@@ -19,7 +19,8 @@
 #include <stdlib.h>
 
 static const enum rbh_filter_field predicate2filter_field[] = {
-    [PRED_NAME] = RBH_FF_NAME,
+    [PRED_INAME]    = RBH_FF_NAME,
+    [PRED_NAME]     = RBH_FF_NAME,
 };
 
 struct rbh_filter *
