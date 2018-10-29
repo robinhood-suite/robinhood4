@@ -122,14 +122,42 @@ parse_predicate(int *arg_idx)
     return filter;
 }
 
+/**
+ * parse_expression - parse a find expression (predicates / operators / actions)
+ *
+ * @param arg_idx   a pointer to the index of argv to start parsing at
+ * @param _filter   a filter (the part of the cli parsed by the caller)
+ *
+ * @return          a filter that represents the parsed expression
+ *
+ * Note this function is recursive and will call find() itself if it parses an
+ * action
+ */
 static struct rbh_filter *
-parse_expression(int arg_idx)
+parse_expression(int *arg_idx, const struct rbh_filter *_filter)
 {
     enum command_line_token previous_token = CLT_URI;
     struct rbh_filter *filter = NULL;
     bool negate = false;
+    int i;
 
-    for (int i = arg_idx; i < argc; i++) {
+    for (i = *arg_idx; i < argc; i++) {
+        const struct rbh_filter *left_filters[2] = {filter, _filter};
+        const struct rbh_filter left_filter = {
+            .op = RBH_FOP_AND,
+            .logical = {
+                .count = 2,
+                .filters = left_filters,
+            },
+        };
+        const struct rbh_filter *ptr_to_left_filter = &left_filter;
+        struct rbh_filter negated_left_filter = {
+            .op = RBH_FOP_NOT,
+            .logical = {
+                .count = 1,
+                .filters = &ptr_to_left_filter,
+            },
+        };
         const struct rbh_filter *filters[2] = {filter, NULL};
         enum command_line_token token;
 
@@ -138,6 +166,7 @@ parse_expression(int arg_idx)
         case CLT_URI:
             error(EX_USAGE, 0, "paths must preceed expression: %s", argv[i]);
         case CLT_AND:
+        case CLT_OR:
             switch (previous_token) {
             case CLT_PREDICATE:
             case CLT_PARENTHESIS_CLOSE:
@@ -147,7 +176,52 @@ parse_expression(int arg_idx)
                       "invalid expression; you have used a binary operator '%s' with nothing before it.",
                       argv[i]);
             }
-            break;
+
+            /* No further processing needed for CLT_AND */
+            if (token == CLT_AND)
+                break;
+
+            /* The -o/-or operator is tricky to implement!
+             *
+             * It works this way: any entry that does not match the left
+             * condition is checked against the right one. Readers should note
+             * that an entry that matches the left condition _is not checked_
+             * against the right condition.
+             *
+             * GNU-find can probably do this in a single filesystem scan, but we
+             * cannot. We have to build a filter for the right condition that
+             * excludes entries matched by the left condition.
+             *
+             * Basically, when we read: "<cond-A> -o <cond-B>", we
+             * translate it to "<cond-A> -o (! <cond-A> -a <cond-B>)"
+             *
+             * An example might help:
+             * -name -a -or -name -b <=> any entry whose name matches 'a' or
+             *                           doesn't match 'a' but matches 'b'
+             */
+
+            /* Consume the -o/-or token */
+            i++;
+
+            /* Parse the filter at the right of -o/-or */
+            filters[1] = parse_expression(&i, &negated_left_filter);
+            /* parse_expression() returned, so it must have seen a closing
+             * parenthesis or reached the end of the command line, we should
+             * return here too.
+             */
+
+            /* "OR" the part of the left filter we parsed ourselves (ie. not
+             * `_filter') and the right filter.
+            */
+            errno = 0;
+            filter = rbh_filter_or_new(filters, 2);
+            if (filter == NULL && errno != 0)
+                error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__ - 2,
+                              "filter_or");
+
+            /* Update arg_idx and return */
+            *arg_idx = i;
+            return filter;
         case CLT_NOT:
             negate = !negate;
             break;
@@ -175,6 +249,7 @@ parse_expression(int arg_idx)
         previous_token = token;
     }
 
+    *arg_idx = i;
     return filter;
 }
 
@@ -221,7 +296,8 @@ main(int _argc, char *_argv[])
     for (size_t i = 0; i < uri_count; i++)
         backends[i] = rbh_backend_from_uri(argv[i]);
 
-    filter = parse_expression(uri_count);
+    _argc = uri_count;
+    filter = parse_expression(&_argc, NULL);
     find(ACT_PRINT, filter);
 
     rbh_filter_free(filter);
