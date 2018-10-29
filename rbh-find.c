@@ -125,6 +125,7 @@ parse_predicate(int *arg_idx)
 static struct rbh_filter *
 parse_expression(int arg_idx)
 {
+    enum command_line_token previous_token = CLT_URI;
     struct rbh_filter *filter = NULL;
     bool negate = false;
 
@@ -136,6 +137,17 @@ parse_expression(int arg_idx)
         switch (token) {
         case CLT_URI:
             error(EX_USAGE, 0, "paths must preceed expression: %s", argv[i]);
+        case CLT_AND:
+            switch (previous_token) {
+            case CLT_PREDICATE:
+            case CLT_PARENTHESIS_CLOSE:
+                break;
+            default:
+                error(EX_USAGE, 0,
+                      "invalid expression; you have used a binary operator '%s' with nothing before it.",
+                      argv[i]);
+            }
+            break;
         case CLT_NOT:
             negate = !negate;
             break;
@@ -160,6 +172,7 @@ parse_expression(int arg_idx)
         default:
             error(EXIT_FAILURE, ENOSYS, argv[i]);
         }
+        previous_token = token;
     }
 
     return filter;
