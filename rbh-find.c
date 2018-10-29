@@ -35,11 +35,12 @@
 static size_t uri_count = 0;
 static struct rbh_backend **backends;
 
-static void
+static size_t
 _find(struct rbh_backend *backend, enum action action,
       const struct rbh_filter *filter)
 {
     struct rbh_mut_iterator *fsentries;
+    size_t count = 0;
 
     fsentries = rbh_backend_filter_fsentries(backend, filter, RBH_FP_ALL,
                                              STATX_ALL);
@@ -67,6 +68,9 @@ _find(struct rbh_backend *backend, enum action action,
              */
             printf("%s\n", fsentry->name);
             break;
+        case ACT_COUNT:
+            count++;
+            break;
         default:
             error(EXIT_FAILURE, ENOSYS, action2str(action));
             break;
@@ -79,16 +83,31 @@ _find(struct rbh_backend *backend, enum action action,
                       "rbh_mut_iter_next");
 
     rbh_mut_iter_destroy(fsentries);
+
+    return count;
 }
 
 static int argc;
 static char **argv;
+static bool did_something = false;
 
 static void
 find(enum action action, const struct rbh_filter *filter)
 {
+    size_t count = 0;
+
+    did_something = true;
+
     for (size_t i = 0; i < uri_count; i++)
-        _find(backends[i], action, filter);
+        count += _find(backends[i], action, filter);
+
+    switch (action) {
+    case ACT_COUNT:
+        printf("%lu matching entries\n", count);
+        break;
+    default:
+        break;
+    }
 }
 
 static struct rbh_filter *
@@ -336,7 +355,8 @@ main(int _argc, char *_argv[])
     if (_argc != argc)
         error(EX_USAGE, 0, "you have too many ')'");
 
-    find(ACT_PRINT, filter);
+    if (!did_something)
+        find(ACT_PRINT, filter);
 
     rbh_filter_free(filter);
 
