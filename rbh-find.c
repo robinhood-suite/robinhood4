@@ -225,6 +225,40 @@ parse_expression(int *arg_idx, const struct rbh_filter *_filter)
         case CLT_NOT:
             negate = !negate;
             break;
+        case CLT_PARENTHESIS_OPEN:
+            /* Consume the ( token */
+            i++;
+
+            /* Parse the sub-expression */
+            filters[1] = parse_expression(&i, NULL);
+            if (i >= argc
+                    || str2command_line_token(argv[i]) != CLT_PARENTHESIS_CLOSE)
+                error(EX_USAGE, 0,
+                      "invalid expression; I was expecting to find a ')' somewhere but did not see one.");
+
+            /* Negate the sub-expression's filter, if need be */
+            if (negate) {
+                errno = 0;
+                filters[1] = rbh_filter_not_new(filters[1]);
+                if (filters[1] == NULL && errno != 0)
+                    error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__ - 2,
+                                  "filter_not");
+                negate = false;
+            }
+
+            /* Build the resulting filter and continue */
+            errno = 0;
+            filter = rbh_filter_and_new(filters, 2);
+            if (filter == NULL && errno != 0)
+                error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__ - 2,
+                              "filter_and");
+            break;
+        case CLT_PARENTHESIS_CLOSE:
+            if (previous_token == CLT_PARENTHESIS_OPEN)
+                error(EXIT_FAILURE, 0, "invalid expression; empty parentheses are not allowed.");
+            /* End of a sub-expression, update arg_idx and return */
+            *arg_idx = i;
+            return filter;
         case CLT_PREDICATE:
             /* Build a filter from the predicate and its arguments */
             filters[1] = parse_predicate(&i);
@@ -298,6 +332,9 @@ main(int _argc, char *_argv[])
 
     _argc = uri_count;
     filter = parse_expression(&_argc, NULL);
+    if (_argc != argc)
+        error(EX_USAGE, 0, "you have too many ')'");
+
     find(ACT_PRINT, filter);
 
     rbh_filter_free(filter);
