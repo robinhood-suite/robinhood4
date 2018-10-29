@@ -43,7 +43,9 @@ executable(
 	'rbh-find',
 	sources: [
 		'rbh-find.c',
+		'src/filters.c',
 		'src/parser.c',
+		'src/utils.c',
 		],
 	dependencies: [librobinhood],
 	include_directories: include_dirs,

@@ -11,6 +11,7 @@
 # include <config.h>
 #endif
 
+#include "filters.h"
 #include "parser.h"
 
 #include <assert.h>
@@ -90,18 +91,66 @@ find(enum action action, const struct rbh_filter *filter)
         _find(backends[i], action, filter);
 }
 
-static void
+static struct rbh_filter *
+parse_predicate(int *arg_idx)
+{
+    enum predicate predicate;
+    struct rbh_filter *filter;
+    int i = *arg_idx;
+
+    predicate = str2predicate(argv[i]);
+
+    if (i + 1 >= argc)
+        error(EX_USAGE, 0, "missing argument to `%s'", argv[i]);
+
+    /* In the following block, functions should call error() themselves rather
+     * than returning.
+     *
+     * Errors are most likely fatal (not recoverable), and this allows for
+     * precise and meaningul error messages.
+     */
+    switch (predicate) {
+    case PRED_NAME:
+        filter = shell_regex2filter(predicate, argv[++i], 0);
+        break;
+    default:
+        error(EXIT_FAILURE, ENOSYS, argv[i]);
+    }
+    assert(filter != NULL);
+
+    *arg_idx = i;
+    return filter;
+}
+
+static struct rbh_filter *
 parse_expression(int arg_idx)
 {
+    struct rbh_filter *filter = NULL;
+
     for (int i = arg_idx; i < argc; i++) {
+        const struct rbh_filter *filters[2] = {filter, NULL};
         enum command_line_token token;
 
         token = str2command_line_token(argv[i]);
         switch (token) {
+        case CLT_URI:
+            error(EX_USAGE, 0, "paths must preceed expression: %s", argv[i]);
+        case CLT_PREDICATE:
+            /* Build a filter from the predicate and its arguments */
+            filters[1] = parse_predicate(&i);
+
+            errno = 0;
+            filter = rbh_filter_and_new(filters, 2);
+            if (filter == NULL && errno != 0)
+                error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__ - 2,
+                              "filter_and");
+            break;
         default:
             error(EXIT_FAILURE, ENOSYS, argv[i]);
         }
     }
+
+    return filter;
 }
 
 static void
@@ -109,6 +158,7 @@ destroy_backends(void)
 {
     for (size_t i = 0; i < uri_count; i++)
         rbh_backend_destroy(backends[i]);
+    free(backends);
 }
 
 static void
@@ -123,6 +173,8 @@ _atexit(void (*function)(void))
 int
 main(int _argc, char *_argv[])
 {
+    struct rbh_filter *filter;
+
     /* Discard the program's name */
     argc = _argc - 1;
     argv = &_argv[1];
@@ -136,6 +188,7 @@ main(int _argc, char *_argv[])
     if (uri_count == 0)
         error(EX_USAGE, 0, "missing at least one robinhood URI");
 
+    _atexit(destroy_backends);
     backends = malloc(uri_count * sizeof(*backends));
     if (backends == NULL)
         error(EXIT_FAILURE, errno, "malloc");
@@ -143,10 +196,10 @@ main(int _argc, char *_argv[])
     for (size_t i = 0; i < uri_count; i++)
         backends[i] = rbh_backend_from_uri(argv[i]);
 
-    _atexit(destroy_backends);
+    filter = parse_expression(uri_count);
+    find(ACT_PRINT, filter);
 
-    parse_expression(uri_count);
-    find(ACT_PRINT, NULL);
+    rbh_filter_free(filter);
 
     return EXIT_SUCCESS;
 }
