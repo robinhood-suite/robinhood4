@@ -126,6 +126,7 @@ static struct rbh_filter *
 parse_expression(int arg_idx)
 {
     struct rbh_filter *filter = NULL;
+    bool negate = false;
 
     for (int i = arg_idx; i < argc; i++) {
         const struct rbh_filter *filters[2] = {filter, NULL};
@@ -135,9 +136,20 @@ parse_expression(int arg_idx)
         switch (token) {
         case CLT_URI:
             error(EX_USAGE, 0, "paths must preceed expression: %s", argv[i]);
+        case CLT_NOT:
+            negate = !negate;
+            break;
         case CLT_PREDICATE:
             /* Build a filter from the predicate and its arguments */
             filters[1] = parse_predicate(&i);
+            if (negate) {
+                errno = 0;
+                filters[1] = rbh_filter_not_new(filters[1]);
+                if (filters[1] == NULL && errno != 0)
+                    error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__ - 2,
+                                  "filter_not");
+                negate = false;
+            }
 
             errno = 0;
             filter = rbh_filter_and_new(filters, 2);
