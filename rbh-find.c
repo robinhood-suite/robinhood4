@@ -68,7 +68,7 @@ _find(struct rbh_backend *backend, enum action action,
             printf("%s\n", fsentry->name);
             break;
         default:
-            assert(false);
+            error(EXIT_FAILURE, ENOSYS, action2str(action));
             break;
         }
         free(fsentry);
@@ -277,8 +277,9 @@ parse_expression(int *arg_idx, const struct rbh_filter *_filter)
                 error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__ - 2,
                               "filter_and");
             break;
-        default:
-            error(EXIT_FAILURE, ENOSYS, argv[i]);
+        case CLT_ACTION:
+            find(str2action(argv[i]), &left_filter);
+            break;
         }
         previous_token = token;
     }

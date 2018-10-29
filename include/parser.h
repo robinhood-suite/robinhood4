@@ -109,4 +109,26 @@ enum action {
     ACT_QUIT,
 };
 
+/**
+ * str2action - convert a string to an action
+ *
+ * @param string    a string representing a valid action
+ *
+ * @return          the action \p string represents
+ *
+ * This function will exit if \p string is not a valid predicate
+ */
+enum action
+str2action(const char *string);
+
+/**
+ * action2str - convert an action to a string
+ *
+ * @param action    an action
+ *
+ * @return          the string that represents \p action
+ */
+const char *
+action2str(enum action action);
+
 #endif
