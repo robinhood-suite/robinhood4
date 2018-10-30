@@ -74,6 +74,9 @@ _find(struct rbh_backend *backend, enum action action,
         case ACT_COUNT:
             count++;
             break;
+        case ACT_QUIT:
+            exit(0);
+            break;
         default:
             error(EXIT_FAILURE, ENOSYS, action2str(action));
             break;
