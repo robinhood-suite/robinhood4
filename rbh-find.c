@@ -68,6 +68,9 @@ _find(struct rbh_backend *backend, enum action action,
              */
             printf("%s\n", fsentry->name);
             break;
+        case ACT_PRINT0:
+            printf("%s%c", fsentry->name, '\0');
+            break;
         case ACT_COUNT:
             count++;
             break;
