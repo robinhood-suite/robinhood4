@@ -364,6 +364,57 @@ str2predicate(const char *string)
     __builtin_unreachable();
 }
 
+static const char *__predicate2str[] = {
+    [PRED_AMIN]         = "amin",
+    [PRED_ANEWER]       = "anewer",
+    [PRED_ATIME]        = "atime",
+    [PRED_CMIN]         = "cmin",
+    [PRED_CNEWER]       = "cnewer",
+    [PRED_CONTEXT]      = "context",
+    [PRED_CTIME]        = "ctime",
+    [PRED_EMPTY]        = "empty",
+    [PRED_EXECUTABLE]   = "executable",
+    [PRED_FALSE]        = "false",
+    [PRED_FSTYPE]       = "fstype",
+    [PRED_GID]          = "gid",
+    [PRED_GROUP]        = "group",
+    [PRED_ILNAME]       = "ilname",
+    [PRED_INAME]        = "iname",
+    [PRED_INUM]         = "inum",
+    [PRED_IPATH]        = "ipath",
+    [PRED_IREGEX]       = "iregex",
+    [PRED_IWHOLENAME]   = "iwholename",
+    [PRED_LINKS]        = "links",
+    [PRED_LNAME]        = "lname",
+    [PRED_MMIN]         = "mmin",
+    [PRED_MTIME]        = "mtime",
+    [PRED_NAME]         = "name",
+    [PRED_NEWER]        = "newer",
+    [PRED_NEWERXY]      = "newerXY",
+    [PRED_NOGROUP]      = "nogroup",
+    [PRED_NOUSER]       = "nouser",
+    [PRED_PATH]         = "path",
+    [PRED_PERM]         = "perm",
+    [PRED_READABLE]     = "readable",
+    [PRED_REGEX]        = "regex",
+    [PRED_SAMEFILE]     = "samefile",
+    [PRED_SIZE]         = "size",
+    [PRED_TRUE]         = "true",
+    [PRED_TYPE]         = "type",
+    [PRED_UID]          = "uid",
+    [PRED_USED]         = "used",
+    [PRED_USER]         = "user",
+    [PRED_WHOLENAME]    = "wholename",
+    [PRED_WRITEABLE]    = "writeable",
+    [PRED_XTYPE]        = "xtype",
+};
+
+const char *
+predicate2str(enum predicate predicate)
+{
+    return __predicate2str[predicate];
+}
+
 enum action
 str2action(const char *string)
 {

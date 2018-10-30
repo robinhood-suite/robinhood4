@@ -28,4 +28,18 @@ struct rbh_filter *
 shell_regex2filter(enum predicate predicate, const char *shell_regex,
                    unsigned int regex_options);
 
+/**
+ * Build a filter for the -[acm]min predicate
+ *
+ * @param predicate one of PRED_[ACM]MIN
+ * @param minutes   a string representing a number of minutes, optionnally
+ *                  prefixed with either a '+' or '-' sign
+ *
+ * @return          a pointer to a newly allocated struct rbh_filter
+ *
+ * Exit on error
+ */
+struct rbh_filter *
+xmin2filter(enum predicate predicate, const char *minutes);
+
 #endif

@@ -129,6 +129,11 @@ parse_predicate(int *arg_idx)
      * precise and meaningul error messages.
      */
     switch (predicate) {
+    case PRED_AMIN:
+    case PRED_MMIN:
+    case PRED_CMIN:
+        filter = xmin2filter(predicate, argv[++i]);
+        break;
     case PRED_NAME:
         filter = shell_regex2filter(predicate, argv[++i], 0);
         break;

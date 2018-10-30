@@ -90,6 +90,16 @@ enum predicate {
 enum predicate
 str2predicate(const char *string);
 
+/**
+ * predicate2str - convert a predicate to a string
+ *
+ * @param predicate a predicate
+ *
+ * @return          the string that represents \p predicate
+ */
+const char *
+predicate2str(enum predicate);
+
 enum action {
     ACT_COUNT,
     ACT_DELETE,
