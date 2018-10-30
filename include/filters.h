@@ -56,4 +56,16 @@ xmin2filter(enum predicate predicate, const char *minutes);
 struct rbh_filter *
 xtime2filter(enum predicate predicate, const char *days);
 
+/**
+ * Build a filter to the -type predicate
+ *
+ * @param filetype  a string representing a filetype
+ *
+ * @return          a pointer to a newly allocated struct rbh_filter
+ *
+ * Exit on error
+ */
+struct rbh_filter *
+filetype2filter(const char *filetype);
+
 #endif

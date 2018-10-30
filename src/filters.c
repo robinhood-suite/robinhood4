@@ -18,6 +18,9 @@
 #include <error.h>
 #include <limits.h>
 #include <stdlib.h>
+#include <sysexits.h>
+
+#include <sys/stat.h>
 
 static const enum rbh_filter_field predicate2filter_field[] = {
     [PRED_AMIN]     = RBH_FF_ATIME,
@@ -139,4 +142,47 @@ struct rbh_filter *
 xtime2filter(enum predicate predicate, const char *days)
 {
     return timedelta2filter(predicate, TU_DAY, days);
+}
+
+struct rbh_filter *
+filetype2filter(const char *_filetype)
+{
+    struct rbh_filter *filter;
+    int filetype;
+
+    if (_filetype[0] == '\0' || _filetype[1] != '\0')
+        error(EX_USAGE, 0, "arguments to -type should only contain one letter");
+
+    switch (_filetype[0]) {
+    case 'b':
+        filetype = S_IFBLK;
+        break;
+    case 'c':
+        filetype = S_IFCHR;
+        break;
+    case 'd':
+        filetype = S_IFDIR;
+        break;
+    case 'f':
+        filetype = S_IFREG;
+        break;
+    case 'l':
+        filetype = S_IFLNK;
+        break;
+    case 'p':
+        filetype = S_IFIFO;
+        break;
+    case 's':
+        filetype = S_IFSOCK;
+        break;
+    default:
+        error(EX_USAGE, 0, "unknown argument to -type: %s", _filetype);
+    }
+
+    filter = rbh_filter_compare_int32_new(RBH_FOP_EQUAL, RBH_FF_TYPE, filetype);
+    if (filter == NULL)
+        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
+                      "filter_compare_integer");
+
+    return filter;
 }

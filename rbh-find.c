@@ -146,6 +146,9 @@ parse_predicate(int *arg_idx)
         filter = shell_regex2filter(predicate, argv[++i],
                                     RBH_FRO_CASE_INSENSITIVE);
         break;
+    case PRED_TYPE:
+        filter = filetype2filter(argv[++i]);
+        break;
     default:
         error(EXIT_FAILURE, ENOSYS, argv[i]);
     }
