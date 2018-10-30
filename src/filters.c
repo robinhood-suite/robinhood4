@@ -23,6 +23,9 @@ static const enum rbh_filter_field predicate2filter_field[] = {
     [PRED_AMIN]     = RBH_FF_ATIME,
     [PRED_MMIN]     = RBH_FF_MTIME,
     [PRED_CMIN]     = RBH_FF_CTIME,
+    [PRED_ATIME]    = RBH_FF_ATIME,
+    [PRED_MTIME]    = RBH_FF_MTIME,
+    [PRED_CTIME]    = RBH_FF_CTIME,
     [PRED_INAME]    = RBH_FF_NAME,
     [PRED_NAME]     = RBH_FF_NAME,
 };
@@ -130,4 +133,10 @@ struct rbh_filter *
 xmin2filter(enum predicate predicate, const char *minutes)
 {
     return timedelta2filter(predicate, TU_MINUTE, minutes);
+}
+
+struct rbh_filter *
+xtime2filter(enum predicate predicate, const char *days)
+{
+    return timedelta2filter(predicate, TU_DAY, days);
 }

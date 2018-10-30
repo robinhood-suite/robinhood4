@@ -134,6 +134,11 @@ parse_predicate(int *arg_idx)
     case PRED_CMIN:
         filter = xmin2filter(predicate, argv[++i]);
         break;
+    case PRED_ATIME:
+    case PRED_MTIME:
+    case PRED_CTIME:
+        filter = xtime2filter(predicate, argv[++i]);
+        break;
     case PRED_NAME:
         filter = shell_regex2filter(predicate, argv[++i], 0);
         break;

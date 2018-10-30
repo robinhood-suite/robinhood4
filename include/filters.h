@@ -42,4 +42,18 @@ shell_regex2filter(enum predicate predicate, const char *shell_regex,
 struct rbh_filter *
 xmin2filter(enum predicate predicate, const char *minutes);
 
+/**
+ * Build a filter for the -[acm]time predicate
+ *
+ * @param predicate one of PRED_[ACM]TIME
+ * @param days      a string representing a number of days, optionnally prefixed
+ *                  with either a '+' or '-' sign
+ *
+ * @return          a pointer to a newly allocated struct rbh_filter
+ *
+ * Exit on error
+ */
+struct rbh_filter *
+xtime2filter(enum predicate predicate, const char *days);
+
 #endif
