@@ -1,4 +1,5 @@
 *.trs
 
+check_filter
 check_fsentry
 check_itertools

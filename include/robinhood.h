@@ -10,6 +10,7 @@
 #ifndef ROBINHOOD_H
 #define ROBINHOOD_H
 
+#include "robinhood/filter.h"
 #include "robinhood/fsentry.h"
 #include "robinhood/iterator.h"
 #include "robinhood/itertools.h"
