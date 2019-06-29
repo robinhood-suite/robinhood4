@@ -10,8 +10,7 @@ include $(top_srcdir)/template.mk.am
 
 AM_CFLAGS += @CHECK_CFLAGS@
 AM_LDFLAGS += @CHECK_LIBS@
+LDADD = $(top_builddir)/lib/librobinhood.la
 
-check_PROGRAMS = check_fsentry
+check_PROGRAMS = check_fsentry check_itertools
 TESTS = $(check_PROGRAMS)
-
-check_fsentry_LDADD = $(top_builddir)/lib/librobinhood.la

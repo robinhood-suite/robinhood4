@@ -10,4 +10,6 @@ include_HEADERS = robinhood.h
 
 robinhooddir = $(includedir)/robinhood
 robinhood_HEADERS = robinhood/fsentry.h \
+		    robinhood/iterator.h \
+		    robinhood/itertools.h \
 		    robinhood/statx.h

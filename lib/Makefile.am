@@ -9,4 +9,5 @@
 include $(top_srcdir)/template.mk.am
 
 lib_LTLIBRARIES = librobinhood.la
-librobinhood_la_SOURCES = ../src/fsentry.c
+librobinhood_la_SOURCES = ../src/fsentry.c \
+			  ../src/itertools.c

@@ -1,3 +1,4 @@
 *.trs
 
 check_fsentry
+check_itertools

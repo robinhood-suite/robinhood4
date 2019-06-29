@@ -11,5 +11,7 @@
 #define ROBINHOOD_H
 
 #include "robinhood/fsentry.h"
+#include "robinhood/iterator.h"
+#include "robinhood/itertools.h"
 
 #endif
