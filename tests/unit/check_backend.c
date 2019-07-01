@@ -1,0 +1,85 @@
+/* This file is part of the RobinHood Library
+ * Copyright (C) 2019 Commissariat a l'energie atomique et aux energies
+ * 		      alternatives
+ *
+ * SPDX-License-Identifer: LGPL-3.0-or-later
+ *
+ * author: Quentin Bouget <quentin.bouget@cea.fr>
+ */
+
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
+
+#include <stdlib.h>
+#include <signal.h>
+
+#include "check-compat.h"
+#include "robinhood/backend.h"
+
+static const struct rbh_backend_operations TEST_BACKEND_OPS = {
+    .destroy = free,
+};
+
+static const struct rbh_backend TEST_BACKEND = {
+    .ops = &TEST_BACKEND_OPS,
+};
+
+static struct rbh_backend *
+test_backend_new(void)
+{
+    struct rbh_backend *backend;
+
+    backend = malloc(sizeof(*backend));
+    ck_assert_ptr_nonnull(backend);
+
+    *backend = TEST_BACKEND;
+    return backend;
+}
+
+/*----------------------------------------------------------------------------*
+ |                        rbh_backend_filter_fsentries                        |
+ *----------------------------------------------------------------------------*/
+
+START_TEST(rbff_unsupported)
+{
+    struct rbh_backend *backend = test_backend_new();
+
+    ck_assert_ptr_null(rbh_backend_filter_fsentries(backend, NULL, 0, 0));
+    ck_assert_int_eq(errno, ENOTSUP);
+
+    rbh_backend_destroy(backend);
+}
+END_TEST
+
+static Suite *
+unit_suite(void)
+{
+    Suite *suite;
+    TCase *tests;
+
+    suite = suite_create("backend");
+    tests = tcase_create("unsupported fsentries operations");
+    tcase_add_test(tests, rbff_unsupported);
+
+    suite_add_tcase(suite, tests);
+
+    return suite;
+}
+
+int
+main(void)
+{
+    int number_failed;
+    Suite *suite;
+    SRunner *runner;
+
+    suite = unit_suite();
+    runner = srunner_create(suite);
+
+    srunner_run_all(runner, CK_NORMAL);
+    number_failed = srunner_ntests_failed(runner);
+    srunner_free(runner);
+
+    return (number_failed == 0) ? EXIT_SUCCESS : EXIT_FAILURE;
+}

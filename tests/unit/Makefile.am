@@ -12,5 +12,5 @@ AM_CFLAGS += @CHECK_CFLAGS@
 AM_LDFLAGS += @CHECK_LIBS@
 LDADD = $(top_builddir)/lib/librobinhood.la
 
-check_PROGRAMS = check_filter check_fsentry check_itertools
+check_PROGRAMS = check_backend check_filter check_fsentry check_itertools
 TESTS = $(check_PROGRAMS)

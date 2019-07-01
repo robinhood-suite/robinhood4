@@ -9,7 +9,8 @@
 include_HEADERS = robinhood.h
 
 robinhooddir = $(includedir)/robinhood
-robinhood_HEADERS = robinhood/filter.h \
+robinhood_HEADERS = robinhood/backend.h \
+		    robinhood/filter.h \
 		    robinhood/fsentry.h \
 		    robinhood/iterator.h \
 		    robinhood/itertools.h \
