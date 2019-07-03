@@ -12,5 +12,8 @@ AM_CFLAGS += @CHECK_CFLAGS@
 AM_LDFLAGS += @CHECK_LIBS@
 LDADD = $(top_builddir)/lib/librobinhood.la
 
-check_PROGRAMS = check_backend check_filter check_fsentry check_itertools
+check_PROGRAMS = check_backend check_filter check_fsentry check_itertools \
+		 check_posix
 TESTS = $(check_PROGRAMS)
+
+check_posix_LDADD = $(LDADD) $(top_builddir)/lib/librbh-posix.la

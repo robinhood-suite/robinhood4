@@ -12,3 +12,7 @@ lib_LTLIBRARIES = librobinhood.la
 librobinhood_la_SOURCES = ../src/filter.c \
 			  ../src/fsentry.c \
 			  ../src/itertools.c
+
+lib_LTLIBRARIES += librbh-posix.la
+librbh_posix_la_SOURCES = ../src/backends/posix.c
+librbh_posix_la_LIBADD = librobinhood.la
