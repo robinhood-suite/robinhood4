@@ -28,7 +28,7 @@ enum rbh_backend_id {
     RBH_BI_GENERIC, /* No backend should use this ID */
 
     /* Backends should declare their ID here */
-    /* TODO: RBH_BI_POSIX, */
+    RBH_BI_POSIX,
 
     /* User defined backends should use an ID so that:
      * RBI_RESERVED_MAX < ID <= 255

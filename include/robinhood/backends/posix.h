@@ -28,4 +28,8 @@
 struct rbh_backend *
 rbh_posix_backend_new(const char *path);
 
+enum rbh_posix_backend_option {
+    RBH_PBO_STATX_SYNC_TYPE = RBH_BO_FIRST(RBH_BI_POSIX),
+};
+
 #endif

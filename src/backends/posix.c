@@ -27,6 +27,7 @@
 
 struct posix_iterator {
     struct rbh_mut_iterator iterator;
+    int statx_sync_type;
     FTS *fts_handle;
 };
 
@@ -313,7 +314,7 @@ skip:
         return NULL;
     }
 
-    fsentry = fsentry_from_ftsent(ftsent, AT_STATX_SYNC_AS_STAT);
+    fsentry = fsentry_from_ftsent(ftsent, posix_iter->statx_sync_type);
     if (fsentry == NULL && (errno == ENOENT || errno == ESTALE))
         /* The entry moved from under our feet */
         goto skip;
@@ -342,6 +343,7 @@ static const struct rbh_mut_iterator POSIX_ITER = {
 struct posix_backend {
     struct rbh_backend backend;
     char *root;
+    int statx_sync_type;
 };
 
 static struct rbh_mut_iterator *
@@ -364,6 +366,7 @@ posix_backend_filter_fsentries(void *backend, const struct rbh_filter *filter,
     if (posix_iter == NULL)
         return NULL;
 
+    posix_iter->statx_sync_type = posix->statx_sync_type;
     posix_iter->fts_handle =
         fts_open(paths, FTS_PHYSICAL | FTS_NOSTAT | FTS_XDEV, NULL);
     if (posix_iter->fts_handle == NULL) {
@@ -379,6 +382,86 @@ posix_backend_filter_fsentries(void *backend, const struct rbh_filter *filter,
     return &posix_iter->iterator;
 }
 
+static int
+posix_get_statx_sync_type(struct posix_backend *posix, void *data,
+                      size_t *data_size)
+{
+    typeof(posix->statx_sync_type) statx_sync_type = posix->statx_sync_type;
+
+    if (*data_size < sizeof(posix->statx_sync_type)) {
+        *data_size = sizeof(posix->statx_sync_type);
+        errno = EOVERFLOW;
+        return -1;
+    }
+    memcpy(data, &statx_sync_type, sizeof(posix->statx_sync_type));
+    *data_size = sizeof(posix->statx_sync_type);
+    return 0;
+}
+
+static int
+posix_backend_get_option(void *backend, unsigned int option, void *data,
+                         size_t *data_size)
+{
+    struct posix_backend *posix = backend;
+
+    switch (option) {
+    case RBH_PBO_STATX_SYNC_TYPE:
+        return posix_get_statx_sync_type(posix, data, data_size);
+    }
+
+    errno = ENOPROTOOPT;
+    return -1;
+}
+
+static int
+posix_set_statx_sync_type(struct posix_backend *posix, const void *data,
+                          size_t data_size)
+{
+    typeof(posix->statx_sync_type) statx_sync_type;
+
+    if (data_size != sizeof(statx_sync_type)) {
+        errno = EINVAL;
+        return -1;
+    }
+    memcpy(&statx_sync_type, data, sizeof(statx_sync_type));
+
+    switch (statx_sync_type) {
+    case AT_STATX_FORCE_SYNC:
+#ifndef HAVE_STATX
+        /* Without the statx() system call, there is no guarantee that metadata
+         * is actually synced by the remote filesystem
+         */
+        errno = ENOTSUP;
+        return -1;
+#else
+        /* Fall through */
+#endif
+    case AT_STATX_SYNC_AS_STAT:
+    case AT_STATX_DONT_SYNC:
+        posix->statx_sync_type &= ~AT_STATX_SYNC_TYPE;
+        posix->statx_sync_type |= statx_sync_type;
+        return 0;
+    }
+
+    errno = EINVAL;
+    return -1;
+}
+
+static int
+posix_backend_set_option(void *backend, unsigned int option, const void *data,
+                         size_t data_size)
+{
+    struct posix_backend *posix = backend;
+
+    switch (option) {
+    case RBH_PBO_STATX_SYNC_TYPE:
+        return posix_set_statx_sync_type(posix, data, data_size);
+    }
+
+    errno = ENOPROTOOPT;
+    return -1;
+}
+
 static void
 posix_backend_destroy(void *backend)
 {
@@ -389,11 +472,14 @@ posix_backend_destroy(void *backend)
 }
 
 static const struct rbh_backend_operations POSIX_BACKEND_OPS = {
+    .get_option = posix_backend_get_option,
+    .set_option = posix_backend_set_option,
     .filter_fsentries = posix_backend_filter_fsentries,
     .destroy = posix_backend_destroy,
 };
 
 static const struct rbh_backend POSIX_BACKEND = {
+    .id = RBH_BI_POSIX,
     .name = RBH_POSIX_BACKEND_NAME,
     .ops = &POSIX_BACKEND_OPS,
 };
@@ -415,6 +501,8 @@ rbh_posix_backend_new(const char *path)
         errno = save_errno;
         return NULL;
     }
+
+    posix->statx_sync_type = AT_STATX_SYNC_AS_STAT;
 
     posix->backend = POSIX_BACKEND;
 
