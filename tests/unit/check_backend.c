@@ -22,6 +22,7 @@ static const struct rbh_backend_operations TEST_BACKEND_OPS = {
 };
 
 static const struct rbh_backend TEST_BACKEND = {
+    .id = UINT8_MAX,
     .ops = &TEST_BACKEND_OPS,
 };
 
@@ -36,6 +37,88 @@ test_backend_new(void)
     *backend = TEST_BACKEND;
     return backend;
 }
+
+/*----------------------------------------------------------------------------*
+ |                           rbh_backend_get_option                           |
+ *----------------------------------------------------------------------------*/
+
+START_TEST(rbgo_unsupported)
+{
+    struct rbh_backend *backend = test_backend_new();
+
+    ck_assert_int_eq(rbh_backend_get_option(backend, RBH_BO_FIRST(backend->id),
+                                            NULL, NULL), -1);
+    ck_assert_int_eq(errno, ENOTSUP);
+
+    rbh_backend_destroy(backend);
+}
+END_TEST
+
+START_TEST(rbgo_wrong_option)
+{
+    struct rbh_backend *backend = test_backend_new();
+
+    ck_assert_int_eq(rbh_backend_get_option(
+                backend, RBH_BO_FIRST(backend->id) - 1, NULL, NULL
+                ), -1);
+    ck_assert_int_eq(errno, EINVAL);
+
+    rbh_backend_destroy(backend);
+}
+END_TEST
+
+START_TEST(rbgo_generic_deprecated)
+{
+    struct rbh_backend *backend = test_backend_new();
+
+    ck_assert_int_eq(rbh_backend_get_option(backend, RBH_GBO_DEPRECATED, NULL,
+                                            NULL), -1);
+    ck_assert_int_eq(errno, ENOTSUP);
+
+    rbh_backend_destroy(backend);
+}
+END_TEST
+
+/*----------------------------------------------------------------------------*
+ |                           rbh_backend_set_option                           |
+ *----------------------------------------------------------------------------*/
+
+START_TEST(rbso_unsupported)
+{
+    struct rbh_backend *backend = test_backend_new();
+
+    ck_assert_int_eq(rbh_backend_set_option(backend, RBH_BO_FIRST(backend->id),
+                                            NULL, 0), -1);
+    ck_assert_int_eq(errno, ENOTSUP);
+
+    rbh_backend_destroy(backend);
+}
+END_TEST
+
+START_TEST(rbso_wrong_option)
+{
+    struct rbh_backend *backend = test_backend_new();
+
+    ck_assert_int_eq(rbh_backend_get_option(
+                backend, RBH_BO_FIRST(backend->id) - 1, NULL, NULL
+                ), -1);
+    ck_assert_int_eq(errno, EINVAL);
+
+    rbh_backend_destroy(backend);
+}
+END_TEST
+
+START_TEST(rbso_generic_deprecated)
+{
+    struct rbh_backend *backend = test_backend_new();
+
+    ck_assert_int_eq(rbh_backend_set_option(backend, RBH_GBO_DEPRECATED, NULL,
+                                            0), -1);
+    ck_assert_int_eq(errno, ENOTSUP);
+
+    rbh_backend_destroy(backend);
+}
+END_TEST
 
 /*----------------------------------------------------------------------------*
  |                        rbh_backend_filter_fsentries                        |
@@ -59,8 +142,18 @@ unit_suite(void)
     TCase *tests;
 
     suite = suite_create("backend");
-    tests = tcase_create("unsupported fsentries operations");
+    tests = tcase_create("unsupported operations");
+    tcase_add_test(tests, rbgo_unsupported);
+    tcase_add_test(tests, rbso_unsupported);
     tcase_add_test(tests, rbff_unsupported);
+
+    suite_add_tcase(suite, tests);
+
+    tests = tcase_create("options");
+    tcase_add_test(tests, rbgo_wrong_option);
+    tcase_add_test(tests, rbgo_generic_deprecated);
+    tcase_add_test(tests, rbso_wrong_option);
+    tcase_add_test(tests, rbso_generic_deprecated);
 
     suite_add_tcase(suite, tests);
 
