@@ -15,6 +15,7 @@ install_headers('robinhood/backend.h',
 		'robinhood/fsevent.h',
 		'robinhood/iterator.h',
 		'robinhood/itertools.h',
+		'robinhood/plugin.h',
 		'robinhood/statx.h',
 		'robinhood/uri.h',
 		subdir: 'robinhood')

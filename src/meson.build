@@ -15,9 +15,11 @@ librobinhood = library(
 		'fsentry.c',
 		'fsevent.c',
 		'itertools.c',
+		'plugin.c',
 		'uri.c',
 	],
 	version: '0.0.0',
+	link_args: ['-ldl'],
 	include_directories: rbh_include,
 	install: true,
 )

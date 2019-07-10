@@ -16,6 +16,7 @@
 #include "robinhood/fsevent.h"
 #include "robinhood/iterator.h"
 #include "robinhood/itertools.h"
+#include "robinhood/plugin.h"
 #include "robinhood/uri.h"
 
 #endif
