@@ -16,6 +16,7 @@ librobinhood = library(
 		'fsevent.c',
 		'itertools.c',
 		'plugin.c',
+		'plugins/backend.c',
 		'uri.c',
 	],
 	version: '0.0.0',
