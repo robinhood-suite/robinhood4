@@ -27,8 +27,11 @@ librobinhood = library(
 
 librbh_posix = library(
 	'rbh-posix',
-	sources: ['backends/posix.c'],
-	version: '0.0.0',
+	sources: [
+		'backends/posix.c',
+		'plugins/backends/posix.c',
+		],
+	version: librbh_posix_version, # defined in include/robinhood/backends
 	link_with: librobinhood,
 	include_directories: rbh_include,
 	install: true,

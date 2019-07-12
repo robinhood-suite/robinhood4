@@ -20,8 +20,7 @@ install_headers('robinhood/backend.h',
 		'robinhood/uri.h',
 		subdir: 'robinhood')
 
-install_headers('robinhood/backends/posix.h',
-		subdir: 'robinhood/backends')
-
 install_headers('robinhood/plugins/backend.h',
 		subdir: 'robinhood/plugins')
+
+subdir('robinhood/backends')
