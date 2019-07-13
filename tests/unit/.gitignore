@@ -6,3 +6,4 @@ check_fsentry
 check_fsevent
 check_itertools
 check_posix
+check_uri

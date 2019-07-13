@@ -13,7 +13,8 @@ librobinhood_la_SOURCES = ../src/backend.c \
 			  ../src/filter.c \
 			  ../src/fsentry.c \
 			  ../src/fsevent.c \
-			  ../src/itertools.c
+			  ../src/itertools.c \
+			  ../src/uri.c
 
 lib_LTLIBRARIES += librbh-posix.la
 librbh_posix_la_SOURCES = ../src/backends/posix.c

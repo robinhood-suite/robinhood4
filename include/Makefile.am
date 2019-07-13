@@ -15,7 +15,8 @@ robinhood_HEADERS = robinhood/backend.h \
 		    robinhood/fsevent.h \
 		    robinhood/iterator.h \
 		    robinhood/itertools.h \
-		    robinhood/statx.h
+		    robinhood/statx.h \
+		    robinhood/uri.h
 
 backendsdir = $(robinhooddir)/backends
 backends_HEADERS = robinhood/backends/posix.h

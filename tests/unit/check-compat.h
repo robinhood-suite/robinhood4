@@ -159,6 +159,22 @@
 
 #if !CHECK_CHECK_VERSION(0, 11, 0) /* CHECK_VERSION < 0.11.0 */
 
+/**
+ * Check two strings to determine if 0==strcmp(X,Y) or if both are undefined
+ *
+ * If both X and Y are NULL the test passes. However, if only one is NULL
+ * the test fails.
+ * If not ((X==NULL)&&(Y==NULL)) || (0==strcmp(X,Y)), the test fails.
+ *
+ * @param X string
+ * @param Y string to compare against X
+ *
+ * @note If the check fails, the remaining of the test is aborted
+ *
+ * @since 0.11.0
+ */
+#define ck_assert_pstr_eq(X, Y) _ck_assert_str(X, ==, Y, 1, 0)
+
 /* Memory location comparison macros with improved output compared to ck_assert() */
 /* OP might be any operator that can be used in '0 OP memcmp(X,Y,L)' comparison */
 /* The x and y parameter swap in memcmp() is needed to handle >, >=, <, <= operators */
