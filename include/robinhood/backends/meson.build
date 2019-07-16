@@ -24,3 +24,22 @@ librbh_posix_h = configure_file(input: 'posix.h.in', output: 'posix.h',
 				configuration: librbh_posix_conf)
 
 install_headers(librbh_posix_h, subdir: 'robinhood/backends')
+
+# Mongo backend
+
+librbh_mongo_conf = configuration_data()
+
+librbh_mongo_conf.set('RBH_MONGO_BACKEND_MAJOR', 0)
+librbh_mongo_conf.set('RBH_MONGO_BACKEND_MINOR', 0)
+librbh_mongo_conf.set('RBH_MONGO_BACKEND_RELEASE', 0)
+
+librbh_mongo_version = '@0@.@1@.@2@'.format(
+	librbh_mongo_conf.get('RBH_MONGO_BACKEND_MAJOR'),
+	librbh_mongo_conf.get('RBH_MONGO_BACKEND_MINOR'),
+	librbh_mongo_conf.get('RBH_MONGO_BACKEND_RELEASE')
+)
+
+librbh_mongo_h = configure_file(input: 'mongo.h.in', output: 'mongo.h',
+				configuration: librbh_mongo_conf)
+
+install_headers(librbh_mongo_h, subdir: 'robinhood/backends')

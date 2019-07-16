@@ -40,3 +40,20 @@ librbh_posix = library(
 	include_directories: rbh_include,
 	install: true,
 )
+
+libmongoc = dependency('libmongoc-1.0', version: '>=1.3.6')
+libbson = dependency('libbson-1.0', version: '>=1.3.5')
+
+librbh_mongo = library(
+	'rbh-mongo',
+	sources: [
+		'backends/mongo.c',
+		'plugins/backends/mongo.c',
+		],
+	# defined in include/robinhood/backends
+	version: librbh_mongo_version,
+	link_with: librobinhood,
+	dependencies: [libmongoc, libbson],
+	include_directories: rbh_include,
+	install: true,
+)

@@ -69,4 +69,10 @@ struct statx {
 #define AT_STATX_FORCE_SYNC   0x2000
 #define AT_STATX_DONT_SYNC    0x4000
 
+#define STATX_ATTR_COMPRESSED   0x0004
+#define STATX_ATTR_IMMUTABLE    0x0010
+#define STATX_ATTR_APPEND       0x0020
+#define STATX_ATTR_NODUMP       0x0040
+#define STATX_ATTR_ENCRYPTED    0x0800
+
 #endif

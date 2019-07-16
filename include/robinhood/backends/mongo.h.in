@@ -1,0 +1,43 @@
+/* This file is part of the RobinHood Library
+ * Copyright (C) 2019 Commissariat a l'energie atomique et aux energies
+ *                    alternatives
+ *
+ * SPDX-License-Identifer: LGPL-3.0-or-later
+ *
+ * author: Quentin Bouget <quentin.bouget@cea.fr>
+ */
+
+#ifndef ROBINHOOD_MONGO_BACKEND_H
+#define ROBINHOOD_MONGO_BACKEND_H
+
+/* If the mongo backend ever supports more operations than the plugin interface
+ * exposes, those operations should be defined here.
+ */
+
+#include "robinhood/backend.h"
+
+#define RBH_MONGO_BACKEND_NAME "mongo"
+
+#mesondefine RBH_MONGO_BACKEND_MAJOR
+#mesondefine RBH_MONGO_BACKEND_MINOR
+#mesondefine RBH_MONGO_BACKEND_RELEASE
+#define RBH_MONGO_BACKEND_VERSION RPV(RBH_MONGO_BACKEND_MAJOR, \
+                                      RBH_MONGO_BACKEND_MINOR, \
+                                      RBH_MONGO_BACKEND_RELEASE)
+
+/**
+ * Create a mongo backend
+ *
+ * @param fsname    the name of the filesystem the backend refers to
+ *
+ * @return          a pointer to a newly allocated mongo backend on success,
+ *                  NULL on error and errno is set appropriately
+ *
+ * @error EINVAL    the backend's configuration is invalid (either a wrong
+ *                  value is used, or a required one is missing)
+ * @error ENOMEM    there was not enough memory available
+ */
+struct rbh_backend *
+rbh_mongo_backend_new(const char *fsname);
+
+#endif
