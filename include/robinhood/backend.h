@@ -19,6 +19,39 @@
 #include "robinhood/fsevent.h"
 #include "robinhood/iterator.h"
 
+/**
+ * For some backends, pinpointing exactly why an operation failed may be a quite
+ * difficult task. In order to facilitate the development of new backends, the
+ * following error handling mechanism is implemented:
+ *
+ * When a backend fails to handle an error properly, that is: set errno to a
+ * documented value; it should set errno to \c RBH_BACKEND_ERROR and place an
+ * explanation message in \c rbh_backend_error. This message should at best
+ * explain what kind of error happened, at worst ask for forgiveness to users.
+ *
+ * Users! Application writers! It is your responsability to report to backend
+ * maintainers when such an error occurs so that they may try their best to
+ * come up with an updated error interface that allows you to gracefully handle
+ * the error.
+ */
+
+/**
+ * Calls to a backend's methods may set errno to \c RBH_BACKEND_ERROR if they
+ * are unable to clearly identify (and document) the cause of an error.
+ * In this case, they must also write a short (< 512 bytes) message in the
+ * thread-local variable \c rbh_backend_error.
+ */
+#define RBH_BACKEND_ERROR 1024
+
+/**
+ * This buffer is only filled with meaningful data after a failed call to a
+ * backend's method set errno to \c RBH_BACKEND_ERROR. In this case, the buffer
+ * contains a message that explains as best as possible why the operation
+ * failed. This message should not be parsed in any way by applications and is
+ * only meant to be printed to users.
+ */
+extern __thread char rbh_backend_error[512];
+
 struct rbh_backend {
     unsigned int id;
     const char *name;
@@ -209,6 +242,9 @@ rbh_backend_set_option(struct rbh_backend *backend, unsigned int option,
  * fsevent of \p fsevents.
  *
  * It is the caller's responsibility to close \p fsevents.
+ *
+ * This function may fail and set errno to any error number specifically
+ * documented by \p backend.
  */
 static inline ssize_t
 rbh_backend_update(struct rbh_backend *backend, struct rbh_iterator *fsevents)
@@ -243,6 +279,9 @@ rbh_backend_update(struct rbh_backend *backend, struct rbh_iterator *fsevents)
  * It is the caller's responsability to check the corresponding masks in the
  * returned fsentries to know whether or not a given field is set and safe to
  * access.
+ *
+ * This function may fail and set errno to any error number specifically
+ * documented by \p backend.
  */
 static inline struct rbh_mut_iterator *
 rbh_backend_filter_fsentries(struct rbh_backend *backend,

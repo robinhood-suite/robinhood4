@@ -13,6 +13,8 @@
 
 #include "robinhood/backend.h"
 
+__thread char rbh_backend_error[512];
+
 int
 rbh_generic_backend_get_option(struct rbh_backend *backend, unsigned int option,
                                void *data, size_t *data_size)
