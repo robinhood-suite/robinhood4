@@ -43,6 +43,7 @@ struct rbh_fsentry {
     struct rbh_id parent_id;
     char *name;
     struct statx *statx;
+    char symlink[];
 };
 
 enum rbh_fsentry_property {
@@ -50,8 +51,9 @@ enum rbh_fsentry_property {
     RBH_FP_PARENT_ID    = 0x0002,
     RBH_FP_NAME         = 0x0004,
     RBH_FP_STATX        = 0x0008,
+    RBH_FP_SYMLINK      = 0x0010,
 
-    RBH_FP_ALL          = 0x000f
+    RBH_FP_ALL          = 0x001f
 };
 
 /**
@@ -60,12 +62,15 @@ enum rbh_fsentry_property {
  * @param id            id of the fsentry to create
  * @param parent_id     parent id of fsentry to create
  * @param name          name of the fsentry
- * @param stat          pointer to the struct stat of the fsentry to create
+ * @param statx         pointer to the struct statx of the fsentry to create
+ * @param symlink       the content of the symlink
  *
  * @return              a pointer to a newly allocated struct rbh_fsentry on
  *                      success, NULL on error and errno is set appropriately
  *
  * @error ENOMEM        there was not enough memory available
+ * @error EINVAL        \p symlink was provided, but the field \c stx_mode of
+ *                      \p statx is not that of a symlink
  *
  * The returned fsentry can be freed with a single call to free().
  *
@@ -74,6 +79,7 @@ enum rbh_fsentry_property {
  */
 struct rbh_fsentry *
 rbh_fsentry_new(const struct rbh_id *id, const struct rbh_id *parent_id,
-                const char *name, const struct statx *statx);
+                const char *name, const struct statx *statx,
+                const char *symlink);
 
 #endif

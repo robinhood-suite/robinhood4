@@ -24,25 +24,42 @@
 
 struct rbh_fsentry *
 rbh_fsentry_new(const struct rbh_id *id, const struct rbh_id *parent_id,
-                const char *name, const struct statx *statx)
+                const char *name, const struct statx *statxbuf,
+                const char *symlink)
 {
     struct rbh_fsentry *fsentry;
     size_t name_length = 0;
-    size_t data_size;
+    size_t symlink_length = 0;
+    size_t data_size = 0;
     char *data;
 
     if (name)
         name_length = strlen(name) + 1;
+    if (symlink) {
+        if (statxbuf && (statxbuf->stx_mask & STATX_TYPE)
+                && !S_ISLNK(statxbuf->stx_mode)) {
+            errno = EINVAL;
+            return NULL;
+        }
+        symlink_length = strlen(symlink) + 1;
+    }
 
-    data_size = name_length;
+    data_size += name_length + symlink_length;
     data_size += id ? id->size : 0;
     data_size += parent_id ? parent_id->size : 0;
-    data_size += statx ? sizeof(*statx) : 0;
+    data_size += statxbuf ? sizeof(*statxbuf) : 0;
 
     fsentry = calloc(1, sizeof(*fsentry) + data_size);
     if (fsentry == NULL)
         return NULL;
-    data = (char *)fsentry + sizeof(*fsentry);
+    data = fsentry->symlink;
+
+    /* fsentry->symlink */
+    if (symlink) {
+        memcpy(data, symlink, symlink_length);
+        data += symlink_length;
+        fsentry->mask |= RBH_FP_SYMLINK;
+    }
 
     /* fsentry->id */
     if (id) {
@@ -66,15 +83,15 @@ rbh_fsentry_new(const struct rbh_id *id, const struct rbh_id *parent_id,
     if (name) {
         memcpy(data, name, name_length);
         fsentry->name = data;
-        data += strlen(name) + 1;
+        data += name_length;
         fsentry->mask |= RBH_FP_NAME;
     }
 
     /* fsentry->statx */
-    if (statx) {
-        memcpy(data, statx, sizeof(*statx));
+    if (statxbuf) {
+        memcpy(data, statxbuf, sizeof(*statxbuf));
         fsentry->statx = (struct statx *)data;
-        data += sizeof(*statx);
+        data += sizeof(*statxbuf);
         fsentry->mask |= RBH_FP_STATX;
     }
 
