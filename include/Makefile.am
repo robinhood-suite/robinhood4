@@ -12,6 +12,7 @@ robinhooddir = $(includedir)/robinhood
 robinhood_HEADERS = robinhood/backend.h \
 		    robinhood/filter.h \
 		    robinhood/fsentry.h \
+		    robinhood/fsevent.h \
 		    robinhood/iterator.h \
 		    robinhood/itertools.h \
 		    robinhood/statx.h

@@ -13,6 +13,7 @@
 #include "robinhood/backend.h"
 #include "robinhood/filter.h"
 #include "robinhood/fsentry.h"
+#include "robinhood/fsevent.h"
 #include "robinhood/iterator.h"
 #include "robinhood/itertools.h"
 

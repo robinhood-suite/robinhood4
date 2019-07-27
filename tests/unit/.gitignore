@@ -3,5 +3,6 @@
 check_backend
 check_filter
 check_fsentry
+check_fsevent
 check_itertools
 check_posix
