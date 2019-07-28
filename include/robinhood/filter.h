@@ -97,7 +97,6 @@ enum rbh_filter_field {
     RBH_FF_MTIME,
     RBH_FF_CTIME,
     RBH_FF_NAME,
-    RBH_FF_PATH,
     RBH_FF_TYPE,
 };
 

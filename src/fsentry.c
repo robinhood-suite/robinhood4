@@ -24,19 +24,17 @@
 
 struct rbh_fsentry *
 rbh_fsentry_new(const struct rbh_id *id, const struct rbh_id *parent_id,
-                const char *path, const char *name, const struct statx *statx)
+                const char *name, const struct statx *statx)
 {
     struct rbh_fsentry *fsentry;
-    size_t string_length = 0;
-    size_t data_size = 0;
+    size_t name_length = 0;
+    size_t data_size;
     char *data;
 
-    if (path)
-        string_length = strlen(path) + 1;
-    else if (name)
-        string_length = strlen(name) + 1;
+    if (name)
+        name_length = strlen(name) + 1;
 
-    data_size += string_length;
+    data_size = name_length;
     data_size += id ? id->size : 0;
     data_size += parent_id ? parent_id->size : 0;
     data_size += statx ? sizeof(*statx) : 0;
@@ -64,20 +62,9 @@ rbh_fsentry_new(const struct rbh_id *id, const struct rbh_id *parent_id,
         fsentry->mask |= RBH_FP_PARENT_ID;
     }
 
-    /* fsentry->path */
-    if (path) {
-        memcpy(data, path, string_length);
-        fsentry->path = data;
-        data += strlen(path) + 1;
-        fsentry->mask |= RBH_FP_PATH;
-
-        /* fsentry->name (from path) */
-        fsentry->name = strrchr(fsentry->path, '/');
-        fsentry->name = fsentry->name ? fsentry->name + 1 : fsentry->path;
-        fsentry->mask |= RBH_FP_NAME;
-    } else if (name) {
-        /* fsentry->name (from name) */
-        memcpy(data, name, string_length);
+    /* fsentry->name */
+    if (name) {
+        memcpy(data, name, name_length);
         fsentry->name = data;
         data += strlen(name) + 1;
         fsentry->mask |= RBH_FP_NAME;

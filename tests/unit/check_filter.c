@@ -137,8 +137,6 @@ filter_field2str(enum rbh_filter_field field)
         return "RBH_FF_CTIME";
     case RBH_FF_NAME:
         return "RBH_FF_NAME";
-    case RBH_FF_PATH:
-        return "RBH_FF_PATH";
     case RBH_FF_TYPE:
         return "RBH_FF_TYPE";
     default:
@@ -286,7 +284,7 @@ static const struct rbh_filter comparison_filters[] = {
     {
         .op = RBH_FOP_IN,
         .compare = {
-            .field = RBH_FF_PATH,
+            .field = RBH_FF_TYPE,
             .value = {
                 .type = RBH_FVT_LIST,
                 .list = {
@@ -299,7 +297,7 @@ static const struct rbh_filter comparison_filters[] = {
     {
         .op = RBH_FOP_IN,
         .compare = {
-            .field = RBH_FF_TYPE,
+            .field = RBH_FF_ID,
             .value = {
                 .type = RBH_FVT_LIST,
                 .list = {
