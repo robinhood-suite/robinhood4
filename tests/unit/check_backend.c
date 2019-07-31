@@ -121,6 +121,21 @@ START_TEST(rbso_generic_deprecated)
 END_TEST
 
 /*----------------------------------------------------------------------------*
+ |                             rbh_backend_update                             |
+ *----------------------------------------------------------------------------*/
+
+START_TEST(rbu_unsupported)
+{
+    struct rbh_backend *backend = test_backend_new();
+
+    ck_assert_int_eq(rbh_backend_update(backend, NULL), -1);
+    ck_assert_int_eq(errno, ENOTSUP);
+
+    rbh_backend_destroy(backend);
+}
+END_TEST
+
+/*----------------------------------------------------------------------------*
  |                        rbh_backend_filter_fsentries                        |
  *----------------------------------------------------------------------------*/
 
@@ -145,6 +160,8 @@ unit_suite(void)
     tests = tcase_create("unsupported operations");
     tcase_add_test(tests, rbgo_unsupported);
     tcase_add_test(tests, rbso_unsupported);
+    tests = tcase_create("unsupported fsentries operations");
+    tcase_add_test(tests, rbu_unsupported);
     tcase_add_test(tests, rbff_unsupported);
 
     suite_add_tcase(suite, tests);

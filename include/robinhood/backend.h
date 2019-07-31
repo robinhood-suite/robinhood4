@@ -16,6 +16,7 @@
 
 #include "robinhood/filter.h"
 #include "robinhood/fsentry.h"
+#include "robinhood/fsevent.h"
 #include "robinhood/iterator.h"
 
 struct rbh_backend {
@@ -48,6 +49,10 @@ struct rbh_backend_operations {
             unsigned int option,
             const void *data,
             size_t data_size
+            );
+    ssize_t (*update)(
+            void *backend,
+            struct rbh_iterator *fsevents
             );
     struct rbh_mut_iterator *(*filter_fsentries)(
             void *backend,
@@ -187,6 +192,32 @@ rbh_backend_set_option(struct rbh_backend *backend, unsigned int option,
     }
 
     return backend->ops->set_option(backend, option, data, data_size);
+}
+
+/**
+ * Apply a series of fsevents on a backend
+ *
+ * @param backend   the backend on which to apply \p fsevents
+ * @param fsevents  an iterator over fsevents to apply on \p backend
+ *
+ * @return          the number of applied fsevents on success, -1 on error and
+ *                  errno is set appropriately
+ *
+ * @error ENOTSUP   \p backend does not support updating
+ *
+ * This function only returns successfully if it (sucessfully) processed each
+ * fsevent of \p fsevents.
+ *
+ * It is the caller's responsibility to close \p fsevents.
+ */
+static inline ssize_t
+rbh_backend_update(struct rbh_backend *backend, struct rbh_iterator *fsevents)
+{
+    if (backend->ops->update == NULL) {
+        errno = ENOTSUP;
+        return -1;
+    }
+    return backend->ops->update(backend, fsevents);
 }
 
 /**
