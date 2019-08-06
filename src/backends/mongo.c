@@ -110,6 +110,9 @@ mongo_cleanup(void)
  *         }
  *     }
  * }
+ *
+ * Note that when they are fetched _from_ the database, the "ns" field is
+ * unwinded so that we do not have to unwind it ourselves.
  */
 
     /*--------------------------------------------------------------------*
@@ -391,6 +394,951 @@ bson_update_from_fsevent(const struct rbh_fsevent *fsevent)
     }
 }
 
+    /*--------------------------------------------------------------------*
+     |                         fsentry_from_bson                          |
+     *--------------------------------------------------------------------*/
+
+enum statx_attributes_token {
+    SAT_UNKNOWN,
+    SAT_COMPRESSED,
+    SAT_IMMUTABLE,
+    SAT_APPEND,
+    SAT_NODUMP,
+    SAT_ENCRYPTED,
+};
+
+static enum statx_attributes_token
+statx_attributes_tokenizer(const char *key)
+{
+    switch (*key++) {
+    case 'a': /* append */
+        if (strcmp(key, "ppend"))
+            break;
+        return SAT_APPEND;
+    case 'c': /* compressed */
+        if (strcmp(key, "ompressed"))
+            break;
+        return SAT_COMPRESSED;
+    case 'e': /* encrypted */
+        if (strcmp(key, "ncrypted"))
+            break;
+        return SAT_ENCRYPTED;
+    case 'i': /* immutable */
+        if (strcmp(key, "mmutable"))
+            break;
+        return SAT_IMMUTABLE;
+    case 'n': /* nodump */
+        if (strcmp(key, "odump"))
+            break;
+        return SAT_NODUMP;
+    }
+    return SAT_UNKNOWN;
+}
+
+static bool
+statx_attributes_from_bson_iter(bson_iter_t *iter, uint64_t *mask,
+                                uint64_t *attributes)
+{
+    while (bson_iter_next(iter)) {
+        switch (statx_attributes_tokenizer(bson_iter_key(iter))) {
+        case SAT_UNKNOWN:
+            break;
+        case SAT_COMPRESSED:
+            if (!BSON_ITER_HOLDS_BOOL(iter))
+                goto out_einval;
+            if (bson_iter_bool(iter))
+                *attributes |= STATX_ATTR_COMPRESSED;
+            else
+                *attributes &= ~STATX_ATTR_COMPRESSED;
+            *mask |= STATX_ATTR_COMPRESSED;
+            break;
+        case SAT_IMMUTABLE:
+            if (!BSON_ITER_HOLDS_BOOL(iter))
+                goto out_einval;
+            if (bson_iter_bool(iter))
+                *attributes |= STATX_ATTR_IMMUTABLE;
+            else
+                *attributes &= ~STATX_ATTR_IMMUTABLE;
+            *mask |= STATX_ATTR_IMMUTABLE;
+            break;
+        case SAT_APPEND:
+            if (!BSON_ITER_HOLDS_BOOL(iter))
+                goto out_einval;
+            if (bson_iter_bool(iter))
+                *attributes |= STATX_ATTR_APPEND;
+            else
+                *attributes &= ~STATX_ATTR_APPEND;
+            *mask |= STATX_ATTR_APPEND;
+            break;
+        case SAT_NODUMP:
+            if (!BSON_ITER_HOLDS_BOOL(iter))
+                goto out_einval;
+            if (bson_iter_bool(iter))
+                *attributes |= STATX_ATTR_NODUMP;
+            else
+                *attributes &= ~STATX_ATTR_NODUMP;
+            *mask |= STATX_ATTR_NODUMP;
+            break;
+        case SAT_ENCRYPTED:
+            if (!BSON_ITER_HOLDS_BOOL(iter))
+                goto out_einval;
+            if (bson_iter_bool(iter))
+                *attributes |= STATX_ATTR_ENCRYPTED;
+            else
+                *attributes &= ~STATX_ATTR_ENCRYPTED;
+            *mask |= STATX_ATTR_ENCRYPTED;
+            break;
+        }
+    }
+
+    return true;
+
+out_einval:
+    errno = EINVAL;
+    return false;
+}
+
+enum statx_timestamp_token {
+    STT_UNKNOWN,
+    STT_SEC,
+    STT_NSEC,
+};
+
+static enum statx_timestamp_token
+statx_timestamp_tokenizer(const char *key)
+{
+    switch (*key++) {
+    case 'n': /* nsec */
+        if (strcmp(key, "sec"))
+            break;
+        return STT_NSEC;
+    case 's': /* sec */
+        if (strcmp(key, "ec"))
+            break;
+        return STT_SEC;
+    }
+    return STT_UNKNOWN;
+}
+
+static bool
+statx_timestamp_from_bson_iter(bson_iter_t *iter,
+                               struct statx_timestamp *timestamp)
+{
+    struct { /* mandatory fields */
+        bool sec:1;
+        bool nsec:1;
+    } seen;
+
+    memset(&seen, 0, sizeof(seen));
+
+    while (bson_iter_next(iter)) {
+        switch (statx_timestamp_tokenizer(bson_iter_key(iter))) {
+        case STT_UNKNOWN:
+            break;
+        case STT_SEC:
+            if (!BSON_ITER_HOLDS_INT64(iter))
+                goto out_einval;
+            timestamp->tv_sec = bson_iter_int64(iter);
+            seen.sec = true;
+            break;
+        case STT_NSEC:
+            if (!BSON_ITER_HOLDS_INT32(iter))
+                goto out_einval;
+            timestamp->tv_nsec = bson_iter_int32(iter);
+            seen.nsec = true;
+            break;
+        }
+    }
+
+    errno = EINVAL;
+    return seen.sec && seen.nsec;
+
+out_einval:
+    errno = EINVAL;
+    return false;
+}
+
+enum statx_device_token {
+    SDT_UNKNOWN,
+    SDT_MAJOR,
+    SDT_MINOR,
+};
+
+static enum statx_device_token
+statx_device_tokenizer(const char *key)
+{
+    if (*key++ != 'm')
+        return SDT_UNKNOWN;
+
+    switch (*key++) {
+    case 'a': /* major */
+        if (strcmp(key, "jor"))
+            break;
+        return SDT_MAJOR;
+    case 'i': /* minor */
+        if (strcmp(key, "nor"))
+            break;
+        return SDT_MINOR;
+    }
+    return SDT_UNKNOWN;
+}
+
+static bool
+statx_device_from_bson_iter(bson_iter_t *iter, uint32_t *major, uint32_t *minor)
+{
+    struct { /* mandatory fields */
+        bool major:1;
+        bool minor:1;
+    } seen;
+
+    memset(&seen, 0, sizeof(seen));
+
+    while (bson_iter_next(iter)) {
+        switch (statx_device_tokenizer(bson_iter_key(iter))) {
+        case SDT_UNKNOWN:
+            break;
+        case SDT_MAJOR:
+            if (!BSON_ITER_HOLDS_INT32(iter))
+                goto out_einval;
+            *major = bson_iter_int32(iter);
+            seen.major = true;
+            break;
+        case SDT_MINOR:
+            if (!BSON_ITER_HOLDS_INT32(iter))
+                goto out_einval;
+            *minor = bson_iter_int32(iter);
+            seen.minor = true;
+            break;
+        }
+    }
+
+    errno = EINVAL;
+    return seen.major && seen.minor;
+
+out_einval:
+    errno = EINVAL;
+    return false;
+}
+
+enum statx_token {
+    ST_UNKNOWN,
+    ST_BLKSIZE,
+    ST_NLINK,
+    ST_UID,
+    ST_GID,
+    ST_TYPE,
+    ST_MODE,
+    ST_INO,
+    ST_SIZE,
+    ST_BLOCKS,
+    ST_ATTRIBUTES,
+    ST_ATIME,
+    ST_BTIME,
+    ST_CTIME,
+    ST_MTIME,
+    ST_RDEV,
+    ST_DEV,
+};
+
+static enum statx_token
+statx_tokenizer(const char *key)
+{
+    switch (*key++) {
+    case 'a': /* atime, attributes */
+        if (*key++ != 't')
+            break;
+        switch (*key++) {
+        case 'i': /* atime */
+            if (strcmp(key, "me"))
+                break;
+            return ST_ATIME;
+        case 't': /* attributes */
+            if (strcmp(key, "ributes"))
+                break;
+            return ST_ATTRIBUTES;
+        }
+        break;
+    case 'b': /* blksize, blocks, btime */
+        switch (*key++) {
+        case 'l': /* blksize, blocks */
+            switch (*key++) {
+            case 'k': /* blksize */
+                if (strcmp(key, "size"))
+                    break;
+                return ST_BLKSIZE;
+            case 'o': /* blocks */
+                if (strcmp(key, "cks"))
+                    break;
+                return ST_BLOCKS;
+            }
+            break;
+        case 't': /* btime */
+            if (strcmp(key, "ime"))
+                break;
+            return ST_BTIME;
+        }
+        break;
+    case 'c': /* ctime */
+        if (strcmp(key, "time"))
+            break;
+        return ST_CTIME;
+    case 'd': /* dev */
+        if (strcmp(key, "ev"))
+            break;
+        return ST_DEV;
+    case 'g': /* gid */
+        if (strcmp(key, "id"))
+            break;
+        return ST_GID;
+    case 'i': /* ino */
+        if (strcmp(key, "no"))
+            break;
+        return ST_INO;
+    case 'm': /* mode, mtime */
+        switch (*key++) {
+        case 'o': /* mode */
+            if (strcmp(key, "de"))
+                break;
+            return ST_MODE;
+        case 't': /* mtime */
+            if (strcmp(key, "ime"))
+                break;
+            return ST_MTIME;
+        }
+        break;
+    case 'n': /* nlink */
+        if (strcmp(key, "link"))
+            break;
+        return ST_NLINK;
+    case 'r': /* rdev */
+        if (strcmp(key, "dev"))
+            break;
+        return ST_RDEV;
+    case 's': /* size */
+        if (strcmp(key, "ize"))
+            break;
+        return ST_SIZE;
+    case 't': /* type */
+        if (strcmp(key, "ype"))
+            break;
+        return ST_TYPE;
+    case 'u': /* uid */
+        if (strcmp(key, "id"))
+            break;
+        return ST_UID;
+    }
+    return ST_UNKNOWN;
+}
+
+static bool
+statx_from_bson_iter(bson_iter_t *iter, struct statx *statxbuf)
+{
+    struct { /* mandatory fields */
+        bool blksize:1;
+        bool rdev:1;
+        bool dev:1;
+    } seen;
+
+    memset(&seen, 0, sizeof(seen));
+    memset(statxbuf, 0, sizeof(*statxbuf));
+
+    while (bson_iter_next(iter)) {
+        bson_iter_t subiter;
+
+        switch (statx_tokenizer(bson_iter_key(iter))) {
+        case ST_UNKNOWN:
+            break;
+        case ST_BLKSIZE:
+            if (!BSON_ITER_HOLDS_INT32(iter))
+                goto out_einval;
+            statxbuf->stx_blksize = bson_iter_int32(iter);
+            seen.blksize = true;
+            break;
+        case ST_NLINK:
+            if (!BSON_ITER_HOLDS_INT32(iter))
+                goto out_einval;
+            statxbuf->stx_nlink = bson_iter_int32(iter);
+            statxbuf->stx_mask |= STATX_NLINK;
+            break;
+        case ST_UID:
+            if (!BSON_ITER_HOLDS_INT32(iter))
+                goto out_einval;
+            statxbuf->stx_uid = bson_iter_int32(iter);
+            statxbuf->stx_mask |= STATX_UID;
+            break;
+        case ST_GID:
+            if (!BSON_ITER_HOLDS_INT32(iter))
+                goto out_einval;
+            statxbuf->stx_gid = bson_iter_int32(iter);
+            statxbuf->stx_mask |= STATX_GID;
+            break;
+        case ST_TYPE:
+            if (!BSON_ITER_HOLDS_INT32(iter))
+                goto out_einval;
+            statxbuf->stx_mode |= bson_iter_int32(iter) & S_IFMT;
+            statxbuf->stx_mask |= STATX_TYPE;
+            break;
+        case ST_MODE:
+            if (!BSON_ITER_HOLDS_INT32(iter))
+                goto out_einval;
+            statxbuf->stx_mode |= bson_iter_int32(iter) & ~S_IFMT;
+            statxbuf->stx_mask |= STATX_MODE;
+            break;
+        case ST_INO:
+            if (!BSON_ITER_HOLDS_INT64(iter))
+                goto out_einval;
+            statxbuf->stx_ino = bson_iter_int64(iter);
+            statxbuf->stx_mask |= STATX_INO;
+            break;
+        case ST_SIZE:
+            if (!BSON_ITER_HOLDS_INT64(iter))
+                goto out_einval;
+            statxbuf->stx_size = bson_iter_int64(iter);
+            statxbuf->stx_mask |= STATX_SIZE;
+            break;
+        case ST_BLOCKS:
+            if (!BSON_ITER_HOLDS_INT64(iter))
+                goto out_einval;
+            statxbuf->stx_blocks = bson_iter_int64(iter);
+            statxbuf->stx_mask |= STATX_BLOCKS;
+            break;
+        case ST_ATTRIBUTES:
+            if (!BSON_ITER_HOLDS_DOCUMENT(iter))
+                goto out_einval;
+            bson_iter_recurse(iter, &subiter);
+            if (!statx_attributes_from_bson_iter(&subiter,
+                                                 &statxbuf->stx_attributes_mask,
+                                                 &statxbuf->stx_attributes))
+                return false;
+            break;
+        case ST_ATIME:
+            if (!BSON_ITER_HOLDS_DOCUMENT(iter))
+                goto out_einval;
+            bson_iter_recurse(iter, &subiter);
+            if (!statx_timestamp_from_bson_iter(&subiter, &statxbuf->stx_atime))
+                return false;
+            statxbuf->stx_mask |= STATX_ATIME;
+            break;
+        case ST_BTIME:
+            if (!BSON_ITER_HOLDS_DOCUMENT(iter))
+                goto out_einval;
+            bson_iter_recurse(iter, &subiter);
+            if (!statx_timestamp_from_bson_iter(&subiter, &statxbuf->stx_btime))
+                return false;
+            statxbuf->stx_mask |= STATX_BTIME;
+            break;
+        case ST_CTIME:
+            if (!BSON_ITER_HOLDS_DOCUMENT(iter))
+                goto out_einval;
+            bson_iter_recurse(iter, &subiter);
+            if (!statx_timestamp_from_bson_iter(&subiter, &statxbuf->stx_ctime))
+                return false;
+            statxbuf->stx_mask |= STATX_CTIME;
+            break;
+        case ST_MTIME:
+            if (!BSON_ITER_HOLDS_DOCUMENT(iter))
+                goto out_einval;
+            bson_iter_recurse(iter, &subiter);
+            if (!statx_timestamp_from_bson_iter(&subiter, &statxbuf->stx_mtime))
+                return false;
+            statxbuf->stx_mask |= STATX_MTIME;
+            break;
+        case ST_RDEV:
+            if (!BSON_ITER_HOLDS_DOCUMENT(iter))
+                goto out_einval;
+            bson_iter_recurse(iter, &subiter);
+            if (!statx_device_from_bson_iter(&subiter,
+                                             &statxbuf->stx_rdev_major,
+                                             &statxbuf->stx_rdev_minor))
+                return false;
+            seen.rdev = true;
+            break;
+        case ST_DEV:
+            if (!BSON_ITER_HOLDS_DOCUMENT(iter))
+                goto out_einval;
+            bson_iter_recurse(iter, &subiter);
+            if (!statx_device_from_bson_iter(&subiter, &statxbuf->stx_dev_major,
+                                             &statxbuf->stx_dev_minor))
+                return false;
+            seen.dev = true;
+            break;
+        }
+    }
+
+    errno = EINVAL;
+    return seen.blksize && seen.rdev && seen.dev;
+
+out_einval:
+    errno = EINVAL;
+    return false;
+}
+
+enum namespace_token {
+    NT_UNKNOWN,
+    NT_PARENT,
+    NT_NAME,
+};
+
+static enum namespace_token
+namespace_tokenizer(const char *key)
+{
+    switch (*key++) {
+    case 'n': /* name */
+        if (strcmp(key, "ame"))
+            break;
+        return NT_NAME;
+    case 'p': /* parent */
+        if (strcmp(key, "arent"))
+            break;
+        return NT_PARENT;
+    }
+    return NT_UNKNOWN;
+}
+
+enum fsentry_token {
+    FT_UNKNOWN,
+    FT_ID,
+    FT_NAMESPACE,
+    FT_SYMLINK,
+    FT_STATX,
+};
+
+static enum fsentry_token
+fsentry_tokenizer(const char *key)
+{
+    switch (*key++) {
+    case '_': /* _id */
+        if (strcmp(key, "id"))
+            break;
+        return FT_ID;
+    case 'n': /* ns */
+        if (strcmp(key, "s"))
+            break;
+        return FT_NAMESPACE;
+    case 's': /* statx, symlink */
+        switch (*key++) {
+        case 't': /* statx */
+            if (strcmp(key, "atx"))
+                break;
+            return FT_STATX;
+        case 'y': /* symlink */
+            if (strcmp(key, "mlink"))
+                break;
+            return FT_SYMLINK;
+        }
+        break;
+    }
+    return FT_UNKNOWN;
+}
+
+static bool
+bson_iter_rbh_id(bson_iter_t *iter, struct rbh_id *id)
+{
+    const bson_value_t *value = bson_iter_value(iter);
+
+    if (value->value.v_binary.subtype != BSON_SUBTYPE_BINARY) {
+        errno = EINVAL;
+        return false;
+    }
+
+    id->data = (char *)value->value.v_binary.data;
+    id->size = value->value.v_binary.data_len;
+    return true;
+}
+
+static const struct rbh_id PARENT_ROOT_ID = {
+    .data = NULL,
+    .size = 0,
+};
+
+static struct rbh_fsentry *
+fsentry_from_bson_iter(bson_iter_t *iter)
+{
+    struct rbh_id id;
+    struct rbh_id parent_id;
+    const char *name = NULL;
+    const char *symlink = NULL;
+    struct statx statxbuf;
+    struct {
+        bool id:1;
+        bool parent:1;
+        bool statx:1;
+    } seen;
+
+    memset(&seen, 0, sizeof(seen));
+
+    while (bson_iter_next(iter)) {
+        bson_iter_t subiter;
+
+        switch (fsentry_tokenizer(bson_iter_key(iter))) {
+        case FT_UNKNOWN:
+            break;
+        case FT_ID:
+            if (!BSON_ITER_HOLDS_BINARY(iter) || !bson_iter_rbh_id(iter, &id))
+                goto out_einval;
+            seen.id = true;
+            break;
+        case FT_NAMESPACE:
+            if (!BSON_ITER_HOLDS_DOCUMENT(iter))
+                goto out_einval;
+            bson_iter_recurse(iter, &subiter);
+
+            /* The parsing of the namespace subdocument is be done here not to
+             * allocate memory on the heap and to simplify the handling of a
+             * missing "parent" field.
+             */
+            while (bson_iter_next(&subiter)) {
+                switch (namespace_tokenizer(bson_iter_key(&subiter))) {
+                case NT_UNKNOWN:
+                    break;
+                case NT_PARENT:
+                    if (BSON_ITER_HOLDS_NULL(&subiter))
+                        parent_id = PARENT_ROOT_ID;
+                    else if (!BSON_ITER_HOLDS_BINARY(&subiter)
+                            || !bson_iter_rbh_id(&subiter, &parent_id))
+                        goto out_einval;
+                    seen.parent = true;
+                    break;
+                case NT_NAME:
+                    if (!BSON_ITER_HOLDS_UTF8(&subiter))
+                        goto out_einval;
+                    name = bson_iter_utf8(&subiter, NULL);
+                    break;
+                }
+            }
+            break;
+        case FT_SYMLINK:
+            if (!BSON_ITER_HOLDS_UTF8(iter))
+                goto out_einval;
+            symlink = bson_iter_utf8(iter, NULL);
+            break;
+        case FT_STATX:
+            if (!BSON_ITER_HOLDS_DOCUMENT(iter))
+                goto out_einval;
+            bson_iter_recurse(iter, &subiter);
+            if (!statx_from_bson_iter(&subiter, &statxbuf))
+                return false;
+            seen.statx = true;
+            break;
+        }
+    }
+
+    return rbh_fsentry_new(seen.id ? &id : NULL,
+                           seen.parent ? &parent_id : NULL, name,
+                           seen.statx ? &statxbuf : NULL, symlink);
+
+out_einval:
+    errno = EINVAL;
+    return false;
+}
+
+static struct rbh_fsentry *
+fsentry_from_bson(const bson_t *bson)
+{
+    bson_iter_t iter;
+
+    if (!bson_iter_init(&iter, bson)) {
+        /* XXX: libbson is not quite clear on why this would happen, the code
+         *      makes me think it only happens if `bson' is malformed.
+         */
+        errno = EINVAL;
+        return NULL;
+    }
+
+    return fsentry_from_bson_iter(&iter);
+}
+
+    /*--------------------------------------------------------------------*
+     |                         bson_append_filter                         |
+     *--------------------------------------------------------------------*/
+
+/* The following helpers should only be used on a valid filter */
+
+static const char * const FOP2STR[] = {
+    [RBH_FOP_EQUAL]             = "$eq",
+    [RBH_FOP_LOWER_THAN]        = "$lt",
+    [RBH_FOP_LOWER_OR_EQUAL]    = "$le",
+    [RBH_FOP_GREATER_THAN]      = "$gt",
+    [RBH_FOP_GREATER_OR_EQUAL]  = "$ge",
+    [RBH_FOP_IN]                = "$in",
+    [RBH_FOP_REGEX]             = "$regex",
+    [RBH_FOP_BITS_ANY_SET]      = "$bitsAnySet",
+    [RBH_FOP_BITS_ALL_SET]      = "$bitsAllSet",
+    [RBH_FOP_BITS_ANY_CLEAR]    = "$bitsAnyClear",
+    [RBH_FOP_BITS_ALL_CLEAR]    = "$bitsAllClear",
+    [RBH_FOP_AND]               = "$and",
+    [RBH_FOP_OR]                = "$or",
+};
+
+static const char * const NEGATED_FOP2STR[] = {
+    [RBH_FOP_EQUAL]             = "$ne",
+    [RBH_FOP_LOWER_THAN]        = "$ge",
+    [RBH_FOP_LOWER_OR_EQUAL]    = "$gt",
+    [RBH_FOP_GREATER_THAN]      = "$le",
+    [RBH_FOP_GREATER_OR_EQUAL]  = "$lt",
+    [RBH_FOP_IN]                = "$nin",
+    [RBH_FOP_REGEX]             = "$not", /* This is not a mistake */
+    [RBH_FOP_BITS_ANY_SET]      = "$bitsAllClear",
+    [RBH_FOP_BITS_ALL_SET]      = "$bitsAnyClear",
+    [RBH_FOP_BITS_ANY_CLEAR]    = "$bitsAllSet",
+    [RBH_FOP_BITS_ALL_CLEAR]    = "$bitsAnySet",
+    [RBH_FOP_AND]               = "$or",
+    [RBH_FOP_OR]                = "$and",
+};
+
+static const char *
+fop2str(enum rbh_filter_operator op, bool negate)
+{
+    return negate ? NEGATED_FOP2STR[op] : FOP2STR[op];
+}
+
+static const char * const FIELD2STR[] = {
+    [RBH_FF_ID]         = MFP_ID,
+    [RBH_FF_PARENT_ID]  = MFP_NAMESPACE "." MFP_PARENT_ID,
+    [RBH_FF_NAME]       = MFP_NAMESPACE "." MFP_NAME,
+    [RBH_FF_TYPE]       = MFP_STATX "." MFP_STATX_TYPE,
+    [RBH_FF_ATIME]      = MFP_STATX "." MFP_STATX_ATIME "." MFP_STATX_TIMESTAMP_SEC,
+    [RBH_FF_CTIME]      = MFP_STATX "." MFP_STATX_CTIME "." MFP_STATX_TIMESTAMP_SEC,
+    [RBH_FF_MTIME]      = MFP_STATX "." MFP_STATX_MTIME "." MFP_STATX_TIMESTAMP_SEC,
+};
+
+static bool
+bson_append_filter_value(bson_t *bson, const char *key, size_t key_length,
+                         const struct rbh_filter_value *value);
+
+static bool
+bson_append_list(bson_t *bson, const char *key, size_t key_length,
+                 const struct rbh_filter_value *values, size_t count)
+{
+    bson_t array;
+
+    if (!bson_append_array_begin(bson, key, key_length, &array))
+        return false;
+
+    for (uint32_t i = 0; i < count; i++) {
+        char str[16];
+
+        key_length = bson_uint32_to_string(i, &key, str, sizeof(str));
+        if (!bson_append_filter_value(&array, key, key_length, &values[i]))
+            return false;
+    }
+
+    return bson_append_array_end(bson, &array);
+}
+
+static bool
+_bson_append_regex(bson_t *bson, const char *key, size_t key_length,
+                    const char *regex, unsigned int options)
+{
+    char mongo_regex_options[8] = {'s', '\0',};
+    uint8_t i = 1;
+
+    if (options & RBH_FRO_CASE_INSENSITIVE)
+        mongo_regex_options[i++] = 'i';
+
+    return bson_append_regex(bson, key, key_length, regex, mongo_regex_options);
+}
+
+static bool
+bson_append_filter_value(bson_t *bson, const char *key, size_t key_length,
+                         const struct rbh_filter_value *value)
+{
+    switch (value->type) {
+    case RBH_FVT_BINARY:
+        return bson_append_binary(bson, key, key_length, BSON_SUBTYPE_BINARY,
+                                  (const unsigned char *)value->binary.data,
+                                  value->binary.size);
+    case RBH_FVT_INT32:
+        return bson_append_int32(bson, key, key_length, value->int32);
+    case RBH_FVT_INT64:
+        return bson_append_int64(bson, key, key_length, value->int64);
+    case RBH_FVT_STRING:
+        return bson_append_utf8(bson, key, key_length, value->string,
+                                strlen(value->string));
+    case RBH_FVT_REGEX:
+        return _bson_append_regex(bson, key, key_length, value->regex.string,
+                                   value->regex.options);
+    case RBH_FVT_TIME:
+        /* Since we do not use the native MongoDB date type, we must adapt our
+         * comparison operators.
+         */
+        return bson_append_int64(bson, key, key_length, value->time);
+    case RBH_FVT_LIST:
+        return bson_append_list(bson, key, key_length, value->list.elements,
+                                value->list.count);
+    }
+    __builtin_unreachable();
+}
+
+#define BSON_APPEND_FILTER_VALUE(bson, key, filter_value) \
+    bson_append_filter_value(bson, key, strlen(key), filter_value)
+
+static bool
+bson_append_comparison_filter(bson_t *bson, const struct rbh_filter *filter,
+                               bool negate)
+{
+    bson_t document;
+
+    if (filter->op == RBH_FOP_REGEX && !negate)
+        /* The regex operator is tricky: $not and $regex are not compatible.
+         *
+         * The workaround is not to use the $regex operator and replace it with
+         * the "/pattern/" syntax.
+         */
+        return BSON_APPEND_FILTER_VALUE(bson, FIELD2STR[filter->compare.field],
+                                        &filter->compare.value);
+
+    return BSON_APPEND_DOCUMENT_BEGIN(bson, FIELD2STR[filter->compare.field],
+                                      &document)
+        && BSON_APPEND_FILTER_VALUE(&document, fop2str(filter->op, negate),
+                                    &filter->compare.value)
+        && bson_append_document_end(bson, &document);
+}
+
+static bool
+_bson_append_filter(bson_t *bson, const struct rbh_filter *filter, bool negate);
+
+static bool
+bson_append_filter(bson_t *bson, const char *key, size_t key_length,
+                    const struct rbh_filter *filter, bool negate)
+{
+    bson_t document;
+
+    return bson_append_document_begin(bson, key, key_length, &document)
+        && _bson_append_filter(&document, filter, negate)
+        && bson_append_document_end(bson, &document);
+}
+#define BSON_APPEND_FILTER(bson, key, filter) \
+    bson_append_filter(bson, key, strlen(key), filter, false)
+
+static bool
+bson_append_logical_filter(bson_t *bson, const struct rbh_filter *filter,
+                           bool negate)
+{
+    bson_t array;
+
+    if (filter->op == RBH_FOP_NOT)
+        return _bson_append_filter(bson, filter->logical.filters[0], !negate);
+
+    if (!BSON_APPEND_ARRAY_BEGIN(bson, fop2str(filter->op, negate), &array))
+        return false;
+
+    for (uint32_t i = 0; i < filter->logical.count; i++) {
+        const char *key;
+        size_t length;
+        char str[16];
+
+        length = bson_uint32_to_string(i, &key, str, sizeof(str));
+        if (!bson_append_filter(&array, key, length, filter->logical.filters[i],
+                                negate))
+            return false;
+    }
+
+    return bson_append_array_end(bson, &array);
+}
+
+
+static bool
+_bson_append_filter(bson_t *bson, const struct rbh_filter *filter, bool negate)
+{
+    if (filter == NULL)
+        /* XXX: I would prefer to use {$expr: false} instead of
+         *      {$where: "false"}, but mongodb does not accept $expr in the
+         *      filter of an upsert operation, even though this is not
+         *      documented anywhere.
+         */
+        return BSON_APPEND_BOOL(bson, "$expr", !negate);
+
+    if (rbh_is_comparison_operator(filter->op))
+        return bson_append_comparison_filter(bson, filter, negate);
+    return bson_append_logical_filter(bson, filter, negate);
+}
+
+    /*--------------------------------------------------------------------*
+     |                     bson_pipieline_from_filter                     |
+     *--------------------------------------------------------------------*/
+
+static bson_t *
+bson_pipeline_from_filter(const struct rbh_filter *filter)
+{
+    bson_t *pipeline = bson_new();
+    bson_t array;
+    bson_t stage;
+
+    if (BSON_APPEND_ARRAY_BEGIN(pipeline, "pipeline", &array)
+     && BSON_APPEND_DOCUMENT_BEGIN(&array, "0", &stage)
+     && BSON_APPEND_UTF8(&stage, "$unwind", "$" MFP_NAMESPACE)
+     && bson_append_document_end(&array, &stage)
+     && BSON_APPEND_DOCUMENT_BEGIN(&array, "1", &stage)
+     && BSON_APPEND_FILTER(&stage, "$match", filter)
+     && bson_append_document_end(&array, &stage)
+     && bson_append_array_end(pipeline, &array))
+        return pipeline;
+
+    bson_destroy(pipeline);
+    errno = ENOBUFS;
+    return NULL;
+}
+
+/*----------------------------------------------------------------------------*
+ |                               mongo_iterator                               |
+ *----------------------------------------------------------------------------*/
+
+struct mongo_iterator {
+    struct rbh_mut_iterator iterator;
+    mongoc_cursor_t *cursor;
+};
+
+static void *
+mongo_iter_next(void *iterator)
+{
+    struct mongo_iterator *mongo_iter = iterator;
+    int save_errno = errno;
+    const bson_t *doc;
+
+    errno = 0;
+    if (mongoc_cursor_next(mongo_iter->cursor, &doc)) {
+        errno = save_errno;
+        return fsentry_from_bson(doc);
+    }
+
+    errno = errno ? : ENODATA;
+    return NULL;
+}
+
+static void
+mongo_iter_destroy(void *iterator)
+{
+    struct mongo_iterator *mongo_iter = iterator;
+
+    mongoc_cursor_destroy(mongo_iter->cursor);
+    free(mongo_iter);
+}
+
+static const struct rbh_mut_iterator_operations MONGO_ITER_OPS = {
+    .next = mongo_iter_next,
+    .destroy = mongo_iter_destroy,
+};
+
+static const struct rbh_mut_iterator MONGO_ITER = {
+    .ops = &MONGO_ITER_OPS,
+};
+
+static struct mongo_iterator *
+mongo_iterator_new(mongoc_cursor_t *cursor)
+{
+    struct mongo_iterator *mongo_iter;
+
+    mongo_iter = malloc(sizeof(*mongo_iter));
+    if (mongo_iter == NULL)
+        return NULL;
+
+    mongo_iter->iterator = MONGO_ITER;
+    mongo_iter->cursor = cursor;
+
+    return mongo_iter;
+}
+
 /*----------------------------------------------------------------------------*
  |                             MONGO_BACKEND_OPS                              |
  *----------------------------------------------------------------------------*/
@@ -599,6 +1547,46 @@ mongo_backend_update(void *backend, struct rbh_iterator *fsevents)
 }
 
     /*--------------------------------------------------------------------*
+     |                          filter fsentries                          |
+     *--------------------------------------------------------------------*/
+
+static struct rbh_mut_iterator *
+mongo_backend_filter_fsentries(void *backend, const struct rbh_filter *filter,
+                               unsigned int fsentry_mask,
+                               unsigned int statx_mask)
+{
+    struct mongo_backend *mongo = backend;
+    struct mongo_iterator *mongo_iter;
+    mongoc_cursor_t *cursor;
+    bson_t *pipeline;
+
+    if (rbh_filter_validate(filter))
+        return NULL;
+
+    pipeline = bson_pipeline_from_filter(filter);
+    if (pipeline == NULL)
+        return NULL;
+
+    cursor = mongoc_collection_aggregate(mongo->entries, MONGOC_QUERY_NONE,
+                                         pipeline, NULL, NULL);
+    bson_destroy(pipeline);
+    if (cursor == NULL) {
+        errno = EINVAL;
+        return NULL;
+    }
+
+    mongo_iter = mongo_iterator_new(cursor);
+    if (mongo_iter == NULL) {
+        int save_errno = errno;
+
+        mongoc_cursor_destroy(cursor);
+        errno = save_errno;
+    }
+
+    return &mongo_iter->iterator;
+}
+
+    /*--------------------------------------------------------------------*
      |                              destroy                               |
      *--------------------------------------------------------------------*/
 
@@ -616,6 +1604,7 @@ mongo_backend_destroy(void *backend)
 
 static const struct rbh_backend_operations MONGO_BACKEND_OPS = {
     .update = mongo_backend_update,
+    .filter_fsentries = mongo_backend_filter_fsentries,
     .destroy = mongo_backend_destroy,
 };
 
