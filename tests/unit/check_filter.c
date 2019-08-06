@@ -27,8 +27,10 @@ filter_value_type2str(enum rbh_filter_value_type type)
     switch (type) {
     case RBH_FVT_BINARY:
         return "RBH_FVT_BINARY";
-    case RBH_FVT_INTEGER:
-        return "RBH_FVT_INTEGER";
+    case RBH_FVT_INT32:
+        return "RBH_FVT_INT32";
+    case RBH_FVT_INT64:
+        return "RBH_FVT_INT64";
     case RBH_FVT_STRING:
         return "RBH_FVT_STRING";
     case RBH_FVT_REGEX:
@@ -56,8 +58,11 @@ filter_value_type2str(enum rbh_filter_value_type type)
         _ck_assert_mem((X)->binary.data, OP, (Y)->binary.data, \
                        (X)->binary.size); \
         break; \
-    case RBH_FVT_INTEGER: \
-        _ck_assert_int((X)->integer, OP, (Y)->integer); \
+    case RBH_FVT_INT32: \
+        _ck_assert_int((X)->int32, OP, (Y)->int32); \
+        break; \
+    case RBH_FVT_INT64: \
+        _ck_assert_int((X)->int64, OP, (Y)->int64); \
         break; \
     case RBH_FVT_STRING: \
         _ck_assert_str((X)->string, OP, (Y)->string, 0, 0); \
@@ -179,12 +184,12 @@ static const struct rbh_filter_value filter_values[] = {
         },
     },
     {
-        .type = RBH_FVT_INTEGER,
-        .integer = 0,
+        .type = RBH_FVT_INT32,
+        .int32 = 0,
     },
     {
-        .type = RBH_FVT_INTEGER,
-        .integer = INT_MAX,
+        .type = RBH_FVT_INT64,
+        .int64 = INT64_MAX,
     },
     {
         .type = RBH_FVT_STRING,
@@ -233,8 +238,8 @@ static const struct rbh_filter comparison_filters[] = {
         .compare = {
             .field = RBH_FF_PARENT_ID,
             .value = {
-                .type = RBH_FVT_INTEGER,
-                .integer = INT_MAX,
+                .type = RBH_FVT_INT32,
+                .int32 = INT32_MAX,
             },
         },
     },
@@ -332,20 +337,40 @@ START_TEST(rfcbn_basic)
 END_TEST
 
 /*----------------------------------------------------------------------------*
- |                      rbh_filter_compare_integer_new()                      |
+ |                       rbh_filter_compare_int32_new()                       |
  *----------------------------------------------------------------------------*/
 
-START_TEST(rfcin_basic)
+START_TEST(rfci32n_basic)
 {
     struct rbh_filter *filter;
 
-    filter = rbh_filter_compare_integer_new(RBH_FOP_EQUAL, RBH_FF_ID, 1234);
+    filter = rbh_filter_compare_int32_new(RBH_FOP_EQUAL, RBH_FF_ID, 1234);
     ck_assert_ptr_nonnull(filter);
 
     ck_assert_int_eq(filter->op, RBH_FOP_EQUAL);
     ck_assert_int_eq(filter->compare.field, RBH_FF_ID);
-    ck_assert_int_eq(filter->compare.value.type, RBH_FVT_INTEGER);
-    ck_assert_int_eq(filter->compare.value.integer, 1234);
+    ck_assert_int_eq(filter->compare.value.type, RBH_FVT_INT32);
+    ck_assert_int_eq(filter->compare.value.int32, 1234);
+
+    rbh_filter_free(filter);
+}
+END_TEST
+
+/*----------------------------------------------------------------------------*
+ |                       rbh_filter_compare_int64_new()                       |
+ *----------------------------------------------------------------------------*/
+
+START_TEST(rfci64n_basic)
+{
+    struct rbh_filter *filter;
+
+    filter = rbh_filter_compare_int64_new(RBH_FOP_EQUAL, RBH_FF_ID, 1234);
+    ck_assert_ptr_nonnull(filter);
+
+    ck_assert_int_eq(filter->op, RBH_FOP_EQUAL);
+    ck_assert_int_eq(filter->compare.field, RBH_FF_ID);
+    ck_assert_int_eq(filter->compare.value.type, RBH_FVT_INT64);
+    ck_assert_int_eq(filter->compare.value.int64, 1234);
 
     rbh_filter_free(filter);
 }
@@ -587,8 +612,13 @@ unit_suite(void)
 
     suite_add_tcase(suite, tests);
 
-    tests = tcase_create("rbh_filter_compare_integer_new");
-    tcase_add_test(tests, rfcin_basic);
+    tests = tcase_create("rbh_filter_compare_int32_new");
+    tcase_add_test(tests, rfci32n_basic);
+
+    suite_add_tcase(suite, tests);
+
+    tests = tcase_create("rbh_filter_compare_int64_new");
+    tcase_add_test(tests, rfci64n_basic);
 
     suite_add_tcase(suite, tests);
 

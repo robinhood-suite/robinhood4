@@ -48,8 +48,8 @@ rbh_filter_compare_binary_new(enum rbh_filter_operator op,
 }
 
 struct rbh_filter *
-rbh_filter_compare_integer_new(enum rbh_filter_operator op,
-                               enum rbh_filter_field field, int integer)
+rbh_filter_compare_int32_new(enum rbh_filter_operator op,
+                             enum rbh_filter_field field, int32_t int32)
 {
     struct rbh_filter *filter;
 
@@ -65,8 +65,32 @@ rbh_filter_compare_integer_new(enum rbh_filter_operator op,
 
     filter->op = op;
     filter->compare.field = field;
-    filter->compare.value.type = RBH_FVT_INTEGER;
-    filter->compare.value.integer = integer;
+    filter->compare.value.type = RBH_FVT_INT32;
+    filter->compare.value.int32 = int32;
+
+    return filter;
+}
+
+struct rbh_filter *
+rbh_filter_compare_int64_new(enum rbh_filter_operator op,
+                             enum rbh_filter_field field, int64_t int64)
+{
+    struct rbh_filter *filter;
+
+    if (!rbh_is_comparison_operator(op) || op == RBH_FOP_REGEX
+            || op == RBH_FOP_IN) {
+        errno = EINVAL;
+        return NULL;
+    }
+
+    filter = malloc(sizeof(*filter));
+    if (filter == NULL)
+        return NULL;
+
+    filter->op = op;
+    filter->compare.field = field;
+    filter->compare.value.type = RBH_FVT_INT64;
+    filter->compare.value.int64 = int64;
 
     return filter;
 }
@@ -160,7 +184,8 @@ filter_value_data_size(const struct rbh_filter_value *value)
     switch (value->type) {
     case RBH_FVT_BINARY:
         return value->binary.size;
-    case RBH_FVT_INTEGER:
+    case RBH_FVT_INT32:
+    case RBH_FVT_INT64:
         return 0;
     case RBH_FVT_STRING:
         return strlen(value->string) + 1;
@@ -198,8 +223,11 @@ filter_value_copy(struct rbh_filter_value *dest,
         memcpy(data, src->binary.data, src->binary.size);
         dest->binary.data = data;
         return (char *)data + src->binary.size;
-    case RBH_FVT_INTEGER:
-        dest->integer = src->integer;
+    case RBH_FVT_INT32:
+        dest->int32 = src->int32;
+        return data;
+    case RBH_FVT_INT64:
+        dest->int64 = src->int64;
         return data;
     case RBH_FVT_STRING:
         strcpy(data, src->string);
@@ -361,7 +389,8 @@ comparison_filter_validate(const struct rbh_filter *filter)
 {
     switch (filter->compare.value.type) {
     case RBH_FVT_BINARY:
-    case RBH_FVT_INTEGER:
+    case RBH_FVT_INT32:
+    case RBH_FVT_INT64:
     case RBH_FVT_STRING:
     case RBH_FVT_TIME:
         switch (filter->op) {
@@ -459,9 +488,12 @@ comparison_filter_clone(const struct rbh_filter *filter)
         return rbh_filter_compare_binary_new(filter->op, filter->compare.field,
                                              filter->compare.value.binary.size,
                                              filter->compare.value.binary.data);
-    case RBH_FVT_INTEGER:
-        return rbh_filter_compare_integer_new(filter->op, filter->compare.field,
-                                              filter->compare.value.integer);
+    case RBH_FVT_INT32:
+        return rbh_filter_compare_int32_new(filter->op, filter->compare.field,
+                                            filter->compare.value.int32);
+    case RBH_FVT_INT64:
+        return rbh_filter_compare_int64_new(filter->op, filter->compare.field,
+                                            filter->compare.value.int64);
     case RBH_FVT_STRING:
         return rbh_filter_compare_string_new(filter->op, filter->compare.field,
                                              filter->compare.value.string);

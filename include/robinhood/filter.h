@@ -35,6 +35,7 @@
  */
 
 #include <stdbool.h>
+#include <stdint.h>
 #include <time.h>
 
 enum rbh_filter_operator {
@@ -97,6 +98,7 @@ enum rbh_filter_field {
     RBH_FF_MTIME,
     RBH_FF_CTIME,
     RBH_FF_NAME,
+    RBH_FF_PATH,
     RBH_FF_TYPE,
 };
 
@@ -108,7 +110,8 @@ enum rbh_filter_regex_option {
 
 enum rbh_filter_value_type {
     RBH_FVT_BINARY,
-    RBH_FVT_INTEGER,
+    RBH_FVT_INT32,
+    RBH_FVT_INT64,
     RBH_FVT_STRING,
     RBH_FVT_REGEX,
     RBH_FVT_TIME,
@@ -125,8 +128,11 @@ struct rbh_filter_value {
             const char *data;
         } binary;
 
-        /* RBH_FVT_INTEGER */
-        int integer;
+        /* RBH_FVT_INT32 */
+        int32_t int32;
+
+        /* RBH_FVT_INT64 */
+        int64_t int64;
 
         /* RBH_FVT_STRING */
         const char *string;
@@ -221,11 +227,11 @@ rbh_filter_compare_binary_new(enum rbh_filter_operator op,
                               const char *data);
 
 /**
- * Create a filter that compares a field to an integer
+ * Create a filter that compares a field to an int32_t
  *
  * @param op        the type of comparison to use
  * @param field     the field to compare
- * @param integer   the integer to compare to
+ * @param int32     the integer to compare \p field to
  *
  * @return          a pointer to a newly allocated struct rbh_filter on success,
  *                  NULL on error and errno is set appropriately
@@ -235,8 +241,26 @@ rbh_filter_compare_binary_new(enum rbh_filter_operator op,
  * \p op may be any comparison operator except FOP_REGEX and FOP_IN
  */
 struct rbh_filter *
-rbh_filter_compare_integer_new(enum rbh_filter_operator op,
-                               enum rbh_filter_field field, int integer);
+rbh_filter_compare_int32_new(enum rbh_filter_operator op,
+                             enum rbh_filter_field field, int32_t int32);
+
+/**
+ * Create a filter that compares a field to an int64_t
+ *
+ * @param op        the type of comparison to use
+ * @param field     the field to compare
+ * @param int64     the integer to compare \p field to
+ *
+ * @return          a pointer to a newly allocated struct rbh_filter on success,
+ *                  NULL on error and errno is set appropriately
+ *
+ * @error ENOMEM    there was not enough memory available
+ *
+ * \p op may be any comparison operator except FOP_REGEX and FOP_IN
+ */
+struct rbh_filter *
+rbh_filter_compare_int64_new(enum rbh_filter_operator op,
+                             enum rbh_filter_field field, int64_t int64);
 
 /**
  * Create a filter that compares a field to a string
