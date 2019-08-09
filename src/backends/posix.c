@@ -14,6 +14,7 @@
 #include <fts.h>
 #include <fcntl.h>
 #include <limits.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
@@ -25,10 +26,16 @@
 # include "robinhood/statx.h"
 #endif
 
+/*----------------------------------------------------------------------------*
+ |                               posix_iterator                               |
+ *----------------------------------------------------------------------------*/
+
 struct posix_iterator {
     struct rbh_mut_iterator iterator;
     int statx_sync_type;
     FTS *fts_handle;
+    FTSENT *ftsent;
+    char *root;
 };
 
 static __thread size_t handle_size = MAX_HANDLE_SZ;
@@ -298,6 +305,7 @@ skip:
         return NULL;
     }
     errno = save_errno;
+    posix_iter->ftsent = ftsent;
 
     switch (ftsent->fts_info) {
     case FTS_DP:
@@ -340,47 +348,54 @@ static const struct rbh_mut_iterator POSIX_ITER = {
     .ops = &POSIX_ITER_OPS,
 };
 
+static struct posix_iterator *
+posix_iterator_new(const char *root, int statx_sync_type)
+{
+    struct posix_iterator *posix_iter;
+    char *paths[2] = {NULL, NULL};
+    int save_errno;
+
+    paths[0] = strdup(root);
+    if (paths[0] == NULL)
+        return NULL;
+
+    posix_iter = malloc(sizeof(*posix_iter));
+    if (posix_iter == NULL) {
+        save_errno = errno;
+        free(paths[0]);
+        errno = save_errno;
+        return NULL;
+    }
+
+    posix_iter->iterator = POSIX_ITER;
+    posix_iter->statx_sync_type = statx_sync_type;
+    posix_iter->fts_handle =
+        fts_open(paths, FTS_PHYSICAL | FTS_NOSTAT | FTS_XDEV, NULL);
+    save_errno = errno;
+    free(paths[0]);
+    if (posix_iter->fts_handle == NULL) {
+        save_errno = errno;
+        free(posix_iter);
+        errno = save_errno;
+        return NULL;
+    }
+
+    return posix_iter;
+}
+
+/*----------------------------------------------------------------------------*
+ |                               posix_backend                                |
+ *----------------------------------------------------------------------------*/
+
 struct posix_backend {
     struct rbh_backend backend;
     char *root;
     int statx_sync_type;
 };
 
-static struct rbh_mut_iterator *
-posix_backend_filter_fsentries(void *backend, const struct rbh_filter *filter,
-                               unsigned int fsentries_mask,
-                               unsigned int statx_mask)
-{
-    struct posix_backend *posix = backend;
-    char *paths[] = {posix->root, NULL};
-    struct posix_iterator *posix_iter;
-
-    /* TODO: make use of `fsentries_mask' and `statx_mask' */
-
-    if (filter != NULL) {
-        errno = ENOTSUP;
-        return NULL;
-    }
-
-    posix_iter = malloc(sizeof(*posix_iter));
-    if (posix_iter == NULL)
-        return NULL;
-
-    posix_iter->statx_sync_type = posix->statx_sync_type;
-    posix_iter->fts_handle =
-        fts_open(paths, FTS_PHYSICAL | FTS_NOSTAT | FTS_XDEV, NULL);
-    if (posix_iter->fts_handle == NULL) {
-        int save_errno = errno;
-
-        free(posix_iter);
-        errno = save_errno;
-        return NULL;
-    }
-
-    posix_iter->iterator = POSIX_ITER;
-
-    return &posix_iter->iterator;
-}
+    /*--------------------------------------------------------------------*
+     |                            get_option()                            |
+     *--------------------------------------------------------------------*/
 
 static int
 posix_get_statx_sync_type(struct posix_backend *posix, void *data,
@@ -412,6 +427,10 @@ posix_backend_get_option(void *backend, unsigned int option, void *data,
     errno = ENOPROTOOPT;
     return -1;
 }
+
+    /*--------------------------------------------------------------------*
+     |                            set_option()                            |
+     *--------------------------------------------------------------------*/
 
 static int
 posix_set_statx_sync_type(struct posix_backend *posix, const void *data,
@@ -462,6 +481,33 @@ posix_backend_set_option(void *backend, unsigned int option, const void *data,
     return -1;
 }
 
+    /*--------------------------------------------------------------------*
+     |                         filter_fsentries()                         |
+     *--------------------------------------------------------------------*/
+
+static struct rbh_mut_iterator *
+posix_backend_filter_fsentries(void *backend, const struct rbh_filter *filter,
+                               unsigned int fsentries_mask,
+                               unsigned int statx_mask)
+{
+    struct posix_backend *posix = backend;
+    struct posix_iterator *iter;
+
+    /* TODO: make use of `fsentries_mask' and `statx_mask' */
+
+    if (filter != NULL) {
+        errno = ENOTSUP;
+        return NULL;
+    }
+
+    iter = posix_iterator_new(posix->root, posix->statx_sync_type);
+    return &iter->iterator;
+}
+
+    /*--------------------------------------------------------------------*
+     |                             destroy()                              |
+     *--------------------------------------------------------------------*/
+
 static void
 posix_backend_destroy(void *backend)
 {
@@ -471,9 +517,199 @@ posix_backend_destroy(void *backend)
     free(posix);
 }
 
+    /*--------------------------------------------------------------------*
+     |                              branch()                              |
+     *--------------------------------------------------------------------*/
+
+static int
+open_by_id(const char *root, const struct rbh_id *id, int flags)
+{
+    struct file_handle *handle;
+    int save_errno;
+    int mount_fd;
+    int fd = -1;
+
+    handle = malloc(sizeof(*handle) + id->size - sizeof(int));
+    if (handle == NULL)
+        return -1;
+
+    memcpy(&handle->handle_type, id->data, sizeof(int));
+    memcpy(handle->f_handle, id->data + sizeof(int), id->size - sizeof(int));
+    handle->handle_bytes = id->size - sizeof(int);
+
+    mount_fd = open(root, O_RDONLY | O_CLOEXEC);
+    save_errno = errno;
+    if (mount_fd < 0)
+        goto out_free_handle;
+
+    fd = open_by_handle_at(mount_fd, handle, flags);
+    save_errno = errno;
+
+    /* Ignore errors on close */
+    close(mount_fd);
+
+out_free_handle:
+    free(handle);
+    errno = save_errno;
+    return fd;
+}
+
+static char *
+fd2path(int fd)
+{
+    size_t pathlen = page_size - 1;
+    char *path = NULL;
+    int proc_fd;
+    int save_errno;
+    char *tmp;
+
+    if (asprintf(&tmp, "/proc/self/fd/%d", fd) < 0) {
+        errno = ENOMEM;
+        return NULL;
+    }
+
+    proc_fd = open(tmp, O_RDONLY | O_CLOEXEC | O_NOFOLLOW | O_PATH);
+    save_errno = errno;
+    free(tmp);
+    if (proc_fd < 0)
+        goto out;
+
+    path = freadlink(proc_fd, &pathlen);
+    save_errno = errno;
+
+    /* Ignore errors on close */
+    close(proc_fd);
+out:
+    errno = save_errno;
+    return path;
+}
+
+static char *
+id2path(const char *root, const struct rbh_id *id)
+{
+    char *path;
+    int fd;
+    int save_errno;
+
+    fd = open_by_id(root, id, O_RDONLY | O_CLOEXEC | O_NOFOLLOW | O_PATH);
+    if (fd < 0)
+        return NULL;
+
+    path = fd2path(fd);
+
+    /* Ignore errors on close */
+    save_errno = errno;
+    close(fd);
+    errno = save_errno;
+    return path;
+}
+
+struct posix_branch_backend {
+    struct posix_backend posix;
+    struct rbh_id id;
+};
+
+static struct rbh_mut_iterator *
+posix_branch_backend_filter_fsentries(void *backend,
+                                      const struct rbh_filter *filter,
+                                      unsigned int fsentries_mask,
+                                      unsigned int statx_mask)
+{
+    struct posix_branch_backend *branch = backend;
+    struct posix_iterator *posix_iter;
+    struct rbh_fsentry *fsentry;
+    int save_errno;
+    char *path;
+
+    if (filter != NULL) {
+        errno = ENOTSUP;
+        return NULL;
+    }
+
+    path = id2path(branch->posix.root, &branch->id);
+    if (path == NULL)
+        return NULL;
+
+    posix_iter = posix_iterator_new(path, branch->posix.statx_sync_type);
+    save_errno = errno;
+    free(path);
+    if (posix_iter == NULL)
+        goto out_error;
+
+    do {
+        errno = 0;
+        fsentry = rbh_mut_iter_next(&posix_iter->iterator);
+    } while (fsentry == NULL && errno == EAGAIN);
+
+    if (fsentry == NULL) {
+        save_errno = errno;
+        goto out_destroy_iter;
+    }
+    errno = save_errno;
+    free(fsentry);
+
+    posix_iter->ftsent->fts_parent->fts_pointer = &branch->id;
+    if (fts_set(posix_iter->fts_handle, posix_iter->ftsent, FTS_AGAIN)) {
+        /* This should never happen */
+        save_errno = errno;
+        goto out_destroy_iter;
+    }
+
+    return &posix_iter->iterator;
+
+out_destroy_iter:
+    rbh_mut_iter_destroy(&posix_iter->iterator);
+out_error:
+    errno = save_errno;
+    return NULL;
+}
+
+static struct rbh_backend *
+posix_backend_branch(void *backend, const struct rbh_id *id);
+
+static const struct rbh_backend_operations POSIX_BRANCH_BACKEND_OPS = {
+    .branch = posix_backend_branch,
+    .filter_fsentries = posix_branch_backend_filter_fsentries,
+    .destroy = posix_backend_destroy,
+};
+
+static const struct rbh_backend POSIX_BRANCH_BACKEND = {
+    .name = RBH_POSIX_BACKEND_NAME,
+    .ops = &POSIX_BRANCH_BACKEND_OPS,
+};
+
+static struct rbh_backend *
+posix_backend_branch(void *backend, const struct rbh_id *id)
+{
+    struct posix_backend *posix = backend;
+    struct posix_branch_backend *branch;
+
+    branch = malloc(sizeof(*branch) + id->size);
+    if (branch == NULL)
+        return NULL;
+
+    branch->posix.root = strdup(posix->root);
+    if (branch->posix.root == NULL) {
+        int save_errno = errno;
+
+        free(branch);
+        errno = save_errno;
+        return NULL;
+    }
+
+    branch->posix.statx_sync_type = posix->statx_sync_type;
+    branch->id.size = id->size;
+    branch->id.data = (char *)branch + sizeof(*branch);
+    memcpy(branch->id.data, id->data, id->size);
+    branch->posix.backend = POSIX_BRANCH_BACKEND;
+
+    return &branch->posix.backend;
+}
+
 static const struct rbh_backend_operations POSIX_BACKEND_OPS = {
     .get_option = posix_backend_get_option,
     .set_option = posix_backend_set_option,
+    .branch = posix_backend_branch,
     .filter_fsentries = posix_backend_filter_fsentries,
     .destroy = posix_backend_destroy,
 };
@@ -503,7 +739,6 @@ rbh_posix_backend_new(const char *path)
     }
 
     posix->statx_sync_type = AT_STATX_SYNC_AS_STAT;
-
     posix->backend = POSIX_BACKEND;
 
     return &posix->backend;

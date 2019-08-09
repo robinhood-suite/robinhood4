@@ -87,6 +87,10 @@ struct rbh_backend_operations {
             void *backend,
             struct rbh_iterator *fsevents
             );
+    struct rbh_backend *(*branch)(
+            void *backend,
+            const struct rbh_id *id
+            );
     struct rbh_mut_iterator *(*filter_fsentries)(
             void *backend,
             const struct rbh_filter *filter,
@@ -254,6 +258,36 @@ rbh_backend_update(struct rbh_backend *backend, struct rbh_iterator *fsevents)
         return -1;
     }
     return backend->ops->update(backend, fsevents);
+}
+
+/**
+ * Create a sub-backend instance
+ *
+ * @param backend   the backend to extract a new backend from
+ * @param id        the id of the fsentry to use as the root of the new backend
+ *
+ * @return          a pointer to a newly allocated struct rbh_backend on
+ *                  success, NULL on error and errno is set appropriately
+ *
+ * @error ENOMEM    there was not enough memory available
+ * @error ENOTSUP   \p backend does not support subsetting
+ *
+ * If \p id is not the id of a directory the result is undefined.
+ *
+ * If the entry \p id refers to is removed from \p backend, future operations
+ * may fail with errno set to ENOENT.
+ *
+ * If \p id is not the id of an entry which \p backend currently manages or used
+ * to manage, the result is undefined.
+ */
+static inline struct rbh_backend *
+rbh_backend_branch(struct rbh_backend *backend, const struct rbh_id *id)
+{
+    if (backend->ops->branch == NULL) {
+        errno = ENOTSUP;
+        return NULL;
+    }
+    return backend->ops->branch(backend, id);
 }
 
 /**
