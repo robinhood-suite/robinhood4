@@ -40,107 +40,7 @@
  * MA 02110-1301, USA.
  */
 
-#if CHECK_CHECK_VERSION(0, 11, 0)
-#else /* CHECK_VERSION < 0.11.0 */
-
-/* Memory location comparison macros with improved output compared to ck_assert() */
-/* OP might be any operator that can be used in '0 OP memcmp(X,Y,L)' comparison */
-/* The x and y parameter swap in memcmp() is needed to handle >, >=, <, <= operators */
-/* Output is limited to CK_MAX_ASSERT_MEM_PRINT_SIZE bytes */
-#ifndef CK_MAX_ASSERT_MEM_PRINT_SIZE
-#define CK_MAX_ASSERT_MEM_PRINT_SIZE 64
-#endif
-
-/* Memory location comparison macros with improved output compared to ck_assert() */
-/* OP might be any operator that can be used in '0 OP memcmp(X,Y,L)' comparison */
-/* The x and y parameter swap in memcmp() is needed to handle >, >=, <, <= operators */
-/* Output is limited to CK_MAX_ASSERT_MEM_PRINT_SIZE bytes */
-#ifndef CK_MAX_ASSERT_MEM_PRINT_SIZE
-#define CK_MAX_ASSERT_MEM_PRINT_SIZE 64
-#endif
-
-#include <stdint.h>
-
-#define _ck_assert_mem(X, OP, Y, L) do { \
-    const uint8_t *_ck_x = (const uint8_t *)(X); \
-    const uint8_t *_ck_y = (const uint8_t *)(Y); \
-    size_t _ck_l = (L); \
-    char _ck_x_str[CK_MAX_ASSERT_MEM_PRINT_SIZE * 2 + 1]; \
-    char _ck_y_str[CK_MAX_ASSERT_MEM_PRINT_SIZE * 2 + 1]; \
-    static const char _ck_hexdigits[] = "0123456789abcdef"; \
-    size_t _ck_i; \
-    size_t _ck_maxl = (_ck_l > CK_MAX_ASSERT_MEM_PRINT_SIZE) ? CK_MAX_ASSERT_MEM_PRINT_SIZE : _ck_l; \
-    for (_ck_i = 0; _ck_i < _ck_maxl; _ck_i++) { \
-        _ck_x_str[_ck_i * 2] = _ck_hexdigits[(_ck_x[_ck_i] >> 4) & 0xF]; \
-        _ck_y_str[_ck_i * 2] = _ck_hexdigits[(_ck_y[_ck_i] >> 4) & 0xF]; \
-        _ck_x_str[_ck_i * 2 + 1] = _ck_hexdigits[_ck_x[_ck_i] & 0xF]; \
-        _ck_y_str[_ck_i * 2 + 1] = _ck_hexdigits[_ck_y[_ck_i] & 0xF]; \
-    } \
-    _ck_x_str[_ck_i * 2] = 0; \
-    _ck_y_str[_ck_i * 2] = 0; \
-    if (_ck_maxl != _ck_l) { \
-        _ck_x_str[_ck_i * 2 - 2] = '.'; \
-        _ck_y_str[_ck_i * 2 - 2] = '.'; \
-        _ck_x_str[_ck_i * 2 - 1] = '.'; \
-        _ck_y_str[_ck_i * 2 - 1] = '.'; \
-    } \
-    ck_assert_msg(0 OP memcmp(_ck_y, _ck_x, _ck_l), \
-                  "Assertion '%s' failed: %s == \"%s\", %s == \"%s\"", \
-                  #X" "#OP" "#Y, #X, _ck_x_str, #Y, _ck_y_str); \
-} while (0)
-
-/**
- * Check two memory locations to determine if 0==memcmp(X,Y,L)
- *
- * If not 0==memcmp(X,Y,L), the test fails.
- *
- * @param X memory location
- * @param Y memory location to compare against X
- *
- * @note If the check fails, the remaining of the test is aborted
- *
- * @since 0.11.0
- */
-#define ck_assert_mem_eq(X, Y, L) _ck_assert_mem(X, ==, Y, L)
-
-/* Pointer against NULL comparison macros with improved output
- *  * compared to ck_assert(). */
-/* OP may only be == or !=  */
-#define _ck_assert_ptr_null(X, OP) do { \
-      const void* _ck_x = (X); \
-      ck_assert_msg(_ck_x OP NULL, \
-                    "Assertion '%s' failed: %s == %#x", \
-                    #X" "#OP" NULL", #X, _ck_x); \
-} while (0)
-
-/**
- * Check if a pointer is equal to NULL.
- *
- * If X != NULL, the test fails.
- *
- * @param X pointer to compare against NULL
- *
- * @note If the check fails, the remaining of the test is aborted
- *
- * @since 0.11.0
- */
-#define ck_assert_ptr_null(X) _ck_assert_ptr_null(X, ==)
-
-/**
- * Check if a pointer is not equal to NULL.
- *
- * If X == NULL, the test fails.
- *
- * @param X pointer to compare against NULL
- *
- * @note If the check fails, the remaining of the test is aborted
- *
- * @since 0.11.0
- */
-#define ck_assert_ptr_nonnull(X) _ck_assert_ptr_null(X, !=)
-
-#if CHECK_CHECK_VERSION(0, 9, 10)
-#else /* CHECK_VERSION < 0.9.10 */
+#if !CHECK_CHECK_VERSION(0, 9, 10) /* CHECK_VERSION < 0.9.10 */
 
 /* Pointer comparison macros with improved output compared to ck_assert(). */
 /* OP may only be == or !=  */
@@ -256,6 +156,105 @@
 #define ck_assert_str_eq(X, Y) _ck_assert_str(X, ==, Y, 0, 0)
 
 #endif /* CHECK_CHECK_VERSION(0, 9, 10) */
+
+#if !CHECK_CHECK_VERSION(0, 11, 0) /* CHECK_VERSION < 0.11.0 */
+
+/* Memory location comparison macros with improved output compared to ck_assert() */
+/* OP might be any operator that can be used in '0 OP memcmp(X,Y,L)' comparison */
+/* The x and y parameter swap in memcmp() is needed to handle >, >=, <, <= operators */
+/* Output is limited to CK_MAX_ASSERT_MEM_PRINT_SIZE bytes */
+#ifndef CK_MAX_ASSERT_MEM_PRINT_SIZE
+#define CK_MAX_ASSERT_MEM_PRINT_SIZE 64
+#endif
+
+/* Memory location comparison macros with improved output compared to ck_assert() */
+/* OP might be any operator that can be used in '0 OP memcmp(X,Y,L)' comparison */
+/* The x and y parameter swap in memcmp() is needed to handle >, >=, <, <= operators */
+/* Output is limited to CK_MAX_ASSERT_MEM_PRINT_SIZE bytes */
+#ifndef CK_MAX_ASSERT_MEM_PRINT_SIZE
+#define CK_MAX_ASSERT_MEM_PRINT_SIZE 64
+#endif
+
+#include <stdint.h>
+
+#define _ck_assert_mem(X, OP, Y, L) do { \
+    const uint8_t *_ck_x = (const uint8_t *)(X); \
+    const uint8_t *_ck_y = (const uint8_t *)(Y); \
+    size_t _ck_l = (L); \
+    char _ck_x_str[CK_MAX_ASSERT_MEM_PRINT_SIZE * 2 + 1]; \
+    char _ck_y_str[CK_MAX_ASSERT_MEM_PRINT_SIZE * 2 + 1]; \
+    static const char _ck_hexdigits[] = "0123456789abcdef"; \
+    size_t _ck_i; \
+    size_t _ck_maxl = (_ck_l > CK_MAX_ASSERT_MEM_PRINT_SIZE) ? CK_MAX_ASSERT_MEM_PRINT_SIZE : _ck_l; \
+    for (_ck_i = 0; _ck_i < _ck_maxl; _ck_i++) { \
+        _ck_x_str[_ck_i * 2] = _ck_hexdigits[(_ck_x[_ck_i] >> 4) & 0xF]; \
+        _ck_y_str[_ck_i * 2] = _ck_hexdigits[(_ck_y[_ck_i] >> 4) & 0xF]; \
+        _ck_x_str[_ck_i * 2 + 1] = _ck_hexdigits[_ck_x[_ck_i] & 0xF]; \
+        _ck_y_str[_ck_i * 2 + 1] = _ck_hexdigits[_ck_y[_ck_i] & 0xF]; \
+    } \
+    _ck_x_str[_ck_i * 2] = 0; \
+    _ck_y_str[_ck_i * 2] = 0; \
+    if (_ck_maxl != _ck_l) { \
+        _ck_x_str[_ck_i * 2 - 2] = '.'; \
+        _ck_y_str[_ck_i * 2 - 2] = '.'; \
+        _ck_x_str[_ck_i * 2 - 1] = '.'; \
+        _ck_y_str[_ck_i * 2 - 1] = '.'; \
+    } \
+    ck_assert_msg(0 OP memcmp(_ck_y, _ck_x, _ck_l), \
+                  "Assertion '%s' failed: %s == \"%s\", %s == \"%s\"", \
+                  #X" "#OP" "#Y, #X, _ck_x_str, #Y, _ck_y_str); \
+} while (0)
+
+/**
+ * Check two memory locations to determine if 0==memcmp(X,Y,L)
+ *
+ * If not 0==memcmp(X,Y,L), the test fails.
+ *
+ * @param X memory location
+ * @param Y memory location to compare against X
+ *
+ * @note If the check fails, the remaining of the test is aborted
+ *
+ * @since 0.11.0
+ */
+#define ck_assert_mem_eq(X, Y, L) _ck_assert_mem(X, ==, Y, L)
+
+/* Pointer against NULL comparison macros with improved output
+ *  * compared to ck_assert(). */
+/* OP may only be == or !=  */
+#define _ck_assert_ptr_null(X, OP) do { \
+      const void* _ck_x = (X); \
+      ck_assert_msg(_ck_x OP NULL, \
+                    "Assertion '%s' failed: %s == %#x", \
+                    #X" "#OP" NULL", #X, _ck_x); \
+} while (0)
+
+/**
+ * Check if a pointer is equal to NULL.
+ *
+ * If X != NULL, the test fails.
+ *
+ * @param X pointer to compare against NULL
+ *
+ * @note If the check fails, the remaining of the test is aborted
+ *
+ * @since 0.11.0
+ */
+#define ck_assert_ptr_null(X) _ck_assert_ptr_null(X, ==)
+
+/**
+ * Check if a pointer is not equal to NULL.
+ *
+ * If X == NULL, the test fails.
+ *
+ * @param X pointer to compare against NULL
+ *
+ * @note If the check fails, the remaining of the test is aborted
+ *
+ * @since 0.11.0
+ */
+# define ck_assert_ptr_nonnull(X) _ck_assert_ptr_null(X, !=)
+
 #endif /* CHECK_CHECK_VERSION(0, 11, 0) */
 
 #endif
