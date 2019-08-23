@@ -54,7 +54,7 @@ rbh_fsentry_new(const struct rbh_id *id, const struct rbh_id *parent_id,
         return NULL;
     data = fsentry->symlink;
 
-    /* fsentry->symlink */
+    /* fsentry->symlink (set first because it is a flexible array) */
     if (symlink) {
         memcpy(data, symlink, symlink_length);
         data += symlink_length;
