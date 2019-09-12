@@ -107,3 +107,141 @@ rbh_parse_raw_uri(struct rbh_raw_uri *uri, char *string)
 
     return 0;
 }
+
+static int
+hex2int(char c)
+{
+    switch (c) {
+    case '0':
+        return 0;
+    case '1':
+        return 1;
+    case '2':
+        return 2;
+    case '3':
+        return 3;
+    case '4':
+        return 4;
+    case '5':
+        return 5;
+    case '6':
+        return 6;
+    case '7':
+        return 7;
+    case '8':
+        return 8;
+    case '9':
+        return 9;
+    case 'a':
+    case 'A':
+        return 10;
+    case 'b':
+    case 'B':
+        return 11;
+    case 'c':
+    case 'C':
+        return 12;
+    case 'd':
+    case 'D':
+        return 13;
+    case 'e':
+    case 'E':
+        return 14;
+    case 'f':
+    case 'F':
+        return 15;
+    }
+    errno = EINVAL;
+    return -1;
+}
+
+static char
+_percent_decode(int major, int minor)
+{
+    return (major << 4) + minor;
+}
+
+static ssize_t
+percent_decode(char *string)
+{
+    size_t count = 0;
+
+    for (char *c = string; *c != '\0'; c++) {
+        int major, minor;
+
+        if (*c != '%')
+            continue;
+        count++;
+
+        major = hex2int(*(c + 1));
+        if (major < 0)
+            return -1;
+
+        minor = hex2int(*(c + 2));
+        if (minor < 0)
+            return -1;
+
+        *c = _percent_decode(major, minor);
+        memmove(c + 1, c + 3, strlen(c + 3) + 1);
+    }
+
+    return count;
+}
+
+int
+rbh_parse_uri(struct rbh_uri *uri, struct rbh_raw_uri *raw_uri)
+{
+    char *colon;
+
+    if (raw_uri->scheme == NULL || strcmp(raw_uri->scheme, RBH_SCHEME)) {
+        errno = EINVAL;
+        return -1;
+    }
+
+    colon = strchr(raw_uri->path, ':');
+    if (colon == NULL) {
+        errno = EINVAL;
+        return -1;
+    }
+    *colon++ = '\0';
+
+    if (percent_decode(raw_uri->path) < 0)
+        return -1;
+    uri->backend = raw_uri->path;
+
+    if (percent_decode(colon) < 0)
+        return -1;
+    uri->fsname = colon;
+
+    if (raw_uri->fragment == NULL) {
+        uri->id.data = NULL;
+        uri->id.size = 0;
+    } else if (raw_uri->fragment[0] == '[') {
+        size_t length = strlen(raw_uri->fragment);
+        ssize_t count;
+
+        if (raw_uri->fragment[length - 1] != ']') {
+            errno = EINVAL;
+            return -1;
+        }
+        raw_uri->fragment[length - 1] = '\0';
+
+        count = percent_decode(raw_uri->fragment + 1);
+        if (count < 0)
+            return -1;
+
+        uri->id.data = raw_uri->fragment + 1;
+        /*                    for the opening and closing brackets
+         *                    vvv
+         */
+        uri->id.size = length - 2 - 2 * (count);
+        /*                        ^^^^^^^^^^^^^
+         *                        for every percent encoded character
+         */
+    } else {
+        errno = EINVAL;
+        return -1;
+    }
+
+    return 0;
+}
