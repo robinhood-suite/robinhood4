@@ -20,6 +20,7 @@ librbh_posix_version = '@0@.@1@.@2@'.format(
 	librbh_posix_conf.get('RBH_POSIX_BACKEND_RELEASE')
 )
 
-configure_file(input: 'posix.h.in', output: 'posix.h',
-               configuration: librbh_posix_conf, install: true,
-	       install_dir: 'robinhood/backends')
+librbh_posix_h = configure_file(input: 'posix.h.in', output: 'posix.h',
+				configuration: librbh_posix_conf)
+
+install_headers(librbh_posix_h, subdir: 'robinhood/backends')
