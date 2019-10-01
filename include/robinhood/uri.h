@@ -12,7 +12,7 @@
 
 #include <robinhood/fsentry.h>
 
-#define RBH_SCHEME "robinhood"
+#define RBH_SCHEME "rbh"
 
 struct rbh_raw_uri {
     char *scheme;
