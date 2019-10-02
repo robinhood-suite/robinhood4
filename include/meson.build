@@ -22,6 +22,7 @@ install_headers('robinhood/backend.h',
 		'robinhood/sstack.h',
 		'robinhood/stack.h',
 		'robinhood/uri.h',
+		'robinhood/utils.h',
 		subdir: 'robinhood')
 
 install_headers('robinhood/plugins/backend.h',

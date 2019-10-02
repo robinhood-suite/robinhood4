@@ -291,13 +291,13 @@ rbh_backend_branch(struct rbh_backend *backend, const struct rbh_id *id)
 }
 
 /**
- * Returns fsentries that match certain criteria
+ * Returns fsentries that match a set of criteria
  *
  * @param backend       the backend from which to fetch fsentries
  * @param filter        a set of criteria that the returned fsentries must match
- * @param fsentry_mask  a bitmask of the fields to return for each fsentry
- * @param statx_mask    a bitmask of the fields to return in the statx field of
- *                      each fsentry (ignored if FP_STATX is not set in
+ * @param fsentry_mask  a bitmask of the fields to set for each fsentry
+ * @param statx_mask    a bitmask of the fields to set in the statx field of
+ *                      each fsentry (ignored if RBH_FP_STATX is not set in
  *                      \p fsentry_mask).
  *
  * @return              an iterator over mutable fsentries on success, NULL on
@@ -306,11 +306,10 @@ rbh_backend_branch(struct rbh_backend *backend, const struct rbh_id *id)
  * @error ENOTSUP       \p backend does not support filtering fsentries
  *
  * Backends may choose to return more (reps. less) fields in fsentries than is
- * required by \p fsentry_mask and \p statx_mask because it the extra
- * information comes at little to no cost (resp. the backend is missing this
- * information).
+ * required by \p fsentry_mask and \p statx_mask because the extra information
+ * comes at little to no cost (resp. the backend is missing this information).
  *
- * It is the caller's responsability to check the corresponding masks in the
+ * It is the caller's responsibility to check the corresponding masks in the
  * returned fsentries to know whether or not a given field is set and safe to
  * access.
  *
@@ -341,5 +340,39 @@ rbh_backend_destroy(struct rbh_backend *backend)
 {
     return backend->ops->destroy(backend);
 }
+
+/**
+ * Retrieve an fsentry from a backend using its path
+ *
+ * @param backend       the backend from which to retrieve the fsentry
+ * @param path          the path of the fsentry to return (will be modified and
+ *                      should not be used anymore)
+ * @param fsentry_mask  a bitmask of the fields to set in the returned fsentry
+ * @param statx_mask    a bitmask of the fields to set in the statx field of
+ *                      the returned fsentry (ignored if RBH_FP_STATX is not set
+ *                      in \p fsentry_mask).
+ *
+ * @return              a pointer to a newly allocated fsentry whose path (in
+ *                      \p backend) matches \p path, on success, NULL on error,
+ *                      and errno is set appropriately.
+ *
+ * @error ENODATA       \p backend is missing information to convert \p path
+ *                      into an fsentry
+ * @error ENOENT        no fsentry in \p backend has a path that matches \p path
+ *
+ * Just like with rbh_backend_filter_fsentries, the returned fsentry may have
+ * more or less fields.
+ *
+ * It is the caller's responsibility to check the corresponding masks in the
+ * returned fsentries to know whether or not a given field is set and safe to
+ * access.
+ *
+ * This function may also fail and set errno for any of the errors specified for
+ * the routine rbh_backend_filter_fsentries().
+ */
+struct rbh_fsentry *
+rbh_backend_fsentry_from_path(struct rbh_backend *backend, char *path,
+                              unsigned int fsentry_mask,
+                              unsigned int statx_mask);
 
 #endif

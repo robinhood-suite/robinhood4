@@ -15,6 +15,7 @@
 #include <stdlib.h>
 
 #include "check-compat.h"
+#include "utils.h"
 #include "robinhood/filter.h"
 
 /*----------------------------------------------------------------------------*
@@ -170,10 +171,6 @@ filter_field2str(enum rbh_filter_field field)
 } while (0)
 
 #define ck_assert_filter_eq(X, Y) _ck_assert_filter(X, ==, Y)
-
-#ifndef ARRAY_SIZE
-#define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
-#endif
 
 static const struct rbh_filter_value filter_values[] = {
     {

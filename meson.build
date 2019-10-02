@@ -18,6 +18,9 @@ project(
 	],
 )
 
+# The version number for librobinhood and librbh-utils
+libversion = '0.0.0'
+
 # GNU extensions
 add_project_arguments(['-D_GNU_SOURCE',], language: 'c')
 
