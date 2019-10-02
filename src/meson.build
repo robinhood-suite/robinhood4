@@ -17,6 +17,7 @@ librobinhood = library(
 		'itertools.c',
 		'plugin.c',
 		'plugins/backend.c',
+		'sstack.c',
 		'stack.c',
 		'uri.c',
 	],
