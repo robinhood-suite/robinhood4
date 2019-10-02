@@ -13,8 +13,10 @@
 
 #include <ctype.h>
 #include <errno.h>
+#include <limits.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdint.h>
 
 #include "robinhood/uri.h"
 
@@ -164,6 +166,7 @@ _percent_decode(int major, int minor)
 static ssize_t
 percent_decode(char *string)
 {
+    const size_t length = strlen(string);
     size_t count = 0;
 
     for (char *c = string; *c != '\0'; c++) {
@@ -171,21 +174,202 @@ percent_decode(char *string)
 
         if (*c != '%')
             continue;
-        count++;
 
         major = hex2int(*(c + 1));
-        if (major < 0)
+        if (major < 0) {
+            if (errno == EINVAL)
+                errno = EILSEQ;
             return -1;
+        }
 
         minor = hex2int(*(c + 2));
-        if (minor < 0)
+        if (minor < 0) {
+            if (errno == EINVAL)
+                errno = EILSEQ;
             return -1;
+        }
 
         *c = _percent_decode(major, minor);
-        memmove(c + 1, c + 3, strlen(c + 3) + 1);
+        memmove(c + 1, c + 3, length - (c - string) - 2 * ++count);
     }
 
     return count;
+}
+
+static uint64_t
+strtou64(const char *nptr, char **endptr, int base)
+{
+#if ULLONG_MAX == UINT64_MAX
+    return strtoull(nptr, endptr, base);
+#else /* ULLONG_MAX > UINT64_MAX */
+    unsigned long long value;
+    int save_errno = errno;
+
+    errno = 0;
+    value = strtoull(nptr, endptr, base);
+    if (value == ULLONG_MAX && errno != 0)
+        return UINT64_MAX;
+
+    if (value > UINT64_MAX) {
+        errno = ERANGE;
+        return UINT64_MAX;
+    }
+
+    errno = save_errno;
+    return value;
+#endif
+}
+
+static uint32_t
+strtou32(const char *nptr, char **endptr, int base)
+{
+#if ULONG_MAX == UINT32_MAX
+    return strtoul(nptr, endptr, base);
+#else /* ULONG_MAX > UINT32_MAX */
+    unsigned long value;
+    int save_errno = errno;
+
+    errno = 0;
+    value = strtoul(nptr, endptr, base);
+    if (value == ULONG_MAX && errno != 0)
+        return UINT32_MAX;
+
+    if (value > UINT32_MAX) {
+        errno = ERANGE;
+        return UINT32_MAX;
+    }
+
+    errno = save_errno;
+    return value;
+#endif
+}
+
+struct lu_fid {
+    uint64_t f_seq;
+    uint32_t f_oid;
+    uint32_t f_ver;
+};
+
+static int
+_parse_fid(struct rbh_uri *uri, const struct lu_fid *fid)
+{
+    const size_t LUSTRE_FH_SIZE = sizeof(int) + 2 * sizeof(*fid);
+    const int FILEID_LUSTRE = 0x97;
+
+    if (sizeof(uri->buffer) < LUSTRE_FH_SIZE) {
+        errno = ENOBUFS;
+        return -1;
+    }
+
+    memcpy(uri->buffer, &FILEID_LUSTRE, sizeof(int));
+    memcpy(uri->buffer + sizeof(int), fid, sizeof(*fid));
+    memset(uri->buffer + sizeof(int) + sizeof(*fid), 0, sizeof(*fid));
+
+    uri->id.data = uri->buffer;
+    uri->id.size = LUSTRE_FH_SIZE;
+
+    return 0;
+}
+
+static int
+parse_fid(struct rbh_uri *uri, char *sequence, char *oid, char *version)
+{
+    int save_errno = errno;
+    struct lu_fid fid;
+    char *nul;
+
+    /* sequence (uint64_t) */
+    if (percent_decode(sequence) < 0)
+        return -1;
+
+    errno = 0;
+    fid.f_seq = strtou64(sequence, &nul, 0);
+    if (fid.f_seq == UINT64_MAX && errno != 0)
+        return -1;
+    if (*nul != '\0') {
+        errno = EINVAL;
+        return -1;
+    }
+
+    /* oid (uint32_t) */
+    if (percent_decode(oid) < 0)
+        return -1;
+
+    errno = 0;
+    fid.f_oid = strtou32(oid, &nul, 0);
+    if (fid.f_oid == UINT32_MAX && errno != 0)
+        return -1;
+    if (*nul != '\0') {
+        errno = EINVAL;
+        return -1;
+    }
+
+    /* version (uint32_t) */
+    if (percent_decode(version) < 0)
+        return -1;
+
+    errno = 0;
+    fid.f_ver = strtou32(version, &nul, 0);
+    if (fid.f_ver == UINT32_MAX && errno != 0)
+        return -1;
+    if (*nul != '\0') {
+        errno = EINVAL;
+        return -1;
+    }
+
+    errno = save_errno;
+    return _parse_fid(uri, &fid);
+}
+
+static int
+parse_fragment(struct rbh_uri *uri, char *fragment)
+{
+    size_t length;
+    ssize_t count;
+    char *colon;
+
+    if (*fragment++ != '[') {
+        errno = EINVAL;
+        return -1;
+    }
+
+    length = strlen(fragment);
+    if (fragment[length - 1] != ']') {
+        errno = EINVAL;
+        return -1;
+    }
+    fragment[--length] = '\0';
+
+    /* Is this a FID? */
+    colon = strchr(fragment, ':');
+    if (colon) { /* Yes */
+        char *sequence = fragment;
+        char *oid = colon + 1;
+        char *version;
+
+        *colon = '\0';
+
+        version = strchr(colon + 1, ':');
+        if (!version) {
+            errno = EINVAL;
+            return -1;
+        }
+        *version++ = '\0';
+
+        return parse_fid(uri, sequence, oid, version);
+    } /* No */
+
+    count = percent_decode(fragment);
+    if (count < 0)
+        return -1;
+
+    uri->id.data = fragment;
+    uri->id.size = length - 2 * (count);
+    /*                    ^^^^^^^^^^^^^
+     *                    for every percent encoded character
+     */
+
+    return 0;
 }
 
 int
@@ -216,32 +400,8 @@ rbh_parse_uri(struct rbh_uri *uri, struct rbh_raw_uri *raw_uri)
     if (raw_uri->fragment == NULL) {
         uri->id.data = NULL;
         uri->id.size = 0;
-    } else if (raw_uri->fragment[0] == '[') {
-        size_t length = strlen(raw_uri->fragment);
-        ssize_t count;
-
-        if (raw_uri->fragment[length - 1] != ']') {
-            errno = EINVAL;
-            return -1;
-        }
-        raw_uri->fragment[length - 1] = '\0';
-
-        count = percent_decode(raw_uri->fragment + 1);
-        if (count < 0)
-            return -1;
-
-        uri->id.data = raw_uri->fragment + 1;
-        /*                    for the opening and closing brackets
-         *                    vvv
-         */
-        uri->id.size = length - 2 - 2 * (count);
-        /*                        ^^^^^^^^^^^^^
-         *                        for every percent encoded character
-         */
-    } else {
-        errno = EINVAL;
-        return -1;
+        return 0;
     }
 
-    return 0;
+    return parse_fragment(uri, raw_uri->fragment);
 }

@@ -101,6 +101,20 @@
  */
 #define ck_assert_uint_eq(X, Y) _ck_assert_uint(X, ==, Y)
 
+/**
+ * Check two unsigned integers to determine if X>=Y
+ *
+ * If not X>=Y, the test fails.
+ *
+ * @param X signed integer
+ * @param Y signed integer to compare against X
+ *
+ * @note If the check fails, the remaining of the test is aborted
+ *
+ * @since 0.9.10
+ */
+#define ck_assert_uint_ge(X, Y) _ck_assert_uint(X, >=, Y)
+
 #undef _ck_assert_str
 #undef ck_assert_str_eq
 

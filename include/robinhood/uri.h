@@ -45,6 +45,9 @@ struct rbh_uri {
     char *backend;
     char *fsname;
     struct rbh_id id;
+
+    /* Some URIs may not be parseable in-place (eg. when the ID is a FID) */
+    char buffer[64];
 };
 
 /**
@@ -56,8 +59,8 @@ struct rbh_uri {
  *
  * @return          0 on success, -1 on error and errno is set appriopriately
  *
- * @error EINVAL    either \p raw_uri is not a valid robinhood uri, or it is
- *                  incorrectly encoded.
+ * @error EINVAL    \p raw_uri is not a valid robinhood uri
+ * @error EILSEQ    \p raw_uri contains misencoded data
  */
 int
 rbh_parse_uri(struct rbh_uri *uri, struct rbh_raw_uri *raw_uri);

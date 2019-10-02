@@ -12,6 +12,7 @@
 #endif
 
 #include <errno.h>
+#include <fcntl.h>
 #include <stdbool.h>
 #include <stdlib.h>
 
@@ -57,7 +58,7 @@ END_TEST
 
 START_TEST(rpru_scheme)
 {
-    static const struct rbh_raw_uri RAW_URI = {
+    const struct rbh_raw_uri RAW_URI = {
         .scheme = RBH_SCHEME,
         .path = "",
     };
@@ -83,7 +84,7 @@ END_TEST
 START_TEST(rpru_fragment)
 {
 #define FRAGMENT "test"
-    static const struct rbh_raw_uri RAW_URI = {
+    const struct rbh_raw_uri RAW_URI = {
         .scheme = RBH_SCHEME,
         .path = "",
         .fragment = FRAGMENT,
@@ -100,7 +101,7 @@ END_TEST
 START_TEST(rpru_query)
 {
 #define QUERY "query"
-    static const struct rbh_raw_uri RAW_URI = {
+    const struct rbh_raw_uri RAW_URI = {
         .scheme = RBH_SCHEME,
         .path = "",
         .query = QUERY,
@@ -117,7 +118,7 @@ END_TEST
 START_TEST(rpru_no_athority_absolute_path)
 {
 #define PATH "/path"
-    static const struct rbh_raw_uri RAW_URI = {
+    const struct rbh_raw_uri RAW_URI = {
         .scheme = RBH_SCHEME,
         .path = PATH,
     };
@@ -133,7 +134,7 @@ END_TEST
 START_TEST(rpru_no_athority_relative_path)
 {
 #define PATH "path"
-    static const struct rbh_raw_uri RAW_URI = {
+    const struct rbh_raw_uri RAW_URI = {
         .scheme = RBH_SCHEME,
         .path = PATH,
     };
@@ -149,7 +150,7 @@ END_TEST
 START_TEST(rpru_empty_authority_empty_path)
 {
 #define HOST "host"
-    static const struct rbh_raw_uri RAW_URI = {
+    const struct rbh_raw_uri RAW_URI = {
         .scheme = RBH_SCHEME,
         .path = "",
     };
@@ -165,7 +166,7 @@ END_TEST
 START_TEST(rpru_empty_authority_path)
 {
 #define PATH "/path"
-    static const struct rbh_raw_uri RAW_URI = {
+    const struct rbh_raw_uri RAW_URI = {
         .scheme = RBH_SCHEME,
         .path = PATH,
     };
@@ -181,7 +182,7 @@ END_TEST
 START_TEST(rpru_userinfo)
 {
 #define USERINFO "userinfo"
-    static const struct rbh_raw_uri RAW_URI = {
+    const struct rbh_raw_uri RAW_URI = {
         .scheme = RBH_SCHEME,
         .userinfo = USERINFO,
         .path = "",
@@ -198,7 +199,7 @@ END_TEST
 START_TEST(rpru_host)
 {
 #define HOST "host"
-    static const struct rbh_raw_uri RAW_URI = {
+    const struct rbh_raw_uri RAW_URI = {
         .scheme = RBH_SCHEME,
         .host = HOST,
         .path = "",
@@ -215,7 +216,7 @@ END_TEST
 START_TEST(rpru_port)
 {
 #define PORT "12345"
-    static const struct rbh_raw_uri RAW_URI = {
+    const struct rbh_raw_uri RAW_URI = {
         .scheme = RBH_SCHEME,
         .port = PORT,
         .path = "",
@@ -284,7 +285,7 @@ START_TEST(rpu_encoding_error_not_hexa)
 
     errno = 0;
     ck_assert_int_eq(rbh_parse_uri(&uri, &raw_uri), -1);
-    ck_assert_int_eq(errno, EINVAL);
+    ck_assert_int_eq(errno, EILSEQ);
 }
 END_TEST
 
@@ -299,7 +300,7 @@ START_TEST(rpu_encoding_error_short_code)
 
     errno = 0;
     ck_assert_int_eq(rbh_parse_uri(&uri, &raw_uri), -1);
-    ck_assert_int_eq(errno, EINVAL);
+    ck_assert_int_eq(errno, EILSEQ);
 }
 END_TEST
 
@@ -310,7 +311,7 @@ START_TEST(rpu_decode_basic)
         .scheme = RBH_SCHEME,
         .path = path,
     };
-    static const struct rbh_uri URI = {
+    const struct rbh_uri URI = {
         .backend = "",
         .fsname = "",
         .id = {
@@ -326,7 +327,7 @@ END_TEST
 
 START_TEST(rpu_decode_lowercase)
 {
-    static const char BACKEND[] = { 0x0a, '\0' };
+    const char BACKEND[] = { 0x0a, '\0' };
     char path[] = "%0a:";
     struct rbh_raw_uri raw_uri = {
         .scheme = RBH_SCHEME,
@@ -341,7 +342,7 @@ END_TEST
 
 START_TEST(rpu_decode_uppercase)
 {
-    static const char BACKEND[] = { 0x0a, '\0' };
+    const char BACKEND[] = { 0x0a, '\0' };
     char path[] = "%0A:";
     struct rbh_raw_uri raw_uri = {
         .scheme = RBH_SCHEME,
@@ -368,6 +369,55 @@ START_TEST(rpu_empty_fragment)
 }
 END_TEST
 
+START_TEST(rpu_empty_id_fragment)
+{
+    char fragment[] = "[]";
+    char path[] = ":";
+    struct rbh_raw_uri raw_uri = {
+        .scheme = RBH_SCHEME,
+        .path = path,
+        .fragment = fragment,
+    };
+    struct rbh_uri uri;
+
+    ck_assert_int_eq(rbh_parse_uri(&uri, &raw_uri), 0);
+    ck_assert_uint_eq(uri.id.size, 0);
+}
+END_TEST
+
+START_TEST(rpu_misencoded_id_fragment)
+{
+    char fragment[] = "[%]";
+    char path[] = ":";
+    struct rbh_raw_uri raw_uri = {
+        .scheme = RBH_SCHEME,
+        .path = path,
+        .fragment = fragment,
+    };
+    struct rbh_uri uri;
+
+    errno = 0;
+    ck_assert_int_eq(rbh_parse_uri(&uri, &raw_uri), -1);
+    ck_assert_int_eq(errno, EILSEQ);
+}
+END_TEST
+
+START_TEST(rpu_id_fragment_missing_opening_bracket)
+{
+    char path[] = ":";
+    struct rbh_raw_uri raw_uri = {
+        .scheme = RBH_SCHEME,
+        .path = path,
+        .fragment = "0",
+    };
+    struct rbh_uri uri;
+
+    errno = 0;
+    ck_assert_int_eq(rbh_parse_uri(&uri, &raw_uri), -1);
+    ck_assert_int_eq(errno, EINVAL);
+}
+END_TEST
+
 START_TEST(rpu_id_fragment_missing_closing_bracket)
 {
     char path[] = ":";
@@ -386,9 +436,9 @@ END_TEST
 
 START_TEST(rpu_id_fragment)
 {
-    static const char DATA[] = { 0, 1, 2, 3, 4, 5, 6, 7 };
+    const char DATA[] = { 0, '1', 2, '3', 4, '5', 6, '7' };
     char path[] = ":";
-    char fragment[] = "[%00%01%02%03%04%05%06%07]";
+    char fragment[] = "[%001%023%045%067]";
     struct rbh_raw_uri raw_uri = {
         .scheme = RBH_SCHEME,
         .path = path,
@@ -402,10 +452,356 @@ START_TEST(rpu_id_fragment)
 }
 END_TEST
 
-START_TEST(rpu_path_fragment)
+static size_t
+fid_copy(char *data, size_t size, uint64_t sequence, uint32_t oid,
+         uint32_t version)
 {
-    /* TODO */
-    return;
+    ck_assert_uint_ge(size, sizeof(uint64_t) + sizeof(uint32_t) * 2);
+
+    memcpy(data, &sequence, sizeof(sequence));
+    data += sizeof(sequence);
+    memcpy(data, &oid, sizeof(oid));
+    data += sizeof(oid);
+    memcpy(data, &version, sizeof(version));
+    data += sizeof(version);
+
+    return sizeof(sequence) + sizeof(oid) + sizeof(version);
+}
+
+/* Build a lustre ID and copy it into a buffer */
+static size_t
+lustre_id_copy(char *data, size_t size, uint64_t sequence, uint32_t oid,
+               uint32_t version)
+{
+    const int FILEID_LUSTRE = 0x97;
+    size_t used = 0;
+
+    ck_assert_uint_ge(size, sizeof(FILEID_LUSTRE));
+    memcpy(data, &FILEID_LUSTRE, sizeof(FILEID_LUSTRE));
+    used += sizeof(FILEID_LUSTRE);
+    used += fid_copy(data + used, size - used, sequence, oid, version);
+    used += fid_copy(data + used, size - used, 0, 0, 0);
+
+    return used;
+}
+
+START_TEST(rpu_fid_fragment)
+{
+    char data[MAX_HANDLE_SZ];
+    char fragment[] = "[0x0:0x1:0x2]";
+    char path[] = ":";
+    struct rbh_raw_uri raw_uri = {
+        .scheme = RBH_SCHEME,
+        .path = path,
+        .fragment = fragment,
+    };
+    struct rbh_uri uri;
+    size_t size;
+
+    size = lustre_id_copy(data, sizeof(data), 0, 1, 2);
+
+    ck_assert_int_eq(rbh_parse_uri(&uri, &raw_uri), 0);
+    ck_assert_uint_eq(uri.id.size, size);
+    ck_assert_mem_eq(uri.id.data, data, size);
+}
+END_TEST
+
+START_TEST(rpu_id_single_unencoded_colon_fragment)
+{
+    char fragment[] = "[:]";
+    char path[] = ":";
+    struct rbh_raw_uri raw_uri = {
+        .scheme = RBH_SCHEME,
+        .path = path,
+        .fragment = fragment,
+    };
+    struct rbh_uri uri;
+
+    errno = 0;
+    ck_assert_int_eq(rbh_parse_uri(&uri, &raw_uri), -1);
+    ck_assert_int_eq(errno, EINVAL);
+}
+END_TEST
+
+START_TEST(rpu_id_single_encoded_colon_fragment)
+{
+    char fragment[] = "[%3a]";
+    char path[] = ":";
+    struct rbh_raw_uri raw_uri = {
+        .scheme = RBH_SCHEME,
+        .path = path,
+        .fragment = fragment,
+    };
+    const struct rbh_uri URI = {
+        .backend = "",
+        .fsname = "",
+        .id = {
+            .data = ":",
+            .size = 1,
+        },
+    };
+    struct rbh_uri uri;
+
+    ck_assert_int_eq(rbh_parse_uri(&uri, &raw_uri), 0);
+    ck_assert_uri_eq(&uri, &URI);
+}
+END_TEST
+
+START_TEST(rpu_id_two_unencoded_colons_fragment)
+{
+    char data[MAX_HANDLE_SZ];
+    char fragment[] = "[::]";
+    char path[] = ":";
+    struct rbh_raw_uri raw_uri = {
+        .scheme = RBH_SCHEME,
+        .path = path,
+        .fragment = fragment,
+    };
+    struct rbh_uri uri;
+    size_t size;
+
+    size = lustre_id_copy(data, sizeof(data), 0, 0, 0);
+
+    ck_assert_int_eq(rbh_parse_uri(&uri, &raw_uri), 0);
+    ck_assert_uint_eq(uri.id.size, size);
+    ck_assert_mem_eq(uri.id.data, data, size);
+}
+END_TEST
+
+START_TEST(rpu_fid_sequence_is_not_hexa_fragment)
+{
+    char fragment[] = "[0x0g:0x1:0x2]";
+    char path[] = ":";
+    struct rbh_raw_uri raw_uri = {
+        .scheme = RBH_SCHEME,
+        .path = path,
+        .fragment = fragment,
+    };
+    struct rbh_uri uri;
+
+    errno = 0;
+    ck_assert_int_eq(rbh_parse_uri(&uri, &raw_uri), -1);
+    ck_assert_int_eq(errno, EINVAL);
+}
+END_TEST
+
+START_TEST(rpu_fid_oid_is_not_hexa_fragment)
+{
+    char fragment[] = "[0x0:0x1g:0x2]";
+    char path[] = ":";
+    struct rbh_raw_uri raw_uri = {
+        .scheme = RBH_SCHEME,
+        .path = path,
+        .fragment = fragment,
+    };
+    struct rbh_uri uri;
+
+    errno = 0;
+    ck_assert_int_eq(rbh_parse_uri(&uri, &raw_uri), -1);
+    ck_assert_int_eq(errno, EINVAL);
+}
+END_TEST
+
+START_TEST(rpu_fid_version_is_not_hexa_fragment)
+{
+    char fragment[] = "[0x0:0x1:0x2g]";
+    char path[] = ":";
+    struct rbh_raw_uri raw_uri = {
+        .scheme = RBH_SCHEME,
+        .path = path,
+        .fragment = fragment,
+    };
+    struct rbh_uri uri;
+
+    errno = 0;
+    ck_assert_int_eq(rbh_parse_uri(&uri, &raw_uri), -1);
+    ck_assert_int_eq(errno, EINVAL);
+}
+END_TEST
+
+START_TEST(rpu_fid_encoded_fragment)
+{
+    char data[MAX_HANDLE_SZ];
+    char fragment[] = "[%30%78%30:0x1:%30%78%32]";
+    char path[] = ":";
+    struct rbh_raw_uri raw_uri = {
+        .scheme = RBH_SCHEME,
+        .path = path,
+        .fragment = fragment,
+    };
+    struct rbh_uri uri;
+    size_t size;
+
+    size = lustre_id_copy(data, sizeof(data), 0, 1, 2);
+
+    ck_assert_int_eq(rbh_parse_uri(&uri, &raw_uri), 0);
+    ck_assert_uint_eq(uri.id.size, size);
+    ck_assert_mem_eq(uri.id.data, data, size);
+}
+END_TEST
+
+START_TEST(rpu_fid_misencoded_sequence_fragment)
+{
+    char fragment[] = "[%3g::]";
+    char path[] = ":";
+    struct rbh_raw_uri raw_uri = {
+        .scheme = RBH_SCHEME,
+        .path = path,
+        .fragment = fragment,
+    };
+    struct rbh_uri uri;
+
+    errno = 0;
+    ck_assert_int_eq(rbh_parse_uri(&uri, &raw_uri), -1);
+    ck_assert_int_eq(errno, EILSEQ);
+}
+END_TEST
+
+START_TEST(rpu_fid_misencoded_oid_fragment)
+{
+    char fragment[] = "[0x0:%3g:]";
+    char path[] = ":";
+    struct rbh_raw_uri raw_uri = {
+        .scheme = RBH_SCHEME,
+        .path = path,
+        .fragment = fragment,
+    };
+    struct rbh_uri uri;
+
+    errno = 0;
+    ck_assert_int_eq(rbh_parse_uri(&uri, &raw_uri), -1);
+    ck_assert_int_eq(errno, EILSEQ);
+}
+END_TEST
+
+START_TEST(rpu_fid_misencoded_version_fragment)
+{
+    char fragment[] = "[0x0:0x1:%3g]";
+    char path[] = ":";
+    struct rbh_raw_uri raw_uri = {
+        .scheme = RBH_SCHEME,
+        .path = path,
+        .fragment = fragment,
+    };
+    struct rbh_uri uri;
+
+    errno = 0;
+    ck_assert_int_eq(rbh_parse_uri(&uri, &raw_uri), -1);
+    ck_assert_int_eq(errno, EILSEQ);
+}
+END_TEST
+
+START_TEST(rpu_fid_max_sequence_fragment)
+{
+    char data[MAX_HANDLE_SZ];
+    char fragment[] = "[0xffffffffffffffff:0x0:0x0]";
+    char path[] = ":";
+    struct rbh_raw_uri raw_uri = {
+        .scheme = RBH_SCHEME,
+        .path = path,
+        .fragment = fragment,
+    };
+    struct rbh_uri uri;
+    size_t size;
+
+    size = lustre_id_copy(data, sizeof(data), UINT64_MAX, 0, 0);
+
+    ck_assert_int_eq(rbh_parse_uri(&uri, &raw_uri), 0);
+    ck_assert_uint_eq(uri.id.size, size);
+    ck_assert_mem_eq(uri.id.data, data, size);
+}
+END_TEST
+
+START_TEST(rpu_fid_overflowed_sequence_fragment)
+{
+    char fragment[] = "[0x10000000000000000:0x0:0x0]";
+    char path[] = ":";
+    struct rbh_raw_uri raw_uri = {
+        .scheme = RBH_SCHEME,
+        .path = path,
+        .fragment = fragment,
+    };
+    struct rbh_uri uri;
+
+    errno = 0;
+    ck_assert_int_eq(rbh_parse_uri(&uri, &raw_uri), -1);
+    ck_assert_int_eq(errno, ERANGE);
+}
+END_TEST
+
+START_TEST(rpu_fid_max_oid_fragment)
+{
+    char data[MAX_HANDLE_SZ];
+    char fragment[] = "[0x0:0xffffffff:0x0]";
+    char path[] = ":";
+    struct rbh_raw_uri raw_uri = {
+        .scheme = RBH_SCHEME,
+        .path = path,
+        .fragment = fragment,
+    };
+    struct rbh_uri uri;
+    size_t size;
+
+    size = lustre_id_copy(data, sizeof(data), 0, UINT32_MAX, 0);
+
+    ck_assert_int_eq(rbh_parse_uri(&uri, &raw_uri), 0);
+    ck_assert_uint_eq(uri.id.size, size);
+    ck_assert_mem_eq(uri.id.data, data, size);
+}
+END_TEST
+
+START_TEST(rpu_fid_overflowed_oid_fragment)
+{
+    char fragment[] = "[0x0:0x100000000:0x0]";
+    char path[] = ":";
+    struct rbh_raw_uri raw_uri = {
+        .scheme = RBH_SCHEME,
+        .path = path,
+        .fragment = fragment,
+    };
+    struct rbh_uri uri;
+
+    errno = 0;
+    ck_assert_int_eq(rbh_parse_uri(&uri, &raw_uri), -1);
+    ck_assert_int_eq(errno, ERANGE);
+}
+END_TEST
+
+START_TEST(rpu_fid_max_version_fragment)
+{
+    char data[MAX_HANDLE_SZ];
+    char fragment[] = "[0x0:0x0:0xffffffff]";
+    char path[] = ":";
+    struct rbh_raw_uri raw_uri = {
+        .scheme = RBH_SCHEME,
+        .path = path,
+        .fragment = fragment,
+    };
+    struct rbh_uri uri;
+    size_t size;
+
+    size = lustre_id_copy(data, sizeof(data), 0, 0, UINT32_MAX);
+
+    ck_assert_int_eq(rbh_parse_uri(&uri, &raw_uri), 0);
+    ck_assert_uint_eq(uri.id.size, size);
+    ck_assert_mem_eq(uri.id.data, data, size);
+}
+END_TEST
+
+START_TEST(rpu_fid_overflowed_version_fragment)
+{
+    char fragment[] = "[0x0:0x0:0x100000000]";
+    char path[] = ":";
+    struct rbh_raw_uri raw_uri = {
+        .scheme = RBH_SCHEME,
+        .path = path,
+        .fragment = fragment,
+    };
+    struct rbh_uri uri;
+
+    errno = 0;
+    ck_assert_int_eq(rbh_parse_uri(&uri, &raw_uri), -1);
+    ck_assert_int_eq(errno, ERANGE);
 }
 END_TEST
 
@@ -432,7 +828,7 @@ unit_suite(void)
 
     suite_add_tcase(suite, tests);
 
-    tests = tcase_create("rbh_parse_raw_uri()");
+    tests = tcase_create("rbh_parse_uri()");
     tcase_add_test(tests, rpu_missing_scheme);
     tcase_add_test(tests, rpu_wrong_scheme);
     tcase_add_test(tests, rpu_no_colon);
@@ -442,9 +838,28 @@ unit_suite(void)
     tcase_add_test(tests, rpu_decode_lowercase);
     tcase_add_test(tests, rpu_decode_uppercase);
     tcase_add_test(tests, rpu_empty_fragment);
+    tcase_add_test(tests, rpu_empty_id_fragment);
+    tcase_add_test(tests, rpu_misencoded_id_fragment);
+    tcase_add_test(tests, rpu_id_fragment_missing_opening_bracket);
     tcase_add_test(tests, rpu_id_fragment_missing_closing_bracket);
     tcase_add_test(tests, rpu_id_fragment);
-    tcase_add_test(tests, rpu_path_fragment);
+    tcase_add_test(tests, rpu_fid_fragment);
+    tcase_add_test(tests, rpu_id_single_unencoded_colon_fragment);
+    tcase_add_test(tests, rpu_id_single_encoded_colon_fragment);
+    tcase_add_test(tests, rpu_id_two_unencoded_colons_fragment);
+    tcase_add_test(tests, rpu_fid_sequence_is_not_hexa_fragment);
+    tcase_add_test(tests, rpu_fid_oid_is_not_hexa_fragment);
+    tcase_add_test(tests, rpu_fid_version_is_not_hexa_fragment);
+    tcase_add_test(tests, rpu_fid_encoded_fragment);
+    tcase_add_test(tests, rpu_fid_misencoded_sequence_fragment);
+    tcase_add_test(tests, rpu_fid_misencoded_oid_fragment);
+    tcase_add_test(tests, rpu_fid_misencoded_version_fragment);
+    tcase_add_test(tests, rpu_fid_max_sequence_fragment);
+    tcase_add_test(tests, rpu_fid_overflowed_sequence_fragment);
+    tcase_add_test(tests, rpu_fid_max_oid_fragment);
+    tcase_add_test(tests, rpu_fid_overflowed_oid_fragment);
+    tcase_add_test(tests, rpu_fid_max_version_fragment);
+    tcase_add_test(tests, rpu_fid_overflowed_version_fragment);
 
     suite_add_tcase(suite, tests);
 
