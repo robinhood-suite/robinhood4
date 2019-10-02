@@ -158,13 +158,13 @@ hex2int(char c)
 }
 
 static char
-_percent_decode(int major, int minor)
+percent_decode(int major, int minor)
 {
     return (major << 4) + minor;
 }
 
-static ssize_t
-percent_decode(char *string)
+ssize_t
+rbh_percent_decode(char *string)
 {
     const size_t length = strlen(string);
     size_t count = 0;
@@ -189,7 +189,7 @@ percent_decode(char *string)
             return -1;
         }
 
-        *c = _percent_decode(major, minor);
+        *c = percent_decode(major, minor);
         memmove(c + 1, c + 3, length - (c - string) - 2 * ++count);
     }
 
@@ -279,7 +279,7 @@ parse_fid(struct rbh_uri *uri, char *sequence, char *oid, char *version)
     char *nul;
 
     /* sequence (uint64_t) */
-    if (percent_decode(sequence) < 0)
+    if (rbh_percent_decode(sequence) < 0)
         return -1;
 
     errno = 0;
@@ -292,7 +292,7 @@ parse_fid(struct rbh_uri *uri, char *sequence, char *oid, char *version)
     }
 
     /* oid (uint32_t) */
-    if (percent_decode(oid) < 0)
+    if (rbh_percent_decode(oid) < 0)
         return -1;
 
     errno = 0;
@@ -305,7 +305,7 @@ parse_fid(struct rbh_uri *uri, char *sequence, char *oid, char *version)
     }
 
     /* version (uint32_t) */
-    if (percent_decode(version) < 0)
+    if (rbh_percent_decode(version) < 0)
         return -1;
 
     errno = 0;
@@ -359,7 +359,7 @@ parse_fragment(struct rbh_uri *uri, char *fragment)
         return parse_fid(uri, sequence, oid, version);
     } /* No */
 
-    count = percent_decode(fragment);
+    count = rbh_percent_decode(fragment);
     if (count < 0)
         return -1;
 
@@ -389,11 +389,11 @@ rbh_parse_uri(struct rbh_uri *uri, struct rbh_raw_uri *raw_uri)
     }
     *colon++ = '\0';
 
-    if (percent_decode(raw_uri->path) < 0)
+    if (rbh_percent_decode(raw_uri->path) < 0)
         return -1;
     uri->backend = raw_uri->path;
 
-    if (percent_decode(colon) < 0)
+    if (rbh_percent_decode(colon) < 0)
         return -1;
     uri->fsname = colon;
 

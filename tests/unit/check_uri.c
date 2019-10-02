@@ -14,6 +14,7 @@
 #include <errno.h>
 #include <fcntl.h>
 #include <stdbool.h>
+#include <stdio.h>
 #include <stdlib.h>
 
 #include "check-compat.h"
@@ -227,6 +228,66 @@ START_TEST(rpru_port)
     ck_assert_int_eq(rbh_parse_raw_uri(&raw_uri, string), 0);
     ck_assert_raw_uri_eq(&raw_uri, &RAW_URI);
 #undef PORT
+}
+END_TEST
+
+/*----------------------------------------------------------------------------*
+ |                            rbh_percent_decode()                            |
+ *----------------------------------------------------------------------------*/
+
+START_TEST(rpd_every_hexa_char)
+{
+    const char DECODED[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14,
+                            15, '\0'};
+    char encoded[] = "%00%01%02%03%04%05%06%07%08%09%0a%0b%0c%0d%0e%0f";
+
+    ck_assert_uint_eq(rbh_percent_decode(encoded), sizeof(DECODED) - 1);
+    ck_assert_str_eq(encoded, DECODED);
+}
+END_TEST
+
+START_TEST(rpd_fully_encoded)
+{
+    const char DECODED[] = "Hello World";
+    char encoded[(sizeof(DECODED) - 1) * 3 + 1];
+
+    for (size_t i = 0; i < sizeof(DECODED) - 1; i++)
+        sprintf(encoded + i * 3, "%%%.2x", DECODED[i]);
+    encoded[sizeof(encoded) - 1] = '\0';
+
+    ck_assert_uint_eq(rbh_percent_decode(encoded), sizeof(DECODED) - 1);
+    ck_assert_str_eq(encoded, DECODED);
+}
+END_TEST
+
+START_TEST(rpd_unencoded)
+{
+#define STRING "Hello World"
+    char unencoded[] = STRING;
+
+    ck_assert_uint_eq(rbh_percent_decode(unencoded), 0);
+    ck_assert_str_eq(unencoded, STRING);
+#undef STRING
+}
+END_TEST
+
+START_TEST(rpd_too_short)
+{
+    char encoded[] = "%e";
+
+    errno = 0;
+    ck_assert_int_eq(rbh_percent_decode(encoded), -1);
+    ck_assert_int_eq(errno, EILSEQ);
+}
+END_TEST
+
+START_TEST(rpd_not_hexa)
+{
+    char encoded[] = "%0g";
+
+    errno = 0;
+    ck_assert_int_eq(rbh_percent_decode(encoded), -1);
+    ck_assert_int_eq(errno, EILSEQ);
 }
 END_TEST
 
@@ -825,6 +886,15 @@ unit_suite(void)
     tcase_add_test(tests, rpru_userinfo);
     tcase_add_test(tests, rpru_host);
     tcase_add_test(tests, rpru_port);
+
+    suite_add_tcase(suite, tests);
+
+    tests = tcase_create("rbh_percent_decode()");
+    tcase_add_test(tests, rpd_every_hexa_char);
+    tcase_add_test(tests, rpd_fully_encoded);
+    tcase_add_test(tests, rpd_unencoded);
+    tcase_add_test(tests, rpd_too_short);
+    tcase_add_test(tests, rpd_not_hexa);
 
     suite_add_tcase(suite, tests);
 

@@ -41,6 +41,22 @@ struct rbh_raw_uri {
 int
 rbh_parse_raw_uri(struct rbh_raw_uri *raw_uri, char *string);
 
+/**
+ * Decode a percent-encoded string in-place
+ *
+ * @param string    the string to decode
+ *
+ * @return          the number of decoded characters on success, -1 on error and
+ *                  errno is set appropriately
+ *
+ * @error EILSEQ    \p string contains misencoded data
+ *
+ * The return value can be used to compute the size of the decoded string from
+ * its encoded size: decoded_size = encoded_size - 2 * return_value.
+ */
+ssize_t
+rbh_percent_decode(char *string);
+
 struct rbh_uri {
     char *backend;
     char *fsname;
