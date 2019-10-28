@@ -104,10 +104,14 @@ START_TEST(pff_empty_root)
     ck_assert(fsentry->mask & RBH_FP_PARENT_ID);
     ck_assert_int_eq(fsentry->parent_id.size, 0);
 
+    free(fsentry);
+
     errno = 0;
     ck_assert_ptr_null(rbh_mut_iter_next(fsentries));
     ck_assert_int_eq(errno, ENODATA);
 
+    rbh_mut_iter_destroy(fsentries);
+    rbh_backend_destroy(posix);
     ck_assert_int_eq(rmdir(EMPTY), 0);
 }
 END_TEST
