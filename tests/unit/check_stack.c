@@ -172,6 +172,8 @@ START_TEST(rspo_too_much)
     errno = 0;
     ck_assert_int_eq(rbh_stack_pop(stack, 1), -1);
     ck_assert_int_eq(errno, EINVAL);
+
+    rbh_stack_destroy(stack);
 }
 END_TEST
 
