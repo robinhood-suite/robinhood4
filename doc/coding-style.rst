@@ -308,6 +308,44 @@ navigating and refactoring code.
 
 .. [#] https://skeptics.stackexchange.com/a/39178
 
+Case
+----
+
+Use UPPER_CASE_WITH_UNDERSCORES for macros and variables defining static
+constants, and for labels in enums.
+
+.. code:: C
+
+    enum my_enum {
+        ME_FIRST,
+        ME_SECOND,
+        ME_THIRD,
+    };
+
+    static const char STRING[] = "example";
+    static const size_t STRING_LEN = sizeof(STRING);
+
+Use lower_case_with_underscores for everything else.
+
+.. code:: C
+
+    static char global_buffer[1 << 12];
+
+    struct my_struct {
+        int field;
+    };
+
+    void
+    my_func(const char *string)
+    {
+        const size_t length = strlen(string);
+
+        ...;
+    }
+
+In the previous example, ``length`` is not considered a "static constant" in
+the sense that its value depends on the content of ``string``.
+
 Prefixes
 --------
 
