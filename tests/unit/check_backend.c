@@ -157,9 +157,13 @@ unit_suite(void)
     TCase *tests;
 
     suite = suite_create("backend");
+
     tests = tcase_create("unsupported operations");
     tcase_add_test(tests, rbgo_unsupported);
     tcase_add_test(tests, rbso_unsupported);
+
+    suite_add_tcase(suite, tests);
+
     tests = tcase_create("unsupported fsentries operations");
     tcase_add_test(tests, rbu_unsupported);
     tcase_add_test(tests, rbff_unsupported);
