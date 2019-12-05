@@ -72,11 +72,11 @@ str2command_line_token(const char *string)
     switch (string[0]) {
     case '(':
         if (string[1] == '\0')
-            return CLT_PARENTHESE_OPEN;
+            return CLT_PARENTHESIS_OPEN;
         break;
     case ')':
         if (string[1] == '\0')
-            return CLT_PARENTHESE_CLOSE;
+            return CLT_PARENTHESIS_CLOSE;
         break;
     case '!':
         if (string[1] == '\0')

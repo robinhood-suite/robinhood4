@@ -15,8 +15,8 @@ enum command_line_token {
     CLT_AND,
     CLT_OR,
     CLT_NOT,
-    CLT_PARENTHESE_OPEN,
-    CLT_PARENTHESE_CLOSE,
+    CLT_PARENTHESIS_OPEN,
+    CLT_PARENTHESIS_CLOSE,
     CLT_PREDICATE,
     CLT_ACTION,
 };
