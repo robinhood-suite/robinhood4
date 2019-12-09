@@ -82,6 +82,23 @@ START_TEST(rpru_missing_scheme)
 }
 END_TEST
 
+START_TEST(rpru_empty_fragment)
+{
+#define FRAGMENT ""
+    const struct rbh_raw_uri RAW_URI = {
+        .scheme = RBH_SCHEME,
+        .path = "",
+        .fragment = FRAGMENT,
+    };
+    struct rbh_raw_uri raw_uri;
+    char string[] = RBH_SCHEME ":#" FRAGMENT;
+
+    ck_assert_int_eq(rbh_parse_raw_uri(&raw_uri, string), 0);
+    ck_assert_raw_uri_eq(&raw_uri, &RAW_URI);
+#undef FRAGMENT
+}
+END_TEST
+
 START_TEST(rpru_fragment)
 {
 #define FRAGMENT "test"
@@ -416,7 +433,7 @@ START_TEST(rpu_decode_uppercase)
 }
 END_TEST
 
-START_TEST(rpu_empty_fragment)
+START_TEST(rpu_no_fragment)
 {
     char path[] = ":";
     struct rbh_raw_uri raw_uri = {
@@ -427,6 +444,22 @@ START_TEST(rpu_empty_fragment)
 
     ck_assert_int_eq(rbh_parse_uri(&uri, &raw_uri), 0);
     ck_assert_uint_eq(uri.id.size, 0);
+}
+END_TEST
+
+START_TEST(rpu_empty_fragment)
+{
+    char path[] = ":";
+    struct rbh_raw_uri raw_uri = {
+        .scheme = RBH_SCHEME,
+        .path = path,
+        .fragment = "",
+    };
+    struct rbh_uri uri;
+
+    errno = 0;
+    ck_assert_int_eq(rbh_parse_uri(&uri, &raw_uri), -1);
+    ck_assert_int_eq(errno, EINVAL);
 }
 END_TEST
 
@@ -878,6 +911,7 @@ unit_suite(void)
     tcase_add_test(tests, rpru_scheme);
     tcase_add_test(tests, rpru_missing_scheme);
     tcase_add_test(tests, rpru_fragment);
+    tcase_add_test(tests, rpru_empty_fragment);
     tcase_add_test(tests, rpru_query);
     tcase_add_test(tests, rpru_no_athority_absolute_path);
     tcase_add_test(tests, rpru_no_athority_relative_path);
@@ -907,6 +941,7 @@ unit_suite(void)
     tcase_add_test(tests, rpu_decode_basic);
     tcase_add_test(tests, rpu_decode_lowercase);
     tcase_add_test(tests, rpu_decode_uppercase);
+    tcase_add_test(tests, rpu_no_fragment);
     tcase_add_test(tests, rpu_empty_fragment);
     tcase_add_test(tests, rpu_empty_id_fragment);
     tcase_add_test(tests, rpu_misencoded_id_fragment);
