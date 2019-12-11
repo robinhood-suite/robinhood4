@@ -636,7 +636,7 @@ struct rbh_backend *
 rbh_mongo_backend_new(const char *fsname)
 {
     struct mongo_backend *mongo;
-    int save_errno = errno;
+    int save_errno;
 
     mongo = malloc(sizeof(*mongo));
     if (mongo == NULL) {
