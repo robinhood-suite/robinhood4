@@ -374,7 +374,6 @@ posix_iterator_new(const char *root, int statx_sync_type)
     save_errno = errno;
     free(paths[0]);
     if (posix_iter->fts_handle == NULL) {
-        save_errno = errno;
         free(posix_iter);
         errno = save_errno;
         return NULL;
