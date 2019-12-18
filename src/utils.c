@@ -61,18 +61,22 @@ shell2pcre(const char *shell)
         len++;
     }
 
-    /* Allocate the destination string */
-    pcre = malloc(len + 7);
+    /*                                     `len'
+     *                                    vvvvvvv
+     * Allocate the destination string: "^<regex>(?!\n)$"
+     *                                   ^       ^^^^^^^^
+     *                                   1       234 5678
+     */
+    pcre = malloc(len + 8);
     if (pcre == NULL) {
         errno = ENOMEM;
         return NULL;
     }
 
-    /* len == strlen(shell) + 1 */
-    len = i;
+    len = i - 1; /* len = strlen(shell) */
     pcre[k++] = '^';
     escaped = false;
-    for (i = 0; i < len - 1; i++) {
+    for (i = 0; i < len; i++) {
         switch (shell[i]) {
         case '\\':
             escaped = !escaped;
