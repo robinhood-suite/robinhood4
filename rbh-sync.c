@@ -16,6 +16,7 @@
 #include <error.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <sysexits.h>
 
 #include <sys/stat.h>
@@ -223,19 +224,159 @@ upsert_fsentries(struct rbh_backend *backend,
 static int
 usage(FILE *output)
 {
-    return fprintf(output, "usage: %s SOURCE DEST\n"
+    return fprintf(output, "usage: %s [--one] SOURCE DEST\n"
 "Positional arguments:\n"
-"    SOURCE  a robinhood URI\n"
-"    DEST    a robinhood URI\n"
+"    SOURCE    a robinhood URI\n"
+"    DEST      a robinhood URI\n"
+"\n"
+"Optional arguments:\n"
+"    -o,--one  only synchronize one entry of SOURCE, its root\n"
 "\n"
 "A robinhood URI is built as follows:\n"
 "    "RBH_SCHEME":BACKEND:FSNAME[#{PATH|ID}]\n"
 "where:\n"
-"    BACKEND  is the name of a backend\n"
-"    FSNAME   is the name of a filesystem for BACKEND\n"
-"    PATH/ID  is the path/id of an fsentry managed by BACKEND:FSNAME (ID must\n"
-"             be enclosed in square brackets '[ID]' to distinguish it from a\n"
-"             path)\n", program_invocation_short_name);
+"    BACKEND    is the name of a backend\n"
+"    FSNAME     is the name of a filesystem for BACKEND\n"
+"    PATH/ID    is the path/id of an fsentry managed by BACKEND:FSNAME (ID must\n"
+"               be enclosed in square brackets '[ID]' to distinguish it from a\n"
+"               path)\n", program_invocation_short_name);
+}
+
+/* CLI parser */
+
+enum command_line_option {
+    CLO_UNKNOWN,
+    CLO_ONE,
+};
+
+static enum command_line_option
+letter2option(char c)
+{
+    switch (c) {
+    case 'o':
+        return CLO_ONE;
+    }
+    return CLO_UNKNOWN;
+}
+
+static enum command_line_option
+str2option(const char *string)
+{
+    switch (*string++) {
+    case 'o':
+        if (strcmp(string, "ne"))
+            break;
+        return CLO_ONE;
+    }
+    return CLO_UNKNOWN;
+}
+
+enum command_line_token {
+    CLT_URI,
+    CLT_DOUBLE_DASH,
+    CLT_SHORT_OPTION,
+    CLT_LONG_OPTION,
+};
+
+static bool double_dash = false;
+
+static enum command_line_token
+str2command_line_token(const char *string)
+{
+    if (double_dash)
+        return CLT_URI;
+
+    switch (*string++) {
+    case '-':
+        if (*string++ == '-') {
+            if (*string++ == '\0')
+                return CLT_DOUBLE_DASH;
+            else
+                return CLT_LONG_OPTION;
+        }
+        return CLT_SHORT_OPTION;
+    default:
+        return CLT_URI;
+    }
+}
+
+static struct {
+    bool one:1;
+} options;
+
+static void
+set_option(enum command_line_option option)
+{
+    switch (option) {
+    case CLO_ONE:
+        options.one = true;
+        break;
+    default:
+        error(EX_SOFTWARE, 0, "unreachable code");
+    }
+}
+
+static void
+parse(int argc, char *argv[])
+{
+    enum command_line_option option;
+
+    for (size_t i = 1; i < argc; i++) {
+        char *arg = argv[i];
+
+        switch (str2command_line_token(arg)) {
+        case CLT_DOUBLE_DASH:
+            double_dash = true;
+            break;
+        case CLT_URI:
+            if (from == NULL) {
+                from = rbh_backend_from_uri(arg);
+                _atexit(destroy_from);
+            } else if (to == NULL) {
+                to = rbh_backend_from_uri(arg);
+                _atexit(destroy_to);
+            } else {
+                usage(stderr);
+                error(EX_USAGE, 0, "unexpected argument: %s", arg);
+            }
+            break;
+        case CLT_SHORT_OPTION:
+            /* Discard the leading '-' */
+            arg++;
+
+            /* Process each letter separately */
+            do {
+                option = letter2option(*arg);
+                if (option == CLO_UNKNOWN) {
+                    usage(stderr);
+                    error(EX_USAGE, 0, "unknown option: -%c", *arg);
+                }
+
+                set_option(option);
+            } while (*++arg != '\0');
+
+            break;
+        case CLT_LONG_OPTION:
+            /* Discard the leading "--" */
+            option = str2option(arg + 2);
+            if (option == CLO_UNKNOWN) {
+                usage(stderr);
+                error(EX_USAGE, 0, "unknown option: %s", arg);
+            }
+
+            set_option(option);
+            break;
+        }
+    }
+
+    if (from == NULL) {
+        usage(stderr);
+        error(EX_USAGE, 0, "missing SOURCE argument");
+    }
+    if (to == NULL) {
+        usage(stderr);
+        error(EX_USAGE, 0, "missing DEST argument");
+    }
 }
 
 int
@@ -244,21 +385,10 @@ main(int argc, char *argv[])
     struct rbh_mut_iterator *fsentries;
     struct rbh_mut_iterator *fsevents;
 
-    if (argc < 2) {
-        usage(stderr);
-        error(EX_USAGE, 0, "missing SOURCE argument");
-    }
+    parse(argc, argv);
 
-    from = rbh_backend_from_uri(argv[1]);
-    _atexit(destroy_from);
-
-    if (argc < 3) {
-        usage(stderr);
-        error(EX_USAGE, 0, "missing DEST argument");
-    }
-
-    to = rbh_backend_from_uri(argv[2]);
-    _atexit(destroy_to);
+    if (options.one)
+        error(EXIT_FAILURE, 0, "-o,--one option not yet implemented");
 
     /* "Dump" `from' */
     fsentries = rbh_backend_filter_fsentries(from, NULL, RBH_FP_ALL, STATX_ALL);
