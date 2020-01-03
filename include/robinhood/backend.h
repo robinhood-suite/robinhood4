@@ -91,6 +91,11 @@ struct rbh_backend_operations {
             void *backend,
             const struct rbh_id *id
             );
+    struct rbh_fsentry *(*root)(
+            void *backend,
+            unsigned int fsentry_mask,
+            unsigned int statx_mask
+            );
     struct rbh_mut_iterator *(*filter_fsentries)(
             void *backend,
             const struct rbh_filter *filter,
@@ -288,6 +293,17 @@ rbh_backend_branch(struct rbh_backend *backend, const struct rbh_id *id)
         return NULL;
     }
     return backend->ops->branch(backend, id);
+}
+
+static inline struct rbh_fsentry *
+rbh_backend_root(struct rbh_backend *backend, unsigned int fsentry_mask,
+                 unsigned int statx_mask)
+{
+    if (backend->ops->root == NULL) {
+        errno = ENOTSUP;
+        return NULL;
+    }
+    return backend->ops->root(backend, fsentry_mask, statx_mask);
 }
 
 /**

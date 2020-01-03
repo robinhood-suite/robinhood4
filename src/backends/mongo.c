@@ -1551,6 +1551,16 @@ mongo_backend_update(void *backend, struct rbh_iterator *fsevents)
 }
 
     /*--------------------------------------------------------------------*
+     |                                root                                |
+     *--------------------------------------------------------------------*/
+
+static struct rbh_fsentry *
+mongo_root(void *backend, unsigned int fsentry_mask, unsigned int statx_mask)
+{
+    return rbh_backend_fsentry_from_path(backend, "", fsentry_mask, statx_mask);
+}
+
+    /*--------------------------------------------------------------------*
      |                          filter fsentries                          |
      *--------------------------------------------------------------------*/
 
@@ -1607,6 +1617,7 @@ mongo_backend_destroy(void *backend)
 }
 
 static const struct rbh_backend_operations MONGO_BACKEND_OPS = {
+    .root = mongo_root,
     .update = mongo_backend_update,
     .filter_fsentries = mongo_backend_filter_fsentries,
     .destroy = mongo_backend_destroy,

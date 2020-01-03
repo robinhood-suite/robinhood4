@@ -493,6 +493,30 @@ posix_backend_set_option(void *backend, unsigned int option, const void *data,
 }
 
     /*--------------------------------------------------------------------*
+     |                               root()                               |
+     *--------------------------------------------------------------------*/
+
+static struct rbh_fsentry *
+posix_root(void *backend, unsigned int fsentry_mask, unsigned int statx_mask)
+{
+    struct rbh_mut_iterator *fsentries;
+    struct rbh_fsentry *root;
+    int save_errno;
+
+    fsentries = rbh_backend_filter_fsentries(backend, NULL, fsentry_mask,
+                                             statx_mask);
+    if (fsentries == NULL)
+        return NULL;
+
+    root = rbh_mut_iter_next(fsentries);
+    save_errno = errno;
+    rbh_mut_iter_destroy(fsentries);
+    errno = save_errno;
+
+    return root;
+}
+
+    /*--------------------------------------------------------------------*
      |                         filter_fsentries()                         |
      *--------------------------------------------------------------------*/
 
@@ -690,6 +714,7 @@ static struct rbh_backend *
 posix_backend_branch(void *backend, const struct rbh_id *id);
 
 static const struct rbh_backend_operations POSIX_BRANCH_BACKEND_OPS = {
+    .root = posix_root,
     .branch = posix_backend_branch,
     .filter_fsentries = posix_branch_backend_filter_fsentries,
     .destroy = posix_backend_destroy,
@@ -732,6 +757,7 @@ static const struct rbh_backend_operations POSIX_BACKEND_OPS = {
     .get_option = posix_backend_get_option,
     .set_option = posix_backend_set_option,
     .branch = posix_backend_branch,
+    .root = posix_root,
     .filter_fsentries = posix_backend_filter_fsentries,
     .destroy = posix_backend_destroy,
 };

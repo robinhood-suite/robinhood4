@@ -120,7 +120,7 @@ rbh_backend_fsentry_from_path(struct rbh_backend *backend, char *path,
     struct rbh_fsentry *save_fsentry;
     int save_errno;
 
-    if (path[0] != '/') {
+    if (path[0] != '\0' && path[0] != '/') {
         errno = EINVAL;
         return NULL;
     }
@@ -131,7 +131,12 @@ rbh_backend_fsentry_from_path(struct rbh_backend *backend, char *path,
         slash = strchr(path, '/');
         if (slash == NULL)
             break;
-        *slash = '\0';
+        *slash++ = '\0';
+
+        /* Look for the next character that is not a '/' */
+        while (*slash++ == '/');
+        if (*slash == '\0')
+            break;
 
         save_fsentry = fsentry;
         fsentry = fsentry_from_parent_and_name(backend, id, path, RBH_FP_ID, 0);
@@ -148,7 +153,7 @@ rbh_backend_fsentry_from_path(struct rbh_backend *backend, char *path,
         }
 
         id = &fsentry->id;
-        path = slash + 1;
+        path = slash;
     }
 
     save_fsentry = fsentry;
