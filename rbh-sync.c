@@ -387,13 +387,22 @@ main(int argc, char *argv[])
 
     parse(argc, argv);
 
-    if (options.one)
-        error(EXIT_FAILURE, 0, "-o,--one option not yet implemented");
+    if (options.one) {
+        struct rbh_fsentry *root;
 
-    /* "Dump" `from' */
-    fsentries = rbh_backend_filter_fsentries(from, NULL, RBH_FP_ALL, STATX_ALL);
-    if (fsentries == NULL)
-        error(EXIT_FAILURE, errno, "rbh_backend_filter_fsentries");
+        root = rbh_backend_root(from, RBH_FP_ALL, STATX_ALL);
+        if (root == NULL)
+            error(EXIT_FAILURE, errno, "rbh_backend_root");
+
+        fsentries = rbh_mut_array_iterator(root, sizeof(*root), 1);
+        if (fsentries == NULL)
+            error(EXIT_FAILURE, errno, "rbh_mut_array_iterator");
+    } else {
+        /* "Dump" `from' */
+        fsentries = rbh_backend_filter_fsentries(from, NULL, RBH_FP_ALL, STATX_ALL);
+        if (fsentries == NULL)
+            error(EXIT_FAILURE, errno, "rbh_backend_filter_fsentries");
+    }
 
     /* Convert all this information into fsevents */
     fsevents = convert_iter_new(fsentries);
