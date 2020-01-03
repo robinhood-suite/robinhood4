@@ -67,19 +67,14 @@ unchecked_teardown_tmpdir(void)
 START_TEST(pff_missing_root)
 {
     struct rbh_backend *posix;
-    struct rbh_mut_iterator *fsentries;
 
     posix = rbh_posix_backend_new("missing");
     ck_assert_ptr_nonnull(posix);
 
-    fsentries = rbh_backend_filter_fsentries(posix, NULL, 0, 0);
-    ck_assert_ptr_nonnull(fsentries);
-
     errno = 0;
-    ck_assert_ptr_null(rbh_mut_iter_next(fsentries));
+    ck_assert_ptr_null(rbh_backend_filter_fsentries(posix, NULL, 0, 0));
     ck_assert_int_eq(errno, ENOENT);
 
-    rbh_mut_iter_destroy(fsentries);
     rbh_backend_destroy(posix);
 }
 END_TEST

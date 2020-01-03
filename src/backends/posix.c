@@ -228,7 +228,10 @@ fsentry_from_ftsent(FTSENT *ftsent, int statx_sync_type)
     if (fd < 0)
         return NULL;
 
-    id = id_from_fd(fd);
+    /* The root entry might already have its ID computed and stored in
+     * `fts_pointer'.
+     */
+    id = ftsent->fts_pointer ? : id_from_fd(fd);
     if (id == NULL) {
         save_errno = errno;
         goto out_close;
@@ -253,11 +256,8 @@ fsentry_from_ftsent(FTSENT *ftsent, int statx_sync_type)
         }
     }
 
-    if (ftsent->fts_parent->fts_pointer == NULL) /* ftsent == root */
-        fsentry = rbh_fsentry_new(id, &ROOT_PARENT_ID, "", &statxbuf, symlink);
-    else
-        fsentry = rbh_fsentry_new(id, ftsent->fts_parent->fts_pointer,
-                                  ftsent->fts_name, &statxbuf, symlink);
+    fsentry = rbh_fsentry_new(id, ftsent->fts_parent->fts_pointer,
+                              ftsent->fts_name, &statxbuf, symlink);
     if (fsentry == NULL) {
         save_errno = errno;
         goto out_free_symlink;
@@ -496,13 +496,32 @@ posix_backend_set_option(void *backend, unsigned int option, const void *data,
      |                         filter_fsentries()                         |
      *--------------------------------------------------------------------*/
 
+/* Modify the root's name and parent ID to match RobinHood's conventions */
+static void
+set_root_properties(FTSENT *root)
+{
+    /* The content of fts_pointer is only ever read, so casting away the
+     * const modifier of `ROOT_PARENT_ID' is harmless.
+     */
+    root->fts_parent->fts_pointer = (void *)&ROOT_PARENT_ID;
+
+    /* XXX: could this mess up fts' internal buffers?
+     *
+     * It does not seem to.
+     */
+    root->fts_name[0] = '\0';
+    root->fts_namelen = 0;
+}
+
 static struct rbh_mut_iterator *
 posix_backend_filter_fsentries(void *backend, const struct rbh_filter *filter,
                                unsigned int fsentries_mask,
                                unsigned int statx_mask)
 {
     struct posix_backend *posix = backend;
-    struct posix_iterator *iter;
+    struct posix_iterator *posix_iter;
+    struct rbh_fsentry *fsentry;
+    int save_errno;
 
     /* TODO: make use of `fsentries_mask' and `statx_mask' */
 
@@ -511,8 +530,33 @@ posix_backend_filter_fsentries(void *backend, const struct rbh_filter *filter,
         return NULL;
     }
 
-    iter = posix_iterator_new(posix->root, posix->statx_sync_type);
-    return &iter->iterator;
+    posix_iter = posix_iterator_new(posix->root, posix->statx_sync_type);
+    if (posix_iter == NULL)
+        return NULL;
+
+    save_errno = errno;
+    do {
+        errno = 0;
+        fsentry = rbh_mut_iter_next(&posix_iter->iterator);
+    } while (fsentry == NULL && errno == EAGAIN);
+
+    if (fsentry == NULL)
+        goto out_destroy_iter;
+    errno = save_errno;
+    free(fsentry);
+
+    set_root_properties(posix_iter->ftsent);
+    if (fts_set(posix_iter->fts_handle, posix_iter->ftsent, FTS_AGAIN))
+        /* This should never happen */
+        goto out_destroy_iter;
+
+    return &posix_iter->iterator;
+
+out_destroy_iter:
+    save_errno = errno;
+    rbh_mut_iter_destroy(&posix_iter->iterator);
+    errno = save_errno;
+    return NULL;
 }
 
     /*--------------------------------------------------------------------*
@@ -628,7 +672,6 @@ posix_branch_backend_filter_fsentries(void *backend,
 {
     struct posix_branch_backend *branch = backend;
     struct posix_iterator *posix_iter;
-    struct rbh_fsentry *fsentry;
     int save_errno;
     char *path;
 
@@ -644,35 +687,9 @@ posix_branch_backend_filter_fsentries(void *backend,
     posix_iter = posix_iterator_new(path, branch->posix.statx_sync_type);
     save_errno = errno;
     free(path);
-    if (posix_iter == NULL)
-        goto out_error;
-
-    do {
-        errno = 0;
-        fsentry = rbh_mut_iter_next(&posix_iter->iterator);
-    } while (fsentry == NULL && errno == EAGAIN);
-
-    if (fsentry == NULL) {
-        save_errno = errno;
-        goto out_destroy_iter;
-    }
     errno = save_errno;
-    free(fsentry);
 
-    posix_iter->ftsent->fts_parent->fts_pointer = &branch->id;
-    if (fts_set(posix_iter->fts_handle, posix_iter->ftsent, FTS_AGAIN)) {
-        /* This should never happen */
-        save_errno = errno;
-        goto out_destroy_iter;
-    }
-
-    return &posix_iter->iterator;
-
-out_destroy_iter:
-    rbh_mut_iter_destroy(&posix_iter->iterator);
-out_error:
-    errno = save_errno;
-    return NULL;
+    return (struct rbh_mut_iterator *)posix_iter;
 }
 
 static struct rbh_backend *
