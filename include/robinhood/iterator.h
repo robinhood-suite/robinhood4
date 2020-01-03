@@ -10,7 +10,6 @@
 #ifndef ROBINHOOD_ITERATOR_H
 #define ROBINHOOD_ITERATOR_H
 
-#include <assert.h>
 #include <stddef.h>
 
 /** @file
@@ -46,15 +45,40 @@ struct rbh_iterator_operations {
  * @return          a const pointer to the next element in the iterator on
  *                  success, NULL on error and errno is set appropriately
  *
+ * @error EAGAIN    temporary failure, retry later
  * @error ENODATA   the iterator is exhausted
+ */
+static inline const void *
+_rbh_iter_next(struct rbh_iterator *iterator)
+{
+    return iterator->ops->next(iterator);
+}
+
+/**
+ * Yield an immutable reference on the next element of an iterator
+ *
+ * @param iterator  an iterator
+ *
+ * @return          a const pointer to the next element in the iterator on
+ *                  success, NULL on error and errno is set appropriately
+ *
+ * @error ENODATA   the iterator is exhausted
+ *
+ * This function handles temporary failures (errno == EAGAIN) itself.
  */
 static inline const void *
 rbh_iter_next(struct rbh_iterator *iterator)
 {
-    assert(iterator);
-    assert(iterator->ops);
-    assert(iterator->ops->next);
-    return iterator->ops->next(iterator);
+    int save_errno = errno;
+    const void *element;
+
+    do {
+        errno = 0;
+        element = _rbh_iter_next(iterator);
+    } while (element == NULL && errno == EAGAIN);
+
+    errno = errno ? : save_errno;
+    return element;
 }
 
 /**
@@ -67,9 +91,6 @@ rbh_iter_next(struct rbh_iterator *iterator)
 static inline void
 rbh_iter_destroy(struct rbh_iterator *iterator)
 {
-    assert(iterator);
-    assert(iterator->ops);
-    assert(iterator->ops->destroy);
     return iterator->ops->destroy(iterator);
 }
 
@@ -99,15 +120,40 @@ struct rbh_mut_iterator_operations {
  * @return          a const pointer to the next element in the iterator on
  *                  success, NULL on error and errno is set appropriately
  *
+ * @error EAGAIN    temporary failure, retry later
  * @error ENODATA   the iterator is exhausted
+ */
+static inline void *
+_rbh_mut_iter_next(struct rbh_mut_iterator *iterator)
+{
+    return iterator->ops->next(iterator);
+}
+
+/**
+ * Yield a mutable reference on the next element of an iterator
+ *
+ * @param iterator  an iterator
+ *
+ * @return          a const pointer to the next element in the iterator on
+ *                  success, NULL on error and errno is set appropriately
+ *
+ * @error ENODATA   the iterator is exhausted
+ *
+ * This function handles temporary failures (errno == EAGAIN) itself.
  */
 static inline void *
 rbh_mut_iter_next(struct rbh_mut_iterator *iterator)
 {
-    assert(iterator);
-    assert(iterator->ops);
-    assert(iterator->ops->next);
-    return iterator->ops->next(iterator);
+    int save_errno = errno;
+    void *element;
+
+    do {
+        errno = 0;
+        element = _rbh_mut_iter_next(iterator);
+    } while (element == NULL && errno == EAGAIN);
+
+    errno = errno ? : save_errno;
+    return element;
 }
 
 /**
@@ -120,9 +166,6 @@ rbh_mut_iter_next(struct rbh_mut_iterator *iterator)
 static inline void
 rbh_mut_iter_destroy(struct rbh_mut_iterator *iterator)
 {
-    assert(iterator);
-    assert(iterator->ops);
-    assert(iterator->ops->destroy);
     return iterator->ops->destroy(iterator);
 }
 

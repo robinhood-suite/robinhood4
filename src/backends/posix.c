@@ -534,15 +534,9 @@ posix_backend_filter_fsentries(void *backend, const struct rbh_filter *filter,
     if (posix_iter == NULL)
         return NULL;
 
-    save_errno = errno;
-    do {
-        errno = 0;
-        fsentry = rbh_mut_iter_next(&posix_iter->iterator);
-    } while (fsentry == NULL && errno == EAGAIN);
-
+    fsentry = rbh_mut_iter_next(&posix_iter->iterator);
     if (fsentry == NULL)
         goto out_destroy_iter;
-    errno = save_errno;
     free(fsentry);
 
     set_root_properties(posix_iter->ftsent);

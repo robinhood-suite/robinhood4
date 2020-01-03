@@ -1426,11 +1426,8 @@ fsevent_iter_next(struct rbh_iterator *fsevents)
     const struct rbh_fsevent *fsevent;
     int save_errno = errno;
 
-    do {
-        errno = 0;
-        fsevent = rbh_iter_next(fsevents);
-    } while (fsevent == NULL && errno == EAGAIN);
-
+    errno = 0;
+    fsevent = rbh_iter_next(fsevents);
     if (errno == 0 || errno == ENODATA)
         errno = save_errno;
     return fsevent;
