@@ -236,7 +236,7 @@ fsentry_from_ftsent(FTSENT *ftsent, int statx_sync_type)
 
     if (_statx(fd, "", statx_flags | statx_sync_type, STATX_ALL, &statxbuf)) {
         save_errno = errno;
-        goto out_close;
+        goto out_free_id;
     }
 
     /* We want the actual type of the file we opened, not the one fts saw */
@@ -334,7 +334,19 @@ static void
 posix_iter_destroy(void *iterator)
 {
     struct posix_iterator *posix_iter = iterator;
+    FTSENT *ftsent;
 
+    while ((ftsent = fts_read(posix_iter->fts_handle)) != NULL) {
+        switch (ftsent->fts_info) {
+        case FTS_D:
+            fts_set(posix_iter->fts_handle, ftsent, FTS_SKIP);
+            break;
+        case FTS_DP:
+            /* fsentry_from_ftsent() memoizes ids of directories */
+            free(ftsent->fts_pointer);
+            break;
+        }
+    }
     fts_close(posix_iter->fts_handle);
     free(posix_iter);
 }
