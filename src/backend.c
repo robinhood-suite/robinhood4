@@ -97,8 +97,10 @@ fsentry_from_parent_and_name(struct rbh_backend *backend,
 
     errno = 0;
     fsentry = rbh_mut_iter_next(fsentries);
-    if (errno != 0)
+    if (fsentry == NULL) {
+        assert(errno);
         save_errno = errno == ENODATA ? ENOENT : errno;
+    }
 
     rbh_mut_iter_destroy(fsentries);
     errno = save_errno;
