@@ -1244,17 +1244,24 @@ bson_append_logical_filter(bson_t *bson, const struct rbh_filter *filter,
     return bson_append_array_end(bson, &array);
 }
 
+static bool
+bson_append_null_filter(bson_t *bson, bool negate)
+{
+    bson_t document;
+
+    /* XXX: I would prefer to use {$expr: !negate}, but it is not
+     *      supported on servers until version 3.6.
+     */
+    return BSON_APPEND_DOCUMENT_BEGIN(bson, "_id", &document)
+        && BSON_APPEND_BOOL(&document, "$exists", !negate)
+        && bson_document_append_end(bson, &document);
+}
 
 static bool
 _bson_append_filter(bson_t *bson, const struct rbh_filter *filter, bool negate)
 {
     if (filter == NULL)
-        /* XXX: I would prefer to use {$expr: false} instead of
-         *      {$where: "false"}, but mongodb does not accept $expr in the
-         *      filter of an upsert operation, even though this is not
-         *      documented anywhere.
-         */
-        return BSON_APPEND_BOOL(bson, "$expr", !negate);
+        return bson_append_null_filter(bson, negate);
 
     if (rbh_is_comparison_operator(filter->op))
         return bson_append_comparison_filter(bson, filter, negate);
