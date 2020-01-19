@@ -11,6 +11,7 @@
 # include "config.h"
 #endif
 
+#include <assert.h>
 #include <ctype.h>
 #include <errno.h>
 #include <limits.h>
@@ -22,6 +23,10 @@
 
 #include "lu_fid.h"
 
+/*----------------------------------------------------------------------------*
+ |                         rbh_raw_uri_from_string()                          |
+ *----------------------------------------------------------------------------*/
+
 /* URI generic syntax: scheme:[//authority]path[?query][#fragment]
  *
  * where authority is: [userinfo@]host[:port]
@@ -31,86 +36,108 @@
  * cf. RFC 3986 for more information
  */
 
-int
-rbh_parse_raw_uri(struct rbh_raw_uri *uri, char *string)
+struct rbh_raw_uri *
+rbh_raw_uri_from_string(const char *string_)
 {
-    char *at;
+    char *pound, *qmark, *slash, *at, *colon;
+    struct rbh_raw_uri *raw_uri;
+    char *string;
+    size_t size;
 
-    /* string = scheme:[[//authority]path[?query][#fragment]
-     *
-     * where scheme = ALPHA *( ALPHA / DIGIT / "+" / "-" / "." )
-     */
-    if (!isalpha(*string)) {
+    if (!isalpha(*string_)) {
         errno = EINVAL;
-        return -1;
+        return NULL;
     }
 
-    memset(uri, 0, sizeof(*uri));
+    size = strlen(string_) + 1;
+    raw_uri = malloc(sizeof(*raw_uri) + size);
+    if (raw_uri == NULL)
+        return NULL;
+    memset(raw_uri, 0, sizeof(*raw_uri));
+    string = (char *)raw_uri + sizeof(*raw_uri);
+    memcpy(string, string_, size);
 
-    uri->scheme = string;
+    raw_uri->scheme = string;
     do {
         string++;
     } while (isalnum(*string) || *string == '+' || *string == '-'
-                || *string == '.');
+            || *string == '.');
 
     if (*string != ':') {
+        free(raw_uri);
         errno = EINVAL;
-        return -1;
+        return NULL;
     }
     *string++ = '\0';
 
     /* string = [//authority]path[?query][#fragment] */
-    uri->fragment = strrchr(string, '#');
-    if (uri->fragment)
-        *uri->fragment++ = '\0';
+    pound = strrchr(string, '#');
+    if (pound) {
+        *pound++ = '\0';
+        raw_uri->fragment = pound;
+    }
 
     /* string = [//authority]path[?query] */
-    uri->query = strrchr(string, '?');
-    if (uri->query)
-        *uri->query++ = '\0';
+    qmark = strrchr(string, '?');
+    if (qmark) {
+        *qmark++ = '\0';
+        raw_uri->query = qmark;
+    }
 
     /* string = [//authority]path */
     if (string[0] != '/' || string[1] != '/') {
         /* string = path */
-        uri->path = string;
-        return 0;
+        raw_uri->path = string;
+        return raw_uri;
     }
 
     /* string = //[userinfo@]host[:port]path
      *
      * where path is either empty or starts with a '/'
      */
-    uri->path = strchrnul(string + 2, '/');
-    if (uri->path == string + 2)
-        /* authority is empty */
-        return 0;
-
-    /* Move everything to the left of path, two chars to the left
-     * (overwriting the leading "//") so [userinfo@]host[:port] can be
-     * separated from path with a '\0' (actually 2 of them).
-     */
-    memmove(string, string + 2, uri->path - string - 2);
-    memset((char *)uri->path - 2, '\0', 2);
+    slash = strchr(string + 2, '/');
+    if (slash) {
+        raw_uri->path = slash;
+        /* Up until now, there always was a separator to overwrite with a '\0'.
+         * Here, we cannot overwrite '/' as it is part of the path and we need
+         * to keep it.
+         *
+         * Fortunately, there are two leading '/' in `string' we do not care
+         * about.
+         */
+        memmove(string, string + 2, slash - string - 2);
+        memset(slash - 2, '\0', 2);
+    } else {
+        raw_uri->path = "";
+        string += 2;
+    }
 
     /* string = [userinfo@]host[:port] */
     at = strchr(string, '@');
     if (at) {
         /* string = userinfo@host[:port] */
-        uri->userinfo = string;
+        raw_uri->userinfo = string;
         *at++ = '\0';
         string = at;
     }
 
     /* string = host[:port] */
-    uri->port = strrchr(string, ':');
-    if (uri->port)
-        *uri->port++ = '\0';
+    colon = strrchr(string, ':');
+    if (colon) {
+        /* string = host:port */
+        *colon++ = '\0';
+        raw_uri->port = colon;
+    }
 
     /* string = host */
-    uri->host = *string == '\0' ? NULL : string;
+    raw_uri->host = string;
 
-    return 0;
+    return raw_uri;
 }
+
+/*----------------------------------------------------------------------------*
+ |                            rbh_percent_decode()                            |
+ *----------------------------------------------------------------------------*/
 
 static int
 hex2int(char c)
@@ -166,238 +193,241 @@ percent_decode(int major, int minor)
 }
 
 ssize_t
-rbh_percent_decode(char *string)
+rbh_percent_decode(char *dest, const char *src, size_t n)
 {
-    const size_t length = strlen(string);
     size_t count = 0;
 
-    for (char *c = string; *c != '\0'; c++) {
+    while (*src != '\0' && n-- > 0) {
         int major, minor;
 
-        if (*c != '%')
+        count++;
+        if (*src != '%') {
+            *dest++ = *src++;
             continue;
+        }
+        /* Discard the '%' */
+        src++;
 
-        major = hex2int(*(c + 1));
+        /* There must be at least 2 characters left to parse */
+        if (n < 2) {
+            errno = EILSEQ;
+            return -1;
+        }
+        n -= 2;
+
+        major = hex2int(*src++);
         if (major < 0) {
             if (errno == EINVAL)
                 errno = EILSEQ;
             return -1;
         }
 
-        minor = hex2int(*(c + 2));
+        minor = hex2int(*src++);
         if (minor < 0) {
             if (errno == EINVAL)
                 errno = EILSEQ;
             return -1;
         }
 
-        *c = percent_decode(major, minor);
-        memmove(c + 1, c + 3, length - (c - string) - 2 * ++count);
+        *dest++ = percent_decode(major, minor);
     }
 
     return count;
 }
 
-static uint64_t
-strtou64(const char *nptr, char **endptr, int base)
+/*----------------------------------------------------------------------------*
+ |                           rbh_uri_from_raw_uri()                           |
+ *----------------------------------------------------------------------------*/
+
+static struct rbh_id *
+id_from_fid_string(const char *fid_string, size_t length)
 {
-#if ULLONG_MAX == UINT64_MAX
-    return strtoull(nptr, endptr, base);
-#else /* ULLONG_MAX > UINT64_MAX */
-    unsigned long long value;
-    int save_errno = errno;
-
-    errno = 0;
-    value = strtoull(nptr, endptr, base);
-    if (value == ULLONG_MAX && errno != 0)
-        return UINT64_MAX;
-
-    if (value > UINT64_MAX) {
-        errno = ERANGE;
-        return UINT64_MAX;
-    }
-
-    errno = save_errno;
-    return value;
-#endif
-}
-
-static uint32_t
-strtou32(const char *nptr, char **endptr, int base)
-{
-#if ULONG_MAX == UINT32_MAX
-    return strtoul(nptr, endptr, base);
-#else /* ULONG_MAX > UINT32_MAX */
-    unsigned long value;
-    int save_errno = errno;
-
-    errno = 0;
-    value = strtoul(nptr, endptr, base);
-    if (value == ULONG_MAX && errno != 0)
-        return UINT32_MAX;
-
-    if (value > UINT32_MAX) {
-        errno = ERANGE;
-        return UINT32_MAX;
-    }
-
-    errno = save_errno;
-    return value;
-#endif
-}
-
-static int
-_parse_fid(struct rbh_uri *uri, const struct lu_fid *fid)
-{
-    size_t bufsize = sizeof(uri->buffer);
-    char *data = uri->buffer;
-    struct rbh_id *id;
-    int save_errno;
-    int rc;
-
-    id = rbh_id_from_lu_fid(fid);
-    if (id == NULL)
-        return -1;
-
-    rc = rbh_id_copy(&uri->id, id, &data, &bufsize);
-    save_errno = errno;
-    free(id);
-    errno = save_errno;
-
-    return rc;
-}
-
-static int
-parse_fid(struct rbh_uri *uri, char *sequence, char *oid, char *version)
-{
-    int save_errno = errno;
     struct lu_fid fid;
-    char *nul;
+    char *end;
 
-    /* sequence (uint64_t) */
-    if (rbh_percent_decode(sequence) < 0)
-        return -1;
+    if (lu_fid_init_from_string(fid_string, &fid, &end))
+        return NULL;
 
-    errno = 0;
-    fid.f_seq = strtou64(sequence, &nul, 0);
-    if (fid.f_seq == UINT64_MAX && errno != 0)
-        return -1;
-    if (*nul != '\0') {
+    if (fid_string + length != end) {
         errno = EINVAL;
-        return -1;
+        return NULL;
     }
 
-    /* oid (uint32_t) */
-    if (rbh_percent_decode(oid) < 0)
-        return -1;
-
-    errno = 0;
-    fid.f_oid = strtou32(oid, &nul, 0);
-    if (fid.f_oid == UINT32_MAX && errno != 0)
-        return -1;
-    if (*nul != '\0') {
-        errno = EINVAL;
-        return -1;
-    }
-
-    /* version (uint32_t) */
-    if (rbh_percent_decode(version) < 0)
-        return -1;
-
-    errno = 0;
-    fid.f_ver = strtou32(version, &nul, 0);
-    if (fid.f_ver == UINT32_MAX && errno != 0)
-        return -1;
-    if (*nul != '\0') {
-        errno = EINVAL;
-        return -1;
-    }
-
-    errno = save_errno;
-    return _parse_fid(uri, &fid);
+    return rbh_id_from_lu_fid(&fid);
 }
 
-static int
-parse_fragment(struct rbh_uri *uri, char *fragment)
+static struct rbh_id *
+id_from_encoded_fid_string(const char *encoded, size_t length)
 {
+    struct rbh_id *id = NULL;
+    int save_errno;
+    char *decoded;
+    ssize_t size;
+
+    decoded = malloc(length + 1);
+    if (decoded == NULL)
+        return NULL;
+
+    size = rbh_percent_decode(decoded, encoded, length);
+    if (size < 0)
+        goto out_free_decoded;
+    decoded[size] = '\0';
+
+    id = id_from_fid_string(decoded, size);
+out_free_decoded:
+    save_errno = errno;
+    free(decoded);
+    errno = save_errno;
+    return id;
+}
+
+static struct rbh_id *
+id_from_encoded_string(const char *encoded_string, size_t length)
+{
+    struct rbh_id *id;
+    ssize_t size;
+    char *data;
+
+    id = malloc(sizeof(*id) + length);
+    if (id == NULL)
+        return NULL;
+    data = (char *)id + sizeof(*id);
+
+    id->data = data;
+    size = rbh_percent_decode(data, encoded_string, length);
+    if (size < 0) {
+        int save_errno = errno;
+
+        free(id);
+        errno = save_errno;
+        return NULL;
+    }
+
+    id->size = size;
+    return id;
+}
+
+static struct rbh_id *
+id_from_fragment(const char *fragment)
+{
+    const char *colon;
     size_t length;
-    ssize_t count;
-    char *colon;
 
     if (*fragment++ != '[') {
         errno = EINVAL;
-        return -1;
+        return NULL;
     }
 
     length = strlen(fragment);
     if (fragment[length - 1] != ']') {
         errno = EINVAL;
-        return -1;
+        return NULL;
     }
-    fragment[--length] = '\0';
+    /* Discard the trailing ']' */
+    length--;
 
-    /* Is this a FID? */
     colon = strchr(fragment, ':');
-    if (colon) { /* Yes */
-        char *sequence = fragment;
-        char *oid = colon + 1;
-        char *version;
-
-        *colon = '\0';
-
-        version = strchr(colon + 1, ':');
-        if (!version) {
+    /* Is this a Lustre FID? */
+    if (colon) {
+        /* It must be */
+        if (strchr(colon + 1, ':') == NULL) {
+            /* Oho, missing a second ':', are we? */
             errno = EINVAL;
-            return -1;
+            return NULL;
         }
-        *version++ = '\0';
+        return id_from_encoded_fid_string(fragment, length);
+    }
 
-        return parse_fid(uri, sequence, oid, version);
-    } /* No */
-
-    count = rbh_percent_decode(fragment);
-    if (count < 0)
-        return -1;
-
-    uri->id.data = fragment;
-    uri->id.size = length - 2 * (count);
-    /*                    ^^^^^^^^^^^^^
-     *                    for every percent encoded character
-     */
-
-    return 0;
+    return id_from_encoded_string(fragment, length);
 }
 
-int
-rbh_parse_uri(struct rbh_uri *uri, struct rbh_raw_uri *raw_uri)
+struct rbh_uri *
+rbh_uri_from_raw_uri(const struct rbh_raw_uri *raw_uri)
 {
-    char *colon;
+    struct rbh_id *id = NULL;
+    struct rbh_uri *uri;
+    const char *colon;
+    int save_errno;
+    size_t size;
+    char *data;
+    ssize_t rc;
 
-    if (raw_uri->scheme == NULL || strcmp(raw_uri->scheme, RBH_SCHEME)) {
+    if (strcmp(raw_uri->scheme, RBH_SCHEME)) {
         errno = EINVAL;
-        return -1;
+        return NULL;
     }
 
     colon = strchr(raw_uri->path, ':');
     if (colon == NULL) {
         errno = EINVAL;
-        return -1;
-    }
-    *colon++ = '\0';
-
-    if (rbh_percent_decode(raw_uri->path) < 0)
-        return -1;
-    uri->backend = raw_uri->path;
-
-    if (rbh_percent_decode(colon) < 0)
-        return -1;
-    uri->fsname = colon;
-
-    if (raw_uri->fragment == NULL) {
-        uri->id.data = NULL;
-        uri->id.size = 0;
-        return 0;
+        return NULL;
     }
 
-    return parse_fragment(uri, raw_uri->fragment);
+    size = strlen(raw_uri->path) + 1;
+    if (raw_uri->fragment) {
+        id = id_from_fragment(raw_uri->fragment);
+        if (id == NULL)
+            return NULL;
+        size += sizeof(*id) + id->size;
+    }
+
+    uri = malloc(sizeof(*uri) + size);
+    if (uri == NULL) {
+        save_errno = errno;
+        goto out_free_id;
+    }
+    data = (char *)uri + sizeof(*uri);
+
+    /* uri->backend */
+    uri->backend = data;
+    rc = rbh_percent_decode(data, raw_uri->path, colon - raw_uri->path);
+    if (rc < 0) {
+        save_errno = errno;
+        goto out_free_uri;
+    }
+
+    assert(rc < size);
+    data[rc] = '\0';
+    data += rc + 1;
+    size -= rc + 1;
+
+    /* uri->fsname */
+    uri->fsname = data;
+    rc = rbh_percent_decode(data, colon + 1, -1);
+    if (rc < 0) {
+        save_errno = errno;
+        goto out_free_uri;
+    }
+
+    assert(rc < size);
+    data[rc] = '\0';
+    data += rc + 1;
+    size -= rc + 1;
+
+    /* uri->id */
+    if (id) {
+        void *tmp = data;
+        int rc;
+
+        uri->id = tmp;
+        data += sizeof(*uri->id);
+        size -= sizeof(*uri->id);
+
+        rc = rbh_id_copy(tmp, id, &data, &size);
+        assert(rc == 0);
+        free(id);
+    } else {
+        uri->id = NULL;
+    }
+
+    return uri;
+
+out_free_uri:
+    free(uri);
+out_free_id:
+    free(id);
+    errno = save_errno;
+    /* The size of the buffer is computed to be an exact fit */
+    assert(errno != ENOBUFS);
+    return NULL;
 }

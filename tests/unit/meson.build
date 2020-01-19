@@ -12,8 +12,8 @@ check = dependency('check', version: '>=0.9.9', required: false)
 if check.found()
 	foreach t: ['check_backend', 'check_filter', 'check_fsentry',
 		    'check_fsevent', 'check_id', 'check_itertools',
-		    'check_plugin', 'check_queue', 'check_ring', 'check_sstack',
-		    'check_stack', 'check_uri']
+		    'check_lu_fid', 'check_plugin', 'check_queue', 'check_ring',
+		    'check_sstack', 'check_stack', 'check_uri']
 		test(t, executable(t, t + '.c',
 				    dependencies: [check],
 				    link_with: [librobinhood],

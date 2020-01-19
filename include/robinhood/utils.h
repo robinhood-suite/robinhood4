@@ -26,13 +26,12 @@
 /**
  * Create a backend from a URI string
  *
- * @param uri   the URI (a string) to use (will be modified and must not be used
- *              anymore)
+ * @param uri   the URI (a string) to use
  *
  * @return      a pointer to a newly allocated backend on success,
  *              exits on error.
  */
 struct rbh_backend *
-rbh_backend_from_uri(char *uri);
+rbh_backend_from_uri(const char *uri);
 
 #endif

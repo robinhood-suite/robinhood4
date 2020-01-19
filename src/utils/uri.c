@@ -15,6 +15,7 @@
 #include <errno.h>
 #include <error.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "robinhood/plugins/backend.h"
 #include "robinhood/utils.h"
@@ -52,7 +53,7 @@ backend_new(const char *type, const char *fsname)
 }
 
 static struct rbh_backend *
-backend_from_uri(const struct rbh_uri *uri, char *path)
+_backend_from_uri(const struct rbh_uri *uri, char *path)
 {
     struct rbh_backend *backend = backend_new(uri->backend, uri->fsname);
     struct rbh_backend *branch;
@@ -60,9 +61,6 @@ backend_from_uri(const struct rbh_uri *uri, char *path)
 
     if (path != NULL) {
         struct rbh_fsentry *fsentry;
-
-        if (rbh_percent_decode(path) < 0)
-            error(EXIT_FAILURE, errno, "rbh_percent_decode");
 
         fsentry = rbh_backend_fsentry_from_path(backend, path, RBH_FP_ID, 0);
         if (fsentry == NULL)
@@ -75,8 +73,8 @@ backend_from_uri(const struct rbh_uri *uri, char *path)
         save_errno = errno;
         free(fsentry);
         errno = save_errno;
-    } else if (uri->id.size != 0) {
-        branch = rbh_backend_branch(backend, &uri->id);
+    } else if (uri->id) {
+        branch = rbh_backend_branch(backend, uri->id);
     } else {
         return backend;
     }
@@ -91,29 +89,64 @@ backend_from_uri(const struct rbh_uri *uri, char *path)
 }
 
 static struct rbh_backend *
-backend_from_raw_uri(struct rbh_raw_uri *raw_uri, char *path)
+backend_from_uri(const struct rbh_uri *uri, const char *encoded_path)
 {
-    struct rbh_uri uri;
+    struct rbh_backend *backend = NULL;
+    char *decoded_path;
+    size_t length;
+    ssize_t rc;
 
-    if (rbh_parse_uri(&uri, raw_uri))
+    if (encoded_path == NULL)
+        return _backend_from_uri(uri, NULL);
+
+    length = strlen(encoded_path);
+    decoded_path = malloc(length + 1);
+    if (decoded_path == NULL)
+        error(EXIT_FAILURE, errno, "malloc");
+
+    rc = rbh_percent_decode(decoded_path, encoded_path, length);
+    if (rc < 0)
+        error(EXIT_FAILURE, errno, "rbh_percent_decode");
+    decoded_path[rc] = '\0';
+
+    backend = _backend_from_uri(uri, decoded_path);
+    free(decoded_path);
+    return backend;
+}
+
+static struct rbh_backend *
+backend_from_raw_uri(const struct rbh_raw_uri *raw_uri,
+                     const char *encoded_path)
+{
+    struct rbh_backend *backend;
+    struct rbh_uri *uri;
+
+    uri = rbh_uri_from_raw_uri(raw_uri);
+    if (uri == NULL)
         error(EXIT_FAILURE, errno, "rbh_parse_uri");
 
-    return backend_from_uri(&uri, path);
+    backend = backend_from_uri(uri, encoded_path);
+    free(uri);
+    return backend;
 }
 
 struct rbh_backend *
-rbh_backend_from_uri(char *string)
+rbh_backend_from_uri(const char *string)
 {
-    struct rbh_raw_uri raw_uri;
-    char *path = NULL;
+    const char *encoded_path = NULL;
+    struct rbh_backend *backend;
+    struct rbh_raw_uri *raw_uri;
 
-    if (rbh_parse_raw_uri(&raw_uri, string))
+    raw_uri = rbh_raw_uri_from_string(string);
+    if (raw_uri == NULL)
         error(EXIT_FAILURE, errno, "rbh_parse_raw_uri");
 
-    if (raw_uri.fragment && raw_uri.fragment[0] != '[') {
-        path = raw_uri.fragment;
-        raw_uri.fragment = NULL;
+    if (raw_uri->fragment && raw_uri->fragment[0] != '[') {
+        encoded_path = raw_uri->fragment;
+        raw_uri->fragment = NULL;
     }
 
-    return backend_from_raw_uri(&raw_uri, path);
+    backend = backend_from_raw_uri(raw_uri, encoded_path);
+    free(raw_uri);
+    return backend;
 }

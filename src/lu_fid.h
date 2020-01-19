@@ -20,3 +20,20 @@ struct lu_fid {
     uint32_t f_oid;
     uint32_t f_ver;
 };
+
+/**
+ * Parse a string into a struct lu_fid
+ *
+ * @param string    a string representing a FID
+ * @param fid       a pointer to a struct lu_fid where to store the information
+ *                  parsed from \p string
+ * @param endptr    the address of a pointer that is updated on success to point
+ *                  after the last parsed character of \p string
+ *
+ * @return          0 on success, -1 on error and errno is appropriately set
+ *
+ * @error EINVAL    \p string is syntactically not a valid FID
+ * @error ERANGE    \p string is numerically not a valid FID
+ */
+int
+lu_fid_init_from_string(const char *string, struct lu_fid *fid, char **endptr);

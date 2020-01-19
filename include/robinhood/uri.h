@@ -14,71 +14,97 @@
 
 #define RBH_SCHEME "rbh"
 
+/*----------------------------------------------------------------------------*
+ |                                rbh_raw_uri                                 |
+ *----------------------------------------------------------------------------*/
+
 struct rbh_raw_uri {
-    char *scheme;
-    char *userinfo;
-    char *host;
-    char *port;
-    char *path;
-    char *query;
-    char *fragment;
+    const char *scheme; /* Non-nullable */
+    const char *userinfo;
+    const char *host;
+    const char *port;
+    const char *path; /* Non-nullable */
+    const char *query;
+    const char *fragment;
 };
 
 /**
  * Parse a URI into a struct rbh_raw_uri
  *
- * @param raw_uri   a pointer to a struct rbh_raw_uri
- * @param string    the URI string to parse (will be modified and should not
- *                  be accessed directly aymore)
+ * @param string    the URI string to parse
  *
- * @return          0 on success, -1 on error and errno is set appropriately
+ * @return          a pointer to a newly allocated struct rbh_raw_uri on
+ *                  success, NULL on error and errno is set appropriately
  *
- * @error EINVAL    \p string is not a valid URI according to RFC 3986.
+ * @error EINVAL    \p string is not a valid URI according to RFC3986.
  *
  * Note that this function does not perform any check other than those necessary
- * to splitting a URI into a struct rbh_raw_uri.
+ * to split a URI into a struct rbh_raw_uri.
  */
-int
-rbh_parse_raw_uri(struct rbh_raw_uri *raw_uri, char *string);
+struct rbh_raw_uri *
+rbh_raw_uri_from_string(const char *string);
 
-/**
- * Decode a percent-encoded string in-place
- *
- * @param string    the string to decode
- *
- * @return          the number of decoded characters on success, -1 on error and
- *                  errno is set appropriately
- *
- * @error EILSEQ    \p string contains misencoded data
- *
- * The return value can be used to compute the size of the decoded string from
- * its encoded size: decoded_size = encoded_size - 2 * return_value.
- */
-ssize_t
-rbh_percent_decode(char *string);
+/*----------------------------------------------------------------------------*
+ |                                rbh_raw_uri                                 |
+ *----------------------------------------------------------------------------*/
 
 struct rbh_uri {
-    char *backend;
-    char *fsname;
-    struct rbh_id id;
-
-    /* Some URIs may not be parseable in-place (eg. when the ID is a FID) */
-    char buffer[64];
+    const char *backend;
+    const char *fsname;
+    const struct rbh_id *id;
 };
 
 /**
- * Parse a struct rbh_raw_uri into a struct rbh_uri
+ * Create a new struct rbh_uri from a struct rbh_raw_uri
  *
- * @param uri       a pointer to a struct rbh_uri
- * @param raw_uri   the raw URI to parse into \p uri (will be modified and
- *                  should not be accessed directly anymore).
+ * @param raw_uri   a pointer to the struct rbh_raw_uri to interpret into a
+ *                  struct rbh_uri
  *
- * @return          0 on success, -1 on error and errno is set appriopriately
+ * @return          a pointer to a newly allocated struct rbh_uri on success,
+ *                  NULL on error and errno is set appropriately
  *
- * @error EINVAL    \p raw_uri is not a valid robinhood uri
  * @error EILSEQ    \p raw_uri contains misencoded data
+ * @error EINVAL    \p raw_uri is not a valid rbh URI
+ * @error ENOMEM    not enough memory available
  */
-int
-rbh_parse_uri(struct rbh_uri *uri, struct rbh_raw_uri *raw_uri);
+struct rbh_uri *
+rbh_uri_from_raw_uri(const struct rbh_raw_uri *raw_uri);
+
+/*----------------------------------------------------------------------------*
+ |                             rbh_percent_decode                             |
+ *----------------------------------------------------------------------------*/
+
+/**
+ * Decode a percent-encoded string
+ *
+ * @param dest      a pointer to a buffer big enough to contain the decoded \n
+ *                  first bytes of src
+ * @param src       the string to decode
+ * @param n         the number of bytes from \p src to decode
+ *
+ * @return          the number of bytes written to \p dest on success, -1 on
+ *                  error and errno is set appropriately.
+ *
+ * @error EILSEQ    \p src contains misencoded data
+ *
+ * \p dest and \p src may overlap.
+ *
+ * At most \p n bytes from \p src will be decoded. The decoded data will
+ * necessarily be as long or shorter than the encoded data ("%xy" --> 'z').
+ *
+ * Note that the decoded data is not necessarily a string. Therefore it will not
+ * be null-terminated (unless the encoded data was terminated by an encoded
+ * null-terminating byte). Feel free to add a null-terminating byte yourself:
+ *
+ *     char test[] = "abc%64efg%68ijk%6cmno";
+ *     ssize_t size;
+ *
+ *     size = rbh_percent_decode(test, test, sizeof(test));
+ *     assert(size < sizeof(test));
+ *     test[size] = '\0';
+ *     assert(strcmp(test, "abcdefghijklmno") == 0);
+ */
+ssize_t
+rbh_percent_decode(char *dest, const char *src, size_t n);
 
 #endif
