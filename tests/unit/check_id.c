@@ -19,6 +19,8 @@
 #include "check_macros.h"
 #include "robinhood/id.h"
 
+#include "../src/lu_fid.h"
+
 /*----------------------------------------------------------------------------*
  |                               rbh_id_copy()                                |
  *----------------------------------------------------------------------------*/
@@ -174,6 +176,42 @@ START_TEST(riffh_empty)
 }
 END_TEST
 
+/*----------------------------------------------------------------------------*
+ |                            rbh_id_from_lu_fid()                            |
+ *----------------------------------------------------------------------------*/
+
+/* Just like riffh_basic, the following test only ensures that the binary layout
+ * of an ID built from a struct lu_fid is consistent over time.
+ */
+
+START_TEST(riflf_basic)
+{
+    const int FILEID_LUSTRE = 0x97;
+    struct lu_fid FID = {
+        .f_seq = 0,
+        .f_oid = 1,
+        .f_ver = 2,
+    };
+    char data[sizeof(FILEID_LUSTRE) + 2 * sizeof(FID)];
+    const struct rbh_id ID = {
+        .data = data,
+        .size = sizeof(data),
+    };
+    struct rbh_id *id;
+    char *tmp;
+
+    tmp = mempcpy(data, &FILEID_LUSTRE, sizeof(FILEID_LUSTRE));
+    tmp = mempcpy(tmp, &FID, sizeof(FID));
+    memset(tmp, 0, sizeof(FID));
+
+    id = rbh_id_from_lu_fid(&FID);
+    ck_assert_ptr_nonnull(id);
+    ck_assert_id_eq(id, &ID);
+
+    free(id);
+}
+END_TEST
+
 static Suite *
 unit_suite(void)
 {
@@ -197,6 +235,11 @@ unit_suite(void)
     tcase_add_test(tests, riffh_sizeof_handle_type);
     tcase_add_test(tests, riffh_basic);
     tcase_add_test(tests, riffh_empty);
+
+    suite_add_tcase(suite, tests);
+
+    tests = tcase_create("rbh_id_from_lu_fid()");
+    tcase_add_test(tests, riflf_basic);
 
     suite_add_tcase(suite, tests);
 

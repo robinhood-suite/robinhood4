@@ -92,4 +92,21 @@ struct file_handle;
 struct rbh_id *
 rbh_id_from_file_handle(const struct file_handle *handle);
 
+struct lu_fid;
+
+/**
+ * Create a new struct rbh_id from a struct lu_fid
+ *
+ * @param fid       the Lustre fid to use
+ *
+ * @return          a pointer to a newly allocated struct rbh_id on success,
+ *                  NULL on error and errno is set appropriately
+ *
+ * @error ENOMEM    not enough memory available
+ *
+ * The returned ID and \p fid do not share data.
+ */
+struct rbh_id *
+rbh_id_from_lu_fid(const struct lu_fid *fid);
+
 #endif

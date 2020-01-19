@@ -19,6 +19,8 @@
 
 #include "robinhood/id.h"
 
+#include "lu_fid.h"
+
 int
 rbh_id_copy(struct rbh_id *dest, const struct rbh_id *src, char **buffer,
             size_t *bufsize)
@@ -112,6 +114,70 @@ rbh_id_from_file_handle(const struct file_handle *handle)
 
     /* id->size */
     id->size = size;
+
+    return id;
+}
+
+/* Lustre file handles can be built from just a struct lu_fid.
+ *
+ * That is because Lustre stores a struct lustre_file_handle in the `f_handle'
+ * field of the struct file_handle it produces.
+ *
+ * struct lustre_file_handle {
+ *     struct lu_fid *child;
+ *     struct lu_fid *parent;
+ * };
+ *
+ * Where:
+ *   - `child' points at the entry's lu_fid;
+ *   - `parent' can probably point at the lu_fid of an entry's parent, but
+ *      mostly points at an lu_fid filled with 0s.
+ *
+ * Therefore, the following data mapping applies:
+ *
+ * ---------------------------------       -------------------------------------
+ * |      lu_fid                   |       |         file handle               |
+ * |-------------------------------|       |-----------------------------------|
+ * | sequence | 0x0123456789abcdef |  <=>  | handle_bytes |                 32 |
+ * | oid      |         0Xfedcba98 |       | handle_type  |             0x0097 |
+ * | version  |         0x76543210 |       | f_handle     | 0x0123456789abcdef |
+ * ---------------------------------       |              |   fedcba9876543210 |
+ *                                         |              |   0000000000000000 |
+ *                                         |              |   0000000000000000 |
+ *                                         -------------------------------------
+ *
+ * -------------------------------------       -----------------------------
+ * |         file handle               |       |             ID            |
+ * |-----------------------------------|       |----------------------------
+ * | handle_bytes |                 32 |  <=>  | data | 0x00970123456789ab |
+ * | handle_type  |             0x0097 |       |      |   cdeffdecba987654 |
+ * | f_handle     | 0x0123456789abcdef |       |      |   3210000000000000 |
+ * |              |   fedcba9876543210 |       |      |   0000000000000000 |
+ * |              |   0000000000000000 |       |      |   0000             |
+ * |              |   0000000000000000 |       | size |                 36 |
+ * -------------------------------------       -----------------------------
+ */
+struct rbh_id *
+rbh_id_from_lu_fid(const struct lu_fid *fid)
+{
+    const size_t LUSTRE_FH_SIZE = sizeof(int) + 2 * sizeof(*fid);
+    const int FILEID_LUSTRE = 0x97;
+    struct rbh_id *id;
+    char *data;
+
+    id = malloc(sizeof(*id) + LUSTRE_FH_SIZE);
+    if (id == NULL)
+        return NULL;
+    data = (char *)id + sizeof(*id);
+
+    /* id->data */
+    id->data = data;
+    data = mempcpy(data, &FILEID_LUSTRE, sizeof(int));
+    data = mempcpy(data, fid, sizeof(*fid));
+    memset(data, 0, sizeof(*fid));
+
+    /* id->size */
+    id->size = LUSTRE_FH_SIZE;
 
     return id;
 }

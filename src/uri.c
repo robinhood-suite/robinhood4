@@ -20,6 +20,8 @@
 
 #include "robinhood/uri.h"
 
+#include "lu_fid.h"
+
 /* URI generic syntax: scheme:[//authority]path[?query][#fragment]
  *
  * where authority is: [userinfo@]host[:port]
@@ -244,31 +246,25 @@ strtou32(const char *nptr, char **endptr, int base)
 #endif
 }
 
-struct lu_fid {
-    uint64_t f_seq;
-    uint32_t f_oid;
-    uint32_t f_ver;
-};
-
 static int
 _parse_fid(struct rbh_uri *uri, const struct lu_fid *fid)
 {
-    const size_t LUSTRE_FH_SIZE = sizeof(int) + 2 * sizeof(*fid);
-    const int FILEID_LUSTRE = 0x97;
+    size_t bufsize = sizeof(uri->buffer);
+    char *data = uri->buffer;
+    struct rbh_id *id;
+    int save_errno;
+    int rc;
 
-    if (sizeof(uri->buffer) < LUSTRE_FH_SIZE) {
-        errno = ENOBUFS;
+    id = rbh_id_from_lu_fid(fid);
+    if (id == NULL)
         return -1;
-    }
 
-    memcpy(uri->buffer, &FILEID_LUSTRE, sizeof(int));
-    memcpy(uri->buffer + sizeof(int), fid, sizeof(*fid));
-    memset(uri->buffer + sizeof(int) + sizeof(*fid), 0, sizeof(*fid));
+    rc = rbh_id_copy(&uri->id, id, &data, &bufsize);
+    save_errno = errno;
+    free(id);
+    errno = save_errno;
 
-    uri->id.data = uri->buffer;
-    uri->id.size = LUSTRE_FH_SIZE;
-
-    return 0;
+    return rc;
 }
 
 static int
