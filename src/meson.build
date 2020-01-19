@@ -14,6 +14,7 @@ librobinhood = library(
 		'filter.c',
 		'fsentry.c',
 		'fsevent.c',
+		'id.c',
 		'itertools.c',
 		'plugin.c',
 		'plugins/backend.c',

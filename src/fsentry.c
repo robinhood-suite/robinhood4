@@ -11,6 +11,7 @@
 # include "config.h"
 #endif
 
+#include <assert.h>
 #include <errno.h>
 #include <stdlib.h>
 #include <string.h>
@@ -28,8 +29,8 @@ rbh_fsentry_new(const struct rbh_id *id, const struct rbh_id *parent_id,
                 const char *symlink)
 {
     struct rbh_fsentry *fsentry;
-    size_t name_length = 0;
     size_t symlink_length = 0;
+    size_t name_length = 0;
     size_t data_size = 0;
     char *data;
 
@@ -56,42 +57,37 @@ rbh_fsentry_new(const struct rbh_id *id, const struct rbh_id *parent_id,
 
     /* fsentry->symlink (set first because it is a flexible array) */
     if (symlink) {
-        memcpy(data, symlink, symlink_length);
-        data += symlink_length;
+        data = mempcpy(data, symlink, symlink_length);
         fsentry->mask |= RBH_FP_SYMLINK;
     }
 
     /* fsentry->id */
     if (id) {
-        memcpy(data, id->data, id->size);
         fsentry->id.data = data;
-        data += id->size;
+        data = mempcpy(data, id->data, id->size);
         fsentry->id.size = id->size;
         fsentry->mask |= RBH_FP_ID;
     };
 
     /* fsentry->parent_id */
     if (parent_id) {
-        memcpy(data, parent_id->data, parent_id->size);
         fsentry->parent_id.data = data;
-        data += parent_id->size;
+        data = mempcpy(data, parent_id->data, parent_id->size);
         fsentry->parent_id.size = parent_id->size;
         fsentry->mask |= RBH_FP_PARENT_ID;
     }
 
     /* fsentry->name */
     if (name) {
-        memcpy(data, name, name_length);
         fsentry->name = data;
-        data += name_length;
+        data = mempcpy(data, name, name_length);
         fsentry->mask |= RBH_FP_NAME;
     }
 
     /* fsentry->statx */
     if (statxbuf) {
-        memcpy(data, statxbuf, sizeof(*statxbuf));
         fsentry->statx = (struct statx *)data;
-        data += sizeof(*statxbuf);
+        data = mempcpy(data, statxbuf, sizeof(*statxbuf));
         fsentry->mask |= RBH_FP_STATX;
     }
 

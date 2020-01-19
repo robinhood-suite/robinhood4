@@ -10,22 +10,11 @@
 #ifndef ROBINHOOD_FSENTRY_H
 #define ROBINHOOD_FSENTRY_H
 
+#include <robinhood/id.h>
+
 /** @file
  * fsentry is the generic name for a filesystem entry (file, dir, symlink, ...)
  */
-
-/**
- * A unique identifier for an fsentry
- *
- * \c data is a series of \c size bytes (not null terminated).
- *
- * As a convention an ID with a \c size of 0 is used to represent a filesystem
- * root's parent fsentry (something that does not exist).
- */
-struct rbh_id {
-    char *data;
-    size_t size;
-};
 
 struct statx;
 
@@ -41,8 +30,8 @@ struct rbh_fsentry {
     unsigned int mask;
     struct rbh_id id;
     struct rbh_id parent_id;
-    char *name;
-    struct statx *statx;
+    const char *name;
+    const struct statx *statx;
     char symlink[];
 };
 
@@ -73,6 +62,8 @@ enum rbh_fsentry_property {
  *                      \p statx is not that of a symlink
  *
  * The returned fsentry can be freed with a single call to free().
+ * The returned fsentry points at internally managed copies of \p id,
+ * \p parent_id, \p name, ...
  *
  * Any of \p id, \p parent_id, \p name and \p statx may be NULL, in which case
  * the corresponding fields in the returned fsentry are not set.

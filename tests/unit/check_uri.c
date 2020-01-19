@@ -18,6 +18,7 @@
 #include <stdlib.h>
 
 #include "check-compat.h"
+#include "check_macros.h"
 #include "robinhood/uri.h"
 
 #define ck_assert_raw_uri_eq(X, Y) do { \
@@ -28,12 +29,6 @@
     ck_assert_str_eq((X)->path, (Y)->path); \
     ck_assert_pstr_eq((X)->query, (Y)->query); \
     ck_assert_pstr_eq((X)->fragment, (Y)->fragment); \
-} while (false)
-
-#define ck_assert_id_eq(X, Y) do { \
-    ck_assert_uint_eq((X)->size, (Y)->size); \
-    if ((X)->size != 0) \
-        ck_assert_mem_eq((X)->data, (Y)->data, (X)->size); \
 } while (false)
 
 #define ck_assert_uri_eq(X, Y) do { \

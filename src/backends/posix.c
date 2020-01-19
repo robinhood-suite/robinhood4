@@ -49,7 +49,6 @@ static const struct rbh_id ROOT_PARENT_ID = {
 static struct rbh_id *
 id_from_fd(int fd)
 {
-    struct rbh_id *id;
     int mount_id;
 
     if (handle == NULL) {
@@ -78,18 +77,7 @@ retry:
         goto retry;
     }
 
-    id = malloc(sizeof(*id) + sizeof(handle->handle_type)
-                + handle->handle_bytes);
-    if (id == NULL)
-        return NULL;
-    id->data = (char *)id + sizeof(*id);
-    id->size = sizeof(handle->handle_type) + handle->handle_bytes;
-
-    memcpy(id->data, &handle->handle_type, sizeof(handle->handle_type));
-    memcpy(id->data + sizeof(handle->handle_type), handle->f_handle,
-           handle->handle_bytes);
-
-    return id;
+    return rbh_id_from_file_handle(handle);
 }
 
 #ifndef HAVE_STATX
@@ -730,10 +718,14 @@ posix_backend_branch(void *backend, const struct rbh_id *id)
 {
     struct posix_backend *posix = backend;
     struct posix_branch_backend *branch;
+    size_t data_size;
+    char *data;
 
-    branch = malloc(sizeof(*branch) + id->size);
+    data_size = id->size;
+    branch = malloc(sizeof(*branch) + data_size);
     if (branch == NULL)
         return NULL;
+    data = (char *)branch + sizeof(*branch);
 
     branch->posix.root = strdup(posix->root);
     if (branch->posix.root == NULL) {
@@ -745,9 +737,7 @@ posix_backend_branch(void *backend, const struct rbh_id *id)
     }
 
     branch->posix.statx_sync_type = posix->statx_sync_type;
-    branch->id.size = id->size;
-    branch->id.data = (char *)branch + sizeof(*branch);
-    memcpy(branch->id.data, id->data, id->size);
+    rbh_id_copy(&branch->id, id, &data, &data_size);
     branch->posix.backend = POSIX_BRANCH_BACKEND;
 
     return &branch->posix.backend;
