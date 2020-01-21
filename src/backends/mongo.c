@@ -1254,7 +1254,7 @@ bson_append_null_filter(bson_t *bson, bool negate)
      */
     return BSON_APPEND_DOCUMENT_BEGIN(bson, "_id", &document)
         && BSON_APPEND_BOOL(&document, "$exists", !negate)
-        && bson_document_append_end(bson, &document);
+        && bson_append_document_end(bson, &document);
 }
 
 static bool
@@ -1269,7 +1269,7 @@ _bson_append_filter(bson_t *bson, const struct rbh_filter *filter, bool negate)
 }
 
     /*--------------------------------------------------------------------*
-     |                     bson_pipieline_from_filter                     |
+     |                     bson_pipeline_from_filter                      |
      *--------------------------------------------------------------------*/
 
 static bson_t *
