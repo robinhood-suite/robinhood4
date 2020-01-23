@@ -320,16 +320,47 @@ START_TEST(rpd_too_short)
 }
 END_TEST
 
-START_TEST(rpd_not_hexa)
+START_TEST(rpd_not_hexa_first)
+{
+    char misencoded[] = "%g0";
+
+    errno = 0;
+    ck_assert_int_eq(
+            rbh_percent_decode(misencoded, misencoded, sizeof(misencoded)), -1
+            );
+    ck_assert_int_eq(errno, EILSEQ);
+}
+END_TEST
+
+START_TEST(rpd_not_hexa_second)
 {
     char misencoded[] = "%0g";
 
     errno = 0;
     ck_assert_int_eq(
-            rbh_percent_decode(misencoded, misencoded, sizeof(misencoded)),
-            -1
+            rbh_percent_decode(misencoded, misencoded, sizeof(misencoded)), -1
             );
     ck_assert_int_eq(errno, EILSEQ);
+}
+END_TEST
+
+START_TEST(rpd_case_insensitive)
+{
+    const char LOWERCASE[] = "abcdef";
+    const char UPPERCASE[] = "ABCDEF";
+    const char DECODED[] = {0xa, 0xb, 0xc, 0xd, 0xe, 0xf};
+    char lowercode[4];
+    char uppercode[4];
+
+    for (size_t i = 0; i < sizeof(LOWERCASE) - 1; i++) {
+        sprintf(lowercode, "%%0%c", LOWERCASE[i]);
+        sprintf(uppercode, "%%0%c", UPPERCASE[i]);
+        ck_assert_int_eq(rbh_percent_decode(lowercode, lowercode, 4), 1);
+        ck_assert_int_eq(rbh_percent_decode(uppercode, uppercode, 4), 1);
+
+        ck_assert_int_eq(*lowercode, DECODED[i]);
+        ck_assert_int_eq(*uppercode, DECODED[i]);
+    }
 }
 END_TEST
 
@@ -362,37 +393,11 @@ START_TEST(rufru_no_colon)
 }
 END_TEST
 
-START_TEST(rufru_encoding_error_not_hexa)
+START_TEST(rufru_encoded_path)
 {
     const struct rbh_raw_uri RAW_URI = {
         .scheme = RBH_SCHEME,
-        .path = "%g0:",
-    };
-
-    errno = 0;
-    ck_assert_ptr_null(rbh_uri_from_raw_uri(&RAW_URI));
-    ck_assert_int_eq(errno, EILSEQ);
-}
-END_TEST
-
-START_TEST(rufru_encoding_error_short_code)
-{
-    const struct rbh_raw_uri RAW_URI = {
-        .scheme = RBH_SCHEME,
-        .path = ":%0",
-    };
-
-    errno = 0;
-    ck_assert_ptr_null(rbh_uri_from_raw_uri(&RAW_URI));
-    ck_assert_int_eq(errno, EILSEQ);
-}
-END_TEST
-
-START_TEST(rufru_decode_basic)
-{
-    const struct rbh_raw_uri RAW_URI = {
-        .scheme = RBH_SCHEME,
-        .path = "%00:",
+        .path = "%00:%00",
     };
     const struct rbh_uri URI = {
         .backend = "",
@@ -409,37 +414,29 @@ START_TEST(rufru_decode_basic)
 }
 END_TEST
 
-START_TEST(rufru_decode_lowercase)
+START_TEST(rufru_misencoded_backend)
 {
-    const char BACKEND[] = { 0x0a, '\0' };
     const struct rbh_raw_uri RAW_URI = {
         .scheme = RBH_SCHEME,
-        .path = "%0a:",
+        .path = "%:",
     };
-    struct rbh_uri *uri;
 
-    uri = rbh_uri_from_raw_uri(&RAW_URI);
-    ck_assert_ptr_nonnull(uri);
-    ck_assert_str_eq(uri->backend, BACKEND);
-
-    free(uri);
+    errno = 0;
+    ck_assert_ptr_null(rbh_uri_from_raw_uri(&RAW_URI));
+    ck_assert_int_eq(errno, EILSEQ);
 }
 END_TEST
 
-START_TEST(rufru_decode_uppercase)
+START_TEST(rufru_misencoded_fsname)
 {
-    const char BACKEND[] = { 0x0a, '\0' };
     const struct rbh_raw_uri RAW_URI = {
         .scheme = RBH_SCHEME,
-        .path = "%0A:",
+        .path = ":%",
     };
-    struct rbh_uri *uri;
 
-    uri = rbh_uri_from_raw_uri(&RAW_URI);
-    ck_assert_ptr_nonnull(uri);
-    ck_assert_str_eq(uri->backend, BACKEND);
-
-    free(uri);
+    errno = 0;
+    ck_assert_ptr_null(rbh_uri_from_raw_uri(&RAW_URI));
+    ck_assert_int_eq(errno, EILSEQ);
 }
 END_TEST
 
@@ -610,6 +607,48 @@ START_TEST(rufru_fid_fragment)
 }
 END_TEST
 
+START_TEST(rufru_bad_fid_fragment)
+{
+    const struct rbh_raw_uri RAW_URI = {
+        .scheme = RBH_SCHEME,
+        .path = ":",
+        .fragment = "[0xg::]",
+    };
+
+    errno = 0;
+    ck_assert_ptr_null(rbh_uri_from_raw_uri(&RAW_URI));
+    ck_assert_int_eq(errno, EINVAL);
+}
+END_TEST
+
+START_TEST(rufru_fid_and_garbage_fragment)
+{
+    const struct rbh_raw_uri RAW_URI = {
+        .scheme = RBH_SCHEME,
+        .path = ":",
+        .fragment = "[::abc]",
+    };
+
+    errno = 0;
+    ck_assert_ptr_null(rbh_uri_from_raw_uri(&RAW_URI));
+    ck_assert_int_eq(errno, EINVAL);
+}
+END_TEST
+
+START_TEST(rufru_misencoded_fid_fragment)
+{
+    const struct rbh_raw_uri RAW_URI = {
+        .scheme = RBH_SCHEME,
+        .path = ":",
+        .fragment = "[%::]",
+    };
+
+    errno = 0;
+    ck_assert_ptr_null(rbh_uri_from_raw_uri(&RAW_URI));
+    ck_assert_int_eq(errno, EILSEQ);
+}
+END_TEST
+
 START_TEST(rufru_id_single_unencoded_colon_fragment)
 {
     const struct rbh_raw_uri RAW_URI = {
@@ -673,48 +712,6 @@ START_TEST(rufru_id_two_unencoded_colons_fragment)
 }
 END_TEST
 
-START_TEST(rufru_fid_sequence_is_not_hexa_fragment)
-{
-    const struct rbh_raw_uri RAW_URI = {
-        .scheme = RBH_SCHEME,
-        .path = ":",
-        .fragment = "[0x0g:0x1:0x2]",
-    };
-
-    errno = 0;
-    ck_assert_ptr_null(rbh_uri_from_raw_uri(&RAW_URI));
-    ck_assert_int_eq(errno, EINVAL);
-}
-END_TEST
-
-START_TEST(rufru_fid_oid_is_not_hexa_fragment)
-{
-    const struct rbh_raw_uri RAW_URI = {
-        .scheme = RBH_SCHEME,
-        .path = ":",
-        .fragment = "[0x0:0x1g:0x2]",
-    };
-
-    errno = 0;
-    ck_assert_ptr_null(rbh_uri_from_raw_uri(&RAW_URI));
-    ck_assert_int_eq(errno, EINVAL);
-}
-END_TEST
-
-START_TEST(rufru_fid_version_is_not_hexa_fragment)
-{
-    const struct rbh_raw_uri RAW_URI = {
-        .scheme = RBH_SCHEME,
-        .path = ":",
-        .fragment = "[0x0:0x1:0x2g]",
-    };
-
-    errno = 0;
-    ck_assert_ptr_null(rbh_uri_from_raw_uri(&RAW_URI));
-    ck_assert_int_eq(errno, EINVAL);
-}
-END_TEST
-
 START_TEST(rufru_fid_encoded_fragment)
 {
     const struct rbh_raw_uri RAW_URI = {
@@ -735,159 +732,6 @@ START_TEST(rufru_fid_encoded_fragment)
     ck_assert_id_eq(uri->id, &id);
 
     free(uri);
-}
-END_TEST
-
-START_TEST(rufru_fid_misencoded_sequence_fragment)
-{
-    const struct rbh_raw_uri RAW_URI = {
-        .scheme = RBH_SCHEME,
-        .path = ":",
-        .fragment = "[%3g::]",
-    };
-
-    errno = 0;
-    ck_assert_ptr_null(rbh_uri_from_raw_uri(&RAW_URI));
-    ck_assert_int_eq(errno, EILSEQ);
-}
-END_TEST
-
-START_TEST(rufru_fid_misencoded_oid_fragment)
-{
-    const struct rbh_raw_uri RAW_URI = {
-        .scheme = RBH_SCHEME,
-        .path = ":",
-        .fragment = "[0x0:%3g:]",
-    };
-
-    errno = 0;
-    ck_assert_ptr_null(rbh_uri_from_raw_uri(&RAW_URI));
-    ck_assert_int_eq(errno, EILSEQ);
-}
-END_TEST
-
-START_TEST(rufru_fid_misencoded_version_fragment)
-{
-    const struct rbh_raw_uri RAW_URI = {
-        .scheme = RBH_SCHEME,
-        .path = ":",
-        .fragment = "[0x0:0x1:%3g]",
-    };
-
-    errno = 0;
-    ck_assert_ptr_null(rbh_uri_from_raw_uri(&RAW_URI));
-    ck_assert_int_eq(errno, EILSEQ);
-}
-END_TEST
-
-START_TEST(rufru_fid_max_sequence_fragment)
-{
-    const struct rbh_raw_uri RAW_URI = {
-        .scheme = RBH_SCHEME,
-        .path = ":",
-        .fragment = "[0xffffffffffffffff:0x0:0x0]",
-    };
-    char data[MAX_HANDLE_SZ];
-    struct rbh_id id = {
-        .data = data,
-    };
-    struct rbh_uri *uri;
-
-    id.size = lustre_id_copy(data, sizeof(data), UINT64_MAX, 0, 0);
-
-    uri = rbh_uri_from_raw_uri(&RAW_URI);
-    ck_assert_ptr_nonnull(uri);
-    ck_assert_id_eq(uri->id, &id);
-
-    free(uri);
-}
-END_TEST
-
-START_TEST(rufru_fid_overflowed_sequence_fragment)
-{
-    const struct rbh_raw_uri RAW_URI = {
-        .scheme = RBH_SCHEME,
-        .path = ":",
-        .fragment = "[0x10000000000000000:0x0:0x0]",
-    };
-
-    errno = 0;
-    ck_assert_ptr_null(rbh_uri_from_raw_uri(&RAW_URI));
-    ck_assert_int_eq(errno, ERANGE);
-}
-END_TEST
-
-START_TEST(rufru_fid_max_oid_fragment)
-{
-    const struct rbh_raw_uri RAW_URI = {
-        .scheme = RBH_SCHEME,
-        .path = ":",
-        .fragment = "[0x0:0xffffffff:0x0]",
-    };
-    char data[MAX_HANDLE_SZ];
-    struct rbh_id id = {
-        .data = data,
-    };
-    struct rbh_uri *uri;
-
-    id.size = lustre_id_copy(data, sizeof(data), 0, UINT32_MAX, 0);
-
-    uri = rbh_uri_from_raw_uri(&RAW_URI);
-    ck_assert_ptr_nonnull(uri);
-    ck_assert_id_eq(uri->id, &id);
-
-    free(uri);
-}
-END_TEST
-
-START_TEST(rufru_fid_overflowed_oid_fragment)
-{
-    const struct rbh_raw_uri RAW_URI = {
-        .scheme = RBH_SCHEME,
-        .path = ":",
-        .fragment = "[0x0:0x100000000:0x0]",
-    };
-
-    errno = 0;
-    ck_assert_ptr_null(rbh_uri_from_raw_uri(&RAW_URI));
-    ck_assert_int_eq(errno, ERANGE);
-}
-END_TEST
-
-START_TEST(rufru_fid_max_version_fragment)
-{
-    const struct rbh_raw_uri RAW_URI = {
-        .scheme = RBH_SCHEME,
-        .path = ":",
-        .fragment = "[0x0:0x0:0xffffffff]",
-    };
-    char data[MAX_HANDLE_SZ];
-    struct rbh_id id = {
-        .data = data,
-    };
-    struct rbh_uri *uri;
-
-    id.size = lustre_id_copy(data, sizeof(data), 0, 0, UINT32_MAX);
-
-    uri = rbh_uri_from_raw_uri(&RAW_URI);
-    ck_assert_ptr_nonnull(uri);
-    ck_assert_id_eq(uri->id, &id);
-
-    free(uri);
-}
-END_TEST
-
-START_TEST(rufru_fid_overflowed_version_fragment)
-{
-    const struct rbh_raw_uri RAW_URI = {
-        .scheme = RBH_SCHEME,
-        .path = ":",
-        .fragment = "[0x0:0x0:0x100000000]",
-    };
-
-    errno = 0;
-    ck_assert_ptr_null(rbh_uri_from_raw_uri(&RAW_URI));
-    ck_assert_int_eq(errno, ERANGE);
 }
 END_TEST
 
@@ -920,18 +764,18 @@ unit_suite(void)
     tcase_add_test(tests, rpd_fully_encoded);
     tcase_add_test(tests, rpd_unencoded);
     tcase_add_test(tests, rpd_too_short);
-    tcase_add_test(tests, rpd_not_hexa);
+    tcase_add_test(tests, rpd_not_hexa_first);
+    tcase_add_test(tests, rpd_not_hexa_second);
+    tcase_add_test(tests, rpd_case_insensitive);
 
     suite_add_tcase(suite, tests);
 
     tests = tcase_create("rbh_uri_from_raw_uri()");
     tcase_add_test(tests, rufru_wrong_scheme);
     tcase_add_test(tests, rufru_no_colon);
-    tcase_add_test(tests, rufru_encoding_error_not_hexa);
-    tcase_add_test(tests, rufru_encoding_error_short_code);
-    tcase_add_test(tests, rufru_decode_basic);
-    tcase_add_test(tests, rufru_decode_lowercase);
-    tcase_add_test(tests, rufru_decode_uppercase);
+    tcase_add_test(tests, rufru_encoded_path);
+    tcase_add_test(tests, rufru_misencoded_backend);
+    tcase_add_test(tests, rufru_misencoded_fsname);
     tcase_add_test(tests, rufru_no_fragment);
     tcase_add_test(tests, rufru_empty_fragment);
     tcase_add_test(tests, rufru_empty_id_fragment);
@@ -940,22 +784,13 @@ unit_suite(void)
     tcase_add_test(tests, rufru_id_fragment_missing_closing_bracket);
     tcase_add_test(tests, rufru_id_fragment);
     tcase_add_test(tests, rufru_fid_fragment);
+    tcase_add_test(tests, rufru_bad_fid_fragment);
+    tcase_add_test(tests, rufru_fid_and_garbage_fragment);
+    tcase_add_test(tests, rufru_misencoded_fid_fragment);
     tcase_add_test(tests, rufru_id_single_unencoded_colon_fragment);
     tcase_add_test(tests, rufru_id_single_encoded_colon_fragment);
     tcase_add_test(tests, rufru_id_two_unencoded_colons_fragment);
-    tcase_add_test(tests, rufru_fid_sequence_is_not_hexa_fragment);
-    tcase_add_test(tests, rufru_fid_oid_is_not_hexa_fragment);
-    tcase_add_test(tests, rufru_fid_version_is_not_hexa_fragment);
     tcase_add_test(tests, rufru_fid_encoded_fragment);
-    tcase_add_test(tests, rufru_fid_misencoded_sequence_fragment);
-    tcase_add_test(tests, rufru_fid_misencoded_oid_fragment);
-    tcase_add_test(tests, rufru_fid_misencoded_version_fragment);
-    tcase_add_test(tests, rufru_fid_max_sequence_fragment);
-    tcase_add_test(tests, rufru_fid_overflowed_sequence_fragment);
-    tcase_add_test(tests, rufru_fid_max_oid_fragment);
-    tcase_add_test(tests, rufru_fid_overflowed_oid_fragment);
-    tcase_add_test(tests, rufru_fid_max_version_fragment);
-    tcase_add_test(tests, rufru_fid_overflowed_version_fragment);
 
     suite_add_tcase(suite, tests);
 
