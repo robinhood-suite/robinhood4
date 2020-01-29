@@ -19,7 +19,7 @@
 #include "check_macros.h"
 #include "robinhood/id.h"
 
-#include "../src/lu_fid.h"
+#include "lu_fid.h"
 
 /*----------------------------------------------------------------------------*
  |                               rbh_id_copy()                                |

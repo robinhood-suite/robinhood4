@@ -17,7 +17,7 @@
 
 #include "check-compat.h"
 
-#include "../src/lu_fid.h"
+#include "lu_fid.h"
 
 #define ck_assert_lu_fid_eq(X, seq, oid, ver) do { \
     ck_assert_uint_eq((X)->f_seq, seq); \
