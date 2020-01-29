@@ -328,15 +328,9 @@ id_from_fragment(const char *fragment)
 
     colon = strchr(fragment, ':');
     /* Is this a Lustre FID? */
-    if (colon) {
+    if (colon && strchr(colon + 1, ':'))
         /* It must be */
-        if (strchr(colon + 1, ':') == NULL) {
-            /* Oho, missing a second ':', are we? */
-            errno = EINVAL;
-            return NULL;
-        }
         return id_from_encoded_fid_string(fragment, length);
-    }
 
     return id_from_encoded_string(fragment, length);
 }

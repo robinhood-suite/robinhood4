@@ -649,6 +649,7 @@ START_TEST(rufru_misencoded_fid_fragment)
 }
 END_TEST
 
+/* A single unencoded colon is not enough to classify the ID as a FID */
 START_TEST(rufru_id_single_unencoded_colon_fragment)
 {
     const struct rbh_raw_uri RAW_URI = {
@@ -656,23 +657,36 @@ START_TEST(rufru_id_single_unencoded_colon_fragment)
         .path = ":",
         .fragment = "[:]",
     };
+    const struct rbh_id ID = {
+        .data = ":",
+        .size = 1,
+    };
+    const struct rbh_uri URI = {
+        .backend = "",
+        .fsname = "",
+        .id = &ID,
+    };
+    struct rbh_uri *uri;
 
-    errno = 0;
-    ck_assert_ptr_null(rbh_uri_from_raw_uri(&RAW_URI));
-    ck_assert_int_eq(errno, EINVAL);
+    uri = rbh_uri_from_raw_uri(&RAW_URI);
+    ck_assert_ptr_nonnull(uri);
+    ck_assert_uri_eq(uri, &URI);
+
+    free(uri);
 }
 END_TEST
 
-START_TEST(rufru_id_single_encoded_colon_fragment)
+/* FIDs are detected _before_ the fragment is decoded */
+START_TEST(rufru_id_not_a_fid)
 {
     const struct rbh_raw_uri RAW_URI = {
         .scheme = RBH_SCHEME,
         .path = ":",
-        .fragment = "[%3a]",
+        .fragment = "[%3a%3a]",
     };
     const struct rbh_id ID = {
-        .data = ":",
-        .size = 1,
+        .data = "::",
+        .size = 2,
     };
     const struct rbh_uri URI = {
         .backend = "",
@@ -788,7 +802,7 @@ unit_suite(void)
     tcase_add_test(tests, rufru_fid_and_garbage_fragment);
     tcase_add_test(tests, rufru_misencoded_fid_fragment);
     tcase_add_test(tests, rufru_id_single_unencoded_colon_fragment);
-    tcase_add_test(tests, rufru_id_single_encoded_colon_fragment);
+    tcase_add_test(tests, rufru_id_not_a_fid);
     tcase_add_test(tests, rufru_id_two_unencoded_colons_fragment);
     tcase_add_test(tests, rufru_fid_encoded_fragment);
 
