@@ -7,6 +7,9 @@
  * author: Quentin Bouget <quentin.bouget@cea.fr>
  */
 
+#ifndef RBH_LU_FID_H
+#define RBH_LU_FID_H
+
 #include <stdint.h>
 
 /* This file provides lustre-specific data structures for compatibility
@@ -37,3 +40,5 @@ struct lu_fid {
  */
 int
 lu_fid_init_from_string(const char *string, struct lu_fid *fid, char **endptr);
+
+#endif
