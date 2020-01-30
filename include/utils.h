@@ -13,8 +13,8 @@
  * Only declare utilies that are clearly needed across multiple source files.
  */
 
-#ifndef RBH_UTIL_H
-#define RBH_UTIL_H
+#ifndef RBH_UTILS_H
+#define RBH_UTILS_H
 
 #ifndef ARRAY_SIZE
 #define ARRAY_SIZE(array) (sizeof(array) / sizeof(array[0]))
