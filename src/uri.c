@@ -412,6 +412,9 @@ rbh_uri_from_raw_uri(const struct rbh_raw_uri *raw_uri)
         data += sizeof(*id);
         size -= sizeof(*id);
 
+        /* scan-build: NULL passed to nonnull */
+        assert(raw_uri->fragment);
+
         /* id->data */
         id->data = data;
         if (fragment_is_fid(raw_uri->fragment, fragment_length))
@@ -442,6 +445,10 @@ rbh_uri_from_raw_uri(const struct rbh_raw_uri *raw_uri)
         /* Nothing to do */
         break;
     }
+
+    /* scan-build: intentional dead store */
+    (void)data;
+    (void)size;
 
     return uri;
 

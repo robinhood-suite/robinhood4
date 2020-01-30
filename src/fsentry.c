@@ -91,5 +91,8 @@ rbh_fsentry_new(const struct rbh_id *id, const struct rbh_id *parent_id,
         fsentry->mask |= RBH_FP_STATX;
     }
 
+    /* scan-build: intentional dead store */
+    (void)data;
+
     return fsentry;
 }
