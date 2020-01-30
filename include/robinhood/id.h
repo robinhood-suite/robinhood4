@@ -92,6 +92,11 @@ struct file_handle;
 struct rbh_id *
 rbh_id_from_file_handle(const struct file_handle *handle);
 
+/**
+ * The size of a Lustre ID as built by rbh_id_from_lu_fid()
+ */
+extern const size_t LUSTRE_ID_SIZE;
+
 struct lu_fid;
 
 /**

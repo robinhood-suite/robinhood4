@@ -15,6 +15,7 @@
 #include <ctype.h>
 #include <errno.h>
 #include <limits.h>
+#include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdint.h>
@@ -281,65 +282,58 @@ out_free_decoded:
     return id;
 }
 
-static struct rbh_id *
-id_from_encoded_string(const char *encoded_string, size_t length)
+static ssize_t
+parse_fid(char *data, const char *fragment, size_t length)
 {
     struct rbh_id *id;
-    ssize_t size;
-    char *data;
 
-    id = malloc(sizeof(*id) + length);
+    id = id_from_encoded_fid_string(fragment, length);
     if (id == NULL)
-        return NULL;
-    data = (char *)id + sizeof(*id);
+        return -1;
 
-    id->data = data;
-    size = rbh_percent_decode(data, encoded_string, length);
-    if (size < 0) {
-        int save_errno = errno;
+    assert(id->size == LUSTRE_ID_SIZE);
+    memcpy(data, id->data, id->size);
+    free(id);
 
-        free(id);
-        errno = save_errno;
-        return NULL;
-    }
-
-    id->size = size;
-    return id;
+    return LUSTRE_ID_SIZE;
 }
 
-static struct rbh_id *
-id_from_fragment(const char *fragment)
+static ssize_t
+parse_id(char *data, const char *fragment, size_t length)
+{
+    return rbh_percent_decode(data, fragment + 1, length - 2);
+}
+
+static bool
+fragment_is_id(const char *fragment, size_t length)
+{
+    return fragment[0] == '[' && fragment[length - 1] == ']';
+}
+
+/* Note that this function assumes the fragment is an ID */
+static bool
+fragment_is_fid(const char *fragment, size_t length)
 {
     const char *colon;
-    size_t length;
 
-    if (*fragment++ != '[') {
-        errno = EINVAL;
-        return NULL;
-    }
-
-    length = strlen(fragment);
-    if (fragment[length - 1] != ']') {
-        errno = EINVAL;
-        return NULL;
-    }
-    /* Discard the trailing ']' */
+    /* Discard the leading opening bracket ('[') */
+    fragment++;
     length--;
 
-    colon = strchr(fragment, ':');
-    /* Is this a Lustre FID? */
-    if (colon && strchr(colon + 1, ':'))
-        /* It must be */
-        return id_from_encoded_fid_string(fragment, length);
+    /* Discard the trailing closing bracket (']') */
+    length--;
 
-    return id_from_encoded_string(fragment, length);
+    colon = memchr(fragment, ':', length);
+    return colon && memchr(colon + 1, ':', length - (colon + 1 - fragment));
 }
 
 struct rbh_uri *
 rbh_uri_from_raw_uri(const struct rbh_raw_uri *raw_uri)
 {
-    struct rbh_id *id = NULL;
+    size_t fragment_length = 0; /* gcc: uninitialized variable */
+    enum rbh_uri_type type;
     struct rbh_uri *uri;
+    struct rbh_id *id;
     const char *colon;
     int save_errno;
     size_t size;
@@ -359,26 +353,41 @@ rbh_uri_from_raw_uri(const struct rbh_raw_uri *raw_uri)
 
     size = strlen(raw_uri->path) + 1;
     if (raw_uri->fragment) {
-        id = id_from_fragment(raw_uri->fragment);
-        if (id == NULL)
-            return NULL;
-        size += sizeof(*id) + id->size;
+        fragment_length = strlen(raw_uri->fragment);
+        if (fragment_is_id(raw_uri->fragment, fragment_length)) {
+            type = RBH_UT_ID;
+            size += sizeof(*id);
+            if (fragment_is_fid(raw_uri->fragment, fragment_length))
+                size += LUSTRE_ID_SIZE;
+            else
+                /*                      a null terminating byte
+                 *                      vvv
+                 */
+                size += fragment_length + 1 - 2;
+                /*                          ^^^
+                 *                          The two unneeded brackets
+                 */
+        } else {
+            type = RBH_UT_PATH;
+            size += fragment_length + 1;
+        }
+    } else {
+        type = RBH_UT_BARE;
     }
 
     uri = malloc(sizeof(*uri) + size);
-    if (uri == NULL) {
-        save_errno = errno;
-        goto out_free_id;
-    }
+    if (uri == NULL)
+        return NULL;
     data = (char *)uri + sizeof(*uri);
+
+    /* uri->type */
+    uri->type = type;
 
     /* uri->backend */
     uri->backend = data;
     rc = rbh_percent_decode(data, raw_uri->path, colon - raw_uri->path);
-    if (rc < 0) {
-        save_errno = errno;
+    if (rc < 0)
         goto out_free_uri;
-    }
 
     assert(rc < size);
     data[rc] = '\0';
@@ -388,38 +397,57 @@ rbh_uri_from_raw_uri(const struct rbh_raw_uri *raw_uri)
     /* uri->fsname */
     uri->fsname = data;
     rc = rbh_percent_decode(data, colon + 1, -1);
-    if (rc < 0) {
-        save_errno = errno;
+    if (rc < 0)
         goto out_free_uri;
-    }
 
     assert(rc < size);
     data[rc] = '\0';
     data += rc + 1;
     size -= rc + 1;
 
-    /* uri->id */
-    if (id) {
-        void *tmp = data;
-        int rc;
+    /* uri->id / uri->path */
+    switch (uri->type) {
+    case RBH_UT_ID:
+        id = (struct rbh_id *)data;
+        data += sizeof(*id);
+        size -= sizeof(*id);
 
-        uri->id = tmp;
-        data += sizeof(*uri->id);
-        size -= sizeof(*uri->id);
+        /* id->data */
+        id->data = data;
+        if (fragment_is_fid(raw_uri->fragment, fragment_length))
+            rc = parse_fid(data, raw_uri->fragment, fragment_length);
+        else
+            rc = parse_id(data, raw_uri->fragment, fragment_length);
+        if (rc < 0)
+            goto out_free_uri;
+        assert(rc <= size);
 
-        rc = rbh_id_copy(tmp, id, &data, &size);
-        assert(rc == 0);
-        free(id);
-    } else {
-        uri->id = NULL;
+        /* id->size */
+        id->size = rc;
+
+        uri->id = id;
+        break;
+    case RBH_UT_PATH:
+        uri->path = data;
+        rc = rbh_percent_decode(data, raw_uri->fragment, fragment_length);
+        if (rc < 0)
+            goto out_free_uri;
+
+        assert(rc < size);
+        data[rc] = '\0';
+        data += rc + 1;
+        size -= rc + 1;
+        break;
+    case RBH_UT_BARE:
+        /* Nothing to do */
+        break;
     }
 
     return uri;
 
 out_free_uri:
+    save_errno = errno;
     free(uri);
-out_free_id:
-    free(id);
     errno = save_errno;
     /* The size of the buffer is computed to be an exact fit */
     assert(errno != ENOBUFS);

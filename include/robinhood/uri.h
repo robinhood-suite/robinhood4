@@ -48,10 +48,23 @@ rbh_raw_uri_from_string(const char *string);
  |                                rbh_raw_uri                                 |
  *----------------------------------------------------------------------------*/
 
+enum rbh_uri_type {
+    RBH_UT_BARE,
+    RBH_UT_ID,
+    RBH_UT_PATH,
+};
+
 struct rbh_uri {
+    enum rbh_uri_type type;
     const char *backend;
     const char *fsname;
-    const struct rbh_id *id;
+    union {
+        /* RBH_UT_ID */
+        const struct rbh_id *id;
+
+        /* RBH_UT_PATH */
+        const char *path;
+    };
 };
 
 /**

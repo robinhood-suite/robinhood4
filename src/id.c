@@ -157,15 +157,18 @@ rbh_id_from_file_handle(const struct file_handle *handle)
  * |              |   0000000000000000 |       | size |                 36 |
  * -------------------------------------       -----------------------------
  */
+static const size_t LUSTRE_FH_SIZE = 2 * sizeof(struct lu_fid);
+static const int FILEID_LUSTRE = 0x97;
+
+const size_t LUSTRE_ID_SIZE = LUSTRE_FH_SIZE + sizeof(int);
+
 struct rbh_id *
 rbh_id_from_lu_fid(const struct lu_fid *fid)
 {
-    const size_t LUSTRE_FH_SIZE = sizeof(int) + 2 * sizeof(*fid);
-    const int FILEID_LUSTRE = 0x97;
     struct rbh_id *id;
     char *data;
 
-    id = malloc(sizeof(*id) + LUSTRE_FH_SIZE);
+    id = malloc(sizeof(*id) + LUSTRE_ID_SIZE);
     if (id == NULL)
         return NULL;
     data = (char *)id + sizeof(*id);
@@ -177,7 +180,7 @@ rbh_id_from_lu_fid(const struct lu_fid *fid)
     memset(data, 0, sizeof(*fid));
 
     /* id->size */
-    id->size = LUSTRE_FH_SIZE;
+    id->size = LUSTRE_ID_SIZE;
 
     return id;
 }
