@@ -402,15 +402,15 @@ static int
 posix_get_statx_sync_type(struct posix_backend *posix, void *data,
                       size_t *data_size)
 {
-    typeof(posix->statx_sync_type) statx_sync_type = posix->statx_sync_type;
+    int statx_sync_type = posix->statx_sync_type;
 
-    if (*data_size < sizeof(posix->statx_sync_type)) {
-        *data_size = sizeof(posix->statx_sync_type);
+    if (*data_size < sizeof(statx_sync_type)) {
+        *data_size = sizeof(statx_sync_type);
         errno = EOVERFLOW;
         return -1;
     }
-    memcpy(data, &statx_sync_type, sizeof(posix->statx_sync_type));
-    *data_size = sizeof(posix->statx_sync_type);
+    memcpy(data, &statx_sync_type, sizeof(statx_sync_type));
+    *data_size = sizeof(statx_sync_type);
     return 0;
 }
 
@@ -437,7 +437,7 @@ static int
 posix_set_statx_sync_type(struct posix_backend *posix, const void *data,
                           size_t data_size)
 {
-    typeof(posix->statx_sync_type) statx_sync_type;
+    int statx_sync_type;
 
     if (data_size != sizeof(statx_sync_type)) {
         errno = EINVAL;
