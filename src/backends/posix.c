@@ -11,6 +11,7 @@
 # include "config.h"
 #endif
 
+#include <assert.h>
 #include <fts.h>
 #include <fcntl.h>
 #include <limits.h>
@@ -236,7 +237,8 @@ fsentry_from_ftsent(FTSENT *ftsent, int statx_sync_type)
             statxbuf.stx_size = page_size - 1;
             statxbuf.stx_mask |= STATX_SIZE;
         }
-        symlink = freadlink(fd, &statxbuf.stx_size);
+        static_assert(sizeof(size_t) == sizeof(statxbuf.stx_size), "");
+        symlink = freadlink(fd, (size_t *)&statxbuf.stx_size);
 
         if (symlink == NULL) {
             save_errno = errno;

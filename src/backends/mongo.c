@@ -814,9 +814,18 @@ statx_from_bson_iter(bson_iter_t *iter, struct statx *statxbuf)
             if (!BSON_ITER_HOLDS_DOCUMENT(iter))
                 goto out_einval;
             bson_iter_recurse(iter, &subiter);
-            if (!statx_attributes_from_bson_iter(&subiter,
-                                                 &statxbuf->stx_attributes_mask,
-                                                 &statxbuf->stx_attributes))
+            static_assert(
+                    sizeof(statxbuf->stx_attributes_mask) == sizeof(uint64_t),
+                    ""
+                    );
+            static_assert(
+                    sizeof(statxbuf->stx_attributes) == sizeof(uint64_t),
+                    ""
+                    );
+            if (!statx_attributes_from_bson_iter(
+                        &subiter, (uint64_t *)&statxbuf->stx_attributes_mask,
+                        (uint64_t *)&statxbuf->stx_attributes
+                        ))
                 return false;
             break;
         case ST_ATIME:
