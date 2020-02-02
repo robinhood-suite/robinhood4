@@ -32,7 +32,7 @@
 #endif
 #include <robinhood/utils.h>
 
-static size_t uri_count = 0;
+static size_t backend_count = 0;
 static struct rbh_backend **backends;
 
 static size_t
@@ -104,7 +104,7 @@ find(enum action action, const struct rbh_filter *filter)
 
     did_something = true;
 
-    for (size_t i = 0; i < uri_count; i++)
+    for (size_t i = 0; i < backend_count; i++)
         count += _find(backends[i], action, filter);
 
     switch (action) {
@@ -333,7 +333,7 @@ parse_expression(int *arg_idx, const struct rbh_filter *_filter)
 static void
 destroy_backends(void)
 {
-    for (size_t i = 0; i < uri_count; i++)
+    for (size_t i = 0; i < backend_count; i++)
         rbh_backend_destroy(backends[i]);
     free(backends);
 }
@@ -351,31 +351,32 @@ int
 main(int _argc, char *_argv[])
 {
     struct rbh_filter *filter;
+    int index;
 
     /* Discard the program's name */
     argc = _argc - 1;
     argv = &_argv[1];
 
     /* Parse the command line */
-    for (uri_count = 0; uri_count < argc; uri_count++) {
-        if (str2command_line_token(argv[uri_count]) != CLT_URI)
+    for (index = 0; index < argc; index++) {
+        if (str2command_line_token(argv[index]) != CLT_URI)
             break;
     }
-
-    if (uri_count == 0)
+    if (index == 0)
         error(EX_USAGE, 0, "missing at least one robinhood URI");
 
     _atexit(destroy_backends);
-    backends = malloc(uri_count * sizeof(*backends));
+    backends = malloc(index * sizeof(*backends));
     if (backends == NULL)
         error(EXIT_FAILURE, errno, "malloc");
 
-    for (size_t i = 0; i < uri_count; i++)
+    for (size_t i = 0; i < index; i++) {
         backends[i] = rbh_backend_from_uri(argv[i]);
+        backend_count++;
+    }
 
-    _argc = uri_count;
-    filter = parse_expression(&_argc, NULL);
-    if (_argc != argc)
+    filter = parse_expression(&index, NULL);
+    if (index != argc)
         error(EX_USAGE, 0, "you have too many ')'");
 
     if (!did_something)
