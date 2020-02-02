@@ -168,7 +168,7 @@ mongo_cleanup(void)
 
 static bool
 _bson_append_binary(bson_t *bson, const char *key, size_t key_length,
-                    bson_subtype_t subtype, const char *data, uint32_t length)
+                    bson_subtype_t subtype, const char *data, size_t length)
 {
     if (length == 0)
         return bson_append_null(bson, key, key_length);
@@ -177,15 +177,16 @@ _bson_append_binary(bson_t *bson, const char *key, size_t key_length,
 }
 
 static bool
-bson_append_rbh_id(bson_t *bson, const char *key, size_t key_length,
-                   const struct rbh_id *id)
+bson_append_rbh_id_filter(bson_t *bson, const char *key, size_t key_length,
+                          const struct rbh_id *id)
 {
     return _bson_append_binary(bson, key, key_length, BSON_SUBTYPE_BINARY,
-                               id->data, id->size);
+                               id->data, id->size)
+        && (id->size != 0 || BSON_APPEND_INT32(bson, "type", BSON_TYPE_NULL));
 }
 
-#define BSON_APPEND_RBH_ID(bson, key, id) \
-    bson_append_rbh_id(bson, key, strlen(key), id)
+#define BSON_APPEND_RBH_ID_FILTER(bson, key, id) \
+    bson_append_rbh_id_filter(bson, key, strlen(key), id)
 
 static bool
 bson_append_statx_attributes(bson_t *bson, const char *key, size_t key_length,
@@ -317,7 +318,7 @@ bson_selector_from_fsevent(const struct rbh_fsevent *fsevent)
 {
     bson_t *selector = bson_new();
 
-    if (BSON_APPEND_RBH_ID(selector, MFP_ID, &fsevent->id))
+    if (BSON_APPEND_RBH_ID_FILTER(selector, MFP_ID, &fsevent->id))
         return selector;
 
     bson_destroy(selector);
@@ -355,7 +356,7 @@ bson_from_link(const struct rbh_id *parent_id, const char *name)
 
     if (BSON_APPEND_DOCUMENT_BEGIN(bson, "$addToSet", &document)
      && BSON_APPEND_DOCUMENT_BEGIN(&document, MFP_NAMESPACE, &subdoc)
-     && BSON_APPEND_RBH_ID(&subdoc, MFP_PARENT_ID, parent_id)
+     && BSON_APPEND_RBH_ID_FILTER(&subdoc, MFP_PARENT_ID, parent_id)
      && BSON_APPEND_UTF8(&subdoc, MFP_NAME, name)
      && bson_append_document_end(&document, &subdoc)
      && bson_append_document_end(bson, &document))
@@ -375,7 +376,7 @@ bson_from_unlink(const struct rbh_id *parent_id, const char *name)
 
     if (BSON_APPEND_DOCUMENT_BEGIN(bson, "$pull", &document)
      && BSON_APPEND_DOCUMENT_BEGIN(&document, MFP_NAMESPACE, &subdoc)
-     && BSON_APPEND_RBH_ID(&subdoc, MFP_PARENT_ID, parent_id)
+     && BSON_APPEND_RBH_ID_FILTER(&subdoc, MFP_PARENT_ID, parent_id)
      && BSON_APPEND_UTF8(&subdoc, MFP_NAME, name)
      && bson_append_document_end(&document, &subdoc)
      && bson_append_document_end(bson, &document))
@@ -1163,7 +1164,9 @@ bson_append_filter_value(bson_t *bson, const char *key, size_t key_length,
     switch (value->type) {
     case RBH_FVT_BINARY:
         return _bson_append_binary(bson, key, key_length, BSON_SUBTYPE_BINARY,
-                                   value->binary.data, value->binary.size);
+                                   value->binary.data, value->binary.size)
+            && (value->binary.size != 0
+                    || BSON_APPEND_INT32(bson, "$type", BSON_TYPE_NULL));
     case RBH_FVT_INT32:
         return bson_append_int32(bson, key, key_length, value->int32);
     case RBH_FVT_INT64:
