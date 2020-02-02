@@ -126,52 +126,59 @@ static struct rbh_fsentry *
 backend_fsentry_from_path(struct rbh_backend *backend, char *path,
                           unsigned int fsentry_mask, unsigned int statx_mask)
 {
-    const struct rbh_id *id = &ROOT_PARENT_ID;
-    struct rbh_fsentry *fsentry = NULL;
-    struct rbh_fsentry *save_fsentry;
+    struct rbh_fsentry *fsentry;
+    struct rbh_fsentry *parent;
     int save_errno;
+    char *slash;
 
-    if (path[0] != '\0' && path[0] != '/') {
-        errno = EINVAL;
+    if (*path == '/') {
+        parent = fsentry_from_parent_and_name(backend, &ROOT_PARENT_ID, "",
+                                              RBH_FP_ID, 0);
+        /* Discard every leading '/' */
+        do {
+            path++;
+        } while (*path == '/');
+    } else {
+        parent = rbh_backend_root(backend, RBH_FP_ID, 0);
+    }
+    if (parent == NULL)
+        return NULL;
+    if (!(parent->mask & RBH_FP_ID)) {
+        free(parent);
+        errno = ENODATA;
         return NULL;
     }
 
-    while (true) {
-        char *slash;
-
-        slash = strchr(path, '/');
-        if (slash == NULL)
-            break;
+    while ((slash = strchr(path, '/'))) {
         *slash++ = '\0';
 
         /* Look for the next character that is not a '/' */
-        while (*slash++ == '/');
+        while (*slash == '/')
+            slash++;
         if (*slash == '\0')
             break;
 
-        save_fsentry = fsentry;
-        fsentry = fsentry_from_parent_and_name(backend, id, path, RBH_FP_ID, 0);
+        fsentry = fsentry_from_parent_and_name(backend, &parent->id, path,
+                                               RBH_FP_ID, 0);
         save_errno = errno;
-        free(save_fsentry);
+        free(parent);
         errno = save_errno;
         if (fsentry == NULL)
             return NULL;
-
         if (!(fsentry->mask & RBH_FP_ID)) {
             free(fsentry);
             errno = ENODATA;
             return NULL;
         }
 
-        id = &fsentry->id;
+        parent = fsentry;
         path = slash;
     }
 
-    save_fsentry = fsentry;
-    fsentry = fsentry_from_parent_and_name(backend, id, path, fsentry_mask,
-                                           statx_mask);
+    fsentry = fsentry_from_parent_and_name(backend, &parent->id, path,
+                                           fsentry_mask, statx_mask);
     save_errno = errno;
-    free(save_fsentry);
+    free(parent);
     errno = save_errno;
     return fsentry;
 }
