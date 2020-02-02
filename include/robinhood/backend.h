@@ -358,6 +358,34 @@ rbh_backend_destroy(struct rbh_backend *backend)
 }
 
 /**
+ * Retrieve a single fsentry
+ *
+ * @param backend       the backend from which to retrieve the fsentry
+ * @param filter        the filter to use
+ * @param fsentry_mask  a bitmask of the fields to set in the returned fsentry
+ * @param statx_mask    a bitmask of the fields to set in the statx field of
+ *                      the returned fsentry (ignored if RBH_FP_STATX is not set
+ *                      in \p fsentry_mask)
+ *
+ * @return              a pointer to a newly allocated fsentry that matches
+ *                      \p filter on success, NULL on error and errno is set
+ *                      appropriately
+ *
+ * @error ENOENT        no fsentry in \p backend matches \p filter
+ *
+ * This function is a thin wrapper around rbh_backend_filter_fsentries(). As
+ * such, any comment that applies to rbh_backend_filter_fsentries() also applies
+ * to this function.
+ *
+ * In particular, this function may fail and set errno for any of the errors
+ * specified for rbh_backend_filter_fsentries().
+ */
+struct rbh_fsentry *
+rbh_backend_filter_one(struct rbh_backend *backend,
+                       const struct rbh_filter *filter,
+                       unsigned int fsentry_mask, unsigned int statx_mask);
+
+/**
  * Retrieve an fsentry from a backend using its path
  *
  * @param backend       the backend from which to retrieve the fsentry

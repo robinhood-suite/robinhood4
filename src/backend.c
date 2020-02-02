@@ -48,6 +48,32 @@ rbh_generic_backend_set_option(struct rbh_backend *backend, unsigned int option,
     return -1;
 }
 
+struct rbh_fsentry *
+rbh_backend_filter_one(struct rbh_backend *backend,
+                       const struct rbh_filter *filter,
+                       unsigned int fsentry_mask, unsigned int statx_mask)
+{
+    struct rbh_mut_iterator *fsentries;
+    struct rbh_fsentry *fsentry;
+    int save_errno = errno;
+
+    fsentries = rbh_backend_filter_fsentries(backend, filter, fsentry_mask,
+                                             statx_mask);
+    if (fsentries == NULL)
+        return NULL;
+
+    errno = 0;
+    fsentry = rbh_mut_iter_next(fsentries);
+    if (fsentry == NULL) {
+        assert(errno);
+        save_errno = errno == ENODATA ? ENOENT : errno;
+    }
+
+    rbh_mut_iter_destroy(fsentries);
+    errno = save_errno;
+    return fsentry;
+}
+
 static struct rbh_fsentry *
 fsentry_from_parent_and_name(struct rbh_backend *backend,
                              const struct rbh_id *parent_id, const char *name,
@@ -87,25 +113,8 @@ fsentry_from_parent_and_name(struct rbh_backend *backend,
             .filters = FILTERS,
         },
     };
-    struct rbh_mut_iterator *fsentries;
-    struct rbh_fsentry *fsentry;
-    int save_errno = errno;
 
-    fsentries = rbh_backend_filter_fsentries(backend, &FILTER, fsentry_mask,
-                                             statx_mask);
-    if (fsentries == NULL)
-        return NULL;
-
-    errno = 0;
-    fsentry = rbh_mut_iter_next(fsentries);
-    if (fsentry == NULL) {
-        assert(errno);
-        save_errno = errno == ENODATA ? ENOENT : errno;
-    }
-
-    rbh_mut_iter_destroy(fsentries);
-    errno = save_errno;
-    return fsentry;
+    return rbh_backend_filter_one(backend, &FILTER, fsentry_mask, statx_mask);
 }
 
 static const struct rbh_id ROOT_PARENT_ID = {

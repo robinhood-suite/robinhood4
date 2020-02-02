@@ -1191,7 +1191,7 @@ bson_append_filter_value(bson_t *bson, const char *key, size_t key_length,
 
 static bool
 bson_append_comparison_filter(bson_t *bson, const struct rbh_filter *filter,
-                               bool negate)
+                              bool negate)
 {
     bson_t document;
 
@@ -1570,10 +1570,24 @@ mongo_backend_update(void *backend, struct rbh_iterator *fsevents)
      |                                root                                |
      *--------------------------------------------------------------------*/
 
+static const struct rbh_filter ROOT_FILTER = {
+    .op = RBH_FOP_EQUAL,
+    .compare = {
+        .field = RBH_FF_PARENT_ID,
+        .value = {
+            .type = RBH_FVT_BINARY,
+            .binary = {
+                .size = 0,
+            },
+        },
+    },
+};
+
 static struct rbh_fsentry *
 mongo_root(void *backend, unsigned int fsentry_mask, unsigned int statx_mask)
 {
-    return rbh_backend_fsentry_from_path(backend, "", fsentry_mask, statx_mask);
+    return rbh_backend_filter_one(backend, &ROOT_FILTER, fsentry_mask,
+                                  statx_mask);
 }
 
     /*--------------------------------------------------------------------*
