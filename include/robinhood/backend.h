@@ -389,12 +389,11 @@ rbh_backend_filter_one(struct rbh_backend *backend,
  * Retrieve an fsentry from a backend using its path
  *
  * @param backend       the backend from which to retrieve the fsentry
- * @param path          the path of the fsentry to return (will be modified and
- *                      should not be used anymore)
+ * @param path          the path of the fsentry to return
  * @param fsentry_mask  a bitmask of the fields to set in the returned fsentry
  * @param statx_mask    a bitmask of the fields to set in the statx field of
  *                      the returned fsentry (ignored if RBH_FP_STATX is not set
- *                      in \p fsentry_mask).
+ *                      in \p fsentry_mask)
  *
  * @return              a pointer to a newly allocated fsentry whose path (in
  *                      \p backend) matches \p path, on success, NULL on error,
@@ -404,18 +403,15 @@ rbh_backend_filter_one(struct rbh_backend *backend,
  *                      into an fsentry
  * @error ENOENT        no fsentry in \p backend has a path that matches \p path
  *
- * Just like with rbh_backend_filter_fsentries, the returned fsentry may have
- * more or less fields.
+ * This function is a wrapper around rbh_backend_filter_fsentries(). As such,
+ * any comment that applies to rbh_backend_filter_fsentries() also applies to
+ * this function.
  *
- * It is the caller's responsibility to check the corresponding masks in the
- * returned fsentries to know whether or not a given field is set and safe to
- * access.
- *
- * This function may also fail and set errno for any of the errors specified for
- * the routine rbh_backend_filter_fsentries().
+ * In particular, this function may fail and set errno for any of the errors
+ * specified for rbh_backend_filter_fsentries().
  */
 struct rbh_fsentry *
-rbh_backend_fsentry_from_path(struct rbh_backend *backend, char *path,
+rbh_backend_fsentry_from_path(struct rbh_backend *backend, const char *path,
                               unsigned int fsentry_mask,
                               unsigned int statx_mask);
 

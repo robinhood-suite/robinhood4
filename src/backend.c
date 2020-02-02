@@ -122,10 +122,9 @@ static const struct rbh_id ROOT_PARENT_ID = {
     .size = 0,
 };
 
-struct rbh_fsentry *
-rbh_backend_fsentry_from_path(struct rbh_backend *backend, char *path,
-                              unsigned int fsentry_mask,
-                              unsigned int statx_mask)
+static struct rbh_fsentry *
+backend_fsentry_from_path(struct rbh_backend *backend, char *path,
+                          unsigned int fsentry_mask, unsigned int statx_mask)
 {
     const struct rbh_id *id = &ROOT_PARENT_ID;
     struct rbh_fsentry *fsentry = NULL;
@@ -173,6 +172,27 @@ rbh_backend_fsentry_from_path(struct rbh_backend *backend, char *path,
                                            statx_mask);
     save_errno = errno;
     free(save_fsentry);
+    errno = save_errno;
+    return fsentry;
+}
+
+struct rbh_fsentry *
+rbh_backend_fsentry_from_path(struct rbh_backend *backend, const char *path_,
+                              unsigned int fsentry_mask,
+                              unsigned int statx_mask)
+{
+    struct rbh_fsentry *fsentry;
+    int save_errno;
+    char *path;
+
+    path = strdup(path_);
+    if (path == NULL)
+        return NULL;
+
+    fsentry = backend_fsentry_from_path(backend, path, fsentry_mask,
+                                        statx_mask);
+    save_errno = errno;
+    free(path);
     errno = save_errno;
     return fsentry;
 }
