@@ -84,7 +84,7 @@ fsentry_from_parent_and_name(struct rbh_backend *backend,
         .compare = {
             .field = RBH_FF_PARENT_ID,
             .value = {
-                .type = RBH_FVT_BINARY,
+                .type = RBH_VT_BINARY,
                 .binary = {
                     .size = parent_id->size,
                     .data = parent_id->data,
@@ -97,7 +97,7 @@ fsentry_from_parent_and_name(struct rbh_backend *backend,
         .compare = {
             .field = RBH_FF_NAME,
             .value = {
-                .type = RBH_FVT_STRING,
+                .type = RBH_VT_STRING,
                 .string = name,
             },
         },

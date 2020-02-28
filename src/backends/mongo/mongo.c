@@ -348,7 +348,7 @@ static const struct rbh_filter ROOT_FILTER = {
     .compare = {
         .field = RBH_FF_PARENT_ID,
         .value = {
-            .type = RBH_FVT_BINARY,
+            .type = RBH_VT_BINARY,
             .binary = {
                 .size = 0,
             },

@@ -11,77 +11,19 @@
 # include "config.h"
 #endif
 
+#include <errno.h>
 #include <limits.h>
 #include <stdlib.h>
 
-#include "check-compat.h"
-#include "utils.h"
 #include "robinhood/filter.h"
+
+#include "check-compat.h"
+#include "check_macros.h"
+#include "utils.h"
 
 /*----------------------------------------------------------------------------*
  |                               tests helpers                                |
  *----------------------------------------------------------------------------*/
-
-static const char *
-filter_value_type2str(enum rbh_filter_value_type type)
-{
-    switch (type) {
-    case RBH_FVT_BINARY:
-        return "RBH_FVT_BINARY";
-    case RBH_FVT_INT32:
-        return "RBH_FVT_INT32";
-    case RBH_FVT_INT64:
-        return "RBH_FVT_INT64";
-    case RBH_FVT_STRING:
-        return "RBH_FVT_STRING";
-    case RBH_FVT_REGEX:
-        return "RBH_FVT_REGEX";
-    case RBH_FVT_TIME:
-        return "RBH_FVT_TIME";
-    case RBH_FVT_LIST:
-        return "RBH_FVT_LIST";
-    default:
-        return "unknown";
-    }
-}
-
-#define _ck_assert_filter_value_type(X, OP, Y) do { \
-    ck_assert_msg((X) OP (Y), ": %s is %s, %s is %s", \
-                  #X, filter_value_type2str(X), \
-                  #Y, filter_value_type2str(Y)); \
-} while (0)
-
-#define _ck_assert_filter_value(X, OP, Y) do { \
-    _ck_assert_filter_value_type((X)->type, OP, (Y)->type); \
-    switch ((X)->type) { \
-    case RBH_FVT_BINARY: \
-        _ck_assert_uint((X)->binary.size, OP, (Y)->binary.size); \
-        _ck_assert_mem((X)->binary.data, OP, (Y)->binary.data, \
-                       (X)->binary.size); \
-        break; \
-    case RBH_FVT_INT32: \
-        _ck_assert_int((X)->int32, OP, (Y)->int32); \
-        break; \
-    case RBH_FVT_INT64: \
-        _ck_assert_int((X)->int64, OP, (Y)->int64); \
-        break; \
-    case RBH_FVT_STRING: \
-        _ck_assert_str((X)->string, OP, (Y)->string, 0, 0); \
-        break; \
-    case RBH_FVT_REGEX: \
-        _ck_assert_uint((X)->regex.options, OP, (Y)->regex.options); \
-        _ck_assert_str((X)->regex.string, OP, (Y)->regex.string, 0, 0); \
-        break; \
-    case RBH_FVT_TIME: \
-        _ck_assert_mem(&(X)->time, OP, &(Y)->time, sizeof((X)->time)); \
-        break; \
-    case RBH_FVT_LIST: \
-        _ck_assert_uint((X)->list.count, OP, (Y)->list.count); \
-        /* Recursion has to be done manually */ \
-    } \
-} while (0)
-
-#define ck_assert_filter_value_eq(X, Y) _ck_assert_filter_value(X, ==, Y)
 
 static const char *
 filter_operator2str(enum rbh_filter_operator op)
@@ -155,74 +97,127 @@ filter_field2str(enum rbh_filter_field field)
                   #X, filter_field2str(X), #Y, filter_field2str(Y)); \
 } while (0);
 
-#define _ck_assert_comparison_filter(X, OP, Y) do { \
+#define _ck_assert_comparison_filter(X, OP, Y, NULLEQ, NULLNE) do { \
     _ck_assert_filter_field((X)->compare.field, OP, (X)->compare.field); \
-    _ck_assert_filter_value(&(X)->compare.value, OP, &(Y)->compare.value); \
+    _ck_assert_value(&(X)->compare.value, OP, &(Y)->compare.value); \
 } while (0);
 
-#define _ck_assert_filter(X, OP, Y) do { \
+#define _ck_assert_filter(X, OP, Y, NULLEQ, NULLNE) do { \
+    if ((X) == NULL || (Y) == NULL) { \
+        _ck_assert_ptr(X, OP, Y); \
+        break; \
+    } \
     _ck_assert_filter_operator((X)->op, OP, (Y)->op); \
     if (rbh_is_comparison_operator((X)->op)) { \
-        _ck_assert_comparison_filter(X, OP, Y); \
+        _ck_assert_comparison_filter(X, OP, Y, NULLEQ, NULLNE); \
     } else { \
         _ck_assert_uint((X)->logical.count, OP, (Y)->logical.count); \
         /* Recursion has to bedone manually */ \
     } \
 } while (0)
 
-#define ck_assert_filter_eq(X, Y) _ck_assert_filter(X, ==, Y)
+#define ck_assert_filter_eq(X, Y) _ck_assert_filter(X, ==, Y, 1, 0)
 
-static const struct rbh_filter_value filter_values[] = {
-    {
-        .type = RBH_FVT_BINARY,
-        .binary = {
-            .size = 16,
-            .data = "abcdefghijklmnop",
+/*----------------------------------------------------------------------------*
+ |                          rbh_filter_compare_new()                          |
+ *----------------------------------------------------------------------------*/
+
+START_TEST(rfcn_basic)
+{
+    const struct rbh_filter FILTER = {
+        .op = RBH_FOP_EQUAL,
+        .compare = {
+            .field = RBH_FF_ID,
+            .value = {
+                .type = RBH_VT_BINARY,
+                .binary = {
+                    .data = "abcdefghijklmnop",
+                    .size = 16,
+                },
+            },
         },
-    },
-    {
-        .type = RBH_FVT_INT32,
-        .int32 = 0,
-    },
-    {
-        .type = RBH_FVT_INT64,
-        .int64 = INT64_MAX,
-    },
-    {
-        .type = RBH_FVT_STRING,
-        .string = "",
-    },
-    {
-        .type = RBH_FVT_STRING,
-        .string = "abcdefghijklmno",
-    },
-    {
-        .type = RBH_FVT_REGEX,
-        .regex = {
-            .options = 0,
-            .string = "abcdefghijklmno",
-        },
-    },
-    {
-        .type = RBH_FVT_REGEX,
-        .regex = {
-            .options = RBH_FRO_CASE_INSENSITIVE,
-            .string = "AbCdEfGhIjKlMnO",
-        },
-    },
-    {
-        .type = RBH_FVT_TIME,
-        .time = 0,
-    },
+    };
+    struct rbh_filter *filter;
+
+    filter = rbh_filter_compare_new(FILTER.op, FILTER.compare.field,
+                                    &FILTER.compare.value);
+    ck_assert_ptr_nonnull(filter);
+
+    ck_assert_filter_eq(filter, &FILTER);
+    free(filter);
+}
+END_TEST
+
+START_TEST(rfcn_bad_operator)
+{
+    const struct rbh_value VALUE = {};
+
+    errno = 0;
+    ck_assert_ptr_null(rbh_filter_compare_new(-1, RBH_FF_ID, &VALUE));
+    ck_assert_int_eq(errno, EINVAL);
+}
+END_TEST
+
+START_TEST(rfcn_in_without_sequence)
+{
+    const struct rbh_value VALUE = {
+        .type = RBH_VT_UINT32,
+    };
+
+    errno = 0;
+    ck_assert_ptr_null(rbh_filter_compare_new(RBH_FOP_IN, RBH_FF_ID, &VALUE));
+    ck_assert_int_eq(errno, EINVAL);
+}
+END_TEST
+
+START_TEST(rfcn_regex_without_regex)
+{
+    const struct rbh_value VALUE = {
+        .type = RBH_VT_UINT32,
+    };
+
+    errno = 0;
+    ck_assert_ptr_null(
+            rbh_filter_compare_new(RBH_FOP_REGEX, RBH_FF_ID, &VALUE)
+            );
+    ck_assert_int_eq(errno, EINVAL);
+}
+END_TEST
+
+static const enum rbh_filter_operator BITWISE_OPS[] = {
+    RBH_FOP_BITS_ANY_SET,
+    RBH_FOP_BITS_ALL_SET,
+    RBH_FOP_BITS_ANY_CLEAR,
+    RBH_FOP_BITS_ALL_CLEAR,
 };
 
-static const struct rbh_filter comparison_filters[] = {
+START_TEST(rfcn_bitwise_without_integer)
+{
+    const struct rbh_value VALUE = {
+        .type = RBH_VT_STRING,
+    };
+
+    errno = 0;
+    ck_assert_ptr_null(
+            rbh_filter_compare_new(BITWISE_OPS[_i], RBH_FF_ID, &VALUE)
+            );
+    ck_assert_int_eq(errno, EINVAL);
+}
+END_TEST
+
+/* TODO: test rbh_filter_compare_*_new() */
+
+/*----------------------------------------------------------------------------*
+ |                            rbh_filter_and_new()                            |
+ *----------------------------------------------------------------------------*/
+
+static const struct rbh_filter COMPARISONS[] = {
     {
         .op = RBH_FOP_EQUAL,
         .compare = {
             .field = RBH_FF_ID,
             .value = {
-                .type = RBH_FVT_BINARY,
+                .type = RBH_VT_BINARY,
                 .binary = {
                     .size = 16,
                     .data = "abcdefghijklmnop",
@@ -235,8 +230,8 @@ static const struct rbh_filter comparison_filters[] = {
         .compare = {
             .field = RBH_FF_PARENT_ID,
             .value = {
-                .type = RBH_FVT_INT32,
-                .int32 = INT32_MAX,
+                .type = RBH_VT_UINT32,
+                .uint32 = INT32_MAX,
             },
         },
     },
@@ -245,8 +240,8 @@ static const struct rbh_filter comparison_filters[] = {
         .compare = {
             .field = RBH_FF_ATIME,
             .value = {
-                .type = RBH_FVT_STRING,
-                .string = "",
+                .type = RBH_VT_UINT64,
+                .uint64 = UINT64_MAX,
             },
         },
     },
@@ -255,31 +250,18 @@ static const struct rbh_filter comparison_filters[] = {
         .compare = {
             .field = RBH_FF_MTIME,
             .value = {
-                .type = RBH_FVT_STRING,
-                .string = "abcdefghijklmno",
+                .type = RBH_VT_INT32,
+                .int32 = INT32_MAX,
             }
-        },
-    },
-    {
-        .op = RBH_FOP_REGEX,
-        .compare = {
-            .field = RBH_FF_CTIME,
-            .value = {
-                .type = RBH_FVT_REGEX,
-                .regex = {
-                    .options = 0,
-                    .string = "abcdefghijklmno",
-                },
-            },
         },
     },
     {
         .op = RBH_FOP_GREATER_OR_EQUAL,
         .compare = {
-            .field = RBH_FF_NAME,
+            .field = RBH_FF_CTIME,
             .value = {
-                .type = RBH_FVT_TIME,
-                .time = 0,
+                .type = RBH_VT_INT64,
+                .int64 = INT64_MIN,
             },
         },
     },
@@ -288,219 +270,101 @@ static const struct rbh_filter comparison_filters[] = {
         .compare = {
             .field = RBH_FF_TYPE,
             .value = {
-                .type = RBH_FVT_LIST,
-                .list = {
+                .type = RBH_VT_SEQUENCE,
+                .sequence = {
+                    .values = NULL,
                     .count = 0,
-                    .elements = NULL,
                 },
             },
         },
     },
     {
-        .op = RBH_FOP_IN,
+        .op = RBH_FOP_REGEX,
+        .compare = {
+            .field = RBH_FF_NAME,
+            .value = {
+                .type = RBH_VT_REGEX,
+                .regex = {
+                    .string = "abcdefg",
+                    .options = 0,
+                },
+            },
+        },
+    },
+    {
+        .op = RBH_FOP_BITS_ANY_SET,
         .compare = {
             .field = RBH_FF_ID,
             .value = {
-                .type = RBH_FVT_LIST,
-                .list = {
-                    .count = ARRAY_SIZE(filter_values),
-                    .elements = filter_values,
-                },
+                .type = RBH_VT_UINT32,
+                .uint32 = UINT32_MAX,
+            },
+        },
+    },
+    {
+        .op = RBH_FOP_BITS_ALL_SET,
+        .compare = {
+            .field = RBH_FF_PARENT_ID,
+            .value = {
+                .type = RBH_VT_UINT64,
+                .uint64 = UINT64_MAX,
+            },
+        },
+    },
+    {
+        .op = RBH_FOP_BITS_ANY_CLEAR,
+        .compare = {
+            .field = RBH_FF_ATIME,
+            .value = {
+                .type = RBH_VT_INT32,
+                .int32 = INT32_MIN,
+            },
+        },
+    },
+    {
+        .op = RBH_FOP_BITS_ANY_CLEAR,
+        .compare = {
+            .field = RBH_FF_ATIME,
+            .value = {
+                .type = RBH_VT_INT64,
+                .int64 = INT64_MIN,
             },
         },
     }
 };
 
-/*----------------------------------------------------------------------------*
- |                      rbh_filter_compare_binary_new()                       |
- *----------------------------------------------------------------------------*/
-
-START_TEST(rfcbn_basic)
+START_TEST(rfan_basic)
 {
+    const struct rbh_filter *filters[ARRAY_SIZE(COMPARISONS) + 1];
+    const struct rbh_filter FILTER = {
+        .op = RBH_FOP_AND,
+        .logical = {
+            .filters = filters,
+            .count = ARRAY_SIZE(filters),
+        },
+    };
     struct rbh_filter *filter;
 
-    filter = rbh_filter_compare_binary_new(RBH_FOP_EQUAL, RBH_FF_ID, 16,
-                                       "abcdefghijklmnop");
+    filters[0] = NULL;
+    for (size_t i = 0; i < ARRAY_SIZE(COMPARISONS); i++)
+        filters[i + 1] = &COMPARISONS[i];
+
+    filter = rbh_filter_and_new(filters, ARRAY_SIZE(filters));
     ck_assert_ptr_nonnull(filter);
 
-    ck_assert_int_eq(filter->op, RBH_FOP_EQUAL);
-    ck_assert_int_eq(filter->compare.field, RBH_FF_ID);
-    ck_assert_int_eq(filter->compare.value.type, RBH_FVT_BINARY);
-    ck_assert_int_eq(filter->compare.value.binary.size, 16);
-    ck_assert_mem_eq(filter->compare.value.binary.data, "abcdefghijklmnop", 16);
-
-    rbh_filter_free(filter);
-}
-END_TEST
-
-/*----------------------------------------------------------------------------*
- |                       rbh_filter_compare_int32_new()                       |
- *----------------------------------------------------------------------------*/
-
-START_TEST(rfci32n_basic)
-{
-    struct rbh_filter *filter;
-
-    filter = rbh_filter_compare_int32_new(RBH_FOP_EQUAL, RBH_FF_ID, 1234);
-    ck_assert_ptr_nonnull(filter);
-
-    ck_assert_int_eq(filter->op, RBH_FOP_EQUAL);
-    ck_assert_int_eq(filter->compare.field, RBH_FF_ID);
-    ck_assert_int_eq(filter->compare.value.type, RBH_FVT_INT32);
-    ck_assert_int_eq(filter->compare.value.int32, 1234);
-
-    rbh_filter_free(filter);
-}
-END_TEST
-
-/*----------------------------------------------------------------------------*
- |                       rbh_filter_compare_int64_new()                       |
- *----------------------------------------------------------------------------*/
-
-START_TEST(rfci64n_basic)
-{
-    struct rbh_filter *filter;
-
-    filter = rbh_filter_compare_int64_new(RBH_FOP_EQUAL, RBH_FF_ID, 1234);
-    ck_assert_ptr_nonnull(filter);
-
-    ck_assert_int_eq(filter->op, RBH_FOP_EQUAL);
-    ck_assert_int_eq(filter->compare.field, RBH_FF_ID);
-    ck_assert_int_eq(filter->compare.value.type, RBH_FVT_INT64);
-    ck_assert_int_eq(filter->compare.value.int64, 1234);
-
-    rbh_filter_free(filter);
-}
-END_TEST
-
-/*----------------------------------------------------------------------------*
- |                      rbh_filter_compare_string_new()                       |
- *----------------------------------------------------------------------------*/
-
-START_TEST(rfcsn_basic)
-{
-    struct rbh_filter *filter;
-
-    filter = rbh_filter_compare_string_new(RBH_FOP_EQUAL, RBH_FF_NAME,
-                                           "abcdefg");
-    ck_assert_ptr_nonnull(filter);
-
-    ck_assert_int_eq(filter->op, RBH_FOP_EQUAL);
-    ck_assert_int_eq(filter->compare.field, RBH_FF_NAME);
-    ck_assert_int_eq(filter->compare.value.type, RBH_FVT_STRING);
-    ck_assert_str_eq(filter->compare.value.string, "abcdefg");
-
-    rbh_filter_free(filter);
-}
-END_TEST
-
-/*----------------------------------------------------------------------------*
- |                       rbh_filter_compare_regex_new()                       |
- *----------------------------------------------------------------------------*/
-
-START_TEST(rfcrn_basic)
-{
-    struct rbh_filter *filter;
-
-    filter = rbh_filter_compare_regex_new(RBH_FF_NAME, "abcdefg", ~0U);
-    ck_assert_ptr_nonnull(filter);
-
-    ck_assert_int_eq(filter->op, RBH_FOP_REGEX);
-    ck_assert_int_eq(filter->compare.field, RBH_FF_NAME);
-    ck_assert_int_eq(filter->compare.value.type, RBH_FVT_REGEX);
-    ck_assert_int_eq(filter->compare.value.regex.options, ~0U);
-    ck_assert_str_eq(filter->compare.value.regex.string, "abcdefg");
-
-    rbh_filter_free(filter);
-}
-END_TEST
-
-/*----------------------------------------------------------------------------*
- |                       rbh_filter_compare_time_new()                        |
- *----------------------------------------------------------------------------*/
-
-START_TEST(rfctn_basic)
-{
-    struct rbh_filter *filter;
-    time_t time = 0;
-
-    filter = rbh_filter_compare_time_new(RBH_FOP_EQUAL, RBH_FF_ATIME, time);
-    ck_assert_ptr_nonnull(filter);
-
-    ck_assert_int_eq(filter->op, RBH_FOP_EQUAL);
-    ck_assert_int_eq(filter->compare.field, RBH_FF_ATIME);
-    ck_assert_int_eq(filter->compare.value.type, RBH_FVT_TIME);
-    ck_assert_int_eq(filter->compare.value.time, time);
-
-    rbh_filter_free(filter);
-}
-END_TEST
-
-/*----------------------------------------------------------------------------*
- |                       rbh_filter_compare_list_new()                        |
- *----------------------------------------------------------------------------*/
-
-START_TEST(rfcln_basic)
-{
-    struct rbh_filter *filter;
-
-    filter = rbh_filter_compare_list_new(RBH_FF_ID, ARRAY_SIZE(filter_values),
-                                         filter_values);
-    ck_assert_ptr_nonnull(filter);
-
-    ck_assert_int_eq(filter->op, RBH_FOP_IN);
-    ck_assert_int_eq(filter->compare.field, RBH_FF_ID);
-    ck_assert_int_eq(filter->compare.value.type, RBH_FVT_LIST);
-    ck_assert_int_eq(filter->compare.value.list.count,
-                     ARRAY_SIZE(filter_values));
-    for (size_t i = 0; i < filter->compare.value.list.count; i++)
-        ck_assert_filter_value_eq(&filter->compare.value.list.elements[i],
-                                  &filter_values[i]);
-
-    rbh_filter_free(filter);
-}
-END_TEST
-
-/*----------------------------------------------------------------------------*
- |                            rbh_filter_and_new()                            |
- *----------------------------------------------------------------------------*/
-
-START_TEST(rfan_null)
-{
-    const struct rbh_filter *filters[1] = { NULL };
-    struct rbh_filter *filter;
-
-    filter = rbh_filter_and_new(filters, 1);
-    ck_assert_ptr_nonnull(filter);
-
-    ck_assert_int_eq(filter->logical.count, 1);
-    ck_assert_ptr_ne(filter->logical.filters, filters);
-    ck_assert_ptr_eq(filter->logical.filters[0], NULL);
-
-    rbh_filter_free(filter);
-}
-END_TEST
-
-START_TEST(rfan_many)
-{
-    const struct rbh_filter *filters[ARRAY_SIZE(comparison_filters)];
-    struct rbh_filter *filter;
-
-    for (size_t i = 0; i < ARRAY_SIZE(comparison_filters); i++)
-        filters[i] = &comparison_filters[i];
-
-    filter = rbh_filter_and_new(filters, ARRAY_SIZE(comparison_filters));
-    ck_assert_ptr_nonnull(filter);
-
-    ck_assert_filter_operator_eq(filter->op, RBH_FOP_AND);
-    ck_assert_uint_eq(filter->logical.count, ARRAY_SIZE(filters));
-    ck_assert_ptr_ne(filter->logical.filters, filters);
-    for (size_t i = 0; i < ARRAY_SIZE(filters); i++) {
-        ck_assert_ptr_eq(filter->logical.filters[i], filters[i]);
-        ck_assert_filter_eq(filter->logical.filters[i], &comparison_filters[i]);
-    }
+    ck_assert_filter_eq(filter, &FILTER);
+    for (size_t i = 0; i < filter->logical.count; i++)
+        ck_assert_filter_eq(filter->logical.filters[i], filters[i]);
 
     free(filter);
+}
+END_TEST
+
+START_TEST(rfan_zero)
+{
+    errno = 0;
+    ck_assert_ptr_null(rbh_filter_and_new(NULL, 0));
+    ck_assert_int_eq(errno, EINVAL);
 }
 END_TEST
 
@@ -511,18 +375,23 @@ END_TEST
 /* The underlying implementation of filter_or() is the same as filter_and()'s.
  * There is no need to test is extensively.
  */
-START_TEST(rfon_many)
+START_TEST(rfon_basic)
 {
-    const struct rbh_filter *filters[3];
+    const struct rbh_filter * const FILTERS[3] = {};
+    const struct rbh_filter FILTER = {
+        .op = RBH_FOP_OR,
+        .logical = {
+            .filters = FILTERS,
+            .count = ARRAY_SIZE(FILTERS),
+        },
+    };
     struct rbh_filter *filter;
 
-    for (size_t i = 0; i < ARRAY_SIZE(filters); i++)
-        filters[i] = rbh_filter_clone(&comparison_filters[i]);
+    filter = rbh_filter_or_new(FILTERS, ARRAY_SIZE(FILTERS));
+    ck_assert_ptr_nonnull(filter);
 
-    filter = rbh_filter_or_new(filters, ARRAY_SIZE(filters));
-    ck_assert_int_eq(filter->op, RBH_FOP_OR);
-
-    rbh_filter_free(filter);
+    ck_assert_filter_eq(filter, &FILTER);
+    free(filter);
 }
 END_TEST
 
@@ -532,67 +401,21 @@ END_TEST
 
 START_TEST(rfnn_basic)
 {
-    struct rbh_filter *negated;
-    struct rbh_filter *filter;
-
-    filter = rbh_filter_clone(&comparison_filters[0]);
-    ck_assert_ptr_nonnull(filter);
-
-    negated = rbh_filter_not_new(filter);
-    ck_assert_ptr_nonnull(negated);
-    ck_assert_int_eq(negated->op, RBH_FOP_NOT);
-    ck_assert_int_eq(negated->logical.count, 1);
-    ck_assert_ptr_eq(negated->logical.filters[0], filter);
-
-    rbh_filter_free(negated);
-}
-END_TEST
-
-/*----------------------------------------------------------------------------*
- |                             rbh_filter_clone()                             |
- *----------------------------------------------------------------------------*/
-
-START_TEST(rfc_null)
-{
-    ck_assert_ptr_null(rbh_filter_clone(NULL));
-}
-END_TEST
-
-START_TEST(rfc_comparison)
-{
-    struct rbh_filter *clone;
-
-    clone = rbh_filter_clone(&comparison_filters[_i]);
-    ck_assert_filter_eq(&comparison_filters[_i], clone);
-
-    rbh_filter_free(clone);
-}
-END_TEST
-
-START_TEST(rfc_logical)
-{
-    const struct rbh_filter *filters[ARRAY_SIZE(comparison_filters)];
-    const struct rbh_filter FILTER = {
-        .op = RBH_FOP_AND,
+    const struct rbh_filter * const FILTERS[1] = {};
+    const struct rbh_filter NEGATED = {
+        .op = RBH_FOP_NOT,
         .logical = {
-            .count = ARRAY_SIZE(comparison_filters),
-            .filters = filters,
+            .filters = FILTERS,
+            .count = 1,
         },
     };
-    struct rbh_filter *clone;
+    struct rbh_filter *filter;
 
-    for (size_t i = 0; i < ARRAY_SIZE(comparison_filters); i++)
-        filters[i] = &comparison_filters[i];
+    filter = rbh_filter_not_new(FILTERS[0]);
+    ck_assert_ptr_nonnull(filter);
 
-    clone = rbh_filter_clone(&FILTER);
-    ck_assert_ptr_nonnull(clone);
-    ck_assert_ptr_ne(clone, &FILTER);
-    ck_assert_filter_eq(clone, &FILTER);
-
-    for (size_t i = 0; i < ARRAY_SIZE(comparison_filters); i++)
-        ck_assert_filter_eq(clone->logical.filters[i], &comparison_filters[i]);
-
-    rbh_filter_free(clone);
+    ck_assert_filter_eq(filter, &NEGATED);
+    free(filter);
 }
 END_TEST
 
@@ -604,62 +427,29 @@ unit_suite(void)
 
     suite = suite_create("filter interface");
 
-    tests = tcase_create("rbh_filter_compare_binary_new");
-    tcase_add_test(tests, rfcbn_basic);
+    tests = tcase_create("rbh_filter_compare_new");
+    tcase_add_test(tests, rfcn_basic);
+    tcase_add_test(tests, rfcn_bad_operator);
+    tcase_add_test(tests, rfcn_in_without_sequence);
+    tcase_add_test(tests, rfcn_regex_without_regex);
+    tcase_add_loop_test(tests, rfcn_bitwise_without_integer, 0,
+                        ARRAY_SIZE(BITWISE_OPS));
 
     suite_add_tcase(suite, tests);
 
-    tests = tcase_create("rbh_filter_compare_int32_new");
-    tcase_add_test(tests, rfci32n_basic);
+    tests = tcase_create("rbh_filter_and_new");
+    tcase_add_test(tests, rfan_basic);
+    tcase_add_test(tests, rfan_zero);
 
     suite_add_tcase(suite, tests);
 
-    tests = tcase_create("rbh_filter_compare_int64_new");
-    tcase_add_test(tests, rfci64n_basic);
+    tests = tcase_create("rbh_filter_or_new");
+    tcase_add_test(tests, rfon_basic);
 
     suite_add_tcase(suite, tests);
 
-    tests = tcase_create("rbh_filter_compare_string_new");
-    tcase_add_test(tests, rfcsn_basic);
-
-    suite_add_tcase(suite, tests);
-
-    tests = tcase_create("rbh_filter_compare_regex_new");
-    tcase_add_test(tests, rfcrn_basic);
-
-    suite_add_tcase(suite, tests);
-
-    tests = tcase_create("rbh_filter_compare_time_new");
-    tcase_add_test(tests, rfctn_basic);
-
-    suite_add_tcase(suite, tests);
-
-    tests = tcase_create("rbh_filter_compare_list_new");
-    tcase_add_test(tests, rfcln_basic);
-
-    suite_add_tcase(suite, tests);
-
-    tests = tcase_create("rbh_filter_and");
-    tcase_add_test(tests, rfan_null);
-    tcase_add_test(tests, rfan_many);
-
-    suite_add_tcase(suite, tests);
-
-    tests = tcase_create("rbh_filter_or");
-    tcase_add_test(tests, rfon_many);
-
-    suite_add_tcase(suite, tests);
-
-    tests = tcase_create("rbh_filter_not");
+    tests = tcase_create("rbh_filter_not_new");
     tcase_add_test(tests, rfnn_basic);
-
-    suite_add_tcase(suite, tests);
-
-    tests = tcase_create("rbh_filter_clone");
-    tcase_add_test(tests, rfc_null);
-    tcase_add_loop_test(tests, rfc_comparison, 0,
-                        ARRAY_SIZE(comparison_filters));
-    tcase_add_test(tests, rfc_logical);
 
     suite_add_tcase(suite, tests);
 

@@ -18,6 +18,8 @@ struct rbh_id;
 struct rbh_filter;
 struct rbh_fsentry;
 struct rbh_fsevent;
+struct rbh_value;
+struct rbh_value_map;
 
 /*----------------------------------------------------------------------------*
  |                            Mongo FSEntry layout                            |
@@ -181,5 +183,23 @@ bson_selector_from_fsevent(const struct rbh_fsevent *fsevent);
 
 bson_t *
 bson_update_from_fsevent(const struct rbh_fsevent *fsevent);
+
+    /*--------------------------------------------------------------------*
+     |                               value                                |
+     *--------------------------------------------------------------------*/
+
+bool
+bson_append_rbh_value(bson_t *bson, const char *key, size_t key_length,
+                      const struct rbh_value *value);
+
+#define BSON_APPEND_RBH_VALUE(bson, key, value) \
+    bson_append_rbh_value(bson, key, strlen(key), value)
+
+bool
+bson_append_rbh_value_map(bson_t *bson, const char *key, size_t key_length,
+                          const struct rbh_value_map *map);
+
+#define BSON_APPEND_RBH_VALUE_MAP(bson, key, map) \
+    bson_append_rbh_value_map(bson, key, strlen(key), map)
 
 #endif

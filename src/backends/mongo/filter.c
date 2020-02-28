@@ -70,78 +70,6 @@ static const char * const FIELD2STR[] = {
 };
 
 static bool
-bson_append_filter_value(bson_t *bson, const char *key, size_t key_length,
-                         const struct rbh_filter_value *value);
-
-static bool
-bson_append_list(bson_t *bson, const char *key, size_t key_length,
-                 const struct rbh_filter_value *values, size_t count)
-{
-    bson_t array;
-
-    if (!bson_append_array_begin(bson, key, key_length, &array))
-        return false;
-
-    for (uint32_t i = 0; i < count; i++) {
-        char str[16];
-
-        key_length = bson_uint32_to_string(i, &key, str, sizeof(str));
-        if (!bson_append_filter_value(&array, key, key_length, &values[i]))
-            return false;
-    }
-
-    return bson_append_array_end(bson, &array);
-}
-
-static bool
-_bson_append_regex(bson_t *bson, const char *key, size_t key_length,
-                    const char *regex, unsigned int options)
-{
-    char mongo_regex_options[8] = {'s', '\0',};
-    uint8_t i = 1;
-
-    if (options & RBH_FRO_CASE_INSENSITIVE)
-        mongo_regex_options[i++] = 'i';
-
-    return bson_append_regex(bson, key, key_length, regex, mongo_regex_options);
-}
-
-static bool
-bson_append_filter_value(bson_t *bson, const char *key, size_t key_length,
-                         const struct rbh_filter_value *value)
-{
-    switch (value->type) {
-    case RBH_FVT_BINARY:
-        return _bson_append_binary(bson, key, key_length, BSON_SUBTYPE_BINARY,
-                                   value->binary.data, value->binary.size)
-            && (value->binary.size != 0
-                    || BSON_APPEND_INT32(bson, "$type", BSON_TYPE_NULL));
-    case RBH_FVT_INT32:
-        return bson_append_int32(bson, key, key_length, value->int32);
-    case RBH_FVT_INT64:
-        return bson_append_int64(bson, key, key_length, value->int64);
-    case RBH_FVT_STRING:
-        return bson_append_utf8(bson, key, key_length, value->string,
-                                strlen(value->string));
-    case RBH_FVT_REGEX:
-        return _bson_append_regex(bson, key, key_length, value->regex.string,
-                                   value->regex.options);
-    case RBH_FVT_TIME:
-        /* Since we do not use the native MongoDB date type, we must adapt our
-         * comparison operators.
-         */
-        return bson_append_int64(bson, key, key_length, value->time);
-    case RBH_FVT_LIST:
-        return bson_append_list(bson, key, key_length, value->list.elements,
-                                value->list.count);
-    }
-    __builtin_unreachable();
-}
-
-#define BSON_APPEND_FILTER_VALUE(bson, key, filter_value) \
-    bson_append_filter_value(bson, key, strlen(key), filter_value)
-
-static bool
 bson_append_comparison_filter(bson_t *bson, const struct rbh_filter *filter,
                               bool negate)
 {
@@ -153,13 +81,13 @@ bson_append_comparison_filter(bson_t *bson, const struct rbh_filter *filter,
          * The workaround is not to use the $regex operator and replace it with
          * the "/pattern/" syntax.
          */
-        return BSON_APPEND_FILTER_VALUE(bson, FIELD2STR[filter->compare.field],
-                                        &filter->compare.value);
+        return BSON_APPEND_RBH_VALUE(bson, FIELD2STR[filter->compare.field],
+                                     &filter->compare.value);
 
     return BSON_APPEND_DOCUMENT_BEGIN(bson, FIELD2STR[filter->compare.field],
                                       &document)
-        && BSON_APPEND_FILTER_VALUE(&document, fop2str(filter->op, negate),
-                                    &filter->compare.value)
+        && BSON_APPEND_RBH_VALUE(&document, fop2str(filter->op, negate),
+                                 &filter->compare.value)
         && bson_append_document_end(bson, &document);
 }
 

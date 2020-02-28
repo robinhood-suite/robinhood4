@@ -19,6 +19,7 @@ librbh_mongo = library(
 		'fsevent.c',
 		'mongo.c',
 		'plugin.c',
+		'value.c',
 		],
 	version: librbh_mongo_version, # defined in include/robinhood/backends
 	link_with: librobinhood,

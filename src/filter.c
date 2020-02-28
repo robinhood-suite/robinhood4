@@ -11,365 +11,400 @@
 # include "config.h"
 #endif
 
+#include <assert.h>
 #include <errno.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include "robinhood/filter.h"
 
-struct rbh_filter *
-rbh_filter_compare_binary_new(enum rbh_filter_operator op,
-                              enum rbh_filter_field field, size_t size,
-                              const char *data_)
-{
-    struct rbh_filter *filter;
-    void *data;
+#include "value.h"
+#include "utils.h"
 
-    if (!rbh_is_comparison_operator(op) || op == RBH_FOP_REGEX
-            || op == RBH_FOP_IN) {
-        errno = EINVAL;
-        return NULL;
+static int
+comparison_filter_copy(struct rbh_filter *dest, const struct rbh_filter *src,
+                       char **buffer, size_t *bufsize)
+{
+    size_t size = *bufsize;
+    char *data = *buffer;
+
+    /* dest->compare.field */
+    dest->compare.field = src->compare.field;
+
+    /* dest->compare.value */
+    if (value_copy(&dest->compare.value, &src->compare.value, &data, &size)) {
+        assert(errno != ENOBUFS);
+        return -1;
     }
 
-    filter = malloc(sizeof(*filter) + size);
-    if (filter == NULL)
-        return NULL;
-    data = (char *)filter + sizeof(*filter);
-
-    memcpy(data, data_, size);
-
-    filter->op = op;
-    filter->compare.field = field;
-    filter->compare.value.type = RBH_FVT_BINARY;
-    filter->compare.value.binary.size = size;
-    filter->compare.value.binary.data = data;
-
-    return filter;
+    *buffer = data;
+    *bufsize = size;
+    return 0;
 }
 
-struct rbh_filter *
-rbh_filter_compare_int32_new(enum rbh_filter_operator op,
-                             enum rbh_filter_field field, int32_t int32)
+static int
+filter_copy(struct rbh_filter *dest, const struct rbh_filter *src,
+            char **buffer, size_t *bufsize);
+
+static int
+logical_filter_copy(struct rbh_filter *dest, const struct rbh_filter *src,
+                    char **buffer, size_t *bufsize)
 {
-    struct rbh_filter *filter;
+    const struct rbh_filter **filters;
+    size_t size = *bufsize;
+    char *data = *buffer;
 
-    if (!rbh_is_comparison_operator(op) || op == RBH_FOP_REGEX
-            || op == RBH_FOP_IN) {
-        errno = EINVAL;
-        return NULL;
-    }
+    /* dest->logical.filters */
+    data = ptralign(data, &size, alignof(*filters));
+    assert(size >= sizeof(*filters) * src->logical.count);
+    filters = (const struct rbh_filter **)data;
+    data += sizeof(*filters) * src->logical.count;
+    size -= sizeof(*filters) * src->logical.count;
 
-    filter = malloc(sizeof(*filter));
-    if (filter == NULL)
-        return NULL;
+    for (size_t i = 0; i < src->logical.count; i++) {
+        struct rbh_filter *filter;
 
-    filter->op = op;
-    filter->compare.field = field;
-    filter->compare.value.type = RBH_FVT_INT32;
-    filter->compare.value.int32 = int32;
-
-    return filter;
-}
-
-struct rbh_filter *
-rbh_filter_compare_int64_new(enum rbh_filter_operator op,
-                             enum rbh_filter_field field, int64_t int64)
-{
-    struct rbh_filter *filter;
-
-    if (!rbh_is_comparison_operator(op) || op == RBH_FOP_REGEX
-            || op == RBH_FOP_IN) {
-        errno = EINVAL;
-        return NULL;
-    }
-
-    filter = malloc(sizeof(*filter));
-    if (filter == NULL)
-        return NULL;
-
-    filter->op = op;
-    filter->compare.field = field;
-    filter->compare.value.type = RBH_FVT_INT64;
-    filter->compare.value.int64 = int64;
-
-    return filter;
-}
-
-struct rbh_filter *
-rbh_filter_compare_string_new(enum rbh_filter_operator op,
-                              enum rbh_filter_field field, const char *string)
-{
-    struct rbh_filter *filter;
-    size_t length;
-    void *data;
-
-    if (!rbh_is_comparison_operator(op) || op == RBH_FOP_REGEX
-            || op == RBH_FOP_IN) {
-        errno = EINVAL;
-        return NULL;
-    }
-
-    length = strlen(string) + 1;
-
-    filter = malloc(sizeof(*filter) + length);
-    if (filter == NULL)
-        return NULL;
-    data = (char *)filter + sizeof(*filter);
-
-    memcpy(data, string, length);
-
-    filter->op = op;
-    filter->compare.field = field;
-    filter->compare.value.type = RBH_FVT_STRING;
-    filter->compare.value.string = data;
-
-    return filter;
-}
-
-struct rbh_filter *
-rbh_filter_compare_regex_new(enum rbh_filter_field field, const char *regex,
-                             unsigned int regex_options)
-{
-    struct rbh_filter *filter;
-    size_t length;
-    void *data;
-
-    length = strlen(regex) + 1;
-
-    filter = malloc(sizeof(*filter) + length);
-    if (filter == NULL)
-        return NULL;
-    data = (char *)filter + sizeof(*filter);
-
-    memcpy(data, regex, length);
-
-    filter->op = RBH_FOP_REGEX;
-    filter->compare.field = field;
-    filter->compare.value.type = RBH_FVT_REGEX;
-    filter->compare.value.regex.string = data;
-    filter->compare.value.regex.options = regex_options;
-
-    return filter;
-}
-
-struct rbh_filter *
-rbh_filter_compare_time_new(enum rbh_filter_operator op,
-                            enum rbh_filter_field field, time_t time)
-{
-    struct rbh_filter *filter;
-
-    if (!rbh_is_comparison_operator(op) || op == RBH_FOP_REGEX
-            || op == RBH_FOP_IN) {
-        errno = EINVAL;
-        return NULL;
-    }
-
-    filter = malloc(sizeof(*filter));
-    if (filter == NULL)
-        return NULL;
-
-    filter->op = op;
-    filter->compare.field = field;
-    filter->compare.value.type = RBH_FVT_TIME;
-    filter->compare.value.time = time;
-
-    return filter;
-}
-
-static ssize_t
-filter_value_data_size(const struct rbh_filter_value *value)
-{
-    ssize_t data_size;
-
-    switch (value->type) {
-    case RBH_FVT_BINARY:
-        return value->binary.size;
-    case RBH_FVT_INT32:
-    case RBH_FVT_INT64:
-        return 0;
-    case RBH_FVT_STRING:
-        return strlen(value->string) + 1;
-    case RBH_FVT_REGEX:
-        return strlen(value->regex.string) + 1;
-    case RBH_FVT_TIME:
-        return 0;
-    case RBH_FVT_LIST:
-        data_size = value->list.count * sizeof(*value->list.elements);
-        for (size_t i = 0; i < value->list.count; i++) {
-            ssize_t tmp;
-
-            tmp = filter_value_data_size(&value->list.elements[i]);
-            if (tmp < 0)
-                return tmp;
-
-            data_size += tmp;
+        if (src->logical.filters[i] == NULL) {
+            filters[i] = NULL;
+            continue;
         }
-        return data_size;
+
+        data = ptralign(data, &size, alignof(*filter));
+        assert(size >= sizeof(*filter));
+        filter = (struct rbh_filter *)data;
+        data += sizeof(*filter);
+        size -= sizeof(*filter);
+
+        if (filter_copy(filter, src->logical.filters[i], &data, &size))
+            return -1;
+
+        filters[i] = filter;
+    }
+    dest->logical.filters = filters;
+
+    /* dest->logical.count */
+    dest->logical.count = src->logical.count;
+
+    *buffer = data;
+    *bufsize = size;
+    return 0;
+}
+
+static int
+filter_copy(struct rbh_filter *dest, const struct rbh_filter *src,
+            char **buffer, size_t *bufsize)
+{
+    assert(src != NULL);
+
+    /* dest->op */
+    dest->op = src->op;
+
+    if (rbh_is_comparison_operator(src->op))
+        /* dest->compare */
+        return comparison_filter_copy(dest, src, buffer, bufsize);
+    return logical_filter_copy(dest, src, buffer, bufsize);
+}
+
+static ssize_t __attribute__((pure))
+filter_data_size(const struct rbh_filter *filter)
+{
+    size_t size = 0;
+
+    if (filter == NULL)
+        return 0;
+
+    switch (filter->op) {
+    case RBH_FOP_COMPARISON_MIN ... RBH_FOP_COMPARISON_MAX:
+        return value_data_size(&filter->compare.value);
+    case RBH_FOP_LOGICAL_MIN ... RBH_FOP_LOGICAL_MAX:
+        size += sizeof(filter) * filter->logical.count;
+        for (size_t i = 0; i < filter->logical.count; i++) {
+            if (filter->logical.filters[i] == NULL)
+                continue;
+
+            size = sizealign(size, alignof(*filter));
+            size += sizeof(*filter);
+            if (filter_data_size(filter->logical.filters[i]) < 0)
+                return -1;
+            size += filter_data_size(filter->logical.filters[i]);
+        }
+        return size;
     }
 
     errno = EINVAL;
     return -1;
 }
 
-static void *
-filter_value_copy(struct rbh_filter_value *dest,
-                  const struct rbh_filter_value *src, void *data)
+static struct rbh_filter *
+filter_clone(const struct rbh_filter *filter)
 {
-    dest->type = src->type;
+    struct rbh_filter *clone;
+    size_t size;
+    char *data;
+    int rc;
 
-    switch (src->type) {
-    case RBH_FVT_BINARY:
-        dest->binary.size = src->binary.size;
-        memcpy(data, src->binary.data, src->binary.size);
-        dest->binary.data = data;
-        return (char *)data + src->binary.size;
-    case RBH_FVT_INT32:
-        dest->int32 = src->int32;
-        return data;
-    case RBH_FVT_INT64:
-        dest->int64 = src->int64;
-        return data;
-    case RBH_FVT_STRING:
-        strcpy(data, src->string);
-        dest->string = data;
-        return (char *)data + strlen(src->string) + 1;
-    case RBH_FVT_REGEX:
-        dest->regex.options = src->regex.options;
-        strcpy(data, src->regex.string);
-        dest->regex.string = data;
-        return (char *)data + strlen(src->regex.string) + 1;
-    case RBH_FVT_TIME:
-        dest->time = src->time;
-        return data;
-    case RBH_FVT_LIST:
-        dest->list.count = src->list.count;
-        memcpy(data, src->list.elements,
-               src->list.count * sizeof(*src->list.elements));
-        dest->list.elements = data;
-        data = (char *)data + src->list.count * sizeof(*src->list.elements);
-        for (size_t i = 0; i < src->list.count; i++) {
-            struct rbh_filter_value *element;
+    if (filter == NULL)
+        return NULL;
 
-            /* Casting the const away is valid here because
-             * `dest->list.elements' is set to point at dynamically allocated
-             * memory (the initial value of `data') */
-            element = (struct rbh_filter_value *)&dest->list.elements[i];
-            data = filter_value_copy(element, &src->list.elements[i], data);
-            if (data == NULL)
-                return NULL;
+    if (filter_data_size(filter) < 0)
+        return NULL;
+    size = filter_data_size(filter);
+
+    clone = malloc(sizeof(*clone) + size);
+    if (clone == NULL)
+        return NULL;
+    data = (char *)clone + sizeof(*clone);
+
+    rc = filter_copy(clone, filter, &data, &size);
+    assert(rc == 0);
+
+    return clone;
+}
+
+static bool
+op_matches_value(enum rbh_filter_operator op, const struct rbh_value *value)
+{
+    if (!rbh_is_comparison_operator(op))
+        return false;
+
+    switch (op) {
+    case RBH_FOP_IN:
+        if (value->type != RBH_VT_SEQUENCE)
+            return false;
+        break;
+    case RBH_FOP_REGEX:
+        if (value->type != RBH_VT_REGEX)
+            return false;
+        break;
+    case RBH_FOP_BITS_ANY_SET:
+    case RBH_FOP_BITS_ALL_SET:
+    case RBH_FOP_BITS_ANY_CLEAR:
+    case RBH_FOP_BITS_ALL_CLEAR:
+        switch (value->type) {
+        case RBH_VT_UINT32:
+        case RBH_VT_UINT64:
+        case RBH_VT_INT32:
+        case RBH_VT_INT64:
+            break;
+        default:
+            return false;
         }
-        return data;
+        break;
+    default:
+        break;
     }
 
-    errno = EINVAL;
-    return NULL;
+    return true;
 }
 
 struct rbh_filter *
-rbh_filter_compare_list_new(enum rbh_filter_field field, size_t count,
-                            const struct rbh_filter_value values[])
+rbh_filter_compare_new(enum rbh_filter_operator op, enum rbh_filter_field field,
+                       const struct rbh_value *value)
 {
-    const struct rbh_filter_value list = {
-        .type = RBH_FVT_LIST,
-        .list = {
-            .count = count,
-            .elements = values,
+    const struct rbh_filter COMPARE = {
+        .op = op,
+        .compare = {
+            .field = field,
+            .value = *value,
         },
     };
-    struct rbh_filter *filter;
-    ssize_t data_size;
-    void *data;
 
-    data_size = filter_value_data_size(&list);
-    if (data_size < 0)
-        return NULL;
-
-    filter = malloc(sizeof(*filter) + data_size);
-    if (filter == NULL)
-        return NULL;
-    data = (char *)filter + sizeof(*filter);
-
-    filter->op = RBH_FOP_IN;
-    filter->compare.field = field;
-    if (filter_value_copy(&filter->compare.value, &list, data) == NULL) {
-        int save_errno = errno;
-
-        free(filter);
-        errno = save_errno;
+    if (!op_matches_value(op, value)) {
+        errno = EINVAL;
         return NULL;
     }
 
-    return filter;
+    return filter_clone(&COMPARE);
+}
+
+struct rbh_filter *
+rbh_filter_compare_binary_new(enum rbh_filter_operator op,
+                              enum rbh_filter_field field, const char *data,
+                              size_t size)
+{
+    const struct rbh_value BINARY = {
+        .type = RBH_VT_BINARY,
+        .binary = {
+            .data = data,
+            .size = size,
+        },
+    };
+
+    return rbh_filter_compare_new(op, field, &BINARY);
+}
+
+struct rbh_filter *
+rbh_filter_compare_uint32_new(enum rbh_filter_operator op,
+                              enum rbh_filter_field field, uint32_t uint32)
+{
+    const struct rbh_value UINT32 = {
+        .type = RBH_VT_UINT32,
+        .uint32 = uint32,
+    };
+
+    return rbh_filter_compare_new(op, field, &UINT32);
+}
+
+struct rbh_filter *
+rbh_filter_compare_uint64_new(enum rbh_filter_operator op,
+                              enum rbh_filter_field field, uint64_t uint64)
+{
+    const struct rbh_value UINT64 = {
+        .type = RBH_VT_UINT64,
+        .uint64 = uint64,
+    };
+
+    return rbh_filter_compare_new(op, field, &UINT64);
+}
+
+struct rbh_filter *
+rbh_filter_compare_int32_new(enum rbh_filter_operator op,
+                             enum rbh_filter_field field, int32_t int32)
+{
+    const struct rbh_value INT32 = {
+        .type = RBH_VT_INT32,
+        .int32 = int32,
+    };
+
+    return rbh_filter_compare_new(op, field, &INT32);
+}
+
+struct rbh_filter *
+rbh_filter_compare_int64_new(enum rbh_filter_operator op,
+                             enum rbh_filter_field field, int64_t int64)
+{
+    const struct rbh_value INT64 = {
+        .type = RBH_VT_INT64,
+        .int64 = int64,
+    };
+
+    return rbh_filter_compare_new(op, field, &INT64);
+}
+
+struct rbh_filter *
+rbh_filter_compare_string_new(enum rbh_filter_operator op,
+                              enum rbh_filter_field field, const char *string)
+{
+    const struct rbh_value STRING = {
+        .type = RBH_VT_STRING,
+        .string = string,
+    };
+
+    return rbh_filter_compare_new(op, field, &STRING);
+}
+
+struct rbh_filter *
+rbh_filter_compare_regex_new(enum rbh_filter_operator op,
+                             enum rbh_filter_field field, const char *regex,
+                             unsigned int regex_options)
+{
+    const struct rbh_value REGEX = {
+        .type = RBH_VT_REGEX,
+        .regex = {
+            .string = regex,
+            .options = regex_options,
+        },
+    };
+
+    return rbh_filter_compare_new(op, field, &REGEX);
+}
+
+struct rbh_filter *
+rbh_filter_compare_sequence_new(enum rbh_filter_operator op,
+                                enum rbh_filter_field field,
+                                const struct rbh_value values[], size_t count)
+{
+    const struct rbh_value SEQUENCE = {
+        .type = RBH_VT_SEQUENCE,
+        .sequence = {
+            .values = values,
+            .count = count,
+        },
+    };
+
+    return rbh_filter_compare_new(op, field, &SEQUENCE);
+}
+
+struct rbh_filter *
+rbh_filter_compare_map_new(enum rbh_filter_operator op,
+                           enum rbh_filter_field field,
+                           const struct rbh_value_pair *pairs, size_t count)
+{
+    const struct rbh_value MAP = {
+        .type = RBH_VT_MAP,
+        .map = {
+            .pairs = pairs,
+            .count = count,
+        },
+    };
+
+    return rbh_filter_compare_new(op, field, &MAP);
 }
 
 static struct rbh_filter *
-filter_compose_new(enum rbh_filter_operator op,
-                   const struct rbh_filter * const filters[], size_t count)
+filter_logical_new(enum rbh_filter_operator op,
+                   const struct rbh_filter * const *filters, size_t count)
 {
-    struct rbh_filter *filter;
-    void *data;
+    const struct rbh_filter LOGICAL = {
+        .op = op,
+        .logical = {
+            .filters = filters,
+            .count = count,
+        },
+    };
 
-    filter = malloc(sizeof(*filter) + count * sizeof(*filters));
-    if (filter == NULL)
+    if (count == 0) {
+        errno = EINVAL;
         return NULL;
-    data = (char *)filter + sizeof(*filter);
+    }
 
-    memcpy(data, filters, count * sizeof(*filters));
-
-    filter->op = op;
-    filter->logical.count = count;
-    filter->logical.filters = data;
-
-    return filter;
+    return filter_clone(&LOGICAL);
 }
 
 struct rbh_filter *
-rbh_filter_and_new(const struct rbh_filter * const filters[], size_t count)
+rbh_filter_and_new(const struct rbh_filter * const *filters, size_t count)
 {
-    return filter_compose_new(RBH_FOP_AND, filters, count);
+    return filter_logical_new(RBH_FOP_AND, filters, count);
 }
 
 struct rbh_filter *
-rbh_filter_or_new(const struct rbh_filter * const filters[], size_t count)
+rbh_filter_or_new(const struct rbh_filter * const *filters, size_t count)
 {
-    return filter_compose_new(RBH_FOP_OR, filters, count);
+    return filter_logical_new(RBH_FOP_OR, filters, count);
 }
 
 struct rbh_filter *
 rbh_filter_not_new(const struct rbh_filter *filter)
 {
-    return filter_compose_new(RBH_FOP_NOT, &filter, 1);
+    return filter_logical_new(RBH_FOP_NOT, &filter, 1);
 }
 
-void
-rbh_filter_free(struct rbh_filter *filter)
+static int
+comparison_filter_validate(const struct rbh_filter *filter)
 {
-    if (filter == NULL)
-        return;
+    if (!op_matches_value(filter->op, &filter->compare.value))
+        goto out_einval;
 
-    if (rbh_is_logical_operator(filter->op)) {
-        struct rbh_filter **filters;
-
-        /* Casting the const away is assumed to be valid, it is the caller's
-         * reponsability to make sure of it.
-         */
-        filters = (struct rbh_filter **)filter->logical.filters;
-
-        for (size_t i = 0; i < filter->logical.count; i++)
-            rbh_filter_free(filters[i]);
+    switch (filter->compare.field) {
+    case RBH_FF_ID:
+    case RBH_FF_PARENT_ID:
+    case RBH_FF_ATIME:
+    case RBH_FF_MTIME:
+    case RBH_FF_CTIME:
+    case RBH_FF_NAME:
+    case RBH_FF_TYPE:
+        return rbh_value_validate(&filter->compare.value);
     }
-    free(filter);
+
+out_einval:
+    errno = EINVAL;
+    return -1;
 }
 
 static int
 logical_filter_validate(const struct rbh_filter *filter)
 {
     if (filter->logical.count == 0) {
-        errno = EINVAL;
-        return -1;
-    }
-
-    if (filter->op == RBH_FOP_NOT && filter->logical.count != 1) {
         errno = EINVAL;
         return -1;
     }
@@ -382,146 +417,19 @@ logical_filter_validate(const struct rbh_filter *filter)
     return 0;
 }
 
-#define FRO_MASK (RBH_FRO_MAX + (RBH_FRO_MAX - 1))
-
-static int
-comparison_filter_validate(const struct rbh_filter *filter)
-{
-    switch (filter->compare.value.type) {
-    case RBH_FVT_BINARY:
-    case RBH_FVT_INT32:
-    case RBH_FVT_INT64:
-    case RBH_FVT_STRING:
-    case RBH_FVT_TIME:
-        switch (filter->op) {
-        case RBH_FOP_REGEX:
-        case RBH_FOP_IN:
-            errno = EINVAL;
-            return -1;
-        default:
-            return 0;
-        }
-    case RBH_FVT_REGEX:
-        /* TODO: maybe check the regex is a valide PCRE? */
-        if (filter->op != RBH_FOP_REGEX) {
-            errno = EINVAL;
-            return -1;
-        }
-        if (filter->compare.value.regex.options & ~FRO_MASK) {
-            errno = EINVAL;
-            return -1;
-        }
-        return 0;
-    case RBH_FVT_LIST:
-        switch (filter->op) {
-        case RBH_FOP_IN:
-            return 0;
-        case RBH_FOP_EQUAL:
-        case RBH_FOP_LOWER_THAN:
-        case RBH_FOP_LOWER_OR_EQUAL:
-        case RBH_FOP_GREATER_THAN:
-        case RBH_FOP_GREATER_OR_EQUAL:
-            errno = ENOTSUP;
-            return -1;
-        default:
-            errno = EINVAL;
-            return -1;
-        }
-    }
-
-    errno = EINVAL;
-    return -1;
-}
-
 int
 rbh_filter_validate(const struct rbh_filter *filter)
 {
     if (filter == NULL)
         return 0;
 
-    if (rbh_is_comparison_operator(filter->op))
+    switch (filter->op) {
+    case RBH_FOP_COMPARISON_MIN ... RBH_FOP_COMPARISON_MAX:
         return comparison_filter_validate(filter);
-    return logical_filter_validate(filter);
-}
-
-static struct rbh_filter *
-logical_filter_clone(const struct rbh_filter *filter)
-{
-    struct rbh_filter **filters;
-    struct rbh_filter *clone;
-    int save_errno = errno;
-
-    clone = malloc(sizeof(*clone) + filter->logical.count * sizeof(*filters));
-    if (clone == NULL)
-        return NULL;
-    filters = (struct rbh_filter **)((char *)clone + sizeof(*clone));
-
-    clone->op = filter->op;
-    for (size_t i = 0; i < filter->logical.count; i++) {
-        errno = 0;
-        filters[i] = rbh_filter_clone(filter->logical.filters[i]);
-        if (filters[i] == NULL && errno != 0) {
-            save_errno = errno;
-            for (size_t j = 0; j < i; j++)
-                rbh_filter_free(filters[j]);
-            free(clone);
-            errno = save_errno;
-            return NULL;
-        }
-    }
-    clone->logical.filters = (const struct rbh_filter **)filters;
-    clone->logical.count = filter->logical.count;
-
-    /* If anyone ever wants to, some combinations of filters may be mergeable.
-     * In which case, it should be done here.
-     */
-
-    errno = save_errno;
-    return clone;
-}
-
-static struct rbh_filter *
-comparison_filter_clone(const struct rbh_filter *filter)
-{
-    switch (filter->compare.value.type) {
-    case RBH_FVT_BINARY:
-        return rbh_filter_compare_binary_new(filter->op, filter->compare.field,
-                                             filter->compare.value.binary.size,
-                                             filter->compare.value.binary.data);
-    case RBH_FVT_INT32:
-        return rbh_filter_compare_int32_new(filter->op, filter->compare.field,
-                                            filter->compare.value.int32);
-    case RBH_FVT_INT64:
-        return rbh_filter_compare_int64_new(filter->op, filter->compare.field,
-                                            filter->compare.value.int64);
-    case RBH_FVT_STRING:
-        return rbh_filter_compare_string_new(filter->op, filter->compare.field,
-                                             filter->compare.value.string);
-    case RBH_FVT_REGEX:
-        return rbh_filter_compare_regex_new(
-                filter->compare.field, filter->compare.value.regex.string,
-                filter->compare.value.regex.options
-                );
-    case RBH_FVT_TIME:
-        return rbh_filter_compare_time_new(filter->op, filter->compare.field,
-                                           filter->compare.value.time);
-    case RBH_FVT_LIST:
-        return rbh_filter_compare_list_new(filter->compare.field,
-                                           filter->compare.value.list.count,
-                                           filter->compare.value.list.elements);
+    case RBH_FOP_LOGICAL_MIN ... RBH_FOP_LOGICAL_MAX:
+        return logical_filter_validate(filter);
     }
 
     errno = EINVAL;
-    return NULL;
-}
-
-struct rbh_filter *
-rbh_filter_clone(const struct rbh_filter *filter)
-{
-    if (filter == NULL)
-        return NULL;
-
-    if (rbh_is_comparison_operator(filter->op))
-        return comparison_filter_clone(filter);
-    return logical_filter_clone(filter);
+    return -1;
 }
