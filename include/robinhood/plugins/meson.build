@@ -7,6 +7,4 @@
 # author: Dominique Martinet <dominique.martinet@cea.fr>
 # author: Quentin Bouget <quentin.bouget@cea.fr>
 
-install_headers('robinhood.h')
-
-subdir('robinhood')
+install_headers('backend.h', subdir: 'robinhood/plugins')

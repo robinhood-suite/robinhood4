@@ -7,6 +7,22 @@
 # author: Dominique Martinet <dominique.martinet@cea.fr>
 # author: Quentin Bouget <quentin.bouget@cea.fr>
 
-install_headers('robinhood.h')
+install_headers('backend.h',
+		'filter.h',
+		'fsentry.h',
+		'fsevent.h',
+		'id.h',
+		'iterator.h',
+		'itertools.h',
+		'plugin.h',
+		'queue.h',
+		'ring.h',
+		'statx.h',
+		'sstack.h',
+		'stack.h',
+		'uri.h',
+		'utils.h',
+		subdir: 'robinhood')
 
-subdir('robinhood')
+subdir('backends')
+subdir('plugins')

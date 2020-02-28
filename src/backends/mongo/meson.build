@@ -7,29 +7,18 @@
 # author: Dominique Martinet <dominique.martinet@cea.fr>
 # author: Quentin Bouget <quentin.bouget@cea.fr>
 
-librobinhood = library(
-	'robinhood',
+libmongoc = dependency('libmongoc-1.0', version: '>=1.3.6')
+libbson = dependency('libbson-1.0', version: '>=1.3.5')
+
+librbh_mongo = library(
+	'rbh-mongo',
 	sources: [
-		'backend.c',
-		'filter.c',
-		'fsentry.c',
-		'fsevent.c',
-		'id.c',
-		'itertools.c',
-		'lu_fid.c',
+		'mongo.c',
 		'plugin.c',
-		'plugins/backend.c',
-		'queue.c',
-		'ring.c',
-		'sstack.c',
-		'stack.c',
-		'uri.c',
-		'utils/uri.c',
-	],
-	version: libversion,
-	link_args: ['-ldl'],
+		],
+	version: librbh_mongo_version, # defined in include/robinhood/backends
+	link_with: librobinhood,
+	dependencies: [libmongoc, libbson],
 	include_directories: rbh_include,
 	install: true,
 )
-
-subdir('backends')

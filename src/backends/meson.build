@@ -4,9 +4,7 @@
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
 #
-# author: Dominique Martinet <dominique.martinet@cea.fr>
 # author: Quentin Bouget <quentin.bouget@cea.fr>
 
-install_headers('robinhood.h')
-
-subdir('robinhood')
+subdir('mongo')
+subdir('posix')

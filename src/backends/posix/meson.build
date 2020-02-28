@@ -7,29 +7,14 @@
 # author: Dominique Martinet <dominique.martinet@cea.fr>
 # author: Quentin Bouget <quentin.bouget@cea.fr>
 
-librobinhood = library(
-	'robinhood',
+librbh_posix = library(
+	'rbh-posix',
 	sources: [
-		'backend.c',
-		'filter.c',
-		'fsentry.c',
-		'fsevent.c',
-		'id.c',
-		'itertools.c',
-		'lu_fid.c',
+		'posix.c',
 		'plugin.c',
-		'plugins/backend.c',
-		'queue.c',
-		'ring.c',
-		'sstack.c',
-		'stack.c',
-		'uri.c',
-		'utils/uri.c',
-	],
-	version: libversion,
-	link_args: ['-ldl'],
+		],
+	version: librbh_posix_version, # defined in include/robinhood/backends
+	link_with: librobinhood,
 	include_directories: rbh_include,
 	install: true,
 )
-
-subdir('backends')
