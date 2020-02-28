@@ -25,6 +25,7 @@ librobinhood = library(
 		'stack.c',
 		'uri.c',
 		'utils/uri.c',
+		'value.c',
 	],
 	version: libversion,
 	link_args: ['-ldl'],

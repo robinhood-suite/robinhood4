@@ -13,7 +13,7 @@ if check.found()
 	foreach t: ['check_backend', 'check_filter', 'check_fsentry',
 		    'check_fsevent', 'check_id', 'check_itertools',
 		    'check_lu_fid', 'check_plugin', 'check_queue', 'check_ring',
-		    'check_sstack', 'check_stack', 'check_uri']
+		    'check_sstack', 'check_stack', 'check_uri', 'check_value']
 		test(t, executable(t, t + '.c',
 				    dependencies: [check],
 				    link_with: [librobinhood],

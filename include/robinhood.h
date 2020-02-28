@@ -24,5 +24,6 @@
 #include "robinhood/sstack.h"
 #include "robinhood/stack.h"
 #include "robinhood/uri.h"
+#include "robinhood/value.h"
 
 #endif

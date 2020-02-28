@@ -22,6 +22,7 @@ install_headers('backend.h',
 		'stack.h',
 		'uri.h',
 		'utils.h',
+		'value.h',
 		subdir: 'robinhood')
 
 subdir('backends')
