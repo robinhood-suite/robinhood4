@@ -13,6 +13,10 @@ libbson = dependency('libbson-1.0', version: '>=1.3.5')
 librbh_mongo = library(
 	'rbh-mongo',
 	sources: [
+		'bson.c',
+		'filter.c',
+		'fsentry.c',
+		'fsevent.c',
 		'mongo.c',
 		'plugin.c',
 		],
