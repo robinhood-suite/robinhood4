@@ -41,7 +41,7 @@ bson_selector_from_fsevent(const struct rbh_fsevent *fsevent)
 {
     bson_t *selector = bson_new();
 
-    if (BSON_APPEND_RBH_ID_FILTER(selector, MFP_ID, &fsevent->id))
+    if (BSON_APPEND_RBH_ID_FILTER(selector, MFF_ID, &fsevent->id))
         return selector;
 
     bson_destroy(selector);
@@ -60,8 +60,8 @@ bson_from_upsert(const struct statx *statxbuf, const char *symlink)
     bson_t document;
 
     if (BSON_APPEND_DOCUMENT_BEGIN(bson, "$set", &document)
-     && (statxbuf ? BSON_APPEND_STATX(&document, MFP_STATX, statxbuf) : true)
-     && (symlink ? BSON_APPEND_UTF8(&document, MFP_SYMLINK, symlink) : true)
+     && (statxbuf ? BSON_APPEND_STATX(&document, MFF_STATX, statxbuf) : true)
+     && (symlink ? BSON_APPEND_UTF8(&document, MFF_SYMLINK, symlink) : true)
      && bson_append_document_end(bson, &document))
         return bson;
 
@@ -78,9 +78,9 @@ bson_from_link(const struct rbh_id *parent_id, const char *name)
     bson_t subdoc;
 
     if (BSON_APPEND_DOCUMENT_BEGIN(bson, "$addToSet", &document)
-     && BSON_APPEND_DOCUMENT_BEGIN(&document, MFP_NAMESPACE, &subdoc)
-     && BSON_APPEND_RBH_ID_FILTER(&subdoc, MFP_PARENT_ID, parent_id)
-     && BSON_APPEND_UTF8(&subdoc, MFP_NAME, name)
+     && BSON_APPEND_DOCUMENT_BEGIN(&document, MFF_NAMESPACE, &subdoc)
+     && BSON_APPEND_RBH_ID_FILTER(&subdoc, MFF_PARENT_ID, parent_id)
+     && BSON_APPEND_UTF8(&subdoc, MFF_NAME, name)
      && bson_append_document_end(&document, &subdoc)
      && bson_append_document_end(bson, &document))
         return bson;
@@ -98,9 +98,9 @@ bson_from_unlink(const struct rbh_id *parent_id, const char *name)
     bson_t subdoc;
 
     if (BSON_APPEND_DOCUMENT_BEGIN(bson, "$pull", &document)
-     && BSON_APPEND_DOCUMENT_BEGIN(&document, MFP_NAMESPACE, &subdoc)
-     && BSON_APPEND_RBH_ID_FILTER(&subdoc, MFP_PARENT_ID, parent_id)
-     && BSON_APPEND_UTF8(&subdoc, MFP_NAME, name)
+     && BSON_APPEND_DOCUMENT_BEGIN(&document, MFF_NAMESPACE, &subdoc)
+     && BSON_APPEND_RBH_ID_FILTER(&subdoc, MFF_PARENT_ID, parent_id)
+     && BSON_APPEND_UTF8(&subdoc, MFF_NAME, name)
      && bson_append_document_end(&document, &subdoc)
      && bson_append_document_end(bson, &document))
         return bson;

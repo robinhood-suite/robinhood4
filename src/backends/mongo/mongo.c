@@ -63,7 +63,7 @@ bson_pipeline_from_filter(const struct rbh_filter *filter)
 
     if (BSON_APPEND_ARRAY_BEGIN(pipeline, "pipeline", &array)
      && BSON_APPEND_DOCUMENT_BEGIN(&array, "0", &stage)
-     && BSON_APPEND_UTF8(&stage, "$unwind", "$" MFP_NAMESPACE)
+     && BSON_APPEND_UTF8(&stage, "$unwind", "$" MFF_NAMESPACE)
      && bson_append_document_end(&array, &stage)
      && BSON_APPEND_DOCUMENT_BEGIN(&array, "1", &stage)
      && BSON_APPEND_FILTER(&stage, "$match", filter)

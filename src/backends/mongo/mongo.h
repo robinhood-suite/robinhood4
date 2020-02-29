@@ -88,55 +88,55 @@ struct rbh_fsevent;
  */
 
     /*--------------------------------------------------------------------*
-     |                       Mongo FSEntry Property                       |
+     |                        Mongo FSEntry Fields                        |
      *--------------------------------------------------------------------*/
 
 /* ID */
-#define MFP_ID                      "_id"
+#define MFF_ID                      "_id"
 
 /* Namespace */
-#define MFP_NAMESPACE               "ns"
-#define MFP_PARENT_ID               "parent"
-#define MFP_NAME                    "name"
+#define MFF_NAMESPACE               "ns"
+#define MFF_PARENT_ID               "parent"
+#define MFF_NAME                    "name"
 
 /* symlink */
-#define MFP_SYMLINK                 "symlink"
+#define MFF_SYMLINK                 "symlink"
 
 /* statx */
-#define MFP_STATX                   "statx"
-#define MFP_STATX_BLKSIZE           "blksize"
-#define MFP_STATX_NLINK             "nlink"
-#define MFP_STATX_UID               "uid"
-#define MFP_STATX_GID               "gid"
-#define MFP_STATX_TYPE              "type"
-#define MFP_STATX_MODE              "mode"
-#define MFP_STATX_INO               "ino"
-#define MFP_STATX_SIZE              "size"
-#define MFP_STATX_BLOCKS            "blocks"
+#define MFF_STATX                   "statx"
+#define MFF_STATX_BLKSIZE           "blksize"
+#define MFF_STATX_NLINK             "nlink"
+#define MFF_STATX_UID               "uid"
+#define MFF_STATX_GID               "gid"
+#define MFF_STATX_TYPE              "type"
+#define MFF_STATX_MODE              "mode"
+#define MFF_STATX_INO               "ino"
+#define MFF_STATX_SIZE              "size"
+#define MFF_STATX_BLOCKS            "blocks"
 
 /* statx->stx_attributes */
-#define MFP_STATX_ATTRIBUTES        "attributes"
-#define MFP_STATX_COMPRESSED        "compressed"
-#define MFP_STATX_IMMUTABLE         "immutable"
-#define MFP_STATX_APPEND            "append"
-#define MFP_STATX_NODUMP            "nodump"
-#define MFP_STATX_ENCRYPTED         "encrypted"
+#define MFF_STATX_ATTRIBUTES        "attributes"
+#define MFF_STATX_COMPRESSED        "compressed"
+#define MFF_STATX_IMMUTABLE         "immutable"
+#define MFF_STATX_APPEND            "append"
+#define MFF_STATX_NODUMP            "nodump"
+#define MFF_STATX_ENCRYPTED         "encrypted"
 
 /* statx_timestamp */
-#define MFP_STATX_TIMESTAMP_SEC     "sec"
-#define MFP_STATX_TIMESTAMP_NSEC    "nsec"
+#define MFF_STATX_TIMESTAMP_SEC     "sec"
+#define MFF_STATX_TIMESTAMP_NSEC    "nsec"
 
-#define MFP_STATX_ATIME             "atime"
-#define MFP_STATX_BTIME             "btime"
-#define MFP_STATX_CTIME             "ctime"
-#define MFP_STATX_MTIME             "mtime"
+#define MFF_STATX_ATIME             "atime"
+#define MFF_STATX_BTIME             "btime"
+#define MFF_STATX_CTIME             "ctime"
+#define MFF_STATX_MTIME             "mtime"
 
 /* "statx_device" */
-#define MFP_STATX_DEVICE_MAJOR      "major"
-#define MFP_STATX_DEVICE_MINOR      "minor"
+#define MFF_STATX_DEVICE_MAJOR      "major"
+#define MFF_STATX_DEVICE_MINOR      "minor"
 
-#define MFP_STATX_RDEV              "rdev"
-#define MFP_STATX_DEV               "dev"
+#define MFF_STATX_RDEV              "rdev"
+#define MFF_STATX_DEV               "dev"
 
 /*----------------------------------------------------------------------------*
  |                                bson helpers                                |
