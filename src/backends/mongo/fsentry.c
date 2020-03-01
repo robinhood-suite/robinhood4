@@ -63,8 +63,8 @@ statx_attributes_tokenizer(const char *key)
 }
 
 static bool
-statx_attributes_from_bson_iter(bson_iter_t *iter, uint64_t *mask,
-                                uint64_t *attributes)
+bson_iter_statx_attributes(bson_iter_t *iter, uint64_t *mask,
+                           uint64_t *attributes)
 {
     while (bson_iter_next(iter)) {
         switch (statx_attributes_tokenizer(bson_iter_key(iter))) {
@@ -148,8 +148,7 @@ statx_timestamp_tokenizer(const char *key)
 }
 
 static bool
-statx_timestamp_from_bson_iter(bson_iter_t *iter,
-                               struct statx_timestamp *timestamp)
+bson_iter_statx_timestamp(bson_iter_t *iter, struct statx_timestamp *timestamp)
 {
     struct { /* mandatory fields */
         bool sec:1;
@@ -211,7 +210,7 @@ statx_device_tokenizer(const char *key)
 }
 
 static bool
-statx_device_from_bson_iter(bson_iter_t *iter, uint32_t *major, uint32_t *minor)
+bson_iter_statx_device(bson_iter_t *iter, uint32_t *major, uint32_t *minor)
 {
     struct { /* mandatory fields */
         bool major:1;
@@ -358,7 +357,7 @@ statx_tokenizer(const char *key)
 }
 
 static bool
-statx_from_bson_iter(bson_iter_t *iter, struct statx *statxbuf)
+bson_iter_statx(bson_iter_t *iter, struct statx *statxbuf)
 {
     struct { /* mandatory fields */
         bool blksize:1;
@@ -441,7 +440,7 @@ statx_from_bson_iter(bson_iter_t *iter, struct statx *statxbuf)
                     sizeof(statxbuf->stx_attributes) == sizeof(uint64_t),
                     ""
                     );
-            if (!statx_attributes_from_bson_iter(
+            if (!bson_iter_statx_attributes(
                         &subiter, (uint64_t *)&statxbuf->stx_attributes_mask,
                         (uint64_t *)&statxbuf->stx_attributes
                         ))
@@ -451,7 +450,7 @@ statx_from_bson_iter(bson_iter_t *iter, struct statx *statxbuf)
             if (!BSON_ITER_HOLDS_DOCUMENT(iter))
                 goto out_einval;
             bson_iter_recurse(iter, &subiter);
-            if (!statx_timestamp_from_bson_iter(&subiter, &statxbuf->stx_atime))
+            if (!bson_iter_statx_timestamp(&subiter, &statxbuf->stx_atime))
                 return false;
             statxbuf->stx_mask |= STATX_ATIME;
             break;
@@ -459,7 +458,7 @@ statx_from_bson_iter(bson_iter_t *iter, struct statx *statxbuf)
             if (!BSON_ITER_HOLDS_DOCUMENT(iter))
                 goto out_einval;
             bson_iter_recurse(iter, &subiter);
-            if (!statx_timestamp_from_bson_iter(&subiter, &statxbuf->stx_btime))
+            if (!bson_iter_statx_timestamp(&subiter, &statxbuf->stx_btime))
                 return false;
             statxbuf->stx_mask |= STATX_BTIME;
             break;
@@ -467,7 +466,7 @@ statx_from_bson_iter(bson_iter_t *iter, struct statx *statxbuf)
             if (!BSON_ITER_HOLDS_DOCUMENT(iter))
                 goto out_einval;
             bson_iter_recurse(iter, &subiter);
-            if (!statx_timestamp_from_bson_iter(&subiter, &statxbuf->stx_ctime))
+            if (!bson_iter_statx_timestamp(&subiter, &statxbuf->stx_ctime))
                 return false;
             statxbuf->stx_mask |= STATX_CTIME;
             break;
@@ -475,7 +474,7 @@ statx_from_bson_iter(bson_iter_t *iter, struct statx *statxbuf)
             if (!BSON_ITER_HOLDS_DOCUMENT(iter))
                 goto out_einval;
             bson_iter_recurse(iter, &subiter);
-            if (!statx_timestamp_from_bson_iter(&subiter, &statxbuf->stx_mtime))
+            if (!bson_iter_statx_timestamp(&subiter, &statxbuf->stx_mtime))
                 return false;
             statxbuf->stx_mask |= STATX_MTIME;
             break;
@@ -483,7 +482,7 @@ statx_from_bson_iter(bson_iter_t *iter, struct statx *statxbuf)
             if (!BSON_ITER_HOLDS_DOCUMENT(iter))
                 goto out_einval;
             bson_iter_recurse(iter, &subiter);
-            if (!statx_device_from_bson_iter(&subiter,
+            if (!bson_iter_statx_device(&subiter,
                                              &statxbuf->stx_rdev_major,
                                              &statxbuf->stx_rdev_minor))
                 return false;
@@ -493,7 +492,7 @@ statx_from_bson_iter(bson_iter_t *iter, struct statx *statxbuf)
             if (!BSON_ITER_HOLDS_DOCUMENT(iter))
                 goto out_einval;
             bson_iter_recurse(iter, &subiter);
-            if (!statx_device_from_bson_iter(&subiter, &statxbuf->stx_dev_major,
+            if (!bson_iter_statx_device(&subiter, &statxbuf->stx_dev_major,
                                              &statxbuf->stx_dev_minor))
                 return false;
             seen.dev = true;
@@ -507,6 +506,34 @@ statx_from_bson_iter(bson_iter_t *iter, struct statx *statxbuf)
 out_einval:
     errno = EINVAL;
     return false;
+}
+
+static void
+_bson_iter_binary(bson_iter_t *iter, bson_subtype_t *subtype,
+                  const char **data, size_t *size)
+{
+    uint32_t binary_len;
+
+    bson_iter_binary(iter, subtype, &binary_len, (const uint8_t **)data);
+
+    static_assert(SIZE_MAX >= UINT32_MAX, "");
+    *size = binary_len;
+}
+
+static bool
+bson_iter_rbh_id(bson_iter_t *iter, struct rbh_id *id)
+{
+    bson_subtype_t subtype;
+
+    if (BSON_ITER_HOLDS_NULL(iter)) {
+        id->size = 0;
+        return true;
+    }
+
+    _bson_iter_binary(iter, &subtype, &id->data, &id->size);
+
+    errno = EINVAL;
+    return subtype == BSON_SUBTYPE_BINARY;
 }
 
 enum namespace_token {
@@ -529,6 +556,38 @@ namespace_tokenizer(const char *key)
         return NT_PARENT;
     }
     return NT_UNKNOWN;
+}
+
+static bool
+bson_iter_namespace(bson_iter_t *iter, struct rbh_fsentry *fsentry)
+{
+    while (bson_iter_next(iter)) {
+        switch (namespace_tokenizer(bson_iter_key(iter))) {
+        case NT_UNKNOWN:
+            break;
+        case NT_PARENT:
+            if (!BSON_ITER_HOLDS_NULL(iter) && !BSON_ITER_HOLDS_BINARY(iter))
+                goto out_einval;
+
+            if (!bson_iter_rbh_id(iter, &fsentry->parent_id))
+                return false;
+            fsentry->mask |= RBH_FP_PARENT_ID;
+            break;
+        case NT_NAME:
+            if (!BSON_ITER_HOLDS_UTF8(iter))
+                goto out_einval;
+
+            fsentry->name = bson_iter_utf8(iter, NULL);
+            fsentry->mask |= RBH_FP_NAME;
+            break;
+        }
+    }
+
+    return true;
+
+out_einval:
+    errno = EINVAL;
+    return false;
 }
 
 enum fsentry_token {
@@ -568,40 +627,11 @@ fsentry_tokenizer(const char *key)
 }
 
 static bool
-bson_iter_rbh_id(bson_iter_t *iter, struct rbh_id *id)
+bson_iter_fsentry(bson_iter_t *iter, struct rbh_fsentry *fsentry,
+                  struct statx *statxbuf, const char **symlink)
 {
-    const bson_value_t *value = bson_iter_value(iter);
-
-    if (value->value.v_binary.subtype != BSON_SUBTYPE_BINARY) {
-        errno = EINVAL;
-        return false;
-    }
-
-    id->data = (char *)value->value.v_binary.data;
-    id->size = value->value.v_binary.data_len;
-    return true;
-}
-
-static const struct rbh_id PARENT_ROOT_ID = {
-    .data = NULL,
-    .size = 0,
-};
-
-static struct rbh_fsentry *
-fsentry_from_bson_iter(bson_iter_t *iter)
-{
-    struct rbh_id id;
-    struct rbh_id parent_id;
-    const char *name = NULL;
-    const char *symlink = NULL;
-    struct statx statxbuf;
-    struct {
-        bool id:1;
-        bool parent:1;
-        bool statx:1;
-    } seen;
-
-    memset(&seen, 0, sizeof(seen));
+    fsentry->mask = 0;
+    *symlink = NULL;
 
     while (bson_iter_next(iter)) {
         bson_iter_t subiter;
@@ -610,67 +640,74 @@ fsentry_from_bson_iter(bson_iter_t *iter)
         case FT_UNKNOWN:
             break;
         case FT_ID:
-            if (!BSON_ITER_HOLDS_BINARY(iter) || !bson_iter_rbh_id(iter, &id))
+            if (!BSON_ITER_HOLDS_BINARY(iter))
                 goto out_einval;
-            seen.id = true;
+
+            if (!bson_iter_rbh_id(iter, &fsentry->id))
+                return false;
+            fsentry->mask |= RBH_FP_ID;
             break;
         case FT_NAMESPACE:
             if (!BSON_ITER_HOLDS_DOCUMENT(iter))
                 goto out_einval;
             bson_iter_recurse(iter, &subiter);
 
-            /* The parsing of the namespace subdocument is be done here not to
-             * allocate memory on the heap and to simplify the handling of a
-             * missing "parent" field.
-             */
-            while (bson_iter_next(&subiter)) {
-                switch (namespace_tokenizer(bson_iter_key(&subiter))) {
-                case NT_UNKNOWN:
-                    break;
-                case NT_PARENT:
-                    if (BSON_ITER_HOLDS_NULL(&subiter))
-                        parent_id = PARENT_ROOT_ID;
-                    else if (!BSON_ITER_HOLDS_BINARY(&subiter)
-                            || !bson_iter_rbh_id(&subiter, &parent_id))
-                        goto out_einval;
-                    seen.parent = true;
-                    break;
-                case NT_NAME:
-                    if (!BSON_ITER_HOLDS_UTF8(&subiter))
-                        goto out_einval;
-                    name = bson_iter_utf8(&subiter, NULL);
-                    break;
-                }
-            }
+            if (!bson_iter_namespace(&subiter, fsentry))
+                return false;
             break;
         case FT_SYMLINK:
             if (!BSON_ITER_HOLDS_UTF8(iter))
                 goto out_einval;
-            symlink = bson_iter_utf8(iter, NULL);
+
+            *symlink = bson_iter_utf8(iter, NULL);
             break;
         case FT_STATX:
             if (!BSON_ITER_HOLDS_DOCUMENT(iter))
                 goto out_einval;
             bson_iter_recurse(iter, &subiter);
-            if (!statx_from_bson_iter(&subiter, &statxbuf))
+
+            if (!bson_iter_statx(&subiter, statxbuf))
                 return false;
-            seen.statx = true;
+            fsentry->statx = statxbuf;
+            fsentry->mask |= RBH_FP_STATX;
             break;
         }
     }
 
-    return rbh_fsentry_new(seen.id ? &id : NULL,
-                           seen.parent ? &parent_id : NULL, name,
-                           seen.statx ? &statxbuf : NULL, symlink);
+    return true;
 
 out_einval:
     errno = EINVAL;
     return false;
 }
 
+static struct rbh_fsentry *
+fsentry_almost_clone(const struct rbh_fsentry *fsentry, const char *symlink)
+{
+    struct {
+        bool id:1;
+        bool parent:1;
+        bool name:1;
+        bool statx:1;
+    } has = {
+        .id = fsentry->mask & RBH_FP_ID,
+        .parent = fsentry->mask & RBH_FP_PARENT_ID,
+        .name = fsentry->mask & RBH_FP_NAME,
+        .statx = fsentry->mask & RBH_FP_STATX,
+    };
+
+    return rbh_fsentry_new(has.id ? &fsentry->id : NULL,
+                           has.parent ? &fsentry->parent_id : NULL,
+                           has.name ? fsentry->name : NULL,
+                           has.statx ? fsentry->statx : NULL, symlink);
+}
+
 struct rbh_fsentry *
 fsentry_from_bson(const bson_t *bson)
 {
+    struct rbh_fsentry fsentry;
+    struct statx statxbuf;
+    const char *symlink;
     bson_iter_t iter;
 
     if (!bson_iter_init(&iter, bson)) {
@@ -681,5 +718,8 @@ fsentry_from_bson(const bson_t *bson)
         return NULL;
     }
 
-    return fsentry_from_bson_iter(&iter);
+    if (!bson_iter_fsentry(&iter, &fsentry, &statxbuf, &symlink))
+        return NULL;
+
+    return fsentry_almost_clone(&fsentry, symlink);
 }
