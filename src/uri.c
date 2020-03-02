@@ -23,6 +23,7 @@
 #include "robinhood/uri.h"
 
 #include "lu_fid.h"
+#include "utils.h"
 
 /*----------------------------------------------------------------------------*
  |                         rbh_raw_uri_from_string()                          |
@@ -324,6 +325,7 @@ rbh_uri_from_raw_uri(const struct rbh_raw_uri *raw_uri)
         fragment_length = strlen(raw_uri->fragment);
         if (fragment_is_id(raw_uri->fragment, fragment_length)) {
             type = RBH_UT_ID;
+            size = sizealign(size, alignof(*id));
             size += sizeof(*id);
             if (fragment_is_fid(raw_uri->fragment, fragment_length))
                 size += LUSTRE_ID_SIZE;
@@ -376,6 +378,7 @@ rbh_uri_from_raw_uri(const struct rbh_raw_uri *raw_uri)
     /* uri->id / uri->path */
     switch (uri->type) {
     case RBH_UT_ID:
+        data = ptralign(data, &size, alignof(*id));
         id = (struct rbh_id *)data;
         data += sizeof(*id);
         size -= sizeof(*id);
