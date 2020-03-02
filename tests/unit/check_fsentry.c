@@ -104,6 +104,19 @@ START_TEST(rfn_statx)
 }
 END_TEST
 
+START_TEST(rfn_statx_misaligned)
+{
+    static const struct statx STATX = {};
+    struct rbh_fsentry *fsentry;
+
+    fsentry = rbh_fsentry_new(NULL, NULL, "abcdef", &STATX, NULL);
+    ck_assert_ptr_nonnull(fsentry);
+    /* Access a member of the statx struct to trigger the misaligned access */
+    ck_assert_int_eq(fsentry->statx->stx_mask, 0);
+    free(fsentry);
+}
+END_TEST
+
 START_TEST(rfn_symlink)
 {
     static const char SYMLINK[] = "abcdefg";
@@ -188,6 +201,7 @@ unit_suite(void)
     tcase_add_test(tests, rfn_parent_id);
     tcase_add_test(tests, rfn_name);
     tcase_add_test(tests, rfn_statx);
+    tcase_add_test(tests, rfn_statx_misaligned);
     tcase_add_test(tests, rfn_symlink);
     tcase_add_test(tests, rfn_symlink_not_a_symlink);
     tcase_add_test(tests, rfn_all);
