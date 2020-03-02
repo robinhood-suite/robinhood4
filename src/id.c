@@ -29,13 +29,14 @@ rbh_id_copy(struct rbh_id *dest, const struct rbh_id *src, char **buffer,
     char *data = *buffer;
 
     /* id->data */
-    if (src->size > size) {
+    if (size < src->size) {
         errno = ENOBUFS;
         return -1;
     }
 
     dest->data = data;
-    memcpy(data, src->data, src->size);
+    if (src->size > 0)
+        memcpy(data, src->data, src->size);
     data += src->size;
     size -= src->size;
 
