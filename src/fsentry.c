@@ -24,11 +24,13 @@
 #endif
 
 #include "utils.h"
+#include "value.h"
 
 struct rbh_fsentry *
 rbh_fsentry_new(const struct rbh_id *id, const struct rbh_id *parent_id,
                 const char *name, const struct statx *statxbuf,
-                const char *symlink)
+                const struct rbh_value_map *ns_xattrs,
+                const struct rbh_value_map *xattrs, const char *symlink)
 {
     struct rbh_fsentry *fsentry;
     size_t symlink_length = 0;
@@ -56,6 +58,18 @@ rbh_fsentry_new(const struct rbh_id *id, const struct rbh_id *parent_id,
     if (statxbuf) {
         size = sizealign(size, alignof(*fsentry->statx));
         size += sizeof(*statxbuf);
+    }
+    if (ns_xattrs) {
+        size = sizealign(size, alignof(*fsentry->xattrs.ns.pairs));
+        if (value_map_data_size(ns_xattrs) < 0)
+            return NULL;
+        size += value_map_data_size(ns_xattrs);
+    }
+    if (xattrs) {
+        size = sizealign(size, alignof(*fsentry->xattrs.inode.pairs));
+        if (value_map_data_size(xattrs) < 0)
+            return NULL;
+        size += value_map_data_size(xattrs);
     }
 
     fsentry = calloc(1, sizeof(*fsentry) + size);
@@ -102,6 +116,26 @@ rbh_fsentry_new(const struct rbh_id *id, const struct rbh_id *parent_id,
         data = mempcpy(data, statxbuf, sizeof(*statxbuf));
         size -= sizeof(*statxbuf);
         fsentry->mask |= RBH_FP_STATX;
+    }
+
+    /* fsentry->xattrs.ns */
+    if (ns_xattrs) {
+        int rc = value_map_copy(&fsentry->xattrs.ns, ns_xattrs, &data, &size);
+        /* If `ns_xattrs' contained invalid data, value_map_data_size() would
+         * have caught it.
+         */
+        assert(rc == 0);
+        fsentry->mask |= RBH_FP_NAMESPACE_XATTRS;
+    }
+
+    /* fsentry->xattrs.inode */
+    if (xattrs) {
+        int rc = value_map_copy(&fsentry->xattrs.inode, xattrs, &data, &size);
+        /* If `xattrs' contained invalid data, value_map_data_size() would have
+         * caught it.
+         */
+        assert(rc == 0);
+        fsentry->mask |= RBH_FP_INODE_XATTRS;
     }
 
     /* scan-build: intentional dead store */

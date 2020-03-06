@@ -699,7 +699,8 @@ fsentry_almost_clone(const struct rbh_fsentry *fsentry, const char *symlink)
     return rbh_fsentry_new(has.id ? &fsentry->id : NULL,
                            has.parent ? &fsentry->parent_id : NULL,
                            has.name ? fsentry->name : NULL,
-                           has.statx ? fsentry->statx : NULL, symlink);
+                           has.statx ? fsentry->statx : NULL, NULL, NULL,
+                           symlink);
 }
 
 struct rbh_fsentry *

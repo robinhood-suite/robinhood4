@@ -16,11 +16,14 @@
 
 #include <sys/stat.h>
 
-#include "check-compat.h"
 #include "robinhood/fsentry.h"
 #ifndef HAVE_STATX
 # include "robinhood/statx.h"
 #endif
+
+#include "check-compat.h"
+#include "check_macros.h"
+#include "utils.h"
 
 /*----------------------------------------------------------------------------*
  |                             rbh_fsentry_new()                              |
@@ -30,7 +33,7 @@ START_TEST(rfn_empty)
 {
     struct rbh_fsentry *fsentry;
 
-    fsentry = rbh_fsentry_new(NULL, NULL, NULL, NULL, NULL);
+    fsentry = rbh_fsentry_new(NULL, NULL, NULL, NULL, NULL, NULL, NULL);
     ck_assert_ptr_nonnull(fsentry);
     ck_assert_int_eq(fsentry->mask, 0);
     free(fsentry);
@@ -45,12 +48,11 @@ START_TEST(rfn_id)
     };
     struct rbh_fsentry *fsentry;
 
-    fsentry = rbh_fsentry_new(&ID, NULL, NULL, NULL, NULL);
+    fsentry = rbh_fsentry_new(&ID, NULL, NULL, NULL, NULL, NULL, NULL);
     ck_assert_ptr_nonnull(fsentry);
     ck_assert_int_eq(fsentry->mask, RBH_FP_ID);
-    ck_assert_int_eq(fsentry->id.size, ID.size);
+    ck_assert_id_eq(&fsentry->id, &ID);
     ck_assert_ptr_ne(fsentry->id.data, ID.data);
-    ck_assert_mem_eq(fsentry->id.data, ID.data, ID.size);
     free(fsentry);
 }
 END_TEST
@@ -63,12 +65,11 @@ START_TEST(rfn_parent_id)
     };
     struct rbh_fsentry *fsentry;
 
-    fsentry = rbh_fsentry_new(NULL, &PARENT_ID, NULL, NULL, NULL);
+    fsentry = rbh_fsentry_new(NULL, &PARENT_ID, NULL, NULL, NULL, NULL, NULL);
     ck_assert_ptr_nonnull(fsentry);
     ck_assert_int_eq(fsentry->mask, RBH_FP_PARENT_ID);
-    ck_assert_int_eq(fsentry->parent_id.size, PARENT_ID.size);
+    ck_assert_id_eq(&fsentry->parent_id, &PARENT_ID);
     ck_assert_ptr_ne(fsentry->parent_id.data, PARENT_ID.data);
-    ck_assert_mem_eq(fsentry->parent_id.data, PARENT_ID.data, PARENT_ID.size);
     free(fsentry);
 }
 END_TEST
@@ -78,7 +79,7 @@ START_TEST(rfn_name)
     static const char NAME[] = "abcdefg";
     struct rbh_fsentry *fsentry;
 
-    fsentry = rbh_fsentry_new(NULL, NULL, NAME, NULL, NULL);
+    fsentry = rbh_fsentry_new(NULL, NULL, NAME, NULL, NULL, NULL, NULL);
     ck_assert_ptr_nonnull(fsentry);
     ck_assert_int_eq(fsentry->mask, RBH_FP_NAME);
     ck_assert_ptr_ne(fsentry->name, NAME);
@@ -91,11 +92,11 @@ START_TEST(rfn_statx)
 {
     static const struct statx STATX = {
         .stx_mask = STATX_UID,
-        .stx_uid = 0,
+        .stx_uid = 1,
     };
     struct rbh_fsentry *fsentry;
 
-    fsentry = rbh_fsentry_new(NULL, NULL, NULL, &STATX, NULL);
+    fsentry = rbh_fsentry_new(NULL, NULL, NULL, &STATX, NULL, NULL, NULL);
     ck_assert_ptr_nonnull(fsentry);
     ck_assert_int_eq(fsentry->mask, RBH_FP_STATX);
     ck_assert_ptr_ne(fsentry->statx, &STATX);
@@ -109,10 +110,110 @@ START_TEST(rfn_statx_misaligned)
     static const struct statx STATX = {};
     struct rbh_fsentry *fsentry;
 
-    fsentry = rbh_fsentry_new(NULL, NULL, "abcdef", &STATX, NULL);
+    fsentry = rbh_fsentry_new(NULL, NULL, "abcdef", &STATX, NULL, NULL, NULL);
     ck_assert_ptr_nonnull(fsentry);
     /* Access a member of the statx struct to trigger the misaligned access */
     ck_assert_int_eq(fsentry->statx->stx_mask, 0);
+    free(fsentry);
+}
+END_TEST
+
+START_TEST(rfn_ns_xattrs)
+{
+    static const struct rbh_value VALUE = {
+        .type = RBH_VT_BINARY,
+        .binary = {
+            .data = "abcdefg",
+            .size = 8,
+        },
+    };
+    static const struct rbh_value_pair PAIR = {
+        .key = "abcdefg",
+        .value = &VALUE,
+    };
+    static const struct rbh_value_map XATTRS = {
+        .pairs = &PAIR,
+        .count = 1,
+    };
+    struct rbh_fsentry *fsentry;
+
+    fsentry = rbh_fsentry_new(NULL, NULL, NULL, NULL, &XATTRS, NULL, NULL);
+    ck_assert_ptr_nonnull(fsentry);
+    ck_assert_int_eq(fsentry->mask, RBH_FP_NAMESPACE_XATTRS);
+    ck_assert_value_map_eq(&fsentry->xattrs.ns, &XATTRS);
+    free(fsentry);
+}
+END_TEST
+
+START_TEST(rfn_ns_xattrs_misaligned)
+{
+    static const struct rbh_value VALUE = {
+        .type = RBH_VT_UINT32,
+        .uint32 = 0,
+    };
+    static const struct rbh_value_pair PAIR = {
+        .key = "abcdefg",
+        .value = &VALUE,
+    };
+    static const struct rbh_value_map XATTRS = {
+        .pairs = &PAIR,
+        .count = 1,
+    };
+    struct rbh_fsentry *fsentry;
+
+    fsentry = rbh_fsentry_new(NULL, NULL, "abcdef", NULL, &XATTRS, NULL, NULL);
+    ck_assert_ptr_nonnull(fsentry);
+    ck_assert_value_map_eq(&fsentry->xattrs.ns, &XATTRS);
+    free(fsentry);
+}
+END_TEST
+
+START_TEST(rfn_inode_xattrs)
+{
+    static const struct rbh_value VALUE = {
+        .type = RBH_VT_BINARY,
+        .binary = {
+            .data = "abcdefg",
+            .size = 8,
+        },
+    };
+    static const struct rbh_value_pair PAIR = {
+            .key = "abcdefg",
+            .value = &VALUE,
+    };
+    static const struct rbh_value_map XATTRS = {
+        .pairs = &PAIR,
+        .count = 1,
+    };
+    struct rbh_fsentry *fsentry;
+
+    fsentry = rbh_fsentry_new(NULL, NULL, NULL, NULL, NULL, &XATTRS, NULL);
+    ck_assert_ptr_nonnull(fsentry);
+    ck_assert_int_eq(fsentry->mask, RBH_FP_INODE_XATTRS);
+    ck_assert_value_map_eq(&fsentry->xattrs.inode, &XATTRS);
+    free(fsentry);
+}
+END_TEST
+
+START_TEST(rfn_inode_xattrs_misaligned)
+{
+    static const struct rbh_value VALUE = {
+        .type = RBH_VT_UINT32,
+        .uint32 = 0,
+    };
+    static const struct rbh_value_pair PAIR = {
+            .key = "abcdefg",
+            .value = &VALUE,
+    };
+    static const struct rbh_value_map XATTRS = {
+        .pairs = &PAIR,
+        .count = 1,
+    };
+    struct rbh_fsentry *fsentry;
+
+    fsentry = rbh_fsentry_new(NULL, NULL, "abcdef", NULL, NULL, &XATTRS, NULL);
+    ck_assert_ptr_nonnull(fsentry);
+    ck_assert_value_map_eq(&fsentry->xattrs.inode, &XATTRS);
     free(fsentry);
 }
 END_TEST
@@ -122,7 +223,7 @@ START_TEST(rfn_symlink)
     static const char SYMLINK[] = "abcdefg";
     struct rbh_fsentry *fsentry;
 
-    fsentry = rbh_fsentry_new(NULL, NULL, NULL, NULL, SYMLINK);
+    fsentry = rbh_fsentry_new(NULL, NULL, NULL, NULL, NULL, NULL, SYMLINK);
     ck_assert_ptr_nonnull(fsentry);
     ck_assert_int_eq(fsentry->mask, RBH_FP_SYMLINK);
     ck_assert_ptr_ne(fsentry->symlink, SYMLINK);
@@ -140,7 +241,9 @@ START_TEST(rfn_symlink_not_a_symlink)
     static const char SYMLINK[] = "abcdefg";
 
     errno = 0;
-    ck_assert_ptr_null(rbh_fsentry_new(NULL, NULL, NULL, &STATX, SYMLINK));
+    ck_assert_ptr_null(
+            rbh_fsentry_new(NULL, NULL, NULL, &STATX, NULL, NULL, SYMLINK)
+            );
     ck_assert_int_eq(errno, EINVAL);
 }
 END_TEST
@@ -160,10 +263,26 @@ START_TEST(rfn_all)
         .stx_mask = STATX_UID,
         .stx_uid = 0,
     };
+    static const struct rbh_value VALUE = {
+        .type = RBH_VT_BINARY,
+        .binary = {
+            .data = "abcdefg",
+            .size = 8,
+        },
+    };
+    static const struct rbh_value_pair PAIR = {
+            .key = "abcdefg",
+            .value = &VALUE,
+    };
+    static const struct rbh_value_map XATTRS = {
+        .pairs = &PAIR,
+        .count = 1,
+    };
     static const char SYMLINK[] = "hijklmn";
     struct rbh_fsentry *fsentry;
 
-    fsentry = rbh_fsentry_new(&ID, &PARENT_ID, NAME, &STATX, SYMLINK);
+    fsentry = rbh_fsentry_new(&ID, &PARENT_ID, NAME, &STATX, &XATTRS, &XATTRS,
+                              SYMLINK);
     ck_assert_ptr_nonnull(fsentry);
     ck_assert_int_eq(fsentry->mask, RBH_FP_ALL);
     /* id */
@@ -180,6 +299,10 @@ START_TEST(rfn_all)
     /* statx */
     ck_assert_ptr_ne(fsentry->statx, &STATX);
     ck_assert_mem_eq(fsentry->statx, &STATX, sizeof(STATX));
+    /* xattrs.ns */
+    ck_assert_value_map_eq(&fsentry->xattrs.ns, &XATTRS);
+    /* xattrs.inode */
+    ck_assert_value_map_eq(&fsentry->xattrs.inode, &XATTRS);
     /* symlink */
     ck_assert_ptr_ne(fsentry->symlink, SYMLINK);
     ck_assert_str_eq(fsentry->symlink, SYMLINK);
@@ -202,6 +325,10 @@ unit_suite(void)
     tcase_add_test(tests, rfn_name);
     tcase_add_test(tests, rfn_statx);
     tcase_add_test(tests, rfn_statx_misaligned);
+    tcase_add_test(tests, rfn_ns_xattrs);
+    tcase_add_test(tests, rfn_ns_xattrs_misaligned);
+    tcase_add_test(tests, rfn_inode_xattrs);
+    tcase_add_test(tests, rfn_inode_xattrs_misaligned);
     tcase_add_test(tests, rfn_symlink);
     tcase_add_test(tests, rfn_symlink_not_a_symlink);
     tcase_add_test(tests, rfn_all);

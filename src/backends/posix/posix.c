@@ -247,7 +247,7 @@ fsentry_from_ftsent(FTSENT *ftsent, int statx_sync_type)
     }
 
     fsentry = rbh_fsentry_new(id, ftsent->fts_parent->fts_pointer,
-                              ftsent->fts_name, &statxbuf, symlink);
+                              ftsent->fts_name, &statxbuf, NULL, NULL, symlink);
     if (fsentry == NULL) {
         save_errno = errno;
         goto out_free_symlink;
