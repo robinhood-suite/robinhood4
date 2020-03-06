@@ -11,6 +11,7 @@
 # include "config.h"
 #endif
 
+#include <assert.h>
 #include <errno.h>
 #include <stdbool.h>
 #include <stdlib.h>
@@ -23,123 +24,304 @@
 # include "robinhood/statx.h"
 #endif
 
-static struct rbh_fsevent *
-fsevent_new(enum rbh_fsevent_type type, const struct rbh_id *id,
-            size_t data_size, char **data)
+#include "utils.h"
+#include "value.h"
+
+static int
+fsevent_copy(struct rbh_fsevent *dest, const struct rbh_fsevent *src,
+             char **data_, size_t *data_size)
 {
-    struct rbh_fsevent *fsevent;
+    size_t size = *data_size;
+    char *data = *data_;
+    struct rbh_id *id;
+    size_t length;
+    int rc;
 
-    fsevent = malloc(sizeof(*fsevent) + id->size + data_size);
-    if (fsevent == NULL)
-        return NULL;
-    fsevent->type = type;
-    *data = (char *)fsevent + sizeof(*fsevent);
+    /* dest->type */
+    dest->type = src->type;
 
-    memcpy(*data, id->data, id->size);
-    fsevent->id.data = *data;
-    fsevent->id.size = id->size;
-    *data += id->size;
+    /* dest->id */
+    rc = rbh_id_copy(&dest->id, &src->id, &data, &size);
+    assert(rc == 0);
 
-    return fsevent;
-}
+    /* dest->xattrs */
+    rc = value_map_copy(&dest->xattrs, &src->xattrs, &data, &size);
+    assert(rc == 0);
 
-struct rbh_fsevent *
-rbh_fsevent_upsert_new(const struct rbh_id *id, const struct statx *statxbuf,
-                       const char *symlink)
-{
-    struct rbh_fsevent *fsevent;
-    size_t symlink_length = 0;
-    size_t size;
-    char *data;
+    switch (src->type) {
+    case RBH_FET_UPSERT: /* dest->upsert */
+        /* dest->upsert.statx */
+        if (src->upsert.statx) {
+            data = ptralign(data, &size, alignof(*dest->upsert.statx));
+            assert(size >= sizeof(*src->upsert.statx));
 
-    if (symlink) {
-        if (statxbuf && (statxbuf->stx_mask & STATX_TYPE)
-                && !S_ISLNK(statxbuf->stx_mode)) {
-            errno = EINVAL;
-            return NULL;
+            dest->upsert.statx = (struct statx *)data;
+            data = mempcpy(data, src->upsert.statx, sizeof(*src->upsert.statx));
+            size -= sizeof(*src->upsert.statx);
+        } else {
+            dest->upsert.statx = NULL;
         }
-        symlink_length = strlen(symlink) + 1;
+
+        /* dest->upsert.symlink */
+        if (src->upsert.symlink) {
+            length = strlen(src->upsert.symlink) + 1;
+            assert(size >= length);
+
+            dest->upsert.symlink = data;
+            data = mempcpy(data, src->upsert.symlink, length);
+            size -= length;
+        } else {
+            dest->upsert.symlink = NULL;
+        }
+        break;
+    case RBH_FET_XATTR: /* dest->ns */
+        if (src->ns.parent_id == NULL) {
+            assert(src->ns.name == NULL);
+            dest->ns.parent_id = NULL;
+            dest->ns.name = NULL;
+            break;
+        }
+        assert(src->ns.name);
+        __attribute__((fallthrough));
+    case RBH_FET_LINK:
+    case RBH_FET_UNLINK: /* dest->link */
+        /* dest->link.parent_id */
+        data = ptralign(data, &size, alignof(*dest->link.parent_id));
+        assert(size >= sizeof(*dest->link.parent_id));
+
+        id = (struct rbh_id *)data;
+        data += sizeof(*id);
+        size -= sizeof(*id);
+        rc = rbh_id_copy(id, src->link.parent_id, &data, &size);
+        assert(rc == 0);
+        dest->link.parent_id = id;
+
+        /* dest->link.name */
+        length = strlen(src->link.name) + 1;
+        assert(size >= length);
+
+        dest->link.name = data;
+        data = mempcpy(data, src->link.name, length);
+        size -= length;
+        break;
+    case RBH_FET_DELETE:
+        break;
     }
 
-    size = statxbuf ? sizeof(*statxbuf) : 0;
-    size += symlink_length;
+    *data_size = size;
+    *data_ = data;
+    return 0;
+}
 
-    fsevent = fsevent_new(RBH_FET_UPSERT, id, size, &data);
-    if (fsevent == NULL)
-        return NULL;
+static size_t __attribute__((pure))
+fsevent_data_size(const struct rbh_fsevent *fsevent)
+{
+    size_t size = 0;
 
-    if (statxbuf) {
-        memcpy(data, statxbuf, sizeof(*statxbuf));
-        fsevent->upsert.statx = (struct statx *)data;
-        data += sizeof(*statxbuf);
-    } else {
-        fsevent->upsert.statx = NULL;
+    /* fsevent->id */
+    size += fsevent->id.size;
+
+    /* fsevent->xattrs */
+    size = sizealign(size, alignof(*fsevent->xattrs.pairs));
+    size += value_map_data_size(&fsevent->xattrs);
+
+    /* fsevent->{upsert,link,ns} */
+    switch (fsevent->type) {
+    case RBH_FET_UPSERT: /* fsevent->upsert */
+        if (fsevent->upsert.statx) {
+            size = sizealign(size, alignof(*fsevent->upsert.statx));
+            size += sizeof(*fsevent->upsert.statx);
+        }
+        if (fsevent->upsert.symlink)
+            size += strlen(fsevent->upsert.symlink) + 1;
+        break;
+    case RBH_FET_XATTR: /* fsevent->ns */
+        if (fsevent->ns.parent_id == NULL) {
+            assert(fsevent->ns.name == NULL);
+            break;
+        }
+        assert(fsevent->ns.name);
+        __attribute__((fallthrough));
+    case RBH_FET_LINK:
+    case RBH_FET_UNLINK /* fsevent->link */:
+        size = sizealign(size, alignof(*fsevent->link.parent_id));
+        size += sizeof(*fsevent->link.parent_id);
+        size += fsevent->link.parent_id->size;
+        size += strlen(fsevent->link.name) + 1;
+        break;
+    case RBH_FET_DELETE:
+        break;
     }
 
-    if (symlink) {
-        memcpy(data, symlink, symlink_length);
-        fsevent->upsert.symlink = data;
-        data += sizeof(*symlink);
-    } else {
-        fsevent->upsert.symlink = NULL;
-    }
-
-    return fsevent;
+    return size;
 }
 
 static struct rbh_fsevent *
-fsevent_link_new(const struct rbh_id *id, const struct rbh_id *parent_id,
-                 const char *name, bool link)
+fsevent_clone(const struct rbh_fsevent *fsevent)
 {
-    struct rbh_fsevent *fsevent;
-    struct rbh_id *tmp;
-    size_t name_length;
+    struct rbh_fsevent *clone;
     size_t size;
     char *data;
+    int rc;
 
-    name_length = strlen(name) + 1;
-    size = sizeof(*parent_id) + parent_id->size + name_length;
-
-    fsevent =
-        fsevent_new(link ? RBH_FET_LINK : RBH_FET_UNLINK, id, size, &data);
-    if (fsevent == NULL)
+    size = fsevent_data_size(fsevent);
+    clone = malloc(sizeof(*clone) + size);
+    if (clone == NULL)
         return NULL;
+    data = (char *)clone + sizeof(*clone);
 
-    tmp = (struct rbh_id *)data;
-    data += sizeof(*tmp);
+    rc = fsevent_copy(clone, fsevent, &data, &size);
+    assert(rc == 0);
 
-    memcpy(data, parent_id->data, parent_id->size);
-    tmp->data = data;
-    tmp->size = parent_id->size;
-    data += parent_id->size;
-
-    fsevent->link.parent_id = tmp;
-
-    memcpy(data, name, name_length);
-    fsevent->link.name = data;
-    data += name_length;
-
-    return fsevent;
+    return clone;
 }
 
 struct rbh_fsevent *
-rbh_fsevent_link_new(const struct rbh_id *id, const struct rbh_id *parent_id,
-                     const char *name)
+rbh_fsevent_upsert_new(const struct rbh_id *id,
+                       const struct rbh_value_map *xattrs,
+                       const struct statx *statxbuf, const char *symlink)
 {
-    return fsevent_link_new(id, parent_id, name, true);
+    const struct rbh_fsevent upsert = {
+        .type = RBH_FET_UPSERT,
+        .id = {
+            .data = id->data,
+            .size = id->size,
+        },
+        .xattrs = {
+            .pairs = xattrs ? xattrs->pairs : NULL,
+            .count = xattrs ? xattrs->count : 0,
+        },
+        .upsert = {
+            .statx = statxbuf,
+            .symlink = symlink,
+        },
+    };
+
+    if (symlink && statxbuf && !S_ISLNK(statxbuf->stx_mode)) {
+        errno = EINVAL;
+        return NULL;
+    }
+
+    return fsevent_clone(&upsert);
+}
+
+struct rbh_fsevent *
+rbh_fsevent_link_new(const struct rbh_id *id,
+                     const struct rbh_value_map *xattrs,
+                     const struct rbh_id *parent_id, const char *name)
+{
+    const struct rbh_fsevent link = {
+        .type = RBH_FET_LINK,
+        .id = {
+            .data = id->data,
+            .size = id->size,
+        },
+        .xattrs = {
+            .pairs = xattrs ? xattrs->pairs : NULL,
+            .count = xattrs ? xattrs->count : 0,
+        },
+        .link = {
+            .parent_id = parent_id,
+            .name = name,
+        },
+    };
+
+    if (parent_id == NULL || name == NULL) {
+        errno = EINVAL;
+        return NULL;
+    }
+
+    return fsevent_clone(&link);
 }
 
 struct rbh_fsevent *
 rbh_fsevent_unlink_new(const struct rbh_id *id, const struct rbh_id *parent_id,
                        const char *name)
 {
-    return fsevent_link_new(id, parent_id, name, false);
+    const struct rbh_fsevent unlink = {
+        .type = RBH_FET_UNLINK,
+        .id = {
+            .data = id->data,
+            .size = id->size,
+        },
+        .xattrs.count = 0,
+        .link = {
+            .parent_id = parent_id,
+            .name = name,
+        },
+    };
+
+    if (parent_id == NULL || name == NULL) {
+        errno = EINVAL;
+        return NULL;
+    }
+
+    return fsevent_clone(&unlink);
 }
 
 struct rbh_fsevent *
 rbh_fsevent_delete_new(const struct rbh_id *id)
 {
-    char *data;
+    const struct rbh_fsevent delete = {
+        .type = RBH_FET_DELETE,
+        .id = {
+            .data = id->data,
+            .size = id->size,
+        },
+        .xattrs.count = 0,
+    };
 
-    return fsevent_new(RBH_FET_DELETE, id, 0, &data);
+    return fsevent_clone(&delete);
+}
+
+struct rbh_fsevent *
+rbh_fsevent_xattr_new(const struct rbh_id *id,
+                      const struct rbh_value_map *xattrs)
+{
+    const struct rbh_fsevent xattr = {
+        .type = RBH_FET_XATTR,
+        .id = {
+            .data = id->data,
+            .size = id->size,
+        },
+        .xattrs = {
+            .pairs = xattrs->pairs,
+            .count = xattrs->count,
+        },
+        .ns = {
+            .parent_id = NULL,
+            .name = NULL,
+        },
+    };
+
+    return fsevent_clone(&xattr);
+}
+
+struct rbh_fsevent *
+rbh_fsevent_ns_xattr_new(const struct rbh_id *id,
+                         const struct rbh_value_map *xattrs,
+                         const struct rbh_id *parent_id, const char *name)
+{
+    const struct rbh_fsevent ns_xattr = {
+        .type = RBH_FET_XATTR,
+        .id = {
+            .data = id->data,
+            .size = id->size,
+        },
+        .xattrs = {
+            .pairs = xattrs->pairs,
+            .count = xattrs->count,
+        },
+        .ns = {
+            .parent_id = parent_id,
+            .name = name,
+        },
+    };
+
+    if (parent_id == NULL || name == NULL) {
+        errno = EINVAL;
+        return NULL;
+    }
+
+    return fsevent_clone(&ns_xattr);
 }
