@@ -43,9 +43,9 @@
 enum rbh_filter_operator {
     /* Comparison */
     RBH_FOP_EQUAL,
-    RBH_FOP_LOWER_THAN,
+    RBH_FOP_STRICTLY_LOWER,
     RBH_FOP_LOWER_OR_EQUAL,
-    RBH_FOP_GREATER_THAN,
+    RBH_FOP_STRICTLY_GREATER,
     RBH_FOP_GREATER_OR_EQUAL,
     RBH_FOP_REGEX,
     RBH_FOP_IN,

@@ -23,10 +23,10 @@
 
 static const char * const FOP2STR[] = {
     [RBH_FOP_EQUAL]             = "$eq",
-    [RBH_FOP_LOWER_THAN]        = "$lt",
-    [RBH_FOP_LOWER_OR_EQUAL]    = "$le",
-    [RBH_FOP_GREATER_THAN]      = "$gt",
-    [RBH_FOP_GREATER_OR_EQUAL]  = "$ge",
+    [RBH_FOP_STRICTLY_LOWER]    = "$lt",
+    [RBH_FOP_LOWER_OR_EQUAL]    = "$lte",
+    [RBH_FOP_STRICTLY_GREATER]  = "$gt",
+    [RBH_FOP_GREATER_OR_EQUAL]  = "$gte",
     [RBH_FOP_IN]                = "$in",
     [RBH_FOP_REGEX]             = "$regex",
     [RBH_FOP_BITS_ANY_SET]      = "$bitsAnySet",
@@ -39,9 +39,9 @@ static const char * const FOP2STR[] = {
 
 static const char * const NEGATED_FOP2STR[] = {
     [RBH_FOP_EQUAL]             = "$ne",
-    [RBH_FOP_LOWER_THAN]        = "$ge",
+    [RBH_FOP_STRICTLY_LOWER]    = "$gte",
     [RBH_FOP_LOWER_OR_EQUAL]    = "$gt",
-    [RBH_FOP_GREATER_THAN]      = "$le",
+    [RBH_FOP_STRICTLY_GREATER]  = "$lte",
     [RBH_FOP_GREATER_OR_EQUAL]  = "$lt",
     [RBH_FOP_IN]                = "$nin",
     [RBH_FOP_REGEX]             = "$not", /* This is not a mistake */

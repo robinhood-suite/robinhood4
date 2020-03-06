@@ -31,12 +31,12 @@ filter_operator2str(enum rbh_filter_operator op)
     switch (op) {
     case RBH_FOP_EQUAL:
         return "RBH_FOP_EQUAL";
-    case RBH_FOP_LOWER_THAN:
-        return "RBH_FOP_LOWER_THAN";
+    case RBH_FOP_STRICTLY_LOWER:
+        return "RBH_FOP_STRICTLY_LOWER";
     case RBH_FOP_LOWER_OR_EQUAL:
         return "RBH_FOP_LOWER_OR_EQUAL";
-    case RBH_FOP_GREATER_THAN:
-        return "RBH_FOP_GREATER_THAN";
+    case RBH_FOP_STRICTLY_GREATER:
+        return "RBH_FOP_STRICTLY_GREATER";
     case RBH_FOP_GREATER_OR_EQUAL:
         return "RBH_FOP_GREATER_OR_EQUAL";
     case RBH_FOP_IN:
@@ -226,7 +226,7 @@ static const struct rbh_filter COMPARISONS[] = {
         },
     },
     {
-        .op = RBH_FOP_LOWER_THAN,
+        .op = RBH_FOP_STRICTLY_LOWER,
         .compare = {
             .field = RBH_FF_PARENT_ID,
             .value = {
@@ -246,7 +246,7 @@ static const struct rbh_filter COMPARISONS[] = {
         },
     },
     {
-        .op = RBH_FOP_GREATER_THAN,
+        .op = RBH_FOP_STRICTLY_GREATER,
         .compare = {
             .field = RBH_FF_MTIME,
             .value = {
