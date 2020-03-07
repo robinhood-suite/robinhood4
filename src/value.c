@@ -63,6 +63,9 @@ value_pair_data_size(const struct rbh_value_pair *pair)
     size = strlen(pair->key);
 
     /* pair->value */
+    if (pair->value == NULL)
+        return size;
+
     size = sizealign(size, alignof(*pair->value));
     size += sizeof(*pair->value);
     if (value_data_size(pair->value) < 0)
@@ -210,6 +213,11 @@ value_pair_copy(struct rbh_value_pair *dest, const struct rbh_value_pair *src,
     size -= keylen;
 
     /* dest->value */
+    if (src->value == NULL) {
+        dest->value = NULL;
+        goto out;
+    }
+
     data = ptralign(data, &size, alignof(*dest->value));
     if (size < sizeof(*value))
         goto out_enobufs;
@@ -221,6 +229,7 @@ value_pair_copy(struct rbh_value_pair *dest, const struct rbh_value_pair *src,
         return -1;
     dest->value = value;
 
+out:
     *buffer = data;
     *bufsize = size;
     return 0;

@@ -331,7 +331,7 @@ START_TEST(rvmn_misaligned)
         .int32 = 0,
     };
     const struct rbh_value_pair PAIR = {
-        .key = "abcdef", /* sizeof(key) == 7 (not aligned) */
+        .key = "abcdef", /* strlen(key) + 1 == 7 (not aligned) */
         .value = &VALUE,
     };
     const struct rbh_value MAP = {
@@ -453,15 +453,16 @@ END_TEST
 START_TEST(vmc_too_small_for_bare_value)
 {
     const char KEY[] = "abcdefg";
+    const struct rbh_value VALUE = {};
     const struct rbh_value_pair PAIR = {
         .key = KEY,
-        .value = NULL,
+        .value = &VALUE,
     };
     const struct rbh_value_map MAP = {
         .pairs = &PAIR,
         .count = 1,
     };
-    char buffer[sizeof(PAIR) + sizeof(KEY) + sizeof(*PAIR.value) - 1];
+    char buffer[sizeof(PAIR) + sizeof(KEY) + sizeof(VALUE) - 1];
     size_t size = sizeof(buffer);
     char *data = buffer;
 

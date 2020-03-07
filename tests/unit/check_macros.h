@@ -97,7 +97,10 @@ value_type2str(enum rbh_value_type type)
 
 #define _ck_assert_value_pair(X, OP, Y) do { \
     _ck_assert_str((X)->key, OP, (Y)->key, 0, 0); \
-    _ck_assert_value((X)->value, OP, (Y)->value); \
+    if ((X)->value == NULL) \
+        _ck_assert_ptr((X)->value, OP, (Y)->value); \
+    else \
+        _ck_assert_value((X)->value, OP, (Y)->value); \
 } while (0)
 
 #define ck_assert_value_pair_eq(X, Y) _ck_assert_value_pair(X, ==, Y)
