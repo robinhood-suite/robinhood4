@@ -31,8 +31,7 @@
  * The returned iterator's next method yields one element of \p array at a time.
  */
 struct rbh_iterator *
-rbh_array_iterator(const void *array, size_t element_size,
-                   size_t element_count);
+rbh_iter_array(const void *array, size_t element_size, size_t element_count);
 
 /**
  * Build a mutable iterator from an array
@@ -50,7 +49,7 @@ rbh_array_iterator(const void *array, size_t element_size,
  * The returned iterator's next method yields one element of \p array at a time.
  */
 struct rbh_mut_iterator *
-rbh_mut_array_iterator(void *array, size_t element_size, size_t element_count);
+rbh_mut_iter_array(void *array, size_t element_size, size_t element_count);
 
 /**
  * Split an iterator into several smaller iterators

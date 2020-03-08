@@ -19,15 +19,15 @@
 #include "robinhood/itertools.h"
 
 /*----------------------------------------------------------------------------*
- |                            rbh_array_iterator()                            |
+ |                              rbh_iter_array()                              |
  *----------------------------------------------------------------------------*/
 
-START_TEST(rai_basic)
+START_TEST(ria_basic)
 {
     const char STRING[] = "abcdefghijklmno";
     struct rbh_iterator *letters;
 
-    letters = rbh_array_iterator(STRING, sizeof(*STRING), sizeof(STRING));
+    letters = rbh_iter_array(STRING, sizeof(*STRING), sizeof(STRING));
     ck_assert_ptr_nonnull(letters);
 
     for (size_t i = 0; i < sizeof(STRING); i++)
@@ -54,7 +54,7 @@ START_TEST(ric_basic)
 
     ck_assert_uint_eq(sizeof(STRING) % CHUNK_SIZE, 0);
 
-    letters = rbh_array_iterator(STRING, sizeof(*STRING), sizeof(STRING));
+    letters = rbh_iter_array(STRING, sizeof(*STRING), sizeof(STRING));
     ck_assert_ptr_nonnull(letters);
 
     chunks = rbh_iter_chunkify(letters, CHUNK_SIZE);
@@ -95,7 +95,7 @@ START_TEST(rit_basic)
     struct rbh_iterator *tees[2];
     struct rbh_iterator *letters;
 
-    letters = rbh_array_iterator(STRING, sizeof(*STRING), sizeof(STRING));
+    letters = rbh_iter_array(STRING, sizeof(*STRING), sizeof(STRING));
     ck_assert_ptr_nonnull(letters);
 
     ck_assert_int_eq(rbh_iter_tee(letters, tees), 0);
@@ -127,8 +127,8 @@ unit_suite(void)
     TCase *tests;
 
     suite = suite_create("itertools");
-    tests = tcase_create("rbh_array_iterator()");
-    tcase_add_test(tests, rai_basic);
+    tests = tcase_create("rbh_iter_array()");
+    tcase_add_test(tests, ria_basic);
 
     suite_add_tcase(suite, tests);
 

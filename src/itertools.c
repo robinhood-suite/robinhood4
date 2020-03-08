@@ -21,7 +21,7 @@
 #include "robinhood/queue.h"
 
 /*----------------------------------------------------------------------------*
- |                            rbh_array_iterator()                            |
+ |                              rbh_iter_array()                              |
  *----------------------------------------------------------------------------*/
 
 struct array_iterator {
@@ -62,7 +62,7 @@ static const struct rbh_iterator ARRAY_ITER = {
 };
 
 struct rbh_iterator *
-rbh_array_iterator(const void *array, size_t element_size, size_t element_count)
+rbh_iter_array(const void *array, size_t element_size, size_t element_count)
 {
     struct array_iterator *iterator;
 
@@ -81,14 +81,14 @@ rbh_array_iterator(const void *array, size_t element_size, size_t element_count)
 }
 
 /*----------------------------------------------------------------------------*
- |                           rbh_mut_array_iterator                           |
+ |                            rbh_mut_iter_array()                            |
  *----------------------------------------------------------------------------*/
 
 struct rbh_mut_iterator *
-rbh_mut_array_iterator(void *array, size_t element_size, size_t element_count)
+rbh_mut_iter_array(void *array, size_t element_size, size_t element_count)
 {
-    return (struct rbh_mut_iterator *)rbh_array_iterator(array, element_size,
-                                                         element_count);
+    return (struct rbh_mut_iterator *)rbh_iter_array(array, element_size,
+                                                     element_count);
 }
 
 /*----------------------------------------------------------------------------*
