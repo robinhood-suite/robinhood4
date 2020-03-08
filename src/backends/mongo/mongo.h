@@ -33,6 +33,10 @@ struct rbh_value_map;
  *     ns: [{
  *         parent: fsentry.parent_id (BINARY, SUBTYPE_BINARY)
  *         name: fsentry.name (UTF8)
+ *         xattrs: {
+ *             <key>: <value> (RBH_VALUE)
+ *             ...
+ *         }
  *     }, ...]
  *
  *     symlink: fsentry.symlink (UTF8)
@@ -83,6 +87,10 @@ struct rbh_value_map;
  *         }
  *     }
  *
+ *     xattrs: {
+ *         <key>: <value> (RBH_VALUE)
+ *         ...
+ *     }
  * }
  *
  * Note that when they are fetched _from_ the database, the "ns" field is
@@ -100,6 +108,9 @@ struct rbh_value_map;
 #define MFF_NAMESPACE               "ns"
 #define MFF_PARENT_ID               "parent"
 #define MFF_NAME                    "name"
+
+/* xattrs (inode & namespace) */
+#define MFF_XATTRS                  "xattrs"
 
 /* symlink */
 #define MFF_SYMLINK                 "symlink"
@@ -155,6 +166,15 @@ bson_append_statx(bson_t *bson, const char *key, size_t key_length,
 #define BSON_APPEND_STATX(bson, key, statxbuf) \
     bson_append_statx(bson, key, strlen(key), statxbuf)
 
+#define XATTR_KEYLEN_MAX 128
+
+bool
+bson_append_xattr(bson_t *bson, const char *xattr, size_t xattrlen,
+                   const struct rbh_value *value);
+
+#define BSON_APPEND_XATTR(bson, xattr, value) \
+    bson_append_xattr(bson, xattr, (xattr) ? strlen(xattr) : 0, value)
+
     /*--------------------------------------------------------------------*
      |                              fsentry                               |
      *--------------------------------------------------------------------*/
@@ -174,12 +194,19 @@ bson_append_filter(bson_t *bson, const char *key, size_t key_length,
 #define BSON_APPEND_FILTER(bson, key, filter) \
     bson_append_filter(bson, key, strlen(key), filter, false)
 
+bool
+bson_append_rbh_id_filter(bson_t *bson, const char *key, size_t key_length,
+                          const struct rbh_id *id);
+
+#define BSON_APPEND_RBH_ID_FILTER(bson, key, id) \
+    bson_append_rbh_id_filter(bson, key, strlen(key), id)
+
     /*--------------------------------------------------------------------*
      |                              fsevent                               |
      *--------------------------------------------------------------------*/
 
 bson_t *
-bson_selector_from_fsevent(const struct rbh_fsevent *fsevent);
+bson_from_unlink(const struct rbh_id *parent_id, const char *name);
 
 bson_t *
 bson_update_from_fsevent(const struct rbh_fsevent *fsevent);

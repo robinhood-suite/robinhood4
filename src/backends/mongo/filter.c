@@ -11,6 +11,7 @@
 # include "config.h"
 #endif
 
+#include "robinhood/id.h"
 #include "robinhood/filter.h"
 
 #include "mongo.h"
@@ -153,4 +154,17 @@ bson_append_filter(bson_t *bson, const char *key, size_t key_length,
     return bson_append_document_begin(bson, key, key_length, &document)
         && _bson_append_filter(&document, filter, negate)
         && bson_append_document_end(bson, &document);
+}
+
+/*----------------------------------------------------------------------------*
+ |                        bson_append_rbh_id_filter()                         |
+ *----------------------------------------------------------------------------*/
+
+bool
+bson_append_rbh_id_filter(bson_t *bson, const char *key, size_t key_length,
+                          const struct rbh_id *id)
+{
+    return _bson_append_binary(bson, key, key_length, BSON_SUBTYPE_BINARY,
+                               id->data, id->size)
+        && (id->size != 0 || BSON_APPEND_INT32(bson, "type", BSON_TYPE_NULL));
 }

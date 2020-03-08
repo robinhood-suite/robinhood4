@@ -216,6 +216,56 @@ _mongoc_bulk_operation_remove_one(mongoc_bulk_operation_t *bulk,
 #endif
 }
 
+static bool
+mongo_bulk_append_fsevent(mongoc_bulk_operation_t *bulk,
+                          const struct rbh_fsevent *fsevent)
+{
+    bson_t selector;
+    bson_t *update;
+    bool success;
+
+    bson_init(&selector);
+    if (!BSON_APPEND_RBH_ID_FILTER(&selector, MFF_ID, &fsevent->id))
+        return false;
+
+    switch (fsevent->type) {
+    case RBH_FET_DELETE:
+        success = _mongoc_bulk_operation_remove_one(bulk, &selector);
+        break;
+    case RBH_FET_LINK:
+        /* Unlink first, then link */
+        update = bson_from_unlink(fsevent->link.parent_id,
+                                  fsevent->link.name);
+        if (update == NULL)
+            return false;
+
+        success = _mongoc_bulk_operation_update_one(bulk, &selector, update,
+                                                    false);
+        bson_destroy(update);
+
+        if (!success)
+            break;
+        __attribute__((fallthrough));
+    default:
+        update = bson_update_from_fsevent(fsevent);
+        if (update == NULL)
+            return false;
+
+        success = _mongoc_bulk_operation_update_one(
+                bulk, &selector, update, fsevent->type != RBH_FET_UNLINK
+                );
+        bson_destroy(update);
+    }
+
+    if (!success) {
+        /* > returns false if passed invalid arguments */
+        errno = EINVAL;
+        return false;
+    }
+
+    return true;
+}
+
 static const struct rbh_fsevent *
 fsevent_iter_next(struct rbh_iterator *fsevents)
 {
@@ -234,8 +284,8 @@ fsevent_iter_next(struct rbh_iterator *fsevents)
          fsevent = fsevent_iter_next(fsevents))
 
 static ssize_t
-mongo_bulk_operation_update(mongoc_bulk_operation_t *bulk,
-                            struct rbh_iterator *fsevents)
+mongo_bulk_init_from_fsevents(mongoc_bulk_operation_t *bulk,
+                              struct rbh_iterator *fsevents)
 {
     const struct rbh_fsevent *fsevent;
     int save_errno = errno;
@@ -243,38 +293,8 @@ mongo_bulk_operation_update(mongoc_bulk_operation_t *bulk,
 
     errno = 0;
     fsevent_for_each(fsevent, fsevents) {
-        bson_t *selector;
-        bson_t *update;
-        bool success;
-
-        selector = bson_selector_from_fsevent(fsevent);
-        if (selector == NULL)
+        if (!mongo_bulk_append_fsevent(bulk, fsevent))
             return -1;
-
-        if (fsevent->type == RBH_FET_DELETE) {
-            success = _mongoc_bulk_operation_remove_one(bulk, selector);
-        } else {
-            bool upsert = fsevent->type != RBH_FET_UNLINK;
-
-            update = bson_update_from_fsevent(fsevent);
-            if (update == NULL) {
-                save_errno = errno;
-                bson_destroy(selector);
-                errno = save_errno;
-                return -1;
-            }
-
-            success = _mongoc_bulk_operation_update_one(bulk, selector, update,
-                                                        upsert);
-            bson_destroy(update);
-        }
-
-        bson_destroy(selector);
-        if (!success) {
-            /* > returns false if passed invalid arguments */
-            errno = EINVAL;
-            return -1;
-        }
         count++;
     }
 
@@ -307,7 +327,7 @@ mongo_backend_update(void *backend, struct rbh_iterator *fsevents)
         return -1;
     }
 
-    count = mongo_bulk_operation_update(bulk, fsevents);
+    count = mongo_bulk_init_from_fsevents(bulk, fsevents);
     if (count <= 0) {
         int save_errno = errno;
 

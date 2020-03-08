@@ -146,3 +146,27 @@ bson_append_statx(bson_t *bson, const char *key, size_t key_length,
                                     statxbuf->stx_dev_minor)
         && bson_append_document_end(bson, &document);
 }
+
+/*----------------------------------------------------------------------------*
+ |                            bson_append_xattr()                             |
+ *----------------------------------------------------------------------------*/
+
+bool
+bson_append_xattr(bson_t *bson, const char *xattr, size_t xattrlen,
+                   const struct rbh_value *value)
+{
+    char key[XATTR_KEYLEN_MAX] = MFF_XATTRS;
+    int keylen = sizeof(MFF_XATTRS) - 1;
+
+    if (xattr) {
+        if (xattrlen > sizeof(key) - keylen)
+            return false;
+
+        memcpy(key + sizeof(MFF_XATTRS) - 1, xattr, xattrlen + 1);
+        keylen += xattrlen;
+    }
+
+    if (value == NULL)
+        return bson_append_null(bson, key, keylen);
+    return bson_append_rbh_value(bson, key, keylen, value);
+}
