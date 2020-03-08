@@ -139,7 +139,7 @@ START_TEST(rfcn_basic)
     };
     struct rbh_filter *filter;
 
-    filter = rbh_filter_compare_new(FILTER.op, FILTER.compare.field,
+    filter = rbh_filter_compare_new(FILTER.op, FILTER.compare.field, NULL,
                                     &FILTER.compare.value);
     ck_assert_ptr_nonnull(filter);
 
@@ -153,7 +153,7 @@ START_TEST(rfcn_bad_operator)
     const struct rbh_value VALUE = {};
 
     errno = 0;
-    ck_assert_ptr_null(rbh_filter_compare_new(-1, RBH_FF_ID, &VALUE));
+    ck_assert_ptr_null(rbh_filter_compare_new(-1, RBH_FF_ID, NULL, &VALUE));
     ck_assert_int_eq(errno, EINVAL);
 }
 END_TEST
@@ -165,7 +165,9 @@ START_TEST(rfcn_in_without_sequence)
     };
 
     errno = 0;
-    ck_assert_ptr_null(rbh_filter_compare_new(RBH_FOP_IN, RBH_FF_ID, &VALUE));
+    ck_assert_ptr_null(
+            rbh_filter_compare_new(RBH_FOP_IN, RBH_FF_ID, NULL, &VALUE)
+            );
     ck_assert_int_eq(errno, EINVAL);
 }
 END_TEST
@@ -178,7 +180,7 @@ START_TEST(rfcn_regex_without_regex)
 
     errno = 0;
     ck_assert_ptr_null(
-            rbh_filter_compare_new(RBH_FOP_REGEX, RBH_FF_ID, &VALUE)
+            rbh_filter_compare_new(RBH_FOP_REGEX, RBH_FF_ID, NULL, &VALUE)
             );
     ck_assert_int_eq(errno, EINVAL);
 }
@@ -199,7 +201,7 @@ START_TEST(rfcn_bitwise_without_integer)
 
     errno = 0;
     ck_assert_ptr_null(
-            rbh_filter_compare_new(BITWISE_OPS[_i], RBH_FF_ID, &VALUE)
+            rbh_filter_compare_new(BITWISE_OPS[_i], RBH_FF_ID, NULL, &VALUE)
             );
     ck_assert_int_eq(errno, EINVAL);
 }

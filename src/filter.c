@@ -31,6 +31,23 @@ comparison_filter_copy(struct rbh_filter *dest, const struct rbh_filter *src,
     /* dest->compare.field */
     dest->compare.field = src->compare.field;
 
+    /* dest->compare.xattr */
+    switch (src->compare.field) {
+    case RBH_FF_NAMESPACE_XATTRS:
+    case RBH_FF_INODE_XATTRS:
+        if (src->compare.xattr) {
+            size_t length = strlen(src->compare.xattr) + 1;
+
+            assert(size >= length);
+            dest->compare.xattr = data;
+            data = mempcpy(data, src->compare.xattr, length);
+            size -= length;
+        }
+    default:
+        /* Nothing to do */
+        break;
+    }
+
     /* dest->compare.value */
     if (value_copy(&dest->compare.value, &src->compare.value, &data, &size)) {
         assert(errno != ENOBUFS);
@@ -115,7 +132,16 @@ filter_data_size(const struct rbh_filter *filter)
 
     switch (filter->op) {
     case RBH_FOP_COMPARISON_MIN ... RBH_FOP_COMPARISON_MAX:
-        return value_data_size(&filter->compare.value);
+        switch (filter->compare.field) {
+        case RBH_FF_NAMESPACE_XATTRS:
+        case RBH_FF_INODE_XATTRS:
+            if (filter->compare.xattr)
+                size = strlen(filter->compare.xattr) + 1;
+            break;
+        default:
+            break;
+        }
+        return size + value_data_size(&filter->compare.value);
     case RBH_FOP_LOGICAL_MIN ... RBH_FOP_LOGICAL_MAX:
         size += sizeof(filter) * filter->logical.count;
         for (size_t i = 0; i < filter->logical.count; i++) {
@@ -199,12 +225,13 @@ op_matches_value(enum rbh_filter_operator op, const struct rbh_value *value)
 
 struct rbh_filter *
 rbh_filter_compare_new(enum rbh_filter_operator op, enum rbh_filter_field field,
-                       const struct rbh_value *value)
+                       const char *xattr, const struct rbh_value *value)
 {
     const struct rbh_filter COMPARE = {
         .op = op,
         .compare = {
             .field = field,
+            .xattr = xattr,
             .value = *value,
         },
     };
@@ -230,7 +257,7 @@ rbh_filter_compare_binary_new(enum rbh_filter_operator op,
         },
     };
 
-    return rbh_filter_compare_new(op, field, &BINARY);
+    return rbh_filter_compare_new(op, field, NULL, &BINARY);
 }
 
 struct rbh_filter *
@@ -242,7 +269,7 @@ rbh_filter_compare_uint32_new(enum rbh_filter_operator op,
         .uint32 = uint32,
     };
 
-    return rbh_filter_compare_new(op, field, &UINT32);
+    return rbh_filter_compare_new(op, field, NULL, &UINT32);
 }
 
 struct rbh_filter *
@@ -254,7 +281,7 @@ rbh_filter_compare_uint64_new(enum rbh_filter_operator op,
         .uint64 = uint64,
     };
 
-    return rbh_filter_compare_new(op, field, &UINT64);
+    return rbh_filter_compare_new(op, field, NULL, &UINT64);
 }
 
 struct rbh_filter *
@@ -266,7 +293,7 @@ rbh_filter_compare_int32_new(enum rbh_filter_operator op,
         .int32 = int32,
     };
 
-    return rbh_filter_compare_new(op, field, &INT32);
+    return rbh_filter_compare_new(op, field, NULL, &INT32);
 }
 
 struct rbh_filter *
@@ -278,7 +305,7 @@ rbh_filter_compare_int64_new(enum rbh_filter_operator op,
         .int64 = int64,
     };
 
-    return rbh_filter_compare_new(op, field, &INT64);
+    return rbh_filter_compare_new(op, field, NULL, &INT64);
 }
 
 struct rbh_filter *
@@ -290,7 +317,7 @@ rbh_filter_compare_string_new(enum rbh_filter_operator op,
         .string = string,
     };
 
-    return rbh_filter_compare_new(op, field, &STRING);
+    return rbh_filter_compare_new(op, field, NULL, &STRING);
 }
 
 struct rbh_filter *
@@ -306,7 +333,7 @@ rbh_filter_compare_regex_new(enum rbh_filter_operator op,
         },
     };
 
-    return rbh_filter_compare_new(op, field, &REGEX);
+    return rbh_filter_compare_new(op, field, NULL, &REGEX);
 }
 
 struct rbh_filter *
@@ -322,13 +349,13 @@ rbh_filter_compare_sequence_new(enum rbh_filter_operator op,
         },
     };
 
-    return rbh_filter_compare_new(op, field, &SEQUENCE);
+    return rbh_filter_compare_new(op, field, NULL, &SEQUENCE);
 }
 
 struct rbh_filter *
 rbh_filter_compare_map_new(enum rbh_filter_operator op,
                            enum rbh_filter_field field,
-                           const struct rbh_value_pair *pairs, size_t count)
+                           const struct rbh_value_pair pairs[], size_t count)
 {
     const struct rbh_value MAP = {
         .type = RBH_VT_MAP,
@@ -338,7 +365,259 @@ rbh_filter_compare_map_new(enum rbh_filter_operator op,
         },
     };
 
-    return rbh_filter_compare_new(op, field, &MAP);
+    return rbh_filter_compare_new(op, field, NULL, &MAP);
+}
+
+struct rbh_filter *
+rbh_filter_compare_xattr_binary_new(enum rbh_filter_operator op,
+                                    const char *xattr, const char *data,
+                                    size_t size)
+{
+    const struct rbh_value BINARY = {
+        .type = RBH_VT_BINARY,
+        .binary = {
+            .data = data,
+            .size = size,
+        },
+    };
+
+    return rbh_filter_compare_new(op, RBH_FF_INODE_XATTRS, xattr, &BINARY);
+}
+
+struct rbh_filter *
+rbh_filter_compare_xattr_uint32_new(enum rbh_filter_operator op,
+                                    const char *xattr, uint32_t uint32)
+{
+    const struct rbh_value UINT32 = {
+        .type = RBH_VT_UINT32,
+        .uint32 = uint32,
+    };
+
+    return rbh_filter_compare_new(op, RBH_FF_INODE_XATTRS, xattr, &UINT32);
+}
+
+struct rbh_filter *
+rbh_filter_compare_xattr_uint64_new(enum rbh_filter_operator op,
+                                    const char *xattr, uint64_t uint64)
+{
+    const struct rbh_value UINT64 = {
+        .type = RBH_VT_UINT64,
+        .uint64 = uint64,
+    };
+
+    return rbh_filter_compare_new(op, RBH_FF_INODE_XATTRS, xattr, &UINT64);
+}
+
+struct rbh_filter *
+rbh_filter_compare_xattr_int32_new(enum rbh_filter_operator op,
+                                   const char *xattr, int32_t int32)
+{
+    const struct rbh_value INT32 = {
+        .type = RBH_VT_INT32,
+        .int32 = int32,
+    };
+
+    return rbh_filter_compare_new(op, RBH_FF_INODE_XATTRS, xattr, &INT32);
+}
+
+struct rbh_filter *
+rbh_filter_compare_xattr_int64_new(enum rbh_filter_operator op,
+                                   const char *xattr, int64_t int64)
+{
+    const struct rbh_value INT64 = {
+        .type = RBH_VT_INT64,
+        .int64 = int64,
+    };
+
+    return rbh_filter_compare_new(op, RBH_FF_INODE_XATTRS, xattr, &INT64);
+}
+
+struct rbh_filter *
+rbh_filter_compare_xattr_string_new(enum rbh_filter_operator op,
+                                    const char *xattr, const char *string)
+{
+    const struct rbh_value STRING = {
+        .type = RBH_VT_STRING,
+        .string = string,
+    };
+
+    return rbh_filter_compare_new(op, RBH_FF_INODE_XATTRS, xattr, &STRING);
+}
+
+struct rbh_filter *
+rbh_filter_compare_xattr_regex_new(enum rbh_filter_operator op,
+                                   const char *xattr, const char *regex,
+                                   unsigned int regex_options)
+{
+    const struct rbh_value REGEX = {
+        .type = RBH_VT_REGEX,
+        .regex = {
+            .string = regex,
+            .options = regex_options,
+        },
+    };
+
+    return rbh_filter_compare_new(op, RBH_FF_INODE_XATTRS, xattr, &REGEX);
+}
+
+struct rbh_filter *
+rbh_filter_compare_xattr_sequence_new(enum rbh_filter_operator op,
+                                      const char *xattr,
+                                      const struct rbh_value values[],
+                                      size_t count)
+{
+    const struct rbh_value SEQUENCE = {
+        .type = RBH_VT_SEQUENCE,
+        .sequence = {
+            .values = values,
+            .count = count,
+        },
+    };
+
+    return rbh_filter_compare_new(op, RBH_FF_INODE_XATTRS, xattr, &SEQUENCE);
+}
+
+struct rbh_filter *
+rbh_filter_compare_xattr_map_new(enum rbh_filter_operator op, const char *xattr,
+                                 const struct rbh_value_pair pairs[],
+                                 size_t count)
+{
+    const struct rbh_value MAP = {
+        .type = RBH_VT_MAP,
+        .map = {
+            .pairs = pairs,
+            .count = count,
+        },
+    };
+
+    return rbh_filter_compare_new(op, RBH_FF_INODE_XATTRS, xattr, &MAP);
+}
+
+struct rbh_filter *
+rbh_filter_compare_ns_xattr_binary_new(enum rbh_filter_operator op,
+                                       const char *xattr, const char *data,
+                                       size_t size)
+{
+    const struct rbh_value BINARY = {
+        .type = RBH_VT_BINARY,
+        .binary = {
+            .data = data,
+            .size = size,
+        },
+    };
+
+    return rbh_filter_compare_new(op, RBH_FF_NAMESPACE_XATTRS, xattr, &BINARY);
+}
+
+struct rbh_filter *
+rbh_filter_compare_ns_xattr_uint32_new(enum rbh_filter_operator op,
+                                       const char *xattr, uint32_t uint32)
+{
+    const struct rbh_value UINT32 = {
+        .type = RBH_VT_UINT32,
+        .uint32 = uint32,
+    };
+
+    return rbh_filter_compare_new(op, RBH_FF_NAMESPACE_XATTRS, xattr, &UINT32);
+}
+
+struct rbh_filter *
+rbh_filter_compare_ns_xattr_uint64_new(enum rbh_filter_operator op,
+                                       const char *xattr, uint64_t uint64)
+{
+    const struct rbh_value UINT64 = {
+        .type = RBH_VT_UINT64,
+        .uint64 = uint64,
+    };
+
+    return rbh_filter_compare_new(op, RBH_FF_NAMESPACE_XATTRS, xattr, &UINT64);
+}
+
+struct rbh_filter *
+rbh_filter_compare_ns_xattr_int32_new(enum rbh_filter_operator op,
+                                      const char *xattr, int32_t int32)
+{
+    const struct rbh_value INT32 = {
+        .type = RBH_VT_INT32,
+        .int32 = int32,
+    };
+
+    return rbh_filter_compare_new(op, RBH_FF_NAMESPACE_XATTRS, xattr, &INT32);
+}
+
+struct rbh_filter *
+rbh_filter_compare_ns_xattr_int64_new(enum rbh_filter_operator op,
+                                      const char *xattr, int64_t int64)
+{
+    const struct rbh_value INT64 = {
+        .type = RBH_VT_INT64,
+        .int64 = int64,
+    };
+
+    return rbh_filter_compare_new(op, RBH_FF_NAMESPACE_XATTRS, xattr, &INT64);
+}
+
+struct rbh_filter *
+rbh_filter_compare_ns_xattr_string_new(enum rbh_filter_operator op,
+                                       const char *xattr, const char *string)
+{
+    const struct rbh_value STRING = {
+        .type = RBH_VT_STRING,
+        .string = string,
+    };
+
+    return rbh_filter_compare_new(op, RBH_FF_NAMESPACE_XATTRS, xattr, &STRING);
+}
+
+struct rbh_filter *
+rbh_filter_compare_ns_xattr_regex_new(enum rbh_filter_operator op,
+                                      const char *xattr, const char *regex,
+                                      unsigned int regex_options)
+{
+    const struct rbh_value REGEX = {
+        .type = RBH_VT_REGEX,
+        .regex = {
+            .string = regex,
+            .options = regex_options,
+        },
+    };
+
+    return rbh_filter_compare_new(op, RBH_FF_NAMESPACE_XATTRS, xattr, &REGEX);
+}
+
+struct rbh_filter *
+rbh_filter_compare_ns_xattr_sequence_new(enum rbh_filter_operator op,
+                                         const char *xattr,
+                                         const struct rbh_value values[],
+                                         size_t count)
+{
+    const struct rbh_value SEQUENCE = {
+        .type = RBH_VT_SEQUENCE,
+        .sequence = {
+            .values = values,
+            .count = count,
+        },
+    };
+
+    return rbh_filter_compare_new(op, RBH_FF_NAMESPACE_XATTRS, xattr,
+                                  &SEQUENCE);
+}
+
+struct rbh_filter *
+rbh_filter_compare_ns_xattr_map_new(enum rbh_filter_operator op,
+                                    const char *xattr,
+                                    const struct rbh_value_pair pairs[],
+                                    size_t count)
+{
+    const struct rbh_value MAP = {
+        .type = RBH_VT_MAP,
+        .map = {
+            .pairs = pairs,
+            .count = count,
+        },
+    };
+
+    return rbh_filter_compare_new(op, RBH_FF_NAMESPACE_XATTRS, xattr, &MAP);
 }
 
 static struct rbh_filter *
@@ -393,6 +672,8 @@ comparison_filter_validate(const struct rbh_filter *filter)
     case RBH_FF_CTIME:
     case RBH_FF_NAME:
     case RBH_FF_TYPE:
+    case RBH_FF_NAMESPACE_XATTRS:
+    case RBH_FF_INODE_XATTRS:
         return rbh_value_validate(&filter->compare.value);
     }
 

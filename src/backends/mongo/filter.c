@@ -11,6 +11,8 @@
 # include "config.h"
 #endif
 
+#include <assert.h>
+
 #include "robinhood/id.h"
 #include "robinhood/filter.h"
 
@@ -61,20 +63,49 @@ fop2str(enum rbh_filter_operator op, bool negate)
 }
 
 static const char * const FIELD2STR[] = {
-    [RBH_FF_ID]         = MFF_ID,
-    [RBH_FF_PARENT_ID]  = MFF_NAMESPACE "." MFF_PARENT_ID,
-    [RBH_FF_NAME]       = MFF_NAMESPACE "." MFF_NAME,
-    [RBH_FF_TYPE]       = MFF_STATX "." MFF_STATX_TYPE,
-    [RBH_FF_ATIME]      = MFF_STATX "." MFF_STATX_ATIME "." MFF_STATX_TIMESTAMP_SEC,
-    [RBH_FF_CTIME]      = MFF_STATX "." MFF_STATX_CTIME "." MFF_STATX_TIMESTAMP_SEC,
-    [RBH_FF_MTIME]      = MFF_STATX "." MFF_STATX_MTIME "." MFF_STATX_TIMESTAMP_SEC,
+    [RBH_FF_ID]                 = MFF_ID,
+    [RBH_FF_PARENT_ID]          = MFF_NAMESPACE "." MFF_PARENT_ID,
+    [RBH_FF_NAME]               = MFF_NAMESPACE "." MFF_NAME,
+    [RBH_FF_NAMESPACE_XATTRS]   = MFF_NAMESPACE "." MFF_XATTRS,
+    [RBH_FF_INODE_XATTRS]       = MFF_XATTRS,
+    [RBH_FF_TYPE]               = MFF_STATX "." MFF_STATX_TYPE,
+    [RBH_FF_ATIME]              = MFF_STATX "." MFF_STATX_ATIME "." MFF_STATX_TIMESTAMP_SEC,
+    [RBH_FF_CTIME]              = MFF_STATX "." MFF_STATX_CTIME "." MFF_STATX_TIMESTAMP_SEC,
+    [RBH_FF_MTIME]              = MFF_STATX "." MFF_STATX_MTIME "." MFF_STATX_TIMESTAMP_SEC,
 };
 
 static bool
 bson_append_comparison_filter(bson_t *bson, const struct rbh_filter *filter,
                               bool negate)
 {
+    const struct rbh_value *value = &filter->compare.value;
+    enum rbh_filter_field field = filter->compare.field;
+    const char *xattr = filter->compare.xattr;
+    enum rbh_filter_operator op = filter->op;
+    char buffer[XATTR_KEYLEN_MAX];
+    const char *fieldstr;
     bson_t document;
+
+    switch (field) {
+    case RBH_FF_NAMESPACE_XATTRS:
+    case RBH_FF_INODE_XATTRS:
+        if (xattr) {
+            int rc = snprintf(buffer, sizeof(buffer), "%s.%s", FIELD2STR[field],
+                              xattr);
+
+            assert(rc >= 0);
+            if (rc >= sizeof(buffer))
+                /* Errors from bson_append_*() are interpreted as ENOBUFs, as in
+                 * `bson' is full... Close enough.
+                 */
+                return false;
+            fieldstr = buffer;
+            break;
+        } /* else */
+        __attribute__((fallthrough));
+    default:
+        fieldstr = FIELD2STR[field];
+    }
 
     if (filter->op == RBH_FOP_REGEX && !negate)
         /* The regex operator is tricky: $not and $regex are not compatible.
@@ -82,13 +113,10 @@ bson_append_comparison_filter(bson_t *bson, const struct rbh_filter *filter,
          * The workaround is not to use the $regex operator and replace it with
          * the "/pattern/" syntax.
          */
-        return BSON_APPEND_RBH_VALUE(bson, FIELD2STR[filter->compare.field],
-                                     &filter->compare.value);
+        return BSON_APPEND_RBH_VALUE(bson, fieldstr, value);
 
-    return BSON_APPEND_DOCUMENT_BEGIN(bson, FIELD2STR[filter->compare.field],
-                                      &document)
-        && BSON_APPEND_RBH_VALUE(&document, fop2str(filter->op, negate),
-                                 &filter->compare.value)
+    return BSON_APPEND_DOCUMENT_BEGIN(bson, fieldstr, &document)
+        && BSON_APPEND_RBH_VALUE(&document, fop2str(op, negate), value)
         && bson_append_document_end(bson, &document);
 }
 

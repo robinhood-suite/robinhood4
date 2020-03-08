@@ -101,6 +101,8 @@ enum rbh_filter_field {
     RBH_FF_CTIME,
     RBH_FF_NAME,
     RBH_FF_TYPE,
+    RBH_FF_NAMESPACE_XATTRS,
+    RBH_FF_INODE_XATTRS,
 };
 
 /**
@@ -124,6 +126,7 @@ struct rbh_filter {
     union {
         struct {
             enum rbh_filter_field field;
+            const char *xattr; /* field == RBH_FF_{NAMESPACE,INODE}_XATTR */
             struct rbh_value value;
         } compare;
 
@@ -341,7 +344,75 @@ rbh_filter_compare_map_new(enum rbh_filter_operator op,
  */
 struct rbh_filter *
 rbh_filter_compare_new(enum rbh_filter_operator op, enum rbh_filter_field field,
-                       const struct rbh_value *value);
+                       const char *xattr, const struct rbh_value *value);
+
+/* TODO: document all the functions below */
+struct rbh_filter *
+rbh_filter_compare_xattr_binary_new(enum rbh_filter_operator op,
+                                    const char *xattr, const char *data,
+                                    size_t size);
+struct rbh_filter *
+rbh_filter_compare_xattr_uint32_new(enum rbh_filter_operator op,
+                                    const char *xattr, uint32_t uint32);
+struct rbh_filter *
+rbh_filter_compare_xattr_uint64_new(enum rbh_filter_operator op,
+                                    const char *xattr, uint64_t uint64);
+struct rbh_filter *
+rbh_filter_compare_xattr_int32_new(enum rbh_filter_operator op,
+                                   const char *xattr, int32_t int32);
+struct rbh_filter *
+rbh_filter_compare_xattr_int64_new(enum rbh_filter_operator op,
+                                   const char *xattr, int64_t int64);
+struct rbh_filter *
+rbh_filter_compare_xattr_string_new(enum rbh_filter_operator op,
+                                    const char *xattr, const char *string);
+struct rbh_filter *
+rbh_filter_compare_xattr_regex_new(enum rbh_filter_operator op,
+                                   const char *xattr, const char *regex,
+                                   unsigned int regex_options);
+struct rbh_filter *
+rbh_filter_compare_xattr_sequence_new(enum rbh_filter_operator op,
+                                      const char *xattr,
+                                      const struct rbh_value values[],
+                                      size_t count);
+struct rbh_filter *
+rbh_filter_compare_xattr_map_new(enum rbh_filter_operator op, const char *xattr,
+                                 const struct rbh_value_pair pairs[],
+                                 size_t count);
+
+struct rbh_filter *
+rbh_filter_compare_ns_xattr_binary_new(enum rbh_filter_operator op,
+                                       const char *xattr, const char *data,
+                                       size_t size);
+struct rbh_filter *
+rbh_filter_compare_ns_xattr_uint32_new(enum rbh_filter_operator op,
+                                       const char *xattr, uint32_t uint32);
+struct rbh_filter *
+rbh_filter_compare_ns_xattr_uint64_new(enum rbh_filter_operator op,
+                                       const char *xattr, uint64_t uint64);
+struct rbh_filter *
+rbh_filter_compare_ns_xattr_int32_new(enum rbh_filter_operator op,
+                                      const char *xattr, int32_t int32);
+struct rbh_filter *
+rbh_filter_compare_ns_xattr_int64_new(enum rbh_filter_operator op,
+                                      const char *xattr, int64_t int64);
+struct rbh_filter *
+rbh_filter_compare_ns_xattr_string_new(enum rbh_filter_operator op,
+                                       const char *xattr, const char *string);
+struct rbh_filter *
+rbh_filter_compare_ns_xattr_regex_new(enum rbh_filter_operator op,
+                                      const char *xattr, const char *regex,
+                                      unsigned int regex_options);
+struct rbh_filter *
+rbh_filter_compare_ns_xattr_sequence_new(enum rbh_filter_operator op,
+                                         const char *xattr,
+                                         const struct rbh_value values[],
+                                         size_t count);
+struct rbh_filter *
+rbh_filter_compare_ns_xattr_map_new(enum rbh_filter_operator op,
+                                    const char *xattr,
+                                    const struct rbh_value_pair pairs[],
+                                    size_t count);
 
 /**
  * Create a filter that ANDs multiple filters
