@@ -31,7 +31,7 @@ static const char * const FOP2STR[] = {
     [RBH_FOP_STRICTLY_GREATER]  = "$gt",
     [RBH_FOP_GREATER_OR_EQUAL]  = "$gte",
     [RBH_FOP_IN]                = "$in",
-    [RBH_FOP_REGEX]             = "$regex",
+    [RBH_FOP_REGEX]             = NULL, /* This is not a mistake */
     [RBH_FOP_BITS_ANY_SET]      = "$bitsAnySet",
     [RBH_FOP_BITS_ALL_SET]      = "$bitsAllSet",
     [RBH_FOP_BITS_ANY_CLEAR]    = "$bitsAnyClear",
@@ -332,9 +332,26 @@ bson_append_comparison_filter(bson_t *bson, const struct rbh_filter *filter,
     case RBH_FOP_REGEX:
         /* The regex operator is tricky: $not and $regex are not compatible.
          *
-         * The workaround is not to use the $regex operator and replace it with
-         * the "/pattern/" syntax.
+         *
+         * The workaround is to not use the $regex operator and replace it
+         * with the "/pattern/" syntax.
+         *
+         * Example:
+         *
+         *      (field =~ pattern) <=> {field: /pattern/}}
+         *     !(field =~ pattern) <=> {field: {$not: /pattern/}}
+         *
+         * Which is why NEGATED_FOP2STR[RBH_FOP_REGEX] is defined as "$not",
+         * and also why FOP2STR[RBH_FOP_REGEX] is defined as NULL (because it
+         * should never be used).
+         *
+         * XXX: this is fixed in mongo 4.0.7
          */
+
+        /* The trick only works if `value' is a regex. This is ensured by
+         * rbh_filter_validate()... But it cannot hurt to check.
+         */
+        assert(value->type == RBH_VT_REGEX);
         if (!negate)
             return BSON_APPEND_RBH_VALUE(bson, fieldstr, value);
         break;
