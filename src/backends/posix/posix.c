@@ -34,9 +34,9 @@
 struct posix_iterator {
     struct rbh_mut_iterator iterator;
     int statx_sync_type;
+    size_t prefix_len;
     FTS *fts_handle;
     FTSENT *ftsent;
-    char *root;
 };
 
 static __thread size_t handle_size = MAX_HANDLE_SZ;
@@ -201,10 +201,23 @@ get_page_size(void)
 }
 
 static struct rbh_fsentry *
-fsentry_from_ftsent(FTSENT *ftsent, int statx_sync_type)
+fsentry_from_ftsent(FTSENT *ftsent, int statx_sync_type, size_t prefix_len)
 {
     const int statx_flags =
         AT_EMPTY_PATH | AT_SYMLINK_NOFOLLOW | AT_NO_AUTOMOUNT;
+    const struct rbh_value PATH = {
+        .type = RBH_VT_STRING,
+        .string = ftsent->fts_pathlen == prefix_len ?
+            "/" : ftsent->fts_path + prefix_len,
+    };
+    const struct rbh_value_pair PAIR = {
+        .key = "path",
+        .value = &PATH,
+    };
+    const struct rbh_value_map XATTRS = {
+        .pairs = &PAIR,
+        .count = 1,
+    };
     struct rbh_fsentry *fsentry;
     struct statx statxbuf;
     struct rbh_id *id;
@@ -247,7 +260,8 @@ fsentry_from_ftsent(FTSENT *ftsent, int statx_sync_type)
     }
 
     fsentry = rbh_fsentry_new(id, ftsent->fts_parent->fts_pointer,
-                              ftsent->fts_name, &statxbuf, NULL, NULL, symlink);
+                              ftsent->fts_name, &statxbuf, &XATTRS, NULL,
+                              symlink);
     if (fsentry == NULL) {
         save_errno = errno;
         goto out_free_symlink;
@@ -312,7 +326,8 @@ skip:
         return NULL;
     }
 
-    fsentry = fsentry_from_ftsent(ftsent, posix_iter->statx_sync_type);
+    fsentry = fsentry_from_ftsent(ftsent, posix_iter->statx_sync_type,
+                                  posix_iter->prefix_len);
     if (fsentry == NULL && (errno == ENOENT || errno == ESTALE))
         /* The entry moved from under our feet */
         goto skip;
@@ -371,6 +386,7 @@ posix_iterator_new(const char *root, int statx_sync_type)
 
     posix_iter->iterator = POSIX_ITER;
     posix_iter->statx_sync_type = statx_sync_type;
+    posix_iter->prefix_len = strlen(root);
     posix_iter->fts_handle =
         fts_open(paths, FTS_PHYSICAL | FTS_NOSTAT | FTS_XDEV, NULL);
     save_errno = errno;
