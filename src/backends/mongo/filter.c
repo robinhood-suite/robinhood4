@@ -19,7 +19,7 @@
 #include "mongo.h"
 
 /*----------------------------------------------------------------------------*
- |                            bson_append_filter()                            |
+ |                          bson_append_rbh_filter()                          |
  *----------------------------------------------------------------------------*/
 
 /* The following helpers should only be used on a valid filter */
@@ -75,7 +75,8 @@ static const char * const FIELD2STR[] = {
 };
 
 static bool
-_bson_append_filter(bson_t *bson, const struct rbh_filter *filter, bool negate);
+_bson_append_rbh_filter(bson_t *bson, const struct rbh_filter *filter,
+                        bool negate);
 
 /* MongoDB does not handle _unsigned_ integers natively, their support has to
  * be emulated.
@@ -144,7 +145,7 @@ bson_append_uint32_lower(bson_t *bson, enum rbh_filter_operator op,
     };
 
     assert(op == RBH_FOP_STRICTLY_LOWER || op == RBH_FOP_LOWER_OR_EQUAL);
-    return _bson_append_filter(bson, &FILTER, negate);
+    return _bson_append_rbh_filter(bson, &FILTER, negate);
 }
 
 static bool
@@ -184,7 +185,7 @@ bson_append_uint32_greater(bson_t *bson, enum rbh_filter_operator op,
     };
 
     assert(op == RBH_FOP_STRICTLY_GREATER || op == RBH_FOP_GREATER_OR_EQUAL);
-    return _bson_append_filter(bson, &FILTER, negate);
+    return _bson_append_rbh_filter(bson, &FILTER, negate);
 }
 
 static bool
@@ -224,7 +225,7 @@ bson_append_uint64_lower(bson_t *bson, enum rbh_filter_operator op,
     };
 
     assert(op == RBH_FOP_STRICTLY_LOWER || op == RBH_FOP_LOWER_OR_EQUAL);
-    return _bson_append_filter(bson, &FILTER, negate);
+    return _bson_append_rbh_filter(bson, &FILTER, negate);
 }
 static bool
 bson_append_uint64_greater(bson_t *bson, enum rbh_filter_operator op,
@@ -263,7 +264,7 @@ bson_append_uint64_greater(bson_t *bson, enum rbh_filter_operator op,
     };
 
     assert(op == RBH_FOP_STRICTLY_GREATER || op == RBH_FOP_GREATER_OR_EQUAL);
-    return _bson_append_filter(bson, &FILTER, negate);
+    return _bson_append_rbh_filter(bson, &FILTER, negate);
 }
 
 static bool
@@ -353,7 +354,8 @@ bson_append_logical_filter(bson_t *bson, const struct rbh_filter *filter,
     bson_t array;
 
     if (filter->op == RBH_FOP_NOT)
-        return _bson_append_filter(bson, filter->logical.filters[0], !negate);
+        return _bson_append_rbh_filter(bson, filter->logical.filters[0],
+                                       !negate);
 
     if (!BSON_APPEND_ARRAY_BEGIN(bson, fop2str(filter->op, negate), &array))
         return false;
@@ -364,8 +366,8 @@ bson_append_logical_filter(bson_t *bson, const struct rbh_filter *filter,
         char str[16];
 
         length = bson_uint32_to_string(i, &key, str, sizeof(str));
-        if (!bson_append_filter(&array, key, length, filter->logical.filters[i],
-                                negate))
+        if (!bson_append_rbh_filter(&array, key, length,
+                                    filter->logical.filters[i], negate))
             return false;
     }
 
@@ -386,7 +388,8 @@ bson_append_null_filter(bson_t *bson, bool negate)
 }
 
 static bool
-_bson_append_filter(bson_t *bson, const struct rbh_filter *filter, bool negate)
+_bson_append_rbh_filter(bson_t *bson, const struct rbh_filter *filter,
+                        bool negate)
 {
     if (filter == NULL)
         return bson_append_null_filter(bson, negate);
@@ -397,13 +400,13 @@ _bson_append_filter(bson_t *bson, const struct rbh_filter *filter, bool negate)
 }
 
 bool
-bson_append_filter(bson_t *bson, const char *key, size_t key_length,
-                    const struct rbh_filter *filter, bool negate)
+bson_append_rbh_filter(bson_t *bson, const char *key, size_t key_length,
+                       const struct rbh_filter *filter, bool negate)
 {
     bson_t document;
 
     return bson_append_document_begin(bson, key, key_length, &document)
-        && _bson_append_filter(&document, filter, negate)
+        && _bson_append_rbh_filter(&document, filter, negate)
         && bson_append_document_end(bson, &document);
 }
 
