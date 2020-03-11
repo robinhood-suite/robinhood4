@@ -125,10 +125,21 @@ convert_iter_next(void *iterator)
     fsentry = convert->fsentry;
 
     if (convert->upsert) {
+        struct {
+            bool xattrs:1;
+            bool statx:1;
+            bool symlink:1;
+        } has = {
+            .xattrs = fsentry->mask & RBH_FP_INODE_XATTRS,
+            .statx = fsentry->mask & RBH_FP_STATX,
+            .symlink = fsentry->mask & RBH_FP_SYMLINK,
+        };
+
         fsevent = rbh_fsevent_upsert_new(
                 &fsentry->id,
-                fsentry->mask & RBH_FP_STATX ? fsentry->statx : NULL,
-                fsentry->mask & RBH_FP_SYMLINK ? fsentry->symlink : NULL
+                has.xattrs ? &fsentry->xattrs.inode : NULL,
+                has.statx ? fsentry->statx : NULL,
+                has.symlink ? fsentry->symlink : NULL
                 );
         if (fsevent == NULL)
             return NULL;
@@ -137,8 +148,11 @@ convert_iter_next(void *iterator)
     }
 
     if (convert->link) {
-        fsevent = rbh_fsevent_link_new(&fsentry->id, &fsentry->parent_id,
-                                       fsentry->name);
+        bool has_xattrs = fsentry->mask & RBH_FP_NAMESPACE_XATTRS;
+
+        fsevent = rbh_fsevent_link_new(&fsentry->id,
+                                       has_xattrs ? &fsentry->xattrs.ns : NULL,
+                                       &fsentry->parent_id, fsentry->name);
         if (fsevent == NULL)
             return NULL;
         convert->link = false;
