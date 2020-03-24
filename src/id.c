@@ -36,8 +36,7 @@ rbh_id_copy(struct rbh_id *dest, const struct rbh_id *src, char **buffer,
 
     dest->data = data;
     if (src->size > 0)
-        memcpy(data, src->data, src->size);
-    data += src->size;
+        data = mempcpy(data, src->data, src->size);
     size -= src->size;
 
     /* id->size */

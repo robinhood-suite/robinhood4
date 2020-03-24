@@ -114,8 +114,7 @@ value_copy(struct rbh_value *dest, const struct rbh_value *src, char **buffer,
 
         dest->binary.data = data;
         if (src->binary.size > 0)
-            memcpy(data, src->binary.data, src->binary.size);
-        data += src->binary.size;
+            data = mempcpy(data, src->binary.data, src->binary.size);
         size -= src->binary.size;
 
         /* dest->binary.size */
@@ -139,8 +138,7 @@ value_copy(struct rbh_value *dest, const struct rbh_value *src, char **buffer,
             goto out_enobufs;
 
         dest->string = data;
-        memcpy(data, src->string, length);
-        data += length;
+        data = mempcpy(data, src->string, length);
         size -= length;
         break;
     case RBH_VT_REGEX: /* dest->regex */
@@ -150,8 +148,7 @@ value_copy(struct rbh_value *dest, const struct rbh_value *src, char **buffer,
             goto out_enobufs;
 
         dest->regex.string = data;
-        memcpy(data, src->regex.string, length);
-        data += length;
+        data = mempcpy(data, src->regex.string, length);
         size -= length;
 
         /* dest->regex.options */
@@ -207,8 +204,7 @@ value_pair_copy(struct rbh_value_pair *dest, const struct rbh_value_pair *src,
         goto out_enobufs;
 
     dest->key = data;
-    memcpy(data, src->key, keylen);
-    data += keylen;
+    data = mempcpy(data, src->key, keylen);
     size -= keylen;
 
     /* dest->value */
