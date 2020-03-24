@@ -110,11 +110,12 @@ rbh_fsentry_new(const struct rbh_id *id, const struct rbh_id *parent_id,
 
     /* fsentry->statx */
     if (statxbuf) {
-        data = ptralign(data, &size, alignof(*fsentry->statx));
-        assert(size >= sizeof(*statxbuf));
-        fsentry->statx = (struct statx *)data;
-        data = mempcpy(data, statxbuf, sizeof(*statxbuf));
-        size -= sizeof(*statxbuf);
+        struct statx *tmp;
+
+        tmp = aligned_memalloc(alignof(*tmp), sizeof(*tmp), &data, &size);
+        assert(tmp);
+        *tmp = *statxbuf;
+        fsentry->statx = tmp;
         fsentry->mask |= RBH_FP_STATX;
     }
 

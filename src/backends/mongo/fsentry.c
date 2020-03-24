@@ -83,23 +83,15 @@ bson_iter_rbh_value_map(bson_iter_t *iter, struct rbh_value_map *map,
     size_t size = *bufsize;
     char *data = *buffer;
 
-    data = ptralign(data, &size, alignof(*pairs));
-    if (size < count * sizeof(*pairs)) {
-        errno = ENOBUFS;
+    pairs = aligned_memalloc(alignof(*pairs), count * sizeof(*pairs), &data,
+                             &size);
+    if (pairs == NULL)
         return false;
-    }
-    pairs = (struct rbh_value_pair *)data;
-    data += count * sizeof(*pairs);
-    size -= count * sizeof(*pairs);
 
-    data = ptralign(data, &size, alignof(*values));
-    if (size < count * sizeof(*values)) {
-        errno = ENOBUFS;
+    values = aligned_memalloc(alignof(*values), count * sizeof(*values), &data,
+                              &size);
+    if (values == NULL)
         return false;
-    }
-    values = (struct rbh_value *)data;
-    data += count * sizeof(*values);
-    size -= count * sizeof(*values);
 
     map->pairs = pairs;
     while (bson_iter_next(iter)) {
@@ -134,14 +126,10 @@ bson_iter_rbh_value_sequence(bson_iter_t *iter, struct rbh_value *value,
     char *data = *buffer;
 
     value->type = RBH_VT_SEQUENCE;
-    data = ptralign(data, &size, alignof(*value->sequence.values));
-    if (size < count * sizeof(*value->sequence.values)) {
-        errno = ENOBUFS;
+    values = aligned_memalloc(alignof(*values), count * sizeof(*values), &data,
+                              &size);
+    if (values == NULL)
         return false;
-    }
-    values = (struct rbh_value *)data;
-    data += count * sizeof(*value->sequence.values);
-    size -= count * sizeof(*value->sequence.values);
 
     value->sequence.values = values;
     while (bson_iter_next(iter)) {

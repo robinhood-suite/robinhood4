@@ -52,12 +52,12 @@ fsevent_copy(struct rbh_fsevent *dest, const struct rbh_fsevent *src,
     case RBH_FET_UPSERT: /* dest->upsert */
         /* dest->upsert.statx */
         if (src->upsert.statx) {
-            data = ptralign(data, &size, alignof(*dest->upsert.statx));
-            assert(size >= sizeof(*src->upsert.statx));
+            struct statx *tmp;
 
-            dest->upsert.statx = (struct statx *)data;
-            data = mempcpy(data, src->upsert.statx, sizeof(*src->upsert.statx));
-            size -= sizeof(*src->upsert.statx);
+            tmp = aligned_memalloc(alignof(*tmp), sizeof(*tmp), &data, &size);
+            assert(tmp);
+            *tmp = *src->upsert.statx;
+            dest->upsert.statx = tmp;
         } else {
             dest->upsert.statx = NULL;
         }
@@ -86,12 +86,8 @@ fsevent_copy(struct rbh_fsevent *dest, const struct rbh_fsevent *src,
     case RBH_FET_LINK:
     case RBH_FET_UNLINK: /* dest->link */
         /* dest->link.parent_id */
-        data = ptralign(data, &size, alignof(*dest->link.parent_id));
-        assert(size >= sizeof(*dest->link.parent_id));
-
-        id = (struct rbh_id *)data;
-        data += sizeof(*id);
-        size -= sizeof(*id);
+        id = aligned_memalloc(alignof(*id), sizeof(*id), &data, &size);
+        assert(id);
         rc = rbh_id_copy(id, src->link.parent_id, &data, &size);
         assert(rc == 0);
         dest->link.parent_id = id;

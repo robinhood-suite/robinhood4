@@ -378,10 +378,8 @@ rbh_uri_from_raw_uri(const struct rbh_raw_uri *raw_uri)
     /* uri->id / uri->path */
     switch (uri->type) {
     case RBH_UT_ID:
-        data = ptralign(data, &size, alignof(*id));
-        id = (struct rbh_id *)data;
-        data += sizeof(*id);
-        size -= sizeof(*id);
+        id = aligned_memalloc(alignof(*id), sizeof(*id), &data, &size);
+        assert(id);
 
         /* scan-build: NULL passed to nonnull */
         assert(raw_uri->fragment);

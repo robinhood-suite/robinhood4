@@ -159,13 +159,12 @@ value_copy(struct rbh_value *dest, const struct rbh_value *src, char **buffer,
         break;
     case RBH_VT_SEQUENCE: /* dest->sequence */
         /* dest->sequence.values */
-        data = ptralign(data, &size, alignof(*src->sequence.values));
-        if (size < src->sequence.count * sizeof(*src->sequence.values))
-            goto out_enobufs;
+        values = aligned_memalloc(alignof(*values),
+                                  src->sequence.count * sizeof(*values), &data,
+                                  &size);
+        if (values == NULL)
+            return -1;
 
-        values = (struct rbh_value *)data;
-        data += src->sequence.count * sizeof(*src->sequence.values);
-        size -= src->sequence.count * sizeof(*src->sequence.values);
         for (size_t i = 0; i < src->sequence.count; i++) {
             if (value_copy(&values[i], &src->sequence.values[i], &data, &size))
                 return -1;
@@ -218,13 +217,9 @@ value_pair_copy(struct rbh_value_pair *dest, const struct rbh_value_pair *src,
         goto out;
     }
 
-    data = ptralign(data, &size, alignof(*dest->value));
-    if (size < sizeof(*value))
-        goto out_enobufs;
-
-    value = (struct rbh_value *)data;
-    data += sizeof(*value);
-    size -= sizeof(*value);
+    value = aligned_memalloc(alignof(*value), sizeof(*value), &data, &size);
+    if (value == NULL)
+        return -1;
     if (value_copy(value, src->value, &data, &size))
         return -1;
     dest->value = value;
@@ -248,15 +243,11 @@ value_map_copy(struct rbh_value_map *dest, const struct rbh_value_map *src,
     char *data = *buffer;
 
     /* dest->pairs */
-    data = ptralign(data, &size, alignof(*dest->pairs));
-    if (size < src->count * sizeof(*pairs)) {
-        errno = ENOBUFS;
+    pairs = aligned_memalloc(alignof(*pairs), src->count * sizeof(*pairs),
+                             &data, &size);
+    if (pairs == NULL)
         return -1;
-    }
 
-    pairs = (struct rbh_value_pair *)data;
-    data += src->count * sizeof(*pairs);
-    size -= src->count * sizeof(*pairs);
     for (size_t i = 0; i < src->count; i++) {
         if (value_pair_copy(&pairs[i], &src->pairs[i], &data, &size))
             return -1;

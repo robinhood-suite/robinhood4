@@ -17,8 +17,9 @@
 #define RBH_UTILS_H
 
 #include <assert.h>
-#include <stddef.h>
+#include <errno.h>
 #include <limits.h>
+#include <stddef.h>
 #include <stdint.h>
 
 #ifndef ARRAY_SIZE
@@ -59,6 +60,24 @@ sizealign(size_t size, size_t alignment)
     assert(__builtin_popcount(alignment) == 1);
     mask = alignment - 1;
     return (size + mask) & ~mask;
+}
+
+static inline void *
+aligned_memalloc(size_t alignment, size_t size, char **buffer, size_t *_bufsize)
+{
+    size_t bufsize = *_bufsize;
+    char *mem = *buffer;
+
+    mem = ptralign(mem, &bufsize, alignment);
+    if (bufsize < size) {
+        errno = ENOBUFS;
+        return NULL;
+    }
+    bufsize -= size;
+
+    *buffer = mem + size;
+    *_bufsize = bufsize;
+    return mem;
 }
 
 #endif

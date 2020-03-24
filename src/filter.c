@@ -72,11 +72,10 @@ logical_filter_copy(struct rbh_filter *dest, const struct rbh_filter *src,
     char *data = *buffer;
 
     /* dest->logical.filters */
-    data = ptralign(data, &size, alignof(*filters));
-    assert(size >= sizeof(*filters) * src->logical.count);
-    filters = (const struct rbh_filter **)data;
-    data += sizeof(*filters) * src->logical.count;
-    size -= sizeof(*filters) * src->logical.count;
+    filters = aligned_memalloc(alignof(*filters),
+                               src->logical.count * sizeof(*filters), &data,
+                               &size);
+    assert(filters);
 
     for (size_t i = 0; i < src->logical.count; i++) {
         struct rbh_filter *filter;
@@ -86,11 +85,9 @@ logical_filter_copy(struct rbh_filter *dest, const struct rbh_filter *src,
             continue;
         }
 
-        data = ptralign(data, &size, alignof(*filter));
-        assert(size >= sizeof(*filter));
-        filter = (struct rbh_filter *)data;
-        data += sizeof(*filter);
-        size -= sizeof(*filter);
+        filter = aligned_memalloc(alignof(*filter), sizeof(*filter), &data,
+                                  &size);
+        assert(filter);
 
         if (filter_copy(filter, src->logical.filters[i], &data, &size))
             return -1;
