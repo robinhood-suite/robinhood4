@@ -35,6 +35,14 @@
 static size_t backend_count = 0;
 static struct rbh_backend **backends;
 
+static void __attribute__((destructor))
+exit_backends(void)
+{
+    for (size_t i = 0; i < backend_count; i++)
+        rbh_backend_destroy(backends[i]);
+    free(backends);
+}
+
 static size_t
 _find(struct rbh_backend *backend, enum action action,
       const struct rbh_filter *filter)
@@ -315,23 +323,6 @@ parse_expression(int *arg_idx, const struct rbh_filter *_filter)
     return filter;
 }
 
-static void
-destroy_backends(void)
-{
-    for (size_t i = 0; i < backend_count; i++)
-        rbh_backend_destroy(backends[i]);
-    free(backends);
-}
-
-static void
-_atexit(void (*function)(void))
-{
-    if (atexit(function)) {
-        function();
-        error(EXIT_FAILURE, 0, "atexit: too many functions registered");
-    }
-}
-
 int
 main(int _argc, char *_argv[])
 {
@@ -350,7 +341,6 @@ main(int _argc, char *_argv[])
     if (index == 0)
         error(EX_USAGE, 0, "missing at least one robinhood URI");
 
-    _atexit(destroy_backends);
     backends = malloc(index * sizeof(*backends));
     if (backends == NULL)
         error(EXIT_FAILURE, errno, "malloc");
