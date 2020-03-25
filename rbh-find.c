@@ -43,6 +43,28 @@ exit_backends(void)
     free(backends);
 }
 
+static const char *
+fsentry_path(const struct rbh_fsentry *fsentry)
+{
+    if (!(fsentry->mask & RBH_FP_NAMESPACE_XATTRS))
+        return NULL;
+
+    for (size_t i = 0; i < fsentry->xattrs.ns.count; i++) {
+        const struct rbh_value_pair *pair = &fsentry->xattrs.ns.pairs[i];
+
+        if (strcmp(pair->key, "path"))
+            continue;
+
+        if (pair->value->type != RBH_VT_STRING)
+            /* XXX: should probably say something... */
+            continue;
+
+        return pair->value->string;
+    }
+
+    return NULL;
+}
+
 static size_t
 _find(struct rbh_backend *backend, enum action action,
       const struct rbh_filter *filter)
@@ -76,13 +98,13 @@ _find(struct rbh_backend *backend, enum action action,
 
         switch (action) {
         case ACT_PRINT:
-            /* TODO: support extended attributes in the RobinHood library
-             *       and switch to printing paths
+            /* XXX: glibc's printf() handles printf("%s", NULL) pretty well, but
+             *      I do not think this is part of any standard.
              */
-            printf("%s\n", fsentry->name);
+            printf("%s%c", fsentry_path(fsentry), '\n');
             break;
         case ACT_PRINT0:
-            printf("%s%c", fsentry->name, '\0');
+            printf("%s%c", fsentry_path(fsentry), '\0');
             break;
         case ACT_COUNT:
             count++;
