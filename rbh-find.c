@@ -11,9 +11,6 @@
 # include <config.h>
 #endif
 
-#include "filters.h"
-#include "parser.h"
-
 #include <assert.h>
 #include <dlfcn.h>
 #include <errno.h>
@@ -32,6 +29,9 @@
 #endif
 #include <robinhood/utils.h>
 
+#include "filters.h"
+#include "parser.h"
+
 static size_t backend_count = 0;
 static struct rbh_backend **backends;
 
@@ -39,11 +39,16 @@ static size_t
 _find(struct rbh_backend *backend, enum action action,
       const struct rbh_filter *filter)
 {
+    const struct rbh_filter_options OPTIONS = {
+        .projection = {
+            .fsentry_mask = RBH_FP_ALL,
+            .statx_mask = STATX_ALL,
+        },
+    };
     struct rbh_mut_iterator *fsentries;
     size_t count = 0;
 
-    fsentries = rbh_backend_filter_fsentries(backend, filter, RBH_FP_ALL,
-                                             STATX_ALL);
+    fsentries = rbh_backend_filter(backend, filter, &OPTIONS);
     if (fsentries == NULL)
         error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
                       "filter_fsentries");
@@ -150,7 +155,7 @@ parse_predicate(int *arg_idx)
         break;
     case PRED_INAME:
         filter = shell_regex2filter(predicate, argv[++i],
-                                    RBH_FRO_CASE_INSENSITIVE);
+                                    RBH_RO_CASE_INSENSITIVE);
         break;
     case PRED_TYPE:
         filter = filetype2filter(argv[++i]);
@@ -188,20 +193,20 @@ parse_expression(int *arg_idx, const struct rbh_filter *_filter)
         const struct rbh_filter left_filter = {
             .op = RBH_FOP_AND,
             .logical = {
-                .count = 2,
                 .filters = left_filters,
+                .count = 2,
             },
         };
         const struct rbh_filter *ptr_to_left_filter = &left_filter;
         struct rbh_filter negated_left_filter = {
             .op = RBH_FOP_NOT,
             .logical = {
-                .count = 1,
                 .filters = &ptr_to_left_filter,
+                .count = 1,
             },
         };
-        const struct rbh_filter *filters[2] = {filter, NULL};
         enum command_line_token token;
+        struct rbh_filter *tmp;
 
         token = str2command_line_token(argv[i]);
         switch (token) {
@@ -246,7 +251,7 @@ parse_expression(int *arg_idx, const struct rbh_filter *_filter)
             i++;
 
             /* Parse the filter at the right of -o/-or */
-            filters[1] = parse_expression(&i, &negated_left_filter);
+            tmp = parse_expression(&i, &negated_left_filter);
             /* parse_expression() returned, so it must have seen a closing
              * parenthesis or reached the end of the command line, we should
              * return here too.
@@ -255,11 +260,7 @@ parse_expression(int *arg_idx, const struct rbh_filter *_filter)
             /* "OR" the part of the left filter we parsed ourselves (ie. not
              * `_filter') and the right filter.
             */
-            errno = 0;
-            filter = rbh_filter_or_new(filters, 2);
-            if (filter == NULL && errno != 0)
-                error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__ - 2,
-                              "filter_or");
+            filter = filter_or(filter, tmp);
 
             /* Update arg_idx and return */
             *arg_idx = i;
@@ -272,7 +273,7 @@ parse_expression(int *arg_idx, const struct rbh_filter *_filter)
             i++;
 
             /* Parse the sub-expression */
-            filters[1] = parse_expression(&i, NULL);
+            tmp = parse_expression(&i, NULL);
             if (i >= argc
                     || str2command_line_token(argv[i]) != CLT_PARENTHESIS_CLOSE)
                 error(EX_USAGE, 0,
@@ -280,20 +281,12 @@ parse_expression(int *arg_idx, const struct rbh_filter *_filter)
 
             /* Negate the sub-expression's filter, if need be */
             if (negate) {
-                errno = 0;
-                filters[1] = rbh_filter_not_new(filters[1]);
-                if (filters[1] == NULL && errno != 0)
-                    error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__ - 2,
-                                  "filter_not");
+                tmp = filter_not(tmp);
                 negate = false;
             }
 
             /* Build the resulting filter and continue */
-            errno = 0;
-            filter = rbh_filter_and_new(filters, 2);
-            if (filter == NULL && errno != 0)
-                error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__ - 2,
-                              "filter_and");
+            filter = filter_and(filter, tmp);
             break;
         case CLT_PARENTHESIS_CLOSE:
             if (previous_token == CLT_PARENTHESIS_OPEN)
@@ -303,21 +296,13 @@ parse_expression(int *arg_idx, const struct rbh_filter *_filter)
             return filter;
         case CLT_PREDICATE:
             /* Build a filter from the predicate and its arguments */
-            filters[1] = parse_predicate(&i);
+            tmp = parse_predicate(&i);
             if (negate) {
-                errno = 0;
-                filters[1] = rbh_filter_not_new(filters[1]);
-                if (filters[1] == NULL && errno != 0)
-                    error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__ - 2,
-                                  "filter_not");
+                tmp = filter_not(tmp);
                 negate = false;
             }
 
-            errno = 0;
-            filter = rbh_filter_and_new(filters, 2);
-            if (filter == NULL && errno != 0)
-                error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__ - 2,
-                              "filter_and");
+            filter = filter_and(filter, tmp);
             break;
         case CLT_ACTION:
             find(str2action(argv[i]), &left_filter);
@@ -381,8 +366,7 @@ main(int _argc, char *_argv[])
 
     if (!did_something)
         find(ACT_PRINT, filter);
-
-    rbh_filter_free(filter);
+    free(filter);
 
     return EXIT_SUCCESS;
 }
