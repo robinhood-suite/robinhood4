@@ -451,6 +451,7 @@ static const struct rbh_backend_operations MONGO_BACKEND_OPS = {
  *----------------------------------------------------------------------------*/
 
 static const struct rbh_backend MONGO_BACKEND = {
+    .id = RBH_BI_MONGO,
     .name = RBH_MONGO_BACKEND_NAME,
     .ops = &MONGO_BACKEND_OPS,
 };
