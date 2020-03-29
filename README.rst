@@ -56,7 +56,7 @@ To build the API documentation, use doxygen:
     doxyconfig INPUT             include/robinhood
     doxyconfig RECURSIVE         YES
     doxyconfig FILE_PATTERNS     "*.h" "*.h.in"
-    doxyconfig EXTENSION_MAPPING h.in=C             # untested
+    doxyconfig EXTENSION_MAPPING in=C
     doxyconfig EXTRACT_ALL       YES
     doxyconfig EXTRACT_STATIC    YES
     doxyconfig ALIASES           error=@exception
