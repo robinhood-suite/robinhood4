@@ -366,7 +366,9 @@ mongo_backend_update(void *backend, struct rbh_iterator *fsevents)
 static const struct rbh_filter ROOT_FILTER = {
     .op = RBH_FOP_EQUAL,
     .compare = {
-        .field = RBH_FF_PARENT_ID,
+        .field = {
+            .fsentry = RBH_FP_PARENT_ID,
+        },
         .value = {
             .type = RBH_VT_BINARY,
             .binary = {

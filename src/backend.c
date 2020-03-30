@@ -82,7 +82,9 @@ fsentry_from_parent_and_name(struct rbh_backend *backend,
     const struct rbh_filter PARENT_FILTER = {
         .op = RBH_FOP_EQUAL,
         .compare = {
-            .field = RBH_FF_PARENT_ID,
+            .field = {
+                .fsentry = RBH_FP_PARENT_ID,
+            },
             .value = {
                 .type = RBH_VT_BINARY,
                 .binary = {
@@ -95,7 +97,9 @@ fsentry_from_parent_and_name(struct rbh_backend *backend,
     const struct rbh_filter NAME_FILTER = {
         .op = RBH_FOP_EQUAL,
         .compare = {
-            .field = RBH_FF_NAME,
+            .field = {
+                .fsentry = RBH_FP_NAME,
+            },
             .value = {
                 .type = RBH_VT_STRING,
                 .string = name,

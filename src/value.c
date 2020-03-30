@@ -21,7 +21,7 @@
 #include "value.h"
 
 ssize_t __attribute__((pure))
-value_data_size(const struct rbh_value *value)
+value_data_size(const struct rbh_value *value, size_t offset)
 {
     size_t size;
 
@@ -38,16 +38,18 @@ value_data_size(const struct rbh_value *value)
     case RBH_VT_REGEX:
         return strlen(value->regex.string) + 1;
     case RBH_VT_SEQUENCE:
+        offset = sizealign(offset, alignof(*value->sequence.values)) - offset;
         size = value->sequence.count * sizeof(*value->sequence.values);
         for (size_t i = 0; i < value->sequence.count; i++) {
             size = sizealign(size, alignof(*value));
-            if (value_data_size(&value->sequence.values[i]) < 0)
+            if (value_data_size(&value->sequence.values[i], size) < 0)
                 return -1;
-            size += value_data_size(&value->sequence.values[i]);
+            size += value_data_size(&value->sequence.values[i], size);
         }
-        return size;
+        return offset + size;
     case RBH_VT_MAP:
-        return value_map_data_size(&value->map);
+        offset = sizealign(offset, alignof(*value->map.pairs)) - offset;
+        return offset + value_map_data_size(&value->map);
     }
 
     errno = EINVAL;
@@ -68,9 +70,9 @@ value_pair_data_size(const struct rbh_value_pair *pair)
 
     size = sizealign(size, alignof(*pair->value));
     size += sizeof(*pair->value);
-    if (value_data_size(pair->value) < 0)
+    if (value_data_size(pair->value, size) < 0)
         return -1;
-    size += value_data_size(pair->value);
+    size += value_data_size(pair->value, size);
 
     return size;
 }
@@ -266,7 +268,7 @@ value_clone(const struct rbh_value *value)
     char *data;
     int rc;
 
-    size = value_data_size(value);
+    size = value_data_size(value, 0);
     clone = malloc(sizeof(*clone) + size);
     if (clone == NULL)
         return NULL;

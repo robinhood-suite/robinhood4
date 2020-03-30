@@ -48,9 +48,8 @@ enum rbh_fsentry_property {
     RBH_FP_SYMLINK          = 0x0010,
     RBH_FP_NAMESPACE_XATTRS = 0x0020,
     RBH_FP_INODE_XATTRS     = 0x0040,
-
-    RBH_FP_ALL              = 0x007f
 };
+#define RBH_FP_ALL            0x007f
 
 /**
  * Create an fsentry in a single memory allocation

@@ -62,17 +62,77 @@ fop2str(enum rbh_filter_operator op, bool negate)
     return negate ? NEGATED_FOP2STR[op] : FOP2STR[op];
 }
 
-static const char * const FIELD2STR[] = {
-    [RBH_FF_ID]                 = MFF_ID,
-    [RBH_FF_PARENT_ID]          = MFF_NAMESPACE "." MFF_PARENT_ID,
-    [RBH_FF_NAME]               = MFF_NAMESPACE "." MFF_NAME,
-    [RBH_FF_NAMESPACE_XATTRS]   = MFF_NAMESPACE "." MFF_XATTRS,
-    [RBH_FF_INODE_XATTRS]       = MFF_XATTRS,
-    [RBH_FF_TYPE]               = MFF_STATX "." MFF_STATX_TYPE,
-    [RBH_FF_ATIME]              = MFF_STATX "." MFF_STATX_ATIME "." MFF_STATX_TIMESTAMP_SEC,
-    [RBH_FF_CTIME]              = MFF_STATX "." MFF_STATX_CTIME "." MFF_STATX_TIMESTAMP_SEC,
-    [RBH_FF_MTIME]              = MFF_STATX "." MFF_STATX_MTIME "." MFF_STATX_TIMESTAMP_SEC,
-};
+static const char *field2str(const struct rbh_filter_field *field,
+                             char **buffer, size_t bufsize)
+{
+    switch (field->fsentry) {
+    case RBH_FP_ID:
+        return MFF_ID;
+    case RBH_FP_PARENT_ID:
+        return MFF_NAMESPACE "." MFF_PARENT_ID;
+    case RBH_FP_NAME:
+        return MFF_NAMESPACE "." MFF_NAME;
+    case RBH_FP_SYMLINK:
+        return MFF_SYMLINK;
+    case RBH_FP_STATX:
+        switch (field->statx) {
+        case STATX_TYPE:
+            return MFF_STATX "." MFF_STATX_TYPE;
+        case STATX_MODE:
+            return MFF_STATX "." MFF_STATX_MODE;
+        case STATX_NLINK:
+            return MFF_STATX "." MFF_STATX_NLINK;
+        case STATX_UID:
+            return MFF_STATX "." MFF_STATX_UID;
+        case STATX_GID:
+            return MFF_STATX "." MFF_STATX_GID;
+        case STATX_ATIME:
+            return MFF_STATX "." MFF_STATX_ATIME;
+        case STATX_MTIME:
+            return MFF_STATX "." MFF_STATX_MTIME;
+        case STATX_CTIME:
+            return MFF_STATX "." MFF_STATX_CTIME;
+        case STATX_INO:
+            return MFF_STATX "." MFF_STATX_INO;
+        case STATX_SIZE:
+            return MFF_STATX "." MFF_STATX_SIZE;
+        case STATX_BLOCKS:
+            return MFF_STATX "." MFF_STATX_BLOCKS;
+        case STATX_BTIME:
+            return MFF_STATX "." MFF_STATX_BTIME;
+        }
+        break;
+    case RBH_FP_NAMESPACE_XATTRS:
+        if (field->xattr == NULL)
+            return MFF_NAMESPACE "." MFF_XATTRS;
+
+        if (snprintf(*buffer, bufsize, "%s.%s", MFF_NAMESPACE "." MFF_XATTRS,
+                     field->xattr) < bufsize)
+            return *buffer;
+
+        /* `*buffer' is too small */
+        if (asprintf(buffer, "%s.%s", MFF_NAMESPACE "." MFF_XATTRS,
+                     field->xattr) < 0)
+            return NULL;
+
+        return *buffer;
+    case RBH_FP_INODE_XATTRS:
+        if (field->xattr == NULL)
+            return MFF_XATTRS;
+
+        if (snprintf(*buffer, bufsize, "%s.%s", MFF_XATTRS, field->xattr)
+                < bufsize)
+            return *buffer;
+
+        /* `*buffer' is too small */
+        if (asprintf(buffer, "%s.%s", MFF_XATTRS, field->xattr) < 0)
+            return NULL;
+        return *buffer;
+    }
+
+    errno = ENOTSUP;
+    return NULL;
+}
 
 static bool
 _bson_append_rbh_filter(bson_t *bson, const struct rbh_filter *filter,
@@ -110,14 +170,13 @@ _bson_append_rbh_filter(bson_t *bson, const struct rbh_filter *filter,
 
 static bool
 bson_append_uint32_lower(bson_t *bson, enum rbh_filter_operator op,
-                         enum rbh_filter_field field, const char *xattr,
-                         uint32_t u32, bool negate)
+                         const struct rbh_filter_field *field, uint32_t u32,
+                         bool negate)
 {
     const struct rbh_filter LOWER = {
         .op = op,
         .compare = {
-            .field = field,
-            .xattr = xattr,
+            .field = *field,
             .value = {
                 .type = RBH_VT_INT32,
                 .int32 = u32,
@@ -127,8 +186,7 @@ bson_append_uint32_lower(bson_t *bson, enum rbh_filter_operator op,
     const struct rbh_filter POSITIVE = {
         .op = RBH_FOP_GREATER_OR_EQUAL,
         .compare = {
-            .field = field,
-            .xattr = xattr,
+            .field = *field,
             .value = {
                 .type = RBH_VT_INT32,
                 .int32 = 0,
@@ -150,14 +208,13 @@ bson_append_uint32_lower(bson_t *bson, enum rbh_filter_operator op,
 
 static bool
 bson_append_uint32_greater(bson_t *bson, enum rbh_filter_operator op,
-                           enum rbh_filter_field field, const char *xattr,
-                           uint32_t u32, bool negate)
+                           const struct rbh_filter_field *field, uint32_t u32,
+                           bool negate)
 {
     const struct rbh_filter GREATER = {
         .op = op,
         .compare = {
-            .field = field,
-            .xattr = xattr,
+            .field = *field,
             .value = {
                 .type = RBH_VT_INT32,
                 .int32 = u32,
@@ -167,8 +224,7 @@ bson_append_uint32_greater(bson_t *bson, enum rbh_filter_operator op,
     const struct rbh_filter NEGATIVE = {
         .op = RBH_FOP_STRICTLY_LOWER,
         .compare = {
-            .field = field,
-            .xattr = xattr,
+            .field = *field,
             .value = {
                 .type = RBH_VT_INT32,
                 .int32 = 0,
@@ -190,14 +246,13 @@ bson_append_uint32_greater(bson_t *bson, enum rbh_filter_operator op,
 
 static bool
 bson_append_uint64_lower(bson_t *bson, enum rbh_filter_operator op,
-                         enum rbh_filter_field field, const char *xattr,
-                         uint64_t u64, bool negate)
+                         const struct rbh_filter_field *field, uint64_t u64,
+                         bool negate)
 {
     const struct rbh_filter LOWER = {
         .op = op,
         .compare = {
-            .field = field,
-            .xattr = xattr,
+            .field = *field,
             .value = {
                 .type = RBH_VT_INT64,
                 .int64 = u64,
@@ -207,8 +262,7 @@ bson_append_uint64_lower(bson_t *bson, enum rbh_filter_operator op,
     const struct rbh_filter POSITIVE = {
         .op = RBH_FOP_GREATER_OR_EQUAL,
         .compare = {
-            .field = field,
-            .xattr = xattr,
+            .field = *field,
             .value = {
                 .type = RBH_VT_INT64,
                 .int64 = 0,
@@ -229,14 +283,13 @@ bson_append_uint64_lower(bson_t *bson, enum rbh_filter_operator op,
 }
 static bool
 bson_append_uint64_greater(bson_t *bson, enum rbh_filter_operator op,
-                           enum rbh_filter_field field, const char *xattr,
-                           uint64_t u64, bool negate)
+                           const struct rbh_filter_field *field, uint64_t u64,
+                           bool negate)
 {
     const struct rbh_filter GREATER = {
         .op = op,
         .compare = {
-            .field = field,
-            .xattr = xattr,
+            .field = *field,
             .value = {
                 .type = RBH_VT_INT64,
                 .int64 = u64,
@@ -246,8 +299,7 @@ bson_append_uint64_greater(bson_t *bson, enum rbh_filter_operator op,
     const struct rbh_filter NEGATIVE = {
         .op = RBH_FOP_STRICTLY_LOWER,
         .compare = {
-            .field = field,
-            .xattr = xattr,
+            .field = *field,
             .value = {
                 .type = RBH_VT_INT64,
                 .int64 = 0,
@@ -268,67 +320,13 @@ bson_append_uint64_greater(bson_t *bson, enum rbh_filter_operator op,
 }
 
 static bool
-bson_append_comparison_filter(bson_t *bson, const struct rbh_filter *filter,
-                              bool negate)
+bson_append_comparison(bson_t *bson, const char *key, size_t key_length,
+                       enum rbh_filter_operator op,
+                       const struct rbh_value *value, bool negate)
 {
-    const struct rbh_value *value = &filter->compare.value;
-    enum rbh_filter_field field = filter->compare.field;
-    const char *xattr = filter->compare.xattr;
-    enum rbh_filter_operator op = filter->op;
-    char buffer[XATTR_KEYLEN_MAX];
-    const char *fieldstr;
     bson_t document;
 
-    switch (field) {
-    case RBH_FF_NAMESPACE_XATTRS:
-    case RBH_FF_INODE_XATTRS:
-        if (xattr) {
-            int rc = snprintf(buffer, sizeof(buffer), "%s.%s", FIELD2STR[field],
-                              xattr);
-
-            assert(rc >= 0);
-            if (rc >= sizeof(buffer))
-                /* Errors from bson_append_*() are interpreted as ENOBUFs, as in
-                 * `bson' is full... Close enough.
-                 */
-                return false;
-            fieldstr = buffer;
-            break;
-        } /* else */
-        __attribute__((fallthrough));
-    default:
-        fieldstr = FIELD2STR[field];
-    }
-
-    /* Special case a few operators */
     switch (op) {
-    /* Mongo does not support unsigned integers, but we can emulate it */
-    case RBH_FOP_STRICTLY_LOWER:
-    case RBH_FOP_LOWER_OR_EQUAL:
-        switch (value->type) {
-        case RBH_VT_UINT32:
-            return bson_append_uint32_lower(bson, op, field, xattr,
-                                            value->uint32, negate);
-        case RBH_VT_UINT64:
-            return bson_append_uint64_lower(bson, op, field, xattr,
-                                            value->uint64, negate);
-        default:
-            break;
-        }
-        break;
-    case RBH_FOP_STRICTLY_GREATER:
-    case RBH_FOP_GREATER_OR_EQUAL:
-        switch (value->type) {
-        case RBH_VT_UINT32:
-            return bson_append_uint32_greater(bson, op, field, xattr,
-                                              value->uint32, negate);
-        case RBH_VT_UINT64:
-            return bson_append_uint64_greater(bson, op, field, xattr,
-                                              value->uint64, negate);
-        default:
-            break;
-        }
-        break;
     case RBH_FOP_REGEX:
         /* The regex operator is tricky: $not and $regex are not compatible.
          *
@@ -338,8 +336,8 @@ bson_append_comparison_filter(bson_t *bson, const struct rbh_filter *filter,
          *
          * Example:
          *
-         *      (field =~ pattern) <=> {field: /pattern/}}
-         *     !(field =~ pattern) <=> {field: {$not: /pattern/}}
+         *      (key =~ pattern) <=> {key: /pattern/}}
+         *     !(key =~ pattern) <=> {key: {$not: /pattern/}}
          *
          * Which is why NEGATED_FOP2STR[RBH_FOP_REGEX] is defined as "$not",
          * and also why FOP2STR[RBH_FOP_REGEX] is defined as NULL (because it
@@ -353,15 +351,74 @@ bson_append_comparison_filter(bson_t *bson, const struct rbh_filter *filter,
          */
         assert(value->type == RBH_VT_REGEX);
         if (!negate)
-            return BSON_APPEND_RBH_VALUE(bson, fieldstr, value);
+            return bson_append_rbh_value(bson, key, key_length, value);
         break;
     default:
         break;
     }
 
-    return BSON_APPEND_DOCUMENT_BEGIN(bson, fieldstr, &document)
+    return bson_append_document_begin(bson, key, key_length, &document)
         && BSON_APPEND_RBH_VALUE(&document, fop2str(op, negate), value)
         && bson_append_document_end(bson, &document);
+}
+
+#define BSON_APPEND_COMPARISON(bson, key, op, value, negate) \
+    bson_append_comparison(bson, key, strlen(key), op, value, negate)
+
+#define XATTR_ONSTACK_LENGTH 128
+
+static bool
+bson_append_comparison_filter(bson_t *bson, const struct rbh_filter *filter,
+                              bool negate)
+{
+    const struct rbh_filter_field *field = &filter->compare.field;
+    const struct rbh_value *value = &filter->compare.value;
+    enum rbh_filter_operator op = filter->op;
+    char onstack[XATTR_ONSTACK_LENGTH];
+    char *buffer = onstack;
+    const char *key;
+    bool success;
+
+    /* Mongo does not support unsigned integers, but we can emulate it */
+    switch (op) {
+    case RBH_FOP_STRICTLY_LOWER:
+    case RBH_FOP_LOWER_OR_EQUAL:
+        switch (value->type) {
+        case RBH_VT_UINT32:
+            return bson_append_uint32_lower(bson, op, field, value->uint32,
+                                            negate);
+        case RBH_VT_UINT64:
+            return bson_append_uint64_lower(bson, op, field, value->uint64,
+                                            negate);
+        default:
+            break;
+        }
+        break;
+    case RBH_FOP_STRICTLY_GREATER:
+    case RBH_FOP_GREATER_OR_EQUAL:
+        switch (value->type) {
+        case RBH_VT_UINT32:
+            return bson_append_uint32_greater(bson, op, field, value->uint32,
+                                              negate);
+        case RBH_VT_UINT64:
+            return bson_append_uint64_greater(bson, op, field, value->uint64,
+                                              negate);
+        default:
+            break;
+        }
+        break;
+    default:
+        break;
+    }
+
+    key = field2str(field, &buffer, sizeof(onstack));
+    if (key == NULL)
+        return false;
+
+    success = BSON_APPEND_COMPARISON(bson, key, op, value, negate);
+    if (buffer != onstack)
+        free(buffer);
+    return success;
 }
 
 static bool

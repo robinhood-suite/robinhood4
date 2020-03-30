@@ -15,6 +15,11 @@
 #include <limits.h>
 #include <stdlib.h>
 
+#include <sys/stat.h>
+#ifndef HAVE_STATX
+# include "robinhood/statx.h"
+#endif
+
 #include "robinhood/filter.h"
 
 #include "check-compat.h"
@@ -70,53 +75,106 @@ filter_operator2str(enum rbh_filter_operator op)
 #define ck_assert_filter_operator_eq(X, Y) _ck_assert_filter_operator(X, ==, Y)
 
 static const char *
-filter_field2str(enum rbh_filter_field field)
+fsentry_property2str(enum rbh_fsentry_property property)
 {
-    switch (field) {
-    case RBH_FF_ID:
-        return "RBH_FF_ID";
-    case RBH_FF_PARENT_ID:
-        return "RBH_FF_PARENT_ID";
-    case RBH_FF_ATIME:
-        return "RBH_FF_ATIME";
-    case RBH_FF_MTIME:
-        return "RBH_FF_MTIME";
-    case RBH_FF_CTIME:
-        return "RBH_FF_CTIME";
-    case RBH_FF_NAME:
-        return "RBH_FF_NAME";
-    case RBH_FF_TYPE:
-        return "RBH_FF_TYPE";
-    default:
-        return "unknown";
+    switch (property) {
+    case RBH_FP_ID:
+        return "RBH_FP_ID";
+    case RBH_FP_PARENT_ID:
+        return "RBH_FP_PARENT_ID";
+    case RBH_FP_NAME:
+        return "RBH_FP_NAME";
+    case RBH_FP_SYMLINK:
+        return "RBH_FP_SYMLINK";
+    case RBH_FP_STATX:
+        return "RBH_FP_STATX";
+    case RBH_FP_NAMESPACE_XATTRS:
+        return "RBH_FP_NAMESPACE_XATTRS";
+    case RBH_FP_INODE_XATTRS:
+        return "RBH_FP_INODE_XATTRS";
     }
+    return "unknown";
 }
 
-#define _ck_assert_filter_field(X, OP, Y) do { \
+static const char *
+statx_field2str(unsigned int field)
+{
+    switch (field) {
+    case STATX_TYPE:
+        return "STATX_TYPE";
+    case STATX_MODE:
+        return "STATX_MODE";
+    case STATX_NLINK:
+        return "STATX_NLINK";
+    case STATX_UID:
+        return "STATX_UID";
+    case STATX_GID:
+        return "STATX_GID";
+    case STATX_ATIME:
+        return "STATX_ATIME";
+    case STATX_MTIME:
+        return "STATX_MTIME";
+    case STATX_CTIME:
+        return "STATX_CTIME";
+    case STATX_INO:
+        return "STATX_INO";
+    case STATX_SIZE:
+        return "STATX_SIZE";
+    case STATX_BLOCKS:
+        return "STATX_BLOCKS";
+    case STATX_BTIME:
+        return "STATX_BTIME";
+    }
+    return "unknown";
+}
+
+#define _ck_assert_fsentry_property(X, OP, Y) \
     ck_assert_msg((X) OP (Y), "%s is %s, %s is %s", \
-                  #X, filter_field2str(X), #Y, filter_field2str(Y)); \
-} while (0);
+                  #X, fsentry_property2str(X), \
+                  #Y, fsentry_property2str(Y))
 
-#define _ck_assert_comparison_filter(X, OP, Y, NULLEQ, NULLNE) do { \
-    _ck_assert_filter_field((X)->compare.field, OP, (X)->compare.field); \
-    _ck_assert_value(&(X)->compare.value, OP, &(Y)->compare.value); \
-} while (0);
+#define _ck_assert_statx_field(X, OP, Y) \
+    ck_assert_msg((X) OP (Y), "%s is %s, %s is %s", \
+                  #X, statx_field2str(X), \
+                  #Y, statx_field2str(Y))
 
-#define _ck_assert_filter(X, OP, Y, NULLEQ, NULLNE) do { \
-    if ((X) == NULL || (Y) == NULL) { \
-        _ck_assert_ptr(X, OP, Y); \
+#define ck_assert_filter_field_eq(X, Y) do { \
+    _ck_assert_fsentry_property((X)->fsentry, ==, (Y)->fsentry); \
+    switch ((X)->fsentry) { \
+    case RBH_FP_ID: \
+    case RBH_FP_PARENT_ID: \
+    case RBH_FP_NAME: \
+    case RBH_FP_SYMLINK: \
+        break; \
+    case RBH_FP_STATX: \
+        _ck_assert_statx_field((X)->statx, ==, (Y)->statx); \
+        break; \
+    case RBH_FP_NAMESPACE_XATTRS: \
+    case RBH_FP_INODE_XATTRS: \
+        ck_assert_pstr_eq((X)->xattr, (Y)->xattr); \
         break; \
     } \
-    _ck_assert_filter_operator((X)->op, OP, (Y)->op); \
+} while (0);
+
+#define ck_assert_comparison_filter_eq(X, Y) do { \
+    ck_assert_filter_field_eq(&(X)->compare.field, &(Y)->compare.field); \
+    ck_assert_value_eq(&(X)->compare.value, &(Y)->compare.value); \
+} while (0);
+
+#define ck_assert_filter_eq(X, Y) do { \
+    if ((X) == NULL || (Y) == NULL) { \
+        ck_assert_ptr_eq(X, Y); \
+        break; \
+    } \
+    ck_assert_filter_operator_eq((X)->op, (Y)->op); \
     if (rbh_is_comparison_operator((X)->op)) { \
-        _ck_assert_comparison_filter(X, OP, Y, NULLEQ, NULLNE); \
+        ck_assert_comparison_filter_eq(X, Y); \
     } else { \
-        _ck_assert_uint((X)->logical.count, OP, (Y)->logical.count); \
-        /* Recursion has to bedone manually */ \
+        ck_assert_uint_eq((X)->logical.count, (Y)->logical.count); \
+        /* Recursion has to be done manually */ \
     } \
 } while (0)
 
-#define ck_assert_filter_eq(X, Y) _ck_assert_filter(X, ==, Y, 1, 0)
 
 /*----------------------------------------------------------------------------*
  |                          rbh_filter_compare_new()                          |
@@ -127,7 +185,9 @@ START_TEST(rfcn_basic)
     const struct rbh_filter FILTER = {
         .op = RBH_FOP_EQUAL,
         .compare = {
-            .field = RBH_FF_ID,
+            .field = {
+                .fsentry = RBH_FP_ID,
+            },
             .value = {
                 .type = RBH_VT_BINARY,
                 .binary = {
@@ -139,7 +199,7 @@ START_TEST(rfcn_basic)
     };
     struct rbh_filter *filter;
 
-    filter = rbh_filter_compare_new(FILTER.op, FILTER.compare.field, NULL,
+    filter = rbh_filter_compare_new(FILTER.op, &FILTER.compare.field,
                                     &FILTER.compare.value);
     ck_assert_ptr_nonnull(filter);
 
@@ -150,38 +210,43 @@ END_TEST
 
 START_TEST(rfcn_bad_operator)
 {
+    const struct rbh_filter_field FIELD = {
+        .fsentry = RBH_FP_ID,
+    };
     const struct rbh_value VALUE = {};
 
     errno = 0;
-    ck_assert_ptr_null(rbh_filter_compare_new(-1, RBH_FF_ID, NULL, &VALUE));
+    ck_assert_ptr_null(rbh_filter_compare_new(-1, &FIELD, &VALUE));
     ck_assert_int_eq(errno, EINVAL);
 }
 END_TEST
 
 START_TEST(rfcn_in_without_sequence)
 {
+    const struct rbh_filter_field FIELD = {
+        .fsentry = RBH_FP_ID,
+    };
     const struct rbh_value VALUE = {
         .type = RBH_VT_UINT32,
     };
 
     errno = 0;
-    ck_assert_ptr_null(
-            rbh_filter_compare_new(RBH_FOP_IN, RBH_FF_ID, NULL, &VALUE)
-            );
+    ck_assert_ptr_null(rbh_filter_compare_new(RBH_FOP_IN, &FIELD, &VALUE));
     ck_assert_int_eq(errno, EINVAL);
 }
 END_TEST
 
 START_TEST(rfcn_regex_without_regex)
 {
+    const struct rbh_filter_field FIELD = {
+        .fsentry = RBH_FP_ID,
+    };
     const struct rbh_value VALUE = {
         .type = RBH_VT_UINT32,
     };
 
     errno = 0;
-    ck_assert_ptr_null(
-            rbh_filter_compare_new(RBH_FOP_REGEX, RBH_FF_ID, NULL, &VALUE)
-            );
+    ck_assert_ptr_null(rbh_filter_compare_new(RBH_FOP_REGEX, &FIELD, &VALUE));
     ck_assert_int_eq(errno, EINVAL);
 }
 END_TEST
@@ -195,19 +260,18 @@ static const enum rbh_filter_operator BITWISE_OPS[] = {
 
 START_TEST(rfcn_bitwise_without_integer)
 {
+    const struct rbh_filter_field FIELD = {
+        .fsentry = RBH_FP_ID,
+    };
     const struct rbh_value VALUE = {
         .type = RBH_VT_STRING,
     };
 
     errno = 0;
-    ck_assert_ptr_null(
-            rbh_filter_compare_new(BITWISE_OPS[_i], RBH_FF_ID, NULL, &VALUE)
-            );
+    ck_assert_ptr_null(rbh_filter_compare_new(BITWISE_OPS[_i], &FIELD, &VALUE));
     ck_assert_int_eq(errno, EINVAL);
 }
 END_TEST
-
-/* TODO: test rbh_filter_compare_*_new() */
 
 /*----------------------------------------------------------------------------*
  |                            rbh_filter_and_new()                            |
@@ -217,7 +281,9 @@ static const struct rbh_filter COMPARISONS[] = {
     {
         .op = RBH_FOP_EQUAL,
         .compare = {
-            .field = RBH_FF_ID,
+            .field = {
+                .fsentry = RBH_FP_ID,
+            },
             .value = {
                 .type = RBH_VT_BINARY,
                 .binary = {
@@ -230,7 +296,9 @@ static const struct rbh_filter COMPARISONS[] = {
     {
         .op = RBH_FOP_STRICTLY_LOWER,
         .compare = {
-            .field = RBH_FF_PARENT_ID,
+            .field = {
+                .fsentry = RBH_FP_PARENT_ID,
+            },
             .value = {
                 .type = RBH_VT_UINT32,
                 .uint32 = INT32_MAX,
@@ -240,7 +308,10 @@ static const struct rbh_filter COMPARISONS[] = {
     {
         .op = RBH_FOP_LOWER_OR_EQUAL,
         .compare = {
-            .field = RBH_FF_ATIME,
+            .field = {
+                .fsentry = RBH_FP_STATX,
+                .statx = STATX_ATIME,
+            },
             .value = {
                 .type = RBH_VT_UINT64,
                 .uint64 = UINT64_MAX,
@@ -250,7 +321,10 @@ static const struct rbh_filter COMPARISONS[] = {
     {
         .op = RBH_FOP_STRICTLY_GREATER,
         .compare = {
-            .field = RBH_FF_MTIME,
+            .field = {
+                .fsentry = RBH_FP_STATX,
+                .statx = STATX_MTIME,
+            },
             .value = {
                 .type = RBH_VT_INT32,
                 .int32 = INT32_MAX,
@@ -260,7 +334,10 @@ static const struct rbh_filter COMPARISONS[] = {
     {
         .op = RBH_FOP_GREATER_OR_EQUAL,
         .compare = {
-            .field = RBH_FF_CTIME,
+            .field = {
+                .fsentry = RBH_FP_STATX,
+                .statx = STATX_CTIME,
+            },
             .value = {
                 .type = RBH_VT_INT64,
                 .int64 = INT64_MIN,
@@ -270,7 +347,10 @@ static const struct rbh_filter COMPARISONS[] = {
     {
         .op = RBH_FOP_IN,
         .compare = {
-            .field = RBH_FF_TYPE,
+            .field = {
+                .fsentry = RBH_FP_STATX,
+                .statx = STATX_TYPE,
+            },
             .value = {
                 .type = RBH_VT_SEQUENCE,
                 .sequence = {
@@ -283,7 +363,9 @@ static const struct rbh_filter COMPARISONS[] = {
     {
         .op = RBH_FOP_REGEX,
         .compare = {
-            .field = RBH_FF_NAME,
+            .field = {
+                .fsentry = RBH_FP_NAME,
+            },
             .value = {
                 .type = RBH_VT_REGEX,
                 .regex = {
@@ -296,7 +378,10 @@ static const struct rbh_filter COMPARISONS[] = {
     {
         .op = RBH_FOP_BITS_ANY_SET,
         .compare = {
-            .field = RBH_FF_ID,
+            .field = {
+                .fsentry = RBH_FP_STATX,
+                .statx = STATX_UID,
+            },
             .value = {
                 .type = RBH_VT_UINT32,
                 .uint32 = UINT32_MAX,
@@ -306,7 +391,10 @@ static const struct rbh_filter COMPARISONS[] = {
     {
         .op = RBH_FOP_BITS_ALL_SET,
         .compare = {
-            .field = RBH_FF_PARENT_ID,
+            .field = {
+               .fsentry = RBH_FP_STATX,
+                .statx = STATX_INO,
+            },
             .value = {
                 .type = RBH_VT_UINT64,
                 .uint64 = UINT64_MAX,
@@ -316,7 +404,10 @@ static const struct rbh_filter COMPARISONS[] = {
     {
         .op = RBH_FOP_BITS_ANY_CLEAR,
         .compare = {
-            .field = RBH_FF_ATIME,
+            .field = {
+                .fsentry = RBH_FP_STATX,
+                .statx = STATX_GID,
+            },
             .value = {
                 .type = RBH_VT_INT32,
                 .int32 = INT32_MIN,
@@ -324,15 +415,53 @@ static const struct rbh_filter COMPARISONS[] = {
         },
     },
     {
-        .op = RBH_FOP_BITS_ANY_CLEAR,
+        .op = RBH_FOP_BITS_ALL_CLEAR,
         .compare = {
-            .field = RBH_FF_ATIME,
+            .field = {
+               .fsentry = RBH_FP_STATX,
+               .statx = STATX_SIZE,
+            },
             .value = {
                 .type = RBH_VT_INT64,
                 .int64 = INT64_MIN,
             },
         },
-    }
+    },
+    /* The filters above should cover all the possible operators.
+     * The filters below should cover all the possible fields (not already
+     * covered above).
+     */
+    {
+        .op = RBH_FOP_REGEX,
+        .compare = {
+            .field = {
+                .fsentry = RBH_FP_NAMESPACE_XATTRS,
+                .xattr = "path",
+            },
+            .value = {
+                .type = RBH_VT_REGEX,
+                .regex = {
+                    .string = "abcdefg",
+                    .options = 0,
+                },
+            },
+        },
+    },
+    {
+        .op = RBH_FOP_EQUAL,
+        .compare = {
+            .field = {
+                .fsentry = RBH_FP_INODE_XATTRS,
+                .xattr = NULL,
+            },
+            .value = {
+                .type = RBH_VT_MAP,
+                .map = {
+                    .count = 0,
+                },
+            },
+        },
+    },
 };
 
 START_TEST(rfan_basic)

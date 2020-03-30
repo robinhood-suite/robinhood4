@@ -18,14 +18,16 @@
  * Compute the size of the data a value points at
  *
  * @param value     the value whose data size to compute
+ * @param offset    an alignment offset
  *
- * @return          the number of bytes \p value points at on success, -1 on
- *                  error and errno is set appropriately
+ * @return          the complement of \p offset + the number of bytes \p value
+ *                  points at on success, -1 on error and errno is set
+ *                  appropriately
  *
  * @error EINVAL    \p value's type is invalid
  */
 ssize_t __attribute__((pure))
-value_data_size(const struct rbh_value *value);
+value_data_size(const struct rbh_value *value, size_t offset);
 
 /**
  * Make a standalone copy of a value
