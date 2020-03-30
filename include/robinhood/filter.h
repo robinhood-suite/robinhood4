@@ -283,6 +283,7 @@ rbh_filter_compare_string_new(enum rbh_filter_operator op,
 /**
  * Create a filter that matches a field against a regex
  *
+ * @param op            the type of comparison to use
  * @param field         the field to compare
  * @param regex         the regex to compare the field to
  * @param regex_options a bitmask of enum rbh_filter_regex_option
