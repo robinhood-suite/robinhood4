@@ -13,25 +13,73 @@
 /** @file
  * Filters are meant to abstract predicates over the properties of an fsentry
  *
- * There are two type of filters: comparison filters, and logical filters.
+ * \section types Types of filters
+ *
+ * There are three type of filters: comparison filters, logical filters, and
+ * the NULL filter.
+ *
+ * To distinguish comparison filters from logical filters, one needs only to
+ * look at its operator (cf. rbh_is_comparison_operator() and
+ * rbh_is_logical_operator()).
+ *
+ * \subsection comparison Comparison filters
  *
  * Comparison filters represent a single predicate:
+ *
  *     an fsentry's name matches '.*.c'
  *
  * They are made of three parts:
- *   - a field: "an fsentry's name";
- *   - an operator: "matches";
- *   - a value: "'.*.c'".
+ *   - a field: \c "an fsentry's name";
+ *   - an operator: \c "matches";
+ *   - a value: \c ".*.c".
+ *
+ * Here is a table that presents valid combinations of
+ * comparison operator / value type:
+ *
+ * |          | EQUAL | LOWER/GREATER | REGEX | IN | BITS |
+ * |----------|:-----:|:-------------:|:-----:|:--:|:----:|
+ * | BINARY   |   X   |       X       |       |    |      |
+ * | INTEGERS |   X   |       X       |       |    |   X  |
+ * | STRING   |   X   |       X       |       |    |      |
+ * | REGEX    |   X   |       X       |   X   |    |      |
+ * | SEQUENCE |   X   |       X       |       |  X |      |
+ * | MAP      |   X   |       X       |       |    |      |
+ *
+ * Using LOWER/GREATER operators with any value type other than INTEGERS, while
+ * considered to be a valid filter may yield different result depending on the
+ * backend that will interpret them. Refrain from using them unless you know
+ * what you are doing.
+ *
+ * \subsection logical Logical filters
  *
  * Logical filters are combinations of other filters:
+ *
  *     (filter_A and filter_B) or not filter_C
  *
  * They are made of two parts:
- *    - an operator: and / or / not;
- *    - a list of filters.
+ *    - an operator: \c "and", \c "or", \c "not";
+ *    - a list of filters: \c "filter_A", \c "filter_B", and "filter_C".
  *
- * To distinguish one type from another, one needs only to look at the operator
- * in the struct filter (there are inline functions for this).
+ * \subsection null NULL filter
+ *
+ * Technically, there is a third type of filters: the NULL filter.
+ *
+ * NULL is a valid filter that matches everything.
+ *
+ * Conversely, the negation of a NULL filter:
+ *
+ * ```
+ * const struct rbh_filter *FILTER_NULL = NULL;
+ * const struct rbh_filter FILTER_NOT_NULL = {
+ *     .op = FOP_NOT,
+ *     .logical = {
+ *         .filters = &FILTER_NULL,
+ *         .count = 1,
+ *     },
+ * };
+ * ```
+ *
+ * matches nothing.
  */
 
 #include <stdbool.h>
@@ -41,6 +89,11 @@
 #include <robinhood/fsentry.h>
 #include <robinhood/value.h>
 
+/**
+ * Filter operator
+ *
+ * There are two types of operators: comparison operators and logical operators.
+ */
 enum rbh_filter_operator {
     /* Comparison */
     RBH_FOP_EQUAL,
@@ -111,20 +164,8 @@ struct rbh_filter_field {
 };
 
 /**
- * NULL is a valid filter that matches everything.
+ * A filter, to be used with rbh_backend_filter()
  *
- * Conversely, the negation of a NULL filter:
- *
- * const struct rbh_filter *FILTER_NULL = NULL;
- * const struct rbh_filter FILTER_NOT_NULL = {
- *     .op = FOP_NOT,
- *     .logical = {
- *         .filters = &FILTER_NULL,
- *         .count = 1,
- *     },
- * };
- *
- * matches nothing.
  */
 struct rbh_filter {
     enum rbh_filter_operator op;
@@ -145,30 +186,6 @@ struct rbh_filter {
  *
  * Any struct rbh_filter returned by the following functions can be freed with
  * a single call to free().
- */
-
-/* Valid combinations of comparison operator / value type:
- *
- * --------------------------------------------------------
- * |##########| EQUAL | LOWER/GREATER | REGEX | IN | BITS |
- * |------------------------------------------------------|
- * | BINARY   |   X   |       X       |       |    |      |
- * |------------------------------------------------------|
- * | INTEGERS |   X   |       X       |       |    |   X  |
- * |------------------------------------------------------|
- * | STRING   |   X   |       X       |       |    |      |
- * |------------------------------------------------------|
- * | REGEX    |   X   |       X       |   X   |    |      |
- * |------------------------------------------------------|
- * | SEQUENCE |   X   |       X       |       |  X |      |
- * |------------------------------------------------------|
- * | MAP      |   X   |       X       |       |    |      |
- * --------------------------------------------------------
- *
- * Using LOWER/GREATER operators with any value type other than INTEGERS, while
- * considered to be a valid filter may yield different result depending on the
- * backend that will interpret them. Refrain from using them unless you know
- * what you are doing.
  */
 
 /**
