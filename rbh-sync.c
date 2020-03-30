@@ -396,6 +396,12 @@ parse(int argc, char *argv[])
 int
 main(int argc, char *argv[])
 {
+    const struct rbh_filter_options OPTIONS = {
+        .projection = {
+            .fsentry_mask = RBH_FP_ALL,
+            .statx_mask = STATX_ALL,
+        },
+    };
     struct rbh_mut_iterator *fsentries;
     struct rbh_mut_iterator *fsevents;
 
@@ -404,16 +410,16 @@ main(int argc, char *argv[])
     if (options.one) {
         struct rbh_fsentry *root;
 
-        root = rbh_backend_root(from, RBH_FP_ALL, STATX_ALL);
+        root = rbh_backend_root(from, &OPTIONS.projection);
         if (root == NULL)
             error(EXIT_FAILURE, errno, "rbh_backend_root");
 
-        fsentries = rbh_mut_array_iterator(root, sizeof(*root), 1);
+        fsentries = rbh_mut_iter_array(root, sizeof(*root), 1);
         if (fsentries == NULL)
             error(EXIT_FAILURE, errno, "rbh_mut_array_iterator");
     } else {
         /* "Dump" `from' */
-        fsentries = rbh_backend_filter_fsentries(from, NULL, RBH_FP_ALL, STATX_ALL);
+        fsentries = rbh_backend_filter(from, NULL, &OPTIONS);
         if (fsentries == NULL)
             error(EXIT_FAILURE, errno, "rbh_backend_filter_fsentries");
     }
