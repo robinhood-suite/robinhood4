@@ -97,7 +97,7 @@ struct rbh_backend_operations {
             unsigned int fsentry_mask,
             unsigned int statx_mask
             );
-    struct rbh_mut_iterator *(*filter_fsentries)(
+    struct rbh_mut_iterator *(*filter)(
             void *backend,
             const struct rbh_filter *filter,
             unsigned int fsentry_mask,
@@ -334,17 +334,14 @@ rbh_backend_root(struct rbh_backend *backend, unsigned int fsentry_mask,
  * documented by \p backend.
  */
 static inline struct rbh_mut_iterator *
-rbh_backend_filter_fsentries(struct rbh_backend *backend,
-                             const struct rbh_filter *filter,
-                             unsigned int fsentry_mask,
-                             unsigned int statx_mask)
+rbh_backend_filter(struct rbh_backend *backend, const struct rbh_filter *filter,
+                   unsigned int fsentry_mask, unsigned int statx_mask)
 {
-    if (backend->ops->filter_fsentries == NULL) {
+    if (backend->ops->filter == NULL) {
         errno = ENOTSUP;
         return NULL;
     }
-    return backend->ops->filter_fsentries(backend, filter, fsentry_mask,
-                                          statx_mask);
+    return backend->ops->filter(backend, filter, fsentry_mask, statx_mask);
 }
 
 /**
@@ -374,12 +371,11 @@ rbh_backend_destroy(struct rbh_backend *backend)
  *
  * @error ENOENT        no fsentry in \p backend matches \p filter
  *
- * This function is a thin wrapper around rbh_backend_filter_fsentries(). As
- * such, any comment that applies to rbh_backend_filter_fsentries() also applies
- * to this function.
+ * This function is a thin wrapper around rbh_backend_filter(). As such, any
+ * comment that applies to rbh_backend_filter() also applies to this function.
  *
  * In particular, this function may fail and set errno for any of the errors
- * specified for rbh_backend_filter_fsentries().
+ * specified for rbh_backend_filter().
  */
 struct rbh_fsentry *
 rbh_backend_filter_one(struct rbh_backend *backend,
@@ -404,12 +400,11 @@ rbh_backend_filter_one(struct rbh_backend *backend,
  *                      into an fsentry
  * @error ENOENT        no fsentry in \p backend has a path that matches \p path
  *
- * This function is a wrapper around rbh_backend_filter_fsentries(). As such,
- * any comment that applies to rbh_backend_filter_fsentries() also applies to
- * this function.
+ * This function is a wrapper around rbh_backend_filter(). As such, any comment
+ * that applies to rbh_backend_filter() also applies to this function.
  *
  * In particular, this function may fail and set errno for any of the errors
- * specified for rbh_backend_filter_fsentries().
+ * specified for rbh_backend_filter().
  */
 struct rbh_fsentry *
 rbh_backend_fsentry_from_path(struct rbh_backend *backend, const char *path,

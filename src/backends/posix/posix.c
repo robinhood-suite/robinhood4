@@ -509,8 +509,7 @@ posix_root(void *backend, unsigned int fsentry_mask, unsigned int statx_mask)
     struct rbh_fsentry *root;
     int save_errno;
 
-    fsentries = rbh_backend_filter_fsentries(backend, NULL, fsentry_mask,
-                                             statx_mask);
+    fsentries = rbh_backend_filter(backend, NULL, fsentry_mask, statx_mask);
     if (fsentries == NULL)
         return NULL;
 
@@ -523,7 +522,7 @@ posix_root(void *backend, unsigned int fsentry_mask, unsigned int statx_mask)
 }
 
     /*--------------------------------------------------------------------*
-     |                         filter_fsentries()                         |
+     |                              filter()                              |
      *--------------------------------------------------------------------*/
 
 /* Modify the root's name and parent ID to match RobinHood's conventions */
@@ -544,9 +543,8 @@ set_root_properties(FTSENT *root)
 }
 
 static struct rbh_mut_iterator *
-posix_backend_filter_fsentries(void *backend, const struct rbh_filter *filter,
-                               unsigned int fsentries_mask,
-                               unsigned int statx_mask)
+posix_backend_filter(void *backend, const struct rbh_filter *filter,
+                     unsigned int fsentries_mask, unsigned int statx_mask)
 {
     struct posix_backend *posix = backend;
     struct posix_iterator *posix_iter;
@@ -689,10 +687,9 @@ struct posix_branch_backend {
 };
 
 static struct rbh_mut_iterator *
-posix_branch_backend_filter_fsentries(void *backend,
-                                      const struct rbh_filter *filter,
-                                      unsigned int fsentries_mask,
-                                      unsigned int statx_mask)
+posix_branch_backend_filter(void *backend, const struct rbh_filter *filter,
+                            unsigned int fsentries_mask,
+                            unsigned int statx_mask)
 {
     struct posix_branch_backend *branch = backend;
     struct posix_iterator *posix_iter;
@@ -722,7 +719,7 @@ posix_backend_branch(void *backend, const struct rbh_id *id);
 static const struct rbh_backend_operations POSIX_BRANCH_BACKEND_OPS = {
     .root = posix_root,
     .branch = posix_backend_branch,
-    .filter_fsentries = posix_branch_backend_filter_fsentries,
+    .filter = posix_branch_backend_filter,
     .destroy = posix_backend_destroy,
 };
 
@@ -766,7 +763,7 @@ static const struct rbh_backend_operations POSIX_BACKEND_OPS = {
     .set_option = posix_backend_set_option,
     .branch = posix_backend_branch,
     .root = posix_root,
-    .filter_fsentries = posix_backend_filter_fsentries,
+    .filter = posix_backend_filter,
     .destroy = posix_backend_destroy,
 };
 

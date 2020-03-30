@@ -136,14 +136,14 @@ START_TEST(rbu_unsupported)
 END_TEST
 
 /*----------------------------------------------------------------------------*
- |                        rbh_backend_filter_fsentries                        |
+ |                             rbh_backend_filter                             |
  *----------------------------------------------------------------------------*/
 
 START_TEST(rbff_unsupported)
 {
     struct rbh_backend *backend = test_backend_new();
 
-    ck_assert_ptr_null(rbh_backend_filter_fsentries(backend, NULL, 0, 0));
+    ck_assert_ptr_null(rbh_backend_filter(backend, NULL, 0, 0));
     ck_assert_int_eq(errno, ENOTSUP);
 
     rbh_backend_destroy(backend);

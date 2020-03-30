@@ -61,7 +61,7 @@ unchecked_teardown_tmpdir(void)
 }
 
 /*----------------------------------------------------------------------------*
- |                           posix filter fsentries                           |
+ |                                posix filter                                |
  *----------------------------------------------------------------------------*/
 
 START_TEST(pff_missing_root)
@@ -72,7 +72,7 @@ START_TEST(pff_missing_root)
     ck_assert_ptr_nonnull(posix);
 
     errno = 0;
-    ck_assert_ptr_null(rbh_backend_filter_fsentries(posix, NULL, 0, 0));
+    ck_assert_ptr_null(rbh_backend_filter(posix, NULL, 0, 0));
     ck_assert_int_eq(errno, ENOENT);
 
     rbh_backend_destroy(posix);
@@ -91,7 +91,7 @@ START_TEST(pff_empty_root)
     posix = rbh_posix_backend_new(EMPTY);
     ck_assert_ptr_nonnull(posix);
 
-    fsentries = rbh_backend_filter_fsentries(posix, NULL, RBH_FP_PARENT_ID, 0);
+    fsentries = rbh_backend_filter(posix, NULL, RBH_FP_PARENT_ID, 0);
     ck_assert_ptr_nonnull(fsentries);
 
     fsentry = rbh_mut_iter_next(fsentries);
@@ -346,7 +346,7 @@ unit_suite(void)
     TCase *tests;
 
     suite = suite_create("posix backend");
-    tests = tcase_create("filter fsentries");
+    tests = tcase_create("filter");
     tcase_add_unchecked_fixture(tests, unchecked_setup_tmpdir,
                                 unchecked_teardown_tmpdir);
     tcase_add_test(tests, pff_missing_root);

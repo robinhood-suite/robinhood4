@@ -386,13 +386,12 @@ mongo_root(void *backend, unsigned int fsentry_mask, unsigned int statx_mask)
 }
 
     /*--------------------------------------------------------------------*
-     |                          filter fsentries                          |
+     |                               filter                               |
      *--------------------------------------------------------------------*/
 
 static struct rbh_mut_iterator *
-mongo_backend_filter_fsentries(void *backend, const struct rbh_filter *filter,
-                               unsigned int fsentry_mask,
-                               unsigned int statx_mask)
+mongo_backend_filter(void *backend, const struct rbh_filter *filter,
+                     unsigned int fsentry_mask, unsigned int statx_mask)
 {
     struct mongo_backend *mongo = backend;
     struct mongo_iterator *mongo_iter;
@@ -444,7 +443,7 @@ mongo_backend_destroy(void *backend)
 static const struct rbh_backend_operations MONGO_BACKEND_OPS = {
     .root = mongo_root,
     .update = mongo_backend_update,
-    .filter_fsentries = mongo_backend_filter_fsentries,
+    .filter = mongo_backend_filter,
     .destroy = mongo_backend_destroy,
 };
 

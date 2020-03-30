@@ -57,8 +57,7 @@ rbh_backend_filter_one(struct rbh_backend *backend,
     struct rbh_fsentry *fsentry;
     int save_errno = errno;
 
-    fsentries = rbh_backend_filter_fsentries(backend, filter, fsentry_mask,
-                                             statx_mask);
+    fsentries = rbh_backend_filter(backend, filter, fsentry_mask, statx_mask);
     if (fsentries == NULL)
         return NULL;
 
