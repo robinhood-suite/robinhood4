@@ -366,13 +366,27 @@ static const struct rbh_mut_iterator POSIX_ITER = {
 };
 
 static struct posix_iterator *
-posix_iterator_new(const char *root, int statx_sync_type)
+posix_iterator_new(const char *root, const char *entry, int statx_sync_type)
 {
     struct posix_iterator *posix_iter;
     char *paths[2] = {NULL, NULL};
     int save_errno;
 
-    paths[0] = strdup(root);
+    /* `root' must not be empty, nor end with a '/' (except if `root' == "/")
+     *
+     * Otherwise, the "path" xattr will not be correct
+     */
+    assert(strlen(root) > 0);
+    assert(strcmp(root, "/") == 0 || root[strlen(root) - 1] != '/');
+
+    if (entry == NULL) {
+        paths[0] = strdup(root);
+    } else {
+        assert(strcmp(root, "/") == 0 || *entry == '/' || *entry == '\0');
+        if (asprintf(&paths[0], "%s%s", root, entry) < 0)
+            paths[0] = NULL;
+    }
+
     if (paths[0] == NULL)
         return NULL;
 
@@ -386,7 +400,7 @@ posix_iterator_new(const char *root, int statx_sync_type)
 
     posix_iter->iterator = POSIX_ITER;
     posix_iter->statx_sync_type = statx_sync_type;
-    posix_iter->prefix_len = strlen(root);
+    posix_iter->prefix_len = strcmp(root, "/") ? strlen(root) : 0;
     posix_iter->fts_handle =
         fts_open(paths, FTS_PHYSICAL | FTS_NOSTAT | FTS_XDEV, NULL);
     save_errno = errno;
@@ -561,7 +575,7 @@ posix_backend_filter(void *backend, const struct rbh_filter *filter,
         return NULL;
     }
 
-    posix_iter = posix_iterator_new(posix->root, posix->statx_sync_type);
+    posix_iter = posix_iterator_new(posix->root, NULL, posix->statx_sync_type);
     if (posix_iter == NULL)
         return NULL;
 
@@ -695,21 +709,32 @@ posix_branch_backend_filter(void *backend, const struct rbh_filter *filter,
 {
     struct posix_branch_backend *branch = backend;
     struct posix_iterator *posix_iter;
+    char *root, *path;
     int save_errno;
-    char *path;
 
     if (filter != NULL) {
         errno = ENOTSUP;
         return NULL;
     }
 
-    path = id2path(branch->posix.root, &branch->id);
-    if (path == NULL)
+    root = realpath(branch->posix.root, NULL);
+    if (root == NULL)
         return NULL;
 
-    posix_iter = posix_iterator_new(path, branch->posix.statx_sync_type);
+    path = id2path(root, &branch->id);
+    save_errno = errno;
+    if (path == NULL) {
+        free(root);
+        errno = save_errno;
+        return NULL;
+    }
+
+    assert(strncmp(root, path, strlen(root)) == 0);
+    posix_iter = posix_iterator_new(root, path + strlen(root),
+                                    branch->posix.statx_sync_type);
     save_errno = errno;
     free(path);
+    free(root);
     errno = save_errno;
 
     return (struct rbh_mut_iterator *)posix_iter;
@@ -775,6 +800,17 @@ static const struct rbh_backend POSIX_BACKEND = {
     .ops = &POSIX_BACKEND_OPS,
 };
 
+static size_t
+rtrim(char *string, char c)
+{
+    size_t length = strlen(string);
+
+    while (length > 0 && string[length - 1] == c)
+        string[--length] = '\0';
+
+    return length;
+}
+
 struct rbh_backend *
 rbh_posix_backend_new(const char *path)
 {
@@ -784,7 +820,7 @@ rbh_posix_backend_new(const char *path)
     if (posix == NULL)
         return NULL;
 
-    posix->root = strdup(path);
+    posix->root = strdup(*path == '\0' ? "." : path);
     if (posix->root == NULL) {
         int save_errno = errno;
 
@@ -792,6 +828,9 @@ rbh_posix_backend_new(const char *path)
         errno = save_errno;
         return NULL;
     }
+
+    if (rtrim(posix->root, '/') == 0)
+        *posix->root = '/';
 
     posix->statx_sync_type = AT_STATX_SYNC_AS_STAT;
     posix->backend = POSIX_BACKEND;
