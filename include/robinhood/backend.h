@@ -10,17 +10,12 @@
 #ifndef ROBINHOOD_BACKEND_H
 #define ROBINHOOD_BACKEND_H
 
-#include <errno.h>
-
-#include <sys/types.h>
-
-#include "robinhood/filter.h"
-#include "robinhood/fsentry.h"
-#include "robinhood/fsevent.h"
-#include "robinhood/iterator.h"
-
-/**
- * For some backends, pinpointing exactly why an operation failed may be a quite
+/** @file
+ * A backend stores and serves a filesystem's metadata.
+ *
+ * \section errors Error handling
+ *
+ * For some backends, pinpointing exactly why an operation failed can be quite a
  * difficult task. In order to facilitate the development of new backends, the
  * following error handling mechanism is implemented:
  *
@@ -29,11 +24,20 @@
  * explanation message in \c rbh_backend_error. This message should at best
  * explain what kind of error happened, at worst ask for forgiveness to users.
  *
- * Users! Application writers! It is your responsability to report to backend
- * maintainers when such an error occurs so that they may try their best to
- * come up with an updated error interface that allows you to gracefully handle
- * the error.
+ * \note Users! Application writers! It is your responsability to report to
+ * backend maintainers when such an error occurs so that they may try their best
+ * to come up with an updated error interface that allows you to gracefully
+ * handle the error.
  */
+
+#include <errno.h>
+
+#include <sys/types.h>
+
+#include "robinhood/filter.h"
+#include "robinhood/fsentry.h"
+#include "robinhood/fsevent.h"
+#include "robinhood/iterator.h"
 
 /**
  * Calls to a backend's methods may set errno to \c RBH_BACKEND_ERROR if they
@@ -52,12 +56,31 @@
  */
 extern __thread char rbh_backend_error[512];
 
-struct rbh_backend {
-    unsigned int id;
-    const char *name;
-    const struct rbh_backend_operations *ops;
-};
-
+/**
+ * A unique backend identifier
+ *
+ * Each backend can be identified either by its name or its backend ID.
+ *
+ * Out of the 256 available values [|0; 255|], the first 128 are reserved for
+ * upstream backends.
+ * Anyone willing to implement their own backend without contributing it back
+ * upstream may choose an ID in the range [|128; 255|] with the knowledge that
+ * no upstream backend shall conflict.
+ *
+ * Backend IDs are also used to identify and route backend options.
+ * Options are stored in unsigned integers as follows:
+ *
+ * ```
+ * 0               8               16
+ * ---------------------------------
+ * |   option_id   |  backend_id   |
+ * ---------------------------------
+ * ```
+ *
+ * ID 0 / \c RBH_BI_GENERIC is special. It is not linked to any particular
+ * backend, and is used to generate generic option IDs, ie. options that can be
+ * implemented irrespective of a backend's type.
+ */
 enum rbh_backend_id {
     RBH_BI_GENERIC, /* No backend should use this ID */
 
@@ -69,6 +92,18 @@ enum rbh_backend_id {
      * RBI_RESERVED_MAX < ID <= 255
      */
     RBH_BI_RESERVED_MAX = 127,
+};
+
+/**
+ * A backend, ie. anything that can store/serve a filesystem's metadata
+ */
+struct rbh_backend {
+    /** A unique identifier */
+    unsigned int id;
+    /** A unique name (mostly for logging purposes) */
+    const char *name;
+    /** A set of operations the backend implements */
+    const struct rbh_backend_operations *ops;
 };
 
 /**
@@ -120,6 +155,15 @@ struct rbh_filter_options {
     } sort;
 };
 
+/**
+ * Operations backends implement
+ *
+ * Only the \c destroy() operation is mandatory, every other one may be set to
+ * NULL to indicate it is not supported.
+ *
+ * Refer to the documentation of the matching rbh_backend_*() wrappers for more
+ * information.
+ */
 struct rbh_backend_operations {
     int (*get_option)(
             void *backend,
@@ -155,19 +199,35 @@ struct rbh_backend_operations {
             );
 };
 
-/* Options are stored in unsigned integers as follows:
+/**
+ * Compute the first option ID for a given backend ID
  *
- * 0               8               16
- * ---------------------------------
- * |   option_id   |  backend_id   |
- * ---------------------------------
+ * @param backend_id    the ID of the backend whose first option ID to compute
  *
+ * @return              the first option ID of the backend identified by
+ *                      \p backend_id
  */
-
 #define RBH_BO_FIRST(backend_id) (backend_id << 8)
+
+/**
+ * Extract the backend ID from an option ID
+ *
+ * @param option    the option ID from which to extract a backend ID
+ *
+ * @return          the backend ID \p option refers to
+ */
 #define RBH_BO_BACKEND_ID(option) (option >> 8)
 
+/**
+ * Generic options
+ */
 enum rbh_generic_backend_option {
+    /** Deprecated options should be defined with this value.
+     *
+     * Until backends are confident that most, if not all, applications have
+     * been recompiled against a version where the option is deprecated, they
+     * should still handle the old value.
+     */
     RBH_GBO_DEPRECATED = RBH_BO_FIRST(RBH_BI_GENERIC),
 };
 
@@ -315,6 +375,28 @@ rbh_backend_update(struct rbh_backend *backend, struct rbh_iterator *fsevents)
 
 /**
  * Create a sub-backend instance
+ *
+ * For example, if a backend A contains:
+ *
+ * ```
+ *             a
+ *       -------------
+ *       b           c
+ *    -------     -------
+ *    d     e     f     g
+ *  ----- ----- ----- -----
+ *  h   i j   k l   m n   o
+ * ```
+ *
+ * Then rbh_backend_branch(A, b) contains:
+ *
+ * ```
+ *      b
+ *   -------
+ *   d     e
+ * ----- -----
+ * h   i j   k
+ * ```
  *
  * @param backend   the backend to extract a new backend from
  * @param id        the id of the fsentry to use as the root of the new backend
