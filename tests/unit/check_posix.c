@@ -64,24 +64,30 @@ unchecked_teardown_tmpdir(void)
  |                                posix filter                                |
  *----------------------------------------------------------------------------*/
 
-START_TEST(pff_missing_root)
+START_TEST(pf_missing_root)
 {
+    const struct rbh_filter_options OPTIONS = {};
     struct rbh_backend *posix;
 
     posix = rbh_posix_backend_new("missing");
     ck_assert_ptr_nonnull(posix);
 
     errno = 0;
-    ck_assert_ptr_null(rbh_backend_filter(posix, NULL, 0, 0));
+    ck_assert_ptr_null(rbh_backend_filter(posix, NULL, &OPTIONS));
     ck_assert_int_eq(errno, ENOENT);
 
     rbh_backend_destroy(posix);
 }
 END_TEST
 
-START_TEST(pff_empty_root)
+START_TEST(pf_empty_root)
 {
     static const char *EMPTY = "empty";
+    const struct rbh_filter_options OPTIONS = {
+        .projection = {
+            .fsentry_mask = RBH_FP_PARENT_ID,
+        },
+    };
     struct rbh_backend *posix;
     struct rbh_mut_iterator *fsentries;
     struct rbh_fsentry *fsentry;
@@ -91,7 +97,7 @@ START_TEST(pff_empty_root)
     posix = rbh_posix_backend_new(EMPTY);
     ck_assert_ptr_nonnull(posix);
 
-    fsentries = rbh_backend_filter(posix, NULL, RBH_FP_PARENT_ID, 0);
+    fsentries = rbh_backend_filter(posix, NULL, &OPTIONS);
     ck_assert_ptr_nonnull(fsentries);
 
     fsentry = rbh_mut_iter_next(fsentries);
@@ -349,8 +355,8 @@ unit_suite(void)
     tests = tcase_create("filter");
     tcase_add_unchecked_fixture(tests, unchecked_setup_tmpdir,
                                 unchecked_teardown_tmpdir);
-    tcase_add_test(tests, pff_missing_root);
-    tcase_add_test(tests, pff_empty_root);
+    tcase_add_test(tests, pf_missing_root);
+    tcase_add_test(tests, pf_empty_root);
 
     suite_add_tcase(suite, tests);
 

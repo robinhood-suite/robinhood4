@@ -51,13 +51,16 @@ rbh_generic_backend_set_option(struct rbh_backend *backend, unsigned int option,
 struct rbh_fsentry *
 rbh_backend_filter_one(struct rbh_backend *backend,
                        const struct rbh_filter *filter,
-                       unsigned int fsentry_mask, unsigned int statx_mask)
+                       const struct rbh_filter_projection *projection)
 {
+    const struct rbh_filter_options options = {
+        .projection = *projection,
+    };
     struct rbh_mut_iterator *fsentries;
     struct rbh_fsentry *fsentry;
     int save_errno = errno;
 
-    fsentries = rbh_backend_filter(backend, filter, fsentry_mask, statx_mask);
+    fsentries = rbh_backend_filter(backend, filter, &options);
     if (fsentries == NULL)
         return NULL;
 
@@ -76,7 +79,7 @@ rbh_backend_filter_one(struct rbh_backend *backend,
 static struct rbh_fsentry *
 fsentry_from_parent_and_name(struct rbh_backend *backend,
                              const struct rbh_id *parent_id, const char *name,
-                             unsigned int fsentry_mask, unsigned int statx_mask)
+                             const struct rbh_filter_projection *projection)
 {
     const struct rbh_filter PARENT_FILTER = {
         .op = RBH_FOP_EQUAL,
@@ -117,7 +120,7 @@ fsentry_from_parent_and_name(struct rbh_backend *backend,
         },
     };
 
-    return rbh_backend_filter_one(backend, &FILTER, fsentry_mask, statx_mask);
+    return rbh_backend_filter_one(backend, &FILTER, projection);
 }
 
 static const struct rbh_id ROOT_PARENT_ID = {
@@ -127,8 +130,11 @@ static const struct rbh_id ROOT_PARENT_ID = {
 
 static struct rbh_fsentry *
 backend_fsentry_from_path(struct rbh_backend *backend, char *path,
-                          unsigned int fsentry_mask, unsigned int statx_mask)
+                          const struct rbh_filter_projection *projection)
 {
+    const struct rbh_filter_projection ID_ONLY = {
+        .fsentry_mask = RBH_FP_ID,
+    };
     struct rbh_fsentry *fsentry;
     struct rbh_fsentry *parent;
     int save_errno;
@@ -136,13 +142,13 @@ backend_fsentry_from_path(struct rbh_backend *backend, char *path,
 
     if (*path == '/') {
         parent = fsentry_from_parent_and_name(backend, &ROOT_PARENT_ID, "",
-                                              RBH_FP_ID, 0);
+                                              &ID_ONLY);
         /* Discard every leading '/' */
         do {
             path++;
         } while (*path == '/');
     } else {
-        parent = rbh_backend_root(backend, RBH_FP_ID, 0);
+        parent = rbh_backend_root(backend, &ID_ONLY);
     }
     if (parent == NULL)
         return NULL;
@@ -162,7 +168,7 @@ backend_fsentry_from_path(struct rbh_backend *backend, char *path,
             break;
 
         fsentry = fsentry_from_parent_and_name(backend, &parent->id, path,
-                                               RBH_FP_ID, 0);
+                                               &ID_ONLY);
         save_errno = errno;
         free(parent);
         errno = save_errno;
@@ -179,7 +185,7 @@ backend_fsentry_from_path(struct rbh_backend *backend, char *path,
     }
 
     fsentry = fsentry_from_parent_and_name(backend, &parent->id, path,
-                                           fsentry_mask, statx_mask);
+                                           projection);
     save_errno = errno;
     free(parent);
     errno = save_errno;
@@ -188,8 +194,7 @@ backend_fsentry_from_path(struct rbh_backend *backend, char *path,
 
 struct rbh_fsentry *
 rbh_backend_fsentry_from_path(struct rbh_backend *backend, const char *path_,
-                              unsigned int fsentry_mask,
-                              unsigned int statx_mask)
+                              const struct rbh_filter_projection *projection)
 {
     struct rbh_fsentry *fsentry;
     int save_errno;
@@ -199,8 +204,7 @@ rbh_backend_fsentry_from_path(struct rbh_backend *backend, const char *path_,
     if (path == NULL)
         return NULL;
 
-    fsentry = backend_fsentry_from_path(backend, path, fsentry_mask,
-                                        statx_mask);
+    fsentry = backend_fsentry_from_path(backend, path, projection);
     save_errno = errno;
     free(path);
     errno = save_errno;

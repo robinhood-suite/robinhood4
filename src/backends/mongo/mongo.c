@@ -379,10 +379,9 @@ static const struct rbh_filter ROOT_FILTER = {
 };
 
 static struct rbh_fsentry *
-mongo_root(void *backend, unsigned int fsentry_mask, unsigned int statx_mask)
+mongo_root(void *backend, const struct rbh_filter_projection *projection)
 {
-    return rbh_backend_filter_one(backend, &ROOT_FILTER, fsentry_mask,
-                                  statx_mask);
+    return rbh_backend_filter_one(backend, &ROOT_FILTER, projection);
 }
 
     /*--------------------------------------------------------------------*
@@ -391,7 +390,7 @@ mongo_root(void *backend, unsigned int fsentry_mask, unsigned int statx_mask)
 
 static struct rbh_mut_iterator *
 mongo_backend_filter(void *backend, const struct rbh_filter *filter,
-                     unsigned int fsentry_mask, unsigned int statx_mask)
+                     const struct rbh_filter_options *options)
 {
     struct mongo_backend *mongo = backend;
     struct mongo_iterator *mongo_iter;

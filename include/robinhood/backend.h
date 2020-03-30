@@ -71,6 +71,55 @@ enum rbh_backend_id {
     RBH_BI_RESERVED_MAX = 127,
 };
 
+/**
+ * The fsentry fields a filter query should set
+ *
+ * Backends may choose to fill additionnal fields (eg. if the performance
+ * penalty for this is deemed negligeable).
+ * Fsentries may still be missing some (or all) of the required fields if
+ * the data is missing from the backend.
+ */
+struct rbh_filter_projection {
+    /** fsentry fields to fill */
+    unsigned int fsentry_mask;
+    /** statx fields to fill */
+    unsigned int statx_mask;
+    /** xattrs to fill (a map with a count of 0 means every xattr) */
+    struct {
+        /** inode xattrs to fill */
+        struct rbh_value_map ns;
+        /** namespace xattrs to fill */
+        struct rbh_value_map inode;
+    } xattrs;
+};
+
+/**
+ * A filtering option the result of a filter query should be ordered by
+ */
+struct rbh_filter_sort {
+    /** The field to use as a sorting key */
+    struct rbh_filter_field field;
+    /** Whether to order the results in ascending or descending order */
+    bool ascending;
+};
+
+/**
+ * Filtering options, to be used with rbh_backend_filter()
+ */
+struct rbh_filter_options {
+    /** Fsentry fields the query should set */
+    struct rbh_filter_projection projection;
+    /** The number of fsentries to skip */
+    size_t skip;
+    /** The maximum number of fsentries to return (0 means unlimited) */
+    size_t limit;
+    /** A sequence of sorting options */
+    struct {
+        const struct rbh_filter_sort *items;
+        size_t count;
+    } sort;
+};
+
 struct rbh_backend_operations {
     int (*get_option)(
             void *backend,
@@ -94,14 +143,12 @@ struct rbh_backend_operations {
             );
     struct rbh_fsentry *(*root)(
             void *backend,
-            unsigned int fsentry_mask,
-            unsigned int statx_mask
+            const struct rbh_filter_projection *projection
             );
     struct rbh_mut_iterator *(*filter)(
             void *backend,
             const struct rbh_filter *filter,
-            unsigned int fsentry_mask,
-            unsigned int statx_mask
+            const struct rbh_filter_options *options
             );
     void (*destroy)(
             void *backend
@@ -296,52 +343,68 @@ rbh_backend_branch(struct rbh_backend *backend, const struct rbh_id *id)
     return backend->ops->branch(backend, id);
 }
 
+/**
+ * Return the root of a backend
+ *
+ * @param backend       the backend whose root to return
+ * @param projection    the fields of the root to fill
+ *
+ * @return              the root of \p backend
+ *
+ * @error ENOTSUP       this operation is not implemented by \p backend
+ * @error ENOMEM        there was not enough memory available
+ */
 static inline struct rbh_fsentry *
-rbh_backend_root(struct rbh_backend *backend, unsigned int fsentry_mask,
-                 unsigned int statx_mask)
+rbh_backend_root(struct rbh_backend *backend,
+                 const struct rbh_filter_projection *projection)
 {
     if (backend->ops->root == NULL) {
         errno = ENOTSUP;
         return NULL;
     }
-    return backend->ops->root(backend, fsentry_mask, statx_mask);
+    return backend->ops->root(backend, projection);
 }
 
 /**
- * Returns fsentries that match a set of criteria
+ * Return an iterator over fsentries that match a set of criteria
  *
- * @param backend       the backend from which to fetch fsentries
- * @param filter        a set of criteria that the returned fsentries must match
- * @param fsentry_mask  a bitmask of the fields to set for each fsentry
- * @param statx_mask    a bitmask of the fields to set in the statx field of
- *                      each fsentry (ignored if RBH_FP_STATX is not set in
- *                      \p fsentry_mask).
+ * @param backend   the backend from which to fetch fsentries
+ * @param filter    a set of criteria that the returned fsentries must match
+ * @param options   a set of filtering options (must not be NULL)
  *
- * @return              an iterator over mutable fsentries on success, NULL on
- *                      error and errno is set appropriately
+ * @return          an iterator over mutable fsentries on success, NULL on error
+ *                  and errno is set appropriately
  *
- * @error ENOTSUP       \p backend does not support filtering fsentries
- *
- * Backends may choose to return more (reps. less) fields in fsentries than is
- * required by \p fsentry_mask and \p statx_mask because the extra information
- * comes at little to no cost (resp. the backend is missing this information).
- *
- * It is the caller's responsibility to check the corresponding masks in the
- * returned fsentries to know whether or not a given field is set and safe to
- * access.
+ * @error ENOMEM    there was not enough memory available
+ * @error ENOTSUP   \p backend does not support filtering fsentries
  *
  * This function may fail and set errno to any error number specifically
  * documented by \p backend.
  */
 static inline struct rbh_mut_iterator *
 rbh_backend_filter(struct rbh_backend *backend, const struct rbh_filter *filter,
-                   unsigned int fsentry_mask, unsigned int statx_mask)
+                   const struct rbh_filter_options *options)
 {
     if (backend->ops->filter == NULL) {
         errno = ENOTSUP;
         return NULL;
     }
-    return backend->ops->filter(backend, filter, fsentry_mask, statx_mask);
+    /* TODO: implement support for skipping in both the posix/mongo backend */
+    if (options->skip > 0) {
+        errno = ENOTSUP;
+        return NULL;
+    }
+    /* TODO: implement support for limiting in both the posix/mongo backend */
+    if (options->limit > 0) {
+        errno = ENOTSUP;
+        return NULL;
+    }
+    /* TODO: implement support for sorting in both the posix/mongo backend */
+    if (options->sort.count > 0) {
+        errno = ENOTSUP;
+        return NULL;
+    }
+    return backend->ops->filter(backend, filter, options);
 }
 
 /**
@@ -360,10 +423,7 @@ rbh_backend_destroy(struct rbh_backend *backend)
  *
  * @param backend       the backend from which to retrieve the fsentry
  * @param filter        the filter to use
- * @param fsentry_mask  a bitmask of the fields to set in the returned fsentry
- * @param statx_mask    a bitmask of the fields to set in the statx field of
- *                      the returned fsentry (ignored if RBH_FP_STATX is not set
- *                      in \p fsentry_mask)
+ * @param projection    fields of the fsentry to fill
  *
  * @return              a pointer to a newly allocated fsentry that matches
  *                      \p filter on success, NULL on error and errno is set
@@ -380,17 +440,14 @@ rbh_backend_destroy(struct rbh_backend *backend)
 struct rbh_fsentry *
 rbh_backend_filter_one(struct rbh_backend *backend,
                        const struct rbh_filter *filter,
-                       unsigned int fsentry_mask, unsigned int statx_mask);
+                       const struct rbh_filter_projection *projection);
 
 /**
  * Retrieve an fsentry from a backend using its path
  *
  * @param backend       the backend from which to retrieve the fsentry
  * @param path          the path of the fsentry to return
- * @param fsentry_mask  a bitmask of the fields to set in the returned fsentry
- * @param statx_mask    a bitmask of the fields to set in the statx field of
- *                      the returned fsentry (ignored if RBH_FP_STATX is not set
- *                      in \p fsentry_mask)
+ * @param projection    fields of the fsentry to fill
  *
  * @return              a pointer to a newly allocated fsentry whose path (in
  *                      \p backend) matches \p path, on success, NULL on error,
@@ -408,7 +465,6 @@ rbh_backend_filter_one(struct rbh_backend *backend,
  */
 struct rbh_fsentry *
 rbh_backend_fsentry_from_path(struct rbh_backend *backend, const char *path,
-                              unsigned int fsentry_mask,
-                              unsigned int statx_mask);
+                              const struct rbh_filter_projection *projection);
 
 #endif

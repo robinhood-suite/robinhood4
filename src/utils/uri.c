@@ -55,6 +55,9 @@ backend_new(const char *type, const char *fsname)
 static struct rbh_backend *
 backend_from_uri(const struct rbh_uri *uri)
 {
+    const struct rbh_filter_projection ID_ONLY = {
+        .fsentry_mask = RBH_FP_ID,
+    };
     struct rbh_backend *backend = backend_new(uri->backend, uri->fsname);
     struct rbh_backend *branch = NULL; /* gcc: unitialized variable */
     struct rbh_fsentry *fsentry;
@@ -67,8 +70,7 @@ backend_from_uri(const struct rbh_uri *uri)
         branch = rbh_backend_branch(backend, uri->id);
         break;
     case RBH_UT_PATH:
-        fsentry = rbh_backend_fsentry_from_path(backend, uri->path, RBH_FP_ID,
-                                                0);
+        fsentry = rbh_backend_fsentry_from_path(backend, uri->path, &ID_ONLY);
         if (fsentry == NULL)
             error(EXIT_FAILURE, errno, "rbh_backend_fsentry_from_path");
 

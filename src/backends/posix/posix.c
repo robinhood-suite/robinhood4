@@ -503,13 +503,16 @@ posix_backend_set_option(void *backend, unsigned int option, const void *data,
      *--------------------------------------------------------------------*/
 
 static struct rbh_fsentry *
-posix_root(void *backend, unsigned int fsentry_mask, unsigned int statx_mask)
+posix_root(void *backend, const struct rbh_filter_projection *projection)
 {
+    const struct rbh_filter_options options = {
+        .projection = *projection,
+    };
     struct rbh_mut_iterator *fsentries;
     struct rbh_fsentry *root;
     int save_errno;
 
-    fsentries = rbh_backend_filter(backend, NULL, fsentry_mask, statx_mask);
+    fsentries = rbh_backend_filter(backend, NULL, &options);
     if (fsentries == NULL)
         return NULL;
 
@@ -544,7 +547,7 @@ set_root_properties(FTSENT *root)
 
 static struct rbh_mut_iterator *
 posix_backend_filter(void *backend, const struct rbh_filter *filter,
-                     unsigned int fsentries_mask, unsigned int statx_mask)
+                     const struct rbh_filter_options *options)
 {
     struct posix_backend *posix = backend;
     struct posix_iterator *posix_iter;
@@ -688,8 +691,7 @@ struct posix_branch_backend {
 
 static struct rbh_mut_iterator *
 posix_branch_backend_filter(void *backend, const struct rbh_filter *filter,
-                            unsigned int fsentries_mask,
-                            unsigned int statx_mask)
+                            const struct rbh_filter_options *options)
 {
     struct posix_branch_backend *branch = backend;
     struct posix_iterator *posix_iter;
