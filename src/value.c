@@ -429,6 +429,8 @@ rbh_value_validate(const struct rbh_value *value)
         if (value->map.count != 0 && value->map.pairs == NULL)
             goto out_einval;
         for (size_t i = 0; i < value->map.count; i++) {
+            if (value->map.pairs[i].key == NULL)
+                goto out_einval;
             if (value->map.pairs[i].value == NULL)
                 goto out_einval;
             if (rbh_value_validate(value->map.pairs[i].value))

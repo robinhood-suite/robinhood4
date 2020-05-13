@@ -959,6 +959,29 @@ START_TEST(rvv_map_nonempty_null)
 }
 END_TEST
 
+START_TEST(rvv_map_with_null_key)
+{
+    const struct rbh_value VALUE = {
+        .type = RBH_VT_INT32,
+    };
+    const struct rbh_value_pair PAIR = {
+        .key = NULL,
+        .value = &VALUE,
+    };
+    const struct rbh_value MAP = {
+        .type = RBH_VT_MAP,
+        .map = {
+            .pairs = &PAIR,
+            .count = 1,
+        },
+    };
+
+    errno = 0;
+    ck_assert_int_eq(rbh_value_validate(&MAP), -1);
+    ck_assert_int_eq(errno, EINVAL);
+}
+END_TEST
+
 START_TEST(rvv_map_with_null_value)
 {
     const struct rbh_value_pair PAIR = {
@@ -1124,6 +1147,7 @@ unit_suite(void)
     tcase_add_test(tests, rvv_sequence_with_valid_value);
     tcase_add_test(tests, rvv_map_empty);
     tcase_add_test(tests, rvv_map_nonempty_null);
+    tcase_add_test(tests, rvv_map_with_null_key);
     tcase_add_test(tests, rvv_map_with_null_value);
     tcase_add_test(tests, rvv_map_with_invalid_value);
     tcase_add_test(tests, rvv_map_with_valid_value);
