@@ -696,6 +696,333 @@ START_TEST(vmc_misaligned_buffer)
 }
 END_TEST
 
+/*----------------------------------------------------------------------------*
+ |                            rbh_value_validate()                            |
+ *----------------------------------------------------------------------------*/
+
+START_TEST(rvv_bad_type)
+{
+    const struct rbh_value INVALID = {
+        .type = -1,
+    };
+
+    errno = 0;
+    ck_assert_int_eq(rbh_value_validate(&INVALID), -1);
+    ck_assert_int_eq(errno, EINVAL);
+}
+END_TEST
+
+START_TEST(rvv_binary_empty)
+{
+    const struct rbh_value BINARY = {
+        .type = RBH_VT_BINARY,
+        .binary = {
+            .size = 0,
+        },
+    };
+
+    ck_assert_int_eq(rbh_value_validate(&BINARY), 0);
+}
+END_TEST
+
+START_TEST(rvv_binary_nonempty)
+{
+    const struct rbh_value BINARY = {
+        .type = RBH_VT_BINARY,
+        .binary = {
+            .data = "abcdefg",
+            .size = 8,
+        },
+    };
+
+    ck_assert_int_eq(rbh_value_validate(&BINARY), 0);
+}
+END_TEST
+
+START_TEST(rvv_binary_nonempty_null)
+{
+    const struct rbh_value BINARY = {
+        .type = RBH_VT_BINARY,
+        .binary = {
+            .data = NULL,
+            .size = 1,
+        },
+    };
+
+    errno = 0;
+    ck_assert_int_eq(rbh_value_validate(&BINARY), -1);
+    ck_assert_int_eq(errno, EINVAL);
+}
+END_TEST
+
+START_TEST(rvv_uint32)
+{
+    const struct rbh_value UINT32 = {
+        .type = RBH_VT_UINT32,
+    };
+
+    ck_assert_int_eq(rbh_value_validate(&UINT32), 0);
+}
+END_TEST
+
+START_TEST(rvv_uint64)
+{
+    const struct rbh_value UINT64 = {
+        .type = RBH_VT_UINT64,
+    };
+
+    ck_assert_int_eq(rbh_value_validate(&UINT64), 0);
+}
+END_TEST
+
+START_TEST(rvv_int32)
+{
+    const struct rbh_value INT32 = {
+        .type = RBH_VT_INT32,
+    };
+
+    ck_assert_int_eq(rbh_value_validate(&INT32), 0);
+}
+END_TEST
+
+START_TEST(rvv_int64)
+{
+    const struct rbh_value INT64 = {
+        .type = RBH_VT_INT64,
+    };
+
+    ck_assert_int_eq(rbh_value_validate(&INT64), 0);
+}
+END_TEST
+
+START_TEST(rvv_string_null)
+{
+    const struct rbh_value STRING = {
+        .type = RBH_VT_STRING,
+        .string = NULL,
+    };
+
+    errno = 0;
+    ck_assert_int_eq(rbh_value_validate(&STRING), -1);
+    ck_assert_int_eq(errno, EINVAL);
+}
+END_TEST
+
+START_TEST(rvv_string_nonnull)
+{
+    const struct rbh_value STRING = {
+        .type = RBH_VT_STRING,
+        .string = "abcdefg",
+    };
+
+    ck_assert_int_eq(rbh_value_validate(&STRING), 0);
+}
+END_TEST
+
+START_TEST(rvv_regex_null)
+{
+    const struct rbh_value REGEX = {
+        .type = RBH_VT_REGEX,
+        .regex = {
+            .string = NULL,
+            .options = 0,
+        },
+    };
+
+    errno = 0;
+    ck_assert_int_eq(rbh_value_validate(&REGEX), -1);
+    ck_assert_int_eq(errno, EINVAL);
+}
+END_TEST
+
+START_TEST(rvv_regex_bad_option)
+{
+    const struct rbh_value REGEX = {
+        .type = RBH_VT_REGEX,
+        .regex = {
+            .string = "abcdefg",
+            .options = RBH_RO_ALL + 1,
+        },
+    };
+
+    errno = 0;
+    ck_assert_int_eq(rbh_value_validate(&REGEX), -1);
+    ck_assert_int_eq(errno, EINVAL);
+}
+END_TEST
+
+START_TEST(rvv_regex_valid)
+{
+    const struct rbh_value REGEX = {
+        .type = RBH_VT_REGEX,
+        .regex = {
+            .string = "abcdefg",
+            .options = RBH_RO_ALL,
+        },
+    };
+
+    ck_assert_int_eq(rbh_value_validate(&REGEX), 0);
+}
+END_TEST
+
+START_TEST(rvv_sequence_empty)
+{
+    const struct rbh_value SEQUENCE = {
+        .type = RBH_VT_SEQUENCE,
+        .sequence = {
+            .count = 0,
+        },
+    };
+
+    ck_assert_int_eq(rbh_value_validate(&SEQUENCE), 0);
+}
+END_TEST
+
+START_TEST(rvv_sequence_nonempty_null)
+{
+    const struct rbh_value SEQUENCE = {
+        .type = RBH_VT_SEQUENCE,
+        .sequence = {
+            .values = NULL,
+            .count = 1,
+        },
+    };
+
+    errno = 0;
+    ck_assert_int_eq(rbh_value_validate(&SEQUENCE), -1);
+    ck_assert_int_eq(errno, EINVAL);
+}
+END_TEST
+
+START_TEST(rvv_sequence_with_invalid_value)
+{
+    const struct rbh_value INVALID = {
+        .type = -1,
+    };
+    const struct rbh_value SEQUENCE = {
+        .type = RBH_VT_SEQUENCE,
+        .sequence = {
+            .values = &INVALID,
+            .count = 1,
+        },
+    };
+
+    errno = 0;
+    ck_assert_int_eq(rbh_value_validate(&SEQUENCE), -1);
+    ck_assert_int_eq(errno, EINVAL);
+}
+END_TEST
+
+START_TEST(rvv_sequence_with_valid_value)
+{
+    const struct rbh_value VALID = {
+        .type = RBH_VT_INT32,
+    };
+    const struct rbh_value SEQUENCE = {
+        .type = RBH_VT_SEQUENCE,
+        .sequence = {
+            .values = &VALID,
+            .count = 1,
+        },
+    };
+
+    ck_assert_int_eq(rbh_value_validate(&SEQUENCE), 0);
+}
+END_TEST
+
+START_TEST(rvv_map_empty)
+{
+    const struct rbh_value MAP = {
+        .type = RBH_VT_MAP,
+        .map = {
+            .count = 0,
+        },
+    };
+
+    ck_assert_int_eq(rbh_value_validate(&MAP), 0);
+}
+END_TEST
+
+START_TEST(rvv_map_nonempty_null)
+{
+    const struct rbh_value MAP = {
+        .type = RBH_VT_MAP,
+        .map = {
+            .pairs = NULL,
+            .count = 1,
+        },
+    };
+
+    errno = 0;
+    ck_assert_int_eq(rbh_value_validate(&MAP), -1);
+    ck_assert_int_eq(errno, EINVAL);
+}
+END_TEST
+
+START_TEST(rvv_map_with_null_value)
+{
+    const struct rbh_value_pair PAIR = {
+        .key = "abcdefg",
+        .value = NULL,
+    };
+    const struct rbh_value MAP = {
+        .type = RBH_VT_MAP,
+        .map = {
+            .pairs = &PAIR,
+            .count = 1,
+        },
+    };
+
+    errno = 0;
+    ck_assert_int_eq(rbh_value_validate(&MAP), -1);
+    ck_assert_int_eq(errno, EINVAL);
+}
+END_TEST
+
+START_TEST(rvv_map_with_invalid_value)
+{
+    const struct rbh_value INVALID = {
+        .type = -1,
+    };
+    const struct rbh_value_pair PAIR = {
+        .key = "abcdefg",
+        .value = &INVALID,
+    };
+    const struct rbh_value MAP = {
+        .type = RBH_VT_MAP,
+        .map = {
+            .pairs = &PAIR,
+            .count = 1,
+        },
+    };
+
+    errno = 0;
+    ck_assert_int_eq(rbh_value_validate(&MAP), -1);
+    ck_assert_int_eq(errno, EINVAL);
+}
+END_TEST
+
+START_TEST(rvv_map_with_valid_value)
+{
+    const struct rbh_value VALID = {
+        .type = RBH_VT_INT32,
+    };
+    const struct rbh_value_pair PAIR = {
+        .key = "abcdefg",
+        .value = &VALID,
+    };
+    const struct rbh_value MAP = {
+        .type = RBH_VT_MAP,
+        .map = {
+            .pairs = &PAIR,
+            .count = 1,
+        },
+    };
+
+    ck_assert_int_eq(rbh_value_validate(&MAP), 0);
+}
+END_TEST
+
 /* TODO: test value_copy() and value_data_size() */
 
 static Suite *
@@ -774,6 +1101,32 @@ unit_suite(void)
     tcase_add_test(tests, vmc_too_small_for_sequence_values);
     tcase_add_test(tests, vmc_too_small_for_map_value);
     tcase_add_test(tests, vmc_misaligned_buffer);
+
+    suite_add_tcase(suite, tests);
+
+    tests = tcase_create("rbh_value_validate");
+    tcase_add_test(tests, rvv_bad_type);
+    tcase_add_test(tests, rvv_binary_empty);
+    tcase_add_test(tests, rvv_binary_nonempty);
+    tcase_add_test(tests, rvv_binary_nonempty_null);
+    tcase_add_test(tests, rvv_uint32);
+    tcase_add_test(tests, rvv_uint64);
+    tcase_add_test(tests, rvv_int32);
+    tcase_add_test(tests, rvv_int64);
+    tcase_add_test(tests, rvv_string_null);
+    tcase_add_test(tests, rvv_string_nonnull);
+    tcase_add_test(tests, rvv_regex_null);
+    tcase_add_test(tests, rvv_regex_bad_option);
+    tcase_add_test(tests, rvv_regex_valid);
+    tcase_add_test(tests, rvv_sequence_empty);
+    tcase_add_test(tests, rvv_sequence_nonempty_null);
+    tcase_add_test(tests, rvv_sequence_with_invalid_value);
+    tcase_add_test(tests, rvv_sequence_with_valid_value);
+    tcase_add_test(tests, rvv_map_empty);
+    tcase_add_test(tests, rvv_map_nonempty_null);
+    tcase_add_test(tests, rvv_map_with_null_value);
+    tcase_add_test(tests, rvv_map_with_invalid_value);
+    tcase_add_test(tests, rvv_map_with_valid_value);
 
     suite_add_tcase(suite, tests);
 
