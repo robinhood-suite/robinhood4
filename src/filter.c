@@ -492,7 +492,7 @@ comparison_filter_validate(const struct rbh_filter *filter)
         return -1;
     }
 
-    if (!filter_field_validate(&filter->compare.field))
+    if (filter_field_validate(&filter->compare.field))
         return -1;
 
     return rbh_value_validate(&filter->compare.value);

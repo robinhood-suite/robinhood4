@@ -432,6 +432,73 @@ static const struct rbh_filter COMPARISONS[] = {
      * covered above).
      */
     {
+        .op = RBH_FOP_EQUAL,
+        .compare = {
+            .field = {
+                .fsentry = RBH_FP_STATX,
+                .statx = STATX_MODE,
+            },
+            .value = {
+                .type = RBH_VT_UINT32,
+                .uint32 = S_IFREG,
+            },
+        },
+    },
+    {
+        .op = RBH_FOP_EQUAL,
+        .compare = {
+            .field = {
+                .fsentry = RBH_FP_STATX,
+                .statx = STATX_NLINK,
+            },
+            .value = {
+                .type = RBH_VT_UINT32,
+                .uint32 = 0,
+            },
+        },
+    },
+    {
+        .op = RBH_FOP_EQUAL,
+        .compare = {
+            .field = {
+                .fsentry = RBH_FP_STATX,
+                .statx = STATX_BLOCKS,
+            },
+            .value = {
+                .type = RBH_VT_UINT64,
+                .uint64 = 0,
+            },
+        },
+    },
+    {
+        .op = RBH_FOP_GREATER_OR_EQUAL,
+        .compare = {
+            .field = {
+                .fsentry = RBH_FP_STATX,
+                .statx = STATX_BTIME,
+            },
+            .value = {
+                .type = RBH_VT_INT64,
+                .int64 = 0,
+            },
+        },
+    },
+    {
+        .op = RBH_FOP_EQUAL,
+        .compare = {
+            .field = {
+                .fsentry = RBH_FP_NAMESPACE_XATTRS,
+                .xattr = NULL,
+            },
+            .value = {
+                .type = RBH_VT_MAP,
+                .map = {
+                    .count = 0,
+                },
+            },
+        },
+    },
+    {
         .op = RBH_FOP_REGEX,
         .compare = {
             .field = {
@@ -444,6 +511,19 @@ static const struct rbh_filter COMPARISONS[] = {
                     .string = "abcdefg",
                     .options = 0,
                 },
+            },
+        },
+    },
+    {
+        .op = RBH_FOP_EQUAL,
+        .compare = {
+            .field = {
+                .fsentry = RBH_FP_INODE_XATTRS,
+                .xattr = "test",
+            },
+            .value = {
+                .type = RBH_VT_INT32,
+                .int32 = 0,
             },
         },
     },
@@ -550,6 +630,193 @@ START_TEST(rfnn_basic)
 }
 END_TEST
 
+/*----------------------------------------------------------------------------*
+ |                           rbh_filter_validate()                            |
+ *----------------------------------------------------------------------------*/
+
+START_TEST(rfv_null_filter)
+{
+    ck_assert_int_eq(rbh_filter_validate(NULL), 0);
+}
+END_TEST
+
+START_TEST(rfv_not_null_filter)
+{
+    const struct rbh_filter *FILTER_NULL = NULL;
+    const struct rbh_filter FILTER_NOT_NULL = {
+        .op = RBH_FOP_NOT,
+        .logical = {
+            .filters = &FILTER_NULL,
+            .count = 1,
+        },
+    };
+
+    ck_assert_int_eq(rbh_filter_validate(&FILTER_NOT_NULL), 0);
+}
+END_TEST
+
+START_TEST(rfv_bad_operator)
+{
+    const struct rbh_filter INVALID = {
+        .op = -1,
+    };
+
+    errno = 0;
+    ck_assert_int_eq(rbh_filter_validate(&INVALID), -1);
+    ck_assert_int_eq(errno, EINVAL);
+}
+END_TEST
+
+/* The internal function op_matches_value() is already tested by:
+ *   - rfcn_bad_operator;
+ *   - rfcn_in_without_sequence;
+ *   - rfcn_regex_without_regex;
+ *   - rfcn_bitwise_without_integer;
+ *
+ * Here we just check that when the operator does not match the value,
+ * rbh_filter_validate() does fail.
+ */
+START_TEST(rfv_op_does_not_match_value)
+{
+    const struct rbh_filter FILTER = {
+        .op = RBH_FOP_REGEX,
+        .compare = {
+            .field = {
+                .fsentry = RBH_FP_ID,
+            },
+            .value = {
+                .type = RBH_VT_INT32,
+            },
+        },
+    };
+
+    errno = 0;
+    ck_assert_int_eq(rbh_filter_validate(&FILTER), -1);
+    ck_assert_int_eq(errno, EINVAL);
+}
+END_TEST
+
+START_TEST(rfv_valid_comparison)
+{
+    ck_assert_int_eq(rbh_filter_validate(&COMPARISONS[_i]), 0);
+}
+END_TEST
+
+START_TEST(rfv_bad_fsentry_field)
+{
+    const struct rbh_filter FILTER = {
+        .op = RBH_FOP_EQUAL,
+        .compare = {
+            .field = {
+                .fsentry = RBH_FP_ID & RBH_FP_PARENT_ID,
+            },
+        },
+    };
+
+    errno = 0;
+    ck_assert_int_eq(rbh_filter_validate(&FILTER), -1);
+    ck_assert_int_eq(errno, EINVAL);
+}
+END_TEST
+
+START_TEST(rfv_bad_statx_field)
+{
+    const struct rbh_filter FILTER = {
+        .op = RBH_FOP_EQUAL,
+        .compare = {
+            .field = {
+                .fsentry = RBH_FP_STATX,
+                .statx = STATX_TYPE & STATX_MODE,
+            },
+        },
+    };
+
+    errno = 0;
+    ck_assert_int_eq(rbh_filter_validate(&FILTER), -1);
+    ck_assert_int_eq(errno, EINVAL);
+}
+END_TEST
+
+START_TEST(rfv_empty_logical)
+{
+    const struct rbh_filter EMPTY_LOGICAL = {
+        .op = RBH_FOP_AND,
+        .logical = {
+            .count = 0,
+        },
+    };
+
+    errno = 0;
+    ck_assert_int_eq(rbh_filter_validate(&EMPTY_LOGICAL), -1);
+    ck_assert_int_eq(errno, EINVAL);
+}
+END_TEST
+
+START_TEST(rfv_logical_with_invalid)
+{
+    const struct rbh_filter INVALID = {
+        .op = -1,
+    };
+    const struct rbh_filter *filters = &INVALID;
+    const struct rbh_filter LOGICAL = {
+        .op = RBH_FOP_LOGICAL_MIN,
+        .logical = {
+            .filters = &filters,
+            .count = 1,
+        },
+    };
+
+    errno = 0;
+    ck_assert_int_eq(rbh_filter_validate(&LOGICAL), -1);
+    ck_assert_int_eq(errno, EINVAL);
+}
+END_TEST
+
+START_TEST(rfv_single_and)
+{
+    const struct rbh_filter *filter = &COMPARISONS[0];
+    const struct rbh_filter AND_FILTER = {
+        .op = RBH_FOP_AND,
+        .logical = {
+            .filters = &filter,
+            .count = 1,
+        },
+    };
+
+    ck_assert_int_eq(rbh_filter_validate(&AND_FILTER), 0);
+}
+END_TEST
+
+START_TEST(rfv_many_and)
+{
+    const struct rbh_filter * const FILTERS[2] = {};
+    const struct rbh_filter AND_FILTER = {
+        .op = RBH_FOP_AND,
+        .logical = {
+            .filters = FILTERS,
+            .count = ARRAY_SIZE(FILTERS),
+        },
+    };
+
+    ck_assert_int_eq(rbh_filter_validate(&AND_FILTER), 0);
+}
+END_TEST
+
+START_TEST(rfv_many_or)
+{
+    const struct rbh_filter * const FILTERS[2] = {};
+    const struct rbh_filter OR_FILTER = {
+        .op = RBH_FOP_OR,
+        .logical = {
+            .filters = FILTERS,
+            .count = ARRAY_SIZE(FILTERS),
+        },
+    };
+
+    ck_assert_int_eq(rbh_filter_validate(&OR_FILTER), 0);
+}
+END_TEST
+
 static Suite *
 unit_suite(void)
 {
@@ -581,6 +848,23 @@ unit_suite(void)
 
     tests = tcase_create("rbh_filter_not_new");
     tcase_add_test(tests, rfnn_basic);
+
+    suite_add_tcase(suite, tests);
+
+    tests = tcase_create("rbh_filter_validate");
+    tcase_add_test(tests, rfv_null_filter);
+    tcase_add_test(tests, rfv_not_null_filter);
+    tcase_add_test(tests, rfv_bad_operator);
+    tcase_add_test(tests, rfv_op_does_not_match_value);
+    tcase_add_loop_test(tests, rfv_valid_comparison, 0,
+                        ARRAY_SIZE(COMPARISONS));
+    tcase_add_test(tests, rfv_bad_fsentry_field);
+    tcase_add_test(tests, rfv_bad_statx_field);
+    tcase_add_test(tests, rfv_empty_logical);
+    tcase_add_test(tests, rfv_logical_with_invalid);
+    tcase_add_test(tests, rfv_single_and);
+    tcase_add_test(tests, rfv_many_and);
+    tcase_add_test(tests, rfv_many_or);
 
     suite_add_tcase(suite, tests);
 
