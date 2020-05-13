@@ -264,7 +264,7 @@ rbh_generic_backend_get_option(struct rbh_backend *backend, unsigned int option,
  * @error EOVERFLOW     \p data_size was too small for \p option (\p data_size
  *                      should contain the minimum number of bytes to allocate
  *                      \p data to so that the operation may succeed)
- * @error ENOTPROTOOPT  invalid \p option (this is different than EINVAL in that
+ * @error ENOPROTOOPT   invalid \p option (this is different than EINVAL in that
  *                      \p option looks like an option of \p backend but the
  *                      backend does not recognize it. One reason for that may
  *                      be that you are using an option not yet implemented by
@@ -318,7 +318,7 @@ rbh_generic_backend_set_option(struct rbh_backend *backend, unsigned int option,
  *                      or \p data_size is invalid.
  * @error ENOTSUP       \p backend does not support the set_option operation,
  *                      or \p option or \p data is not supported.
- * @error ENOTPROTOOPT  invalid \p option (this is different than EINVAL in that
+ * @error ENOPROTOOPT   invalid \p option (this is different than EINVAL in that
  *                      \p option looks like an option of \p backend but the
  *                      backend does not recognize it. One reason for that may
  *                      be that you are using an option not yet implemented by
