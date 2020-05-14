@@ -113,7 +113,7 @@ _find(struct rbh_backend *backend, enum action action,
             exit(0);
             break;
         default:
-            error(EXIT_FAILURE, ENOSYS, action2str(action));
+            error(EXIT_FAILURE, ENOSYS, "%s", action2str(action));
             break;
         }
         free(fsentry);
@@ -191,7 +191,7 @@ parse_predicate(int *arg_idx)
         filter = filetype2filter(argv[++i]);
         break;
     default:
-        error(EXIT_FAILURE, ENOSYS, argv[i]);
+        error(EXIT_FAILURE, ENOSYS, "%s", argv[i]);
     }
     assert(filter != NULL);
 
