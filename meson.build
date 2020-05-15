@@ -14,7 +14,6 @@ project(
 	license: 'LGPL3.0-or-later',
 	default_options: [
 		'werror=true',
-		'c_std=gnu99',
 	],
 )
 
