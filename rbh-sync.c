@@ -208,7 +208,7 @@ upsert_fsentries(struct rbh_backend *backend,
     if (rbh_mut_iter_tee(fsevents, fsevents_tee))
         return -1;
 
-    rc = rbh_backend_update(to, (struct rbh_iterator *)fsevents_tee[0]);
+    rc = rbh_backend_update(backend, (struct rbh_iterator *)fsevents_tee[0]);
     save_errno = errno;
     rbh_mut_iter_destroy(fsevents_tee[0]);
 
@@ -335,7 +335,7 @@ parse(int argc, char *argv[])
 {
     enum command_line_option option;
 
-    for (size_t i = 1; i < argc; i++) {
+    for (int i = 1; i < argc; i++) {
         char *arg = argv[i];
 
         switch (str2command_line_token(arg)) {
@@ -468,7 +468,9 @@ main(int argc, char *argv[])
         return EXIT_SUCCESS;
     case RBH_BACKEND_ERROR:
         error(EXIT_FAILURE, 0, "unhandled error: %s\n", rbh_backend_error);
+        __builtin_unreachable();
     default:
         error(EXIT_FAILURE, errno, "while iterating over SOURCE's entries");
+        __builtin_unreachable();
     }
 }
