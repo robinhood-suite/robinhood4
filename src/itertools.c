@@ -240,7 +240,7 @@ struct tee_iterator {
     const void *next;
 };
 
-static const int
+static int
 tee_iter_share(struct tee_iterator *tee, const void *element)
 {
     return rbh_queue_push(tee->queue, &element, sizeof(element)) ? 0 : -1;
