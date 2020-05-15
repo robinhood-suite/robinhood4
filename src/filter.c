@@ -523,7 +523,13 @@ rbh_filter_validate(const struct rbh_filter *filter)
     switch (filter->op) {
     case RBH_FOP_COMPARISON_MIN ... RBH_FOP_COMPARISON_MAX:
         return comparison_filter_validate(filter);
-    case RBH_FOP_LOGICAL_MIN ... RBH_FOP_LOGICAL_MAX:
+    case RBH_FOP_NOT:
+        if (filter->logical.count != 1) {
+            errno = EINVAL;
+            return -1;
+        }
+    case RBH_FOP_AND:
+    case RBH_FOP_OR:
         return logical_filter_validate(filter);
     }
 

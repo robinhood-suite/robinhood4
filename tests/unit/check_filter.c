@@ -772,6 +772,21 @@ START_TEST(rfv_logical_with_invalid)
 }
 END_TEST
 
+START_TEST(rfv_many_not)
+{
+    const struct rbh_filter NOT_FILTER = {
+        .op = RBH_FOP_NOT,
+        .logical = {
+            .count = 2,
+        },
+    };
+
+    errno = 0;
+    ck_assert_int_eq(rbh_filter_validate(&NOT_FILTER), -1);
+    ck_assert_int_eq(errno, EINVAL);
+}
+END_TEST
+
 START_TEST(rfv_single_and)
 {
     const struct rbh_filter *filter = &COMPARISONS[0];
@@ -862,6 +877,7 @@ unit_suite(void)
     tcase_add_test(tests, rfv_bad_statx_field);
     tcase_add_test(tests, rfv_empty_logical);
     tcase_add_test(tests, rfv_logical_with_invalid);
+    tcase_add_test(tests, rfv_many_not);
     tcase_add_test(tests, rfv_single_and);
     tcase_add_test(tests, rfv_many_and);
     tcase_add_test(tests, rfv_many_or);
