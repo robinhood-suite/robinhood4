@@ -242,6 +242,7 @@ parse_expression(int *arg_idx, const struct rbh_filter *_filter)
         switch (token) {
         case CLT_URI:
             error(EX_USAGE, 0, "paths must preceed expression: %s", argv[i]);
+            __builtin_unreachable();
         case CLT_AND:
         case CLT_OR:
             switch (previous_token) {
@@ -367,7 +368,7 @@ main(int _argc, char *_argv[])
     if (backends == NULL)
         error(EXIT_FAILURE, errno, "malloc");
 
-    for (size_t i = 0; i < index; i++) {
+    for (int i = 0; i < index; i++) {
         backends[i] = rbh_backend_from_uri(argv[i]);
         backend_count++;
     }

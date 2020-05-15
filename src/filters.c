@@ -113,7 +113,7 @@ timedelta2filter(enum predicate predicate, enum time_unit unit,
     now = time(NULL);
     if (now < 0)
         error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__, "time");
-    then = now < delta ? 0 : now - delta;
+    then = now - delta;
 
     switch (operator) {
     case '-':
