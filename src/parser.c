@@ -270,6 +270,7 @@ str2predicate(const char *string)
             }
             break;
         }
+        break;
     case 'p':
         switch (string[2]) {
         case 'a':
