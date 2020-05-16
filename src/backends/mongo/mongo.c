@@ -266,42 +266,30 @@ mongo_bulk_append_fsevent(mongoc_bulk_operation_t *bulk,
     return true;
 }
 
-static const struct rbh_fsevent *
-fsevent_iter_next(struct rbh_iterator *fsevents)
-{
-    const struct rbh_fsevent *fsevent;
-    int save_errno = errno;
-
-    errno = 0;
-    fsevent = rbh_iter_next(fsevents);
-    if (errno == 0 || errno == ENODATA)
-        errno = save_errno;
-    return fsevent;
-}
-
-#define fsevent_for_each(fsevent, fsevents) \
-    for (fsevent = fsevent_iter_next(fsevents); fsevent != NULL; \
-         fsevent = fsevent_iter_next(fsevents))
-
 static ssize_t
 mongo_bulk_init_from_fsevents(mongoc_bulk_operation_t *bulk,
                               struct rbh_iterator *fsevents)
 {
-    const struct rbh_fsevent *fsevent;
     int save_errno = errno;
     size_t count = 0;
 
-    errno = 0;
-    fsevent_for_each(fsevent, fsevents) {
+    do {
+        const struct rbh_fsevent *fsevent;
+
+        errno = 0;
+        fsevent = rbh_iter_next(fsevents);
+        if (fsevent == NULL) {
+            if (errno == ENODATA)
+                break;
+            return -1;
+        }
+
         if (!mongo_bulk_append_fsevent(bulk, fsevent))
             return -1;
         count++;
-    }
+    } while (true);
 
-    if (errno)
-        return -1;
     errno = save_errno;
-
     return count;
 }
 
