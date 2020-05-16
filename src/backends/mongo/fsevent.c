@@ -11,6 +11,7 @@
 # include "config.h"
 #endif
 
+#include <assert.h>
 #include <sys/stat.h>
 
 #include "robinhood/fsevent.h"
@@ -30,58 +31,49 @@ bson_from_upsert(const struct rbh_value_map *xattrs,
 {
     bson_t *bson = bson_new();
     int save_errno = ENOBUFS;
-    bool unset = false;
-    bson_t document;
+    bson_t set, unset;
 
-    if (!BSON_APPEND_DOCUMENT_BEGIN(bson, "$set", &document)
-     || !(statxbuf ? BSON_APPEND_STATX(&document, MFF_STATX, statxbuf) : true)
-     || !(symlink ? BSON_APPEND_UTF8(&document, MFF_SYMLINK, symlink) : true))
-        goto out_destroy_bson;
-
-    for (size_t i = 0; i < xattrs->count; i++) {
-        const struct rbh_value *value = xattrs->pairs[i].value;
-        const char *xattr = xattrs->pairs[i].key;
-
-        /* Skip xattrs that are to be unset */
-        if (value == NULL) {
-            unset = true;
-            continue;
-        }
-
-        if (xattr == NULL && value->type != RBH_VT_MAP) {
-            save_errno = EINVAL;
-            goto out_destroy_bson;
-        }
-        if (!BSON_APPEND_XATTR(bson, xattr, value))
-            goto out_destroy_bson;
+    bson_init(&set);
+    if (statxbuf) {
+        if (!BSON_APPEND_STATX(&set, MFF_STATX, statxbuf))
+            goto out_destroy_set;
     }
 
-    if (!bson_append_document_end(bson, &document))
-        goto out_destroy_bson;
-
-    if (unset) {
-        if (!BSON_APPEND_DOCUMENT_BEGIN(bson, "$unset", &document))
-            goto out_destroy_bson;
-
-        for (size_t i = 0; i < xattrs->count; i++) {
-            const struct rbh_value *value = xattrs->pairs[i].value;
-            const char *xattr = xattrs->pairs[i].key;
-
-            /* Skip xattrs that are to be set */
-            if (value)
-                continue;
-
-            if (!BSON_APPEND_XATTR(bson, xattr, NULL))
-                goto out_destroy_bson;
-        }
-
-        if (!bson_append_document_end(bson, &document))
-            goto out_destroy_bson;
+    if (symlink) {
+        if (!BSON_APPEND_UTF8(&set, MFF_SYMLINK, symlink))
+            goto out_destroy_set;
     }
 
+    if (!bson_append_setxattrs(&set, MFF_XATTRS, xattrs)) {
+        save_errno = errno;
+        goto out_destroy_set;
+    }
+
+    bson_init(&unset);
+    if (!bson_append_unsetxattrs(&unset, MFF_XATTRS, xattrs)) {
+        save_errno = errno;
+        goto out_destroy_unset;
+    }
+
+    /* Empty $set or $unset documents are not allowed */
+    if (!bson_empty(&set)) {
+        if (!BSON_APPEND_DOCUMENT(bson, "$set", &set))
+            goto out_destroy_unset;
+    }
+
+    if (!bson_empty(&unset)) {
+        if (BSON_APPEND_DOCUMENT(bson, "$unset", &unset))
+            goto out_destroy_unset;
+    }
+
+    bson_destroy(&unset);
+    bson_destroy(&set);
     return bson;
 
-out_destroy_bson:
+out_destroy_unset:
+    bson_destroy(&unset);
+out_destroy_set:
+    bson_destroy(&set);
     bson_destroy(bson);
     errno = save_errno;
     return NULL;
@@ -109,7 +101,7 @@ bson_from_link(const struct rbh_value_map *xattrs,
     return NULL;
 }
 
-bson_t *
+static bson_t *
 bson_from_unlink(const struct rbh_id *parent_id, const char *name)
 {
     bson_t *bson = bson_new();
@@ -129,6 +121,61 @@ bson_from_unlink(const struct rbh_id *parent_id, const char *name)
     return NULL;
 }
 
+static bson_t *
+bson_from_xattrs(const char *prefix, const struct rbh_value_map *xattrs)
+{
+    bson_t *bson = bson_new();
+    int save_errno = ENOBUFS;
+    bson_t set, unset;
+
+    bson_init(&set);
+    if (!bson_append_setxattrs(&set, prefix, xattrs)) {
+        save_errno = errno;
+        goto out_destroy_set;
+    }
+
+    bson_init(&unset);
+    if (!bson_append_unsetxattrs(&unset, prefix, xattrs)) {
+        save_errno = errno;
+        goto out_destroy_unset;
+    }
+
+    /* Empty $set or $unset documents are not allowed */
+    if (!bson_empty(&set)) {
+        if (!BSON_APPEND_DOCUMENT(bson, "$set", &set))
+            goto out_destroy_unset;
+    }
+
+    if (!bson_empty(&unset)) {
+        if (!BSON_APPEND_DOCUMENT(bson, "$unset", &unset))
+            goto out_destroy_unset;
+    }
+
+    bson_destroy(&unset);
+    bson_destroy(&set);
+    return bson;
+
+out_destroy_unset:
+    bson_destroy(&unset);
+out_destroy_set:
+    bson_destroy(&set);
+    bson_destroy(bson);
+    errno = save_errno;
+    return NULL;
+}
+
+static bson_t *
+bson_from_ns_xattrs(const struct rbh_value_map *xattrs)
+{
+    return bson_from_xattrs(MFF_NAMESPACE ".$." MFF_XATTRS, xattrs);
+}
+
+static bson_t *
+bson_from_inode_xattrs(const struct rbh_value_map *xattrs)
+{
+    return bson_from_xattrs(MFF_XATTRS, xattrs);
+}
+
 bson_t *
 bson_update_from_fsevent(const struct rbh_fsevent *fsevent)
 {
@@ -142,9 +189,9 @@ bson_update_from_fsevent(const struct rbh_fsevent *fsevent)
     case RBH_FET_UNLINK:
         return bson_from_unlink(fsevent->link.parent_id, fsevent->link.name);
     case RBH_FET_XATTR:
-        /* TODO */
-        errno = ENOTSUP;
-        return NULL;
+        if (fsevent->ns.parent_id)
+            return bson_from_ns_xattrs(&fsevent->xattrs);
+        return bson_from_inode_xattrs(&fsevent->xattrs);
     default:
         errno = EINVAL;
         return NULL;

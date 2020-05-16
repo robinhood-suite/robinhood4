@@ -216,54 +216,102 @@ _mongoc_bulk_operation_remove_one(mongoc_bulk_operation_t *bulk,
 #endif
 }
 
+static bson_t *
+bson_selector_from_fsevent(const struct rbh_fsevent *fsevent)
+{
+    bson_t *selector = bson_new();
+    bson_t namespace;
+    bson_t elem_match;
+
+    if (!BSON_APPEND_RBH_ID(selector, MFF_ID, &fsevent->id))
+        goto out_bson_destroy;
+
+    if (fsevent->type != RBH_FET_XATTR || fsevent->ns.parent_id == NULL)
+        return selector;
+    assert(fsevent->ns.name);
+
+    if (BSON_APPEND_DOCUMENT_BEGIN(selector, MFF_NAMESPACE, &namespace)
+     && BSON_APPEND_DOCUMENT_BEGIN(&namespace, "$elemMatch", &elem_match)
+     && BSON_APPEND_RBH_ID(&elem_match, MFF_PARENT_ID, fsevent->ns.parent_id)
+     && BSON_APPEND_UTF8(&elem_match, MFF_NAME, fsevent->ns.name)
+     && bson_append_document_end(&namespace, &elem_match)
+     && bson_append_document_end(selector, &namespace))
+        return selector;
+
+out_bson_destroy:
+    bson_destroy(selector);
+    errno = ENOBUFS;
+    return NULL;
+}
+
+static bool
+mongo_bulk_append_fsevent(mongoc_bulk_operation_t *bulk,
+                          const struct rbh_fsevent *fsevent);
+
+static bool
+mongo_bulk_append_unlink_from_link(mongoc_bulk_operation_t *bulk,
+                                   const struct rbh_fsevent *link)
+{
+    const struct rbh_fsevent unlink = {
+        .type = RBH_FET_UNLINK,
+        .id = {
+            .data = link->id.data,
+            .size = link->id.size,
+        },
+        .link = {
+            .parent_id = link->link.parent_id,
+            .name = link->link.name,
+        },
+    };
+
+    return mongo_bulk_append_fsevent(bulk, &unlink);
+}
+
 static bool
 mongo_bulk_append_fsevent(mongoc_bulk_operation_t *bulk,
                           const struct rbh_fsevent *fsevent)
 {
-    bson_t selector;
+    bool upsert = false;
+    bson_t *selector;
     bson_t *update;
     bool success;
 
-    bson_init(&selector);
-    if (!BSON_APPEND_RBH_ID(&selector, MFF_ID, &fsevent->id))
+    selector = bson_selector_from_fsevent(fsevent);
+    if (selector == NULL)
         return false;
 
     switch (fsevent->type) {
     case RBH_FET_DELETE:
-        success = _mongoc_bulk_operation_remove_one(bulk, &selector);
+        success = _mongoc_bulk_operation_remove_one(bulk, selector);
         break;
     case RBH_FET_LINK:
-        /* Unlink first, then link */
-        update = bson_from_unlink(fsevent->link.parent_id,
-                                  fsevent->link.name);
-        if (update == NULL)
-            return false;
-
-        success = _mongoc_bulk_operation_update_one(bulk, &selector, update,
-                                                    false);
-        bson_destroy(update);
-
+        success = mongo_bulk_append_unlink_from_link(bulk, fsevent);
         if (!success)
             break;
         __attribute__((fallthrough));
+    case RBH_FET_UPSERT:
+        upsert = true;
+        __attribute__((fallthrough));
     default:
         update = bson_update_from_fsevent(fsevent);
-        if (update == NULL)
-            return false;
+        if (update == NULL) {
+            int save_errno = errno;
 
-        success = _mongoc_bulk_operation_update_one(
-                bulk, &selector, update, fsevent->type != RBH_FET_UNLINK
-                );
+            bson_destroy(selector);
+            errno = save_errno;
+            return false;
+        }
+
+        success = _mongoc_bulk_operation_update_one(bulk, selector, update,
+                                                    upsert);
         bson_destroy(update);
     }
+    bson_destroy(selector);
 
-    if (!success) {
+    if (!success)
         /* > returns false if passed invalid arguments */
         errno = EINVAL;
-        return false;
-    }
-
-    return true;
+    return success;
 }
 
 static ssize_t

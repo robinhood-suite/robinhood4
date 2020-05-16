@@ -13,6 +13,7 @@
 
 #include <sys/stat.h>
 
+#include "robinhood/value.h"
 #ifndef HAVE_STATX
 # include "robinhood/statx.h"
 #endif
@@ -138,25 +139,75 @@ bson_append_statx(bson_t *bson, const char *key, size_t key_length,
 }
 
 /*----------------------------------------------------------------------------*
- |                            bson_append_xattr()                             |
+ |                          bson_append_setxattrs()                           |
+ *----------------------------------------------------------------------------*/
+
+#define ONSTACK_KEYLEN_MAX 128
+
+static bool
+bson_append_xattr(bson_t *bson, const char *prefix, const char *xattr,
+                  const struct rbh_value *value)
+{
+    char onstack[ONSTACK_KEYLEN_MAX];
+    char *key = onstack;
+    bool success;
+    int keylen;
+
+    keylen = snprintf(key, sizeof(onstack), "%s.%s", prefix, xattr);
+    if (keylen >= sizeof(onstack))
+        keylen = asprintf(&key, "%s.%s", prefix, xattr);
+    if (keylen < 0)
+        return false;
+
+    if (value == NULL)
+        success = bson_append_null(bson, key, keylen);
+    else
+        success = bson_append_rbh_value(bson, key, keylen, value);
+    if (key != onstack)
+        free(key);
+
+    errno = ENOBUFS;
+    return success;
+}
+
+bool
+bson_append_setxattrs(bson_t *bson, const char *prefix,
+                      const struct rbh_value_map *xattrs)
+{
+    for (size_t i = 0; i < xattrs->count; i++) {
+        const struct rbh_value *value = xattrs->pairs[i].value;
+        const char *xattr = xattrs->pairs[i].key;
+
+        /* Skip xattrs that are to be unset */
+        if (value == NULL)
+            continue;
+
+        if (!bson_append_xattr(bson, prefix, xattr, value))
+            return false;
+    }
+
+    return true;
+}
+
+/*----------------------------------------------------------------------------*
+ |                         bson_append_unsetxattrs()                          |
  *----------------------------------------------------------------------------*/
 
 bool
-bson_append_xattr(bson_t *bson, const char *xattr, size_t xattrlen,
-                   const struct rbh_value *value)
+bson_append_unsetxattrs(bson_t *bson, const char *prefix,
+                        const struct rbh_value_map *xattrs)
 {
-    char key[XATTR_KEYLEN_MAX] = MFF_XATTRS;
-    int keylen = sizeof(MFF_XATTRS) - 1;
+    for (size_t i = 0; i < xattrs->count; i++) {
+        const struct rbh_value *value = xattrs->pairs[i].value;
+        const char *xattr = xattrs->pairs[i].key;
 
-    if (xattr) {
-        if (xattrlen > sizeof(key) - keylen)
+        /* Skip xattrs that are to be set */
+        if (value)
+            continue;
+
+        if (!bson_append_xattr(bson, prefix, xattr, NULL))
             return false;
-
-        memcpy(key + sizeof(MFF_XATTRS) - 1, xattr, xattrlen + 1);
-        keylen += xattrlen;
     }
 
-    if (value == NULL)
-        return bson_append_null(bson, key, keylen);
-    return bson_append_rbh_value(bson, key, keylen, value);
+    return true;
 }

@@ -182,14 +182,13 @@ bson_append_statx(bson_t *bson, const char *key, size_t key_length,
 #define BSON_APPEND_STATX(bson, key, statxbuf) \
     bson_append_statx(bson, key, strlen(key), statxbuf)
 
-#define XATTR_KEYLEN_MAX 128
+bool
+bson_append_setxattrs(bson_t *bson, const char *prefix,
+                      const struct rbh_value_map *xattrs);
 
 bool
-bson_append_xattr(bson_t *bson, const char *xattr, size_t xattrlen,
-                   const struct rbh_value *value);
-
-#define BSON_APPEND_XATTR(bson, xattr, value) \
-    bson_append_xattr(bson, xattr, (xattr) ? strlen(xattr) : 0, value)
+bson_append_unsetxattrs(bson_t *bson, const char *prefix,
+                        const struct rbh_value_map *xattrs);
 
     /*--------------------------------------------------------------------*
      |                              fsentry                               |
@@ -213,9 +212,6 @@ bson_append_rbh_filter(bson_t *bson, const char *key, size_t key_length,
     /*--------------------------------------------------------------------*
      |                              fsevent                               |
      *--------------------------------------------------------------------*/
-
-bson_t *
-bson_from_unlink(const struct rbh_id *parent_id, const char *name);
 
 bson_t *
 bson_update_from_fsevent(const struct rbh_fsevent *fsevent);
