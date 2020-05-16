@@ -8,7 +8,7 @@
 # author: Quentin Bouget <quentin.bouget@cea.fr>
 
 libmongoc = dependency('libmongoc-1.0', version: '>=1.3.6')
-libbson = dependency('libbson-1.0', version: '>=1.3.5')
+libbson = dependency('libbson-1.0', version: '>=1.16.0')
 
 librbh_mongo = library(
 	'rbh-mongo',

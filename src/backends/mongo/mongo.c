@@ -225,7 +225,7 @@ mongo_bulk_append_fsevent(mongoc_bulk_operation_t *bulk,
     bool success;
 
     bson_init(&selector);
-    if (!BSON_APPEND_RBH_ID_FILTER(&selector, MFF_ID, &fsevent->id))
+    if (!BSON_APPEND_RBH_ID(&selector, MFF_ID, &fsevent->id))
         return false;
 
     switch (fsevent->type) {

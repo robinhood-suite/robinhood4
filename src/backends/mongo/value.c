@@ -59,9 +59,7 @@ bson_append_rbh_value(bson_t *bson, const char *key, size_t key_length,
     switch (value->type) {
     case RBH_VT_BINARY:
         return _bson_append_binary(bson, key, key_length, BSON_SUBTYPE_BINARY,
-                                   value->binary.data, value->binary.size)
-            && (value->binary.size != 0
-                    || BSON_APPEND_INT32(bson, "$type", BSON_TYPE_NULL));
+                                   value->binary.data, value->binary.size);
     case RBH_VT_UINT32:
         return bson_append_int32(bson, key, key_length, value->uint32);
     case RBH_VT_UINT64:

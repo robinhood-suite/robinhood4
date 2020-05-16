@@ -14,7 +14,8 @@
 
 #include <bson.h>
 
-struct rbh_id;
+#include <robinhood/id.h>
+
 struct rbh_filter;
 struct rbh_fsentry;
 struct rbh_fsevent;
@@ -155,9 +156,24 @@ struct rbh_value_map;
  |                                bson helpers                                |
  *----------------------------------------------------------------------------*/
 
-bool
+static inline bool
 _bson_append_binary(bson_t *bson, const char *key, size_t key_length,
-                    bson_subtype_t subtype, const char *data, size_t size);
+                    bson_subtype_t subtype, const char *data, size_t size)
+{
+    return bson_append_binary(bson, key, key_length, subtype,
+                              (const uint8_t *)data, size);
+}
+
+static inline bool
+bson_append_rbh_id(bson_t *bson, const char *key, size_t key_length,
+                   const struct rbh_id *id)
+{
+    return _bson_append_binary(bson, key, key_length, BSON_SUBTYPE_BINARY,
+                               id->data, id->size);
+}
+
+#define BSON_APPEND_RBH_ID(bson, key, id) \
+    bson_append_rbh_id(bson, key, strlen(key), id)
 
 bool
 bson_append_statx(bson_t *bson, const char *key, size_t key_length,
@@ -193,13 +209,6 @@ bson_append_rbh_filter(bson_t *bson, const char *key, size_t key_length,
 
 #define BSON_APPEND_RBH_FILTER(bson, key, filter) \
     bson_append_rbh_filter(bson, key, strlen(key), filter, false)
-
-bool
-bson_append_rbh_id_filter(bson_t *bson, const char *key, size_t key_length,
-                          const struct rbh_id *id);
-
-#define BSON_APPEND_RBH_ID_FILTER(bson, key, id) \
-    bson_append_rbh_id_filter(bson, key, strlen(key), id)
 
     /*--------------------------------------------------------------------*
      |                              fsevent                               |

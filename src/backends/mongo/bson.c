@@ -19,16 +19,6 @@
 
 #include "mongo.h"
 
-bool
-_bson_append_binary(bson_t *bson, const char *key, size_t key_length,
-                    bson_subtype_t subtype, const char *data, size_t length)
-{
-    if (length == 0)
-        return bson_append_null(bson, key, key_length);
-    return bson_append_binary(bson, key, key_length, subtype,
-                              (const uint8_t *)data, length);
-}
-
 static bool
 bson_append_statx_attributes(bson_t *bson, const char *key, size_t key_length,
                              uint64_t mask, uint64_t attributes)

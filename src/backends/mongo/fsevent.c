@@ -97,7 +97,7 @@ bson_from_link(const struct rbh_value_map *xattrs,
 
     if (BSON_APPEND_DOCUMENT_BEGIN(bson, "$push", &document)
      && BSON_APPEND_DOCUMENT_BEGIN(&document, MFF_NAMESPACE, &subdoc)
-     && BSON_APPEND_RBH_ID_FILTER(&subdoc, MFF_PARENT_ID, parent_id)
+     && BSON_APPEND_RBH_ID(&subdoc, MFF_PARENT_ID, parent_id)
      && BSON_APPEND_UTF8(&subdoc, MFF_NAME, name)
      && BSON_APPEND_RBH_VALUE_MAP(&subdoc, MFF_XATTRS, xattrs)
      && bson_append_document_end(&document, &subdoc)
@@ -118,7 +118,7 @@ bson_from_unlink(const struct rbh_id *parent_id, const char *name)
 
     if (BSON_APPEND_DOCUMENT_BEGIN(bson, "$pull", &document)
      && BSON_APPEND_DOCUMENT_BEGIN(&document, MFF_NAMESPACE, &subdoc)
-     && BSON_APPEND_RBH_ID_FILTER(&subdoc, MFF_PARENT_ID, parent_id)
+     && BSON_APPEND_RBH_ID(&subdoc, MFF_PARENT_ID, parent_id)
      && BSON_APPEND_UTF8(&subdoc, MFF_NAME, name)
      && bson_append_document_end(&document, &subdoc)
      && bson_append_document_end(bson, &document))

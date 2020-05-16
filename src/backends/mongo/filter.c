@@ -483,16 +483,3 @@ bson_append_rbh_filter(bson_t *bson, const char *key, size_t key_length,
         && _bson_append_rbh_filter(&document, filter, negate)
         && bson_append_document_end(bson, &document);
 }
-
-/*----------------------------------------------------------------------------*
- |                        bson_append_rbh_id_filter()                         |
- *----------------------------------------------------------------------------*/
-
-bool
-bson_append_rbh_id_filter(bson_t *bson, const char *key, size_t key_length,
-                          const struct rbh_id *id)
-{
-    return _bson_append_binary(bson, key, key_length, BSON_SUBTYPE_BINARY,
-                               id->data, id->size)
-        && (id->size != 0 || BSON_APPEND_INT32(bson, "type", BSON_TYPE_NULL));
-}
