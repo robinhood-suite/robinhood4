@@ -46,11 +46,6 @@ now, it is more like the child version of find's twin.
 The structure of the project is all done. The rest should be easy enough.
 Feel free to contribute!
 
-One thing that is cruelly missing from the current version of the project is
-user-defined attributes on fsentries_. Without it, rbh-find cannot print the
-path of fsentries; only their names. As annoying as it is, this is
-**temporary**.
-
 .. __: find_
 .. _RobinHood library: https://github.com/cea-hpc/robinhood/tree/v4
 .. _fsentries: https://github.com/cea-hpc/robinhood/tree/v4/doc/robinhood.rst#fsentries
@@ -219,7 +214,7 @@ The same query, ran with rbh-find would simply print each file and directory
 under the current directory. Implementing the same behaviour as find is not
 impossible: it would simply require keeping track of entries that "failed"
 actions and exclude them from the next queries. But remembering those entries
-could prove prohibitely expensive in term of memory consumption. Moreover the
+could prove prohibitively expensive in terms of memory consumption. Moreover the
 time to build the queries would increase as we exclude more and more entries.
 
 -amin, -cmin, and -mmin
