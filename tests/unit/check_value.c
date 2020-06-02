@@ -421,8 +421,9 @@ START_TEST(vmc_too_small_for_array_of_pairs)
         .pairs = NULL,
         .count = 1,
     };
-    size_t size = sizeof(*MAP.pairs) - 1;
-    char *data;
+    char buffer[sizeof(*MAP.pairs) - 1];
+    size_t size = sizeof(buffer);
+    char *data = buffer;
 
     errno = 0;
     ck_assert_int_eq(value_map_copy(NULL, &MAP, &data, &size), -1);
@@ -441,8 +442,9 @@ START_TEST(vmc_too_small_for_key)
         .pairs = &PAIR,
         .count = 1,
     };
-    size_t size = sizeof(PAIR) + sizeof(KEY) - 1;
-    char *data;
+    char buffer[sizeof(PAIR) + sizeof(KEY) - 1];
+    size_t size = sizeof(buffer);
+    char *data = buffer;
 
     errno = 0;
     ck_assert_int_eq(value_map_copy(NULL, &MAP, &data, &size), -1);
