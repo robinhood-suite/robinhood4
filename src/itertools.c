@@ -13,6 +13,7 @@
 
 #include <assert.h>
 #include <errno.h>
+#include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
@@ -101,6 +102,7 @@ struct chunk_iterator {
     struct rbh_iterator *subiter;
     const void *first;
     size_t count;
+    bool once;
 };
 
 static const void *
@@ -110,10 +112,9 @@ chunk_iter_next(void *iterator)
     const void *next;
     int save_errno;
 
-    if (chunk->first != NULL) {
-        next = chunk->first;
-        chunk->first = NULL;
-        return next;
+    if (!chunk->once) {
+        chunk->once = true;
+        return chunk->first;
     }
 
     if (chunk->count == 0) {
@@ -123,7 +124,8 @@ chunk_iter_next(void *iterator)
 
     save_errno = errno;
     errno = 0;
-    if ((next = rbh_iter_next(chunk->subiter)) != NULL)
+    next = rbh_iter_next(chunk->subiter);
+    if (next != NULL || errno == 0)
         chunk->count--;
 
     errno = errno ? : save_errno;
@@ -158,20 +160,25 @@ chunkify_iter_next(void *iterator)
     struct chunkify_iterator *chunkify = iterator;
     struct chunk_iterator *chunk;
     const void *first;
+    int save_errno;
 
-    if ((first = rbh_iter_next(chunkify->subiter)) == NULL)
+    save_errno = errno;
+    errno = 0;
+    first = rbh_iter_next(chunkify->subiter);
+    if (first == NULL && errno != 0)
         return NULL;
+    errno = save_errno;
 
     chunk = malloc(sizeof(*chunk));
-    if (chunk == NULL) {
-        errno = ENOMEM;
+    if (chunk == NULL)
         return NULL;
-    }
+
     chunk->iterator = CHUNK_ITER;
 
     chunk->subiter = chunkify->subiter;
     chunk->first = first;
     chunk->count = chunkify->chunk - 1;
+    chunk->once = false;
 
     return chunk;
 }

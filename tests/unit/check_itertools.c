@@ -85,6 +85,55 @@ START_TEST(ric_basic)
 }
 END_TEST
 
+static const void *
+null_iter_next(void *iterator)
+{
+    return NULL;
+}
+
+static void
+null_iter_destroy(void *iterator)
+{
+    ;
+}
+
+static const struct rbh_iterator_operations NULL_ITER_OPS = {
+    .next = null_iter_next,
+    .destroy = null_iter_destroy,
+};
+
+static const struct rbh_iterator NULL_ITER = {
+    .ops = &NULL_ITER_OPS,
+};
+
+START_TEST(ric_with_null_elements)
+{
+    struct rbh_iterator nulls = NULL_ITER;
+    struct rbh_mut_iterator *chunks;
+    struct rbh_iterator *chunk;
+    const size_t CHUNK_SIZE = 3;
+
+    chunks = rbh_iter_chunkify(&nulls, CHUNK_SIZE);
+    ck_assert_ptr_nonnull(chunks);
+
+    chunk = rbh_mut_iter_next(chunks);
+    ck_assert_ptr_nonnull(chunk);
+
+    for (size_t i = 0; i < CHUNK_SIZE; i++) {
+        errno = 0;
+        ck_assert_ptr_null(rbh_iter_next(chunk));
+        ck_assert_int_eq(errno, 0);
+    }
+
+    errno = 0;
+    ck_assert_ptr_null(rbh_iter_next(chunk));
+    ck_assert_int_eq(errno, ENODATA);
+
+    rbh_iter_destroy(chunk);
+    rbh_mut_iter_destroy(chunks);
+}
+END_TEST
+
 /*----------------------------------------------------------------------------*
  |                               rbh_iter_tee()                               |
  *----------------------------------------------------------------------------*/
@@ -134,6 +183,7 @@ unit_suite(void)
 
     tests = tcase_create("rbh_iter_chunkify()");
     tcase_add_test(tests, ric_basic);
+    tcase_add_test(tests, ric_with_null_elements);
 
     suite_add_tcase(suite, tests);
 
