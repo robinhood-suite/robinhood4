@@ -28,7 +28,7 @@
 struct array_iterator {
     struct rbh_iterator iter;
 
-    const void *array;
+    const char *array;
     size_t size;
     size_t count;
 
@@ -41,7 +41,7 @@ array_iter_next(void *iterator)
     struct array_iterator *array = iterator;
 
     if (array->index < array->count)
-        return (const char *)array->array + (array->size * array->index++);
+        return array->array + (array->size * array->index++);
 
     errno = ENODATA;
     return NULL;
