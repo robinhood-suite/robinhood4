@@ -4,6 +4,8 @@
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
 
+libdl = cc.find_library('dl', required: false)
+
 librobinhood = library(
     'robinhood',
     sources: [
@@ -25,7 +27,7 @@ librobinhood = library(
         'value.c',
     ],
     version: libversion,
-    link_args: ['-ldl'],
+    dependencies: [ libdl ],
     include_directories: rbh_include,
     install: true,
 )
