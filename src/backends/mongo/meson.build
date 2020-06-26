@@ -3,9 +3,6 @@
 #                    alternatives
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
-#
-# author: Dominique Martinet <dominique.martinet@cea.fr>
-# author: Quentin Bouget <quentin.bouget@cea.fr>
 
 libmongoc = dependency('libmongoc-1.0', version: '>=1.3.6')
 libbson = dependency('libbson-1.0', version: '>=1.16.0')
