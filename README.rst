@@ -4,8 +4,6 @@
 
    SPDX-License-Identifer: LGPL-3.0-or-later
 
-   author: Quentin Bouget <quentin.bouget@cea.fr>
-
 ########
 rbh-find
 ########

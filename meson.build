@@ -3,9 +3,6 @@
 # 		      alternatives
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
-#
-# author: Dominique Martinet <dominique.martinet@cea.fr>
-# author: Quentin Bouget <quentin.bouget@cea.fr>
 
 project(
 	'rbh-find',

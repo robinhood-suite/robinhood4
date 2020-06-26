@@ -3,8 +3,6 @@
  *                    alternatives
  *
  * SPDX-License-Identifer: LGPL-3.0-or-later
- *
- * author: Quentin Bouget <quentin.bouget@cea.fr>
  */
 
 #ifndef RBH_FIND_PARSER_H
