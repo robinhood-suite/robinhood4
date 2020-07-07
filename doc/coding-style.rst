@@ -8,7 +8,7 @@
 Coding style
 ############
 
-*Code contains bugs. Bugs need fixing. Fixing is hard.*
+*Code contains bugs. Bugs need fixing. Fixing bugs is hard.*
 
 Since fixing bugs involves reading code, let's try and make this as easy as
 possible.
@@ -193,7 +193,7 @@ Never use two (or more) blank lines in a row. [#]_
 Braces
 ------
 
-Always put the opening brace last on the line, and the closing brace first.
+Always put the opening brace last on the line, and the closing brace first:
 
 .. code:: C
 
@@ -269,16 +269,17 @@ Declaring more than 10 variables in a single function or a single block is
 prohibited. Consider splitting your function or encapsulating some variables
 in a ``struct``.
 
-The only exception to this rule is about ``for`` loops, for which it is
-encouraged to declare elements in the first part of the loop:
+The only exception to this rule are ``for`` loops, for which you are encouraged
+to declare loop-local variables in the initializer part of the ``for``
+construct:
 
 .. code:: C
 
     for (size_t i = 0; i < ; i++)
         something(i);
 
-This allows *hiding* meaningless loop variables and restricting their scope to
-a minimal.
+This allows hiding meaningless loop variables and restricting their scope to
+a minimum.
 
 Naming
 ======
@@ -413,8 +414,8 @@ be 80 characters wide with a title at their center: [#]_
      |                                    TITLE                                   |
      *----------------------------------------------------------------------------*/
 
-Any public function should appear under its own banner. And as much of the code
-written specifically for this public function should also be placed under the
-banner.
+Any public function should appear under its own banner. And as much as possible,
+the code written specifically for this public function should also be placed
+under that same banner.
 
 .. [#] To vim users: the ``:center`` command helped me a lot (``:help :center``)

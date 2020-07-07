@@ -71,14 +71,14 @@ Backend
 
 .. _backends: backend_
 
-Abstraction over RobinHood storage medium/technology. Acts as a mirror of a
-filesystem's metadata.
+Abstraction over a storage medium/technology. Acts as a mirror of a filesystem's
+metadata.
 
 It exposes three main operations: one to update the metadata it manages, another
 to query it, and a third one we will describe later. The updating part is done
 by providing a stream of fsevents_ to the backend. The querying part works by
 providing a filter_ to the backend which then returns a stream of
-fsentries_ matching said filter. The filter may be ``NULL`` in which case, the
+fsentries_ matching said filter. The filter may be ``NULL``, in which case the
 backend simply returns every fsentry it knows of.
 
 As RobinHood is not directly involved in filesystems' metadata update process,
@@ -112,7 +112,7 @@ POSIX backend
 
 This backend implements only the branching and the querying part of the
 interface. And even that last part is only partially implemented: filtering is
-not supported (any filter_ other than ``NULL`` will yield an ENOTSUP error).
+not supported (any filter_ other than ``NULL`` will yield an ``ENOTSUP`` error).
 
 It may seem odd, but this backend is just a means to an end. Its purpose is to
 allow dumping any POSIX filesystem's metadata in a format RobinHood can easily
@@ -197,7 +197,7 @@ Iterators
 
 A classical iterator interface.
 
-RobinHood implements two types of iterators: iterator over constant (ie.
+RobinHood implements two types of iterators: iterators over constant (ie.
 read-only) references, and iterators over mutable (ie. regular) references. This
 distinction allows for a clear delegation of memory ownership at the API level:
 constant references must not be freed [#]_ nor modified; mutable references may
@@ -244,7 +244,7 @@ There are many candidate technologies over which one can implement the backend_
 interface. The RobinHood development team cannot be expected to support them
 all. The backend plugin interface solves this by allowing anyone to implement
 support for their favourite storage technology and have RobinHood applications
-use them just as well as an officially supported backend.
+use them just as well as any officially supported backend.
 
 URI
 ---
@@ -382,7 +382,7 @@ The RobinHood project includes several tools:
 rbh-sync
 --------
 
-This tool allows synchronizing any two RobinHood backens, provided the source
+This tool allows synchronizing any two RobinHood backends, provided the source
 backend implements the querying part of the backend_ interface, and the
 destination backend implements the updating part.
 
