@@ -148,9 +148,9 @@ FSEntry
 This is RobinHood's representation of a filesystem entry and the metadata
 associated with it.
 
-For now, it is a structure that represents the most common metadata attributes
-(name, size, owner, ...) of POSIX filesystems. In the future, it will also
-handle extended attributes, and user defined attributes.
+It is a structure that represents the most common metadata attributes (name,
+size, owner, ...) of an entry (file, directory, symlink, ...) in a POSIX
+filesystem. An fsentry is also able to hold structured extended attributes.
 
 Each fsentry is uniquely identified by an ID.
 
