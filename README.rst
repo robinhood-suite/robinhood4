@@ -74,7 +74,7 @@ The syntax for ``fsname`` depends on the backend's type:
 ::
 
     rbh:posix:/mnt/path/to/dir
-    rbh:mongo:something-that-makes-me-think-of-/math/path/to/dir
+    rbh:mongo:something-that-makes-me-think-of-/mnt/path/to/dir
     rbh:posix:/scratch
     rbh:mongo:scratch
 
@@ -113,7 +113,7 @@ sections 2.1_ and 2.2_ for more information on this.
 CLI
 ---
 
-What is all the fuss about RobinHood URIs then? Well they are integral to
+What is all the fuss with RobinHood URIs then? Well they are integral to
 rbh-sync's command line interface. [#]_
 
 Much like rsync, rbh-sync takes two arguments, both of which are URIs::
@@ -138,16 +138,16 @@ might:
 
 #. miss the update;
 #. see an incomplete version of the update;
-#. see the update entirely.
+#. simply see the whole update.
 
 In both the first and second cases, the destination backend will contain stale
 metadata at the end of the run.
 
 Conversely, if the destination backend is updated while rbh-sync operates on it,
-there is not particular garantee that the resulting metadata will be consistent.
+there is no particular garantee that the resulting metadata will be consistent.
 
 To work around this, if either the source backend or the destination backend
-was updated while rbh-sync ran, just re-run rbh-sync again.
+was updated while rbh-sync ran, just run rbh-sync again.
 
 The destination backend might never be exactly up-to-date, but you can be sure
 that it will always go *forward*. In this sense, you get a level of consistency
