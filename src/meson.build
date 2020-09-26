@@ -26,7 +26,7 @@ librobinhood = library(
         'utils/uri.c',
         'value.c',
     ],
-    version: libversion,
+    version: meson.project_version(),
     dependencies: [ libdl ],
     include_directories: rbh_include,
     install: true,

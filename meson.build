@@ -5,18 +5,15 @@
 # SPDX-License-Identifer: LGPL-3.0-or-later
 
 project(
-    'robinhood',
+    'librobinhood',
     'c',
-    version: '4.0.0',
+    version: '0.0.0',
     license: 'LGPL3.0-or-later',
     default_options: [
         'werror=true',
         'c_std=c11',
     ],
 )
-
-# The version number for librobinhood and librbh-utils
-libversion = '0.0.0'
 
 # GNU extensions
 cc = meson.get_compiler('c')

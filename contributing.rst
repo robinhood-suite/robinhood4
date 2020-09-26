@@ -8,8 +8,8 @@
 Contributing
 ############
 
-This document describes how to contribute to RobinHood and details a few rules
-the project implements.
+This document describes how to contribute to librobinhood and details a few
+rules the project implements.
 
 Overview
 ========
@@ -27,12 +27,12 @@ about the project: robinhood-news_.
 
 Reviews_ happen on GerritHub_, and so patches_ must be submitted there too.
 
-.. __: https://github.com/cea-hpc/robinhood/issues
+.. __: https://github.com/cea-hpc/librobinhood/issues
 .. _subscribe: https://sourceforge.net/p/robinhood/mailman/
 .. _robinhood-support: mailto:robinhood-support@lists.sourceforge.net
 .. _robinhood-devel: mailto:robinhood-devel@lists.sourceforge.net
 .. _robinhood-news: https://sourceforge.net/projects/robinhood/lists/robinhood-news
-.. _gerrithub: https://review.gerrithub.io/cea-hpc/robinhood
+.. _gerrithub: https://review.gerrithub.io/cea-hpc/librobinhood
 
 Issues
 ======
@@ -48,12 +48,10 @@ Alternatively, run the commands below:
 
 .. code:: shell
 
-    cd robinhood/
-    git remote add gerrithub https://review.gerrithub.io/cea-hpc/robinhood
-    git config remote.gerrithub.pushurl https://<login>@review.gerrithub.io/a/cea-hpc/robinhood
-    git config remote.gerrithub.push HEAD:refs/for/v4
-
-Notice how we use ``refs/for/v4`` rather than the usual ``refs/for/master``.
+    cd librobinhood/
+    git remote add gerrithub https://review.gerrithub.io/cea-hpc/librobinhood
+    git config remote.gerrithub.pushurl https://<login>@review.gerrithub.io/a/cea-hpc/librobinhood
+    git config remote.gerrithub.push HEAD:refs/for/main
 
 Also note that you may need to log in at least once on GerritHub_ before you can
 push changes.
@@ -69,7 +67,7 @@ information.
 
 .. _Linux kernel coding style: https://www.kernel.org/doc/html/latest/process/coding-style.html
 .. _PEP 8: https://www.python.org/dev/peps/pep-0008
-.. _RobinHood coding style: https://github.com/cea-hpc/robinhood/tree/v4/doc/coding-style.rst
+.. _RobinHood coding style: https://github.com/cea-hpc/librobinhood/blob/main/doc/coding-style.rst
 
 Tests
 -----
@@ -146,7 +144,7 @@ can fetch it with:
 
 .. code:: shell
 
-    curl -Lo path/to/robinhood/.git/hooks/ \
+    curl -Lo path/to/librobinhood/.git/hooks/ \
         https://review.gerrithub.io/tools/hooks/commit-msg
 
 Refer to the documentation__ for more information.
@@ -185,6 +183,7 @@ Key takeways are:
 
 Landing
 -------
+
 RobinHood patches are systematically reviewed before they are merged.
 
 Authors may negatively score their own patch to prevent it from landing. But

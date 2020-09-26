@@ -13,7 +13,7 @@ It provides an efficient C-API to store and query any filesystem's metadata.
 
 A broad description of its internals is available here__.
 
-.. __: https://github.com/cea-hpc/robinhood/tree/v4/doc/robinhood.rst
+.. __: https://github.com/cea-hpc/robinhood/blob/main/doc/robinhood.rst
 
 Installation
 ============
@@ -22,8 +22,8 @@ Download the sources:
 
 .. code:: bash
 
-    git clone https://github.com/cea-hpc/robinhood.git
-    cd robinhood
+    git clone https://github.com/cea-hpc/librobinhood.git
+    cd librobinhood
 
 Build and install with meson_ and ninja_:
 
@@ -50,7 +50,7 @@ To build the API documentation, use doxygen:
     doxyconfig() {
         sed -i "s|\($1\s*\)=.*$|\1= ${*:2}|" Doxyfile
     }
-    doxyconfig PROJECT_NAME      RobinHood
+    doxyconfig PROJECT_NAME      librobinhood
     doxyconfig INPUT             include/robinhood
     doxyconfig RECURSIVE         YES
     doxyconfig FILE_PATTERNS     "*.h" "*.h.in"
@@ -116,7 +116,7 @@ every entry under the current directory and exit:
     }
 
 For more advanced use cases, check out rbh-sync_ and rbh-find_ — currently the
-two main applications built on top of the RobinHood library.
+two main applications built on top of librobinhood.
 
 .. _rbh-sync: https://github.com/cea-hpc/rbh-sync
 .. _rbh-find: https://github.com/cea-hpc/rbh-find
