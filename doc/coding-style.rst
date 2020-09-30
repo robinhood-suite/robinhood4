@@ -289,18 +289,12 @@ Naming is notoriously hard:
     *There are only two hard things in Computer Science: cache invalidation and
     naming things. --Phil Karlton* [#]_
 
-My personnal formula to evaluate whether or not a name is good is::
+My personnal opinion is that a good name is **concise** and also **easy** to
+**unambiguously** interpret.
 
-    conciseness / (explicitness + accuracy)
-
-Put into words: a good name is **concise** and it is **easy** to
-**unambiguously** infer what it refers to.
-
-.. TODO look for online pointers on what makes good and bad names
-
-While this formula helps you compare different options, it does nothing to help
-you find names. AFAICT, conjuring inspiration is a hard problem, and we will not
-try to solve it in this document.
+While helpful to compare different options, this does nothing to actually *find*
+options. AFAICT, conjuring inspiration is a hard problem, and we will not try to
+solve it in this document.
 
 The rest of this section details naming conventions that are meant to ease
 navigating and refactoring code.
