@@ -71,8 +71,8 @@ In my experience, this applies particularly well to static array declarations:
 
 Where the expectation is that you only ever read this kind of array looking to
 know what ``messages[FIRST]`` evaluates to; or which index yields the message
-``this is the first message``. In the later case, having the messages vertically
-aligned allows easily scanning for the ``first`` part.
+``this is the first message``. In the latter case, having the messages
+vertically aligned allows easily scanning for the ``first`` part.
 
 Preprocessor
 ~~~~~~~~~~~~
