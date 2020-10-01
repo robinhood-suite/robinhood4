@@ -67,7 +67,7 @@ information.
 
 .. _Linux kernel coding style: https://www.kernel.org/doc/html/latest/process/coding-style.html
 .. _PEP 8: https://www.python.org/dev/peps/pep-0008
-.. _RobinHood coding style: https://github.com/cea-hpc/librobinhood/blob/main/doc/coding-style.rst
+.. _RobinHood coding style: https://github.com/cea-hpc/robinhood/blob/v4/doc/coding-style.rst
 
 Tests
 -----
