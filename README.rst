@@ -13,7 +13,7 @@ It provides an efficient C-API to store and query any filesystem's metadata.
 
 A broad description of its internals is available here__.
 
-.. __: https://github.com/cea-hpc/robinhood/blob/main/doc/robinhood.rst
+.. __: https://github.com/cea-hpc/librobinhood/blob/main/doc/internals.rst
 
 Installation
 ============
