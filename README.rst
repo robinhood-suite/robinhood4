@@ -33,7 +33,7 @@ Build and install with meson_ and ninja_:
 
 .. _meson: https://mesonbuild.com
 .. _ninja: https://ninja-build.org
-.. _RobinHood library: https://github.com/cea-hpc/robinhood/tree/v4
+.. _RobinHood library: https://github.com/cea-hpc/librobinhood
 
 A work in progress
 ==================
@@ -45,8 +45,6 @@ The structure of the project is all done. The rest should be easy enough.
 Feel free to contribute!
 
 .. __: find_
-.. _RobinHood library: https://github.com/cea-hpc/robinhood/tree/v4
-.. _fsentries: https://github.com/cea-hpc/robinhood/tree/v4/doc/robinhood.rst#fsentries
 
 Usage
 =====
@@ -97,8 +95,8 @@ For more information, please refer to the RobinHood library's `documentation on
 URIs`__.
 
 
-.. _RobinHood backends: https://github.com/cea-hpc/robinhood/tree/v4/doc/robinhood.rst#backend
-.. __: https://github.com/cea-hpc/robinhood/tree/v4/doc/robinhood.rst#uri
+.. _RobinHood backends: https://github.com/cea-hpc/librobinhood/blob/main/doc/internals.rst#backend
+.. __: https://github.com/cea-hpc/librobinhood/blob/main/doc/internals.rst#uri
 
 FS traversal vs. Backend filtering
 ----------------------------------
