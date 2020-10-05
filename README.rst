@@ -30,7 +30,7 @@ Build and install with meson_ and ninja_:
 
 .. _meson: https://mesonbuild.com
 .. _ninja: https://ninja-build.org
-.. _RobinHood library: https://github.com/cea-hpc/robinhood/tree/v4
+.. _RobinHood library: https://github.com/cea-hpc/librobinhood
 
 Usage
 =====
@@ -42,7 +42,7 @@ another.
        filesystem's metadata, and later query it.
 
 .. _RobinHood Backend:
-       https://github.com/cea-hpc/robinhood/tree/v4/doc/robinhood.rst#backend
+       https://github.com/cea-hpc/librobinhood/blob/main/doc/internals.rst#backend
 
 RobinHood URIs
 --------------
@@ -106,8 +106,8 @@ sections 2.1_ and 2.2_ for more information on this.
 .. _RFC3986: https://tools.ietf.org/html/rfc3986
 .. _2.1: https://tools.ietf.org/html/rfc3986#section-2.1
 .. _2.2: https://tools.ietf.org/html/rfc3986#section-2.2
-.. __: https://github.com/cea-hpc/robinhood/tree/v4/doc/robinhood.rst
-.. _fsentry: https://github.com/cea-hpc/robinhood/tree/v4/doc/robinhood.rst#fsentry
+.. __: https://github.com/cea-hpc/librobinhood/blob/main/doc/internals.rst
+.. _fsentry: https://github.com/cea-hpc/librobinhood/blob/main/doc/internals.rst#fsentry
 .. _Mongo: https://www.mongodb.com
 
 CLI
