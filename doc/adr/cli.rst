@@ -1,4 +1,4 @@
-.. This file is part of rbh-fsevent
+.. This file is part of rbh-fsevents
    Copyright (C) 2020 Commissariat a l'energie atomique et aux energies
                       alternatives
 
@@ -14,12 +14,12 @@ Requirements
 Multiple input sources/formats
 ------------------------------
 
-rbh-fsevent must be able to parse events from different event sources: Lustre,
+rbh-fsevents must be able to parse events from different event sources: Lustre,
 FANOTIFY, RobinHood, BeeGFS, HPSS, ...
 
 Each of these streams uses a different format and collection API.
 
-One way or another, rbh-fsevent must be able to distinguish one type of stream
+One way or another, rbh-fsevents must be able to distinguish one type of stream
 from another.
 
 Distributed processing
@@ -40,7 +40,7 @@ Here are the different steps in the collection and processing of fsevents:
 #. applying fsevents on a robinhood backend.
 
 A simple approach to the problem at hand is to distribute each and every step to
-a different worker pool. Therefore rbh-fsevent's cli should make it possible to
+a different worker pool. Therefore rbh-fsevents' cli should make it possible to
 run each step individually.
 
 In practice, each step can be divided into 3 phases::
@@ -53,7 +53,7 @@ a step of its own.
 Multiple output sinks
 ---------------------
 
-From the previous point, it is obvious that rbh-fsevent must be able to emit
+From the previous point, it is obvious that rbh-fsevents must be able to emit
 data to multiple output sinks.
 
 We want to support the following:
@@ -65,12 +65,12 @@ We want to support the following:
 Solution
 ========
 
-Here is what the CLI of rbh-fsevent will look like.
+Here is what the CLI of rbh-fsevents will look like.
 
 .. code:: console
 
-    $ ./rbh-fsevent --help
-    usage: rbh-fsevent [-h] [--raw] [--enrich MOUNTPOINT] SOURCE DESTINATION
+    $ ./rbh-fsevents --help
+    usage: rbh-fsevents [-h] [--raw] [--enrich MOUNTPOINT] SOURCE DESTINATION
 
     Collect fsevents from SOURCE, optionally enrich them with data collected from
     MOUNTPOINT, and send them to DESTINATION.
@@ -117,28 +117,28 @@ pools.
 .. code:: console
 
    $ # Collecting and converting raw external events into (sparse) fsevents
-   $ rbh-fsevent lustre-MDT0000 - > /tmp/sparse-fsevents.yaml
+   $ rbh-fsevents lustre-MDT0000 - > /tmp/sparse-fsevents.yaml
 
    $ # Enriching fsevents
-   $ rbh-fsevent --enrich /mnt/scratch - < /tmp/sparse-fsevents.yaml \
+   $ rbh-fsevents --enrich /mnt/scratch - < /tmp/sparse-fsevents.yaml \
        - > /tmp/fsevents.yaml
 
    $ # Applying fsevents on a RobinHood backend
-   $ rbh-fsevent - < /tmp/fsevents.yaml rbh:mongo:scratch
+   $ rbh-fsevents - < /tmp/fsevents.yaml rbh:mongo:scratch
 
 The same result can be achieved without intermediary files using pipes:
 
 .. code:: console
 
-   $ rbh-fsevent lustre-MDT0000 - |
-       rbh-fsevent --enrich /mnt/scratch - - |
-       rbh-fsevent - rbh:mongo:scratch
+   $ rbh-fsevents lustre-MDT0000 - |
+       rbh-fsevents --enrich /mnt/scratch - - |
+       rbh-fsevents - rbh:mongo:scratch
 
 Or in a single command:
 
 .. code:: console
 
-   $ rbh-fsevent --enrich /mnt/scratch lustre-MDT0000 rbh:mongo:scratch
+   $ rbh-fsevents --enrich /mnt/scratch lustre-MDT0000 rbh:mongo:scratch
 
 What about message queues?
 --------------------------
