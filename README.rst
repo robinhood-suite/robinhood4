@@ -83,6 +83,11 @@ every entry under the current directory and exit:
     int
     main()
     {
+        struct rbh_filter_options options = {
+            .projection = {
+                .fsentry_mask = RBH_FP_NAME,
+            }
+        };
         struct rbh_mut_iterator *fsentries;
         struct rbh_backend *backend;
 
@@ -90,7 +95,7 @@ every entry under the current directory and exit:
         backend = rbh_backend_from_uri(uri);
 
         /* Fetch every fsentry */
-        fsentries = rbh_backend_filter_fsentries(backend, NULL, RBH_FP_NAME, 0);
+        fsentries = rbh_backend_filter(backend, NULL, &options);
 
         /* Iterate over each fsentry and print its name (if it is set) */
         while (1) {
