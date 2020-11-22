@@ -202,7 +202,7 @@ fsentry_from_bson(const bson_t *bson);
 /* Should only be used on a valid filter */
 bool
 bson_append_rbh_filter(bson_t *bson, const char *key, size_t key_length,
-                   const struct rbh_filter *filter, bool negate);
+                       const struct rbh_filter *filter, bool negate);
 
 #define BSON_APPEND_RBH_FILTER(bson, key, filter) \
     bson_append_rbh_filter(bson, key, strlen(key), filter, false)
