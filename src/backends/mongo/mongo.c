@@ -49,11 +49,12 @@ mongo_cleanup(void)
 }
 
     /*--------------------------------------------------------------------*
-     |                     bson_pipeline_from_filter                      |
+     |               bson_pipeline_from_filter_and_options                |
      *--------------------------------------------------------------------*/
 
 static bson_t *
-bson_pipeline_from_filter(const struct rbh_filter *filter)
+bson_pipeline_from_filter_and_options(const struct rbh_filter *filter,
+                                      const struct rbh_filter_options *options)
 {
     bson_t *pipeline = bson_new();
     bson_t array;
@@ -65,6 +66,10 @@ bson_pipeline_from_filter(const struct rbh_filter *filter)
      && bson_append_document_end(&array, &stage)
      && BSON_APPEND_DOCUMENT_BEGIN(&array, "1", &stage)
      && BSON_APPEND_RBH_FILTER(&stage, "$match", filter)
+     && bson_append_document_end(&array, &stage)
+     && BSON_APPEND_DOCUMENT_BEGIN(&array, "2", &stage)
+     && BSON_APPEND_RBH_FILTER_PROJECTION(&stage, "$project",
+                                          &options->projection)
      && bson_append_document_end(&array, &stage)
      && bson_append_array_end(pipeline, &array))
         return pipeline;
@@ -434,7 +439,7 @@ mongo_backend_filter(void *backend, const struct rbh_filter *filter,
     if (rbh_filter_validate(filter))
         return NULL;
 
-    pipeline = bson_pipeline_from_filter(filter);
+    pipeline = bson_pipeline_from_filter_and_options(filter, options);
     if (pipeline == NULL)
         return NULL;
 

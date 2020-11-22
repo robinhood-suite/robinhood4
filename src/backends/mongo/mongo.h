@@ -13,6 +13,7 @@
 #include <bson.h>
 
 #include <robinhood/id.h>
+#include <robinhood/backend.h>
 
 struct rbh_filter;
 struct rbh_fsentry;
@@ -206,6 +207,19 @@ bson_append_rbh_filter(bson_t *bson, const char *key, size_t key_length,
 
 #define BSON_APPEND_RBH_FILTER(bson, key, filter) \
     bson_append_rbh_filter(bson, key, strlen(key), filter, false)
+
+    /*--------------------------------------------------------------------*
+     |                         filter_projection                          |
+     *--------------------------------------------------------------------*/
+
+bool
+bson_append_rbh_filter_projection(
+        bson_t *bson, const char *key, size_t key_length,
+        const struct rbh_filter_projection *projection
+        );
+
+#define BSON_APPEND_RBH_FILTER_PROJECTION(bson, key, projection) \
+    bson_append_rbh_filter_projection(bson, key, strlen(key), projection)
 
     /*--------------------------------------------------------------------*
      |                              fsevent                               |
