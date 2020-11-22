@@ -227,6 +227,15 @@ enum rbh_generic_backend_option {
      * should still handle the old value.
      */
     RBH_GBO_DEPRECATED = RBH_BO_FIRST(RBH_BI_GENERIC),
+    /** Switch a backend to a "garbage collecting" mode
+     *
+     * When this option is set (on a backend that supports it), only entries
+     * without any link in the namespace should be returned by subsequent call
+     * to the `filter' operator.
+     *
+     * type: bool
+     */
+    RBH_GBO_GC,
 };
 
 /**

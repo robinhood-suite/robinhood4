@@ -26,6 +26,12 @@ rbh_generic_backend_get_option(struct rbh_backend *backend, unsigned int option,
     case RBH_GBO_DEPRECATED:
         errno = ENOTSUP;
         return -1;
+    case RBH_GBO_GC:
+        if (backend->ops->get_option == NULL) {
+            errno = ENOTSUP;
+            return -1;
+        }
+        return backend->ops->get_option(backend, option, data, data_size);
     }
 
     errno = EINVAL;
@@ -40,6 +46,12 @@ rbh_generic_backend_set_option(struct rbh_backend *backend, unsigned int option,
     case RBH_GBO_DEPRECATED:
         errno = ENOTSUP;
         return -1;
+    case RBH_GBO_GC:
+        if (backend->ops->set_option == NULL) {
+            errno = ENOTSUP;
+            return -1;
+        }
+        return backend->ops->set_option(backend, option, data, data_size);
     }
 
     errno = EINVAL;
