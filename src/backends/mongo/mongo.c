@@ -150,6 +150,14 @@ struct mongo_backend {
     mongoc_collection_t *entries;
 };
 
+static int
+mongo_get_option(void *backend, unsigned int option, void *data,
+                 size_t *data_size);
+
+static int
+mongo_set_option(void *backend, unsigned int option, const void *data,
+                 size_t data_size);
+
     /*--------------------------------------------------------------------*
      |                               update                               |
      *--------------------------------------------------------------------*/
@@ -479,11 +487,181 @@ mongo_backend_destroy(void *backend)
 }
 
 static const struct rbh_backend_operations MONGO_BACKEND_OPS = {
+    .get_option = mongo_get_option,
+    .set_option = mongo_set_option,
     .root = mongo_root,
     .update = mongo_backend_update,
     .filter = mongo_backend_filter,
     .destroy = mongo_backend_destroy,
 };
+
+    /*--------------------------------------------------------------------*
+     |                             gc_filter                              |
+     *--------------------------------------------------------------------*/
+
+static bson_t *
+bson_from_options(const struct rbh_filter_options *options_)
+{
+    bson_t *options = bson_new();
+
+    if (BSON_APPEND_RBH_FILTER_PROJECTION(options, "projection",
+                                          &options_->projection))
+        return options;
+
+    bson_destroy(options);
+    errno = ENOBUFS;
+    return NULL;
+}
+
+static bson_t *
+bson_from_gc_filter(const struct rbh_filter *filter_)
+{
+    bson_t *filter = bson_new();
+    bson_t array, subarray;
+    bson_t document;
+
+    if (BSON_APPEND_ARRAY_BEGIN(filter, "$and", &array)
+     && BSON_APPEND_DOCUMENT_BEGIN(&array, "0", &document)
+     && BSON_APPEND_ARRAY_BEGIN(&document, MFF_NAMESPACE, &subarray)
+     && bson_append_array_end(&document, &subarray)
+     && bson_append_document_end(&array, &document)
+     && BSON_APPEND_RBH_FILTER(&array, "1", filter_)
+     && bson_append_array_end(filter, &array))
+        return filter;
+
+    bson_destroy(filter);
+    errno = ENOBUFS;
+    return NULL;
+}
+
+static struct rbh_mut_iterator *
+mongo_gc_backend_filter(void *backend, const struct rbh_filter *filter_,
+                        const struct rbh_filter_options *options_)
+{
+    const unsigned int unavailable_fields =
+        RBH_FP_PARENT_ID | RBH_FP_NAME | RBH_FP_NAMESPACE_XATTRS;
+    struct rbh_filter_options options = *options_;
+    struct mongo_backend *mongo = backend;
+    struct mongo_iterator *mongo_iter;
+    mongoc_cursor_t *cursor;
+    bson_t *filter;
+    bson_t *opts;
+
+    if (rbh_filter_validate(filter_))
+        return NULL;
+
+    /* Removed unavailable projection fields */
+    options.projection.fsentry_mask &= ~unavailable_fields;
+    opts = bson_from_options(&options);
+    if (opts == NULL)
+        return NULL;
+
+    filter = bson_from_gc_filter(filter_);
+    if (filter == NULL) {
+        int save_errno = errno;
+
+        bson_destroy(opts);
+        errno = save_errno;
+        return NULL;
+    }
+
+    cursor = mongoc_collection_find_with_opts(mongo->entries, filter, opts,
+                                              NULL);
+    bson_destroy(filter);
+    bson_destroy(opts);
+    if (cursor == NULL) {
+        errno = EINVAL;
+        return NULL;
+    }
+
+    mongo_iter = mongo_iterator_new(cursor);
+    if (mongo_iter == NULL) {
+        int save_errno = errno;
+
+        mongoc_cursor_destroy(cursor);
+        errno = save_errno;
+    }
+
+    return &mongo_iter->iterator;
+}
+
+static const struct rbh_backend_operations MONGO_GC_BACKEND_OPS = {
+    .get_option = mongo_get_option,
+    .set_option = mongo_set_option,
+    .root = mongo_root,
+    .update = mongo_backend_update,
+    .filter = mongo_gc_backend_filter,
+    .destroy = mongo_backend_destroy,
+};
+
+    /*--------------------------------------------------------------------*
+     |                             get_option                             |
+     *--------------------------------------------------------------------*/
+
+static int
+mongo_get_gc_option(struct mongo_backend *mongo, void *data, size_t *data_size)
+{
+    bool is_gc = mongo->backend.ops == &MONGO_GC_BACKEND_OPS;
+
+    if (*data_size < sizeof(is_gc)) {
+        *data_size = sizeof(is_gc);
+        errno = EOVERFLOW;
+        return -1;
+    }
+    memcpy(data, &is_gc, sizeof(is_gc));
+    *data_size = sizeof(is_gc);
+    return 0;
+}
+
+static int
+mongo_get_option(void *backend, unsigned int option, void *data,
+                 size_t *data_size)
+{
+    struct mongo_backend *mongo = backend;
+
+    switch (option) {
+    case RBH_GBO_GC:
+        return mongo_get_gc_option(mongo, data, data_size);
+    }
+
+    errno = ENOPROTOOPT;
+    return -1;
+}
+
+    /*--------------------------------------------------------------------*
+     |                             set_option                             |
+     *--------------------------------------------------------------------*/
+
+static int
+mongo_set_gc_option(struct mongo_backend *mongo, const void *data,
+                    size_t data_size)
+{
+    bool is_gc;
+
+    if (data_size != sizeof(is_gc)) {
+        errno = EINVAL;
+        return -1;
+    }
+    memcpy(&is_gc, data, sizeof(is_gc));
+
+    mongo->backend.ops = is_gc ? &MONGO_GC_BACKEND_OPS : &MONGO_BACKEND_OPS;
+    return 0;
+}
+
+static int
+mongo_set_option(void *backend, unsigned int option, const void *data,
+                 size_t data_size)
+{
+    struct mongo_backend *mongo = backend;
+
+    switch (option) {
+    case RBH_GBO_GC:
+        return mongo_set_gc_option(mongo, data, data_size);
+    }
+
+    errno = ENOPROTOOPT;
+    return -1;
+}
 
 /*----------------------------------------------------------------------------*
  |                               MONGO_BACKEND                                |
