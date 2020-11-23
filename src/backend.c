@@ -151,12 +151,17 @@ backend_fsentry_from_path(struct rbh_backend *backend, char *path,
     char *slash;
 
     if (*path == '/') {
-        parent = fsentry_from_parent_and_name(backend, &ROOT_PARENT_ID, "",
-                                              &ID_ONLY);
         /* Discard every leading '/' */
         do {
             path++;
         } while (*path == '/');
+
+        if (*path == '\0')
+            return fsentry_from_parent_and_name(backend, &ROOT_PARENT_ID, "",
+                                                projection);
+
+        parent = fsentry_from_parent_and_name(backend, &ROOT_PARENT_ID, "",
+                                              &ID_ONLY);
     } else {
         parent = rbh_backend_root(backend, &ID_ONLY);
     }
