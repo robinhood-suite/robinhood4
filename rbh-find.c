@@ -190,6 +190,8 @@ parse_predicate(int *arg_idx)
         break;
     default:
         error(EXIT_FAILURE, ENOSYS, "%s", argv[i]);
+        /* clang: -Wsometimes-unitialized: `filter` */
+        __builtin_unreachable();
     }
     assert(filter != NULL);
 

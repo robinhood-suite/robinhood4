@@ -185,6 +185,8 @@ filetype2filter(const char *_filetype)
         break;
     default:
         error(EX_USAGE, 0, "unknown argument to -type: %s", _filetype);
+        /* clang: -Wsometimes-unitialized: `filtetype` */
+        __builtin_unreachable();
     }
 
     filter = rbh_filter_compare_int32_new(RBH_FOP_EQUAL,
