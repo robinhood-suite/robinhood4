@@ -97,7 +97,7 @@ bson_pipeline_from_filter_and_options(const struct rbh_filter *filter,
     bson_t array;
     bson_t stage;
 
-    if (options->skip > INT64_MAX) {
+    if (options->skip > INT64_MAX || options->limit > INT64_MAX) {
         errno = ENOTSUP;
         return NULL;
     }
@@ -118,6 +118,10 @@ bson_pipeline_from_filter_and_options(const struct rbh_filter *filter,
      && (options->skip == 0
       || (BSON_APPEND_DOCUMENT_BEGIN(&array, UINT8_TO_STR[i], &stage) && ++i
        && BSON_APPEND_INT64(&stage, "$skip", options->skip)
+       && bson_append_document_end(&array, &stage)))
+     && (options->limit == 0
+      || (BSON_APPEND_DOCUMENT_BEGIN(&array, UINT8_TO_STR[i], &stage) && ++i
+       && BSON_APPEND_INT64(&stage, "$limit", options->limit)
        && bson_append_document_end(&array, &stage)))
      && bson_append_array_end(pipeline, &array))
         return pipeline;
@@ -567,7 +571,7 @@ bson_from_options(const struct rbh_filter_options *options)
 {
     bson_t *bson;
 
-    if (options->skip > INT64_MAX) {
+    if (options->skip > INT64_MAX || options->limit > INT64_MAX) {
         errno = ENOTSUP;
         return NULL;
     }
@@ -576,7 +580,9 @@ bson_from_options(const struct rbh_filter_options *options)
     if (BSON_APPEND_RBH_FILTER_PROJECTION(bson, "projection",
                                           &options->projection)
      && (options->skip == 0
-      || BSON_APPEND_INT64(bson, "skip", options->skip)))
+      || BSON_APPEND_INT64(bson, "skip", options->skip))
+     && (options->limit == 0
+      || BSON_APPEND_INT64(bson, "limit", options->limit)))
         return bson;
 
     bson_destroy(bson);

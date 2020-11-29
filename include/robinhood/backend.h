@@ -478,11 +478,6 @@ rbh_backend_filter(struct rbh_backend *backend, const struct rbh_filter *filter,
         errno = ENOTSUP;
         return NULL;
     }
-    /* TODO: implement support for limiting in both the posix/mongo backend */
-    if (options->limit > 0) {
-        errno = ENOTSUP;
-        return NULL;
-    }
     /* TODO: implement support for sorting in both the posix/mongo backend */
     if (options->sort.count > 0) {
         errno = ENOTSUP;
