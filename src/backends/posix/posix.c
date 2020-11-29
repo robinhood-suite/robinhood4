@@ -573,6 +573,11 @@ posix_backend_filter(void *backend, const struct rbh_filter *filter,
         return NULL;
     }
 
+    if (options->skip > 0) {
+        errno = ENOTSUP;
+        return NULL;
+    }
+
     posix_iter = posix_iterator_new(posix->root, NULL, posix->statx_sync_type);
     if (posix_iter == NULL)
         return NULL;
@@ -707,6 +712,11 @@ posix_branch_backend_filter(void *backend, const struct rbh_filter *filter,
     int save_errno;
 
     if (filter != NULL) {
+        errno = ENOTSUP;
+        return NULL;
+    }
+
+    if (options->skip > 0) {
         errno = ENOTSUP;
         return NULL;
     }
