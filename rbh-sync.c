@@ -88,10 +88,12 @@ _convert_iter_next(struct convert_iterator *convert)
         if (fsentry == NULL)
             return -1;
 
-        if (!(fsentry->mask & RBH_FP_ID))
+        if (!(fsentry->mask & RBH_FP_ID)) {
             /* this should never happen */
             /* FIXME: log something about it */
+            upsert = link = false;
             continue;
+        }
 
         /* What kind of fsevent should this fsentry be converted to? */
         upsert = (fsentry->mask & RBH_FP_STATX)
