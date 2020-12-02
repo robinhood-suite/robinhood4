@@ -26,18 +26,74 @@ struct statx;
  * provides one or include <robinhood/statx.h>.
  */
 struct rbh_fsentry {
+    /**
+     * Mask of bits indicating filled fields
+     *
+     * To be compared with values from enum rbh_fsentry_property.
+     */
     unsigned int mask;
+    /**
+     * Unique identifier for the fsentry
+     *
+     * While not mandated by design, this ID is expected to have a very specific
+     * format which allows it to be converted to/from a struct file_handle.
+     *
+     * cf. rbh_id_from_file_handle()
+     */
     struct rbh_id id;
+    /**
+     * ID of the parent fsentry (for a given link in the namespace)
+     *
+     * There may be several fsentries with the same ID but with different
+     * parents (and/or names), both because of hardlinks, and the eventual
+     * consistency of robinhood backends.
+     */
     struct rbh_id parent_id;
+    /**
+     * Name of fsentry (for a given link in the namespace)
+     *
+     * There may be several fsentries with the same ID but with different names
+     * (and/or parents), both because of hardlinks, and the eventual consistency
+     * of robinhood backends.
+     */
     const char *name;
+    /**
+     * statx attributes for the fsentry
+     */
     const struct statx *statx;
+    /* Extended attributes
+     *
+     * An extended attribute in librobinhood is similar to a regular filesystem
+     * xattr, it is a key/value pair, where the key is necessarily a string and
+     * the value can be any valid struct rbh_value.
+     *
+     * xattrs can be used to both store information present on the original
+     * filesystem, as well as user-defined enrichments.
+     */
     struct {
+        /**
+         * Namespace extended attributes
+         *
+         * Much like regular xattrs in filesystems, except they are attached to
+         * a **namespace** entry rather than an inode.
+         */
         struct rbh_value_map ns; /* namespace is a reserved keyword in C++ */
+        /**
+         * Namespace extended attributes
+         *
+         * Much like regular xattrs in filesystems.
+         */
         struct rbh_value_map inode;
     } xattrs;
+    /**
+     * Content of a symlink
+     */
     char symlink[];
 };
 
+/**
+ * Bits used to designate fields of a struct rbh_fsentry
+ */
 enum rbh_fsentry_property {
     RBH_FP_ID               = 0x0001,
     RBH_FP_PARENT_ID        = 0x0002,
