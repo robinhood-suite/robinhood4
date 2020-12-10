@@ -38,9 +38,9 @@ rbh_iter_array(const void *array, size_t element_size, size_t element_count);
  * @param element_size  the size of the elements in \p array
  * @param element_count the number of elements in \p array
  *
- * @return              a pointer to a newly allocated
- *                      struct rbh_mutable_iterator on success, NULL otherwise
- *                      and errno is set appropriately
+ * @return              a pointer to a newly allocated struct rbh_mut_iterator
+ *                      on success, NULL otherwise and errno is set
+ *                      appropriately
  *
  * @retval ENOMEM       there was not enough memory to allocate the iterator
  *
