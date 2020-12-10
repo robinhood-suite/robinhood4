@@ -198,8 +198,8 @@ filter_data_size(const struct rbh_filter *filter)
     return -1;
 }
 
-static struct rbh_filter *
-filter_clone(const struct rbh_filter *filter)
+struct rbh_filter *
+rbh_filter_clone(const struct rbh_filter *filter)
 {
     struct rbh_filter *clone;
     size_t size;
@@ -278,7 +278,7 @@ rbh_filter_compare_new(enum rbh_filter_operator op,
         return NULL;
     }
 
-    return filter_clone(&COMPARE);
+    return rbh_filter_clone(&COMPARE);
 }
 
 struct rbh_filter *
@@ -427,7 +427,7 @@ filter_logical_new(enum rbh_filter_operator op,
         return NULL;
     }
 
-    return filter_clone(&LOGICAL);
+    return rbh_filter_clone(&LOGICAL);
 }
 
 struct rbh_filter *

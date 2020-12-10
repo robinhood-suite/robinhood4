@@ -830,6 +830,37 @@ START_TEST(rfv_many_or)
 }
 END_TEST
 
+/*----------------------------------------------------------------------------*
+ |                             rbh_filter_clone()                             |
+ *----------------------------------------------------------------------------*/
+
+START_TEST(rfc_basic)
+{
+    const struct rbh_filter FILTER = {
+        .op = RBH_FOP_EQUAL,
+        .compare = {
+            .field = {
+                .fsentry = RBH_FP_ID,
+            },
+            .value = {
+                .type = RBH_VT_BINARY,
+                .binary = {
+                    .data = "abcdefghijklmnop",
+                    .size = 16,
+                },
+            },
+        },
+    };
+    struct rbh_filter *clone;
+
+    clone = rbh_filter_clone(&FILTER);
+    ck_assert_ptr_nonnull(clone);
+    ck_assert_filter_eq(clone, &FILTER);
+    ck_assert_ptr_ne(clone, &FILTER);
+    free(clone);
+}
+END_TEST
+
 static Suite *
 unit_suite(void)
 {
@@ -879,6 +910,11 @@ unit_suite(void)
     tcase_add_test(tests, rfv_single_and);
     tcase_add_test(tests, rfv_many_and);
     tcase_add_test(tests, rfv_many_or);
+
+    suite_add_tcase(suite, tests);
+
+    tests = tcase_create("rbh_filter_clone");
+    tcase_add_test(tests, rfc_basic);
 
     suite_add_tcase(suite, tests);
 

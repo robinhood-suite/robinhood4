@@ -426,4 +426,17 @@ rbh_filter_not_new(const struct rbh_filter *filter);
 int
 rbh_filter_validate(const struct rbh_filter *filter);
 
+/**
+ * Clone a filter
+ *
+ * @param filter    the filter to clone
+ *
+ * @return          a pointer to a newly allocated struct rbh_filter on success,
+ *                  NULL on error and errno is set appropriately
+ *
+ * @error ENOMEM    there was not enough memory available
+ */
+struct rbh_filter *
+rbh_filter_clone(const struct rbh_filter *filter);
+
 #endif
