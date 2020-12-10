@@ -24,6 +24,7 @@
 #include <mongoc.h>
 
 #include "robinhood/backends/mongo.h"
+#include "robinhood/itertools.h"
 #ifndef HAVE_STATX
 # include "robinhood/statx.h"
 #endif
@@ -482,9 +483,13 @@ mongo_backend_destroy(void *backend)
     free(mongo);
 }
 
+static struct rbh_backend *
+mongo_backend_branch(void *backend, const struct rbh_id *id);
+
 static const struct rbh_backend_operations MONGO_BACKEND_OPS = {
     .get_option = mongo_get_option,
     .set_option = mongo_set_option,
+    .branch = mongo_backend_branch,
     .root = mongo_root,
     .update = mongo_backend_update,
     .filter = mongo_backend_filter,
@@ -659,19 +664,330 @@ mongo_set_option(void *backend, unsigned int option, const void *data,
     return -1;
 }
 
-/*----------------------------------------------------------------------------*
- |                               MONGO_BACKEND                                |
- *----------------------------------------------------------------------------*/
+    /*--------------------------------------------------------------------*
+     |                               branch                               |
+     *--------------------------------------------------------------------*/
 
-static const struct rbh_backend MONGO_BACKEND = {
-    .id = RBH_BI_MONGO,
-    .name = RBH_MONGO_BACKEND_NAME,
-    .ops = &MONGO_BACKEND_OPS,
+struct mongo_branch_backend {
+    struct mongo_backend mongo;
+    struct rbh_id id;
 };
 
-/*----------------------------------------------------------------------------*
- |                          rbh_mongo_backend_new()                           |
- *----------------------------------------------------------------------------*/
+        /*------------------------------------------------------------*
+         |                        branch-root                         |
+         *------------------------------------------------------------*/
+
+static struct rbh_fsentry *
+mongo_branch_root(void *backend, const struct rbh_filter_projection *projection)
+{
+    struct mongo_branch_backend *branch = backend;
+    const struct rbh_filter id_filter = {
+        .op = RBH_FOP_EQUAL,
+        .compare = {
+            .field = {
+                .fsentry = RBH_FP_ID,
+            },
+            .value = {
+                .binary = {
+                   .data = branch->id.data,
+                   .size = branch->id.size,
+                },
+            },
+        },
+    };
+    const struct rbh_backend_operations *ops = branch->mongo.backend.ops;
+    struct rbh_fsentry *root;
+
+    /* To avoid the infinite recursion root -> branch_filter -> root -> ... */
+    branch->mongo.backend.ops = &MONGO_BACKEND_OPS;
+    root = rbh_backend_filter_one(backend, &id_filter, projection);
+    branch->mongo.backend.ops = ops;
+    return root;
+}
+
+        /*------------------------------------------------------------*
+         |                       branch-filter                        |
+         *------------------------------------------------------------*/
+
+/* This implementation is almost generic, except for the calls to
+ * mongo_backend_filter() (calling rbh_backend_filter() instead is not an option
+ * as it would lead to an infinite recursion).
+ *
+ * If another backend ever needs this code, one should consider putting it in
+ * a separate source file, replace calls to mongo_backend_filter() with
+ * BACKEND_NAME ## _backend_filter(), and include the code both here and in the
+ * other backend's sources, after approprately defining the BACKEND_NAME macro.
+ */
+
+struct branch_iterator {
+    struct rbh_mut_iterator iterator;
+
+    struct rbh_backend *backend;
+    struct rbh_filter *filter;
+    struct rbh_filter_options options;
+
+    struct rbh_mut_iterator *directories;
+    struct rbh_mut_iterator *fsentries;
+    struct rbh_fsentry *directory;
+};
+
+static struct rbh_mut_iterator *
+filter_child_fsentries(struct rbh_backend *backend,
+                       const struct rbh_id *id, const struct rbh_filter *filter,
+                       const struct rbh_filter_options *options)
+{
+    const struct rbh_filter parent_id_filter = {
+        .op = RBH_FOP_EQUAL,
+        .compare = {
+            .field = {
+                .fsentry = RBH_FP_PARENT_ID,
+            },
+            .value = {
+                .type = RBH_VT_BINARY,
+                .binary = {
+                    .size = id->size,
+                    .data = id->data,
+                },
+            },
+        },
+    };
+    const struct rbh_filter *filters[2] = {
+        &parent_id_filter,
+        filter,
+    };
+    const struct rbh_filter and_filter = {
+        .op = RBH_FOP_AND,
+        .logical = {
+            .count = 2,
+            .filters = filters,
+        },
+    };
+
+    return mongo_backend_filter(backend, &and_filter, options);
+}
+
+static const struct rbh_filter ISDIR_FILTER = {
+    .op = RBH_FOP_EQUAL,
+    .compare = {
+        .field = {
+            .fsentry = RBH_FP_STATX,
+            .statx = STATX_TYPE,
+        },
+        .value = {
+            .type = RBH_VT_INT32,
+            .int32 = S_IFDIR,
+        },
+    },
+};
+
+static struct rbh_mut_iterator *
+branch_next_directory(struct branch_iterator *iter)
+{
+    const struct rbh_filter_options ID_ONLY = {
+        .projection = {
+            .fsentry_mask = RBH_FP_ID,
+        },
+    };
+    struct rbh_mut_iterator *_directories;
+    struct rbh_mut_iterator *directories;
+    struct rbh_mut_iterator *fsentries;
+
+    if (iter->directory == NULL) {
+        iter->directory = rbh_mut_iter_next(iter->directories);
+        if (iter->directory == NULL)
+            return NULL;
+        assert(iter->directory->mask & RBH_FP_ID);
+    }
+
+    _directories = filter_child_fsentries(iter->backend, &iter->directory->id,
+                                          &ISDIR_FILTER, &ID_ONLY);
+    if (_directories == NULL)
+        return NULL;
+
+    fsentries = filter_child_fsentries(iter->backend, &iter->directory->id,
+                                       iter->filter, &iter->options);
+    if (fsentries == NULL) {
+        int save_errno = errno;
+
+        rbh_mut_iter_destroy(_directories);
+        errno = save_errno;
+        return NULL;
+    }
+
+    directories = rbh_mut_iter_chain(iter->directories, _directories);
+    if (directories == NULL) {
+        int save_errno = errno;
+
+        rbh_mut_iter_destroy(fsentries);
+        rbh_mut_iter_destroy(_directories);
+        errno = save_errno;
+        return NULL;
+    }
+    iter->directories = directories;
+
+    free(iter->directory);
+    iter->directory = NULL;
+
+    return fsentries;
+}
+
+static void *
+branch_iter_next(void *iterator)
+{
+    struct branch_iterator *iter = iterator;
+    struct rbh_fsentry *fsentry;
+
+    if (iter->fsentries == NULL) {
+        iter->fsentries = branch_next_directory(iter);
+        if (iter->fsentries == NULL)
+            return NULL;
+    }
+
+    fsentry = rbh_mut_iter_next(iter->fsentries);
+    if (fsentry != NULL)
+        return fsentry;
+
+    assert(errno);
+    if (errno != ENODATA)
+        return NULL;
+
+    rbh_mut_iter_destroy(iter->fsentries);
+    iter->fsentries = NULL;
+
+    return branch_iter_next(iterator);
+}
+
+static void
+branch_iter_destroy(void *iterator)
+{
+    struct branch_iterator *iter = iterator;
+
+    if (iter->fsentries != NULL)
+        rbh_mut_iter_destroy(iter->fsentries);
+
+    rbh_mut_iter_destroy(iter->directories);
+    free(iter->directory);
+    free(iter->filter);
+    free(iter);
+}
+
+static const struct rbh_mut_iterator_operations BRANCH_ITER_OPS = {
+    .next    = branch_iter_next,
+    .destroy = branch_iter_destroy,
+};
+
+static const struct rbh_mut_iterator BRANCH_ITERATOR = {
+    .ops = &BRANCH_ITER_OPS,
+};
+
+/* Unlike rbh_backend_filter_one(), this function is about applying a filter to
+ * a specific entry (identified by its ID) and see if it matches.
+ */
+static struct rbh_mut_iterator *
+filter_one(void *backend, const struct rbh_id *id,
+           const struct rbh_filter *filter,
+           const struct rbh_filter_options *options)
+{
+    const struct rbh_filter id_filter = {
+        .op = RBH_FOP_EQUAL,
+        .compare = {
+            .field = {
+                .fsentry = RBH_FP_ID,
+            },
+            .value = {
+                .type = RBH_VT_BINARY,
+                .binary = {
+                    .data = id->data,
+                    .size = id->size,
+                },
+            },
+        },
+    };
+    const struct rbh_filter *filters[2] = {
+        &id_filter,
+        filter,
+    };
+    const struct rbh_filter and_filter = {
+        .op = RBH_FOP_AND,
+        .logical = {
+            .count = 2,
+            .filters = filters,
+        },
+    };
+
+    return mongo_backend_filter(backend, &and_filter, options);
+}
+
+struct rbh_mut_iterator *
+generic_branch_backend_filter(void *backend, const struct rbh_filter *filter,
+                              const struct rbh_filter_options *options)
+{
+    const struct rbh_filter_projection ID_ONLY = {
+        .fsentry_mask = RBH_FP_ID,
+    };
+    struct branch_iterator *iter;
+    int save_errno = errno;
+
+    /* The recursive traversal of the branch prevents a few features from
+     * working out of the box.
+     */
+    if (options->skip || options->limit || options->sort.count) {
+        errno = ENOTSUP;
+        return NULL;
+    }
+
+    iter = malloc(sizeof(*iter));
+    if (iter == NULL)
+        return NULL;
+
+    iter->directory = rbh_backend_root(backend, &ID_ONLY);
+    if (iter->directory == NULL) {
+        save_errno = errno;
+        rbh_mut_iter_destroy(&iter->iterator);
+        errno = save_errno;
+        return NULL;
+    }
+    assert(iter->directory->mask & RBH_FP_ID);
+
+    iter->fsentries = filter_one(backend, &iter->directory->id,
+                                 filter, options);
+    if (iter->fsentries == NULL) {
+        save_errno = errno;
+        free(iter);
+        errno = save_errno;
+        return NULL;
+    }
+
+    errno = 0;
+    iter->filter = filter ? rbh_filter_clone(filter) : NULL;
+    if (iter->filter == NULL && errno != 0) {
+        save_errno = errno;
+        rbh_mut_iter_destroy(&iter->iterator);
+        errno = save_errno;
+        return NULL;
+    }
+    errno = save_errno;
+
+    iter->options = *options;
+    iter->directories = NULL;
+    iter->backend = backend;
+    iter->iterator = BRANCH_ITERATOR;
+
+    return &iter->iterator;
+}
+static const struct rbh_backend_operations MONGO_BRANCH_BACKEND_OPS = {
+    .branch = mongo_backend_branch,
+    .root = mongo_branch_root,
+    .update = mongo_backend_update,
+    .filter = generic_branch_backend_filter,
+    .destroy = mongo_backend_destroy,
+};
+
+static const struct rbh_backend MONGO_BRANCH_BACKEND = {
+    .id = RBH_BI_MONGO,
+    .name = RBH_MONGO_BACKEND_NAME,
+    .ops = &MONGO_BRANCH_BACKEND_OPS,
+};
 
 static int
 mongo_backend_init_from_uri(struct mongo_backend *mongo,
@@ -711,6 +1027,49 @@ mongo_backend_init_from_uri(struct mongo_backend *mongo,
 
     return 0;
 }
+
+static struct rbh_backend *
+mongo_backend_branch(void *backend, const struct rbh_id *id)
+{
+    struct mongo_backend *mongo = backend;
+    struct mongo_branch_backend *branch;
+    size_t data_size;
+    char *data;
+
+    data_size = id->size;
+    branch = malloc(sizeof(*branch) + data_size);
+    if (branch == NULL)
+        return NULL;
+    data = (char *)branch + sizeof(*branch);
+
+    if (mongo_backend_init_from_uri(&branch->mongo,
+                                    mongoc_client_get_uri(mongo->client))) {
+        int save_errno = errno;
+
+        free(branch);
+        errno = save_errno;
+        return NULL;
+    }
+
+    rbh_id_copy(&branch->id, id, &data, &data_size);
+    branch->mongo.backend = MONGO_BRANCH_BACKEND;
+
+    return &branch->mongo.backend;
+}
+
+/*----------------------------------------------------------------------------*
+ |                               MONGO_BACKEND                                |
+ *----------------------------------------------------------------------------*/
+
+static const struct rbh_backend MONGO_BACKEND = {
+    .id = RBH_BI_MONGO,
+    .name = RBH_MONGO_BACKEND_NAME,
+    .ops = &MONGO_BACKEND_OPS,
+};
+
+/*----------------------------------------------------------------------------*
+ |                          rbh_mongo_backend_new()                           |
+ *----------------------------------------------------------------------------*/
 
 static int
 mongo_backend_init(struct mongo_backend *mongo, const char *fsname)
