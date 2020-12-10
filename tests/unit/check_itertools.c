@@ -43,7 +43,7 @@ END_TEST
  |                            rbh_iter_chunkify()                             |
  *----------------------------------------------------------------------------*/
 
-START_TEST(ric_basic)
+START_TEST(richu_basic)
 {
     const char STRING[] = "abcdefghijklmno";
     const size_t CHUNK_SIZE = 4;
@@ -104,7 +104,7 @@ static const struct rbh_iterator NULL_ITER = {
     .ops = &NULL_ITER_OPS,
 };
 
-START_TEST(ric_with_null_elements)
+START_TEST(richu_with_null_elements)
 {
     struct rbh_iterator nulls = NULL_ITER;
     struct rbh_mut_iterator *chunks;
@@ -167,6 +167,38 @@ START_TEST(rit_basic)
 }
 END_TEST
 
+/*----------------------------------------------------------------------------*
+ |                              rbh_iter_chain()                              |
+ *----------------------------------------------------------------------------*/
+
+START_TEST(richa_basic)
+{
+    const char STRING[] = "abcdefghijklmno";
+    struct rbh_iterator *chain;
+    struct rbh_iterator *start;
+    struct rbh_iterator *end;
+
+    start = rbh_iter_array(STRING, sizeof(*STRING), sizeof(STRING) / 2);
+    ck_assert_ptr_nonnull(start);
+
+    end = rbh_iter_array(STRING + sizeof(STRING) / 2, sizeof(*STRING),
+                         (sizeof(STRING) + 1) / 2);
+    ck_assert_ptr_nonnull(end);
+
+    chain = rbh_iter_chain(start, end);
+    ck_assert_ptr_nonnull(chain);
+
+    for (size_t i = 0; i < sizeof(STRING); i++)
+        ck_assert_mem_eq(rbh_iter_next(chain), &STRING[i], sizeof(*STRING));
+
+    errno = 0;
+    ck_assert_ptr_null(rbh_iter_next(chain));
+    ck_assert_int_eq(errno, ENODATA);
+
+    rbh_iter_destroy(chain);
+}
+END_TEST
+
 static Suite *
 unit_suite(void)
 {
@@ -180,13 +212,18 @@ unit_suite(void)
     suite_add_tcase(suite, tests);
 
     tests = tcase_create("rbh_iter_chunkify()");
-    tcase_add_test(tests, ric_basic);
-    tcase_add_test(tests, ric_with_null_elements);
+    tcase_add_test(tests, richu_basic);
+    tcase_add_test(tests, richu_with_null_elements);
 
     suite_add_tcase(suite, tests);
 
     tests = tcase_create("rbh_iter_tee()");
     tcase_add_test(tests, rit_basic);
+
+    suite_add_tcase(suite, tests);
+
+    tests = tcase_create("rbh_iter_chain()");
+    tcase_add_test(tests, richa_basic);
 
     suite_add_tcase(suite, tests);
 

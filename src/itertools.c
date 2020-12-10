@@ -409,3 +409,97 @@ rbh_mut_iter_tee(struct rbh_mut_iterator *iterator,
     return rbh_iter_tee((struct rbh_iterator *)iterator,
                         (struct rbh_iterator **)iterators);
 }
+
+/*----------------------------------------------------------------------------*
+ |                              rbh_iter_chain()                              |
+ *----------------------------------------------------------------------------*/
+
+struct chain_iterator {
+    struct rbh_iterator iterator;
+    struct rbh_iterator *first;
+    struct rbh_iterator *second;
+};
+
+static const void *
+chain_iter_next(void *iterator)
+{
+    struct chain_iterator *chain = iterator;
+    const void *element;
+    int save_errno;
+
+retry:
+    if (chain->first == NULL) {
+        errno = ENODATA;
+        return NULL;
+    }
+
+    save_errno = errno;
+    errno = 0;
+    element = rbh_iter_next(chain->first);
+    if (element != NULL || errno == 0) {
+        errno = save_errno;
+        return element;
+    }
+    if (errno != ENODATA)
+        return NULL;
+
+    rbh_iter_destroy(chain->first);
+    chain->first = chain->second;
+    chain->second = NULL;
+    goto retry;
+}
+
+static void
+chain_iter_destroy(void *iterator)
+{
+    struct chain_iterator *chain = iterator;
+
+    if (chain->first)
+        rbh_iter_destroy(chain->first);
+    if (chain->second)
+        rbh_iter_destroy(chain->second);
+    free(chain);
+}
+
+static const struct rbh_iterator_operations CHAIN_ITER_OPS = {
+    .next = chain_iter_next,
+    .destroy = chain_iter_destroy,
+};
+
+static const struct rbh_iterator CHAIN_ITER = {
+    .ops = &CHAIN_ITER_OPS,
+};
+
+struct rbh_iterator *
+rbh_iter_chain(struct rbh_iterator *first, struct rbh_iterator *second)
+{
+    struct chain_iterator *chain;
+
+    if (first == NULL)
+        return second;
+    if (second == NULL)
+        return first;
+
+    chain = malloc(sizeof(*chain));
+    if (chain == NULL)
+        return NULL;
+
+    chain->iterator = CHAIN_ITER;
+    chain->first = first;
+    chain->second = second;
+    return &chain->iterator;
+}
+
+/*----------------------------------------------------------------------------*
+ |                            rbh_mut_iter_chain()                            |
+ *----------------------------------------------------------------------------*/
+
+struct rbh_mut_iterator *
+rbh_mut_iter_chain(struct rbh_mut_iterator *first,
+                   struct rbh_mut_iterator *second)
+{
+    return (struct rbh_mut_iterator *)rbh_iter_chain(
+            (struct rbh_iterator *)first,
+            (struct rbh_iterator *)second
+            );
+}
