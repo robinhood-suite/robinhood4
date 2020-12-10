@@ -144,9 +144,7 @@ mongo_iterator_new(mongoc_cursor_t *cursor)
 
 struct mongo_backend {
     struct rbh_backend backend;
-    mongoc_uri_t *uri;
     mongoc_client_t *client;
-    mongoc_database_t *db;
     mongoc_collection_t *entries;
 };
 
@@ -480,9 +478,7 @@ mongo_backend_destroy(void *backend)
     struct mongo_backend *mongo = backend;
 
     mongoc_collection_destroy(mongo->entries);
-    mongoc_database_destroy(mongo->db);
     mongoc_client_destroy(mongo->client);
-    mongoc_uri_destroy(mongo->uri);
     free(mongo);
 }
 
@@ -674,66 +670,92 @@ static const struct rbh_backend MONGO_BACKEND = {
 };
 
 /*----------------------------------------------------------------------------*
- |                         rbh_mongo_backend_create()                         |
+ |                          rbh_mongo_backend_new()                           |
  *----------------------------------------------------------------------------*/
 
-struct rbh_backend *
-rbh_mongo_backend_new(const char *fsname)
+static int
+mongo_backend_init_from_uri(struct mongo_backend *mongo,
+                            const mongoc_uri_t *uri)
 {
-    struct mongo_backend *mongo;
-    int save_errno;
+    const char *db;
 
-    mongo = malloc(sizeof(*mongo));
-    if (mongo == NULL) {
-        save_errno = errno;
-        goto out;
-    }
-    mongo->backend = MONGO_BACKEND;
-
-    mongo->uri = mongoc_uri_new("mongodb://localhost:27017");
-    if (mongo->uri == NULL) {
-        save_errno = EINVAL;
-        goto out_free_mongo;
-    }
-
-    mongo->client = mongoc_client_new_from_uri(mongo->uri);
+    mongo->client = mongoc_client_new_from_uri(uri);
     if (mongo->client == NULL) {
-        save_errno = ENOMEM;
-        goto out_mongoc_uri_destroy;
+        errno = ENOMEM;
+        return -1;
     }
 
 #if MONGOC_CHECK_VERSION(1, 4, 0)
     if (!mongoc_client_set_error_api(mongo->client,
                                      MONGOC_ERROR_API_VERSION_2)) {
         /* Should never happen */
-        save_errno = EINVAL;
-        goto out_mongoc_client_destroy;
+        mongoc_client_destroy(mongo->client);
+        errno = EINVAL;
+        return -1;
     }
 #endif
 
-    mongo->db = mongoc_client_get_database(mongo->client, fsname);
-    if (mongo->db == NULL) {
-        save_errno = ENOMEM;
-        goto out_mongoc_client_destroy;
+    db = mongoc_uri_get_database(uri);
+    if (db == NULL) {
+        mongoc_client_destroy(mongo->client);
+        errno = EINVAL;
+        return -1;
     }
 
-    mongo->entries = mongoc_database_get_collection(mongo->db, "entries");
+    mongo->entries = mongoc_client_get_collection(mongo->client, db, "entries");
     if (mongo->entries == NULL) {
-        save_errno = ENOMEM;
-        goto out_mongoc_database_destroy;
+        mongoc_client_destroy(mongo->client);
+        errno = ENOMEM;
+        return -1;
     }
+
+    return 0;
+}
+
+static int
+mongo_backend_init(struct mongo_backend *mongo, const char *fsname)
+{
+    mongoc_uri_t *uri;
+    int save_errno;
+    int rc;
+
+    uri = mongoc_uri_new("mongodb://localhost:27017");
+    if (uri == NULL) {
+        errno = EINVAL;
+        return -1;
+    }
+
+    if (!mongoc_uri_set_database(uri, fsname)) {
+        mongoc_uri_destroy(uri);
+        errno = EINVAL;
+        return -1;
+    }
+
+    rc = mongo_backend_init_from_uri(mongo, uri);
+    save_errno = errno;
+    mongoc_uri_destroy(uri);
+    errno = save_errno;
+    return rc;
+}
+
+struct rbh_backend *
+rbh_mongo_backend_new(const char *fsname)
+{
+    struct mongo_backend *mongo;
+
+    mongo = malloc(sizeof(*mongo));
+    if (mongo == NULL)
+        return NULL;
+
+    if (mongo_backend_init(mongo, fsname)) {
+        int save_errno = errno;
+
+        free(mongo);
+        errno = save_errno;
+        return NULL;
+    }
+
+    mongo->backend = MONGO_BACKEND;
 
     return &mongo->backend;
-
-out_mongoc_database_destroy:
-    mongoc_database_destroy(mongo->db);
-out_mongoc_client_destroy:
-    mongoc_client_destroy(mongo->client);
-out_mongoc_uri_destroy:
-    mongoc_uri_destroy(mongo->uri);
-out_free_mongo:
-    free(mongo);
-out:
-    errno = save_errno;
-    return NULL;
 }
