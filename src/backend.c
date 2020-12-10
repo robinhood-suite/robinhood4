@@ -13,10 +13,15 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "utils.h"
 #include "robinhood/backend.h"
 
+#include "utils.h"
+
 __thread char rbh_backend_error[512];
+
+/*----------------------------------------------------------------------------*
+ |                      rbh_generic_backend_get_option()                      |
+ *----------------------------------------------------------------------------*/
 
 int
 rbh_generic_backend_get_option(struct rbh_backend *backend, unsigned int option,
@@ -38,6 +43,10 @@ rbh_generic_backend_get_option(struct rbh_backend *backend, unsigned int option,
     return -1;
 }
 
+/*----------------------------------------------------------------------------*
+ |                      rbh_generic_backend_set_option()                      |
+ *----------------------------------------------------------------------------*/
+
 int
 rbh_generic_backend_set_option(struct rbh_backend *backend, unsigned int option,
                                const void *data, size_t data_size)
@@ -57,6 +66,10 @@ rbh_generic_backend_set_option(struct rbh_backend *backend, unsigned int option,
     errno = EINVAL;
     return -1;
 }
+
+/*----------------------------------------------------------------------------*
+ |                          rbh_generic_filter_one()                          |
+ *----------------------------------------------------------------------------*/
 
 struct rbh_fsentry *
 rbh_backend_filter_one(struct rbh_backend *backend,
@@ -85,6 +98,10 @@ rbh_backend_filter_one(struct rbh_backend *backend,
     errno = save_errno;
     return fsentry;
 }
+
+/*----------------------------------------------------------------------------*
+ |                      rbh_backend_fsentry_from_path()                       |
+ *----------------------------------------------------------------------------*/
 
 static struct rbh_fsentry *
 fsentry_from_parent_and_name(struct rbh_backend *backend,
