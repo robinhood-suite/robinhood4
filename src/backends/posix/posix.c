@@ -621,13 +621,9 @@ open_by_id(const char *root, const struct rbh_id *id, int flags)
     int mount_fd;
     int fd = -1;
 
-    handle = malloc(sizeof(*handle) + id->size - sizeof(int));
+    handle = rbh_file_handle_from_id(id);
     if (handle == NULL)
         return -1;
-
-    memcpy(&handle->handle_type, id->data, sizeof(int));
-    memcpy(handle->f_handle, id->data + sizeof(int), id->size - sizeof(int));
-    handle->handle_bytes = id->size - sizeof(int);
 
     mount_fd = open(root, O_RDONLY | O_CLOEXEC);
     save_errno = errno;

@@ -210,6 +210,46 @@ START_TEST(riflf_basic)
 }
 END_TEST
 
+/*----------------------------------------------------------------------------*
+ |                         rbh_file_handle_from_id()                          |
+ *----------------------------------------------------------------------------*/
+
+START_TEST(rfhfi_basic)
+{
+    const char F_HANDLE[] = "abcdefg";
+    char data[sizeof(int) + sizeof(F_HANDLE)];
+    const struct rbh_id ID = {
+        .data = data,
+        .size = sizeof(data),
+    };
+    struct file_handle *fh;
+
+    memcpy(data, &(int){1234}, sizeof(int));
+    memcpy(data + sizeof(int), F_HANDLE, sizeof(F_HANDLE));
+
+    fh = rbh_file_handle_from_id(&ID);
+    ck_assert_ptr_nonnull(fh);
+
+    ck_assert_int_eq(fh->handle_bytes, sizeof(F_HANDLE));
+    ck_assert_int_eq(fh->handle_type, 1234);
+    ck_assert_mem_eq(fh->f_handle, F_HANDLE, sizeof(F_HANDLE));
+
+    free(fh);
+}
+END_TEST
+
+START_TEST(rfhfi_not_a_file_handle)
+{
+    const struct rbh_id ID = {
+        .size = sizeof(int) - 1,
+    };
+
+    errno = 0;
+    ck_assert_ptr_null(rbh_file_handle_from_id(&ID));
+    ck_assert_int_eq(errno, EINVAL);
+}
+END_TEST
+
 static Suite *
 unit_suite(void)
 {
@@ -238,6 +278,12 @@ unit_suite(void)
 
     tests = tcase_create("rbh_id_from_lu_fid()");
     tcase_add_test(tests, riflf_basic);
+
+    suite_add_tcase(suite, tests);
+
+    tests = tcase_create("rbh_file_handle_from_id()");
+    tcase_add_test(tests, rfhfi_basic);
+    tcase_add_test(tests, rfhfi_not_a_file_handle);
 
     suite_add_tcase(suite, tests);
 

@@ -112,4 +112,18 @@ struct lu_fid;
 struct rbh_id *
 rbh_id_from_lu_fid(const struct lu_fid *fid);
 
+/**
+ * Create a new struct file_handle from a struct rbh_id
+ *
+ * @param id        the id to use
+ *
+ * @return          a pointer to newly allocated struct file_handle on success,
+ *                  NULL on error and errno is set appropriately
+ *
+ * @error EINVAL    \p id cannot be unpacked into a struct file_handle
+ * @error ENOMEM    not enough memory available
+ */
+struct file_handle *
+rbh_file_handle_from_id(const struct rbh_id *fid);
+
 #endif
