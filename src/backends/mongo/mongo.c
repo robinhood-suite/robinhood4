@@ -93,16 +93,30 @@ static void *
 mongo_iter_next(void *iterator)
 {
     struct mongo_iterator *mongo_iter = iterator;
-    int save_errno = errno;
+    bson_error_t error;
     const bson_t *doc;
 
-    errno = 0;
-    if (mongoc_cursor_next(mongo_iter->cursor, &doc)) {
-        errno = save_errno;
+    if (mongoc_cursor_next(mongo_iter->cursor, &doc))
         return fsentry_from_bson(doc);
+
+    if (!mongoc_cursor_error(mongo_iter->cursor, &error)) {
+        errno = ENODATA;
+        return NULL;
     }
 
-    errno = errno ? : ENODATA;
+    switch (error.domain) {
+    case MONGOC_ERROR_SERVER_SELECTION:
+        switch (error.code) {
+        case MONGOC_ERROR_SERVER_SELECTION_FAILURE:
+            errno = ENOTCONN;
+            return NULL;
+        }
+        break;
+    }
+    snprintf(rbh_backend_error, sizeof(rbh_backend_error), "%d.%d: %s",
+             error.domain, error.code, error.message);
+    errno = RBH_BACKEND_ERROR;
+
     return NULL;
 }
 
