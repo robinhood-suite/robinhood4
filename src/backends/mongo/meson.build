@@ -12,6 +12,7 @@ librbh_mongo = library(
     sources: [
         'bson.c',
         'filter.c',
+        'fields.c',
         'fsentry.c',
         'fsevent.c',
         'mongo.c',

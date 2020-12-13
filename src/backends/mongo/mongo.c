@@ -111,6 +111,11 @@ bson_pipeline_from_filter_and_options(const struct rbh_filter *filter,
      && BSON_APPEND_DOCUMENT_BEGIN(&array, UINT8_TO_STR[i], &stage) && ++i
      && BSON_APPEND_RBH_FILTER(&stage, "$match", filter)
      && bson_append_document_end(&array, &stage)
+     && (options->sort.count == 0
+      || (BSON_APPEND_DOCUMENT_BEGIN(&array, UINT8_TO_STR[i], &stage) && ++i
+       && BSON_APPEND_RBH_FILTER_SORTS(&stage, "$sort", options->sort.items,
+                                       options->sort.count)
+       && bson_append_document_end(&array, &stage)))
      && BSON_APPEND_DOCUMENT_BEGIN(&array, UINT8_TO_STR[i], &stage) && ++i
      && BSON_APPEND_RBH_FILTER_PROJECTION(&stage, "$project",
                                           &options->projection)
@@ -507,6 +512,7 @@ mongo_backend_filter(void *backend, const struct rbh_filter *filter,
     struct mongo_iterator *mongo_iter;
     mongoc_cursor_t *cursor;
     bson_t *pipeline;
+    bson_t *opts;
 
     if (rbh_filter_validate(filter))
         return NULL;
@@ -515,8 +521,11 @@ mongo_backend_filter(void *backend, const struct rbh_filter *filter,
     if (pipeline == NULL)
         return NULL;
 
+    opts = options->sort.count > 0 ? BCON_NEW("allowDiskUse", BCON_BOOL(true))
+                                   : NULL;
     cursor = mongoc_collection_aggregate(mongo->entries, MONGOC_QUERY_NONE,
-                                         pipeline, NULL, NULL);
+                                         pipeline, opts, NULL);
+    bson_destroy(opts);
     bson_destroy(pipeline);
     if (cursor == NULL) {
         errno = EINVAL;
@@ -582,7 +591,11 @@ bson_from_options(const struct rbh_filter_options *options)
      && (options->skip == 0
       || BSON_APPEND_INT64(bson, "skip", options->skip))
      && (options->limit == 0
-      || BSON_APPEND_INT64(bson, "limit", options->limit)))
+      || BSON_APPEND_INT64(bson, "limit", options->limit))
+     && (options->sort.count == 0
+      || (BSON_APPEND_RBH_FILTER_SORTS(bson, "sort", options->sort.items,
+                                       options->sort.count)
+       && BSON_APPEND_BOOL(bson, "allowDiskUse", true))))
         return bson;
 
     bson_destroy(bson);

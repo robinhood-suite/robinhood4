@@ -151,6 +151,9 @@ struct rbh_value_map;
 #define MFF_STATX_RDEV              "rdev"
 #define MFF_STATX_DEV               "dev"
 
+const char *field2str(const struct rbh_filter_field *field, char **buffer,
+                      size_t bufsize);
+
 /*----------------------------------------------------------------------------*
  |                                bson helpers                                |
  *----------------------------------------------------------------------------*/
@@ -207,6 +210,17 @@ bson_append_rbh_filter(bson_t *bson, const char *key, size_t key_length,
 
 #define BSON_APPEND_RBH_FILTER(bson, key, filter) \
     bson_append_rbh_filter(bson, key, strlen(key), filter, false)
+
+    /*--------------------------------------------------------------------*
+     |                            filter_sort                             |
+     *--------------------------------------------------------------------*/
+
+bool
+bson_append_rbh_filter_sorts(bson_t *bson, const char *key, size_t key_length,
+                             const struct rbh_filter_sort *items, size_t count);
+
+#define BSON_APPEND_RBH_FILTER_SORTS(bson, key, items, count) \
+    bson_append_rbh_filter_sorts(bson, key, strlen(key), items, count)
 
     /*--------------------------------------------------------------------*
      |                         filter_projection                          |

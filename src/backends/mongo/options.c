@@ -7,6 +7,10 @@
 
 #include "mongo.h"
 
+/*----------------------------------------------------------------------------*
+ |                    bson_append_rbh_filter_projection()                     |
+ *----------------------------------------------------------------------------*/
+
 static bool
 bson_append_statx_projection(bson_t *bson, const char *key, size_t key_length,
                              unsigned int mask)
@@ -137,4 +141,39 @@ bson_append_rbh_filter_projection(
          || BSON_APPEND_XATTRS_PROJECTION(&document, MFF_XATTRS,
                                           &projection->xattrs.inode))
         && bson_append_document_end(bson, &document);
+}
+
+/*----------------------------------------------------------------------------*
+ |                       bson_append_rbh_filter_sorts()                       |
+ *----------------------------------------------------------------------------*/
+
+#define XATTR_ONSTACK_LENGTH 128
+
+bool
+bson_append_rbh_filter_sorts(bson_t *bson, const char *key, size_t key_length,
+                             const struct rbh_filter_sort *items, size_t count)
+{
+    bson_t document;
+
+    if (!bson_append_document_begin(bson, key, key_length, &document))
+        return false;
+
+    for (size_t i = 0; i < count; i++) {
+        char onstack[XATTR_ONSTACK_LENGTH];
+        char *buffer = onstack;
+        bool success;
+
+        key = field2str(&items[i].field, &buffer, sizeof(onstack));
+        if (key == NULL)
+            return false;
+
+        success = BSON_APPEND_INT32(&document, key,
+                                    items[i].ascending ? 1 : -1);
+        if (buffer != onstack)
+            free(buffer);
+        if (!success)
+            return false;
+    }
+
+    return bson_append_document_end(bson, &document);
 }
