@@ -54,6 +54,18 @@ destroy_chunks(void)
         rbh_mut_iter_destroy(chunks);
 }
 
+static struct {
+    bool one:1;
+} options;
+
+/*----------------------------------------------------------------------------*
+ |                                   sync()                                   |
+ *----------------------------------------------------------------------------*/
+
+    /*--------------------------------------------------------------------*
+     |                         convert_iter_new()                         |
+     *--------------------------------------------------------------------*/
+
 /* A convert_iterator converts fsentries into fsevents.
  *
  * For each fsentry, it yields up to two fsevents (depending on the information
@@ -231,6 +243,92 @@ upsert_fsentries(struct rbh_backend *backend,
     return rc >= 0 && errno == ENODATA ? 0 : -1;
 }
 
+static void
+sync(void)
+{
+    const struct rbh_filter_options OPTIONS = {
+        .projection = {
+            .fsentry_mask = RBH_FP_ALL,
+            .statx_mask = STATX_ALL,
+        },
+    };
+    struct rbh_mut_iterator *fsentries;
+    struct rbh_mut_iterator *fsevents;
+
+    if (options.one) {
+        struct rbh_fsentry *root;
+
+        root = rbh_backend_root(from, &OPTIONS.projection);
+        if (root == NULL)
+            error(EXIT_FAILURE, errno, "rbh_backend_root");
+
+        fsentries = rbh_mut_iter_array(root, sizeof(*root), 1);
+        if (fsentries == NULL)
+            error(EXIT_FAILURE, errno, "rbh_mut_array_iterator");
+    } else {
+        /* "Dump" `from' */
+        fsentries = rbh_backend_filter(from, NULL, &OPTIONS);
+        if (fsentries == NULL)
+            error(EXIT_FAILURE, errno, "rbh_backend_filter_fsentries");
+    }
+
+    /* Convert all this information into fsevents */
+    fsevents = convert_iter_new(fsentries);
+    if (fsevents == NULL) {
+        int save_errno = errno;
+        rbh_mut_iter_destroy(fsentries);
+        error(EXIT_FAILURE, save_errno, "convert_iter_new");
+    }
+
+    /* upsert_fsentries() cannot free fsevents as they are consumed. It has to
+     * wait until the rbh_backend_update() returns. As there is no limit to the
+     * number of elements `fsevents' may yield, this could lead to memory
+     * exhaustion.
+     *
+     * Splitting `fsevents' into fixed-size sub-iterators solves this.
+     */
+    chunks = rbh_mut_iter_chunkify(fsevents, RBH_ITER_CHUNK_SIZE);
+    if (chunks == NULL) {
+        int save_errno = errno;
+        rbh_mut_iter_destroy(fsevents);
+        error(EXIT_FAILURE, save_errno, "rbh_mut_iter_chunkify");
+    }
+
+    /* Update `to' */
+    do {
+        struct rbh_mut_iterator *chunk = rbh_mut_iter_next(chunks);
+
+        if (chunk == NULL) {
+            if (errno == ENODATA)
+                break;
+            error(EXIT_FAILURE, errno, "while chunkifying SOURCE's entries");
+        }
+
+        if (upsert_fsentries(to, chunk)) {
+            assert(errno != ENODATA);
+            break;
+        }
+    } while (true);
+
+    switch (errno) {
+    case ENODATA:
+        return;
+    case RBH_BACKEND_ERROR:
+        error(EXIT_FAILURE, 0, "unhandled error: %s", rbh_backend_error);
+        __builtin_unreachable();
+    default:
+        error(EXIT_FAILURE, errno, "while iterating over SOURCE's entries");
+    }
+}
+
+/*----------------------------------------------------------------------------*
+ |                                    cli                                     |
+ *----------------------------------------------------------------------------*/
+
+    /*--------------------------------------------------------------------*
+     |                              usage()                               |
+     *--------------------------------------------------------------------*/
+
 static int
 usage(FILE *output)
 {
@@ -252,7 +350,9 @@ usage(FILE *output)
 "               path)\n", program_invocation_short_name);
 }
 
-/* CLI parser */
+    /*--------------------------------------------------------------------*
+     |                              parse()                               |
+     *--------------------------------------------------------------------*/
 
 enum command_line_option {
     CLO_UNKNOWN,
@@ -309,10 +409,6 @@ str2command_line_token(const char *string)
         return CLT_URI;
     }
 }
-
-static struct {
-    bool one:1;
-} options;
 
 static void
 set_option(enum command_line_option option)
@@ -390,80 +486,9 @@ parse(int argc, char *argv[])
 int
 main(int argc, char *argv[])
 {
-    const struct rbh_filter_options OPTIONS = {
-        .projection = {
-            .fsentry_mask = RBH_FP_ALL,
-            .statx_mask = STATX_ALL,
-        },
-    };
-    struct rbh_mut_iterator *fsentries;
-    struct rbh_mut_iterator *fsevents;
-
     parse(argc, argv);
 
-    if (options.one) {
-        struct rbh_fsentry *root;
+    sync();
 
-        root = rbh_backend_root(from, &OPTIONS.projection);
-        if (root == NULL)
-            error(EXIT_FAILURE, errno, "rbh_backend_root");
-
-        fsentries = rbh_mut_iter_array(root, sizeof(*root), 1);
-        if (fsentries == NULL)
-            error(EXIT_FAILURE, errno, "rbh_mut_array_iterator");
-    } else {
-        /* "Dump" `from' */
-        fsentries = rbh_backend_filter(from, NULL, &OPTIONS);
-        if (fsentries == NULL)
-            error(EXIT_FAILURE, errno, "rbh_backend_filter_fsentries");
-    }
-
-    /* Convert all this information into fsevents */
-    fsevents = convert_iter_new(fsentries);
-    if (fsevents == NULL) {
-        int save_errno = errno;
-        rbh_mut_iter_destroy(fsentries);
-        error(EXIT_FAILURE, save_errno, "convert_iter_new");
-    }
-
-    /* upsert_fsentries() cannot free fsevents as they are consumed. It has to
-     * wait until the rbh_backend_update() returns. As there is no limit to the
-     * number of elements `fsevents' may yield, this could lead to memory
-     * exhaustion.
-     *
-     * Splitting `fsevents' into fixed-size sub-iterators solves this.
-     */
-    chunks = rbh_mut_iter_chunkify(fsevents, RBH_ITER_CHUNK_SIZE);
-    if (chunks == NULL) {
-        int save_errno = errno;
-        rbh_mut_iter_destroy(fsevents);
-        error(EXIT_FAILURE, save_errno, "rbh_mut_iter_chunkify");
-    }
-
-    /* Update `to' */
-    do {
-        struct rbh_mut_iterator *chunk = rbh_mut_iter_next(chunks);
-
-        if (chunk == NULL) {
-            if (errno == ENODATA)
-                break;
-            error(EXIT_FAILURE, errno, "while chunkifying SOURCE's entries");
-        }
-
-        if (upsert_fsentries(to, chunk)) {
-            assert(errno != ENODATA);
-            break;
-        }
-    } while (true);
-
-    switch (errno) {
-    case ENODATA:
-        return EXIT_SUCCESS;
-    case RBH_BACKEND_ERROR:
-        error(EXIT_FAILURE, 0, "unhandled error: %s\n", rbh_backend_error);
-        __builtin_unreachable();
-    default:
-        error(EXIT_FAILURE, errno, "while iterating over SOURCE's entries");
-        __builtin_unreachable();
-    }
+    return EXIT_SUCCESS;
 }
