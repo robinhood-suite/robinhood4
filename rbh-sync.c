@@ -31,31 +31,27 @@
 
 static struct rbh_backend *from, *to;
 
-static void
+static void __attribute__((destructor))
 destroy_from(void)
 {
-    rbh_backend_destroy(from);
+    if (from)
+        rbh_backend_destroy(from);
 }
 
-static void
+static void __attribute__((destructor))
 destroy_to(void)
 {
-    rbh_backend_destroy(to);
+    if (to)
+        rbh_backend_destroy(to);
 }
 
 static struct rbh_mut_iterator *chunks;
 
-static void
+static void __attribute__((destructor))
 destroy_chunks(void)
 {
-    rbh_mut_iter_destroy(chunks);
-}
-
-static void
-_atexit(void (*function)(void))
-{
-    if (atexit(function))
-        error(EXIT_FAILURE, 0, "cannot set atexit function");
+    if (chunks)
+        rbh_mut_iter_destroy(chunks);
 }
 
 /* A convert_iterator converts fsentries into fsevents.
@@ -345,10 +341,8 @@ parse(int argc, char *argv[])
         case CLT_URI:
             if (from == NULL) {
                 from = rbh_backend_from_uri(arg);
-                _atexit(destroy_from);
             } else if (to == NULL) {
                 to = rbh_backend_from_uri(arg);
-                _atexit(destroy_to);
             } else {
                 usage(stderr);
                 error(EX_USAGE, 0, "unexpected argument: %s", arg);
@@ -445,7 +439,6 @@ main(int argc, char *argv[])
         rbh_mut_iter_destroy(fsevents);
         error(EXIT_FAILURE, save_errno, "rbh_mut_iter_chunkify");
     }
-    _atexit(destroy_chunks);
 
     /* Update `to' */
     do {
