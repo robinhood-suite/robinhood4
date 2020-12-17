@@ -12,6 +12,7 @@
 #include <dlfcn.h>
 #include <errno.h>
 #include <error.h>
+#include <getopt.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -54,9 +55,7 @@ destroy_chunks(void)
         rbh_mut_iter_destroy(chunks);
 }
 
-static struct {
-    bool one:1;
-} options;
+static bool one = false;
 
 /*----------------------------------------------------------------------------*
  |                                   sync()                                   |
@@ -255,7 +254,7 @@ sync(void)
     struct rbh_mut_iterator *fsentries;
     struct rbh_mut_iterator *fsevents;
 
-    if (options.one) {
+    if (one) {
         struct rbh_fsentry *root;
 
         root = rbh_backend_root(from, &OPTIONS.projection);
@@ -330,163 +329,77 @@ sync(void)
      *--------------------------------------------------------------------*/
 
 static int
-usage(FILE *output)
+usage(void)
 {
-    return fprintf(output, "usage: %s [--one] SOURCE DEST\n"
-"Positional arguments:\n"
-"    SOURCE    a robinhood URI\n"
-"    DEST      a robinhood URI\n"
-"\n"
-"Optional arguments:\n"
-"    -o,--one  only synchronize one entry of SOURCE, its root\n"
-"\n"
-"A robinhood URI is built as follows:\n"
-"    "RBH_SCHEME":BACKEND:FSNAME[#{PATH|ID}]\n"
-"where:\n"
-"    BACKEND    is the name of a backend\n"
-"    FSNAME     is the name of a filesystem for BACKEND\n"
-"    PATH/ID    is the path/id of an fsentry managed by BACKEND:FSNAME (ID must\n"
-"               be enclosed in square brackets '[ID]' to distinguish it from a\n"
-"               path)\n", program_invocation_short_name);
-}
+    const char *message =
+        "usage: %s [--one] SOURCE DEST\n"
+        "\n"
+        "Upsert SOURCE's entries into DEST\n"
+        "\n"
+        "Positional arguments:\n"
+        "    SOURCE  a robinhood URI\n"
+        "    DEST    a robinhood URI\n"
+        "\n"
+        "Optional arguments:\n"
+        "    -h,--help  show this message and exit\n"
+        "    -o,--one   only consider the root of SOURCE\n"
+        "\n"
+        "A robinhood URI is built as follows:\n"
+        "    "RBH_SCHEME":BACKEND:FSNAME[#{PATH|ID}]\n"
+        "Where:\n"
+        "    BACKEND  is the name of a backend\n"
+        "    FSNAME   is the name of a filesystem for BACKEND\n"
+        "    PATH/ID  is the path/id of an fsentry managed by BACKEND:FSNAME\n"
+        "             (ID must be enclosed in square brackets '[ID]' to distinguish it\n"
+        "             from a path)\n";
 
-    /*--------------------------------------------------------------------*
-     |                              parse()                               |
-     *--------------------------------------------------------------------*/
-
-enum command_line_option {
-    CLO_UNKNOWN,
-    CLO_ONE,
-};
-
-static enum command_line_option
-letter2option(char c)
-{
-    switch (c) {
-    case 'o':
-        return CLO_ONE;
-    }
-    return CLO_UNKNOWN;
-}
-
-static enum command_line_option
-str2option(const char *string)
-{
-    switch (*string++) {
-    case 'o':
-        if (strcmp(string, "ne"))
-            break;
-        return CLO_ONE;
-    }
-    return CLO_UNKNOWN;
-}
-
-enum command_line_token {
-    CLT_URI,
-    CLT_DOUBLE_DASH,
-    CLT_SHORT_OPTION,
-    CLT_LONG_OPTION,
-};
-
-static bool double_dash = false;
-
-static enum command_line_token
-str2command_line_token(const char *string)
-{
-    if (double_dash)
-        return CLT_URI;
-
-    switch (*string++) {
-    case '-':
-        if (*string++ == '-') {
-            if (*string++ == '\0')
-                return CLT_DOUBLE_DASH;
-            else
-                return CLT_LONG_OPTION;
-        }
-        return CLT_SHORT_OPTION;
-    default:
-        return CLT_URI;
-    }
-}
-
-static void
-set_option(enum command_line_option option)
-{
-    switch (option) {
-    case CLO_ONE:
-        options.one = true;
-        break;
-    default:
-        error(EX_SOFTWARE, 0, "unreachable code");
-    }
-}
-
-static void
-parse(int argc, char *argv[])
-{
-    enum command_line_option option;
-
-    for (int i = 1; i < argc; i++) {
-        char *arg = argv[i];
-
-        switch (str2command_line_token(arg)) {
-        case CLT_DOUBLE_DASH:
-            double_dash = true;
-            break;
-        case CLT_URI:
-            if (from == NULL) {
-                from = rbh_backend_from_uri(arg);
-            } else if (to == NULL) {
-                to = rbh_backend_from_uri(arg);
-            } else {
-                usage(stderr);
-                error(EX_USAGE, 0, "unexpected argument: %s", arg);
-            }
-            break;
-        case CLT_SHORT_OPTION:
-            /* Discard the leading '-' */
-            arg++;
-
-            /* Process each letter separately */
-            do {
-                option = letter2option(*arg);
-                if (option == CLO_UNKNOWN) {
-                    usage(stderr);
-                    error(EX_USAGE, 0, "unknown option: -%c", *arg);
-                }
-
-                set_option(option);
-            } while (*++arg != '\0');
-
-            break;
-        case CLT_LONG_OPTION:
-            /* Discard the leading "--" */
-            option = str2option(arg + 2);
-            if (option == CLO_UNKNOWN) {
-                usage(stderr);
-                error(EX_USAGE, 0, "unknown option: %s", arg);
-            }
-
-            set_option(option);
-            break;
-        }
-    }
-
-    if (from == NULL) {
-        usage(stderr);
-        error(EX_USAGE, 0, "missing SOURCE argument");
-    }
-    if (to == NULL) {
-        usage(stderr);
-        error(EX_USAGE, 0, "missing DEST argument");
-    }
+    return printf(message, program_invocation_short_name);
 }
 
 int
 main(int argc, char *argv[])
 {
-    parse(argc, argv);
+    const struct option LONG_OPTIONS[] = {
+        {
+            .name = "help",
+            .val = 'h',
+        },
+        {
+            .name = "one",
+            .val = 'o',
+        },
+        {}
+    };
+    char c;
+
+    /* Parse the command line */
+    while ((c = getopt_long(argc, argv, "ho", LONG_OPTIONS, NULL)) != -1) {
+        switch (c) {
+        case 'h':
+            usage();
+            return 0;
+        case 'o':
+            one = true;
+            break;
+        case '?':
+        default:
+            /* getopt_long() prints meaningful error messages itself */
+            exit(EX_USAGE);
+        }
+    }
+
+    argc -= optind;
+    argv += optind;
+
+    if (argc < 2)
+        error(EX_USAGE, 0, "not enough arguments");
+    if (argc > 2)
+        error(EX_USAGE, 0, "unexpected argument: %s", argv[2]);
+
+    /* Parse SOURCE */
+    from = rbh_backend_from_uri(argv[0]);
+    /* Parse DEST */
+    to = rbh_backend_from_uri(argv[1]);
 
     sync();
 
