@@ -119,7 +119,7 @@ mut_iter_one(void *element)
 }
 
     /*--------------------------------------------------------------------*
-     |                         convert_iter_new()                         |
+     |                           iter_convert()                           |
      *--------------------------------------------------------------------*/
 
 /* A convert_iterator converts fsentries into fsevents.
@@ -130,9 +130,9 @@ mut_iter_one(void *element)
  */
 struct convert_iterator {
     struct rbh_mut_iterator iterator;
-    struct rbh_mut_iterator *fsentries;
-    struct rbh_fsentry *fsentry;
+    struct rbh_iterator *fsentries;
 
+    const struct rbh_fsentry *fsentry;
     bool upsert;
     bool link;
 };
@@ -141,14 +141,11 @@ struct convert_iterator {
 static int
 _convert_iter_next(struct convert_iterator *convert)
 {
-    struct rbh_fsentry *fsentry = convert->fsentry;
+    const struct rbh_fsentry *fsentry;
     bool upsert, link;
 
-    convert->fsentry = NULL;
     do {
-        free(fsentry);
-
-        fsentry = rbh_mut_iter_next(convert->fsentries);
+        fsentry = rbh_iter_next(convert->fsentries);
         if (fsentry == NULL)
             return -1;
 
@@ -176,7 +173,7 @@ static void *
 convert_iter_next(void *iterator)
 {
     struct convert_iterator *convert = iterator;
-    struct rbh_fsentry *fsentry;
+    const struct rbh_fsentry *fsentry;
     struct rbh_fsevent *fsevent;
 
     /* Should the current fsentry generate any more fsevent? */
@@ -230,8 +227,7 @@ static void
 convert_iter_destroy(void *iterator) {
     struct convert_iterator *convert = iterator;
 
-    rbh_mut_iter_destroy(convert->fsentries);
-    free(convert->fsentry);
+    rbh_iter_destroy(convert->fsentries);
     free(convert);
 }
 
@@ -244,10 +240,11 @@ static const struct rbh_mut_iterator CONVERT_ITER = {
     .ops = &CONVERT_ITER_OPS,
 };
 
-static struct rbh_mut_iterator *
-convert_iter_new(struct rbh_mut_iterator *fsentries)
+static struct rbh_iterator *
+iter_convert(struct rbh_iterator *fsentries)
 {
     struct convert_iterator *convert;
+    struct rbh_iterator *constified;
 
     convert = malloc(sizeof(*convert));
     if (convert == NULL)
@@ -258,45 +255,15 @@ convert_iter_new(struct rbh_mut_iterator *fsentries)
     convert->fsentry = NULL;
     convert->upsert = convert->link = false;
 
-    return &convert->iterator;
-}
+    constified = rbh_iter_constify(&convert->iterator);
+    if (constified == NULL) {
+        int save_errno = errno;
 
-static int
-upsert_fsentries(struct rbh_backend *backend,
-                 struct rbh_mut_iterator *fsevents)
-{
-    struct rbh_mut_iterator *fsevents_tee[2];
-    int save_errno;
-    ssize_t rc;
+        rbh_mut_iter_destroy(&convert->iterator);
+        errno = save_errno;
+    }
 
-    if (rbh_mut_iter_tee(fsevents, fsevents_tee))
-        return -1;
-
-    rc = rbh_backend_update(backend, (struct rbh_iterator *)fsevents_tee[0]);
-    save_errno = errno;
-    rbh_mut_iter_destroy(fsevents_tee[0]);
-
-    /* Free all the fsevents */
-    do {
-        struct rbh_fsevent *fsevent = rbh_mut_iter_next(fsevents_tee[1]);
-
-        if (fsevent == NULL)
-            break;
-        free(fsevent);
-    } while (true);
-
-    /* The previous loop should not exit without setting errno */
-    assert(errno);
-
-    /* If rbh_backend_update() failed, the value of errno at the time is what
-     * we want to restore on return.
-     */
-    if (rc >= 0)
-        save_errno = errno;
-
-    rbh_mut_iter_destroy(fsevents_tee[1]);
-    errno = save_errno;
-    return rc >= 0 && errno == ENODATA ? 0 : -1;
+    return constified;
 }
 
 static void
@@ -308,8 +275,9 @@ sync(void)
             .statx_mask = STATX_ALL,
         },
     };
-    struct rbh_mut_iterator *fsentries;
-    struct rbh_mut_iterator *fsevents;
+    struct rbh_mut_iterator *_fsentries;
+    struct rbh_iterator *fsentries;
+    struct rbh_iterator *fsevents;
 
     if (one) {
         struct rbh_fsentry *root;
@@ -318,41 +286,51 @@ sync(void)
         if (root == NULL)
             error(EXIT_FAILURE, errno, "rbh_backend_root");
 
-        fsentries = mut_iter_one(root);
-        if (fsentries == NULL)
+        _fsentries = mut_iter_one(root);
+        if (_fsentries == NULL)
             error(EXIT_FAILURE, errno, "rbh_mut_array_iterator");
     } else {
         /* "Dump" `from' */
-        fsentries = rbh_backend_filter(from, NULL, &OPTIONS);
-        if (fsentries == NULL)
+        _fsentries = rbh_backend_filter(from, NULL, &OPTIONS);
+        if (_fsentries == NULL)
             error(EXIT_FAILURE, errno, "rbh_backend_filter_fsentries");
     }
 
-    /* Convert all this information into fsevents */
-    fsevents = convert_iter_new(fsentries);
-    if (fsevents == NULL) {
+    fsentries = rbh_iter_constify(_fsentries);
+    if (fsentries == NULL) {
         int save_errno = errno;
-        rbh_mut_iter_destroy(fsentries);
-        error(EXIT_FAILURE, save_errno, "convert_iter_new");
+
+        rbh_mut_iter_destroy(_fsentries);
+        error(EXIT_FAILURE, save_errno, "rbh_iter_constify");
     }
 
-    /* upsert_fsentries() cannot free fsevents as they are consumed. It has to
-     * wait until the rbh_backend_update() returns. As there is no limit to the
-     * number of elements `fsevents' may yield, this could lead to memory
-     * exhaustion.
+    /* Convert all this information into fsevents */
+    fsevents = iter_convert(fsentries);
+    if (fsevents == NULL) {
+        int save_errno = errno;
+
+        rbh_iter_destroy(fsentries);
+        error(EXIT_FAILURE, save_errno, "iter_convert");
+    }
+
+    /* XXX: the mongo backend tries to process all the fsevents at once in a
+     *      single bulk operation, but a bulk operation is limited in size.
      *
      * Splitting `fsevents' into fixed-size sub-iterators solves this.
      */
-    chunks = rbh_mut_iter_chunkify(fsevents, RBH_ITER_CHUNK_SIZE);
+    chunks = rbh_iter_chunkify(fsevents, RBH_ITER_CHUNK_SIZE);
     if (chunks == NULL) {
         int save_errno = errno;
-        rbh_mut_iter_destroy(fsevents);
+
+        rbh_iter_destroy(fsevents);
         error(EXIT_FAILURE, save_errno, "rbh_mut_iter_chunkify");
     }
 
     /* Update `to' */
     do {
-        struct rbh_mut_iterator *chunk = rbh_mut_iter_next(chunks);
+        struct rbh_iterator *chunk = rbh_mut_iter_next(chunks);
+        int save_errno;
+        ssize_t count;
 
         if (chunk == NULL) {
             if (errno == ENODATA)
@@ -360,7 +338,11 @@ sync(void)
             error(EXIT_FAILURE, errno, "while chunkifying SOURCE's entries");
         }
 
-        if (upsert_fsentries(to, chunk)) {
+        count = rbh_backend_update(to, chunk);
+        save_errno = errno;
+        rbh_iter_destroy(chunk);
+        if (count < 0) {
+            errno = save_errno;
             assert(errno != ENODATA);
             break;
         }
