@@ -62,6 +62,63 @@ static bool one = false;
  *----------------------------------------------------------------------------*/
 
     /*--------------------------------------------------------------------*
+     |                           mut_iter_one()                           |
+     *--------------------------------------------------------------------*/
+
+struct one_iterator {
+    struct rbh_mut_iterator iterator;
+    void *element;
+};
+
+static void *
+one_mut_iter_next(void *iterator)
+{
+    struct one_iterator *one = iterator;
+
+    if (one->element) {
+        void *element = one->element;
+
+        one->element = NULL;
+        return element;
+    }
+
+    errno = ENODATA;
+    return NULL;
+}
+
+static void
+one_mut_iter_destroy(void *iterator)
+{
+    struct one_iterator *one = iterator;
+
+    free(one->element);
+    free(one);
+}
+
+static const struct rbh_mut_iterator_operations ONE_ITER_OPS = {
+    .next = one_mut_iter_next,
+    .destroy = one_mut_iter_destroy,
+};
+
+static const struct rbh_mut_iterator ONE_ITERATOR = {
+    .ops = &ONE_ITER_OPS,
+};
+
+static struct rbh_mut_iterator *
+mut_iter_one(void *element)
+{
+    struct one_iterator *one;
+
+    one = malloc(sizeof(*one));
+    if (one == NULL)
+        error(EXIT_FAILURE, errno, "malloc");
+
+    one->element = element;
+    one->iterator = ONE_ITERATOR;
+    return &one->iterator;
+}
+
+    /*--------------------------------------------------------------------*
      |                         convert_iter_new()                         |
      *--------------------------------------------------------------------*/
 
@@ -261,7 +318,7 @@ sync(void)
         if (root == NULL)
             error(EXIT_FAILURE, errno, "rbh_backend_root");
 
-        fsentries = rbh_mut_iter_array(root, sizeof(*root), 1);
+        fsentries = mut_iter_one(root);
         if (fsentries == NULL)
             error(EXIT_FAILURE, errno, "rbh_mut_array_iterator");
     } else {
