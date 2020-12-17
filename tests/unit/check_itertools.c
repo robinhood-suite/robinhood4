@@ -199,6 +199,64 @@ START_TEST(richa_basic)
 }
 END_TEST
 
+/*----------------------------------------------------------------------------*
+ |                            rbh_iter_constify()                             |
+ *----------------------------------------------------------------------------*/
+
+struct ascii_iterator {
+    struct rbh_mut_iterator iterator;
+    unsigned char c;
+};
+
+static void *
+ascii_iter_next(void *iterator)
+{
+    struct ascii_iterator *ascii = iterator;
+    char *c;
+
+    c = malloc(sizeof(*c));
+    if (c == NULL)
+        return NULL;
+
+    *c = ascii->c++;
+    return c;
+}
+
+static void
+ascii_iter_destroy(void *iterator)
+{
+    return;
+}
+
+static const struct rbh_mut_iterator_operations ASCII_ITER_OPS = {
+    .next = ascii_iter_next,
+    .destroy = ascii_iter_destroy,
+};
+
+static const struct rbh_mut_iterator ASCII_ITERATOR = {
+    .ops = &ASCII_ITER_OPS,
+};
+
+/* We have to rely on libasan to test that memory is properly deallocated */
+START_TEST(rico_basic)
+{
+    const char STRING[] = "abcdefghijklmno";
+    struct ascii_iterator _ascii;
+    struct rbh_iterator *ascii;
+
+    _ascii.iterator = ASCII_ITERATOR;
+    _ascii.c = 'a';
+
+    ascii = rbh_iter_constify(&_ascii.iterator);
+    ck_assert_ptr_nonnull(ascii);
+
+    for (size_t i = 0; i < sizeof(STRING) - 1; i++)
+        ck_assert_mem_eq(rbh_iter_next(ascii), &STRING[i], sizeof(*STRING));
+
+    rbh_iter_destroy(ascii);
+}
+END_TEST
+
 static Suite *
 unit_suite(void)
 {
@@ -224,6 +282,11 @@ unit_suite(void)
 
     tests = tcase_create("rbh_iter_chain()");
     tcase_add_test(tests, richa_basic);
+
+    suite_add_tcase(suite, tests);
+
+    tests = tcase_create("rbh_iter_constify()");
+    tcase_add_test(tests, rico_basic);
 
     suite_add_tcase(suite, tests);
 

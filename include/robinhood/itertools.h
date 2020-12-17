@@ -171,4 +171,25 @@ struct rbh_mut_iterator *
 rbh_mut_iter_chain(struct rbh_mut_iterator *restrict first,
                    struct rbh_mut_iterator *restrict second);
 
+/**
+ * Turn a mutable iterator into an immutable iterator without leaking memory
+ *
+ * @param iterator  a mutable iterator
+ *
+ * @return          a pointer to a newly allocated struct rbh_iterator on
+ *                  success, NULL on error and errno is set appropriately
+ *
+ * @error ENOMEM    there was not enough memory available
+ *
+ * Each entry yielded by \p iterator will be freed automatically.
+ *
+ * If you need an immutable iterator from a mutable iterator whose elements
+ * should not be freed, simply cast that iterator into a struct rbh_iterator.
+ *
+ * \p iterator should not be used anymore after a successful call to this
+ * function.
+ */
+struct rbh_iterator *
+rbh_iter_constify(struct rbh_mut_iterator *iterator);
+
 #endif

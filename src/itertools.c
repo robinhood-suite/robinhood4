@@ -503,3 +503,58 @@ rbh_mut_iter_chain(struct rbh_mut_iterator *first,
             (struct rbh_iterator *)second
             );
 }
+
+/*----------------------------------------------------------------------------*
+ |                            rbh_iter_constify()                             |
+ *----------------------------------------------------------------------------*/
+
+struct constify_iterator {
+    struct rbh_iterator iterator;
+
+    struct rbh_mut_iterator *subiter;
+    void *element;
+};
+
+static const void *
+constify_iter_next(void *iterator)
+{
+    struct constify_iterator *constify = iterator;
+
+    free(constify->element);
+    constify->element = rbh_mut_iter_next(constify->subiter);
+    return constify->element;
+}
+
+static void
+constify_iter_destroy(void *iterator)
+{
+    struct constify_iterator *constify = iterator;
+
+    free(constify->element);
+    rbh_mut_iter_destroy(constify->subiter);
+    free(constify);
+}
+
+static const struct rbh_iterator_operations CONSTIFY_ITER_OPS = {
+    .next = constify_iter_next,
+    .destroy = constify_iter_destroy,
+};
+
+static const struct rbh_iterator CONSTIFY_ITERATOR = {
+    .ops = &CONSTIFY_ITER_OPS,
+};
+
+struct rbh_iterator *
+rbh_iter_constify(struct rbh_mut_iterator *iterator)
+{
+    struct constify_iterator *constify;
+
+    constify = malloc(sizeof(*constify));
+    if (constify == NULL)
+        return NULL;
+
+    constify->iterator = CONSTIFY_ITERATOR;
+    constify->subiter = iterator;
+    constify->element = NULL;
+    return &constify->iterator;
+}
