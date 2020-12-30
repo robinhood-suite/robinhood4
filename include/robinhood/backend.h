@@ -365,7 +365,7 @@ rbh_backend_set_option(struct rbh_backend *backend, unsigned int option,
  * This function only returns successfully if it (sucessfully) processed each
  * fsevent of \p fsevents.
  *
- * It is the caller's responsibility to close \p fsevents.
+ * It is the caller's responsibility to destroy \p fsevents.
  *
  * This function may fail and set errno to any error number specifically
  * documented by \p backend.
