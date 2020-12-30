@@ -223,16 +223,6 @@ rbh_iter_chunkify(struct rbh_iterator *iterator, size_t chunk)
 }
 
 /*----------------------------------------------------------------------------*
- |                          rbh_mut_iter_chunkify()                           |
- *----------------------------------------------------------------------------*/
-
-struct rbh_mut_iterator *
-rbh_mut_iter_chunkify(struct rbh_mut_iterator *iterator, size_t chunk)
-{
-    return rbh_iter_chunkify((struct rbh_iterator *)iterator, chunk);
-}
-
-/*----------------------------------------------------------------------------*
  |                               rbh_iter_tee()                               |
  *----------------------------------------------------------------------------*/
 

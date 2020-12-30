@@ -73,24 +73,6 @@ struct rbh_mut_iterator *
 rbh_iter_chunkify(struct rbh_iterator *iterator, size_t chunk);
 
 /**
- * Split a mutable iterator into several smaller mutable iterators
- *
- * @param iterator  the mutable iterator to split
- * @param chunk     the number of elements each subiterator should yield
- *
- * @return          a pointer to a newly allocated struct rbh_mut_meta_iterator
- *                  on success, NULL on error and errno is set appropriately
- *
- * @error EINVAL    Invalid value for \p chunk (must be > 0)
- * @error ENOMEM    there was not enough memory available
- *
- * The returned iterator is a meta iterator (it yields iterators). Each iterator
- * must be exhausted before the next one can be used.
- */
-struct rbh_mut_iterator *
-rbh_mut_iter_chunkify(struct rbh_mut_iterator *iterator, size_t chunk);
-
-/**
  * Produce 2 independent iterators from a single one.
  *
  * @param iterator      the source iterator
