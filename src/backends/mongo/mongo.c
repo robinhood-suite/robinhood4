@@ -25,6 +25,7 @@
 
 #include "robinhood/backends/mongo.h"
 #include "robinhood/itertools.h"
+#include "robinhood/ringr.h"
 #ifndef HAVE_STATX
 # include "robinhood/statx.h"
 #endif
@@ -814,6 +815,11 @@ mongo_branch_root(void *backend, const struct rbh_filter_projection *projection)
  * other backend's sources, after approprately defining the BACKEND_NAME macro.
  */
 
+enum ringr_reader_type {
+    RRT_DIRECTORIES,
+    RRT_FSENTRIES,
+};
+
 struct branch_iterator {
     struct rbh_mut_iterator iterator;
 
@@ -824,25 +830,41 @@ struct branch_iterator {
     struct rbh_mut_iterator *directories;
     struct rbh_mut_iterator *fsentries;
     struct rbh_fsentry *directory;
+
+    struct rbh_ringr *ids[2];       /* indexed with enum ringr_reader_type */
+    struct rbh_ringr *values[2];    /* indexed with enum ringr_reader_type */
+    struct rbh_value value;
 };
 
+static enum ringr_reader_type
+ringr_largest_reader(struct rbh_ringr *ringr[2])
+{
+    size_t size[2];
+
+    rbh_ringr_peek(ringr[RRT_DIRECTORIES], &size[0]);
+    rbh_ringr_peek(ringr[RRT_FSENTRIES], &size[1]);
+
+    return size[0] > size[1] ? RRT_DIRECTORIES : RRT_FSENTRIES;
+}
+
 static struct rbh_mut_iterator *
-filter_child_fsentries(struct rbh_backend *backend,
-                       const struct rbh_id *id, const struct rbh_filter *filter,
-                       const struct rbh_filter_options *options)
+_filter_child_fsentries(struct rbh_backend *backend, size_t id_count,
+                        const struct rbh_value *id_values,
+                        const struct rbh_filter *filter,
+                        const struct rbh_filter_options *options)
 {
     const struct rbh_filter parent_id_filter = {
-        .op = RBH_FOP_EQUAL,
+        .op = RBH_FOP_IN,
         .compare = {
             .field = {
                 .fsentry = RBH_FP_PARENT_ID,
             },
             .value = {
-                .type = RBH_VT_BINARY,
-                .binary = {
-                    .size = id->size,
-                    .data = id->data,
-                },
+                .type = RBH_VT_SEQUENCE,
+                .sequence = {
+                    .count = id_count,
+                    .values = id_values,
+                }
             },
         },
     };
@@ -861,6 +883,43 @@ filter_child_fsentries(struct rbh_backend *backend,
     return mongo_backend_filter(backend, &and_filter, options);
 }
 
+static struct rbh_mut_iterator *
+filter_child_fsentries(struct rbh_backend *backend, struct rbh_ringr *_values,
+                       struct rbh_ringr *_ids, const struct rbh_filter *filter,
+                       const struct rbh_filter_options *options)
+{
+    struct rbh_mut_iterator *iterator;
+    struct rbh_value *values;
+    size_t readable;
+    size_t count;
+    int rc;
+
+    values = rbh_ringr_peek(_values, &readable);
+    if (readable == 0) {
+        errno = ENODATA;
+        return NULL;
+    }
+    assert(readable % sizeof(*values) == 0);
+    count = readable / sizeof(*values);
+
+    iterator = _filter_child_fsentries(backend, count, values, filter, options);
+    if (iterator == NULL)
+        return NULL;
+
+    /* IDs have variable size, we cannot just ack `count * <something>` bytes */
+    readable = 0;
+    for (size_t i = 0; i < count; ++i)
+        readable += values[i].binary.size;
+
+    /* Acknowledge data in both rings */
+    rc = rbh_ringr_ack(_values, count * sizeof(*values));
+    assert(rc == 0);
+    rbh_ringr_ack(_ids, readable);
+    assert(rc == 0);
+
+    return iterator;
+}
+
 static const struct rbh_filter ISDIR_FILTER = {
     .op = RBH_FOP_EQUAL,
     .compare = {
@@ -875,55 +934,147 @@ static const struct rbh_filter ISDIR_FILTER = {
     },
 };
 
-static struct rbh_mut_iterator *
-branch_next_directory(struct branch_iterator *iter)
+static int
+branch_iter_recurse(struct branch_iterator *iter)
 {
-    const struct rbh_filter_options ID_ONLY = {
+    const struct rbh_filter_options OPTIONS = {
         .projection = {
             .fsentry_mask = RBH_FP_ID,
         },
     };
     struct rbh_mut_iterator *_directories;
     struct rbh_mut_iterator *directories;
-    struct rbh_mut_iterator *fsentries;
 
-    if (iter->directory == NULL) {
-        iter->directory = rbh_mut_iter_next(iter->directories);
-        if (iter->directory == NULL)
-            return NULL;
-        assert(iter->directory->mask & RBH_FP_ID);
-    }
-
-    _directories = filter_child_fsentries(iter->backend, &iter->directory->id,
-                                          &ISDIR_FILTER, &ID_ONLY);
+    _directories = filter_child_fsentries(iter->backend,
+                                          iter->values[RRT_DIRECTORIES],
+                                          iter->ids[RRT_DIRECTORIES],
+                                          &ISDIR_FILTER, &OPTIONS);
     if (_directories == NULL)
-        return NULL;
-
-    fsentries = filter_child_fsentries(iter->backend, &iter->directory->id,
-                                       iter->filter, &iter->options);
-    if (fsentries == NULL) {
-        int save_errno = errno;
-
-        rbh_mut_iter_destroy(_directories);
-        errno = save_errno;
-        return NULL;
-    }
+        return -1;
 
     directories = rbh_mut_iter_chain(iter->directories, _directories);
     if (directories == NULL) {
         int save_errno = errno;
 
-        rbh_mut_iter_destroy(fsentries);
         rbh_mut_iter_destroy(_directories);
         errno = save_errno;
-        return NULL;
+        return -1;
     }
     iter->directories = directories;
 
-    free(iter->directory);
-    iter->directory = NULL;
+    return 0;
+}
 
-    return fsentries;
+static struct rbh_mut_iterator *
+_branch_next_fsentries(struct branch_iterator *iter)
+{
+    return filter_child_fsentries(iter->backend, iter->values[RRT_FSENTRIES],
+                                  iter->ids[RRT_FSENTRIES], iter->filter,
+                                  &iter->options);
+}
+
+static struct rbh_mut_iterator *
+branch_next_fsentries(struct branch_iterator *iter)
+{
+    struct rbh_value *value = &iter->value;
+
+    /* A previous call to branch_next_fsentries() may have been interrupted
+     * before all the data that needed to be committed actually was.
+     *
+     * Resume the execution from where it stopped.
+     */
+    if (iter->directory != NULL) {
+        if (iter->value.binary.data != NULL)
+            goto record_rbh_value;
+        goto record_id;
+    }
+
+    /* Build a list of directory ids */
+    while (true) {
+        const struct rbh_id *id;
+
+        /* Fetch the next directory */
+        iter->directory = rbh_mut_iter_next(iter->directories);
+        if (iter->directory == NULL) {
+            if (errno != ENODATA)
+                return NULL;
+
+            /* `iterator->directories' is exhausted, let's hydrate it */
+            if (branch_iter_recurse(iter)) {
+                if (errno != ENODATA)
+                    return NULL;
+
+                /* The traversal is complete */
+                return _branch_next_fsentries(iter);
+            }
+            continue;
+        }
+
+record_id:
+        id = &iter->directory->id;
+        value->binary.data = rbh_ringr_push(*iter->ids, id->data, id->size);
+        /* Record this directory for a later traversal */
+        if (value->binary.data == NULL) {
+            switch (errno) {
+            case ENOBUFS: /* the ring is full */
+                /* Should we traverse directories or fsentries? */
+                switch (ringr_largest_reader(iter->ids)) {
+                case RRT_DIRECTORIES:
+                    if (branch_iter_recurse(iter)) {
+                        /* the ring can't be full and empty at the same time */
+                        assert(errno != ENODATA);
+                        return NULL;
+                    }
+                    goto record_id;
+                case RRT_FSENTRIES:
+                    return _branch_next_fsentries(iter);
+                }
+                /* Unreachable */
+            default:
+                return NULL;
+            }
+        }
+        value->binary.size = id->size;
+
+        /* Recording the id first helps keep the code's complexity bearable
+         *
+         * If someone ever wants to do it the other way around, they should
+         * keep in mind that:
+         *   - there is no guarantee on how long an id is:
+         *     1) although it is reasonable to assume an id is only a few bytes
+         *        long (at the time of writing, ids are 16 bytes long), there is
+         *        no limit to how big "a few bytes" might be
+         *     2) different ids may have different sizes
+         *   - list_child_fsentries() asssumes all the readable rbh_values
+         *     in the value ring contain an id that points inside the id ring
+         *   - rbh_ring_push() may fail (that one is obvious)
+         *   - no matter the error, branch_next_fsentries() must be retryable
+         */
+
+record_rbh_value:
+        /* Then, record the associated rbh_value in `iterator->values' */
+        if (rbh_ringr_push(*iter->values, value, sizeof(*value)) == NULL) {
+            switch (errno) {
+            case ENOBUFS: /* the ring is full */
+                /* Should we traverse directories or fsentries? */
+                switch (ringr_largest_reader(iter->ids)) {
+                case RRT_DIRECTORIES:
+                    if (branch_iter_recurse(iter)) {
+                        /* the ring can't be full and empty at the same time */
+                        assert(errno != ENODATA);
+                        return NULL;
+                    }
+                    goto record_rbh_value;
+                case RRT_FSENTRIES:
+                    return _branch_next_fsentries(iter);
+                }
+                /* Unreachable */
+            default:
+                return NULL;
+            }
+        }
+        free(iter->directory);
+    }
 }
 
 static void *
@@ -933,7 +1084,7 @@ branch_iter_next(void *iterator)
     struct rbh_fsentry *fsentry;
 
     if (iter->fsentries == NULL) {
-        iter->fsentries = branch_next_directory(iter);
+        iter->fsentries = branch_next_fsentries(iter);
         if (iter->fsentries == NULL)
             return NULL;
     }
@@ -956,6 +1107,11 @@ static void
 branch_iter_destroy(void *iterator)
 {
     struct branch_iterator *iter = iterator;
+
+    rbh_ringr_destroy(iter->ids[0]);
+    rbh_ringr_destroy(iter->ids[1]);
+    rbh_ringr_destroy(iter->values[0]);
+    rbh_ringr_destroy(iter->values[1]);
 
     if (iter->fsentries)
         rbh_mut_iter_destroy(iter->fsentries);
@@ -1013,6 +1169,9 @@ filter_one(void *backend, const struct rbh_id *id,
     return mongo_backend_filter(backend, &and_filter, options);
 }
 
+#define VALUE_RING_SIZE (1 << 14) /* 16MB */
+#define ID_RING_SIZE (1 << 14) /* 16MB */
+
 struct rbh_mut_iterator *
 generic_branch_backend_filter(void *backend, const struct rbh_filter *filter,
                               const struct rbh_filter_options *options)
@@ -1038,41 +1197,78 @@ generic_branch_backend_filter(void *backend, const struct rbh_filter *filter,
     iter->directory = rbh_backend_root(backend, &ID_ONLY);
     if (iter->directory == NULL) {
         save_errno = errno;
-        free(iter);
-        errno = save_errno;
-        return NULL;
+        goto out_free_iter;
     }
-    assert(iter->directory->mask & RBH_FP_ID);
 
+    assert(iter->directory->mask & RBH_FP_ID);
     iter->fsentries = filter_one(backend, &iter->directory->id,
                                  filter, options);
     if (iter->fsentries == NULL) {
         save_errno = errno;
-        free(iter->directory);
-        free(iter);
-        errno = save_errno;
-        return NULL;
+        goto out_free_directory;
     }
 
     errno = 0;
     iter->filter = filter ? rbh_filter_clone(filter) : NULL;
     if (iter->filter == NULL && errno != 0) {
         save_errno = errno;
-        rbh_mut_iter_destroy(iter->fsentries);
-        free(iter->directory);
-        free(iter);
-        errno = save_errno;
-        return NULL;
+        goto out_destroy_fsentries;
     }
     errno = save_errno;
 
+    iter->values[0] = rbh_ringr_new(VALUE_RING_SIZE);
+    if (iter->values[0] == NULL) {
+        save_errno = errno;
+        goto out_free_filter;
+    }
+
+    iter->values[1] = rbh_ringr_dup(iter->values[0]);
+    if (iter->values[1] == NULL) {
+        save_errno = errno;
+        goto out_free_first_values_ringr;
+    }
+
+    iter->ids[0] = rbh_ringr_new(ID_RING_SIZE);
+    if (iter->ids[0] == NULL) {
+        save_errno = errno;
+        goto out_free_second_values_ringr;
+    }
+
+    iter->ids[1] = rbh_ringr_dup(iter->ids[0]);
+    if (iter->ids[1] == NULL) {
+        save_errno = errno;
+        goto out_free_first_ids_ringr;
+    }
+
     iter->options = *options;
-    iter->directories = NULL;
     iter->backend = backend;
     iter->iterator = BRANCH_ITERATOR;
 
+    /* Setup `iter->value' for the first run of branch_next_fsentries() */
+    iter->directories = rbh_mut_iter_array(NULL, 0, 0); /* Empty iterator */
+    iter->value.type = RBH_VT_BINARY;
+    iter->value.binary.data = NULL;
+
     return &iter->iterator;
+
+out_free_first_ids_ringr:
+    rbh_ringr_destroy(iter->ids[0]);
+out_free_second_values_ringr:
+    rbh_ringr_destroy(iter->values[1]);
+out_free_first_values_ringr:
+    rbh_ringr_destroy(iter->values[0]);
+out_free_filter:
+    free(iter->filter);
+out_destroy_fsentries:
+    rbh_mut_iter_destroy(iter->fsentries);
+out_free_directory:
+    free(iter->directory);
+out_free_iter:
+    free(iter);
+    errno = save_errno;
+    return NULL;
 }
+
 static const struct rbh_backend_operations MONGO_BRANCH_BACKEND_OPS = {
     .branch = mongo_backend_branch,
     .root = mongo_branch_root,
