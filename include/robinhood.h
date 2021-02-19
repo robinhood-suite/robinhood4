@@ -19,6 +19,7 @@
 #include "robinhood/plugins/backend.h"
 #include "robinhood/queue.h"
 #include "robinhood/ring.h"
+#include "robinhood/ringr.h"
 #include "robinhood/sstack.h"
 #include "robinhood/stack.h"
 #include "robinhood/uri.h"

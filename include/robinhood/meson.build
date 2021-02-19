@@ -15,6 +15,7 @@ install_headers(
     'plugin.h',
     'queue.h',
     'ring.h',
+    'ringr.h',
     'statx.h',
     'sstack.h',
     'stack.h',

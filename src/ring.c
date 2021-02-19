@@ -1,12 +1,12 @@
 /* This file is part of the RobinHood Library
- * Copyright (C) 2019 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2021 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifer: LGPL-3.0-or-later
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+# include <config.h>
 #endif
 
 #include <errno.h>
@@ -18,13 +18,7 @@
 #include <sys/syscall.h>
 
 #include "robinhood/ring.h"
-
-struct rbh_ring {
-    size_t size;
-    char *head;
-    size_t used;
-    char *data;
-};
+#include "ring.h"
 
 struct rbh_ring *
 rbh_ring_new(size_t size)
@@ -116,6 +110,7 @@ rbh_ring_push(struct rbh_ring *ring, const void *data, size_t size)
     ring->used += size;
     if (data != NULL)
         memcpy(tail, data, size);
+
     return tail;
 }
 

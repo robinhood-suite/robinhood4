@@ -20,6 +20,7 @@ librobinhood = library(
         'plugins/backend.c',
         'queue.c',
         'ring.c',
+        'ringr.c',
         'sstack.c',
         'stack.c',
         'uri.c',
