@@ -1033,7 +1033,7 @@ generic_branch_backend_filter(void *backend, const struct rbh_filter *filter,
     iter->directory = rbh_backend_root(backend, &ID_ONLY);
     if (iter->directory == NULL) {
         save_errno = errno;
-        rbh_mut_iter_destroy(&iter->iterator);
+        free(iter);
         errno = save_errno;
         return NULL;
     }
@@ -1043,6 +1043,7 @@ generic_branch_backend_filter(void *backend, const struct rbh_filter *filter,
                                  filter, options);
     if (iter->fsentries == NULL) {
         save_errno = errno;
+        free(iter->directory);
         free(iter);
         errno = save_errno;
         return NULL;
@@ -1052,7 +1053,9 @@ generic_branch_backend_filter(void *backend, const struct rbh_filter *filter,
     iter->filter = filter ? rbh_filter_clone(filter) : NULL;
     if (iter->filter == NULL && errno != 0) {
         save_errno = errno;
-        rbh_mut_iter_destroy(&iter->iterator);
+        rbh_mut_iter_destroy(iter->fsentries);
+        free(iter->directory);
+        free(iter);
         errno = save_errno;
         return NULL;
     }
