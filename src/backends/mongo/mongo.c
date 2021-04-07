@@ -957,10 +957,10 @@ branch_iter_destroy(void *iterator)
 {
     struct branch_iterator *iter = iterator;
 
-    if (iter->fsentries != NULL)
+    if (iter->fsentries)
         rbh_mut_iter_destroy(iter->fsentries);
-
-    rbh_mut_iter_destroy(iter->directories);
+    if (iter->directories)
+        rbh_mut_iter_destroy(iter->directories);
     free(iter->directory);
     free(iter->filter);
     free(iter);
