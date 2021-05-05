@@ -76,6 +76,26 @@ The following examples all assume you have a backend set up at
 .. [#] to set up a backend, have a look at rbh-sync_'s documentation
 .. _rbh-sync: https://github.com/cea-hpc/rbh-sync
 
+The following examples all showcase the use of the ``-size`` predicate.
+
+.. code:: bash
+
+    # list all entries with a size of exactly 2 Gigabytes
+    rbh-find rbh:mongo:test -size 2G
+    /testA
+
+    # list all entries with a size greater than 1 Megabytes
+    rbh-find rbh:mongo:test -size +1M
+    /
+    /testA
+    /testB
+    /testC
+
+    # list all entries with a size greater than 1 Megabytes and smaller
+    # than 1 Gigabytes
+    rbh-find rbh:mongo:test -size +1M -size -1G
+    /testB
+
 Paths vs. URIs
 --------------
 
@@ -221,6 +241,12 @@ of how the time boundaries are computed. There is no apparent reason for this.
 
 rbh-find uses the same method for all 6 predicates which it borrows from find's
 ``-[acm]time``.
+
+-size
+-----------------------
+
+rbh-find's ``-size`` predicate works exactly like find's ``-size``, but with
+the addition of the ``T`` size, for Terabytes.
 
 Extra features
 ==============

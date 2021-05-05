@@ -12,7 +12,9 @@
 #include <assert.h>
 #include <errno.h>
 #include <error.h>
+#include <inttypes.h>
 #include <limits.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <sysexits.h>
 
@@ -36,6 +38,7 @@ static const struct rbh_filter_field predicate2filter_field[] = {
     [PRED_MMIN]     = { .fsentry = RBH_FP_STATX, .statx = STATX_MTIME, },
     [PRED_MTIME]    = { .fsentry = RBH_FP_STATX, .statx = STATX_MTIME, },
     [PRED_TYPE]     = { .fsentry = RBH_FP_STATX, .statx = STATX_TYPE },
+    [PRED_SIZE]     = { .fsentry = RBH_FP_STATX, .statx = STATX_SIZE },
 };
 
 struct rbh_filter *
@@ -192,6 +195,87 @@ filetype2filter(const char *_filetype)
     filter = rbh_filter_compare_int32_new(RBH_FOP_EQUAL,
                                           &predicate2filter_field[PRED_TYPE],
                                           filetype);
+    if (filter == NULL)
+        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
+                      "filter_compare_integer");
+
+    return filter;
+}
+
+struct rbh_filter *
+filesize2filter(const char *_filesize)
+{
+    char operator = *_filesize;
+    struct rbh_filter *filter;
+    uint64_t unit_size;
+    uint64_t filesize;
+    char *suffix;
+
+    switch (operator) {
+    case '+':
+    case '-':
+        _filesize++;
+    }
+
+    filesize = strtoull(_filesize, &suffix, 10);
+    if (filesize == 0ULL)
+        error(EX_USAGE, 0,
+              "arguments to -size should start with at least one digit");
+    else if (errno == ERANGE && filesize == ULLONG_MAX)
+        error(EX_USAGE, EOVERFLOW, "invalid argument `%s' to -size", _filesize);
+
+    switch (*suffix++) {
+    case 'T':
+        unit_size = 1099511627776;
+        break;
+    case 'G':
+        unit_size = 1073741824;
+        break;
+    case 'M':
+        unit_size = 1048576;
+        break;
+    case 'k':
+        unit_size = 1024;
+        break;
+    case '\0':
+        /* default suffix */
+        suffix--;
+        __attribute__((fallthrough));
+    case 'b':
+        unit_size = 512;
+        break;
+    case 'w':
+        unit_size = 2;
+        break;
+    case 'c':
+        unit_size = 1;
+        break;
+    default:
+        error(EX_USAGE, 0, "invalid argument `%s' to -size", _filesize);
+    }
+
+    if (*suffix)
+        error(EX_USAGE, 0, "invalid argument `%s' to -size", _filesize);
+
+    switch (operator) {
+    case '-':
+        filter = rbh_filter_compare_uint64_new(
+                RBH_FOP_LOWER_OR_EQUAL, &predicate2filter_field[PRED_SIZE],
+                (filesize - 1) * unit_size
+                );
+        break;
+    case '+':
+        filter = rbh_filter_compare_uint64_new(
+                RBH_FOP_STRICTLY_GREATER, &predicate2filter_field[PRED_SIZE],
+                filesize * unit_size
+                );
+        break;
+    default:
+        filter = filter_uint64_range_new(&predicate2filter_field[PRED_SIZE],
+                                         (filesize - 1) * unit_size,
+                                         filesize * unit_size + 1);
+    }
+
     if (filter == NULL)
         error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
                       "filter_compare_integer");

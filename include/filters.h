@@ -55,7 +55,7 @@ struct rbh_filter *
 xtime2filter(enum predicate predicate, const char *days);
 
 /**
- * Build a filter to the -type predicate
+ * Build a filter for the -type predicate
  *
  * @param filetype  a string representing a filetype
  *
@@ -65,6 +65,18 @@ xtime2filter(enum predicate predicate, const char *days);
  */
 struct rbh_filter *
 filetype2filter(const char *filetype);
+
+/**
+ * Build a filter for the -size predicate
+ *
+ * @param filesize  a string representing a size
+ *
+ * @return          a pointer to a newly allocated struct rbh_filter
+ *
+ * Exit on error
+ */
+struct rbh_filter *
+filesize2filter(const char *filesize);
 
 /**
  * AND two dynamically allocated filters
