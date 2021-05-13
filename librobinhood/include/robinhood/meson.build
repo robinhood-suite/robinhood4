@@ -9,6 +9,7 @@ install_headers(
     'filter.h',
     'fsentry.h',
     'fsevent.h',
+    'hashmap.h',
     'id.h',
     'iterator.h',
     'itertools.h',
