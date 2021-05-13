@@ -20,7 +20,8 @@ cc = meson.get_compiler('c')
 options = cc.get_supported_arguments([
     '-Wno-gnu-alignof-expression', # gcc >= 10.1.0 (maybe less)
 ])
-add_project_arguments(['-D_GNU_SOURCE'] + options, language: 'c')
+add_project_arguments(['-D_DEFAULT_SOURCE', '-D_GNU_SOURCE'] + options,
+                      language: 'c')
 
 # Configuration checks
 conf_data = configuration_data()

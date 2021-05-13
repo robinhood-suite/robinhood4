@@ -107,7 +107,7 @@ retry:
             struct rbh_ring **tmp = queue->rings;
             size_t new_count = queue->count * 2;
 
-            tmp = realloc(tmp, new_count * sizeof(*tmp));
+            tmp = reallocarray(tmp, new_count, sizeof(*tmp));
             if (tmp == NULL) {
                 queue->tail--;
                 return NULL;

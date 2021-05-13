@@ -76,7 +76,7 @@ retry:
         struct rbh_stack **tmp = sstack->stacks;
         size_t new_count = sstack->count * 2;
 
-        tmp = realloc(tmp, new_count * sizeof(*tmp));
+        tmp = reallocarray(tmp, new_count, sizeof(*tmp));
         if (tmp == NULL) {
             sstack->current--;
             return NULL;
