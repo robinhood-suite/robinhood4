@@ -13,6 +13,7 @@ librobinhood = library(
         'filter.c',
         'fsentry.c',
         'fsevent.c',
+        'hashmap.c',
         'id.c',
         'itertools.c',
         'lu_fid.c',

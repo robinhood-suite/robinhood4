@@ -12,6 +12,7 @@
 #include "robinhood/filter.h"
 #include "robinhood/fsentry.h"
 #include "robinhood/fsevent.h"
+#include "robinhood/hashmap.h"
 #include "robinhood/id.h"
 #include "robinhood/iterator.h"
 #include "robinhood/itertools.h"
