@@ -70,10 +70,13 @@ rbh_fsentry_new(const struct rbh_id *id, const struct rbh_id *parent_id,
         size += value_map_data_size(xattrs);
     }
 
-    fsentry = calloc(1, sizeof(*fsentry) + size);
+    fsentry = malloc(sizeof(*fsentry) + size);
     if (fsentry == NULL)
         return NULL;
     data = fsentry->symlink;
+
+    /* fsentry->mask */
+    fsentry->mask = 0;
 
     /* fsentry->symlink (set first because it is a flexible array) */
     if (symlink) {
