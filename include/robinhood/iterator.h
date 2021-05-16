@@ -8,6 +8,7 @@
 #ifndef ROBINHOOD_ITERATOR_H
 #define ROBINHOOD_ITERATOR_H
 
+#include <errno.h>
 #include <stddef.h>
 
 /** @file

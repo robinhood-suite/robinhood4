@@ -8,6 +8,8 @@
 #ifndef ROBINHOOD_URI_H
 #define ROBINHOOD_URI_H
 
+#include <sys/types.h>
+
 #include <robinhood/fsentry.h>
 
 #define RBH_SCHEME "rbh"
