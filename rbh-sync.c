@@ -333,7 +333,7 @@ sync(void)
         ssize_t count;
 
         if (chunk == NULL) {
-            if (errno == ENODATA)
+            if (errno == ENODATA || errno == RBH_BACKEND_ERROR)
                 break;
             error(EXIT_FAILURE, errno, "while chunkifying SOURCE's entries");
         }
