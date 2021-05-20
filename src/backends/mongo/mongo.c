@@ -152,6 +152,11 @@ mongo_iter_next(void *iterator)
     bson_error_t error;
     const bson_t *doc;
 
+    if (!mongoc_cursor_more(mongo_iter->cursor)) {
+        errno = ENODATA;
+        return NULL;
+    }
+
     if (mongoc_cursor_next(mongo_iter->cursor, &doc))
         return fsentry_from_bson(doc);
 
