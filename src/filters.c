@@ -17,6 +17,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <sysexits.h>
+#include <ctype.h>
 
 #include <sys/stat.h>
 #ifndef HAVE_STATX
@@ -39,6 +40,7 @@ static const struct rbh_filter_field predicate2filter_field[] = {
     [PRED_MTIME]    = { .fsentry = RBH_FP_STATX, .statx = STATX_MTIME, },
     [PRED_TYPE]     = { .fsentry = RBH_FP_STATX, .statx = STATX_TYPE },
     [PRED_SIZE]     = { .fsentry = RBH_FP_STATX, .statx = STATX_SIZE },
+    [PRED_PERM]     = { .fsentry = RBH_FP_STATX, .statx = STATX_MODE },
 };
 
 struct rbh_filter *
@@ -279,6 +281,329 @@ filesize2filter(const char *_filesize)
     if (filter == NULL)
         error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
                       "filter_compare_integer");
+
+    return filter;
+}
+
+struct who {
+    bool u, o, g;
+};
+
+static bool
+who_is_empty(const struct who *who)
+{
+    return !(who->u || who->g || who->o);
+}
+
+static void
+parse_symbolic_who(const char **input, struct who *who)
+{
+    while (true) {
+        switch (**input) {
+        case 'u':
+            who->u = true;
+            break;
+        case 'g':
+            who->g = true;
+            break;
+        case 'o':
+            who->o = true;
+            break;
+        case 'a':
+            who->u = true;
+            who->g = true;
+            who->o = true;
+            break;
+        default:
+            return;
+        }
+        (*input)++;
+    }
+}
+
+static mode_t
+parse_symbolic_perm(const struct who *who, const char **input, mode_t mode)
+{
+    bool empty_who = who_is_empty(who);
+    bool all = (who->u && who->g && who->o);
+    mode_t perm = 0;
+
+    while (true) {
+        switch (**input) {
+        case 'r':
+            perm |= who->u ? 0400 : 0;
+            perm |= who->g ? 0040 : 0;
+            perm |= who->o ? 0004 : 0;
+            perm |= empty_who ? 0444 : 0;
+            break;
+        case 'w':
+            perm |= who->u ? 0200 : 0;
+            perm |= who->g ? 0020 : 0;
+            perm |= who->o ? 0002 : 0;
+            perm |= empty_who ? 0222 : 0;
+            break;
+        case 'x':
+            perm |= who->u ? 0100 : 0;
+            perm |= who->g ? 0010 : 0;
+            perm |= who->o ? 0001 : 0;
+            perm |= empty_who ? 0111 : 0;
+            break;
+        case 'X':
+            /* Adds execute permission to 'u', 'g' and/or 'o' if specified and
+             * either 'u', 'g' or 'o' already has execute permissions.
+             */
+            if ((mode & 0111) != 0) {
+                perm |= who->u ? 0100 : 0;
+                perm |= who->g ? 0010 : 0;
+                perm |= who->o ? 0001 : 0;
+            }
+            break;
+        case 's':
+            /* 's' is ignored if only 'o' is given, it's not an error */
+            if (who->o && !who->g && !who->u)
+                break;
+            perm |= who->u ? S_ISUID : 0;
+            perm |= who->g ? S_ISGID : 0;
+            break;
+        case 't':
+            /* 't' should be used when 'o' or 'a' is given or who is empty */
+            perm |= (who->o || empty_who || all) ? S_ISVTX : 0;
+            break;
+        default:
+            return perm;
+        }
+        (*input)++;
+    }
+}
+
+static mode_t
+parse_symbolic_permcopy(const struct who *who, const char **input, mode_t mode)
+{
+    bool empty_who = who_is_empty(who);
+    mode_t previous_flags = 0;
+    mode_t perm = 0;
+
+    switch (**input) {
+    case 'u':
+        previous_flags = (mode & 0700);
+        perm |= (empty_who || who->u) ? previous_flags : 0;
+        perm |= (empty_who || who->g) ? (previous_flags >> 3) : 0;
+        perm |= (empty_who || who->o) ? (previous_flags >> 6) : 0;
+        (*input)++;
+        break;
+    case 'g':
+        previous_flags = (mode & 0070);
+        perm |= (empty_who || who->u) ? (previous_flags << 3) : 0;
+        perm |= (empty_who || who->g) ? previous_flags : 0;
+        perm |= (empty_who || who->o) ? (previous_flags >> 3) : 0;
+        (*input)++;
+        break;
+    case 'o':
+        previous_flags = (mode & 0007);
+        perm |= (empty_who || who->u) ? (previous_flags << 6) : 0;
+        perm |= (empty_who || who->g) ? (previous_flags << 3) : 0;
+        perm |= (empty_who || who->o) ? previous_flags : 0;
+        (*input)++;
+        break;
+    default:
+        break;
+    }
+
+    return perm;
+}
+
+static bool
+is_op(char input)
+{
+    return (input == '-' || input == '+' || input == '=');
+}
+
+static mode_t
+symbolic_action(const struct who *who, char op, mode_t current, mode_t new)
+{
+    switch (op) {
+    case '-':
+        /* remove the flags from mode */
+        return current & ~new;
+    case '+':
+        /* add the flags to mode */
+        return current | new;
+    case '=':
+        /* set the flags of mode to perm */
+        if (new != 0) {
+            if (who_is_empty(who))
+                return new;
+
+            if (who->u)
+                current = ((new & 0700) | (current & 0077));
+            if (who->g)
+                current = ((new & 0070) | (current & 0707));
+            if (who->o)
+                current = ((new & 0007) | (current & 0770));
+            return current;
+        }
+        return 0;
+    default:
+        return 017777;
+    }
+}
+
+static unsigned long
+octal_str2mode(const char *input, const char **end)
+{
+    unsigned long mode;
+    char *c;
+
+    mode = strtoul(input, &c, 8);
+    if (mode > 07777 || (*c != '\0' && *c != ','))
+        return ULONG_MAX;
+
+    if (end)
+        *end = c;
+
+
+    return mode;
+}
+
+static mode_t
+parse_symbolic_actionlist(const struct who *who, mode_t input_mode,
+                          const char **input)
+{
+    bool empty_who = who_is_empty(who);
+    mode_t perm = input_mode;
+    char op;
+
+    if (!is_op(**input))
+        return 17777;
+
+    while (is_op(**input)) {
+        mode_t tmp = 0;
+
+        op = *(*input)++;
+        if (empty_who && **input == '\0')
+            return 017777;
+
+        tmp = parse_symbolic_permcopy(who, input, perm);
+        if (tmp == 0) {
+            tmp = parse_symbolic_perm(who, input, perm);
+
+            if (tmp > 07777) {
+                return tmp;
+            }
+        }
+
+        perm = symbolic_action(who, op, perm, tmp);
+    }
+
+    return perm;
+}
+
+static mode_t
+parse_symbolic_clause(const char *input, mode_t current, const char **end)
+{
+    struct who who = {
+        .u = false,
+        .g = false,
+        .o = false
+    };
+    mode_t mode;
+
+    parse_symbolic_who(&input, &who);
+
+    if (who_is_empty(&who)) {
+        mode_t tmp;
+        char op;
+
+        op = *input++;
+        tmp = octal_str2mode(input, end);
+
+        if (tmp <= 07777) {
+            tmp = symbolic_action(&who, op, current, tmp);
+            return tmp;
+        }
+
+        input--;
+    }
+
+    mode = parse_symbolic_actionlist(&who, current, &input);
+    *end = input;
+
+    return mode;
+}
+
+static mode_t
+symbolic_str2mode(const char *input)
+{
+    /* parse comma seperated list of symbolic representation */
+    const char *end = NULL;
+    mode_t mode = 0;
+
+    do {
+        if (*input == '\0')
+            return 017777;
+
+        mode = parse_symbolic_clause(input, mode, &end);
+
+        if (mode > 07777)
+            return mode;
+        input = end+1;
+    } while (*end == ',');
+
+    if (*end != '\0')
+        return 017777;
+
+    return mode;
+}
+
+static unsigned long
+str2mode(const char *input)
+{
+    switch (*input) {
+    case '0' ... '7':
+        return octal_str2mode(input, NULL);
+    case '8' ... '9':
+        return ULONG_MAX;
+    default:
+        return symbolic_str2mode(input);
+    }
+}
+
+struct rbh_filter *
+mode2filter(const char *_input)
+{
+    enum rbh_filter_operator operator;
+    struct rbh_filter *filter;
+    const char *input = _input;
+    unsigned long mode;
+
+    if (*input == '\0')
+        error(EX_USAGE, 0,
+              "arguments to -perm should contain at least one digit or a symbolic mode");
+
+    switch (*input) {
+    case '/':
+        operator = RBH_FOP_BITS_ANY_SET;
+        input++;
+        break;
+    case '-':
+        operator = RBH_FOP_BITS_ALL_SET;
+        input++;
+        break;
+    default:
+        operator = RBH_FOP_EQUAL;
+        break;
+    }
+
+    mode = str2mode(input);
+    if (mode > 07777)
+        error(EX_USAGE, 0, "invalid mode: %s", _input);
+
+    filter = rbh_filter_compare_uint32_new(operator,
+                                           &predicate2filter_field[PRED_PERM],
+                                           mode);
+    if (filter == NULL)
+        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
+                      "filter_compare_uint32_new");
 
     return filter;
 }

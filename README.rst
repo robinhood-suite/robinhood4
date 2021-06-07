@@ -73,6 +73,9 @@ The following examples all assume you have a backend set up at
     # find files modified today
     rbh-find rbh:mongo:test -mtime 0
 
+    # find setuid bit
+    rbh-find rbh:mongo:test -perm /u+s
+
 .. [#] to set up a backend, have a look at rbh-sync_'s documentation
 .. _rbh-sync: https://github.com/cea-hpc/rbh-sync
 
@@ -247,6 +250,23 @@ rbh-find uses the same method for all 6 predicates which it borrows from find's
 
 rbh-find's ``-size`` predicate works exactly like find's ``-size``, but with
 the addition of the ``T`` size, for Terabytes.
+
+-perm
+-----
+
+The implementation is still a work in progress as some differences with GNU find
+still exist.
+
+rbh-find's ``-perm`` predicate works like GNU find's except that GNU find
+supports '-', '/' and '+' as a prefix for the mode string. The '+' is deprecated
+and not used by GNU find but does not trigger a parsing error. Whereas, it is
+a parsing error to use '+' in rbh-find as a prefix. Keep in mind that some
+symbolic modes start with a '+' such as '+t' which corresponds to the sticky
+bit. This '+' sign represents the operation to perform as '-' and '=' not the
+prefix and is the reason for the deprecation of '+' as a prefix.
+
+So looking for all the files with a sticky bit could be done with ``/+t``. And
+``+t`` would match on file with only the sticky bit set and no other permission.
 
 Extra features
 ==============

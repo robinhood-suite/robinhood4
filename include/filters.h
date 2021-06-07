@@ -79,6 +79,18 @@ struct rbh_filter *
 filesize2filter(const char *filesize);
 
 /**
+ * Build a filter for the -perm predicate
+ *
+ * @param mode_arg a string representing an octal or symbol mode
+ *
+ * @return         a pointer to a newly allocated struct rbh_filter
+ *
+ * Exit on error
+ */
+struct rbh_filter *
+mode2filter(const char *mode_arg);
+
+/**
  * AND two dynamically allocated filters
  *
  * @param left  a pointer to a dynamically allocated struct rbh_filter

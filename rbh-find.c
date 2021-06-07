@@ -191,6 +191,9 @@ parse_predicate(int *arg_idx)
     case PRED_SIZE:
         filter = filesize2filter(argv[++i]);
         break;
+    case PRED_PERM:
+        filter = mode2filter(argv[++i]);
+        break;
     default:
         error(EXIT_FAILURE, ENOSYS, "%s", argv[i]);
         /* clang: -Wsometimes-unitialized: `filter` */
