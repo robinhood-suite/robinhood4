@@ -37,6 +37,7 @@ struct rbh_raw_uri {
  *                  success, NULL on error and errno is set appropriately
  *
  * @error EINVAL    \p string is not a valid URI according to RFC3986.
+ * @error ENOMEM    not enough memory available
  *
  * Note that this function does not perform any check other than those necessary
  * to split a URI into a struct rbh_raw_uri.
