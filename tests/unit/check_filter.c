@@ -68,7 +68,7 @@ filter_operator2str(enum rbh_filter_operator op)
 #define _ck_assert_filter_operator(X, OP, Y) do { \
     ck_assert_msg((X) OP (Y), "%s is %s, %s is %s", \
                   #X, filter_operator2str(X), #Y, filter_operator2str(Y)); \
-} while (0);
+} while (0)
 
 #define ck_assert_filter_operator_eq(X, Y) _ck_assert_filter_operator(X, ==, Y)
 
@@ -152,12 +152,12 @@ statx_field2str(unsigned int field)
         ck_assert_pstr_eq((X)->xattr, (Y)->xattr); \
         break; \
     } \
-} while (0);
+} while (0)
 
 #define ck_assert_comparison_filter_eq(X, Y) do { \
     ck_assert_filter_field_eq(&(X)->compare.field, &(Y)->compare.field); \
     ck_assert_value_eq(&(X)->compare.value, &(Y)->compare.value); \
-} while (0);
+} while (0)
 
 #define ck_assert_filter_eq(X, Y) do { \
     if ((X) == NULL || (Y) == NULL) { \
