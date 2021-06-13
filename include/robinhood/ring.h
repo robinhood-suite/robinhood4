@@ -185,7 +185,7 @@ int
 rbh_ring_pop(struct rbh_ring *ring, size_t count);
 
 /**
- * Free ressources associated with a ring buffer
+ * Free resources associated with a ring buffer
  *
  * @param ring  the ring to destroy
  */
