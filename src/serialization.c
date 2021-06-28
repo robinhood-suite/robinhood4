@@ -1160,13 +1160,132 @@ emit_statx_attributes(yaml_emitter_t *emitter, uint64_t mask,
     return yaml_emit_mapping_end(emitter);
 }
 
-static bool
-parse_statx_attributes(yaml_parser_t *parser __attribute__((unused)),
-                       uint64_t *mask __attribute__((unused)),
-                       uint64_t *attributes __attribute__((unused)))
+static uint64_t
+str2statx_attribute(const char *string)
 {
-    error(EXIT_FAILURE, ENOSYS, __func__);
-    __builtin_unreachable();
+    switch (*string++) {
+    case 'a': /* append, automount */
+        switch (*string++) {
+        case 'p': /* append */
+            if (strcmp(string, "pend"))
+                break;
+            return STATX_ATTR_APPEND;
+        case 'u': /* automount */
+            if (strcmp(string, "tomount"))
+                break;
+            return STATX_ATTR_AUTOMOUNT;
+        }
+        break;
+    case 'c': /* compressed */
+        if (strcmp(string, "ompressed"))
+            break;
+        return STATX_ATTR_COMPRESSED;
+    case 'd': /* dax */
+        if (strcmp(string, "ax"))
+            break;
+        return STATX_ATTR_DAX;
+    case 'e': /* encrypted */
+        if (strcmp(string, "ncrypted"))
+            break;
+        return STATX_ATTR_ENCRYPTED;
+    case 'i': /* immutable */
+        if (strcmp(string, "mmutable"))
+            break;
+        return STATX_ATTR_IMMUTABLE;
+    case 'm': /* mount-root */
+        if (strcmp(string, "ount-root"))
+            break;
+        return STATX_ATTR_MOUNT_ROOT;
+    case 'n': /* nodump */
+        if (strcmp(string, "odump"))
+            break;
+        return STATX_ATTR_NODUMP;
+    case 'v': /* verity */
+        if (strcmp(string, "erity"))
+            break;
+        return STATX_ATTR_VERITY;
+    }
+
+    errno = EINVAL;
+    return 0;
+}
+
+static bool
+_parse_statx_attributes(yaml_parser_t *parser, uint64_t *mask,
+                        uint64_t *attributes)
+{
+    *mask = 0;
+
+    while (true) {
+        yaml_event_t event;
+        const char *name;
+        int save_errno;
+        uint64_t attr;
+        bool success;
+        bool is_set;
+
+        if (!yaml_parser_parse(parser, &event))
+            parser_error(parser);
+
+        if (event.type == YAML_MAPPING_END_EVENT) {
+            yaml_event_delete(&event);
+            return true;
+        }
+
+        if (!yaml_parse_string(&event, &name, NULL)) {
+            save_errno = errno;
+            yaml_event_delete(&event);
+            errno = save_errno;
+            return false;
+        }
+
+        attr = str2statx_attribute(name);
+        save_errno = errno;
+        yaml_event_delete(&event);
+        if (attr == 0) {
+            errno = save_errno;
+            return false;
+        }
+
+        *mask |= attr;
+
+        if (!yaml_parser_parse(parser, &event))
+            parser_error(parser);
+
+        success = yaml_parse_boolean(&event, &is_set);
+        save_errno = errno;
+        yaml_event_delete(&event);
+        if (!success) {
+            errno = save_errno;
+            return false;
+        }
+
+        if (is_set)
+            *attributes |= attr;
+        else
+            *attributes &= ~attr;
+    }
+}
+
+static bool
+parse_statx_attributes(yaml_parser_t *parser, uint64_t *mask,
+                       uint64_t *attributes)
+{
+    yaml_event_type_t type;
+    yaml_event_t event;
+
+    if (!yaml_parser_parse(parser, &event))
+        parser_error(parser);
+
+    type = event.type;
+    yaml_event_delete(&event);
+
+    if (type != YAML_MAPPING_START_EVENT) {
+        errno = EINVAL;
+        return false;
+    }
+
+    return _parse_statx_attributes(parser, mask, attributes);
 }
 
         /*------------------------------------------------------------*
