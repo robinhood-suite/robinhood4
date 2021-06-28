@@ -1056,13 +1056,15 @@ emit_statx_attributes(yaml_emitter_t *emitter, uint64_t mask,
          *------------------------------------------------------------*/
 
 static bool
-emit_statx_timestamp(
-        yaml_emitter_t *emitter __attribute__((unused)),
-        const struct statx_timestamp *timestamp __attribute__((unused))
-        )
+emit_statx_timestamp(yaml_emitter_t *emitter,
+                     const struct statx_timestamp *timestamp)
 {
-    error(EXIT_FAILURE, ENOSYS, __func__);
-    __builtin_unreachable();
+    return yaml_emit_mapping_start(emitter, NULL)
+        && YAML_EMIT_STRING(emitter, "sec")
+        && yaml_emit_integer(emitter, timestamp->tv_sec)
+        && YAML_EMIT_STRING(emitter, "nsec")
+        && yaml_emit_unsigned_integer(emitter, timestamp->tv_nsec)
+        && yaml_emit_mapping_end(emitter);
 }
 
         /*------------------------------------------------------------*
