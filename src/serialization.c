@@ -946,11 +946,27 @@ parse_xattrs(yaml_parser_t *parser, struct rbh_value_map *map)
          *------------------------------------------------------------*/
 
 static bool
-emit_filetype(yaml_emitter_t *emitter __attribute__((unused)),
-              uint16_t filetype __attribute__((unused)))
+emit_filetype(yaml_emitter_t *emitter, uint16_t filetype)
 {
-    error(EXIT_FAILURE, ENOSYS, __func__);
-    __builtin_unreachable();
+    switch (filetype) {
+    case S_IFSOCK:
+        return YAML_EMIT_STRING(emitter, "socket");
+    case S_IFLNK:
+        return YAML_EMIT_STRING(emitter, "link");
+    case S_IFREG:
+        return YAML_EMIT_STRING(emitter, "file");
+    case S_IFBLK:
+        return YAML_EMIT_STRING(emitter, "blockdev");
+    case S_IFDIR:
+        return YAML_EMIT_STRING(emitter, "directory");
+    case S_IFCHR:
+        return YAML_EMIT_STRING(emitter, "chardev");
+    case S_IFIFO:
+        return YAML_EMIT_STRING(emitter, "fifo");
+    default:
+        errno = EINVAL;
+        return false;
+    }
 }
 
         /*------------------------------------------------------------*
