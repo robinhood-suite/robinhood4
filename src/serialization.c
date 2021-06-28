@@ -6,6 +6,7 @@
 
 #include <errno.h>
 #include <error.h>
+#include <limits.h>
 #include <stdlib.h>
 
 #include <sys/stat.h>
@@ -617,13 +618,118 @@ emit_regex(yaml_emitter_t *emitter, const char *regex, unsigned int options)
         && yaml_emit_mapping_end(emitter);
 }
 
-static bool
-parse_regex_mapping(yaml_parser_t *parser __attribute__((unused)),
-                    const char **regex __attribute__((unused)),
-                    unsigned int *options __attribute__((unused)))
+enum regex_field {
+    RF_UNKNOWN  = 0x0,
+    RF_REGEX    = 0x1,
+    RF_OPTIONS  = 0x2,
+};
+
+static enum regex_field
+regex_field_tokenize(const char *key)
 {
-    error(EXIT_FAILURE, ENOSYS, __func__);
-    __builtin_unreachable();
+    switch (*key++) {
+    case 'r': /* regex */
+        if (strcmp(key, "egex"))
+            break;
+        return RF_REGEX;
+    case 'o': /* options */
+        if (strcmp(key, "ptions"))
+            break;
+        return RF_OPTIONS;
+    }
+
+    errno = EINVAL;
+    return RF_UNKNOWN;
+}
+
+static void
+parse_regex_field(yaml_parser_t *parser, const char *key, const char **regex,
+                  unsigned int *options, unsigned int *seen)
+{
+    yaml_event_t event;
+    uintmax_t umax;
+
+    if (!yaml_parser_parse(parser, &event))
+        parser_error(parser);
+
+    switch (regex_field_tokenize(key)) {
+    case RF_UNKNOWN:
+        break;
+    case RF_REGEX:
+        if (yaml_parse_string(&event, regex, NULL)) {
+            /* Instead of making a copy of `regex', we are just going to keep
+             * a copy of the event and free it later.
+             */
+            if (rbh_sstack_push(context.events, &event, sizeof(event)) == NULL)
+                error(EXIT_FAILURE, errno, "rbh_sstack_push");
+            *seen |= RF_REGEX;
+            return;
+        }
+        break;
+    case RF_OPTIONS:
+        if (yaml_parse_unsigned_integer(&event, &umax)) {
+            if (umax > UINT_MAX) {
+                errno = ERANGE;
+                break;
+            }
+
+            *options = umax;
+            *seen |= RF_OPTIONS;
+            yaml_event_delete(&event);
+            return;
+        }
+        break;
+    }
+
+    error(0, errno, "%s, l.%zu:%zu", key, event.start_mark.line,
+          event.start_mark.column);
+
+    if (!yaml_parser_skip(parser, event.type))
+        parser_error(parser);
+    yaml_event_delete(&event);
+}
+
+static bool
+parse_regex_mapping(yaml_parser_t *parser, const char **regex,
+                    unsigned int *options)
+{
+    unsigned int seen = 0;
+    bool end = false;
+
+    *options = 0;
+
+    do {
+        yaml_event_t event;
+        const char *key;
+
+        if (!yaml_parser_parse(parser, &event))
+            parser_error(parser);
+
+        switch (event.type) {
+        case YAML_MAPPING_END_EVENT:
+            end = true;
+            break;
+        case YAML_SCALAR_EVENT:
+            if (yaml_parse_string(&event, &key, NULL)) {
+                parse_regex_field(parser, key, regex, options, &seen);
+                break;
+            }
+
+            /* Otherwise, skip it */
+            __attribute__((fallthrough));
+        default:
+            /* Ignore this key/value */
+            if (!yaml_parser_skip(parser, event.type))
+                parser_error(parser);
+            if (!yaml_parser_skip_next(parser))
+                parser_error(parser);
+        }
+
+        yaml_event_delete(&event);
+    } while (!end);
+
+    /* "options" is optional */
+    return seen & RF_REGEX;
 }
 
     /*--------------------------------------------------------------------*
