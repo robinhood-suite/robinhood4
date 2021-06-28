@@ -149,11 +149,38 @@ emit_uint64(yaml_emitter_t *emitter, uint64_t u)
 }
 
 static bool
-parse_uint64(const yaml_event_t *event __attribute__((unused)),
-             uint64_t *u __attribute__((unused)))
+parse_uint64(const yaml_event_t *event, uint64_t *u)
 {
-    error(EXIT_FAILURE, ENOSYS, __func__);
-    __builtin_unreachable();
+    const char *value = yaml_scalar_value(event);
+    const char *tag = yaml_scalar_tag(event);
+    uintmax_t umax;
+    int save_errno;
+    char *end;
+
+    assert(event->type == YAML_SCALAR_EVENT);
+
+    if (tag ? strcmp(tag, UINT64_TAG) : !yaml_scalar_is_plain(event)) {
+        errno = EINVAL;
+        return false;
+    }
+
+    save_errno = errno;
+    errno = 0;
+    umax = strtoumax(value, &end, 0);
+    if ((umax == UINTMAX_MAX) && errno == ERANGE)
+        return false;
+    if (umax > UINT64_MAX) {
+        errno = ERANGE;
+        return false;
+    }
+    if (*end != '\0') {
+        errno = EINVAL;
+        return false;
+    }
+
+    *u = umax;
+    errno = save_errno;
+    return true;
 }
 
     /*--------------------------------------------------------------------*
