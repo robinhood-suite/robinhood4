@@ -214,6 +214,14 @@ emit_rbh_value_map(yaml_emitter_t *emitter, const struct rbh_value_map *map)
     return yaml_emit_mapping_end(emitter);
 }
 
+static bool
+parse_rbh_value_map(yaml_parser_t *parser __attribute__((unused)),
+                    struct rbh_value_map *map __attribute__((unused)))
+{
+    error(EXIT_FAILURE, ENOSYS, __func__);
+    __builtin_unreachable();
+}
+
     /*--------------------------------------------------------------------*
      |                               regex                                |
      *--------------------------------------------------------------------*/
@@ -275,11 +283,21 @@ emit_rbh_value(yaml_emitter_t *emitter, const struct rbh_value *value)
  *----------------------------------------------------------------------------*/
 
 static bool
-parse_xattrs(yaml_parser_t *parser __attribute__((unused)),
-             struct rbh_value_map *map __attribute__((unused)))
+parse_xattrs(yaml_parser_t *parser, struct rbh_value_map *map)
 {
-    error(EXIT_FAILURE, ENOSYS, __func__);
-    __builtin_unreachable();
+    yaml_event_t event;
+
+    if (!yaml_parser_parse(parser, &event))
+        parser_error(parser);
+
+    if (event.type != YAML_MAPPING_START_EVENT) {
+        yaml_event_delete(&event);
+        errno = EINVAL;
+        return false;
+    }
+    yaml_event_delete(&event);
+
+    return parse_rbh_value_map(parser, map);
 }
 
 /*----------------------------------------------------------------------------*
