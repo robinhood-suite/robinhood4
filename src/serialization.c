@@ -2515,19 +2515,86 @@ parse_delete(yaml_parser_t *parser, struct rbh_fsevent *delete)
 #define NS_XATTR_TAG "!ns_xattr"
 
 static bool
-emit_ns_xattr(yaml_emitter_t *emitter __attribute__((unused)),
-              const struct rbh_fsevent *ns_xattr __attribute__((unused)))
+emit_ns_xattr(yaml_emitter_t *emitter, const struct rbh_fsevent *ns_xattr)
 {
-    error(EXIT_FAILURE, ENOSYS, __func__);
-    __builtin_unreachable();
+    const struct rbh_id *parent = ns_xattr->ns.parent_id;
+    const char *name = ns_xattr->ns.name;
+
+    return yaml_emit_mapping_start(emitter, NS_XATTR_TAG)
+        && YAML_EMIT_STRING(emitter, "id")
+        && yaml_emit_binary(emitter, ns_xattr->id.data, ns_xattr->id.size)
+        && YAML_EMIT_STRING(emitter, "xattrs")
+        && emit_rbh_value_map(emitter, &ns_xattr->xattrs)
+        && YAML_EMIT_STRING(emitter, "parent")
+        && yaml_emit_binary(emitter, parent->data, parent->size)
+        && YAML_EMIT_STRING(emitter, "name")
+        && YAML_EMIT_STRING(emitter, name)
+        && yaml_emit_mapping_end(emitter);
 }
 
 static bool
-parse_ns_xattr(yaml_parser_t *parser __attribute__((unused)),
-               struct rbh_fsevent *ns_xattr __attribute__((unused)))
+parse_ns_xattr(yaml_parser_t *parser, struct rbh_fsevent *ns_xattr)
 {
-    error(EXIT_FAILURE, ENOSYS, __func__);
-    __builtin_unreachable();
+    static struct rbh_id parent;
+    struct {
+        bool id:1;
+        bool parent:1;
+        bool name:1;
+    } seen = {};
+
+    while (true) {
+        enum link_field field;
+        yaml_event_t event;
+        const char *key;
+        int save_errno;
+        bool success;
+
+        if (!yaml_parser_parse(parser, &event))
+            parser_error(parser);
+
+        if (event.type == YAML_MAPPING_END_EVENT) {
+            yaml_event_delete(&event);
+            break;
+        }
+
+        if (!yaml_parse_string(&event, &key, NULL)) {
+            save_errno = errno;
+            yaml_event_delete(&event);
+            errno = save_errno;
+            return false;
+        }
+
+        field = str2link_field(key);
+        save_errno = errno;
+        yaml_event_delete(&event);
+
+        switch (field) {
+        case LF_UNKNOWN:
+            errno = save_errno;
+            return false;
+        case LF_ID:
+            seen.id = true;
+            success = parse_id(parser, &ns_xattr->id);
+            break;
+        case LF_XATTRS:
+            success = parse_rbh_value_map(parser, &ns_xattr->xattrs);
+            break;
+        case LF_PARENT:
+            seen.parent = true;
+            success = parse_id(parser, &parent);
+            ns_xattr->ns.parent_id = &parent;
+            break;
+        case LF_NAME:
+            seen.name = true;
+            success = parse_name(parser, &ns_xattr->ns.name);
+            break;
+        }
+
+        if (!success)
+            return false;
+    }
+
+    return seen.id && seen.parent && seen.name;
 }
 
     /*--------------------------------------------------------------------*
