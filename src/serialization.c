@@ -2515,6 +2515,14 @@ parse_delete(yaml_parser_t *parser, struct rbh_fsevent *delete)
 #define NS_XATTR_TAG "!ns_xattr"
 
 static bool
+emit_ns_xattr(yaml_emitter_t *emitter __attribute__((unused)),
+              const struct rbh_fsevent *ns_xattr __attribute__((unused)))
+{
+    error(EXIT_FAILURE, ENOSYS, __func__);
+    __builtin_unreachable();
+}
+
+static bool
 parse_ns_xattr(yaml_parser_t *parser __attribute__((unused)),
                struct rbh_fsevent *ns_xattr __attribute__((unused)))
 {
@@ -2529,6 +2537,14 @@ parse_ns_xattr(yaml_parser_t *parser __attribute__((unused)),
 #define INODE_XATTR_TAG "!inode_xattr"
 
 static bool
+emit_inode_xattr(yaml_emitter_t *emitter __attribute__((unused)),
+                 const struct rbh_fsevent *inode_xattr __attribute__((unused)))
+{
+    error(EXIT_FAILURE, ENOSYS, __func__);
+    __builtin_unreachable();
+}
+
+static bool
 parse_inode_xattr(yaml_parser_t *parser __attribute__((unused)),
                   struct rbh_fsevent *inode_xattr __attribute__((unused)))
 {
@@ -2539,11 +2555,15 @@ parse_inode_xattr(yaml_parser_t *parser __attribute__((unused)),
 /*---------------------------------- xattr -----------------------------------*/
 
 static bool
-emit_xattr(yaml_emitter_t *emitter __attribute__((unused)),
-           const struct rbh_fsevent *xattr __attribute__((unused)))
+emit_xattr(yaml_emitter_t *emitter, const struct rbh_fsevent *xattr)
 {
-    error(EXIT_FAILURE, ENOSYS, __func__);
-    __builtin_unreachable();
+    if (xattr->ns.parent_id) {
+        assert(xattr->ns.name);
+        return emit_ns_xattr(emitter, xattr);
+    }
+    assert(xattr->ns.name == NULL);
+
+    return emit_inode_xattr(emitter, xattr);
 }
 
 /*----------------------------------------------------------------------------*
