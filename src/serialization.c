@@ -2452,19 +2452,56 @@ parse_unlink(yaml_parser_t *parser, struct rbh_fsevent *unlink)
 #define DELETE_TAG "!delete"
 
 static bool
-emit_delete(yaml_emitter_t *emitter __attribute__((unused)),
-            const struct rbh_fsevent *delete __attribute__((unused)))
+emit_delete(yaml_emitter_t *emitter, const struct rbh_fsevent *delete)
 {
-    error(EXIT_FAILURE, ENOSYS, __func__);
-    __builtin_unreachable();
+    return yaml_emit_mapping_start(emitter, DELETE_TAG)
+        && YAML_EMIT_STRING(emitter, "id")
+        && yaml_emit_binary(emitter, delete->id.data, delete->id.size)
+        && yaml_emit_mapping_end(emitter);
 }
 
 static bool
-parse_delete(yaml_parser_t *parser __attribute__((unused)),
-             struct rbh_fsevent *delete __attribute__((unused)))
+parse_delete(yaml_parser_t *parser, struct rbh_fsevent *delete)
 {
-    error(EXIT_FAILURE, ENOSYS, __func__);
-    __builtin_unreachable();
+    struct {
+        bool id:1;
+    } seen = {};
+
+    while (true) {
+        yaml_event_t event;
+        const char *key;
+        int save_errno;
+        int cmp;
+
+        if (!yaml_parser_parse(parser, &event))
+            parser_error(parser);
+
+        if (event.type == YAML_MAPPING_END_EVENT) {
+            yaml_event_delete(&event);
+            break;
+        }
+
+        if (!yaml_parse_string(&event, &key, NULL)) {
+            save_errno = errno;
+            yaml_event_delete(&event);
+            errno = save_errno;
+            return false;
+        }
+
+        cmp = strcmp(key, "id");
+        yaml_event_delete(&event);
+        if (cmp) {
+            errno = EINVAL;
+            return false;
+        }
+
+        if (!parse_id(parser, &delete->id))
+            return false;
+
+        seen.id = true;
+    }
+
+    return seen.id;
 }
 
 /*----------------------------------------------------------------------------*
