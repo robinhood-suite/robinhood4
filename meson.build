@@ -17,6 +17,7 @@ add_project_arguments(['-D_DEFAULT_SOURCE', '-D_GNU_SOURCE',], language: 'c')
 # Dependencies
 librobinhood = dependency('robinhood', version: '>=0.0.0')
 libyaml = dependency('yaml-0.1', version: '>=0.2.5')
+miniyaml = dependency('miniyaml', version: '>=0.0.0')
 
 includes = include_directories('.', 'include')
 
@@ -28,6 +29,6 @@ executable(
         'src/sources/file.c',
     ],
     include_directories: includes,
-    dependencies: [librobinhood, libyaml],
+    dependencies: [librobinhood, libyaml, miniyaml],
     install: true,
 )
