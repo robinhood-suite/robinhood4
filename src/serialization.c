@@ -1326,11 +1326,9 @@ parse_nlink(yaml_parser_t *parser, uint32_t *nlink)
          *------------------------------------------------------------*/
 
 static bool
-parse_uid(yaml_parser_t *parser __attribute__((unused)),
-          uint32_t *uid __attribute__((unused)))
+parse_uid(yaml_parser_t *parser, uint32_t *uid)
 {
-    error(EXIT_FAILURE, ENOSYS, __func__);
-    __builtin_unreachable();
+    return parse_next_uint32(parser, uid);
 }
 
         /*------------------------------------------------------------*
