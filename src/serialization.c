@@ -1420,12 +1420,117 @@ emit_statx_timestamp(yaml_emitter_t *emitter,
         && yaml_emit_mapping_end(emitter);
 }
 
-static bool
-parse_statx_timestamp(yaml_parser_t *parser __attribute__((unused)),
-                      struct statx_timestamp *timestamp __attribute__((unused)))
+
+enum statx_timestamp_field {
+    STF_UNKNOWN,
+    STF_SEC,
+    STF_NSEC,
+};
+
+static enum statx_timestamp_field
+str2statx_timestamp_field(const char *string)
 {
-    error(EXIT_FAILURE, ENOSYS, __func__);
-    __builtin_unreachable();
+    switch (*string++) {
+    case 'n': /* nsec */
+        if (strcmp(string, "sec"))
+            break;
+        return STF_NSEC;
+    case 's': /* sec */
+        if (strcmp(string, "ec"))
+            break;
+        return STF_SEC;
+    }
+
+    errno = EINVAL;
+    return STF_UNKNOWN;
+}
+
+static bool
+_parse_statx_timestamp(yaml_parser_t *parser, struct statx_timestamp *timestamp)
+{
+    struct {
+        bool sec:1;
+        bool nsec:1;
+    } seen = {};
+
+    while (true) {
+        enum statx_timestamp_field field;
+        yaml_event_t event;
+        const char *key;
+        int save_errno;
+
+        if (!yaml_parser_parse(parser, &event))
+            parser_error(parser);
+
+        if (event.type == YAML_MAPPING_END_EVENT) {
+            yaml_event_delete(&event);
+            break;
+        }
+
+        if (!yaml_parse_string(&event, &key, NULL)) {
+            save_errno = errno;
+            yaml_event_delete(&event);
+            errno = save_errno;
+            return false;
+        }
+
+        field = str2statx_timestamp_field(key);
+        save_errno = errno;
+        yaml_event_delete(&event);
+        switch (field) {
+        case STF_UNKNOWN:
+            errno = save_errno;
+            return false;
+        case STF_SEC:
+            if (!yaml_parser_parse(parser, &event))
+                parser_error(parser);
+
+            static_assert(sizeof(timestamp->tv_sec) == sizeof(int64_t), "");
+            seen.sec = parse_int64(&event, (int64_t *)&timestamp->tv_sec);
+            save_errno = errno;
+            yaml_event_delete(&event);
+            if (!seen.sec) {
+                errno = save_errno;
+                return false;
+            }
+            break;
+        case STF_NSEC:
+            if (!yaml_parser_parse(parser, &event))
+                parser_error(parser);
+
+            seen.nsec = parse_uint32(&event, &timestamp->tv_nsec);
+            save_errno = errno;
+            yaml_event_delete(&event);
+            if (!seen.nsec) {
+                errno = save_errno;
+                return false;
+            }
+            break;
+        }
+    }
+
+    errno = EINVAL;
+    return seen.sec && seen.nsec;
+}
+
+static bool
+parse_statx_timestamp(yaml_parser_t *parser, struct statx_timestamp *timestamp)
+{
+    yaml_event_type_t type;
+    yaml_event_t event;
+
+    if (!yaml_parser_parse(parser, &event))
+        parser_error(parser);
+
+    type = event.type;
+    yaml_event_delete(&event);
+
+    if (type != YAML_MAPPING_START_EVENT) {
+        errno = EINVAL;
+        return false;
+    }
+
+    return _parse_statx_timestamp(parser, timestamp);
 }
 
         /*------------------------------------------------------------*
