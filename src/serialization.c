@@ -116,6 +116,9 @@ parse_id(yaml_parser_t *parser, struct rbh_id *id)
  |                                   value                                    |
  *----------------------------------------------------------------------------*/
 
+static bool
+emit_rbh_value(yaml_emitter_t *emitter, const struct rbh_value *value);
+
     /*--------------------------------------------------------------------*
      |                                map                                 |
      *--------------------------------------------------------------------*/
@@ -123,6 +126,28 @@ parse_id(yaml_parser_t *parser, struct rbh_id *id)
 static bool
 emit_rbh_value_map(yaml_emitter_t *emitter __attribute__((unused)),
                    const struct rbh_value_map *map __attribute__((unused)))
+{
+    if (!yaml_emit_mapping_start(emitter, NULL))
+        return false;
+
+    for (size_t i = 0; i < map->count; i++) {
+        const struct rbh_value_pair *pair = &map->pairs[i];
+
+        if (!YAML_EMIT_STRING(emitter, pair->key))
+            return false;
+
+        if (!emit_rbh_value(emitter, pair->value))
+            return false;
+    }
+
+    return yaml_emit_mapping_end(emitter);
+}
+
+/*---------------------------------- value -----------------------------------*/
+
+static bool
+emit_rbh_value(yaml_emitter_t *emitter __attribute__((unused)),
+               const struct rbh_value *value __attribute__((unused)))
 {
     error(EXIT_FAILURE, ENOSYS, __func__);
     __builtin_unreachable();
