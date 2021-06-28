@@ -1399,11 +1399,9 @@ parse_blocks(yaml_parser_t *parser, uint64_t *blocks)
          *------------------------------------------------------------*/
 
 static bool
-parse_blksize(yaml_parser_t *parser __attribute__((unused)),
-              uint32_t *blksize __attribute__((unused)))
+parse_blksize(yaml_parser_t *parser, uint32_t *blksize)
 {
-    error(EXIT_FAILURE, ENOSYS, __func__);
-    __builtin_unreachable();
+    return parse_next_uint32(parser, blksize);
 }
 
         /*------------------------------------------------------------*
