@@ -1379,11 +1379,9 @@ parse_ino(yaml_parser_t *parser, uint64_t *ino)
          *------------------------------------------------------------*/
 
 static bool
-parse_size(yaml_parser_t *parser __attribute__((unused)),
-           uint64_t *size __attribute__((unused)))
+parse_size(yaml_parser_t *parser, uint64_t *size)
 {
-    error(EXIT_FAILURE, ENOSYS, __func__);
-    __builtin_unreachable();
+    return parse_next_uint64(parser, size);
 }
 
         /*------------------------------------------------------------*
