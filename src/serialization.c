@@ -988,12 +988,67 @@ emit_octal_unsigned_integer(yaml_emitter_t *emitter, uintmax_t u)
          *------------------------------------------------------------*/
 
 static bool
-emit_statx_attributes(yaml_emitter_t *emitter __attribute__((unused)),
-                      uint64_t mask __attribute__((unused)),
-                      uint64_t attributes __attribute__((unused)))
+emit_statx_attributes(yaml_emitter_t *emitter, uint64_t mask,
+                      uint64_t attributes)
 {
-    error(EXIT_FAILURE, ENOSYS, __func__);
-    __builtin_unreachable();
+    if (!yaml_emit_mapping_start(emitter, NULL))
+        return false;
+
+    if (mask & STATX_ATTR_COMPRESSED) {
+        if (!YAML_EMIT_STRING(emitter, "compressed")
+         || !yaml_emit_boolean(emitter, attributes & STATX_ATTR_COMPRESSED))
+            return false;
+    }
+
+    if (mask & STATX_ATTR_IMMUTABLE) {
+        if (!YAML_EMIT_STRING(emitter, "immutable")
+         || !yaml_emit_boolean(emitter, attributes & STATX_ATTR_IMMUTABLE))
+            return false;
+    }
+
+    if (mask & STATX_ATTR_APPEND) {
+        if (!YAML_EMIT_STRING(emitter, "append")
+         || !yaml_emit_boolean(emitter, attributes & STATX_ATTR_APPEND))
+            return false;
+    }
+
+    if (mask & STATX_ATTR_NODUMP) {
+        if (!YAML_EMIT_STRING(emitter, "nodump")
+         || !yaml_emit_boolean(emitter, attributes & STATX_ATTR_NODUMP))
+            return false;
+    }
+
+    if (mask & STATX_ATTR_ENCRYPTED) {
+        if (!YAML_EMIT_STRING(emitter, "encrypted")
+         || !yaml_emit_boolean(emitter, attributes & STATX_ATTR_ENCRYPTED))
+            return false;
+    }
+
+    if (mask & STATX_ATTR_AUTOMOUNT) {
+        if (!YAML_EMIT_STRING(emitter, "automount")
+         || !yaml_emit_boolean(emitter, attributes & STATX_ATTR_AUTOMOUNT))
+            return false;
+    }
+
+    if (mask & STATX_ATTR_MOUNT_ROOT) {
+        if (!YAML_EMIT_STRING(emitter, "mount-root")
+         || !yaml_emit_boolean(emitter, attributes & STATX_ATTR_MOUNT_ROOT))
+            return false;
+    }
+
+    if (mask & STATX_ATTR_VERITY) {
+        if (!YAML_EMIT_STRING(emitter, "verity")
+         || !yaml_emit_boolean(emitter, attributes & STATX_ATTR_VERITY))
+            return false;
+    }
+
+    if (mask & STATX_ATTR_DAX) {
+        if (!YAML_EMIT_STRING(emitter, "dax")
+         || !yaml_emit_boolean(emitter, attributes & STATX_ATTR_DAX))
+            return false;
+    }
+
+    return yaml_emit_mapping_end(emitter);
 }
 
         /*------------------------------------------------------------*
