@@ -14,6 +14,19 @@ project(
 # GNU extensions
 add_project_arguments(['-D_DEFAULT_SOURCE', '-D_GNU_SOURCE',], language: 'c')
 
+# Configuration checks
+conf_data = configuration_data()
+
+## Functions
+cc = meson.get_compiler('c')
+have_statx = cc.has_function('statx', args: '-D_GNU_SOURCE',
+                             prefix: '#include <sys/stat.h>')
+conf_data.set('HAVE_STATX', have_statx)
+
+configure_file(input: 'config.h.in', output: 'config.h',
+               configuration: conf_data)
+add_project_arguments(['-DHAVE_CONFIG_H',], language: 'c')
+
 # Dependencies
 librobinhood = dependency('robinhood', version: '>=0.0.0')
 libyaml = dependency('yaml-0.1', version: '>=0.2.5')

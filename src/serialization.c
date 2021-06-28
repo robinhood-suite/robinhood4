@@ -8,7 +8,13 @@
 #include <error.h>
 #include <stdlib.h>
 
+#include <sys/stat.h>
+#ifndef HAVE_STATX
+# include <robinhood/statx.h>
+#endif
+
 #include <miniyaml.h>
+#include <robinhood.h>
 
 #include "serialization.h"
 
@@ -20,25 +26,201 @@ parser_error(yaml_parser_t *parser)
 }
 
 /*----------------------------------------------------------------------------*
+ |                                     id                                     |
+ *----------------------------------------------------------------------------*/
+
+static bool
+parse_id(yaml_parser_t *parser __attribute__((unused)),
+         struct rbh_id *id __attribute__((unused)))
+{
+    error(EXIT_FAILURE, ENOSYS, __func__);
+    __builtin_unreachable();
+}
+
+/*----------------------------------------------------------------------------*
+ |                                   value                                    |
+ *----------------------------------------------------------------------------*/
+
+    /*--------------------------------------------------------------------*
+     |                                map                                 |
+     *--------------------------------------------------------------------*/
+
+static bool
+emit_rbh_value_map(yaml_emitter_t *emitter __attribute__((unused)),
+                   const struct rbh_value_map *map __attribute__((unused)))
+{
+    error(EXIT_FAILURE, ENOSYS, __func__);
+    __builtin_unreachable();
+}
+
+/*----------------------------------------------------------------------------*
+ |                                   xattrs                                   |
+ *----------------------------------------------------------------------------*/
+
+static bool
+parse_xattrs(yaml_parser_t *parser __attribute__((unused)),
+             struct rbh_value_map *map __attribute__((unused)))
+{
+    error(EXIT_FAILURE, ENOSYS, __func__);
+    __builtin_unreachable();
+}
+
+/*----------------------------------------------------------------------------*
  |                                   upsert                                   |
  *----------------------------------------------------------------------------*/
 
-#define UPSERT_TAG "!upsert"
+    /*--------------------------------------------------------------------*
+     |                               statx                                |
+     *--------------------------------------------------------------------*/
 
 static bool
-emit_upsert(yaml_emitter_t *emitter __attribute__((unused)),
-            const struct rbh_fsevent *upsert __attribute__((unused)))
+emit_statx(yaml_emitter_t *emitter __attribute__((unused)),
+           const struct statx *statxbuf __attribute__((unused)))
 {
     error(EXIT_FAILURE, ENOSYS, __func__);
     __builtin_unreachable();
 }
 
 static bool
-parse_upsert(yaml_parser_t *parser __attribute__((unused)),
-             struct rbh_fsevent *upsert __attribute__((unused)))
+parse_statx(yaml_parser_t *parser __attribute__((unused)),
+            struct statx *statxbuf __attribute__((unused)))
 {
     error(EXIT_FAILURE, ENOSYS, __func__);
     __builtin_unreachable();
+}
+
+    /*--------------------------------------------------------------------*
+     |                              symlink                               |
+     *--------------------------------------------------------------------*/
+
+static bool
+parse_symlink(yaml_parser_t *parser __attribute__((unused)),
+              const char **symlink __attribute__((unused)))
+{
+    error(EXIT_FAILURE, ENOSYS, __func__);
+    __builtin_unreachable();
+}
+
+/*---------------------------------- upsert ----------------------------------*/
+
+#define UPSERT_TAG "!upsert"
+
+static bool
+emit_upsert(yaml_emitter_t *emitter, const struct rbh_fsevent *upsert)
+{
+    const struct statx *statxbuf = upsert->upsert.statx;
+    const char *symlink = upsert->upsert.symlink;
+
+    return yaml_emit_mapping_start(emitter, UPSERT_TAG)
+        && YAML_EMIT_STRING(emitter, "id")
+        && yaml_emit_binary(emitter, upsert->id.data, upsert->id.size)
+        && YAML_EMIT_STRING(emitter, "xattrs")
+        && emit_rbh_value_map(emitter, &upsert->xattrs)
+        && (statxbuf ? (YAML_EMIT_STRING(emitter, "statx")
+                     && emit_statx(emitter, statxbuf))
+                     : true)
+        && (symlink ? YAML_EMIT_STRING(emitter, "symlink")
+                   && YAML_EMIT_STRING(emitter, symlink) : true)
+        && yaml_emit_mapping_end(emitter);
+}
+
+enum upsert_field {
+    UF_UNKNOWN,
+    UF_ID,
+    UF_XATTRS,
+    UF_STATX,
+    UF_SYMLINK,
+};
+
+static enum upsert_field
+str2upsert_field(const char *string)
+{
+    switch (*string++) {
+    case 'i': /* id */
+        if (strcmp(string, "d"))
+            break;
+        return UF_ID;
+    case 's': /* statx, symlink */
+        switch (*string++) {
+        case 't': /* statx */
+            if (strcmp(string, "atx"))
+                break;
+            return UF_STATX;
+        case 'y': /* symlink */
+            if (strcmp(string, "mlink"))
+                break;
+            return UF_SYMLINK;
+        }
+        break;
+    case 'x': /* xattrs */
+        if (strcmp(string, "attrs"))
+            break;
+        return UF_XATTRS;
+    }
+
+    errno = EINVAL;
+    return UF_UNKNOWN;
+}
+
+static bool
+parse_upsert(yaml_parser_t *parser, struct rbh_fsevent *upsert)
+{
+    static struct statx statxbuf;
+    struct {
+        bool id:1;
+    } seen = {};
+
+    while (true) {
+        enum upsert_field field;
+        yaml_event_t event;
+        const char *key;
+        int save_errno;
+        bool success;
+
+        if (!yaml_parser_parse(parser, &event))
+            parser_error(parser);
+
+        if (event.type == YAML_MAPPING_END_EVENT) {
+            yaml_event_delete(&event);
+            break;
+        }
+
+        if (!yaml_parse_string(&event, &key, NULL)) {
+            save_errno = errno;
+            yaml_event_delete(&event);
+            errno = save_errno;
+            return false;
+        }
+
+        field = str2upsert_field(key);
+        save_errno = errno;
+        yaml_event_delete(&event);
+
+        switch (field) {
+        case UF_UNKNOWN:
+            errno = save_errno;
+            return false;
+        case UF_ID:
+            success = parse_id(parser, &upsert->id);
+            seen.id = true;
+            break;
+        case UF_XATTRS:
+            success = parse_xattrs(parser, &upsert->xattrs);
+            break;
+        case UF_STATX:
+            success = parse_statx(parser, &statxbuf);
+            upsert->upsert.statx = &statxbuf;
+            break;
+        case UF_SYMLINK:
+            success = parse_symlink(parser, &upsert->upsert.symlink);
+            break;
+        }
+
+        if (!success)
+            return false;
+    }
+
+    return seen.id;
 }
 
 /*----------------------------------------------------------------------------*
