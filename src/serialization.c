@@ -25,16 +25,91 @@ parser_error(yaml_parser_t *parser)
     __builtin_unreachable();
 }
 
+static struct {
+    struct rbh_sstack *events;
+} context;
+
+static void __attribute__((constructor))
+context_init(void)
+{
+    context.events = rbh_sstack_new(sizeof(yaml_event_t) * 64);
+    if (context.events == NULL)
+        error(EXIT_FAILURE, errno, "rbh_sstack_new");
+}
+
+static void
+events_flush(void)
+{
+    while (true) {
+        yaml_event_t *events;
+        size_t readable;
+
+        events = rbh_sstack_peek(context.events, &readable);
+        if (readable == 0)
+            break;
+        assert(readable % sizeof(*events) == 0);
+
+        for (size_t i = 0; i < readable / sizeof(*events); i++)
+            yaml_event_delete(&events[i]);
+
+        rbh_sstack_pop(context.events, readable);
+    }
+    rbh_sstack_shrink(context.events);
+}
+
+static void
+context_reinit(void)
+{
+    events_flush();
+}
+
+static void __attribute__((destructor))
+context_exit(void)
+{
+    if (context.events) {
+        events_flush();
+        rbh_sstack_destroy(context.events);
+    }
+}
+
 /*----------------------------------------------------------------------------*
  |                                     id                                     |
  *----------------------------------------------------------------------------*/
 
 static bool
-parse_id(yaml_parser_t *parser __attribute__((unused)),
-         struct rbh_id *id __attribute__((unused)))
+parse_id(yaml_parser_t *parser, struct rbh_id *id)
 {
-    error(EXIT_FAILURE, ENOSYS, __func__);
-    __builtin_unreachable();
+    yaml_event_t event;
+
+    if (!yaml_parser_parse(parser, &event))
+        parser_error(parser);
+
+    if (event.type != YAML_SCALAR_EVENT) {
+        yaml_event_delete(&event);
+        errno = EINVAL;
+        return false;
+    }
+
+    /* FIXME: this relies on libyaml's internals, it is a hack */
+    id->data = yaml_scalar_value(&event);
+    if (!yaml_parse_binary(&event, (char *)event.data.scalar.value,
+                           &id->size)) {
+        int save_errno = errno;
+
+        yaml_event_delete(&event);
+        errno = save_errno;
+        return false;
+    }
+
+    if (rbh_sstack_push(context.events, &event, sizeof(event)) == NULL) {
+        int save_errno = errno;
+
+        yaml_event_delete(&event);
+        errno = save_errno;
+        return false;
+    }
+
+    return true;
 }
 
 /*----------------------------------------------------------------------------*
@@ -408,6 +483,8 @@ parse_fsevent(yaml_parser_t *parser, struct rbh_fsevent *fsevent)
     yaml_event_t event;
     const char *tag;
     int save_errno;
+
+    context_reinit();
 
     if (!yaml_parser_parse(parser, &event))
         parser_error(parser);
