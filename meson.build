@@ -38,6 +38,7 @@ executable(
     'rbh-fsevents',
     sources: [
         'rbh-fsevents.c',
+        'src/deduplicator.c',
         'src/serialization.c',
         'src/sources/file.c',
         'src/sinks/backend.c',

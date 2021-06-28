@@ -18,6 +18,7 @@
 #include <robinhood/uri.h>
 #include <robinhood/utils.h>
 
+#include "deduplicator.h"
 #include "source.h"
 #include "sink.h"
 
@@ -143,6 +144,37 @@ sink_exit(void)
 
 static const char *mountpoint;
 
+static const size_t BATCH_SIZE = 1;
+
+static void
+feed(struct sink *sink, struct source *source)
+{
+    struct rbh_mut_iterator *deduplicator;
+
+    deduplicator = deduplicator_new(BATCH_SIZE, source);
+    if (deduplicator == NULL)
+        error(EXIT_FAILURE, errno, "deduplicator_new");
+
+    while (true) {
+        struct rbh_iterator *fsevents;
+
+        errno = 0;
+        fsevents = rbh_mut_iter_next(deduplicator);
+        if (fsevents == NULL)
+            break;
+
+        if (sink_process(sink, fsevents))
+            error(EXIT_FAILURE, errno, "sink_process");
+
+        rbh_iter_destroy(fsevents);
+    }
+
+    if (errno != ENODATA)
+        error(EXIT_FAILURE, errno, "getting the next batch of fsevents");
+
+    rbh_mut_iter_destroy(deduplicator);
+}
+
 int
 main(int argc, char *argv[])
 {
@@ -191,7 +223,6 @@ main(int argc, char *argv[])
     source = source_new(argv[optind++]);
     sink = sink_new(argv[optind++]);
 
-    /* TODO: feed SOURCE's fsevents to DESTINATION */
-
-    error(EXIT_FAILURE, ENOSYS, "%s", __func__);
+    feed(sink, source);
+    return error_message_count == 0 ? EXIT_SUCCESS : EXIT_FAILURE;
 }
