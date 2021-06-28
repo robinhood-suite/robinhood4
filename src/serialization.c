@@ -2604,19 +2604,91 @@ parse_ns_xattr(yaml_parser_t *parser, struct rbh_fsevent *ns_xattr)
 #define INODE_XATTR_TAG "!inode_xattr"
 
 static bool
-emit_inode_xattr(yaml_emitter_t *emitter __attribute__((unused)),
-                 const struct rbh_fsevent *inode_xattr __attribute__((unused)))
+emit_inode_xattr(yaml_emitter_t *emitter, const struct rbh_fsevent *inode_xattr)
 {
-    error(EXIT_FAILURE, ENOSYS, __func__);
-    __builtin_unreachable();
+    return yaml_emit_mapping_start(emitter, INODE_XATTR_TAG)
+        && YAML_EMIT_STRING(emitter, "id")
+        && yaml_emit_binary(emitter, inode_xattr->id.data, inode_xattr->id.size)
+        && YAML_EMIT_STRING(emitter, "xattrs")
+        && emit_rbh_value_map(emitter, &inode_xattr->xattrs)
+        && yaml_emit_mapping_end(emitter);
+}
+
+enum inode_xattr_field {
+    IXF_UNKNOWN,
+    IXF_ID,
+    IXF_XATTRS,
+};
+
+static enum inode_xattr_field
+str2inode_xattr_field(const char *string)
+{
+    switch (*string++) {
+    case 'i': /* id */
+        if (strcmp(string, "d"))
+            break;
+        return IXF_ID;
+    case 'x': /* xattrs */
+        if (strcmp(string, "attrs"))
+            break;
+        return IXF_XATTRS;
+    }
+
+    errno = EINVAL;
+    return IXF_UNKNOWN;
 }
 
 static bool
-parse_inode_xattr(yaml_parser_t *parser __attribute__((unused)),
-                  struct rbh_fsevent *inode_xattr __attribute__((unused)))
+parse_inode_xattr(yaml_parser_t *parser, struct rbh_fsevent *inode_xattr)
 {
-    error(EXIT_FAILURE, ENOSYS, __func__);
-    __builtin_unreachable();
+    struct {
+        bool id:1;
+    } seen = {};
+
+    while (true) {
+        enum inode_xattr_field field;
+        yaml_event_t event;
+        const char *key;
+        int save_errno;
+        bool success;
+
+        if (!yaml_parser_parse(parser, &event))
+            parser_error(parser);
+
+        if (event.type == YAML_MAPPING_END_EVENT) {
+            yaml_event_delete(&event);
+            break;
+        }
+
+        if (!yaml_parse_string(&event, &key, NULL)) {
+            save_errno = errno;
+            yaml_event_delete(&event);
+            errno = save_errno;
+            return false;
+        }
+
+        field = str2inode_xattr_field(key);
+        save_errno = errno;
+        yaml_event_delete(&event);
+
+        switch (field) {
+        case IXF_UNKNOWN:
+            errno = save_errno;
+            return false;
+        case IXF_ID:
+            seen.id = true;
+            success = parse_id(parser, &inode_xattr->id);
+            break;
+        case IXF_XATTRS:
+            success = parse_rbh_value_map(parser, &inode_xattr->xattrs);
+            break;
+        }
+
+        if (!success)
+            return false;
+    }
+
+    return seen.id;
 }
 
 /*---------------------------------- xattr -----------------------------------*/
