@@ -1072,12 +1072,14 @@ emit_statx_timestamp(yaml_emitter_t *emitter,
          *------------------------------------------------------------*/
 
 static bool
-emit_device_numbers(yaml_emitter_t *emitter __attribute__((unused)),
-                    uint32_t major __attribute__((unused)),
-                    uint32_t minor __attribute__((unused)))
+emit_device_numbers(yaml_emitter_t *emitter, uint32_t major, uint32_t minor)
 {
-    error(EXIT_FAILURE, ENOSYS, __func__);
-    __builtin_unreachable();
+    return yaml_emit_mapping_start(emitter, NULL)
+        && YAML_EMIT_STRING(emitter, "major")
+        && yaml_emit_unsigned_integer(emitter, major)
+        && YAML_EMIT_STRING(emitter, "minor")
+        && yaml_emit_unsigned_integer(emitter, minor)
+        && yaml_emit_mapping_end(emitter);
 }
 
     /*------------------------------ statx -------------------------------*/
