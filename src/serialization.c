@@ -2039,11 +2039,36 @@ parse_statx(yaml_parser_t *parser, struct statx *statxbuf)
      *--------------------------------------------------------------------*/
 
 static bool
-parse_symlink(yaml_parser_t *parser __attribute__((unused)),
-              const char **symlink __attribute__((unused)))
+parse_symlink(yaml_parser_t *parser, const char **symlink)
 {
-    error(EXIT_FAILURE, ENOSYS, __func__);
-    __builtin_unreachable();
+    yaml_event_t event;
+
+    if (!yaml_parser_parse(parser, &event))
+        parser_error(parser);
+
+    if (event.type != YAML_SCALAR_EVENT) {
+        yaml_event_delete(&event);
+        errno = EINVAL;
+        return false;
+    }
+
+    if (!yaml_parse_string(&event, symlink, NULL)) {
+        int save_errno = errno;
+
+        yaml_event_delete(&event);
+        errno = save_errno;
+        return false;
+    }
+
+    if (rbh_sstack_push(context.events, &event, sizeof(event)) == NULL) {
+        int save_errno = errno;
+
+        yaml_event_delete(&event);
+        errno = save_errno;
+        return false;
+    }
+
+    return true;
 }
 
 /*---------------------------------- upsert ----------------------------------*/
