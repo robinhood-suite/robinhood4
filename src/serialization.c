@@ -969,12 +969,78 @@ emit_filetype(yaml_emitter_t *emitter, uint16_t filetype)
     }
 }
 
-static bool
-parse_filetype(yaml_parser_t *parser __attribute__((unused)),
-               uint16_t *filetype __attribute__((unused)))
+static int
+str2filetype(const char *string)
 {
-    error(EXIT_FAILURE, ENOSYS, __func__);
-    __builtin_unreachable();
+    switch (*string++) {
+    case 'b': /* blockdev */
+        if (strcmp(string, "lockdev"))
+            break;
+        return S_IFBLK;
+    case 'c': /* chardev */
+        if (strcmp(string, "hardev"))
+            break;
+        return S_IFCHR;
+    case 'd': /* directory */
+        if (strcmp(string, "irectory"))
+            break;
+        return S_IFDIR;
+    case 'f': /* fifo, file */
+        if (*string++ != 'i')
+            break;
+        switch (*string++) {
+        case 'f': /* fifo */
+            if (strcmp(string, "o"))
+                break;
+            return S_IFIFO;
+        case 'l': /* file */
+            if (strcmp(string, "e"))
+                break;
+            return S_IFREG;
+        }
+        break;
+    case 'l': /* link */
+        if (strcmp(string, "ink"))
+            break;
+        return S_IFLNK;
+    case 's': /* socket */
+        if (strcmp(string, "ocket"))
+            break;
+        return S_IFSOCK;
+    }
+
+    errno = EINVAL;
+    return 0;
+}
+
+static bool
+parse_filetype(yaml_parser_t *parser, uint16_t *filetype)
+{
+    yaml_event_t event;
+    const char *name;
+    int save_errno;
+    uint16_t type;
+
+    if (!yaml_parser_parse(parser, &event))
+        parser_error(parser);
+
+    if (!yaml_parse_string(&event, &name, NULL)) {
+        save_errno = errno;
+        yaml_event_delete(&event);
+        errno = save_errno;
+        return false;
+    }
+
+    type = str2filetype(name);
+    save_errno = errno;
+    yaml_event_delete(&event);
+    if (type == 0) {
+        errno = save_errno;
+        return false;
+    }
+
+    *filetype = type;
+    return true;
 }
 
         /*------------------------------------------------------------*
