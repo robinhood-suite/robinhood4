@@ -1058,11 +1058,38 @@ emit_octal_unsigned_integer(yaml_emitter_t *emitter, uintmax_t u)
 }
 
 static bool
-parse_permissions(yaml_parser_t *parser __attribute__((unused)),
-                  uint16_t *permissions __attribute__((unused)))
+parse_permissions(yaml_parser_t *parser, uint16_t *permissions)
 {
-    error(EXIT_FAILURE, ENOSYS, __func__);
-    __builtin_unreachable();
+    yaml_event_t event;
+    int save_errno;
+    bool success;
+    uintmax_t u;
+
+    if (!yaml_parser_parse(parser, &event))
+        parser_error(parser);
+
+    if (event.type != YAML_SCALAR_EVENT) {
+        yaml_event_delete(&event);
+        errno = EINVAL;
+        return false;
+    }
+
+    success = yaml_parse_unsigned_integer(&event, &u);
+    save_errno = errno;
+    yaml_event_delete(&event);
+
+    if (!success) {
+        errno = save_errno;
+        return false;
+    }
+
+    if (u > UINT16_MAX) {
+        errno = ERANGE;
+        return false;
+    }
+
+    *permissions = u;
+    return true;
 }
 
         /*------------------------------------------------------------*
