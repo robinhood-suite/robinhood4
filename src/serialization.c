@@ -540,11 +540,64 @@ parse_rbh_value_map(yaml_parser_t *parser, struct rbh_value_map *map)
      *--------------------------------------------------------------------*/
 
 static bool
-parse_sequence(yaml_parser_t *parser __attribute__((unused)),
-               struct rbh_value *sequence __attribute__((unused)))
+parse_sequence(yaml_parser_t *parser, struct rbh_value *sequence)
 {
-    error(EXIT_FAILURE, ENOSYS, __func__);
-    __builtin_unreachable();
+    struct rbh_value *values;
+    size_t count = 1; /* TODO: fine tune this */
+    size_t i = 0;
+
+    values = malloc(sizeof(*values) * count);
+    if (values == NULL)
+        return false;
+
+    while (true) {
+        yaml_event_t event;
+
+        if (!yaml_parser_parse(parser, &event))
+            parser_error(parser);
+
+        if (event.type == YAML_SEQUENCE_END_EVENT) {
+            yaml_event_delete(&event);
+            break;
+        }
+
+        if (i == count) {
+            void *tmp = values;
+
+            count *= 2;
+            tmp = reallocarray(tmp, count, sizeof(*values));
+            if (tmp == NULL) {
+                int save_errno = errno;
+
+                yaml_event_delete(&event);
+                free(values);
+                errno = save_errno;
+                return false;
+            }
+            values = tmp;
+        }
+
+        if (!parse_rbh_value(parser, &event, &values[i++])) {
+            int save_errno = errno;
+
+            free(values);
+            errno = save_errno;
+            return false;
+        }
+    }
+
+    if (rbh_sstack_push(context.pointers, &values, sizeof(values)) == NULL) {
+        int save_errno = errno;
+
+        free(values);
+        errno = save_errno;
+        return false;
+    }
+
+    sequence->sequence.values = values;
+    sequence->sequence.count = i;
+
+    return true;
 }
 
     /*--------------------------------------------------------------------*
