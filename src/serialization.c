@@ -28,6 +28,7 @@ parser_error(yaml_parser_t *parser)
 static struct {
     struct rbh_sstack *events;
     struct rbh_sstack *pointers;
+    struct rbh_sstack *values;
 } context;
 
 static void __attribute__((constructor))
@@ -39,6 +40,10 @@ context_init(void)
 
     context.pointers = rbh_sstack_new(sizeof(void *) * 8);
     if (context.pointers == NULL)
+        error(EXIT_FAILURE, errno, "rbh_sstack_new");
+
+    context.values = rbh_sstack_new(sizeof(struct rbh_value) * 64);
+    if (context.values == NULL)
         error(EXIT_FAILURE, errno, "rbh_sstack_new");
 }
 
@@ -83,8 +88,24 @@ pointers_flush(void)
 }
 
 static void
+values_flush(void)
+{
+    while (true) {
+        size_t readable;
+
+        rbh_sstack_peek(context.values, &readable);
+        if (readable == 0)
+            break;
+
+        rbh_sstack_pop(context.values, readable);
+    }
+    rbh_sstack_shrink(context.values);
+}
+
+static void
 context_reinit(void)
 {
+    values_flush();
     pointers_flush();
     events_flush();
 }
@@ -92,6 +113,10 @@ context_reinit(void)
 static void __attribute__((destructor))
 context_exit(void)
 {
+    if (context.values) {
+        values_flush();
+        rbh_sstack_destroy(context.values);
+    }
     if (context.pointers) {
         pointers_flush();
         rbh_sstack_destroy(context.pointers);
@@ -221,6 +246,10 @@ parse_id(yaml_parser_t *parser, struct rbh_id *id)
 static bool
 emit_rbh_value(yaml_emitter_t *emitter, const struct rbh_value *value);
 
+static bool
+parse_rbh_value(yaml_parser_t *parser, yaml_event_t *event,
+                struct rbh_value *value);
+
     /*--------------------------------------------------------------------*
      |                                map                                 |
      *--------------------------------------------------------------------*/
@@ -246,12 +275,51 @@ emit_rbh_value_map(yaml_emitter_t *emitter, const struct rbh_value_map *map)
 
 /* This function takes the ownership of `event' */
 static bool
-parse_rbh_value_pair(yaml_parser_t *parser __attribute__((unused)),
-                     yaml_event_t *event __attribute__((unused)),
-                     struct rbh_value_pair *pair __attribute__((unused)))
+parse_rbh_value_pair(yaml_parser_t *parser, yaml_event_t *event,
+                     struct rbh_value_pair *pair)
 {
-    error(EXIT_FAILURE, ENOSYS, __func__);
-    __builtin_unreachable();
+    struct rbh_value *value;
+
+    /* Parse the key */
+    if (!yaml_parse_string(event, &pair->key, NULL)) {
+        yaml_event_delete(event);
+        return false;
+    }
+
+    /* Store the event that references the key */
+    if (rbh_sstack_push(context.events, event, sizeof(*event)) == NULL) {
+        yaml_event_delete(event);
+        return false;
+    }
+
+    /* Parse the value */
+    if (!yaml_parser_parse(parser, event))
+        parser_error(parser);
+
+    /* It could be a NULL... */
+    if (event->type == YAML_SCALAR_EVENT && yaml_parse_null(event)) {
+        yaml_event_delete(event);
+        pair->value = NULL;
+        return true;
+    }
+
+    /* ... Or it could just be a regular value */
+
+    /* Allocate a struct rbh_value on a context stack */
+    value = rbh_sstack_push(context.values, NULL, sizeof(*value));
+    if (value == NULL)
+        return false;
+    pair->value = value;
+
+    if (!parse_rbh_value(parser, event, value)) {
+        int save_errno = errno;
+
+        rbh_sstack_pop(context.values, sizeof(*value));
+        errno = save_errno;
+        return false;
+    }
+
+    return true;
 }
 
 static bool
@@ -381,6 +449,16 @@ emit_rbh_value(yaml_emitter_t *emitter, const struct rbh_value *value)
         errno = EINVAL;
         return false;
     }
+}
+
+/* This function takes the ownership of `event' */
+static bool
+parse_rbh_value(yaml_parser_t *parser __attribute__((unused)),
+                yaml_event_t *event __attribute__((unused)),
+                struct rbh_value *value __attribute__((unused)))
+{
+    error(EXIT_FAILURE, ENOSYS, __func__);
+    __builtin_unreachable();
 }
 
 /*----------------------------------------------------------------------------*
