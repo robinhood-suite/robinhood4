@@ -2202,11 +2202,36 @@ parse_upsert(yaml_parser_t *parser, struct rbh_fsevent *upsert)
      *--------------------------------------------------------------------*/
 
 static bool
-parse_name(yaml_parser_t *parser __attribute__((unused)),
-           const char **name __attribute__((unused)))
+parse_name(yaml_parser_t *parser, const char **name)
 {
-    error(EXIT_FAILURE, ENOSYS, __func__);
-    __builtin_unreachable();
+    yaml_event_t event;
+
+    if (!yaml_parser_parse(parser, &event))
+        parser_error(parser);
+
+    if (event.type != YAML_SCALAR_EVENT) {
+        yaml_event_delete(&event);
+        errno = EINVAL;
+        return false;
+    }
+
+    if (!yaml_parse_string(&event, name, NULL)) {
+        int save_errno = errno;
+
+        yaml_event_delete(&event);
+        errno = save_errno;
+        return false;
+    }
+
+    if (rbh_sstack_push(context.events, &event, sizeof(event)) == NULL) {
+        int save_errno = errno;
+
+        yaml_event_delete(&event);
+        errno = save_errno;
+        return false;
+    }
+
+    return true;
 }
 
 /*----------------------------------- link -----------------------------------*/
