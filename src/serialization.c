@@ -73,6 +73,78 @@ context_exit(void)
 }
 
 /*----------------------------------------------------------------------------*
+ |                               sized integers                               |
+ *----------------------------------------------------------------------------*/
+
+    /*--------------------------------------------------------------------*
+     |                              uint64_t                              |
+     *--------------------------------------------------------------------*/
+
+#define UINT64_TAG "!uint64"
+
+static bool
+emit_uint64(yaml_emitter_t *emitter, uint64_t u)
+{
+    char buffer[sizeof(u) * 4];
+    int n;
+
+    n = snprintf(buffer, sizeof(buffer), "%" PRIu64, u);
+    return yaml_emit_scalar(emitter, UINT64_TAG, buffer, n,
+                            YAML_PLAIN_SCALAR_STYLE);
+}
+
+    /*--------------------------------------------------------------------*
+     |                              uint32_t                              |
+     *--------------------------------------------------------------------*/
+
+#define UINT32_TAG "!uint32"
+
+static bool
+emit_uint32(yaml_emitter_t *emitter, uint32_t u)
+{
+    char buffer[sizeof(u) * 4];
+    int n;
+
+    n = snprintf(buffer, sizeof(buffer), "%" PRIu32, u);
+    return yaml_emit_scalar(emitter, UINT32_TAG, buffer, n,
+                            YAML_PLAIN_SCALAR_STYLE);
+}
+
+    /*--------------------------------------------------------------------*
+     |                              int64_t                               |
+     *--------------------------------------------------------------------*/
+
+#define INT64_TAG "!int64"
+
+static bool
+emit_int64(yaml_emitter_t *emitter, int64_t i)
+{
+    char buffer[sizeof(i) * 4];
+    int n;
+
+    n = snprintf(buffer, sizeof(buffer), "%" PRIi64, i);
+    return yaml_emit_scalar(emitter, INT64_TAG, buffer, n,
+                            YAML_PLAIN_SCALAR_STYLE);
+}
+
+    /*--------------------------------------------------------------------*
+     |                              int32_t                               |
+     *--------------------------------------------------------------------*/
+
+#define INT32_TAG "!int32"
+
+static bool
+emit_int32(yaml_emitter_t *emitter, int32_t i)
+{
+    char buffer[sizeof(i) * 4];
+    int n;
+
+    n = snprintf(buffer, sizeof(buffer), "%" PRIi32, i);
+    return yaml_emit_scalar(emitter, INT32_TAG, buffer, n,
+                            YAML_PLAIN_SCALAR_STYLE);
+}
+
+/*----------------------------------------------------------------------------*
  |                                     id                                     |
  *----------------------------------------------------------------------------*/
 
@@ -124,8 +196,7 @@ emit_rbh_value(yaml_emitter_t *emitter, const struct rbh_value *value);
      *--------------------------------------------------------------------*/
 
 static bool
-emit_rbh_value_map(yaml_emitter_t *emitter __attribute__((unused)),
-                   const struct rbh_value_map *map __attribute__((unused)))
+emit_rbh_value_map(yaml_emitter_t *emitter, const struct rbh_value_map *map)
 {
     if (!yaml_emit_mapping_start(emitter, NULL))
         return false;
@@ -143,14 +214,60 @@ emit_rbh_value_map(yaml_emitter_t *emitter __attribute__((unused)),
     return yaml_emit_mapping_end(emitter);
 }
 
+    /*--------------------------------------------------------------------*
+     |                               regex                                |
+     *--------------------------------------------------------------------*/
+
+#define REGEX_TAG "!regex"
+
+static bool
+emit_regex(yaml_emitter_t *emitter, const char *regex, unsigned int options)
+{
+    return yaml_emit_mapping_start(emitter, REGEX_TAG)
+        && YAML_EMIT_STRING(emitter, "regex")
+        && YAML_EMIT_STRING(emitter, regex)
+        && YAML_EMIT_STRING(emitter, "options")
+        && yaml_emit_integer(emitter, options)
+        && yaml_emit_mapping_end(emitter);
+}
+
 /*---------------------------------- value -----------------------------------*/
 
 static bool
-emit_rbh_value(yaml_emitter_t *emitter __attribute__((unused)),
-               const struct rbh_value *value __attribute__((unused)))
+emit_rbh_value(yaml_emitter_t *emitter, const struct rbh_value *value)
 {
-    error(EXIT_FAILURE, ENOSYS, __func__);
-    __builtin_unreachable();
+    switch (value->type) {
+    case RBH_VT_BINARY:
+        return yaml_emit_binary(emitter, value->binary.data,
+                                value->binary.size);
+    case RBH_VT_UINT32:
+        return emit_uint32(emitter, value->uint32);
+    case RBH_VT_UINT64:
+        return emit_uint64(emitter, value->uint64);
+    case RBH_VT_INT32:
+        return emit_int32(emitter, value->int32);
+    case RBH_VT_INT64:
+        return emit_int64(emitter, value->int64);
+    case RBH_VT_STRING:
+        return YAML_EMIT_STRING(emitter, value->string);
+    case RBH_VT_REGEX:
+        return emit_regex(emitter, value->regex.string, value->regex.options);
+    case RBH_VT_SEQUENCE:
+        if (!yaml_emit_sequence_start(emitter, NULL))
+            return false;
+
+        for (size_t i = 0; i < value->sequence.count; i++) {
+            if (!emit_rbh_value(emitter, &value->sequence.values[i]))
+                return false;
+        }
+
+        return yaml_emit_sequence_end(emitter);
+    case RBH_VT_MAP:
+        return emit_rbh_value_map(emitter, &value->map);
+    default:
+        errno = EINVAL;
+        return false;
+    }
 }
 
 /*----------------------------------------------------------------------------*
