@@ -1336,11 +1336,9 @@ parse_uid(yaml_parser_t *parser, uint32_t *uid)
          *------------------------------------------------------------*/
 
 static bool
-parse_gid(yaml_parser_t *parser __attribute__((unused)),
-          uint32_t *gid __attribute__((unused)))
+parse_gid(yaml_parser_t *parser, uint32_t *gid)
 {
-    error(EXIT_FAILURE, ENOSYS, __func__);
-    __builtin_unreachable();
+    return parse_next_uint32(parser, gid);
 }
 
         /*------------------------------------------------------------*
