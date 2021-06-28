@@ -1389,11 +1389,9 @@ parse_size(yaml_parser_t *parser, uint64_t *size)
          *------------------------------------------------------------*/
 
 static bool
-parse_blocks(yaml_parser_t *parser __attribute__((unused)),
-             uint64_t *blocks __attribute__((unused)))
+parse_blocks(yaml_parser_t *parser, uint64_t *blocks)
 {
-    error(EXIT_FAILURE, ENOSYS, __func__);
-    __builtin_unreachable();
+    return parse_next_uint64(parser, blocks);
 }
 
         /*------------------------------------------------------------*
