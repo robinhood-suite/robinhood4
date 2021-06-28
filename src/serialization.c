@@ -1548,13 +1548,119 @@ emit_device_numbers(yaml_emitter_t *emitter, uint32_t major, uint32_t minor)
         && yaml_emit_mapping_end(emitter);
 }
 
-static bool
-parse_device_numbers(yaml_parser_t *parser __attribute__((unused)),
-                     uint32_t *major __attribute__((unused)),
-                     uint32_t *minor __attribute__((unused)))
+enum device_number_field {
+    DNF_UNKNOWN,
+    DNF_MAJOR,
+    DNF_MINOR,
+};
+
+static enum device_number_field
+str2device_numbers(const char *string)
 {
-    error(EXIT_FAILURE, ENOSYS, __func__);
-    __builtin_unreachable();
+    switch (*string++) {
+    case 'm': /* major, minor */
+        switch (*string++) {
+        case 'a': /* major */
+            if (strcmp(string, "jor"))
+                break;
+            return DNF_MAJOR;
+        case 'i': /* minor */
+            if (strcmp(string, "nor"))
+                break;
+            return DNF_MINOR;
+        }
+        break;
+    }
+
+    errno = EINVAL;
+    return DNF_UNKNOWN;
+}
+
+static bool
+_parse_device_numbers(yaml_parser_t *parser, uint32_t *major, uint32_t *minor)
+{
+    struct {
+        bool major:1;
+        bool minor:1;
+    } seen = {};
+
+    while (true) {
+        enum device_number_field field;
+        yaml_event_t event;
+        const char *key;
+        int save_errno;
+
+        if (!yaml_parser_parse(parser, &event))
+            parser_error(parser);
+
+        if (event.type == YAML_MAPPING_END_EVENT) {
+            yaml_event_delete(&event);
+            break;
+        }
+
+        if (!yaml_parse_string(&event, &key, NULL)) {
+            save_errno = errno;
+            yaml_event_delete(&event);
+            errno = save_errno;
+            return false;
+        }
+
+        field = str2device_numbers(key);
+        save_errno = errno;
+        yaml_event_delete(&event);
+        switch (field) {
+        case DNF_UNKNOWN:
+            errno = save_errno;
+            return false;
+        case DNF_MAJOR:
+            if (!yaml_parser_parse(parser, &event))
+                parser_error(parser);
+
+            seen.major = parse_uint32(&event, major);
+            save_errno = errno;
+            yaml_event_delete(&event);
+            if (!seen.major) {
+                errno = save_errno;
+                return false;
+            }
+            break;
+        case DNF_MINOR:
+            if (!yaml_parser_parse(parser, &event))
+                parser_error(parser);
+
+            seen.minor = parse_uint32(&event, minor);
+            save_errno = errno;
+            yaml_event_delete(&event);
+            if (!seen.minor) {
+                errno = save_errno;
+                return false;
+            }
+            break;
+        }
+    }
+
+    errno = EINVAL;
+    return seen.major && seen.minor;
+}
+
+static bool
+parse_device_numbers(yaml_parser_t *parser, uint32_t *major, uint32_t *minor)
+{
+    yaml_event_type_t type;
+    yaml_event_t event;
+
+    if (!yaml_parser_parse(parser, &event))
+        parser_error(parser);
+
+    type = event.type;
+    yaml_event_delete(&event);
+
+    if (type != YAML_MAPPING_START_EVENT) {
+        errno = EINVAL;
+        return false;
+    }
+
+    return _parse_device_numbers(parser, major, minor);
 }
 
     /*------------------------------ statx -------------------------------*/
