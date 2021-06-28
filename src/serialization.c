@@ -27,6 +27,7 @@ parser_error(yaml_parser_t *parser)
 
 static struct {
     struct rbh_sstack *events;
+    struct rbh_sstack *pointers;
 } context;
 
 static void __attribute__((constructor))
@@ -34,6 +35,10 @@ context_init(void)
 {
     context.events = rbh_sstack_new(sizeof(yaml_event_t) * 64);
     if (context.events == NULL)
+        error(EXIT_FAILURE, errno, "rbh_sstack_new");
+
+    context.pointers = rbh_sstack_new(sizeof(void *) * 8);
+    if (context.pointers == NULL)
         error(EXIT_FAILURE, errno, "rbh_sstack_new");
 }
 
@@ -58,14 +63,39 @@ events_flush(void)
 }
 
 static void
+pointers_flush(void)
+{
+    while (true) {
+        size_t readable;
+        void **pointers;
+
+        pointers = rbh_sstack_peek(context.pointers, &readable);
+        if (readable == 0)
+            break;
+        assert(readable % sizeof(*pointers) == 0);
+
+        for (size_t i = 0; i < readable / sizeof(*pointers); i++)
+            free(pointers[i]);
+
+        rbh_sstack_pop(context.pointers, readable);
+    }
+    rbh_sstack_shrink(context.pointers);
+}
+
+static void
 context_reinit(void)
 {
+    pointers_flush();
     events_flush();
 }
 
 static void __attribute__((destructor))
 context_exit(void)
 {
+    if (context.pointers) {
+        pointers_flush();
+        rbh_sstack_destroy(context.pointers);
+    }
     if (context.events) {
         events_flush();
         rbh_sstack_destroy(context.events);
@@ -214,12 +244,87 @@ emit_rbh_value_map(yaml_emitter_t *emitter, const struct rbh_value_map *map)
     return yaml_emit_mapping_end(emitter);
 }
 
+/* This function takes the ownership of `event' */
 static bool
-parse_rbh_value_map(yaml_parser_t *parser __attribute__((unused)),
-                    struct rbh_value_map *map __attribute__((unused)))
+parse_rbh_value_pair(yaml_parser_t *parser __attribute__((unused)),
+                     yaml_event_t *event __attribute__((unused)),
+                     struct rbh_value_pair *pair __attribute__((unused)))
 {
     error(EXIT_FAILURE, ENOSYS, __func__);
     __builtin_unreachable();
+}
+
+static bool
+parse_rbh_value_map(yaml_parser_t *parser, struct rbh_value_map *map)
+{
+    struct rbh_value_pair *pairs;
+    size_t count = 1; /* TODO: fine tune this */
+    size_t i = 0;
+    bool end = false;
+
+    pairs = malloc(sizeof(*pairs) * count);
+    if (pairs == NULL)
+        return false;
+
+    do {
+        yaml_event_t event;
+
+        if (!yaml_parser_parse(parser, &event))
+            parser_error(parser);
+
+        /* Every key must be a scalar */
+        switch (event.type) {
+        case YAML_SCALAR_EVENT:
+            break;
+        case YAML_MAPPING_END_EVENT:
+            yaml_event_delete(&event);
+            end = true;
+            continue;
+        default:
+            yaml_event_delete(&event);
+            free(pairs);
+            errno = EINVAL;
+            return false;
+        }
+
+        if (i == count) {
+            void *tmp = pairs;
+
+            count *= 2;
+            tmp = reallocarray(tmp, count, sizeof(*pairs));
+            if (tmp == NULL) {
+                int save_errno = errno;
+
+                yaml_event_delete(&event);
+                free(pairs);
+                errno = save_errno;
+                return false;
+            }
+            pairs = tmp;
+        }
+
+        if (!parse_rbh_value_pair(parser, &event, &pairs[i++])) {
+            int save_errno = errno;
+
+            yaml_event_delete(&event);
+            free(pairs);
+            errno = save_errno;
+            return false;
+        }
+    } while (!end);
+
+    if (rbh_sstack_push(context.pointers, &pairs, sizeof(pairs)) == NULL) {
+        int save_errno = errno;
+
+        free(pairs);
+        errno = save_errno;
+        return false;
+    }
+
+    map->pairs = pairs;
+    map->count = i;
+
+    return true;
 }
 
     /*--------------------------------------------------------------------*
