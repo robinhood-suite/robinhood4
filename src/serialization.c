@@ -305,11 +305,38 @@ emit_int32(yaml_emitter_t *emitter, int32_t i)
 }
 
 static bool
-parse_int32(const yaml_event_t *event __attribute__((unused)),
-            int32_t *i __attribute__((unused)))
+parse_int32(const yaml_event_t *event, int32_t *i)
 {
-    error(EXIT_FAILURE, ENOSYS, __func__);
-    __builtin_unreachable();
+    const char *value = yaml_scalar_value(event);
+    const char *tag = yaml_scalar_tag(event);
+    intmax_t imax;
+    int save_errno;
+    char *end;
+
+    assert(event->type == YAML_SCALAR_EVENT);
+
+    if (tag ? strcmp(tag, INT32_TAG) : !yaml_scalar_is_plain(event)) {
+        errno = EINVAL;
+        return false;
+    }
+
+    save_errno = errno;
+    errno = 0;
+    imax = strtoimax(value, &end, 0);
+    if ((imax == INTMAX_MAX || imax == INTMAX_MIN) && errno == ERANGE)
+        return false;
+    if (imax < INT32_MIN || imax > INT32_MAX) {
+        errno = ERANGE;
+        return false;
+    }
+    if (*end != '\0') {
+        errno = EINVAL;
+        return false;
+    }
+
+    *i = imax;
+    errno = save_errno;
+    return true;
 }
 
 /*----------------------------------------------------------------------------*
