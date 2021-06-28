@@ -15,6 +15,8 @@
 #include <string.h>
 #include <sysexits.h>
 
+#include "source.h"
+
 static void
 usage(void)
 {
@@ -42,6 +44,39 @@ usage(void)
         "be enriched first.\n";
 
     printf(message, program_invocation_short_name);
+}
+
+static struct source *
+source_new(const char *arg)
+{
+    FILE *file;
+
+    if (strcmp(arg, "-") == 0)
+        /* SOURCE is '-' (stdin) */
+        return source_from_file(stdin);
+
+    file = fopen(arg, "r");
+    if (file != NULL)
+        /* SOURCE is a path to a file */
+        return source_from_file(file);
+    if (file == NULL && errno != ENOENT)
+        /* SOURCE is a path to a file, but there was some sort of error trying
+         * to open it.
+         */
+        error(EXIT_FAILURE, errno, "%s", arg);
+
+    /* TODO: parse SOURCE as an MDT name (ie. <fsname>-MDT<index>) */
+    error(EX_USAGE, EINVAL, "%s", arg);
+    __builtin_unreachable();
+}
+
+static struct source *source;
+
+static void __attribute__((destructor))
+source_exit(void)
+{
+    if (source)
+        rbh_iter_destroy(&source->fsevents);
 }
 
 static const char *mountpoint;
@@ -91,9 +126,7 @@ main(int argc, char *argv[])
     if (argc - optind > 2)
         error(EX_USAGE, 0, "too many arguments");
 
-    /* TODO: parse SOURCE into an iterator yielding fsevents
-     *       (potentially enriching them as needed/possible)
-     */
+    source = source_new(argv[optind++]);
 
     /* TODO: parse DESTINATION and feed it SOURCE's fsevents */
 

@@ -17,11 +17,15 @@ add_project_arguments(['-D_DEFAULT_SOURCE', '-D_GNU_SOURCE',], language: 'c')
 # Dependencies
 librobinhood = dependency('robinhood', version: '>=0.0.0')
 
+includes = include_directories('.', 'include')
+
 executable(
     'rbh-fsevents',
     sources: [
         'rbh-fsevents.c',
+        'src/sources/file.c',
     ],
+    include_directories: includes,
     dependencies: [librobinhood],
     install: true,
 )
