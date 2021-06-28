@@ -148,6 +148,14 @@ emit_uint64(yaml_emitter_t *emitter, uint64_t u)
                             YAML_PLAIN_SCALAR_STYLE);
 }
 
+static bool
+parse_uint64(const yaml_event_t *event __attribute__((unused)),
+             uint64_t *u __attribute__((unused)))
+{
+    error(EXIT_FAILURE, ENOSYS, __func__);
+    __builtin_unreachable();
+}
+
     /*--------------------------------------------------------------------*
      |                              uint32_t                              |
      *--------------------------------------------------------------------*/
@@ -163,6 +171,14 @@ emit_uint32(yaml_emitter_t *emitter, uint32_t u)
     n = snprintf(buffer, sizeof(buffer), "%" PRIu32, u);
     return yaml_emit_scalar(emitter, UINT32_TAG, buffer, n,
                             YAML_PLAIN_SCALAR_STYLE);
+}
+
+static bool
+parse_uint32(const yaml_event_t *event __attribute__((unused)),
+             uint32_t *u __attribute__((unused)))
+{
+    error(EXIT_FAILURE, ENOSYS, __func__);
+    __builtin_unreachable();
 }
 
     /*--------------------------------------------------------------------*
@@ -182,6 +198,14 @@ emit_int64(yaml_emitter_t *emitter, int64_t i)
                             YAML_PLAIN_SCALAR_STYLE);
 }
 
+static bool
+parse_int64(const yaml_event_t *event __attribute__((unused)),
+            int64_t *i __attribute__((unused)))
+{
+    error(EXIT_FAILURE, ENOSYS, __func__);
+    __builtin_unreachable();
+}
+
     /*--------------------------------------------------------------------*
      |                              int32_t                               |
      *--------------------------------------------------------------------*/
@@ -197,6 +221,14 @@ emit_int32(yaml_emitter_t *emitter, int32_t i)
     n = snprintf(buffer, sizeof(buffer), "%" PRIi32, i);
     return yaml_emit_scalar(emitter, INT32_TAG, buffer, n,
                             YAML_PLAIN_SCALAR_STYLE);
+}
+
+static bool
+parse_int32(const yaml_event_t *event __attribute__((unused)),
+            int32_t *i __attribute__((unused)))
+{
+    error(EXIT_FAILURE, ENOSYS, __func__);
+    __builtin_unreachable();
 }
 
 /*----------------------------------------------------------------------------*
@@ -396,6 +428,30 @@ parse_rbh_value_map(yaml_parser_t *parser, struct rbh_value_map *map)
 }
 
     /*--------------------------------------------------------------------*
+     |                              sequence                              |
+     *--------------------------------------------------------------------*/
+
+static bool
+parse_sequence(yaml_parser_t *parser __attribute__((unused)),
+               struct rbh_value *sequence __attribute__((unused)))
+{
+    error(EXIT_FAILURE, ENOSYS, __func__);
+    __builtin_unreachable();
+}
+
+    /*--------------------------------------------------------------------*
+     |                                type                                |
+     *--------------------------------------------------------------------*/
+
+static bool
+parse_value_type(const yaml_event_t *event __attribute__((unused)),
+                 enum rbh_value_type *type __attribute__((unused)))
+{
+    error(EXIT_FAILURE, ENOSYS, __func__);
+    __builtin_unreachable();
+}
+
+    /*--------------------------------------------------------------------*
      |                               regex                                |
      *--------------------------------------------------------------------*/
 
@@ -410,6 +466,15 @@ emit_regex(yaml_emitter_t *emitter, const char *regex, unsigned int options)
         && YAML_EMIT_STRING(emitter, "options")
         && yaml_emit_integer(emitter, options)
         && yaml_emit_mapping_end(emitter);
+}
+
+static bool
+parse_regex_mapping(yaml_parser_t *parser __attribute__((unused)),
+                    const char **regex __attribute__((unused)),
+                    unsigned int *options __attribute__((unused)))
+{
+    error(EXIT_FAILURE, ENOSYS, __func__);
+    __builtin_unreachable();
 }
 
 /*---------------------------------- value -----------------------------------*/
@@ -453,12 +518,65 @@ emit_rbh_value(yaml_emitter_t *emitter, const struct rbh_value *value)
 
 /* This function takes the ownership of `event' */
 static bool
-parse_rbh_value(yaml_parser_t *parser __attribute__((unused)),
-                yaml_event_t *event __attribute__((unused)),
-                struct rbh_value *value __attribute__((unused)))
+parse_rbh_value(yaml_parser_t *parser, yaml_event_t *event,
+                struct rbh_value *value)
 {
-    error(EXIT_FAILURE, ENOSYS, __func__);
-    __builtin_unreachable();
+    bool success = false;
+
+    if (!parse_value_type(event, &value->type)) {
+        yaml_event_delete(event);
+        return false;
+    }
+
+    switch (value->type) {
+    case RBH_VT_BINARY:
+        /* FIXME: this relies on libyaml's internals, it is a hack */
+        value->binary.data = yaml_scalar_value(event);
+        if (yaml_parse_binary(event, (char *)event->data.scalar.value,
+                              &value->binary.size))
+            goto save_event;
+        break;
+    case RBH_VT_UINT32:
+        success = parse_uint32(event, &value->uint32);
+        break;
+    case RBH_VT_UINT64:
+        success = parse_uint64(event, &value->uint64);
+        break;
+    case RBH_VT_INT32:
+        success = parse_int32(event, &value->int32);
+        break;
+    case RBH_VT_INT64:
+        success = parse_int64(event, &value->int64);
+        break;
+    case RBH_VT_STRING:
+        if (yaml_parse_string(event, &value->string, NULL))
+            goto save_event;
+        break;
+    case RBH_VT_REGEX:
+        yaml_event_delete(event);
+        return parse_regex_mapping(parser, &value->regex.string,
+                                   &value->regex.options);
+    case RBH_VT_SEQUENCE:
+        yaml_event_delete(event);
+        return parse_sequence(parser, value);
+    case RBH_VT_MAP:
+        yaml_event_delete(event);
+        return parse_rbh_value_map(parser, &value->map);
+    }
+
+    yaml_event_delete(event);
+    return success;
+
+save_event:
+    if (rbh_sstack_push(context.events, event, sizeof(*event)) == NULL) {
+        int save_errno = errno;
+
+        yaml_event_delete(event);
+        errno = save_errno;
+        return false;
+    }
+
+    return true;
 }
 
 /*----------------------------------------------------------------------------*
