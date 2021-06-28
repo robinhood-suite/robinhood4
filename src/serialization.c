@@ -974,11 +974,13 @@ emit_filetype(yaml_emitter_t *emitter, uint16_t filetype)
          *------------------------------------------------------------*/
 
 static bool
-emit_octal_unsigned_integer(yaml_emitter_t *emitter __attribute__((unused)),
-                            uintmax_t u __attribute__((unused)))
+emit_octal_unsigned_integer(yaml_emitter_t *emitter, uintmax_t u)
 {
-    error(EXIT_FAILURE, ENOSYS, __func__);
-    __builtin_unreachable();
+    char buffer[4 * sizeof(u)];
+    int n;
+
+    n = snprintf(buffer, sizeof(buffer), "0%" PRIoMAX, u);
+    return yaml_emit_scalar(emitter, NULL, buffer, n, YAML_PLAIN_SCALAR_STYLE);
 }
 
         /*------------------------------------------------------------*
