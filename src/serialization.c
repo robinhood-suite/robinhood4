@@ -969,6 +969,14 @@ emit_filetype(yaml_emitter_t *emitter, uint16_t filetype)
     }
 }
 
+static bool
+parse_filetype(yaml_parser_t *parser __attribute__((unused)),
+               uint16_t *filetype __attribute__((unused)))
+{
+    error(EXIT_FAILURE, ENOSYS, __func__);
+    __builtin_unreachable();
+}
+
         /*------------------------------------------------------------*
          |                        permissions                         |
          *------------------------------------------------------------*/
@@ -981,6 +989,14 @@ emit_octal_unsigned_integer(yaml_emitter_t *emitter, uintmax_t u)
 
     n = snprintf(buffer, sizeof(buffer), "0%" PRIoMAX, u);
     return yaml_emit_scalar(emitter, NULL, buffer, n, YAML_PLAIN_SCALAR_STYLE);
+}
+
+static bool
+parse_permissions(yaml_parser_t *parser __attribute__((unused)),
+                  uint16_t *permissions __attribute__((unused)))
+{
+    error(EXIT_FAILURE, ENOSYS, __func__);
+    __builtin_unreachable();
 }
 
         /*------------------------------------------------------------*
@@ -1051,6 +1067,99 @@ emit_statx_attributes(yaml_emitter_t *emitter, uint64_t mask,
     return yaml_emit_mapping_end(emitter);
 }
 
+static bool
+parse_statx_attributes(yaml_parser_t *parser __attribute__((unused)),
+                       uint64_t *mask __attribute__((unused)),
+                       uint64_t *attributes __attribute__((unused)))
+{
+    error(EXIT_FAILURE, ENOSYS, __func__);
+    __builtin_unreachable();
+}
+
+        /*------------------------------------------------------------*
+         |                           nlink                            |
+         *------------------------------------------------------------*/
+
+static bool
+parse_nlink(yaml_parser_t *parser __attribute__((unused)),
+            uint32_t *nlink __attribute__((unused)))
+{
+    error(EXIT_FAILURE, ENOSYS, __func__);
+    __builtin_unreachable();
+}
+
+        /*------------------------------------------------------------*
+         |                            uid                             |
+         *------------------------------------------------------------*/
+
+static bool
+parse_uid(yaml_parser_t *parser __attribute__((unused)),
+          uint32_t *uid __attribute__((unused)))
+{
+    error(EXIT_FAILURE, ENOSYS, __func__);
+    __builtin_unreachable();
+}
+
+        /*------------------------------------------------------------*
+         |                            gid                             |
+         *------------------------------------------------------------*/
+
+static bool
+parse_gid(yaml_parser_t *parser __attribute__((unused)),
+          uint32_t *gid __attribute__((unused)))
+{
+    error(EXIT_FAILURE, ENOSYS, __func__);
+    __builtin_unreachable();
+}
+
+        /*------------------------------------------------------------*
+         |                            ino                             |
+         *------------------------------------------------------------*/
+
+static bool
+parse_ino(yaml_parser_t *parser __attribute__((unused)),
+          uint64_t *ino __attribute__((unused)))
+{
+    error(EXIT_FAILURE, ENOSYS, __func__);
+    __builtin_unreachable();
+}
+
+        /*------------------------------------------------------------*
+         |                            size                            |
+         *------------------------------------------------------------*/
+
+static bool
+parse_size(yaml_parser_t *parser __attribute__((unused)),
+           uint64_t *size __attribute__((unused)))
+{
+    error(EXIT_FAILURE, ENOSYS, __func__);
+    __builtin_unreachable();
+}
+
+        /*------------------------------------------------------------*
+         |                           blocks                           |
+         *------------------------------------------------------------*/
+
+static bool
+parse_blocks(yaml_parser_t *parser __attribute__((unused)),
+             uint64_t *blocks __attribute__((unused)))
+{
+    error(EXIT_FAILURE, ENOSYS, __func__);
+    __builtin_unreachable();
+}
+
+        /*------------------------------------------------------------*
+         |                          blksize                           |
+         *------------------------------------------------------------*/
+
+static bool
+parse_blksize(yaml_parser_t *parser __attribute__((unused)),
+              uint32_t *blksize __attribute__((unused)))
+{
+    error(EXIT_FAILURE, ENOSYS, __func__);
+    __builtin_unreachable();
+}
+
         /*------------------------------------------------------------*
          |                         timestamp                          |
          *------------------------------------------------------------*/
@@ -1067,6 +1176,14 @@ emit_statx_timestamp(yaml_emitter_t *emitter,
         && yaml_emit_mapping_end(emitter);
 }
 
+static bool
+parse_statx_timestamp(yaml_parser_t *parser __attribute__((unused)),
+                      struct statx_timestamp *timestamp __attribute__((unused)))
+{
+    error(EXIT_FAILURE, ENOSYS, __func__);
+    __builtin_unreachable();
+}
+
         /*------------------------------------------------------------*
          |                       device numbers                       |
          *------------------------------------------------------------*/
@@ -1080,6 +1197,15 @@ emit_device_numbers(yaml_emitter_t *emitter, uint32_t major, uint32_t minor)
         && YAML_EMIT_STRING(emitter, "minor")
         && yaml_emit_unsigned_integer(emitter, minor)
         && yaml_emit_mapping_end(emitter);
+}
+
+static bool
+parse_device_numbers(yaml_parser_t *parser __attribute__((unused)),
+                     uint32_t *major __attribute__((unused)),
+                     uint32_t *minor __attribute__((unused)))
+{
+    error(EXIT_FAILURE, ENOSYS, __func__);
+    __builtin_unreachable();
 }
 
     /*------------------------------ statx -------------------------------*/
@@ -1178,12 +1304,279 @@ emit_statx(yaml_emitter_t *emitter, const struct statx *statxbuf)
         && yaml_emit_mapping_end(emitter);
 }
 
-static bool
-parse_statx(yaml_parser_t *parser __attribute__((unused)),
-            struct statx *statxbuf __attribute__((unused)))
+enum statx_field {
+    SF_UNKNOWN,
+    SF_TYPE,
+    SF_MODE,
+    SF_NLINK,
+    SF_UID,
+    SF_GID,
+    SF_ATIME,
+    SF_MTIME,
+    SF_CTIME,
+    SF_INO,
+    SF_SIZE,
+    SF_BLOCKS,
+    SF_BTIME,
+    SF_BLKSIZE,
+    SF_ATTRIBUTES,
+    SF_RDEV,
+    SF_DEV,
+};
+
+static enum statx_field
+str2statx_field(const char *string)
 {
-    error(EXIT_FAILURE, ENOSYS, __func__);
-    __builtin_unreachable();
+    switch (*string++) {
+    case 'a': /* atime, attributes */
+        if (*string++ != 't')
+            break;
+        switch (*string++) {
+        case 'i': /* atime */
+            if (strcmp(string, "me"))
+                break;
+            return SF_ATIME;
+        case 't': /* attributes */
+            if (strcmp(string, "ributes"))
+                break;
+            return SF_ATTRIBUTES;
+        }
+        break;
+    case 'b': /* blksize, blocks, btime */
+        switch (*string++) {
+        case 'l': /* blksize, blocks */
+            switch (*string++) {
+            case 'k': /* blksize */
+                if (strcmp(string, "size"))
+                    break;
+                return SF_BLKSIZE;
+            case 'o': /* blocks */
+                if (strcmp(string, "cks"))
+                    break;
+                return SF_BLOCKS;
+            }
+            break;
+        case 't': /* btime */
+            if (strcmp(string, "ime"))
+                break;
+            return SF_BTIME;
+        }
+        break;
+    case 'c': /* ctime */
+        if (strcmp(string, "time"))
+            break;
+        return SF_CTIME;
+    case 'd': /* dev */
+        if (strcmp(string, "ev"))
+            break;
+        return SF_DEV;
+    case 'g': /* gid */
+        if (strcmp(string, "id"))
+            break;
+        return SF_GID;
+    case 'i': /* ino */
+        if (strcmp(string, "no"))
+            break;
+        return SF_INO;
+    case 'm': /* mode, mtime */
+        switch (*string++) {
+        case 'o': /* mode */
+            if (strcmp(string, "de"))
+                break;
+            return SF_MODE;
+        case 't': /* mtime */
+            if (strcmp(string, "ime"))
+                break;
+            return SF_MTIME;
+        }
+        break;
+    case 'n': /* nlink */
+        if (strcmp(string, "link"))
+            break;
+        return SF_NLINK;
+    case 'r': /* rdev */
+        if (strcmp(string, "dev"))
+            break;
+        return SF_RDEV;
+    case 's': /* size */
+        if (strcmp(string, "ize"))
+            break;
+        return SF_SIZE;
+    case 't': /* type */
+        if (strcmp(string, "ype"))
+            break;
+        return SF_TYPE;
+    case 'u': /* uid */
+        if (strcmp(string, "id"))
+            break;
+        return SF_UID;
+    }
+
+    errno = EINVAL;
+    return SF_UNKNOWN;
+}
+
+static bool
+parse_statx_mapping(yaml_parser_t *parser, struct statx *statxbuf)
+{
+    struct {
+        bool blksize:1;
+        bool attributes:1;
+        bool rdev:1;
+        bool dev:1;
+    } seen = {};
+
+    statxbuf->stx_mode = 0;
+
+    while (true) {
+        enum statx_field field;
+        yaml_event_t event;
+        const char *key;
+        int save_errno;
+        bool success;
+        uint16_t tmp;
+
+        if (!yaml_parser_parse(parser, &event))
+            parser_error(parser);
+
+        if (event.type == YAML_MAPPING_END_EVENT) {
+            yaml_event_delete(&event);
+            break;
+        }
+
+        if (!yaml_parse_string(&event, &key, NULL)) {
+            save_errno = errno;
+            yaml_event_delete(&event);
+            errno = save_errno;
+            return false;
+        }
+
+        field = str2statx_field(key);
+        save_errno = errno;
+        yaml_event_delete(&event);
+
+        switch (field) {
+        case SF_UNKNOWN:
+            errno = save_errno;
+            return false;
+        case SF_TYPE:
+            statxbuf->stx_mask |= STATX_TYPE;
+            success = parse_filetype(parser, &tmp);
+            if (success)
+                statxbuf->stx_mode |= tmp;
+            break;
+        case SF_MODE:
+            statxbuf->stx_mask |= STATX_MODE;
+            success = parse_permissions(parser, &tmp);
+            if (success)
+                statxbuf->stx_mode |= tmp;
+            break;
+        case SF_NLINK:
+            statxbuf->stx_mask |= STATX_NLINK;
+            success = parse_nlink(parser, &statxbuf->stx_nlink);
+            break;
+        case SF_UID:
+            statxbuf->stx_mask |= STATX_UID;
+            success = parse_uid(parser, &statxbuf->stx_uid);
+            break;
+        case SF_GID:
+            statxbuf->stx_mask |= STATX_GID;
+            success = parse_gid(parser, &statxbuf->stx_gid);
+            break;
+        case SF_ATIME:
+            statxbuf->stx_mask |= STATX_ATIME;
+            success = parse_statx_timestamp(parser, &statxbuf->stx_atime);
+            break;
+        case SF_MTIME:
+            statxbuf->stx_mask |= STATX_MTIME;
+            success = parse_statx_timestamp(parser, &statxbuf->stx_mtime);
+            break;
+        case SF_CTIME:
+            statxbuf->stx_mask |= STATX_CTIME;
+            success = parse_statx_timestamp(parser, &statxbuf->stx_ctime);
+            break;
+        case SF_INO:
+            statxbuf->stx_mask |= STATX_INO;
+            static_assert(sizeof(statxbuf->stx_size) == sizeof(uint64_t), "");
+            success = parse_ino(parser, (uint64_t *)&statxbuf->stx_ino);
+            break;
+        case SF_SIZE:
+            statxbuf->stx_mask |= STATX_SIZE;
+            static_assert(sizeof(statxbuf->stx_size) == sizeof(uint64_t), "");
+            success = parse_size(parser, (uint64_t *)&statxbuf->stx_size);
+            break;
+        case SF_BLOCKS:
+            statxbuf->stx_mask |= STATX_BLOCKS;
+            static_assert(sizeof(statxbuf->stx_blocks) == sizeof(uint64_t), "");
+            success = parse_blocks(parser, (uint64_t *)&statxbuf->stx_blocks);
+            break;
+        case SF_BTIME:
+            statxbuf->stx_mask |= STATX_BTIME;
+            success = parse_statx_timestamp(parser, &statxbuf->stx_btime);
+            break;
+        case SF_BLKSIZE:
+            success = parse_blksize(parser, &statxbuf->stx_blksize);
+            seen.blksize = true;
+            break;
+        case SF_ATTRIBUTES:
+            /* XXX: gcc does not allow a static assert to immediately follow
+             *      a label... Beats me.
+             */
+            ;
+            static_assert(
+                    sizeof(statxbuf->stx_attributes_mask) == sizeof(uint64_t),
+                    ""
+                    );
+            static_assert(sizeof(statxbuf->stx_attributes) == sizeof(uint64_t),
+                          "");
+            success = parse_statx_attributes(
+                    parser, (uint64_t *)&statxbuf->stx_attributes_mask,
+                    (uint64_t *)&statxbuf->stx_attributes
+                    );
+            seen.attributes = true;
+            break;
+        case SF_RDEV:
+            success = parse_device_numbers(parser, &statxbuf->stx_rdev_major,
+                                           &statxbuf->stx_rdev_minor);
+            seen.rdev = true;
+            break;
+        case SF_DEV:
+            success = parse_device_numbers(parser, &statxbuf->stx_dev_major,
+                                           &statxbuf->stx_dev_minor);
+            seen.dev = true;
+            break;
+        }
+
+        if (!success)
+            return false;
+    }
+
+    return seen.blksize && seen.attributes && seen.rdev && seen.dev;
+}
+
+static bool
+parse_statx(yaml_parser_t *parser, struct statx *statxbuf)
+{
+    yaml_event_type_t type;
+    yaml_event_t event;
+    bool success;
+
+    if (!yaml_parser_parse(parser, &event))
+        parser_error(parser);
+
+    type = event.type;
+    yaml_event_delete(&event);
+
+    switch (type) {
+    case YAML_MAPPING_START_EVENT:
+        success = parse_statx_mapping(parser, statxbuf);
+        break;
+    default:
+        errno = EINVAL;
+        return false;
+    }
+
+    return success;
 }
 
     /*--------------------------------------------------------------------*
