@@ -941,12 +941,164 @@ parse_xattrs(yaml_parser_t *parser, struct rbh_value_map *map)
      |                               statx                                |
      *--------------------------------------------------------------------*/
 
+        /*------------------------------------------------------------*
+         |                          filetype                          |
+         *------------------------------------------------------------*/
+
 static bool
-emit_statx(yaml_emitter_t *emitter __attribute__((unused)),
-           const struct statx *statxbuf __attribute__((unused)))
+emit_filetype(yaml_emitter_t *emitter __attribute__((unused)),
+              uint16_t filetype __attribute__((unused)))
 {
     error(EXIT_FAILURE, ENOSYS, __func__);
     __builtin_unreachable();
+}
+
+        /*------------------------------------------------------------*
+         |                        permissions                         |
+         *------------------------------------------------------------*/
+
+static bool
+emit_octal_unsigned_integer(yaml_emitter_t *emitter __attribute__((unused)),
+                            uintmax_t u __attribute__((unused)))
+{
+    error(EXIT_FAILURE, ENOSYS, __func__);
+    __builtin_unreachable();
+}
+
+        /*------------------------------------------------------------*
+         |                         attributes                         |
+         *------------------------------------------------------------*/
+
+static bool
+emit_statx_attributes(yaml_emitter_t *emitter __attribute__((unused)),
+                      uint64_t mask __attribute__((unused)),
+                      uint64_t attributes __attribute__((unused)))
+{
+    error(EXIT_FAILURE, ENOSYS, __func__);
+    __builtin_unreachable();
+}
+
+        /*------------------------------------------------------------*
+         |                         timestamp                          |
+         *------------------------------------------------------------*/
+
+static bool
+emit_statx_timestamp(
+        yaml_emitter_t *emitter __attribute__((unused)),
+        const struct statx_timestamp *timestamp __attribute__((unused))
+        )
+{
+    error(EXIT_FAILURE, ENOSYS, __func__);
+    __builtin_unreachable();
+}
+
+        /*------------------------------------------------------------*
+         |                       device numbers                       |
+         *------------------------------------------------------------*/
+
+static bool
+emit_device_numbers(yaml_emitter_t *emitter __attribute__((unused)),
+                    uint32_t major __attribute__((unused)),
+                    uint32_t minor __attribute__((unused)))
+{
+    error(EXIT_FAILURE, ENOSYS, __func__);
+    __builtin_unreachable();
+}
+
+    /*------------------------------ statx -------------------------------*/
+
+static bool
+emit_statx(yaml_emitter_t *emitter, const struct statx *statxbuf)
+{
+    uint64_t mask = statxbuf->stx_mask;
+
+    if (!yaml_emit_mapping_start(emitter, NULL))
+        return false;
+
+    if (mask & STATX_TYPE) {
+        if (!YAML_EMIT_STRING(emitter, "type")
+         || !emit_filetype(emitter, statxbuf->stx_mode & S_IFMT))
+            return false;
+    }
+
+    if (mask & STATX_MODE) {
+        if (!YAML_EMIT_STRING(emitter, "mode")
+         || !emit_octal_unsigned_integer(emitter, statxbuf->stx_mode & ~S_IFMT))
+            return false;
+    }
+
+    if (mask & STATX_NLINK) {
+        if (!YAML_EMIT_STRING(emitter, "nlink")
+         || !yaml_emit_unsigned_integer(emitter, statxbuf->stx_nlink))
+            return false;
+    }
+
+    if (mask & STATX_UID) {
+        if (!YAML_EMIT_STRING(emitter, "uid")
+         || !yaml_emit_unsigned_integer(emitter, statxbuf->stx_uid))
+            return false;
+    }
+
+    if (mask & STATX_GID) {
+        if (!YAML_EMIT_STRING(emitter, "gid")
+         || !yaml_emit_unsigned_integer(emitter, statxbuf->stx_gid))
+            return false;
+    }
+
+    if (mask & STATX_ATIME) {
+        if (!YAML_EMIT_STRING(emitter, "atime")
+         || !emit_statx_timestamp(emitter, &statxbuf->stx_atime))
+            return false;
+    }
+
+    if (mask & STATX_MTIME) {
+        if (!YAML_EMIT_STRING(emitter, "mtime")
+         || !emit_statx_timestamp(emitter, &statxbuf->stx_mtime))
+            return false;
+    }
+
+    if (mask & STATX_CTIME) {
+        if (!YAML_EMIT_STRING(emitter, "ctime")
+         || !emit_statx_timestamp(emitter, &statxbuf->stx_ctime))
+            return false;
+    }
+
+    if (mask & STATX_INO) {
+        if (!YAML_EMIT_STRING(emitter, "ino")
+         || !yaml_emit_unsigned_integer(emitter, statxbuf->stx_ino))
+            return false;
+    }
+
+    if (mask & STATX_SIZE) {
+        if (!YAML_EMIT_STRING(emitter, "size")
+         || !yaml_emit_unsigned_integer(emitter, statxbuf->stx_size))
+            return false;
+    }
+
+    if (mask & STATX_BLOCKS) {
+        if (!YAML_EMIT_STRING(emitter, "blocks")
+         || !yaml_emit_unsigned_integer(emitter, statxbuf->stx_blocks))
+            return false;
+    }
+
+    if (mask & STATX_BTIME) {
+        if (!YAML_EMIT_STRING(emitter, "btime")
+         || !emit_statx_timestamp(emitter, &statxbuf->stx_btime))
+            return false;
+    }
+
+    return YAML_EMIT_STRING(emitter, "blksize")
+        && yaml_emit_unsigned_integer(emitter, statxbuf->stx_blksize)
+        && YAML_EMIT_STRING(emitter, "attributes")
+        && emit_statx_attributes(emitter, statxbuf->stx_attributes_mask,
+                                 statxbuf->stx_attributes)
+        && YAML_EMIT_STRING(emitter, "rdev")
+        && emit_device_numbers(emitter, statxbuf->stx_rdev_major,
+                               statxbuf->stx_rdev_minor)
+        && YAML_EMIT_STRING(emitter, "dev")
+        && emit_device_numbers(emitter, statxbuf->stx_dev_major,
+                               statxbuf->stx_dev_minor)
+        && yaml_emit_mapping_end(emitter);
 }
 
 static bool
