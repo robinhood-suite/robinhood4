@@ -16,6 +16,7 @@ add_project_arguments(['-D_DEFAULT_SOURCE', '-D_GNU_SOURCE',], language: 'c')
 
 # Dependencies
 librobinhood = dependency('robinhood', version: '>=0.0.0')
+libyaml = dependency('yaml-0.1', version: '>=0.2.5')
 
 includes = include_directories('.', 'include')
 
@@ -23,9 +24,10 @@ executable(
     'rbh-fsevents',
     sources: [
         'rbh-fsevents.c',
+        'src/serialization.c',
         'src/sources/file.c',
     ],
     include_directories: includes,
-    dependencies: [librobinhood],
+    dependencies: [librobinhood, libyaml],
     install: true,
 )
