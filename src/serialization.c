@@ -236,6 +236,29 @@ parse_uint32(const yaml_event_t *event, uint32_t *u)
     return true;
 }
 
+static bool
+parse_next_uint32(yaml_parser_t *parser, uint32_t *u)
+{
+    yaml_event_t event;
+    int save_errno;
+    bool success;
+
+    if (!yaml_parser_parse(parser, &event))
+        parser_error(parser);
+
+    if (event.type != YAML_SCALAR_EVENT) {
+        yaml_event_delete(&event);
+        errno = EINVAL;
+        return false;
+    }
+
+    success = parse_uint32(&event, u);
+    save_errno = errno;
+    yaml_event_delete(&event);
+    errno = save_errno;
+    return success;
+}
+
     /*--------------------------------------------------------------------*
      |                              int64_t                               |
      *--------------------------------------------------------------------*/
@@ -1293,11 +1316,9 @@ parse_statx_attributes(yaml_parser_t *parser, uint64_t *mask,
          *------------------------------------------------------------*/
 
 static bool
-parse_nlink(yaml_parser_t *parser __attribute__((unused)),
-            uint32_t *nlink __attribute__((unused)))
+parse_nlink(yaml_parser_t *parser, uint32_t *nlink)
 {
-    error(EXIT_FAILURE, ENOSYS, __func__);
-    __builtin_unreachable();
+    return parse_next_uint32(parser, nlink);
 }
 
         /*------------------------------------------------------------*
