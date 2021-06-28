@@ -15,7 +15,11 @@
 #include <string.h>
 #include <sysexits.h>
 
+#include <robinhood/uri.h>
+#include <robinhood/utils.h>
+
 #include "source.h"
+#include "sink.h"
 
 static void
 usage(void)
@@ -79,6 +83,64 @@ source_exit(void)
         rbh_iter_destroy(&source->fsevents);
 }
 
+static struct sink *
+sink_from_uri(const char *uri)
+{
+    struct rbh_raw_uri *raw_uri;
+
+    raw_uri = rbh_raw_uri_from_string(uri);
+    if (raw_uri == NULL)
+        error(EXIT_FAILURE, errno, "rbh_raw_uri_from_string");
+
+    if (strcmp(raw_uri->scheme, "rbh") == 0) {
+        free(raw_uri);
+        return sink_from_backend(rbh_backend_from_uri(uri));
+    }
+
+    free(raw_uri);
+    error(EX_USAGE, 0, "%s: uri scheme not supported", uri);
+    __builtin_unreachable();
+}
+
+static bool
+is_uri(const char *string)
+{
+    struct rbh_raw_uri *raw_uri;
+
+    raw_uri = rbh_raw_uri_from_string(string);
+    if (raw_uri == NULL) {
+        if (errno == EINVAL)
+            return false;
+        error(EXIT_FAILURE, errno, "rbh_raw_uri_from_string");
+    }
+
+    free(raw_uri);
+    return true;
+}
+
+static struct sink *
+sink_new(const char *arg)
+{
+    if (strcmp(arg, "-") == 0)
+        /* DESTINATION is '-' (stdout) */
+        return sink_from_file(stdout);
+
+    if (is_uri(arg))
+        return sink_from_uri(arg);
+
+    error(EX_USAGE, EINVAL, "%s", arg);
+    __builtin_unreachable();
+}
+
+static struct sink *sink;
+
+static void __attribute__((destructor))
+sink_exit(void)
+{
+    if (sink)
+        sink_destroy(sink);
+}
+
 static const char *mountpoint;
 
 int
@@ -127,8 +189,9 @@ main(int argc, char *argv[])
         error(EX_USAGE, 0, "too many arguments");
 
     source = source_new(argv[optind++]);
+    sink = sink_new(argv[optind++]);
 
-    /* TODO: parse DESTINATION and feed it SOURCE's fsevents */
+    /* TODO: feed SOURCE's fsevents to DESTINATION */
 
     error(EXIT_FAILURE, ENOSYS, "%s", __func__);
 }

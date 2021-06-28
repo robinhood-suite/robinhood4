@@ -40,6 +40,8 @@ executable(
         'rbh-fsevents.c',
         'src/serialization.c',
         'src/sources/file.c',
+        'src/sinks/backend.c',
+        'src/sinks/file.c',
     ],
     include_directories: includes,
     dependencies: [librobinhood, libyaml, miniyaml],
