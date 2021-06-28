@@ -601,18 +601,6 @@ parse_sequence(yaml_parser_t *parser, struct rbh_value *sequence)
 }
 
     /*--------------------------------------------------------------------*
-     |                                type                                |
-     *--------------------------------------------------------------------*/
-
-static bool
-parse_value_type(const yaml_event_t *event __attribute__((unused)),
-                 enum rbh_value_type *type __attribute__((unused)))
-{
-    error(EXIT_FAILURE, ENOSYS, __func__);
-    __builtin_unreachable();
-}
-
-    /*--------------------------------------------------------------------*
      |                               regex                                |
      *--------------------------------------------------------------------*/
 
@@ -636,6 +624,83 @@ parse_regex_mapping(yaml_parser_t *parser __attribute__((unused)),
 {
     error(EXIT_FAILURE, ENOSYS, __func__);
     __builtin_unreachable();
+}
+
+    /*--------------------------------------------------------------------*
+     |                                type                                |
+     *--------------------------------------------------------------------*/
+
+#ifndef YAML_BINARY_TAG
+# define YAML_BINARY_TAG "tag:yaml.org,2002:binary"
+#endif
+
+static bool
+parse_value_type(const yaml_event_t *event, enum rbh_value_type *type)
+{
+    const char *tag;
+
+    switch (event->type) {
+    case YAML_MAPPING_START_EVENT:
+        /* Map or regex? */
+        tag = yaml_mapping_tag(event);
+        if (tag == NULL) {
+            *type = RBH_VT_MAP;
+            return true;
+        }
+        if (strcmp(tag, REGEX_TAG) == 0) {
+            *type = RBH_VT_REGEX;
+            return true;
+        }
+        errno = EINVAL;
+        return false;
+    case YAML_SEQUENCE_START_EVENT:
+        /* XXX: should we bail if there is a tag? */
+        *type = RBH_VT_SEQUENCE;
+        return true;
+    case YAML_SCALAR_EVENT:
+        break;
+    default:
+        errno = EINVAL;
+        return false;
+    }
+
+    tag = yaml_scalar_tag(event);
+    if (tag == NULL) {
+        *type = RBH_VT_STRING;
+        return true;
+    }
+
+    /* XXX: if this ever becomes a bottleneck, you can try unrolling the calls
+     *      to strcmp() with large switch statements. Right now, this feels like
+     *      premature optimization (the readability is just not as good).
+     */
+    if (strcmp(tag, UINT32_TAG) == 0) {
+        *type = RBH_VT_UINT32;
+        return true;
+    }
+    if (strcmp(tag, UINT64_TAG) == 0) {
+        *type = RBH_VT_UINT64;
+        return true;
+    }
+    if (strcmp(tag, INT32_TAG) == 0) {
+        *type = RBH_VT_INT32;
+        return true;
+    }
+    if (strcmp(tag, INT64_TAG) == 0) {
+        *type = RBH_VT_INT64;
+        return true;
+    }
+    if (strcmp(tag, YAML_BINARY_TAG) == 0) {
+        *type = RBH_VT_BINARY;
+        return true;
+    }
+    if (strcmp(tag, YAML_STR_TAG) == 0) {
+        *type = RBH_VT_STRING;
+        return true;
+    }
+
+    errno = EINVAL;
+    return false;
 }
 
 /*---------------------------------- value -----------------------------------*/
