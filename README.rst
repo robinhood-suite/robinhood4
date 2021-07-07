@@ -284,3 +284,86 @@ expect: count the matching entries.
     71 matching entries
 
 **The message format is not yet stable. Please do not rely on it.**
+
+-sort/-rsort
+-------------
+
+rbh-find defines the ``-sort`` and ``-rsort`` options which allow sorting
+entries based on their name, last access time, ... in ascending and descending
+order.
+
+.. code:: bash
+
+    rbh-find rbh:mongo:test -sort name
+    ./
+    ./a
+    ./b
+    ./c
+    rbh-find rbh:mongo:test -rsort name
+    ./c
+    ./b
+    ./a
+    ./
+
+``-sort`` and ``-rsort`` affect the actions that they precede, irrespective
+of logical operators: parentheses, ``!``, ``-or``, and ``-and``.
+
+For example,
+
+.. code:: bash
+
+     rbh-find uri -type f -sort a -name '* .txt' -sort b -o \
+       \(-size + 1M -sort c -o -size -1K -sort d \) -print \
+       -sort e -print
+
+Is equivalent to:
+.. code:: bash
+
+     rbh-find uri -type f -name '* .txt' -o \
+       \(-size +1M -o size -1K \) \
+       -sort a -sort b -sort c -sort d -print \
+       -sort e -print
+
+Depending on the backend and the field being sorted on, this option may provide
+orders of magnitude faster results than sorting entries after the fact. That is
+because, for database-like backends, ordering entries on an indexed field is
+usually (if not always) an efficient process.
+
+For technical reasons, not every backend supports sorting, and those which do,
+may not be able to in every situation. For example, at the time of writing, the
+mongo backend does not support sorting for fragmented URIs:
+
+.. code:: bash
+
+    rbh-find rbh:mongo:test -sort type
+    ./
+    ./dir-0
+    ./dir-1
+    ./dir-0/file-0
+    ./dir-0/file-1
+    ./dir-1/file-2
+    ./dir-2/file-3
+
+    rbh-find rbh:mongo:test#dir-0 -sort type
+    rbh-find:../rbh-find.c:81: filter_fsentries: Operation not supported
+
+In these cases, short of finding a tricky way to achieve the same result:
+
+.. code:: bash
+
+    rbh-find rbh:mongo:test#dir-0 -type d -print -o -type f -print
+    ./
+    ./dir-0
+    ./dir-0/file-0
+    ./dir-0/file-1
+
+You will have to resort to manually sorting the output:
+
+.. code:: bash
+
+    rbh-find rbh:mongo:test#dir-0 -printf "%y %p\0" | sort -zsk1,1 |
+        cut -zd' ' -f2- | tr '\0' '\n'
+    ./
+    ./dir-0
+    ./dir-0/file-0
+    ./dir-0/file-1

@@ -136,4 +136,32 @@ filter_or(struct rbh_filter *left, struct rbh_filter *right);
 struct rbh_filter *
 filter_not(struct rbh_filter *filter);
 
+/**
+ * Build a filter field from the -sort/-rsort attribute
+ *
+ * @param attribute    a string representing an attribute
+ *
+ * @return             a filter field
+ *
+ * Exit on Error
+ */
+struct rbh_filter_field
+str2field(const char *attribute);
+
+/**
+ * Build a dynamically allocated options filter
+ *
+ * @param sorts     a list of sort predicates
+ * @param count     the size of \p sorts
+ * @param field     a sort attribute
+ *
+ * @return          a pointer to a newly allocated
+ *                  struct rbh_filter_sort
+ *
+ * Exit on error
+ */
+struct rbh_filter_sort *
+sort_options_append(struct rbh_filter_sort *sorts, size_t count,
+                    struct rbh_filter_field field, bool ascending);
+
 #endif

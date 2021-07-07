@@ -97,6 +97,14 @@ str2command_line_token(const char *string)
             if (strcmp(&string[2], "ot") == 0)
                 return CLT_NOT;
             break;
+        case 'r':
+            if (strcmp(&string[2], "sort") == 0)
+                return CLT_RSORT;
+            break;
+        case 's':
+            if (strcmp(&string[2], "ort") == 0)
+                return CLT_SORT;
+            break;
         }
         return predicate_or_action(string);
     }

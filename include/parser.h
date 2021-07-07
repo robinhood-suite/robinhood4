@@ -17,6 +17,8 @@ enum command_line_token {
     CLT_PARENTHESIS_CLOSE,
     CLT_PREDICATE,
     CLT_ACTION,
+    CLT_SORT,
+    CLT_RSORT,
 };
 
 /**

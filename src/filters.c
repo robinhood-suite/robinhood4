@@ -14,6 +14,8 @@
 #include <error.h>
 #include <inttypes.h>
 #include <limits.h>
+#include <string.h>
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <sysexits.h>
@@ -24,6 +26,7 @@
 # include <robinhood/statx.h>
 #endif
 
+#include <robinhood/backend.h>
 #include <robinhood/sstack.h>
 
 #include "filters.h"
@@ -700,4 +703,74 @@ filter_not(struct rbh_filter *filter)
     not->logical.count = 1;
 
     return not;
+}
+
+struct rbh_filter_field
+str2field(const char *attribute)
+{
+    struct rbh_filter_field field;
+
+    switch(attribute[0]) {
+    case 'a':
+        if (strcmp(&attribute[1], "time") == 0) {
+            field.fsentry = RBH_FP_STATX;
+            field.statx = STATX_ATIME;
+            return field;
+        }
+        break;
+    case 'c':
+        if (strcmp(&attribute[1], "time") == 0) {
+            field.fsentry = RBH_FP_STATX;
+            field.statx = STATX_CTIME;
+            return field;
+        }
+        break;
+    case 'm':
+        if (strcmp(&attribute[1], "time") == 0) {
+            field.fsentry = RBH_FP_STATX;
+            field.statx = STATX_MTIME;
+            return field;
+        }
+        break;
+    case 'n':
+        if (strcmp(&attribute[1], "ame") == 0) {
+            field.fsentry = RBH_FP_NAME;
+            return field;
+        }
+        break;
+    case 's':
+        if (strcmp(&attribute[1], "ize") == 0) {
+            field.fsentry = RBH_FP_STATX;
+            field.statx = STATX_SIZE;
+            return field;
+        }
+        break;
+    case 't':
+        if (strcmp(&attribute[1], "ype") == 0) {
+            field.fsentry = RBH_FP_STATX;
+            field.statx = STATX_TYPE;
+            return field;
+        }
+        break;
+    }
+    error(EX_USAGE, 0, "invalid field for sort: %s", attribute);
+    __builtin_unreachable();
+}
+
+struct rbh_filter_sort *
+sort_options_append(struct rbh_filter_sort *sorts, size_t count,
+                    struct rbh_filter_field field, bool ascending)
+{
+    struct rbh_filter_sort *tmp = sorts;
+    struct rbh_filter_sort sort = {
+        .field = field,
+        .ascending = ascending
+    };
+
+    tmp = reallocarray(tmp, count + 1, sizeof(*tmp));
+    if (tmp == NULL)
+        error(EXIT_FAILURE, 0, "reallocarray with rbh_filter_sort");
+    tmp[count] = sort;
+
+    return tmp;
 }
