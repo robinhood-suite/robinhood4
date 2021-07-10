@@ -217,7 +217,7 @@ parse_predicate(int *arg_idx)
 static struct rbh_filter *
 parse_expression(int *arg_idx, const struct rbh_filter *_filter)
 {
-    enum command_line_token previous_token = CLT_URI;
+    static enum command_line_token token = CLT_URI;
     struct rbh_filter *filter = NULL;
     bool negate = false;
     int i;
@@ -239,7 +239,7 @@ parse_expression(int *arg_idx, const struct rbh_filter *_filter)
                 .count = 1,
             },
         };
-        enum command_line_token token;
+        enum command_line_token previous_token = token;
         struct rbh_filter *tmp;
 
         token = str2command_line_token(argv[i]);
@@ -309,8 +309,7 @@ parse_expression(int *arg_idx, const struct rbh_filter *_filter)
 
             /* Parse the sub-expression */
             tmp = parse_expression(&i, NULL);
-            if (i >= argc
-                    || str2command_line_token(argv[i]) != CLT_PARENTHESIS_CLOSE)
+            if (i >= argc || token != CLT_PARENTHESIS_CLOSE)
                 error(EX_USAGE, 0,
                       "invalid expression; I was expecting to find a ')' somewhere but did not see one.");
 
@@ -343,7 +342,6 @@ parse_expression(int *arg_idx, const struct rbh_filter *_filter)
             find(str2action(argv[i]), &left_filter);
             break;
         }
-        previous_token = token;
     }
 
     *arg_idx = i;
