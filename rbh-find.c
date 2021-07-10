@@ -308,7 +308,7 @@ parse_expression(int *arg_idx, const struct rbh_filter *_filter)
             i++;
 
             /* Parse the sub-expression */
-            tmp = parse_expression(&i, NULL);
+            tmp = parse_expression(&i, &left_filter);
             if (i >= argc || token != CLT_PARENTHESIS_CLOSE)
                 error(EX_USAGE, 0,
                       "invalid expression; I was expecting to find a ')' somewhere but did not see one.");
