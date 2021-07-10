@@ -89,8 +89,6 @@ _find(struct rbh_backend *backend, enum action action,
             fsentry = rbh_mut_iter_next(fsentries);
         } while (fsentry == NULL && errno == EAGAIN);
 
-        if (fsentry == NULL && errno == ENODATA)
-            break;
         if (fsentry == NULL)
             break;
 
