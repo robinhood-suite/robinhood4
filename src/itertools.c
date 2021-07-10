@@ -18,6 +18,7 @@
 
 #include "robinhood/itertools.h"
 #include "robinhood/queue.h"
+#include "robinhood/ring.h"
 
 /*----------------------------------------------------------------------------*
  |                              rbh_iter_array()                              |
@@ -547,4 +548,69 @@ rbh_iter_constify(struct rbh_mut_iterator *iterator)
     constify->subiter = iterator;
     constify->element = NULL;
     return &constify->iterator;
+}
+
+/*----------------------------------------------------------------------------*
+ |                              rbh_iter_ring()                               |
+ *----------------------------------------------------------------------------*/
+
+struct ring_iterator {
+    struct rbh_iterator iterator;
+
+    struct rbh_ring *ring;
+    size_t size;
+};
+
+static const void *
+ring_iter_next(void *iterator)
+{
+    struct ring_iterator *iter = iterator;
+    const void *element;
+    size_t readable;
+    int rc;
+
+    element = rbh_ring_peek(iter->ring, &readable);
+    if (readable == 0) {
+        errno = ENODATA;
+        return NULL;
+    }
+
+    assert(readable % iter->size == 0);
+    rc = rbh_ring_pop(iter->ring, iter->size);
+    assert(rc == 0);
+    return element;
+}
+
+static const struct rbh_iterator_operations RING_ITER_OPS = {
+    .next = ring_iter_next,
+    .destroy = free,
+};
+
+static const struct rbh_iterator RING_ITERATOR = {
+    .ops = &RING_ITER_OPS,
+};
+
+struct rbh_iterator *
+rbh_iter_ring(struct rbh_ring *ring, size_t element_size)
+{
+    struct ring_iterator *iterator;
+
+    iterator = malloc(sizeof(*iterator));
+    if (iterator == NULL)
+        return NULL;
+
+    iterator->iterator = RING_ITERATOR;
+    iterator->ring = ring;
+    iterator->size = element_size;
+    return &iterator->iterator;
+}
+
+/*----------------------------------------------------------------------------*
+ |                            rbh_mut_iter_ring()                             |
+ *----------------------------------------------------------------------------*/
+
+struct rbh_mut_iterator *
+rbh_mut_iter_ring(struct rbh_ring *ring, size_t element_size)
+{
+    return (struct rbh_mut_iterator *)rbh_iter_ring(ring, element_size);
 }

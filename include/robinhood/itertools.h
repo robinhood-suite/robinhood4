@@ -9,6 +9,7 @@
 #define ROBINHOOD_ITERTOOLS_H
 
 #include "robinhood/iterator.h"
+#include "robinhood/ring.h"
 
 /* @file
  * A collection of utilities to manipulate and build iterators
@@ -173,5 +174,37 @@ rbh_mut_iter_chain(struct rbh_mut_iterator *restrict first,
  */
 struct rbh_iterator *
 rbh_iter_constify(struct rbh_mut_iterator *iterator);
+
+/**
+ * Build an iterator from a ring
+ *
+ * @param ring          a ring
+ * @param element_size  the size of the elements in \p ring
+ *
+ * @return              a pointer to a newly allocated struct rbh_iterator on
+ *                      success, NULL on error and errno is set appropriately
+ *
+ * @error ENOMEM        there was not enough memory available
+ *
+ * Each element yielded by the returned iterator will be popped from the ring.
+ */
+struct rbh_iterator *
+rbh_iter_ring(struct rbh_ring *ring, size_t element_size);
+
+/**
+ * Build a mutable iterator from a ring
+ *
+ * @param ring          a ring
+ * @param element_size  the size of the elements in \p ring
+ *
+ * @return              a pointer to a newly allocated struct rbh_mut_iterator
+ *                      on success, NULL on error and errno is set appropriately
+ *
+ * @error ENOMEM        there was not enough memory available
+ *
+ * Each element yielded by the returned iterator will be popped from the ring.
+ */
+struct rbh_mut_iterator *
+rbh_mut_iter_ring(struct rbh_ring *ring, size_t element_size);
 
 #endif

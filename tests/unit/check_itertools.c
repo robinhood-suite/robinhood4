@@ -12,6 +12,7 @@
 #include <errno.h>
 #include <stdbool.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 #include "check-compat.h"
 #include "robinhood/itertools.h"
@@ -257,6 +258,49 @@ START_TEST(rico_basic)
 }
 END_TEST
 
+/*----------------------------------------------------------------------------*
+ |                              rbh_iter_ring()                               |
+ *----------------------------------------------------------------------------*/
+
+static size_t pagesize;
+
+static void __attribute__((constructor))
+pagesize_init(void)
+{
+    pagesize = sysconf(_SC_PAGESIZE);
+}
+
+START_TEST(rir_basic)
+{
+    const char STRING[] = "abcdefghijklmno";
+    struct rbh_iterator *iter;
+    struct rbh_ring *ring;
+    size_t readable;
+
+    ring = rbh_ring_new(pagesize);
+    ck_assert_ptr_nonnull(ring);
+
+    ck_assert_ptr_nonnull(rbh_ring_push(ring, STRING, sizeof(STRING)));
+
+    iter = rbh_iter_ring(ring, 1);
+    ck_assert_ptr_nonnull(iter);
+
+    for (size_t i = 0; i < sizeof(STRING); i++)
+        ck_assert_mem_eq(rbh_iter_next(iter), &STRING[i], 1);
+
+    errno = 0;
+    ck_assert_ptr_null(rbh_iter_next(iter));
+    ck_assert_int_eq(errno, ENODATA);
+
+    rbh_iter_destroy(iter);
+
+    rbh_ring_peek(ring, &readable);
+    ck_assert_uint_eq(readable, 0);
+
+    rbh_ring_destroy(ring);
+}
+END_TEST
+
 static Suite *
 unit_suite(void)
 {
@@ -287,6 +331,11 @@ unit_suite(void)
 
     tests = tcase_create("rbh_iter_constify()");
     tcase_add_test(tests, rico_basic);
+
+    suite_add_tcase(suite, tests);
+
+    tests = tcase_create("rbh_iter_ring()");
+    tcase_add_test(tests, rir_basic);
 
     suite_add_tcase(suite, tests);
 
