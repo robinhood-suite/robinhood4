@@ -250,6 +250,7 @@ parse_expression(int *arg_idx, const struct rbh_filter *_filter)
         case CLT_AND:
         case CLT_OR:
             switch (previous_token) {
+            case CLT_ACTION:
             case CLT_PREDICATE:
             case CLT_PARENTHESIS_CLOSE:
                 break;
