@@ -718,6 +718,13 @@ str2field(const char *attribute)
             return field;
         }
         break;
+    case 'b':
+        if (strcmp(&attribute[1], "locks") == 0) {
+            field.fsentry = RBH_FP_STATX;
+            field.statx = STATX_BLOCKS;
+            return field;
+        }
+        break;
     case 'c':
         if (strcmp(&attribute[1], "time") == 0) {
             field.fsentry = RBH_FP_STATX;
