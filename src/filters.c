@@ -719,9 +719,18 @@ str2field(const char *attribute)
         }
         break;
     case 'b':
-        if (strcmp(&attribute[1], "locks") == 0) {
+        switch (attribute[1]) {
+        case 'l':
+            if (strcmp(&attribute[2], "ocks"))
+                break;
             field.fsentry = RBH_FP_STATX;
             field.statx = STATX_BLOCKS;
+            return field;
+        case 't':
+            if (strcmp(&attribute[2], "ime"))
+                break;
+            field.fsentry = RBH_FP_STATX;
+            field.statx = STATX_BTIME;
             return field;
         }
         break;
