@@ -732,6 +732,13 @@ str2field(const char *attribute)
             return field;
         }
         break;
+    case 'i':
+        if (strcmp(&attribute[1], "no") == 0) {
+            field.fsentry = RBH_FP_STATX;
+            field.statx = STATX_INO;
+            return field;
+        }
+        break;
     case 'm':
         if (strcmp(&attribute[1], "time") == 0) {
             field.fsentry = RBH_FP_STATX;
