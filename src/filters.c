@@ -747,8 +747,17 @@ str2field(const char *attribute)
         }
         break;
     case 'n':
-        if (strcmp(&attribute[1], "ame") == 0) {
+        switch (attribute[1]) {
+        case 'a':
+            if (strcmp(&attribute[2], "me"))
+                break;
             field.fsentry = RBH_FP_NAME;
+            return field;
+        case 'l':
+            if (strcmp(&attribute[2], "ink"))
+                break;
+            field.fsentry = RBH_FP_STATX;
+            field.statx = STATX_NLINK;
             return field;
         }
         break;
