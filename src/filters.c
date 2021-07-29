@@ -741,6 +741,13 @@ str2field(const char *attribute)
             return field;
         }
         break;
+    case 'g':
+        if (strcmp(&attribute[1], "id") == 0) {
+            field.fsentry = RBH_FP_STATX;
+            field.statx = STATX_GID;
+            return field;
+        }
+        break;
     case 'i':
         if (strcmp(&attribute[1], "no") == 0) {
             field.fsentry = RBH_FP_STATX;
