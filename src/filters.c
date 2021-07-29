@@ -793,6 +793,13 @@ str2field(const char *attribute)
             return field;
         }
         break;
+    case 'u':
+        if (strcmp(&attribute[1], "id") == 0) {
+            field.fsentry = RBH_FP_STATX;
+            field.statx = STATX_UID;
+            return field;
+        }
+        break;
     }
     error(EX_USAGE, 0, "invalid field for sort: %s", attribute);
     __builtin_unreachable();
