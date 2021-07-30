@@ -285,10 +285,15 @@ fsentry_print_ls_dils(const struct rbh_fsentry *fsentry)
     printf("\n");
 }
 
+union action_arguments {
+    /* ACT_FLS, ACT_FPRINT, ACT_FPRINT0, ACT_FPRINTF */
+    FILE *file;
+};
+
 static size_t
 _find(struct rbh_backend *backend, enum action action,
-      const struct rbh_filter *filter,
-      const struct rbh_filter_sort *sorts, size_t sorts_count)
+      const struct rbh_filter *filter, const struct rbh_filter_sort *sorts,
+      size_t sorts_count, const union action_arguments *args)
 {
     const struct rbh_filter_options OPTIONS = {
         .projection = {
@@ -329,6 +334,9 @@ _find(struct rbh_backend *backend, enum action action,
         case ACT_PRINT0:
             printf("%s%c", fsentry_path(fsentry), '\0');
             break;
+        case ACT_FPRINT:
+            fprintf(args->file, "%s\n", fsentry_path(fsentry));
+            break;
         case ACT_LS:
             fsentry_print_ls_dils(fsentry);
             break;
@@ -359,23 +367,46 @@ static char **argv;
 static bool did_something = false;
 
 static void
-find(enum action action, const struct rbh_filter *filter,
+find(enum action action, int *arg_idx, const struct rbh_filter *filter,
      const struct rbh_filter_sort *sorts, size_t sorts_count)
 {
+    union action_arguments args;
+    const char *filename;
+    int i = *arg_idx;
     size_t count = 0;
 
     did_something = true;
 
+    switch (action) {
+    case ACT_FPRINT:
+        if (i >= argc)
+            error(EX_USAGE, 0, "missing argument to `%s'", action2str(action));
+
+        filename = argv[i++];
+        args.file = fopen(filename, "w");
+        if (args.file == NULL)
+            error(EXIT_FAILURE, errno, "fopen: %s", filename);
+        break;
+    default:
+        break;
+    }
+
     for (size_t i = 0; i < backend_count; i++)
-        count += _find(backends[i], action, filter, sorts, sorts_count);
+        count += _find(backends[i], action, filter, sorts, sorts_count, &args);
 
     switch (action) {
     case ACT_COUNT:
         printf("%lu matching entries\n", count);
         break;
+    case ACT_FPRINT:
+        if (fclose(args.file))
+            error(EXIT_FAILURE, errno, "fclose: %s", filename);
+        break;
     default:
         break;
     }
+
+    *arg_idx = i;
 }
 
 static struct rbh_filter *
@@ -587,7 +618,10 @@ parse_expression(int *arg_idx, const struct rbh_filter *_filter,
             filter = filter_and(filter, tmp);
             break;
         case CLT_ACTION:
-            find(str2action(argv[i]), &left_filter, *sorts, *sorts_count);
+            /* Consume the action token */
+            i++;
+            find(str2action(argv[i - 1]), &i, &left_filter, *sorts,
+                 *sorts_count);
             break;
         }
     }
@@ -599,9 +633,9 @@ parse_expression(int *arg_idx, const struct rbh_filter *_filter,
 int
 main(int _argc, char *_argv[])
 {
+    struct rbh_filter *filter;
     struct rbh_filter_sort *sorts = NULL;
     size_t sorts_count = 0;
-    struct rbh_filter *filter;
     int index;
 
     /* Discard the program's name */
@@ -630,7 +664,7 @@ main(int _argc, char *_argv[])
         error(EX_USAGE, 0, "you have too many ')'");
 
     if (!did_something)
-        find(ACT_PRINT, filter, sorts, sorts_count);
+        find(ACT_PRINT, &index, filter, sorts, sorts_count);
     free(filter);
 
     return EXIT_SUCCESS;
