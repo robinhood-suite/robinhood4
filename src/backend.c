@@ -179,6 +179,8 @@ backend_fsentry_from_path(struct rbh_backend *backend, char *path,
 
         parent = fsentry_from_parent_and_name(backend, &ROOT_PARENT_ID, "",
                                               &ID_ONLY);
+    } else if (*path == '\0') {
+        return rbh_backend_root(backend, projection);
     } else {
         parent = rbh_backend_root(backend, &ID_ONLY);
     }
