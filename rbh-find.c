@@ -337,6 +337,9 @@ _find(struct rbh_backend *backend, enum action action,
         case ACT_FPRINT:
             fprintf(args->file, "%s\n", fsentry_path(fsentry));
             break;
+        case ACT_FPRINT0:
+            fprintf(args->file, "%s%c", fsentry_path(fsentry), '\0');
+            break;
         case ACT_LS:
             fsentry_print_ls_dils(fsentry);
             break;
@@ -379,6 +382,7 @@ find(enum action action, int *arg_idx, const struct rbh_filter *filter,
 
     switch (action) {
     case ACT_FPRINT:
+    case ACT_FPRINT0:
         if (i >= argc)
             error(EX_USAGE, 0, "missing argument to `%s'", action2str(action));
 
@@ -399,6 +403,7 @@ find(enum action action, int *arg_idx, const struct rbh_filter *filter,
         printf("%lu matching entries\n", count);
         break;
     case ACT_FPRINT:
+    case ACT_FPRINT0:
         if (fclose(args.file))
             error(EXIT_FAILURE, errno, "fclose: %s", filename);
         break;
