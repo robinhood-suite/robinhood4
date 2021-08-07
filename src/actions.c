@@ -38,7 +38,7 @@ now_init(void)
 
 /* Timestamp string is: "Jan 31 12:00" or "Jan 31  2000" */
 static void
-timestamp_print_ls_dils(int64_t timestamp)
+timestamp_print_ls_dils(FILE *file, int64_t timestamp)
 {
     static_assert(sizeof(time_t) >= sizeof(int64_t), "");
     char buffer[sizeof("Jan 31 12:00")];
@@ -53,7 +53,7 @@ timestamp_print_ls_dils(int64_t timestamp)
              datetime->tm_year < now.tm_year ? "%b %e  %G" : "%b %e %H:%M",
              datetime);
 
-    printf("%s", buffer);
+    fprintf(file, "%s", buffer);
 }
 
 /**
@@ -103,7 +103,7 @@ static const mode_t MODE_BITS[] = {
 #endif
 
 static void
-mode_print_ls_dils(mode_t mode)
+mode_print_ls_dils(FILE *file, mode_t mode)
 {
     static_assert(ARRAY_SIZE(MODE_BITS) == ARRAY_SIZE(SPECIAL_BITS), "");
     for (size_t i = 0; i < ARRAY_SIZE(MODE_BITS); i++) {
@@ -112,7 +112,7 @@ mode_print_ls_dils(mode_t mode)
                                                          : "..S..S..T"
                                    : mode & MODE_BITS[i] ? "rwxrwxrwx"
                                                          : "---------";
-        printf("%c", mapping[i]);
+        fprintf(file, "%c", mapping[i]);
     }
 }
 
@@ -125,7 +125,7 @@ posixly_correct_init(void)
 }
 
 static void
-statx_print_ls_dils(const struct statx *statxbuf)
+statx_print_ls_dils(FILE *file, const struct statx *statxbuf)
 {
     static struct {
         int ino;
@@ -146,17 +146,17 @@ statx_print_ls_dils(const struct statx *statxbuf)
 
     if (statxbuf == NULL) {
         /*              -rwxrwxrwx                 Jan 31 20:00 */
-        printf("%*c %*c ?????????? %*c %*c %*c %*c ????????????",
-               length.ino, '?', length.blocks, '?', length.nlink, '?',
-               length.uid, '?', length.gid, '?', length.size, '?');
+        fprintf(file, "%*c %*c ?????????? %*c %*c %*c %*c ????????????",
+                length.ino, '?', length.blocks, '?', length.nlink, '?',
+                length.uid, '?', length.gid, '?', length.size, '?');
         return;
     }
 
     if (statxbuf->stx_mask & STATX_INO) {
-        rc = printf("%*lld", length.ino, statxbuf->stx_ino);
+        rc = fprintf(file, "%*lld", length.ino, statxbuf->stx_ino);
         length.ino = MAX(length.ino, rc);
     } else {
-        printf("%*c", length.ino, '?');
+        fprintf(file, "%*c", length.ino, '?');
     }
 
     if (statxbuf->stx_mask & STATX_BLOCKS) {
@@ -164,81 +164,82 @@ statx_print_ls_dils(const struct statx *statxbuf)
                                           : statxbuf->stx_blocks / 2;
 
         /* The `-1` makes up for the space before the string */
-        rc = printf(" %*ld", length.blocks, blocks) - 1;
+        rc = fprintf(file, " %*ld", length.blocks, blocks) - 1;
         length.blocks = MAX(length.blocks, rc);
     } else {
-        printf(" %*c", length.blocks, '?');
+        fprintf(file, " %*c", length.blocks, '?');
     }
 
-    printf(" %c",
+    fprintf(file, " %c",
            statxbuf->stx_mask & STATX_TYPE ? mode2type(statxbuf->stx_mode)
                                            : '?');
 
     if (statxbuf->stx_mask & STATX_MODE)
-        mode_print_ls_dils(statxbuf->stx_mode);
+        mode_print_ls_dils(file, statxbuf->stx_mode);
     else
         /*      rwxrwxrwx */
-        printf("?????????");
+        fprintf(file, "?????????");
 
     if (statxbuf->stx_mask & STATX_NLINK) {
-        rc = printf(" %*d", length.nlink, statxbuf->stx_nlink) - 1;
+        rc = fprintf(file, " %*d", length.nlink, statxbuf->stx_nlink) - 1;
         length.nlink = MAX(length.nlink, rc);
     } else {
-        printf(" %*c", length.nlink, '?');
+        fprintf(file, " %*c", length.nlink, '?');
     }
 
     if (statxbuf->stx_mask & STATX_UID) {
         const struct passwd *uid = getpwuid(statxbuf->stx_uid);
 
         if (uid)
-            rc = printf(" %-*s", length.uid, uid->pw_name) - 1;
+            rc = fprintf(file, " %-*s", length.uid, uid->pw_name) - 1;
         else
-            rc = printf(" %*d", length.uid, statxbuf->stx_uid) - 1;
+            rc = fprintf(file, " %*d", length.uid, statxbuf->stx_uid) - 1;
 
         length.uid = MAX(length.uid, rc);
     } else {
-        printf(" %*c", length.uid, '?');
+        fprintf(file, " %*c", length.uid, '?');
     }
 
     if (statxbuf->stx_mask & STATX_GID) {
         const struct group *gid = getgrgid(statxbuf->stx_gid);
 
         if (gid)
-            rc = printf(" %-*s", length.gid, gid->gr_name) - 1;
+            rc = fprintf(file, " %-*s", length.gid, gid->gr_name) - 1;
         else
-            rc = printf(" %*d", length.gid, statxbuf->stx_gid) - 1;
+            rc = fprintf(file, " %*d", length.gid, statxbuf->stx_gid) - 1;
 
         length.gid = MAX(length.gid, rc);
     } else {
-        printf(" %*c", length.gid, '?');
+        fprintf(file, " %*c", length.gid, '?');
     }
 
     if (statxbuf->stx_mask & STATX_SIZE) {
-        rc = printf(" %*lld", length.size, statxbuf->stx_size) - 1;
+        rc = fprintf(file, " %*lld", length.size, statxbuf->stx_size) - 1;
         length.size = MAX(length.size, rc);
     } else {
-        printf(" %*c", length.size, '?');
+        fprintf(file, " %*c", length.size, '?');
     }
 
-    printf(" ");
+    fprintf(file, " ");
     if (statxbuf->stx_mask & STATX_MTIME)
-        timestamp_print_ls_dils(statxbuf->stx_mtime.tv_sec);
+        timestamp_print_ls_dils(file, statxbuf->stx_mtime.tv_sec);
     else
         /*      Jan 31 20:00 */
-        printf("????????????");
+        fprintf(file, "????????????");
 }
 
 void
-fsentry_print_ls_dils(const struct rbh_fsentry *fsentry)
+fsentry_print_ls_dils(FILE *file, const struct rbh_fsentry *fsentry)
 {
-    statx_print_ls_dils(fsentry->mask & RBH_FP_STATX ? fsentry->statx : NULL);
+    statx_print_ls_dils(file,
+                        fsentry->mask & RBH_FP_STATX ? fsentry->statx : NULL);
 
-    printf(" %s", fsentry_path(fsentry));
+    fprintf(file, " %s", fsentry_path(fsentry));
 
     if (fsentry->mask & RBH_FP_SYMLINK)
-        printf(" -> %s", fsentry->symlink);
+        fprintf(file, " -> %s", fsentry->symlink);
 
-    printf("\n");
+    fprintf(file, "\n");
 }
 
 const char *
