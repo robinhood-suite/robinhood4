@@ -324,7 +324,7 @@ _find(struct rbh_backend *backend, enum action action,
             /* XXX: glibc's printf() handles printf("%s", NULL) pretty well, but
              *      I do not think this is part of any standard.
              */
-            printf("%s%c", fsentry_path(fsentry), '\n');
+            printf("%s\n", fsentry_path(fsentry));
             break;
         case ACT_PRINT0:
             printf("%s%c", fsentry_path(fsentry), '\0');
