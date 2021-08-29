@@ -21,6 +21,7 @@
 #include <sys/stat.h>
 
 #include "robinhood/backends/posix.h"
+#include "robinhood/statx.h"
 #ifndef HAVE_STATX
 # include "robinhood/statx-compat.h"
 #endif
@@ -97,7 +98,7 @@ statx_timestamp_from_timespec(struct statx_timestamp *timestamp,
 static void
 statx_from_stat(struct statx *statxbuf, struct stat *stat)
 {
-    statxbuf->stx_mask = STATX_BASIC_STATS;
+    statxbuf->stx_mask = RBH_STATX_BASIC_STATS;
     statxbuf->stx_blksize = stat->st_blksize;
     statxbuf->stx_nlink = stat->st_nlink;
     statxbuf->stx_uid = stat->st_uid;
@@ -106,16 +107,15 @@ statx_from_stat(struct statx *statxbuf, struct stat *stat)
     statxbuf->stx_ino = stat->st_ino;
     statxbuf->stx_size = stat->st_size;
     statxbuf->stx_blocks = stat->st_blocks;
-    statxbuf->stx_attributes_mask = 0;
 
     if (statx_timestamp_from_timespec(&statxbuf->stx_atime, &stat->st_atim))
-        statxbuf->stx_mask &= ~STATX_ATIME;
+        statxbuf->stx_mask &= ~RBH_STATX_ATIME;
 
     if (statx_timestamp_from_timespec(&statxbuf->stx_mtime, &stat->st_mtim))
-        statxbuf->stx_mask &= ~STATX_MTIME;
+        statxbuf->stx_mask &= ~RBH_STATX_MTIME;
 
     if (statx_timestamp_from_timespec(&statxbuf->stx_ctime, &stat->st_ctim))
-        statxbuf->stx_mask &= ~STATX_CTIME;
+        statxbuf->stx_mask &= ~RBH_STATX_CTIME;
 
     statxbuf->stx_rdev_major = major(stat->st_rdev);
     statxbuf->stx_rdev_minor = minor(stat->st_rdev);
@@ -123,6 +123,26 @@ statx_from_stat(struct statx *statxbuf, struct stat *stat)
     statxbuf->stx_dev_minor = minor(stat->st_dev);
 }
 #endif
+
+static uint32_t
+statx2rbh_statx_mask(uint32_t mask)
+{
+    mask |= RBH_STATX_BLKSIZE | RBH_STATX_RDEV | RBH_STATX_DEV;
+
+    if (mask & STATX_ATIME)
+        mask |= RBH_STATX_ATIME_NSEC;
+
+    if (mask & STATX_BTIME)
+        mask |= RBH_STATX_BTIME_NSEC;
+
+    if (mask & STATX_CTIME)
+        mask |= RBH_STATX_CTIME_NSEC;
+
+    if (mask & STATX_MTIME)
+        mask |= RBH_STATX_MTIME_NSEC;
+
+    return mask;
+}
 
 /* XXX: this wrapper is only needed for as long as we support platforms where
  *      statx() is not defined
@@ -132,7 +152,11 @@ _statx(int dirfd, const char *pathname, int flags, unsigned int mask,
        struct statx *statxbuf)
 {
 #ifdef HAVE_STATX
-    return statx(dirfd, pathname, flags, mask, statxbuf);
+    int rc;
+
+    rc = statx(dirfd, pathname, flags, mask, statxbuf);
+    statxbuf->stx_mask = statx2rbh_statx_mask(statxbuf->stx_mask);
+    return rc;
 #else
     struct stat stat;
 
@@ -243,10 +267,10 @@ fsentry_from_ftsent(FTSENT *ftsent, int statx_sync_type, size_t prefix_len)
     }
 
     /* We want the actual type of the file we opened, not the one fts saw */
-    if (statxbuf.stx_mask & STATX_TYPE && S_ISLNK(statxbuf.stx_mode)) {
-        if ((statxbuf.stx_mask & STATX_SIZE) == 0) {
+    if (statxbuf.stx_mask & RBH_STATX_TYPE && S_ISLNK(statxbuf.stx_mode)) {
+        if ((statxbuf.stx_mask & RBH_STATX_SIZE) == 0) {
             statxbuf.stx_size = page_size - 1;
-            statxbuf.stx_mask |= STATX_SIZE;
+            statxbuf.stx_mask |= RBH_STATX_SIZE;
         }
         static_assert(sizeof(size_t) == sizeof(statxbuf.stx_size), "");
         symlink = freadlink(fd, (size_t *)&statxbuf.stx_size);
