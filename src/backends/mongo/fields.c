@@ -9,6 +9,12 @@
 # include "config.h"
 #endif
 
+#include <sys/stat.h>
+
+#ifndef HAVE_STATX
+# include "robinhood/statx.h"
+#endif
+
 #include "mongo.h"
 
 const char *field2str(const struct rbh_filter_field *field, char **buffer,
