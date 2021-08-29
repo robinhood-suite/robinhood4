@@ -152,7 +152,7 @@ struct rbh_filter_field {
     enum rbh_fsentry_property fsentry;
     union {
         /** If \c fsentry is RBH_FP_STATX: a STATX_* macro (eg. STATX_UID) */
-        unsigned int statx;
+        uint32_t statx;
         /** If \c fsentry is RBH_FP_*_XATTRS: NULL, or a string
          *
          * If NULL, the filter will be applied on the \c fsentry field itself.
