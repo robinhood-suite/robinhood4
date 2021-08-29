@@ -41,6 +41,18 @@ bson_append_statx_attributes(bson_t *bson, const char *key, size_t key_length,
         && (mask & STATX_ATTR_ENCRYPTED ?
                 BSON_APPEND_BOOL(&document, MFF_STATX_ENCRYPTED,
                                  attributes & STATX_ATTR_ENCRYPTED) : true)
+        && (mask & STATX_ATTR_AUTOMOUNT ?
+                BSON_APPEND_BOOL(&document, MFF_STATX_AUTOMOUNT,
+                                 attributes & STATX_ATTR_AUTOMOUNT) : true)
+        && (mask & STATX_ATTR_MOUNT_ROOT ?
+                BSON_APPEND_BOOL(&document, MFF_STATX_MOUNT_ROOT,
+                                 attributes & STATX_ATTR_MOUNT_ROOT) : true)
+        && (mask & STATX_ATTR_VERITY ?
+                BSON_APPEND_BOOL(&document, MFF_STATX_VERITY,
+                                 attributes & STATX_ATTR_VERITY) : true)
+        && (mask & STATX_ATTR_DAX ?
+                BSON_APPEND_BOOL(&document, MFF_STATX_DAX,
+                                 attributes & STATX_ATTR_DAX) : true)
         && bson_append_document_end(bson, &document);
 }
 

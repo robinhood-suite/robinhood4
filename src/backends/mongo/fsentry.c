@@ -224,20 +224,36 @@ enum statx_attributes_token {
     SAT_APPEND,
     SAT_NODUMP,
     SAT_ENCRYPTED,
+    SAT_AUTOMOUNT,
+    SAT_MOUNT_ROOT,
+    SAT_VERITY,
+    SAT_DAX,
 };
 
 static enum statx_attributes_token
 statx_attributes_tokenizer(const char *key)
 {
     switch (*key++) {
-    case 'a': /* append */
-        if (strcmp(key, "ppend"))
-            break;
-        return SAT_APPEND;
+    case 'a': /* append, automount */
+        switch (*key++) {
+        case 'p': /* append */
+            if (strcmp(key, "pend"))
+                break;
+            return SAT_APPEND;
+        case 'u': /* automount */
+            if (strcmp(key, "tomount"))
+                break;
+            return SAT_AUTOMOUNT;
+        }
+        break;
     case 'c': /* compressed */
         if (strcmp(key, "ompressed"))
             break;
         return SAT_COMPRESSED;
+    case 'd': /* dax */
+        if (strcmp(key, "ax"))
+            break;
+        return SAT_DAX;
     case 'e': /* encrypted */
         if (strcmp(key, "ncrypted"))
             break;
@@ -246,10 +262,18 @@ statx_attributes_tokenizer(const char *key)
         if (strcmp(key, "mmutable"))
             break;
         return SAT_IMMUTABLE;
+    case 'm': /* mount-root */
+        if (strcmp(key, "ount-root"))
+            break;
+        return SAT_MOUNT_ROOT;
     case 'n': /* nodump */
         if (strcmp(key, "odump"))
             break;
         return SAT_NODUMP;
+    case 'v': /* verity */
+        if (strcmp(key, "erity"))
+            break;
+        return SAT_VERITY;
     }
     return SAT_UNKNOWN;
 }
@@ -306,6 +330,42 @@ bson_iter_statx_attributes(bson_iter_t *iter, uint64_t *mask,
             else
                 *attributes &= ~STATX_ATTR_ENCRYPTED;
             *mask |= STATX_ATTR_ENCRYPTED;
+            break;
+        case SAT_AUTOMOUNT:
+            if (!BSON_ITER_HOLDS_BOOL(iter))
+                goto out_einval;
+            if (bson_iter_bool(iter))
+                *attributes |= STATX_ATTR_AUTOMOUNT;
+            else
+                *attributes &= ~STATX_ATTR_AUTOMOUNT;
+            *mask |= STATX_ATTR_AUTOMOUNT;
+            break;
+        case SAT_MOUNT_ROOT:
+            if (!BSON_ITER_HOLDS_BOOL(iter))
+                goto out_einval;
+            if (bson_iter_bool(iter))
+                *attributes |= STATX_ATTR_MOUNT_ROOT;
+            else
+                *attributes &= ~STATX_ATTR_MOUNT_ROOT;
+            *mask |= STATX_ATTR_MOUNT_ROOT;
+            break;
+        case SAT_VERITY:
+            if (!BSON_ITER_HOLDS_BOOL(iter))
+                goto out_einval;
+            if (bson_iter_bool(iter))
+                *attributes |= STATX_ATTR_VERITY;
+            else
+                *attributes &= ~STATX_ATTR_VERITY;
+            *mask |= STATX_ATTR_VERITY;
+            break;
+        case SAT_DAX:
+            if (!BSON_ITER_HOLDS_BOOL(iter))
+                goto out_einval;
+            if (bson_iter_bool(iter))
+                *attributes |= STATX_ATTR_DAX;
+            else
+                *attributes &= ~STATX_ATTR_DAX;
+            *mask |= STATX_ATTR_DAX;
             break;
         }
     }

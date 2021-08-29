@@ -134,6 +134,10 @@ struct rbh_value_map;
 #define MFF_STATX_APPEND            "append"
 #define MFF_STATX_NODUMP            "nodump"
 #define MFF_STATX_ENCRYPTED         "encrypted"
+#define MFF_STATX_AUTOMOUNT         "automount"
+#define MFF_STATX_MOUNT_ROOT        "mount-root"
+#define MFF_STATX_VERITY            "verity"
+#define MFF_STATX_DAX               "dax"
 
 /* statx_timestamp */
 #define MFF_STATX_TIMESTAMP_SEC     "sec"
