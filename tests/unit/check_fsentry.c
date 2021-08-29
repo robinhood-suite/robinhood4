@@ -15,6 +15,7 @@
 #include <sys/stat.h>
 
 #include "robinhood/fsentry.h"
+#include "robinhood/statx.h"
 #ifndef HAVE_STATX
 # include "robinhood/statx-compat.h"
 #endif
@@ -89,7 +90,7 @@ END_TEST
 START_TEST(rfn_statx)
 {
     static const struct statx STATX = {
-        .stx_mask = STATX_UID,
+        .stx_mask = RBH_STATX_UID,
         .stx_uid = 1,
     };
     struct rbh_fsentry *fsentry;
@@ -233,7 +234,7 @@ END_TEST
 START_TEST(rfn_symlink_not_a_symlink)
 {
     static const struct statx STATX = {
-        .stx_mask = STATX_TYPE,
+        .stx_mask = RBH_STATX_TYPE,
         .stx_mode = S_IFREG,
     };
     static const char SYMLINK[] = "abcdefg";
@@ -258,7 +259,7 @@ START_TEST(rfn_all)
     };
     static const char NAME[] = "opqrstu";
     static const struct statx STATX = {
-        .stx_mask = STATX_UID,
+        .stx_mask = RBH_STATX_UID,
         .stx_uid = 0,
     };
     static const struct rbh_value VALUE = {

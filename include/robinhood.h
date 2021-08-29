@@ -22,6 +22,7 @@
 #include "robinhood/ringr.h"
 #include "robinhood/sstack.h"
 #include "robinhood/stack.h"
+#include "robinhood/statx.h"
 #include "robinhood/uri.h"
 #include "robinhood/value.h"
 

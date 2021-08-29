@@ -19,6 +19,7 @@ install_headers(
     'statx-compat.h',
     'sstack.h',
     'stack.h',
+    'statx.h',
     'uri.h',
     'utils.h',
     'value.h',

@@ -15,6 +15,7 @@
 #include <sys/stat.h>
 
 #include "robinhood/fsevent.h"
+#include "robinhood/statx.h"
 #ifndef HAVE_STATX
 # include "robinhood/statx-compat.h"
 #endif
@@ -156,7 +157,7 @@ END_TEST
 START_TEST(rfupn_statx)
 {
     const struct statx STATX = {
-        .stx_mask = STATX_UID,
+        .stx_mask = RBH_STATX_UID,
         .stx_uid = 0,
     };
     const struct rbh_fsevent FSEVENT = {
@@ -182,7 +183,7 @@ END_TEST
 START_TEST(rfupn_statx_misaligned)
 {
     const struct statx STATX = {
-        .stx_mask = STATX_UID,
+        .stx_mask = RBH_STATX_UID,
         .stx_uid = 0,
     };
     const struct rbh_value_pair PAIR = {
@@ -246,7 +247,7 @@ START_TEST(rfupn_symlink_not_a_symlink)
         .size = 8,
     };
     const struct statx STATX = {
-        .stx_mask = STATX_TYPE,
+        .stx_mask = RBH_STATX_TYPE,
         .stx_mode = S_IFREG,
     };
     const char SYMLINK[] = "hijklmn";
@@ -273,7 +274,7 @@ START_TEST(rfupn_all)
         .value = &VALUE,
     };
     const struct statx STATX = {
-        .stx_mask = STATX_TYPE,
+        .stx_mask = RBH_STATX_TYPE,
         .stx_mode = S_IFLNK,
     };
     const struct rbh_fsevent FSEVENT = {

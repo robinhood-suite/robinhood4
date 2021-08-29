@@ -14,12 +14,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <sys/stat.h>
-#ifndef HAVE_STATX
-# include "robinhood/statx-compat.h"
-#endif
-
 #include "robinhood/filter.h"
+#include "robinhood/statx.h"
 
 #include "value.h"
 #include "utils.h"
@@ -461,18 +457,28 @@ filter_field_validate(const struct rbh_filter_field *field)
         return 0;
     case RBH_FP_STATX:
         switch (field->statx) {
-        case STATX_TYPE:
-        case STATX_MODE:
-        case STATX_NLINK:
-        case STATX_UID:
-        case STATX_GID:
-        case STATX_ATIME:
-        case STATX_MTIME:
-        case STATX_CTIME:
-        case STATX_INO:
-        case STATX_SIZE:
-        case STATX_BLOCKS:
-        case STATX_BTIME:
+        case RBH_STATX_TYPE:
+        case RBH_STATX_MODE:
+        case RBH_STATX_NLINK:
+        case RBH_STATX_UID:
+        case RBH_STATX_GID:
+        case RBH_STATX_ATIME_SEC:
+        case RBH_STATX_MTIME_SEC:
+        case RBH_STATX_CTIME_SEC:
+        case RBH_STATX_INO:
+        case RBH_STATX_SIZE:
+        case RBH_STATX_BLOCKS:
+        case RBH_STATX_BTIME_SEC:
+        case RBH_STATX_BLKSIZE:
+        case RBH_STATX_ATTRIBUTES:
+        case RBH_STATX_ATIME_NSEC:
+        case RBH_STATX_BTIME_NSEC:
+        case RBH_STATX_CTIME_NSEC:
+        case RBH_STATX_MTIME_NSEC:
+        case RBH_STATX_RDEV_MAJOR:
+        case RBH_STATX_RDEV_MINOR:
+        case RBH_STATX_DEV_MAJOR:
+        case RBH_STATX_DEV_MINOR:
             return 0;
         }
         break;

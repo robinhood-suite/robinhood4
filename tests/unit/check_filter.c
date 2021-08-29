@@ -14,11 +14,12 @@
 #include <stdlib.h>
 
 #include <sys/stat.h>
+
+#include "robinhood/filter.h"
+#include "robinhood/statx.h"
 #ifndef HAVE_STATX
 # include "robinhood/statx-compat.h"
 #endif
-
-#include "robinhood/filter.h"
 
 #include "check-compat.h"
 #include "check_macros.h"
@@ -98,30 +99,50 @@ static const char *
 statx_field2str(unsigned int field)
 {
     switch (field) {
-    case STATX_TYPE:
-        return "STATX_TYPE";
-    case STATX_MODE:
-        return "STATX_MODE";
-    case STATX_NLINK:
-        return "STATX_NLINK";
-    case STATX_UID:
-        return "STATX_UID";
-    case STATX_GID:
-        return "STATX_GID";
-    case STATX_ATIME:
-        return "STATX_ATIME";
-    case STATX_MTIME:
-        return "STATX_MTIME";
-    case STATX_CTIME:
-        return "STATX_CTIME";
-    case STATX_INO:
-        return "STATX_INO";
-    case STATX_SIZE:
-        return "STATX_SIZE";
-    case STATX_BLOCKS:
-        return "STATX_BLOCKS";
-    case STATX_BTIME:
-        return "STATX_BTIME";
+    case RBH_STATX_TYPE:
+        return "RBH_STATX_TYPE";
+    case RBH_STATX_MODE:
+        return "RBH_STATX_MODE";
+    case RBH_STATX_NLINK:
+        return "RBH_STATX_NLINK";
+    case RBH_STATX_UID:
+        return "RBH_STATX_UID";
+    case RBH_STATX_GID:
+        return "RBH_STATX_GID";
+    case RBH_STATX_ATIME_SEC:
+        return "RBH_STATX_ATIME_SEC";
+    case RBH_STATX_MTIME_SEC:
+        return "RBH_STATX_MTIME_SEC";
+    case RBH_STATX_CTIME_SEC:
+        return "RBH_STATX_CTIME_SEC";
+    case RBH_STATX_INO:
+        return "RBH_STATX_INO";
+    case RBH_STATX_SIZE:
+        return "RBH_STATX_SIZE";
+    case RBH_STATX_BLOCKS:
+        return "RBH_STATX_BLOCKS";
+    case RBH_STATX_BTIME_SEC:
+        return "RBH_STATX_BTIME_SEC";
+    case RBH_STATX_BLKSIZE:
+        return "RBH_STATX_BLKSIZE";
+    case RBH_STATX_ATTRIBUTES:
+        return "RBH_STATX_ATTRIBUTES";
+    case RBH_STATX_ATIME_NSEC:
+        return "RBH_STATX_ATIME_NSEC";
+    case RBH_STATX_BTIME_NSEC:
+        return "RBH_STATX_BTIME_NSEC";
+    case RBH_STATX_CTIME_NSEC:
+        return "RBH_STATX_CTIME_NSEC";
+    case RBH_STATX_MTIME_NSEC:
+        return "RBH_STATX_MTIME_NSEC";
+    case RBH_STATX_RDEV_MAJOR:
+        return "RBH_STATX_RDEV_MAJOR";
+    case RBH_STATX_RDEV_MINOR:
+        return "RBH_STATX_RDEV_MINOR";
+    case RBH_STATX_DEV_MAJOR:
+        return "RBH_STATX_DEV_MAJOR";
+    case RBH_STATX_DEV_MINOR:
+        return "RBH_STATX_DEV_MINOR";
     }
     return "unknown";
 }
@@ -308,7 +329,7 @@ static const struct rbh_filter COMPARISONS[] = {
         .compare = {
             .field = {
                 .fsentry = RBH_FP_STATX,
-                .statx = STATX_ATIME,
+                .statx = RBH_STATX_ATIME_SEC,
             },
             .value = {
                 .type = RBH_VT_UINT64,
@@ -321,7 +342,7 @@ static const struct rbh_filter COMPARISONS[] = {
         .compare = {
             .field = {
                 .fsentry = RBH_FP_STATX,
-                .statx = STATX_MTIME,
+                .statx = RBH_STATX_MTIME_SEC,
             },
             .value = {
                 .type = RBH_VT_INT32,
@@ -334,7 +355,7 @@ static const struct rbh_filter COMPARISONS[] = {
         .compare = {
             .field = {
                 .fsentry = RBH_FP_STATX,
-                .statx = STATX_CTIME,
+                .statx = RBH_STATX_CTIME_SEC,
             },
             .value = {
                 .type = RBH_VT_INT64,
@@ -347,7 +368,7 @@ static const struct rbh_filter COMPARISONS[] = {
         .compare = {
             .field = {
                 .fsentry = RBH_FP_STATX,
-                .statx = STATX_TYPE,
+                .statx = RBH_STATX_TYPE,
             },
             .value = {
                 .type = RBH_VT_SEQUENCE,
@@ -378,7 +399,7 @@ static const struct rbh_filter COMPARISONS[] = {
         .compare = {
             .field = {
                 .fsentry = RBH_FP_STATX,
-                .statx = STATX_UID,
+                .statx = RBH_STATX_UID,
             },
             .value = {
                 .type = RBH_VT_UINT32,
@@ -391,7 +412,7 @@ static const struct rbh_filter COMPARISONS[] = {
         .compare = {
             .field = {
                .fsentry = RBH_FP_STATX,
-                .statx = STATX_INO,
+                .statx = RBH_STATX_INO,
             },
             .value = {
                 .type = RBH_VT_UINT64,
@@ -404,7 +425,7 @@ static const struct rbh_filter COMPARISONS[] = {
         .compare = {
             .field = {
                 .fsentry = RBH_FP_STATX,
-                .statx = STATX_GID,
+                .statx = RBH_STATX_GID,
             },
             .value = {
                 .type = RBH_VT_INT32,
@@ -417,7 +438,7 @@ static const struct rbh_filter COMPARISONS[] = {
         .compare = {
             .field = {
                .fsentry = RBH_FP_STATX,
-               .statx = STATX_SIZE,
+               .statx = RBH_STATX_SIZE,
             },
             .value = {
                 .type = RBH_VT_INT64,
@@ -434,7 +455,7 @@ static const struct rbh_filter COMPARISONS[] = {
         .compare = {
             .field = {
                 .fsentry = RBH_FP_STATX,
-                .statx = STATX_MODE,
+                .statx = RBH_STATX_MODE,
             },
             .value = {
                 .type = RBH_VT_UINT32,
@@ -447,7 +468,7 @@ static const struct rbh_filter COMPARISONS[] = {
         .compare = {
             .field = {
                 .fsentry = RBH_FP_STATX,
-                .statx = STATX_NLINK,
+                .statx = RBH_STATX_NLINK,
             },
             .value = {
                 .type = RBH_VT_UINT32,
@@ -460,7 +481,7 @@ static const struct rbh_filter COMPARISONS[] = {
         .compare = {
             .field = {
                 .fsentry = RBH_FP_STATX,
-                .statx = STATX_BLOCKS,
+                .statx = RBH_STATX_BLOCKS,
             },
             .value = {
                 .type = RBH_VT_UINT64,
@@ -473,11 +494,141 @@ static const struct rbh_filter COMPARISONS[] = {
         .compare = {
             .field = {
                 .fsentry = RBH_FP_STATX,
-                .statx = STATX_BTIME,
+                .statx = RBH_STATX_BTIME_SEC,
             },
             .value = {
                 .type = RBH_VT_INT64,
                 .int64 = 0,
+            },
+        },
+    },
+    {
+        .op = RBH_FOP_EQUAL,
+        .compare = {
+            .field = {
+                .fsentry = RBH_FP_STATX,
+                .statx = RBH_STATX_BLKSIZE,
+            },
+            .value = {
+                .type = RBH_VT_INT32,
+                .int32 = 0,
+            },
+        },
+    },
+    {
+        .op = RBH_FOP_BITS_ALL_SET,
+        .compare = {
+            .field = {
+                .fsentry = RBH_FP_STATX,
+                .statx = RBH_STATX_ATTRIBUTES,
+            },
+            .value = {
+                .type = RBH_VT_INT64,
+                .int64 = STATX_ATTR_APPEND | STATX_ATTR_COMPRESSED,
+            },
+        },
+    },
+    {
+        .op = RBH_FOP_EQUAL,
+        .compare = {
+            .field = {
+                .fsentry = RBH_FP_STATX,
+                .statx = RBH_STATX_ATIME_NSEC,
+            },
+            .value = {
+                .type = RBH_VT_INT32,
+                .int32 = 0,
+            },
+        },
+    },
+    {
+        .op = RBH_FOP_EQUAL,
+        .compare = {
+            .field = {
+                .fsentry = RBH_FP_STATX,
+                .statx = RBH_STATX_BTIME_NSEC,
+            },
+            .value = {
+                .type = RBH_VT_INT32,
+                .int32 = 0,
+            },
+        },
+    },
+    {
+        .op = RBH_FOP_GREATER_OR_EQUAL,
+        .compare = {
+            .field = {
+                .fsentry = RBH_FP_STATX,
+                .statx = RBH_STATX_CTIME_NSEC,
+            },
+            .value = {
+                .type = RBH_VT_INT32,
+                .int32 = 0,
+            },
+        },
+    },
+    {
+        .op = RBH_FOP_GREATER_OR_EQUAL,
+        .compare = {
+            .field = {
+                .fsentry = RBH_FP_STATX,
+                .statx = RBH_STATX_MTIME_NSEC,
+            },
+            .value = {
+                .type = RBH_VT_INT32,
+                .int32 = 0,
+            },
+        },
+    },
+    {
+        .op = RBH_FOP_GREATER_OR_EQUAL,
+        .compare = {
+            .field = {
+                .fsentry = RBH_FP_STATX,
+                .statx = RBH_STATX_RDEV_MAJOR,
+            },
+            .value = {
+                .type = RBH_VT_INT32,
+                .int32 = 0,
+            },
+        },
+    },
+    {
+        .op = RBH_FOP_GREATER_OR_EQUAL,
+        .compare = {
+            .field = {
+                .fsentry = RBH_FP_STATX,
+                .statx = RBH_STATX_RDEV_MINOR,
+            },
+            .value = {
+                .type = RBH_VT_INT32,
+                .int32 = 0,
+            },
+        },
+    },
+    {
+        .op = RBH_FOP_GREATER_OR_EQUAL,
+        .compare = {
+            .field = {
+                .fsentry = RBH_FP_STATX,
+                .statx = RBH_STATX_DEV_MAJOR,
+            },
+            .value = {
+                .type = RBH_VT_INT32,
+                .int32 = 0,
+            },
+        },
+    },
+    {
+        .op = RBH_FOP_GREATER_OR_EQUAL,
+        .compare = {
+            .field = {
+                .fsentry = RBH_FP_STATX,
+                .statx = RBH_STATX_DEV_MINOR,
+            },
+            .value = {
+                .type = RBH_VT_INT32,
+                .int32 = 0,
             },
         },
     },
@@ -706,7 +857,7 @@ START_TEST(rfv_bad_fsentry_field)
         .op = RBH_FOP_EQUAL,
         .compare = {
             .field = {
-                .fsentry = RBH_FP_ID & RBH_FP_PARENT_ID,
+                .fsentry = RBH_FP_ID | RBH_FP_PARENT_ID,
             },
         },
     };
@@ -724,7 +875,7 @@ START_TEST(rfv_bad_statx_field)
         .compare = {
             .field = {
                 .fsentry = RBH_FP_STATX,
-                .statx = STATX_TYPE & STATX_MODE,
+                .statx = RBH_STATX_TYPE | RBH_STATX_MODE,
             },
         },
     };
