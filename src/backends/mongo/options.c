@@ -9,11 +9,7 @@
 # include "config.h"
 #endif
 
-#include <sys/stat.h>
-
-#ifndef HAVE_STATX
-# include "robinhood/statx-compat.h"
-#endif
+#include "robinhood/statx.h"
 
 #include "mongo.h"
 
@@ -29,34 +25,66 @@ bson_append_statx_projection(bson_t *bson, const char *key, size_t key_length,
 
     /* cf. comment in bson_append_rbh_filter_projection() */
     return bson_append_document_begin(bson, key, key_length, &document)
-        && BSON_APPEND_BOOL(&document, MFF_STATX_BLKSIZE, true)
-        && BSON_APPEND_BOOL(&document, MFF_STATX_ATTRIBUTES, true)
-        && BSON_APPEND_BOOL(&document, MFF_STATX_DEV, true)
-        && BSON_APPEND_BOOL(&document, MFF_STATX_RDEV, true)
-        && (!(mask & STATX_TYPE)
+        && (!(mask & RBH_STATX_TYPE)
          || BSON_APPEND_BOOL(&document, MFF_STATX_TYPE, true))
-        && (!(mask & STATX_MODE)
+        && (!(mask & RBH_STATX_MODE)
          || BSON_APPEND_BOOL(&document, MFF_STATX_MODE, true))
-        && (!(mask & STATX_NLINK)
+        && (!(mask & RBH_STATX_NLINK)
          || BSON_APPEND_BOOL(&document, MFF_STATX_NLINK, true))
-        && (!(mask & STATX_UID)
+        && (!(mask & RBH_STATX_UID)
          || BSON_APPEND_BOOL(&document, MFF_STATX_UID, true))
-        && (!(mask & STATX_GID)
+        && (!(mask & RBH_STATX_GID)
          || BSON_APPEND_BOOL(&document, MFF_STATX_GID, true))
-        && (!(mask & STATX_ATIME)
-         || BSON_APPEND_BOOL(&document, MFF_STATX_ATIME, true))
-        && (!(mask & STATX_MTIME)
-         || BSON_APPEND_BOOL(&document, MFF_STATX_MTIME, true))
-        && (!(mask & STATX_CTIME)
-         || BSON_APPEND_BOOL(&document, MFF_STATX_CTIME, true))
-        && (!(mask & STATX_INO)
+        && (!(mask & RBH_STATX_ATIME_SEC)
+         || BSON_APPEND_BOOL(&document,
+                             MFF_STATX_ATIME "." MFF_STATX_TIMESTAMP_SEC, true))
+        && (!(mask & RBH_STATX_MTIME_SEC)
+         || BSON_APPEND_BOOL(&document,
+                             MFF_STATX_BTIME "." MFF_STATX_TIMESTAMP_SEC, true))
+        && (!(mask & RBH_STATX_CTIME_SEC)
+         || BSON_APPEND_BOOL(&document,
+                             MFF_STATX_CTIME "." MFF_STATX_TIMESTAMP_SEC, true))
+        && (!(mask & RBH_STATX_INO)
          || BSON_APPEND_BOOL(&document, MFF_STATX_INO, true))
-        && (!(mask & STATX_SIZE)
+        && (!(mask & RBH_STATX_SIZE)
          || BSON_APPEND_BOOL(&document, MFF_STATX_SIZE, true))
-        && (!(mask & STATX_BLOCKS)
+        && (!(mask & RBH_STATX_BLOCKS)
          || BSON_APPEND_BOOL(&document, MFF_STATX_BLOCKS, true))
-        && (!(mask & STATX_BTIME)
-         || BSON_APPEND_BOOL(&document, MFF_STATX_BTIME, true))
+        && (!(mask & RBH_STATX_BTIME_SEC)
+         || BSON_APPEND_BOOL(&document,
+                             MFF_STATX_BTIME "." MFF_STATX_TIMESTAMP_SEC, true))
+        && (!(mask & RBH_STATX_BLKSIZE)
+         || BSON_APPEND_BOOL(&document, MFF_STATX_BLKSIZE, true))
+        && (!(mask & RBH_STATX_ATTRIBUTES)
+         || BSON_APPEND_BOOL(&document, MFF_STATX_ATTRIBUTES, true))
+        && (!(mask & RBH_STATX_ATIME_NSEC)
+         || BSON_APPEND_BOOL(&document,
+                             MFF_STATX_ATIME "." MFF_STATX_TIMESTAMP_NSEC,
+                             true))
+        && (!(mask & RBH_STATX_BTIME_NSEC)
+         || BSON_APPEND_BOOL(&document,
+                             MFF_STATX_BTIME "." MFF_STATX_TIMESTAMP_NSEC,
+                             true))
+        && (!(mask & RBH_STATX_CTIME_NSEC)
+         || BSON_APPEND_BOOL(&document,
+                             MFF_STATX_CTIME "." MFF_STATX_TIMESTAMP_NSEC,
+                             true))
+        && (!(mask & RBH_STATX_MTIME_NSEC)
+         || BSON_APPEND_BOOL(&document,
+                             MFF_STATX_MTIME "." MFF_STATX_TIMESTAMP_NSEC,
+                             true))
+        && (!(mask & RBH_STATX_RDEV_MAJOR)
+         || BSON_APPEND_BOOL(&document,
+                             MFF_STATX_RDEV "." MFF_STATX_DEVICE_MAJOR, true))
+        && (!(mask & RBH_STATX_RDEV_MINOR)
+         || BSON_APPEND_BOOL(&document,
+                             MFF_STATX_RDEV "." MFF_STATX_DEVICE_MINOR, true))
+        && (!(mask & RBH_STATX_DEV_MAJOR)
+         || BSON_APPEND_BOOL(&document,
+                             MFF_STATX_DEV "." MFF_STATX_DEVICE_MAJOR, true))
+        && (!(mask & RBH_STATX_DEV_MINOR)
+         || BSON_APPEND_BOOL(&document,
+                             MFF_STATX_DEV "." MFF_STATX_DEVICE_MINOR, true))
         && bson_append_document_end(bson, &document);
 }
 

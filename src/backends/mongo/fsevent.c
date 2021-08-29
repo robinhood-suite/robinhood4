@@ -10,12 +10,8 @@
 #endif
 
 #include <assert.h>
-#include <sys/stat.h>
 
 #include "robinhood/fsevent.h"
-#ifndef HAVE_STATX
-# include "robinhood/statx-compat.h"
-#endif
 
 #include "mongo.h"
 
