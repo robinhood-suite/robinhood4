@@ -8,8 +8,8 @@
 #ifndef ROBINHOOD_FSENTRY_H
 #define ROBINHOOD_FSENTRY_H
 
-#include <robinhood/id.h>
-#include <robinhood/value.h>
+#include "robinhood/id.h"
+#include "robinhood/value.h"
 
 /** @file
  * fsentry is the generic name for a filesystem entry (file, dir, symlink, ...)

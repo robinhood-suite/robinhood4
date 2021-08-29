@@ -84,8 +84,8 @@
 #include <stdint.h>
 #include <time.h>
 
-#include <robinhood/fsentry.h>
-#include <robinhood/value.h>
+#include "robinhood/fsentry.h"
+#include "robinhood/value.h"
 
 /**
  * Filter operator

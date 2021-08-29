@@ -10,7 +10,7 @@
 
 #include <sys/types.h>
 
-#include <robinhood/fsentry.h>
+#include "robinhood/fsentry.h"
 
 #define RBH_SCHEME "rbh"
 
