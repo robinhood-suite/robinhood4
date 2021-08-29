@@ -23,7 +23,7 @@ struct statx;
  * \c mask is set to indicate which fields of an fsentry are set.
  *
  * To access the content of \c statx, either use the libc definition if it
- * provides one or include <robinhood/statx.h>.
+ * provides one or include <robinhood/statx-compat.h>.
  */
 struct rbh_fsentry {
     /**

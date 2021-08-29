@@ -16,7 +16,7 @@ install_headers(
     'queue.h',
     'ring.h',
     'ringr.h',
-    'statx.h',
+    'statx-compat.h',
     'sstack.h',
     'stack.h',
     'uri.h',

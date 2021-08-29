@@ -5,8 +5,8 @@
  * SPDX-License-Identifer: LGPL-3.0-or-later
  */
 
-#ifndef ROBINHOOD_STATX_H
-#define ROBINHOOD_STATX_H
+#ifndef ROBINHOOD_STATX_COMPAT_H
+#define ROBINHOOD_STATX_COMPAT_H
 
 /** @file
  * Definition of statx structures for compatability with older systems

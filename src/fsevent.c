@@ -19,7 +19,7 @@
 
 #include "robinhood/fsevent.h"
 #ifndef HAVE_STATX
-# include "robinhood/statx.h"
+# include "robinhood/statx-compat.h"
 #endif
 
 #include "utils.h"

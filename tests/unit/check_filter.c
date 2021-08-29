@@ -15,7 +15,7 @@
 
 #include <sys/stat.h>
 #ifndef HAVE_STATX
-# include "robinhood/statx.h"
+# include "robinhood/statx-compat.h"
 #endif
 
 #include "robinhood/filter.h"

@@ -27,7 +27,7 @@
 #include "robinhood/itertools.h"
 #include "robinhood/ringr.h"
 #ifndef HAVE_STATX
-# include "robinhood/statx.h"
+# include "robinhood/statx-compat.h"
 #endif
 
 #include "mongo.h"
