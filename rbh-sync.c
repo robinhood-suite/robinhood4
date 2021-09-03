@@ -5,10 +5,6 @@
  * SPDX-License-Identifer: LGPL-3.0-or-later
  */
 
-#ifdef HAVE_CONFIG_H
-# include "config.h"
-#endif
-
 #include <dlfcn.h>
 #include <errno.h>
 #include <error.h>
@@ -18,12 +14,8 @@
 #include <string.h>
 #include <sysexits.h>
 
-#include <sys/stat.h>
-
 #include <robinhood.h>
-#ifndef HAVE_STATX
-# include <robinhood/statx.h>
-#endif
+#include <robinhood/statx.h>
 #include <robinhood/utils.h>
 
 #ifndef RBH_ITER_CHUNK_SIZE
@@ -272,7 +264,7 @@ sync(void)
     const struct rbh_filter_options OPTIONS = {
         .projection = {
             .fsentry_mask = RBH_FP_ALL,
-            .statx_mask = STATX_ALL,
+            .statx_mask = RBH_STATX_ALL,
         },
     };
     struct rbh_mut_iterator *_fsentries;
