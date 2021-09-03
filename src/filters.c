@@ -22,8 +22,10 @@
 #include <ctype.h>
 
 #include <sys/stat.h>
+
+#include <robinhood/statx.h>
 #ifndef HAVE_STATX
-# include <robinhood/statx.h>
+# include <robinhood/statx-compat.h>
 #endif
 
 #include <robinhood/backend.h>
@@ -33,17 +35,17 @@
 #include "utils.h"
 
 static const struct rbh_filter_field predicate2filter_field[] = {
-    [PRED_AMIN]     = { .fsentry = RBH_FP_STATX, .statx = STATX_ATIME, },
-    [PRED_ATIME]    = { .fsentry = RBH_FP_STATX, .statx = STATX_ATIME, },
-    [PRED_CMIN]     = { .fsentry = RBH_FP_STATX, .statx = STATX_CTIME, },
-    [PRED_CTIME]    = { .fsentry = RBH_FP_STATX, .statx = STATX_CTIME, },
-    [PRED_NAME]     = { .fsentry = RBH_FP_NAME, },
-    [PRED_INAME]    = { .fsentry = RBH_FP_NAME, },
-    [PRED_MMIN]     = { .fsentry = RBH_FP_STATX, .statx = STATX_MTIME, },
-    [PRED_MTIME]    = { .fsentry = RBH_FP_STATX, .statx = STATX_MTIME, },
-    [PRED_TYPE]     = { .fsentry = RBH_FP_STATX, .statx = STATX_TYPE },
-    [PRED_SIZE]     = { .fsentry = RBH_FP_STATX, .statx = STATX_SIZE },
-    [PRED_PERM]     = { .fsentry = RBH_FP_STATX, .statx = STATX_MODE },
+    [PRED_AMIN]     = {.fsentry = RBH_FP_STATX, .statx = RBH_STATX_ATIME_SEC},
+    [PRED_ATIME]    = {.fsentry = RBH_FP_STATX, .statx = RBH_STATX_ATIME_SEC},
+    [PRED_CMIN]     = {.fsentry = RBH_FP_STATX, .statx = RBH_STATX_CTIME_SEC},
+    [PRED_CTIME]    = {.fsentry = RBH_FP_STATX, .statx = RBH_STATX_CTIME_SEC},
+    [PRED_NAME]     = {.fsentry = RBH_FP_NAME},
+    [PRED_INAME]    = {.fsentry = RBH_FP_NAME},
+    [PRED_MMIN]     = {.fsentry = RBH_FP_STATX, .statx = RBH_STATX_MTIME_SEC},
+    [PRED_MTIME]    = {.fsentry = RBH_FP_STATX, .statx = RBH_STATX_MTIME_SEC},
+    [PRED_TYPE]     = {.fsentry = RBH_FP_STATX, .statx = RBH_STATX_TYPE},
+    [PRED_SIZE]     = {.fsentry = RBH_FP_STATX, .statx = RBH_STATX_SIZE},
+    [PRED_PERM]     = {.fsentry = RBH_FP_STATX, .statx = RBH_STATX_MODE},
 };
 
 struct rbh_filter *
@@ -714,7 +716,7 @@ str2field(const char *attribute)
     case 'a':
         if (strcmp(&attribute[1], "time") == 0) {
             field.fsentry = RBH_FP_STATX;
-            field.statx = STATX_ATIME;
+            field.statx = RBH_STATX_ATIME_SEC;
             return field;
         }
         break;
@@ -724,34 +726,34 @@ str2field(const char *attribute)
             if (strcmp(&attribute[2], "ocks"))
                 break;
             field.fsentry = RBH_FP_STATX;
-            field.statx = STATX_BLOCKS;
+            field.statx = RBH_STATX_BLOCKS;
             return field;
         case 't':
             if (strcmp(&attribute[2], "ime"))
                 break;
             field.fsentry = RBH_FP_STATX;
-            field.statx = STATX_BTIME;
+            field.statx = RBH_STATX_BTIME_SEC;
             return field;
         }
         break;
     case 'c':
         if (strcmp(&attribute[1], "time") == 0) {
             field.fsentry = RBH_FP_STATX;
-            field.statx = STATX_CTIME;
+            field.statx = RBH_STATX_CTIME_SEC;
             return field;
         }
         break;
     case 'g':
         if (strcmp(&attribute[1], "id") == 0) {
             field.fsentry = RBH_FP_STATX;
-            field.statx = STATX_GID;
+            field.statx = RBH_STATX_GID;
             return field;
         }
         break;
     case 'i':
         if (strcmp(&attribute[1], "no") == 0) {
             field.fsentry = RBH_FP_STATX;
-            field.statx = STATX_INO;
+            field.statx = RBH_STATX_INO;
             return field;
         }
         break;
@@ -761,13 +763,13 @@ str2field(const char *attribute)
             if (strcmp(&attribute[2], "de"))
                 break;
             field.fsentry = RBH_FP_STATX;
-            field.statx = STATX_MODE;
+            field.statx = RBH_STATX_MODE;
             return field;
         case 't':
             if (strcmp(&attribute[2], "ime"))
                 break;
             field.fsentry = RBH_FP_STATX;
-            field.statx = STATX_MTIME;
+            field.statx = RBH_STATX_MTIME_SEC;
             return field;
         }
         break;
@@ -782,28 +784,28 @@ str2field(const char *attribute)
             if (strcmp(&attribute[2], "ink"))
                 break;
             field.fsentry = RBH_FP_STATX;
-            field.statx = STATX_NLINK;
+            field.statx = RBH_STATX_NLINK;
             return field;
         }
         break;
     case 's':
         if (strcmp(&attribute[1], "ize") == 0) {
             field.fsentry = RBH_FP_STATX;
-            field.statx = STATX_SIZE;
+            field.statx = RBH_STATX_SIZE;
             return field;
         }
         break;
     case 't':
         if (strcmp(&attribute[1], "ype") == 0) {
             field.fsentry = RBH_FP_STATX;
-            field.statx = STATX_TYPE;
+            field.statx = RBH_STATX_TYPE;
             return field;
         }
         break;
     case 'u':
         if (strcmp(&attribute[1], "id") == 0) {
             field.fsentry = RBH_FP_STATX;
-            field.statx = STATX_UID;
+            field.statx = RBH_STATX_UID;
             return field;
         }
         break;

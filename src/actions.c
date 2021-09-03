@@ -18,8 +18,9 @@
 #include <sys/param.h>
 #include <sys/stat.h>
 
+#include <robinhood/statx.h>
 #ifndef HAVE_STATX
-# include <robinhood/statx.h>
+# include <robinhood/statx-compat.h>
 #endif
 
 #include "actions.h"
@@ -152,14 +153,14 @@ statx_print_ls_dils(FILE *file, const struct statx *statxbuf)
         return;
     }
 
-    if (statxbuf->stx_mask & STATX_INO) {
+    if (statxbuf->stx_mask & RBH_STATX_INO) {
         rc = fprintf(file, "%*lld", length.ino, statxbuf->stx_ino);
         length.ino = MAX(length.ino, rc);
     } else {
         fprintf(file, "%*c", length.ino, '?');
     }
 
-    if (statxbuf->stx_mask & STATX_BLOCKS) {
+    if (statxbuf->stx_mask & RBH_STATX_BLOCKS) {
         uint64_t blocks = posixly_correct ? statxbuf->stx_blocks
                                           : statxbuf->stx_blocks / 2;
 
@@ -171,23 +172,23 @@ statx_print_ls_dils(FILE *file, const struct statx *statxbuf)
     }
 
     fprintf(file, " %c",
-           statxbuf->stx_mask & STATX_TYPE ? mode2type(statxbuf->stx_mode)
+           statxbuf->stx_mask & RBH_STATX_TYPE ? mode2type(statxbuf->stx_mode)
                                            : '?');
 
-    if (statxbuf->stx_mask & STATX_MODE)
+    if (statxbuf->stx_mask & RBH_STATX_MODE)
         mode_print_ls_dils(file, statxbuf->stx_mode);
     else
         /*      rwxrwxrwx */
         fprintf(file, "?????????");
 
-    if (statxbuf->stx_mask & STATX_NLINK) {
+    if (statxbuf->stx_mask & RBH_STATX_NLINK) {
         rc = fprintf(file, " %*d", length.nlink, statxbuf->stx_nlink) - 1;
         length.nlink = MAX(length.nlink, rc);
     } else {
         fprintf(file, " %*c", length.nlink, '?');
     }
 
-    if (statxbuf->stx_mask & STATX_UID) {
+    if (statxbuf->stx_mask & RBH_STATX_UID) {
         const struct passwd *uid = getpwuid(statxbuf->stx_uid);
 
         if (uid)
@@ -200,7 +201,7 @@ statx_print_ls_dils(FILE *file, const struct statx *statxbuf)
         fprintf(file, " %*c", length.uid, '?');
     }
 
-    if (statxbuf->stx_mask & STATX_GID) {
+    if (statxbuf->stx_mask & RBH_STATX_GID) {
         const struct group *gid = getgrgid(statxbuf->stx_gid);
 
         if (gid)
@@ -213,7 +214,7 @@ statx_print_ls_dils(FILE *file, const struct statx *statxbuf)
         fprintf(file, " %*c", length.gid, '?');
     }
 
-    if (statxbuf->stx_mask & STATX_SIZE) {
+    if (statxbuf->stx_mask & RBH_STATX_SIZE) {
         rc = fprintf(file, " %*lld", length.size, statxbuf->stx_size) - 1;
         length.size = MAX(length.size, rc);
     } else {
@@ -221,7 +222,7 @@ statx_print_ls_dils(FILE *file, const struct statx *statxbuf)
     }
 
     fprintf(file, " ");
-    if (statxbuf->stx_mask & STATX_MTIME)
+    if (statxbuf->stx_mask & RBH_STATX_MTIME_SEC)
         timestamp_print_ls_dils(file, statxbuf->stx_mtime.tv_sec);
     else
         /*      Jan 31 20:00 */

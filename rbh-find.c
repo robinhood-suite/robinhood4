@@ -18,13 +18,7 @@
 #include <stdio.h>
 #include <sysexits.h>
 
-#include <sys/stat.h>
-#include <sys/types.h>
-
 #include <robinhood.h>
-#ifndef HAVE_STATX
-# include <robinhood/statx.h>
-#endif
 #include <robinhood/utils.h>
 
 #include "actions.h"
@@ -55,7 +49,7 @@ _find(struct rbh_backend *backend, enum action action,
     const struct rbh_filter_options OPTIONS = {
         .projection = {
             .fsentry_mask = RBH_FP_ALL,
-            .statx_mask = STATX_ALL,
+            .statx_mask = RBH_STATX_ALL,
         },
         .sort = {
             .items = sorts,
