@@ -10,8 +10,9 @@
 #include <stdlib.h>
 
 #include <sys/stat.h>
-#ifndef HAVE_STATX
 # include <robinhood/statx.h>
+#ifndef HAVE_STATX
+# include <robinhood/statx-compat.h>
 #endif
 
 #include <miniyaml.h>
@@ -1409,17 +1410,17 @@ parse_blksize(yaml_parser_t *parser, uint32_t *blksize)
          *------------------------------------------------------------*/
 
 static bool
-emit_statx_timestamp(yaml_emitter_t *emitter,
+emit_statx_timestamp(yaml_emitter_t *emitter, bool sec, bool nsec,
                      const struct statx_timestamp *timestamp)
 {
     return yaml_emit_mapping_start(emitter, NULL)
-        && YAML_EMIT_STRING(emitter, "sec")
-        && yaml_emit_integer(emitter, timestamp->tv_sec)
-        && YAML_EMIT_STRING(emitter, "nsec")
-        && yaml_emit_unsigned_integer(emitter, timestamp->tv_nsec)
+        && (sec ? YAML_EMIT_STRING(emitter, "sec")
+               && yaml_emit_integer(emitter, timestamp->tv_sec) : true)
+        && (nsec ? YAML_EMIT_STRING(emitter, "nsec")
+                && yaml_emit_unsigned_integer(emitter, timestamp->tv_nsec)
+                 : true)
         && yaml_emit_mapping_end(emitter);
 }
-
 
 enum statx_timestamp_field {
     STF_UNKNOWN,
@@ -1446,18 +1447,15 @@ str2statx_timestamp_field(const char *string)
 }
 
 static bool
-_parse_statx_timestamp(yaml_parser_t *parser, struct statx_timestamp *timestamp)
+_parse_statx_timestamp(yaml_parser_t *parser, uint32_t *mask, uint32_t sec,
+                       uint32_t nsec, struct statx_timestamp *timestamp)
 {
-    struct {
-        bool sec:1;
-        bool nsec:1;
-    } seen = {};
-
     while (true) {
         enum statx_timestamp_field field;
         yaml_event_t event;
         const char *key;
         int save_errno;
+        bool success;
 
         if (!yaml_parser_parse(parser, &event))
             parser_error(parser);
@@ -1486,35 +1484,37 @@ _parse_statx_timestamp(yaml_parser_t *parser, struct statx_timestamp *timestamp)
                 parser_error(parser);
 
             static_assert(sizeof(timestamp->tv_sec) == sizeof(int64_t), "");
-            seen.sec = parse_int64(&event, (int64_t *)&timestamp->tv_sec);
+            success = parse_int64(&event, (int64_t *)&timestamp->tv_sec);
             save_errno = errno;
             yaml_event_delete(&event);
-            if (!seen.sec) {
+            if (!success) {
                 errno = save_errno;
                 return false;
             }
+            *mask |= sec;
             break;
         case STF_NSEC:
             if (!yaml_parser_parse(parser, &event))
                 parser_error(parser);
 
-            seen.nsec = parse_uint32(&event, &timestamp->tv_nsec);
+            success = parse_uint32(&event, &timestamp->tv_nsec);
             save_errno = errno;
             yaml_event_delete(&event);
-            if (!seen.nsec) {
+            if (!success) {
                 errno = save_errno;
                 return false;
             }
+            *mask |= nsec;
             break;
         }
     }
 
-    errno = EINVAL;
-    return seen.sec && seen.nsec;
+    return true;
 }
 
 static bool
-parse_statx_timestamp(yaml_parser_t *parser, struct statx_timestamp *timestamp)
+parse_statx_timestamp(yaml_parser_t *parser, uint32_t *mask, uint32_t sec,
+                      uint32_t nsec, struct statx_timestamp *timestamp)
 {
     yaml_event_type_t type;
     yaml_event_t event;
@@ -1530,7 +1530,7 @@ parse_statx_timestamp(yaml_parser_t *parser, struct statx_timestamp *timestamp)
         return false;
     }
 
-    return _parse_statx_timestamp(parser, timestamp);
+    return _parse_statx_timestamp(parser, mask, sec, nsec, timestamp);
 }
 
         /*------------------------------------------------------------*
@@ -1538,13 +1538,14 @@ parse_statx_timestamp(yaml_parser_t *parser, struct statx_timestamp *timestamp)
          *------------------------------------------------------------*/
 
 static bool
-emit_device_numbers(yaml_emitter_t *emitter, uint32_t major, uint32_t minor)
+emit_device_number(yaml_emitter_t *emitter, bool major_, uint32_t major,
+                   bool minor_, uint32_t minor)
 {
     return yaml_emit_mapping_start(emitter, NULL)
-        && YAML_EMIT_STRING(emitter, "major")
-        && yaml_emit_unsigned_integer(emitter, major)
-        && YAML_EMIT_STRING(emitter, "minor")
-        && yaml_emit_unsigned_integer(emitter, minor)
+        && (major_ ? YAML_EMIT_STRING(emitter, "major")
+                  && yaml_emit_unsigned_integer(emitter, major) : true)
+        && (minor_ ? YAML_EMIT_STRING(emitter, "minor")
+                  && yaml_emit_unsigned_integer(emitter, minor) : true)
         && yaml_emit_mapping_end(emitter);
 }
 
@@ -1577,18 +1578,15 @@ str2device_numbers(const char *string)
 }
 
 static bool
-_parse_device_numbers(yaml_parser_t *parser, uint32_t *major, uint32_t *minor)
+_parse_device_numbers(yaml_parser_t *parser, uint32_t *mask, uint32_t major_,
+                      uint32_t *major, uint32_t minor_, uint32_t *minor)
 {
-    struct {
-        bool major:1;
-        bool minor:1;
-    } seen = {};
-
     while (true) {
         enum device_number_field field;
         yaml_event_t event;
         const char *key;
         int save_errno;
+        bool success;
 
         if (!yaml_parser_parse(parser, &event))
             parser_error(parser);
@@ -1616,35 +1614,37 @@ _parse_device_numbers(yaml_parser_t *parser, uint32_t *major, uint32_t *minor)
             if (!yaml_parser_parse(parser, &event))
                 parser_error(parser);
 
-            seen.major = parse_uint32(&event, major);
+            success = parse_uint32(&event, major);
             save_errno = errno;
             yaml_event_delete(&event);
-            if (!seen.major) {
+            if (!success) {
                 errno = save_errno;
                 return false;
             }
+            *mask |= major_;
             break;
         case DNF_MINOR:
             if (!yaml_parser_parse(parser, &event))
                 parser_error(parser);
 
-            seen.minor = parse_uint32(&event, minor);
+            success = parse_uint32(&event, minor);
             save_errno = errno;
             yaml_event_delete(&event);
-            if (!seen.minor) {
+            if (!success) {
                 errno = save_errno;
                 return false;
             }
+            *mask |= minor_;
             break;
         }
     }
 
-    errno = EINVAL;
-    return seen.major && seen.minor;
+    return true;
 }
 
 static bool
-parse_device_numbers(yaml_parser_t *parser, uint32_t *major, uint32_t *minor)
+parse_device_numbers(yaml_parser_t *parser, uint32_t *mask, uint32_t major_,
+                      uint32_t *major, uint32_t minor_, uint32_t *minor)
 {
     yaml_event_type_t type;
     yaml_event_t event;
@@ -1660,7 +1660,7 @@ parse_device_numbers(yaml_parser_t *parser, uint32_t *major, uint32_t *minor)
         return false;
     }
 
-    return _parse_device_numbers(parser, major, minor);
+    return _parse_device_numbers(parser, mask, major_, major, minor_, minor);
 }
 
     /*------------------------------ statx -------------------------------*/
@@ -1673,90 +1673,118 @@ emit_statx(yaml_emitter_t *emitter, const struct statx *statxbuf)
     if (!yaml_emit_mapping_start(emitter, NULL))
         return false;
 
-    if (mask & STATX_TYPE) {
+    if (mask & RBH_STATX_TYPE) {
         if (!YAML_EMIT_STRING(emitter, "type")
          || !emit_filetype(emitter, statxbuf->stx_mode & S_IFMT))
             return false;
     }
 
-    if (mask & STATX_MODE) {
+    if (mask & RBH_STATX_MODE) {
         if (!YAML_EMIT_STRING(emitter, "mode")
          || !emit_octal_unsigned_integer(emitter, statxbuf->stx_mode & ~S_IFMT))
             return false;
     }
 
-    if (mask & STATX_NLINK) {
+    if (mask & RBH_STATX_NLINK) {
         if (!YAML_EMIT_STRING(emitter, "nlink")
          || !yaml_emit_unsigned_integer(emitter, statxbuf->stx_nlink))
             return false;
     }
 
-    if (mask & STATX_UID) {
+    if (mask & RBH_STATX_UID) {
         if (!YAML_EMIT_STRING(emitter, "uid")
          || !yaml_emit_unsigned_integer(emitter, statxbuf->stx_uid))
             return false;
     }
 
-    if (mask & STATX_GID) {
+    if (mask & RBH_STATX_GID) {
         if (!YAML_EMIT_STRING(emitter, "gid")
          || !yaml_emit_unsigned_integer(emitter, statxbuf->stx_gid))
             return false;
     }
 
-    if (mask & STATX_ATIME) {
+    if (mask & RBH_STATX_ATIME) {
         if (!YAML_EMIT_STRING(emitter, "atime")
-         || !emit_statx_timestamp(emitter, &statxbuf->stx_atime))
+         || !emit_statx_timestamp(emitter, mask & RBH_STATX_ATIME_SEC,
+                                  mask & RBH_STATX_ATIME_NSEC,
+                                  &statxbuf->stx_atime))
             return false;
     }
 
-    if (mask & STATX_MTIME) {
+    if (mask & RBH_STATX_MTIME) {
         if (!YAML_EMIT_STRING(emitter, "mtime")
-         || !emit_statx_timestamp(emitter, &statxbuf->stx_mtime))
+         || !emit_statx_timestamp(emitter, mask & RBH_STATX_MTIME_SEC,
+                                  mask & RBH_STATX_MTIME_NSEC,
+                                  &statxbuf->stx_mtime))
             return false;
     }
 
-    if (mask & STATX_CTIME) {
+    if (mask & RBH_STATX_CTIME) {
         if (!YAML_EMIT_STRING(emitter, "ctime")
-         || !emit_statx_timestamp(emitter, &statxbuf->stx_ctime))
+         || !emit_statx_timestamp(emitter, mask & RBH_STATX_CTIME_SEC,
+                                  mask & RBH_STATX_CTIME_NSEC,
+                                  &statxbuf->stx_ctime))
             return false;
     }
 
-    if (mask & STATX_INO) {
+    if (mask & RBH_STATX_INO) {
         if (!YAML_EMIT_STRING(emitter, "ino")
          || !yaml_emit_unsigned_integer(emitter, statxbuf->stx_ino))
             return false;
     }
 
-    if (mask & STATX_SIZE) {
+    if (mask & RBH_STATX_SIZE) {
         if (!YAML_EMIT_STRING(emitter, "size")
          || !yaml_emit_unsigned_integer(emitter, statxbuf->stx_size))
             return false;
     }
 
-    if (mask & STATX_BLOCKS) {
+    if (mask & RBH_STATX_BLOCKS) {
         if (!YAML_EMIT_STRING(emitter, "blocks")
          || !yaml_emit_unsigned_integer(emitter, statxbuf->stx_blocks))
             return false;
     }
 
-    if (mask & STATX_BTIME) {
+    if (mask & RBH_STATX_BTIME) {
         if (!YAML_EMIT_STRING(emitter, "btime")
-         || !emit_statx_timestamp(emitter, &statxbuf->stx_btime))
+         || !emit_statx_timestamp(emitter, mask & RBH_STATX_BTIME_SEC,
+                                  mask & RBH_STATX_BTIME_NSEC,
+                                  &statxbuf->stx_btime))
             return false;
     }
 
-    return YAML_EMIT_STRING(emitter, "blksize")
-        && yaml_emit_unsigned_integer(emitter, statxbuf->stx_blksize)
-        && YAML_EMIT_STRING(emitter, "attributes")
-        && emit_statx_attributes(emitter, statxbuf->stx_attributes_mask,
-                                 statxbuf->stx_attributes)
-        && YAML_EMIT_STRING(emitter, "rdev")
-        && emit_device_numbers(emitter, statxbuf->stx_rdev_major,
-                               statxbuf->stx_rdev_minor)
-        && YAML_EMIT_STRING(emitter, "dev")
-        && emit_device_numbers(emitter, statxbuf->stx_dev_major,
-                               statxbuf->stx_dev_minor)
-        && yaml_emit_mapping_end(emitter);
+    if (mask & RBH_STATX_BLKSIZE) {
+        if (!YAML_EMIT_STRING(emitter, "blksize")
+         || !yaml_emit_unsigned_integer(emitter, statxbuf->stx_blksize))
+            return false;
+    }
+
+    if (mask & RBH_STATX_ATTRIBUTES) {
+        if (!YAML_EMIT_STRING(emitter, "attributes")
+         || !emit_statx_attributes(emitter, statxbuf->stx_attributes_mask,
+                                   statxbuf->stx_attributes))
+            return false;
+    }
+
+    if (mask & RBH_STATX_RDEV) {
+        if (!YAML_EMIT_STRING(emitter, "rdev")
+         || !emit_device_number(emitter, mask & RBH_STATX_RDEV_MAJOR,
+                                statxbuf->stx_rdev_major,
+                                mask & RBH_STATX_RDEV_MINOR,
+                                statxbuf->stx_rdev_minor))
+            return false;
+    }
+
+    if (mask & RBH_STATX_DEV) {
+        if (!YAML_EMIT_STRING(emitter, "dev")
+         || !emit_device_number(emitter, mask & RBH_STATX_DEV_MAJOR,
+                                statxbuf->stx_dev_major,
+                                mask & RBH_STATX_DEV_MINOR,
+                                statxbuf->stx_dev_minor))
+            return false;
+    }
+
+    return yaml_emit_mapping_end(emitter);
 }
 
 enum statx_field {
@@ -1874,13 +1902,6 @@ str2statx_field(const char *string)
 static bool
 parse_statx_mapping(yaml_parser_t *parser, struct statx *statxbuf)
 {
-    struct {
-        bool blksize:1;
-        bool attributes:1;
-        bool rdev:1;
-        bool dev:1;
-    } seen = {};
-
     statxbuf->stx_mode = 0;
 
     while (true) {
@@ -1915,63 +1936,71 @@ parse_statx_mapping(yaml_parser_t *parser, struct statx *statxbuf)
             errno = save_errno;
             return false;
         case SF_TYPE:
-            statxbuf->stx_mask |= STATX_TYPE;
+            statxbuf->stx_mask |= RBH_STATX_TYPE;
             success = parse_filetype(parser, &tmp);
             if (success)
                 statxbuf->stx_mode |= tmp;
             break;
         case SF_MODE:
-            statxbuf->stx_mask |= STATX_MODE;
+            statxbuf->stx_mask |= RBH_STATX_MODE;
             success = parse_permissions(parser, &tmp);
             if (success)
                 statxbuf->stx_mode |= tmp;
             break;
         case SF_NLINK:
-            statxbuf->stx_mask |= STATX_NLINK;
+            statxbuf->stx_mask |= RBH_STATX_NLINK;
             success = parse_nlink(parser, &statxbuf->stx_nlink);
             break;
         case SF_UID:
-            statxbuf->stx_mask |= STATX_UID;
+            statxbuf->stx_mask |= RBH_STATX_UID;
             success = parse_uid(parser, &statxbuf->stx_uid);
             break;
         case SF_GID:
-            statxbuf->stx_mask |= STATX_GID;
+            statxbuf->stx_mask |= RBH_STATX_GID;
             success = parse_gid(parser, &statxbuf->stx_gid);
             break;
         case SF_ATIME:
-            statxbuf->stx_mask |= STATX_ATIME;
-            success = parse_statx_timestamp(parser, &statxbuf->stx_atime);
+            success = parse_statx_timestamp(parser, &statxbuf->stx_mask,
+                                            RBH_STATX_ATIME_SEC,
+                                            RBH_STATX_ATIME_NSEC,
+                                            &statxbuf->stx_atime);
             break;
         case SF_MTIME:
-            statxbuf->stx_mask |= STATX_MTIME;
-            success = parse_statx_timestamp(parser, &statxbuf->stx_mtime);
+            success = parse_statx_timestamp(parser, &statxbuf->stx_mask,
+                                            RBH_STATX_MTIME_SEC,
+                                            RBH_STATX_MTIME_NSEC,
+                                            &statxbuf->stx_mtime);
             break;
         case SF_CTIME:
-            statxbuf->stx_mask |= STATX_CTIME;
-            success = parse_statx_timestamp(parser, &statxbuf->stx_ctime);
+            success = parse_statx_timestamp(parser, &statxbuf->stx_mask,
+                                            RBH_STATX_CTIME_SEC,
+                                            RBH_STATX_CTIME_NSEC,
+                                            &statxbuf->stx_ctime);
             break;
         case SF_INO:
-            statxbuf->stx_mask |= STATX_INO;
+            statxbuf->stx_mask |= RBH_STATX_INO;
             static_assert(sizeof(statxbuf->stx_size) == sizeof(uint64_t), "");
             success = parse_ino(parser, (uint64_t *)&statxbuf->stx_ino);
             break;
         case SF_SIZE:
-            statxbuf->stx_mask |= STATX_SIZE;
+            statxbuf->stx_mask |= RBH_STATX_SIZE;
             static_assert(sizeof(statxbuf->stx_size) == sizeof(uint64_t), "");
             success = parse_size(parser, (uint64_t *)&statxbuf->stx_size);
             break;
         case SF_BLOCKS:
-            statxbuf->stx_mask |= STATX_BLOCKS;
+            statxbuf->stx_mask |= RBH_STATX_BLOCKS;
             static_assert(sizeof(statxbuf->stx_blocks) == sizeof(uint64_t), "");
             success = parse_blocks(parser, (uint64_t *)&statxbuf->stx_blocks);
             break;
         case SF_BTIME:
-            statxbuf->stx_mask |= STATX_BTIME;
-            success = parse_statx_timestamp(parser, &statxbuf->stx_btime);
+            success = parse_statx_timestamp(parser, &statxbuf->stx_mask,
+                                            RBH_STATX_BTIME_SEC,
+                                            RBH_STATX_BTIME_NSEC,
+                                            &statxbuf->stx_btime);
             break;
         case SF_BLKSIZE:
+            statxbuf->stx_mask |= RBH_STATX_BLKSIZE;
             success = parse_blksize(parser, &statxbuf->stx_blksize);
-            seen.blksize = true;
             break;
         case SF_ATTRIBUTES:
             /* XXX: gcc does not allow a static assert to immediately follow
@@ -1984,21 +2013,25 @@ parse_statx_mapping(yaml_parser_t *parser, struct statx *statxbuf)
                     );
             static_assert(sizeof(statxbuf->stx_attributes) == sizeof(uint64_t),
                           "");
+            statxbuf->stx_mask |= RBH_STATX_ATTRIBUTES;
             success = parse_statx_attributes(
                     parser, (uint64_t *)&statxbuf->stx_attributes_mask,
                     (uint64_t *)&statxbuf->stx_attributes
                     );
-            seen.attributes = true;
             break;
         case SF_RDEV:
-            success = parse_device_numbers(parser, &statxbuf->stx_rdev_major,
+            success = parse_device_numbers(parser, &statxbuf->stx_mask,
+                                           RBH_STATX_RDEV_MAJOR,
+                                           &statxbuf->stx_rdev_major,
+                                           RBH_STATX_RDEV_MINOR,
                                            &statxbuf->stx_rdev_minor);
-            seen.rdev = true;
             break;
         case SF_DEV:
-            success = parse_device_numbers(parser, &statxbuf->stx_dev_major,
+            success = parse_device_numbers(parser, &statxbuf->stx_mask,
+                                           RBH_STATX_DEV_MAJOR,
+                                           &statxbuf->stx_dev_major,
+                                           RBH_STATX_DEV_MINOR,
                                            &statxbuf->stx_dev_minor);
-            seen.dev = true;
             break;
         }
 
@@ -2006,7 +2039,7 @@ parse_statx_mapping(yaml_parser_t *parser, struct statx *statxbuf)
             return false;
     }
 
-    return seen.blksize && seen.attributes && seen.rdev && seen.dev;
+    return true;
 }
 
 static bool
