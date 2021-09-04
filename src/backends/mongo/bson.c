@@ -146,6 +146,9 @@ bson_append_statx(bson_t *bson, const char *key, size_t key_length,
                 BSON_APPEND_INT32(&document,
                                   MFF_STATX_DEV "." MFF_STATX_DEVICE_MINOR,
                                   statxbuf->stx_dev_minor) : true)
+        && (statxbuf->stx_mask & RBH_STATX_MNT_ID ?
+                BSON_APPEND_INT64(&document, MFF_STATX_MNT_ID,
+                                  statxbuf->stx_mnt_id) : true)
         && bson_append_document_end(bson, &document);
 }
 

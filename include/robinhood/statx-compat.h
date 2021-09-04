@@ -45,6 +45,8 @@ struct statx {
 
     uint32_t stx_dev_major;
     uint32_t stx_dev_minor;
+
+    uint64_t stx_mnt_id;
 };
 
 #define STATX_TYPE          0x000000001U
@@ -60,6 +62,11 @@ struct statx {
 #define STATX_BLOCKS        0x000000400U
 #define STATX_BASIC_STATS   0x0000007ffU
 #define STATX_BTIME         0x000000800U
+#define STATX_MNT_ID        0x000001000U
+
+/* STATX_ALL has been deprecated upstream, its value will not change from
+ * (STATX_BASIC_STATS | STATX_BTIME). Users should replace its usage by
+ * explicitely or-ing the right flags */
 #define STATX_ALL           0x000000fffU
 
 #define AT_STATX_SYNC_TYPE    0x6000

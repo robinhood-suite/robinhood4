@@ -85,6 +85,7 @@ struct rbh_value_map;
  *             major: fsentry.statx.stx_dev_major (INT32)
  *             minor: fsentry.statx.stx_dev_minor (INT32)
  *         }
+ *         mnt_id: fsentry.statx.stx_mnt_id (INT64)
  *     }
  *
  *     xattrs: {
@@ -126,6 +127,7 @@ struct rbh_value_map;
 #define MFF_STATX_INO               "ino"
 #define MFF_STATX_SIZE              "size"
 #define MFF_STATX_BLOCKS            "blocks"
+#define MFF_STATX_MNT_ID            "mount-id"
 
 /* statx->stx_attributes */
 #define MFF_STATX_ATTRIBUTES        "attributes"

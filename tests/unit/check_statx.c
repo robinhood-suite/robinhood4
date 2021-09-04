@@ -155,7 +155,8 @@ START_TEST(rbh_all)
     static_assert(RBH_STATX_ALL == (RBH_STATX_BASIC_STATS
                                   | RBH_STATX_ATTRIBUTES
                                   | RBH_STATX_BTIME_SEC
-                                  | RBH_STATX_BTIME_NSEC), "");
+                                  | RBH_STATX_BTIME_NSEC
+                                  | RBH_STATX_MNT_ID), "");
 }
 END_TEST
 

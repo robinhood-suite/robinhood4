@@ -51,6 +51,8 @@ const char *field2str(const struct rbh_filter_field *field, char **buffer,
             return MFF_STATX "." MFF_STATX_BLOCKS;
         case RBH_STATX_BTIME_SEC:
             return MFF_STATX "." MFF_STATX_BTIME "." MFF_STATX_TIMESTAMP_SEC;
+        case RBH_STATX_MNT_ID:
+            return MFF_STATX "." MFF_STATX_MNT_ID;
         case RBH_STATX_BLKSIZE:
             return MFF_STATX "." MFF_STATX_BLKSIZE;
         case RBH_STATX_ATTRIBUTES:

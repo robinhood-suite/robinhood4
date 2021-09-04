@@ -53,6 +53,8 @@ bson_append_statx_projection(bson_t *bson, const char *key, size_t key_length,
         && (!(mask & RBH_STATX_BTIME_SEC)
          || BSON_APPEND_BOOL(&document,
                              MFF_STATX_BTIME "." MFF_STATX_TIMESTAMP_SEC, true))
+        && (!(mask & RBH_STATX_MNT_ID)
+         || BSON_APPEND_BOOL(&document, MFF_STATX_MNT_ID, true))
         && (!(mask & RBH_STATX_BLKSIZE)
          || BSON_APPEND_BOOL(&document, MFF_STATX_BLKSIZE, true))
         && (!(mask & RBH_STATX_ATTRIBUTES)

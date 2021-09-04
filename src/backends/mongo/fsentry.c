@@ -503,6 +503,7 @@ enum statx_token {
     ST_MTIME,
     ST_RDEV,
     ST_DEV,
+    ST_MNT_ID,
 };
 
 static enum statx_token
@@ -559,12 +560,20 @@ statx_tokenizer(const char *key)
         if (strcmp(key, "no"))
             break;
         return ST_INO;
-    case 'm': /* mode, mtime */
+    case 'm': /* mode, mount-id, mtime */
         switch (*key++) {
-        case 'o': /* mode */
-            if (strcmp(key, "de"))
-                break;
-            return ST_MODE;
+        case 'o': /* mode, mount-id */
+            switch (*key++) {
+            case 'd': /* mode */
+                if (strcmp(key, "e"))
+                    break;
+                return ST_MODE;
+            case 'u': /* mount-id */
+                if (strcmp(key, "nt-id"))
+                    break;
+                return ST_MNT_ID;
+            }
+            break;
         case 't': /* mtime */
             if (strcmp(key, "ime"))
                 break;
@@ -740,6 +749,12 @@ bson_iter_statx(bson_iter_t *iter, struct statx *statxbuf)
                                         RBH_STATX_DEV_MINOR,
                                         &statxbuf->stx_dev_minor))
                 return false;
+            break;
+        case ST_MNT_ID:
+            if (!BSON_ITER_HOLDS_INT64(iter))
+                goto out_einval;
+            statxbuf->stx_mnt_id = bson_iter_int64(iter);
+            statxbuf->stx_mask |= RBH_STATX_MNT_ID;
             break;
         }
     }

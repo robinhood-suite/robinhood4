@@ -19,6 +19,7 @@
 #define RBH_STATX_SIZE          0x00000200U
 #define RBH_STATX_BLOCKS        0x00000400U
 #define RBH_STATX_BTIME_SEC     0x00000800U
+#define RBH_STATX_MNT_ID        0x00001000U
 #define RBH_STATX_BLKSIZE       0x40000000U
 #define RBH_STATX_ATTRIBUTES    0x20000000U
 #define RBH_STATX_ATIME_NSEC    0x10000000U
@@ -38,6 +39,6 @@
 #define RBH_STATX_DEV           0x00600000U
 
 #define RBH_STATX_BASIC_STATS   0x57e007ffU
-#define RBH_STATX_ALL           0x7fe00fffU
+#define RBH_STATX_ALL           0x7fe01fffU
 
 #endif
