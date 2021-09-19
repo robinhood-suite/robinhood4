@@ -24,6 +24,7 @@ value_data_size(const struct rbh_value *value, size_t offset)
     size_t size;
 
     switch (value->type) {
+    case RBH_VT_BOOLEAN:
     case RBH_VT_INT32:
     case RBH_VT_UINT32:
     case RBH_VT_INT64:
@@ -107,6 +108,9 @@ value_copy(struct rbh_value *dest, const struct rbh_value *src, char **buffer,
     dest->type = src->type;
 
     switch (src->type) {
+    case RBH_VT_BOOLEAN: /* dest->boolean */
+        dest->boolean = src->boolean;
+        break;
     case RBH_VT_INT32: /* dest->int32 */
         dest->int32 = src->int32;
         break;
@@ -279,17 +283,14 @@ value_clone(const struct rbh_value *value)
 }
 
 struct rbh_value *
-rbh_value_binary_new(const char *data, size_t size)
+rbh_value_boolean_new(bool boolean)
 {
-    const struct rbh_value binary = {
-        .type = RBH_VT_BINARY,
-        .binary = {
-            .data = data,
-            .size = size,
-        },
+    const struct rbh_value boolean_ = {
+        .type = RBH_VT_BOOLEAN,
+        .int32 = boolean,
     };
 
-    return value_clone(&binary);
+    return value_clone(&boolean_);
 }
 
 struct rbh_value *
@@ -348,6 +349,20 @@ rbh_value_string_new(const char *string)
 }
 
 struct rbh_value *
+rbh_value_binary_new(const char *data, size_t size)
+{
+    const struct rbh_value binary = {
+        .type = RBH_VT_BINARY,
+        .binary = {
+            .data = data,
+            .size = size,
+        },
+    };
+
+    return value_clone(&binary);
+}
+
+struct rbh_value *
 rbh_value_regex_new(const char *regex, unsigned int options)
 {
     const struct rbh_value regex_ = {
@@ -398,6 +413,7 @@ int
 rbh_value_validate(const struct rbh_value *value)
 {
     switch (value->type) {
+    case RBH_VT_BOOLEAN:
     case RBH_VT_INT32:
     case RBH_VT_UINT32:
     case RBH_VT_INT64:

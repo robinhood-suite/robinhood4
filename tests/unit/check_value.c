@@ -21,6 +21,44 @@
 #include "value.h"
 
 /*----------------------------------------------------------------------------*
+ |                          rbh_value_boolean_new()                           |
+ *----------------------------------------------------------------------------*/
+
+START_TEST(rvbn_false)
+{
+    const struct rbh_value VALUE = {
+        .type = RBH_VT_BOOLEAN,
+        .boolean = false,
+    };
+    struct rbh_value *value;
+
+    value = rbh_value_boolean_new(VALUE.boolean);
+    ck_assert_ptr_nonnull(value);
+
+    ck_assert_value_eq(value, &VALUE);
+
+    free(value);
+}
+END_TEST
+
+START_TEST(rvbn_true)
+{
+    const struct rbh_value VALUE = {
+        .type = RBH_VT_BOOLEAN,
+        .boolean = true,
+    };
+    struct rbh_value *value;
+
+    value = rbh_value_boolean_new(VALUE.boolean);
+    ck_assert_ptr_nonnull(value);
+
+    ck_assert_value_eq(value, &VALUE);
+
+    free(value);
+}
+END_TEST
+
+/*----------------------------------------------------------------------------*
  |                           rbh_value_int32_new()                            |
  *----------------------------------------------------------------------------*/
 
@@ -1055,6 +1093,12 @@ unit_suite(void)
     TCase *tests;
 
     suite = suite_create("value");
+
+    tests = tcase_create("rbh_value_boolean_new");
+    tcase_add_test(tests, rvbn_false);
+    tcase_add_test(tests, rvbn_true);
+
+    suite_add_tcase(suite, tests);
 
     tests = tcase_create("rbh_value_int32_new");
     tcase_add_test(tests, rvi32n_min);

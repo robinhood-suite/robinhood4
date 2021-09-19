@@ -278,19 +278,16 @@ rbh_filter_compare_new(enum rbh_filter_operator op,
 }
 
 struct rbh_filter *
-rbh_filter_compare_binary_new(enum rbh_filter_operator op,
-                              const struct rbh_filter_field *field,
-                              const char *data, size_t size)
+rbh_filter_compare_boolean_new(enum rbh_filter_operator op,
+                               const struct rbh_filter_field *field,
+                               bool boolean)
 {
-    const struct rbh_value binary = {
-        .type = RBH_VT_BINARY,
-        .binary = {
-            .data = data,
-            .size = size,
-        },
+    const struct rbh_value boolean_ = {
+        .type = RBH_VT_BOOLEAN,
+        .boolean = boolean,
     };
 
-    return rbh_filter_compare_new(op, field, &binary);
+    return rbh_filter_compare_new(op, field, &boolean_);
 }
 
 struct rbh_filter *
@@ -356,6 +353,22 @@ rbh_filter_compare_string_new(enum rbh_filter_operator op,
     };
 
     return rbh_filter_compare_new(op, field, &string_);
+}
+
+struct rbh_filter *
+rbh_filter_compare_binary_new(enum rbh_filter_operator op,
+                              const struct rbh_filter_field *field,
+                              const char *data, size_t size)
+{
+    const struct rbh_value binary = {
+        .type = RBH_VT_BINARY,
+        .binary = {
+            .data = data,
+            .size = size,
+        },
+    };
+
+    return rbh_filter_compare_new(op, field, &binary);
 }
 
 struct rbh_filter *

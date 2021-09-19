@@ -185,8 +185,8 @@ bson_iter_rbh_value(bson_iter_t *iter, struct rbh_value *value,
         value->binary.size = size;
         break;
     case BSON_TYPE_BOOL:
-        value->type = RBH_VT_INT32;
-        value->int32 = bson_iter_bool(iter);
+        value->type = RBH_VT_BOOLEAN;
+        value->boolean = bson_iter_bool(iter);
         break;
     case BSON_TYPE_NULL:
         value->type = RBH_VT_BINARY;

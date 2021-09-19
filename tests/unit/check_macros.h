@@ -23,6 +23,8 @@ static inline const char *
 value_type2str(enum rbh_value_type type)
 {
     switch (type) {
+    case RBH_VT_BOOLEAN:
+        return "RBH_VT_BOOLEAN";
     case RBH_VT_INT32:
         return "RBH_VT_INT32";
     case RBH_VT_UINT32:
@@ -53,6 +55,9 @@ value_type2str(enum rbh_value_type type)
 #define _ck_assert_value(X, OP, Y) do { \
     _ck_assert_value_type((X)->type, OP, (Y)->type); \
     switch ((X)->type) { \
+    case RBH_VT_BOOLEAN: \
+        _ck_assert_int((X)->boolean, OP, (Y)->boolean); \
+        break; \
     case RBH_VT_INT32: \
         _ck_assert_int((X)->int32, OP, (Y)->int32); \
         break; \

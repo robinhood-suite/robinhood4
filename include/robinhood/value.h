@@ -8,12 +8,14 @@
 #ifndef ROBINHOOD_VALUE_H
 #define ROBINHOOD_VALUE_H
 
+#include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
 
 struct rbh_value;
 
 enum rbh_value_type {
+    RBH_VT_BOOLEAN,
     RBH_VT_INT32,
     RBH_VT_UINT32,
     RBH_VT_INT64,
@@ -45,6 +47,9 @@ struct rbh_value {
     enum rbh_value_type type;
 
     union {
+        /* RBH_VT_BOOLEAN */
+        bool boolean;
+
         /* RBH_VT_INT32 */
         int32_t int32;
 
@@ -82,6 +87,19 @@ struct rbh_value {
         struct rbh_value_map map;
     };
 };
+
+/**
+ * Create a new boolean value
+ *
+ * @param boolean   a boolean
+ *
+ * @return          a pointer to a newly allocated struct rbh_value on success,
+ *                  -1 on error and errno is set appropriately
+ *
+ * @error ENOMEM    there was not enough memory available
+ */
+struct rbh_value *
+rbh_value_boolean_new(bool boolean);
 
 /**
  * Create a new int32 value
