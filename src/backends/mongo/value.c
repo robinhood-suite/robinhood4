@@ -55,20 +55,20 @@ bson_append_rbh_value(bson_t *bson, const char *key, size_t key_length,
                       const struct rbh_value *value)
 {
     switch (value->type) {
-    case RBH_VT_BINARY:
-        return _bson_append_binary(bson, key, key_length, BSON_SUBTYPE_BINARY,
-                                   value->binary.data, value->binary.size);
-    case RBH_VT_UINT32:
-        return bson_append_int32(bson, key, key_length, value->uint32);
-    case RBH_VT_UINT64:
-        return bson_append_int64(bson, key, key_length, value->uint64);
     case RBH_VT_INT32:
         return bson_append_int32(bson, key, key_length, value->int32);
+    case RBH_VT_UINT32:
+        return bson_append_int32(bson, key, key_length, value->uint32);
     case RBH_VT_INT64:
         return bson_append_int64(bson, key, key_length, value->int64);
+    case RBH_VT_UINT64:
+        return bson_append_int64(bson, key, key_length, value->uint64);
     case RBH_VT_STRING:
         return bson_append_utf8(bson, key, key_length, value->string,
                                 strlen(value->string));
+    case RBH_VT_BINARY:
+        return _bson_append_binary(bson, key, key_length, BSON_SUBTYPE_BINARY,
+                                   value->binary.data, value->binary.size);
     case RBH_VT_REGEX:
         return _bson_append_regex(bson, key, key_length, value->regex.string,
                                   value->regex.options);

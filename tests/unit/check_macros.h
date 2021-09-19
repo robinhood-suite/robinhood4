@@ -23,18 +23,18 @@ static inline const char *
 value_type2str(enum rbh_value_type type)
 {
     switch (type) {
-    case RBH_VT_BINARY:
-        return "RBH_VT_BINARY";
-    case RBH_VT_UINT32:
-        return "RBH_VT_UINT32";
-    case RBH_VT_UINT64:
-        return "RBH_VT_UINT64";
     case RBH_VT_INT32:
         return "RBH_VT_INT32";
+    case RBH_VT_UINT32:
+        return "RBH_VT_UINT32";
     case RBH_VT_INT64:
         return "RBH_VT_INT64";
+    case RBH_VT_UINT64:
+        return "RBH_VT_UINT64";
     case RBH_VT_STRING:
         return "RBH_VT_STRING";
+    case RBH_VT_BINARY:
+        return "RBH_VT_BINARY";
     case RBH_VT_REGEX:
         return "RBH_VT_REGEX";
     case RBH_VT_SEQUENCE:
@@ -53,26 +53,26 @@ value_type2str(enum rbh_value_type type)
 #define _ck_assert_value(X, OP, Y) do { \
     _ck_assert_value_type((X)->type, OP, (Y)->type); \
     switch ((X)->type) { \
+    case RBH_VT_INT32: \
+        _ck_assert_int((X)->int32, OP, (Y)->int32); \
+        break; \
+    case RBH_VT_UINT32: \
+        _ck_assert_uint((X)->uint32, OP, (Y)->uint32); \
+        break; \
+    case RBH_VT_INT64: \
+        _ck_assert_int((X)->int64, OP, (Y)->int64); \
+        break; \
+    case RBH_VT_UINT64: \
+        _ck_assert_uint((X)->uint64, OP, (Y)->uint64); \
+        break; \
+    case RBH_VT_STRING: \
+        _ck_assert_str((X)->string, OP, (Y)->string, 0, 0); \
+        break; \
     case RBH_VT_BINARY: \
         _ck_assert_uint((X)->binary.size, OP, (Y)->binary.size); \
         if ((X)->binary.size > 0) \
             _ck_assert_mem((X)->binary.data, OP, (Y)->binary.data, \
                            (X)->binary.size); \
-        break; \
-    case RBH_VT_UINT32: \
-        _ck_assert_uint((X)->uint32, OP, (Y)->uint32); \
-        break; \
-    case RBH_VT_UINT64: \
-        _ck_assert_uint((X)->uint64, OP, (Y)->uint64); \
-        break; \
-    case RBH_VT_INT32: \
-        _ck_assert_int((X)->int32, OP, (Y)->int32); \
-        break; \
-    case RBH_VT_INT64: \
-        _ck_assert_int((X)->int64, OP, (Y)->int64); \
-        break; \
-    case RBH_VT_STRING: \
-        _ck_assert_str((X)->string, OP, (Y)->string, 0, 0); \
         break; \
     case RBH_VT_REGEX: \
         _ck_assert_str((X)->regex.string, OP, (Y)->regex.string, 0, 0); \

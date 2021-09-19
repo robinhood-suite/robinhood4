@@ -21,6 +21,122 @@
 #include "value.h"
 
 /*----------------------------------------------------------------------------*
+ |                           rbh_value_int32_new()                            |
+ *----------------------------------------------------------------------------*/
+
+START_TEST(rvi32n_min)
+{
+    const struct rbh_value VALUE = {
+        .type = RBH_VT_INT32,
+        .int32 = INT32_MIN,
+    };
+    struct rbh_value *value;
+
+    ck_assert_uint_eq(sizeof(VALUE.int32), sizeof(int32_t));
+    ck_assert_int_lt(VALUE.int32, 0);
+
+    value = rbh_value_int32_new(VALUE.int32);
+    ck_assert_ptr_nonnull(value);
+
+    ck_assert_value_eq(value, &VALUE);
+
+    free(value);
+}
+END_TEST
+
+/*----------------------------------------------------------------------------*
+ |                           rbh_value_uint32_new()                           |
+ *----------------------------------------------------------------------------*/
+
+START_TEST(rvu32n_max)
+{
+    const struct rbh_value VALUE = {
+        .type = RBH_VT_UINT32,
+        .uint32 = UINT32_MAX,
+    };
+    struct rbh_value *value;
+
+    ck_assert_uint_eq(sizeof(VALUE.uint32), sizeof(uint32_t));
+
+    value = rbh_value_uint32_new(VALUE.uint32);
+    ck_assert_ptr_nonnull(value);
+
+    ck_assert_value_eq(value, &VALUE);
+
+    free(value);
+}
+END_TEST
+
+/*----------------------------------------------------------------------------*
+ |                           rbh_value_int64_new()                            |
+ *----------------------------------------------------------------------------*/
+
+START_TEST(rvi64n_min)
+{
+    const struct rbh_value VALUE = {
+        .type = RBH_VT_INT64,
+        .int64 = INT64_MIN,
+    };
+    struct rbh_value *value;
+
+    ck_assert_uint_eq(sizeof(VALUE.int64), sizeof(int64_t));
+    ck_assert_int_lt(VALUE.int64, 0);
+
+    value = rbh_value_int64_new(VALUE.int64);
+    ck_assert_ptr_nonnull(value);
+
+    ck_assert_value_eq(value, &VALUE);
+
+    free(value);
+}
+END_TEST
+
+/*----------------------------------------------------------------------------*
+ |                           rbh_value_uint64_new()                           |
+ *----------------------------------------------------------------------------*/
+
+START_TEST(rvu64n_max)
+{
+    const struct rbh_value VALUE = {
+        .type = RBH_VT_UINT64,
+        .uint64 = UINT64_MAX,
+    };
+    struct rbh_value *value;
+
+    ck_assert_uint_eq(sizeof(VALUE.uint64), sizeof(uint64_t));
+
+    value = rbh_value_uint64_new(VALUE.uint64);
+    ck_assert_ptr_nonnull(value);
+
+    ck_assert_value_eq(value, &VALUE);
+
+    free(value);
+}
+END_TEST
+
+/*----------------------------------------------------------------------------*
+ |                           rbh_value_string_new()                           |
+ *----------------------------------------------------------------------------*/
+
+START_TEST(rvstrn_basic)
+{
+    const struct rbh_value VALUE = {
+        .type = RBH_VT_STRING,
+        .string = "abcdefg",
+    };
+    struct rbh_value *value;
+
+    value = rbh_value_string_new(VALUE.string);
+    ck_assert_ptr_nonnull(value);
+
+    ck_assert_value_eq(value, &VALUE);
+    ck_assert_ptr_ne(value->string, VALUE.string);
+
+    free(value);
+}
+END_TEST
+
+/*----------------------------------------------------------------------------*
  |                           rbh_value_binary_new()                           |
  *----------------------------------------------------------------------------*/
 
@@ -59,122 +175,6 @@ START_TEST(rvbn_empty)
     ck_assert_ptr_nonnull(value);
 
     ck_assert_value_eq(value, &VALUE);
-
-    free(value);
-}
-END_TEST
-
-/*----------------------------------------------------------------------------*
- |                           rbh_value_uint32_new()                           |
- *----------------------------------------------------------------------------*/
-
-START_TEST(rvu32n_max)
-{
-    const struct rbh_value VALUE = {
-        .type = RBH_VT_UINT32,
-        .uint32 = UINT32_MAX,
-    };
-    struct rbh_value *value;
-
-    ck_assert_uint_eq(sizeof(VALUE.uint32), sizeof(uint32_t));
-
-    value = rbh_value_uint32_new(VALUE.uint32);
-    ck_assert_ptr_nonnull(value);
-
-    ck_assert_value_eq(value, &VALUE);
-
-    free(value);
-}
-END_TEST
-
-/*----------------------------------------------------------------------------*
- |                           rbh_value_uint64_new()                           |
- *----------------------------------------------------------------------------*/
-
-START_TEST(rvu64n_max)
-{
-    const struct rbh_value VALUE = {
-        .type = RBH_VT_UINT64,
-        .uint64 = UINT64_MAX,
-    };
-    struct rbh_value *value;
-
-    ck_assert_uint_eq(sizeof(VALUE.uint64), sizeof(uint64_t));
-
-    value = rbh_value_uint64_new(VALUE.uint64);
-    ck_assert_ptr_nonnull(value);
-
-    ck_assert_value_eq(value, &VALUE);
-
-    free(value);
-}
-END_TEST
-
-/*----------------------------------------------------------------------------*
- |                           rbh_value_int32_new()                            |
- *----------------------------------------------------------------------------*/
-
-START_TEST(rvi32n_min)
-{
-    const struct rbh_value VALUE = {
-        .type = RBH_VT_INT32,
-        .int32 = INT32_MIN,
-    };
-    struct rbh_value *value;
-
-    ck_assert_uint_eq(sizeof(VALUE.int32), sizeof(int32_t));
-    ck_assert_int_lt(VALUE.int32, 0);
-
-    value = rbh_value_int32_new(VALUE.int32);
-    ck_assert_ptr_nonnull(value);
-
-    ck_assert_value_eq(value, &VALUE);
-
-    free(value);
-}
-END_TEST
-
-/*----------------------------------------------------------------------------*
- |                           rbh_value_int64_new()                            |
- *----------------------------------------------------------------------------*/
-
-START_TEST(rvi64n_min)
-{
-    const struct rbh_value VALUE = {
-        .type = RBH_VT_INT64,
-        .int64 = INT64_MIN,
-    };
-    struct rbh_value *value;
-
-    ck_assert_uint_eq(sizeof(VALUE.int64), sizeof(int64_t));
-    ck_assert_int_lt(VALUE.int64, 0);
-
-    value = rbh_value_int64_new(VALUE.int64);
-    ck_assert_ptr_nonnull(value);
-
-    ck_assert_value_eq(value, &VALUE);
-
-    free(value);
-}
-END_TEST
-
-/*----------------------------------------------------------------------------*
- |                           rbh_value_string_new()                           |
- *----------------------------------------------------------------------------*/
-
-START_TEST(rvstrn_basic)
-{
-    const struct rbh_value VALUE = {
-        .type = RBH_VT_STRING,
-        .string = "abcdefg",
-    };
-    struct rbh_value *value;
-
-    value = rbh_value_string_new(VALUE.string);
-    ck_assert_ptr_nonnull(value);
-
-    ck_assert_value_eq(value, &VALUE);
-    ck_assert_ptr_ne(value->string, VALUE.string);
 
     free(value);
 }
@@ -1056,9 +1056,8 @@ unit_suite(void)
 
     suite = suite_create("value");
 
-    tests = tcase_create("rbh_value_binary_new");
-    tcase_add_test(tests, rvbn_basic);
-    tcase_add_test(tests, rvbn_empty);
+    tests = tcase_create("rbh_value_int32_new");
+    tcase_add_test(tests, rvi32n_min);
 
     suite_add_tcase(suite, tests);
 
@@ -1067,23 +1066,24 @@ unit_suite(void)
 
     suite_add_tcase(suite, tests);
 
-    tests = tcase_create("rbh_value_uint64_new");
-    tcase_add_test(tests, rvu64n_max);
-
-    suite_add_tcase(suite, tests);
-
-    tests = tcase_create("rbh_value_int32_new");
-    tcase_add_test(tests, rvi32n_min);
-
-    suite_add_tcase(suite, tests);
-
     tests = tcase_create("rbh_value_int64_new");
     tcase_add_test(tests, rvi64n_min);
 
     suite_add_tcase(suite, tests);
 
+    tests = tcase_create("rbh_value_uint64_new");
+    tcase_add_test(tests, rvu64n_max);
+
+    suite_add_tcase(suite, tests);
+
     tests = tcase_create("rbh_value_string_new");
     tcase_add_test(tests, rvstrn_basic);
+
+    suite_add_tcase(suite, tests);
+
+    tests = tcase_create("rbh_value_binary_new");
+    tcase_add_test(tests, rvbn_basic);
+    tcase_add_test(tests, rvbn_empty);
 
     suite_add_tcase(suite, tests);
 

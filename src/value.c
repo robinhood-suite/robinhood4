@@ -24,15 +24,15 @@ value_data_size(const struct rbh_value *value, size_t offset)
     size_t size;
 
     switch (value->type) {
-    case RBH_VT_BINARY:
-        return value->binary.size;
-    case RBH_VT_UINT32:
-    case RBH_VT_UINT64:
     case RBH_VT_INT32:
+    case RBH_VT_UINT32:
     case RBH_VT_INT64:
+    case RBH_VT_UINT64:
         return 0;
     case RBH_VT_STRING:
         return strlen(value->string) + 1;
+    case RBH_VT_BINARY:
+        return value->binary.size;
     case RBH_VT_REGEX:
         return strlen(value->regex.string) + 1;
     case RBH_VT_SEQUENCE:
@@ -107,6 +107,27 @@ value_copy(struct rbh_value *dest, const struct rbh_value *src, char **buffer,
     dest->type = src->type;
 
     switch (src->type) {
+    case RBH_VT_INT32: /* dest->int32 */
+        dest->int32 = src->int32;
+        break;
+    case RBH_VT_UINT32: /* dest->uint32 */
+        dest->uint32 = src->uint32;
+        break;
+    case RBH_VT_INT64: /* dest->int64 */
+        dest->int64 = src->int64;
+        break;
+    case RBH_VT_UINT64: /* dest->uint64 */
+        dest->uint64 = src->uint64;
+        break;
+    case RBH_VT_STRING: /* dest->string */
+        length = strlen(src->string) + 1;
+        if (size < length)
+            goto out_enobufs;
+
+        dest->string = data;
+        data = mempcpy(data, src->string, length);
+        size -= length;
+        break;
     case RBH_VT_BINARY: /* dest->binary */
         /* dest->binary.data */
         if (size < src->binary.size)
@@ -119,27 +140,6 @@ value_copy(struct rbh_value *dest, const struct rbh_value *src, char **buffer,
 
         /* dest->binary.size */
         dest->binary.size = src->binary.size;
-        break;
-    case RBH_VT_UINT32: /* dest->uint32 */
-        dest->uint32 = src->uint32;
-        break;
-    case RBH_VT_UINT64: /* dest->uint64 */
-        dest->uint64 = src->uint64;
-        break;
-    case RBH_VT_INT32: /* dest->int32 */
-        dest->int32 = src->int32;
-        break;
-    case RBH_VT_INT64: /* dest->int64 */
-        dest->int64 = src->int64;
-        break;
-    case RBH_VT_STRING: /* dest->string */
-        length = strlen(src->string) + 1;
-        if (size < length)
-            goto out_enobufs;
-
-        dest->string = data;
-        data = mempcpy(data, src->string, length);
-        size -= length;
         break;
     case RBH_VT_REGEX: /* dest->regex */
         /* dest->regex.string */
@@ -293,28 +293,6 @@ rbh_value_binary_new(const char *data, size_t size)
 }
 
 struct rbh_value *
-rbh_value_uint32_new(uint32_t uint32)
-{
-    const struct rbh_value UINT32 = {
-        .type = RBH_VT_UINT32,
-        .uint32 = uint32,
-    };
-
-    return value_clone(&UINT32);
-}
-
-struct rbh_value *
-rbh_value_uint64_new(uint64_t uint64)
-{
-    const struct rbh_value UINT64 = {
-        .type = RBH_VT_UINT64,
-        .uint64 = uint64,
-    };
-
-    return value_clone(&UINT64);
-}
-
-struct rbh_value *
 rbh_value_int32_new(int32_t int32)
 {
     const struct rbh_value INT32 = {
@@ -326,6 +304,17 @@ rbh_value_int32_new(int32_t int32)
 }
 
 struct rbh_value *
+rbh_value_uint32_new(uint32_t uint32)
+{
+    const struct rbh_value UINT32 = {
+        .type = RBH_VT_UINT32,
+        .uint32 = uint32,
+    };
+
+    return value_clone(&UINT32);
+}
+
+struct rbh_value *
 rbh_value_int64_new(int64_t int64)
 {
     const struct rbh_value INT64 = {
@@ -334,6 +323,17 @@ rbh_value_int64_new(int64_t int64)
     };
 
     return value_clone(&INT64);
+}
+
+struct rbh_value *
+rbh_value_uint64_new(uint64_t uint64)
+{
+    const struct rbh_value UINT64 = {
+        .type = RBH_VT_UINT64,
+        .uint64 = uint64,
+    };
+
+    return value_clone(&UINT64);
 }
 
 struct rbh_value *
@@ -398,17 +398,17 @@ int
 rbh_value_validate(const struct rbh_value *value)
 {
     switch (value->type) {
-    case RBH_VT_BINARY:
-        if (value->binary.size != 0 && value->binary.data == NULL)
-            goto out_einval;
-        return 0;
-    case RBH_VT_UINT32:
-    case RBH_VT_UINT64:
     case RBH_VT_INT32:
+    case RBH_VT_UINT32:
     case RBH_VT_INT64:
+    case RBH_VT_UINT64:
         return 0;
     case RBH_VT_STRING:
         if (value->string == NULL)
+            goto out_einval;
+        return 0;
+    case RBH_VT_BINARY:
+        if (value->binary.size != 0 && value->binary.data == NULL)
             goto out_einval;
         return 0;
     case RBH_VT_REGEX:

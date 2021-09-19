@@ -294,31 +294,6 @@ rbh_filter_compare_binary_new(enum rbh_filter_operator op,
 }
 
 struct rbh_filter *
-rbh_filter_compare_uint32_new(enum rbh_filter_operator op,
-                              const struct rbh_filter_field *field, uint32_t uint32)
-{
-    const struct rbh_value UINT32 = {
-        .type = RBH_VT_UINT32,
-        .uint32 = uint32,
-    };
-
-    return rbh_filter_compare_new(op, field, &UINT32);
-}
-
-struct rbh_filter *
-rbh_filter_compare_uint64_new(enum rbh_filter_operator op,
-                              const struct rbh_filter_field *field,
-                              uint64_t uint64)
-{
-    const struct rbh_value UINT64 = {
-        .type = RBH_VT_UINT64,
-        .uint64 = uint64,
-    };
-
-    return rbh_filter_compare_new(op, field, &UINT64);
-}
-
-struct rbh_filter *
 rbh_filter_compare_int32_new(enum rbh_filter_operator op,
                              const struct rbh_filter_field *field,
                              int32_t int32)
@@ -332,6 +307,19 @@ rbh_filter_compare_int32_new(enum rbh_filter_operator op,
 }
 
 struct rbh_filter *
+rbh_filter_compare_uint32_new(enum rbh_filter_operator op,
+                              const struct rbh_filter_field *field,
+                              uint32_t uint32)
+{
+    const struct rbh_value UINT32 = {
+        .type = RBH_VT_UINT32,
+        .uint32 = uint32,
+    };
+
+    return rbh_filter_compare_new(op, field, &UINT32);
+}
+
+struct rbh_filter *
 rbh_filter_compare_int64_new(enum rbh_filter_operator op,
                              const struct rbh_filter_field *field,
                              int64_t int64)
@@ -342,6 +330,19 @@ rbh_filter_compare_int64_new(enum rbh_filter_operator op,
     };
 
     return rbh_filter_compare_new(op, field, &INT64);
+}
+
+struct rbh_filter *
+rbh_filter_compare_uint64_new(enum rbh_filter_operator op,
+                              const struct rbh_filter_field *field,
+                              uint64_t uint64)
+{
+    const struct rbh_value UINT64 = {
+        .type = RBH_VT_UINT64,
+        .uint64 = uint64,
+    };
+
+    return rbh_filter_compare_new(op, field, &UINT64);
 }
 
 struct rbh_filter *

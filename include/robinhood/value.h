@@ -14,12 +14,12 @@
 struct rbh_value;
 
 enum rbh_value_type {
-    RBH_VT_BINARY,
-    RBH_VT_UINT32,
-    RBH_VT_UINT64,
     RBH_VT_INT32,
+    RBH_VT_UINT32,
     RBH_VT_INT64,
+    RBH_VT_UINT64,
     RBH_VT_STRING,
+    RBH_VT_BINARY,
     RBH_VT_REGEX,
     RBH_VT_SEQUENCE,
     RBH_VT_MAP,
@@ -45,26 +45,26 @@ struct rbh_value {
     enum rbh_value_type type;
 
     union {
+        /* RBH_VT_INT32 */
+        int32_t int32;
+
+        /* RBH_VT_UINT32 */
+        uint32_t uint32;
+
+        /* RBH_VT_INT64 */
+        int64_t int64;
+
+        /* RBH_VT_UINT64 */
+        uint64_t uint64;
+
+        /* RBH_VT_STRING */
+        const char *string;
+
         /* RBH_VT_BINARY */
         struct {
             const char *data;
             size_t size;
         } binary;
-
-        /* RBH_VT_UINT32 */
-        uint32_t uint32;
-
-        /* RBH_VT_UINT64 */
-        uint64_t uint64;
-
-        /* RBH_VT_INT32 */
-        int32_t int32;
-
-        /* RBH_VT_INT64 */
-        int64_t int64;
-
-        /* RBH_VT_STRING */
-        const char *string;
 
         /* RBH_VT_REGEX */
         struct {
@@ -84,10 +84,9 @@ struct rbh_value {
 };
 
 /**
- * Create a new binary value
+ * Create a new int32 value
  *
- * @param data      a series of \p size bytes
- * @param size      the length of \p data in bytes
+ * @param int32     an int32_t
  *
  * @return          a pointer to a newly allocated struct rbh_value on success,
  *                  -1 on error and errno is set appropriately
@@ -95,7 +94,7 @@ struct rbh_value {
  * @error ENOMEM    there was not enough memory available
  */
 struct rbh_value *
-rbh_value_binary_new(const char *data, size_t size);
+rbh_value_int32_new(int32_t int32);
 
 /**
  * Create a new uint32 value
@@ -111,32 +110,6 @@ struct rbh_value *
 rbh_value_uint32_new(uint32_t uint32);
 
 /**
- * Create a new uint64 value
- *
- * @param uint64    an uint64_t
- *
- * @return          a pointer to a newly allocated struct rbh_value on success,
- *                  -1 on error and errno is set appropriately
- *
- * @error ENOMEM    there was not enough memory available
- */
-struct rbh_value *
-rbh_value_uint64_new(uint64_t uint64);
-
-/**
- * Create a new int32 value
- *
- * @param int32     an int32_t
- *
- * @return          a pointer to a newly allocated struct rbh_value on success,
- *                  -1 on error and errno is set appropriately
- *
- * @error ENOMEM    there was not enough memory available
- */
-struct rbh_value *
-rbh_value_int32_new(int32_t int32);
-
-/**
  * Create a new int64 value
  *
  * @param int64     an int64_t
@@ -150,6 +123,19 @@ struct rbh_value *
 rbh_value_int64_new(int64_t int64);
 
 /**
+ * Create a new uint64 value
+ *
+ * @param uint64    an uint64_t
+ *
+ * @return          a pointer to a newly allocated struct rbh_value on success,
+ *                  -1 on error and errno is set appropriately
+ *
+ * @error ENOMEM    there was not enough memory available
+ */
+struct rbh_value *
+rbh_value_uint64_new(uint64_t uint64);
+
+/**
  * Create a new string value
  *
  * @param string    a (null-terminated) string
@@ -161,6 +147,20 @@ rbh_value_int64_new(int64_t int64);
  */
 struct rbh_value *
 rbh_value_string_new(const char *string);
+
+/**
+ * Create a new binary value
+ *
+ * @param data      a series of \p size bytes
+ * @param size      the length of \p data in bytes
+ *
+ * @return          a pointer to a newly allocated struct rbh_value on success,
+ *                  -1 on error and errno is set appropriately
+ *
+ * @error ENOMEM    there was not enough memory available
+ */
+struct rbh_value *
+rbh_value_binary_new(const char *data, size_t size);
 
 /**
  * Create a new string value
