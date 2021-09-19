@@ -281,7 +281,7 @@ value_clone(const struct rbh_value *value)
 struct rbh_value *
 rbh_value_binary_new(const char *data, size_t size)
 {
-    const struct rbh_value BINARY = {
+    const struct rbh_value binary = {
         .type = RBH_VT_BINARY,
         .binary = {
             .data = data,
@@ -289,68 +289,68 @@ rbh_value_binary_new(const char *data, size_t size)
         },
     };
 
-    return value_clone(&BINARY);
+    return value_clone(&binary);
 }
 
 struct rbh_value *
 rbh_value_int32_new(int32_t int32)
 {
-    const struct rbh_value INT32 = {
+    const struct rbh_value int32_ = {
         .type = RBH_VT_INT32,
         .int32 = int32,
     };
 
-    return value_clone(&INT32);
+    return value_clone(&int32_);
 }
 
 struct rbh_value *
 rbh_value_uint32_new(uint32_t uint32)
 {
-    const struct rbh_value UINT32 = {
+    const struct rbh_value uint32_ = {
         .type = RBH_VT_UINT32,
         .uint32 = uint32,
     };
 
-    return value_clone(&UINT32);
+    return value_clone(&uint32_);
 }
 
 struct rbh_value *
 rbh_value_int64_new(int64_t int64)
 {
-    const struct rbh_value INT64 = {
+    const struct rbh_value int64_ = {
         .type = RBH_VT_INT64,
         .int64 = int64,
     };
 
-    return value_clone(&INT64);
+    return value_clone(&int64_);
 }
 
 struct rbh_value *
 rbh_value_uint64_new(uint64_t uint64)
 {
-    const struct rbh_value UINT64 = {
+    const struct rbh_value uint64_ = {
         .type = RBH_VT_UINT64,
         .uint64 = uint64,
     };
 
-    return value_clone(&UINT64);
+    return value_clone(&uint64_);
 }
 
 struct rbh_value *
 rbh_value_string_new(const char *string)
 {
-    const struct rbh_value STRING = {
+    const struct rbh_value string_ = {
         .type = RBH_VT_STRING,
         .string = string,
     };
 
-    return value_clone(&STRING);
+    return value_clone(&string_);
 }
 
 struct rbh_value *
 rbh_value_regex_new(const char *regex, unsigned int options)
 {
-    const struct rbh_value REGEX = {
+    const struct rbh_value regex_ = {
         .type = RBH_VT_REGEX,
         .regex = {
             .string = regex,
@@ -363,13 +363,13 @@ rbh_value_regex_new(const char *regex, unsigned int options)
         return NULL;
     }
 
-    return value_clone(&REGEX);
+    return value_clone(&regex_);
 }
 
 struct rbh_value *
 rbh_value_sequence_new(const struct rbh_value *values, size_t count)
 {
-    const struct rbh_value SEQUENCE = {
+    const struct rbh_value sequence = {
         .type = RBH_VT_SEQUENCE,
         .sequence = {
             .values = values,
@@ -377,13 +377,13 @@ rbh_value_sequence_new(const struct rbh_value *values, size_t count)
         },
     };
 
-    return value_clone(&SEQUENCE);
+    return value_clone(&sequence);
 }
 
 struct rbh_value *
 rbh_value_map_new(const struct rbh_value_pair *pairs, size_t count)
 {
-    const struct rbh_value MAP = {
+    const struct rbh_value map = {
         .type = RBH_VT_MAP,
         .map = {
             .pairs = pairs,
@@ -391,7 +391,7 @@ rbh_value_map_new(const struct rbh_value_pair *pairs, size_t count)
         },
     };
 
-    return value_clone(&MAP);
+    return value_clone(&map);
 }
 
 int

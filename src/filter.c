@@ -282,7 +282,7 @@ rbh_filter_compare_binary_new(enum rbh_filter_operator op,
                               const struct rbh_filter_field *field,
                               const char *data, size_t size)
 {
-    const struct rbh_value BINARY = {
+    const struct rbh_value binary = {
         .type = RBH_VT_BINARY,
         .binary = {
             .data = data,
@@ -290,7 +290,7 @@ rbh_filter_compare_binary_new(enum rbh_filter_operator op,
         },
     };
 
-    return rbh_filter_compare_new(op, field, &BINARY);
+    return rbh_filter_compare_new(op, field, &binary);
 }
 
 struct rbh_filter *
@@ -298,12 +298,12 @@ rbh_filter_compare_int32_new(enum rbh_filter_operator op,
                              const struct rbh_filter_field *field,
                              int32_t int32)
 {
-    const struct rbh_value INT32 = {
+    const struct rbh_value int32_ = {
         .type = RBH_VT_INT32,
         .int32 = int32,
     };
 
-    return rbh_filter_compare_new(op, field, &INT32);
+    return rbh_filter_compare_new(op, field, &int32_);
 }
 
 struct rbh_filter *
@@ -311,12 +311,12 @@ rbh_filter_compare_uint32_new(enum rbh_filter_operator op,
                               const struct rbh_filter_field *field,
                               uint32_t uint32)
 {
-    const struct rbh_value UINT32 = {
+    const struct rbh_value uint32_ = {
         .type = RBH_VT_UINT32,
         .uint32 = uint32,
     };
 
-    return rbh_filter_compare_new(op, field, &UINT32);
+    return rbh_filter_compare_new(op, field, &uint32_);
 }
 
 struct rbh_filter *
@@ -324,12 +324,12 @@ rbh_filter_compare_int64_new(enum rbh_filter_operator op,
                              const struct rbh_filter_field *field,
                              int64_t int64)
 {
-    const struct rbh_value INT64 = {
+    const struct rbh_value int64_ = {
         .type = RBH_VT_INT64,
         .int64 = int64,
     };
 
-    return rbh_filter_compare_new(op, field, &INT64);
+    return rbh_filter_compare_new(op, field, &int64_);
 }
 
 struct rbh_filter *
@@ -337,12 +337,12 @@ rbh_filter_compare_uint64_new(enum rbh_filter_operator op,
                               const struct rbh_filter_field *field,
                               uint64_t uint64)
 {
-    const struct rbh_value UINT64 = {
+    const struct rbh_value uint64_ = {
         .type = RBH_VT_UINT64,
         .uint64 = uint64,
     };
 
-    return rbh_filter_compare_new(op, field, &UINT64);
+    return rbh_filter_compare_new(op, field, &uint64_);
 }
 
 struct rbh_filter *
@@ -350,12 +350,12 @@ rbh_filter_compare_string_new(enum rbh_filter_operator op,
                               const struct rbh_filter_field *field,
                               const char *string)
 {
-    const struct rbh_value STRING = {
+    const struct rbh_value string_ = {
         .type = RBH_VT_STRING,
         .string = string,
     };
 
-    return rbh_filter_compare_new(op, field, &STRING);
+    return rbh_filter_compare_new(op, field, &string_);
 }
 
 struct rbh_filter *
@@ -364,7 +364,7 @@ rbh_filter_compare_regex_new(enum rbh_filter_operator op,
                              const char *regex,
                              unsigned int regex_options)
 {
-    const struct rbh_value REGEX = {
+    const struct rbh_value regex_ = {
         .type = RBH_VT_REGEX,
         .regex = {
             .string = regex,
@@ -372,7 +372,7 @@ rbh_filter_compare_regex_new(enum rbh_filter_operator op,
         },
     };
 
-    return rbh_filter_compare_new(op, field, &REGEX);
+    return rbh_filter_compare_new(op, field, &regex_);
 }
 
 struct rbh_filter *
@@ -380,7 +380,7 @@ rbh_filter_compare_sequence_new(enum rbh_filter_operator op,
                                 const struct rbh_filter_field *field,
                                 const struct rbh_value values[], size_t count)
 {
-    const struct rbh_value SEQUENCE = {
+    const struct rbh_value sequence = {
         .type = RBH_VT_SEQUENCE,
         .sequence = {
             .values = values,
@@ -388,7 +388,7 @@ rbh_filter_compare_sequence_new(enum rbh_filter_operator op,
         },
     };
 
-    return rbh_filter_compare_new(op, field, &SEQUENCE);
+    return rbh_filter_compare_new(op, field, &sequence);
 }
 
 struct rbh_filter *
@@ -396,7 +396,7 @@ rbh_filter_compare_map_new(enum rbh_filter_operator op,
                            const struct rbh_filter_field *field,
                            const struct rbh_value_pair pairs[], size_t count)
 {
-    const struct rbh_value MAP = {
+    const struct rbh_value map = {
         .type = RBH_VT_MAP,
         .map = {
             .pairs = pairs,
@@ -404,14 +404,14 @@ rbh_filter_compare_map_new(enum rbh_filter_operator op,
         },
     };
 
-    return rbh_filter_compare_new(op, field, &MAP);
+    return rbh_filter_compare_new(op, field, &map);
 }
 
 static struct rbh_filter *
 filter_logical_new(enum rbh_filter_operator op,
                    const struct rbh_filter * const *filters, size_t count)
 {
-    const struct rbh_filter LOGICAL = {
+    const struct rbh_filter logical = {
         .op = op,
         .logical = {
             .filters = filters,
@@ -424,7 +424,7 @@ filter_logical_new(enum rbh_filter_operator op,
         return NULL;
     }
 
-    return rbh_filter_clone(&LOGICAL);
+    return rbh_filter_clone(&logical);
 }
 
 struct rbh_filter *
