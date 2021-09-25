@@ -64,6 +64,7 @@ bson_append_statx(bson_t *bson, const char *key, size_t key_length,
                   const struct statx *statxbuf)
 {
     bson_t document;
+    bson_t subdoc;
 
     return bson_append_document_begin(bson, key, key_length, &document)
         && (statxbuf->stx_mask & RBH_STATX_BLKSIZE ?
@@ -98,54 +99,66 @@ bson_append_statx(bson_t *bson, const char *key, size_t key_length,
                                              MFF_STATX_ATTRIBUTES,
                                              statxbuf->stx_attributes_mask,
                                              statxbuf->stx_attributes) : true)
-        && (statxbuf->stx_mask & RBH_STATX_ATIME_SEC ?
-                BSON_APPEND_INT64(&document,
-                                  MFF_STATX_ATIME "." MFF_STATX_TIMESTAMP_SEC,
-                                  statxbuf->stx_atime.tv_sec) : true)
-        && (statxbuf->stx_mask & RBH_STATX_ATIME_NSEC ?
-                BSON_APPEND_INT32(&document,
-                                  MFF_STATX_ATIME "." MFF_STATX_TIMESTAMP_NSEC,
-                                  statxbuf->stx_atime.tv_nsec) : true)
-        && (statxbuf->stx_mask & RBH_STATX_BTIME_SEC ?
-                BSON_APPEND_INT64(&document,
-                                  MFF_STATX_BTIME "." MFF_STATX_TIMESTAMP_SEC,
-                                  statxbuf->stx_btime.tv_sec) : true)
-        && (statxbuf->stx_mask & RBH_STATX_BTIME_NSEC ?
-                BSON_APPEND_INT32(&document,
-                                  MFF_STATX_BTIME "." MFF_STATX_TIMESTAMP_NSEC,
-                                  statxbuf->stx_btime.tv_nsec) : true)
-        && (statxbuf->stx_mask & RBH_STATX_CTIME_SEC ?
-                BSON_APPEND_INT64(&document,
-                                  MFF_STATX_CTIME "." MFF_STATX_TIMESTAMP_SEC,
-                                  statxbuf->stx_ctime.tv_sec) : true)
-        && (statxbuf->stx_mask & RBH_STATX_CTIME_NSEC ?
-                BSON_APPEND_INT32(&document,
-                                  MFF_STATX_CTIME "." MFF_STATX_TIMESTAMP_NSEC,
-                                  statxbuf->stx_ctime.tv_nsec) : true)
-        && (statxbuf->stx_mask & RBH_STATX_MTIME_SEC ?
-                BSON_APPEND_INT64(&document,
-                                  MFF_STATX_MTIME "." MFF_STATX_TIMESTAMP_SEC,
-                                  statxbuf->stx_mtime.tv_sec) : true)
-        && (statxbuf->stx_mask & RBH_STATX_MTIME_NSEC ?
-                BSON_APPEND_INT32(&document,
-                                  MFF_STATX_MTIME "." MFF_STATX_TIMESTAMP_NSEC,
-                                  statxbuf->stx_mtime.tv_nsec) : true)
-        && (statxbuf->stx_mask & RBH_STATX_RDEV_MAJOR ?
-                BSON_APPEND_INT32(&document,
-                                  MFF_STATX_RDEV "." MFF_STATX_DEVICE_MAJOR,
-                                  statxbuf->stx_rdev_major) : true)
-        && (statxbuf->stx_mask & RBH_STATX_RDEV_MINOR ?
-                BSON_APPEND_INT32(&document,
-                                  MFF_STATX_RDEV "." MFF_STATX_DEVICE_MINOR,
-                                  statxbuf->stx_rdev_minor) : true)
-        && (statxbuf->stx_mask & RBH_STATX_DEV_MAJOR ?
-                BSON_APPEND_INT32(&document,
-                                  MFF_STATX_DEV "." MFF_STATX_DEVICE_MAJOR,
-                                  statxbuf->stx_dev_major) : true)
-        && (statxbuf->stx_mask & RBH_STATX_DEV_MINOR ?
-                BSON_APPEND_INT32(&document,
-                                  MFF_STATX_DEV "." MFF_STATX_DEVICE_MINOR,
-                                  statxbuf->stx_dev_minor) : true)
+        && (statxbuf->stx_mask & RBH_STATX_ATIME ?
+                BSON_APPEND_DOCUMENT_BEGIN(&document, MFF_STATX_ATIME, &subdoc)
+             && (statxbuf->stx_mask & RBH_STATX_ATIME_SEC ?
+                     BSON_APPEND_INT64(&subdoc, MFF_STATX_TIMESTAMP_SEC,
+                                       statxbuf->stx_atime.tv_sec) : true)
+             && (statxbuf->stx_mask & RBH_STATX_ATIME_NSEC ?
+                     BSON_APPEND_INT32(&subdoc, MFF_STATX_TIMESTAMP_NSEC,
+                                       statxbuf->stx_atime.tv_nsec) : true)
+             && bson_append_document_end(&document, &subdoc)
+              : true)
+        && (statxbuf->stx_mask & RBH_STATX_BTIME ?
+                BSON_APPEND_DOCUMENT_BEGIN(&document, MFF_STATX_BTIME, &subdoc)
+             && (statxbuf->stx_mask & RBH_STATX_BTIME_SEC ?
+                     BSON_APPEND_INT64(&subdoc, MFF_STATX_TIMESTAMP_SEC,
+                                       statxbuf->stx_btime.tv_sec) : true)
+             && (statxbuf->stx_mask & RBH_STATX_BTIME_NSEC ?
+                     BSON_APPEND_INT32(&subdoc, MFF_STATX_TIMESTAMP_NSEC,
+                                       statxbuf->stx_btime.tv_nsec) : true)
+             && bson_append_document_end(&document, &subdoc)
+              : true)
+        && (statxbuf->stx_mask & RBH_STATX_CTIME ?
+                BSON_APPEND_DOCUMENT_BEGIN(&document, MFF_STATX_CTIME, &subdoc)
+             && (statxbuf->stx_mask & RBH_STATX_CTIME_SEC ?
+                     BSON_APPEND_INT64(&subdoc, MFF_STATX_TIMESTAMP_SEC,
+                                       statxbuf->stx_ctime.tv_sec) : true)
+             && (statxbuf->stx_mask & RBH_STATX_CTIME_NSEC ?
+                     BSON_APPEND_INT32(&subdoc, MFF_STATX_TIMESTAMP_NSEC,
+                                       statxbuf->stx_ctime.tv_nsec) : true)
+             && bson_append_document_end(&document, &subdoc)
+              : true)
+        && (statxbuf->stx_mask & RBH_STATX_MTIME ?
+                BSON_APPEND_DOCUMENT_BEGIN(&document, MFF_STATX_MTIME, &subdoc)
+             && (statxbuf->stx_mask & RBH_STATX_MTIME_SEC ?
+                     BSON_APPEND_INT64(&subdoc, MFF_STATX_TIMESTAMP_SEC,
+                                       statxbuf->stx_mtime.tv_sec) : true)
+             && (statxbuf->stx_mask & RBH_STATX_MTIME_NSEC ?
+                     BSON_APPEND_INT32(&subdoc, MFF_STATX_TIMESTAMP_NSEC,
+                                       statxbuf->stx_mtime.tv_nsec) : true)
+             && bson_append_document_end(&document, &subdoc)
+              : true)
+        && (statxbuf->stx_mask & RBH_STATX_RDEV ?
+                BSON_APPEND_DOCUMENT_BEGIN(&document, MFF_STATX_RDEV, &subdoc)
+             && (statxbuf->stx_mask & RBH_STATX_RDEV_MAJOR ?
+                     BSON_APPEND_INT64(&subdoc, MFF_STATX_DEVICE_MAJOR,
+                                       statxbuf->stx_rdev_major) : true)
+             && (statxbuf->stx_mask & RBH_STATX_RDEV_MINOR ?
+                     BSON_APPEND_INT32(&subdoc, MFF_STATX_DEVICE_MINOR,
+                                       statxbuf->stx_rdev_minor) : true)
+             && bson_append_document_end(&document, &subdoc)
+              : true)
+        && (statxbuf->stx_mask & RBH_STATX_DEV ?
+                BSON_APPEND_DOCUMENT_BEGIN(&document, MFF_STATX_DEV, &subdoc)
+             && (statxbuf->stx_mask & RBH_STATX_DEV_MAJOR ?
+                     BSON_APPEND_INT64(&subdoc, MFF_STATX_DEVICE_MAJOR,
+                                       statxbuf->stx_dev_major) : true)
+             && (statxbuf->stx_mask & RBH_STATX_DEV_MINOR ?
+                     BSON_APPEND_INT32(&subdoc, MFF_STATX_DEVICE_MINOR,
+                                       statxbuf->stx_dev_minor) : true)
+             && bson_append_document_end(&document, &subdoc)
+              : true)
         && (statxbuf->stx_mask & RBH_STATX_MNT_ID ?
                 BSON_APPEND_INT64(&document, MFF_STATX_MNT_ID,
                                   statxbuf->stx_mnt_id) : true)
