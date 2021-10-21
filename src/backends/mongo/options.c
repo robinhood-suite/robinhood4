@@ -22,6 +22,7 @@ bson_append_statx_projection(bson_t *bson, const char *key, size_t key_length,
                              unsigned int mask)
 {
     bson_t document;
+    bson_t subdoc;
 
     /* cf. comment in bson_append_rbh_filter_projection() */
     return bson_append_document_begin(bson, key, key_length, &document)
@@ -35,58 +36,60 @@ bson_append_statx_projection(bson_t *bson, const char *key, size_t key_length,
          || BSON_APPEND_BOOL(&document, MFF_STATX_UID, true))
         && (!(mask & RBH_STATX_GID)
          || BSON_APPEND_BOOL(&document, MFF_STATX_GID, true))
-        && (!(mask & RBH_STATX_ATIME_SEC)
-         || BSON_APPEND_BOOL(&document,
-                             MFF_STATX_ATIME "." MFF_STATX_TIMESTAMP_SEC, true))
-        && (!(mask & RBH_STATX_MTIME_SEC)
-         || BSON_APPEND_BOOL(&document,
-                             MFF_STATX_BTIME "." MFF_STATX_TIMESTAMP_SEC, true))
-        && (!(mask & RBH_STATX_CTIME_SEC)
-         || BSON_APPEND_BOOL(&document,
-                             MFF_STATX_CTIME "." MFF_STATX_TIMESTAMP_SEC, true))
+        && (!(mask & RBH_STATX_ATIME)
+         || (BSON_APPEND_DOCUMENT_BEGIN(&document, MFF_STATX_ATIME, &subdoc)
+             && (!(mask & RBH_STATX_ATIME_SEC)
+              || BSON_APPEND_BOOL(&subdoc, MFF_STATX_TIMESTAMP_SEC, true))
+             && (!(mask & RBH_STATX_ATIME_NSEC)
+              || BSON_APPEND_BOOL(&subdoc, MFF_STATX_TIMESTAMP_NSEC, true))
+             && bson_append_document_end(&document, &subdoc)))
+        && (!(mask & RBH_STATX_BTIME)
+         || (BSON_APPEND_DOCUMENT_BEGIN(&document, MFF_STATX_BTIME, &subdoc)
+             && (!(mask & RBH_STATX_BTIME_SEC)
+              || BSON_APPEND_BOOL(&subdoc, MFF_STATX_TIMESTAMP_SEC, true))
+             && (!(mask & RBH_STATX_BTIME_NSEC)
+              || BSON_APPEND_BOOL(&subdoc, MFF_STATX_TIMESTAMP_NSEC, true))
+             && bson_append_document_end(&document, &subdoc)))
+        && (!(mask & RBH_STATX_CTIME)
+         || (BSON_APPEND_DOCUMENT_BEGIN(&document, MFF_STATX_CTIME, &subdoc)
+             && (!(mask & RBH_STATX_CTIME_SEC)
+              || BSON_APPEND_BOOL(&subdoc, MFF_STATX_TIMESTAMP_SEC, true))
+             && (!(mask & RBH_STATX_CTIME_NSEC)
+              || BSON_APPEND_BOOL(&subdoc, MFF_STATX_TIMESTAMP_NSEC, true))
+             && bson_append_document_end(&document, &subdoc)))
+        && (!(mask & RBH_STATX_MTIME)
+         || (BSON_APPEND_DOCUMENT_BEGIN(&document, MFF_STATX_MTIME, &subdoc)
+             && (!(mask & RBH_STATX_MTIME_SEC)
+              || BSON_APPEND_BOOL(&subdoc, MFF_STATX_TIMESTAMP_SEC, true))
+             && (!(mask & RBH_STATX_MTIME_NSEC)
+              || BSON_APPEND_BOOL(&subdoc, MFF_STATX_TIMESTAMP_NSEC, true))
+             && bson_append_document_end(&document, &subdoc)))
         && (!(mask & RBH_STATX_INO)
          || BSON_APPEND_BOOL(&document, MFF_STATX_INO, true))
         && (!(mask & RBH_STATX_SIZE)
          || BSON_APPEND_BOOL(&document, MFF_STATX_SIZE, true))
         && (!(mask & RBH_STATX_BLOCKS)
          || BSON_APPEND_BOOL(&document, MFF_STATX_BLOCKS, true))
-        && (!(mask & RBH_STATX_BTIME_SEC)
-         || BSON_APPEND_BOOL(&document,
-                             MFF_STATX_BTIME "." MFF_STATX_TIMESTAMP_SEC, true))
         && (!(mask & RBH_STATX_MNT_ID)
          || BSON_APPEND_BOOL(&document, MFF_STATX_MNT_ID, true))
         && (!(mask & RBH_STATX_BLKSIZE)
          || BSON_APPEND_BOOL(&document, MFF_STATX_BLKSIZE, true))
         && (!(mask & RBH_STATX_ATTRIBUTES)
          || BSON_APPEND_BOOL(&document, MFF_STATX_ATTRIBUTES, true))
-        && (!(mask & RBH_STATX_ATIME_NSEC)
-         || BSON_APPEND_BOOL(&document,
-                             MFF_STATX_ATIME "." MFF_STATX_TIMESTAMP_NSEC,
-                             true))
-        && (!(mask & RBH_STATX_BTIME_NSEC)
-         || BSON_APPEND_BOOL(&document,
-                             MFF_STATX_BTIME "." MFF_STATX_TIMESTAMP_NSEC,
-                             true))
-        && (!(mask & RBH_STATX_CTIME_NSEC)
-         || BSON_APPEND_BOOL(&document,
-                             MFF_STATX_CTIME "." MFF_STATX_TIMESTAMP_NSEC,
-                             true))
-        && (!(mask & RBH_STATX_MTIME_NSEC)
-         || BSON_APPEND_BOOL(&document,
-                             MFF_STATX_MTIME "." MFF_STATX_TIMESTAMP_NSEC,
-                             true))
-        && (!(mask & RBH_STATX_RDEV_MAJOR)
-         || BSON_APPEND_BOOL(&document,
-                             MFF_STATX_RDEV "." MFF_STATX_DEVICE_MAJOR, true))
-        && (!(mask & RBH_STATX_RDEV_MINOR)
-         || BSON_APPEND_BOOL(&document,
-                             MFF_STATX_RDEV "." MFF_STATX_DEVICE_MINOR, true))
-        && (!(mask & RBH_STATX_DEV_MAJOR)
-         || BSON_APPEND_BOOL(&document,
-                             MFF_STATX_DEV "." MFF_STATX_DEVICE_MAJOR, true))
-        && (!(mask & RBH_STATX_DEV_MINOR)
-         || BSON_APPEND_BOOL(&document,
-                             MFF_STATX_DEV "." MFF_STATX_DEVICE_MINOR, true))
+        && (!(mask & RBH_STATX_DEV)
+         || (BSON_APPEND_DOCUMENT_BEGIN(&document, MFF_STATX_DEV, &subdoc)
+             && (!(mask & RBH_STATX_DEV_MAJOR)
+              || BSON_APPEND_BOOL(&subdoc, MFF_STATX_DEVICE_MAJOR, true))
+             && (!(mask & RBH_STATX_DEV_MINOR)
+              || BSON_APPEND_BOOL(&subdoc, MFF_STATX_DEVICE_MINOR, true))
+             && bson_append_document_end(&document, &subdoc)))
+        && (!(mask & RBH_STATX_RDEV)
+         || (BSON_APPEND_DOCUMENT_BEGIN(&document, MFF_STATX_RDEV, &subdoc)
+             && (!(mask & RBH_STATX_RDEV_MAJOR)
+              || BSON_APPEND_BOOL(&subdoc, MFF_STATX_DEVICE_MAJOR, true))
+             && (!(mask & RBH_STATX_RDEV_MINOR)
+              || BSON_APPEND_BOOL(&subdoc, MFF_STATX_DEVICE_MINOR, true))
+             && bson_append_document_end(&document, &subdoc)))
         && bson_append_document_end(bson, &document);
 }
 
@@ -127,6 +130,7 @@ bson_append_rbh_filter_projection(
 {
     unsigned int fsentry_mask = projection->fsentry_mask;
     bson_t document;
+    bson_t subdoc;
 
     /* MongoDB does not support mixing include/exclude projections, so we can't
      * send:
@@ -164,19 +168,23 @@ bson_append_rbh_filter_projection(
     return bson_append_document_begin(bson, key, key_length, &document)
         && (!(fsentry_mask & RBH_FP_ID)
          || BSON_APPEND_BOOL(&document, MFF_ID, true))
-        && (!(fsentry_mask & RBH_FP_PARENT_ID)
-         || BSON_APPEND_BOOL(&document, MFF_NAMESPACE "." MFF_PARENT_ID, true))
-        && (!(fsentry_mask & RBH_FP_NAME)
-         || BSON_APPEND_BOOL(&document, MFF_NAMESPACE "." MFF_NAME, true))
+        && (!(fsentry_mask & RBH_FP_PARENT_ID ||
+              fsentry_mask & RBH_FP_NAME ||
+              fsentry_mask & RBH_FP_NAMESPACE_XATTRS)
+         || (BSON_APPEND_DOCUMENT_BEGIN(&document, MFF_NAMESPACE, &subdoc)
+             && (!(fsentry_mask & RBH_FP_PARENT_ID)
+              || BSON_APPEND_BOOL(&subdoc, MFF_PARENT_ID, true))
+             && (!(fsentry_mask & RBH_FP_NAME)
+              || BSON_APPEND_BOOL(&subdoc, MFF_NAME, true))
+             && (!(fsentry_mask & RBH_FP_NAMESPACE_XATTRS)
+              || BSON_APPEND_XATTRS_PROJECTION(&subdoc, MFF_XATTRS,
+                                               &projection->xattrs.ns))
+             && bson_append_document_end(&document, &subdoc)))
         && (!(fsentry_mask & RBH_FP_STATX)
          || BSON_APPEND_STATX_PROJECTION(&document, MFF_STATX,
                                          projection->statx_mask))
         && (!(fsentry_mask & RBH_FP_SYMLINK)
          || BSON_APPEND_BOOL(&document, MFF_SYMLINK, true))
-        && (!(fsentry_mask & RBH_FP_NAMESPACE_XATTRS)
-         || BSON_APPEND_XATTRS_PROJECTION(&document,
-                                          MFF_NAMESPACE "." MFF_XATTRS,
-                                          &projection->xattrs.ns))
         && (!(fsentry_mask & RBH_FP_INODE_XATTRS)
          || BSON_APPEND_XATTRS_PROJECTION(&document, MFF_XATTRS,
                                           &projection->xattrs.inode))
