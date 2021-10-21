@@ -139,7 +139,7 @@ bson_append_statx(bson_t *bson, const char *key, size_t key_length,
         && (statxbuf->stx_mask & RBH_STATX_RDEV ?
                 BSON_APPEND_DOCUMENT_BEGIN(&document, MFF_STATX_RDEV, &subdoc)
              && (statxbuf->stx_mask & RBH_STATX_RDEV_MAJOR ?
-                     BSON_APPEND_INT64(&subdoc, MFF_STATX_DEVICE_MAJOR,
+                     BSON_APPEND_INT32(&subdoc, MFF_STATX_DEVICE_MAJOR,
                                        statxbuf->stx_rdev_major) : true)
              && (statxbuf->stx_mask & RBH_STATX_RDEV_MINOR ?
                      BSON_APPEND_INT32(&subdoc, MFF_STATX_DEVICE_MINOR,
@@ -149,7 +149,7 @@ bson_append_statx(bson_t *bson, const char *key, size_t key_length,
         && (statxbuf->stx_mask & RBH_STATX_DEV ?
                 BSON_APPEND_DOCUMENT_BEGIN(&document, MFF_STATX_DEV, &subdoc)
              && (statxbuf->stx_mask & RBH_STATX_DEV_MAJOR ?
-                     BSON_APPEND_INT64(&subdoc, MFF_STATX_DEVICE_MAJOR,
+                     BSON_APPEND_INT32(&subdoc, MFF_STATX_DEVICE_MAJOR,
                                        statxbuf->stx_dev_major) : true)
              && (statxbuf->stx_mask & RBH_STATX_DEV_MINOR ?
                      BSON_APPEND_INT32(&subdoc, MFF_STATX_DEVICE_MINOR,
