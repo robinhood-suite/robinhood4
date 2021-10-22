@@ -22,9 +22,6 @@
 
 #include "robinhood/backends/posix.h"
 #include "robinhood/statx.h"
-#ifndef HAVE_STATX
-# include "robinhood/statx-compat.h"
-#endif
 
 /*----------------------------------------------------------------------------*
  |                               posix_iterator                               |
@@ -82,7 +79,7 @@ retry:
 
 #ifndef HAVE_STATX
 static int
-statx_timestamp_from_timespec(struct statx_timestamp *timestamp,
+statx_timestamp_from_timespec(struct rbh_statx_timestamp *timestamp,
                               struct timespec *timespec)
 {
     if (timespec->tv_sec > INT64_MAX) {
@@ -96,7 +93,7 @@ statx_timestamp_from_timespec(struct statx_timestamp *timestamp,
 }
 
 static void
-statx_from_stat(struct statx *statxbuf, struct stat *stat)
+statx_from_stat(struct rbh_statx *statxbuf, struct stat *stat)
 {
     statxbuf->stx_mask = RBH_STATX_BASIC_STATS;
     statxbuf->stx_blksize = stat->st_blksize;
@@ -149,19 +146,19 @@ statx2rbh_statx_mask(uint32_t mask)
  */
 static int
 _statx(int dirfd, const char *pathname, int flags, unsigned int mask,
-       struct statx *statxbuf)
+       struct rbh_statx *statxbuf)
 {
 #ifdef HAVE_STATX
     int rc;
 
-    rc = statx(dirfd, pathname, flags, mask, statxbuf);
+    rc = statx(dirfd, pathname, flags, mask, (struct statx *)statxbuf);
     statxbuf->stx_mask = statx2rbh_statx_mask(statxbuf->stx_mask);
     return rc;
 #else
     struct stat stat;
 
     /* `flags' may contain values specific to statx, let's remove them */
-    if (fstatat(dirfd, pathname, &stat, flags & ~AT_STATX_SYNC_TYPE))
+    if (fstatat(dirfd, pathname, &stat, flags & ~AT_RBH_STATX_SYNC_TYPE))
         return -1;
 
     statx_from_stat(statxbuf, &stat);
@@ -241,7 +238,7 @@ fsentry_from_ftsent(FTSENT *ftsent, int statx_sync_type, size_t prefix_len)
         .count = 1,
     };
     struct rbh_fsentry *fsentry;
-    struct statx statxbuf;
+    struct rbh_statx statxbuf;
     struct rbh_id *id;
     char *symlink = NULL;
     int save_errno;
@@ -262,7 +259,8 @@ fsentry_from_ftsent(FTSENT *ftsent, int statx_sync_type, size_t prefix_len)
     }
 
     if (_statx(fd, "", statx_flags | statx_sync_type,
-               STATX_BASIC_STATS | STATX_BTIME | STATX_MNT_ID, &statxbuf)) {
+               RBH_STATX_BASIC_STATS | RBH_STATX_BTIME | RBH_STATX_MNT_ID,
+               &statxbuf)) {
         save_errno = errno;
         goto out_free_id;
     }
@@ -499,7 +497,7 @@ posix_set_statx_sync_type(struct posix_backend *posix, const void *data,
     memcpy(&statx_sync_type, data, sizeof(statx_sync_type));
 
     switch (statx_sync_type) {
-    case AT_STATX_FORCE_SYNC:
+    case AT_RBH_STATX_FORCE_SYNC:
 #ifndef HAVE_STATX
         /* Without the statx() system call, there is no guarantee that metadata
          * is actually synced by the remote filesystem
@@ -509,9 +507,9 @@ posix_set_statx_sync_type(struct posix_backend *posix, const void *data,
 #else
         /* Fall through */
 #endif
-    case AT_STATX_SYNC_AS_STAT:
-    case AT_STATX_DONT_SYNC:
-        posix->statx_sync_type &= ~AT_STATX_SYNC_TYPE;
+    case AT_RBH_STATX_SYNC_AS_STAT:
+    case AT_RBH_STATX_DONT_SYNC:
+        posix->statx_sync_type &= ~AT_RBH_STATX_SYNC_TYPE;
         posix->statx_sync_type |= statx_sync_type;
         return 0;
     }
@@ -861,7 +859,7 @@ rbh_posix_backend_new(const char *path)
     if (rtrim(posix->root, '/') == 0)
         *posix->root = '/';
 
-    posix->statx_sync_type = AT_STATX_SYNC_AS_STAT;
+    posix->statx_sync_type = AT_RBH_STATX_SYNC_AS_STAT;
     posix->backend = POSIX_BACKEND;
 
     return &posix->backend;

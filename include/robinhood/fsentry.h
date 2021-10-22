@@ -15,7 +15,7 @@
  * fsentry is the generic name for a filesystem entry (file, dir, symlink, ...)
  */
 
-struct statx;
+struct rbh_statx;
 
 /**
  * Any filesystem entry (file, dir, symlink, ...)
@@ -60,7 +60,7 @@ struct rbh_fsentry {
     /**
      * statx attributes for the fsentry
      */
-    const struct statx *statx;
+    const struct rbh_statx *statx;
     /* Extended attributes
      *
      * An extended attribute in librobinhood is similar to a regular filesystem
@@ -111,7 +111,7 @@ enum rbh_fsentry_property {
  * @param id            id of the fsentry to create
  * @param parent_id     parent id of fsentry to create
  * @param name          name of the fsentry
- * @param statx         pointer to the struct statx of the fsentry to create
+ * @param statx         pointer to the struct rbh_statx of the fsentry to create
  * @param ns_xattrs     namespace xattrs
  * @param xattrs        inode xattrs
  * @param symlink       the content of the symlink
@@ -133,7 +133,7 @@ enum rbh_fsentry_property {
  */
 struct rbh_fsentry *
 rbh_fsentry_new(const struct rbh_id *id, const struct rbh_id *parent_id,
-                const char *name, const struct statx *statx,
+                const char *name, const struct rbh_statx *statx,
                 const struct rbh_value_map *ns_xattrs,
                 const struct rbh_value_map *xattrs, const char *symlink);
 

@@ -21,7 +21,7 @@
 
 static bson_t *
 bson_from_upsert(const struct rbh_value_map *xattrs,
-                 const struct statx *statxbuf, const char *symlink)
+                 const struct rbh_statx *statxbuf, const char *symlink)
 {
     bson_t *bson = bson_new();
     int save_errno = ENOBUFS;

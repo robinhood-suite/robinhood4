@@ -43,7 +43,7 @@ enum rbh_fsevent_type {
     RBH_FET_XATTR,
 };
 
-struct statx;
+struct rbh_statx;
 
 struct rbh_fsevent {
     /** Type of the fsevent */
@@ -59,7 +59,7 @@ struct rbh_fsevent {
     union {
         /** `type' == RBH_FET_UPSERT */
         struct {
-            const struct statx *statx; /* Nullable */
+            const struct rbh_statx *statx; /* Nullable */
             const char *symlink; /* Nullable */
         } upsert;
 
@@ -111,7 +111,7 @@ struct rbh_fsevent {
 struct rbh_fsevent *
 rbh_fsevent_upsert_new(const struct rbh_id *id,
                        const struct rbh_value_map *xattrs,
-                       const struct statx *statxbuf, const char *symlink);
+                       const struct rbh_statx *statxbuf, const char *symlink);
 
 /**
  * Create a link fsevent

@@ -18,9 +18,7 @@
 #include <sys/stat.h>
 
 #include "robinhood/fsevent.h"
-#ifndef HAVE_STATX
-# include "robinhood/statx-compat.h"
-#endif
+#include "robinhood/statx.h"
 
 #include "utils.h"
 #include "value.h"
@@ -50,7 +48,7 @@ fsevent_copy(struct rbh_fsevent *dest, const struct rbh_fsevent *src,
     case RBH_FET_UPSERT: /* dest->upsert */
         /* dest->upsert.statx */
         if (src->upsert.statx) {
-            struct statx *tmp;
+            struct rbh_statx *tmp;
 
             tmp = aligned_memalloc(alignof(*tmp), sizeof(*tmp), &data, &size);
             assert(tmp);
@@ -173,7 +171,7 @@ fsevent_clone(const struct rbh_fsevent *fsevent)
 struct rbh_fsevent *
 rbh_fsevent_upsert_new(const struct rbh_id *id,
                        const struct rbh_value_map *xattrs,
-                       const struct statx *statxbuf, const char *symlink)
+                       const struct rbh_statx *statxbuf, const char *symlink)
 {
     const struct rbh_fsevent upsert = {
         .type = RBH_FET_UPSERT,

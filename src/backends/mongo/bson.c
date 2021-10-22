@@ -13,9 +13,6 @@
 
 #include "robinhood/value.h"
 #include "robinhood/statx.h"
-#ifndef HAVE_STATX
-# include "robinhood/statx-compat.h"
-#endif
 
 #include "mongo.h"
 
@@ -26,33 +23,33 @@ bson_append_statx_attributes(bson_t *bson, const char *key, size_t key_length,
     bson_t document;
 
     return bson_append_document_begin(bson, key, key_length, &document)
-        && (mask & STATX_ATTR_COMPRESSED ?
+        && (mask & RBH_STATX_ATTR_COMPRESSED ?
                 BSON_APPEND_BOOL(&document, MFF_STATX_COMPRESSED,
-                                 attributes & STATX_ATTR_COMPRESSED) : true)
-        && (mask & STATX_ATTR_IMMUTABLE ?
+                                 attributes & RBH_STATX_ATTR_COMPRESSED) : true)
+        && (mask & RBH_STATX_ATTR_IMMUTABLE ?
                 BSON_APPEND_BOOL(&document, MFF_STATX_IMMUTABLE,
-                                 attributes & STATX_ATTR_IMMUTABLE) : true)
-        && (mask & STATX_ATTR_APPEND ?
+                                 attributes & RBH_STATX_ATTR_IMMUTABLE) : true)
+        && (mask & RBH_STATX_ATTR_APPEND ?
                 BSON_APPEND_BOOL(&document, MFF_STATX_APPEND,
-                                 attributes & STATX_ATTR_APPEND) : true)
-        && (mask & STATX_ATTR_NODUMP ?
+                                 attributes & RBH_STATX_ATTR_APPEND) : true)
+        && (mask & RBH_STATX_ATTR_NODUMP ?
                 BSON_APPEND_BOOL(&document, MFF_STATX_NODUMP,
-                                 attributes & STATX_ATTR_NODUMP) : true)
-        && (mask & STATX_ATTR_ENCRYPTED ?
+                                 attributes & RBH_STATX_ATTR_NODUMP) : true)
+        && (mask & RBH_STATX_ATTR_ENCRYPTED ?
                 BSON_APPEND_BOOL(&document, MFF_STATX_ENCRYPTED,
-                                 attributes & STATX_ATTR_ENCRYPTED) : true)
-        && (mask & STATX_ATTR_AUTOMOUNT ?
+                                 attributes & RBH_STATX_ATTR_ENCRYPTED) : true)
+        && (mask & RBH_STATX_ATTR_AUTOMOUNT ?
                 BSON_APPEND_BOOL(&document, MFF_STATX_AUTOMOUNT,
-                                 attributes & STATX_ATTR_AUTOMOUNT) : true)
-        && (mask & STATX_ATTR_MOUNT_ROOT ?
+                                 attributes & RBH_STATX_ATTR_AUTOMOUNT) : true)
+        && (mask & RBH_STATX_ATTR_MOUNT_ROOT ?
                 BSON_APPEND_BOOL(&document, MFF_STATX_MOUNT_ROOT,
-                                 attributes & STATX_ATTR_MOUNT_ROOT) : true)
-        && (mask & STATX_ATTR_VERITY ?
+                                 attributes & RBH_STATX_ATTR_MOUNT_ROOT) : true)
+        && (mask & RBH_STATX_ATTR_VERITY ?
                 BSON_APPEND_BOOL(&document, MFF_STATX_VERITY,
-                                 attributes & STATX_ATTR_VERITY) : true)
-        && (mask & STATX_ATTR_DAX ?
+                                 attributes & RBH_STATX_ATTR_VERITY) : true)
+        && (mask & RBH_STATX_ATTR_DAX ?
                 BSON_APPEND_BOOL(&document, MFF_STATX_DAX,
-                                 attributes & STATX_ATTR_DAX) : true)
+                                 attributes & RBH_STATX_ATTR_DAX) : true)
         && bson_append_document_end(bson, &document);
 }
 
@@ -61,7 +58,7 @@ bson_append_statx_attributes(bson_t *bson, const char *key, size_t key_length,
 
 bool
 bson_append_statx(bson_t *bson, const char *key, size_t key_length,
-                  const struct statx *statxbuf)
+                  const struct rbh_statx *statxbuf)
 {
     bson_t document;
     bson_t subdoc;

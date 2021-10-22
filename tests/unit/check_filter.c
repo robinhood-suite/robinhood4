@@ -17,9 +17,6 @@
 
 #include "robinhood/filter.h"
 #include "robinhood/statx.h"
-#ifndef HAVE_STATX
-# include "robinhood/statx-compat.h"
-#endif
 
 #include "check-compat.h"
 #include "check_macros.h"
@@ -524,7 +521,7 @@ static const struct rbh_filter COMPARISONS[] = {
             },
             .value = {
                 .type = RBH_VT_INT64,
-                .int64 = STATX_ATTR_APPEND | STATX_ATTR_COMPRESSED,
+                .int64 = RBH_STATX_ATTR_APPEND | RBH_STATX_ATTR_COMPRESSED,
             },
         },
     },

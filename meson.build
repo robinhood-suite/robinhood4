@@ -36,6 +36,28 @@ have_statx = cc.has_function('statx', args: '-D_GNU_SOURCE',
                              prefix: '#include <sys/stat.h>')
 conf_data.set('HAVE_STATX', have_statx)
 
+## Members
+have_stx_mnt_id = cc.has_member('struct statx', 'stx_mnt_id',
+                                args: '-D_GNU_SOURCE',
+                                prefix: '#include <sys/stat.h>')
+conf_data.set('HAVE_STX_MNT_ID', have_stx_mnt_id)
+
+## Symbols
+have_statx_attr_mount_root = cc.has_header_symbol('sys/stat.h',
+                                                  'STATX_ATTR_MOUNT_ROOT',
+                                                  args: '-D_GNU_SOURCE')
+conf_data.set('HAVE_STATX_ATTR_MOUNT_ROOT', have_statx_attr_mount_root)
+
+have_statx_attr_verity = cc.has_header_symbol('sys/stat.h',
+                                              'STATX_ATTR_VERITY',
+                                              args: '-D_GNU_SOURCE')
+conf_data.set('HAVE_STATX_ATTR_VERITY', have_statx_attr_verity)
+
+have_statx_attr_dax = cc.has_header_symbol('sys/stat.h',
+                                           'STATX_ATTR_DAX',
+                                           args: '-D_GNU_SOURCE')
+conf_data.set('HAVE_STATX_ATTR_DAX', have_statx_attr_dax)
+
 configure_file(input: 'config.h.in', output: 'config.h',
                configuration: conf_data)
 add_project_arguments(['-DHAVE_CONFIG_H',], language: 'c')

@@ -14,9 +14,6 @@
 
 #include "robinhood/fsentry.h"
 #include "robinhood/statx.h"
-#ifndef HAVE_STATX
-# include "robinhood/statx-compat.h"
-#endif
 
 #include "mongo.h"
 #include "utils.h"
@@ -293,82 +290,82 @@ bson_iter_statx_attributes(bson_iter_t *iter, uint64_t *mask,
             if (!BSON_ITER_HOLDS_BOOL(iter))
                 goto out_einval;
             if (bson_iter_bool(iter))
-                *attributes |= STATX_ATTR_COMPRESSED;
+                *attributes |= RBH_STATX_ATTR_COMPRESSED;
             else
-                *attributes &= ~STATX_ATTR_COMPRESSED;
-            *mask |= STATX_ATTR_COMPRESSED;
+                *attributes &= ~RBH_STATX_ATTR_COMPRESSED;
+            *mask |= RBH_STATX_ATTR_COMPRESSED;
             break;
         case SAT_IMMUTABLE:
             if (!BSON_ITER_HOLDS_BOOL(iter))
                 goto out_einval;
             if (bson_iter_bool(iter))
-                *attributes |= STATX_ATTR_IMMUTABLE;
+                *attributes |= RBH_STATX_ATTR_IMMUTABLE;
             else
-                *attributes &= ~STATX_ATTR_IMMUTABLE;
-            *mask |= STATX_ATTR_IMMUTABLE;
+                *attributes &= ~RBH_STATX_ATTR_IMMUTABLE;
+            *mask |= RBH_STATX_ATTR_IMMUTABLE;
             break;
         case SAT_APPEND:
             if (!BSON_ITER_HOLDS_BOOL(iter))
                 goto out_einval;
             if (bson_iter_bool(iter))
-                *attributes |= STATX_ATTR_APPEND;
+                *attributes |= RBH_STATX_ATTR_APPEND;
             else
-                *attributes &= ~STATX_ATTR_APPEND;
-            *mask |= STATX_ATTR_APPEND;
+                *attributes &= ~RBH_STATX_ATTR_APPEND;
+            *mask |= RBH_STATX_ATTR_APPEND;
             break;
         case SAT_NODUMP:
             if (!BSON_ITER_HOLDS_BOOL(iter))
                 goto out_einval;
             if (bson_iter_bool(iter))
-                *attributes |= STATX_ATTR_NODUMP;
+                *attributes |= RBH_STATX_ATTR_NODUMP;
             else
-                *attributes &= ~STATX_ATTR_NODUMP;
-            *mask |= STATX_ATTR_NODUMP;
+                *attributes &= ~RBH_STATX_ATTR_NODUMP;
+            *mask |= RBH_STATX_ATTR_NODUMP;
             break;
         case SAT_ENCRYPTED:
             if (!BSON_ITER_HOLDS_BOOL(iter))
                 goto out_einval;
             if (bson_iter_bool(iter))
-                *attributes |= STATX_ATTR_ENCRYPTED;
+                *attributes |= RBH_STATX_ATTR_ENCRYPTED;
             else
-                *attributes &= ~STATX_ATTR_ENCRYPTED;
-            *mask |= STATX_ATTR_ENCRYPTED;
+                *attributes &= ~RBH_STATX_ATTR_ENCRYPTED;
+            *mask |= RBH_STATX_ATTR_ENCRYPTED;
             break;
         case SAT_AUTOMOUNT:
             if (!BSON_ITER_HOLDS_BOOL(iter))
                 goto out_einval;
             if (bson_iter_bool(iter))
-                *attributes |= STATX_ATTR_AUTOMOUNT;
+                *attributes |= RBH_STATX_ATTR_AUTOMOUNT;
             else
-                *attributes &= ~STATX_ATTR_AUTOMOUNT;
-            *mask |= STATX_ATTR_AUTOMOUNT;
+                *attributes &= ~RBH_STATX_ATTR_AUTOMOUNT;
+            *mask |= RBH_STATX_ATTR_AUTOMOUNT;
             break;
         case SAT_MOUNT_ROOT:
             if (!BSON_ITER_HOLDS_BOOL(iter))
                 goto out_einval;
             if (bson_iter_bool(iter))
-                *attributes |= STATX_ATTR_MOUNT_ROOT;
+                *attributes |= RBH_STATX_ATTR_MOUNT_ROOT;
             else
-                *attributes &= ~STATX_ATTR_MOUNT_ROOT;
-            *mask |= STATX_ATTR_MOUNT_ROOT;
+                *attributes &= ~RBH_STATX_ATTR_MOUNT_ROOT;
+            *mask |= RBH_STATX_ATTR_MOUNT_ROOT;
             break;
         case SAT_VERITY:
             if (!BSON_ITER_HOLDS_BOOL(iter))
                 goto out_einval;
             if (bson_iter_bool(iter))
-                *attributes |= STATX_ATTR_VERITY;
+                *attributes |= RBH_STATX_ATTR_VERITY;
             else
-                *attributes &= ~STATX_ATTR_VERITY;
-            *mask |= STATX_ATTR_VERITY;
+                *attributes &= ~RBH_STATX_ATTR_VERITY;
+            *mask |= RBH_STATX_ATTR_VERITY;
             break;
         case SAT_DAX:
             if (!BSON_ITER_HOLDS_BOOL(iter))
                 goto out_einval;
             if (bson_iter_bool(iter))
-                *attributes |= STATX_ATTR_DAX;
+                *attributes |= RBH_STATX_ATTR_DAX;
             else
-                *attributes &= ~STATX_ATTR_DAX;
-            *mask |= STATX_ATTR_DAX;
+                *attributes &= ~RBH_STATX_ATTR_DAX;
+            *mask |= RBH_STATX_ATTR_DAX;
             break;
         }
     }
@@ -405,7 +402,7 @@ statx_timestamp_tokenizer(const char *key)
 static bool
 bson_iter_statx_timestamp(bson_iter_t *iter, uint32_t *mask,
                           uint32_t tv_sec_flag, uint32_t tv_nsec_flag,
-                          struct statx_timestamp *timestamp)
+                          struct rbh_statx_timestamp *timestamp)
 {
     while (bson_iter_next(iter)) {
         switch (statx_timestamp_tokenizer(bson_iter_key(iter))) {
@@ -608,7 +605,7 @@ statx_tokenizer(const char *key)
 }
 
 static bool
-bson_iter_statx(bson_iter_t *iter, struct statx *statxbuf)
+bson_iter_statx(bson_iter_t *iter, struct rbh_statx *statxbuf)
 {
     statxbuf->stx_mask = 0;
     statxbuf->stx_mode = 0;
@@ -927,7 +924,7 @@ fsentry_tokenizer(const char *key)
 
 static bool
 bson_iter_fsentry(bson_iter_t *iter, struct rbh_fsentry *fsentry,
-                  struct statx *statxbuf, const char **symlink, char **buffer,
+                  struct rbh_statx *statxbuf, const char **symlink, char **buffer,
                   size_t *bufsize)
 {
     size_t size = *bufsize;
@@ -1030,7 +1027,7 @@ struct rbh_fsentry *
 fsentry_from_bson(const bson_t *bson)
 {
     struct rbh_fsentry fsentry;
-    struct statx statxbuf;
+    struct rbh_statx statxbuf;
     const char *symlink;
     bson_iter_t iter;
     char tmp[512]; /* TODO: figure out a better size than the arbitrary 512 */

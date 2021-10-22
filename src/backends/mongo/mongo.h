@@ -185,7 +185,7 @@ bson_append_rbh_id(bson_t *bson, const char *key, size_t key_length,
 
 bool
 bson_append_statx(bson_t *bson, const char *key, size_t key_length,
-                  const struct statx *statxbuf);
+                  const struct rbh_statx *statxbuf);
 
 #define BSON_APPEND_STATX(bson, key, statxbuf) \
     bson_append_statx(bson, key, strlen(key), statxbuf)

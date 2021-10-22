@@ -6,3 +6,7 @@
  */
 
 #mesondefine HAVE_STATX
+#mesondefine HAVE_STX_MNT_ID
+#mesondefine HAVE_STATX_ATTR_MOUNT_ROOT
+#mesondefine HAVE_STATX_ATTR_VERITY
+#mesondefine HAVE_STATX_ATTR_DAX

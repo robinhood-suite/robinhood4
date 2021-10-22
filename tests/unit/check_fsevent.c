@@ -16,9 +16,6 @@
 
 #include "robinhood/fsevent.h"
 #include "robinhood/statx.h"
-#ifndef HAVE_STATX
-# include "robinhood/statx-compat.h"
-#endif
 
 #include "check-compat.h"
 #include "check_macros.h"
@@ -34,7 +31,7 @@
         } else { \
             ck_assert_ptr_nonnull((Y)->upsert.statx); \
             ck_assert_mem_eq((X)->upsert.statx, (Y)->upsert.statx, \
-                             sizeof(struct statx)); \
+                             sizeof(struct rbh_statx)); \
         } \
         ck_assert_pstr_eq((X)->upsert.symlink, (Y)->upsert.symlink); \
         break; \
@@ -156,7 +153,7 @@ END_TEST
 
 START_TEST(rfupn_statx)
 {
-    const struct statx STATX = {
+    const struct rbh_statx STATX = {
         .stx_mask = RBH_STATX_UID,
         .stx_uid = 0,
     };
@@ -182,7 +179,7 @@ END_TEST
 
 START_TEST(rfupn_statx_misaligned)
 {
-    const struct statx STATX = {
+    const struct rbh_statx STATX = {
         .stx_mask = RBH_STATX_UID,
         .stx_uid = 0,
     };
@@ -246,7 +243,7 @@ START_TEST(rfupn_symlink_not_a_symlink)
         .data ="abcdefg",
         .size = 8,
     };
-    const struct statx STATX = {
+    const struct rbh_statx STATX = {
         .stx_mask = RBH_STATX_TYPE,
         .stx_mode = S_IFREG,
     };
@@ -273,7 +270,7 @@ START_TEST(rfupn_all)
         .key = "hijklmn",
         .value = &VALUE,
     };
-    const struct statx STATX = {
+    const struct rbh_statx STATX = {
         .stx_mask = RBH_STATX_TYPE,
         .stx_mode = S_IFLNK,
     };

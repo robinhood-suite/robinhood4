@@ -16,9 +16,6 @@
 
 #include "robinhood/fsentry.h"
 #include "robinhood/statx.h"
-#ifndef HAVE_STATX
-# include "robinhood/statx-compat.h"
-#endif
 
 #include "check-compat.h"
 #include "check_macros.h"
@@ -89,7 +86,7 @@ END_TEST
 
 START_TEST(rfn_statx)
 {
-    static const struct statx STATX = {
+    static const struct rbh_statx STATX = {
         .stx_mask = RBH_STATX_UID,
         .stx_uid = 1,
     };
@@ -106,7 +103,7 @@ END_TEST
 
 START_TEST(rfn_statx_misaligned)
 {
-    static const struct statx STATX = {};
+    static const struct rbh_statx STATX = {};
     struct rbh_fsentry *fsentry;
 
     fsentry = rbh_fsentry_new(NULL, NULL, "abcdef", &STATX, NULL, NULL, NULL);
@@ -233,7 +230,7 @@ END_TEST
 
 START_TEST(rfn_symlink_not_a_symlink)
 {
-    static const struct statx STATX = {
+    static const struct rbh_statx STATX = {
         .stx_mask = RBH_STATX_TYPE,
         .stx_mode = S_IFREG,
     };
@@ -258,7 +255,7 @@ START_TEST(rfn_all)
         .size = 8,
     };
     static const char NAME[] = "opqrstu";
-    static const struct statx STATX = {
+    static const struct rbh_statx STATX = {
         .stx_mask = RBH_STATX_UID,
         .stx_uid = 0,
     };

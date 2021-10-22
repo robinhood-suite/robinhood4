@@ -18,16 +18,13 @@
 
 #include "robinhood/fsentry.h"
 #include "robinhood/statx.h"
-#ifndef HAVE_STATX
-# include "robinhood/statx-compat.h"
-#endif
 
 #include "utils.h"
 #include "value.h"
 
 struct rbh_fsentry *
 rbh_fsentry_new(const struct rbh_id *id, const struct rbh_id *parent_id,
-                const char *name, const struct statx *statxbuf,
+                const char *name, const struct rbh_statx *statxbuf,
                 const struct rbh_value_map *ns_xattrs,
                 const struct rbh_value_map *xattrs, const char *symlink)
 {
@@ -112,7 +109,7 @@ rbh_fsentry_new(const struct rbh_id *id, const struct rbh_id *parent_id,
 
     /* fsentry->statx */
     if (statxbuf) {
-        struct statx *tmp;
+        struct rbh_statx *tmp;
 
         tmp = aligned_memalloc(alignof(*tmp), sizeof(*tmp), &data, &size);
         assert(tmp);

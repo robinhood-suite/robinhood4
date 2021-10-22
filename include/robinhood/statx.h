@@ -7,6 +7,8 @@
  * Definition of robinhood-specific extensions for statx
  */
 
+#include <stdint.h>
+
 #define RBH_STATX_TYPE          0x00000001U
 #define RBH_STATX_MODE          0x00000002U
 #define RBH_STATX_NLINK         0x00000004U
@@ -40,5 +42,52 @@
 
 #define RBH_STATX_BASIC_STATS   0x57e007ffU
 #define RBH_STATX_ALL           0x7fe01fffU
+
+struct rbh_statx_timestamp {
+    int64_t tv_sec;
+    uint32_t tv_nsec;
+    uint32_t __reserved;
+};
+
+struct rbh_statx {
+    uint32_t stx_mask;
+    uint32_t stx_blksize;
+    uint64_t stx_attributes;
+    uint32_t stx_nlink;
+    uint32_t stx_uid;
+    uint32_t stx_gid;
+    uint16_t stx_mode;
+    uint16_t __spare0[1];
+    uint64_t stx_ino;
+    uint64_t stx_size;
+    uint64_t stx_blocks;
+    uint64_t stx_attributes_mask;
+    struct rbh_statx_timestamp stx_atime;
+    struct rbh_statx_timestamp stx_btime;
+    struct rbh_statx_timestamp stx_ctime;
+    struct rbh_statx_timestamp stx_mtime;
+    uint32_t stx_rdev_major;
+    uint32_t stx_rdev_minor;
+    uint32_t stx_dev_major;
+    uint32_t stx_dev_minor;
+    uint64_t stx_mnt_id;
+    uint64_t __spare2;
+    uint64_t __spare3[12];
+};
+
+#define RBH_STATX_ATTR_COMPRESSED  0x00000004
+#define RBH_STATX_ATTR_IMMUTABLE   0x00000010
+#define RBH_STATX_ATTR_APPEND      0x00000020
+#define RBH_STATX_ATTR_NODUMP      0x00000040
+#define RBH_STATX_ATTR_ENCRYPTED   0x00000800
+#define RBH_STATX_ATTR_AUTOMOUNT   0x00001000
+#define RBH_STATX_ATTR_MOUNT_ROOT  0x00002000
+#define RBH_STATX_ATTR_VERITY      0x00100000
+#define RBH_STATX_ATTR_DAX         0x00200000
+
+#define AT_RBH_STATX_SYNC_AS_STAT   0x0000
+#define AT_RBH_STATX_FORCE_SYNC     0x2000
+#define AT_RBH_STATX_DONT_SYNC      0x4000
+#define AT_RBH_STATX_SYNC_TYPE      0x6000
 
 #endif
