@@ -124,7 +124,8 @@ statx_from_stat(struct rbh_statx *statxbuf, struct stat *stat)
 static uint32_t
 statx2rbh_statx_mask(uint32_t mask)
 {
-    mask |= RBH_STATX_BLKSIZE | RBH_STATX_RDEV | RBH_STATX_DEV;
+    mask |= RBH_STATX_ATTRIBUTES | RBH_STATX_BLKSIZE | RBH_STATX_RDEV
+          | RBH_STATX_DEV;
 
     if (mask & STATX_ATIME)
         mask |= RBH_STATX_ATIME_NSEC;
