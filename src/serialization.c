@@ -1420,7 +1420,7 @@ parse_blksize(yaml_parser_t *parser, uint32_t *blksize)
 
 static bool
 emit_statx_timestamp(yaml_emitter_t *emitter, bool sec, bool nsec,
-                     const struct statx_timestamp *timestamp)
+                     const struct rbh_statx_timestamp *timestamp)
 {
     return yaml_emit_mapping_start(emitter, NULL)
         && (sec ? YAML_EMIT_STRING(emitter, "sec")
@@ -1457,7 +1457,7 @@ str2statx_timestamp_field(const char *string)
 
 static bool
 _parse_statx_timestamp(yaml_parser_t *parser, uint32_t *mask, uint32_t sec,
-                       uint32_t nsec, struct statx_timestamp *timestamp)
+                       uint32_t nsec, struct rbh_statx_timestamp *timestamp)
 {
     while (true) {
         enum statx_timestamp_field field;
@@ -1523,7 +1523,7 @@ _parse_statx_timestamp(yaml_parser_t *parser, uint32_t *mask, uint32_t sec,
 
 static bool
 parse_statx_timestamp(yaml_parser_t *parser, uint32_t *mask, uint32_t sec,
-                      uint32_t nsec, struct statx_timestamp *timestamp)
+                      uint32_t nsec, struct rbh_statx_timestamp *timestamp)
 {
     yaml_event_type_t type;
     yaml_event_t event;
@@ -1675,7 +1675,7 @@ parse_device_numbers(yaml_parser_t *parser, uint32_t *mask, uint32_t major_,
     /*------------------------------ statx -------------------------------*/
 
 static bool
-emit_statx(yaml_emitter_t *emitter, const struct statx *statxbuf)
+emit_statx(yaml_emitter_t *emitter, const struct rbh_statx *statxbuf)
 {
     uint64_t mask = statxbuf->stx_mask;
 
@@ -1909,7 +1909,7 @@ str2statx_field(const char *string)
 }
 
 static bool
-parse_statx_mapping(yaml_parser_t *parser, struct statx *statxbuf)
+parse_statx_mapping(yaml_parser_t *parser, struct rbh_statx *statxbuf)
 {
     statxbuf->stx_mode = 0;
 
@@ -2052,7 +2052,7 @@ parse_statx_mapping(yaml_parser_t *parser, struct statx *statxbuf)
 }
 
 static bool
-parse_statx(yaml_parser_t *parser, struct statx *statxbuf)
+parse_statx(yaml_parser_t *parser, struct rbh_statx *statxbuf)
 {
     yaml_event_type_t type;
     yaml_event_t event;
@@ -2120,7 +2120,7 @@ parse_symlink(yaml_parser_t *parser, const char **symlink)
 static bool
 emit_upsert(yaml_emitter_t *emitter, const struct rbh_fsevent *upsert)
 {
-    const struct statx *statxbuf = upsert->upsert.statx;
+    const struct rbh_statx *statxbuf = upsert->upsert.statx;
     const char *symlink = upsert->upsert.symlink;
 
     return yaml_emit_mapping_start(emitter, UPSERT_TAG)
@@ -2177,7 +2177,7 @@ str2upsert_field(const char *string)
 static bool
 parse_upsert(yaml_parser_t *parser, struct rbh_fsevent *upsert)
 {
-    static struct statx statxbuf;
+    static struct rbh_statx statxbuf;
     struct {
         bool id:1;
     } seen = {};
