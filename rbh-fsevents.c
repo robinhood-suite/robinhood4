@@ -7,6 +7,7 @@
 #include <assert.h>
 #include <errno.h>
 #include <error.h>
+#include <fcntl.h>
 #include <getopt.h>
 #include <limits.h>
 #include <stdbool.h>
@@ -14,11 +15,13 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sysexits.h>
+#include <unistd.h>
 
 #include <robinhood/uri.h>
 #include <robinhood/utils.h>
 
 #include "deduplicator.h"
+#include "enricher.h"
 #include "source.h"
 #include "sink.h"
 
@@ -142,12 +145,20 @@ sink_exit(void)
         sink_destroy(sink);
 }
 
-static const char *mountpoint;
+static int mount_fd = -1;
+
+static void __attribute__((destructor))
+mount_fd_exit(void)
+{
+    if (mount_fd != -1)
+        /* Ignore errors on close */
+        close(mount_fd);
+}
 
 static const size_t BATCH_SIZE = 1;
 
 static void
-feed(struct sink *sink, struct source *source)
+feed(struct sink *sink, struct source *source, bool enrich, bool allow_partials)
 {
     struct rbh_mut_iterator *deduplicator;
 
@@ -162,6 +173,13 @@ feed(struct sink *sink, struct source *source)
         fsevents = rbh_mut_iter_next(deduplicator);
         if (fsevents == NULL)
             break;
+
+        if (enrich)
+            fsevents = iter_enrich(fsevents, mount_fd);
+        else if (!allow_partials)
+            fsevents = iter_no_partial(fsevents);
+        if (fsevents == NULL)
+            error(EXIT_FAILURE, errno, "iter_enrich");
 
         if (sink_process(sink, fsevents))
             error(EXIT_FAILURE, errno, "sink_process");
@@ -200,13 +218,17 @@ main(int argc, char *argv[])
     while ((c = getopt_long(argc, argv, "e:hr", LONG_OPTIONS, NULL)) != -1) {
         switch (c) {
         case 'e':
-            mountpoint = optarg;
+            mount_fd = open(optarg, O_RDONLY | O_CLOEXEC);
+            if (mount_fd == -1)
+                error(EXIT_FAILURE, errno, "open: %s", optarg);
             break;
         case 'h':
             usage();
             return 0;
         case 'r':
-            mountpoint = NULL;
+            /* Ignore errors on close */
+            mount_fd_exit();
+            mount_fd = -1;
             break;
         case '?':
         default:
@@ -223,6 +245,6 @@ main(int argc, char *argv[])
     source = source_new(argv[optind++]);
     sink = sink_new(argv[optind++]);
 
-    feed(sink, source);
+    feed(sink, source, mount_fd != -1, strcmp(sink->name, "backend"));
     return error_message_count == 0 ? EXIT_SUCCESS : EXIT_FAILURE;
 }
