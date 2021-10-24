@@ -827,6 +827,10 @@ parse_value_type(const yaml_event_t *event, enum rbh_value_type *type)
      *      to strcmp() with large switch statements. Right now, this feels like
      *      premature optimization (the readability is just not as good).
      */
+    if (strcmp(tag, YAML_BOOL_TAG) == 0) {
+        *type = RBH_VT_BOOLEAN;
+        return true;
+    }
     if (strcmp(tag, UINT32_TAG) == 0) {
         *type = RBH_VT_UINT32;
         return true;
@@ -862,6 +866,8 @@ static bool
 emit_rbh_value(yaml_emitter_t *emitter, const struct rbh_value *value)
 {
     switch (value->type) {
+    case RBH_VT_BOOLEAN:
+        return yaml_emit_boolean(emitter, value->boolean);
     case RBH_VT_BINARY:
         return yaml_emit_binary(emitter, value->binary.data,
                                 value->binary.size);
@@ -908,6 +914,9 @@ parse_rbh_value(yaml_parser_t *parser, yaml_event_t *event,
     }
 
     switch (value->type) {
+    case RBH_VT_BOOLEAN:
+        success = yaml_parse_boolean(event, &value->boolean);
+        break;
     case RBH_VT_BINARY:
         /* FIXME: this relies on libyaml's internals, it is a hack */
         value->binary.data = yaml_scalar_value(event);
