@@ -23,6 +23,7 @@ librobinhood = library(
         'ringr.c',
         'sstack.c',
         'stack.c',
+        'statx.c',
         'uri.c',
         'utils/uri.c',
         'value.c',

@@ -77,96 +77,6 @@ retry:
     return rbh_id_from_file_handle(handle);
 }
 
-#ifndef HAVE_STATX
-static int
-statx_timestamp_from_timespec(struct rbh_statx_timestamp *timestamp,
-                              struct timespec *timespec)
-{
-    if (timespec->tv_sec > INT64_MAX) {
-        errno = EOVERFLOW;
-        return -1;
-    }
-
-    timestamp->tv_sec = timespec->tv_sec;
-    timestamp->tv_nsec = timespec->tv_nsec;
-    return 0;
-}
-
-static void
-statx_from_stat(struct rbh_statx *statxbuf, struct stat *stat)
-{
-    statxbuf->stx_mask = RBH_STATX_BASIC_STATS;
-    statxbuf->stx_blksize = stat->st_blksize;
-    statxbuf->stx_nlink = stat->st_nlink;
-    statxbuf->stx_uid = stat->st_uid;
-    statxbuf->stx_gid = stat->st_gid;
-    statxbuf->stx_mode = stat->st_mode;
-    statxbuf->stx_ino = stat->st_ino;
-    statxbuf->stx_size = stat->st_size;
-    statxbuf->stx_blocks = stat->st_blocks;
-
-    if (statx_timestamp_from_timespec(&statxbuf->stx_atime, &stat->st_atim))
-        statxbuf->stx_mask &= ~RBH_STATX_ATIME;
-
-    if (statx_timestamp_from_timespec(&statxbuf->stx_mtime, &stat->st_mtim))
-        statxbuf->stx_mask &= ~RBH_STATX_MTIME;
-
-    if (statx_timestamp_from_timespec(&statxbuf->stx_ctime, &stat->st_ctim))
-        statxbuf->stx_mask &= ~RBH_STATX_CTIME;
-
-    statxbuf->stx_rdev_major = major(stat->st_rdev);
-    statxbuf->stx_rdev_minor = minor(stat->st_rdev);
-    statxbuf->stx_dev_major = major(stat->st_dev);
-    statxbuf->stx_dev_minor = minor(stat->st_dev);
-}
-#endif
-
-static uint32_t
-statx2rbh_statx_mask(uint32_t mask)
-{
-    mask |= RBH_STATX_ATTRIBUTES | RBH_STATX_BLKSIZE | RBH_STATX_RDEV
-          | RBH_STATX_DEV;
-
-    if (mask & RBH_STATX_ATIME_SEC)
-        mask |= RBH_STATX_ATIME_NSEC;
-
-    if (mask & RBH_STATX_BTIME_SEC)
-        mask |= RBH_STATX_BTIME_NSEC;
-
-    if (mask & RBH_STATX_CTIME_SEC)
-        mask |= RBH_STATX_CTIME_NSEC;
-
-    if (mask & RBH_STATX_MTIME_SEC)
-        mask |= RBH_STATX_MTIME_NSEC;
-
-    return mask;
-}
-
-/* XXX: this wrapper is only needed for as long as we support platforms where
- *      statx() is not defined
- */
-static int
-_statx(int dirfd, const char *pathname, int flags, unsigned int mask,
-       struct rbh_statx *statxbuf)
-{
-#ifdef HAVE_STATX
-    int rc;
-
-    rc = statx(dirfd, pathname, flags, mask, (struct statx *)statxbuf);
-    statxbuf->stx_mask = statx2rbh_statx_mask(statxbuf->stx_mask);
-    return rc;
-#else
-    struct stat stat;
-
-    /* `flags' may contain values specific to statx, let's remove them */
-    if (fstatat(dirfd, pathname, &stat, flags & ~AT_RBH_STATX_SYNC_TYPE))
-        return -1;
-
-    statx_from_stat(statxbuf, &stat);
-    return 0;
-#endif
-}
-
 static char *
 freadlink(int fd, size_t *size_)
 {
@@ -259,9 +169,9 @@ fsentry_from_ftsent(FTSENT *ftsent, int statx_sync_type, size_t prefix_len)
         goto out_close;
     }
 
-    if (_statx(fd, "", statx_flags | statx_sync_type,
-               RBH_STATX_BASIC_STATS | RBH_STATX_BTIME | RBH_STATX_MNT_ID,
-               &statxbuf)) {
+    if (rbh_statx(fd, "", statx_flags | statx_sync_type,
+                  RBH_STATX_BASIC_STATS | RBH_STATX_BTIME | RBH_STATX_MNT_ID,
+                  &statxbuf)) {
         save_errno = errno;
         goto out_free_id;
     }

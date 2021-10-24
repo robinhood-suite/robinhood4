@@ -90,4 +90,8 @@ struct rbh_statx {
 #define AT_RBH_STATX_DONT_SYNC      0x4000
 #define AT_RBH_STATX_SYNC_TYPE      0x6000
 
+int
+rbh_statx(int dirfd, const char *restrict pathname, int flags,
+          unsigned int mask, struct rbh_statx *restrict statxbuf);
+
 #endif
