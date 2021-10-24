@@ -127,16 +127,16 @@ statx2rbh_statx_mask(uint32_t mask)
     mask |= RBH_STATX_ATTRIBUTES | RBH_STATX_BLKSIZE | RBH_STATX_RDEV
           | RBH_STATX_DEV;
 
-    if (mask & STATX_ATIME)
+    if (mask & RBH_STATX_ATIME_SEC)
         mask |= RBH_STATX_ATIME_NSEC;
 
-    if (mask & STATX_BTIME)
+    if (mask & RBH_STATX_BTIME_SEC)
         mask |= RBH_STATX_BTIME_NSEC;
 
-    if (mask & STATX_CTIME)
+    if (mask & RBH_STATX_CTIME_SEC)
         mask |= RBH_STATX_CTIME_NSEC;
 
-    if (mask & STATX_MTIME)
+    if (mask & RBH_STATX_MTIME_SEC)
         mask |= RBH_STATX_MTIME_NSEC;
 
     return mask;
