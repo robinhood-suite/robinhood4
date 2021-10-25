@@ -8,6 +8,7 @@
 #include <errno.h>
 #include <error.h>
 #include <grp.h>
+#include <inttypes.h>
 #include <pwd.h>
 #include <stdbool.h>
 #include <stdlib.h>
@@ -19,9 +20,6 @@
 #include <sys/stat.h>
 
 #include <robinhood/statx.h>
-#ifndef HAVE_STATX
-# include <robinhood/statx-compat.h>
-#endif
 
 #include "actions.h"
 
@@ -126,7 +124,7 @@ posixly_correct_init(void)
 }
 
 static void
-statx_print_ls_dils(FILE *file, const struct statx *statxbuf)
+statx_print_ls_dils(FILE *file, const struct rbh_statx *statxbuf)
 {
     static struct {
         int ino;
@@ -154,7 +152,7 @@ statx_print_ls_dils(FILE *file, const struct statx *statxbuf)
     }
 
     if (statxbuf->stx_mask & RBH_STATX_INO) {
-        rc = fprintf(file, "%*lld", length.ino, statxbuf->stx_ino);
+        rc = fprintf(file, "%*" PRIu64, length.ino, statxbuf->stx_ino);
         length.ino = MAX(length.ino, rc);
     } else {
         fprintf(file, "%*c", length.ino, '?');
@@ -215,7 +213,7 @@ statx_print_ls_dils(FILE *file, const struct statx *statxbuf)
     }
 
     if (statxbuf->stx_mask & RBH_STATX_SIZE) {
-        rc = fprintf(file, " %*lld", length.size, statxbuf->stx_size) - 1;
+        rc = fprintf(file, " %*" PRIu64, length.size, statxbuf->stx_size) - 1;
         length.size = MAX(length.size, rc);
     } else {
         fprintf(file, " %*c", length.size, '?');
