@@ -780,6 +780,7 @@ mongo_branch_root(void *backend, const struct rbh_filter_projection *projection)
                 .fsentry = RBH_FP_ID,
             },
             .value = {
+                .type = RBH_VT_BINARY,
                 .binary = {
                    .data = branch->id.data,
                    .size = branch->id.size,
