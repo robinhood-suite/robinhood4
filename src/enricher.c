@@ -131,7 +131,7 @@ str2statx_field(const char *string)
             break;
         return SF_SIZE;
     case 't': /* type */
-        if (strcmp(string, "type"))
+        if (strcmp(string, "ype"))
             break;
         return SF_TYPE;
     case 'u': /* uid */
