@@ -91,6 +91,18 @@ struct rbh_filter *
 mode2filter(const char *mode_arg);
 
 /**
+ * Build a filter for the -xattr predicate
+ *
+ * @param xattr_field  field name of the xattr to use
+ *
+ * @return             a pointer to a newly allocated struct rbh_filter
+ *
+ * Exit on error
+ */
+struct rbh_filter *
+xattr2filter(const char *xattr_field);
+
+/**
  * AND two dynamically allocated filters
  *
  * @param left  a pointer to a dynamically allocated struct rbh_filter

@@ -363,8 +363,16 @@ str2predicate(const char *string)
         }
         break;
     case 'x':
-        if (strcmp(&string[2], "type") == 0)
-            return PRED_XTYPE;
+        switch (string[2]) {
+        case 'a':
+            if (strcmp(&string[3], "ttr") == 0)
+                return PRED_XATTR;
+            break;
+        case 't':
+            if (strcmp(&string[3], "ype") == 0)
+                return PRED_XTYPE;
+            break;
+        }
         break;
     }
     error(EX_USAGE, 0, "unknown predicate: `%s'", string);
@@ -413,6 +421,7 @@ static const char *__predicate2str[] = {
     [PRED_USER]         = "user",
     [PRED_WHOLENAME]    = "wholename",
     [PRED_WRITEABLE]    = "writeable",
+    [PRED_XATTR]        = "xattr",
     [PRED_XTYPE]        = "xtype",
 };
 

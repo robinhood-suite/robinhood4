@@ -1,5 +1,5 @@
 integration_tests = [
-    'test_perm'
+    'test_perm', 'test_xattr'
 ]
 
 foreach t: integration_tests

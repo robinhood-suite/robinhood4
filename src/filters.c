@@ -613,6 +613,23 @@ mode2filter(const char *_input)
     return filter;
 }
 
+struct rbh_filter *
+xattr2filter(const char *xattr_field)
+{
+    struct rbh_filter_field field = {
+        .fsentry = RBH_FP_INODE_XATTRS,
+        .xattr = xattr_field,
+    };
+    struct rbh_filter *filter;
+
+    filter = rbh_filter_exists_new(&field);
+    if (filter == NULL)
+        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
+                      "filter_exists_new");
+
+    return filter;
+}
+
 static struct rbh_sstack *filters;
 
 static void __attribute__((constructor))
