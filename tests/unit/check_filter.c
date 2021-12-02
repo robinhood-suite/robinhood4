@@ -58,6 +58,8 @@ filter_operator2str(enum rbh_filter_operator op)
         return "RBH_FOP_OR";
     case RBH_FOP_NOT:
         return "RBH_FOP_NOT";
+    case RBH_FOP_EXISTS:
+        return "RBH_FOP_EXISTS";
     default:
         return "unknown";
     }
@@ -641,6 +643,19 @@ static const struct rbh_filter COMPARISONS[] = {
                 .map = {
                     .count = 0,
                 },
+            },
+        },
+    },
+    {
+            .op = RBH_FOP_EXISTS,
+        .compare = {
+            .field = {
+                .fsentry = RBH_FP_INODE_XATTRS,
+                .xattr = "abcdefg",
+            },
+            .value = {
+                .type = RBH_VT_BOOLEAN,
+                .boolean = true,
             },
         },
     },

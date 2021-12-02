@@ -29,6 +29,7 @@ static const char * const FOP2STR[] = {
     [RBH_FOP_STRICTLY_GREATER]  = "$gt",
     [RBH_FOP_GREATER_OR_EQUAL]  = "$gte",
     [RBH_FOP_IN]                = "$in",
+    [RBH_FOP_EXISTS]            = "$exists",
     [RBH_FOP_REGEX]             = NULL, /* This is not a mistake */
     [RBH_FOP_BITS_ANY_SET]      = "$bitsAnySet",
     [RBH_FOP_BITS_ALL_SET]      = "$bitsAllSet",
@@ -45,6 +46,7 @@ static const char * const NEGATED_FOP2STR[] = {
     [RBH_FOP_STRICTLY_GREATER]  = "$lte",
     [RBH_FOP_GREATER_OR_EQUAL]  = "$lt",
     [RBH_FOP_IN]                = "$nin",
+    [RBH_FOP_EXISTS]            = "$exists", /* Negation is "exists" = false */
     [RBH_FOP_REGEX]             = "$not", /* This is not a mistake */
     [RBH_FOP_BITS_ANY_SET]      = "$bitsAllClear",
     [RBH_FOP_BITS_ALL_SET]      = "$bitsAnyClear",
@@ -250,6 +252,7 @@ bson_append_comparison(bson_t *bson, const char *key, size_t key_length,
                        enum rbh_filter_operator op,
                        const struct rbh_value *value, bool negate)
 {
+    struct rbh_value tmp;
     bson_t document;
 
     switch (op) {
@@ -278,6 +281,15 @@ bson_append_comparison(bson_t *bson, const char *key, size_t key_length,
         assert(value->type == RBH_VT_REGEX);
         if (!negate)
             return bson_append_rbh_value(bson, key, key_length, value);
+        break;
+    case RBH_FOP_EXISTS:
+        /* The exists operator doesn't have a negation in mongo's list of
+         * operators, `{$not: {$exists: true}}` is simply `{$exists: false}`.
+         */
+        assert(value->type == RBH_VT_BOOLEAN);
+        tmp.type = value->type;
+        tmp.boolean = value->boolean ^ negate;
+        value = &tmp;
         break;
     default:
         break;
