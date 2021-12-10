@@ -214,6 +214,33 @@ START_TEST(rfn_inode_xattrs_misaligned)
 }
 END_TEST
 
+START_TEST(rfn_inode_xattrs_key_eight)
+{
+    static const struct rbh_value VALUE = {
+        .type = RBH_VT_BINARY,
+        .binary = {
+            .data = "01234567",
+            .size = 8,
+        },
+    };
+    static const struct rbh_value_pair PAIR = {
+            .key = "01234567",
+            .value = &VALUE,
+    };
+    static const struct rbh_value_map XATTRS = {
+        .pairs = &PAIR,
+        .count = 1,
+    };
+    struct rbh_fsentry *fsentry;
+
+    fsentry = rbh_fsentry_new(NULL, NULL, NULL, NULL, NULL, &XATTRS, NULL);
+    ck_assert_ptr_nonnull(fsentry);
+    ck_assert_int_eq(fsentry->mask, RBH_FP_INODE_XATTRS);
+    ck_assert_value_map_eq(&fsentry->xattrs.inode, &XATTRS);
+    free(fsentry);
+}
+END_TEST
+
 START_TEST(rfn_symlink)
 {
     static const char SYMLINK[] = "abcdefg";
@@ -324,6 +351,7 @@ unit_suite(void)
     tcase_add_test(tests, rfn_ns_xattrs);
     tcase_add_test(tests, rfn_ns_xattrs_misaligned);
     tcase_add_test(tests, rfn_inode_xattrs);
+    tcase_add_test(tests, rfn_inode_xattrs_key_eight);
     tcase_add_test(tests, rfn_inode_xattrs_misaligned);
     tcase_add_test(tests, rfn_symlink);
     tcase_add_test(tests, rfn_symlink_not_a_symlink);

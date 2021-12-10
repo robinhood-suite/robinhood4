@@ -61,7 +61,7 @@ value_pair_data_size(const struct rbh_value_pair *pair)
     size_t size;
 
     /* pair->key */
-    size = strlen(pair->key);
+    size = strlen(pair->key) + 1;
 
     /* pair->value */
     if (pair->value == NULL)
