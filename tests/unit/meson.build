@@ -11,20 +11,35 @@ if not check.found()
     subdir_done()
 endif
 
+# force tests to use the newly built binaries over paths in
+# LD_LIBRARY_PATH. The problem is that recent linkers will
+# use RUNPATH when meson requests -rpath, and runpath has
+# lower priority than LD_LIBRARY_PATH (contrary to rpath)
+# See https://github.com/mesonbuild/meson/issues/1383
+env = environment()
+env.prepend('LD_LIBRARY_PATH', meson.build_root() + '/src')
+# .. and also add paths for plugins required by tests that require one
+env.prepend('LD_LIBRARY_PATH', meson.build_root() + '/src/backends/posix')
+
+
 foreach t: ['check_backend', 'check_filter', 'check_fsentry',
             'check_fsevent', 'check_id', 'check_itertools',
-            'check_lu_fid', 'check_queue', 'check_ring', 'check_ringr',
-            'check_sstack', 'check_stack', 'check_statx', 'check_uri',
-            'check_value']
-    test(t, executable(t, t + '.c',
-                       dependencies: [check],
-                       link_with: [librobinhood],
-                       include_directories: rbh_include))
+            'check_lu_fid', 'check_plugin', 'check_queue', 'check_ring',
+            'check_ringr', 'check_sstack', 'check_stack', 'check_statx',
+            'check_uri', 'check_value']
+    test(t,
+         executable(t, t + '.c',
+                    dependencies: [check],
+                    link_with: [librobinhood],
+                    include_directories: rbh_include),
+         env: env)
 endforeach
 
-foreach t: ['check_plugin', 'check_posix']
-    test(t, executable(t, t + '.c',
-                       dependencies: [check],
-                       link_with: [librobinhood, librbh_posix],
-                       include_directories: rbh_include))
+foreach t: ['check_posix']
+    test(t,
+         executable(t, t + '.c',
+                    dependencies: [check],
+                    link_with: [librobinhood, librbh_posix],
+                    include_directories: rbh_include),
+         env: env)
 endforeach
