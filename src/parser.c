@@ -9,12 +9,12 @@
 # include <config.h>
 #endif
 
-#include "parser.h"
-
 #include <assert.h>
 #include <error.h>
 #include <string.h>
 #include <sysexits.h>
+
+#include "rbh-find/parser.h"
 
 static enum command_line_token
 predicate_or_action(const char *string)

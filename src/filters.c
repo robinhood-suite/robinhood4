@@ -31,8 +31,8 @@
 #include <robinhood/backend.h>
 #include <robinhood/sstack.h>
 
-#include "filters.h"
-#include "utils.h"
+#include "rbh-find/filters.h"
+#include "rbh-find/utils.h"
 
 static const struct rbh_filter_field predicate2filter_field[] = {
     [PRED_AMIN]     = {.fsentry = RBH_FP_STATX, .statx = RBH_STATX_ATIME_SEC},

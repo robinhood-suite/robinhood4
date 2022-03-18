@@ -21,9 +21,9 @@
 #include <robinhood.h>
 #include <robinhood/utils.h>
 
-#include "actions.h"
-#include "filters.h"
-#include "parser.h"
+#include "rbh-find/actions.h"
+#include "rbh-find/filters.h"
+#include "rbh-find/parser.h"
 
 static size_t backend_count = 0;
 static struct rbh_backend **backends;

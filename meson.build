@@ -51,3 +51,17 @@ executable(
 	include_directories: include_dirs,
 	install: true,
 )
+
+# Build rbh-find library for rbh-find overloads
+rbhfind_include = include_directories('.', 'include')
+subdir('include')
+subdir('src')
+
+pkg_mod = import('pkgconfig')
+pkg_mod.generate(
+        libraries: librbhfind,
+        version: meson.project_version(),
+        name: 'librbh-find',
+        filebase: 'rbh-find',
+        description: 'C-API to librobinhood find-like mechanism'
+)

@@ -9,14 +9,14 @@
 # include <config.h>
 #endif
 
-#include "utils.h"
-
 #include <errno.h>
 #include <limits.h>
 #include <stdbool.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+
+#include "rbh-find/utils.h"
 
 char *
 shell2pcre(const char *shell)

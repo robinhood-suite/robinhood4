@@ -21,7 +21,7 @@
 
 #include <robinhood/statx.h>
 
-#include "actions.h"
+#include "rbh-find/actions.h"
 
 static struct tm now;
 
