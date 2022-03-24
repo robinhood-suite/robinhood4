@@ -22,20 +22,14 @@
 #include <sys/xattr.h>
 
 #include "robinhood/backends/posix.h"
+#include "robinhood/backends/posix_internal.h"
 #include "robinhood/sstack.h"
 #include "robinhood/statx.h"
+
 
 /*----------------------------------------------------------------------------*
  |                               posix_iterator                               |
  *----------------------------------------------------------------------------*/
-
-struct posix_iterator {
-    struct rbh_mut_iterator iterator;
-    int statx_sync_type;
-    size_t prefix_len;
-    FTS *fts_handle;
-    FTSENT *ftsent;
-};
 
 static __thread size_t handle_size = MAX_HANDLE_SZ;
 static __thread struct file_handle *handle;
@@ -296,9 +290,15 @@ static __thread struct rbh_value_pair *pairs;
 static __thread size_t pairs_count = 1 << 7;
 static __thread struct rbh_sstack *values;
 static __thread struct rbh_sstack *xattrs;
+static __thread struct rbh_value_pair *ns_pairs;
+static __thread size_t ns_pairs_count = 1 << 7;
+static __thread struct rbh_sstack *ns_values;
 
 static struct rbh_fsentry *
-fsentry_from_ftsent(FTSENT *ftsent, int statx_sync_type, size_t prefix_len)
+fsentry_from_ftsent(FTSENT *ftsent, int statx_sync_type, size_t prefix_len,
+                    ssize_t (*ns_xattrs_callback)(const int, const uint16_t,
+                                                  struct rbh_value_pair *,
+                                                  struct rbh_sstack *))
 {
     const int statx_flags =
         AT_EMPTY_PATH | AT_SYMLINK_NOFOLLOW | AT_NO_AUTOMOUNT;
@@ -307,19 +307,14 @@ fsentry_from_ftsent(FTSENT *ftsent, int statx_sync_type, size_t prefix_len)
         .string = ftsent->fts_pathlen == prefix_len ?
             "/" : ftsent->fts_path + prefix_len,
     };
-    const struct rbh_value_pair pair = {
-        .key = "path",
-        .value = &path,
-    };
-    const struct rbh_value_map ns_xattrs = {
-        .pairs = &pair,
-        .count = 1,
-    };
     struct rbh_value_map inode_xattrs;
+    struct rbh_value_map ns_xattrs;
+    struct rbh_value_pair *pair;
     struct rbh_fsentry *fsentry;
     struct rbh_statx statxbuf;
-    struct rbh_id *id;
     char *symlink = NULL;
+    ssize_t ns_count = 0;
+    struct rbh_id *id;
     int save_errno;
     ssize_t count;
     int fd;
@@ -331,9 +326,16 @@ fsentry_from_ftsent(FTSENT *ftsent, int statx_sync_type, size_t prefix_len)
             return NULL;
     }
 
+    if (ns_pairs == NULL) {
+        /* Per-thread initialization of `ns_pairs' */
+        ns_pairs = reallocarray(NULL, ns_pairs_count, sizeof(*ns_pairs));
+        if (ns_pairs == NULL)
+            return NULL;
+    }
+
     if (values == NULL) {
         /* Per-thread initialization of `xattrs' */
-        values = rbh_sstack_new(sizeof(struct rbh_value) * pairs_count);
+        values = rbh_sstack_new(sizeof(ns_pairs->value) * pairs_count);
         if (values == NULL)
             return NULL;
     }
@@ -342,6 +344,13 @@ fsentry_from_ftsent(FTSENT *ftsent, int statx_sync_type, size_t prefix_len)
         /* Per-thread initialization of `values' */
         xattrs = rbh_sstack_new(XATTR_VALUE_MAX_VFS_SIZE);
         if (xattrs == NULL)
+            return NULL;
+    }
+
+    if (ns_values == NULL) {
+        /* Per-thread initialization of `ns_values' */
+        ns_values = rbh_sstack_new(sizeof(ns_pairs->value) * ns_pairs_count);
+        if (ns_values == NULL)
             return NULL;
     }
 
@@ -390,6 +399,29 @@ fsentry_from_ftsent(FTSENT *ftsent, int statx_sync_type, size_t prefix_len)
     inode_xattrs.pairs = pairs;
     inode_xattrs.count = count;
 
+    pair = &ns_pairs[0];
+    pair->key = "path";
+    pair->value = rbh_sstack_push(ns_values, &path, sizeof(path));
+    if (pair->value == NULL) {
+        save_errno = errno;
+        goto out_clear_sstacks;
+    }
+
+    ns_xattrs.count = 1;
+
+    if (ns_xattrs_callback != NULL) {
+        ns_count = ns_xattrs_callback(fd, statxbuf.stx_mode,
+                                      &ns_pairs[ns_xattrs.count], ns_values);
+        if (ns_count == -1) {
+            save_errno = errno;
+            goto out_clear_sstacks;
+        }
+
+        ns_xattrs.count += ns_count;
+    }
+
+    ns_xattrs.pairs = ns_pairs;
+
     fsentry = rbh_fsentry_new(id, ftsent->fts_parent->fts_pointer,
                               ftsent->fts_name, &statxbuf, &ns_xattrs,
                               &inode_xattrs, symlink);
@@ -400,6 +432,7 @@ fsentry_from_ftsent(FTSENT *ftsent, int statx_sync_type, size_t prefix_len)
 
     sstack_clear(values);
     sstack_clear(xattrs);
+    sstack_clear(ns_values);
     free(symlink);
     /* Ignore errors on close */
     close(fd);
@@ -418,6 +451,7 @@ fsentry_from_ftsent(FTSENT *ftsent, int statx_sync_type, size_t prefix_len)
 out_clear_sstacks:
     sstack_clear(values);
     sstack_clear(xattrs);
+    sstack_clear(ns_values);
 
     free(symlink);
 out_free_id:
@@ -463,7 +497,8 @@ skip:
     }
 
     fsentry = fsentry_from_ftsent(ftsent, posix_iter->statx_sync_type,
-                                  posix_iter->prefix_len);
+                                  posix_iter->prefix_len,
+                                  posix_iter->ns_xattrs_callback);
     if (fsentry == NULL && (errno == ENOENT || errno == ESTALE))
         /* The entry moved from under our feet */
         goto skip;
@@ -501,7 +536,7 @@ static const struct rbh_mut_iterator POSIX_ITER = {
     .ops = &POSIX_ITER_OPS,
 };
 
-static struct posix_iterator *
+struct posix_iterator *
 posix_iterator_new(const char *root, const char *entry, int statx_sync_type)
 {
     struct posix_iterator *posix_iter;
@@ -535,6 +570,7 @@ posix_iterator_new(const char *root, const char *entry, int statx_sync_type)
     }
 
     posix_iter->iterator = POSIX_ITER;
+    posix_iter->ns_xattrs_callback = NULL;
     posix_iter->statx_sync_type = statx_sync_type;
     posix_iter->prefix_len = strcmp(root, "/") ? strlen(root) : 0;
     posix_iter->fts_handle =
@@ -553,12 +589,6 @@ posix_iterator_new(const char *root, const char *entry, int statx_sync_type)
 /*----------------------------------------------------------------------------*
  |                               posix_backend                                |
  *----------------------------------------------------------------------------*/
-
-struct posix_backend {
-    struct rbh_backend backend;
-    char *root;
-    int statx_sync_type;
-};
 
     /*--------------------------------------------------------------------*
      |                            get_option()                            |
@@ -716,7 +746,7 @@ posix_backend_filter(void *backend, const struct rbh_filter *filter,
         return NULL;
     }
 
-    posix_iter = posix_iterator_new(posix->root, NULL, posix->statx_sync_type);
+    posix_iter = posix->iter_new(posix->root, NULL, posix->statx_sync_type);
     if (posix_iter == NULL)
         return NULL;
 
@@ -872,8 +902,8 @@ posix_branch_backend_filter(void *backend, const struct rbh_filter *filter,
     }
 
     assert(strncmp(root, path, strlen(root)) == 0);
-    posix_iter = posix_iterator_new(root, path + strlen(root),
-                                    branch->posix.statx_sync_type);
+    posix_iter = branch->posix.iter_new(root, path + strlen(root),
+                                       branch->posix.statx_sync_type);
     save_errno = errno;
     free(path);
     free(root);
@@ -920,6 +950,7 @@ posix_backend_branch(void *backend, const struct rbh_id *id)
         return NULL;
     }
 
+    branch->posix.iter_new = posix_iterator_new;
     branch->posix.statx_sync_type = posix->statx_sync_type;
     rbh_id_copy(&branch->id, id, &data, &data_size);
     branch->posix.backend = POSIX_BRANCH_BACKEND;
@@ -974,6 +1005,7 @@ rbh_posix_backend_new(const char *path)
     if (rtrim(posix->root, '/') == 0)
         *posix->root = '/';
 
+    posix->iter_new = posix_iterator_new;
     posix->statx_sync_type = AT_RBH_STATX_SYNC_AS_STAT;
     posix->backend = POSIX_BACKEND;
 
