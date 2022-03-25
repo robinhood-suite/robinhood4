@@ -41,3 +41,22 @@ librbh_mongo_h = configure_file(input: 'mongo.h.in', output: 'mongo.h',
                                 configuration: librbh_mongo_conf)
 
 install_headers(librbh_mongo_h, subdir: 'robinhood/backends')
+
+# Lustre backend
+
+librbh_lustre_conf = configuration_data()
+
+librbh_lustre_conf.set('RBH_LUSTRE_BACKEND_MAJOR', 0)
+librbh_lustre_conf.set('RBH_LUSTRE_BACKEND_MINOR', 0)
+librbh_lustre_conf.set('RBH_LUSTRE_BACKEND_RELEASE', 0)
+
+librbh_lustre_version = '@0@.@1@.@2@'.format(
+    librbh_lustre_conf.get('RBH_LUSTRE_BACKEND_MAJOR'),
+    librbh_lustre_conf.get('RBH_LUSTRE_BACKEND_MINOR'),
+    librbh_lustre_conf.get('RBH_LUSTRE_BACKEND_RELEASE')
+)
+
+librbh_lustre_h = configure_file(input: 'lustre.h.in', output: 'lustre.h',
+                                 configuration: librbh_lustre_conf)
+
+install_headers(librbh_lustre_h, subdir: 'robinhood/backends')

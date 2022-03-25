@@ -6,3 +6,4 @@
 
 subdir('mongo')
 subdir('posix')
+subdir('lustre')
