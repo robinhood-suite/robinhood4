@@ -1,0 +1,8 @@
+/* This file is part of rbh-find-lustre
+ * Copyright (C) 2022 Commissariat a l'energie atomique et aux energies
+ *                    alternatives
+ *
+ * SPDX-License-Identifer: LGPL-3.0-or-later
+ */
+
+#mesondefine HAVE_STATX
