@@ -4,9 +4,9 @@
 
    SPDX-License-Identifer: LGPL-3.0-or-later
 
-########
+###############
 rbh-find-lustre
-########
+###############
 
 rbh-find-lustre is an overload of `rbh-find(1)`__.
 
@@ -49,8 +49,8 @@ some Lustre specific features, but will still behave exactly like `rbh-find`.
 Usage
 =====
 
-`rbh-lfind` works so much like find that documenting how it works would look
-a lot like `rbh-find's documentation`_. Instead, we will document the
+`rbh-lfind` works so much like `rbh-find` that documenting how it works would
+look a lot like `rbh-find's documentation`_. Instead, we will document the
 differences of `rbh-lfind` compared to `rbh-find`.
 
 .. _: https://github.com/cea-hpc/rbh-find/README.rst
