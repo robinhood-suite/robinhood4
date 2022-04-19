@@ -43,6 +43,7 @@ executable(
 	sources: [
 		'rbh-find.c',
 		'src/actions.c',
+		'src/core.c',
 		'src/filters.c',
 		'src/parser.c',
 		'src/utils.c',

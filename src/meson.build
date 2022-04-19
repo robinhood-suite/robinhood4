@@ -8,6 +8,7 @@ librbhfind = library(
     'rbh-find',
     sources: [
         'actions.c',
+        'core.c',
         'filters.c',
         'parser.c',
         'utils.c',
