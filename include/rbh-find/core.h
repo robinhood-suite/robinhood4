@@ -127,4 +127,23 @@ find(struct find_context *ctx, enum action action, int *arg_idx,
      const struct rbh_filter *filter, const struct rbh_filter_sort *sorts,
      size_t sorts_count);
 
+/**
+ * parse_expression - parse a find expression (predicates / operators / actions)
+ *
+ * @param ctx           find's context for this execution
+ * @param arg_idx       a pointer to the index of argv to start parsing at
+ * @param _filter       a filter (the part of the cli already parsed)
+ * @param sorts         an array of filtering options
+ * @param sorts_count   the size of \p sorts
+ *
+ * @return              a filter that represents the parsed expression
+ *
+ * Note this function is recursive and will call find() itself if it parses an
+ * action
+ */
+struct rbh_filter *
+parse_expression(struct find_context *ctx, int *arg_idx,
+                 const struct rbh_filter *_filter,
+                 struct rbh_filter_sort **sorts, size_t *sorts_count);
+
 #endif
