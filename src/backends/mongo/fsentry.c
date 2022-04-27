@@ -1030,7 +1030,7 @@ fsentry_from_bson(const bson_t *bson)
     struct rbh_statx statxbuf;
     const char *symlink;
     bson_iter_t iter;
-    char tmp[512]; /* TODO: figure out a better size than the arbitrary 512 */
+    char tmp[4096]; /* TODO: figure out a better size than the arbitrary 4096 */
     size_t bufsize = sizeof(tmp);
     char *buffer = tmp;
 
