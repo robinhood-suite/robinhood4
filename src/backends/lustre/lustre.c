@@ -3,6 +3,7 @@
 #endif
 
 #include <stdlib.h>
+#include <string.h>
 #include <sys/types.h>
 #include <sys/xattr.h>
 
@@ -11,6 +12,21 @@
 #include "robinhood/backends/posix.h"
 #include "robinhood/backends/posix_internal.h"
 #include "robinhood/backends/lustre.h"
+
+struct iterator_data {
+    struct rbh_value *stripe_count;
+    struct rbh_value *stripe_size;
+    struct rbh_value *mirror_id;
+    struct rbh_value *pattern;
+    struct rbh_value *begin;
+    struct rbh_value *flags;
+    struct rbh_value *pool;
+    struct rbh_value *end;
+    struct rbh_value *ost;
+    int comp_index;
+    int ost_size;
+    int ost_idx;
+};
 
 static __thread struct rbh_sstack *_values;
 static __thread bool is_dir;
@@ -49,6 +65,25 @@ fill_uint32_pair(const char *key, uint32_t integer, struct rbh_value_pair *pair)
     };
 
     return fill_pair(key, &uint32_value, pair);
+}
+
+static inline int
+fill_sequence_pair(const char *key, struct rbh_value *values, uint64_t length,
+                   struct rbh_value_pair *pair)
+{
+    const struct rbh_value sequence_value = {
+        .type = RBH_VT_SEQUENCE,
+        .sequence = {
+            .values = rbh_sstack_push(_values, values,
+                                      length * sizeof(*values)),
+            .count = length,
+        },
+    };
+
+    if (sequence_value.sequence.values == NULL)
+        return -1;
+
+    return fill_pair(key, &sequence_value, pair);
 }
 
 /**
@@ -113,6 +148,276 @@ xattrs_get_hsm(int fd, struct rbh_value_pair *pairs)
 
     rc = fill_uint32_pair("hsm_archive_id", hus.hus_archive_id,
                           &pairs[subcount++]);
+    if (rc)
+        return -1;
+
+    return subcount;
+}
+
+static inline struct rbh_value
+create_uint64_value(uint64_t integer)
+{
+    struct rbh_value val = {
+        .type = RBH_VT_UINT64,
+        .uint64 = integer,
+    };
+
+    return val;
+}
+
+static inline struct rbh_value
+create_uint32_value(uint32_t integer)
+{
+    struct rbh_value val = {
+        .type = RBH_VT_UINT32,
+        .uint32 = integer,
+    };
+
+    return val;
+}
+
+static inline struct rbh_value
+create_string_value(char *str, size_t len)
+{
+    struct rbh_value val = {
+        .type = RBH_VT_STRING,
+        .string = rbh_sstack_push(_values, str, len),
+    };
+
+    return val;
+}
+
+/**
+ * Resize the OST array in \p data if the list of the current component's OSTs
+ * cannot fit
+ *
+ * @param data      iterator_data structure with OST array to resize
+ * @param index     index corresponding to the position to fill in the \p data
+ *                  arrays
+ *
+ * @return          -1 if an error occured (and errno is set), 0 otherwise
+ */
+static int
+iter_data_ost_try_resize(struct iterator_data *data, int ost_len)
+{
+    void *tmp;
+
+    if (data->ost_idx + ost_len > data->ost_size) {
+        tmp = realloc(data->ost,
+                      (data->ost_size + ost_len) * sizeof(*data->ost));
+        if (tmp == NULL) {
+            free(data->ost);
+            errno = -ENOMEM;
+            return -1;
+        }
+
+        data->ost = tmp;
+        data->ost_size += ost_len;
+    }
+
+    return 0;
+}
+
+/**
+ * Fill \p data using \p layout attributes
+ *
+ * @param layout    layout to retrieve the attributes from
+ * @param data      iterator_data structure to fill
+ * @param index     index corresponding to the position to fill in the \p data
+ *                  arrays
+ *
+ * @return          -1 if an error occured (and errno is set), 0 otherwise
+ */
+static int
+fill_iterator_data(struct llapi_layout *layout,
+                   struct iterator_data *data, const int index)
+{
+    char pool_tmp[LOV_MAXPOOLNAME + 1];
+    uint64_t stripe_count = 0;
+    bool is_init_or_not_comp;
+    uint32_t flags = 0;
+    uint64_t tmp = 0;
+    int ost_len;
+    int rc;
+
+    rc = llapi_layout_stripe_count_get(layout, &stripe_count);
+    if (rc)
+        return -1;
+
+    data->stripe_count[index] = create_uint64_value(stripe_count);
+
+    rc = llapi_layout_stripe_size_get(layout, &tmp);
+    if (rc)
+        return -1;
+
+    data->stripe_size[index] = create_uint64_value(tmp);
+
+    rc = llapi_layout_pattern_get(layout, &tmp);
+    if (rc)
+        return -1;
+
+    data->pattern[index] = create_uint64_value(tmp);
+
+    rc = llapi_layout_comp_flags_get(layout, &flags);
+    if (rc)
+        return -1;
+
+    data->flags[index] = create_uint32_value(flags);
+
+    rc = llapi_layout_pool_name_get(layout, pool_tmp, sizeof(pool_tmp));
+    if (rc)
+        return -1;
+
+    data->pool[index] = create_string_value(pool_tmp, strlen(pool_tmp) + 1);
+
+    is_init_or_not_comp = (flags == LCME_FL_INIT ||
+                           !llapi_layout_is_composite(layout));
+    ost_len = (is_init_or_not_comp ? stripe_count : 1);
+
+    rc = iter_data_ost_try_resize(data, ost_len);
+    if (rc)
+        return rc;
+
+    if (is_init_or_not_comp) {
+        uint64_t i;
+
+        for (i = 0; i < stripe_count; ++i) {
+            rc = llapi_layout_ost_index_get(layout, i, &tmp);
+            if (rc == -1 && errno == EINVAL)
+                break;
+            else if (rc)
+                return rc;
+
+            data->ost[data->ost_idx++] = create_uint64_value(tmp);
+        }
+    } else {
+        data->ost[data->ost_idx++] = create_uint64_value(-1);
+    }
+
+    return 0;
+}
+
+/**
+ * Callback function called by Lustre when iterating over a layout's components
+ *
+ * @param layout    layout of the file, with the current component set by Lustre
+ * @param cbdata    void pointer pointing to callback parameters
+ *
+ * @return          -1 on error, 0 otherwise
+ */
+static int
+xattrs_layout_iterator(struct llapi_layout *layout, void *cbdata)
+{
+    struct iterator_data *data = (struct iterator_data*) cbdata;
+    uint32_t mirror_id;
+    uint64_t begin;
+    uint64_t end;
+    int rc;
+
+    rc = fill_iterator_data(layout, data, data->comp_index);
+    if (rc)
+        return -1;
+
+    rc = llapi_layout_comp_extent_get(layout, &begin, &end);
+    if (rc)
+        return -1;
+
+    data->begin[data->comp_index] = create_uint64_value(begin);
+    data->end[data->comp_index] = create_uint64_value(end);
+
+    rc = llapi_layout_mirror_id_get(layout, &mirror_id);
+    if (rc)
+        return -1;
+
+    data->mirror_id[data->comp_index] = create_uint32_value(mirror_id);
+
+    data->comp_index += 1;
+
+    return 0;
+}
+
+static int
+layout_get_nb_comp(struct llapi_layout *layout, uint32_t *nb_comp)
+{
+    int rc;
+
+    rc = llapi_layout_comp_use(layout, LLAPI_LAYOUT_COMP_USE_LAST);
+    if (rc)
+        return -1;
+
+    rc = llapi_layout_comp_id_get(layout, nb_comp);
+    if (rc)
+        return -1;
+
+    rc = llapi_layout_comp_use(layout, LLAPI_LAYOUT_COMP_USE_FIRST);
+    if (rc)
+        return -1;
+
+    return 0;
+}
+
+static int
+init_iterator_data(struct iterator_data *data, const uint32_t length,
+                   const int nb_xattrs)
+{
+    /**
+     * We want to fetch 8 attributes: mirror_id, stripe_count, stripe_size,
+     * pattern, begin, end, flags, pool.
+     *
+     * Additionnaly, we will keep the OSTs of each component in a separate list
+     * because its length isn't fixed.
+     */
+    struct rbh_value *arr = calloc(nb_xattrs * length, sizeof(*arr));
+    if (arr == NULL)
+        return -1;
+
+    data->stripe_count = &arr[0 * length];
+    data->stripe_size = &arr[1 * length];
+    data->pattern = &arr[2 * length];
+    data->flags = &arr[3 * length];
+    data->pool = &arr[4 * length];
+
+    if (nb_xattrs >= 6) {
+        data->mirror_id = &arr[5 * length];
+        data->begin = &arr[6 * length];
+        data->end = &arr[7 * length];
+    }
+
+    data->ost = malloc(length * sizeof(*data->ost));
+    if (data->ost == NULL) {
+        free(arr);
+        errno = -ENOMEM;
+        return -1;
+    }
+
+    data->ost_size = length;
+    data->ost_idx = 0;
+    data->comp_index = 0;
+
+    return 0;
+}
+
+static int
+xattrs_fill_layout(struct iterator_data *data, int nb_xattrs,
+                   struct rbh_value_pair *pairs)
+{
+    struct rbh_value *values[] = {data->stripe_count, data->stripe_size,
+                                  data->pattern, data->flags, data->pool,
+                                  data->mirror_id, data->begin, data->end};
+    char *keys[] = {"stripe_count", "stripe_size", "pattern", "comp_flags",
+                    "pool", "mirror_id", "begin", "end"};
+    int subcount = 0;
+    int rc;
+
+    for (int i = 0; i < nb_xattrs; ++i) {
+        rc = fill_sequence_pair(keys[i], values[i], data->comp_index,
+                                &pairs[subcount++]);
+        if (rc)
+            return -1;
+    }
+
+    rc = fill_sequence_pair("ost", data->ost, data->ost_idx,
+                            &pairs[subcount++]);
     if (rc)
         return -1;
 
@@ -194,8 +499,21 @@ xattrs_get_magic_and_gen(int fd, struct rbh_value_pair *pairs)
 }
 
 /**
- * Record a file's layout attributes (main flags, and magic number and layout
- * generation if it is a regular file) in \p pairs
+ * Record a file's layout attributes:
+ *  - main flags
+ *  - magic number and layout generation if the file is regular
+ *  - mirror_count if the file is composite
+ *  - per component:
+ *    - stripe_count
+ *    - stripe_size
+ *    - pattern
+ *    - component flags
+ *    - pool
+ *    - ost
+ *    - if the file is composite, 3 more attributes:
+ *      - mirror_id
+ *      - begin
+ *      - end
  *
  * @param fd        file descriptor to check
  * @param pairs     list of pairs to fill
@@ -205,7 +523,16 @@ xattrs_get_magic_and_gen(int fd, struct rbh_value_pair *pairs)
 static int
 xattrs_get_layout(int fd, struct rbh_value_pair *pairs)
 {
+    struct iterator_data data = { .comp_index = 0 };
     struct llapi_layout *layout;
+    uint16_t mirror_count = 0;
+    uint32_t nb_comp = 1;
+    /**
+     * There are 6 layout header components in total, but OST is in its own
+     * list, so we only consider 5 attributes for the main data array allocation
+     */
+    int save_errno = 0;
+    int nb_xattrs = 5;
     int subcount = 0;
     uint32_t flags;
     int rc;
@@ -227,13 +554,54 @@ xattrs_get_layout(int fd, struct rbh_value_pair *pairs)
         if (rc < 0)
             goto err;
 
-
         subcount += rc;
-        rc = 0;
     }
 
+    if (llapi_layout_is_composite(layout)) {
+        rc = llapi_layout_mirror_count_get(layout, &mirror_count);
+        if (rc)
+            goto err;
+
+        rc = fill_uint32_pair("mirror_count", mirror_count, &pairs[subcount++]);
+        if (rc)
+            goto err;
+
+        rc = layout_get_nb_comp(layout, &nb_comp);
+        if (rc)
+            goto err;
+
+        /** The file is composite, so we add 3 more xattrs to the main alloc */
+        nb_xattrs += 3;
+    }
+
+    rc = init_iterator_data(&data, nb_comp, nb_xattrs);
+    if (rc)
+        goto err;
+
+    if (llapi_layout_is_composite(layout))
+        rc = llapi_layout_comp_iterate(layout, &xattrs_layout_iterator, &data);
+    else
+        rc = fill_iterator_data(layout, &data, 0);
+
+    if (rc)
+        goto free_data;
+
+    rc = xattrs_fill_layout(&data, nb_xattrs, &pairs[subcount]);
+    if (rc < 0)
+        goto free_data;
+
+    subcount += rc;
+    rc = 0;
+
+free_data:
+    save_errno = errno;
+    free(data.stripe_count);
+    free(data.ost);
+
 err:
+    save_errno = save_errno ? : errno;
     llapi_layout_free(layout);
+    errno = save_errno;
     return rc ? rc : subcount;
 }
 
