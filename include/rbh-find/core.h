@@ -84,6 +84,16 @@ struct find_context {
      */
     struct rbh_filter *(*parse_predicate_callback)(struct find_context *ctx,
                                                    int *arg_idx);
+
+    /**
+     * Callback to convert a string to a command_line_token
+     *
+     * @param string    the string to convert
+     *
+     * @return          the command line token that represents \p string
+     */
+    enum command_line_token
+    (*pred_or_action_callback)(const char *string);
 };
 
 /**
@@ -93,6 +103,19 @@ struct find_context {
  */
 void
 ctx_finish(struct find_context *ctx);
+
+/**
+ * str2command_line_token - command line token classifier
+ *
+ * @param ctx       find's context for this execution
+ * @param string    the string to classify
+ *
+ * @return          the command_line_token that represents \p string
+ *
+ * \p string does not need to be a valid token
+ */
+enum command_line_token
+str2command_line_token(struct find_context *ctx, const char *string);
 
 /**
  * Filter through every fsentries in a specific backend, executing the

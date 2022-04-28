@@ -49,4 +49,13 @@ find_post_action(struct find_context *ctx, const int index,
 struct rbh_filter *
 find_parse_predicate(struct find_context *ctx, int *arg_idx);
 
+/**
+ * Find predicate_or_action function, see `pred_or_action_callback` in `struct
+ * find_context` for more information.
+ *
+ * Called by rbh-find and implement GNU-find like behaviour.
+ */
+enum command_line_token
+find_predicate_or_action(const char *string);
+
 #endif

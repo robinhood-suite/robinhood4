@@ -21,18 +21,6 @@ enum command_line_token {
     CLT_RSORT,
 };
 
-/**
- * str2command_line_token - command line token classifier
- *
- * @param string    the string to classify
- *
- * @return          the command_line_token that most like represents \p string
- *
- * \p string does not need to be a valid token
- */
-enum command_line_token
-str2command_line_token(const char *string);
-
 enum predicate {
     PRED_AMIN,
     PRED_ANEWER,

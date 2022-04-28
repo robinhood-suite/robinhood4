@@ -9,6 +9,7 @@
 # include <config.h>
 #endif
 
+#include <string.h>
 #include <sysexits.h>
 
 #include "rbh-find/core.h"
@@ -19,6 +20,50 @@ ctx_finish(struct find_context *ctx)
     for (size_t i = 0; i < ctx->backend_count; i++)
         rbh_backend_destroy(ctx->backends[i]);
     free(ctx->backends);
+}
+
+enum command_line_token
+str2command_line_token(struct find_context *ctx, const char *string)
+{
+    switch (string[0]) {
+    case '(':
+        if (string[1] == '\0')
+            return CLT_PARENTHESIS_OPEN;
+        break;
+    case ')':
+        if (string[1] == '\0')
+            return CLT_PARENTHESIS_CLOSE;
+        break;
+    case '!':
+        if (string[1] == '\0')
+            return CLT_NOT;
+        break;
+    case '-':
+        switch (string[1]) {
+        case 'a':
+            if (string[2] == '\0' || strcmp(&string[2], "nd") == 0)
+                return CLT_AND;
+            break;
+        case 'o':
+            if (string[2] == '\0' || strcmp(&string[2], "r") == 0)
+                return CLT_OR;
+            break;
+        case 'n':
+            if (strcmp(&string[2], "ot") == 0)
+                return CLT_NOT;
+            break;
+        case 'r':
+            if (strcmp(&string[2], "sort") == 0)
+                return CLT_RSORT;
+            break;
+        case 's':
+            if (strcmp(&string[2], "ort") == 0)
+                return CLT_SORT;
+            break;
+        }
+        return ctx->pred_or_action_callback(string);
+    }
+    return CLT_URI;
 }
 
 size_t
@@ -120,7 +165,7 @@ parse_expression(struct find_context *ctx, int *arg_idx,
         struct rbh_filter *tmp;
         bool ascending = true;
 
-        token = str2command_line_token(ctx->argv[i]);
+        token = str2command_line_token(ctx, ctx->argv[i]);
         switch (token) {
         case CLT_URI:
             error(EX_USAGE, 0, "paths must preceed expression: %s",
