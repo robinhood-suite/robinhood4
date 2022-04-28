@@ -11,10 +11,13 @@
 #include <error.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <sysexits.h>
 
 #include <robinhood.h>
+#include <robinhood/utils.h>
 
 #include "rbh-find/actions.h"
+#include "rbh-find/filters.h"
 #include "rbh-find/parser.h"
 
 /**
@@ -70,6 +73,17 @@ struct find_context {
      */
     void (*post_action_callback)(struct find_context *ctx, const int index,
                                  const enum action action, const size_t count);
+
+    /**
+     * Callback to parse a predicate in the command line
+     *
+     * @param ctx            find's context for this execution
+     * @param arg_idx        index of the predicate to parse in the command line
+     *
+     * @return               a filter corresponding to the predicate
+     */
+    struct rbh_filter *(*parse_predicate_callback)(struct find_context *ctx,
+                                                   int *arg_idx);
 };
 
 /**
@@ -97,5 +111,20 @@ size_t
 _find(struct find_context *ctx, int backend_index, enum action action,
       const struct rbh_filter *filter, const struct rbh_filter_sort *sorts,
       size_t sorts_count);
+
+/**
+ * Execute a find search corresponding to an action on each backend
+ *
+ * @param ctx            find's context for this execution
+ * @param action         the type of action to execute
+ * @param arg_idx        a pointer to the index of the action token in \p argv
+ * @param filter         the filter to apply to each fsentry
+ * @param sorts          list of criteria used to sort the list of fsentries
+ * @param sorts_count    size of the sorts list
+ */
+void
+find(struct find_context *ctx, enum action action, int *arg_idx,
+     const struct rbh_filter *filter, const struct rbh_filter_sort *sorts,
+     size_t sorts_count);
 
 #endif

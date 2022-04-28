@@ -100,3 +100,62 @@ find_post_action(struct find_context *ctx, const int index,
         break;
     }
 }
+
+struct rbh_filter *
+find_parse_predicate(struct find_context *ctx, int *arg_idx)
+{
+    struct rbh_filter *filter;
+    enum predicate predicate;
+    int i = *arg_idx;
+
+    predicate = str2predicate(ctx->argv[i]);
+
+    if (i + 1 >= ctx->argc)
+        error(EX_USAGE, 0, "missing argument to `%s'", ctx->argv[i]);
+
+    /* In the following block, functions should call error() themselves rather
+     * than returning.
+     *
+     * Errors are most likely fatal (not recoverable), and this allows for
+     * precise and meaningful error messages.
+     */
+    switch (predicate) {
+    case PRED_AMIN:
+    case PRED_MMIN:
+    case PRED_CMIN:
+        filter = xmin2filter(predicate, ctx->argv[++i]);
+        break;
+    case PRED_ATIME:
+    case PRED_MTIME:
+    case PRED_CTIME:
+        filter = xtime2filter(predicate, ctx->argv[++i]);
+        break;
+    case PRED_NAME:
+        filter = shell_regex2filter(predicate, ctx->argv[++i], 0);
+        break;
+    case PRED_INAME:
+        filter = shell_regex2filter(predicate, ctx->argv[++i],
+                                    RBH_RO_CASE_INSENSITIVE);
+        break;
+    case PRED_TYPE:
+        filter = filetype2filter(ctx->argv[++i]);
+        break;
+    case PRED_SIZE:
+        filter = filesize2filter(ctx->argv[++i]);
+        break;
+    case PRED_PERM:
+        filter = mode2filter(ctx->argv[++i]);
+        break;
+    case PRED_XATTR:
+        filter = xattr2filter(ctx->argv[++i]);
+        break;
+    default:
+        error(EXIT_FAILURE, ENOSYS, "%s", ctx->argv[i]);
+        /* clang: -Wsometimes-unitialized: `filter` */
+        __builtin_unreachable();
+    }
+    assert(filter != NULL);
+
+    *arg_idx = i;
+    return filter;
+}

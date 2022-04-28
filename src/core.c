@@ -68,3 +68,23 @@ _find(struct find_context *ctx, int backend_index, enum action action,
 
     return count;
 }
+
+void
+find(struct find_context *ctx, enum action action, int *arg_idx,
+     const struct rbh_filter *filter, const struct rbh_filter_sort *sorts,
+     size_t sorts_count)
+{
+    int i = *arg_idx;
+    size_t count = 0;
+
+    ctx->action_done = true;
+
+    i += ctx->pre_action_callback(ctx, i, action);
+
+    for (size_t i = 0; i < ctx->backend_count; i++)
+        count += _find(ctx, i, action, filter, sorts, sorts_count);
+
+    ctx->post_action_callback(ctx, i, action, count);
+
+    *arg_idx = i;
+}

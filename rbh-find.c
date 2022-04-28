@@ -35,85 +35,6 @@ on_find_exit(void)
     ctx_finish(&ctx);
 }
 
-static void
-find(struct find_context *ctx, enum action action, int *arg_idx,
-     const struct rbh_filter *filter, const struct rbh_filter_sort *sorts,
-     size_t sorts_count)
-{
-    int i = *arg_idx;
-    size_t count = 0;
-
-    ctx->action_done = true;
-
-    i += ctx->pre_action_callback(ctx, i, action);
-
-    for (size_t i = 0; i < ctx->backend_count; i++)
-        count += _find(ctx, i, action, filter, sorts, sorts_count);
-
-    ctx->post_action_callback(ctx, i, action, count);
-
-    *arg_idx = i;
-}
-
-static struct rbh_filter *
-parse_predicate(struct find_context *ctx, int *arg_idx)
-{
-    enum predicate predicate;
-    struct rbh_filter *filter;
-    int i = *arg_idx;
-
-    predicate = str2predicate(ctx->argv[i]);
-
-    if (i + 1 >= ctx->argc)
-        error(EX_USAGE, 0, "missing argument to `%s'", ctx->argv[i]);
-
-    /* In the following block, functions should call error() themselves rather
-     * than returning.
-     *
-     * Errors are most likely fatal (not recoverable), and this allows for
-     * precise and meaningul error messages.
-     */
-    switch (predicate) {
-    case PRED_AMIN:
-    case PRED_MMIN:
-    case PRED_CMIN:
-        filter = xmin2filter(predicate, ctx->argv[++i]);
-        break;
-    case PRED_ATIME:
-    case PRED_MTIME:
-    case PRED_CTIME:
-        filter = xtime2filter(predicate, ctx->argv[++i]);
-        break;
-    case PRED_NAME:
-        filter = shell_regex2filter(predicate, ctx->argv[++i], 0);
-        break;
-    case PRED_INAME:
-        filter = shell_regex2filter(predicate, ctx->argv[++i],
-                                    RBH_RO_CASE_INSENSITIVE);
-        break;
-    case PRED_TYPE:
-        filter = filetype2filter(ctx->argv[++i]);
-        break;
-    case PRED_SIZE:
-        filter = filesize2filter(ctx->argv[++i]);
-        break;
-    case PRED_PERM:
-        filter = mode2filter(ctx->argv[++i]);
-        break;
-    case PRED_XATTR:
-        filter = xattr2filter(ctx->argv[++i]);
-        break;
-    default:
-        error(EXIT_FAILURE, ENOSYS, "%s", ctx->argv[i]);
-        /* clang: -Wsometimes-unitialized: `filter` */
-        __builtin_unreachable();
-    }
-    assert(filter != NULL);
-
-    *arg_idx = i;
-    return filter;
-}
-
 /**
  * parse_expression - parse a find expression (predicates / operators / actions)
  *
@@ -261,7 +182,7 @@ parse_expression(struct find_context *ctx, int *arg_idx,
             break;
         case CLT_PREDICATE:
             /* Build a filter from the predicate and its arguments */
-            tmp = parse_predicate(ctx, &i);
+            tmp = ctx->parse_predicate_callback(ctx, &i);
             if (negate) {
                 tmp = filter_not(tmp);
                 negate = false;
@@ -295,6 +216,7 @@ main(int _argc, char *_argv[])
     ctx.pre_action_callback = &find_pre_action;
     ctx.exec_action_callback = &find_exec_action;
     ctx.post_action_callback = &find_post_action;
+    ctx.parse_predicate_callback = &find_parse_predicate;
 
     /* Parse the command line */
     for (index = 0; index < ctx.argc; index++) {
@@ -312,7 +234,6 @@ main(int _argc, char *_argv[])
         ctx.backends[i] = rbh_backend_from_uri(ctx.argv[i]);
         ctx.backend_count++;
     }
-
     filter = parse_expression(&ctx, &index, NULL, &sorts, &sorts_count);
     if (index != ctx.argc)
         error(EX_USAGE, 0, "you have too many ')'");
