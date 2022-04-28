@@ -10,6 +10,7 @@ librbhfind = library(
         'actions.c',
         'core.c',
         'filters.c',
+        'find_cb.c',
         'parser.c',
         'utils.c',
     ],

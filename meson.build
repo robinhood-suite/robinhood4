@@ -45,6 +45,7 @@ executable(
 		'src/actions.c',
 		'src/core.c',
 		'src/filters.c',
+		'src/find_cb.c',
 		'src/parser.c',
 		'src/utils.c',
 		],

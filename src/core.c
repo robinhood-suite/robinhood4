@@ -9,6 +9,8 @@
 # include <config.h>
 #endif
 
+#include <sysexits.h>
+
 #include "rbh-find/core.h"
 
 void
