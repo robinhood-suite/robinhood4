@@ -21,7 +21,7 @@ str2lustre_predicate(const char *string)
     assert(string[0] == '-');
 
     if (strcmp(&string[1], "placeholder") == 0)
-        error(EX_USAGE, ENOTSUP, "placeholder predicate");
+        return PRED_PLACEHOLDER;
 
     return str2predicate(string);
 }
