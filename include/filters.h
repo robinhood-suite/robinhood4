@@ -13,15 +13,15 @@
 #include <rbh-find/filters.h>
 
 /**
- * Placeholder function for future fields to filter.
+ * Build a filter for the -hsm-state predicate
  *
- * @param placeholder_field  placeholder field name
+ * @param hsm_state    a string representing a HSM state
  *
  * @return             a pointer to a newly allocated struct rbh_filter
  *
  * Exit on error
  */
 struct rbh_filter *
-placeholder2filter(const char *placeholder_field);
+hsm_state2filter(const char *hsm_state);
 
 #endif

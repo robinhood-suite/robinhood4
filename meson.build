@@ -33,6 +33,7 @@ add_project_arguments(['-DHAVE_CONFIG_H',], language: 'c')
 
 librobinhood = dependency('robinhood', version: '>=0.0.0')
 librbhfind = dependency('rbh-find', version: '>=0.0.0')
+liblustre = dependency('lustre')
 
 # "." is necessary for config.h
 include_dirs = include_directories('.', 'include')
@@ -44,7 +45,7 @@ executable(
 		'src/filters.c',
 		'src/parser.c',
 		],
-	dependencies: [librobinhood, librbhfind],
+	dependencies: [librobinhood, librbhfind, liblustre],
 	include_directories: include_dirs,
 	install: true,
 )

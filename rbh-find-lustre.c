@@ -42,8 +42,9 @@ lustre_predicate_or_action(const char *string)
 {
     switch (string[0]) {
     case '-':
-        if (!strcmp(&string[1], "placeholder"))
+        if (!strcmp(&string[1], "hsm-state"))
             return CLT_PREDICATE;
+        break;
     }
 
     return find_predicate_or_action(string);
@@ -68,8 +69,8 @@ lustre_parse_predicate(struct find_context *ctx, int *arg_idx)
      * precise and meaningul error messages.
      */
     switch (predicate) {
-    case PRED_PLACEHOLDER:
-        filter = placeholder2filter(ctx->argv[++i]);
+    case PRED_HSM_STATE:
+        filter = hsm_state2filter(ctx->argv[++i]);
         break;
     default:
         filter = find_parse_predicate(ctx, &i);

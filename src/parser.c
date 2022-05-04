@@ -20,20 +20,20 @@ str2lustre_predicate(const char *string)
 {
     assert(string[0] == '-');
 
-    if (strcmp(&string[1], "placeholder") == 0)
-        return PRED_PLACEHOLDER;
+    if (strcmp(&string[1], "hsm-state") == 0)
+        return PRED_HSM_STATE;
 
     return str2predicate(string);
 }
 
 static const char *__lustre_predicate2str[] = {
-    [PRED_PLACEHOLDER]  = "placeholder",
+    [PRED_HSM_STATE]  = "hsm-state",
 };
 
 const char *
 lustre_predicate2str(int predicate)
 {
-    if (predicate >= PRED_PLACEHOLDER)
+    if (PRED_MIN <= predicate && predicate < PRED_MAX)
         return __lustre_predicate2str[predicate];
 
     return predicate2str(predicate);

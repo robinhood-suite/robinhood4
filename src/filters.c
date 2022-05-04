@@ -7,18 +7,85 @@
 
 #include <error.h>
 #include <stdlib.h>
+#include <sysexits.h>
+
+#include <lustre/lustreapi.h>
 
 #include <robinhood/backend.h>
+#include <rbh-find/filters.h>
 
 #include "filters.h"
 
-struct rbh_filter *
-placeholder2filter(const char *placeholder_field)
+static const struct rbh_filter_field predicate2filter_field[] = {
+    [PRED_HSM_STATE] = {.fsentry = RBH_FP_NAMESPACE_XATTRS, .xattr = "hsm_state"},
+};
+
+static enum hsm_states
+str2hsm_states(const char *hsm_state)
 {
-    (void) placeholder_field;
+    switch (hsm_state[0]) {
+    case 'a':
+        if (strcmp(&hsm_state[1], "rchived"))
+            error(EX_USAGE, 0, "invalid argument to -hsm-state");
+        return HS_ARCHIVED;
+    case 'd':
+        if (strcmp(&hsm_state[1], "irty"))
+            error(EX_USAGE, 0, "invalid argument to -hsm-state");
+        return HS_DIRTY;
+    case 'e':
+        if (strcmp(&hsm_state[1], "xists"))
+            error(EX_USAGE, 0, "invalid argument to -hsm-state");
+        return HS_EXISTS;
+    case 'l':
+        if (strcmp(&hsm_state[1], "ost"))
+            error(EX_USAGE, 0, "invalid argument to -hsm-state");
+        return HS_LOST;
+    case 'n':
+        if (hsm_state[1] != 'o')
+            error(EX_USAGE, 0, "invalid argument to -hsm-state");
+        switch (hsm_state[2]) {
+        case 'a':
+            if (strcmp(&hsm_state[3], "rchive"))
+                error(EX_USAGE, 0, "invalid argument to -hsm-state");
+            return HS_NOARCHIVE;
+        case 'n':
+            if (hsm_state[3] != 'e' || hsm_state[4] != 0)
+                error(EX_USAGE, 0, "invalid argument to -hsm-state");
+            return HS_NONE;
+        case 'r':
+            if (strcmp(&hsm_state[3], "elease"))
+                error(EX_USAGE, 0, "invalid argument to -hsm-state");
+            return HS_NORELEASE;
+        default:
+            error(EX_USAGE, 0, "invalid argument to -hsm-state");
+            __builtin_unreachable();
+        }
+    case 'r':
+        if (strcmp(&hsm_state[1], "eleased"))
+            error(EX_USAGE, 0, "invalid argument to -hsm-state");
+        return HS_RELEASED;
+    }
 
-    error_at_line(EXIT_FAILURE, ENOTSUP, __FILE__, __LINE__,
-                  "placeholder2filter");
+    error(EX_USAGE, 0, "unknown hsm-state: `%s'", hsm_state);
+    __builtin_unreachable();
+}
 
-    return NULL;
+struct rbh_filter *
+hsm_state2filter(const char *hsm_state)
+{
+    enum rbh_filter_operator op = RBH_FOP_BITS_ANY_SET;
+    enum hsm_states state = str2hsm_states(hsm_state);
+    struct rbh_filter *filter;
+
+    if (state == HS_NONE)
+        op = RBH_FOP_EQUAL;
+
+    filter = rbh_filter_compare_uint32_new(
+            op, &predicate2filter_field[PRED_HSM_STATE], state
+            );
+    if (filter == NULL)
+        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
+                      "hsm_state2filter");
+
+    return filter;
 }

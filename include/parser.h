@@ -11,7 +11,11 @@
 #include <rbh-find/parser.h>
 
 enum lustre_predicate {
-    PRED_PLACEHOLDER = 128,
+    PRED_MIN = 128,
+
+    PRED_HSM_STATE = PRED_MIN,
+
+    PRED_MAX,
 };
 
 /**
