@@ -24,4 +24,16 @@
 struct rbh_filter *
 hsm_state2filter(const char *hsm_state);
 
+/**
+ * Build a filter for the -fid predicate
+ *
+ * @param fid          a string representing a FID
+ *
+ * @return             a pointer to a newly allocated struct rbh_filter
+ *
+ * Exit on error
+ */
+struct rbh_filter *
+fid2filter(const char *fid);
+
 #endif

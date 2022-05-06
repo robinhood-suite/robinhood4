@@ -5,4 +5,4 @@
  * SPDX-License-Identifer: LGPL-3.0-or-later
  */
 
-#mesondefine HAVE_STATX
+#mesondefine HAVE_FID_PARSE

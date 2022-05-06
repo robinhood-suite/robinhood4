@@ -15,6 +15,11 @@ project(
 	],
 )
 
+librobinhood = dependency('robinhood', version: '>=0.0.0')
+librbhfind = dependency('rbh-find', version: '>=0.0.0')
+
+liblustre = dependency('lustre')
+
 # Project extentions
 add_project_arguments('-D_GNU_SOURCE', language: 'c')
 
@@ -23,17 +28,14 @@ conf_data = configuration_data()
 
 ## Functions
 cc = meson.get_compiler('c')
-have_statx = cc.has_function('statx', args: '-D_GNU_SOURCE',
-			     prefix: '#include <sys/stat.h>')
-conf_data.set('HAVE_STATX', have_statx)
+have_fid_parse = cc.has_function('llapi_fid_parse', args: '-D_GNU_SOURCE',
+		                         dependencies: [liblustre],
+			                     prefix: '#include <lustre/lustreapi.h>')
+conf_data.set('HAVE_FID_PARSE', have_fid_parse)
 
 configure_file(input: 'config.h.in', output: 'config.h',
 	       configuration: conf_data)
 add_project_arguments(['-DHAVE_CONFIG_H',], language: 'c')
-
-librobinhood = dependency('robinhood', version: '>=0.0.0')
-librbhfind = dependency('rbh-find', version: '>=0.0.0')
-liblustre = dependency('lustre')
 
 # "." is necessary for config.h
 include_dirs = include_directories('.', 'include')
@@ -49,3 +51,4 @@ executable(
 	include_directories: include_dirs,
 	install: true,
 )
+subdir('tests')

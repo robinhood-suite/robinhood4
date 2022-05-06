@@ -42,8 +42,16 @@ lustre_predicate_or_action(const char *string)
 {
     switch (string[0]) {
     case '-':
-        if (!strcmp(&string[1], "hsm-state"))
-            return CLT_PREDICATE;
+        switch (string[1]) {
+        case 'f':
+            if (!strcmp(&string[2], "id"))
+                return CLT_PREDICATE;
+            break;
+        case 'h':
+            if (!strcmp(&string[2], "sm-state"))
+                return CLT_PREDICATE;
+            break;
+        }
         break;
     }
 
@@ -69,6 +77,9 @@ lustre_parse_predicate(struct find_context *ctx, int *arg_idx)
      * precise and meaningul error messages.
      */
     switch (predicate) {
+    case PRED_FID:
+        filter = fid2filter(ctx->argv[++i]);
+        break;
     case PRED_HSM_STATE:
         filter = hsm_state2filter(ctx->argv[++i]);
         break;
