@@ -9,6 +9,7 @@
 #include <errno.h>
 #include <error.h>
 #include <string.h>
+#include <stdio.h>
 #include <sysexits.h>
 
 #include <rbh-find/parser.h>
@@ -29,6 +30,10 @@ str2lustre_predicate(const char *string)
         if (strcmp(&string[2], "sm-state") == 0)
             return LPRED_HSM_STATE;
         break;
+    case 'o':
+        if (strcmp(&string[2], "st") == 0)
+            return LPRED_OST_INDEX;
+        break;
     }
 
     return str2predicate(string);
@@ -37,6 +42,7 @@ str2lustre_predicate(const char *string)
 static const char *__lustre_predicate2str[] = {
     [LPRED_FID - LPRED_MIN]  = "fid",
     [LPRED_HSM_STATE - LPRED_MIN]  = "hsm-state",
+    [LPRED_OST_INDEX - LPRED_MIN]  = "ost",
 };
 
 const char *

@@ -61,7 +61,7 @@ Extra features
 -hsm-state
 ----------
 
-rbh-lfind defines a ``-hsm-state`` action that filter the entries on their HSM
+rbh-lfind defines a ``-hsm-state`` action that filters the entries on their HSM
 status. These include: archived, dirty, exists, lost, noarchive, norelease, none
 and released.
 
@@ -78,12 +78,25 @@ and released.
 -fid
 ----
 
-rbh-lfind defines a ``-fid`` action that filter the entries on an exact fid.
+rbh-lfind defines a ``-fid`` action that filters the entries on an exact fid.
 
 .. code:: bash
 
     rbh-find rbh:mongo:test -fid [0xa:0xb:0xc]
     ./dir/file-1
+
+-ost
+----
+
+rbh-lfind defines a ``-ost`` action that currently filters the entries on an
+exact OST index.
+
+.. code:: bash
+
+    rbh-find rbh:mongo:test -ost 1 -o ost 2
+    ./dir/file-on-ost-1
+    ./dir/file-on-ost-2
+    ./dir/file-on-ost-1-and-2
 
 Examples
 --------

@@ -36,4 +36,14 @@ hsm_state2filter(const char *hsm_state);
 struct rbh_filter *
 fid2filter(const char *fid);
 
+/**
+ * Build a filter for the -ost predicate
+ *
+ * @param ost_index    a string representing a single integer
+ *
+ * @return             a pointer to a newly allocated struct rbh_filter
+ */
+struct rbh_filter *
+ost_index2filter(const char *ost_index);
+
 #endif
