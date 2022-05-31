@@ -145,7 +145,7 @@ xattrs_get_hsm(int fd, struct rbh_value_pair *pairs)
     int subcount = 0;
     int rc;
 
-    if (is_dir)
+    if (!is_reg)
         return 0;
 
     rc = llapi_hsm_state_get_fd(fd, &hus);
