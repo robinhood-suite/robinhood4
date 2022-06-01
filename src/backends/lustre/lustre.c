@@ -218,7 +218,6 @@ iter_data_ost_try_resize(struct iterator_data *data, int ost_len)
         tmp = realloc(data->ost,
                       (data->ost_size + ost_len) * sizeof(*data->ost));
         if (tmp == NULL) {
-            free(data->ost);
             errno = -ENOMEM;
             return -1;
         }
