@@ -55,6 +55,36 @@ differences of `rbh-lfind` compared to `rbh-find`.
 
 .. _: https://github.com/cea-hpc/rbh-find/README.rst
 
+Extra features
+==============
+
+-hsm-state
+----------
+
+rbh-lfind defines a ``-hsm-state`` action that filter the entries on their HSM
+status. These include: archived, dirty, exists, lost, noarchive, norelease, none
+and released.
+
+.. code:: bash
+
+    rbh-find rbh:mongo:test -hsm-state archived
+    ./file
+    ./dir/file-0
+    ./dir/file-1
+
+    rbh-find rbh:mongo:test -hsm-state archived -hsm-state norelease
+    ./dir/file-0
+
+-fid
+----
+
+rbh-lfind defines a ``-fid`` action that filter the entries on an exact fid.
+
+.. code:: bash
+
+    rbh-find rbh:mongo:test -fid [0xa:0xb:0xc]
+    ./dir/file-1
+
 Examples
 --------
 
