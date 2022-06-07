@@ -21,21 +21,6 @@ fi
 test_dir=$(dirname $(readlink -e $0))
 . $test_dir/test_utils.bash
 
-retrieve_fid()
-{
-    local file="$1"
-    local fid
-
-    fid=$(mongo $testdb --quiet \
-        --eval "db.entries.find({'ns.name': '$file'},
-                                {_id: 0, 'ns.xattrs.fid': 1})")
-
-    # The mongo output will be something like
-    # '{ "ns" : [ { "xattrs" : { "fid" : "0x200000401:0x210:0x0" } } ] }'
-    fid=$(echo "$fid" | cut -d'"' -f8)
-    echo "$fid"
-}
-
 ################################################################################
 #                                    TESTS                                     #
 ################################################################################
@@ -71,7 +56,9 @@ test_known_fid()
     touch "$file"
     rbh-sync "rbh:lustre:." "rbh:mongo:$testdb"
 
-    local fid=$(retrieve_fid "$file")
+    local fid=$(lfs path2fid "$file")
+    # remove braces around fid
+    fid="${fid:1:-1}"
 
     rbh_lfind "rbh:mongo:$testdb" -fid "$fid" | sort |
         difflines "/$file"

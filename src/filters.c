@@ -97,7 +97,6 @@ hsm_state2filter(const char *hsm_state)
 struct rbh_filter *
 fid2filter(const char *fid)
 {
-    char buf[FID_NOBRACE_LEN + 1];
     struct rbh_filter *filter;
     struct lu_fid lu_fid;
     int rc;
@@ -112,12 +111,9 @@ fid2filter(const char *fid)
         error(EX_USAGE, 0, "invalid fid parsing");
 #endif
 
-    rc = snprintf(buf, sizeof(buf), DFID_NOBRACE, PFID(&lu_fid));
-    if (rc < 0)
-        error(EX_USAGE, 0, "failed fid allocation: %s", strerror(EINVAL));
-
-    filter = rbh_filter_compare_string_new(
-            RBH_FOP_EQUAL, &predicate2filter_field[LPRED_FID - LPRED_MIN], buf
+    filter = rbh_filter_compare_binary_new(
+            RBH_FOP_EQUAL, &predicate2filter_field[PRED_FID - PRED_MIN],
+            (char *) &lu_fid, sizeof(lu_fid)
             );
     if (filter == NULL)
         error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
