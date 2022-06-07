@@ -46,6 +46,24 @@ fill_pair(const char *key, const struct rbh_value *value,
 }
 
 static inline int
+fill_binary_pair(const char *key, const void *data, const ssize_t len,
+                 struct rbh_value_pair *pair)
+{
+    const struct rbh_value binary_value = {
+        .type = RBH_VT_BINARY,
+        .binary = {
+            .data = rbh_sstack_push(_values, data, len),
+            .size = len,
+        },
+    };
+
+    if (binary_value.binary.data == NULL)
+        return -1;
+
+    return fill_pair(key, &binary_value, pair);
+}
+
+static inline int
 fill_string_pair(const char *key, const char *str, const int len,
                  struct rbh_value_pair *pair)
 {
@@ -53,6 +71,9 @@ fill_string_pair(const char *key, const char *str, const int len,
         .type = RBH_VT_STRING,
         .string = rbh_sstack_push(_values, str, len),
     };
+
+    if (string_value.string == NULL)
+        return -1;
 
     return fill_pair(key, &string_value, pair);
 }
@@ -109,7 +130,6 @@ fill_sequence_pair(const char *key, struct rbh_value *values, uint64_t length,
 static int
 xattrs_get_fid(int fd, struct rbh_value_pair *pairs)
 {
-    char buf[FID_NOBRACE_LEN + 1];
     struct lu_fid fid;
     int rc;
 
@@ -119,13 +139,7 @@ xattrs_get_fid(int fd, struct rbh_value_pair *pairs)
         return -1;
     }
 
-    rc = snprintf(buf, FID_NOBRACE_LEN, DFID_NOBRACE, PFID(&fid));
-    if (rc < 0) {
-        errno = -EINVAL;
-        return -1;
-    }
-
-    rc = fill_string_pair("fid", buf, FID_NOBRACE_LEN + 1, pairs);
+    rc = fill_binary_pair("fid", &fid, sizeof(fid), pairs);
 
     return rc ? : 1;
 }
