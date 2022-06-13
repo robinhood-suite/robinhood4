@@ -382,7 +382,7 @@ init_iterator_data(struct iterator_data *data, const uint32_t length,
     if (arr == NULL)
         return -1;
 
-    data->stripe_count = &arr[0 * length];
+    data->stripe_count = arr;
     data->stripe_size = &arr[1 * length];
     data->pattern = &arr[2 * length];
     data->flags = &arr[3 * length];
