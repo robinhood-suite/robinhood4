@@ -20,6 +20,7 @@ env = environment()
 env.prepend('LD_LIBRARY_PATH', meson.build_root() + '/src')
 # .. and also add paths for plugins required by tests that require one
 env.prepend('LD_LIBRARY_PATH', meson.build_root() + '/src/backends/posix')
+env.prepend('LD_LIBRARY_PATH', meson.build_root() + '/src/backends/lustre')
 
 
 foreach t: ['check_backend', 'check_filter', 'check_fsentry',
@@ -40,6 +41,15 @@ foreach t: ['check_posix']
          executable(t, t + '.c',
                     dependencies: [check],
                     link_with: [librobinhood, librbh_posix],
+                    include_directories: rbh_include),
+         env: env)
+endforeach
+
+foreach t: ['check_lustre']
+    test(t,
+         executable(t, t + '.c',
+                    dependencies: [check],
+                    link_with: [librobinhood, librbh_lustre],
                     include_directories: rbh_include),
          env: env)
 endforeach
