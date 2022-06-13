@@ -65,6 +65,8 @@ enum predicate {
     PRED_WRITEABLE,
     PRED_XATTR,
     PRED_XTYPE,
+
+    PRED_LAST,
 };
 
 /**
