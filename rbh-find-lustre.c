@@ -77,10 +77,10 @@ lustre_parse_predicate(struct find_context *ctx, int *arg_idx)
      * precise and meaningul error messages.
      */
     switch (predicate) {
-    case PRED_FID:
+    case LPRED_FID:
         filter = fid2filter(ctx->argv[++i]);
         break;
-    case PRED_HSM_STATE:
+    case LPRED_HSM_STATE:
         filter = hsm_state2filter(ctx->argv[++i]);
         break;
     default:

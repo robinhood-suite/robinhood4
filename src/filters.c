@@ -18,10 +18,10 @@
 #include "filters.h"
 
 static const struct rbh_filter_field predicate2filter_field[] = {
-    [PRED_FID - PRED_MIN] =       {.fsentry = RBH_FP_NAMESPACE_XATTRS,
-                                   .xattr = "fid"},
-    [PRED_HSM_STATE - PRED_MIN] = {.fsentry = RBH_FP_NAMESPACE_XATTRS,
-                                   .xattr = "hsm_state"},
+    [LPRED_FID - LPRED_MIN] =       {.fsentry = RBH_FP_NAMESPACE_XATTRS,
+                                     .xattr = "fid"},
+    [LPRED_HSM_STATE - LPRED_MIN] = {.fsentry = RBH_FP_NAMESPACE_XATTRS,
+                                     .xattr = "hsm_state"},
 };
 
 static enum hsm_states
@@ -85,7 +85,7 @@ hsm_state2filter(const char *hsm_state)
         op = RBH_FOP_EQUAL;
 
     filter = rbh_filter_compare_uint32_new(
-            op, &predicate2filter_field[PRED_HSM_STATE - PRED_MIN], state
+            op, &predicate2filter_field[LPRED_HSM_STATE - LPRED_MIN], state
             );
     if (filter == NULL)
         error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
@@ -117,7 +117,7 @@ fid2filter(const char *fid)
         error(EX_USAGE, 0, "failed fid allocation: %s", strerror(EINVAL));
 
     filter = rbh_filter_compare_string_new(
-            RBH_FOP_EQUAL, &predicate2filter_field[PRED_FID - PRED_MIN], buf
+            RBH_FOP_EQUAL, &predicate2filter_field[LPRED_FID - LPRED_MIN], buf
             );
     if (filter == NULL)
         error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,

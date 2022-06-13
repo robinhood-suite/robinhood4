@@ -23,11 +23,11 @@ str2lustre_predicate(const char *string)
     switch (string[1]) {
     case 'f':
         if (strcmp(&string[2], "id") == 0)
-            return PRED_FID;
+            return LPRED_FID;
         break;
     case 'h':
         if (strcmp(&string[2], "sm-state") == 0)
-            return PRED_HSM_STATE;
+            return LPRED_HSM_STATE;
         break;
     }
 
@@ -35,15 +35,15 @@ str2lustre_predicate(const char *string)
 }
 
 static const char *__lustre_predicate2str[] = {
-    [PRED_FID - PRED_MIN]  = "fid",
-    [PRED_HSM_STATE - PRED_MIN]  = "hsm-state",
+    [LPRED_FID - LPRED_MIN]  = "fid",
+    [LPRED_HSM_STATE - LPRED_MIN]  = "hsm-state",
 };
 
 const char *
 lustre_predicate2str(int predicate)
 {
-    if (PRED_MIN <= predicate && predicate < PRED_MAX)
-        return __lustre_predicate2str[predicate - PRED_MIN];
+    if (LPRED_MIN <= predicate && predicate < LPRED_MAX)
+        return __lustre_predicate2str[predicate - LPRED_MIN];
 
     return predicate2str(predicate);
 }
