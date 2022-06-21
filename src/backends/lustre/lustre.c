@@ -32,6 +32,7 @@ struct iterator_data {
 static __thread struct rbh_sstack *_values;
 static __thread bool is_dir;
 static __thread bool is_reg;
+static __thread bool is_symlink;
 
 static inline int
 fill_pair(const char *key, const struct rbh_value *value,
@@ -562,6 +563,9 @@ xattrs_get_layout(int fd, struct rbh_value_pair *pairs)
     uint32_t flags;
     int rc;
 
+    if (is_symlink)
+        return 0;
+
     layout = llapi_layout_get_by_fd(fd, 0);
     if (layout == NULL)
         return -1;
@@ -673,7 +677,7 @@ xattrs_get_mdt_info(int fd, struct rbh_value_pair *pairs)
                               &pairs[subcount++]);
         if (rc)
             return -1;
-    } else {
+    } else if (!is_symlink) {
         int32_t mdt;
 
         rc = llapi_file_fget_mdtidx(fd, &mdt);
@@ -699,6 +703,7 @@ lustre_ns_xattrs_callback(const int fd, const uint16_t mode,
     int count = 0;
     int subcount;
 
+    is_symlink = S_ISLNK(mode);
     is_dir = S_ISDIR(mode);
     is_reg = S_ISREG(mode);
     _values = values;

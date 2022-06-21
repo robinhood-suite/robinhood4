@@ -139,7 +139,7 @@ ceil2(size_t number)
 }
 
 static ssize_t
-flistxattrs(int fd, char **buffer, size_t *size)
+flistxattrs(char *proc_fd_path, char **buffer, size_t *size)
 {
     size_t buflen = *size;
     char *keys = *buffer;
@@ -147,7 +147,7 @@ flistxattrs(int fd, char **buffer, size_t *size)
     ssize_t length;
 
 retry:
-    length = flistxattr(fd, keys, buflen);
+    length = listxattr(proc_fd_path, keys, buflen);
     if (length == -1) {
         void *tmp;
 
@@ -157,7 +157,7 @@ retry:
             /* Not much we can do */
             return 0;
         case ERANGE:
-            length = flistxattr(fd, NULL, 0);
+            length = listxattr(proc_fd_path, NULL, 0);
             if (length == -1) {
                 switch (errno) {
                 case E2BIG:
@@ -197,7 +197,7 @@ static __thread size_t names_length = 1 << 12;
 static __thread char *names;
 
 static ssize_t
-getxattrs(int fd, struct rbh_value_pair **_pairs, size_t *_pairs_count,
+getxattrs(char *proc_fd_path, struct rbh_value_pair **_pairs, size_t *_pairs_count,
           struct rbh_sstack *values, struct rbh_sstack *xattrs)
 {
     struct rbh_value_pair *pairs = *_pairs;
@@ -212,7 +212,7 @@ getxattrs(int fd, struct rbh_value_pair **_pairs, size_t *_pairs_count,
             return -1;
     }
 
-    count = flistxattrs(fd, &names, &names_length);
+    count = flistxattrs(proc_fd_path, &names, &names_length);
     if (count == -1)
         return -1;
 
@@ -237,7 +237,7 @@ getxattrs(int fd, struct rbh_value_pair **_pairs, size_t *_pairs_count,
         assert(i - skipped < pairs_count);
 
         pair->key = name;
-        length = fgetxattr(fd, name, &buffer, sizeof(buffer));
+        length = getxattr(proc_fd_path, name, &buffer, sizeof(buffer));
         if (length == -1) {
             switch (errno) {
             case E2BIG:
@@ -312,6 +312,7 @@ fsentry_from_ftsent(FTSENT *ftsent, int statx_sync_type, size_t prefix_len,
     struct rbh_value_pair *pair;
     struct rbh_fsentry *fsentry;
     struct rbh_statx statxbuf;
+    char proc_fd_path[64];
     char *symlink = NULL;
     ssize_t ns_count = 0;
     struct rbh_id *id;
@@ -356,8 +357,18 @@ fsentry_from_ftsent(FTSENT *ftsent, int statx_sync_type, size_t prefix_len,
 
     fd = openat(AT_FDCWD, ftsent->fts_accpath,
                 O_RDONLY | O_CLOEXEC | O_NOFOLLOW);
+    if (fd < 0 && errno == ELOOP)
+        /* If the file to open is a symlink, reopen it with O_PATH set */
+        fd = openat(AT_FDCWD, ftsent->fts_accpath,
+                    O_CLOEXEC | O_NOFOLLOW | O_PATH);
+
     if (fd < 0)
         return NULL;
+
+    if (sprintf(proc_fd_path, "/proc/self/fd/%d", fd) == -1) {
+        errno = ENOMEM;
+        return NULL;
+    }
 
     /* The root entry might already have its ID computed and stored in
      * `fts_pointer'.
@@ -390,7 +401,7 @@ fsentry_from_ftsent(FTSENT *ftsent, int statx_sync_type, size_t prefix_len,
         }
     }
 
-    count = getxattrs(fd, &pairs, &pairs_count, values, xattrs);
+    count = getxattrs(proc_fd_path, &pairs, &pairs_count, values, xattrs);
     if (count == -1) {
         save_errno = errno;
         goto out_clear_sstacks;
