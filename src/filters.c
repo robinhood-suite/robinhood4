@@ -122,8 +122,19 @@ fid2filter(const char *fid)
     if (rc)
         error(EX_USAGE, 0, "invalid fid parsing: %s", strerror(-rc));
 #else
-    rc = sscanf(fid, SFID, RFID(&lu_fid));
+    char *fid_format;
+    int n_chars;
+
+    if (*fid == '[')
+        fid_format = "[" SFID "]%n";
+    else
+        fid_format = SFID "%n";
+
+    rc = sscanf(fid, fid_format, RFID(&lu_fid), &n_chars);
     if (rc != 3)
+        error(EX_USAGE, 0, "invalid fid parsing");
+
+    if (fid[n_chars] != '\0')
         error(EX_USAGE, 0, "invalid fid parsing");
 #endif
 
