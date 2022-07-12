@@ -1159,57 +1159,57 @@ emit_statx_attributes(yaml_emitter_t *emitter, uint64_t mask,
     if (!yaml_emit_mapping_start(emitter, NULL))
         return false;
 
-    if (mask & STATX_ATTR_COMPRESSED) {
+    if (mask & RBH_STATX_ATTR_COMPRESSED) {
         if (!YAML_EMIT_STRING(emitter, "compressed")
-         || !yaml_emit_boolean(emitter, attributes & STATX_ATTR_COMPRESSED))
+         || !yaml_emit_boolean(emitter, attributes & RBH_STATX_ATTR_COMPRESSED))
             return false;
     }
 
-    if (mask & STATX_ATTR_IMMUTABLE) {
+    if (mask & RBH_STATX_ATTR_IMMUTABLE) {
         if (!YAML_EMIT_STRING(emitter, "immutable")
-         || !yaml_emit_boolean(emitter, attributes & STATX_ATTR_IMMUTABLE))
+         || !yaml_emit_boolean(emitter, attributes & RBH_STATX_ATTR_IMMUTABLE))
             return false;
     }
 
-    if (mask & STATX_ATTR_APPEND) {
+    if (mask & RBH_STATX_ATTR_APPEND) {
         if (!YAML_EMIT_STRING(emitter, "append")
-         || !yaml_emit_boolean(emitter, attributes & STATX_ATTR_APPEND))
+         || !yaml_emit_boolean(emitter, attributes & RBH_STATX_ATTR_APPEND))
             return false;
     }
 
-    if (mask & STATX_ATTR_NODUMP) {
+    if (mask & RBH_STATX_ATTR_NODUMP) {
         if (!YAML_EMIT_STRING(emitter, "nodump")
-         || !yaml_emit_boolean(emitter, attributes & STATX_ATTR_NODUMP))
+         || !yaml_emit_boolean(emitter, attributes & RBH_STATX_ATTR_NODUMP))
             return false;
     }
 
-    if (mask & STATX_ATTR_ENCRYPTED) {
+    if (mask & RBH_STATX_ATTR_ENCRYPTED) {
         if (!YAML_EMIT_STRING(emitter, "encrypted")
-         || !yaml_emit_boolean(emitter, attributes & STATX_ATTR_ENCRYPTED))
+         || !yaml_emit_boolean(emitter, attributes & RBH_STATX_ATTR_ENCRYPTED))
             return false;
     }
 
-    if (mask & STATX_ATTR_AUTOMOUNT) {
+    if (mask & RBH_STATX_ATTR_AUTOMOUNT) {
         if (!YAML_EMIT_STRING(emitter, "automount")
-         || !yaml_emit_boolean(emitter, attributes & STATX_ATTR_AUTOMOUNT))
+         || !yaml_emit_boolean(emitter, attributes & RBH_STATX_ATTR_AUTOMOUNT))
             return false;
     }
 
-    if (mask & STATX_ATTR_MOUNT_ROOT) {
+    if (mask & RBH_STATX_ATTR_MOUNT_ROOT) {
         if (!YAML_EMIT_STRING(emitter, "mount-root")
-         || !yaml_emit_boolean(emitter, attributes & STATX_ATTR_MOUNT_ROOT))
+         || !yaml_emit_boolean(emitter, attributes & RBH_STATX_ATTR_MOUNT_ROOT))
             return false;
     }
 
-    if (mask & STATX_ATTR_VERITY) {
+    if (mask & RBH_STATX_ATTR_VERITY) {
         if (!YAML_EMIT_STRING(emitter, "verity")
-         || !yaml_emit_boolean(emitter, attributes & STATX_ATTR_VERITY))
+         || !yaml_emit_boolean(emitter, attributes & RBH_STATX_ATTR_VERITY))
             return false;
     }
 
-    if (mask & STATX_ATTR_DAX) {
+    if (mask & RBH_STATX_ATTR_DAX) {
         if (!YAML_EMIT_STRING(emitter, "dax")
-         || !yaml_emit_boolean(emitter, attributes & STATX_ATTR_DAX))
+         || !yaml_emit_boolean(emitter, attributes & RBH_STATX_ATTR_DAX))
             return false;
     }
 
@@ -1225,41 +1225,41 @@ str2statx_attribute(const char *string)
         case 'p': /* append */
             if (strcmp(string, "pend"))
                 break;
-            return STATX_ATTR_APPEND;
+            return RBH_STATX_ATTR_APPEND;
         case 'u': /* automount */
             if (strcmp(string, "tomount"))
                 break;
-            return STATX_ATTR_AUTOMOUNT;
+            return RBH_STATX_ATTR_AUTOMOUNT;
         }
         break;
     case 'c': /* compressed */
         if (strcmp(string, "ompressed"))
             break;
-        return STATX_ATTR_COMPRESSED;
+        return RBH_STATX_ATTR_COMPRESSED;
     case 'd': /* dax */
         if (strcmp(string, "ax"))
             break;
-        return STATX_ATTR_DAX;
+        return RBH_STATX_ATTR_DAX;
     case 'e': /* encrypted */
         if (strcmp(string, "ncrypted"))
             break;
-        return STATX_ATTR_ENCRYPTED;
+        return RBH_STATX_ATTR_ENCRYPTED;
     case 'i': /* immutable */
         if (strcmp(string, "mmutable"))
             break;
-        return STATX_ATTR_IMMUTABLE;
+        return RBH_STATX_ATTR_IMMUTABLE;
     case 'm': /* mount-root */
         if (strcmp(string, "ount-root"))
             break;
-        return STATX_ATTR_MOUNT_ROOT;
+        return RBH_STATX_ATTR_MOUNT_ROOT;
     case 'n': /* nodump */
         if (strcmp(string, "odump"))
             break;
-        return STATX_ATTR_NODUMP;
+        return RBH_STATX_ATTR_NODUMP;
     case 'v': /* verity */
         if (strcmp(string, "erity"))
             break;
-        return STATX_ATTR_VERITY;
+        return RBH_STATX_ATTR_VERITY;
     }
 
     errno = EINVAL;
