@@ -25,11 +25,17 @@
 #include "source.h"
 #include "sink.h"
 
+enum rbh_source_t {
+    SRC_DEFAULT = 0,
+    SRC_FILE = SRC_DEFAULT,
+    SRC_LUSTRE,
+};
+
 static void
 usage(void)
 {
     const char *message =
-        "usage: %s [-h] [--raw] [--enrich MOUNTPOINT] SOURCE DESTINATION\n"
+        "usage: %s [-h] [--raw] [--enrich MOUNTPOINT] [--lustre] SOURCE DESTINATION\n"
         "\n"
         "Collect changelog records from SOURCE, optionally enrich them with data\n"
         "collected from MOUNTPOINT and send them to DESTINATION.\n"
@@ -47,6 +53,7 @@ usage(void)
         "    -r, --raw       do not enrich changelog records (default)\n"
         "    -e, --enrich MOUNTPOINT\n"
         "                    enrich changelog records by querying MOUNTPOINT as needed\n"
+        "    -l, --lustre    consider SOURCE is an MDT name\n"
         "\n"
         "Note that uploading raw records to a RobinHood backend will fail, they have to\n"
         "be enriched first.\n";
@@ -55,9 +62,18 @@ usage(void)
 }
 
 static struct source *
-source_new(const char *arg)
+source_new(const char *arg, enum  rbh_source_t source_type)
 {
     FILE *file;
+
+    switch(source_type) {
+    case SRC_LUSTRE:
+        error(EX_USAGE, EINVAL, "MDT source is not available");
+    case SRC_FILE:
+        break;
+    default:
+        __builtin_unreachable();
+    }
 
     if (strcmp(arg, "-") == 0)
         /* SOURCE is '-' (stdin) */
@@ -73,7 +89,6 @@ source_new(const char *arg)
          */
         error(EXIT_FAILURE, errno, "%s", arg);
 
-    /* TODO: parse SOURCE as an MDT name (ie. <fsname>-MDT<index>) */
     error(EX_USAGE, EINVAL, "%s", arg);
     __builtin_unreachable();
 }
@@ -207,15 +222,20 @@ main(int argc, char *argv[])
             .val = 'h',
         },
         {
+            .name = "lustre",
+            .val = 'l',
+        },
+        {
             .name = "raw",
             .val = 'r',
         },
         {}
     };
+    enum rbh_source_t source_type = SRC_DEFAULT;
     char c;
 
     /* Parse the command line */
-    while ((c = getopt_long(argc, argv, "e:hr", LONG_OPTIONS, NULL)) != -1) {
+    while ((c = getopt_long(argc, argv, "e:hlr", LONG_OPTIONS, NULL)) != -1) {
         switch (c) {
         case 'e':
             mount_fd = open(optarg, O_RDONLY | O_CLOEXEC);
@@ -225,6 +245,11 @@ main(int argc, char *argv[])
         case 'h':
             usage();
             return 0;
+        case 'l':
+            if (source_type != SRC_DEFAULT)
+                error(EX_USAGE, EINVAL, "source type already specified");
+            source_type = SRC_LUSTRE;
+            break;
         case 'r':
             /* Ignore errors on close */
             mount_fd_exit();
@@ -242,7 +267,7 @@ main(int argc, char *argv[])
     if (argc - optind > 2)
         error(EX_USAGE, 0, "too many arguments");
 
-    source = source_new(argv[optind++]);
+    source = source_new(argv[optind++], source_type);
     sink = sink_new(argv[optind++]);
 
     feed(sink, source, mount_fd != -1, strcmp(sink->name, "backend"));
