@@ -140,6 +140,24 @@ the pattern of any of their components. The only accepted values are
 ``default``, ``raid0`` and ``mdt``. It behaves exactly like the
 ``stripe-count`` predicate with regards to the default value otherwise.
 
+-expired-at
+----
+
+rbh-lfind defines a ``-expired-at`` action that filters entries which
+expired or will expire at a given epoch. The expiration date is defined
+by the extended attribute 'user.ccc_expires_at'.
+
+.. code:: bash
+
+    rbh-find rbh:mongo:test -expired-at $(date +%s)
+    ./dir/file-that-just-expired
+
+    rbh-find rbh:mongo:test -expired-at $(date +%s) -o \
+        -expired-at +$(date +%s -d "5 minutes")
+    ./dir/file-that-just-expired
+    ./dir/file-that-will-expire-in-10-minutes
+    ./dir/file-that-will-expire-in-2-days
+
 Examples
 --------
 

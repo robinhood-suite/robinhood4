@@ -23,6 +23,7 @@
 #include <robinhood/backend.h>
 #include <robinhood/utils.h>
 #include <rbh-find/filters.h>
+#include <rbh-find/utils.h>
 
 #include "filters.h"
 
@@ -39,6 +40,8 @@ static const struct rbh_filter_field predicate2filter_field[] = {
                                           .xattr = "stripe_count"},
     [LPRED_STRIPE_SIZE - LPRED_MIN]    = {.fsentry = RBH_FP_INODE_XATTRS,
                                           .xattr = "stripe_size"},
+    [LPRED_EXPIRED_AT - LPRED_MIN] = {.fsentry = RBH_FP_INODE_XATTRS,
+                                      .xattr = "user.ccc_expires_at"},
 };
 
 static inline const struct rbh_filter_field *
@@ -484,4 +487,17 @@ layout_pattern2filter(const char *_layout)
         return filter_or(filter, default_filter);
 
     return filter_and(filter, filter_not(default_filter));
+}
+
+struct rbh_filter *
+expired_at2filter(const char *expired_at)
+{
+    struct rbh_filter *result = numeric2filter(
+        &predicate2filter_field[LPRED_EXPIRED_AT - LPRED_MIN], expired_at);
+
+    if (!result)
+        error(EXIT_FAILURE, errno, "invalid argument `%s' to `%s'", expired_at,
+              lustre_predicate2str(LPRED_EXPIRED_AT));
+
+    return result;
 }

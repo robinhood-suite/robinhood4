@@ -77,4 +77,14 @@ stripe_size2filter(const char *stripe_size);
 struct rbh_filter *
 layout_pattern2filter(const char *layout_pattern);
 
+/**
+ * Build a filter for the -expired-at predicate
+ *
+ * @param expired_at   a string representing an epoch
+ *
+ * @return             a pointer to a newly allocated struct rbh_filter
+ */
+struct rbh_filter *
+expired_at2filter(const char *expired_at);
+
 #endif
