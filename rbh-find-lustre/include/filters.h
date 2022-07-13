@@ -46,4 +46,14 @@ fid2filter(const char *fid);
 struct rbh_filter *
 ost_index2filter(const char *ost_index);
 
+/**
+ * Build a filter for the -expired-at predicate
+ *
+ * @param ost_index    a string representing an epoch
+ *
+ * @return             a pointer to a newly allocated struct rbh_filter
+ */
+struct rbh_filter *
+expired_at2filter(const char *expired_at);
+
 #endif

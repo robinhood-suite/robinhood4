@@ -15,16 +15,19 @@
 
 #include <robinhood/backend.h>
 #include <rbh-find/filters.h>
+#include <rbh-find/utils.h>
 
 #include "filters.h"
 
 static const struct rbh_filter_field predicate2filter_field[] = {
-    [LPRED_FID - LPRED_MIN] =       {.fsentry = RBH_FP_NAMESPACE_XATTRS,
-                                     .xattr = "fid"},
-    [LPRED_HSM_STATE - LPRED_MIN] = {.fsentry = RBH_FP_NAMESPACE_XATTRS,
-                                     .xattr = "hsm_state"},
-    [LPRED_OST_INDEX - LPRED_MIN] = {.fsentry = RBH_FP_NAMESPACE_XATTRS,
-                                     .xattr = "ost"},
+    [LPRED_EXPIRED_AT - LPRED_MIN] = {.fsentry = RBH_FP_INODE_XATTRS,
+                                      .xattr = "user.ccc_expires_at"},
+    [LPRED_FID - LPRED_MIN] =        {.fsentry = RBH_FP_NAMESPACE_XATTRS,
+                                      .xattr = "fid"},
+    [LPRED_HSM_STATE - LPRED_MIN] =  {.fsentry = RBH_FP_NAMESPACE_XATTRS,
+                                      .xattr = "hsm_state"},
+    [LPRED_OST_INDEX - LPRED_MIN] =  {.fsentry = RBH_FP_NAMESPACE_XATTRS,
+                                      .xattr = "ost"},
 };
 
 static enum hsm_states
@@ -183,4 +186,17 @@ ost_index2filter(const char *ost_index)
                       "ost_index2filter");
 
     return filter;
+}
+
+struct rbh_filter *
+expired_at2filter(const char *expired_at)
+{
+    struct rbh_filter *result = numeric2filter(
+        &predicate2filter_field[LPRED_EXPIRED_AT - LPRED_MIN], expired_at);
+
+    if (!result)
+        error(EXIT_FAILURE, errno, "invalid argument `%s' to `%s'", expired_at,
+              lustre_predicate2str(LPRED_EXPIRED_AT));
+
+    return result;
 }
