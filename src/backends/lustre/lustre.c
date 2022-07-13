@@ -5,8 +5,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/ioctl.h>
-#include <sys/types.h>
-#include <sys/xattr.h>
 
 #include <lustre/lustreapi.h>
 
@@ -29,10 +27,12 @@ struct iterator_data {
     int ost_idx;
 };
 
+static __thread struct rbh_value_pair *_inode_xattrs;
+static __thread ssize_t *_inode_xattrs_count;
 static __thread struct rbh_sstack *_values;
+static __thread bool is_symlink;
 static __thread bool is_dir;
 static __thread bool is_reg;
-static __thread bool is_symlink;
 
 static inline int
 fill_pair(const char *key, const struct rbh_value *value,
@@ -461,8 +461,7 @@ xattrs_fill_layout(struct iterator_data *data, int nb_xattrs,
 static int
 xattrs_get_magic_and_gen(int fd, struct rbh_value_pair *pairs)
 {
-    char lov_buf[XATTR_SIZE_MAX];
-    ssize_t xattr_size;
+    const char *lov_buf;
     uint32_t magic = 0;
     int magic_str_len;
     int subcount = 0;
@@ -470,9 +469,9 @@ xattrs_get_magic_and_gen(int fd, struct rbh_value_pair *pairs)
     char *magic_str;
     int rc;
 
-    xattr_size = fgetxattr(fd, XATTR_LUSTRE_LOV, lov_buf, sizeof(lov_buf));
-    if (xattr_size < 0)
-        return -1;
+    for (int i = 0; i < *_inode_xattrs_count; ++i)
+        if (!strcmp(_inode_xattrs[i].key, XATTR_LUSTRE_LOV))
+            lov_buf = _inode_xattrs[i].value->binary.data;
 
     magic = ((struct lov_user_md *) lov_buf)->lmm_magic;
 
@@ -694,6 +693,8 @@ xattrs_get_mdt_info(int fd, struct rbh_value_pair *pairs)
 
 static ssize_t
 lustre_ns_xattrs_callback(const int fd, const uint16_t mode,
+                          struct rbh_value_pair *inode_xattrs,
+                          ssize_t *inode_xattrs_count,
                           struct rbh_value_pair *pairs,
                           struct rbh_sstack *values)
 {
@@ -703,6 +704,8 @@ lustre_ns_xattrs_callback(const int fd, const uint16_t mode,
     int count = 0;
     int subcount;
 
+    _inode_xattrs_count = inode_xattrs_count;
+    _inode_xattrs = inode_xattrs;
     is_symlink = S_ISLNK(mode);
     is_dir = S_ISDIR(mode);
     is_reg = S_ISREG(mode);

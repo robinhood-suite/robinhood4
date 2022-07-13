@@ -286,10 +286,6 @@ sstack_clear(struct rbh_sstack *sstack)
     }
 }
 
-static __thread struct rbh_value_pair *pairs;
-static __thread size_t pairs_count = 1 << 7;
-static __thread struct rbh_sstack *values;
-static __thread struct rbh_sstack *xattrs;
 static __thread struct rbh_value_pair *ns_pairs;
 static __thread size_t ns_pairs_count = 1 << 7;
 static __thread struct rbh_sstack *ns_values;
@@ -297,6 +293,8 @@ static __thread struct rbh_sstack *ns_values;
 static struct rbh_fsentry *
 fsentry_from_ftsent(FTSENT *ftsent, int statx_sync_type, size_t prefix_len,
                     ssize_t (*ns_xattrs_callback)(const int, const uint16_t,
+                                                  struct rbh_value_pair *,
+                                                  ssize_t *,
                                                   struct rbh_value_pair *,
                                                   struct rbh_sstack *))
 {
@@ -307,10 +305,14 @@ fsentry_from_ftsent(FTSENT *ftsent, int statx_sync_type, size_t prefix_len,
         .string = ftsent->fts_pathlen == prefix_len ?
             "/" : ftsent->fts_path + prefix_len,
     };
+    struct rbh_value_pair *pairs = NULL;
     struct rbh_value_map inode_xattrs;
+    struct rbh_sstack *values = NULL;
+    struct rbh_sstack *xattrs = NULL;
     struct rbh_value_map ns_xattrs;
     struct rbh_value_pair *pair;
     struct rbh_fsentry *fsentry;
+    size_t pairs_count = 1 << 7;
     struct rbh_statx statxbuf;
     char proc_fd_path[64];
     char *symlink = NULL;
@@ -407,9 +409,6 @@ fsentry_from_ftsent(FTSENT *ftsent, int statx_sync_type, size_t prefix_len,
         goto out_clear_sstacks;
     }
 
-    inode_xattrs.pairs = pairs;
-    inode_xattrs.count = count;
-
     pair = &ns_pairs[0];
     pair->key = "path";
     pair->value = rbh_sstack_push(ns_values, &path, sizeof(path));
@@ -421,7 +420,7 @@ fsentry_from_ftsent(FTSENT *ftsent, int statx_sync_type, size_t prefix_len,
     ns_xattrs.count = 1;
 
     if (ns_xattrs_callback != NULL) {
-        ns_count = ns_xattrs_callback(fd, statxbuf.stx_mode,
+        ns_count = ns_xattrs_callback(fd, statxbuf.stx_mode, pairs, &count,
                                       &ns_pairs[ns_xattrs.count], ns_values);
         if (ns_count == -1) {
             save_errno = errno;
@@ -432,6 +431,9 @@ fsentry_from_ftsent(FTSENT *ftsent, int statx_sync_type, size_t prefix_len,
     }
 
     ns_xattrs.pairs = ns_pairs;
+
+    inode_xattrs.pairs = pairs;
+    inode_xattrs.count = count;
 
     fsentry = rbh_fsentry_new(id, ftsent->fts_parent->fts_pointer,
                               ftsent->fts_name, &statxbuf, &ns_xattrs,

@@ -42,6 +42,8 @@ struct posix_iterator {
      * @return          number of filled \p pairs
      */
     ssize_t (*ns_xattrs_callback)(const int fd, const uint16_t mode,
+                                  struct rbh_value_pair *inode_xattrs,
+                                  ssize_t *inode_xattrs_count,
                                   struct rbh_value_pair *pairs,
                                   struct rbh_sstack *values);
 
