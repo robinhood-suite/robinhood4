@@ -13,7 +13,8 @@
 enum lustre_predicate {
     LPRED_MIN = PRED_LAST,
 
-    LPRED_FID = LPRED_MIN,
+    LPRED_EXPIRED_AT = LPRED_MIN,
+    LPRED_FID,
     LPRED_HSM_STATE,
     LPRED_OST_INDEX,
 
