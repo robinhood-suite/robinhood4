@@ -9,6 +9,7 @@
 #define RBH_FIND_FILTERS_H
 
 #include "parser.h"
+#include "utils.h"
 
 #include <robinhood/filter.h>
 
@@ -25,6 +26,21 @@
 struct rbh_filter *
 shell_regex2filter(enum predicate predicate, const char *shell_regex,
                    unsigned int regex_options);
+
+/**
+ * numeric2filter - build a filter from a string representing a uint64_t value.
+ * If the given value is preceded with a '+' or '-', will filter entries
+ * with \p field greater or lower than \p _numeric.
+ *
+ * @param field         a field to filter
+ * @param _numeric      a string representing a uint64_t, optionnally prefixed
+ *                      with either a '+' or '-' sign
+ *
+ * @return              a pointer to a newly allocated struct filter, or NULL on
+ *                      error
+ */
+struct rbh_filter *
+numeric2filter(const struct rbh_filter_field *field, const char *_numeric);
 
 /**
  * Build a filter for the -[acm]min predicate

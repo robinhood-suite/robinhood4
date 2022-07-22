@@ -71,6 +71,48 @@ shell_regex2filter(enum predicate predicate, const char *shell_regex,
     return filter;
 }
 
+struct rbh_filter *
+numeric2filter(const struct rbh_filter_field *field, const char *_numeric)
+{
+    const char *numeric = _numeric;
+    struct rbh_filter *filter;
+    char operator = *numeric;
+    uint64_t value;
+    int save_errno;
+
+    switch (operator) {
+    case '-':
+    case '+':
+        numeric++;
+    }
+
+    save_errno = errno;
+    if (str2uint64_t(numeric, &value))
+        return NULL;
+
+    errno = save_errno;
+
+    switch (operator) {
+    case '-':
+        filter = rbh_filter_compare_uint64_new(RBH_FOP_STRICTLY_LOWER, field,
+                                               value);
+        break;
+    case '+':
+        filter = rbh_filter_compare_uint64_new(RBH_FOP_STRICTLY_GREATER, field,
+                                               value);
+        break;
+    default:
+        filter = rbh_filter_compare_uint64_new(RBH_FOP_EQUAL, field, value);
+        break;
+    }
+
+    if (filter == NULL)
+        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
+                      "rbh_filter_compare_uint64_new");
+
+    return filter;
+}
+
 static struct rbh_filter *
 filter_uint64_range_new(const struct rbh_filter_field *field, uint64_t start,
                         uint64_t end)
@@ -113,7 +155,7 @@ timedelta2filter(enum predicate predicate, enum time_unit unit,
     errno = 0;
     delta = str2seconds(unit, timedelta);
     if ((errno == ERANGE && delta == ULONG_MAX) || (errno != 0 && delta == 0))
-        error(EXIT_FAILURE, 0, "invalid argument `%s' to `%s'", _timedelta,
+        error(EXIT_FAILURE, errno, "invalid argument `%s' to `%s'", _timedelta,
               predicate2str(predicate));
     errno = save_errno;
 
@@ -126,7 +168,7 @@ timedelta2filter(enum predicate predicate, enum time_unit unit,
     switch (operator) {
     case '-':
         filter = rbh_filter_compare_uint64_new(RBH_FOP_STRICTLY_GREATER, field,
-                                              then);
+                                               then);
         if (filter == NULL)
             error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
                           "rbh_filter_compare_time_new");
