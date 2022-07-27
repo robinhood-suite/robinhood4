@@ -6,53 +6,13 @@
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
 
-set -e
-
 if ! command -v rbh-sync &> /dev/null; then
     echo "This test requires rbh-sync to be installed" >&2
     exit 1
 fi
 
-################################################################################
-#                                  UTILITIES                                   #
-################################################################################
-
-SUITE=${BASH_SOURCE##*/}
-SUITE=${SUITE%.*}
-
-__rbh_find=$(PATH="$PWD:$PATH" which rbh-find)
-rbh_find()
-{
-    "$__rbh_find" "$@"
-}
-
-__mongo=$(which mongosh || which mongo)
-mongo()
-{
-    "$__mongo" "$@"
-}
-
-setup()
-{
-    # Create a test directory and `cd` into it
-    testdir=$SUITE-$test
-    mkdir "$testdir"
-    cd "$testdir"
-
-    # "Create" a test database
-    testdb=$SUITE-$test
-}
-
-teardown()
-{
-    mongo --quiet "$testdb" --eval "db.dropDatabase()" >/dev/null
-    rm -rf "$testdir"
-}
-
-difflines()
-{
-    diff -y - <([ $# -eq 0 ] && printf '' || printf '%s\n' "$@")
-}
+test_dir=$(dirname $(readlink -e $0))
+. $test_dir/test_utils.bash
 
 ################################################################################
 #                                    TESTS                                     #
@@ -115,11 +75,4 @@ tmpdir=$(mktemp --directory)
 trap -- "rm -rf '$tmpdir'" EXIT
 cd "$tmpdir"
 
-for test in "${tests[@]}"; do
-    (
-    trap -- "teardown" EXIT
-    setup
-
-    ("$test") && echo "$test: ✔" || echo "$test: ✖"
-    )
-done
+run_tests ${tests[@]}
