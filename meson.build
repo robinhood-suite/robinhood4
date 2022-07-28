@@ -28,8 +28,15 @@ configure_file(input: 'config.h.in', output: 'config.h',
 add_project_arguments(['-DHAVE_CONFIG_H',], language: 'c')
 
 # Dependencies
+extra_sources = []
+
 librobinhood = dependency('robinhood', version: '>=0.0.0')
 miniyaml = dependency('miniyaml', version: '>=0.0.0')
+liblustre = dependency('lustre', required: false)
+if liblustre.found()
+    extra_sources += 'src/sources/lustre.c'
+    add_project_arguments(['-DHAVE_LUSTRE',], language: 'c')
+endif
 
 includes = include_directories('.', 'include')
 
@@ -43,8 +50,8 @@ executable(
         'src/sources/file.c',
         'src/sinks/backend.c',
         'src/sinks/file.c',
-    ],
+    ] + extra_sources,
     include_directories: includes,
-    dependencies: [librobinhood, miniyaml],
+    dependencies: [librobinhood, miniyaml, liblustre],
     install: true,
 )

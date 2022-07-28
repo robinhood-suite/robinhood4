@@ -17,4 +17,7 @@ struct source {
 struct source *
 source_from_file(FILE *file);
 
+struct source *
+source_from_lustre_changelog(const char *mdtname);
+
 #endif

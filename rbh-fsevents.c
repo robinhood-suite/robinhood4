@@ -68,7 +68,11 @@ source_new(const char *arg, enum  rbh_source_t source_type)
 
     switch(source_type) {
     case SRC_LUSTRE:
+#ifdef HAVE_LUSTRE
+        return source_from_lustre_changelog(arg);
+#else
         error(EX_USAGE, EINVAL, "MDT source is not available");
+#endif
     case SRC_FILE:
         break;
     default:
