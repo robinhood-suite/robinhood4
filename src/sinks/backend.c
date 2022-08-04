@@ -22,7 +22,7 @@ backend_sink_process(void *_sink, struct rbh_iterator *fsevents)
 {
     struct backend_sink *sink = _sink;
 
-    return rbh_backend_update(sink->backend, fsevents) >= 0;
+    return rbh_backend_update(sink->backend, fsevents) >= 0 ? 0 : -1;
 }
 
 static void
