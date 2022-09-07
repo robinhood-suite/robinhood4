@@ -648,6 +648,8 @@ enricher_iter_destroy(void *iterator)
     struct enricher *enricher = iterator;
 
     rbh_iter_destroy(enricher->fsevents);
+    free(enricher->symlink);
+    free(enricher->pairs);
     free(enricher);
 }
 
