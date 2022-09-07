@@ -329,6 +329,8 @@ retry:
         fsevent->upsert.statx = rec_statx;
         goto end_event;
     case CL_CLOSE:
+        enrich_mask |= RBH_STATX_ATIME_SEC | RBH_STATX_ATIME_NSEC;
+
         fsevent->type = RBH_FET_UPSERT;
         goto end_event;
     case CL_MKDIR:      /* RBH_FET_UPSERT */
