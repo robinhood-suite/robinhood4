@@ -58,6 +58,18 @@ fsevent_from_record(struct changelog_rec *record)
     return bad;
 }
 
+static struct rbh_value_pair ENRICH_PAIR[] = {
+    { .key = "statx" }
+};
+
+static const struct rbh_value ENRICH_MAP = {
+    .type = RBH_VT_MAP,
+    .map = {
+        .pairs = ENRICH_PAIR,
+        .count = 1,
+    },
+};
+
 static struct rbh_value NS_XATTRS_MAP = {
     .type = RBH_VT_MAP,
 };
@@ -71,12 +83,13 @@ static const struct rbh_value NS_XATTRS_SEQUENCE = {
 };
 
 static const struct rbh_value_pair XATTRS_PAIRS[] = {
+    { .key = "rbh-fsevents", .value = &ENRICH_MAP },
     { .key = "ns",           .value = &NS_XATTRS_SEQUENCE },
 };
 
 static const struct rbh_value_map XATTRS_MAP = {
     .pairs = XATTRS_PAIRS,
-    .count = 1,
+    .count = 2,
 };
 
 /* BSON results:
@@ -91,32 +104,6 @@ fill_uidgid(struct changelog_rec *record, struct rbh_statx *statx)
     uidgid = changelog_rec_uidgid(record);
     statx->stx_uid = uidgid->cr_uid;
     statx->stx_gid = uidgid->cr_gid;
-}
-
-/* BSON results:
- * { "statx" : { "atime" : { "sec" : x1, "nsec" : y1 } },
- *             { "btime" : { "sec" : x2, "nsec" : y2 } },
- *             { "ctime" : { "sec" : x3, "nsec" : y3 } },
- *             { "mtime" : { "sec" : x4, "nsec" : y4 } } }
- */
-static void
-fill_open_time(struct changelog_rec *record, struct rbh_statx *statx)
-{
-    statx->stx_mask |= RBH_STATX_ATIME_SEC | RBH_STATX_ATIME_NSEC;
-    statx->stx_atime.tv_sec = record->cr_time >> 30;
-    statx->stx_atime.tv_nsec = 0;
-
-    statx->stx_mask |= RBH_STATX_BTIME_SEC | RBH_STATX_BTIME_NSEC;
-    statx->stx_btime.tv_sec = record->cr_time >> 30;
-    statx->stx_btime.tv_nsec = 0;
-
-    statx->stx_mask |= RBH_STATX_CTIME_SEC | RBH_STATX_CTIME_NSEC;
-    statx->stx_ctime.tv_sec = record->cr_time >> 30;
-    statx->stx_ctime.tv_nsec = 0;
-
-    statx->stx_mask |= RBH_STATX_MTIME_SEC | RBH_STATX_MTIME_NSEC;
-    statx->stx_mtime.tv_sec = record->cr_time >> 30;
-    statx->stx_mtime.tv_nsec = 0;
 }
 
 /* BSON results:
@@ -251,9 +238,28 @@ fill_ns_xattrs(struct changelog_rec *record, struct rbh_value_map *map,
     return 0;
 }
 
+static int
+fill_enrich_mask(uint32_t enrich_mask, struct rbh_sstack *values)
+{
+    struct rbh_value *enrich_mask_value =
+        rbh_sstack_push(values, NULL, sizeof(*enrich_mask_value));
+
+    if (enrich_mask_value == NULL)
+        return -1;
+
+    enrich_mask_value->type = RBH_VT_UINT32;
+    enrich_mask_value->uint32 = enrich_mask;
+
+    ENRICH_PAIR[0].value = enrich_mask_value;
+
+    return 0;
+}
+
 static const void *
 lustre_changelog_iter_next(void *iterator)
 {
+    uint32_t enrich_mask = RBH_STATX_RDEV_MAJOR | RBH_STATX_RDEV_MINOR |
+                           RBH_STATX_DEV_MAJOR | RBH_STATX_DEV_MINOR;
     struct lustre_changelog_iterator *records = iterator;
     struct rbh_fsevent *fsevent = NULL;
     struct changelog_rec *record;
@@ -309,12 +315,15 @@ retry:
     switch(record->cr_type) {
     case CL_CREATE:     /* RBH_FET_UPSERT */
         fill_uidgid(record, rec_statx);
-        fill_open_time(record, rec_statx);
         if (fill_ns_xattrs(record, &NS_XATTRS_MAP.map, records->values)) {
             fsevent = NULL;
             goto end_event;
         }
 
+        enrich_mask |= RBH_STATX_ATIME_SEC | RBH_STATX_ATIME_NSEC |
+                       RBH_STATX_BTIME_SEC | RBH_STATX_BTIME_NSEC |
+                       RBH_STATX_CTIME_SEC | RBH_STATX_CTIME_NSEC |
+                       RBH_STATX_MTIME_SEC | RBH_STATX_MTIME_NSEC;
         fsevent->type = RBH_FET_UPSERT;
         fsevent->xattrs = XATTRS_MAP;
         fsevent->upsert.statx = rec_statx;
@@ -360,6 +369,9 @@ end_event:
     save_errno = errno;
     llapi_changelog_free(&record);
     errno = save_errno;
+
+    if (fill_enrich_mask(enrich_mask, records->values))
+        return NULL;
 
     return fsevent;
 }
