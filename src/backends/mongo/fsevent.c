@@ -28,6 +28,9 @@ bson_from_upsert(const struct rbh_value_map *xattrs,
     bson_t set, unset;
 
     bson_init(&set);
+    if (!bson_append_document_begin(bson, "$set", strlen("$set"), &set))
+        goto out_destroy_set;
+
     if (statxbuf) {
         if (!BSON_APPEND_STATX(&set, MFF_STATX, statxbuf))
             goto out_destroy_set;
@@ -43,18 +46,16 @@ bson_from_upsert(const struct rbh_value_map *xattrs,
         goto out_destroy_set;
     }
 
+    if (!bson_append_document_end(bson, &set))
+        goto out_destroy_set;
+
     bson_init(&unset);
     if (!bson_append_unsetxattrs(&unset, MFF_XATTRS, xattrs)) {
         save_errno = errno;
         goto out_destroy_unset;
     }
 
-    /* Empty $set or $unset documents are not allowed */
-    if (!bson_empty(&set)) {
-        if (!BSON_APPEND_DOCUMENT(bson, "$set", &set))
-            goto out_destroy_unset;
-    }
-
+    /* Empty $unset documents are not allowed */
     if (!bson_empty(&unset)) {
         if (BSON_APPEND_DOCUMENT(bson, "$unset", &unset))
             goto out_destroy_unset;

@@ -157,6 +157,12 @@ struct rbh_value_map;
 #define MFF_STATX_RDEV              "rdev"
 #define MFF_STATX_DEV               "dev"
 
+const char *subdoc2str(const uint32_t subdoc);
+
+const char *attr2str(const uint32_t attr);
+
+const char *statx2str(const uint32_t statx);
+
 const char *field2str(const struct rbh_filter_field *field, char **buffer,
                       size_t bufsize);
 
