@@ -34,14 +34,14 @@ struct posix_iterator {
      * Callback for managing and filling namespace xattrs
      *
      * @param fd        file descriptor of the entry
-     * @param mode      mode of file examined
+     * @param statx     statx metadata of the entry
      * @param pairs     list of rbh_value_pairs to fill
      * @param values    stack that will contain every rbh_value of
      *                  \p pairs
      *
      * @return          number of filled \p pairs
      */
-    int (*ns_xattrs_callback)(const int fd, const uint16_t mode,
+    int (*ns_xattrs_callback)(const int fd, const struct rbh_statx *statx,
                               struct rbh_value_pair *inode_xattrs,
                               ssize_t *inode_xattrs_count,
                               struct rbh_value_pair *pairs,

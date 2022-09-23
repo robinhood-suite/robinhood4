@@ -95,7 +95,7 @@ enrich_lustre(struct rbh_backend *backend, int mount_fd,
                                  | AT_NO_AUTOMOUNT | AT_SYMLINK_NOFOLLOW;
     struct {
         int fd;
-        uint16_t mode;
+        struct rbh_statx *statx;
         struct rbh_sstack *values;
     } arg;
     struct rbh_statx statxbuf;
@@ -120,7 +120,7 @@ enrich_lustre(struct rbh_backend *backend, int mount_fd,
         return -1;
     }
 
-    arg.mode = statxbuf.stx_mode;
+    arg.statx = &statxbuf;
     arg.values = xattrs_values;
 
     size = rbh_backend_get_attribute(backend, "lustre", &arg, pair);
