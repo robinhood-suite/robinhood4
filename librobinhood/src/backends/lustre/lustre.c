@@ -3,9 +3,11 @@
 #endif
 
 #include <fcntl.h>
+#include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/ioctl.h>
+#include <sys/param.h>
 #include <sys/types.h>
 #include <sys/xattr.h>
 
@@ -16,6 +18,7 @@
 #include "robinhood/backends/posix.h"
 #include "robinhood/backends/posix_internal.h"
 #include "robinhood/backends/lustre.h"
+#include "robinhood/statx.h"
 
 #ifndef HAVE_LUSTRE_FILE_HANDLE
 /* This structure is not defined before 2.15, so we define it to retrieve the
@@ -881,11 +884,13 @@ free_lum:
     return subcount;
 }
 
-#define XATTR_CCC_EXPIRES_AT "user.ccc_expires_at"
+#define XATTR_CCC_EXPIRES "user.ccc_expires"
+#define XATTR_CCC_EXPIRES_ABS "user.ccc_expires_abs"
+#define XATTR_CCC_EXPIRES_REL "user.ccc_expires_rel"
 #define UINT64_MAX_STR_LEN 22
 
 static void
-xattrs_get_retention()
+xattrs_get_retention(const struct rbh_statx *statx)
 {
     struct rbh_value_pair new_pair;
     uint64_t result;
@@ -894,7 +899,7 @@ xattrs_get_retention()
     for (int i = 0; i < *_inode_xattrs_count; ++i) {
         char tmp[UINT64_MAX_STR_LEN];
 
-        if (strcmp(_inode_xattrs[i].key, XATTR_CCC_EXPIRES_AT) ||
+        if (strcmp(_inode_xattrs[i].key, XATTR_CCC_EXPIRES) ||
             _inode_xattrs[i].value->binary.size >= UINT64_MAX_STR_LEN)
             continue;
 
@@ -902,18 +907,35 @@ xattrs_get_retention()
                _inode_xattrs[i].value->binary.size);
         tmp[_inode_xattrs[i].value->binary.size] = 0;
 
-        result = strtoul(tmp, &end, 10);
+        result = strtoul(*tmp == '+' ? tmp + 1 : tmp, &end, 10);
         if (errno || (!result && tmp == end) || *end != '\0')
             break;
 
-        fill_uint64_pair(_inode_xattrs[i].key, result, &new_pair);
+        if (*tmp == '+') {
+            int64_t last_access_date;
+
+            last_access_date = MAX(statx->stx_atime.tv_sec,
+                                   statx->stx_mtime.tv_sec);
+            if (UINT64_MAX - last_access_date < result)
+                /* If the result overflows, set the expiration date to the
+                 * max
+                 */
+                result = UINT64_MAX;
+            else
+                result += last_access_date;
+
+            fill_uint64_pair(XATTR_CCC_EXPIRES_REL, result, &new_pair);
+        } else {
+            fill_uint64_pair(XATTR_CCC_EXPIRES_ABS, result, &new_pair);
+        }
+
         _inode_xattrs[i] = new_pair;
         break;
     }
 }
 
 static int
-_get_attrs(const int fd, const uint16_t entry_mode,
+_get_attrs(const int fd, const struct rbh_statx *statx,
            int (*attrs_funcs[])(int, struct rbh_value_pair *),
            int nb_attrs_funcs,
            struct rbh_value_pair *inode_xattrs,
@@ -926,7 +948,7 @@ _get_attrs(const int fd, const uint16_t entry_mode,
 
     _inode_xattrs_count = inode_xattrs_count;
     _inode_xattrs = inode_xattrs;
-    mode = entry_mode;
+    mode = statx->stx_mode;
     _values = values;
 
     for (int i = 0; i < nb_attrs_funcs; ++i) {
@@ -937,13 +959,13 @@ _get_attrs(const int fd, const uint16_t entry_mode,
         count += subcount;
     }
 
-    xattrs_get_retention();
+    xattrs_get_retention(statx);
 
     return count;
 }
 
 static int
-lustre_get_attrs(const int fd, const uint16_t mode,
+lustre_get_attrs(const int fd, const struct rbh_statx *statx,
                  struct rbh_value_pair *pairs,
                  struct rbh_sstack *values)
 {
@@ -951,13 +973,13 @@ lustre_get_attrs(const int fd, const uint16_t mode,
         xattrs_get_hsm, xattrs_get_layout, xattrs_get_mdt_info
     };
 
-    return _get_attrs(fd, mode, xattrs_funcs,
+    return _get_attrs(fd, statx, xattrs_funcs,
                       sizeof(xattrs_funcs) / sizeof(xattrs_funcs[0]),
                       NULL, NULL, pairs, values);
 }
 
 static int
-lustre_ns_xattrs_callback(const int fd, const uint16_t mode,
+lustre_ns_xattrs_callback(const int fd, const struct rbh_statx *statx,
                           struct rbh_value_pair *inode_xattrs,
                           ssize_t *inode_xattrs_count,
                           struct rbh_value_pair *pairs,
@@ -967,7 +989,7 @@ lustre_ns_xattrs_callback(const int fd, const uint16_t mode,
         xattrs_get_fid, xattrs_get_hsm, xattrs_get_layout, xattrs_get_mdt_info
     };
 
-    return _get_attrs(fd, mode, xattrs_funcs,
+    return _get_attrs(fd, statx, xattrs_funcs,
                       sizeof(xattrs_funcs) / sizeof(xattrs_funcs[0]),
                       inode_xattrs, inode_xattrs_count, pairs, values);
 }
@@ -978,7 +1000,7 @@ lustre_backend_get_attribute(void *backend, const char *attr_name,
 {
     struct arg_t {
         int fd;
-        uint16_t mode;
+        struct rbh_statx *statx;
         struct rbh_sstack *values;
     };
     struct arg_t *arg = (struct arg_t *)_arg;
@@ -988,7 +1010,7 @@ lustre_backend_get_attribute(void *backend, const char *attr_name,
     if (strcmp(attr_name, "lustre") != 0)
         return -1;
 
-    return lustre_get_attrs(arg->fd, arg->mode, data, arg->values);
+    return lustre_get_attrs(arg->fd, arg->statx, data, arg->values);
 }
 
 struct posix_iterator *
