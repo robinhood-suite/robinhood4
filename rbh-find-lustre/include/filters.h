@@ -78,13 +78,21 @@ struct rbh_filter *
 layout_pattern2filter(const char *layout_pattern);
 
 /**
- * Build a filter for the -expired-at predicate
- *
- * @param expired_at   a string representing an epoch
+ * Build a filter for the -expired predicate
  *
  * @return             a pointer to a newly allocated struct rbh_filter
  */
 struct rbh_filter *
-expired_at2filter(const char *expired_at);
+expired2filter();
+
+/**
+ * Build a filter for the -expired-at predicate
+ *
+ * @param expired      the next argument in the command line or NULL
+ *
+ * @return             a pointer to a newly allocated struct rbh_filter
+ */
+struct rbh_filter *
+expired_at2filter(const char *expired);
 
 #endif

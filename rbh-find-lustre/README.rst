@@ -141,22 +141,47 @@ the pattern of any of their components. The only accepted values are
 ``stripe-count`` predicate with regards to the default value otherwise.
 
 -expired-at
-----
+-----------
 
-rbh-lfind defines a ``-expired-at`` action that filters entries which
+rbh-lfind defines a ``-expired-at`` predicate that filters entries which
 expired or will expire at a given epoch. The expiration date is defined
-by the extended attribute 'user.ccc_expires_at'.
+by the extended attribute 'user.ccc_expires', and can either be absolute
+or relative to the maximum between the atime, ctime and mtime.
+
+The predicate can be given an epoch, which can be prepended by a '+' or '-', and
+the following is applied:
+ - <n>: match files that expired at and before epoch <n>
+ - -<n>: match files that expired before epoch <n>
+ - +<n>: match files that expire after epoch <n>
 
 .. code:: bash
 
-    rbh-find rbh:mongo:test -expired-at $(date +%s)
-    ./dir/file-that-just-expired
+    rbh-find rbh:mongo:test -expired-at -$(date +%s)
+    ./dir/file-that-expired-1-hour-ago
 
     rbh-find rbh:mongo:test -expired-at $(date +%s) -o \
         -expired-at +$(date +%s -d "5 minutes")
     ./dir/file-that-just-expired
+    ./dir/file-that-expired-1-hour-ago
     ./dir/file-that-will-expire-in-10-minutes
     ./dir/file-that-will-expire-in-2-days
+
+    rbh-find rbh:mongo:test -expired-at +$(date +%s) -o \
+        -expired-at -$(date +%s -d "1 day")
+    ./dir/file-that-will-expire-in-10-minutes
+
+-expired
+--------
+
+rbh-lfind defines a ``-expired`` predicate which takes no argument and shows
+all files that expired at and before the time of the command. Simply put, it
+behaves exactly ``-expired-at $(date +%s)``.
+
+.. code:: bash
+
+    rbh-find rbh:mongo:test -expired
+    ./dir/file-that-just-expired
+    ./dir/file-that-expired-1-hour-ago
 
 Examples
 --------

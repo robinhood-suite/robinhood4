@@ -17,8 +17,11 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <time.h>
 
 #include <lustre/lustreapi.h>
+
+#include <robinhood/statx.h>
 
 #include <robinhood/backend.h>
 #include <robinhood/utils.h>
@@ -40,8 +43,10 @@ static const struct rbh_filter_field predicate2filter_field[] = {
                                           .xattr = "stripe_count"},
     [LPRED_STRIPE_SIZE - LPRED_MIN]    = {.fsentry = RBH_FP_INODE_XATTRS,
                                           .xattr = "stripe_size"},
-    [LPRED_EXPIRED_AT - LPRED_MIN] = {.fsentry = RBH_FP_INODE_XATTRS,
-                                      .xattr = "user.ccc_expires_at"},
+    [LPRED_EXPIRED_ABS - LPRED_MIN] = {.fsentry = RBH_FP_INODE_XATTRS,
+                                       .xattr = "user.ccc_expires_abs"},
+    [LPRED_EXPIRED_REL - LPRED_MIN] = {.fsentry = RBH_FP_INODE_XATTRS,
+                                       .xattr = "user.ccc_expires_rel"},
 };
 
 static inline const struct rbh_filter_field *
@@ -490,14 +495,54 @@ layout_pattern2filter(const char *_layout)
 }
 
 struct rbh_filter *
-expired_at2filter(const char *expired_at)
+expired2filter()
 {
-    struct rbh_filter *result = numeric2filter(
-        &predicate2filter_field[LPRED_EXPIRED_AT - LPRED_MIN], expired_at);
+    struct rbh_filter *filter_abs;
+    struct rbh_filter *filter_rel;
+    time_t now;
 
-    if (!result)
-        error(EXIT_FAILURE, errno, "invalid argument `%s' to `%s'", expired_at,
+    now = time(NULL);
+
+    filter_abs = rbh_filter_compare_uint64_new(
+        RBH_FOP_LOWER_OR_EQUAL,
+        &predicate2filter_field[LPRED_EXPIRED_ABS - LPRED_MIN],
+        now);
+    if (!filter_abs)
+        error(EXIT_FAILURE, errno, "rbh_filter_compare_uint64_new");
+
+    filter_rel = rbh_filter_compare_uint64_new(
+        RBH_FOP_LOWER_OR_EQUAL,
+        &predicate2filter_field[LPRED_EXPIRED_REL - LPRED_MIN],
+        now);
+    if (!filter_rel)
+        error(EXIT_FAILURE, errno, "rbh_filter_compare_uint64_new");
+
+    return filter_or(filter_abs, filter_rel);
+}
+
+struct rbh_filter *
+expired_at2filter(const char *expired)
+{
+    struct rbh_filter *filter_abs;
+    struct rbh_filter *filter_rel;
+
+    if (!isdigit(expired[0]) && expired[0] != '+' && expired[0] != '-')
+        error(EXIT_FAILURE, errno, "invalid argument `%s' to `%s'", expired,
               lustre_predicate2str(LPRED_EXPIRED_AT));
 
-    return result;
+    if ((expired[0] == '+' || expired[0] == '-') && !isdigit(expired[1]))
+        error(EXIT_FAILURE, errno, "invalid argument `%s' to `%s'", expired,
+              lustre_predicate2str(LPRED_EXPIRED_AT));
+
+    filter_abs = epoch2filter(
+        &predicate2filter_field[LPRED_EXPIRED_ABS - LPRED_MIN], expired);
+    if (!filter_abs)
+        error(EXIT_FAILURE, errno, "epoch2filter");
+
+    filter_rel = epoch2filter(
+        &predicate2filter_field[LPRED_EXPIRED_REL - LPRED_MIN], expired);
+    if (!filter_rel)
+        error(EXIT_FAILURE, errno, "epoch2filter");
+
+    return filter_or(filter_abs, filter_rel);
 }
