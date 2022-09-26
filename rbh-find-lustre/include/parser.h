@@ -8,12 +8,17 @@
 #ifndef RBH_FIND_LUSTRE_PARSER_H
 #define RBH_FIND_LUSTRE_PARSER_H
 
+#include <stdbool.h>
+
 #include <rbh-find/parser.h>
 
 enum lustre_predicate {
     LPRED_MIN = PRED_LAST,
 
-    LPRED_EXPIRED_AT = LPRED_MIN,
+    LPRED_EXPIRED = LPRED_MIN,
+    LPRED_EXPIRED_AT,
+    LPRED_EXPIRED_ABS,
+    LPRED_EXPIRED_REL,
     LPRED_FID,
     LPRED_HSM_STATE,
     LPRED_OST_INDEX,
@@ -25,9 +30,9 @@ enum lustre_predicate {
  * str2lustre_predicate - convert a string to an integer corresponding to a
  * predicate or a lustre_predicate
  *
- * @param string    a string representing a valid predicate
+ * @param string          a string representing a valid predicate
  *
- * @return          the predicate that \p string represents
+ * @return                the predicate that \p string represents
  *
  * This function will exit if \p string is not a valid predicate
  */
