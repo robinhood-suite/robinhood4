@@ -27,19 +27,6 @@ static const struct rbh_filter_field predicate2filter_field[] = {
                                      .xattr = "ost"},
 };
 
-static int
-str2uint64_t(const char *input, uint64_t *result)
-{
-    char *end;
-
-    errno = 0;
-    *result = strtoull(input, &end, 0);
-    if (errno || (!*result && input == end) || *end != '\0')
-        return -1;
-
-    return 0;
-}
-
 static enum hsm_states
 str2hsm_states(const char *hsm_state)
 {
