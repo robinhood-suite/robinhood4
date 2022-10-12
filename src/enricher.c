@@ -719,7 +719,7 @@ no_partial_iter_next(void *iterator)
     struct no_partial_iterator *no_partial = iterator;
     const struct rbh_fsevent *fsevent;
 
-    fsevent = rbh_iter_next(&no_partial->iterator);
+    fsevent = rbh_iter_next(no_partial->fsevents);
     if (fsevent == NULL)
         return fsevent;
 
