@@ -514,9 +514,21 @@ static bool
 parse_rbh_value_map(yaml_parser_t *parser, struct rbh_value_map *map)
 {
     struct rbh_value_pair *pairs;
+    yaml_event_t map_event;
     size_t count = 1; /* TODO: fine tune this */
-    size_t i = 0;
     bool end = false;
+    size_t i = 0;
+
+    if (!yaml_parser_parse(parser, &map_event))
+        parser_error(parser);
+
+    if (map_event.type != YAML_MAPPING_START_EVENT) {
+            yaml_event_delete(&map_event);
+            errno = EINVAL;
+            return false;
+    }
+
+    yaml_event_delete(&map_event);
 
     pairs = malloc(sizeof(*pairs) * count);
     if (pairs == NULL)
