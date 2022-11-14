@@ -61,38 +61,14 @@ fsevent_from_record(struct changelog_rec *record)
     return bad;
 }
 
-static struct rbh_value_pair ENRICH_PAIR[] = {
-    { .key = "statx" }
-};
 
-static const struct rbh_value ENRICH_MAP = {
-    .type = RBH_VT_MAP,
-    .map = {
-        .pairs = ENRICH_PAIR,
-        .count = 1,
-    },
-};
+static struct rbh_value_pair FID_XATTRS_PAIRS[] = {
+    { .key = "fid" },
+ };
 
-static struct rbh_value NS_XATTRS_MAP = {
-    .type = RBH_VT_MAP,
-};
-
-static const struct rbh_value NS_XATTRS_SEQUENCE = {
-    .type = RBH_VT_SEQUENCE,
-    .sequence = {
-        .values = &NS_XATTRS_MAP,
-        .count = 1,
-    },
-};
-
-static const struct rbh_value_pair XATTRS_PAIRS[] = {
-    { .key = "rbh-fsevents", .value = &ENRICH_MAP },
-    { .key = "ns",           .value = &NS_XATTRS_SEQUENCE },
-};
-
-static const struct rbh_value_map XATTRS_MAP = {
-    .pairs = XATTRS_PAIRS,
-    .count = 2,
+static const struct rbh_value_map FID_XATTRS_MAP = {
+    .pairs = FID_XATTRS_PAIRS,
+    .count = 1,
 };
 
 /* BSON results:
@@ -110,55 +86,7 @@ fill_uidgid(struct changelog_rec *record, struct rbh_statx *statx)
 }
 
 /* BSON results:
- * { "xattrs" : { "ns" : [ { "parent": x } ] } }
- */
-static int
-fill_ns_xattrs_parent(struct changelog_rec *record, struct rbh_value_pair *pair)
-{
-    struct rbh_id *parent_id = NULL;
-    struct rbh_value parent_value;
-
-    parent_id = rbh_id_from_lu_fid(&record->cr_pfid);
-    parent_value.type = RBH_VT_BINARY;
-    parent_value.binary.size = parent_id->size;
-    parent_value.binary.data = rbh_sstack_push(_values, parent_id->data,
-                                               parent_id->size);
-    free(parent_id);
-    if (parent_value.binary.data == NULL)
-        return -1;
-
-    pair->key = "parent";
-    pair->value = rbh_sstack_push(_values, &parent_value, sizeof(parent_value));
-    if (pair->value == NULL)
-        return -1;
-
-    return 0;
-}
-
-/* BSON results:
- * { "xattrs" : { "ns" : [ { "name": x } ] } }
- */
-static int
-fill_ns_xattrs_name(struct changelog_rec *record, struct rbh_value_pair *pair)
-{
-    struct rbh_value name_value;
-
-    name_value.type = RBH_VT_STRING;
-    name_value.string = rbh_sstack_push(_values, changelog_rec_name(record),
-                                        strlen(changelog_rec_name(record)) + 1);
-    if (name_value.string == NULL)
-        return -1;
-
-    pair->key = "name";
-    pair->value = rbh_sstack_push(_values, &name_value, sizeof(name_value));
-    if (pair->value == NULL)
-        return -1;
-
-    return 0;
-}
-
-/* BSON results:
- * { "xattrs" : { "ns" : [ { "xattrs": { "fid" : x } } ] } }
+ * { "ns" : [ { "xattrs": { "fid" : x } } ] }
  */
 static int
 fill_ns_xattrs_fid(struct changelog_rec *record, struct rbh_value_pair *pair)
@@ -181,92 +109,215 @@ fill_ns_xattrs_fid(struct changelog_rec *record, struct rbh_value_pair *pair)
     return 0;
 }
 
-/* BSON results:
- * { "xattrs" : { "ns" : [ { "xattrs": x } ] } }
- */
-static int
-fill_ns_xattrs_xattrs(struct changelog_rec *record, struct rbh_value_pair *pair)
+static struct rbh_value *
+build_statx_mask(void *arg)
 {
-    struct rbh_value_pair submap_pairs;
-    struct rbh_value_map submap_value;
-    struct rbh_value map_value;
+    uint32_t enrich_mask = *(uint32_t *)arg;
+    const struct rbh_value MASK = {
+        .type = RBH_VT_UINT32,
+        .uint32 = enrich_mask,
+    };
+    struct rbh_value *mask;
 
-    if (fill_ns_xattrs_fid(record, &submap_pairs))
-        return -1;
+    mask = rbh_sstack_push(_values, NULL, sizeof(*mask));
+    if (mask == NULL)
+        return NULL;
+    *mask = MASK;
 
-    submap_value.count = 1;
-    submap_value.pairs = rbh_sstack_push(_values, &submap_pairs,
-                                         sizeof(submap_pairs));
-    if (submap_value.pairs == NULL)
-        return -1;
+    return mask;
+}
 
-    map_value.type = RBH_VT_MAP;
-    map_value.map = submap_value;
+static struct rbh_value *
+build_xattrs(void *arg)
+{
+    struct rbh_value *xattr_sequence;
+    char *xattr_name = (char *)arg;
+    struct rbh_value *xattr_value;
 
-    pair->key = "xattrs";
-    pair->value = rbh_sstack_push(_values, &map_value, sizeof(map_value));
-    if (pair->value == NULL)
-        return -1;
+    xattr_value = rbh_sstack_push(_values, NULL, sizeof(*xattr_value));
+    if (xattr_value == NULL)
+        return NULL;
+    xattr_value->type = RBH_VT_STRING;
+    xattr_value->string = rbh_sstack_push(_values, xattr_name,
+                                          strlen(xattr_name) + 1);
+    if (xattr_value->string == NULL)
+        return NULL;
+    xattr_sequence = rbh_sstack_push(_values, NULL, sizeof(*xattr_sequence));
+    if (xattr_sequence == NULL)
+        return NULL;
+    xattr_sequence->type = RBH_VT_SEQUENCE;
+    xattr_sequence->sequence.count = 1;
+    xattr_sequence->sequence.values = xattr_value;
 
-    return 0;
+    return xattr_sequence;
+}
+
+static struct rbh_value_pair *
+build_pair(const char *key, struct rbh_value *(*part_builder)(void *),
+           void *part_builder_arg)
+{
+    const struct rbh_value_pair PAIR[] = {
+        { .key = key, .value = part_builder(part_builder_arg) },
+    };
+    struct rbh_value_pair *pair;
+
+    if (PAIR[0].value == NULL)
+        return NULL;
+
+    pair = rbh_sstack_push(_values, NULL, sizeof(*pair));
+    if (pair == NULL)
+        return NULL;
+    memcpy(pair, PAIR, sizeof(*pair));
+
+    return pair;
+}
+
+static struct rbh_value *
+_fill_enrich(const char *key, struct rbh_value *(*builder)(void *),
+             void *arg)
+{
+    const struct rbh_value_map MAP = {
+        .count = 1,
+        .pairs = build_pair(key, builder, arg),
+    };
+    const struct rbh_value ENRICH = {
+        .type = RBH_VT_MAP,
+        .map = MAP,
+    };
+    struct rbh_value *enrich;
+
+    if (MAP.pairs == NULL)
+        return NULL;
+
+    enrich = rbh_sstack_push(_values, NULL, sizeof(*enrich));
+    if (enrich == NULL)
+        return NULL;
+    memcpy(enrich, &ENRICH, sizeof(*enrich));
+
+    return enrich;
 }
 
 /* BSON results:
- * { "xattrs" : { "ns" : [ x, y, z, ... ] } }
- */
-static int
-fill_ns_xattrs(struct changelog_rec *record, struct rbh_value_map *map)
+ *  * { "xattrs" : { "rbh-fsevents" : { "xattrs" : [ a, b, c, ... ] } } }
+ *   */
+static struct rbh_value *
+fill_inode_xattrs(void *arg)
 {
-    struct rbh_value_pair pairs[3];
+    return _fill_enrich("xattrs", build_xattrs, arg);
+}
 
-    if (fill_ns_xattrs_parent(record, &pairs[0]))
-        return -1;
+static struct rbh_value *
+fill_statx(void *arg)
+{
+    return _fill_enrich("statx", build_statx_mask, arg);
+}
 
-    if (fill_ns_xattrs_name(record, &pairs[1]))
-        return -1;
+static struct rbh_value_map
+build_enrich_map(struct rbh_value *(*part_builder)(void *),
+                 void *part_builder_arg)
+{
+    const struct rbh_value_map ENRICH = {
+        .count = 1,
+        .pairs = build_pair("rbh-fsevents", part_builder, part_builder_arg),
+    };
 
-    if (fill_ns_xattrs_xattrs(record, &pairs[2]))
-        return -1;
+    return ENRICH;
+}
 
-    map->count = 3;
-    map->pairs = rbh_sstack_push(_values, pairs, sizeof(pairs));
-    if (map->pairs == NULL)
-        return -1;
+static struct rbh_id *
+build_id(const struct lu_fid *fid)
+{
+    struct rbh_id *tmp_id;
+    struct rbh_id *id;
+    size_t data_size;
+    char *data;
+    int rc;
 
-    return 0;
+    tmp_id = rbh_id_from_lu_fid(fid);
+    if (tmp_id == NULL)
+        return NULL;
+
+    data_size = tmp_id->size;
+    id = rbh_sstack_push(_values, NULL, sizeof(*id) + data_size);
+    if (id == NULL)
+        return NULL;
+
+    data = (char *)(id + 1);
+    rc = rbh_id_copy(id, tmp_id, &data, &data_size);
+    if (rc)
+        return NULL;
+
+    free(tmp_id);
+
+    return id;
 }
 
 static int
-fill_enrich_mask(uint32_t enrich_mask)
+build_create_event(unsigned int process_step, struct changelog_rec *record,
+                   struct rbh_fsevent *fsevent)
 {
-    struct rbh_value *enrich_mask_value =
-        rbh_sstack_push(_values, NULL, sizeof(*enrich_mask_value));
+    struct rbh_statx *rec_statx;
+    uint32_t statx_enrich_mask;
+    char *data;
 
-    if (enrich_mask_value == NULL)
-        return -1;
+    assert(process_step < 3);
+    switch(process_step) {
+        case 0:
+            fsevent->type = RBH_FET_LINK;
 
-    enrich_mask_value->type = RBH_VT_UINT32;
-    enrich_mask_value->uint32 = enrich_mask;
+            fsevent->xattrs = build_enrich_map(fill_inode_xattrs, "path");
+            if (fsevent->xattrs.pairs == NULL)
+                return -1;
 
-    ENRICH_PAIR[0].value = enrich_mask_value;
+            fsevent->link.parent_id = build_id(&record->cr_pfid);
+            if (fsevent->link.parent_id == NULL)
+                return -1;
 
-    return 0;
+            data = rbh_sstack_push(_values, NULL, record->cr_namelen + 1);
+            if (data == NULL)
+                return -1;
+            memcpy(data, changelog_rec_name(record), record->cr_namelen);
+            data[record->cr_namelen] = '\0';
+            fsevent->link.name = data;
+
+            return 1;
+        case 1:
+            fsevent->type = RBH_FET_XATTR;
+            fsevent->xattrs = FID_XATTRS_MAP;
+            if (fill_ns_xattrs_fid(record, &FID_XATTRS_PAIRS[0]))
+                return -1;
+
+            return 1;
+        case 2:
+            rec_statx = rbh_sstack_push(_values, NULL, sizeof(*rec_statx));
+            if (rec_statx == NULL)
+                return -1;
+
+            rec_statx->stx_mask = 0;
+            fill_uidgid(record, rec_statx);
+
+            fsevent->type = RBH_FET_UPSERT;
+            fsevent->upsert.statx = rec_statx;
+
+            statx_enrich_mask = RBH_STATX_ALL;
+            fsevent->xattrs = build_enrich_map(fill_statx,
+                    &statx_enrich_mask);
+            if (fsevent->xattrs.pairs == NULL)
+                return -1;
+
+            return 0;
+    }
+    __builtin_unreachable();
 }
 
 static const void *
 lustre_changelog_iter_next(void *iterator)
 {
-    uint32_t enrich_mask = RBH_STATX_RDEV_MAJOR | RBH_STATX_RDEV_MINOR |
-                           RBH_STATX_DEV_MAJOR | RBH_STATX_DEV_MINOR;
     struct lustre_changelog_iterator *records = iterator;
     struct rbh_fsevent *fsevent = NULL;
     struct changelog_rec *record;
-    struct rbh_statx *rec_statx;
-    struct rbh_id *tmp_id;
     struct rbh_id *id;
-    size_t data_size;
     int save_errno;
-    char *data;
     int rc;
 
     _values_flush(_values);
@@ -288,58 +339,23 @@ retry:
         records->prev_record = NULL;
     }
 
-    tmp_id = rbh_id_from_lu_fid(&record->cr_tfid);
-    if (tmp_id == NULL)
-        goto end_event;
-
-    data_size = tmp_id->size;
-    id = rbh_sstack_push(_values, NULL, sizeof(*id) + data_size);
+    id = build_id(&record->cr_tfid);
     if (id == NULL)
         goto end_event;
-
-    data = (char *)(id + 1);
-    rc = rbh_id_copy(id, tmp_id, &data, &data_size);
-    if (rc)
-        goto end_event;
-
-    free(tmp_id);
-
-    rec_statx = rbh_sstack_push(_values, NULL, sizeof(*rec_statx));
-    if (rec_statx == NULL)
-        goto end_event;
-
-    rec_statx->stx_mask = 0;
 
     fsevent = rbh_sstack_push(_values, NULL, sizeof(*fsevent));
     if (fsevent == NULL)
         goto end_event;
+    memset(fsevent, 0, sizeof(*fsevent));
     fsevent->id.data = id->data;
     fsevent->id.size = id->size;
 
     switch(record->cr_type) {
-    case CL_CREATE:     /* RBH_FET_UPSERT */
-        fill_uidgid(record, rec_statx);
-        if (fill_ns_xattrs(record, &NS_XATTRS_MAP.map)) {
-            fsevent = NULL;
-            goto end_event;
-        }
-
-        enrich_mask |= RBH_STATX_ATIME_SEC | RBH_STATX_ATIME_NSEC |
-                       RBH_STATX_BTIME_SEC | RBH_STATX_BTIME_NSEC |
-                       RBH_STATX_CTIME_SEC | RBH_STATX_CTIME_NSEC |
-                       RBH_STATX_MTIME_SEC | RBH_STATX_MTIME_NSEC;
-        fsevent->type = RBH_FET_UPSERT;
-        fsevent->xattrs = XATTRS_MAP;
-        fsevent->upsert.statx = rec_statx;
-        goto end_event;
+    case CL_CREATE:
+        rc = build_create_event(records->process_step, record, fsevent);
+        break;
     case CL_CLOSE:
-        enrich_mask |= RBH_STATX_ATIME_SEC | RBH_STATX_ATIME_NSEC;
-
-        fsevent->type = RBH_FET_UPSERT;
-        goto end_event;
     case CL_MKDIR:      /* RBH_FET_UPSERT */
-        fsevent->type = RBH_FET_UPSERT;
-        goto end_event;
     case CL_HARDLINK:   /* RBH_FET_LINK? */
     case CL_SOFTLINK:   /* RBH_FET_UPSERT + symlink */
     case CL_MKNOD:
@@ -369,24 +385,28 @@ retry:
         goto retry;
     }
 
-    __builtin_unreachable();
+    if (rc == -1)
+        goto err;
+    else if (rc == 1) /* record is partially parsed */
+        goto save_event;
+    else /* record is fully parsed */
+        goto end_event;
+
+err:
+    fsevent = NULL;
 
 end_event:
     save_errno = errno;
     llapi_changelog_free(&record);
     errno = save_errno;
 
-    if (fill_enrich_mask(enrich_mask))
-        return NULL;
-
     return fsevent;
 
-/* To uncomment once a case need to generate a double event */
-/*save_event:
+save_event:
     records->prev_record = record;
     ++records->process_step;
 
-    return fsevent;*/
+    return fsevent;
 }
 
 static void
