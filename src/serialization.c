@@ -877,6 +877,9 @@ parse_value_type(const yaml_event_t *event, enum rbh_value_type *type)
 static bool
 emit_rbh_value(yaml_emitter_t *emitter, const struct rbh_value *value)
 {
+    if (value == NULL)
+        return yaml_emit_null(emitter);
+
     switch (value->type) {
     case RBH_VT_BOOLEAN:
         return yaml_emit_boolean(emitter, value->boolean);
