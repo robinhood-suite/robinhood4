@@ -38,6 +38,8 @@ struct lustre_changelog_iterator {
 
     struct rbh_sstack *values;
     void *reader;
+    struct changelog_rec *prev_record;
+    unsigned int process_step;
 };
 
 static void *
@@ -274,14 +276,20 @@ lustre_changelog_iter_next(void *iterator)
     values_flush(records->values);
 
 retry:
-    rc = llapi_changelog_recv(records->reader, &record);
-    if (rc < 0) {
-        errno = -rc;
-        return NULL;
-    }
-    if (rc > 0) {
-        errno = ENODATA;
-        return NULL;
+    if (records->prev_record == NULL) {
+        rc = llapi_changelog_recv(records->reader, &record);
+        if (rc < 0) {
+            errno = -rc;
+            return NULL;
+        }
+        if (rc > 0) {
+            errno = ENODATA;
+            return NULL;
+        }
+        records->process_step = 0;
+    } else {
+        record = records->prev_record;
+        records->prev_record = NULL;
     }
 
     tmp_id = rbh_id_from_lu_fid(&record->cr_tfid);
@@ -376,6 +384,13 @@ end_event:
         return NULL;
 
     return fsevent;
+
+/* To uncomment once a case need to generate a double event */
+/*save_event:
+    records->prev_record = record;
+    ++records->process_step;
+
+    return fsevent;*/
 }
 
 static void
@@ -468,6 +483,7 @@ source_from_lustre_changelog(const char *mdtname)
 
     source->events.values = rbh_sstack_new(sizeof(struct rbh_value_pair) *
                                            (1 << 7));
+    source->events.prev_record = NULL;
     source->source = LUSTRE_SOURCE;
     return &source->source;
 }
