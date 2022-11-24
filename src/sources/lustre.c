@@ -18,8 +18,10 @@
 
 #include "source.h"
 
+static __thread struct rbh_sstack *_values;
+
 static void
-values_flush(struct rbh_sstack *values)
+_values_flush(struct rbh_sstack *values)
 {
     while (true) {
         size_t readable;
@@ -36,7 +38,6 @@ values_flush(struct rbh_sstack *values)
 struct lustre_changelog_iterator {
     struct rbh_iterator iterator;
 
-    struct rbh_sstack *values;
     void *reader;
     struct changelog_rec *prev_record;
     unsigned int process_step;
@@ -112,8 +113,7 @@ fill_uidgid(struct changelog_rec *record, struct rbh_statx *statx)
  * { "xattrs" : { "ns" : [ { "parent": x } ] } }
  */
 static int
-fill_ns_xattrs_parent(struct rbh_sstack *values, struct changelog_rec *record,
-                      struct rbh_value_pair *pair)
+fill_ns_xattrs_parent(struct changelog_rec *record, struct rbh_value_pair *pair)
 {
     struct rbh_id *parent_id = NULL;
     struct rbh_value parent_value;
@@ -121,14 +121,14 @@ fill_ns_xattrs_parent(struct rbh_sstack *values, struct changelog_rec *record,
     parent_id = rbh_id_from_lu_fid(&record->cr_pfid);
     parent_value.type = RBH_VT_BINARY;
     parent_value.binary.size = parent_id->size;
-    parent_value.binary.data = rbh_sstack_push(values, parent_id->data,
+    parent_value.binary.data = rbh_sstack_push(_values, parent_id->data,
                                                parent_id->size);
     free(parent_id);
     if (parent_value.binary.data == NULL)
         return -1;
 
     pair->key = "parent";
-    pair->value = rbh_sstack_push(values, &parent_value, sizeof(parent_value));
+    pair->value = rbh_sstack_push(_values, &parent_value, sizeof(parent_value));
     if (pair->value == NULL)
         return -1;
 
@@ -139,19 +139,18 @@ fill_ns_xattrs_parent(struct rbh_sstack *values, struct changelog_rec *record,
  * { "xattrs" : { "ns" : [ { "name": x } ] } }
  */
 static int
-fill_ns_xattrs_name(struct rbh_sstack *values, struct changelog_rec *record,
-                    struct rbh_value_pair *pair)
+fill_ns_xattrs_name(struct changelog_rec *record, struct rbh_value_pair *pair)
 {
     struct rbh_value name_value;
 
     name_value.type = RBH_VT_STRING;
-    name_value.string = rbh_sstack_push(values, changelog_rec_name(record),
+    name_value.string = rbh_sstack_push(_values, changelog_rec_name(record),
                                         strlen(changelog_rec_name(record)) + 1);
     if (name_value.string == NULL)
         return -1;
 
     pair->key = "name";
-    pair->value = rbh_sstack_push(values, &name_value, sizeof(name_value));
+    pair->value = rbh_sstack_push(_values, &name_value, sizeof(name_value));
     if (pair->value == NULL)
         return -1;
 
@@ -162,21 +161,20 @@ fill_ns_xattrs_name(struct rbh_sstack *values, struct changelog_rec *record,
  * { "xattrs" : { "ns" : [ { "xattrs": { "fid" : x } } ] } }
  */
 static int
-fill_ns_xattrs_fid(struct rbh_sstack *values, struct changelog_rec *record,
-                   struct rbh_value_pair *pair)
+fill_ns_xattrs_fid(struct changelog_rec *record, struct rbh_value_pair *pair)
 {
     struct rbh_value lu_fid_value;
 
     lu_fid_value.type = RBH_VT_BINARY;
     lu_fid_value.binary.size = sizeof(record->cr_tfid);
-    lu_fid_value.binary.data = rbh_sstack_push(values,
+    lu_fid_value.binary.data = rbh_sstack_push(_values,
                                                (const char *)&record->cr_tfid,
                                                sizeof(record->cr_tfid));
     if (lu_fid_value.binary.data == NULL)
         return -1;
 
     pair->key = "fid";
-    pair->value = rbh_sstack_push(values, &lu_fid_value, sizeof(lu_fid_value));
+    pair->value = rbh_sstack_push(_values, &lu_fid_value, sizeof(lu_fid_value));
     if (pair->value == NULL)
         return -1;
 
@@ -187,18 +185,17 @@ fill_ns_xattrs_fid(struct rbh_sstack *values, struct changelog_rec *record,
  * { "xattrs" : { "ns" : [ { "xattrs": x } ] } }
  */
 static int
-fill_ns_xattrs_xattrs(struct rbh_sstack *values, struct changelog_rec *record,
-                      struct rbh_value_pair *pair)
+fill_ns_xattrs_xattrs(struct changelog_rec *record, struct rbh_value_pair *pair)
 {
     struct rbh_value_pair submap_pairs;
     struct rbh_value_map submap_value;
     struct rbh_value map_value;
 
-    if (fill_ns_xattrs_fid(values, record, &submap_pairs))
+    if (fill_ns_xattrs_fid(record, &submap_pairs))
         return -1;
 
     submap_value.count = 1;
-    submap_value.pairs = rbh_sstack_push(values, &submap_pairs,
+    submap_value.pairs = rbh_sstack_push(_values, &submap_pairs,
                                          sizeof(submap_pairs));
     if (submap_value.pairs == NULL)
         return -1;
@@ -207,7 +204,7 @@ fill_ns_xattrs_xattrs(struct rbh_sstack *values, struct changelog_rec *record,
     map_value.map = submap_value;
 
     pair->key = "xattrs";
-    pair->value = rbh_sstack_push(values, &map_value, sizeof(map_value));
+    pair->value = rbh_sstack_push(_values, &map_value, sizeof(map_value));
     if (pair->value == NULL)
         return -1;
 
@@ -218,22 +215,21 @@ fill_ns_xattrs_xattrs(struct rbh_sstack *values, struct changelog_rec *record,
  * { "xattrs" : { "ns" : [ x, y, z, ... ] } }
  */
 static int
-fill_ns_xattrs(struct changelog_rec *record, struct rbh_value_map *map,
-               struct rbh_sstack *values)
+fill_ns_xattrs(struct changelog_rec *record, struct rbh_value_map *map)
 {
     struct rbh_value_pair pairs[3];
 
-    if (fill_ns_xattrs_parent(values, record, &pairs[0]))
+    if (fill_ns_xattrs_parent(record, &pairs[0]))
         return -1;
 
-    if (fill_ns_xattrs_name(values, record, &pairs[1]))
+    if (fill_ns_xattrs_name(record, &pairs[1]))
         return -1;
 
-    if (fill_ns_xattrs_xattrs(values, record, &pairs[2]))
+    if (fill_ns_xattrs_xattrs(record, &pairs[2]))
         return -1;
 
     map->count = 3;
-    map->pairs = rbh_sstack_push(values, pairs, sizeof(pairs));
+    map->pairs = rbh_sstack_push(_values, pairs, sizeof(pairs));
     if (map->pairs == NULL)
         return -1;
 
@@ -241,10 +237,10 @@ fill_ns_xattrs(struct changelog_rec *record, struct rbh_value_map *map,
 }
 
 static int
-fill_enrich_mask(uint32_t enrich_mask, struct rbh_sstack *values)
+fill_enrich_mask(uint32_t enrich_mask)
 {
     struct rbh_value *enrich_mask_value =
-        rbh_sstack_push(values, NULL, sizeof(*enrich_mask_value));
+        rbh_sstack_push(_values, NULL, sizeof(*enrich_mask_value));
 
     if (enrich_mask_value == NULL)
         return -1;
@@ -273,7 +269,7 @@ lustre_changelog_iter_next(void *iterator)
     char *data;
     int rc;
 
-    values_flush(records->values);
+    _values_flush(_values);
 
 retry:
     if (records->prev_record == NULL) {
@@ -297,7 +293,7 @@ retry:
         goto end_event;
 
     data_size = tmp_id->size;
-    id = rbh_sstack_push(records->values, NULL, sizeof(*id) + data_size);
+    id = rbh_sstack_push(_values, NULL, sizeof(*id) + data_size);
     if (id == NULL)
         goto end_event;
 
@@ -308,13 +304,13 @@ retry:
 
     free(tmp_id);
 
-    rec_statx = rbh_sstack_push(records->values, NULL, sizeof(*rec_statx));
+    rec_statx = rbh_sstack_push(_values, NULL, sizeof(*rec_statx));
     if (rec_statx == NULL)
         goto end_event;
 
     rec_statx->stx_mask = 0;
 
-    fsevent = rbh_sstack_push(records->values, NULL, sizeof(*fsevent));
+    fsevent = rbh_sstack_push(_values, NULL, sizeof(*fsevent));
     if (fsevent == NULL)
         goto end_event;
     fsevent->id.data = id->data;
@@ -323,7 +319,7 @@ retry:
     switch(record->cr_type) {
     case CL_CREATE:     /* RBH_FET_UPSERT */
         fill_uidgid(record, rec_statx);
-        if (fill_ns_xattrs(record, &NS_XATTRS_MAP.map, records->values)) {
+        if (fill_ns_xattrs(record, &NS_XATTRS_MAP.map)) {
             fsevent = NULL;
             goto end_event;
         }
@@ -380,7 +376,7 @@ end_event:
     llapi_changelog_free(&record);
     errno = save_errno;
 
-    if (fill_enrich_mask(enrich_mask, records->values))
+    if (fill_enrich_mask(enrich_mask))
         return NULL;
 
     return fsevent;
@@ -398,7 +394,7 @@ lustre_changelog_iter_destroy(void *iterator)
 {
     struct lustre_changelog_iterator *records = iterator;
 
-    rbh_sstack_destroy(records->values);
+    rbh_sstack_destroy(_values);
     llapi_changelog_fini(&records->reader);
 }
 
@@ -481,8 +477,7 @@ source_from_lustre_changelog(const char *mdtname)
 
     lustre_changelog_init(&source->events, mdtname);
 
-    source->events.values = rbh_sstack_new(sizeof(struct rbh_value_pair) *
-                                           (1 << 7));
+    _values = rbh_sstack_new(sizeof(struct rbh_value_pair) * (1 << 7));
     source->events.prev_record = NULL;
     source->source = LUSTRE_SOURCE;
     return &source->source;
