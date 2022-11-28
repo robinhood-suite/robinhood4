@@ -43,6 +43,22 @@ struct rbh_filter *
 numeric2filter(const struct rbh_filter_field *field, const char *_numeric);
 
 /**
+ * epoch2filter - build a filter from a string representing a uint64_t value.
+ * If the given value is preceded with a '+' or '-', will filter entries
+ * with \p field greater or lower than \p _numeric. Else, it will filter entries
+ * with \p field lower or equal to \p _epoch.
+ *
+ * @param field         a field to filter
+ * @param _epoch        a string representing a uint64_t, optionnally prefixed
+ *                      with either a '+' or '-' sign
+ *
+ * @return              a pointer to a newly allocated struct filter, or NULL on
+ *                      error
+ */
+struct rbh_filter *
+epoch2filter(const struct rbh_filter_field *field, const char *_epoch);
+
+/**
  * Build a filter for the -[acm]min predicate
  *
  * @param predicate one of PRED_[ACM]MIN

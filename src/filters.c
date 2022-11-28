@@ -71,8 +71,9 @@ shell_regex2filter(enum predicate predicate, const char *shell_regex,
     return filter;
 }
 
-struct rbh_filter *
-numeric2filter(const struct rbh_filter_field *field, const char *_numeric)
+static struct rbh_filter *
+_numeric2filter(const struct rbh_filter_field *field, const char *_numeric,
+                const enum rbh_filter_operator no_sign_op)
 {
     const char *numeric = _numeric;
     struct rbh_filter *filter;
@@ -102,7 +103,7 @@ numeric2filter(const struct rbh_filter_field *field, const char *_numeric)
                                                value);
         break;
     default:
-        filter = rbh_filter_compare_uint64_new(RBH_FOP_EQUAL, field, value);
+        filter = rbh_filter_compare_uint64_new(no_sign_op, field, value);
         break;
     }
 
@@ -111,6 +112,18 @@ numeric2filter(const struct rbh_filter_field *field, const char *_numeric)
                       "rbh_filter_compare_uint64_new");
 
     return filter;
+}
+
+struct rbh_filter *
+numeric2filter(const struct rbh_filter_field *field, const char *_numeric)
+{
+    return _numeric2filter(field, _numeric, RBH_FOP_EQUAL);
+}
+
+struct rbh_filter *
+epoch2filter(const struct rbh_filter_field *field, const char *_epoch)
+{
+    return _numeric2filter(field, _epoch, RBH_FOP_LOWER_OR_EQUAL);
 }
 
 static struct rbh_filter *
