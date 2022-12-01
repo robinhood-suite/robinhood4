@@ -60,3 +60,22 @@ librbh_lustre_h = configure_file(input: 'lustre.h.in', output: 'lustre.h',
                                  configuration: librbh_lustre_conf)
 
 install_headers(librbh_lustre_h, subdir: 'robinhood/backends')
+
+# Hestia backend
+
+librbh_hestia_conf = configuration_data()
+
+librbh_hestia_conf.set('RBH_HESTIA_BACKEND_MAJOR', 0)
+librbh_hestia_conf.set('RBH_HESTIA_BACKEND_MINOR', 0)
+librbh_hestia_conf.set('RBH_HESTIA_BACKEND_RELEASE', 0)
+
+librbh_hestia_version = '@0@.@1@.@2@'.format(
+    librbh_hestia_conf.get('RBH_HESTIA_BACKEND_MAJOR'),
+    librbh_hestia_conf.get('RBH_HESTIA_BACKEND_MINOR'),
+    librbh_hestia_conf.get('RBH_HESTIA_BACKEND_RELEASE')
+)
+
+librbh_hestia_h = configure_file(input: 'hestia.h.in', output: 'hestia.h',
+                                 configuration: librbh_hestia_conf)
+
+install_headers(librbh_hestia_h, subdir: 'robinhood/backends')

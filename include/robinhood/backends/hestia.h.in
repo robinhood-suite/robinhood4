@@ -1,0 +1,35 @@
+/* This file is part of the RobinHood Library
+ * Copyright (C) 2022 Commissariat a l'energie atomique et aux energies
+ *                    alternatives
+ *
+ * SPDX-License-Identifer: LGPL-3.0-or-later
+ */
+
+#ifndef ROBINHOOD_HESTIA_BACKEND_H
+#define ROBINHOOD_HESTIA_BACKEND_H
+
+#include "robinhood/backend.h"
+
+#define RBH_HESTIA_BACKEND_NAME "hestia"
+
+#mesondefine RBH_HESTIA_BACKEND_MAJOR
+#mesondefine RBH_HESTIA_BACKEND_MINOR
+#mesondefine RBH_HESTIA_BACKEND_RELEASE
+#define RBH_HESTIA_BACKEND_VERSION RPV(RBH_HESTIA_BACKEND_MAJOR, \
+                                       RBH_HESTIA_BACKEND_MINOR, \
+                                       RBH_HESTIA_BACKEND_RELEASE)
+
+/**
+ * Create a hestia backend
+ *
+ * @param path      a path to the root fsentry (unused)
+ *
+ * @return          a pointer to a newly allocated hestia backend on success,
+ *                  NULL on error and errno is set appropriately
+ *
+ * @error ENOMEM    there was not enough memory available
+ */
+struct rbh_backend *
+rbh_hestia_backend_new(__attribute__((unused)) const char *path);
+
+#endif
