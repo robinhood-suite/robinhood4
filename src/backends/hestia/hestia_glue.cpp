@@ -53,3 +53,16 @@ int list_objects(uint8_t *tiers, size_t tiers_len,
 
     return 0;
 }
+
+int list_object_attrs(struct hestia_id *id, char **obj_attrs, size_t *len)
+{
+    struct hestia::hsm_uint oid(id->higher, id->lower);
+    std::string attrs = hestia::list_attrs(oid);
+
+    *obj_attrs = strdup(attrs.c_str());
+    if (obj_attrs == NULL)
+        return -1;
+
+    *len = attrs.length();
+    return 0;
+}

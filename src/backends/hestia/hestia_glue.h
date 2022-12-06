@@ -15,6 +15,7 @@ struct hestia_id {
 int list_tiers(uint8_t **tiers, size_t *len);
 int list_objects(uint8_t *tiers, size_t tiers_len,
                  struct hestia_id **ids, size_t *ids_len);
+int list_object_attrs(struct hestia_id *id, char **obj_attrs, size_t *len);
 
 #ifdef __cplusplus
 }

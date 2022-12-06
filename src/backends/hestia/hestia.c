@@ -24,6 +24,38 @@ struct hestia_iterator {
     size_t length;
 };
 
+static void *
+hestia_iter_next(void *iterator)
+{
+    struct hestia_iterator *hestia_iter = iterator;
+    char *obj_attrs = NULL;
+    struct hestia_id *obj;
+    size_t attrs_len;
+    int rc;
+
+    if (hestia_iter->current_id >= hestia_iter->length)
+        return NULL;
+
+    obj = &hestia_iter->ids[hestia_iter->current_id];
+
+    rc = list_object_attrs(obj, &obj_attrs, &attrs_len);
+    if (rc)
+        return NULL;
+
+    /* The following lines will be removed in the next patch */
+    fprintf(stderr, "len = %ld, cur = %ld\n",
+            hestia_iter->length, hestia_iter->current_id);
+    fprintf(stderr, "object found = (%ld, %ld)\n", obj->higher, obj->lower);
+    fprintf(stderr, "object attrs = '%s'\n", obj_attrs);
+
+    hestia_iter->current_id++;
+
+    free(obj_attrs);
+
+    /* Will be changed next patch */
+    return NULL;
+}
+
 static void
 hestia_iter_destroy(void *iterator)
 {
@@ -35,7 +67,7 @@ hestia_iter_destroy(void *iterator)
 }
 
 static const struct rbh_mut_iterator_operations HESTIA_ITER_OPS = {
-    .next = NULL,
+    .next = hestia_iter_next,
     .destroy = hestia_iter_destroy,
 };
 
@@ -76,19 +108,7 @@ hestia_iterator_new()
     if (hestia_iter->values == NULL)
         goto err;
 
-    /* The following lines will be removed in the next patch */
-    for (int i = 0; i < ids_len; ++i)
-        fprintf(stderr, "object found = (%ld, %ld)\n",
-                ids[i].higher, ids[i].lower);
-
-    rbh_sstack_destroy(hestia_iter->values);
-    free(ids);
-    free(hestia_iter);
-
-    /* Returning the iterator is not possible here yet because the "next"
-     * operation is NULL, which is not handled correctly by rbh_mut_iter_next
-     */
-    return NULL;
+    return hestia_iter;
 
 err:
     save_errno = errno;
