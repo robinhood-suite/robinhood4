@@ -7,6 +7,7 @@
 #include <string.h>
 
 #include "robinhood/backends/hestia.h"
+#include "robinhood/sstack.h"
 
 #include "hestia_glue.h"
 
@@ -16,6 +17,11 @@
 
 struct hestia_iterator {
     struct rbh_mut_iterator iterator;
+    struct rbh_sstack *values;
+    struct hestia_id *ids;
+    size_t current_id; /* index of the object in 'ids' that will be managed in
+                        * the next call to "hestia_iter_next". */
+    size_t length;
 };
 
 static void
@@ -23,6 +29,8 @@ hestia_iter_destroy(void *iterator)
 {
     struct hestia_iterator *hestia_iter = iterator;
 
+    rbh_sstack_destroy(hestia_iter->values);
+    free(hestia_iter->ids);
     free(hestia_iter);
 }
 
@@ -39,8 +47,10 @@ struct hestia_iterator *
 hestia_iterator_new()
 {
     struct hestia_iterator *hestia_iter = NULL;
+    struct hestia_id *ids = NULL;
     uint8_t *tiers = NULL;
     size_t tiers_len;
+    size_t ids_len;
     int save_errno;
     int rc;
 
@@ -52,13 +62,27 @@ hestia_iterator_new()
     if (rc)
         goto err;
 
+    rc = list_objects(tiers, tiers_len, &ids, &ids_len);
+    free(tiers);
+    if (rc)
+        goto err;
+
     hestia_iter->iterator = HESTIA_ITER;
+    hestia_iter->ids = ids;
+    hestia_iter->length = ids_len;
+    hestia_iter->current_id = 0;
+
+    hestia_iter->values = rbh_sstack_new(1 << 10);
+    if (hestia_iter->values == NULL)
+        goto err;
 
     /* The following lines will be removed in the next patch */
-    for (int i = 0; i < tiers_len; ++i)
-        fprintf(stderr, "tier found = '%d'\n", tiers[i]);
+    for (int i = 0; i < ids_len; ++i)
+        fprintf(stderr, "object found = (%ld, %ld)\n",
+                ids[i].higher, ids[i].lower);
 
-    free(tiers);
+    rbh_sstack_destroy(hestia_iter->values);
+    free(ids);
     free(hestia_iter);
 
     /* Returning the iterator is not possible here yet because the "next"
@@ -68,7 +92,7 @@ hestia_iterator_new()
 
 err:
     save_errno = errno;
-    free(tiers);
+    free(ids);
     free(hestia_iter);
     errno = save_errno;
     return NULL;
