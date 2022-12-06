@@ -6,7 +6,7 @@
 
 project(
     'librobinhood',
-    'c',
+    'c', 'cpp',
     version: '0.0.0',
     license: 'LGPL3.0-or-later',
     default_options: [
