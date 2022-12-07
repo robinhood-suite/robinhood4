@@ -7,6 +7,8 @@
 cpp = meson.get_compiler('cpp')
 libhestia = cpp.find_library('hestia_lib', disabler: true, required: false)
 
+libjansson = dependency('jansson', version: '>=2.5')
+
 librbh_hestia_glue = shared_library(
     'rbh-hestia-glue',
     sources: [
@@ -24,6 +26,7 @@ librbh_hestia = library(
     ],
     version: librbh_hestia_version, # defined in include/robinhood/backends
     link_with: [librobinhood, librbh_hestia_glue],
+    dependencies: [libjansson],
     include_directories: rbh_include,
     install: true,
 )
