@@ -113,6 +113,19 @@ struct rbh_id *
 rbh_id_from_lu_fid(const struct lu_fid *fid);
 
 /**
+ * Create a new struct lu_fid from a struct rbh_id
+ *
+ * @param id        the fid to use
+ *
+ * @return          a pointer to a struct lu_fid on success,
+ *                  NULL on error
+ *
+ * The returned lu_fid and \p fid share data.
+ */
+const struct lu_fid *
+rbh_lu_fid_from_id(const struct rbh_id *id);
+
+/**
  * Create a new struct file_handle from a struct rbh_id
  *
  * @param id        the id to use
@@ -124,6 +137,6 @@ rbh_id_from_lu_fid(const struct lu_fid *fid);
  * @error ENOMEM    not enough memory available
  */
 struct file_handle *
-rbh_file_handle_from_id(const struct rbh_id *fid);
+rbh_file_handle_from_id(const struct rbh_id *id);
 
 #endif

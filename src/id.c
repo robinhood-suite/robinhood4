@@ -183,6 +183,14 @@ rbh_id_from_lu_fid(const struct lu_fid *fid)
     return id;
 }
 
+const struct lu_fid *
+rbh_lu_fid_from_id(const struct rbh_id *id)
+{
+    assert(*(int *)id->data == FILEID_LUSTRE);
+
+    return (const struct lu_fid *) (id->data + sizeof(FILEID_LUSTRE));
+}
+
 struct file_handle *
 rbh_file_handle_from_id(const struct rbh_id *id)
 {
