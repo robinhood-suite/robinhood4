@@ -2,6 +2,7 @@
 # include "config.h"
 #endif
 
+#include <inttypes.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -56,6 +57,49 @@ fill_tier(json_t *value, struct rbh_value *tier_value)
 }
 
 static int
+fill_xattrs(json_t *value, struct rbh_value *_value,
+            struct rbh_sstack *values)
+{
+    int type = json_typeof(value);
+    char *val_str;
+    int rc = 0;
+
+    switch (type) {
+    case JSON_OBJECT:
+    case JSON_ARRAY:
+        val_str = json_dumps(value, JSON_ESCAPE_SLASH);
+        break;
+    case JSON_STRING:
+        rc = asprintf(&val_str, "%s", json_string_value(value));
+        break;
+    case JSON_INTEGER:
+        rc = asprintf(&val_str, "%"PRId64, json_integer_value(value));
+        break;
+    case JSON_REAL:
+        rc = asprintf(&val_str, "%f", json_real_value(value));
+        break;
+    case JSON_TRUE:
+    case JSON_FALSE:
+        rc = asprintf(&val_str, json_is_true(value) ? "true" : "false");
+        break;
+    default:
+        rc = asprintf(&val_str, "null");
+    }
+
+    if (rc < 0)
+        goto err;
+
+    _value->type = RBH_VT_STRING;
+    _value->string = rbh_sstack_push(values, val_str, strlen(val_str) + 1);
+    free(val_str);
+    if (_value->string == NULL)
+        return -1;
+
+err:
+    return rc < 0 ? rc : 0;
+}
+
+static int
 parse_attrs(const char *obj_attrs, struct rbh_statx *statx,
             struct rbh_value_pair **_pair, struct rbh_sstack *sstack)
 {
@@ -88,31 +132,27 @@ parse_attrs(const char *obj_attrs, struct rbh_statx *statx,
         goto err;
 
     json_object_foreach(attrs, key, value) {
-        switch (key[0]) {
-        case 'c':
-            if (!strcmp(&key[1], "reation_time")) {
-                fill_creation_time(value, statx);
-                continue;
-            }
-            break;
-        case 'l':
-            if (!strcmp(&key[1], "ast_modified")) {
-                fill_last_modified(value, statx);
-                continue;
-            }
-            break;
-        case 't':
-            if (!strcmp(&key[1], "ier")) {
-                rc = fill_tier(value, &values[idx]);
-                if (rc)
-                    goto err;
-            }
-            break;
-        default:
+        if (key[0] == 'c' && !strcmp(&key[1], "reation_time")) {
+            fill_creation_time(value, statx);
             continue;
+        } else if (key[0] == 'l' && !strcmp(&key[1], "ast_modified")) {
+            fill_last_modified(value, statx);
+            continue;
+        } else if (key[0] == 't' && !strcmp(&key[1], "ier")) {
+            fill_tier(value, &values[idx]);
+        } else {
+            rc = fill_xattrs(value, &values[idx], sstack);
         }
 
-        pairs[idx].key = key;
+        if (rc)
+            goto err;
+
+        pairs[idx].key = rbh_sstack_push(sstack, key, strlen(key) + 1);
+        if (pairs[idx].key == NULL) {
+            rc = -1;
+            goto err;
+        }
+
         pairs[idx].value = &values[idx];
         idx++;
     }
