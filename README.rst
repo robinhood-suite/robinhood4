@@ -120,8 +120,12 @@ every entry under the current directory and exit:
         return EXIT_SUCCESS;
     }
 
-For more advanced use cases, check out rbh-sync_ and rbh-find_ — currently the
-two main applications built on top of librobinhood.
+For more advanced use cases, check out the following applications built on top
+of librobinhood:
+ - rbh-sync_ to synchronize two backends
+ - rbh-fsevents_ to update a backend with changelog events
+ - rbh-find_ to query a backend and filter entries
 
 .. _rbh-sync: https://github.com/cea-hpc/rbh-sync
+.. _rbh-fsevents: https://github.com/cea-hpc/rbh-fsevents
 .. _rbh-find: https://github.com/cea-hpc/rbh-find

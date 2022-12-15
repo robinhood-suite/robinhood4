@@ -96,8 +96,8 @@ filesystem can be seen as the nodes and leaves of a tree. In RobinHood's
 semantics, branching means creating a backend from another backend by selecting
 only a subtree (or a "branch") of the original.
 
-Currently, RobinHood implements two backends: the `POSIX backend`_ and the
-`MongoDB backend`_.
+Currently, RobinHood implements three backends: the `POSIX backend`_,
+`MongoDB backend`_ and the `Lustre backend`_.
 
 .. [#] this may sound more dramatic than it is. In practice, the same thing
        can happen when you call statx_. RobinHood simply operates at greater
@@ -140,6 +140,34 @@ and how it works.
 
 __ https://docs.mongodb.com/manual/
 
+Lustre backend
+~~~~~~~~~~~~~~~
+
+This backend is an extension of the POSIX backend, in that it will only overload
+the extended attributes retrieval, to enrich the entries with Lustre specific
+values. Otherwise, it behaves exactly like the POSIX backend, provides the
+same features and fills the same goals.
+
+The retrieved extended attributes are the following:
+ - fid
+ - hsm state and archive ID
+ - layout main flags
+ - if the file is a regular file, the magic number and layout generation
+ - if the file has a composite layout, the mirror count
+ - per component of the file:
+   - stripe count and size
+   - pattern
+   - flags
+   - pool
+   - ost
+   - if the file is composite, the mirror ID, and start and end offsets of each
+   component
+
+Refer to Lustre's documentation__ for more information about what these
+attributes correspond to.
+
+__ https://wiki.lustre.org/Main_Page
+
 FSEntry
 -------
 
@@ -149,8 +177,9 @@ This is RobinHood's representation of a filesystem entry and the metadata
 associated with it.
 
 It is a structure that represents the most common metadata attributes (name,
-size, owner, ...) of an entry (file, directory, symlink, ...) in a POSIX
-filesystem. An fsentry is also able to hold structured extended attributes.
+size, owner, ...) of an entry (file, directory, symlink, ...) in a POSIX or
+Lustre filesystem. An fsentry is also able to hold structured extended
+attributes.
 
 Each fsentry is uniquely identified by an ID.
 
@@ -284,6 +313,7 @@ are:
 
 * ``posix`` for the `Posix Backend`_;
 * ``mongo`` for the `MongoDB Backend`_.
+* ``lustre`` for the `Lustre Backend`_.
 
 Given ``backend-type``, ``fsname`` uniquely identifies an instance of that type
 of backend. The format and further meaning attached to ``fsname`` depend on the
@@ -291,6 +321,7 @@ value of ``backend-type``. For example, for:
 
 * ``posix``, ``fsname`` is the root of the filesystem used;
 * ``mongo``, ``fsname`` is the name of the database used.
+* ``lustre``, ``fsname`` is the root of the filesystem used;
 
 Unofficial `backend plugin`_ implementations are welcome to choose a name for
 themselves, and attach their own meaning to ``fsname``. The RobinHood project
@@ -324,6 +355,7 @@ Here are a few examples of valid RobinHood URIs::
 
     rbh:mongo:test
     rbh:posix:/mnt
+    rbh:lustre:/mnt/lustre
     rbh:mongo:scratch#test-user/dir0
     rbh:my-backend:store#[0x0:0x1:0x2]
 
@@ -377,7 +409,9 @@ Applications
 The RobinHood project includes several tools:
 
 * rbh-sync_
+* rbh-fsevents_
 * rbh-find_
+* rbh-find-lustre_
 
 rbh-sync
 --------
@@ -392,11 +426,33 @@ more information.
 
 __ https://github.com/cea-hpc/rbh-sync
 
+rbh-fsevents
+------------
+
+This tool allows updating a RobinHood backend using changelog events from a
+source similar to the backend (for instance, Lustre changelogs to update a
+Lustre mirror). The destination backend must implement the updating part of the
+backend_ interface.
+
+This is the tool of choice to keep a backend sync-ed after an initial call to
+rbh-sync_ when the backend support a log of metadata changes. Refer to the
+project's documentation__ for more information.
+
+__ https://github.com/cea-hpc/rbh-fsevents
+
 rbh-find
 --------
 
-Basically a clone of `(gnu-)find`_. Refer to project's documentation__ for more
-information.
+Basically a clone of `(gnu-)find`_. Refer to the project's documentation__ for
+more information.
 
 .. _(gnu-)find: https://www.gnu.org/software/findutils/
 __ https://github.com/cea-hpc/rbh-find
+
+rbh-find-lustre
+---------------
+
+This is an overload of rbh-find_ which implements specific predicates to query
+Lustre attributes. Refer to the project's documentation__ for more information.
+
+__ https://github.com/cea-hpc/rbh-find-lustre
