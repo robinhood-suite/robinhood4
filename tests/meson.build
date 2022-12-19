@@ -6,6 +6,12 @@
 
 integration_tests = ['test_posix_mongo_sync', 'test_mongo_mongo_sync']
 
+liblustre = dependency('lustre', disabler: true, required: false)
+
+if liblustre.found()
+    integration_tests += ['test_lustre_mongo_sync']
+endif
+
 foreach t: integration_tests
     e = find_program(t + '.bash')
     test(t, e)

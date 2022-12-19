@@ -69,13 +69,15 @@ This references a (whole) backend.
 The syntax for ``fsname`` depends on the backend's type:
 
 * for ``mongo`` it can pretty much be anything you want; [#]_
-* for ``posix`` it must be the path to the backend's root.
+* for ``posix`` or ``lustre`` it must be the path to the backend's root.
 
 ::
 
     rbh:posix:/mnt/path/to/dir
+    rbh:lustre:/mnt/lustre/path-to-dir
     rbh:mongo:something-that-makes-me-think-of-/mnt/path/to/dir
     rbh:posix:/scratch
+    rbh:lustre:/work
     rbh:mongo:scratch
 
 Optionnally, you can append a ``#``, followed by either:
@@ -89,6 +91,7 @@ This references a particular fsentry in a backend.
 ::
 
     rbh:posix:/scratch#testuser/somedir
+    rbh:lustre:/work#testuser2/somedirbis
     rbh:mongo:scratch#[0x200000007:0x1:0x0]
 
 We choose not to put an example with a regular fsentry's ID here, as they are
@@ -172,11 +175,6 @@ provide a reasonable amount of parallelization, without sacrificing consistency.
     done
     rbh-sync --one rbh:posix:/scratch rbh:mongo:scratch &
     wait
-
-*Note that the* ``--one`` *option is not currently implemented, which means that
-you will need to skip that step for now. Your backend will be missing metadata
-about the* ``/scratch`` *directory, but this probably won't be much of a
-problem. This is* **temporary**.
 
 Also, since rbh-sync heavily relies on the backends' implementation, if these
 were to implement any sort of parallelization, rbh-sync would transparently
