@@ -63,3 +63,5 @@ executable(
     dependencies: [librobinhood, miniyaml, liblustre],
     install: true,
 )
+
+subdir('tests')
