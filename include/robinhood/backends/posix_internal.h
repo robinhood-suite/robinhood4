@@ -41,11 +41,11 @@ struct posix_iterator {
      *
      * @return          number of filled \p pairs
      */
-    ssize_t (*ns_xattrs_callback)(const int fd, const uint16_t mode,
-                                  struct rbh_value_pair *inode_xattrs,
-                                  ssize_t *inode_xattrs_count,
-                                  struct rbh_value_pair *pairs,
-                                  struct rbh_sstack *values);
+    int (*ns_xattrs_callback)(const int fd, const uint16_t mode,
+                              struct rbh_value_pair *inode_xattrs,
+                              ssize_t *inode_xattrs_count,
+                              struct rbh_value_pair *pairs,
+                              struct rbh_sstack *values);
 
     int statx_sync_type;
     size_t prefix_len;
@@ -55,6 +55,30 @@ struct posix_iterator {
 
 struct posix_iterator *
 posix_iterator_new(const char *root, const char *entry, int statx_sync_type);
+
+/*----------------------------------------------------------------------------*
+ |                              posix_operations                              |
+ *----------------------------------------------------------------------------*/
+
+int
+posix_backend_get_option(void *backend, unsigned int option, void *data,
+                         size_t *data_size);
+int
+posix_backend_set_option(void *backend, unsigned int option, const void *data,
+                         size_t data_size);
+
+struct rbh_backend *
+posix_backend_branch(void *backend, const struct rbh_id *id);
+
+struct rbh_fsentry *
+posix_root(void *backend, const struct rbh_filter_projection *projection);
+
+struct rbh_mut_iterator *
+posix_backend_filter(void *backend, const struct rbh_filter *filter,
+                     const struct rbh_filter_options *options);
+
+void
+posix_backend_destroy(void *backend);
 
 /*----------------------------------------------------------------------------*
  |                               posix_backend                                |

@@ -5,6 +5,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/ioctl.h>
+#include <sys/types.h>
+#include <sys/xattr.h>
 
 #include <lustre/lustreapi.h>
 
@@ -453,31 +455,16 @@ xattrs_fill_layout(struct iterator_data *data, int nb_xattrs,
     return subcount;
 }
 
-/**
- * Record a file's magic number and layout generation in \p pairs
- *
- * @param fd        file descriptor to check
- * @param pairs     list of pairs to fill
- *
- * @return          number of filled \p pairs
- */
 static int
-xattrs_get_magic_and_gen(int fd, struct rbh_value_pair *pairs)
+_xattrs_get_magic_and_gen(int fd, const char *lov_buf,
+                          struct rbh_value_pair *pairs)
 {
-    const char *lov_buf = NULL;
     uint32_t magic = 0;
     int magic_str_len;
     int subcount = 0;
     uint32_t gen = 0;
     char *magic_str;
     int rc;
-
-    for (int i = 0; i < *_inode_xattrs_count; ++i)
-        if (!strcmp(_inode_xattrs[i].key, XATTR_LUSTRE_LOV))
-            lov_buf = _inode_xattrs[i].value->binary.data;
-
-    if (!lov_buf)
-        return 0;
 
     magic = ((struct lov_user_md *) lov_buf)->lmm_magic;
 
@@ -531,6 +518,50 @@ xattrs_get_magic_and_gen(int fd, struct rbh_value_pair *pairs)
         return -1;
 
     return subcount;
+}
+
+/* The Linux VFS does not allow values of more than 64KiB */
+static const size_t XATTR_VALUE_MAX_VFS_SIZE = 1 << 16;
+
+/**
+ * Record a file's magic number and layout generation in \p pairs
+ *
+ * @param fd        file descriptor to check
+ * @param pairs     list of pairs to fill
+ *
+ * @return          number of filled \p pairs
+ */
+static int
+xattrs_get_magic_and_gen(int fd, struct rbh_value_pair *pairs)
+{
+    char buffer[XATTR_VALUE_MAX_VFS_SIZE];
+    const char *lov_buf;
+    int save_errno;
+
+    if (_inode_xattrs != NULL) {
+        for (int i = 0; i < *_inode_xattrs_count; ++i)
+            if (!strcmp(_inode_xattrs[i].key, XATTR_LUSTRE_LOV)) {
+                lov_buf = _inode_xattrs[i].value->binary.data;
+                break;
+            }
+    } else {
+    /* TODO: when the attribute will be retrieved using the changelog,
+     * change the xattr retrieval by seeking the one already retrieved.
+     */
+        ssize_t length = XATTR_VALUE_MAX_VFS_SIZE;
+
+        length = fgetxattr(fd, XATTR_LUSTRE_LOV, buffer, length);
+        if (length == -1) {
+            save_errno = errno;
+            free(buffer);
+            errno = save_errno;
+            return -1;
+        }
+
+        lov_buf = buffer;
+    }
+
+    return _xattrs_get_magic_and_gen(fd, lov_buf, pairs);
 }
 
 /**
@@ -701,16 +732,15 @@ xattrs_get_mdt_info(int fd, struct rbh_value_pair *pairs)
     return subcount;
 }
 
-static ssize_t
-lustre_ns_xattrs_callback(const int fd, const uint16_t mode,
-                          struct rbh_value_pair *inode_xattrs,
-                          ssize_t *inode_xattrs_count,
-                          struct rbh_value_pair *pairs,
-                          struct rbh_sstack *values)
+static int
+_get_attrs(const int fd, const uint16_t mode,
+           int (*attrs_funcs[])(int, struct rbh_value_pair *),
+           int nb_attrs_funcs,
+           struct rbh_value_pair *inode_xattrs,
+           ssize_t *inode_xattrs_count,
+           struct rbh_value_pair *pairs,
+           struct rbh_sstack *values)
 {
-    int (*xattrs_funcs[])(int, struct rbh_value_pair *) = {
-        xattrs_get_fid, xattrs_get_hsm, xattrs_get_layout, xattrs_get_mdt_info
-    };
     int count = 0;
     int subcount;
 
@@ -721,8 +751,8 @@ lustre_ns_xattrs_callback(const int fd, const uint16_t mode,
     is_reg = S_ISREG(mode);
     _values = values;
 
-    for (int i = 0; i < sizeof(xattrs_funcs) / sizeof(xattrs_funcs[0]); ++i) {
-        subcount = xattrs_funcs[i](fd, &pairs[count]);
+    for (int i = 0; i < nb_attrs_funcs; ++i) {
+        subcount = attrs_funcs[i](fd, &pairs[count]);
         if (subcount == -1)
             return -1;
 
@@ -730,6 +760,55 @@ lustre_ns_xattrs_callback(const int fd, const uint16_t mode,
     }
 
     return count;
+}
+
+static int
+lustre_get_attrs(const int fd, const uint16_t mode,
+                 struct rbh_value_pair *pairs,
+                 struct rbh_sstack *values)
+{
+    int (*xattrs_funcs[])(int, struct rbh_value_pair *) = {
+        xattrs_get_hsm, xattrs_get_layout, xattrs_get_mdt_info
+    };
+
+    return _get_attrs(fd, mode, xattrs_funcs,
+                      sizeof(xattrs_funcs) / sizeof(xattrs_funcs[0]),
+                      NULL, NULL, pairs, values);
+}
+
+static int
+lustre_ns_xattrs_callback(const int fd, const uint16_t mode,
+                          struct rbh_value_pair *inode_xattrs,
+                          ssize_t *inode_xattrs_count,
+                          struct rbh_value_pair *pairs,
+                          struct rbh_sstack *values)
+{
+    int (*xattrs_funcs[])(int, struct rbh_value_pair *) = {
+        xattrs_get_fid, xattrs_get_hsm, xattrs_get_layout, xattrs_get_mdt_info
+    };
+
+    return _get_attrs(fd, mode, xattrs_funcs,
+                      sizeof(xattrs_funcs) / sizeof(xattrs_funcs[0]),
+                      inode_xattrs, inode_xattrs_count, pairs, values);
+}
+
+static int
+lustre_backend_get_attribute(void *backend, const char *attr_name,
+                             void *_arg, struct rbh_value_pair *data)
+{
+    struct arg_t {
+        int fd;
+        uint16_t mode;
+        struct rbh_sstack *values;
+    };
+    struct arg_t *arg = (struct arg_t *)_arg;
+
+    (void)backend;
+
+    if (strcmp(attr_name, "lustre") != 0)
+        return -1;
+
+    return lustre_get_attrs(arg->fd, arg->mode, data, arg->values);
 }
 
 struct posix_iterator *
@@ -746,6 +825,16 @@ lustre_iterator_new(const char *root, const char *entry, int statx_sync_type)
     return lustre_iter;
 }
 
+static const struct rbh_backend_operations LUSTRE_BACKEND_OPS = {
+    .get_option = posix_backend_get_option,
+    .set_option = posix_backend_set_option,
+    .branch = posix_backend_branch,
+    .root = posix_root,
+    .filter = posix_backend_filter,
+    .get_attribute = lustre_backend_get_attribute,
+    .destroy = posix_backend_destroy,
+};
+
 struct rbh_backend *
 rbh_lustre_backend_new(const char *path)
 {
@@ -758,6 +847,7 @@ rbh_lustre_backend_new(const char *path)
     lustre->iter_new = lustre_iterator_new;
     lustre->backend.id = RBH_BI_LUSTRE;
     lustre->backend.name = RBH_LUSTRE_BACKEND_NAME;
+    lustre->backend.ops = &LUSTRE_BACKEND_OPS;
 
     return &lustre->backend;
 }

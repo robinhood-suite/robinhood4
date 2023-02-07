@@ -292,11 +292,11 @@ static __thread struct rbh_sstack *ns_values;
 
 static struct rbh_fsentry *
 fsentry_from_ftsent(FTSENT *ftsent, int statx_sync_type, size_t prefix_len,
-                    ssize_t (*ns_xattrs_callback)(const int, const uint16_t,
-                                                  struct rbh_value_pair *,
-                                                  ssize_t *,
-                                                  struct rbh_value_pair *,
-                                                  struct rbh_sstack *))
+                    int (*ns_xattrs_callback)(const int, const uint16_t,
+                                              struct rbh_value_pair *,
+                                              ssize_t *,
+                                              struct rbh_value_pair *,
+                                              struct rbh_sstack *))
 {
     const int statx_flags =
         AT_EMPTY_PATH | AT_SYMLINK_NOFOLLOW | AT_NO_AUTOMOUNT;
@@ -623,7 +623,7 @@ posix_get_statx_sync_type(struct posix_backend *posix, void *data,
     return 0;
 }
 
-static int
+int
 posix_backend_get_option(void *backend, unsigned int option, void *data,
                          size_t *data_size)
 {
@@ -676,7 +676,7 @@ posix_set_statx_sync_type(struct posix_backend *posix, const void *data,
     return -1;
 }
 
-static int
+int
 posix_backend_set_option(void *backend, unsigned int option, const void *data,
                          size_t data_size)
 {
@@ -695,7 +695,7 @@ posix_backend_set_option(void *backend, unsigned int option, const void *data,
      |                               root()                               |
      *--------------------------------------------------------------------*/
 
-static struct rbh_fsentry *
+struct rbh_fsentry *
 posix_root(void *backend, const struct rbh_filter_projection *projection)
 {
     const struct rbh_filter_options options = {
@@ -738,7 +738,7 @@ set_root_properties(FTSENT *root)
     root->fts_namelen = 0;
 }
 
-static struct rbh_mut_iterator *
+struct rbh_mut_iterator *
 posix_backend_filter(void *backend, const struct rbh_filter *filter,
                      const struct rbh_filter_options *options)
 {
@@ -786,7 +786,7 @@ out_destroy_iter:
      |                             destroy()                              |
      *--------------------------------------------------------------------*/
 
-static void
+void
 posix_backend_destroy(void *backend)
 {
     struct posix_backend *posix = backend;
@@ -925,9 +925,6 @@ posix_branch_backend_filter(void *backend, const struct rbh_filter *filter,
     return (struct rbh_mut_iterator *)posix_iter;
 }
 
-static struct rbh_backend *
-posix_backend_branch(void *backend, const struct rbh_id *id);
-
 static const struct rbh_backend_operations POSIX_BRANCH_BACKEND_OPS = {
     .root = posix_root,
     .branch = posix_backend_branch,
@@ -940,7 +937,7 @@ static const struct rbh_backend POSIX_BRANCH_BACKEND = {
     .ops = &POSIX_BRANCH_BACKEND_OPS,
 };
 
-static struct rbh_backend *
+struct rbh_backend *
 posix_backend_branch(void *backend, const struct rbh_id *id)
 {
     struct posix_backend *posix = backend;
