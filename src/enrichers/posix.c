@@ -19,20 +19,7 @@
 #include <robinhood.h>
 
 #include "enricher.h"
-
-struct enricher {
-    struct rbh_iterator iterator;
-
-    struct rbh_iterator *fsevents;
-    int mount_fd;
-
-    struct rbh_value_pair *pairs;
-    size_t pair_count;
-
-    struct rbh_fsevent fsevent;
-    struct rbh_statx statx;
-    char *symlink;
-};
+#include "internals.h"
 
 enum statx_field {
     SF_UNKNOWN,
@@ -349,11 +336,13 @@ parse_statx_mask(uint32_t *mask, const struct rbh_value *value)
     return 0;
 }
 
+/* TODO: Partial fields parsing needs to be moved to enricher.c or an internal
+ * for both posix and lustre. */
 enum partial_field {
     PF_UNKNOWN,
     PF_STATX,
-    PF_XATTRS,
     PF_SYMLINK,
+    PF_XATTRS,
 };
 
 static enum partial_field __attribute__((pure))
@@ -464,7 +453,7 @@ merge_statx(struct rbh_statx *original, const struct rbh_statx *override)
         original->stx_dev_minor = override->stx_dev_minor;
 }
 
-static int
+int
 open_by_id(int mount_fd, const struct rbh_id *id, int flags)
 {
     struct file_handle *handle;
@@ -643,11 +632,12 @@ enrich_symlink(char symlink[SYMLINK_MAX_SIZE], const struct rbh_id *id,
     return rc == -1 ? -1 : 0;
 }
 
-static int
-_enrich(const struct rbh_value_pair *partial, struct rbh_value_pair **pairs,
-        size_t *pair_count, struct rbh_fsevent *enriched,
-        const struct rbh_fsevent *original, int mount_fd,
-        struct rbh_statx *statxbuf, char symlink[SYMLINK_MAX_SIZE])
+int
+posix_enrich(const struct rbh_value_pair *partial,
+             struct rbh_value_pair **pairs, size_t *pair_count,
+             struct rbh_fsevent *enriched,
+             const struct rbh_fsevent *original, int mount_fd,
+             struct rbh_statx *statxbuf, char symlink[SYMLINK_MAX_SIZE])
 {
     uint32_t statx_mask;
 
@@ -733,9 +723,9 @@ enrich(struct enricher *enricher, const struct rbh_fsevent *original)
         partials = &pair->value->map;
 
         for (size_t i = 0; i < partials->count; i++) {
-            if (_enrich(&partials->pairs[i], &pairs, &pair_count, enriched,
-                        original, enricher->mount_fd, &enricher->statx,
-                        enricher->symlink))
+            if (posix_enrich(&partials->pairs[i], &pairs, &pair_count, enriched,
+                             original, enricher->mount_fd, &enricher->statx,
+                             enricher->symlink))
                 return -1;
         }
 
@@ -746,7 +736,7 @@ enrich(struct enricher *enricher, const struct rbh_fsevent *original)
 }
 
 static const void *
-enricher_iter_next(void *iterator)
+posix_enricher_iter_next(void *iterator)
 {
     struct enricher *enricher = iterator;
     const void *fsevent;
@@ -761,8 +751,8 @@ enricher_iter_next(void *iterator)
     return &enricher->fsevent;
 }
 
-static void
-enricher_iter_destroy(void *iterator)
+void
+posix_enricher_iter_destroy(void *iterator)
 {
     struct enricher *enricher = iterator;
 
@@ -772,19 +762,19 @@ enricher_iter_destroy(void *iterator)
     free(enricher);
 }
 
-static const struct rbh_iterator_operations ENRICHER_ITER_OPS = {
-    .next = enricher_iter_next,
-    .destroy = enricher_iter_destroy,
+static const struct rbh_iterator_operations POSIX_ENRICHER_ITER_OPS = {
+    .next = posix_enricher_iter_next,
+    .destroy = posix_enricher_iter_destroy,
 };
 
-static const struct rbh_iterator ENRICHER_ITERATOR = {
-    .ops = &ENRICHER_ITER_OPS,
+static const struct rbh_iterator POSIX_ENRICHER_ITERATOR = {
+    .ops = &POSIX_ENRICHER_ITER_OPS,
 };
 
 #define INITIAL_PAIR_COUNT (1 << 7)
 
 struct rbh_iterator *
-iter_enrich(struct rbh_iterator *fsevents, int mount_fd)
+posix_iter_enrich(struct rbh_iterator *fsevents, int mount_fd)
 {
     struct rbh_value_pair *pairs;
     struct enricher *enricher;
@@ -813,7 +803,8 @@ iter_enrich(struct rbh_iterator *fsevents, int mount_fd)
         return NULL;
     }
 
-    enricher->iterator = ENRICHER_ITERATOR;
+    enricher->iterator = POSIX_ENRICHER_ITERATOR;
+    enricher->backend = NULL;
     enricher->fsevents = fsevents;
     enricher->mount_fd = mount_fd;
     enricher->pairs = pairs;
@@ -887,6 +878,9 @@ iter_no_partial(struct rbh_iterator *fsevents)
     return &no_partial->iterator;
 }
 
+/*----------------------------------------------------------------------------*
+ *                            posix_backend_enrich                            *
+ *----------------------------------------------------------------------------*/
 
 static struct rbh_iterator *
 posix_enrich_iter_builder_build_iter(void *_builder,
@@ -894,10 +888,10 @@ posix_enrich_iter_builder_build_iter(void *_builder,
 {
     struct enrich_iter_builder *builder = _builder;
 
-    return iter_enrich(fsevents, builder->mount_fd);
+    return posix_iter_enrich(fsevents, builder->mount_fd);
 }
 
-static void
+void
 posix_enrich_iter_builder_destroy(void *_builder)
 {
     struct enrich_iter_builder *builder = _builder;
@@ -913,27 +907,7 @@ POSIX_ENRICH_ITER_BUILDER_OPS = {
     .destroy = posix_enrich_iter_builder_destroy,
 };
 
-static const struct enrich_iter_builder POSIX_ENRICH_ITER_BUILDER = {
+const struct enrich_iter_builder POSIX_ENRICH_ITER_BUILDER = {
     .name = "posix",
     .ops = &POSIX_ENRICH_ITER_BUILDER_OPS,
 };
-
-struct enrich_iter_builder *
-enrich_iter_builder_from_backend(struct rbh_backend *backend,
-                                 const char *mount_path)
-{
-    struct enrich_iter_builder *builder;
-
-    builder = malloc(sizeof(*builder));
-    if (builder == NULL)
-        error(EXIT_FAILURE, errno, "malloc");
-
-    *builder = POSIX_ENRICH_ITER_BUILDER;
-    builder->backend = backend;
-
-    builder->mount_fd = open(mount_path, O_RDONLY | O_CLOEXEC);
-    if (builder->mount_fd == -1)
-        error(EXIT_FAILURE, errno, "open: %s", mount_path);
-
-    return builder;
-}

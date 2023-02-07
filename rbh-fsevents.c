@@ -34,6 +34,7 @@ enum rbh_source_t {
 static void
 usage(void)
 {
+    /* TODO: accept source as a URI or a '-', like src:lustre:lustre-MDT0000. */
     const char *message =
         "usage: %s [-h] [--raw] [--enrich MOUNTPOINT] [--lustre] SOURCE DESTINATION\n"
         "\n"
@@ -213,6 +214,15 @@ mount_fd_exit(void)
 }
 
 static const size_t BATCH_SIZE = 1;
+
+static struct rbh_backend *enrich_point;
+
+static void __attribute__((destructor))
+destroy_enrich_point(void)
+{
+    if (enrich_point)
+        rbh_backend_destroy(enrich_point);
+}
 
 static void
 feed(struct sink *sink, struct source *source,
