@@ -164,10 +164,13 @@ xattrs_get_hsm(int fd, struct rbh_value_pair *pairs)
         return 0;
 
     rc = llapi_hsm_state_get_fd(fd, &hus);
-    if (rc) {
+    if (rc && rc != -ENODATA) {
         errno = -rc;
         return -1;
     }
+
+    if (rc == -ENODATA || hus.hus_archive_id == 0)
+        return 0;
 
     rc = fill_uint32_pair("hsm_state", hus.hus_states, &pairs[subcount++]);
     if (rc)
