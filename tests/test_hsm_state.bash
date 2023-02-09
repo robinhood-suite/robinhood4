@@ -6,8 +6,6 @@
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
 
-set -xe
-
 if ! command -v rbh-sync &> /dev/null; then
     echo "This test requires rbh-sync to be installed" >&2
     exit 1
@@ -21,6 +19,17 @@ fi
 test_dir=$(dirname $(readlink -e $0))
 . $test_dir/test_utils.bash
 
+archive_file()
+{
+    local file="$1"
+
+    sudo lfs hsm_archive "$file"
+
+    while ! lfs hsm_state "$file" | grep "archive_id:"; do
+        sleep 0.5
+    done
+}
+
 ################################################################################
 #                                    TESTS                                     #
 ################################################################################
@@ -29,11 +38,13 @@ test_none()
 {
     touch "none"
     touch "archived"
-    lfs hsm_set --archived archived
+    archive_file "archived"
     rbh-sync "rbh:lustre:." "rbh:mongo:$testdb"
 
     rbh_lfind "rbh:mongo:$testdb" -hsm-state none | sort |
         difflines "/none"
+    rbh_lfind "rbh:mongo:$testdb" -hsm-state archived | sort |
+        difflines "/archived"
 }
 
 test_archived_states()
@@ -41,12 +52,8 @@ test_archived_states()
     local states=("dirty" "lost" "released")
 
     for state in "${states[@]}"; do
-        touch "${state}"
-        sudo lfs hsm_archive "$state"
-
-        while ! lfs hsm_state "$state" | grep "archived"; do
-            sleep 0.5;
-        done
+        touch "$state"
+        archive_file "$state"
 
         if [ "$state" == "released" ]; then
             sudo lfs hsm_release "$state"
@@ -65,10 +72,12 @@ test_archived_states()
 
 test_independant_states()
 {
-    local states=("archived" "exists" "norelease" "noarchive")
+    local states=("norelease" "noarchive")
 
     for state in "${states[@]}"; do
         touch "${state}"
+        archive_file "$state"
+
         sudo lfs hsm_set "--$state" "$state"
     done
 
@@ -82,13 +91,14 @@ test_independant_states()
 
 test_multiple_states()
 {
-    local states=("archived" "exists" "noarchive" "norelease")
+    local states=("noarchive" "norelease")
     local length=${#states[@]}
     length=$((length - 1))
 
     for i in $(seq 0 $length); do
         local state=${states[$i]}
         touch "$state"
+        archive_file "$state"
 
         for j in $(seq $i $length); do
             local flag=${states[$j]}

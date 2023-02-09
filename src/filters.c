@@ -80,16 +80,36 @@ str2hsm_states(const char *hsm_state)
 struct rbh_filter *
 hsm_state2filter(const char *hsm_state)
 {
-    enum rbh_filter_operator op = RBH_FOP_BITS_ANY_SET;
     enum hsm_states state = str2hsm_states(hsm_state);
     struct rbh_filter *filter;
 
-    if (state == HS_NONE)
-        op = RBH_FOP_EQUAL;
+    if (state == HS_NONE) {
+        struct rbh_filter *file_filter;
 
-    filter = rbh_filter_compare_uint32_new(
-            op, &predicate2filter_field[LPRED_HSM_STATE - LPRED_MIN], state
-            );
+        file_filter = filetype2filter("f");
+        if (file_filter == NULL)
+            error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
+                          "hsm_state2filter");
+
+        filter = rbh_filter_exists_new(
+                &predicate2filter_field[LPRED_HSM_STATE - LPRED_MIN]);
+        if (filter == NULL)
+            error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
+                          "hsm_state2filter");
+
+        filter = filter_not(filter);
+        if (filter == NULL)
+            error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
+                          "hsm_state2filter");
+
+        filter = filter_and(file_filter, filter);
+    } else {
+        filter = rbh_filter_compare_uint32_new(
+                RBH_FOP_BITS_ANY_SET,
+                &predicate2filter_field[LPRED_HSM_STATE - LPRED_MIN], state
+                );
+    }
+
     if (filter == NULL)
         error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
                       "hsm_state2filter");

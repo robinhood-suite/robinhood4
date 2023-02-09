@@ -58,9 +58,8 @@ run_tests()
     local fail=0
 
     for test in "$@"; do
-        if (trap -- teardown EXIT
-            setup
-            "$test"); then
+        (set -e; trap -- teardown EXIT; setup; "$test")
+        if !(($?)); then
             echo "$test: ✔"
         else
             echo "$test: ✖"
