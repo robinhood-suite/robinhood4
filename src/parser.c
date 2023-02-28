@@ -38,6 +38,18 @@ str2predicate(const char *string)
             break;
         }
         break;
+    case 'b':
+        switch (string[2]) {
+        case 'm':
+            if (strcmp(&string[3], "in") == 0)
+                return PRED_BMIN;
+            break;
+        case 't':
+            if (strcmp(&string[3], "ime") == 0)
+                return PRED_BTIME;
+            break;
+        }
+        break;
     case 'c':
         switch (string[2]) {
         case 'm':
@@ -288,6 +300,9 @@ static const char *__predicate2str[] = {
     [PRED_AMIN]         = "amin",
     [PRED_ANEWER]       = "anewer",
     [PRED_ATIME]        = "atime",
+    [PRED_BMIN]         = "bmin",
+    [PRED_BNEWER]       = "bnewer",
+    [PRED_BTIME]        = "btime",
     [PRED_CMIN]         = "cmin",
     [PRED_CNEWER]       = "cnewer",
     [PRED_CONTEXT]      = "context",

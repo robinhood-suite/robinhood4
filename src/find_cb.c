@@ -122,11 +122,13 @@ find_parse_predicate(struct find_context *ctx, int *arg_idx)
      */
     switch (predicate) {
     case PRED_AMIN:
+    case PRED_BMIN:
     case PRED_MMIN:
     case PRED_CMIN:
         filter = xmin2filter(predicate, ctx->argv[++i]);
         break;
     case PRED_ATIME:
+    case PRED_BTIME:
     case PRED_MTIME:
     case PRED_CTIME:
         filter = xtime2filter(predicate, ctx->argv[++i]);
@@ -166,6 +168,7 @@ find_predicate_or_action(const char *string)
 {
     switch (string[1]) {
     case 'a':
+    case 'b':
     case 'g':
     case 'i':
     case 'm':

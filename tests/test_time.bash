@@ -48,10 +48,10 @@ test_a_m_time()
     test_generic_a_m_time "days" "-mtime"
 }
 
-test_generic_c_time()
+test_generic_b_c_time()
 {
-    # Unfortunately there is no way to change the "change" time, so there's
-    # not much to test
+    # Unfortunately there is no way to change the "birth" and "change" time,
+    # so there's not much to test
     touch filetest
 
     sleep 1
@@ -71,17 +71,19 @@ test_generic_c_time()
 
 }
 
-test_c_time()
+test_b_c_time()
 {
-    test_generic_c_time "-cmin"
-    test_generic_c_time "-ctime"
+    test_generic_b_c_time "-bmin"
+    test_generic_b_c_time "-btime"
+    test_generic_b_c_time "-cmin"
+    test_generic_b_c_time "-ctime"
 }
 
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
-declare -a tests=(test_a_m_time test_c_time)
+declare -a tests=(test_a_m_time test_b_c_time)
 
 tmpdir=$(mktemp --directory)
 trap -- "rm -rf '$tmpdir'" EXIT

@@ -67,3 +67,4 @@ pkg_mod.generate(
         filebase: 'rbh-find',
         description: 'C-API to librobinhood find-like mechanism'
 )
+subdir('tests')
