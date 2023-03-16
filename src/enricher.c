@@ -670,7 +670,7 @@ _enrich(const struct rbh_value_pair *partial, struct rbh_value_pair **pairs,
         enriched->upsert.statx = statxbuf;
         break;
     case PF_XATTRS:
-        if (original->type != RBH_FET_XATTR) {
+        if (original->type != RBH_FET_XATTR && original->type != RBH_FET_LINK) {
             errno = EINVAL;
             return -1;
         }
