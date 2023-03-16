@@ -309,6 +309,34 @@ build_id(const struct lu_fid *fid)
 }
 
 static int
+build_statx_event(uint32_t statx_enrich_mask, struct rbh_fsevent *fsevent,
+                  struct rbh_statx *rec_statx)
+{
+    fsevent->type = RBH_FET_UPSERT;
+    fsevent->upsert.statx = rec_statx;
+
+    fsevent->xattrs = build_enrich_map(fill_statx, &statx_enrich_mask);
+    if (fsevent->xattrs.pairs == NULL)
+        return -1;
+
+    return 0;
+}
+
+static int
+create_statx_uid_gid(struct changelog_rec *record, struct rbh_statx **rec_statx)
+{
+    *rec_statx = rbh_sstack_push(_values, NULL, sizeof(**rec_statx));
+    if (*rec_statx == NULL)
+        return -1;
+
+    (*rec_statx)->stx_mask = 0;
+    (*rec_statx)->stx_mode = 0;
+    fill_uidgid(record, *rec_statx);
+
+    return 0;
+}
+
+static int
 build_create_event(unsigned int process_step, struct changelog_rec *record,
                    struct rbh_fsevent *fsevent)
 {
@@ -341,25 +369,17 @@ build_create_event(unsigned int process_step, struct changelog_rec *record,
             fsevent->type = RBH_FET_XATTR;
             if (build_enrich_xattr_fsevent(&fsevent->xattrs,
                     "fid", fill_ns_xattrs_fid(record),
-                    "rbh-fsevents", build_empty_map("lustre")))
+                    "rbh-fsevents", build_empty_map("lustre"), NULL))
                 return -1;
 
             return 1;
         case 2:
-            rec_statx = rbh_sstack_push(_values, NULL, sizeof(*rec_statx));
-            if (rec_statx == NULL)
+            if (create_statx_uid_gid(record, &rec_statx))
                 return -1;
 
-            rec_statx->stx_mask = 0;
-            fill_uidgid(record, rec_statx);
+            statx_enrich_mask = RBH_STATX_ALL ^ RBH_STATX_UID ^ RBH_STATX_GID;
 
-            fsevent->type = RBH_FET_UPSERT;
-            fsevent->upsert.statx = rec_statx;
-
-            statx_enrich_mask = RBH_STATX_ALL;
-            fsevent->xattrs = build_enrich_map(fill_statx,
-                    &statx_enrich_mask);
-            if (fsevent->xattrs.pairs == NULL)
+            if (build_statx_event(statx_enrich_mask, fsevent, rec_statx))
                 return -1;
 
             return 0;
@@ -396,18 +416,6 @@ build_setxattr_event(unsigned int process_step, struct changelog_rec *record,
     __builtin_unreachable();
 }
 
-static int
-build_statx_event(uint32_t statx_enrich_mask, struct rbh_fsevent *fsevent)
-{
-    fsevent->type = RBH_FET_UPSERT;
-
-    fsevent->xattrs = build_enrich_map(fill_statx, &statx_enrich_mask);
-    if (fsevent->xattrs.pairs == NULL)
-        return -1;
-
-    return 0;
-}
-
 static const void *
 lustre_changelog_iter_next(void *iterator)
 {
@@ -438,14 +446,15 @@ retry:
         records->prev_record = NULL;
     }
 
-    id = build_id(&record->cr_tfid);
-    if (id == NULL)
-        goto end_event;
-
     fsevent = rbh_sstack_push(_values, NULL, sizeof(*fsevent));
     if (fsevent == NULL)
         goto end_event;
     memset(fsevent, 0, sizeof(*fsevent));
+
+    id = build_id(&record->cr_tfid);
+    if (id == NULL)
+        goto err;
+
     fsevent->id.data = id->data;
     fsevent->id.size = id->size;
 
@@ -469,7 +478,7 @@ retry:
         /* fall through */
     case CL_ATIME:
         statx_enrich_mask |= RBH_STATX_ATIME_SEC | RBH_STATX_ATIME_NSEC;
-        rc = build_statx_event(statx_enrich_mask, fsevent);
+        rc = build_statx_event(statx_enrich_mask, fsevent, NULL);
         break;
     case CL_MKDIR:      /* RBH_FET_UPSERT */
     case CL_HARDLINK:   /* RBH_FET_LINK? */

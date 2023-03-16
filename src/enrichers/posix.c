@@ -496,10 +496,13 @@ enrich_statx(struct rbh_statx *dest, const struct rbh_id *id, int mount_fd,
         return -1;
     }
 
-    if (original)
+    if (original) {
         *dest = *original;
-    else
+    } else {
         dest->stx_mask = 0;
+        dest->stx_mode = 0;
+    }
+
     merge_statx(dest, &statxbuf);
     return 0;
 }
@@ -624,7 +627,10 @@ enrich_symlink(char symlink[SYMLINK_MAX_SIZE], const struct rbh_id *id,
     if (fd == -1)
         return -1;
 
-    rc = readlinkat(fd, "", symlink, SYMLINK_MAX_SIZE);
+    rc = readlinkat(fd, "", symlink, SYMLINK_MAX_SIZE - 1);
+    if (rc != -1)
+        symlink[rc] = 0;
+
     save_errno = errno;
     /* Ignore errors on close */
     close(fd);
