@@ -15,12 +15,12 @@ test_dir=$(dirname $(readlink -e $0))
 
 create_entry()
 {
-    touch "$1"
+    mkdir "$1"
 }
 
 create_filled_entry()
 {
-    echo "blob" > "$1"
+    mkdir -p "$1/tmp_test_dir"
 }
 
 ################################################################################

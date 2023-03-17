@@ -51,9 +51,9 @@ setup()
 
 teardown()
 {
-    clear_changelogs
     mongo "$testdb" --eval "db.dropDatabase()" >/dev/null
     rm -rf "$testdir"
+    clear_changelogs
 }
 
 error()
