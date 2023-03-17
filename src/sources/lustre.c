@@ -309,20 +309,6 @@ build_id(const struct lu_fid *fid)
 }
 
 static int
-build_statx_event(uint32_t statx_enrich_mask, struct rbh_fsevent *fsevent,
-                  struct rbh_statx *rec_statx)
-{
-    fsevent->type = RBH_FET_UPSERT;
-    fsevent->upsert.statx = rec_statx;
-
-    fsevent->xattrs = build_enrich_map(fill_statx, &statx_enrich_mask);
-    if (fsevent->xattrs.pairs == NULL)
-        return -1;
-
-    return 0;
-}
-
-static int
 create_statx_uid_gid(struct changelog_rec *record, struct rbh_statx **rec_statx)
 {
     *rec_statx = rbh_sstack_push(_values, NULL, sizeof(**rec_statx));
@@ -337,54 +323,123 @@ create_statx_uid_gid(struct changelog_rec *record, struct rbh_statx **rec_statx)
 }
 
 static int
-build_create_event(unsigned int process_step, struct changelog_rec *record,
-                   struct rbh_fsevent *fsevent)
+build_statx_event(uint32_t statx_enrich_mask, struct rbh_fsevent *fsevent,
+                  struct rbh_statx *rec_statx)
+{
+    fsevent->type = RBH_FET_UPSERT;
+    fsevent->upsert.statx = rec_statx;
+
+    fsevent->xattrs = build_enrich_map(fill_statx, &statx_enrich_mask);
+    if (fsevent->xattrs.pairs == NULL)
+        return -1;
+
+    return 0;
+}
+
+static int
+link_new_inode_event(struct changelog_rec *record, struct rbh_fsevent *fsevent)
+{
+    char *data;
+
+    fsevent->type = RBH_FET_LINK;
+
+    fsevent->xattrs = build_enrich_map(build_empty_map, "path");
+    if (fsevent->xattrs.pairs == NULL)
+        return -1;
+
+    fsevent->link.parent_id = build_id(&record->cr_pfid);
+    if (fsevent->link.parent_id == NULL)
+        return -1;
+
+    data = rbh_sstack_push(_values, NULL, record->cr_namelen + 1);
+    if (data == NULL)
+        return -1;
+    memcpy(data, changelog_rec_name(record), record->cr_namelen);
+    data[record->cr_namelen] = '\0';
+    fsevent->link.name = data;
+
+    return 0;
+}
+
+static int
+fid_new_inode_event(struct changelog_rec *record, struct rbh_fsevent *fsevent)
+{
+    fsevent->type = RBH_FET_XATTR;
+    if (build_enrich_xattr_fsevent(&fsevent->xattrs,
+                                   "fid", fill_ns_xattrs_fid(record),
+                                   "rbh-fsevents", build_empty_map("lustre"),
+                                   NULL))
+        return -1;
+
+    return 0;
+}
+
+static int
+update_uid_gid_event(struct changelog_rec *record, struct rbh_fsevent *fsevent)
 {
     struct rbh_statx *rec_statx;
     uint32_t statx_enrich_mask;
-    char *data;
 
-    assert(process_step < 3);
+    if (create_statx_uid_gid(record, &rec_statx))
+        return -1;
+
+    statx_enrich_mask = RBH_STATX_ALL ^ RBH_STATX_UID ^ RBH_STATX_GID;
+    if (build_statx_event(statx_enrich_mask, fsevent, rec_statx))
+        return -1;
+
+    return 0;
+}
+
+static int
+update_parent_statx_event(struct changelog_rec *record,
+                          struct rbh_fsevent *fsevent)
+{
+    uint32_t statx_enrich_mask;
+    struct rbh_id *id;
+
+    id = build_id(&record->cr_pfid);
+    if (id == NULL)
+        return -1;
+
+    fsevent->id.data = id->data;
+    fsevent->id.size = id->size;
+
+    statx_enrich_mask = RBH_STATX_ATIME | RBH_STATX_CTIME | RBH_STATX_MTIME;
+    if (build_statx_event(statx_enrich_mask, fsevent, NULL))
+        return -1;
+
+    return 0;
+}
+
+static int
+build_create_event(unsigned int process_step, struct changelog_rec *record,
+                   struct rbh_fsevent *fsevent)
+{
+    assert(process_step < 4);
     switch(process_step) {
-        case 0:
-            fsevent->type = RBH_FET_LINK;
+    case 0:
+        if (link_new_inode_event(record, fsevent))
+            return -1;
 
-            fsevent->xattrs = build_enrich_map(build_empty_map, "path");
-            if (fsevent->xattrs.pairs == NULL)
-                return -1;
+        break;
+    case 1:
+        if (fid_new_inode_event(record, fsevent))
+            return -1;
 
-            fsevent->link.parent_id = build_id(&record->cr_pfid);
-            if (fsevent->link.parent_id == NULL)
-                return -1;
+        break;
+    case 2:
+        if (update_uid_gid_event(record, fsevent))
+            return -1;
 
-            data = rbh_sstack_push(_values, NULL, record->cr_namelen + 1);
-            if (data == NULL)
-                return -1;
-            memcpy(data, changelog_rec_name(record), record->cr_namelen);
-            data[record->cr_namelen] = '\0';
-            fsevent->link.name = data;
+        break;
+    case 3: /* Update the parent information after creating a new entry */
+        if (update_parent_statx_event(record, fsevent))
+            return -1;
 
-            return 1;
-        case 1:
-            fsevent->type = RBH_FET_XATTR;
-            if (build_enrich_xattr_fsevent(&fsevent->xattrs,
-                    "fid", fill_ns_xattrs_fid(record),
-                    "rbh-fsevents", build_empty_map("lustre"), NULL))
-                return -1;
-
-            return 1;
-        case 2:
-            if (create_statx_uid_gid(record, &rec_statx))
-                return -1;
-
-            statx_enrich_mask = RBH_STATX_ALL ^ RBH_STATX_UID ^ RBH_STATX_GID;
-
-            if (build_statx_event(statx_enrich_mask, fsevent, rec_statx))
-                return -1;
-
-            return 0;
+        break;
     }
-    __builtin_unreachable();
+
+    return process_step != 3 ? 1 : 0;
 }
 
 static int
