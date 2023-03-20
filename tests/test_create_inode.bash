@@ -15,8 +15,9 @@ test_create_entry()
         "rbh:mongo:$testdb"
 
     local entries=$(mongo "$testdb" --eval "db.entries.find()" | wc -l)
-    if [[ $entries -ne 2 ]]; then
-        error "There should be only two entries in the database"
+    local count=$(find . | wc -l)
+    if [[ $entries -ne $count ]]; then
+        error "There should be only $count entries in the database"
     fi
 
     find_attribute "\"ns.name\":\"$entry\""
