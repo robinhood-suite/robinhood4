@@ -539,17 +539,21 @@ build_softlink_events(unsigned int process_step, struct changelog_rec *record,
 }
 
 static int
-build_hardlink_events(unsigned int process_step, struct changelog_rec *record,
-                      struct rbh_fsevent *fsevent)
+build_hardlink_or_mknod_events(unsigned int process_step,
+                               struct changelog_rec *record,
+                               struct rbh_fsevent *fsevent)
 {
     assert(process_step < 3);
     /* For hardlinks, we must create a new ns entry for the target, update its
      * statx attributes and the statx attributes of the parent directory of the
-     * link. We don't need to retrieve the xattr attributes of the link, since
-     * they are the same of those of the target.
+     * link. We don't need to retrieve the xattrs of the link, since they are
+     * the same of those of the target.
      *
-     * Therefore, the build of a hardlink event is subset of the operations done
-     * to build a inode creation event.
+     * For special files like named pipes, we must do the same operations as
+     * hardlinks, and not retrieve xattrs aswell since they cannot have xattrs.
+     *
+     * Therefore, the build of a hardlink or mknod event is subset of the
+     * operations done to build a inode creation event.
      */
     switch(process_step) {
     case 0: /* Create new ns entry for the target */
@@ -641,9 +645,10 @@ retry:
         rc = build_softlink_events(records->process_step, record, fsevent);
         break;
     case CL_HARDLINK:
-        rc = build_hardlink_events(records->process_step, record, fsevent);
-        break;
     case CL_MKNOD:
+        rc = build_hardlink_or_mknod_events(records->process_step, record,
+                                            fsevent);
+        break;
     case CL_UNLINK:     /* RBH_FET_UNLINK or RBH_FET_DELETE */
     case CL_RMDIR:      /* RBH_FET_UNLINK or RBH_FET_DELETE */
     case CL_RENAME:     /* RBH_FET_UPSERT */
