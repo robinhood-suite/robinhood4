@@ -9,7 +9,8 @@ integration_tests = []
 liblustre = dependency('lustre', disabler: true, required: false)
 
 if liblustre.found()
-    integration_tests += ['test_create_close', 'test_mkdir', 'test_symlink']
+    integration_tests += ['test_create_close', 'test_mkdir', 'test_symlink',
+                          'test_hardlink']
 endif
 
 foreach t: integration_tests

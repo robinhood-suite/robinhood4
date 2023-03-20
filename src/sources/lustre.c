@@ -539,8 +539,8 @@ build_softlink_events(unsigned int process_step, struct changelog_rec *record,
 }
 
 static int
-build_hardlink_event(unsigned int process_step, struct changelog_rec *record,
-                     struct rbh_fsevent *fsevent)
+build_hardlink_events(unsigned int process_step, struct changelog_rec *record,
+                      struct rbh_fsevent *fsevent)
 {
     assert(process_step < 3);
     /* For hardlinks, we must create a new ns entry for the target, update its
@@ -641,7 +641,7 @@ retry:
         rc = build_softlink_events(records->process_step, record, fsevent);
         break;
     case CL_HARDLINK:
-        rc = build_hardlink_event(records->process_step, record, fsevent);
+        rc = build_hardlink_events(records->process_step, record, fsevent);
         break;
     case CL_MKNOD:
     case CL_UNLINK:     /* RBH_FET_UNLINK or RBH_FET_DELETE */
