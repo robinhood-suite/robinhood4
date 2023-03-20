@@ -538,6 +538,40 @@ build_softlink_events(unsigned int process_step, struct changelog_rec *record,
     return process_step != 4 ? 1 : 0;
 }
 
+static int
+build_hardlink_event(unsigned int process_step, struct changelog_rec *record,
+                     struct rbh_fsevent *fsevent)
+{
+    assert(process_step < 3);
+    /* For hardlinks, we must create a new ns entry for the target, update its
+     * statx attributes and the statx attributes of the parent directory of the
+     * link. We don't need to retrieve the xattr attributes of the link, since
+     * they are the same of those of the target.
+     *
+     * Therefore, the build of a hardlink event is subset of the operations done
+     * to build a inode creation event.
+     */
+    switch(process_step) {
+    case 0: /* Create new ns entry for the target */
+        if (link_new_inode_event(record, fsevent))
+            return -1;
+
+        break;
+    case 1: /* update target statx */
+        if (update_uid_gid_event(record, fsevent))
+            return -1;
+
+        break;
+    case 2: /* update link's parent statx */
+        if (update_parent_statx_event(record, fsevent))
+            return -1;
+
+        break;
+    }
+
+    return process_step != 2 ? 1 : 0;
+}
+
 static const void *
 lustre_changelog_iter_next(void *iterator)
 {
@@ -606,7 +640,9 @@ retry:
     case CL_SOFTLINK:
         rc = build_softlink_events(records->process_step, record, fsevent);
         break;
-    case CL_HARDLINK:   /* RBH_FET_LINK? */
+    case CL_HARDLINK:
+        rc = build_hardlink_event(records->process_step, record, fsevent);
+        break;
     case CL_MKNOD:
     case CL_UNLINK:     /* RBH_FET_UNLINK or RBH_FET_DELETE */
     case CL_RMDIR:      /* RBH_FET_UNLINK or RBH_FET_DELETE */
