@@ -143,6 +143,19 @@ build_xattrs(void *arg)
     return xattr_sequence;
 }
 
+static struct rbh_value *
+build_symlink_string(void *arg)
+{
+    const struct rbh_value SYMLINK = {
+        .type = RBH_VT_STRING,
+        .string = "symlink",
+    };
+
+    (void) arg;
+
+    return rbh_sstack_push(_values, &SYMLINK, sizeof(SYMLINK));
+}
+
 static struct rbh_value_pair *
 build_pair(const char *key, struct rbh_value *(*part_builder)(void *),
            void *part_builder_arg)
@@ -194,14 +207,17 @@ _fill_enrich(const char *key, struct rbh_value *(*builder)(void *),
 }
 
 /* BSON results:
- *  * { "xattrs" : { "rbh-fsevents" : { "xattrs" : [ a, b, c, ... ] } } }
- *   */
+ * { "xattrs" : { "rbh-fsevents" : { "xattrs" : [ a, b, c, ... ] } } }
+ */
 static struct rbh_value *
 fill_inode_xattrs(void *arg)
 {
     return _fill_enrich("xattrs", build_xattrs, arg);
 }
 
+/* BSON results:
+ * { "xattrs" : { "rbh-fsevents" : { "statx" : 1234567 } } }
+ */
 static struct rbh_value *
 fill_statx(void *arg)
 {
@@ -223,6 +239,15 @@ build_empty_map(void *arg)
     struct rbh_value *enrich;
 
     return rbh_sstack_push(_values, &ENRICH, sizeof(*enrich));
+}
+
+/* BSON results:
+ * { "xattrs" : { "rbh-fsevents" : { "symlink" : "symlink" } } }
+ */
+static struct rbh_value *
+build_symlink_enrich_map(void *arg)
+{
+    return _fill_enrich("symlink", build_symlink_string, arg);
 }
 
 static struct rbh_value_map
@@ -412,9 +437,9 @@ update_parent_statx_event(struct changelog_rec *record,
 }
 
 static int
-build_create_inode_event(unsigned int process_step,
-                         struct changelog_rec *record,
-                         struct rbh_fsevent *fsevent)
+build_create_inode_events(unsigned int process_step,
+                          struct changelog_rec *record,
+                          struct rbh_fsevent *fsevent)
 {
     assert(process_step < 4);
     switch(process_step) {
@@ -472,6 +497,47 @@ build_setxattr_event(unsigned int process_step, struct changelog_rec *record,
     __builtin_unreachable();
 }
 
+static int
+build_softlink_events(unsigned int process_step, struct changelog_rec *record,
+                      struct rbh_fsevent *fsevent)
+{
+    assert(process_step < 5);
+    /* Do the exact same operations as for creating an inode, except for an
+     * additional one that is the enrichment of the symlink target
+     */
+    switch(process_step) {
+    case 0:
+        if (link_new_inode_event(record, fsevent))
+            return -1;
+
+        break;
+    case 1:
+        if (fid_new_inode_event(record, fsevent))
+            return -1;
+
+        break;
+    case 2:
+        if (update_uid_gid_event(record, fsevent))
+            return -1;
+
+        break;
+    case 3:
+        if (update_parent_statx_event(record, fsevent))
+            return -1;
+
+        break;
+    case 4: /* Mark the event for enrichment of the symlink target */
+        fsevent->type = RBH_FET_UPSERT;
+        fsevent->upsert.statx = NULL;
+
+        fsevent->xattrs = build_enrich_map(build_symlink_enrich_map, NULL);
+        if (fsevent->xattrs.pairs == NULL)
+            return -1;
+    }
+
+    return process_step != 4 ? 1 : 0;
+}
+
 static const void *
 lustre_changelog_iter_next(void *iterator)
 {
@@ -517,7 +583,7 @@ retry:
     switch(record->cr_type) {
     case CL_CREATE:
     case CL_MKDIR:
-        rc = build_create_inode_event(records->process_step, record, fsevent);
+        rc = build_create_inode_events(records->process_step, record, fsevent);
         break;
     case CL_SETXATTR:
         rc = build_setxattr_event(records->process_step, record, fsevent);
@@ -537,8 +603,10 @@ retry:
         statx_enrich_mask |= RBH_STATX_ATIME_SEC | RBH_STATX_ATIME_NSEC;
         rc = build_statx_event(statx_enrich_mask, fsevent, NULL);
         break;
+    case CL_SOFTLINK:
+        rc = build_softlink_events(records->process_step, record, fsevent);
+        break;
     case CL_HARDLINK:   /* RBH_FET_LINK? */
-    case CL_SOFTLINK:   /* RBH_FET_UPSERT + symlink */
     case CL_MKNOD:
     case CL_UNLINK:     /* RBH_FET_UNLINK or RBH_FET_DELETE */
     case CL_RMDIR:      /* RBH_FET_UNLINK or RBH_FET_DELETE */
