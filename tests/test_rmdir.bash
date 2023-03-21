@@ -15,39 +15,12 @@ test_dir=$(dirname $(readlink -e $0))
 
 create_entry()
 {
-    touch "$1"
+    mkdir "$1"
 }
 
 rm_entry()
 {
-    rm -f "$1"
-}
-
-test_rm_with_hsm_copy()
-{
-    local entry="test_entry"
-    create_entry $entry
-
-    rbh_fsevents --enrich "$LUSTRE_DIR" --lustre "$LUSTRE_MDT" \
-        "rbh:mongo:$testdb"
-
-    archive_file $entry
-    clear_changelogs
-    rm_entry $entry
-
-    rbh_fsevents --enrich "$LUSTRE_DIR" --lustre "$LUSTRE_MDT" \
-        "rbh:mongo:$testdb"
-
-    # Since an archived copy of $entry still exists, the DB should still contain
-    # $entry with no parent
-    local entries=$(mongo "$testdb" --eval "db.entries.find()" | wc -l)
-    local count=$(find . | wc -l)
-    count=$((count + 1))
-    if [[ $entries -ne $count ]]; then
-        error "There should be only $count entries in the database"
-    fi
-
-    find_attribute '"ns": { $exists : true }' '"ns": { $size : 0 }'
+    rmdir "$1"
 }
 
 ################################################################################
@@ -57,10 +30,6 @@ test_rm_with_hsm_copy()
 source $test_dir/test_rm_inode.bash
 
 declare -a tests=(test_rm_same_batch test_rm_different_batch)
-
-if lctl get_param mdt.*.hsm_control | grep "enabled"; then
-    tests+=(test_rm_with_hsm_copy)
-fi
 
 LUSTRE_DIR=/mnt/lustre/
 cd "$LUSTRE_DIR"
