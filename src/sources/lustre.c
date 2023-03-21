@@ -577,8 +577,9 @@ build_hardlink_or_mknod_events(unsigned int process_step,
 }
 
 static int
-build_unlink_events(unsigned int process_step, struct changelog_rec *record,
-                    struct rbh_fsevent *fsevent)
+build_unlink_or_rmdir_events(unsigned int process_step,
+                             struct changelog_rec *record,
+                             struct rbh_fsevent *fsevent)
 {
     char *data;
 
@@ -597,7 +598,6 @@ build_unlink_events(unsigned int process_step, struct changelog_rec *record,
         }
 
         fsevent->type = RBH_FET_UNLINK;
-
 
         fsevent->link.parent_id = build_id(&record->cr_pfid);
         if (fsevent->link.parent_id == NULL)
@@ -692,10 +692,11 @@ retry:
         rc = build_hardlink_or_mknod_events(records->process_step, record,
                                             fsevent);
         break;
+    case CL_RMDIR:
     case CL_UNLINK:
-        rc = build_unlink_events(records->process_step, record, fsevent);
+        rc = build_unlink_or_rmdir_events(records->process_step, record,
+                                          fsevent);
         break;
-    case CL_RMDIR:      /* RBH_FET_UNLINK or RBH_FET_DELETE */
     case CL_RENAME:     /* RBH_FET_UPSERT */
     case CL_EXT:
     case CL_OPEN:
