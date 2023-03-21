@@ -576,6 +576,49 @@ build_hardlink_or_mknod_events(unsigned int process_step,
     return process_step != 2 ? 1 : 0;
 }
 
+static int
+build_unlink_events(unsigned int process_step, struct changelog_rec *record,
+                    struct rbh_fsevent *fsevent)
+{
+    char *data;
+
+    assert(process_step < 2);
+    switch(process_step) {
+    case 0:
+        fsevent->xattrs.count = 0;
+
+        /* If the unlinked target is the last link and it has no copy archived,
+         * delete the entry altogether.
+         */
+        if ((record->cr_flags & CLF_UNLINK_LAST) &&
+            !(record->cr_flags & CLF_UNLINK_HSM_EXISTS)) {
+            fsevent->type = RBH_FET_DELETE;
+            break;
+        }
+
+        fsevent->type = RBH_FET_UNLINK;
+
+
+        fsevent->link.parent_id = build_id(&record->cr_pfid);
+        if (fsevent->link.parent_id == NULL)
+            return -1;
+
+        data = rbh_sstack_push(_values, NULL, record->cr_namelen + 1);
+        if (data == NULL)
+            return -1;
+        memcpy(data, changelog_rec_name(record), record->cr_namelen);
+        data[record->cr_namelen] = '\0';
+        fsevent->link.name = data;
+
+        break;
+    case 1: /* update parent statx */
+        if (update_parent_statx_event(record, fsevent))
+            return -1;
+    }
+
+    return process_step != 1 ? 1 : 0;
+}
+
 static const void *
 lustre_changelog_iter_next(void *iterator)
 {
@@ -649,7 +692,9 @@ retry:
         rc = build_hardlink_or_mknod_events(records->process_step, record,
                                             fsevent);
         break;
-    case CL_UNLINK:     /* RBH_FET_UNLINK or RBH_FET_DELETE */
+    case CL_UNLINK:
+        rc = build_unlink_events(records->process_step, record, fsevent);
+        break;
     case CL_RMDIR:      /* RBH_FET_UNLINK or RBH_FET_DELETE */
     case CL_RENAME:     /* RBH_FET_UPSERT */
     case CL_EXT:
