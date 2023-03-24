@@ -250,10 +250,11 @@ feed(struct sink *sink, struct source *source,
         if (fsevents == NULL)
             error(EXIT_FAILURE, errno, "iter_enrich");
 
-        /* If we couldn't open the file because it is already deleted,
-         * just ignore the error and manage the next record instead of quitting
+        /* If we couldn't open the file because it is already deleted (ESTALE or
+         * ENOENT are both possible, depending of the event), just ignore the
+         * error and manage the next record instead of quitting
          */
-        if (sink_process(sink, fsevents) && errno != ESTALE)
+        if (sink_process(sink, fsevents) && errno != ESTALE && errno != ENOENT)
             error(EXIT_FAILURE, errno, "sink_process");
 
         rbh_iter_destroy(fsevents);
