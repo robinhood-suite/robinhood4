@@ -17,12 +17,12 @@ test_rename()
 {
     local entry="$1"
     local entry_renamed="$2"
+    local count=$3
 
     rbh_fsevents --enrich "$LUSTRE_DIR" --lustre "$LUSTRE_MDT" \
         "rbh:mongo:$testdb"
 
     local entries=$(mongo "$testdb" --eval "db.entries.find()" | wc -l)
-    local count=$(find . | wc -l)
     if [[ $entries -ne $count ]]; then
         error "There should be only $count entries in the database"
     fi
@@ -59,7 +59,8 @@ test_rename_same_dir()
     touch $entry
     mv $entry $entry_renamed
 
-    test_rename "$entry" "$entry_renamed"
+    local count=$(find . | wc -l)
+    test_rename $entry $entry_renamed $count
 }
 
 test_rename_different_dir()
@@ -70,14 +71,68 @@ test_rename_different_dir()
     touch $entry
     mv $entry tmp/$entry_renamed
 
-    test_rename "$entry" "$entry_renamed"
+    local count=$(find . | wc -l)
+    test_rename $entry $entry_renamed $count
+}
+
+test_rename_overwrite_data()
+{
+    local entry="test_entry"
+    local entry_renamed="test_entry_renamed"
+    touch $entry
+    mkdir tmp
+    touch tmp/$entry_renamed
+
+    mv $entry tmp/$entry_renamed
+    local count=$(find . | wc -l)
+
+    test_rename $entry $entry_renamed $count
+}
+
+test_rename_overwrite_data_with_hsm_copy()
+{
+    local entry="test_entry"
+    local entry_renamed="test_entry_renamed"
+    touch $entry
+    mkdir tmp
+    touch tmp/$entry_renamed
+
+    rbh_fsevents --enrich "$LUSTRE_DIR" --lustre "$LUSTRE_MDT" \
+        "rbh:mongo:$testdb"
+
+    archive_file tmp/$entry_renamed
+    clear_changelogs
+
+    # Retrieve the overwriten link's id to test the link was deleted but the
+    # inode still exists since an archived copy is still valid
+    local old_entry=$(mongo "$testdb" --eval \
+                      'db.entries.find({"ns.name":"'$entry_renamed'"},
+                                       {"_id": 1})')
+
+    old_entry="BinData${old_entry#*BinData}"
+    old_entry="${old_entry%)*})"
+
+    mv $entry tmp/$entry_renamed
+    local count=$(find . | wc -l)
+    count=$((count + 1))
+
+    test_rename $entry $entry_renamed $count
+
+    # Check the overwriten entry is still in the DB but has no link anymore
+    find_attribute '"_id":'$old_entry \
+                   '"ns": { $exists : true }' '"ns": { $size : 0 }'
 }
 
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
-declare -a tests=(test_rename_same_dir test_rename_different_dir)
+declare -a tests=(test_rename_same_dir test_rename_different_dir
+                  test_rename_overwrite_data)
+
+if lctl get_param mdt.*.hsm_control | grep "enabled"; then
+    tests+=(test_rename_overwrite_data_with_hsm_copy)
+fi
 
 LUSTRE_DIR=/mnt/lustre/
 cd "$LUSTRE_DIR"
