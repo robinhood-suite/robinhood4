@@ -721,6 +721,63 @@ build_rename_events(unsigned int process_step, struct changelog_rec *record,
     return process_step != 5 ? 1 : 0;
 }
 
+/* In the future we will need to modify this function to create two events for
+ * releases and restores, because they both modify the layout of the file as
+ * well as the hsm state. Currently, these operations both trigger a CL_LAYOUT
+ * changelog, so the layout modification will be managed in that event's
+ * associated function.
+ */
+static int
+build_hsm_events(unsigned int process_step, struct rbh_fsevent *fsevent)
+{
+    uint32_t statx_enrich_mask = 0;
+
+    assert(process_step < 4);
+    switch(process_step) {
+    case 0:
+        fsevent->type = RBH_FET_UPSERT;
+
+        statx_enrich_mask = RBH_STATX_BLOCKS;
+        fsevent->xattrs = build_enrich_map(fill_statx, &statx_enrich_mask);
+        if (fsevent->xattrs.pairs == NULL)
+            return -1;
+
+        break;
+    case 1:
+        fsevent->type = RBH_FET_XATTR;
+
+        /* Mark this fsevent for Lustre enrichment to retrieve all Lustre
+         * values. Will be changed later to retrieve only the modified values,
+         * i.e. archive id, hsm state and layout.
+         */
+        if (build_enrich_xattr_fsevent(&fsevent->xattrs,
+                                       "rbh-fsevents",
+                                       build_empty_map("lustre"),
+                                       NULL))
+            return -1;
+
+        break;
+    case 2:
+        fsevent->type = RBH_FET_XATTR;
+
+        fsevent->xattrs = build_enrich_map(fill_inode_xattrs, "trusted.lov");
+        if (fsevent->xattrs.pairs == NULL)
+            return -1;
+
+        break;
+    case 3:
+        fsevent->type = RBH_FET_XATTR;
+
+        fsevent->xattrs = build_enrich_map(fill_inode_xattrs, "trusted.hsm");
+        if (fsevent->xattrs.pairs == NULL)
+            return -1;
+
+        break;
+    }
+
+    return process_step != 3 ? 1 : 0;
+}
+
 static const void *
 lustre_changelog_iter_next(void *iterator)
 {
@@ -802,11 +859,13 @@ retry:
     case CL_RENAME:
         rc = build_rename_events(records->process_step, record, fsevent);
         break;
+    case CL_HSM:
+        rc = build_hsm_events(records->process_step, fsevent);
+        break;
     case CL_EXT:
     case CL_OPEN:
     case CL_LAYOUT:
     case CL_TRUNC:
-    case CL_HSM:
     case CL_MIGRATE:
     case CL_FLRW:
     case CL_RESYNC:
