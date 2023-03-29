@@ -31,7 +31,7 @@ test_rm_with_hsm_copy()
     rbh_fsevents --enrich "$LUSTRE_DIR" --lustre "$LUSTRE_MDT" \
         "rbh:mongo:$testdb"
 
-    archive_file $entry
+    hsm_archive_file $entry
     clear_changelogs
     rm_entry $entry
 

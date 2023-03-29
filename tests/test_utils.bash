@@ -25,15 +25,38 @@ mongo()
     "$__mongo" --quiet "$@"
 }
 
-archive_file()
+hsm_archive_file()
 {
     local file="$1"
 
-    sudo lfs hsm_archive "$file"
+    lfs hsm_archive "$file"
 
     while ! lfs hsm_state "$file" | grep "archive_id:"; do
         sleep 0.5
     done
+}
+
+hsm_remove_file()
+{
+    local file="$1"
+
+    lfs hsm_remove "$file"
+
+    while lfs hsm_state "$file" | grep "archived"; do
+        sleep 0.5
+    done
+}
+
+get_hsm_state()
+{
+    # retrieve the hsm status which is in-between parentheses
+    local state=$(lfs hsm_state "$1" | cut -d '(' -f2 | cut -d ')' -f1)
+    # the hsm status is written in hexa, so remove the first two characters (0x)
+    state=$(echo "${state:2}")
+    # bc only understands uppercase hexadecimals, but hsm state only returns
+    # lowercase, so we use some bashism to uppercase the whole string, and then
+    # convert the hexa to decimal
+    echo "ibase=16; ${state^^}" | bc
 }
 
 start_changelogs()
