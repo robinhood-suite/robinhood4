@@ -862,10 +862,15 @@ retry:
     case CL_HSM:
         rc = build_hsm_events(records->process_step, fsevent);
         break;
+    case CL_TRUNC:
+        statx_enrich_mask = RBH_STATX_CTIME_SEC | RBH_STATX_CTIME_NSEC |
+                            RBH_STATX_MTIME_SEC | RBH_STATX_MTIME_NSEC |
+                            RBH_STATX_SIZE;
+        rc = build_statx_event(statx_enrich_mask, fsevent, NULL);
+        break;
     case CL_EXT:
     case CL_OPEN:
     case CL_LAYOUT:
-    case CL_TRUNC:
     case CL_MIGRATE:
     case CL_FLRW:
     case CL_RESYNC:
