@@ -778,6 +778,39 @@ build_hsm_events(unsigned int process_step, struct rbh_fsevent *fsevent)
     return process_step != 3 ? 1 : 0;
 }
 
+static int
+build_layout_events(unsigned int process_step, struct rbh_fsevent *fsevent)
+{
+    uint32_t statx_enrich_mask = 0;
+
+    assert(process_step < 2);
+    switch(process_step) {
+    case 0:
+        fsevent->type = RBH_FET_UPSERT;
+
+        statx_enrich_mask = RBH_STATX_CTIME_SEC | RBH_STATX_CTIME_NSEC;
+        fsevent->xattrs = build_enrich_map(fill_statx, &statx_enrich_mask);
+        if (fsevent->xattrs.pairs == NULL)
+            return -1;
+
+        return 1;
+    case 1:
+        fsevent->type = RBH_FET_XATTR;
+
+        /* Mark this fsevent for Lustre enrichment to retrieve all Lustre
+         * values. Will be changed later to retrieve only the modified values,
+         * i.e. archive id, hsm state and layout.
+         */
+        fsevent->xattrs = build_enrich_map(fill_inode_xattrs, "lustre");
+        if (fsevent->xattrs.pairs == NULL)
+            return -1;
+
+        break;
+    }
+
+    return process_step != 1 ? 1 : 0;
+}
+
 static const void *
 lustre_changelog_iter_next(void *iterator)
 {
@@ -868,9 +901,11 @@ retry:
                             RBH_STATX_SIZE;
         rc = build_statx_event(statx_enrich_mask, fsevent, NULL);
         break;
+    case CL_LAYOUT:
+        rc = build_layout_events(records->process_step, fsevent);
+        break;
     case CL_EXT:
     case CL_OPEN:
-    case CL_LAYOUT:
     case CL_MIGRATE:
     case CL_FLRW:
     case CL_RESYNC:
