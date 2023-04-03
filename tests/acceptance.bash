@@ -43,7 +43,7 @@ acceptance()
     touch $file6
     lfs migrate -E 1k -c 2 -E -1 -c 1 $file6
 
-    #XXX: commented until migrate events are properly managed
+    #XXX: commented until migrate events are properly checked
     #lfs setdirstripe -i 1 $dir2
     #lfs migrate -m 0 $dir2
 
