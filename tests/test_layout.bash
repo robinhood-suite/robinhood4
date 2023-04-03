@@ -24,8 +24,8 @@ test_layout()
     lfs migrate -E 1k -c 2 -E -1 -c 1 $entry
 
     local old_version=$(mongo "$testdb" --eval \
-        'db.entries.find({"ns.name":"'$entry'"}, {"statx.ctime":0,
-                                                  "xattrs":0})')
+        'db.entries.find({"ns.name":"'$entry'"},
+                         {"statx.ctime":0, "xattrs":0})')
 
     invoke_rbh-fsevents
 
