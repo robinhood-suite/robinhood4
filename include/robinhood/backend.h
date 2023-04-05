@@ -194,6 +194,12 @@ struct rbh_backend_operations {
             const struct rbh_filter *filter,
             const struct rbh_filter_options *options
             );
+    int (*get_attribute)(
+            void *backend,
+            const char *attr_name,
+            void *arg,
+            struct rbh_value_pair *data
+            );
     void (*destroy)(
             void *backend
             );
@@ -481,6 +487,28 @@ rbh_backend_filter(struct rbh_backend *backend, const struct rbh_filter *filter,
         return NULL;
     }
     return backend->ops->filter(backend, filter, options);
+}
+
+/**
+ * Retrieve specific attributes from a backend
+ *
+ * @param backend   the backend from which to fetch attributes
+ * @param attr_name the name of the fetched attribute
+ * @param arg       \p backend-specific arguments
+ * @param data      filled pairs with names and values of fetched attributes
+ *
+ * @return          -1 if an error occured,
+ *                  the number of fetched attributes otherwise
+ */
+static inline int
+rbh_backend_get_attribute(struct rbh_backend *backend, const char *attr_name,
+                          void *arg, struct rbh_value_pair *data)
+{
+    if (backend->ops->get_attribute == NULL) {
+        errno = ENOTSUP;
+        return -1;
+    }
+    return backend->ops->get_attribute(backend, attr_name, arg, data);
 }
 
 /**
