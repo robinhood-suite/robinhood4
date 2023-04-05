@@ -721,26 +721,45 @@ xattrs_get_mdt_info(int fd, struct rbh_value_pair *pairs)
     int rc = 0;
 
     if (is_dir) {
-        struct lmv_user_md lum = {
-            .lum_magic = LMV_USER_MAGIC,
-        };
+        struct lmv_user_mds_data *objects;
         struct rbh_value *mdt_idx;
+        struct lmv_user_md *lum;
+        int stripe_count = 256;
         int save_errno = 0;
 
-        rc = ioctl(fd, LL_IOC_LMV_GETSTRIPE, &lum);
+        /* This is how it is done in Lustre, initiate the lmv_user_md
+         * structure to the correct magic number and a default stripe_count of
+         * 256, do the ioctl which will fail because the stripe_count/size is
+         * invalid, update the stripe_count, reallocate the structure, and do
+         * the ioctl again.
+         */
+again:
+        lum = calloc(1,
+                     lmv_user_md_size(stripe_count, LMV_USER_MAGIC_SPECIFIC));
+        lum->lum_magic = LMV_MAGIC_V1;
+        lum->lum_stripe_count = stripe_count;
+
+        rc = ioctl(fd, LL_IOC_LMV_GETSTRIPE, lum);
         if (rc && errno == ENODATA)
             return 0;
-        else if (rc)
+        else if (rc && errno == E2BIG) {
+            stripe_count = lum->lum_stripe_count;
+            free(lum);
+            errno = 0;
+            goto again;
+        } else if (rc)
             return rc;
 
-        mdt_idx = calloc(lum.lum_stripe_count, sizeof(*mdt_idx));
+        mdt_idx = calloc(lum->lum_stripe_count, sizeof(*mdt_idx));
         if (mdt_idx == NULL)
             return -1;
 
-        for (int i = 0; i < lum.lum_stripe_count; i++)
-            mdt_idx[i] = create_uint32_value(lum.lum_objects[i].lum_mds);
+        objects = lum->lum_objects;
 
-        rc = fill_sequence_pair("mdt_idx", mdt_idx, lum.lum_stripe_count,
+        for (int i = 0; i < lum->lum_stripe_count; i++)
+            mdt_idx[i] = create_uint32_value(objects[i].lum_mds);
+
+        rc = fill_sequence_pair("child_mdt_idx", mdt_idx, lum->lum_stripe_count,
                                 &pairs[subcount++]);
         save_errno = errno;
         free(mdt_idx);
@@ -748,12 +767,12 @@ xattrs_get_mdt_info(int fd, struct rbh_value_pair *pairs)
         if (rc)
             return -1;
 
-        rc = fill_uint32_pair("mdt_hash", lum.lum_hash_type,
+        rc = fill_uint32_pair("mdt_hash", lum->lum_hash_type,
                               &pairs[subcount++]);
         if (rc)
             return -1;
 
-        rc = fill_uint32_pair("mdt_count", lum.lum_stripe_count,
+        rc = fill_uint32_pair("mdt_count", lum->lum_stripe_count,
                               &pairs[subcount++]);
         if (rc)
             return -1;
