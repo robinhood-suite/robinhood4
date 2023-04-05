@@ -198,7 +198,7 @@ expired2filter()
 {
     struct rbh_filter *filter_abs;
     struct rbh_filter *filter_rel;
-    time_t now;
+    uint64_t now;
 
     now = time(NULL);
 
@@ -223,7 +223,20 @@ struct rbh_filter *
 expired_at2filter(const char *expired)
 {
     struct rbh_filter *filter_abs;
+    struct rbh_filter *filter_inf;
     struct rbh_filter *filter_rel;
+    uint64_t inf = UINT64_MAX;
+
+    if (!strcmp(expired, "inf")) {
+        filter_inf = rbh_filter_compare_uint64_new(
+            RBH_FOP_EQUAL,
+            &predicate2filter_field[LPRED_EXPIRED_ABS - LPRED_MIN],
+            inf);
+        if (!filter_inf)
+            error(EXIT_FAILURE, errno, "rbh_filter_compare_uint64_new");
+
+        return filter_inf;
+    }
 
     if (!isdigit(expired[0]) && expired[0] != '+' && expired[0] != '-')
         error(EXIT_FAILURE, errno, "invalid argument `%s' to `%s'", expired,
@@ -243,5 +256,13 @@ expired_at2filter(const char *expired)
     if (!filter_rel)
         error(EXIT_FAILURE, errno, "epoch2filter");
 
-    return filter_or(filter_abs, filter_rel);
+    filter_inf = rbh_filter_compare_uint64_new(
+        RBH_FOP_EQUAL,
+        &predicate2filter_field[LPRED_EXPIRED_ABS - LPRED_MIN],
+        inf);
+    if (!filter_abs)
+        error(EXIT_FAILURE, errno, "rbh_filter_compare_uint64_new");
+
+    return filter_and(filter_not(filter_inf),
+                      filter_or(filter_abs, filter_rel));
 }
