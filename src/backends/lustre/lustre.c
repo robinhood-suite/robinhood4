@@ -11,6 +11,7 @@
 
 #include <lustre/lustreapi.h>
 #include <lustre/lustre_user.h>
+#include <linux/lustre/lustre_idl.h>
 
 #include "robinhood/backends/posix.h"
 #include "robinhood/backends/posix_internal.h"
@@ -756,7 +757,9 @@ xattrs_get_mdt_info(int fd, struct rbh_value_pair *pairs)
                               &pairs[subcount++]);
         if (rc)
             return -1;
-    } else if (!is_symlink) {
+    }
+
+    if (!is_symlink) {
         int32_t mdt;
 
         rc = llapi_file_fget_mdtidx(fd, &mdt);
