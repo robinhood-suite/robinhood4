@@ -417,53 +417,72 @@ test_mdt_index_file()
                    '"ns.xattrs.path":"/test_mdt_index"'
 }
 
-# TODO: test with multiple MDTs
 test_mdt_index_dir()
 {
-    mkdir "test_mdt_index"
+    local mdt_count=$(lfs mdts | wc -l)
+
+    mkdir "test_mdt_index0"
+    lfs migrate -m 0 "test_mdt_index0"
+    if [[ $mdt_count -ge 2 ]]; then
+        mkdir "test_mdt_index1"
+        lfs migrate -m 1 "test_mdt_index1"
+        mkdir "test_mdt_index2"
+        # use MDT 0 and $mdt_count - 1 to stripe the content of the dir
+        lfs migrate -m 0,$((mdt_count - 1)) "test_mdt_index2"
+    fi
 
     rbh_sync "rbh:lustre:." "rbh:mongo:$testdb"
 
-    local mdt_indexes="[$(lfs getdirstripe -m 'test_mdt_index')]"
+    local mdt_indexes="[$(lfs getdirstripe -m 'test_mdt_index0')]"
+    find_attribute '"ns.xattrs.child_mdt_idx":'$mdt_indexes \
+                   '"ns.xattrs.path":"/test_mdt_index0"'
 
-    find_attribute '"ns.xattrs.mdt_idx":'$mdt_indexes \
-                   '"ns.xattrs.path":"/test_mdt_index"'
+    if [[ $mdt_count -ge 2 ]]; then
+        mdt_indexes="[$(lfs getdirstripe -m 'test_mdt_index1')]"
+        find_attribute '"ns.xattrs.child_mdt_idx":'$mdt_indexes \
+                       '"ns.xattrs.path":"/test_mdt_index1"'
+
+        mdt_stripe=$(lfs getdirstripe -c 'test_mdt_index2')
+        # Retrieve the last two stripe count lines of the getdirstripe output,
+        # as getdirstripe -m will only show the first one, and create an array
+        # with these values
+        mdt_indexes=$(lfs getdirstripe -y 'test_mdt_index2' |
+                      tail -n "$mdt_stripe" | awk '{print $1","}' | tr -d '\n')
+        mdt_indexes="[${mdt_indexes##-1}]"
+        find_attribute '"ns.xattrs.child_mdt_idx":'$mdt_indexes \
+                       '"ns.xattrs.path":"/test_mdt_index2"'
+    fi
 }
 
 test_mdt_hash()
 {
     mkdir "test_mdt_hash1"
-    lfs setdirstripe -D "test_mdt_hash1"
+    lfs migrate -m 0 -H all_char "test_mdt_hash1"
     mkdir "test_mdt_hash2"
-    lfs setdirstripe -D -H all_char "test_mdt_hash2"
-    mkdir "test_mdt_hash3"
-    lfs setdirstripe -D -H fnv_1a_64 "test_mdt_hash3"
+    lfs migrate -m 0 -H fnv_1a_64 "test_mdt_hash2"
 
     rbh_sync "rbh:lustre:." "rbh:mongo:$testdb"
 
-    local mdt_hash1=$(lfs getdirstripe -D -H "test_mdt_hash1")
-    mdt_hash1="${mdt_hash1//none/0}"
-    local mdt_hash2=$(lfs getdirstripe -D -H "test_mdt_hash2")
-    mdt_hash2="${mdt_hash2//all_char/1}"
-    local mdt_hash3=$(lfs getdirstripe -D -H "test_mdt_hash3")
-    mdt_hash3="${mdt_hash3//fnv_1a_64/2}"
+    local mdt_hash1=$(lfs getdirstripe -H "test_mdt_hash1" | cut -d',' -f1)
+    mdt_hash1="${mdt_hash1//all_char/1}"
+    local mdt_hash2=$(lfs getdirstripe -H "test_mdt_hash2" | cut -d',' -f1)
+    mdt_hash2="${mdt_hash2//fnv_1a_64/2}"
 
     find_attribute '"ns.xattrs.mdt_hash":'$mdt_hash1 \
                    '"ns.xattrs.path":"/test_mdt_hash1"'
     find_attribute '"ns.xattrs.mdt_hash":'$mdt_hash2 \
                    '"ns.xattrs.path":"/test_mdt_hash2"'
-    find_attribute '"ns.xattrs.mdt_hash":'$mdt_hash3 \
-                   '"ns.xattrs.path":"/test_mdt_hash3"'
 }
 
-# TODO: test with multiple MDTs
 test_mdt_count()
 {
-    lfs setdirstripe -c 1 "test_mdt_count"
+    local mdt_count=$(lfs mdts | wc -l)
+
+    lfs setdirstripe -c $mdt_count "test_mdt_count"
 
     rbh_sync "rbh:lustre:." "rbh:mongo:$testdb"
 
-    local mdt_count=$(lfs getdirstripe -D -c "test_mdt_count")
+    local mdt_count=$(lfs getdirstripe -c "test_mdt_count")
 
     find_attribute '"ns.xattrs.mdt_count":'$mdt_count \
                    '"ns.xattrs.path":"/test_mdt_count"'
