@@ -767,7 +767,18 @@ again:
         if (rc)
             return -1;
 
-        rc = fill_uint32_pair("mdt_hash", lum->lum_hash_type,
+        /* TODO: change this to "mdt_hash_type" when modifying the structure of
+         * the Lustre attributes (i.e. "xattrs.mdt : { child_mdt_idx, hash_type,
+         * hash_flags, count }")
+         */
+        rc = fill_uint32_pair("mdt_hash",
+                              lum->lum_hash_type & LMV_HASH_TYPE_MASK,
+                              &pairs[subcount++]);
+        if (rc)
+            return -1;
+
+        rc = fill_uint32_pair("mdt_hash_flags",
+                              lum->lum_hash_type & ~LMV_HASH_TYPE_MASK,
                               &pairs[subcount++]);
         if (rc)
             return -1;
