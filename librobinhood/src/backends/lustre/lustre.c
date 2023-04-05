@@ -898,6 +898,7 @@ xattrs_get_retention(const struct rbh_statx *statx)
 
     for (int i = 0; i < *_inode_xattrs_count; ++i) {
         char tmp[UINT64_MAX_STR_LEN];
+        char *retention_attribute;
 
         if (strcmp(_inode_xattrs[i].key, XATTR_CCC_EXPIRES) ||
             _inode_xattrs[i].value->binary.size >= UINT64_MAX_STR_LEN)
@@ -907,28 +908,42 @@ xattrs_get_retention(const struct rbh_statx *statx)
                _inode_xattrs[i].value->binary.size);
         tmp[_inode_xattrs[i].value->binary.size] = 0;
 
-        result = strtoul(*tmp == '+' ? tmp + 1 : tmp, &end, 10);
-        if (errno || (!result && tmp == end) || *end != '\0')
-            break;
+        /* Add infinite retention to the data */
+        if (*tmp == 'i') {
+            if (strcmp(tmp + 1, "nf"))
+                break;
 
-        if (*tmp == '+') {
-            int64_t last_access_date;
-
-            last_access_date = MAX(statx->stx_atime.tv_sec,
-                                   statx->stx_mtime.tv_sec);
-            if (UINT64_MAX - last_access_date < result)
-                /* If the result overflows, set the expiration date to the
-                 * max
-                 */
-                result = UINT64_MAX;
-            else
-                result += last_access_date;
-
-            fill_uint64_pair(XATTR_CCC_EXPIRES_REL, result, &new_pair);
+            result = UINT64_MAX;
+            retention_attribute = XATTR_CCC_EXPIRES_ABS;
         } else {
-            fill_uint64_pair(XATTR_CCC_EXPIRES_ABS, result, &new_pair);
+            result = strtoul(*tmp == '+' ? tmp + 1 : tmp, &end, 10);
+            if (errno || (!result && tmp == end) || *end != '\0')
+                break;
+
+            if (*tmp == '+') {
+                int64_t last_access_date;
+
+                last_access_date = MAX(statx->stx_atime.tv_sec,
+                                       statx->stx_mtime.tv_sec);
+                if (UINT64_MAX - last_access_date < result)
+                    /* If the result overflows, set the expiration date to the
+                     * max
+                     */
+                    result = UINT64_MAX;
+                else
+                    result += last_access_date;
+
+                /* If the attribute starts with a '+', it is relative to the
+                 * last access date
+                 */
+                retention_attribute = XATTR_CCC_EXPIRES_REL;
+            } else {
+                /* Otherwise it is an absolute date */
+                retention_attribute = XATTR_CCC_EXPIRES_ABS;
+            }
         }
 
+        fill_uint64_pair(retention_attribute, result, &new_pair);
         _inode_xattrs[i] = new_pair;
         break;
     }
