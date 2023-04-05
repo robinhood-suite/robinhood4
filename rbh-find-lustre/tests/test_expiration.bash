@@ -71,6 +71,8 @@ test_expired_abs()
     local timeC="$(($(date +%s) - 80))"
     local fileD="expired_file_D"
     local timeD="$(($(date +%s) + 100))"
+    local fileE="expired_file_E"
+    local timeE="inf"
 
     touch "$fileA"
     setfattr -n user.ccc_expires -v "$timeA" "$fileA"
@@ -83,6 +85,9 @@ test_expired_abs()
 
     touch "$fileD"
     setfattr -n user.ccc_expires -v "$timeD" "$fileD"
+
+    touch "$fileE"
+    setfattr -n user.ccc_expires -v "$timeE" "$fileE"
 
     rbh-sync "rbh:lustre:." "rbh:mongo:$testdb"
 
@@ -100,6 +105,12 @@ test_expired_abs()
         difflines
     rbh_lfind "rbh:mongo:$testdb" -expired-at -$timeC | sort |
         difflines
+    rbh_lfind "rbh:mongo:$testdb" -expired-at 18446744073709551615 | sort |
+        difflines "/$fileA" "/$fileB" "/$fileC" "/$fileD"
+    rbh_lfind "rbh:mongo:$testdb" -expired-at +18446744073709551614 | sort |
+        difflines
+    rbh_lfind "rbh:mongo:$testdb" -expired-at inf | sort |
+        difflines "/$fileE"
 }
 
 test_expired_rel()
