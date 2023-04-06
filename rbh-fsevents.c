@@ -53,6 +53,7 @@ usage(void)
         "    -r, --raw       do not enrich changelog records (default)\n"
         "    -e, --enrich MOUNTPOINT\n"
         "                    enrich changelog records by querying MOUNTPOINT as needed\n"
+        "                    MOUNTPOINT is a RobinHood URI (eg. rbh:lustre:/mnt/lustre)\n"
         "    -l, --lustre    consider SOURCE is an MDT name\n"
         "\n"
         "Note that uploading raw records to a RobinHood backend will fail, they have to\n"
@@ -164,6 +165,43 @@ sink_exit(void)
         sink_destroy(sink);
 }
 
+static struct enrich_iter_builder *
+enrich_iter_builder_from_uri(const char *uri)
+{
+    struct enrich_iter_builder *builder;
+    struct rbh_raw_uri *raw_uri;
+    struct rbh_uri *rbh_uri;
+    int save_errno;
+
+    raw_uri = rbh_raw_uri_from_string(uri);
+    if (raw_uri == NULL)
+        error(EXIT_FAILURE, errno, "rbh_raw_uri_from_raw_uri: %s", uri);
+
+    rbh_uri = rbh_uri_from_raw_uri(raw_uri);
+    save_errno = errno;
+    free(raw_uri);
+    errno = save_errno;
+    if (rbh_uri == NULL)
+        error(EXIT_FAILURE, errno, "rbh_uri_from_raw_uri: %s", uri);
+
+    builder = enrich_iter_builder_from_backend(
+        rbh_backend_from_uri(uri), rbh_uri->fsname);
+    save_errno = errno;
+    free(rbh_uri);
+    errno = save_errno;
+
+    return builder;
+}
+
+static struct enrich_iter_builder *enrich_builder;
+
+static void __attribute__((destructor))
+enrich_iter_builder_exit(void)
+{
+    if (enrich_builder)
+        enrich_iter_builder_destroy(enrich_builder);
+}
+
 static int mount_fd = -1;
 
 static void __attribute__((destructor))
@@ -177,7 +215,8 @@ mount_fd_exit(void)
 static const size_t BATCH_SIZE = 1;
 
 static void
-feed(struct sink *sink, struct source *source, bool enrich, bool allow_partials)
+feed(struct sink *sink, struct source *source,
+     struct enrich_iter_builder *builder, bool allow_partials)
 {
     struct rbh_mut_iterator *deduplicator;
 
@@ -193,10 +232,11 @@ feed(struct sink *sink, struct source *source, bool enrich, bool allow_partials)
         if (fsevents == NULL)
             break;
 
-        if (enrich)
-            fsevents = iter_enrich(fsevents, mount_fd);
+        if (builder != NULL)
+            fsevents = enrich_iter_builder_build_iter(builder, fsevents);
         else if (!allow_partials)
             fsevents = iter_no_partial(fsevents);
+
         if (fsevents == NULL)
             error(EXIT_FAILURE, errno, "iter_enrich");
 
@@ -242,9 +282,9 @@ main(int argc, char *argv[])
     while ((c = getopt_long(argc, argv, "e:hlr", LONG_OPTIONS, NULL)) != -1) {
         switch (c) {
         case 'e':
-            mount_fd = open(optarg, O_RDONLY | O_CLOEXEC);
-            if (mount_fd == -1)
-                error(EXIT_FAILURE, errno, "open: %s", optarg);
+            enrich_builder = enrich_iter_builder_from_uri(optarg);
+            if (enrich_builder == NULL)
+                error(EXIT_FAILURE, errno, "enrich_new");
             break;
         case 'h':
             usage();
@@ -274,6 +314,6 @@ main(int argc, char *argv[])
     source = source_new(argv[optind++], source_type);
     sink = sink_new(argv[optind++]);
 
-    feed(sink, source, mount_fd != -1, strcmp(sink->name, "backend"));
+    feed(sink, source, enrich_builder, strcmp(sink->name, "backend"));
     return error_message_count == 0 ? EXIT_SUCCESS : EXIT_FAILURE;
 }

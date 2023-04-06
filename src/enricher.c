@@ -886,3 +886,54 @@ iter_no_partial(struct rbh_iterator *fsevents)
     no_partial->fsevents = fsevents;
     return &no_partial->iterator;
 }
+
+
+static struct rbh_iterator *
+posix_enrich_iter_builder_build_iter(void *_builder,
+                                     struct rbh_iterator *fsevents)
+{
+    struct enrich_iter_builder *builder = _builder;
+
+    return iter_enrich(fsevents, builder->mount_fd);
+}
+
+static void
+posix_enrich_iter_builder_destroy(void *_builder)
+{
+    struct enrich_iter_builder *builder = _builder;
+
+    rbh_backend_destroy(builder->backend);
+    close(builder->mount_fd);
+    free(builder);
+}
+
+static const struct enrich_iter_builder_operations
+POSIX_ENRICH_ITER_BUILDER_OPS = {
+    .build_iter = posix_enrich_iter_builder_build_iter,
+    .destroy = posix_enrich_iter_builder_destroy,
+};
+
+static const struct enrich_iter_builder POSIX_ENRICH_ITER_BUILDER = {
+    .name = "posix",
+    .ops = &POSIX_ENRICH_ITER_BUILDER_OPS,
+};
+
+struct enrich_iter_builder *
+enrich_iter_builder_from_backend(struct rbh_backend *backend,
+                                 const char *mount_path)
+{
+    struct enrich_iter_builder *builder;
+
+    builder = malloc(sizeof(*builder));
+    if (builder == NULL)
+        error(EXIT_FAILURE, errno, "malloc");
+
+    *builder = POSIX_ENRICH_ITER_BUILDER;
+    builder->backend = backend;
+
+    builder->mount_fd = open(mount_path, O_RDONLY | O_CLOEXEC);
+    if (builder->mount_fd == -1)
+        error(EXIT_FAILURE, errno, "open: %s", mount_path);
+
+    return builder;
+}
