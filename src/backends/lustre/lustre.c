@@ -464,7 +464,7 @@ xattrs_fill_layout(struct iterator_data *data, int nb_xattrs,
 static int
 xattrs_get_magic_and_gen(int fd, struct rbh_value_pair *pairs)
 {
-    const char *lov_buf;
+    const char *lov_buf = NULL;
     uint32_t magic = 0;
     int magic_str_len;
     int subcount = 0;
@@ -475,6 +475,9 @@ xattrs_get_magic_and_gen(int fd, struct rbh_value_pair *pairs)
     for (int i = 0; i < *_inode_xattrs_count; ++i)
         if (!strcmp(_inode_xattrs[i].key, XATTR_LUSTRE_LOV))
             lov_buf = _inode_xattrs[i].value->binary.data;
+
+    if (!lov_buf)
+        return 0;
 
     magic = ((struct lov_user_md *) lov_buf)->lmm_magic;
 
