@@ -58,6 +58,16 @@ have_statx_attr_dax = cc.has_header_symbol('sys/stat.h',
                                            args: '-D_GNU_SOURCE')
 conf_data.set('HAVE_STATX_ATTR_DAX', have_statx_attr_dax)
 
+have_lov_user_magic_sel = cc.has_header_symbol('lustre/lustre_user.h',
+                                               'LOV_USER_MAGIC_SEL',
+                                               args: '-D_GNU_SOURCE')
+conf_data.set('HAVE_LOV_USER_MAGIC_SEL', have_lov_user_magic_sel)
+
+have_lov_user_magic_foreign = cc.has_header_symbol('lustre/lustre_user.h',
+                                                   'LOV_USER_MAGIC_FOREIGN',
+                                                   args: '-D_GNU_SOURCE')
+conf_data.set('HAVE_LOV_USER_MAGIC_FOREIGN', have_lov_user_magic_foreign)
+
 configure_file(input: 'config.h.in', output: 'config.h',
                configuration: conf_data)
 add_project_arguments(['-DHAVE_CONFIG_H',], language: 'c')

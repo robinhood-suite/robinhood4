@@ -492,11 +492,13 @@ xattrs_get_magic_and_gen(int fd, struct rbh_value_pair *pairs)
         magic_str_len = strlen(magic_str);
         gen = ((struct lov_comp_md_v1 *) lov_buf)->lcm_layout_gen;
         break;
+#ifdef HAVE_LOV_USER_MAGIC_SEL
     case LOV_USER_MAGIC_SEL:
         magic_str = "LOV_USER_MAGIC_SEL";
         magic_str_len = strlen(magic_str);
         gen = ((struct lov_comp_md_v1 *) lov_buf)->lcm_layout_gen;
         break;
+#endif
     case LOV_USER_MAGIC_V3:
         magic_str = "LOV_USER_MAGIC_V3";
         magic_str_len = strlen(magic_str);
@@ -507,11 +509,13 @@ xattrs_get_magic_and_gen(int fd, struct rbh_value_pair *pairs)
         magic_str_len = strlen(magic_str);
         gen = ((struct lov_user_md_v3 *) lov_buf)->lmm_layout_gen;
         break;
+#ifdef HAVE_LOV_USER_MAGIC_FOREIGN
     case LOV_USER_MAGIC_FOREIGN:
         magic_str = "LOV_USER_MAGIC_FOREIGN";
         magic_str_len = strlen(magic_str);
         gen = -1;
         break;
+#endif
     default:
         errno = EINVAL;
         return -1;
