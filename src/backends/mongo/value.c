@@ -54,6 +54,9 @@ bool
 bson_append_rbh_value(bson_t *bson, const char *key, size_t key_length,
                       const struct rbh_value *value)
 {
+    if (!value)
+        return bson_append_null(bson, key, key_length);
+
     switch (value->type) {
     case RBH_VT_BOOLEAN:
         return bson_append_bool(bson, key, key_length, value->boolean);
