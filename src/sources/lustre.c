@@ -812,10 +812,10 @@ build_layout_events(unsigned int process_step, struct rbh_fsevent *fsevent)
 }
 
 /* FLRW events are events that happen when writing data to a mirrored file in
- * Lustre. When doing so, it will write data to the "main" copy, and set flags
- * to the other copies signifying a synchronization is necessary. As such,
- * managing this event is the same as managing a truncate + retrieving the
- * Lustre information for that file.
+ * Lustre. When doing so, it will write data to the "main" copy, and set a
+ * "dirty" flag to the other copies signifying a synchronization is necessary.
+ * As such, managing this event is the same as managing a truncate + retrieving
+ * the Lustre information for that file.
  */
 static int
 build_flrw_events(unsigned int process_step, struct rbh_fsevent *fsevent)
@@ -828,6 +828,43 @@ build_flrw_events(unsigned int process_step, struct rbh_fsevent *fsevent)
         statx_enrich_mask = RBH_STATX_CTIME_SEC | RBH_STATX_CTIME_NSEC |
                             RBH_STATX_MTIME_SEC | RBH_STATX_MTIME_NSEC |
                             RBH_STATX_BLOCKS | RBH_STATX_SIZE;
+        if (build_statx_event(statx_enrich_mask, fsevent, NULL))
+            return -1;
+
+        break;
+    case 1:
+        fsevent->type = RBH_FET_XATTR;
+
+        /* Mark this fsevent for Lustre enrichment to retrieve all Lustre
+         * values. Will be changed later to retrieve only the modified values,
+         * i.e. layout (especially the component flags).
+         */
+        fsevent->xattrs = build_enrich_map(fill_inode_xattrs, "lustre");
+        if (fsevent->xattrs.pairs == NULL)
+            return -1;
+
+        break;
+    }
+
+    return process_step != 1 ? 1 : 0;
+}
+
+/* Resync events are events that happen when synchronizing a mirrored file in
+ * Lustre. When doing so, all mirrors of a file will copy the data from the
+ * "main" mirror, and remove the "dirty" flags from the other copies. As such,
+ * managing this event is the same as managing a FLRW event, minus a few statx
+ * values.
+ */
+static int
+build_resync_events(unsigned int process_step, struct rbh_fsevent *fsevent)
+{
+    uint32_t statx_enrich_mask = 0;
+
+    assert(process_step < 2);
+    switch(process_step) {
+    case 0:
+        statx_enrich_mask = RBH_STATX_CTIME_SEC | RBH_STATX_CTIME_NSEC |
+                            RBH_STATX_BLOCKS;
         if (build_statx_event(statx_enrich_mask, fsevent, NULL))
             return -1;
 
@@ -945,10 +982,12 @@ retry:
     case CL_FLRW:
         rc = build_flrw_events(records->process_step, fsevent);
         break;
+    case CL_RESYNC:
+        rc = build_resync_events(records->process_step, fsevent);
+        break;
     case CL_MIGRATE:
     case CL_EXT:
     case CL_OPEN:
-    case CL_RESYNC:
     case CL_GETXATTR:
     case CL_DN_OPEN:
         fsevent = fsevent_from_record(record);
