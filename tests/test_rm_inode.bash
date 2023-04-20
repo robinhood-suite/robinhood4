@@ -12,7 +12,7 @@ test_rm_same_batch()
     create_entry $entry
     rm_entry $entry
 
-    rbh_fsevents --enrich "$LUSTRE_DIR" --lustre "$LUSTRE_MDT" \
+    rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" --lustre "$LUSTRE_MDT" \
         "rbh:mongo:$testdb"
 
     # The only entry in the database should be the mount point, as the created
@@ -29,13 +29,13 @@ test_rm_different_batch()
     local entry="test_entry"
     create_entry $entry
 
-    rbh_fsevents --enrich "$LUSTRE_DIR" --lustre "$LUSTRE_MDT" \
+    rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" --lustre "$LUSTRE_MDT" \
         "rbh:mongo:$testdb"
 
     clear_changelogs
     rm_entry $entry
 
-    rbh_fsevents --enrich "$LUSTRE_DIR" --lustre "$LUSTRE_MDT" \
+    rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" --lustre "$LUSTRE_MDT" \
         "rbh:mongo:$testdb"
 
     local entries=$(mongo "$testdb" --eval "db.entries.find()" | wc -l)

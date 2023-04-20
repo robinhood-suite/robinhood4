@@ -13,7 +13,7 @@ if liblustre.found()
                           'test_hardlink', 'test_mknod', 'test_unlink',
                           'test_rmdir', 'test_rename', 'test_hsm',
                           'test_trunc', 'test_layout', 'test_flrw',
-                          'test_resync', 'test_setxattr']
+                          'test_resync', 'test_setxattr', 'acceptance']
 endif
 
 foreach t: integration_tests

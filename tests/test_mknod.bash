@@ -29,7 +29,7 @@ test_create_mknod()
     mknod $entry.1 b 1 2
     mknod $entry.2 p
 
-    rbh_fsevents --enrich "$LUSTRE_DIR" --lustre "$LUSTRE_MDT" \
+    rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" --lustre "$LUSTRE_MDT" \
         "rbh:mongo:$testdb"
 
     local entries=$(mongo "$testdb" --eval "db.entries.find()" | wc -l)

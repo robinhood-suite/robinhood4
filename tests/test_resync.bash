@@ -24,7 +24,7 @@ test_resync()
     lfs mirror create -N2 $entry
     echo "test_data" >> $entry
 
-    rbh_fsevents --enrich "$LUSTRE_DIR" --lustre "$LUSTRE_MDT" \
+    rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" --lustre "$LUSTRE_MDT" \
         "rbh:mongo:$testdb"
 
     clear_changelogs
@@ -34,7 +34,7 @@ test_resync()
         'db.entries.find({"ns.name":"'$entry'"},
                          {"statx.ctime":0, "statx.blocks":0})')
 
-    rbh_fsevents --enrich "$LUSTRE_DIR" --lustre "$LUSTRE_MDT" \
+    rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" --lustre "$LUSTRE_MDT" \
         "rbh:mongo:$testdb"
 
     local entries=$(mongo "$testdb" --eval "db.entries.find()" | wc -l)

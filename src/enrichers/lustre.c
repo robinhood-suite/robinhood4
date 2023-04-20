@@ -46,8 +46,10 @@ enrich_path(const int mount_fd, const struct rbh_id *id, const char *name,
     path[0] = '/';
     rc = llapi_fid2path_at(mount_fd, fid, path + 1, PATH_MAX - name_length - 2,
                            &recno, &linkno);
-    if (rc)
-        return rc;
+    if (rc) {
+        errno = -rc;
+        return -1;
+    }
 
     /* If not called on the root, llapi_fid2path_at will return "path/to",
      * meaning we need to lead the path by a '/' and add one at its end before
