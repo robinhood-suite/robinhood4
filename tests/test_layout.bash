@@ -18,8 +18,7 @@ test_layout()
     local entry="test_entry"
     touch $entry
 
-    rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" --lustre "$LUSTRE_MDT" \
-        "rbh:mongo:$testdb"
+    invoke_rbh-fsevents
 
     clear_changelogs
     lfs migrate -E 1k -c 2 -E -1 -c 1 $entry
@@ -27,8 +26,7 @@ test_layout()
     local old_version=$(mongo "$testdb" --eval \
         'db.entries.find({"ns.name":"'$entry'"}, {"statx.ctime":0})')
 
-    rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" --lustre "$LUSTRE_MDT" \
-        "rbh:mongo:$testdb"
+    invoke_rbh-fsevents
 
     local entries=$(mongo "$testdb" --eval "db.entries.find()" | wc -l)
     local count=$(find . | wc -l)

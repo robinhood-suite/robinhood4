@@ -33,8 +33,7 @@ test_create_symlink()
     local entry="test_entry"
     create_entry "$entry"
 
-    rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" --lustre "$LUSTRE_MDT" \
-        "rbh:mongo:$testdb"
+    invoke_rbh-fsevents
 
     local entries=$(mongo "$testdb" --eval "db.entries.find()" | wc -l)
     local count=$(find . | wc -l)

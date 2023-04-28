@@ -11,8 +11,7 @@ test_create_entry()
     local entry="test_entry"
     create_entry "$entry"
 
-    rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" --lustre "$LUSTRE_MDT" \
-        "rbh:mongo:$testdb"
+    invoke_rbh-fsevents
 
     local entries=$(mongo "$testdb" --eval "db.entries.find()" | wc -l)
     local count=$(find . | wc -l)
@@ -31,8 +30,7 @@ test_create_two_entries()
     local entry2="test_entry2"
     create_entry "$entry1"
 
-    rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" --lustre "$LUSTRE_MDT" \
-        "rbh:mongo:$testdb"
+    invoke_rbh-fsevents
 
     find_attribute "\"ns.name\":\"$entry1\""
     # XXX: to uncomment once the path is enriched
@@ -41,8 +39,7 @@ test_create_two_entries()
     clear_changelogs
     create_entry "$entry2"
 
-    rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" --lustre "$LUSTRE_MDT" \
-        "rbh:mongo:$testdb"
+    invoke_rbh-fsevents
 
     find_attribute "\"ns.name\":\"$entry1\""
     # XXX: to uncomment once the path is enriched
@@ -57,8 +54,7 @@ test_create_entry_check_statx_attr()
     local entry="test_entry"
     create_filled_entry "$entry"
 
-    rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" --lustre "$LUSTRE_MDT" \
-        "rbh:mongo:$testdb"
+    invoke_rbh-fsevents
 
     find_attribute "\"ns.name\":\"$entry\""
     # XXX: to uncomment once the path is enriched

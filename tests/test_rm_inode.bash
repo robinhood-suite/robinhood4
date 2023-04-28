@@ -12,8 +12,7 @@ test_rm_same_batch()
     create_entry $entry
     rm_entry $entry
 
-    rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" --lustre "$LUSTRE_MDT" \
-        "rbh:mongo:$testdb"
+    invoke_rbh-fsevents
 
     # The only entry in the database should be the mount point, as the created
     # entry was immediately deleted and should have been ignored
@@ -29,14 +28,12 @@ test_rm_different_batch()
     local entry="test_entry"
     create_entry $entry
 
-    rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" --lustre "$LUSTRE_MDT" \
-        "rbh:mongo:$testdb"
+    invoke_rbh-fsevents
 
     clear_changelogs
     rm_entry $entry
 
-    rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" --lustre "$LUSTRE_MDT" \
-        "rbh:mongo:$testdb"
+    invoke_rbh-fsevents
 
     local entries=$(mongo "$testdb" --eval "db.entries.find()" | wc -l)
     local count=$(find . | wc -l)

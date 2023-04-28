@@ -21,8 +21,7 @@ test_truncate()
     # first create a file, sync it to the DB, then do a truncate
     touch $entry
 
-    rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" --lustre "$LUSTRE_MDT" \
-        "rbh:mongo:$testdb"
+    invoke_rbh-fsevents
 
     clear_changelogs
 
@@ -33,8 +32,7 @@ test_truncate()
                          {"statx.mtime":0, "statx.ctime":0, "statx.size":0})')
     truncate -s 300 $entry
 
-    rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" --lustre "$LUSTRE_MDT" \
-        "rbh:mongo:$testdb"
+    invoke_rbh-fsevents
 
     local entries=$(mongo "$testdb" --eval "db.entries.find()" | wc -l)
     local count=$(find . | wc -l)

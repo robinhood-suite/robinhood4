@@ -25,6 +25,33 @@ mongo()
     "$__mongo" --quiet "$@"
 }
 
+
+################################################################################
+#                                DATABASE UTILS                                #
+################################################################################
+
+
+invoke_rbh-fsevents()
+{
+    rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" --lustre "$LUSTRE_MDT" \
+        "rbh:mongo:$testdb"
+}
+
+find_attribute()
+{
+    old_IFS=$IFS
+    IFS=','
+    local output="$*"
+    IFS=$old_IFS
+    local res=$(mongo $testdb --eval "db.entries.count({$output})")
+    [[ "$res" == "1" ]] && return 0 ||
+        error "No entry found with filter '$output'"
+}
+
+################################################################################
+#                                 LUSTRE UTILS                                 #
+################################################################################
+
 hsm_archive_file()
 {
     local file="$1"
@@ -71,6 +98,28 @@ clear_changelogs()
     done
 }
 
+################################################################################
+#                                 POSIX UTILS                                  #
+################################################################################
+
+statx()
+{
+    local format="$1"
+    local file="$2"
+
+    local stat=$(stat -c="$format" "$file")
+    if [ -z $3 ]; then
+        echo "${stat:2}"
+    else
+        stat=${stat:2}
+        echo "ibase=$3; ${stat^^}" | bc
+    fi
+}
+
+################################################################################
+#                                  TEST UTILS                                  #
+################################################################################
+
 setup()
 {
     # Create a test directory and `cd` into it
@@ -94,31 +143,6 @@ error()
 {
     echo "$*"
     exit 1
-}
-
-find_attribute()
-{
-    old_IFS=$IFS
-    IFS=','
-    local output="$*"
-    IFS=$old_IFS
-    local res=$(mongo $testdb --eval "db.entries.count({$output})")
-    [[ "$res" == "1" ]] && return 0 ||
-        error "No entry found with filter '$output'"
-}
-
-statx()
-{
-    local format="$1"
-    local file="$2"
-
-    local stat=$(stat -c="$format" "$file")
-    if [ -z $3 ]; then
-        echo "${stat:2}"
-    else
-        stat=${stat:2}
-        echo "ibase=$3; ${stat^^}" | bc
-    fi
 }
 
 run_tests()

@@ -28,15 +28,13 @@ test_rm_with_hsm_copy()
     local entry="test_entry"
     create_entry $entry
 
-    rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" --lustre "$LUSTRE_MDT" \
-        "rbh:mongo:$testdb"
+    invoke_rbh-fsevents
 
     hsm_archive_file $entry
     clear_changelogs
     rm_entry $entry
 
-    rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" --lustre "$LUSTRE_MDT" \
-        "rbh:mongo:$testdb"
+    invoke_rbh-fsevents
 
     # Since an archived copy of $entry still exists, the DB should still contain
     # $entry with no parent

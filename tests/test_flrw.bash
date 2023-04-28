@@ -23,8 +23,7 @@ test_flrw()
     local entry="test_entry"
     lfs mirror create -N2 $entry
 
-    rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" --lustre "$LUSTRE_MDT" \
-        "rbh:mongo:$testdb"
+    invoke_rbh-fsevents
 
     clear_changelogs
     echo "test_data" >> $entry
@@ -34,8 +33,7 @@ test_flrw()
                          {"statx.ctime":0, "statx.mtime":0, "statx.size":0,
                           "statx.blocks":0})')
 
-    rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" --lustre "$LUSTRE_MDT" \
-        "rbh:mongo:$testdb"
+    invoke_rbh-fsevents
 
     local entries=$(mongo "$testdb" --eval "db.entries.find()" | wc -l)
     local count=$(find . | wc -l)

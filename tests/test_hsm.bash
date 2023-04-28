@@ -27,8 +27,7 @@ test_hsm()
     local entry="$1"
     local state="$2"
 
-    rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" --lustre "$LUSTRE_MDT" \
-        "rbh:mongo:$testdb"
+    invoke_rbh-fsevents
 
     mongo "$testdb" --eval "db.entries.find()"
 

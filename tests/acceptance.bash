@@ -91,8 +91,7 @@ acceptance()
 
     touch $file8
 
-    rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" --lustre "$LUSTRE_MDT" \
-        "rbh:mongo:$testdb"
+    invoke_rbh-fsevents
 
     for entry in "$(find *)"; do
         check_statx $entry
@@ -106,8 +105,7 @@ acceptance()
     rm $file1
     rm $file8
 
-    rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" --lustre "$LUSTRE_MDT" \
-        "rbh:mongo:$testdb"
+    invoke_rbh-fsevents
 
     mongo $testdb --eval "db.entries.find()"
     local entries=$(mongo "$testdb" --eval "db.entries.find()" | wc -l)
