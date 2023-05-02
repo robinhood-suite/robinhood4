@@ -34,6 +34,13 @@
 static __thread size_t handle_size = MAX_HANDLE_SZ;
 static __thread struct file_handle *handle;
 
+__attribute__((destructor))
+void
+free_handle(void)
+{
+    free(handle);
+}
+
 static const struct rbh_id ROOT_PARENT_ID = {
     .data = NULL,
     .size = 0,
@@ -196,8 +203,16 @@ static const size_t XATTR_VALUE_MAX_VFS_SIZE = 1 << 16;
 static __thread size_t names_length = 1 << 12;
 static __thread char *names;
 
+__attribute__((destructor))
+void
+free_names(void)
+{
+    free(names);
+}
+
 static ssize_t
-getxattrs(char *proc_fd_path, struct rbh_value_pair **_pairs, size_t *_pairs_count,
+getxattrs(char *proc_fd_path, struct rbh_value_pair **_pairs,
+          size_t *_pairs_count,
           struct rbh_sstack *values, struct rbh_sstack *xattrs)
 {
     struct rbh_value_pair *pairs = *_pairs;
@@ -289,6 +304,24 @@ sstack_clear(struct rbh_sstack *sstack)
 static __thread struct rbh_value_pair *ns_pairs;
 static __thread size_t ns_pairs_count = 1 << 7;
 static __thread struct rbh_sstack *ns_values;
+static __thread struct rbh_sstack *values;
+static __thread struct rbh_sstack *xattrs;
+static __thread struct rbh_value_pair *pairs;
+
+__attribute__((destructor))
+void
+free_ns_data(void)
+{
+    free(ns_pairs);
+    free(pairs);
+
+    if (ns_values)
+        rbh_sstack_destroy(ns_values);
+    if (values)
+        rbh_sstack_destroy(values);
+    if (xattrs)
+        rbh_sstack_destroy(xattrs);
+}
 
 static struct rbh_fsentry *
 fsentry_from_ftsent(FTSENT *ftsent, int statx_sync_type, size_t prefix_len,
@@ -305,10 +338,7 @@ fsentry_from_ftsent(FTSENT *ftsent, int statx_sync_type, size_t prefix_len,
         .string = ftsent->fts_pathlen == prefix_len ?
             "/" : ftsent->fts_path + prefix_len,
     };
-    struct rbh_value_pair *pairs = NULL;
     struct rbh_value_map inode_xattrs;
-    struct rbh_sstack *values = NULL;
-    struct rbh_sstack *xattrs = NULL;
     struct rbh_value_map ns_xattrs;
     struct rbh_value_pair *pair;
     struct rbh_fsentry *fsentry;
