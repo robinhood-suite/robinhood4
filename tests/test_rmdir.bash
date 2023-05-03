@@ -38,6 +38,7 @@ LUSTRE_MDT=lustre-MDT0000
 start_changelogs "$LUSTRE_MDT"
 
 tmpdir=$(mktemp --directory --tmpdir=$LUSTRE_DIR)
+lfs setdirstripe -D -i 0 $tmpdir
 trap -- "rm -rf '$tmpdir'; clear_changelogs" EXIT
 cd "$tmpdir"
 

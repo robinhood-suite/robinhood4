@@ -29,8 +29,7 @@ create_filled_entry()
 
 source $test_dir/test_create_inode.bash
 
-declare -a tests=(test_create_entry test_create_two_entries
-                  test_create_entry_check_statx_attr)
+declare -a tests=(test_create_entry test_create_two_entries)
 
 LUSTRE_DIR=/mnt/lustre/
 cd "$LUSTRE_DIR"
@@ -39,6 +38,7 @@ LUSTRE_MDT=lustre-MDT0000
 start_changelogs "$LUSTRE_MDT"
 
 tmpdir=$(mktemp --directory --tmpdir=$LUSTRE_DIR)
+lfs setdirstripe -D -i 0 $tmpdir
 trap -- "rm -rf '$tmpdir'; clear_changelogs" EXIT
 cd "$tmpdir"
 

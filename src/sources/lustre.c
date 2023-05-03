@@ -641,7 +641,7 @@ build_unlink_or_rmdir_events(unsigned int process_step,
  * inodes.
  *
  * If the rename overwrote data, we must also unlink that link from the DB. This
- * information is recored in the target fid of the record, so if it is not 0,
+ * information is recorded in the target fid of the record, so if it is not 0,
  * that means data was overwriten.
  */
 static int
@@ -799,7 +799,7 @@ build_layout_events(unsigned int process_step, struct rbh_fsevent *fsevent)
 
         /* Mark this fsevent for Lustre enrichment to retrieve all Lustre
          * values. Will be changed later to retrieve only the modified values,
-         * i.e. archive id, hsm state and layout.
+         * i.e. trusted.lov.
          */
         fsevent->xattrs = build_enrich_map(fill_inode_xattrs, "lustre");
         if (fsevent->xattrs.pairs == NULL)

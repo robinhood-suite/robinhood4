@@ -102,6 +102,16 @@ clear_changelogs()
 #                                 POSIX UTILS                                  #
 ################################################################################
 
+mountless_path()
+{
+    local entry="$1"
+
+    # Get the fullpath of the file, but remove the starting mountpoint as it is
+    # not kept in the database (but keep a '/')
+    local path="$(realpath $entry)"
+    echo "/${path//$LUSTRE_DIR/}"
+}
+
 statx()
 {
     local format="$1"
@@ -114,6 +124,42 @@ statx()
         stat=${stat:2}
         echo "ibase=$3; ${stat^^}" | bc
     fi
+}
+
+verify_statx()
+{
+    local entry="$1"
+    local raw_mode="$(statx +%f "$entry" 16)"
+    local type=$((raw_mode & 00170000))
+    local mode=$((raw_mode & ~00170000))
+
+    find_attribute '"ns.name":"'$entry'"'
+    find_attribute '"ns.xattrs.path":"'$(mountless_path "$entry")'"'
+    find_attribute '"statx.atime.sec":NumberLong('$(statx +%X "$entry")')' \
+                   '"ns.name":"'$entry'"'
+    find_attribute '"statx.atime.nsec":0' '"ns.name":"'$entry'"'
+    find_attribute '"statx.ctime.sec":NumberLong('$(statx +%Z "$entry")')' \
+                   '"ns.name":"'$entry'"'
+    find_attribute '"statx.ctime.nsec":0' '"ns.name":"'$entry'"'
+    find_attribute '"statx.mtime.sec":NumberLong('$(statx +%Y "$entry")')' \
+                   '"ns.name":"'$entry'"'
+    find_attribute '"statx.mtime.nsec":0' '"ns.name":"'$entry'"'
+    find_attribute '"statx.btime.nsec":0' '"ns.name":"'$entry'"'
+    find_attribute '"statx.blksize":'$(statx +%o "$entry") \
+                   '"ns.name":"'$entry'"'
+    find_attribute '"statx.blocks":NumberLong('$(statx +%b "$entry")')' \
+                   '"ns.name":"'$entry'"'
+    find_attribute '"statx.nlink":'$(statx +%h "$entry") \
+                   '"ns.name":"'$entry'"'
+    find_attribute '"statx.ino":NumberLong("'$(statx +%i "$entry")'")' \
+                   '"ns.name":"'$entry'"'
+    find_attribute '"statx.gid":'$(statx +%g "$entry") '"ns.name":"'$entry'"'
+    find_attribute '"statx.uid":'$(statx +%u "$entry") '"ns.name":"'$entry'"'
+    find_attribute '"statx.size":NumberLong('$(statx +%s "$entry")')' \
+                   '"ns.name":"'$entry'"'
+
+    find_attribute '"statx.type":'$type '"ns.name":"'$entry'"'
+    find_attribute '"statx.mode":'$mode '"ns.name":"'$entry'"'
 }
 
 ################################################################################
