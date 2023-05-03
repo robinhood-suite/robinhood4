@@ -6,60 +6,9 @@
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
 
-set -e
+test_dir=$(dirname $(readlink -e $0))
+. $test_dir/test_utils.bash
 
-################################################################################
-#                                  UTILITIES                                   #
-################################################################################
-
-SUITE=${BASH_SOURCE##*/}
-SUITE=${SUITE%.*}
-
-__rbh_sync=$(PATH="$PWD:$PATH" which rbh-sync)
-rbh_sync()
-{
-    "$__rbh_sync" "$@"
-}
-
-__mongosh=$(which mongosh || which mongo)
-mongosh()
-{
-    "$__mongosh" --quiet "$@"
-}
-
-setup()
-{
-    # Create a test directory and `cd` into it
-    testdir=$SUITE-$test
-    mkdir "$testdir"
-    cd "$testdir"
-
-    # Create test database's name
-    testdb=$SUITE-$test
-}
-
-teardown()
-{
-    mongosh "$testdb" --eval "db.dropDatabase()" >/dev/null
-    rm -rf "$testdir"
-}
-
-error()
-{
-    echo "$*"
-    exit 1
-}
-
-find_attribute()
-{
-    old_IFS=$IFS
-    IFS=','
-    local output="$*"
-    IFS=$old_IFS
-    local res=$(mongosh $testdb --eval "db.entries.count({$output})")
-    [[ "$res" == "1" ]] && return 0 ||
-        error "No entry found with filter '$output'"
-}
 ################################################################################
 #                                    TESTS                                     #
 ################################################################################
@@ -153,11 +102,47 @@ test_sync_one_two_files()
     find_attribute '"statx.size" : '$length \
                    '"xattrs.user.a" : { $exists : true }'
 
-    local output_lines=$(mongosh $testdb --eval "db.entries.count()")
+    local output_lines=$(mongo $testdb --eval "db.entries.count()")
     if [[ $output_lines -ne 2 ]]; then
         error "Invalid number of files were synced, expected '2' lines, " \
               "found '$output_lines'."
     fi
+}
+
+check_mode_and_type()
+{
+    local entry="$1"
+
+    local raw_mode="$(statx -c="+%f" "$entry")"
+    raw_mode=${raw_mode:2}
+    raw_mode=$(echo "ibase=16; ${raw_mode^^}" | bc)
+    local type=$((raw_mode & 00170000))
+    local mode=$((raw_mode & ~00170000))
+
+    find_attribute '"statx.type":'$type
+    find_attribute '"statx.mode":'$mode
+}
+
+test_sync_socket()
+{
+    local entry="socket_file"
+
+    python -c "import socket as s; \
+               sock = s.socket(s.AF_UNIX); \
+               sock.bind('$entry')"
+
+    rbh_sync -o "rbh:posix:$entry" "rbh:mongo:$testdb"
+    check_mode_and_type $entry
+}
+
+test_sync_fifo()
+{
+    local entry="fifo_file"
+
+    mkfifo $entry
+
+    rbh_sync -o "rbh:posix:$entry" "rbh:mongo:$testdb"
+    check_mode_and_type $entry
 }
 
 ################################################################################
@@ -166,17 +151,11 @@ test_sync_one_two_files()
 
 declare -a tests=(test_sync_2_files test_sync_size test_sync_3_files
                   test_sync_xattrs test_sync_subdir test_sync_large_tree
-                  test_sync_one_one_file test_sync_one_two_files)
+                  test_sync_one_one_file test_sync_one_two_files
+                  test_sync_socket test_sync_fifo)
 
 tmpdir=$(mktemp --directory)
 trap -- "rm -rf '$tmpdir'" EXIT
 cd "$tmpdir"
 
-for test in "${tests[@]}"; do
-    (
-    trap -- "teardown" EXIT
-    setup
-
-    ("$test") && echo "$test: ✔" || error "$test: ✖"
-    )
-done
+run_tests ${tests[@]}
