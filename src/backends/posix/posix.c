@@ -388,11 +388,13 @@ fsentry_from_ftsent(FTSENT *ftsent, int statx_sync_type, size_t prefix_len,
     }
 
     fd = openat(AT_FDCWD, ftsent->fts_accpath,
-                O_RDONLY | O_CLOEXEC | O_NOFOLLOW);
-    if (fd < 0 && errno == ELOOP)
-        /* If the file to open is a symlink, reopen it with O_PATH set */
+                O_RDONLY | O_CLOEXEC | O_NOFOLLOW | O_NONBLOCK);
+    if (fd < 0 && (errno == ELOOP || errno == ENXIO))
+        /* If the file to open is a symlink or a socket, reopen it with O_PATH
+         * set
+         */
         fd = openat(AT_FDCWD, ftsent->fts_accpath,
-                    O_CLOEXEC | O_NOFOLLOW | O_PATH);
+                    O_CLOEXEC | O_NOFOLLOW | O_PATH | O_NONBLOCK);
 
     if (fd < 0)
         return NULL;
