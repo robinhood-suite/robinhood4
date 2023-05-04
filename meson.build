@@ -68,6 +68,14 @@ have_lov_user_magic_foreign = cc.has_header_symbol('lustre/lustre_user.h',
                                                    args: '-D_GNU_SOURCE')
 conf_data.set('HAVE_LOV_USER_MAGIC_FOREIGN', have_lov_user_magic_foreign)
 
+have_lustre_file_handle = cc.has_member(
+    'struct lustre_file_handle',
+    'lfh_child',
+    prefix: '#include <lustre/lustre_user.h>',
+    args: '-D_GNU_SOURCE'
+)
+conf_data.set('HAVE_LUSTRE_FILE_HANDLE', have_lustre_file_handle)
+
 configure_file(input: 'config.h.in', output: 'config.h',
                configuration: conf_data)
 add_project_arguments(['-DHAVE_CONFIG_H',], language: 'c')

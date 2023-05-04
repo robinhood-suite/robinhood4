@@ -12,3 +12,4 @@
 #mesondefine HAVE_STATX_ATTR_DAX
 #mesondefine HAVE_LOV_USER_MAGIC_SEL
 #mesondefine HAVE_LOV_USER_MAGIC_FOREIGN
+#mesondefine HAVE_LUSTRE_FILE_HANDLE
