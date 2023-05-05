@@ -647,10 +647,12 @@ xattrs_get_layout(int fd, struct rbh_value_pair *pairs)
     if (rc)
         goto err;
 
-    if (llapi_layout_is_composite(layout))
+    if (llapi_layout_is_composite(layout)) {
         rc = llapi_layout_comp_iterate(layout, &xattrs_layout_iterator, &data);
-    else
+    } else {
         rc = fill_iterator_data(layout, &data, 0);
+        data.comp_index = 1;
+    }
 
     if (rc)
         goto free_data;
