@@ -209,7 +209,7 @@ xattrs_get_hsm(int fd, struct rbh_value_pair *pairs)
         return -1;
     }
 
-    if (rc == -ENODATA || hus.hus_archive_id == 0)
+    if (rc == -ENODATA || (hus.hus_archive_id == 0 && hus.hus_states == 0))
         return 0;
 
     rc = fill_uint32_pair("hsm_state", hus.hus_states, &pairs[subcount++]);
