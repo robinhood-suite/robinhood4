@@ -63,6 +63,28 @@ hsm_archive_file()
     done
 }
 
+hsm_release_file()
+{
+    local file="$1"
+
+    lfs hsm_release "$file"
+
+    while ! lfs hsm_state "$file" | grep "released"; do
+        sleep 0.5
+    done
+}
+
+hsm_restore_file()
+{
+    local file="$1"
+
+    lfs hsm_restore "$file"
+
+    while lfs hsm_state "$file" | grep "released"; do
+        sleep 0.5
+    done
+}
+
 hsm_remove_file()
 {
     local file="$1"

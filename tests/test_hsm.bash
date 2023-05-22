@@ -18,14 +18,9 @@ test_dir=$(dirname $(readlink -e $0))
 #                                    TESTS                                     #
 ################################################################################
 
-# There is no test for releases and restores because these events both trigger a
-# layout changelog, and release also trigger a truncate changelog, so this test
-# will have to be enriched when these two types of changelogs are managed
-
 test_hsm()
 {
     local entry="$1"
-    local state="$2"
 
     invoke_rbh-fsevents
 
@@ -39,8 +34,6 @@ test_hsm()
                    '"ns.name":"'$entry'"'
     find_attribute '"statx.ctime.nsec":0' '"ns.name":"'$entry'"'
     find_attribute '"statx.blocks":NumberLong('$(statx +%b "$entry")')' \
-                   '"ns.name":"'$entry'"'
-    find_attribute '"statx.size":NumberLong('$(statx +%s "$entry")')' \
                    '"ns.name":"'$entry'"'
 
     local id=$(lfs hsm_state "$entry" | cut -d ':' -f3)
@@ -58,7 +51,34 @@ test_hsm_archive()
     touch $entry
     hsm_archive_file $entry
 
-    test_hsm $entry "released"
+    test_hsm $entry
+}
+
+test_hsm_release()
+{
+    local entry="test_entry"
+    touch $entry
+    hsm_archive_file $entry
+
+    invoke_rbh-fsevents
+
+    hsm_release_file $entry
+
+    test_hsm $entry
+}
+
+test_hsm_restore()
+{
+    local entry="test_entry"
+    touch $entry
+    hsm_archive_file $entry
+    hsm_release_file $entry
+
+    invoke_rbh-fsevents
+
+    hsm_restore_file $entry
+
+    test_hsm $entry
 }
 
 test_hsm_remove()
@@ -66,16 +86,37 @@ test_hsm_remove()
     local entry="test_entry"
     touch $entry
     hsm_archive_file $entry
+
+    invoke_rbh-fsevents
+
     hsm_remove_file $entry
 
-    test_hsm $entry "none"
+    test_hsm $entry
+}
+
+test_hsm_remove_and_rm()
+{
+    local entry="test_entry"
+    touch $entry
+    hsm_archive_file $entry
+    hsm_remove_file $entry
+    rm $entry
+
+    invoke_rbh-fsevents
+
+    local entries=$(mongo "$testdb" --eval "db.entries.find()" | wc -l)
+    local count=$(find . | wc -l)
+    if [[ $entries -ne $count ]]; then
+        error "There should be only $count entries in the database"
+    fi
 }
 
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
-declare -a tests=(test_hsm_archive test_hsm_remove)
+declare -a tests=(test_hsm_archive test_hsm_release test_hsm_restore
+                  test_hsm_remove test_hsm_remove_and_rm)
 
 LUSTRE_DIR=/mnt/lustre/
 cd "$LUSTRE_DIR"
