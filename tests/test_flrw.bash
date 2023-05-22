@@ -21,7 +21,8 @@ fi
 test_flrw()
 {
     local entry="test_entry"
-    lfs mirror create -N2 $entry
+    local n_mirror=2
+    lfs mirror create -N$n_mirror $entry
 
     invoke_rbh-fsevents
 
@@ -62,7 +63,11 @@ test_flrw()
     find_attribute '"statx.blocks":NumberLong('$(statx +%b "$entry")')' \
                    '"ns.name":"'$entry'"'
 
-    #TODO: enrich this test with Lustre specific testing
+    find_attribute '"xattrs.mirror_count":'$n_mirror '"ns.name":"'$entry'"'
+    find_attribute '"xattrs.mirror_id":'$(get_mirror_id "$entry") \
+                   '"ns.name":"'$entry'"'
+    find_attribute '"xattrs.flags":'$(get_flags "$entry") \
+                   '"ns.name":"'$entry'"'
 }
 
 ################################################################################

@@ -42,6 +42,7 @@ test_create_hardlink()
     find_attribute "\"ns.name\":\"$entry.tmp\"" "\"ns.name\":\"$entry\""
     verify_statx "$entry"
     verify_statx "$entry.tmp"
+    verify_lustre "$entry"
 }
 
 ################################################################################

@@ -38,7 +38,9 @@ test_create_mknod()
     fi
 
     verify_statx "$entry.1"
+    verify_lustre "$entry.1"
     verify_statx "$entry.2"
+    verify_lustre "$entry.2"
 }
 
 ################################################################################

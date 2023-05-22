@@ -20,6 +20,7 @@ test_create_entry()
     fi
 
     verify_statx "$entry"
+    verify_lustre "$entry"
 }
 
 test_create_two_entries()
@@ -36,5 +37,7 @@ test_create_two_entries()
     invoke_rbh-fsevents
 
     verify_statx "$entry1"
+    verify_lustre "$entry1"
     verify_statx "$entry2"
+    verify_lustre "$entry2"
 }

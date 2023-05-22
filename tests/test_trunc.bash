@@ -56,6 +56,8 @@ test_truncate()
     find_attribute '"statx.mtime.nsec":0' '"ns.name":"'$entry'"'
     find_attribute '"statx.size":NumberLong('$(statx +%s "$entry")')' \
                    '"ns.name":"'$entry'"'
+
+    verify_lustre "$entry"
 }
 
 ################################################################################

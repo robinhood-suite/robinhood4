@@ -47,6 +47,12 @@ test_migrate()
 
     invoke_rbh-fsevents
 
+    local entries=$(mongo "$testdb" --eval "db.entries.find()" | wc -l)
+    local count=$(find . | wc -l)
+    if [[ $entries -ne $count ]]; then
+        error "There should be only $count entries in the database"
+    fi
+
     verify_statx $entry
     find_attribute '"xattrs.mdt_index": 0' '"ns.name":"'$entry'"'
     find_attribute '"xattrs.mdt_count": 1' '"ns.name":"'$entry'"'

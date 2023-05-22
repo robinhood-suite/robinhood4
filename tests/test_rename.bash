@@ -60,6 +60,8 @@ test_rename_same_dir()
 
     local count=$(find . | wc -l)
     test_rename $entry $entry_renamed $count
+
+    verify_lustre $entry_renamed
 }
 
 test_rename_different_dir()
@@ -72,6 +74,8 @@ test_rename_different_dir()
 
     local count=$(find . | wc -l)
     test_rename $entry $entry_renamed $count
+
+    verify_lustre tmp/$entry_renamed
 }
 
 test_rename_overwrite_data()
@@ -86,6 +90,8 @@ test_rename_overwrite_data()
     local count=$(find . | wc -l)
 
     test_rename $entry $entry_renamed $count
+
+    verify_lustre tmp/$entry_renamed
 }
 
 test_rename_overwrite_data_with_hsm_copy()
@@ -119,6 +125,7 @@ test_rename_overwrite_data_with_hsm_copy()
     # Check the overwriten entry is still in the DB but has no link anymore
     find_attribute '"_id":'$old_entry \
                    '"ns": { $exists : true }' '"ns": { $size : 0 }'
+    verify_lustre tmp/$entry_renamed
 }
 
 ################################################################################

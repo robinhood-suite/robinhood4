@@ -16,7 +16,7 @@ test_dir=$(dirname $(readlink -e $0))
 acceptance()
 {
     local dir1="test_dir1"
-    #local dir2="test_dir2"
+    local dir2="test_dir2"
     local file1="test_file1"
     local file2="test_file2"
     local file3="test_file3"
@@ -43,9 +43,9 @@ acceptance()
     touch $file6
     lfs migrate -E 1k -c 2 -E -1 -c 1 $file6
 
-    #XXX: commented until migrate events are properly checked
-    #lfs setdirstripe -i 1 $dir2
-    #lfs migrate -m 0 $dir2
+    lfs setdirstripe -i 1 $dir2
+    lfs migrate -m 0 $dir2
+    lfs setstripe -c 2 -S 3M $dir2
 
     lfs mirror create -N2 $file7
     truncate -s 300 $file7
@@ -55,8 +55,9 @@ acceptance()
 
     invoke_rbh-fsevents
 
-    for entry in "$(find *)"; do
+    for entry in $(find *); do
         verify_statx $entry
+        verify_lustre $entry
     done
 
     clear_changelogs

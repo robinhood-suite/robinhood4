@@ -47,7 +47,7 @@ test_layout()
                    '"ns.name":"'$entry'"'
     find_attribute '"statx.ctime.nsec":0' '"ns.name":"'$entry'"'
 
-    #TODO: enrich this test with Lustre specific testing
+    verify_lustre "$entry"
 }
 
 ################################################################################
