@@ -573,7 +573,7 @@ static int
 xattrs_get_magic_and_gen(int fd, struct rbh_value_pair *pairs)
 {
     char buffer[XATTR_VALUE_MAX_VFS_SIZE];
-    const char *lov_buf;
+    const char *lov_buf = NULL;
     int save_errno;
 
     if (_inode_xattrs != NULL) {
@@ -598,6 +598,9 @@ xattrs_get_magic_and_gen(int fd, struct rbh_value_pair *pairs)
 
         lov_buf = buffer;
     }
+
+    if (!lov_buf)
+        return 0;
 
     return _xattrs_get_magic_and_gen(fd, lov_buf, pairs);
 }
