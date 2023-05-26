@@ -388,9 +388,15 @@ clear_changelogs()
     local mdt="$1"
     local user="$2"
 
-    for i in $(seq 1 ${user:2}); do
-        lfs changelog_clear "$mdt" "cl$i" 0
-    done
+    lfs changelog_clear "$mdt" "$user" 0
+}
+
+stop_changelogs()
+{
+    local mdt="$1"
+    local user="$2"
+
+    lctl --device "$mdt" changelog_deregister "$userid"
 }
 
 ################################################################################
