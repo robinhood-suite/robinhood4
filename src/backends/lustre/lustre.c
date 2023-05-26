@@ -337,6 +337,9 @@ fill_iterator_data(struct llapi_layout *layout,
 
     data->pool[index] = create_string_value(pool_tmp, strlen(pool_tmp) + 1);
 
+    if (S_ISDIR(mode))
+        return 0;
+
     is_init_or_not_comp = (flags == LCME_FL_INIT ||
                            !llapi_layout_is_composite(layout));
     ost_len = (is_init_or_not_comp ? stripe_count : 1);
@@ -450,11 +453,15 @@ init_iterator_data(struct iterator_data *data, const uint32_t length,
         data->end = &arr[7 * length];
     }
 
-    data->ost = malloc(length * sizeof(*data->ost));
-    if (data->ost == NULL) {
-        free(arr);
-        errno = -ENOMEM;
-        return -1;
+    if (S_ISDIR(mode)) {
+        data->ost = NULL;
+    } else {
+        data->ost = malloc(length * sizeof(*data->ost));
+        if (data->ost == NULL) {
+            free(arr);
+            errno = -ENOMEM;
+            return -1;
+        }
     }
 
     data->ost_size = length;
@@ -482,6 +489,9 @@ xattrs_fill_layout(struct iterator_data *data, int nb_xattrs,
         if (rc)
             return -1;
     }
+
+    if (S_ISDIR(mode))
+        return subcount;
 
     rc = fill_sequence_pair("ost", data->ost, data->ost_idx,
                             &pairs[subcount++]);
@@ -575,11 +585,12 @@ xattrs_get_magic_and_gen(int fd, struct rbh_value_pair *pairs)
     int save_errno;
 
     if (_inode_xattrs != NULL) {
-        for (int i = 0; i < *_inode_xattrs_count; ++i)
+        for (int i = 0; i < *_inode_xattrs_count; ++i) {
             if (!strcmp(_inode_xattrs[i].key, XATTR_LUSTRE_LOV)) {
                 lov_buf = _inode_xattrs[i].value->binary.data;
                 break;
             }
+        }
     } else {
     /* TODO: when the attribute will be retrieved using the changelog,
      * change the xattr retrieval by seeking the one already retrieved.
@@ -601,6 +612,36 @@ xattrs_get_magic_and_gen(int fd, struct rbh_value_pair *pairs)
         return 0;
 
     return _xattrs_get_magic_and_gen(fd, lov_buf, pairs);
+}
+
+/**
+ * Retrieve a directory's layout by using an ioctl.
+ *
+ * @param fd        file descriptor of the directory we want the layout of
+ *
+ * @return          layout of the directory, or NULL
+ */
+static struct llapi_layout *
+xattrs_get_dir_data_striping(int fd)
+{
+    char tmp[XATTR_SIZE_MAX] = {0};
+    struct llapi_layout *layout;
+    struct lov_user_md *lum;
+    int lum_size;
+    int rc = 0;
+
+    lum = (struct lov_user_md *)tmp;
+
+    rc = ioctl(fd, LL_IOC_LOV_GETSTRIPE, (void *)lum);
+    if (rc)
+        return NULL;
+
+    lum_size = lov_user_md_size(lum->lmm_stripe_count, lum->lmm_magic);
+    layout = llapi_layout_get_by_xattr(lum, lum_size, 0);
+    if (!layout)
+        return NULL;
+
+    return layout;
 }
 
 /**
@@ -645,7 +686,17 @@ xattrs_get_layout(int fd, struct rbh_value_pair *pairs)
     if (S_ISLNK(mode))
         return 0;
 
-    layout = llapi_layout_get_by_fd(fd, 0);
+    if (S_ISDIR(mode)) {
+        layout = xattrs_get_dir_data_striping(fd);
+        /* If layout is NULL and errno is ENODATA, that means the ioctl failed
+         * because there is no default striping on the directory.
+         */
+        if (layout == NULL && errno == ENODATA)
+            return 0;
+    } else {
+        layout = llapi_layout_get_by_fd(fd, 0);
+    }
+
     if (layout == NULL)
         return -1;
 
@@ -741,19 +792,28 @@ again:
         lum->lum_stripe_count = stripe_count;
 
         rc = ioctl(fd, LL_IOC_LMV_GETSTRIPE, lum);
-        if (rc && errno == ENODATA)
-            return 0;
-        else if (rc && errno == E2BIG) {
-            stripe_count = lum->lum_stripe_count;
+        if (rc) {
+            if (errno == E2BIG)
+                stripe_count = lum->lum_stripe_count;
+
+            save_errno = errno;
             free(lum);
-            errno = 0;
-            goto again;
-        } else if (rc)
-            return rc;
+            errno = save_errno;
+
+            switch (errno) {
+            case E2BIG:
+                goto again;
+            case ENODATA:
+                return 0;
+            default:
+                return rc;
+            }
+            __builtin_unreachable();
+        }
 
         mdt_idx = calloc(lum->lum_stripe_count, sizeof(*mdt_idx));
         if (mdt_idx == NULL)
-            return -1;
+            goto free_lum;
 
         objects = lum->lum_objects;
 
@@ -766,7 +826,7 @@ again:
         free(mdt_idx);
         errno = save_errno;
         if (rc)
-            return -1;
+            goto free_lum;
 
         /* TODO: change this to "mdt_hash_type" when modifying the structure of
          * the Lustre attributes (i.e. "xattrs.mdt : { child_mdt_idx, hash_type,
@@ -776,16 +836,21 @@ again:
                               lum->lum_hash_type & LMV_HASH_TYPE_MASK,
                               &pairs[subcount++]);
         if (rc)
-            return -1;
+            goto free_lum;
 
         rc = fill_uint32_pair("mdt_hash_flags",
                               lum->lum_hash_type & ~LMV_HASH_TYPE_MASK,
                               &pairs[subcount++]);
         if (rc)
-            return -1;
+            goto free_lum;
 
         rc = fill_uint32_pair("mdt_count", lum->lum_stripe_count,
                               &pairs[subcount++]);
+
+free_lum:
+        save_errno = errno;
+        free(lum);
+        errno = save_errno;
         if (rc)
             return -1;
     }
