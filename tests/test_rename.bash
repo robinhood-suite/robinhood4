@@ -105,7 +105,7 @@ test_rename_overwrite_data_with_hsm_copy()
     invoke_rbh-fsevents
 
     hsm_archive_file tmp/$entry_renamed
-    clear_changelogs
+    clear_changelogs "$LUSTRE_MDT" "$userid"
 
     # Retrieve the overwriten link's id to test the link was deleted but the
     # inode still exists since an archived copy is still valid
@@ -143,11 +143,11 @@ LUSTRE_DIR=/mnt/lustre/
 cd "$LUSTRE_DIR"
 
 LUSTRE_MDT=lustre-MDT0000
-start_changelogs "$LUSTRE_MDT"
+userid="$(start_changelogs "$LUSTRE_MDT")"
 
 tmpdir=$(mktemp --directory --tmpdir=$LUSTRE_DIR)
 lfs setdirstripe -D -i 0 $tmpdir
-trap -- "rm -rf '$tmpdir'; clear_changelogs" EXIT
+trap -- "rm -rf '$tmpdir'; clear_changelogs '$LUSTRE_MDT' '$userid'" EXIT
 cd "$tmpdir"
 
 run_tests ${tests[@]}

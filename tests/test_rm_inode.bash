@@ -30,7 +30,7 @@ test_rm_different_batch()
 
     invoke_rbh-fsevents
 
-    clear_changelogs
+    clear_changelogs "$LUSTRE_MDT" "$userid"
     rm_entry $entry
 
     invoke_rbh-fsevents

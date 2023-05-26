@@ -378,13 +378,18 @@ verify_lustre()
 
 start_changelogs()
 {
-    userid=$(lctl --device "$LUSTRE_MDT" changelog_register | cut -d "'" -f2)
+    local mdt="$1"
+
+    echo "$(lctl --device "$mdt" changelog_register | cut -d "'" -f2)"
 }
 
 clear_changelogs()
 {
-    for i in $(seq 1 ${userid:2}); do
-        lfs changelog_clear "$LUSTRE_MDT" "cl$i" 0
+    local mdt="$1"
+    local user="$2"
+
+    for i in $(seq 1 ${user:2}); do
+        lfs changelog_clear "$mdt" "cl$i" 0
     done
 }
 
@@ -500,14 +505,14 @@ setup()
 
     # Create test database's name
     testdb=$SUITE-$test
-    clear_changelogs
+    clear_changelogs "$LUSTRE_MDT" "$userid"
 }
 
 teardown()
 {
     mongo "$testdb" --eval "db.dropDatabase()" >/dev/null
     rm -rf "$testdir"
-    clear_changelogs
+    clear_changelogs "$LUSTRE_MDT" "$userid"
 }
 
 error()

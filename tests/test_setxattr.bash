@@ -20,7 +20,7 @@ test_setxattr()
 
     invoke_rbh-fsevents
 
-    clear_changelogs
+    clear_changelogs "$LUSTRE_MDT" "$userid"
     setfattr -n user.test -v 42 "$entry"
 
     invoke_rbh-fsevents
@@ -37,7 +37,7 @@ test_setxattr_remove()
 
     invoke_rbh-fsevents
 
-    clear_changelogs
+    clear_changelogs "$LUSTRE_MDT" "$userid"
     setfattr -n user.test -v 42 "$entry"
 
     invoke_rbh-fsevents
@@ -46,7 +46,7 @@ test_setxattr_remove()
     find_attribute '"xattrs.user":{$exists: true}' '"ns.name":"'$entry'"'
     find_attribute '"xattrs.user.test":{$exists: true}' '"ns.name":"'$entry'"'
 
-    clear_changelogs
+    clear_changelogs "$LUSTRE_MDT" "$userid"
     setfattr --remove="user.test" "$entry"
 
     invoke_rbh-fsevents
@@ -63,7 +63,7 @@ test_check_last_setxattr_is_inserted()
 
     invoke_rbh-fsevents
 
-    clear_changelogs
+    clear_changelogs "$LUSTRE_MDT" "$userid"
     setfattr -n user.test -v 42 "$entry"
     setfattr -n user.blob -v 43 "$entry"
 
@@ -82,7 +82,7 @@ test_setxattr_replace()
 
     invoke_rbh-fsevents
 
-    clear_changelogs
+    clear_changelogs "$LUSTRE_MDT" "$userid"
     setfattr -n user.test -v 42 "$entry"
 
     invoke_rbh-fsevents
@@ -93,7 +93,7 @@ test_setxattr_replace()
         'db.entries.find({"xattrs.user.test":{$exists: true}},
                          {_id: 0, "xattrs.user.test": 1})')
 
-    clear_changelogs
+    clear_changelogs "$LUSTRE_MDT" "$userid"
     setfattr -n user.test -v 43 "$entry"
 
     invoke_rbh-fsevents
@@ -120,11 +120,11 @@ LUSTRE_DIR=/mnt/lustre/
 cd "$LUSTRE_DIR"
 
 LUSTRE_MDT=lustre-MDT0000
-start_changelogs "$LUSTRE_MDT"
+userid="$(start_changelogs "$LUSTRE_MDT")"
 
 tmpdir=$(mktemp --directory --tmpdir=$LUSTRE_DIR)
 lfs setdirstripe -D -i 0 $tmpdir
-trap -- "rm -rf '$tmpdir'; clear_changelogs" EXIT
+trap -- "rm -rf '$tmpdir'; clear_changelogs '$LUSTRE_MDT' '$userid'" EXIT
 cd "$tmpdir"
 
 run_tests ${tests[@]}

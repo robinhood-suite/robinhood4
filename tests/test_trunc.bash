@@ -23,7 +23,7 @@ test_truncate()
 
     invoke_rbh-fsevents
 
-    clear_changelogs
+    clear_changelogs "$LUSTRE_MDT" "$userid"
 
     # retrieve the version before the truncate and after, to check there is no
     # difference between the two except the fields that should be modified
@@ -70,11 +70,11 @@ LUSTRE_DIR=/mnt/lustre/
 cd "$LUSTRE_DIR"
 
 LUSTRE_MDT=lustre-MDT0000
-start_changelogs "$LUSTRE_MDT"
+userid="$(start_changelogs "$LUSTRE_MDT")"
 
 tmpdir=$(mktemp --directory --tmpdir=$LUSTRE_DIR)
 lfs setdirstripe -D -i 0 $tmpdir
-trap -- "rm -rf '$tmpdir'; clear_changelogs" EXIT
+trap -- "rm -rf '$tmpdir'; clear_changelogs '$LUSTRE_MDT' '$userid'" EXIT
 cd "$tmpdir"
 
 run_tests ${tests[@]}

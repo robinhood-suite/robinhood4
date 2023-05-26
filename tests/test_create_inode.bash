@@ -31,7 +31,7 @@ test_create_two_entries()
 
     invoke_rbh-fsevents
 
-    clear_changelogs
+    clear_changelogs "$LUSTRE_MDT" "$userid"
     create_filled_entry "$entry2"
 
     invoke_rbh-fsevents

@@ -20,7 +20,7 @@ test_layout()
 
     invoke_rbh-fsevents
 
-    clear_changelogs
+    clear_changelogs "$LUSTRE_MDT" "$userid"
     lfs migrate -E 1k -c 2 -E -1 -c 1 $entry
 
     local old_version=$(mongo "$testdb" --eval \
@@ -60,11 +60,11 @@ LUSTRE_DIR=/mnt/lustre/
 cd "$LUSTRE_DIR"
 
 LUSTRE_MDT=lustre-MDT0000
-start_changelogs "$LUSTRE_MDT"
+userid="$(start_changelogs "$LUSTRE_MDT")"
 
 tmpdir=$(mktemp --directory --tmpdir=$LUSTRE_DIR)
 lfs setdirstripe -D -i 0 $tmpdir
-trap -- "rm -rf '$tmpdir'; clear_changelogs" EXIT
+trap -- "rm -rf '$tmpdir'; clear_changelogs '$LUSTRE_MDT' '$userid'" EXIT
 cd "$tmpdir"
 
 run_tests ${tests[@]}

@@ -32,13 +32,13 @@ test_migrate()
     mkdir $entry
 
     invoke_rbh-fsevents
-    clear_changelogs
+    clear_changelogs "$LUSTRE_MDT" "$userid"
 
     lfs migrate -m 1 $entry
     # This will be done more properly in a next patch
     rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" --lustre "$other_mdt" \
         "rbh:mongo:$testdb"
-    lfs changelog_clear "$other_mdt" "$other_mdt_user" 0
+    clear_changelogs "$other_mdt" "$other_mdt_user"
 
     lfs migrate -m 0 $entry
 
@@ -68,11 +68,11 @@ LUSTRE_DIR=/mnt/lustre/
 cd "$LUSTRE_DIR"
 
 LUSTRE_MDT=lustre-MDT0000
-start_changelogs "$LUSTRE_MDT"
+userid="$(start_changelogs "$LUSTRE_MDT")"
 
 tmpdir=$(mktemp --directory --tmpdir=$LUSTRE_DIR)
 lfs setdirstripe -D -i 0 $tmpdir
-trap -- "rm -rf '$tmpdir'; clear_changelogs" EXIT
+trap -- "rm -rf '$tmpdir'; clear_changelogs '$LUSTRE_MDT' '$userid'" EXIT
 cd "$tmpdir"
 
 run_tests ${tests[@]}
