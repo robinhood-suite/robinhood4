@@ -41,5 +41,9 @@ enrich_iter_builder_from_backend(struct rbh_backend *backend,
     if (builder->mount_fd == -1)
         error(EXIT_FAILURE, errno, "open: %s", mount_path);
 
+    builder->mount_path = strdup(mount_path);
+    if (builder->mount_path == NULL)
+        error(EXIT_FAILURE, ENOMEM, "strdup: %s", mount_path);
+
     return builder;
 }

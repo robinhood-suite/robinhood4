@@ -27,11 +27,12 @@ exit_xattrs_values(void)
 }
 
 static int
-enrich_path(const int mount_fd, const struct rbh_id *id, const char *name,
+enrich_path(const char *mount_path, const struct rbh_id *id, const char *name,
             struct rbh_sstack *xattrs_values, struct rbh_value **_value)
 {
     const struct lu_fid *fid = rbh_lu_fid_from_id(id);
     size_t name_length = strlen(name);
+    char fid_str[FID_LEN];
     long long recno = 0;
     size_t path_length;
     int linkno = 0;
@@ -42,10 +43,14 @@ enrich_path(const int mount_fd, const struct rbh_id *id, const char *name,
     if (path == NULL)
         return -1;
 
+    rc = sprintf(fid_str, DFID, PFID(fid));
+    if (rc < 0)
+        return -1;
+
     /* lustre path */
     path[0] = '/';
-    rc = llapi_fid2path_at(mount_fd, fid, path + 1, PATH_MAX - name_length - 2,
-                           &recno, &linkno);
+    rc = llapi_fid2path(mount_path, fid_str, path + 1,
+                        PATH_MAX - name_length - 2, &recno, &linkno);
     if (rc) {
         errno = -rc;
         return -1;
@@ -143,7 +148,7 @@ lustre_enrich(struct enricher *enricher, const struct rbh_value_pair *attr,
     if (strcmp(attr->key, "path") == 0) {
         struct rbh_value *value;
 
-        size = enrich_path(enricher->mount_fd, original->link.parent_id,
+        size = enrich_path(enricher->mount_path, original->link.parent_id,
                            original->link.name, xattrs_values, &value);
         if (size == -1)
             return -1;
@@ -243,9 +248,10 @@ static const struct rbh_iterator_operations LUSTRE_ENRICHER_ITER_OPS = {
 
 static struct rbh_iterator *
 lustre_iter_enrich(struct rbh_backend *backend, struct rbh_iterator *fsevents,
-                   int mount_fd)
+                   int mount_fd, const char *mount_path)
 {
-    struct rbh_iterator *iter = posix_iter_enrich(fsevents, mount_fd);
+    struct rbh_iterator *iter = posix_iter_enrich(fsevents, mount_fd,
+                                                  mount_path);
     struct enricher *enricher = (struct enricher *)iter;
 
     if (iter == NULL)
@@ -267,7 +273,8 @@ lustre_enrich_iter_builder_build_iter(void *_builder,
 {
     struct enrich_iter_builder *builder = _builder;
 
-    return lustre_iter_enrich(builder->backend, fsevents, builder->mount_fd);
+    return lustre_iter_enrich(builder->backend, fsevents, builder->mount_fd,
+                              builder->mount_path);
 }
 
 static const struct enrich_iter_builder_operations

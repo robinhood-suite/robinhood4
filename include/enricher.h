@@ -19,6 +19,7 @@ struct enrich_iter_builder {
     struct rbh_backend *backend;
     const struct enrich_iter_builder_operations *ops;
     int mount_fd;
+    const char *mount_path;
 };
 
 static inline struct rbh_iterator *

@@ -780,7 +780,8 @@ static const struct rbh_iterator POSIX_ENRICHER_ITERATOR = {
 #define INITIAL_PAIR_COUNT (1 << 7)
 
 struct rbh_iterator *
-posix_iter_enrich(struct rbh_iterator *fsevents, int mount_fd)
+posix_iter_enrich(struct rbh_iterator *fsevents, int mount_fd,
+                  const char *mount_path)
 {
     struct rbh_value_pair *pairs;
     struct enricher *enricher;
@@ -813,6 +814,7 @@ posix_iter_enrich(struct rbh_iterator *fsevents, int mount_fd)
     enricher->backend = NULL;
     enricher->fsevents = fsevents;
     enricher->mount_fd = mount_fd;
+    enricher->mount_path = mount_path;
     enricher->pairs = pairs;
     enricher->pair_count = INITIAL_PAIR_COUNT;
     enricher->symlink = symlink;
@@ -894,7 +896,7 @@ posix_enrich_iter_builder_build_iter(void *_builder,
 {
     struct enrich_iter_builder *builder = _builder;
 
-    return posix_iter_enrich(fsevents, builder->mount_fd);
+    return posix_iter_enrich(fsevents, builder->mount_fd, builder->mount_path);
 }
 
 void
@@ -904,6 +906,7 @@ posix_enrich_iter_builder_destroy(void *_builder)
 
     rbh_backend_destroy(builder->backend);
     close(builder->mount_fd);
+    free((char *)builder->mount_path);
     free(builder);
 }
 

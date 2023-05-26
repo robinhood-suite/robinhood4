@@ -11,6 +11,7 @@ struct enricher {
 
     struct rbh_iterator *fsevents;
     int mount_fd;
+    const char *mount_path;
 
     struct rbh_value_pair *pairs;
     size_t pair_count;
@@ -34,7 +35,8 @@ int posix_enrich(const struct rbh_value_pair *partial,
                  struct rbh_statx *statxbuf, char symlink[]);
 
 struct rbh_iterator *
-posix_iter_enrich(struct rbh_iterator *fsevents, int mount_fd);
+posix_iter_enrich(struct rbh_iterator *fsevents, int mount_fd,
+                  const char *mount_path);
 
 void
 posix_enricher_iter_destroy(void *iterator);
