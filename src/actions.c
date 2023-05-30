@@ -305,6 +305,26 @@ fsentry_print_escape(char *output, int max_length, const char *escape)
     __builtin_unreachable();
 }
 
+static int
+fsentry_print_regular_char(char *output, int max_length,
+                           const char *format_string)
+{
+    int sublength = 0;
+
+    assert(format_string != NULL);
+    assert(*format_string != '\0');
+
+    while (format_string[sublength] != '%' &&
+           format_string[sublength] != '\\' &&
+           format_string[sublength] != 0 &&
+           sublength < max_length) {
+        output[sublength] = format_string[sublength];
+        sublength++;
+    }
+
+    return sublength;
+}
+
 void
 fsentry_printf_format(FILE *file, const struct rbh_fsentry *fsentry,
                       const char *format_string)
@@ -333,9 +353,13 @@ fsentry_printf_format(FILE *file, const struct rbh_fsentry *fsentry,
             i++;
             break;
         default:
-            error(EXIT_FAILURE, ENOTSUP, "char in format string not supported");
+            tmp_length = fsentry_print_regular_char(&output[output_length],
+                                                    max_length,
+                                                    format_string + i);
+            i += tmp_length - 1;
         }
 
+        output_length += tmp_length;
         max_length -= tmp_length;
 
         if (tmp_length < 0) {
@@ -345,8 +369,6 @@ fsentry_printf_format(FILE *file, const struct rbh_fsentry *fsentry,
             output_length = MAX_OUTPUT_SIZE - 1;
             break;
         }
-
-        output_length += tmp_length;
     }
 
     output[output_length] = 0;
