@@ -9,6 +9,7 @@
 #include <error.h>
 #include <grp.h>
 #include <inttypes.h>
+#include <linux/limits.h>
 #include <pwd.h>
 #include <stdbool.h>
 #include <stdlib.h>
@@ -261,4 +262,66 @@ fsentry_path(const struct rbh_fsentry *fsentry)
     }
 
     return NULL;
+}
+
+#define MAX_OUTPUT_SIZE (PATH_MAX + 256)
+
+static int
+fsentry_print_directive(char *output, int max_length,
+                        const struct rbh_fsentry *fsentry,
+                        const char *directive)
+{
+    assert(directive != NULL);
+    assert(*directive != '\0');
+
+    /* For now, consider the directive to be a single character */
+    switch (*directive) {
+    case 'p':
+        return snprintf(output, max_length, "%s", fsentry_path(fsentry));
+    default:
+        error(EXIT_FAILURE, ENOTSUP, "format directive not supported");
+    }
+
+    __builtin_unreachable();
+}
+
+void
+fsentry_printf_format(FILE *file, const struct rbh_fsentry *fsentry,
+                      const char *format_string)
+{
+    size_t length = strlen(format_string);
+    int max_length = MAX_OUTPUT_SIZE;
+    char output[MAX_OUTPUT_SIZE];
+    size_t output_length = 0;
+
+    for (size_t i = 0; i < length; i++) {
+        int tmp_length;
+
+        switch (format_string[i]) {
+        case '%':
+            tmp_length = fsentry_print_directive(&output[output_length],
+                                                 max_length, fsentry,
+                                                 format_string + i + 1);
+            /* Go over the directive that was just printed */
+            i++;
+            break;
+        default:
+            error(EXIT_FAILURE, ENOTSUP, "char in format string not supported");
+        }
+
+        max_length -= tmp_length;
+
+        if (tmp_length < 0) {
+            error(EXIT_FAILURE, EINVAL, "failed to write to buffer for printf");
+        } else if (max_length <= 0) {
+            /* No more data can fit in the output array */
+            output_length = MAX_OUTPUT_SIZE - 1;
+            break;
+        }
+
+        output_length += tmp_length;
+    }
+
+    output[output_length] = 0;
+    fprintf(file, "%s", output);
 }

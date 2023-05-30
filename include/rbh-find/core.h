@@ -38,6 +38,11 @@ struct find_context {
     /** The file that should contain the results of an action, if specified */
     FILE *action_file;
 
+    /** The format string to use for printing the results of the command, if
+     * specified
+     */
+    char *format_string;
+
     /**
      * Callback to prepare an action's execution
      *

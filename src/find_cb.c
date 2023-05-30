@@ -14,12 +14,27 @@
 
 #include "rbh-find/find_cb.h"
 
+static void
+open_action_file(struct find_context *ctx, const char *filename)
+{
+    ctx->action_file = fopen(filename, "w");
+    if (ctx->action_file == NULL)
+        error(EXIT_FAILURE, errno, "fopen: %s", filename);
+}
+
+
+static bool
+validate_format_string(const char *format_string)
+{
+    (void) format_string;
+
+    return true;
+}
+
 int
 find_pre_action(struct find_context *ctx, const int index,
                 const enum action action)
 {
-    const char *filename;
-
     switch (action) {
     case ACT_FLS:
     case ACT_FPRINT:
@@ -27,10 +42,31 @@ find_pre_action(struct find_context *ctx, const int index,
         if (index + 1 >= ctx->argc)
             error(EX_USAGE, 0, "missing argument to `%s'", action2str(action));
 
-        filename = ctx->argv[index + 1];
-        ctx->action_file = fopen(filename, "w");
-        if (ctx->action_file == NULL)
-            error(EXIT_FAILURE, errno, "fopen: %s", filename);
+        open_action_file(ctx, ctx->argv[index + 1]);
+
+        return 1;
+    case ACT_FPRINTF:
+        if (index + 2 >= ctx->argc)
+            error(EX_USAGE, 0, "missing argument to `%s'", action2str(action));
+
+        open_action_file(ctx, ctx->argv[index + 1]);
+
+        if (!validate_format_string(ctx->argv[index + 2]))
+            error(EX_USAGE, 0, "missing format string to `%s'",
+                  action2str(action));
+
+        ctx->format_string = ctx->argv[index + 2];
+
+        return 1;
+    case ACT_PRINTF:
+        if (index + 1 >= ctx->argc)
+            error(EX_USAGE, 0, "missing argument to `%s'", action2str(action));
+
+        if (!validate_format_string(ctx->argv[index + 1]))
+            error(EX_USAGE, 0, "missing format string to `%s'",
+                  action2str(action));
+
+        ctx->format_string = ctx->argv[index + 1];
 
         return 1;
     default:
@@ -65,6 +101,12 @@ find_exec_action(struct find_context *ctx, enum action action,
         break;
     case ACT_LS:
         fsentry_print_ls_dils(stdout, fsentry);
+        break;
+    case ACT_FPRINTF:
+        fsentry_printf_format(ctx->action_file, fsentry, ctx->format_string);
+        break;
+    case ACT_PRINTF:
+        fsentry_printf_format(stdout, fsentry, ctx->format_string);
         break;
     case ACT_COUNT:
         return 1;
