@@ -362,7 +362,7 @@ build_statx_event(uint32_t statx_enrich_mask, struct rbh_fsevent *fsevent,
 }
 
 static int
-link_new_inode_event(struct changelog_rec *record, struct rbh_fsevent *fsevent)
+new_link_inode_event(struct changelog_rec *record, struct rbh_fsevent *fsevent)
 {
     char *data;
 
@@ -387,20 +387,8 @@ link_new_inode_event(struct changelog_rec *record, struct rbh_fsevent *fsevent)
 }
 
 static int
-fid_new_inode_event(struct changelog_rec *record, struct rbh_fsevent *fsevent)
-{
-    fsevent->type = RBH_FET_XATTR;
-    if (build_enrich_xattr_fsevent(&fsevent->xattrs,
-                                   "fid", fill_ns_xattrs_fid(record),
-                                   "rbh-fsevents", build_empty_map("lustre"),
-                                   NULL))
-        return -1;
-
-    return 0;
-}
-
-static int
-update_uid_gid_event(struct changelog_rec *record, struct rbh_fsevent *fsevent)
+update_statx_without_uid_gid_event(struct changelog_rec *record,
+                                   struct rbh_fsevent *fsevent)
 {
     struct rbh_statx *rec_statx;
     uint32_t statx_enrich_mask;
@@ -416,7 +404,8 @@ update_uid_gid_event(struct changelog_rec *record, struct rbh_fsevent *fsevent)
 }
 
 static int
-update_parent_statx_event(struct lu_fid *parent_id, struct rbh_fsevent *fsevent)
+update_parent_acmtime_event(struct lu_fid *parent_id,
+                            struct rbh_fsevent *fsevent)
 {
     uint32_t statx_enrich_mask;
     struct rbh_id *id;
@@ -443,22 +432,29 @@ build_create_inode_events(unsigned int process_step,
     assert(process_step < 4);
     switch(process_step) {
     case 0:
-        if (link_new_inode_event(record, fsevent))
+        if (new_link_inode_event(record, fsevent))
             return -1;
 
         break;
     case 1:
-        if (fid_new_inode_event(record, fsevent))
+        fsevent->type = RBH_FET_XATTR;
+
+        if (build_enrich_xattr_fsevent(&fsevent->xattrs,
+                                       "fid",
+                                       fill_ns_xattrs_fid(record),
+                                       "rbh-fsevents",
+                                       build_empty_map("lustre"),
+                                       NULL))
             return -1;
 
         break;
     case 2:
-        if (update_uid_gid_event(record, fsevent))
+        if (update_statx_without_uid_gid_event(record, fsevent))
             return -1;
 
         break;
     case 3: /* Update the parent information after creating a new entry */
-        if (update_parent_statx_event(&record->cr_pfid, fsevent))
+        if (update_parent_acmtime_event(&record->cr_pfid, fsevent))
             return -1;
 
         break;
@@ -506,22 +502,25 @@ build_softlink_events(unsigned int process_step, struct changelog_rec *record,
      */
     switch(process_step) {
     case 0:
-        if (link_new_inode_event(record, fsevent))
+        if (new_link_inode_event(record, fsevent))
             return -1;
 
         break;
     case 1:
-        if (fid_new_inode_event(record, fsevent))
-            return -1;
+        fsevent->type = RBH_FET_XATTR;
+        if (build_enrich_xattr_fsevent(&fsevent->xattrs,
+                                       "fid", fill_ns_xattrs_fid(record),
+                                       NULL))
+        return -1;
 
         break;
     case 2:
-        if (update_uid_gid_event(record, fsevent))
+        if (update_statx_without_uid_gid_event(record, fsevent))
             return -1;
 
         break;
     case 3:
-        if (update_parent_statx_event(&record->cr_pfid, fsevent))
+        if (update_parent_acmtime_event(&record->cr_pfid, fsevent))
             return -1;
 
         break;
@@ -542,7 +541,7 @@ build_hardlink_or_mknod_events(unsigned int process_step,
                                struct changelog_rec *record,
                                struct rbh_fsevent *fsevent)
 {
-    assert(process_step < 3);
+    assert(process_step < 4);
     /* For hardlinks, we must create a new ns entry for the target, update its
      * statx attributes and the statx attributes of the parent directory of the
      * link. We don't need to retrieve the xattrs of the link, since they are
@@ -556,17 +555,17 @@ build_hardlink_or_mknod_events(unsigned int process_step,
      */
     switch(process_step) {
     case 0: /* Create new ns entry for the target */
-        if (link_new_inode_event(record, fsevent))
+        if (new_link_inode_event(record, fsevent))
             return -1;
 
         break;
     case 1: /* update target statx */
-        if (update_uid_gid_event(record, fsevent))
+        if (update_statx_without_uid_gid_event(record, fsevent))
             return -1;
 
         break;
     case 2: /* update link's parent statx */
-        if (update_parent_statx_event(&record->cr_pfid, fsevent))
+        if (update_parent_acmtime_event(&record->cr_pfid, fsevent))
             return -1;
 
         break;
@@ -582,7 +581,7 @@ build_hardlink_or_mknod_events(unsigned int process_step,
         break;
     }
 
-    return process_step != 2 ? 1 : 0;
+    return process_step != 3 ? 1 : 0;
 }
 
 static int
@@ -634,7 +633,7 @@ build_unlink_or_rmdir_events(unsigned int process_step,
 
         break;
     case 1: /* update parent statx */
-        if (update_parent_statx_event(&record->cr_pfid, fsevent))
+        if (update_parent_acmtime_event(&record->cr_pfid, fsevent))
             return -1;
     }
 
@@ -699,17 +698,17 @@ build_rename_events(unsigned int process_step, struct changelog_rec *record,
 
         break;
     case 1: /* create new link */
-        if (link_new_inode_event(record, fsevent))
+        if (new_link_inode_event(record, fsevent))
             return -1;
 
         break;
     case 2: /* update target statx */
-        if (update_uid_gid_event(record, fsevent))
+        if (update_statx_without_uid_gid_event(record, fsevent))
             return -1;
 
         break;
     case 3: /* update target's parent statx */
-        if (update_parent_statx_event(&record->cr_pfid, fsevent))
+        if (update_parent_acmtime_event(&record->cr_pfid, fsevent))
             return -1;
 
         break;
@@ -722,7 +721,7 @@ build_rename_events(unsigned int process_step, struct changelog_rec *record,
 
         break;
     case 5: /* update source's parent statx */
-        if (update_parent_statx_event(&rename_log->cr_spfid, fsevent))
+        if (update_parent_acmtime_event(&rename_log->cr_spfid, fsevent))
             return -1;
 
         break;
