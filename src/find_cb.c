@@ -133,6 +133,7 @@ find_parse_predicate(struct find_context *ctx, int *arg_idx)
     case PRED_CTIME:
         filter = xtime2filter(predicate, ctx->argv[++i]);
         break;
+    case PRED_PATH:
     case PRED_NAME:
         filter = shell_regex2filter(predicate, ctx->argv[++i], 0);
         break;

@@ -43,6 +43,7 @@ static const struct rbh_filter_field predicate2filter_field[] = {
     [PRED_CTIME]    = {.fsentry = RBH_FP_STATX, .statx = RBH_STATX_CTIME_SEC},
     [PRED_NAME]     = {.fsentry = RBH_FP_NAME},
     [PRED_INAME]    = {.fsentry = RBH_FP_NAME},
+    [PRED_PATH]     = {.fsentry = RBH_FP_NAMESPACE_XATTRS, .xattr = "path"},
     [PRED_MMIN]     = {.fsentry = RBH_FP_STATX, .statx = RBH_STATX_MTIME_SEC},
     [PRED_MTIME]    = {.fsentry = RBH_FP_STATX, .statx = RBH_STATX_MTIME_SEC},
     [PRED_TYPE]     = {.fsentry = RBH_FP_STATX, .statx = RBH_STATX_TYPE},
