@@ -103,7 +103,8 @@ enrich_lustre(struct rbh_backend *backend, int mount_fd,
     int size;
     int rc;
 
-    arg.fd = open_by_id(mount_fd, id, O_RDONLY | O_CLOEXEC | O_NOFOLLOW);
+    arg.fd = open_by_id(mount_fd, id, O_RDONLY | O_CLOEXEC | O_NOFOLLOW |
+                                      O_NONBLOCK);
     if (arg.fd < 0 && errno == ELOOP)
         /* If the file to open is a symlink, reopen it with O_PATH set */
         arg.fd = open_by_id(mount_fd, id,

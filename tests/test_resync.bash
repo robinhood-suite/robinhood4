@@ -31,7 +31,7 @@ test_resync()
 
     local old_version=$(mongo "$testdb" --eval \
         'db.entries.find({"ns.name":"'$entry'"},
-                         {"statx.ctime":0, "statx.blocks":0})')
+                         {"statx.ctime":0, "statx.blocks":0, "xattrs":0})')
 
     invoke_rbh-fsevents
 
@@ -43,10 +43,11 @@ test_resync()
 
     local updated_version=$(mongo "$testdb" --eval \
         'db.entries.find({"ns.name":"'$entry'"},
-                         {"statx.ctime":0, "statx.blocks":0})')
+                         {"statx.ctime":0, "statx.blocks":0, "xattrs":0})')
 
     if [ "$old_version" != "$updated_version" ]; then
-        error "Layout event modified more than ctime, mtime and size"
+        error "Layout event modified other statx elements than ctime, mtime "
+              "and size"
     fi
 
     find_attribute '"statx.ctime.sec":NumberLong('$(statx +%Z "$entry")')' \

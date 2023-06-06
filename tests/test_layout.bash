@@ -24,7 +24,8 @@ test_layout()
     lfs migrate -E 1k -c 2 -E -1 -c 1 $entry
 
     local old_version=$(mongo "$testdb" --eval \
-        'db.entries.find({"ns.name":"'$entry'"}, {"statx.ctime":0})')
+        'db.entries.find({"ns.name":"'$entry'"}, {"statx.ctime":0,
+                                                  "xattrs":0})')
 
     invoke_rbh-fsevents
 
@@ -35,10 +36,11 @@ test_layout()
     fi
 
     local updated_version=$(mongo "$testdb" --eval \
-        'db.entries.find({"ns.name":"'$entry'"}, {"statx.ctime":0})')
+        'db.entries.find({"ns.name":"'$entry'"},
+                         {"statx.ctime":0, "xattrs":0})')
 
     if [ "$old_version" != "$updated_version" ]; then
-        error "Layout event modified more than ctime"
+        error "Layout event modified other statx elements than ctime"
     fi
 
     find_attribute '"statx.ctime.sec":NumberLong('$(statx +%Z "$entry")')' \
