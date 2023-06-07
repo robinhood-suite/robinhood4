@@ -45,9 +45,7 @@ struct iterator_data {
 static __thread struct rbh_value_pair *_inode_xattrs;
 static __thread ssize_t *_inode_xattrs_count;
 static __thread struct rbh_sstack *_values;
-static __thread bool is_symlink;
-static __thread bool is_dir;
-static __thread bool is_reg;
+static __thread uint16_t mode;
 
 static inline int
 fill_pair(const char *key, const struct rbh_value *value,
@@ -200,7 +198,7 @@ xattrs_get_hsm(int fd, struct rbh_value_pair *pairs)
     int subcount = 0;
     int rc;
 
-    if (!is_reg)
+    if (!S_ISREG(mode))
         return 0;
 
     rc = llapi_hsm_state_get_fd(fd, &hus);
@@ -644,7 +642,7 @@ xattrs_get_layout(int fd, struct rbh_value_pair *pairs)
     uint32_t flags;
     int rc;
 
-    if (is_symlink)
+    if (S_ISLNK(mode))
         return 0;
 
     layout = llapi_layout_get_by_fd(fd, 0);
@@ -659,7 +657,7 @@ xattrs_get_layout(int fd, struct rbh_value_pair *pairs)
     if (rc)
         goto err;
 
-    if (is_reg) {
+    if (S_ISREG(mode)) {
         rc = xattrs_get_magic_and_gen(fd, &pairs[subcount]);
         if (rc < 0)
             goto err;
@@ -723,7 +721,7 @@ xattrs_get_mdt_info(int fd, struct rbh_value_pair *pairs)
     int subcount = 0;
     int rc = 0;
 
-    if (is_dir) {
+    if (S_ISDIR(mode)) {
         struct lmv_user_mds_data *objects;
         struct rbh_value *mdt_idx;
         struct lmv_user_md *lum;
@@ -792,7 +790,7 @@ again:
             return -1;
     }
 
-    if (!is_symlink) {
+    if (S_ISREG(mode) || S_ISDIR(mode)) {
         int32_t mdt;
 
         rc = llapi_file_fget_mdtidx(fd, &mdt);
@@ -808,7 +806,7 @@ again:
 }
 
 static int
-_get_attrs(const int fd, const uint16_t mode,
+_get_attrs(const int fd, const uint16_t entry_mode,
            int (*attrs_funcs[])(int, struct rbh_value_pair *),
            int nb_attrs_funcs,
            struct rbh_value_pair *inode_xattrs,
@@ -821,9 +819,7 @@ _get_attrs(const int fd, const uint16_t mode,
 
     _inode_xattrs_count = inode_xattrs_count;
     _inode_xattrs = inode_xattrs;
-    is_symlink = S_ISLNK(mode);
-    is_dir = S_ISDIR(mode);
-    is_reg = S_ISREG(mode);
+    mode = entry_mode;
     _values = values;
 
     for (int i = 0; i < nb_attrs_funcs; ++i) {
