@@ -16,6 +16,7 @@ librobinhood = library(
         'hashmap.c',
         'id.c',
         'itertools.c',
+        'list.c',
         'lu_fid.c',
         'plugin.c',
         'plugins/backend.c',
