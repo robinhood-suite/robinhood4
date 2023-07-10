@@ -13,6 +13,7 @@ install_headers(
     'id.h',
     'iterator.h',
     'itertools.h',
+    'list.h',
     'plugin.h',
     'queue.h',
     'ring.h',
