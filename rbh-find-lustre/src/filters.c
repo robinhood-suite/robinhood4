@@ -133,7 +133,7 @@ fid2filter(const char *fid)
     int n_chars;
 
     if (*fid == '[')
-        fid_format = "[" SFID "]%n";
+        fid_format = "[" SFID "%n]";
     else
         fid_format = SFID "%n";
 
@@ -141,8 +141,16 @@ fid2filter(const char *fid)
     if (rc != 3)
         error(EX_USAGE, 0, "invalid fid parsing");
 
-    if (fid[n_chars] != '\0')
-        error(EX_USAGE, 0, "invalid fid parsing");
+    switch (*fid) {
+    case '[':
+        if (fid[n_chars] != ']' || fid[n_chars + 1] != '\0')
+            error(EX_USAGE, 0, "invalid fid parsing");
+        break;
+    default:
+        if (fid[n_chars] != '\0')
+            error(EX_USAGE, 0, "invalid fid parsing");
+        break;
+    }
 #endif
 
     filter = rbh_filter_compare_binary_new(
