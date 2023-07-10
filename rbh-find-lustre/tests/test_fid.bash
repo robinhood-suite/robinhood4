@@ -52,6 +52,8 @@ test_syntax_error()
         error "command should have failed because of invalid syntax"
     rbh_lfind "rbh:mongo:$testdb" -fid "[0x3:0x4:0x5)" &&
         error "command should have failed because of invalid syntax"
+    rbh_lfind "rbh:mongo:$testdb" -fid "]0x3:0x4:0x5[" &&
+        error "command should have failed because of invalid syntax"
 
     return 0
 }
