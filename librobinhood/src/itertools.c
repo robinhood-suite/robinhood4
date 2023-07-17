@@ -614,3 +614,57 @@ rbh_mut_iter_ring(struct rbh_ring *ring, size_t element_size)
 {
     return (struct rbh_mut_iterator *)rbh_iter_ring(ring, element_size);
 }
+
+/*----------------------------------------------------------------------------*
+ |                            rbh_iter_list()                                 |
+ *----------------------------------------------------------------------------*/
+
+struct list_iterator {
+    struct rbh_iterator iterator;
+
+    struct rbh_list_node *head;
+    struct rbh_list_node *current;
+    off_t offset;
+};
+
+static const void *
+list_iter_next(void *iterator)
+{
+    struct list_iterator *iter = iterator;
+
+    assert(iter->current);
+    if (iter->current->next == iter->head) {
+        errno = ENODATA;
+        return NULL;
+    }
+
+    iter->current = iter->current->next;
+
+    return ((char *)iter->current - iter->offset);
+}
+
+static const struct rbh_iterator_operations LIST_OPS = {
+    .next = list_iter_next,
+    .destroy = free,
+};
+
+static const struct rbh_iterator LIST_ITERATOR = {
+    .ops = &LIST_OPS,
+};
+
+struct rbh_iterator *
+rbh_iter_list(struct rbh_list_node *list, off_t offset)
+{
+    struct list_iterator *iterator;
+
+    iterator = malloc(sizeof(*iterator));
+    if (iterator == NULL)
+        return NULL;
+
+    iterator->iterator = LIST_ITERATOR;
+    iterator->head = list;
+    iterator->current = list;
+    iterator->offset = offset;
+
+    return &iterator->iterator;
+}

@@ -16,6 +16,7 @@
 
 #include "check-compat.h"
 #include "robinhood/itertools.h"
+#include "robinhood/itertools.h"
 
 /*----------------------------------------------------------------------------*
  |                              rbh_iter_array()                              |
@@ -301,6 +302,47 @@ START_TEST(rir_basic)
 }
 END_TEST
 
+/*----------------------------------------------------------------------------*
+ |                              rbh_iter_list()                               |
+ *----------------------------------------------------------------------------*/
+
+START_TEST(ril_basic)
+{
+    struct list_elem {
+        int value;
+        struct rbh_list_node link;
+    } values[4] = {
+        { .value = 1 },
+        { .value = 2 },
+        { .value = 3 },
+        { .value = 4 },
+    };
+    struct rbh_iterator *iter;
+    struct rbh_list_node list;
+
+    rbh_list_init(&list);
+
+    for (int i = 0; i < 4; i++)
+        rbh_list_add_tail(&list, &values[i].link);
+
+    iter = rbh_iter_list(&list, offsetof(struct list_elem, link));
+    ck_assert_ptr_nonnull(iter);
+
+    for (int i = 0; i < 4; i++) {
+        const struct list_elem *node;
+
+        node = rbh_iter_next(iter);
+        ck_assert_ptr_nonnull(node);
+        ck_assert_int_eq(node->value, values[i].value);
+    }
+
+    ck_assert_ptr_null(rbh_iter_next(iter));
+    ck_assert_int_eq(errno, ENODATA);
+
+    rbh_iter_destroy(iter);
+}
+END_TEST
+
 static Suite *
 unit_suite(void)
 {
@@ -336,6 +378,9 @@ unit_suite(void)
 
     tests = tcase_create("rbh_iter_ring()");
     tcase_add_test(tests, rir_basic);
+
+    tests = tcase_create("rbh_iter_list()");
+    tcase_add_test(tests, ril_basic);
 
     suite_add_tcase(suite, tests);
 
