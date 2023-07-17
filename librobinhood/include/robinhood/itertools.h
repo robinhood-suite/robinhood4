@@ -10,6 +10,9 @@
 
 #include "robinhood/iterator.h"
 #include "robinhood/ring.h"
+#include "robinhood/list.h"
+
+#include <sys/types.h>
 
 /* @file
  * A collection of utilities to manipulate and build iterators
@@ -206,5 +209,31 @@ rbh_iter_ring(struct rbh_ring *ring, size_t element_size);
  */
 struct rbh_mut_iterator *
 rbh_mut_iter_ring(struct rbh_ring *ring, size_t element_size);
+
+/**
+ * Build an iterator from a linked list.
+ *
+ * @param list    head of the linked list
+ * @param offset  offset in bytes of the node in the wrapper structure.
+ *                The offset is positive. For example:
+ *
+ *                struct list_item {
+ *                    int value;
+ *                    struct rbh_list_node link;
+ *                };
+ *
+ *                struct rbh_list_node *list;
+ *
+ *                struct rbh_iterator *list_iter = rbh_iter_list(
+ *                    list, offsetof(struct list_item, link)
+ *                    );
+ *
+ * @return        a pointer to a newly allocated struct rbh_iterator on success,
+ *                NULL on error and errno is set appropriately
+ *
+ * @errro ENOMEM  there was not enough memory available
+ */
+struct rbh_iterator *
+rbh_iter_list(struct rbh_list_node *list, off_t offset);
 
 #endif
