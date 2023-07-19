@@ -45,6 +45,15 @@ rbh_id_copy(struct rbh_id *dest, const struct rbh_id *src, char **buffer,
     return 0;
 }
 
+bool
+rbh_id_equal(const struct rbh_id *first, const struct rbh_id *second)
+{
+    if (first->size != second->size)
+        return false;
+
+    return !memcmp(first->data, second->data, first->size);
+}
+
 static struct rbh_id *
 rbh_id_clone(const struct rbh_id *id)
 {
