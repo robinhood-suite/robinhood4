@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cd762aee_9972a1d8",
+        "filename": "rbh-find-lustre/src/filters.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-07-25T13:21:20Z",
+      "side": 1,
+      "message": "major:  `[a:b:c][]` doesn\u0027t fail here aswell",
+      "range": {
+        "startLine": 160,
+        "startChar": 39,
+        "endLine": 160,
+        "endChar": 43
+      },
+      "revId": "526ed3408d562e1d45e3fed3ec2552b9267fa165",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
