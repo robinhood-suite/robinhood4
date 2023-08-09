@@ -255,13 +255,21 @@ feed(struct sink *sink, struct source *source,
          * error and manage the next record instead of quitting
          */
         if (sink_process(sink, fsevents) && errno != ESTALE && errno != ENOENT)
-            error(EXIT_FAILURE, errno, "sink_process");
+            break;
 
         rbh_iter_destroy(fsevents);
     }
 
-    if (errno != ENODATA)
+    switch (errno) {
+    case 0:
+    case ENODATA:
+        break;
+    case RBH_BACKEND_ERROR:
+        error(EXIT_FAILURE, 0, "unhandled error: %s\n", rbh_backend_error);
+        __builtin_unreachable();
+    default:
         error(EXIT_FAILURE, errno, "getting the next batch of fsevents");
+    }
 
     rbh_mut_iter_destroy(deduplicator);
 }
