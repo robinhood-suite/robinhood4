@@ -105,7 +105,8 @@ test_setxattr_replace()
                          {_id: 0, "xattrs.user.test": 1})')
 
     if [ "$old_value" == "$new_value" ]; then
-        error "xattrs values should be different after an update"
+        error "xattrs values should be different after an update:" \
+            "$old_value != $new_value"
     fi
 }
 
