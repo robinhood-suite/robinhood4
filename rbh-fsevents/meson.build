@@ -52,6 +52,7 @@ executable(
     sources: [
         'rbh-fsevents.c',
         'src/deduplicator.c',
+        'src/deduplicator/rbh_fsevent_utils.c',
         'src/enricher.c',
         'src/enrichers/posix.c',
         'src/serialization.c',
