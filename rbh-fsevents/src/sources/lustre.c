@@ -128,14 +128,17 @@ build_xattrs(void *arg)
     xattr_value = rbh_sstack_push(_values, NULL, sizeof(*xattr_value));
     if (xattr_value == NULL)
         return NULL;
+
     xattr_value->type = RBH_VT_STRING;
     xattr_value->string = rbh_sstack_push(_values, xattr_name,
                                           strlen(xattr_name) + 1);
     if (xattr_value->string == NULL)
         return NULL;
+
     xattr_sequence = rbh_sstack_push(_values, NULL, sizeof(*xattr_sequence));
     if (xattr_sequence == NULL)
         return NULL;
+
     xattr_sequence->type = RBH_VT_SEQUENCE;
     xattr_sequence->sequence.count = 1;
     xattr_sequence->sequence.values = xattr_value;
@@ -185,17 +188,16 @@ static struct rbh_value *
 _fill_enrich(const char *key, struct rbh_value *(*builder)(void *),
              void *arg)
 {
-    const struct rbh_value_map MAP = {
-        .count = 1,
-        .pairs = build_pair(key, builder, arg),
-    };
     const struct rbh_value ENRICH = {
         .type = RBH_VT_MAP,
-        .map = MAP,
+        .map = {
+            .count = 1,
+            .pairs = build_pair(key, builder, arg),
+        },
     };
     struct rbh_value *enrich;
 
-    if (MAP.pairs == NULL)
+    if (ENRICH.map.pairs == NULL)
         return NULL;
 
     enrich = rbh_sstack_push(_values, NULL, sizeof(*enrich));
@@ -511,7 +513,7 @@ build_softlink_events(unsigned int process_step, struct changelog_rec *record,
         if (build_enrich_xattr_fsevent(&fsevent->xattrs,
                                        "fid", fill_ns_xattrs_fid(record),
                                        NULL))
-        return -1;
+            return -1;
 
         break;
     case 2:
@@ -1012,7 +1014,7 @@ retry:
     fsevent->id.data = id->data;
     fsevent->id.size = id->size;
 
-    switch(record->cr_type) {
+    switch (record->cr_type) {
     case CL_CREATE:
     case CL_MKDIR:
         rc = build_create_inode_events(records->process_step, record, fsevent);
@@ -1127,8 +1129,8 @@ static const struct rbh_iterator LUSTRE_CHANGELOG_ITERATOR = {
 };
 
 static void
-lustre_changelog_init(struct lustre_changelog_iterator *events,
-                      const char *mdtname)
+lustre_changelog_iter_init(struct lustre_changelog_iterator *events,
+                           const char *mdtname)
 {
     int rc;
 
@@ -1194,7 +1196,7 @@ source_from_lustre_changelog(const char *mdtname)
     if (source == NULL)
         error(EXIT_FAILURE, errno, "malloc");
 
-    lustre_changelog_init(&source->events, mdtname);
+    lustre_changelog_iter_init(&source->events, mdtname);
 
     _values = rbh_sstack_new(sizeof(struct rbh_value_pair) * (1 << 7));
     source->events.prev_record = NULL;
