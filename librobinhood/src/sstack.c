@@ -69,6 +69,7 @@ rbh_sstack_push(struct rbh_sstack *sstack, const void *data, size_t size)
     void *ret;
 
 retry:
+    errno = 0;
     ret = rbh_stack_push(sstack->stacks[sstack->current], data, size);
     if (ret != NULL)
         return ret;
