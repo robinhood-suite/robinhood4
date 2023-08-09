@@ -243,7 +243,7 @@ feed(struct sink *sink, struct source *source,
             break;
 
         if (builder != NULL)
-            fsevents = enrich_iter_builder_build_iter(builder, fsevents);
+            fsevents = build_enrich_iter(builder, fsevents);
         else if (!allow_partials)
             fsevents = iter_no_partial(fsevents);
 
