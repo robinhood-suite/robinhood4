@@ -23,7 +23,7 @@ test_rename()
 
     local entries=$(mongo "$testdb" --eval "db.entries.find()" | wc -l)
     if [[ $entries -ne $count ]]; then
-        error "There should be only $count entries in the database"
+        error "There should be $count entries in the database, found $entries"
     fi
 
     find_attribute '"ns": { $exists : true }' '"ns": { $size : 1 }' \

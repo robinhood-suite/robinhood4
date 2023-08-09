@@ -42,7 +42,7 @@ test_rm_with_hsm_copy()
     local count=$(find . | wc -l)
     count=$((count + 1))
     if [[ $entries -ne $count ]]; then
-        error "There should be only $count entries in the database"
+        error "There should be $count entries in the database, found $entries"
     fi
 
     find_attribute '"ns": { $exists : true }' '"ns": { $size : 0 }'
