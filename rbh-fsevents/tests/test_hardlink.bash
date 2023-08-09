@@ -36,7 +36,7 @@ test_create_hardlink()
     local count=$(find . | wc -l)
     count=$((count - 1))
     if [[ $entries -ne $count ]]; then
-        error "There should be only $count entries in the database"
+        error "There should be $count entries in the database, found $entries"
     fi
 
     find_attribute "\"ns.name\":\"$entry.tmp\"" "\"ns.name\":\"$entry\""

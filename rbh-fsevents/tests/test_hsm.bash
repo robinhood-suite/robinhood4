@@ -107,7 +107,7 @@ test_hsm_remove_and_rm()
     local entries=$(mongo "$testdb" --eval "db.entries.find()" | wc -l)
     local count=$(find . | wc -l)
     if [[ $entries -ne $count ]]; then
-        error "There should be only $count entries in the database"
+        error "There should be $count entries in the database, found $entries"
     fi
 }
 
