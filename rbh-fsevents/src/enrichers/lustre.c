@@ -11,8 +11,6 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-#include <robinhood.h>
-
 #include "enricher.h"
 #include "internals.h"
 
