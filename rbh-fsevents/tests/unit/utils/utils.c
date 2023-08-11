@@ -208,3 +208,56 @@ fake_upsert(struct rbh_fsevent *fsevent, struct rbh_id *id, uint32_t mask,
     fsevent->upsert.statx = statx;
     fsevent->xattrs = make_upsert_statx(pairs, map_values, mask);
 }
+static struct rbh_value_map
+make_symlink(struct rbh_value_pair *pairs, struct rbh_value *values)
+{
+    struct rbh_value_map xattr = {
+        .count = 1,
+        .pairs = &pairs[0],
+    };
+    struct rbh_value_pair rbh_fsevents_pair = { /* pairs[0] */
+        .key = "rbh-fsevents",
+        .value = &values[0],
+    };
+    struct rbh_value rbh_fsevents_map_value = { /* values[0] */
+        .type = RBH_VT_MAP,
+        .map = {
+            .count = 1,
+            .pairs = &pairs[1],
+        },
+    };
+    struct rbh_value_pair symlink_pair = { /* pairs[1] */
+        .key = "symlink",
+        .value = &values[1],
+    };
+    struct rbh_value symlink_value = { /* values[1] */
+        .type = RBH_VT_STRING,
+        .string = "symlink",
+    };
+
+    memcpy(&pairs[0], &rbh_fsevents_pair, sizeof(rbh_fsevents_pair));
+    memcpy(&pairs[1], &symlink_pair, sizeof(symlink_pair));
+
+    memcpy(&values[0], &rbh_fsevents_map_value, sizeof(rbh_fsevents_map_value));
+    memcpy(&values[1], &symlink_value, sizeof(symlink_value));
+
+    return xattr;
+}
+
+void
+fake_symlink(struct rbh_fsevent *fsevent, struct rbh_id *id)
+{
+    struct rbh_value_pair *pairs;
+    struct rbh_value *values;
+
+    pairs = malloc(2 * sizeof(*pairs));
+    ck_assert_ptr_nonnull(pairs);
+
+    values = malloc(2 * sizeof(*values));
+    ck_assert_ptr_nonnull(values);
+
+    memset(fsevent, 0, sizeof(*fsevent));
+    fsevent->id = *id;
+    fsevent->upsert.statx = NULL;
+    fsevent->xattrs = make_symlink(pairs, values);
+}
