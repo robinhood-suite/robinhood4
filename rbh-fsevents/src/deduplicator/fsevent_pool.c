@@ -158,6 +158,85 @@ rbh_fsevent_pool_insert_new_entry(struct rbh_fsevent_pool *pool,
 }
 
 static int
+insert_symlink(struct rbh_fsevent_pool *pool,
+               struct rbh_fsevent *cached_event)
+{
+    const struct rbh_value_map *rbh_fsevents_map;
+    struct rbh_value symlink_value = {
+        .type = RBH_VT_STRING,
+        .string = "symlink"
+    };
+    struct rbh_value_pair symlink_pair = {
+        .key = "symlink",
+        .value = rbh_sstack_push(pool->xattr_sequence_container,
+                                 &symlink_value,
+                                 sizeof(symlink_value)
+                                 )
+    };
+    struct rbh_value_pair *tmp;
+
+    rbh_fsevents_map = rbh_fsevent_find_fsevents_map(cached_event);
+    assert(rbh_fsevents_map);
+
+    tmp = rbh_sstack_push(pool->xattr_sequence_container,
+                          NULL,
+                          (rbh_fsevents_map->count + 1) * sizeof(*tmp)
+                          );
+    memcpy(tmp, rbh_fsevents_map->pairs,
+           rbh_fsevents_map->count * sizeof(*tmp)
+           );
+    memcpy(&tmp[rbh_fsevents_map->count], &symlink_pair, sizeof(symlink_pair));
+
+    void **ptr = (void **)&rbh_fsevents_map->pairs;
+    *ptr = tmp;
+    size_t *count_ref = (size_t *)&rbh_fsevents_map->count;
+    (*count_ref)++;
+
+    return 0;
+}
+
+static int
+dedup_upsert(struct rbh_fsevent_pool *pool,
+             const struct rbh_fsevent *event,
+             struct rbh_fsevent *cached_upsert)
+{
+    const struct rbh_value_map *rbh_fsevents_map;
+
+    rbh_fsevents_map = rbh_fsevent_find_fsevents_map(event);
+    /* upsert events either contain "rbh-fsevents": "statx" or
+     * "rbh-fsevent": "symlink".
+     */
+    assert(rbh_fsevents_map);
+
+    for (size_t i = 0; i < rbh_fsevents_map->count; i++) {
+        const struct rbh_value_pair *xattr = &rbh_fsevents_map->pairs[i];
+
+        if (!strcmp(xattr->key, "statx")) {
+            struct rbh_value *mask;
+            mask = (struct rbh_value *)
+                cached_upsert->xattrs.pairs[0].value->map.pairs[0].value;
+
+            mask->uint32 |=
+                event->xattrs.pairs[0].value->map.pairs[0].value->uint32;
+
+            if (event->upsert.statx) {
+                if (cached_upsert->upsert.statx)
+                    merge_statx((struct rbh_statx *)cached_upsert->upsert.statx,
+                                event->upsert.statx);
+                else
+                    cached_upsert->upsert.statx = event->upsert.statx;
+            }
+        } else if (!strcmp(xattr->key, "symlink")) {
+            // XXX at most one symlink per inode
+            insert_symlink(pool, cached_upsert);
+        }
+    }
+
+
+    return 0;
+}
+
+static int
 deduplicate_event(struct rbh_fsevent_pool *pool, struct rbh_list_node *events,
                   const struct rbh_fsevent *event)
 {
@@ -211,6 +290,22 @@ deduplicate_event(struct rbh_fsevent_pool *pool, struct rbh_list_node *events,
                 }
             }
 
+            return 0;
+        }
+    } else if (event->type == RBH_FET_UPSERT) {
+        struct rbh_fsevent_node *upsert = NULL;
+        struct rbh_fsevent_node *elem;
+
+        rbh_list_foreach(events, elem, link) {
+            if (elem->fsevent.type == RBH_FET_UPSERT) {
+                upsert = elem;
+                /* with the dedup, only one upsert per event list */
+                break;
+            }
+        }
+
+        if (upsert) {
+            dedup_upsert(pool, event, &upsert->fsevent);
             return 0;
         }
     } /* no dedup for links */
