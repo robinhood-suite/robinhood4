@@ -185,6 +185,165 @@ fake_delete(struct rbh_fsevent *fsevent, struct rbh_id *id)
 }
 
 static struct rbh_value_map
+make_xattr_fsevent(struct rbh_value_pair *pairs, struct rbh_value *map_values,
+                   const char *key)
+{
+    struct rbh_value_map xattr = {
+        .count = 1,
+        .pairs = &pairs[0], /* "rbh-fsevents" */
+    };
+    struct rbh_value_pair rbh_fsevents_map = { /* pairs[0] */
+        .key = "rbh-fsevents",
+        .value = &map_values[0],
+    };
+    struct rbh_value rbh_fsevents_value = { /* map_values[0] */
+        .type = RBH_VT_MAP,
+        .map = {
+            .count = 1,
+            .pairs = &pairs[1], /* "xattrs" */
+        },
+    };
+    struct rbh_value_pair xattrs_map = { /* pairs[1] */
+        .key = "xattrs",
+        .value = &map_values[1], /* [ "key" ] */
+    };
+    struct rbh_value xattrs_value = { /* map_values[1] */
+        .type = RBH_VT_SEQUENCE,
+        .sequence = {
+            .count = 1,
+            .values = &map_values[2],
+        },
+    };
+    struct rbh_value key_string = { /* map_values[2] */
+        .type = RBH_VT_STRING,
+        .string = key,
+    };
+
+    memcpy(&pairs[0], &rbh_fsevents_map, sizeof(rbh_fsevents_map));
+    memcpy(&pairs[1], &xattrs_map, sizeof(xattrs_map));
+
+    memcpy(&map_values[0], &rbh_fsevents_value, sizeof(rbh_fsevents_value));
+    memcpy(&map_values[1], &xattrs_value, sizeof(xattrs_value));
+    memcpy(&map_values[2], &key_string, sizeof(key_string));
+
+    return xattr;
+}
+
+void
+fake_xattr(struct rbh_fsevent *fsevent, struct rbh_id *id, const char *key)
+{
+    struct rbh_value_pair *pairs;
+    struct rbh_value *map_values;
+
+    pairs = alloc(3 * sizeof(*pairs));
+    ck_assert_ptr_nonnull(pairs);
+    map_values = alloc(3 * sizeof(*map_values));
+    ck_assert_ptr_nonnull(map_values);
+
+    memset(fsevent, 0, sizeof(*fsevent));
+    fsevent->id = *id;
+    fsevent->type = RBH_FET_XATTR;
+    fsevent->xattrs = make_xattr_fsevent(pairs, map_values, key);
+}
+
+static struct rbh_value_map
+make_lustre_fsevent(struct rbh_value_pair *pairs,
+                    struct rbh_value *map_values)
+{
+    struct rbh_value_map xattr = {
+        .count = 1,
+        .pairs = &pairs[0], /* "rbh-fsevents" */
+    };
+    struct rbh_value_pair rbh_fsevents = { /* pairs[0] */
+        .key = "rbh-fsevents",
+        .value = &map_values[0],
+    };
+    struct rbh_value lustre_map = { /* map_values[0] */
+        .type = RBH_VT_MAP,
+        .map = {
+            .count = 1,
+            .pairs = &pairs[1], /* "lustre": NULL */
+        },
+    };
+    struct rbh_value_pair lustre_map_value = { /* pairs[1] */
+        .key = "lustre",
+        .value = NULL,
+    };
+
+    memcpy(&pairs[0], &rbh_fsevents, sizeof(rbh_fsevents));
+    memcpy(&pairs[1], &lustre_map_value, sizeof(lustre_map_value));
+
+    memcpy(&map_values[0], &lustre_map, sizeof(lustre_map));
+
+    return xattr;
+}
+
+void
+fake_lustre(struct rbh_fsevent *fsevent, struct rbh_id *id)
+{
+    struct rbh_value *map_values;
+    struct rbh_value_pair *pairs;
+
+    pairs = alloc(2 * sizeof(*pairs));
+    ck_assert_ptr_nonnull(pairs);
+
+    map_values = alloc(2 * sizeof(*map_values));
+    ck_assert_ptr_nonnull(map_values);
+
+    memset(fsevent, 0, sizeof(*fsevent));
+    fsevent->type = RBH_FET_XATTR;
+    fsevent->id = *id;
+    fsevent->xattrs = make_lustre_fsevent(pairs, map_values);
+}
+
+static struct rbh_value_map
+make_fid(struct rbh_value *map_values, struct rbh_value_pair *pairs,
+         const struct lu_fid *fid)
+{
+    struct rbh_value_map xattr = {
+        .count = 1,
+        .pairs = &pairs[0],
+    };
+    struct rbh_value_pair fid_pair = { /* pairs[0] */
+        .key = "fid",
+        .value = &map_values[0], /* fid */
+    };
+    struct rbh_value fid_value = { /* map_values[0] */
+        .type = RBH_VT_BINARY,
+        .binary = {
+            .data = (const char *)fid,
+            .size = sizeof(*fid),
+        },
+    };
+
+    memcpy(&pairs[0], &fid_pair, sizeof(fid_pair));
+    memcpy(&map_values[0], &fid_value, sizeof(fid_value));
+
+    return xattr;
+}
+
+void
+fake_fid(struct rbh_fsevent *fsevent, struct rbh_id *id)
+{
+    struct rbh_value *map_values;
+    struct rbh_value_pair *pairs;
+    const struct lu_fid *fid;
+
+    map_values = alloc(sizeof(*map_values));
+    ck_assert_ptr_nonnull(map_values);
+    pairs = alloc(sizeof(*pairs));
+    ck_assert_ptr_nonnull(pairs);
+
+    fid = rbh_lu_fid_from_id(id);
+
+    memset(fsevent, 0, sizeof(*fsevent));
+
+    fsevent->type = RBH_FET_XATTR;
+    fsevent->id = *id;
+    fsevent->xattrs = make_fid(map_values, pairs, fid);
+}
+
+static struct rbh_value_map
 make_upsert_statx(struct rbh_value_pair *pairs,
                   struct rbh_value *map_values,
                   uint32_t mask)
