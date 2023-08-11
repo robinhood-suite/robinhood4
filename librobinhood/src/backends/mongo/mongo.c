@@ -411,6 +411,14 @@ mongo_bulk_init_from_fsevents(mongoc_bulk_operation_t *bulk,
         if (fsevent == NULL) {
             if (errno == ENODATA)
                 break;
+
+            /* If we couldn't open the file because it is already deleted
+             * (ESTALE or ENOENT are both possible, depending on the event),
+             * just ignore the error and manage the next record instead of
+             * quitting.
+             */
+            if (errno == ESTALE || errno == ENOENT)
+                continue;
             return -1;
         }
 
