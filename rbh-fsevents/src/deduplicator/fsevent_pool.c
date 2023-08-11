@@ -152,6 +152,331 @@ rbh_fsevent_pool_insert_new_entry(struct rbh_fsevent_pool *pool,
 }
 
 static int
+insert_partial_xattr(struct rbh_fsevent_pool * pool,
+                     struct rbh_fsevent *cached_event,
+                     const struct rbh_value *partial_xattr)
+{
+    const struct rbh_value_map *rbh_fsevents_map;
+    const struct rbh_value *xattrs_sequence;
+    size_t *count_ref;
+
+    /* we have at least one xattr in the cached event */
+    assert(cached_event->xattrs.count >= 1);
+
+    rbh_fsevents_map = rbh_fsevent_find_fsevents_map(cached_event);
+    if (!rbh_fsevents_map) {
+        /* "rbh-fsevents" may not exist if first xattr was complete */
+        struct rbh_value rbh_fsevent_value = {
+            .type = RBH_VT_MAP,
+            .map = {
+                .count = 0,
+                .pairs = NULL,
+            },
+        };
+        struct rbh_value_pair rbh_fsevent_pair = {
+            .key = "rbh-fsevents",
+            .value = rbh_sstack_push(pool->xattr_sequence_container,
+                                     &rbh_fsevent_value,
+                                     sizeof(rbh_fsevent_value)
+                                     ),
+        };
+        struct rbh_value_pair *tmp;
+
+        tmp = rbh_sstack_push(pool->xattr_sequence_container,
+                              NULL,
+                              sizeof(*tmp) * (cached_event->xattrs.count + 1)
+                              );
+        if (!tmp)
+            return -1;
+
+        memcpy(tmp, cached_event->xattrs.pairs,
+               sizeof(*tmp) * cached_event->xattrs.count
+               );
+        memcpy(&tmp[cached_event->xattrs.count], &rbh_fsevent_pair,
+               sizeof(rbh_fsevent_pair)
+               );
+        rbh_fsevents_map = &tmp[cached_event->xattrs.count].value->map;
+        cached_event->xattrs.count++;
+        cached_event->xattrs.pairs = tmp;
+    }
+
+    xattrs_sequence = rbh_map_find(rbh_fsevents_map, "xattrs");
+    if (!xattrs_sequence) {
+        /* the map may not exist if first event was "lustre" */
+        struct rbh_value xattr_string = {
+            .type = RBH_VT_STRING,
+            .string = rbh_sstack_push(pool->xattr_sequence_container,
+                                      partial_xattr->string,
+                                      strlen(partial_xattr->string) + 1
+                                      ),
+        };
+        struct rbh_value xattrs_sequence = {
+            .type = RBH_VT_SEQUENCE,
+            .sequence = {
+                .count = 1,
+                .values = rbh_sstack_push(pool->xattr_sequence_container,
+                                          &xattr_string, sizeof(xattr_string)
+                                          ),
+                // TODO check non NULL
+            },
+        };
+        struct rbh_value_pair xattrs_pair = {
+            .key = "xattrs",
+            .value = rbh_sstack_push(pool->xattr_sequence_container,
+                                     &xattrs_sequence, sizeof(xattrs_sequence)
+                                     ),
+            // TODO check non null
+        };
+        struct rbh_value_pair *tmp;
+
+        tmp = rbh_sstack_push(pool->xattr_sequence_container,
+                              NULL,
+                              (rbh_fsevents_map->count + 1) *
+                              sizeof(*rbh_fsevents_map->pairs)
+                              );
+        memcpy(tmp, rbh_fsevents_map->pairs,
+               rbh_fsevents_map->count * sizeof(*rbh_fsevents_map->pairs)
+               );
+        memcpy(&tmp[rbh_fsevents_map->count],
+               &xattrs_pair, sizeof(xattrs_pair)
+               );
+
+        void **ptr = (void **)&rbh_fsevents_map->pairs;
+        *ptr = tmp;
+
+        count_ref = (size_t *)&rbh_fsevents_map->count;
+        (*count_ref)++;
+
+        return 0;
+    }
+    struct rbh_value *tmp;
+
+    assert(xattrs_sequence->type == RBH_VT_SEQUENCE);
+
+    tmp = rbh_sstack_push(pool->xattr_sequence_container,
+                          NULL,
+                          (xattrs_sequence->sequence.count + 1) *
+                          sizeof(*xattrs_sequence->sequence.values)
+                          );
+    if (!tmp)
+        return -1;
+
+    void **ptr = (void **)&xattrs_sequence->sequence.values;
+    count_ref = (size_t *)&xattrs_sequence->sequence.count;
+
+    struct rbh_value xattr_string = {
+        .type = RBH_VT_STRING,
+        .string = rbh_sstack_push(pool->xattr_sequence_container,
+                                  partial_xattr->string,
+                                  strlen(partial_xattr->string) + 1
+                                  ),
+    };
+
+    memcpy(tmp, xattrs_sequence->sequence.values,
+           xattrs_sequence->sequence.count *
+           sizeof(*xattrs_sequence->sequence.values)
+           );
+    memcpy(&tmp[xattrs_sequence->sequence.count], &xattr_string,
+           sizeof(xattr_string)
+           );
+
+    *ptr = tmp;
+    (*count_ref)++;
+
+    return 0;
+}
+
+static void
+dedup_partial_xattr(struct rbh_fsevent_pool *pool,
+                    struct rbh_fsevent *cached_event,
+                    const struct rbh_value *partial_xattr)
+{
+    const struct rbh_value *cached_partial_xattr;
+
+    assert(partial_xattr->type == RBH_VT_STRING);
+    cached_partial_xattr = rbh_fsevent_find_partial_xattr(
+        // FIXME this does not work
+        cached_event, partial_xattr->string
+        );
+
+    if (cached_partial_xattr)
+        /* xattr found, do not add it to the cached fsevent */
+        return;
+
+    insert_partial_xattr(pool, cached_event, partial_xattr);
+}
+
+static int
+insert_enrich_element(struct rbh_fsevent_pool *pool,
+                      struct rbh_fsevent *cached_event,
+                      const struct rbh_value_pair *xattr)
+{
+    const struct rbh_value_map *rbh_fsevents_map;
+
+    rbh_fsevents_map = rbh_fsevent_find_fsevents_map(cached_event);
+
+    if (!rbh_fsevents_map) {
+        /* "rbh-fsevents" may not exist if first xattr was complete */
+        struct rbh_value rbh_fsevents_value = {
+            .type = RBH_VT_MAP,
+            .map = {
+                .count = 1,
+                .pairs = rbh_sstack_push(pool->xattr_sequence_container,
+                                         xattr,
+                                         sizeof(*xattr)
+                                         ),
+            },
+        };
+        struct rbh_value_pair rbh_fsevents_map = {
+            .key = "rbh-fsevents",
+            .value = rbh_sstack_push(pool->xattr_sequence_container,
+                                     &rbh_fsevents_value,
+                                     sizeof(rbh_fsevents_value)
+                                     ),
+        };
+        struct rbh_value_pair *tmp;
+
+        tmp = rbh_sstack_push(pool->xattr_sequence_container,
+                              NULL,
+                              sizeof(*tmp) * (cached_event->xattrs.count + 1)
+                              );
+        if (!tmp)
+            return -1;
+
+        memcpy(tmp, cached_event->xattrs.pairs,
+               sizeof(*cached_event->xattrs.pairs) * cached_event->xattrs.count
+               );
+        memcpy(&tmp[cached_event->xattrs.count], &rbh_fsevents_map,
+               sizeof(rbh_fsevents_map)
+               );
+
+        cached_event->xattrs.pairs = tmp;
+        cached_event->xattrs.count++;
+
+        return 0;
+    }
+
+    size_t *count_ref = (size_t *)&rbh_fsevents_map->count;
+    void **ptr = (void **)&rbh_fsevents_map->pairs;
+
+    struct rbh_value_pair *tmp;
+
+    tmp = rbh_sstack_push(pool->xattr_sequence_container,
+                          NULL,
+                          sizeof(*tmp) * (rbh_fsevents_map->count + 1)
+                          );
+    if (!tmp)
+        // TODO error(...);
+        return -1;
+
+    memcpy(tmp, rbh_fsevents_map->pairs,
+           rbh_fsevents_map->count * sizeof(*rbh_fsevents_map->pairs)
+           );
+    memcpy(&tmp[rbh_fsevents_map->count], xattr, sizeof(*xattr));
+
+    *ptr = tmp;
+    (*count_ref)++;
+
+    return 0;
+}
+
+static void
+dedup_enrich_element(struct rbh_fsevent_pool *pool,
+                     struct rbh_fsevent *cached_event,
+                     const struct rbh_value_pair *xattr)
+{
+    const struct rbh_value_pair *cached_xattr;
+
+    cached_xattr = rbh_fsevent_find_enrich_element(cached_event, xattr->key);
+    if (cached_xattr)
+        /* xattr found, do not add it to the cached fsevent */
+        // FIXME if the value is different, update it
+        return;
+
+    insert_enrich_element(pool, cached_event, xattr);
+}
+
+static int
+insert_xattr(struct rbh_fsevent_pool *pool, struct rbh_fsevent *cached_event,
+             const struct rbh_value_pair *xattr)
+{
+    struct rbh_value_pair *tmp;
+
+    tmp = rbh_sstack_push(pool->xattr_sequence_container,
+                          NULL,
+                          sizeof(*tmp) * (cached_event->xattrs.count + 1)
+                          );
+    if (!tmp)
+        return -1;
+
+    memcpy(tmp, cached_event->xattrs.pairs,
+           cached_event->xattrs.count * sizeof(*tmp));
+    memcpy(&tmp[cached_event->xattrs.count], xattr, sizeof(*xattr));
+
+    cached_event->xattrs.count++;
+    cached_event->xattrs.pairs = tmp;
+
+    return 0;
+}
+
+static void
+dedup_xattr(struct rbh_fsevent_pool *pool,
+            struct rbh_fsevent *cached_event,
+            const struct rbh_value_pair *xattr)
+{
+    const struct rbh_value_pair *cached_xattr;
+
+    cached_xattr = rbh_fsevent_find_xattr(cached_event, xattr->key);
+    if (cached_xattr)
+        /* xattr found, do not add it to the cached fsevent */
+        // FIXME if the value is different, update it
+        return;
+
+    insert_xattr(pool, cached_event, xattr);
+}
+
+static void
+dedup_xattrs(struct rbh_fsevent_pool *pool,
+             const struct rbh_fsevent *event,
+             struct rbh_fsevent *cached_xattr)
+{
+    for (size_t i = 0; i < event->xattrs.count; i++) {
+        const struct rbh_value_pair *xattr = &event->xattrs.pairs[i];
+
+        if (!strcmp(xattr->key, "rbh-fsevents")) {
+            const struct rbh_value_map *sub_map;
+
+            assert(xattr->value->type == RBH_VT_MAP);
+            sub_map = (void *)&xattr->value->map;
+
+            for (size_t i = 0; i < sub_map->count; i++) {
+                if (!strcmp(sub_map->pairs[i].key, "xattrs")) {
+                    const struct rbh_value *to_enrich;
+
+                    to_enrich = (void *)sub_map->pairs[i].value;
+
+                    assert(to_enrich->type == RBH_VT_SEQUENCE);
+
+                    for (size_t i = 0; i < to_enrich->sequence.count;
+                         i++) {
+                        const struct rbh_value *partial_xattr;
+
+                        partial_xattr = (void *)&to_enrich->sequence.values[i];
+                        dedup_partial_xattr(pool, cached_xattr, partial_xattr);
+                    }
+                } else {
+                    dedup_enrich_element(pool, cached_xattr,
+                                         &sub_map->pairs[i]
+                                         );
+                }
+            }
+        } else {
+            dedup_xattr(pool, cached_xattr, xattr);
+        }
+    }
+}
+
+static int
 insert_symlink(struct rbh_fsevent_pool *pool,
                struct rbh_fsevent *cached_event)
 {
@@ -284,6 +609,25 @@ deduplicate_event(struct rbh_fsevent_pool *pool, struct rbh_list_node *events,
                     }
                 }
             }
+            return 0;
+        }
+    } else if (event->type == RBH_FET_XATTR) {
+        struct rbh_fsevent_node *xattr_event = NULL;
+        struct rbh_fsevent_node *elem;
+
+        // XXX instead of a list, we could have one xattr, a list of links, a
+        // list of unlinks, one delete...
+        rbh_list_foreach(events, elem, link) {
+            if (elem->fsevent.type == RBH_FET_XATTR) {
+                xattr_event = elem;
+                /* with the dedup, only one xattr per event list */
+                break;
+            }
+        }
+
+        if (xattr_event) {
+            dedup_xattrs(pool, event, &xattr_event->fsevent);
+
             return 0;
         }
     } else if (event->type == RBH_FET_UPSERT) {
