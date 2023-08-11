@@ -11,10 +11,11 @@
 #include <robinhood/ring.h>
 
 #include "deduplicator.h"
+#include "deduplicator/fsevent_pool.h"
 
 struct deduplicator {
     struct rbh_mut_iterator batches;
-
+    struct rbh_fsevent_pool *pool;
     struct source *source;
 };
 
@@ -28,11 +29,30 @@ deduplicator_iter_next(void *iterator)
     struct deduplicator *deduplicator = iterator;
     const struct rbh_fsevent *fsevent;
 
-    fsevent = rbh_iter_next(&deduplicator->source->fsevents);
-    if (fsevent == NULL)
-        return NULL;
+    do {
+        int rc;
 
-    return rbh_iter_array(fsevent, sizeof(fsevent), 1);
+        fsevent = rbh_iter_next(&deduplicator->source->fsevents);
+        if (fsevent == NULL) {
+            if (errno == ENODATA)
+                break;
+
+            return NULL;
+        }
+
+        errno = 0;
+        rc = rbh_fsevent_pool_push(deduplicator->pool, fsevent);
+        if (rc == -1 && errno != ENOSPC)
+            return NULL;
+
+    } while (errno == 0);
+
+    /* The pool will be flushed whether the loop was stopped because
+     * rbh_iter_next returned NULL or the pool is full and needs to
+     * be flushed. In the first case, it means that not enough events
+     * where generated and we could not fill the pool completely.
+     */
+    return rbh_fsevent_pool_flush(deduplicator->pool);
 }
 
 static void
@@ -53,7 +73,7 @@ static const struct rbh_mut_iterator DEDUPLICATOR_ITERATOR = {
 };
 
 struct rbh_mut_iterator *
-deduplicator_new(size_t count __attribute__((unused)), struct source *source)
+deduplicator_new(size_t count, struct source *source)
 {
     struct deduplicator *deduplicator;
 
@@ -63,5 +83,8 @@ deduplicator_new(size_t count __attribute__((unused)), struct source *source)
 
     deduplicator->batches = DEDUPLICATOR_ITERATOR;
     deduplicator->source = source;
+    // TODO put the flush_size percent as a parameter
+    deduplicator->pool = rbh_fsevent_pool_new(count, count / 2);
+
     return &deduplicator->batches;
 }

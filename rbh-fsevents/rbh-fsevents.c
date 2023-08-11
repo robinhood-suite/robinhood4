@@ -213,7 +213,7 @@ mount_fd_exit(void)
         close(mount_fd);
 }
 
-static const size_t BATCH_SIZE = 1;
+static const size_t BATCH_SIZE = 100;
 
 static struct rbh_backend *enrich_point;
 
@@ -250,11 +250,7 @@ feed(struct sink *sink, struct source *source,
         if (fsevents == NULL)
             error(EXIT_FAILURE, errno, "iter_enrich");
 
-        /* If we couldn't open the file because it is already deleted (ESTALE or
-         * ENOENT are both possible, depending of the event), just ignore the
-         * error and manage the next record instead of quitting
-         */
-        if (sink_process(sink, fsevents) && errno != ESTALE && errno != ENOENT)
+        if (sink_process(sink, fsevents))
             break;
 
         rbh_iter_destroy(fsevents);
@@ -268,7 +264,7 @@ feed(struct sink *sink, struct source *source,
         error(EXIT_FAILURE, 0, "unhandled error: %s\n", rbh_backend_error);
         __builtin_unreachable();
     default:
-        error(EXIT_FAILURE, errno, "getting the next batch of fsevents");
+        error(EXIT_FAILURE, errno, "could not get the next batch of fsevents");
     }
 
     rbh_mut_iter_destroy(deduplicator);
