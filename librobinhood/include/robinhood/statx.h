@@ -94,4 +94,7 @@ int
 rbh_statx(int dirfd, const char *restrict pathname, int flags,
           unsigned int mask, struct rbh_statx *restrict statxbuf);
 
+void
+merge_statx(struct rbh_statx *original, const struct rbh_statx *override);
+
 #endif
