@@ -38,10 +38,19 @@ void
 fake_delete(struct rbh_fsevent *fsevent, struct rbh_id *id);
 
 void
+fake_xattr(struct rbh_fsevent *fsevent, struct rbh_id *id, const char *key);
+
+void
+fake_lustre(struct rbh_fsevent *fsevent, struct rbh_id *id);
+
+void
 fake_upsert(struct rbh_fsevent *fsevent, struct rbh_id *id, uint32_t mask,
             struct rbh_statx *statx);
 
 void
 fake_symlink(struct rbh_fsevent *fsevent, struct rbh_id *id);
+
+void
+fake_fid(struct rbh_fsevent *fsevent, struct rbh_id *id);
 
 #endif

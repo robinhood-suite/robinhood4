@@ -424,6 +424,266 @@ START_TEST(dedup_upsert_statx_symlink)
 }
 END_TEST
 
+START_TEST(dedup_same_xattr)
+{
+    struct rbh_mut_iterator *deduplicator;
+    struct source *fake_source = NULL;
+    struct rbh_fsevent fake_events[2];
+    struct rbh_mut_iterator *events;
+    struct rbh_fsevent *event;
+    struct rbh_id *id;
+
+    id = fake_id();
+
+    fake_xattr(&fake_events[0], id, "key");
+    fake_xattr(&fake_events[1], id, "key");
+
+    fake_source = event_list_source(fake_events, 2);
+    ck_assert_ptr_nonnull(fake_source);
+
+    deduplicator = deduplicator_new(20, fake_source);
+    ck_assert_ptr_nonnull(deduplicator);
+
+    events = rbh_mut_iter_next(deduplicator);
+    ck_assert_ptr_nonnull(events);
+
+    event = rbh_mut_iter_next(events);
+    ck_assert_ptr_nonnull(event);
+
+    event = rbh_mut_iter_next(events);
+    ck_assert_ptr_null(event);
+    ck_assert_int_eq(errno, ENODATA);
+
+    free(id);
+}
+END_TEST
+
+START_TEST(dedup_lustre_xattr)
+{
+    struct rbh_mut_iterator *deduplicator;
+    struct source *fake_source = NULL;
+    struct rbh_fsevent fake_events[2];
+    struct rbh_mut_iterator *events;
+    struct rbh_fsevent *event;
+    struct rbh_id *id;
+
+    id = fake_id();
+
+    fake_lustre(&fake_events[0], id);
+    fake_lustre(&fake_events[1], id);
+
+    fake_source = event_list_source(fake_events, 2);
+    ck_assert_ptr_nonnull(fake_source);
+
+    deduplicator = deduplicator_new(20, fake_source);
+    ck_assert_ptr_nonnull(deduplicator);
+
+    events = rbh_mut_iter_next(deduplicator);
+    ck_assert_ptr_nonnull(events);
+
+    event = rbh_mut_iter_next(events);
+    ck_assert_ptr_nonnull(event);
+
+    event = rbh_mut_iter_next(events);
+    ck_assert_ptr_null(event);
+    ck_assert_int_eq(errno, ENODATA);
+
+    free(id);
+}
+END_TEST
+
+START_TEST(dedup_xattr_merge_lustre_with_xattr)
+{
+    struct rbh_mut_iterator *deduplicator;
+    struct source *fake_source = NULL;
+    struct rbh_fsevent fake_events[2];
+    struct rbh_mut_iterator *events;
+    struct rbh_fsevent *event;
+    struct rbh_id *id;
+
+    id = fake_id();
+
+    fake_xattr(&fake_events[0], id, "test");
+    fake_lustre(&fake_events[1], id);
+    // TODO fake fid event
+
+    fake_source = event_list_source(fake_events, 2);
+    ck_assert_ptr_nonnull(fake_source);
+
+    deduplicator = deduplicator_new(20, fake_source);
+    ck_assert_ptr_nonnull(deduplicator);
+
+    events = rbh_mut_iter_next(deduplicator);
+    ck_assert_ptr_nonnull(events);
+
+    event = rbh_mut_iter_next(events);
+    ck_assert_ptr_nonnull(event);
+    ck_assert_int_eq(event->xattrs.count, 1);
+    ck_assert_str_eq(event->xattrs.pairs[0].key, "rbh-fsevents");
+    ck_assert_int_eq(event->xattrs.pairs[0].value->type, RBH_VT_MAP);
+    ck_assert_int_eq(event->xattrs.pairs[0].value->map.count, 2);
+    ck_assert_str_eq(event->xattrs.pairs[0].value->map.pairs[0].key, "xattrs");
+    ck_assert_str_eq(event->xattrs.pairs[0].value->map.pairs[1].key, "lustre");
+
+    event = rbh_mut_iter_next(events);
+    ck_assert_ptr_null(event);
+    ck_assert_int_eq(errno, ENODATA);
+
+    free(id);
+}
+END_TEST
+
+START_TEST(dedup_xattr_merge_xattrs_with_lustre)
+{
+    struct rbh_mut_iterator *deduplicator;
+    struct source *fake_source = NULL;
+    struct rbh_fsevent fake_events[2];
+    struct rbh_mut_iterator *events;
+    struct rbh_fsevent *event;
+    struct rbh_id *id;
+
+    id = fake_id();
+
+    fake_lustre(&fake_events[0], id);
+    fake_xattr(&fake_events[1], id, "test");
+
+    fake_source = event_list_source(fake_events, 2);
+    ck_assert_ptr_nonnull(fake_source);
+
+    deduplicator = deduplicator_new(20, fake_source);
+    ck_assert_ptr_nonnull(deduplicator);
+
+    events = rbh_mut_iter_next(deduplicator);
+    ck_assert_ptr_nonnull(events);
+
+    event = rbh_mut_iter_next(events);
+    ck_assert_ptr_nonnull(event);
+    ck_assert_int_eq(event->xattrs.count, 1);
+    ck_assert_str_eq(event->xattrs.pairs[0].key, "rbh-fsevents");
+    ck_assert_int_eq(event->xattrs.pairs[0].value->type, RBH_VT_MAP);
+    ck_assert_int_eq(event->xattrs.pairs[0].value->map.count, 2);
+    ck_assert_str_eq(event->xattrs.pairs[0].value->map.pairs[0].key, "lustre");
+    ck_assert_str_eq(event->xattrs.pairs[0].value->map.pairs[1].key, "xattrs");
+
+    event = rbh_mut_iter_next(events);
+    ck_assert_ptr_null(event);
+    ck_assert_int_eq(errno, ENODATA);
+
+    free(id);
+}
+END_TEST
+
+START_TEST(dedup_xattr_merge_fid_with_lustre)
+{
+    struct rbh_mut_iterator *deduplicator;
+    struct source *fake_source = NULL;
+    struct rbh_fsevent fake_events[2];
+    struct rbh_mut_iterator *events;
+    struct rbh_fsevent *event;
+    struct rbh_id *id;
+
+    id = fake_id();
+
+    fake_fid(&fake_events[0], id);
+    fake_lustre(&fake_events[1], id);
+
+    fake_source = event_list_source(fake_events, 2);
+    ck_assert_ptr_nonnull(fake_source);
+
+    deduplicator = deduplicator_new(20, fake_source);
+    ck_assert_ptr_nonnull(deduplicator);
+
+    events = rbh_mut_iter_next(deduplicator);
+    ck_assert_ptr_nonnull(events);
+
+    event = rbh_mut_iter_next(events);
+    ck_assert_ptr_nonnull(event);
+    ck_assert_int_eq(event->xattrs.count, 2);
+    ck_assert_str_eq(event->xattrs.pairs[0].key, "fid");
+    ck_assert_str_eq(event->xattrs.pairs[1].key, "rbh-fsevents");
+
+    event = rbh_mut_iter_next(events);
+    ck_assert_ptr_null(event);
+    ck_assert_int_eq(errno, ENODATA);
+
+    free(id);
+}
+END_TEST
+
+START_TEST(dedup_xattr_merge_lustre_with_fid)
+{
+    struct rbh_mut_iterator *deduplicator;
+    struct source *fake_source = NULL;
+    struct rbh_fsevent fake_events[2];
+    struct rbh_mut_iterator *events;
+    struct rbh_fsevent *event;
+    struct rbh_id *id;
+
+    id = fake_id();
+
+    fake_lustre(&fake_events[0], id);
+    fake_fid(&fake_events[1], id);
+
+    fake_source = event_list_source(fake_events, 2);
+    ck_assert_ptr_nonnull(fake_source);
+
+    deduplicator = deduplicator_new(20, fake_source);
+    ck_assert_ptr_nonnull(deduplicator);
+
+    events = rbh_mut_iter_next(deduplicator);
+    ck_assert_ptr_nonnull(events);
+
+    event = rbh_mut_iter_next(events);
+    ck_assert_ptr_nonnull(event);
+    ck_assert_int_eq(event->xattrs.count, 2);
+    ck_assert_str_eq(event->xattrs.pairs[0].key, "rbh-fsevents");
+    ck_assert_str_eq(event->xattrs.pairs[1].key, "fid");
+
+    event = rbh_mut_iter_next(events);
+    ck_assert_ptr_null(event);
+    ck_assert_int_eq(errno, ENODATA);
+
+    free(id);
+}
+END_TEST
+
+START_TEST(dedup_xattr_merge_xattrs_with_fid)
+{
+    struct rbh_mut_iterator *deduplicator;
+    struct source *fake_source = NULL;
+    struct rbh_fsevent fake_events[2];
+    struct rbh_mut_iterator *events;
+    struct rbh_fsevent *event;
+    struct rbh_id *id;
+
+    id = fake_id();
+
+    fake_fid(&fake_events[0], id);
+    fake_xattr(&fake_events[1], id, "test");
+
+    fake_source = event_list_source(fake_events, 2);
+    ck_assert_ptr_nonnull(fake_source);
+
+    deduplicator = deduplicator_new(20, fake_source);
+    ck_assert_ptr_nonnull(deduplicator);
+
+    events = rbh_mut_iter_next(deduplicator);
+    ck_assert_ptr_nonnull(events);
+
+    event = rbh_mut_iter_next(events);
+    ck_assert_ptr_nonnull(event);
+    ck_assert_int_eq(event->xattrs.count, 2);
+    ck_assert_str_eq(event->xattrs.pairs[0].key, "fid");
+    ck_assert_str_eq(event->xattrs.pairs[1].key, "rbh-fsevents");
+
+    event = rbh_mut_iter_next(events);
+    ck_assert_ptr_null(event);
+    ck_assert_int_eq(errno, ENODATA);
+
+    free(id);
+}
+END_TEST
+
 static Suite *
 unit_suite(void)
 {
@@ -444,6 +704,13 @@ unit_suite(void)
     tcase_add_test(tests, dedup_upsert_no_statx);
     tcase_add_test(tests, dedup_upsert_statx);
     tcase_add_test(tests, dedup_upsert_statx_symlink);
+    tcase_add_test(tests, dedup_same_xattr);
+    tcase_add_test(tests, dedup_lustre_xattr);
+    tcase_add_test(tests, dedup_xattr_merge_lustre_with_xattr);
+    tcase_add_test(tests, dedup_xattr_merge_xattrs_with_lustre);
+    tcase_add_test(tests, dedup_xattr_merge_fid_with_lustre);
+    tcase_add_test(tests, dedup_xattr_merge_lustre_with_fid);
+    tcase_add_test(tests, dedup_xattr_merge_xattrs_with_fid);
 
     suite_add_tcase(suite, tests);
 
