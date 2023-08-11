@@ -47,11 +47,12 @@ endif
 
 includes = include_directories('.', 'include')
 
-executable(
+fsevents_lib = static_library(
     'rbh-fsevents',
     sources: [
-        'rbh-fsevents.c',
         'src/deduplicator.c',
+        'src/deduplicator/fsevent_pool.c',
+        'src/deduplicator/hash.c',
         'src/deduplicator/rbh_fsevent_utils.c',
         'src/enricher.c',
         'src/enrichers/posix.c',
@@ -61,6 +62,18 @@ executable(
         'src/sinks/file.c',
     ] + extra_sources,
     include_directories: includes,
+    dependencies: [librobinhood, miniyaml, liblustre]
+)
+fsevents_dep = declare_dependency(
+    link_with: fsevents_lib,
+    include_directories: includes
+)
+
+executable(
+    'rbh-fsevents',
+    sources: 'rbh-fsevents.c',
+    include_directories: includes,
+    link_with: fsevents_lib,
     dependencies: [librobinhood, miniyaml, liblustre],
     install: true,
 )
