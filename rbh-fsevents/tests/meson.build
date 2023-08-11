@@ -4,6 +4,8 @@
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
 
+subdir('unit')
+
 integration_tests = []
 
 liblustre = dependency('lustre', disabler: true, required: false)
