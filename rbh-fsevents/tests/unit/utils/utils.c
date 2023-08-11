@@ -8,8 +8,32 @@
 
 #include <robinhood/iterator.h>
 #include <robinhood/itertools.h>
+#include <robinhood/sstack.h>
 
 #include <lustre/lustre_user.h>
+
+static struct rbh_sstack *fake_events_container;
+
+__attribute__((constructor))
+static void
+sstack_init(void)
+{
+    fake_events_container = rbh_sstack_new(1 << 11);
+}
+
+__attribute__((destructor))
+static void
+sstack_destory(void)
+{
+    if (fake_events_container)
+        rbh_sstack_destroy(fake_events_container);
+}
+
+static void *
+alloc(size_t size)
+{
+    return rbh_sstack_push(fake_events_container, NULL, size);
+}
 
 static const void *
 empty_source_next(void *iterator __attribute__((unused)))
@@ -125,4 +149,95 @@ fake_create(struct rbh_fsevent *fsevent, struct rbh_id *id,
     fsevent->id = *id;
     fsevent->link.name = "test";
     fsevent->link.parent_id = parent;
+}
+
+void
+fake_link(struct rbh_fsevent *fsevent, struct rbh_id *id, const char *name,
+          struct rbh_id *parent)
+{
+    memset(fsevent, 0, sizeof(*fsevent));
+
+    fsevent->type = RBH_FET_LINK;
+    fsevent->id = *id;
+    fsevent->link.name = name;
+    fsevent->link.parent_id = parent;
+}
+
+void
+fake_unlink(struct rbh_fsevent *fsevent, struct rbh_id *id, const char *name,
+            struct rbh_id *parent)
+{
+    memset(fsevent, 0, sizeof(*fsevent));
+
+    fsevent->type = RBH_FET_UNLINK;
+    fsevent->id = *id;
+    fsevent->link.name = name;
+    fsevent->link.parent_id = parent;
+}
+
+void
+fake_delete(struct rbh_fsevent *fsevent, struct rbh_id *id)
+{
+    memset(fsevent, 0, sizeof(*fsevent));
+
+    fsevent->type = RBH_FET_DELETE;
+    fsevent->id = *id;
+}
+
+static struct rbh_value_map
+make_upsert_statx(struct rbh_value_pair *pairs,
+                  struct rbh_value *map_values,
+                  uint32_t mask)
+{
+    struct rbh_value_map xattr = {
+        .count = 1,
+        .pairs = &pairs[0], /* "rbh-fsevents" */
+    };
+    struct rbh_value_pair rbh_fsevents_map = { /* pairs[0] */
+        .key = "rbh-fsevents",
+        .value = &map_values[0],
+    };
+    struct rbh_value rbh_fsevents_map_value = { /* map_values[0] */
+        .type = RBH_VT_MAP,
+        .map = {
+            .count = 1,
+            .pairs = &pairs[1], /* "statx" */
+        },
+    };
+    struct rbh_value_pair statx_mask = {
+        .key = "statx",
+        .value = &map_values[1], /* mask */
+    };
+    struct rbh_value statx_mask_value = {
+        .type = RBH_VT_UINT32,
+        .uint32 = mask,
+    };
+
+    memcpy(&pairs[0], &rbh_fsevents_map, sizeof(rbh_fsevents_map));
+    memcpy(&pairs[1], &statx_mask, sizeof(statx_mask));
+
+    memcpy(&map_values[0], &rbh_fsevents_map_value,
+           sizeof(rbh_fsevents_map_value));
+    memcpy(&map_values[1], &statx_mask_value, sizeof(statx_mask_value));
+
+    return xattr;
+}
+
+void
+fake_upsert(struct rbh_fsevent *fsevent, struct rbh_id *id, uint32_t mask,
+            struct rbh_statx *statx)
+{
+    struct rbh_value *map_values;
+    struct rbh_value_pair *pairs;
+
+    pairs = alloc(2 * sizeof(*pairs));
+    ck_assert_ptr_nonnull(pairs);
+
+    map_values = alloc(2 * sizeof(*map_values));
+    ck_assert_ptr_nonnull(map_values);
+
+    memset(fsevent, 0, sizeof(*fsevent));
+    fsevent->id = *id;
+    fsevent->upsert.statx = statx;
+    fsevent->xattrs = make_upsert_statx(pairs, map_values, mask);
 }

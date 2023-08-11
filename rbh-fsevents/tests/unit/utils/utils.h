@@ -29,4 +29,19 @@ void
 fake_create(struct rbh_fsevent *fsevent, struct rbh_id *id,
             struct rbh_id *parent);
 
+void
+fake_link(struct rbh_fsevent *fsevent, struct rbh_id *id, const char *name,
+          struct rbh_id *parent);
+
+void
+fake_unlink(struct rbh_fsevent *fsevent, struct rbh_id *id, const char *name,
+            struct rbh_id *parent);
+
+void
+fake_delete(struct rbh_fsevent *fsevent, struct rbh_id *id);
+
+void
+fake_upsert(struct rbh_fsevent *fsevent, struct rbh_id *id, uint32_t mask,
+            struct rbh_statx *statx);
+
 #endif
