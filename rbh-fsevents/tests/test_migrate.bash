@@ -25,9 +25,7 @@ test_migrate()
     # This will be done more properly in a next patch
     local other_mdt_user="$(lctl --device "$other_mdt" changelog_register |
                             cut -d "'" -f2)"
-    for i in $(seq 1 ${other_mdt_user:2}); do
-        lfs changelog_clear "$other_mdt" "cl$i" 0
-    done
+    lfs changelog_clear "$other_mdt" "$other_mdt_user" 0
 
     mkdir $entry
 
@@ -56,6 +54,8 @@ test_migrate()
     verify_statx $entry
     find_attribute '"xattrs.mdt_index": 0' '"ns.name":"'$entry'"'
     find_attribute '"xattrs.mdt_count": 1' '"ns.name":"'$entry'"'
+
+    lctl --device "$other_mdt" changelog_deregister "$other_mdt_user"
 }
 
 ################################################################################
