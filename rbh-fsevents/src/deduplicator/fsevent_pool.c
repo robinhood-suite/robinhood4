@@ -157,7 +157,28 @@ deduplicate_event(struct rbh_fsevent_pool *pool, struct rbh_list_node *events,
 {
     struct rbh_fsevent_node *node;
 
-    // XXX currently no dedup
+    if (event->type == RBH_FET_UNLINK) {
+        struct rbh_fsevent_node *link = NULL;
+        struct rbh_fsevent_node *node;
+
+        rbh_list_foreach(events, node, link)
+            if (node->fsevent.type == RBH_FET_LINK &&
+                !strcmp(event->link.name, node->fsevent.link.name) &&
+                rbh_id_equal(event->link.parent_id,
+                             node->fsevent.link.parent_id))
+                link = node;
+
+        if (link) {
+            rbh_list_del(&link->link);
+
+            if (rbh_list_empty(events)) {
+                rbh_hashmap_pop(pool->pool, &event->id);
+                // TODO remove id from global list
+                pool->count--;
+            }
+            return 0;
+        }
+    } /* no dedup for links */
 
     node = rbh_sstack_push(pool->list_container, NULL, sizeof(*node));
     if (!node)
@@ -165,9 +186,12 @@ deduplicate_event(struct rbh_fsevent_pool *pool, struct rbh_list_node *events,
 
     rbh_fsevent_deep_copy(&node->fsevent, event,
                           pool->xattr_sequence_container);
-
-    /* keep the order of events */
-    rbh_list_add_tail(events, &node->link);
+    if (event->type == RBH_FET_LINK)
+        /* move links at the front to insert new entries before any other action
+         */
+        rbh_list_add(events, &node->link);
+    else
+        rbh_list_add_tail(events, &node->link);
 
     return 0;
 }
@@ -248,3 +272,4 @@ rbh_fsevent_pool_flush(struct rbh_fsevent_pool *pool)
                          offsetof(struct rbh_fsevent_node, link)
                          );
 }
+
