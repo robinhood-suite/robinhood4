@@ -156,6 +156,7 @@ deduplicate_event(struct rbh_fsevent_pool *pool, struct rbh_list_node *events,
                   const struct rbh_fsevent *event)
 {
     struct rbh_fsevent_node *node;
+    bool insert_delete = true;
 
     if (event->type == RBH_FET_UNLINK) {
         struct rbh_fsevent_node *link = NULL;
@@ -175,6 +176,34 @@ deduplicate_event(struct rbh_fsevent_pool *pool, struct rbh_list_node *events,
                 rbh_hashmap_pop(pool->pool, &event->id);
                 // TODO remove id from global list
                 pool->count--;
+            }
+            return 0;
+        }
+    } else if (event->type == RBH_FET_DELETE) {
+        struct rbh_fsevent_node *elem, *tmp;
+
+        rbh_list_foreach_safe(events, elem, tmp, link) {
+            if (elem->fsevent.type == RBH_FET_LINK)
+                insert_delete = false;
+
+            rbh_list_del(&elem->link);
+        }
+
+        if (!insert_delete) {
+            if (rbh_list_empty(events)) {
+                struct rbh_id_node *elem, *tmp;
+
+                rbh_hashmap_pop(pool->pool, &event->id);
+                pool->count--;
+
+                rbh_list_foreach_safe(&pool->ids, elem, tmp, link) {
+                    if (rbh_id_equal(&event->id, elem->id)) {
+                        // XXX we could keep a reference to this node in the
+                        // hash table's element
+                        rbh_list_del(&elem->link);
+                        break;
+                    }
+                }
             }
             return 0;
         }
