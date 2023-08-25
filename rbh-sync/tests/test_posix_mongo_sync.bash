@@ -127,9 +127,9 @@ test_sync_socket()
 {
     local entry="socket_file"
 
-    python -c "import socket as s; \
-               sock = s.socket(s.AF_UNIX); \
-               sock.bind('$entry')"
+    python3 -c "import socket as s; \
+                sock = s.socket(s.AF_UNIX); \
+                sock.bind('$entry')"
 
     rbh_sync -o "rbh:posix:$entry" "rbh:mongo:$testdb"
     check_mode_and_type $entry
@@ -145,6 +145,47 @@ test_sync_fifo()
     check_mode_and_type $entry
 }
 
+test_sync_branch()
+{
+    local first_dir="test1"
+    local second_dir="test2"
+    local third_dir="test3"
+    local entry="random_file"
+
+    mkdir -p $first_dir/$second_dir/$third_dir
+    touch $first_dir/$second_dir/$third_dir/$entry
+
+    rbh_sync "rbh:posix:$first_dir#$second_dir" "rbh:mongo:$testdb"
+
+    find_attribute '"ns.name":"'$second_dir'"'
+    find_attribute '"ns.xattrs.path":"'/$second_dir'"'
+    find_attribute '"ns.name":"'$third_dir'"'
+    find_attribute '"ns.xattrs.path":"'/$second_dir/$third_dir'"'
+    find_attribute '"ns.name":"'$entry'"'
+    find_attribute '"ns.xattrs.path":"'/$second_dir/$third_dir/$entry'"'
+
+    mongo $testdb --eval "db.dropDatabase()"
+
+    local abs_path="$(realpath $first_dir)"
+
+    rbh_sync "rbh:posix:$abs_path#$second_dir" "rbh:mongo:$testdb"
+
+    find_attribute '"ns.name":"'$second_dir'"'
+    find_attribute '"ns.xattrs.path":"'/$second_dir'"'
+    find_attribute '"ns.name":"'$third_dir'"'
+    find_attribute '"ns.xattrs.path":"'/$second_dir/$third_dir'"'
+    find_attribute '"ns.name":"'$entry'"'
+    find_attribute '"ns.xattrs.path":"'/$second_dir/$third_dir/$entry'"'
+
+    mongo $testdb --eval "db.dropDatabase()"
+
+    rbh_sync "rbh:posix:$first_dir#$second_dir/$third_dir" "rbh:mongo:$testdb"
+    find_attribute '"ns.name":"'$third_dir'"'
+    find_attribute '"ns.xattrs.path":"'/$second_dir/$third_dir'"'
+    find_attribute '"ns.name":"'$entry'"'
+    find_attribute '"ns.xattrs.path":"'/$second_dir/$third_dir/$entry'"'
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
@@ -152,7 +193,7 @@ test_sync_fifo()
 declare -a tests=(test_sync_2_files test_sync_size test_sync_3_files
                   test_sync_xattrs test_sync_subdir test_sync_large_tree
                   test_sync_one_one_file test_sync_one_two_files
-                  test_sync_socket test_sync_fifo)
+                  test_sync_socket test_sync_fifo test_sync_branch)
 
 tmpdir=$(mktemp --directory)
 trap -- "rm -rf '$tmpdir'" EXIT
