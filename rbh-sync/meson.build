@@ -29,3 +29,5 @@ executable(
     dependencies: [librobinhood],
     install: true,
 )
+
+subdir('tests')
