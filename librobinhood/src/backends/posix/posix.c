@@ -549,8 +549,8 @@ posix_iter_next(void *iterator)
 {
     struct posix_iterator *posix_iter = iterator;
     struct rbh_fsentry *fsentry;
-    FTSENT *ftsent;
     int save_errno = errno;
+    FTSENT *ftsent;
 
 skip:
     errno = 0;
@@ -575,6 +575,47 @@ skip:
     case FTS_NS:
         errno = ftsent->fts_errno;
         return NULL;
+    }
+
+    /* This condition checks if the entry has no parent, which indicates whether
+     * the current ftsent is the root of our iterator or not, and if the first
+     * character of its path is a '/', which indicates whether we are in a
+     * branch or not. In that case, we open the parent of the branch point, and
+     * set it so that the branch point has a proper path set in the database.
+     */
+    if (ftsent->fts_parent->fts_pointer == NULL &&
+        ftsent->fts_accpath[0] == '/') {
+        char *path_dup = strdup(ftsent->fts_accpath);
+        char *last_slash;
+        int fd;
+
+        if (path_dup == NULL)
+            return NULL;
+
+        last_slash = strrchr(path_dup, '/');
+        if (last_slash == NULL) {
+            save_errno = errno;
+            free(path_dup);
+            errno = save_errno;
+            return NULL;
+        }
+
+        last_slash[0] = 0;
+        fd = openat(AT_FDCWD, path_dup, O_RDONLY | O_CLOEXEC);
+        if (fd < 0) {
+            save_errno = errno;
+            free(path_dup);
+            errno = save_errno;
+            return NULL;
+        }
+
+        ftsent->fts_parent->fts_pointer = id_from_fd(fd);
+        save_errno = errno;
+        close(fd);
+        free(path_dup);
+        errno = save_errno;
+        if (ftsent->fts_parent->fts_pointer == NULL)
+            return NULL;
     }
 
     fsentry = fsentry_from_ftsent(ftsent, posix_iter->statx_sync_type,
