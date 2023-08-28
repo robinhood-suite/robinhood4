@@ -1,0 +1,251 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6232309f_951fba88",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-08-28T10:49:16Z",
+      "side": 1,
+      "message": "minor: specify in the commit message what are those functions",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 52
+      },
+      "revId": "455d980b0380f9d4cdd02d9b48b9948edb3564a1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d4bbdac9_0c0de841",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-08-28T10:49:16Z",
+      "side": 1,
+      "message": "Overall, many if not all functions could/should be included in the header of librobinhood, as similar functions already exist or they are more general than for deduplication",
+      "revId": "455d980b0380f9d4cdd02d9b48b9948edb3564a1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "37db63b1_25c24775",
+        "filename": "rbh-fsevents/src/deduplicator/rbh_fsevent_utils.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-08-28T10:49:16Z",
+      "side": 1,
+      "message": "minor: following the header, this should be before the function above line 20 (and it would make reading that function easier)",
+      "range": {
+        "startLine": 47,
+        "startChar": 0,
+        "endLine": 47,
+        "endChar": 29
+      },
+      "revId": "455d980b0380f9d4cdd02d9b48b9948edb3564a1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "765d1d60_9dba9502",
+        "filename": "rbh-fsevents/src/deduplicator/rbh_fsevent_utils.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-08-28T10:49:16Z",
+      "side": 1,
+      "message": "suggest: move this function to the value.h header in librobinhood, as it is a better place for it, and it also already contains \"value_map_copy\", so having its twin would be nice",
+      "range": {
+        "startLine": 102,
+        "startChar": 0,
+        "endLine": 102,
+        "endChar": 23
+      },
+      "revId": "455d980b0380f9d4cdd02d9b48b9948edb3564a1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "87b17242_ba97b8c3",
+        "filename": "rbh-fsevents/src/deduplicator/rbh_fsevent_utils.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-08-28T10:49:16Z",
+      "side": 1,
+      "message": "style: shouldn\u0027t this be on the line before ?",
+      "range": {
+        "startLine": 127,
+        "startChar": 36,
+        "endLine": 127,
+        "endChar": 38
+      },
+      "revId": "455d980b0380f9d4cdd02d9b48b9948edb3564a1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "86a8fc44_d5458e6a",
+        "filename": "rbh-fsevents/src/deduplicator/rbh_fsevent_utils.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-08-28T10:49:16Z",
+      "side": 1,
+      "message": "suggest: put this line before the switch",
+      "range": {
+        "startLine": 183,
+        "startChar": 8,
+        "endLine": 183,
+        "endChar": 35
+      },
+      "revId": "455d980b0380f9d4cdd02d9b48b9948edb3564a1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e4a85cb0_4c564b11",
+        "filename": "rbh-fsevents/src/deduplicator/rbh_fsevent_utils.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-08-28T10:49:16Z",
+      "side": 1,
+      "message": "suggest: I think that even for 3-4 lines, it would be nicer to have functions that do this and the other 2 cases, similar to the ones for the sequence and map",
+      "range": {
+        "startLine": 190,
+        "startChar": 8,
+        "endLine": 192,
+        "endChar": 62
+      },
+      "revId": "455d980b0380f9d4cdd02d9b48b9948edb3564a1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c6664209_de2e61df",
+        "filename": "rbh-fsevents/src/deduplicator/rbh_fsevent_utils.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-08-28T10:49:16Z",
+      "side": 1,
+      "message": "question: why is this \"value_map\" and the one for sequence is just \"sequence\" ?",
+      "range": {
+        "startLine": 207,
+        "startChar": 19,
+        "endLine": 207,
+        "endChar": 28
+      },
+      "revId": "455d980b0380f9d4cdd02d9b48b9948edb3564a1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a1735f5d_650ba4b6",
+        "filename": "rbh-fsevents/src/deduplicator/rbh_fsevent_utils.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-08-28T10:49:16Z",
+      "side": 1,
+      "message": "minor: this is not necessary for all events, upsert or unlink don\u0027t have a xattrs map for instance",
+      "range": {
+        "startLine": 229,
+        "startChar": 4,
+        "endLine": 231,
+        "endChar": 18
+      },
+      "revId": "455d980b0380f9d4cdd02d9b48b9948edb3564a1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6637e457_ab6dee03",
+        "filename": "rbh-fsevents/src/deduplicator/rbh_fsevent_utils.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-08-28T10:49:16Z",
+      "side": 1,
+      "message": "suggest: add the content of each case in a specific function",
+      "range": {
+        "startLine": 235,
+        "startChar": 8,
+        "endLine": 250,
+        "endChar": 14
+      },
+      "revId": "455d980b0380f9d4cdd02d9b48b9948edb3564a1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7eb68859_d05f8b7c",
+        "filename": "rbh-fsevents/src/deduplicator/rbh_fsevent_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-08-28T10:49:16Z",
+      "side": 1,
+      "message": "minor: missing documentation for the functions",
+      "range": {
+        "startLine": 7,
+        "startChar": 3,
+        "endLine": 7,
+        "endChar": 8
+      },
+      "revId": "455d980b0380f9d4cdd02d9b48b9948edb3564a1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
