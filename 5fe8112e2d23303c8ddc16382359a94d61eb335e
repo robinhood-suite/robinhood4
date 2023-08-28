@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6570f4d3_49e8408a",
+        "filename": "rbh-fsevents/src/deduplicator/fsevent_pool.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-08-28T14:58:30Z",
+      "side": 1,
+      "message": "minor: I suppose this is done in a later patch, but the content of this if (and the others future events) should be in their own functions",
+      "range": {
+        "startLine": 160,
+        "startChar": 4,
+        "endLine": 160,
+        "endChar": 40
+      },
+      "revId": "5fe8112e2d23303c8ddc16382359a94d61eb335e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5a420a4e_8f444a30",
+        "filename": "rbh-fsevents/src/deduplicator/fsevent_pool.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-08-28T14:58:30Z",
+      "side": 1,
+      "message": "minor: OK this is actually kinda disturbing to see this without any bracket. Either add them at the end of the first line and a normal branch condition, or around these lines so show what the foreach content consists of",
+      "range": {
+        "startLine": 164,
+        "startChar": 8,
+        "endLine": 169,
+        "endChar": 28
+      },
+      "revId": "5fe8112e2d23303c8ddc16382359a94d61eb335e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
