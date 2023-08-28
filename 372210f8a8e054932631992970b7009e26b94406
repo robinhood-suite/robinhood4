@@ -1,0 +1,257 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6fd0a314_1e320610",
+        "filename": "rbh-fsevents/meson.build",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-08-28T13:49:22Z",
+      "side": 1,
+      "message": "question: what is the reason behind this change ?",
+      "range": {
+        "startLine": 50,
+        "startChar": 0,
+        "endLine": 50,
+        "endChar": 29
+      },
+      "revId": "372210f8a8e054932631992970b7009e26b94406",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ea1a4fcc_da29a08d",
+        "filename": "rbh-fsevents/src/deduplicator.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-08-28T13:49:22Z",
+      "side": 1,
+      "message": "major? shouldn\u0027t there be the size check here ? To verify the pool is not overflowing. Or is it added later ?",
+      "range": {
+        "startLine": 44,
+        "startChar": 13,
+        "endLine": 44,
+        "endChar": 34
+      },
+      "revId": "372210f8a8e054932631992970b7009e26b94406",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a5660aeb_9a2e836b",
+        "filename": "rbh-fsevents/src/deduplicator/fsevent_pool.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-08-28T13:49:22Z",
+      "side": 1,
+      "message": "suggest: having an explanation of each field and its goal would be nice",
+      "range": {
+        "startLine": 19,
+        "startChar": 22,
+        "endLine": 19,
+        "endChar": 38
+      },
+      "revId": "372210f8a8e054932631992970b7009e26b94406",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "af4f9e67_1e145ec3",
+        "filename": "rbh-fsevents/src/deduplicator/fsevent_pool.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-08-28T13:49:22Z",
+      "side": 1,
+      "message": "suggest: `size_threshold`, the name `flush_size` could also mean the number of entries to flush and the pool is at maximum capacity",
+      "range": {
+        "startLine": 21,
+        "startChar": 11,
+        "endLine": 21,
+        "endChar": 21
+      },
+      "revId": "372210f8a8e054932631992970b7009e26b94406",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4dd00275_4b20fabf",
+        "filename": "rbh-fsevents/src/deduplicator/fsevent_pool.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-08-28T13:49:22Z",
+      "side": 1,
+      "message": "I agree it don\u0027t seem necessary",
+      "range": {
+        "startLine": 26,
+        "startChar": 4,
+        "endLine": 27,
+        "endChar": 45
+      },
+      "revId": "372210f8a8e054932631992970b7009e26b94406",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c9d64b30_d60ccbe1",
+        "filename": "rbh-fsevents/src/deduplicator/fsevent_pool.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-08-28T13:49:22Z",
+      "side": 1,
+      "message": "major: missing sstack destroy of xattr_sequence and list",
+      "range": {
+        "startLine": 83,
+        "startChar": 8,
+        "endLine": 84,
+        "endChar": 27
+      },
+      "revId": "372210f8a8e054932631992970b7009e26b94406",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a1880226_2b697a28",
+        "filename": "rbh-fsevents/src/deduplicator/fsevent_pool.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-08-28T13:49:22Z",
+      "side": 1,
+      "message": "major: missing destroy of xattr_sequence",
+      "range": {
+        "startLine": 101,
+        "startChar": 4,
+        "endLine": 101,
+        "endChar": 22
+      },
+      "revId": "372210f8a8e054932631992970b7009e26b94406",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2a4b14b1_c0fc9e5e",
+        "filename": "rbh-fsevents/src/deduplicator/fsevent_pool.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-08-28T13:49:22Z",
+      "side": 1,
+      "message": "style",
+      "range": {
+        "startLine": 116,
+        "startChar": 4,
+        "endLine": 117,
+        "endChar": 33
+      },
+      "revId": "372210f8a8e054932631992970b7009e26b94406",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3b5f1891_0e0480b1",
+        "filename": "rbh-fsevents/src/deduplicator/fsevent_pool.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-08-28T13:49:22Z",
+      "side": 1,
+      "message": "suggest:\n```\nif (events) {\n    rc \u003d dedup...\n} else {\n    assert...\n    errno \u003d 0\n    rc \u003d insert new entry\n}\n\nif (rc)\n    return rc;\n    \nreturn 0;\n```",
+      "range": {
+        "startLine": 197,
+        "startChar": 4,
+        "endLine": 213,
+        "endChar": 13
+      },
+      "revId": "372210f8a8e054932631992970b7009e26b94406",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1de964b3_e19a1f7e",
+        "filename": "rbh-fsevents/src/deduplicator/fsevent_pool.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-08-28T13:49:22Z",
+      "side": 1,
+      "message": "question: how can the list of ids be empty if the pool count is not 0 ?",
+      "range": {
+        "startLine": 229,
+        "startChar": 8,
+        "endLine": 229,
+        "endChar": 39
+      },
+      "revId": "372210f8a8e054932631992970b7009e26b94406",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "95fc2d3e_4f39d787",
+        "filename": "rbh-fsevents/src/deduplicator/hash.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-08-28T13:49:22Z",
+      "side": 1,
+      "message": "minor: wrong project, and we should most likely change it everywhere to `robinhood4`...",
+      "range": {
+        "startLine": 1,
+        "startChar": 24,
+        "endLine": 1,
+        "endChar": 32
+      },
+      "revId": "372210f8a8e054932631992970b7009e26b94406",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
