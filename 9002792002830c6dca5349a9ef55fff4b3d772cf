@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8a48ac31_8901a737",
+        "filename": "librobinhood/src/itertools.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 618,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-08-28T09:30:38Z",
+      "side": 1,
+      "message": "minor: add a banner above like for the other iterators",
+      "range": {
+        "startLine": 618,
+        "startChar": 1,
+        "endLine": 618,
+        "endChar": 20
+      },
+      "revId": "9002792002830c6dca5349a9ef55fff4b3d772cf",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "230dc0cf_06e94dca",
+        "filename": "librobinhood/src/itertools.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 637,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-08-28T09:30:38Z",
+      "side": 1,
+      "message": "minor: double check with line 631",
+      "range": {
+        "startLine": 637,
+        "startChar": 4,
+        "endLine": 637,
+        "endChar": 26
+      },
+      "revId": "9002792002830c6dca5349a9ef55fff4b3d772cf",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7f1f508e_305f35ce",
+        "filename": "librobinhood/tests/unit/check_itertools.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 305,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-08-28T09:30:38Z",
+      "side": 1,
+      "message": "suggest: something banner something",
+      "range": {
+        "startLine": 305,
+        "startChar": 0,
+        "endLine": 305,
+        "endChar": 10
+      },
+      "revId": "9002792002830c6dca5349a9ef55fff4b3d772cf",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3d0966d2_cfc770ea",
+        "filename": "librobinhood/tests/unit/check_itertools.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 332,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-08-28T09:30:38Z",
+      "side": 1,
+      "message": "nit: values[i].value",
+      "range": {
+        "startLine": 332,
+        "startChar": 38,
+        "endLine": 332,
+        "endChar": 43
+      },
+      "revId": "9002792002830c6dca5349a9ef55fff4b3d772cf",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
