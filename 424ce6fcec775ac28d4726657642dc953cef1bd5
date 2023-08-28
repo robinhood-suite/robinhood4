@@ -1,0 +1,211 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7498fdac_6b23752a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-08-28T08:42:59Z",
+      "side": 1,
+      "message": "question: why didn\u0027t you use this API then ?",
+      "range": {
+        "startLine": 10,
+        "startChar": 18,
+        "endLine": 10,
+        "endChar": 39
+      },
+      "revId": "424ce6fcec775ac28d4726657642dc953cef1bd5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b6ed514b_1acd7b8b",
+        "filename": "librobinhood/include/robinhood/list.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-08-28T08:42:59Z",
+      "side": 1,
+      "message": "major: no documentation in the file\n\nEDIT: after reading the test, I now remember how the list_head kernel API works, but it would be nice to add an explanation here",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 20
+      },
+      "revId": "424ce6fcec775ac28d4726657642dc953cef1bd5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0d260ab2_a5f63339",
+        "filename": "librobinhood/include/robinhood/list.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-08-28T08:42:59Z",
+      "side": 1,
+      "message": "major: I\u0027d suggest using the \"container_of\" macro for that operation, as it is easier to understand and a known macro. You can even just copy/paste it, as it is frequently done",
+      "range": {
+        "startLine": 19,
+        "startChar": 8,
+        "endLine": 19,
+        "endChar": 22
+      },
+      "revId": "424ce6fcec775ac28d4726657642dc953cef1bd5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b2f4778c_3bbb465f",
+        "filename": "librobinhood/include/robinhood/list.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-08-28T08:42:59Z",
+      "side": 1,
+      "message": "suggest: add a \"rbh_list_size\" function",
+      "range": {
+        "startLine": 34,
+        "startChar": 0,
+        "endLine": 34,
+        "endChar": 13
+      },
+      "revId": "424ce6fcec775ac28d4726657642dc953cef1bd5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "42077c6f_f73926ac",
+        "filename": "librobinhood/src/list.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-08-28T08:42:59Z",
+      "side": 1,
+      "message": "minor: end",
+      "range": {
+        "startLine": 16,
+        "startChar": 25,
+        "endLine": 16,
+        "endChar": 33
+      },
+      "revId": "424ce6fcec775ac28d4726657642dc953cef1bd5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "539924e8_1cf0e2b6",
+        "filename": "librobinhood/tests/unit/check_list.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-08-28T08:42:59Z",
+      "side": 1,
+      "message": "question: isn\u0027t that dangerous ? Is it assured that if a function returns a \"true\" boolean, it will be translated to 1 ?",
+      "range": {
+        "startLine": 34,
+        "startChar": 21,
+        "endLine": 34,
+        "endChar": 45
+      },
+      "revId": "424ce6fcec775ac28d4726657642dc953cef1bd5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "70cd14b8_e186d7da",
+        "filename": "librobinhood/tests/unit/check_list.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-08-28T08:42:59Z",
+      "side": 1,
+      "message": "nit: add a new banner like the one line 39 before this function, and on the other functions below",
+      "range": {
+        "startLine": 89,
+        "startChar": 11,
+        "endLine": 89,
+        "endChar": 23
+      },
+      "revId": "424ce6fcec775ac28d4726657642dc953cef1bd5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0960e9de_484a1fd5",
+        "filename": "librobinhood/tests/unit/check_list.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-08-28T08:42:59Z",
+      "side": 1,
+      "message": "major: there is no check that the values are correct afterwards, so we don\u0027t know if this works",
+      "range": {
+        "startLine": 234,
+        "startChar": 3,
+        "endLine": 235,
+        "endChar": 43
+      },
+      "revId": "424ce6fcec775ac28d4726657642dc953cef1bd5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "14357f50_09dec6e2",
+        "filename": "librobinhood/tests/unit/check_list.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-08-28T08:42:59Z",
+      "side": 1,
+      "message": "major-suggest: for the sake of thoroughness, adding checks that the functions \"next\" and \"first\", and the macro \"rbh_list_foreach_safe\", work would be nice (and \"size\" if you decide to add it)",
+      "range": {
+        "startLine": 260,
+        "startChar": 4,
+        "endLine": 260,
+        "endChar": 19
+      },
+      "revId": "424ce6fcec775ac28d4726657642dc953cef1bd5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
