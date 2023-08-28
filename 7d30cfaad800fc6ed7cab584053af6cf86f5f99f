@@ -1,0 +1,211 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4792d018_157542b6",
+        "filename": "rbh-fsevents/tests/unit/check_dedup.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-08-28T14:48:24Z",
+      "side": 1,
+      "message": "I don\u0027t understand what the question",
+      "range": {
+        "startLine": 35,
+        "startChar": 4,
+        "endLine": 35,
+        "endChar": 38
+      },
+      "revId": "7d30cfaad800fc6ed7cab584053af6cf86f5f99f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "21668b07_d44e82e1",
+        "filename": "rbh-fsevents/tests/unit/check_dedup.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-08-28T14:48:24Z",
+      "side": 1,
+      "message": "nit: add check for the parent",
+      "range": {
+        "startLine": 70,
+        "startChar": 4,
+        "endLine": 70,
+        "endChar": 36
+      },
+      "revId": "7d30cfaad800fc6ed7cab584053af6cf86f5f99f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5f602672_9b309f9c",
+        "filename": "rbh-fsevents/tests/unit/check_dedup.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-08-28T14:48:24Z",
+      "side": 1,
+      "message": "minor: missing destroy of the source, deduplicator, parent id, fake event and events. If we do not care about freeing the memory in a test, this line should be removed",
+      "range": {
+        "startLine": 72,
+        "startChar": 4,
+        "endLine": 72,
+        "endChar": 13
+      },
+      "revId": "7d30cfaad800fc6ed7cab584053af6cf86f5f99f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "03499d16_827b1276",
+        "filename": "rbh-fsevents/tests/unit/check_dedup.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-08-28T14:48:24Z",
+      "side": 1,
+      "message": "minor: idem",
+      "range": {
+        "startLine": 107,
+        "startChar": 8,
+        "endLine": 107,
+        "endChar": 21
+      },
+      "revId": "7d30cfaad800fc6ed7cab584053af6cf86f5f99f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f567d647_6c9375d3",
+        "filename": "rbh-fsevents/tests/unit/utils/utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-08-28T14:48:24Z",
+      "side": 1,
+      "message": "we should do a cleanup after this stack...",
+      "range": {
+        "startLine": 1,
+        "startChar": 24,
+        "endLine": 1,
+        "endChar": 32
+      },
+      "revId": "7d30cfaad800fc6ed7cab584053af6cf86f5f99f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "85e494fe_84f4a610",
+        "filename": "rbh-fsevents/tests/unit/utils/utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-08-28T14:48:24Z",
+      "side": 1,
+      "message": "suggest: create_empty_source",
+      "range": {
+        "startLine": 17,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 12
+      },
+      "revId": "7d30cfaad800fc6ed7cab584053af6cf86f5f99f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "00aaa9c8_946d42bc",
+        "filename": "rbh-fsevents/tests/unit/utils/utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-08-28T14:48:24Z",
+      "side": 1,
+      "message": "suggest: create_source_with_events",
+      "range": {
+        "startLine": 20,
+        "startChar": 0,
+        "endLine": 20,
+        "endChar": 17
+      },
+      "revId": "7d30cfaad800fc6ed7cab584053af6cf86f5f99f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5333555c_79e83a09",
+        "filename": "rbh-fsevents/tests/unit/utils/utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-08-28T14:48:24Z",
+      "side": 1,
+      "message": "suggest: create_fake_rbh_id",
+      "range": {
+        "startLine": 23,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 7
+      },
+      "revId": "7d30cfaad800fc6ed7cab584053af6cf86f5f99f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f6247cc9_0593ce66",
+        "filename": "rbh-fsevents/tests/unit/utils/utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-08-28T14:48:24Z",
+      "side": 1,
+      "message": "suggest: create_fake_rbh_fsevent",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 11
+      },
+      "revId": "7d30cfaad800fc6ed7cab584053af6cf86f5f99f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
