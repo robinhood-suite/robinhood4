@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "014d51aa_6132a7b1",
+        "filename": "rbh-fsevents/rbh-fsevents.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-08-28T09:33:08Z",
+      "side": 1,
+      "message": "minor: this is not the same as before, if errno is 0 here, it was treated as a default error",
+      "range": {
+        "startLine": 264,
+        "startChar": 4,
+        "endLine": 264,
+        "endChar": 11
+      },
+      "revId": "2bb8e917c9bba8956a536b10645664063bcd17fa",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
