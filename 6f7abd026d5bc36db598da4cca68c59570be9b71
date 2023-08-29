@@ -16,6 +16,24 @@
       "message": "One of the patch of all times, no doubt",
       "revId": "6f7abd026d5bc36db598da4cca68c59570be9b71",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1e55689f_8da3189a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-08-29T14:42:57Z",
+      "side": 1,
+      "message": "Il will extent this to other tests as well. There are a few logs of this type that don\u0027t state how many entries were found. And it seems to me that it would be interesting to have this information when the tests failed. At least, I have found it useful. :)",
+      "parentUuid": "4d7f9bda_55804e34",
+      "revId": "6f7abd026d5bc36db598da4cca68c59570be9b71",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
