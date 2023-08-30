@@ -1,0 +1,211 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8e890004_dbccda4a",
+        "filename": "rbh-fsevents/tests/unit/check_dedup.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-08-30T08:16:36Z",
+      "side": 1,
+      "message": "minor: harmonize between the tests, either free these fake ids or don\u0027t",
+      "range": {
+        "startLine": 175,
+        "startChar": 4,
+        "endLine": 176,
+        "endChar": 22
+      },
+      "revId": "d190a978ab03f87a485236102120202edb6c3748",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5ab2040d_d348c9b8",
+        "filename": "rbh-fsevents/tests/unit/check_dedup.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-08-30T08:16:36Z",
+      "side": 1,
+      "message": "minor: no check that only the delete stays ?",
+      "range": {
+        "startLine": 274,
+        "startChar": 4,
+        "endLine": 274,
+        "endChar": 34
+      },
+      "revId": "d190a978ab03f87a485236102120202edb6c3748",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "51d73668_13b0d83c",
+        "filename": "rbh-fsevents/tests/unit/utils/utils.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-08-30T08:16:36Z",
+      "side": 1,
+      "message": "suggest: add a comment to explain what this function does, I don\u0027t find the small ones are enough to understand it",
+      "range": {
+        "startLine": 155,
+        "startChar": 0,
+        "endLine": 155,
+        "endChar": 17
+      },
+      "revId": "d190a978ab03f87a485236102120202edb6c3748",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "860e44a1_39a2e279",
+        "filename": "rbh-fsevents/tests/unit/utils/utils.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-08-30T08:16:36Z",
+      "side": 1,
+      "message": "question: didn\u0027t the compiler complain there is no static ?",
+      "range": {
+        "startLine": 154,
+        "startChar": 0,
+        "endLine": 155,
+        "endChar": 17
+      },
+      "revId": "d190a978ab03f87a485236102120202edb6c3748",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bdf44e0f_27b27d6f",
+        "filename": "rbh-fsevents/tests/unit/utils/utils.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-08-30T08:16:36Z",
+      "side": 1,
+      "message": "comment: not really fond of doing these checks in a utils file, but I guess it can\u0027t be easily done otherwise...",
+      "range": {
+        "startLine": 201,
+        "startChar": 4,
+        "endLine": 201,
+        "endChar": 33
+      },
+      "revId": "d190a978ab03f87a485236102120202edb6c3748",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9ba0baf8_183e1a27",
+        "filename": "rbh-fsevents/tests/unit/utils/utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-08-30T08:16:36Z",
+      "side": 1,
+      "message": "question: why duplicate this function ? Isn\u0027t this the same as \"fake_create\" apart from the name being given ?",
+      "range": {
+        "startLine": 30,
+        "startChar": 0,
+        "endLine": 30,
+        "endChar": 9
+      },
+      "revId": "d190a978ab03f87a485236102120202edb6c3748",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "671241b9_8906e04d",
+        "filename": "rbh-fsevents/tests/unit/utils/utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-08-30T08:16:36Z",
+      "side": 1,
+      "message": "suggest: as \"fake_create\", change the name to \"create_fake_unlink_fsevent\"",
+      "range": {
+        "startLine": 34,
+        "startChar": 0,
+        "endLine": 34,
+        "endChar": 11
+      },
+      "revId": "d190a978ab03f87a485236102120202edb6c3748",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "24506772_56620e0d",
+        "filename": "rbh-fsevents/tests/unit/utils/utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-08-30T08:16:36Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 38,
+        "startChar": 0,
+        "endLine": 38,
+        "endChar": 11
+      },
+      "revId": "d190a978ab03f87a485236102120202edb6c3748",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7eb8c7cb_9ababf27",
+        "filename": "rbh-fsevents/tests/unit/utils/utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-08-30T08:16:36Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 41,
+        "startChar": 0,
+        "endLine": 41,
+        "endChar": 11
+      },
+      "revId": "d190a978ab03f87a485236102120202edb6c3748",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
