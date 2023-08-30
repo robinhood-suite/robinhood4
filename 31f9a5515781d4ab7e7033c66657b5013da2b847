@@ -63,6 +63,30 @@
       },
       "revId": "31f9a5515781d4ab7e7033c66657b5013da2b847",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f4979670_40af9913",
+        "filename": "rbh-fsevents/src/deduplicator/fsevent_pool.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 619,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-08-30T10:15:25Z",
+      "side": 1,
+      "message": "Yes, but since you\u0027re already assured of it with the break line 624, this comment can be removed right ?",
+      "parentUuid": "2e6457b2_e7a300fa",
+      "range": {
+        "startLine": 618,
+        "startChar": 8,
+        "endLine": 619,
+        "endChar": 41
+      },
+      "revId": "31f9a5515781d4ab7e7033c66657b5013da2b847",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
