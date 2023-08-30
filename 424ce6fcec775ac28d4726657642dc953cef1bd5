@@ -118,6 +118,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d9a75798_0ad65be9",
+        "filename": "librobinhood/src/list.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2023-08-30T11:22:02Z",
+      "side": 1,
+      "message": "typo: beginning",
+      "range": {
+        "startLine": 26,
+        "startChar": 25,
+        "endLine": 26,
+        "endChar": 33
+      },
+      "revId": "424ce6fcec775ac28d4726657642dc953cef1bd5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "539924e8_1cf0e2b6",
         "filename": "librobinhood/tests/unit/check_list.c",
         "patchSetId": 1
@@ -129,6 +152,30 @@
       "writtenOn": "2023-08-28T08:42:59Z",
       "side": 1,
       "message": "question: isn\u0027t that dangerous ? Is it assured that if a function returns a \"true\" boolean, it will be translated to 1 ?",
+      "range": {
+        "startLine": 34,
+        "startChar": 21,
+        "endLine": 34,
+        "endChar": 45
+      },
+      "revId": "424ce6fcec775ac28d4726657642dc953cef1bd5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0cbf2f92_ddc5ac49",
+        "filename": "librobinhood/tests/unit/check_list.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2023-08-30T11:22:02Z",
+      "side": 1,
+      "message": "I think that boolean is just an alias to int or unsigned, with true at 1, and false at 0.\n\nEdit: well, almost confirmed by https://stackoverflow.com/questions/24602814/bool-data-type-of-c99\nbool is an alias to _Bool which is defined as an unsigned integer",
+      "parentUuid": "539924e8_1cf0e2b6",
       "range": {
         "startLine": 34,
         "startChar": 21,
