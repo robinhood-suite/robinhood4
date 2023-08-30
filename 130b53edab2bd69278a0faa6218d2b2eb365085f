@@ -16,6 +16,24 @@
       "message": "Since I already reviewed the original patch as a +1, and the only difference between both is the \u0027size\u0027 function, I didn\u0027t review everything",
       "revId": "130b53edab2bd69278a0faa6218d2b2eb365085f",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "36e7be23_65a1473c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-08-30T06:47:21Z",
+      "side": 1,
+      "message": "It reminds me that the size function is not used. I will have to remove it.",
+      "parentUuid": "f9beed77_f9753341",
+      "revId": "130b53edab2bd69278a0faa6218d2b2eb365085f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
