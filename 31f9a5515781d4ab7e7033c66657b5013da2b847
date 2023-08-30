@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0c87f091_c37866fe",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-08-30T10:08:09Z",
+      "side": 1,
+      "message": "I think having more comments and shorter functions would make this patch way more readable, as it is the most complex one. I understand what is going on, but it is very hard to read, especially because of the conditions and abstraction inherent to the rbh_fsevent structure and assertions done",
+      "revId": "31f9a5515781d4ab7e7033c66657b5013da2b847",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9c812a78_b64a9a20",
+        "filename": "rbh-fsevents/src/deduplicator/fsevent_pool.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 619,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-08-30T10:08:09Z",
+      "side": 1,
+      "message": "question: not sure I understand this, isn\u0027t it the case ? You can only have one xattr, one upsert, one delete, multiple links and multiple unlinks",
+      "range": {
+        "startLine": 618,
+        "startChar": 8,
+        "endLine": 619,
+        "endChar": 41
+      },
+      "revId": "31f9a5515781d4ab7e7033c66657b5013da2b847",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
