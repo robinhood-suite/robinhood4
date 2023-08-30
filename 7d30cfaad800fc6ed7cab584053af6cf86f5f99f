@@ -230,6 +230,54 @@
       },
       "revId": "7d30cfaad800fc6ed7cab584053af6cf86f5f99f",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1d7dd7f0_6e47a68a",
+        "filename": "rbh-fsevents/tests/unit/utils/utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-08-30T07:43:03Z",
+      "side": 1,
+      "message": "I don\u0027t like this name. The \"create_\" part seems superfluous to me. As for the \"link\" part, I want to make a distinction between a create event (i.e. the first link) and an additional link event. This is just to make the intention of the test more clear.",
+      "parentUuid": "de813e4d_20c5a85a",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 11
+      },
+      "revId": "7d30cfaad800fc6ed7cab584053af6cf86f5f99f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d75887a7_fd91c9cc",
+        "filename": "rbh-fsevents/tests/unit/utils/utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-08-30T07:43:03Z",
+      "side": 1,
+      "message": "I don\u0027t like this name. The \"create_\" part seems superflous to me. As for the \"link\" part, I want to make the distinction between the event that indicates the creation of an entry (i.e. the one emitted after a CL_CREAT changelog) and an additional link added to an entry. So the create is intentional here. We could have implemented the create with a different event. This is just to make the test more clear.",
+      "parentUuid": "de813e4d_20c5a85a",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 11
+      },
+      "revId": "7d30cfaad800fc6ed7cab584053af6cf86f5f99f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
