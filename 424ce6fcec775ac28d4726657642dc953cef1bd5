@@ -188,6 +188,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a4ab5bb2_116bfeb9",
+        "filename": "librobinhood/tests/unit/check_list.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-08-30T11:38:43Z",
+      "side": 1,
+      "message": "I think the standard guaranties that (int)false \u003d\u003d 0 and (int)true \u003d\u003d 1 (or any type of integer). Most likely because prior to the integration of booleans to C, most programs would use 0 and 1 as booleans. So the standard had to be complient with those usage.",
+      "parentUuid": "0cbf2f92_ddc5ac49",
+      "range": {
+        "startLine": 34,
+        "startChar": 21,
+        "endLine": 34,
+        "endChar": 45
+      },
+      "revId": "424ce6fcec775ac28d4726657642dc953cef1bd5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "70cd14b8_e186d7da",
         "filename": "librobinhood/tests/unit/check_list.c",
         "patchSetId": 1
