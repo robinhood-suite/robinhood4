@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4d9dfcc8_67c23d39",
+        "filename": "rbh-fsevents/doc/adr/deduplication.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2023-08-30T08:23:37Z",
+      "side": 1,
+      "message": "typo: several",
+      "range": {
+        "startLine": 133,
+        "startChar": 62,
+        "endLine": 133,
+        "endChar": 70
+      },
+      "revId": "6843f1d5d7041b9d3b6ed3ebf72154aea6039c8e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
