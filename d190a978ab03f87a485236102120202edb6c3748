@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e4a6c45a_719a7ac5",
+        "filename": "rbh-fsevents/tests/unit/check_dedup.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-08-31T14:00:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8e890004_dbccda4a",
+      "range": {
+        "startLine": 175,
+        "startChar": 4,
+        "endLine": 176,
+        "endChar": 22
+      },
+      "revId": "d190a978ab03f87a485236102120202edb6c3748",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5ab2040d_d348c9b8",
@@ -37,6 +61,30 @@
       "writtenOn": "2023-08-30T08:16:36Z",
       "side": 1,
       "message": "minor: no check that only the delete stays ?",
+      "range": {
+        "startLine": 274,
+        "startChar": 4,
+        "endLine": 274,
+        "endChar": 34
+      },
+      "revId": "d190a978ab03f87a485236102120202edb6c3748",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b6da4f5c_02adf43a",
+        "filename": "rbh-fsevents/tests/unit/check_dedup.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-08-31T14:00:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ab2040d_d348c9b8",
       "range": {
         "startLine": 274,
         "startChar": 4,
@@ -93,6 +141,54 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "30acb944_4e49589f",
+        "filename": "rbh-fsevents/tests/unit/utils/utils.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-08-31T14:00:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "860e44a1_39a2e279",
+      "range": {
+        "startLine": 154,
+        "startChar": 0,
+        "endLine": 155,
+        "endChar": 17
+      },
+      "revId": "d190a978ab03f87a485236102120202edb6c3748",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fe810c94_a485a505",
+        "filename": "rbh-fsevents/tests/unit/utils/utils.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-08-31T14:00:43Z",
+      "side": 1,
+      "message": "It create an upsert with a statx. The name of the function seems to be enough to me?",
+      "parentUuid": "51d73668_13b0d83c",
+      "range": {
+        "startLine": 155,
+        "startChar": 0,
+        "endLine": 155,
+        "endChar": 17
+      },
+      "revId": "d190a978ab03f87a485236102120202edb6c3748",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bdf44e0f_27b27d6f",
@@ -106,6 +202,30 @@
       "writtenOn": "2023-08-30T08:16:36Z",
       "side": 1,
       "message": "comment: not really fond of doing these checks in a utils file, but I guess it can\u0027t be easily done otherwise...",
+      "range": {
+        "startLine": 201,
+        "startChar": 4,
+        "endLine": 201,
+        "endChar": 33
+      },
+      "revId": "d190a978ab03f87a485236102120202edb6c3748",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b3f19b1a_dc91d280",
+        "filename": "rbh-fsevents/tests/unit/utils/utils.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-08-31T14:00:43Z",
+      "side": 1,
+      "message": "A test utils file* :)",
+      "parentUuid": "bdf44e0f_27b27d6f",
       "range": {
         "startLine": 201,
         "startChar": 4,
@@ -141,6 +261,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b8685414_5e4e93d2",
+        "filename": "rbh-fsevents/tests/unit/utils/utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-08-31T14:00:43Z",
+      "side": 1,
+      "message": "They are small enough that I don\u0027t find the duplication to be an issue and they are only used in tests so...",
+      "parentUuid": "9ba0baf8_183e1a27",
+      "range": {
+        "startLine": 30,
+        "startChar": 0,
+        "endLine": 30,
+        "endChar": 9
+      },
+      "revId": "d190a978ab03f87a485236102120202edb6c3748",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "671241b9_8906e04d",
         "filename": "rbh-fsevents/tests/unit/utils/utils.h",
         "patchSetId": 1
@@ -152,6 +296,30 @@
       "writtenOn": "2023-08-30T08:16:36Z",
       "side": 1,
       "message": "suggest: as \"fake_create\", change the name to \"create_fake_unlink_fsevent\"",
+      "range": {
+        "startLine": 34,
+        "startChar": 0,
+        "endLine": 34,
+        "endChar": 11
+      },
+      "revId": "d190a978ab03f87a485236102120202edb6c3748",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3d4abe0f_c904def0",
+        "filename": "rbh-fsevents/tests/unit/utils/utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-08-31T14:00:43Z",
+      "side": 1,
+      "message": "As in the other patch, I am not a fan of these names. I find fake_*** to be explicit enough and these are test functions. Not the ones a developer is going to interact with very often.",
+      "parentUuid": "671241b9_8906e04d",
       "range": {
         "startLine": 34,
         "startChar": 0,
