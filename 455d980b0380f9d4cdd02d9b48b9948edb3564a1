@@ -110,6 +110,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c0cfbc17_0cc2fbc4",
+        "filename": "rbh-fsevents/src/deduplicator/rbh_fsevent_utils.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-08-31T12:16:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "87b17242_ba97b8c3",
+      "range": {
+        "startLine": 127,
+        "startChar": 36,
+        "endLine": 127,
+        "endChar": 38
+      },
+      "revId": "455d980b0380f9d4cdd02d9b48b9948edb3564a1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "86a8fc44_d5458e6a",
@@ -133,6 +157,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "eaa1343e_f4cfd102",
+        "filename": "rbh-fsevents/src/deduplicator/rbh_fsevent_utils.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-08-31T12:16:25Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "86a8fc44_d5458e6a",
+      "range": {
+        "startLine": 183,
+        "startChar": 8,
+        "endLine": 183,
+        "endChar": 35
+      },
+      "revId": "455d980b0380f9d4cdd02d9b48b9948edb3564a1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e4a85cb0_4c564b11",
@@ -146,6 +194,30 @@
       "writtenOn": "2023-08-28T10:49:16Z",
       "side": 1,
       "message": "suggest: I think that even for 3-4 lines, it would be nicer to have functions that do this and the other 2 cases, similar to the ones for the sequence and map",
+      "range": {
+        "startLine": 190,
+        "startChar": 8,
+        "endLine": 192,
+        "endChar": 62
+      },
+      "revId": "455d980b0380f9d4cdd02d9b48b9948edb3564a1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "14eeb3d8_cd606b53",
+        "filename": "rbh-fsevents/src/deduplicator/rbh_fsevent_utils.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-08-31T12:16:25Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "e4a85cb0_4c564b11",
       "range": {
         "startLine": 190,
         "startChar": 8,
@@ -181,6 +253,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "05ae2973_d464e228",
+        "filename": "rbh-fsevents/src/deduplicator/rbh_fsevent_utils.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-08-31T12:16:25Z",
+      "side": 1,
+      "message": "because the structure is called value_map",
+      "parentUuid": "c6664209_de2e61df",
+      "range": {
+        "startLine": 207,
+        "startChar": 19,
+        "endLine": 207,
+        "endChar": 28
+      },
+      "revId": "455d980b0380f9d4cdd02d9b48b9948edb3564a1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a1735f5d_650ba4b6",
         "filename": "rbh-fsevents/src/deduplicator/rbh_fsevent_utils.c",
         "patchSetId": 1
@@ -192,6 +288,30 @@
       "writtenOn": "2023-08-28T10:49:16Z",
       "side": 1,
       "message": "minor: this is not necessary for all events, upsert or unlink don\u0027t have a xattrs map for instance",
+      "range": {
+        "startLine": 229,
+        "startChar": 4,
+        "endLine": 231,
+        "endChar": 18
+      },
+      "revId": "455d980b0380f9d4cdd02d9b48b9948edb3564a1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c6badc7d_38c5bfcd",
+        "filename": "rbh-fsevents/src/deduplicator/rbh_fsevent_utils.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-08-31T12:16:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a1735f5d_650ba4b6",
       "range": {
         "startLine": 229,
         "startChar": 4,
@@ -215,6 +335,30 @@
       "writtenOn": "2023-08-28T10:49:16Z",
       "side": 1,
       "message": "suggest: add the content of each case in a specific function",
+      "range": {
+        "startLine": 235,
+        "startChar": 8,
+        "endLine": 250,
+        "endChar": 14
+      },
+      "revId": "455d980b0380f9d4cdd02d9b48b9948edb3564a1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "70ed487b_285bc9de",
+        "filename": "rbh-fsevents/src/deduplicator/rbh_fsevent_utils.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-08-31T12:16:25Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "6637e457_ab6dee03",
       "range": {
         "startLine": 235,
         "startChar": 8,
