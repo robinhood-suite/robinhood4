@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3fa9a3ea_b511e063",
+        "filename": "rbh-fsevents/src/deduplicator/fsevent_pool.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-08-31T13:32:24Z",
+      "side": 1,
+      "message": "Acknowledged, will be done in a later patch (remind me if I forget :) )",
+      "parentUuid": "6570f4d3_49e8408a",
+      "range": {
+        "startLine": 160,
+        "startChar": 4,
+        "endLine": 160,
+        "endChar": 40
+      },
+      "revId": "5fe8112e2d23303c8ddc16382359a94d61eb335e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5a420a4e_8f444a30",
@@ -61,6 +85,30 @@
       "side": 1,
       "message": "\"first line as a normal branch condition\"*, sorry",
       "parentUuid": "5a420a4e_8f444a30",
+      "range": {
+        "startLine": 164,
+        "startChar": 8,
+        "endLine": 169,
+        "endChar": 28
+      },
+      "revId": "5fe8112e2d23303c8ddc16382359a94d61eb335e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9c2943ce_93bd0364",
+        "filename": "rbh-fsevents/src/deduplicator/fsevent_pool.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-08-31T13:32:24Z",
+      "side": 1,
+      "message": "I\u0027ve added brackets around the foreach",
+      "parentUuid": "db59dbc6_6e02c1bc",
       "range": {
         "startLine": 164,
         "startChar": 8,
