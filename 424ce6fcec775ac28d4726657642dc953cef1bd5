@@ -47,6 +47,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "43e34c94_c5815c83",
+        "filename": "librobinhood/include/robinhood/list.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-08-31T09:35:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b6ed514b_1acd7b8b",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 20
+      },
+      "revId": "424ce6fcec775ac28d4726657642dc953cef1bd5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0d260ab2_a5f63339",
@@ -60,6 +84,30 @@
       "writtenOn": "2023-08-28T08:42:59Z",
       "side": 1,
       "message": "major: I\u0027d suggest using the \"container_of\" macro for that operation, as it is easier to understand and a known macro. You can even just copy/paste it, as it is frequently done",
+      "range": {
+        "startLine": 19,
+        "startChar": 8,
+        "endLine": 19,
+        "endChar": 22
+      },
+      "revId": "424ce6fcec775ac28d4726657642dc953cef1bd5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2cf3242a_836b196f",
+        "filename": "librobinhood/include/robinhood/list.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-08-31T09:35:27Z",
+      "side": 1,
+      "message": "This macro is useful as is to get the element of a list given its link. I\u0027ve added a bit of documentation to make it more clear. But to me this name should be viewed in the context of a linked list structure:\n\nIf I have:\n\n`struct rbh_list_node *list_elem;`\n\nI can find my structure with:\n\n`struct mystruct *myvalue \u003d rbh_list_entry(list_elem, struct mystruct, link);`\n\nTo me, this is a more consitent API. One needs to know that rbh_list_entry converts a list node to the underlying entry that is of interest to the user. container_of makes its implementation more explicit but I would argue that one doesn\u0027t necessarily need to know how an API is implemented to use it effectively.",
+      "parentUuid": "0d260ab2_a5f63339",
       "range": {
         "startLine": 19,
         "startChar": 8,
@@ -95,6 +143,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "66bf0a1c_fb3e2e0d",
+        "filename": "librobinhood/include/robinhood/list.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-08-31T09:35:27Z",
+      "side": 1,
+      "message": "This fonction as no use and is O(n) so in practice, you would want to keep the size yourself if you want to know it.",
+      "parentUuid": "b2f4778c_3bbb465f",
+      "range": {
+        "startLine": 34,
+        "startChar": 0,
+        "endLine": 34,
+        "endChar": 13
+      },
+      "revId": "424ce6fcec775ac28d4726657642dc953cef1bd5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "42077c6f_f73926ac",
         "filename": "librobinhood/src/list.c",
         "patchSetId": 1
@@ -106,6 +178,30 @@
       "writtenOn": "2023-08-28T08:42:59Z",
       "side": 1,
       "message": "minor: end",
+      "range": {
+        "startLine": 16,
+        "startChar": 25,
+        "endLine": 16,
+        "endChar": 33
+      },
+      "revId": "424ce6fcec775ac28d4726657642dc953cef1bd5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d219a1e_fa9ec02f",
+        "filename": "librobinhood/src/list.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-08-31T09:35:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "42077c6f_f73926ac",
       "range": {
         "startLine": 16,
         "startChar": 25,
@@ -129,6 +225,30 @@
       "writtenOn": "2023-08-30T11:22:02Z",
       "side": 1,
       "message": "typo: beginning",
+      "range": {
+        "startLine": 26,
+        "startChar": 25,
+        "endLine": 26,
+        "endChar": 33
+      },
+      "revId": "424ce6fcec775ac28d4726657642dc953cef1bd5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "653bdd61_68597730",
+        "filename": "librobinhood/src/list.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-08-31T09:35:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d9a75798_0ad65be9",
       "range": {
         "startLine": 26,
         "startChar": 25,
@@ -235,6 +355,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f8d4a9f4_025182d0",
+        "filename": "librobinhood/tests/unit/check_list.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-08-31T09:35:27Z",
+      "side": 1,
+      "message": "I would actually prefer to remove the banner as it does not add anything meaningful to the comprehension of the code",
+      "parentUuid": "70cd14b8_e186d7da",
+      "range": {
+        "startLine": 89,
+        "startChar": 11,
+        "endLine": 89,
+        "endChar": 23
+      },
+      "revId": "424ce6fcec775ac28d4726657642dc953cef1bd5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0960e9de_484a1fd5",
         "filename": "librobinhood/tests/unit/check_list.c",
         "patchSetId": 1
@@ -258,6 +402,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7657dd9d_27dc45da",
+        "filename": "librobinhood/tests/unit/check_list.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-08-31T09:35:27Z",
+      "side": 1,
+      "message": "What do you mean? This loop checks that the values are the same as the ones that are inserted",
+      "parentUuid": "0960e9de_484a1fd5",
+      "range": {
+        "startLine": 234,
+        "startChar": 3,
+        "endLine": 235,
+        "endChar": 43
+      },
+      "revId": "424ce6fcec775ac28d4726657642dc953cef1bd5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "14357f50_09dec6e2",
         "filename": "librobinhood/tests/unit/check_list.c",
         "patchSetId": 1
@@ -269,6 +437,30 @@
       "writtenOn": "2023-08-28T08:42:59Z",
       "side": 1,
       "message": "major-suggest: for the sake of thoroughness, adding checks that the functions \"next\" and \"first\", and the macro \"rbh_list_foreach_safe\", work would be nice (and \"size\" if you decide to add it)",
+      "range": {
+        "startLine": 260,
+        "startChar": 4,
+        "endLine": 260,
+        "endChar": 19
+      },
+      "revId": "424ce6fcec775ac28d4726657642dc953cef1bd5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2c9441e0_55bfeb63",
+        "filename": "librobinhood/tests/unit/check_list.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-08-31T09:35:27Z",
+      "side": 1,
+      "message": "next is already used in many tests",
+      "parentUuid": "14357f50_09dec6e2",
       "range": {
         "startLine": 260,
         "startChar": 4,
