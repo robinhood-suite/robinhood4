@@ -390,6 +390,23 @@
       },
       "revId": "455d980b0380f9d4cdd02d9b48b9948edb3564a1",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "844687c6_8fefe059",
+        "filename": "rbh-fsevents/src/deduplicator/rbh_fsevent_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2023-09-01T11:01:23Z",
+      "side": 1,
+      "message": "typo: extended",
+      "revId": "455d980b0380f9d4cdd02d9b48b9948edb3564a1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
