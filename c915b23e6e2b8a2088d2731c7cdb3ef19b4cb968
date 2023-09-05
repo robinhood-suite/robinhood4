@@ -66,6 +66,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1eac4c72_92e5323e",
+        "filename": "rbh-fsevents/src/deduplicator/fsevent_pool.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 294,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-09-05T11:11:41Z",
+      "side": 1,
+      "message": "The ids are the same since they are filtered by id in the hashmap. The list events here contains events on the same id.",
+      "parentUuid": "d506fd2f_9857e1a5",
+      "range": {
+        "startLine": 294,
+        "startChar": 16,
+        "endLine": 294,
+        "endChar": 52
+      },
+      "revId": "c915b23e6e2b8a2088d2731c7cdb3ef19b4cb968",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "926a14bf_1c34ebcd",
         "filename": "rbh-fsevents/src/deduplicator/fsevent_pool.c",
         "patchSetId": 1
