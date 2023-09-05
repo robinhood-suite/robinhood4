@@ -97,6 +97,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "82bb8967_f866d9e6",
+        "filename": "rbh-fsevents/src/deduplicator.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2023-09-05T07:14:16Z",
+      "side": 1,
+      "message": "typo: were",
+      "range": {
+        "startLine": 53,
+        "startChar": 7,
+        "endLine": 53,
+        "endChar": 12
+      },
+      "revId": "372210f8a8e054932631992970b7009e26b94406",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a5660aeb_9a2e836b",
         "filename": "rbh-fsevents/src/deduplicator/fsevent_pool.c",
         "patchSetId": 1
@@ -379,6 +402,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "aac54eaa_9794d43c",
+        "filename": "rbh-fsevents/src/deduplicator/fsevent_pool.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2023-09-05T07:14:16Z",
+      "side": 1,
+      "message": "typo: generates",
+      "range": {
+        "startLine": 135,
+        "startChar": 61,
+        "endLine": 135,
+        "endChar": 69
+      },
+      "revId": "372210f8a8e054932631992970b7009e26b94406",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3b5f1891_0e0480b1",
         "filename": "rbh-fsevents/src/deduplicator/fsevent_pool.c",
         "patchSetId": 1
@@ -466,6 +512,29 @@
         "startChar": 8,
         "endLine": 229,
         "endChar": 39
+      },
+      "revId": "372210f8a8e054932631992970b7009e26b94406",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "be4d4e23_69fb1cef",
+        "filename": "rbh-fsevents/src/deduplicator/hash.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2023-09-05T07:14:16Z",
+      "side": 1,
+      "message": "question: do we need to precise why we use those values?",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 13
       },
       "revId": "372210f8a8e054932631992970b7009e26b94406",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
