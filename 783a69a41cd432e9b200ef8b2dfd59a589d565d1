@@ -120,6 +120,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7a2527c4_3488b315",
+        "filename": "rbh-fsevents/src/deduplicator/fsevent_pool.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-09-05T11:02:26Z",
+      "side": 1,
+      "message": "It is the name of the member in the structure of elem\u0027s type: rbh_fsevent_node::link",
+      "parentUuid": "062e1ef7_28297d7c",
+      "range": {
+        "startLine": 185,
+        "startChar": 49,
+        "endLine": 185,
+        "endChar": 53
+      },
+      "revId": "783a69a41cd432e9b200ef8b2dfd59a589d565d1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9862cc24_5bbe1e3d",
         "filename": "rbh-fsevents/src/deduplicator/fsevent_pool.c",
         "patchSetId": 1
@@ -131,6 +155,30 @@
       "writtenOn": "2023-09-05T09:20:45Z",
       "side": 1,
       "message": "question: don\u0027t you need to check the name is the same?",
+      "range": {
+        "startLine": 186,
+        "startChar": 12,
+        "endLine": 186,
+        "endChar": 51
+      },
+      "revId": "783a69a41cd432e9b200ef8b2dfd59a589d565d1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "496d0ca0_ae717087",
+        "filename": "rbh-fsevents/src/deduplicator/fsevent_pool.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-09-05T11:02:26Z",
+      "side": 1,
+      "message": "I think you are right, if the following batch is split in 2 between link(\"a\", \"b\") and link(\"a\", \"c\"), we won\u0027t deduplicate link(\"a\", \"c\") with unlink(\"c\") since unlink(\"c\") will be translated to a delete event. Therefore, if we have the link and delete of the same id in the same batch we know that all the events are in the same batch.\n\n```\ncreat(\"a\")\nlink(\"a\", \"b\")\nlink(\"a\", \"c\")\nunlink(\"a\")\nunlink(\"b\")\nunlink(\"c\")\n```",
+      "parentUuid": "9862cc24_5bbe1e3d",
       "range": {
         "startLine": 186,
         "startChar": 12,
