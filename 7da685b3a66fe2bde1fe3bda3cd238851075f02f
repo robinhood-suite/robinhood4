@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1007a03e_f3be6216",
+        "filename": "rbh-fsevents/tests/unit/check_dedup.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 525,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-09-06T12:54:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "35a66d55_68eb3e87",
+      "range": {
+        "startLine": 525,
+        "startChar": 4,
+        "endLine": 525,
+        "endChar": 79
+      },
+      "revId": "7da685b3a66fe2bde1fe3bda3cd238851075f02f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "117aa129_8d9ed6aa",
@@ -47,6 +71,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "edc74bce_6e8e4138",
+        "filename": "rbh-fsevents/tests/unit/check_dedup.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 603,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-09-06T12:54:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "117aa129_8d9ed6aa",
+      "range": {
+        "startLine": 603,
+        "startChar": 4,
+        "endLine": 603,
+        "endChar": 65
+      },
+      "revId": "7da685b3a66fe2bde1fe3bda3cd238851075f02f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "820fd8fa_d7214b9b",
@@ -60,6 +108,30 @@
       "writtenOn": "2023-08-30T10:21:59Z",
       "side": 1,
       "message": "minor: missing check of the dedup on different xattrs, to see if they are both put in the same sequence",
+      "range": {
+        "startLine": 707,
+        "startChar": 3,
+        "endLine": 707,
+        "endChar": 44
+      },
+      "revId": "7da685b3a66fe2bde1fe3bda3cd238851075f02f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0c4c0e9d_5569b706",
+        "filename": "rbh-fsevents/tests/unit/check_dedup.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 707,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-09-06T12:54:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "820fd8fa_d7214b9b",
       "range": {
         "startLine": 707,
         "startChar": 3,
