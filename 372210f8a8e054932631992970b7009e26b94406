@@ -118,6 +118,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9d362616_1e0984ce",
+        "filename": "rbh-fsevents/src/deduplicator.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-09-06T10:10:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "82bb8967_f866d9e6",
+      "range": {
+        "startLine": 53,
+        "startChar": 7,
+        "endLine": 53,
+        "endChar": 12
+      },
+      "revId": "372210f8a8e054932631992970b7009e26b94406",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a5660aeb_9a2e836b",
@@ -423,6 +447,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "94595137_acb562fe",
+        "filename": "rbh-fsevents/src/deduplicator/fsevent_pool.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-09-06T10:10:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "aac54eaa_9794d43c",
+      "range": {
+        "startLine": 135,
+        "startChar": 61,
+        "endLine": 135,
+        "endChar": 69
+      },
+      "revId": "372210f8a8e054932631992970b7009e26b94406",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3b5f1891_0e0480b1",
@@ -530,6 +578,30 @@
       "writtenOn": "2023-09-05T07:14:16Z",
       "side": 1,
       "message": "question: do we need to precise why we use those values?",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 13
+      },
+      "revId": "372210f8a8e054932631992970b7009e26b94406",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d0f0b2a1_67b87f9b",
+        "filename": "rbh-fsevents/src/deduplicator/hash.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-09-06T10:10:41Z",
+      "side": 1,
+      "message": "This is actually a placeholder. I didn\u0027t know which hash algorithm to use so I used the one of RBH3. But this is specific to lustre since I extract the lu_fid from the rbh_id. Robinhood 3 has a link to the repo where this hash function was taken from, I will add it to in a comment above. But this hash function needs to be fixed for POSIX and maybe a better hash can be found for Lustre?",
+      "parentUuid": "be4d4e23_69fb1cef",
       "range": {
         "startLine": 7,
         "startChar": 0,
