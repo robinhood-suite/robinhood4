@@ -48,6 +48,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0f34a3b0_ec1edaa5",
+        "filename": "rbh-fsevents/tests/unit/check_dedup.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-09-06T10:24:24Z",
+      "side": 1,
+      "message": "The question was more what value is meaninfull for the tests. But I suppose each test can use 10 and if one test needs more at some point, it will use another value. I will remove the comment.",
+      "parentUuid": "903fd620_d131a1d8",
+      "range": {
+        "startLine": 35,
+        "startChar": 4,
+        "endLine": 35,
+        "endChar": 38
+      },
+      "revId": "7d30cfaad800fc6ed7cab584053af6cf86f5f99f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "21668b07_d44e82e1",
@@ -61,6 +85,30 @@
       "writtenOn": "2023-08-28T14:48:24Z",
       "side": 1,
       "message": "nit: add check for the parent",
+      "range": {
+        "startLine": 70,
+        "startChar": 4,
+        "endLine": 70,
+        "endChar": 36
+      },
+      "revId": "7d30cfaad800fc6ed7cab584053af6cf86f5f99f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "69cc2387_6ceff8d8",
+        "filename": "rbh-fsevents/tests/unit/check_dedup.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-09-06T10:24:24Z",
+      "side": 1,
+      "message": "Since there is only one event in this test, this won\u0027t add any meaningful test coverage.",
+      "parentUuid": "21668b07_d44e82e1",
       "range": {
         "startLine": 70,
         "startChar": 4,
@@ -94,6 +142,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "64cb473d_00c14e54",
+        "filename": "rbh-fsevents/tests/unit/check_dedup.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-09-06T10:24:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5f602672_9b309f9c",
+      "range": {
+        "startLine": 72,
+        "startChar": 4,
+        "endLine": 72,
+        "endChar": 13
+      },
+      "revId": "7d30cfaad800fc6ed7cab584053af6cf86f5f99f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "03499d16_827b1276",
@@ -107,6 +179,30 @@
       "writtenOn": "2023-08-28T14:48:24Z",
       "side": 1,
       "message": "minor: idem",
+      "range": {
+        "startLine": 107,
+        "startChar": 8,
+        "endLine": 107,
+        "endChar": 21
+      },
+      "revId": "7d30cfaad800fc6ed7cab584053af6cf86f5f99f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0df12086_ba097785",
+        "filename": "rbh-fsevents/tests/unit/check_dedup.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-09-06T10:24:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "03499d16_827b1276",
       "range": {
         "startLine": 107,
         "startChar": 8,
@@ -140,6 +236,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5e194ba8_d8c66497",
+        "filename": "rbh-fsevents/tests/unit/utils/utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-09-06T10:24:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f567d647_6c9375d3",
+      "range": {
+        "startLine": 1,
+        "startChar": 24,
+        "endLine": 1,
+        "endChar": 32
+      },
+      "revId": "7d30cfaad800fc6ed7cab584053af6cf86f5f99f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "85e494fe_84f4a610",
@@ -153,6 +273,30 @@
       "writtenOn": "2023-08-28T14:48:24Z",
       "side": 1,
       "message": "suggest: create_empty_source",
+      "range": {
+        "startLine": 17,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 12
+      },
+      "revId": "7d30cfaad800fc6ed7cab584053af6cf86f5f99f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d7a4e943_1b4b5388",
+        "filename": "rbh-fsevents/tests/unit/utils/utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-09-06T10:24:24Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "85e494fe_84f4a610",
       "range": {
         "startLine": 17,
         "startChar": 0,
@@ -186,6 +330,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "775476b9_8812d98f",
+        "filename": "rbh-fsevents/tests/unit/utils/utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-09-06T10:24:24Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "00aaa9c8_946d42bc",
+      "range": {
+        "startLine": 20,
+        "startChar": 0,
+        "endLine": 20,
+        "endChar": 17
+      },
+      "revId": "7d30cfaad800fc6ed7cab584053af6cf86f5f99f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5333555c_79e83a09",
@@ -199,6 +367,30 @@
       "writtenOn": "2023-08-28T14:48:24Z",
       "side": 1,
       "message": "suggest: create_fake_rbh_id",
+      "range": {
+        "startLine": 23,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 7
+      },
+      "revId": "7d30cfaad800fc6ed7cab584053af6cf86f5f99f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "21022232_dfdf20f3",
+        "filename": "rbh-fsevents/tests/unit/utils/utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-09-06T10:24:24Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "5333555c_79e83a09",
       "range": {
         "startLine": 23,
         "startChar": 0,
@@ -366,6 +558,30 @@
       "side": 1,
       "message": "Right but later, you have fake_link, fake_unlink, fake_xattrs... It becomes clear that create here refers to a type of fsevent.",
       "parentUuid": "594cb02b_61993d38",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 11
+      },
+      "revId": "7d30cfaad800fc6ed7cab584053af6cf86f5f99f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5f93ede3_5d054cdd",
+        "filename": "rbh-fsevents/tests/unit/utils/utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-09-06T10:24:24Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "e7c46369_ed402e31",
       "range": {
         "startLine": 26,
         "startChar": 0,
