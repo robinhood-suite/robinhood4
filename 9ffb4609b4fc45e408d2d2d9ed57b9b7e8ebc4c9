@@ -39,6 +39,30 @@
       },
       "revId": "9ffb4609b4fc45e408d2d2d9ed57b9b7e8ebc4c9",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "57de36b9_7a3df5ca",
+        "filename": "rbh-fsevents/tests/test_migrate.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-09-07T07:55:06Z",
+      "side": 1,
+      "message": "clear_changelogs does the same thing as lfs changelog_clear. It is a simple wrapper around lfs changelog_clear but for MDT0000 only. Most tests only create entries and changelogs on MDT0000 so the function clear_changelogs was implemented to make it easier to clean them. But since this test migrates metadata between MDTs, we need to clear the changelogs of both MDTs. Hence the call to lfs changelog_clear on $other_mdt here.",
+      "parentUuid": "3407fdfa_212679c4",
+      "range": {
+        "startLine": 39,
+        "startChar": 4,
+        "endLine": 39,
+        "endChar": 51
+      },
+      "revId": "9ffb4609b4fc45e408d2d2d9ed57b9b7e8ebc4c9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
