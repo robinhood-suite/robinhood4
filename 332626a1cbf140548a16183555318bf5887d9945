@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d074d0e9_b71df731",
+        "filename": "librobinhood/tests/unit/check_itertools.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2023-09-07T08:39:57Z",
+      "side": 1,
+      "message": "suggest: adding a test on an iterator on an empty list.",
+      "range": {
+        "startLine": 309,
+        "startChar": 11,
+        "endLine": 309,
+        "endChar": 20
+      },
+      "revId": "332626a1cbf140548a16183555318bf5887d9945",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
