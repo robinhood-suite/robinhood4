@@ -155,6 +155,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "95c432c5_05e00b42",
+        "filename": "rbh-fsevents/src/deduplicator/fsevent_pool.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-09-07T13:29:28Z",
+      "side": 1,
+      "message": "One thing that I am noting here is that this does not prevent the caller from pushing too many events. Meaning that if I check if the pull is full after the push is done, a caller that calls push again when errno was set to ENOSPC will be able to add more elements. Maybe the implementation of push should be left as is to prevent overflowing the pool and then the caller has to push the fsevent again after the flush. We could do something like this:\n\n```\nlast_fsevent \u003d NULL;\n\nloop {\n    fsevent \u003d iter_next();\n    \n    push(fsevent)\n    if (errno \u003d\u003d ENOSPC) {\n        last_fsevent \u003d fsevent;\n        break;\n    }\n    ...\n}\n\niterator \u003d flush(pool);\nif last_fsevent\n    push(last_fsevent);\n\nreturn iterator;\n```\n\nAn other solution is to keep both checks (before the actual push and after) so that after a push, we return ENOSPC to the caller to indicate that the next push won\u0027t succeed. So maybe we can have:\n- on the last push that filled the pool (i.e. full after insertion):\n  return 0 and set errno to ENOSPC (which is a bit weird to do since the function returns 0)\n- on the next push (i.e. the pool is already full before insert):\n  do not insert the fsevent, return -1 and set errno to ENOSPC\n  \nThe second solution is easier to use from the caller\u0027s perspective and does not require too many changes to the current implementation.\n\nWhat to you think?",
+      "parentUuid": "d11d850b_ce7d8daa",
+      "revId": "c690b582be42f25bcf211832643e1b7ffc74aefd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "becb6173_fa9aae8c",
         "filename": "rbh-fsevents/src/deduplicator/fsevent_pool.c",
         "patchSetId": 2
@@ -237,6 +255,30 @@
       "side": 1,
       "message": "Yes. I\u0027m not familiar with the rbh iterators. But isn\u0027t it the rigth way to proceed ?\n\nAre you sure when pool_flush is called that you can clear the list ? Are you sure that the iterator of the prev flush is finished and already send all events elem ?\n\nI\u0027m just trying to understand how you manage the previous iterator returned by previous flush and the new one and the cleaning ...",
       "parentUuid": "9cba5416_197d1187",
+      "range": {
+        "startLine": 218,
+        "startChar": 4,
+        "endLine": 219,
+        "endChar": 34
+      },
+      "revId": "c690b582be42f25bcf211832643e1b7ffc74aefd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "44359e1c_a243f5dc",
+        "filename": "rbh-fsevents/src/deduplicator/fsevent_pool.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-09-07T13:29:28Z",
+      "side": 1,
+      "message": "Everything is sequential here. Which means that when flush is first called and returns an iterator, the function feed will call rbh_backend_update (through the function sink_process -\u003e backend_sink_process -\u003e rbh_backend_upadte). This function will iterate over the list_iter returned here (there is also the enrich process that may happen in between but lets ignore it since it does not change the logic I\u0027m describing here) and perform the necessary updates to the backend. Once all the events of the list are processed, the sink_process will return and feed will call rbh_iter_next on the deduplicator which in turn will call rbh_iter_next on the source to get more changelogs from the reader.\n\nOnce the pool is full again, we call flush, this time we have elements in the list that we remove. This is fine since all the updates are already committed to the backend. We could create an iterator that fetches an element from the list then removes it and returns the associated value. I don\u0027t know what\u0027s best between the two. This solution is maybe a bit more explicit but relies on the fact that all the events are committed between each call to flush. Which is the case for now.",
+      "parentUuid": "e753c600_ee2572f6",
       "range": {
         "startLine": 218,
         "startChar": 4,
