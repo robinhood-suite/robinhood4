@@ -221,6 +221,30 @@
       },
       "revId": "c690b582be42f25bcf211832643e1b7ffc74aefd",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e753c600_ee2572f6",
+        "filename": "rbh-fsevents/src/deduplicator/fsevent_pool.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2023-09-07T12:59:19Z",
+      "side": 1,
+      "message": "Yes. I\u0027m not familiar with the rbh iterators. But isn\u0027t it the rigth way to proceed ?\n\nAre you sure when pool_flush is called that you can clear the list ? Are you sure that the iterator of the prev flush is finished and already send all events elem ?\n\nI\u0027m just trying to understand how you manage the previous iterator returned by previous flush and the new one and the cleaning ...",
+      "parentUuid": "9cba5416_197d1187",
+      "range": {
+        "startLine": 218,
+        "startChar": 4,
+        "endLine": 219,
+        "endChar": 34
+      },
+      "revId": "c690b582be42f25bcf211832643e1b7ffc74aefd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
