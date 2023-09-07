@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a86ba173_d9899c2e",
+        "filename": "rbh-fsevents/src/deduplicator.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-09-07T11:23:11Z",
+      "side": 1,
+      "message": "I think you are right, we are loosing one event each time the pool is full.",
+      "parentUuid": "5c2b6a93_a986cc6a",
+      "range": {
+        "startLine": 45,
+        "startChar": 9,
+        "endLine": 46,
+        "endChar": 24
+      },
+      "revId": "c690b582be42f25bcf211832643e1b7ffc74aefd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3a2e079c_1ee0cc4d",
         "filename": "rbh-fsevents/src/deduplicator/fsevent_pool.c",
         "patchSetId": 2
@@ -37,6 +61,30 @@
       "writtenOn": "2023-09-07T10:36:40Z",
       "side": 1,
       "message": "major: In the function rbh_fsevent_pool_is_full, you use this value as the threshold to the fact that the pool is full, not the number of element to flushed ?\n\nWhy did you not store pool_size (first arg of the pool_new function) as the total size of the pool, use it in is_full, and store flush_size as the number of entries to flush as you describe in this comment ?\n\nstatic bool\nrbh_fsevent_pool_is_full(struct rbh_fsevent_pool *pool)\n{\n    return pool-\u003ecount \u003d\u003d pool-\u003eflush_size;\n}",
+      "range": {
+        "startLine": 21,
+        "startChar": 4,
+        "endLine": 22,
+        "endChar": 26
+      },
+      "revId": "c690b582be42f25bcf211832643e1b7ffc74aefd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ef2e6580_2ac2f14c",
+        "filename": "rbh-fsevents/src/deduplicator/fsevent_pool.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-09-07T11:23:11Z",
+      "side": 1,
+      "message": "Indeed, I should check that the total size of the pool is reached not the flush size.",
+      "parentUuid": "3a2e079c_1ee0cc4d",
       "range": {
         "startLine": 21,
         "startChar": 4,
@@ -89,6 +137,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d11d850b_ce7d8daa",
+        "filename": "rbh-fsevents/src/deduplicator/fsevent_pool.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-09-07T11:23:11Z",
+      "side": 1,
+      "message": "Yes, this would prevent the loss of an event.",
+      "parentUuid": "a032e9a7_d13c93cc",
+      "revId": "c690b582be42f25bcf211832643e1b7ffc74aefd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "becb6173_fa9aae8c",
         "filename": "rbh-fsevents/src/deduplicator/fsevent_pool.c",
         "patchSetId": 2
@@ -123,6 +189,30 @@
       "writtenOn": "2023-09-07T10:36:40Z",
       "side": 1,
       "message": "major: why cleaning the flushed list of event when you try to create a new one instead of cleaning each element when you return it by the iterator ?",
+      "range": {
+        "startLine": 218,
+        "startChar": 4,
+        "endLine": 219,
+        "endChar": 34
+      },
+      "revId": "c690b582be42f25bcf211832643e1b7ffc74aefd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9cba5416_197d1187",
+        "filename": "rbh-fsevents/src/deduplicator/fsevent_pool.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-09-07T11:23:11Z",
+      "side": 1,
+      "message": "Do you mean that the list iterator returned at the end of this function would remove elements from the list as they are yield to the caller ?",
+      "parentUuid": "e3c46141_baa8fc1f",
       "range": {
         "startLine": 218,
         "startChar": 4,
