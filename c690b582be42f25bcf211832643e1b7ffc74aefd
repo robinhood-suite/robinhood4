@@ -1,0 +1,136 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5c2b6a93_a986cc6a",
+        "filename": "rbh-fsevents/src/deduplicator.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2023-09-07T10:36:40Z",
+      "side": 1,
+      "message": "defect: I do not understand what happens to the fsevent that generates the ENOSPC. On one side, the deduplicator-\u003esource-\u003efsevents iterator has already returns it and, I guess, will never return it again. On the other side, the implementation of the rbh_fsevent_pool_push function simply returns ENOSPC without storing it. So, I have the impression that this fsevent is simply lost and never register. Where am I wrong ?\n\nI guess a correct implementation of the rbh_fsevent_pool_push is to return ENOSPC as result of the call adding the last entry instead of returning ENOSPC in the call that try to add the entry next to the last stored one.\n\n(This behaviour bans pool of size 0.)",
+      "range": {
+        "startLine": 45,
+        "startChar": 9,
+        "endLine": 46,
+        "endChar": 24
+      },
+      "revId": "c690b582be42f25bcf211832643e1b7ffc74aefd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3a2e079c_1ee0cc4d",
+        "filename": "rbh-fsevents/src/deduplicator/fsevent_pool.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2023-09-07T10:36:40Z",
+      "side": 1,
+      "message": "major: In the function rbh_fsevent_pool_is_full, you use this value as the threshold to the fact that the pool is full, not the number of element to flushed ?\n\nWhy did you not store pool_size (first arg of the pool_new function) as the total size of the pool, use it in is_full, and store flush_size as the number of entries to flush as you describe in this comment ?\n\nstatic bool\nrbh_fsevent_pool_is_full(struct rbh_fsevent_pool *pool)\n{\n    return pool-\u003ecount \u003d\u003d pool-\u003eflush_size;\n}",
+      "range": {
+        "startLine": 21,
+        "startChar": 4,
+        "endLine": 22,
+        "endChar": 26
+      },
+      "revId": "c690b582be42f25bcf211832643e1b7ffc74aefd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "66318d5b_6cfc753d",
+        "filename": "rbh-fsevents/src/deduplicator/fsevent_pool.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2023-09-07T10:36:40Z",
+      "side": 1,
+      "message": "minor: should not we add a check to prohibit creation of pool with pool_size of 0 ?",
+      "range": {
+        "startLine": 58,
+        "startChar": 0,
+        "endLine": 58,
+        "endChar": 1
+      },
+      "revId": "c690b582be42f25bcf211832643e1b7ffc74aefd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a032e9a7_d13c93cc",
+        "filename": "rbh-fsevents/src/deduplicator/fsevent_pool.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2023-09-07T10:36:40Z",
+      "side": 1,
+      "message": "comment: (linked to the defect at ENOSPC) isn\u0027t it the good place to check an return ENOSPC ?",
+      "revId": "c690b582be42f25bcf211832643e1b7ffc74aefd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "becb6173_fa9aae8c",
+        "filename": "rbh-fsevents/src/deduplicator/fsevent_pool.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2023-09-07T10:36:40Z",
+      "side": 1,
+      "message": "comment: (linked to the defect ENOSPC) ENOSPC is returned without storing event anywhere in the pool.",
+      "range": {
+        "startLine": 188,
+        "startChar": 4,
+        "endLine": 191,
+        "endChar": 5
+      },
+      "revId": "c690b582be42f25bcf211832643e1b7ffc74aefd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e3c46141_baa8fc1f",
+        "filename": "rbh-fsevents/src/deduplicator/fsevent_pool.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2023-09-07T10:36:40Z",
+      "side": 1,
+      "message": "major: why cleaning the flushed list of event when you try to create a new one instead of cleaning each element when you return it by the iterator ?",
+      "range": {
+        "startLine": 218,
+        "startChar": 4,
+        "endLine": 219,
+        "endChar": 34
+      },
+      "revId": "c690b582be42f25bcf211832643e1b7ffc74aefd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
