@@ -118,6 +118,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "488d124e_8c27d30e",
+        "filename": "librobinhood/include/robinhood/list.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2023-09-07T08:29:06Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "2cf3242a_836b196f",
+      "range": {
+        "startLine": 19,
+        "startChar": 8,
+        "endLine": 19,
+        "endChar": 22
+      },
+      "revId": "424ce6fcec775ac28d4726657642dc953cef1bd5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b2f4778c_3bbb465f",
@@ -155,6 +179,30 @@
       "side": 1,
       "message": "This fonction as no use and is O(n) so in practice, you would want to keep the size yourself if you want to know it.",
       "parentUuid": "b2f4778c_3bbb465f",
+      "range": {
+        "startLine": 34,
+        "startChar": 0,
+        "endLine": 34,
+        "endChar": 13
+      },
+      "revId": "424ce6fcec775ac28d4726657642dc953cef1bd5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d62faed1_98852372",
+        "filename": "librobinhood/include/robinhood/list.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2023-09-07T08:29:06Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "66bf0a1c_fb3e2e0d",
       "range": {
         "startLine": 34,
         "startChar": 0,
@@ -330,6 +378,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "27babbc4_332cd4c2",
+        "filename": "librobinhood/tests/unit/check_list.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2023-09-07T08:29:06Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "a4ab5bb2_116bfeb9",
+      "range": {
+        "startLine": 34,
+        "startChar": 21,
+        "endLine": 34,
+        "endChar": 45
+      },
+      "revId": "424ce6fcec775ac28d4726657642dc953cef1bd5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "70cd14b8_e186d7da",
@@ -367,6 +439,30 @@
       "side": 1,
       "message": "I would actually prefer to remove the banner as it does not add anything meaningful to the comprehension of the code",
       "parentUuid": "70cd14b8_e186d7da",
+      "range": {
+        "startLine": 89,
+        "startChar": 11,
+        "endLine": 89,
+        "endChar": 23
+      },
+      "revId": "424ce6fcec775ac28d4726657642dc953cef1bd5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "08bced66_13ac3193",
+        "filename": "librobinhood/tests/unit/check_list.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2023-09-07T08:29:06Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "f8d4a9f4_025182d0",
       "range": {
         "startLine": 89,
         "startChar": 11,
