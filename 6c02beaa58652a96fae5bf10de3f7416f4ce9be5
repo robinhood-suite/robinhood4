@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "85643e5e_1cdcf77d",
+        "filename": "rbh-fsevents/tests/unit/utils/utils.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2023-09-07T07:14:23Z",
+      "side": 1,
+      "message": "typo: sstack_destroy",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 14
+      },
+      "revId": "6c02beaa58652a96fae5bf10de3f7416f4ce9be5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
