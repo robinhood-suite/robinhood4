@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ab4a55b0_f5babc47",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2023-09-07T07:47:10Z",
+      "side": 1,
+      "message": "I maintain my vote to 0 until I understand the changelog reader process.",
+      "revId": "9ffb4609b4fc45e408d2d2d9ed57b9b7e8ebc4c9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3407fdfa_212679c4",
+        "filename": "rbh-fsevents/tests/test_migrate.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2023-09-07T07:47:10Z",
+      "side": 1,
+      "message": "question: what is the difference between this line and the line 28 \u0027lfs changelog_clear \"$other_mdt\" \"$other_mdt_user\" 0\u0027 ?",
+      "range": {
+        "startLine": 39,
+        "startChar": 4,
+        "endLine": 39,
+        "endChar": 51
+      },
+      "revId": "9ffb4609b4fc45e408d2d2d9ed57b9b7e8ebc4c9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
