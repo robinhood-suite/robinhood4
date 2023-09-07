@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3b26851a_9d3772ee",
+        "filename": "rbh-fsevents/src/deduplicator/fsevent_pool.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2023-09-07T07:16:25Z",
+      "side": 1,
+      "message": "minor: I didn\u0027t say it in the previous review, as it was just after the first one, but it misses an \u0027s\u0027 to \"rbh-fsevent\" :).",
+      "range": {
+        "startLine": 207,
+        "startChar": 8,
+        "endLine": 207,
+        "endChar": 19
+      },
+      "revId": "e486afc6f10866d2ab3c0ce43b65da041a7b07a1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
