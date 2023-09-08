@@ -3,6 +3,52 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e6bd4b1f_95f0e6be",
+        "filename": "rbh-fsevents/tests/unit/check_dedup.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2023-09-08T13:44:11Z",
+      "side": 1,
+      "message": "question: why not adding \"ck_assert_int_eq(errno, ENODATA);\" ?",
+      "range": {
+        "startLine": 189,
+        "startChar": 4,
+        "endLine": 189,
+        "endChar": 11
+      },
+      "revId": "6c02beaa58652a96fae5bf10de3f7416f4ce9be5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "01d14b58_b1d5be8a",
+        "filename": "rbh-fsevents/tests/unit/check_dedup.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 267,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2023-09-08T13:44:11Z",
+      "side": 1,
+      "message": "question: idem (ck_assert_int_eq(errno, ENODATA);) ?",
+      "range": {
+        "startLine": 267,
+        "startChar": 4,
+        "endLine": 267,
+        "endChar": 10
+      },
+      "revId": "6c02beaa58652a96fae5bf10de3f7416f4ce9be5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "85643e5e_1cdcf77d",
         "filename": "rbh-fsevents/tests/unit/utils/utils.c",
         "patchSetId": 2
