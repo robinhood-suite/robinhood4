@@ -45,6 +45,30 @@
       },
       "revId": "41b462b38a1132a60d043c83e5829fbf911d1e27",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "133b2591_4bc69d0f",
+        "filename": "rbh-fsevents/src/deduplicator/fsevent_pool.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 625,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-09-08T14:46:56Z",
+      "side": 1,
+      "message": "I answered the same question for Yoann in patchset 1. Let me know if you need more details. This is simply an idea to make some optimizations.",
+      "parentUuid": "ece536bd_0f0eae52",
+      "range": {
+        "startLine": 624,
+        "startChar": 8,
+        "endLine": 625,
+        "endChar": 41
+      },
+      "revId": "41b462b38a1132a60d043c83e5829fbf911d1e27",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
