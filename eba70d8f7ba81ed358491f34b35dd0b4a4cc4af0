@@ -39,6 +39,30 @@
       },
       "revId": "eba70d8f7ba81ed358491f34b35dd0b4a4cc4af0",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7fb585ac_49fd687e",
+        "filename": "rbh-fsevents/src/deduplicator/rbh_fsevent_utils.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 303,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-09-12T11:58:35Z",
+      "side": 1,
+      "message": "The function is not used. I need to removed it.",
+      "parentUuid": "dca7e2a8_abb90d41",
+      "range": {
+        "startLine": 303,
+        "startChar": 1,
+        "endLine": 303,
+        "endChar": 23
+      },
+      "revId": "eba70d8f7ba81ed358491f34b35dd0b4a4cc4af0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
