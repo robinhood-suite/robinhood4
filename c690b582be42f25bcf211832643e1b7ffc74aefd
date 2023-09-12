@@ -48,6 +48,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "df2c14ab_9006c6d0",
+        "filename": "rbh-fsevents/src/deduplicator.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-09-12T12:15:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a86ba173_d9899c2e",
+      "range": {
+        "startLine": 45,
+        "startChar": 9,
+        "endLine": 46,
+        "endChar": 24
+      },
+      "revId": "c690b582be42f25bcf211832643e1b7ffc74aefd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3a2e079c_1ee0cc4d",
@@ -95,6 +119,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7f4f1397_e99f530b",
+        "filename": "rbh-fsevents/src/deduplicator/fsevent_pool.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-09-12T12:15:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ef2e6580_2ac2f14c",
+      "range": {
+        "startLine": 21,
+        "startChar": 4,
+        "endLine": 22,
+        "endChar": 26
+      },
+      "revId": "c690b582be42f25bcf211832643e1b7ffc74aefd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "66318d5b_6cfc753d",
@@ -108,6 +156,30 @@
       "writtenOn": "2023-09-07T10:36:40Z",
       "side": 1,
       "message": "minor: should not we add a check to prohibit creation of pool with pool_size of 0 ?",
+      "range": {
+        "startLine": 58,
+        "startChar": 0,
+        "endLine": 58,
+        "endChar": 1
+      },
+      "revId": "c690b582be42f25bcf211832643e1b7ffc74aefd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "87a05f07_9845ad4e",
+        "filename": "rbh-fsevents/src/deduplicator/fsevent_pool.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-09-12T12:15:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "66318d5b_6cfc753d",
       "range": {
         "startLine": 58,
         "startChar": 0,
@@ -171,6 +243,24 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b3405b4f_00213891",
+        "filename": "rbh-fsevents/src/deduplicator/fsevent_pool.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-09-12T12:15:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "95c432c5_05e00b42",
+      "revId": "c690b582be42f25bcf211832643e1b7ffc74aefd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "becb6173_fa9aae8c",
@@ -184,6 +274,30 @@
       "writtenOn": "2023-09-07T10:36:40Z",
       "side": 1,
       "message": "comment: (linked to the defect ENOSPC) ENOSPC is returned without storing event anywhere in the pool.",
+      "range": {
+        "startLine": 188,
+        "startChar": 4,
+        "endLine": 191,
+        "endChar": 5
+      },
+      "revId": "c690b582be42f25bcf211832643e1b7ffc74aefd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "186c8aeb_1902c470",
+        "filename": "rbh-fsevents/src/deduplicator/fsevent_pool.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-09-12T12:15:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "becb6173_fa9aae8c",
       "range": {
         "startLine": 188,
         "startChar": 4,
