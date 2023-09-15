@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "13ec3ef6_49ebe9d1",
+        "filename": "README.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2023-09-15T14:19:07Z",
+      "side": 1,
+      "message": "typo: robinhood4",
+      "range": {
+        "startLine": 43,
+        "startChar": 7,
+        "endLine": 43,
+        "endChar": 16
+      },
+      "revId": "80abdab90097720a4cfc2e3a8cd25d7e1fe1217d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c5d5a340_8b79cca0",
+        "filename": "README.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2023-09-15T14:19:07Z",
+      "side": 1,
+      "message": "question: why a star?",
+      "range": {
+        "startLine": 49,
+        "startChar": 67,
+        "endLine": 49,
+        "endChar": 68
+      },
+      "revId": "80abdab90097720a4cfc2e3a8cd25d7e1fe1217d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
