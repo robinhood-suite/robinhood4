@@ -199,6 +199,7 @@ xattrs_get_hsm(int fd, struct rbh_value_pair *pairs)
     int rc;
 
     if (!S_ISREG(mode))
+        /* Only regular files can be archived */
         return 0;
 
     rc = llapi_hsm_state_get_fd(fd, &hus);
@@ -338,6 +339,7 @@ fill_iterator_data(struct llapi_layout *layout,
     data->pool[index] = create_string_value(pool_tmp, strlen(pool_tmp) + 1);
 
     if (S_ISDIR(mode))
+        /* XXX we do not yet fetch the OST indexes of directories */
         return 0;
 
     is_init_or_not_comp = (flags == LCME_FL_INIT ||
@@ -454,6 +456,7 @@ init_iterator_data(struct iterator_data *data, const uint32_t length,
     }
 
     if (S_ISDIR(mode)) {
+        /* XXX we do not yet fetch the OST indexes of directories */
         data->ost = NULL;
     } else {
         data->ost = malloc(length * sizeof(*data->ost));
@@ -491,6 +494,7 @@ xattrs_fill_layout(struct iterator_data *data, int nb_xattrs,
     }
 
     if (S_ISDIR(mode))
+        /* XXX we do not yet fetch the OST indexes of directories */
         return subcount;
 
     rc = fill_sequence_pair("ost", data->ost, data->ost_idx,
@@ -684,9 +688,14 @@ xattrs_get_layout(int fd, struct rbh_value_pair *pairs)
     int rc;
 
     if (S_ISLNK(mode))
+        /* no layout to fetch for links */
         return 0;
 
     if (S_ISDIR(mode)) {
+        /* Directories have a default striping that children can inherit from.
+         * These information can be manipulated as a regular file layout but
+         * they are fetched differently through the Lustre API.
+         */
         layout = xattrs_get_dir_data_striping(fd);
         /* If layout is NULL and errno is ENODATA, that means the ioctl failed
          * because there is no default striping on the directory.
@@ -709,6 +718,9 @@ xattrs_get_layout(int fd, struct rbh_value_pair *pairs)
         goto err;
 
     if (S_ISREG(mode)) {
+        /* Magic number and generation are only meaningful for actual layouts,
+         * not the default layout stored in the directory.
+         */
         rc = xattrs_get_magic_and_gen(fd, &pairs[subcount]);
         if (rc < 0)
             goto err;
@@ -773,6 +785,7 @@ xattrs_get_mdt_info(int fd, struct rbh_value_pair *pairs)
     int rc = 0;
 
     if (S_ISDIR(mode)) {
+        /* Fetch meta data striping for directories only */
         struct lmv_user_mds_data *objects;
         struct rbh_value *mdt_idx;
         struct lmv_user_md *lum;
