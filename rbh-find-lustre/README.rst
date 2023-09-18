@@ -11,7 +11,7 @@ rbh-find-lustre
 rbh-find-lustre is an overload of `rbh-find(1)`__.
 
 .. __: rbh-find_
-.. _rbh-find: https://github.com/cea-hpc/rbh-find.git
+.. _rbh-find: https://github.com/robinhood-suite/robinhood4/tree/main/rbh-find
 
 Installation
 ============
@@ -19,23 +19,19 @@ Installation
 Install the `RobinHood library`_ and the `rbh-find library`_ first, then
 download the sources:
 
-.. code:: bash
-
-    git clone https://github.com/cea-hpc/rbh-find-lustre.git
-    cd rbh-find-lustre
-
 Build and install with meson_ and ninja_:
 
 .. code:: bash
 
+    cd robinhood4/rbh-find-lustre
     meson builddir
     ninja -C builddir
     sudo ninja -C builddir install
 
 .. _meson: https://mesonbuild.com
 .. _ninja: https://ninja-build.org
-.. _RobinHood library: https://github.com/cea-hpc/librobinhood
-.. _rbh-find library: https://github.com/cea-hpc/rbh-find
+.. _RobinHood library: https://github.com/robinhood-suite/robinhood4/tree/main/librobinhood
+.. _rbh-find library: https://github.com/robinhood-suite/robinhood4/tree/main/rbh-find
 
 A work in progress
 ==================
@@ -53,7 +49,7 @@ Usage
 look a lot like `rbh-find's documentation`_. Instead, we will document the
 differences of `rbh-lfind` compared to `rbh-find`.
 
-.. _: https://github.com/cea-hpc/rbh-find/README.rst
+.. _: https://github.com/robinhood-suite/robinhood4/blob/main/rbh-find/README.rst
 
 Extra features
 ==============
