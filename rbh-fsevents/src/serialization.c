@@ -20,13 +20,6 @@
 
 #include "serialization.h"
 
-static void __attribute__((noreturn))
-parser_error(yaml_parser_t *parser)
-{
-    error(EXIT_FAILURE, 0, "parser error: %s", parser->problem);
-    __builtin_unreachable();
-}
-
 static struct {
     struct rbh_sstack *events;
     struct rbh_sstack *pointers;
