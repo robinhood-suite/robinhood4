@@ -57,6 +57,7 @@ executable(
         'src/enricher.c',
         'src/enrichers/posix.c',
         'src/serialization.c',
+        'src/sources/yaml_file.c',
         'src/sources/file.c',
         'src/sinks/backend.c',
         'src/sinks/file.c',
