@@ -34,7 +34,7 @@ test_migrate()
 
     lfs migrate -m 1 $entry
     # This will be done more properly in a next patch
-    rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" --lustre "$other_mdt" \
+    rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" src:lustre:"$other_mdt" \
         "rbh:mongo:$testdb"
     clear_changelogs "$other_mdt" "$other_mdt_user"
 
