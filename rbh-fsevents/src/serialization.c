@@ -522,7 +522,15 @@ parse_rbh_value_map(yaml_parser_t *parser, struct rbh_value_map *map)
     if (!yaml_parser_parse(parser, &map_event))
         parser_error(parser);
 
-    if (map_event.type != YAML_MAPPING_START_EVENT) {
+    if (map_event.type == YAML_MAPPING_END_EVENT) {
+        /* This is the case when the xattrs map is empty, and the YAML string is
+         * '"xattrs": {}'.
+         */
+        map->pairs = NULL;
+        map->count = 0;
+        yaml_event_delete(&map_event);
+        return true;
+    } else if (map_event.type != YAML_MAPPING_START_EVENT) {
             yaml_event_delete(&map_event);
             errno = EINVAL;
             return false;

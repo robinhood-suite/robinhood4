@@ -25,26 +25,20 @@
 #include "source.h"
 #include "sink.h"
 
-enum rbh_source_t {
-    SRC_DEFAULT = 0,
-    SRC_FILE = SRC_DEFAULT,
-    SRC_LUSTRE,
-};
-
 static void
 usage(void)
 {
-    /* TODO: accept source as a URI or a '-', like src:lustre:lustre-MDT0000. */
     const char *message =
-        "usage: %s [-h] [--raw] [--enrich MOUNTPOINT] [--lustre] SOURCE DESTINATION\n"
+        "usage: %s [-h] [--raw] [--enrich MOUNTPOINT] SOURCE DESTINATION\n"
         "\n"
         "Collect changelog records from SOURCE, optionally enrich them with data\n"
         "collected from MOUNTPOINT and send them to DESTINATION.\n"
         "\n"
         "Positional arguments:\n"
         "    SOURCE          can be one of:\n"
-        "                        a path to a yaml file, or '-' for stdin;\n"
-        "                        an MDT name (eg. lustre-MDT0000).\n"
+        "                        '-' for stdin;\n"
+        "                        a Source URI (eg. src:file:/path/to/test, \n"
+        "                        src:lustre:lustre-MDT0000).\n"
         "    DESTINATION     can be one of:\n"
         "                        '-' for stdout;\n"
         "                        a RobinHood URI (eg. rbh:mongo:test).\n"
@@ -55,7 +49,6 @@ usage(void)
         "    -e, --enrich MOUNTPOINT\n"
         "                    enrich changelog records by querying MOUNTPOINT as needed\n"
         "                    MOUNTPOINT is a RobinHood URI (eg. rbh:lustre:/mnt/lustre)\n"
-        "    -l, --lustre    consider SOURCE is an MDT name\n"
         "\n"
         "Note that uploading raw records to a RobinHood backend will fail, they have to\n"
         "be enriched first.\n";
@@ -63,37 +56,97 @@ usage(void)
     printf(message, program_invocation_short_name);
 }
 
+static bool
+is_uri(const char *string)
+{
+    struct rbh_raw_uri *raw_uri;
+
+    raw_uri = rbh_raw_uri_from_string(string);
+    if (raw_uri == NULL) {
+        if (errno == EINVAL)
+            return false;
+        error(EXIT_FAILURE, errno, "rbh_raw_uri_from_string");
+    }
+
+    free(raw_uri);
+    return true;
+}
+
 static struct source *
-source_new(const char *arg, enum  rbh_source_t source_type)
+source_from_file_uri(const char *file_path)
 {
     FILE *file;
 
-    switch(source_type) {
-    case SRC_LUSTRE:
-#ifdef HAVE_LUSTRE
-        return source_from_lustre_changelog(arg);
-#else
-        error(EX_USAGE, EINVAL, "MDT source is not available");
-#endif
-    case SRC_FILE:
-        break;
-    default:
-        __builtin_unreachable();
-    }
-
-    if (strcmp(arg, "-") == 0)
-        /* SOURCE is '-' (stdin) */
-        return source_from_file(stdin);
-
-    file = fopen(arg, "r");
+    file = fopen(file_path, "r");
     if (file != NULL)
         /* SOURCE is a path to a file */
         return source_from_file(file);
+
     if (file == NULL && errno != ENOENT)
         /* SOURCE is a path to a file, but there was some sort of error trying
          * to open it.
          */
-        error(EXIT_FAILURE, errno, "%s", arg);
+        error(EXIT_FAILURE, errno, "%s", file_path);
+
+    error(EX_USAGE, EINVAL, "%s", file_path);
+    __builtin_unreachable();
+}
+
+static struct source *
+source_from_uri(const char *uri)
+{
+    struct rbh_raw_uri *raw_uri;
+    struct source *source;
+    char *colon;
+    char *name;
+
+    raw_uri = rbh_raw_uri_from_string(uri);
+    if (raw_uri == NULL)
+        error(EXIT_FAILURE, errno, "rbh_raw_uri_from_string");
+
+    if (strcmp(raw_uri->scheme, RBH_SOURCE) != 0) {
+        free(raw_uri);
+        error(EX_USAGE, 0, "%s: uri scheme not supported", raw_uri->scheme);
+        __builtin_unreachable();
+    }
+
+    colon = strrchr(raw_uri->path, ':');
+    if (colon) {
+        /* colon = backend_type:fsname */
+        *colon = '\0';
+        name = colon + 1;
+    }
+
+    if (strcmp(raw_uri->path, "file") == 0) {
+        source = source_from_file_uri(name);
+    } else if (strcmp(raw_uri->path, "lustre") == 0) {
+#ifdef HAVE_LUSTRE
+        source = source_from_lustre_changelog(name);
+#else
+        free(raw_uri);
+        error(EX_USAGE, EINVAL, "MDT source is not available");
+        __builtin_unreachable();
+#endif
+    }
+
+    free(raw_uri);
+
+    if (source)
+        return source;
+
+    error(EX_USAGE, 0, "%s: uri path not supported", raw_uri->path);
+    __builtin_unreachable();
+}
+
+static struct source *
+source_new(const char *arg)
+{
+    if (strcmp(arg, "-") == 0)
+        /* SOURCE is '-' (stdin) */
+        return source_from_file(stdin);
+
+    if (is_uri(arg))
+        return source_from_uri(arg);
 
     error(EX_USAGE, EINVAL, "%s", arg);
     __builtin_unreachable();
@@ -119,28 +172,12 @@ sink_from_uri(const char *uri)
 
     if (strcmp(raw_uri->scheme, "rbh") == 0) {
         free(raw_uri);
-        return sink_from_backend(rbh_backend_from_uri(uri));
+        return (void *) sink_from_backend(rbh_backend_from_uri(uri));
     }
 
     free(raw_uri);
     error(EX_USAGE, 0, "%s: uri scheme not supported", uri);
     __builtin_unreachable();
-}
-
-static bool
-is_uri(const char *string)
-{
-    struct rbh_raw_uri *raw_uri;
-
-    raw_uri = rbh_raw_uri_from_string(string);
-    if (raw_uri == NULL) {
-        if (errno == EINVAL)
-            return false;
-        error(EXIT_FAILURE, errno, "rbh_raw_uri_from_string");
-    }
-
-    free(raw_uri);
-    return true;
 }
 
 static struct sink *
@@ -280,20 +317,15 @@ main(int argc, char *argv[])
             .val = 'h',
         },
         {
-            .name = "lustre",
-            .val = 'l',
-        },
-        {
             .name = "raw",
             .val = 'r',
         },
         {}
     };
-    enum rbh_source_t source_type = SRC_DEFAULT;
     char c;
 
     /* Parse the command line */
-    while ((c = getopt_long(argc, argv, "e:hlr", LONG_OPTIONS, NULL)) != -1) {
+    while ((c = getopt_long(argc, argv, "e:hr", LONG_OPTIONS, NULL)) != -1) {
         switch (c) {
         case 'e':
             enrich_builder = enrich_iter_builder_from_uri(optarg);
@@ -303,11 +335,6 @@ main(int argc, char *argv[])
         case 'h':
             usage();
             return 0;
-        case 'l':
-            if (source_type != SRC_DEFAULT)
-                error(EX_USAGE, EINVAL, "source type already specified");
-            source_type = SRC_LUSTRE;
-            break;
         case 'r':
             /* Ignore errors on close */
             mount_fd_exit();
@@ -325,7 +352,7 @@ main(int argc, char *argv[])
     if (argc - optind > 2)
         error(EX_USAGE, 0, "too many arguments");
 
-    source = source_new(argv[optind++], source_type);
+    source = source_new(argv[optind++]);
     sink = sink_new(argv[optind++]);
 
     feed(sink, source, enrich_builder, strcmp(sink->name, "backend"));
