@@ -13,6 +13,7 @@
 #include "robinhood/fsentry.h"
 
 #define RBH_SCHEME "rbh"
+#define RBH_SOURCE "src"
 
 /*----------------------------------------------------------------------------*
  |                                rbh_raw_uri                                 |
