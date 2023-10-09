@@ -66,7 +66,7 @@ hestia_fsevent_iter_destroy(void *iterator)
     yaml_parser_delete(&fsevents->parser);
 }
 
-static const struct rbh_iterator_operations YAML_FSEVENT_ITER_OPS = {
+static const struct rbh_iterator_operations HESTIA_FSEVENT_ITER_OPS = {
     .next = hestia_fsevent_iter_next,
     .destroy = hestia_fsevent_iter_destroy,
 };
@@ -75,7 +75,7 @@ static const struct rbh_iterator HESTIA_FSEVENT_ITERATOR = {
     .ops = &HESTIA_FSEVENT_ITER_OPS,
 };
 
-const struct rbh_iterator_operations YAML_SOURCE_ITER_OPS = {
+static const struct rbh_iterator_operations YAML_SOURCE_ITER_OPS = {
     .next = yaml_source_iter_next,
     .destroy = yaml_source_iter_destroy,
 };

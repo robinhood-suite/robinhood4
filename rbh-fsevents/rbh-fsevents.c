@@ -38,7 +38,8 @@ usage(void)
         "    SOURCE          can be one of:\n"
         "                        '-' for stdin;\n"
         "                        a Source URI (eg. src:file:/path/to/test, \n"
-        "                        src:lustre:lustre-MDT0000).\n"
+        "                        src:lustre:lustre-MDT0000, \n"
+        "                        src:hestia:/path/to/file).\n"
         "    DESTINATION     can be one of:\n"
         "                        '-' for stdout;\n"
         "                        a RobinHood URI (eg. rbh:mongo:test).\n"
@@ -73,14 +74,15 @@ is_uri(const char *string)
 }
 
 static struct source *
-source_from_file_uri(const char *file_path)
+source_from_file_uri(const char *file_path,
+                     struct source *(*source_from)(FILE *))
 {
     FILE *file;
 
     file = fopen(file_path, "r");
     if (file != NULL)
         /* SOURCE is a path to a file */
-        return source_from_file(file);
+        return source_from(file);
 
     if (file == NULL && errno != ENOENT)
         /* SOURCE is a path to a file, but there was some sort of error trying
@@ -118,7 +120,7 @@ source_from_uri(const char *uri)
 
     if (strcmp(raw_uri->path, "file") == 0) {
         free(raw_uri);
-        return source_from_file_uri(name);
+        return source_from_file_uri(name, source_from_file);
     } else if (strcmp(raw_uri->path, "lustre") == 0) {
 #ifdef HAVE_LUSTRE
         free(raw_uri);
@@ -128,6 +130,9 @@ source_from_uri(const char *uri)
         error(EX_USAGE, EINVAL, "MDT source is not available");
         __builtin_unreachable();
 #endif
+    } else if (strcmp(raw_uri->path, "hestia") == 0) {
+        free(raw_uri);
+        return source_from_file_uri(name, source_from_hestia_file);
     }
 
     error(EX_USAGE, 0, "%s: uri path not supported", raw_uri->path);
