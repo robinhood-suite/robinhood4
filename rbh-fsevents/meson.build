@@ -59,6 +59,7 @@ executable(
         'src/serialization.c',
         'src/sources/yaml_file.c',
         'src/sources/file.c',
+        'src/sources/hestia.c',
         'src/sinks/backend.c',
         'src/sinks/file.c',
     ] + extra_sources,
