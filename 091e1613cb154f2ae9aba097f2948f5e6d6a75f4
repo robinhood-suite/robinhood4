@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5ac96011_ed8b03fb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-10-09T09:41:12Z",
+      "side": 1,
+      "message": "Ignore this patch for now, it wasn\u0027t supposed to be pushed.",
+      "revId": "091e1613cb154f2ae9aba097f2948f5e6d6a75f4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
