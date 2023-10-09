@@ -48,6 +48,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "50cc2c3e_6b0b2796",
+        "filename": "rbh-fsevents/src/deduplicator.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-10-09T09:35:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6df75a33_2ba012c4",
+      "range": {
+        "startLine": 46,
+        "startChar": 12,
+        "endLine": 48,
+        "endChar": 22
+      },
+      "revId": "ca66f01f3f56f8685caaec9e1d08c842cc42b2a6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c22a218a_defd5e61",
@@ -61,6 +85,30 @@
       "writtenOn": "2023-09-13T07:01:02Z",
       "side": 1,
       "message": "minor: if (flush_size \u003e pool_size || flush_size \u003d\u003d 0)",
+      "range": {
+        "startLine": 62,
+        "startChar": 4,
+        "endLine": 63,
+        "endChar": 20
+      },
+      "revId": "ca66f01f3f56f8685caaec9e1d08c842cc42b2a6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d5d3325a_bcd75148",
+        "filename": "rbh-fsevents/src/deduplicator/fsevent_pool.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-10-09T09:35:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c22a218a_defd5e61",
       "range": {
         "startLine": 62,
         "startChar": 4,
