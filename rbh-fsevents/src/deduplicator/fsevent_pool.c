@@ -100,6 +100,7 @@ rbh_fsevent_pool_new(size_t pool_size, size_t flush_size)
     rbh_list_init(&pool->ids);
     pool->count = 0;
     rbh_list_init(&pool->events);
+    rbh_list_init(&pool->free);
 
     return pool;
 }
@@ -334,16 +335,14 @@ insert_enrich_element(struct rbh_fsevent_pool *pool,
                 .count = 1,
                 .pairs = rbh_sstack_push(pool->xattr_sequence_container,
                                          xattr,
-                                         sizeof(*xattr)
-                                         ),
+                                         sizeof(*xattr)),
             },
         };
         struct rbh_value_pair rbh_fsevents_map = {
             .key = "rbh-fsevents",
             .value = rbh_sstack_push(pool->xattr_sequence_container,
                                      &rbh_fsevents_value,
-                                     sizeof(rbh_fsevents_value)
-                                     ),
+                                     sizeof(rbh_fsevents_value)),
         };
         struct rbh_value_pair *tmp;
 
@@ -358,8 +357,7 @@ insert_enrich_element(struct rbh_fsevent_pool *pool,
                sizeof(*cached_event->xattrs.pairs) * cached_event->xattrs.count
                );
         memcpy(&tmp[cached_event->xattrs.count], &rbh_fsevents_map,
-               sizeof(rbh_fsevents_map)
-               );
+               sizeof(rbh_fsevents_map));
 
         cached_event->xattrs.pairs = tmp;
         cached_event->xattrs.count++;
@@ -374,15 +372,13 @@ insert_enrich_element(struct rbh_fsevent_pool *pool,
 
     tmp = rbh_sstack_push(pool->xattr_sequence_container,
                           NULL,
-                          sizeof(*tmp) * (rbh_fsevents_map->count + 1)
-                          );
+                          sizeof(*tmp) * (rbh_fsevents_map->count + 1));
     if (!tmp)
         // TODO error(...);
         return -1;
 
     memcpy(tmp, rbh_fsevents_map->pairs,
-           rbh_fsevents_map->count * sizeof(*rbh_fsevents_map->pairs)
-           );
+           rbh_fsevents_map->count * sizeof(*rbh_fsevents_map->pairs));
     memcpy(&tmp[rbh_fsevents_map->count], xattr, sizeof(*xattr));
 
     *ptr = tmp;
@@ -415,8 +411,7 @@ insert_xattr(struct rbh_fsevent_pool *pool, struct rbh_fsevent *cached_event,
 
     tmp = rbh_sstack_push(pool->xattr_sequence_container,
                           NULL,
-                          sizeof(*tmp) * (cached_event->xattrs.count + 1)
-                          );
+                          sizeof(*tmp) * (cached_event->xattrs.count + 1));
     if (!tmp)
         return -1;
 
@@ -477,8 +472,7 @@ dedup_xattrs(struct rbh_fsevent_pool *pool,
                     }
                 } else {
                     dedup_enrich_element(pool, cached_xattr,
-                                         &sub_map->pairs[i]
-                                         );
+                                         &sub_map->pairs[i]);
                 }
             }
         } else {
@@ -500,8 +494,7 @@ insert_symlink(struct rbh_fsevent_pool *pool,
         .key = "symlink",
         .value = rbh_sstack_push(pool->xattr_sequence_container,
                                  &symlink_value,
-                                 sizeof(symlink_value)
-                                 )
+                                 sizeof(symlink_value))
     };
     struct rbh_value_pair *tmp;
 
@@ -510,11 +503,9 @@ insert_symlink(struct rbh_fsevent_pool *pool,
 
     tmp = rbh_sstack_push(pool->xattr_sequence_container,
                           NULL,
-                          (rbh_fsevents_map->count + 1) * sizeof(*tmp)
-                          );
+                          (rbh_fsevents_map->count + 1) * sizeof(*tmp));
     memcpy(tmp, rbh_fsevents_map->pairs,
-           rbh_fsevents_map->count * sizeof(*tmp)
-           );
+           rbh_fsevents_map->count * sizeof(*tmp));
     memcpy(&tmp[rbh_fsevents_map->count], &symlink_pair, sizeof(symlink_pair));
 
     void **ptr = (void **)&rbh_fsevents_map->pairs;
