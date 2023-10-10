@@ -17,28 +17,158 @@
 
 #include "yaml_file.h"
 
+enum link_field {
+    LF_UNKNOWN,
+    LF_ID,
+    LF_ATTRS,
+    LF_TIME,
+};
+
+static enum link_field
+str2link_field(const char *string)
+{
+    switch (*string++) {
+    case 'i': /* id */
+        if (strcmp(string, "d"))
+            break;
+        return LF_ID;
+    case 'a': /* attrs */
+        if (strcmp(string, "ttrs"))
+            break;
+        return LF_ATTRS;
+    case 't': /* time */
+        if (strcmp(string, "ime"))
+            break;
+        return LF_TIME;
+    }
+
+    errno = EINVAL;
+    return LF_UNKNOWN;
+}
+
+/* "CREATE" events in Hestia are of the form:
+ *
+ * ---
+ * !create
+ * attrs:
+ *   dataset.id: "70c88005-aa7e-bce6-7583-0d8b26926c25"
+ * id: "421b3153-9108-d1ef-3413-945177dd4ab3"
+ * time: 1696837025493616528
+ * ...
+ *
+ */
+static bool
+parse_create(yaml_parser_t *parser, struct rbh_fsevent *link,
+             struct rbh_value_map *saved_xattr)
+{
+    struct rbh_id *parent_id;
+    bool seen_id = false;
+
+    /* Objects have no parent and no path */
+    parent_id = malloc(sizeof(*parent_id));
+    if (parent_id == NULL)
+        error(EXIT_FAILURE, errno, "malloc");
+
+    parent_id->size = 0;
+    parent_id->data = NULL;
+    link->link.parent_id = parent_id;
+
+    link->xattrs.count = 0;
+
+    while (true) {
+        enum link_field field;
+        yaml_event_t event;
+        const char *key;
+        int save_errno;
+        bool success;
+
+        if (!yaml_parser_parse(parser, &event))
+            parser_error(parser);
+
+        if (event.type == YAML_MAPPING_END_EVENT) {
+            yaml_event_delete(&event);
+            break;
+        }
+
+        if (!yaml_parse_string(&event, &key, NULL)) {
+            save_errno = errno;
+            yaml_event_delete(&event);
+            free(parent_id);
+            errno = save_errno;
+            return false;
+        }
+
+        field = str2link_field(key);
+        save_errno = errno;
+        yaml_event_delete(&event);
+
+        switch (field) {
+        case LF_UNKNOWN:
+            free(parent_id);
+            errno = save_errno;
+            return false;
+        case LF_ID:
+            seen_id = true;
+
+            success = parse_name(parser, &link->link.name);
+            link->id.data = strdup(link->link.name);
+            if (!link->id.data)
+                error(EXIT_FAILURE, errno, "malloc");
+
+            link->id.size = strlen(link->id.data);
+            break;
+        case LF_ATTRS:
+            /* The attributes are not namespace ones, so we store them for
+             * later in another map
+             */
+            success = parse_rbh_value_map(parser, saved_xattr);
+            break;
+        case LF_TIME:
+            /* This is the time of the changelog, close but not equal to the
+             * object atime/mtime/ctime, so we skip it
+             */
+            if (!yaml_parser_parse(parser, &event))
+                parser_error(parser);
+
+            save_errno = errno;
+            yaml_event_delete(&event);
+            errno = save_errno;
+            success = true;
+            break;
+        }
+
+        if (!success) {
+            free(parent_id);
+            return false;
+        }
+    }
+
+    return seen_id;
+}
+
 enum fsevent_type {
     FT_UNKNOWN,
+    FT_CREATE,
 };
 
 static enum fsevent_type
 str2fsevent_type(const char *string)
 {
-    (void) string;
+    if (strcmp(string, "!create") == 0)
+        return FT_CREATE;
 
     errno = EINVAL;
     return FT_UNKNOWN;
 }
 
 bool
-parse_hestia_event(yaml_parser_t *parser, struct rbh_fsevent *fsevent)
+parse_hestia_event(yaml_parser_t *parser, struct rbh_fsevent *fsevent,
+                   struct rbh_value_map *map)
 {
     enum fsevent_type type;
     yaml_event_t event;
     const char *tag;
     int save_errno;
-
-    (void) fsevent;
 
     if (!yaml_parser_parse(parser, &event))
         parser_error(parser);
@@ -64,6 +194,9 @@ parse_hestia_event(yaml_parser_t *parser, struct rbh_fsevent *fsevent)
     case FT_UNKNOWN:
         errno = save_errno;
         return false;
+    case FT_CREATE:
+        fsevent->type = RBH_FET_LINK;
+        return parse_create(parser, fsevent, map);
     default:
         assert(false);
         __builtin_unreachable();
@@ -81,6 +214,16 @@ hestia_fsevent_iter_next(void *iterator)
         return NULL;
     }
 
+    /* If there are additional xattrs to manage, create a specific event */
+    if (fsevents->additional_xattr.count != 0) {
+        struct rbh_fsevent *new_inode_event =
+            rbh_fsevent_xattr_new(&fsevents->fsevent.id,
+                                  &fsevents->additional_xattr);
+        fsevents->additional_xattr.count = 0;
+
+        return new_inode_event;
+    }
+
     if (!yaml_parser_parse(&fsevents->parser, &event))
         parser_error(&fsevents->parser);
 
@@ -92,7 +235,8 @@ hestia_fsevent_iter_next(void *iterator)
         /* Remove any trace of the previous parsed fsevent */
         memset(&fsevents->fsevent, 0, sizeof(fsevents->fsevent));
 
-        if (!parse_hestia_event(&fsevents->parser, &fsevents->fsevent))
+        if (!parse_hestia_event(&fsevents->parser, &fsevents->fsevent,
+                                &fsevents->additional_xattr))
             parser_error(&fsevents->parser);
 
         if (!yaml_parser_parse(&fsevents->parser, &event))

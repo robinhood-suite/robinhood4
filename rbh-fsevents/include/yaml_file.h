@@ -23,6 +23,8 @@ struct yaml_fsevent_iterator {
     struct rbh_fsevent fsevent;
     yaml_parser_t parser;
     bool exhausted;
+
+    struct rbh_value_map additional_xattr;
 };
 
 struct source *
