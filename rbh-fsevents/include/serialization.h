@@ -16,6 +16,12 @@ parser_error(yaml_parser_t *parser)
 }
 
 bool
+parse_name(yaml_parser_t *parser, const char **name);
+
+bool
+parse_rbh_value_map(yaml_parser_t *parser, struct rbh_value_map *map);
+
+bool
 emit_fsevent(yaml_emitter_t *emitter, const struct rbh_fsevent *fsevent);
 
 /* On success \p fsevent's fields may point at static memory.
