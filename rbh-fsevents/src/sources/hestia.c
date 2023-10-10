@@ -17,6 +17,58 @@
 
 #include "yaml_file.h"
 
+enum fsevent_type {
+    FT_UNKNOWN,
+};
+
+static enum fsevent_type
+str2fsevent_type(const char *string)
+{
+    (void) string;
+
+    errno = EINVAL;
+    return FT_UNKNOWN;
+}
+
+bool
+parse_hestia_event(yaml_parser_t *parser, struct rbh_fsevent *fsevent)
+{
+    enum fsevent_type type;
+    yaml_event_t event;
+    const char *tag;
+    int save_errno;
+
+    (void) fsevent;
+
+    if (!yaml_parser_parse(parser, &event))
+        parser_error(parser);
+
+    if (event.type != YAML_MAPPING_START_EVENT) {
+        yaml_event_delete(&event);
+        errno = EINVAL;
+        return false;
+    }
+
+    tag = yaml_mapping_tag(&event);
+    if (tag == NULL) {
+        yaml_event_delete(&event);
+        errno = EINVAL;
+        return false;
+    }
+
+    type = str2fsevent_type(tag);
+    save_errno = errno;
+    yaml_event_delete(&event);
+
+    switch (type) {
+    case FT_UNKNOWN:
+        errno = save_errno;
+        return false;
+    default:
+        assert(false);
+        __builtin_unreachable();
+    }
+}
 static const void *
 hestia_fsevent_iter_next(void *iterator)
 {
@@ -40,7 +92,8 @@ hestia_fsevent_iter_next(void *iterator)
         /* Remove any trace of the previous parsed fsevent */
         memset(&fsevents->fsevent, 0, sizeof(fsevents->fsevent));
 
-        /* Parsing of the Hestia event will be here */
+        if (!parse_hestia_event(&fsevents->parser, &fsevents->fsevent))
+            parser_error(&fsevents->parser);
 
         if (!yaml_parser_parse(&fsevents->parser, &event))
             parser_error(&fsevents->parser);
