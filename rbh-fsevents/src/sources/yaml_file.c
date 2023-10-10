@@ -38,6 +38,9 @@ yaml_fsevent_init(struct yaml_fsevent_iterator *fsevents, FILE *file,
     fsevents->iterator = iterator;
     fsevents->exhausted = false;
     fsevents->fsevent.type = 0;
+
+    fsevents->additional_xattr.pairs = NULL;
+    fsevents->additional_xattr.count = 0;
 }
 
 const void *

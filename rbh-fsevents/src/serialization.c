@@ -503,7 +503,7 @@ parse_rbh_value_pair(yaml_parser_t *parser, yaml_event_t *event,
     return true;
 }
 
-static bool
+bool
 parse_rbh_value_map(yaml_parser_t *parser, struct rbh_value_map *map)
 {
     struct rbh_value_pair *pairs;
@@ -2259,7 +2259,7 @@ parse_upsert(yaml_parser_t *parser, struct rbh_fsevent *upsert)
      |                                name                                |
      *--------------------------------------------------------------------*/
 
-static bool
+bool
 parse_name(yaml_parser_t *parser, const char **name)
 {
     yaml_event_t event;
