@@ -17,33 +17,102 @@
 
 #include "yaml_file.h"
 
-enum link_field {
-    LF_UNKNOWN,
-    LF_ID,
-    LF_ATTRS,
-    LF_TIME,
+enum event_fields {
+    EF_UNKNOWN,
+    EF_ID,
+    EF_ATTRS,
+    EF_TIME,
 };
 
-static enum link_field
-str2link_field(const char *string)
+static enum event_fields
+str2event_fields(const char *string)
 {
     switch (*string++) {
     case 'i': /* id */
         if (strcmp(string, "d"))
             break;
-        return LF_ID;
+        return EF_ID;
     case 'a': /* attrs */
         if (strcmp(string, "ttrs"))
             break;
-        return LF_ATTRS;
+        return EF_ATTRS;
     case 't': /* time */
         if (strcmp(string, "ime"))
             break;
-        return LF_TIME;
+        return EF_TIME;
     }
 
     errno = EINVAL;
-    return LF_UNKNOWN;
+    return EF_UNKNOWN;
+}
+
+/* "REMOVE" events in Hestia are of the form:
+ *
+ * ---
+ * !remove
+ * id: "421b3153-9108-d1ef-3413-945177dd4ab3"
+ * time: 1696837025493616528
+ * ...
+ *
+ */
+static bool
+parse_remove(yaml_parser_t *parser, struct rbh_fsevent *delete)
+{
+    bool seen_id = false;
+
+    while (true) {
+        enum event_fields field;
+        yaml_event_t event;
+        const char *key;
+        int save_errno;
+        bool success;
+
+        if (!yaml_parser_parse(parser, &event))
+            parser_error(parser);
+
+        if (event.type == YAML_MAPPING_END_EVENT) {
+            yaml_event_delete(&event);
+            break;
+        }
+
+        if (!yaml_parse_string(&event, &key, NULL)) {
+            save_errno = errno;
+            yaml_event_delete(&event);
+            errno = save_errno;
+            return false;
+        }
+
+        field = str2event_fields(key);
+        save_errno = errno;
+        yaml_event_delete(&event);
+
+        switch (field) {
+        case EF_ID:
+            seen_id = true;
+
+            success = parse_name(parser, &delete->id.data);
+            delete->id.size = strlen(delete->id.data);
+            break;
+        case EF_TIME:
+            /* Ignore this part of the event */
+            if (!yaml_parser_parse(parser, &event))
+                parser_error(parser);
+
+            save_errno = errno;
+            yaml_event_delete(&event);
+            errno = save_errno;
+            success = true;
+            break;
+        default:
+            errno = save_errno;
+            return false;
+        }
+
+        if (!success)
+            return false;
+    }
+
+    return seen_id;
 }
 
 /* "CREATE" events in Hestia are of the form:
@@ -76,7 +145,7 @@ parse_create(yaml_parser_t *parser, struct rbh_fsevent *link,
     link->xattrs.count = 0;
 
     while (true) {
-        enum link_field field;
+        enum event_fields field;
         yaml_event_t event;
         const char *key;
         int save_errno;
@@ -98,16 +167,16 @@ parse_create(yaml_parser_t *parser, struct rbh_fsevent *link,
             return false;
         }
 
-        field = str2link_field(key);
+        field = str2event_fields(key);
         save_errno = errno;
         yaml_event_delete(&event);
 
         switch (field) {
-        case LF_UNKNOWN:
+        case EF_UNKNOWN:
             free(parent_id);
             errno = save_errno;
             return false;
-        case LF_ID:
+        case EF_ID:
             seen_id = true;
 
             success = parse_name(parser, &link->link.name);
@@ -117,13 +186,13 @@ parse_create(yaml_parser_t *parser, struct rbh_fsevent *link,
 
             link->id.size = strlen(link->id.data);
             break;
-        case LF_ATTRS:
+        case EF_ATTRS:
             /* The attributes are not namespace ones, so we store them for
              * later in another map
              */
             success = parse_rbh_value_map(parser, saved_xattr);
             break;
-        case LF_TIME:
+        case EF_TIME:
             /* This is the time of the changelog, close but not equal to the
              * object atime/mtime/ctime, so we skip it
              */
@@ -135,6 +204,9 @@ parse_create(yaml_parser_t *parser, struct rbh_fsevent *link,
             errno = save_errno;
             success = true;
             break;
+        default:
+            errno = save_errno;
+            return false;
         }
 
         if (!success) {
@@ -149,6 +221,7 @@ parse_create(yaml_parser_t *parser, struct rbh_fsevent *link,
 enum fsevent_type {
     FT_UNKNOWN,
     FT_CREATE,
+    FT_REMOVE,
 };
 
 static enum fsevent_type
@@ -156,6 +229,8 @@ str2fsevent_type(const char *string)
 {
     if (strcmp(string, "!create") == 0)
         return FT_CREATE;
+    if (strcmp(string, "!remove") == 0)
+        return FT_REMOVE;
 
     errno = EINVAL;
     return FT_UNKNOWN;
@@ -197,6 +272,9 @@ parse_hestia_event(yaml_parser_t *parser, struct rbh_fsevent *fsevent,
     case FT_CREATE:
         fsevent->type = RBH_FET_LINK;
         return parse_create(parser, fsevent, map);
+    case FT_REMOVE:
+        fsevent->type = RBH_FET_DELETE;
+        return parse_remove(parser, fsevent);
     default:
         assert(false);
         __builtin_unreachable();
