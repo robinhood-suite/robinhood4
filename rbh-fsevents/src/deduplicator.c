@@ -86,7 +86,8 @@ static const struct rbh_mut_iterator DEDUPLICATOR_ITERATOR = {
 };
 
 struct rbh_mut_iterator *
-deduplicator_new(size_t count, struct source *source)
+deduplicator_new(size_t batch_size, size_t flush_size,
+                 struct source *source)
 {
     struct deduplicator *deduplicator;
 
@@ -96,8 +97,7 @@ deduplicator_new(size_t count, struct source *source)
 
     deduplicator->batches = DEDUPLICATOR_ITERATOR;
     deduplicator->source = source;
-    // TODO put the flush_size percent as a parameter
-    deduplicator->pool = rbh_fsevent_pool_new(count, count / 2);
+    deduplicator->pool = rbh_fsevent_pool_new(batch_size, flush_size);
 
     return &deduplicator->batches;
 }
