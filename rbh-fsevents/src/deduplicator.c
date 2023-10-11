@@ -81,8 +81,30 @@ static const struct rbh_mut_iterator_operations DEDUPLICATOR_ITER_OPS = {
     .destroy = deduplicator_iter_destroy,
 };
 
+static void *
+no_dedup_iter_next(void *iterator)
+{
+    struct deduplicator *deduplicator = iterator;
+    const struct rbh_fsevent *fsevent;
+
+    fsevent = rbh_iter_next(&deduplicator->source->fsevents);
+    if (fsevent == NULL)
+        return NULL;
+
+    return rbh_iter_array(fsevent, sizeof(struct rbh_fsevent), 1);
+}
+
+static const struct rbh_mut_iterator_operations NO_DEDUP_ITER_OPS = {
+    .next = no_dedup_iter_next,
+    .destroy = free,
+};
+
 static const struct rbh_mut_iterator DEDUPLICATOR_ITERATOR = {
     .ops = &DEDUPLICATOR_ITER_OPS,
+};
+
+static const struct rbh_mut_iterator NO_DEDUP_ITERATOR = {
+    .ops = &NO_DEDUP_ITER_OPS,
 };
 
 struct rbh_mut_iterator *
@@ -95,9 +117,13 @@ deduplicator_new(size_t batch_size, size_t flush_size,
     if (deduplicator == NULL)
         return NULL;
 
-    deduplicator->batches = DEDUPLICATOR_ITERATOR;
     deduplicator->source = source;
-    deduplicator->pool = rbh_fsevent_pool_new(batch_size, flush_size);
+    if (batch_size == 0) {
+        deduplicator->batches = NO_DEDUP_ITERATOR;
+    } else {
+        deduplicator->batches = DEDUPLICATOR_ITERATOR;
+        deduplicator->pool = rbh_fsevent_pool_new(batch_size, flush_size);
+    }
 
     return &deduplicator->batches;
 }
