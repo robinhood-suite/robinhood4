@@ -12,8 +12,6 @@
 #include <stdio.h>
 #include <string.h>
 
-// FIXME every list element is leaked
-
 struct rbh_fsevent_pool {
     size_t size; /* maximum number of ids allowed in the pool */
     struct rbh_hashmap *pool; /* container of lists of events per id */
@@ -28,8 +26,16 @@ struct rbh_fsevent_pool {
     struct rbh_list_node events; /* list of flushed events that the user of the
                                   * pool will iterate over
                                   */
-    // TODO implement this
-    struct rbh_list_node free;
+    struct rbh_list_node free_fsevents; /* List of available
+                                         * struct rbh_fsevent_node
+                                         */
+    struct rbh_list_node free_ids; /* List of available struct rbh_id_node */
+    struct rbh_list_node free_nodes; /* List of available struct rbh_list_node
+                                      */
+};
+
+struct rbh_list_node_wrapper {
+    struct rbh_list_node link;
 };
 
 struct rbh_fsevent_node {
@@ -100,7 +106,9 @@ rbh_fsevent_pool_new(size_t pool_size, size_t flush_size)
     rbh_list_init(&pool->ids);
     pool->count = 0;
     rbh_list_init(&pool->events);
-    rbh_list_init(&pool->free);
+    rbh_list_init(&pool->free_ids);
+    rbh_list_init(&pool->free_nodes);
+    rbh_list_init(&pool->free_fsevents);
 
     return pool;
 }
@@ -120,6 +128,59 @@ rbh_fsevent_pool_is_full(struct rbh_fsevent_pool *pool)
     return pool->count == pool->size;
 }
 
+static struct rbh_list_node *
+event_list_alloc(struct rbh_fsevent_pool *pool)
+{
+    if (!rbh_list_empty(&pool->free_nodes))
+        return (void *)rbh_list_first(&pool->free_nodes,
+                                      struct rbh_list_node_wrapper,
+                                      link);
+
+    return rbh_sstack_push(pool->list_container, NULL,
+                           sizeof(struct rbh_list_node));
+}
+
+static void
+event_list_free(struct rbh_fsevent_pool *pool, struct rbh_list_node *node)
+{
+    rbh_list_add(&pool->free_nodes, node);
+}
+
+static struct rbh_fsevent_node *
+fsevent_node_alloc(struct rbh_fsevent_pool *pool)
+{
+    if (!rbh_list_empty(&pool->free_fsevents))
+        return rbh_list_first(&pool->free_fsevents, struct rbh_fsevent_node,
+                              link);
+
+    return rbh_sstack_push(pool->list_container, NULL,
+                           sizeof(struct rbh_fsevent_node));
+}
+
+static void
+fsevent_node_free(struct rbh_fsevent_pool *pool, struct rbh_fsevent_node *node)
+{
+    rbh_list_del(&node->link);
+    rbh_list_add(&pool->free_fsevents, &node->link);
+}
+
+static struct rbh_id_node *
+id_node_alloc(struct rbh_fsevent_pool *pool)
+{
+    if (!rbh_list_empty(&pool->free_ids))
+        return rbh_list_first(&pool->free_ids, struct rbh_id_node, link);
+
+    return rbh_sstack_push(pool->list_container, NULL,
+                           sizeof(struct rbh_id_node));
+}
+
+static void
+id_node_free(struct rbh_fsevent_pool *pool, struct rbh_id_node *id)
+{
+    rbh_list_del(&id->link);
+    rbh_list_add(&pool->free_ids, &id->link);
+}
+
 static int
 rbh_fsevent_pool_insert_new_entry(struct rbh_fsevent_pool *pool,
                                   const struct rbh_fsevent *event)
@@ -129,15 +190,15 @@ rbh_fsevent_pool_insert_new_entry(struct rbh_fsevent_pool *pool,
     struct rbh_id_node *id_node;
     int rc;
 
-    events = rbh_sstack_push(pool->list_container, NULL, sizeof(*events));
+    events = event_list_alloc(pool);
     if (!events)
         return -1;
 
-    node = rbh_sstack_push(pool->list_container, NULL, sizeof(*node));
+    node = fsevent_node_alloc(pool);
     if (!node)
         return -1;
 
-    id_node = rbh_sstack_push(pool->list_container, NULL, sizeof(*id_node));
+    id_node = id_node_alloc(pool);
     if (!id_node)
         return -1;
 
@@ -229,7 +290,6 @@ insert_partial_xattr(struct rbh_fsevent_pool * pool,
                 .values = rbh_sstack_push(pool->xattr_sequence_container,
                                           &xattr_string, sizeof(xattr_string)
                                           ),
-                // TODO check non NULL
             },
         };
         struct rbh_value_pair xattrs_pair = {
@@ -237,9 +297,12 @@ insert_partial_xattr(struct rbh_fsevent_pool * pool,
             .value = rbh_sstack_push(pool->xattr_sequence_container,
                                      &xattrs_sequence, sizeof(xattrs_sequence)
                                      ),
-            // TODO check non null
         };
         struct rbh_value_pair *tmp;
+
+        if (!xattrs_sequence.sequence.values ||
+            !xattrs_pair.value)
+            return -1;
 
         tmp = rbh_sstack_push(pool->xattr_sequence_container,
                               NULL,
@@ -307,7 +370,7 @@ dedup_partial_xattr(struct rbh_fsevent_pool *pool,
 
     assert(partial_xattr->type == RBH_VT_STRING);
     cached_partial_xattr = rbh_fsevent_find_partial_xattr(
-        // FIXME this does not work
+        // TODO test if this works
         cached_event, partial_xattr->string
         );
 
@@ -397,7 +460,7 @@ dedup_enrich_element(struct rbh_fsevent_pool *pool,
     cached_xattr = rbh_fsevent_find_enrich_element(cached_event, xattr->key);
     if (cached_xattr)
         /* xattr found, do not add it to the cached fsevent */
-        // FIXME if the value is different, update it
+        // FIXME we should take the last value
         return;
 
     insert_enrich_element(pool, cached_event, xattr);
@@ -497,6 +560,8 @@ insert_symlink(struct rbh_fsevent_pool *pool,
                                  sizeof(symlink_value))
     };
     struct rbh_value_pair *tmp;
+    size_t *count_ref;
+    void **ptr;
 
     rbh_fsevents_map = rbh_fsevent_find_fsevents_map(cached_event);
     assert(rbh_fsevents_map);
@@ -508,9 +573,9 @@ insert_symlink(struct rbh_fsevent_pool *pool,
            rbh_fsevents_map->count * sizeof(*tmp));
     memcpy(&tmp[rbh_fsevents_map->count], &symlink_pair, sizeof(symlink_pair));
 
-    void **ptr = (void **)&rbh_fsevents_map->pairs;
+    ptr = (void **)&rbh_fsevents_map->pairs;
     *ptr = tmp;
-    size_t *count_ref = (size_t *)&rbh_fsevents_map->count;
+    count_ref = (size_t *)&rbh_fsevents_map->count;
     (*count_ref)++;
 
     return 0;
@@ -552,7 +617,6 @@ dedup_upsert(struct rbh_fsevent_pool *pool,
             insert_symlink(pool, cached_upsert);
         }
     }
-
 
     return 0;
 }
@@ -708,7 +772,7 @@ rbh_fsevent_pool_flush(struct rbh_fsevent_pool *pool)
     size_t count = 0;
 
     rbh_list_foreach_safe(&pool->events, elem, tmp, link)
-        rbh_list_del(&elem->link);
+        fsevent_node_free(pool, elem);
 
     if (pool->count == 0)
         return NULL;
@@ -716,6 +780,7 @@ rbh_fsevent_pool_flush(struct rbh_fsevent_pool *pool)
     while (pool->count > 0 && count < pool->flush_size) {
         struct rbh_list_node *first_events;
         struct rbh_id_node *first_id;
+        struct rbh_list_node *events;
 
         first_id = rbh_list_first(&pool->ids, struct rbh_id_node, link);
         first_events = (void *)rbh_hashmap_get(pool->pool, first_id->id);
@@ -723,9 +788,9 @@ rbh_fsevent_pool_flush(struct rbh_fsevent_pool *pool)
 
         rbh_list_splice_tail(&pool->events, first_events);
 
-        // TODO move this to the free list
-        rbh_list_del(&first_id->link);
-        rbh_hashmap_pop(pool->pool, first_id->id);
+        id_node_free(pool, first_id);
+        events = (void *)rbh_hashmap_pop(pool->pool, first_id->id);
+        event_list_free(pool, events);
         pool->count--;
         count++;
     }
@@ -733,4 +798,3 @@ rbh_fsevent_pool_flush(struct rbh_fsevent_pool *pool)
     return rbh_iter_list(&pool->events,
                          offsetof(struct rbh_fsevent_node, link));
 }
-
