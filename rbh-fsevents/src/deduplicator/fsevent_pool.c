@@ -636,98 +636,150 @@ dedup_upsert(const struct rbh_fsevent *event,
     return 0;
 }
 
+static void
+remove_event_list(struct rbh_fsevent_pool *pool,
+                  const struct rbh_id *id)
+{
+    struct rbh_id_node *elem, *tmp;
+
+    rbh_hashmap_pop(pool->pool, id);
+    pool->count--;
+
+    rbh_list_foreach_safe(&pool->ids, elem, tmp, link) {
+        if (rbh_id_equal(id, elem->id)) {
+            // XXX we could keep a reference to this node in the
+            // hash table's element
+            rbh_list_del(&elem->link);
+            break;
+        }
+    }
+}
+
+static bool
+dedup_unlink_event(struct rbh_fsevent_pool *pool, struct rbh_list_node *events,
+                   const struct rbh_fsevent *event)
+{
+    struct rbh_fsevent_node *link_fsevent = NULL;
+    struct rbh_fsevent_node *node;
+
+    rbh_list_foreach(events, node, link) {
+        if (node->fsevent.type == RBH_FET_LINK &&
+            !strcmp(event->link.name, node->fsevent.link.name) &&
+            rbh_id_equal(event->link.parent_id,
+                         node->fsevent.link.parent_id))
+            link_fsevent = node;
+    }
+
+    if (!link_fsevent)
+        return true;
+
+    rbh_list_del(&link_fsevent->link);
+
+    if (rbh_list_empty(events))
+        remove_event_list(pool, &event->id);
+
+    return false;
+}
+
+static bool
+dedup_delete_event(struct rbh_fsevent_pool *pool, struct rbh_list_node *events,
+                   const struct rbh_fsevent *event)
+{
+    struct rbh_fsevent_node *elem, *tmp;
+    bool insert_delete = true;
+
+    rbh_list_foreach_safe(events, elem, tmp, link) {
+        if (elem->fsevent.type == RBH_FET_LINK)
+            insert_delete = false;
+
+        rbh_list_del(&elem->link);
+    }
+
+    if (!insert_delete) {
+        remove_event_list(pool, &event->id);
+
+        return false;
+    }
+
+    return true;
+}
+
+static bool
+dedup_xattr_event(struct rbh_list_node *events,
+                  const struct rbh_fsevent *fsevent)
+{
+    struct rbh_fsevent_node *xattr_event = NULL;
+    struct rbh_fsevent_node *elem;
+
+    // XXX instead of a list, we could have one xattr, a list of links, a
+    // list of unlinks, one delete...
+    rbh_list_foreach(events, elem, link) {
+        if (elem->fsevent.type == RBH_FET_XATTR) {
+            xattr_event = elem;
+            /* with the dedup, only one xattr per event list */
+            break;
+        }
+    }
+
+    if (xattr_event) {
+        dedup_xattrs(fsevent, xattr_event);
+
+        return false;
+    }
+
+    return true;
+}
+
+static bool
+dedup_upsert_event(struct rbh_list_node *events,
+                   const struct rbh_fsevent *event)
+{
+    struct rbh_fsevent_node *upsert = NULL;
+    struct rbh_fsevent_node *elem;
+
+    rbh_list_foreach(events, elem, link) {
+        if (elem->fsevent.type == RBH_FET_UPSERT) {
+            upsert = elem;
+            /* with the dedup, only one upsert per event list */
+            break;
+        }
+    }
+
+    if (upsert) {
+        dedup_upsert(event, upsert);
+        return false;
+    }
+
+    return true;
+}
+
 static int
 deduplicate_event(struct rbh_fsevent_pool *pool, struct rbh_list_node *events,
                   const struct rbh_fsevent *event)
 {
     struct rbh_fsevent_node *node;
-    bool insert_delete = true;
+    bool should_insert = true;
 
-    if (event->type == RBH_FET_UNLINK) {
-        struct rbh_fsevent_node *link = NULL;
-        struct rbh_fsevent_node *node;
+    switch (event->type) {
+    case RBH_FET_UPSERT:
+        should_insert = dedup_upsert_event(events, event);
+        break;
+    case RBH_FET_LINK:
+        /* no dedup for link */
+        break;
+    case RBH_FET_UNLINK:
+        should_insert = dedup_unlink_event(pool, events, event);
+        break;
+    case RBH_FET_DELETE:
+        should_insert = dedup_delete_event(pool, events, event);
+        break;
+    case RBH_FET_XATTR:
+        should_insert = dedup_xattr_event(events, event);
+        break;
+    }
 
-        rbh_list_foreach(events, node, link) {
-            if (node->fsevent.type == RBH_FET_LINK &&
-                !strcmp(event->link.name, node->fsevent.link.name) &&
-                rbh_id_equal(event->link.parent_id,
-                             node->fsevent.link.parent_id))
-                link = node;
-        }
-
-        if (link) {
-            rbh_list_del(&link->link);
-
-            if (rbh_list_empty(events)) {
-                rbh_hashmap_pop(pool->pool, &event->id);
-                // TODO remove id from global list
-                pool->count--;
-            }
-            return 0;
-        }
-    } else if (event->type == RBH_FET_DELETE) {
-        struct rbh_fsevent_node *elem, *tmp;
-
-        rbh_list_foreach_safe(events, elem, tmp, link) {
-            if (elem->fsevent.type == RBH_FET_LINK)
-                insert_delete = false;
-
-            rbh_list_del(&elem->link);
-        }
-
-        if (!insert_delete) {
-            struct rbh_id_node *elem, *tmp;
-
-            rbh_hashmap_pop(pool->pool, &event->id);
-            pool->count--;
-
-            rbh_list_foreach_safe(&pool->ids, elem, tmp, link) {
-                if (rbh_id_equal(&event->id, elem->id)) {
-                    // XXX we could keep a reference to this node in the
-                    // hash table's element
-                    rbh_list_del(&elem->link);
-                    break;
-                }
-            }
-
-            return 0;
-        }
-    } else if (event->type == RBH_FET_XATTR) {
-        struct rbh_fsevent_node *xattr_event = NULL;
-        struct rbh_fsevent_node *elem;
-
-        // XXX instead of a list, we could have one xattr, a list of links, a
-        // list of unlinks, one delete...
-        rbh_list_foreach(events, elem, link) {
-            if (elem->fsevent.type == RBH_FET_XATTR) {
-                xattr_event = elem;
-                /* with the dedup, only one xattr per event list */
-                break;
-            }
-        }
-
-        if (xattr_event) {
-            dedup_xattrs(event, xattr_event);
-
-            return 0;
-        }
-    } else if (event->type == RBH_FET_UPSERT) {
-        struct rbh_fsevent_node *upsert = NULL;
-        struct rbh_fsevent_node *elem;
-
-        rbh_list_foreach(events, elem, link) {
-            if (elem->fsevent.type == RBH_FET_UPSERT) {
-                upsert = elem;
-                /* with the dedup, only one upsert per event list */
-                break;
-            }
-        }
-
-        if (upsert) {
-            dedup_upsert(event, upsert);
-            return 0;
-        }
-    } /* no dedup for links */
+    if (!should_insert)
+        return 0;
 
     node = fsevent_node_alloc(pool);
     if (!node)
