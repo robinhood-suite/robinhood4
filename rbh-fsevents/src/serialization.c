@@ -293,7 +293,7 @@ emit_int64(yaml_emitter_t *emitter, int64_t i)
                             YAML_PLAIN_SCALAR_STYLE);
 }
 
-static bool
+bool
 parse_int64(const yaml_event_t *event, int64_t *i)
 {
     const char *value = yaml_scalar_value(event);
