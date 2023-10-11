@@ -40,11 +40,24 @@ creat_delete()
     fi
 }
 
+test_flush_size()
+{
+    touch file
+    rm file
+
+    # A flush size of 1 means that we will process events one by one so no
+    # deduplication will happen.
+    rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" --lustre "$LUSTRE_MDT" \
+        "rbh:mongo:$testdb" --batch-size 100 --flush-size 1 > output.yaml
+
+    # TODO make sure that we have a link and unlink and upsert...
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
-declare -a tests=(creat_delete)
+declare -a tests=(creat_delete test_flush_size)
 
 LUSTRE_DIR=/mnt/lustre/
 cd "$LUSTRE_DIR"
