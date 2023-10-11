@@ -504,7 +504,8 @@ parse_rbh_value_pair(yaml_parser_t *parser, yaml_event_t *event,
 }
 
 bool
-parse_rbh_value_map(yaml_parser_t *parser, struct rbh_value_map *map)
+parse_rbh_value_map(yaml_parser_t *parser, struct rbh_value_map *map,
+                    yaml_event_t *map_event_to_use)
 {
     struct rbh_value_pair *pairs;
     yaml_event_t map_event;
@@ -512,7 +513,9 @@ parse_rbh_value_map(yaml_parser_t *parser, struct rbh_value_map *map)
     bool end = false;
     size_t i = 0;
 
-    if (!yaml_parser_parse(parser, &map_event))
+    if (map_event_to_use)
+        map_event = *map_event_to_use;
+    else if (!yaml_parser_parse(parser, &map_event))
         parser_error(parser);
 
     if (map_event.type == YAML_MAPPING_END_EVENT) {
@@ -524,9 +527,9 @@ parse_rbh_value_map(yaml_parser_t *parser, struct rbh_value_map *map)
         yaml_event_delete(&map_event);
         return true;
     } else if (map_event.type != YAML_MAPPING_START_EVENT) {
-            yaml_event_delete(&map_event);
-            errno = EINVAL;
-            return false;
+        yaml_event_delete(&map_event);
+        errno = EINVAL;
+        return false;
     }
 
     yaml_event_delete(&map_event);
@@ -964,8 +967,8 @@ parse_rbh_value(yaml_parser_t *parser, yaml_event_t *event,
         yaml_event_delete(event);
         return parse_sequence(parser, value);
     case RBH_VT_MAP:
-        yaml_event_delete(event);
-        return parse_rbh_value_map(parser, &value->map);
+        //yaml_event_delete(event);
+        return parse_rbh_value_map(parser, &value->map, event);
     }
 
     yaml_event_delete(event);
@@ -1002,7 +1005,7 @@ parse_xattrs(yaml_parser_t *parser, struct rbh_value_map *map)
     }
     yaml_event_delete(&event);
 
-    return parse_rbh_value_map(parser, map);
+    return parse_rbh_value_map(parser, map, NULL);
 }
 
 /*----------------------------------------------------------------------------*
@@ -2393,7 +2396,7 @@ parse_link(yaml_parser_t *parser, struct rbh_fsevent *link)
             success = parse_id(parser, &link->id);
             break;
         case LF_XATTRS:
-            success = parse_rbh_value_map(parser, &link->xattrs);
+            success = parse_rbh_value_map(parser, &link->xattrs, NULL);
             break;
         case LF_PARENT:
             seen.parent = true;
@@ -2635,7 +2638,7 @@ parse_ns_xattr(yaml_parser_t *parser, struct rbh_fsevent *ns_xattr)
             success = parse_id(parser, &ns_xattr->id);
             break;
         case LF_XATTRS:
-            success = parse_rbh_value_map(parser, &ns_xattr->xattrs);
+            success = parse_rbh_value_map(parser, &ns_xattr->xattrs, NULL);
             break;
         case LF_PARENT:
             seen.parent = true;
@@ -2738,7 +2741,7 @@ parse_inode_xattr(yaml_parser_t *parser, struct rbh_fsevent *inode_xattr)
             success = parse_id(parser, &inode_xattr->id);
             break;
         case IXF_XATTRS:
-            success = parse_rbh_value_map(parser, &inode_xattr->xattrs);
+            success = parse_rbh_value_map(parser, &inode_xattr->xattrs, NULL);
             break;
         }
 
