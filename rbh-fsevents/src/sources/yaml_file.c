@@ -53,6 +53,7 @@ yaml_fsevent_init(FILE *file, const struct rbh_iterator iterator,
 
     file_source->fsevents.additional_xattr.pairs = NULL;
     file_source->fsevents.additional_xattr.count = 0;
+    file_source->fsevents.additional_statx.stx_mask = 0;
 
     file_source->source = *source;
     file_source->file = file;

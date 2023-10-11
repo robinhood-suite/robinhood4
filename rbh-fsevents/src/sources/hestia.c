@@ -59,10 +59,13 @@ str2event_fields(const char *string)
  *
  */
 static bool
-parse_update(yaml_parser_t *parser, struct rbh_fsevent *inode)
+parse_update(yaml_parser_t *parser, struct rbh_fsevent *inode,
+             struct rbh_statx *statx)
 {
     bool seen_attrs = false;
+    bool seen_time = false;
     bool seen_id = false;
+    int64_t event_time;
 
     inode->link.parent_id = NULL;
     inode->link.name = NULL;
@@ -101,14 +104,25 @@ parse_update(yaml_parser_t *parser, struct rbh_fsevent *inode)
             inode->id.size = strlen(inode->id.data);
             break;
         case EF_TIME:
-            /* Ignore this part of the event */
+            seen_time = true;
             if (!yaml_parser_parse(parser, &event))
                 parser_error(parser);
+
+            /* This is the time of the changelog, close but not equal to the
+             * object atime/mtime/ctime, but consider it as the object's times
+             * for now
+             */
+            success = parse_int64(&event, &event_time);
+            if (!success)
+                error(EXIT_FAILURE, 0, "malloc");
+
+            statx->stx_mask = RBH_STATX_CTIME;
+            statx->stx_ctime.tv_sec = event_time;
+            statx->stx_ctime.tv_nsec = 0;
 
             save_errno = errno;
             yaml_event_delete(&event);
             errno = save_errno;
-            success = true;
             break;
         case EF_ATTRS:
             seen_attrs = true;
@@ -123,7 +137,7 @@ parse_update(yaml_parser_t *parser, struct rbh_fsevent *inode)
             return false;
     }
 
-    return seen_id && seen_attrs;
+    return seen_id && seen_attrs && seen_time;
 }
 
 /* "REMOVE" events in Hestia are of the form:
@@ -208,10 +222,12 @@ parse_remove(yaml_parser_t *parser, struct rbh_fsevent *delete)
  */
 static bool
 parse_create(yaml_parser_t *parser, struct rbh_fsevent *link,
-             struct rbh_value_map *saved_xattr)
+             struct rbh_value_map *saved_xattr, struct rbh_statx *statx)
 {
     struct rbh_id *parent_id;
+    bool seen_time = false;
     bool seen_id = false;
+    int64_t event_time;
 
     /* Objects have no parent and no path */
     parent_id = malloc(sizeof(*parent_id));
@@ -268,16 +284,28 @@ parse_create(yaml_parser_t *parser, struct rbh_fsevent *link,
             success = parse_rbh_value_map(parser, saved_xattr, true);
             break;
         case EF_TIME:
-            /* This is the time of the changelog, close but not equal to the
-             * object atime/mtime/ctime, so we skip it
-             */
+            seen_time = true;
             if (!yaml_parser_parse(parser, &event))
                 parser_error(parser);
+
+            success = parse_int64(&event, &event_time);
+            if (!success)
+                error(EXIT_FAILURE, 0, "malloc");
+
+            statx->stx_mask = RBH_STATX_ATIME | RBH_STATX_BTIME |
+                              RBH_STATX_CTIME | RBH_STATX_MTIME;
+            statx->stx_atime.tv_sec = event_time;
+            statx->stx_atime.tv_nsec = 0;
+            statx->stx_btime.tv_sec = event_time;
+            statx->stx_btime.tv_nsec = 0;
+            statx->stx_ctime.tv_sec = event_time;
+            statx->stx_ctime.tv_nsec = 0;
+            statx->stx_mtime.tv_sec = event_time;
+            statx->stx_mtime.tv_nsec = 0;
 
             save_errno = errno;
             yaml_event_delete(&event);
             errno = save_errno;
-            success = true;
             break;
         default:
             errno = save_errno;
@@ -288,7 +316,7 @@ parse_create(yaml_parser_t *parser, struct rbh_fsevent *link,
             return false;
     }
 
-    return seen_id;
+    return seen_id && seen_time;
 }
 
 enum fsevent_type {
@@ -314,7 +342,7 @@ str2fsevent_type(const char *string)
 
 bool
 parse_hestia_event(yaml_parser_t *parser, struct rbh_fsevent *fsevent,
-                   struct rbh_value_map *map)
+                   struct rbh_value_map *map, struct rbh_statx *statx)
 {
     enum fsevent_type type;
     yaml_event_t event;
@@ -347,13 +375,13 @@ parse_hestia_event(yaml_parser_t *parser, struct rbh_fsevent *fsevent,
         return false;
     case FT_CREATE:
         fsevent->type = RBH_FET_LINK;
-        return parse_create(parser, fsevent, map);
+        return parse_create(parser, fsevent, map, statx);
     case FT_REMOVE:
         fsevent->type = RBH_FET_DELETE;
         return parse_remove(parser, fsevent);
     case FT_UPDATE:
         fsevent->type = RBH_FET_XATTR;
-        return parse_update(parser, fsevent);
+        return parse_update(parser, fsevent, statx);
     default:
         assert(false);
         __builtin_unreachable();
@@ -381,6 +409,15 @@ hestia_fsevent_iter_next(void *iterator)
         return new_inode_event;
     }
 
+    if (fsevents->additional_statx.stx_mask != 0) {
+        struct rbh_fsevent *new_upsert_event =
+            rbh_fsevent_upsert_new(&fsevents->fsevent.id, NULL,
+                                   &fsevents->additional_statx, NULL);
+        fsevents->additional_statx.stx_mask = 0;
+
+        return new_upsert_event;
+    }
+
     if (!yaml_parser_parse(&fsevents->parser, &event))
         parser_error(&fsevents->parser);
 
@@ -393,7 +430,8 @@ hestia_fsevent_iter_next(void *iterator)
         memset(&fsevents->fsevent, 0, sizeof(fsevents->fsevent));
 
         if (!parse_hestia_event(&fsevents->parser, &fsevents->fsevent,
-                                &fsevents->additional_xattr))
+                                &fsevents->additional_xattr,
+                                &fsevents->additional_statx))
             parser_error(&fsevents->parser);
 
         if (!yaml_parser_parse(&fsevents->parser, &event))
