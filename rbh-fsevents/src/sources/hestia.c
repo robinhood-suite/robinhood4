@@ -46,6 +46,98 @@ str2event_fields(const char *string)
     return EF_UNKNOWN;
 }
 
+/* "READ" events in Hestia are of the form:
+ *
+ * ---
+ * !read
+ * time: 1696837025523562141
+ * id: "421b3153-9108-d1ef-3413-945177dd4ab3"
+ * ...
+ *
+ */
+static bool
+parse_read(yaml_parser_t *parser, struct rbh_fsevent *upsert)
+{
+    struct rbh_statx *statx;
+    bool seen_time = false;
+    bool seen_id = false;
+    int64_t event_time;
+    const char *name;
+
+    upsert->xattrs.count = 0;
+    upsert->upsert.symlink = NULL;
+
+    while (true) {
+        enum event_fields field;
+        yaml_event_t event;
+        const char *key;
+        int save_errno;
+        bool success;
+
+        if (!yaml_parser_parse(parser, &event))
+            parser_error(parser);
+
+        if (event.type == YAML_MAPPING_END_EVENT) {
+            yaml_event_delete(&event);
+            break;
+        }
+
+        if (!yaml_parse_string(&event, &key, NULL)) {
+            save_errno = errno;
+            yaml_event_delete(&event);
+            errno = save_errno;
+            return false;
+        }
+
+        field = str2event_fields(key);
+        save_errno = errno;
+        yaml_event_delete(&event);
+
+        switch (field) {
+        case EF_ID:
+            seen_id = true;
+            /* The name of the object is irrelevant here, we only use it as an
+             * intermediary to recreate the object's id
+             */
+            success = parse_name(parser, &name);
+            upsert->id.data = strdup(name);
+            upsert->id.size = strlen(upsert->id.data);
+            break;
+        case EF_TIME:
+            seen_time = true;
+            if (!yaml_parser_parse(parser, &event))
+                parser_error(parser);
+
+            /* This is the time of the changelog, close but not equal to the
+             * object atime/mtime/ctime, but consider it as the object's times
+             * for now
+             */
+            success = parse_int64(&event, &event_time);
+            if (!success)
+                return false;
+
+            statx = malloc(sizeof(statx));
+            if (!statx)
+                error(EXIT_FAILURE, 0, "malloc");
+
+            statx->stx_mask = RBH_STATX_ATIME;
+            statx->stx_atime.tv_sec = event_time;
+            statx->stx_atime.tv_nsec = 0;
+
+            upsert->upsert.statx = statx;
+            break;
+        default:
+            errno = save_errno;
+            return false;
+        }
+
+        if (!success)
+            return false;
+    }
+
+    return seen_id && seen_time;
+}
+
 /* "UPDATE" events in Hestia are of the form:
  *
  * ---
@@ -327,6 +419,7 @@ enum fsevent_type {
     FT_CREATE,
     FT_REMOVE,
     FT_UPDATE,
+    FT_READ,
 };
 
 static enum fsevent_type
@@ -338,6 +431,8 @@ str2fsevent_type(const char *string)
         return FT_REMOVE;
     if (strcmp(string, "!update") == 0)
         return FT_UPDATE;
+    if (strcmp(string, "!read") == 0)
+        return FT_READ;
 
     errno = EINVAL;
     return FT_UNKNOWN;
@@ -385,6 +480,9 @@ parse_hestia_event(yaml_parser_t *parser, struct rbh_fsevent *fsevent,
     case FT_UPDATE:
         fsevent->type = RBH_FET_XATTR;
         return parse_update(parser, fsevent, statx);
+    case FT_READ:
+        fsevent->type = RBH_FET_UPSERT;
+        return parse_read(parser, fsevent);
     default:
         assert(false);
         __builtin_unreachable();
