@@ -7,7 +7,7 @@
 struct rbh_fsevent_pool;
 
 struct rbh_fsevent_pool *
-rbh_fsevent_pool_new(size_t pool_size, size_t flush_size);
+rbh_fsevent_pool_new(size_t batch_size, size_t flush_size);
 
 void
 rbh_fsevent_pool_destroy(struct rbh_fsevent_pool *pool);
