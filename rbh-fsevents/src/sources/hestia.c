@@ -46,6 +46,86 @@ str2event_fields(const char *string)
     return EF_UNKNOWN;
 }
 
+/* "UPDATE" events in Hestia are of the form:
+ *
+ * ---
+ * !update
+ * attrs:
+ *   user_metadata.key0: "value0"
+ *   user_metadata.key1: "value1"
+ * id: "421b3153-9108-d1ef-3413-945177dd4ab3"
+ * time: 1696837025494619488
+ * ...
+ *
+ */
+static bool
+parse_update(yaml_parser_t *parser, struct rbh_fsevent *inode)
+{
+    bool seen_attrs = false;
+    bool seen_id = false;
+
+    inode->link.parent_id = NULL;
+    inode->link.name = NULL;
+
+    while (true) {
+        enum event_fields field;
+        yaml_event_t event;
+        const char *key;
+        int save_errno;
+        bool success;
+
+        if (!yaml_parser_parse(parser, &event))
+            parser_error(parser);
+
+        if (event.type == YAML_MAPPING_END_EVENT) {
+            yaml_event_delete(&event);
+            break;
+        }
+
+        if (!yaml_parse_string(&event, &key, NULL)) {
+            save_errno = errno;
+            yaml_event_delete(&event);
+            errno = save_errno;
+            return false;
+        }
+
+        field = str2event_fields(key);
+        save_errno = errno;
+        yaml_event_delete(&event);
+
+        switch (field) {
+        case EF_ID:
+            seen_id = true;
+
+            success = parse_name(parser, &inode->id.data);
+            inode->id.size = strlen(inode->id.data);
+            break;
+        case EF_TIME:
+            /* Ignore this part of the event */
+            if (!yaml_parser_parse(parser, &event))
+                parser_error(parser);
+
+            save_errno = errno;
+            yaml_event_delete(&event);
+            errno = save_errno;
+            success = true;
+            break;
+        case EF_ATTRS:
+            seen_attrs = true;
+            success = parse_rbh_value_map(parser, &inode->xattrs);
+            break;
+        default:
+            errno = save_errno;
+            return false;
+        }
+
+        if (!success)
+            return false;
+    }
+
+    return seen_id && seen_attrs;
+}
+
 /* "REMOVE" events in Hestia are of the form:
  *
  * ---
@@ -222,6 +302,7 @@ enum fsevent_type {
     FT_UNKNOWN,
     FT_CREATE,
     FT_REMOVE,
+    FT_UPDATE,
 };
 
 static enum fsevent_type
@@ -231,6 +312,8 @@ str2fsevent_type(const char *string)
         return FT_CREATE;
     if (strcmp(string, "!remove") == 0)
         return FT_REMOVE;
+    if (strcmp(string, "!update") == 0)
+        return FT_UPDATE;
 
     errno = EINVAL;
     return FT_UNKNOWN;
@@ -275,6 +358,9 @@ parse_hestia_event(yaml_parser_t *parser, struct rbh_fsevent *fsevent,
     case FT_REMOVE:
         fsevent->type = RBH_FET_DELETE;
         return parse_remove(parser, fsevent);
+    case FT_UPDATE:
+        fsevent->type = RBH_FET_XATTR;
+        return parse_update(parser, fsevent);
     default:
         assert(false);
         __builtin_unreachable();
