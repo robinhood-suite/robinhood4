@@ -19,7 +19,8 @@ bool
 parse_name(yaml_parser_t *parser, const char **name);
 
 bool
-parse_rbh_value_map(yaml_parser_t *parser, struct rbh_value_map *map);
+parse_rbh_value_map(yaml_parser_t *parser, struct rbh_value_map *map,
+                    yaml_event_t *event_map);
 
 bool
 emit_fsevent(yaml_emitter_t *emitter, const struct rbh_fsevent *fsevent);

@@ -279,7 +279,7 @@ parse_create(yaml_parser_t *parser, struct rbh_fsevent *link,
             /* The attributes are not namespace ones, so we store them for
              * later in another map
              */
-            success = parse_rbh_value_map(parser, map);
+            success = parse_rbh_value_map(parser, map, NULL);
             break;
         case EF_TIME:
             /* This is the time of the changelog, close but not equal to the
