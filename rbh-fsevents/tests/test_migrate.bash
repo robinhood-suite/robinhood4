@@ -25,6 +25,8 @@ test_migrate()
     # This will be done more properly in a next patch
     local other_mdt_user="$(lctl --device "$other_mdt" changelog_register |
                             cut -d "'" -f2)"
+    # Clear changelogs from previous tests
+    lfs changelog_clear "$LUSTRE_MDT" "$userid" 0
     lfs changelog_clear "$other_mdt" "$other_mdt_user" 0
 
     mkdir $entry
