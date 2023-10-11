@@ -9,9 +9,10 @@
 #include <assert.h>
 #include <errno.h>
 #include <error.h>
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
+#include <sysexits.h>
 
 struct rbh_fsevent_pool {
     size_t size; /* maximum number of ids allowed in the pool */
@@ -62,12 +63,18 @@ fsevent_pool_hash(const void *key)
 }
 
 struct rbh_fsevent_pool *
-rbh_fsevent_pool_new(size_t pool_size, size_t flush_size)
+rbh_fsevent_pool_new(size_t batch_size, size_t flush_size)
 {
     struct rbh_fsevent_pool *pool;
 
-    if (flush_size > pool_size || flush_size == 0)
-        return NULL;
+    if (flush_size == 0)
+        error(EX_USAGE, 0, "flush size cannot be 0");
+
+    if (flush_size > batch_size)
+        error(EX_USAGE, 0,
+              "batch size (%lu) must be greater than flush size (%lu)",
+              batch_size, flush_size);
+
 
     pool = malloc(sizeof(*pool));
     if (!pool)
@@ -81,7 +88,7 @@ rbh_fsevent_pool_new(size_t pool_size, size_t flush_size)
     }
 
     pool->pool = rbh_hashmap_new(fsevent_pool_equals, fsevent_pool_hash,
-                                 pool_size * 100 / 70);
+                                 batch_size * 100 / 70);
     if (!pool->pool) {
         int save_errno = errno;
 
@@ -92,7 +99,7 @@ rbh_fsevent_pool_new(size_t pool_size, size_t flush_size)
     }
 
     pool->flush_size = flush_size;
-    pool->size = pool_size;
+    pool->size = batch_size;
     rbh_list_init(&pool->ids);
     pool->count = 0;
     rbh_list_init(&pool->events);

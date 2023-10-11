@@ -10,6 +10,6 @@
 #include "source.h"
 
 struct rbh_mut_iterator *
-deduplicator_new(size_t count, struct source *source);
+deduplicator_new(size_t batch_size, size_t flush_size, struct source *source);
 
 #endif
