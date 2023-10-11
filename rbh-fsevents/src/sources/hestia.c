@@ -112,7 +112,7 @@ parse_update(yaml_parser_t *parser, struct rbh_fsevent *inode)
             break;
         case EF_ATTRS:
             seen_attrs = true;
-            success = parse_rbh_value_map(parser, &inode->xattrs);
+            success = parse_rbh_value_map(parser, &inode->xattrs, true);
             break;
         default:
             errno = save_errno;
@@ -270,7 +270,7 @@ parse_create(yaml_parser_t *parser, struct rbh_fsevent *link,
             /* The attributes are not namespace ones, so we store them for
              * later in another map
              */
-            success = parse_rbh_value_map(parser, saved_xattr);
+            success = parse_rbh_value_map(parser, saved_xattr, true);
             break;
         case EF_TIME:
             /* This is the time of the changelog, close but not equal to the
