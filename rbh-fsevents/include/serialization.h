@@ -16,6 +16,9 @@ parser_error(yaml_parser_t *parser)
 }
 
 bool
+parse_int64(const yaml_event_t *event, int64_t *i);
+
+bool
 parse_name(yaml_parser_t *parser, const char **name);
 
 bool

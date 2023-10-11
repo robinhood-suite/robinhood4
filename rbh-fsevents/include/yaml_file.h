@@ -14,6 +14,7 @@
 
 #include <miniyaml.h>
 #include <robinhood/fsevent.h>
+#include <robinhood/statx.h>
 
 #include "source.h"
 
@@ -25,6 +26,7 @@ struct yaml_fsevent_iterator {
     bool exhausted;
 
     struct rbh_value_map additional_xattr;
+    struct rbh_statx additional_statx;
 };
 
 void
