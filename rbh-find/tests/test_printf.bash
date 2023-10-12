@@ -194,13 +194,29 @@ test_size()
     fi
 }
 
+test_type()
+{
+    touch file
+    ln file hlink
+    ln -s file slink
+    mkfifo fifo
+    mknod block b 0 0
+    mknod char c 0 0
+
+    rbh-sync "rbh:posix:." "rbh:mongo:$testdb"
+
+    rbh-find "rbh:mongo:$testdb" -printf "%p %y\n" | sort |
+        difflines "/block b" "/char c" "/ d" "/fifo p" "/file f" "/hlink f" \
+            "/slink l"
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
 declare -a tests=(test_atime test_ctime test_mtime test_filename test_inode
                   test_uid test_gid test_username test_groupname
-                  test_backend_name test_size)
+                  test_backend_name test_size test_type)
 
 tmpdir=$(mktemp --directory)
 trap -- "rm -rf '$tmpdir'" EXIT
