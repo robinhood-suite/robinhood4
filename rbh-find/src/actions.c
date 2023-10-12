@@ -359,6 +359,11 @@ fsentry_print_directive(char *output, int max_length,
         return snprintf(output, max_length, "%s", backend);
     case 'i':
         return snprintf(output, max_length, "%lu", fsentry->statx->stx_ino);
+    case 'l':
+        if (!S_ISLNK(fsentry->statx->stx_mode))
+            return 0;
+
+        return snprintf(output, max_length, "%s", fsentry->symlink);
     case 'p':
         return snprintf(output, max_length, "%s", fsentry_path(fsentry));
     case 's':
