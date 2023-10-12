@@ -44,6 +44,9 @@ struct find_context {
      */
     char *format_string;
 
+    /** The command to execute on each entry and its arguments */
+    char **exec_command;
+
     /**
      * Callback to prepare an action's execution
      *
