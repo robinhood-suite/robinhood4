@@ -63,11 +63,20 @@ test_mtime()
     fi
 }
 
+test_filename()
+{
+    touch file
+    rbh-sync "rbh:posix:." "rbh:mongo:$testdb"
+
+    rbh-find "rbh:mongo:$testdb" -name file -printf "%f\n" | sort |
+        difflines "file"
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
-declare -a tests=(test_atime test_ctime test_mtime)
+declare -a tests=(test_atime test_ctime test_mtime test_filename)
 
 tmpdir=$(mktemp --directory)
 trap -- "rm -rf '$tmpdir'" EXIT
