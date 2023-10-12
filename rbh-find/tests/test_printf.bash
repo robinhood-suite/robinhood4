@@ -72,11 +72,24 @@ test_filename()
         difflines "file"
 }
 
+test_inode()
+{
+    touch file
+    rbh-sync "rbh:posix:." "rbh:mongo:$testdb"
+
+    local i=$(rbh-find "rbh:mongo:$testdb" -name file -printf "%i\n")
+    local inode=$(stat -c %i file)
+
+    if [[ $i != $inode ]]; then
+        error "printf inode: $i != actual $inode"
+    fi
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
-declare -a tests=(test_atime test_ctime test_mtime test_filename)
+declare -a tests=(test_atime test_ctime test_mtime test_filename test_inode)
 
 tmpdir=$(mktemp --directory)
 trap -- "rm -rf '$tmpdir'" EXIT
