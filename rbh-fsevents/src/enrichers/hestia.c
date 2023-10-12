@@ -17,6 +17,78 @@
 #include "enricher.h"
 #include "internals.h"
 
+static const void *
+hestia_enricher_iter_next(void *iterator)
+{
+    struct enricher *enricher = iterator;
+    const void *fsevent;
+
+    (void) enricher;
+    (void) fsevent;
+
+    /*
+    fsevent = rbh_iter_next(enricher->fsevents);
+    if (fsevent == NULL)
+        return NULL;
+
+    if (enrich(enricher, fsevent))
+        return NULL;
+    */
+    return NULL;//&enricher->fsevent;
+}
+
+void
+hestia_enricher_iter_destroy(void *iterator)
+{
+    struct enricher *enricher = iterator;
+
+    rbh_iter_destroy(enricher->fsevents);
+    free(enricher->pairs);
+    free(enricher);
+}
+
+static const struct rbh_iterator_operations HESTIA_ENRICHER_ITER_OPS = {
+    .next = hestia_enricher_iter_next,
+    .destroy = hestia_enricher_iter_destroy,
+};
+
+static const struct rbh_iterator HESTIA_ENRICHER_ITERATOR = {
+    .ops = &HESTIA_ENRICHER_ITER_OPS,
+};
+
+#define INITIAL_PAIR_COUNT (1 << 7)
+
+struct rbh_iterator *
+hestia_iter_enrich(struct rbh_iterator *fsevents)
+{
+    struct rbh_value_pair *pairs;
+    struct enricher *enricher;
+
+    pairs = reallocarray(NULL, INITIAL_PAIR_COUNT, sizeof(*pairs));
+    if (pairs == NULL)
+        return NULL;
+
+    enricher = malloc(sizeof(*enricher));
+    if (enricher == NULL) {
+        int save_errno = errno;
+
+        free(pairs);
+        errno = save_errno;
+        return NULL;
+    }
+
+    enricher->iterator = HESTIA_ENRICHER_ITERATOR;
+    enricher->backend = NULL;
+    enricher->fsevents = fsevents;
+    enricher->mount_fd = -1;
+    enricher->mount_path = NULL;
+    enricher->pairs = pairs;
+    enricher->pair_count = INITIAL_PAIR_COUNT;
+    enricher->symlink = NULL;
+
+    return &enricher->iterator;
+}
+
 /*----------------------------------------------------------------------------*
  *                           hestia_backend_enrich                            *
  *----------------------------------------------------------------------------*/
@@ -25,12 +97,9 @@ static struct rbh_iterator *
 hestia_enrich_iter_builder_build_iter(void *_builder,
                                       struct rbh_iterator *fsevents)
 {
-    struct enrich_iter_builder *builder = _builder;
+    (void) _builder;
 
-    (void) builder;
-    (void) fsevents;
-
-    return NULL;
+    return hestia_iter_enrich(fsevents);
 }
 
 void
