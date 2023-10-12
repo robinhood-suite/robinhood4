@@ -31,11 +31,27 @@ test_exec()
         difflines "file:test data"
 }
 
+test_delete()
+{
+    touch to_delete
+    touch do_not_delete
+
+    rbh-sync "rbh:posix:." "rbh:mongo:$testdb"
+    rbh_find "rbh:mongo:$testdb" -name to_delete -delete
+    if [[ -f to_delete ]]; then
+        error "File 'to_delete' should have been deleted"
+    fi
+
+    if [[ ! -f do_not_delete ]]; then
+        error "File 'do_not_delete' should not have been deleted"
+    fi
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
-declare -a tests=(test_exec)
+declare -a tests=(test_exec test_delete)
 
 tmpdir=$(mktemp --directory)
 trap -- "rm -rf '$tmpdir'" EXIT
