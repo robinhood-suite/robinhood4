@@ -163,12 +163,31 @@ test_groupname()
     fi
 }
 
+test_backend_name()
+{
+    mongo "other" --eval "db.dropDatabase()" >/dev/null
+    mongo "${testdb}2" --eval "db.dropDatabase()" >/dev/null
+
+    rbh-sync "rbh:posix:." "rbh:mongo:other"
+    touch file
+    rbh-sync "rbh:posix:." "rbh:mongo:$testdb"
+    rbh-sync "rbh:posix:." "rbh:mongo:${testdb}2"
+
+    rbh-find "rbh:mongo:$testdb" "rbh:mongo:other" "rbh:mongo:${testdb}2" \
+        -name file -printf "%H\n" | sort |
+            difflines "rbh:mongo:$testdb" "rbh:mongo:${testdb}2"
+
+    mongo "other" --eval "db.dropDatabase()" >/dev/null
+    mongo "${testdb}2" --eval "db.dropDatabase()" >/dev/null
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
 declare -a tests=(test_atime test_ctime test_mtime test_filename test_inode
-                  test_uid test_gid test_username test_groupname)
+                  test_uid test_gid test_username test_groupname
+                  test_backend_name)
 
 tmpdir=$(mktemp --directory)
 trap -- "rm -rf '$tmpdir'" EXIT

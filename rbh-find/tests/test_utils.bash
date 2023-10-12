@@ -22,7 +22,7 @@ rbh_find()
 __mongo=$(which mongosh || which mongo)
 mongo()
 {
-    "$__mongo" "$@"
+    "$__mongo" --quiet "$@"
 }
 
 setup()
@@ -38,7 +38,7 @@ setup()
 
 teardown()
 {
-    mongo --quiet "$testdb" --eval "db.dropDatabase()" >/dev/null
+    mongo "$testdb" --eval "db.dropDatabase()" >/dev/null
     rm -rf "$testdir"
 }
 
