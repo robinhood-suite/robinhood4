@@ -181,13 +181,26 @@ test_backend_name()
     mongo "${testdb}2" --eval "db.dropDatabase()" >/dev/null
 }
 
+test_size()
+{
+    truncate -s 512 file
+    rbh-sync "rbh:posix:." "rbh:mongo:$testdb"
+
+    local s=$(rbh-find "rbh:mongo:$testdb" -name file -printf "%s\n")
+    local size=$(stat -c %s file)
+
+    if [[ $s != $size ]]; then
+        error "wrong size: $s != $size"
+    fi
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
 declare -a tests=(test_atime test_ctime test_mtime test_filename test_inode
                   test_uid test_gid test_username test_groupname
-                  test_backend_name)
+                  test_backend_name test_size)
 
 tmpdir=$(mktemp --directory)
 trap -- "rm -rf '$tmpdir'" EXIT
