@@ -111,12 +111,64 @@ test_gid()
     fi
 }
 
+test_username()
+{
+    touch file
+    touch file_without_user
+    useradd test
+    chown test: file_without_user
+
+    rbh-sync "rbh:posix:." "rbh:mongo:$testdb"
+    userdel test
+
+    local u=$(rbh-find "rbh:mongo:$testdb" -name file -printf "%u\n")
+    local name=$(stat -c %U file)
+
+    if [[ $u != $name ]]; then
+        error "printf user name: $u != actual $name"
+    fi
+
+    local u=$(rbh-find "rbh:mongo:$testdb" -name file_without_user \
+                  -printf "%u\n")
+    local uid=$(stat -c %u file_without_user)
+
+    if [[ $u != $uid ]]; then
+        error "printf UID: $u != actual $uid"
+    fi
+}
+
+test_groupname()
+{
+    touch file
+    touch file_without_user
+    useradd test
+    chown test: file_without_user
+
+    rbh-sync "rbh:posix:." "rbh:mongo:$testdb"
+    userdel test
+
+    local g=$(rbh-find "rbh:mongo:$testdb" -name file -printf "%g\n")
+    local name=$(stat -c %G file)
+
+    if [[ $g != $name ]]; then
+        error "wrong group name: $g != $name"
+    fi
+
+    local g=$(rbh-find "rbh:mongo:$testdb" -name file_without_user \
+                  -printf "%g\n")
+    local gid=$(stat -c %g file_without_user)
+
+    if [[ $g != $gid ]]; then
+        error "printf GID: $g != actual $gid"
+    fi
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
 declare -a tests=(test_atime test_ctime test_mtime test_filename test_inode
-                  test_uid test_gid)
+                  test_uid test_gid test_username test_groupname)
 
 tmpdir=$(mktemp --directory)
 trap -- "rm -rf '$tmpdir'" EXIT
