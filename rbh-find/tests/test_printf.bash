@@ -85,11 +85,38 @@ test_inode()
     fi
 }
 
+test_uid()
+{
+    touch file
+    rbh-sync "rbh:posix:." "rbh:mongo:$testdb"
+
+    local u=$(rbh-find "rbh:mongo:$testdb" -name file -printf "%U\n")
+    local uid=$(stat -c %u file)
+
+    if [[ $u != $uid ]]; then
+        error "printf UID: $u != actual $uid"
+    fi
+}
+
+test_gid()
+{
+    touch file
+    rbh-sync "rbh:posix:." "rbh:mongo:$testdb"
+
+    local g=$(rbh-find "rbh:mongo:$testdb" -name file -printf "%G\n")
+    local gid=$(stat -c %g file)
+
+    if [[ $g != $gid ]]; then
+        error "printf GID: $g != actual $gid"
+    fi
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
-declare -a tests=(test_atime test_ctime test_mtime test_filename test_inode)
+declare -a tests=(test_atime test_ctime test_mtime test_filename test_inode
+                  test_uid test_gid)
 
 tmpdir=$(mktemp --directory)
 trap -- "rm -rf '$tmpdir'" EXIT
