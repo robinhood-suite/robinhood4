@@ -298,6 +298,8 @@ fsentry_print_directive(char *output, int max_length,
                         );
     case 'f':
         return snprintf(output, max_length, "%s", fsentry->name);
+    case 'G':
+        return snprintf(output, max_length, "%u", fsentry->statx->stx_gid);
     case 'i':
         return snprintf(output, max_length, "%lu", fsentry->statx->stx_ino);
     case 'p':
@@ -306,6 +308,8 @@ fsentry_print_directive(char *output, int max_length,
         return snprintf(output, max_length, "%s",
                         ctime_from_timestamp(&fsentry->statx->stx_mtime.tv_sec)
                         );
+    case 'U':
+        return snprintf(output, max_length, "%u", fsentry->statx->stx_uid);
     default:
         error(EXIT_FAILURE, ENOTSUP, "format directive '%c' not supported",
               *directive);
