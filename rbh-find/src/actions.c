@@ -339,6 +339,8 @@ fsentry_print_directive(char *output, int max_length,
         return snprintf(output, max_length, "%lu", fsentry->statx->stx_ino);
     case 'p':
         return snprintf(output, max_length, "%s", fsentry_path(fsentry));
+    case 's':
+        return snprintf(output, max_length, "%lu", fsentry->statx->stx_size);
     case 'u':
         name = get_user_name(fsentry->statx->stx_uid);
         if (name)
