@@ -11,6 +11,9 @@
 
 #include <string.h>
 #include <sysexits.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <unistd.h>
 
 #include "rbh-find/find_cb.h"
 
@@ -31,11 +34,41 @@ validate_format_string(const char *format_string)
     return true;
 }
 
+static int
+parse_exec_command(struct find_context *ctx, const int index)
+{
+    size_t count = 0;
+    int i = index;
+
+    while (i < ctx->argc && strcmp(ctx->argv[i], ";")) {
+        count++;
+        i++;
+    }
+    // XXX test if this works
+    if (i == ctx->argc)
+        error(EX_USAGE, 0, "missing ';' at the end of -exec command");
+
+    // +1 for NULL at the end
+    ctx->exec_command = calloc(count + 1, sizeof(*ctx->exec_command));
+    if (!ctx->exec_command)
+        error(EXIT_FAILURE, errno, "parse_exec_command");
+
+    for (size_t j = 0; j < count; j++)
+        ctx->exec_command[j] = ctx->argv[index + j];
+
+    return count;
+}
+
 int
 find_pre_action(struct find_context *ctx, const int index,
                 const enum action action)
 {
     switch (action) {
+    case ACT_EXEC:
+        if (index + 2 >= ctx->argc) // at least two args: -exec cmd ;
+            error(EX_USAGE, 0, "missing argument to `%s'", action2str(action));
+
+        return 1 + parse_exec_command(ctx, index + 1); // consume -exec
     case ACT_FLS:
     case ACT_FPRINT:
     case ACT_FPRINT0:
@@ -76,11 +109,72 @@ find_pre_action(struct find_context *ctx, const int index,
     return 0;
 }
 
+static int
+wait_process(pid_t child)
+{
+    int rc;
+
+    rc = waitpid(child, NULL, 0);
+    if (rc == -1)
+        perror("waitpid");
+
+    return 0;
+}
+
+static const char *
+fsentry_relative_path(const struct rbh_fsentry *fsentry)
+{
+    const char *path = fsentry_path(fsentry);
+
+    if (path[0] == '/' && path[1] == '\0')
+        return ".";
+    else
+        return &path[1];
+}
+
+static int
+exec_command(struct find_context *ctx, struct rbh_fsentry *fsentry)
+{
+    const char **cmd;
+    pid_t child;
+    int i = 0;
+
+    while (ctx->exec_command[i++]);
+    --i;
+
+    cmd = calloc(i + 1, sizeof(*cmd));
+    if (!cmd)
+        return -1;
+
+    for (int j = 0; j < i; j++) {
+        if (!strcmp(ctx->exec_command[j], "{}"))
+            cmd[j] = fsentry_relative_path(fsentry);
+        else
+            cmd[j] = ctx->exec_command[j];
+    }
+
+    child = fork();
+
+    switch (child) {
+    case -1:
+        return -1;
+    case 0:
+        execvp(cmd[0], (char * const *)cmd);
+        // This is exiting the child process, not the main rbh-find process.
+        error(EXIT_FAILURE, errno, "failed to execute '%s'", cmd[0]);
+        __builtin_unreachable();
+    default:
+        return wait_process(child);
+    }
+}
+
 int
 find_exec_action(struct find_context *ctx, enum action action,
                  struct rbh_fsentry *fsentry)
 {
     switch (action) {
+    case ACT_EXEC:
+        return exec_command(ctx, fsentry);
     case ACT_PRINT:
         /* XXX: glibc's printf() handles printf("%s", NULL) pretty well, but
          *      I do not think this is part of any standard.
@@ -110,7 +204,6 @@ find_exec_action(struct find_context *ctx, enum action action,
         break;
     case ACT_COUNT:
         return 1;
-        break;
     case ACT_QUIT:
         exit(0);
         break;
@@ -129,6 +222,9 @@ find_post_action(struct find_context *ctx, const int index,
     const char *filename;
 
     switch (action) {
+    case ACT_EXEC:
+        free(ctx->exec_command);
+        break;
     case ACT_COUNT:
         printf("%lu matching entries\n", count);
         break;
