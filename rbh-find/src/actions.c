@@ -298,6 +298,8 @@ fsentry_print_directive(char *output, int max_length,
                         );
     case 'f':
         return snprintf(output, max_length, "%s", basename(fsentry->name));
+    case 'i':
+        return snprintf(output, max_length, "%lu", fsentry->statx->stx_ino);
     case 'p':
         return snprintf(output, max_length, "%s", fsentry_path(fsentry));
     default:
