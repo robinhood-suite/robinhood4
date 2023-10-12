@@ -302,6 +302,28 @@ get_user_name(uint32_t uid)
         return passwd->pw_name;
 }
 
+static char
+type2char(uint16_t mode)
+{
+    if (S_ISREG(mode))
+        return 'f';
+    else if (S_ISDIR(mode))
+        return 'd';
+    else if (S_ISCHR(mode))
+        return 'c';
+    else if (S_ISBLK(mode))
+        return 'b';
+    else if (S_ISFIFO(mode))
+        return 'p';
+    else if (S_ISLNK(mode))
+        return 'l';
+    else if (S_ISSOCK(mode))
+        return 's';
+    else
+        return 'U';
+
+}
+
 static int
 fsentry_print_directive(char *output, int max_length,
                         const struct rbh_fsentry *fsentry,
@@ -349,6 +371,9 @@ fsentry_print_directive(char *output, int max_length,
         __attribute__((fallthrough));
     case 'U':
         return snprintf(output, max_length, "%u", fsentry->statx->stx_uid);
+    case 'y':
+        return snprintf(output, max_length, "%c",
+                        type2char(fsentry->statx->stx_mode));
     default:
         error(EXIT_FAILURE, ENOTSUP, "format directive not supported");
     }
