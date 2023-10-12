@@ -211,6 +211,7 @@ static struct enrich_iter_builder *
 enrich_iter_builder_from_uri(const char *uri)
 {
     struct enrich_iter_builder *builder;
+    struct rbh_backend *uri_backend;
     struct rbh_raw_uri *raw_uri;
     struct rbh_uri *rbh_uri;
     int save_errno;
@@ -226,8 +227,20 @@ enrich_iter_builder_from_uri(const char *uri)
     if (rbh_uri == NULL)
         error(EXIT_FAILURE, errno, "rbh_uri_from_raw_uri: %s", uri);
 
-    builder = enrich_iter_builder_from_backend(
-        rbh_backend_from_uri(uri), rbh_uri->fsname);
+    /* XXX: this a temporary hack because the Hestia backend cannot properly
+     * build at the moment.
+     */
+    if (strlen(rbh_uri->fsname) == 0) {
+        uri_backend = malloc(sizeof(*uri_backend));
+        if (uri_backend == NULL)
+            error(EXIT_FAILURE, errno, "malloc");
+
+        uri_backend->id = RBH_BI_HESTIA;
+    } else {
+        uri_backend = rbh_backend_from_uri(uri);
+    }
+
+    builder = enrich_iter_builder_from_backend(uri_backend, rbh_uri->fsname);
     save_errno = errno;
     free(rbh_uri);
     errno = save_errno;
