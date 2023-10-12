@@ -52,5 +52,8 @@ extern const struct enrich_iter_builder POSIX_ENRICH_ITER_BUILDER;
 #ifdef HAVE_LUSTRE
 extern const struct enrich_iter_builder LUSTRE_ENRICH_ITER_BUILDER;
 #endif
+#ifdef HAVE_HESTIA
+extern const struct enrich_iter_builder HESTIA_ENRICH_ITER_BUILDER;
+#endif
 
 #endif
