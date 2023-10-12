@@ -94,12 +94,38 @@ test_gid()
     fi
 }
 
+test_username()
+{
+    touch file
+    rbh-sync "rbh:posix:." "rbh:mongo:$testdb"
+
+    local u=$(rbh-find "rbh:mongo:$testdb" -name file -printf "%u\n")
+    local name=$(stat -c %U file)
+
+    if [[ $u != $name ]]; then
+        error "wrong user name: $u != $name"
+    fi
+}
+
+test_groupname()
+{
+    touch file
+    rbh-sync "rbh:posix:." "rbh:mongo:$testdb"
+
+    local g=$(rbh-find "rbh:mongo:$testdb" -name file -printf "%g\n")
+    local name=$(stat -c %G file)
+
+    if [[ $g != $name ]]; then
+        error "wrong group name: $g != $name"
+    fi
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
 declare -a tests=(test_atime test_ctime test_filename test_inode test_uid
-                  test_gid)
+                  test_gid test_username test_groupname)
 
 tmpdir=$(mktemp --directory)
 trap -- "rm -rf '$tmpdir'" EXIT
