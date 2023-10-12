@@ -32,6 +32,14 @@ enrich_iter_builder_from_backend(struct rbh_backend *backend,
             *builder = LUSTRE_ENRICH_ITER_BUILDER;
             break;
 #endif
+#ifdef HAVE_HESTIA
+        case RBH_BI_HESTIA:
+            *builder = HESTIA_ENRICH_ITER_BUILDER;
+            builder->backend = backend;
+            builder->mount_fd = -1;
+            builder->mount_path = NULL;
+            return builder;
+#endif
         default:
             error(EX_USAGE, EINVAL, "enricher type not allowed");
     }
