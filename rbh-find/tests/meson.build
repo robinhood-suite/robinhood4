@@ -5,7 +5,12 @@
 # SPDX-License-Identifer: LGPL-3.0-or-later
 
 integration_tests = [
-  'test_perm', 'test_size', 'test_xattr', 'test_time', 'test_printf',
+  'test_actions',
+  'test_perm',
+  'test_printf',
+  'test_size',
+  'test_time',
+  'test_xattr',
 ]
 
 foreach t: integration_tests
