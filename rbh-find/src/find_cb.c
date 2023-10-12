@@ -14,6 +14,7 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <unistd.h>
+#include <stdio.h>
 
 #include "rbh-find/find_cb.h"
 
@@ -173,6 +174,8 @@ find_exec_action(struct find_context *ctx, enum action action,
                  struct rbh_fsentry *fsentry)
 {
     switch (action) {
+    case ACT_DELETE:
+        return unlink(&fsentry_path(fsentry)[1]); // remove first slash
     case ACT_EXEC:
         return exec_command(ctx, fsentry);
     case ACT_PRINT:
