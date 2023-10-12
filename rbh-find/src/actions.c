@@ -278,11 +278,37 @@ ctime_from_timestamp(const time_t *time)
     return res;
 }
 
+static const char*
+get_group_name(uint32_t gid)
+{
+    struct group *group;
+
+    group = getgrgid(gid);
+    if (!group)
+        return NULL;
+    else
+        return group->gr_name;
+}
+
+static const char *
+get_user_name(uint32_t uid)
+{
+    struct passwd *passwd;
+
+    passwd = getpwuid(uid);
+    if (!passwd)
+        return NULL;
+    else
+        return passwd->pw_name;
+}
+
 static int
 fsentry_print_directive(char *output, int max_length,
                         const struct rbh_fsentry *fsentry,
                         const char *directive)
 {
+    const char *name;
+
     assert(directive != NULL);
     assert(*directive != '\0');
 
@@ -298,6 +324,12 @@ fsentry_print_directive(char *output, int max_length,
                         );
     case 'f':
         return snprintf(output, max_length, "%s", fsentry->name);
+    case 'g':
+        name = get_group_name(fsentry->statx->stx_gid);
+        if (name)
+            return snprintf(output, max_length, "%s", name);
+
+        __attribute__((fallthrough));
     case 'G':
         return snprintf(output, max_length, "%u", fsentry->statx->stx_gid);
     case 'i':
@@ -308,6 +340,12 @@ fsentry_print_directive(char *output, int max_length,
         return snprintf(output, max_length, "%s",
                         ctime_from_timestamp(&fsentry->statx->stx_mtime.tv_sec)
                         );
+    case 'u':
+        name = get_user_name(fsentry->statx->stx_uid);
+        if (name)
+            return snprintf(output, max_length, "%s", name);
+
+        __attribute__((fallthrough));
     case 'U':
         return snprintf(output, max_length, "%u", fsentry->statx->stx_uid);
     default:
