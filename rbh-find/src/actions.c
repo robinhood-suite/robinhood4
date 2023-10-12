@@ -266,6 +266,18 @@ fsentry_path(const struct rbh_fsentry *fsentry)
 
 #define MAX_OUTPUT_SIZE (PATH_MAX + 256)
 
+static const char *
+ctime_from_timestamp(const time_t *time)
+{
+    char *res = ctime(time);
+    size_t len = strlen(res);
+
+    /* ctime adds an extra \n at then end of the buffer, remove it */
+    res[len - 1] = '\0';
+
+    return res;
+}
+
 static int
 fsentry_print_directive(char *output, int max_length,
                         const struct rbh_fsentry *fsentry,
@@ -276,10 +288,23 @@ fsentry_print_directive(char *output, int max_length,
 
     /* For now, consider the directive to be a single character */
     switch (*directive) {
+    case 'a':
+        return snprintf(output, max_length, "%s",
+                        ctime_from_timestamp(&fsentry->statx->stx_atime.tv_sec)
+                        );
+    case 'c':
+        return snprintf(output, max_length, "%s",
+                        ctime_from_timestamp(&fsentry->statx->stx_ctime.tv_sec)
+                        );
     case 'p':
         return snprintf(output, max_length, "%s", fsentry_path(fsentry));
+    case 't':
+        return snprintf(output, max_length, "%s",
+                        ctime_from_timestamp(&fsentry->statx->stx_mtime.tv_sec)
+                        );
     default:
-        error(EXIT_FAILURE, ENOTSUP, "format directive not supported");
+        error(EXIT_FAILURE, ENOTSUP, "format directive '%c' not supported",
+              *directive);
     }
 
     __builtin_unreachable();
