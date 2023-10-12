@@ -77,7 +77,9 @@ find_pre_action(struct find_context *ctx, const int index,
 }
 
 int
-find_exec_action(struct find_context *ctx, enum action action,
+find_exec_action(struct find_context *ctx,
+                 size_t backend_index,
+                 enum action action,
                  struct rbh_fsentry *fsentry)
 {
     switch (action) {
@@ -103,10 +105,12 @@ find_exec_action(struct find_context *ctx, enum action action,
         fsentry_print_ls_dils(stdout, fsentry);
         break;
     case ACT_FPRINTF:
-        fsentry_printf_format(ctx->action_file, fsentry, ctx->format_string);
+        fsentry_printf_format(ctx->action_file, fsentry, ctx->format_string,
+                              ctx->uris[backend_index]);
         break;
     case ACT_PRINTF:
-        fsentry_printf_format(stdout, fsentry, ctx->format_string);
+        fsentry_printf_format(stdout, fsentry, ctx->format_string,
+                              ctx->uris[backend_index]);
         break;
     case ACT_COUNT:
         return 1;

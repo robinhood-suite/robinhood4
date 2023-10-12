@@ -305,7 +305,8 @@ get_user_name(uint32_t uid)
 static int
 fsentry_print_directive(char *output, int max_length,
                         const struct rbh_fsentry *fsentry,
-                        const char *directive)
+                        const char *directive,
+                        const char *backend)
 {
     const char *name;
 
@@ -332,6 +333,8 @@ fsentry_print_directive(char *output, int max_length,
         __attribute__((fallthrough));
     case 'G':
         return snprintf(output, max_length, "%u", fsentry->statx->stx_gid);
+    case 'H':
+        return snprintf(output, max_length, "%s", backend);
     case 'i':
         return snprintf(output, max_length, "%lu", fsentry->statx->stx_ino);
     case 'p':
@@ -393,7 +396,7 @@ fsentry_print_regular_char(char *output, int max_length,
 
 void
 fsentry_printf_format(FILE *file, const struct rbh_fsentry *fsentry,
-                      const char *format_string)
+                      const char *format_string, const char *backend)
 {
     size_t length = strlen(format_string);
     int max_length = MAX_OUTPUT_SIZE;
@@ -407,7 +410,8 @@ fsentry_printf_format(FILE *file, const struct rbh_fsentry *fsentry,
         case '%':
             tmp_length = fsentry_print_directive(&output[output_length],
                                                  max_length, fsentry,
-                                                 format_string + i + 1);
+                                                 format_string + i + 1,
+                                                 backend);
             /* Go over the directive that was just printed */
             i++;
             break;

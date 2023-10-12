@@ -101,7 +101,7 @@ _find(struct find_context *ctx, int backend_index, enum action action,
         if (fsentry == NULL)
             break;
 
-        count += ctx->exec_action_callback(ctx, action, fsentry);
+        count += ctx->exec_action_callback(ctx, backend_index, action, fsentry);
         free(fsentry);
     } while (true);
 
