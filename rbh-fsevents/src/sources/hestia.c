@@ -46,6 +46,38 @@ str2event_fields(const char *string)
     return EF_UNKNOWN;
 }
 
+static bool
+get_next_key_name(yaml_parser_t *parser, yaml_event_t *event,
+                  enum event_fields *field)
+{
+    const char *key;
+    int save_errno;
+
+    if (!yaml_parser_parse(parser, event))
+        parser_error(parser);
+
+    if (event->type == YAML_MAPPING_END_EVENT) {
+        yaml_event_delete(event);
+        return false;
+    }
+
+    if (!yaml_parse_string(event, &key, NULL)) {
+        *field = -1;
+
+        save_errno = errno;
+        yaml_event_delete(event);
+        errno = save_errno;
+        return false;
+    }
+
+    *field = str2event_fields(key);
+    save_errno = errno;
+    yaml_event_delete(event);
+    errno = save_errno;
+
+    return true;
+}
+
 /* "READ" events in Hestia are of the form:
  *
  * ---
@@ -68,30 +100,21 @@ parse_read(yaml_parser_t *parser, struct rbh_fsevent *upsert)
     upsert->upsert.symlink = NULL;
 
     while (true) {
-        enum event_fields field;
+        enum event_fields field = 0;
         yaml_event_t event;
-        const char *key;
         int save_errno;
         bool success;
 
-        if (!yaml_parser_parse(parser, &event))
-            parser_error(parser);
+        success = get_next_key_name(parser, &event, &field);
+        if (!success) {
+            if (field == 0)
+                /* If we failed to get the next key, and it is because the
+                 * event is done, break the while loop
+                 */
+                break;
 
-        if (event.type == YAML_MAPPING_END_EVENT) {
-            yaml_event_delete(&event);
-            break;
-        }
-
-        if (!yaml_parse_string(&event, &key, NULL)) {
-            save_errno = errno;
-            yaml_event_delete(&event);
-            errno = save_errno;
             return false;
         }
-
-        field = str2event_fields(key);
-        save_errno = errno;
-        yaml_event_delete(&event);
 
         switch (field) {
         case EF_ID:
@@ -132,7 +155,6 @@ parse_read(yaml_parser_t *parser, struct rbh_fsevent *upsert)
             errno = save_errno;
             break;
         default:
-            errno = save_errno;
             return false;
         }
 
@@ -169,30 +191,21 @@ parse_update(yaml_parser_t *parser, struct rbh_fsevent *inode,
     inode->link.name = NULL;
 
     while (true) {
-        enum event_fields field;
+        enum event_fields field = 0;
         yaml_event_t event;
-        const char *key;
         int save_errno;
         bool success;
 
-        if (!yaml_parser_parse(parser, &event))
-            parser_error(parser);
+        success = get_next_key_name(parser, &event, &field);
+        if (!success) {
+            if (field == 0)
+                /* If we failed to get the next key, and it is because the
+                 * event is done, break the while loop
+                 */
+                break;
 
-        if (event.type == YAML_MAPPING_END_EVENT) {
-            yaml_event_delete(&event);
-            break;
-        }
-
-        if (!yaml_parse_string(&event, &key, NULL)) {
-            save_errno = errno;
-            yaml_event_delete(&event);
-            errno = save_errno;
             return false;
         }
-
-        field = str2event_fields(key);
-        save_errno = errno;
-        yaml_event_delete(&event);
 
         switch (field) {
         case EF_ID:
@@ -233,7 +246,6 @@ parse_update(yaml_parser_t *parser, struct rbh_fsevent *inode,
             success = parse_rbh_value_map(parser, &inode->xattrs, NULL);
             break;
         default:
-            errno = save_errno;
             return false;
         }
 
@@ -260,30 +272,21 @@ parse_remove(yaml_parser_t *parser, struct rbh_fsevent *unlink)
     const char *name;
 
     while (true) {
-        enum event_fields field;
+        enum event_fields field = 0;
         yaml_event_t event;
-        const char *key;
         int save_errno;
         bool success;
 
-        if (!yaml_parser_parse(parser, &event))
-            parser_error(parser);
+        success = get_next_key_name(parser, &event, &field);
+        if (!success) {
+            if (field == 0)
+                /* If we failed to get the next key, and it is because the
+                 * event is done, break the while loop
+                 */
+                break;
 
-        if (event.type == YAML_MAPPING_END_EVENT) {
-            yaml_event_delete(&event);
-            break;
-        }
-
-        if (!yaml_parse_string(&event, &key, NULL)) {
-            save_errno = errno;
-            yaml_event_delete(&event);
-            errno = save_errno;
             return false;
         }
-
-        field = str2event_fields(key);
-        save_errno = errno;
-        yaml_event_delete(&event);
 
         switch (field) {
         case EF_ID:
@@ -309,7 +312,6 @@ parse_remove(yaml_parser_t *parser, struct rbh_fsevent *unlink)
             success = true;
             break;
         default:
-            errno = save_errno;
             return false;
         }
 
@@ -352,30 +354,21 @@ parse_create(yaml_parser_t *parser, struct rbh_fsevent *link,
     link->xattrs.count = 0;
 
     while (true) {
-        enum event_fields field;
+        enum event_fields field = 0;
         yaml_event_t event;
-        const char *key;
         int save_errno;
         bool success;
 
-        if (!yaml_parser_parse(parser, &event))
-            parser_error(parser);
+        success = get_next_key_name(parser, &event, &field);
+        if (!success) {
+            if (field == 0)
+                /* If we failed to get the next key, and it is because the
+                 * event is done, break the while loop
+                 */
+                break;
 
-        if (event.type == YAML_MAPPING_END_EVENT) {
-            yaml_event_delete(&event);
-            break;
-        }
-
-        if (!yaml_parse_string(&event, &key, NULL)) {
-            save_errno = errno;
-            yaml_event_delete(&event);
-            errno = save_errno;
             return false;
         }
-
-        field = str2event_fields(key);
-        save_errno = errno;
-        yaml_event_delete(&event);
 
         switch (field) {
         case EF_ID:
@@ -419,7 +412,6 @@ parse_create(yaml_parser_t *parser, struct rbh_fsevent *link,
             errno = save_errno;
             break;
         default:
-            errno = save_errno;
             return false;
         }
 
