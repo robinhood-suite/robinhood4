@@ -296,6 +296,8 @@ fsentry_print_directive(char *output, int max_length,
         return snprintf(output, max_length, "%s",
                         ctime_from_timestamp(&fsentry->statx->stx_ctime.tv_sec)
                         );
+    case 'f':
+        return snprintf(output, max_length, "%s", basename(fsentry->name));
     case 'p':
         return snprintf(output, max_length, "%s", fsentry_path(fsentry));
     default:
