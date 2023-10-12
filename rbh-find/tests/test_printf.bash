@@ -210,13 +210,28 @@ test_type()
             "/slink l"
 }
 
+test_symlink()
+{
+    touch file
+    ln -s file slink
+
+    rbh-sync "rbh:posix:." "rbh:mongo:$testdb"
+
+    # %l for files other than symlink return an empty string
+    rbh-find "rbh:mongo:$testdb" -name file -printf "%l\n" |
+        difflines ""
+
+    rbh-find "rbh:mongo:$testdb" -name slink -printf "%l\n" |
+        difflines "file"
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
 declare -a tests=(test_atime test_ctime test_mtime test_filename test_inode
                   test_uid test_gid test_username test_groupname
-                  test_backend_name test_size test_type)
+                  test_backend_name test_size test_type test_symlink)
 
 tmpdir=$(mktemp --directory)
 trap -- "rm -rf '$tmpdir'" EXIT
