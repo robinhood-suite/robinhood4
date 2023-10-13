@@ -3,6 +3,7 @@
 #endif
 
 #include <inttypes.h>
+#include <error.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
@@ -18,6 +19,12 @@
 #include "internals.h"
 
 #include "hestia/hestia.h"
+
+static void __attribute__((destructor))
+exit_hestia(void)
+{
+    hestia_finish();
+}
 
 static int
 hestia_enrich(struct rbh_fsevent *enriched, const struct rbh_value_pair *attr)
@@ -210,3 +217,27 @@ const struct enrich_iter_builder HESTIA_ENRICH_ITER_BUILDER = {
     .name = "hestia",
     .ops = &HESTIA_ENRICH_ITER_BUILDER_OPS,
 };
+
+struct enrich_iter_builder *
+hestia_enrich_iter_builder(struct rbh_backend *backend)
+{
+    struct enrich_iter_builder *builder;
+
+    builder = malloc(sizeof(*builder));
+    if (builder == NULL)
+        error(EXIT_FAILURE, errno, "malloc");
+
+    *builder = HESTIA_ENRICH_ITER_BUILDER;
+
+    builder->backend = backend;
+    builder->mount_fd = -1;
+    builder->mount_path = NULL;
+
+    /* XXX: not specifying the configuration file provokes a segfault
+     * when calling hestia_finish
+     */
+    //hestia_initialize(NULL, NULL, NULL);
+    hestia_initialize("/etc/hestia/hestiad.yaml", NULL, NULL);
+
+    return builder;
+}
