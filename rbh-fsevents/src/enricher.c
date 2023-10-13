@@ -13,6 +13,17 @@
 #include "enricher.h"
 #include "enrichers/internals.h"
 
+#ifdef HAVE_HESTIA
+
+#include <hestia/hestia.h>
+
+static void __attribute__((destructor))
+exit_hestia(void)
+{
+    hestia_finish();
+}
+#endif
+
 struct enrich_iter_builder *
 enrich_iter_builder_from_backend(struct rbh_backend *backend,
                                  const char *mount_path)
@@ -35,9 +46,17 @@ enrich_iter_builder_from_backend(struct rbh_backend *backend,
 #ifdef HAVE_HESTIA
         case RBH_BI_HESTIA:
             *builder = HESTIA_ENRICH_ITER_BUILDER;
+
             builder->backend = backend;
             builder->mount_fd = 0;
             builder->mount_path = NULL;
+
+            /* XXX: not specifying the configuration file provokes a segfault
+             * when calling hestia_finish
+             */
+            //hestia_initialize(NULL, NULL, NULL);
+            hestia_initialize("/etc/hestia/hestiad.yaml", NULL, NULL);
+
             return builder;
 #endif
         default:
