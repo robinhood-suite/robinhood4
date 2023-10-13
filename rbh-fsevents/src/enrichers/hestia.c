@@ -17,16 +17,113 @@
 #include "enricher.h"
 #include "internals.h"
 
+#include "hestia/hestia.h"
+
+static int
+hestia_enrich(struct rbh_fsevent *enriched, const struct rbh_value_pair *attr)
+{
+    char *attrs_buffer = NULL;
+    json_t *attrs = NULL;
+    int total_count = 0;
+    int attrs_len = 0;
+    size_t nb_attrs;
+    int rc;
+
+    (void) attr;
+
+    /* XXX: Missing check that we want to retrieve Hestia attributes, will be
+     * added later
+     */
+    rc = hestia_read(HESTIA_OBJECT, HESTIA_QUERY_IDS, HESTIA_ID, 0, 0,
+                     enriched->id.data, enriched->id.size, HESTIA_IO_JSON,
+                     &attrs_buffer, &attrs_len, &total_count);
+    if (rc != 0) {
+        fprintf(stderr, "Failed to get object system attributes.\n");
+        return rc;
+    }
+
+    attrs = json_loads(attrs_buffer, 0, NULL);
+    if (attrs == NULL)
+        goto free_output;
+
+    nb_attrs = json_object_size(attrs);
+    if (nb_attrs == 0)
+        goto decref_attrs;
+
+    printf("Attributes of '%s': %s\n",
+           enriched->id.data, json_dumps(attrs, JSON_INDENT(4)));
+
+decref_attrs:
+    json_decref(attrs);
+
+free_output:
+    hestia_free_output(&attrs_buffer);
+
+    return 0;
+}
+
+static int
+enrich(struct enricher *enricher, const struct rbh_fsevent *original)
+{
+    struct rbh_fsevent *enriched = &enricher->fsevent;
+    struct rbh_value_pair *pairs = enricher->pairs;
+    size_t pair_count = enricher->pair_count;
+
+    *enriched = *original;
+    enriched->xattrs.count = 0;
+
+    for (size_t i = 0; i < original->xattrs.count; i++) {
+        const struct rbh_value_pair *pair = &original->xattrs.pairs[i];
+        const struct rbh_value_map *partials;
+
+        if (strcmp(pair->key, "rbh-fsevents")) {
+            if (enriched->xattrs.count + 1 >= pair_count) {
+                void *tmp;
+
+                tmp = reallocarray(pairs, pair_count << 1, sizeof(*pairs));
+                if (tmp == NULL)
+                    return -1;
+                enricher->pairs = pairs = tmp;
+                enricher->pair_count = pair_count = pair_count << 1;
+            }
+            pairs[enriched->xattrs.count++] = original->xattrs.pairs[i];
+            continue;
+        }
+
+        if (pair->value == NULL || pair->value->type != RBH_VT_MAP) {
+            errno = EINVAL;
+            return -1;
+        }
+        partials = &pair->value->map;
+
+        for (size_t i = 0; i < partials->count; i++) {
+            int rc;
+
+            rc = hestia_enrich(enriched, &partials->pairs[i]);
+            if (rc == -1)
+                return -1;
+        }
+
+    }
+    enriched->xattrs.pairs = pairs;
+
+    return 0;
+}
+
 static const void *
 hestia_enricher_iter_next(void *iterator)
 {
     struct enricher *enricher = iterator;
     const void *fsevent;
 
-    (void) enricher;
-    (void) fsevent;
+    fsevent = rbh_iter_next(enricher->fsevents);
+    if (fsevent == NULL)
+        return NULL;
 
-    return NULL;
+    if (enrich(enricher, fsevent))
+        return NULL;
+
+    return &enricher->fsevent;
 }
 
 void
