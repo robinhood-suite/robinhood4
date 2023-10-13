@@ -48,12 +48,17 @@ posix_enrich_iter_builder_destroy(void *_enrich);
  *                       enrich iter builder interfaces                       *
  *----------------------------------------------------------------------------*/
 
-extern const struct enrich_iter_builder POSIX_ENRICH_ITER_BUILDER;
+struct enrich_iter_builder *
+posix_enrich_iter_builder(struct rbh_backend *backend, const char *mount_path);
+
 #ifdef HAVE_LUSTRE
-extern const struct enrich_iter_builder LUSTRE_ENRICH_ITER_BUILDER;
+struct enrich_iter_builder *
+lustre_enrich_iter_builder(struct rbh_backend *backend, const char *mount_path);
 #endif
+
 #ifdef HAVE_HESTIA
-extern const struct enrich_iter_builder HESTIA_ENRICH_ITER_BUILDER;
+struct enrich_iter_builder *
+hestia_enrich_iter_builder(struct rbh_backend *backend);
 #endif
 
 #endif
