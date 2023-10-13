@@ -45,8 +45,11 @@ if liblustre.found()
     add_project_arguments(['-DHAVE_LUSTRE',], language: 'c')
 endif
 
-libhestia = cc.find_library('hestia', disabler: true, required: false)
+libhestia = cc.find_library('hestia', dirs: '/usr/lib/hestia',
+                            disabler: true, required: false)
 if libhestia.found()
+    libjansson = dependency('jansson', version: '>=2.5')
+    extra_dependencies += [libjansson]
     extra_sources += [
         'src/enrichers/hestia.c',
     ]
@@ -70,7 +73,9 @@ executable(
         'src/sinks/file.c',
     ] + extra_sources,
     include_directories: includes,
-    dependencies: [librobinhood, miniyaml, liblustre, libhestia],
+    dependencies: [
+        librobinhood, miniyaml, liblustre, libhestia
+    ] + extra_dependencies,
     install: true,
 )
 
