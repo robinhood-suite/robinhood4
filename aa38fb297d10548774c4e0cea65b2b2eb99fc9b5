@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "66fab017_f2af4cac",
+        "filename": "rbh-fsevents/src/sources/hestia.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-10-16T10:10:08Z",
+      "side": 1,
+      "message": "suggest: call this delete not unlink",
+      "range": {
+        "startLine": 97,
+        "startChar": 12,
+        "endLine": 97,
+        "endChar": 18
+      },
+      "revId": "aa38fb297d10548774c4e0cea65b2b2eb99fc9b5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c459d178_08dce99b",
+        "filename": "rbh-fsevents/src/sources/hestia.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-10-16T10:10:08Z",
+      "side": 1,
+      "message": "suggest: errno",
+      "range": {
+        "startLine": 99,
+        "startChar": 36,
+        "endLine": 99,
+        "endChar": 37
+      },
+      "revId": "aa38fb297d10548774c4e0cea65b2b2eb99fc9b5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
