@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "30b4e2eb_ed192dd5",
+        "filename": "rbh-fsevents/src/sources/hestia.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-10-16T10:12:34Z",
+      "side": 1,
+      "message": "suggest: as in the previous commit, what you should say is that you don\u0027t need to fill the name of the ns part of the rbh_fsevent.",
+      "range": {
+        "startLine": 100,
+        "startChar": 15,
+        "endLine": 101,
+        "endChar": 55
+      },
+      "revId": "621e77f740a97040a694a7ea70bf05489d175ff6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
