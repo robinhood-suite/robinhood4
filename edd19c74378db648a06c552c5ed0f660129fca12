@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d241f5d4_4d916080",
+        "filename": "rbh-fsevents/src/serialization.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 517,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-10-16T13:14:53Z",
+      "side": 1,
+      "message": "question: is it ok to copy a yaml_event_t?",
+      "range": {
+        "startLine": 517,
+        "startChar": 7,
+        "endLine": 517,
+        "endChar": 38
+      },
+      "revId": "edd19c74378db648a06c552c5ed0f660129fca12",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ba210606_154ebfd9",
+        "filename": "rbh-fsevents/src/serialization.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 548,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-10-16T13:14:53Z",
+      "side": 1,
+      "message": "suggest: to me the issue is here. This switch should handle the YAML_MAPPING_START_EVENT then parse_rbh_value_pair should be able to parse a scalar key then a map or a sequence or a string... In our case, we only need a map or a string. This would avoid the extra parameter.",
+      "range": {
+        "startLine": 548,
+        "startChar": 16,
+        "endLine": 548,
+        "endChar": 26
+      },
+      "revId": "edd19c74378db648a06c552c5ed0f660129fca12",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
