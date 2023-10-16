@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "018f486b_a6046ffb",
+        "filename": "rbh-fsevents/src/sources/file.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-10-16T09:32:27Z",
+      "side": 1,
+      "message": "question: why remove the static? Do you need this outside this file?",
+      "range": {
+        "startLine": 79,
+        "startChar": 0,
+        "endLine": 79,
+        "endChar": 5
+      },
+      "revId": "dc2e313b56c227e7f32b0fb7ae59f5289ec1ad88",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
