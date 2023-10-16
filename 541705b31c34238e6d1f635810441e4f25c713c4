@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "12327fb3_e310440d",
+        "filename": "rbh-fsevents/rbh-fsevents.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 239,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-10-16T14:06:23Z",
+      "side": 1,
+      "message": "question: but if the backend does not build, what is this patch supposed to do?\n\nThis seems a bit artificial. This does not fix the issue. So I think it would be better to not put some extra code in this case. Lets just accept the fact that for now, hestia does not work at all.",
+      "range": {
+        "startLine": 233,
+        "startChar": 4,
+        "endLine": 239,
+        "endChar": 12
+      },
+      "revId": "541705b31c34238e6d1f635810441e4f25c713c4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3591cc23_66c4fe8a",
+        "filename": "rbh-fsevents/src/enricher.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-10-16T14:06:23Z",
+      "side": 1,
+      "message": "major: 0 is a valid fd. Use -1 instead.",
+      "range": {
+        "startLine": 39,
+        "startChar": 32,
+        "endLine": 39,
+        "endChar": 34
+      },
+      "revId": "541705b31c34238e6d1f635810441e4f25c713c4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7c3bee05_1bdc851e",
+        "filename": "rbh-fsevents/src/enrichers/hestia.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-10-16T14:06:23Z",
+      "side": 1,
+      "message": "or simply hestia_build_enrich_iter",
+      "range": {
+        "startLine": 47,
+        "startChar": 18,
+        "endLine": 47,
+        "endChar": 55
+      },
+      "revId": "541705b31c34238e6d1f635810441e4f25c713c4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e5264d88_5698dd3c",
+        "filename": "rbh-fsevents/src/enrichers/hestia.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-10-16T14:06:23Z",
+      "side": 1,
+      "message": "or simply hestia_iter_builder_destroy",
+      "range": {
+        "startLine": 48,
+        "startChar": 15,
+        "endLine": 48,
+        "endChar": 50
+      },
+      "revId": "541705b31c34238e6d1f635810441e4f25c713c4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
