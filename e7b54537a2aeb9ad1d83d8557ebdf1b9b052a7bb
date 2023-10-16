@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "805b4d61_c45c0780",
+        "filename": "rbh-fsevents/src/sources/hestia.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-10-16T13:46:03Z",
+      "side": 1,
+      "message": "same comment as in the previous patches",
+      "range": {
+        "startLine": 99,
+        "startChar": 15,
+        "endLine": 100,
+        "endChar": 55
+      },
+      "revId": "e7b54537a2aeb9ad1d83d8557ebdf1b9b052a7bb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "af303d17_9d0e49df",
+        "filename": "rbh-fsevents/src/sources/hestia.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-10-16T13:46:03Z",
+      "side": 1,
+      "message": "suggest: errno",
+      "range": {
+        "startLine": 105,
+        "startChar": 36,
+        "endLine": 105,
+        "endChar": 37
+      },
+      "revId": "e7b54537a2aeb9ad1d83d8557ebdf1b9b052a7bb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
