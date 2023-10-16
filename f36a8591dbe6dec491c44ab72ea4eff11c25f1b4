@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b7bdd217_c8397c40",
+        "filename": "rbh-fsevents/src/enrichers/hestia.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-10-16T14:07:57Z",
+      "side": 1,
+      "message": "major: I don\u0027t like putting commented code. If this is not used right now, lets just not put it here.",
+      "range": {
+        "startLine": 29,
+        "startChar": 3,
+        "endLine": 37,
+        "endChar": 37
+      },
+      "revId": "f36a8591dbe6dec491c44ab72ea4eff11c25f1b4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
