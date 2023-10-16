@@ -1,0 +1,136 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "85ca638b_51fead13",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-10-16T13:53:50Z",
+      "side": 1,
+      "message": "Not so fond of the way the new function indicates failure.",
+      "revId": "595e944049682b3ec493698593d5463aab4165f1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "31154603_49077c78",
+        "filename": "rbh-fsevents/src/sources/hestia.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-10-16T13:53:50Z",
+      "side": 1,
+      "message": "minor: this is misleading. This function does not return a name but a yaml_event. So I would prefer: get_next_key or get_next_key_event.",
+      "range": {
+        "startLine": 50,
+        "startChar": 12,
+        "endLine": 50,
+        "endChar": 17
+      },
+      "revId": "595e944049682b3ec493698593d5463aab4165f1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7fb0ca41_dad5f28e",
+        "filename": "rbh-fsevents/src/sources/hestia.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-10-16T13:53:50Z",
+      "side": 1,
+      "message": "return KRP_END",
+      "range": {
+        "startLine": 61,
+        "startChar": 15,
+        "endLine": 61,
+        "endChar": 20
+      },
+      "revId": "595e944049682b3ec493698593d5463aab4165f1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5beaa625_932ed6f2",
+        "filename": "rbh-fsevents/src/sources/hestia.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-10-16T13:53:50Z",
+      "side": 1,
+      "message": "return KRP_ERROR",
+      "range": {
+        "startLine": 70,
+        "startChar": 15,
+        "endLine": 70,
+        "endChar": 20
+      },
+      "revId": "595e944049682b3ec493698593d5463aab4165f1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1b365b4f_e7d33303",
+        "filename": "rbh-fsevents/src/sources/hestia.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-10-16T13:53:50Z",
+      "side": 1,
+      "message": "return KRP_OK",
+      "range": {
+        "startLine": 78,
+        "startChar": 11,
+        "endLine": 78,
+        "endChar": 15
+      },
+      "revId": "595e944049682b3ec493698593d5463aab4165f1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2396d3bf_f8a5054b",
+        "filename": "rbh-fsevents/src/sources/hestia.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-10-16T13:53:50Z",
+      "side": 1,
+      "message": "major: if you have several outcomes to this function, you should return an enum:\n\n```\nenum key_parse_res {\n    KPR_OK,\n    KPR_END,\n    KPR_ERROR,\n};\n```\n\nInstead of using the boolean and field \u003d\u003d 0. This would also avoid the  extra comment on each call.",
+      "range": {
+        "startLine": 106,
+        "startChar": 8,
+        "endLine": 108,
+        "endChar": 15
+      },
+      "revId": "595e944049682b3ec493698593d5463aab4165f1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
