@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "702fee01_9dcd0cf8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-10-16T14:25:53Z",
+      "side": 1,
+      "message": "typo: it will be",
+      "range": {
+        "startLine": 11,
+        "startChar": 21,
+        "endLine": 11,
+        "endChar": 27
+      },
+      "revId": "92e2a5590d31f3f2c93921b54711dcd437310d9e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
