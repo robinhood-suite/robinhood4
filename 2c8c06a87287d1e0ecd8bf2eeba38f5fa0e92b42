@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cebcca76_2c6a1ef5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-10-16T09:01:00Z",
+      "side": 1,
+      "message": "typo: an",
+      "range": {
+        "startLine": 10,
+        "startChar": 67,
+        "endLine": 10,
+        "endChar": 68
+      },
+      "revId": "2c8c06a87287d1e0ecd8bf2eeba38f5fa0e92b42",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8fbade5e_65d10a76",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-10-16T09:01:00Z",
+      "side": 1,
+      "message": "comment: it would be nice to avoid having unrelated issues fixed in the same patch.",
+      "range": {
+        "startLine": 19,
+        "startChar": 0,
+        "endLine": 22,
+        "endChar": 5
+      },
+      "revId": "2c8c06a87287d1e0ecd8bf2eeba38f5fa0e92b42",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
