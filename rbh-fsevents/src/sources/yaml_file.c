@@ -42,6 +42,7 @@ yaml_fsevent_init(struct yaml_fsevent_iterator *fsevents, FILE *file,
     fsevents->additional_xattr.pairs = NULL;
     fsevents->additional_xattr.count = 0;
     fsevents->additional_statx.stx_mask = 0;
+    fsevents->enrich_required = false;
 }
 
 const void *

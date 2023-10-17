@@ -27,6 +27,7 @@ struct yaml_fsevent_iterator {
 
     struct rbh_value_map additional_xattr;
     struct rbh_statx additional_statx;
+    bool enrich_required;
 };
 
 void

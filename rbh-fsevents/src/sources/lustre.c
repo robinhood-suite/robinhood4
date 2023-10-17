@@ -17,23 +17,7 @@
 #include <robinhood/statx.h>
 
 #include "source.h"
-
-static __thread struct rbh_sstack *_values;
-
-static void
-_values_flush(struct rbh_sstack *values)
-{
-    while (true) {
-        size_t readable;
-
-        rbh_sstack_peek(values, &readable);
-        if (readable == 0)
-            break;
-
-        rbh_sstack_pop(values, readable);
-    }
-    rbh_sstack_shrink(values);
-}
+#include "utils.h"
 
 struct lustre_changelog_iterator {
     struct rbh_iterator iterator;
@@ -87,13 +71,13 @@ fill_ns_xattrs_fid(void *arg)
 
     lu_fid_value.type = RBH_VT_BINARY;
     lu_fid_value.binary.size = sizeof(record->cr_tfid);
-    lu_fid_value.binary.data = rbh_sstack_push(_values,
+    lu_fid_value.binary.data = rbh_sstack_push(global_values,
                                                (const char *)&record->cr_tfid,
                                                sizeof(record->cr_tfid));
     if (lu_fid_value.binary.data == NULL)
         return NULL;
 
-    value = rbh_sstack_push(_values, &lu_fid_value, sizeof(lu_fid_value));
+    value = rbh_sstack_push(global_values, &lu_fid_value, sizeof(lu_fid_value));
     if (value == NULL)
         return NULL;
 
@@ -110,7 +94,7 @@ build_statx_mask(void *arg)
     };
     struct rbh_value *mask;
 
-    mask = rbh_sstack_push(_values, NULL, sizeof(*mask));
+    mask = rbh_sstack_push(global_values, NULL, sizeof(*mask));
     if (mask == NULL)
         return NULL;
     *mask = MASK;
@@ -125,15 +109,15 @@ build_xattrs(void *arg)
     char *xattr_name = (char *)arg;
     struct rbh_value *xattr_value;
 
-    xattr_value = rbh_sstack_push(_values, NULL, sizeof(*xattr_value));
+    xattr_value = rbh_sstack_push(global_values, NULL, sizeof(*xattr_value));
     if (xattr_value == NULL)
         return NULL;
     xattr_value->type = RBH_VT_STRING;
-    xattr_value->string = rbh_sstack_push(_values, xattr_name,
+    xattr_value->string = rbh_sstack_push(global_values, xattr_name,
                                           strlen(xattr_name) + 1);
     if (xattr_value->string == NULL)
         return NULL;
-    xattr_sequence = rbh_sstack_push(_values, NULL, sizeof(*xattr_sequence));
+    xattr_sequence = rbh_sstack_push(global_values, NULL, sizeof(*xattr_sequence));
     if (xattr_sequence == NULL)
         return NULL;
     xattr_sequence->type = RBH_VT_SEQUENCE;
@@ -153,32 +137,7 @@ build_symlink_string(void *arg)
 
     (void) arg;
 
-    return rbh_sstack_push(_values, &SYMLINK, sizeof(SYMLINK));
-}
-
-static struct rbh_value_pair *
-build_pair(const char *key, struct rbh_value *(*part_builder)(void *),
-           void *part_builder_arg)
-{
-    const struct rbh_value_pair PAIR[] = {
-        {
-            .key = key,
-            .value = part_builder != NULL ?
-                part_builder(part_builder_arg) :
-                NULL,
-        },
-    };
-    struct rbh_value_pair *pair;
-
-    if (PAIR[0].value == NULL && part_builder != NULL)
-        return NULL;
-
-    pair = rbh_sstack_push(_values, NULL, sizeof(*pair));
-    if (pair == NULL)
-        return NULL;
-    memcpy(pair, PAIR, sizeof(*pair));
-
-    return pair;
+    return rbh_sstack_push(global_values, &SYMLINK, sizeof(SYMLINK));
 }
 
 static struct rbh_value *
@@ -198,7 +157,7 @@ _fill_enrich(const char *key, struct rbh_value *(*builder)(void *),
     if (MAP.pairs == NULL)
         return NULL;
 
-    enrich = rbh_sstack_push(_values, NULL, sizeof(*enrich));
+    enrich = rbh_sstack_push(global_values, NULL, sizeof(*enrich));
     if (enrich == NULL)
         return NULL;
     memcpy(enrich, &ENRICH, sizeof(*enrich));
@@ -224,23 +183,6 @@ fill_statx(void *arg)
     return _fill_enrich("statx", build_statx_mask, arg);
 }
 
-static struct rbh_value *
-build_empty_map(void *arg)
-{
-    const char *key = (const char *)arg;
-    const struct rbh_value_map MAP = {
-        .count = 1,
-        .pairs = build_pair(key, NULL, NULL),
-    };
-    const struct rbh_value ENRICH = {
-        .type = RBH_VT_MAP,
-        .map = MAP,
-    };
-    struct rbh_value *enrich;
-
-    return rbh_sstack_push(_values, &ENRICH, sizeof(*enrich));
-}
-
 /* BSON results:
  * { "xattrs" : { "rbh-fsevents" : { "symlink" : "symlink" } } }
  */
@@ -250,24 +192,12 @@ build_symlink_enrich_map(void *arg)
     return _fill_enrich("symlink", build_symlink_string, arg);
 }
 
-static struct rbh_value_map
-build_enrich_map(struct rbh_value *(*part_builder)(void *),
-                 void *part_builder_arg)
-{
-    const struct rbh_value_map ENRICH = {
-        .count = 1,
-        .pairs = build_pair("rbh-fsevents", part_builder, part_builder_arg),
-    };
-
-    return ENRICH;
-}
-
 /* The variadic arguments must be given by pairs -a string key and a rbh value-,
  * and finished by a NULL pointer.
  */
 static int
 build_enrich_xattr_fsevent(struct rbh_value_map *xattrs_map,
-    char *key, struct rbh_value *value, ...)
+                           char *key, struct rbh_value *value, ...)
 {
     struct rbh_value_pair *pairs;
     va_list args;
@@ -285,7 +215,7 @@ build_enrich_xattr_fsevent(struct rbh_value_map *xattrs_map,
     xattrs_map->count = 1 + count / 2;
 
     pairs = rbh_sstack_push(
-        _values, NULL, xattrs_map->count * sizeof(*xattrs_map->pairs));
+        global_values, NULL, xattrs_map->count * sizeof(*xattrs_map->pairs));
     if (pairs == NULL)
         return -1;
 
@@ -319,7 +249,7 @@ build_id(const struct lu_fid *fid)
         return NULL;
 
     data_size = tmp_id->size;
-    id = rbh_sstack_push(_values, NULL, sizeof(*id) + data_size);
+    id = rbh_sstack_push(global_values, NULL, sizeof(*id) + data_size);
     if (id == NULL)
         return NULL;
 
@@ -336,7 +266,7 @@ build_id(const struct lu_fid *fid)
 static int
 create_statx_uid_gid(struct changelog_rec *record, struct rbh_statx **rec_statx)
 {
-    *rec_statx = rbh_sstack_push(_values, NULL, sizeof(**rec_statx));
+    *rec_statx = rbh_sstack_push(global_values, NULL, sizeof(**rec_statx));
     if (*rec_statx == NULL)
         return -1;
 
@@ -376,7 +306,7 @@ new_link_inode_event(struct changelog_rec *record, struct rbh_fsevent *fsevent)
     if (fsevent->link.parent_id == NULL)
         return -1;
 
-    data = rbh_sstack_push(_values, NULL, record->cr_namelen + 1);
+    data = rbh_sstack_push(global_values, NULL, record->cr_namelen + 1);
     if (data == NULL)
         return -1;
     memcpy(data, changelog_rec_name(record), record->cr_namelen);
@@ -606,7 +536,7 @@ unlink_inode_event(struct lu_fid *parent_id, char *name, size_t namelen,
     if (fsevent->link.parent_id == NULL)
         return -1;
 
-    data = rbh_sstack_push(_values, NULL, namelen + 1);
+    data = rbh_sstack_push(global_values, NULL, namelen + 1);
     if (data == NULL)
         return -1;
     memcpy(data, name, namelen);
@@ -981,7 +911,7 @@ lustre_changelog_iter_next(void *iterator)
     int save_errno;
     int rc;
 
-    _values_flush(_values);
+    flush_global_values();
 
 retry:
     if (records->prev_record == NULL) {
@@ -1000,7 +930,7 @@ retry:
         records->prev_record = NULL;
     }
 
-    fsevent = rbh_sstack_push(_values, NULL, sizeof(*fsevent));
+    fsevent = rbh_sstack_push(global_values, NULL, sizeof(*fsevent));
     if (fsevent == NULL)
         goto end_event;
     memset(fsevent, 0, sizeof(*fsevent));
@@ -1113,7 +1043,6 @@ lustre_changelog_iter_destroy(void *iterator)
 {
     struct lustre_changelog_iterator *records = iterator;
 
-    rbh_sstack_destroy(_values);
     llapi_changelog_fini(&records->reader);
 }
 
@@ -1196,7 +1125,7 @@ source_from_lustre_changelog(const char *mdtname)
 
     lustre_changelog_init(&source->events, mdtname);
 
-    _values = rbh_sstack_new(sizeof(struct rbh_value_pair) * (1 << 7));
+    initialize_global_values(sizeof(struct rbh_value_pair) * (1 << 7));
     source->events.prev_record = NULL;
     source->source = LUSTRE_SOURCE;
     return &source->source;
