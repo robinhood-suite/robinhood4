@@ -18,7 +18,7 @@
 #include "enricher.h"
 #include "internals.h"
 
-#include "hestia/hestia.h"
+#include "hestia/hestia_iosea.h"
 
 static __thread bool hestia_init = false;
 
@@ -29,42 +29,53 @@ exit_hestia(void)
         hestia_finish();
 }
 
+static void
+fill_attributes(HestiaObject *object, struct rbh_statx *statx)
+{
+    statx->stx_mask = RBH_STATX_SIZE | RBH_STATX_ATIME | RBH_STATX_BTIME |
+                      RBH_STATX_CTIME;
+
+    statx->stx_size = object->m_size;
+    statx->stx_atime.tv_sec = object->m_last_accessed_time;
+    statx->stx_atime.tv_nsec = 0;
+    statx->stx_btime.tv_sec = object->m_creation_time;
+    statx->stx_btime.tv_nsec = 0;
+    statx->stx_ctime.tv_sec = object->m_last_modified_time;
+    statx->stx_ctime.tv_nsec = 0;
+}
+
 static int
 hestia_enrich(struct rbh_fsevent *enriched, const struct rbh_value_pair *attr)
 {
-    char *attrs_buffer = NULL;
-    json_t *attrs = NULL;
+    struct rbh_statx *statx;
     int total_count = 0;
-    int attrs_len = 0;
-    size_t nb_attrs;
+    HestiaObject object;
+    HestiaId object_id;
     int rc;
 
     (void) attr;
 
+    statx = malloc(sizeof(*statx));
+    if (statx == NULL)
+        return -1;
+
+    statx->stx_mask = 0;
+
     /* XXX: Missing check that we want to retrieve Hestia attributes, will be
      * added later
      */
-    rc = hestia_read(HESTIA_OBJECT, HESTIA_QUERY_IDS, HESTIA_ID, 0, 0,
-                     enriched->id.data, enriched->id.size, HESTIA_IO_JSON,
-                     &attrs_buffer, &attrs_len, &total_count);
+    rc = hestia_object_get_attrs(&object_id, &object);
     if (rc != 0) {
-        fprintf(stderr, "Failed to get object system attributes.\n");
+        fprintf(stderr, "Failed to get Hestia attributes ('%d').\n", rc);
         return rc;
     }
 
-    attrs = json_loads(attrs_buffer, 0, NULL);
-    if (attrs == NULL)
-        goto free_output;
+    fill_attributes(&object, statx);
 
-    nb_attrs = json_object_size(attrs);
-    if (nb_attrs == 0)
-        goto decref_attrs;
-
-decref_attrs:
-    json_decref(attrs);
+    enriched->upsert.statx = statx;
 
 free_output:
-    hestia_free_output(&attrs_buffer);
+    hestia_init_object(&object);
 
     return 0;
 }
