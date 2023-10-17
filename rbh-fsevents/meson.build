@@ -46,7 +46,7 @@ if liblustre.found()
 endif
 
 libhestia = cc.find_library('hestia', dirs: '/usr/lib/hestia',
-                            disabler: true, required: false)
+                            disabler: false, required: false)
 if libhestia.found()
     libjansson = dependency('jansson', version: '>=2.5')
     extra_dependencies += [libjansson]
@@ -70,6 +70,7 @@ executable(
         'src/sources/yaml_file.c',
         'src/sources/file.c',
         'src/sources/hestia.c',
+        'src/sources/utils.c',
         'src/sinks/backend.c',
         'src/sinks/file.c',
     ] + extra_sources,

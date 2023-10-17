@@ -12,10 +12,10 @@
 #include <miniyaml.h>
 #include <robinhood/fsevent.h>
 
-#include "include/serialization.h"
+#include "serialization.h"
 #include "source.h"
-
 #include "yaml_file.h"
+#include "utils.h"
 
 enum event_fields {
     EF_UNKNOWN,
@@ -423,9 +423,12 @@ str2fsevent_type(const char *string)
 }
 
 bool
-parse_hestia_event(yaml_parser_t *parser, struct rbh_fsevent *fsevent,
-                   struct rbh_value_map *map, struct rbh_statx *statx)
+parse_hestia_event(struct yaml_fsevent_iterator *fsevents)
 {
+    struct rbh_value_map *map = &fsevents->additional_xattr;
+    struct rbh_statx *statx = &fsevents->additional_statx;
+    struct rbh_fsevent *fsevent = &fsevents->fsevent;
+    yaml_parser_t *parser = &fsevents->parser;
     enum fsevent_type type;
     yaml_event_t event;
     const char *tag;
@@ -457,12 +460,14 @@ parse_hestia_event(yaml_parser_t *parser, struct rbh_fsevent *fsevent,
         return false;
     case FT_CREATE:
         fsevent->type = RBH_FET_LINK;
+        fsevents->enrich_required = true;
         return parse_create(parser, fsevent, map, statx);
     case FT_REMOVE:
         fsevent->type = RBH_FET_DELETE;
         return parse_remove(parser, fsevent);
     case FT_UPDATE:
         fsevent->type = RBH_FET_XATTR;
+        fsevents->enrich_required = true;
         return parse_update(parser, fsevent, statx);
     case FT_READ:
         fsevent->type = RBH_FET_UPSERT;
@@ -503,6 +508,20 @@ hestia_fsevent_iter_next(void *iterator)
         return new_upsert_event;
     }
 
+    if (fsevents->enrich_required) {
+        struct rbh_value_map map = build_enrich_map(build_empty_map, "hestia");
+        struct rbh_fsevent *new_upsert_event;
+
+        if (map.pairs == NULL)
+            error(EXIT_FAILURE, 0, "build_enrich_map");
+
+        new_upsert_event = rbh_fsevent_upsert_new(&fsevents->fsevent.id,
+                                                  &map, NULL, NULL);
+
+        fsevents->enrich_required = false;
+        return new_upsert_event;
+    }
+
     if (!yaml_parser_parse(&fsevents->parser, &event))
         parser_error(&fsevents->parser);
 
@@ -514,9 +533,7 @@ hestia_fsevent_iter_next(void *iterator)
         /* Remove any trace of the previous parsed fsevent */
         memset(&fsevents->fsevent, 0, sizeof(fsevents->fsevent));
 
-        if (!parse_hestia_event(&fsevents->parser, &fsevents->fsevent,
-                                &fsevents->additional_xattr,
-                                &fsevents->additional_statx))
+        if (!parse_hestia_event(fsevents))
             parser_error(&fsevents->parser);
 
         if (!yaml_parser_parse(&fsevents->parser, &event))
@@ -567,5 +584,7 @@ static const struct source FILE_SOURCE = {
 struct source *
 source_from_hestia_file(FILE *file)
 {
+    initialize_global_values(sizeof(struct rbh_value_pair) * (1 << 7));
+
     return yaml_fsevent_init(file, HESTIA_FSEVENT_ITERATOR, &FILE_SOURCE);
 }
