@@ -20,16 +20,98 @@
 
 #include "hestia/hestia.h"
 
+static __thread bool hestia_is_init = false;
+
 static void __attribute__((destructor))
 exit_hestia(void)
 {
-    hestia_finish();
+    if (hestia_is_init)
+        hestia_finish();
+}
+
+int
+str2int64_t(const char *input, int64_t *result)
+{
+    char *end;
+
+    errno = 0;
+    *result = strtoll(input, &end, 0);
+    if (errno) {
+        return -1;
+    } else if ((!*result && input == end) || *end != '\0') {
+        errno = EINVAL;
+        return -1;
+    }
+
+    return 0;
+}
+
+static void
+fill_last_modified_time(json_t *value, struct rbh_statx *statx)
+{
+    const char *str_val = json_string_value(value);
+    int64_t val;
+
+    if (str2int64_t(str_val, &val))
+        error(EXIT_FAILURE, errno, "str2uint64_t");
+
+    statx->stx_mtime.tv_sec = val;
+    statx->stx_mtime.tv_nsec = 0;
+    statx->stx_mask |= RBH_STATX_MTIME;
+}
+
+static void
+fill_creation_time(json_t *value, struct rbh_statx *statx)
+{
+    const char *str_val = json_string_value(value);
+    int64_t val;
+
+    if (str2int64_t(str_val, &val))
+        error(EXIT_FAILURE, errno, "str2uint64_t");
+
+    statx->stx_btime.tv_sec = val;
+    statx->stx_btime.tv_nsec = 0;
+    statx->stx_mask |= RBH_STATX_BTIME;
+}
+
+static void
+fill_size(json_t *value, struct rbh_statx *statx)
+{
+    const char *str_val = json_string_value(value);
+    int64_t val;
+
+    if (str2int64_t(str_val, &val))
+        error(EXIT_FAILURE, errno, "str2uint64_t");
+
+    statx->stx_size = (uint64_t) val;
+    statx->stx_mask |= RBH_STATX_SIZE;
+}
+
+static void
+fill_attributes(json_t *attrs, struct rbh_statx *statx)
+{
+    const char *key;
+    json_t *value;
+
+    json_object_foreach(attrs, key, value) {
+        if (key[0] == 'l' && !strcmp(&key[1], "ast_modified_time")) {
+            fill_last_modified_time(value, statx);
+            continue;
+        } else if (key[0] == 'c' && !strcmp(&key[1], "reation_time")) {
+            fill_creation_time(value, statx);
+            continue;
+        } else if (key[0] == 's' && !strcmp(&key[1], "ize")) {
+            fill_size(value, statx);
+            continue;
+        }
+    }
 }
 
 static int
 hestia_enrich(struct rbh_fsevent *enriched, const struct rbh_value_pair *attr)
 {
     char *attrs_buffer = NULL;
+    struct rbh_statx *statx;
     json_t *attrs = NULL;
     int total_count = 0;
     int attrs_len = 0;
@@ -37,6 +119,12 @@ hestia_enrich(struct rbh_fsevent *enriched, const struct rbh_value_pair *attr)
     int rc;
 
     (void) attr;
+
+    statx = malloc(sizeof(*statx));
+    if (statx == NULL)
+        return -1;
+
+    statx->stx_mask = 0;
 
     /* XXX: Missing check that we want to retrieve Hestia attributes, will be
      * added later
@@ -59,6 +147,10 @@ hestia_enrich(struct rbh_fsevent *enriched, const struct rbh_value_pair *attr)
 
     printf("Attributes of '%s': %s\n",
            enriched->id.data, json_dumps(attrs, JSON_INDENT(4)));
+
+    fill_attributes(attrs, statx);
+
+    enriched->upsert.statx = statx;
 
 decref_attrs:
     json_decref(attrs);
@@ -238,6 +330,7 @@ hestia_enrich_iter_builder(struct rbh_backend *backend)
      */
     //hestia_initialize(NULL, NULL, NULL);
     hestia_initialize("/etc/hestia/hestiad.yaml", NULL, NULL);
+    hestia_is_init = true;
 
     return builder;
 }
