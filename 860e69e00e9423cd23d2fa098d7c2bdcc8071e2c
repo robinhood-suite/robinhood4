@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "700438ef_0f3af85a",
+        "filename": "librobinhood/src/backends/posix/posix.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 586,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2023-10-17T11:23:38Z",
+      "side": 1,
+      "message": "comment: one could find more logical to use (ftsent-\u003efts_parent-\u003efts_level \u003d\u003d -1)",
+      "range": {
+        "startLine": 586,
+        "startChar": 8,
+        "endLine": 586,
+        "endChar": 39
+      },
+      "revId": "860e69e00e9423cd23d2fa098d7c2bdcc8071e2c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
