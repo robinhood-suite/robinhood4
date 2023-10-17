@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5e390dfb_46054880",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2023-10-17T12:10:12Z",
+      "side": 1,
+      "message": "Same observation as in the previous patch, for letting file_source be outside for `yaml_file.c`",
+      "revId": "5657be457b39eff0f1bdc93c39aaee29069dbe78",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d9fbadaa_ee091152",
