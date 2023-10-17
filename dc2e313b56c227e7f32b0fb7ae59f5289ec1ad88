@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7a43ea9e_2dc0cf90",
+        "filename": "rbh-fsevents/include/yaml_file.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2023-10-17T11:59:20Z",
+      "side": 1,
+      "message": "question: why is this here? is it used outside the source code of `yaml_file.c`? it seems it is only used for the initialization of the structure. maybe the `malloc()` must be in `yaml_fsevent_init()`?",
+      "range": {
+        "startLine": 32,
+        "startChar": 0,
+        "endLine": 37,
+        "endChar": 2
+      },
+      "revId": "dc2e313b56c227e7f32b0fb7ae59f5289ec1ad88",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "018f486b_a6046ffb",
         "filename": "rbh-fsevents/src/sources/file.c",
         "patchSetId": 2
