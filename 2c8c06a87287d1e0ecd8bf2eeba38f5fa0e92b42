@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "16e1c47d_1ee097ae",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2023-10-17T11:49:54Z",
+      "side": 1,
+      "message": "Actually, we write \"a URI\": the \u0027u\u0027 sound is considered as a consonant one if it pronounces like \u0027y\u0027, which is the case here.\n\nSo the commit title should be changed.",
+      "parentUuid": "cebcca76_2c6a1ef5",
+      "range": {
+        "startLine": 10,
+        "startChar": 67,
+        "endLine": 10,
+        "endChar": 68
+      },
+      "revId": "2c8c06a87287d1e0ecd8bf2eeba38f5fa0e92b42",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8fbade5e_65d10a76",
         "filename": "/COMMIT_MSG",
         "patchSetId": 2
@@ -37,6 +61,30 @@
       "writtenOn": "2023-10-16T09:01:00Z",
       "side": 1,
       "message": "comment: it would be nice to avoid having unrelated issues fixed in the same patch.",
+      "range": {
+        "startLine": 19,
+        "startChar": 0,
+        "endLine": 22,
+        "endChar": 5
+      },
+      "revId": "2c8c06a87287d1e0ecd8bf2eeba38f5fa0e92b42",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7e3d2954_c0946e85",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2023-10-17T11:49:54Z",
+      "side": 1,
+      "message": "I agree",
+      "parentUuid": "8fbade5e_65d10a76",
       "range": {
         "startLine": 19,
         "startChar": 0,
