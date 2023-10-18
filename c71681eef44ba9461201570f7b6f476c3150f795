@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "362a1c08_632830a0",
+        "filename": "rbh-fsevents/src/sources/hestia.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-10-18T08:12:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d4478a82_4bcf459d",
+      "range": {
+        "startLine": 62,
+        "startChar": 35,
+        "endLine": 62,
+        "endChar": 38
+      },
+      "revId": "c71681eef44ba9461201570f7b6f476c3150f795",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "eeef4659_5656353f",
@@ -47,6 +71,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8500b40b_07b357f9",
+        "filename": "rbh-fsevents/src/sources/hestia.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-10-18T08:12:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eeef4659_5656353f",
+      "range": {
+        "startLine": 70,
+        "startChar": 28,
+        "endLine": 70,
+        "endChar": 29
+      },
+      "revId": "c71681eef44ba9461201570f7b6f476c3150f795",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "32e81659_3b4f1ad0",
@@ -60,6 +108,30 @@
       "writtenOn": "2023-10-16T10:02:37Z",
       "side": 1,
       "message": "suggest: errno",
+      "range": {
+        "startLine": 114,
+        "startChar": 36,
+        "endLine": 114,
+        "endChar": 37
+      },
+      "revId": "c71681eef44ba9461201570f7b6f476c3150f795",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c250aea2_a455afe6",
+        "filename": "rbh-fsevents/src/sources/hestia.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-10-18T08:12:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "32e81659_3b4f1ad0",
       "range": {
         "startLine": 114,
         "startChar": 36,
