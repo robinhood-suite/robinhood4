@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "38ee7957_5d003945",
+        "filename": "rbh-fsevents/rbh-fsevents.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 239,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-10-18T10:47:01Z",
+      "side": 1,
+      "message": "If the backend doesn\u0027t build, this patch ensures the Hestia enricher still works properly. Per our conversation, we will continue with this for the time being, and switch to the way the Lustre enricher works when the backend is usable again.",
+      "parentUuid": "12327fb3_e310440d",
+      "range": {
+        "startLine": 233,
+        "startChar": 4,
+        "endLine": 239,
+        "endChar": 12
+      },
+      "revId": "541705b31c34238e6d1f635810441e4f25c713c4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3591cc23_66c4fe8a",
@@ -37,6 +61,30 @@
       "writtenOn": "2023-10-16T14:06:23Z",
       "side": 1,
       "message": "major: 0 is a valid fd. Use -1 instead.",
+      "range": {
+        "startLine": 39,
+        "startChar": 32,
+        "endLine": 39,
+        "endChar": 34
+      },
+      "revId": "541705b31c34238e6d1f635810441e4f25c713c4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7d995230_95187790",
+        "filename": "rbh-fsevents/src/enricher.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-10-18T10:47:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3591cc23_66c4fe8a",
       "range": {
         "startLine": 39,
         "startChar": 32,
@@ -70,6 +118,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4da8107b_37843c58",
+        "filename": "rbh-fsevents/src/enrichers/hestia.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-10-18T10:47:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7c3bee05_1bdc851e",
+      "range": {
+        "startLine": 47,
+        "startChar": 18,
+        "endLine": 47,
+        "endChar": 55
+      },
+      "revId": "541705b31c34238e6d1f635810441e4f25c713c4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e5264d88_5698dd3c",
@@ -83,6 +155,30 @@
       "writtenOn": "2023-10-16T14:06:23Z",
       "side": 1,
       "message": "or simply hestia_iter_builder_destroy",
+      "range": {
+        "startLine": 48,
+        "startChar": 15,
+        "endLine": 48,
+        "endChar": 50
+      },
+      "revId": "541705b31c34238e6d1f635810441e4f25c713c4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6da912a3_9d083122",
+        "filename": "rbh-fsevents/src/enrichers/hestia.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-10-18T10:47:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e5264d88_5698dd3c",
       "range": {
         "startLine": 48,
         "startChar": 15,
