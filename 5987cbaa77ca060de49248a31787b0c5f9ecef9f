@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ddc7d968_5ddf1163",
+        "filename": "rbh-fsevents/meson.build",
+        "patchSetId": 1
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2023-10-18T08:27:18Z",
+      "side": 1,
+      "message": "style: what is this empty line?",
+      "revId": "5987cbaa77ca060de49248a31787b0c5f9ecef9f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
