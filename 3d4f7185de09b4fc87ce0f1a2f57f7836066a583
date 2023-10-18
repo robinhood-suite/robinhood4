@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d5c742f5_a88b1bcb",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-10-18T10:48:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "af2740e1_396d7042",
+      "range": {
+        "startLine": 12,
+        "startChar": 10,
+        "endLine": 12,
+        "endChar": 14
+      },
+      "revId": "3d4f7185de09b4fc87ce0f1a2f57f7836066a583",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "091dd2c0_878ee254",
@@ -47,6 +71,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "21d74c87_01ff782f",
+        "filename": "rbh-fsevents/include/utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-10-18T10:48:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "091dd2c0_878ee254",
+      "range": {
+        "startLine": 16,
+        "startChar": 8,
+        "endLine": 16,
+        "endChar": 18
+      },
+      "revId": "3d4f7185de09b4fc87ce0f1a2f57f7836066a583",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "650654f3_e9fcda06",
@@ -60,6 +108,30 @@
       "writtenOn": "2023-10-18T08:15:44Z",
       "side": 1,
       "message": "minor: this has nothing to do with the patch. It would be nice to mention this in the commit message.",
+      "range": {
+        "startLine": 49,
+        "startChar": 38,
+        "endLine": 49,
+        "endChar": 43
+      },
+      "revId": "3d4f7185de09b4fc87ce0f1a2f57f7836066a583",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b9519603_36b570d3",
+        "filename": "rbh-fsevents/meson.build",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-10-18T10:48:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "650654f3_e9fcda06",
       "range": {
         "startLine": 49,
         "startChar": 38,
