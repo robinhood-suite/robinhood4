@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6fd40372_435423d9",
+        "filename": "rbh-fsevents/rbh-fsevents.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-10-18T08:11:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "74452ffe_a327a21b",
+      "range": {
+        "startLine": 41,
+        "startChar": 59,
+        "endLine": 41,
+        "endChar": 60
+      },
+      "revId": "2e24c86b72c55ed3f693f2154f54e2c290ddfd35",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "231376ad_779b7bb0",
@@ -37,6 +61,30 @@
       "writtenOn": "2023-10-16T09:40:53Z",
       "side": 1,
       "message": "comment: this is very weird to have this function defined in the previous patch.",
+      "range": {
+        "startLine": 133,
+        "startChar": 44,
+        "endLine": 133,
+        "endChar": 67
+      },
+      "revId": "2e24c86b72c55ed3f693f2154f54e2c290ddfd35",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "38187c27_ce90026d",
+        "filename": "rbh-fsevents/rbh-fsevents.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-10-18T08:11:51Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "231376ad_779b7bb0",
       "range": {
         "startLine": 133,
         "startChar": 44,
