@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a6810502_5f50e85a",
+        "filename": "rbh-fsevents/src/sources/hestia.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2023-10-18T08:43:34Z",
+      "side": 1,
+      "message": "major: it may be freed in the same way the event is deleted when an error occured",
+      "range": {
+        "startLine": 68,
+        "startChar": 4,
+        "endLine": 68,
+        "endChar": 43
+      },
+      "revId": "b7f20d6d62076dc537819f4e6b0962d9f4d0957c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
