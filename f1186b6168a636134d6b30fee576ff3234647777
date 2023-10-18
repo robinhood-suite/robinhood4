@@ -114,6 +114,30 @@
       },
       "revId": "f1186b6168a636134d6b30fee576ff3234647777",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f6583281_52b0de47",
+        "filename": "rbh-fsevents/src/deduplicator/fsevent_pool.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-10-18T08:26:26Z",
+      "side": 1,
+      "message": "The returned value is the number of inserted fsevents or -1 on error.",
+      "parentUuid": "7b892a71_ef71b9d0",
+      "range": {
+        "startLine": 218,
+        "startChar": 4,
+        "endLine": 218,
+        "endChar": 13
+      },
+      "revId": "f1186b6168a636134d6b30fee576ff3234647777",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
