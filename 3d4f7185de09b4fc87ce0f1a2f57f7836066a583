@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "af2740e1_396d7042",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-10-18T08:15:44Z",
+      "side": 1,
+      "message": "typo: This",
+      "range": {
+        "startLine": 12,
+        "startChar": 10,
+        "endLine": 12,
+        "endChar": 14
+      },
+      "revId": "3d4f7185de09b4fc87ce0f1a2f57f7836066a583",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "091dd2c0_878ee254",
+        "filename": "rbh-fsevents/include/utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-10-18T08:15:44Z",
+      "side": 1,
+      "message": "typo: This sstack is shared",
+      "range": {
+        "startLine": 16,
+        "startChar": 8,
+        "endLine": 16,
+        "endChar": 18
+      },
+      "revId": "3d4f7185de09b4fc87ce0f1a2f57f7836066a583",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "650654f3_e9fcda06",
+        "filename": "rbh-fsevents/meson.build",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-10-18T08:15:44Z",
+      "side": 1,
+      "message": "minor: this has nothing to do with the patch. It would be nice to mention this in the commit message.",
+      "range": {
+        "startLine": 49,
+        "startChar": 38,
+        "endLine": 49,
+        "endChar": 43
+      },
+      "revId": "3d4f7185de09b4fc87ce0f1a2f57f7836066a583",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
