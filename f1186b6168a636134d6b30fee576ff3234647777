@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "be834c99_23178b14",
+        "filename": "rbh-fsevents/src/deduplicator.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-10-18T07:20:46Z",
+      "side": 1,
+      "message": "suggest: having an enum could be nice, with values like \"POOL_ALREADY_FULL\", \"POOL_GOT_FULL\" and \"POOL_FAILED_INSERT\" or something like that",
+      "range": {
+        "startLine": 45,
+        "startChar": 8,
+        "endLine": 45,
+        "endChar": 22
+      },
+      "revId": "f1186b6168a636134d6b30fee576ff3234647777",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "82d989a9_48f3c0c8",
+        "filename": "rbh-fsevents/src/deduplicator/fsevent_pool.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-10-18T07:20:46Z",
+      "side": 1,
+      "message": "minor: the name implies it\u0027s a container for xattrs in fsevents, not for fsevents",
+      "range": {
+        "startLine": 21,
+        "startChar": 52,
+        "endLine": 21,
+        "endChar": 74
+      },
+      "revId": "f1186b6168a636134d6b30fee576ff3234647777",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "917fbfd2_7ff1de6a",
+        "filename": "rbh-fsevents/src/deduplicator/fsevent_pool.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-10-18T07:20:46Z",
+      "side": 1,
+      "message": "question: couldn\u0027t this case simply be kept as a way to say that when we want to flush the ids, we flush the whole pool ? If you want to do that with this code, you have to use `flush_size \u003d pool_size` right ?",
+      "range": {
+        "startLine": 62,
+        "startChar": 8,
+        "endLine": 62,
+        "endChar": 30
+      },
+      "revId": "f1186b6168a636134d6b30fee576ff3234647777",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7ed07557_fbec4d46",
+        "filename": "rbh-fsevents/src/deduplicator/fsevent_pool.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-10-18T07:20:46Z",
+      "side": 1,
+      "message": "question/major? Missing the free of the ids and events list, is this what you meant by the comment line 15 ?",
+      "range": {
+        "startLine": 108,
+        "startChar": 0,
+        "endLine": 108,
+        "endChar": 24
+      },
+      "revId": "f1186b6168a636134d6b30fee576ff3234647777",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7b892a71_ef71b9d0",
+        "filename": "rbh-fsevents/src/deduplicator/fsevent_pool.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-10-18T07:20:46Z",
+      "side": 1,
+      "message": "suggest: yeah I\u0027d prefer having an enum for the different outputs of this function, because returning 1 here when the function didn\u0027t error out is strange",
+      "range": {
+        "startLine": 218,
+        "startChar": 4,
+        "endLine": 218,
+        "endChar": 13
+      },
+      "revId": "f1186b6168a636134d6b30fee576ff3234647777",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}

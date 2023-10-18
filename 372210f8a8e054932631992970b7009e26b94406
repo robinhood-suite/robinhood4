@@ -48,6 +48,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "102b3260_7f17ec0a",
+        "filename": "rbh-fsevents/meson.build",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-10-18T07:20:46Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "47b7ea5f_8578300b",
+      "range": {
+        "startLine": 50,
+        "startChar": 0,
+        "endLine": 50,
+        "endChar": 29
+      },
+      "revId": "372210f8a8e054932631992970b7009e26b94406",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ea1a4fcc_da29a08d",
@@ -85,6 +109,30 @@
       "side": 1,
       "message": "This is done in the function rbh_fsevent_pool_push",
       "parentUuid": "ea1a4fcc_da29a08d",
+      "range": {
+        "startLine": 44,
+        "startChar": 13,
+        "endLine": 44,
+        "endChar": 34
+      },
+      "revId": "372210f8a8e054932631992970b7009e26b94406",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a81e9380_17d52d19",
+        "filename": "rbh-fsevents/src/deduplicator.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-10-18T07:20:46Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "806a0e23_ca4e20a5",
       "range": {
         "startLine": 44,
         "startChar": 13,
