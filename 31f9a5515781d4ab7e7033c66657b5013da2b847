@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a9a5bae2_e7f7b2f2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-10-18T08:17:38Z",
+      "side": 1,
+      "message": "My comment was ignored ;(",
+      "parentUuid": "0c87f091_c37866fe",
+      "revId": "31f9a5515781d4ab7e7033c66657b5013da2b847",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9c812a78_b64a9a20",
         "filename": "rbh-fsevents/src/deduplicator/fsevent_pool.c",
         "patchSetId": 1
@@ -127,6 +145,30 @@
       "side": 1,
       "message": "No, because the idea is to not use the list for events that we know will be present at most once.",
       "parentUuid": "f4979670_40af9913",
+      "range": {
+        "startLine": 618,
+        "startChar": 8,
+        "endLine": 619,
+        "endChar": 41
+      },
+      "revId": "31f9a5515781d4ab7e7033c66657b5013da2b847",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8f7cbd14_30d40cfe",
+        "filename": "rbh-fsevents/src/deduplicator/fsevent_pool.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 619,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-10-18T08:17:38Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "13c227b1_c97fbc60",
       "range": {
         "startLine": 618,
         "startChar": 8,
