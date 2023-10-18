@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bc18b1cd_6959f141",
+        "filename": "rbh-fsevents/tests/unit/check_dedup.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 511,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-10-18T08:34:18Z",
+      "side": 1,
+      "message": "style",
+      "range": {
+        "startLine": 511,
+        "startChar": 4,
+        "endLine": 511,
+        "endChar": 35
+      },
+      "revId": "33ee2e562793c6480eb7ad4892e6892ee6d2addb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
