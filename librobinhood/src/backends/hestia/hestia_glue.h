@@ -1,3 +1,11 @@
+/**
+ * This file is part of RobinHood 4
+ *
+ * Copyright (C) 2022 Commissariat a l'energie atomique et aux energies
+ *                    alternatives
+ *
+ * SPDX-License-Identifer: LGPL-3.0-or-later
+ */
 #ifndef RBH_HESTIA_GLUE_H
 #define RBH_HESTIA_GLUE_H
 
