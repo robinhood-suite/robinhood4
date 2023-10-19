@@ -102,5 +102,6 @@ initialize_global_values(size_t stack_size)
 {
     global_values = rbh_sstack_new(stack_size);
     if (!global_values)
-        error(EXIT_FAILURE, errno, "rbh_sstack_new");
+        error(EXIT_FAILURE, errno,
+              "rbh_sstack_new in initialize_global_values");
 }
