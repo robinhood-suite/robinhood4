@@ -139,7 +139,7 @@ parse_read(yaml_parser_t *parser, struct rbh_fsevent *upsert)
 
             statx = malloc(sizeof(*statx));
             if (!statx)
-                error(EXIT_FAILURE, errno, "malloc");
+                error(EXIT_FAILURE, errno, "malloc in parse_read");
 
             statx->stx_mask = RBH_STATX_ATIME;
             statx->stx_atime.tv_sec = event_time;
@@ -214,7 +214,7 @@ parse_update(yaml_parser_t *parser, struct rbh_fsevent *inode,
              */
             success = parse_int64(&event, &event_time);
             if (!success)
-                error(EXIT_FAILURE, 0, "malloc");
+                error(EXIT_FAILURE, 0, "parse_int64 in parse_update");
 
             statx->stx_mask = RBH_STATX_CTIME;
             statx->stx_ctime.tv_sec = event_time;
@@ -316,7 +316,7 @@ parse_create(yaml_parser_t *parser, struct rbh_fsevent *link,
     /* Objects have no parent and no path */
     parent_id = malloc(sizeof(*parent_id));
     if (parent_id == NULL)
-        error(EXIT_FAILURE, errno, "malloc");
+        error(EXIT_FAILURE, errno, "malloc in parse_create");
 
     parent_id->size = 0;
     parent_id->data = NULL;
@@ -352,7 +352,7 @@ parse_create(yaml_parser_t *parser, struct rbh_fsevent *link,
             success = parse_name(parser, &link->link.name);
             link->id.data = strdup(link->link.name);
             if (!link->id.data)
-                error(EXIT_FAILURE, errno, "malloc");
+                error(EXIT_FAILURE, errno, "strdup in parse_create");
 
             link->id.size = strlen(link->id.data);
             break;
@@ -368,7 +368,7 @@ parse_create(yaml_parser_t *parser, struct rbh_fsevent *link,
 
             success = parse_int64(&event, &event_time);
             if (!success)
-                error(EXIT_FAILURE, 0, "malloc");
+                error(EXIT_FAILURE, 0, "parse_int64 in parse_create");
 
             statx->stx_mask = RBH_STATX_ATIME | RBH_STATX_BTIME |
                               RBH_STATX_CTIME | RBH_STATX_MTIME;
@@ -513,7 +513,8 @@ hestia_fsevent_iter_next(void *iterator)
         struct rbh_fsevent *new_upsert_event;
 
         if (map.pairs == NULL)
-            error(EXIT_FAILURE, 0, "build_enrich_map");
+            error(EXIT_FAILURE, errno,
+                  "build_enrich_map in hestia_fsevent_iter_next");
 
         new_upsert_event = rbh_fsevent_upsert_new(&fsevents->fsevent.id,
                                                   &map, NULL, NULL);
