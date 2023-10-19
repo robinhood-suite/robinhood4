@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f56144d0_abd19363",
+        "filename": "rbh-fsevents/src/enrichers/hestia.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2023-10-19T11:33:04Z",
+      "side": 1,
+      "message": "question: will it later be in a stack?",
+      "range": {
+        "startLine": 123,
+        "startChar": 4,
+        "endLine": 125,
+        "endChar": 18
+      },
+      "revId": "532e543972f93fe11d78b07877a1e6196e85b110",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
