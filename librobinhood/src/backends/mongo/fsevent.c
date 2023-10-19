@@ -57,7 +57,7 @@ bson_from_upsert(const struct rbh_value_map *xattrs,
 
     /* Empty $unset documents are not allowed */
     if (!bson_empty(&unset)) {
-        if (BSON_APPEND_DOCUMENT(bson, "$unset", &unset))
+        if (!BSON_APPEND_DOCUMENT(bson, "$unset", &unset))
             goto out_destroy_unset;
     }
 
