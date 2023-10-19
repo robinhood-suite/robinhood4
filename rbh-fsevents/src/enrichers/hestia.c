@@ -48,6 +48,24 @@ fill_tier_attributes(HestiaTierExtent *tiers, size_t n_tiers,
 }
 
 static void
+fill_user_attributes(HestiaKeyValuePair *attrs, size_t n_attrs,
+                     struct rbh_value_pair *pairs)
+{
+    int rc;
+
+    for (size_t i = 0; i < n_attrs; ++i) {
+        pairs[i].key = strdup(attrs[i].m_key);
+        if (pairs[i].key == NULL)
+            error(EXIT_FAILURE, ENOMEM, "strdup in fill_user_attributes");
+
+        pairs[i].value = rbh_value_string_new(attrs[i].m_value);
+        if (pairs[i].value == NULL)
+            error(EXIT_FAILURE, ENOMEM,
+                  "rbh_value_string_new in fill_user_attributes");
+    }
+}
+
+static void
 fill_attributes(HestiaObject *object, struct rbh_statx *statx,
                 struct rbh_value_pair *pairs, size_t *count)
 {
@@ -63,7 +81,10 @@ fill_attributes(HestiaObject *object, struct rbh_statx *statx,
     statx->stx_ctime.tv_nsec = 0;
 
     *count = object->m_num_tier_extents;
-    fill_tier_attributes(object->m_tier_extents, m_num_tier_extents, pairs);
+    fill_tier_attributes(object->m_tier_extents, m_num_tier_extents, &pairs[0]);
+    *count += object->m_num_attrs;
+    fill_user_attributes(object->m_attrs, object->m_num_attrs,
+                         &pairs[object->m_num_tier_extents]);
 }
 
 static int
@@ -71,8 +92,8 @@ hestia_enrich(struct rbh_fsevent *enriched, struct rbh_value_pair *pairs)
 {
     struct rbh_statx *statx;
     HestiaObject object;
+    size_t nb_pairs = 0;
     HestiaId object_id;
-    size_t nb_pairs;
     int rc;
 
     statx = malloc(sizeof(*statx));
