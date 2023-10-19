@@ -22,6 +22,30 @@
       },
       "revId": "532e543972f93fe11d78b07877a1e6196e85b110",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "14bb674a_8da4ac75",
+        "filename": "rbh-fsevents/src/enrichers/hestia.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-10-19T14:50:16Z",
+      "side": 1,
+      "message": "Yes, I didn\u0027t want to bother with this at first, so that the I can check the code works properly, and I\u0027ll change all the use of malloc with a sstack in another patch",
+      "parentUuid": "f56144d0_abd19363",
+      "range": {
+        "startLine": 123,
+        "startChar": 4,
+        "endLine": 125,
+        "endChar": 18
+      },
+      "revId": "532e543972f93fe11d78b07877a1e6196e85b110",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
