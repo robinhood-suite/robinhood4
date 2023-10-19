@@ -41,6 +41,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "865f4d74_56ca1ffa",
+        "filename": "rbh-fsevents/src/sources/hestia.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-10-19T14:49:53Z",
+      "side": 1,
+      "message": "Done in a later patch",
+      "parentUuid": "db079cf1_32d52983",
+      "range": {
+        "startLine": 70,
+        "startChar": 36,
+        "endLine": 70,
+        "endChar": 42
+      },
+      "revId": "7b15be327cc9b7f25cc80b61e0ac3882f4ab59ce",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "108c2c20_6c5b73f5",
@@ -54,6 +78,30 @@
       "writtenOn": "2023-10-18T11:32:22Z",
       "side": 1,
       "message": "major: need to free parent_id here",
+      "range": {
+        "startLine": 89,
+        "startChar": 12,
+        "endLine": 89,
+        "endChar": 38
+      },
+      "revId": "7b15be327cc9b7f25cc80b61e0ac3882f4ab59ce",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "938faa2b_dd4d6bed",
+        "filename": "rbh-fsevents/src/sources/hestia.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-10-19T14:49:53Z",
+      "side": 1,
+      "message": "This is the normal and only way out without an error. If the event is a mapping_end_event, it is done being parsed, and the fsevent is complete, so we shouldn\u0027t remove the parent id.\n\nThe memory may leak if the event is empty and we directly detect the mapping end event type. However, in that case, the function will error out because we didn\u0027t see the id. And since the memory isn\u0027t managed properly yet, I do not feel the need to make an exception here, and I\u0027ll manage it later.",
+      "parentUuid": "108c2c20_6c5b73f5",
       "range": {
         "startLine": 89,
         "startChar": 12,
