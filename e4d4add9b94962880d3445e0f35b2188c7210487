@@ -93,6 +93,30 @@
       },
       "revId": "e4d4add9b94962880d3445e0f35b2188c7210487",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "49999879_4f1127bc",
+        "filename": "rbh-fsevents/src/enricher.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2023-10-19T11:25:46Z",
+      "side": 1,
+      "message": "Is it really the normal code? Seems legit to me to force the definition of Hestia\u0027s configuration file.",
+      "parentUuid": "f7676d9c_6fd3e87f",
+      "range": {
+        "startLine": 57,
+        "startChar": 11,
+        "endLine": 57,
+        "endChar": 50
+      },
+      "revId": "e4d4add9b94962880d3445e0f35b2188c7210487",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
