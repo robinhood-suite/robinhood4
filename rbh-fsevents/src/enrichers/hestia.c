@@ -30,7 +30,26 @@ exit_hestia(void)
 }
 
 static void
-fill_attributes(HestiaObject *object, struct rbh_statx *statx)
+fill_tier_attributes(HestiaTierExtent *tiers, size_t n_tiers,
+                     struct rbh_value_pair *pairs)
+{
+    int rc;
+
+    for (size_t i = 0; i < n_tiers; ++i) {
+        rc = asprintf(&pairs[i].key, "%" PRIu8, tiers[i].m_tier_id);
+        if (rc <= 0)
+            error(EXIT_FAILURE, ENOMEM, "asprintf in fill_tier_attributes");
+
+        pairs[i].value = rbh_value_uint64_new(tiers[i].m_size);
+        if (pairs[i].value == NULL)
+            error(EXIT_FAILURE, errno,
+                  "rbh_value_uint64_new in fill_tier_attributes");
+    }
+}
+
+static void
+fill_attributes(HestiaObject *object, struct rbh_statx *statx,
+                struct rbh_value_pair *pairs, size_t *count)
 {
     statx->stx_mask = RBH_STATX_SIZE | RBH_STATX_ATIME | RBH_STATX_BTIME |
                       RBH_STATX_CTIME;
@@ -42,18 +61,19 @@ fill_attributes(HestiaObject *object, struct rbh_statx *statx)
     statx->stx_btime.tv_nsec = 0;
     statx->stx_ctime.tv_sec = object->m_last_modified_time;
     statx->stx_ctime.tv_nsec = 0;
+
+    *count = object->m_num_tier_extents;
+    fill_tier_attributes(object->m_tier_extents, m_num_tier_extents, pairs);
 }
 
 static int
-hestia_enrich(struct rbh_fsevent *enriched, const struct rbh_value_pair *attr)
+hestia_enrich(struct rbh_fsevent *enriched, struct rbh_value_pair *pairs)
 {
     struct rbh_statx *statx;
-    int total_count = 0;
     HestiaObject object;
     HestiaId object_id;
+    size_t nb_pairs;
     int rc;
-
-    (void) attr;
 
     statx = malloc(sizeof(*statx));
     if (statx == NULL)
@@ -70,9 +90,10 @@ hestia_enrich(struct rbh_fsevent *enriched, const struct rbh_value_pair *attr)
         return rc;
     }
 
-    fill_attributes(&object, statx);
+    fill_attributes(&object, statx, pairs, &nb_pairs);
 
     enriched->upsert.statx = statx;
+    enriched->xattrs.count += nb_pairs;
 
 free_output:
     hestia_init_object(&object);
@@ -117,7 +138,7 @@ enrich(struct enricher *enricher, const struct rbh_fsevent *original)
         for (size_t i = 0; i < partials->count; i++) {
             int rc;
 
-            rc = hestia_enrich(enriched, &partials->pairs[i]);
+            rc = hestia_enrich(enriched, &pairs[enriched->xattrs.count]);
             if (rc == -1)
                 return -1;
         }
