@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "00c2276f_3a80ec29",
+        "filename": "rbh-fsevents/src/sources/yaml_file.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-10-19T07:09:49Z",
+      "side": 1,
+      "message": "suggest: instead of saying that an allocation failed (which can happen anywhere in the code, I think it would be better to use the name of the function yaml_fsevent_init. Also, you should return errno, not 0.",
+      "range": {
+        "startLine": 36,
+        "startChar": 32,
+        "endLine": 36,
+        "endChar": 38
+      },
+      "revId": "dc3ab1f4bf59ff9e7569159e493c96b1c1c22412",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
