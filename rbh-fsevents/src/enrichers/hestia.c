@@ -87,11 +87,47 @@ fill_size(json_t *value, struct rbh_statx *statx)
     statx->stx_mask |= RBH_STATX_SIZE;
 }
 
+static struct rbh_value *
+fill_attribute(json_t *value)
+{
+    struct rbh_value *result_value;
+    int type = json_typeof(value);
+
+    result_value = malloc(sizeof(*result_value));
+    if (result_value == NULL)
+        error(EXIT_FAILURE, errno, "malloc in fill_attribute");
+
+    switch (type) {
+    case JSON_STRING:
+        result_value->type = RBH_VT_STRING;
+        result_value->string = strdup(json_string_value(value));
+        if (result_value->string == NULL)
+            error(EXIT_FAILURE, errno, "strdup in fill_attribute");
+
+        break;
+    default:
+        result_value->type = RBH_VT_STRING;
+        result_value->string = "null";
+    }
+
+    return result_value;
+}
+
 static void
-fill_attributes(json_t *attrs, struct rbh_statx *statx)
+fill_attributes(json_t *attrs, struct rbh_statx *statx,
+                struct rbh_value_pair *pairs, size_t *count)
 {
     const char *key;
     json_t *value;
+    int index = 0;
+
+    *count = json_object_size(attrs);
+    if (*count == 0) {
+        pairs = NULL;
+        return;
+    }
+
+    *count -= 3;
 
     json_object_foreach(attrs, key, value) {
         if (key[0] == 'l' && !strcmp(&key[1], "ast_modified_time")) {
@@ -104,21 +140,23 @@ fill_attributes(json_t *attrs, struct rbh_statx *statx)
             fill_size(value, statx);
             continue;
         }
+
+        pairs[index].key = strdup(key);
+        pairs[index].value = fill_attribute(value);
+        index++;
     }
 }
 
 static int
-hestia_enrich(struct rbh_fsevent *enriched, const struct rbh_value_pair *attr)
+hestia_enrich(struct rbh_fsevent *enriched, struct rbh_value_pair *pairs)
 {
     char *attrs_buffer = NULL;
     struct rbh_statx *statx;
     json_t *attrs = NULL;
     int total_count = 0;
     int attrs_len = 0;
-    size_t nb_attrs;
+    size_t nb_pairs;
     int rc;
-
-    (void) attr;
 
     statx = malloc(sizeof(*statx));
     if (statx == NULL)
@@ -141,15 +179,11 @@ hestia_enrich(struct rbh_fsevent *enriched, const struct rbh_value_pair *attr)
     if (attrs == NULL)
         goto free_output;
 
-    nb_attrs = json_object_size(attrs);
-    if (nb_attrs == 0)
-        goto decref_attrs;
-
-    fill_attributes(attrs, statx);
+    fill_attributes(attrs, statx, pairs, &nb_pairs);
 
     enriched->upsert.statx = statx;
+    enriched->xattrs.count += nb_pairs;
 
-decref_attrs:
     json_decref(attrs);
 
 free_output:
@@ -195,7 +229,7 @@ enrich(struct enricher *enricher, const struct rbh_fsevent *original)
         for (size_t i = 0; i < partials->count; i++) {
             int rc;
 
-            rc = hestia_enrich(enriched, &partials->pairs[i]);
+            rc = hestia_enrich(enriched, &pairs[enriched->xattrs.count]);
             if (rc == -1)
                 return -1;
         }
