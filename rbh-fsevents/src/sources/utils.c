@@ -24,7 +24,8 @@ __thread struct rbh_sstack *global_values;
 static void __attribute__((destructor))
 destroy_global_values(void)
 {
-    rbh_sstack_destroy(global_values);
+    if (global_values)
+        rbh_sstack_destroy(global_values);
 }
 
 void
