@@ -1,4 +1,4 @@
-.. This file is part of rbh-fsevents
+.. This file is part of RobinHood 4
    Copyright (C) 2020 Commissariat a l'energie atomique et aux energies
                       alternatives
 
