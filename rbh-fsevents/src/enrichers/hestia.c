@@ -92,6 +92,8 @@ fill_attribute(json_t *value)
 {
     struct rbh_value *result_value;
     int type = json_typeof(value);
+    char *real_tmp_str;
+    int rc;
 
     result_value = malloc(sizeof(*result_value));
     if (result_value == NULL)
@@ -105,9 +107,26 @@ fill_attribute(json_t *value)
             error(EXIT_FAILURE, errno, "strdup in fill_attribute");
 
         break;
-    default:
+    case JSON_INTEGER:
+        result_value->type = RBH_VT_INT64;
+        result_value->int64 = json_integer_value(value);
+        break;
+    case JSON_REAL:
         result_value->type = RBH_VT_STRING;
-        result_value->string = "null";
+        rc = asprintf(&real_tmp_str, "%f", json_real_value(value));
+        if (rc == -1)
+            error(EXIT_FAILURE, errno, "asprintf in fill_attribute");
+
+        result_value->string = real_tmp_str;
+        break;
+    case JSON_TRUE:
+    case JSON_FALSE:
+        result_value->type = RBH_VT_BOOLEAN;
+        result_value->boolean = (json_is_true(value) ? true : false);
+        break;
+    default:
+        free(result_value);
+        result_value = NULL;
     }
 
     return result_value;
