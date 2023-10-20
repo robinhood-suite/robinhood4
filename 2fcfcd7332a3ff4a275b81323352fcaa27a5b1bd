@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c713184b_5b2236e6",
+        "filename": "rbh-fsevents/tests/acceptance-dedup.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-10-20T08:25:19Z",
+      "side": 1,
+      "message": "major: check that the file is empty, because a close generates multiple event, not only a link and unlink, so we must verify that the upsert/xattrs ones are also removed",
+      "range": {
+        "startLine": 40,
+        "startChar": 4,
+        "endLine": 40,
+        "endChar": 6
+      },
+      "revId": "2fcfcd7332a3ff4a275b81323352fcaa27a5b1bd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
