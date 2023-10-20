@@ -20,10 +20,13 @@
 
 #include "hestia/hestia.h"
 
+static __thread bool hestia_init = false;
+
 static void __attribute__((destructor))
 exit_hestia(void)
 {
-    hestia_finish();
+    if (hestia_init)
+        hestia_finish();
 }
 
 static int
@@ -56,9 +59,6 @@ hestia_enrich(struct rbh_fsevent *enriched, const struct rbh_value_pair *attr)
     nb_attrs = json_object_size(attrs);
     if (nb_attrs == 0)
         goto decref_attrs;
-
-    printf("Attributes of '%s': %s\n",
-           enriched->id.data, json_dumps(attrs, JSON_INDENT(4)));
 
 decref_attrs:
     json_decref(attrs);
@@ -237,6 +237,7 @@ hestia_enrich_iter_builder(struct rbh_backend *backend)
      */
     //hestia_initialize(NULL, NULL, NULL);
     hestia_initialize("/etc/hestia/hestiad.yaml", NULL, NULL);
+    hestia_init = true;
 
     return builder;
 }
