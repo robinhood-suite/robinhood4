@@ -12,15 +12,8 @@
 
 #include <robinhood/fsevent.h>
 
-/*
- * This sstack is shared amongst the enrichers for easier use. Since some
- * enrichers use similar functions, they are defined here, and since they
- * require an sstack, we define one as a global variable.
- */
-extern __thread struct rbh_sstack *global_values;
-
 void
-flush_global_values();
+flush_source_stack();
 
 struct rbh_value_pair *
 build_pair(const char *key, struct rbh_value *(*part_builder)(void *),
@@ -33,5 +26,8 @@ struct rbh_value_map
 build_enrich_map(struct rbh_value *(*part_builder)(void *),
                  void *part_builder_arg);
 
+void *
+source_stack_alloc(const void *data, size_t size);
+
 void
-initialize_global_values(size_t stack_size);
+initialize_source_stack(size_t stack_size);
