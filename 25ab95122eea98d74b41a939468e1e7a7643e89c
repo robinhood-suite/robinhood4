@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "176e7998_19ee8b0e",
+        "filename": "rbh-fsevents/src/deduplicator/fsevent_pool.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 636,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-10-20T08:50:39Z",
+      "side": 1,
+      "message": "suggest: link_fsevent, because \"link-\u003elink\" line 648 is peculiar",
+      "range": {
+        "startLine": 636,
+        "startChar": 29,
+        "endLine": 636,
+        "endChar": 33
+      },
+      "revId": "25ab95122eea98d74b41a939468e1e7a7643e89c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b818d00a_b8d6411a",
+        "filename": "rbh-fsevents/src/deduplicator/fsevent_pool.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 647,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-10-20T08:50:39Z",
+      "side": 1,
+      "message": "suggest:\n```\nif link \u003d\u003d NULL \n   return true;\n   \ncontent of the if...\n```",
+      "range": {
+        "startLine": 647,
+        "startChar": 4,
+        "endLine": 647,
+        "endChar": 14
+      },
+      "revId": "25ab95122eea98d74b41a939468e1e7a7643e89c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e7cc1e68_afbf0021",
+        "filename": "rbh-fsevents/src/deduplicator/fsevent_pool.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 666,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-10-20T08:50:39Z",
+      "side": 1,
+      "message": "suggest: `insert_and_delete_in_same_batch` (yes it\u0027s a long name, but it\u0027s explicit, which `insert_delete` isn\u0027t)",
+      "range": {
+        "startLine": 666,
+        "startChar": 9,
+        "endLine": 666,
+        "endChar": 22
+      },
+      "revId": "25ab95122eea98d74b41a939468e1e7a7643e89c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f092bb19_e11b6592",
+        "filename": "rbh-fsevents/src/deduplicator/fsevent_pool.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 688,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-10-20T08:50:39Z",
+      "side": 1,
+      "message": "question: isn\u0027t this the loop you need for the todo line 652 ?",
+      "range": {
+        "startLine": 681,
+        "startChar": 8,
+        "endLine": 688,
+        "endChar": 9
+      },
+      "revId": "25ab95122eea98d74b41a939468e1e7a7643e89c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
