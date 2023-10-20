@@ -137,9 +137,9 @@ parse_read(yaml_parser_t *parser, struct rbh_fsevent *upsert)
             if (!success)
                 return false;
 
-            statx = malloc(sizeof(*statx));
+            statx = source_stack_alloc(NULL, sizeof(*statx));
             if (!statx)
-                error(EXIT_FAILURE, errno, "malloc in parse_read");
+                error(EXIT_FAILURE, errno, "source_stack_alloc in parse_read");
 
             statx->stx_mask = RBH_STATX_ATIME;
             statx->stx_atime.tv_sec = event_time;
@@ -314,9 +314,9 @@ parse_create(yaml_parser_t *parser, struct rbh_fsevent *link,
     int64_t event_time;
 
     /* Objects have no parent and no path */
-    parent_id = malloc(sizeof(*parent_id));
+    parent_id = source_stack_alloc(NULL, sizeof(*parent_id));
     if (parent_id == NULL)
-        error(EXIT_FAILURE, errno, "malloc in parse_create");
+        error(EXIT_FAILURE, errno, "source_stack_alloc in parse_create");
 
     parent_id->size = 0;
     parent_id->data = NULL;
@@ -350,9 +350,11 @@ parse_create(yaml_parser_t *parser, struct rbh_fsevent *link,
             seen_id = true;
 
             success = parse_name(parser, &link->link.name);
-            link->id.data = strdup(link->link.name);
+            link->id.data = source_stack_alloc(link->link.name,
+                                               strlen(link->link.name));
             if (!link->id.data)
-                error(EXIT_FAILURE, errno, "strdup in parse_create");
+                error(EXIT_FAILURE, errno,
+                      "source_stack_alloc in parse_create");
 
             link->id.size = strlen(link->id.data);
             break;
@@ -477,6 +479,72 @@ parse_hestia_event(struct yaml_fsevent_iterator *fsevents)
         __builtin_unreachable();
     }
 }
+
+static struct rbh_fsevent *
+create_new_xattr_fsevent(const struct rbh_id *id,
+                         const struct rbh_value_map *xattrs)
+{
+    struct rbh_fsevent *xattr = source_stack_alloc(NULL, sizeof(*xattr));
+
+    if (xattr == NULL)
+        error(EXIT_FAILURE, errno,
+              "source_stack_alloc on xattr in create_new_xattr_fsevent");
+
+    xattr->type = RBH_FET_XATTR;
+    xattr->id.data = source_stack_alloc(id->data, id->size);
+    if (xattr->id.data == NULL)
+        error(EXIT_FAILURE, errno,
+              "source_stack_alloc on id in create_new_xattr_fsevent");
+
+    xattr->id.size = id->size;
+
+    xattr->xattrs.pairs = xattrs->pairs;
+    xattr->xattrs.count = xattrs->count;
+
+    xattr->ns.parent_id = NULL;
+    xattr->ns.name = NULL;
+
+    return xattr;
+}
+
+static struct rbh_fsevent *
+create_new_upsert_fsevent(const struct rbh_id *id,
+                          const struct rbh_value_map *xattrs,
+                          const struct rbh_statx *statx)
+{
+    struct rbh_fsevent *upsert = source_stack_alloc(NULL, sizeof(*upsert));
+
+    if (upsert == NULL)
+        error(EXIT_FAILURE, errno,
+              "source_stack_alloc on upsert in create_new_upsert_fsevent");
+
+    upsert->type = RBH_FET_UPSERT;
+    upsert->id.data = source_stack_alloc(id->data, id->size);
+    if (upsert->id.data == NULL)
+        error(EXIT_FAILURE, errno,
+              "source_stack_alloc on id in create_new_upsert_fsevent");
+
+    upsert->id.size = id->size;
+
+    if (xattrs != NULL) {
+        upsert->xattrs.pairs = xattrs->pairs;
+        upsert->xattrs.count = xattrs->count;
+    } else {
+        upsert->xattrs.pairs = NULL;
+        upsert->xattrs.count = 0;
+    }
+
+    if (statx != NULL) {
+        upsert->upsert.statx = source_stack_alloc(&(*statx), sizeof(*statx));
+    } else {
+        upsert->upsert.statx = NULL;
+    }
+
+    upsert->upsert.symlink = NULL;
+
+    return upsert;
+}
+
 static const void *
 hestia_fsevent_iter_next(void *iterator)
 {
@@ -492,8 +560,8 @@ hestia_fsevent_iter_next(void *iterator)
     /* If there are additional xattrs to manage, create a specific event */
     if (fsevents->additional_xattr.count != 0) {
         struct rbh_fsevent *new_inode_event =
-            rbh_fsevent_xattr_new(&fsevents->fsevent.id,
-                                  &fsevents->additional_xattr);
+            create_new_xattr_fsevent(&fsevents->fsevent.id,
+                                     &fsevents->additional_xattr);
         fsevents->additional_xattr.count = 0;
 
         return new_inode_event;
@@ -501,8 +569,8 @@ hestia_fsevent_iter_next(void *iterator)
 
     if (fsevents->additional_statx.stx_mask != 0) {
         struct rbh_fsevent *new_upsert_event =
-            rbh_fsevent_upsert_new(&fsevents->fsevent.id, NULL,
-                                   &fsevents->additional_statx, NULL);
+            create_new_upsert_fsevent(&fsevents->fsevent.id, NULL,
+                                      &fsevents->additional_statx);
         fsevents->additional_statx.stx_mask = 0;
 
         return new_upsert_event;
@@ -516,8 +584,8 @@ hestia_fsevent_iter_next(void *iterator)
             error(EXIT_FAILURE, errno,
                   "build_enrich_map in hestia_fsevent_iter_next");
 
-        new_upsert_event = rbh_fsevent_upsert_new(&fsevents->fsevent.id,
-                                                  &map, NULL, NULL);
+        new_upsert_event = create_new_upsert_fsevent(&fsevents->fsevent.id,
+                                                     &map, NULL);
 
         fsevents->enrich_required = false;
         return new_upsert_event;
@@ -585,7 +653,7 @@ static const struct source FILE_SOURCE = {
 struct source *
 source_from_hestia_file(FILE *file)
 {
-    initialize_global_values(sizeof(struct rbh_value_pair) * (1 << 7));
+    initialize_source_stack(sizeof(struct rbh_value_pair) * (1 << 7));
 
     return yaml_fsevent_init(file, HESTIA_FSEVENT_ITERATOR, &FILE_SOURCE);
 }

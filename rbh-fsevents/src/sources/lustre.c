@@ -34,7 +34,7 @@ fsevent_from_record(struct changelog_rec *record)
 
     (void)record;
 
-    bad = malloc(sizeof(*bad));
+    bad = source_stack_alloc(NULL, sizeof(*bad));
     if (bad == NULL)
         return NULL;
 
@@ -71,13 +71,12 @@ fill_ns_xattrs_fid(void *arg)
 
     lu_fid_value.type = RBH_VT_BINARY;
     lu_fid_value.binary.size = sizeof(record->cr_tfid);
-    lu_fid_value.binary.data = rbh_sstack_push(global_values,
-                                               (const char *)&record->cr_tfid,
-                                               sizeof(record->cr_tfid));
+    lu_fid_value.binary.data = source_stack_alloc(
+        (const char *)&record->cr_tfid, sizeof(record->cr_tfid));
     if (lu_fid_value.binary.data == NULL)
         return NULL;
 
-    value = rbh_sstack_push(global_values, &lu_fid_value, sizeof(lu_fid_value));
+    value = source_stack_alloc(&lu_fid_value, sizeof(lu_fid_value));
     if (value == NULL)
         return NULL;
 
@@ -94,7 +93,7 @@ build_statx_mask(void *arg)
     };
     struct rbh_value *mask;
 
-    mask = rbh_sstack_push(global_values, NULL, sizeof(*mask));
+    mask = source_stack_alloc(NULL, sizeof(*mask));
     if (mask == NULL)
         return NULL;
     *mask = MASK;
@@ -109,17 +108,17 @@ build_xattrs(void *arg)
     char *xattr_name = (char *)arg;
     struct rbh_value *xattr_value;
 
-    xattr_value = rbh_sstack_push(global_values, NULL, sizeof(*xattr_value));
+    xattr_value = source_stack_alloc(NULL, sizeof(*xattr_value));
     if (xattr_value == NULL)
         return NULL;
 
     xattr_value->type = RBH_VT_STRING;
-    xattr_value->string = rbh_sstack_push(global_values, xattr_name,
-                                          strlen(xattr_name) + 1);
+    xattr_value->string = source_stack_alloc(xattr_name,
+                                             strlen(xattr_name) + 1);
     if (xattr_value->string == NULL)
         return NULL;
 
-    xattr_sequence = rbh_sstack_push(global_values, NULL, sizeof(*xattr_sequence));
+    xattr_sequence = source_stack_alloc(NULL, sizeof(*xattr_sequence));
     if (xattr_sequence == NULL)
         return NULL;
 
@@ -140,7 +139,7 @@ build_symlink_string(void *arg)
 
     (void) arg;
 
-    return rbh_sstack_push(global_values, &SYMLINK, sizeof(SYMLINK));
+    return source_stack_alloc(&SYMLINK, sizeof(SYMLINK));
 }
 
 static struct rbh_value *
@@ -159,7 +158,7 @@ _fill_enrich(const char *key, struct rbh_value *(*builder)(void *),
     if (ENRICH.map.pairs == NULL)
         return NULL;
 
-    enrich = rbh_sstack_push(global_values, NULL, sizeof(*enrich));
+    enrich = source_stack_alloc(NULL, sizeof(*enrich));
     if (enrich == NULL)
         return NULL;
     memcpy(enrich, &ENRICH, sizeof(*enrich));
@@ -217,7 +216,7 @@ build_enrich_xattr_fsevent(struct rbh_value_map *xattrs_map,
     xattrs_map->count = 1 + count / 2;
 
     pairs = rbh_sstack_push(
-        global_values, NULL, xattrs_map->count * sizeof(*xattrs_map->pairs));
+        source_stack, NULL, xattrs_map->count * sizeof(*xattrs_map->pairs));
     if (pairs == NULL)
         return -1;
 
@@ -251,7 +250,7 @@ build_id(const struct lu_fid *fid)
         return NULL;
 
     data_size = tmp_id->size;
-    id = rbh_sstack_push(global_values, NULL, sizeof(*id) + data_size);
+    id = source_stack_alloc(NULL, sizeof(*id) + data_size);
     if (id == NULL)
         return NULL;
 
@@ -268,7 +267,7 @@ build_id(const struct lu_fid *fid)
 static int
 create_statx_uid_gid(struct changelog_rec *record, struct rbh_statx **rec_statx)
 {
-    *rec_statx = rbh_sstack_push(global_values, NULL, sizeof(**rec_statx));
+    *rec_statx = source_stack_alloc(NULL, sizeof(**rec_statx));
     if (*rec_statx == NULL)
         return -1;
 
@@ -308,7 +307,7 @@ new_link_inode_event(struct changelog_rec *record, struct rbh_fsevent *fsevent)
     if (fsevent->link.parent_id == NULL)
         return -1;
 
-    data = rbh_sstack_push(global_values, NULL, record->cr_namelen + 1);
+    data = source_stack_alloc(NULL, record->cr_namelen + 1);
     if (data == NULL)
         return -1;
     memcpy(data, changelog_rec_name(record), record->cr_namelen);
@@ -538,7 +537,7 @@ unlink_inode_event(struct lu_fid *parent_id, char *name, size_t namelen,
     if (fsevent->link.parent_id == NULL)
         return -1;
 
-    data = rbh_sstack_push(global_values, NULL, namelen + 1);
+    data = source_stack_alloc(NULL, namelen + 1);
     if (data == NULL)
         return -1;
     memcpy(data, name, namelen);
@@ -913,7 +912,7 @@ lustre_changelog_iter_next(void *iterator)
     int save_errno;
     int rc;
 
-    flush_global_values();
+    flush_source_stack();
 
 retry:
     if (records->prev_record == NULL) {
@@ -932,7 +931,7 @@ retry:
         records->prev_record = NULL;
     }
 
-    fsevent = rbh_sstack_push(global_values, NULL, sizeof(*fsevent));
+    fsevent = source_stack_alloc(NULL, sizeof(*fsevent));
     if (fsevent == NULL)
         goto end_event;
     memset(fsevent, 0, sizeof(*fsevent));
@@ -1127,7 +1126,7 @@ source_from_lustre_changelog(const char *mdtname)
 
     lustre_changelog_iter_init(&source->events, mdtname);
 
-    initialize_global_values(sizeof(struct rbh_value_pair) * (1 << 7));
+    initialize_source_stack(sizeof(struct rbh_value_pair) * (1 << 7));
     source->events.prev_record = NULL;
     source->source = LUSTRE_SOURCE;
     return &source->source;
