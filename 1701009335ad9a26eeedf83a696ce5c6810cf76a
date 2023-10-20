@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6aaa958d_059ed361",
+        "filename": "rbh-fsevents/src/enrichers/hestia.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-10-20T12:38:41Z",
+      "side": 1,
+      "message": "minor: this is assuming that you will find all the attributes in the JSON. A more robust approach would be to increment count in each if/else if",
+      "range": {
+        "startLine": 130,
+        "startChar": 4,
+        "endLine": 130,
+        "endChar": 16
+      },
+      "revId": "1701009335ad9a26eeedf83a696ce5c6810cf76a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6462fb5e_1d849e5a",
+        "filename": "rbh-fsevents/src/enrichers/hestia.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-10-20T12:38:41Z",
+      "side": 1,
+      "message": "comment: I don\u0027t think this is a good idea to fetch all the attributes. We will only need some of them. We will only need to do that for the user metadata.",
+      "range": {
+        "startLine": 145,
+        "startChar": 29,
+        "endLine": 145,
+        "endChar": 51
+      },
+      "revId": "1701009335ad9a26eeedf83a696ce5c6810cf76a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
