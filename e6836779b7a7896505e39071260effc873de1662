@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9989e3ef_14395281",
+        "filename": "rbh-fsevents/rbh-fsevents.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-10-20T08:17:11Z",
+      "side": 1,
+      "message": "minor: missing default value",
+      "range": {
+        "startLine": 64,
+        "startChar": 19,
+        "endLine": 64,
+        "endChar": 29
+      },
+      "revId": "e6836779b7a7896505e39071260effc873de1662",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "203eb434_58a1a4fa",
+        "filename": "rbh-fsevents/src/deduplicator/fsevent_pool.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-10-20T08:17:11Z",
+      "side": 1,
+      "message": "suggest: cannot",
+      "range": {
+        "startLine": 71,
+        "startChar": 39,
+        "endLine": 71,
+        "endChar": 47
+      },
+      "revId": "e6836779b7a7896505e39071260effc873de1662",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "610ee7b4_29ed627a",
+        "filename": "rbh-fsevents/src/deduplicator/fsevent_pool.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-10-20T08:17:11Z",
+      "side": 1,
+      "message": "comment: wouldn\u0027t it be simpler to allow this, and simply consider that if the flush size is greater than the batch size, we flush the whole batch ? (i.e if flush size \u003e batch size then flush size \u003d batch size ?)",
+      "range": {
+        "startLine": 73,
+        "startChar": 4,
+        "endLine": 73,
+        "endChar": 32
+      },
+      "revId": "e6836779b7a7896505e39071260effc873de1662",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f126e15f_08374d4d",
+        "filename": "rbh-fsevents/src/deduplicator/fsevent_pool.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-10-20T08:17:11Z",
+      "side": 1,
+      "message": "suggest: EINVAL here and above",
+      "range": {
+        "startLine": 74,
+        "startChar": 24,
+        "endLine": 74,
+        "endChar": 25
+      },
+      "revId": "e6836779b7a7896505e39071260effc873de1662",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
