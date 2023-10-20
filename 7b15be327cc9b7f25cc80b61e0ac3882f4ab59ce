@@ -158,6 +158,30 @@
       },
       "revId": "7b15be327cc9b7f25cc80b61e0ac3882f4ab59ce",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a57123af_66a4a975",
+        "filename": "rbh-fsevents/src/sources/hestia.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-10-20T09:50:19Z",
+      "side": 1,
+      "message": "It will be done in this stack, and I\u0027ve added a gitlab issue for it",
+      "parentUuid": "b5c0c2e3_0beefd6a",
+      "range": {
+        "startLine": 89,
+        "startChar": 12,
+        "endLine": 89,
+        "endChar": 38
+      },
+      "revId": "7b15be327cc9b7f25cc80b61e0ac3882f4ab59ce",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
