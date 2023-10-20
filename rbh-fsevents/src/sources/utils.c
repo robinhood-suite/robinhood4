@@ -19,28 +19,29 @@
 #include "source.h"
 #include "utils.h"
 
-__thread struct rbh_sstack *global_values;
+__thread struct rbh_sstack *source_stack;
 
 static void __attribute__((destructor))
-destroy_global_values(void)
+destroy_source_stack(void)
 {
-    rbh_sstack_destroy(global_values);
+    if (source_stack)
+        rbh_sstack_destroy(source_stack);
 }
 
 void
-flush_global_values()
+flush_source_stack()
 {
     while (true) {
         size_t readable;
 
-        rbh_sstack_peek(global_values, &readable);
+        rbh_sstack_peek(source_stack, &readable);
         if (readable == 0)
             break;
 
-        rbh_sstack_pop(global_values, readable);
+        rbh_sstack_pop(source_stack, readable);
     }
 
-    rbh_sstack_shrink(global_values);
+    rbh_sstack_shrink(source_stack);
 }
 
 struct rbh_value_pair *
@@ -60,7 +61,7 @@ build_pair(const char *key, struct rbh_value *(*part_builder)(void *),
     if (PAIR[0].value == NULL && part_builder != NULL)
         return NULL;
 
-    pair = rbh_sstack_push(global_values, NULL, sizeof(*pair));
+    pair = rbh_sstack_push(source_stack, NULL, sizeof(*pair));
     if (pair == NULL)
         return NULL;
     memcpy(pair, PAIR, sizeof(*pair));
@@ -82,7 +83,7 @@ build_empty_map(void *arg)
     };
     struct rbh_value *enrich;
 
-    return rbh_sstack_push(global_values, &ENRICH, sizeof(*enrich));
+    return rbh_sstack_push(source_stack, &ENRICH, sizeof(*enrich));
 }
 
 struct rbh_value_map
@@ -97,11 +98,17 @@ build_enrich_map(struct rbh_value *(*part_builder)(void *),
     return ENRICH;
 }
 
-void
-initialize_global_values(size_t stack_size)
+void *
+source_stack_alloc(const void *data, size_t size)
 {
-    global_values = rbh_sstack_new(stack_size);
-    if (!global_values)
+    return rbh_sstack_push(source_stack, data, size);
+}
+
+void
+initialize_source_stack(size_t stack_size)
+{
+    source_stack = rbh_sstack_new(stack_size);
+    if (!source_stack)
         error(EXIT_FAILURE, errno,
-              "rbh_sstack_new in initialize_global_values");
+              "rbh_sstack_new in initialize_source_stack");
 }

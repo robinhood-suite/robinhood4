@@ -57,9 +57,6 @@ hestia_enrich(struct rbh_fsevent *enriched, const struct rbh_value_pair *attr)
     if (nb_attrs == 0)
         goto decref_attrs;
 
-    printf("Attributes of '%s': %s\n",
-           enriched->id.data, json_dumps(attrs, JSON_INDENT(4)));
-
 decref_attrs:
     json_decref(attrs);
 
