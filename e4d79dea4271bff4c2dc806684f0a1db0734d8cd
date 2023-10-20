@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "59a0adc1_9bd58046",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-10-20T08:28:26Z",
+      "side": 1,
+      "message": "0 while the test doesn\u0027t actually test anything",
+      "revId": "e4d79dea4271bff4c2dc806684f0a1db0734d8cd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b6935f1c_21c19329",
+        "filename": "rbh-fsevents/tests/acceptance-dedup.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-10-20T08:28:26Z",
+      "side": 1,
+      "message": "suggest: you could simply have another to rbh-fsevents without any dedup, and check the outputs are the exact same.",
+      "range": {
+        "startLine": 53,
+        "startChar": 4,
+        "endLine": 53,
+        "endChar": 65
+      },
+      "revId": "e4d79dea4271bff4c2dc806684f0a1db0734d8cd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
