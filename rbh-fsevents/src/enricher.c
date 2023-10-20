@@ -17,12 +17,6 @@ struct enrich_iter_builder *
 enrich_iter_builder_from_backend(struct rbh_backend *backend,
                                  const char *mount_path)
 {
-    struct enrich_iter_builder *builder;
-
-    builder = malloc(sizeof(*builder));
-    if (builder == NULL)
-        error(EXIT_FAILURE, errno, "malloc");
-
     switch (backend->id) {
         case RBH_BI_POSIX:
             return posix_enrich_iter_builder(backend, mount_path);
