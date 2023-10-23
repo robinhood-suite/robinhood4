@@ -7,7 +7,8 @@
 # SPDX-License-Identifer: LGPL-3.0-or-later
 
 test_dir=$(dirname $(readlink -e $0))
-. $test_dir/test_utils.bash
+. $test_dir/../test_utils.bash
+. $test_dir/lustre_utils.bash
 
 ################################################################################
 #                                    TESTS                                     #
@@ -15,12 +16,35 @@ test_dir=$(dirname $(readlink -e $0))
 
 create_entry()
 {
-    mkdir "$1"
+    # test_create_two_entries and test_create_entry_check_statx_attr will only
+    # check for the symlink itself, and not other entries, so creating two
+    # entries here is not an issue
+    touch "$1.tmp"
+    ln -s "$1.tmp" "$1"
 }
 
 create_filled_entry()
 {
-    mkdir -p "$1/tmp_test_dir"
+    echo "test" > "$1.tmp"
+    ln -s "$1.tmp" "$1"
+}
+
+test_create_symlink()
+{
+    local entry="test_entry"
+    create_entry "$entry"
+
+    invoke_rbh-fsevents
+
+    local entries=$(mongo "$testdb" --eval "db.entries.find()" | wc -l)
+    local count=$(find . | wc -l)
+    if [[ $entries -ne $count ]]; then
+        error "There should be $count entries in the database, found $entries"
+    fi
+
+    verify_statx "$entry"
+    verify_statx "$entry.tmp"
+    find_attribute "\"ns.name\":\"$entry\"" "\"symlink\":\"$entry.tmp\""
 }
 
 ################################################################################
@@ -29,7 +53,7 @@ create_filled_entry()
 
 source $test_dir/test_create_inode.bash
 
-declare -a tests=(test_create_entry test_create_two_entries)
+declare -a tests=(test_create_symlink test_create_two_entries)
 
 LUSTRE_DIR=/mnt/lustre/
 cd "$LUSTRE_DIR"
@@ -42,4 +66,4 @@ lfs setdirstripe -D -i 0 $tmpdir
 trap -- "rm -rf '$tmpdir'; stop_changelogs '$LUSTRE_MDT' '$userid'" EXIT
 cd "$tmpdir"
 
-run_tests ${tests[@]}
+run_tests lustre_setup lustre_teardown "${tests[@]}"
