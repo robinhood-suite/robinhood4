@@ -1,13 +1,14 @@
 #!/usr/bin/env bash
 
-# This file is part of rbh-find-lustre
+# This file is part of rbh-fsevents
 # Copyright (C) 2023 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
 
 test_dir=$(dirname $(readlink -e $0))
-. $test_dir/test_utils.bash
+. $test_dir/../test_utils.bash
+. $test_dir/lustre_utils.bash
 
 ################################################################################
 #                                    TESTS                                     #
@@ -15,50 +16,41 @@ test_dir=$(dirname $(readlink -e $0))
 
 create_entry()
 {
-    touch "$1"
+    mknod "$1" b 1 2
 }
 
-rm_entry()
+create_filled_entry()
 {
-    rm -f "$1"
+    mknod "$1" b 1 2
 }
 
-test_rm_with_hsm_copy()
+test_create_mknod()
 {
     local entry="test_entry"
-    create_entry $entry
+    mknod $entry.1 b 1 2
+    mknod $entry.2 p
 
     invoke_rbh-fsevents
 
-    hsm_archive_file $entry
-    clear_changelogs "$LUSTRE_MDT" "$userid"
-    rm_entry $entry
-
-    invoke_rbh-fsevents
-
-    # Since an archived copy of $entry still exists, the DB should still contain
-    # $entry with no parent
     local entries=$(mongo "$testdb" --eval "db.entries.find()" | wc -l)
     local count=$(find . | wc -l)
-    count=$((count + 1))
     if [[ $entries -ne $count ]]; then
         error "There should be $count entries in the database, found $entries"
     fi
 
-    find_attribute '"ns": { $exists : true }' '"ns": { $size : 0 }'
+    verify_statx "$entry.1"
+    verify_lustre "$entry.1"
+    verify_statx "$entry.2"
+    verify_lustre "$entry.2"
 }
 
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
-source $test_dir/test_rm_inode.bash
+source $test_dir/test_create_inode.bash
 
-declare -a tests=(test_rm_same_batch test_rm_different_batch)
-
-if lctl get_param mdt.*.hsm_control | grep "enabled"; then
-    tests+=(test_rm_with_hsm_copy)
-fi
+declare -a tests=(test_create_mknod test_create_two_entries)
 
 LUSTRE_DIR=/mnt/lustre/
 cd "$LUSTRE_DIR"
@@ -71,4 +63,4 @@ lfs setdirstripe -D -i 0 $tmpdir
 trap -- "rm -rf '$tmpdir'; stop_changelogs '$LUSTRE_MDT' '$userid'" EXIT
 cd "$tmpdir"
 
-run_tests ${tests[@]}
+run_tests lustre_setup lustre_teardown "${tests[@]}"
