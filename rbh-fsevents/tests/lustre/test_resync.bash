@@ -7,7 +7,8 @@
 # SPDX-License-Identifer: LGPL-3.0-or-later
 
 test_dir=$(dirname $(readlink -e $0))
-. $test_dir/test_utils.bash
+. $test_dir/../test_utils.bash
+. $test_dir/lustre_utils.bash
 
 ost_count=$(lfs osts | wc -l)
 if [[ $ost_count -lt 2 ]]; then
@@ -18,21 +19,21 @@ fi
 #                                    TESTS                                     #
 ################################################################################
 
-test_flrw()
+test_resync()
 {
     local entry="test_entry"
     local n_mirror=2
     lfs mirror create -N$n_mirror $entry
+    echo "test_data" >> $entry
 
     invoke_rbh-fsevents
 
     clear_changelogs "$LUSTRE_MDT" "$userid"
-    echo "test_data" >> $entry
+    lfs mirror resync $entry
 
     local old_version=$(mongo "$testdb" --eval \
         'db.entries.find({"ns.name":"'$entry'"},
-                         {"statx.ctime":0, "statx.mtime":0, "statx.size":0,
-                          "statx.blocks":0, "xattrs":0})')
+                         {"statx.ctime":0, "statx.blocks":0, "xattrs":0})')
 
     invoke_rbh-fsevents
 
@@ -44,8 +45,7 @@ test_flrw()
 
     local updated_version=$(mongo "$testdb" --eval \
         'db.entries.find({"ns.name":"'$entry'"},
-                         {"statx.ctime":0, "statx.mtime":0, "statx.size":0,
-                          "statx.blocks":0, "xattrs":0})')
+                         {"statx.ctime":0, "statx.blocks":0, "xattrs":0})')
 
     if [ "$old_version" != "$updated_version" ]; then
         error "Layout event modified other statx elements than ctime, mtime "
@@ -55,11 +55,6 @@ test_flrw()
     find_attribute '"statx.ctime.sec":NumberLong('$(statx +%Z "$entry")')' \
                    '"ns.name":"'$entry'"'
     find_attribute '"statx.ctime.nsec":0' '"ns.name":"'$entry'"'
-    find_attribute '"statx.mtime.sec":NumberLong('$(statx +%Y "$entry")')' \
-                   '"ns.name":"'$entry'"'
-    find_attribute '"statx.mtime.nsec":0' '"ns.name":"'$entry'"'
-    find_attribute '"statx.size":NumberLong('$(statx +%s "$entry")')' \
-                   '"ns.name":"'$entry'"'
     find_attribute '"statx.blocks":NumberLong('$(statx +%b "$entry")')' \
                    '"ns.name":"'$entry'"'
 
@@ -74,7 +69,7 @@ test_flrw()
 #                                     MAIN                                     #
 ################################################################################
 
-declare -a tests=(test_flrw)
+declare -a tests=(test_resync)
 
 LUSTRE_DIR=/mnt/lustre/
 cd "$LUSTRE_DIR"
@@ -87,4 +82,4 @@ lfs setdirstripe -D -i 0 $tmpdir
 trap -- "rm -rf '$tmpdir'; stop_changelogs '$LUSTRE_MDT' '$userid'" EXIT
 cd "$tmpdir"
 
-run_tests ${tests[@]}
+run_tests lustre_setup lustre_teardown "${tests[@]}"
