@@ -7,58 +7,65 @@
 # SPDX-License-Identifer: LGPL-3.0-or-later
 
 test_dir=$(dirname $(readlink -e $0))
-. $test_dir/test_utils.bash
+. $test_dir/../test_utils.bash
+. $test_dir/lustre_utils.bash
+
+mdt_count=$(lfs mdts | wc -l)
+if [[ $mdt_count -lt 2 ]]; then
+    exit 77
+fi
 
 ################################################################################
 #                                    TESTS                                     #
 ################################################################################
 
-create_entry()
-{
-    touch "$1"
-}
-
-rm_entry()
-{
-    rm -f "$1"
-}
-
-test_rm_with_hsm_copy()
+test_migrate()
 {
     local entry="test_entry"
-    create_entry $entry
+    local other_mdt="lustre-MDT0001"
+    # This will be done more properly in a next patch
+    local other_mdt_user="$(lctl --device "$other_mdt" changelog_register |
+                            cut -d "'" -f2)"
+    # Clear changelogs from previous tests
+    lfs changelog_clear "$LUSTRE_MDT" "$userid" 0
+    lfs changelog_clear "$other_mdt" "$other_mdt_user" 0
+
+    mkdir $entry
 
     invoke_rbh-fsevents
-
-    hsm_archive_file $entry
     clear_changelogs "$LUSTRE_MDT" "$userid"
-    rm_entry $entry
+
+    lfs migrate -m 1 $entry
+    # This will be done more properly in a next patch
+    rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" src:lustre:"$other_mdt" \
+        "rbh:mongo:$testdb"
+    clear_changelogs "$other_mdt" "$other_mdt_user"
+
+    lfs migrate -m 0 $entry
+
+    find_attribute '"xattrs.mdt_index": 1' '"ns.name":"'$entry'"'
+    find_attribute '"xattrs.mdt_count": 1' '"ns.name":"'$entry'"'
 
     invoke_rbh-fsevents
 
-    # Since an archived copy of $entry still exists, the DB should still contain
-    # $entry with no parent
     local entries=$(mongo "$testdb" --eval "db.entries.find()" | wc -l)
     local count=$(find . | wc -l)
-    count=$((count + 1))
     if [[ $entries -ne $count ]]; then
         error "There should be $count entries in the database, found $entries"
     fi
 
-    find_attribute '"ns": { $exists : true }' '"ns": { $size : 0 }'
+    verify_statx $entry
+    find_attribute '"xattrs.mdt_index": 0' '"ns.name":"'$entry'"'
+    find_attribute '"xattrs.mdt_count": 1' '"ns.name":"'$entry'"'
+
+    lctl --device "$other_mdt" changelog_deregister "$other_mdt_user"
 }
 
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
-source $test_dir/test_rm_inode.bash
-
-declare -a tests=(test_rm_same_batch test_rm_different_batch)
-
-if lctl get_param mdt.*.hsm_control | grep "enabled"; then
-    tests+=(test_rm_with_hsm_copy)
-fi
+declare -a tests=(test_migrate)
 
 LUSTRE_DIR=/mnt/lustre/
 cd "$LUSTRE_DIR"
@@ -71,4 +78,4 @@ lfs setdirstripe -D -i 0 $tmpdir
 trap -- "rm -rf '$tmpdir'; stop_changelogs '$LUSTRE_MDT' '$userid'" EXIT
 cd "$tmpdir"
 
-run_tests ${tests[@]}
+run_tests lustre_setup lustre_teardown "${tests[@]}"
