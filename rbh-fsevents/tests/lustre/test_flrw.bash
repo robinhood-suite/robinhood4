@@ -7,45 +7,50 @@
 # SPDX-License-Identifer: LGPL-3.0-or-later
 
 test_dir=$(dirname $(readlink -e $0))
-. $test_dir/test_utils.bash
+. $test_dir/../test_utils.bash
+. $test_dir/lustre_utils.bash
+
+ost_count=$(lfs osts | wc -l)
+if [[ $ost_count -lt 2 ]]; then
+    exit 77
+fi
 
 ################################################################################
 #                                    TESTS                                     #
 ################################################################################
 
-test_truncate()
+test_flrw()
 {
     local entry="test_entry"
-    # if the file does not exist, truncate will also create it, but that will
-    # trigger a creat/close changelog, so to only test the truncate event, we
-    # first create a file, sync it to the DB, then do a truncate
-    touch $entry
+    local n_mirror=2
+    lfs mirror create -N$n_mirror $entry
 
     invoke_rbh-fsevents
 
     clear_changelogs "$LUSTRE_MDT" "$userid"
+    echo "test_data" >> $entry
 
-    # retrieve the version before the truncate and after, to check there is no
-    # difference between the two except the fields that should be modified
     local old_version=$(mongo "$testdb" --eval \
         'db.entries.find({"ns.name":"'$entry'"},
-                         {"statx.mtime":0, "statx.ctime":0, "statx.size":0})')
-    truncate -s 300 $entry
+                         {"statx.ctime":0, "statx.mtime":0, "statx.size":0,
+                          "statx.blocks":0, "xattrs":0})')
 
     invoke_rbh-fsevents
 
     local entries=$(mongo "$testdb" --eval "db.entries.find()" | wc -l)
     local count=$(find . | wc -l)
     if [[ $entries -ne $count ]]; then
-        error "There should be only $count entries in the database"
+        error "There should be $count entries in the database, found $entries"
     fi
 
     local updated_version=$(mongo "$testdb" --eval \
         'db.entries.find({"ns.name":"'$entry'"},
-                         {"statx.mtime":0, "statx.ctime":0, "statx.size":0})')
+                         {"statx.ctime":0, "statx.mtime":0, "statx.size":0,
+                          "statx.blocks":0, "xattrs":0})')
 
     if [ "$old_version" != "$updated_version" ]; then
-        error "Truncate modified more than mtime, ctime and size"
+        error "Layout event modified other statx elements than ctime, mtime "
+              "and size"
     fi
 
     find_attribute '"statx.ctime.sec":NumberLong('$(statx +%Z "$entry")')' \
@@ -56,15 +61,21 @@ test_truncate()
     find_attribute '"statx.mtime.nsec":0' '"ns.name":"'$entry'"'
     find_attribute '"statx.size":NumberLong('$(statx +%s "$entry")')' \
                    '"ns.name":"'$entry'"'
+    find_attribute '"statx.blocks":NumberLong('$(statx +%b "$entry")')' \
+                   '"ns.name":"'$entry'"'
 
-    verify_lustre "$entry"
+    find_attribute '"xattrs.mirror_count":'$n_mirror '"ns.name":"'$entry'"'
+    find_attribute '"xattrs.mirror_id":'$(get_mirror_id "$entry") \
+                   '"ns.name":"'$entry'"'
+    find_attribute '"xattrs.flags":'$(get_flags "$entry") \
+                   '"ns.name":"'$entry'"'
 }
 
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
-declare -a tests=(test_truncate)
+declare -a tests=(test_flrw)
 
 LUSTRE_DIR=/mnt/lustre/
 cd "$LUSTRE_DIR"
@@ -77,4 +88,4 @@ lfs setdirstripe -D -i 0 $tmpdir
 trap -- "rm -rf '$tmpdir'; stop_changelogs '$LUSTRE_MDT' '$userid'" EXIT
 cd "$tmpdir"
 
-run_tests ${tests[@]}
+run_tests lustre_setup lustre_teardown "${tests[@]}"

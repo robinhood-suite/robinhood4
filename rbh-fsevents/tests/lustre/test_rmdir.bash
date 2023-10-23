@@ -7,7 +7,8 @@
 # SPDX-License-Identifer: LGPL-3.0-or-later
 
 test_dir=$(dirname $(readlink -e $0))
-. $test_dir/test_utils.bash
+. $test_dir/../test_utils.bash
+. $test_dir/lustre_utils.bash
 
 ################################################################################
 #                                    TESTS                                     #
@@ -15,21 +16,21 @@ test_dir=$(dirname $(readlink -e $0))
 
 create_entry()
 {
-    touch "$1"
+    mkdir "$1"
 }
 
-create_filled_entry()
+rm_entry()
 {
-    echo "blob" > "$1"
+    rmdir "$1"
 }
 
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
-source $test_dir/test_create_inode.bash
+source $test_dir/test_rm_inode.bash
 
-declare -a tests=(test_create_entry test_create_two_entries)
+declare -a tests=(test_rm_same_batch test_rm_different_batch)
 
 LUSTRE_DIR=/mnt/lustre/
 cd "$LUSTRE_DIR"
@@ -42,4 +43,4 @@ lfs setdirstripe -D -i 0 $tmpdir
 trap -- "rm -rf '$tmpdir'; stop_changelogs '$LUSTRE_MDT' '$userid'" EXIT
 cd "$tmpdir"
 
-run_tests ${tests[@]}
+run_tests lustre_setup lustre_teardown "${tests[@]}"
