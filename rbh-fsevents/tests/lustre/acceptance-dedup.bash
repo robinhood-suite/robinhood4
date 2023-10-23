@@ -7,7 +7,8 @@
 # SPDX-License-Identifer: LGPL-3.0-or-later
 
 test_dir=$(dirname $(readlink -e $0))
-. $test_dir/test_utils.bash
+. $test_dir/../test_utils.bash
+. $test_dir/lustre_utils.bash
 
 ################################################################################
 #                                    TESTS                                     #
@@ -15,9 +16,6 @@ test_dir=$(dirname $(readlink -e $0))
 
 creat_delete()
 {
-    # Clear remaining changelogs
-    clear_changelogs "$LUSTRE_MDT" "$userid"
-
     touch file
     rm file
 
@@ -60,4 +58,4 @@ lfs setdirstripe -D -i 0 $tmpdir
 trap -- "rm -rf '$tmpdir'; stop_changelogs '$LUSTRE_MDT' '$userid'" EXIT
 cd "$tmpdir"
 
-run_tests ${tests[@]}
+run_tests lustre_setup lustre_teardown ${tests[@]}

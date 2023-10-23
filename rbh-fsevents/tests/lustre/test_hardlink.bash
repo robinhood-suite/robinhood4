@@ -7,7 +7,8 @@
 # SPDX-License-Identifer: LGPL-3.0-or-later
 
 test_dir=$(dirname $(readlink -e $0))
-. $test_dir/test_utils.bash
+. $test_dir/../test_utils.bash
+. $test_dir/lustre_utils.bash
 
 ################################################################################
 #                                    TESTS                                     #
@@ -15,21 +16,43 @@ test_dir=$(dirname $(readlink -e $0))
 
 create_entry()
 {
-    mkdir "$1"
+    touch "$1.tmp"
+    ln "$1.tmp" "$1"
 }
 
-rm_entry()
+create_filled_entry()
 {
-    rmdir "$1"
+    echo "test" > "$1.tmp"
+    ln "$1.tmp" "$1"
+}
+
+test_create_hardlink()
+{
+    local entry="test_entry"
+    create_entry $entry
+
+    invoke_rbh-fsevents
+
+    local entries=$(mongo "$testdb" --eval "db.entries.find()" | wc -l)
+    local count=$(find . | wc -l)
+    count=$((count - 1))
+    if [[ $entries -ne $count ]]; then
+        error "There should be $count entries in the database, found $entries"
+    fi
+
+    find_attribute "\"ns.name\":\"$entry.tmp\"" "\"ns.name\":\"$entry\""
+    verify_statx "$entry"
+    verify_statx "$entry.tmp"
+    verify_lustre "$entry"
 }
 
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
-source $test_dir/test_rm_inode.bash
+source $test_dir/test_create_inode.bash
 
-declare -a tests=(test_rm_same_batch test_rm_different_batch)
+declare -a tests=(test_create_hardlink test_create_two_entries)
 
 LUSTRE_DIR=/mnt/lustre/
 cd "$LUSTRE_DIR"
@@ -42,4 +65,4 @@ lfs setdirstripe -D -i 0 $tmpdir
 trap -- "rm -rf '$tmpdir'; stop_changelogs '$LUSTRE_MDT' '$userid'" EXIT
 cd "$tmpdir"
 
-run_tests ${tests[@]}
+run_tests lustre_setup lustre_teardown "${tests[@]}"
