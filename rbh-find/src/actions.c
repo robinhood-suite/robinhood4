@@ -363,6 +363,9 @@ fsentry_print_directive(char *output, int max_length,
         return snprintf(output, max_length, "%d",
                         depth_from_path(fsentry_path(fsentry))
                         );
+    case 'D':
+        return snprintf(output, max_length, "%u",
+                        fsentry->statx->stx_dev_major);
     case 'f':
         return snprintf(output, max_length, "%s", basename(fsentry->name));
     case 'g':
