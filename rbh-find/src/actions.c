@@ -383,6 +383,8 @@ fsentry_print_directive(char *output, int max_length,
     case 'y':
         return snprintf(output, max_length, "%c",
                         type2char(fsentry->statx->stx_mode));
+    case '%':
+        return snprintf(output, max_length, "%%");
     default:
         error(EXIT_FAILURE, ENOTSUP, "format directive '%c' not supported",
               *directive);
