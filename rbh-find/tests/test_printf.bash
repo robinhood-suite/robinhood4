@@ -249,6 +249,16 @@ test_blocks()
     fi
 }
 
+test_depth()
+{
+    mkdir -p a/b/c/d/e
+
+    rbh-sync "rbh:posix:." "rbh:mongo:$testdb"
+
+    rbh-find "rbh:mongo:$testdb" -printf "%d\n" | sort |
+        difflines "0" "1" "2" "3" "4" "5"
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
@@ -256,7 +266,7 @@ test_blocks()
 declare -a tests=(test_atime test_ctime test_mtime test_filename test_inode
                   test_uid test_gid test_username test_groupname
                   test_backend_name test_size test_type test_symlink
-                  test_percent_sign test_blocks)
+                  test_percent_sign test_blocks test_depth)
 
 tmpdir=$(mktemp --directory)
 trap -- "rm -rf '$tmpdir'" EXIT
