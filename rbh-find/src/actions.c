@@ -10,6 +10,7 @@
 #include <grp.h>
 #include <inttypes.h>
 #include <linux/limits.h>
+#include <libgen.h>
 #include <pwd.h>
 #include <stdbool.h>
 #include <stdlib.h>
@@ -345,7 +346,9 @@ fsentry_print_directive(char *output, int max_length,
                         const char *directive,
                         const char *backend)
 {
+    int chars_written;
     const char *name;
+    char *path;
 
     assert(directive != NULL);
     assert(*directive != '\0');
@@ -381,6 +384,11 @@ fsentry_print_directive(char *output, int max_length,
         __attribute__((fallthrough));
     case 'G':
         return snprintf(output, max_length, "%u", fsentry->statx->stx_gid);
+    case 'h':
+        path = strdup(fsentry_path(fsentry));
+        chars_written = snprintf(output, max_length, "%s", dirname(path));
+        free(path);
+        return chars_written;
     case 'H':
         return snprintf(output, max_length, "%s", backend);
     case 'i':
