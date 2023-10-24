@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3faff51b_665a38c7",
+        "filename": "rbh-find/tests/test_printf.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-10-24T11:25:57Z",
+      "side": 1,
+      "message": "suggest: same as the other patches",
+      "range": {
+        "startLine": 93,
+        "startChar": 26,
+        "endLine": 93,
+        "endChar": 36
+      },
+      "revId": "d2648155a12e42e28c93cda91276983fa3ac42a2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
