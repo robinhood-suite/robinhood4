@@ -321,7 +321,19 @@ type2char(uint16_t mode)
         return 's';
     else
         return 'U';
+}
 
+static int
+depth_from_path(const char *path)
+{
+    int count = 0;
+    int i;
+
+    for (i = 0; path[i]; i++)
+        if (path[i] == '/')
+            count++;
+
+    return count;
 }
 
 static int
@@ -346,6 +358,10 @@ fsentry_print_directive(char *output, int max_length,
     case 'c':
         return snprintf(output, max_length, "%s",
                         ctime_from_timestamp(&fsentry->statx->stx_ctime.tv_sec)
+                        );
+    case 'd':
+        return snprintf(output, max_length, "%d",
+                        depth_from_path(fsentry_path(fsentry))
                         );
     case 'f':
         return snprintf(output, max_length, "%s", basename(fsentry->name));
