@@ -19,6 +19,7 @@
 
 #include <sys/param.h>
 #include <sys/stat.h>
+#include <sys/sysmacros.h>
 
 #include <robinhood/statx.h>
 
@@ -364,6 +365,10 @@ fsentry_print_directive(char *output, int max_length,
     case 'd':
         return snprintf(output, max_length, "%d",
                         depth_from_path(fsentry_path(fsentry)));
+    case 'D':
+        return snprintf(output, max_length, "%lu",
+                        makedev(fsentry->statx->stx_dev_major,
+                                fsentry->statx->stx_dev_minor));
     case 'f':
         return snprintf(output, max_length, "%s", fsentry->name);
     case 'g':

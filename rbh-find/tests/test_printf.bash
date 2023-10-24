@@ -267,6 +267,20 @@ test_depth()
         difflines "$(find . -printf "%d\n")"
 }
 
+test_device()
+{
+    touch file
+
+    rbh-sync "rbh:posix:." "rbh:mongo:$testdb"
+
+    local D=$(rbh-find "rbh:mongo:$testdb" -name file -printf "%D\n")
+    local device=$(stat -c %d file)
+
+    if [[ $D != $device ]]; then
+        error "wrong device: printf output '$D' != stat output '$device'"
+    fi
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
@@ -274,7 +288,7 @@ test_depth()
 declare -a tests=(test_atime test_ctime test_mtime test_filename test_inode
                   test_uid test_gid test_username test_groupname
                   test_backend_name test_size test_type test_symlink
-                  test_percent_sign test_blocks test_depth)
+                  test_percent_sign test_blocks test_depth test_device)
 
 tmpdir=$(mktemp --directory)
 trap -- "rm -rf '$tmpdir'" EXIT
