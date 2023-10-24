@@ -341,6 +341,8 @@ fsentry_print_directive(char *output, int max_length,
         return snprintf(output, max_length, "%s",
                         ctime_from_timestamp(&fsentry->statx->stx_atime.tv_sec)
                         );
+    case 'b':
+        return snprintf(output, max_length, "%lu", fsentry->statx->stx_blocks);
     case 'c':
         return snprintf(output, max_length, "%s",
                         ctime_from_timestamp(&fsentry->statx->stx_ctime.tv_sec)
