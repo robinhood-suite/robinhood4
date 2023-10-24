@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "272d974e_4e0dd5c3",
+        "filename": "rbh-find/tests/test_printf.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-10-24T11:23:57Z",
+      "side": 1,
+      "message": "suggest: as in the first patch of the stack, modify the error message just to show which one is the one returned by printf and which is by stat",
+      "range": {
+        "startLine": 67,
+        "startChar": 28,
+        "endLine": 67,
+        "endChar": 40
+      },
+      "revId": "057762062f90817e07a9b65db3412f1a503b4721",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
