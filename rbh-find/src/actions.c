@@ -340,12 +340,31 @@ depth_from_path(const char *path)
     return count;
 }
 
+static void
+symbolic_permission(char *symbolic_mode, mode_t mode)
+{
+    symbolic_mode[0] = type2char(mode);
+    if (symbolic_mode[0] == 'f')
+        symbolic_mode[0] = '-';
+
+    static_assert(ARRAY_SIZE(MODE_BITS) == ARRAY_SIZE(SPECIAL_BITS), "");
+    for (size_t i = 0; i < ARRAY_SIZE(MODE_BITS); i++) {
+        const char *mapping =
+            mode & SPECIAL_BITS[i] ? mode & MODE_BITS[i] ? "..s..s..t"
+                                                         : "..S..S..T"
+                                   : mode & MODE_BITS[i] ? "rwxrwxrwx"
+                                                         : "---------";
+        symbolic_mode[i + 1] = mapping[i];
+    }
+}
+
 static int
 fsentry_print_directive(char *output, int max_length,
                         const struct rbh_fsentry *fsentry,
                         const char *directive,
                         const char *backend)
 {
+    char symbolic_mode[11];
     int chars_written;
     const char *name;
     char *path;
@@ -398,6 +417,9 @@ fsentry_print_directive(char *output, int max_length,
             return 0;
 
         return snprintf(output, max_length, "%s", fsentry->symlink);
+    case 'M':
+        symbolic_permission(symbolic_mode, fsentry->statx->stx_mode);
+        return snprintf(output, max_length, "%s", symbolic_mode);
     case 'p':
         return snprintf(output, max_length, "%s", fsentry_path(fsentry));
     case 's':
