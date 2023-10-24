@@ -358,6 +358,19 @@ symbolic_permission(char *symbolic_mode, mode_t mode)
 }
 
 static int
+octal_permission(mode_t mode)
+{
+    int user = (mode & S_IRUSR ? 400 : 0) + (mode & S_IWUSR ? 200 : 0) +
+               (mode & S_IXUSR ? 100 : 0);
+    int group = (mode & S_IRGRP ? 40 : 0) + (mode & S_IWGRP ? 20 : 0) +
+                (mode & S_IXGRP ? 10 : 0);
+    int other = (mode & S_IROTH ? 4 : 0) + (mode & S_IWOTH ? 2 : 0) +
+                (mode & S_IXOTH ? 1 : 0);
+
+    return user + group + other;
+}
+
+static int
 fsentry_print_directive(char *output, int max_length,
                         const struct rbh_fsentry *fsentry,
                         const char *directive,
@@ -419,6 +432,9 @@ fsentry_print_directive(char *output, int max_length,
         return snprintf(output, max_length, "%s", fsentry->symlink);
     case 'i':
         return snprintf(output, max_length, "%lu", fsentry->statx->stx_ino);
+    case 'm':
+        return snprintf(output, max_length, "%d",
+                        octal_permission(fsentry->statx->stx_mode));
     case 'M':
         symbolic_permission(symbolic_mode, fsentry->statx->stx_mode);
         return snprintf(output, max_length, "%s", symbolic_mode);
