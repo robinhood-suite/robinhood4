@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bee26c15_ec45d091",
+        "filename": "rbh-find/src/actions.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-10-24T11:19:36Z",
+      "side": 1,
+      "message": "suggest: add the %t directive aswell, since it\u0027s exactly the same but for the mtime, and the test can be copied without much extra work",
+      "range": {
+        "startLine": 295,
+        "startChar": 4,
+        "endLine": 298,
+        "endChar": 26
+      },
+      "revId": "9ceb7f6ff75edd1690497df38b6ebc81cfdd001d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fc6f0f11_4490e064",
+        "filename": "rbh-find/tests/test_printf.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-10-24T11:19:36Z",
+      "side": 1,
+      "message": "major: sleep 1 or 2 seconds, then do another touch on the file, because as it is, your test doesn\u0027t verify that you actually print the access time of the file, only that you print one of the 3 (or 4) times, since they are all the same",
+      "range": {
+        "startLine": 23,
+        "startChar": 4,
+        "endLine": 24,
+        "endChar": 46
+      },
+      "revId": "9ceb7f6ff75edd1690497df38b6ebc81cfdd001d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aad21425_36114e22",
+        "filename": "rbh-find/tests/test_printf.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-10-24T11:19:36Z",
+      "side": 1,
+      "message": "suggest: `printf time \u0027$d\u0027 !\u003d file time \u0027$atime\u0027`\nJust to show which one is the correct one (the file time) and which one isn\u0027t",
+      "range": {
+        "startLine": 31,
+        "startChar": 28,
+        "endLine": 31,
+        "endChar": 44
+      },
+      "revId": "9ceb7f6ff75edd1690497df38b6ebc81cfdd001d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "13952e86_0da7e21d",
+        "filename": "rbh-find/tests/test_printf.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-10-24T11:19:36Z",
+      "side": 1,
+      "message": "major: idem, but with a modification of the change time",
+      "range": {
+        "startLine": 37,
+        "startChar": 4,
+        "endLine": 38,
+        "endChar": 46
+      },
+      "revId": "9ceb7f6ff75edd1690497df38b6ebc81cfdd001d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
