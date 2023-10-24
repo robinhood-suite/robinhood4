@@ -376,6 +376,10 @@ fsentry_print_directive(char *output, int max_length,
         __attribute__((fallthrough));
     case 'G':
         return snprintf(output, max_length, "%u", fsentry->statx->stx_gid);
+    case 'h':
+        return snprintf(output, max_length, "%s",
+                        dirname(fsentry_path(fsentry))
+                        );
     case 'H':
         return snprintf(output, max_length, "%s", backend);
     case 'l':
