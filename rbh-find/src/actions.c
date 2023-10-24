@@ -329,11 +329,28 @@ depth_from_path(const char *path)
     int count = 0;
     int i;
 
+
     for (i = 0; path[i]; i++)
         if (path[i] == '/')
             count++;
 
     return count;
+}
+
+static void
+symbolic_permission(char *symbolic_mode, mode_t mode)
+{
+    symbolic_mode[0] = S_ISREG(mode) ? '-' : 'd';
+
+    static_assert(ARRAY_SIZE(MODE_BITS) == ARRAY_SIZE(SPECIAL_BITS), "");
+    for (size_t i = 0; i < ARRAY_SIZE(MODE_BITS); i++) {
+        const char *mapping =
+            mode & SPECIAL_BITS[i] ? mode & MODE_BITS[i] ? "..s..s..t"
+                                                         : "..S..S..T"
+                                   : mode & MODE_BITS[i] ? "rwxrwxrwx"
+                                                         : "---------";
+        symbolic_mode[i + 1] = mapping[i];
+    }
 }
 
 static int
@@ -342,6 +359,7 @@ fsentry_print_directive(char *output, int max_length,
                         const char *directive,
                         const char *backend)
 {
+    char symbolic_mode[10];
     const char *name;
 
     assert(directive != NULL);
@@ -389,6 +407,9 @@ fsentry_print_directive(char *output, int max_length,
         return snprintf(output, max_length, "%s", fsentry->symlink);
     case 'i':
         return snprintf(output, max_length, "%lu", fsentry->statx->stx_ino);
+    case 'M':
+        symbolic_permission(symbolic_mode, fsentry->statx->stx_mode);
+        return snprintf(output, max_length, "%s", symbolic_mode);
     case 'p':
         return snprintf(output, max_length, "%s", fsentry_path(fsentry));
     case 's':

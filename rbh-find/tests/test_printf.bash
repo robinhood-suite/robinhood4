@@ -240,6 +240,21 @@ test_dirname()
         difflines "." "." "a" "a/b" "a/b/c" "a/b/c/d"
 }
 
+test_symbolic_permission()
+{
+    touch file
+    chmod 461 file
+    mkdir dir
+
+    rbh-sync "rbh:posix:." "rbh:mongo:$testdb"
+
+    rbh-find "rbh:mongo:$testdb" -name file -printf "%M\n" |
+        difflines "-r--rw---x"
+
+    rbh-find "rbh:mongo:$testdb" -name dir -printf "%M\n" |
+        difflines "drwxr-xr-x"
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
@@ -247,7 +262,8 @@ test_dirname()
 declare -a tests=(test_atime test_ctime test_filename test_inode test_uid
                   test_gid test_username test_groupname test_backend_name
                   test_size test_type test_symlink test_percent_sign
-                  test_blocks test_depth test_device test_dirname)
+                  test_blocks test_depth test_device test_dirname
+                  test_symbolic_permission)
 
 tmpdir=$(mktemp --directory)
 trap -- "rm -rf '$tmpdir'" EXIT
