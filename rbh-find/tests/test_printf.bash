@@ -225,13 +225,24 @@ test_symlink()
         difflines "file"
 }
 
+test_percent_sign()
+{
+    touch file
+
+    rbh-sync "rbh:posix:." "rbh:mongo:$testdb"
+
+    rbh-find "rbh:mongo:$testdb" -printf "%%\n" |
+        difflines "%" "%"
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
 declare -a tests=(test_atime test_ctime test_mtime test_filename test_inode
                   test_uid test_gid test_username test_groupname
-                  test_backend_name test_size test_type test_symlink)
+                  test_backend_name test_size test_type test_symlink
+                  test_percent_sign)
 
 tmpdir=$(mktemp --directory)
 trap -- "rm -rf '$tmpdir'" EXIT
