@@ -311,6 +311,20 @@ test_symbolic_permission()
         difflines "$find_output"
 }
 
+test_octal_permission()
+{
+    touch file
+    chmod 461 file
+    mkdir dir
+
+    rbh-sync "rbh:posix:." "rbh:mongo:$testdb"
+
+    local find_output="$(find . -printf "%m\n" | sort)"
+
+    rbh-find "rbh:mongo:$testdb" -printf "%m\n" | sort |
+        difflines "$find_output"
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
@@ -319,7 +333,7 @@ declare -a tests=(test_atime test_ctime test_mtime test_filename test_inode
                   test_uid test_gid test_username test_groupname
                   test_backend_name test_size test_type test_symlink
                   test_percent_sign test_blocks test_depth test_device
-                  test_dirname test_symbolic_permission)
+                  test_dirname test_symbolic_permission test_octal_permission)
 
 tmpdir=$(mktemp --directory)
 trap -- "rm -rf '$tmpdir'" EXIT
