@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "feec7dbc_e7b4078c",
+        "filename": "rbh-find/tests/test_printf.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-10-24T11:31:56Z",
+      "side": 1,
+      "message": "suggest: check that if the user does not have a name, the printf return the correct numerical value",
+      "range": {
+        "startLine": 105,
+        "startChar": 5,
+        "endLine": 107,
+        "endChar": 6
+      },
+      "revId": "d40ee3ce6091ceecc18f9a773a4771fdb8e5f385",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d4c39bef_20cb0991",
+        "filename": "rbh-find/tests/test_printf.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-10-24T11:31:56Z",
+      "side": 1,
+      "message": "suggest: same as the other, but for groups",
+      "range": {
+        "startLine": 118,
+        "startChar": 4,
+        "endLine": 120,
+        "endChar": 6
+      },
+      "revId": "d40ee3ce6091ceecc18f9a773a4771fdb8e5f385",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
