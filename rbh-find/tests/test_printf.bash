@@ -235,6 +235,20 @@ test_percent_sign()
         difflines "%" "%"
 }
 
+test_blocks()
+{
+    touch file
+
+    rbh-sync "rbh:posix:." "rbh:mongo:$testdb"
+
+    local b=$(rbh-find "rbh:mongo:$testdb" -name file -printf "%b\n")
+    local blocks=$(stat -c %b file)
+
+    if [[ $b != $blocks ]]; then
+        error "wrong blocks: printf output '$b' != stat output '$blocks'"
+    fi
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
@@ -242,7 +256,7 @@ test_percent_sign()
 declare -a tests=(test_atime test_ctime test_mtime test_filename test_inode
                   test_uid test_gid test_username test_groupname
                   test_backend_name test_size test_type test_symlink
-                  test_percent_sign)
+                  test_percent_sign test_blocks)
 
 tmpdir=$(mktemp --directory)
 trap -- "rm -rf '$tmpdir'" EXIT
