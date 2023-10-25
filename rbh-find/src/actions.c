@@ -426,6 +426,8 @@ fsentry_print_directive(char *output, int max_length,
     case 'M':
         symbolic_permission(symbolic_mode, fsentry->statx->stx_mode);
         return snprintf(output, max_length, "%s", symbolic_mode);
+    case 'n':
+        return snprintf(output, max_length, "%d", fsentry->statx->stx_nlink);
     case 'p':
         return snprintf(output, max_length, "%s", fsentry_path(fsentry));
     case 's':
