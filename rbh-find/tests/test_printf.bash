@@ -216,8 +216,7 @@ test_depth()
         difflines "0" "1" "2" "3" "4" "5"
 }
 
-test_device()
-{
+test_device() {
     touch file
 
     rbh-sync "rbh:posix:." "rbh:mongo:$testdb"
@@ -284,6 +283,42 @@ test_octal_permission()
         difflines "755"
 }
 
+test_hardlink()
+{
+    touch file
+    ln file hlink1
+    touch blob
+    ln blob hlink2
+    ln blob hlink3
+    touch dummy
+
+    rbh-sync "rbh:posix:." "rbh:mongo:$testdb"
+
+    local N1=$(rbh-find "rbh:mongo:$testdb" -name file -printf "%n\n")
+    local hardlink1=$(stat -c %h file)
+
+    if [[ $N1 != $hardlink1 ]]; then
+        error "wrong number of hard links: printf output '$N1' !=" \
+              "stat output '$hardlink1'"
+    fi
+
+    local N2=$(rbh-find "rbh:mongo:$testdb" -name blob -printf "%n\n")
+    local hardlink2=$(stat -c %h blob)
+
+    if [[ $N2 != $hardlink2 ]]; then
+        error "wrong number of hard links: printf output '$N2' !=" \
+              "stat output '$hardlink2'"
+    fi
+
+    local N3=$(rbh-find "rbh:mongo:$testdb" -name dummy -printf "%n\n")
+    local hardlink3=$(stat -c %h dummy)
+
+    if [[ $N3 != $hardlink3 ]]; then
+        error "wrong number of hard links: printf output '$N3' !=" \
+              "stat output '$hardlink3'"
+    fi
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
@@ -292,7 +327,7 @@ declare -a tests=(test_atime test_ctime test_filename test_inode test_uid
                   test_gid test_username test_groupname test_backend_name
                   test_size test_type test_symlink test_percent_sign
                   test_blocks test_depth test_device test_dirname
-                  test_symbolic_permission test_octal_permission)
+                  test_symbolic_permission test_octal_permission test_hardlink)
 
 tmpdir=$(mktemp --directory)
 trap -- "rm -rf '$tmpdir'" EXIT
