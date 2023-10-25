@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6a6f0fef_eae24aa1",
+        "filename": "rbh-find/src/actions.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 343,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2023-10-25T13:45:39Z",
+      "side": 1,
+      "message": "question: what about links and other kind of files?\n\nOn my side, a link can show this kind of output: `lrwxrwxrwx.`\n\nAlso there is a point at the end of the mode in `ls` output.",
+      "range": {
+        "startLine": 343,
+        "startChar": 4,
+        "endLine": 343,
+        "endChar": 49
+      },
+      "revId": "5f7a7ba66f150ff170317a16670536469ecde340",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "32b1aa6c_a3249102",
+        "filename": "rbh-find/tests/test_printf.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2023-10-25T13:45:39Z",
+      "side": 1,
+      "message": "suggest: can we have a check on the special bits too?",
+      "range": {
+        "startLine": 243,
+        "startChar": 0,
+        "endLine": 243,
+        "endChar": 24
+      },
+      "revId": "5f7a7ba66f150ff170317a16670536469ecde340",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
