@@ -8,7 +8,12 @@ subdir('unit')
 
 integration_tests = []
 
-liblustre = dependency('lustre', disabler: true, required: false)
+liblustre = dependency('lustre', required: false)
 if liblustre.found()
     subdir('lustre')
+endif
+
+libhestia = cc.find_library('hestia', dirs: '/usr/lib/hestia', required: false)
+if libhestia.found()
+    subdir('hestia')
 endif
