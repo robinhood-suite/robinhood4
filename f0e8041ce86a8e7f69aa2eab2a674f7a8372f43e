@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "022505b7_fee8c6cb",
+        "filename": "rbh-find/tests/test_printf.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2023-10-25T13:48:39Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 219,
+        "startChar": 13,
+        "endLine": 219,
+        "endChar": 14
+      },
+      "revId": "f0e8041ce86a8e7f69aa2eab2a674f7a8372f43e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
