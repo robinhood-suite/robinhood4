@@ -357,6 +357,15 @@ symbolic_permission(char *symbolic_mode, mode_t mode)
     }
 }
 
+static const char *
+remove_start_point(const char *path)
+{
+    if (*path == '/' && *(path + 1) == 0)
+        return "";
+
+    return &path[1];
+}
+
 static int
 octal_permission(mode_t mode)
 {
@@ -442,6 +451,9 @@ fsentry_print_directive(char *output, int max_length,
         return snprintf(output, max_length, "%d", fsentry->statx->stx_nlink);
     case 'p':
         return snprintf(output, max_length, "%s", fsentry_path(fsentry));
+    case 'P':
+        return snprintf(output, max_length, "%s",
+                        remove_start_point(fsentry_path(fsentry)));
     case 's':
         return snprintf(output, max_length, "%lu", fsentry->statx->stx_size);
     case 'u':
