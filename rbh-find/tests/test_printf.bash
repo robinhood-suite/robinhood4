@@ -305,6 +305,16 @@ test_hardlink()
     fi
 }
 
+test_path_without_start()
+{
+    touch file
+
+    rbh-sync "rbh:posix:." "rbh:mongo:$testdb"
+
+    rbh-find "rbh:mongo:$testdb" -printf "%P\n" | sort |
+        difflines "" "file"
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
@@ -313,7 +323,8 @@ declare -a tests=(test_atime test_ctime test_filename test_inode test_uid
                   test_gid test_username test_groupname test_backend_name
                   test_size test_type test_symlink test_percent_sign
                   test_blocks test_depth test_device test_dirname
-                  test_symbolic_permission test_octal_permission test_hardlink)
+                  test_symbolic_permission test_octal_permission test_hardlink
+                  test_path_without_start)
 
 tmpdir=$(mktemp --directory)
 trap -- "rm -rf '$tmpdir'" EXIT
