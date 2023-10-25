@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "75d3cadc_d919565a",
+        "filename": "rbh-find/tests/test_printf.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2023-10-25T13:47:04Z",
+      "side": 1,
+      "message": "question: strange for a directory, didn\u0027t you mean 755?",
+      "range": {
+        "startLine": 270,
+        "startChar": 19,
+        "endLine": 270,
+        "endChar": 22
+      },
+      "revId": "f31e86365f5ce93c26a22d880e11c2d1ea6c2ede",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
