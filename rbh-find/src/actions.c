@@ -358,6 +358,42 @@ symbolic_permission(char *symbolic_mode, mode_t mode)
     }
 }
 
+static const char *
+remove_start_point(const char *path, const char *backend)
+{
+    size_t branch_len;
+    char *branch;
+
+    if (*path == '/' && *(path + 1) == 0)
+        return "";
+
+    // Get the branch point which is after the #
+    branch = strchr(backend, '#');
+
+    // If there is no branch, return the path without the '/'
+    if (branch == NULL)
+        return &path[1];
+
+    branch++;
+    branch_len = strlen(branch);
+
+    /* If the path starts with a '/' and then is equal to the branch point, we
+     * check if it is the end of the path. If so, return an empty string because
+     * it means the path is the branch point prepended by a '/'. If not, check
+     * the path if "/[branch point]/", in which case return the path after the
+     * second '/'.
+     */
+    if (*path == '/' && strncmp(&path[1], branch, branch_len) == 0) {
+        if (path[branch_len + 1] == 0)
+            return "";
+        else if (path[1 + branch_len] == '/')
+            return &path[branch_len + 2]; // +2 to remove the '/'s
+    }
+
+    // If not, return the path after the initial '/'
+    return &path[1];
+}
+
 static int
 fsentry_print_directive(char *output, int max_length,
                         const struct rbh_fsentry *fsentry,
@@ -427,6 +463,9 @@ fsentry_print_directive(char *output, int max_length,
         return snprintf(output, max_length, "%d", fsentry->statx->stx_nlink);
     case 'p':
         return snprintf(output, max_length, "%s", fsentry_path(fsentry));
+    case 'P':
+        return snprintf(output, max_length, "%s",
+                        remove_start_point(fsentry_path(fsentry), backend));
     case 's':
         return snprintf(output, max_length, "%lu", fsentry->statx->stx_size);
     case 't':
