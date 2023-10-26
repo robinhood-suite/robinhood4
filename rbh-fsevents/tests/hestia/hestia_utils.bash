@@ -43,6 +43,11 @@ fill_events_array()
     done
 }
 
+clear_event_feed()
+{
+    rm $HOME/.cache/hestia/event_feed.yaml
+}
+
 hestia_setup()
 {
     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib/hestia
