@@ -4,7 +4,7 @@
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
 
-integration_tests = ['test_create']
+integration_tests = ['test_create', 'test_remove']
 
 foreach t: integration_tests
     e = find_program(t + '.bash')
