@@ -48,6 +48,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0ff07f91_c882510c",
+        "filename": "rbh-find/src/actions.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 343,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-10-26T09:07:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6da45a56_32cc4f31",
+      "range": {
+        "startLine": 343,
+        "startChar": 4,
+        "endLine": 343,
+        "endChar": 49
+      },
+      "revId": "5f7a7ba66f150ff170317a16670536469ecde340",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "32b1aa6c_a3249102",
@@ -61,6 +85,30 @@
       "writtenOn": "2023-10-25T13:45:39Z",
       "side": 1,
       "message": "suggest: can we have a check on the special bits too?",
+      "range": {
+        "startLine": 243,
+        "startChar": 0,
+        "endLine": 243,
+        "endChar": 24
+      },
+      "revId": "5f7a7ba66f150ff170317a16670536469ecde340",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e32f51ce_892d5677",
+        "filename": "rbh-find/tests/test_printf.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-10-26T09:07:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "32b1aa6c_a3249102",
       "range": {
         "startLine": 243,
         "startChar": 0,
