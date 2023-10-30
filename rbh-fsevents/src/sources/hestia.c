@@ -11,11 +11,21 @@
 
 #include <miniyaml.h>
 #include <robinhood/fsevent.h>
+#include <robinhood/itertools.h>
 
 #include "serialization.h"
 #include "source.h"
 #include "yaml_file.h"
 #include "utils.h"
+
+static __thread struct rbh_iterator *fsevents_iterator;
+
+static void __attribute__((destructor))
+free_fsevents_iterator(void)
+{
+    if (fsevents_iterator)
+        rbh_iter_destroy(fsevents_iterator);
+}
 
 enum event_fields {
     EF_UNKNOWN,
@@ -82,6 +92,71 @@ get_next_key(yaml_parser_t *parser, yaml_event_t *event,
     errno = save_errno;
 
     return KPR_OK;
+}
+
+static struct rbh_fsevent *
+create_new_xattr_fsevent(const struct rbh_id *id,
+                         const struct rbh_value_map *xattrs)
+{
+    struct rbh_fsevent *xattr = source_stack_alloc(NULL, sizeof(*xattr));
+
+    if (xattr == NULL)
+        error(EXIT_FAILURE, errno,
+              "source_stack_alloc on xattr in create_new_xattr_fsevent");
+
+    xattr->type = RBH_FET_XATTR;
+    xattr->id.data = source_stack_alloc(id->data, id->size);
+    if (xattr->id.data == NULL)
+        error(EXIT_FAILURE, errno,
+              "source_stack_alloc on id in create_new_xattr_fsevent");
+
+    xattr->id.size = id->size;
+
+    xattr->xattrs.pairs = xattrs->pairs;
+    xattr->xattrs.count = xattrs->count;
+
+    xattr->ns.parent_id = NULL;
+    xattr->ns.name = NULL;
+
+    return xattr;
+}
+
+static struct rbh_fsevent *
+create_new_upsert_fsevent(const struct rbh_id *id,
+                          const struct rbh_value_map *xattrs,
+                          const struct rbh_statx *statx)
+{
+    struct rbh_fsevent *upsert = source_stack_alloc(NULL, sizeof(*upsert));
+
+    if (upsert == NULL)
+        error(EXIT_FAILURE, errno,
+              "source_stack_alloc on upsert in create_new_upsert_fsevent");
+
+    upsert->type = RBH_FET_UPSERT;
+    upsert->id.data = source_stack_alloc(id->data, id->size);
+    if (upsert->id.data == NULL)
+        error(EXIT_FAILURE, errno,
+              "source_stack_alloc on id in create_new_upsert_fsevent");
+
+    upsert->id.size = id->size;
+
+    if (xattrs != NULL) {
+        upsert->xattrs.pairs = xattrs->pairs;
+        upsert->xattrs.count = xattrs->count;
+    } else {
+        upsert->xattrs.pairs = NULL;
+        upsert->xattrs.count = 0;
+    }
+
+    if (statx != NULL) {
+        upsert->upsert.statx = source_stack_alloc(&(*statx), sizeof(*statx));
+    } else {
+        upsert->upsert.statx = NULL;
+    }
+
+    upsert->upsert.symlink = NULL;
+
+    return upsert;
 }
 
 /* "READ" events in Hestia are of the form:
@@ -249,9 +324,16 @@ parse_update(yaml_parser_t *parser, struct rbh_fsevent *inode,
  *
  */
 static bool
-parse_remove(yaml_parser_t *parser, struct rbh_fsevent *delete)
+parse_remove(yaml_parser_t *parser)
 {
+    struct rbh_fsevent *new_delete_event;
     bool seen_id = false;
+
+    new_delete_event = source_stack_alloc(NULL, sizeof(*new_delete_event));
+    if (new_delete_event == NULL)
+        error(EXIT_FAILURE, errno, "source_stack_alloc in parse_remove");
+
+    new_delete_event[0].type = RBH_FET_DELETE;
 
     while (true) {
         enum event_fields field = 0;
@@ -270,8 +352,8 @@ parse_remove(yaml_parser_t *parser, struct rbh_fsevent *delete)
         case EF_ID:
             seen_id = true;
 
-            success = parse_name(parser, &delete->id.data);
-            delete->id.size = strlen(delete->id.data);
+            success = parse_name(parser, &new_delete_event[0].id.data);
+            new_delete_event[0].id.size = strlen(new_delete_event[0].id.data);
             break;
         case EF_TIME:
             /* Ignore this part of the event */
@@ -290,6 +372,9 @@ parse_remove(yaml_parser_t *parser, struct rbh_fsevent *delete)
         if (!success)
             return false;
     }
+
+    fsevents_iterator = rbh_iter_array(new_delete_event,
+                                       sizeof(new_delete_event), 1);
 
     return seen_id;
 }
@@ -466,7 +551,7 @@ parse_hestia_event(struct yaml_fsevent_iterator *fsevents)
         return parse_create(parser, fsevent, map, statx);
     case FT_REMOVE:
         fsevent->type = RBH_FET_DELETE;
-        return parse_remove(parser, fsevent);
+        return parse_remove(parser);
     case FT_UPDATE:
         fsevent->type = RBH_FET_XATTR;
         fsevents->enrich_required = true;
@@ -480,81 +565,26 @@ parse_hestia_event(struct yaml_fsevent_iterator *fsevents)
     }
 }
 
-static struct rbh_fsevent *
-create_new_xattr_fsevent(const struct rbh_id *id,
-                         const struct rbh_value_map *xattrs)
-{
-    struct rbh_fsevent *xattr = source_stack_alloc(NULL, sizeof(*xattr));
-
-    if (xattr == NULL)
-        error(EXIT_FAILURE, errno,
-              "source_stack_alloc on xattr in create_new_xattr_fsevent");
-
-    xattr->type = RBH_FET_XATTR;
-    xattr->id.data = source_stack_alloc(id->data, id->size);
-    if (xattr->id.data == NULL)
-        error(EXIT_FAILURE, errno,
-              "source_stack_alloc on id in create_new_xattr_fsevent");
-
-    xattr->id.size = id->size;
-
-    xattr->xattrs.pairs = xattrs->pairs;
-    xattr->xattrs.count = xattrs->count;
-
-    xattr->ns.parent_id = NULL;
-    xattr->ns.name = NULL;
-
-    return xattr;
-}
-
-static struct rbh_fsevent *
-create_new_upsert_fsevent(const struct rbh_id *id,
-                          const struct rbh_value_map *xattrs,
-                          const struct rbh_statx *statx)
-{
-    struct rbh_fsevent *upsert = source_stack_alloc(NULL, sizeof(*upsert));
-
-    if (upsert == NULL)
-        error(EXIT_FAILURE, errno,
-              "source_stack_alloc on upsert in create_new_upsert_fsevent");
-
-    upsert->type = RBH_FET_UPSERT;
-    upsert->id.data = source_stack_alloc(id->data, id->size);
-    if (upsert->id.data == NULL)
-        error(EXIT_FAILURE, errno,
-              "source_stack_alloc on id in create_new_upsert_fsevent");
-
-    upsert->id.size = id->size;
-
-    if (xattrs != NULL) {
-        upsert->xattrs.pairs = xattrs->pairs;
-        upsert->xattrs.count = xattrs->count;
-    } else {
-        upsert->xattrs.pairs = NULL;
-        upsert->xattrs.count = 0;
-    }
-
-    if (statx != NULL) {
-        upsert->upsert.statx = source_stack_alloc(&(*statx), sizeof(*statx));
-    } else {
-        upsert->upsert.statx = NULL;
-    }
-
-    upsert->upsert.symlink = NULL;
-
-    return upsert;
-}
-
 static const void *
 hestia_fsevent_iter_next(void *iterator)
 {
     struct yaml_fsevent_iterator *fsevents = iterator;
+    const struct rbh_fsevent *to_return;
     yaml_event_type_t type;
     yaml_event_t event;
 
     if (fsevents->exhausted) {
         errno = ENODATA;
         return NULL;
+    }
+
+    if (fsevents_iterator) {
+        to_return = rbh_iter_next(fsevents_iterator);
+        if (to_return != NULL)
+            goto return_fsevent;
+
+        rbh_iter_destroy(fsevents_iterator);
+        fsevents_iterator = NULL;
     }
 
     /* If there are additional xattrs to manage, create a specific event */
@@ -564,19 +594,17 @@ hestia_fsevent_iter_next(void *iterator)
                                      &fsevents->additional_xattr);
         fsevents->additional_xattr.count = 0;
 
-        return new_inode_event;
-    }
-
-    if (fsevents->additional_statx.stx_mask != 0) {
+        fsevents_iterator = rbh_iter_array(new_inode_event,
+                                           sizeof(new_inode_event), 1);
+    } else if (fsevents->additional_statx.stx_mask != 0) {
         struct rbh_fsevent *new_upsert_event =
             create_new_upsert_fsevent(&fsevents->fsevent.id, NULL,
                                       &fsevents->additional_statx);
         fsevents->additional_statx.stx_mask = 0;
 
-        return new_upsert_event;
-    }
-
-    if (fsevents->enrich_required) {
+        fsevents_iterator = rbh_iter_array(new_upsert_event,
+                                           sizeof(new_upsert_event), 1);
+    } else if (fsevents->enrich_required) {
         struct rbh_value_map map = build_enrich_map(build_empty_map, "hestia");
         struct rbh_fsevent *new_upsert_event;
 
@@ -588,7 +616,17 @@ hestia_fsevent_iter_next(void *iterator)
                                                      &map, NULL);
 
         fsevents->enrich_required = false;
-        return new_upsert_event;
+        fsevents_iterator = rbh_iter_array(new_upsert_event,
+                                           sizeof(new_upsert_event), 1);
+    }
+
+    if (fsevents_iterator) {
+        to_return = rbh_iter_next(fsevents_iterator);
+        if (to_return != NULL)
+            goto return_fsevent;
+
+        rbh_iter_destroy(fsevents_iterator);
+        fsevents_iterator = NULL;
     }
 
     if (!yaml_parser_parse(&fsevents->parser, &event))
@@ -610,6 +648,10 @@ hestia_fsevent_iter_next(void *iterator)
 
         assert(event.type == YAML_DOCUMENT_END_EVENT);
         yaml_event_delete(&event);
+
+        if (fsevents_iterator != NULL)
+            break;
+
         return &fsevents->fsevent;
     case YAML_STREAM_END_EVENT:
         fsevents->exhausted = true;
@@ -619,6 +661,11 @@ hestia_fsevent_iter_next(void *iterator)
         error(EXIT_FAILURE, 0, "unexpected YAML event: type = %i", event.type);
         __builtin_unreachable();
     }
+
+    to_return = rbh_iter_next(fsevents_iterator);
+
+return_fsevent:
+    return to_return;
 }
 
 static void
