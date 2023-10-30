@@ -95,33 +95,6 @@ get_next_key(yaml_parser_t *parser, yaml_event_t *event,
 }
 
 static struct rbh_fsevent *
-create_new_xattr_fsevent(const struct rbh_id *id,
-                         const struct rbh_value_map *xattrs)
-{
-    struct rbh_fsevent *xattr = source_stack_alloc(NULL, sizeof(*xattr));
-
-    if (xattr == NULL)
-        error(EXIT_FAILURE, errno,
-              "source_stack_alloc on xattr in create_new_xattr_fsevent");
-
-    xattr->type = RBH_FET_XATTR;
-    xattr->id.data = source_stack_alloc(id->data, id->size);
-    if (xattr->id.data == NULL)
-        error(EXIT_FAILURE, errno,
-              "source_stack_alloc on id in create_new_xattr_fsevent");
-
-    xattr->id.size = id->size;
-
-    xattr->xattrs.pairs = xattrs->pairs;
-    xattr->xattrs.count = xattrs->count;
-
-    xattr->ns.parent_id = NULL;
-    xattr->ns.name = NULL;
-
-    return xattr;
-}
-
-static struct rbh_fsevent *
 create_new_upsert_fsevent(const struct rbh_id *id,
                           const struct rbh_value_map *xattrs,
                           const struct rbh_statx *statx)
@@ -379,6 +352,55 @@ parse_remove(yaml_parser_t *parser)
     return seen_id;
 }
 
+static void
+initialize_create_fsevents(struct rbh_fsevent *new_create_events)
+{
+    struct rbh_id *parent_id;
+
+    new_create_events[0].type = RBH_FET_LINK;
+
+    /* Objects have no parent and no path */
+    parent_id = source_stack_alloc(NULL, sizeof(*parent_id));
+    if (parent_id == NULL)
+        error(EXIT_FAILURE, errno, "source_stack_alloc in parse_create");
+
+    parent_id->size = 0;
+    parent_id->data = NULL;
+    new_create_events[0].link.parent_id = parent_id;
+    new_create_events[0].xattrs.count = 0;
+
+    new_create_events[1].type = RBH_FET_XATTR;
+    new_create_events[1].ns.parent_id = NULL;
+    new_create_events[1].ns.name = NULL;
+
+    new_create_events[2].type = RBH_FET_UPSERT;
+    new_create_events[2].xattrs.pairs = NULL;
+    new_create_events[2].xattrs.count = 0;
+    new_create_events[2].upsert.symlink = NULL;
+}
+
+static void
+copy_id_in_create_events(struct rbh_fsevent *new_create_events)
+{
+    new_create_events[1].id.data = source_stack_alloc(
+        new_create_events[0].id.data, new_create_events[0].id.size + 1
+    );
+    if (!new_create_events[1].id.data)
+        error(EXIT_FAILURE, errno,
+              "source_stack_alloc in copy_id_in_create_events");
+
+    new_create_events[1].id.size = new_create_events[0].id.size;
+
+    new_create_events[2].id.data = source_stack_alloc(
+        new_create_events[0].id.data, new_create_events[0].id.size + 1
+    );
+    if (!new_create_events[2].id.data)
+        error(EXIT_FAILURE, errno,
+              "source_stack_alloc in copy_id_in_create_events");
+
+    new_create_events[2].id.size = new_create_events[0].id.size;
+}
+
 /* "CREATE" events in Hestia are of the form:
  *
  * ---
@@ -391,23 +413,20 @@ parse_remove(yaml_parser_t *parser)
  *
  */
 static bool
-parse_create(yaml_parser_t *parser, struct rbh_fsevent *link,
-             struct rbh_value_map *saved_xattr, struct rbh_statx *statx)
+parse_create(yaml_parser_t *parser)
 {
-    struct rbh_id *parent_id;
+    struct rbh_fsevent *new_create_events;
+    struct rbh_statx *statx;
     bool seen_id = false;
     int64_t event_time;
+    int id_length;
 
-    /* Objects have no parent and no path */
-    parent_id = source_stack_alloc(NULL, sizeof(*parent_id));
-    if (parent_id == NULL)
+    new_create_events = source_stack_alloc(NULL,
+                                           sizeof(*new_create_events) * 3);
+    if (new_create_events == NULL)
         error(EXIT_FAILURE, errno, "source_stack_alloc in parse_create");
 
-    parent_id->size = 0;
-    parent_id->data = NULL;
-    link->link.parent_id = parent_id;
-
-    link->xattrs.count = 0;
+    initialize_create_fsevents(new_create_events);
 
     while (true) {
         enum event_fields field = 0;
@@ -417,37 +436,36 @@ parse_create(yaml_parser_t *parser, struct rbh_fsevent *link,
         bool success;
 
         next = get_next_key(parser, &event, &field);
-        if (next == KPR_END) {
+        if (next == KPR_END)
             break;
-        } else if (next == KPR_ERROR) {
-            save_errno = errno;
-            free(parent_id);
-            errno = save_errno;
+        else if (next == KPR_ERROR)
             return false;
-        }
 
         switch (field) {
         case EF_UNKNOWN:
-            free(parent_id);
-            errno = save_errno;
             return false;
         case EF_ID:
             seen_id = true;
 
-            success = parse_name(parser, &link->link.name);
-            link->id.data = source_stack_alloc(link->link.name,
-                                               strlen(link->link.name));
-            if (!link->id.data)
+            success = parse_name(parser, &new_create_events[0].link.name);
+            id_length = strlen(new_create_events[0].link.name);
+            new_create_events[0].id.data = source_stack_alloc(
+                new_create_events[0].link.name, id_length
+            );
+
+            if (!new_create_events[0].id.data)
                 error(EXIT_FAILURE, errno,
                       "source_stack_alloc in parse_create");
 
-            link->id.size = strlen(link->id.data);
+            new_create_events[0].id.size = id_length;
+            copy_id_in_create_events(new_create_events);
             break;
         case EF_ATTRS:
             /* The attributes are not namespace ones, so we store them for
              * later in another map
              */
-            success = parse_rbh_value_map(parser, saved_xattr, true);
+            success = parse_rbh_value_map(parser, &new_create_events[1].xattrs,
+                                          true);
             break;
         case EF_TIME:
             if (!yaml_parser_parse(parser, &event))
@@ -456,6 +474,11 @@ parse_create(yaml_parser_t *parser, struct rbh_fsevent *link,
             success = parse_int64(&event, &event_time);
             if (!success)
                 error(EXIT_FAILURE, errno, "parse_int64 in parse_create");
+
+            statx = source_stack_alloc(NULL, sizeof(*statx));
+            if (!statx)
+                error(EXIT_FAILURE, errno,
+                      "source_stack_alloc in parse_create");
 
             statx->stx_mask = RBH_STATX_ATIME | RBH_STATX_BTIME |
                               RBH_STATX_CTIME | RBH_STATX_MTIME;
@@ -468,6 +491,8 @@ parse_create(yaml_parser_t *parser, struct rbh_fsevent *link,
             statx->stx_mtime.tv_sec = event_time;
             statx->stx_mtime.tv_nsec = 0;
 
+            new_create_events[2].upsert.statx = statx;
+
             save_errno = errno;
             yaml_event_delete(&event);
             errno = save_errno;
@@ -476,11 +501,12 @@ parse_create(yaml_parser_t *parser, struct rbh_fsevent *link,
             return false;
         }
 
-        if (!success) {
-            free(parent_id);
+        if (!success)
             return false;
-        }
     }
+
+    fsevents_iterator = rbh_iter_array(new_create_events,
+                                       sizeof(*new_create_events), 3);
 
     return seen_id;
 }
@@ -512,7 +538,6 @@ str2fsevent_type(const char *string)
 bool
 parse_hestia_event(struct yaml_fsevent_iterator *fsevents)
 {
-    struct rbh_value_map *map = &fsevents->additional_xattr;
     struct rbh_statx *statx = &fsevents->additional_statx;
     struct rbh_fsevent *fsevent = &fsevents->fsevent;
     yaml_parser_t *parser = &fsevents->parser;
@@ -548,7 +573,7 @@ parse_hestia_event(struct yaml_fsevent_iterator *fsevents)
     case FT_CREATE:
         fsevent->type = RBH_FET_LINK;
         fsevents->enrich_required = true;
-        return parse_create(parser, fsevent, map, statx);
+        return parse_create(parser);
     case FT_REMOVE:
         fsevent->type = RBH_FET_DELETE;
         return parse_remove(parser);
@@ -587,16 +612,7 @@ hestia_fsevent_iter_next(void *iterator)
         fsevents_iterator = NULL;
     }
 
-    /* If there are additional xattrs to manage, create a specific event */
-    if (fsevents->additional_xattr.count != 0) {
-        struct rbh_fsevent *new_inode_event =
-            create_new_xattr_fsevent(&fsevents->fsevent.id,
-                                     &fsevents->additional_xattr);
-        fsevents->additional_xattr.count = 0;
-
-        fsevents_iterator = rbh_iter_array(new_inode_event,
-                                           sizeof(new_inode_event), 1);
-    } else if (fsevents->additional_statx.stx_mask != 0) {
+    if (fsevents->additional_statx.stx_mask != 0) {
         struct rbh_fsevent *new_upsert_event =
             create_new_upsert_fsevent(&fsevents->fsevent.id, NULL,
                                       &fsevents->additional_statx);
