@@ -94,44 +94,6 @@ get_next_key(yaml_parser_t *parser, yaml_event_t *event,
     return KPR_OK;
 }
 
-static struct rbh_fsevent *
-create_new_upsert_fsevent(const struct rbh_id *id,
-                          const struct rbh_value_map *xattrs,
-                          const struct rbh_statx *statx)
-{
-    struct rbh_fsevent *upsert = source_stack_alloc(NULL, sizeof(*upsert));
-
-    if (upsert == NULL)
-        error(EXIT_FAILURE, errno,
-              "source_stack_alloc on upsert in create_new_upsert_fsevent");
-
-    upsert->type = RBH_FET_UPSERT;
-    upsert->id.data = source_stack_alloc(id->data, id->size);
-    if (upsert->id.data == NULL)
-        error(EXIT_FAILURE, errno,
-              "source_stack_alloc on id in create_new_upsert_fsevent");
-
-    upsert->id.size = id->size;
-
-    if (xattrs != NULL) {
-        upsert->xattrs.pairs = xattrs->pairs;
-        upsert->xattrs.count = xattrs->count;
-    } else {
-        upsert->xattrs.pairs = NULL;
-        upsert->xattrs.count = 0;
-    }
-
-    if (statx != NULL) {
-        upsert->upsert.statx = source_stack_alloc(&(*statx), sizeof(*statx));
-    } else {
-        upsert->upsert.statx = NULL;
-    }
-
-    upsert->upsert.symlink = NULL;
-
-    return upsert;
-}
-
 /* Copy the ID set in new_events[0] to the other events in new_events, according
  * to the number of events given as n_events.
  */
@@ -250,6 +212,10 @@ initialize_update_fsevents(struct rbh_fsevent *new_update_events)
     new_update_events[1].xattrs.pairs = NULL;
     new_update_events[1].xattrs.count = 0;
     new_update_events[1].upsert.symlink = NULL;
+
+    new_update_events[2].type = RBH_FET_UPSERT;
+    new_update_events[2].upsert.statx = NULL;
+    new_update_events[2].upsert.symlink = NULL;
 }
 
 /* "UPDATE" events in Hestia are of the form:
@@ -268,13 +234,14 @@ static bool
 parse_update(yaml_parser_t *parser)
 {
     struct rbh_fsevent *new_update_events;
+    struct rbh_value_map enrich_map;
     struct rbh_statx *statx;
     bool seen_attrs = false;
     bool seen_id = false;
     int64_t event_time;
 
     new_update_events = source_stack_alloc(NULL,
-                                           sizeof(*new_update_events) * 2);
+                                           sizeof(*new_update_events) * 3);
     if (new_update_events == NULL)
         error(EXIT_FAILURE, errno, "source_stack_alloc in parse_update");
 
@@ -299,7 +266,7 @@ parse_update(yaml_parser_t *parser)
 
             success = parse_name(parser, &new_update_events[0].id.data);
             new_update_events[0].id.size = strlen(new_update_events[0].id.data);
-            copy_id_in_events(new_update_events, 2);
+            copy_id_in_events(new_update_events, 3);
             break;
         case EF_TIME:
             if (!yaml_parser_parse(parser, &event))
@@ -341,8 +308,15 @@ parse_update(yaml_parser_t *parser)
             return false;
     }
 
+    enrich_map = build_enrich_map(build_empty_map, "hestia");
+    if (enrich_map.pairs == NULL)
+        error(EXIT_FAILURE, errno, "build_enrich_map in parse_create");
+
+    new_update_events[2].xattrs.pairs = enrich_map.pairs;
+    new_update_events[2].xattrs.count = enrich_map.count;
+
     fsevents_iterator = rbh_iter_array(new_update_events,
-                                       sizeof(*new_update_events), 2);
+                                       sizeof(*new_update_events), 3);
 
     return seen_id && seen_attrs;
 }
@@ -437,6 +411,10 @@ initialize_create_fsevents(struct rbh_fsevent *new_create_events)
     new_create_events[2].xattrs.pairs = NULL;
     new_create_events[2].xattrs.count = 0;
     new_create_events[2].upsert.symlink = NULL;
+
+    new_create_events[3].type = RBH_FET_UPSERT;
+    new_create_events[3].upsert.statx = NULL;
+    new_create_events[3].upsert.symlink = NULL;
 }
 
 /* "CREATE" events in Hestia are of the form:
@@ -454,13 +432,14 @@ static bool
 parse_create(yaml_parser_t *parser)
 {
     struct rbh_fsevent *new_create_events;
+    struct rbh_value_map enrich_map;
     struct rbh_statx *statx;
     bool seen_id = false;
     int64_t event_time;
     int id_length;
 
     new_create_events = source_stack_alloc(NULL,
-                                           sizeof(*new_create_events) * 3);
+                                           sizeof(*new_create_events) * 4);
     if (new_create_events == NULL)
         error(EXIT_FAILURE, errno, "source_stack_alloc in parse_create");
 
@@ -496,7 +475,7 @@ parse_create(yaml_parser_t *parser)
                       "source_stack_alloc in parse_create");
 
             new_create_events[0].id.size = id_length;
-            copy_id_in_events(new_create_events, 3);
+            copy_id_in_events(new_create_events, 4);
             break;
         case EF_ATTRS:
             /* The attributes are not namespace ones, so we store them for
@@ -543,8 +522,15 @@ parse_create(yaml_parser_t *parser)
             return false;
     }
 
+    enrich_map = build_enrich_map(build_empty_map, "hestia");
+    if (enrich_map.pairs == NULL)
+        error(EXIT_FAILURE, errno, "build_enrich_map in parse_create");
+
+    new_create_events[3].xattrs.pairs = enrich_map.pairs;
+    new_create_events[3].xattrs.count = enrich_map.count;
+
     fsevents_iterator = rbh_iter_array(new_create_events,
-                                       sizeof(*new_create_events), 3);
+                                       sizeof(*new_create_events), 4);
 
     return seen_id;
 }
@@ -576,7 +562,6 @@ str2fsevent_type(const char *string)
 bool
 parse_hestia_event(struct yaml_fsevent_iterator *fsevents)
 {
-    struct rbh_fsevent *fsevent = &fsevents->fsevent;
     yaml_parser_t *parser = &fsevents->parser;
     enum fsevent_type type;
     yaml_event_t event;
@@ -608,18 +593,12 @@ parse_hestia_event(struct yaml_fsevent_iterator *fsevents)
         errno = save_errno;
         return false;
     case FT_CREATE:
-        fsevent->type = RBH_FET_LINK;
-        fsevents->enrich_required = true;
         return parse_create(parser);
     case FT_REMOVE:
-        fsevent->type = RBH_FET_DELETE;
         return parse_remove(parser);
     case FT_UPDATE:
-        fsevent->type = RBH_FET_XATTR;
-        fsevents->enrich_required = true;
         return parse_update(parser);
     case FT_READ:
-        fsevent->type = RBH_FET_UPSERT;
         return parse_read(parser);
     default:
         assert(false);
@@ -643,31 +622,10 @@ hestia_fsevent_iter_next(void *iterator)
     if (fsevents_iterator) {
         to_return = rbh_iter_next(fsevents_iterator);
         if (to_return != NULL)
-            goto return_fsevent;
-
-        rbh_iter_destroy(fsevents_iterator);
-        fsevents_iterator = NULL;
-    }
-
-    if (fsevents->enrich_required) {
-        struct rbh_value_map map = build_enrich_map(build_empty_map, "hestia");
-        struct rbh_fsevent *new_upsert_event;
-
-        if (map.pairs == NULL)
-            error(EXIT_FAILURE, errno,
-                  "build_enrich_map in hestia_fsevent_iter_next");
-
-        new_upsert_event = create_new_upsert_fsevent(&fsevents->fsevent.id,
-                                                     &map, NULL);
-
-        fsevents->enrich_required = false;
-        fsevents_iterator = rbh_iter_array(new_upsert_event,
-                                           sizeof(new_upsert_event), 1);
-    }
-
-    if (fsevents_iterator) {
-        to_return = rbh_iter_next(fsevents_iterator);
-        if (to_return != NULL)
+            /* If the fsevent found is not NULL, return it. Otherwise it means
+             * we generated all fsevents corresponding to a Hestia event, so
+             * parse the next one.
+             */
             goto return_fsevent;
 
         rbh_iter_destroy(fsevents_iterator);

@@ -24,8 +24,6 @@ struct yaml_fsevent_iterator {
     struct rbh_fsevent fsevent;
     yaml_parser_t parser;
     bool exhausted;
-
-    bool enrich_required;
 };
 
 struct source *
