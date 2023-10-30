@@ -21,14 +21,17 @@
 struct yaml_fsevent_iterator {
     struct rbh_iterator iterator;
 
-    struct rbh_fsevent fsevent;
     yaml_parser_t parser;
     bool exhausted;
+
+    void *source_item; /* This can be a rbh_fsevent for file source, a
+                        * rbh_iterator for Hestia, ...
+                        */
 };
 
 struct source *
 yaml_fsevent_init(FILE *file, const struct rbh_iterator iterator,
-                  const struct source *source);
+                  const struct source *source, void *source_item);
 
 const void *yaml_source_iter_next(void *iterator);
 
