@@ -16,13 +16,17 @@
 #include "source.h"
 
 #include "yaml_file.h"
+#include "utils.h"
 
 static const void *
 yaml_fsevent_iter_next(void *iterator)
 {
     struct yaml_fsevent_iterator *fsevents = iterator;
+    struct rbh_fsevent *fsevent;
     yaml_event_type_t type;
     yaml_event_t event;
+
+    fsevent = fsevents->source_item;
 
     if (fsevents->exhausted) {
         errno = ENODATA;
@@ -38,9 +42,9 @@ yaml_fsevent_iter_next(void *iterator)
     switch (type) {
     case YAML_DOCUMENT_START_EVENT:
         /* Remove any trace of the previous parsed fsevent */
-        memset(&fsevents->fsevent, 0, sizeof(fsevents->fsevent));
+        memset(fsevent, 0, sizeof(*fsevent));
 
-        if (!parse_fsevent(&fsevents->parser, &fsevents->fsevent))
+        if (!parse_fsevent(&fsevents->parser, fsevent))
             parser_error(&fsevents->parser);
 
         if (!yaml_parser_parse(&fsevents->parser, &event))
@@ -48,7 +52,7 @@ yaml_fsevent_iter_next(void *iterator)
 
         assert(event.type == YAML_DOCUMENT_END_EVENT);
         yaml_event_delete(&event);
-        return &fsevents->fsevent;
+        return fsevent;
     case YAML_STREAM_END_EVENT:
         fsevents->exhausted = true;
         errno = ENODATA;
@@ -91,5 +95,11 @@ static const struct source FILE_SOURCE = {
 struct source *
 source_from_file(FILE *file)
 {
-    return yaml_fsevent_init(file, YAML_FSEVENT_ITERATOR, &FILE_SOURCE);
+    struct rbh_fsevent *fsevent;
+
+    initialize_source_stack(sizeof(struct rbh_value_pair) * (1 << 7));
+    fsevent = source_stack_alloc(NULL, sizeof(*fsevent));
+
+    return yaml_fsevent_init(file, YAML_FSEVENT_ITERATOR, &FILE_SOURCE,
+                             fsevent);
 }
