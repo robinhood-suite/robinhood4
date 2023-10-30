@@ -154,15 +154,22 @@ copy_id_in_events(struct rbh_fsevent *new_events, size_t n_events)
  *
  */
 static bool
-parse_read(yaml_parser_t *parser, struct rbh_fsevent *upsert)
+parse_read(yaml_parser_t *parser)
 {
+    struct rbh_fsevent *new_read_event;
     struct rbh_statx *statx;
     bool seen_time = false;
     bool seen_id = false;
     int64_t event_time;
 
-    upsert->xattrs.count = 0;
-    upsert->upsert.symlink = NULL;
+    new_read_event = source_stack_alloc(NULL, sizeof(*new_read_event));
+    if (new_read_event == NULL)
+        error(EXIT_FAILURE, errno, "source_stack_alloc in parse_read");
+
+    new_read_event[0].type = RBH_FET_UPSERT;
+    new_read_event[0].xattrs.count = 0;
+    new_read_event[0].xattrs.pairs = NULL;
+    new_read_event[0].upsert.symlink = NULL;
 
     while (true) {
         enum event_fields field = 0;
@@ -181,8 +188,8 @@ parse_read(yaml_parser_t *parser, struct rbh_fsevent *upsert)
         case EF_ID:
             seen_id = true;
 
-            success = parse_name(parser, &upsert->id.data);
-            upsert->id.size = strlen(upsert->id.data);
+            success = parse_name(parser, &new_read_event[0].id.data);
+            new_read_event[0].id.size = strlen(new_read_event[0].id.data);
             break;
         case EF_TIME:
             seen_time = true;
@@ -205,7 +212,8 @@ parse_read(yaml_parser_t *parser, struct rbh_fsevent *upsert)
             statx->stx_atime.tv_sec = event_time;
             statx->stx_atime.tv_nsec = 0;
 
-            upsert->upsert.statx = statx;
+            new_read_event[0].upsert.statx = statx;
+
             save_errno = errno;
             yaml_event_delete(&event);
             errno = save_errno;
@@ -217,6 +225,9 @@ parse_read(yaml_parser_t *parser, struct rbh_fsevent *upsert)
         if (!success)
             return false;
     }
+
+    fsevents_iterator = rbh_iter_array(new_read_event, sizeof(*new_read_event),
+                                       1);
 
     return seen_id && seen_time;
 }
@@ -602,7 +613,7 @@ parse_hestia_event(struct yaml_fsevent_iterator *fsevents)
         return parse_update(parser);
     case FT_READ:
         fsevent->type = RBH_FET_UPSERT;
-        return parse_read(parser, fsevent);
+        return parse_read(parser);
     default:
         assert(false);
         __builtin_unreachable();
@@ -676,10 +687,7 @@ hestia_fsevent_iter_next(void *iterator)
         assert(event.type == YAML_DOCUMENT_END_EVENT);
         yaml_event_delete(&event);
 
-        if (fsevents_iterator != NULL)
-            break;
-
-        return &fsevents->fsevent;
+        break;
     case YAML_STREAM_END_EVENT:
         fsevents->exhausted = true;
         errno = ENODATA;
