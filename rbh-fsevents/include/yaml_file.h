@@ -25,7 +25,6 @@ struct yaml_fsevent_iterator {
     yaml_parser_t parser;
     bool exhausted;
 
-    struct rbh_statx additional_statx;
     bool enrich_required;
 };
 
