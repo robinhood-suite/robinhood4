@@ -18,15 +18,6 @@
 #include "yaml_file.h"
 #include "utils.h"
 
-static __thread struct rbh_iterator *fsevents_iterator;
-
-static void __attribute__((destructor))
-free_fsevents_iterator(void)
-{
-    if (fsevents_iterator)
-        rbh_iter_destroy(fsevents_iterator);
-}
-
 enum event_fields {
     EF_UNKNOWN,
     EF_ID,
@@ -123,7 +114,7 @@ copy_id_in_events(struct rbh_fsevent *new_events, size_t n_events)
  *
  */
 static bool
-parse_read(yaml_parser_t *parser)
+parse_read(yaml_parser_t *parser, struct rbh_iterator **fsevents_iterator)
 {
     struct rbh_fsevent *new_read_event;
     struct rbh_statx *statx;
@@ -195,8 +186,8 @@ parse_read(yaml_parser_t *parser)
             return false;
     }
 
-    fsevents_iterator = rbh_iter_array(new_read_event, sizeof(*new_read_event),
-                                       1);
+    *fsevents_iterator = rbh_iter_array(new_read_event, sizeof(*new_read_event),
+                                        1);
 
     return seen_id && seen_time;
 }
@@ -231,7 +222,7 @@ initialize_update_fsevents(struct rbh_fsevent *new_update_events)
  *
  */
 static bool
-parse_update(yaml_parser_t *parser)
+parse_update(yaml_parser_t *parser, struct rbh_iterator **fsevents_iterator)
 {
     struct rbh_fsevent *new_update_events;
     struct rbh_value_map enrich_map;
@@ -315,8 +306,8 @@ parse_update(yaml_parser_t *parser)
     new_update_events[2].xattrs.pairs = enrich_map.pairs;
     new_update_events[2].xattrs.count = enrich_map.count;
 
-    fsevents_iterator = rbh_iter_array(new_update_events,
-                                       sizeof(*new_update_events), 3);
+    *fsevents_iterator = rbh_iter_array(new_update_events,
+                                        sizeof(*new_update_events), 3);
 
     return seen_id && seen_attrs;
 }
@@ -331,7 +322,7 @@ parse_update(yaml_parser_t *parser)
  *
  */
 static bool
-parse_remove(yaml_parser_t *parser)
+parse_remove(yaml_parser_t *parser, struct rbh_iterator **fsevents_iterator)
 {
     struct rbh_fsevent *new_delete_event;
     bool seen_id = false;
@@ -380,8 +371,8 @@ parse_remove(yaml_parser_t *parser)
             return false;
     }
 
-    fsevents_iterator = rbh_iter_array(new_delete_event,
-                                       sizeof(new_delete_event), 1);
+    *fsevents_iterator = rbh_iter_array(new_delete_event,
+                                        sizeof(new_delete_event), 1);
 
     return seen_id;
 }
@@ -429,7 +420,7 @@ initialize_create_fsevents(struct rbh_fsevent *new_create_events)
  *
  */
 static bool
-parse_create(yaml_parser_t *parser)
+parse_create(yaml_parser_t *parser, struct rbh_iterator **fsevents_iterator)
 {
     struct rbh_fsevent *new_create_events;
     struct rbh_value_map enrich_map;
@@ -529,8 +520,8 @@ parse_create(yaml_parser_t *parser)
     new_create_events[3].xattrs.pairs = enrich_map.pairs;
     new_create_events[3].xattrs.count = enrich_map.count;
 
-    fsevents_iterator = rbh_iter_array(new_create_events,
-                                       sizeof(*new_create_events), 4);
+    *fsevents_iterator = rbh_iter_array(new_create_events,
+                                        sizeof(*new_create_events), 4);
 
     return seen_id;
 }
@@ -593,13 +584,17 @@ parse_hestia_event(struct yaml_fsevent_iterator *fsevents)
         errno = save_errno;
         return false;
     case FT_CREATE:
-        return parse_create(parser);
+        return parse_create(parser,
+                            (struct rbh_iterator **)&fsevents->source_item);
     case FT_REMOVE:
-        return parse_remove(parser);
+        return parse_remove(parser,
+                            (struct rbh_iterator **)&fsevents->source_item);
     case FT_UPDATE:
-        return parse_update(parser);
+        return parse_update(parser,
+                            (struct rbh_iterator **)&fsevents->source_item);
     case FT_READ:
-        return parse_read(parser);
+        return parse_read(parser,
+                          (struct rbh_iterator **)&fsevents->source_item);
     default:
         assert(false);
         __builtin_unreachable();
@@ -610,11 +605,19 @@ static const void *
 hestia_fsevent_iter_next(void *iterator)
 {
     struct yaml_fsevent_iterator *fsevents = iterator;
+    struct rbh_iterator *fsevents_iterator;
     const struct rbh_fsevent *to_return;
     yaml_event_type_t type;
     yaml_event_t event;
 
+    fsevents_iterator = fsevents->source_item;
+
     if (fsevents->exhausted) {
+        if (fsevents_iterator) {
+            rbh_iter_destroy(fsevents_iterator);
+            fsevents->source_item = NULL;
+        }
+
         errno = ENODATA;
         return NULL;
     }
@@ -629,7 +632,7 @@ hestia_fsevent_iter_next(void *iterator)
             goto return_fsevent;
 
         rbh_iter_destroy(fsevents_iterator);
-        fsevents_iterator = NULL;
+        fsevents->source_item = NULL;
     }
 
     if (!yaml_parser_parse(&fsevents->parser, &event))
@@ -640,9 +643,6 @@ hestia_fsevent_iter_next(void *iterator)
 
     switch (type) {
     case YAML_DOCUMENT_START_EVENT:
-        /* Remove any trace of the previous parsed fsevent */
-        memset(&fsevents->fsevent, 0, sizeof(fsevents->fsevent));
-
         if (!parse_hestia_event(fsevents))
             parser_error(&fsevents->parser);
 
@@ -662,7 +662,7 @@ hestia_fsevent_iter_next(void *iterator)
         __builtin_unreachable();
     }
 
-    to_return = rbh_iter_next(fsevents_iterator);
+    to_return = rbh_iter_next((struct rbh_iterator *)fsevents->source_item);
 
 return_fsevent:
     return to_return;
@@ -702,5 +702,5 @@ source_from_hestia_file(FILE *file)
 {
     initialize_source_stack(sizeof(struct rbh_value_pair) * (1 << 7));
 
-    return yaml_fsevent_init(file, HESTIA_FSEVENT_ITERATOR, &FILE_SOURCE);
+    return yaml_fsevent_init(file, HESTIA_FSEVENT_ITERATOR, &FILE_SOURCE, NULL);
 }

@@ -26,7 +26,7 @@ struct file_source {
 
 struct source *
 yaml_fsevent_init(FILE *file, const struct rbh_iterator iterator,
-                  const struct source *source)
+                  const struct source *source, void *source_item)
 {
     struct file_source *file_source;
     yaml_event_t event;
@@ -50,7 +50,7 @@ yaml_fsevent_init(FILE *file, const struct rbh_iterator iterator,
 
     file_source->fsevents.iterator = iterator;
     file_source->fsevents.exhausted = false;
-    file_source->fsevents.fsevent.type = 0;
+    file_source->fsevents.source_item = source_item;
 
     file_source->source = *source;
     file_source->file = file;
