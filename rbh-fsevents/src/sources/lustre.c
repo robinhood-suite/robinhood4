@@ -12,12 +12,22 @@
 
 #include <lustre/lustreapi.h>
 
+#include <robinhood/itertools.h>
 #include <robinhood/fsevent.h>
 #include <robinhood/sstack.h>
 #include <robinhood/statx.h>
 
 #include "source.h"
 #include "utils.h"
+
+static __thread struct rbh_iterator *fsevents_iterator;
+
+static void __attribute__((destructor))
+free_fsevents_iterator(void)
+{
+    if (fsevents_iterator)
+        rbh_iter_destroy(fsevents_iterator);
+}
 
 struct lustre_changelog_iterator {
     struct rbh_iterator iterator;
@@ -355,43 +365,65 @@ update_parent_acmtime_event(struct lu_fid *parent_id,
     return 0;
 }
 
+/* Copy the ID set in new_events[0] to the other events in new_events, according
+ * to the number of events given as n_events.
+ */
+static void
+copy_id_in_events(struct rbh_fsevent *new_events, size_t n_events)
+{
+    size_t i;
+
+    for (i = 1; i < n_events; ++i) {
+        new_events[i].id.data = source_stack_alloc(new_events[0].id.data,
+                                                   new_events[0].id.size + 1);
+        if (!new_events[i].id.data)
+            error(EXIT_FAILURE, errno,
+                  "source_stack_alloc in copy_id_in_events");
+
+        new_events[i].id.size = new_events[0].id.size;
+    }
+}
+
 static int
-build_create_inode_events(unsigned int process_step,
-                          struct changelog_rec *record,
+build_create_inode_events(struct changelog_rec *record,
                           struct rbh_fsevent *fsevent)
 {
-    assert(process_step < 4);
-    switch(process_step) {
-    case 0:
-        if (new_link_inode_event(record, fsevent))
-            return -1;
+    struct rbh_fsevent *new_events;
 
-        break;
-    case 1:
-        fsevent->type = RBH_FET_XATTR;
+    new_events = source_stack_alloc(NULL, sizeof(*new_events) * 4);
+    if (new_events == NULL)
+        error(EXIT_FAILURE, errno,
+              "source_stack_alloc in build_create_inode_events");
 
-        if (build_enrich_xattr_fsevent(&fsevent->xattrs,
-                                       "fid",
-                                       fill_ns_xattrs_fid(record),
-                                       "rbh-fsevents",
-                                       build_empty_map("lustre"),
-                                       NULL))
-            return -1;
+    memset(new_events, 0, sizeof(*new_events) * 4);
 
-        break;
-    case 2:
-        if (update_statx_without_uid_gid_event(record, fsevent))
-            return -1;
+    new_events[0].id.data = source_stack_alloc(fsevent->id.data,
+                                               fsevent->id.size);
+    new_events[0].id.size = fsevent->id.size;
+    copy_id_in_events(new_events, 4);
 
-        break;
-    case 3: /* Update the parent information after creating a new entry */
-        if (update_parent_acmtime_event(&record->cr_pfid, fsevent))
-            return -1;
+    if (new_link_inode_event(record, &new_events[0]))
+        return -1;
 
-        break;
-    }
+    new_events[1].type = RBH_FET_XATTR;
+    if (build_enrich_xattr_fsevent(&new_events[1].xattrs,
+                                   "fid",
+                                   fill_ns_xattrs_fid(record),
+                                   "rbh-fsevents",
+                                   build_empty_map("lustre"),
+                                   NULL))
+        return -1;
 
-    return process_step != 3 ? 1 : 0;
+    if (update_statx_without_uid_gid_event(record, &new_events[2]))
+        return -1;
+
+    /* Update the parent information after creating a new entry */
+    if (update_parent_acmtime_event(&record->cr_pfid, &new_events[3]))
+        return -1;
+
+    fsevents_iterator = rbh_iter_array(new_events, sizeof(*new_events), 4);
+
+    return 0;
 }
 
 static int
@@ -905,6 +937,7 @@ static const void *
 lustre_changelog_iter_next(void *iterator)
 {
     struct lustre_changelog_iterator *records = iterator;
+    const struct rbh_fsevent *to_return;
     struct rbh_fsevent *fsevent = NULL;
     uint32_t statx_enrich_mask = 0;
     struct changelog_rec *record;
@@ -913,6 +946,15 @@ lustre_changelog_iter_next(void *iterator)
     int rc;
 
     flush_source_stack();
+
+    if (fsevents_iterator) {
+        to_return = rbh_iter_next(fsevents_iterator);
+        if (to_return != NULL)
+            return to_return;
+
+        rbh_iter_destroy(fsevents_iterator);
+        fsevents_iterator = NULL;
+    }
 
 retry:
     if (records->prev_record == NULL) {
@@ -946,7 +988,7 @@ retry:
     switch (record->cr_type) {
     case CL_CREATE:
     case CL_MKDIR:
-        rc = build_create_inode_events(records->process_step, record, fsevent);
+        rc = build_create_inode_events(record, fsevent);
         break;
     case CL_SETXATTR:
         rc = build_setxattr_event(records->process_step, record, fsevent);
@@ -1029,6 +1071,9 @@ end_event:
     save_errno = errno;
     llapi_changelog_free(&record);
     errno = save_errno;
+
+    if (fsevents_iterator)
+        return rbh_iter_next(fsevents_iterator);
 
     return fsevent;
 
