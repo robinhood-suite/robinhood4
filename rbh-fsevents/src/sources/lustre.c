@@ -695,54 +695,42 @@ build_rename_events(struct changelog_rec *record, struct rbh_id *id)
  * associated function.
  */
 static int
-build_hsm_events(unsigned int process_step, struct rbh_fsevent *fsevent)
+build_hsm_events(struct rbh_id *id)
 {
-    uint32_t statx_enrich_mask = 0;
+    uint32_t statx_enrich_mask = RBH_STATX_BLOCKS;
+    struct rbh_fsevent *new_events;
 
-    assert(process_step < 4);
-    switch(process_step) {
-    case 0:
-        fsevent->type = RBH_FET_UPSERT;
+    initialize_events(&new_events, 4, id);
 
-        statx_enrich_mask = RBH_STATX_BLOCKS;
-        fsevent->xattrs = build_enrich_map(fill_statx, &statx_enrich_mask);
-        if (fsevent->xattrs.pairs == NULL)
-            return -1;
+    new_events[0].type = RBH_FET_UPSERT;
+    new_events[0].xattrs = build_enrich_map(fill_statx, &statx_enrich_mask);
+    if (new_events[0].xattrs.pairs == NULL)
+        return -1;
 
-        break;
-    case 1:
-        fsevent->type = RBH_FET_XATTR;
+    new_events[1].type = RBH_FET_XATTR;
 
-        /* Mark this fsevent for Lustre enrichment to retrieve all Lustre
-         * values. Will be changed later to retrieve only the modified values,
-         * i.e. archive id, hsm state and layout.
-         */
-        if (build_enrich_xattr_fsevent(&fsevent->xattrs,
-                                       "rbh-fsevents",
-                                       build_empty_map("lustre"),
-                                       NULL))
-            return -1;
+    /* Mark this fsevent for Lustre enrichment to retrieve all Lustre
+     * values. Will be changed later to retrieve only the modified values,
+     * i.e. archive id, hsm state and layout.
+     */
+    if (build_enrich_xattr_fsevent(&new_events[1].xattrs,
+                                   "rbh-fsevents", build_empty_map("lustre"),
+                                   NULL))
+        return -1;
 
-        break;
-    case 2:
-        fsevent->type = RBH_FET_XATTR;
+    new_events[2].type = RBH_FET_XATTR;
+    new_events[2].xattrs = build_enrich_map(fill_inode_xattrs, "trusted.lov");
+    if (new_events[2].xattrs.pairs == NULL)
+        return -1;
 
-        fsevent->xattrs = build_enrich_map(fill_inode_xattrs, "trusted.lov");
-        if (fsevent->xattrs.pairs == NULL)
-            return -1;
+    new_events[3].type = RBH_FET_XATTR;
+    new_events[3].xattrs = build_enrich_map(fill_inode_xattrs, "trusted.hsm");
+    if (new_events[3].xattrs.pairs == NULL)
+        return -1;
 
-        break;
-    case 3:
-        fsevent->type = RBH_FET_XATTR;
+    fsevents_iterator = rbh_iter_array(new_events, sizeof(*new_events), 4);
 
-        fsevent->xattrs = build_enrich_map(fill_inode_xattrs, "trusted.hsm");
-        if (fsevent->xattrs.pairs == NULL)
-            return -1;
-
-        break;
-    }
-
-    return process_step != 3 ? 1 : 0;
+    return 0;
 }
 
 static int
@@ -1018,7 +1006,7 @@ retry:
         rc = build_rename_events(record, id);
         break;
     case CL_HSM:
-        rc = build_hsm_events(records->process_step, fsevent);
+        rc = build_hsm_events(id);
         break;
     case CL_TRUNC:
         statx_enrich_mask = RBH_STATX_CTIME_SEC | RBH_STATX_CTIME_NSEC |
