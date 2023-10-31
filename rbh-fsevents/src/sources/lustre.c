@@ -468,48 +468,42 @@ build_statx_update_event(uint32_t statx_enrich_mask, struct rbh_id *id)
     return 0;
 }
 
+/* Do the exact same operations as for creating an inode, except for an
+ * additional one that is the enrichment of the symlink target
+ */
 static int
-build_softlink_events(unsigned int process_step, struct changelog_rec *record,
-                      struct rbh_fsevent *fsevent)
+build_softlink_events(struct changelog_rec *record, struct rbh_id *id)
 {
-    assert(process_step < 5);
-    /* Do the exact same operations as for creating an inode, except for an
-     * additional one that is the enrichment of the symlink target
-     */
-    switch(process_step) {
-    case 0:
-        if (new_link_inode_event(record, fsevent))
-            return -1;
+    struct rbh_fsevent *new_events;
 
-        break;
-    case 1:
-        fsevent->type = RBH_FET_XATTR;
-        if (build_enrich_xattr_fsevent(&fsevent->xattrs,
-                                       "fid", fill_ns_xattrs_fid(record),
-                                       NULL))
-            return -1;
+    initialize_events(&new_events, 5, id);
 
-        break;
-    case 2:
-        if (update_statx_without_uid_gid_event(record, fsevent))
-            return -1;
+    if (new_link_inode_event(record, &new_events[0]))
+        return -1;
 
-        break;
-    case 3:
-        if (update_parent_acmtime_event(&record->cr_pfid, fsevent))
-            return -1;
+    new_events[1].type = RBH_FET_XATTR;
+    if (build_enrich_xattr_fsevent(&new_events[1].xattrs,
+                                   "fid",
+                                   fill_ns_xattrs_fid(record),
+                                   NULL))
+        return -1;
 
-        break;
-    case 4: /* Mark the event for enrichment of the symlink target */
-        fsevent->type = RBH_FET_UPSERT;
-        fsevent->upsert.statx = NULL;
+    if (update_statx_without_uid_gid_event(record, &new_events[2]))
+        return -1;
 
-        fsevent->xattrs = build_enrich_map(build_symlink_enrich_map, NULL);
-        if (fsevent->xattrs.pairs == NULL)
-            return -1;
-    }
+    /* Update the parent information after creating a new entry */
+    if (update_parent_acmtime_event(&record->cr_pfid, &new_events[3]))
+        return -1;
 
-    return process_step != 4 ? 1 : 0;
+    /* Mark the event for enrichment of the symlink target */
+    new_events[4].type = RBH_FET_UPSERT;
+    new_events[4].xattrs = build_enrich_map(build_symlink_enrich_map, NULL);
+    if (new_events[4].xattrs.pairs == NULL)
+        return -1;
+
+    fsevents_iterator = rbh_iter_array(new_events, sizeof(*new_events), 5);
+
+    return 0;
 }
 
 static int
@@ -1022,7 +1016,7 @@ retry:
         rc = build_statx_update_event(statx_enrich_mask, id);
         break;
     case CL_SOFTLINK:
-        rc = build_softlink_events(records->process_step, record, fsevent);
+        rc = build_softlink_events(record, id);
         break;
     case CL_HARDLINK:
     case CL_MKNOD:
