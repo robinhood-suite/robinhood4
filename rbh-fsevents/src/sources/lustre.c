@@ -503,11 +503,10 @@ build_softlink_events(struct changelog_rec *record, struct rbh_id *id)
 }
 
 static int
-build_hardlink_or_mknod_events(unsigned int process_step,
-                               struct changelog_rec *record,
-                               struct rbh_fsevent *fsevent)
+build_hardlink_or_mknod_events(struct changelog_rec *record, struct rbh_id *id)
 {
-    assert(process_step < 4);
+    struct rbh_fsevent *new_events;
+
     /* For hardlinks, we must create a new ns entry for the target, update its
      * statx attributes and the statx attributes of the parent directory of the
      * link. We don't need to retrieve the xattrs of the link, since they are
@@ -519,35 +518,28 @@ build_hardlink_or_mknod_events(unsigned int process_step,
      * Therefore, the build of a hardlink or mknod event is subset of the
      * operations done to build a inode creation event.
      */
-    switch(process_step) {
-    case 0: /* Create new ns entry for the target */
-        if (new_link_inode_event(record, fsevent))
-            return -1;
+    initialize_events(&new_events, 4, id);
 
-        break;
-    case 1: /* update target statx */
-        if (update_statx_without_uid_gid_event(record, fsevent))
-            return -1;
+    if (new_link_inode_event(record, &new_events[0]))
+        return -1;
 
-        break;
-    case 2: /* update link's parent statx */
-        if (update_parent_acmtime_event(&record->cr_pfid, fsevent))
-            return -1;
+    if (update_statx_without_uid_gid_event(record, &new_events[1]))
+        return -1;
 
-        break;
-    case 3:
-        fsevent->type = RBH_FET_XATTR;
+    /* Update the parent information after creating a new entry */
+    if (update_parent_acmtime_event(&record->cr_pfid, &new_events[2]))
+        return -1;
 
-        if (build_enrich_xattr_fsevent(&fsevent->xattrs,
-                                       "rbh-fsevents",
-                                       build_empty_map("lustre"),
-                                       NULL))
-            return -1;
+    new_events[3].type = RBH_FET_XATTR;
+    if (build_enrich_xattr_fsevent(&new_events[3].xattrs,
+                                   "rbh-fsevents",
+                                   build_empty_map("lustre"),
+                                   NULL))
+        return -1;
 
-        break;
-    }
+    fsevents_iterator = rbh_iter_array(new_events, sizeof(*new_events), 4);
 
-    return process_step != 3 ? 1 : 0;
+    return 0;
 }
 
 static int
@@ -1017,8 +1009,7 @@ retry:
         break;
     case CL_HARDLINK:
     case CL_MKNOD:
-        rc = build_hardlink_or_mknod_events(records->process_step, record,
-                                            fsevent);
+        rc = build_hardlink_or_mknod_events(record, id);
         break;
     case CL_RMDIR:
     case CL_UNLINK:
