@@ -821,69 +821,50 @@ build_resync_events(struct rbh_id *id)
  * change the target and target's parent striping information.
  */
 static int
-build_migrate_events(unsigned int process_step, struct changelog_rec *record,
-                     struct rbh_fsevent *fsevent)
+build_migrate_events(struct changelog_rec *record, struct rbh_id *id)
 {
     struct changelog_ext_rename *migrate_log = changelog_rec_rename(record);
-    struct rbh_id *id;
+    struct rbh_fsevent *new_events;
+    struct rbh_id *migrated_id;
 
-    /* If the process step is 3, we change the targeted id to the source so that
-     * we can unlink it properly.
+    migrated_id = build_id(&migrate_log->cr_sfid);
+    if (migrated_id == NULL)
+        return -1;
+
+    initialize_events(&new_events, 6, id);
+
+    /* This new link is necessary because a metadata migration changes the
+     * FID of the entry.
      */
-    if (process_step == 3) {
-        id = build_id(&migrate_log->cr_sfid);
-        if (id == NULL)
-            return -1;
+    if (new_link_inode_event(record, &new_events[0]))
+        return -1;
 
-        fsevent->id.data = id->data;
-        fsevent->id.size = id->size;
-    }
+    if (update_statx_without_uid_gid_event(record, &new_events[1]))
+        return -1;
 
-    assert(process_step < 6);
-    switch (process_step) {
-    case 0: /* create new link */
-        /* This new link is necessary because a metadata migration changes the
-         * FID of the entry.
-         */
-        if (new_link_inode_event(record, fsevent))
-            return -1;
+    /* Update the parent information after creating a new entry */
+    if (update_parent_acmtime_event(&record->cr_pfid, &new_events[2]))
+        return -1;
 
-        break;
-    case 1: /* update target statx */
-        if (update_statx_without_uid_gid_event(record, fsevent))
-            return -1;
+    new_events[3].id.data = migrated_id->data;
+    new_events[3].id.size = migrated_id->size;
+    if (unlink_inode_event(&migrate_log->cr_spfid, changelog_rec_name(record),
+                           changelog_rec_snamelen(record), true,
+                           &new_events[3]))
+        return -1;
 
-        break;
-    case 2: /* update target's parent statx */
-        if (update_parent_acmtime_event(&record->cr_pfid, fsevent))
-            return -1;
+    if (update_parent_acmtime_event(&migrate_log->cr_spfid, &new_events[4]))
+        return -1;
 
-        break;
-    case 3: /* unlink source link */
-        if (unlink_inode_event(&migrate_log->cr_spfid,
-                               changelog_rec_sname(record),
-                               changelog_rec_snamelen(record),
-                               true, fsevent))
-            return -1;
-        break;
-    case 4: /* update source's parent statx */
-        if (update_parent_acmtime_event(&migrate_log->cr_spfid, fsevent))
-            return -1;
+    new_events[5].type = RBH_FET_XATTR;
+    if (build_enrich_xattr_fsevent(&new_events[5].xattrs,
+                                   "rbh-fsevents", build_empty_map("lustre"),
+                                   NULL))
+        return -1;
 
-        break;
-    case 5: /* update target striping info */
-        fsevent->type = RBH_FET_XATTR;
+    fsevents_iterator = rbh_iter_array(new_events, sizeof(*new_events), 6);
 
-        if (build_enrich_xattr_fsevent(&fsevent->xattrs,
-                                       "rbh-fsevents",
-                                       build_empty_map("lustre"),
-                                       NULL))
-            return -1;
-
-        break;
-    }
-
-    return process_step != 5 ? 1 : 0;
+    return 0;
 }
 
 static const void *
@@ -995,7 +976,7 @@ retry:
         rc = build_resync_events(id);
         break;
     case CL_MIGRATE:
-        rc = build_migrate_events(records->process_step, record, fsevent);
+        rc = build_migrate_events(record, id);
         break;
     case CL_EXT:
     case CL_OPEN:
