@@ -448,6 +448,23 @@ build_setxattr_event(struct changelog_rec *record, struct rbh_id *id)
 }
 
 static int
+build_statx_update_event(uint32_t statx_enrich_mask, struct rbh_id *id)
+{
+    struct rbh_fsevent *new_events;
+
+    initialize_events(&new_events, 1, id);
+
+    new_events[0].type = RBH_FET_UPSERT;
+    new_events[0].xattrs = build_enrich_map(fill_statx, &statx_enrich_mask);
+    if (new_events[0].xattrs.pairs == NULL)
+        return -1;
+
+    fsevents_iterator = rbh_iter_array(new_events, sizeof(*new_events), 1);
+
+    return 0;
+}
+
+static int
 build_softlink_events(unsigned int process_step, struct changelog_rec *record,
                       struct rbh_fsevent *fsevent)
 {
@@ -999,7 +1016,7 @@ retry:
         /* fall through */
     case CL_ATIME:
         statx_enrich_mask |= RBH_STATX_ATIME_SEC | RBH_STATX_ATIME_NSEC;
-        rc = build_statx_event(statx_enrich_mask, fsevent, NULL);
+        rc = build_statx_update_event(statx_enrich_mask, id);
         break;
     case CL_SOFTLINK:
         rc = build_softlink_events(records->process_step, record, fsevent);
@@ -1024,7 +1041,7 @@ retry:
         statx_enrich_mask = RBH_STATX_CTIME_SEC | RBH_STATX_CTIME_NSEC |
                             RBH_STATX_MTIME_SEC | RBH_STATX_MTIME_NSEC |
                             RBH_STATX_SIZE;
-        rc = build_statx_event(statx_enrich_mask, fsevent, NULL);
+        rc = build_statx_update_event(statx_enrich_mask, id);
         break;
     case CL_LAYOUT:
         rc = build_layout_events(records->process_step, fsevent);
