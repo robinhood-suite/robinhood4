@@ -579,27 +579,24 @@ unlink_inode_event(struct lu_fid *parent_id, char *name, size_t namelen,
 }
 
 static int
-build_unlink_or_rmdir_events(unsigned int process_step,
-                             struct changelog_rec *record,
-                             struct rbh_fsevent *fsevent)
+build_unlink_or_rmdir_events(struct changelog_rec *record, struct rbh_id *id)
 {
     bool last_copy = (record->cr_flags & CLF_UNLINK_LAST) &&
                      !(record->cr_flags & CLF_UNLINK_HSM_EXISTS);
+    struct rbh_fsevent *new_events;
 
-    assert(process_step < 2);
-    switch(process_step) {
-    case 0:
-        if (unlink_inode_event(&record->cr_pfid, changelog_rec_name(record),
-                               record->cr_namelen, last_copy, fsevent))
-            return -1;
+    initialize_events(&new_events, 2, id);
 
-        break;
-    case 1: /* update parent statx */
-        if (update_parent_acmtime_event(&record->cr_pfid, fsevent))
-            return -1;
-    }
+    if (unlink_inode_event(&record->cr_pfid, changelog_rec_name(record),
+                           record->cr_namelen, last_copy, &new_events[0]))
+        return -1;
 
-    return process_step != 1 ? 1 : 0;
+    if (update_parent_acmtime_event(&record->cr_pfid, &new_events[1]))
+        return -1;
+
+    fsevents_iterator = rbh_iter_array(new_events, sizeof(*new_events), 2);
+
+    return 0;
 }
 
 /* Renames are a combination of 6 values :
@@ -1016,8 +1013,7 @@ retry:
         break;
     case CL_RMDIR:
     case CL_UNLINK:
-        rc = build_unlink_or_rmdir_events(records->process_step, record,
-                                          fsevent);
+        rc = build_unlink_or_rmdir_events(record, id);
         break;
     case CL_RENAME:
         rc = build_rename_events(records->process_step, record, fsevent);
