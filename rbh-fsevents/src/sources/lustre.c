@@ -423,23 +423,13 @@ build_create_inode_events(struct changelog_rec *record, struct rbh_id *id)
 }
 
 static int
-build_setxattr_event(struct changelog_rec *record, struct rbh_fsevent *fsevent)
+build_setxattr_event(struct changelog_rec *record, struct rbh_id *id)
 {
     char *xattr = changelog_rec_xattr(record)->cr_xattr;
     struct rbh_fsevent *new_events;
     uint32_t statx_enrich_mask = 0;
 
-    new_events = source_stack_alloc(NULL, sizeof(*new_events) * 2);
-    if (new_events == NULL)
-        error(EXIT_FAILURE, errno,
-              "source_stack_alloc in build_setxattr_event");
-
-    memset(new_events, 0, sizeof(*new_events) * 2);
-
-    new_events[0].id.data = source_stack_alloc(fsevent->id.data,
-                                               fsevent->id.size);
-    new_events[0].id.size = fsevent->id.size;
-    copy_id_in_events(new_events, 2);
+    initialize_events(&new_events, 2, id);
 
     new_events[0].type = RBH_FET_UPSERT;
     statx_enrich_mask = RBH_STATX_CTIME_SEC | RBH_STATX_CTIME_NSEC;
@@ -994,7 +984,7 @@ retry:
         rc = build_create_inode_events(record, id);
         break;
     case CL_SETXATTR:
-        rc = build_setxattr_event(record, fsevent);
+        rc = build_setxattr_event(record, id);
         break;
     case CL_SETATTR:
         statx_enrich_mask = RBH_STATX_ALL;
