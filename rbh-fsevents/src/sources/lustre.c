@@ -423,32 +423,28 @@ build_create_inode_events(struct changelog_rec *record, struct rbh_id *id)
 }
 
 static int
-build_setxattr_event(unsigned int process_step, struct changelog_rec *record,
-                     struct rbh_fsevent *fsevent)
+build_setxattr_event(struct changelog_rec *record, struct rbh_id *id)
 {
     char *xattr = changelog_rec_xattr(record)->cr_xattr;
+    struct rbh_fsevent *new_events;
     uint32_t statx_enrich_mask = 0;
 
-    assert(process_step < 2);
-    switch(process_step) {
-    case 0:
-        fsevent->type = RBH_FET_UPSERT;
+    initialize_events(&new_events, 2, id);
 
-        statx_enrich_mask = RBH_STATX_CTIME_SEC | RBH_STATX_CTIME_NSEC;
-        fsevent->xattrs = build_enrich_map(fill_statx, &statx_enrich_mask);
-        if (fsevent->xattrs.pairs == NULL)
-            return -1;
+    new_events[0].type = RBH_FET_UPSERT;
+    statx_enrich_mask = RBH_STATX_CTIME_SEC | RBH_STATX_CTIME_NSEC;
+    new_events[0].xattrs = build_enrich_map(fill_statx, &statx_enrich_mask);
+    if (new_events[0].xattrs.pairs == NULL)
+        return -1;
 
-        return 1;
-    case 1:
-        fsevent->type = RBH_FET_XATTR;
-        fsevent->xattrs = build_enrich_map(fill_inode_xattrs, xattr);
-        if (fsevent->xattrs.pairs == NULL)
-            return -1;
+    new_events[1].type = RBH_FET_XATTR;
+    new_events[1].xattrs = build_enrich_map(fill_inode_xattrs, xattr);
+    if (new_events[1].xattrs.pairs == NULL)
+        return -1;
 
-        return 0;
-    }
-    __builtin_unreachable();
+    fsevents_iterator = rbh_iter_array(new_events, sizeof(*new_events), 2);
+
+    return 0;
 }
 
 static int
@@ -988,7 +984,7 @@ retry:
         rc = build_create_inode_events(record, id);
         break;
     case CL_SETXATTR:
-        rc = build_setxattr_event(records->process_step, record, fsevent);
+        rc = build_setxattr_event(record, id);
         break;
     case CL_SETATTR:
         statx_enrich_mask = RBH_STATX_ALL;
