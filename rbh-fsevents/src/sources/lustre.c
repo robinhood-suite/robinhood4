@@ -33,8 +33,6 @@ struct lustre_changelog_iterator {
     struct rbh_iterator iterator;
 
     void *reader;
-    struct changelog_rec *prev_record;
-    unsigned int process_step;
 };
 
 /* BSON results:
@@ -350,9 +348,8 @@ update_parent_acmtime_event(struct lu_fid *parent_id,
 /* Initialize a batch of \p n_events fsevents, and copy a given rbh_id \p id
  * to each event in the batch.
  */
-static void
-initialize_events(struct rbh_fsevent **_new_events, size_t n_events,
-                  struct rbh_id *id)
+static struct rbh_fsevent *
+fsevent_list_alloc(size_t n_events, struct rbh_id *id)
 {
     struct rbh_fsevent *new_events;
     size_t i;
@@ -360,7 +357,7 @@ initialize_events(struct rbh_fsevent **_new_events, size_t n_events,
     new_events = source_stack_alloc(NULL, sizeof(*new_events) * n_events);
     if (new_events == NULL)
         error(EXIT_FAILURE, errno,
-              "source_stack_alloc in initialize_events for '%lu' events",
+              "source_stack_alloc in fsevent_list_alloc for '%lu' events",
               n_events);
 
     memset(new_events, 0, sizeof(*new_events) * n_events);
@@ -370,7 +367,7 @@ initialize_events(struct rbh_fsevent **_new_events, size_t n_events,
         new_events[i].id.size = id->size;
     }
 
-    *_new_events = new_events;
+    return new_events;
 }
 
 static int
@@ -378,7 +375,7 @@ build_create_inode_events(struct changelog_rec *record, struct rbh_id *id)
 {
     struct rbh_fsevent *new_events;
 
-    initialize_events(&new_events, 4, id);
+    new_events = fsevent_list_alloc(4, id);
 
     if (new_link_inode_event(record, &new_events[0]))
         return -1;
@@ -411,7 +408,7 @@ build_setxattr_event(struct changelog_rec *record, struct rbh_id *id)
     struct rbh_fsevent *new_events;
     uint32_t statx_enrich_mask = 0;
 
-    initialize_events(&new_events, 2, id);
+    new_events = fsevent_list_alloc(2, id);
 
     new_events[0].type = RBH_FET_UPSERT;
     statx_enrich_mask = RBH_STATX_CTIME_SEC | RBH_STATX_CTIME_NSEC;
@@ -434,7 +431,7 @@ build_statx_update_event(uint32_t statx_enrich_mask, struct rbh_id *id)
 {
     struct rbh_fsevent *new_events;
 
-    initialize_events(&new_events, 1, id);
+    new_events = fsevent_list_alloc(1, id);
 
     new_events[0].type = RBH_FET_UPSERT;
     new_events[0].xattrs = build_enrich_map(fill_statx, &statx_enrich_mask);
@@ -454,7 +451,7 @@ build_softlink_events(struct changelog_rec *record, struct rbh_id *id)
 {
     struct rbh_fsevent *new_events;
 
-    initialize_events(&new_events, 5, id);
+    new_events = fsevent_list_alloc(5, id);
 
     if (new_link_inode_event(record, &new_events[0]))
         return -1;
@@ -500,7 +497,7 @@ build_hardlink_or_mknod_events(struct changelog_rec *record, struct rbh_id *id)
      * Therefore, the build of a hardlink or mknod event is subset of the
      * operations done to build a inode creation event.
      */
-    initialize_events(&new_events, 4, id);
+    new_events = fsevent_list_alloc(4, id);
 
     if (new_link_inode_event(record, &new_events[0]))
         return -1;
@@ -563,7 +560,7 @@ build_unlink_or_rmdir_events(struct changelog_rec *record, struct rbh_id *id)
                      !(record->cr_flags & CLF_UNLINK_HSM_EXISTS);
     struct rbh_fsevent *new_events;
 
-    initialize_events(&new_events, 2, id);
+    new_events = fsevent_list_alloc(2, id);
 
     if (unlink_inode_event(&record->cr_pfid, changelog_rec_name(record),
                            record->cr_namelen, last_copy, &new_events[0]))
@@ -616,7 +613,7 @@ build_rename_events(struct changelog_rec *record, struct rbh_id *id)
         return -1;
 
     /* Create the batch of events and give them the ID of the renamed entry */
-    initialize_events(&new_events, n_events, renamed_id);
+    new_events = fsevent_list_alloc(n_events, renamed_id);
 
     /* If an entry is overwritten, simply change the target ID of the unlink to
      * that one.
@@ -678,7 +675,7 @@ build_hsm_events(struct rbh_id *id)
     uint32_t statx_enrich_mask = RBH_STATX_BLOCKS;
     struct rbh_fsevent *new_events;
 
-    initialize_events(&new_events, 4, id);
+    new_events = fsevent_list_alloc(4, id);
 
     new_events[0].type = RBH_FET_UPSERT;
     new_events[0].xattrs = build_enrich_map(fill_statx, &statx_enrich_mask);
@@ -717,7 +714,7 @@ build_layout_events(struct rbh_id *id)
     uint32_t statx_enrich_mask = RBH_STATX_CTIME_SEC | RBH_STATX_CTIME_NSEC;
     struct rbh_fsevent *new_events;
 
-    initialize_events(&new_events, 2, id);
+    new_events = fsevent_list_alloc(2, id);
 
     new_events[0].type = RBH_FET_UPSERT;
     new_events[0].xattrs = build_enrich_map(fill_statx, &statx_enrich_mask);
@@ -754,7 +751,7 @@ build_flrw_events(struct rbh_id *id)
                                  RBH_STATX_BLOCKS | RBH_STATX_SIZE;
     struct rbh_fsevent *new_events;
 
-    initialize_events(&new_events, 2, id);
+    new_events = fsevent_list_alloc(2, id);
 
     if (build_statx_event(statx_enrich_mask, &new_events[0], NULL))
         return -1;
@@ -783,7 +780,7 @@ build_resync_events(struct rbh_id *id)
                                  RBH_STATX_BLOCKS;
     struct rbh_fsevent *new_events;
 
-    initialize_events(&new_events, 2, id);
+    new_events = fsevent_list_alloc(2, id);
 
     if (build_statx_event(statx_enrich_mask, &new_events[0], NULL))
         return -1;
@@ -813,7 +810,7 @@ build_migrate_events(struct changelog_rec *record, struct rbh_id *id)
     if (migrated_id == NULL)
         return -1;
 
-    initialize_events(&new_events, 6, id);
+    new_events = fsevent_list_alloc(6, id);
 
     /* This new link is necessary because a metadata migration changes the
      * FID of the entry.
@@ -854,7 +851,6 @@ lustre_changelog_iter_next(void *iterator)
 {
     struct lustre_changelog_iterator *records = iterator;
     const struct rbh_fsevent *to_return;
-    struct rbh_fsevent *fsevent = NULL;
     uint32_t statx_enrich_mask = 0;
     struct changelog_rec *record;
     struct rbh_id *id;
@@ -874,33 +870,20 @@ lustre_changelog_iter_next(void *iterator)
     }
 
 retry:
-    if (records->prev_record == NULL) {
-        rc = llapi_changelog_recv(records->reader, &record);
-        if (rc < 0) {
-            errno = -rc;
-            return NULL;
-        }
-        if (rc > 0) {
-            errno = ENODATA;
-            return NULL;
-        }
-        records->process_step = 0;
-    } else {
-        record = records->prev_record;
-        records->prev_record = NULL;
+    rc = llapi_changelog_recv(records->reader, &record);
+    if (rc > 0 || rc == -EAGAIN) {
+        errno = ENODATA;
+        return NULL;
+    } else if (rc < 0) {
+        errno = -rc;
+        return NULL;
     }
 
-    fsevent = source_stack_alloc(NULL, sizeof(*fsevent));
-    if (fsevent == NULL)
-        goto end_event;
-    memset(fsevent, 0, sizeof(*fsevent));
-
     id = build_id(&record->cr_tfid);
-    if (id == NULL)
-        goto err;
-
-    fsevent->id.data = id->data;
-    fsevent->id.size = id->size;
+    if (id == NULL) {
+        rc = -1;
+        goto end_event;
+    }
 
     switch (record->cr_type) {
     case CL_CREATE:
@@ -975,31 +958,15 @@ retry:
         goto retry;
     }
 
-    if (rc == -1)
-        goto err;
-    else if (rc == 1) /* record is partially parsed */
-        goto save_event;
-    else /* record is fully parsed */
-        goto end_event;
-
-err:
-    fsevent = NULL;
-
 end_event:
     save_errno = errno;
     llapi_changelog_free(&record);
     errno = save_errno;
 
-    if (fsevents_iterator)
+    if (rc != -1 && fsevents_iterator)
         return rbh_iter_next(fsevents_iterator);
 
-    return fsevent;
-
-save_event:
-    records->prev_record = record;
-    ++records->process_step;
-
-    return fsevent;
+    return NULL;
 }
 
 static void
@@ -1090,7 +1057,6 @@ source_from_lustre_changelog(const char *mdtname)
     lustre_changelog_iter_init(&source->events, mdtname);
 
     initialize_source_stack(sizeof(struct rbh_value_pair) * (1 << 7));
-    source->events.prev_record = NULL;
     source->source = LUSTRE_SOURCE;
     return &source->source;
 }
