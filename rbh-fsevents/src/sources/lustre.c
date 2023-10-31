@@ -730,38 +730,32 @@ build_hsm_events(struct rbh_id *id)
 }
 
 static int
-build_layout_events(unsigned int process_step, struct rbh_fsevent *fsevent)
+build_layout_events(struct rbh_id *id)
 {
-    uint32_t statx_enrich_mask = 0;
+    uint32_t statx_enrich_mask = RBH_STATX_CTIME_SEC | RBH_STATX_CTIME_NSEC;
+    struct rbh_fsevent *new_events;
 
-    assert(process_step < 2);
-    switch(process_step) {
-    case 0:
-        fsevent->type = RBH_FET_UPSERT;
+    initialize_events(&new_events, 2, id);
 
-        statx_enrich_mask = RBH_STATX_CTIME_SEC | RBH_STATX_CTIME_NSEC;
-        fsevent->xattrs = build_enrich_map(fill_statx, &statx_enrich_mask);
-        if (fsevent->xattrs.pairs == NULL)
-            return -1;
+    new_events[0].type = RBH_FET_UPSERT;
+    new_events[0].xattrs = build_enrich_map(fill_statx, &statx_enrich_mask);
+    if (new_events[0].xattrs.pairs == NULL)
+        return -1;
 
-        return 1;
-    case 1:
-        fsevent->type = RBH_FET_XATTR;
+    new_events[1].type = RBH_FET_XATTR;
 
-        /* Mark this fsevent for Lustre enrichment to retrieve all Lustre
-         * values. Will be changed later to retrieve only the modified values,
-         * i.e. trusted.lov.
-         */
-        if (build_enrich_xattr_fsevent(&fsevent->xattrs,
-                                       "rbh-fsevents",
-                                       build_empty_map("lustre"),
-                                       NULL))
-            return -1;
+    /* Mark this fsevent for Lustre enrichment to retrieve all Lustre
+     * values. Will be changed later to retrieve only the modified values,
+     * i.e. archive id, hsm state and layout.
+     */
+    if (build_enrich_xattr_fsevent(&new_events[1].xattrs,
+                                   "rbh-fsevents", build_empty_map("lustre"),
+                                   NULL))
+        return -1;
 
-        break;
-    }
+    fsevents_iterator = rbh_iter_array(new_events, sizeof(*new_events), 2);
 
-    return process_step != 1 ? 1 : 0;
+    return 0;
 }
 
 /* FLRW events are events that happen when writing data to a mirrored file in
@@ -1012,7 +1006,7 @@ retry:
         rc = build_statx_update_event(statx_enrich_mask, id);
         break;
     case CL_LAYOUT:
-        rc = build_layout_events(records->process_step, fsevent);
+        rc = build_layout_events(id);
         break;
     case CL_FLRW:
         rc = build_flrw_events(records->process_step, fsevent);
