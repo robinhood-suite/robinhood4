@@ -33,8 +33,6 @@ struct lustre_changelog_iterator {
     struct rbh_iterator iterator;
 
     void *reader;
-    struct changelog_rec *prev_record;
-    unsigned int process_step;
 };
 
 /* BSON results:
@@ -858,7 +856,6 @@ lustre_changelog_iter_next(void *iterator)
 {
     struct lustre_changelog_iterator *records = iterator;
     const struct rbh_fsevent *to_return;
-    struct rbh_fsevent *fsevent = NULL;
     uint32_t statx_enrich_mask = 0;
     struct changelog_rec *record;
     struct rbh_id *id;
@@ -877,33 +874,20 @@ lustre_changelog_iter_next(void *iterator)
     }
 
 retry:
-    if (records->prev_record == NULL) {
-        rc = llapi_changelog_recv(records->reader, &record);
-        if (rc < 0) {
-            errno = -rc;
-            return NULL;
-        }
-        if (rc > 0) {
-            errno = ENODATA;
-            return NULL;
-        }
-        records->process_step = 0;
-    } else {
-        record = records->prev_record;
-        records->prev_record = NULL;
+    rc = llapi_changelog_recv(records->reader, &record);
+    if (rc < 0) {
+        errno = -rc;
+        return NULL;
+    } else if (rc > 0) {
+        errno = ENODATA;
+        return NULL;
     }
 
-    fsevent = source_stack_alloc(NULL, sizeof(*fsevent));
-    if (fsevent == NULL)
-        goto end_event;
-    memset(fsevent, 0, sizeof(*fsevent));
-
     id = build_id(&record->cr_tfid);
-    if (id == NULL)
-        goto err;
-
-    fsevent->id.data = id->data;
-    fsevent->id.size = id->size;
+    if (id == NULL) {
+        rc = -1;
+        goto end_event;
+    }
 
     switch (record->cr_type) {
     case CL_CREATE:
@@ -971,31 +955,15 @@ retry:
         goto retry;
     }
 
-    if (rc == -1)
-        goto err;
-    else if (rc == 1) /* record is partially parsed */
-        goto save_event;
-    else /* record is fully parsed */
-        goto end_event;
-
-err:
-    fsevent = NULL;
-
 end_event:
     save_errno = errno;
     llapi_changelog_free(&record);
     errno = save_errno;
 
-    if (fsevents_iterator)
+    if (rc != -1 && fsevents_iterator)
         return rbh_iter_next(fsevents_iterator);
 
-    return fsevent;
-
-save_event:
-    records->prev_record = record;
-    ++records->process_step;
-
-    return fsevent;
+    return NULL;
 }
 
 static void
@@ -1086,7 +1054,6 @@ source_from_lustre_changelog(const char *mdtname)
     lustre_changelog_iter_init(&source->events, mdtname);
 
     initialize_source_stack(sizeof(struct rbh_value_pair) * (1 << 7));
-    source->events.prev_record = NULL;
     source->source = LUSTRE_SOURCE;
     return &source->source;
 }
