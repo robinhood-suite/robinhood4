@@ -20,19 +20,11 @@
 #include "source.h"
 #include "utils.h"
 
-static __thread struct rbh_iterator *fsevents_iterator;
-
-static void __attribute__((destructor))
-free_fsevents_iterator(void)
-{
-    if (fsevents_iterator)
-        rbh_iter_destroy(fsevents_iterator);
-}
-
 struct lustre_changelog_iterator {
     struct rbh_iterator iterator;
 
     void *reader;
+    struct rbh_iterator *fsevents_iterator;
 };
 
 /* BSON results:
@@ -376,7 +368,8 @@ initialize_events(struct rbh_fsevent **_new_events, size_t n_events,
 }
 
 static int
-build_create_inode_events(struct changelog_rec *record, struct rbh_id *id)
+build_create_inode_events(struct changelog_rec *record, struct rbh_id *id,
+                          struct rbh_iterator **fsevents_iterator)
 {
     struct rbh_fsevent *new_events;
 
@@ -401,13 +394,14 @@ build_create_inode_events(struct changelog_rec *record, struct rbh_id *id)
     if (update_parent_acmtime_event(&record->cr_pfid, &new_events[3]))
         return -1;
 
-    fsevents_iterator = rbh_iter_array(new_events, sizeof(*new_events), 4);
+    *fsevents_iterator = rbh_iter_array(new_events, sizeof(*new_events), 4);
 
     return 0;
 }
 
 static int
-build_setxattr_event(struct changelog_rec *record, struct rbh_id *id)
+build_setxattr_event(struct changelog_rec *record, struct rbh_id *id,
+                     struct rbh_iterator **fsevents_iterator)
 {
     char *xattr = changelog_rec_xattr(record)->cr_xattr;
     struct rbh_fsevent *new_events;
@@ -426,13 +420,14 @@ build_setxattr_event(struct changelog_rec *record, struct rbh_id *id)
     if (new_events[1].xattrs.pairs == NULL)
         return -1;
 
-    fsevents_iterator = rbh_iter_array(new_events, sizeof(*new_events), 2);
+    *fsevents_iterator = rbh_iter_array(new_events, sizeof(*new_events), 2);
 
     return 0;
 }
 
 static int
-build_statx_update_event(uint32_t statx_enrich_mask, struct rbh_id *id)
+build_statx_update_event(uint32_t statx_enrich_mask, struct rbh_id *id,
+                         struct rbh_iterator **fsevents_iterator)
 {
     struct rbh_fsevent *new_events;
 
@@ -443,7 +438,7 @@ build_statx_update_event(uint32_t statx_enrich_mask, struct rbh_id *id)
     if (new_events[0].xattrs.pairs == NULL)
         return -1;
 
-    fsevents_iterator = rbh_iter_array(new_events, sizeof(*new_events), 1);
+    *fsevents_iterator = rbh_iter_array(new_events, sizeof(*new_events), 1);
 
     return 0;
 }
@@ -452,7 +447,8 @@ build_statx_update_event(uint32_t statx_enrich_mask, struct rbh_id *id)
  * additional one that is the enrichment of the symlink target
  */
 static int
-build_softlink_events(struct changelog_rec *record, struct rbh_id *id)
+build_softlink_events(struct changelog_rec *record, struct rbh_id *id,
+                      struct rbh_iterator **fsevents_iterator)
 {
     struct rbh_fsevent *new_events;
 
@@ -481,13 +477,14 @@ build_softlink_events(struct changelog_rec *record, struct rbh_id *id)
     if (new_events[4].xattrs.pairs == NULL)
         return -1;
 
-    fsevents_iterator = rbh_iter_array(new_events, sizeof(*new_events), 5);
+    *fsevents_iterator = rbh_iter_array(new_events, sizeof(*new_events), 5);
 
     return 0;
 }
 
 static int
-build_hardlink_or_mknod_events(struct changelog_rec *record, struct rbh_id *id)
+build_hardlink_or_mknod_events(struct changelog_rec *record, struct rbh_id *id,
+                               struct rbh_iterator **fsevents_iterator)
 {
     struct rbh_fsevent *new_events;
 
@@ -521,7 +518,7 @@ build_hardlink_or_mknod_events(struct changelog_rec *record, struct rbh_id *id)
                                    NULL))
         return -1;
 
-    fsevents_iterator = rbh_iter_array(new_events, sizeof(*new_events), 4);
+    *fsevents_iterator = rbh_iter_array(new_events, sizeof(*new_events), 4);
 
     return 0;
 }
@@ -559,7 +556,8 @@ unlink_inode_event(struct lu_fid *parent_id, char *name, size_t namelen,
 }
 
 static int
-build_unlink_or_rmdir_events(struct changelog_rec *record, struct rbh_id *id)
+build_unlink_or_rmdir_events(struct changelog_rec *record, struct rbh_id *id,
+                             struct rbh_iterator **fsevents_iterator)
 {
     bool last_copy = (record->cr_flags & CLF_UNLINK_LAST) &&
                      !(record->cr_flags & CLF_UNLINK_HSM_EXISTS);
@@ -574,7 +572,7 @@ build_unlink_or_rmdir_events(struct changelog_rec *record, struct rbh_id *id)
     if (update_parent_acmtime_event(&record->cr_pfid, &new_events[1]))
         return -1;
 
-    fsevents_iterator = rbh_iter_array(new_events, sizeof(*new_events), 2);
+    *fsevents_iterator = rbh_iter_array(new_events, sizeof(*new_events), 2);
 
     return 0;
 }
@@ -593,7 +591,8 @@ build_unlink_or_rmdir_events(struct changelog_rec *record, struct rbh_id *id)
  * that means data was overwriten.
  */
 static int
-build_rename_events(struct changelog_rec *record, struct rbh_id *id)
+build_rename_events(struct changelog_rec *record, struct rbh_id *id,
+                    struct rbh_iterator **fsevents_iterator)
 {
     struct changelog_ext_rename *rename_log = changelog_rec_rename(record);
     /* If the overwriten link is the last one and it has no HSM copy */
@@ -662,7 +661,7 @@ build_rename_events(struct changelog_rec *record, struct rbh_id *id)
                                     &new_events[counter]))
         return -1;
 
-    fsevents_iterator = rbh_iter_array(new_events, sizeof(*new_events),
+    *fsevents_iterator = rbh_iter_array(new_events, sizeof(*new_events),
                                        n_events);
 
     return 0;
@@ -675,7 +674,7 @@ build_rename_events(struct changelog_rec *record, struct rbh_id *id)
  * associated function.
  */
 static int
-build_hsm_events(struct rbh_id *id)
+build_hsm_events(struct rbh_id *id, struct rbh_iterator **fsevents_iterator)
 {
     uint32_t statx_enrich_mask = RBH_STATX_BLOCKS;
     struct rbh_fsevent *new_events;
@@ -708,13 +707,13 @@ build_hsm_events(struct rbh_id *id)
     if (new_events[3].xattrs.pairs == NULL)
         return -1;
 
-    fsevents_iterator = rbh_iter_array(new_events, sizeof(*new_events), 4);
+    *fsevents_iterator = rbh_iter_array(new_events, sizeof(*new_events), 4);
 
     return 0;
 }
 
 static int
-build_layout_events(struct rbh_id *id)
+build_layout_events(struct rbh_id *id, struct rbh_iterator **fsevents_iterator)
 {
     uint32_t statx_enrich_mask = RBH_STATX_CTIME_SEC | RBH_STATX_CTIME_NSEC;
     struct rbh_fsevent *new_events;
@@ -737,7 +736,7 @@ build_layout_events(struct rbh_id *id)
                                    NULL))
         return -1;
 
-    fsevents_iterator = rbh_iter_array(new_events, sizeof(*new_events), 2);
+    *fsevents_iterator = rbh_iter_array(new_events, sizeof(*new_events), 2);
 
     return 0;
 }
@@ -749,7 +748,7 @@ build_layout_events(struct rbh_id *id)
  * the Lustre information for that file.
  */
 static int
-build_flrw_events(struct rbh_id *id)
+build_flrw_events(struct rbh_id *id, struct rbh_iterator **fsevents_iterator)
 {
     uint32_t statx_enrich_mask = RBH_STATX_CTIME_SEC | RBH_STATX_CTIME_NSEC |
                                  RBH_STATX_MTIME_SEC | RBH_STATX_MTIME_NSEC |
@@ -767,7 +766,7 @@ build_flrw_events(struct rbh_id *id)
                                    NULL))
         return -1;
 
-    fsevents_iterator = rbh_iter_array(new_events, sizeof(*new_events), 2);
+    *fsevents_iterator = rbh_iter_array(new_events, sizeof(*new_events), 2);
 
     return 0;
 }
@@ -779,7 +778,7 @@ build_flrw_events(struct rbh_id *id)
  * values.
  */
 static int
-build_resync_events(struct rbh_id *id)
+build_resync_events(struct rbh_id *id, struct rbh_iterator **fsevents_iterator)
 {
     uint32_t statx_enrich_mask = RBH_STATX_CTIME_SEC | RBH_STATX_CTIME_NSEC |
                                  RBH_STATX_BLOCKS;
@@ -796,7 +795,7 @@ build_resync_events(struct rbh_id *id)
                                    NULL))
         return -1;
 
-    fsevents_iterator = rbh_iter_array(new_events, sizeof(*new_events), 2);
+    *fsevents_iterator = rbh_iter_array(new_events, sizeof(*new_events), 2);
 
     return 0;
 }
@@ -805,7 +804,8 @@ build_resync_events(struct rbh_id *id)
  * change the target and target's parent striping information.
  */
 static int
-build_migrate_events(struct changelog_rec *record, struct rbh_id *id)
+build_migrate_events(struct changelog_rec *record, struct rbh_id *id,
+                     struct rbh_iterator **fsevents_iterator)
 {
     struct changelog_ext_rename *migrate_log = changelog_rec_rename(record);
     struct rbh_fsevent *new_events;
@@ -846,7 +846,7 @@ build_migrate_events(struct changelog_rec *record, struct rbh_id *id)
                                    NULL))
         return -1;
 
-    fsevents_iterator = rbh_iter_array(new_events, sizeof(*new_events), 6);
+    *fsevents_iterator = rbh_iter_array(new_events, sizeof(*new_events), 6);
 
     return 0;
 }
@@ -855,6 +855,7 @@ static const void *
 lustre_changelog_iter_next(void *iterator)
 {
     struct lustre_changelog_iterator *records = iterator;
+    struct rbh_iterator *fsevents_iterator;
     const struct rbh_fsevent *to_return;
     uint32_t statx_enrich_mask = 0;
     struct changelog_rec *record;
@@ -864,13 +865,15 @@ lustre_changelog_iter_next(void *iterator)
 
     flush_source_stack();
 
+    fsevents_iterator = records->fsevents_iterator;
+
     if (fsevents_iterator) {
         to_return = rbh_iter_next(fsevents_iterator);
         if (to_return != NULL)
             return to_return;
 
         rbh_iter_destroy(fsevents_iterator);
-        fsevents_iterator = NULL;
+        records->fsevents_iterator = NULL;
     }
 
 retry:
@@ -892,10 +895,10 @@ retry:
     switch (record->cr_type) {
     case CL_CREATE:
     case CL_MKDIR:
-        rc = build_create_inode_events(record, id);
+        rc = build_create_inode_events(record, id, &records->fsevents_iterator);
         break;
     case CL_SETXATTR:
-        rc = build_setxattr_event(record, id);
+        rc = build_setxattr_event(record, id, &records->fsevents_iterator);
         break;
     case CL_SETATTR:
         statx_enrich_mask = RBH_STATX_ALL;
@@ -910,42 +913,46 @@ retry:
         /* fall through */
     case CL_ATIME:
         statx_enrich_mask |= RBH_STATX_ATIME_SEC | RBH_STATX_ATIME_NSEC;
-        rc = build_statx_update_event(statx_enrich_mask, id);
+        rc = build_statx_update_event(statx_enrich_mask, id,
+                                      &records->fsevents_iterator);
         break;
     case CL_SOFTLINK:
-        rc = build_softlink_events(record, id);
+        rc = build_softlink_events(record, id, &records->fsevents_iterator);
         break;
     case CL_HARDLINK:
     case CL_MKNOD:
-        rc = build_hardlink_or_mknod_events(record, id);
+        rc = build_hardlink_or_mknod_events(record, id,
+                                            &records->fsevents_iterator);
         break;
     case CL_RMDIR:
     case CL_UNLINK:
-        rc = build_unlink_or_rmdir_events(record, id);
+        rc = build_unlink_or_rmdir_events(record, id,
+                                          &records->fsevents_iterator);
         break;
     case CL_RENAME:
-        rc = build_rename_events(record, id);
+        rc = build_rename_events(record, id, &records->fsevents_iterator);
         break;
     case CL_HSM:
-        rc = build_hsm_events(id);
+        rc = build_hsm_events(id, &records->fsevents_iterator);
         break;
     case CL_TRUNC:
         statx_enrich_mask = RBH_STATX_CTIME_SEC | RBH_STATX_CTIME_NSEC |
                             RBH_STATX_MTIME_SEC | RBH_STATX_MTIME_NSEC |
                             RBH_STATX_SIZE;
-        rc = build_statx_update_event(statx_enrich_mask, id);
+        rc = build_statx_update_event(statx_enrich_mask, id,
+                                      &records->fsevents_iterator);
         break;
     case CL_LAYOUT:
-        rc = build_layout_events(id);
+        rc = build_layout_events(id, &records->fsevents_iterator);
         break;
     case CL_FLRW:
-        rc = build_flrw_events(id);
+        rc = build_flrw_events(id, &records->fsevents_iterator);
         break;
     case CL_RESYNC:
-        rc = build_resync_events(id);
+        rc = build_resync_events(id, &records->fsevents_iterator);
         break;
     case CL_MIGRATE:
-        rc = build_migrate_events(record, id);
+        rc = build_migrate_events(record, id, &records->fsevents_iterator);
         break;
     default: /* CL_MARK or other events */
         /* Events may never be seen as they are often deactivated, so we do not
@@ -960,8 +967,8 @@ end_event:
     llapi_changelog_free(&record);
     errno = save_errno;
 
-    if (rc != -1 && fsevents_iterator)
-        return rbh_iter_next(fsevents_iterator);
+    if (rc != -1 && records->fsevents_iterator)
+        return rbh_iter_next(records->fsevents_iterator);
 
     return NULL;
 }
@@ -972,6 +979,8 @@ lustre_changelog_iter_destroy(void *iterator)
     struct lustre_changelog_iterator *records = iterator;
 
     llapi_changelog_fini(&records->reader);
+    if (records->fsevents_iterator)
+        rbh_iter_destroy(records->fsevents_iterator);
 }
 
 static const struct rbh_iterator_operations LUSTRE_CHANGELOG_ITER_OPS = {
@@ -1005,6 +1014,7 @@ lustre_changelog_iter_init(struct lustre_changelog_iterator *events,
         error(EXIT_FAILURE, -rc, "llapi_changelog_set_xflags");
 
     events->iterator = LUSTRE_CHANGELOG_ITERATOR;
+    events->fsevents_iterator = NULL;
 }
 
 struct lustre_source {
