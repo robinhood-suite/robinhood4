@@ -799,36 +799,26 @@ build_flrw_events(struct rbh_id *id)
  * values.
  */
 static int
-build_resync_events(unsigned int process_step, struct rbh_fsevent *fsevent)
+build_resync_events(struct rbh_id *id)
 {
-    uint32_t statx_enrich_mask = 0;
+    uint32_t statx_enrich_mask = RBH_STATX_CTIME_SEC | RBH_STATX_CTIME_NSEC |
+                                 RBH_STATX_BLOCKS;
+    struct rbh_fsevent *new_events;
 
-    assert(process_step < 2);
-    switch(process_step) {
-    case 0:
-        statx_enrich_mask = RBH_STATX_CTIME_SEC | RBH_STATX_CTIME_NSEC |
-                            RBH_STATX_BLOCKS;
-        if (build_statx_event(statx_enrich_mask, fsevent, NULL))
-            return -1;
+    initialize_events(&new_events, 2, id);
 
-        break;
-    case 1:
-        fsevent->type = RBH_FET_XATTR;
+    if (build_statx_event(statx_enrich_mask, &new_events[0], NULL))
+        return -1;
 
-        /* Mark this fsevent for Lustre enrichment to retrieve all Lustre
-         * values. Will be changed later to retrieve only the modified values,
-         * i.e. layout (especially the component flags).
-         */
-        if (build_enrich_xattr_fsevent(&fsevent->xattrs,
-                                       "rbh-fsevents",
-                                       build_empty_map("lustre"),
-                                       NULL))
-            return -1;
+    new_events[1].type = RBH_FET_XATTR;
+    if (build_enrich_xattr_fsevent(&new_events[1].xattrs,
+                                   "rbh-fsevents", build_empty_map("lustre"),
+                                   NULL))
+        return -1;
 
-        break;
-    }
+    fsevents_iterator = rbh_iter_array(new_events, sizeof(*new_events), 2);
 
-    return process_step != 1 ? 1 : 0;
+    return 0;
 }
 
 /* Migrate events only correspond to metadata changes, meaning we only have to
@@ -1005,7 +995,7 @@ retry:
         rc = build_flrw_events(id);
         break;
     case CL_RESYNC:
-        rc = build_resync_events(records->process_step, fsevent);
+        rc = build_resync_events(id);
         break;
     case CL_MIGRATE:
         rc = build_migrate_events(records->process_step, record, fsevent);
