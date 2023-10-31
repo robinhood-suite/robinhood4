@@ -37,24 +37,6 @@ struct lustre_changelog_iterator {
     unsigned int process_step;
 };
 
-static void *
-fsevent_from_record(struct changelog_rec *record)
-{
-    struct rbh_fsevent *bad;
-
-    (void)record;
-
-    bad = source_stack_alloc(NULL, sizeof(*bad));
-    if (bad == NULL)
-        return NULL;
-
-    bad->type = -1;
-    bad->id.data = NULL;
-    bad->id.size = 0;
-
-    return bad;
-}
-
 /* BSON results:
  * { "statx" : { "uid" : x, "gid" : y } }
  */
@@ -978,14 +960,10 @@ retry:
     case CL_MIGRATE:
         rc = build_migrate_events(record, id);
         break;
-    case CL_EXT:
-    case CL_OPEN:
-    case CL_GETXATTR:
-    case CL_DN_OPEN:
-        fsevent = fsevent_from_record(record);
-        goto end_event;
     default: /* CL_MARK or other events */
-        /* Events not managed yet, we go to the next record */
+        /* Events may never be seen as they are often deactivated, so we do not
+         * bother and go to the next record.
+         */
         llapi_changelog_free(&record);
         goto retry;
     }
