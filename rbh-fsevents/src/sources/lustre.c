@@ -609,80 +609,79 @@ build_unlink_or_rmdir_events(struct changelog_rec *record, struct rbh_id *id)
  * that means data was overwriten.
  */
 static int
-build_rename_events(unsigned int process_step, struct changelog_rec *record,
-                    struct rbh_fsevent *fsevent)
+build_rename_events(struct changelog_rec *record, struct rbh_id *id)
 {
     struct changelog_ext_rename *rename_log = changelog_rec_rename(record);
     /* If the overwriten link is the last one and it has no HSM copy */
     bool last_copy = (record->cr_flags & CLF_RENAME_LAST) &&
                      !(record->cr_flags & CLF_RENAME_LAST_EXISTS);
-    struct rbh_id *id;
+    struct rbh_fsevent *new_events;
+    struct rbh_id *renamed_id;
+    int counter = 0;
+    int n_events;
 
     /* Unlink of the overwriten link is the first step done, but if the target
-     * fid is 0, we can skip that step instead. To prevent any NULL fsevents
-     * issue, we simply increment the process_step and manage the rest
-     * of the event normally.
+     * fid is 0, nothing was overwritten, so we don't need a corresponding
+     * event.
      */
     if (fid_is_zero(&record->cr_tfid))
-        process_step += 1;
+        n_events = 5;
+    else
+        n_events = 6;
 
-    /* If a file was overwritten, id is cr_tfid which is the FID of the file
-     * that was removed. We need to remove that entry from the backend, so we
-     * do not change id. If process step is greater than 0, we need to target
-     * the file that was renamed which is cr_sfid, so we replace id here.
+    renamed_id = build_id(&rename_log->cr_sfid);
+    if (renamed_id == NULL)
+        return -1;
+
+    /* Create the batch of events and give them the ID of the renamed entry */
+    initialize_events(&new_events, n_events, renamed_id);
+
+    /* If an entry is overwritten, simply change the target ID of the unlink to
+     * that one.
      */
-    if (process_step != 0) {
-        /* XXX: the build here could be done only once and reused for the rest
-         * of the event, but I couldn't find a proper way to do it, and by using
-         * a static variable, I couldn't make the unlink of the source work...
-         */
-        id = build_id(&rename_log->cr_sfid);
-        if (id == NULL)
-            return -1;
+    if (!fid_is_zero(&record->cr_tfid)) {
+        new_events[counter].id.data = id->data;
+        new_events[counter].id.size = id->size;
 
-        fsevent->id.data = id->data;
-        fsevent->id.size = id->size;
-    }
-
-    assert(process_step < 6);
-    switch (process_step) {
-    case 0: /* unlink overwriten inode */
         if (unlink_inode_event(&record->cr_pfid, changelog_rec_name(record),
-                               record->cr_namelen, last_copy, fsevent))
+                               record->cr_namelen, last_copy,
+                               &new_events[counter]))
             return -1;
 
-        break;
-    case 1: /* create new link */
-        if (new_link_inode_event(record, fsevent))
-            return -1;
-
-        break;
-    case 2: /* update target statx */
-        if (update_statx_without_uid_gid_event(record, fsevent))
-            return -1;
-
-        break;
-    case 3: /* update target's parent statx */
-        if (update_parent_acmtime_event(&record->cr_pfid, fsevent))
-            return -1;
-
-        break;
-    case 4: /* unlink source link */
-        if (unlink_inode_event(&rename_log->cr_spfid,
-                               changelog_rec_sname(record),
-                               changelog_rec_snamelen(record),
-                               false, fsevent))
-            return -1;
-
-        break;
-    case 5: /* update source's parent statx */
-        if (update_parent_acmtime_event(&rename_log->cr_spfid, fsevent))
-            return -1;
-
-        break;
+        counter++;
     }
 
-    return process_step != 5 ? 1 : 0;
+    if (new_link_inode_event(record, &new_events[counter]))
+        return -1;
+
+    counter++;
+
+    if (update_statx_without_uid_gid_event(record, &new_events[counter]))
+        return -1;
+
+    counter++;
+
+    /* Update the parent information after creating a new entry */
+    if (update_parent_acmtime_event(&record->cr_pfid, &new_events[counter]))
+        return -1;
+
+    counter++;
+
+    if (unlink_inode_event(&rename_log->cr_spfid, changelog_rec_sname(record),
+                           changelog_rec_snamelen(record),
+                           false, &new_events[counter]))
+        return -1;
+
+    counter++;
+
+    if (update_parent_acmtime_event(&rename_log->cr_spfid,
+                                    &new_events[counter]))
+        return -1;
+
+    fsevents_iterator = rbh_iter_array(new_events, sizeof(*new_events),
+                                       n_events);
+
+    return 0;
 }
 
 /* In the future we will need to modify this function to create two events for
@@ -1013,7 +1012,7 @@ retry:
         rc = build_unlink_or_rmdir_events(record, id);
         break;
     case CL_RENAME:
-        rc = build_rename_events(records->process_step, record, fsevent);
+        rc = build_rename_events(record, id);
         break;
     case CL_HSM:
         rc = build_hsm_events(records->process_step, fsevent);
