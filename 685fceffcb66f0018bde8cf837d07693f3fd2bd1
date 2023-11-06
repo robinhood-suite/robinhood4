@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2df9cccc_7422ba89",
+        "filename": "rbh-fsevents/src/sources/lustre.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 987,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-11-06T09:57:55Z",
+      "side": 0,
+      "message": "minor: I think you should leave the names of the events here. So that the list of ignored events is explicit.",
+      "range": {
+        "startLine": 984,
+        "startChar": 3,
+        "endLine": 987,
+        "endChar": 20
+      },
+      "revId": "685fceffcb66f0018bde8cf837d07693f3fd2bd1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
