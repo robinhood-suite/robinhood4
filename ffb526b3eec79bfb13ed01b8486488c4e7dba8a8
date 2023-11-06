@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bc66f6d0_c35cf46d",
+        "filename": "rbh-fsevents/src/sources/lustre.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 560,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-11-06T10:01:57Z",
+      "side": 1,
+      "message": "major: it would be nicer to return the iterator from the functions",
+      "range": {
+        "startLine": 560,
+        "startChar": 29,
+        "endLine": 560,
+        "endChar": 68
+      },
+      "revId": "ffb526b3eec79bfb13ed01b8486488c4e7dba8a8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "77628b85_90db81a2",
+        "filename": "rbh-fsevents/src/sources/lustre.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 971,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-11-06T10:01:57Z",
+      "side": 1,
+      "message": "major: the goal is to return the iterator. If this patch does not  make the change, it should be made later. It seems to me that this is another temporary hack until the other part of the code understands that this is now an iterator. Since this is not the case at this stage of the stack, this patch is not useful.",
+      "range": {
+        "startLine": 970,
+        "startChar": 4,
+        "endLine": 971,
+        "endChar": 57
+      },
+      "revId": "ffb526b3eec79bfb13ed01b8486488c4e7dba8a8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
