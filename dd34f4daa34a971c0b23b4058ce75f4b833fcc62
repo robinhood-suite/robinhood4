@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "591d2335_0cb8e536",
+        "filename": "rbh-find/src/actions.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 382,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-11-06T09:01:46Z",
+      "side": 1,
+      "message": "question: why did you make this change? This has nothing to do with this patch, right? If so, it should be in another patch with a proper commit message. Also, if this case is not coded properly, the current patch is still in review. So the modification should be in it directly.",
+      "range": {
+        "startLine": 379,
+        "startChar": 8,
+        "endLine": 382,
+        "endChar": 29
+      },
+      "revId": "dd34f4daa34a971c0b23b4058ce75f4b833fcc62",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
