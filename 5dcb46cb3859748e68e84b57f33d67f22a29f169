@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ff300925_e6835f09",
+        "filename": "rbh-fsevents/src/sources/lustre.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 466,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-11-06T09:38:26Z",
+      "side": 1,
+      "message": "major: at some point this must be returned by the function. Not in a global variable like this.",
+      "range": {
+        "startLine": 466,
+        "startChar": 4,
+        "endLine": 466,
+        "endChar": 23
+      },
+      "revId": "5dcb46cb3859748e68e84b57f33d67f22a29f169",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
