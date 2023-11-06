@@ -39,6 +39,30 @@
       },
       "revId": "195f0807483aba0a5484443662cf558880ff5fe5",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9116d579_d59373a1",
+        "filename": "rbh-fsevents/src/sources/lustre.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 372,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-11-06T09:52:24Z",
+      "side": 1,
+      "message": "Also, as mentioned in one of the previous patches, you should return the list of events instead of passing it as an argument. This would be more in line with how other function of robinhood work and easier to use.",
+      "parentUuid": "d2a68744_f1ac4fff",
+      "range": {
+        "startLine": 372,
+        "startChar": 0,
+        "endLine": 372,
+        "endChar": 17
+      },
+      "revId": "195f0807483aba0a5484443662cf558880ff5fe5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
