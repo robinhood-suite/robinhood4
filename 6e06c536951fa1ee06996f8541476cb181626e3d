@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1540ea1d_24464395",
+        "filename": "rbh-fsevents/src/sources/lustre.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 446,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-11-06T09:35:31Z",
+      "side": 1,
+      "message": "minor: this could be a function\n\n```\nnew_events \u003d fsevent_list_alloc(2, id);\nif (!new_events)\n    ...\n```\n\nThis could be used for in the other patches as well. And maybe in the hestia source also?\n\nThe only issue may be the fact that some events will use a different id for the parent. So this function may not be used in all the situations?",
+      "range": {
+        "startLine": 436,
+        "startChar": 4,
+        "endLine": 446,
+        "endChar": 37
+      },
+      "revId": "6e06c536951fa1ee06996f8541476cb181626e3d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
