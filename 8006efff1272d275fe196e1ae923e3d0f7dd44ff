@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "682872fd_ed165844",
+        "filename": "rbh-find/src/actions.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 363,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-11-06T09:13:54Z",
+      "side": 1,
+      "message": "\u0027\\0\u0027",
+      "range": {
+        "startLine": 363,
+        "startChar": 39,
+        "endLine": 363,
+        "endChar": 40
+      },
+      "revId": "8006efff1272d275fe196e1ae923e3d0f7dd44ff",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "29dfd893_119f5cef",
+        "filename": "rbh-find/src/actions.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 456,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-11-06T09:13:54Z",
+      "side": 1,
+      "message": "question: I can\u0027t test this right now unfortunatly. But does rbh-find support branching? If so, I don\u0027t think your implementation works.",
+      "range": {
+        "startLine": 454,
+        "startChar": 4,
+        "endLine": 456,
+        "endChar": 67
+      },
+      "revId": "8006efff1272d275fe196e1ae923e3d0f7dd44ff",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
