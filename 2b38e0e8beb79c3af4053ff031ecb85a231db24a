@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "85166de3_36c0448e",
+        "filename": "rbh-fsevents/include/utils.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-11-06T09:26:33Z",
+      "side": 1,
+      "message": "major: it seams to me that you don\u0027t need to export this variable now that you have the function source_stack_alloc.",
+      "range": {
+        "startLine": 15,
+        "startChar": 0,
+        "endLine": 20,
+        "endChar": 48
+      },
+      "revId": "2b38e0e8beb79c3af4053ff031ecb85a231db24a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cc74883e_309a3203",
+        "filename": "rbh-fsevents/src/sources/hestia.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 538,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-11-06T09:26:33Z",
+      "side": 1,
+      "message": "minor: simply statx",
+      "range": {
+        "startLine": 538,
+        "startChar": 50,
+        "endLine": 538,
+        "endChar": 59
+      },
+      "revId": "2b38e0e8beb79c3af4053ff031ecb85a231db24a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
