@@ -22,6 +22,30 @@
       },
       "revId": "5860430f23d248cabc3d4f4a7a8cfeaca95bb73d",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "925d49ea_c5817720",
+        "filename": "rbh-fsevents/tests/hestia/hestia_utils.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-11-07T11:23:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "08f40c99_8234ee62",
+      "range": {
+        "startLine": 30,
+        "startChar": 15,
+        "endLine": 31,
+        "endChar": 1
+      },
+      "revId": "5860430f23d248cabc3d4f4a7a8cfeaca95bb73d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
