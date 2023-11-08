@@ -95,6 +95,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1495e27f_bd992c1f",
+        "filename": "rbh-fsevents/tests/unit/check_dedup.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 267,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-11-08T09:26:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "01d14b58_b1d5be8a",
+      "range": {
+        "startLine": 267,
+        "startChar": 4,
+        "endLine": 267,
+        "endChar": 10
+      },
+      "revId": "6c02beaa58652a96fae5bf10de3f7416f4ce9be5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "85643e5e_1cdcf77d",
@@ -108,6 +132,30 @@
       "writtenOn": "2023-09-07T07:14:23Z",
       "side": 1,
       "message": "typo: sstack_destroy",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 14
+      },
+      "revId": "6c02beaa58652a96fae5bf10de3f7416f4ce9be5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "831fac03_d68f3a80",
+        "filename": "rbh-fsevents/tests/unit/utils/utils.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-11-08T09:26:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "85643e5e_1cdcf77d",
       "range": {
         "startLine": 26,
         "startChar": 0,

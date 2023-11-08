@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d4ec1e3f_c3630254",
+        "filename": "rbh-fsevents/tests/unit/check_dedup.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-11-08T09:26:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ad1b5798_ce3f9fe3",
+      "range": {
+        "startLine": 283,
+        "startChar": 4,
+        "endLine": 284,
+        "endChar": 30
+      },
+      "revId": "67698a83cc2cf41e42209e2751e89e5e5b1d85a1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9e64a9c9_12060e2c",
@@ -37,6 +61,30 @@
       "writtenOn": "2023-10-18T08:03:57Z",
       "side": 1,
       "message": "minor: add a check that the next event is NULL, to be sure the unlink have been removed",
+      "range": {
+        "startLine": 303,
+        "startChar": 3,
+        "endLine": 305,
+        "endChar": 50
+      },
+      "revId": "67698a83cc2cf41e42209e2751e89e5e5b1d85a1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f1dac2c8_a8ed4486",
+        "filename": "rbh-fsevents/tests/unit/check_dedup.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 305,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-11-08T09:26:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9e64a9c9_12060e2c",
       "range": {
         "startLine": 303,
         "startChar": 3,
