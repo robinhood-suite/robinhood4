@@ -83,7 +83,7 @@ is_uri(const char *string)
     if (raw_uri == NULL) {
         if (errno == EINVAL)
             return false;
-        error(EXIT_FAILURE, errno, "rbh_raw_uri_from_string");
+        error(EXIT_FAILURE, errno, "cannot parse URI '%s'", string);
     }
 
     free(raw_uri);
@@ -121,7 +121,7 @@ source_from_uri(const char *uri)
 
     raw_uri = rbh_raw_uri_from_string(uri);
     if (raw_uri == NULL)
-        error(EXIT_FAILURE, errno, "rbh_raw_uri_from_string");
+        error(EXIT_FAILURE, errno, "cannot parse URI '%s'", uri);
 
     if (strcmp(raw_uri->scheme, RBH_SOURCE) != 0) {
         free(raw_uri);
@@ -189,7 +189,7 @@ sink_from_uri(const char *uri)
 
     raw_uri = rbh_raw_uri_from_string(uri);
     if (raw_uri == NULL)
-        error(EXIT_FAILURE, errno, "rbh_raw_uri_from_string");
+        error(EXIT_FAILURE, errno, "cannot parse URI '%s'", uri);
 
     if (strcmp(raw_uri->scheme, "rbh") == 0) {
         free(raw_uri);
@@ -235,14 +235,14 @@ enrich_iter_builder_from_uri(const char *uri)
 
     raw_uri = rbh_raw_uri_from_string(uri);
     if (raw_uri == NULL)
-        error(EXIT_FAILURE, errno, "rbh_raw_uri_from_raw_uri: %s", uri);
+        error(EXIT_FAILURE, errno, "cannot parse URI '%s'", uri);
 
     rbh_uri = rbh_uri_from_raw_uri(raw_uri);
     save_errno = errno;
     free(raw_uri);
     errno = save_errno;
     if (rbh_uri == NULL)
-        error(EXIT_FAILURE, errno, "rbh_uri_from_raw_uri: %s", uri);
+        error(EXIT_FAILURE, errno, "cannot parse URI '%s'", uri);
 
     /* XXX: this a temporary hack because the Hestia backend cannot properly
      * build at the moment.

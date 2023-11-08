@@ -56,4 +56,8 @@ fake_symlink(struct rbh_fsevent *fsevent, struct rbh_id *id);
 void
 fake_fid(struct rbh_fsevent *fsevent, struct rbh_id *id);
 
+void
+fake_xattr_key_value(struct rbh_fsevent *fsevent, struct rbh_id *id,
+                     const char *key, const char *value);
+
 #endif
