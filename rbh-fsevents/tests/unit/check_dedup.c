@@ -564,6 +564,51 @@ START_TEST(dedup_different_xattrs)
 }
 END_TEST
 
+START_TEST(dedup_same_xattr_different_values)
+{
+    struct rbh_mut_iterator *deduplicator;
+    struct source *fake_source = NULL;
+    struct rbh_fsevent fake_events[4];
+    struct rbh_mut_iterator *events;
+    struct rbh_fsevent *event;
+    struct rbh_id *id;
+
+    id = fake_id();
+
+    fake_xattr_key_value(&fake_events[0], id, "key", "value1");
+    fake_xattr_key_value(&fake_events[1], id, "key", "value2");
+    fake_xattr_key_value(&fake_events[2], id, "key", "value3");
+    fake_xattr_key_value(&fake_events[3], id, "key", "value4");
+
+    fake_source = event_list_source(fake_events, 4);
+    ck_assert_ptr_nonnull(fake_source);
+
+    deduplicator = deduplicator_new(20, 10, fake_source);
+    ck_assert_ptr_nonnull(deduplicator);
+
+    events = rbh_mut_iter_next(deduplicator);
+    ck_assert_ptr_nonnull(events);
+
+    event = rbh_mut_iter_next(events);
+    ck_assert_ptr_nonnull(event);
+
+    ck_assert_int_eq(event->type, RBH_FET_XATTR);
+    ck_assert_int_eq(event->xattrs.count, 1);
+    ck_assert_str_eq(event->xattrs.pairs[0].key, "key");
+    ck_assert_int_eq(event->xattrs.pairs[0].value->type, RBH_VT_BINARY);
+    ck_assert_str_eq(event->xattrs.pairs[0].value->binary.data, "value4");
+
+    event = rbh_mut_iter_next(events);
+    ck_assert_ptr_null(event);
+    ck_assert_int_eq(errno, ENODATA);
+
+    free(id);
+    rbh_mut_iter_destroy(events);
+    rbh_mut_iter_destroy(deduplicator);
+    event_list_source_destroy(fake_source);
+}
+END_TEST
+
 START_TEST(dedup_lustre_xattr)
 {
     struct rbh_mut_iterator *deduplicator;
@@ -890,6 +935,7 @@ unit_suite(void)
     tcase_add_test(tests, dedup_upsert_statx);
     tcase_add_test(tests, dedup_upsert_statx_symlink);
     tcase_add_test(tests, dedup_same_xattr);
+    tcase_add_test(tests, dedup_same_xattr_different_values);
     tcase_add_test(tests, dedup_different_xattrs);
     tcase_add_test(tests, dedup_lustre_xattr);
     tcase_add_test(tests, dedup_xattr_merge_lustre_with_xattr);

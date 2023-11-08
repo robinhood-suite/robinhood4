@@ -297,29 +297,50 @@ fake_lustre(struct rbh_fsevent *fsevent, struct rbh_id *id)
 }
 
 static struct rbh_value_map
-make_fid(struct rbh_value *map_values, struct rbh_value_pair *pairs,
-         const struct lu_fid *fid)
+make_xattr_key_value(struct rbh_value *map_values, struct rbh_value_pair *pairs,
+                     const char *key, const void *value, size_t size)
 {
     struct rbh_value_map xattr = {
         .count = 1,
         .pairs = &pairs[0],
     };
-    struct rbh_value_pair fid_pair = { /* pairs[0] */
-        .key = "fid",
-        .value = &map_values[0], /* fid */
+    struct rbh_value_pair xattr_pair = {
+        .key = key,
+        .value = &map_values[0],
     };
-    struct rbh_value fid_value = { /* map_values[0] */
+    struct rbh_value xattr_value = {
         .type = RBH_VT_BINARY,
         .binary = {
-            .data = (const char *)fid,
-            .size = sizeof(*fid),
+            .data = value,
+            .size = size,
         },
     };
 
-    memcpy(&pairs[0], &fid_pair, sizeof(fid_pair));
-    memcpy(&map_values[0], &fid_value, sizeof(fid_value));
+    memcpy(&pairs[0], &xattr_pair, sizeof(xattr_pair));
+    memcpy(&map_values[0], &xattr_value, sizeof(xattr_value));
 
     return xattr;
+}
+
+void
+fake_xattr_key_value(struct rbh_fsevent *fsevent, struct rbh_id *id,
+                     const char *key, const char *value)
+{
+    struct rbh_value *map_values;
+    struct rbh_value_pair *pairs;
+
+    map_values = alloc(sizeof(*map_values));
+    ck_assert_ptr_nonnull(map_values);
+
+    pairs = alloc(sizeof(*pairs));
+    ck_assert_ptr_nonnull(pairs);
+
+    memset(fsevent, 0, sizeof(*fsevent));
+
+    fsevent->type = RBH_FET_XATTR;
+    fsevent->id = *id;
+    fsevent->xattrs = make_xattr_key_value(map_values, pairs, key, value,
+                                           strlen(value) + 1);
 }
 
 void
@@ -340,7 +361,8 @@ fake_fid(struct rbh_fsevent *fsevent, struct rbh_id *id)
 
     fsevent->type = RBH_FET_XATTR;
     fsevent->id = *id;
-    fsevent->xattrs = make_fid(map_values, pairs, fid);
+    fsevent->xattrs = make_xattr_key_value(map_values, pairs, "fid", fid,
+                                           sizeof(*fid));
 }
 
 static struct rbh_value_map
