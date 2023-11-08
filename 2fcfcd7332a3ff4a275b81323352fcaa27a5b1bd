@@ -22,6 +22,30 @@
       },
       "revId": "2fcfcd7332a3ff4a275b81323352fcaa27a5b1bd",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "38db62bf_271bf743",
+        "filename": "rbh-fsevents/tests/acceptance-dedup.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-11-08T10:19:52Z",
+      "side": 1,
+      "message": "I would like to keep this test simple as the goal is simply to show that rbh-fsevents will do deduplication. The tests for the details of the deduplication are checked by the test check_dedup.c. I\u0027ve added the check for xattrs. But not for the upsert as there will be an upsert on the parent. So the file will not be empty.",
+      "parentUuid": "c713184b_5b2236e6",
+      "range": {
+        "startLine": 40,
+        "startChar": 4,
+        "endLine": 40,
+        "endChar": 6
+      },
+      "revId": "2fcfcd7332a3ff4a275b81323352fcaa27a5b1bd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
