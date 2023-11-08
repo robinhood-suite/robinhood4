@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "290384f9_a4e51bc3",
+        "filename": "rbh-fsevents/src/deduplicator/fsevent_pool.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 620,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-11-08T09:29:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8e62ecfa_d93378cd",
+      "range": {
+        "startLine": 620,
+        "startChar": 15,
+        "endLine": 620,
+        "endChar": 43
+      },
+      "revId": "41b462b38a1132a60d043c83e5829fbf911d1e27",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ece536bd_0f0eae52",
