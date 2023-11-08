@@ -22,6 +22,30 @@
       },
       "revId": "33ee2e562793c6480eb7ad4892e6892ee6d2addb",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "565da8a3_24f56ea1",
+        "filename": "rbh-fsevents/tests/unit/check_dedup.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 511,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-11-08T09:30:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bc18b1cd_6959f141",
+      "range": {
+        "startLine": 511,
+        "startChar": 4,
+        "endLine": 511,
+        "endChar": 35
+      },
+      "revId": "33ee2e562793c6480eb7ad4892e6892ee6d2addb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
