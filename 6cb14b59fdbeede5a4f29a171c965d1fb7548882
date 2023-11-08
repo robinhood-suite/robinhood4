@@ -95,6 +95,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "73ea8a45_de56b1e7",
+        "filename": "rbh-fsevents/src/sources/lustre.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-11-08T09:21:02Z",
+      "side": 1,
+      "message": "After careful consideration and talks, we will not make the source return an iterator because it would mean making the source iterators mutable, so the memory would have to be managed by the caller (i.e. deduplicator). This would be quite a headache to properly handle, as the source would initialize events that the deduplicator would use, so when should the memory be freed, and who should do it ?\n\nSo we\u0027ll keep it the way it done with this patch stack, as ultimately, the difference between the source returning an iterator and what is done with this stack is almost the same from a pure code perspective.",
+      "parentUuid": "87e72b7c_bf1d2fac",
+      "range": {
+        "startLine": 23,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 55
+      },
+      "revId": "6cb14b59fdbeede5a4f29a171c965d1fb7548882",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f7800c4f_3a36112d",
