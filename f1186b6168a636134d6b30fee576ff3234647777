@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ebf4c20b_f210b970",
+        "filename": "rbh-fsevents/src/deduplicator.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-11-08T09:06:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "be834c99_23178b14",
+      "range": {
+        "startLine": 45,
+        "startChar": 8,
+        "endLine": 45,
+        "endChar": 22
+      },
+      "revId": "f1186b6168a636134d6b30fee576ff3234647777",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "82d989a9_48f3c0c8",
@@ -37,6 +61,30 @@
       "writtenOn": "2023-10-18T07:20:46Z",
       "side": 1,
       "message": "minor: the name implies it\u0027s a container for xattrs in fsevents, not for fsevents",
+      "range": {
+        "startLine": 21,
+        "startChar": 52,
+        "endLine": 21,
+        "endChar": 74
+      },
+      "revId": "f1186b6168a636134d6b30fee576ff3234647777",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9243cd5c_f3cffc61",
+        "filename": "rbh-fsevents/src/deduplicator/fsevent_pool.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-11-08T09:06:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "82d989a9_48f3c0c8",
       "range": {
         "startLine": 21,
         "startChar": 52,
@@ -72,6 +120,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7cf8eae9_8e06fe7c",
+        "filename": "rbh-fsevents/src/deduplicator/fsevent_pool.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-11-08T09:06:52Z",
+      "side": 1,
+      "message": "Maybe a better way of doing this is to have CLI set flush_size to pool_size when flush_size is greater than pool size. So I will do this in the patch that introduces the CLI arguments.",
+      "parentUuid": "917fbfd2_7ff1de6a",
+      "range": {
+        "startLine": 62,
+        "startChar": 8,
+        "endLine": 62,
+        "endChar": 30
+      },
+      "revId": "f1186b6168a636134d6b30fee576ff3234647777",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7ed07557_fbec4d46",
         "filename": "rbh-fsevents/src/deduplicator/fsevent_pool.c",
         "patchSetId": 4
@@ -83,6 +155,30 @@
       "writtenOn": "2023-10-18T07:20:46Z",
       "side": 1,
       "message": "question/major? Missing the free of the ids and events list, is this what you meant by the comment line 15 ?",
+      "range": {
+        "startLine": 108,
+        "startChar": 0,
+        "endLine": 108,
+        "endChar": 24
+      },
+      "revId": "f1186b6168a636134d6b30fee576ff3234647777",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "16241f7d_7600381e",
+        "filename": "rbh-fsevents/src/deduplicator/fsevent_pool.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-11-08T09:06:52Z",
+      "side": 1,
+      "message": "No, the comment line 15 is fixed by the commits \"manage list elements\u0027 memory correctly\" and \"manage fsevent deduplication seperately\". The list node in the structure `pool-\u003eids` and `pool-\u003eevents do not need to be freed.",
+      "parentUuid": "7ed07557_fbec4d46",
       "range": {
         "startLine": 108,
         "startChar": 0,
