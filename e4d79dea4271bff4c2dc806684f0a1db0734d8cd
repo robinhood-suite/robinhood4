@@ -18,6 +18,24 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "410ad26d_845d8acd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-11-08T10:20:35Z",
+      "side": 1,
+      "message": "The test I had in mind is actually not possible. So I will simply remove it.",
+      "parentUuid": "59a0adc1_9bd58046",
+      "revId": "e4d79dea4271bff4c2dc806684f0a1db0734d8cd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b6935f1c_21c19329",
@@ -55,6 +73,30 @@
       "side": 1,
       "message": "\"another call* to\"\nforgetting words...",
       "parentUuid": "b6935f1c_21c19329",
+      "range": {
+        "startLine": 53,
+        "startChar": 4,
+        "endLine": 53,
+        "endChar": 65
+      },
+      "revId": "e4d79dea4271bff4c2dc806684f0a1db0734d8cd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e27f15e6_7fc83f69",
+        "filename": "rbh-fsevents/tests/acceptance-dedup.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-11-08T10:20:35Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "97f9f744_c46d3097",
       "range": {
         "startLine": 53,
         "startChar": 4,
