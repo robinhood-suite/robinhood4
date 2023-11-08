@@ -512,6 +512,19 @@ insert_xattr(struct rbh_fsevent_node *cached_event,
 }
 
 static void
+update_xattr_value(struct rbh_fsevent_node *cached_event,
+                   const struct rbh_value_pair *xattr)
+{
+    const struct rbh_value *cached_xattr;
+
+    cached_xattr = rbh_map_find(&cached_event->fsevent.xattrs, xattr->key);
+    assert(cached_xattr);
+
+    /* overwrite the old value with the new one */
+    memcpy((void *)cached_xattr, xattr->value, sizeof(*xattr));
+}
+
+static void
 dedup_xattr(struct rbh_fsevent_node *cached_event,
             const struct rbh_value_pair *xattr)
 {
@@ -520,9 +533,9 @@ dedup_xattr(struct rbh_fsevent_node *cached_event,
     cached_xattr = rbh_fsevent_find_xattr(&cached_event->fsevent, xattr->key);
     if (cached_xattr)
         /* xattr found, do not add it to the cached fsevent */
-        return;
-
-    insert_xattr(cached_event, xattr);
+        update_xattr_value(cached_event, xattr);
+    else
+        insert_xattr(cached_event, xattr);
 }
 
 static void
