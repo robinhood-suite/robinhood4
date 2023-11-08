@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "c9aa016d_005d73db",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-11-08T09:11:38Z",
+      "side": 1,
+      "message": "I have made some modifications to include what you suggested but I\u0027ve phrased it a bit differently. Tell me if this is ok with you.",
+      "parentUuid": "990e5d74_5a5a6da2",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 10
+      },
+      "revId": "f3240ecbf42f076ac6e3a09970192701c2f2c7a2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "08fdb144_dcf3999b",
