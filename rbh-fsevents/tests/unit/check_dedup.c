@@ -914,6 +914,70 @@ START_TEST(dedup_xattr_merge_xattrs_fid_and_lustre)
 }
 END_TEST
 
+START_TEST(dedup_check_flush_order)
+{
+    struct rbh_mut_iterator *deduplicator;
+    struct source *fake_source = NULL;
+    struct rbh_fsevent fake_events[6];
+    struct rbh_mut_iterator *events;
+    struct rbh_fsevent *event;
+    struct rbh_id *ids[3];
+
+    fprintf(stderr, "dedup xattr start\n");
+
+    for (size_t i = 0; i < 3; i++)
+        ids[i] = fake_id();
+
+    fake_xattr(&fake_events[0], ids[0], "test");
+    fake_xattr(&fake_events[1], ids[1], "test");
+    fake_xattr(&fake_events[2], ids[2], "test");
+
+    fake_xattr(&fake_events[3], ids[1], "test");
+    fake_xattr(&fake_events[4], ids[0], "test");
+    fake_xattr(&fake_events[5], ids[2], "test");
+
+    /* In this configuration, we will have 3 different ids.
+     * Each id will have 2 associated events.
+     * What we expect is 1 event per id after deduplication.
+     * The events should be ordered by oldest event reception.
+     * This means that although the events where first received in the order 0,
+     * 1, 2, we expect to get the order 1, 0, 2 after the deduplication since 1
+     * has not received any events for the longest time.
+     */
+
+    fake_source = event_list_source(fake_events, 6);
+    ck_assert_ptr_nonnull(fake_source);
+
+    deduplicator = deduplicator_new(20, 10, fake_source);
+    ck_assert_ptr_nonnull(deduplicator);
+
+    events = rbh_mut_iter_next(deduplicator);
+    ck_assert_ptr_nonnull(events);
+
+    event = rbh_mut_iter_next(events);
+    ck_assert_ptr_nonnull(event);
+    ck_assert_id_eq(ids[1], &event->id);
+
+    event = rbh_mut_iter_next(events);
+    ck_assert_ptr_nonnull(event);
+    ck_assert_id_eq(ids[0], &event->id);
+
+    event = rbh_mut_iter_next(events);
+    ck_assert_ptr_nonnull(event);
+    ck_assert_id_eq(ids[2], &event->id);
+
+    event = rbh_mut_iter_next(events);
+    ck_assert_ptr_null(event);
+    ck_assert_int_eq(errno, ENODATA);
+
+    for (size_t i = 0; i < 3; i++)
+        free(ids[i]);
+    rbh_mut_iter_destroy(events);
+    rbh_mut_iter_destroy(deduplicator);
+    event_list_source_destroy(fake_source);
+}
+END_TEST
+
 static Suite *
 unit_suite(void)
 {
@@ -944,6 +1008,7 @@ unit_suite(void)
     tcase_add_test(tests, dedup_xattr_merge_lustre_with_fid);
     tcase_add_test(tests, dedup_xattr_merge_xattrs_with_fid);
     tcase_add_test(tests, dedup_xattr_merge_xattrs_fid_and_lustre);
+    tcase_add_test(tests, dedup_check_flush_order);
 
     suite_add_tcase(suite, tests);
 

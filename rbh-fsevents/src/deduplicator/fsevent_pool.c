@@ -262,6 +262,7 @@ rbh_fsevent_pool_insert_new_entry(struct rbh_fsevent_pool *pool,
         return rc;
 
     id_node->id = &node->fsevent.id;
+
     rbh_list_add_tail(&pool->ids, &id_node->link);
 
     pool->count++;
@@ -767,12 +768,36 @@ dedup_upsert_event(struct rbh_list_node *events,
     return true;
 }
 
+static void
+move_list_node_at_tail(struct rbh_list_node *list, struct rbh_list_node *node)
+{
+    rbh_list_del(node);
+    rbh_list_add_tail(list, node);
+}
+
+static struct rbh_id_node *
+id_list_find(struct rbh_fsevent_pool *pool, const struct rbh_id *id)
+{
+    struct rbh_id_node *node;
+
+    rbh_list_foreach(&pool->ids, node, link) {
+        if (rbh_id_equal(id, node->id))
+            return node;
+    }
+
+    return NULL;
+}
+
 static int
 deduplicate_event(struct rbh_fsevent_pool *pool, struct rbh_list_node *events,
                   const struct rbh_fsevent *event)
 {
     struct rbh_fsevent_node *node;
     bool should_insert = true;
+    struct rbh_id_node *id;
+
+    id = id_list_find(pool, &event->id);
+    move_list_node_at_tail(&pool->ids, &id->link);
 
     switch (event->type) {
     case RBH_FET_UPSERT:
