@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b600e444_d65b3286",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-11-08T09:55:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "21e90f74_d2ed7533",
+      "range": {
+        "startLine": 14,
+        "startChar": 35,
+        "endLine": 14,
+        "endChar": 46
+      },
+      "revId": "a8ee24a2fcdd3a1935d0e443459c5cbdb732e21f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c799d05d_30316039",
@@ -47,6 +71,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d326d181_da84bd3b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-11-08T09:55:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c799d05d_30316039",
+      "range": {
+        "startLine": 15,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 8
+      },
+      "revId": "a8ee24a2fcdd3a1935d0e443459c5cbdb732e21f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "178dc120_ae730261",
@@ -60,6 +108,30 @@
       "writtenOn": "2023-10-20T08:18:16Z",
       "side": 1,
       "message": "defect: here and below, the node isn\u0027t removed from this list",
+      "range": {
+        "startLine": 135,
+        "startChar": 8,
+        "endLine": 137,
+        "endChar": 44
+      },
+      "revId": "a8ee24a2fcdd3a1935d0e443459c5cbdb732e21f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c82fb367_71e6cfdb",
+        "filename": "rbh-fsevents/src/deduplicator/fsevent_pool.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-11-08T09:55:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "178dc120_ae730261",
       "range": {
         "startLine": 135,
         "startChar": 8,
@@ -95,6 +167,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4f4f22b8_9eff0b06",
+        "filename": "rbh-fsevents/src/deduplicator/fsevent_pool.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-11-08T09:55:42Z",
+      "side": 1,
+      "message": "This is what I did initially but it didn\u0027t work. This will need more investigation.",
+      "parentUuid": "a20458ca_ce8f8847",
+      "range": {
+        "startLine": 144,
+        "startChar": 0,
+        "endLine": 144,
+        "endChar": 15
+      },
+      "revId": "a8ee24a2fcdd3a1935d0e443459c5cbdb732e21f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "cf6dcaf3_2252659f",
         "filename": "rbh-fsevents/src/deduplicator/fsevent_pool.c",
         "patchSetId": 1
@@ -118,6 +214,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e8dac57c_9ff851f0",
+        "filename": "rbh-fsevents/src/deduplicator/fsevent_pool.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-11-08T09:55:42Z",
+      "side": 1,
+      "message": "This is because I need to allocate a struct rbh_list_node that is stored in the hashmap (the hasmap is an association from rbh_id to rbh_list_node). These nodes will be stored in the list free_nodes. But since it is a simple rbh_list_node that is stored, there is no offset to use to get the actual structure back. The structure rbh_list_node_wrapper is simply used to have a struct where the offset of the rbh_list_node is 0 inside of it.",
+      "parentUuid": "cf6dcaf3_2252659f",
+      "range": {
+        "startLine": 153,
+        "startChar": 59,
+        "endLine": 153,
+        "endChar": 75
+      },
+      "revId": "a8ee24a2fcdd3a1935d0e443459c5cbdb732e21f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1dbcb246_0637132c",
         "filename": "rbh-fsevents/src/deduplicator/fsevent_pool.c",
         "patchSetId": 1
@@ -129,6 +249,30 @@
       "writtenOn": "2023-10-20T07:51:23Z",
       "side": 1,
       "message": "nit: add {} around the call below",
+      "range": {
+        "startLine": 774,
+        "startChar": 56,
+        "endLine": 774,
+        "endChar": 57
+      },
+      "revId": "a8ee24a2fcdd3a1935d0e443459c5cbdb732e21f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "18743fb6_f15ff652",
+        "filename": "rbh-fsevents/src/deduplicator/fsevent_pool.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 774,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-11-08T09:55:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1dbcb246_0637132c",
       "range": {
         "startLine": 774,
         "startChar": 56,
