@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "652b5dd0_1db4c210",
+        "filename": "rbh-fsevents/tests/hestia/test_update.bash",
+        "patchSetId": 5
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-11-10T13:51:42Z",
+      "side": 1,
+      "message": "Nope",
+      "parentUuid": "4ce1df7a_7db02405",
+      "range": {
+        "startLine": 40,
+        "startChar": 4,
+        "endLine": 40,
+        "endChar": 33
+      },
+      "revId": "bb751c2e91cdd5e104ef494ade3afe34a37747ba",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a5553583_ee37aa68",
@@ -37,6 +61,30 @@
       "writtenOn": "2023-11-10T08:26:25Z",
       "side": 1,
       "message": "question: why not grep \"0,$size\"?",
+      "range": {
+        "startLine": 123,
+        "startChar": 46,
+        "endLine": 123,
+        "endChar": 51
+      },
+      "revId": "bb751c2e91cdd5e104ef494ade3afe34a37747ba",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "10340c5d_b31a855c",
+        "filename": "rbh-fsevents/tests/hestia/test_update.bash",
+        "patchSetId": 5
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-11-10T13:51:42Z",
+      "side": 1,
+      "message": "Because it isn\u0027t written as such in the event feed anymore, now it\u0027s\n```\n\"tiers\":\n  - \"extents\":\n    - \"length\": \"97158\"\n      \"offset\": \"0\"\n    \"name\": \"0\"\n  - \"extents\":\n    - \"length\": \"97158\"\n      \"offset\": \"0\"\n    \"name\": \"1\"\n  \"size\": \"97158\"\n```\n\nSo there is no \"0,$size\" to grep",
+      "parentUuid": "a5553583_ee37aa68",
       "range": {
         "startLine": 123,
         "startChar": 46,
