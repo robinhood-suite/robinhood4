@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a1dc016e_d2708091",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-11-10T09:13:39Z",
+      "side": 1,
+      "message": "question: I was wondering if this could not be moved in the source structure? This will likely be used by all types of sources. Currently, hestia and lustre use it. Only the yaml source doesn\u0027t. The benefit of this is that we could have a function source_iter_next that checks whether this iterator is null or not and call iter_next on it. This might not work due to the fact that the YAML source would not use it though.",
+      "range": {
+        "startLine": 7,
+        "startChar": 41,
+        "endLine": 7,
+        "endChar": 61
+      },
+      "revId": "15a17488f7acac8001f5b98cd20e342b4074aeca",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a8cfc0a6_4dea9d94",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-11-10T09:13:39Z",
+      "side": 1,
+      "message": "typoe: as a",
+      "range": {
+        "startLine": 9,
+        "startChar": 46,
+        "endLine": 9,
+        "endChar": 47
+      },
+      "revId": "15a17488f7acac8001f5b98cd20e342b4074aeca",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3a0c2d4f_dece0a63",
+        "filename": "rbh-fsevents/src/sources/lustre.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 864,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-11-10T09:13:39Z",
+      "side": 1,
+      "message": "minor: this variable is only used line 866, 867 and 871 if I\u0027m not mistaken. I don\u0027t think it is useful.",
+      "range": {
+        "startLine": 864,
+        "startChar": 4,
+        "endLine": 864,
+        "endChar": 49
+      },
+      "revId": "15a17488f7acac8001f5b98cd20e342b4074aeca",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
