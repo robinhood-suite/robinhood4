@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "27f94dbe_0c7b16af",
+        "filename": "rbh-fsevents/src/sources/lustre.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 564,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-11-10T13:51:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "04490a57_1a440901",
+      "range": {
+        "startLine": 564,
+        "startChar": 3,
+        "endLine": 564,
+        "endChar": 22
+      },
+      "revId": "0898abd0d7510c9aa6126c5f14626d3ae4412eed",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "14bf3564_d332c959",
@@ -37,6 +61,30 @@
       "writtenOn": "2023-11-10T09:07:09Z",
       "side": 1,
       "message": "question: should we check that llapi_changelog_recv doesn\u0027t return ENODATA. Otherwise, we could have an infinite loop. I don\u0027t know if it can return it but it seems safer to check for it.",
+      "range": {
+        "startLine": 876,
+        "startChar": 9,
+        "endLine": 876,
+        "endChar": 20
+      },
+      "revId": "0898abd0d7510c9aa6126c5f14626d3ae4412eed",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dbfb446b_4439da49",
+        "filename": "rbh-fsevents/src/sources/lustre.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 876,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-11-10T13:51:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "14bf3564_d332c959",
       "range": {
         "startLine": 876,
         "startChar": 9,
