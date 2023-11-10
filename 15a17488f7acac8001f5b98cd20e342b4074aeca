@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "28a37b12_f408d3ca",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-11-10T13:52:04Z",
+      "side": 1,
+      "message": "This could be done if the file source created iterator for each event it reads, but that would mean having an additional allocation each time. Another possibility is to have the YAML source checks the name of the source used (file or hestia), and if it is a file, return the fsevent returned by the file source, otherwise get the iterator and return the next event in it. But that means adding an \"ugly\" check.\n\nI\u0027m not opposed to these two ideas, but I\u0027m not sure everybody is ok aswell.",
+      "parentUuid": "a1dc016e_d2708091",
+      "range": {
+        "startLine": 7,
+        "startChar": 41,
+        "endLine": 7,
+        "endChar": 61
+      },
+      "revId": "15a17488f7acac8001f5b98cd20e342b4074aeca",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a8cfc0a6_4dea9d94",
         "filename": "/COMMIT_MSG",
         "patchSetId": 4
@@ -37,6 +61,30 @@
       "writtenOn": "2023-11-10T09:13:39Z",
       "side": 1,
       "message": "typoe: as a",
+      "range": {
+        "startLine": 9,
+        "startChar": 46,
+        "endLine": 9,
+        "endChar": 47
+      },
+      "revId": "15a17488f7acac8001f5b98cd20e342b4074aeca",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "36b1c25a_9155c218",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-11-10T13:52:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a8cfc0a6_4dea9d94",
       "range": {
         "startLine": 9,
         "startChar": 46,
@@ -60,6 +108,30 @@
       "writtenOn": "2023-11-10T09:13:39Z",
       "side": 1,
       "message": "minor: this variable is only used line 866, 867 and 871 if I\u0027m not mistaken. I don\u0027t think it is useful.",
+      "range": {
+        "startLine": 864,
+        "startChar": 4,
+        "endLine": 864,
+        "endChar": 49
+      },
+      "revId": "15a17488f7acac8001f5b98cd20e342b4074aeca",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b29cbb7f_7975f62d",
+        "filename": "rbh-fsevents/src/sources/lustre.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 864,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-11-10T13:52:04Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "3a0c2d4f_dece0a63",
       "range": {
         "startLine": 864,
         "startChar": 4,
