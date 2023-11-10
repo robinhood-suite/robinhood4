@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c8fd22d0_d6d696f8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-11-10T12:26:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a10f6aef_39920649",
+      "range": {
+        "startLine": 9,
+        "startChar": 41,
+        "endLine": 9,
+        "endChar": 43
+      },
+      "revId": "d2648155a12e42e28c93cda91276983fa3ac42a2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3faff51b_665a38c7",
@@ -37,6 +61,30 @@
       "writtenOn": "2023-10-24T11:25:57Z",
       "side": 1,
       "message": "suggest: same as the other patches",
+      "range": {
+        "startLine": 93,
+        "startChar": 26,
+        "endLine": 93,
+        "endChar": 36
+      },
+      "revId": "d2648155a12e42e28c93cda91276983fa3ac42a2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "129ae5ca_f9857e3a",
+        "filename": "rbh-find/tests/test_printf.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-11-10T12:26:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3faff51b_665a38c7",
       "range": {
         "startLine": 93,
         "startChar": 26,
