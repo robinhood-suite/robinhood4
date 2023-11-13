@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "79a99306_4cd5b463",
+        "filename": "rbh-fsevents/src/sources/lustre.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 874,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-11-13T10:35:33Z",
+      "side": 1,
+      "message": "defect: \u003d\u003d",
+      "range": {
+        "startLine": 874,
+        "startChar": 21,
+        "endLine": 874,
+        "endChar": 22
+      },
+      "revId": "322030befc9aaeb96301f2eecf8d357b363afd46",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
