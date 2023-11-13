@@ -22,6 +22,30 @@
       },
       "revId": "8d986db43b6d983f2e9679fe6e204b0e29a11e6e",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0636cc6c_420b5fe3",
+        "filename": "rbh-fsevents/tests/acceptance-dedup.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-11-13T10:51:49Z",
+      "side": 1,
+      "message": "The goal here is to clear the changelogs from the other tests in the suite. But it would probably be better to have this in the teardown of each test.",
+      "parentUuid": "0e99abff_10e9a07a",
+      "range": {
+        "startLine": 19,
+        "startChar": 4,
+        "endLine": 19,
+        "endChar": 44
+      },
+      "revId": "8d986db43b6d983f2e9679fe6e204b0e29a11e6e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
