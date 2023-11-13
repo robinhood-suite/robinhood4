@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "69301014_353a5d98",
+        "filename": "rbh-fsevents/src/deduplicator/fsevent_pool.c",
+        "patchSetId": 6
+      },
+      "lineNbr": 336,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-11-13T08:44:22Z",
+      "side": 1,
+      "message": "minor: no check this is correct",
+      "range": {
+        "startLine": 336,
+        "startChar": 25,
+        "endLine": 336,
+        "endChar": 40
+      },
+      "revId": "6fa64a9510ee9c488c59ffd9196b8e4f27ef6db4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "910991ec_294b1abe",
+        "filename": "rbh-fsevents/src/deduplicator/fsevent_pool.c",
+        "patchSetId": 6
+      },
+      "lineNbr": 343,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-11-13T08:44:22Z",
+      "side": 1,
+      "message": "minor: no check this is correct",
+      "range": {
+        "startLine": 343,
+        "startChar": 21,
+        "endLine": 343,
+        "endChar": 36
+      },
+      "revId": "6fa64a9510ee9c488c59ffd9196b8e4f27ef6db4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d62c71de_ad690422",
+        "filename": "rbh-fsevents/src/deduplicator/fsevent_pool.c",
+        "patchSetId": 6
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-11-13T08:44:22Z",
+      "side": 1,
+      "message": "minor: use error here aswell",
+      "range": {
+        "startLine": 353,
+        "startChar": 12,
+        "endLine": 353,
+        "endChar": 22
+      },
+      "revId": "6fa64a9510ee9c488c59ffd9196b8e4f27ef6db4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
