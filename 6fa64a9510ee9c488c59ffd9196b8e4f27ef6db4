@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f7f5ef32_3f24c680",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2023-11-13T10:38:47Z",
+      "side": 1,
+      "message": "Except for what Yoann pointer, seems ok to me.",
+      "revId": "6fa64a9510ee9c488c59ffd9196b8e4f27ef6db4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "69301014_353a5d98",
