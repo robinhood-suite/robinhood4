@@ -189,6 +189,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "99133b3e_1a3f6e87",
+        "filename": "rbh-fsevents/src/deduplicator/fsevent_pool.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-11-13T08:48:41Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "4f4f22b8_9eff0b06",
+      "range": {
+        "startLine": 144,
+        "startChar": 0,
+        "endLine": 144,
+        "endChar": 15
+      },
+      "revId": "a8ee24a2fcdd3a1935d0e443459c5cbdb732e21f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cf6dcaf3_2252659f",
@@ -226,6 +250,30 @@
       "side": 1,
       "message": "This is because I need to allocate a struct rbh_list_node that is stored in the hashmap (the hasmap is an association from rbh_id to rbh_list_node). These nodes will be stored in the list free_nodes. But since it is a simple rbh_list_node that is stored, there is no offset to use to get the actual structure back. The structure rbh_list_node_wrapper is simply used to have a struct where the offset of the rbh_list_node is 0 inside of it.",
       "parentUuid": "cf6dcaf3_2252659f",
+      "range": {
+        "startLine": 153,
+        "startChar": 59,
+        "endLine": 153,
+        "endChar": 75
+      },
+      "revId": "a8ee24a2fcdd3a1935d0e443459c5cbdb732e21f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb6c0884_f89a23d1",
+        "filename": "rbh-fsevents/src/deduplicator/fsevent_pool.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-11-13T08:48:41Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "e8dac57c_9ff851f0",
       "range": {
         "startLine": 153,
         "startChar": 59,
