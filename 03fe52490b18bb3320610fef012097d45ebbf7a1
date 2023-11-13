@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "354b7f7c_ffaa116b",
+        "filename": "rbh-fsevents/src/deduplicator/fsevent_pool.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 536,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-11-13T09:27:31Z",
+      "side": 1,
+      "message": "major: I think you can skip the \"rbh_map_find\" in this function, and directly give it the value associated with cached_xattr, as they are the same here and in the function. That would mean \"update_xattr_value\" would end up as a simple memcpy",
+      "range": {
+        "startLine": 536,
+        "startChar": 8,
+        "endLine": 536,
+        "endChar": 26
+      },
+      "revId": "03fe52490b18bb3320610fef012097d45ebbf7a1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
