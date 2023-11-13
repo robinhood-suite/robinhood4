@@ -22,6 +22,30 @@
       },
       "revId": "509ad42da33b2aad9df07f4a59fd2e01ee0c5c35",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6be594cf_b10c0534",
+        "filename": "rbh-fsevents/src/deduplicator/fsevent_pool.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-11-13T10:52:45Z",
+      "side": 1,
+      "message": "It looks like a merge issue. This is the previous version of the code.",
+      "parentUuid": "badaf0e3_80c24d14",
+      "range": {
+        "startLine": 173,
+        "startChar": 4,
+        "endLine": 175,
+        "endChar": 36
+      },
+      "revId": "509ad42da33b2aad9df07f4a59fd2e01ee0c5c35",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
