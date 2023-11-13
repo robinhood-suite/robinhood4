@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "badaf0e3_80c24d14",
+        "filename": "rbh-fsevents/src/deduplicator/fsevent_pool.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2023-11-13T10:28:17Z",
+      "side": 1,
+      "message": "minor: we never get in this check? this is the same as the previous one",
+      "range": {
+        "startLine": 173,
+        "startChar": 4,
+        "endLine": 175,
+        "endChar": 36
+      },
+      "revId": "509ad42da33b2aad9df07f4a59fd2e01ee0c5c35",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
