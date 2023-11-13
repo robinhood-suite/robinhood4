@@ -142,6 +142,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7a75ed4e_e74d984e",
+        "filename": "rbh-fsevents/src/deduplicator/fsevent_pool.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-11-13T08:32:28Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "7cf8eae9_8e06fe7c",
+      "range": {
+        "startLine": 62,
+        "startChar": 8,
+        "endLine": 62,
+        "endChar": 30
+      },
+      "revId": "f1186b6168a636134d6b30fee576ff3234647777",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7ed07557_fbec4d46",
@@ -179,6 +203,30 @@
       "side": 1,
       "message": "No, the comment line 15 is fixed by the commits \"manage list elements\u0027 memory correctly\" and \"manage fsevent deduplication seperately\". The list node in the structure `pool-\u003eids` and `pool-\u003eevents do not need to be freed.",
       "parentUuid": "7ed07557_fbec4d46",
+      "range": {
+        "startLine": 108,
+        "startChar": 0,
+        "endLine": 108,
+        "endChar": 24
+      },
+      "revId": "f1186b6168a636134d6b30fee576ff3234647777",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ab726b43_3e65b245",
+        "filename": "rbh-fsevents/src/deduplicator/fsevent_pool.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-11-13T08:32:28Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "16241f7d_7600381e",
       "range": {
         "startLine": 108,
         "startChar": 0,
