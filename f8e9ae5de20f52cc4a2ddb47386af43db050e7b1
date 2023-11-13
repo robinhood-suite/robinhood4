@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e0c24cab_5f02434c",
+        "filename": "rbh-find/src/actions.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 368,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-11-13T14:35:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "30a4d193_39076896",
+      "range": {
+        "startLine": 363,
+        "startChar": 4,
+        "endLine": 368,
+        "endChar": 41
+      },
+      "revId": "f8e9ae5de20f52cc4a2ddb47386af43db050e7b1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bc3a43e5_d7eada28",
@@ -37,6 +61,30 @@
       "writtenOn": "2023-11-06T09:10:22Z",
       "side": 1,
       "message": "major: you should test agaisnt the actual values returned by find or by stat",
+      "range": {
+        "startLine": 280,
+        "startChar": 4,
+        "endLine": 284,
+        "endChar": 23
+      },
+      "revId": "f8e9ae5de20f52cc4a2ddb47386af43db050e7b1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "23a9db8d_4e919d51",
+        "filename": "rbh-find/tests/test_printf.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-11-13T14:35:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bc3a43e5_d7eada28",
       "range": {
         "startLine": 280,
         "startChar": 4,
