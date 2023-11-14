@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9aa022e5_4c032e48",
+        "filename": "rbh-find/src/actions.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 367,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-11-14T07:55:33Z",
+      "side": 1,
+      "message": "style: this should be at the end of line 366",
+      "range": {
+        "startLine": 367,
+        "startChar": 24,
+        "endLine": 367,
+        "endChar": 26
+      },
+      "revId": "4c4c1018160b35d822faa95838e7c12ff776957b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bd5a7e56_13f22d07",
+        "filename": "rbh-find/tests/test_printf.bash",
+        "patchSetId": 3
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-11-14T07:55:33Z",
+      "side": 1,
+      "message": "major: you should compare this to the output of find",
+      "range": {
+        "startLine": 259,
+        "startChar": 17,
+        "endLine": 259,
+        "endChar": 41
+      },
+      "revId": "4c4c1018160b35d822faa95838e7c12ff776957b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
