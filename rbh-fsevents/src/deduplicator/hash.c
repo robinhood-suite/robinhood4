@@ -1,6 +1,23 @@
 #include "hash.h"
 #include <lustre/lustre_user.h>
 
+static size_t
+dbj2(const char *buf, size_t size)
+{
+    size_t hash = 5381;
+
+    for (size_t i = 0; i < size; i++)
+        hash = ((hash << 5) + hash) + buf[i];
+
+    return hash;
+}
+
+size_t
+hash_id(const struct rbh_id *id)
+{
+    return dbj2(id->data, id->size);
+}
+
 // Taken from robinhood v3's implementation
 // Murmur3 uint64 finalizer from:
 // https://github.com/aappleby/smhasher/blob/master/src/MurmurHash3.cpp
@@ -16,10 +33,9 @@ hash64(size_t k)
 }
 
 size_t
-hash_id(const struct rbh_id *id)
+hash_lu_id(const struct rbh_id *id)
 {
     const struct lu_fid *fid = rbh_lu_fid_from_id(id);
 
-    // FIXME this is Lustre specific
     return hash64(fid->f_seq ^ fid->f_oid);
 }
