@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "94f509c6_5c963dbc",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-11-14T09:50:01Z",
+      "side": 1,
+      "message": "As for all the other, I simply copied the find\u0027s man explanation.",
+      "parentUuid": "dd0351dd_52521580",
+      "range": {
+        "startLine": 9,
+        "startChar": 42,
+        "endLine": 10,
+        "endChar": 47
+      },
+      "revId": "3f2ad112b0aef3011e2668569f2020cacee6ddc6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1531dd16_33e4e983",
@@ -37,6 +61,30 @@
       "writtenOn": "2023-11-14T08:27:55Z",
       "side": 1,
       "message": "major: it takes some time to understand this comment. Maybe giving 2 examples would make this easier. For example:\n\nGiven backend \u003d \"rbh:mongo:test#/my/branch\", we have 2 possibilities:\n- path \u003d \"/my/branch\": this is the root of the branch, return an empty string\n- path \u003d \"/my/branch/dir/file\": this is an entry, return \"dir/file\" (i.e. path[branch_len + 2])",
+      "range": {
+        "startLine": 380,
+        "startChar": 7,
+        "endLine": 384,
+        "endChar": 18
+      },
+      "revId": "3f2ad112b0aef3011e2668569f2020cacee6ddc6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1c973f11_c5de25a0",
+        "filename": "rbh-find/src/actions.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 384,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-11-14T09:50:01Z",
+      "side": 1,
+      "message": "I activated my brain and vastly simplified this function.",
+      "parentUuid": "1531dd16_33e4e983",
       "range": {
         "startLine": 380,
         "startChar": 7,
@@ -70,6 +118,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3e10fbd8_73c8a565",
+        "filename": "rbh-find/src/actions.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 386,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-11-14T09:50:01Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "b2ad1db6_c40b0920",
+      "range": {
+        "startLine": 386,
+        "startChar": 8,
+        "endLine": 386,
+        "endChar": 13
+      },
+      "revId": "3f2ad112b0aef3011e2668569f2020cacee6ddc6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "363875f3_df9be0e1",
@@ -93,6 +165,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac5ff015_33b31c51",
+        "filename": "rbh-find/src/actions.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-11-14T09:50:01Z",
+      "side": 1,
+      "message": "Yes it is, I wasn\u0027t completely sure, but yes it is.",
+      "parentUuid": "363875f3_df9be0e1",
+      "range": {
+        "startLine": 389,
+        "startChar": 13,
+        "endLine": 389,
+        "endChar": 45
+      },
+      "revId": "3f2ad112b0aef3011e2668569f2020cacee6ddc6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "98fa9531_b6336368",
@@ -106,6 +202,30 @@
       "writtenOn": "2023-11-14T08:27:55Z",
       "side": 1,
       "message": "question: why would the path not start with \u0027/\u0027?",
+      "range": {
+        "startLine": 393,
+        "startChar": 4,
+        "endLine": 394,
+        "endChar": 20
+      },
+      "revId": "3f2ad112b0aef3011e2668569f2020cacee6ddc6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f0f9c373_f931b524",
+        "filename": "rbh-find/src/actions.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 394,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-11-14T09:50:01Z",
+      "side": 1,
+      "message": "Same answer",
+      "parentUuid": "98fa9531_b6336368",
       "range": {
         "startLine": 393,
         "startChar": 4,
