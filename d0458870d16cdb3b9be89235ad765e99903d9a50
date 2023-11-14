@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d947ab29_0855f6c5",
+        "filename": "rbh-find/src/actions.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 346,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-11-14T09:49:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7f9626c0_70d1df4d",
+      "range": {
+        "startLine": 346,
+        "startChar": 4,
+        "endLine": 346,
+        "endChar": 20
+      },
+      "revId": "d0458870d16cdb3b9be89235ad765e99903d9a50",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "273307a6_ba3b2805",
@@ -37,6 +61,30 @@
       "writtenOn": "2023-11-14T08:03:39Z",
       "side": 1,
       "message": "question: why not simply sort the outputs of find and rbh-find instead of doing each file one at a time?",
+      "range": {
+        "startLine": 300,
+        "startChar": 4,
+        "endLine": 301,
+        "endChar": 53
+      },
+      "revId": "d0458870d16cdb3b9be89235ad765e99903d9a50",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "deb6bb65_9ddb5c83",
+        "filename": "rbh-find/tests/test_printf.bash",
+        "patchSetId": 3
+      },
+      "lineNbr": 301,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-11-14T09:49:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "273307a6_ba3b2805",
       "range": {
         "startLine": 300,
         "startChar": 4,
