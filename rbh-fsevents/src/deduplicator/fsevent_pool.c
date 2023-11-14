@@ -57,15 +57,23 @@ fsevent_pool_equals(const void *first, const void *second)
 }
 
 static size_t
-fsevent_pool_hash(const void *key)
+fsevent_pool_hash_id(const void *key)
 {
     return hash_id(key);
 }
 
+static size_t
+fsevent_pool_hash_lu_id(const void *key)
+{
+    return hash_lu_id(key);
+}
+
 struct rbh_fsevent_pool *
-rbh_fsevent_pool_new(size_t batch_size, size_t flush_size)
+rbh_fsevent_pool_new(size_t batch_size, size_t flush_size,
+                     struct source *source)
 {
     struct rbh_fsevent_pool *pool;
+    size_t (*hash_fn)(const void *);
 
     if (flush_size == 0)
         error(EX_USAGE, 0, "flush size cannot be 0");
@@ -87,7 +95,12 @@ rbh_fsevent_pool_new(size_t batch_size, size_t flush_size)
         return NULL;
     }
 
-    pool->pool = rbh_hashmap_new(fsevent_pool_equals, fsevent_pool_hash,
+    if (!strcmp(source->name, "lustre"))
+        hash_fn = fsevent_pool_hash_lu_id;
+    else
+        hash_fn = fsevent_pool_hash_id;
+
+    pool->pool = rbh_hashmap_new(fsevent_pool_equals, hash_fn,
                                  batch_size * 100 / 70);
     if (!pool->pool) {
         int save_errno = errno;
