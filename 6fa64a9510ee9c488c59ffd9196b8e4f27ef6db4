@@ -41,6 +41,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "828d7d0c_5cb7839b",
+        "filename": "rbh-fsevents/src/deduplicator/fsevent_pool.c",
+        "patchSetId": 6
+      },
+      "lineNbr": 336,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-11-14T12:24:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "69301014_353a5d98",
+      "range": {
+        "startLine": 336,
+        "startChar": 25,
+        "endLine": 336,
+        "endChar": 40
+      },
+      "revId": "6fa64a9510ee9c488c59ffd9196b8e4f27ef6db4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "910991ec_294b1abe",
@@ -64,6 +88,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "76d51387_429ab855",
+        "filename": "rbh-fsevents/src/deduplicator/fsevent_pool.c",
+        "patchSetId": 6
+      },
+      "lineNbr": 343,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-11-14T12:24:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "910991ec_294b1abe",
+      "range": {
+        "startLine": 343,
+        "startChar": 21,
+        "endLine": 343,
+        "endChar": 36
+      },
+      "revId": "6fa64a9510ee9c488c59ffd9196b8e4f27ef6db4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d62c71de_ad690422",
@@ -77,6 +125,30 @@
       "writtenOn": "2023-11-13T08:44:22Z",
       "side": 1,
       "message": "minor: use error here aswell",
+      "range": {
+        "startLine": 353,
+        "startChar": 12,
+        "endLine": 353,
+        "endChar": 22
+      },
+      "revId": "6fa64a9510ee9c488c59ffd9196b8e4f27ef6db4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "844f6458_a35216de",
+        "filename": "rbh-fsevents/src/deduplicator/fsevent_pool.c",
+        "patchSetId": 6
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-11-14T12:24:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d62c71de_ad690422",
       "range": {
         "startLine": 353,
         "startChar": 12,
