@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "540a68cf_1c521432",
+        "filename": "rbh-find/tests/test_printf.bash",
+        "patchSetId": 3
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-11-14T07:53:32Z",
+      "side": 1,
+      "message": "major: you should test with a non empty file as well. A truncate won\u0027t be enough since this is the number of allocated blocks.",
+      "range": {
+        "startLine": 240,
+        "startChar": 4,
+        "endLine": 240,
+        "endChar": 14
+      },
+      "revId": "1822ea70a0f5cfb5de32f328f4e97d9dd0e7e917",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
