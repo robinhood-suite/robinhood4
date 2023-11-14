@@ -22,6 +22,30 @@
       },
       "revId": "af15016c1892470e4d0553b8c079f24069dd1d33",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3b203d11_17a4d427",
+        "filename": "rbh-fsevents/src/deduplicator/fsevent_pool.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-11-14T12:38:26Z",
+      "side": 1,
+      "message": "Actually, this cast is to convert from struct rbh_list_node_wrapper to rbh_list_node. They are basically the same structure. The wrapper one is just a way to have rbh_list_first use the proper offset of the struct rbh_list_node in a struct rbh_list_node... (i.e. 0).\n\nBut I understand what you mean. If that\u0027s ok with you, I will add the comments in a patch at the top of the stack.",
+      "parentUuid": "84342d99_53bbd3a7",
+      "range": {
+        "startLine": 137,
+        "startChar": 15,
+        "endLine": 137,
+        "endChar": 23
+      },
+      "revId": "af15016c1892470e4d0553b8c079f24069dd1d33",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
