@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a87dc42c_49b66fdd",
+        "filename": "rbh-fsevents/src/enrichers/hestia.c",
+        "patchSetId": 16
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2023-11-15T15:26:35Z",
+      "side": 1,
+      "message": "question: do not we need them to be stored in a stack? to avoid multiple allocations.",
+      "range": {
+        "startLine": 57,
+        "startChar": 23,
+        "endLine": 57,
+        "endChar": 46
+      },
+      "revId": "8badc10a6e7bdbc0ac464c2334b8dd2f9df2c7d6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
