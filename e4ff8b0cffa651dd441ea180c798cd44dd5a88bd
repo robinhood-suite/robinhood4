@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "973b8548_6752c773",
+        "filename": "rbh-fsevents/src/enrichers/hestia.c",
+        "patchSetId": 17
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2023-11-15T15:19:35Z",
+      "side": 1,
+      "message": "defect: we need to free the statx field before leaving",
+      "range": {
+        "startLine": 70,
+        "startChar": 8,
+        "endLine": 70,
+        "endChar": 18
+      },
+      "revId": "e4ff8b0cffa651dd441ea180c798cd44dd5a88bd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1f06d5f5_62349877",
+        "filename": "rbh-fsevents/src/enrichers/hestia.c",
+        "patchSetId": 17
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2023-11-15T15:19:35Z",
+      "side": 1,
+      "message": "minor: this label is not used anymore",
+      "range": {
+        "startLine": 77,
+        "startChar": 0,
+        "endLine": 77,
+        "endChar": 11
+      },
+      "revId": "e4ff8b0cffa651dd441ea180c798cd44dd5a88bd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
