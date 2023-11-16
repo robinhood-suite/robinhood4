@@ -65,6 +65,21 @@ get_next_object(struct hestia_iterator *hestia_iter)
     return to_return;
 }
 
+static void
+fill_statx(struct rbh_statx *statx, HestiaObject *obj)
+{
+    statx->stx_mask = RBH_STATX_SIZE | RBH_STATX_BTIME | RBH_STATX_CTIME |
+                      RBH_STATX_ATIME;
+
+    statx->stx_size = obj->m_size;
+    statx->stx_btime.tv_sec = obj->m_creation_time;
+    statx->stx_btime.tv_nsec = 0;
+    statx->stx_ctime.tv_sec = obj->m_last_modified_time;
+    statx->stx_ctime.tv_nsec = 0;
+    statx->stx_atime.tv_sec = obj->m_last_accessed_time;
+    statx->stx_atime.tv_nsec = 0;
+}
+
 static int
 fill_path(char *path, struct rbh_value_pair **_pairs, struct rbh_sstack *values)
 {
@@ -97,7 +112,9 @@ hestia_iter_next(void *iterator)
     struct rbh_fsentry *fsentry = NULL;
     struct rbh_value_pair *ns_pairs;
     struct rbh_value_map ns_xattrs;
+    struct rbh_statx statx = {0};
     struct rbh_id parent_id;
+    HestiaObject obj = {0};
     char *name = NULL;
     struct rbh_id id;
     HestiaId *obj_id;
@@ -117,6 +134,12 @@ hestia_iter_next(void *iterator)
     /* All objects have no parent */
     parent_id.size = 0;
 
+    rc = hestia_object_get_attrs(obj_id, &obj);
+    if (rc)
+        goto err;
+
+    fill_statx(&statx, &obj);
+
     rc = asprintf(&name, "%ld-%ld", obj_id->m_hi, obj_id->m_lo);
     if (rc <= 0)
         goto err;
@@ -128,7 +151,7 @@ hestia_iter_next(void *iterator)
     ns_xattrs.pairs = ns_pairs;
     ns_xattrs.count = 1;
 
-    fsentry = rbh_fsentry_new(&id, &parent_id, name, NULL, &ns_xattrs,
+    fsentry = rbh_fsentry_new(&id, &parent_id, name, &statx, &ns_xattrs,
                               NULL, NULL);
     if (fsentry == NULL)
         goto err;
