@@ -110,9 +110,9 @@ hestia_iter_next(void *iterator)
     struct rbh_statx statx = {0};
     struct rbh_id parent_id;
     HestiaObject obj = {0};
-    char *name = NULL;
     struct rbh_id id;
     HestiaId *obj_id;
+    char *name;
     int rc;
 
     obj_id = get_next_object(hestia_iter);
@@ -131,13 +131,19 @@ hestia_iter_next(void *iterator)
 
     rc = hestia_object_get_attrs(obj_id, &obj);
     if (rc)
-        goto err;
+        return NULL;
 
     fill_statx(&statx, &obj);
 
-    rc = asprintf(&name, "%ld-%ld", obj_id->m_hi, obj_id->m_lo);
-    if (rc <= 0)
-        goto err;
+    if (*obj.m_name != 0) {
+        name = strdup(obj.m_name);
+        if (name == NULL)
+            return NULL;
+    } else {
+        rc = asprintf(&name, "%ld-%ld", obj_id->m_hi, obj_id->m_lo);
+        if (rc <= 0)
+            return NULL;
+    }
 
     rc = fill_path(name, &ns_pairs, hestia_iter->values);
     if (rc)
@@ -148,14 +154,11 @@ hestia_iter_next(void *iterator)
 
     fsentry = rbh_fsentry_new(&id, &parent_id, name, &statx, &ns_xattrs,
                               NULL, NULL);
-    if (fsentry == NULL)
-        goto err;
 
     hestia_iter->tiers[hestia_iter->current_tier].current_id++;
 
 err:
     free(name);
-
     return fsentry;
 }
 
