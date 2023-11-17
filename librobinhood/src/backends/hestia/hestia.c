@@ -176,6 +176,64 @@ fill_tier_attributes(HestiaObject *obj, struct rbh_value_pair *pairs,
     pairs[0].value = sequence_value;
 }
 
+static void
+fill_user_attributes(HestiaObject *obj, struct rbh_value_pair *pairs,
+                     struct rbh_sstack *values)
+{
+    struct rbh_value *map_value = rbh_sstack_push(values, NULL,
+                                                  sizeof(*map_value));
+    struct rbh_value_map *map = rbh_sstack_push(values, NULL, sizeof(*map));
+    struct rbh_value_pair *user_pairs = rbh_sstack_push(values, NULL,
+                                                        sizeof(*user_pairs) *
+                                                        obj->m_num_attrs);
+
+    if (map_value == NULL)
+        error(EXIT_FAILURE, ENOMEM,
+              "rbh_sstack_push on map_value in fill_user_attributes");
+
+    if (map == NULL)
+        error(EXIT_FAILURE, ENOMEM,
+              "rbh_sstack_push on map in fill_user_attributes");
+
+    if (user_pairs == NULL)
+        error(EXIT_FAILURE, ENOMEM,
+              "rbh_sstack_push on user_pairs in fill_user_attributes");
+
+    for (size_t i = 0; i < obj->m_num_attrs; ++i) {
+        HestiaKeyValuePair *attr = &obj->m_attrs[i];
+        struct rbh_value *attr_value;
+
+        attr_value = rbh_sstack_push(values, NULL, sizeof(*attr_value));
+        if (attr_value == NULL)
+            error(EXIT_FAILURE, ENOMEM,
+                  "rbh_sstack_push on attr_value in fill_user_attributes");
+
+        attr_value->type = RBH_VT_STRING;
+        attr_value->string = rbh_sstack_push(values, attr->m_value,
+                                             strlen(attr->m_value) + 1);
+        if (attr_value->string == NULL)
+            error(EXIT_FAILURE, ENOMEM,
+                  "rbh_sstack_push on value string in fill_user_attributes");
+
+        user_pairs[i].key = rbh_sstack_push(values, attr->m_key,
+                                       strlen(attr->m_key) + 1);
+        if (user_pairs[i].key == NULL)
+            error(EXIT_FAILURE, ENOMEM,
+                  "rbh_sstack_push on key pair in fill_user_attributes");
+
+        user_pairs[i].value = attr_value;
+    }
+
+    map->count = obj->m_num_attrs;
+    map->pairs = user_pairs;
+
+    map_value->type = RBH_VT_MAP;
+    map_value->map = *map;
+
+    pairs[0].key = "user_metadata";
+    pairs[0].value = map_value;
+}
+
 static void *
 hestia_iter_next(void *iterator)
 {
@@ -227,14 +285,16 @@ hestia_iter_next(void *iterator)
     ns_xattrs.count = 1;
 
     inode_pairs = rbh_sstack_push(hestia_iter->values, NULL,
-                                  sizeof(*inode_pairs));
+                                  sizeof(*inode_pairs) * 2);
     if (inode_pairs == NULL)
         error(EXIT_FAILURE, ENOMEM, "rbh_sstack_push in fill_tier_attributes");
 
-    fill_tier_attributes(&obj, inode_pairs, hestia_iter->values);
+    fill_tier_attributes(&obj, &inode_pairs[0], hestia_iter->values);
+
+    fill_user_attributes(&obj, &inode_pairs[1], hestia_iter->values);
 
     inode_xattrs.pairs = inode_pairs;
-    inode_xattrs.count = 1;
+    inode_xattrs.count = 2;
 
     fsentry = rbh_fsentry_new(&id, &parent_id, name, &statx, &ns_xattrs,
                               &inode_xattrs, NULL);
