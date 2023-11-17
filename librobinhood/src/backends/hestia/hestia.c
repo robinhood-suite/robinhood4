@@ -105,11 +105,86 @@ fill_path(char *path, struct rbh_value_pair **_pairs, struct rbh_sstack *values)
     return 0;
 }
 
+static void
+create_tier_map(struct rbh_value *value, HestiaTierExtent *extent,
+                struct rbh_sstack *sstack)
+{
+    struct rbh_value *extent_size = rbh_sstack_push(sstack, NULL,
+                                                    sizeof(*extent_size));
+    struct rbh_value_map *map = rbh_sstack_push(sstack, NULL, sizeof(*map));
+    struct rbh_value *tier_extents = rbh_sstack_push(sstack, NULL,
+                                                     sizeof(*tier_extents));
+    struct rbh_value *tier_index = rbh_sstack_push(sstack, NULL,
+                                                   sizeof(*tier_index));
+    struct rbh_value_pair *pairs = rbh_sstack_push(sstack, NULL,
+                                                   sizeof(*pairs) * 2);
+
+    if (map == NULL || pairs == NULL || tier_index == NULL ||
+        tier_extents == NULL || extent_size == NULL)
+        error(EXIT_FAILURE, ENOMEM, "rbh_sstack_push in create_tier_map");
+
+    extent_size->type = RBH_VT_UINT64;
+    extent_size->uint64 = extent->m_size;
+
+    tier_extents->type = RBH_VT_SEQUENCE;
+    tier_extents->sequence.count = 1;
+    tier_extents->sequence.values = extent_size;
+
+    tier_index->type = RBH_VT_UINT32;
+    tier_index->uint32 = extent->m_tier_index;
+
+    pairs[0].key = "extents";
+    pairs[0].value = tier_extents;
+
+    pairs[1].key = "index";
+    pairs[1].value = tier_index;
+
+    map->count = 2;
+    map->pairs = pairs;
+
+    value->type = RBH_VT_MAP;
+    value->map = *map;
+}
+
+static void
+fill_tier_attributes(HestiaObject *obj, struct rbh_value_pair *pairs,
+                     struct rbh_sstack *stack)
+{
+    struct rbh_value *tiers_sequence = rbh_sstack_push(stack, NULL,
+                                                       sizeof(*tiers_sequence));
+    struct rbh_value *tiers;
+
+    if (tiers_sequence == NULL)
+        error(EXIT_FAILURE, errno,
+              "rbh_sstack_push on tiers_sequence in fill_tier_attributes");
+
+    tiers_sequence->type = RBH_VT_SEQUENCE;
+    tiers_sequence->sequence.count = obj->m_num_tier_extents;
+    tiers = rbh_sstack_push(stack, NULL,
+                            sizeof(*tiers) * tiers_sequence->sequence.count);
+    if (tiers == NULL)
+        error(EXIT_FAILURE, errno,
+              "rbh_sstack_push on tiers in fill_tier_attributes");
+
+    for (size_t i = 0; i < obj->m_num_tier_extents; ++i) {
+        HestiaTierExtent *extent = &obj->m_tier_extents[i];
+
+        create_tier_map(&tiers[i], extent, stack);
+    }
+
+    tiers_sequence->sequence.values = tiers;
+
+    pairs[0].key = "tiers";
+    pairs[0].value = tiers_sequence;
+}
+
 static void *
 hestia_iter_next(void *iterator)
 {
     struct hestia_iterator *hestia_iter = iterator;
     struct rbh_fsentry *fsentry = NULL;
+    struct rbh_value_pair *inode_pairs;
+    struct rbh_value_map inode_xattrs;
     struct rbh_value_pair *ns_pairs;
     struct rbh_value_map ns_xattrs;
     struct rbh_statx statx = {0};
@@ -125,11 +200,12 @@ hestia_iter_next(void *iterator)
         return NULL;
 
     /* Use the hestia_id of each file as rbh_id */
-    id.data = rbh_sstack_push(hestia_iter->values, obj_id, sizeof(*obj_id));
+    id.data = rbh_sstack_push(hestia_iter->values, obj_id->m_uuid,
+                              strlen(obj_id->m_uuid) + 1);
     if (id.data == NULL)
         return NULL;
 
-    id.size = sizeof(*obj_id);
+    id.size = strlen(obj_id->m_uuid) + 1;
 
     /* All objects have no parent */
     parent_id.size = 0;
@@ -152,8 +228,18 @@ hestia_iter_next(void *iterator)
     ns_xattrs.pairs = ns_pairs;
     ns_xattrs.count = 1;
 
+    inode_pairs = rbh_sstack_push(hestia_iter->values, NULL,
+                                  sizeof(*inode_pairs));
+    if (inode_pairs == NULL)
+        error(EXIT_FAILURE, errno, "rbh_sstack_push in fill_tier_attributes");
+
+    fill_tier_attributes(&obj, inode_pairs, hestia_iter->values);
+
+    inode_xattrs.pairs = inode_pairs;
+    inode_xattrs.count = 1;
+
     fsentry = rbh_fsentry_new(&id, &parent_id, name, &statx, &ns_xattrs,
-                              NULL, NULL);
+                              &inode_xattrs, NULL);
 
 err:
     free(name);
