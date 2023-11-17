@@ -105,11 +105,84 @@ fill_path(char *path, struct rbh_value_pair **_pairs, struct rbh_sstack *values)
     return 0;
 }
 
+static void
+create_tier_map(struct rbh_value *value, HestiaTierExtent *extent,
+                struct rbh_sstack *sstack)
+{
+    struct rbh_value *extents = rbh_sstack_push(sstack, NULL, sizeof(*extents));
+    struct rbh_value_map *map = rbh_sstack_push(sstack, NULL, sizeof(*map));
+    struct rbh_value *tier_extents = rbh_sstack_push(sstack, NULL,
+                                                     sizeof(*tier_extents));
+    struct rbh_value *tier_index = rbh_sstack_push(sstack, NULL,
+                                                   sizeof(*tier_index));
+    struct rbh_value_pair *pairs = rbh_sstack_push(sstack, NULL,
+                                                   sizeof(*pairs) * 2);
+
+    if (map == NULL || pairs == NULL || tier_index == NULL ||
+        tier_extents == NULL || extents == NULL)
+        error(EXIT_FAILURE, ENOMEM,
+              "rbh_sstack_push in create_tier_map");
+
+    extents->type = RBH_VT_UINT64;
+    extents->uint64 = extent->m_size;
+
+    tier_extents->type = RBH_VT_SEQUENCE;
+    tier_extents->sequence.count = 1;
+    tier_extents->sequence.values = extents;
+
+    tier_index->type = RBH_VT_UINT32;
+    tier_index->uint32 = extent->m_tier_index;
+
+    pairs[0].key = "extents";
+    pairs[0].value = tier_extents;
+
+    pairs[1].key = "index";
+    pairs[1].value = tier_index;
+
+    map->count = 2;
+    map->pairs = pairs;
+
+    value->type = RBH_VT_MAP;
+    value->map = *map;
+}
+
+static void
+fill_tier_attributes(HestiaObject *obj, uint8_t tier_id,
+                     struct rbh_value_pair *pairs, struct rbh_sstack *values)
+{
+    struct rbh_value *sequence_value = rbh_sstack_push(values, NULL,
+                                                       sizeof(*sequence_value));
+    struct rbh_value *sequence_values;
+
+    if (sequence_value == NULL)
+        error(EXIT_FAILURE, ENOMEM,
+              "rbh_sstack_push on sequence_value in fill_tier_attributes");
+
+    sequence_value->type = RBH_VT_SEQUENCE;
+    sequence_value->sequence.count = obj->m_num_tier_extents;
+    sequence_values = rbh_sstack_push(values, NULL,
+                                      sizeof(*sequence_values) *
+                                      sequence_value->sequence.count);
+
+    for (size_t i = 0; i < obj->m_num_tier_extents; ++i) {
+        HestiaTierExtent *extent = &obj->m_tier_extents[i];
+
+        create_tier_map(&sequence_values[i], extent, values);
+    }
+
+    sequence_value->sequence.values = sequence_values;
+
+    pairs[0].key = "tiers";
+    pairs[0].value = sequence_value;
+}
+
 static void *
 hestia_iter_next(void *iterator)
 {
     struct hestia_iterator *hestia_iter = iterator;
     struct rbh_fsentry *fsentry = NULL;
+    struct rbh_value_pair *inode_pairs;
+    struct rbh_value_map inode_xattrs;
     struct rbh_value_pair *ns_pairs;
     struct rbh_value_map ns_xattrs;
     struct rbh_statx statx = {0};
@@ -125,11 +198,12 @@ hestia_iter_next(void *iterator)
         return NULL;
 
     /* Use the hestia_id of each file as rbh_id */
-    id.data = rbh_sstack_push(hestia_iter->values, obj_id, sizeof(*obj_id));
+    id.data = rbh_sstack_push(hestia_iter->values, obj_id->m_uuid,
+                              strlen(obj_id->m_uuid) + 1);
     if (id.data == NULL)
         return NULL;
 
-    id.size = sizeof(*obj_id);
+    id.size = strlen(obj_id->m_uuid);
 
     /* All objects have no parent */
     parent_id.size = 0;
@@ -152,8 +226,19 @@ hestia_iter_next(void *iterator)
     ns_xattrs.pairs = ns_pairs;
     ns_xattrs.count = 1;
 
+    inode_pairs = rbh_sstack_push(hestia_iter->values, NULL,
+                                  sizeof(*inode_pairs));
+    if (inode_pairs == NULL)
+        error(EXIT_FAILURE, ENOMEM, "rbh_sstack_push in fill_tier_attributes");
+
+    fill_tier_attributes(&obj, hestia_iter->tier_ids[hestia_iter->current_tier],
+                         inode_pairs, hestia_iter->values);
+
+    inode_xattrs.pairs = inode_pairs;
+    inode_xattrs.count = 1;
+
     fsentry = rbh_fsentry_new(&id, &parent_id, name, &statx, &ns_xattrs,
-                              NULL, NULL);
+                              &inode_xattrs, NULL);
 
 err:
     free(name);
@@ -166,10 +251,6 @@ hestia_iter_destroy(void *iterator)
     struct hestia_iterator *hestia_iter = iterator;
 
     rbh_sstack_destroy(hestia_iter->values);
-    for (size_t i = 0; i < hestia_iter->tiers_length; ++i)
-        if (hestia_iter->tiers[i].ids_length)
-            hestia_free_ids(&hestia_iter->tiers[i].ids,
-                            hestia_iter->tiers[i].ids_length);
 
     hestia_free_tier_ids(&hestia_iter->tier_ids);
     free(hestia_iter->tiers);
