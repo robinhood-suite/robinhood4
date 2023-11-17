@@ -133,6 +133,36 @@ fill_tier_attributes(HestiaObject *obj, uint8_t tier_id,
     }
 }
 
+static void
+fill_user_attributes(HestiaObject *obj, struct rbh_value_pair *pairs,
+                     struct rbh_sstack *values)
+{
+    for (size_t i = 0; i < obj->m_num_attrs; ++i) {
+        HestiaKeyValuePair attr = obj->m_attrs[i];
+        struct rbh_value *attr_value;
+
+        attr_value = rbh_sstack_push(values, NULL, sizeof(*attr_value));
+        if (attr_value == NULL)
+            error(EXIT_FAILURE, ENOMEM,
+                  "rbh_sstack_push on attr_value in fill_user_attributes");
+
+        attr_value->type = RBH_VT_STRING;
+        attr_value->string = rbh_sstack_push(values, attr.m_value,
+                                             strlen(attr.m_value) + 1);
+        if (attr_value->string == NULL)
+            error(EXIT_FAILURE, ENOMEM,
+                  "rbh_sstack_push on value string in fill_user_attributes");
+
+        pairs[i].key = rbh_sstack_push(values, attr.m_key,
+                                       strlen(attr.m_key) + 1);
+        if (pairs[i].key == NULL)
+            error(EXIT_FAILURE, ENOMEM,
+                  "rbh_sstack_push on key pair in fill_user_attributes");
+
+        pairs[i].value = attr_value;
+    }
+}
+
 static void *
 hestia_iter_next(void *iterator)
 {
@@ -189,16 +219,19 @@ hestia_iter_next(void *iterator)
 
     inode_pairs = rbh_sstack_push(
         hestia_iter->values, NULL,
-        sizeof(*inode_pairs) * obj.m_num_tier_extents
+        sizeof(*inode_pairs) * (obj.m_num_tier_extents + obj.m_num_attrs)
         );
     if (inode_pairs == NULL)
         error(EXIT_FAILURE, ENOMEM, "rbh_sstack_push in fill_tier_attributes");
 
     fill_tier_attributes(&obj, hestia_iter->tier_ids[hestia_iter->current_tier],
-                         inode_pairs, hestia_iter->values);
+                         &inode_pairs[0], hestia_iter->values);
+
+    fill_user_attributes(&obj, &inode_pairs[obj.m_num_tier_extents],
+                         hestia_iter->values);
 
     inode_xattrs.pairs = inode_pairs;
-    inode_xattrs.count = obj.m_num_tier_extents;
+    inode_xattrs.count = obj.m_num_tier_extents + obj.m_num_attrs;
 
     fsentry = rbh_fsentry_new(&id, &parent_id, name, &statx, &ns_xattrs,
                               &inode_xattrs, NULL);
