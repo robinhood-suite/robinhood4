@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f8b95c3f_dee6c587",
+        "filename": "rbh-fsevents/src/deduplicator/fsevent_pool.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-11-23T15:22:05Z",
+      "side": 1,
+      "message": "minor: add a comment to explain you do this and don\u0027t use the other function all the time",
+      "range": {
+        "startLine": 98,
+        "startChar": 4,
+        "endLine": 98,
+        "endChar": 40
+      },
+      "revId": "9ec972cd4aa682ed0d619357e4a4d9f296787217",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e7e79486_ef0374d4",
+        "filename": "rbh-fsevents/src/deduplicator/hash.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-11-23T15:22:05Z",
+      "side": 1,
+      "message": "suggest: add a link above to the algorithm used, to show on what you based this implementation",
+      "range": {
+        "startLine": 5,
+        "startChar": 0,
+        "endLine": 5,
+        "endChar": 4
+      },
+      "revId": "9ec972cd4aa682ed0d619357e4a4d9f296787217",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
