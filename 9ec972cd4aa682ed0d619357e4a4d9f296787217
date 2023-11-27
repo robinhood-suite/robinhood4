@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b73c3b0a_9d76e40b",
+        "filename": "rbh-fsevents/src/deduplicator/fsevent_pool.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-11-27T09:19:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f8b95c3f_dee6c587",
+      "range": {
+        "startLine": 98,
+        "startChar": 4,
+        "endLine": 98,
+        "endChar": 40
+      },
+      "revId": "9ec972cd4aa682ed0d619357e4a4d9f296787217",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e7e79486_ef0374d4",
@@ -37,6 +61,30 @@
       "writtenOn": "2023-11-23T15:22:05Z",
       "side": 1,
       "message": "suggest: add a link above to the algorithm used, to show on what you based this implementation",
+      "range": {
+        "startLine": 5,
+        "startChar": 0,
+        "endLine": 5,
+        "endChar": 4
+      },
+      "revId": "9ec972cd4aa682ed0d619357e4a4d9f296787217",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7767e9e9_aa82a536",
+        "filename": "rbh-fsevents/src/deduplicator/hash.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-11-27T09:19:56Z",
+      "side": 1,
+      "message": "This is the classic dbj2 implementation. There is no particular reference. You can find dozens on the internet.",
+      "parentUuid": "e7e79486_ef0374d4",
       "range": {
         "startLine": 5,
         "startChar": 0,
