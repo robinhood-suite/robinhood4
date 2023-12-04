@@ -185,11 +185,11 @@ hestia_iter_next(void *iterator)
         return NULL;
 
     /* Use the hestia_id of each file as rbh_id */
-    id.data = rbh_sstack_push(hestia_iter->values, obj_id, sizeof(*obj_id));
+    id.data = rbh_sstack_push(hestia_iter->values, obj_id->m_uuid, strlen(obj_id->m_uuid) + 1); //sizeof(*obj_id));
     if (id.data == NULL)
         return NULL;
 
-    id.size = sizeof(*obj_id);
+    id.size = strlen(obj_id->m_uuid); //sizeof(*obj_id);
 
     /* All objects have no parent */
     parent_id.size = 0;
