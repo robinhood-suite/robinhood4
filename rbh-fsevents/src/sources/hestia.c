@@ -281,10 +281,6 @@ parse_read(yaml_parser_t *parser, struct rbh_iterator **fsevents_iterator)
             if (!yaml_parser_parse(parser, &event))
                 parser_error(parser);
 
-            /* This is the time of the changelog, close but not equal to the
-             * object atime/mtime/ctime, but consider it as the object's times
-             * for now
-             */
             success = parse_int64(&event, &event_time);
             if (!success)
                 return false;
@@ -335,14 +331,16 @@ initialize_update_fsevents(struct rbh_fsevent *new_update_events)
 }
 
 /* "UPDATE" events in Hestia are of the form:
- *
  * ---
  * !update
  * attrs:
- *   user_metadata.key0: "value0"
- *   user_metadata.key1: "value1"
- * id: "421b3153-9108-d1ef-3413-945177dd4ab3"
- * time: 1696837025494619488
+ *   user_metadata:
+ *     my_key: "my_value"
+ *   size: 0
+ *   tiers:
+ *     []
+ * time: 1701419100896048
+ * id: "d198c172-35ff-d962-a3db-027cdcf9116c"
  * ...
  *
  */
@@ -396,10 +394,6 @@ parse_update(yaml_parser_t *parser, struct rbh_iterator **fsevents_iterator)
             if (!yaml_parser_parse(parser, &event))
                 parser_error(parser);
 
-            /* This is the time of the changelog, close but not equal to the
-             * object atime/mtime/ctime, but consider it as the object's times
-             * for now
-             */
             success = parse_int64(&event, &event_time);
             if (!success)
                 error(EXIT_FAILURE, errno, "parse_int64 in parse_update");
@@ -619,15 +613,13 @@ parse_create(yaml_parser_t *parser, struct rbh_iterator **fsevents_iterator)
                 error(EXIT_FAILURE, errno, "parse_int64 in parse_create");
 
             statx->stx_mask |= RBH_STATX_ATIME | RBH_STATX_BTIME |
-                               RBH_STATX_CTIME | RBH_STATX_MTIME;
+                               RBH_STATX_CTIME;
             statx->stx_atime.tv_sec = event_time;
             statx->stx_atime.tv_nsec = 0;
             statx->stx_btime.tv_sec = event_time;
             statx->stx_btime.tv_nsec = 0;
             statx->stx_ctime.tv_sec = event_time;
             statx->stx_ctime.tv_nsec = 0;
-            statx->stx_mtime.tv_sec = event_time;
-            statx->stx_mtime.tv_nsec = 0;
 
             save_errno = errno;
             yaml_event_delete(&event);

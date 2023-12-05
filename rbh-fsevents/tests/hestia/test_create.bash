@@ -50,8 +50,6 @@ test_create()
         error "The 'inode_xattr' event should have 'tiers' as an empty array"
     fi
 
-    # We check the changelog time since the enrichment of the times isn't ready
-    # yet
     local changelog_time=$(cat ~/.cache/hestia/event_feed.yaml | grep "time" |
                            cut -d' ' -f2)
 
