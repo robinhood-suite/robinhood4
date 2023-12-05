@@ -69,8 +69,9 @@ test_create()
 
     local n=$(echo "${events[0]}" | grep "$changelog_time" | wc -l)
 
-    if [[ $n != 4 ]]; then
-        error "'$changelog_time' should be set for the 4 times, but seen '$n'"
+    if [[ $n != 3 ]]; then
+        error "'$changelog_time' should be set for the a/c/m-time," \
+              "but seen '$n'"
     fi
 
     if ! echo "${events[0]}" | grep "size" | grep "0"; then
