@@ -48,6 +48,16 @@ check_ctime()
     fi
 }
 
+check_size()
+{
+    local output="$1"
+    local size="$2"
+
+    if ! echo "$output" | grep "size" | grep "$size"; then
+        error "The 'upsert' event should have 'size' set to '$size'"
+    fi
+}
+
 test_update_xattrs()
 {
     hestia object create blob
@@ -102,6 +112,7 @@ test_update_xattrs()
     fi
 
     check_ctime "${events[0]}"
+    check_size "${events[0]}" 0
 }
 
 check_tier()
@@ -155,6 +166,8 @@ test_update_data()
 
     check_id "${events[0]}" "$object_id"
 
+    check_tier "${events[0]}" "0" "$(stat -c %s /etc/hosts)"
+
     fill_events_array "$output" "upsert"
 
     if [[ ${#events[@]} != 1 ]]; then
@@ -162,6 +175,7 @@ test_update_data()
     fi
 
     check_ctime "${events[0]}"
+    check_size "${events[0]}" "$(stat -c %s /etc/hosts)"
 }
 
 test_update_copy()
@@ -192,6 +206,9 @@ test_update_copy()
 
     check_id "${events[0]}" "$object_id"
 
+    check_tier "${events[0]}" "0" "$(stat -c %s /etc/hosts)"
+    check_tier "${events[0]}" "1" "$(stat -c %s /etc/hosts)"
+
     fill_events_array "$output" "upsert"
 
     if [[ ${#events[@]} != 1 ]]; then
@@ -199,6 +216,7 @@ test_update_copy()
     fi
 
     check_ctime "${events[0]}"
+    check_size "${events[0]}" "$(stat -c %s /etc/hosts)"
 }
 
 test_update_release()
@@ -230,6 +248,8 @@ test_update_release()
 
     check_id "${events[0]}" "$object_id"
 
+    check_tier "${events[0]}" "1" "$(stat -c %s /etc/hosts)"
+
     if echo "${events[0]}" | grep "tier_0"; then
         error "There should be no data on 'tier_0'"
     fi
@@ -241,6 +261,7 @@ test_update_release()
     fi
 
     check_ctime "${events[0]}"
+    check_size "${events[0]}" "$(stat -c %s /etc/hosts)"
 }
 
 ################################################################################
