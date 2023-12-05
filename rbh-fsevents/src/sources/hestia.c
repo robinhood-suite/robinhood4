@@ -513,7 +513,6 @@ initialize_create_fsevents(struct rbh_fsevent *new_create_events)
     parent_id->size = 0;
     parent_id->data = NULL;
     new_create_events[0].link.parent_id = parent_id;
-    new_create_events[0].xattrs.count = 0;
 
     new_create_events[1].type = RBH_FET_XATTR;
     new_create_events[1].ns.parent_id = NULL;
@@ -527,6 +526,35 @@ initialize_create_fsevents(struct rbh_fsevent *new_create_events)
     new_create_events[3].type = RBH_FET_UPSERT;
     new_create_events[3].upsert.statx = NULL;
     new_create_events[3].upsert.symlink = NULL;
+}
+
+static void
+set_object_path_in_ns(const char *name, struct rbh_value_map *xattrs)
+{
+    struct rbh_value_pair *pair;
+    struct rbh_value *value;
+
+    value = source_stack_alloc(NULL, sizeof(*value));
+    if (value == NULL)
+        error(EXIT_FAILURE, errno,
+              "source_stack_alloc on value in set_object_path_in_ns");
+
+    value->type = RBH_VT_STRING;
+    value->string = source_stack_alloc(name, strlen(name) + 1);
+    if (value->string == NULL)
+        error(EXIT_FAILURE, errno,
+              "source_stack_alloc on value->string in set_object_path_in_ns");
+
+    pair = source_stack_alloc(NULL, sizeof(*pair));
+    if (pair == NULL)
+        error(EXIT_FAILURE, errno,
+              "source_stack_alloc on pair in set_object_path_in_ns");
+
+    pair->value = value;
+    pair->key = "path";
+
+    xattrs->pairs = pair;
+    xattrs->count = 1;
 }
 
 /* "CREATE" events in Hestia are of the form:
@@ -600,6 +628,8 @@ parse_create(yaml_parser_t *parser, struct rbh_iterator **fsevents_iterator)
 
             new_create_events[0].id.size = id_length;
             copy_id_in_events(new_create_events, 4);
+            set_object_path_in_ns(new_create_events[0].link.name,
+                                  &new_create_events[0].xattrs);
             break;
         case EF_ATTRS:
             success = parse_attrs(parser, &new_create_events[1].xattrs, statx);
