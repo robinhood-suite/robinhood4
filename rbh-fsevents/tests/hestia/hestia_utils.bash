@@ -15,7 +15,7 @@ test_dir=$(dirname $(readlink -e $0))
 
 invoke_rbh-fsevents()
 {
-    rbh_fsevents src:hestia:$HOME/.cache/hestia/event_feed.yaml -
+    rbh_fsevents --batch-size 0 src:hestia:$HOME/.cache/hestia/event_feed.yaml -
 }
 
 number_of_events()

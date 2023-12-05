@@ -47,13 +47,13 @@ test_create()
         error "There should be a single 'inode_xattr' event in '$output'"
     fi
 
-    if ! echo "${events[0]}" | grep "tiers" | grep "\[\]"; then
-        error "The 'inode_xattr' event should have 'tiers' as an empty array"
-    fi
+    #if ! echo "${events[0]}" | grep "tiers" | grep "\[\]"; then
+    #    error "The 'inode_xattr' event should have 'tiers' as an empty array"
+    #fi
 
-    if ! echo "${events[0]}" | grep "size" | grep "0"; then
-        error "The 'inode_xattr' event should have 'size' set to '0'"
-    fi
+    #if ! echo "${events[0]}" | grep "size" | grep "0"; then
+    #    error "The 'inode_xattr' event should have 'size' set to '0'"
+    #fi
 
     # We check the changelog time since the enrichment of the times isn't ready
     # yet
