@@ -20,9 +20,12 @@
 
 enum event_fields {
     EF_UNKNOWN,
-    EF_ID,
     EF_ATTRS,
+    EF_ID,
+    EF_SIZE,
+    EF_TIERS,
     EF_TIME,
+    EF_USER_MD,
 };
 
 enum key_parse_result {
@@ -35,18 +38,37 @@ static enum event_fields
 str2event_fields(const char *string)
 {
     switch (*string++) {
-    case 'i': /* id */
-        if (strcmp(string, "d"))
-            break;
-        return EF_ID;
     case 'a': /* attrs */
         if (strcmp(string, "ttrs"))
             break;
         return EF_ATTRS;
-    case 't': /* time */
-        if (strcmp(string, "ime"))
+    case 'i': /* id */
+        if (strcmp(string, "d"))
             break;
-        return EF_TIME;
+        return EF_ID;
+    case 's': /* size */
+        if (strcmp(string, "ize"))
+            break;
+        return EF_SIZE;
+    case 't':
+        if (*string++ != 'i')
+            break;
+
+        switch (*string++) {
+        case 'e': /* tiers */
+            if (strcmp(string, "rs"))
+                break;
+            return EF_TIERS;
+        case 'm': /* timer */
+            if (*string != 'e')
+                break;
+            return EF_TIME;
+        }
+        break;
+    case 'u': /* user_metadata */
+        if (strcmp(string, "ser_metadata"))
+            break;
+        return EF_USER_MD;
     }
 
     errno = EINVAL;
@@ -95,6 +117,97 @@ copy_id_in_events(struct rbh_fsevent *new_events, size_t n_events)
         new_events[i].id.data = new_events[0].id.data;
         new_events[i].id.size = new_events[0].id.size;
     }
+}
+
+static bool
+parse_attrs(yaml_parser_t *parser, struct rbh_value_map *map)
+{
+    struct rbh_value_pair *pairs;
+    bool seen_user_md = false;
+    bool seen_tiers = false;
+    yaml_event_t event;
+    int save_errno;
+
+    pairs = source_stack_alloc(NULL, sizeof(*pairs) * 2);
+    if (pairs == NULL)
+        error(EXIT_FAILURE, errno,
+              "source_stack_alloc on pairs in parse_attrs");
+
+    if (!yaml_parser_parse(parser, &event))
+        parser_error(parser);
+
+    save_errno = errno;
+    yaml_event_delete(&event);
+    errno = save_errno;
+
+    while (true) {
+        enum key_parse_result next;
+        struct rbh_value *value;
+        enum event_fields field;
+        bool success;
+
+        next = get_next_key(parser, &event, &field);
+        if (next == KPR_END)
+            break;
+        else if (next == KPR_ERROR)
+            return false;
+
+        switch (field) {
+        case EF_USER_MD:
+            pairs[0].key = source_stack_alloc("user_metadata",
+                                              strlen("user_metadata") + 1);
+            if (pairs[0].key == NULL)
+                error(EXIT_FAILURE, errno,
+                      "source_stack_alloc on pairs[0].key in parse_attrs");
+
+            value = source_stack_alloc(NULL, sizeof(*value));
+            if (value == NULL)
+                error(EXIT_FAILURE, errno,
+                      "source_stack_alloc on value in parse_attrs");
+
+            success = parse_rbh_value_map(parser, &value->map, true);
+            value->type = RBH_VT_MAP;
+            pairs[0].value = value;
+            seen_user_md = true;
+            break;
+        case EF_TIERS:
+            pairs[1].key = source_stack_alloc("tiers", strlen("tiers") + 1);
+            if (pairs[1].key == NULL)
+                error(EXIT_FAILURE, errno,
+                      "source_stack_alloc on pairs[1].key in parse_attrs");
+
+            value = source_stack_alloc(NULL, sizeof(*value));
+            if (value == NULL)
+                error(EXIT_FAILURE, errno,
+                      "source_stack_alloc on value in parse_attrs");
+
+            if (!yaml_parser_parse(parser, &event))
+                parser_error(parser);
+
+            success = parse_sequence(parser, value);
+            value->type = RBH_VT_SEQUENCE;
+            pairs[1].value = value;
+            seen_tiers = true;
+            break;
+        default:
+            if (!yaml_parser_parse(parser, &event))
+                parser_error(parser);
+
+            save_errno = errno;
+            yaml_event_delete(&event);
+            errno = save_errno;
+            success = true;
+            break;
+        }
+
+        if (!success)
+            return false;
+    }
+
+    map->pairs = pairs;
+    map->count = 2;
+
+    return seen_user_md && seen_tiers;
 }
 
 /* "READ" events in Hestia are of the form:
@@ -197,7 +310,7 @@ initialize_update_fsevents(struct rbh_fsevent *new_update_events)
     new_update_events[1].xattrs.count = 0;
     new_update_events[1].upsert.symlink = NULL;
 
-    new_update_events[2].type = RBH_FET_UPSERT;
+    new_update_events[2].type = RBH_FET_XATTR;
     new_update_events[2].upsert.statx = NULL;
     new_update_events[2].upsert.symlink = NULL;
 }
@@ -227,9 +340,11 @@ parse_update(yaml_parser_t *parser, struct rbh_iterator **fsevents_iterator)
     new_update_events = source_stack_alloc(NULL,
                                            sizeof(*new_update_events) * 3);
     if (new_update_events == NULL)
-        error(EXIT_FAILURE, errno, "source_stack_alloc in parse_update");
+        error(EXIT_FAILURE, errno,
+              "source_stack_alloc on new_update_events in parse_update");
 
     initialize_update_fsevents(new_update_events);
+
 
     while (true) {
         enum event_fields field = 0;
@@ -259,7 +374,7 @@ parse_update(yaml_parser_t *parser, struct rbh_iterator **fsevents_iterator)
             statx = source_stack_alloc(NULL, sizeof(*statx));
             if (!statx)
                 error(EXIT_FAILURE, errno,
-                      "source_stack_alloc in parse_create");
+                      "source_stack_alloc on statx in parse_update");
 
             /* This is the time of the changelog, close but not equal to the
              * object atime/mtime/ctime, but consider it as the object's times
@@ -281,8 +396,7 @@ parse_update(yaml_parser_t *parser, struct rbh_iterator **fsevents_iterator)
             break;
         case EF_ATTRS:
             seen_attrs = true;
-            success = parse_rbh_value_map(parser, &new_update_events[0].xattrs,
-                                          true);
+            success = parse_attrs(parser, &new_update_events[0].xattrs);
             break;
         default:
             return false;
@@ -406,9 +520,13 @@ initialize_create_fsevents(struct rbh_fsevent *new_create_events)
  * ---
  * !create
  * attrs:
- *   dataset.id: "70c88005-aa7e-bce6-7583-0d8b26926c25"
- * id: "421b3153-9108-d1ef-3413-945177dd4ab3"
- * time: 1696837025493616528
+ *   user_metadata:
+ *     {}
+ *   size: 0
+ *   tiers:
+ *     []
+ * time: 1701418948885961
+ * id: "d198c172-35ff-d962-a3db-027cdcf9116c"
  * ...
  *
  */
@@ -425,7 +543,8 @@ parse_create(yaml_parser_t *parser, struct rbh_iterator **fsevents_iterator)
     new_create_events = source_stack_alloc(NULL,
                                            sizeof(*new_create_events) * 4);
     if (new_create_events == NULL)
-        error(EXIT_FAILURE, errno, "source_stack_alloc in parse_create");
+        error(EXIT_FAILURE, errno,
+              "source_stack_alloc on new_create_events in parse_create");
 
     initialize_create_fsevents(new_create_events);
 
@@ -462,24 +581,20 @@ parse_create(yaml_parser_t *parser, struct rbh_iterator **fsevents_iterator)
             copy_id_in_events(new_create_events, 4);
             break;
         case EF_ATTRS:
-            /* The attributes are not namespace ones, so we store them for
-             * later in another map
-             */
-            success = parse_rbh_value_map(parser, &new_create_events[1].xattrs,
-                                          true);
+            success = parse_attrs(parser, &new_create_events[1].xattrs);
             break;
         case EF_TIME:
             if (!yaml_parser_parse(parser, &event))
                 parser_error(parser);
 
-            success = parse_int64(&event, &event_time);
-            if (!success)
-                error(EXIT_FAILURE, errno, "parse_int64 in parse_create");
-
             statx = source_stack_alloc(NULL, sizeof(*statx));
             if (!statx)
                 error(EXIT_FAILURE, errno,
-                      "source_stack_alloc in parse_create");
+                      "source_stack_alloc on statx in parse_create");
+
+            success = parse_int64(&event, &event_time);
+            if (!success)
+                error(EXIT_FAILURE, errno, "parse_int64 in parse_create");
 
             statx->stx_mask = RBH_STATX_ATIME | RBH_STATX_BTIME |
                               RBH_STATX_CTIME | RBH_STATX_MTIME;
