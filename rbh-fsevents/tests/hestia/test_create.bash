@@ -20,10 +20,9 @@ test_create()
 
     local output=$(invoke_rbh-fsevents)
 
-    if [[ $(number_of_events "$output") != 4 ]]; then
-        error "There should be 4 fsevents created (one for link," \
-              "inode_xattrs, upsert of statx and upsert of enrichment tag)," \
-              "found '$(number_of_events "$output")'"
+    if [[ $(number_of_events "$output") != 3 ]]; then
+        error "There should be 3 fsevents created (one for link," \
+              "inode_xattrs and upsert), found '$(number_of_events "$output")'"
     fi
 
     if ! echo "$output" | xargs | cut -d'.' -f1 | grep "blob" | \
@@ -47,14 +46,6 @@ test_create()
         error "There should be a single 'inode_xattr' event in '$output'"
     fi
 
-    if ! echo "${events[0]}" | grep "tiers" | grep "\[\]"; then
-        error "The 'inode_xattr' event should have 'tiers' as an empty array"
-    fi
-
-    if ! echo "${events[0]}" | grep "size" | grep "0"; then
-        error "The 'inode_xattr' event should have 'size' set to '0'"
-    fi
-
     # We check the changelog time since the enrichment of the times isn't ready
     # yet
     local changelog_time=$(cat ~/.cache/hestia/event_feed.yaml | grep "time" |
@@ -62,8 +53,8 @@ test_create()
 
     fill_events_array "$output" "upsert"
 
-    if [[ ${#events[@]} != 2 ]]; then
-        error "There should be two events 'upsert' in '$output'"
+    if [[ ${#events[@]} != 1 ]]; then
+        error "There should be one event 'upsert' in '$output'"
     fi
 
     if ! echo "${events[0]}" | grep "$changelog_time"; then
@@ -78,10 +69,6 @@ test_create()
 
     if [[ $n != 4 ]]; then
         error "'$changelog_time' should be set for the 4 times, but seen '$n'"
-    fi
-
-    if ! echo "${events[1]}" | grep "rbh-fsevents"; then
-        error "One 'upsert' event should set the enrichment tag"
     fi
 }
 

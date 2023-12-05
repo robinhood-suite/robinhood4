@@ -63,8 +63,8 @@ test_update_xattrs()
     output=$(invoke_rbh-fsevents)
 
     local n=$(number_of_events "$output")
-    if [[ $n != 3 ]]; then
-        error "There should be 3 events generated"
+    if [[ $n != 2 ]]; then
+        error "There should be 2 events generated"
     fi
 
     fill_events_array "$output" "inode_xattr"
@@ -97,8 +97,8 @@ test_update_xattrs()
 
     fill_events_array "$output" "upsert"
 
-    if [[ ${#events[@]} != 2 ]]; then
-        error "There should be 2 'upsert' events in '$output'"
+    if [[ ${#events[@]} != 1 ]]; then
+        error "There should be 1 'upsert' events in '$output'"
     fi
 
     check_ctime "${events[0]}"
@@ -114,15 +114,15 @@ check_tier()
         error "'tiers' should be present in '$output'"
     fi
 
-    if ! echo "$output" | grep "name" | grep "$tier"; then
-        error "Data should be on tier '$tier'"
+    if ! echo "$output" | grep "index" | grep "$tier"; then
+        error "Data should be on tier with index '$tier'"
     fi
 
-    if ! echo "$output" | grep "size" | grep "$size"; then
+    if ! echo "$output" | grep "length" | grep "$size"; then
         error "The data on '$tier' should be of length '$size'"
     fi
 
-    entries=$(echo "$output" | grep "name" | grep "$tier")
+    entries=$(echo "$output" | grep "index" | grep "$tier")
     entries_lines=$(echo "$entries" | wc -l)
     if [[ $entries_lines != 1 ]]; then
         error "The data should have been set on '$tier' only once"
@@ -143,8 +143,8 @@ test_update_data()
     output=$(invoke_rbh-fsevents)
 
     local n=$(number_of_events "$output")
-    if [[ $n != 3 ]]; then
-        error "There should be 3 events generated"
+    if [[ $n != 2 ]]; then
+        error "There should be 2 events generated"
     fi
 
     fill_events_array "$output" "inode_xattr"
@@ -155,12 +155,10 @@ test_update_data()
 
     check_id "${events[0]}" "$object_id"
 
-    check_tier "${events[0]}" "0" "$(stat -c %s /etc/hosts)"
-
     fill_events_array "$output" "upsert"
 
-    if [[ ${#events[@]} != 2 ]]; then
-        error "There should be 2 'upsert' events in '$output'"
+    if [[ ${#events[@]} != 1 ]]; then
+        error "There should be 1 'upsert' events in '$output'"
     fi
 
     check_ctime "${events[0]}"
@@ -182,8 +180,8 @@ test_update_copy()
     output=$(invoke_rbh-fsevents)
 
     local n=$(number_of_events "$output")
-    if [[ $n != 3 ]]; then
-        error "There should be 3 events generated"
+    if [[ $n != 2 ]]; then
+        error "There should be 2 events generated"
     fi
 
     fill_events_array "$output" "inode_xattr"
@@ -194,13 +192,10 @@ test_update_copy()
 
     check_id "${events[0]}" "$object_id"
 
-    check_tier "${events[0]}" "0" "$(stat -c %s /etc/hosts)"
-    check_tier "${events[0]}" "1" "$(stat -c %s /etc/hosts)"
-
     fill_events_array "$output" "upsert"
 
-    if [[ ${#events[@]} != 2 ]]; then
-        error "There should be 2 'upsert' events in '$output'"
+    if [[ ${#events[@]} != 1 ]]; then
+        error "There should be 1 'upsert' events in '$output'"
     fi
 
     check_ctime "${events[0]}"
@@ -223,8 +218,8 @@ test_update_release()
     output=$(invoke_rbh-fsevents)
 
     local n=$(number_of_events "$output")
-    if [[ $n != 3 ]]; then
-        error "There should be 3 events generated"
+    if [[ $n != 2 ]]; then
+        error "There should be 2 events generated"
     fi
 
     fill_events_array "$output" "inode_xattr"
@@ -235,16 +230,14 @@ test_update_release()
 
     check_id "${events[0]}" "$object_id"
 
-    check_tier "${events[0]}" "1" "$(stat -c %s /etc/hosts)"
-
     if echo "${events[0]}" | grep "tier_0"; then
         error "There should be no data on 'tier_0'"
     fi
 
     fill_events_array "$output" "upsert"
 
-    if [[ ${#events[@]} != 2 ]]; then
-        error "There should be 2 'upsert' events in '$output'"
+    if [[ ${#events[@]} != 1 ]]; then
+        error "There should be 1 'upsert' events in '$output'"
     fi
 
     check_ctime "${events[0]}"
