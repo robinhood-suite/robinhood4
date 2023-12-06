@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c21c232d_ab3ac877",
+        "filename": "librobinhood/src/backends/hestia/hestia.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-12-06T10:50:13Z",
+      "side": 1,
+      "message": "question: is there a reason for not doing this in get_next_object? This would be safer IMHO.",
+      "range": {
+        "startLine": 131,
+        "startChar": 4,
+        "endLine": 131,
+        "endChar": 62
+      },
+      "revId": "508490c24f4cb24e8986253f1a34f78243e95d37",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f44594b3_046f1c93",
+        "filename": "librobinhood/src/backends/hestia/meson.build",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-12-06T10:50:13Z",
+      "side": 1,
+      "message": "question: don\u0027t they have a findHestia.cmake installed? If so you should use dependency instead of find library.",
+      "range": {
+        "startLine": 8,
+        "startChar": 12,
+        "endLine": 9,
+        "endChar": 60
+      },
+      "revId": "508490c24f4cb24e8986253f1a34f78243e95d37",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}

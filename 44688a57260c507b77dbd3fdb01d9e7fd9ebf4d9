@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ac78e4bb_316ddb02",
+        "filename": "librobinhood/src/backends/hestia/hestia.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-12-06T10:50:13Z",
+      "side": 0,
+      "message": "question: so we don\u0027t insert attributes anymore?",
+      "range": {
+        "startLine": 244,
+        "startChar": 4,
+        "endLine": 249,
+        "endChar": 28
+      },
+      "revId": "44688a57260c507b77dbd3fdb01d9e7fd9ebf4d9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
