@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bcbafd07_99c36397",
+        "filename": "librobinhood/src/backends/hestia/hestia.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-12-06T10:59:57Z",
+      "side": 1,
+      "message": "minor: no need to copy",
+      "range": {
+        "startLine": 110,
+        "startChar": 25,
+        "endLine": 110,
+        "endChar": 31
+      },
+      "revId": "e0de8e3ac72e1890964719535715e6b3f1addb08",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a64ca530_938b648c",
+        "filename": "librobinhood/src/backends/hestia/hestia.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-12-06T10:59:57Z",
+      "side": 1,
+      "message": "question: isn\u0027t there an offset attribute as well? From robinhoods point of view, maybe what we need is simply the list of tiers on which the object is. As we do for Lustre, we don\u0027t know which part of the file are on a given OST (although this could be reconstructed from the stripping information). But I think, in practice, we will only care about which tiers contain a given object.",
+      "range": {
+        "startLine": 119,
+        "startChar": 9,
+        "endLine": 120,
+        "endChar": 42
+      },
+      "revId": "e0de8e3ac72e1890964719535715e6b3f1addb08",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
