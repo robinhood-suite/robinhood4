@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1c38f3ac_78cb7e5a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-12-06T15:45:24Z",
+      "side": 1,
+      "message": "minor: API?",
+      "range": {
+        "startLine": 7,
+        "startChar": 40,
+        "endLine": 7,
+        "endChar": 49
+      },
+      "revId": "b15e847c3c91b0be9351e1007415c19721e3278e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3b1f8dd7_c74a1e2d",
+        "filename": "rbh-fsevents/src/sources/hestia.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-12-06T15:45:24Z",
+      "side": 1,
+      "message": "alphabetical order?",
+      "range": {
+        "startLine": 22,
+        "startChar": 4,
+        "endLine": 28,
+        "endChar": 13
+      },
+      "revId": "b15e847c3c91b0be9351e1007415c19721e3278e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fb7eb6ea_69d29836",
+        "filename": "rbh-fsevents/src/sources/hestia.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-12-06T15:45:24Z",
+      "side": 1,
+      "message": "question: why is user_md mandatory? An object must have user attributes?",
+      "range": {
+        "startLine": 210,
+        "startChar": 11,
+        "endLine": 210,
+        "endChar": 23
+      },
+      "revId": "b15e847c3c91b0be9351e1007415c19721e3278e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "34c0cf32_bd771829",
+        "filename": "rbh-fsevents/tests/hestia/hestia_utils.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-12-06T15:45:24Z",
+      "side": 1,
+      "message": "major: I would not deactivate dedup by default. This reduces the test coverage of the dedup which most likely be used by default most of the time.",
+      "range": {
+        "startLine": 18,
+        "startChar": 17,
+        "endLine": 18,
+        "endChar": 31
+      },
+      "revId": "b15e847c3c91b0be9351e1007415c19721e3278e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "72aa2ae8_9b4cdc78",
+        "filename": "rbh-fsevents/tests/hestia/test_create.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-12-06T15:45:24Z",
+      "side": 1,
+      "message": "major: to remove (if necessary later, git will be your friend :) )",
+      "range": {
+        "startLine": 50,
+        "startChar": 4,
+        "endLine": 57,
+        "endChar": 1
+      },
+      "revId": "b15e847c3c91b0be9351e1007415c19721e3278e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "67825378_45fb7609",
+        "filename": "rbh-fsevents/tests/hestia/test_update.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-12-06T15:45:24Z",
+      "side": 1,
+      "message": "major: to remove",
+      "range": {
+        "startLine": 158,
+        "startChar": 5,
+        "endLine": 158,
+        "endChar": 61
+      },
+      "revId": "b15e847c3c91b0be9351e1007415c19721e3278e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
