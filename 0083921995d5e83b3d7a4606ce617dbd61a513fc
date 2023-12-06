@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8b660d77_f9e1b0e7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-12-06T10:54:15Z",
+      "side": 1,
+      "message": "major: it seems to me that you use m_name and default to m_uuid. This is either inaccurate or needs more explanations.",
+      "range": {
+        "startLine": 12,
+        "startChar": 11,
+        "endLine": 13,
+        "endChar": 6
+      },
+      "revId": "0083921995d5e83b3d7a4606ce617dbd61a513fc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "66eb580b_377cd105",
+        "filename": "librobinhood/src/backends/hestia/hestia.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-12-06T10:54:15Z",
+      "side": 1,
+      "message": "comment: I assume that it may be useful to have the uuid as well as the name in the database. So uuid should be an xattr if name exists in this case IMO.",
+      "range": {
+        "startLine": 138,
+        "startChar": 44,
+        "endLine": 138,
+        "endChar": 54
+      },
+      "revId": "0083921995d5e83b3d7a4606ce617dbd61a513fc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
