@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "135b41e1_b89d1c67",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-12-07T08:34:00Z",
+      "side": 1,
+      "message": "typo: makes",
+      "range": {
+        "startLine": 9,
+        "startChar": 50,
+        "endLine": 9,
+        "endChar": 54
+      },
+      "revId": "fee99d2f31992ffa53bdc1b911ecf9f31c6b4021",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "81c0c0e3_e450067c",
+        "filename": "rbh-fsevents/src/sources/hestia.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 631,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-12-07T08:34:00Z",
+      "side": 1,
+      "message": "suggest: set_object_id_in_ns_path (the other name suggests that an object has a path)",
+      "range": {
+        "startLine": 631,
+        "startChar": 23,
+        "endLine": 631,
+        "endChar": 33
+      },
+      "revId": "fee99d2f31992ffa53bdc1b911ecf9f31c6b4021",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cce3a87d_cde75f52",
+        "filename": "rbh-fsevents/tests/hestia/test_create.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-12-07T08:34:00Z",
+      "side": 1,
+      "message": "typo: what do you mean?",
+      "range": {
+        "startLine": 76,
+        "startChar": 47,
+        "endLine": 76,
+        "endChar": 56
+      },
+      "revId": "fee99d2f31992ffa53bdc1b911ecf9f31c6b4021",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
