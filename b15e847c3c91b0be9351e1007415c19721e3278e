@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e6f23c8e_19020a37",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-12-12T12:21:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1c38f3ac_78cb7e5a",
+      "range": {
+        "startLine": 7,
+        "startChar": 40,
+        "endLine": 7,
+        "endChar": 49
+      },
+      "revId": "b15e847c3c91b0be9351e1007415c19721e3278e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3b1f8dd7_c74a1e2d",
@@ -37,6 +61,30 @@
       "writtenOn": "2023-12-06T15:45:24Z",
       "side": 1,
       "message": "alphabetical order?",
+      "range": {
+        "startLine": 22,
+        "startChar": 4,
+        "endLine": 28,
+        "endChar": 13
+      },
+      "revId": "b15e847c3c91b0be9351e1007415c19721e3278e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1fa95a21_3e6300d5",
+        "filename": "rbh-fsevents/src/sources/hestia.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-12-12T12:21:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3b1f8dd7_c74a1e2d",
       "range": {
         "startLine": 22,
         "startChar": 4,
@@ -72,6 +120,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "65c23082_45a339af",
+        "filename": "rbh-fsevents/src/sources/hestia.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-12-12T12:21:36Z",
+      "side": 1,
+      "message": "The Hestia event feed always has them, and it is part of the event. That\u0027s also why the event are snapshot of the object, so we don\u0027t need the enricher",
+      "parentUuid": "fb7eb6ea_69d29836",
+      "range": {
+        "startLine": 210,
+        "startChar": 11,
+        "endLine": 210,
+        "endChar": 23
+      },
+      "revId": "b15e847c3c91b0be9351e1007415c19721e3278e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "34c0cf32_bd771829",
         "filename": "rbh-fsevents/tests/hestia/hestia_utils.bash",
         "patchSetId": 1
@@ -83,6 +155,30 @@
       "writtenOn": "2023-12-06T15:45:24Z",
       "side": 1,
       "message": "major: I would not deactivate dedup by default. This reduces the test coverage of the dedup which most likely be used by default most of the time.",
+      "range": {
+        "startLine": 18,
+        "startChar": 17,
+        "endLine": 18,
+        "endChar": 31
+      },
+      "revId": "b15e847c3c91b0be9351e1007415c19721e3278e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8e84e6a6_49fd4822",
+        "filename": "rbh-fsevents/tests/hestia/hestia_utils.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-12-12T12:21:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "34c0cf32_bd771829",
       "range": {
         "startLine": 18,
         "startChar": 17,
@@ -116,6 +212,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9a4bd01d_308153c6",
+        "filename": "rbh-fsevents/tests/hestia/test_create.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-12-12T12:21:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "72aa2ae8_9b4cdc78",
+      "range": {
+        "startLine": 50,
+        "startChar": 4,
+        "endLine": 57,
+        "endChar": 1
+      },
+      "revId": "b15e847c3c91b0be9351e1007415c19721e3278e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "67825378_45fb7609",
@@ -129,6 +249,30 @@
       "writtenOn": "2023-12-06T15:45:24Z",
       "side": 1,
       "message": "major: to remove",
+      "range": {
+        "startLine": 158,
+        "startChar": 5,
+        "endLine": 158,
+        "endChar": 61
+      },
+      "revId": "b15e847c3c91b0be9351e1007415c19721e3278e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3de9efa0_93991a06",
+        "filename": "rbh-fsevents/tests/hestia/test_update.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-12-12T12:21:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "67825378_45fb7609",
       "range": {
         "startLine": 158,
         "startChar": 5,
