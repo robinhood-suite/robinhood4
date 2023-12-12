@@ -22,6 +22,30 @@
       },
       "revId": "b6e0816a3e32175c2f2401c09f0c111e113eaaf4",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "65e02bbe_80a46d9b",
+        "filename": "rbh-fsevents/src/sources/hestia.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 516,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-12-12T12:21:03Z",
+      "side": 0,
+      "message": "It was because the value was modified later, since it now contained the path of the object. But sure, removing this line is not necessary.",
+      "parentUuid": "2a8260bb_a0dba1f3",
+      "range": {
+        "startLine": 516,
+        "startChar": 4,
+        "endLine": 516,
+        "endChar": 42
+      },
+      "revId": "b6e0816a3e32175c2f2401c09f0c111e113eaaf4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }

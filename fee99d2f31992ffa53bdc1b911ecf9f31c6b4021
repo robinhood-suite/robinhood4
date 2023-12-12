@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e6c6fb98_10c7fb0c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-12-12T12:21:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "135b41e1_b89d1c67",
+      "range": {
+        "startLine": 9,
+        "startChar": 50,
+        "endLine": 9,
+        "endChar": 54
+      },
+      "revId": "fee99d2f31992ffa53bdc1b911ecf9f31c6b4021",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "81c0c0e3_e450067c",
@@ -47,6 +71,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c196603c_5db79784",
+        "filename": "rbh-fsevents/src/sources/hestia.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 631,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-12-12T12:21:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "81c0c0e3_e450067c",
+      "range": {
+        "startLine": 631,
+        "startChar": 23,
+        "endLine": 631,
+        "endChar": 33
+      },
+      "revId": "fee99d2f31992ffa53bdc1b911ecf9f31c6b4021",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cce3a87d_cde75f52",
@@ -60,6 +108,30 @@
       "writtenOn": "2023-12-07T08:34:00Z",
       "side": 1,
       "message": "typo: what do you mean?",
+      "range": {
+        "startLine": 76,
+        "startChar": 47,
+        "endLine": 76,
+        "endChar": 56
+      },
+      "revId": "fee99d2f31992ffa53bdc1b911ecf9f31c6b4021",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e37053da_6d09f82a",
+        "filename": "rbh-fsevents/tests/hestia/test_create.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-12-12T12:21:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cce3a87d_cde75f52",
       "range": {
         "startLine": 76,
         "startChar": 47,
