@@ -93,6 +93,30 @@
       },
       "revId": "fd7d06876838b3ba1cc06e14d8fcbe36bfd6bfdb",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c8d801bf_c0abd859",
+        "filename": "librobinhood/src/backends/hestia/hestia.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-12-14T10:34:37Z",
+      "side": 1,
+      "message": "But the safer option would be to assume that its binary data.",
+      "parentUuid": "a0a2bf44_66d0c651",
+      "range": {
+        "startLine": 151,
+        "startChar": 45,
+        "endLine": 151,
+        "endChar": 65
+      },
+      "revId": "fd7d06876838b3ba1cc06e14d8fcbe36bfd6bfdb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
