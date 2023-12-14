@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f208c667_13d9827c",
+        "filename": "librobinhood/src/backends/hestia/hestia.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-12-14T09:21:30Z",
+      "side": 1,
+      "message": "nit: you could have done `return \u0026tier-\u003eids[tier-\u003ecurrent_id++];`",
+      "range": {
+        "startLine": 61,
+        "startChar": 4,
+        "endLine": 65,
+        "endChar": 21
+      },
+      "revId": "73cf46d244346b7bc980e33365ce48e69fe8132d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
