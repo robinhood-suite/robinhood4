@@ -22,6 +22,30 @@
       },
       "revId": "44688a57260c507b77dbd3fdb01d9e7fd9ebf4d9",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "def77b2d_a77c0ae7",
+        "filename": "librobinhood/src/backends/hestia/hestia.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-12-14T09:05:30Z",
+      "side": 0,
+      "message": "In this patch yes, after the following ones no.",
+      "parentUuid": "ac78e4bb_316ddb02",
+      "range": {
+        "startLine": 244,
+        "startChar": 4,
+        "endLine": 249,
+        "endChar": 28
+      },
+      "revId": "44688a57260c507b77dbd3fdb01d9e7fd9ebf4d9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
