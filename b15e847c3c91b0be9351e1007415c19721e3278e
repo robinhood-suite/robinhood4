@@ -142,6 +142,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ddbb61d_48bbf82f",
+        "filename": "rbh-fsevents/src/sources/hestia.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2023-12-14T09:10:14Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "65c23082_45a339af",
+      "range": {
+        "startLine": 210,
+        "startChar": 11,
+        "endLine": 210,
+        "endChar": 23
+      },
+      "revId": "b15e847c3c91b0be9351e1007415c19721e3278e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "34c0cf32_bd771829",
