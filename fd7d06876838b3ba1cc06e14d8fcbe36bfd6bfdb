@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2b4094f7_24ba57bf",
+        "filename": "librobinhood/src/backends/hestia/hestia.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-12-14T10:31:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "82de26d1_60d79359",
+      "range": {
+        "startLine": 141,
+        "startChar": 27,
+        "endLine": 141,
+        "endChar": 31
+      },
+      "revId": "fd7d06876838b3ba1cc06e14d8fcbe36bfd6bfdb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e7802482_88653bb5",
@@ -37,6 +61,30 @@
       "writtenOn": "2023-12-06T15:35:42Z",
       "side": 1,
       "message": "question: are we sure that the value is a string not binary data?",
+      "range": {
+        "startLine": 151,
+        "startChar": 45,
+        "endLine": 151,
+        "endChar": 65
+      },
+      "revId": "fd7d06876838b3ba1cc06e14d8fcbe36bfd6bfdb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a0a2bf44_66d0c651",
+        "filename": "librobinhood/src/backends/hestia/hestia.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-12-14T10:31:58Z",
+      "side": 1,
+      "message": "Well, we don\u0027t really have any way of knowing that, so I\u0027d rather simply assume it\u0027s a string, and modify this later to change the types of the values depending on the keys",
+      "parentUuid": "e7802482_88653bb5",
       "range": {
         "startLine": 151,
         "startChar": 45,
