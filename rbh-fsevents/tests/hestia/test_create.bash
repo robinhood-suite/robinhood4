@@ -18,7 +18,7 @@ test_create()
 {
     hestia object create blob
 
-    local output=$(invoke_rbh-fsevents)
+    local output=$(invoke_rbh_fsevents "-")
 
     if [[ $(number_of_events "$output") != 3 ]]; then
         error "There should be 3 fsevents created (one for link," \
@@ -79,10 +79,29 @@ test_create()
     fi
 }
 
+test_create_to_mongo()
+{
+    local obj=$(hestia object --verbosity 1 create blob)
+    invoke_rbh_fsevents "rbh:mongo:$testdb"
+
+    find_attribute '"ns.name":"'$obj'"'
+    find_attribute '"ns.xattrs.path":"'$obj'"'
+    find_attribute '"xattrs.tiers": { $size: 0 }' '"ns.name":"'$obj'"'
+    find_attribute '"xattrs.user_metadata": { }' '"ns.name":"'$obj'"'
+
+    local time=$(hestia_get_attr "$obj" "creation_time")
+
+    find_time_attribute "atime" "$time" "$obj"
+    find_time_attribute "btime" "$time" "$obj"
+    find_time_attribute "ctime" "$time" "$obj"
+
+    find_attribute '"statx.size": 0'
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
-declare -a tests=(test_create)
+declare -a tests=(test_create test_create_to_mongo)
 
 run_tests hestia_setup hestia_teardown ${tests[@]}
