@@ -10,7 +10,7 @@ integration_tests = []
 
 liblustre = dependency('lustre', required: false)
 if liblustre.found()
-    subdir('lustre')
+    #subdir('lustre')
 endif
 
 libhestia = dependency('hestia', required: false)

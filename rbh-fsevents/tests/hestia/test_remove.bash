@@ -18,14 +18,14 @@ test_remove()
 {
     hestia object create blob
 
-    local output=$(invoke_rbh-fsevents)
+    local output=$(invoke_rbh_fsevents "-")
     local object_id=$(echo "$output" | grep "id" | xargs | cut -d' ' -f3)
 
     clear_event_feed
 
     hestia object remove blob
 
-    output=$(invoke_rbh-fsevents)
+    output=$(invoke_rbh_fsevents "-")
 
     local n=$(number_of_events "$output")
     if [[ $n != 1 ]]; then

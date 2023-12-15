@@ -62,7 +62,7 @@ test_update_xattrs()
 {
     hestia object create blob
 
-    local output=$(invoke_rbh-fsevents)
+    local output=$(invoke_rbh_fsevents "-")
     local object_id=$(echo "$output" | grep "id" | xargs | cut -d' ' -f3)
 
     clear_event_feed
@@ -70,7 +70,7 @@ test_update_xattrs()
     hestia metadata update --id_fmt=parent_id --input_fmt=key_value blob <<< \
         data.key,value
 
-    output=$(invoke_rbh-fsevents)
+    output=$(invoke_rbh_fsevents "-")
 
     local n=$(number_of_events "$output")
     if [[ $n != 2 ]]; then
@@ -144,14 +144,14 @@ test_update_data()
 {
     hestia object create blob
 
-    local output=$(invoke_rbh-fsevents)
+    local output=$(invoke_rbh_fsevents "-")
     local object_id=$(echo "$output" | grep "id" | xargs | cut -d' ' -f3)
 
     clear_event_feed
 
     hestia object put_data --file /etc/hosts blob
 
-    output=$(invoke_rbh-fsevents)
+    output=$(invoke_rbh_fsevents "-")
 
     local n=$(number_of_events "$output")
     if [[ $n != 2 ]]; then
@@ -182,7 +182,7 @@ test_update_copy()
 {
     hestia object create blob
 
-    local output=$(invoke_rbh-fsevents)
+    local output=$(invoke_rbh_fsevents "-")
     local object_id=$(echo "$output" | grep "id" | xargs | cut -d' ' -f3)
 
     hestia object put_data --file /etc/hosts blob
@@ -191,7 +191,7 @@ test_update_copy()
 
     hestia object copy_data blob --source 0 --target 1
 
-    output=$(invoke_rbh-fsevents)
+    output=$(invoke_rbh_fsevents "-")
 
     local n=$(number_of_events "$output")
     if [[ $n != 2 ]]; then
@@ -223,7 +223,7 @@ test_update_release()
 {
     hestia object create blob
 
-    local output=$(invoke_rbh-fsevents)
+    local output=$(invoke_rbh_fsevents "-")
     local object_id=$(echo "$output" | grep "id" | xargs | cut -d' ' -f3)
 
     hestia object put_data --file /etc/hosts blob
@@ -233,7 +233,7 @@ test_update_release()
 
     hestia object release_data blob --tier 0
 
-    output=$(invoke_rbh-fsevents)
+    output=$(invoke_rbh_fsevents "-")
 
     local n=$(number_of_events "$output")
     if [[ $n != 2 ]]; then

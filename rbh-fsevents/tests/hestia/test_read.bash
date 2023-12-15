@@ -18,7 +18,7 @@ test_read()
 {
     hestia object create blob
 
-    local output=$(invoke_rbh-fsevents)
+    local output=$(invoke_rbh_fsevents "-")
     local object_id=$(echo "$output" | grep "id" | xargs | cut -d' ' -f3)
 
     hestia object put_data --file /etc/hosts blob
@@ -27,7 +27,7 @@ test_read()
 
     hestia object get_data --file /dev/null blob
 
-    output=$(invoke_rbh-fsevents)
+    output=$(invoke_rbh_fsevents "-")
     local n=$(number_of_events "$output")
 
     if [[ $n != 1 ]]; then
@@ -62,6 +62,18 @@ test_read()
     if ! echo "${events[0]}" | grep "atime"; then
         error "'$changelog_time' should be set for the access time"
     fi
+}
+
+test_read_to_mongo()
+{
+    local obj=$(hestia object --verbosity 1 create blob)
+
+    hestia object put_data --file /etc/hosts "$obj"
+
+    clear_event_feed
+
+    hestia object get_data --file /dev/null "$obj"
+
 }
 
 ################################################################################
