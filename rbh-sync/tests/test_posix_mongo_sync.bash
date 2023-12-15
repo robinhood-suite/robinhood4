@@ -190,6 +190,11 @@ test_sync_branch()
 #                                     MAIN                                     #
 ################################################################################
 
+test_teardown()
+{
+    true
+}
+
 declare -a tests=(test_sync_2_files test_sync_size test_sync_3_files
                   test_sync_xattrs test_sync_subdir test_sync_large_tree
                   test_sync_one_one_file test_sync_one_two_files

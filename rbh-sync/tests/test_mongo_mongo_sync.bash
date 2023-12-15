@@ -145,6 +145,11 @@ test_sync_branch()
 #                                     MAIN                                     #
 ################################################################################
 
+test_teardown()
+{
+    true
+}
+
 declare -a tests=(test_sync_simple test_sync_branch)
 
 tmpdir=$(mktemp --directory)

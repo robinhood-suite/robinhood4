@@ -492,6 +492,11 @@ test_mdt_count()
 #                                     MAIN                                     #
 ################################################################################
 
+test_teardown()
+{
+    true
+}
+
 declare -a tests=(test_simple_sync)
 
 if lctl get_param mdt.*.hsm_control | grep "enabled"; then

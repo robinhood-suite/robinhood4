@@ -40,6 +40,7 @@ teardown()
 {
     mongo "$testdb" --eval "db.dropDatabase()" >/dev/null
     rm -rf "$testdir"
+    test_teardown
 }
 
 error()
