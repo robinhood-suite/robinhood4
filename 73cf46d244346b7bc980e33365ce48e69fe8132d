@@ -22,6 +22,30 @@
       },
       "revId": "73cf46d244346b7bc980e33365ce48e69fe8132d",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8bc81e5f_09040593",
+        "filename": "librobinhood/src/backends/hestia/hestia.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2023-12-15T08:52:37Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "f208c667_13d9827c",
+      "range": {
+        "startLine": 61,
+        "startChar": 4,
+        "endLine": 65,
+        "endChar": 21
+      },
+      "revId": "73cf46d244346b7bc980e33365ce48e69fe8132d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
