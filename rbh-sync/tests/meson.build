@@ -12,6 +12,12 @@ if liblustre.found()
     integration_tests += ['test_lustre_mongo_sync']
 endif
 
+libhestia = dependency('hestia', disabler: true, required: false)
+
+if libhestia.found()
+    integration_tests += ['test_hestia_mongo_sync']
+endif
+
 foreach t: integration_tests
     e = find_program(t + '.bash')
     test(t, e)
