@@ -13,9 +13,9 @@ test_dir=$(dirname $(readlink -e $0))
 #                                DATABASE UTILS                                #
 ################################################################################
 
-invoke_rbh-fsevents()
+invoke_rbh_fsevents()
 {
-    rbh_fsevents src:hestia:$HOME/.cache/hestia/event_feed.yaml -
+    rbh_fsevents src:hestia:$HOME/.cache/hestia/event_feed.yaml "$*"
 }
 
 number_of_events()
@@ -58,4 +58,32 @@ hestia_setup()
 hestia_teardown()
 {
     rm -rf $HOME/.cache/hestia/
+}
+
+dump_feed()
+{
+    cat $HOME/.cache/hestia/event_feed.yaml
+}
+
+hestia_get_attr()
+{
+    local obj="$1"
+    local attr="$2"
+
+    hestia object --verbosity 1 read "$obj" | grep "$attr" | head -n 1 |
+        cut -d':' -f2 | cut -d',' -f1 | xargs
+}
+
+find_time_attribute()
+{
+    local category="$1"
+    local time="$2"
+    local object="$3"
+
+    if [ "$object" != "" ]; then
+        find_attribute '"statx.'$category'.sec":NumberLong("'$time'")' \
+                       '"ns.name":"'$object'"'
+    else
+        find_attribute '"statx.'$category'.sec":NumberLong("'$time'")'
+    fi
 }

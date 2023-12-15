@@ -18,7 +18,7 @@ test_read()
 {
     hestia object create blob
 
-    local output=$(invoke_rbh-fsevents)
+    local output=$(invoke_rbh_fsevents "-")
     local object_id=$(echo "$output" | grep "id" | xargs | cut -d' ' -f3)
 
     hestia object put_data --file /etc/hosts blob
@@ -27,7 +27,7 @@ test_read()
 
     hestia object get_data --file /dev/null blob
 
-    output=$(invoke_rbh-fsevents)
+    output=$(invoke_rbh_fsevents "-")
     local n=$(number_of_events "$output")
 
     if [[ $n != 1 ]]; then
@@ -64,10 +64,26 @@ test_read()
     fi
 }
 
+test_read_to_mongo()
+{
+    local obj=$(hestia object --verbosity 1 create blob)
+
+    hestia object put_data --file /etc/hosts "$obj"
+
+    clear_event_feed
+
+    hestia object get_data --file /dev/null "$obj"
+    local time=$(hestia_get_attr "$obj" "content_accessed_time")
+
+    invoke_rbh_fsevents "rbh:mongo:$testdb"
+
+    find_time_attribute "atime" "$time"
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
-declare -a tests=(test_read)
+declare -a tests=(test_read test_read_to_mongo)
 
 run_tests hestia_setup hestia_teardown "${tests[@]}"

@@ -394,7 +394,9 @@ parse_update(yaml_parser_t *parser, struct rbh_iterator **fsevents_iterator)
             if (!success)
                 error(EXIT_FAILURE, errno, "parse_int64 in parse_update");
 
-            statx->stx_mask |= RBH_STATX_CTIME;
+            statx->stx_mask |= RBH_STATX_ATIME | RBH_STATX_CTIME;
+            statx->stx_atime.tv_sec = event_time;
+            statx->stx_atime.tv_nsec = 0;
             statx->stx_ctime.tv_sec = event_time;
             statx->stx_ctime.tv_nsec = 0;
 
