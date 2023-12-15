@@ -51,7 +51,7 @@ clear_event_feed()
 
 hestia_setup()
 {
-    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib/hestia
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib64/hestia
     declare -a events
 }
 
