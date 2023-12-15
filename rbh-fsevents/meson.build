@@ -45,8 +45,7 @@ if liblustre.found()
     add_project_arguments(['-DHAVE_LUSTRE',], language: 'c')
 endif
 
-libhestia = cc.find_library('hestia', dirs: '/usr/lib/hestia',
-                            disabler: false, required: false)
+libhestia = dependency('hestia', disabler: false, required: false)
 if libhestia.found()
     libjansson = dependency('jansson', version: '>=2.5')
     extra_dependencies += [libjansson]
