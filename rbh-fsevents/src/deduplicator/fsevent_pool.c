@@ -631,11 +631,20 @@ dedup_upsert(const struct rbh_fsevent *event,
 {
     const struct rbh_value_map *rbh_fsevents_map;
 
+    if (event->upsert.statx) {
+        if (cached_upsert->fsevent.upsert.statx)
+            merge_statx((struct rbh_statx *)cached_upsert->fsevent.upsert.statx,
+                        event->upsert.statx);
+        else
+            cached_upsert->fsevent.upsert.statx = event->upsert.statx;
+    }
+
     rbh_fsevents_map = rbh_fsevent_find_fsevents_map(event);
     /* upsert events either contain "rbh-fsevents": "statx" or
      * "rbh-fsevents": "symlink".
      */
-    assert(rbh_fsevents_map);
+    if (!rbh_fsevents_map)
+        return 0;
 
     for (size_t i = 0; i < rbh_fsevents_map->count; i++) {
         const struct rbh_value_pair *xattr = &rbh_fsevents_map->pairs[i];
@@ -648,14 +657,6 @@ dedup_upsert(const struct rbh_fsevent *event,
             mask->uint32 |=
                 event->xattrs.pairs[0].value->map.pairs[0].value->uint32;
 
-            if (event->upsert.statx) {
-                if (cached_upsert->fsevent.upsert.statx)
-                    merge_statx(
-                        (struct rbh_statx *)cached_upsert->fsevent.upsert.statx,
-                                event->upsert.statx);
-                else
-                    cached_upsert->fsevent.upsert.statx = event->upsert.statx;
-            }
         } else if (!strcmp(xattr->key, "symlink")) {
             // XXX at most one symlink per inode
             insert_symlink(cached_upsert);
