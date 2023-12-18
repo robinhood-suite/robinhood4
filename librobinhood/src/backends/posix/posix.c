@@ -586,6 +586,7 @@ skip:
     if (ftsent->fts_parent->fts_pointer == NULL &&
         ftsent->fts_accpath[0] == '/') {
         char *path_dup = strdup(ftsent->fts_accpath);
+        char *first_slash;
         char *last_slash;
         int fd;
 
@@ -600,7 +601,10 @@ skip:
             return NULL;
         }
 
-        last_slash[0] = 0;
+        first_slash = strchr(path_dup, '/');
+        if (first_slash != last_slash)
+            last_slash[0] = 0;
+
         fd = openat(AT_FDCWD, path_dup, O_RDONLY | O_CLOEXEC);
         if (fd < 0) {
             save_errno = errno;
