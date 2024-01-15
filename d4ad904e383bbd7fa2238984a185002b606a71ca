@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "51b50d24_1943d39b",
+        "filename": "librobinhood/src/backends/hestia/hestia.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-01-15T08:50:22Z",
+      "side": 1,
+      "message": "major: errno",
+      "range": {
+        "startLine": 123,
+        "startChar": 28,
+        "endLine": 123,
+        "endChar": 34
+      },
+      "revId": "d4ad904e383bbd7fa2238984a185002b606a71ca",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b3bbc9ce_86c06c91",
+        "filename": "librobinhood/src/backends/hestia/hestia.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-01-15T08:50:22Z",
+      "side": 1,
+      "message": "question: what does this variable represent? The name is not explicit. Is it the size of the extent? In this case, extent_size would be better. Since the variable is named extents, I would guess that it is the number of extents but since there is only one extent stored in the list this isn\u0027t clear... Or maybe its the number of the extent. In this case, extent_id or extent_number would be more explicit. But since the name of the member is m_size, this would be even more confusing.",
+      "range": {
+        "startLine": 126,
+        "startChar": 4,
+        "endLine": 126,
+        "endChar": 11
+      },
+      "revId": "d4ad904e383bbd7fa2238984a185002b606a71ca",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "77746926_de477a1e",
+        "filename": "librobinhood/src/backends/hestia/hestia.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-01-15T08:50:22Z",
+      "side": 1,
+      "message": "suggest: to make the code simpler to understand I would rename:\nvalues -\u003e stack\nsequence_value -\u003e tiers_sequence\nsequence_value -\u003e tiers\n\nThe _value does not add much since it is redundant with the type name.",
+      "range": {
+        "startLine": 151,
+        "startChar": 40,
+        "endLine": 151,
+        "endChar": 46
+      },
+      "revId": "d4ad904e383bbd7fa2238984a185002b606a71ca",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "88b54779_c3a3efbe",
+        "filename": "librobinhood/src/backends/hestia/hestia.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-01-15T08:50:22Z",
+      "side": 1,
+      "message": "defect: + 1, you are missing the last \\0, rbh_id_copy won\u0027t copy it for example.",
+      "range": {
+        "startLine": 206,
+        "startChar": 14,
+        "endLine": 206,
+        "endChar": 36
+      },
+      "revId": "d4ad904e383bbd7fa2238984a185002b606a71ca",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ce6997e0_8f65898b",
+        "filename": "librobinhood/src/backends/hestia/hestia.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-01-15T08:50:22Z",
+      "side": 1,
+      "message": "major: errno",
+      "range": {
+        "startLine": 232,
+        "startChar": 28,
+        "endLine": 232,
+        "endChar": 34
+      },
+      "revId": "d4ad904e383bbd7fa2238984a185002b606a71ca",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
