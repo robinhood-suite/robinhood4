@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6f0399cf_6fbb8f4e",
+        "filename": "rbh-fsevents/tests/hestia/test_create.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-01-15T15:29:27Z",
+      "side": 1,
+      "message": "question: was it suppose to be done in the previous patch?",
+      "range": {
+        "startLine": 72,
+        "startChar": 4,
+        "endLine": 74,
+        "endChar": 29
+      },
+      "revId": "f6526ef0d75d40e8b2d1eea51a22bacc18599a3a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
