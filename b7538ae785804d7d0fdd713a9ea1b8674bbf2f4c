@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4ea075f6_99400bfa",
+        "filename": "librobinhood/src/backends/hestia/hestia.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-01-15T09:03:35Z",
+      "side": 1,
+      "message": "suggest: you could only have one check for all the pointers as you did in the previous patch.",
+      "range": {
+        "startLine": 190,
+        "startChar": 7,
+        "endLine": 190,
+        "endChar": 25
+      },
+      "revId": "b7538ae785804d7d0fdd713a9ea1b8674bbf2f4c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "328c4696_aa3d0bbb",
+        "filename": "librobinhood/src/backends/hestia/hestia.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-01-15T09:03:35Z",
+      "side": 1,
+      "message": "major: errno (and all the others)",
+      "range": {
+        "startLine": 191,
+        "startChar": 28,
+        "endLine": 191,
+        "endChar": 34
+      },
+      "revId": "b7538ae785804d7d0fdd713a9ea1b8674bbf2f4c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "579baca1_c680cb3d",
+        "filename": "librobinhood/src/backends/hestia/hestia.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-01-15T09:03:35Z",
+      "side": 1,
+      "message": "style: bad indentation",
+      "range": {
+        "startLine": 219,
+        "startChar": 39,
+        "endLine": 219,
+        "endChar": 44
+      },
+      "revId": "b7538ae785804d7d0fdd713a9ea1b8674bbf2f4c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6d8b0517_40772a13",
+        "filename": "librobinhood/src/backends/hestia/hestia.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-01-15T09:03:35Z",
+      "side": 1,
+      "message": "major: since you copy the map, no need to allocate it.",
+      "range": {
+        "startLine": 231,
+        "startChar": 3,
+        "endLine": 231,
+        "endChar": 26
+      },
+      "revId": "b7538ae785804d7d0fdd713a9ea1b8674bbf2f4c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b5966cdd_b354592c",
+        "filename": "librobinhood/src/backends/hestia/hestia.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-01-15T09:03:35Z",
+      "side": 1,
+      "message": "minor: I find this a bit weird to consider this a table when in reality the caller of this function gives a pointer to a single element. It would be more explicit to just consider it to be a pointer to a single struct (i.e. pairs-\u003ekey instead of pairs[0].key).",
+      "range": {
+        "startLine": 233,
+        "startChar": 9,
+        "endLine": 233,
+        "endChar": 12
+      },
+      "revId": "b7538ae785804d7d0fdd713a9ea1b8674bbf2f4c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
