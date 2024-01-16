@@ -72,6 +72,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d7c3b890_d6652ec2",
+        "filename": "librobinhood/src/backends/hestia/hestia.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-01-16T12:06:10Z",
+      "side": 1,
+      "message": "major: as pointed by Guillaume, errno here",
+      "range": {
+        "startLine": 158,
+        "startChar": 28,
+        "endLine": 158,
+        "endChar": 34
+      },
+      "revId": "d4ad904e383bbd7fa2238984a185002b606a71ca",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "88b54779_c3a3efbe",
         "filename": "librobinhood/src/backends/hestia/hestia.c",
         "patchSetId": 4
