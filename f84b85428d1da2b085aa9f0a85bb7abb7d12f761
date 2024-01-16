@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "52216f73_27c18b08",
+        "filename": "rbh-sync/tests/test_hestia_mongo_sync.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-01-16T12:31:22Z",
+      "side": 1,
+      "message": "typo: 2024",
+      "range": {
+        "startLine": 4,
+        "startChar": 16,
+        "endLine": 4,
+        "endChar": 20
+      },
+      "revId": "f84b85428d1da2b085aa9f0a85bb7abb7d12f761",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4a5b23f7_cc50cfcc",
         "filename": "rbh-sync/tests/test_hestia_mongo_sync.bash",
         "patchSetId": 1
