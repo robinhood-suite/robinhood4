@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "436e0f19_d9cc93c8",
+        "filename": "librobinhood/src/backends/hestia/hestia.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-01-18T10:08:22Z",
+      "side": 1,
+      "message": "as talked about, since the first stack push may fail, but the other may not, so the errno isn\u0027t assured to be set properly, so we let the ENOMEM here",
+      "parentUuid": "51b50d24_1943d39b",
+      "range": {
+        "startLine": 123,
+        "startChar": 28,
+        "endLine": 123,
+        "endChar": 34
+      },
+      "revId": "d4ad904e383bbd7fa2238984a185002b606a71ca",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b3bbc9ce_86c06c91",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-01-15T08:50:22Z",
       "side": 1,
       "message": "question: what does this variable represent? The name is not explicit. Is it the size of the extent? In this case, extent_size would be better. Since the variable is named extents, I would guess that it is the number of extents but since there is only one extent stored in the list this isn\u0027t clear... Or maybe its the number of the extent. In this case, extent_id or extent_number would be more explicit. But since the name of the member is m_size, this would be even more confusing.",
+      "range": {
+        "startLine": 126,
+        "startChar": 4,
+        "endLine": 126,
+        "endChar": 11
+      },
+      "revId": "d4ad904e383bbd7fa2238984a185002b606a71ca",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8a0302e6_bd4f79b1",
+        "filename": "librobinhood/src/backends/hestia/hestia.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-01-18T10:08:22Z",
+      "side": 1,
+      "message": "It represents the extent sizes on each tier, so I changed the name to that",
+      "parentUuid": "b3bbc9ce_86c06c91",
       "range": {
         "startLine": 126,
         "startChar": 4,
@@ -70,6 +118,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e60f4db5_46fc9621",
+        "filename": "librobinhood/src/backends/hestia/hestia.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-01-18T10:08:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "77746926_de477a1e",
+      "range": {
+        "startLine": 151,
+        "startChar": 40,
+        "endLine": 151,
+        "endChar": 46
+      },
+      "revId": "d4ad904e383bbd7fa2238984a185002b606a71ca",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d7c3b890_d6652ec2",
@@ -83,6 +155,30 @@
       "writtenOn": "2024-01-16T12:06:10Z",
       "side": 1,
       "message": "major: as pointed by Guillaume, errno here",
+      "range": {
+        "startLine": 158,
+        "startChar": 28,
+        "endLine": 158,
+        "endChar": 34
+      },
+      "revId": "d4ad904e383bbd7fa2238984a185002b606a71ca",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "88308454_8e0c9872",
+        "filename": "librobinhood/src/backends/hestia/hestia.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-01-18T10:08:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d7c3b890_d6652ec2",
       "range": {
         "startLine": 158,
         "startChar": 28,
@@ -116,6 +212,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e75d9d3a_0c87762e",
+        "filename": "librobinhood/src/backends/hestia/hestia.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-01-18T10:08:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "88b54779_c3a3efbe",
+      "range": {
+        "startLine": 206,
+        "startChar": 14,
+        "endLine": 206,
+        "endChar": 36
+      },
+      "revId": "d4ad904e383bbd7fa2238984a185002b606a71ca",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ce6997e0_8f65898b",
@@ -129,6 +249,30 @@
       "writtenOn": "2024-01-15T08:50:22Z",
       "side": 1,
       "message": "major: errno",
+      "range": {
+        "startLine": 232,
+        "startChar": 28,
+        "endLine": 232,
+        "endChar": 34
+      },
+      "revId": "d4ad904e383bbd7fa2238984a185002b606a71ca",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "01e6cba4_7d04cfc6",
+        "filename": "librobinhood/src/backends/hestia/hestia.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-01-18T10:08:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ce6997e0_8f65898b",
       "range": {
         "startLine": 232,
         "startChar": 28,
