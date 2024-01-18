@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "782e3d0d_58d13882",
+        "filename": "rbh-sync/tests/test_hestia_mongo_sync.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-01-18T10:08:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "52216f73_27c18b08",
+      "range": {
+        "startLine": 4,
+        "startChar": 16,
+        "endLine": 4,
+        "endChar": 20
+      },
+      "revId": "f84b85428d1da2b085aa9f0a85bb7abb7d12f761",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4a5b23f7_cc50cfcc",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-01-15T09:11:53Z",
       "side": 1,
       "message": "To remove? Otherwise, you should add more information in the comment.",
+      "range": {
+        "startLine": 120,
+        "startChar": 0,
+        "endLine": 120,
+        "endChar": 19
+      },
+      "revId": "f84b85428d1da2b085aa9f0a85bb7abb7d12f761",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f8265d0c_81f54df4",
+        "filename": "rbh-sync/tests/test_hestia_mongo_sync.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-01-18T10:08:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4a5b23f7_cc50cfcc",
       "range": {
         "startLine": 120,
         "startChar": 0,
@@ -70,6 +118,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "364efc69_46853cf9",
+        "filename": "rbh-sync/tests/test_hestia_mongo_sync.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-01-18T10:08:34Z",
+      "side": 1,
+      "message": "It was just a joke 😞\nDone",
+      "parentUuid": "42f7b046_f09e41f3",
+      "range": {
+        "startLine": 121,
+        "startChar": 83,
+        "endLine": 121,
+        "endChar": 87
+      },
+      "revId": "f84b85428d1da2b085aa9f0a85bb7abb7d12f761",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e8621180_69bf804d",
@@ -83,6 +155,30 @@
       "writtenOn": "2024-01-15T09:11:53Z",
       "side": 1,
       "message": "major: instead of defining the test_teardown in each test when it does nothing, it would be better to just define it when it is used. You could use a variable for this: [ ! -z \"$test_teardown\" ] \u0026\u0026 \"$test_teardown\"\n\nAnd in the test simply:\n\ntest_teardown\u003dmy_teardown\n...\n\nrun_tests ...",
+      "range": {
+        "startLine": 43,
+        "startChar": 4,
+        "endLine": 43,
+        "endChar": 17
+      },
+      "revId": "f84b85428d1da2b085aa9f0a85bb7abb7d12f761",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f939dd9_65229074",
+        "filename": "rbh-sync/tests/test_utils.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-01-18T10:08:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e8621180_69bf804d",
       "range": {
         "startLine": 43,
         "startChar": 4,
