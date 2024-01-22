@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9df291ea_49c971c6",
+        "filename": "rbh-fsevents/src/enrichers/hestia.c",
+        "patchSetId": 16
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-01-22T10:24:27Z",
+      "side": 1,
+      "message": "question: does Hestia use errno? This is breaking the conventions of robinhood.",
+      "range": {
+        "startLine": 90,
+        "startChar": 15,
+        "endLine": 90,
+        "endChar": 17
+      },
+      "revId": "bada281ce6e586c5ff8467d518570bf99fd28bbe",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
