@@ -1,0 +1,211 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ff6e8c80_9aae875a",
+        "filename": "rbh-sync/tests/test_hestia_mongo_sync.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-01-22T10:03:55Z",
+      "side": 1,
+      "message": "echo is unecessary",
+      "range": {
+        "startLine": 26,
+        "startChar": 4,
+        "endLine": 26,
+        "endChar": 12
+      },
+      "revId": "ec6cd839b0b35e4751383787856fc2a40f628a62",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d6c111e4_982dd7a4",
+        "filename": "rbh-sync/tests/test_hestia_mongo_sync.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-01-22T10:03:55Z",
+      "side": 1,
+      "message": "style: to make it a bit more readable:\n\nlocal obj1\u003d$(...)\nlocal obj2\u003d$(...)\n\nhestia_obj put_data ...\nhestia_obj put_data ...\n\nAlso, is the put data necessary when you just check that they exist?",
+      "range": {
+        "startLine": 43,
+        "startChar": 4,
+        "endLine": 45,
+        "endChar": 47
+      },
+      "revId": "ec6cd839b0b35e4751383787856fc2a40f628a62",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6aaabac6_5df0e9fc",
+        "filename": "rbh-sync/tests/test_hestia_mongo_sync.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-01-22T10:03:55Z",
+      "side": 1,
+      "message": "to remove",
+      "range": {
+        "startLine": 49,
+        "startChar": 3,
+        "endLine": 49,
+        "endChar": 44
+      },
+      "revId": "ec6cd839b0b35e4751383787856fc2a40f628a62",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "58429d3f_db7daa83",
+        "filename": "rbh-sync/tests/test_hestia_mongo_sync.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-01-22T10:03:55Z",
+      "side": 1,
+      "message": "to remove",
+      "range": {
+        "startLine": 64,
+        "startChar": 4,
+        "endLine": 64,
+        "endChar": 44
+      },
+      "revId": "ec6cd839b0b35e4751383787856fc2a40f628a62",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6ec99013_c7881ed5",
+        "filename": "rbh-sync/tests/test_hestia_mongo_sync.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-01-22T10:03:55Z",
+      "side": 1,
+      "message": "question: why is there a space here? This should be `\u0027$size\u0027 \"ns.name\"`, right?",
+      "range": {
+        "startLine": 69,
+        "startChar": 49,
+        "endLine": 69,
+        "endChar": 50
+      },
+      "revId": "ec6cd839b0b35e4751383787856fc2a40f628a62",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "caf59f37_6aa12769",
+        "filename": "rbh-sync/tests/test_hestia_mongo_sync.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-01-22T10:03:55Z",
+      "side": 1,
+      "message": "same question",
+      "range": {
+        "startLine": 93,
+        "startChar": 49,
+        "endLine": 93,
+        "endChar": 52
+      },
+      "revId": "ec6cd839b0b35e4751383787856fc2a40f628a62",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3d98540c_409571ec",
+        "filename": "rbh-sync/tests/test_hestia_mongo_sync.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-01-22T10:03:55Z",
+      "side": 1,
+      "message": "same comment as in test_sync",
+      "range": {
+        "startLine": 116,
+        "startChar": 4,
+        "endLine": 119,
+        "endChar": 47
+      },
+      "revId": "ec6cd839b0b35e4751383787856fc2a40f628a62",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8178b8ff_e9770512",
+        "filename": "rbh-sync/tests/test_hestia_mongo_sync.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-01-22T10:03:55Z",
+      "side": 1,
+      "message": "question: what is the purpose of this? A comment would be nice.",
+      "range": {
+        "startLine": 130,
+        "startChar": 4,
+        "endLine": 130,
+        "endChar": 27
+      },
+      "revId": "ec6cd839b0b35e4751383787856fc2a40f628a62",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c542c0ad_06db8f79",
+        "filename": "rbh-sync/tests/test_utils.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-01-22T10:03:55Z",
+      "side": 1,
+      "message": "to remove",
+      "range": {
+        "startLine": 43,
+        "startChar": 3,
+        "endLine": 43,
+        "endChar": 44
+      },
+      "revId": "ec6cd839b0b35e4751383787856fc2a40f628a62",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
