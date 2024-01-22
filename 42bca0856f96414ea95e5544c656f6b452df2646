@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2c55806f_ee3108a4",
+        "filename": "rbh-fsevents/src/sources/hestia.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 417,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-01-22T10:08:27Z",
+      "side": 1,
+      "message": "question: why swap the upsert and xattr? This should be mentioned in the commit message.",
+      "range": {
+        "startLine": 417,
+        "startChar": 21,
+        "endLine": 417,
+        "endChar": 24
+      },
+      "revId": "42bca0856f96414ea95e5544c656f6b452df2646",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
