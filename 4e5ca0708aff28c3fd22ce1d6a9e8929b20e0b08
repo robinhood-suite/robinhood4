@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2c6b2fa4_2a67a84e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-01-23T09:53:23Z",
+      "side": 1,
+      "message": "You forgot my comment on the commit message :(.",
+      "revId": "4e5ca0708aff28c3fd22ce1d6a9e8929b20e0b08",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
