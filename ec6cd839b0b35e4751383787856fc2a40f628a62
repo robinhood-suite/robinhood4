@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "983b277f_76dac9d7",
+        "filename": "rbh-sync/tests/test_hestia_mongo_sync.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-01-23T10:04:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ff6e8c80_9aae875a",
+      "range": {
+        "startLine": 26,
+        "startChar": 4,
+        "endLine": 26,
+        "endChar": 12
+      },
+      "revId": "ec6cd839b0b35e4751383787856fc2a40f628a62",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d6c111e4_982dd7a4",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-01-22T10:03:55Z",
       "side": 1,
       "message": "style: to make it a bit more readable:\n\nlocal obj1\u003d$(...)\nlocal obj2\u003d$(...)\n\nhestia_obj put_data ...\nhestia_obj put_data ...\n\nAlso, is the put data necessary when you just check that they exist?",
+      "range": {
+        "startLine": 43,
+        "startChar": 4,
+        "endLine": 45,
+        "endChar": 47
+      },
+      "revId": "ec6cd839b0b35e4751383787856fc2a40f628a62",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f4d701c9_eb18ecd4",
+        "filename": "rbh-sync/tests/test_hestia_mongo_sync.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-01-23T10:04:13Z",
+      "side": 1,
+      "message": "Done, and yes because the synchro is done by looping through each tier and object in the tier. However, if we do not put data, the object isn\u0027t put on a tier by Hestia, so we cannot see it...",
+      "parentUuid": "d6c111e4_982dd7a4",
       "range": {
         "startLine": 43,
         "startChar": 4,
@@ -70,6 +118,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7ed84b3f_f8224746",
+        "filename": "rbh-sync/tests/test_hestia_mongo_sync.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-01-23T10:04:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6aaabac6_5df0e9fc",
+      "range": {
+        "startLine": 49,
+        "startChar": 3,
+        "endLine": 49,
+        "endChar": 44
+      },
+      "revId": "ec6cd839b0b35e4751383787856fc2a40f628a62",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "58429d3f_db7daa83",
@@ -83,6 +155,30 @@
       "writtenOn": "2024-01-22T10:03:55Z",
       "side": 1,
       "message": "to remove",
+      "range": {
+        "startLine": 64,
+        "startChar": 4,
+        "endLine": 64,
+        "endChar": 44
+      },
+      "revId": "ec6cd839b0b35e4751383787856fc2a40f628a62",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "67c61ca5_d046f89a",
+        "filename": "rbh-sync/tests/test_hestia_mongo_sync.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-01-23T10:04:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "58429d3f_db7daa83",
       "range": {
         "startLine": 64,
         "startChar": 4,
@@ -116,6 +212,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9bd6e748_af62b327",
+        "filename": "rbh-sync/tests/test_hestia_mongo_sync.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-01-23T10:04:13Z",
+      "side": 1,
+      "message": "No, the space is on the right place, it\u0027s just some bashism... I use single quotes because otherwise I\u0027d have to put \u0027\\\u0027 before every double quotes in the parameters and it\u0027s annoying... So yes it\u0027s kinda ugly, but the space is at the right place",
+      "parentUuid": "6ec99013_c7881ed5",
+      "range": {
+        "startLine": 69,
+        "startChar": 49,
+        "endLine": 69,
+        "endChar": 50
+      },
+      "revId": "ec6cd839b0b35e4751383787856fc2a40f628a62",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "caf59f37_6aa12769",
@@ -129,6 +249,30 @@
       "writtenOn": "2024-01-22T10:03:55Z",
       "side": 1,
       "message": "same question",
+      "range": {
+        "startLine": 93,
+        "startChar": 49,
+        "endLine": 93,
+        "endChar": 52
+      },
+      "revId": "ec6cd839b0b35e4751383787856fc2a40f628a62",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6dff1310_2f4984f0",
+        "filename": "rbh-sync/tests/test_hestia_mongo_sync.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-01-23T10:04:13Z",
+      "side": 1,
+      "message": "Same answer",
+      "parentUuid": "caf59f37_6aa12769",
       "range": {
         "startLine": 93,
         "startChar": 49,
@@ -162,6 +306,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "545385f1_cbb593a0",
+        "filename": "rbh-sync/tests/test_hestia_mongo_sync.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-01-23T10:04:13Z",
+      "side": 1,
+      "message": "Same answer",
+      "parentUuid": "3d98540c_409571ec",
+      "range": {
+        "startLine": 116,
+        "startChar": 4,
+        "endLine": 119,
+        "endChar": 47
+      },
+      "revId": "ec6cd839b0b35e4751383787856fc2a40f628a62",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8178b8ff_e9770512",
@@ -185,6 +353,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "57756995_57f8c6f8",
+        "filename": "rbh-sync/tests/test_hestia_mongo_sync.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-01-23T10:04:13Z",
+      "side": 1,
+      "message": "It is a forgotten line, removed.",
+      "parentUuid": "8178b8ff_e9770512",
+      "range": {
+        "startLine": 130,
+        "startChar": 4,
+        "endLine": 130,
+        "endChar": 27
+      },
+      "revId": "ec6cd839b0b35e4751383787856fc2a40f628a62",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c542c0ad_06db8f79",
@@ -198,6 +390,30 @@
       "writtenOn": "2024-01-22T10:03:55Z",
       "side": 1,
       "message": "to remove",
+      "range": {
+        "startLine": 43,
+        "startChar": 3,
+        "endLine": 43,
+        "endChar": 44
+      },
+      "revId": "ec6cd839b0b35e4751383787856fc2a40f628a62",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b3e851c1_d1df3115",
+        "filename": "rbh-sync/tests/test_utils.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-01-23T10:04:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c542c0ad_06db8f79",
       "range": {
         "startLine": 43,
         "startChar": 3,
