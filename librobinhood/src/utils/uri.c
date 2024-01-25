@@ -21,6 +21,10 @@
 #include "robinhood/utils.h"
 #include "robinhood/uri.h"
 
+
+#include <stdio.h>
+#include <limits.h>
+
 static const struct rbh_backend_plugin *
 backend_plugin_import(const char *name)
 {
@@ -52,70 +56,35 @@ backend_new(const char *type, const char *fsname)
     return backend;
 }
 
-static struct file_handle *
-path2handle_at(int dirfd, const char *path, int flags)
-{
-    struct file_handle *handle;
-    int mount_id;
-
-    handle = malloc(MAX_HANDLE_SZ);
-    if (handle == NULL)
-        error(EXIT_FAILURE, errno, "malloc");
-    handle->handle_bytes = MAX_HANDLE_SZ - sizeof(*handle);
-
-    while (name_to_handle_at(dirfd, path, handle, &mount_id, flags)) {
-        if (errno != EOVERFLOW)
-            error(EXIT_FAILURE, errno, "name_to_handle_at: %s", path);
-
-        handle = realloc(handle, sizeof(*handle) + handle->handle_bytes);
-        if (handle == NULL)
-            error(EXIT_FAILURE, errno, "realloc");
-    }
-
-    return handle;
-}
-
-static struct rbh_id *
-path2id_at(int dirfd, const char *path, int flags)
-{
-    struct file_handle *handle;
-    struct rbh_id *id;
-
-    handle = path2handle_at(dirfd, path, flags);
-
-    id = rbh_id_from_file_handle(handle);
-    if (id == NULL)
-        error(EXIT_FAILURE, errno, "rbh_id_from_file_handle");
-
-    free(handle);
-    return id;
-}
-
 static struct rbh_backend *
 posix_backend_branch_from_path(struct rbh_backend *backend, const char *fsname,
                                const char *path)
 {
     struct rbh_backend *branch;
-    struct rbh_id *id;
+    char pwd[PATH_MAX];
+    char *full_path;
     int save_errno;
-    int dirfd;
-
-    dirfd = open(fsname, O_RDONLY);
-    if (dirfd < 0)
-        error(EXIT_FAILURE, errno, "open: %s", fsname);
 
     /* Discard every leading '/' in `path' */
     while (*path == '/')
         path++;
 
-    /* AT_EMPTY_PATH is required as `path' may be empty */
-    id = path2id_at(dirfd, path, AT_EMPTY_PATH);
-    /* Ignore errors on close */
-    close(dirfd);
+    if (fsname[0] != '/') {
+        if (getcwd(pwd, sizeof(pwd)) == NULL)
+            error(EXIT_FAILURE, errno, "getcwd");
 
-    branch = rbh_backend_branch(backend, id);
+        if (asprintf(&full_path, "%s/%s/%s", pwd, fsname, path) == -1)
+            error(EXIT_FAILURE, errno, "asprintf with '%s', '%s' and '%s'",
+                  pwd, fsname, path);
+    } else {
+        if (asprintf(&full_path, "%s/%s", fsname, path) == -1)
+            error(EXIT_FAILURE, errno, "asprintf with '%s' and '%s'",
+                  fsname, path);
+    }
+
+    branch = rbh_backend_branch(backend, NULL, full_path);
     save_errno = errno;
-    free(id);
+    free(full_path);
     errno = save_errno;
     return branch;
 }
@@ -137,7 +106,7 @@ backend_branch_from_path(struct rbh_backend *backend, const char *path)
     if (!(fsentry->mask & RBH_FP_ID))
         error(EXIT_FAILURE, ENODATA, "rbh_backend_fsentry_from_path");
 
-    branch = rbh_backend_branch(backend, &fsentry->id);
+    branch = rbh_backend_branch(backend, &fsentry->id, NULL);
     save_errno = errno;
     free(fsentry);
     errno = save_errno;
@@ -155,7 +124,7 @@ backend_from_uri(const struct rbh_uri *uri)
     case RBH_UT_BARE:
         return backend;
     case RBH_UT_ID:
-        branch = rbh_backend_branch(backend, uri->id);
+        branch = rbh_backend_branch(backend, uri->id, NULL);
         break;
     case RBH_UT_PATH:
         /* The posix backend does not support filtering, treat it differently */
