@@ -68,7 +68,7 @@ posix_backend_set_option(void *backend, unsigned int option, const void *data,
                          size_t data_size);
 
 struct rbh_backend *
-posix_backend_branch(void *backend, const struct rbh_id *id);
+posix_backend_branch(void *backend, const struct rbh_id *id, const char *path);
 
 struct rbh_fsentry *
 posix_root(void *backend, const struct rbh_filter_projection *projection);
