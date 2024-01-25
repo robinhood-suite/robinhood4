@@ -998,7 +998,17 @@ id2path(const char *root, const struct rbh_id *id)
 struct posix_branch_backend {
     struct posix_backend posix;
     struct rbh_id id;
+    char *path;
 };
+
+void
+posix_branch_backend_destroy(void *backend)
+{
+    struct posix_branch_backend *branch = backend;
+
+    posix_backend_destroy(&branch->posix);
+    free(branch);
+}
 
 static struct rbh_mut_iterator *
 posix_branch_backend_filter(void *backend, const struct rbh_filter *filter,
@@ -1023,17 +1033,21 @@ posix_branch_backend_filter(void *backend, const struct rbh_filter *filter,
     if (root == NULL)
         return NULL;
 
-    path = id2path(root, &branch->id);
-    save_errno = errno;
-    if (path == NULL) {
-        free(root);
-        errno = save_errno;
-        return NULL;
+    if (branch->path) {
+        path = branch->path;
+    } else {
+        path = id2path(root, &branch->id);
+        save_errno = errno;
+        if (path == NULL) {
+            free(root);
+            errno = save_errno;
+            return NULL;
+        }
     }
 
     assert(strncmp(root, path, strlen(root)) == 0);
     posix_iter = branch->posix.iter_new(root, path + strlen(root),
-                                       branch->posix.statx_sync_type);
+                                        branch->posix.statx_sync_type);
     save_errno = errno;
     free(path);
     free(root);
@@ -1055,18 +1069,30 @@ static const struct rbh_backend POSIX_BRANCH_BACKEND = {
 };
 
 struct rbh_backend *
-posix_backend_branch(void *backend, const struct rbh_id *id)
+posix_backend_branch(void *backend, const struct rbh_id *id, const char *path)
 {
     struct posix_backend *posix = backend;
     struct posix_branch_backend *branch;
     size_t data_size;
     char *data;
 
-    data_size = id->size;
-    branch = malloc(sizeof(*branch) + data_size);
-    if (branch == NULL)
+    if (id == NULL && path == NULL) {
+        errno = EINVAL;
         return NULL;
-    data = (char *)branch + sizeof(*branch);
+    }
+
+    if (id) {
+        data_size = id->size;
+        branch = malloc(sizeof(*branch) + data_size);
+        if (branch == NULL)
+            return NULL;
+
+        data = (char *)branch + sizeof(*branch);
+    } else {
+        branch = malloc(sizeof(*branch));
+        if (branch == NULL)
+            return NULL;
+    }
 
     branch->posix.root = strdup(posix->root);
     if (branch->posix.root == NULL) {
@@ -1077,9 +1103,27 @@ posix_backend_branch(void *backend, const struct rbh_id *id)
         return NULL;
     }
 
+    if (path) {
+        branch->path = strdup(path);
+        if (branch->path == NULL) {
+            int save_errno = errno;
+
+            free(branch);
+            free(branch->posix.root);
+            errno = save_errno;
+            return NULL;
+        }
+    } else {
+        branch->path = NULL;
+    }
+
+    if (id)
+        rbh_id_copy(&branch->id, id, &data, &data_size);
+    else
+        branch->id.size = 0;
+
     branch->posix.iter_new = posix_iterator_new;
     branch->posix.statx_sync_type = posix->statx_sync_type;
-    rbh_id_copy(&branch->id, id, &data, &data_size);
     branch->posix.backend = POSIX_BRANCH_BACKEND;
 
     return &branch->posix.backend;

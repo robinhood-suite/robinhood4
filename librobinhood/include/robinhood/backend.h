@@ -183,7 +183,8 @@ struct rbh_backend_operations {
             );
     struct rbh_backend *(*branch)(
             void *backend,
-            const struct rbh_id *id
+            const struct rbh_id *id,
+            const char *path
             );
     struct rbh_fsentry *(*root)(
             void *backend,
@@ -415,6 +416,8 @@ rbh_backend_update(struct rbh_backend *backend, struct rbh_iterator *fsevents)
  *
  * @param backend   the backend to extract a new backend from
  * @param id        the id of the fsentry to use as the root of the new backend
+ * @param path      the path of the fsentry to use as the root of the new
+ *                  backend, may be NULL
  *
  * @return          a pointer to a newly allocated struct rbh_backend on
  *                  success, NULL on error and errno is set appropriately
@@ -431,13 +434,14 @@ rbh_backend_update(struct rbh_backend *backend, struct rbh_iterator *fsevents)
  * to manage, the result is undefined.
  */
 static inline struct rbh_backend *
-rbh_backend_branch(struct rbh_backend *backend, const struct rbh_id *id)
+rbh_backend_branch(struct rbh_backend *backend, const struct rbh_id *id,
+                   const char *path)
 {
     if (backend->ops->branch == NULL) {
         errno = ENOTSUP;
         return NULL;
     }
-    return backend->ops->branch(backend, id);
+    return backend->ops->branch(backend, id, path);
 }
 
 /**
