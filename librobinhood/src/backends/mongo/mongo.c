@@ -569,7 +569,7 @@ mongo_backend_destroy(void *backend)
 }
 
 static struct rbh_backend *
-mongo_backend_branch(void *backend, const struct rbh_id *id);
+mongo_backend_branch(void *backend, const struct rbh_id *id, const char *path);
 
 static const struct rbh_backend_operations MONGO_BACKEND_OPS = {
     .get_option = mongo_get_option,
@@ -1328,12 +1328,14 @@ mongo_backend_init_from_uri(struct mongo_backend *mongo,
 }
 
 static struct rbh_backend *
-mongo_backend_branch(void *backend, const struct rbh_id *id)
+mongo_backend_branch(void *backend, const struct rbh_id *id, const char *path)
 {
     struct mongo_backend *mongo = backend;
     struct mongo_branch_backend *branch;
     size_t data_size;
     char *data;
+
+    (void) path;
 
     data_size = id->size;
     branch = malloc(sizeof(*branch) + data_size);
