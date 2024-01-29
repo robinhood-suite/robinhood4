@@ -387,14 +387,23 @@ fsentry_from_ftsent(FTSENT *ftsent, int statx_sync_type, size_t prefix_len,
             return NULL;
     }
 
-    fd = openat(AT_FDCWD, ftsent->fts_accpath,
-                O_RDONLY | O_CLOEXEC | O_NOFOLLOW | O_NONBLOCK);
-    if (fd < 0 && (errno == ELOOP || errno == ENXIO))
-        /* If the file to open is a symlink or a socket, reopen it with O_PATH
-         * set
-         */
+    /* FTS can tell us if we are dealing with a symbolic link, so open the entry
+     * using O_PATH.
+     */
+    if (ftsent->fts_info == FTS_SL) {
         fd = openat(AT_FDCWD, ftsent->fts_accpath,
-                    O_CLOEXEC | O_NOFOLLOW | O_PATH | O_NONBLOCK);
+                    O_PATH | O_CLOEXEC | O_NOFOLLOW | O_NONBLOCK);
+        fprintf(stderr, "opening truc\n");
+    } else {
+        fd = openat(AT_FDCWD, ftsent->fts_accpath,
+                    O_RDONLY | O_CLOEXEC | O_NOFOLLOW | O_NONBLOCK);
+        if (fd < 0 && errno == ENXIO)
+            /* The open will fail with ENXIO if the entry is a socket, so open
+             * it again but with O_PATH
+             */
+            fd = openat(AT_FDCWD, ftsent->fts_accpath,
+                        O_PATH | O_CLOEXEC | O_NOFOLLOW | O_NONBLOCK);
+    }
 
     if (fd < 0) {
         fprintf(stderr, "Failed to open '%s': %s (%d)\n",
