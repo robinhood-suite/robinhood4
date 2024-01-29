@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2e060bd0_fb09872e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-01-29T08:40:21Z",
+      "side": 1,
+      "message": "typo: a?",
+      "range": {
+        "startLine": 13,
+        "startChar": 55,
+        "endLine": 13,
+        "endChar": 56
+      },
+      "revId": "a3ae9ba3aee04fa68caba8f470ace08f4d6c9296",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1c312fa0_149178c5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-01-29T08:40:21Z",
+      "side": 1,
+      "message": "suggest: for non root users.",
+      "range": {
+        "startLine": 23,
+        "startChar": 22,
+        "endLine": 23,
+        "endChar": 30
+      },
+      "revId": "a3ae9ba3aee04fa68caba8f470ace08f4d6c9296",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9ec57bb7_f5b65a1a",
+        "filename": "librobinhood/src/backends/posix/posix.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 1031,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-01-29T08:40:21Z",
+      "side": 1,
+      "message": "major: to remove",
+      "range": {
+        "startLine": 1031,
+        "startChar": 8,
+        "endLine": 1031,
+        "endChar": 51
+      },
+      "revId": "a3ae9ba3aee04fa68caba8f470ace08f4d6c9296",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "39894e0a_3b7f4680",
+        "filename": "librobinhood/src/utils/uri.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-01-29T08:40:21Z",
+      "side": 1,
+      "message": "suggest: you could use snprintf to write in pwd (that you can rename) to create the full path and avoid the allocation.",
+      "range": {
+        "startLine": 76,
+        "startChar": 12,
+        "endLine": 76,
+        "endChar": 20
+      },
+      "revId": "a3ae9ba3aee04fa68caba8f470ace08f4d6c9296",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
