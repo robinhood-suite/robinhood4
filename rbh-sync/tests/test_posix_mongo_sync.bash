@@ -123,6 +123,17 @@ check_mode_and_type()
     find_attribute '"statx.mode":'$mode
 }
 
+test_sync_symbolic_link()
+{
+    local entry="symbolic_link"
+
+    touch ${entry}_target
+    ln -s ${entry}_target $entry
+
+    rbh_sync -o "rbh:posix:$entry" "rbh:mongo:$testdb"
+    check_mode_and_type $entry
+}
+
 test_sync_socket()
 {
     local entry="socket_file"
@@ -193,7 +204,8 @@ test_sync_branch()
 declare -a tests=(test_sync_2_files test_sync_size test_sync_3_files
                   test_sync_xattrs test_sync_subdir test_sync_large_tree
                   test_sync_one_one_file test_sync_one_two_files
-                  test_sync_socket test_sync_fifo test_sync_branch)
+                  test_sync_symbolic_link test_sync_socket test_sync_fifo
+                  test_sync_branch)
 
 tmpdir=$(mktemp --directory)
 trap -- "rm -rf '$tmpdir'" EXIT
