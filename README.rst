@@ -7,9 +7,14 @@
 #########
 RobinHood
 #########
-
+SEBASTIENNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
 This is the 4th version of RobinHood. This version has a more modular approach
-to development. Although the core utilities are grouped in the same repository,
+to development. Although the core utilities are grouped in q
+sdqs
+dqs
+dq
+dq
+sdthe same repository,
 they are built on a core library librobinhood__. Any extension can be added to
 this tool suite through the core library.
 
