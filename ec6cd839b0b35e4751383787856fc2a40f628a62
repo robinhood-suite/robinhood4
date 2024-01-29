@@ -95,6 +95,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "136df004_aeabd822",
+        "filename": "rbh-sync/tests/test_hestia_mongo_sync.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-01-29T15:33:24Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "f4d701c9_eb18ecd4",
+      "range": {
+        "startLine": 43,
+        "startChar": 4,
+        "endLine": 45,
+        "endChar": 47
+      },
+      "revId": "ec6cd839b0b35e4751383787856fc2a40f628a62",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6aaabac6_5df0e9fc",
