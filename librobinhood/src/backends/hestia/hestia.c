@@ -68,16 +68,18 @@ get_next_object(struct hestia_iterator *hestia_iter)
 static void
 fill_statx(struct rbh_statx *statx, HestiaObject *obj)
 {
-    statx->stx_mask = RBH_STATX_SIZE | RBH_STATX_BTIME | RBH_STATX_CTIME |
-                      RBH_STATX_ATIME;
+    statx->stx_mask = RBH_STATX_SIZE | RBH_STATX_ATIME | RBH_STATX_BTIME |
+                      RBH_STATX_CTIME | RBH_STATX_MTIME;
 
     statx->stx_size = obj->m_size;
+    statx->stx_atime.tv_sec = obj->m_atime;
+    statx->stx_atime.tv_nsec = 0;
     statx->stx_btime.tv_sec = obj->m_creation_time;
     statx->stx_btime.tv_nsec = 0;
-    statx->stx_ctime.tv_sec = obj->m_last_modified_time;
+    statx->stx_ctime.tv_sec = obj->m_ctime;
     statx->stx_ctime.tv_nsec = 0;
-    statx->stx_atime.tv_sec = obj->m_last_accessed_time;
-    statx->stx_atime.tv_nsec = 0;
+    statx->stx_mtime.tv_sec = obj->m_mtime;
+    statx->stx_mtime.tv_nsec = 0;
 }
 
 static int

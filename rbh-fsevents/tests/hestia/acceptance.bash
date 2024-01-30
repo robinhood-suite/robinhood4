@@ -73,21 +73,19 @@ acceptance()
     local btime2=$(hestia_get_attr "$obj2" "creation_time")
     find_time_attribute "btime" "$btime2" "$obj2"
 
-    # The time attribute parser from Hestia is different for the two objects
-    # because a put_data modifies the access and change time of an object, but a
-    # metadata update modifies only the change time. However, both commands
-    # create an update event in the feed, but since we cannot differentiate an
-    # update to metadata from an update to the data, we cannot properly assign
-    # the time in the event feed to one category, so it is assigned to both, and
-    # we check different times here
-    local atime1=$(hestia_get_attr "$obj1" "content_modified_time")
+    local atime1=$(hestia_get_attr "$obj1" "content_accessed_time")
     find_time_attribute "atime" "$atime1" "$obj1"
     local atime2=$(hestia_get_attr "$obj2" "content_accessed_time")
     find_time_attribute "atime" "$atime2" "$obj2"
 
-    local ctime1=$(hestia_get_attr "$obj1" "content_modified_time")
+    local mtime1=$(hestia_get_attr "$obj1" "content_modified_time")
+    find_time_attribute "mtime" "$mtime1" "$obj1"
+    local mtime2=$(hestia_get_attr "$obj2" "content_modified_time")
+    find_time_attribute "mtime" "$mtime2" "$obj2"
+
+    local ctime1=$(hestia_get_attr "$obj1" "metadata_modified_time")
     find_time_attribute "ctime" "$ctime1" "$obj1"
-    local ctime2=$(hestia_get_attr "$obj2" "content_modified_time")
+    local ctime2=$(hestia_get_attr "$obj2" "metadata_modified_time")
     find_time_attribute "ctime" "$ctime2" "$obj2"
 
     find_attribute '"statx.size": NumberLong('$size')' '"ns.name":"'$obj1'"'

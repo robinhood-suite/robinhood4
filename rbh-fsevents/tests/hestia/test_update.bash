@@ -39,7 +39,7 @@ check_ctime()
 
     local n=$(echo "${events[0]}" | grep "$changelog_time" | wc -l)
 
-    if [ -z "$n" ] || [[ $n != 2 ]]; then
+    if [ -z "$n" ] || [[ $n != 3 ]]; then
         error "'$changelog_time' should be set twice, but seen '$n'"
     fi
 
@@ -278,9 +278,12 @@ test_update_xattrs_to_mongo()
     find_attribute '"xattrs.tiers": { $size: 0 }'
     find_attribute '"xattrs.user_metadata": { "my_key": "my_value" }'
 
-    local time=$(hestia_get_attr "$obj" "content_modified_time")
-
+    local time=$(hestia_get_attr "$obj" "metadata_modified_time")
     find_time_attribute "ctime" "$time"
+
+    time=$(hestia_get_attr "$obj" "content_modified_time")
+    find_time_attribute "mtime" "$time"
+
     find_attribute '"statx.size": 0'
 }
 

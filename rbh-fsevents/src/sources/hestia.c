@@ -21,7 +21,9 @@
 enum event_fields {
     EF_UNKNOWN,
     EF_ATTRS,
+    EF_CTIME,
     EF_ID,
+    EF_MTIME,
     EF_SIZE,
     EF_TIERS,
     EF_TIME,
@@ -42,10 +44,18 @@ str2event_fields(const char *string)
         if (strcmp(string, "ttrs"))
             break;
         return EF_ATTRS;
+    case 'c': /* ctime */
+        if (strcmp(string, "time"))
+            break;
+        return EF_CTIME;
     case 'i': /* id */
         if (strcmp(string, "d"))
             break;
         return EF_ID;
+    case 'm': /* mtime */
+        if (strcmp(string, "time"))
+            break;
+        return EF_MTIME;
     case 's': /* size */
         if (strcmp(string, "ize"))
             break;
@@ -324,20 +334,40 @@ initialize_update_fsevents(struct rbh_fsevent *new_update_events)
     new_update_events[1].type = RBH_FET_XATTR;
     new_update_events[1].link.parent_id = NULL;
     new_update_events[1].link.name = NULL;
+}
 
+static int64_t
+parse_update_time(yaml_parser_t *parser)
+{
+    int64_t event_time;
+    yaml_event_t event;
+    int save_errno;
+
+    if (!yaml_parser_parse(parser, &event))
+        parser_error(parser);
+
+    if (!parse_int64(&event, &event_time))
+        error(EXIT_FAILURE, errno, "parse_int64 in parse_update");
+
+    save_errno = errno;
+    yaml_event_delete(&event);
+    errno = save_errno;
+    return event_time;
 }
 
 /* "UPDATE" events in Hestia are of the form:
  * ---
  * !update
+ * ctime: 1706606568729909
+ * mtime: 1706606568697886
  * attrs:
  *   user_metadata:
  *     my_key: "my_value"
- *   size: 0
  *   tiers:
  *     []
- * time: 1701419100896048
- * id: "d198c172-35ff-d962-a3db-027cdcf9116c"
+ *   size: 0
+ * id: "blob"
+ * time: 1706606568729909
  * ...
  *
  */
@@ -348,7 +378,6 @@ parse_update(yaml_parser_t *parser, struct rbh_iterator **fsevents_iterator)
     struct rbh_statx *statx;
     bool seen_attrs = false;
     bool seen_id = false;
-    int64_t event_time;
 
     new_update_events = source_stack_alloc(NULL,
                                            sizeof(*new_update_events) * 2);
@@ -368,6 +397,7 @@ parse_update(yaml_parser_t *parser, struct rbh_iterator **fsevents_iterator)
     while (true) {
         enum event_fields field = 0;
         enum key_parse_result next;
+        int64_t event_time;
         yaml_event_t event;
         int save_errno;
         bool success;
@@ -386,23 +416,38 @@ parse_update(yaml_parser_t *parser, struct rbh_iterator **fsevents_iterator)
             new_update_events[0].id.size = strlen(new_update_events[0].id.data);
             copy_id_in_events(new_update_events, 2);
             break;
-        case EF_TIME:
-            if (!yaml_parser_parse(parser, &event))
-                parser_error(parser);
+        case EF_CTIME:
+            event_time = parse_update_time(parser);
+            success = true;
 
-            success = parse_int64(&event, &event_time);
-            if (!success)
-                error(EXIT_FAILURE, errno, "parse_int64 in parse_update");
-
-            statx->stx_mask |= RBH_STATX_ATIME | RBH_STATX_CTIME;
-            statx->stx_atime.tv_sec = event_time;
-            statx->stx_atime.tv_nsec = 0;
+            statx->stx_mask |= RBH_STATX_CTIME;
             statx->stx_ctime.tv_sec = event_time;
             statx->stx_ctime.tv_nsec = 0;
+
+            break;
+        case EF_MTIME:
+            event_time = parse_update_time(parser);
+            success = true;
+
+            statx->stx_mask |= RBH_STATX_ATIME | RBH_STATX_MTIME;
+            statx->stx_atime.tv_sec = event_time;
+            statx->stx_atime.tv_nsec = 0;
+            statx->stx_mtime.tv_sec = event_time;
+            statx->stx_mtime.tv_nsec = 0;
+
+            break;
+        case EF_TIME:
+            /* The 'time' component of each update event is now equal to the
+             * ctime and/or the mtime, so it is redundant and doesn't need to be
+             * considered.
+             */
+            if (!yaml_parser_parse(parser, &event))
+                parser_error(parser);
 
             save_errno = errno;
             yaml_event_delete(&event);
             errno = save_errno;
+            success = true;
             break;
         case EF_ATTRS:
             seen_attrs = true;
