@@ -74,6 +74,7 @@ test_put_data()
 
     find_time_attribute "atime" "$time" "$obj"
     find_time_attribute "ctime" "$time" "$obj"
+    find_time_attribute "mtime" "$time" "$obj"
 }
 
 test_copy()
