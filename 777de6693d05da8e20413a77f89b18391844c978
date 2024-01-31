@@ -3,6 +3,52 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "34032d52_fae9fad3",
+        "filename": "rbh-fsevents/src/sources/hestia.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 350,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-01-31T08:42:30Z",
+      "side": 1,
+      "message": "major: unlike memory allocations, this is a message that a user might come across. This should be more descriptive: \"failed to parse integer \u0027%s\u0027 in time Hestia event\"",
+      "range": {
+        "startLine": 350,
+        "startChar": 36,
+        "endLine": 350,
+        "endChar": 63
+      },
+      "revId": "777de6693d05da8e20413a77f89b18391844c978",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bfecef42_5ef229a0",
+        "filename": "rbh-fsevents/src/sources/hestia.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 352,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-01-31T08:42:30Z",
+      "side": 1,
+      "message": "question: isn\u0027t errno 0 at this point anyway?",
+      "range": {
+        "startLine": 352,
+        "startChar": 4,
+        "endLine": 352,
+        "endChar": 23
+      },
+      "revId": "777de6693d05da8e20413a77f89b18391844c978",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a011eb0c_5ed6b306",
         "filename": "rbh-fsevents/src/sources/hestia.c",
         "patchSetId": 1
@@ -38,6 +84,30 @@
       "side": 1,
       "message": "Yes, a mtime change means a ctime change, but a ctime change does not mean a mtime change. But since we have both information in every update event anyway, we\u0027re sure the three times that can be updated will be",
       "parentUuid": "a011eb0c_5ed6b306",
+      "range": {
+        "startLine": 432,
+        "startChar": 12,
+        "endLine": 436,
+        "endChar": 41
+      },
+      "revId": "777de6693d05da8e20413a77f89b18391844c978",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "11a41490_dc56a0d3",
+        "filename": "rbh-fsevents/src/sources/hestia.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 436,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-01-31T08:42:30Z",
+      "side": 1,
+      "message": "Do you mean that both EF_MTIME and EF_CTIME will be in the Hestia event? If so a comment would be nice explaining why ctime is no added here.",
+      "parentUuid": "1e8d8adf_e1ad9c63",
       "range": {
         "startLine": 432,
         "startChar": 12,
