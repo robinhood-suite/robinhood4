@@ -1,0 +1,115 @@
+Name:    robinhood4
+Version: @version@
+Release: 1%{?dist}
+Summary: RobinHood V4 tool suite
+
+Group:   Applications/System
+License: LGPLv3
+URL:     https://github.com/robinhood-suite/robinhood4.git
+Source0: %{name}-%{version}.tar.xz
+
+Requires: mongo-c-driver-libs
+Requires: mongodb
+Requires: hestia
+
+BuildRequires: meson
+BuildRequires: gcc
+BuildRequires: gcc-c++
+BuildRequires: mongo-c-driver-devel
+BuildRequires: jansson-devel
+BuildRequires: check-devel
+
+%description
+The robinhood4 tools necessary for the IO-SEA project. Includes librobinhood
+with the Hestia backend, rbh-sync, rbh-find, rbh-find-iosea and rbh-fsevents.
+It is installed on machines that run a Mongo database.
+
+%package devel
+Summary: C API for RobinHood V4 tool suite.
+Requires: robinhood4
+Requires: pkgconf-pkg-config
+
+%description devel
+This package contains header files and libraries to use the robinhood4 tool
+suite from a C program.
+
+%prep
+%autosetup
+
+%build
+for project in librobinhood rbh-sync rbh-find rbh-find-iosea miniyaml \
+               rbh-fsevents; do
+    cd $project
+    %meson
+    %meson_build
+    cd ..
+done
+
+%install
+for project in librobinhood rbh-sync rbh-find rbh-find-iosea miniyaml \
+               rbh-fsevents; do
+    cd $project
+    %meson_install
+    if [ "$project" == "librobinhood" ]; then
+        rm -f $RPM_BUILD_ROOT/%{_libdir}/librbh-lustre.so*
+        rm -f $RPM_BUILD_ROOT/%{_includedir}/robinhood/backends/lustre.h
+    fi
+    cd ..
+done
+
+%files
+%{_libdir}/librobinhood.so.*
+%{_libdir}/librbh-hestia.so*
+%{_libdir}/librbh-mongo.so*
+%{_libdir}/librbh-posix.so*
+%{_libdir}/pkgconfig/robinhood.pc
+%{_bindir}/rbh-sync
+%{_bindir}/rbh-find
+%{_libdir}/librbh-find.so.*
+%{_libdir}/pkgconfig/rbh-find.pc
+%{_bindir}/rbh-ifind
+%{_libdir}/libminiyaml.so.*
+%{_libdir}/pkgconfig/miniyaml.pc
+%{_bindir}/rbh-fsevents
+
+%files devel
+%{_libdir}/librobinhood.so
+%{_includedir}/robinhood.h
+%{_includedir}/robinhood/backend.h
+%{_includedir}/robinhood/backends/hestia.h
+%{_includedir}/robinhood/backends/mongo.h
+%{_includedir}/robinhood/backends/posix.h
+%{_includedir}/robinhood/filter.h
+%{_includedir}/robinhood/fsentry.h
+%{_includedir}/robinhood/fsevent.h
+%{_includedir}/robinhood/hashmap.h
+%{_includedir}/robinhood/id.h
+%{_includedir}/robinhood/iterator.h
+%{_includedir}/robinhood/itertools.h
+%{_includedir}/robinhood/list.h
+%{_includedir}/robinhood/plugin.h
+%{_includedir}/robinhood/plugins/backend.h
+%{_includedir}/robinhood/queue.h
+%{_includedir}/robinhood/ring.h
+%{_includedir}/robinhood/ringr.h
+%{_includedir}/robinhood/sstack.h
+%{_includedir}/robinhood/stack.h
+%{_includedir}/robinhood/statx.h
+%{_includedir}/robinhood/uri.h
+%{_includedir}/robinhood/utils.h
+%{_includedir}/robinhood/value.h
+%{_libdir}/librbh-find.so
+%{_includedir}/rbh-find/actions.h
+%{_includedir}/rbh-find/core.h
+%{_includedir}/rbh-find/filters.h
+%{_includedir}/rbh-find/find_cb.h
+%{_includedir}/rbh-find/parser.h
+%{_includedir}/rbh-find/rbh-find.h
+%{_includedir}/rbh-find/utils.h
+%{_includedir}/miniyaml.h
+%{_libdir}/libminiyaml.so
+
+%changelog
+* Thu Feb 1 2024 - Yoann Valeri <yoann.valeri@cea.fr> - 0.1-1
+- First version
+- Support the POSIX, Mongo and Hestia backends
