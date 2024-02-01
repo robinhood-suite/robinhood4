@@ -97,6 +97,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2f8a0dbb_7d9e844d",
+        "filename": "rbh-fsevents/src/sources/hestia.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 352,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-02-01T07:51:21Z",
+      "side": 1,
+      "message": "Yes, but since the call succeeded, you shoudn\u0027t set errno anyway. So might as well let yaml_event_delete set errno to whatever value it wants.",
+      "parentUuid": "c7715e38_db89402a",
+      "range": {
+        "startLine": 352,
+        "startChar": 4,
+        "endLine": 352,
+        "endChar": 23
+      },
+      "revId": "777de6693d05da8e20413a77f89b18391844c978",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a011eb0c_5ed6b306",
         "filename": "rbh-fsevents/src/sources/hestia.c",
         "patchSetId": 1
