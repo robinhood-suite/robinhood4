@@ -284,7 +284,7 @@ parse_read(yaml_parser_t *parser, struct rbh_iterator **fsevents_iterator)
             seen_id = true;
 
             success = parse_name(parser, &new_read_event[0].id.data);
-            new_read_event[0].id.size = strlen(new_read_event[0].id.data);
+            new_read_event[0].id.size = strlen(new_read_event[0].id.data) + 1;
             break;
         case EF_TIME:
             seen_time = true;
@@ -414,7 +414,8 @@ parse_update(yaml_parser_t *parser, struct rbh_iterator **fsevents_iterator)
             seen_id = true;
 
             success = parse_name(parser, &new_update_events[0].id.data);
-            new_update_events[0].id.size = strlen(new_update_events[0].id.data);
+            new_update_events[0].id.size =
+                strlen(new_update_events[0].id.data) + 1;
             copy_id_in_events(new_update_events, 2);
             break;
         case EF_CTIME:
@@ -514,7 +515,8 @@ parse_remove(yaml_parser_t *parser, struct rbh_iterator **fsevents_iterator)
             seen_id = true;
 
             success = parse_name(parser, &new_delete_event[0].id.data);
-            new_delete_event[0].id.size = strlen(new_delete_event[0].id.data);
+            new_delete_event[0].id.size =
+                strlen(new_delete_event[0].id.data) + 1;
             break;
         case EF_TIME:
             /* Ignore this part of the event */
@@ -656,7 +658,7 @@ parse_create(yaml_parser_t *parser, struct rbh_iterator **fsevents_iterator)
             seen_id = true;
 
             success = parse_name(parser, &new_create_events[0].link.name);
-            id_length = strlen(new_create_events[0].link.name);
+            id_length = strlen(new_create_events[0].link.name) + 1;
             new_create_events[0].id.data = source_stack_alloc(
                 new_create_events[0].link.name, id_length
                 );
