@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4538d3e4_e346e20d",
+        "filename": "robinhood4.iosea.spec.in",
+        "patchSetId": 1
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-02-02T15:34:01Z",
+      "side": 1,
+      "message": "The rpm/repo is robinhood4, so it\u0027s the first version of robinhood4. If it was simply robinhood, then yes it should robinhood 4.0",
+      "parentUuid": "a18f8e9e_f07cc811",
+      "range": {
+        "startLine": 3,
+        "startChar": 9,
+        "endLine": 3,
+        "endChar": 10
+      },
+      "revId": "f4f637f22e61d9d1cbbcc78e962b9cead2ed7e98",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "02cc84c8_2acbf763",
         "filename": "robinhood4.iosea.spec.in",
         "patchSetId": 1
@@ -49,6 +73,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "93790326_259e3773",
+        "filename": "robinhood4.iosea.spec.in",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-02-02T15:34:01Z",
+      "side": 1,
+      "message": "This is special specfile done for the io-sea project, and is only temporary, so we took some liberties to make it easier for us, but this spec file will not stay permanently in the repo.",
+      "parentUuid": "02cc84c8_2acbf763",
+      "range": {
+        "startLine": 40,
+        "startChar": 61,
+        "endLine": 40,
+        "endChar": 69
+      },
+      "revId": "f4f637f22e61d9d1cbbcc78e962b9cead2ed7e98",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9cbf2fef_593ce039",
         "filename": "robinhood4.iosea.spec.in",
         "patchSetId": 1
@@ -60,6 +108,30 @@
       "writtenOn": "2024-02-02T08:36:31Z",
       "side": 1,
       "message": "suggest: it would be better to just have an option to disable lustre (and IO-SEA) instead of relying on the presence or not of the libraries.",
+      "range": {
+        "startLine": 53,
+        "startChar": 4,
+        "endLine": 56,
+        "endChar": 6
+      },
+      "revId": "f4f637f22e61d9d1cbbcc78e962b9cead2ed7e98",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "75d98d0e_d4def3c6",
+        "filename": "robinhood4.iosea.spec.in",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-02-02T15:34:01Z",
+      "side": 1,
+      "message": "Same answer, it\u0027s just easier to do this for now.",
+      "parentUuid": "9cbf2fef_593ce039",
       "range": {
         "startLine": 53,
         "startChar": 4,
