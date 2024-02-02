@@ -22,6 +22,30 @@
       },
       "revId": "7052ab137212ba64101f6cab05c997fd5bce3ef8",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9b90dbaa_0c927f4f",
+        "filename": "rbh-fsevents/rbh-fsevents.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-02-02T15:33:55Z",
+      "side": 1,
+      "message": "Yes it will be, which will trigger an error in source_from_file_uri, as we try to open NULL.",
+      "parentUuid": "022a49e2_6971efe8",
+      "range": {
+        "startLine": 140,
+        "startChar": 38,
+        "endLine": 140,
+        "endChar": 42
+      },
+      "revId": "7052ab137212ba64101f6cab05c997fd5bce3ef8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
