@@ -197,6 +197,44 @@ test_sync_branch()
     find_attribute '"ns.xattrs.path":"'/$second_dir/$third_dir/$entry'"'
 }
 
+test_continue_sync_on_error()
+{
+    local first_file="test1"
+    local second_file="test2"
+    local third_file="test3"
+    local dir="dir"
+
+    mkdir $dir
+    touch $first_file $second_file $dir/$third_file
+    chmod o-rw $second_file
+    chmod o-rw $dir
+
+    # Here, we create a test user, and use it to run a rbh-sync on the files
+    # created above. Since that user doesn't have the read or write access to
+    # the second file and the directory, it cannot synchronize both, so errors
+    # should be outputed but the command shouldn't fail.
+    useradd -N -M test
+    local output="$((sudo -E -H -u test bash -c "rbh-sync rbh:posix:. \
+                     rbh:mongo:$testdb") 2>&1)"
+    userdel -f -r test || true
+
+    echo "$output" | grep "open '/$second_file'" ||
+        error "Failed to find error on open of '$second_file'"
+    echo "$output" | grep "open '/$dir'" ||
+        error "Failed to find error on open of '$second_file'"
+    echo "$output" | grep "FTS read './$dir'" ||
+        error "Failed to find error on open of '$second_file'"
+
+    local db_count=$(mongo $testdb --eval "db.entries.count()")
+    if [[ $db_count -ne 2 ]]; then
+        error "Invalid number of files were synced, expected '2' entries, " \
+              "found '$db_count'."
+    fi
+
+    find_attribute '"ns.xattrs.path":"/"'
+    find_attribute '"ns.name":"'$first_file'"'
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
@@ -205,7 +243,7 @@ declare -a tests=(test_sync_2_files test_sync_size test_sync_3_files
                   test_sync_xattrs test_sync_subdir test_sync_large_tree
                   test_sync_one_one_file test_sync_one_two_files
                   test_sync_symbolic_link test_sync_socket test_sync_fifo
-                  test_sync_branch)
+                  test_sync_branch test_continue_sync_on_error)
 
 tmpdir=$(mktemp --directory)
 trap -- "rm -rf '$tmpdir'" EXIT

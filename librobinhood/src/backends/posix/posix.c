@@ -580,6 +580,11 @@ skip:
         return NULL;
     case FTS_DNR:
     case FTS_ERR:
+        errno = ftsent->fts_errno;
+        fprintf(stderr, "Failed to FTS read '%s': %s (%d)\n",
+                ftsent->fts_path, strerror(errno), errno);
+        fprintf(stderr, "Synchronization of '%s' skipped\n", ftsent->fts_path);
+        goto skip;
     case FTS_NS:
         errno = ftsent->fts_errno;
         return NULL;
@@ -629,9 +634,11 @@ skip:
     fsentry = fsentry_from_ftsent(ftsent, posix_iter->statx_sync_type,
                                   posix_iter->prefix_len,
                                   posix_iter->ns_xattrs_callback);
-    if (fsentry == NULL && (errno == ENOENT || errno == ESTALE))
+    if (fsentry == NULL && (errno == ENOENT || errno == ESTALE)) {
+        fprintf(stderr, "Synchronization of '%s' skipped\n", ftsent->fts_path);
         /* The entry moved from under our feet */
         goto skip;
+    }
 
     return fsentry;
 }
