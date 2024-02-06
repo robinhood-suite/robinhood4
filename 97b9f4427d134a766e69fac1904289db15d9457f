@@ -22,6 +22,30 @@
       },
       "revId": "97b9f4427d134a766e69fac1904289db15d9457f",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cc67c45a_1dd954b4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-02-06T10:15:50Z",
+      "side": 1,
+      "message": "Yes, but a git revert would have reverted the whole patch, including the test, which I didn\u0027t want to remove.",
+      "parentUuid": "7b931961_2fef01ea",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 22,
+        "endChar": 5
+      },
+      "revId": "97b9f4427d134a766e69fac1904289db15d9457f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
