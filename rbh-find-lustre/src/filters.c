@@ -27,16 +27,14 @@
 #include "filters.h"
 
 static const struct rbh_filter_field predicate2filter_field[] = {
-    [LPRED_EXPIRED_ABS - LPRED_MIN] = {.fsentry = RBH_FP_INODE_XATTRS,
-                                       .xattr = "user.ccc_expires_abs"},
-    [LPRED_EXPIRED_REL - LPRED_MIN] = {.fsentry = RBH_FP_INODE_XATTRS,
-                                       .xattr = "user.ccc_expires_rel"},
-    [LPRED_FID - LPRED_MIN] =         {.fsentry = RBH_FP_INODE_XATTRS,
-                                       .xattr = "fid"},
-    [LPRED_HSM_STATE - LPRED_MIN] =   {.fsentry = RBH_FP_INODE_XATTRS,
-                                       .xattr = "hsm_state"},
-    [LPRED_OST_INDEX - LPRED_MIN] =   {.fsentry = RBH_FP_INODE_XATTRS,
-                                       .xattr = "ost"},
+    [LPRED_EXPIRED - LPRED_MIN] =   {.fsentry = RBH_FP_INODE_XATTRS,
+                                     .xattr = "user.ccc_expiration_date"},
+    [LPRED_FID - LPRED_MIN] =       {.fsentry = RBH_FP_INODE_XATTRS,
+                                     .xattr = "fid"},
+    [LPRED_HSM_STATE - LPRED_MIN] = {.fsentry = RBH_FP_INODE_XATTRS,
+                                     .xattr = "hsm_state"},
+    [LPRED_OST_INDEX - LPRED_MIN] = {.fsentry = RBH_FP_INODE_XATTRS,
+                                     .xattr = "ost"},
 };
 
 static enum hsm_states
@@ -237,42 +235,33 @@ ost_index2filter(const char *ost_index)
 struct rbh_filter *
 expired2filter()
 {
-    struct rbh_filter *filter_abs;
-    struct rbh_filter *filter_rel;
+    struct rbh_filter *filter_expiration_date;
     uint64_t now;
 
     now = time(NULL);
 
-    filter_abs = rbh_filter_compare_uint64_new(
+    filter_expiration_date = rbh_filter_compare_uint64_new(
         RBH_FOP_LOWER_OR_EQUAL,
-        &predicate2filter_field[LPRED_EXPIRED_ABS - LPRED_MIN],
+        &predicate2filter_field[LPRED_EXPIRED - LPRED_MIN],
         now);
-    if (!filter_abs)
+    if (!filter_expiration_date)
         error(EXIT_FAILURE, errno, "rbh_filter_compare_uint64_new");
 
-    filter_rel = rbh_filter_compare_uint64_new(
-        RBH_FOP_LOWER_OR_EQUAL,
-        &predicate2filter_field[LPRED_EXPIRED_REL - LPRED_MIN],
-        now);
-    if (!filter_rel)
-        error(EXIT_FAILURE, errno, "rbh_filter_compare_uint64_new");
-
-    return filter_or(filter_abs, filter_rel);
+    return filter_expiration_date;
 }
 
 struct rbh_filter *
 expired_at2filter(const char *expired)
 {
-    struct rbh_filter *filter_abs;
+    const struct rbh_filter_field predicate =
+        predicate2filter_field[LPRED_EXPIRED - LPRED_MIN];
+    struct rbh_filter *filter_expiration_date;
     struct rbh_filter *filter_inf;
-    struct rbh_filter *filter_rel;
     uint64_t inf = UINT64_MAX;
 
     if (!strcmp(expired, "inf")) {
-        filter_inf = rbh_filter_compare_uint64_new(
-            RBH_FOP_EQUAL,
-            &predicate2filter_field[LPRED_EXPIRED_ABS - LPRED_MIN],
-            inf);
+        filter_inf = rbh_filter_compare_uint64_new(RBH_FOP_EQUAL, &predicate,
+                                                   inf);
         if (!filter_inf)
             error(EXIT_FAILURE, errno, "rbh_filter_compare_uint64_new");
 
@@ -287,23 +276,17 @@ expired_at2filter(const char *expired)
         error(EXIT_FAILURE, errno, "invalid argument `%s' to `%s'", expired,
               lustre_predicate2str(LPRED_EXPIRED_AT));
 
-    filter_abs = epoch2filter(
-        &predicate2filter_field[LPRED_EXPIRED_ABS - LPRED_MIN], expired);
-    if (!filter_abs)
+    filter_expiration_date = epoch2filter(&predicate, expired);
+    if (!filter_expiration_date)
         error(EXIT_FAILURE, errno, "epoch2filter");
 
-    filter_rel = epoch2filter(
-        &predicate2filter_field[LPRED_EXPIRED_REL - LPRED_MIN], expired);
-    if (!filter_rel)
-        error(EXIT_FAILURE, errno, "epoch2filter");
-
-    filter_inf = rbh_filter_compare_uint64_new(
-        RBH_FOP_EQUAL,
-        &predicate2filter_field[LPRED_EXPIRED_ABS - LPRED_MIN],
-        inf);
-    if (!filter_abs)
+    /* If we want to check all the entries that will be expired after a certain
+     * time, do not include those that have an infinite expiration date, as it
+     * internally is equivalent to an expiration date set to UINT64_MAX.
+     */
+    filter_inf = rbh_filter_compare_uint64_new(RBH_FOP_EQUAL, &predicate, inf);
+    if (!filter_inf)
         error(EXIT_FAILURE, errno, "rbh_filter_compare_uint64_new");
 
-    return filter_and(filter_not(filter_inf),
-                      filter_or(filter_abs, filter_rel));
+    return filter_and(filter_not(filter_inf), filter_expiration_date);
 }
