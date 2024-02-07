@@ -49,14 +49,14 @@ str2lustre_predicate(const char *string)
     return str2predicate(string);
 }
 
+#define LOCAL(X) (X) - LPRED_MIN
 static const char *__lustre_predicate2str[] = {
-    [LPRED_EXPIRED - LPRED_MIN]     = "expired",
-    [LPRED_EXPIRED_AT - LPRED_MIN]  = "expired-at",
-    [LPRED_EXPIRED_ABS - LPRED_MIN] = "expired",
-    [LPRED_EXPIRED_REL - LPRED_MIN] = "expired",
-    [LPRED_FID - LPRED_MIN]         = "fid",
-    [LPRED_HSM_STATE - LPRED_MIN]   = "hsm-state",
-    [LPRED_OST_INDEX - LPRED_MIN]   = "ost",
+    [LOCAL(LPRED_EXPIRED)]         = "expired",
+    [LOCAL(LPRED_EXPIRED_AT)]      = "expired-at",
+    [LOCAL(LPRED_EXPIRATION_DATE)] = "expired",
+    [LOCAL(LPRED_FID)]             = "fid",
+    [LOCAL(LPRED_HSM_STATE)]       = "hsm-state",
+    [LOCAL(LPRED_OST_INDEX)]       = "ost",
 };
 
 const char *
