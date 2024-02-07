@@ -906,65 +906,108 @@ free_lum:
 }
 
 #define XATTR_CCC_EXPIRES "user.ccc_expires"
-#define XATTR_CCC_EXPIRES_ABS "user.ccc_expires_abs"
-#define XATTR_CCC_EXPIRES_REL "user.ccc_expires_rel"
+#define XATTR_CCC_EXPIRATION_DATE "user.ccc_expiration_date"
 #define UINT64_MAX_STR_LEN 22
+
+static int
+create_expiration_date_value_pair(const char *attribute_value,
+                                  const struct rbh_statx *statx,
+                                  struct rbh_value_pair *expiration_pair)
+{
+    uint64_t expiration_date;
+    int64_t last_access_date;
+    char *end;
+
+    switch (attribute_value[0]) {
+    case 'i':
+        if (strcmp(attribute_value + 1, "nf")) {
+            fprintf(stderr,
+                    "Invalid value for expiration attribute '%s', should be 'inf'\n",
+                    attribute_value);
+            errno = EINVAL;
+            return -1;
+        }
+
+        expiration_date = UINT64_MAX;
+        break;
+    case '+':
+        errno = 0;
+        expiration_date = strtoul(attribute_value + 1, &end, 10);
+        if (errno) {
+            fprintf(stderr,
+                    "Invalid value for expiration attribute '%s', should be '+<integer>'\n",
+                    attribute_value);
+            return -1;
+        }
+
+        if ((!expiration_date && attribute_value == end) || *end != '\0') {
+            fprintf(stderr,
+                    "Invalid value for expiration attribute '%s', should be '+<integer>'\n",
+                    attribute_value);
+            errno = EINVAL;
+            return -1;
+        }
+
+        last_access_date = MAX(statx->stx_atime.tv_sec,
+                               statx->stx_mtime.tv_sec);
+        if (UINT64_MAX - last_access_date < expiration_date)
+            /* If the result overflows, set the expiration date to the max */
+            expiration_date = UINT64_MAX;
+        else
+            expiration_date += last_access_date;
+
+        break;
+    default:
+        errno = 0;
+        expiration_date = strtoul(attribute_value, &end, 10);
+        if (errno) {
+            fprintf(stderr,
+                    "Invalid value for expiration attribute '%s', should be an integer\n",
+                    attribute_value);
+            return -1;
+        }
+
+        if ((!expiration_date && attribute_value == end) || *end != '\0') {
+            fprintf(stderr,
+                    "Invalid value for expiration attribute '%s', should be an integer\n",
+                    attribute_value);
+            errno = EINVAL;
+            return -1;
+        }
+    }
+
+    fill_uint64_pair(XATTR_CCC_EXPIRATION_DATE, expiration_date,
+                     expiration_pair);
+
+    return 0;
+}
 
 static void
 xattrs_get_retention(const struct rbh_statx *statx)
 {
     struct rbh_value_pair new_pair;
-    uint64_t result;
-    char *end;
 
     for (int i = 0; i < *_inode_xattrs_count; ++i) {
         char tmp[UINT64_MAX_STR_LEN];
-        char *retention_attribute;
 
-        if (strcmp(_inode_xattrs[i].key, XATTR_CCC_EXPIRES) ||
-            _inode_xattrs[i].value->binary.size >= UINT64_MAX_STR_LEN)
+        if (strcmp(_inode_xattrs[i].key, XATTR_CCC_EXPIRES))
             continue;
+
+        if (_inode_xattrs[i].value->binary.size >= UINT64_MAX_STR_LEN) {
+            fprintf(stderr,
+                    "Invalid value for expiration attribute '%.*s', too long, max size is '%d'\n",
+                    (int) _inode_xattrs[i].value->binary.size,
+                    _inode_xattrs[i].value->binary.data,
+                    UINT64_MAX_STR_LEN);
+            break;
+        }
 
         memcpy(tmp, _inode_xattrs[i].value->binary.data,
                _inode_xattrs[i].value->binary.size);
         tmp[_inode_xattrs[i].value->binary.size] = 0;
 
-        /* Add infinite retention to the data */
-        if (*tmp == 'i') {
-            if (strcmp(tmp + 1, "nf"))
-                break;
+        create_expiration_date_value_pair(tmp, statx, &new_pair);
 
-            result = UINT64_MAX;
-            retention_attribute = XATTR_CCC_EXPIRES_ABS;
-        } else {
-            result = strtoul(*tmp == '+' ? tmp + 1 : tmp, &end, 10);
-            if (errno || (!result && tmp == end) || *end != '\0')
-                break;
-
-            if (*tmp == '+') {
-                int64_t last_access_date;
-
-                last_access_date = MAX(statx->stx_atime.tv_sec,
-                                       statx->stx_mtime.tv_sec);
-                if (UINT64_MAX - last_access_date < result)
-                    /* If the result overflows, set the expiration date to the
-                     * max
-                     */
-                    result = UINT64_MAX;
-                else
-                    result += last_access_date;
-
-                /* If the attribute starts with a '+', it is relative to the
-                 * last access date
-                 */
-                retention_attribute = XATTR_CCC_EXPIRES_REL;
-            } else {
-                /* Otherwise it is an absolute date */
-                retention_attribute = XATTR_CCC_EXPIRES_ABS;
-            }
-        }
-
-        fill_uint64_pair(retention_attribute, result, &new_pair);
         _inode_xattrs[i] = new_pair;
         break;
     }
