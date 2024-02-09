@@ -548,6 +548,7 @@ static void *
 posix_iter_next(void *iterator)
 {
     struct posix_iterator *posix_iter = iterator;
+    bool skip_error = posix_iter->skip_error;
     struct rbh_fsentry *fsentry;
     int save_errno = errno;
     FTSENT *ftsent;
@@ -575,8 +576,12 @@ skip:
         errno = ftsent->fts_errno;
         fprintf(stderr, "FTS: failed to read entry '%s': %s (%d)\n",
                 ftsent->fts_path, strerror(errno), errno);
-        fprintf(stderr, "Synchronization of '%s' skipped\n", ftsent->fts_path);
-        goto skip;
+        if (skip_error) {
+             fprintf(stderr, "Synchronization of '%s' skipped\n",
+                     ftsent->fts_path);
+             goto skip;
+        }
+        return NULL;
     case FTS_NS:
         errno = ftsent->fts_errno;
         return NULL;
@@ -627,9 +632,13 @@ skip:
                                   posix_iter->prefix_len,
                                   posix_iter->ns_xattrs_callback);
     if (fsentry == NULL && (errno == ENOENT || errno == ESTALE)) {
-        fprintf(stderr, "Synchronization of '%s' skipped\n", ftsent->fts_path);
         /* The entry moved from under our feet */
-        goto skip;
+        if (skip_error) {
+            fprintf(stderr, "Synchronization of '%s' skipped\n",
+                    ftsent->fts_path);
+            goto skip;
+        }
+        return NULL;
     }
 
     return fsentry;
@@ -878,7 +887,7 @@ posix_backend_filter(void *backend, const struct rbh_filter *filter,
     posix_iter = posix->iter_new(posix->root, NULL, posix->statx_sync_type);
     if (posix_iter == NULL)
         return NULL;
-
+    posix_iter->skip_error = options->skip_error;
     fsentry = rbh_mut_iter_next(&posix_iter->iterator);
     if (fsentry == NULL)
         goto out_destroy_iter;
