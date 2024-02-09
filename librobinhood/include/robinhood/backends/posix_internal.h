@@ -51,6 +51,7 @@ struct posix_iterator {
     size_t prefix_len;
     FTS *fts_handle;
     FTSENT *ftsent;
+    bool skip_error;
 };
 
 struct posix_iterator *
