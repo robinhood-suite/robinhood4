@@ -148,6 +148,8 @@ struct rbh_filter_options {
     size_t skip;
     /** The maximum number of fsentries to return (0 means unlimited) */
     size_t limit;
+    /** Allow to skip error while generate fsevents */
+    bool skip_error;
     /** A sequence of sorting options */
     struct {
         const struct rbh_filter_sort *items;
@@ -179,7 +181,8 @@ struct rbh_backend_operations {
             );
     ssize_t (*update)(
             void *backend,
-            struct rbh_iterator *fsevents
+            struct rbh_iterator *fsevents,
+            bool skip_err
             );
     struct rbh_backend *(*branch)(
             void *backend,
@@ -380,13 +383,14 @@ rbh_backend_set_option(struct rbh_backend *backend, unsigned int option,
  * documented by \p backend.
  */
 static inline ssize_t
-rbh_backend_update(struct rbh_backend *backend, struct rbh_iterator *fsevents)
+rbh_backend_update(struct rbh_backend *backend, struct rbh_iterator *fsevents,
+                   bool skip_err)
 {
     if (backend->ops->update == NULL) {
         errno = ENOTSUP;
         return -1;
     }
-    return backend->ops->update(backend, fsevents);
+    return backend->ops->update(backend, fsevents, skip_err);
 }
 
 /**

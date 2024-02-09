@@ -47,7 +47,7 @@ destroy_chunks(void)
 }
 
 static bool one = false;
-
+static bool skip_err = true;
 /*----------------------------------------------------------------------------*
  |                                   sync()                                   |
  *----------------------------------------------------------------------------*/
@@ -381,6 +381,7 @@ sync(const struct rbh_filter_projection *projection)
             .fsentry_mask = RBH_FP_ALL,
             .statx_mask = RBH_STATX_ALL,
         },
+        .skip_error = skip_err,
     };
     struct rbh_mut_iterator *_fsentries;
     struct rbh_iterator *fsentries;
@@ -445,7 +446,7 @@ sync(const struct rbh_filter_projection *projection)
             error(EXIT_FAILURE, errno, "while chunkifying SOURCE's entries");
         }
 
-        count = rbh_backend_update(to, chunk);
+        count = rbh_backend_update(to, chunk, skip_err);
         save_errno = errno;
         rbh_iter_destroy(chunk);
         if (count < 0) {
@@ -478,7 +479,7 @@ static int
 usage(void)
 {
     const char *message =
-        "usage: %s [-ho] [-f [+-]FIELD] SOURCE DEST\n"
+        "usage: %s [-hon] [-f [+-]FIELD] SOURCE DEST\n"
         "\n"
         "Upsert SOURCE's entries into DEST\n"
         "\n"
@@ -491,6 +492,7 @@ usage(void)
         "                          (can be specified multiple times)\n"
         "    -h,--help             show this message and exit\n"
         "    -o,--one              only consider the root of SOURCE\n"
+        "    -n,--no-skip          stop skipping error while synchronizing backends\n"
         "\n"
         "A robinhood URI is built as follows:\n"
         "    "RBH_SCHEME":BACKEND:FSNAME[#{PATH|ID}]\n"
@@ -866,6 +868,10 @@ main(int argc, char *argv[])
             .name = "one",
             .val = 'o',
         },
+        {
+            .name = "no-skip",
+            .val = 'n',
+        },
         {}
     };
     struct rbh_filter_projection projection = {
@@ -875,7 +881,7 @@ main(int argc, char *argv[])
     char c;
 
     /* Parse the command line */
-    while ((c = getopt_long(argc, argv, "f:ho", LONG_OPTIONS, NULL)) != -1) {
+    while ((c = getopt_long(argc, argv, "f:hon", LONG_OPTIONS, NULL)) != -1) {
         switch (c) {
         case 'f':
             switch (optarg[0]) {
@@ -895,6 +901,9 @@ main(int argc, char *argv[])
             return 0;
         case 'o':
             one = true;
+            break;
+        case 'n':
+            skip_err = false;
             break;
         case '?':
         default:
