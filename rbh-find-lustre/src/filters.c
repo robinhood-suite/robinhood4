@@ -23,11 +23,11 @@
 #include "filters.h"
 
 static const struct rbh_filter_field predicate2filter_field[] = {
-    [LPRED_FID - LPRED_MIN] =       {.fsentry = RBH_FP_NAMESPACE_XATTRS,
+    [LPRED_FID - LPRED_MIN] =       {.fsentry = RBH_FP_INODE_XATTRS,
                                      .xattr = "fid"},
-    [LPRED_HSM_STATE - LPRED_MIN] = {.fsentry = RBH_FP_NAMESPACE_XATTRS,
+    [LPRED_HSM_STATE - LPRED_MIN] = {.fsentry = RBH_FP_INODE_XATTRS,
                                      .xattr = "hsm_state"},
-    [LPRED_OST_INDEX - LPRED_MIN] = {.fsentry = RBH_FP_NAMESPACE_XATTRS,
+    [LPRED_OST_INDEX - LPRED_MIN] = {.fsentry = RBH_FP_INODE_XATTRS,
                                      .xattr = "ost"},
 };
 
