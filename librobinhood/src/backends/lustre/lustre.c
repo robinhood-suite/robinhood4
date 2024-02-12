@@ -1008,10 +1008,11 @@ lustre_get_attrs(const int fd, const struct rbh_statx *statx,
     int (*xattrs_funcs[])(int, struct rbh_value_pair *) = {
         xattrs_get_hsm, xattrs_get_layout, xattrs_get_mdt_info
     };
+    ssize_t inode_xattrs_count = 0;
 
     return _get_attrs(fd, statx, xattrs_funcs,
                       sizeof(xattrs_funcs) / sizeof(xattrs_funcs[0]),
-                      NULL, NULL, pairs, values);
+                      NULL, &inode_xattrs_count, pairs, values);
 }
 
 static int
