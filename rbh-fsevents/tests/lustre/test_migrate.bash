@@ -47,6 +47,7 @@ test_migrate()
     find_attribute '"xattrs.mdt_count": 1' '"ns.name":"'$entry'"'
 
     invoke_rbh-fsevents
+    mongo $testdb --eval "db.entries.find()"
 
     local entries=$(mongo "$testdb" --eval "db.entries.find()" | wc -l)
     local count=$(find . | wc -l)
