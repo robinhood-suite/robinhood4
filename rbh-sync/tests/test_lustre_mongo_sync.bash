@@ -58,9 +58,9 @@ test_hsm_state_none()
 
     rbh_sync "rbh:lustre:." "rbh:mongo:$testdb"
 
-    find_attribute '"ns.xattrs.hsm_state": { $exists : false }' \
+    find_attribute '"xattrs.hsm_state": { $exists : false }' \
                    '"ns.xattrs.path" : "/none"'
-    find_attribute '"ns.xattrs.hsm_state":'$(get_hsm_state_value "archived") \
+    find_attribute '"xattrs.hsm_state":'$(get_hsm_state_value "archived") \
                    '"ns.xattrs.path" : "/archived"'
 }
 
@@ -82,7 +82,7 @@ test_hsm_state_archived_states()
     rbh_sync "rbh:lustre:." "rbh:mongo:$testdb"
 
     for state in "${states[@]}"; do
-        find_attribute '"ns.xattrs.hsm_state":'$(get_hsm_state_value "$state") \
+        find_attribute '"xattrs.hsm_state":'$(get_hsm_state_value "$state") \
                        '"ns.xattrs.path" : "/'$state'"'
     done
 }
@@ -101,7 +101,7 @@ test_hsm_state_independant_states()
     rbh_sync "rbh:lustre:." "rbh:mongo:$testdb"
 
     for state in "${states[@]}"; do
-        find_attribute '"ns.xattrs.hsm_state":'$(get_hsm_state_value "$state") \
+        find_attribute '"xattrs.hsm_state":'$(get_hsm_state_value "$state") \
                        '"ns.xattrs.path" : "/'$state'"'
     done
 }
@@ -127,7 +127,7 @@ test_hsm_state_multiple_states()
     rbh_sync "rbh:lustre:." "rbh:mongo:$testdb"
 
     for state in "${states[@]}"; do
-        find_attribute '"ns.xattrs.hsm_state":'$(get_hsm_state_value "$state") \
+        find_attribute '"xattrs.hsm_state":'$(get_hsm_state_value "$state") \
                        '"ns.xattrs.path" : "/'$state'"'
     done
 }
@@ -144,7 +144,7 @@ test_hsm_archive_id()
     rbh_sync "rbh:lustre:." "rbh:mongo:$testdb"
 
     local id_1=$(lfs hsm_state "archive-id-1" | cut -d ':' -f3)
-    find_attribute '"ns.xattrs.hsm_archive_id":'$id_1 \
+    find_attribute '"xattrs.hsm_archive_id":'$id_1 \
                    '"ns.xattrs.path" : "/archive-id-1"'
 }
 
@@ -158,7 +158,7 @@ test_flags()
     local flags=$(lfs getstripe -v "test_flags" | grep "lcm_flags" | \
                   cut -d ':' -f2 | xargs)
 
-    find_attribute '"ns.xattrs.flags":'$flags '"ns.xattrs.path":"/test_flags"'
+    find_attribute '"xattrs.flags":'$flags '"ns.xattrs.path":"/test_flags"'
 }
 
 test_gen()
@@ -174,8 +174,8 @@ test_gen()
                   cut -d ':' -f2 | xargs)
     local gen_2=$(lfs getstripe -v "test_gen_2" | grep "lcm_layout_gen" | \
                   cut -d ':' -f2 | xargs)
-    find_attribute '"ns.xattrs.gen":'$gen_1 '"ns.xattrs.path" : "/test_gen_1"'
-    find_attribute '"ns.xattrs.gen":'$gen_2 '"ns.xattrs.path" : "/test_gen_2"'
+    find_attribute '"xattrs.gen":'$gen_1 '"ns.xattrs.path" : "/test_gen_1"'
+    find_attribute '"xattrs.gen":'$gen_2 '"ns.xattrs.path" : "/test_gen_2"'
 }
 
 test_mirror_count()
@@ -196,11 +196,11 @@ test_mirror_count()
                 cut -d ':' -f2 | xargs)
     local mc4=$(lfs getstripe -v "test_mc4" | grep "lcm_mirror_count" | \
                 cut -d ':' -f2 | xargs)
-    find_attribute '"ns.xattrs.mirror_count":'$mc \
+    find_attribute '"xattrs.mirror_count":'$mc \
                    '"ns.xattrs.path":"/test_mc"'
-    find_attribute '"ns.xattrs.mirror_count":'$mc2 \
+    find_attribute '"xattrs.mirror_count":'$mc2 \
                    '"ns.xattrs.path":"/test_mc2"'
-    find_attribute '"ns.xattrs.mirror_count":'$mc4 \
+    find_attribute '"xattrs.mirror_count":'$mc4 \
                    '"ns.xattrs.path":"/test_mc4"'
 }
 
@@ -215,7 +215,7 @@ test_stripe_count()
                      cut -d ':' -f2 | xargs)
     sc_array=$(build_long_array ${sc_array[@]})
 
-    find_attribute '"ns.xattrs.stripe_count":'$sc_array \
+    find_attribute '"xattrs.stripe_count":'$sc_array \
                    '"ns.xattrs.path":"/test_sc"'
 }
 
@@ -230,7 +230,7 @@ test_stripe_size()
                      cut -d ':' -f2 | xargs)
     ss_array=$(build_long_array ${ss_array[@]})
 
-    find_attribute '"ns.xattrs.stripe_size":'$ss_array \
+    find_attribute '"xattrs.stripe_size":'$ss_array \
                    '"ns.xattrs.path":"/test_ss"'
 }
 
@@ -262,11 +262,11 @@ test_pattern()
     patterns_o="${patterns_o//raid0/0}"
     local pattern_o_array=$(build_long_array $patterns_o)
 
-    find_attribute '"ns.xattrs.pattern":'$pattern_r_array \
+    find_attribute '"xattrs.pattern":'$pattern_r_array \
                    '"ns.xattrs.path":"/test_pattern_raid0"'
-    find_attribute '"ns.xattrs.pattern":'$pattern_m_array \
+    find_attribute '"xattrs.pattern":'$pattern_m_array \
                    '"ns.xattrs.path":"/test_pattern_mdt"'
-    find_attribute '"ns.xattrs.pattern":'$pattern_o_array \
+    find_attribute '"xattrs.pattern":'$pattern_o_array \
                    '"ns.xattrs.path":"/test_pattern_overstriping"'
 }
 
@@ -284,7 +284,7 @@ test_comp_flags()
     flags="${flags//init/16}"
     flags_array=$(build_long_array $flags)
 
-    find_attribute '"ns.xattrs.comp_flags":'$flags_array \
+    find_attribute '"xattrs.comp_flags":'$flags_array \
                    '"ns.xattrs.path":"/test_comp_flags"'
 }
 
@@ -309,7 +309,7 @@ test_pool()
 
     pools_array=$(build_string_array ${pools[@]})
 
-    find_attribute '"ns.xattrs.pool":'$pools_array \
+    find_attribute '"xattrs.pool":'$pools_array \
                    '"ns.xattrs.path":"/test_pool"'
 }
 
@@ -324,7 +324,7 @@ test_mirror_id()
                  cut -d ':' -f2 | xargs)
     mids_array=$(build_long_array $mids)
 
-    find_attribute '"ns.xattrs.mirror_id":'$mids_array \
+    find_attribute '"xattrs.mirror_id":'$mids_array \
                    '"ns.xattrs.path":"/test_mirror_id"'
 }
 
@@ -341,7 +341,7 @@ test_begin()
     begins="${begins//EOF/-1}"
     begins_array=$(build_long_array $begins)
 
-    find_attribute '"ns.xattrs.begin":'$begins_array \
+    find_attribute '"xattrs.begin":'$begins_array \
                    '"ns.xattrs.path":"/test_begin"'
 }
 
@@ -358,7 +358,7 @@ test_end()
     ends="${ends//EOF/-1}"
     ends_array=$(build_long_array $ends)
 
-    find_attribute '"ns.xattrs.end":'$ends_array \
+    find_attribute '"xattrs.end":'$ends_array \
                    '"ns.xattrs.path":"/test_end"'
 }
 
@@ -399,9 +399,9 @@ test_ost()
     ost1s_array=$(build_long_array $ost1s)
     ost2s_array=$(build_long_array $ost2s)
 
-    find_attribute '"ns.xattrs.ost":'$ost1s_array \
+    find_attribute '"xattrs.ost":'$ost1s_array \
                    '"ns.xattrs.path":"/test_ost1"'
-    find_attribute '"ns.xattrs.ost":'$ost2s_array \
+    find_attribute '"xattrs.ost":'$ost2s_array \
                    '"ns.xattrs.path":"/test_ost2"'
 }
 
@@ -413,7 +413,7 @@ test_mdt_index_file()
 
     local mdt_index=$(lfs getstripe -m "test_mdt_index")
 
-    find_attribute '"ns.xattrs.mdt_index":'$mdt_index \
+    find_attribute '"xattrs.mdt_index":'$mdt_index \
                    '"ns.xattrs.path":"/test_mdt_index"'
 }
 
@@ -434,12 +434,12 @@ test_mdt_index_dir()
     rbh_sync "rbh:lustre:." "rbh:mongo:$testdb"
 
     local mdt_indexes="[$(lfs getdirstripe -m 'test_mdt_index0')]"
-    find_attribute '"ns.xattrs.child_mdt_idx":'$mdt_indexes \
+    find_attribute '"xattrs.child_mdt_idx":'$mdt_indexes \
                    '"ns.xattrs.path":"/test_mdt_index0"'
 
     if [[ $mdt_count -ge 2 ]]; then
         mdt_indexes="[$(lfs getdirstripe -m 'test_mdt_index1')]"
-        find_attribute '"ns.xattrs.child_mdt_idx":'$mdt_indexes \
+        find_attribute '"xattrs.child_mdt_idx":'$mdt_indexes \
                        '"ns.xattrs.path":"/test_mdt_index1"'
 
         mdt_stripe=$(lfs getdirstripe -c 'test_mdt_index2')
@@ -449,7 +449,7 @@ test_mdt_index_dir()
         mdt_indexes=$(lfs getdirstripe -y 'test_mdt_index2' |
                       tail -n "$mdt_stripe" | awk '{print $1","}' | tr -d '\n')
         mdt_indexes="[${mdt_indexes##-1}]"
-        find_attribute '"ns.xattrs.child_mdt_idx":'$mdt_indexes \
+        find_attribute '"xattrs.child_mdt_idx":'$mdt_indexes \
                        '"ns.xattrs.path":"/test_mdt_index2"'
     fi
 }
@@ -468,9 +468,9 @@ test_mdt_hash()
     local mdt_hash2=$(lfs getdirstripe -H "test_mdt_hash2" | cut -d',' -f1)
     mdt_hash2="${mdt_hash2//fnv_1a_64/2}"
 
-    find_attribute '"ns.xattrs.mdt_hash":'$mdt_hash1 \
+    find_attribute '"xattrs.mdt_hash":'$mdt_hash1 \
                    '"ns.xattrs.path":"/test_mdt_hash1"'
-    find_attribute '"ns.xattrs.mdt_hash":'$mdt_hash2 \
+    find_attribute '"xattrs.mdt_hash":'$mdt_hash2 \
                    '"ns.xattrs.path":"/test_mdt_hash2"'
 }
 
@@ -484,7 +484,7 @@ test_mdt_count()
 
     local mdt_count=$(lfs getdirstripe -c "test_mdt_count")
 
-    find_attribute '"ns.xattrs.mdt_count":'$mdt_count \
+    find_attribute '"xattrs.mdt_count":'$mdt_count \
                    '"ns.xattrs.path":"/test_mdt_count"'
 }
 

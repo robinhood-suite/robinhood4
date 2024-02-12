@@ -1058,11 +1058,11 @@ lustre_get_attrs(const int fd, const struct rbh_statx *statx,
 }
 
 static int
-lustre_ns_xattrs_callback(const int fd, const struct rbh_statx *statx,
-                          struct rbh_value_pair *inode_xattrs,
-                          ssize_t *inode_xattrs_count,
-                          struct rbh_value_pair *pairs,
-                          struct rbh_sstack *values)
+lustre_inode_xattrs_callback(const int fd, const struct rbh_statx *statx,
+                             struct rbh_value_pair *inode_xattrs,
+                             ssize_t *inode_xattrs_count,
+                             struct rbh_value_pair *pairs,
+                             struct rbh_sstack *values)
 {
     int (*xattrs_funcs[])(int, struct rbh_value_pair *) = {
         xattrs_get_fid, xattrs_get_hsm, xattrs_get_layout, xattrs_get_mdt_info
@@ -1101,7 +1101,7 @@ lustre_iterator_new(const char *root, const char *entry, int statx_sync_type)
     if (lustre_iter == NULL)
         return NULL;
 
-    lustre_iter->ns_xattrs_callback = lustre_ns_xattrs_callback;
+    lustre_iter->inode_xattrs_callback = lustre_inode_xattrs_callback;
 
     return lustre_iter;
 }
