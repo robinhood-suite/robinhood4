@@ -126,14 +126,14 @@ fill_uint32_pair(const char *key, uint32_t integer, struct rbh_value_pair *pair)
 }
 
 static inline int
-fill_uint64_pair(const char *key, uint64_t integer, struct rbh_value_pair *pair)
+fill_int64_pair(const char *key, int64_t integer, struct rbh_value_pair *pair)
 {
-    const struct rbh_value uint64_value = {
-        .type = RBH_VT_UINT64,
-        .uint64 = integer,
+    const struct rbh_value int64_value = {
+        .type = RBH_VT_INT64,
+        .int64 = integer,
     };
 
-    return fill_pair(key, &uint64_value, pair);
+    return fill_pair(key, &int64_value, pair);
 }
 
 static inline int
@@ -907,15 +907,15 @@ free_lum:
 
 #define XATTR_CCC_EXPIRES "user.ccc_expires"
 #define XATTR_CCC_EXPIRATION_DATE "user.ccc_expiration_date"
-#define UINT64_MAX_STR_LEN 22
+#define INT64_MAX_STR_LEN 19
 
 static int
 create_expiration_date_value_pair(const char *attribute_value,
                                   const struct rbh_statx *statx,
                                   struct rbh_value_pair *expiration_pair)
 {
-    uint64_t expiration_date;
     int64_t last_access_date;
+    int64_t expiration_date;
     char *end;
 
     switch (attribute_value[0]) {
@@ -928,7 +928,7 @@ create_expiration_date_value_pair(const char *attribute_value,
             return -1;
         }
 
-        expiration_date = UINT64_MAX;
+        expiration_date = INT64_MAX;
         break;
     case '+':
         errno = 0;
@@ -950,9 +950,9 @@ create_expiration_date_value_pair(const char *attribute_value,
 
         last_access_date = MAX(statx->stx_atime.tv_sec,
                                statx->stx_mtime.tv_sec);
-        if (UINT64_MAX - last_access_date < expiration_date)
+        if (INT64_MAX - last_access_date < expiration_date)
             /* If the result overflows, set the expiration date to the max */
-            expiration_date = UINT64_MAX;
+            expiration_date = INT64_MAX;
         else
             expiration_date += last_access_date;
 
@@ -975,8 +975,8 @@ create_expiration_date_value_pair(const char *attribute_value,
         }
     }
 
-    fill_uint64_pair(XATTR_CCC_EXPIRATION_DATE, expiration_date,
-                     expiration_pair);
+    fill_int64_pair(XATTR_CCC_EXPIRATION_DATE, expiration_date,
+                    expiration_pair);
 
     return 0;
 }
@@ -987,17 +987,17 @@ xattrs_get_retention(const struct rbh_statx *statx)
     struct rbh_value_pair new_pair;
 
     for (int i = 0; i < *_inode_xattrs_count; ++i) {
-        char tmp[UINT64_MAX_STR_LEN];
+        char tmp[INT64_MAX_STR_LEN];
 
         if (strcmp(_inode_xattrs[i].key, XATTR_CCC_EXPIRES))
             continue;
 
-        if (_inode_xattrs[i].value->binary.size >= UINT64_MAX_STR_LEN) {
+        if (_inode_xattrs[i].value->binary.size >= INT64_MAX_STR_LEN) {
             fprintf(stderr,
                     "Invalid value for expiration attribute '%.*s', too long, max size is '%d'\n",
                     (int) _inode_xattrs[i].value->binary.size,
                     _inode_xattrs[i].value->binary.data,
-                    UINT64_MAX_STR_LEN);
+                    INT64_MAX_STR_LEN);
             break;
         }
 

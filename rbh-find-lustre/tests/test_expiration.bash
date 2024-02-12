@@ -159,11 +159,40 @@ test_expired_rel()
         sort | difflines "/$fileA" "/$fileB"
 }
 
+test_printf_expiration_date()
+{
+    local fileA="fileA"
+    local timeA="+30"
+    local fileB="fileB"
+    local timeB="3"
+    local fileC="fileC"
+    local timeC="inf"
+    local fileD="fileD"
+
+    touch "$fileA" "$fileB" "$fileC" "$fileD"
+    setfattr -n user.ccc_expires -v "$timeA" "$fileA"
+    setfattr -n user.ccc_expires -v "$timeB" "$fileB"
+    setfattr -n user.ccc_expires -v "$timeC" "$fileC"
+
+    rbh-sync "rbh:lustre:." "rbh:mongo:$testdb"
+
+    local expA="$(stat -c %X $fileA)"
+    expA=$((expA + timeA))
+    local expB="3"
+    local expC="Inf"
+    local expD="None"
+
+    rbh_lfind "rbh:mongo:$testdb" -printf "%p %E\n" | sort |
+        difflines "/$fileA $expA" "/$fileB $expB" "/$fileC $expC" \
+                  "/$fileD $expD" "/ None"
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
-declare -a tests=(test_invalid test_expired_abs test_expired_rel)
+declare -a tests=(test_invalid test_expired_abs test_expired_rel
+                  test_printf_expiration_date)
 
 tmpdir=$(mktemp --directory --tmpdir=$LUSTRE_DIR)
 trap "rm -r $tmpdir" EXIT

@@ -137,4 +137,16 @@ rbh_fsentry_new(const struct rbh_id *id, const struct rbh_id *parent_id,
                 const struct rbh_value_map *ns_xattrs,
                 const struct rbh_value_map *xattrs, const char *symlink);
 
+/**
+ * Retrieve a value associated to a key in a fsentry's inode xattrs
+ *
+ * @param entry         a pointer to a struct rbh_fsentry
+ * @param key           the key to find
+ *
+ * @return              a pointer to the value associated to the key in the
+ *                      entry's inode xattrs
+ */
+const struct rbh_value *
+rbh_fsentry_find_inode_xattr(const struct rbh_fsentry *entry, const char *key);
+
 #endif
