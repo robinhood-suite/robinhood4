@@ -28,6 +28,7 @@
 
 #include "filters.h"
 #include "parser.h"
+#include "actions.h"
 
 static struct find_context ctx;
 
@@ -117,6 +118,7 @@ main(int _argc, char *_argv[])
     ctx.post_action_callback = &find_post_action;
     ctx.parse_predicate_callback = &lustre_parse_predicate;
     ctx.pred_or_action_callback = &lustre_predicate_or_action;
+    ctx.print_directive = &fsentry_print_lustre_directive;
 
     /* Parse the command line */
     for (index = 0; index < ctx.argc; index++) {
