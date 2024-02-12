@@ -8,6 +8,8 @@
 #ifndef RBH_FIND_UTILS_H
 #define RBH_FIND_UTILS_H
 
+#include <time.h>
+
 /**
  * shell2pcre - translate a shell pattern into a Perl Compatible regex
  *
@@ -56,5 +58,16 @@ str2seconds(enum time_unit unit, const char *string);
  */
 int
 str2uint64_t(const char *input, uint64_t *result);
+
+/**
+ * time_from_timestamp - convert a timestamp to a human-readable string using
+ * ctime(3)
+ *
+ * @param time      a timestamp to convert
+ *
+ * @return          the human-readable string corresponding to time
+ */
+const char *
+time_from_timestamp(const time_t *time);
 
 #endif

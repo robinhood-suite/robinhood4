@@ -16,6 +16,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <time.h>
 
 #include "rbh-find/utils.h"
 
@@ -180,4 +181,16 @@ str2uint64_t(const char *input, uint64_t *result)
     }
 
     return 0;
+}
+
+const char *
+time_from_timestamp(const time_t *time)
+{
+    char *res = ctime(time);
+    size_t len = strlen(res);
+
+    /* ctime adds an extra \n at then end of the buffer, remove it */
+    res[len - 1] = '\0';
+
+    return res;
 }
