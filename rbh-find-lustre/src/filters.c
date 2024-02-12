@@ -257,7 +257,7 @@ expired_at2filter(const char *expired)
         predicate2filter_field[LPRED_EXPIRED - LPRED_MIN];
     struct rbh_filter *filter_expiration_date;
     struct rbh_filter *filter_inf;
-    uint64_t inf = UINT64_MAX;
+    int64_t inf = INT64_MAX;
 
     if (!strcmp(expired, "inf")) {
         filter_inf = rbh_filter_compare_uint64_new(RBH_FOP_EQUAL, &predicate,
@@ -282,7 +282,7 @@ expired_at2filter(const char *expired)
 
     /* If we want to check all the entries that will be expired after a certain
      * time, do not include those that have an infinite expiration date, as it
-     * internally is equivalent to an expiration date set to UINT64_MAX.
+     * internally is equivalent to an expiration date set to INT64_MAX.
      */
     filter_inf = rbh_filter_compare_uint64_new(RBH_FOP_EQUAL, &predicate, inf);
     if (!filter_inf)
