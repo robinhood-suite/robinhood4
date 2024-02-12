@@ -257,7 +257,7 @@ expired_at2filter(const char *expired)
         predicate2filter_field[LPRED_EXPIRATION_DATE - LPRED_MIN];
     struct rbh_filter *filter_expiration_date;
     struct rbh_filter *filter_inf;
-    uint64_t inf = UINT64_MAX;
+    int64_t inf = INT64_MAX;
 
     if (!strcmp(expired, "inf")) {
         filter_inf = rbh_filter_compare_uint64_new(RBH_FOP_EQUAL, &predicate,

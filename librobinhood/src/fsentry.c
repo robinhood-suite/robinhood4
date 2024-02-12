@@ -144,3 +144,55 @@ rbh_fsentry_new(const struct rbh_id *id, const struct rbh_id *parent_id,
 
     return fsentry;
 }
+
+static const struct rbh_value *
+rbh_map_find(const struct rbh_value_map *map, const char *key)
+{
+    for (size_t i = 0; i < map->count; i++)
+        if (!strcmp(map->pairs[i].key, key))
+            return map->pairs[i].value;
+
+    return NULL;
+}
+
+const struct rbh_value *
+rbh_fsentry_find_inode_xattr(const struct rbh_fsentry *entry,
+                             const char *key_to_find)
+{
+    const struct rbh_value_map *map = &entry->xattrs.inode;
+    char *key = strdup(key_to_find);
+    const struct rbh_value *value;
+    char *delimiter = ".";
+    char *pointer;
+    char *next;
+
+    /* The key to retrieve can be in dot notation, i.e. "users.blob", so we want
+     * to retrieve the value associated to "blob", which requires checking the
+     * submap "users".
+     */
+
+    pointer = strtok(key, delimiter);
+
+    while (pointer != NULL) {
+        next = strtok(NULL, delimiter);
+
+        if (next != NULL) {
+            value = rbh_map_find(map, pointer);
+            if (value == NULL || value->type != RBH_VT_MAP) {
+                free(key);
+                return NULL;
+            }
+
+            map = &value->map;
+        } else {
+            value = rbh_map_find(map, pointer);
+            break;
+        }
+
+        pointer = next;
+    }
+
+    free(key);
+
+    return value;
+}

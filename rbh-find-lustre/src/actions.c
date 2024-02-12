@@ -32,9 +32,19 @@ int
 write_expiration_date_from_entry(const struct rbh_fsentry *fsentry,
                                  char *output, int max_length)
 {
-    (void) fsentry;
+    const struct rbh_value *value =
+        rbh_fsentry_find_inode_xattr(fsentry, "user.ccc_expiration_date");
 
-    return snprintf(output, max_length, "ENOTSUP");
+    if (value != NULL)
+        fprintf(stderr, "%s (%d): value type = '%d'\n", __FILE__, __LINE__,
+                value->type);
+
+    if (value == NULL || value->type != RBH_VT_INT64)
+        return snprintf(output, max_length, "None");
+    else if (value->int64 == INT64_MAX)
+        return snprintf(output, max_length, "Inf");
+    else
+        return snprintf(output, max_length, "%ld", value->int64);
 }
 
 int
