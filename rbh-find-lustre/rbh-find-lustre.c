@@ -28,6 +28,7 @@
 
 #include "filters.h"
 #include "parser.h"
+#include "actions.h"
 
 static struct find_context ctx;
 
@@ -123,6 +124,30 @@ lustre_parse_predicate(struct find_context *ctx, int *arg_idx)
 }
 
 int
+find_exec_lustre_action(struct find_context *ctx,
+                        size_t backend_index,
+                        enum action action,
+                        struct rbh_fsentry *fsentry)
+{
+    switch (action) {
+    case ACT_FPRINTF:
+        fsentry_printf_format(ctx->action_file, fsentry, ctx->format_string,
+                              ctx->uris[backend_index],
+                              fsentry_print_lustre_directive);
+        break;
+    case ACT_PRINTF:
+        fsentry_printf_format(stdout, fsentry, ctx->format_string,
+                              ctx->uris[backend_index],
+                              fsentry_print_lustre_directive);
+        break;
+    default:
+        return find_exec_action(ctx, backend_index, action, fsentry);
+    }
+
+    return 0;
+}
+
+int
 main(int _argc, char *_argv[])
 {
     struct rbh_filter_sort *sorts = NULL;
@@ -135,7 +160,7 @@ main(int _argc, char *_argv[])
     ctx.argv = &_argv[1];
 
     ctx.pre_action_callback = &find_pre_action;
-    ctx.exec_action_callback = &find_exec_action;
+    ctx.exec_action_callback = &find_exec_lustre_action;
     ctx.post_action_callback = &find_post_action;
     ctx.parse_predicate_callback = &lustre_parse_predicate;
     ctx.pred_or_action_callback = &lustre_predicate_or_action;
