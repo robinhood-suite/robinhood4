@@ -137,6 +137,13 @@ behaves exactly ``-expired-at $(date +%s)``.
     ./dir/file-that-just-expired
     ./dir/file-that-expired-1-hour-ago
 
+-printf
+-------
+
+rbh-lfind defines a ``printf`` action that will print information specific to
+Lustre. More specifically, we define the following directives:
+ - '%E': to print the expiration date of the entry
+
 Examples
 --------
 
