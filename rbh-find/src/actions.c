@@ -390,7 +390,7 @@ remove_start_point(const char *path, const char *backend)
     return &path[branch_len + 2];
 }
 
-static int
+int
 fsentry_print_directive(char *output, int max_length,
                         const struct rbh_fsentry *fsentry,
                         const char *directive,
@@ -529,7 +529,10 @@ fsentry_print_regular_char(char *output, int max_length,
 
 void
 fsentry_printf_format(FILE *file, const struct rbh_fsentry *fsentry,
-                      const char *format_string, const char *backend)
+                      const char *format_string, const char *backend,
+                      int (*print_directive)(char *, int,
+                                             const struct rbh_fsentry *,
+                                             const char *, const char *))
 {
     size_t length = strlen(format_string);
     int max_length = MAX_OUTPUT_SIZE;
@@ -541,10 +544,9 @@ fsentry_printf_format(FILE *file, const struct rbh_fsentry *fsentry,
 
         switch (format_string[i]) {
         case '%':
-            tmp_length = fsentry_print_directive(&output[output_length],
-                                                 max_length, fsentry,
-                                                 format_string + i + 1,
-                                                 backend);
+            tmp_length = print_directive(&output[output_length], max_length,
+                                         fsentry, format_string + i + 1,
+                                         backend);
             /* Go over the directive that was just printed */
             i++;
             break;
