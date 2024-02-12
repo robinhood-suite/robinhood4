@@ -106,6 +106,21 @@ struct find_context {
      */
     enum command_line_token
     (*pred_or_action_callback)(const char *string);
+
+    /**
+     * Callback to print directives
+     *
+     * @param output      buffer in which to print the directive's result
+     * @param max_length  maximum length the output can hold
+     * @param fsentry     fsentry to print the information of
+     * @param directive   directive to print
+     * @param backend     targetted backend of the command
+     *
+     * @return            the number of characters written to output
+     */
+    int (*print_directive)(char *output, int max_length,
+                           const struct rbh_fsentry *fsentry,
+                           const char *directive, const char *backend);
 };
 
 /**
