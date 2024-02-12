@@ -25,6 +25,7 @@
 #include <robinhood/statx.h>
 
 #include "rbh-find/actions.h"
+#include "rbh-find/utils.h"
 
 static struct tm now;
 
@@ -268,18 +269,6 @@ fsentry_path(const struct rbh_fsentry *fsentry)
 
 #define MAX_OUTPUT_SIZE (PATH_MAX + 256)
 
-static const char *
-ctime_from_timestamp(const time_t *time)
-{
-    char *res = ctime(time);
-    size_t len = strlen(res);
-
-    /* ctime adds an extra \n at then end of the buffer, remove it */
-    res[len - 1] = '\0';
-
-    return res;
-}
-
 static const char*
 get_group_name(uint32_t gid)
 {
@@ -408,13 +397,13 @@ fsentry_print_directive(char *output, int max_length,
     switch (*directive) {
     case 'a':
         return snprintf(output, max_length, "%s",
-                        ctime_from_timestamp(&fsentry->statx->stx_atime.tv_sec)
+                        time_from_timestamp(&fsentry->statx->stx_atime.tv_sec)
                         );
     case 'b':
         return snprintf(output, max_length, "%lu", fsentry->statx->stx_blocks);
     case 'c':
         return snprintf(output, max_length, "%s",
-                        ctime_from_timestamp(&fsentry->statx->stx_ctime.tv_sec)
+                        time_from_timestamp(&fsentry->statx->stx_ctime.tv_sec)
                         );
     case 'd':
         return snprintf(output, max_length, "%d",
@@ -464,7 +453,7 @@ fsentry_print_directive(char *output, int max_length,
         return snprintf(output, max_length, "%lu", fsentry->statx->stx_size);
     case 't':
         return snprintf(output, max_length, "%s",
-                        ctime_from_timestamp(&fsentry->statx->stx_mtime.tv_sec)
+                        time_from_timestamp(&fsentry->statx->stx_mtime.tv_sec)
                         );
     case 'u':
         name = get_user_name(fsentry->statx->stx_uid);
