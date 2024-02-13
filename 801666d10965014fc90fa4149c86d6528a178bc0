@@ -236,6 +236,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "20b71e43_ac148b24",
+        "filename": "rbh-sync/tests/test_posix_mongo_sync.bash",
+        "patchSetId": 3
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-02-13T09:40:57Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "23e0156c_3233cd2e",
+      "range": {
+        "startLine": 273,
+        "startChar": 4,
+        "endLine": 274,
+        "endChar": 66
+      },
+      "revId": "801666d10965014fc90fa4149c86d6528a178bc0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "00cf0019_e62176bd",
@@ -273,6 +297,30 @@
       "side": 1,
       "message": "The purpose of this option is to stop at the first error.\nAs we don\u0027t know the order in which files and directories are synchronized,\nif synchronization starts with the first file, it will stop when the second\nfile or directory is synchronized. Only the first file should be synchronized. \nAnd if synchronization starts with the second file or directory, no files\nshould be synchronized, as an error will occur from the start.",
       "parentUuid": "00cf0019_e62176bd",
+      "range": {
+        "startLine": 279,
+        "startChar": 4,
+        "endLine": 283,
+        "endChar": 58
+      },
+      "revId": "801666d10965014fc90fa4149c86d6528a178bc0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "99f0c1db_d83f6e5d",
+        "filename": "rbh-sync/tests/test_posix_mongo_sync.bash",
+        "patchSetId": 3
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-02-13T09:40:57Z",
+      "side": 1,
+      "message": "Yes, so checking the synchronization state of the first file is not relevant here, as previously said.",
+      "parentUuid": "f46a239f_c1920c78",
       "range": {
         "startLine": 279,
         "startChar": 4,

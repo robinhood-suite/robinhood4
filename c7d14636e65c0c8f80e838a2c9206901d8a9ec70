@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e9df6ce2_238027c3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-02-13T09:40:57Z",
+      "side": 1,
+      "message": "The last point is nitpicking, so this patch can be landed :).",
+      "revId": "c7d14636e65c0c8f80e838a2c9206901d8a9ec70",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
