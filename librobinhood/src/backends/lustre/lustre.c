@@ -981,10 +981,11 @@ create_expiration_date_value_pair(const char *attribute_value,
     return 0;
 }
 
-static void
-xattrs_get_retention(const struct rbh_statx *statx)
+static int
+xattrs_get_retention(const struct rbh_statx *statx,
+                     struct rbh_value_pair *pairs)
 {
-    struct rbh_value_pair new_pair;
+    struct rbh_value *new_value;
 
     for (int i = 0; i < *_inode_xattrs_count; ++i) {
         char tmp[INT64_MAX_STR_LEN];
@@ -1005,11 +1006,22 @@ xattrs_get_retention(const struct rbh_statx *statx)
                _inode_xattrs[i].value->binary.size);
         tmp[_inode_xattrs[i].value->binary.size] = 0;
 
-        create_expiration_date_value_pair(tmp, statx, &new_pair);
+        if (create_expiration_date_value_pair(tmp, statx, &pairs[0]))
+            return -1;
 
-        _inode_xattrs[i] = new_pair;
-        break;
+        new_value = rbh_sstack_push(_values, NULL, sizeof(*new_value));
+        if (new_value == NULL)
+            return -1;
+
+        new_value->type = RBH_VT_STRING;
+        new_value->string = rbh_sstack_push(_values, tmp, strlen(tmp) + 1);
+
+        _inode_xattrs[i].value = new_value;
+
+        return 1;
     }
+
+    return 0;
 }
 
 static int
@@ -1037,7 +1049,11 @@ _get_attrs(const int fd, const struct rbh_statx *statx,
         count += subcount;
     }
 
-    xattrs_get_retention(statx);
+    subcount = xattrs_get_retention(statx, &pairs[count]);
+    if (subcount == -1)
+        return -1;
+
+    count += subcount;
 
     return count;
 }
