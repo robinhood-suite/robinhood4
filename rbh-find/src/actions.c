@@ -399,6 +399,8 @@ fsentry_print_directive(char *output, int max_length,
         return snprintf(output, max_length, "%s",
                         time_from_timestamp(&fsentry->statx->stx_atime.tv_sec)
                         );
+    case 'A':
+        return snprintf(output, max_length, "%lu", fsentry->statx->stx_atime.tv_sec);
     case 'b':
         return snprintf(output, max_length, "%lu", fsentry->statx->stx_blocks);
     case 'c':
@@ -455,6 +457,8 @@ fsentry_print_directive(char *output, int max_length,
         return snprintf(output, max_length, "%s",
                         time_from_timestamp(&fsentry->statx->stx_mtime.tv_sec)
                         );
+    case 'T':
+        return snprintf(output, max_length, "%lu", fsentry->statx->stx_mtime.tv_sec);
     case 'u':
         name = get_user_name(fsentry->statx->stx_uid);
         if (name)
