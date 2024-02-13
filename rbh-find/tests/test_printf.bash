@@ -29,7 +29,14 @@ test_atime()
     local atime=$(date -d "@$(stat -c %X file)")
 
     if [[ "$d" != "$atime" ]]; then
-        error "printf atime: '$d' != actual '$atime'"
+        error "printf atime human-readable: '$d' != actual '$atime'"
+    fi
+
+    date=$(rbh-find "rbh:mongo:$testdb" -name file -printf "%A\n")
+    atime=$(stat -c %X file)
+
+    if [[ "$date" != "$atime" ]]; then
+        error "printf atime epoch: '$date' != actual '$atime'"
     fi
 }
 
@@ -60,6 +67,13 @@ test_mtime()
 
     if [[ "$d" != "$mtime" ]]; then
         error "printf mtime: '$d' != actual '$mtime'"
+    fi
+
+    date=$(rbh-find "rbh:mongo:$testdb" -name file -printf "%T\n")
+    mtime=$(stat -c %Y file)
+
+    if [[ "$date" != "$mtime" ]]; then
+        error "printf mtime epoch: '$date' != actual '$mtime'"
     fi
 }
 
