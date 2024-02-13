@@ -12,30 +12,21 @@
 #include <miniyaml.h>
 #include <robinhood/fsevent.h>
 
-#include "include/serialization.h"
+#include "serialization.h"
 #include "source.h"
 
-struct yaml_fsevent_iterator {
-    struct rbh_iterator iterator;
-
-    struct rbh_fsevent fsevent;
-    yaml_parser_t parser;
-    bool exhausted;
-};
-
-static void __attribute__((noreturn))
-parser_error(yaml_parser_t *parser)
-{
-    error(EXIT_FAILURE, 0, "parser error: %s", parser->problem);
-    __builtin_unreachable();
-}
+#include "yaml_file.h"
+#include "utils.h"
 
 static const void *
 yaml_fsevent_iter_next(void *iterator)
 {
     struct yaml_fsevent_iterator *fsevents = iterator;
+    struct rbh_fsevent *fsevent;
     yaml_event_type_t type;
     yaml_event_t event;
+
+    fsevent = fsevents->source_item;
 
     if (fsevents->exhausted) {
         errno = ENODATA;
@@ -51,9 +42,9 @@ yaml_fsevent_iter_next(void *iterator)
     switch (type) {
     case YAML_DOCUMENT_START_EVENT:
         /* Remove any trace of the previous parsed fsevent */
-        memset(&fsevents->fsevent, 0, sizeof(fsevents->fsevent));
+        memset(fsevent, 0, sizeof(*fsevent));
 
-        if (!parse_fsevent(&fsevents->parser, &fsevents->fsevent))
+        if (!parse_fsevent(&fsevents->parser, fsevent))
             parser_error(&fsevents->parser);
 
         if (!yaml_parser_parse(&fsevents->parser, &event))
@@ -61,7 +52,7 @@ yaml_fsevent_iter_next(void *iterator)
 
         assert(event.type == YAML_DOCUMENT_END_EVENT);
         yaml_event_delete(&event);
-        return &fsevents->fsevent;
+        return fsevent;
     case YAML_STREAM_END_EVENT:
         fsevents->exhausted = true;
         errno = ENODATA;
@@ -89,78 +80,26 @@ static const struct rbh_iterator YAML_FSEVENT_ITERATOR = {
     .ops = &YAML_FSEVENT_ITER_OPS,
 };
 
-static void
-yaml_fsevent_init(struct yaml_fsevent_iterator *fsevents, FILE *file)
-{
-    yaml_event_t event;
-
-    if (!yaml_parser_initialize(&fsevents->parser))
-        error(EXIT_FAILURE, 0, "yaml_paser_initialize");
-
-    yaml_parser_set_input_file(&fsevents->parser, file);
-    yaml_parser_set_encoding(&fsevents->parser, YAML_UTF8_ENCODING);
-
-    if (!yaml_parser_parse(&fsevents->parser, &event))
-        parser_error(&fsevents->parser);
-
-    assert(event.type == YAML_STREAM_START_EVENT);
-    yaml_event_delete(&event);
-
-    fsevents->iterator = YAML_FSEVENT_ITERATOR;
-    fsevents->exhausted = false;
-    fsevents->fsevent.type = 0;
-}
-
-struct file_source {
-    struct source source;
-
-    struct yaml_fsevent_iterator fsevents;
-    FILE *file;
-};
-
-static const void *
-source_iter_next(void *iterator)
-{
-    struct file_source *source = iterator;
-
-    return rbh_iter_next(&source->fsevents.iterator);
-}
-
-static void
-source_iter_destroy(void *iterator)
-{
-    struct file_source *source = iterator;
-
-    rbh_iter_destroy(&source->fsevents.iterator);
-    /* Ignore errors on close */
-    fclose(source->file);
-    free(source);
-}
-
-static const struct rbh_iterator_operations SOURCE_ITER_OPS = {
-    .next = source_iter_next,
-    .destroy = source_iter_destroy,
+static const struct rbh_iterator_operations YAML_SOURCE_ITER_OPS = {
+    .next = yaml_source_iter_next,
+    .destroy = yaml_source_iter_destroy,
 };
 
 static const struct source FILE_SOURCE = {
     .name = "file",
     .fsevents = {
-        .ops = &SOURCE_ITER_OPS,
+        .ops = &YAML_SOURCE_ITER_OPS,
     },
 };
 
 struct source *
 source_from_file(FILE *file)
 {
-    struct file_source *source;
+    struct rbh_fsevent *fsevent;
 
-    source = malloc(sizeof(*source));
-    if (source == NULL)
-        error(EXIT_FAILURE, 0, "malloc");
+    initialize_source_stack(sizeof(struct rbh_value_pair) * (1 << 7));
+    fsevent = source_stack_alloc(NULL, sizeof(*fsevent));
 
-    yaml_fsevent_init(&source->fsevents, file);
-
-    source->source = FILE_SOURCE;
-    source->file = file;
-    return &source->source;
+    return yaml_fsevent_init(file, YAML_FSEVENT_ITERATOR, &FILE_SOURCE,
+                             fsevent);
 }

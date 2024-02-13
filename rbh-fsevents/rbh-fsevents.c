@@ -25,75 +25,149 @@
 #include "source.h"
 #include "sink.h"
 
-enum rbh_source_t {
-    SRC_DEFAULT = 0,
-    SRC_FILE = SRC_DEFAULT,
-    SRC_LUSTRE,
+struct deduplicator_options {
+    size_t batch_size;
+    size_t flush_size;
 };
+
+static const size_t DEFAULT_BATCH_SIZE = 100;
+static const size_t DEFAULT_FLUSH_SIZE = 50; /* 50% */
 
 static void
 usage(void)
 {
-    /* TODO: accept source as a URI or a '-', like src:lustre:lustre-MDT0000. */
     const char *message =
-        "usage: %s [-h] [--raw] [--enrich MOUNTPOINT] [--lustre] SOURCE DESTINATION\n"
+        "usage: %s [-h] [--raw] [--enrich MOUNTPOINT] SOURCE DESTINATION\n"
         "\n"
         "Collect changelog records from SOURCE, optionally enrich them with data\n"
         "collected from MOUNTPOINT and send them to DESTINATION.\n"
         "\n"
         "Positional arguments:\n"
         "    SOURCE          can be one of:\n"
-        "                        a path to a yaml file, or '-' for stdin;\n"
-        "                        an MDT name (eg. lustre-MDT0000).\n"
+        "                        '-' for stdin;\n"
+        "                        a Source URI (eg. src:file:/path/to/test, \n"
+        "                        src:lustre:lustre-MDT0000,\n"
+        "                        src:hestia:/path/to/file).\n"
         "    DESTINATION     can be one of:\n"
         "                        '-' for stdout;\n"
         "                        a RobinHood URI (eg. rbh:mongo:test).\n"
         "\n"
         "Optional arguments:\n"
-        "    -h, --help      print this message and exit\n"
-        "    -r, --raw       do not enrich changelog records (default)\n"
+        "    -b, --batch-size NUMBER\n"
+        "                    the number of fsevents to keep in memory for deduplication\n"
+        "                    default: %lu\n"
         "    -e, --enrich MOUNTPOINT\n"
         "                    enrich changelog records by querying MOUNTPOINT as needed\n"
         "                    MOUNTPOINT is a RobinHood URI (eg. rbh:lustre:/mnt/lustre)\n"
+        "    -f, --flush-size NUMBER\n"
+        "                    the number of fsevents flushed when the batch is filled\n"
+        "                    (i.e. when we have reached the batch size)\n"
+        "                    default: %lu\n"
+        "    -h, --help      print this message and exit\n"
         "    -l, --lustre    consider SOURCE is an MDT name\n"
+        "    -r, --raw       do not enrich changelog records (default)\n"
         "\n"
         "Note that uploading raw records to a RobinHood backend will fail, they have to\n"
         "be enriched first.\n";
 
-    printf(message, program_invocation_short_name);
+    printf(message, program_invocation_short_name, DEFAULT_BATCH_SIZE,
+           DEFAULT_FLUSH_SIZE);
+}
+
+static bool
+is_uri(const char *string)
+{
+    struct rbh_raw_uri *raw_uri;
+
+    raw_uri = rbh_raw_uri_from_string(string);
+    if (raw_uri == NULL) {
+        if (errno == EINVAL)
+            return false;
+        error(EXIT_FAILURE, errno, "cannot parse URI '%s'", string);
+    }
+
+    free(raw_uri);
+    return true;
 }
 
 static struct source *
-source_new(const char *arg, enum  rbh_source_t source_type)
+source_from_file_uri(const char *file_path,
+                     struct source *(*source_from)(FILE *))
 {
     FILE *file;
 
-    switch(source_type) {
-    case SRC_LUSTRE:
-#ifdef HAVE_LUSTRE
-        return source_from_lustre_changelog(arg);
-#else
-        error(EX_USAGE, EINVAL, "MDT source is not available");
-#endif
-    case SRC_FILE:
-        break;
-    default:
-        __builtin_unreachable();
-    }
-
-    if (strcmp(arg, "-") == 0)
-        /* SOURCE is '-' (stdin) */
-        return source_from_file(stdin);
-
-    file = fopen(arg, "r");
+    file = fopen(file_path, "r");
     if (file != NULL)
         /* SOURCE is a path to a file */
-        return source_from_file(file);
+        return source_from(file);
+
     if (file == NULL && errno != ENOENT)
         /* SOURCE is a path to a file, but there was some sort of error trying
          * to open it.
          */
-        error(EXIT_FAILURE, errno, "%s", arg);
+        error(EXIT_FAILURE, errno, "%s", file_path);
+
+    error(EX_USAGE, EINVAL, "%s", file_path);
+    __builtin_unreachable();
+}
+
+static struct source *
+source_from_uri(const char *uri)
+{
+    struct source *source = NULL;
+    struct rbh_raw_uri *raw_uri;
+    char *name = NULL;
+    char *colon;
+
+    raw_uri = rbh_raw_uri_from_string(uri);
+    if (raw_uri == NULL)
+        error(EXIT_FAILURE, errno, "cannot parse URI '%s'", uri);
+
+    if (strcmp(raw_uri->scheme, RBH_SOURCE) != 0) {
+        free(raw_uri);
+        error(EX_USAGE, 0, "%s: uri scheme not supported", raw_uri->scheme);
+        __builtin_unreachable();
+    }
+
+    colon = strrchr(raw_uri->path, ':');
+    if (colon) {
+        /* colon = backend_type:fsname */
+        *colon = '\0';
+        name = colon + 1;
+    }
+
+    if (strcmp(raw_uri->path, "file") == 0) {
+        source = source_from_file_uri(name, source_from_file);
+    } else if (strcmp(raw_uri->path, "lustre") == 0) {
+#ifdef HAVE_LUSTRE
+        source = source_from_lustre_changelog(name);
+#else
+        free(raw_uri);
+        error(EX_USAGE, EINVAL, "MDT source is not available");
+        __builtin_unreachable();
+#endif
+    } else if (strcmp(raw_uri->path, "hestia") == 0) {
+        source = source_from_file_uri(name, source_from_hestia_file);
+    }
+
+    free(raw_uri);
+
+    if (source)
+        return source;
+
+    error(EX_USAGE, 0, "%s: uri path not supported", raw_uri->path);
+    __builtin_unreachable();
+}
+
+static struct source *
+source_new(const char *arg)
+{
+    if (strcmp(arg, "-") == 0)
+        /* SOURCE is '-' (stdin) */
+        return source_from_file(stdin);
+
+    if (is_uri(arg))
+        return source_from_uri(arg);
 
     error(EX_USAGE, EINVAL, "%s", arg);
     __builtin_unreachable();
@@ -115,32 +189,16 @@ sink_from_uri(const char *uri)
 
     raw_uri = rbh_raw_uri_from_string(uri);
     if (raw_uri == NULL)
-        error(EXIT_FAILURE, errno, "rbh_raw_uri_from_string");
+        error(EXIT_FAILURE, errno, "cannot parse URI '%s'", uri);
 
     if (strcmp(raw_uri->scheme, "rbh") == 0) {
         free(raw_uri);
-        return sink_from_backend(rbh_backend_from_uri(uri));
+        return (void *) sink_from_backend(rbh_backend_from_uri(uri));
     }
 
     free(raw_uri);
     error(EX_USAGE, 0, "%s: uri scheme not supported", uri);
     __builtin_unreachable();
-}
-
-static bool
-is_uri(const char *string)
-{
-    struct rbh_raw_uri *raw_uri;
-
-    raw_uri = rbh_raw_uri_from_string(string);
-    if (raw_uri == NULL) {
-        if (errno == EINVAL)
-            return false;
-        error(EXIT_FAILURE, errno, "rbh_raw_uri_from_string");
-    }
-
-    free(raw_uri);
-    return true;
 }
 
 static struct sink *
@@ -170,23 +228,36 @@ static struct enrich_iter_builder *
 enrich_iter_builder_from_uri(const char *uri)
 {
     struct enrich_iter_builder *builder;
+    struct rbh_backend *uri_backend;
     struct rbh_raw_uri *raw_uri;
     struct rbh_uri *rbh_uri;
     int save_errno;
 
     raw_uri = rbh_raw_uri_from_string(uri);
     if (raw_uri == NULL)
-        error(EXIT_FAILURE, errno, "rbh_raw_uri_from_raw_uri: %s", uri);
+        error(EXIT_FAILURE, errno, "cannot parse URI '%s'", uri);
 
     rbh_uri = rbh_uri_from_raw_uri(raw_uri);
     save_errno = errno;
     free(raw_uri);
     errno = save_errno;
     if (rbh_uri == NULL)
-        error(EXIT_FAILURE, errno, "rbh_uri_from_raw_uri: %s", uri);
+        error(EXIT_FAILURE, errno, "cannot parse URI '%s'", uri);
 
-    builder = enrich_iter_builder_from_backend(
-        rbh_backend_from_uri(uri), rbh_uri->fsname);
+    /* XXX: this a temporary hack because the Hestia backend cannot properly
+     * build at the moment.
+     */
+    if (strlen(rbh_uri->fsname) == 0) {
+        uri_backend = malloc(sizeof(*uri_backend));
+        if (uri_backend == NULL)
+            error(EXIT_FAILURE, errno, "malloc");
+
+        uri_backend->id = RBH_BI_HESTIA;
+    } else {
+        uri_backend = rbh_backend_from_uri(uri);
+    }
+
+    builder = enrich_iter_builder_from_backend(uri_backend, rbh_uri->fsname);
     save_errno = errno;
     free(rbh_uri);
     errno = save_errno;
@@ -213,8 +284,6 @@ mount_fd_exit(void)
         close(mount_fd);
 }
 
-static const size_t BATCH_SIZE = 1;
-
 static struct rbh_backend *enrich_point;
 
 static void __attribute__((destructor))
@@ -226,11 +295,14 @@ destroy_enrich_point(void)
 
 static void
 feed(struct sink *sink, struct source *source,
-     struct enrich_iter_builder *builder, bool allow_partials)
+     struct enrich_iter_builder *builder, bool allow_partials,
+     struct deduplicator_options *dedup_opts)
 {
     struct rbh_mut_iterator *deduplicator;
 
-    deduplicator = deduplicator_new(BATCH_SIZE, source);
+    deduplicator = deduplicator_new(dedup_opts->batch_size,
+                                    dedup_opts->flush_size,
+                                    source);
     if (deduplicator == NULL)
         error(EXIT_FAILURE, errno, "deduplicator_new");
 
@@ -243,27 +315,49 @@ feed(struct sink *sink, struct source *source,
             break;
 
         if (builder != NULL)
-            fsevents = enrich_iter_builder_build_iter(builder, fsevents);
+            fsevents = build_enrich_iter(builder, fsevents);
         else if (!allow_partials)
             fsevents = iter_no_partial(fsevents);
 
         if (fsevents == NULL)
             error(EXIT_FAILURE, errno, "iter_enrich");
 
-        /* If we couldn't open the file because it is already deleted (ESTALE or
-         * ENOENT are both possible, depending of the event), just ignore the
-         * error and manage the next record instead of quitting
-         */
-        if (sink_process(sink, fsevents) && errno != ESTALE && errno != ENOENT)
-            error(EXIT_FAILURE, errno, "sink_process");
+        if (sink_process(sink, fsevents))
+            break;
 
         rbh_iter_destroy(fsevents);
     }
 
-    if (errno != ENODATA)
-        error(EXIT_FAILURE, errno, "getting the next batch of fsevents");
+    switch (errno) {
+    case 0:
+        error(EXIT_FAILURE, EINVAL, "unexpected exit status 0");
+    case ENODATA:
+        break;
+    case RBH_BACKEND_ERROR:
+        error(EXIT_FAILURE, 0, "unhandled error: %s\n", rbh_backend_error);
+        __builtin_unreachable();
+    default:
+        error(EXIT_FAILURE, errno, "could not get the next batch of fsevents");
+    }
 
     rbh_mut_iter_destroy(deduplicator);
+}
+
+static bool
+str2size_t(const char *input, size_t *result)
+{
+    char *end;
+
+    errno = 0;
+    *result = strtoull(input, &end, 0);
+    if (errno) {
+        return -1;
+    } else if ((!*result && input == end) || *end != '\0') {
+        errno = EINVAL;
+        return false;
+    }
+
+    return true;
 }
 
 int
@@ -271,17 +365,23 @@ main(int argc, char *argv[])
 {
     const struct option LONG_OPTIONS[] = {
         {
+            .name = "batch-size",
+            .has_arg = required_argument,
+            .val = 'b',
+        },
+        {
             .name = "enrich",
             .has_arg = required_argument,
             .val = 'e',
         },
         {
-            .name = "help",
-            .val = 'h',
+            .name = "flush-size",
+            .has_arg = required_argument,
+            .val = 'f',
         },
         {
-            .name = "lustre",
-            .val = 'l',
+            .name = "help",
+            .val = 'h',
         },
         {
             .name = "raw",
@@ -289,25 +389,33 @@ main(int argc, char *argv[])
         },
         {}
     };
-    enum rbh_source_t source_type = SRC_DEFAULT;
+    struct deduplicator_options dedup_opts = {
+        .batch_size = DEFAULT_BATCH_SIZE,
+        .flush_size = DEFAULT_FLUSH_SIZE,
+    };
     char c;
 
     /* Parse the command line */
-    while ((c = getopt_long(argc, argv, "e:hlr", LONG_OPTIONS, NULL)) != -1) {
+    while ((c = getopt_long(argc, argv, "b:e:f:hlr", LONG_OPTIONS, NULL)) != -1) {
         switch (c) {
+        case 'b':
+            if (!str2size_t(optarg, &dedup_opts.batch_size))
+                error(EXIT_FAILURE, 0, "'%s' is not an integer", optarg);
+
+            break;
         case 'e':
             enrich_builder = enrich_iter_builder_from_uri(optarg);
             if (enrich_builder == NULL)
                 error(EXIT_FAILURE, errno, "enrich_new");
             break;
+        case 'f':
+            if (!str2size_t(optarg, &dedup_opts.flush_size))
+                error(EXIT_FAILURE, 0, "'%s' is not an integer", optarg);
+
+            break;
         case 'h':
             usage();
             return 0;
-        case 'l':
-            if (source_type != SRC_DEFAULT)
-                error(EX_USAGE, EINVAL, "source type already specified");
-            source_type = SRC_LUSTRE;
-            break;
         case 'r':
             /* Ignore errors on close */
             mount_fd_exit();
@@ -320,14 +428,22 @@ main(int argc, char *argv[])
         }
     }
 
+    /* if user asks for a flush size greater than the batch size, simply set it
+     * to the maximum instead of returning an error.
+     */
+    if (dedup_opts.flush_size > dedup_opts.batch_size)
+        dedup_opts.flush_size = dedup_opts.batch_size;
+
     if (argc - optind < 2)
         error(EX_USAGE, 0, "not enough arguments");
     if (argc - optind > 2)
         error(EX_USAGE, 0, "too many arguments");
 
-    source = source_new(argv[optind++], source_type);
+    source = source_new(argv[optind++]);
     sink = sink_new(argv[optind++]);
 
-    feed(sink, source, enrich_builder, strcmp(sink->name, "backend"));
+    feed(sink, source, enrich_builder, strcmp(sink->name, "backend"),
+         &dedup_opts);
+
     return error_message_count == 0 ? EXIT_SUCCESS : EXIT_FAILURE;
 }

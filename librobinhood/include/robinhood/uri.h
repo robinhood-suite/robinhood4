@@ -1,4 +1,4 @@
-/* This file is part of the RobinHood Library
+/* This file is part of RobinHood 4
  * Copyright (C) 2019 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
@@ -13,6 +13,7 @@
 #include "robinhood/fsentry.h"
 
 #define RBH_SCHEME "rbh"
+#define RBH_SOURCE "src"
 
 /*----------------------------------------------------------------------------*
  |                                rbh_raw_uri                                 |

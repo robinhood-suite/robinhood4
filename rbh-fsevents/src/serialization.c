@@ -20,13 +20,6 @@
 
 #include "serialization.h"
 
-static void __attribute__((noreturn))
-parser_error(yaml_parser_t *parser)
-{
-    error(EXIT_FAILURE, 0, "parser error: %s", parser->problem);
-    __builtin_unreachable();
-}
-
 static struct {
     struct rbh_sstack *events;
     struct rbh_sstack *pointers;
@@ -300,7 +293,7 @@ emit_int64(yaml_emitter_t *emitter, int64_t i)
                             YAML_PLAIN_SCALAR_STYLE);
 }
 
-static bool
+bool
 parse_int64(const yaml_event_t *event, int64_t *i)
 {
     const char *value = yaml_scalar_value(event);
@@ -510,8 +503,9 @@ parse_rbh_value_pair(yaml_parser_t *parser, yaml_event_t *event,
     return true;
 }
 
-static bool
-parse_rbh_value_map(yaml_parser_t *parser, struct rbh_value_map *map)
+bool
+parse_rbh_value_map(yaml_parser_t *parser, struct rbh_value_map *map,
+                    bool parse_first_event)
 {
     struct rbh_value_pair *pairs;
     yaml_event_t map_event;
@@ -519,16 +513,26 @@ parse_rbh_value_map(yaml_parser_t *parser, struct rbh_value_map *map)
     bool end = false;
     size_t i = 0;
 
-    if (!yaml_parser_parse(parser, &map_event))
-        parser_error(parser);
+    if (parse_first_event) {
+        if (!yaml_parser_parse(parser, &map_event))
+            parser_error(parser);
 
-    if (map_event.type != YAML_MAPPING_START_EVENT) {
+        if (map_event.type == YAML_MAPPING_END_EVENT) {
+            /* This is the case when the xattrs map is empty, and the YAML
+             * string is '"xattrs": {}'.
+             */
+            map->pairs = NULL;
+            map->count = 0;
+            yaml_event_delete(&map_event);
+            return true;
+        } else if (map_event.type != YAML_MAPPING_START_EVENT) {
             yaml_event_delete(&map_event);
             errno = EINVAL;
             return false;
-    }
+        }
 
-    yaml_event_delete(&map_event);
+        yaml_event_delete(&map_event);
+    }
 
     pairs = malloc(sizeof(*pairs) * count);
     if (pairs == NULL)
@@ -599,7 +603,7 @@ parse_rbh_value_map(yaml_parser_t *parser, struct rbh_value_map *map)
      |                              sequence                              |
      *--------------------------------------------------------------------*/
 
-static bool
+bool
 parse_sequence(yaml_parser_t *parser, struct rbh_value *sequence)
 {
     struct rbh_value *values;
@@ -963,8 +967,7 @@ parse_rbh_value(yaml_parser_t *parser, yaml_event_t *event,
         yaml_event_delete(event);
         return parse_sequence(parser, value);
     case RBH_VT_MAP:
-        yaml_event_delete(event);
-        return parse_rbh_value_map(parser, &value->map);
+        return parse_rbh_value_map(parser, &value->map, false);
     }
 
     yaml_event_delete(event);
@@ -1001,7 +1004,7 @@ parse_xattrs(yaml_parser_t *parser, struct rbh_value_map *map)
     }
     yaml_event_delete(&event);
 
-    return parse_rbh_value_map(parser, map);
+    return parse_rbh_value_map(parser, map, false);
 }
 
 /*----------------------------------------------------------------------------*
@@ -2258,7 +2261,7 @@ parse_upsert(yaml_parser_t *parser, struct rbh_fsevent *upsert)
      |                                name                                |
      *--------------------------------------------------------------------*/
 
-static bool
+bool
 parse_name(yaml_parser_t *parser, const char **name)
 {
     yaml_event_t event;
@@ -2392,7 +2395,7 @@ parse_link(yaml_parser_t *parser, struct rbh_fsevent *link)
             success = parse_id(parser, &link->id);
             break;
         case LF_XATTRS:
-            success = parse_rbh_value_map(parser, &link->xattrs);
+            success = parse_rbh_value_map(parser, &link->xattrs, true);
             break;
         case LF_PARENT:
             seen.parent = true;
@@ -2634,7 +2637,7 @@ parse_ns_xattr(yaml_parser_t *parser, struct rbh_fsevent *ns_xattr)
             success = parse_id(parser, &ns_xattr->id);
             break;
         case LF_XATTRS:
-            success = parse_rbh_value_map(parser, &ns_xattr->xattrs);
+            success = parse_rbh_value_map(parser, &ns_xattr->xattrs, true);
             break;
         case LF_PARENT:
             seen.parent = true;
@@ -2737,7 +2740,7 @@ parse_inode_xattr(yaml_parser_t *parser, struct rbh_fsevent *inode_xattr)
             success = parse_id(parser, &inode_xattr->id);
             break;
         case IXF_XATTRS:
-            success = parse_rbh_value_map(parser, &inode_xattr->xattrs);
+            success = parse_rbh_value_map(parser, &inode_xattr->xattrs, true);
             break;
         }
 

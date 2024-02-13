@@ -1,4 +1,4 @@
-/* This file is part of the RobinHood Library
+/* This file is part of RobinHood 4
  * Copyright (C) 2019 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
@@ -411,6 +411,14 @@ mongo_bulk_init_from_fsevents(mongoc_bulk_operation_t *bulk,
         if (fsevent == NULL) {
             if (errno == ENODATA)
                 break;
+
+            /* If we couldn't open the file because it is already deleted
+             * (ESTALE or ENOENT are both possible, depending on the event),
+             * just ignore the error and manage the next record instead of
+             * quitting.
+             */
+            if (errno == ESTALE || errno == ENOENT)
+                continue;
             return -1;
         }
 
@@ -561,7 +569,7 @@ mongo_backend_destroy(void *backend)
 }
 
 static struct rbh_backend *
-mongo_backend_branch(void *backend, const struct rbh_id *id);
+mongo_backend_branch(void *backend, const struct rbh_id *id, const char *path);
 
 static const struct rbh_backend_operations MONGO_BACKEND_OPS = {
     .get_option = mongo_get_option,
@@ -1320,12 +1328,14 @@ mongo_backend_init_from_uri(struct mongo_backend *mongo,
 }
 
 static struct rbh_backend *
-mongo_backend_branch(void *backend, const struct rbh_id *id)
+mongo_backend_branch(void *backend, const struct rbh_id *id, const char *path)
 {
     struct mongo_backend *mongo = backend;
     struct mongo_branch_backend *branch;
     size_t data_size;
     char *data;
+
+    (void) path;
 
     data_size = id->size;
     branch = malloc(sizeof(*branch) + data_size);

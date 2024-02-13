@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# This file is part of rbh-find-lustre.
+# This file is part of RobinHood 4
 # Copyright (C) 2022 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #
@@ -22,7 +22,7 @@ rbh_find()
 __mongo=$(which mongosh || which mongo)
 mongo()
 {
-    "$__mongo" "$@"
+    "$__mongo" --quiet "$@"
 }
 
 setup()
@@ -38,7 +38,7 @@ setup()
 
 teardown()
 {
-    mongo --quiet "$testdb" --eval "db.dropDatabase()" >/dev/null
+    mongo "$testdb" --eval "db.dropDatabase()" >/dev/null
     rm -rf "$testdir"
 }
 

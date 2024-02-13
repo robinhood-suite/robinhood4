@@ -8,6 +8,26 @@
 #include <robinhood/fsevent.h>
 #include <yaml.h>
 
+static inline void __attribute__((noreturn))
+parser_error(yaml_parser_t *parser)
+{
+    error(EXIT_FAILURE, 0, "parser error: %s", parser->problem);
+    __builtin_unreachable();
+}
+
+bool
+parse_int64(const yaml_event_t *event, int64_t *i);
+
+bool
+parse_name(yaml_parser_t *parser, const char **name);
+
+bool
+parse_rbh_value_map(yaml_parser_t *parser, struct rbh_value_map *map,
+                    bool parse_first_event);
+
+bool
+parse_sequence(yaml_parser_t *parser, struct rbh_value *sequence);
+
 bool
 emit_fsevent(yaml_emitter_t *emitter, const struct rbh_fsevent *fsevent);
 

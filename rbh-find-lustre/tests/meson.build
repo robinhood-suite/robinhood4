@@ -1,4 +1,4 @@
-# This file is part of the RobinHood Library
+# This file is part of RobinHood 4
 # Copyright (C) 2021 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #

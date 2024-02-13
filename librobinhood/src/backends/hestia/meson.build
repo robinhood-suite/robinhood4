@@ -1,22 +1,11 @@
-# This file is part of the RobinHood Library
+# This file is part of Robinhood 4
 # Copyright (C) 2022 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
 
-cpp = meson.get_compiler('cpp')
-libhestia = cpp.find_library('hestia_lib', disabler: true, required: false)
-
-libjansson = dependency('jansson', version: '>=2.5')
-
-librbh_hestia_glue = shared_library(
-    'rbh-hestia-glue',
-    sources: [
-        'hestia_glue.cpp',
-    ],
-    dependencies: [libhestia],
-    install: true,
-)
+libhestia = dependency('hestia', dirs: '/usr/lib/hestia',
+                       disabler: true, required: false)
 
 librbh_hestia = library(
     'rbh-hestia',
@@ -25,8 +14,8 @@ librbh_hestia = library(
         'plugin.c',
     ],
     version: librbh_hestia_version, # defined in include/robinhood/backends
-    link_with: [librobinhood, librbh_hestia_glue],
-    dependencies: [libjansson],
+    link_with: [librobinhood],
+    dependencies: [libhestia],
     include_directories: rbh_include,
     install: true,
 )

@@ -1,4 +1,4 @@
-/* This file is part of the RobinHood Library
+/* This file is part of RobinHood 4
  * Copyright (C) 2019 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
@@ -391,11 +391,11 @@ fsentry_from_ftsent(FTSENT *ftsent, int statx_sync_type, size_t prefix_len,
     fd = openat(AT_FDCWD, ftsent->fts_accpath,
                 O_RDONLY | O_CLOEXEC | O_NOFOLLOW | O_NONBLOCK);
     if (fd < 0 && (errno == ELOOP || errno == ENXIO))
-        /* If the file to open is a symlink or a socket, reopen it with O_PATH
-         * set
+        /* The open will fail with ENXIO if the entry is a socket, so open
+         * it again but with O_PATH
          */
         fd = openat(AT_FDCWD, ftsent->fts_accpath,
-                    O_CLOEXEC | O_NOFOLLOW | O_PATH | O_NONBLOCK);
+                    O_PATH | O_CLOEXEC | O_NOFOLLOW | O_NONBLOCK);
 
     if (fd < 0) {
         fprintf(stderr, "Failed to open '%s': %s (%d)\n",
@@ -550,8 +550,8 @@ posix_iter_next(void *iterator)
 {
     struct posix_iterator *posix_iter = iterator;
     struct rbh_fsentry *fsentry;
-    FTSENT *ftsent;
     int save_errno = errno;
+    FTSENT *ftsent;
 
 skip:
     errno = 0;
@@ -573,17 +573,65 @@ skip:
         return NULL;
     case FTS_DNR:
     case FTS_ERR:
+        errno = ftsent->fts_errno;
+        fprintf(stderr, "FTS: failed to read entry '%s': %s (%d)\n",
+                ftsent->fts_path, strerror(errno), errno);
+        fprintf(stderr, "Synchronization of '%s' skipped\n", ftsent->fts_path);
+        goto skip;
     case FTS_NS:
         errno = ftsent->fts_errno;
         return NULL;
     }
 
+    /* This condition checks if the entry has no parent, which indicates whether
+     * the current ftsent is the root of our iterator or not, and if the first
+     * character of its path is a '/', which indicates whether we are in a
+     * branch or not. In that case, we open the parent of the branch point, and
+     * set it so that the branch point has a proper path set in the database.
+     */
+    if (ftsent->fts_parent->fts_pointer == NULL &&
+        ftsent->fts_accpath[0] == '/') {
+        char *path_dup = strdup(ftsent->fts_accpath);
+        char *last_slash;
+        int fd;
+
+        if (path_dup == NULL)
+            return NULL;
+
+        last_slash = strrchr(path_dup, '/');
+        if (last_slash == NULL) {
+            save_errno = errno;
+            free(path_dup);
+            errno = save_errno;
+            return NULL;
+        }
+
+        last_slash[0] = 0;
+        fd = openat(AT_FDCWD, path_dup, O_RDONLY | O_CLOEXEC);
+        if (fd < 0) {
+            save_errno = errno;
+            free(path_dup);
+            errno = save_errno;
+            return NULL;
+        }
+
+        ftsent->fts_parent->fts_pointer = id_from_fd(fd);
+        save_errno = errno;
+        close(fd);
+        free(path_dup);
+        errno = save_errno;
+        if (ftsent->fts_parent->fts_pointer == NULL)
+            return NULL;
+    }
+
     fsentry = fsentry_from_ftsent(ftsent, posix_iter->statx_sync_type,
                                   posix_iter->prefix_len,
                                   posix_iter->ns_xattrs_callback);
-    if (fsentry == NULL && (errno == ENOENT || errno == ESTALE))
+    if (fsentry == NULL && (errno == ENOENT || errno == ESTALE)) {
+        fprintf(stderr, "Synchronization of '%s' skipped\n", ftsent->fts_path);
         /* The entry moved from under our feet */
         goto skip;
+    }
 
     return fsentry;
 }
@@ -950,7 +998,17 @@ id2path(const char *root, const struct rbh_id *id)
 struct posix_branch_backend {
     struct posix_backend posix;
     struct rbh_id id;
+    char *path;
 };
+
+void
+posix_branch_backend_destroy(void *backend)
+{
+    struct posix_branch_backend *branch = backend;
+
+    posix_backend_destroy(&branch->posix);
+    free(branch);
+}
 
 static struct rbh_mut_iterator *
 posix_branch_backend_filter(void *backend, const struct rbh_filter *filter,
@@ -975,17 +1033,21 @@ posix_branch_backend_filter(void *backend, const struct rbh_filter *filter,
     if (root == NULL)
         return NULL;
 
-    path = id2path(root, &branch->id);
-    save_errno = errno;
-    if (path == NULL) {
-        free(root);
-        errno = save_errno;
-        return NULL;
+    if (branch->path) {
+        path = branch->path;
+    } else {
+        path = id2path(root, &branch->id);
+        save_errno = errno;
+        if (path == NULL) {
+            free(root);
+            errno = save_errno;
+            return NULL;
+        }
     }
 
     assert(strncmp(root, path, strlen(root)) == 0);
     posix_iter = branch->posix.iter_new(root, path + strlen(root),
-                                       branch->posix.statx_sync_type);
+                                        branch->posix.statx_sync_type);
     save_errno = errno;
     free(path);
     free(root);
@@ -1007,18 +1069,30 @@ static const struct rbh_backend POSIX_BRANCH_BACKEND = {
 };
 
 struct rbh_backend *
-posix_backend_branch(void *backend, const struct rbh_id *id)
+posix_backend_branch(void *backend, const struct rbh_id *id, const char *path)
 {
     struct posix_backend *posix = backend;
     struct posix_branch_backend *branch;
     size_t data_size;
     char *data;
 
-    data_size = id->size;
-    branch = malloc(sizeof(*branch) + data_size);
-    if (branch == NULL)
+    if (id == NULL && path == NULL) {
+        errno = EINVAL;
         return NULL;
-    data = (char *)branch + sizeof(*branch);
+    }
+
+    if (id) {
+        data_size = id->size;
+        branch = malloc(sizeof(*branch) + data_size);
+        if (branch == NULL)
+            return NULL;
+
+        data = (char *)branch + sizeof(*branch);
+    } else {
+        branch = malloc(sizeof(*branch));
+        if (branch == NULL)
+            return NULL;
+    }
 
     branch->posix.root = strdup(posix->root);
     if (branch->posix.root == NULL) {
@@ -1029,9 +1103,27 @@ posix_backend_branch(void *backend, const struct rbh_id *id)
         return NULL;
     }
 
+    if (path) {
+        branch->path = strdup(path);
+        if (branch->path == NULL) {
+            int save_errno = errno;
+
+            free(branch);
+            free(branch->posix.root);
+            errno = save_errno;
+            return NULL;
+        }
+    } else {
+        branch->path = NULL;
+    }
+
+    if (id)
+        rbh_id_copy(&branch->id, id, &data, &data_size);
+    else
+        branch->id.size = 0;
+
     branch->posix.iter_new = posix_iterator_new;
     branch->posix.statx_sync_type = posix->statx_sync_type;
-    rbh_id_copy(&branch->id, id, &data, &data_size);
     branch->posix.backend = POSIX_BRANCH_BACKEND;
 
     return &branch->posix.backend;

@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+# This file is part of RobinHood 4
+# Copyright (C) 2023 Commissariat a l'energie atomique et aux energies
+# alternatives
+
 if ! command -v rbh-sync &> /dev/null; then
     echo "This test requires rbh-sync to be installed"
     exit 1

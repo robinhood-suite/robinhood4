@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# This file is part of rbh-find-lustre
+# This file is part of RobinHood 4
 # Copyright (C) 2022 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #
@@ -47,6 +47,14 @@ test_syntax_error()
     rbh_lfind "rbh:mongo:$testdb" -fid "[[0x3:0x4:0x5]" &&
         error "command should have failed because of invalid syntax"
     rbh_lfind "rbh:mongo:$testdb" -fid "[0x3:0x4:0x5]]" &&
+        error "command should have failed because of invalid syntax"
+    rbh_lfind "rbh:mongo:$testdb" -fid "[0x3:0x4:0x5]invalid" &&
+        error "command should have failed because of invalid syntax"
+    rbh_lfind "rbh:mongo:$testdb" -fid "[0x3:0x4:0x5)" &&
+        error "command should have failed because of invalid syntax"
+    rbh_lfind "rbh:mongo:$testdb" -fid "]0x3:0x4:0x5[" &&
+        error "command should have failed because of invalid syntax"
+    rbh_lfind "rbh:mongo:$testdb" -fid "[0x3:0x4:0x5][]" &&
         error "command should have failed because of invalid syntax"
 
     return 0

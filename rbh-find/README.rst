@@ -1,4 +1,4 @@
-.. This file is part of rbh-find
+.. This file is part of RobinHood 4
    Copyright (C) 2019 Commissariat a l'energie atomique et aux energies
                       alternatives
 
@@ -16,24 +16,18 @@ rbh-find is a close twin of `find(1)`__.
 Installation
 ============
 
-Install the `RobinHood library`_ first, then download the sources:
-
-.. code:: bash
-
-    git clone https://github.com/cea-hpc/rbh-find.git
-    cd rbh-find
-
 Build and install with meson_ and ninja_:
 
 .. code:: bash
 
+    cd robinhood4/rbh-find
     meson builddir
     ninja -C builddir
     sudo ninja -C builddir install
 
 .. _meson: https://mesonbuild.com
 .. _ninja: https://ninja-build.org
-.. _RobinHood library: https://github.com/cea-hpc/librobinhood
+.. _RobinHood library: https://github.com/robinhood-suite/robinhood4/tree/main/librobinhood
 
 A work in progress
 ==================
@@ -77,7 +71,7 @@ The following examples all assume you have a backend set up at
     rbh-find rbh:mongo:test -perm /u+s
 
 .. [#] to set up a backend, have a look at rbh-sync_'s documentation
-.. _rbh-sync: https://github.com/cea-hpc/rbh-sync
+.. _rbh-sync: https://github.com/robinhood-suite/robinhood4/tree/main/rbh-sync
 
 The following examples all showcase the use of the ``-size`` predicate.
 
@@ -118,8 +112,8 @@ For more information, please refer to the RobinHood library's `documentation on
 URIs`__.
 
 
-.. _RobinHood backends: https://github.com/cea-hpc/librobinhood/blob/main/doc/internals.rst#backend
-.. __: https://github.com/cea-hpc/librobinhood/blob/main/doc/internals.rst#uri
+.. _RobinHood backends: https://github.com/robinhood-suite/robinhood4/blob/main/librobinhood/doc/internals.rst#backend
+.. __: https://github.com/robinhood-suite/robinhood4/blob/main/librobinhood/doc/internals.rst#uri
 
 FS traversal vs. Backend filtering
 ----------------------------------

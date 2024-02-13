@@ -1,4 +1,4 @@
-# This file is part of rbh-sync
+# This file is part of Robinhood 4
 # Copyright (C) 2019 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #
@@ -29,3 +29,5 @@ executable(
     dependencies: [librobinhood],
     install: true,
 )
+
+subdir('tests')

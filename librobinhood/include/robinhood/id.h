@@ -1,4 +1,4 @@
-/* This file is part of the RobinHood Library
+/* This file is part of RobinHood 4
  * Copyright (C) 2019 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
@@ -9,6 +9,7 @@
 #define ROBINHOOD_ID_H
 
 #include <stddef.h>
+#include <stdbool.h>
 
 /** @file
  * IDs uniquely indentify the fsentries of a given filesystem.
@@ -56,6 +57,14 @@ struct rbh_id {
 int
 rbh_id_copy(struct rbh_id *dest, const struct rbh_id *src, char **buffer,
             size_t *bufsize);
+
+/**
+ * Check whether two struct rbh_id are equal
+ *
+ * @return          true if they are equal, false otherwise.
+ */
+bool
+rbh_id_equal(const struct rbh_id *first, const struct rbh_id *second);
 
 /**
  * Create a new struct rbh_id

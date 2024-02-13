@@ -1,4 +1,4 @@
-/* This file is part of rbh-find
+/* This file is part of Robinhood 4
  * Copyright (C) 2019 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
@@ -65,8 +65,13 @@ main(int _argc, char *_argv[])
     if (ctx.backends == NULL)
         error(EXIT_FAILURE, errno, "malloc");
 
+    ctx.uris = malloc(index * sizeof(*ctx.uris));
+    if (!ctx.uris)
+        error(EXIT_FAILURE, errno, "malloc");
+
     for (int i = 0; i < index; i++) {
         ctx.backends[i] = rbh_backend_from_uri(ctx.argv[i]);
+        ctx.uris[i] = ctx.argv[i];
         ctx.backend_count++;
     }
     filter = parse_expression(&ctx, &index, NULL, &sorts, &sorts_count);

@@ -1,4 +1,4 @@
-.. This file is part of the RobinHood Library
+.. This file is part of RobinHood 4
    Copyright (C) 2020 Commissariat a l'energie atomique et aux energies
                       alternatives
 
@@ -13,22 +13,16 @@ It provides an efficient C-API to store and query any filesystem's metadata.
 
 A broad description of its internals is available here__.
 
-.. __: https://github.com/cea-hpc/librobinhood/blob/main/doc/internals.rst
+.. __: https://github.com/robinhood-suite/robinhood4/blob/main/librobinhood/doc/internals.rst
 
 Installation
 ============
-
-Download the sources:
-
-.. code:: bash
-
-    git clone https://github.com/cea-hpc/librobinhood.git
-    cd librobinhood
 
 Build and install with meson_ and ninja_:
 
 .. code:: bash
 
+    cd robinhood4/librobinhood
     meson builddir
     ninja -C builddir
     sudo ninja -C builddir install
@@ -126,6 +120,6 @@ of librobinhood:
  - rbh-fsevents_ to update a backend with changelog events
  - rbh-find_ to query a backend and filter entries
 
-.. _rbh-sync: https://github.com/cea-hpc/rbh-sync
-.. _rbh-fsevents: https://github.com/cea-hpc/rbh-fsevents
-.. _rbh-find: https://github.com/cea-hpc/rbh-find
+.. _rbh-sync: https://github.com/robinhood-suite/robinhood4/tree/main/rbh-sync
+.. _rbh-fsevents: https://github.com/robinhood-suite/robinhood4/tree/main/rbh-fsevents
+.. _rbh-find: https://github.com/robinhood-suite/robinhood4/tree/main/rbh-find

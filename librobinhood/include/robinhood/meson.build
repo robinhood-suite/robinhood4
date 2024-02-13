@@ -1,4 +1,4 @@
-# This file is part of the RobinHood Library
+# This file is part of RobinHood 4
 # Copyright (C) 2019 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #
@@ -9,9 +9,11 @@ install_headers(
     'filter.h',
     'fsentry.h',
     'fsevent.h',
+    'hashmap.h',
     'id.h',
     'iterator.h',
     'itertools.h',
+    'list.h',
     'plugin.h',
     'queue.h',
     'ring.h',

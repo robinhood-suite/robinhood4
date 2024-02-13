@@ -23,8 +23,8 @@ struct enrich_iter_builder {
 };
 
 static inline struct rbh_iterator *
-enrich_iter_builder_build_iter(struct enrich_iter_builder *builder,
-                               struct rbh_iterator *fsevents)
+build_enrich_iter(struct enrich_iter_builder *builder,
+                  struct rbh_iterator *fsevents)
 {
     return builder->ops->build_iter(builder, fsevents);
 }

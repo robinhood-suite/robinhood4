@@ -1,4 +1,4 @@
-/* This file is part of rbh-find
+/* This file is part of RobinHood 4
  * Copyright (C) 2022 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
@@ -27,6 +27,7 @@ struct find_context {
     /** The backends to go through */
     size_t backend_count;
     struct rbh_backend **backends;
+    const char **uris;
 
     /** The command-line arguments to parse */
     int argc;
@@ -42,6 +43,9 @@ struct find_context {
      * specified
      */
     char *format_string;
+
+    /** The command to execute on each entry and its arguments */
+    char **exec_command;
 
     /**
      * Callback to prepare an action's execution
@@ -59,13 +63,16 @@ struct find_context {
     /**
      * Callback for executing an action
      *
-     * @param ctx      find's context for this execution
-     * @param action   the type of action to execute
-     * @param fsentry  the fsentry to act on
+     * @param ctx            find's context for this execution
+     * @param backend_index  which backend is being queried
+     * @param action         the type of action to execute
+     * @param fsentry        the fsentry to act on
      *
      * @return         1 if the action is ACT_COUNT, 0 otherwise.
      */
-    int (*exec_action_callback)(struct find_context *ctx, enum action action,
+    int (*exec_action_callback)(struct find_context *ctx,
+                                size_t backend_index,
+                                enum action action,
                                 struct rbh_fsentry *fsentry);
 
     /**

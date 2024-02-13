@@ -15,6 +15,6 @@ fsentry_path(const struct rbh_fsentry *fsentry);
 
 void
 fsentry_printf_format(FILE *file, const struct rbh_fsentry *fsentry,
-                      const char *format_string);
+                      const char *format_string, const char *backend);
 
 #endif

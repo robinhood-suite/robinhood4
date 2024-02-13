@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# This file is part of the RobinHood Library
+# This file is part of RobinHood 4
 # Copyright (C) 2021 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #
@@ -123,13 +123,24 @@ check_mode_and_type()
     find_attribute '"statx.mode":'$mode
 }
 
+test_sync_symbolic_link()
+{
+    local entry="symbolic_link"
+
+    touch ${entry}_target
+    ln -s ${entry}_target $entry
+
+    rbh_sync -o "rbh:posix:$entry" "rbh:mongo:$testdb"
+    check_mode_and_type $entry
+}
+
 test_sync_socket()
 {
     local entry="socket_file"
 
-    python -c "import socket as s; \
-               sock = s.socket(s.AF_UNIX); \
-               sock.bind('$entry')"
+    python3 -c "import socket as s; \
+                sock = s.socket(s.AF_UNIX); \
+                sock.bind('$entry')"
 
     rbh_sync -o "rbh:posix:$entry" "rbh:mongo:$testdb"
     check_mode_and_type $entry
@@ -145,6 +156,85 @@ test_sync_fifo()
     check_mode_and_type $entry
 }
 
+test_sync_branch()
+{
+    local first_dir="test1"
+    local second_dir="test2"
+    local third_dir="test3"
+    local entry="random_file"
+
+    mkdir -p $first_dir/$second_dir/$third_dir
+    touch $first_dir/$second_dir/$third_dir/$entry
+
+    rbh_sync "rbh:posix:$first_dir#$second_dir" "rbh:mongo:$testdb"
+
+    find_attribute '"ns.name":"'$second_dir'"'
+    find_attribute '"ns.xattrs.path":"'/$second_dir'"'
+    find_attribute '"ns.name":"'$third_dir'"'
+    find_attribute '"ns.xattrs.path":"'/$second_dir/$third_dir'"'
+    find_attribute '"ns.name":"'$entry'"'
+    find_attribute '"ns.xattrs.path":"'/$second_dir/$third_dir/$entry'"'
+
+    mongo $testdb --eval "db.dropDatabase()"
+
+    local abs_path="$(realpath $first_dir)"
+
+    rbh_sync "rbh:posix:$abs_path#$second_dir" "rbh:mongo:$testdb"
+
+    find_attribute '"ns.name":"'$second_dir'"'
+    find_attribute '"ns.xattrs.path":"'/$second_dir'"'
+    find_attribute '"ns.name":"'$third_dir'"'
+    find_attribute '"ns.xattrs.path":"'/$second_dir/$third_dir'"'
+    find_attribute '"ns.name":"'$entry'"'
+    find_attribute '"ns.xattrs.path":"'/$second_dir/$third_dir/$entry'"'
+
+    mongo $testdb --eval "db.dropDatabase()"
+
+    rbh_sync "rbh:posix:$first_dir#$second_dir/$third_dir" "rbh:mongo:$testdb"
+    find_attribute '"ns.name":"'$third_dir'"'
+    find_attribute '"ns.xattrs.path":"'/$second_dir/$third_dir'"'
+    find_attribute '"ns.name":"'$entry'"'
+    find_attribute '"ns.xattrs.path":"'/$second_dir/$third_dir/$entry'"'
+}
+
+test_continue_sync_on_error()
+{
+    local first_file="test1"
+    local second_file="test2"
+    local third_file="test3"
+    local dir="dir"
+
+    mkdir $dir
+    touch $first_file $second_file $dir/$third_file
+    chmod o-rw $second_file
+    chmod o-rw $dir
+
+    # Here, we create a test user, and use it to run a rbh-sync on the files
+    # created above. Since that user doesn't have the read or write access to
+    # the second file and the directory, it cannot synchronize both, so errors
+    # should be outputted but the command shouldn't fail.
+    useradd -N -M test
+    local output="$((sudo -E -H -u test bash -c "rbh-sync rbh:posix:. \
+                     rbh:mongo:$testdb") 2>&1)"
+    userdel -f -r test || true
+
+    echo "$output" | grep "open '/$second_file'" ||
+        error "Failed to find error on open of '$second_file'"
+    echo "$output" | grep "open '/$dir'" ||
+        error "Failed to find error on open of '$second_file'"
+    echo "$output" | grep "FTS" | grep "read entry './$dir'" ||
+        error "Failed to find error on open of '$second_file'"
+
+    local db_count=$(mongo $testdb --eval "db.entries.count()")
+    if [[ $db_count -ne 2 ]]; then
+        error "Invalid number of files were synced, expected '2' entries, " \
+              "found '$db_count'."
+    fi
+
+    find_attribute '"ns.xattrs.path":"/"'
+    find_attribute '"ns.name":"'$first_file'"'
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
@@ -152,7 +242,8 @@ test_sync_fifo()
 declare -a tests=(test_sync_2_files test_sync_size test_sync_3_files
                   test_sync_xattrs test_sync_subdir test_sync_large_tree
                   test_sync_one_one_file test_sync_one_two_files
-                  test_sync_socket test_sync_fifo)
+                  test_sync_symbolic_link test_sync_socket test_sync_fifo
+                  test_sync_branch test_continue_sync_on_error)
 
 tmpdir=$(mktemp --directory)
 trap -- "rm -rf '$tmpdir'" EXIT

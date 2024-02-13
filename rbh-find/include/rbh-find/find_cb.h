@@ -1,4 +1,4 @@
-/* This file is part of rbh-find
+/* This file is part of RobinHood 4
  * Copyright (C) 2022 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
@@ -27,7 +27,9 @@ find_pre_action(struct find_context *ctx, const int index,
  * Called by rbh-find and implement GNU-find like behaviour.
  */
 int
-find_exec_action(struct find_context *ctx, enum action action,
+find_exec_action(struct find_context *ctx,
+                 size_t backend_index,
+                 enum action action,
                  struct rbh_fsentry *fsentry);
 
 /**

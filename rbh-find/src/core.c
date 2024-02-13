@@ -1,4 +1,4 @@
-/* This file is part of rbh-find
+/* This file is part of RobinHood 4
  * Copyright (C) 2022 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
@@ -101,7 +101,7 @@ _find(struct find_context *ctx, int backend_index, enum action action,
         if (fsentry == NULL)
             break;
 
-        count += ctx->exec_action_callback(ctx, action, fsentry);
+        count += ctx->exec_action_callback(ctx, backend_index, action, fsentry);
         free(fsentry);
     } while (true);
 

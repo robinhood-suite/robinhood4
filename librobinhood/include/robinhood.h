@@ -1,4 +1,4 @@
-/* This file is part of the RobinHood Library
+/* This file is part of RobinHood 4
  * Copyright (C) 2019 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
@@ -12,6 +12,7 @@
 #include "robinhood/filter.h"
 #include "robinhood/fsentry.h"
 #include "robinhood/fsevent.h"
+#include "robinhood/hashmap.h"
 #include "robinhood/id.h"
 #include "robinhood/iterator.h"
 #include "robinhood/itertools.h"

@@ -1,9 +1,13 @@
-/* This file is part of rbh-find-lustre
+/* This file is part of RobinHood 4
  * Copyright (C) 2022 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifer: LGPL-3.0-or-later
  */
+
+#if HAVE_CONFIG_H
+#include "config.h"
+#endif
 
 #include <ctype.h>
 #include <error.h>
@@ -125,23 +129,52 @@ hsm_state2filter(const char *hsm_state)
     return filter;
 }
 
+static bool
+check_balanced_braces(const char *fid)
+{
+    const char last = *(fid + strlen(fid) - 1);
+    const char *iter = fid;
+    int nb_braces = 0;
+
+    while (*iter) {
+        switch (*iter) {
+        case '[':
+            nb_braces++;
+            break;
+        case ']':
+            if (nb_braces <= 0)
+                return false;
+
+            nb_braces--;
+            break;
+        default:
+            break;
+        }
+        iter++;
+    }
+
+    return nb_braces == 0 &&
+        (*fid == '[' ? last == ']' : true);
+}
+
 struct rbh_filter *
 fid2filter(const char *fid)
 {
     struct rbh_filter *filter;
     struct lu_fid lu_fid;
+    char *endptr;
     int rc;
 
-#if HAVE_FID_PARSE
-    rc = llapi_fid_parse(fid, &lu_fid, NULL);
-    if (rc)
+#ifdef HAVE_FID_PARSE
+    rc = llapi_fid_parse(fid, &lu_fid, &endptr);
+    if (rc || *endptr != '\0' || !check_balanced_braces(fid))
         error(EX_USAGE, 0, "invalid fid parsing: %s", strerror(-rc));
 #else
     char *fid_format;
     int n_chars;
 
     if (*fid == '[')
-        fid_format = "[" SFID "]%n";
+        fid_format = "[" SFID "%n]";
     else
         fid_format = SFID "%n";
 
@@ -149,8 +182,16 @@ fid2filter(const char *fid)
     if (rc != 3)
         error(EX_USAGE, 0, "invalid fid parsing");
 
-    if (fid[n_chars] != '\0')
-        error(EX_USAGE, 0, "invalid fid parsing");
+    switch (*fid) {
+    case '[':
+        if (fid[n_chars] != ']' || fid[n_chars + 1] != '\0')
+            error(EX_USAGE, 0, "invalid fid parsing");
+        break;
+    default:
+        if (fid[n_chars] != '\0')
+            error(EX_USAGE, 0, "invalid fid parsing");
+        break;
+    }
 #endif
 
     filter = rbh_filter_compare_binary_new(

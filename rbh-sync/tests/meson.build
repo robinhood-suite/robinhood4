@@ -1,4 +1,4 @@
-# This file is part of the RobinHood Library
+# This file is part of RobinHood 4
 # Copyright (C) 2021 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #
@@ -10,6 +10,12 @@ liblustre = dependency('lustre', disabler: true, required: false)
 
 if liblustre.found()
     integration_tests += ['test_lustre_mongo_sync']
+endif
+
+libhestia = dependency('hestia', disabler: true, required: false)
+
+if libhestia.found()
+    integration_tests += ['test_hestia_mongo_sync']
 endif
 
 foreach t: integration_tests
