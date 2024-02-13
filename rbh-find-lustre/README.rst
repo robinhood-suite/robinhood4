@@ -144,6 +144,7 @@ rbh-lfind defines a ``printf`` action that will print information specific to
 Lustre. More specifically, we define the following directives:
  - '%E': to print the expiration date of the entry
  - '%e': to print the expiration attribute as set by the user
+ - '%I': to print the ID of an entry in base64
 
 Examples
 --------
