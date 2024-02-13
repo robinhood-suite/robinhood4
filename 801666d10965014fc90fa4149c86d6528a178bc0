@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1d2fe289_83e3251f",
+        "filename": "librobinhood/src/backends/posix/posix.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 554,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-02-13T08:02:12Z",
+      "side": 1,
+      "message": "style: declarations must be ordered following the line length, in a descending order\n\n```\nblabla abcqsd;\nbla qsdceb;\nblabla a;\n```",
+      "range": {
+        "startLine": 554,
+        "startChar": 4,
+        "endLine": 554,
+        "endChar": 45
+      },
+      "revId": "801666d10965014fc90fa4149c86d6528a178bc0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f0b08035_93d89950",
+        "filename": "librobinhood/src/backends/posix/posix.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 580,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-02-13T08:02:12Z",
+      "side": 1,
+      "message": "style: a line length must be less than 80 characters (except for strings)\n\n```\nfprintf(stderr, \"Synchronization of \u0027%s\u0027 skipped\\n\",\n        ftsent-\u003efts_path);\n```",
+      "range": {
+        "startLine": 580,
+        "startChar": 13,
+        "endLine": 580,
+        "endChar": 84
+      },
+      "revId": "801666d10965014fc90fa4149c86d6528a178bc0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6b5a5c01_58829063",
+        "filename": "librobinhood/src/backends/posix/posix.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 636,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-02-13T08:02:12Z",
+      "side": 1,
+      "message": "style: same as before",
+      "range": {
+        "startLine": 636,
+        "startChar": 12,
+        "endLine": 636,
+        "endChar": 83
+      },
+      "revId": "801666d10965014fc90fa4149c86d6528a178bc0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "743a6e18_6eb9a4fd",
+        "filename": "rbh-sync/tests/test_posix_mongo_sync.bash",
+        "patchSetId": 3
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-02-13T08:02:12Z",
+      "side": 1,
+      "message": "question: in this case, can the synchronization starts with the third file? or the directory?",
+      "range": {
+        "startLine": 273,
+        "startChar": 4,
+        "endLine": 274,
+        "endChar": 66
+      },
+      "revId": "801666d10965014fc90fa4149c86d6528a178bc0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fb9718b5_b33d579d",
+        "filename": "rbh-sync/tests/test_posix_mongo_sync.bash",
+        "patchSetId": 3
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-02-13T08:02:12Z",
+      "side": 1,
+      "message": "typo: double space",
+      "range": {
+        "startLine": 274,
+        "startChar": 40,
+        "endLine": 274,
+        "endChar": 41
+      },
+      "revId": "801666d10965014fc90fa4149c86d6528a178bc0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "00cf0019_e62176bd",
+        "filename": "rbh-sync/tests/test_posix_mongo_sync.bash",
+        "patchSetId": 3
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-02-13T08:02:12Z",
+      "side": 1,
+      "message": "minor/style: well, first because of line lengths, I propose the following version\n\n```\n    (echo $first_file_att | grep \"No entry found\" \u0026\u0026 \\\n     echo $second_file_att | grep \"No entry found\" \u0026\u0026 \\\n     echo $third_file_att | grep \"No entry found\") || \\\n    (find_attribute \u0027\"ns.name\":\"\u0027$first_file\u0027\"\u0027 \u0026\u0026 \\\n     echo $second_file_att | grep \"No entry found\" \u0026\u0026 \\\n     echo $third_file_att | grep \"No entry found\") || \\\n    error \"Synchronized files that should not.\"\n```\n\nBut it seems to me that the result of the first file synchronization is not important, either it succeeds or not, so maybe we do not need to test it?",
+      "range": {
+        "startLine": 279,
+        "startChar": 4,
+        "endLine": 283,
+        "endChar": 58
+      },
+      "revId": "801666d10965014fc90fa4149c86d6528a178bc0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
