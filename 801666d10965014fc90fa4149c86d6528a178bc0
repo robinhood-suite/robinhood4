@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "640195a3_7cc9209e",
+        "filename": "librobinhood/src/backends/posix/posix.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 554,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-02-13T09:10:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1d2fe289_83e3251f",
+      "range": {
+        "startLine": 554,
+        "startChar": 4,
+        "endLine": 554,
+        "endChar": 45
+      },
+      "revId": "801666d10965014fc90fa4149c86d6528a178bc0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f0b08035_93d89950",
@@ -47,6 +71,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc703b6e_dceae3bf",
+        "filename": "librobinhood/src/backends/posix/posix.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 580,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-02-13T09:10:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f0b08035_93d89950",
+      "range": {
+        "startLine": 580,
+        "startChar": 13,
+        "endLine": 580,
+        "endChar": 84
+      },
+      "revId": "801666d10965014fc90fa4149c86d6528a178bc0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6b5a5c01_58829063",
@@ -60,6 +108,30 @@
       "writtenOn": "2024-02-13T08:02:12Z",
       "side": 1,
       "message": "style: same as before",
+      "range": {
+        "startLine": 636,
+        "startChar": 12,
+        "endLine": 636,
+        "endChar": 83
+      },
+      "revId": "801666d10965014fc90fa4149c86d6528a178bc0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a91b5e43_2842d8f8",
+        "filename": "librobinhood/src/backends/posix/posix.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 636,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-02-13T09:10:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6b5a5c01_58829063",
       "range": {
         "startLine": 636,
         "startChar": 12,
@@ -118,6 +190,54 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "23e0156c_3233cd2e",
+        "filename": "rbh-sync/tests/test_posix_mongo_sync.bash",
+        "patchSetId": 3
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-02-13T09:10:17Z",
+      "side": 1,
+      "message": "Synchronization can begin with any file or directory in the tree. The order depends on how the files are stored by the file system. So it may well start with the first and second file or the directory in this case but not the third file because he is in the directory.",
+      "parentUuid": "743a6e18_6eb9a4fd",
+      "range": {
+        "startLine": 273,
+        "startChar": 4,
+        "endLine": 274,
+        "endChar": 66
+      },
+      "revId": "801666d10965014fc90fa4149c86d6528a178bc0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2d8cd0ec_6f033e6e",
+        "filename": "rbh-sync/tests/test_posix_mongo_sync.bash",
+        "patchSetId": 3
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-02-13T09:10:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fb9718b5_b33d579d",
+      "range": {
+        "startLine": 274,
+        "startChar": 40,
+        "endLine": 274,
+        "endChar": 41
+      },
+      "revId": "801666d10965014fc90fa4149c86d6528a178bc0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "00cf0019_e62176bd",
         "filename": "rbh-sync/tests/test_posix_mongo_sync.bash",
         "patchSetId": 3
@@ -129,6 +249,30 @@
       "writtenOn": "2024-02-13T08:02:12Z",
       "side": 1,
       "message": "minor/style: well, first because of line lengths, I propose the following version\n\n```\n    (echo $first_file_att | grep \"No entry found\" \u0026\u0026 \\\n     echo $second_file_att | grep \"No entry found\" \u0026\u0026 \\\n     echo $third_file_att | grep \"No entry found\") || \\\n    (find_attribute \u0027\"ns.name\":\"\u0027$first_file\u0027\"\u0027 \u0026\u0026 \\\n     echo $second_file_att | grep \"No entry found\" \u0026\u0026 \\\n     echo $third_file_att | grep \"No entry found\") || \\\n    error \"Synchronized files that should not.\"\n```\n\nBut it seems to me that the result of the first file synchronization is not important, either it succeeds or not, so maybe we do not need to test it?",
+      "range": {
+        "startLine": 279,
+        "startChar": 4,
+        "endLine": 283,
+        "endChar": 58
+      },
+      "revId": "801666d10965014fc90fa4149c86d6528a178bc0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f46a239f_c1920c78",
+        "filename": "rbh-sync/tests/test_posix_mongo_sync.bash",
+        "patchSetId": 3
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-02-13T09:10:17Z",
+      "side": 1,
+      "message": "The purpose of this option is to stop at the first error.\nAs we don\u0027t know the order in which files and directories are synchronized,\nif synchronization starts with the first file, it will stop when the second\nfile or directory is synchronized. Only the first file should be synchronized. \nAnd if synchronization starts with the second file or directory, no files\nshould be synchronized, as an error will occur from the start.",
+      "parentUuid": "00cf0019_e62176bd",
       "range": {
         "startLine": 279,
         "startChar": 4,
