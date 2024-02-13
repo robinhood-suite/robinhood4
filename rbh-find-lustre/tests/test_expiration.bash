@@ -159,7 +159,7 @@ test_expired_rel()
         sort | difflines "/$fileA" "/$fileB"
 }
 
-test_printf_expiration_date()
+test_printf_expiration_info()
 {
     local fileA="fileA"
     local timeA="+30"
@@ -183,6 +183,10 @@ test_printf_expiration_date()
     rbh_lfind "rbh:mongo:$testdb" -printf "%p %E\n" | sort |
         difflines "/$fileA $expA" "/$fileB $expB" "/$fileC Inf" \
                   "/$fileD None" "/ None"
+
+    rbh_lfind "rbh:mongo:$testdb" -printf "%p %e\n" | sort |
+        difflines "/$fileA $timeA" "/$fileB $timeB" "/$fileC $timeC" \
+                  "/$fileD None" "/ None"
 }
 
 ################################################################################
@@ -190,7 +194,7 @@ test_printf_expiration_date()
 ################################################################################
 
 declare -a tests=(test_invalid test_expired_abs test_expired_rel
-                  test_printf_expiration_date)
+                  test_printf_expiration_info)
 
 tmpdir=$(mktemp --directory --tmpdir=$LUSTRE_DIR)
 trap "rm -r $tmpdir" EXIT
