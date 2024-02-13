@@ -27,6 +27,19 @@ write_expiration_date_from_entry(const struct rbh_fsentry *fsentry,
                         time_from_timestamp(&value->int64));
 }
 
+static int
+write_expires_from_entry(const struct rbh_fsentry *fsentry,
+                                 char *output, int max_length)
+{
+    const struct rbh_value *value =
+        rbh_fsentry_find_inode_xattr(fsentry, "user.ccc_expires");
+
+    if (value == NULL || value->type != RBH_VT_STRING)
+        return snprintf(output, max_length, "None");
+    else
+        return snprintf(output, max_length, "%s", value->string);
+}
+
 int
 fsentry_print_lustre_directive(char *output, int max_length,
                                const struct rbh_fsentry *fsentry,
@@ -37,6 +50,8 @@ fsentry_print_lustre_directive(char *output, int max_length,
     assert(*directive != '\0');
 
     switch (*directive) {
+    case 'e':
+        return write_expires_from_entry(fsentry, output, max_length);
     case 'E':
         return write_expiration_date_from_entry(fsentry, output, max_length);
     default:
