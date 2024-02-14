@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "40e16d0c_77129235",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-02-14T08:14:48Z",
+      "side": 1,
+      "message": "Is this patch also on master?",
+      "revId": "b8dffd89053e4d571a1253476ea739a8e286760d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "adcb5ef1_7ee4c98f",
+        "filename": "librobinhood/src/backends/lustre/lustre.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 1011,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-02-14T08:14:48Z",
+      "side": 1,
+      "message": "defect: this patch is not fixing the issue. The issue is that xattrs_get_retention wants to retrieve the attribute from the ones that have been fetched in fsentry_from_ftsent. But when using lustre_get_attrs from rbh-fsevents, these attributes are not defined. What you are doing here is that rbh-fsevent will actually never retrieve the retention attribute since you set inode_xattrs_count to 0. You should do something similar to what xattr_get_magic_and_gen does: if the attributes are defined, try to find the retention attributes inside the list, otherwise fetch the attribute yourself.",
+      "range": {
+        "startLine": 1011,
+        "startChar": 12,
+        "endLine": 1011,
+        "endChar": 30
+      },
+      "revId": "b8dffd89053e4d571a1253476ea739a8e286760d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
