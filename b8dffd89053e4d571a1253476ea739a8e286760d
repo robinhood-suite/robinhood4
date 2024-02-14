@@ -39,6 +39,30 @@
       },
       "revId": "b8dffd89053e4d571a1253476ea739a8e286760d",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6916be8d_31269780",
+        "filename": "librobinhood/src/backends/lustre/lustre.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 1011,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-02-14T16:10:13Z",
+      "side": 1,
+      "message": "I disagree, the issue was a segfault, it is fixed. Yes this patch does not what you suggest, and it is planned, but that\u0027s neither the goal of this patch nor the reason of the segfault.\n\nI\u0027ve added the suggestion to my plan, it\u0027ll most be likely be done is the patch after the retention script, but not in this one.",
+      "parentUuid": "adcb5ef1_7ee4c98f",
+      "range": {
+        "startLine": 1011,
+        "startChar": 12,
+        "endLine": 1011,
+        "endChar": 30
+      },
+      "revId": "b8dffd89053e4d571a1253476ea739a8e286760d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
