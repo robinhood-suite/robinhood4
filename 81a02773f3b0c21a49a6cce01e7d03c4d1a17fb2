@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8eb46d5e_a47ccccb",
+        "filename": "utils/update_retention.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-02-14T10:03:17Z",
+      "side": 1,
+      "message": "minor: simply \"Directory \u0027$directory\u0027 has expired\"",
+      "range": {
+        "startLine": 40,
+        "startChar": 40,
+        "endLine": 40,
+        "endChar": 46
+      },
+      "revId": "81a02773f3b0c21a49a6cce01e7d03c4d1a17fb2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1c24c945_647c8f58",
+        "filename": "utils/update_retention.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-02-14T10:03:17Z",
+      "side": 1,
+      "message": "suggest: it would be better to avoid storing the results of rbh-lfind in a temp variable:\n\n```\nrbh-lfind ... | while IFS\u003d\u0027|\u0027 read -r dir expires expiration_date ID; do\n    check_expiration_date ...\ndone\n```",
+      "range": {
+        "startLine": 44,
+        "startChar": 9,
+        "endLine": 44,
+        "endChar": 30
+      },
+      "revId": "81a02773f3b0c21a49a6cce01e7d03c4d1a17fb2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2bb6a2ea_79e97d08",
+        "filename": "utils/update_retention.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-02-14T10:03:17Z",
+      "side": 1,
+      "message": "suggest: in the spirit of robinhood and to avoid confusion, it would probably be better (and more generic) to ask for a URI.",
+      "range": {
+        "startLine": 68,
+        "startChar": 10,
+        "endLine": 68,
+        "endChar": 45
+      },
+      "revId": "81a02773f3b0c21a49a6cce01e7d03c4d1a17fb2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
