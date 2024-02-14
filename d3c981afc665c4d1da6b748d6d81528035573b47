@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "75cda80e_33a98a66",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-02-14T09:25:04Z",
+      "side": 1,
+      "message": "Adding the overload should be in main since this will be useful for fid, hsm state... This patch should be split in 2: one on main and one on retention with the %E.",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 55
+      },
+      "revId": "d3c981afc665c4d1da6b748d6d81528035573b47",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f9f33904_02843e9c",
+        "filename": "rbh-find-lustre/rbh-find-lustre.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-02-14T09:25:04Z",
+      "side": 1,
+      "message": "minor: since this is the only difference, why not simply add this function to the context instead of redefining the same exec function for rbh-find and rbh-find-lustre? This would be simpler.",
+      "range": {
+        "startLine": 136,
+        "startChar": 30,
+        "endLine": 136,
+        "endChar": 60
+      },
+      "revId": "d3c981afc665c4d1da6b748d6d81528035573b47",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cacde6a8_24837cd2",
+        "filename": "rbh-find-lustre/src/actions.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-02-14T09:25:04Z",
+      "side": 1,
+      "message": "minor: you can simply print nothing",
+      "range": {
+        "startLine": 37,
+        "startChar": 4,
+        "endLine": 37,
+        "endChar": 51
+      },
+      "revId": "d3c981afc665c4d1da6b748d6d81528035573b47",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f51892db_096fbd3c",
+        "filename": "rbh-find-lustre/src/actions.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-02-14T09:25:04Z",
+      "side": 1,
+      "message": "suggest: as in rbh-find, it would be simpler to have a function like expired2str and do something like this:\n\nexpired_date \u003d expired2str(...);\nreturn snprintf(output, max_length, \"%s\", expired_date);\n\nYou could use a structure very similar to ctime_from_timestamp in rbh-find.",
+      "range": {
+        "startLine": 51,
+        "startChar": 15,
+        "endLine": 51,
+        "endChar": 47
+      },
+      "revId": "d3c981afc665c4d1da6b748d6d81528035573b47",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3085687e_abf6c7d9",
+        "filename": "rbh-find/src/find_cb.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-02-14T09:25:04Z",
+      "side": 1,
+      "message": "suggest: this could be ctx-\u003eprintf.print_directive",
+      "range": {
+        "startLine": 220,
+        "startChar": 30,
+        "endLine": 220,
+        "endChar": 53
+      },
+      "revId": "d3c981afc665c4d1da6b748d6d81528035573b47",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
