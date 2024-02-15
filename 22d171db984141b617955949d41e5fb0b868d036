@@ -429,6 +429,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "10542995_15fee343",
+        "filename": "librobinhood/src/backends/lustre-mpi/lustre-mpi.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-02-15T10:19:48Z",
+      "side": 1,
+      "message": "Yes it is, my comment was only referring to the declaration of the variable, not its value\n```\n    const char *path; //on line 47\n    path \u003d mfu_flist_file_get_name(mpi_iter-\u003eflist, ...);\n```",
+      "parentUuid": "349fd8db_794b4634",
+      "range": {
+        "startLine": 51,
+        "startChar": 4,
+        "endLine": 51,
+        "endChar": 20
+      },
+      "revId": "22d171db984141b617955949d41e5fb0b868d036",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "291a2250_0b6b1d50",
         "filename": "librobinhood/src/backends/lustre-mpi/lustre-mpi.c",
         "patchSetId": 3
