@@ -24,6 +24,7 @@
 #include "robinhood/backends/posix.h"
 #include "robinhood/backends/posix_internal.h"
 #include "robinhood/backends/lustre.h"
+#include "robinhood/statx.h"
 
 #ifndef HAVE_LUSTRE_FILE_HANDLE
 /* This structure is not defined before 2.15, so we define it to retrieve the
@@ -934,7 +935,7 @@ lustre_get_attrs(const int fd, const uint16_t mode,
 }
 
 static int
-lustre_ns_xattrs_callback(const int fd, const uint16_t mode,
+lustre_ns_xattrs_callback(const int fd, const struct rbh_statx *statx,
                           struct rbh_value_pair *inode_xattrs,
                           ssize_t *inode_xattrs_count,
                           struct rbh_value_pair *pairs,
@@ -944,7 +945,7 @@ lustre_ns_xattrs_callback(const int fd, const uint16_t mode,
         xattrs_get_fid, xattrs_get_hsm, xattrs_get_layout, xattrs_get_mdt_info
     };
 
-    return _get_attrs(fd, mode, xattrs_funcs,
+    return _get_attrs(fd, statx->stx_mode, xattrs_funcs,
                       sizeof(xattrs_funcs) / sizeof(xattrs_funcs[0]),
                       inode_xattrs, inode_xattrs_count, pairs, values);
 }
