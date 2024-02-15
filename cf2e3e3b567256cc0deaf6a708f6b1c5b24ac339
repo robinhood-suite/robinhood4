@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f0c4e6f1_046de893",
+        "filename": "librobinhood/src/backends/lustre-mpi/lustre-mpi.c",
+        "patchSetId": 7
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-02-15T15:19:26Z",
+      "side": 1,
+      "message": "nit: usually for memory allocation errors we use a function called error. You can look at `man 3 error`. This function will exit the program. You can either call error inside walk_path and therefore, you don\u0027t need to check that flist is not NULl here. Or you do it here. Both are fine. You can look at how it is called in other parts of the code. Note that when you call error, the program terminates which means that you don\u0027t need to free the already allocated memory.",
+      "range": {
+        "startLine": 138,
+        "startChar": 8,
+        "endLine": 141,
+        "endChar": 20
+      },
+      "revId": "cf2e3e3b567256cc0deaf6a708f6b1c5b24ac339",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
