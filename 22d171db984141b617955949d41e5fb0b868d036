@@ -1,0 +1,165 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "23271875_3f9dfb03",
+        "filename": "librobinhood/src/backends/lustre-mpi/lustre-mpi.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-02-15T08:13:52Z",
+      "side": 1,
+      "message": "major: to tell the iterator that it has to stop calling iter_next, you must set errno to ENODATA here\n\n```suggestion\n    if (mpi_iter-\u003ecurrent \u003d\u003d mpi_iter-\u003etotal) {\n        errno \u003d EINVAL;\n        return NULL;\n    }\n```",
+      "range": {
+        "startLine": 48,
+        "startChar": 4,
+        "endLine": 49,
+        "endChar": 20
+      },
+      "revId": "22d171db984141b617955949d41e5fb0b868d036",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fbdd66ab_2ae732a2",
+        "filename": "librobinhood/src/backends/lustre-mpi/lustre-mpi.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-02-15T08:13:52Z",
+      "side": 1,
+      "message": "style: we usually put variable declarations at the start of blocks",
+      "range": {
+        "startLine": 51,
+        "startChar": 4,
+        "endLine": 51,
+        "endChar": 20
+      },
+      "revId": "22d171db984141b617955949d41e5fb0b868d036",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "291a2250_0b6b1d50",
+        "filename": "librobinhood/src/backends/lustre-mpi/lustre-mpi.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-02-15T08:13:52Z",
+      "side": 1,
+      "message": "minor? So if `skip_error` is true, it means we want to skip the error, but we return NULL instead ? Shouldn\u0027t it be `!skip_error` here ?\n```suggestion\n        if (!skip_error)\n```",
+      "range": {
+        "startLine": 57,
+        "startChar": 12,
+        "endLine": 57,
+        "endChar": 22
+      },
+      "revId": "22d171db984141b617955949d41e5fb0b868d036",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f060e210_e6847ce5",
+        "filename": "librobinhood/src/backends/lustre-mpi/lustre-mpi.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-02-15T08:13:52Z",
+      "side": 1,
+      "message": "defect: if path is NULL and skip_error is false, we go to line 55, and end up in a infinite loop. The skip goto target should be on line 50",
+      "range": {
+        "startLine": 59,
+        "startChar": 8,
+        "endLine": 59,
+        "endChar": 18
+      },
+      "revId": "22d171db984141b617955949d41e5fb0b868d036",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "47e1fc6c_cb7d94a7",
+        "filename": "librobinhood/src/backends/lustre-mpi/lustre-mpi.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-02-15T08:13:52Z",
+      "side": 1,
+      "message": "minor: no need for two paths here, one is enough",
+      "range": {
+        "startLine": 100,
+        "startChar": 15,
+        "endLine": 100,
+        "endChar": 18
+      },
+      "revId": "22d171db984141b617955949d41e5fb0b868d036",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5b0a0fa9_ffecbf1c",
+        "filename": "librobinhood/src/backends/lustre-mpi/lustre-mpi.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-02-15T08:13:52Z",
+      "side": 1,
+      "message": "style: inverted pyramid",
+      "range": {
+        "startLine": 99,
+        "startChar": 4,
+        "endLine": 102,
+        "endChar": 19
+      },
+      "revId": "22d171db984141b617955949d41e5fb0b868d036",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f5402659_e8cecf1c",
+        "filename": "librobinhood/src/backends/lustre-mpi/lustre-mpi.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-02-15T08:13:52Z",
+      "side": 1,
+      "message": "suggest: put the declaration of this variable on the same line as its usage, line 125",
+      "range": {
+        "startLine": 102,
+        "startChar": 4,
+        "endLine": 102,
+        "endChar": 19
+      },
+      "revId": "22d171db984141b617955949d41e5fb0b868d036",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
