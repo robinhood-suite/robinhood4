@@ -142,6 +142,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "80e77eba_38076b37",
+        "filename": "librobinhood/src/backends/lustre-mpi/lustre-mpi.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-02-15T08:48:58Z",
+      "side": 1,
+      "message": "Whoops, wanted to try out gerrithub\u0027s new feature, but uh...\n```suggestion\n    if (mpi_iter-\u003ecurrent \u003d\u003d mpi_iter-\u003etotal) {\n        errno \u003d ENODATA;\n        return NULL;\n    }\n```",
+      "parentUuid": "da15d076_fc4d86cf",
+      "range": {
+        "startLine": 48,
+        "startChar": 4,
+        "endLine": 49,
+        "endChar": 20
+      },
+      "revId": "22d171db984141b617955949d41e5fb0b868d036",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "fbdd66ab_2ae732a2",
         "filename": "librobinhood/src/backends/lustre-mpi/lustre-mpi.c",
         "patchSetId": 3
