@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b09db5b7_0ad96256",
+        "filename": "librobinhood/src/backends/lustre-mpi/lustre-mpi.c",
+        "patchSetId": 6
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-02-15T12:37:41Z",
+      "side": 1,
+      "message": "suggest:\n\n```\nstatic mfu_flist\nwalk_path(const char *path)\n{\n    mfu_walk_opts_t *walk_opts \u003d ...;\n    mfu_file_t *mfu_file \u003d ...;\n    mfu_flist flist \u003d mfu_flist_new(); // attention à l\u0027ordre des déclarations\n    \n    if (!flist || !mfu_file || !walk_opts)\n        error(...);\n        \n    mfu_flist_walk_path(...);\n    mfu_walk_opts_delete(...);\n    mfu_file_delete(\u0026mfu_file);\n    \n    return flist;\n}\n```",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 27,
+        "endChar": 20
+      },
+      "revId": "08d39624660c14c03974ffea7e2240ab9f6a0e54",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8e34a43f_0d54bb56",
         "filename": "librobinhood/src/backends/lustre-mpi/lustre-mpi.c",
         "patchSetId": 6
@@ -19,6 +42,29 @@
         "startChar": 10,
         "endLine": 102,
         "endChar": 15
+      },
+      "revId": "08d39624660c14c03974ffea7e2240ab9f6a0e54",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "78ba8dbe_d3cff7b9",
+        "filename": "librobinhood/src/backends/lustre-mpi/lustre-mpi.c",
+        "patchSetId": 6
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-02-15T12:37:41Z",
+      "side": 1,
+      "message": "suggest: if you follow my suggestion `mpi_iter-\u003eflist \u003d walk_path(path);`",
+      "range": {
+        "startLine": 134,
+        "startChar": 22,
+        "endLine": 134,
+        "endChar": 27
       },
       "revId": "08d39624660c14c03974ffea7e2240ab9f6a0e54",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
