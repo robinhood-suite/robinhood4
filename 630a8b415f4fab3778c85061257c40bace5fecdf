@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8abdf9fa_c4567004",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-02-15T14:23:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "82182c86_9ad580f5",
+      "range": {
+        "startLine": 10,
+        "startChar": 24,
+        "endLine": 11,
+        "endChar": 9
+      },
+      "revId": "630a8b415f4fab3778c85061257c40bace5fecdf",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "347d8293_f8a8d067",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-02-14T09:51:39Z",
       "side": 1,
       "message": "minor: the user doesn\u0027t know what we store. Who is user referring to here? The owner of the file or the system administrator using robinhood? This should say \"and we don\u0027t have a way to retrieve what the user stored in the attribute.\"",
+      "range": {
+        "startLine": 15,
+        "startChar": 4,
+        "endLine": 16,
+        "endChar": 8
+      },
+      "revId": "630a8b415f4fab3778c85061257c40bace5fecdf",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f6bc1f62_353b850f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-02-15T14:23:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "347d8293_f8a8d067",
       "range": {
         "startLine": 15,
         "startChar": 4,
@@ -70,6 +118,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a71ea6d5_4d06f6d1",
+        "filename": "librobinhood/src/backends/lustre/lustre.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 924,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-02-15T14:23:10Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "1eb0c2c8_e9570c4e",
+      "range": {
+        "startLine": 924,
+        "startChar": 11,
+        "endLine": 924,
+        "endChar": 25
+      },
+      "revId": "630a8b415f4fab3778c85061257c40bace5fecdf",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "220b0939_b9e66d18",
@@ -83,6 +155,30 @@
       "writtenOn": "2024-02-14T09:51:39Z",
       "side": 1,
       "message": "defect: errno is not set here\nthis change looks like you wanted to not update the attribute when it was ill formed. This should have been mentioned in the commit message or put in another patch. Also, it looks like this bug was introduced in [this](https://review.gerrithub.io/c/robinhood-suite/robinhood4/+/1176817/1) patch so it should be fixed there.",
+      "range": {
+        "startLine": 979,
+        "startChar": 8,
+        "endLine": 980,
+        "endChar": 22
+      },
+      "revId": "630a8b415f4fab3778c85061257c40bace5fecdf",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "611a9d40_0c4bd88e",
+        "filename": "librobinhood/src/backends/lustre/lustre.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 980,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-02-15T14:23:10Z",
+      "side": 1,
+      "message": "Modified this to do a \"best effort\" approach: if the creation fails, we simply return 0, to indicate that no new xattr has been added to the inode_xattrs of the entry. Since getting this value is not mandatory, we shouldn\u0027t skip the entry in case of failure",
+      "parentUuid": "220b0939_b9e66d18",
       "range": {
         "startLine": 979,
         "startChar": 8,
