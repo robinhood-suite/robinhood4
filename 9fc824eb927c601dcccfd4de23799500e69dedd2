@@ -65,6 +65,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "60f2c993_d12b7640",
+        "filename": "librobinhood/src/backends/posix/posix.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 483,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-02-15T09:01:30Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "69b936ef_be2a24bd",
+      "range": {
+        "startLine": 483,
+        "startChar": 36,
+        "endLine": 483,
+        "endChar": 57
+      },
+      "revId": "9fc824eb927c601dcccfd4de23799500e69dedd2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7099b32b_433f3386",
