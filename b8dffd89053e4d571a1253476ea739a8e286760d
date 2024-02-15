@@ -63,6 +63,30 @@
       },
       "revId": "b8dffd89053e4d571a1253476ea739a8e286760d",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6bc01c09_4c0c8e61",
+        "filename": "librobinhood/src/backends/lustre/lustre.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 1011,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-02-15T07:53:18Z",
+      "side": 1,
+      "message": "So I don\u0027t see a reason to integrate this patch then. It seems to me that it does not belong to this stack anyway. So might as well remove it from here and do a proper fix instead. The actual fix is not complex. It\u0027s just \"test if a pointer is NULL and call getxattr\". So I\u0027d rather have the fix than an intermediary patch that does fix the actual issue.",
+      "parentUuid": "6916be8d_31269780",
+      "range": {
+        "startLine": 1011,
+        "startChar": 12,
+        "endLine": 1011,
+        "endChar": 30
+      },
+      "revId": "b8dffd89053e4d571a1253476ea739a8e286760d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
