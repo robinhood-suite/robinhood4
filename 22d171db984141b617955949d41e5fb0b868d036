@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "065ef548_3eaf891f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-02-15T10:11:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "696f5e13_e180997d",
+      "range": {
+        "startLine": 12,
+        "startChar": 224,
+        "endLine": 12,
+        "endChar": 230
+      },
+      "revId": "22d171db984141b617955949d41e5fb0b868d036",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ac0e5461_a6490944",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-02-15T08:47:09Z",
       "side": 1,
       "message": "typo",
+      "range": {
+        "startLine": 14,
+        "startChar": 90,
+        "endLine": 14,
+        "endChar": 96
+      },
+      "revId": "22d171db984141b617955949d41e5fb0b868d036",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b8f859d_a21b3a60",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-02-15T10:11:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ac0e5461_a6490944",
       "range": {
         "startLine": 14,
         "startChar": 90,
@@ -70,6 +118,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "39824e7f_78e82f6a",
+        "filename": "librobinhood/include/robinhood/backends/lustre_mpi_internal.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-02-15T10:11:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4ec2ad74_e470b1a5",
+      "range": {
+        "startLine": 48,
+        "startChar": 4,
+        "endLine": 53,
+        "endChar": 20
+      },
+      "revId": "22d171db984141b617955949d41e5fb0b868d036",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ed45c7a0_2f1260b6",
@@ -83,6 +155,30 @@
       "writtenOn": "2024-02-15T08:47:09Z",
       "side": 1,
       "message": "question: I am not familiar with the API, is it standard to delete those structures after the walk path?\n\nAfter some thinkings, maybe because at this point, the file system walk is already done and the options are not needed anymore. If it\u0027s correct you can resolve this question.",
+      "range": {
+        "startLine": 37,
+        "startChar": 4,
+        "endLine": 38,
+        "endChar": 31
+      },
+      "revId": "22d171db984141b617955949d41e5fb0b868d036",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "20c26612_d5bba65e",
+        "filename": "librobinhood/src/backends/lustre-mpi/lustre-mpi.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-02-15T10:11:45Z",
+      "side": 1,
+      "message": "The \"walk_opts\" and \"mfu_file\" objects are only useful for the file system walk, we no longer need them after.",
+      "parentUuid": "ed45c7a0_2f1260b6",
       "range": {
         "startLine": 37,
         "startChar": 4,
@@ -164,6 +260,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e2627a96_0cb19498",
+        "filename": "librobinhood/src/backends/lustre-mpi/lustre-mpi.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-02-15T10:11:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "23271875_3f9dfb03",
+      "range": {
+        "startLine": 48,
+        "startChar": 4,
+        "endLine": 49,
+        "endChar": 20
+      },
+      "revId": "22d171db984141b617955949d41e5fb0b868d036",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fbdd66ab_2ae732a2",
@@ -177,6 +297,30 @@
       "writtenOn": "2024-02-15T08:13:52Z",
       "side": 1,
       "message": "style: we usually put variable declarations at the start of blocks",
+      "range": {
+        "startLine": 51,
+        "startChar": 4,
+        "endLine": 51,
+        "endChar": 20
+      },
+      "revId": "22d171db984141b617955949d41e5fb0b868d036",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "349fd8db_794b4634",
+        "filename": "librobinhood/src/backends/lustre-mpi/lustre-mpi.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-02-15T10:11:45Z",
+      "side": 1,
+      "message": "It seems to me more logical to retrieve the path of the next file only if we are not at the end of the flist.",
+      "parentUuid": "fbdd66ab_2ae732a2",
       "range": {
         "startLine": 51,
         "startChar": 4,
@@ -210,6 +354,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6172644d_ca8bce6a",
+        "filename": "librobinhood/src/backends/lustre-mpi/lustre-mpi.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-02-15T10:11:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "291a2250_0b6b1d50",
+      "range": {
+        "startLine": 57,
+        "startChar": 12,
+        "endLine": 57,
+        "endChar": 22
+      },
+      "revId": "22d171db984141b617955949d41e5fb0b868d036",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f060e210_e6847ce5",
@@ -233,6 +401,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4df0dbe5_c4e1847f",
+        "filename": "librobinhood/src/backends/lustre-mpi/lustre-mpi.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-02-15T10:11:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f060e210_e6847ce5",
+      "range": {
+        "startLine": 59,
+        "startChar": 8,
+        "endLine": 59,
+        "endChar": 18
+      },
+      "revId": "22d171db984141b617955949d41e5fb0b868d036",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "47e1fc6c_cb7d94a7",
@@ -246,6 +438,30 @@
       "writtenOn": "2024-02-15T08:13:52Z",
       "side": 1,
       "message": "minor: no need for two paths here, one is enough",
+      "range": {
+        "startLine": 100,
+        "startChar": 15,
+        "endLine": 100,
+        "endChar": 18
+      },
+      "revId": "22d171db984141b617955949d41e5fb0b868d036",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad290bc4_9e732208",
+        "filename": "librobinhood/src/backends/lustre-mpi/lustre-mpi.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-02-15T10:11:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "47e1fc6c_cb7d94a7",
       "range": {
         "startLine": 100,
         "startChar": 15,
@@ -294,6 +510,54 @@
       "message": "suggest: put the declaration of this variable on the same line as its usage, line 125",
       "range": {
         "startLine": 102,
+        "startChar": 4,
+        "endLine": 102,
+        "endChar": 19
+      },
+      "revId": "22d171db984141b617955949d41e5fb0b868d036",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6f9df4ec_15f3ff74",
+        "filename": "librobinhood/src/backends/lustre-mpi/lustre-mpi.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-02-15T10:11:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f5402659_e8cecf1c",
+      "range": {
+        "startLine": 102,
+        "startChar": 4,
+        "endLine": 102,
+        "endChar": 19
+      },
+      "revId": "22d171db984141b617955949d41e5fb0b868d036",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c8c22c4_87f406d8",
+        "filename": "librobinhood/src/backends/lustre-mpi/lustre-mpi.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-02-15T10:11:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5b0a0fa9_ffecbf1c",
+      "range": {
+        "startLine": 99,
         "startChar": 4,
         "endLine": 102,
         "endChar": 19
