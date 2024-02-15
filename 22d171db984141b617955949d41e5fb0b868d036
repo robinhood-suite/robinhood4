@@ -3,6 +3,98 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "696f5e13_e180997d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-02-15T08:47:09Z",
+      "side": 1,
+      "message": "typo: lustre",
+      "range": {
+        "startLine": 12,
+        "startChar": 224,
+        "endLine": 12,
+        "endChar": 230
+      },
+      "revId": "22d171db984141b617955949d41e5fb0b868d036",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ac0e5461_a6490944",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-02-15T08:47:09Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 14,
+        "startChar": 90,
+        "endLine": 14,
+        "endChar": 96
+      },
+      "revId": "22d171db984141b617955949d41e5fb0b868d036",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4ec2ad74_e470b1a5",
+        "filename": "librobinhood/include/robinhood/backends/lustre_mpi_internal.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-02-15T08:47:09Z",
+      "side": 1,
+      "message": "minor: it will be better with some comments to explain those fields",
+      "range": {
+        "startLine": 48,
+        "startChar": 4,
+        "endLine": 53,
+        "endChar": 20
+      },
+      "revId": "22d171db984141b617955949d41e5fb0b868d036",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ed45c7a0_2f1260b6",
+        "filename": "librobinhood/src/backends/lustre-mpi/lustre-mpi.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-02-15T08:47:09Z",
+      "side": 1,
+      "message": "question: I am not familiar with the API, is it standard to delete those structures after the walk path?\n\nAfter some thinkings, maybe because at this point, the file system walk is already done and the options are not needed anymore. If it\u0027s correct you can resolve this question.",
+      "range": {
+        "startLine": 37,
+        "startChar": 4,
+        "endLine": 38,
+        "endChar": 31
+      },
+      "revId": "22d171db984141b617955949d41e5fb0b868d036",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "23271875_3f9dfb03",
         "filename": "librobinhood/src/backends/lustre-mpi/lustre-mpi.c",
         "patchSetId": 3
@@ -14,6 +106,30 @@
       "writtenOn": "2024-02-15T08:13:52Z",
       "side": 1,
       "message": "major: to tell the iterator that it has to stop calling iter_next, you must set errno to ENODATA here\n\n```suggestion\n    if (mpi_iter-\u003ecurrent \u003d\u003d mpi_iter-\u003etotal) {\n        errno \u003d EINVAL;\n        return NULL;\n    }\n```",
+      "range": {
+        "startLine": 48,
+        "startChar": 4,
+        "endLine": 49,
+        "endChar": 20
+      },
+      "revId": "22d171db984141b617955949d41e5fb0b868d036",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "da15d076_fc4d86cf",
+        "filename": "librobinhood/src/backends/lustre-mpi/lustre-mpi.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-02-15T08:47:09Z",
+      "side": 1,
+      "message": "You mentioned ENODATA but suggested EINVAL.",
+      "parentUuid": "23271875_3f9dfb03",
       "range": {
         "startLine": 48,
         "startChar": 4,
