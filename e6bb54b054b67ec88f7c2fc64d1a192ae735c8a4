@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "46e3c155_b54fc12e",
+        "filename": "rbh-find/include/rbh-find/core.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-02-16T14:54:25Z",
+      "side": 1,
+      "message": "typo: targeted",
+      "range": {
+        "startLine": 117,
+        "startChar": 26,
+        "endLine": 117,
+        "endChar": 35
+      },
+      "revId": "e6bb54b054b67ec88f7c2fc64d1a192ae735c8a4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
