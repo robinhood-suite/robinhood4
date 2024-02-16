@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6f3dc3d7_5cdec688",
+        "filename": "rbh-find/tests/test_printf.bash",
+        "patchSetId": 4
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-02-16T13:36:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b1ec0f58_606d4e4d",
+      "range": {
+        "startLine": 32,
+        "startChar": 27,
+        "endLine": 32,
+        "endChar": 42
+      },
+      "revId": "e9104b3937847c33a0d404614f9e9de372a5d570",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cf380fa2_0496f465",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-02-16T10:35:58Z",
       "side": 1,
       "message": "minor: same thing, to useful",
+      "range": {
+        "startLine": 39,
+        "startChar": 28,
+        "endLine": 39,
+        "endChar": 33
+      },
+      "revId": "e9104b3937847c33a0d404614f9e9de372a5d570",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4fe864b2_1de90b21",
+        "filename": "rbh-find/tests/test_printf.bash",
+        "patchSetId": 4
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-02-16T13:36:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cf380fa2_0496f465",
       "range": {
         "startLine": 39,
         "startChar": 28,
