@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4d5d57a6_ea6d3a3c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-02-16T10:56:28Z",
+      "side": 1,
+      "message": "style: the indentation is strange",
+      "range": {
+        "startLine": 17,
+        "startChar": 1,
+        "endLine": 22,
+        "endChar": 48
+      },
+      "revId": "571edec2dff6235f396db7ce3b1263d5592f2fb4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aeb736e1_d771ee27",
+        "filename": "utils/update_retention.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-02-16T10:56:28Z",
+      "side": 1,
+      "message": "major: missing license, also if this is intended to be used this should be installed by the meson script. And I would suggest to rename it: rbh_update_retention (without the .sh and a rbh_ prefix). The user of this command doesn\u0027t need to know its a shell script.",
+      "range": {
+        "startLine": 1,
+        "startChar": 1,
+        "endLine": 1,
+        "endChar": 11
+      },
+      "revId": "571edec2dff6235f396db7ce3b1263d5592f2fb4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ed12386b_3a46359f",
+        "filename": "utils/update_retention.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-02-16T10:56:28Z",
+      "side": 1,
+      "message": "suggest: to make it a bit more readable you could do this:\n\n```\nrbh-fsevents ... \u003c\u003cEOF\n--- !inode_xattr\n\"id\": !!binary $directory_ID\n\"xattrs:\n  \"user.ccc_expiration_date\": !int64 $expiration_date\n...\nEOF\n```",
+      "range": {
+        "startLine": 9,
+        "startChar": 5,
+        "endLine": 9,
+        "endChar": 10
+      },
+      "revId": "571edec2dff6235f396db7ce3b1263d5592f2fb4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b37343dc_4f966132",
+        "filename": "utils/update_retention.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-02-16T10:56:28Z",
+      "side": 1,
+      "message": "defect: I don\u0027t think this works because sort by default does not sort numericaly:\n\n```\nprintf \"9\\n99\\n88\\n\" | sort\n88\n9\n99\n```\n\nThis does what you want:\n```\nprintf \"9\\n99\\n88\\n\" | sort -n\n9\n88\n99\n```\n\nAlso, this is probably not important but maybe its more efficient to use head instead of tail that will read the whole stdout of sort. So using `sort -rn | head -n 1` may be a bit more efficient (I don\u0027t know).",
+      "range": {
+        "startLine": 25,
+        "startChar": 45,
+        "endLine": 25,
+        "endChar": 49
+      },
+      "revId": "571edec2dff6235f396db7ce3b1263d5592f2fb4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8a4938d3_ea1f4562",
+        "filename": "utils/update_retention.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-02-16T10:56:28Z",
+      "side": 1,
+      "message": "question: aren\u0027t you supposed to remove the entries here? Or simply print them so that the admin can do something like: `check_expiration rbh:mongo:lustre | xargs rm`. If we go for the print option, all the messages that you display should be redirected to stderr.",
+      "range": {
+        "startLine": 40,
+        "startChar": 8,
+        "endLine": 40,
+        "endChar": 49
+      },
+      "revId": "571edec2dff6235f396db7ce3b1263d5592f2fb4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eb5687e6_3aece330",
+        "filename": "utils/update_retention.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-02-16T10:56:28Z",
+      "side": 1,
+      "message": "minor: one too many",
+      "range": {
+        "startLine": 48,
+        "startChar": 36,
+        "endLine": 48,
+        "endChar": 45
+      },
+      "revId": "571edec2dff6235f396db7ce3b1263d5592f2fb4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
