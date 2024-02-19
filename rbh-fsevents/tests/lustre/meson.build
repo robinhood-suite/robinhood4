@@ -8,7 +8,8 @@ integration_tests = ['test_create_close', 'test_mkdir', 'test_symlink',
                      'test_hardlink', 'test_mknod', 'test_unlink', 'test_rmdir',
                      'test_rename', 'test_hsm', 'test_trunc', 'test_layout',
                      'test_migrate', 'test_flrw', 'test_resync',
-                     'test_setxattr', 'acceptance', 'acceptance-dedup']
+                     'test_setxattr', 'test_retention', 'acceptance',
+                     'acceptance-dedup']
 
 foreach t: integration_tests
     e = find_program(t + '.bash')
