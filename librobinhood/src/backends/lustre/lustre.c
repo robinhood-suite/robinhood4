@@ -983,46 +983,52 @@ create_expiration_date_value_pair(const char *attribute_value,
 }
 
 static int
-xattrs_get_retention(const struct rbh_statx *statx,
+xattrs_get_retention(int fd, const struct rbh_statx *statx,
                      struct rbh_value_pair *pairs)
 {
     struct rbh_value *new_value;
+    char tmp[INT64_MAX_STR_LEN];
 
-    for (int i = 0; i < *_inode_xattrs_count; ++i) {
-        char tmp[INT64_MAX_STR_LEN];
+    if (_inode_xattrs_count == NULL) {
+        ssize_t length = fgetxattr(fd, XATTR_CCC_EXPIRES, tmp, sizeof(tmp));
 
-        if (strcmp(_inode_xattrs[i].key, XATTR_CCC_EXPIRES))
-            continue;
+        if (length == -1)
+            return 0;
 
-        if (_inode_xattrs[i].value->binary.size >= INT64_MAX_STR_LEN) {
-            fprintf(stderr,
-                    "Invalid value for expiration attribute '%.*s', too long, max size is '%d'\n",
-                    (int) _inode_xattrs[i].value->binary.size,
-                    _inode_xattrs[i].value->binary.data,
-                    INT64_MAX_STR_LEN);
-            break;
+        tmp[length] = 0;
+    } else {
+        for (int i = 0; i < *_inode_xattrs_count; ++i) {
+            if (strcmp(_inode_xattrs[i].key, XATTR_CCC_EXPIRES))
+                continue;
+
+            if (_inode_xattrs[i].value->binary.size >= INT64_MAX_STR_LEN) {
+                fprintf(stderr,
+                        "Invalid value for expiration attribute '%.*s', too long, max size is '%d'\n",
+                        (int) _inode_xattrs[i].value->binary.size,
+                        _inode_xattrs[i].value->binary.data,
+                        INT64_MAX_STR_LEN);
+                break;
+            }
+
+            memcpy(tmp, _inode_xattrs[i].value->binary.data,
+                   _inode_xattrs[i].value->binary.size);
+            tmp[_inode_xattrs[i].value->binary.size] = 0;
+
+            new_value = rbh_sstack_push(_values, NULL, sizeof(*new_value));
+            if (new_value == NULL)
+                return 0;
+
+            new_value->type = RBH_VT_STRING;
+            new_value->string = rbh_sstack_push(_values, tmp, strlen(tmp) + 1);
+
+            _inode_xattrs[i].value = new_value;
         }
-
-        memcpy(tmp, _inode_xattrs[i].value->binary.data,
-               _inode_xattrs[i].value->binary.size);
-        tmp[_inode_xattrs[i].value->binary.size] = 0;
-
-        if (create_expiration_date_value_pair(tmp, statx, &pairs[0]))
-            return 0;
-
-        new_value = rbh_sstack_push(_values, NULL, sizeof(*new_value));
-        if (new_value == NULL)
-            return 0;
-
-        new_value->type = RBH_VT_STRING;
-        new_value->string = rbh_sstack_push(_values, tmp, strlen(tmp) + 1);
-
-        _inode_xattrs[i].value = new_value;
-
-        return 1;
     }
 
-    return 0;
+    if (create_expiration_date_value_pair(tmp, statx, &pairs[0]))
+        return 0;
+
+    return 1;
 }
 
 static int
@@ -1050,9 +1056,7 @@ _get_attrs(const int fd, const struct rbh_statx *statx,
         count += subcount;
     }
 
-    subcount = xattrs_get_retention(statx, &pairs[count]);
-
-    count += subcount;
+    count += xattrs_get_retention(fd, statx, &pairs[count]);
 
     return count;
 }
