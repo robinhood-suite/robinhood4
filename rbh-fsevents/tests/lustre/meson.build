@@ -10,6 +10,11 @@ integration_tests = ['test_create_close', 'test_mkdir', 'test_symlink',
                      'test_migrate', 'test_flrw', 'test_resync',
                      'test_setxattr', 'acceptance', 'acceptance-dedup']
 
+lfind = find_program('rbh-lfind', required: false)
+if lfind.found()
+    integration_tests += ['test_retention']
+endif
+
 foreach t: integration_tests
     e = find_program(t + '.bash')
     # Meson by default runs all tests in parallel, and since they all add data
