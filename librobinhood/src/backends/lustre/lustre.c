@@ -988,6 +988,7 @@ xattrs_get_retention(int fd, const struct rbh_statx *statx,
 {
     struct rbh_value *new_value;
     char tmp[INT64_MAX_STR_LEN];
+    int index_to_change;
 
     if (_inode_xattrs_count == NULL) {
         ssize_t length = fgetxattr(fd, XATTR_CCC_EXPIRES, tmp, sizeof(tmp));
@@ -1014,21 +1015,30 @@ xattrs_get_retention(int fd, const struct rbh_statx *statx,
                    _inode_xattrs[i].value->binary.size);
             tmp[_inode_xattrs[i].value->binary.size] = 0;
 
-            new_value = rbh_sstack_push(_values, NULL, sizeof(*new_value));
-            if (new_value == NULL)
-                return 0;
-
-            new_value->type = RBH_VT_STRING;
-            new_value->string = rbh_sstack_push(_values, tmp, strlen(tmp) + 1);
-
-            _inode_xattrs[i].value = new_value;
+            index_to_change = i;
         }
     }
 
     if (create_expiration_date_value_pair(tmp, statx, &pairs[0]))
         return 0;
 
-    return 1;
+    new_value = rbh_sstack_push(_values, NULL, sizeof(*new_value));
+    if (new_value == NULL)
+        return 0;
+
+    new_value->type = RBH_VT_STRING;
+    new_value->string = rbh_sstack_push(_values, tmp, strlen(tmp) + 1);
+
+    if (_inode_xattrs) {
+        fill_string_pair(XATTR_CCC_EXPIRES, tmp, strlen(tmp) + 1,
+                         &_inode_xattrs[index_to_change]);
+
+        return 1;
+    } else {
+        fill_string_pair(XATTR_CCC_EXPIRES, tmp, strlen(tmp) + 1, &pairs[1]);
+
+        return 2;
+    }
 }
 
 static int
