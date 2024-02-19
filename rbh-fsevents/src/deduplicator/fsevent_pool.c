@@ -655,7 +655,7 @@ dedup_upsert(const struct rbh_fsevent *event,
             cached_upsert->fsevent.xattrs.pairs[0].value->map.pairs[0].value;
 
             mask->uint32 |=
-                event->xattrs.pairs[0].value->map.pairs[0].value->uint32;
+                event->xattrs.pairs[0].value->map.pairs[i].value->uint32;
 
         } else if (!strcmp(xattr->key, "symlink")) {
             // XXX at most one symlink per inode
