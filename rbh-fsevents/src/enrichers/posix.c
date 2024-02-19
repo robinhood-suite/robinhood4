@@ -499,6 +499,20 @@ enrich_xattrs(const struct rbh_value *xattrs_to_enrich,
 
     for (size_t i = 0; i < xattrs_count; i++) {
         const char *key = xattrs_seq[i].string;
+        bool already_found = false;
+
+        for (size_t j = 0; j < enriched->xattrs.count; ++j) {
+            /* If we already found the xattr to enrich, for instance in the
+             * Lustre enricher, skip it in the POSIX one.
+             */
+            if (strcmp(key, (*pairs)[j].key) == 0) {
+                already_found = true;
+                break;
+            }
+        }
+
+        if (already_found)
+            continue;
 
         length = fgetxattr(fd, key, buffer, sizeof(buffer));
         if (length == -1) {

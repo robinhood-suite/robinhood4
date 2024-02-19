@@ -57,6 +57,7 @@ test_retention()
     local exp_time="$(( $(stat -c %X $entry) + 5))"
     find_attribute '"xattrs.user.ccc_expiration_date": NumberLong('$exp_time')'\
                    '"ns.name": "'$entry'"'
+    find_attribute '"xattrs.user.ccc_expires": "+5"' '"ns.name": "'$entry'"'
 
     rbh-lfind "rbh:mongo:$testdb" -expired | sort | difflines
 
@@ -75,6 +76,7 @@ test_retention()
     exp_time="$(( $(stat -c %Y $entry) + 5))"
     find_attribute '"xattrs.user.ccc_expiration_date": NumberLong('$exp_time')'\
                    '"ns.name": "'$entry'"'
+    find_attribute '"xattrs.user.ccc_expires": "+5"' '"ns.name": "'$entry'"'
 
     rbh-lfind "rbh:mongo:$testdb" -expired | sort | difflines
 
