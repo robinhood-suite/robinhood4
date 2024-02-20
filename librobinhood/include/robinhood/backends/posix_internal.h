@@ -19,6 +19,7 @@
  */
 
 #include <fts.h>
+#include <unistd.h>
 
 #include "robinhood/backend.h"
 #include "robinhood/sstack.h"
@@ -56,8 +57,35 @@ struct posix_iterator {
     bool skip_error;
 };
 
+/**
+ * Structure containing the result of fsentry_from_any
+ */
+struct fsentry_id_pair {
+    /**
+     * rbh_id of the rbh_fsentry,
+     * use by the backend posix to remember the id for the fsentry's children
+     */
+    struct rbh_id *id;
+    struct rbh_fsentry *fsentry;
+};
+
 struct posix_iterator *
 posix_iterator_new(const char *root, const char *entry, int statx_sync_type);
+
+struct rbh_id *
+id_from_fd(int fd);
+
+
+bool
+fsentry_from_any(struct fsentry_id_pair *fid, struct rbh_value path,
+                 char *accpath, struct rbh_id *file_id,
+                 struct rbh_id *parent_id, char *name, int statx_sync_type,
+                 int (*inode_xattrs_callback)(const int,
+                                              const struct rbh_statx *,
+                                              struct rbh_value_pair *,
+                                              ssize_t *,
+                                              struct rbh_value_pair *,
+                                              struct rbh_sstack *));
 
 /*----------------------------------------------------------------------------*
  |                              posix_operations                              |
