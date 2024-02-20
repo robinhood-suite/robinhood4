@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6bd0dac7_485aeca7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-02-20T09:23:32Z",
+      "side": 1,
+      "message": "Better ?",
+      "parentUuid": "4d5d57a6_ea6d3a3c",
+      "range": {
+        "startLine": 17,
+        "startChar": 1,
+        "endLine": 22,
+        "endChar": 48
+      },
+      "revId": "571edec2dff6235f396db7ce3b1263d5592f2fb4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "aeb736e1_d771ee27",
         "filename": "utils/update_retention.sh",
         "patchSetId": 4
@@ -37,6 +61,30 @@
       "writtenOn": "2024-02-16T10:56:28Z",
       "side": 1,
       "message": "major: missing license, also if this is intended to be used this should be installed by the meson script. And I would suggest to rename it: rbh_update_retention (without the .sh and a rbh_ prefix). The user of this command doesn\u0027t need to know its a shell script.",
+      "range": {
+        "startLine": 1,
+        "startChar": 1,
+        "endLine": 1,
+        "endChar": 11
+      },
+      "revId": "571edec2dff6235f396db7ce3b1263d5592f2fb4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a5efe19_6c635f87",
+        "filename": "utils/update_retention.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-02-20T09:23:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "aeb736e1_d771ee27",
       "range": {
         "startLine": 1,
         "startChar": 1,
@@ -70,6 +118,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e5bf58b7_1c272e5d",
+        "filename": "utils/update_retention.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-02-20T09:23:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ed12386b_3a46359f",
+      "range": {
+        "startLine": 9,
+        "startChar": 5,
+        "endLine": 9,
+        "endChar": 10
+      },
+      "revId": "571edec2dff6235f396db7ce3b1263d5592f2fb4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b37343dc_4f966132",
@@ -83,6 +155,30 @@
       "writtenOn": "2024-02-16T10:56:28Z",
       "side": 1,
       "message": "defect: I don\u0027t think this works because sort by default does not sort numericaly:\n\n```\nprintf \"9\\n99\\n88\\n\" | sort\n88\n9\n99\n```\n\nThis does what you want:\n```\nprintf \"9\\n99\\n88\\n\" | sort -n\n9\n88\n99\n```\n\nAlso, this is probably not important but maybe its more efficient to use head instead of tail that will read the whole stdout of sort. So using `sort -rn | head -n 1` may be a bit more efficient (I don\u0027t know).",
+      "range": {
+        "startLine": 25,
+        "startChar": 45,
+        "endLine": 25,
+        "endChar": 49
+      },
+      "revId": "571edec2dff6235f396db7ce3b1263d5592f2fb4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "50ee0ed1_e20da903",
+        "filename": "utils/update_retention.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-02-20T09:23:32Z",
+      "side": 1,
+      "message": "Technically it works fine here because all the times have the same number of digits, so the alphabetical sort works, but it\u0027s not the proper way, so done.",
+      "parentUuid": "b37343dc_4f966132",
       "range": {
         "startLine": 25,
         "startChar": 45,
@@ -116,6 +212,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "57f819ce_0661dcf5",
+        "filename": "utils/update_retention.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-02-20T09:23:32Z",
+      "side": 1,
+      "message": "I have to see if we do a simple rm, an archival, or just print the expired directories... Most likely with options, but it\u0027s still tbd.",
+      "parentUuid": "8a4938d3_ea1f4562",
+      "range": {
+        "startLine": 40,
+        "startChar": 8,
+        "endLine": 40,
+        "endChar": 49
+      },
+      "revId": "571edec2dff6235f396db7ce3b1263d5592f2fb4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "eb5687e6_3aece330",
@@ -129,6 +249,30 @@
       "writtenOn": "2024-02-16T10:56:28Z",
       "side": 1,
       "message": "minor: one too many",
+      "range": {
+        "startLine": 48,
+        "startChar": 36,
+        "endLine": 48,
+        "endChar": 45
+      },
+      "revId": "571edec2dff6235f396db7ce3b1263d5592f2fb4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6341589d_fea438ab",
+        "filename": "utils/update_retention.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-02-20T09:23:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eb5687e6_3aece330",
       "range": {
         "startLine": 48,
         "startChar": 36,
