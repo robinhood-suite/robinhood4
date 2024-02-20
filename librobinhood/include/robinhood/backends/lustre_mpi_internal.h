@@ -12,7 +12,7 @@
 /**
  * @file
  *
- * Internal header which defines the mpi_iterator structure
+ * Internal header which defines the mpi_iterator and mpi_file_info structure
  *
  */
 
@@ -20,6 +20,8 @@
 #include "robinhood/iterator.h"
 #include "robinhood/sstack.h"
 #include "robinhood/value.h"
+#include "robinhood/id.h"
+#include "robinhood/statx.h"
 
 /*----------------------------------------------------------------------------*
  |                                mpi_iterator                                |
@@ -39,11 +41,11 @@ struct mpi_iterator {
      *
      * @return          number of filled \p pairs
      */
-    int (*ns_xattrs_callback)(const int fd, const uint16_t mode,
-                              struct rbh_value_pair *inode_xattrs,
-                              ssize_t *inode_xattrs_count,
-                              struct rbh_value_pair *pairs,
-                              struct rbh_sstack *values);
+    int (*inode_xattrs_callback)(const int fd, const struct rbh_statx *statx,
+                                 struct rbh_value_pair *inode_xattrs,
+                                 ssize_t *inode_xattrs_count,
+                                 struct rbh_value_pair *pairs,
+                                 struct rbh_sstack *values);
 
     int statx_sync_type;
     size_t prefix_len;
@@ -64,6 +66,21 @@ struct mpi_iterator {
     uint64_t total;
 
     mfu_flist flist;
+};
+
+/*----------------------------------------------------------------------------*
+ |                               mpi_file_info                                |
+ *----------------------------------------------------------------------------*/
+
+struct mpi_file_info {
+    /* File path from the root */
+    const char *path;
+
+    /* File name */
+    char *name;
+
+    /* rbh_id of file parent */
+    struct rbh_id *parent_id;
 };
 
 #endif

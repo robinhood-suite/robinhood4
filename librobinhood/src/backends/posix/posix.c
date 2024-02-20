@@ -17,6 +17,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <error.h>
 
 #include <sys/stat.h>
 #include <sys/xattr.h>
@@ -34,6 +35,7 @@
 static __thread size_t handle_size = MAX_HANDLE_SZ;
 static __thread struct file_handle *handle;
 
+
 __attribute__((destructor))
 void
 free_handle(void)
@@ -41,12 +43,13 @@ free_handle(void)
     free(handle);
 }
 
+
 static const struct rbh_id ROOT_PARENT_ID = {
     .data = NULL,
     .size = 0,
 };
 
-static struct rbh_id *
+struct rbh_id *
 id_from_fd(int fd)
 {
     int mount_id;
@@ -198,6 +201,7 @@ retry:
 }
 
 /* The Linux VFS does not allow values of more than 64KiB */
+
 static const size_t XATTR_VALUE_MAX_VFS_SIZE = 1 << 16;
 
 static __thread size_t names_length = 1 << 12;
@@ -209,6 +213,7 @@ free_names(void)
 {
     free(names);
 }
+
 
 static ssize_t
 getxattrs(char *proc_fd_path, struct rbh_value_pair **_pairs,
@@ -323,24 +328,21 @@ free_ns_data(void)
         rbh_sstack_destroy(xattrs);
 }
 
-static struct rbh_fsentry *
-fsentry_from_ftsent(FTSENT *ftsent, int statx_sync_type, size_t prefix_len,
-                    int (*inode_xattrs_callback)(const int,
-                                                 const struct rbh_statx *,
-                                                 struct rbh_value_pair *,
-                                                 ssize_t *,
-                                                 struct rbh_value_pair *,
-                                                 struct rbh_sstack *))
+struct fsentry_id_pair *
+fsentry_from_any(struct rbh_value path, char *accpath, struct rbh_id *file_id,
+                 struct rbh_id *parent_id, char *name, int statx_sync_type,
+                 int (*inode_xattrs_callback)(const int,
+                                           const struct rbh_statx *,
+                                           struct rbh_value_pair *,
+                                           ssize_t *,
+                                           struct rbh_value_pair *,
+                                           struct rbh_sstack *))
 {
-    const int statx_flags =
+    const int statx_flags = 
         AT_EMPTY_PATH | AT_SYMLINK_NOFOLLOW | AT_NO_AUTOMOUNT;
-    const struct rbh_value path = {
-        .type = RBH_VT_STRING,
-        .string = ftsent->fts_pathlen == prefix_len ?
-            "/" : ftsent->fts_path + prefix_len,
-    };
     struct rbh_value_map inode_xattrs;
     struct rbh_value_map ns_xattrs;
+    struct fsentry_id_pair *pair_fid;
     struct rbh_value_pair *pair;
     struct rbh_fsentry *fsentry;
     size_t pairs_count = 1 << 7;
@@ -387,13 +389,13 @@ fsentry_from_ftsent(FTSENT *ftsent, int statx_sync_type, size_t prefix_len,
             return NULL;
     }
 
-    fd = openat(AT_FDCWD, ftsent->fts_accpath,
+    fd = openat(AT_FDCWD, accpath,
                 O_RDONLY | O_CLOEXEC | O_NOFOLLOW | O_NONBLOCK);
     if (fd < 0 && (errno == ELOOP || errno == ENXIO))
         /* The open will fail with ENXIO if the entry is a socket, so open
          * it again but with O_PATH
          */
-        fd = openat(AT_FDCWD, ftsent->fts_accpath,
+        fd = openat(AT_FDCWD, accpath,
                     O_PATH | O_CLOEXEC | O_NOFOLLOW | O_NONBLOCK);
 
     if (fd < 0) {
@@ -414,7 +416,7 @@ fsentry_from_ftsent(FTSENT *ftsent, int statx_sync_type, size_t prefix_len,
     /* The root entry might already have its ID computed and stored in
      * `fts_pointer'.
      */
-    id = ftsent->fts_pointer ? : id_from_fd(fd);
+    id = file_id ? : id_from_fd(fd);
     if (id == NULL) {
         save_errno = errno;
         goto out_close;
@@ -503,9 +505,8 @@ fsentry_from_ftsent(FTSENT *ftsent, int statx_sync_type, size_t prefix_len,
     inode_xattrs.pairs = pairs;
     inode_xattrs.count = count;
 
-    fsentry = rbh_fsentry_new(id, ftsent->fts_parent->fts_pointer,
-                              ftsent->fts_name, &statxbuf, &ns_xattrs,
-                              &inode_xattrs, symlink);
+    fsentry = rbh_fsentry_new(id, parent_id, name, &statxbuf, 
+                              &ns_xattrs, &inode_xattrs, symlink);
     if (fsentry == NULL) {
         save_errno = errno;
         goto out_clear_sstacks;
@@ -518,16 +519,14 @@ fsentry_from_ftsent(FTSENT *ftsent, int statx_sync_type, size_t prefix_len,
     /* Ignore errors on close */
     close(fd);
 
-    switch (ftsent->fts_info) {
-    case FTS_D:
-        /* memoize ids of directories */
-        ftsent->fts_pointer = id;
-        break;
-    default:
-        free(id);
-    }
+    pair_fid = malloc(sizeof(*pair_fid));
+    if (pair_fid == NULL)
+        error(EXIT_FAILURE, errno, "malloc fsentry_id_pair");
 
-    return fsentry;
+    pair_fid->fsentry = fsentry;
+    pair_fid->id = id;
+
+    return pair_fid;
 
 out_clear_sstacks:
     sstack_clear(values);
@@ -542,6 +541,44 @@ out_close:
 
     errno = save_errno;
     return NULL;
+}
+
+static struct rbh_fsentry *
+fsentry_from_ftsent(FTSENT *ftsent, int statx_sync_type, size_t prefix_len,
+                    int (*ns_xattrs_callback)(const int,
+                                              const struct rbh_statx *,
+                                              struct rbh_value_pair *,
+                                              ssize_t *,
+                                              struct rbh_value_pair *,
+                                              struct rbh_sstack *))
+{
+    const struct rbh_value path = {
+        .type = RBH_VT_STRING,
+        .string = ftsent->fts_pathlen == prefix_len ?
+            "/" : ftsent->fts_path + prefix_len,
+    };
+    struct fsentry_id_pair *pair;
+    struct rbh_fsentry *fsentry;
+
+    pair = fsentry_from_any(path, ftsent->fts_accpath, ftsent->fts_pointer,
+                              ftsent->fts_parent->fts_pointer, ftsent->fts_name,
+                              statx_sync_type, ns_xattrs_callback);
+
+    if (pair == NULL)
+        return NULL;
+
+    switch (ftsent->fts_info) {
+    case FTS_D:
+        /* memoize ids of directories */
+        ftsent->fts_pointer = pair->id;
+        break;
+    default:
+        free(pair->id);
+    }
+    fsentry = pair->fsentry;
+    free(pair);
+
+    return fsentry;
 }
 
 static void *
