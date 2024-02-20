@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c5a2b65_17498175",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-02-20T09:23:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6714cc45_5eaef937",
+      "range": {
+        "startLine": 19,
+        "startChar": 16,
+        "endLine": 21,
+        "endChar": 50
+      },
+      "revId": "8df5ca397a6c602390d28bbd7247df27406cdb97",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a31b768a_3a8d945a",
@@ -47,6 +71,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1355ae71_539c5da3",
+        "filename": "rbh-find-lustre/tests/test_expiration.bash",
+        "patchSetId": 4
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-02-20T09:23:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a31b768a_3a8d945a",
+      "range": {
+        "startLine": 183,
+        "startChar": 4,
+        "endLine": 183,
+        "endChar": 44
+      },
+      "revId": "8df5ca397a6c602390d28bbd7247df27406cdb97",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a68b02ce_a2bf24ad",
@@ -60,6 +108,30 @@
       "writtenOn": "2024-02-16T10:29:11Z",
       "side": 1,
       "message": "suggest: ctime(3)",
+      "range": {
+        "startLine": 62,
+        "startChar": 3,
+        "endLine": 62,
+        "endChar": 8
+      },
+      "revId": "8df5ca397a6c602390d28bbd7247df27406cdb97",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2a91d9d1_e8c85c63",
+        "filename": "rbh-find/include/rbh-find/utils.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-02-20T09:23:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a68b02ce_a2bf24ad",
       "range": {
         "startLine": 62,
         "startChar": 3,
