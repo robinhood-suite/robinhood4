@@ -20,7 +20,7 @@ librbh_lustre_mpi = library(
         'lustre-mpi.c',
     ],
     version: librbh_lustre_version, # defined in include/robinhood/backends
-    link_with: [librobinhood],
+    link_with: [librobinhood, librbh_posix],
     dependencies:[
         liblustre,
         libmfu,

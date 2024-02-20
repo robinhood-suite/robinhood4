@@ -15,14 +15,82 @@
 #include <string.h>
 #include <errno.h>
 #include <error.h>
+#include <fcntl.h>
+#include <sys/stat.h>
+#include <string.h>
+#include <libgen.h>
 
 #include "robinhood/backends/lustre_mpi_internal.h"
+#include "robinhood/backends/posix_internal.h"
 #include "robinhood/fsentry.h"
 #include "robinhood/iterator.h"
+#include "robinhood/id.h"
+#include "robinhood/statx.h"
 
 /*----------------------------------------------------------------------------*
  |                                mfu_iterator                                |
  *----------------------------------------------------------------------------*/
+
+static struct rbh_id *
+get_parent_id(const char *path)
+{
+    struct rbh_id *parent_id;
+    int save_errno = errno;
+    char *parent_path;
+    char *tmp_path;
+    int fd;
+
+    tmp_path = strdup(path);
+    if (tmp_path == NULL)
+        return NULL;
+    parent_path = dirname(tmp_path);
+
+    fd = openat(AT_FDCWD, parent_path, O_RDONLY | O_CLOEXEC | O_PATH);
+    if (fd < 0) {
+        save_errno = errno;
+        free(tmp_path);
+        errno = save_errno;
+        return NULL;
+    }
+
+    parent_id = id_from_fd(fd);
+    if (parent_id == NULL)
+        return NULL;
+
+    save_errno = errno;
+    close(fd);
+    free(tmp_path);
+    errno = save_errno;
+
+    return parent_id;
+}
+
+static struct rbh_fsentry *
+fsentry_from_mpi_fi(struct mpi_file_info *mpi_fi, int statx_sync_type,
+                    size_t prefix_len,
+                    int (*inode_xattrs_callback)(const int,
+                                                 const struct rbh_statx *,
+                                                 struct rbh_value_pair *,
+                                                 ssize_t *,
+                                                 struct rbh_value_pair *,
+                                                 struct rbh_sstack *))
+{
+    const struct rbh_value path = {
+        .type = RBH_VT_STRING,
+        .string = strlen(mpi_fi->path) == prefix_len ?
+            "/" : mpi_fi->path + prefix_len,
+    };
+    struct fsentry_id_pair pair;
+    bool fsentry_success;
+
+    fsentry_success = fsentry_from_any(&pair, &path, (char *)mpi_fi->path,
+                                       NULL, mpi_fi->parent_id, mpi_fi->name,
+                                       statx_sync_type, inode_xattrs_callback);
+    if (!fsentry_success)
+        return NULL;
+
+    return pair.fsentry;
+}
 
 static mfu_flist
 walk_path(const char* path)
@@ -34,7 +102,7 @@ walk_path(const char* path)
     if (walk_opts == NULL || mfu_file == NULL || flist == NULL)
         error(EXIT_FAILURE, errno, "malloc flist, mfu_file or walk_opts");
 
-    /* Tell mpifileutils not to do stats during the walk  */
+    /* Tell mpifileutils not to do stats during the walk */
     walk_opts->use_stat = 0;
 
     mfu_flist_walk_path(path, walk_opts, flist, mfu_file);
@@ -51,7 +119,10 @@ lustre_mpi_iter_next(void *iterator)
     struct mpi_iterator *mpi_iter = iterator;
     bool skip_error = mpi_iter->skip_error;
     struct rbh_fsentry *fsentry = NULL;
+    struct mpi_file_info mpi_fi;
     const char *path;
+    char *path_dup;
+
 skip:
     if (mpi_iter->current == mpi_iter->total) {
         errno = ENODATA;
@@ -59,27 +130,44 @@ skip:
     }
 
     path = mfu_flist_file_get_name(mpi_iter->flist, mpi_iter->current);
-    mpi_iter->current++;
-
-    if (path == NULL) {
-        if (skip_error)
-            goto skip;
+    path_dup = strdup(path);
+    if (path_dup == NULL)
         return NULL;
-    }
 
-    /* TO-DO construct fsentry from flist path *
-     *
-     * fsentry = fsentry_from_flist_path()    */
+    mpi_fi.path = path;
+    mpi_fi.name = basename(path_dup);
+    mpi_fi.parent_id = get_parent_id(path);
 
-    if (fsentry == NULL && (errno == ENOENT || errno == ESTALE)) {
-        /* The entry moved from under our feet */
+    if (mpi_fi.parent_id == NULL){
+        fprintf(stderr, "Failed to get parent id of '%s'\n", path);
+        free(path_dup);
         if (skip_error) {
-            fprintf(stderr, "Synchronization of '%s' skipped\n",
-                    path);
+            fprintf(stderr, "Synchronization of '%s' skipped\n", path);
+            mpi_iter->current++;
             goto skip;
         }
         return NULL;
     }
+
+
+    fsentry = fsentry_from_mpi_fi(&mpi_fi, mpi_iter->statx_sync_type,
+                                  mpi_iter->prefix_len,
+                                  mpi_iter->inode_xattrs_callback);
+    if (fsentry == NULL && (errno == ENOENT || errno == ESTALE)) {
+        /* The entry moved from under our feet */
+        free(path_dup);
+        if (skip_error) {
+            fprintf(stderr, "Synchronization of '%s' skipped\n",
+                    path);
+            mpi_iter->current++;
+            goto skip;
+        }
+        return NULL;
+    }
+
+    mpi_iter->current++;
+    free(path_dup);
+
     return fsentry;
 }
 
@@ -134,8 +222,8 @@ lustre_mpi_iterator_new(const char *root, const char *entry,
     mpi_iter->prefix_len = strcmp(root, "/") ? strlen(root) : 0;
     mpi_iter->total = mfu_flist_size(mpi_iter->flist);
     mpi_iter->statx_sync_type = statx_sync_type;
+    mpi_iter->inode_xattrs_callback = NULL;
     mpi_iter->iterator = LUSTRE_MPI_ITER;
-    mpi_iter->ns_xattrs_callback = NULL;
     mpi_iter->current = 0;
 
     free(path);
