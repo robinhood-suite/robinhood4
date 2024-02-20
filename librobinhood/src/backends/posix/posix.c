@@ -17,6 +17,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <error.h>
 
 #include <sys/stat.h>
 #include <sys/xattr.h>
@@ -46,7 +47,7 @@ static const struct rbh_id ROOT_PARENT_ID = {
     .size = 0,
 };
 
-static struct rbh_id *
+struct rbh_id *
 id_from_fd(int fd)
 {
     int mount_id;
@@ -323,22 +324,19 @@ free_ns_data(void)
         rbh_sstack_destroy(xattrs);
 }
 
-static struct rbh_fsentry *
-fsentry_from_ftsent(FTSENT *ftsent, int statx_sync_type, size_t prefix_len,
-                    int (*inode_xattrs_callback)(const int,
-                                                 const struct rbh_statx *,
-                                                 struct rbh_value_pair *,
-                                                 ssize_t *,
-                                                 struct rbh_value_pair *,
-                                                 struct rbh_sstack *))
+bool
+fsentry_from_any(struct fsentry_id_pair *fip, const struct rbh_value *path,
+                 char *accpath, struct rbh_id *entry_id,
+                 struct rbh_id *parent_id, char *name, int statx_sync_type,
+                 int (*inode_xattrs_callback)(const int,
+                                           const struct rbh_statx *,
+                                           struct rbh_value_pair *,
+                                           ssize_t *,
+                                           struct rbh_value_pair *,
+                                           struct rbh_sstack *))
 {
     const int statx_flags =
         AT_EMPTY_PATH | AT_SYMLINK_NOFOLLOW | AT_NO_AUTOMOUNT;
-    const struct rbh_value path = {
-        .type = RBH_VT_STRING,
-        .string = ftsent->fts_pathlen == prefix_len ?
-            "/" : ftsent->fts_path + prefix_len,
-    };
     struct rbh_value_map inode_xattrs;
     struct rbh_value_map ns_xattrs;
     struct rbh_value_pair *pair;
@@ -356,65 +354,65 @@ fsentry_from_ftsent(FTSENT *ftsent, int statx_sync_type, size_t prefix_len,
         /* Per-thread initialization of `pairs' */
         pairs = reallocarray(NULL, pairs_count, sizeof(*pairs));
         if (pairs == NULL)
-            return NULL;
+            return false;
     }
 
     if (ns_pairs == NULL) {
         /* Per-thread initialization of `ns_pairs' */
         ns_pairs = reallocarray(NULL, ns_pairs_count, sizeof(*ns_pairs));
         if (ns_pairs == NULL)
-            return NULL;
+            return false;
     }
 
     if (values == NULL) {
         /* Per-thread initialization of `xattrs' */
         values = rbh_sstack_new(sizeof(ns_pairs->value) * pairs_count);
         if (values == NULL)
-            return NULL;
+            return false;
     }
 
     if (xattrs == NULL) {
         /* Per-thread initialization of `values' */
         xattrs = rbh_sstack_new(XATTR_VALUE_MAX_VFS_SIZE);
         if (xattrs == NULL)
-            return NULL;
+            return false;
     }
 
     if (ns_values == NULL) {
         /* Per-thread initialization of `ns_values' */
         ns_values = rbh_sstack_new(sizeof(ns_pairs->value) * ns_pairs_count);
         if (ns_values == NULL)
-            return NULL;
+            return false;
     }
 
-    fd = openat(AT_FDCWD, ftsent->fts_accpath,
+    fd = openat(AT_FDCWD, accpath,
                 O_RDONLY | O_CLOEXEC | O_NOFOLLOW | O_NONBLOCK);
     if (fd < 0 && (errno == ELOOP || errno == ENXIO))
         /* The open will fail with ENXIO if the entry is a socket, so open
          * it again but with O_PATH
          */
-        fd = openat(AT_FDCWD, ftsent->fts_accpath,
+        fd = openat(AT_FDCWD, accpath,
                     O_PATH | O_CLOEXEC | O_NOFOLLOW | O_NONBLOCK);
 
     if (fd < 0) {
         fprintf(stderr, "Failed to open '%s': %s (%d)\n",
-                path.string, strerror(errno), errno);
+                path->string, strerror(errno), errno);
         /* Set errno to ESTALE to not stop the iterator for a single failed
          * entry.
          */
         errno = ESTALE;
-        return NULL;
+        return false;
     }
 
     if (sprintf(proc_fd_path, "/proc/self/fd/%d", fd) == -1) {
         errno = ENOMEM;
-        return NULL;
+        return false;
     }
 
     /* The root entry might already have its ID computed and stored in
-     * `fts_pointer'.
+     * `entry_id'.
      */
-    id = ftsent->fts_pointer ? : id_from_fd(fd);
+    id = entry_id ? : id_from_fd(fd);
     if (id == NULL) {
         save_errno = errno;
         goto out_close;
@@ -424,7 +422,7 @@ fsentry_from_ftsent(FTSENT *ftsent, int statx_sync_type, size_t prefix_len,
                   RBH_STATX_BASIC_STATS | RBH_STATX_BTIME | RBH_STATX_MNT_ID,
                   &statxbuf)) {
         fprintf(stderr, "Failed to stat '%s': %s (%d)\n",
-                path.string, strerror(errno), errno);
+                path->string, strerror(errno), errno);
         /* Set errno to ESTALE to not stop the iterator for a single failed
          * entry.
          */
@@ -444,7 +442,7 @@ fsentry_from_ftsent(FTSENT *ftsent, int statx_sync_type, size_t prefix_len,
 
         if (symlink == NULL) {
             fprintf(stderr, "Failed to readlink '%s': %s (%d)\n",
-                    path.string, strerror(errno), errno);
+                    path->string, strerror(errno), errno);
             /* Set errno to ESTALE to not stop the iterator for a single failed
              * entry.
              */
@@ -458,7 +456,7 @@ fsentry_from_ftsent(FTSENT *ftsent, int statx_sync_type, size_t prefix_len,
     if (count == -1) {
         if (errno != ENOMEM) {
             fprintf(stderr, "Failed to get xattrs of '%s': %s (%d)\n",
-                    path.string, strerror(errno), errno);
+                    path->string, strerror(errno), errno);
             /* Set errno to ESTALE to not stop the iterator for a single failed
             * entry.
             */
@@ -470,7 +468,7 @@ fsentry_from_ftsent(FTSENT *ftsent, int statx_sync_type, size_t prefix_len,
 
     pair = &ns_pairs[0];
     pair->key = "path";
-    pair->value = rbh_sstack_push(ns_values, &path, sizeof(path));
+    pair->value = rbh_sstack_push(ns_values, path, sizeof(*path));
     if (pair->value == NULL) {
         save_errno = errno;
         goto out_clear_sstacks;
@@ -487,7 +485,7 @@ fsentry_from_ftsent(FTSENT *ftsent, int statx_sync_type, size_t prefix_len,
             if (errno != ENOMEM) {
                 fprintf(stderr,
                         "Failed to get inode xattrs of '%s': %s (%d)\n",
-                        path.string, strerror(errno), errno);
+                        path->string, strerror(errno), errno);
                 /* Set errno to ESTALE to not stop the iterator for a single
                  * failed entry.
                  */
@@ -503,9 +501,8 @@ fsentry_from_ftsent(FTSENT *ftsent, int statx_sync_type, size_t prefix_len,
     inode_xattrs.pairs = pairs;
     inode_xattrs.count = count;
 
-    fsentry = rbh_fsentry_new(id, ftsent->fts_parent->fts_pointer,
-                              ftsent->fts_name, &statxbuf, &ns_xattrs,
-                              &inode_xattrs, symlink);
+    fsentry = rbh_fsentry_new(id, parent_id, name, &statxbuf,
+                              &ns_xattrs, &inode_xattrs, symlink);
     if (fsentry == NULL) {
         save_errno = errno;
         goto out_clear_sstacks;
@@ -518,16 +515,10 @@ fsentry_from_ftsent(FTSENT *ftsent, int statx_sync_type, size_t prefix_len,
     /* Ignore errors on close */
     close(fd);
 
-    switch (ftsent->fts_info) {
-    case FTS_D:
-        /* memoize ids of directories */
-        ftsent->fts_pointer = id;
-        break;
-    default:
-        free(id);
-    }
+    fip->fsentry = fsentry;
+    fip->id = id;
 
-    return fsentry;
+    return true;
 
 out_clear_sstacks:
     sstack_clear(values);
@@ -541,7 +532,48 @@ out_close:
     close(fd);
 
     errno = save_errno;
-    return NULL;
+    return false;
+}
+
+static struct rbh_fsentry *
+fsentry_from_ftsent(FTSENT *ftsent, int statx_sync_type, size_t prefix_len,
+                    int (*ns_xattrs_callback)(const int,
+                                              const struct rbh_statx *,
+                                              struct rbh_value_pair *,
+                                              ssize_t *,
+                                              struct rbh_value_pair *,
+                                              struct rbh_sstack *))
+{
+    const struct rbh_value path = {
+        .type = RBH_VT_STRING,
+        .string = ftsent->fts_pathlen == prefix_len ?
+            "/" : ftsent->fts_path + prefix_len,
+    };
+    struct fsentry_id_pair pair;
+    bool fsentry_success;
+    int save_errno;
+
+    fsentry_success = fsentry_from_any(&pair, &path, ftsent->fts_accpath,
+                                       ftsent->fts_pointer,
+                                       ftsent->fts_parent->fts_pointer,
+                                       ftsent->fts_name,
+                                       statx_sync_type, ns_xattrs_callback);
+    save_errno = errno;
+
+    if (!fsentry_success)
+        return NULL;
+
+    switch (ftsent->fts_info) {
+    case FTS_D:
+        /* memoize ids of directories */
+        ftsent->fts_pointer = pair.id;
+        break;
+    default:
+        free(pair.id);
+    }
+
+    errno = save_errno;
+    return pair.fsentry;
 }
 
 static void *
