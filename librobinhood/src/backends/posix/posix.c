@@ -325,12 +325,12 @@ free_ns_data(void)
 
 static struct rbh_fsentry *
 fsentry_from_ftsent(FTSENT *ftsent, int statx_sync_type, size_t prefix_len,
-                    int (*ns_xattrs_callback)(const int,
-                                              const struct rbh_statx *,
-                                              struct rbh_value_pair *,
-                                              ssize_t *,
-                                              struct rbh_value_pair *,
-                                              struct rbh_sstack *))
+                    int (*inode_xattrs_callback)(const int,
+                                                 const struct rbh_statx *,
+                                                 struct rbh_value_pair *,
+                                                 ssize_t *,
+                                                 struct rbh_value_pair *,
+                                                 struct rbh_sstack *))
 {
     const int statx_flags =
         AT_EMPTY_PATH | AT_SYMLINK_NOFOLLOW | AT_NO_AUTOMOUNT;
@@ -347,7 +347,6 @@ fsentry_from_ftsent(FTSENT *ftsent, int statx_sync_type, size_t prefix_len,
     struct rbh_statx statxbuf;
     char proc_fd_path[64];
     char *symlink = NULL;
-    ssize_t ns_count = 0;
     struct rbh_id *id;
     int save_errno;
     ssize_t count;
@@ -478,14 +477,16 @@ fsentry_from_ftsent(FTSENT *ftsent, int statx_sync_type, size_t prefix_len,
     }
 
     ns_xattrs.count = 1;
+    ns_xattrs.pairs = ns_pairs;
 
-    if (ns_xattrs_callback != NULL) {
-        ns_count = ns_xattrs_callback(fd, &statxbuf, pairs, &count,
-                                      &ns_pairs[ns_xattrs.count], ns_values);
-        if (ns_count == -1) {
+    if (inode_xattrs_callback != NULL) {
+        int callback_xattrs_count = inode_xattrs_callback(fd, &statxbuf, pairs,
+                                                          &count, &pairs[count],
+                                                          values);
+        if (callback_xattrs_count == -1) {
             if (errno != ENOMEM) {
                 fprintf(stderr,
-                        "Failed to get namespace xattrs of '%s': %s (%d)\n",
+                        "Failed to get inode xattrs of '%s': %s (%d)\n",
                         path.string, strerror(errno), errno);
                 /* Set errno to ESTALE to not stop the iterator for a single
                  * failed entry.
@@ -496,10 +497,8 @@ fsentry_from_ftsent(FTSENT *ftsent, int statx_sync_type, size_t prefix_len,
             goto out_clear_sstacks;
         }
 
-        ns_xattrs.count += ns_count;
+        count += callback_xattrs_count;
     }
-
-    ns_xattrs.pairs = ns_pairs;
 
     inode_xattrs.pairs = pairs;
     inode_xattrs.count = count;
@@ -549,6 +548,7 @@ static void *
 posix_iter_next(void *iterator)
 {
     struct posix_iterator *posix_iter = iterator;
+    bool skip_error = posix_iter->skip_error;
     struct rbh_fsentry *fsentry;
     int save_errno = errno;
     FTSENT *ftsent;
@@ -576,8 +576,12 @@ skip:
         errno = ftsent->fts_errno;
         fprintf(stderr, "FTS: failed to read entry '%s': %s (%d)\n",
                 ftsent->fts_path, strerror(errno), errno);
-        fprintf(stderr, "Synchronization of '%s' skipped\n", ftsent->fts_path);
-        goto skip;
+        if (skip_error) {
+             fprintf(stderr, "Synchronization of '%s' skipped\n",
+                     ftsent->fts_path);
+             goto skip;
+        }
+        return NULL;
     case FTS_NS:
         errno = ftsent->fts_errno;
         return NULL;
@@ -626,11 +630,15 @@ skip:
 
     fsentry = fsentry_from_ftsent(ftsent, posix_iter->statx_sync_type,
                                   posix_iter->prefix_len,
-                                  posix_iter->ns_xattrs_callback);
+                                  posix_iter->inode_xattrs_callback);
     if (fsentry == NULL && (errno == ENOENT || errno == ESTALE)) {
-        fprintf(stderr, "Synchronization of '%s' skipped\n", ftsent->fts_path);
         /* The entry moved from under our feet */
-        goto skip;
+        if (skip_error) {
+            fprintf(stderr, "Synchronization of '%s' skipped\n",
+                    ftsent->fts_path);
+            goto skip;
+        }
+        return NULL;
     }
 
     return fsentry;
@@ -700,7 +708,7 @@ posix_iterator_new(const char *root, const char *entry, int statx_sync_type)
     }
 
     posix_iter->iterator = POSIX_ITER;
-    posix_iter->ns_xattrs_callback = NULL;
+    posix_iter->inode_xattrs_callback = NULL;
     posix_iter->statx_sync_type = statx_sync_type;
     posix_iter->prefix_len = strcmp(root, "/") ? strlen(root) : 0;
     posix_iter->fts_handle =
@@ -879,7 +887,7 @@ posix_backend_filter(void *backend, const struct rbh_filter *filter,
     posix_iter = posix->iter_new(posix->root, NULL, posix->statx_sync_type);
     if (posix_iter == NULL)
         return NULL;
-
+    posix_iter->skip_error = options->skip_error;
     fsentry = rbh_mut_iter_next(&posix_iter->iterator);
     if (fsentry == NULL)
         goto out_destroy_iter;
