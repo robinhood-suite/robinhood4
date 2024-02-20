@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e5c1cf1e_00c0ec87",
+        "filename": "librobinhood/src/backends/posix/posix.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 522,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-02-20T15:08:36Z",
+      "side": 1,
+      "message": "minor: it seems to me that as soon as you have returned this structure to the caller, you get its content and free it. It would be better to avoid this call to malloc to be more efficient. You can simply create a local variable in this function and return it by copy to the caller. This function would return a `struct fsentry_id_pair` instead of `struct fsentry_id_pair *`.",
+      "range": {
+        "startLine": 522,
+        "startChar": 15,
+        "endLine": 522,
+        "endChar": 40
+      },
+      "revId": "32ad81b878bec5caba804e628ca359e828518152",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
