@@ -182,7 +182,11 @@ skip:
         return NULL;
     }
 
-    depth = compute_depth(path + mpi_iter->prefix_len);
+    depth = mfu_flist_file_get_depth(mpi_iter->flist, mpi_iter->current);
+    if (depth == -1)
+        depth = compute_depth(path);
+
+    depth -= mpi_iter->root_depth;
 
     mpi_fi = malloc(sizeof(*mpi_fi));
     if (mpi_fi == NULL)
@@ -264,6 +268,7 @@ lustre_mpi_iterator_new(const char *root, const char *entry,
 
     mpi_iter->flist = walk_path(path);
     mpi_iter->prefix_len = strcmp(root, "/") ? strlen(root) : 0;
+    mpi_iter->root_depth = compute_depth(root);
     mpi_iter->total = mfu_flist_size(mpi_iter->flist);
     mpi_iter->statx_sync_type = statx_sync_type;
     mpi_iter->inode_xattrs_callback = NULL;
