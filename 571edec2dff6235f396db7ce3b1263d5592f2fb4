@@ -48,6 +48,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8912434e_afdcd033",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-02-21T08:12:29Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "6bd0dac7_485aeca7",
+      "range": {
+        "startLine": 17,
+        "startChar": 1,
+        "endLine": 22,
+        "endChar": 48
+      },
+      "revId": "571edec2dff6235f396db7ce3b1263d5592f2fb4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "aeb736e1_d771ee27",
@@ -226,6 +250,30 @@
       "side": 1,
       "message": "I have to see if we do a simple rm, an archival, or just print the expired directories... Most likely with options, but it\u0027s still tbd.",
       "parentUuid": "8a4938d3_ea1f4562",
+      "range": {
+        "startLine": 40,
+        "startChar": 8,
+        "endLine": 40,
+        "endChar": 49
+      },
+      "revId": "571edec2dff6235f396db7ce3b1263d5592f2fb4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2c7cc406_07986b4d",
+        "filename": "utils/update_retention.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-02-21T08:12:29Z",
+      "side": 1,
+      "message": "You could simply be agnostic and offer both options:\n\n`rbh_update_retention --delete` to do the rm, otherwise, just print.",
+      "parentUuid": "57f819ce_0661dcf5",
       "range": {
         "startLine": 40,
         "startChar": 8,

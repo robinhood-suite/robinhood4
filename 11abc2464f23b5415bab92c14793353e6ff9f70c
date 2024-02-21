@@ -1,0 +1,159 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ffdced7_507ae85a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-02-21T08:12:29Z",
+      "side": 1,
+      "message": "There are a few things I don\u0027t quite understand with the test.",
+      "revId": "11abc2464f23b5415bab92c14793353e6ff9f70c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "da3dc5ac_b7244edb",
+        "filename": "utils/rbh_update_retention",
+        "patchSetId": 5
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-02-21T08:12:29Z",
+      "side": 1,
+      "message": "question: are the escapes really necessary? This works for me:\n```\n$ id\u003dtest\n$ cat \u003c\u003c EOF\n\"id\": !!binary $id\nEOF\n\"id\": !!binary test\n```\n\nBut you solution prints the \\:\n```\n$ cat \u003c\u003c EOF\n\\\"id\\\": !!binary $id\nEOF\n\n\\\"id\\\": !!binary test\n```",
+      "range": {
+        "startLine": 17,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 1
+      },
+      "revId": "11abc2464f23b5415bab92c14793353e6ff9f70c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "86ac155b_511956a1",
+        "filename": "utils/test_update_retention.bash",
+        "patchSetId": 5
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-02-21T08:12:29Z",
+      "side": 1,
+      "message": "minor: to remove",
+      "range": {
+        "startLine": 29,
+        "startChar": 4,
+        "endLine": 29,
+        "endChar": 22
+      },
+      "revId": "11abc2464f23b5415bab92c14793353e6ff9f70c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b44f3a74_1f439d21",
+        "filename": "utils/test_update_retention.bash",
+        "patchSetId": 5
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-02-21T08:12:29Z",
+      "side": 1,
+      "message": "question: why do you do this? A comment here would have been more helpful than the ones in the setup function.",
+      "range": {
+        "startLine": 30,
+        "startChar": 4,
+        "endLine": 30,
+        "endChar": 21
+      },
+      "revId": "11abc2464f23b5415bab92c14793353e6ff9f70c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dfb08f56_27f9a851",
+        "filename": "utils/test_update_retention.bash",
+        "patchSetId": 5
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-02-21T08:12:29Z",
+      "side": 1,
+      "message": "major: I don\u0027t understand how this works since the fix of rbh-fsevents is done in the next patch. rbh-fsevents should segfault in this case, right?",
+      "range": {
+        "startLine": 88,
+        "startChar": 0,
+        "endLine": 88,
+        "endChar": 17
+      },
+      "revId": "11abc2464f23b5415bab92c14793353e6ff9f70c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c428176b_0b0573e5",
+        "filename": "utils/test_update_retention.bash",
+        "patchSetId": 5
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-02-21T08:12:29Z",
+      "side": 1,
+      "message": "minor: the quotes are not necessary (bellow as well)",
+      "range": {
+        "startLine": 120,
+        "startChar": 17,
+        "endLine": 120,
+        "endChar": 18
+      },
+      "revId": "11abc2464f23b5415bab92c14793353e6ff9f70c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0f26da9d_52299bce",
+        "filename": "utils/test_update_retention.bash",
+        "patchSetId": 5
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-02-21T08:12:29Z",
+      "side": 1,
+      "message": "question: why should dir4 be expired here? It should be expired 15 seconds after its creation so why is it expired when we set the time to 11s in the future? Is this because by the time we reach this test, 4 seconds have passed? If so you should really increase the times you use. You can set expiration dates of 1 day since you are modifying the time of the VM manually anyway. This prevents the timing of the test from influencing the outcome.",
+      "range": {
+        "startLine": 160,
+        "startChar": 4,
+        "endLine": 160,
+        "endChar": 39
+      },
+      "revId": "11abc2464f23b5415bab92c14793353e6ff9f70c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
