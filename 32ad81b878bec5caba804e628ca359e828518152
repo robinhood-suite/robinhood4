@@ -46,6 +46,30 @@
       },
       "revId": "32ad81b878bec5caba804e628ca359e828518152",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d6c52314_a96cfc7e",
+        "filename": "librobinhood/src/backends/posix/posix.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 522,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-02-21T11:10:09Z",
+      "side": 1,
+      "message": "In this case, you can pass fsentry_id_pair as an out parameter to fsentry_from_any and return a boolean indicating whether the call succeeded or not. If the function returns false, the caller will check errno to see the actual error.",
+      "parentUuid": "e8ff9ed1_8a35a1be",
+      "range": {
+        "startLine": 522,
+        "startChar": 15,
+        "endLine": 522,
+        "endChar": 40
+      },
+      "revId": "32ad81b878bec5caba804e628ca359e828518152",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
