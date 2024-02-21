@@ -49,7 +49,12 @@ struct mpi_iterator {
 
     int statx_sync_type;
     size_t prefix_len;
-
+    /**
+     * Root depth
+     * this allows us to avoid recalculating the depth for each entry in the
+     * mfu_flist.
+     */
+    int root_depth;
     /**
      * Boolean to indicate if we want to skip errors while synchronizing two
      * backends
