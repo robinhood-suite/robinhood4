@@ -7,5 +7,5 @@
 subdir('mongo')
 subdir('posix')
 subdir('lustre')
-subdir('lustre-mpi')
+subdir('lustre_mpi')
 subdir('hestia')

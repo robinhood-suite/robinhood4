@@ -69,7 +69,7 @@ struct fsentry_id_pair {
     struct rbh_fsentry *fsentry;
 };
 
-struct posix_iterator *
+struct rbh_mut_iterator *
 posix_iterator_new(const char *root, const char *entry, int statx_sync_type);
 
 struct rbh_id *
@@ -117,7 +117,7 @@ posix_backend_destroy(void *backend);
 
 struct posix_backend {
     struct rbh_backend backend;
-    struct posix_iterator *(*iter_new)(const char *, const char *, int);
+    struct rbh_mut_iterator *(*iter_new)(const char *, const char *, int);
     char *root;
     int statx_sync_type;
 };

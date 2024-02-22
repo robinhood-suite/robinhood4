@@ -25,6 +25,16 @@ strtoupper(char *string)
     return string;
 }
 
+static char *
+remove_non_alnum(char *string)
+{
+    for (char *c = string; *c != '\0'; c++) {
+        if (!isalnum(*c) && *c != '_')
+            *c = '_';
+    }
+    return string;
+}
+
 char *
 rbh_backend_plugin_symbol(const char *name)
 {
@@ -34,7 +44,7 @@ rbh_backend_plugin_symbol(const char *name)
         errno = ENOMEM;
         return NULL;
     }
-    return strtoupper(symbol);
+    return remove_non_alnum(strtoupper(symbol));
 }
 
 const struct rbh_backend_plugin *
