@@ -17,10 +17,11 @@ libmpi = dependency('ompi', disabler: true, required: false)
 librbh_lustre_mpi = library(
     'rbh-lustre-mpi',
     sources: [
-        'lustre-mpi.c',
+        'lustre_mpi.c',
+        'plugin.c',
     ],
-    version: librbh_lustre_version, # defined in include/robinhood/backends
-    link_with: [librobinhood, librbh_posix],
+    version: librbh_lustre_mpi_version, # defined in include/robinhood/backends
+    link_with: [librobinhood, librbh_posix, librbh_lustre],
     dependencies:[
         liblustre,
         libmfu,
