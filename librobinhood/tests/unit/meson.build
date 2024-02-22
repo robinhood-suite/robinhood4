@@ -21,7 +21,7 @@ env.prepend('LD_LIBRARY_PATH', meson.build_root() + '/src')
 # .. and also add paths for plugins required by tests that require one
 env.prepend('LD_LIBRARY_PATH', meson.build_root() + '/src/backends/posix')
 env.prepend('LD_LIBRARY_PATH', meson.build_root() + '/src/backends/lustre')
-
+env.prepend('LD_LIBRARY_PATH', meson.build_root() + '/src/backends/lustre_mpi')
 
 foreach t: ['check_backend', 'check_filter', 'check_fsentry',
             'check_fsevent', 'check_hashmap', 'check_id', 'check_itertools',
@@ -53,3 +53,22 @@ foreach t: ['check_lustre']
                     include_directories: rbh_include),
          env: env)
 endforeach
+
+
+r = run_command('check_mpirun.sh', check: false)
+bash = find_program('bash', disabler: true, required: false)
+
+if r.returncode() == 0 and libmfu.found()
+    env.prepend('CK_FORK', 'no')
+    foreach t: ['check_lustre_mpi_missing', 'check_lustre_mpi_empty']
+        executable(t, t + '.c',
+            dependencies: [check],
+            link_with: [librobinhood, librbh_lustre_mpi],
+            include_directories: rbh_include)
+    endforeach
+
+    builddir = meson.current_build_dir()
+    test('check_lustre_mpi', bash,
+         args: ['../tests/unit/check_lustre_mpi.sh', builddir],
+         env: env)
+endif
