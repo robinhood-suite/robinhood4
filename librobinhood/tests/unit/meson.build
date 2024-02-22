@@ -11,6 +11,8 @@ if not check.found()
     subdir_done()
 endif
 
+mpirun = find_program('mpirun', disabler: true)
+
 # force tests to use the newly built binaries over paths in
 # LD_LIBRARY_PATH. The problem is that recent linkers will
 # use RUNPATH when meson requests -rpath, and runpath has
@@ -21,7 +23,7 @@ env.prepend('LD_LIBRARY_PATH', meson.build_root() + '/src')
 # .. and also add paths for plugins required by tests that require one
 env.prepend('LD_LIBRARY_PATH', meson.build_root() + '/src/backends/posix')
 env.prepend('LD_LIBRARY_PATH', meson.build_root() + '/src/backends/lustre')
-
+env.prepend('LD_LIBRARY_PATH', meson.build_root() + '/src/backends/lustre_mpi')
 
 foreach t: ['check_backend', 'check_filter', 'check_fsentry',
             'check_fsevent', 'check_hashmap', 'check_id', 'check_itertools',
@@ -52,4 +54,16 @@ foreach t: ['check_lustre']
                     link_with: [librobinhood, librbh_lustre],
                     include_directories: rbh_include),
          env: env)
+endforeach
+
+env.prepend('CK_FORK', 'no')
+
+foreach t: ['check_lustre_mpi_missing', 'check_lustre_mpi_empty']
+    executable(t, t + '.c',
+           dependencies: [check],
+           link_with: [librobinhood, librbh_lustre_mpi],
+           include_directories: rbh_include)
+    test(t, mpirun,
+        args:['--allow-run-as-root', '-np', '4', 'tests/unit/' + t],
+        env: env)
 endforeach
