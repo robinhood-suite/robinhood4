@@ -41,6 +41,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "43d5fd1f_85ef763a",
+        "filename": "utils/rbh_update_retention",
+        "patchSetId": 5
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-02-22T09:13:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da3dc5ac_b7244edb",
+      "range": {
+        "startLine": 17,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 1
+      },
+      "revId": "11abc2464f23b5415bab92c14793353e6ff9f70c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "86ac155b_511956a1",
@@ -54,6 +78,30 @@
       "writtenOn": "2024-02-21T08:12:29Z",
       "side": 1,
       "message": "minor: to remove",
+      "range": {
+        "startLine": 29,
+        "startChar": 4,
+        "endLine": 29,
+        "endChar": 22
+      },
+      "revId": "11abc2464f23b5415bab92c14793353e6ff9f70c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4b085932_67a6c6b0",
+        "filename": "utils/test_update_retention.bash",
+        "patchSetId": 5
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-02-22T09:13:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "86ac155b_511956a1",
       "range": {
         "startLine": 29,
         "startChar": 4,
@@ -87,6 +135,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c275cb95_250c8bb4",
+        "filename": "utils/test_update_retention.bash",
+        "patchSetId": 5
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-02-22T09:13:59Z",
+      "side": 1,
+      "message": "Since the test works by changing the clock of the system, we must reset it at the end of it, and this is the command that does it.\nAdded a comment.",
+      "parentUuid": "b44f3a74_1f439d21",
+      "range": {
+        "startLine": 30,
+        "startChar": 4,
+        "endLine": 30,
+        "endChar": 21
+      },
+      "revId": "11abc2464f23b5415bab92c14793353e6ff9f70c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dfb08f56_27f9a851",
@@ -100,6 +172,30 @@
       "writtenOn": "2024-02-21T08:12:29Z",
       "side": 1,
       "message": "major: I don\u0027t understand how this works since the fix of rbh-fsevents is done in the next patch. rbh-fsevents should segfault in this case, right?",
+      "range": {
+        "startLine": 88,
+        "startChar": 0,
+        "endLine": 88,
+        "endChar": 17
+      },
+      "revId": "11abc2464f23b5415bab92c14793353e6ff9f70c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b74e635a_8a89358c",
+        "filename": "utils/test_update_retention.bash",
+        "patchSetId": 5
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-02-22T09:13:59Z",
+      "side": 1,
+      "message": "The fix is necessary when using the enricher part of rbh-fsevents, but in our script we do not use it, instead we create an already enriched event, and directly synchronize it in the database, so there is no need to open the file or retrieve any attribute, and the fix isn\u0027t necessary",
+      "parentUuid": "dfb08f56_27f9a851",
       "range": {
         "startLine": 88,
         "startChar": 0,
@@ -133,6 +229,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "46ecf400_48d9d38d",
+        "filename": "utils/test_update_retention.bash",
+        "patchSetId": 5
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-02-22T09:13:59Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "c428176b_0b0573e5",
+      "range": {
+        "startLine": 120,
+        "startChar": 17,
+        "endLine": 120,
+        "endChar": 18
+      },
+      "revId": "11abc2464f23b5415bab92c14793353e6ff9f70c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0f26da9d_52299bce",
@@ -146,6 +266,30 @@
       "writtenOn": "2024-02-21T08:12:29Z",
       "side": 1,
       "message": "question: why should dir4 be expired here? It should be expired 15 seconds after its creation so why is it expired when we set the time to 11s in the future? Is this because by the time we reach this test, 4 seconds have passed? If so you should really increase the times you use. You can set expiration dates of 1 day since you are modifying the time of the VM manually anyway. This prevents the timing of the test from influencing the outcome.",
+      "range": {
+        "startLine": 160,
+        "startChar": 4,
+        "endLine": 160,
+        "endChar": 39
+      },
+      "revId": "11abc2464f23b5415bab92c14793353e6ff9f70c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "58bd8b62_77de05f1",
+        "filename": "utils/test_update_retention.bash",
+        "patchSetId": 5
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-02-22T09:13:59Z",
+      "side": 1,
+      "message": "dir4 is expired because with line 135 we set the date 11 seconds into the future, then without 144 we touch the access time of entry1 (so it\u0027s access time is 11 seconds into the future), and then with line 153 we set the date 11 seconds into the future with regard to entry. So in total, at this point, we are 22 seconds into the future, and dir4 expired 15 seconds after its creation, so 7 seconds ago.",
+      "parentUuid": "0f26da9d_52299bce",
       "range": {
         "startLine": 160,
         "startChar": 4,
