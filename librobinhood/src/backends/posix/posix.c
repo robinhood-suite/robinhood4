@@ -710,7 +710,7 @@ static const struct rbh_mut_iterator POSIX_ITER = {
     .ops = &POSIX_ITER_OPS,
 };
 
-struct posix_iterator *
+void *
 posix_iterator_new(const char *root, const char *entry, int statx_sync_type)
 {
     struct posix_iterator *posix_iter;
@@ -920,7 +920,8 @@ posix_backend_filter(void *backend, const struct rbh_filter *filter,
         return NULL;
     }
 
-    posix_iter = posix->iter_new(posix->root, NULL, posix->statx_sync_type);
+    posix_iter = (struct posix_iterator *)
+                  posix->iter_new(posix->root, NULL, posix->statx_sync_type);
     if (posix_iter == NULL)
         return NULL;
     posix_iter->skip_error = options->skip_error;
@@ -1090,8 +1091,9 @@ posix_branch_backend_filter(void *backend, const struct rbh_filter *filter,
     }
 
     assert(strncmp(root, path, strlen(root)) == 0);
-    posix_iter = branch->posix.iter_new(root, path + strlen(root),
-                                        branch->posix.statx_sync_type);
+    posix_iter = (struct posix_iterator *)
+                  branch->posix.iter_new(root, path + strlen(root),
+                                         branch->posix.statx_sync_type);
     save_errno = errno;
     free(path);
     free(root);
