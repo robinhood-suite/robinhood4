@@ -1014,7 +1014,7 @@ lustre_get_attrs(const int fd, const struct rbh_statx *statx,
                       NULL, NULL, pairs, values);
 }
 
-static int
+int
 lustre_inode_xattrs_callback(const int fd, const struct rbh_statx *statx,
                              struct rbh_value_pair *inode_xattrs,
                              ssize_t *inode_xattrs_count,
@@ -1030,7 +1030,7 @@ lustre_inode_xattrs_callback(const int fd, const struct rbh_statx *statx,
                       inode_xattrs, inode_xattrs_count, pairs, values);
 }
 
-static int
+int
 lustre_backend_get_attribute(void *backend, const char *attr_name,
                              void *_arg, struct rbh_value_pair *data)
 {
@@ -1049,7 +1049,7 @@ lustre_backend_get_attribute(void *backend, const char *attr_name,
     return lustre_get_attrs(arg->fd, arg->statx, data, arg->values);
 }
 
-struct posix_iterator *
+void *
 lustre_iterator_new(const char *root, const char *entry, int statx_sync_type)
 {
     struct posix_iterator *lustre_iter;
