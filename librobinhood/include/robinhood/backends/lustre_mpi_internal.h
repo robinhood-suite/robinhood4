@@ -66,7 +66,6 @@ struct mpi_iterator {
      * this is not the global size of the flist
      */
     uint64_t total;
-
     mfu_flist flist;
 };
 
