@@ -61,6 +61,27 @@ librbh_lustre_h = configure_file(input: 'lustre.h.in', output: 'lustre.h',
 
 install_headers(librbh_lustre_h, subdir: 'robinhood/backends')
 
+# Lustre MPI backend
+
+librbh_lustre_mpi_conf = configuration_data()
+
+librbh_lustre_mpi_conf.set('RBH_LUSTRE_MPI_BACKEND_MAJOR', 0)
+librbh_lustre_mpi_conf.set('RBH_LUSTRE_MPI_BACKEND_MINOR', 0)
+librbh_lustre_mpi_conf.set('RBH_LUSTRE_MPI_BACKEND_RELEASE', 0)
+
+librbh_lustre_mpi_version = '@0@.@1@.@2@'.format(
+    librbh_lustre_mpi_conf.get('RBH_LUSTRE_MPI_BACKEND_MAJOR'),
+    librbh_lustre_mpi_conf.get('RBH_LUSTRE_MPI_BACKEND_MINOR'),
+    librbh_lustre_mpi_conf.get('RBH_LUSTRE_MPI_BACKEND_RELEASE')
+)
+
+librbh_lustre_mpi_h = configure_file(input: 'lustre_mpi.h.in',
+                                     output: 'lustre_mpi.h',
+                                     configuration: librbh_lustre_mpi_conf)
+
+install_headers(librbh_lustre_mpi_h, subdir: 'robinhood/backends')
+
+
 # Hestia backend
 
 librbh_hestia_conf = configuration_data()

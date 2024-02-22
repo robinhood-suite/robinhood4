@@ -934,7 +934,7 @@ lustre_get_attrs(const int fd, const uint16_t mode,
                       NULL, NULL, pairs, values);
 }
 
-static int
+int
 lustre_inode_xattrs_callback(const int fd, const struct rbh_statx *statx,
                              struct rbh_value_pair *inode_xattrs,
                              ssize_t *inode_xattrs_count,
@@ -950,7 +950,7 @@ lustre_inode_xattrs_callback(const int fd, const struct rbh_statx *statx,
                       inode_xattrs, inode_xattrs_count, pairs, values);
 }
 
-static int
+int
 lustre_backend_get_attribute(void *backend, const char *attr_name,
                              void *_arg, struct rbh_value_pair *data)
 {
@@ -969,18 +969,19 @@ lustre_backend_get_attribute(void *backend, const char *attr_name,
     return lustre_get_attrs(arg->fd, arg->mode, data, arg->values);
 }
 
-struct posix_iterator *
+static struct rbh_mut_iterator *
 lustre_iterator_new(const char *root, const char *entry, int statx_sync_type)
 {
     struct posix_iterator *lustre_iter;
 
-    lustre_iter = posix_iterator_new(root, entry, statx_sync_type);
+    lustre_iter = (struct posix_iterator *)
+                   posix_iterator_new(root, entry, statx_sync_type);
     if (lustre_iter == NULL)
         return NULL;
 
     lustre_iter->inode_xattrs_callback = lustre_inode_xattrs_callback;
 
-    return lustre_iter;
+    return (struct rbh_mut_iterator *)lustre_iter;
 }
 
 static const struct rbh_backend_operations LUSTRE_BACKEND_OPS = {
