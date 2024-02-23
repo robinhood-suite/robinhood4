@@ -134,7 +134,6 @@ test_retention_script()
     shant_be_expired "$output" "$dir4"
 
     date --set="@$(( $(stat -c %X $dir1) + 11))"
-    rbh-sync rbh:lustre:. "rbh:mongo:$testdb"
 
     output="$($test_dir/rbh_update_retention "rbh:mongo:$testdb")"
     should_be_expired "$output" "$dir1"
@@ -152,7 +151,6 @@ test_retention_script()
     shant_be_expired "$output" "$dir4"
 
     date --set="@$(( $(stat -c %X $dir1/$entry1) + 11))"
-    rbh-sync rbh:lustre:. "rbh:mongo:$testdb"
 
     output="$($test_dir/rbh_update_retention "rbh:mongo:$testdb")"
     should_be_expired "$output" "$dir1"
@@ -161,7 +159,6 @@ test_retention_script()
     should_be_expired "$output" "$dir4"
 
     date --set="@$(( $(stat -c %X $dir2/$entry3) + 16))"
-    rbh-sync rbh:lustre:. "rbh:mongo:$testdb"
 
     output="$($test_dir/rbh_update_retention "rbh:mongo:$testdb")"
     should_be_expired "$output" "$dir1"
@@ -177,6 +174,16 @@ test_retention_script()
     should_be_expired "$output" "$dir2"
     shant_be_expired "$output" "$dir3"
     should_be_expired "$output" "$dir4"
+
+    date --set="@$(( $(stat -c %X $dir3) + 6))"
+
+    $test_dir/rbh_update_retention "rbh:mongo:$testdb" --delete $testdir
+
+    if [ -d "$dir1" ] || [ -d "$dir2" ] || [ -d "$dir3" ] || [ -d "$dir4" ]
+    then
+      error "All directories should have been deleted."
+    fi
+
 }
 
 ################################################################################
