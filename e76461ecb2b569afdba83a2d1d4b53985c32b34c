@@ -1,0 +1,343 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "665f6843_3c1ca5b8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-02-23T09:04:01Z",
+      "side": 1,
+      "message": "style: we try to keep the commit message size to 70 caracters",
+      "range": {
+        "startLine": 10,
+        "startChar": 68,
+        "endLine": 10,
+        "endChar": 78
+      },
+      "revId": "e76461ecb2b569afdba83a2d1d4b53985c32b34c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c6f31fc7_217fa7e1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-02-23T09:04:01Z",
+      "side": 1,
+      "message": "typo: an",
+      "range": {
+        "startLine": 15,
+        "startChar": 50,
+        "endLine": 15,
+        "endChar": 51
+      },
+      "revId": "e76461ecb2b569afdba83a2d1d4b53985c32b34c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3bf33737_eb41a230",
+        "filename": "librobinhood/include/robinhood/backends/lustre_mpi_internal.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-02-23T09:04:01Z",
+      "side": 1,
+      "message": "comment: there is no need to be exhaustive here. You can leave this be no need to update it each time you add a structure to the header file",
+      "range": {
+        "startLine": 15,
+        "startChar": 50,
+        "endLine": 15,
+        "endChar": 67
+      },
+      "revId": "e76461ecb2b569afdba83a2d1d4b53985c32b34c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "14a10d6b_cd60b5c4",
+        "filename": "librobinhood/include/robinhood/backends/lustre_mpi_internal.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-02-23T09:04:01Z",
+      "side": 1,
+      "message": "minor: for documentation, you need to use two \u0027**\u0027. This is what the doxygen program uses to identify documentation blocks: https://www.doxygen.nl/manual/docblocks.html\n\nSame comment bellow.",
+      "range": {
+        "startLine": 59,
+        "startChar": 5,
+        "endLine": 59,
+        "endChar": 6
+      },
+      "revId": "e76461ecb2b569afdba83a2d1d4b53985c32b34c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "51c8ae14_ecb466ca",
+        "filename": "librobinhood/include/robinhood/backends/lustre_mpi_internal.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-02-23T09:04:01Z",
+      "side": 1,
+      "message": "suggest: parent entry or parent directory",
+      "range": {
+        "startLine": 82,
+        "startChar": 17,
+        "endLine": 82,
+        "endChar": 28
+      },
+      "revId": "e76461ecb2b569afdba83a2d1d4b53985c32b34c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0e28f5ff_75166ac7",
+        "filename": "librobinhood/include/robinhood/backends/posix_internal.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-02-23T09:04:01Z",
+      "side": 1,
+      "message": "typo: child? there is only one in this case, right?",
+      "range": {
+        "startLine": 66,
+        "startChar": 69,
+        "endLine": 66,
+        "endChar": 77
+      },
+      "revId": "e76461ecb2b569afdba83a2d1d4b53985c32b34c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ee783375_44257f5d",
+        "filename": "librobinhood/include/robinhood/backends/posix_internal.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-02-23T09:04:01Z",
+      "side": 1,
+      "message": "typo: posix backend",
+      "range": {
+        "startLine": 66,
+        "startChar": 18,
+        "endLine": 66,
+        "endChar": 31
+      },
+      "revId": "e76461ecb2b569afdba83a2d1d4b53985c32b34c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0ec0906b_2d4c9fee",
+        "filename": "librobinhood/include/robinhood/backends/posix_internal.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-02-23T09:04:01Z",
+      "side": 1,
+      "message": "suggest: use a pointer to avoid copy",
+      "range": {
+        "startLine": 80,
+        "startChar": 63,
+        "endLine": 80,
+        "endChar": 67
+      },
+      "revId": "e76461ecb2b569afdba83a2d1d4b53985c32b34c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f744a172_be37092f",
+        "filename": "librobinhood/src/backends/lustre-mpi/lustre-mpi.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-02-23T09:04:01Z",
+      "side": 1,
+      "message": "style: add an empty line after the declaration of variables",
+      "range": {
+        "startLine": 36,
+        "startChar": 3,
+        "endLine": 36,
+        "endChar": 17
+      },
+      "revId": "e76461ecb2b569afdba83a2d1d4b53985c32b34c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "05f537c0_19886842",
+        "filename": "librobinhood/src/backends/lustre-mpi/lustre-mpi.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-02-23T09:04:01Z",
+      "side": 1,
+      "message": "minor: this is the function basename (man 3 basename)",
+      "range": {
+        "startLine": 45,
+        "startChar": 0,
+        "endLine": 45,
+        "endChar": 12
+      },
+      "revId": "e76461ecb2b569afdba83a2d1d4b53985c32b34c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9a0eceb7_bcb6a22f",
+        "filename": "librobinhood/src/backends/lustre-mpi/lustre-mpi.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-02-23T09:04:01Z",
+      "side": 1,
+      "message": "minor: I feel like there is a simpler solution. Fist of all, if you want to get the path of the parent, there is the function dirname. You need to copy the path before calling it.",
+      "range": {
+        "startLine": 62,
+        "startChar": 0,
+        "endLine": 62,
+        "endChar": 13
+      },
+      "revId": "e76461ecb2b569afdba83a2d1d4b53985c32b34c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "850c8fb1_c131c416",
+        "filename": "librobinhood/src/backends/lustre-mpi/lustre-mpi.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-02-23T09:04:01Z",
+      "side": 1,
+      "message": "minor: you should use O_NOFOLLOW and O_PATH as well in the flags",
+      "range": {
+        "startLine": 75,
+        "startChar": 13,
+        "endLine": 75,
+        "endChar": 19
+      },
+      "revId": "e76461ecb2b569afdba83a2d1d4b53985c32b34c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e830e12a_599748ac",
+        "filename": "librobinhood/src/backends/lustre-mpi/lustre-mpi.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-02-23T09:04:01Z",
+      "side": 1,
+      "message": "minor: no need to allocate this structure, it can be on the stack",
+      "range": {
+        "startLine": 187,
+        "startChar": 12,
+        "endLine": 187,
+        "endChar": 19
+      },
+      "revId": "e76461ecb2b569afdba83a2d1d4b53985c32b34c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6eb8f2b3_26d8e29b",
+        "filename": "librobinhood/src/backends/posix/posix.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-02-23T09:04:01Z",
+      "side": 1,
+      "message": "style: the empty lines are not necessary",
+      "revId": "e76461ecb2b569afdba83a2d1d4b53985c32b34c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ca4d1895_d767cefb",
+        "filename": "librobinhood/src/backends/posix/posix.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 508,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-02-23T09:04:01Z",
+      "side": 1,
+      "message": "style: tailing whitespace",
+      "range": {
+        "startLine": 508,
+        "startChar": 61,
+        "endLine": 508,
+        "endChar": 62
+      },
+      "revId": "e76461ecb2b569afdba83a2d1d4b53985c32b34c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
