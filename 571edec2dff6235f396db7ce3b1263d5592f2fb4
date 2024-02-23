@@ -284,6 +284,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "027f70f0_effa4b40",
+        "filename": "utils/update_retention.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-02-23T13:49:15Z",
+      "side": 1,
+      "message": "Done in another patch",
+      "parentUuid": "2c7cc406_07986b4d",
+      "range": {
+        "startLine": 40,
+        "startChar": 8,
+        "endLine": 40,
+        "endChar": 49
+      },
+      "revId": "571edec2dff6235f396db7ce3b1263d5592f2fb4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "eb5687e6_3aece330",
