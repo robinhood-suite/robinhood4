@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "744f47b3_4e4ff2dd",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-02-23T08:01:58Z",
+      "side": 1,
+      "message": "suggest: This patch converts the retention attribute set by the user to a string in the database.",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 48
+      },
+      "revId": "1291de42a8bcec0e45ae011ab34077d958a34526",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "14917f0f_e4468a05",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-02-23T08:01:58Z",
+      "side": 1,
+      "message": "typo: correctly\nsuggest: remove correctly: Since this attribute is only interpreted by the Lustre backend",
+      "range": {
+        "startLine": 11,
+        "startChar": 12,
+        "endLine": 11,
+        "endChar": 21
+      },
+      "revId": "1291de42a8bcec0e45ae011ab34077d958a34526",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "54f483ce_846eb114",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-02-23T08:01:58Z",
+      "side": 1,
+      "message": "otherwise",
+      "range": {
+        "startLine": 13,
+        "startChar": 61,
+        "endLine": 13,
+        "endChar": 65
+      },
+      "revId": "1291de42a8bcec0e45ae011ab34077d958a34526",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c06a082d_215a4e4e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-02-23T08:01:58Z",
+      "side": 1,
+      "message": "ttri",
+      "revId": "1291de42a8bcec0e45ae011ab34077d958a34526",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
