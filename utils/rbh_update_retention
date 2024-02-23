@@ -28,6 +28,7 @@ function check_expiration_date
     local directory_ID="$3"
     local expires="$4"
     local expiration_date="$5"
+    local mount_point="$6"
 
     local max_time=$(rbh-find "$URI#$directory" \
                         -printf "%A\n%T\n" | sort -rn | head -n 1)
@@ -46,12 +47,16 @@ function check_expiration_date
                                          "$new_expiration_date"
     else
         echo "Directory '$directory' has expired"
+        if [ ! -z "$mount_point" ]; then
+            rm -rf "$mount_point/$directory"
+        fi
     fi
 }
 
 function run_retention_updater
 {
     local URI="$1"
+    local mount_point="$2"
     local tmp_file="$(mktemp tmp.XXXXXX)"
 
     rbh-lfind $URI -type d -expired -printf "%p|%e|%E|%I\n" |
@@ -59,10 +64,12 @@ function run_retention_updater
 
         if [ "${expires:0:1}" != "+" ]; then
             echo "Directory '$dir' has expired"
+            rm -rf "$mount_point/$dir"
             continue
         fi
 
-        check_expiration_date "$URI" "$dir" "$ID" "$expires" "$expiration_date"
+        check_expiration_date "$URI" "$dir" "$ID" "$expires" \
+                              "$expiration_date" "$mount_point"
         echo "true" > $tmp_file
     done
 
@@ -74,14 +81,47 @@ function run_retention_updater
     rm $tmp_file
 }
 
+function print_doc
+{
+    echo "This script will update the retention of attributes of any directory"
+    echo "that is expired, based on their content's last accessed time."
+    echo "If a directory is expired, it is printed to the output, unless the"
+    echo "'--delete' option is given, in which case it will be removed;"
+    echo ""
+    echo "Usage: rbh-update-retention URI [--delete <mount point>]"
+}
+
 if [ $# -eq 0 ]; then
     echo "Please specify a URI to update"
     exit 1
-elif [ $# -gt 1 ]; then
-    echo "Please only specify one argument"
-    exit 1
 fi
 
-URI="$1"
+while :
+do
+    case "$1" in
+        --delete)
+            if [ "$delete_found" == "true" ]; then
+                echo "Delete option already given"
+                exit 1
+            fi
+            delete_found=true
+            shift
+            mount_point=$1
+            ;;
+        --help)
+            print_doc
+            exit 0
+            ;;
+        *)
+            if [ "$uri_found" == "true" ]; then
+                break;
+            fi
+            uri_found=true
+            URI="$1"
+            ;;
+    esac
 
-run_retention_updater "$URI"
+    shift
+done
+
+run_retention_updater "$URI" "$mount_point"
