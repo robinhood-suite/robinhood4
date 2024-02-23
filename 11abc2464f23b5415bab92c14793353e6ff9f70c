@@ -298,6 +298,30 @@
       },
       "revId": "11abc2464f23b5415bab92c14793353e6ff9f70c",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8fbf642b_a80e9a76",
+        "filename": "utils/test_update_retention.bash",
+        "patchSetId": 5
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-02-23T07:54:13Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "58bd8b62_77de05f1",
+      "range": {
+        "startLine": 160,
+        "startChar": 4,
+        "endLine": 160,
+        "endChar": 39
+      },
+      "revId": "11abc2464f23b5415bab92c14793353e6ff9f70c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }

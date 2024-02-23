@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d4b3a62c_5aca1e31",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-02-23T07:54:13Z",
+      "side": 1,
+      "message": "The script is not installed, is this intentional?",
+      "revId": "6c4dbfbaeb63f369cc1988152b131c45cccf09b4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "785d8ea4_2976bf39",
+        "filename": "utils/meson.build",
+        "patchSetId": 6
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-02-23T07:54:13Z",
+      "side": 1,
+      "message": "nit: all these could be a simple for loop",
+      "range": {
+        "startLine": 18,
+        "startChar": 7,
+        "endLine": 18,
+        "endChar": 19
+      },
+      "revId": "6c4dbfbaeb63f369cc1988152b131c45cccf09b4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
