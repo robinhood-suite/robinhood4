@@ -13,7 +13,7 @@ if liblustre.found()
     subdir('lustre')
 endif
 
-libhestia = cc.find_library('hestia', dirs: '/usr/lib/hestia', required: false)
+libhestia = dependency('hestia', required: false)
 if libhestia.found()
     subdir('hestia')
 endif

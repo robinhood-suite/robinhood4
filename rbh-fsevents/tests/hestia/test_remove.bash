@@ -18,14 +18,14 @@ test_remove()
 {
     hestia object create blob
 
-    local output=$(invoke_rbh-fsevents)
+    local output=$(invoke_rbh_fsevents "-")
     local object_id=$(echo "$output" | grep "id" | xargs | cut -d' ' -f3)
 
     clear_event_feed
 
     hestia object remove blob
 
-    output=$(invoke_rbh-fsevents)
+    output=$(invoke_rbh_fsevents "-")
 
     local n=$(number_of_events "$output")
     if [[ $n != 1 ]]; then
@@ -45,10 +45,28 @@ test_remove()
     fi
 }
 
+test_remove_to_mongo()
+{
+    local obj=$(hestia object --verbosity 1 create blob)
+    invoke_rbh_fsevents "rbh:mongo:$testdb"
+
+    clear_event_feed
+
+    hestia object remove "$obj"
+
+    find_attribute '"ns.name":"'$obj'"'
+    invoke_rbh_fsevents "rbh:mongo:$testdb"
+
+    local count=$(mongo $testdb --eval "db.entries.count()")
+    if (( $count != 0 )); then
+        error "Remove event should have deleted sole record in the DB"
+    fi
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
-declare -a tests=(test_remove)
+declare -a tests=(test_remove test_remove_to_mongo)
 
 run_tests hestia_setup hestia_teardown "${tests[@]}"

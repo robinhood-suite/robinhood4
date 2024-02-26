@@ -31,26 +31,29 @@ struct posix_iterator {
     struct rbh_mut_iterator iterator;
 
     /**
-     * Callback for managing and filling namespace xattrs
+     * Callback for managing and filling inode xattrs
      *
-     * @param fd        file descriptor of the entry
-     * @param mode      mode of file examined
-     * @param pairs     list of rbh_value_pairs to fill
-     * @param values    stack that will contain every rbh_value of
-     *                  \p pairs
+     * @param fd                   file descriptor of the entry
+     * @param statx                statx metadata of the entry
+     * @param inode_xattrs         inode xattrs already retrieved
+     * @param inode_xattrs_count   number of xattrs already retrieved
+     * @param pairs                list of rbh_value_pairs to fill
+     * @param values               stack that will contain every rbh_value of
+     *                             \p pairs
      *
-     * @return          number of filled \p pairs
+     * @return                     number of filled \p pairs
      */
-    int (*ns_xattrs_callback)(const int fd, const uint16_t mode,
-                              struct rbh_value_pair *inode_xattrs,
-                              ssize_t *inode_xattrs_count,
-                              struct rbh_value_pair *pairs,
-                              struct rbh_sstack *values);
+    int (*inode_xattrs_callback)(const int fd, const struct rbh_statx *statx,
+                                 struct rbh_value_pair *inode_xattrs,
+                                 ssize_t *inode_xattrs_count,
+                                 struct rbh_value_pair *pairs,
+                                 struct rbh_sstack *values);
 
     int statx_sync_type;
     size_t prefix_len;
     FTS *fts_handle;
     FTSENT *ftsent;
+    bool skip_error;
 };
 
 struct posix_iterator *
@@ -68,7 +71,7 @@ posix_backend_set_option(void *backend, unsigned int option, const void *data,
                          size_t data_size);
 
 struct rbh_backend *
-posix_backend_branch(void *backend, const struct rbh_id *id);
+posix_backend_branch(void *backend, const struct rbh_id *id, const char *path);
 
 struct rbh_fsentry *
 posix_root(void *backend, const struct rbh_filter_projection *projection);

@@ -52,6 +52,7 @@ main(int _argc, char *_argv[])
     ctx.post_action_callback = &find_post_action;
     ctx.parse_predicate_callback = &find_parse_predicate;
     ctx.pred_or_action_callback = &find_predicate_or_action;
+    ctx.print_directive = &fsentry_print_directive;
 
     /* Parse the command line */
     for (index = 0; index < ctx.argc; index++) {

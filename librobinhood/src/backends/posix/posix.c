@@ -325,11 +325,12 @@ free_ns_data(void)
 
 static struct rbh_fsentry *
 fsentry_from_ftsent(FTSENT *ftsent, int statx_sync_type, size_t prefix_len,
-                    int (*ns_xattrs_callback)(const int, const uint16_t,
-                                              struct rbh_value_pair *,
-                                              ssize_t *,
-                                              struct rbh_value_pair *,
-                                              struct rbh_sstack *))
+                    int (*inode_xattrs_callback)(const int,
+                                                 const struct rbh_statx *,
+                                                 struct rbh_value_pair *,
+                                                 ssize_t *,
+                                                 struct rbh_value_pair *,
+                                                 struct rbh_sstack *))
 {
     const int statx_flags =
         AT_EMPTY_PATH | AT_SYMLINK_NOFOLLOW | AT_NO_AUTOMOUNT;
@@ -346,7 +347,6 @@ fsentry_from_ftsent(FTSENT *ftsent, int statx_sync_type, size_t prefix_len,
     struct rbh_statx statxbuf;
     char proc_fd_path[64];
     char *symlink = NULL;
-    ssize_t ns_count = 0;
     struct rbh_id *id;
     int save_errno;
     ssize_t count;
@@ -390,11 +390,11 @@ fsentry_from_ftsent(FTSENT *ftsent, int statx_sync_type, size_t prefix_len,
     fd = openat(AT_FDCWD, ftsent->fts_accpath,
                 O_RDONLY | O_CLOEXEC | O_NOFOLLOW | O_NONBLOCK);
     if (fd < 0 && (errno == ELOOP || errno == ENXIO))
-        /* If the file to open is a symlink or a socket, reopen it with O_PATH
-         * set
+        /* The open will fail with ENXIO if the entry is a socket, so open
+         * it again but with O_PATH
          */
         fd = openat(AT_FDCWD, ftsent->fts_accpath,
-                    O_CLOEXEC | O_NOFOLLOW | O_PATH | O_NONBLOCK);
+                    O_PATH | O_CLOEXEC | O_NOFOLLOW | O_NONBLOCK);
 
     if (fd < 0) {
         fprintf(stderr, "Failed to open '%s': %s (%d)\n",
@@ -477,14 +477,16 @@ fsentry_from_ftsent(FTSENT *ftsent, int statx_sync_type, size_t prefix_len,
     }
 
     ns_xattrs.count = 1;
+    ns_xattrs.pairs = ns_pairs;
 
-    if (ns_xattrs_callback != NULL) {
-        ns_count = ns_xattrs_callback(fd, statxbuf.stx_mode, pairs, &count,
-                                      &ns_pairs[ns_xattrs.count], ns_values);
-        if (ns_count == -1) {
+    if (inode_xattrs_callback != NULL) {
+        int callback_xattrs_count = inode_xattrs_callback(fd, &statxbuf, pairs,
+                                                          &count, &pairs[count],
+                                                          values);
+        if (callback_xattrs_count == -1) {
             if (errno != ENOMEM) {
                 fprintf(stderr,
-                        "Failed to get namespace xattrs of '%s': %s (%d)\n",
+                        "Failed to get inode xattrs of '%s': %s (%d)\n",
                         path.string, strerror(errno), errno);
                 /* Set errno to ESTALE to not stop the iterator for a single
                  * failed entry.
@@ -495,10 +497,8 @@ fsentry_from_ftsent(FTSENT *ftsent, int statx_sync_type, size_t prefix_len,
             goto out_clear_sstacks;
         }
 
-        ns_xattrs.count += ns_count;
+        count += callback_xattrs_count;
     }
-
-    ns_xattrs.pairs = ns_pairs;
 
     inode_xattrs.pairs = pairs;
     inode_xattrs.count = count;
@@ -548,6 +548,7 @@ static void *
 posix_iter_next(void *iterator)
 {
     struct posix_iterator *posix_iter = iterator;
+    bool skip_error = posix_iter->skip_error;
     struct rbh_fsentry *fsentry;
     int save_errno = errno;
     FTSENT *ftsent;
@@ -572,6 +573,15 @@ skip:
         return NULL;
     case FTS_DNR:
     case FTS_ERR:
+        errno = ftsent->fts_errno;
+        fprintf(stderr, "FTS: failed to read entry '%s': %s (%d)\n",
+                ftsent->fts_path, strerror(errno), errno);
+        if (skip_error) {
+             fprintf(stderr, "Synchronization of '%s' skipped\n",
+                     ftsent->fts_path);
+             goto skip;
+        }
+        return NULL;
     case FTS_NS:
         errno = ftsent->fts_errno;
         return NULL;
@@ -624,10 +634,16 @@ skip:
 
     fsentry = fsentry_from_ftsent(ftsent, posix_iter->statx_sync_type,
                                   posix_iter->prefix_len,
-                                  posix_iter->ns_xattrs_callback);
-    if (fsentry == NULL && (errno == ENOENT || errno == ESTALE))
+                                  posix_iter->inode_xattrs_callback);
+    if (fsentry == NULL && (errno == ENOENT || errno == ESTALE)) {
         /* The entry moved from under our feet */
-        goto skip;
+        if (skip_error) {
+            fprintf(stderr, "Synchronization of '%s' skipped\n",
+                    ftsent->fts_path);
+            goto skip;
+        }
+        return NULL;
+    }
 
     return fsentry;
 }
@@ -696,7 +712,7 @@ posix_iterator_new(const char *root, const char *entry, int statx_sync_type)
     }
 
     posix_iter->iterator = POSIX_ITER;
-    posix_iter->ns_xattrs_callback = NULL;
+    posix_iter->inode_xattrs_callback = NULL;
     posix_iter->statx_sync_type = statx_sync_type;
     posix_iter->prefix_len = strcmp(root, "/") ? strlen(root) : 0;
     posix_iter->fts_handle =
@@ -875,7 +891,7 @@ posix_backend_filter(void *backend, const struct rbh_filter *filter,
     posix_iter = posix->iter_new(posix->root, NULL, posix->statx_sync_type);
     if (posix_iter == NULL)
         return NULL;
-
+    posix_iter->skip_error = options->skip_error;
     fsentry = rbh_mut_iter_next(&posix_iter->iterator);
     if (fsentry == NULL)
         goto out_destroy_iter;
@@ -994,7 +1010,17 @@ id2path(const char *root, const struct rbh_id *id)
 struct posix_branch_backend {
     struct posix_backend posix;
     struct rbh_id id;
+    char *path;
 };
+
+void
+posix_branch_backend_destroy(void *backend)
+{
+    struct posix_branch_backend *branch = backend;
+
+    posix_backend_destroy(&branch->posix);
+    free(branch);
+}
 
 static struct rbh_mut_iterator *
 posix_branch_backend_filter(void *backend, const struct rbh_filter *filter,
@@ -1019,17 +1045,21 @@ posix_branch_backend_filter(void *backend, const struct rbh_filter *filter,
     if (root == NULL)
         return NULL;
 
-    path = id2path(root, &branch->id);
-    save_errno = errno;
-    if (path == NULL) {
-        free(root);
-        errno = save_errno;
-        return NULL;
+    if (branch->path) {
+        path = branch->path;
+    } else {
+        path = id2path(root, &branch->id);
+        save_errno = errno;
+        if (path == NULL) {
+            free(root);
+            errno = save_errno;
+            return NULL;
+        }
     }
 
     assert(strncmp(root, path, strlen(root)) == 0);
     posix_iter = branch->posix.iter_new(root, path + strlen(root),
-                                       branch->posix.statx_sync_type);
+                                        branch->posix.statx_sync_type);
     save_errno = errno;
     free(path);
     free(root);
@@ -1051,18 +1081,30 @@ static const struct rbh_backend POSIX_BRANCH_BACKEND = {
 };
 
 struct rbh_backend *
-posix_backend_branch(void *backend, const struct rbh_id *id)
+posix_backend_branch(void *backend, const struct rbh_id *id, const char *path)
 {
     struct posix_backend *posix = backend;
     struct posix_branch_backend *branch;
     size_t data_size;
     char *data;
 
-    data_size = id->size;
-    branch = malloc(sizeof(*branch) + data_size);
-    if (branch == NULL)
+    if (id == NULL && path == NULL) {
+        errno = EINVAL;
         return NULL;
-    data = (char *)branch + sizeof(*branch);
+    }
+
+    if (id) {
+        data_size = id->size;
+        branch = malloc(sizeof(*branch) + data_size);
+        if (branch == NULL)
+            return NULL;
+
+        data = (char *)branch + sizeof(*branch);
+    } else {
+        branch = malloc(sizeof(*branch));
+        if (branch == NULL)
+            return NULL;
+    }
 
     branch->posix.root = strdup(posix->root);
     if (branch->posix.root == NULL) {
@@ -1073,9 +1115,27 @@ posix_backend_branch(void *backend, const struct rbh_id *id)
         return NULL;
     }
 
+    if (path) {
+        branch->path = strdup(path);
+        if (branch->path == NULL) {
+            int save_errno = errno;
+
+            free(branch);
+            free(branch->posix.root);
+            errno = save_errno;
+            return NULL;
+        }
+    } else {
+        branch->path = NULL;
+    }
+
+    if (id)
+        rbh_id_copy(&branch->id, id, &data, &data_size);
+    else
+        branch->id.size = 0;
+
     branch->posix.iter_new = posix_iterator_new;
     branch->posix.statx_sync_type = posix->statx_sync_type;
-    rbh_id_copy(&branch->id, id, &data, &data_size);
     branch->posix.backend = POSIX_BRANCH_BACKEND;
 
     return &branch->posix.backend;

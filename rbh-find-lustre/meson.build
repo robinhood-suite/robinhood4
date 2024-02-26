@@ -46,6 +46,7 @@ executable(
 		'rbh-find-lustre.c',
 		'src/filters.c',
 		'src/parser.c',
+		'src/actions.c',
 		],
 	dependencies: [librobinhood, librbhfind, liblustre],
 	include_directories: include_dirs,

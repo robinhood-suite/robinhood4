@@ -123,6 +123,17 @@ check_mode_and_type()
     find_attribute '"statx.mode":'$mode
 }
 
+test_sync_symbolic_link()
+{
+    local entry="symbolic_link"
+
+    touch ${entry}_target
+    ln -s ${entry}_target $entry
+
+    rbh_sync -o "rbh:posix:$entry" "rbh:mongo:$testdb"
+    check_mode_and_type $entry
+}
+
 test_sync_socket()
 {
     local entry="socket_file"
@@ -186,6 +197,91 @@ test_sync_branch()
     find_attribute '"ns.xattrs.path":"'/$second_dir/$third_dir/$entry'"'
 }
 
+test_continue_sync_on_error()
+{
+    local first_file="test1"
+    local second_file="test2"
+    local third_file="test3"
+    local dir="dir"
+
+    mkdir $dir
+    touch $first_file $second_file $dir/$third_file
+    chmod o-rw $second_file
+    chmod o-rw $dir
+
+    # Here, we create a test user, and use it to run a rbh-sync on the files
+    # created above. Since that user doesn't have the read or write access to
+    # the second file and the directory, it cannot synchronize both, so errors
+    # should be outputted but the command shouldn't fail.
+    useradd -N -M test
+    local output="$((sudo -E -H -u test bash -c "rbh-sync rbh:posix:. \
+                     rbh:mongo:$testdb") 2>&1)"
+    userdel -f -r test || true
+
+    echo "$output" | grep "open '/$second_file'" ||
+        error "Failed to find error on open of '$second_file'"
+    echo "$output" | grep "open '/$dir'" ||
+        error "Failed to find error on open of '$second_file'"
+    echo "$output" | grep "FTS" | grep "read entry './$dir'" ||
+        error "Failed to find error on open of '$second_file'"
+
+    local db_count=$(mongo $testdb --eval "db.entries.count()")
+    if [[ $db_count -ne 2 ]]; then
+        error "Invalid number of files were synced, expected '2' entries, " \
+              "found '$db_count'."
+    fi
+
+    find_attribute '"ns.xattrs.path":"/"'
+    find_attribute '"ns.name":"'$first_file'"'
+}
+
+test_stop_sync_on_error(){
+    local first_file="test1"
+    local second_file="test2"
+    local third_file="test3"
+    local dir="dir"
+
+    touch $first_file
+    touch $second_file
+    mkdir $dir
+    touch $dir/$third_file
+
+    chmod o-rw $second_file
+    chmod o-rw $dir
+
+    # Here, we create a test user, and use it to run a rbh-sync on the files
+    # created above. Since that user doesn't have the read or write access to
+    # the second file and the directory, it cannot synchronize both, the
+    # command should fail when synchronizing the second file and the directory
+
+    useradd -N -M test
+    local output=$((sudo -E -H -u test bash -c "rbh-sync --no-skip rbh:posix:. \
+                        rbh:mongo:$testdb") 2>&1)
+    userdel -f -r test || true
+    local db_count=$(mongo $testdb --eval "db.entries.count()")
+    if [[ $db_count -lt 1 ]]; then
+        error "Invalid number of files were synced, expected at least '1'" \
+            "entries found (root) '$db_count'."
+    fi
+
+    find_attribute '"ns.xattrs.path":"/"'
+
+    local first_file_att="$(find_attribute '"ns.name":"'$first_file'"')"
+    local second_file_att="$(find_attribute '"ns.name":"'$second_file'"')"
+    local third_file_att="$(find_attribute '"ns.name":"'$third_file'"')"
+
+    # Nothing guarantees the order of synchronization, the command can start
+    # with the second file and fail, or any other file or directory
+
+    # First check if any files have been synchronized, then check that the
+    # first file has been synchronized and the others have not
+
+    (echo $second_file_att | grep "No entry found" && \
+     echo $third_file_att | grep "No entry found") || \
+    error "Synchronized files that should not."
+
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
@@ -193,7 +289,9 @@ test_sync_branch()
 declare -a tests=(test_sync_2_files test_sync_size test_sync_3_files
                   test_sync_xattrs test_sync_subdir test_sync_large_tree
                   test_sync_one_one_file test_sync_one_two_files
-                  test_sync_socket test_sync_fifo test_sync_branch)
+                  test_sync_symbolic_link test_sync_socket test_sync_fifo
+                  test_sync_branch test_continue_sync_on_error
+                  test_stop_sync_on_error )
 
 tmpdir=$(mktemp --directory)
 trap -- "rm -rf '$tmpdir'" EXIT

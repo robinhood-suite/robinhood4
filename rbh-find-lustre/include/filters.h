@@ -46,4 +46,22 @@ fid2filter(const char *fid);
 struct rbh_filter *
 ost_index2filter(const char *ost_index);
 
+/**
+ * Build a filter for the -expired predicate
+ *
+ * @return             a pointer to a newly allocated struct rbh_filter
+ */
+struct rbh_filter *
+expired2filter();
+
+/**
+ * Build a filter for the -expired predicate
+ *
+ * @param expired      the next argument in the command line or NULL
+ *
+ * @return             a pointer to a newly allocated struct rbh_filter
+ */
+struct rbh_filter *
+expired_at2filter(const char *expired);
+
 #endif

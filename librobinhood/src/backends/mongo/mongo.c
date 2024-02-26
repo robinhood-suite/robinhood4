@@ -398,7 +398,8 @@ mongo_bulk_append_fsevent(mongoc_bulk_operation_t *bulk,
 
 static ssize_t
 mongo_bulk_init_from_fsevents(mongoc_bulk_operation_t *bulk,
-                              struct rbh_iterator *fsevents)
+                              struct rbh_iterator *fsevents,
+                              bool skip_error)
 {
     int save_errno = errno;
     size_t count = 0;
@@ -409,7 +410,7 @@ mongo_bulk_init_from_fsevents(mongoc_bulk_operation_t *bulk,
         errno = 0;
         fsevent = rbh_iter_next(fsevents);
         if (fsevent == NULL) {
-            if (errno == ENODATA)
+            if (errno == ENODATA || !skip_error)
                 break;
 
             /* If we couldn't open the file because it is already deleted
@@ -432,7 +433,8 @@ mongo_bulk_init_from_fsevents(mongoc_bulk_operation_t *bulk,
 }
 
 static ssize_t
-mongo_backend_update(void *backend, struct rbh_iterator *fsevents)
+mongo_backend_update(void *backend, struct rbh_iterator *fsevents,
+                     bool skip_error)
 {
     struct mongo_backend *mongo = backend;
     mongoc_bulk_operation_t *bulk;
@@ -453,7 +455,7 @@ mongo_backend_update(void *backend, struct rbh_iterator *fsevents)
         return -1;
     }
 
-    count = mongo_bulk_init_from_fsevents(bulk, fsevents);
+    count = mongo_bulk_init_from_fsevents(bulk, fsevents, skip_error);
     if (count <= 0) {
         int save_errno = errno;
 
@@ -569,7 +571,7 @@ mongo_backend_destroy(void *backend)
 }
 
 static struct rbh_backend *
-mongo_backend_branch(void *backend, const struct rbh_id *id);
+mongo_backend_branch(void *backend, const struct rbh_id *id, const char *path);
 
 static const struct rbh_backend_operations MONGO_BACKEND_OPS = {
     .get_option = mongo_get_option,
@@ -1328,12 +1330,14 @@ mongo_backend_init_from_uri(struct mongo_backend *mongo,
 }
 
 static struct rbh_backend *
-mongo_backend_branch(void *backend, const struct rbh_id *id)
+mongo_backend_branch(void *backend, const struct rbh_id *id, const char *path)
 {
     struct mongo_backend *mongo = backend;
     struct mongo_branch_backend *branch;
     size_t data_size;
     char *data;
+
+    (void) path;
 
     data_size = id->size;
     branch = malloc(sizeof(*branch) + data_size);
