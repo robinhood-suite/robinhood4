@@ -377,6 +377,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c0b44985_288cbf74",
+        "filename": "librobinhood/include/robinhood/backends/posix_internal.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-02-26T08:40:38Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "54508362_086ea5b7",
+      "range": {
+        "startLine": 68,
+        "startChar": 0,
+        "endLine": 68,
+        "endChar": 2
+      },
+      "revId": "e76461ecb2b569afdba83a2d1d4b53985c32b34c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0ec0906b_2d4c9fee",
@@ -508,6 +532,30 @@
       "side": 1,
       "message": "Yes, he is retrieved from fstent structure in the posix backend or computed for each entry in `lustre_mpi_iter_next` in the lustre_mpi backend.",
       "parentUuid": "e9b2c862_bc8241b5",
+      "range": {
+        "startLine": 82,
+        "startChar": 49,
+        "endLine": 82,
+        "endChar": 53
+      },
+      "revId": "e76461ecb2b569afdba83a2d1d4b53985c32b34c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c6056585_29a8808e",
+        "filename": "librobinhood/include/robinhood/backends/posix_internal.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-02-26T08:40:38Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "e4c47a32_0ca1d7b0",
       "range": {
         "startLine": 82,
         "startChar": 49,
