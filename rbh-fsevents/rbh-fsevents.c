@@ -114,10 +114,10 @@ source_from_file_uri(const char *file_path,
 static struct source *
 source_from_uri(const char *uri)
 {
+    struct source *source = NULL;
     struct rbh_raw_uri *raw_uri;
-    struct source *source;
+    char *name = NULL;
     char *colon;
-    char *name;
 
     raw_uri = rbh_raw_uri_from_string(uri);
     if (raw_uri == NULL)

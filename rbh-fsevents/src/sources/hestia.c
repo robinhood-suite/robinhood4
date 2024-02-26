@@ -20,9 +20,14 @@
 
 enum event_fields {
     EF_UNKNOWN,
-    EF_ID,
     EF_ATTRS,
+    EF_CTIME,
+    EF_ID,
+    EF_MTIME,
+    EF_SIZE,
+    EF_TIERS,
     EF_TIME,
+    EF_USER_MD,
 };
 
 enum key_parse_result {
@@ -35,18 +40,45 @@ static enum event_fields
 str2event_fields(const char *string)
 {
     switch (*string++) {
-    case 'i': /* id */
-        if (strcmp(string, "d"))
-            break;
-        return EF_ID;
     case 'a': /* attrs */
         if (strcmp(string, "ttrs"))
             break;
         return EF_ATTRS;
-    case 't': /* time */
-        if (strcmp(string, "ime"))
+    case 'c': /* ctime */
+        if (strcmp(string, "time"))
             break;
-        return EF_TIME;
+        return EF_CTIME;
+    case 'i': /* id */
+        if (strcmp(string, "d"))
+            break;
+        return EF_ID;
+    case 'm': /* mtime */
+        if (strcmp(string, "time"))
+            break;
+        return EF_MTIME;
+    case 's': /* size */
+        if (strcmp(string, "ize"))
+            break;
+        return EF_SIZE;
+    case 't':
+        if (*string++ != 'i')
+            break;
+
+        switch (*string++) {
+        case 'e': /* tiers */
+            if (strcmp(string, "rs"))
+                break;
+            return EF_TIERS;
+        case 'm': /* timer */
+            if (*string != 'e')
+                break;
+            return EF_TIME;
+        }
+        break;
+    case 'u': /* user_metadata */
+        if (strcmp(string, "ser_metadata"))
+            break;
+        return EF_USER_MD;
     }
 
     errno = EINVAL;
@@ -97,6 +129,116 @@ copy_id_in_events(struct rbh_fsevent *new_events, size_t n_events)
     }
 }
 
+static bool
+parse_attrs(yaml_parser_t *parser, struct rbh_value_map *map,
+            struct rbh_statx *statx)
+{
+    struct rbh_value_pair *pairs;
+    bool seen_user_md = false;
+    bool seen_tiers = false;
+    bool seen_size = false;
+    yaml_event_t event;
+    int save_errno;
+
+    pairs = source_stack_alloc(NULL, sizeof(*pairs) * 2);
+    if (pairs == NULL)
+        error(EXIT_FAILURE, errno,
+              "source_stack_alloc on pairs in parse_attrs");
+
+    if (!yaml_parser_parse(parser, &event))
+        parser_error(parser);
+
+    save_errno = errno;
+    yaml_event_delete(&event);
+    errno = save_errno;
+
+    while (true) {
+        enum key_parse_result next;
+        struct rbh_value *value;
+        enum event_fields field;
+        int64_t event_size;
+        bool success;
+
+        next = get_next_key(parser, &event, &field);
+        if (next == KPR_END)
+            break;
+        else if (next == KPR_ERROR)
+            return false;
+
+        switch (field) {
+        case EF_USER_MD:
+            pairs[0].key = source_stack_alloc("user_metadata",
+                                              strlen("user_metadata") + 1);
+            if (pairs[0].key == NULL)
+                error(EXIT_FAILURE, errno,
+                      "source_stack_alloc on pairs[0].key in parse_attrs");
+
+            value = source_stack_alloc(NULL, sizeof(*value));
+            if (value == NULL)
+                error(EXIT_FAILURE, errno,
+                      "source_stack_alloc on value in parse_attrs");
+
+            success = parse_rbh_value_map(parser, &value->map, true);
+            value->type = RBH_VT_MAP;
+            pairs[0].value = value;
+            seen_user_md = true;
+            break;
+        case EF_TIERS:
+            pairs[1].key = source_stack_alloc("tiers", strlen("tiers") + 1);
+            if (pairs[1].key == NULL)
+                error(EXIT_FAILURE, errno,
+                      "source_stack_alloc on pairs[1].key in parse_attrs");
+
+            value = source_stack_alloc(NULL, sizeof(*value));
+            if (value == NULL)
+                error(EXIT_FAILURE, errno,
+                      "source_stack_alloc on value in parse_attrs");
+
+            if (!yaml_parser_parse(parser, &event))
+                parser_error(parser);
+
+            success = parse_sequence(parser, value);
+            value->type = RBH_VT_SEQUENCE;
+            pairs[1].value = value;
+            seen_tiers = true;
+            break;
+        case EF_SIZE:
+            seen_size = true;
+            if (!yaml_parser_parse(parser, &event))
+                parser_error(parser);
+
+            success = parse_int64(&event, &event_size);
+            if (!success)
+                return false;
+
+            statx->stx_mask |= RBH_STATX_SIZE;
+            statx->stx_size = event_size;
+
+            save_errno = errno;
+            yaml_event_delete(&event);
+            errno = save_errno;
+            break;
+        default:
+            if (!yaml_parser_parse(parser, &event))
+                parser_error(parser);
+
+            save_errno = errno;
+            yaml_event_delete(&event);
+            errno = save_errno;
+            success = true;
+            break;
+        }
+
+        if (!success)
+            return false;
+    }
+
+    map->pairs = pairs;
+    map->count = 2;
+
+    return seen_user_md && seen_tiers && seen_size;
+}
+
 /* "READ" events in Hestia are of the form:
  *
  * ---
@@ -142,17 +284,13 @@ parse_read(yaml_parser_t *parser, struct rbh_iterator **fsevents_iterator)
             seen_id = true;
 
             success = parse_name(parser, &new_read_event[0].id.data);
-            new_read_event[0].id.size = strlen(new_read_event[0].id.data);
+            new_read_event[0].id.size = strlen(new_read_event[0].id.data) + 1;
             break;
         case EF_TIME:
             seen_time = true;
             if (!yaml_parser_parse(parser, &event))
                 parser_error(parser);
 
-            /* This is the time of the changelog, close but not equal to the
-             * object atime/mtime/ctime, but consider it as the object's times
-             * for now
-             */
             success = parse_int64(&event, &event_time);
             if (!success)
                 return false;
@@ -188,29 +326,47 @@ parse_read(yaml_parser_t *parser, struct rbh_iterator **fsevents_iterator)
 static void
 initialize_update_fsevents(struct rbh_fsevent *new_update_events)
 {
-    new_update_events[0].type = RBH_FET_XATTR;
-    new_update_events[0].link.parent_id = NULL;
-    new_update_events[0].link.name = NULL;
+    new_update_events[0].type = RBH_FET_UPSERT;
+    new_update_events[0].xattrs.pairs = NULL;
+    new_update_events[0].xattrs.count = 0;
+    new_update_events[0].upsert.symlink = NULL;
 
-    new_update_events[1].type = RBH_FET_UPSERT;
-    new_update_events[1].xattrs.pairs = NULL;
-    new_update_events[1].xattrs.count = 0;
-    new_update_events[1].upsert.symlink = NULL;
+    new_update_events[1].type = RBH_FET_XATTR;
+    new_update_events[1].link.parent_id = NULL;
+    new_update_events[1].link.name = NULL;
+}
 
-    new_update_events[2].type = RBH_FET_UPSERT;
-    new_update_events[2].upsert.statx = NULL;
-    new_update_events[2].upsert.symlink = NULL;
+static int64_t
+parse_update_time(yaml_parser_t *parser)
+{
+    int64_t event_time;
+    yaml_event_t event;
+
+    if (!yaml_parser_parse(parser, &event))
+        parser_error(parser);
+
+    if (!parse_int64(&event, &event_time))
+        error(EXIT_FAILURE, errno,
+              "failed to parse time value '%s' in Hestia event",
+              yaml_scalar_value(&event));
+
+    yaml_event_delete(&event);
+    return event_time;
 }
 
 /* "UPDATE" events in Hestia are of the form:
- *
  * ---
  * !update
+ * ctime: 1706606568729909
+ * mtime: 1706606568697886
  * attrs:
- *   user_metadata.key0: "value0"
- *   user_metadata.key1: "value1"
- * id: "421b3153-9108-d1ef-3413-945177dd4ab3"
- * time: 1696837025494619488
+ *   user_metadata:
+ *     my_key: "my_value"
+ *   tiers:
+ *     []
+ *   size: 0
+ * id: "blob"
+ * time: 1706606568729909
  * ...
  *
  */
@@ -218,22 +374,31 @@ static bool
 parse_update(yaml_parser_t *parser, struct rbh_iterator **fsevents_iterator)
 {
     struct rbh_fsevent *new_update_events;
-    struct rbh_value_map enrich_map;
     struct rbh_statx *statx;
     bool seen_attrs = false;
+    bool seen_ctime = false;
+    bool seen_mtime = false;
     bool seen_id = false;
-    int64_t event_time;
 
     new_update_events = source_stack_alloc(NULL,
-                                           sizeof(*new_update_events) * 3);
+                                           sizeof(*new_update_events) * 2);
     if (new_update_events == NULL)
-        error(EXIT_FAILURE, errno, "source_stack_alloc in parse_update");
+        error(EXIT_FAILURE, errno,
+              "source_stack_alloc on new_update_events in parse_update");
 
     initialize_update_fsevents(new_update_events);
+
+    statx = source_stack_alloc(NULL, sizeof(*statx));
+    if (!statx)
+        error(EXIT_FAILURE, errno,
+              "source_stack_alloc on statx in parse_update");
+
+    statx->stx_mask = 0;
 
     while (true) {
         enum event_fields field = 0;
         enum key_parse_result next;
+        int64_t event_time;
         yaml_event_t event;
         int save_errno;
         bool success;
@@ -249,40 +414,51 @@ parse_update(yaml_parser_t *parser, struct rbh_iterator **fsevents_iterator)
             seen_id = true;
 
             success = parse_name(parser, &new_update_events[0].id.data);
-            new_update_events[0].id.size = strlen(new_update_events[0].id.data);
-            copy_id_in_events(new_update_events, 3);
+            new_update_events[0].id.size =
+                strlen(new_update_events[0].id.data) + 1;
+            copy_id_in_events(new_update_events, 2);
             break;
-        case EF_TIME:
-            if (!yaml_parser_parse(parser, &event))
-                parser_error(parser);
+        case EF_CTIME:
+            event_time = parse_update_time(parser);
+            success = true;
+            seen_ctime = true;
 
-            statx = source_stack_alloc(NULL, sizeof(*statx));
-            if (!statx)
-                error(EXIT_FAILURE, errno,
-                      "source_stack_alloc in parse_create");
-
-            /* This is the time of the changelog, close but not equal to the
-             * object atime/mtime/ctime, but consider it as the object's times
-             * for now
-             */
-            success = parse_int64(&event, &event_time);
-            if (!success)
-                error(EXIT_FAILURE, errno, "parse_int64 in parse_update");
-
-            statx->stx_mask = RBH_STATX_CTIME;
+            statx->stx_mask |= RBH_STATX_CTIME;
             statx->stx_ctime.tv_sec = event_time;
             statx->stx_ctime.tv_nsec = 0;
 
-            new_update_events[1].upsert.statx = statx;
+            break;
+        case EF_MTIME:
+            event_time = parse_update_time(parser);
+            success = true;
+            seen_mtime = true;
+
+            /* Do not update the ctime here because the update event contains
+             * both ctime and mtime.
+             */
+            statx->stx_mask |= RBH_STATX_ATIME | RBH_STATX_MTIME;
+            statx->stx_atime.tv_sec = event_time;
+            statx->stx_atime.tv_nsec = 0;
+            statx->stx_mtime.tv_sec = event_time;
+            statx->stx_mtime.tv_nsec = 0;
+
+            break;
+        case EF_TIME:
+            /* The 'time' component of each update event is now equal to the
+             * ctime and/or the mtime, so it is redundant and doesn't need to be
+             * considered.
+             */
+            if (!yaml_parser_parse(parser, &event))
+                parser_error(parser);
 
             save_errno = errno;
             yaml_event_delete(&event);
             errno = save_errno;
+            success = true;
             break;
         case EF_ATTRS:
             seen_attrs = true;
-            success = parse_rbh_value_map(parser, &new_update_events[0].xattrs,
-                                          true);
+            success = parse_attrs(parser, &new_update_events[1].xattrs, statx);
             break;
         default:
             return false;
@@ -292,17 +468,12 @@ parse_update(yaml_parser_t *parser, struct rbh_iterator **fsevents_iterator)
             return false;
     }
 
-    enrich_map = build_enrich_map(build_empty_map, "hestia");
-    if (enrich_map.pairs == NULL)
-        error(EXIT_FAILURE, errno, "build_enrich_map in parse_create");
-
-    new_update_events[2].xattrs.pairs = enrich_map.pairs;
-    new_update_events[2].xattrs.count = enrich_map.count;
+    new_update_events[0].upsert.statx = statx;
 
     *fsevents_iterator = rbh_iter_array(new_update_events,
-                                        sizeof(*new_update_events), 3);
+                                        sizeof(*new_update_events), 2);
 
-    return seen_id && seen_attrs;
+    return seen_id && seen_attrs && seen_ctime && seen_mtime;
 }
 
 /* "REMOVE" events in Hestia are of the form:
@@ -344,7 +515,8 @@ parse_remove(yaml_parser_t *parser, struct rbh_iterator **fsevents_iterator)
             seen_id = true;
 
             success = parse_name(parser, &new_delete_event[0].id.data);
-            new_delete_event[0].id.size = strlen(new_delete_event[0].id.data);
+            new_delete_event[0].id.size =
+                strlen(new_delete_event[0].id.data) + 1;
             break;
         case EF_TIME:
             /* Ignore this part of the event */
@@ -395,10 +567,36 @@ initialize_create_fsevents(struct rbh_fsevent *new_create_events)
     new_create_events[2].xattrs.pairs = NULL;
     new_create_events[2].xattrs.count = 0;
     new_create_events[2].upsert.symlink = NULL;
+}
 
-    new_create_events[3].type = RBH_FET_UPSERT;
-    new_create_events[3].upsert.statx = NULL;
-    new_create_events[3].upsert.symlink = NULL;
+static void
+set_object_id_in_ns_path(const char *name, struct rbh_value_map *xattrs)
+{
+    struct rbh_value_pair *pair;
+    struct rbh_value *value;
+
+    value = source_stack_alloc(NULL, sizeof(*value));
+    if (value == NULL)
+        error(EXIT_FAILURE, errno,
+              "source_stack_alloc on value in set_object_id_in_ns_path");
+
+    value->type = RBH_VT_STRING;
+    value->string = source_stack_alloc(name, strlen(name) + 1);
+    if (value->string == NULL)
+        error(EXIT_FAILURE, errno,
+              "source_stack_alloc on value->string in "
+              "set_object_id_in_ns_path");
+
+    pair = source_stack_alloc(NULL, sizeof(*pair));
+    if (pair == NULL)
+        error(EXIT_FAILURE, errno,
+              "source_stack_alloc on pair in set_object_id_in_ns_path");
+
+    pair->value = value;
+    pair->key = "path";
+
+    xattrs->pairs = pair;
+    xattrs->count = 1;
 }
 
 /* "CREATE" events in Hestia are of the form:
@@ -406,9 +604,13 @@ initialize_create_fsevents(struct rbh_fsevent *new_create_events)
  * ---
  * !create
  * attrs:
- *   dataset.id: "70c88005-aa7e-bce6-7583-0d8b26926c25"
- * id: "421b3153-9108-d1ef-3413-945177dd4ab3"
- * time: 1696837025493616528
+ *   user_metadata:
+ *     {}
+ *   size: 0
+ *   tiers:
+ *     []
+ * time: 1701418948885961
+ * id: "d198c172-35ff-d962-a3db-027cdcf9116c"
  * ...
  *
  */
@@ -416,18 +618,25 @@ static bool
 parse_create(yaml_parser_t *parser, struct rbh_iterator **fsevents_iterator)
 {
     struct rbh_fsevent *new_create_events;
-    struct rbh_value_map enrich_map;
     struct rbh_statx *statx;
     bool seen_id = false;
     int64_t event_time;
     int id_length;
 
     new_create_events = source_stack_alloc(NULL,
-                                           sizeof(*new_create_events) * 4);
+                                           sizeof(*new_create_events) * 3);
     if (new_create_events == NULL)
-        error(EXIT_FAILURE, errno, "source_stack_alloc in parse_create");
+        error(EXIT_FAILURE, errno,
+              "source_stack_alloc on new_create_events in parse_create");
 
     initialize_create_fsevents(new_create_events);
+
+    statx = source_stack_alloc(NULL, sizeof(*statx));
+    if (!statx)
+        error(EXIT_FAILURE, errno,
+              "source_stack_alloc on statx in parse_create");
+
+    statx->stx_mask = 0;
 
     while (true) {
         enum event_fields field = 0;
@@ -449,7 +658,7 @@ parse_create(yaml_parser_t *parser, struct rbh_iterator **fsevents_iterator)
             seen_id = true;
 
             success = parse_name(parser, &new_create_events[0].link.name);
-            id_length = strlen(new_create_events[0].link.name);
+            id_length = strlen(new_create_events[0].link.name) + 1;
             new_create_events[0].id.data = source_stack_alloc(
                 new_create_events[0].link.name, id_length
                 );
@@ -459,14 +668,12 @@ parse_create(yaml_parser_t *parser, struct rbh_iterator **fsevents_iterator)
                       "source_stack_alloc in parse_create");
 
             new_create_events[0].id.size = id_length;
-            copy_id_in_events(new_create_events, 4);
+            copy_id_in_events(new_create_events, 3);
+            set_object_id_in_ns_path(new_create_events[0].link.name,
+                                     &new_create_events[0].xattrs);
             break;
         case EF_ATTRS:
-            /* The attributes are not namespace ones, so we store them for
-             * later in another map
-             */
-            success = parse_rbh_value_map(parser, &new_create_events[1].xattrs,
-                                          true);
+            success = parse_attrs(parser, &new_create_events[1].xattrs, statx);
             break;
         case EF_TIME:
             if (!yaml_parser_parse(parser, &event))
@@ -476,23 +683,14 @@ parse_create(yaml_parser_t *parser, struct rbh_iterator **fsevents_iterator)
             if (!success)
                 error(EXIT_FAILURE, errno, "parse_int64 in parse_create");
 
-            statx = source_stack_alloc(NULL, sizeof(*statx));
-            if (!statx)
-                error(EXIT_FAILURE, errno,
-                      "source_stack_alloc in parse_create");
-
-            statx->stx_mask = RBH_STATX_ATIME | RBH_STATX_BTIME |
-                              RBH_STATX_CTIME | RBH_STATX_MTIME;
+            statx->stx_mask |= RBH_STATX_ATIME | RBH_STATX_BTIME |
+                               RBH_STATX_CTIME;
             statx->stx_atime.tv_sec = event_time;
             statx->stx_atime.tv_nsec = 0;
             statx->stx_btime.tv_sec = event_time;
             statx->stx_btime.tv_nsec = 0;
             statx->stx_ctime.tv_sec = event_time;
             statx->stx_ctime.tv_nsec = 0;
-            statx->stx_mtime.tv_sec = event_time;
-            statx->stx_mtime.tv_nsec = 0;
-
-            new_create_events[2].upsert.statx = statx;
 
             save_errno = errno;
             yaml_event_delete(&event);
@@ -506,15 +704,10 @@ parse_create(yaml_parser_t *parser, struct rbh_iterator **fsevents_iterator)
             return false;
     }
 
-    enrich_map = build_enrich_map(build_empty_map, "hestia");
-    if (enrich_map.pairs == NULL)
-        error(EXIT_FAILURE, errno, "build_enrich_map in parse_create");
-
-    new_create_events[3].xattrs.pairs = enrich_map.pairs;
-    new_create_events[3].xattrs.count = enrich_map.count;
+    new_create_events[2].upsert.statx = statx;
 
     *fsevents_iterator = rbh_iter_array(new_create_events,
-                                        sizeof(*new_create_events), 4);
+                                        sizeof(*new_create_events), 3);
 
     return seen_id;
 }

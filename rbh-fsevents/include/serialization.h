@@ -26,6 +26,9 @@ parse_rbh_value_map(yaml_parser_t *parser, struct rbh_value_map *map,
                     bool parse_first_event);
 
 bool
+parse_sequence(yaml_parser_t *parser, struct rbh_value *sequence);
+
+bool
 emit_fsevent(yaml_emitter_t *emitter, const struct rbh_fsevent *fsevent);
 
 /* On success \p fsevent's fields may point at static memory.

@@ -126,7 +126,7 @@ START_TEST(rbu_unsupported)
 {
     struct rbh_backend *backend = test_backend_new();
 
-    ck_assert_int_eq(rbh_backend_update(backend, NULL), -1);
+    ck_assert_int_eq(rbh_backend_update(backend, NULL, true), -1);
     ck_assert_int_eq(errno, ENOTSUP);
 
     rbh_backend_destroy(backend);
@@ -157,7 +157,7 @@ START_TEST(rbb_unsupported)
 {
     struct rbh_backend *backend = test_backend_new();
 
-    ck_assert_ptr_null(rbh_backend_branch(backend, NULL));
+    ck_assert_ptr_null(rbh_backend_branch(backend, NULL, NULL));
     ck_assert_int_eq(errno, ENOTSUP);
 
     rbh_backend_destroy(backend);

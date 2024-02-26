@@ -603,7 +603,7 @@ parse_rbh_value_map(yaml_parser_t *parser, struct rbh_value_map *map,
      |                              sequence                              |
      *--------------------------------------------------------------------*/
 
-static bool
+bool
 parse_sequence(yaml_parser_t *parser, struct rbh_value *sequence)
 {
     struct rbh_value *values;

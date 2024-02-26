@@ -9,168 +9,77 @@
 # include "config.h"
 #endif
 
+#include <error.h>
 #include <inttypes.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-#include <jansson.h>
 
 #include "robinhood/backends/hestia.h"
 #include "robinhood/sstack.h"
 #include "robinhood/statx.h"
 
-#include "hestia_glue.h"
+#include "hestia/hestia_iosea.h"
 
 /*----------------------------------------------------------------------------*
  |                              hestia_iterator                               |
  *----------------------------------------------------------------------------*/
 
+struct tier_objects {
+    HestiaId *ids;
+    size_t ids_length;
+    size_t current_id; /* index of the object in 'ids' that will be managed in
+                        * the next call to "hestia_iter_next". */
+};
+
 struct hestia_iterator {
     struct rbh_mut_iterator iterator;
     struct rbh_sstack *values;
-    struct hestia_id *ids;
-    size_t current_id; /* index of the object in 'ids' that will be managed in
-                        * the next call to "hestia_iter_next". */
-    size_t length;
+    struct tier_objects *tiers;
+    uint8_t *tier_ids;
+    size_t tiers_length;
+    size_t current_tier; /* index of the tier in "tiers" that will be managed in
+                          * the next call to "hestia_iter_next". */
 };
 
-static void
-fill_creation_time(json_t *value, struct rbh_statx *statx)
+static HestiaId *
+get_next_object(struct hestia_iterator *hestia_iter)
 {
-    json_int_t val = json_integer_value(value);
+    struct tier_objects *tier = &hestia_iter->tiers[hestia_iter->current_tier];
+    HestiaId *to_return;
 
-    statx->stx_btime.tv_sec = val;
+    if (tier->current_id == tier->ids_length) {
+        if (hestia_iter->current_tier + 1 == hestia_iter->tiers_length) {
+            errno = ENODATA;
+            return NULL;
+        }
+
+        hestia_iter->current_tier++;
+        return get_next_object(hestia_iter);
+    }
+
+    to_return = &tier->ids[tier->current_id];
+
+    tier->current_id++;
+
+    return to_return;
+}
+
+static void
+fill_statx(struct rbh_statx *statx, HestiaObject *obj)
+{
+    statx->stx_mask = RBH_STATX_SIZE | RBH_STATX_ATIME | RBH_STATX_BTIME |
+                      RBH_STATX_CTIME | RBH_STATX_MTIME;
+
+    statx->stx_size = obj->m_size;
+    statx->stx_atime.tv_sec = obj->m_atime;
+    statx->stx_atime.tv_nsec = 0;
+    statx->stx_btime.tv_sec = obj->m_creation_time;
     statx->stx_btime.tv_nsec = 0;
-    statx->stx_mask |= RBH_STATX_BTIME;
-}
-
-static void
-fill_last_modified(json_t *value, struct rbh_statx *statx)
-{
-    json_int_t val = json_integer_value(value);
-
-    statx->stx_mtime.tv_sec = val;
+    statx->stx_ctime.tv_sec = obj->m_ctime;
+    statx->stx_ctime.tv_nsec = 0;
+    statx->stx_mtime.tv_sec = obj->m_mtime;
     statx->stx_mtime.tv_nsec = 0;
-    statx->stx_mask |= RBH_STATX_MTIME;
-}
-
-static void
-fill_tier(json_t *value, struct rbh_value *tier_value)
-{
-    json_int_t val = json_integer_value(value);
-
-    tier_value->type = RBH_VT_UINT64;
-    tier_value->uint64 = val;
-}
-
-static int
-fill_xattrs(json_t *value, struct rbh_value *_value,
-            struct rbh_sstack *values)
-{
-    int type = json_typeof(value);
-    char *val_str;
-    int rc = 0;
-
-    switch (type) {
-    case JSON_OBJECT:
-    case JSON_ARRAY:
-        val_str = json_dumps(value, JSON_ESCAPE_SLASH);
-        break;
-    case JSON_STRING:
-        rc = asprintf(&val_str, "%s", json_string_value(value));
-        break;
-    case JSON_INTEGER:
-        rc = asprintf(&val_str, "%"PRId64, json_integer_value(value));
-        break;
-    case JSON_REAL:
-        rc = asprintf(&val_str, "%f", json_real_value(value));
-        break;
-    case JSON_TRUE:
-    case JSON_FALSE:
-        rc = asprintf(&val_str, json_is_true(value) ? "true" : "false");
-        break;
-    default:
-        rc = asprintf(&val_str, "null");
-    }
-
-    if (rc < 0)
-        goto err;
-
-    _value->type = RBH_VT_STRING;
-    _value->string = rbh_sstack_push(values, val_str, strlen(val_str) + 1);
-    free(val_str);
-    if (_value->string == NULL)
-        return -1;
-
-err:
-    return rc < 0 ? rc : 0;
-}
-
-static int
-parse_attrs(const char *obj_attrs, struct rbh_statx *statx,
-            struct rbh_value_pair **_pair, struct rbh_sstack *sstack)
-{
-    struct rbh_value_pair *pairs;
-    struct rbh_value *values;
-    json_t *attrs = NULL;
-    size_t nb_attrs;
-    const char *key;
-    json_t *value;
-    int idx = 0;
-    int rc = 0;
-
-    attrs = json_loads(obj_attrs, 0, NULL);
-    if (attrs == NULL)
-        return -1;
-
-    nb_attrs = json_object_size(attrs);
-    if (nb_attrs == 0)
-        goto err;
-
-    /* 2 attributes will be filed in the statx structure, so they are not to be
-     * filled as rbh_values.
-     */
-    values = rbh_sstack_push(sstack, NULL, sizeof(*values) * (nb_attrs - 2));
-    if (values == NULL)
-        goto err;
-
-    pairs = rbh_sstack_push(sstack, NULL, sizeof(*pairs) * (nb_attrs - 2));
-    if (pairs == NULL)
-        goto err;
-
-    json_object_foreach(attrs, key, value) {
-        if (key[0] == 'c' && !strcmp(&key[1], "reation_time")) {
-            fill_creation_time(value, statx);
-            continue;
-        } else if (key[0] == 'l' && !strcmp(&key[1], "ast_modified")) {
-            fill_last_modified(value, statx);
-            continue;
-        } else if (key[0] == 't' && !strcmp(&key[1], "ier")) {
-            fill_tier(value, &values[idx]);
-        } else {
-            rc = fill_xattrs(value, &values[idx], sstack);
-        }
-
-        if (rc)
-            goto err;
-
-        pairs[idx].key = rbh_sstack_push(sstack, key, strlen(key) + 1);
-        if (pairs[idx].key == NULL) {
-            rc = -1;
-            goto err;
-        }
-
-        pairs[idx].value = &values[idx];
-        idx++;
-    }
-
-    *_pair = pairs;
-    rc = idx;
-
-err:
-    json_decref(attrs);
-
-    return rc;
 }
 
 static int
@@ -198,55 +107,171 @@ fill_path(char *path, struct rbh_value_pair **_pairs, struct rbh_sstack *values)
     return 0;
 }
 
+static void
+create_tier_map(struct rbh_value *value, HestiaTierExtent *extent,
+                struct rbh_sstack *sstack)
+{
+    struct rbh_value *extent_size = rbh_sstack_push(sstack, NULL,
+                                                    sizeof(*extent_size));
+    struct rbh_value_map *map = rbh_sstack_push(sstack, NULL, sizeof(*map));
+    struct rbh_value *tier_extents = rbh_sstack_push(sstack, NULL,
+                                                     sizeof(*tier_extents));
+    struct rbh_value *tier_index = rbh_sstack_push(sstack, NULL,
+                                                   sizeof(*tier_index));
+    struct rbh_value_pair *pairs = rbh_sstack_push(sstack, NULL,
+                                                   sizeof(*pairs) * 2);
+
+    if (map == NULL || pairs == NULL || tier_index == NULL ||
+        tier_extents == NULL || extent_size == NULL)
+        error(EXIT_FAILURE, ENOMEM, "rbh_sstack_push in create_tier_map");
+
+    extent_size->type = RBH_VT_UINT64;
+    extent_size->uint64 = extent->m_size;
+
+    tier_extents->type = RBH_VT_SEQUENCE;
+    tier_extents->sequence.count = 1;
+    tier_extents->sequence.values = extent_size;
+
+    tier_index->type = RBH_VT_UINT32;
+    tier_index->uint32 = extent->m_tier_index;
+
+    pairs[0].key = "extents";
+    pairs[0].value = tier_extents;
+
+    pairs[1].key = "index";
+    pairs[1].value = tier_index;
+
+    map->count = 2;
+    map->pairs = pairs;
+
+    value->type = RBH_VT_MAP;
+    value->map = *map;
+}
+
+static void
+fill_tier_attributes(HestiaObject *obj, struct rbh_value_pair *pairs,
+                     struct rbh_sstack *stack)
+{
+    struct rbh_value *tiers_sequence = rbh_sstack_push(stack, NULL,
+                                                       sizeof(*tiers_sequence));
+    struct rbh_value *tiers;
+
+    if (tiers_sequence == NULL)
+        error(EXIT_FAILURE, errno,
+              "rbh_sstack_push on tiers_sequence in fill_tier_attributes");
+
+    tiers_sequence->type = RBH_VT_SEQUENCE;
+    tiers_sequence->sequence.count = obj->m_num_tier_extents;
+    tiers = rbh_sstack_push(stack, NULL,
+                            sizeof(*tiers) * tiers_sequence->sequence.count);
+    if (tiers == NULL)
+        error(EXIT_FAILURE, errno,
+              "rbh_sstack_push on tiers in fill_tier_attributes");
+
+    for (size_t i = 0; i < obj->m_num_tier_extents; ++i) {
+        HestiaTierExtent *extent = &obj->m_tier_extents[i];
+
+        create_tier_map(&tiers[i], extent, stack);
+    }
+
+    tiers_sequence->sequence.values = tiers;
+
+    pairs[0].key = "tiers";
+    pairs[0].value = tiers_sequence;
+}
+
+static void
+fill_user_attributes(HestiaObject *obj, struct rbh_value_pair *pairs,
+                     struct rbh_sstack *values)
+{
+    struct rbh_value *map_value = rbh_sstack_push(values, NULL,
+                                                  sizeof(*map_value));
+    struct rbh_value_pair *user_pairs = rbh_sstack_push(values, NULL,
+                                                        sizeof(*user_pairs) *
+                                                        obj->m_num_attrs);
+    struct rbh_value_map map;
+
+    if (map_value == NULL || user_pairs == NULL)
+        error(EXIT_FAILURE, ENOMEM,
+              "rbh_sstack_push in fill_user_attributes");
+
+    for (size_t i = 0; i < obj->m_num_attrs; ++i) {
+        HestiaKeyValuePair *attr = &obj->m_attrs[i];
+        struct rbh_value *attr_value;
+
+        attr_value = rbh_sstack_push(values, NULL, sizeof(*attr_value));
+        if (attr_value == NULL)
+            error(EXIT_FAILURE, ENOMEM,
+                  "rbh_sstack_push on attr_value in fill_user_attributes");
+
+        attr_value->type = RBH_VT_STRING;
+        attr_value->string = rbh_sstack_push(values, attr->m_value,
+                                             strlen(attr->m_value) + 1);
+        if (attr_value->string == NULL)
+            error(EXIT_FAILURE, ENOMEM,
+                  "rbh_sstack_push on value string in fill_user_attributes");
+
+        user_pairs[i].key = rbh_sstack_push(values, attr->m_key,
+                                            strlen(attr->m_key) + 1);
+        if (user_pairs[i].key == NULL)
+            error(EXIT_FAILURE, ENOMEM,
+                  "rbh_sstack_push on key pair in fill_user_attributes");
+
+        user_pairs[i].value = attr_value;
+    }
+
+    map.count = obj->m_num_attrs;
+    map.pairs = user_pairs;
+
+    map_value->type = RBH_VT_MAP;
+    map_value->map = map;
+
+    pairs->key = "user_metadata";
+    pairs->value = map_value;
+}
+
 static void *
 hestia_iter_next(void *iterator)
 {
     struct hestia_iterator *hestia_iter = iterator;
-    struct rbh_statx statx = { .stx_mask = 0 };
     struct rbh_fsentry *fsentry = NULL;
     struct rbh_value_pair *inode_pairs;
     struct rbh_value_map inode_xattrs;
     struct rbh_value_pair *ns_pairs;
     struct rbh_value_map ns_xattrs;
+    struct rbh_statx statx = {0};
     struct rbh_id parent_id;
-    char *obj_attrs = NULL;
-    struct hestia_id *obj;
-    char *name = NULL;
+    HestiaObject obj = {0};
     struct rbh_id id;
-    size_t attrs_len;
+    HestiaId *obj_id;
+    char *name;
     int rc;
 
-    if (hestia_iter->current_id >= hestia_iter->length) {
-        errno = ENODATA;
-        return NULL;
-    }
-
-    obj = &hestia_iter->ids[hestia_iter->current_id];
-
-    rc = list_object_attrs(obj, &obj_attrs, &attrs_len);
-    if (rc)
+    obj_id = get_next_object(hestia_iter);
+    if (obj_id == NULL)
         return NULL;
 
     /* Use the hestia_id of each file as rbh_id */
-    id.data = rbh_sstack_push(hestia_iter->values, obj, sizeof(*obj));
+    id.data = rbh_sstack_push(hestia_iter->values, obj_id->m_uuid,
+                              strlen(obj_id->m_uuid) + 1);
     if (id.data == NULL)
-        goto err;
+        return NULL;
 
-    id.size = sizeof(*obj);
+    id.size = strlen(obj_id->m_uuid) + 1;
 
     /* All objects have no parent */
     parent_id.size = 0;
 
-    rc = asprintf(&name, "%ld-%ld", obj->higher, obj->lower);
-    if (rc <= 0)
-        goto err;
+    rc = hestia_object_get_attrs(obj_id, &obj);
+    if (rc)
+        return NULL;
 
-    rc = parse_attrs(obj_attrs, &statx, &inode_pairs, hestia_iter->values);
-    if (rc <= 0)
-        goto err;
+    fill_statx(&statx, &obj);
 
-    inode_xattrs.pairs = inode_pairs;
-    inode_xattrs.count = rc;
+    // TODO: register the name of the object
+    name = strdup(obj.m_uuid);
+    if (name == NULL)
+        return NULL;
 
     rc = fill_path(name, &ns_pairs, hestia_iter->values);
     if (rc)
@@ -255,17 +280,23 @@ hestia_iter_next(void *iterator)
     ns_xattrs.pairs = ns_pairs;
     ns_xattrs.count = 1;
 
+    inode_pairs = rbh_sstack_push(hestia_iter->values, NULL,
+                                  sizeof(*inode_pairs) * 2);
+    if (inode_pairs == NULL)
+        error(EXIT_FAILURE, errno, "rbh_sstack_push in fill_tier_attributes");
+
+    fill_tier_attributes(&obj, &inode_pairs[0], hestia_iter->values);
+
+    fill_user_attributes(&obj, &inode_pairs[1], hestia_iter->values);
+
+    inode_xattrs.pairs = inode_pairs;
+    inode_xattrs.count = 2;
+
     fsentry = rbh_fsentry_new(&id, &parent_id, name, &statx, &ns_xattrs,
                               &inode_xattrs, NULL);
-    if (fsentry == NULL)
-        goto err;
-
-    hestia_iter->current_id++;
 
 err:
     free(name);
-    free(obj_attrs);
-
     return fsentry;
 }
 
@@ -275,7 +306,9 @@ hestia_iter_destroy(void *iterator)
     struct hestia_iterator *hestia_iter = iterator;
 
     rbh_sstack_destroy(hestia_iter->values);
-    free(hestia_iter->ids);
+
+    hestia_free_tier_ids(&hestia_iter->tier_ids);
+    free(hestia_iter->tiers);
     free(hestia_iter);
 }
 
@@ -293,35 +326,57 @@ hestia_iterator_new()
 {
     struct hestia_iterator *hestia_iter = NULL;
     struct hestia_id *ids = NULL;
-    uint8_t *tiers = NULL;
     size_t tiers_len;
-    size_t ids_len;
     int save_errno;
+    uint8_t *tiers;
     int rc;
 
     hestia_iter = malloc(sizeof(*hestia_iter));
     if (hestia_iter == NULL)
         return NULL;
 
-    rc = list_tiers(&tiers, &tiers_len);
+    rc = hestia_list_tiers(&tiers, &tiers_len);
     if (rc)
         goto err;
 
-    rc = list_objects(tiers, tiers_len, &ids, &ids_len);
-    free(tiers);
-    if (rc)
-        goto err;
+    hestia_iter->tiers_length = tiers_len;
+    hestia_iter->tier_ids = tiers;
+    hestia_iter->current_tier = 0;
+
+    hestia_iter->tiers = malloc(sizeof(*hestia_iter->tiers) * tiers_len);
+    if (hestia_iter->tiers == NULL)
+        goto err_tiers;
+
+    for (size_t i = 0; i < tiers_len; ++i) {
+        HestiaId *object_ids;
+        size_t num_ids;
+
+        rc = hestia_object_list(tiers[i], &object_ids, &num_ids);
+        if (rc)
+            goto err_objects;
+
+        hestia_iter->tiers[i].ids = object_ids;
+        hestia_iter->tiers[i].ids_length = num_ids;
+        hestia_iter->tiers[i].current_id = 0;
+    }
 
     hestia_iter->iterator = HESTIA_ITER;
-    hestia_iter->ids = ids;
-    hestia_iter->length = ids_len;
-    hestia_iter->current_id = 0;
 
     hestia_iter->values = rbh_sstack_new(1 << 10);
     if (hestia_iter->values == NULL)
-        goto err;
+        goto err_objects;
 
     return hestia_iter;
+
+err_objects:
+    save_errno = errno;
+    free(hestia_iter->tiers);
+    errno = save_errno;
+
+err_tiers:
+    save_errno = errno;
+    hestia_free_tier_ids(&tiers);
+    errno = save_errno;
 
 err:
     save_errno = errno;
@@ -378,6 +433,7 @@ hestia_backend_destroy(void *backend)
     struct hestia_backend *hestia = backend;
 
     free(hestia);
+    //hestia_finish();
 }
 
 static const struct rbh_backend_operations HESTIA_BACKEND_OPS = {
@@ -402,6 +458,8 @@ rbh_hestia_backend_new(__attribute__((unused)) const char *path)
 
     hestia->iter_new = hestia_iterator_new;
     hestia->backend = HESTIA_BACKEND;
+
+    hestia_initialize("/etc/hestia/hestiad.yaml", NULL, NULL);
 
     return &hestia->backend;
 }
