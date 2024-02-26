@@ -47,6 +47,54 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "43381c4e_a27f45ae",
+        "filename": "librobinhood/include/robinhood/backends/posix_internal.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-02-26T12:08:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5e941533_a8eb59c9",
+      "range": {
+        "startLine": 66,
+        "startChar": 7,
+        "endLine": 66,
+        "endChar": 10
+      },
+      "revId": "73fcd2d6a276410f34b985c2e5d99bde3cd6ea4d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9f835da2_b733a11e",
+        "filename": "librobinhood/include/robinhood/backends/posix_internal.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-02-26T12:08:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "73ba7db0_f4172d6c",
+      "range": {
+        "startLine": 66,
+        "startChar": 32,
+        "endLine": 66,
+        "endChar": 77
+      },
+      "revId": "73fcd2d6a276410f34b985c2e5d99bde3cd6ea4d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c1742d9c_1bf41948",
@@ -60,6 +108,30 @@
       "writtenOn": "2024-02-26T08:40:38Z",
       "side": 1,
       "message": "minor: check the returned pointer isn\u0027t NULL (and no need for the extra spaces between the name and the \u0027\u003d\u0027",
+      "range": {
+        "startLine": 43,
+        "startChar": 18,
+        "endLine": 43,
+        "endChar": 31
+      },
+      "revId": "73fcd2d6a276410f34b985c2e5d99bde3cd6ea4d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2969a42a_e0c0aafe",
+        "filename": "librobinhood/src/backends/lustre-mpi/lustre-mpi.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-02-26T12:08:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c1742d9c_1bf41948",
       "range": {
         "startLine": 43,
         "startChar": 18,
@@ -93,6 +165,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cd01c633_cd2b5622",
+        "filename": "librobinhood/src/backends/lustre-mpi/lustre-mpi.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-02-26T12:08:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0326eb51_0e5f6765",
+      "range": {
+        "startLine": 46,
+        "startChar": 39,
+        "endLine": 46,
+        "endChar": 59
+      },
+      "revId": "73fcd2d6a276410f34b985c2e5d99bde3cd6ea4d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "67348248_13fd2a5f",
@@ -106,6 +202,30 @@
       "writtenOn": "2024-02-26T08:40:38Z",
       "side": 1,
       "message": "nit: O_NOFOLLOW isn\u0027t necessary since you\u0027re assured the target is a directory",
+      "range": {
+        "startLine": 47,
+        "startChar": 50,
+        "endLine": 47,
+        "endChar": 60
+      },
+      "revId": "73fcd2d6a276410f34b985c2e5d99bde3cd6ea4d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e89f7a78_958436b2",
+        "filename": "librobinhood/src/backends/lustre-mpi/lustre-mpi.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-02-26T12:08:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "67348248_13fd2a5f",
       "range": {
         "startLine": 47,
         "startChar": 50,
@@ -139,6 +259,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea2cfedd_d3d0798b",
+        "filename": "librobinhood/src/backends/lustre-mpi/lustre-mpi.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-02-26T12:08:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "21493a18_ab945e24",
+      "range": {
+        "startLine": 130,
+        "startChar": 15,
+        "endLine": 130,
+        "endChar": 28
+      },
+      "revId": "73fcd2d6a276410f34b985c2e5d99bde3cd6ea4d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a8afda41_721110de",
@@ -152,6 +296,30 @@
       "writtenOn": "2024-02-26T08:40:38Z",
       "side": 1,
       "message": "style: we keep the variable declarations at the start of blocks, so put the struct at the start of the function, and keep the 3 assigns here",
+      "range": {
+        "startLine": 132,
+        "startChar": 4,
+        "endLine": 132,
+        "endChar": 31
+      },
+      "revId": "73fcd2d6a276410f34b985c2e5d99bde3cd6ea4d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3787a66c_491c0722",
+        "filename": "librobinhood/src/backends/lustre-mpi/lustre-mpi.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-02-26T12:08:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a8afda41_721110de",
       "range": {
         "startLine": 132,
         "startChar": 4,
