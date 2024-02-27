@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "886a3058_d5bc8cc0",
+        "filename": "utils/rbh_update_retention",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-02-27T07:37:08Z",
+      "side": 1,
+      "message": "minor: as it is a rbh tool (kinda), I prefer to stick with its name convention, using dashes instead of underscores\n\nEDIT: I didn\u0027t see the rename option when installing. Good for me.",
+      "revId": "818ca615f80779f0b2bc9e58556d6a79047e3afd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cb8adbaa_6bbedaec",
+        "filename": "utils/rbh_update_retention",
+        "patchSetId": 7
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-02-27T07:37:08Z",
+      "side": 1,
+      "message": "style: remove the space before the arithmetic expression or add one after",
+      "range": {
+        "startLine": 40,
+        "startChar": 7,
+        "endLine": 40,
+        "endChar": 41
+      },
+      "revId": "818ca615f80779f0b2bc9e58556d6a79047e3afd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fbae9c13_d41b20c2",
+        "filename": "utils/test_update_retention.bash",
+        "patchSetId": 7
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-02-27T07:37:08Z",
+      "side": 1,
+      "message": "nit: I didn\u0027t know that form, thanks :).\n\nBut it seems this is the contraction of shall not, and not should not (as mentioned in the last log)",
+      "range": {
+        "startLine": 76,
+        "startChar": 0,
+        "endLine": 76,
+        "endChar": 5
+      },
+      "revId": "818ca615f80779f0b2bc9e58556d6a79047e3afd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
