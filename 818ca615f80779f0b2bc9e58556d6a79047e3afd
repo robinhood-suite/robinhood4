@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8bb7fbc6_6b7e11e3",
+        "filename": "utils/meson.build",
+        "patchSetId": 7
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-02-28T09:50:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8972bc8e_961ac667",
+      "range": {
+        "startLine": 19,
+        "startChar": 4,
+        "endLine": 19,
+        "endChar": 8
+      },
+      "revId": "818ca615f80779f0b2bc9e58556d6a79047e3afd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e22fa956_a251f686",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-02-28T08:04:58Z",
       "side": 1,
       "message": "major: dep + \u0027 is missing...\u0027",
+      "range": {
+        "startLine": 21,
+        "startChar": 17,
+        "endLine": 21,
+        "endChar": 21
+      },
+      "revId": "818ca615f80779f0b2bc9e58556d6a79047e3afd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "28c7aadc_ae641089",
+        "filename": "utils/meson.build",
+        "patchSetId": 7
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-02-28T09:50:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e22fa956_a251f686",
       "range": {
         "startLine": 21,
         "startChar": 17,
@@ -87,6 +135,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "feb22928_26406ecc",
+        "filename": "utils/rbh_update_retention",
+        "patchSetId": 7
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-02-28T09:50:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cb8adbaa_6bbedaec",
+      "range": {
+        "startLine": 40,
+        "startChar": 7,
+        "endLine": 40,
+        "endChar": 41
+      },
+      "revId": "818ca615f80779f0b2bc9e58556d6a79047e3afd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fbae9c13_d41b20c2",
@@ -100,6 +172,30 @@
       "writtenOn": "2024-02-27T07:37:08Z",
       "side": 1,
       "message": "nit: I didn\u0027t know that form, thanks :).\n\nBut it seems this is the contraction of shall not, and not should not (as mentioned in the last log)",
+      "range": {
+        "startLine": 76,
+        "startChar": 0,
+        "endLine": 76,
+        "endChar": 5
+      },
+      "revId": "818ca615f80779f0b2bc9e58556d6a79047e3afd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "681ec553_b9756e3a",
+        "filename": "utils/test_update_retention.bash",
+        "patchSetId": 7
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-02-28T09:50:45Z",
+      "side": 1,
+      "message": "Just wanted to differentiate this name from the \"should_be_expired\", so I got a little creative... But yes, it\u0027s \"shall not\", rather than \"should not\", though it doesn\u0027t change much",
+      "parentUuid": "fbae9c13_d41b20c2",
       "range": {
         "startLine": 76,
         "startChar": 0,
