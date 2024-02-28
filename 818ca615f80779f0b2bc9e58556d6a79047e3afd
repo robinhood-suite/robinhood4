@@ -1,6 +1,52 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "8972bc8e_961ac667",
+        "filename": "utils/meson.build",
+        "patchSetId": 7
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-02-28T08:04:58Z",
+      "side": 1,
+      "message": "major: not sync, maybe program or something like this.",
+      "range": {
+        "startLine": 19,
+        "startChar": 4,
+        "endLine": 19,
+        "endChar": 8
+      },
+      "revId": "818ca615f80779f0b2bc9e58556d6a79047e3afd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e22fa956_a251f686",
+        "filename": "utils/meson.build",
+        "patchSetId": 7
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-02-28T08:04:58Z",
+      "side": 1,
+      "message": "major: dep + \u0027 is missing...\u0027",
+      "range": {
+        "startLine": 21,
+        "startChar": 17,
+        "endLine": 21,
+        "endChar": 21
+      },
+      "revId": "818ca615f80779f0b2bc9e58556d6a79047e3afd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "886a3058_d5bc8cc0",
