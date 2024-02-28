@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2a1274c0_1d182b1d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-02-28T09:50:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4a736795_310890aa",
+      "range": {
+        "startLine": 10,
+        "startChar": 7,
+        "endLine": 10,
+        "endChar": 9
+      },
+      "revId": "21853b4d2a4dde0e8ea5785c4f00935b9aa993aa",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4d480426_aae59762",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-02-28T08:16:42Z",
       "side": 1,
       "message": "minor: this variable is never used",
+      "range": {
+        "startLine": 102,
+        "startChar": 12,
+        "endLine": 102,
+        "endChar": 29
+      },
+      "revId": "21853b4d2a4dde0e8ea5785c4f00935b9aa993aa",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fcef3681_a0c752d2",
+        "filename": "utils/rbh_update_retention",
+        "patchSetId": 1
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-02-28T09:50:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4d480426_aae59762",
       "range": {
         "startLine": 102,
         "startChar": 12,
