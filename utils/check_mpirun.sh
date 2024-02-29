@@ -6,8 +6,7 @@
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
 
-
-if which module ; then
+if ! type -t module ; then
     exit 1
 fi
 
