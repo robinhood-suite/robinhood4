@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d941a1c6_5a09c690",
+        "filename": "librobinhood/src/backends/lustre_mpi/lustre_mpi.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-02-29T15:07:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ac488734_7eab697c",
+      "range": {
+        "startLine": 160,
+        "startChar": 4,
+        "endLine": 160,
+        "endChar": 7
+      },
+      "revId": "1eb8742e535210d02e20b8722a2a685212bcf1c5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "72dc4231_848e988c",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-02-29T08:47:39Z",
       "side": 1,
       "message": "style: trailing whitespace",
+      "range": {
+        "startLine": 17,
+        "startChar": 49,
+        "endLine": 17,
+        "endChar": 50
+      },
+      "revId": "1eb8742e535210d02e20b8722a2a685212bcf1c5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d55c1aa3_10a0fb0e",
+        "filename": "librobinhood/src/backends/lustre_mpi/plugin.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-02-29T15:07:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "72dc4231_848e988c",
       "range": {
         "startLine": 17,
         "startChar": 49,
@@ -70,6 +118,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee98544d_39eca4a2",
+        "filename": "librobinhood/tests/unit/check_lustre_mpi.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-02-29T15:07:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b1bc66c8_32aa7b56",
+      "range": {
+        "startLine": 1,
+        "startChar": 28,
+        "endLine": 2,
+        "endChar": 21
+      },
+      "revId": "1eb8742e535210d02e20b8722a2a685212bcf1c5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a3858d22_9b209824",
@@ -93,6 +165,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2a4ce026_971667fe",
+        "filename": "librobinhood/tests/unit/check_lustre_mpi.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-02-29T15:07:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a3858d22_9b209824",
+      "range": {
+        "startLine": 89,
+        "startChar": 4,
+        "endLine": 100,
+        "endChar": 35
+      },
+      "revId": "1eb8742e535210d02e20b8722a2a685212bcf1c5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c0b3f130_56fd55ae",
@@ -106,6 +202,30 @@
       "writtenOn": "2024-02-29T08:47:39Z",
       "side": 1,
       "message": "question: why is this condition here ? The iterator can should always have the directory as an entry no ?",
+      "range": {
+        "startLine": 111,
+        "startChar": 4,
+        "endLine": 111,
+        "endChar": 26
+      },
+      "revId": "1eb8742e535210d02e20b8722a2a685212bcf1c5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1db830db_9e9b17c5",
+        "filename": "librobinhood/tests/unit/check_lustre_mpi.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-02-29T15:07:19Z",
+      "side": 1,
+      "message": "If we have only one process, the iterator has always the directory as an entry but with the Lustre-mpi backend, we can have multiple processes and multiple iterators. Only one iterator will have the directory as an entry and the others will be empty.",
+      "parentUuid": "c0b3f130_56fd55ae",
       "range": {
         "startLine": 111,
         "startChar": 4,
