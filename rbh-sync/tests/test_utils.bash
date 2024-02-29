@@ -16,7 +16,11 @@ SUITE=${SUITE%.*}
 __rbh_sync=$(PATH="$PWD:$PATH" which rbh-sync)
 rbh_sync()
 {
-    "$__rbh_sync" "$@"
+    if [[ "$WITH_MPI" == "true" ]]; then
+        mpirun --allow-run-as-root -np 4 "$__rbh_sync" "$@"
+    else
+        "$__rbh_sync" "$@"
+    fi
 }
 
 __mongo=$(which mongosh || which mongo)
@@ -34,6 +38,11 @@ setup()
 
     # Create test database's name
     testdb=$SUITE-$test
+
+    # Load MPI
+    if [[ "$WITH_MPI" == "true" ]]; then
+        module load mpi/openmpi-x86_64
+    fi
 }
 
 teardown()
