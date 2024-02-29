@@ -6,9 +6,7 @@
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
 
-
-if which module ; then
-    echo "a"
+if ! type -a module ; then
     exit 1
 fi
 

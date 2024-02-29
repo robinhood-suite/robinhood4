@@ -55,7 +55,7 @@ foreach t: ['check_lustre']
 endforeach
 
 
-r = run_command('check_mpirun.sh')
+r = run_command('../../../utils/check_mpirun.sh')
 bash = find_program('bash', disabler: true, required: false)
 
 if r.returncode() == 0 and libmfu.found()
