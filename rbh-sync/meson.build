@@ -15,18 +15,21 @@ project(
     ],
 )
 
+cc = meson.get_compiler('c')
 # GNU extensions
 add_project_arguments(['-D_GNU_SOURCE',], language: 'c')
 
 # Dependencies
 librobinhood = dependency('robinhood', version: '>=0.0.0')
+libmpi = dependency('ompi')
+libmfu = cc.find_library('mfu')
 
 executable(
     'rbh-sync',
     sources: [
         'rbh-sync.c',
     ],
-    dependencies: [librobinhood],
+    dependencies: [librobinhood, libmpi, libmfu],
     install: true,
 )
 

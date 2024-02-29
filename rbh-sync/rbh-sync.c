@@ -16,6 +16,7 @@
 
 #include <robinhood.h>
 #include <robinhood/utils.h>
+#include "mfu.h"
 
 #ifndef RBH_ITER_CHUNK_SIZE
 # define RBH_ITER_CHUNK_SIZE (1 << 12)
@@ -374,7 +375,7 @@ iter_convert(struct rbh_iterator *fsentries,
 }
 
 static void
-sync(const struct rbh_filter_projection *projection)
+_sync(const struct rbh_filter_projection *projection)
 {
     const struct rbh_filter_options OPTIONS = {
         .projection = {
@@ -879,6 +880,7 @@ main(int argc, char *argv[])
         .fsentry_mask = RBH_FP_ALL,
         .statx_mask = RBH_STATX_ALL & ~RBH_STATX_MNT_ID,
     };
+    bool useMPI = false;
     char c;
 
     /* Parse the command line */
@@ -921,12 +923,22 @@ main(int argc, char *argv[])
     if (argc > 2)
         error(EX_USAGE, 0, "unexpected argument: %s", argv[2]);
 
+    /* Check if the backend will use MPI */
+    if (strstr(argv[0], "-mpi") != NULL) {
+        useMPI = true;
+        MPI_Init(&argc, &argv);
+        mfu_init();
+    }
     /* Parse SOURCE */
     from = rbh_backend_from_uri(argv[0]);
     /* Parse DEST */
     to = rbh_backend_from_uri(argv[1]);
 
-    sync(&projection);
+    _sync(&projection);
 
+    if (useMPI) {
+        mfu_finalize();
+        MPI_Finalize();
+    }
     return EXIT_SUCCESS;
 }

@@ -19,9 +19,14 @@
 static char *
 strtoupper(char *string)
 {
-    for (char *c = string; *c != '\0'; c++)
-        *c = toupper(*c);
-
+    for (char *c = string; *c != '\0'; c++) {
+        /* Change *c in "_" if not a letter, number or "_" */
+        if ((*c < 'a' || *c > 'z') && (*c < 'A' || *c > 'Z') &&
+            (*c < '0' || *c > '9') && (*c != '_'))
+            *c = '_';
+        else
+            *c = toupper(*c);
+    }
     return string;
 }
 
