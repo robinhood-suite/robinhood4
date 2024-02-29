@@ -25,6 +25,11 @@ mongo()
     "$__mongo" --quiet "$@"
 }
 
+__mpirun=$(which mpirun)
+rbh_sync_mpi()
+{
+    "$__mpirun" --allow-run-as-root -np 4 "$__rbh_sync" "$@"
+}
 setup()
 {
     # Create a test directory and `cd` into it

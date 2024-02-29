@@ -157,7 +157,7 @@ skip:
     /* Modify the root's name and parent ID to match RobinHood's conventions */
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     if (rank == 0 && mpi_iter->current == 0) {
-       mpi_fi.parent_id = &ROOT_PARENT_ID;
+        mpi_fi.parent_id = &ROOT_PARENT_ID;
         mpi_fi.name[0] = '\0';
     }
 

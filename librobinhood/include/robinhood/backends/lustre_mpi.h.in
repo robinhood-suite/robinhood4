@@ -16,8 +16,8 @@
 #mesondefine RBH_LUSTRE_MPI_BACKEND_MINOR
 #mesondefine RBH_LUSTRE_MPI_BACKEND_RELEASE
 #define RBH_LUSTRE_MPI_BACKEND_VERSION RPV(RBH_LUSTRE_MPI_BACKEND_MAJOR, \
-                                       RBH_LUSTRE_MPI_BACKEND_MINOR, \
-                                       RBH_LUSTRE_MPI_BACKEND_RELEASE)
+                                           RBH_LUSTRE_MPI_BACKEND_MINOR, \
+                                           RBH_LUSTRE_MPI_BACKEND_RELEASE)
 
 /**
  * Create a lustre_mpi backend
