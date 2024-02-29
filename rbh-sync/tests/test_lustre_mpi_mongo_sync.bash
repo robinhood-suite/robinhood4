@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # This file is part of RobinHood 4
-# Copyright (C) 2022 Commissariat a l'energie atomique et aux energies
+# Copyright (C) 2024 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #
 # SPDX-License-Identifier: LGPL-3.0-or-later
@@ -14,7 +14,7 @@ test_dir=$(dirname $(readlink -e $0))
 #                                     MAIN                                     #
 ################################################################################
 
-export USE_MPI=false
+export USE_MPI=true
 declare -a tests=(test_simple_sync)
 
 if lctl get_param mdt.*.hsm_control | grep "enabled"; then
