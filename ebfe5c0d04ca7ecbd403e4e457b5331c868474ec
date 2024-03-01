@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce056bec_42412bf9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-03-01T09:30:49Z",
+      "side": 1,
+      "message": "This patch seems good. But as asked in the previous patch, maybe having directly `rbh:lustre:/mount/point` bound the the lustre-mpi backend if available is a better idea.",
+      "revId": "ebfe5c0d04ca7ecbd403e4e457b5331c868474ec",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
