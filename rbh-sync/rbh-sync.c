@@ -468,6 +468,32 @@ sync(const struct rbh_filter_projection *projection)
 }
 
 /*----------------------------------------------------------------------------*
+ |                                list capabilities                           |
+ *----------------------------------------------------------------------------*/
+static void
+list_capabilities(char *uri)
+{
+    const struct rbh_backend_plugin *plugin;
+    struct rbh_backend *backend;
+
+    plugin = rbh_backend_plugin_import(uri);
+    if (plugin != NULL) {
+        backend = rbh_backend_plugin_new(plugin, "none");
+    } else {
+        backend = rbh_backend_from_uri(uri);
+        if (backend == NULL)
+            error(EXIT_FAILURE, errno, "Unable to load backend %s", uri);
+    }
+
+    printf("*** Capabilities for %s backend ***\n", backend->name);
+    printf("[%c] SOURCE backend\n", (backend->ops->filter ? 'x':' '));
+    printf("[%c] DEST backend\n", (backend->ops->update ? 'x':' '));
+    printf("[%c] BRANCH backend\n", (backend->ops->branch ? 'x':' '));
+
+    return;
+}
+
+/*----------------------------------------------------------------------------*
  |                                    cli                                     |
  *----------------------------------------------------------------------------*/
 
@@ -494,6 +520,10 @@ usage(void)
         "    -o,--one              only consider the root of SOURCE\n"
         "    -n,--no-skip          do not skip errors when synchronizing backends,\n"
         "                          instead stop on the first error.\n"
+        "\n"
+        "Capability arguments:\n"
+        "    -l,--list-capabilities URI|NAME\n"
+        "                          print backend URI or NAME capabilities\n"
         "\n"
         "A robinhood URI is built as follows:\n"
         "    "RBH_SCHEME":BACKEND:FSNAME[#{PATH|ID}]\n"
@@ -866,6 +896,10 @@ main(int argc, char *argv[])
             .val = 'h',
         },
         {
+            .name = "list-capabilities",
+            .val = 'l',
+        },
+        {
             .name = "one",
             .val = 'o',
         },
@@ -882,7 +916,7 @@ main(int argc, char *argv[])
     char c;
 
     /* Parse the command line */
-    while ((c = getopt_long(argc, argv, "f:hon", LONG_OPTIONS, NULL)) != -1) {
+    while ((c = getopt_long(argc, argv, "f:hl:on", LONG_OPTIONS, NULL)) != -1) {
         switch (c) {
         case 'f':
             switch (optarg[0]) {
@@ -900,6 +934,9 @@ main(int argc, char *argv[])
         case 'h':
             usage();
             return 0;
+        case 'l':
+            list_capabilities(optarg);
+            return EXIT_SUCCESS;
         case 'o':
             one = true;
             break;
@@ -930,3 +967,5 @@ main(int argc, char *argv[])
 
     return EXIT_SUCCESS;
 }
+
+// vim: expandtab:ts=4:sw=4
