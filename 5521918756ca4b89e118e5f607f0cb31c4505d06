@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "48347e90_8b1f087e",
+        "filename": "librobinhood/include/robinhood/backends/lustre_mpi.h.in",
+        "patchSetId": 4
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-03-04T12:04:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "53a0461f_52c413b1",
+      "range": {
+        "startLine": 18,
+        "startChar": 43,
+        "endLine": 20,
+        "endChar": 70
+      },
+      "revId": "5521918756ca4b89e118e5f607f0cb31c4505d06",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6750b5d4_e7f65ee3",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-03-01T09:29:26Z",
       "side": 1,
       "message": "question: I do not know how it may impact this part of the code, but I checked the next patch, and I wondered if it may be a good idea to bind the URI `rbh:lustre:/mount/point` to the lustre-mpi backend if available, instead of the basic lustre one?",
+      "range": {
+        "startLine": 64,
+        "startChar": 0,
+        "endLine": 82,
+        "endChar": 66
+      },
+      "revId": "5521918756ca4b89e118e5f607f0cb31c4505d06",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1047141f_e44360db",
+        "filename": "librobinhood/include/robinhood/backends/meson.build",
+        "patchSetId": 4
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-03-04T12:04:33Z",
+      "side": 1,
+      "message": "Why not, but isn\u0027t it better to give the user the option to choose between the two backends?",
+      "parentUuid": "6750b5d4_e7f65ee3",
       "range": {
         "startLine": 64,
         "startChar": 0,
@@ -70,6 +118,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae8d068c_2f9a52a9",
+        "filename": "librobinhood/src/backends/lustre_mpi/lustre_mpi.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-03-04T12:04:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b0b738ac_22b7db56",
+      "range": {
+        "startLine": 160,
+        "startChar": 7,
+        "endLine": 160,
+        "endChar": 42
+      },
+      "revId": "5521918756ca4b89e118e5f607f0cb31c4505d06",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5d07e415_a4638340",
@@ -83,6 +155,30 @@
       "writtenOn": "2024-03-01T09:29:26Z",
       "side": 1,
       "message": "question: is it planned to also implement this operation? this is an operation we use a lot when syncing in parallel (each subdirectory can be synced using a branch operation, then syncing the root), but maybe this parallelism grain is not interesting with the MPIFileUtils backend?",
+      "range": {
+        "startLine": 292,
+        "startChar": 14,
+        "endLine": 292,
+        "endChar": 34
+      },
+      "revId": "5521918756ca4b89e118e5f607f0cb31c4505d06",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "58286c44_83138d94",
+        "filename": "librobinhood/src/backends/lustre_mpi/lustre_mpi.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-03-04T12:04:33Z",
+      "side": 1,
+      "message": "Yes, it is planned in a future patch to implement this operation with the Lustre-mpi backend. I don\u0027t know if it\u0027s really interesting. Maybe it\u0027s faster to sync everything directly rather than making branches, that\u0027s something to test.",
+      "parentUuid": "5d07e415_a4638340",
       "range": {
         "startLine": 292,
         "startChar": 14,
