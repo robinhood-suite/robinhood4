@@ -34,7 +34,7 @@ function check_expiration_date
                         -printf "%A\n%T\n" | sort -rn | head -n 1)
 
     echo "Directory '$directory' expiration date is set to '$expiration_date'"
-    echo "The last accessed file in it was accessed at '$max_time'"
+    echo "The last accessed file in it was accessed on '$(date -d "@$max_time")'"
 
     local current="$(date +%s)"
 
@@ -42,7 +42,7 @@ function check_expiration_date
         local new_expiration_date=$((max_time + expires + 1))
 
         echo "Expiration of the directory should occur '$expires' seconds after it's last usage"
-        echo "Changing the expiration date of '$directory' to '$new_expiration_date'"
+        echo "Changing the expiration date of '$directory' to '$(date -d "@$new_expiration_date")'"
         update_directory_expiration_date "$URI" "$directory_ID" \
                                          "$new_expiration_date"
     else
@@ -63,8 +63,10 @@ function run_retention_updater
         while IFS='|' read -r dir expires expiration_date ID; do
 
         if [ "${expires:0:1}" != "+" ]; then
-            echo "Directory '$dir' has expired"
-            rm -rf "$mount_point/$dir"
+            echo "Directory '$dir' expired on '$(date -d "@$expires")'"
+            if [ ! -z "$mount_point" ]; then
+                rm -rf "$mount_point/$dir"
+            fi
             continue
         fi
 
