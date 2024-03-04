@@ -127,63 +127,89 @@ test_retention_script()
 
     date --set="@$(( $(stat -c %X $dir3) + 6))"
 
+    echo "First test: 1 expired, 3 not expired, 0 updated"
     output="$($test_dir/rbh_update_retention "rbh:mongo:$testdb")"
     shant_be_expired "$output" "$dir1"
     shant_be_expired "$output" "$dir2"
     should_be_expired "$output" "$dir3"
     shant_be_expired "$output" "$dir4"
+    echo "Success"
 
     date --set="@$(( $(stat -c %X $dir1) + 11))"
 
+    echo "Second test: 2 expired, 2 not expired, 0 updated"
     output="$($test_dir/rbh_update_retention "rbh:mongo:$testdb")"
     should_be_expired "$output" "$dir1"
     shant_be_expired "$output" "$dir2"
     should_be_expired "$output" "$dir3"
     shant_be_expired "$output" "$dir4"
+    echo "Success"
 
     touch -a $dir1/$entry1 $dir2/$entry3
     rbh-sync rbh:lustre:. "rbh:mongo:$testdb"
 
+    echo "Third test: 1 expired, 2 not expired, 1 updated"
     output="$($test_dir/rbh_update_retention "rbh:mongo:$testdb")"
     should_be_updated "$output" "$dir1"
     shant_be_expired "$output" "$dir2"
     should_be_expired "$output" "$dir3"
     shant_be_expired "$output" "$dir4"
+    echo "Success"
 
     date --set="@$(( $(stat -c %X $dir1/$entry1) + 11))"
 
+    echo "Fourth test: 3 expired, 0 not expired, 1 updated"
     output="$($test_dir/rbh_update_retention "rbh:mongo:$testdb")"
     should_be_expired "$output" "$dir1"
     should_be_updated "$output" "$dir2"
     should_be_expired "$output" "$dir3"
     should_be_expired "$output" "$dir4"
+    echo "Success"
 
     date --set="@$(( $(stat -c %X $dir2/$entry3) + 16))"
 
+    echo "Fifth test: 4 expired, 0 not expired, 0 updated"
     output="$($test_dir/rbh_update_retention "rbh:mongo:$testdb")"
     should_be_expired "$output" "$dir1"
     should_be_expired "$output" "$dir2"
     should_be_expired "$output" "$dir3"
     should_be_expired "$output" "$dir4"
+    echo "Success"
 
     touch -a $dir3
     rbh-sync rbh:lustre:. "rbh:mongo:$testdb"
 
+    # Nothing should have changed because we only touched the access time of the
+    # directory, and not its modify time
+    echo "Sixth test: 4 expired, 0 not expired, 0 updated"
+    output="$($test_dir/rbh_update_retention "rbh:mongo:$testdb")"
+    should_be_expired "$output" "$dir1"
+    should_be_expired "$output" "$dir2"
+    should_be_expired "$output" "$dir3"
+    should_be_expired "$output" "$dir4"
+    echo "Success"
+
+    touch -m $dir3
+    rbh-sync rbh:lustre:. "rbh:mongo:$testdb"
+
+    echo "Seventh test: 3 expired, 0 not expired, 1 updated"
     output="$($test_dir/rbh_update_retention "rbh:mongo:$testdb")"
     should_be_expired "$output" "$dir1"
     should_be_expired "$output" "$dir2"
     shant_be_expired "$output" "$dir3"
     should_be_expired "$output" "$dir4"
+    echo "Success"
 
     date --set="@$(( $(stat -c %X $dir3) + 6))"
 
+    echo "Eighth test: 4 deleted"
     $test_dir/rbh_update_retention "rbh:mongo:$testdb" --delete $PWD
 
     if [ -d "$dir1" ] || [ -d "$dir2" ] || [ -d "$dir3" ] || [ -d "$dir4" ]
     then
       error "All directories should have been deleted."
     fi
-
+    echo "Success"
 }
 
 ################################################################################
