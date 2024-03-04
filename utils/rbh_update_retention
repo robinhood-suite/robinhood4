@@ -6,6 +6,13 @@
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
 
+for program in rbh-sync rbh-lfind rbh-fsevents; do
+    if ! command -v $program &> /dev/null; then
+        echo "This command requires $program to be installed"
+        exit 1
+    fi
+done
+
 function update_directory_expiration_date
 {
     local URI="$1"
@@ -31,10 +38,19 @@ function check_expiration_date
     local mount_point="$6"
 
     local max_time=$(rbh-find "$URI#$directory" \
-                        -printf "%A\n%T\n" | sort -rn | head -n 1)
+                        -type f -printf "%A\n%T\n" | sort -rn | head -n 1)
 
     echo "Directory '$directory' expiration date is set to '$expiration_date'"
-    echo "The last accessed file in it was accessed at '$max_time'"
+
+    if [ -z "$max_time" ]; then
+        echo "Directory '$directory' has expired and it is empty, no other check needed"
+        if [ ! -z "$mount_point" ]; then
+            rmdir "$mount_point/$directory"
+        fi
+        return 0
+    fi
+
+    echo "The last accessed file in it was accessed on '$(date -d "@$max_time")'"
 
     local current="$(date +%s)"
 
@@ -42,7 +58,7 @@ function check_expiration_date
         local new_expiration_date=$((max_time + expires + 1))
 
         echo "Expiration of the directory should occur '$expires' seconds after it's last usage"
-        echo "Changing the expiration date of '$directory' to '$new_expiration_date'"
+        echo "Changing the expiration date of '$directory' to '$(date -d "@$new_expiration_date")'"
         update_directory_expiration_date "$URI" "$directory_ID" \
                                          "$new_expiration_date"
     else
@@ -63,8 +79,13 @@ function run_retention_updater
         while IFS='|' read -r dir expires expiration_date ID; do
 
         if [ "${expires:0:1}" != "+" ]; then
-            echo "Directory '$dir' has expired"
-            rm -rf "$mount_point/$dir"
+            echo "Directory '$dir' expired on '$(date -d "@$expires")'"
+            if [ ! -z "$mount_point" ] && [ ! -z "$dir" ]; then
+                rm -rf "$mount_point/$dir"
+            fi
+
+            echo "true" > $tmp_file
+
             continue
         fi
 
