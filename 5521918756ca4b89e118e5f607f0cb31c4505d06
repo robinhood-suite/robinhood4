@@ -97,6 +97,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4025bd70_e144937b",
+        "filename": "librobinhood/include/robinhood/backends/meson.build",
+        "patchSetId": 4
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-03-04T15:46:44Z",
+      "side": 1,
+      "message": "I donnot think so. If they both do the same thing, but one is faster that the other, why choosing the first one? This is something we may decide in a meeting later, once Guillaume is back.",
+      "parentUuid": "1047141f_e44360db",
+      "range": {
+        "startLine": 64,
+        "startChar": 0,
+        "endLine": 82,
+        "endChar": 66
+      },
+      "revId": "5521918756ca4b89e118e5f607f0cb31c4505d06",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b0b738ac_22b7db56",
         "filename": "librobinhood/src/backends/lustre_mpi/lustre_mpi.c",
         "patchSetId": 4
@@ -179,6 +203,30 @@
       "side": 1,
       "message": "Yes, it is planned in a future patch to implement this operation with the Lustre-mpi backend. I don\u0027t know if it\u0027s really interesting. Maybe it\u0027s faster to sync everything directly rather than making branches, that\u0027s something to test.",
       "parentUuid": "5d07e415_a4638340",
+      "range": {
+        "startLine": 292,
+        "startChar": 14,
+        "endLine": 292,
+        "endChar": 34
+      },
+      "revId": "5521918756ca4b89e118e5f607f0cb31c4505d06",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c901bc28_0c168e10",
+        "filename": "librobinhood/src/backends/lustre_mpi/lustre_mpi.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-03-04T15:46:44Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "58286c44_83138d94",
       "range": {
         "startLine": 292,
         "startChar": 14,
