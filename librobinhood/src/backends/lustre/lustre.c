@@ -914,7 +914,6 @@ create_expiration_date_value_pair(const char *attribute_value,
                                   const struct rbh_statx *statx,
                                   struct rbh_value_pair *expiration_pair)
 {
-    int64_t last_access_date;
     int64_t expiration_date;
     char *end;
 
@@ -948,13 +947,11 @@ create_expiration_date_value_pair(const char *attribute_value,
             return -1;
         }
 
-        last_access_date = MAX(statx->stx_atime.tv_sec,
-                               statx->stx_mtime.tv_sec);
-        if (INT64_MAX - last_access_date < expiration_date)
+        if (INT64_MAX - statx->stx_mtime.tv_sec < expiration_date)
             /* If the result overflows, set the expiration date to the max */
             expiration_date = INT64_MAX;
         else
-            expiration_date += last_access_date;
+            expiration_date += statx->stx_mtime.tv_sec;
 
         break;
     default:
