@@ -35,8 +35,8 @@ backend_plugin_import(const char *name)
     plugin = rbh_backend_plugin_import(name);
     if (plugin == NULL) {
         if (errno == 0)
-            error(EXIT_FAILURE, 0, "rbh_backend_plugin_import: %s", dlerror());
-        error(EXIT_FAILURE, errno, "rbh_backend_plugin_import");
+            error(EXIT_FAILURE, 0, "Unable to load backend plugin: %s", dlerror());
+        error(EXIT_FAILURE, errno, "Unable to load backend plugin");
     }
 
     errno = save_errno;
@@ -149,14 +149,16 @@ rbh_backend_from_uri(const char *string)
 
     raw_uri = rbh_raw_uri_from_string(string);
     if (raw_uri == NULL)
-        error(EXIT_FAILURE, errno, "rbh_raw_uri_from_string");
+        error(EXIT_FAILURE, errno, "Can not detect backend uri");
 
     uri = rbh_uri_from_raw_uri(raw_uri);
     if (uri == NULL)
-        error(EXIT_FAILURE, errno, "rbh_uri_from_raw_uri");
+        error(EXIT_FAILURE, errno, "Can not detect given backend");
     free(raw_uri);
 
     backend = backend_from_uri(uri);
     free(uri);
     return backend;
 }
+
+// vim: expandtab:ts=4:sw=4
