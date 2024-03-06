@@ -123,3 +123,16 @@ of librobinhood:
 .. _rbh-sync: https://github.com/robinhood-suite/robinhood4/tree/main/rbh-sync
 .. _rbh-fsevents: https://github.com/robinhood-suite/robinhood4/tree/main/rbh-fsevents
 .. _rbh-find: https://github.com/robinhood-suite/robinhood4/tree/main/rbh-find
+
+Remote MongoDB Database
+=======================
+
+Librobinhood can use a remote mongo database for the mongo backend. To do this,
+you must define the environment variable ``RBH_MONGO_DB_URI`` with the host
+and port where the database is located.
+
+The variable must follow the form ``mongodb://HOST:PORT``
+
+.. code:: bash
+
+    export RBH_MONGO_DB_URI=mongodb://localhost:27017
