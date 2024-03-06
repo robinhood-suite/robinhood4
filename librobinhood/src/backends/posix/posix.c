@@ -1021,7 +1021,7 @@ out:
     return path;
 }
 
-static char *
+char *
 id2path(const char *root, const struct rbh_id *id)
 {
     char *path;
@@ -1040,12 +1040,6 @@ id2path(const char *root, const struct rbh_id *id)
     errno = save_errno;
     return path;
 }
-
-struct posix_branch_backend {
-    struct posix_backend posix;
-    struct rbh_id id;
-    char *path;
-};
 
 void
 posix_branch_backend_destroy(void *backend)
