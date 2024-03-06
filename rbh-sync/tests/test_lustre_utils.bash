@@ -40,6 +40,49 @@ test_simple_sync()
     find_attribute '"ns.xattrs.path":"/dir/fileB"'
 }
 
+test_branch_sync()
+{
+    local first_dir="test1"
+    local second_dir="test2"
+    local third_dir="test3"
+    local entry="random_file"
+
+    mkdir -p $first_dir/$second_dir/$third_dir
+    touch $first_dir/$second_dir/$third_dir/$entry
+
+    rbh_sync_mpi "rbh:lustre-mpi:$first_dir#$second_dir" "rbh:mongo:$testdb"
+
+    find_attribute '"ns.name":"'$second_dir'"'
+    find_attribute '"ns.xattrs.path":"'/$second_dir'"'
+    find_attribute '"ns.name":"'$third_dir'"'
+    find_attribute '"ns.xattrs.path":"'/$second_dir/$third_dir'"'
+    find_attribute '"ns.name":"'$entry'"'
+    find_attribute '"ns.xattrs.path":"'/$second_dir/$third_dir/$entry'"'
+
+    mongo $testdb --eval "db.dropDatabase()"
+
+    local abs_path="$(realpath $first_dir)"
+
+    rbh_sync_mpi "rbh:lustre-mpi:$abs_path#$second_dir" "rbh:mongo:$testdb"
+
+    find_attribute '"ns.name":"'$second_dir'"'
+    find_attribute '"ns.xattrs.path":"'/$second_dir'"'
+    find_attribute '"ns.name":"'$third_dir'"'
+    find_attribute '"ns.xattrs.path":"'/$second_dir/$third_dir'"'
+    find_attribute '"ns.name":"'$entry'"'
+    find_attribute '"ns.xattrs.path":"'/$second_dir/$third_dir/$entry'"'
+
+    mongo $testdb --eval "db.dropDatabase()"
+
+    rbh_sync_mpi "rbh:lustre-mpi:$first_dir#$second_dir/$third_dir" \
+                 "rbh:mongo:$testdb"
+
+    find_attribute '"ns.name":"'$third_dir'"'
+    find_attribute '"ns.xattrs.path":"'/$second_dir/$third_dir'"'
+    find_attribute '"ns.name":"'$entry'"'
+    find_attribute '"ns.xattrs.path":"'/$second_dir/$third_dir/$entry'"'
+}
+
 get_hsm_state_value()
 {
     # retrieve the hsm status which is in-between parentheses

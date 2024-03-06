@@ -15,7 +15,7 @@ test_dir=$(dirname $(readlink -e $0))
 ################################################################################
 
 export USE_MPI=true
-declare -a tests=(test_simple_sync)
+declare -a tests=(test_simple_sync test_branch_sync)
 
 if lctl get_param mdt.*.hsm_control | grep "enabled"; then
     tests+=(test_hsm_state_none test_hsm_state_archived_states

@@ -57,6 +57,11 @@ struct mpi_iterator {
     bool skip_error;
 
     /**
+     * Boolean to indicate if we are synchronizing a branch
+     */
+    bool is_branch;
+
+    /**
      * Index of current file in the flist in the process
      */
     uint64_t current;
@@ -89,5 +94,13 @@ struct mpi_file_info {
      */
     struct rbh_id *parent_id;
 };
+
+/*----------------------------------------------------------------------------*
+ |                       lustre_mpi operations                                |
+ *----------------------------------------------------------------------------*/
+
+struct rbh_backend *
+lustre_mpi_backend_branch(void *backend, const struct rbh_id *id,
+                          const char *path);
 
 #endif
