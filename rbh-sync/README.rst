@@ -175,3 +175,16 @@ provide a reasonable amount of parallelization, without sacrificing consistency.
 Also, since rbh-sync heavily relies on the backends' implementation, if these
 were to implement any sort of parallelization, rbh-sync would transparently
 benefit from it.
+
+Remote MongoDB Database
+-----------------------
+
+rbh-sync can use a remote mongo backend. To do this, you must define the
+environment variable ``RBH_MONGO_DB_URI`` with the address and port where the
+database is located.
+
+The variable must follow the form ``mongodb://IP:PORT``
+
+.. code:: bash
+
+    export RBH_MONGO_DB_URI=mongodb://localhost:27017
