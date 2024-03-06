@@ -16,6 +16,23 @@
       "message": "Hi,\nHere is a little patch to list backend compatibility regarding SOURCE and DESTINATION in rbh-sync.",
       "revId": "fb910e88f14e9a01016d9cbdab2e5b8c5c24d00f",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "44731cea_971b05eb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-03-06T15:12:44Z",
+      "side": 1,
+      "message": "As already discussed, it may be interesting to port this feature to a new tool (rbh-capabilities is fine with me) that will fetch the available backends from a configuration file, and check for each of them if we can use them in rbh-tools, and how.",
+      "revId": "fb910e88f14e9a01016d9cbdab2e5b8c5c24d00f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
