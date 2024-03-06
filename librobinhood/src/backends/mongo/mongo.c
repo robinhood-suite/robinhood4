@@ -11,6 +11,7 @@
 
 #include <assert.h>
 #include <stdlib.h>
+#include <string.h>
 
 /* This backend uses libmongoc, from the "mongo-c-driver" project to interact
  * with a MongoDB database.
@@ -1383,11 +1384,24 @@ static const struct rbh_backend MONGO_BACKEND = {
 static int
 mongo_backend_init(struct mongo_backend *mongo, const char *fsname)
 {
+    const char *prefix = "mongodb://";
     mongoc_uri_t *uri;
+    char path_db[128];
     int save_errno;
+    char *env_db;
     int rc;
 
-    uri = mongoc_uri_new("mongodb://localhost:27017");
+    env_db = getenv("ADDR_DB");
+    if (env_db == NULL)
+        uri = mongoc_uri_new("mongodb://localhost:27017");
+    else {
+        if (sprintf(path_db, "%s%s", prefix, env_db) == -1) {
+            errno = EINVAL;
+            return -1;
+        }
+        uri = mongoc_uri_new(path_db);
+    }
+
     if (uri == NULL) {
         errno = EINVAL;
         return -1;
