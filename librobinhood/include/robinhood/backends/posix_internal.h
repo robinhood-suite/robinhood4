@@ -111,6 +111,9 @@ posix_backend_filter(void *backend, const struct rbh_filter *filter,
 void
 posix_backend_destroy(void *backend);
 
+char *
+id2path(const char *root, const struct rbh_id *id);
+
 /*----------------------------------------------------------------------------*
  |                               posix_backend                                |
  *----------------------------------------------------------------------------*/
@@ -120,6 +123,12 @@ struct posix_backend {
     struct rbh_mut_iterator *(*iter_new)(const char *, const char *, int);
     char *root;
     int statx_sync_type;
+};
+
+struct posix_branch_backend {
+    struct posix_backend posix;
+    struct rbh_id id;
+    char *path;
 };
 
 #endif
