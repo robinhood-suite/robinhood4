@@ -1374,6 +1374,17 @@ static const struct rbh_backend MONGO_BACKEND = {
  |                          rbh_mongo_backend_new()                           |
  *----------------------------------------------------------------------------*/
 
+static const char *
+get_mongo_addr(void)
+{
+    const char *addr = getenv("RBH_MONGO_DB_URI");
+
+    if (!addr)
+        addr = "mongodb://localhost:27017";
+
+    return addr;
+}
+
 static int
 mongo_backend_init(struct mongo_backend *mongo, const char *fsname)
 {
@@ -1381,7 +1392,8 @@ mongo_backend_init(struct mongo_backend *mongo, const char *fsname)
     int save_errno;
     int rc;
 
-    uri = mongoc_uri_new("mongodb://localhost:27017");
+    uri = mongoc_uri_new(get_mongo_addr());
+
     if (uri == NULL) {
         errno = EINVAL;
         return -1;
