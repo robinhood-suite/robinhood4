@@ -47,6 +47,67 @@ test_simple_sync()
     find_attribute '"ns.xattrs.path":"/dir/fileB"'
 }
 
+test_branch_sync()
+{
+
+    local first_dir="test1"
+    local second_dir="test2"
+    local third_dir="test3"
+    local entry="random_file"
+
+    mkdir -p $first_dir/$second_dir/$third_dir
+    touch $first_dir/$second_dir/$third_dir/$entry
+
+    rbh_sync_lustre "$first_dir#$second_dir" "rbh:mongo:$testdb"
+
+    local output_first=$(find_attribute '"ns.name":"'$first_dir'"')
+
+    echo "$output_first" | grep "No entry found with filter" ||
+        error "$first_dir shouldn't be synchronized"
+
+    find_attribute '"ns.name":"'$second_dir'"'
+    find_attribute '"ns.xattrs.path":"'/$second_dir'"'
+    find_attribute '"ns.name":"'$third_dir'"'
+    find_attribute '"ns.xattrs.path":"'/$second_dir/$third_dir'"'
+    find_attribute '"ns.name":"'$entry'"'
+    find_attribute '"ns.xattrs.path":"'/$second_dir/$third_dir/$entry'"'
+
+    mongo $testdb --eval "db.dropDatabase()"
+
+    local abs_path="$(realpath $first_dir)"
+
+    rbh_sync_lustre "$abs_path#$second_dir" "rbh:mongo:$testdb"
+
+    local output_abs=$(find_attribute '"ns.name":"'$abs_path'"')
+
+    echo "$output_abs" | grep "No entry found with filter" ||
+        error "$abs_path shouldn't be synchronized"
+
+    find_attribute '"ns.name":"'$second_dir'"'
+    find_attribute '"ns.xattrs.path":"'/$second_dir'"'
+    find_attribute '"ns.name":"'$third_dir'"'
+    find_attribute '"ns.xattrs.path":"'/$second_dir/$third_dir'"'
+    find_attribute '"ns.name":"'$entry'"'
+    find_attribute '"ns.xattrs.path":"'/$second_dir/$third_dir/$entry'"'
+
+    mongo $testdb --eval "db.dropDatabase()"
+
+    rbh_sync_lustre "$first_dir#$second_dir/$third_dir" "rbh:mongo:$testdb"
+
+    local output_first=$(find_attribute '"ns.name":"'$first_dir'"')
+    local output_second=$(find_attribute '"ns.name":"'$second_dir'"')
+
+    echo "$output_first" | grep "No entry found with filter" ||
+        error "$first_dir shouldn't be synchronized"
+    echo "$output_second" | grep "No entry found with filter" ||
+        error "$second_dir shouldn't be synchronized"
+
+    find_attribute '"ns.name":"'$third_dir'"'
+    find_attribute '"ns.xattrs.path":"'/$second_dir/$third_dir'"'
+    find_attribute '"ns.name":"'$entry'"'
+    find_attribute '"ns.xattrs.path":"'/$second_dir/$third_dir/$entry'"'
+}
+
 get_hsm_state_value()
 {
     # retrieve the hsm status which is in-between parentheses
@@ -501,7 +562,7 @@ test_mdt_count()
 #                                     MAIN                                     #
 ################################################################################
 
-declare -a tests=(test_simple_sync)
+declare -a tests=(test_simple_sync test_branch_sync)
 
 if lctl get_param mdt.*.hsm_control | grep "enabled"; then
     tests+=(test_hsm_state_none test_hsm_state_archived_states
