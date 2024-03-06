@@ -154,9 +154,11 @@ skip:
         return NULL;
     }
 
-    /* Modify the root's name and parent ID to match RobinHood's conventions */
+    /* Modify the root's name and parent ID to match RobinHood's conventions,
+     * only if we are not synchronizing a branch
+     */
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-    if (rank == 0 && mpi_iter->current == 0) {
+    if (rank == 0 && mpi_iter->current == 0 && !mpi_iter->is_branch) {
         mpi_fi.parent_id = &ROOT_PARENT_ID;
         mpi_fi.name[0] = '\0';
     }
@@ -236,14 +238,19 @@ lustre_mpi_iterator_new(const char *root, const char *entry,
     mpi_iter->flist = walk_path(path);
     mpi_iter->total = mfu_flist_size(mpi_iter->flist);
     mpi_iter->current = 0;
+    mpi_iter->is_branch = false;
 
     free(path);
     return (struct rbh_mut_iterator *)mpi_iter;
 }
 
 /*----------------------------------------------------------------------------*
- |                                 filter()                                   |
+ |                          lustre_mpi_backend                                |
  *----------------------------------------------------------------------------*/
+
+    /*--------------------------------------------------------------------*
+     |                          filter()                                  |
+     *--------------------------------------------------------------------*/
 
 static struct rbh_mut_iterator *
 lustre_mpi_backend_filter(void *backend, const struct rbh_filter *filter,
@@ -286,9 +293,9 @@ out_destroy_iter:
     return NULL;
 }
 
-/* ---------------------------------------------------------------------------*
- |                          get_attribute()                                   |
- *----------------------------------------------------------------------------*/
+    /* -------------------------------------------------------------------*
+     |                          get_attribute()                           |
+     *--------------------------------------------------------------------*/
 
 static int
 lustre_mpi_backend_get_attribute(void *backend, const char *attr_name,
@@ -297,20 +304,10 @@ lustre_mpi_backend_get_attribute(void *backend, const char *attr_name,
     return lustre_get_attribute(attr_name, arg, data);
 }
 
-/* ---------------------------------------------------------------------------*
- |                          branch()                                          |
- *----------------------------------------------------------------------------*/
 
-static struct rbh_backend *
-lustre_mpi_backend_branch(void *backend, const struct rbh_id *id,
-                          const char *path)
-{
-    return posix_backend_branch(backend, id, path);
-}
-
-/* ---------------------------------------------------------------------------*
- |                          get_option()                                      |
- *----------------------------------------------------------------------------*/
+    /* -------------------------------------------------------------------*
+     |                          get_option()                              |
+     *--------------------------------------------------------------------*/
 
 static int
 lustre_mpi_backend_get_option(void *backend, unsigned int option, void *data,
@@ -319,9 +316,9 @@ lustre_mpi_backend_get_option(void *backend, unsigned int option, void *data,
     return posix_backend_get_option(backend, option, data, data_size);
 }
 
-/* ---------------------------------------------------------------------------*
- |                          set_option()                                      |
- *----------------------------------------------------------------------------*/
+    /* -------------------------------------------------------------------*
+    |                          set_option()                               |
+    *---------------------------------------------------------------------*/
 
 static int
 lustre_mpi_backend_set_option(void *backend, unsigned int option,
@@ -330,9 +327,9 @@ lustre_mpi_backend_set_option(void *backend, unsigned int option,
     return posix_backend_set_option(backend, option, data, data_size);
 }
 
-/* ---------------------------------------------------------------------------*
- |                          root()                                            |
- *----------------------------------------------------------------------------*/
+    /* -------------------------------------------------------------------*
+    |                          root()                                     |
+    *---------------------------------------------------------------------*/
 
 static struct rbh_fsentry *
 lustre_mpi_backend_root(void *backend,
@@ -341,9 +338,9 @@ lustre_mpi_backend_root(void *backend,
     return posix_root(backend, projection);
 }
 
-/* ---------------------------------------------------------------------------*
- |                          destroy()                                         |
- *----------------------------------------------------------------------------*/
+    /* -------------------------------------------------------------------*
+     |                          destroy()                                 |
+     *--------------------------------------------------------------------*/
 
 static void
 lustre_mpi_backend_destroy(void *backend)
@@ -358,6 +355,94 @@ lustre_mpi_backend_destroy(void *backend)
         MPI_Finalize();
     }
 }
+
+    /*--------------------------------------------------------------------*
+     |                          branch()                                  |
+     *--------------------------------------------------------------------*/
+
+static struct rbh_mut_iterator *
+lustre_mpi_branch_backend_filter(void *backend, const struct rbh_filter *filter,
+                                 const struct rbh_filter_options *options)
+{
+    struct posix_branch_backend *branch = backend;
+    struct mpi_iterator *mpi_iter;
+    char *root, *path;
+    int save_errno;
+
+    if (filter != NULL) {
+        errno = ENOTSUP;
+        return NULL;
+    }
+
+    if (options->skip > 0 || options->limit > 0 || options->sort.count > 0) {
+        errno = ENOTSUP;
+        return NULL;
+    }
+
+    root = realpath(branch->posix.root, NULL);
+    if (root == NULL)
+        return NULL;
+
+    if (branch->path) {
+        path = branch->path;
+    } else {
+        path = id2path(root, &branch->id);
+        save_errno = errno;
+        if (path == NULL) {
+            free(root);
+            errno = save_errno;
+            return NULL;
+        }
+    }
+
+    assert(strncmp(root, path, strlen(root)) == 0);
+    mpi_iter = (struct mpi_iterator *)
+                branch->posix.iter_new(root, path + strlen(root),
+                                       branch->posix.statx_sync_type);
+    mpi_iter->skip_error = options->skip_error;
+    mpi_iter->is_branch = true;
+    save_errno = errno;
+    free(path);
+    free(root);
+    errno = save_errno;
+
+    return (struct rbh_mut_iterator *)mpi_iter;
+}
+
+static const struct rbh_backend_operations LUSTRE_MPI_BRANCH_BACKEND_OPS = {
+    .root = lustre_mpi_backend_root,
+    .branch = lustre_mpi_backend_branch,
+    .filter = lustre_mpi_branch_backend_filter,
+    .destroy = lustre_mpi_backend_destroy,
+};
+
+static const struct rbh_backend LUSTRE_MPI_BRANCH_BACKEND = {
+    .name = RBH_LUSTRE_MPI_BACKEND_NAME,
+    .ops = &LUSTRE_MPI_BRANCH_BACKEND_OPS,
+};
+
+struct rbh_backend *
+lustre_mpi_backend_branch(void *backend, const struct rbh_id *id,
+                  const char *path)
+{
+    struct posix_backend *lustre_mpi = backend;
+    struct posix_branch_backend *branch;
+
+    branch = (struct posix_branch_backend *)
+              posix_backend_branch(backend, id, path);
+    if (branch == NULL)
+        return NULL;
+
+    branch->posix.statx_sync_type = lustre_mpi->statx_sync_type;
+    branch->posix.backend = LUSTRE_MPI_BRANCH_BACKEND;
+    branch->posix.iter_new = lustre_mpi_iterator_new;
+
+    return &branch->posix.backend;
+}
+
+    /*--------------------------------------------------------------------*
+     |                          backend()                                 |
+     *--------------------------------------------------------------------*/
 
 static const struct rbh_backend_operations LUSTRE_MPI_BACKEND_OPS = {
     .get_option = lustre_mpi_backend_get_option,
