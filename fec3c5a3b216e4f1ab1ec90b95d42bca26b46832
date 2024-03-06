@@ -16,6 +16,29 @@
       "message": "Hi,\nA very tiny change to provide a more explicit message when a backend can\u0027t be loaded.",
       "revId": "fec3c5a3b216e4f1ab1ec90b95d42bca26b46832",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3d376040_dcc95982",
+        "filename": "librobinhood/src/utils/uri.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-03-06T15:05:49Z",
+      "side": 1,
+      "message": "style: size too long",
+      "range": {
+        "startLine": 38,
+        "startChar": 12,
+        "endLine": 38,
+        "endChar": 83
+      },
+      "revId": "fec3c5a3b216e4f1ab1ec90b95d42bca26b46832",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
