@@ -33,6 +33,144 @@
       "message": "As already discussed, it may be interesting to port this feature to a new tool (rbh-capabilities is fine with me) that will fetch the available backends from a configuration file, and check for each of them if we can use them in rbh-tools, and how.",
       "revId": "fb910e88f14e9a01016d9cbdab2e5b8c5c24d00f",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "71cf4134_914395c5",
+        "filename": "rbh-sync/rbh-sync.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 473,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-03-08T09:43:08Z",
+      "side": 1,
+      "message": "minor: since you error out in case of failure, this could simply be a static void function",
+      "range": {
+        "startLine": 473,
+        "startChar": 0,
+        "endLine": 473,
+        "endChar": 3
+      },
+      "revId": "fb910e88f14e9a01016d9cbdab2e5b8c5c24d00f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6784b6e2_0933b29c",
+        "filename": "rbh-sync/rbh-sync.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 474,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-03-08T09:43:08Z",
+      "side": 1,
+      "message": "style: remove space",
+      "range": {
+        "startLine": 474,
+        "startChar": 24,
+        "endLine": 474,
+        "endChar": 25
+      },
+      "revId": "fb910e88f14e9a01016d9cbdab2e5b8c5c24d00f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0e935400_e5ef05fa",
+        "filename": "rbh-sync/rbh-sync.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 477,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-03-08T09:43:08Z",
+      "side": 1,
+      "message": "style: inverted pyramid for the variable declarations",
+      "range": {
+        "startLine": 476,
+        "startChar": 4,
+        "endLine": 477,
+        "endChar": 44
+      },
+      "revId": "fb910e88f14e9a01016d9cbdab2e5b8c5c24d00f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "97c35b07_3afe6268",
+        "filename": "rbh-sync/rbh-sync.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 480,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-03-08T09:43:08Z",
+      "side": 1,
+      "message": "style: space before the \u0027{\u0027",
+      "range": {
+        "startLine": 480,
+        "startChar": 23,
+        "endLine": 480,
+        "endChar": 24
+      },
+      "revId": "fb910e88f14e9a01016d9cbdab2e5b8c5c24d00f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "93cd9182_6e9207e6",
+        "filename": "rbh-sync/rbh-sync.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 490,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-03-08T09:43:08Z",
+      "side": 1,
+      "message": "suggest: add the same line for the \"branch\" feature",
+      "range": {
+        "startLine": 489,
+        "startChar": 70,
+        "endLine": 490,
+        "endChar": 68
+      },
+      "revId": "fb910e88f14e9a01016d9cbdab2e5b8c5c24d00f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f6bb3ac4_8eeff88a",
+        "filename": "rbh-sync/rbh-sync.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 970,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-03-08T09:43:08Z",
+      "side": 1,
+      "message": "minor: to remove",
+      "range": {
+        "startLine": 970,
+        "startChar": 0,
+        "endLine": 970,
+        "endChar": 27
+      },
+      "revId": "fb910e88f14e9a01016d9cbdab2e5b8c5c24d00f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
