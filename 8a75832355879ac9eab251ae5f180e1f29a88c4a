@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8e35e443_4d755171",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-03-08T08:58:33Z",
+      "side": 1,
+      "message": "defect: this shouldn\u0027t be done in rbh-sync, but in the backend of librobinhood. When creating the backend with `rbh_lustre_mpi_backend_new`, you should call the appropriate init functions. Likewise, you should define a MPI specific destroy function, which will do the finalize of MPI.\n\nNormally, this patch just shouldn\u0027t be necessary",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 50
+      },
+      "revId": "8a75832355879ac9eab251ae5f180e1f29a88c4a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
