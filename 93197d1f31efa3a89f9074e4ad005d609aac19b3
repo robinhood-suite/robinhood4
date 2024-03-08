@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ce65f943_961350d9",
+        "filename": "rbh-sync/tests/test_lustre_utils.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-03-08T09:31:44Z",
+      "side": 1,
+      "message": "suggest: this test could also be done for the regular lustre backend",
+      "range": {
+        "startLine": 43,
+        "startChar": 0,
+        "endLine": 43,
+        "endChar": 16
+      },
+      "revId": "93197d1f31efa3a89f9074e4ad005d609aac19b3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
