@@ -39,6 +39,75 @@
       },
       "revId": "fec3c5a3b216e4f1ab1ec90b95d42bca26b46832",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "488181bc_63963f99",
+        "filename": "librobinhood/src/utils/uri.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-03-08T09:45:41Z",
+      "side": 1,
+      "message": "nit: cannot",
+      "range": {
+        "startLine": 152,
+        "startChar": 36,
+        "endLine": 152,
+        "endChar": 43
+      },
+      "revId": "fec3c5a3b216e4f1ab1ec90b95d42bca26b46832",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4224350d_5aa2f6fc",
+        "filename": "librobinhood/src/utils/uri.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-03-08T09:45:41Z",
+      "side": 1,
+      "message": "nit: cannot",
+      "range": {
+        "startLine": 156,
+        "startChar": 36,
+        "endLine": 156,
+        "endChar": 43
+      },
+      "revId": "fec3c5a3b216e4f1ab1ec90b95d42bca26b46832",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8a6f4330_0e0d2d6a",
+        "filename": "librobinhood/src/utils/uri.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-03-08T09:45:41Z",
+      "side": 1,
+      "message": "minor: to remove",
+      "range": {
+        "startLine": 164,
+        "startChar": 0,
+        "endLine": 164,
+        "endChar": 27
+      },
+      "revId": "fec3c5a3b216e4f1ab1ec90b95d42bca26b46832",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
