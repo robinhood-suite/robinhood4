@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "29beddc4_74b54c7e",
+        "filename": "rbh-sync/tests/test_utils.bash",
+        "patchSetId": 3
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-03-08T09:26:47Z",
+      "side": 1,
+      "message": "suggest: instead of using `if [[ \"$USE_MPI\" \u003d\u003d false ]]; then` in the `test_lustre_utils` file, you could simply do it in the `rbh_sync` function above. That way, you don\u0027t have to copy the file `test_lustre_mongo_sync`, and in the meson build, you can run the test twice with a different export of the variable each time. Or if you don\u0027t want to do that in the meson.build, create a \"proxy\" file that will do it and call the lustre test twice, with the export changed each time",
+      "range": {
+        "startLine": 31,
+        "startChar": 4,
+        "endLine": 31,
+        "endChar": 15
+      },
+      "revId": "75ff3d23266ae2b8a8252c6d3063c2bb4cc7d3fa",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
