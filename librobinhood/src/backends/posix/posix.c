@@ -1120,8 +1120,8 @@ posix_backend_branch(void *backend, const struct rbh_id *id, const char *path)
         if (branch->path == NULL) {
             int save_errno = errno;
 
-            free(branch);
             free(branch->posix.root);
+            free(branch);
             errno = save_errno;
             return NULL;
         }
