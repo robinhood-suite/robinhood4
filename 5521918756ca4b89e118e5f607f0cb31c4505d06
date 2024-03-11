@@ -121,6 +121,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e3dc6ba1_1b5bb168",
+        "filename": "librobinhood/include/robinhood/backends/meson.build",
+        "patchSetId": 4
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-03-11T13:02:29Z",
+      "side": 1,
+      "message": "I understand that we may want to have the MPI backend be the default for Lustre but MPI is not such a small dependency to have by default. In an ideal world, maybe having lustre-fts and lustre-mpi would be better and a configuration could allow the user to specify a custom backend \"lustre\" that would be an alias to lustre-mpi? I don\u0027t know, this is probably overkill. But my sense is that enforcing MPI as a default dependency might be a pain for the users. Having the option to set it to the default might be a better compromise?",
+      "parentUuid": "4025bd70_e144937b",
+      "range": {
+        "startLine": 64,
+        "startChar": 0,
+        "endLine": 82,
+        "endChar": 66
+      },
+      "revId": "5521918756ca4b89e118e5f607f0cb31c4505d06",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b0b738ac_22b7db56",
         "filename": "librobinhood/src/backends/lustre_mpi/lustre_mpi.c",
         "patchSetId": 4
