@@ -4,8 +4,7 @@
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
 
-libhestia = dependency('hestia', dirs: '/usr/lib/hestia',
-                       disabler: true, required: false)
+libhestia = dependency('hestia', disabler: true, required: false)
 
 librbh_hestia = library(
     'rbh-hestia',
