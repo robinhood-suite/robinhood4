@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "10088f59_967ff26e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-03-11T13:09:34Z",
+      "side": 1,
+      "message": "typo: Lustre",
+      "range": {
+        "startLine": 14,
+        "startChar": 14,
+        "endLine": 14,
+        "endChar": 22
+      },
+      "revId": "75ff3d23266ae2b8a8252c6d3063c2bb4cc7d3fa",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "29beddc4_74b54c7e",
         "filename": "rbh-sync/tests/test_utils.bash",
         "patchSetId": 3
@@ -14,6 +37,30 @@
       "writtenOn": "2024-03-08T09:26:47Z",
       "side": 1,
       "message": "suggest: instead of using `if [[ \"$USE_MPI\" \u003d\u003d false ]]; then` in the `test_lustre_utils` file, you could simply do it in the `rbh_sync` function above. That way, you don\u0027t have to copy the file `test_lustre_mongo_sync`, and in the meson build, you can run the test twice with a different export of the variable each time. Or if you don\u0027t want to do that in the meson.build, create a \"proxy\" file that will do it and call the lustre test twice, with the export changed each time",
+      "range": {
+        "startLine": 31,
+        "startChar": 4,
+        "endLine": 31,
+        "endChar": 15
+      },
+      "revId": "75ff3d23266ae2b8a8252c6d3063c2bb4cc7d3fa",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "673a6668_fa8cdf6f",
+        "filename": "rbh-sync/tests/test_utils.bash",
+        "patchSetId": 3
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-03-11T13:09:34Z",
+      "side": 1,
+      "message": "I agree with Yoann. It would be better to only have one function rbh_sync that is run with mpirun or not depending on the test. Also, you don\u0027t need to have __mpirun since there is only one command. We use __mongo because depending on the version you can have mongosh or mongo installed on the system. But for mpirun, as there is only one command you can just use it. The idea of having only one file is also interesting. The `env` parameter can be used to specify extra environment variables in the meson.build and this would avoid the duplication of the test list.",
+      "parentUuid": "29beddc4_74b54c7e",
       "range": {
         "startLine": 31,
         "startChar": 4,
