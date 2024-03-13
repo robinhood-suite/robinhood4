@@ -286,8 +286,63 @@ out_destroy_iter:
     return NULL;
 }
 
-/*----------------------------------------------------------------------------*
- |                              destroy()                                     |
+/* ---------------------------------------------------------------------------*
+ |                          get_attribute()                                   |
+ *----------------------------------------------------------------------------*/
+
+static int
+lustre_mpi_backend_get_attribute(void *backend, const char *attr_name,
+                                 void *arg, struct rbh_value_pair *data)
+{
+    return lustre_get_attribute(attr_name, arg, data);
+}
+
+/* ---------------------------------------------------------------------------*
+ |                          branch()                                          |
+ *----------------------------------------------------------------------------*/
+
+static struct rbh_backend *
+lustre_mpi_backend_branch(void *backend, const struct rbh_id *id,
+                          const char *path)
+{
+    return posix_backend_branch(backend, id, path);
+}
+
+/* ---------------------------------------------------------------------------*
+ |                          get_option()                                      |
+ *----------------------------------------------------------------------------*/
+
+static int
+lustre_mpi_backend_get_option(void *backend, unsigned int option, void *data,
+                              size_t *data_size)
+{
+    return posix_backend_get_option(backend, option, data, data_size);
+}
+
+/* ---------------------------------------------------------------------------*
+ |                          set_option()                                      |
+ *----------------------------------------------------------------------------*/
+
+static int
+lustre_mpi_backend_set_option(void *backend, unsigned int option,
+                              const void *data, size_t data_size)
+{
+    return posix_backend_set_option(backend, option, data, data_size);
+}
+
+/* ---------------------------------------------------------------------------*
+ |                          root()                                            |
+ *----------------------------------------------------------------------------*/
+
+static struct rbh_fsentry *
+lustre_mpi_backend_root(void *backend,
+                        const struct rbh_filter_projection *projection)
+{
+    return posix_root(backend, projection);
+}
+
+/* ---------------------------------------------------------------------------*
+ |                          destroy()                                         |
  *----------------------------------------------------------------------------*/
 
 static void
@@ -305,12 +360,12 @@ lustre_mpi_backend_destroy(void *backend)
 }
 
 static const struct rbh_backend_operations LUSTRE_MPI_BACKEND_OPS = {
-    .get_option = posix_backend_get_option,
-    .set_option = posix_backend_set_option,
-    .branch = posix_backend_branch,
-    .root = posix_root,
+    .get_option = lustre_mpi_backend_get_option,
+    .set_option = lustre_mpi_backend_set_option,
+    .branch = lustre_mpi_backend_branch,
+    .root = lustre_mpi_backend_root,
     .filter = lustre_mpi_backend_filter,
-    .get_attribute = lustre_backend_get_attribute,
+    .get_attribute = lustre_mpi_backend_get_attribute,
     .destroy = lustre_mpi_backend_destroy,
 };
 
