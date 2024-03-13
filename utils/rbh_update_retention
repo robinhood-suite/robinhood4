@@ -6,6 +6,13 @@
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
 
+for program in rbh-sync rbh-lfind rbh-fsevents; do
+    if ! command -v $program &> /dev/null; then
+        echo "This command requires $program to be installed"
+        exit 1
+    fi
+done
+
 function update_directory_expiration_date
 {
     local URI="$1"

@@ -18,6 +18,7 @@ BuildRequires: mongo-c-driver-devel
 BuildRequires: jansson-devel
 BuildRequires: check-devel
 BuildRequires: (lustre-client < 2.15 or lustre-devel)
+BuildRequires: libyaml-devel
 
 %description
 The robinhood4 tools necessary for the retention feature. Includes librobinhood
@@ -39,9 +40,14 @@ suite from a C program.
 %autosetup
 
 %build
+export DIR=$PWD
 for project in librobinhood rbh-sync rbh-find rbh-find-lustre miniyaml \
                rbh-fsevents utils; do
     cd $project
+    export LDFLAGS="$LDFLAGS -L$DIR/$project/x86_64-redhat-linux-gnu/src"
+    export CFLAGS="$CFLAGS -I$DIR/$project/include -g"
+    export PKG_CONFIG_PATH="$PKG_CONFIG_PATH:$DIR/$project/x86_64-redhat-linux-gnu/meson-private:$DIR/$project/x86_64-redhat-linux-gnu"
+#:$DIR/rbh-find/x86_64-redhat-linux-gnu/meson-private/::$DIR/miniyaml/x86_64-redhat-linux-gnu/meson-private/
     %meson
     %meson_build
     cd ..
