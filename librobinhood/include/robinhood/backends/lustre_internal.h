@@ -23,7 +23,7 @@ lustre_inode_xattrs_callback(const int fd, const struct rbh_statx *statx,
                              struct rbh_sstack *values);
 
 int
-lustre_backend_get_attribute(void *backend, const char *attr_name,
-                             void *_arg, struct rbh_value_pair *data);
+lustre_get_attribute(const char *attr_name, void *_arg,
+                     struct rbh_value_pair *data);
 
 #endif
