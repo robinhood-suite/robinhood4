@@ -15,14 +15,6 @@ project(
     ],
 )
 
-foreach dep: ['rbh-sync', 'rbh-lfind', 'rbh-fsevents']
-    program = find_program(dep)
-    if not program.found()
-        message(dep + ' is missing: skipping utils testing')
-        subdir_done()
-    endif
-endforeach
-
 integration_tests = ['test_update_retention']
 
 foreach t: integration_tests

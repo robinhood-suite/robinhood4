@@ -46,9 +46,9 @@ export DIR=$PWD
 for project in librobinhood rbh-sync rbh-find rbh-find-lustre miniyaml \
                rbh-fsevents utils; do
     cd $project
-    export LDFLAGS="$LDFLAGS -L$DIR/$project/redhat-linux-build/src"
+    export LDFLAGS="$LDFLAGS -L$DIR/$project/x86_64-redhat-linux-gnu/src"
     export CFLAGS="$CFLAGS -I$DIR/$project/include -g"
-    export PKG_CONFIG_PATH="$PKG_CONFIG_PATH:$DIR/$project/redhat-linux-build/meson-private:$DIR/$project/redhat-linux-build"
+    export PKG_CONFIG_PATH="$PKG_CONFIG_PATH:$DIR/$project/x86_64-redhat-linux-gnu/meson-private:$DIR/$project/x86_64-redhat-linux-gnu"
     %meson
     %meson_build
     cd ..
