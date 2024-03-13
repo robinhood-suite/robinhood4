@@ -950,9 +950,17 @@ lustre_inode_xattrs_callback(const int fd, const struct rbh_statx *statx,
                       inode_xattrs, inode_xattrs_count, pairs, values);
 }
 
+/*----------------------------------------------------------------------------*
+ |                          lustre_backend                                    |
+ *----------------------------------------------------------------------------*/
+
+    /*--------------------------------------------------------------------*
+     |                          get_attribute()                           |
+     *--------------------------------------------------------------------*/
+
 int
-lustre_backend_get_attribute(void *backend, const char *attr_name,
-                             void *_arg, struct rbh_value_pair *data)
+lustre_get_attribute(const char *attr_name, void *_arg,
+                     struct rbh_value_pair *data)
 {
     struct arg_t {
         int fd;
@@ -961,12 +969,82 @@ lustre_backend_get_attribute(void *backend, const char *attr_name,
     };
     struct arg_t *arg = (struct arg_t *)_arg;
 
-    (void)backend;
-
     if (strcmp(attr_name, "lustre") != 0)
         return -1;
 
     return lustre_get_attrs(arg->fd, arg->mode, data, arg->values);
+}
+
+static int
+lustre_fts_backend_get_attribute(void *backend, const char *attr_name,
+                                 void *arg, struct rbh_value_pair *data)
+{
+    return lustre_get_attribute(attr_name, arg, data);
+}
+
+    /*--------------------------------------------------------------------*
+     |                          get_option()                              |
+     *--------------------------------------------------------------------*/
+
+static int
+lustre_fts_backend_get_option(void *backend, unsigned int option, void *data,
+                              size_t *data_size)
+{
+    return posix_backend_get_option(backend, option, data, data_size);
+}
+
+    /*--------------------------------------------------------------------*
+     |                          set_option()                              |
+     *--------------------------------------------------------------------*/
+
+static int
+lustre_fts_backend_set_option(void *backend, unsigned int option,
+                              const void *data, size_t data_size)
+{
+    return posix_backend_set_option(backend, option, data, data_size);
+}
+
+    /*--------------------------------------------------------------------*
+     |                          branch()                                  |
+     *--------------------------------------------------------------------*/
+
+static struct rbh_backend *
+lustre_fts_backend_branch(void *backend, const struct rbh_id *id,
+                          const char *path)
+{
+    return posix_backend_branch(backend, id, path);
+}
+
+    /*--------------------------------------------------------------------*
+     |                          root()                                    |
+     *--------------------------------------------------------------------*/
+
+static struct rbh_fsentry *
+lustre_fts_backend_root(void *backend,
+                        const struct rbh_filter_projection *projection)
+{
+    return posix_root(backend, projection);
+}
+
+    /*--------------------------------------------------------------------*
+     |                          filter()                                  |
+     *--------------------------------------------------------------------*/
+
+static struct rbh_mut_iterator *
+lustre_fts_backend_filter(void *backend, const struct rbh_filter *filter,
+                          const struct rbh_filter_options *options)
+{
+    return posix_backend_filter(backend, filter, options);
+}
+
+    /*--------------------------------------------------------------------*
+     |                          destroy()                                 |
+     *--------------------------------------------------------------------*/
+
+static void
+lustre_fts_backend_destroy(void *backend)
+{
+    posix_backend_destroy(backend);
 }
 
 static struct rbh_mut_iterator *
@@ -985,13 +1063,13 @@ lustre_iterator_new(const char *root, const char *entry, int statx_sync_type)
 }
 
 static const struct rbh_backend_operations LUSTRE_BACKEND_OPS = {
-    .get_option = posix_backend_get_option,
-    .set_option = posix_backend_set_option,
-    .branch = posix_backend_branch,
-    .root = posix_root,
-    .filter = posix_backend_filter,
-    .get_attribute = lustre_backend_get_attribute,
-    .destroy = posix_backend_destroy,
+    .get_option = lustre_fts_backend_get_option,
+    .set_option = lustre_fts_backend_set_option,
+    .branch = lustre_fts_backend_branch,
+    .root = lustre_fts_backend_root,
+    .filter = lustre_fts_backend_filter,
+    .get_attribute = lustre_fts_backend_get_attribute,
+    .destroy = lustre_fts_backend_destroy,
 };
 
 struct rbh_backend *
