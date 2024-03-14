@@ -169,6 +169,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "20002ad7_433cc717",
+        "filename": "librobinhood/include/robinhood/backends/meson.build",
+        "patchSetId": 4
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-03-14T09:28:16Z",
+      "side": 1,
+      "message": "Right, but there is a difference between the packaging environment that may have MPIFileUtils installed where we would say \"oh I have MPI available, let me make rbh:lustre:something use MPI\" and then the actual environment where rbh4 is used that now needs to have MPIFileUtils installed in order to use `rbh-sync rbh:lustre:something`. For example, let say we want to package RBH4 with MPIFileUtils support in ocean, if someone uses the ocean package in their system, then they are stuck with MPIFileUtils when using `rbh-sync rbh:lustre:something`.\n\nThat being said, since the MPIFileUtils backend is part of the core backends of librobinhood, if we package librobinhood compiled with MPIFileUtils enabled, we will have that dependency in our specfile. So one will have to install MPIFileUtils anyway. Unless, we package the backend in a different RPM which might be a better solution? I don\u0027t know...",
+      "parentUuid": "a5dc8401_3f6ab723",
+      "range": {
+        "startLine": 64,
+        "startChar": 0,
+        "endLine": 82,
+        "endChar": 66
+      },
+      "revId": "5521918756ca4b89e118e5f607f0cb31c4505d06",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b0b738ac_22b7db56",
         "filename": "librobinhood/src/backends/lustre_mpi/lustre_mpi.c",
         "patchSetId": 4
