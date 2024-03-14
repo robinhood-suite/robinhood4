@@ -16,6 +16,24 @@
       "message": "Hi,\nI\u0027m not quite sure howto fix this, but newer version of meson doesn\u0027t support \u0027dirs\u0027 parameter in the capability object.\nAnyways, hestia libdir seems to be a bit weird. On redhat like platforms it should be in /lib64 or /usr/lib64 on other distro it will be located in /usr/lib.\nThe best way to me is to add a meson parameter to define the hestia library path.\nWhat do you think ?",
       "revId": "8af1284a0390a8caa52d06013d99d3fab5ebc88d",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d850a0af_638c77aa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-03-14T08:44:36Z",
+      "side": 1,
+      "message": "I agree.",
+      "parentUuid": "57ed6331_f77fe05d",
+      "revId": "8af1284a0390a8caa52d06013d99d3fab5ebc88d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
