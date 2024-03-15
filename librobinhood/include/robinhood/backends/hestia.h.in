@@ -32,4 +32,10 @@
 struct rbh_backend *
 rbh_hestia_backend_new(__attribute__((unused)) const char *path);
 
+/**
+ * Release the memory associated with the plugin
+ */
+void
+rbh_hestia_plugin_destroy();
+
 #endif

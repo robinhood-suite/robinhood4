@@ -18,6 +18,7 @@
 #include <unistd.h>
 
 #include "check-compat.h"
+#include "robinhood.h"
 #include "robinhood/backends/lustre_mpi.h"
 
 /*----------------------------------------------------------------------------*
@@ -83,6 +84,48 @@ START_TEST(lf_missing_root)
 }
 END_TEST
 
+START_TEST(lf_empty_root)
+{
+    const struct rbh_filter_options OPTIONS = {
+        .projection = {
+            .fsentry_mask = RBH_FP_PARENT_ID,
+        },
+    };
+    struct rbh_mut_iterator *fsentries;
+    static const char *EMPTY = "empty";
+    struct rbh_backend *lustre_mpi;
+    struct rbh_fsentry *fsentry;
+
+    ck_assert_int_eq(mkdir(EMPTY, S_IRWXU), 0);
+
+    lustre_mpi = rbh_lustre_mpi_backend_new(EMPTY);
+    ck_assert_ptr_nonnull(lustre_mpi);
+
+    fsentries = rbh_backend_filter(lustre_mpi, NULL, &OPTIONS);
+    ck_assert_ptr_nonnull(fsentries);
+
+    fsentry = rbh_mut_iter_next(fsentries);
+    if (fsentry != NULL) {
+        ck_assert(fsentry->mask & RBH_FP_PARENT_ID);
+        ck_assert_int_eq(fsentry->parent_id.size, 0);
+
+        free(fsentry);
+
+        errno = 0;
+        ck_assert_ptr_null(rbh_mut_iter_next(fsentries));
+        ck_assert_int_eq(errno, ENODATA);
+
+    } else {
+        ck_assert_ptr_null(fsentry);
+        ck_assert_int_eq(errno, ENODATA);
+    }
+
+    rbh_mut_iter_destroy(fsentries);
+    rbh_backend_destroy(lustre_mpi);
+    ck_assert_int_eq(rmdir(EMPTY), 0);
+}
+END_TEST
+
 static Suite *
 unit_suite(void)
 {
@@ -94,6 +137,7 @@ unit_suite(void)
     tcase_add_unchecked_fixture(tests, unchecked_setup_tmpdir,
                                 unchecked_teardown_tmpdir);
     tcase_add_test(tests, lf_missing_root);
+    tcase_add_test(tests, lf_empty_root);
 
     suite_add_tcase(suite, tests);
 
@@ -113,6 +157,7 @@ main(int argc, char **argv)
     srunner_run_all(runner, CK_NORMAL);
     number_failed = srunner_ntests_failed(runner);
     srunner_free(runner);
+    rbh_backend_plugin_destroy("lustre-mpi");
 
     return (number_failed == 0) ? EXIT_SUCCESS : EXIT_FAILURE;
 }

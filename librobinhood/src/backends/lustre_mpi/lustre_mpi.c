@@ -344,15 +344,14 @@ lustre_mpi_backend_root(void *backend,
 static void
 lustre_mpi_backend_destroy(void *backend)
 {
-    int flag;
-
     posix_backend_destroy(backend);
+}
 
-    MPI_Finalized(&flag);
-    if (!flag) {
-        mfu_finalize();
-        MPI_Finalize();
-    }
+void
+rbh_lustre_mpi_plugin_destroy()
+{
+    mfu_finalize();
+    MPI_Finalize();
 }
 
     /*--------------------------------------------------------------------*
