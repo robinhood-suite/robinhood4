@@ -9,6 +9,9 @@
 #define ROBINHOOD_BACKEND_PLUGIN_H
 
 #include <assert.h>
+#include <error.h>
+#include <stdlib.h>
+#include <errno.h>
 
 #include "robinhood/plugin.h"
 #include "robinhood/backend.h"
@@ -20,27 +23,8 @@ struct rbh_backend_plugin {
 
 struct rbh_backend_plugin_operations {
     struct rbh_backend *(*new)(const char *fsname);
+    void (*destroy)();
 };
-
-/**
- * Create a backend from a backend plugin
- *
- * @param plugin    the plugin to create a backend from
- * @param fsname    a string that identifies which filesystem to load a backend
- *                  for
- *
- * @return          a pointer to newly allocated struct rbh_backend on success,
- *                  NULL on error and errno is set appropriately
- *
- * @error ENOMEM    there was not enough memory available
- * @error TODO
- */
-static inline struct rbh_backend *
-rbh_backend_plugin_new(const struct rbh_backend_plugin *plugin,
-                          const char *fsname)
-{
-    return plugin->ops->new(fsname);
-}
 
 /**
  * Macro plugins should use to name the struct rbh_backend_plugin they export
@@ -83,5 +67,44 @@ rbh_backend_plugin_symbol(const char *name);
  */
 const struct rbh_backend_plugin *
 rbh_backend_plugin_import(const char *name);
+
+/**
+ * Create a backend from a backend plugin
+ *
+ * @param plugin    the plugin to create a backend from
+ * @param fsname    a string that identifies which filesystem to load a backend
+ *                  for
+ *
+ * @return          a pointer to newly allocated struct rbh_backend on success,
+ *                  NULL on error and errno is set appropriately
+ *
+ * @error ENOMEM    there was not enough memory available
+ * @error TODO
+ */
+static inline struct rbh_backend *
+rbh_backend_plugin_new(const struct rbh_backend_plugin *plugin,
+                          const char *fsname)
+{
+    return plugin->ops->new(fsname);
+}
+
+/**
+ * Clear the memory associated with a plugin
+ *
+ * @param name   the name of the plugin
+ *
+ */
+static inline void
+rbh_backend_plugin_destroy(const char *name)
+{
+    const struct rbh_backend_plugin *plugin;
+
+    plugin = rbh_backend_plugin_import(name);
+    if (plugin == NULL)
+        error(EXIT_FAILURE, errno, "rbh_backend_plugin_import");
+
+    if (plugin->ops->destroy)
+        plugin->ops->destroy();
+}
 
 #endif
