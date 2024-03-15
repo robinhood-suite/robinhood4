@@ -20,6 +20,7 @@ struct rbh_backend_plugin {
 
 struct rbh_backend_plugin_operations {
     struct rbh_backend *(*new)(const char *fsname);
+    void (*destroy)(struct rbh_backend *backend);
 };
 
 /**
@@ -41,6 +42,16 @@ rbh_backend_plugin_new(const struct rbh_backend_plugin *plugin,
 {
     return plugin->ops->new(fsname);
 }
+
+/**
+ * Destroy a backend from a backend plugin
+ *
+ * @param backend   the backend to destroy
+ *
+ */
+void
+rbh_backend_plugin_destroy(struct rbh_backend *backend);
+
 
 /**
  * Macro plugins should use to name the struct rbh_backend_plugin they export

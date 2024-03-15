@@ -958,6 +958,12 @@ posix_backend_destroy(void *backend)
     free(posix);
 }
 
+void
+rbh_posix_backend_destroy(struct rbh_backend *backend)
+{
+    posix_backend_destroy(backend);
+}
+
     /*--------------------------------------------------------------------*
      |                              branch()                              |
      *--------------------------------------------------------------------*/

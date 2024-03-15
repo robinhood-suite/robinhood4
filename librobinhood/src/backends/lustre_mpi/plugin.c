@@ -17,6 +17,7 @@
 static const struct rbh_backend_plugin_operations
 LUSTRE_MPI_BACKEND_PLUGIN_OPS = {
     .new = rbh_lustre_mpi_backend_new,
+    .destroy = rbh_lustre_mpi_backend_destroy,
 };
 
 const struct rbh_backend_plugin RBH_BACKEND_PLUGIN_SYMBOL(LUSTRE_MPI) = {

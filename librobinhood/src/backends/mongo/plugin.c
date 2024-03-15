@@ -16,6 +16,7 @@
 
 static const struct rbh_backend_plugin_operations MONGO_BACKEND_PLUGIN_OPS = {
     .new = rbh_mongo_backend_new,
+    .destroy = rbh_mongo_backend_destroy,
 };
 
 const struct rbh_backend_plugin RBH_BACKEND_PLUGIN_SYMBOL(MONGO) = {

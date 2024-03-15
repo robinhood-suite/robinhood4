@@ -10,7 +10,7 @@
 
 #include "robinhood/backend.h"
 
-#define RBH_LUSTRE_MPI_BACKEND_NAME "lustre_mpi"
+#define RBH_LUSTRE_MPI_BACKEND_NAME "lustre-mpi"
 
 #mesondefine RBH_LUSTRE_MPI_BACKEND_MAJOR
 #mesondefine RBH_LUSTRE_MPI_BACKEND_MINOR
@@ -32,4 +32,11 @@
 struct rbh_backend *
 rbh_lustre_mpi_backend_new(const char *path);
 
+/**
+ * Destroy a lustre_mpi backend
+ *
+ * @param backend   the backend to destroy
+ */
+void
+rbh_lustre_mpi_backend_destroy(struct rbh_backend *backend);
 #endif

@@ -344,9 +344,15 @@ lustre_mpi_backend_root(void *backend,
 static void
 lustre_mpi_backend_destroy(void *backend)
 {
+    posix_backend_destroy(backend);
+}
+
+void
+rbh_lustre_mpi_backend_destroy(struct rbh_backend *backend)
+{
     int flag;
 
-    posix_backend_destroy(backend);
+    lustre_mpi_backend_destroy(backend);
 
     MPI_Finalized(&flag);
     if (!flag) {

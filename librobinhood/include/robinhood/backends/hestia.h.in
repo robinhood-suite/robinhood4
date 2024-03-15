@@ -32,4 +32,13 @@
 struct rbh_backend *
 rbh_hestia_backend_new(__attribute__((unused)) const char *path);
 
+/**
+ * Destroy a hestia backend
+ *
+ * @param backend   the backend to destroy
+ */
+void
+rbh_hestia_backend_destroy(struct rbh_backend *backend);
+
+
 #endif

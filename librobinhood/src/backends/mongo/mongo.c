@@ -570,6 +570,12 @@ mongo_backend_destroy(void *backend)
     free(mongo);
 }
 
+void
+rbh_mongo_backend_destroy(struct rbh_backend *backend)
+{
+    mongo_backend_destroy(backend);
+}
+
 static struct rbh_backend *
 mongo_backend_branch(void *backend, const struct rbh_id *id, const char *path);
 

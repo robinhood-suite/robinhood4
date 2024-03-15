@@ -32,4 +32,14 @@
 struct rbh_backend *
 rbh_lustre_backend_new(const char *path);
 
+/**
+ * Destroy a lustre backend
+ *
+ * @param backend   the backend to destroy
+ *
+ */
+void
+rbh_lustre_backend_destroy(struct rbh_backend *backend);
+
+
 #endif

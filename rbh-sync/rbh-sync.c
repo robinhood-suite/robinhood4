@@ -27,14 +27,14 @@ static void __attribute__((destructor))
 destroy_from(void)
 {
     if (from)
-        rbh_backend_destroy(from);
+        rbh_backend_plugin_destroy(from);
 }
 
 static void __attribute__((destructor))
 destroy_to(void)
 {
     if (to)
-        rbh_backend_destroy(to);
+        rbh_backend_plugin_destroy(to);
 }
 
 static struct rbh_mut_iterator *chunks;
