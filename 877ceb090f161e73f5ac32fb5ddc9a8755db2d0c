@@ -41,6 +41,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae0477c7_4f923bd0",
+        "filename": "librobinhood/src/backends/lustre_mpi/lustre_mpi.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 291,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-03-15T14:58:43Z",
+      "side": 1,
+      "message": "Creation of the wrapper functions for all the callbacks are done in the next patch: `lustre \u0026 lustre-mpi backend: add wrapper functions to callbacks`.",
+      "parentUuid": "ea6400b2_bbda7536",
+      "range": {
+        "startLine": 290,
+        "startChar": 18,
+        "endLine": 291,
+        "endChar": 43
+      },
+      "revId": "877ceb090f161e73f5ac32fb5ddc9a8755db2d0c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "83a5fbbd_a431bfab",
@@ -64,6 +88,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b2cb4b31_fa224440",
+        "filename": "librobinhood/src/backends/lustre_mpi/lustre_mpi.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-03-15T14:58:43Z",
+      "side": 1,
+      "message": "It\u0027s done in the patch `lustre-mpi: add branches to lustre-mpi backend`.",
+      "parentUuid": "83a5fbbd_a431bfab",
+      "range": {
+        "startLine": 292,
+        "startChar": 14,
+        "endLine": 292,
+        "endChar": 34
+      },
+      "revId": "877ceb090f161e73f5ac32fb5ddc9a8755db2d0c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "35c13dc1_0bcf22b3",
@@ -77,6 +125,30 @@
       "writtenOn": "2024-03-11T13:02:29Z",
       "side": 1,
       "message": "minor: I don\u0027t think this is necessary in C. For example, malloc returns `void *` but you don\u0027t cast it every time.",
+      "range": {
+        "startLine": 923,
+        "startChar": 17,
+        "endLine": 923,
+        "endChar": 42
+      },
+      "revId": "877ceb090f161e73f5ac32fb5ddc9a8755db2d0c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d58c8753_353ecfb3",
+        "filename": "librobinhood/src/backends/posix/posix.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 923,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-03-15T14:58:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "35c13dc1_0bcf22b3",
       "range": {
         "startLine": 923,
         "startChar": 17,
