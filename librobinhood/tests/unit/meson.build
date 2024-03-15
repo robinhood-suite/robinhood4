@@ -60,7 +60,7 @@ bash = find_program('bash', disabler: true, required: false)
 
 if r.returncode() == 0 and libmfu.found()
     env.prepend('CK_FORK', 'no')
-    foreach t: ['check_lustre_mpi_missing', 'check_lustre_mpi_empty']
+    foreach t: ['check_lustre_mpi']
         executable(t, t + '.c',
             dependencies: [check],
             link_with: [librobinhood, librbh_lustre_mpi],
