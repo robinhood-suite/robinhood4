@@ -26,15 +26,25 @@ static struct rbh_backend *from, *to;
 static void __attribute__((destructor))
 destroy_from(void)
 {
-    if (from)
+    const char *name;
+
+    if (from) {
+        name = from->name;
         rbh_backend_destroy(from);
+        rbh_backend_plugin_destroy(name);
+    }
 }
 
 static void __attribute__((destructor))
 destroy_to(void)
 {
-    if (to)
+    const char *name;
+
+    if (to) {
+        name = to->name;
         rbh_backend_destroy(to);
+        rbh_backend_plugin_destroy(name);
+    }
 }
 
 static struct rbh_mut_iterator *chunks;
