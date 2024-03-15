@@ -32,6 +32,15 @@
 struct rbh_backend *
 rbh_posix_backend_new(const char *path);
 
+/**
+ * Destroy a posix backend
+ *
+ * @param backend   the backend to destroy
+ */
+void
+rbh_posix_backend_destroy(struct rbh_backend *backend);
+
+
 enum rbh_posix_backend_option {
     RBH_PBO_STATX_SYNC_TYPE = RBH_BO_FIRST(RBH_BI_POSIX),
 };

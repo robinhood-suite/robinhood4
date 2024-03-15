@@ -11,6 +11,7 @@
 
 #include <ctype.h>
 #include <errno.h>
+#include <error.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -63,4 +64,16 @@ rbh_backend_plugin_import(const char *name)
     errno = save_errno;
 
     return plugin;
+}
+
+void
+rbh_backend_plugin_destroy(struct rbh_backend *backend)
+{
+    const struct rbh_backend_plugin *plugin;
+
+    plugin = rbh_backend_plugin_import(backend->name);
+    if (plugin == NULL)
+        error(EXIT_FAILURE, errno, "rbh_backend_plugin_import");
+
+    plugin->ops->destroy(backend);
 }

@@ -38,4 +38,13 @@
 struct rbh_backend *
 rbh_mongo_backend_new(const char *fsname);
 
+/**
+ * Destroy a mongo backend
+ *
+ * @param backend   the backend to destroy
+ */
+void
+rbh_mongo_backend_destroy(struct rbh_backend *destroy);
+
+
 #endif

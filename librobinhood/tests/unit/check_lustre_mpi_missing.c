@@ -18,6 +18,7 @@
 #include <unistd.h>
 
 #include "check-compat.h"
+#include "robinhood.h"
 #include "robinhood/backends/lustre_mpi.h"
 
 /*----------------------------------------------------------------------------*
@@ -79,7 +80,7 @@ START_TEST(lf_missing_root)
     ck_assert_ptr_null(rbh_backend_filter(lustre_mpi, NULL, &OPTIONS));
     ck_assert_int_eq(errno, ENOENT);
 
-    rbh_backend_destroy(lustre_mpi);
+    rbh_backend_plugin_destroy(lustre_mpi);
 }
 END_TEST
 

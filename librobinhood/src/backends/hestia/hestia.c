@@ -436,6 +436,12 @@ hestia_backend_destroy(void *backend)
     //hestia_finish();
 }
 
+void
+rbh_hestia_backend_destroy(struct rbh_backend *backend)
+{
+    hestia_backend_destroy(backend);
+}
+
 static const struct rbh_backend_operations HESTIA_BACKEND_OPS = {
     .filter = hestia_backend_filter,
     .destroy = hestia_backend_destroy,
