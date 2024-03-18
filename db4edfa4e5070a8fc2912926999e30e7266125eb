@@ -91,6 +91,138 @@
       },
       "revId": "db4edfa4e5070a8fc2912926999e30e7266125eb",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "309932ee_205a093e",
+        "filename": "librobinhood/include/robinhood/backends/lustre.h.in",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-03-18T10:55:55Z",
+      "side": 1,
+      "message": "major: there is a function rbh_backend_destroy that calls rbh_backend_operations::destroy to free the internals of a backend. You should call these functions rbh_\u003cbackendname\u003e_plugin_destroy.",
+      "range": {
+        "startLine": 42,
+        "startChar": 11,
+        "endLine": 42,
+        "endChar": 21
+      },
+      "revId": "db4edfa4e5070a8fc2912926999e30e7266125eb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d8643997_529eeec0",
+        "filename": "librobinhood/include/robinhood/backends/lustre.h.in",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-03-18T10:55:55Z",
+      "side": 1,
+      "message": "style: empty line",
+      "revId": "db4edfa4e5070a8fc2912926999e30e7266125eb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c46ce6a7_192829d0",
+        "filename": "librobinhood/include/robinhood/plugins/backend.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-03-18T10:55:55Z",
+      "side": 1,
+      "message": "this is a function that release the memory associated to a plugin not a backend. This should call the destroy function of rbh_backend_plugin_operations.",
+      "range": {
+        "startLine": 53,
+        "startChar": 34,
+        "endLine": 53,
+        "endChar": 54
+      },
+      "revId": "db4edfa4e5070a8fc2912926999e30e7266125eb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7d3202dc_085c4455",
+        "filename": "librobinhood/src/backends/hestia/hestia.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 442,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-03-18T10:55:55Z",
+      "side": 1,
+      "message": "defect: this should not destroy a backend but a plugin",
+      "range": {
+        "startLine": 442,
+        "startChar": 4,
+        "endLine": 442,
+        "endChar": 36
+      },
+      "revId": "db4edfa4e5070a8fc2912926999e30e7266125eb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "305ce869_85287fce",
+        "filename": "librobinhood/src/backends/lustre_mpi/lustre_mpi.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 346,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-03-18T10:55:55Z",
+      "side": 1,
+      "message": "defect: same as for hestia",
+      "range": {
+        "startLine": 346,
+        "startChar": 4,
+        "endLine": 346,
+        "endChar": 25
+      },
+      "revId": "db4edfa4e5070a8fc2912926999e30e7266125eb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7000e2c1_417f2ff7",
+        "filename": "librobinhood/src/plugins/backend.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-03-18T10:55:55Z",
+      "side": 1,
+      "message": "defect: this function should release ressources associated with the plugin not the backend. In an ideal world, this should take the plugin as an import. But this would be really annoying to update all the places where backend_new is called to get a reference to the plugin and keep it to be released later. So a useful middle ground is to simply pass no argument.",
+      "range": {
+        "startLine": 70,
+        "startChar": 27,
+        "endLine": 70,
+        "endChar": 54
+      },
+      "revId": "db4edfa4e5070a8fc2912926999e30e7266125eb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
