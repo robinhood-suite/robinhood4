@@ -48,6 +48,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bb07a2f2_9b17d678",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-03-18T08:30:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "caa3d6d7_830275c0",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 50
+      },
+      "revId": "8a75832355879ac9eab251ae5f180e1f29a88c4a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8aaf853c_6d8576be",
@@ -61,6 +85,30 @@
       "writtenOn": "2024-03-11T12:56:28Z",
       "side": 1,
       "message": "major: this could be done in the previous patch or a seperate patch below the one introducing the lustre-mpi plugin. Also, strtoupper converts a from lower to upper case. You are expanding it to switch characters as well. This should be a different function:\n\n```\nstatic char *\nremove_non_alnum(char *string)\n{\n    for (char *c \u003d string; *c \u003d \u0027\\0\u0027; c++) {\n        if (!isalnum(*c) \u0026\u0026 *c !\u003d \u0027_\u0027)\n            *c \u003d \u0027_\u0027;\n    }\n    return string;\n}\n\nrbh_backend_plugin_symbol(const char *name)\n{\n    ...\n    \n    return remove_non_alnum(strtoupper(symbol));\n}\n```",
+      "range": {
+        "startLine": 23,
+        "startChar": 7,
+        "endLine": 26,
+        "endChar": 21
+      },
+      "revId": "8a75832355879ac9eab251ae5f180e1f29a88c4a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2a79c55c_22a4f437",
+        "filename": "librobinhood/src/plugins/backend.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-03-18T08:30:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8aaf853c_6d8576be",
       "range": {
         "startLine": 23,
         "startChar": 7,
