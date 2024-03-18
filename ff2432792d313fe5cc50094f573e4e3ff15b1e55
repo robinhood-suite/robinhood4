@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f836e0be_168d2118",
+        "filename": "rbh-sync/tests/meson.build",
+        "patchSetId": 4
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-03-18T09:23:44Z",
+      "side": 1,
+      "message": "Yes, but if we add a test in the future, we know that it won\u0027t work. And is_parallel for one test isn\u0027t doing anything so we might as well leave it to same some trouble for the one who will add one test?",
+      "parentUuid": "bb540d8e_97422306",
+      "range": {
+        "startLine": 19,
+        "startChar": 13,
+        "endLine": 19,
+        "endChar": 33
+      },
+      "revId": "ff2432792d313fe5cc50094f573e4e3ff15b1e55",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9f270302_8cbbeabd",
         "filename": "rbh-sync/tests/test_lustre_mongo_sync.bash",
         "patchSetId": 4
