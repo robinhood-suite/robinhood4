@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bb540d8e_97422306",
+        "filename": "rbh-sync/tests/meson.build",
+        "patchSetId": 4
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-03-18T08:49:49Z",
+      "side": 1,
+      "message": "minor: this one is not necessary, since you\u0027ll just run the posix and mongo tests in parallel, which can be done without issue.",
+      "range": {
+        "startLine": 19,
+        "startChar": 13,
+        "endLine": 19,
+        "endChar": 33
+      },
+      "revId": "ff2432792d313fe5cc50094f573e4e3ff15b1e55",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9f270302_8cbbeabd",
+        "filename": "rbh-sync/tests/test_lustre_mongo_sync.bash",
+        "patchSetId": 4
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-03-18T08:49:49Z",
+      "side": 1,
+      "message": "minor: all of these 5-lines could be in a function in this test, like `sync_current_dir`",
+      "range": {
+        "startLine": 33,
+        "startChar": 4,
+        "endLine": 37,
+        "endChar": 6
+      },
+      "revId": "ff2432792d313fe5cc50094f573e4e3ff15b1e55",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
