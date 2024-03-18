@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b9165c33_b1392370",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-03-18T14:16:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "12403e1b_416a9362",
+      "range": {
+        "startLine": 14,
+        "startChar": 57,
+        "endLine": 14,
+        "endChar": 64
+      },
+      "revId": "0f12060e0a6788fd3589819cd72daee52b26e50c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d1fbb10b_6c404631",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-03-18T13:51:42Z",
       "side": 1,
       "message": "minor: looking at mongo\u0027s documentation it seems that the mongo command can accept several formats including ones that don\u0027t start with `mongodb://`. I would suggest using the environment variable\u0027s value directly instead of prefixing it. So you would do something like:\n\n```\nexport RBH_MONGO_DB_URI\u003d\"mongodb://localhost:27017\"\nrbh-sync ... rbh:mongo:dbname\n```\n\nI realise after reading the code a bit more closely that `mongo_uri_new` probably only accepts URI like parameters but I still think that it would be better to pass the full string instead of just the substring.",
+      "range": {
+        "startLine": 1387,
+        "startChar": 25,
+        "endLine": 1387,
+        "endChar": 37
+      },
+      "revId": "0f12060e0a6788fd3589819cd72daee52b26e50c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d0d26018_4ead2817",
+        "filename": "librobinhood/src/backends/mongo/mongo.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 1387,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-03-18T14:16:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d1fbb10b_6c404631",
       "range": {
         "startLine": 1387,
         "startChar": 25,
@@ -70,6 +118,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "602a7ddb_bb9373f1",
+        "filename": "librobinhood/src/backends/mongo/mongo.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 1394,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-03-18T14:16:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "42260ab1_389f21ee",
+      "range": {
+        "startLine": 1394,
+        "startChar": 21,
+        "endLine": 1394,
+        "endChar": 28
+      },
+      "revId": "0f12060e0a6788fd3589819cd72daee52b26e50c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8f597e2c_4691d6b6",
@@ -83,6 +155,30 @@
       "writtenOn": "2024-03-18T13:51:42Z",
       "side": 1,
       "message": "style: if any branch of an if/else has {}, all of them should have them.",
+      "range": {
+        "startLine": 1397,
+        "startChar": 4,
+        "endLine": 1397,
+        "endChar": 10
+      },
+      "revId": "0f12060e0a6788fd3589819cd72daee52b26e50c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dda017ed_ad45de72",
+        "filename": "librobinhood/src/backends/mongo/mongo.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 1397,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-03-18T14:16:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8f597e2c_4691d6b6",
       "range": {
         "startLine": 1397,
         "startChar": 4,
@@ -116,6 +212,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "36c5bcdf_9618ab60",
+        "filename": "librobinhood/src/backends/mongo/mongo.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 1398,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-03-18T14:16:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8b4bb6e0_8544552e",
+      "range": {
+        "startLine": 1398,
+        "startChar": 12,
+        "endLine": 1398,
+        "endChar": 19
+      },
+      "revId": "0f12060e0a6788fd3589819cd72daee52b26e50c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f31bde63_95938f87",
@@ -129,6 +249,30 @@
       "writtenOn": "2024-03-18T13:51:42Z",
       "side": 1,
       "message": "style: instead of the if/else logic here, you could create a function that retrieves the DB address:\n\n```\nstatic const char *\nget_mongo_addr(void)\n{\n    const char *addr \u003d getenv(\"RBH_MONGO_DB_URI\");\n    \n    if (!addr)\n        addr \u003d \"mongodb://...\";\n        \n    return addr;\n}\n\n\nuri \u003d mongoc_uri_new(get_mongo_addr());\n```",
+      "range": {
+        "startLine": 1402,
+        "startChar": 14,
+        "endLine": 1402,
+        "endChar": 37
+      },
+      "revId": "0f12060e0a6788fd3589819cd72daee52b26e50c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c2d21b09_7d2233dc",
+        "filename": "librobinhood/src/backends/mongo/mongo.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 1402,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-03-18T14:16:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f31bde63_95938f87",
       "range": {
         "startLine": 1402,
         "startChar": 14,
