@@ -22,6 +22,98 @@
       },
       "revId": "46f3261c121550095cfdfa592f0a5aaa1532f0a3",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5849c650_806419e3",
+        "filename": "librobinhood/src/backends/lustre_mpi/lustre_mpi.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 397,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-03-18T10:30:13Z",
+      "side": 1,
+      "message": "minor: I don\u0027t think the cast is necessary",
+      "range": {
+        "startLine": 397,
+        "startChar": 15,
+        "endLine": 397,
+        "endChar": 38
+      },
+      "revId": "46f3261c121550095cfdfa592f0a5aaa1532f0a3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3e37e4fa_9647ee6d",
+        "filename": "librobinhood/src/backends/lustre_mpi/lustre_mpi.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 429,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-03-18T10:30:13Z",
+      "side": 1,
+      "message": "minor: same comment as above",
+      "range": {
+        "startLine": 429,
+        "startChar": 13,
+        "endLine": 429,
+        "endChar": 44
+      },
+      "revId": "46f3261c121550095cfdfa592f0a5aaa1532f0a3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "16d9eaad_346d997b",
+        "filename": "librobinhood/src/backends/lustre_mpi/lustre_mpi.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 445,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-03-18T10:30:13Z",
+      "side": 1,
+      "message": "question: why do you have this intermediary function?",
+      "range": {
+        "startLine": 445,
+        "startChar": 11,
+        "endLine": 445,
+        "endChar": 28
+      },
+      "revId": "46f3261c121550095cfdfa592f0a5aaa1532f0a3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d27300cc_deb69663",
+        "filename": "rbh-sync/tests/test_lustre_mongo_sync.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-03-18T10:30:13Z",
+      "side": 1,
+      "message": "nit: you could create a function rbh_sync_lustre:\n\nrbh_sync_lustre \"$first_dir#$second_dir\" \"rbh:mongo:$testdb\"\n\nThis fonction will prepend \"rbh:lustre:\" or \"rbh:lustre-mpi:\" depending on the variable WITH_MPI",
+      "range": {
+        "startLine": 57,
+        "startChar": 8,
+        "endLine": 57,
+        "endChar": 16
+      },
+      "revId": "46f3261c121550095cfdfa592f0a5aaa1532f0a3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
