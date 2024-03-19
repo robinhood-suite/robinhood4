@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "253b06e0_0332ed30",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2024-03-19T14:33:16Z",
+      "side": 1,
+      "message": "Is-there any place in the project source code where you can add documentation to the user concerning this new config parameter ?",
+      "revId": "536253a2da001d721d575c85087db53816ec4905",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
