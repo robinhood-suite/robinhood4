@@ -50,6 +50,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f1a85720_5c4b2146",
+        "filename": "rbh-sync/tests/meson.build",
+        "patchSetId": 4
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-03-19T14:36:47Z",
+      "side": 1,
+      "message": "defect: missing a check that mpirun and the module are known",
+      "range": {
+        "startLine": 30,
+        "startChar": 10,
+        "endLine": 30,
+        "endChar": 36
+      },
+      "revId": "ff2432792d313fe5cc50094f573e4e3ff15b1e55",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9f270302_8cbbeabd",
         "filename": "rbh-sync/tests/test_lustre_mongo_sync.bash",
         "patchSetId": 4
