@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6aa2403d_e000660a",
+        "filename": "robinhood4.iosea.spec.in",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1015302
+      },
+      "writtenOn": "2024-03-19T15:27:43Z",
+      "side": 1,
+      "message": "Mongo n\u0027est plus distribué dans les repositories officiel mais ici : \nhttps://repo.mongodb.org/yum/redhat/\nD\u0027où le mongodb-org.\nIls fournissent toutes les version 7, 8 et 9 des variante de rhel. Est-ce qu\u0027il ne faudrait pas juste mettre mongodb-org en dépendance avec un petit commentaire qui dit où le trouver ?",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 6
+      },
+      "revId": "ed8d6ed9d8ebcd6cb6e3683f5830b4f0f1312461",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
