@@ -18,7 +18,11 @@ project(
 librobinhood = dependency('robinhood', version: '>=0.0.0')
 librbhfind = dependency('rbh-find', version: '>=0.0.0')
 
-liblustre = dependency('lustre')
+cc = meson.get_compiler('c')
+liblustre = dependency('lustre', disabler: true, required: false)
+if not liblustre.found()
+    liblustre = cc.find_library('lustreapi', disabler:true, required: false)
+endif
 
 # Project extentions
 add_project_arguments('-D_GNU_SOURCE', language: 'c')
@@ -27,7 +31,6 @@ add_project_arguments('-D_GNU_SOURCE', language: 'c')
 conf_data = configuration_data()
 
 ## Functions
-cc = meson.get_compiler('c')
 have_fid_parse = cc.has_function('llapi_fid_parse', args: '-D_GNU_SOURCE',
 		                         dependencies: [liblustre],
 			                     prefix: '#include <lustre/lustreapi.h>')
