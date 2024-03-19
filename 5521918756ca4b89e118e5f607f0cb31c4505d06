@@ -193,6 +193,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "00eace27_b27626f9",
+        "filename": "librobinhood/include/robinhood/backends/meson.build",
+        "patchSetId": 4
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-03-19T14:33:45Z",
+      "side": 1,
+      "message": "Having non-core backends (i.e. posix and mongo) as additional RPMs seems legit to me.",
+      "parentUuid": "20002ad7_433cc717",
+      "range": {
+        "startLine": 64,
+        "startChar": 0,
+        "endLine": 82,
+        "endChar": 66
+      },
+      "revId": "5521918756ca4b89e118e5f607f0cb31c4505d06",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b0b738ac_22b7db56",
         "filename": "librobinhood/src/backends/lustre_mpi/lustre_mpi.c",
         "patchSetId": 4
