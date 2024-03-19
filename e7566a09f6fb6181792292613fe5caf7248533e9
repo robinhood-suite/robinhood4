@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "629c41f9_0f65e593",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-03-19T15:07:30Z",
+      "side": 1,
+      "message": "Responding to Yoann\u0027s [1184814](https://review.gerrithub.io/c/robinhood-suite/robinhood4/+/1184814/1) commit, I prefer solving this issue like this. Choose whatever fix you want.",
+      "revId": "e7566a09f6fb6181792292613fe5caf7248533e9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
