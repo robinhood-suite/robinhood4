@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bf956f05_041e67c2",
+        "filename": "rbh-find-lustre/meson.build",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2024-03-19T14:17:16Z",
+      "side": 1,
+      "message": "nit: because you directly update liblustre object after, I think that this option is useless here. You could return a \"not found\" dependency if \u0027lustre\u0027 is not found.",
+      "range": {
+        "startLine": 22,
+        "startChar": 33,
+        "endLine": 22,
+        "endChar": 48
+      },
+      "revId": "f6a62e7cf736c8bbcf456d08d0051da89771ab80",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
