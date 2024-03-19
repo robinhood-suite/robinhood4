@@ -15,6 +15,8 @@ project(
     ],
 )
 
+add_project_arguments('-Wno-pedantic', language : 'c')
+
 # GNU extensions
 cc = meson.get_compiler('c')
 options = cc.get_supported_arguments([
