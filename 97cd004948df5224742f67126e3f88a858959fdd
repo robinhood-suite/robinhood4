@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "68b6bbc1_b63a6ae3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2024-03-19T14:22:38Z",
+      "side": 1,
+      "message": "Are there so many ternary pendantic errors to modify in the code ?",
+      "revId": "97cd004948df5224742f67126e3f88a858959fdd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
