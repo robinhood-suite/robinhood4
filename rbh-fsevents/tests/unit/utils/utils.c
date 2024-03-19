@@ -1,4 +1,5 @@
 #include "utils.h"
+#include "lu_fid.h"
 #include "check-compat.h"
 #include "check_macros.h"
 
@@ -9,8 +10,6 @@
 #include <robinhood/iterator.h>
 #include <robinhood/itertools.h>
 #include <robinhood/sstack.h>
-
-#include <lustre/lustre_user.h>
 
 static struct rbh_sstack *fake_events_container;
 

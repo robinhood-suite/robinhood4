@@ -1,5 +1,5 @@
 #include "hash.h"
-#include <lustre/lustre_user.h>
+#include "lu_fid.h"
 
 static size_t
 dbj2(const char *buf, size_t size)
