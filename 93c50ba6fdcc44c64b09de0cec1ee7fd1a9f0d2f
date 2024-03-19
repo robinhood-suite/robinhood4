@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a12ec542_d53653f7",
+        "filename": "librobinhood/src/backends/lustre-mpi/meson.build",
+        "patchSetId": 10
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-03-19T13:58:03Z",
+      "side": 1,
+      "message": "defect: you must add the disabler to true and required false, otherwise this library and the following dependency are required to build the project",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 31
+      },
+      "revId": "93c50ba6fdcc44c64b09de0cec1ee7fd1a9f0d2f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
