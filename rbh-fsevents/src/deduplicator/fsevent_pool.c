@@ -4,8 +4,6 @@
 
 #include <robinhood.h>
 
-#include <lustre/lustre_user.h>
-
 #include <assert.h>
 #include <errno.h>
 #include <error.h>

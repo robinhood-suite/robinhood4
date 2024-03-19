@@ -9,8 +9,7 @@
 #include <error.h>
 #include <stdio.h>
 #include <stdlib.h>
-
-#include <lustre/lustreapi.h>
+#include <string.h>
 
 #include <robinhood/fsevent.h>
 #include <robinhood/sstack.h>

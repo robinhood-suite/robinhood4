@@ -9,10 +9,21 @@
 #include <robinhood/iterator.h>
 #include <robinhood/itertools.h>
 #include <robinhood/sstack.h>
-
-#include <lustre/lustre_user.h>
+#include <robinhood/id.h>
 
 static struct rbh_sstack *fake_events_container;
+
+/* This file provides lustre-specific data structures for compatibility
+ * purposes.
+ *
+ * It allows RobinHood not to depend on Lustre.
+ */
+
+struct lu_fid {
+    uint64_t f_seq;
+    uint32_t f_oid;
+    uint32_t f_ver;
+};
 
 __attribute__((constructor))
 static void
