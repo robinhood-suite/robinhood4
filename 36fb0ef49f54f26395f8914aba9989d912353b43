@@ -1,6 +1,46 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2989a295_21c4824e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-03-19T14:08:25Z",
+      "side": 1,
+      "message": "+ meson --prefix\u003d/usr builddir\nThe Meson build system\nVersion: 0.55.3\nSource dir: /home/valeriy/robinhood4/librobinhood\nBuild dir: /home/valeriy/robinhood4/librobinhood/builddir\nBuild type: native build\nProject name: librobinhood\nProject version: 0.0.0\nC compiler for the host machine: cc (gcc 8.4.1 \"cc (GCC) 8.4.1 20200928 (Red Hat 8.4.1-1)\")\nC linker for the host machine: cc ld.bfd 2.30-73\nC++ compiler for the host machine: c++ (gcc 8.4.1 \"c++ (GCC) 8.4.1 20200928 (Red Hat 8.4.1-1)\")\nC++ linker for the host machine: c++ ld.bfd 2.30-73\nHost machine cpu family: x86_64\nHost machine cpu: x86_64\nCompiler for C supports arguments -Wno-gnu-alignof-expression -Wgnu-alignof-expression: NO \nChecking if \"fts.h with _FILE_OFFSET_BITS\u003d64\" compiles: YES \nChecking for function \"statx\" : YES \nChecking whether type \"struct statx\" has member \"stx_mnt_id\" : NO \nHeader \u003csys/stat.h\u003e has symbol \"STATX_ATTR_MOUNT_ROOT\" : NO \nHeader \u003csys/stat.h\u003e has symbol \"STATX_ATTR_VERITY\" : NO \nHeader \u003csys/stat.h\u003e has symbol \"STATX_ATTR_DAX\" : NO \nHeader \u003clustre/lustre_user.h\u003e has symbol \"LOV_USER_MAGIC_SEL\" : YES \nHeader \u003clustre/lustre_user.h\u003e has symbol \"LOV_USER_MAGIC_FOREIGN\" : YES \nChecking whether type \"struct lustre_file_handle\" has member \"lfh_child\" : YES \nConfiguring config.h using configuration\nConfiguring posix.h using configuration\nConfiguring mongo.h using configuration\nConfiguring lustre.h using configuration\nConfiguring lustre_mpi.h using configuration\nConfiguring hestia.h using configuration\nLibrary dl found: YES\nFound pkg-config: /usr/bin/pkg-config (1.4.2)\nRun-time dependency libmongoc-1.0 found: YES 1.20.0\nRun-time dependency libbson-1.0 found: YES 1.20.0\nRun-time dependency lustre found: YES 2.15.0_dirty\nDependency lustre found: YES 2.15.0_dirty (cached)\nLibrary mfu found: NO\nFound CMake: /usr/bin/cmake (3.18.2)\nRun-time dependency ompi found: NO (tried pkgconfig and cmake)\nsrc/backends/hestia/meson.build:7: WARNING: Passed invalid keyword argument \"dirs\".\nWARNING: This will become a hard error in the future.\nRun-time dependency hestia found: NO (tried pkgconfig and cmake)\nRun-time dependency check found: YES 0.12.0\nProgram mpirun found: NO\n\ntests/unit/meson.build:14:0: ERROR: Program \u0027mpirun\u0027 not found",
+      "revId": "36fb0ef49f54f26395f8914aba9989d912353b43",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f1a4324d_4dfb0f98",
+        "filename": "librobinhood/tests/unit/meson.build",
+        "patchSetId": 6
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-03-19T14:08:25Z",
+      "side": 1,
+      "message": "defect: missing the \"required: false\" aswell",
+      "range": {
+        "startLine": 14,
+        "startChar": 32,
+        "endLine": 14,
+        "endChar": 47
+      },
+      "revId": "36fb0ef49f54f26395f8914aba9989d912353b43",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "99384429_d887b31b",
