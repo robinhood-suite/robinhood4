@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b69da6a4_fef116d9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-03-19T13:58:33Z",
+      "side": 1,
+      "message": "+ meson --prefix\u003d/usr builddir\nThe Meson build system\nVersion: 0.55.3\nSource dir: /home/valeriy/robinhood4/librobinhood\nBuild dir: /home/valeriy/robinhood4/librobinhood/builddir\nBuild type: native build\nProject name: librobinhood\nProject version: 0.0.0\nC compiler for the host machine: cc (gcc 8.4.1 \"cc (GCC) 8.4.1 20200928 (Red Hat 8.4.1-1)\")\nC linker for the host machine: cc ld.bfd 2.30-73\nC++ compiler for the host machine: c++ (gcc 8.4.1 \"c++ (GCC) 8.4.1 20200928 (Red Hat 8.4.1-1)\")\nC++ linker for the host machine: c++ ld.bfd 2.30-73\nHost machine cpu family: x86_64\nHost machine cpu: x86_64\nCompiler for C supports arguments -Wno-gnu-alignof-expression -Wgnu-alignof-expression: NO \nChecking if \"fts.h with _FILE_OFFSET_BITS\u003d64\" compiles: YES \nChecking for function \"statx\" : YES \nChecking whether type \"struct statx\" has member \"stx_mnt_id\" : NO \nHeader \u003csys/stat.h\u003e has symbol \"STATX_ATTR_MOUNT_ROOT\" : NO \nHeader \u003csys/stat.h\u003e has symbol \"STATX_ATTR_VERITY\" : NO \nHeader \u003csys/stat.h\u003e has symbol \"STATX_ATTR_DAX\" : NO \nHeader \u003clustre/lustre_user.h\u003e has symbol \"LOV_USER_MAGIC_SEL\" : YES \nHeader \u003clustre/lustre_user.h\u003e has symbol \"LOV_USER_MAGIC_FOREIGN\" : YES \nChecking whether type \"struct lustre_file_handle\" has member \"lfh_child\" : YES \nConfiguring config.h using configuration\nConfiguring posix.h using configuration\nConfiguring mongo.h using configuration\nConfiguring lustre.h using configuration\nConfiguring hestia.h using configuration\nLibrary dl found: YES\nFound pkg-config: /usr/bin/pkg-config (1.4.2)\nRun-time dependency libmongoc-1.0 found: YES 1.20.0\nRun-time dependency libbson-1.0 found: YES 1.20.0\nRun-time dependency lustre found: YES 2.15.0_dirty\nDependency lustre found: YES 2.15.0_dirty (cached)\n\nsrc/backends/lustre-mpi/meson.build:14:0: ERROR: C shared or static library \u0027mfu\u0027 not found",
+      "revId": "93c50ba6fdcc44c64b09de0cec1ee7fd1a9f0d2f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a12ec542_d53653f7",
