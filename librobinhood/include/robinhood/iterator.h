@@ -76,7 +76,7 @@ rbh_iter_next(struct rbh_iterator *iterator)
         element = _rbh_iter_next(iterator);
     } while (element == NULL && errno == EAGAIN);
 
-    errno = errno ? : save_errno;
+    errno = errno ? errno : save_errno;
     return element;
 }
 
@@ -151,7 +151,7 @@ rbh_mut_iter_next(struct rbh_mut_iterator *iterator)
         element = _rbh_mut_iter_next(iterator);
     } while (element == NULL && errno == EAGAIN);
 
-    errno = errno ? : save_errno;
+    errno = errno ? errno : save_errno;
     return element;
 }
 

@@ -189,7 +189,7 @@ retry:
         sizeof(struct lu_fid), pairs
     );
 
-    return rc ? : 1;
+    return rc ? rc : 1;
 }
 
 /**
@@ -781,7 +781,7 @@ free_data:
     free(data.ost);
 
 err:
-    save_errno = save_errno ? : errno;
+    save_errno = save_errno ? save_errno : errno;
     llapi_layout_free(layout);
     errno = save_errno;
     return rc ? rc : subcount;

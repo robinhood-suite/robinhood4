@@ -414,7 +414,7 @@ fsentry_from_ftsent(FTSENT *ftsent, int statx_sync_type, size_t prefix_len,
     /* The root entry might already have its ID computed and stored in
      * `fts_pointer'.
      */
-    id = ftsent->fts_pointer ? : id_from_fd(fd);
+    id = ftsent->fts_pointer ? ftsent->fts_pointer : id_from_fd(fd);
     if (id == NULL) {
         save_errno = errno;
         goto out_close;
@@ -557,7 +557,7 @@ skip:
     errno = 0;
     ftsent = fts_read(posix_iter->fts_handle);
     if (ftsent == NULL) {
-        errno = errno ? : ENODATA;
+        errno = errno ? errno : ENODATA;
         return NULL;
     }
     errno = save_errno;

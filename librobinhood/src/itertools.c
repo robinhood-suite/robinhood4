@@ -127,7 +127,7 @@ chunk_iter_next(void *iterator)
     if (next != NULL || errno == 0)
         chunk->count--;
 
-    errno = errno ? : save_errno;
+    errno = errno ? errno : save_errno;
     return next;
 }
 
