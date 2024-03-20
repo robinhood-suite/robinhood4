@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf7941c5_2246854f",
+        "filename": "librobinhood/src/backends/lustre_mpi/lustre_mpi.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-03-20T14:07:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6e7f809d_f0327e9e",
+      "range": {
+        "startLine": 158,
+        "startChar": 48,
+        "endLine": 158,
+        "endChar": 50
+      },
+      "revId": "46f3261c121550095cfdfa592f0a5aaa1532f0a3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5849c650_806419e3",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-03-18T10:30:13Z",
       "side": 1,
       "message": "minor: I don\u0027t think the cast is necessary",
+      "range": {
+        "startLine": 397,
+        "startChar": 15,
+        "endLine": 397,
+        "endChar": 38
+      },
+      "revId": "46f3261c121550095cfdfa592f0a5aaa1532f0a3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c07c6be_53b097b3",
+        "filename": "librobinhood/src/backends/lustre_mpi/lustre_mpi.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 397,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-03-20T14:07:15Z",
+      "side": 1,
+      "message": "It\u0027s necessary because `iter_new` return a `rbh_mut_iterator` and it\u0027s no compatible with `mpi_iterator`.",
+      "parentUuid": "5849c650_806419e3",
       "range": {
         "startLine": 397,
         "startChar": 15,
@@ -70,6 +118,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "649cd14e_6f8fc460",
+        "filename": "librobinhood/src/backends/lustre_mpi/lustre_mpi.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 429,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-03-20T14:07:15Z",
+      "side": 1,
+      "message": "I need it because `posix_backend_branch` return a `rbh_backend` structure and branch is a `posix_branch_backend` structure.",
+      "parentUuid": "3e37e4fa_9647ee6d",
+      "range": {
+        "startLine": 429,
+        "startChar": 13,
+        "endLine": 429,
+        "endChar": 44
+      },
+      "revId": "46f3261c121550095cfdfa592f0a5aaa1532f0a3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "16d9eaad_346d997b",
@@ -93,6 +165,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "031c0ec8_2a07aba0",
+        "filename": "librobinhood/src/backends/lustre_mpi/lustre_mpi.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 445,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-03-20T14:07:15Z",
+      "side": 1,
+      "message": "It\u0027s a mistake, I forgot to remove it after a rebase.",
+      "parentUuid": "16d9eaad_346d997b",
+      "range": {
+        "startLine": 445,
+        "startChar": 11,
+        "endLine": 445,
+        "endChar": 28
+      },
+      "revId": "46f3261c121550095cfdfa592f0a5aaa1532f0a3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d27300cc_deb69663",
@@ -106,6 +202,30 @@
       "writtenOn": "2024-03-18T10:30:13Z",
       "side": 1,
       "message": "nit: you could create a function rbh_sync_lustre:\n\nrbh_sync_lustre \"$first_dir#$second_dir\" \"rbh:mongo:$testdb\"\n\nThis fonction will prepend \"rbh:lustre:\" or \"rbh:lustre-mpi:\" depending on the variable WITH_MPI",
+      "range": {
+        "startLine": 57,
+        "startChar": 8,
+        "endLine": 57,
+        "endChar": 16
+      },
+      "revId": "46f3261c121550095cfdfa592f0a5aaa1532f0a3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a9aeed01_59f7ca47",
+        "filename": "rbh-sync/tests/test_lustre_mongo_sync.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-03-20T14:07:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d27300cc_deb69663",
       "range": {
         "startLine": 57,
         "startChar": 8,
