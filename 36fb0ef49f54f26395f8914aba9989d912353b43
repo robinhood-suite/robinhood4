@@ -41,6 +41,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "80575aec_7a8b3d2f",
+        "filename": "librobinhood/tests/unit/meson.build",
+        "patchSetId": 6
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-03-20T14:06:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f1a4324d_4dfb0f98",
+      "range": {
+        "startLine": 14,
+        "startChar": 32,
+        "endLine": 14,
+        "endChar": 47
+      },
+      "revId": "36fb0ef49f54f26395f8914aba9989d912353b43",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "99384429_d887b31b",
@@ -54,6 +78,30 @@
       "writtenOn": "2024-03-18T08:34:37Z",
       "side": 1,
       "message": "question: why did you split the test in two files ?",
+      "range": {
+        "startLine": 61,
+        "startChar": 1,
+        "endLine": 61,
+        "endChar": 65
+      },
+      "revId": "36fb0ef49f54f26395f8914aba9989d912353b43",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "544546c7_df912b7d",
+        "filename": "librobinhood/tests/unit/meson.build",
+        "patchSetId": 6
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-03-20T14:06:25Z",
+      "side": 1,
+      "message": "By adding the initialization and finalization of MPI in the backend, this means that during the tests we will create a lustre-mpi backend twice, in the test for missing_root and empty_root. However, you cannot initialize or finalize MPI twice during a program.",
+      "parentUuid": "99384429_d887b31b",
       "range": {
         "startLine": 61,
         "startChar": 1,
