@@ -16,6 +16,24 @@
       "message": "Is-there any place in the project source code where you can add documentation to the user concerning this new config parameter ?",
       "revId": "536253a2da001d721d575c85087db53816ec4905",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2ad9c807_6557c4ce",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-03-20T14:06:37Z",
+      "side": 1,
+      "message": "I added the documentation in the README of rbh-sync.",
+      "parentUuid": "253b06e0_0332ed30",
+      "revId": "536253a2da001d721d575c85087db53816ec4905",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
