@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c43e59eb_85adc0fa",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-03-22T12:34:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "19f9b96e_2ace5c1a",
+      "range": {
+        "startLine": 9,
+        "startChar": 11,
+        "endLine": 9,
+        "endChar": 14
+      },
+      "revId": "db4edfa4e5070a8fc2912926999e30e7266125eb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "77513c6f_53e988c5",
@@ -70,6 +94,54 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f56c26e4_f1303431",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-03-22T12:34:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "77513c6f_53e988c5",
+      "range": {
+        "startLine": 10,
+        "startChar": 24,
+        "endLine": 10,
+        "endChar": 26
+      },
+      "revId": "db4edfa4e5070a8fc2912926999e30e7266125eb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1eb7f9f2_e080e03a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-03-22T12:34:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6c46de06_4281a186",
+      "range": {
+        "startLine": 10,
+        "startChar": 41,
+        "endLine": 10,
+        "endChar": 45
+      },
+      "revId": "db4edfa4e5070a8fc2912926999e30e7266125eb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f376f312_e1794ba2",
@@ -83,6 +155,30 @@
       "writtenOn": "2024-03-18T09:24:01Z",
       "side": 1,
       "message": "typo: remove the \"of\" here",
+      "range": {
+        "startLine": 12,
+        "startChar": 9,
+        "endLine": 12,
+        "endChar": 11
+      },
+      "revId": "db4edfa4e5070a8fc2912926999e30e7266125eb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae1a2c58_b73fb6c8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-03-22T12:34:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f376f312_e1794ba2",
       "range": {
         "startLine": 12,
         "startChar": 9,
@@ -116,6 +212,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c78ea67_ffa95073",
+        "filename": "librobinhood/include/robinhood/backends/lustre.h.in",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-03-22T12:34:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "309932ee_205a093e",
+      "range": {
+        "startLine": 42,
+        "startChar": 11,
+        "endLine": 42,
+        "endChar": 21
+      },
+      "revId": "db4edfa4e5070a8fc2912926999e30e7266125eb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d8643997_529eeec0",
@@ -133,6 +253,24 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2a357909_110011ad",
+        "filename": "librobinhood/include/robinhood/backends/lustre.h.in",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-03-22T12:34:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d8643997_529eeec0",
+      "revId": "db4edfa4e5070a8fc2912926999e30e7266125eb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c46ce6a7_192829d0",
@@ -146,6 +284,30 @@
       "writtenOn": "2024-03-18T10:55:55Z",
       "side": 1,
       "message": "this is a function that release the memory associated to a plugin not a backend. This should call the destroy function of rbh_backend_plugin_operations.",
+      "range": {
+        "startLine": 53,
+        "startChar": 34,
+        "endLine": 53,
+        "endChar": 54
+      },
+      "revId": "db4edfa4e5070a8fc2912926999e30e7266125eb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d84b86c7_ae6402b1",
+        "filename": "librobinhood/include/robinhood/plugins/backend.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-03-22T12:34:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c46ce6a7_192829d0",
       "range": {
         "startLine": 53,
         "startChar": 34,
@@ -179,6 +341,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "62cf5ceb_b592b5ed",
+        "filename": "librobinhood/src/backends/hestia/hestia.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 442,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-03-22T12:34:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7d3202dc_085c4455",
+      "range": {
+        "startLine": 442,
+        "startChar": 4,
+        "endLine": 442,
+        "endChar": 36
+      },
+      "revId": "db4edfa4e5070a8fc2912926999e30e7266125eb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "305ce869_85287fce",
@@ -202,6 +388,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4a075b67_d354eec0",
+        "filename": "librobinhood/src/backends/lustre_mpi/lustre_mpi.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 346,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-03-22T12:34:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "305ce869_85287fce",
+      "range": {
+        "startLine": 346,
+        "startChar": 4,
+        "endLine": 346,
+        "endChar": 25
+      },
+      "revId": "db4edfa4e5070a8fc2912926999e30e7266125eb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7000e2c1_417f2ff7",
@@ -215,6 +425,30 @@
       "writtenOn": "2024-03-18T10:55:55Z",
       "side": 1,
       "message": "defect: this function should release ressources associated with the plugin not the backend. In an ideal world, this should take the plugin as an import. But this would be really annoying to update all the places where backend_new is called to get a reference to the plugin and keep it to be released later. So a useful middle ground is to simply pass no argument.",
+      "range": {
+        "startLine": 70,
+        "startChar": 27,
+        "endLine": 70,
+        "endChar": 54
+      },
+      "revId": "db4edfa4e5070a8fc2912926999e30e7266125eb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7c4a1acc_85290575",
+        "filename": "librobinhood/src/plugins/backend.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-03-22T12:34:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7000e2c1_417f2ff7",
       "range": {
         "startLine": 70,
         "startChar": 27,
