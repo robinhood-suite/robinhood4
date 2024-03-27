@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dd05c786_8abaa80d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-03-27T10:02:51Z",
+      "side": 1,
+      "message": "+ sudo ninja -C builddir test\nninja: Entering directory `builddir\u0027\n[0/1] Running all tests.\n 1/21 check_backend    OK             0.01s\n 2/21 check_filter     OK             0.01s\n 3/21 check_fsentry    OK             0.01s\n 4/21 check_fsevent    OK             0.01s\n 5/21 check_hashmap    OK             0.02s\n 6/21 check_id         OK             0.02s\n 7/21 check_itertools  OK             0.02s\n 8/21 check_list       OK             0.02s\n 9/21 check_lu_fid     OK             0.03s\n10/21 check_plugin     OK             0.01s\n11/21 check_queue      OK             0.01s\n12/21 check_ring       OK             0.02s\n13/21 check_ringr      OK             0.02s\n14/21 check_sstack     OK             0.02s\n15/21 check_stack      OK             0.01s\n16/21 check_statx      OK             0.01s\n17/21 check_uri        OK             0.02s\n18/21 check_value      OK             0.01s\n19/21 check_posix      OK             0.01s\n20/21 check_lustre     OK             0.03s\n21/21 check_lustre_mpi FAIL           0.01s (exit status 127)\n\nOk:                 20  \nExpected Fail:      0   \nFail:               1   \nUnexpected Pass:    0   \nSkipped:            0   \nTimeout:            0   \n\n\nThe output from the failed tests:\n\n21/21 check_lustre_mpi FAIL           0.01s (exit status 127)\n\n--- command ---\n09:56:28 CK_FORK\u003d\u0027no\u0027 LD_LIBRARY_PATH\u003d\u0027/home/valeriy/robinhood4/librobinhood/builddir/src/backends/lustre_mpi\u0027 /usr/bin/bash ../tests/unit/check_lustre_mpi.sh\n--- stderr ---\n../tests/unit/check_lustre_mpi.sh: line 3: module: command not found\n../tests/unit/check_lustre_mpi.sh: line 5: mpirun: command not found\n../tests/unit/check_lustre_mpi.sh: line 7: mpirun: command not found\n-------\n\nFull log written to /home/valeriy/robinhood4/librobinhood/builddir/meson-logs/testlog.txt\nFAILED: meson-test \n/usr/bin/meson test --no-rebuild --print-errorlogs\nninja: build stopped: subcommand failed.",
+      "revId": "25ef5ab00c0ad62893fc5cdc9f62962ac342233b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a95bef83_0843ac9b",
