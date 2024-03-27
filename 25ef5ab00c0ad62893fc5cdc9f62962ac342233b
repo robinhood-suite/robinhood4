@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a95bef83_0843ac9b",
+        "filename": "librobinhood/tests/unit/check_mpirun.sh",
+        "patchSetId": 8
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-03-27T09:23:58Z",
+      "side": 1,
+      "message": "minor: a",
+      "range": {
+        "startLine": 11,
+        "startChar": 4,
+        "endLine": 11,
+        "endChar": 12
+      },
+      "revId": "25ef5ab00c0ad62893fc5cdc9f62962ac342233b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "be3ba8bf_fc11549f",
+        "filename": "librobinhood/tests/unit/meson.build",
+        "patchSetId": 8
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-03-27T09:23:58Z",
+      "side": 1,
+      "message": "nit: according to https://mesonbuild.com/Reference-manual_functions.html#run_command, \"check\" is false by default, but it will be true in the future. So when you do another patch, adding a \"check: false\" here could be nice",
+      "range": {
+        "startLine": 58,
+        "startChar": 32,
+        "endLine": 58,
+        "endChar": 33
+      },
+      "revId": "25ef5ab00c0ad62893fc5cdc9f62962ac342233b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
