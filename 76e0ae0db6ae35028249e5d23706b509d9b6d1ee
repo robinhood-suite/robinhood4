@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7d179d5f_2bc88373",
+        "filename": "rbh-sync/tests/check_mpirun.sh",
+        "patchSetId": 6
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-03-27T08:01:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c26c7b0b_13ee475c",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 19
+      },
+      "revId": "76e0ae0db6ae35028249e5d23706b509d9b6d1ee",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e48d2bdd_44d4d82b",
@@ -47,6 +71,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e3dee6a7_53effe40",
+        "filename": "rbh-sync/tests/check_mpirun.sh",
+        "patchSetId": 6
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-03-27T08:01:28Z",
+      "side": 1,
+      "message": "No, i want to exit with 1 when `which mpirun` failed. I also change the line 9 because \"which\" didn\u0027t seem to behave properly with module which is an alias.",
+      "parentUuid": "e48d2bdd_44d4d82b",
+      "range": {
+        "startLine": 17,
+        "startChar": 3,
+        "endLine": 17,
+        "endChar": 4
+      },
+      "revId": "76e0ae0db6ae35028249e5d23706b509d9b6d1ee",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "141cb8ea_363a3f82",
@@ -60,6 +108,30 @@
       "writtenOn": "2024-03-25T09:05:06Z",
       "side": 1,
       "message": "style: add space",
+      "range": {
+        "startLine": 38,
+        "startChar": 12,
+        "endLine": 38,
+        "endChar": 13
+      },
+      "revId": "76e0ae0db6ae35028249e5d23706b509d9b6d1ee",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d4f59a32_bac59ed4",
+        "filename": "rbh-sync/tests/meson.build",
+        "patchSetId": 6
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-03-27T08:01:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "141cb8ea_363a3f82",
       "range": {
         "startLine": 38,
         "startChar": 12,
