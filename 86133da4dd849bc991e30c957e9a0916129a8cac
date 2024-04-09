@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4831ac6d_d9344003",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-04-09T08:53:27Z",
+      "side": 1,
+      "message": "minor: this can probably also be the hostname where the DB is available. So: mongodb://HOST:port",
+      "range": {
+        "startLine": 15,
+        "startChar": 42,
+        "endLine": 15,
+        "endChar": 44
+      },
+      "revId": "86133da4dd849bc991e30c957e9a0916129a8cac",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "745f0455_2d899374",
+        "filename": "rbh-sync/README.rst",
+        "patchSetId": 8
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-04-09T08:53:27Z",
+      "side": 1,
+      "message": "major: this is true for all the tools that use librobinhood not just rbh-sync. So you should move this to the documentation of the mongo backend in librobinhood.",
+      "range": {
+        "startLine": 179,
+        "startChar": 1,
+        "endLine": 190,
+        "endChar": 53
+      },
+      "revId": "86133da4dd849bc991e30c957e9a0916129a8cac",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
