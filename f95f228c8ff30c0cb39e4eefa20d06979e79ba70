@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c20ad6a1_9a1320a5",
+        "filename": "librobinhood/tests/unit/check_lustre_mpi.sh",
+        "patchSetId": 9
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-04-09T07:31:32Z",
+      "side": 1,
+      "message": "question: when the proper handling of MPI_Finalize is done in the stack, do you merge both tests? There is no need to duplicated the test files.",
+      "range": {
+        "startLine": 5,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 60
+      },
+      "revId": "f95f228c8ff30c0cb39e4eefa20d06979e79ba70",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
