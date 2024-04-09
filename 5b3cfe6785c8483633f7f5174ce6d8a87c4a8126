@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "05307e74_93c75f3a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-04-09T08:39:37Z",
+      "side": 1,
+      "message": "typo: follows",
+      "range": {
+        "startLine": 10,
+        "startChar": 7,
+        "endLine": 10,
+        "endChar": 13
+      },
+      "revId": "5b3cfe6785c8483633f7f5174ce6d8a87c4a8126",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bd6e4327_ef645f9e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-04-09T08:39:37Z",
+      "side": 1,
+      "message": "typo: used",
+      "range": {
+        "startLine": 14,
+        "startChar": 41,
+        "endLine": 14,
+        "endChar": 44
+      },
+      "revId": "5b3cfe6785c8483633f7f5174ce6d8a87c4a8126",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "331fd879_ddfb1bde",
+        "filename": "librobinhood/src/utils/uri.c",
+        "patchSetId": 8
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-04-09T08:39:37Z",
+      "side": 1,
+      "message": "typo: do",
+      "range": {
+        "startLine": 125,
+        "startChar": 51,
+        "endLine": 125,
+        "endChar": 55
+      },
+      "revId": "5b3cfe6785c8483633f7f5174ce6d8a87c4a8126",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1e6f5b61_19801292",
+        "filename": "rbh-sync/tests/test_lustre_mongo_sync.bash",
+        "patchSetId": 8
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-04-09T08:39:37Z",
+      "side": 1,
+      "message": "suggest: it would be nice to add a test to ensure that no entry has the name $second_dir or $first_dir. The test for $first_dir could be added above.",
+      "range": {
+        "startLine": 87,
+        "startChar": 4,
+        "endLine": 87,
+        "endChar": 45
+      },
+      "revId": "5b3cfe6785c8483633f7f5174ce6d8a87c4a8126",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
