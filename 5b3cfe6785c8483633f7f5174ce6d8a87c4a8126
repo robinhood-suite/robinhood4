@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e9d908f8_bdeb3d9e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-04-10T09:16:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "05307e74_93c75f3a",
+      "range": {
+        "startLine": 10,
+        "startChar": 7,
+        "endLine": 10,
+        "endChar": 13
+      },
+      "revId": "5b3cfe6785c8483633f7f5174ce6d8a87c4a8126",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bd6e4327_ef645f9e",
@@ -47,6 +71,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8aa1d15d_bf7eca2c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-04-10T09:16:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bd6e4327_ef645f9e",
+      "range": {
+        "startLine": 14,
+        "startChar": 41,
+        "endLine": 14,
+        "endChar": 44
+      },
+      "revId": "5b3cfe6785c8483633f7f5174ce6d8a87c4a8126",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "331fd879_ddfb1bde",
@@ -60,6 +108,30 @@
       "writtenOn": "2024-04-09T08:39:37Z",
       "side": 1,
       "message": "typo: do",
+      "range": {
+        "startLine": 125,
+        "startChar": 51,
+        "endLine": 125,
+        "endChar": 55
+      },
+      "revId": "5b3cfe6785c8483633f7f5174ce6d8a87c4a8126",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eccf1d99_1f00ecd4",
+        "filename": "librobinhood/src/utils/uri.c",
+        "patchSetId": 8
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-04-10T09:16:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "331fd879_ddfb1bde",
       "range": {
         "startLine": 125,
         "startChar": 51,
@@ -107,6 +179,30 @@
       "side": 1,
       "message": "That or a check there only 2 documents in the database",
       "parentUuid": "1e6f5b61_19801292",
+      "range": {
+        "startLine": 87,
+        "startChar": 4,
+        "endLine": 87,
+        "endChar": 45
+      },
+      "revId": "5b3cfe6785c8483633f7f5174ce6d8a87c4a8126",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f0e4f22a_9bd6f908",
+        "filename": "rbh-sync/tests/test_lustre_mongo_sync.bash",
+        "patchSetId": 8
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-04-10T09:16:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f0c5c9b7_4803c24a",
       "range": {
         "startLine": 87,
         "startChar": 4,
