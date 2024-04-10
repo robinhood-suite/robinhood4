@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b6400e68_5b5433d3",
+        "filename": "rbh-sync/tests/test_lustre_mongo_sync.bash",
+        "patchSetId": 9
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-04-10T09:16:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "985af4d8_af2a74e4",
+      "range": {
+        "startLine": 26,
+        "startChar": 34,
+        "endLine": 26,
+        "endChar": 38
+      },
+      "revId": "c4d477030d0526b495f1246887a345bbf4472ba7",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "87e69f95_915aa9f6",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-04-09T08:20:58Z",
       "side": 1,
       "message": "question: why did you switch from which to type? If you need to use type, you could use type -t module which will simply print the type of `module`: `function`. `-a` seems to output the function body which is unnecessary here.",
+      "range": {
+        "startLine": 9,
+        "startChar": 5,
+        "endLine": 9,
+        "endChar": 13
+      },
+      "revId": "c4d477030d0526b495f1246887a345bbf4472ba7",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c8e523b_20ab9a3c",
+        "filename": "utils/check_mpirun.sh",
+        "patchSetId": 9
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-04-10T09:16:47Z",
+      "side": 1,
+      "message": "I don\u0027t know why but in the VM, `bash -c \"which module\"` doesn\u0027t work, module is not found whereas with `bash -c \"type -t module\"` it is found.",
+      "parentUuid": "87e69f95_915aa9f6",
       "range": {
         "startLine": 9,
         "startChar": 5,
