@@ -4,8 +4,6 @@
 
 #include <robinhood.h>
 
-#include <lustre/lustre_user.h>
-
 #include <assert.h>
 #include <errno.h>
 #include <error.h>
@@ -223,8 +221,15 @@ fsevent_node_free(struct rbh_fsevent_pool *pool, struct rbh_fsevent_node *node)
 static struct rbh_id_node *
 id_node_alloc(struct rbh_fsevent_pool *pool)
 {
-    if (!rbh_list_empty(&pool->free_ids))
-        return rbh_list_first(&pool->free_ids, struct rbh_id_node, link);
+    if (!rbh_list_empty(&pool->free_ids)) {
+        struct rbh_id_node *id_node;
+
+        id_node = rbh_list_first(&pool->free_ids, struct rbh_id_node, link);
+        if (id_node)
+            rbh_list_del(&id_node->link);
+
+        return id_node;
+    }
 
     return rbh_sstack_push(pool->list_container, NULL,
                            sizeof(struct rbh_id_node));

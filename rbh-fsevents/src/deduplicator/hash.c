@@ -1,5 +1,8 @@
-#include "hash.h"
+#ifdef HAVE_LUSTRE
 #include <lustre/lustre_user.h>
+#endif
+
+#include "hash.h"
 
 static size_t
 dbj2(const char *buf, size_t size)
@@ -35,7 +38,12 @@ hash64(size_t k)
 size_t
 hash_lu_id(const struct rbh_id *id)
 {
+#ifdef HAVE_LUSTRE
     const struct lu_fid *fid = rbh_lu_fid_from_id(id);
 
     return hash64(fid->f_seq ^ fid->f_oid);
+#else
+    return hash_id(id);
+#endif
+
 }

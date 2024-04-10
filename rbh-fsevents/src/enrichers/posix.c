@@ -535,9 +535,6 @@ err:
     return rc;
 }
 
-/* The Linux VFS doesn't allow for symlinks of more than 64KiB */
-#define SYMLINK_MAX_SIZE (1 << 16)
-
 static int
 enrich_symlink(char symlink[SYMLINK_MAX_SIZE], const struct rbh_id *id,
                int mount_fd)

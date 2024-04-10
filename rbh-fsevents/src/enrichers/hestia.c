@@ -11,7 +11,6 @@
 
 #include <jansson.h>
 
-#include "robinhood/backends/hestia.h"
 #include "robinhood/sstack.h"
 #include "robinhood/statx.h"
 
