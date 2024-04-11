@@ -328,17 +328,6 @@ lustre_mpi_backend_set_option(void *backend, unsigned int option,
 }
 
     /* -------------------------------------------------------------------*
-    |                          root()                                     |
-    *---------------------------------------------------------------------*/
-
-static struct rbh_fsentry *
-lustre_mpi_backend_root(void *backend,
-                        const struct rbh_filter_projection *projection)
-{
-    return posix_root(backend, projection);
-}
-
-    /* -------------------------------------------------------------------*
      |                          destroy()                                 |
      *--------------------------------------------------------------------*/
 
@@ -353,6 +342,31 @@ rbh_lustre_mpi_plugin_destroy()
 {
     mfu_finalize();
     MPI_Finalize();
+}
+
+    /* -------------------------------------------------------------------*
+    |                          root()                                     |
+    *---------------------------------------------------------------------*/
+
+static struct rbh_fsentry *
+lustre_mpi_backend_root(void *backend,
+                        const struct rbh_filter_projection *projection)
+{
+    static const struct rbh_backend_operations LUSTRE_MPI_ROOT_BACKEND_OPS = {
+        .get_option = lustre_mpi_backend_get_option,
+        .set_option = lustre_mpi_backend_set_option,
+        .branch = lustre_mpi_backend_branch,
+        .root = lustre_mpi_backend_root,
+        .filter = posix_backend_filter,
+        .get_attribute = lustre_mpi_backend_get_attribute,
+        .destroy = lustre_mpi_backend_destroy,
+    };
+    struct posix_backend *lustre_mpi_root = backend;
+
+    lustre_mpi_root->iter_new = posix_iterator_new;
+    lustre_mpi_root->backend.ops = &LUSTRE_MPI_ROOT_BACKEND_OPS;
+
+    return posix_root(backend, projection);
 }
 
     /*--------------------------------------------------------------------*
