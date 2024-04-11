@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3951686b_104c3478",
+        "filename": "librobinhood/include/robinhood/backend.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-04-11T08:56:34Z",
+      "side": 1,
+      "message": "suggest: `int available_pairs`",
+      "revId": "d7eb7323127d01e99399b4d90b7769900bb7626c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "77eb757a_d31ccd27",
+        "filename": "librobinhood/include/robinhood/backend.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 507,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-04-11T08:56:34Z",
+      "side": 1,
+      "message": "typo: pairs",
+      "revId": "d7eb7323127d01e99399b4d90b7769900bb7626c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f6b57eae_40d7329a",
+        "filename": "librobinhood/include/robinhood/backend.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 508,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-04-11T08:56:34Z",
+      "side": 1,
+      "message": "suggest: add what `available_pairs` corresponds to in the comments",
+      "revId": "d7eb7323127d01e99399b4d90b7769900bb7626c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8f7bd757_54db1ec0",
+        "filename": "librobinhood/include/robinhood/backends/posix_internal.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-04-11T08:56:34Z",
+      "side": 1,
+      "message": "minor: put back the comments to explain those fields",
+      "revId": "d7eb7323127d01e99399b4d90b7769900bb7626c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
