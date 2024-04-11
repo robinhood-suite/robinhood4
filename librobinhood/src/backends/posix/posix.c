@@ -325,11 +325,9 @@ free_ns_data(void)
 
 static struct rbh_fsentry *
 fsentry_from_ftsent(FTSENT *ftsent, int statx_sync_type, size_t prefix_len,
-                    int (*inode_xattrs_callback)(const int,
-                                                 const struct rbh_statx *,
+                    int (*inode_xattrs_callback)(struct entry_info *,
                                                  struct rbh_value_pair *,
-                                                 ssize_t *,
-                                                 struct rbh_value_pair *,
+                                                 int,
                                                  struct rbh_sstack *))
 {
     const int statx_flags =
@@ -480,9 +478,17 @@ fsentry_from_ftsent(FTSENT *ftsent, int statx_sync_type, size_t prefix_len,
     ns_xattrs.pairs = ns_pairs;
 
     if (inode_xattrs_callback != NULL) {
-        int callback_xattrs_count = inode_xattrs_callback(fd, &statxbuf, pairs,
-                                                          &count, &pairs[count],
-                                                          values);
+        struct entry_info info = {
+            .fd = fd,
+            .statx = &statxbuf,
+            .inode_xattrs = pairs,
+            .inode_xattrs_count = &count,
+        };
+        int callback_xattrs_count;
+
+        callback_xattrs_count = inode_xattrs_callback(&info, &pairs[count],
+                                                      pairs_count - count,
+                                                      values);
         if (callback_xattrs_count == -1) {
             if (errno != ENOMEM) {
                 fprintf(stderr,

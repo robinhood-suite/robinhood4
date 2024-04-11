@@ -27,26 +27,34 @@
  |                               posix_iterator                               |
  *----------------------------------------------------------------------------*/
 
+/**
+ * This structure corresponds to the information available about an entry for
+ * other backends.
+ */
+struct entry_info {
+    int fd;                              /* The file descriptor of the entry */
+    struct rbh_statx *statx;             /* The statx of the entry */
+    struct rbh_value_pair *inode_xattrs; /* The inode xattrs of the entry */
+    ssize_t *inode_xattrs_count;         /* The number of inode xattrs */
+};
+
 struct posix_iterator {
     struct rbh_mut_iterator iterator;
 
     /**
      * Callback for managing and filling inode xattrs
      *
-     * @param fd                   file descriptor of the entry
-     * @param statx                statx metadata of the entry
-     * @param inode_xattrs         inode xattrs already retrieved
-     * @param inode_xattrs_count   number of xattrs already retrieved
+     * @param info                 Information about an entry
      * @param pairs                list of rbh_value_pairs to fill
+     * @param available_pairs      the number of pairs that can be filled
      * @param values               stack that will contain every rbh_value of
      *                             \p pairs
      *
      * @return                     number of filled \p pairs
      */
-    int (*inode_xattrs_callback)(const int fd, const struct rbh_statx *statx,
-                                 struct rbh_value_pair *inode_xattrs,
-                                 ssize_t *inode_xattrs_count,
+    int (*inode_xattrs_callback)(struct entry_info *info,
                                  struct rbh_value_pair *pairs,
+                                 int available_pairs,
                                  struct rbh_sstack *values);
 
     int statx_sync_type;
