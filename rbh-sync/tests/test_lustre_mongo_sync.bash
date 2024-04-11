@@ -8,6 +8,7 @@
 
 test_dir=$(dirname $(readlink -e $0))
 . $test_dir/test_utils.bash
+. $test_dir/lustre_utils.bash
 
 archive_file()
 {
@@ -26,6 +27,15 @@ rbh_sync_lustre()
         rbh_sync "rbh:lustre-mpi:$1" "$2"
     else
         rbh_sync "rbh:lustre:$1" "$2"
+    fi
+}
+
+rbh_sync_lustre_one()
+{
+    if [[ "$WITH_MPI" == "true" ]]; then
+        rbh_sync -o "rbh:lustre-mpi:$1" "$2"
+    else
+        rbh_sync -o "rbh:lustre:$1" "$2"
     fi
 }
 
@@ -95,6 +105,21 @@ test_branch_sync()
     find_attribute '"ns.xattrs.path":"'/$second_dir/$third_dir'"'
     find_attribute '"ns.name":"'$entry'"'
     find_attribute '"ns.xattrs.path":"'/$second_dir/$third_dir/$entry'"'
+}
+
+test_sync_one_file(){
+    truncate -s 1k "fileA"
+
+    rbh_sync_lustre_one "fileA" "rbh:mongo:$testdb"
+
+    local count=$(mongo $testdb --eval "db.entries.count()")
+    if [[ $count -ne 1 ]]; then
+        error "Invalid number of files were synced, expected '1' entries, " \
+              "found '$count'."
+   fi
+
+   verify_statx -o "fileA"
+   verify_lustre -o "fileA"
 }
 
 get_hsm_state_value()
@@ -551,7 +576,7 @@ test_mdt_count()
 #                                     MAIN                                     #
 ################################################################################
 
-declare -a tests=(test_simple_sync test_branch_sync)
+declare -a tests=(test_simple_sync test_branch_sync test_sync_one_file)
 
 if lctl get_param mdt.*.hsm_control | grep "enabled"; then
     tests+=(test_hsm_state_none test_hsm_state_archived_states
