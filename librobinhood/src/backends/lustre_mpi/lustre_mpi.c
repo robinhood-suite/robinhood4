@@ -72,12 +72,7 @@ get_parent_id(const char *path)
 static struct rbh_fsentry *
 fsentry_from_mpi_fi(struct mpi_file_info *mpi_fi, int statx_sync_type,
                     size_t prefix_len,
-                    int (*inode_xattrs_callback)(const int,
-                                                 const struct rbh_statx *,
-                                                 struct rbh_value_pair *,
-                                                 ssize_t *,
-                                                 struct rbh_value_pair *,
-                                                 struct rbh_sstack *))
+                    inode_xattrs_callback_t inode_xattrs_callback)
 {
     const struct rbh_value path = {
         .type = RBH_VT_STRING,
@@ -299,9 +294,10 @@ out_destroy_iter:
 
 static int
 lustre_mpi_backend_get_attribute(void *backend, const char *attr_name,
-                                 void *arg, struct rbh_value_pair *data)
+                                 void *arg, struct rbh_value_pair *pairs,
+                                 int available_pairs)
 {
-    return lustre_get_attribute(attr_name, arg, data);
+    return lustre_get_attribute(attr_name, arg, pairs, available_pairs);
 }
 
 

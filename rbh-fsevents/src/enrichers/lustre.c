@@ -87,13 +87,13 @@ enrich_path(const char *mount_path, const struct rbh_id *id, const char *name,
 static int
 enrich_lustre(struct rbh_backend *backend, int mount_fd,
               const struct rbh_id *id, struct rbh_sstack *xattrs_values,
-              struct rbh_value_pair *pair)
+              struct rbh_value_pair *pairs, int available_pairs)
 {
     static const int STATX_FLAGS = AT_STATX_FORCE_SYNC | AT_EMPTY_PATH
                                  | AT_NO_AUTOMOUNT | AT_SYMLINK_NOFOLLOW;
     struct {
         int fd;
-        uint16_t mode;
+        struct rbh_statx *statx;
         struct rbh_sstack *values;
     } arg;
     struct rbh_statx statxbuf;
@@ -118,10 +118,11 @@ enrich_lustre(struct rbh_backend *backend, int mount_fd,
         return -1;
     }
 
-    arg.mode = statxbuf.stx_mode;
+    arg.statx = &statxbuf;
     arg.values = xattrs_values;
 
-    size = rbh_backend_get_attribute(backend, "lustre", &arg, pair);
+    size = rbh_backend_get_attribute(backend, "lustre", &arg,
+                                     pairs, available_pairs);
 
     save_errno = errno;
     close(arg.fd);
@@ -160,9 +161,10 @@ lustre_enrich(struct enricher *enricher, const struct rbh_value_pair *attr,
     }
 
     if (strcmp(attr->key, "lustre") == 0) {
-        size = enrich_lustre(enricher->backend, enricher->mount_fd,
-                             &original->id, xattrs_values,
-                             &pairs[enricher->fsevent.xattrs.count]);
+        size = enrich_lustre(
+            enricher->backend, enricher->mount_fd, &original->id,
+            xattrs_values, &pairs[enricher->fsevent.xattrs.count],
+            enricher->pair_count - enricher->fsevent.xattrs.count);
         if (size == -1)
             return -1;
 
