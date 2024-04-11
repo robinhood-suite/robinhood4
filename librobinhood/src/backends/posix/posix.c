@@ -328,12 +328,7 @@ bool
 fsentry_from_any(struct fsentry_id_pair *fip, const struct rbh_value *path,
                  char *accpath, struct rbh_id *entry_id,
                  struct rbh_id *parent_id, char *name, int statx_sync_type,
-                 int (*inode_xattrs_callback)(const int,
-                                           const struct rbh_statx *,
-                                           struct rbh_value_pair *,
-                                           ssize_t *,
-                                           struct rbh_value_pair *,
-                                           struct rbh_sstack *))
+                 inode_xattrs_callback_t inode_xattrs_callback)
 {
     const int statx_flags =
         AT_EMPTY_PATH | AT_SYMLINK_NOFOLLOW | AT_NO_AUTOMOUNT;
@@ -478,9 +473,17 @@ fsentry_from_any(struct fsentry_id_pair *fip, const struct rbh_value *path,
     ns_xattrs.pairs = ns_pairs;
 
     if (inode_xattrs_callback != NULL) {
-        int callback_xattrs_count = inode_xattrs_callback(fd, &statxbuf, pairs,
-                                                          &count, &pairs[count],
-                                                          values);
+        struct entry_info info = {
+            .fd = fd,
+            .statx = &statxbuf,
+            .inode_xattrs = pairs,
+            .inode_xattrs_count = &count,
+        };
+        int callback_xattrs_count;
+
+        callback_xattrs_count = inode_xattrs_callback(&info, &pairs[count],
+                                                      pairs_count - count,
+                                                      values);
         if (callback_xattrs_count == -1) {
             if (errno != ENOMEM) {
                 fprintf(stderr,
@@ -537,12 +540,7 @@ out_close:
 
 static struct rbh_fsentry *
 fsentry_from_ftsent(FTSENT *ftsent, int statx_sync_type, size_t prefix_len,
-                    int (*ns_xattrs_callback)(const int,
-                                              const struct rbh_statx *,
-                                              struct rbh_value_pair *,
-                                              ssize_t *,
-                                              struct rbh_value_pair *,
-                                              struct rbh_sstack *))
+                    inode_xattrs_callback_t inode_xattrs_callback)
 {
     const struct rbh_value path = {
         .type = RBH_VT_STRING,
@@ -557,7 +555,7 @@ fsentry_from_ftsent(FTSENT *ftsent, int statx_sync_type, size_t prefix_len,
                                        ftsent->fts_pointer,
                                        ftsent->fts_parent->fts_pointer,
                                        ftsent->fts_name,
-                                       statx_sync_type, ns_xattrs_callback);
+                                       statx_sync_type, inode_xattrs_callback);
     save_errno = errno;
 
     if (!fsentry_success)

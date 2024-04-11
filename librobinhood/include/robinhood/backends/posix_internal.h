@@ -24,32 +24,15 @@
 #include "robinhood/backend.h"
 #include "robinhood/sstack.h"
 
+#include "common.h"
+
 /*----------------------------------------------------------------------------*
  |                               posix_iterator                               |
  *----------------------------------------------------------------------------*/
 
 struct posix_iterator {
     struct rbh_mut_iterator iterator;
-
-    /**
-     * Callback for managing and filling inode xattrs
-     *
-     * @param fd                   file descriptor of the entry
-     * @param statx                statx metadata of the entry
-     * @param inode_xattrs         inode xattrs already retrieved
-     * @param inode_xattrs_count   number of xattrs already retrieved
-     * @param pairs                list of rbh_value_pairs to fill
-     * @param values               stack that will contain every rbh_value of
-     *                             \p pairs
-     *
-     * @return                     number of filled \p pairs
-     */
-    int (*inode_xattrs_callback)(const int fd, const struct rbh_statx *statx,
-                                 struct rbh_value_pair *inode_xattrs,
-                                 ssize_t *inode_xattrs_count,
-                                 struct rbh_value_pair *pairs,
-                                 struct rbh_sstack *values);
-
+    inode_xattrs_callback_t inode_xattrs_callback;
     int statx_sync_type;
     size_t prefix_len;
     FTS *fts_handle;
@@ -80,12 +63,7 @@ bool
 fsentry_from_any(struct fsentry_id_pair *fip, const struct rbh_value *path,
                  char *accpath, struct rbh_id *entry_id,
                  struct rbh_id *parent_id, char *name, int statx_sync_type,
-                 int (*inode_xattrs_callback)(const int,
-                                              const struct rbh_statx *,
-                                              struct rbh_value_pair *,
-                                              ssize_t *,
-                                              struct rbh_value_pair *,
-                                              struct rbh_sstack *));
+                 inode_xattrs_callback_t inode_xattrs_callback);
 
 /*----------------------------------------------------------------------------*
  |                              posix_operations                              |

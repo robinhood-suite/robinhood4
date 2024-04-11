@@ -23,6 +23,7 @@
 
 #include "robinhood/backends/posix.h"
 #include "robinhood/backends/posix_internal.h"
+#include "robinhood/backends/lustre_internal.h"
 #include "robinhood/backends/lustre.h"
 #include "robinhood/statx.h"
 
@@ -151,12 +152,15 @@ fill_sequence_pair(const char *key, struct rbh_value *values, uint64_t length,
  * @return          number of filled \p pairs
  */
 static int
-xattrs_get_fid(int fd, struct rbh_value_pair *pairs)
+xattrs_get_fid(int fd, struct rbh_value_pair *pairs, int available_pairs)
 {
     size_t handle_size = sizeof(struct lustre_file_handle);
     static struct file_handle *handle;
     int mount_id;
     int rc;
+
+    if (available_pairs < 1)
+        return -1;
 
     if (handle == NULL) {
         /* Per-thread initialization of `handle' */
@@ -201,7 +205,7 @@ retry:
  * @return          number of filled \p pairs
  */
 static int
-xattrs_get_hsm(int fd, struct rbh_value_pair *pairs)
+xattrs_get_hsm(int fd, struct rbh_value_pair *pairs, int available_pairs)
 {
     struct hsm_user_state hus;
     int subcount = 0;
@@ -210,6 +214,9 @@ xattrs_get_hsm(int fd, struct rbh_value_pair *pairs)
     if (!S_ISREG(mode))
         /* Only regular files can be archived */
         return 0;
+
+    if (available_pairs < 2)
+        return -1;
 
     rc = llapi_hsm_state_get_fd(fd, &hus);
     if (rc && rc != -ENODATA) {
@@ -680,11 +687,12 @@ xattrs_get_dir_data_striping(int fd)
  * @return          number of filled \p pairs
  */
 static int
-xattrs_get_layout(int fd, struct rbh_value_pair *pairs)
+xattrs_get_layout(int fd, struct rbh_value_pair *pairs, int available_pairs)
 {
     struct iterator_data data = { .comp_index = 0 };
     struct llapi_layout *layout;
     uint16_t mirror_count = 0;
+    int required_pairs = 0;
     uint32_t nb_comp = 1;
     /**
      * There are 6 layout header components in total, but OST is in its own
@@ -699,6 +707,14 @@ xattrs_get_layout(int fd, struct rbh_value_pair *pairs)
     if (S_ISLNK(mode))
         /* no layout to fetch for links */
         return 0;
+
+    if (S_ISREG(mode))
+        required_pairs = 3;
+    else
+        required_pairs = 1;
+
+    if (available_pairs < required_pairs)
+        return -1;
 
     if (S_ISDIR(mode)) {
         /* Directories have a default striping that children can inherit from.
@@ -737,7 +753,12 @@ xattrs_get_layout(int fd, struct rbh_value_pair *pairs)
         subcount += rc;
     }
 
+    available_pairs -= subcount;
+
     if (llapi_layout_is_composite(layout)) {
+        if (available_pairs < 1)
+            return -1;
+
         rc = llapi_layout_mirror_count_get(layout, &mirror_count);
         if (rc)
             goto err;
@@ -752,6 +773,7 @@ xattrs_get_layout(int fd, struct rbh_value_pair *pairs)
 
         /** The file is composite, so we add 3 more xattrs to the main alloc */
         nb_xattrs += 3;
+        available_pairs -= 1;
     }
 
     rc = init_iterator_data(&data, nb_comp, nb_xattrs);
@@ -767,6 +789,14 @@ xattrs_get_layout(int fd, struct rbh_value_pair *pairs)
 
     if (rc)
         goto free_data;
+
+    if (S_ISDIR(mode))
+        required_pairs = nb_xattrs - 1;
+    else
+        required_pairs = nb_xattrs;
+
+    if (available_pairs < required_pairs)
+        return -1;
 
     rc = xattrs_fill_layout(&data, nb_xattrs, &pairs[subcount]);
     if (rc < 0)
@@ -788,10 +818,19 @@ err:
 }
 
 static int
-xattrs_get_mdt_info(int fd, struct rbh_value_pair *pairs)
+xattrs_get_mdt_info(int fd, struct rbh_value_pair *pairs, int available_pairs)
 {
+    int required_pairs = 0;
     int subcount = 0;
     int rc = 0;
+
+    if (S_ISDIR(mode))
+        required_pairs = 5;
+    else if (S_ISREG(mode))
+        required_pairs = 1;
+
+    if (available_pairs < required_pairs)
+        return -1;
 
     if (S_ISDIR(mode)) {
         /* Fetch meta data striping for directories only */
@@ -893,27 +932,28 @@ free_lum:
 }
 
 static int
-_get_attrs(const int fd, const uint16_t entry_mode,
-           int (*attrs_funcs[])(int, struct rbh_value_pair *),
+_get_attrs(struct entry_info *entry_info,
+           int (*attrs_funcs[])(int, struct rbh_value_pair *, int),
            int nb_attrs_funcs,
-           struct rbh_value_pair *inode_xattrs,
-           ssize_t *inode_xattrs_count,
            struct rbh_value_pair *pairs,
+           int available_pairs,
            struct rbh_sstack *values)
 {
     int count = 0;
     int subcount;
 
-    _inode_xattrs_count = inode_xattrs_count;
-    _inode_xattrs = inode_xattrs;
-    mode = entry_mode;
+    _inode_xattrs_count = entry_info->inode_xattrs_count;
+    _inode_xattrs = entry_info->inode_xattrs;
+    mode = entry_info->statx->stx_mode;
     _values = values;
 
     for (int i = 0; i < nb_attrs_funcs; ++i) {
-        subcount = attrs_funcs[i](fd, &pairs[count]);
+        subcount = attrs_funcs[i](entry_info->fd, &pairs[count],
+                                  available_pairs);
         if (subcount == -1)
             return -1;
 
+        available_pairs -= subcount;
         count += subcount;
     }
 
@@ -921,33 +961,33 @@ _get_attrs(const int fd, const uint16_t entry_mode,
 }
 
 static int
-lustre_get_attrs(const int fd, const uint16_t mode,
+lustre_get_attrs(struct entry_info *entry_info,
                  struct rbh_value_pair *pairs,
+                 int available_pairs,
                  struct rbh_sstack *values)
 {
-    int (*xattrs_funcs[])(int, struct rbh_value_pair *) = {
+    int (*xattrs_funcs[])(int, struct rbh_value_pair *, int) = {
         xattrs_get_hsm, xattrs_get_layout, xattrs_get_mdt_info
     };
 
-    return _get_attrs(fd, mode, xattrs_funcs,
+    return _get_attrs(entry_info, xattrs_funcs,
                       sizeof(xattrs_funcs) / sizeof(xattrs_funcs[0]),
-                      NULL, NULL, pairs, values);
+                      pairs, available_pairs, values);
 }
 
 int
-lustre_inode_xattrs_callback(const int fd, const struct rbh_statx *statx,
-                             struct rbh_value_pair *inode_xattrs,
-                             ssize_t *inode_xattrs_count,
+lustre_inode_xattrs_callback(struct entry_info *entry_info,
                              struct rbh_value_pair *pairs,
+                             int available_pairs,
                              struct rbh_sstack *values)
 {
-    int (*xattrs_funcs[])(int, struct rbh_value_pair *) = {
+    int (*xattrs_funcs[])(int, struct rbh_value_pair *, int) = {
         xattrs_get_fid, xattrs_get_hsm, xattrs_get_layout, xattrs_get_mdt_info
     };
 
-    return _get_attrs(fd, statx->stx_mode, xattrs_funcs,
+    return _get_attrs(entry_info, xattrs_funcs,
                       sizeof(xattrs_funcs) / sizeof(xattrs_funcs[0]),
-                      inode_xattrs, inode_xattrs_count, pairs, values);
+                      pairs, available_pairs, values);
 }
 
 /*----------------------------------------------------------------------------*
@@ -960,26 +1000,33 @@ lustre_inode_xattrs_callback(const int fd, const struct rbh_statx *statx,
 
 int
 lustre_get_attribute(const char *attr_name, void *_arg,
-                     struct rbh_value_pair *data)
+                     struct rbh_value_pair *pairs, int available_pairs)
 {
     struct arg_t {
         int fd;
-        uint16_t mode;
+        struct rbh_statx *statx;
         struct rbh_sstack *values;
     };
-    struct arg_t *arg = (struct arg_t *)_arg;
+    struct arg_t *info = (struct arg_t *)_arg;
+    struct entry_info entry_info = {
+        .fd = info->fd,
+        .statx = info->statx,
+        .inode_xattrs = NULL,
+        .inode_xattrs_count = NULL,
+    };
 
     if (strcmp(attr_name, "lustre") != 0)
         return -1;
 
-    return lustre_get_attrs(arg->fd, arg->mode, data, arg->values);
+    return lustre_get_attrs(&entry_info, pairs, available_pairs, info->values);
 }
 
 static int
 lustre_fts_backend_get_attribute(void *backend, const char *attr_name,
-                                 void *arg, struct rbh_value_pair *data)
+                                 void *arg, struct rbh_value_pair *pairs,
+                                 int available_pairs)
 {
-    return lustre_get_attribute(attr_name, arg, data);
+    return lustre_get_attribute(attr_name, arg, pairs, available_pairs);
 }
 
     /*--------------------------------------------------------------------*
