@@ -1047,7 +1047,7 @@ lustre_fts_backend_destroy(void *backend)
     posix_backend_destroy(backend);
 }
 
-static struct rbh_mut_iterator *
+struct rbh_mut_iterator *
 lustre_iterator_new(const char *root, const char *entry, int statx_sync_type)
 {
     struct posix_iterator *lustre_iter;

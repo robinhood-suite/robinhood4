@@ -35,6 +35,7 @@ if liblustre.found()
         env.prepend('WITH_MPI', 'true')
         test('test_lustre_mpi_mongo_sync', e,
              is_parallel: false,
-             env: env)
+             env: env,
+             timeout: 60)
     endif
 endif
