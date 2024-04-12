@@ -31,3 +31,6 @@ source_stack_alloc(const void *data, size_t size);
 
 void
 initialize_source_stack(size_t stack_size);
+
+int
+str2int64_t(const char *input, int64_t *result);

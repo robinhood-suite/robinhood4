@@ -5,6 +5,7 @@
 #endif
 
 #include <assert.h>
+#include <ctype.h>
 #include <errno.h>
 #include <error.h>
 #include <stdio.h>
@@ -25,6 +26,8 @@ struct lustre_changelog_iterator {
 
     void *reader;
     struct rbh_iterator *fsevents_iterator;
+
+    int32_t source_mdt_index;
 };
 
 /* BSON results:
@@ -42,10 +45,10 @@ fill_uidgid(struct changelog_rec *record, struct rbh_statx *statx)
 }
 
 /* BSON results:
- * { "ns" : [ { "xattrs": { "fid" : x } } ] }
+ * { "xattrs": { "fid" : x } }
  */
 static struct rbh_value *
-fill_ns_xattrs_fid(void *arg)
+fill_xattrs_fid(void *arg)
 {
     struct changelog_rec *record = (struct changelog_rec *)arg;
     struct rbh_value lu_fid_value;
@@ -59,6 +62,26 @@ fill_ns_xattrs_fid(void *arg)
         return NULL;
 
     value = source_stack_alloc(&lu_fid_value, sizeof(lu_fid_value));
+    if (value == NULL)
+        return NULL;
+
+    return value;
+}
+
+/* BSON results:
+ * { "xattrs": { "mdt_index" : x } }
+ */
+static struct rbh_value *
+fill_xattrs_mdt_index(void *arg)
+{
+    int32_t mdt_index = *((int32_t *) arg);
+    struct rbh_value mdt_index_value;
+    struct rbh_value *value;
+
+    mdt_index_value.type = RBH_VT_INT32;
+    mdt_index_value.int32 = mdt_index;
+
+    value = source_stack_alloc(&mdt_index_value, sizeof(mdt_index_value));
     if (value == NULL)
         return NULL;
 
@@ -376,7 +399,7 @@ build_create_inode_events(struct changelog_rec *record, struct rbh_id *id,
     new_events[1].type = RBH_FET_XATTR;
     if (build_enrich_xattr_fsevent(&new_events[1].xattrs,
                                    "fid",
-                                   fill_ns_xattrs_fid(record),
+                                   fill_xattrs_fid(record),
                                    "rbh-fsevents",
                                    build_empty_map("lustre"),
                                    NULL))
@@ -443,6 +466,7 @@ build_statx_update_event(uint32_t statx_enrich_mask, struct rbh_id *id,
  */
 static int
 build_softlink_events(struct changelog_rec *record, struct rbh_id *id,
+                      int32_t mdt_index,
                       struct rbh_iterator **fsevents_iterator)
 {
     struct rbh_fsevent *new_events;
@@ -455,7 +479,9 @@ build_softlink_events(struct changelog_rec *record, struct rbh_id *id,
     new_events[1].type = RBH_FET_XATTR;
     if (build_enrich_xattr_fsevent(&new_events[1].xattrs,
                                    "fid",
-                                   fill_ns_xattrs_fid(record),
+                                   fill_xattrs_fid(record),
+                                   "mdt_index",
+                                   fill_xattrs_mdt_index(&mdt_index),
                                    NULL))
         return -1;
 
@@ -913,7 +939,8 @@ retry:
                                       &records->fsevents_iterator);
         break;
     case CL_SOFTLINK:
-        rc = build_softlink_events(record, id, &records->fsevents_iterator);
+        rc = build_softlink_events(record, id, records->source_mdt_index,
+                                   &records->fsevents_iterator);
         break;
     case CL_HARDLINK:
     case CL_MKNOD:
@@ -999,6 +1026,7 @@ static void
 lustre_changelog_iter_init(struct lustre_changelog_iterator *events,
                            const char *mdtname)
 {
+    const char *mdtname_index;
     int rc;
 
     rc = llapi_changelog_start(&events->reader,
@@ -1018,6 +1046,12 @@ lustre_changelog_iter_init(struct lustre_changelog_iterator *events,
 
     events->iterator = LUSTRE_CHANGELOG_ITERATOR;
     events->fsevents_iterator = NULL;
+
+    for (mdtname_index = mdtname; !isdigit(*mdtname_index); mdtname_index++);
+
+    rc = str2int64_t(mdtname_index, (int64_t *) &events->source_mdt_index);
+    if (rc)
+        error(EXIT_FAILURE, errno, "str2int64_t");
 }
 
 struct lustre_source {
