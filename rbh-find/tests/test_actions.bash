@@ -20,6 +20,8 @@ test_dir=$(dirname $(readlink -e $0))
 
 test_exec()
 {
+    local current_dir=$PWD
+
     echo "test data" > file
     rbh-sync "rbh:posix:." "rbh:mongo:$testdb"
 
@@ -29,6 +31,18 @@ test_exec()
     # database
     rbh_find "rbh:mongo:$testdb" -exec grep -H "test data" {} ";" | sort |
         difflines "file:test data"
+
+    (
+     cd /tmp
+     # Given the absolute path, grep should work on file
+     rbh_find "rbh:mongo:$testdb" -exec grep -H "test data" "$current_dir/{}" ";" |
+         sort | difflines "$current_dir/file:test data"
+    )
+
+    rbh-find "rbh:mongo:$testdb" -exec echo {}{}{} /mnt/lustre/{{}}/{} ";" |
+        sort |
+        difflines "filefilefile /mnt/lustre/{file}/file" \
+                  "... /mnt/lustre/{.}/."
 }
 
 test_delete()
