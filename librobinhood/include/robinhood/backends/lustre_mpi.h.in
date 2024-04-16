@@ -32,10 +32,4 @@
 struct rbh_backend *
 rbh_lustre_mpi_backend_new(const char *path);
 
-/**
- * Release the memory associated with the plugin
- */
-void
-rbh_lustre_mpi_plugin_destroy();
-
 #endif
