@@ -22,6 +22,7 @@ env.prepend('LD_LIBRARY_PATH', meson.build_root() + '/src')
 env.prepend('LD_LIBRARY_PATH', meson.build_root() + '/src/backends/posix')
 env.prepend('LD_LIBRARY_PATH', meson.build_root() + '/src/backends/lustre')
 env.prepend('LD_LIBRARY_PATH', meson.build_root() + '/src/backends/lustre_mpi')
+env.prepend('LD_LIBRARY_PATH', meson.build_root() + '/src/backends/posix_mpi')
 
 foreach t: ['check_backend', 'check_filter', 'check_fsentry',
             'check_fsevent', 'check_hashmap', 'check_id', 'check_itertools',
@@ -71,4 +72,16 @@ if r.returncode() == 0 and libmfu.found()
     test('check_lustre_mpi', bash,
          args: ['../tests/unit/check_lustre_mpi.sh', builddir],
          env: env)
+
+    foreach t: ['check_posix_mpi']
+        executable(t, t + '.c',
+            dependencies: [check],
+            link_with: [librobinhood, librbh_posix_mpi],
+            include_directories: rbh_include)
+    endforeach
+
+    test('check_posix_mpi', bash,
+         args: ['../tests/unit/check_posix_mpi.sh', builddir],
+         env: env)
+
 endif
