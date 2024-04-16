@@ -124,6 +124,17 @@ fill_uint32_pair(const char *key, uint32_t integer, struct rbh_value_pair *pair)
 }
 
 static inline int
+fill_uint64_pair(const char *key, uint64_t integer, struct rbh_value_pair *pair)
+{
+    const struct rbh_value uint64_value = {
+        .type = RBH_VT_UINT64,
+        .uint64 = integer,
+    };
+
+    return fill_pair(key, &uint64_value, pair);
+}
+
+static inline int
 fill_sequence_pair(const char *key, struct rbh_value *values, uint64_t length,
                    struct rbh_value_pair *pair)
 {
@@ -635,7 +646,7 @@ xattrs_get_magic_and_gen(int fd, struct rbh_value_pair *pairs)
  * @return          layout of the directory, or NULL
  */
 static struct llapi_layout *
-xattrs_get_dir_data_striping(int fd)
+get_dir_data_striping(int fd)
 {
     char tmp[XATTR_SIZE_MAX] = {0};
     struct llapi_layout *layout;
@@ -655,6 +666,57 @@ xattrs_get_dir_data_striping(int fd)
         return NULL;
 
     return layout;
+}
+
+static int
+get_default_data_striping(struct rbh_value_pair *pairs)
+{
+    char pool_tmp[LOV_MAXPOOLNAME + 1];
+    struct llapi_layout *layout;
+    int subcount = 0;
+    uint64_t tmp = 0;
+    int rc;
+
+    layout = llapi_layout_alloc();
+    if (layout == NULL)
+        return -1;
+
+    rc = llapi_layout_stripe_count_get(layout, &tmp);
+    if (rc)
+        return -1;
+
+    rc = fill_uint64_pair("stripe_count", tmp, &pairs[subcount++]);
+    if (rc)
+        return -1;
+
+    rc = llapi_layout_stripe_size_get(layout, &tmp);
+    if (rc)
+        return -1;
+
+    rc = fill_uint64_pair("stripe_size", tmp, &pairs[subcount++]);
+    if (rc)
+        return -1;
+
+    rc = llapi_layout_pattern_get(layout, &tmp);
+    if (rc)
+        return -1;
+
+    rc = fill_uint64_pair("pattern", tmp, &pairs[subcount++]);
+    if (rc)
+        return -1;
+
+    rc = llapi_layout_pool_name_get(layout, pool_tmp, sizeof(pool_tmp));
+    if (rc)
+        return -1;
+
+    rc = fill_string_pair("pool", pool_tmp, strlen(pool_tmp),
+                          &pairs[subcount++]);
+    if (rc)
+        return -1;
+
+    llapi_layout_free(layout);
+
+    return subcount;
 }
 
 /**
@@ -705,12 +767,12 @@ xattrs_get_layout(int fd, struct rbh_value_pair *pairs)
          * These information can be manipulated as a regular file layout but
          * they are fetched differently through the Lustre API.
          */
-        layout = xattrs_get_dir_data_striping(fd);
+        layout = get_dir_data_striping(fd);
         /* If layout is NULL and errno is ENODATA, that means the ioctl failed
          * because there is no default striping on the directory.
          */
         if (layout == NULL && errno == ENODATA)
-            return 0;
+            return get_default_data_striping(&pairs[subcount]);
     } else {
         layout = llapi_layout_get_by_fd(fd, 0);
     }
