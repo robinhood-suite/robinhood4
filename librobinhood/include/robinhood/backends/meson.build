@@ -23,6 +23,26 @@ librbh_posix_h = configure_file(input: 'posix.h.in', output: 'posix.h',
 
 install_headers(librbh_posix_h, subdir: 'robinhood/backends')
 
+# Posix MPI backend
+
+librbh_posix_mpi_conf = configuration_data()
+
+librbh_posix_mpi_conf.set('RBH_POSIX_MPI_BACKEND_MAJOR', 0)
+librbh_posix_mpi_conf.set('RBH_POSIX_MPI_BACKEND_MINOR', 0)
+librbh_posix_mpi_conf.set('RBH_POSIX_MPI_BACKEND_RELEASE', 0)
+
+librbh_posix_mpi_version = '@0@.@1@.@2@'.format(
+    librbh_posix_mpi_conf.get('RBH_POSIX_MPI_BACKEND_MAJOR'),
+    librbh_posix_mpi_conf.get('RBH_POSIX_MPI_BACKEND_MINOR'),
+    librbh_posix_mpi_conf.get('RBH_POSIX_MPI_BACKEND_RELEASE')
+)
+
+librbh_posix_mpi_h = configure_file(input: 'posix_mpi.h.in',
+                                    output: 'posix_mpi.h',
+                                    configuration: librbh_posix_mpi_conf)
+
+install_headers(librbh_posix_mpi_h, subdir: 'robinhood/backends')
+
 # Mongo backend
 
 librbh_mongo_conf = configuration_data()
