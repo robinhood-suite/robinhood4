@@ -123,10 +123,10 @@ backend_from_uri(const struct rbh_uri *uri)
         branch = rbh_backend_branch(backend, uri->id, NULL);
         break;
     case RBH_UT_PATH:
-        /* The posix and lustre/lustre-mpi backend do not support filtering,
-         * treat it differently */
-        if (backend->id == RBH_BI_POSIX || backend->id == RBH_BI_LUSTRE_MPI ||
-            backend->id == RBH_BI_LUSTRE)
+        /* The posix/posix-mpi and lustre/lustre-mpi backend do not support
+         * filtering, treat it differently */
+        if (backend->id == RBH_BI_POSIX || backend->id == RBH_BI_POSIX_MPI ||
+            backend->id == RBH_BI_LUSTRE || backend->id == RBH_BI_LUSTRE_MPI)
             branch = posix_backend_branch_from_path(backend, uri->fsname,
                                                     uri->path);
         else
