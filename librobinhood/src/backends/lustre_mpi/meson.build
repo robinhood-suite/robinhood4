@@ -18,6 +18,7 @@ librbh_lustre_mpi = library(
     'rbh-lustre-mpi',
     sources: [
         'lustre_mpi.c',
+        '../iter_mpi/iter_mpi.c',
         'plugin.c',
     ],
     version: librbh_lustre_mpi_version, # defined in include/robinhood/backends
