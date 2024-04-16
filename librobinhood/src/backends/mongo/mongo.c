@@ -1387,7 +1387,7 @@ get_mongo_addr()
     if (rc == KPR_ERROR)
         return NULL;
 
-    if (value.string == NULL)
+    if (rc == KPR_NOT_FOUND)
         value.string = "mongodb://localhost:27017";
 
     return value.string;
