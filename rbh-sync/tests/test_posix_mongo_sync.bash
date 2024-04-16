@@ -9,6 +9,24 @@
 test_dir=$(dirname $(readlink -e $0))
 . $test_dir/test_utils.bash
 
+rbh_sync_posix()
+{
+    if [[ "$WITH_MPI" == "true" ]]; then
+        rbh_sync "rbh:posix-mpi:$1" "$2"
+    else
+        rbh_sync "rbh:posix:$1" "$2"
+    fi
+}
+
+rbh_sync_posix_one()
+{
+    if [[ "$WITH_MPI" == "true" ]]; then
+        rbh_sync -o "rbh:posix-mpi:$1" "$2"
+    else
+        rbh_sync -o "rbh:posix:$1" "$2"
+    fi
+}
+
 ################################################################################
 #                                    TESTS                                     #
 ################################################################################
@@ -17,7 +35,7 @@ test_sync_2_files()
 {
     truncate -s 1k "fileA"
 
-    rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
+    rbh_sync_posix "." "rbh:mongo:$testdb"
     find_attribute '"ns.xattrs.path":"/"'
     find_attribute '"ns.xattrs.path":"/fileA"'
 }
@@ -27,7 +45,7 @@ test_sync_size()
     truncate -s 1025 "fileA"
     local length=$(stat -c %s "fileA")
 
-    rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
+    rbh_sync_posix "." "rbh:mongo:$testdb"
     find_attribute '"ns.xattrs.path":"/fileA"' '"statx.size" : '$length
 }
 
@@ -36,7 +54,7 @@ test_sync_3_files()
     truncate -s 1k "fileA"
     truncate -s 1k "fileB"
 
-    rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
+    rbh_sync_posix "." "rbh:mongo:$testdb"
     find_attribute '"ns.xattrs.path":"/"'
     find_attribute '"ns.xattrs.path":"/fileA"'
     find_attribute '"ns.xattrs.path":"/fileB"'
@@ -49,7 +67,7 @@ test_sync_xattrs()
     truncate -s 1k "fileB"
     setfattr -n user.c -v d "fileB"
 
-    rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
+    rbh_sync_posix "." "rbh:mongo:$testdb"
     find_attribute '"ns.xattrs.path":"/fileA"' \
                    '"xattrs.user.a" : { $exists : true }'
     find_attribute '"ns.xattrs.path":"/fileB"' \
@@ -63,7 +81,7 @@ test_sync_subdir()
     truncate -s 1k "fileA"
     truncate -s 1k "fileB"
 
-    rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
+    rbh_sync_posix "." "rbh:mongo:$testdb"
     find_attribute '"ns.xattrs.path":"/"'
     find_attribute '"ns.xattrs.path":"/fileA"'
     find_attribute '"ns.xattrs.path":"/fileB"'
@@ -75,7 +93,7 @@ test_sync_large_tree()
 {
     mkdir -p {1..9}/{1..9}
 
-    rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
+    rbh_sync_posix "." "rbh:mongo:$testdb"
     for i in $(find *); do
         find_attribute '"ns.xattrs.path":"/'$i'"'
     done
@@ -86,7 +104,7 @@ test_sync_one_one_file()
     truncate -s 1k "fileA"
     local length=$(stat -c %s "fileA")
 
-    rbh_sync -o "rbh:posix:fileA" "rbh:mongo:$testdb"
+    rbh_sync_posix_one "fileA" "rbh:mongo:$testdb"
     find_attribute '"statx.size" : '$length
 }
 
@@ -97,8 +115,8 @@ test_sync_one_two_files()
     setfattr -n user.a -v b "fileB"
     local length=$(stat -c %s "fileB")
 
-    rbh_sync -o "rbh:posix:fileA" "rbh:mongo:$testdb"
-    rbh_sync -o "rbh:posix:fileB" "rbh:mongo:$testdb"
+    rbh_sync_posix_one "fileA" "rbh:mongo:$testdb"
+    rbh_sync_posix_one "fileB" "rbh:mongo:$testdb"
     find_attribute '"statx.size" : '$length \
                    '"xattrs.user.a" : { $exists : true }'
 
@@ -142,7 +160,7 @@ test_sync_socket()
                 sock = s.socket(s.AF_UNIX); \
                 sock.bind('$entry')"
 
-    rbh_sync -o "rbh:posix:$entry" "rbh:mongo:$testdb"
+    rbh_sync_posix_one "$entry" "rbh:mongo:$testdb"
     check_mode_and_type $entry
 }
 
@@ -152,7 +170,7 @@ test_sync_fifo()
 
     mkfifo $entry
 
-    rbh_sync -o "rbh:posix:$entry" "rbh:mongo:$testdb"
+    rbh_sync_posix_one "$entry" "rbh:mongo:$testdb"
     check_mode_and_type $entry
 }
 
@@ -166,7 +184,7 @@ test_sync_branch()
     mkdir -p $first_dir/$second_dir/$third_dir
     touch $first_dir/$second_dir/$third_dir/$entry
 
-    rbh_sync "rbh:posix:$first_dir#$second_dir" "rbh:mongo:$testdb"
+    rbh_sync_posix "$first_dir#$second_dir" "rbh:mongo:$testdb"
 
     find_attribute '"ns.name":"'$second_dir'"'
     find_attribute '"ns.xattrs.path":"'/$second_dir'"'
@@ -179,7 +197,7 @@ test_sync_branch()
 
     local abs_path="$(realpath $first_dir)"
 
-    rbh_sync "rbh:posix:$abs_path#$second_dir" "rbh:mongo:$testdb"
+    rbh_sync_posix "$abs_path#$second_dir" "rbh:mongo:$testdb"
 
     find_attribute '"ns.name":"'$second_dir'"'
     find_attribute '"ns.xattrs.path":"'/$second_dir'"'
@@ -190,7 +208,8 @@ test_sync_branch()
 
     mongo $testdb --eval "db.dropDatabase()"
 
-    rbh_sync "rbh:posix:$first_dir#$second_dir/$third_dir" "rbh:mongo:$testdb"
+    rbh_sync_posix "$first_dir#$second_dir/$third_dir" "rbh:mongo:$testdb"
+
     find_attribute '"ns.name":"'$third_dir'"'
     find_attribute '"ns.xattrs.path":"'/$second_dir/$third_dir'"'
     find_attribute '"ns.name":"'$entry'"'
@@ -214,16 +233,35 @@ test_continue_sync_on_error()
     # the second file and the directory, it cannot synchronize both, so errors
     # should be outputted but the command shouldn't fail.
     useradd -N -M test
-    local output="$((sudo -E -H -u test bash -c "rbh-sync rbh:posix:. \
-                     rbh:mongo:$testdb") 2>&1)"
+
+    if [[ "$WITH_MPI" == "true" ]]; then
+        # We need to give execute permissions to the user for mpirun to run
+        chmod o+x ..
+        output="$((sudo -E -H -u test bash -c \
+                "source /etc/profile.d/modules.sh; \
+                 module load mpi/openmpi-x86_64; mpirun -np 4 \
+                 rbh-sync rbh:posix-mpi:. rbh:mongo:$testdb") 2>&1)"
+    else
+        output="$((sudo -E -H -u test bash -c "rbh-sync rbh:posix:. \
+                   rbh:mongo:$testdb") 2>&1)"
+    fi
+
     userdel -f -r test || true
 
     echo "$output" | grep "open '/$second_file'" ||
         error "Failed to find error on open of '$second_file'"
     echo "$output" | grep "open '/$dir'" ||
         error "Failed to find error on open of '$second_file'"
-    echo "$output" | grep "FTS" | grep "read entry './$dir'" ||
+
+    if [[ "$WITH_MPI" == "true" ]]; then
+        # We check if there is an error from mpifileutils while opening /dir
+        echo "$output" | \
+        grep "ERROR: Failed to open directory with opendir: './$dir'" || \
         error "Failed to find error on open of '$second_file'"
+    else
+        echo "$output" | grep "FTS" | grep "read entry './$dir'" ||
+            error "Failed to find error on open of '$second_file'"
+    fi
 
     local db_count=$(mongo $testdb --eval "db.entries.count()")
     if [[ $db_count -ne 2 ]]; then
@@ -255,9 +293,22 @@ test_stop_sync_on_error(){
     # command should fail when synchronizing the second file and the directory
 
     useradd -N -M test
-    local output=$((sudo -E -H -u test bash -c "rbh-sync --no-skip rbh:posix:. \
+
+    if [[ "$WITH_MPI" == "true" ]]; then
+        # We need to give execute permissions to the user for mpirun to run
+        chmod o+x ..
+        local output=$((sudo -E -H -u test bash -c \
+                        "source /etc/profile.d/modules.sh; \
+                        module load mpi/openmpi-x86_64; mpirun -np 4 \
+                        rbh-sync --no-skip rbh:posix-mpi:. \
                         rbh:mongo:$testdb") 2>&1)
+    else
+        local output=$((sudo -E -H -u test bash -c "rbh-sync --no-skip rbh:posix:. \
+                   rbh:mongo:$testdb") 2>&1)
+    fi
+
     userdel -f -r test || true
+
     local db_count=$(mongo $testdb --eval "db.entries.count()")
     if [[ $db_count -lt 1 ]]; then
         error "Invalid number of files were synced, expected at least '1'" \
