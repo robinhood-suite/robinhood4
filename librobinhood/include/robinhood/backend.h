@@ -84,6 +84,7 @@ enum rbh_backend_id {
 
     /* Backends should declare their ID here */
     RBH_BI_POSIX,
+    RBH_BI_POSIX_MPI,
     RBH_BI_MONGO,
     RBH_BI_LUSTRE,
     RBH_BI_LUSTRE_MPI,
