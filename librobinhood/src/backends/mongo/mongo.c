@@ -1387,7 +1387,7 @@ get_mongo_addr()
     if (rc == KPR_ERROR)
         return NULL;
 
-    if (value.string == NULL)
+    if (rc == KPR_NOT_FOUND)
         value.string = "mongodb://localhost:27017";
 
     return value.string;
@@ -1402,9 +1402,8 @@ mongo_backend_init(struct mongo_backend *mongo, const char *fsname)
     int rc;
 
     addr = get_mongo_addr();
-    if (addr == NULL) {
+    if (addr == NULL)
         return -1;
-    }
 
     uri = mongoc_uri_new(addr);
     if (uri == NULL) {
