@@ -46,4 +46,14 @@ fid2filter(const char *fid);
 struct rbh_filter *
 ost_index2filter(const char *ost_index);
 
+/**
+ * Build a filter for the -stripe-count predicate
+ *
+ * @param stripe_count a string representing a number
+ *
+ * @return             a pointer to a newly allocated struct rbh_filter
+ */
+struct rbh_filter *
+stripe_count2filter(const char *stripe_count);
+
 #endif
