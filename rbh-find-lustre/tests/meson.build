@@ -11,3 +11,6 @@ foreach t: integration_tests
     e = find_program(t + '.bash')
     test(t, e)
 endforeach
+
+e = find_program('test_stripe_count.bash')
+test('test_stripe_count', e, should_fail: true)
