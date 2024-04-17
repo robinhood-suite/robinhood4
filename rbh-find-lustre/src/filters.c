@@ -33,6 +33,12 @@ static const struct rbh_filter_field predicate2filter_field[] = {
                                         .xattr = "stripe_count"},
 };
 
+static inline const struct rbh_filter_field *
+get_filter_field(enum lustre_predicate predicate)
+{
+    return &predicate2filter_field[predicate - LPRED_MIN];
+}
+
 static enum hsm_states
 str2hsm_states(const char *hsm_state)
 {
@@ -97,8 +103,7 @@ hsm_state2filter(const char *hsm_state)
             error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
                           "hsm_state2filter");
 
-        filter = rbh_filter_exists_new(
-                &predicate2filter_field[LPRED_HSM_STATE - LPRED_MIN]);
+        filter = rbh_filter_exists_new(get_filter_field(LPRED_HSM_STATE));
         if (filter == NULL)
             error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
                           "hsm_state2filter");
@@ -111,8 +116,7 @@ hsm_state2filter(const char *hsm_state)
         filter = filter_and(file_filter, filter);
     } else {
         filter = rbh_filter_compare_uint32_new(
-                RBH_FOP_BITS_ANY_SET,
-                &predicate2filter_field[LPRED_HSM_STATE - LPRED_MIN], state
+                RBH_FOP_BITS_ANY_SET, get_filter_field(LPRED_HSM_STATE), state
                 );
     }
 
@@ -188,10 +192,9 @@ fid2filter(const char *fid)
     }
 #endif
 
-    filter = rbh_filter_compare_binary_new(
-            RBH_FOP_EQUAL, &predicate2filter_field[LPRED_FID - LPRED_MIN],
-            (char *) &lu_fid, sizeof(lu_fid)
-            );
+    filter = rbh_filter_compare_binary_new(RBH_FOP_EQUAL,
+                                           get_filter_field(LPRED_FID),
+                                           (char *) &lu_fid, sizeof(lu_fid));
     if (filter == NULL)
         error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
                       "fid2filter");
@@ -218,8 +221,7 @@ ost_index2filter(const char *ost_index)
 
     index_value.uint64 = index;
     filter = rbh_filter_compare_sequence_new(
-            RBH_FOP_IN, &predicate2filter_field[LPRED_OST_INDEX - LPRED_MIN],
-            &index_value, 1
+            RBH_FOP_IN, get_filter_field(LPRED_OST_INDEX), &index_value, 1
             );
     if (filter == NULL)
         error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
@@ -233,10 +235,24 @@ stripe_count2filter(const char *stripe_count)
 {
     struct rbh_filter *filter;
 
-    filter = numeric2filter(
-            &predicate2filter_field[LPRED_STRIPE_COUNT - LPRED_MIN],
-            stripe_count
-            );
+    if (strcmp(stripe_count, "default") == 0) {
+        struct rbh_filter_field default_field = {
+            .fsentry = RBH_FP_INODE_XATTRS,
+            .xattr = "trusted.lov",
+        };
+        struct rbh_filter *dir_filter;
+
+        filter = rbh_filter_exists_new(&default_field);
+        if (filter == NULL)
+            error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
+                          "stripe_count2filter");
+
+        dir_filter = filetype2filter("d");
+        filter = filter_and(dir_filter, filter_not(filter));
+    } else {
+        filter = numeric2filter(get_filter_field(LPRED_STRIPE_COUNT),
+                                stripe_count);
+    }
     if (filter == NULL)
         error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
                       "Invalid stripe count provided, should be '<+|->n', got '%s'",
