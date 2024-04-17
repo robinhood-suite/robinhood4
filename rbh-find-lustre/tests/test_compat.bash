@@ -6,8 +6,6 @@
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
 
-set -e
-
 if ! command -v rbh-sync &> /dev/null; then
     echo "This test requires rbh-sync to be installed" >&2
     exit 1
