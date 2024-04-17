@@ -29,6 +29,8 @@ static const struct rbh_filter_field predicate2filter_field[] = {
                                      .xattr = "hsm_state"},
     [LPRED_OST_INDEX - LPRED_MIN] = {.fsentry = RBH_FP_INODE_XATTRS,
                                      .xattr = "ost"},
+    [LPRED_STRIPE_COUNT - LPRED_MIN] = {.fsentry = RBH_FP_INODE_XATTRS,
+                                        .xattr = "stripe_count"},
 };
 
 static enum hsm_states
@@ -222,6 +224,22 @@ ost_index2filter(const char *ost_index)
     if (filter == NULL)
         error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
                       "ost_index2filter");
+
+    return filter;
+}
+
+struct rbh_filter *
+stripe_count2filter(const char *stripe_count)
+{
+    struct rbh_filter *filter;
+
+    filter = numeric2filter(
+            &predicate2filter_field[LPRED_STRIPE_COUNT - LPRED_MIN],
+            stripe_count
+            );
+    if (filter == NULL)
+        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
+                      "stripe_count2filter");
 
     return filter;
 }

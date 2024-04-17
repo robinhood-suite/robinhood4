@@ -23,10 +23,6 @@ cd "$LUSTRE_DIR"
 
 test_invalid()
 {
-    if rbh_lfind "rbh:mongo:$testdb" -stripe-count -1; then
-        error "find with a negative ost index should have failed"
-    fi
-
     if rbh_lfind "rbh:mongo:$testdb" -stripe-count $(echo 2^64 | bc); then
         error "find with an ost index too big should have failed"
     fi
