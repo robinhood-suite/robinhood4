@@ -642,7 +642,7 @@ xattrs_get_magic_and_gen(int fd, struct rbh_value_pair *pairs)
  * @return          layout of the directory, or NULL
  */
 static struct llapi_layout *
-xattrs_get_dir_data_striping(int fd)
+get_dir_data_striping(int fd)
 {
     char tmp[XATTR_SIZE_MAX] = {0};
     struct llapi_layout *layout;
@@ -721,7 +721,7 @@ xattrs_get_layout(int fd, struct rbh_value_pair *pairs, int available_pairs)
          * These information can be manipulated as a regular file layout but
          * they are fetched differently through the Lustre API.
          */
-        layout = xattrs_get_dir_data_striping(fd);
+        layout = get_dir_data_striping(fd);
         /* If layout is NULL and errno is ENODATA, that means the ioctl failed
          * because there is no default striping on the directory.
          */
@@ -994,6 +994,32 @@ lustre_inode_xattrs_callback(struct entry_info *entry_info,
  |                          lustre_backend                                    |
  *----------------------------------------------------------------------------*/
 
+static int
+lustre_get_default_stripe_value(int fd, struct rbh_value_pair *pair)
+{
+    struct llapi_layout *layout = get_dir_data_striping(fd);
+    struct rbh_value *value = malloc(sizeof(*value));
+
+    if (value == NULL)
+        return -1;
+
+    if (strcmp(pair->key, "stripe count") == 0) {
+        if (layout == NULL)
+            value->uint64 = 0;
+        else if (llapi_layout_stripe_count_get(layout, &value->uint64))
+            return -1;
+
+        value->type = RBH_VT_UINT64;
+    } else {
+        errno = EOPNOTSUPP;
+        return -1;
+    }
+
+    pair->value = value;
+
+    return 0;
+}
+
     /*--------------------------------------------------------------------*
      |                          get_attribute()                           |
      *--------------------------------------------------------------------*/
@@ -1015,10 +1041,13 @@ lustre_get_attribute(const char *attr_name, void *_arg,
         .inode_xattrs_count = NULL,
     };
 
-    if (strcmp(attr_name, "lustre") != 0)
-        return -1;
+    if (strcmp(attr_name, "lustre") == 0)
+        return lustre_get_attrs(&entry_info, pairs, available_pairs,
+                                info->values);
+    else if (strcmp(attr_name, "dir.lov") == 0)
+        return lustre_get_default_stripe_value(info->fd, pairs);
 
-    return lustre_get_attrs(&entry_info, pairs, available_pairs, info->values);
+    return -1;
 }
 
 static int
