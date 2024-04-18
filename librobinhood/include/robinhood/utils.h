@@ -32,4 +32,20 @@
 struct rbh_backend *
 rbh_backend_from_uri(const char *uri);
 
+/**
+ * Retrieves the mount path of a filesystem, given an entry under this mount
+ * path.
+ * If multiple mount points match, returns the most recent one.
+ *
+ * @param[in]  path      Path of an entry in a filesystem (must be absolute
+ *                       and canonical for the result of this function to be
+ *                       accurate)
+ * @param[out] mnt_path  Pointer to the path where the filesystem is mounted
+ *                       (must be freed by the caller).
+ *
+ * @return 0 on success, another value error and errno is set.
+ */
+int
+get_mount_path(const char *path, char **mount_path);
+
 #endif
