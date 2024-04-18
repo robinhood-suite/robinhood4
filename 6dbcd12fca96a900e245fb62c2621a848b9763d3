@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "43bd4fa2_d6b1724f",
+        "filename": "robinhood4.ocean.spec.in",
+        "patchSetId": 3
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-04-18T07:26:18Z",
+      "side": 1,
+      "message": "question: this is different from the iosea specfile. I assume this depends on the OS version. Should this be updated in the iosea specfile as well? Otherwise, a conditional check for the dependency should be done depending on the OS.",
+      "range": {
+        "startLine": 13,
+        "startChar": 10,
+        "endLine": 13,
+        "endChar": 17
+      },
+      "revId": "6dbcd12fca96a900e245fb62c2621a848b9763d3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "66795773_198b9061",
+        "filename": "robinhood4.ocean.spec.in",
+        "patchSetId": 3
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-04-18T07:26:18Z",
+      "side": 1,
+      "message": "question: in the iosea specfile there is a %post section with ldconfig. Why isn\u0027t it included here as well? Should the one in the iosea specfile be removed?",
+      "range": {
+        "startLine": 122,
+        "startChar": 1,
+        "endLine": 122,
+        "endChar": 10
+      },
+      "revId": "6dbcd12fca96a900e245fb62c2621a848b9763d3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ae45e422_85cc8314",
+        "filename": "utils/add_specfile_to_dist.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-04-18T07:26:18Z",
+      "side": 1,
+      "message": "minor: this should be a parameter",
+      "range": {
+        "startLine": 3,
+        "startChar": 34,
+        "endLine": 3,
+        "endChar": 40
+      },
+      "revId": "6dbcd12fca96a900e245fb62c2621a848b9763d3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
