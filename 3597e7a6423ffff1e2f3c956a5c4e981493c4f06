@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "33302928_556dce90",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-04-18T07:28:24Z",
+      "side": 1,
+      "message": "question: what do you mean? What Lustre changes? And why is this not integrated in the first patch of the stack that is introducing the specfile since it is not landed yet?",
+      "range": {
+        "startLine": 10,
+        "startChar": 28,
+        "endLine": 11,
+        "endChar": 39
+      },
+      "revId": "3597e7a6423ffff1e2f3c956a5c4e981493c4f06",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
