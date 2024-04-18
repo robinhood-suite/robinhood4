@@ -27,6 +27,7 @@ librobinhood = library(
         'stack.c',
         'statx.c',
         'uri.c',
+        'utils/path.c',
         'utils/uri.c',
         'value.c',
     ],
