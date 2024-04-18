@@ -14,10 +14,14 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sysexits.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 
 #include <lustre/lustreapi.h>
 
 #include <robinhood/backend.h>
+#include <robinhood/utils.h>
 #include <rbh-find/filters.h>
 
 #include "filters.h"
@@ -233,28 +237,64 @@ ost_index2filter(const char *ost_index)
 struct rbh_filter *
 stripe_count2filter(const char *stripe_count)
 {
+    struct rbh_backend *backend = rbh_backend_from_uri("rbh:lustre:.");
+    struct rbh_filter_field default_field = {
+        .fsentry = RBH_FP_INODE_XATTRS,
+        .xattr = "trusted.lov",
+    };
+    struct rbh_filter *default_filter;
+    struct rbh_value_pair pair = {
+        .key = "stripe count",
+    };
     struct rbh_filter *filter;
+    char *mount_path = NULL;
+    char pwd[PATH_MAX];
+    struct {
+        int fd;
+        uint16_t mode;
+        struct rbh_sstack *values;
+    } arg;
+    int rc;
 
-    if (strcmp(stripe_count, "default") == 0) {
-        struct rbh_filter_field default_field = {
-            .fsentry = RBH_FP_INODE_XATTRS,
-            .xattr = "trusted.lov",
-        };
-        filter = rbh_filter_exists_new(&default_field);
-        if (filter == NULL)
-            error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
-                          "stripe_count2filter");
+    if (backend == NULL)
+        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
+                      "rbh_backend_from_uri");
 
-        filter = filter_not(filter);
-    } else {
-        filter = numeric2filter(
-                &predicate2filter_field[LPRED_STRIPE_COUNT - LPRED_MIN],
-                stripe_count
-                );
-    }
+    default_filter = rbh_filter_exists_new(&default_field);
+    if (default_filter == NULL)
+        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
+                      "stripe_count2filter");
+
+    default_filter = filter_not(default_filter);
+
+    if (strcmp(stripe_count, "default") == 0)
+        return default_filter;
+
+    if (getcwd(pwd, sizeof(pwd)) == NULL)
+        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__, "getcwd");
+
+    rc = get_mount_path(pwd, &mount_path);
+    if (rc)
+        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
+                      "get_mount_path");
+
+    arg.fd = open(mount_path, O_RDONLY | O_CLOEXEC);
+    if (arg.fd < 0)
+        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__, "open");
+
+    rc = rbh_backend_get_attribute(backend, "dir.lov", &arg, &pair);
+    if (rc)
+        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
+                      "rbh_backend_get_attribute");
+
+    filter = numeric2filter(get_filter_field(LPRED_STRIPE_COUNT), stripe_count);
     if (filter == NULL)
         error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
                       "stripe_count2filter");
 
-    return filter;
+    if (filter->op != RBH_FOP_EQUAL ||
+        filter->compare.value.uint64 != pair.value->uint64)
+        return filter_and(filter, filter_not(default_filter));
+
+    return filter_or(filter, default_filter);
 }
