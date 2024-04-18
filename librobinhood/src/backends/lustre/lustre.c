@@ -1013,6 +1013,31 @@ lustre_inode_xattrs_callback(const int fd, const struct rbh_statx *statx,
 }
 
 static int
+lustre_get_default_value(int fd, struct rbh_value_pair *pair)
+{
+    struct llapi_layout *layout = get_dir_data_striping(fd);
+    struct rbh_value *value = malloc(sizeof(*value));
+
+    if (value == NULL)
+        return -1;
+
+    if (strcmp(pair->key, "stripe count") == 0) {
+        if (layout == NULL)
+            value->uint64 = 0;
+        else if (llapi_layout_stripe_count_get(layout, &value->uint64))
+            return -1;
+
+        value->type = RBH_VT_UINT64;
+    } else {
+        return -1;
+    }
+
+    pair->value = value;
+
+    return 0;
+}
+
+static int
 lustre_backend_get_attribute(void *backend, const char *attr_name,
                              void *_arg, struct rbh_value_pair *data)
 {
@@ -1025,10 +1050,12 @@ lustre_backend_get_attribute(void *backend, const char *attr_name,
 
     (void)backend;
 
-    if (strcmp(attr_name, "lustre") != 0)
-        return -1;
+    if (strcmp(attr_name, "lustre") == 0)
+        return lustre_get_attrs(arg->fd, arg->mode, data, arg->values);
+    else if (strcmp(attr_name, "dir.lov") == 0)
+        return lustre_get_default_value(arg->fd, data);
 
-    return lustre_get_attrs(arg->fd, arg->mode, data, arg->values);
+    return -1;
 }
 
 struct posix_iterator *
