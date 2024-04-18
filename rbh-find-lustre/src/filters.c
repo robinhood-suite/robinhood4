@@ -302,9 +302,22 @@ stripe_count2filter(const char *stripe_count)
                       "Invalid stripe count provided, should be '<+|->n', got '%s'",
                       stripe_count);
 
-    if (filter->op != RBH_FOP_EQUAL ||
-        filter->compare.value.uint64 != pair.value->uint64)
-        return filter_and(filter, filter_not(default_filter));
+    switch (filter->op) {
+    case RBH_FOP_STRICTLY_LOWER:
+        if (pair.value->uint64 < filter->compare.value.uint64)
+            return filter_or(filter, default_filter);
+        break;
+    case RBH_FOP_STRICTLY_GREATER:
+        if (pair.value->uint64 > filter->compare.value.uint64)
+            return filter_or(filter, default_filter);
+        break;
+    case RBH_FOP_EQUAL:
+        if (pair.value->uint64 == filter->compare.value.uint64)
+            return filter_or(filter, default_filter);
+        break;
+    default:
+        __builtin_unreachable();
+    }
 
-    return filter_or(filter, default_filter);
+    return filter_and(filter, filter_not(default_filter));
 }
