@@ -105,7 +105,7 @@ retry:
         errno = save_errno;
         return NULL;
     }
-    if (rc == size) {
+    if ((size_t)rc == size) {
         /* Output may have been truncated, try a bigger size to check */
         free(symlink);
 
@@ -147,7 +147,7 @@ ceil2(size_t number)
         return number;
 
     shift = sizeof(number) * 8 - __builtin_clzll(number);
-    return shift >= sizeof(number) * 8 ? number : 1 << shift;
+    return shift >= sizeof(number) * 8 ? number : 1u << shift;
 }
 
 static ssize_t
@@ -180,7 +180,7 @@ retry:
                 }
             }
 
-            if (length <= buflen)
+            if ((size_t)length <= buflen)
                 /* The list of xattrs must have shrunk in between both calls */
                 goto retry;
 
@@ -237,7 +237,7 @@ getxattrs(char *proc_fd_path, struct rbh_value_pair **_pairs,
         return -1;
 
     name = names;
-    for (size_t i = 0; i < count; i++, name += strlen(name) + 1) {
+    for (size_t i = 0; i < (size_t)count; i++, name += strlen(name) + 1) {
         struct rbh_value_pair *pair = &pairs[i - skipped];
         char buffer[XATTR_VALUE_MAX_VFS_SIZE];
         struct rbh_value value = {
@@ -274,7 +274,7 @@ getxattrs(char *proc_fd_path, struct rbh_value_pair **_pairs,
                 return -1;
             }
         }
-        assert(length <= sizeof(buffer));
+        assert((size_t)length <= sizeof(buffer));
 
         value.binary.data = rbh_sstack_push(xattrs, buffer, length);
         if (value.binary.data == NULL)

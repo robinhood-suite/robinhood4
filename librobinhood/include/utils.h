@@ -46,7 +46,8 @@ ptralign(void *pointer, size_t *size, size_t alignment)
 {
     ptrdiff_t offset = alignoffset(pointer, alignment);
 
-    *size = *size > offset ? *size - offset : 0;
+    assert(offset >= 0);
+    *size = *size > (size_t)offset ? *size - offset : 0;
     return (char *)pointer + offset;
 }
 

@@ -64,6 +64,7 @@ lustre_mpi_backend_get_attribute(void *backend, const char *attr_name,
                                  void *arg, struct rbh_value_pair *pairs,
                                  int available_pairs)
 {
+    (void) backend;
     return lustre_get_attribute(attr_name, arg, pairs, available_pairs);
 }
 
@@ -118,6 +119,8 @@ lustre_mpi_backend_root(void *backend,
         .destroy = lustre_mpi_backend_destroy,
     };
     struct posix_backend *lustre_mpi_root = backend;
+
+    (void) backend;
 
     lustre_mpi_root->iter_new = lustre_iterator_new;
     lustre_mpi_root->backend.ops = &LUSTRE_MPI_ROOT_BACKEND_OPS;

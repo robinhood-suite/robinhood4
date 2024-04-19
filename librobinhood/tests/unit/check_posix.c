@@ -43,6 +43,9 @@ delete(const char *fpath, const struct stat *sb, int typeflags,
        struct FTW * ftwbuf)
 {
     ck_assert_int_eq(remove(fpath), 0);
+    (void) sb;
+    (void) typeflags;
+    (void) ftwbuf;
     return 0;
 }
 

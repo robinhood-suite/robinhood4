@@ -561,6 +561,7 @@ rbh_filter_validate(const struct rbh_filter *filter)
             errno = EINVAL;
             return -1;
         }
+        __attribute__((fallthrough));
     case RBH_FOP_AND:
     case RBH_FOP_OR:
         return logical_filter_validate(filter);

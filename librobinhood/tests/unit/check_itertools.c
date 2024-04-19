@@ -88,12 +88,14 @@ END_TEST
 static const void *
 null_iter_next(void *iterator)
 {
+    (void) iterator;
     return NULL;
 }
 
 static void
 null_iter_destroy(void *iterator)
 {
+    (void) iterator;
     ;
 }
 
@@ -227,6 +229,7 @@ ascii_iter_next(void *iterator)
 static void
 ascii_iter_destroy(void *iterator)
 {
+    (void) iterator;
     return;
 }
 
