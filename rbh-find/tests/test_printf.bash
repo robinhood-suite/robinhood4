@@ -6,11 +6,6 @@
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
 
-if ! command -v rbh-sync &> /dev/null; then
-    echo "This test requires rbh-sync to be installed" >&2
-    exit 1
-fi
-
 test_dir=$(dirname $(readlink -e $0))
 . $test_dir/test_utils.bash
 
@@ -22,9 +17,10 @@ test_atime()
 {
     touch -a -d "$(date -d '1 hour')" file
     touch -m -d "$(date -d '2 hours')" file
-    rbh-sync "rbh:posix:." "rbh:mongo:$testdb"
 
-    local date=$(rbh-find "rbh:mongo:$testdb" -name file -printf "%a\n")
+    rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
+
+    local date=$(rbh_find "rbh:mongo:$testdb" -name file -printf "%a\n")
     local d=$(date -d "$date")
     local atime=$(date -d "@$(stat -c %X file)")
 
@@ -32,7 +28,7 @@ test_atime()
         error "printf atime: '$d' != actual '$atime'"
     fi
 
-    date=$(rbh-find "rbh:mongo:$testdb" -name file -printf "%A\n")
+    date=$(rbh_find "rbh:mongo:$testdb" -name file -printf "%A\n")
     atime=$(stat -c %X file)
 
     if [[ "$date" != "$atime" ]]; then
@@ -44,9 +40,10 @@ test_ctime()
 {
     touch -a -d "$(date -d '1 hour')" file
     touch -m -d "$(date -d '2 hours')" file
-    rbh-sync "rbh:posix:." "rbh:mongo:$testdb"
 
-    local date=$(rbh-find "rbh:mongo:$testdb" -name file -printf "%c\n")
+    rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
+
+    local date=$(rbh_find "rbh:mongo:$testdb" -name file -printf "%c\n")
     local d=$(date -d "$date")
     local ctime=$(date -d "@$(stat -c %Z file)")
 
@@ -59,9 +56,10 @@ test_mtime()
 {
     touch -a -d "$(date -d '1 hour')" file
     touch -m -d "$(date -d '2 hours')" file
-    rbh-sync "rbh:posix:." "rbh:mongo:$testdb"
 
-    local date=$(rbh-find "rbh:mongo:$testdb" -name file -printf "%t\n")
+    rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
+
+    local date=$(rbh_find "rbh:mongo:$testdb" -name file -printf "%t\n")
     local d=$(date -d "$date")
     local mtime=$(date -d "@$(stat -c %Y file)")
 
@@ -69,7 +67,7 @@ test_mtime()
         error "printf mtime: '$d' != actual '$mtime'"
     fi
 
-    date=$(rbh-find "rbh:mongo:$testdb" -name file -printf "%T\n")
+    date=$(rbh_find "rbh:mongo:$testdb" -name file -printf "%T\n")
     mtime=$(stat -c %Y file)
 
     if [[ "$date" != "$mtime" ]]; then
@@ -80,18 +78,20 @@ test_mtime()
 test_filename()
 {
     touch file
-    rbh-sync "rbh:posix:." "rbh:mongo:$testdb"
 
-    rbh-find "rbh:mongo:$testdb" -name file -printf "%f\n" | sort |
+    rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
+
+    rbh_find "rbh:mongo:$testdb" -name file -printf "%f\n" | sort |
         difflines "file"
 }
 
 test_inode()
 {
     touch file
-    rbh-sync "rbh:posix:." "rbh:mongo:$testdb"
 
-    local i=$(rbh-find "rbh:mongo:$testdb" -name file -printf "%i\n")
+    rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
+
+    local i=$(rbh_find "rbh:mongo:$testdb" -name file -printf "%i\n")
     local inode=$(stat -c %i file)
 
     if [[ $i != $inode ]]; then
@@ -102,9 +102,10 @@ test_inode()
 test_uid()
 {
     touch file
-    rbh-sync "rbh:posix:." "rbh:mongo:$testdb"
 
-    local u=$(rbh-find "rbh:mongo:$testdb" -name file -printf "%U\n")
+    rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
+
+    local u=$(rbh_find "rbh:mongo:$testdb" -name file -printf "%U\n")
     local uid=$(stat -c %u file)
 
     if [[ $u != $uid ]]; then
@@ -115,9 +116,10 @@ test_uid()
 test_gid()
 {
     touch file
-    rbh-sync "rbh:posix:." "rbh:mongo:$testdb"
 
-    local g=$(rbh-find "rbh:mongo:$testdb" -name file -printf "%G\n")
+    rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
+
+    local g=$(rbh_find "rbh:mongo:$testdb" -name file -printf "%G\n")
     local gid=$(stat -c %g file)
 
     if [[ $g != $gid ]]; then
@@ -132,17 +134,17 @@ test_username()
     useradd test
     chown test: file_without_user
 
-    rbh-sync "rbh:posix:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
     userdel test
 
-    local u=$(rbh-find "rbh:mongo:$testdb" -name file -printf "%u\n")
+    local u=$(rbh_find "rbh:mongo:$testdb" -name file -printf "%u\n")
     local name=$(stat -c %U file)
 
     if [[ $u != $name ]]; then
         error "printf user name: $u != actual $name"
     fi
 
-    local u=$(rbh-find "rbh:mongo:$testdb" -name file_without_user \
+    local u=$(rbh_find "rbh:mongo:$testdb" -name file_without_user \
                   -printf "%u\n")
     local uid=$(stat -c %u file_without_user)
 
@@ -158,17 +160,17 @@ test_groupname()
     useradd test
     chown test: file_without_user
 
-    rbh-sync "rbh:posix:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
     userdel test
 
-    local g=$(rbh-find "rbh:mongo:$testdb" -name file -printf "%g\n")
+    local g=$(rbh_find "rbh:mongo:$testdb" -name file -printf "%g\n")
     local name=$(stat -c %G file)
 
     if [[ $g != $name ]]; then
         error "wrong group name: $g != $name"
     fi
 
-    local g=$(rbh-find "rbh:mongo:$testdb" -name file_without_user \
+    local g=$(rbh_find "rbh:mongo:$testdb" -name file_without_user \
                   -printf "%g\n")
     local gid=$(stat -c %g file_without_user)
 
@@ -182,12 +184,12 @@ test_backend_name()
     mongo "other" --eval "db.dropDatabase()" >/dev/null
     mongo "${testdb}2" --eval "db.dropDatabase()" >/dev/null
 
-    rbh-sync "rbh:posix:." "rbh:mongo:other"
+    rbh_sync "rbh:posix:." "rbh:mongo:other"
     touch file
-    rbh-sync "rbh:posix:." "rbh:mongo:$testdb"
-    rbh-sync "rbh:posix:." "rbh:mongo:${testdb}2"
+    rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:posix:." "rbh:mongo:${testdb}2"
 
-    rbh-find "rbh:mongo:$testdb" "rbh:mongo:other" "rbh:mongo:${testdb}2" \
+    rbh_find "rbh:mongo:$testdb" "rbh:mongo:other" "rbh:mongo:${testdb}2" \
         -name file -printf "%H\n" | sort |
             difflines "rbh:mongo:$testdb" "rbh:mongo:${testdb}2"
 
@@ -198,9 +200,10 @@ test_backend_name()
 test_size()
 {
     truncate -s 512 file
-    rbh-sync "rbh:posix:." "rbh:mongo:$testdb"
 
-    local s=$(rbh-find "rbh:mongo:$testdb" -name file -printf "%s\n")
+    rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
+
+    local s=$(rbh_find "rbh:mongo:$testdb" -name file -printf "%s\n")
     local size=$(stat -c %s file)
 
     if [[ $s != $size ]]; then
@@ -217,9 +220,9 @@ test_type()
     mknod block b 0 0
     mknod char c 0 0
 
-    rbh-sync "rbh:posix:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
 
-    rbh-find "rbh:mongo:$testdb" -printf "%p %y\n" | sort |
+    rbh_find "rbh:mongo:$testdb" -printf "%p %y\n" | sort |
         difflines "/block b" "/char c" "/ d" "/fifo p" "/file f" "/hlink f" \
             "/slink l"
 }
@@ -229,13 +232,13 @@ test_symlink()
     touch file
     ln -s file slink
 
-    rbh-sync "rbh:posix:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
 
     # %l for files other than symlink return an empty string
-    rbh-find "rbh:mongo:$testdb" -name file -printf "%l\n" |
+    rbh_find "rbh:mongo:$testdb" -name file -printf "%l\n" |
         difflines ""
 
-    rbh-find "rbh:mongo:$testdb" -name slink -printf "%l\n" |
+    rbh_find "rbh:mongo:$testdb" -name slink -printf "%l\n" |
         difflines "file"
 }
 
@@ -243,9 +246,9 @@ test_percent_sign()
 {
     touch file
 
-    rbh-sync "rbh:posix:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
 
-    rbh-find "rbh:mongo:$testdb" -printf "%%\n" |
+    rbh_find "rbh:mongo:$testdb" -printf "%%\n" |
         difflines "%" "%"
 }
 
@@ -254,16 +257,16 @@ test_blocks()
     dd oflag=direct if=/dev/urandom of=blocks count=4
     touch file
 
-    rbh-sync "rbh:posix:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
 
-    local b=$(rbh-find "rbh:mongo:$testdb" -name file -printf "%b\n")
+    local b=$(rbh_find "rbh:mongo:$testdb" -name file -printf "%b\n")
     local blocks=$(stat -c %b file)
 
     if [[ $b != $blocks ]]; then
         error "wrong blocks: printf output '$b' != stat output '$blocks'"
     fi
 
-    b=$(rbh-find "rbh:mongo:$testdb" -name blocks -printf "%b\n")
+    b=$(rbh_find "rbh:mongo:$testdb" -name blocks -printf "%b\n")
     blocks=$(stat -c %b blocks)
 
     if [[ $b != $blocks ]]; then
@@ -275,9 +278,9 @@ test_depth()
 {
     mkdir -p a/b/c/d/e
 
-    rbh-sync "rbh:posix:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
 
-    rbh-find "rbh:mongo:$testdb" -printf "%d\n" | sort |
+    rbh_find "rbh:mongo:$testdb" -printf "%d\n" | sort |
         difflines "$(find . -printf "%d\n")"
 }
 
@@ -285,9 +288,9 @@ test_device()
 {
     touch file
 
-    rbh-sync "rbh:posix:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
 
-    local D=$(rbh-find "rbh:mongo:$testdb" -name file -printf "%D\n")
+    local D=$(rbh_find "rbh:mongo:$testdb" -name file -printf "%D\n")
     local device=$(stat -c %d file)
 
     if [[ $D != $device ]]; then
@@ -299,9 +302,9 @@ test_dirname()
 {
     mkdir -p a/b/c/d/e
 
-    rbh-sync "rbh:posix:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
 
-    rbh-find "rbh:mongo:$testdb" -printf "%h\n" | sort |
+    rbh_find "rbh:mongo:$testdb" -printf "%h\n" | sort |
         difflines "/" "/" "/a" "/a/b" "/a/b/c" "/a/b/c/d"
 }
 
@@ -317,11 +320,11 @@ test_symbolic_permission()
     mkdir dir
     mknod block b 1 2
 
-    rbh-sync "rbh:posix:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
 
     local find_output="$(find . -printf "%M\n" | sort)"
 
-    rbh-find "rbh:mongo:$testdb" -printf "%M\n" | sort |
+    rbh_find "rbh:mongo:$testdb" -printf "%M\n" | sort |
         difflines "$find_output"
 }
 
@@ -331,11 +334,11 @@ test_octal_permission()
     chmod 461 file
     mkdir dir
 
-    rbh-sync "rbh:posix:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
 
     local find_output="$(find . -printf "%m\n" | sort)"
 
-    rbh-find "rbh:mongo:$testdb" -printf "%m\n" | sort |
+    rbh_find "rbh:mongo:$testdb" -printf "%m\n" | sort |
         difflines "$find_output"
 }
 
@@ -348,9 +351,9 @@ test_hardlink()
     ln blob hlink3
     touch dummy
 
-    rbh-sync "rbh:posix:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
 
-    local N1=$(rbh-find "rbh:mongo:$testdb" -name file -printf "%n\n")
+    local N1=$(rbh_find "rbh:mongo:$testdb" -name file -printf "%n\n")
     local hardlink1=$(stat -c %h file)
 
     if [[ $N1 != $hardlink1 ]]; then
@@ -358,7 +361,7 @@ test_hardlink()
               "stat output '$hardlink1'"
     fi
 
-    local N2=$(rbh-find "rbh:mongo:$testdb" -name blob -printf "%n\n")
+    local N2=$(rbh_find "rbh:mongo:$testdb" -name blob -printf "%n\n")
     local hardlink2=$(stat -c %h blob)
 
     if [[ $N2 != $hardlink2 ]]; then
@@ -366,7 +369,7 @@ test_hardlink()
               "stat output '$hardlink2'"
     fi
 
-    local N3=$(rbh-find "rbh:mongo:$testdb" -name dummy -printf "%n\n")
+    local N3=$(rbh_find "rbh:mongo:$testdb" -name dummy -printf "%n\n")
     local hardlink3=$(stat -c %h dummy)
 
     if [[ $N3 != $hardlink3 ]]; then
@@ -381,12 +384,12 @@ test_path_without_start()
     mkdir -p tmp/test
     touch tmp/test/blob
 
-    rbh-sync "rbh:posix:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
 
-    rbh-find "rbh:mongo:$testdb" -printf "%P\n" | sort |
+    rbh_find "rbh:mongo:$testdb" -printf "%P\n" | sort |
         difflines "" "file" "tmp" "tmp/test" "tmp/test/blob"
 
-    rbh-find "rbh:mongo:$testdb#tmp" -printf "%P\n" | sort |
+    rbh_find "rbh:mongo:$testdb#tmp" -printf "%P\n" | sort |
         difflines "" "test" "test/blob"
 }
 

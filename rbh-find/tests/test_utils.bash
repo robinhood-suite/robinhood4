@@ -13,7 +13,13 @@
 SUITE=${BASH_SOURCE##*/}
 SUITE=${SUITE%.*}
 
-__rbh_find=$(PATH="$PWD:$PATH" which rbh-find)
+__rbh_sync=$(PATH="$PWD/rbh-sync:$PATH" which rbh-sync)
+rbh_sync()
+{
+    "$__rbh_sync" "$@"
+}
+
+__rbh_find=$(PATH="$PWD/rbh-find:$PATH" which rbh-find)
 rbh_find()
 {
     "$__rbh_find" "$@"

@@ -6,11 +6,6 @@
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
 
-if ! command -v rbh-sync &> /dev/null; then
-    echo "This test requires rbh-sync to be installed" >&2
-    exit 1
-fi
-
 if ! lctl get_param mdt.*.hsm_control | grep "enabled"; then
     echo "At least 1 MDT needs to have HSM control enabled" >&2
     exit 1
@@ -26,7 +21,8 @@ test_dir=$(dirname $(readlink -e $0))
 test_syntax_error()
 {
     touch "dummy"
-    rbh-sync "rbh:lustre:." "rbh:mongo:$testdb"
+
+    rbh_sync "rbh:lustre:." "rbh:mongo:$testdb"
 
     rbh_lfind "rbh:mongo:$testdb" -fid fail &&
         error "command should have failed because of invalid syntax"
@@ -61,7 +57,8 @@ test_syntax_error()
 test_unknown_fid()
 {
     touch "unknown_fid"
-    rbh-sync "rbh:lustre:." "rbh:mongo:$testdb"
+
+    rbh_sync "rbh:lustre:." "rbh:mongo:$testdb"
 
     rbh_lfind "rbh:mongo:$testdb" -fid 0x0:0x0:0x0 | sort |
         difflines
@@ -72,7 +69,8 @@ test_known_fid()
     local file="known_fid"
 
     touch "$file"
-    rbh-sync "rbh:lustre:." "rbh:mongo:$testdb"
+
+    rbh_sync "rbh:lustre:." "rbh:mongo:$testdb"
 
     local fid=$(lfs path2fid "$file")
     rbh_lfind "rbh:mongo:$testdb" -fid "$fid" | sort |

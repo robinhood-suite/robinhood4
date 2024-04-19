@@ -6,16 +6,11 @@
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
 
-if ! command -v rbh-lfind &> /dev/null; then
-    echo "This test requires rbh-lfind to be installed" >&2
-    exit 1
-fi
-
 test_dir=$(dirname $(readlink -e $0))
 . $test_dir/../test_utils.bash
 . $test_dir/lustre_utils.bash
 
-__rbh_lfind=$(PATH="$PWD:$PATH" which rbh-lfind)
+__rbh_lfind=$(PATH="$PWD/rbh-find-lustre:$PATH" which rbh-lfind)
 rbh_lfind()
 {
     "$__rbh_lfind" "$@"

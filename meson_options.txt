@@ -1,1 +1,2 @@
-option('build_mpi', type: 'boolean', value: true)
+option('mfu', type: 'feature', value: 'enabled')
+option('hestia', type: 'feature', value: 'disabled')

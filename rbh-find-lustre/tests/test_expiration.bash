@@ -8,11 +8,6 @@
 
 set -e
 
-if ! command -v rbh-sync &> /dev/null; then
-    echo "This test requires rbh-sync to be installed" >&2
-    exit 1
-fi
-
 test_dir=$(dirname $(readlink -e $0))
 . $test_dir/test_utils.bash
 
@@ -89,7 +84,7 @@ test_expired_abs()
     touch "$fileE"
     setfattr -n user.expires -v "$timeE" "$fileE"
 
-    rbh-sync "rbh:lustre:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:lustre:." "rbh:mongo:$testdb"
 
     rbh_lfind "rbh:mongo:$testdb" -expired-at $(date +%s) | sort |
         difflines "/$fileA" "/$fileC"
@@ -133,7 +128,7 @@ test_expired_rel()
     touch "$fileC"
     setfattr -n user.expires -v "$timeC" "$fileC"
 
-    rbh-sync "rbh:lustre:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:lustre:." "rbh:mongo:$testdb"
 
     rbh_lfind "rbh:mongo:$testdb" -expired-at $(date +%s) | sort |
         difflines "/$fileA" "/$fileB"
@@ -174,7 +169,7 @@ test_printf_expiration_info()
     setfattr -n user.expires -v "$timeB" "$fileB"
     setfattr -n user.expires -v "$timeC" "$fileC"
 
-    rbh-sync "rbh:lustre:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:lustre:." "rbh:mongo:$testdb"
 
     local expA="$(stat -c %X $fileA)"
     expA="$(date -d "@$((expA + timeA))" "+%a %b %e %T %Y")"
@@ -207,7 +202,7 @@ RBH_RETENTION_XATTR: \"user.blob\"
     setfattr -n user.blob -v 42 $dir/$fileA
     setfattr -n user.expires -v 777 $dir/$fileB
 
-    rbh-sync --config $conf_file "rbh:lustre:$dir" "rbh:mongo:$testdb"
+    rbh_sync --config $conf_file "rbh:lustre:$dir" "rbh:mongo:$testdb"
 
     rbh_lfind --config $conf_file "rbh:mongo:$testdb" -printf "%p %e\n" | sort |
         difflines "/$fileA 42" "/$fileB None" "/ None"

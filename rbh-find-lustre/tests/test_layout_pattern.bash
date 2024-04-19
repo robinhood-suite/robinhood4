@@ -6,11 +6,6 @@
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
 
-if ! command -v rbh-sync &> /dev/null; then
-    echo "This test requires rbh-sync to be installed" >&2
-    exit 1
-fi
-
 test_dir=$(dirname $(readlink -e $0))
 . $test_dir/test_utils.bash
 
@@ -38,19 +33,19 @@ test_default()
 
     mkdir $dir
 
-    rbh-sync "rbh:lustre:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:lustre:." "rbh:mongo:$testdb"
 
     rbh_lfind "rbh:mongo:$testdb" -layout-pattern default | sort |
         difflines "/" "/$dir"
 
     lfs setstripe -L mdt -E 1M $dir
-    rbh-sync "rbh:lustre:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:lustre:." "rbh:mongo:$testdb"
 
     rbh_lfind "rbh:mongo:$testdb" -layout-pattern default | sort |
         difflines "/"
 
     lfs setstripe -L raid0 $dir
-    rbh-sync "rbh:lustre:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:lustre:." "rbh:mongo:$testdb"
 
     rbh_lfind "rbh:mongo:$testdb" -layout-pattern default | sort |
         difflines "/"
@@ -67,7 +62,7 @@ test_layout()
     lfs setstripe -L raid0 -c 1 .
     lfs setstripe -L mdt -E 1M $dir
 
-    rbh-sync "rbh:lustre:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:lustre:." "rbh:mongo:$testdb"
 
     rbh_lfind "rbh:mongo:$testdb" -layout-pattern raid0 | sort |
         difflines "/" "/$dir/$file"
@@ -75,7 +70,7 @@ test_layout()
         difflines "/$dir"
 
     lfs migrate -L mdt -E 1M $dir/$file
-    rbh-sync "rbh:lustre:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:lustre:." "rbh:mongo:$testdb"
 
     rbh_lfind "rbh:mongo:$testdb" -layout-pattern raid0 | sort |
         difflines "/"
@@ -83,7 +78,7 @@ test_layout()
         difflines "/$dir" "/$dir/$file"
 
     lfs setstripe -L mdt -E 1M .
-    rbh-sync "rbh:lustre:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:lustre:." "rbh:mongo:$testdb"
 
     rbh_lfind "rbh:mongo:$testdb" -layout-pattern raid0 | sort |
         difflines
@@ -99,7 +94,7 @@ test_default_layout()
     mkdir $dir
     lfs setstripe -L raid0 -c 1 $file
 
-    rbh-sync "rbh:lustre:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:lustre:." "rbh:mongo:$testdb"
 
     rbh_lfind "rbh:mongo:$testdb" -layout-pattern mdt | sort |
         difflines
@@ -130,7 +125,7 @@ test_other_layouts()
     archive_file $file2
     lfs hsm_release $file2
 
-    rbh-sync "rbh:lustre:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:lustre:." "rbh:mongo:$testdb"
 
     rbh_lfind "rbh:mongo:$testdb" -layout-pattern overstriped | sort |
         difflines "/$file1"

@@ -4,16 +4,6 @@
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
 
-cc = meson.get_compiler('c')
-
-liblustre = dependency('lustre', disabler: true, required: false)
-if not liblustre.found()
-        liblustre = cc.find_library('lustreapi', disabler:true, required: false)
-endif
-
-libmfu = cc.find_library('mfu', disabler: true, required: false)
-libmpi = dependency('ompi', disabler: true, required: false)
-
 librbh_lustre_mpi = library(
     'rbh-lustre-mpi',
     sources: [
@@ -30,5 +20,5 @@ librbh_lustre_mpi = library(
     ],
     include_directories: rbh_include,
     install: true,
+    c_args: '-DHAVE_CONFIG_H',
 )
-

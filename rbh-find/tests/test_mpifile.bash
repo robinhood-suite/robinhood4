@@ -6,11 +6,6 @@
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
 
-if ! command -v rbh-sync &> /dev/null; then
-    echo "This test requires rbh-sync to be installed" >&2
-    exit 1
-fi
-
 test_dir=$(dirname $(readlink -e $0))
 . $test_dir/test_utils.bash
 
@@ -58,9 +53,9 @@ test_path()
     mkdir dir
     touch dir/fileB dir/fileC
 
-    # We test filtering on path from dwalk and rbh-sync because dwalk store the
-    # absolute path unlike rbh-sync, but rbh-find's output is supposed to be the
-    # same with dwalk's file and rbh-sync's file.
+    # We test filtering on path from dwalk and rbh_sync because dwalk store the
+    # absolute path unlike rbh_sync, but rbh-find's output is supposed to be the
+    # same with dwalk's file and rbh_sync's file.
 
     dwalk -q -o "$testdb.mfu" .
 
@@ -70,7 +65,7 @@ test_path()
     rbh_find "rbh:mpi-file:$testdb.mfu" -path "/dir/*" | sort |
         difflines "/dir/fileB" "/dir/fileC"
 
-    rbh-sync "rbh:posix:." "rbh:mpi-file:$testdb.mfu"
+    rbh_sync "rbh:posix:." "rbh:mpi-file:$testdb.mfu"
 
     rbh_find "rbh:mpi-file:$testdb.mfu" -path "/fileA" | sort |
         difflines "/fileA"

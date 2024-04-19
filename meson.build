@@ -1,28 +1,60 @@
+# This file is part of RobinHood 4
+# Copyright (C) 2024 Commissariat a l'energie atomique et aux energies
+#                    alternatives
+#
 # SPDX-License-Identifer: LGPL-3.0-or-later
+
 project(
     'robinhood4',
-    'c',
+    'c', 'cpp',
     version: '1.0.0',
     license: 'LGPL3.0-or-later',
     default_options: [
-        'warning_level=2',
         'werror=true',
+        'c_std=c11',
     ],
 )
 
-specfile = configuration_data()
-specfile.set('version', meson.project_version())
-specfile.set('file', 'robinhood4.ocean.spec')
-configure_file(
-    input: 'robinhood4.ocean.spec.in',
-    output: specfile.get('file'),
-    configuration: specfile,
+# GNU extensions
+cc = meson.get_compiler('c')
+options = cc.get_supported_arguments([
+    '-Wno-gnu-alignof-expression', # gcc >= 10.1.0 (maybe less)
+])
+
+## Macro definitions
+if not cc.compiles('#include <fts.h>', name: 'fts.h with _FILE_OFFSET_BITS=64')
+    add_project_arguments(['-U_FILE_OFFSET_BITS'], language: 'c')
+endif
+
+
+add_project_arguments([
+        '-D_DEFAULT_SOURCE',
+        '-D_GNU_SOURCE',
+        '-Wno-pedantic',
+    ] + options,
+    language: 'c'
 )
-meson.add_dist_script('utils/add_specfile_to_dist.sh', specfile.get('file'))
-custom_target('rpm',
-    output: 'robinhood4-' + meson.project_version() + '.ocean.rpm',
-    command: [
-        # The `get_option` isn't generic at all, but it will suffice for now
-        '../utils/make_rpm.sh', meson.current_build_dir(), meson.project_version(), get_option('build_mpi').to_string()
-    ],
-)
+
+miniyaml = dependency('miniyaml', version: '>=0.0.0')
+
+liblustre = dependency('lustre', disabler: true, required: false)
+if not liblustre.found()
+        liblustre = cc.find_library('lustreapi', disabler:true, required: false)
+endif
+
+if get_option('mfu').enabled()
+    libmfu = cc.find_library('mfu', disabler: true, required: false)
+    libmpi = dependency('ompi', disabler: true, required: false)
+else
+    libmfu = disabler()
+    libmpi = disabler()
+endif
+
+subdir('librobinhood')
+subdir('rbh-sync')
+subdir('rbh-find')
+subdir('rbh-fsevents')
+subdir('rbh-find-lustre')
+subdir('rbh-capabilities')
+subdir('packaging')
+subdir('utils')

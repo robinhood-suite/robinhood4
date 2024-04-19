@@ -8,11 +8,6 @@
 
 set -xe
 
-if ! command -v rbh-sync &> /dev/null; then
-    echo "This test requires rbh-sync to be installed" >&2
-    exit 1
-fi
-
 test_dir=$(dirname $(readlink -e $0))
 . $test_dir/test_utils.bash
 
@@ -24,7 +19,8 @@ test_id()
 {
     touch fileA
     touch fileB
-    rbh-sync "rbh:lustre:." "rbh:mongo:$testdb"
+
+    rbh_sync "rbh:lustre:." "rbh:mongo:$testdb"
 
     local IDA=$(rbh_lfind "rbh:mongo:$testdb" -name fileA -printf "%I\n")
     local IDB=$(rbh_lfind "rbh:mongo:$testdb" -name fileB -printf "%I\n")

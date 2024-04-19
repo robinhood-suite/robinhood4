@@ -11,21 +11,6 @@ if not check.found()
     subdir_done()
 endif
 
-miniyaml = dependency('miniyaml', version: '>=0.1.0')
-
-# force tests to use the newly built binaries over paths in
-# LD_LIBRARY_PATH. The problem is that recent linkers will
-# use RUNPATH when meson requests -rpath, and runpath has
-# lower priority than LD_LIBRARY_PATH (contrary to rpath)
-# See https://github.com/mesonbuild/meson/issues/1383
-env = environment()
-env.prepend('LD_LIBRARY_PATH', meson.build_root() + '/src')
-# .. and also add paths for plugins required by tests that require one
-env.prepend('LD_LIBRARY_PATH', meson.build_root() + '/src/backends/posix')
-env.prepend('LD_LIBRARY_PATH', meson.build_root() + '/src/backends/lustre')
-env.prepend('LD_LIBRARY_PATH', meson.build_root() + '/src/backends/lustre_mpi')
-env.prepend('LD_LIBRARY_PATH', meson.build_root() + '/src/backends/posix_mpi')
-
 foreach t: ['check_backend', 'check_filter', 'check_fsentry',
             'check_fsevent', 'check_hashmap', 'check_id', 'check_itertools',
             'check_list', 'check_lu_fid', 'check_plugin', 'check_queue',
@@ -35,8 +20,9 @@ foreach t: ['check_backend', 'check_filter', 'check_fsentry',
          executable(t, t + '.c',
                     dependencies: [check, miniyaml],
                     link_with: [librobinhood],
-                    include_directories: rbh_include),
-         env: env)
+                    include_directories: rbh_include,
+                    c_args: '-DHAVE_CONFIG_H'),
+         env: backend_path_env)
 endforeach
 
 foreach t: ['check_posix']
@@ -44,8 +30,9 @@ foreach t: ['check_posix']
          executable(t, t + '.c',
                     dependencies: [check, miniyaml],
                     link_with: [librobinhood, librbh_posix],
-                    include_directories: rbh_include),
-         env: env)
+                    include_directories: rbh_include,
+                    c_args: '-DHAVE_CONFIG_H'),
+         env: backend_path_env)
 endforeach
 
 foreach t: ['check_lustre']
@@ -53,8 +40,9 @@ foreach t: ['check_lustre']
          executable(t, t + '.c',
                     dependencies: [check, miniyaml],
                     link_with: [librobinhood, librbh_lustre],
-                    include_directories: rbh_include),
-         env: env)
+                    include_directories: rbh_include,
+                    c_args: '-DHAVE_CONFIG_H'),
+         env: backend_path_env)
 endforeach
 
 
@@ -67,13 +55,14 @@ if r.returncode() == 0 and libmfu.found()
         executable(t, t + '.c',
             dependencies: [check, miniyaml],
             link_with: [librobinhood, librbh_lustre_mpi],
-            include_directories: rbh_include)
+            include_directories: rbh_include,
+            c_args: '-DHAVE_CONFIG_H')
     endforeach
 
     builddir = meson.current_build_dir()
     test('check_lustre_mpi', bash,
-         args: ['../tests/unit/check_lustre_mpi.sh', builddir],
-         env: env)
+         args: [files('check_lustre_mpi.sh'), builddir],
+         env: backend_path_env)
 
     foreach t: ['check_posix_mpi']
         executable(t, t + '.c',
@@ -84,6 +73,5 @@ if r.returncode() == 0 and libmfu.found()
 
     test('check_posix_mpi', bash,
          args: ['../tests/unit/check_posix_mpi.sh', builddir],
-         env: env)
-
+         env: backend_path_env)
 endif

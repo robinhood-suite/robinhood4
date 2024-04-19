@@ -6,11 +6,6 @@
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
 
-if ! command -v rbh-sync &> /dev/null; then
-    echo "This test requires rbh-sync to be installed" >&2
-    exit 1
-fi
-
 test_dir=$(dirname $(readlink -e $0))
 . $test_dir/test_utils.bash
 
@@ -42,19 +37,19 @@ test_default()
     local default_stripe_size="$(lfs getstripe -S $LUSTRE_DIR | xargs)"
     mkdir $dir
 
-    rbh-sync "rbh:lustre:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:lustre:." "rbh:mongo:$testdb"
 
     rbh_lfind "rbh:mongo:$testdb" -stripe-size default | sort |
         difflines "/" "/$dir"
 
     lfs setstripe -S $((default_stripe_size * 2)) $dir
-    rbh-sync "rbh:lustre:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:lustre:." "rbh:mongo:$testdb"
 
     rbh_lfind "rbh:mongo:$testdb" -stripe-size default | sort |
         difflines "/"
 
     lfs setstripe -S $((default_stripe_size)) $dir
-    rbh-sync "rbh:lustre:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:lustre:." "rbh:mongo:$testdb"
 
     rbh_lfind "rbh:mongo:$testdb" -stripe-size default | sort |
         difflines "/"
@@ -76,7 +71,7 @@ test_stripe_size()
     local threeM="$(($oneM * 3))"
     local fourM="$(($oneM * 4))"
 
-    rbh-sync "rbh:lustre:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:lustre:." "rbh:mongo:$testdb"
 
     rbh_lfind "rbh:mongo:$testdb" -stripe-size $oneM | sort |
         difflines "/$dir/$file"
@@ -100,13 +95,13 @@ test_stripe_size()
         difflines "/"
 
     lfs migrate -S $threeM $dir/$file
-    rbh-sync "rbh:lustre:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:lustre:." "rbh:mongo:$testdb"
 
     rbh_lfind "rbh:mongo:$testdb" -stripe-size $threeM | sort |
         difflines "/" "/$dir/$file"
 
     lfs setstripe -S $threeM $dir
-    rbh-sync "rbh:lustre:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:lustre:." "rbh:mongo:$testdb"
 
     rbh_lfind "rbh:mongo:$testdb" -stripe-size $threeM | sort |
         difflines "/" "/$dir" "/$dir/$file"
@@ -129,7 +124,7 @@ test_default_stripe_size()
     local threeM="$(($fourM * 3 / 4))"
     local twoM="$(($fourM / 2))"
 
-    rbh-sync "rbh:lustre:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:lustre:." "rbh:mongo:$testdb"
 
     rbh_lfind "rbh:mongo:$testdb" \
         -stripe-size $(lfs getstripe -S $LUSTRE_DIR | xargs) | sort |
