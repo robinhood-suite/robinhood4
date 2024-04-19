@@ -441,6 +441,8 @@ _xattrs_get_magic_and_gen(int fd, const char *lov_buf,
     char *magic_str;
     int rc;
 
+    (void) fd;
+
     magic = ((struct lov_user_md *) lov_buf)->lmm_magic;
 
     switch (magic) {
@@ -784,7 +786,7 @@ again:
 
         objects = lum->lum_objects;
 
-        for (int i = 0; i < lum->lum_stripe_count; i++)
+        for (uint32_t i = 0; i < lum->lum_stripe_count; i++)
             mdt_idx[i] = create_uint32_value(objects[i].lum_mds);
 
         rc = fill_sequence_pair("child_mdt_idx", mdt_idx, lum->lum_stripe_count,
@@ -1175,6 +1177,7 @@ lustre_fts_backend_get_attribute(void *backend, const char *attr_name,
                                  void *arg, struct rbh_value_pair *pairs,
                                  int available_pairs)
 {
+    (void) backend;
     return lustre_get_attribute(attr_name, arg, pairs, available_pairs);
 }
 

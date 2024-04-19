@@ -46,7 +46,7 @@ random_read(char *buffer, size_t size)
     do {
         read_bytes += read(fd, buffer, size);
         ck_assert_int_ge(read_bytes, 0);
-    } while (read_bytes < size);
+    } while ((size_t)read_bytes < size);
 
     close(fd);
 }
@@ -177,7 +177,7 @@ START_TEST(rrp_full)
     head = rbh_ringr_push(ringr, buffer, UCHAR_MAX + 1);
     ck_assert_mem_eq(head, buffer, UCHAR_MAX + 1);
 
-    for (size_t i = 1; i < page_size / (UCHAR_MAX + 1); i++) {
+    for (size_t i = 1; i < (size_t)page_size / (UCHAR_MAX + 1); i++) {
         void *data;
 
         data = rbh_ringr_push(ringr, buffer, UCHAR_MAX + 1);

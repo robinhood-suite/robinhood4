@@ -22,6 +22,9 @@ bson_append_statx_attributes(bson_t *bson, const char *key, size_t key_length,
 {
     bson_t document = *bson;
 
+    (void) key;
+    (void) key_length;
+
     return (mask & RBH_STATX_ATTR_COMPRESSED ?
                 BSON_APPEND_BOOL(&document, attr2str(RBH_STATX_ATTR_COMPRESSED),
                                  attributes & RBH_STATX_ATTR_COMPRESSED) : true)
@@ -60,6 +63,9 @@ bson_append_statx(bson_t *bson, const char *key, size_t key_length,
 {
     bson_t *document = bson;
     bson_t subdoc;
+
+    (void) key;
+    (void) key_length;
 
     return (statxbuf->stx_mask & RBH_STATX_BLKSIZE ?
                 BSON_APPEND_INT32(document, statx2str(RBH_STATX_BLKSIZE),
@@ -186,7 +192,9 @@ bson_append_xattr(bson_t *bson, const char *prefix, const char *xattr,
     int keylen;
 
     keylen = snprintf(key, sizeof(onstack), "%s.%s", prefix, xattr);
-    if (keylen >= sizeof(onstack))
+    if (keylen < 0)
+        return false;
+    if ((size_t)keylen >= sizeof(onstack))
         keylen = asprintf(&key, "%s.%s", prefix, xattr);
     if (keylen < 0)
         return false;
