@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e1237941_2d86b45f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-04-19T07:59:15Z",
+      "side": 1,
+      "message": "major: this is not what this patch does",
+      "range": {
+        "startLine": 11,
+        "startChar": 30,
+        "endLine": 12,
+        "endChar": 20
+      },
+      "revId": "e30613c3c42cf0616e31664b949cab0ef19545de",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8ca09ba0_b9f7235d",
+        "filename": "rbh-find-lustre/src/filters.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-04-19T07:59:15Z",
+      "side": 1,
+      "message": "question: why not adding a field LPRED_DEFAULT_STRIPE_COUNT to the list?",
+      "range": {
+        "startLine": 239,
+        "startChar": 8,
+        "endLine": 242,
+        "endChar": 10
+      },
+      "revId": "e30613c3c42cf0616e31664b949cab0ef19545de",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5da761f5_60023eda",
+        "filename": "rbh-find-lustre/src/filters.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-04-19T07:59:15Z",
+      "side": 1,
+      "message": "minor: this is probably not necessary but we could add a filter is_dir to be more accurate.",
+      "range": {
+        "startLine": 243,
+        "startChar": 17,
+        "endLine": 243,
+        "endChar": 54
+      },
+      "revId": "e30613c3c42cf0616e31664b949cab0ef19545de",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
