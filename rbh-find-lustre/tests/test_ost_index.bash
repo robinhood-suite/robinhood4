@@ -6,11 +6,6 @@
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
 
-if ! command -v rbh-sync &> /dev/null; then
-    echo "This test requires rbh-sync to be installed" >&2
-    exit 1
-fi
-
 test_dir=$(dirname $(readlink -e $0))
 . $test_dir/test_utils.bash
 
@@ -46,7 +41,7 @@ test_one_match()
 
     lfs setstripe -i 0 -c 1 $file
 
-    rbh-sync "rbh:lustre:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:lustre:." "rbh:mongo:$testdb"
 
     rbh_lfind "rbh:mongo:$testdb" -ost 0 | sort |
         difflines "/$file"
@@ -62,7 +57,7 @@ test_none()
 
     lfs setstripe -i 0 -c 1 $file
 
-    rbh-sync "rbh:lustre:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:lustre:." "rbh:mongo:$testdb"
 
     rbh_lfind "rbh:mongo:$testdb" -ost 1 | sort |
         difflines

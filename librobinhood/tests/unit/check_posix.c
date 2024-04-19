@@ -20,7 +20,7 @@
 #include "check-compat.h"
 #include "robinhood/backends/posix.h"
 #ifndef HAVE_STATX
-# include "robinhood/statx-compat.h"
+# include "robinhood/statx.h"
 #endif
 
 /*----------------------------------------------------------------------------*

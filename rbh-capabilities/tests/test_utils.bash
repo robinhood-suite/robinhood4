@@ -13,6 +13,12 @@
 SUITE=${BASH_SOURCE##*/}
 SUITE=${SUITE%.*}
 
+__rbh_capabilities=$(PATH="$PWD/rbh-capabilities:$PATH" which rbh-capabilities)
+rbh_capbilities()
+{
+    "$__rbh_capabilities" "$@"
+}
+
 setup()
 {
     # Create a test directory and `cd` into it

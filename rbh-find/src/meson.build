@@ -15,7 +15,12 @@ librbhfind = library(
         'utils.c',
     ],
     version: meson.project_version(),
-    dependencies: [librobinhood],
+    dependencies: [librobinhood_dep],
     include_directories: rbhfind_include,
     install: true,
+)
+
+librbhfind_dep = declare_dependency(
+    link_with: librbhfind,
+    include_directories: rbhfind_include
 )

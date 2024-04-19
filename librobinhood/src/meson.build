@@ -5,7 +5,6 @@
 # SPDX-License-Identifer: LGPL-3.0-or-later
 
 libdl = cc.find_library('dl', required: false)
-miniyaml = dependency('miniyaml', version: '>=0.1.0')
 
 librobinhood = library(
     'robinhood',
@@ -40,6 +39,12 @@ librobinhood = library(
     dependencies: [ libdl, miniyaml ],
     include_directories: rbh_include,
     install: true,
+    c_args: '-DHAVE_CONFIG_H',
+)
+
+librobinhood_dep = declare_dependency(
+    link_with: librobinhood,
+    include_directories: rbh_include
 )
 
 subdir('backends')

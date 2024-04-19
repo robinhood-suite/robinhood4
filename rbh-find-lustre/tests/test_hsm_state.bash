@@ -6,11 +6,6 @@
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
 
-if ! command -v rbh-sync &> /dev/null; then
-    echo "This test requires rbh-sync to be installed" >&2
-    exit 1
-fi
-
 if ! lctl get_param mdt.*.hsm_control | grep "enabled"; then
     echo "At least 1 MDT needs to have HSM control enabled" >&2
     exit 1
@@ -28,7 +23,8 @@ test_none()
     touch "none"
     touch "archived"
     archive_file "archived"
-    rbh-sync "rbh:lustre:." "rbh:mongo:$testdb"
+
+    rbh_sync "rbh:lustre:." "rbh:mongo:$testdb"
 
     rbh_lfind "rbh:mongo:$testdb" -hsm-state none | sort |
         difflines "/none"
@@ -51,7 +47,7 @@ test_archived_states()
         fi
     done
 
-    rbh-sync "rbh:lustre:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:lustre:." "rbh:mongo:$testdb"
 
     for state in "${states[@]}"; do
         rbh_lfind "rbh:mongo:$testdb" -hsm-state "$state" | sort |
@@ -70,7 +66,7 @@ test_independant_states()
         sudo lfs hsm_set "--$state" "$state"
     done
 
-    rbh-sync "rbh:lustre:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:lustre:." "rbh:mongo:$testdb"
 
     for state in "${states[@]}"; do
         rbh_lfind "rbh:mongo:$testdb" -hsm-state "$state" | sort |
@@ -96,7 +92,7 @@ test_multiple_states()
         done
     done
 
-    rbh-sync "rbh:lustre:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:lustre:." "rbh:mongo:$testdb"
 
     for i in $(seq 0 $length); do
         local state=${states[$i]}

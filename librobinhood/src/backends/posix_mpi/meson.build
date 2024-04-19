@@ -4,11 +4,6 @@
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
 
-cc = meson.get_compiler('c')
-
-libmfu = cc.find_library('mfu', disabler: true, required: false)
-libmpi = dependency('ompi', disabler: true, required: false)
-
 librbh_posix_mpi = library(
     'rbh-posix-mpi',
     sources: [

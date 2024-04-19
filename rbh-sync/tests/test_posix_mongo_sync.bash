@@ -237,13 +237,15 @@ test_continue_sync_on_error()
     if [[ "$WITH_MPI" == "true" ]]; then
         # We need to give execute permissions to the user for mpirun to run
         chmod o+x ..
-        output="$((sudo -H -u test bash -c \
+        output="$(sudo -H -u test bash -c \
                 "source /etc/profile.d/modules.sh; \
                  module load mpi/openmpi-x86_64; mpirun -np 4 \
-                 rbh-sync rbh:posix-mpi:. rbh:mongo:$testdb") 2>&1)"
+                 LD_LIBRARY_PATH=$LD_LIBRARY_PATH \
+                    $__rbh_sync rbh:posix-mpi:. rbh:mongo:$testdb" 2>&1)"
     else
-        output="$((sudo -E -H -u test bash -c "rbh-sync rbh:posix:. \
-                   rbh:mongo:$testdb") 2>&1)"
+        output="$(sudo -E -H -u test bash -c "\
+                  LD_LIBRARY_PATH=$LD_LIBRARY_PATH \
+                      $__rbh_sync rbh:posix:.  rbh:mongo:$testdb" 2>&1)"
     fi
 
     userdel -f -r test || true
@@ -298,14 +300,16 @@ test_stop_sync_on_error()
     if [[ "$WITH_MPI" == "true" ]]; then
         # We need to give execute permissions to the user for mpirun to run
         chmod o+x ..
-        local output=$((sudo -H -u test bash -c \
+        local output=$(sudo -H -u test bash -c \
                         "source /etc/profile.d/modules.sh; \
                         module load mpi/openmpi-x86_64; mpirun -np 4 \
-                        rbh-sync --no-skip rbh:posix-mpi:. \
-                        rbh:mongo:$testdb") 2>&1)
+                        LD_LIBRARY_PATH=$LD_LIBRARY_PATH \
+                            $__rbh_sync --no-skip rbh:posix-mpi:. \
+                        rbh:mongo:$testdb" 2>&1)
     else
-        local output=$((sudo -E -H -u test bash -c "rbh-sync --no-skip \
-                        rbh:posix:. rbh:mongo:$testdb") 2>&1)
+        local output=$(sudo -E -H -u test bash -c "\
+                       LD_LIBRARY_PATH=$LD_LIBRARY_PATH $__rbh_sync --no-skip \
+                       rbh:posix:. rbh:mongo:$testdb" 2>&1)
     fi
 
     userdel -f -r test || true
@@ -393,7 +397,7 @@ declare -a tests=(test_sync_2_files test_sync_size test_sync_3_files
                   test_stop_sync_on_error test_config)
 
 tmpdir=$(mktemp --directory)
-trap -- "rm -rf '$tmpdir'" EXIT
+trap -- "rm -rf '$tmpdir'; userdel test" EXIT
 cd "$tmpdir"
 
 run_tests ${tests[@]}

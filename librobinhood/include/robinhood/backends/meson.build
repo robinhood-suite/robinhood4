@@ -23,26 +23,6 @@ librbh_posix_h = configure_file(input: 'posix.h.in', output: 'posix.h',
 
 install_headers(librbh_posix_h, subdir: 'robinhood/backends')
 
-# Posix MPI backend
-
-librbh_posix_mpi_conf = configuration_data()
-
-librbh_posix_mpi_conf.set('RBH_POSIX_MPI_BACKEND_MAJOR', 1)
-librbh_posix_mpi_conf.set('RBH_POSIX_MPI_BACKEND_MINOR', 0)
-librbh_posix_mpi_conf.set('RBH_POSIX_MPI_BACKEND_RELEASE', 0)
-
-librbh_posix_mpi_version = '@0@.@1@.@2@'.format(
-    librbh_posix_mpi_conf.get('RBH_POSIX_MPI_BACKEND_MAJOR'),
-    librbh_posix_mpi_conf.get('RBH_POSIX_MPI_BACKEND_MINOR'),
-    librbh_posix_mpi_conf.get('RBH_POSIX_MPI_BACKEND_RELEASE')
-)
-
-librbh_posix_mpi_h = configure_file(input: 'posix_mpi.h.in',
-                                    output: 'posix_mpi.h',
-                                    configuration: librbh_posix_mpi_conf)
-
-install_headers(librbh_posix_mpi_h, subdir: 'robinhood/backends')
-
 # Mongo backend
 
 librbh_mongo_conf = configuration_data()
@@ -81,6 +61,52 @@ librbh_lustre_h = configure_file(input: 'lustre.h.in', output: 'lustre.h',
 
 install_headers(librbh_lustre_h, subdir: 'robinhood/backends')
 
+# Hestia backend
+
+if get_option('hestia').enabled()
+    librbh_hestia_conf = configuration_data()
+
+    librbh_hestia_conf.set('RBH_HESTIA_BACKEND_MAJOR', 0)
+    librbh_hestia_conf.set('RBH_HESTIA_BACKEND_MINOR', 0)
+    librbh_hestia_conf.set('RBH_HESTIA_BACKEND_RELEASE', 0)
+
+    librbh_hestia_version = '@0@.@1@.@2@'.format(
+        librbh_hestia_conf.get('RBH_HESTIA_BACKEND_MAJOR'),
+        librbh_hestia_conf.get('RBH_HESTIA_BACKEND_MINOR'),
+        librbh_hestia_conf.get('RBH_HESTIA_BACKEND_RELEASE')
+    )
+
+    librbh_hestia_h = configure_file(input: 'hestia.h.in', output: 'hestia.h',
+                                     configuration: librbh_hestia_conf)
+
+    install_headers(librbh_hestia_h, subdir: 'robinhood/backends')
+endif
+
+if get_option('mfu').disabled()
+    message('Do not compile with MPI File Utils')
+    subdir_done()
+endif
+
+# Posix MPI backend
+
+librbh_posix_mpi_conf = configuration_data()
+
+librbh_posix_mpi_conf.set('RBH_POSIX_MPI_BACKEND_MAJOR', 1)
+librbh_posix_mpi_conf.set('RBH_POSIX_MPI_BACKEND_MINOR', 0)
+librbh_posix_mpi_conf.set('RBH_POSIX_MPI_BACKEND_RELEASE', 0)
+
+librbh_posix_mpi_version = '@0@.@1@.@2@'.format(
+    librbh_posix_mpi_conf.get('RBH_POSIX_MPI_BACKEND_MAJOR'),
+    librbh_posix_mpi_conf.get('RBH_POSIX_MPI_BACKEND_MINOR'),
+    librbh_posix_mpi_conf.get('RBH_POSIX_MPI_BACKEND_RELEASE')
+)
+
+librbh_posix_mpi_h = configure_file(input: 'posix_mpi.h.in',
+                                    output: 'posix_mpi.h',
+                                    configuration: librbh_posix_mpi_conf)
+
+install_headers(librbh_posix_mpi_h, subdir: 'robinhood/backends')
+
 # Lustre MPI backend
 
 librbh_lustre_mpi_conf = configuration_data()
@@ -101,25 +127,6 @@ librbh_lustre_mpi_h = configure_file(input: 'lustre_mpi.h.in',
 
 install_headers(librbh_lustre_mpi_h, subdir: 'robinhood/backends')
 
-
-# Hestia backend
-
-librbh_hestia_conf = configuration_data()
-
-librbh_hestia_conf.set('RBH_HESTIA_BACKEND_MAJOR', 0)
-librbh_hestia_conf.set('RBH_HESTIA_BACKEND_MINOR', 0)
-librbh_hestia_conf.set('RBH_HESTIA_BACKEND_RELEASE', 0)
-
-librbh_hestia_version = '@0@.@1@.@2@'.format(
-    librbh_hestia_conf.get('RBH_HESTIA_BACKEND_MAJOR'),
-    librbh_hestia_conf.get('RBH_HESTIA_BACKEND_MINOR'),
-    librbh_hestia_conf.get('RBH_HESTIA_BACKEND_RELEASE')
-)
-
-librbh_hestia_h = configure_file(input: 'hestia.h.in', output: 'hestia.h',
-                                 configuration: librbh_hestia_conf)
-
-install_headers(librbh_hestia_h, subdir: 'robinhood/backends')
 
 # MPI-FILE backend
 
