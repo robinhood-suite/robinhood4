@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "64406a3a_93b48361",
+        "filename": "rbh-find-lustre/tests/test_stripe_count.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-04-19T07:44:42Z",
+      "side": 1,
+      "message": "suggest: you could simply do\n\n```\ncmd \u0026\u0026\n   error \"should fail\"\n```",
+      "range": {
+        "startLine": 26,
+        "startChar": 4,
+        "endLine": 26,
+        "endChar": 7
+      },
+      "revId": "97e92f71c07411ce4ee20d2a7f01bb87d39eef90",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3048d96c_07e35509",
+        "filename": "rbh-find-lustre/tests/test_stripe_count.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-04-19T07:44:42Z",
+      "side": 1,
+      "message": "not need to use lfs if you don\u0027t want to specify the MDT on which the directory should be created.",
+      "range": {
+        "startLine": 48,
+        "startChar": 4,
+        "endLine": 48,
+        "endChar": 8
+      },
+      "revId": "97e92f71c07411ce4ee20d2a7f01bb87d39eef90",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9b34ee4d_81d193a8",
+        "filename": "rbh-find-lustre/tests/test_stripe_count.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-04-19T07:44:42Z",
+      "side": 1,
+      "message": "nit: to make the test a bit more explicit, you could name this variable \"default_stripe_count\". Because what we are checking here is that setting the default stripe count explicitly doesn\u0027t make it a directory with no stripe that is catched by the default filter.",
+      "range": {
+        "startLine": 61,
+        "startChar": 24,
+        "endLine": 61,
+        "endChar": 40
+      },
+      "revId": "97e92f71c07411ce4ee20d2a7f01bb87d39eef90",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dbc3a8b6_56fbc307",
+        "filename": "rbh-find-lustre/tests/test_stripe_count.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-04-19T07:44:42Z",
+      "side": 1,
+      "message": "nit/style:\n\n```\nrbh_lfind \"rbh:mongo:$testdb\" \\\n    -stripe-count $(lfs getstripe -c $LUSTRE_DIR | xargs) |\n        sort | difflines\n```",
+      "range": {
+        "startLine": 130,
+        "startChar": 4,
+        "endLine": 131,
+        "endChar": 58
+      },
+      "revId": "97e92f71c07411ce4ee20d2a7f01bb87d39eef90",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b4dd0cf7_c30ee3be",
+        "filename": "rbh-find-lustre/tests/test_stripe_count.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-04-19T07:44:42Z",
+      "side": 1,
+      "message": "question: shouldn\u0027t you have / and /$dir here? You are asking for the default striping so this should return both of these entries.",
+      "range": {
+        "startLine": 132,
+        "startChar": 15,
+        "endLine": 132,
+        "endChar": 24
+      },
+      "revId": "97e92f71c07411ce4ee20d2a7f01bb87d39eef90",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
