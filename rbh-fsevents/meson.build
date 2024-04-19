@@ -1,19 +1,5 @@
 # SPDX-License-Identifer: LGPL-3.0-or-later
 
-project(
-    'rbh-fsevents',
-    'c',
-    version: '0.0.0',
-    license: 'LGPL3.0-or-later',
-    default_options: [
-        'warning_level=2',
-        'werror=true',
-    ],
-)
-
-# GNU extensions
-add_project_arguments(['-D_DEFAULT_SOURCE', '-D_GNU_SOURCE',], language: 'c')
-
 # Configuration checks
 conf_data = configuration_data()
 
@@ -25,13 +11,12 @@ conf_data.set('HAVE_STATX', have_statx)
 
 configure_file(input: 'config.h.in', output: 'config.h',
                configuration: conf_data)
-add_project_arguments(['-DHAVE_CONFIG_H',], language: 'c')
 
 # Dependencies
 extra_sources = []
 extra_dependencies = []
+extra_args = []
 
-librobinhood = dependency('robinhood', version: '>=0.0.0')
 miniyaml = dependency('miniyaml', version: '>=0.0.0')
 liblustre = dependency('lustre', required: false)
 if not liblustre.found()
@@ -42,7 +27,7 @@ if liblustre.found()
         'src/sources/lustre.c',
         'src/enrichers/lustre.c',
     ]
-    add_project_arguments(['-DHAVE_LUSTRE',], language: 'c')
+    extra_args += ['-DHAVE_LUSTRE']
 endif
 
 libhestia = dependency('hestia', disabler: false, required: false)
@@ -75,8 +60,9 @@ fsevents_lib = static_library(
     ] + extra_sources,
     include_directories: includes,
     dependencies: [
-        librobinhood, miniyaml, liblustre, libhestia
+        librobinhood_dep, miniyaml, liblustre, libhestia
     ] + extra_dependencies,
+    c_args: ['-DHAVE_CONFIG_H'] + extra_args,
 )
 fsevents_dep = declare_dependency(
     link_with: fsevents_lib,
@@ -88,8 +74,9 @@ executable(
     sources: 'rbh-fsevents.c',
     include_directories: includes,
     link_with: fsevents_lib,
-    dependencies: [librobinhood, miniyaml, liblustre],
+    dependencies: [librobinhood_dep, miniyaml, liblustre],
     install: true,
+    c_args: ['-DHAVE_CONFIG_H'] + extra_args,
 )
 
 subdir('tests')

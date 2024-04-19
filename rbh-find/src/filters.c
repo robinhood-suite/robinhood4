@@ -25,7 +25,7 @@
 
 #include <robinhood/statx.h>
 #ifndef HAVE_STATX
-# include <robinhood/statx-compat.h>
+# include <robinhood/statx.h>
 #endif
 
 #include <robinhood/backend.h>

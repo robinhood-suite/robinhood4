@@ -15,7 +15,7 @@ set -e
 SUITE=${BASH_SOURCE##*/}
 SUITE=${SUITE%.*}
 
-__rbh_sync=$(PATH="$PWD:$PATH" which rbh-sync)
+__rbh_sync=$(PATH="$PWD/rbh-sync:$PATH" which rbh-sync)
 rbh_sync()
 {
     "$__rbh_sync" "$@"

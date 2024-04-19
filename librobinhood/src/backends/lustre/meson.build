@@ -22,4 +22,5 @@ librbh_lustre = library(
     dependencies: [liblustre],
     include_directories: rbh_include,
     install: true,
+    c_args: '-DHAVE_CONFIG_H',
 )

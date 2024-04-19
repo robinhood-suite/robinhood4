@@ -30,5 +30,5 @@ librbh_lustre_mpi = library(
     ],
     include_directories: rbh_include,
     install: true,
+    c_args: '-DHAVE_CONFIG_H',
 )
-

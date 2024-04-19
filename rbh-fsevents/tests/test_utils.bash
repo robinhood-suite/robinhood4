@@ -13,7 +13,7 @@
 SUITE=${BASH_SOURCE##*/}
 SUITE=${SUITE%.*}
 
-__rbh_fsevents=$(PATH="$PWD:$PATH" which rbh-fsevents)
+__rbh_fsevents=$(PATH="$PWD/rbh-fsevents:$PATH" which rbh-fsevents)
 rbh_fsevents()
 {
     "$__rbh_fsevents" "$@"

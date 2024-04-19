@@ -14,7 +14,7 @@ endif
 test_utils = library(
     'test_utils',
     sources: 'utils/utils.c',
-    dependencies: [ librobinhood, fsevents_dep, check ],
+    dependencies: [ librobinhood_dep, fsevents_dep, check ],
     include_directories: 'utils'
 )
 test_utils_dep = declare_dependency(
@@ -32,6 +32,7 @@ foreach t: unit_tests
                        check,
                        test_utils_dep,
                        fsevents_dep,
+                       librobinhood_dep
                    ])
 
     test(t, e)

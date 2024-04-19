@@ -17,4 +17,5 @@ librbh_hestia = library(
     dependencies: [libhestia],
     include_directories: rbh_include,
     install: true,
+    c_args: '-DHAVE_CONFIG_H',
 )
