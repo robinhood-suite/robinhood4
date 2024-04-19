@@ -119,6 +119,8 @@ const char *statx2str(const uint32_t statx)
 const char *field2str(const struct rbh_filter_field *field, char **buffer,
                       size_t bufsize)
 {
+    int rc;
+
     switch (field->fsentry) {
     case RBH_FP_ID:
         return MFF_ID;
@@ -134,8 +136,11 @@ const char *field2str(const struct rbh_filter_field *field, char **buffer,
         if (field->xattr == NULL)
             return MFF_NAMESPACE "." MFF_XATTRS;
 
-        if (snprintf(*buffer, bufsize, "%s.%s", MFF_NAMESPACE "." MFF_XATTRS,
-                     field->xattr) < bufsize)
+        rc = snprintf(*buffer, bufsize, "%s.%s", MFF_NAMESPACE "." MFF_XATTRS,
+                     field->xattr);
+        if (rc < 0)
+            return NULL;
+        if ((size_t)rc < bufsize)
             return *buffer;
 
         /* `*buffer' is too small */
@@ -148,8 +153,10 @@ const char *field2str(const struct rbh_filter_field *field, char **buffer,
         if (field->xattr == NULL)
             return MFF_XATTRS;
 
-        if (snprintf(*buffer, bufsize, "%s.%s", MFF_XATTRS, field->xattr)
-                < bufsize)
+        rc = snprintf(*buffer, bufsize, "%s.%s", MFF_XATTRS, field->xattr);
+        if (rc < 0)
+            return NULL;
+        if ((size_t)rc < bufsize)
             return *buffer;
 
         /* `*buffer' is too small */

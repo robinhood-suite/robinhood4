@@ -357,7 +357,7 @@ rbh_uri_from_raw_uri(const struct rbh_raw_uri *raw_uri)
     if (rc < 0)
         goto out_free_uri;
 
-    assert(rc < size);
+    assert((size_t)rc < size);
     data[rc] = '\0';
     data += rc + 1;
     size -= rc + 1;
@@ -368,7 +368,7 @@ rbh_uri_from_raw_uri(const struct rbh_raw_uri *raw_uri)
     if (rc < 0)
         goto out_free_uri;
 
-    assert(rc < size);
+    assert((size_t)rc < size);
     data[rc] = '\0';
     data += rc + 1;
     size -= rc + 1;
@@ -390,7 +390,7 @@ rbh_uri_from_raw_uri(const struct rbh_raw_uri *raw_uri)
             rc = parse_id(data, raw_uri->fragment, fragment_length);
         if (rc < 0)
             goto out_free_uri;
-        assert(rc <= size);
+        assert((size_t)rc <= size);
 
         /* id->size */
         id->size = rc;
@@ -403,7 +403,7 @@ rbh_uri_from_raw_uri(const struct rbh_raw_uri *raw_uri)
         if (rc < 0)
             goto out_free_uri;
 
-        assert(rc < size);
+        assert((size_t)rc < size);
         data[rc] = '\0';
         data += rc + 1;
         size -= rc + 1;

@@ -1042,7 +1042,7 @@ record_id:
                 case RRT_FSENTRIES:
                     return _branch_next_fsentries(iter);
                 }
-                /* Unreachable */
+                __builtin_unreachable();
             default:
                 return NULL;
             }
@@ -1081,7 +1081,7 @@ record_rbh_value:
                 case RRT_FSENTRIES:
                     return _branch_next_fsentries(iter);
                 }
-                /* Unreachable */
+                __builtin_unreachable();
             default:
                 return NULL;
             }
