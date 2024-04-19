@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3decf079_29c6f527",
+        "filename": "librobinhood/src/backends/lustre/lustre.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 686,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-04-19T07:49:20Z",
+      "side": 1,
+      "message": "question: why do you do this? The only thing you need to do is to store LLAPI_LAYOUT_DEFAULT for stripe_count, stripe_size and pattern.",
+      "range": {
+        "startLine": 680,
+        "startChar": 4,
+        "endLine": 686,
+        "endChar": 18
+      },
+      "revId": "f9f551e2859ebd0254a9d05516b140bb59ff9791",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
