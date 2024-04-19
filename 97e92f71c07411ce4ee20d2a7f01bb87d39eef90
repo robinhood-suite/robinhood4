@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6ad485ea_2578a9df",
+        "filename": "rbh-find-lustre/tests/test_stripe_count.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-04-19T11:32:55Z",
+      "side": 1,
+      "message": "type: 2024",
+      "revId": "97e92f71c07411ce4ee20d2a7f01bb87d39eef90",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "64406a3a_93b48361",
         "filename": "rbh-find-lustre/tests/test_stripe_count.bash",
         "patchSetId": 1
@@ -20,6 +37,23 @@
         "endLine": 26,
         "endChar": 7
       },
+      "revId": "97e92f71c07411ce4ee20d2a7f01bb87d39eef90",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "28cc35be_bf23b908",
+        "filename": "rbh-find-lustre/tests/test_stripe_count.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-04-19T11:32:55Z",
+      "side": 1,
+      "message": "question: This test and the one above are not identical ?",
       "revId": "97e92f71c07411ce4ee20d2a7f01bb87d39eef90",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
