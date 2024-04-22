@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "40160753_2343819f",
+        "filename": "librobinhood/src/backends/posix_mpi/posix_mpi.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-04-22T09:23:35Z",
+      "side": 1,
+      "message": "question: maybe this was talked about in a similar patch previously, but can\u0027t you just set these functions to the regular posix ones ? Instead of having wrappers",
+      "range": {
+        "startLine": 102,
+        "startChar": 22,
+        "endLine": 102,
+        "endChar": 50
+      },
+      "revId": "2d41de3bf60c1f32feba9d82704b36ad6448a0df",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
