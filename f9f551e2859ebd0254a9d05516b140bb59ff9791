@@ -46,6 +46,30 @@
       },
       "revId": "f9f551e2859ebd0254a9d05516b140bb59ff9791",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "79d5a20d_d6210223",
+        "filename": "librobinhood/src/backends/lustre/lustre.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 686,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-04-22T08:12:12Z",
+      "side": 1,
+      "message": "I don\u0027t like this approach. First, the value of default attributes will not change any time soon otherwise Lustre will break compatibility with everything. Second, this is doing an unnecessary allocation. Also, this is a convention used by RBH. We are not forced to use the same default value as Lustre as long as the sync par and the find part are aligned. So even if Lustre wants to break compatibility, this won\u0027t affect this part of the code. The only thing that may break is what attributes are considered default. But this will break with your implementation or a simpler one.",
+      "parentUuid": "3e0d36af_ca1c0d16",
+      "range": {
+        "startLine": 680,
+        "startChar": 4,
+        "endLine": 686,
+        "endChar": 18
+      },
+      "revId": "f9f551e2859ebd0254a9d05516b140bb59ff9791",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
