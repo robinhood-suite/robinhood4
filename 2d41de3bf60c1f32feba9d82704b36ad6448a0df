@@ -22,6 +22,30 @@
       },
       "revId": "2d41de3bf60c1f32feba9d82704b36ad6448a0df",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bb4bb1d8_c9e211da",
+        "filename": "librobinhood/src/backends/posix_mpi/posix_mpi.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-04-22T09:41:18Z",
+      "side": 1,
+      "message": "I suggested the wrappers to make it more explicit. Some functions don\u0027t use the backend parameter and can be used with other backends. But this is not obvious when reading the function name. So to make \"sure\" that we don\u0027t unintentionally use a wrong backend function, I thought that having wrappers might be a better way. But if you think this is overkill, we can remove them.",
+      "parentUuid": "40160753_2343819f",
+      "range": {
+        "startLine": 102,
+        "startChar": 22,
+        "endLine": 102,
+        "endChar": 50
+      },
+      "revId": "2d41de3bf60c1f32feba9d82704b36ad6448a0df",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
