@@ -27,15 +27,17 @@
 #include "filters.h"
 
 static const struct rbh_filter_field predicate2filter_field[] = {
-    [LPRED_FID - LPRED_MIN] =       {.fsentry = RBH_FP_INODE_XATTRS,
-                                     .xattr = "fid"},
-    [LPRED_HSM_STATE - LPRED_MIN] = {.fsentry = RBH_FP_INODE_XATTRS,
-                                     .xattr = "hsm_state"},
-    [LPRED_OST_INDEX - LPRED_MIN] = {.fsentry = RBH_FP_INODE_XATTRS,
-                                     .xattr = "ost"},
+    [LPRED_FID - LPRED_MIN]          = {.fsentry = RBH_FP_INODE_XATTRS,
+                                        .xattr = "fid"},
+    [LPRED_HSM_STATE - LPRED_MIN]    = {.fsentry = RBH_FP_INODE_XATTRS,
+                                        .xattr = "hsm_state"},
+    [LPRED_OST_INDEX - LPRED_MIN]    = {.fsentry = RBH_FP_INODE_XATTRS,
+                                        .xattr = "ost"},
+    [LPRED_PATTERN - LPRED_MIN]      = {.fsentry = RBH_FP_INODE_XATTRS,
+                                        .xattr = "pattern"},
     [LPRED_STRIPE_COUNT - LPRED_MIN] = {.fsentry = RBH_FP_INODE_XATTRS,
                                         .xattr = "stripe_count"},
-    [LPRED_STRIPE_SIZE - LPRED_MIN] = {.fsentry = RBH_FP_INODE_XATTRS,
+    [LPRED_STRIPE_SIZE - LPRED_MIN]  = {.fsentry = RBH_FP_INODE_XATTRS,
                                         .xattr = "stripe_size"},
 };
 
@@ -373,6 +375,56 @@ stripe_size2filter(const char *stripe_size)
     default:
         __builtin_unreachable();
     }
+
+    return filter_and(filter, filter_not(default_filter));
+}
+
+struct rbh_filter *
+pattern2filter(const char *pattern)
+{
+    struct rbh_filter_field default_field = {
+        .fsentry = RBH_FP_INODE_XATTRS,
+        .xattr = "trusted.lov",
+    };
+    struct rbh_filter *default_filter;
+    struct rbh_filter *dir_filter;
+    struct rbh_value_pair pair = {
+        .key = "pattern",
+    };
+    struct rbh_filter *filter;
+
+    if (strcmp(pattern, "raid0") && strcmp(pattern, "mdt") &&
+        strcmp(pattern, "default"))
+        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
+                      "Invalid pattern provided, should be 'raid0', 'mdt' or 'default', got '%s'",
+                      pattern);
+
+    default_filter = rbh_filter_exists_new(&default_field);
+    if (default_filter == NULL)
+        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
+                      "pattern2filter");
+
+    dir_filter = filetype2filter("d");
+    default_filter = filter_and(dir_filter, filter_not(default_filter));
+
+    if (strcmp(pattern, "default") == 0)
+        return default_filter;
+
+    get_fs_default_value(&pair);
+
+    /* The values '0' and '2' are taken from Lustre's source code */
+    if (strcmp(pattern, "raid0") == 0)
+        filter = numeric2filter(get_filter_field(LPRED_PATTERN), "0");
+    else
+        filter = numeric2filter(get_filter_field(LPRED_PATTERN), "2");
+
+    if (filter == NULL)
+        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
+                      "Invalid pattern provided, should be 'raid0', 'mdt' or 'default', got '%s'",
+                      pattern);
+
+    if (pair.value->uint64 == filter->compare.value.uint64)
+        return filter_or(filter, default_filter);
 
     return filter_and(filter, filter_not(default_filter));
 }

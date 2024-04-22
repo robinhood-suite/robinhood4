@@ -66,4 +66,15 @@ stripe_count2filter(const char *stripe_count);
 struct rbh_filter *
 stripe_size2filter(const char *stripe_size);
 
+/**
+ * Build a filter for the -pattern predicate
+ *
+ * @param pattern      a string representing a valid pattern (either 'mdt' or
+ *                     'raid0')
+ *
+ * @return             a pointer to a newly allocated struct rbh_filter
+ */
+struct rbh_filter *
+pattern2filter(const char *pattern);
+
 #endif
