@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9693eb64_c9cbeb02",
+        "filename": "librobinhood/include/robinhood/utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-04-22T08:08:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "87342286_e1b6aefc",
+      "range": {
+        "startLine": 38,
+        "startChar": 35,
+        "endLine": 38,
+        "endChar": 73
+      },
+      "revId": "092c30cdc5ae3c606aea488912d03aeeba0e5973",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ddc0008c_52460c83",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-04-19T08:04:56Z",
       "side": 1,
       "message": "major: use robinhood convention (i.e. errno)",
+      "range": {
+        "startLine": 46,
+        "startChar": 3,
+        "endLine": 46,
+        "endChar": 51
+      },
+      "revId": "092c30cdc5ae3c606aea488912d03aeeba0e5973",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e9fe18f1_83ae0627",
+        "filename": "librobinhood/include/robinhood/utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-04-22T08:08:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ddc0008c_52460c83",
       "range": {
         "startLine": 46,
         "startChar": 3,
@@ -70,6 +118,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4f0f898d_1eb17c83",
+        "filename": "librobinhood/src/utils/path.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-04-22T08:08:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b3003910_0e3e5329",
+      "range": {
+        "startLine": 40,
+        "startChar": 8,
+        "endLine": 40,
+        "endChar": 21
+      },
+      "revId": "092c30cdc5ae3c606aea488912d03aeeba0e5973",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bca34ce3_55f27e78",
@@ -87,6 +159,24 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6784f96d_457b749e",
+        "filename": "librobinhood/src/utils/path.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-04-22T08:08:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bca34ce3_55f27e78",
+      "revId": "092c30cdc5ae3c606aea488912d03aeeba0e5973",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ba0e4892_9c3b2f0d",
@@ -100,6 +190,24 @@
       "writtenOn": "2024-04-19T10:15:21Z",
       "side": 1,
       "message": "major: add `endmntent(fp)` because if `strdup` failed fp is never closed.",
+      "revId": "092c30cdc5ae3c606aea488912d03aeeba0e5973",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "45c528c8_51c84936",
+        "filename": "librobinhood/src/utils/path.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-04-22T08:08:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ba0e4892_9c3b2f0d",
       "revId": "092c30cdc5ae3c606aea488912d03aeeba0e5973",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
