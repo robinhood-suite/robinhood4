@@ -59,6 +59,8 @@ lustre_predicate_or_action(const char *string)
         case 's':
             if (!strcmp(&string[2], "tripe-count"))
                 return CLT_PREDICATE;
+            else if (!strcmp(&string[2], "tripe-size"))
+                return CLT_PREDICATE;
             break;
         }
         break;
@@ -97,6 +99,9 @@ lustre_parse_predicate(struct find_context *ctx, int *arg_idx)
         break;
     case LPRED_STRIPE_COUNT:
         filter = stripe_count2filter(ctx->argv[++i]);
+        break;
+    case LPRED_STRIPE_SIZE:
+        filter = stripe_size2filter(ctx->argv[++i]);
         break;
     default:
         filter = find_parse_predicate(ctx, &i);

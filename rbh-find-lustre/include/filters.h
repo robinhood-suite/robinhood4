@@ -56,4 +56,14 @@ ost_index2filter(const char *ost_index);
 struct rbh_filter *
 stripe_count2filter(const char *stripe_count);
 
+/**
+ * Build a filter for the -stripe-size predicate
+ *
+ * @param stripe_size  a string representing a number
+ *
+ * @return             a pointer to a newly allocated struct rbh_filter
+ */
+struct rbh_filter *
+stripe_size2filter(const char *stripe_size);
+
 #endif
