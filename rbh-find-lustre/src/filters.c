@@ -35,6 +35,8 @@ static const struct rbh_filter_field predicate2filter_field[] = {
                                      .xattr = "ost"},
     [LPRED_STRIPE_COUNT - LPRED_MIN] = {.fsentry = RBH_FP_INODE_XATTRS,
                                         .xattr = "stripe_count"},
+    [LPRED_STRIPE_SIZE - LPRED_MIN] = {.fsentry = RBH_FP_INODE_XATTRS,
+                                        .xattr = "stripe_size"},
 };
 
 static inline const struct rbh_filter_field *
@@ -301,6 +303,59 @@ stripe_count2filter(const char *stripe_count)
         error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
                       "Invalid stripe count provided, should be '<+|->n', got '%s'",
                       stripe_count);
+
+    switch (filter->op) {
+    case RBH_FOP_STRICTLY_LOWER:
+        if (pair.value->uint64 < filter->compare.value.uint64)
+            return filter_or(filter, default_filter);
+        break;
+    case RBH_FOP_STRICTLY_GREATER:
+        if (pair.value->uint64 > filter->compare.value.uint64)
+            return filter_or(filter, default_filter);
+        break;
+    case RBH_FOP_EQUAL:
+        if (pair.value->uint64 == filter->compare.value.uint64)
+            return filter_or(filter, default_filter);
+        break;
+    default:
+        __builtin_unreachable();
+    }
+
+    return filter_and(filter, filter_not(default_filter));
+}
+
+struct rbh_filter *
+stripe_size2filter(const char *stripe_size)
+{
+    struct rbh_filter_field default_field = {
+        .fsentry = RBH_FP_INODE_XATTRS,
+        .xattr = "trusted.lov",
+    };
+    struct rbh_filter *default_filter;
+    struct rbh_filter *dir_filter;
+    struct rbh_value_pair pair = {
+        .key = "stripe size",
+    };
+    struct rbh_filter *filter;
+
+    default_filter = rbh_filter_exists_new(&default_field);
+    if (default_filter == NULL)
+        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
+                      "stripe_size2filter");
+
+    dir_filter = filetype2filter("d");
+    default_filter = filter_and(dir_filter, filter_not(default_filter));
+
+    if (strcmp(stripe_size, "default") == 0)
+        return default_filter;
+
+    get_fs_default_value(&pair);
+
+    filter = numeric2filter(get_filter_field(LPRED_STRIPE_SIZE), stripe_size);
+    if (filter == NULL)
+        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
+                      "Invalid stripe size provided, should be '<+|->n', got '%s'",
+                      stripe_size);
 
     switch (filter->op) {
     case RBH_FOP_STRICTLY_LOWER:
