@@ -33,9 +33,11 @@ static const struct rbh_filter_field predicate2filter_field[] = {
                                         .xattr = "hsm_state"},
     [LPRED_OST_INDEX - LPRED_MIN]    = {.fsentry = RBH_FP_INODE_XATTRS,
                                         .xattr = "ost"},
+    [LPRED_LAYOUT - LPRED_MIN]       = {.fsentry = RBH_FP_INODE_XATTRS,
+                                        .xattr = "pattern"},
     [LPRED_STRIPE_COUNT - LPRED_MIN] = {.fsentry = RBH_FP_INODE_XATTRS,
                                         .xattr = "stripe_count"},
-    [LPRED_STRIPE_SIZE - LPRED_MIN] = {.fsentry = RBH_FP_INODE_XATTRS,
+    [LPRED_STRIPE_SIZE - LPRED_MIN]  = {.fsentry = RBH_FP_INODE_XATTRS,
                                         .xattr = "stripe_size"},
 };
 
@@ -378,6 +380,50 @@ stripe_size2filter(const char *stripe_size)
     default:
         __builtin_unreachable();
     }
+
+    return filter_and(filter, filter_not(default_filter));
+}
+
+struct rbh_filter *
+layout2filter(const char *layout)
+{
+    struct rbh_filter *default_filter;
+    struct rbh_value_pair pair = {
+        .key = "layout",
+    };
+    struct rbh_filter *filter;
+    bool default_exists;
+
+    if (strcmp(layout, "raid0") && strcmp(layout, "mdt") &&
+        strcmp(layout, "default"))
+        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
+                      "Invalid layout provided, should be 'raid0', 'mdt' or 'default', got '%s'",
+                      layout);
+
+    default_filter = get_default_filter();
+    if (strcmp(layout, "default") == 0)
+        return default_filter;
+
+    default_exists = get_fs_default_value(&pair);
+
+    if (strcmp(layout, "raid0") == 0)
+        filter = rbh_filter_compare_uint64_new(RBH_FOP_EQUAL,
+                                               get_filter_field(LPRED_LAYOUT),
+                                               LLAPI_LAYOUT_RAID0);
+    else
+        filter = rbh_filter_compare_uint64_new(RBH_FOP_EQUAL,
+                                               get_filter_field(LPRED_LAYOUT),
+                                               LLAPI_LAYOUT_MDT);
+
+    if (filter == NULL)
+        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
+                      "Failed to create the filter for comparing a layout");
+
+    if (default_exists == false)
+        return filter_and(filter, filter_not(default_filter));
+
+    if (pair.value->uint64 == filter->compare.value.uint64)
+        return filter_or(filter, default_filter);
 
     return filter_and(filter, filter_not(default_filter));
 }
