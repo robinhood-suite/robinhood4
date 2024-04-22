@@ -17,3 +17,6 @@ foreach t: non_parallel_integration_tests
     e = find_program(t + '.bash')
     test(t, e, is_parallel: false)
 endforeach
+
+e = find_program('test_layout_pattern.bash')
+test('test_layout_pattern', e, should_fail: true, is_parallel: false)
