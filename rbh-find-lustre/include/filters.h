@@ -66,4 +66,15 @@ stripe_count2filter(const char *stripe_count);
 struct rbh_filter *
 stripe_size2filter(const char *stripe_size);
 
+/**
+ * Build a filter for the -layout-pattern predicate
+ *
+ * @param layout       a string representing a valid layout (either 'mdt',
+ *                     'raid0' or 'default')
+ *
+ * @return             a pointer to a newly allocated struct rbh_filter
+ */
+struct rbh_filter *
+layout_pattern2filter(const char *layout_pattern);
+
 #endif
