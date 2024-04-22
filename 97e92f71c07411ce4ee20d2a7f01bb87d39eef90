@@ -18,6 +18,24 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "60c5211f_687a6e98",
+        "filename": "rbh-find-lustre/tests/test_stripe_count.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-04-22T08:07:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6ad485ea_2578a9df",
+      "revId": "97e92f71c07411ce4ee20d2a7f01bb87d39eef90",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "64406a3a_93b48361",
@@ -31,6 +49,30 @@
       "writtenOn": "2024-04-19T07:44:42Z",
       "side": 1,
       "message": "suggest: you could simply do\n\n```\ncmd \u0026\u0026\n   error \"should fail\"\n```",
+      "range": {
+        "startLine": 26,
+        "startChar": 4,
+        "endLine": 26,
+        "endChar": 7
+      },
+      "revId": "97e92f71c07411ce4ee20d2a7f01bb87d39eef90",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ebc814d3_f8cf2ed7",
+        "filename": "rbh-find-lustre/tests/test_stripe_count.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-04-22T08:07:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "64406a3a_93b48361",
       "range": {
         "startLine": 26,
         "startChar": 4,
@@ -60,6 +102,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3531f5d3_051a5e40",
+        "filename": "rbh-find-lustre/tests/test_stripe_count.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-04-22T08:07:59Z",
+      "side": 1,
+      "message": "No because the one above tests that even if we have integers before non-digits, the parsing fails, and we do not filter on the value \"42\". This one tests that we do not consider string as valid filter values, except default.",
+      "parentUuid": "28cc35be_bf23b908",
+      "revId": "97e92f71c07411ce4ee20d2a7f01bb87d39eef90",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3048d96c_07e35509",
         "filename": "rbh-find-lustre/tests/test_stripe_count.bash",
         "patchSetId": 1
@@ -71,6 +131,30 @@
       "writtenOn": "2024-04-19T07:44:42Z",
       "side": 1,
       "message": "not need to use lfs if you don\u0027t want to specify the MDT on which the directory should be created.",
+      "range": {
+        "startLine": 48,
+        "startChar": 4,
+        "endLine": 48,
+        "endChar": 8
+      },
+      "revId": "97e92f71c07411ce4ee20d2a7f01bb87d39eef90",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d3e4e242_733ab448",
+        "filename": "rbh-find-lustre/tests/test_stripe_count.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-04-22T08:07:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3048d96c_07e35509",
       "range": {
         "startLine": 48,
         "startChar": 4,
@@ -104,6 +188,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2ee3ea5f_a008ac5c",
+        "filename": "rbh-find-lustre/tests/test_stripe_count.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-04-22T08:07:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9b34ee4d_81d193a8",
+      "range": {
+        "startLine": 61,
+        "startChar": 24,
+        "endLine": 61,
+        "endChar": 40
+      },
+      "revId": "97e92f71c07411ce4ee20d2a7f01bb87d39eef90",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dbc3a8b6_56fbc307",
@@ -127,6 +235,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3e015008_34d43cc5",
+        "filename": "rbh-find-lustre/tests/test_stripe_count.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-04-22T08:07:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dbc3a8b6_56fbc307",
+      "range": {
+        "startLine": 130,
+        "startChar": 4,
+        "endLine": 131,
+        "endChar": 58
+      },
+      "revId": "97e92f71c07411ce4ee20d2a7f01bb87d39eef90",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b4dd0cf7_c30ee3be",
@@ -140,6 +272,30 @@
       "writtenOn": "2024-04-19T07:44:42Z",
       "side": 1,
       "message": "question: shouldn\u0027t you have / and /$dir here? You are asking for the default striping so this should return both of these entries.",
+      "range": {
+        "startLine": 132,
+        "startChar": 15,
+        "endLine": 132,
+        "endChar": 24
+      },
+      "revId": "97e92f71c07411ce4ee20d2a7f01bb87d39eef90",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "724870b6_f8ed2845",
+        "filename": "rbh-find-lustre/tests/test_stripe_count.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-04-22T08:07:59Z",
+      "side": 1,
+      "message": "No because I\u0027m not asking for the default striping but for the stripe count 1, as lfs getstripe does some stuff and will output 1 when asked the stripe count of the mount point while it hasn\u0027t been set yet.\n\nSo I\u0027m not asking the default stripe count, which mean only the entries with a stripe count of 1 should get filtered, which is none of them.",
+      "parentUuid": "b4dd0cf7_c30ee3be",
       "range": {
         "startLine": 132,
         "startChar": 15,
