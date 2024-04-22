@@ -30,6 +30,10 @@ str2lustre_predicate(const char *string)
         if (strcmp(&string[2], "sm-state") == 0)
             return LPRED_HSM_STATE;
         break;
+    case 'l':
+        if (strcmp(&string[2], "ayout-pattern") == 0)
+            return LPRED_LAYOUT_PATTERN;
+        break;
     case 'o':
         if (strcmp(&string[2], "st") == 0)
             return LPRED_OST_INDEX;
@@ -46,11 +50,12 @@ str2lustre_predicate(const char *string)
 }
 
 static const char *__lustre_predicate2str[] = {
-    [LPRED_FID - LPRED_MIN]           = "fid",
-    [LPRED_HSM_STATE - LPRED_MIN]     = "hsm-state",
-    [LPRED_OST_INDEX - LPRED_MIN]     = "ost",
-    [LPRED_STRIPE_COUNT - LPRED_MIN]  = "stripe-count",
-    [LPRED_STRIPE_SIZE - LPRED_MIN]   = "stripe-size",
+    [LPRED_FID - LPRED_MIN]            = "fid",
+    [LPRED_HSM_STATE - LPRED_MIN]      = "hsm-state",
+    [LPRED_OST_INDEX - LPRED_MIN]      = "ost",
+    [LPRED_LAYOUT_PATTERN - LPRED_MIN] = "layout-pattern",
+    [LPRED_STRIPE_COUNT - LPRED_MIN]   = "stripe-count",
+    [LPRED_STRIPE_SIZE - LPRED_MIN]    = "stripe-size",
 };
 
 const char *
