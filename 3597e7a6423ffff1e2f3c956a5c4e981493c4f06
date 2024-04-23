@@ -22,6 +22,30 @@
       },
       "revId": "3597e7a6423ffff1e2f3c956a5c4e981493c4f06",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "626bd5a8_a9c546c8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-04-23T14:45:13Z",
+      "side": 1,
+      "message": "You\u0027re right, it is already done.",
+      "parentUuid": "33302928_556dce90",
+      "range": {
+        "startLine": 10,
+        "startChar": 28,
+        "endLine": 11,
+        "endChar": 39
+      },
+      "revId": "3597e7a6423ffff1e2f3c956a5c4e981493c4f06",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
