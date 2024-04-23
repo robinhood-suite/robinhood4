@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5b3c32a1_3f222eb8",
+        "filename": "rbh-find-lustre/src/filters.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-04-23T13:48:00Z",
+      "side": 1,
+      "message": "style: you can align the declarations with the one you added",
+      "range": {
+        "startLine": 26,
+        "startChar": 36,
+        "endLine": 31,
+        "endChar": 53
+      },
+      "revId": "c7655e237cf19320144630fd92ceb2e954ae2d55",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
