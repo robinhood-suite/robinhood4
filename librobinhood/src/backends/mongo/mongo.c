@@ -443,6 +443,9 @@ mongo_backend_update(void *backend, struct rbh_iterator *fsevents,
     bson_t reply;
     uint32_t rc;
 
+    if (fsevents == NULL)
+        return 0;
+
     bulk = _mongoc_collection_create_bulk_operation(mongo->entries, false,
                                                     NULL);
     if (bulk == NULL) {

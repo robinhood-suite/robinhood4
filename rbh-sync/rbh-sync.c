@@ -468,6 +468,7 @@ sync(const struct rbh_filter_projection *projection)
 
     switch (errno) {
     case ENODATA:
+        rbh_backend_update(to, NULL, skip_error);
         return;
     case RBH_BACKEND_ERROR:
         error(EXIT_FAILURE, 0, "unhandled error: %s", rbh_backend_error);
