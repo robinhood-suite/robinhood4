@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6941c30d_b587c5f7",
+        "filename": "robinhood4.ocean.spec.in",
+        "patchSetId": 3
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-04-23T14:45:24Z",
+      "side": 1,
+      "message": "Added the same as the iosea specfile",
+      "parentUuid": "43bd4fa2_d6b1724f",
+      "range": {
+        "startLine": 13,
+        "startChar": 10,
+        "endLine": 13,
+        "endChar": 17
+      },
+      "revId": "6dbcd12fca96a900e245fb62c2621a848b9763d3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "66795773_198b9061",
@@ -47,6 +71,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a34910e6_1ba6e274",
+        "filename": "robinhood4.ocean.spec.in",
+        "patchSetId": 3
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-04-23T14:45:24Z",
+      "side": 1,
+      "message": "Added the %post here",
+      "parentUuid": "66795773_198b9061",
+      "range": {
+        "startLine": 122,
+        "startChar": 1,
+        "endLine": 122,
+        "endChar": 10
+      },
+      "revId": "6dbcd12fca96a900e245fb62c2621a848b9763d3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ae45e422_85cc8314",
@@ -60,6 +108,30 @@
       "writtenOn": "2024-04-18T07:26:18Z",
       "side": 1,
       "message": "minor: this should be a parameter",
+      "range": {
+        "startLine": 3,
+        "startChar": 34,
+        "endLine": 3,
+        "endChar": 40
+      },
+      "revId": "6dbcd12fca96a900e245fb62c2621a848b9763d3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2981bcf8_2c66dee2",
+        "filename": "utils/add_specfile_to_dist.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-04-23T14:45:24Z",
+      "side": 1,
+      "message": "Added to our backlog, will be a patch to main first, then here, but later.",
+      "parentUuid": "ae45e422_85cc8314",
       "range": {
         "startLine": 3,
         "startChar": 34,
