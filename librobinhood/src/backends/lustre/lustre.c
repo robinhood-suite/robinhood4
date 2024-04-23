@@ -425,21 +425,11 @@ xattrs_layout_iterator(struct llapi_layout *layout, void *cbdata)
 }
 
 static int
-layout_get_nb_comp(struct llapi_layout *layout, uint32_t *nb_comp)
+layout_get_nb_comp(struct llapi_layout *layout, void *cbdata)
 {
-    int rc;
+    uint32_t *nb_comp = (uint32_t *) cbdata;
 
-    rc = llapi_layout_comp_use(layout, LLAPI_LAYOUT_COMP_USE_LAST);
-    if (rc)
-        return -1;
-
-    rc = llapi_layout_comp_id_get(layout, nb_comp);
-    if (rc)
-        return -1;
-
-    rc = llapi_layout_comp_use(layout, LLAPI_LAYOUT_COMP_USE_FIRST);
-    if (rc)
-        return -1;
+    (*nb_comp)++;
 
     return 0;
 }
@@ -693,13 +683,13 @@ xattrs_get_layout(int fd, struct rbh_value_pair *pairs, int available_pairs)
     struct llapi_layout *layout;
     uint16_t mirror_count = 0;
     int required_pairs = 0;
-    uint32_t nb_comp = 1;
     /**
      * There are 6 layout header components in total, but OST is in its own
      * list, so we only consider 5 attributes for the main data array allocation
      */
     int save_errno = 0;
     int nb_xattrs = 5;
+    uint32_t nb_comp;
     int subcount = 0;
     uint32_t flags;
     int rc;
@@ -767,13 +757,16 @@ xattrs_get_layout(int fd, struct rbh_value_pair *pairs, int available_pairs)
         if (rc)
             goto err;
 
-        rc = layout_get_nb_comp(layout, &nb_comp);
+        nb_comp = 0;
+        rc = llapi_layout_comp_iterate(layout, &layout_get_nb_comp, &nb_comp);
         if (rc)
             goto err;
 
         /** The file is composite, so we add 3 more xattrs to the main alloc */
         nb_xattrs += 3;
         available_pairs -= 1;
+    } else {
+        nb_comp = 1;
     }
 
     rc = init_iterator_data(&data, nb_comp, nb_xattrs);
