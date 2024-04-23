@@ -970,6 +970,13 @@ lustre_get_default_stripe_value(int fd, struct rbh_value_pair *pair)
             return -1;
 
         value->type = RBH_VT_UINT64;
+    } else if (strcmp(pair->key, "layout") == 0) {
+        if (layout == NULL)
+            value->uint64 = 0;
+        else if (llapi_layout_pattern_get(layout, &value->uint64))
+            return -1;
+
+        value->type = RBH_VT_UINT64;
     } else {
         errno = EOPNOTSUPP;
         return -1;
