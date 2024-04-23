@@ -1,0 +1,35 @@
+/* This file is part of RobinHood 4
+ * Copyright (C) 2024 Commissariat a l'energie atomique et aux energies
+ *                    alternatives
+ *
+ * SPDX-License-Identifer: LGPL-3.0-or-later
+ */
+
+#ifndef ROBINHOOD_MPI_FILE_BACKEND_H
+#define ROBINHOOD_MPI_FILE_BACKEND_H
+
+#include "robinhood/backend.h"
+
+#define RBH_MPI_FILE_BACKEND_NAME "mpi-file"
+
+#mesondefine RBH_MPI_FILE_BACKEND_MAJOR
+#mesondefine RBH_MPI_FILE_BACKEND_MINOR
+#mesondefine RBH_MPI_FILE_BACKEND_RELEASE
+#define RBH_MPI_FILE_BACKEND_VERSION RPV(RBH_MPI_FILE_BACKEND_MAJOR, \
+                                         RBH_MPI_FILE_BACKEND_MINOR, \
+                                         RBH_MPI_FILE_BACKEND_RELEASE)
+
+/**
+ * Create a mpi_file backend
+ *
+ * @param path      the path of the mpifileutils file the backend refers to
+ *
+ * @return          a pointer to a newly allocated mpi_file backend on
+ *                  success, NULL on error and errno is set appropriately
+ *
+ * @error ENOMEM    there was not enough memory available
+ */
+struct rbh_backend *
+rbh_mpi_file_backend_new(const char *path);
+
+#endif
