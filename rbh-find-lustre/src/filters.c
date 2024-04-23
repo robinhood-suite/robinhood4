@@ -389,7 +389,7 @@ layout_pattern2filter(const char *layout)
 {
     struct rbh_filter *default_filter;
     struct rbh_value_pair pair = {
-        .key = "layout",
+        .key = "layout pattern",
     };
     struct rbh_filter *filter;
     bool default_exists;
