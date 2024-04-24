@@ -384,36 +384,82 @@ stripe_size2filter(const char *stripe_size)
     return filter_and(filter, filter_not(default_filter));
 }
 
+enum layouts {
+    LAYOUT_INVALID,
+    LAYOUT_DEFAULT,
+    LAYOUT_RAID0,
+    LAYOUT_MDT,
+    LAYOUT_OVERSTRIPED
+};
+
+enum layouts
+str2layouts(const char *layout)
+{
+    switch (*layout) {
+    case 'd':
+        if (strcmp(&layout[1], "efault") == 0)
+            return LAYOUT_DEFAULT;
+        break;
+    case 'r':
+        if (strcmp(&layout[1], "aid0") == 0)
+            return LAYOUT_RAID0;
+        break;
+    case 'm':
+        if (strcmp(&layout[1], "dt") == 0)
+            return LAYOUT_MDT;
+        break;
+    case 'o':
+        if (strcmp(&layout[1], "verstriped") == 0)
+            return LAYOUT_OVERSTRIPED;
+        break;
+    }
+
+    return LAYOUT_INVALID;
+}
+
 struct rbh_filter *
-layout2filter(const char *layout)
+layout2filter(const char *_layout)
 {
     struct rbh_filter *default_filter;
     struct rbh_value_pair pair = {
         .key = "layout",
     };
     struct rbh_filter *filter;
+    enum layouts layout;
     bool default_exists;
 
-    if (strcmp(layout, "raid0") && strcmp(layout, "mdt") &&
-        strcmp(layout, "default"))
+    layout = str2layouts(_layout);
+    if (layout == LAYOUT_INVALID)
         error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
-                      "Invalid layout provided, should be 'raid0', 'mdt' or 'default', got '%s'",
-                      layout);
+                      "Invalid layout provided, should be 'raid0', 'mdt', 'overstriped' or 'default', got '%s'",
+                      _layout);
 
     default_filter = get_default_filter();
-    if (strcmp(layout, "default") == 0)
+    if (layout == LAYOUT_DEFAULT)
         return default_filter;
 
     default_exists = get_fs_default_value(&pair);
 
-    if (strcmp(layout, "raid0") == 0)
+    /* The values for comparison are taken from Lustre's source code */
+    switch (layout) {
+    case LAYOUT_RAID0:
         filter = rbh_filter_compare_uint64_new(RBH_FOP_EQUAL,
                                                get_filter_field(LPRED_LAYOUT),
                                                LLAPI_LAYOUT_RAID0);
-    else
+        break;
+    case LAYOUT_MDT:
         filter = rbh_filter_compare_uint64_new(RBH_FOP_EQUAL,
                                                get_filter_field(LPRED_LAYOUT),
                                                LLAPI_LAYOUT_MDT);
+        break;
+    case LAYOUT_OVERSTRIPED:
+        filter = rbh_filter_compare_uint64_new(RBH_FOP_EQUAL,
+                                               get_filter_field(LPRED_LAYOUT),
+                                               LLAPI_LAYOUT_OVERSTRIPING);
+        break;
+    default:
+        __builtin_unreachable();
+    }
 
     if (filter == NULL)
         error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
