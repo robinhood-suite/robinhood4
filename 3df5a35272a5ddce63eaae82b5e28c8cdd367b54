@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f2efbbec_77dd7acd",
+        "filename": "rbh-find-lustre/include/filters.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-04-24T06:56:26Z",
+      "side": 1,
+      "message": "suggest: maybe add \"default\" as it says in the commit",
+      "revId": "3df5a35272a5ddce63eaae82b5e28c8cdd367b54",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4c836c6a_b17b832f",
+        "filename": "rbh-find-lustre/src/filters.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 396,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-04-24T06:56:26Z",
+      "side": 1,
+      "message": "suggest: add in the future a function that checks that the value of the pattern is valid, for the moment there are only 3 values, but with the addition of other patterns, it will be easier to read.",
+      "revId": "3df5a35272a5ddce63eaae82b5e28c8cdd367b54",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
