@@ -119,12 +119,24 @@ test_default_layout()
         difflines "/" "/$file" "/$dir"
 }
 
+test_other_layouts()
+{
+    local file1=test_layout_overstriped
+
+    lfs setstripe -E 1M -C 5 -E -1 -c -1 $file1
+
+    rbh-sync "rbh:lustre:." "rbh:mongo:$testdb"
+
+    rbh_lfind "rbh:mongo:$testdb" -layout-pattern overstriped | sort |
+        difflines "/$file1"
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
 declare -a tests=(test_invalid test_default test_layout
-                  test_default_layout)
+                  test_default_layout test_other_layouts)
 
 tmpdir=$(mktemp --directory --tmpdir=$LUSTRE_DIR)
 trap "rm -r $tmpdir; lfs setstripe -L raid0 $LUSTRE_DIR" EXIT
