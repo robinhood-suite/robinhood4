@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "31473e9d_effe7cb0",
+        "filename": "rbh-find-lustre/tests/test_pattern.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-04-25T13:12:53Z",
+      "side": 1,
+      "message": "question: If I recall correctly what you said, setting the striping to raid0 is considered the default by Lustre and removes the trusted.lov attribute, right? If so this test should not pass.",
+      "range": {
+        "startLine": 52,
+        "startChar": 3,
+        "endLine": 57,
+        "endChar": 1
+      },
+      "revId": "2994eed9ccb4f78537e9d5b5b1ce687524efde18",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "89b29966_cb5a3e6b",
         "filename": "rbh-find-lustre/tests/test_pattern.bash",
         "patchSetId": 1
@@ -14,6 +37,29 @@
       "writtenOn": "2024-04-24T07:11:29Z",
       "side": 1,
       "message": "question: why are you doing this ?",
+      "revId": "2994eed9ccb4f78537e9d5b5b1ce687524efde18",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bf6d63d3_4b7d90e0",
+        "filename": "rbh-find-lustre/tests/test_pattern.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-04-25T13:12:53Z",
+      "side": 1,
+      "message": "suggest: I don\u0027t mind the pattern name but to be more explicit this could be name stripe-pattern. This would also be more consistent with stripe-count/size.",
+      "range": {
+        "startLine": 74,
+        "startChar": 34,
+        "endLine": 74,
+        "endChar": 42
+      },
       "revId": "2994eed9ccb4f78537e9d5b5b1ce687524efde18",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
