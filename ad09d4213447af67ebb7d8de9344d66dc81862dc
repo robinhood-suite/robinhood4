@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "78adf6d4_67c38269",
+        "filename": "librobinhood/src/utils/uri.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-04-25T08:42:32Z",
+      "side": 1,
+      "message": "suggest: maybe in another patch (or even something to discuss between us before) but we could have a boolean in the rbh_backend structure indicating whether the backend support filtering. This could even be a bit field because I imagine that other options might be setup in the same way. The other weird thing about this code is that we call posix_backend_branch_from_path for all of the backends listed here. This is very implementation specific. But for now, this will do.",
+      "range": {
+        "startLine": 128,
+        "startChar": 12,
+        "endLine": 129,
+        "endChar": 76
+      },
+      "revId": "ad09d4213447af67ebb7d8de9344d66dc81862dc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
