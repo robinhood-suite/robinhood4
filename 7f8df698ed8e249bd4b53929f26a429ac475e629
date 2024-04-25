@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "17a44c47_a6dde1fa",
+        "filename": "librobinhood/src/backends/lustre/lustre.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 958,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-04-25T09:27:01Z",
+      "side": 1,
+      "message": "suggest: get_default_stripe_value",
+      "range": {
+        "startLine": 958,
+        "startChar": 7,
+        "endLine": 958,
+        "endChar": 24
+      },
+      "revId": "7f8df698ed8e249bd4b53929f26a429ac475e629",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
