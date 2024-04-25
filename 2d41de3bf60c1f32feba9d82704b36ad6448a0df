@@ -47,6 +47,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4dc89fe9_b88d6aa0",
+        "filename": "librobinhood/src/backends/posix_mpi/posix_mpi.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-04-25T08:34:55Z",
+      "side": 1,
+      "message": "My bad, I\u0027ve seen the next patch. It could be nice to mention these kinds of things in the commit message to avoid surprises for the reviewers. No need to update it now.",
+      "parentUuid": "06c67f90_3420447c",
+      "range": {
+        "startLine": 101,
+        "startChar": 47,
+        "endLine": 101,
+        "endChar": 73
+      },
+      "revId": "2d41de3bf60c1f32feba9d82704b36ad6448a0df",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "40160753_2343819f",
@@ -131,6 +155,30 @@
       "writtenOn": "2024-04-25T08:33:00Z",
       "side": 1,
       "message": "major: again, missing branch here",
+      "range": {
+        "startLine": 120,
+        "startChar": 43,
+        "endLine": 120,
+        "endChar": 64
+      },
+      "revId": "2d41de3bf60c1f32feba9d82704b36ad6448a0df",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e6b2813a_151da0b1",
+        "filename": "librobinhood/src/backends/posix_mpi/posix_mpi.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-04-25T08:34:55Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "f8946702_12336fee",
       "range": {
         "startLine": 120,
         "startChar": 43,
