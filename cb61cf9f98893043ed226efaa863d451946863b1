@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c80377c2_8dffe36e",
+        "filename": "rbh-find-lustre/tests/test_layout.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-04-25T15:16:21Z",
+      "side": 1,
+      "message": "major: no, this is a misunderstanding. Between -layout and -pattern, I\u0027d rather have -pattern. I thought we agreed on -layout-pattern.",
+      "range": {
+        "startLine": 26,
+        "startChar": 35,
+        "endLine": 26,
+        "endChar": 41
+      },
+      "revId": "cb61cf9f98893043ed226efaa863d451946863b1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
