@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "68103f25_a7491997",
+        "filename": "librobinhood/include/robinhood/backends/lustre_mpi_internal.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-04-25T13:34:20Z",
+      "side": 1,
+      "message": "You don\u0027t have to define it in the header file. You can simply define it at the top of the source file.",
+      "parentUuid": "e1a7ded3_067df6e2",
+      "range": {
+        "startLine": 17,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 25
+      },
+      "revId": "19fbda87f6e1bb9704897a2a29f6f6eceb7e0e4f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f5910067_26e448f2",
         "filename": "librobinhood/src/backends/iter_mpi/iter_mpi.c",
         "patchSetId": 2
