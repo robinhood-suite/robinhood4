@@ -122,13 +122,20 @@ test_default_layout()
 test_other_layouts()
 {
     local file1=test_layout_overstriped
+    local file2=test_layout_released
 
     lfs setstripe -E 1M -C 5 -E -1 -c -1 $file1
+
+    touch $file2
+    archive_file $file2
+    lfs hsm_release $file2
 
     rbh-sync "rbh:lustre:." "rbh:mongo:$testdb"
 
     rbh_lfind "rbh:mongo:$testdb" -layout-pattern overstriped | sort |
         difflines "/$file1"
+    rbh_lfind "rbh:mongo:$testdb" -layout-pattern released | sort |
+        difflines "/$file2"
 }
 
 ################################################################################
