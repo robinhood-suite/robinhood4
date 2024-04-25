@@ -3,6 +3,52 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6fde9fcf_9a257d4b",
+        "filename": "librobinhood/include/robinhood/backends/posix_mpi.h.in",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-04-25T08:33:00Z",
+      "side": 1,
+      "message": "typo: posix_mpi",
+      "range": {
+        "startLine": 27,
+        "startChar": 51,
+        "endLine": 27,
+        "endChar": 57
+      },
+      "revId": "2d41de3bf60c1f32feba9d82704b36ad6448a0df",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "06c67f90_3420447c",
+        "filename": "librobinhood/src/backends/posix_mpi/posix_mpi.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-04-25T08:33:00Z",
+      "side": 1,
+      "message": "major: there is a branch in the lustre_mpi iterator but not the posix one. Not sure of the implications but I assume that this would not work: `rbh:posix-mpi:dir#subdir/file`?",
+      "range": {
+        "startLine": 101,
+        "startChar": 47,
+        "endLine": 101,
+        "endChar": 73
+      },
+      "revId": "2d41de3bf60c1f32feba9d82704b36ad6448a0df",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "40160753_2343819f",
         "filename": "librobinhood/src/backends/posix_mpi/posix_mpi.c",
         "patchSetId": 2
@@ -67,6 +113,29 @@
         "startChar": 22,
         "endLine": 102,
         "endChar": 50
+      },
+      "revId": "2d41de3bf60c1f32feba9d82704b36ad6448a0df",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f8946702_12336fee",
+        "filename": "librobinhood/src/backends/posix_mpi/posix_mpi.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-04-25T08:33:00Z",
+      "side": 1,
+      "message": "major: again, missing branch here",
+      "range": {
+        "startLine": 120,
+        "startChar": 43,
+        "endLine": 120,
+        "endChar": 64
       },
       "revId": "2d41de3bf60c1f32feba9d82704b36ad6448a0df",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
