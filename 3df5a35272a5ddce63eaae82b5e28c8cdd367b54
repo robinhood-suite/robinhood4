@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7b22d450_16e3ff8d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-04-25T13:22:00Z",
+      "side": 1,
+      "message": "nit: not these two for now",
+      "range": {
+        "startLine": 15,
+        "startChar": 13,
+        "endLine": 15,
+        "endChar": 42
+      },
+      "revId": "3df5a35272a5ddce63eaae82b5e28c8cdd367b54",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f2efbbec_77dd7acd",
         "filename": "rbh-find-lustre/include/filters.h",
         "patchSetId": 1
@@ -20,6 +43,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "134833dc_31ad0849",
+        "filename": "rbh-find-lustre/include/parser.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-04-25T13:22:00Z",
+      "side": 1,
+      "message": "suggest: at least in the source code, I would name this stripe_pattern, not just pattern. Even if we still want to keep the `-pattern` predicate.",
+      "range": {
+        "startLine": 19,
+        "startChar": 10,
+        "endLine": 19,
+        "endChar": 17
+      },
+      "revId": "3df5a35272a5ddce63eaae82b5e28c8cdd367b54",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4c836c6a_b17b832f",
         "filename": "rbh-find-lustre/src/filters.c",
         "patchSetId": 1
@@ -31,6 +77,75 @@
       "writtenOn": "2024-04-24T06:56:26Z",
       "side": 1,
       "message": "suggest: add in the future a function that checks that the value of the pattern is valid, for the moment there are only 3 values, but with the addition of other patterns, it will be easier to read.",
+      "revId": "3df5a35272a5ddce63eaae82b5e28c8cdd367b54",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd0fd82c_1eb029e3",
+        "filename": "rbh-find-lustre/src/filters.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 415,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-04-25T13:22:00Z",
+      "side": 1,
+      "message": "major: use the macro provided by Lustre",
+      "range": {
+        "startLine": 415,
+        "startChar": 7,
+        "endLine": 415,
+        "endChar": 65
+      },
+      "revId": "3df5a35272a5ddce63eaae82b5e28c8cdd367b54",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "21fe1f1c_75a9b060",
+        "filename": "rbh-find-lustre/src/filters.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 417,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-04-25T13:22:00Z",
+      "side": 1,
+      "message": "question: why not a simple rbh_filter_compare_uint64 (or whatever the right type is)?",
+      "range": {
+        "startLine": 417,
+        "startChar": 17,
+        "endLine": 417,
+        "endChar": 31
+      },
+      "revId": "3df5a35272a5ddce63eaae82b5e28c8cdd367b54",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8b8912f3_e4d8db12",
+        "filename": "rbh-find-lustre/src/filters.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 423,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-04-25T13:22:00Z",
+      "side": 1,
+      "message": "major: this error message is wrong",
+      "range": {
+        "startLine": 423,
+        "startChar": 23,
+        "endLine": 423,
+        "endChar": 95
+      },
       "revId": "3df5a35272a5ddce63eaae82b5e28c8cdd367b54",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
