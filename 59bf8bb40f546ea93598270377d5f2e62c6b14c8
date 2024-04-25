@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2170e5bb_c8a29266",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-04-25T09:06:57Z",
+      "side": 1,
+      "message": "suggest: this is very vague. Something like: \"retrieve stripe size from lustre_get_attribute\" would be more explicit.",
+      "range": {
+        "startLine": 7,
+        "startChar": 8,
+        "endLine": 7,
+        "endChar": 47
+      },
+      "revId": "59bf8bb40f546ea93598270377d5f2e62c6b14c8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5e885817_5ae81652",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-04-25T09:06:57Z",
+      "side": 1,
+      "message": "suggest: same remark as for the first sentence.",
+      "range": {
+        "startLine": 9,
+        "startChar": 16,
+        "endLine": 9,
+        "endChar": 71
+      },
+      "revId": "59bf8bb40f546ea93598270377d5f2e62c6b14c8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2a641d4d_7edc3d75",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-04-25T09:06:57Z",
+      "side": 1,
+      "message": "style: we usually try to limit the length of commit messages to 70 characters I think.",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 4
+      },
+      "revId": "59bf8bb40f546ea93598270377d5f2e62c6b14c8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
