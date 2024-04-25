@@ -19,17 +19,6 @@ fi
 test_dir=$(dirname $(readlink -e $0))
 . $test_dir/test_utils.bash
 
-archive_file()
-{
-    local file="$1"
-
-    sudo lfs hsm_archive "$file"
-
-    while ! lfs hsm_state "$file" | grep "archive_id:"; do
-        sleep 0.5
-    done
-}
-
 ################################################################################
 #                                    TESTS                                     #
 ################################################################################
