@@ -389,7 +389,8 @@ enum layouts {
     LAYOUT_DEFAULT,
     LAYOUT_RAID0,
     LAYOUT_MDT,
-    LAYOUT_OVERSTRIPED
+    LAYOUT_OVERSTRIPED,
+    LAYOUT_RELEASED
 };
 
 enum layouts
@@ -403,6 +404,8 @@ str2layouts(const char *layout)
     case 'r':
         if (strcmp(&layout[1], "aid0") == 0)
             return LAYOUT_RAID0;
+        else if (strcmp(&layout[1], "eleased") == 0)
+            return LAYOUT_RELEASED;
         break;
     case 'm':
         if (strcmp(&layout[1], "dt") == 0)
@@ -456,6 +459,11 @@ layout2filter(const char *_layout)
         filter = rbh_filter_compare_uint64_new(RBH_FOP_EQUAL,
                                                get_filter_field(LPRED_LAYOUT),
                                                LLAPI_LAYOUT_OVERSTRIPING);
+        break;
+    case LAYOUT_RELEASED:
+        filter = rbh_filter_compare_uint64_new(RBH_FOP_BITS_ANY_SET,
+                                               get_filter_field(LPRED_LAYOUT),
+                                               LOV_PATTERN_F_RELEASED);
         break;
     default:
         __builtin_unreachable();
