@@ -389,7 +389,8 @@ enum layout_patterns {
     LAYOUT_PATTERN_DEFAULT,
     LAYOUT_PATTERN_RAID0,
     LAYOUT_PATTERN_MDT,
-    LAYOUT_PATTERN_OVERSTRIPED
+    LAYOUT_PATTERN_OVERSTRIPED,
+    LAYOUT_PATTERN_RELEASED
 };
 
 enum layout_patterns
@@ -403,6 +404,8 @@ str2layout_patterns(const char *layout_pattern)
     case 'r':
         if (strcmp(&layout_pattern[1], "aid0") == 0)
             return LAYOUT_PATTERN_RAID0;
+        else if (strcmp(&layout_pattern[1], "eleased") == 0)
+            return LAYOUT_PATTERN_RELEASED;
         break;
     case 'm':
         if (strcmp(&layout_pattern[1], "dt") == 0)
@@ -459,6 +462,12 @@ layout_pattern2filter(const char *_layout)
             RBH_FOP_EQUAL,
             get_filter_field(LPRED_LAYOUT_PATTERN),
             LLAPI_LAYOUT_OVERSTRIPING);
+        break;
+    case LAYOUT_PATTERN_RELEASED:
+        filter = rbh_filter_compare_uint64_new(
+            RBH_FOP_BITS_ANY_SET,
+            get_filter_field(LPRED_LAYOUT_PATTERN),
+            LOV_PATTERN_F_RELEASED);
         break;
     default:
         __builtin_unreachable();
