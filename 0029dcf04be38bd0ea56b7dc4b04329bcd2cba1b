@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b93b5042_c33412c7",
+        "filename": "librobinhood/src/utils/path.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-04-25T14:20:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6fc38bf2_4a78d7fd",
+      "range": {
+        "startLine": 34,
+        "startChar": 15,
+        "endLine": 34,
+        "endChar": 23
+      },
+      "revId": "0029dcf04be38bd0ea56b7dc4b04329bcd2cba1b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7418a4d6_333822c2",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-04-25T09:22:01Z",
       "side": 1,
       "message": "This is not using the errno convention. You should return -1 and leave errno.",
+      "range": {
+        "startLine": 39,
+        "startChar": 8,
+        "endLine": 39,
+        "endChar": 22
+      },
+      "revId": "0029dcf04be38bd0ea56b7dc4b04329bcd2cba1b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ed4635f8_5095ba2a",
+        "filename": "librobinhood/src/utils/path.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-04-25T14:20:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7418a4d6_333822c2",
       "range": {
         "startLine": 39,
         "startChar": 8,
@@ -70,6 +118,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2141351a_7209761e",
+        "filename": "librobinhood/src/utils/path.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-04-25T14:20:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5389fa3a_acaae2e2",
+      "range": {
+        "startLine": 69,
+        "startChar": 15,
+        "endLine": 69,
+        "endChar": 29
+      },
+      "revId": "0029dcf04be38bd0ea56b7dc4b04329bcd2cba1b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8a950d23_23e538ef",
@@ -83,6 +155,30 @@
       "writtenOn": "2024-04-25T09:22:01Z",
       "side": 1,
       "message": "major: errno should be positive",
+      "range": {
+        "startLine": 70,
+        "startChar": 22,
+        "endLine": 70,
+        "endChar": 27
+      },
+      "revId": "0029dcf04be38bd0ea56b7dc4b04329bcd2cba1b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e0e0b57d_343d5cfd",
+        "filename": "librobinhood/src/utils/path.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-04-25T14:20:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8a950d23_23e538ef",
       "range": {
         "startLine": 70,
         "startChar": 22,
@@ -116,6 +212,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7d67e75b_0fe0830b",
+        "filename": "librobinhood/src/utils/path.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-04-25T14:20:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3c44ca4b_86edcd2f",
+      "range": {
+        "startLine": 71,
+        "startChar": 16,
+        "endLine": 71,
+        "endChar": 30
+      },
+      "revId": "0029dcf04be38bd0ea56b7dc4b04329bcd2cba1b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6d910fc4_6f8fcbd7",
@@ -139,6 +259,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "304c1cff_306f650e",
+        "filename": "librobinhood/src/utils/path.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-04-25T14:20:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6d910fc4_6f8fcbd7",
+      "range": {
+        "startLine": 81,
+        "startChar": 8,
+        "endLine": 81,
+        "endChar": 26
+      },
+      "revId": "0029dcf04be38bd0ea56b7dc4b04329bcd2cba1b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d2892ba8_c2ff0fad",
@@ -152,6 +296,30 @@
       "writtenOn": "2024-04-25T09:22:01Z",
       "side": 1,
       "message": "major: rc \u003d -1; errno \u003d ENOENT;",
+      "range": {
+        "startLine": 84,
+        "startChar": 8,
+        "endLine": 84,
+        "endChar": 21
+      },
+      "revId": "0029dcf04be38bd0ea56b7dc4b04329bcd2cba1b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c298c193_35b83e41",
+        "filename": "librobinhood/src/utils/path.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-04-25T14:20:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d2892ba8_c2ff0fad",
       "range": {
         "startLine": 84,
         "startChar": 8,
