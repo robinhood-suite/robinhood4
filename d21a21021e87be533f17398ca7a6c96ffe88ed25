@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bd0fff34_d735904d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-04-25T09:51:56Z",
+      "side": 1,
+      "message": "major: not set",
+      "range": {
+        "startLine": 17,
+        "startChar": 50,
+        "endLine": 17,
+        "endChar": 59
+      },
+      "revId": "d21a21021e87be533f17398ca7a6c96ffe88ed25",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "28038b19_84f22da0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-04-25T09:51:56Z",
+      "side": 1,
+      "message": "minor: the part in parenthesis should be in the last \"otherwise\".",
+      "range": {
+        "startLine": 29,
+        "startChar": 10,
+        "endLine": 32,
+        "endChar": 13
+      },
+      "revId": "d21a21021e87be533f17398ca7a6c96ffe88ed25",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "00535871_a46797d4",
+        "filename": "rbh-find-lustre/src/filters.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-04-25T09:51:56Z",
+      "side": 1,
+      "message": "major: use real errors for all the functions called here. They might fail for valid reasons. Especially the open one. The path should be mentioned.",
+      "range": {
+        "startLine": 255,
+        "startChar": 8,
+        "endLine": 255,
+        "endChar": 73
+      },
+      "revId": "d21a21021e87be533f17398ca7a6c96ffe88ed25",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
