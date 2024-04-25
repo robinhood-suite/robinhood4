@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "51b53782_8033567d",
+        "filename": "rbh-find-lustre/tests/test_pattern.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-04-25T14:20:52Z",
+      "side": 1,
+      "message": "Here, explicitly setting the pattern on $dir sets up it\u0027s stripe attributes, so `trusted.lov` will be set. So it doesn\u0027t have a default striping anymore, but has one set by the user (us).\n\nTherefore, at this point, only the \"/\" doesn\u0027t have an explicit striping set, so default will only match it.",
+      "parentUuid": "31473e9d_effe7cb0",
+      "range": {
+        "startLine": 52,
+        "startChar": 3,
+        "endLine": 57,
+        "endChar": 1
+      },
+      "revId": "2994eed9ccb4f78537e9d5b5b1ce687524efde18",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "89b29966_cb5a3e6b",
         "filename": "rbh-find-lustre/tests/test_pattern.bash",
         "patchSetId": 1
@@ -37,6 +61,24 @@
       "writtenOn": "2024-04-24T07:11:29Z",
       "side": 1,
       "message": "question: why are you doing this ?",
+      "revId": "2994eed9ccb4f78537e9d5b5b1ce687524efde18",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb2c6e12_019a3b41",
+        "filename": "rbh-find-lustre/tests/test_pattern.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-04-25T14:20:52Z",
+      "side": 1,
+      "message": "Forgot to remove it",
+      "parentUuid": "89b29966_cb5a3e6b",
       "revId": "2994eed9ccb4f78537e9d5b5b1ce687524efde18",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
@@ -54,6 +96,30 @@
       "writtenOn": "2024-04-25T13:12:53Z",
       "side": 1,
       "message": "suggest: I don\u0027t mind the pattern name but to be more explicit this could be name stripe-pattern. This would also be more consistent with stripe-count/size.",
+      "range": {
+        "startLine": 74,
+        "startChar": 34,
+        "endLine": 74,
+        "endChar": 42
+      },
+      "revId": "2994eed9ccb4f78537e9d5b5b1ce687524efde18",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "285b9530_e7a6664f",
+        "filename": "rbh-find-lustre/tests/test_pattern.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-04-25T14:20:52Z",
+      "side": 1,
+      "message": "Since it\u0027s not really a striping information, I renamed it to \"layout\"",
+      "parentUuid": "bf6d63d3_4b7d90e0",
       "range": {
         "startLine": 74,
         "startChar": 34,
