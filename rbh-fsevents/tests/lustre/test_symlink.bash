@@ -47,13 +47,41 @@ test_create_symlink()
     find_attribute "\"ns.name\":\"$entry\"" "\"symlink\":\"$entry.tmp\""
 }
 
+test_symlink_other_mdt()
+{
+    local entry="test_entry"
+    local dir="test_dir"
+
+    old_LUSTRE_MDT=$LUSTRE_MDT
+    old_userid=$userid
+
+    LUSTRE_MDT=lustre-MDT0003
+    userid="$(start_changelogs "$LUSTRE_MDT")"
+
+    touch $entry
+    lfs mkdir -i 3 $dir
+    ln -s $entry $dir/$entry.tmp
+
+    invoke_rbh-fsevents
+
+    clear_changelogs $LUSTRE_MDT $userid
+    stop_changelogs $LUSTRE_MDT $userid
+
+    LUSTRE_MDT=$old_LUSTRE_MDT
+    userid=$old_userid
+
+    find_attribute "\"ns.name\":\"$entry.tmp\"" "\"symlink\":\"$entry\""
+    find_attribute "\"ns.name\":\"$entry.tmp\"" "\"xattrs.mdt_index\":3"
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
 source $test_dir/test_create_inode.bash
 
-declare -a tests=(test_create_symlink test_create_two_entries)
+declare -a tests=(test_create_symlink test_create_two_entries
+                  test_symlink_other_mdt)
 
 LUSTRE_DIR=/mnt/lustre/
 cd "$LUSTRE_DIR"

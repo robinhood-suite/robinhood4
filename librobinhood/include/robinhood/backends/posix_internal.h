@@ -19,6 +19,7 @@
  */
 
 #include <fts.h>
+#include <unistd.h>
 
 #include "robinhood/backend.h"
 #include "robinhood/sstack.h"
@@ -56,8 +57,35 @@ struct posix_iterator {
     bool skip_error;
 };
 
-struct posix_iterator *
+/**
+ * Structure containing the result of fsentry_from_any
+ */
+struct fsentry_id_pair {
+    /**
+     * rbh_id of the rbh_fsentry,
+     * used by the POSIX backend, corresponds to the fsentry's parent
+     */
+    struct rbh_id *id;
+    struct rbh_fsentry *fsentry;
+};
+
+struct rbh_mut_iterator *
 posix_iterator_new(const char *root, const char *entry, int statx_sync_type);
+
+struct rbh_id *
+id_from_fd(int fd);
+
+
+bool
+fsentry_from_any(struct fsentry_id_pair *fip, const struct rbh_value *path,
+                 char *accpath, struct rbh_id *entry_id,
+                 struct rbh_id *parent_id, char *name, int statx_sync_type,
+                 int (*inode_xattrs_callback)(const int,
+                                              const struct rbh_statx *,
+                                              struct rbh_value_pair *,
+                                              ssize_t *,
+                                              struct rbh_value_pair *,
+                                              struct rbh_sstack *));
 
 /*----------------------------------------------------------------------------*
  |                              posix_operations                              |
@@ -83,15 +111,24 @@ posix_backend_filter(void *backend, const struct rbh_filter *filter,
 void
 posix_backend_destroy(void *backend);
 
+char *
+id2path(const char *root, const struct rbh_id *id);
+
 /*----------------------------------------------------------------------------*
  |                               posix_backend                                |
  *----------------------------------------------------------------------------*/
 
 struct posix_backend {
     struct rbh_backend backend;
-    struct posix_iterator *(*iter_new)(const char *, const char *, int);
+    struct rbh_mut_iterator *(*iter_new)(const char *, const char *, int);
     char *root;
     int statx_sync_type;
+};
+
+struct posix_branch_backend {
+    struct posix_backend posix;
+    struct rbh_id id;
+    char *path;
 };
 
 #endif
