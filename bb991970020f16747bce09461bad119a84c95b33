@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "af17017c_18a7dc81",
+        "filename": "rbh-find-lustre/src/filters.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 387,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-04-25T15:23:34Z",
+      "side": 1,
+      "message": "major: again, I\u0027d prefer layout_patterns",
+      "range": {
+        "startLine": 387,
+        "startChar": 5,
+        "endLine": 387,
+        "endChar": 12
+      },
+      "revId": "bb991970020f16747bce09461bad119a84c95b33",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
