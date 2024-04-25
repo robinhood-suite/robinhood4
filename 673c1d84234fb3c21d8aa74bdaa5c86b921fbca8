@@ -22,6 +22,30 @@
       },
       "revId": "673c1d84234fb3c21d8aa74bdaa5c86b921fbca8",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b16f32f8_7f019189",
+        "filename": "rbh-find-lustre/src/filters.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-04-25T09:15:42Z",
+      "side": 1,
+      "message": "This is because in lustre, only directories should have a default striping. The concept of default striping does not make sense for other types of files. But this could be documented.",
+      "parentUuid": "a535e4d2_fa932ac3",
+      "range": {
+        "startLine": 250,
+        "startChar": 8,
+        "endLine": 250,
+        "endChar": 42
+      },
+      "revId": "673c1d84234fb3c21d8aa74bdaa5c86b921fbca8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
