@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4a5a2b63_a8e8f1c8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-04-25T14:19:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2170e5bb_c8a29266",
+      "range": {
+        "startLine": 7,
+        "startChar": 8,
+        "endLine": 7,
+        "endChar": 47
+      },
+      "revId": "59bf8bb40f546ea93598270377d5f2e62c6b14c8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5e885817_5ae81652",
@@ -65,6 +89,54 @@
         "startChar": 0,
         "endLine": 9,
         "endChar": 4
+      },
+      "revId": "59bf8bb40f546ea93598270377d5f2e62c6b14c8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6fbb7174_5abe9625",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-04-25T14:19:47Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "2a641d4d_7edc3d75",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 4
+      },
+      "revId": "59bf8bb40f546ea93598270377d5f2e62c6b14c8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5d07832a_61449c3b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-04-25T14:19:47Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "5e885817_5ae81652",
+      "range": {
+        "startLine": 9,
+        "startChar": 16,
+        "endLine": 9,
+        "endChar": 71
       },
       "revId": "59bf8bb40f546ea93598270377d5f2e62c6b14c8",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
