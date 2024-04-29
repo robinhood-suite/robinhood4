@@ -102,6 +102,11 @@ find_attribute()
         error "No entry found with filter '$output'"
 }
 
+difflines()
+{
+    diff -y - <([ $# -eq 0 ] && printf '' || printf '%s\n' "$@")
+}
+
 run_tests()
 {
     local fail=0
