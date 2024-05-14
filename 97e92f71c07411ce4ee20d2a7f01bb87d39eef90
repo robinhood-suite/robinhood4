@@ -83,6 +83,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "973b23ac_f2487204",
+        "filename": "rbh-find-lustre/tests/test_stripe_count.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-05-14T16:00:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "64406a3a_93b48361",
+      "range": {
+        "startLine": 26,
+        "startChar": 4,
+        "endLine": 26,
+        "endChar": 7
+      },
+      "revId": "97e92f71c07411ce4ee20d2a7f01bb87d39eef90",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "28cc35be_bf23b908",
@@ -183,6 +207,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad2cf491_21f2bfb6",
+        "filename": "rbh-find-lustre/tests/test_stripe_count.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-05-14T16:00:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3048d96c_07e35509",
+      "range": {
+        "startLine": 48,
+        "startChar": 4,
+        "endLine": 48,
+        "endChar": 8
+      },
+      "revId": "97e92f71c07411ce4ee20d2a7f01bb87d39eef90",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9b34ee4d_81d193a8",
@@ -230,6 +278,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5bdf6d4d_eb574744",
+        "filename": "rbh-find-lustre/tests/test_stripe_count.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-05-14T16:00:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9b34ee4d_81d193a8",
+      "range": {
+        "startLine": 61,
+        "startChar": 24,
+        "endLine": 61,
+        "endChar": 40
+      },
+      "revId": "97e92f71c07411ce4ee20d2a7f01bb87d39eef90",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dbc3a8b6_56fbc307",
@@ -264,6 +336,30 @@
         "id": 1019048
       },
       "writtenOn": "2024-04-22T08:07:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dbc3a8b6_56fbc307",
+      "range": {
+        "startLine": 130,
+        "startChar": 4,
+        "endLine": 131,
+        "endChar": 58
+      },
+      "revId": "97e92f71c07411ce4ee20d2a7f01bb87d39eef90",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "76548b84_8ad3dffe",
+        "filename": "rbh-find-lustre/tests/test_stripe_count.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-05-14T16:00:31Z",
       "side": 1,
       "message": "Done",
       "parentUuid": "dbc3a8b6_56fbc307",
@@ -338,6 +434,30 @@
       "side": 1,
       "message": "I\u0027m fine with leaving this as is for now but we need to investigate what \"stuff\" lfs does. We should have the same behavior as lfs when appropriate/possible.",
       "parentUuid": "724870b6_f8ed2845",
+      "range": {
+        "startLine": 132,
+        "startChar": 15,
+        "endLine": 132,
+        "endChar": 24
+      },
+      "revId": "97e92f71c07411ce4ee20d2a7f01bb87d39eef90",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1af10824_2b280dff",
+        "filename": "rbh-find-lustre/tests/test_stripe_count.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-05-14T16:00:31Z",
+      "side": 1,
+      "message": "Here, I am filtering which have a stripe count equal to the one of the mount point. However, lfs getstripe on the mount point before we set anything will return an actual value (here, 1). So we filter all entries with a stripe count of 1.\n\nThe thing is that while we do not set a default stripe count for the mount point, it does not have any. lfs getstripe returns something because it\u0027s lfs getstripe doing stuff, but not the actual value for the mount point.\n\nSo since there is no stripe count on the mount point, we consider there is no default value to filter on, which means we don\u0027t retrieve every entry with a default stripe count.\n\nTherefore, the final filter ends up being just on entries with a stripe count of 1, which there is none, because $file has a stripe count of 4, and / and $dir have a default stripe count.\n\n\n\nLustre is easy.",
+      "parentUuid": "b4dd0cf7_c30ee3be",
       "range": {
         "startLine": 132,
         "startChar": 15,
