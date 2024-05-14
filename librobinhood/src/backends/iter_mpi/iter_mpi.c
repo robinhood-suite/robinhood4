@@ -28,8 +28,8 @@ static struct rbh_id ROOT_PARENT_ID = {
     .size = 0,
 };
 
-static struct rbh_id *
-get_parent_id(const char *path)
+struct rbh_id *
+get_parent_id(const char *path, bool use_fd)
 {
     struct rbh_id *parent_id;
     int save_errno = errno;
@@ -42,20 +42,27 @@ get_parent_id(const char *path)
         return NULL;
     parent_path = dirname(tmp_path);
 
-    fd = openat(AT_FDCWD, parent_path, O_RDONLY | O_CLOEXEC | O_PATH);
-    if (fd < 0) {
-        save_errno = errno;
-        free(tmp_path);
-        errno = save_errno;
-        return NULL;
+    if (use_fd) {
+        fd = openat(AT_FDCWD, parent_path, O_RDONLY | O_CLOEXEC | O_PATH);
+        if (fd < 0) {
+            save_errno = errno;
+            free(tmp_path);
+            errno = save_errno;
+            return NULL;
+        }
+
+        parent_id = id_from_fd(fd);
+    } else {
+        parent_id = rbh_id_new(parent_path,
+                               (strlen(parent_path) + 1) * sizeof(char));
     }
 
-    parent_id = id_from_fd(fd);
     if (parent_id == NULL)
         return NULL;
 
     save_errno = errno;
-    close(fd);
+    if (use_fd)
+        close(fd);
     free(tmp_path);
     errno = save_errno;
 
@@ -63,10 +70,13 @@ get_parent_id(const char *path)
 }
 
 static struct rbh_fsentry *
-fsentry_from_mpi_fi(struct mpi_file_info *mpi_fi, int statx_sync_type,
-                    size_t prefix_len,
-                    inode_xattrs_callback_t inode_xattrs_callback)
+fsentry_from_mpi_fi(struct mpi_file_info *mpi_fi,
+                    struct mpi_iterator *iterator)
 {
+    inode_xattrs_callback_t inode_xattrs_callback =
+        iterator->inode_xattrs_callback;
+    int statx_sync_type = iterator->statx_sync_type;
+    size_t prefix_len = iterator->prefix_len;
     const struct rbh_value path = {
         .type = RBH_VT_STRING,
         .string = strlen(mpi_fi->path) == prefix_len ?
@@ -129,7 +139,7 @@ skip:
 
     mpi_fi.path = path;
     mpi_fi.name = basename(path_dup);
-    mpi_fi.parent_id = get_parent_id(path);
+    mpi_fi.parent_id = get_parent_id(path, mpi_iter->use_fd);
 
     if (mpi_fi.parent_id == NULL) {
         fprintf(stderr, "Failed to get parent id of '%s'\n", path);
@@ -151,9 +161,8 @@ skip:
         mpi_fi.name[0] = '\0';
     }
 
-    fsentry = fsentry_from_mpi_fi(&mpi_fi, mpi_iter->statx_sync_type,
-                                  mpi_iter->prefix_len,
-                                  mpi_iter->inode_xattrs_callback);
+    fsentry = mpi_iter->fsentry_from_mpi(&mpi_fi, mpi_iter);
+
     if (fsentry == NULL && (errno == ENOENT || errno == ESTALE)) {
         /* The entry moved from under our feet */
         free(path_dup);
@@ -225,6 +234,8 @@ mpi_iterator_new(const char *root, const char *entry, int statx_sync_type)
     mpi_iter->total = mfu_flist_size(mpi_iter->flist);
     mpi_iter->current = 0;
     mpi_iter->is_branch = false;
+    mpi_iter->use_fd = true;
+    mpi_iter->fsentry_from_mpi = fsentry_from_mpi_fi;
 
     free(path);
     return (struct rbh_mut_iterator *)mpi_iter;
