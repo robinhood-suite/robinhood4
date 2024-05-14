@@ -28,7 +28,9 @@ struct lustre_changelog_iterator {
     struct rbh_iterator *fsevents_iterator;
 
     char *username;
+    char *mdt_name;
     int32_t source_mdt_index;
+    uint64_t last_changelog_index;
 };
 
 /* BSON results:
@@ -909,6 +911,8 @@ retry:
         return NULL;
     }
 
+    records->last_changelog_index = record->cr_index;
+
     id = build_id(&record->cr_tfid);
     if (id == NULL) {
         rc = -1;
@@ -1013,7 +1017,13 @@ lustre_changelog_iter_destroy(void *iterator)
     if (records->fsevents_iterator)
         rbh_iter_destroy(records->fsevents_iterator);
 
-    free(records->username);
+    if (records->username) {
+        llapi_changelog_clear(records->mdt_name, records->username,
+                              records->last_changelog_index);
+        free(records->username);
+    }
+
+    free(records->mdt_name);
 }
 
 static const struct rbh_iterator_operations LUSTRE_CHANGELOG_ITER_OPS = {
@@ -1032,10 +1042,12 @@ lustre_changelog_iter_init(struct lustre_changelog_iterator *events,
     const char *mdtname_index;
     int rc;
 
+    events->last_changelog_index = 0;
+
     rc = llapi_changelog_start(&events->reader,
                                CHANGELOG_FLAG_JOBID |
                                CHANGELOG_FLAG_EXTRA_FLAGS,
-                               mdtname, 0 /*start_rec*/);
+                               mdtname, events->last_changelog_index);
     if (rc < 0)
         error(EXIT_FAILURE, -rc, "llapi_changelog_start");
 
@@ -1057,6 +1069,10 @@ lustre_changelog_iter_init(struct lustre_changelog_iterator *events,
     } else {
         events->username = NULL;
     }
+
+    events->mdt_name = strdup(mdtname);
+    if (events->mdt_name == NULL)
+        error(EXIT_FAILURE, ENOMEM, "strdup");
 
     for (mdtname_index = mdtname; !isdigit(*mdtname_index); mdtname_index++);
 
