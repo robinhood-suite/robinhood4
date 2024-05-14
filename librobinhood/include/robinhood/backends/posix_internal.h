@@ -58,6 +58,8 @@ posix_iterator_new(const char *root, const char *entry, int statx_sync_type);
 struct rbh_id *
 id_from_fd(int fd);
 
+char *
+freadlink(int fd, const char *path, size_t *size_);
 
 bool
 fsentry_from_any(struct fsentry_id_pair *fip, const struct rbh_value *path,

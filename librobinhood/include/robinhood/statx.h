@@ -42,6 +42,7 @@
 
 #define RBH_STATX_BASIC_STATS   0x57e007ffU
 #define RBH_STATX_ALL           0x7fe01fffU
+#define RBH_STATX_EMPTY         0x00000000U
 
 struct rbh_statx_timestamp {
     int64_t tv_sec;
