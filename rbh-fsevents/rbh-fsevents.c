@@ -112,12 +112,14 @@ source_from_file_uri(const char *file_path,
 }
 
 static struct source *
-source_from_uri(const char *uri)
+source_from_uri(const char *uri, void *additional_arg)
 {
     struct source *source = NULL;
     struct rbh_raw_uri *raw_uri;
     char *name = NULL;
     char *colon;
+
+    (void) additional_arg;
 
     raw_uri = rbh_raw_uri_from_string(uri);
     if (raw_uri == NULL)
@@ -140,7 +142,7 @@ source_from_uri(const char *uri)
         source = source_from_file_uri(name, source_from_file);
     } else if (strcmp(raw_uri->path, "lustre") == 0) {
 #ifdef HAVE_LUSTRE
-        source = source_from_lustre_changelog(name);
+        source = source_from_lustre_changelog(name, (char *) additional_arg);
 #else
         free(raw_uri);
         error(EX_USAGE, EINVAL, "MDT source is not available");
@@ -160,14 +162,14 @@ source_from_uri(const char *uri)
 }
 
 static struct source *
-source_new(const char *arg)
+source_new(const char *arg, void *additional_arg)
 {
     if (strcmp(arg, "-") == 0)
         /* SOURCE is '-' (stdin) */
         return source_from_file(stdin);
 
     if (is_uri(arg))
-        return source_from_uri(arg);
+        return source_from_uri(arg, additional_arg);
 
     error(EX_USAGE, EINVAL, "%s", arg);
     __builtin_unreachable();
@@ -387,16 +389,22 @@ main(int argc, char *argv[])
             .name = "raw",
             .val = 'r',
         },
+        {
+            .name = "user",
+            .has_arg = required_argument,
+            .val = 'u',
+        },
         {}
     };
     struct deduplicator_options dedup_opts = {
         .batch_size = DEFAULT_BATCH_SIZE,
         .flush_size = DEFAULT_FLUSH_SIZE,
     };
+    char *username = NULL;
     char c;
 
     /* Parse the command line */
-    while ((c = getopt_long(argc, argv, "b:e:f:hlr", LONG_OPTIONS, NULL)) != -1) {
+    while ((c = getopt_long(argc, argv, "u:b:e:f:hlr", LONG_OPTIONS, NULL)) != -1) {
         switch (c) {
         case 'b':
             if (!str2size_t(optarg, &dedup_opts.batch_size))
@@ -421,6 +429,12 @@ main(int argc, char *argv[])
             mount_fd_exit();
             mount_fd = -1;
             break;
+        case 'u':
+            username = strdup(optarg);
+            if (username == NULL)
+                error(EXIT_FAILURE, ENOMEM, "failed to duplicate '%s'", optarg);
+
+            break;
         case '?':
         default:
             /* getopt_long() prints meaningful error messages itself */
@@ -439,7 +453,7 @@ main(int argc, char *argv[])
     if (argc - optind > 2)
         error(EX_USAGE, 0, "too many arguments");
 
-    source = source_new(argv[optind++]);
+    source = source_new(argv[optind++], (void *) username);
     sink = sink_new(argv[optind++]);
 
     feed(sink, source, enrich_builder, strcmp(sink->name, "backend"),

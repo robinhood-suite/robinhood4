@@ -13,8 +13,8 @@
 
 invoke_rbh-fsevents()
 {
-    rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" src:lustre:"$LUSTRE_MDT" \
-        "rbh:mongo:$testdb"
+    rbh_fsevents --user $userid --enrich rbh:lustre:"$LUSTRE_DIR" \
+        src:lustre:"$LUSTRE_MDT" "rbh:mongo:$testdb"
 }
 
 ################################################################################
