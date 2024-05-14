@@ -18,7 +18,7 @@ struct source *
 source_from_file(FILE *file);
 
 struct source *
-source_from_lustre_changelog(const char *mdtname);
+source_from_lustre_changelog(const char *mdtname, const char *username);
 
 struct source *
 source_from_hestia_file(FILE *file);

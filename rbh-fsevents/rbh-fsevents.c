@@ -90,6 +90,26 @@ is_uri(const char *string)
     return true;
 }
 
+char *
+parse_query(const char *query)
+{
+    const char *key = query;
+    char *value;
+    char *equal;
+
+    equal = strchr(query, '=');
+    if (equal == NULL)
+        error(EXIT_FAILURE, EINVAL, "URI's query should be of the form 'key=value', got '%s'",
+              query);
+
+    value = equal + 1;
+    if (strncmp(key, "ack-user", strlen("ack-user")))
+        error(EXIT_FAILURE, EINVAL, "URI's query should only contain the option 'ack-user=<user>', option '%s' unknown",
+              query);
+
+    return value;
+}
+
 static struct source *
 source_from_file_uri(const char *file_path,
                      struct source *(*source_from)(FILE *))
@@ -117,6 +137,7 @@ source_from_uri(const char *uri)
     struct source *source = NULL;
     struct rbh_raw_uri *raw_uri;
     char *name = NULL;
+    char *username;
     char *colon;
 
     raw_uri = rbh_raw_uri_from_string(uri);
@@ -136,11 +157,16 @@ source_from_uri(const char *uri)
         name = colon + 1;
     }
 
+    if (raw_uri->query)
+        username = parse_query(raw_uri->query);
+    else
+        username = NULL;
+
     if (strcmp(raw_uri->path, "file") == 0) {
         source = source_from_file_uri(name, source_from_file);
     } else if (strcmp(raw_uri->path, "lustre") == 0) {
 #ifdef HAVE_LUSTRE
-        source = source_from_lustre_changelog(name);
+        source = source_from_lustre_changelog(name, username);
 #else
         free(raw_uri);
         error(EX_USAGE, EINVAL, "MDT source is not available");
