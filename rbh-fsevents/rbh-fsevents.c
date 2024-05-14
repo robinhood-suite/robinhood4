@@ -30,7 +30,7 @@ struct deduplicator_options {
     size_t flush_size;
 };
 
-static const size_t DEFAULT_BATCH_SIZE = 100;
+static const size_t DEFAULT_BATCH_SIZE = 4;
 static const size_t DEFAULT_FLUSH_SIZE = 50; /* 50% */
 
 static void
