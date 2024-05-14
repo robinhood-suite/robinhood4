@@ -24,6 +24,27 @@
 #include "common.h"
 
 /*----------------------------------------------------------------------------*
+ |                               mpi_file_info                                |
+ *----------------------------------------------------------------------------*/
+
+struct mpi_file_info {
+    /**
+     * File path from the root
+     */
+    const char *path;
+
+    /**
+     * File name
+     */
+    char *name;
+
+    /**
+     * rbh_id of parent entry
+     */
+    struct rbh_id *parent_id;
+};
+
+/*----------------------------------------------------------------------------*
  |                                mpi_iterator                                |
  *----------------------------------------------------------------------------*/
 
@@ -32,6 +53,17 @@ struct mpi_iterator {
     inode_xattrs_callback_t inode_xattrs_callback;
     int statx_sync_type;
     size_t prefix_len;
+
+    /**
+     * Operation used to build a new fsentry from mpifileutils
+     */
+    struct rbh_fsentry *(*mpi_build_fsentry)(struct mpi_file_info *mpi_fi,
+                                             struct mpi_iterator *iterator);
+    /**
+     * Boolean to indicate if we build the rbh_id with a file descriptor or
+     * a path
+     */
+    bool use_fd;
 
     /**
      * Boolean to indicate if we want to skip errors while synchronizing two
@@ -61,32 +93,14 @@ struct mpi_iterator {
  |                       mpi_iterator operations                              |
  *----------------------------------------------------------------------------*/
 
+struct rbh_id *
+get_parent_id(const char *path, bool use_fd);
+
 struct rbh_mut_iterator *
 mpi_iterator_new(const char *root, const char *entry, int statx_sync_type);
 
 void *
 mpi_iter_next(void *iterator);
-
-/*----------------------------------------------------------------------------*
- |                               mpi_file_info                                |
- *----------------------------------------------------------------------------*/
-
-struct mpi_file_info {
-    /**
-     * File path from the root
-     */
-    const char *path;
-
-    /**
-     * File name
-     */
-    char *name;
-
-    /**
-     * rbh_id of parent entry
-     */
-    struct rbh_id *parent_id;
-};
 
 /*----------------------------------------------------------------------------*
  |                       mpi_backend operations                               |

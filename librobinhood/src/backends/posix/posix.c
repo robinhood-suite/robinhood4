@@ -81,8 +81,8 @@ retry:
     return rbh_id_from_file_handle(handle);
 }
 
-static char *
-freadlink(int fd, size_t *size_)
+char *
+freadlink(int fd, const char *path, size_t *size_)
 {
     size_t size = *size_ + 1;
     char *symlink;
@@ -93,7 +93,11 @@ retry:
     if (symlink == NULL)
         return NULL;
 
-    rc = readlinkat(fd, "", symlink, size);
+    if (path == NULL)
+        rc = readlinkat(fd, "", symlink, size);
+    else
+        rc = readlink(path, symlink, size);
+
     if (rc < 0) {
         int save_errno = errno;
 
@@ -433,7 +437,7 @@ fsentry_from_any(struct fsentry_id_pair *fip, const struct rbh_value *path,
             statxbuf.stx_mask |= RBH_STATX_SIZE;
         }
         static_assert(sizeof(size_t) == sizeof(statxbuf.stx_size), "");
-        symlink = freadlink(fd, (size_t *)&statxbuf.stx_size);
+        symlink = freadlink(fd, NULL, (size_t *)&statxbuf.stx_size);
 
         if (symlink == NULL) {
             fprintf(stderr, "Failed to readlink '%s': %s (%d)\n",
@@ -1009,7 +1013,7 @@ fd2path(int fd)
     if (proc_fd < 0)
         goto out;
 
-    path = freadlink(proc_fd, &pathlen);
+    path = freadlink(proc_fd, NULL, &pathlen);
     save_errno = errno;
 
     /* Ignore errors on close */
