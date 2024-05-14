@@ -27,6 +27,7 @@ struct lustre_changelog_iterator {
     void *reader;
     struct rbh_iterator *fsevents_iterator;
 
+    char *username;
     int32_t source_mdt_index;
 };
 
@@ -1011,6 +1012,8 @@ lustre_changelog_iter_destroy(void *iterator)
     llapi_changelog_fini(&records->reader);
     if (records->fsevents_iterator)
         rbh_iter_destroy(records->fsevents_iterator);
+
+    free(records->username);
 }
 
 static const struct rbh_iterator_operations LUSTRE_CHANGELOG_ITER_OPS = {
@@ -1024,7 +1027,7 @@ static const struct rbh_iterator LUSTRE_CHANGELOG_ITERATOR = {
 
 static void
 lustre_changelog_iter_init(struct lustre_changelog_iterator *events,
-                           const char *mdtname)
+                           const char *mdtname, const char *username)
 {
     const char *mdtname_index;
     int rc;
@@ -1046,6 +1049,14 @@ lustre_changelog_iter_init(struct lustre_changelog_iterator *events,
 
     events->iterator = LUSTRE_CHANGELOG_ITERATOR;
     events->fsevents_iterator = NULL;
+
+    if (username != NULL) {
+        events->username = strdup(username);
+        if (events->username == NULL)
+            error(EXIT_FAILURE, ENOMEM, "strdup");
+    } else {
+        events->username = NULL;
+    }
 
     for (mdtname_index = mdtname; !isdigit(*mdtname_index); mdtname_index++);
 
@@ -1090,7 +1101,7 @@ static const struct source LUSTRE_SOURCE = {
 };
 
 struct source *
-source_from_lustre_changelog(const char *mdtname)
+source_from_lustre_changelog(const char *mdtname, const char *username)
 {
     struct lustre_source *source;
 
@@ -1098,7 +1109,7 @@ source_from_lustre_changelog(const char *mdtname)
     if (source == NULL)
         error(EXIT_FAILURE, errno, "malloc");
 
-    lustre_changelog_iter_init(&source->events, mdtname);
+    lustre_changelog_iter_init(&source->events, mdtname, username);
 
     initialize_source_stack(sizeof(struct rbh_value_pair) * (1 << 7));
     source->source = LUSTRE_SOURCE;
