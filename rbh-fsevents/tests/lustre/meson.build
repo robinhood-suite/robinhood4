@@ -18,3 +18,6 @@ foreach t: integration_tests
     # in parallel.
     test(t, e, is_parallel : false)
 endforeach
+
+e = find_program('acknowledgement.bash')
+test('acknowledgement', e, should_fail: true)
