@@ -27,11 +27,9 @@
 
 struct deduplicator_options {
     size_t batch_size;
-    size_t flush_size;
 };
 
 static const size_t DEFAULT_BATCH_SIZE = 100;
-static const size_t DEFAULT_FLUSH_SIZE = 50; /* 50% */
 
 static void
 usage(void)
@@ -59,10 +57,6 @@ usage(void)
         "    -e, --enrich MOUNTPOINT\n"
         "                    enrich changelog records by querying MOUNTPOINT as needed\n"
         "                    MOUNTPOINT is a RobinHood URI (eg. rbh:lustre:/mnt/lustre)\n"
-        "    -f, --flush-size NUMBER\n"
-        "                    the number of fsevents flushed when the batch is filled\n"
-        "                    (i.e. when we have reached the batch size)\n"
-        "                    default: %lu\n"
         "    -h, --help      print this message and exit\n"
         "    -l, --lustre    consider SOURCE is an MDT name\n"
         "    -r, --raw       do not enrich changelog records (default)\n"
@@ -70,8 +64,7 @@ usage(void)
         "Note that uploading raw records to a RobinHood backend will fail, they have to\n"
         "be enriched first.\n";
 
-    printf(message, program_invocation_short_name, DEFAULT_BATCH_SIZE,
-           DEFAULT_FLUSH_SIZE);
+    printf(message, program_invocation_short_name, DEFAULT_BATCH_SIZE);
 }
 
 static bool
@@ -326,9 +319,7 @@ feed(struct sink *sink, struct source *source,
 {
     struct rbh_mut_iterator *deduplicator;
 
-    deduplicator = deduplicator_new(dedup_opts->batch_size,
-                                    dedup_opts->flush_size,
-                                    source);
+    deduplicator = deduplicator_new(dedup_opts->batch_size, source);
     if (deduplicator == NULL)
         error(EXIT_FAILURE, errno, "deduplicator_new");
 
@@ -401,11 +392,6 @@ main(int argc, char *argv[])
             .val = 'e',
         },
         {
-            .name = "flush-size",
-            .has_arg = required_argument,
-            .val = 'f',
-        },
-        {
             .name = "help",
             .val = 'h',
         },
@@ -417,12 +403,11 @@ main(int argc, char *argv[])
     };
     struct deduplicator_options dedup_opts = {
         .batch_size = DEFAULT_BATCH_SIZE,
-        .flush_size = DEFAULT_FLUSH_SIZE,
     };
     char c;
 
     /* Parse the command line */
-    while ((c = getopt_long(argc, argv, "b:e:f:hlr", LONG_OPTIONS, NULL)) != -1) {
+    while ((c = getopt_long(argc, argv, "b:e:hlr", LONG_OPTIONS, NULL)) != -1) {
         switch (c) {
         case 'b':
             if (!str2size_t(optarg, &dedup_opts.batch_size))
@@ -433,11 +418,6 @@ main(int argc, char *argv[])
             enrich_builder = enrich_iter_builder_from_uri(optarg);
             if (enrich_builder == NULL)
                 error(EXIT_FAILURE, errno, "enrich_new");
-            break;
-        case 'f':
-            if (!str2size_t(optarg, &dedup_opts.flush_size))
-                error(EXIT_FAILURE, 0, "'%s' is not an integer", optarg);
-
             break;
         case 'h':
             usage();
@@ -453,12 +433,6 @@ main(int argc, char *argv[])
             exit(EX_USAGE);
         }
     }
-
-    /* if user asks for a flush size greater than the batch size, simply set it
-     * to the maximum instead of returning an error.
-     */
-    if (dedup_opts.flush_size > dedup_opts.batch_size)
-        dedup_opts.flush_size = dedup_opts.batch_size;
 
     if (argc - optind < 2)
         error(EX_USAGE, 0, "not enough arguments");
