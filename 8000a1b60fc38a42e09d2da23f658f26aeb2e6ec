@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5ecf57ff_fc2c2463",
+        "filename": "rbh-find-lustre/src/filters.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 392,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-05-15T08:34:19Z",
+      "side": 1,
+      "message": "comment: kind of confusing here, the xattr above is named \u0027pattern\u0027, the key is named \u0027layout\u0027 and the option is \u0027layout-pattern\u0027",
+      "range": {
+        "startLine": 392,
+        "startChar": 16,
+        "endLine": 392,
+        "endChar": 22
+      },
+      "revId": "8000a1b60fc38a42e09d2da23f658f26aeb2e6ec",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
