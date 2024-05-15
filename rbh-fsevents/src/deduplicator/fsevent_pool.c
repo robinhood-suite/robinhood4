@@ -16,8 +16,6 @@ struct rbh_fsevent_pool {
     size_t size; /* maximum number of ids allowed in the pool */
     struct rbh_hashmap *pool; /* container of lists of events per id */
     struct rbh_sstack *list_container; /* container of list elements */
-    size_t flush_size; /* number of elements to be flushed when the pool is full
-                        */
     struct rbh_list_node ids; /* list of rbh_id that were inserted in the pool
                                * ordered by time of insertion
                                */
@@ -67,26 +65,16 @@ fsevent_pool_hash_lu_id(const void *key)
 }
 
 struct rbh_fsevent_pool *
-rbh_fsevent_pool_new(size_t batch_size, size_t flush_size,
-                     struct source *source)
+rbh_fsevent_pool_new(size_t batch_size, struct source *source)
 {
     struct rbh_fsevent_pool *pool;
     size_t (*hash_fn)(const void *);
-
-    if (flush_size == 0)
-        error(EX_USAGE, 0, "flush size cannot be 0");
-
-    if (flush_size > batch_size)
-        error(EX_USAGE, 0,
-              "batch size (%lu) must be greater than flush size (%lu)",
-              batch_size, flush_size);
-
 
     pool = malloc(sizeof(*pool));
     if (!pool)
         return NULL;
 
-    // XXX the stack size should probably be a function of the flush_size
+    // XXX the stack size should probably be a function of the batch_size
     pool->list_container = rbh_sstack_new(1 << 10);
     if (!pool->list_container) {
         free(pool);
@@ -110,7 +98,6 @@ rbh_fsevent_pool_new(size_t batch_size, size_t flush_size,
         return NULL;
     }
 
-    pool->flush_size = flush_size;
     pool->size = batch_size;
     rbh_list_init(&pool->ids);
     pool->count = 0;
@@ -905,7 +892,7 @@ rbh_fsevent_pool_flush(struct rbh_fsevent_pool *pool)
     if (pool->count == 0)
         return NULL;
 
-    while (pool->count > 0 && count < pool->flush_size) {
+    while (pool->count > 0) {
         struct rbh_list_node *first_events;
         struct rbh_id_node *first_id;
         struct rbh_list_node *events;

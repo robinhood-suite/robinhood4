@@ -108,8 +108,7 @@ static const struct rbh_mut_iterator NO_DEDUP_ITERATOR = {
 };
 
 struct rbh_mut_iterator *
-deduplicator_new(size_t batch_size, size_t flush_size,
-                 struct source *source)
+deduplicator_new(size_t batch_size, struct source *source)
 {
     struct deduplicator *deduplicator;
 
@@ -122,8 +121,7 @@ deduplicator_new(size_t batch_size, size_t flush_size,
         deduplicator->batches = NO_DEDUP_ITERATOR;
     } else {
         deduplicator->batches = DEDUPLICATOR_ITERATOR;
-        deduplicator->pool = rbh_fsevent_pool_new(batch_size, flush_size,
-                                                  source);
+        deduplicator->pool = rbh_fsevent_pool_new(batch_size, source);
     }
 
     return &deduplicator->batches;
