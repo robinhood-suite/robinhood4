@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "502b5197_f7cb2f8b",
+        "filename": "rbh-sync/tests/test_mongo_mpifile_sync.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-05-16T08:59:40Z",
+      "side": 1,
+      "message": "minor: assign these to local variables with better names",
+      "range": {
+        "startLine": 33,
+        "startChar": 16,
+        "endLine": 33,
+        "endChar": 18
+      },
+      "revId": "5109ea384b00839ffad14684e6a11c22305cf1c3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "82e20d96_dd2bf3a4",
+        "filename": "rbh-sync/tests/test_mongo_mpifile_sync.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-05-16T08:59:40Z",
+      "side": 1,
+      "message": "minor: I don\u0027t think a sleep is necessary",
+      "range": {
+        "startLine": 36,
+        "startChar": 4,
+        "endLine": 36,
+        "endChar": 11
+      },
+      "revId": "5109ea384b00839ffad14684e6a11c22305cf1c3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
