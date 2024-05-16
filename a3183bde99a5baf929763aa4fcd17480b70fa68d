@@ -46,6 +46,30 @@
       },
       "revId": "a3183bde99a5baf929763aa4fcd17480b70fa68d",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "73f1e3d5_e4ce969f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-05-16T15:10:08Z",
+      "side": 1,
+      "message": "How can we ensure that ? Checking that would mean checking filesystem in which the sync was done and the one where the find is done are the same, which you can\u0027t really do realistically",
+      "parentUuid": "80d0c747_edc2d25a",
+      "range": {
+        "startLine": 20,
+        "startChar": 54,
+        "endLine": 22,
+        "endChar": 15
+      },
+      "revId": "a3183bde99a5baf929763aa4fcd17480b70fa68d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
