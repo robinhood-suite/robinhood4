@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d44248b4_6e0dbc0b",
+        "filename": "rbh-sync/tests/test_mpifile_mongo_sync.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-05-16T09:05:42Z",
+      "side": 1,
+      "message": "major: this will be an issue I think, you should remove the absolute path from the file, since we consider the paths recorded in RBH start from the mount point given, so here you should have the same tests as the function below",
+      "range": {
+        "startLine": 25,
+        "startChar": 40,
+        "endLine": 25,
+        "endChar": 44
+      },
+      "revId": "3db302018c1d4b15ad3f87e00e18c8d964d8a961",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eda1fa58_01c17415",
+        "filename": "rbh-sync/tests/test_mpifile_mongo_sync.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-05-16T09:05:42Z",
+      "side": 1,
+      "message": "question: why are you going through Mongo for this ? Posix -\u003e MPI File -\u003e Mongo should work properly",
+      "range": {
+        "startLine": 37,
+        "startChar": 4,
+        "endLine": 39,
+        "endChar": 44
+      },
+      "revId": "3db302018c1d4b15ad3f87e00e18c8d964d8a961",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
