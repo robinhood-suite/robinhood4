@@ -106,11 +106,16 @@ fsentry_from_flist(struct mpi_file_info *mpi_fi,
     char *symlink = NULL;
     struct rbh_id *id;
     int save_errno;
+    const struct rbh_value path = {
+        .type = RBH_VT_STRING,
+        .string = strlen(mpi_fi->path) == iterator->prefix_len ?
+            "/" : mpi_fi->path + iterator->prefix_len,
+    };
     /**
      * Unlike with posix, we use the relative path of an entry to
      * create an unique ID
      */
-    id = rbh_id_new(mpi_fi->path, (strlen(mpi_fi->path) + 1) * sizeof(char));
+    id = rbh_id_new(path.string, (strlen(path.string) + 1) * sizeof(char));
     if (id == NULL) {
         save_errno = errno;
         return NULL;
@@ -120,10 +125,11 @@ fsentry_from_flist(struct mpi_file_info *mpi_fi,
 
     if (statxbuf.stx_mask & RBH_STATX_TYPE && S_ISLNK(statxbuf.stx_mode)) {
         static_assert(sizeof(size_t) == sizeof(statxbuf.stx_size), "");
+        // We keep the asbolute path here to read the symbolic link
         symlink = freadlink(-1, mpi_fi->path, (size_t *)&statxbuf.stx_size);
 
         if (symlink == NULL) {
-            fprintf(stderr, "Failed to readlink '%s': %s (%d)\n", mpi_fi->path,
+            fprintf(stderr, "Failed to readlink '%s': %s (%d)\n", path.string,
                     strerror(errno), errno);
             errno = ESTALE;
             save_errno = errno;
@@ -137,7 +143,7 @@ fsentry_from_flist(struct mpi_file_info *mpi_fi,
         goto out_free_symlink;
     }
     ns_pairs->key = "path";
-    ns_pairs->value = rbh_value_string_new(mpi_fi->path);
+    ns_pairs->value = rbh_value_string_new(path.string);
     if (ns_pairs->value == NULL) {
         save_errno = errno;
         goto out_free_symlink;
@@ -191,6 +197,8 @@ static struct rbh_mut_iterator *
 mpi_file_iterator_new(mfu_flist flist)
 {
     struct mpi_iterator *mpi_file_iter;
+    int prefix_len;
+    int rank;
 
     mpi_file_iter = malloc(sizeof(*mpi_file_iter));
     if (mpi_file_iter == NULL)
@@ -202,6 +210,19 @@ mpi_file_iterator_new(mfu_flist flist)
     mpi_file_iter->total = mfu_flist_size(flist);
     mpi_file_iter->is_branch = false;
     mpi_file_iter->use_fd = false;
+
+    /**
+     * We need to broadcast to all rank the of the root in order to
+     * remove it from the path
+     */
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+    if (rank == 0) {
+        const char *root = mfu_flist_file_get_name(flist, 0);
+        prefix_len = strcmp(root, "/") ? strlen(root) : 0;
+    }
+
+    MPI_Bcast(&prefix_len, 1, MPI_INT, 0, MPI_COMM_WORLD);
+    mpi_file_iter->prefix_len = prefix_len;
     mpi_file_iter->fsentry_from_mpi = fsentry_from_flist;
 
     return (struct rbh_mut_iterator *)mpi_file_iter;
