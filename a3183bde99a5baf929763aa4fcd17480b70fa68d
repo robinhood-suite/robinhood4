@@ -22,6 +22,30 @@
       },
       "revId": "a3183bde99a5baf929763aa4fcd17480b70fa68d",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "80d0c747_edc2d25a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-05-16T10:34:52Z",
+      "side": 1,
+      "message": "After discussion, it seems this assumption is made in another part of the code. I still think we may ensure this is correct.",
+      "parentUuid": "2925bb5c_757e3532",
+      "range": {
+        "startLine": 20,
+        "startChar": 54,
+        "endLine": 22,
+        "endChar": 15
+      },
+      "revId": "a3183bde99a5baf929763aa4fcd17480b70fa68d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
