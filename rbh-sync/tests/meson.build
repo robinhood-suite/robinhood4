@@ -29,7 +29,7 @@ libmfu = cc.find_library('mfu', disabler: true, required: false)
 r = run_command('../../utils/check_mpirun.sh', check: false)
 
 if r.returncode() == 0 and libmfu.found()
-    integration_tests = ['test_mongo_mpifile_sync', 'test_mpifile_mongo_sync']
+    integration_tests = ['test_mongo_mpifile_sync']
     foreach t: integration_tests
         e = find_program(t + '.bash')
         test(t, e, is_parallel: false)
@@ -37,7 +37,7 @@ if r.returncode() == 0 and libmfu.found()
 
     env = environment()
     env.prepend('WITH_MPI', 'true')
-    integration_tests_mpi = ['test_posix_mongo_sync']
+    integration_tests_mpi = ['test_posix_mongo_sync', 'test_mpifile_mongo_sync']
 
     if liblustre.found()
         integration_tests_mpi += ['test_lustre_mongo_sync']
