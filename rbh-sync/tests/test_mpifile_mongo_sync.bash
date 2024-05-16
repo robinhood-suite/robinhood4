@@ -22,10 +22,10 @@ test_sync_simple_from_dwalk()
     dwalk -q -o "$testdb.mfu" .
     rbh_sync "rbh:mpi-file:$testdb.mfu" "rbh:mongo:$testdb"
 
-    find_attribute '"ns.xattrs.path": "'$PWD'"'
-    find_attribute '"ns.xattrs.path": "'$PWD'/fileA"'
-    find_attribute '"ns.xattrs.path": "'$PWD'/dir"'
-    find_attribute '"ns.xattrs.path": "'$PWD'/dir/file1"'
+    find_attribute '"ns.xattrs.path": "/"'
+    find_attribute '"ns.xattrs.path": "/fileA"'
+    find_attribute '"ns.xattrs.path": "/dir"'
+    find_attribute '"ns.xattrs.path": "/dir/file1"'
 }
 
 test_sync_simple_from_robinhood()
@@ -34,7 +34,7 @@ test_sync_simple_from_robinhood()
     mkdir dir
     touch dir/file1
 
-    rbh_sync "rbh:posix:." "rbh:mpi-file:$testdb.mfu"
+    rbh_sync "rbh:posix-mpi:." "rbh:mpi-file:$testdb.mfu"
     rbh_sync "rbh:mpi-file:$testdb.mfu" "rbh:mongo:$testdb"
 
     find_attribute '"ns.xattrs.path": "/"'
@@ -51,7 +51,7 @@ test_sync_size()
     dwalk -q -o "$testdb.mfu" .
     rbh_sync "rbh:mpi-file:$testdb.mfu" "rbh:mongo:$testdb"
 
-    find_attribute '"ns.xattrs.path":"'$PWD'/fileA"' '"statx.size":'$size
+    find_attribute '"ns.xattrs.path":"/fileA"' '"statx.size":'$size
 }
 
 test_sync_time()
@@ -64,9 +64,9 @@ test_sync_time()
     dwalk -q -o "$testdb.mfu" .
     rbh_sync "rbh:mpi-file:$testdb.mfu" "rbh:mongo:$testdb"
 
-    find_attribute '"ns.xattrs.path":"'$PWD'/fileA"' '"statx.atime.sec":'$atime
-    find_attribute '"ns.xattrs.path":"'$PWD'/fileA"' '"statx.mtime.sec":'$mtime
-    find_attribute '"ns.xattrs.path":"'$PWD'/fileA"' '"statx.ctime.sec":'$ctime
+    find_attribute '"ns.xattrs.path":"/fileA"' '"statx.atime.sec":'$atime
+    find_attribute '"ns.xattrs.path":"/fileA"' '"statx.mtime.sec":'$mtime
+    find_attribute '"ns.xattrs.path":"/fileA"' '"statx.ctime.sec":'$ctime
 }
 
 ################################################################################
