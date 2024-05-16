@@ -29,7 +29,7 @@ static struct rbh_id ROOT_PARENT_ID = {
 };
 
 struct rbh_id *
-get_parent_id(const char *path, bool use_fd)
+get_parent_id(const char *path, bool use_fd, int prefix_len)
 {
     struct rbh_id *parent_id;
     int save_errno = errno;
@@ -40,9 +40,9 @@ get_parent_id(const char *path, bool use_fd)
     tmp_path = strdup(path);
     if (tmp_path == NULL)
         return NULL;
-    parent_path = dirname(tmp_path);
 
     if (use_fd) {
+        parent_path = dirname(tmp_path);
         fd = openat(AT_FDCWD, parent_path, O_RDONLY | O_CLOEXEC | O_PATH);
         if (fd < 0) {
             save_errno = errno;
@@ -53,6 +53,8 @@ get_parent_id(const char *path, bool use_fd)
 
         parent_id = id_from_fd(fd);
     } else {
+        parent_path = dirname(strlen(tmp_path) == prefix_len ? tmp_path :
+                              tmp_path + prefix_len);
         parent_id = rbh_id_new(parent_path,
                                (strlen(parent_path) + 1) * sizeof(char));
     }
@@ -139,7 +141,8 @@ skip:
 
     mpi_fi.path = path;
     mpi_fi.name = basename(path_dup);
-    mpi_fi.parent_id = get_parent_id(path, mpi_iter->use_fd);
+    mpi_fi.parent_id = get_parent_id(path, mpi_iter->use_fd,
+                                     mpi_iter->prefix_len);
 
     if (mpi_fi.parent_id == NULL) {
         fprintf(stderr, "Failed to get parent id of '%s'\n", path);
