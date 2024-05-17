@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dfdd7af7_f79deb88",
+        "filename": "librobinhood/src/backends/posix_mpi/posix_mpi.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-05-17T07:45:30Z",
+      "side": 1,
+      "message": "question: why does the functions were wrapped here? we can directly use the original functions:\n\n```\nPOSIX_MPI_BACKEND_OPS \u003d {\n    .get_option \u003d posix_backend_get_option,\n    .set_option \u003d posix_backend_set_option,\n    ...\n}\n```",
+      "range": {
+        "startLine": 121,
+        "startChar": 4,
+        "endLine": 125,
+        "endChar": 41
+      },
+      "revId": "c2969b5e2902c61a1d670a1e1f1b5ea085d7c87a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
