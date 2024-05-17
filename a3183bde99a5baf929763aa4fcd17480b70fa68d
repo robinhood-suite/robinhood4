@@ -70,6 +70,30 @@
       },
       "revId": "a3183bde99a5baf929763aa4fcd17480b70fa68d",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d059e91f_b4befb8b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-05-17T07:37:41Z",
+      "side": 1,
+      "message": "Ensure the assumption is correct, that the admins will use rbh-lfind under the right filesystem mount point.",
+      "parentUuid": "73f1e3d5_e4ce969f",
+      "range": {
+        "startLine": 20,
+        "startChar": 54,
+        "endLine": 22,
+        "endChar": 15
+      },
+      "revId": "a3183bde99a5baf929763aa4fcd17480b70fa68d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
