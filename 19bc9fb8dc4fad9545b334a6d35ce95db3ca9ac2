@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2cf06b1c_28679a3a",
+        "filename": "rbh-find-lustre/README.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-05-22T14:37:19Z",
+      "side": 1,
+      "message": "suggest: something to do in another patch. It would be nice if rbh-lfind doesn\u0027t fail if we are not under a Lustre filesystem but simply fetch the entries that have the actual stripe count specified (i.e. not the default one). Maybe this already works?",
+      "range": {
+        "startLine": 110,
+        "startChar": 0,
+        "endLine": 110,
+        "endChar": 13
+      },
+      "revId": "19bc9fb8dc4fad9545b334a6d35ce95db3ca9ac2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "840b698a_dcdca250",
+        "filename": "rbh-find-lustre/README.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-05-22T14:37:19Z",
+      "side": 1,
+      "message": "minor: this is a bit of a stretch. This is not a numerical value. You could say: It behaves exactly like the \\`\\`stripe-count\u0027\u0027 predicate for with regards to the default value.",
+      "range": {
+        "startLine": 140,
+        "startChar": 36,
+        "endLine": 141,
+        "endChar": 37
+      },
+      "revId": "19bc9fb8dc4fad9545b334a6d35ce95db3ca9ac2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
