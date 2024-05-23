@@ -54,6 +54,9 @@ usage(void)
         "    -b, --batch-size NUMBER\n"
         "                    the number of fsevents to keep in memory for deduplication\n"
         "                    default: %lu\n"
+        "    -d, --dump PATH\n"
+        "                    the path to a file where the changelogs should be dumped,\n"
+        "                    can only be used with a Lustre source. Use '-' for stdout.\n"
         "    -e, --enrich MOUNTPOINT\n"
         "                    enrich changelog records by querying MOUNTPOINT as needed\n"
         "                    MOUNTPOINT is a RobinHood URI (eg. rbh:lustre:/mnt/lustre)\n"
@@ -125,13 +128,15 @@ source_from_file_uri(const char *file_path,
 }
 
 static struct source *
-source_from_uri(const char *uri)
+source_from_uri(const char *uri, const char *dump_file)
 {
     struct source *source = NULL;
     struct rbh_raw_uri *raw_uri;
     char *name = NULL;
     char *username;
     char *colon;
+
+    (void) dump_logs;
 
     raw_uri = rbh_raw_uri_from_string(uri);
     if (raw_uri == NULL)
@@ -159,7 +164,7 @@ source_from_uri(const char *uri)
         source = source_from_file_uri(name, source_from_file);
     } else if (strcmp(raw_uri->path, "lustre") == 0) {
 #ifdef HAVE_LUSTRE
-        source = source_from_lustre_changelog(name, username);
+        source = source_from_lustre_changelog(name, username, dump_file);
 #endif
     } else if (strcmp(raw_uri->path, "hestia") == 0) {
         source = source_from_file_uri(name, source_from_hestia_file);
@@ -175,14 +180,14 @@ source_from_uri(const char *uri)
 }
 
 static struct source *
-source_new(const char *arg)
+source_new(const char *arg, const char *dump_file)
 {
     if (strcmp(arg, "-") == 0)
         /* SOURCE is '-' (stdin) */
         return source_from_file(stdin);
 
     if (is_uri(arg))
-        return source_from_uri(arg);
+        return source_from_uri(arg, dump_file);
 
     error(EX_USAGE, EINVAL, "%s", arg);
     __builtin_unreachable();
@@ -383,6 +388,11 @@ main(int argc, char *argv[])
             .val = 'b',
         },
         {
+            .name = "dump",
+            .has_arg = required_argument,
+            .val = 'd',
+        },
+        {
             .name = "enrich",
             .has_arg = required_argument,
             .val = 'e',
@@ -400,15 +410,21 @@ main(int argc, char *argv[])
     struct deduplicator_options dedup_opts = {
         .batch_size = DEFAULT_BATCH_SIZE,
     };
+    char *dump_file = NULL;
     char c;
 
     /* Parse the command line */
-    while ((c = getopt_long(argc, argv, "b:e:hlr", LONG_OPTIONS, NULL)) != -1) {
+    while ((c = getopt_long(argc, argv, "b:d:e:hlr", LONG_OPTIONS, NULL)) != -1) {
         switch (c) {
         case 'b':
             if (!str2size_t(optarg, &dedup_opts.batch_size))
                 error(EXIT_FAILURE, 0, "'%s' is not an integer", optarg);
 
+            break;
+        case 'd':
+            dump_file = strdup(optarg);
+            if (dump_file == NULL)
+                error(EXIT_FAILURE, ENOMEM, "strdup");
             break;
         case 'e':
             enrich_builder = enrich_iter_builder_from_uri(optarg);
@@ -435,7 +451,7 @@ main(int argc, char *argv[])
     if (argc - optind > 2)
         error(EX_USAGE, 0, "too many arguments");
 
-    source = source_new(argv[optind++]);
+    source = source_new(argv[optind++], dump_file);
     sink = sink_new(argv[optind++]);
 
     feed(sink, source, enrich_builder, strcmp(sink->name, "backend"),
