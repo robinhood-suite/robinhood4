@@ -35,11 +35,131 @@ struct lustre_changelog_iterator {
     FILE *dump_file;
 };
 
+static const char
+*get_event_name(unsigned int cl_event)
+{
+    static const char * const event_name[] = {
+        "archive", "restore", "cancel", "release", "remove", "state",
+    };
+
+    if (cl_event >= sizeof(event_name))
+        return "unknown";
+    else
+        return event_name[cl_event];
+}
+
+#define RBH_PATH_MAX    PATH_MAX
+#define CL_BASE_FORMAT "%s: %llu %02d%-5s %u.%09u 0x%x%s t="DFID
+#define CL_BASE_ARG(_mdt, _rec_) (_mdt), (_rec_)->cr_index, (_rec_)->cr_type, \
+                                 changelog_type2str((_rec_)->cr_type),        \
+                                 (uint32_t)cltime2sec((_rec_)->cr_time),      \
+                                 cltime2nsec((_rec_)->cr_time),               \
+                                 (_rec_)->cr_flags & CLF_FLAGMASK, flag_buff, \
+                                 PFID(&(_rec_)->cr_tfid)
+#define CL_NAME_FORMAT "p="DFID" %.*s"
+#define CL_NAME_ARG(_rec_) PFID(&(_rec_)->cr_pfid), (_rec_)->cr_namelen, \
+        rh_get_cl_cr_name(_rec_)
+
+enum fid_seq {
+    FID_SEQ_OST_MDT0 = 0,
+    FID_SEQ_LLOG = 1,   /* unnamed llogs */
+    FID_SEQ_ECHO = 2,
+    FID_SEQ_OST_MDT1 = 3,
+    FID_SEQ_OST_MAX = 9,    /* Max MDT count before OST_on_FID */
+    FID_SEQ_LLOG_NAME = 10, /* named llogs */
+    FID_SEQ_RSVD = 11,
+    FID_SEQ_IGIF = 12,
+    FID_SEQ_IGIF_MAX = 0x0ffffffffULL,
+    FID_SEQ_IDIF = 0x100000000ULL,
+    FID_SEQ_IDIF_MAX = 0x1ffffffffULL,
+    FID_SEQ_START = 0x200000000ULL,
+    FID_SEQ_LOCAL_FILE = 0x200000001ULL,
+    FID_SEQ_DOT_LUSTRE = 0x200000002ULL,
+    FID_SEQ_LOCAL_NAME = 0x200000003ULL,
+    FID_SEQ_SPECIAL = 0x200000004ULL,
+    FID_SEQ_QUOTA = 0x200000005ULL,
+    FID_SEQ_QUOTA_GLB = 0x200000006ULL,
+    FID_SEQ_ROOT = 0x200000007ULL,  /* Located on MDT0 */
+    FID_SEQ_NORMAL = 0x200000400ULL,
+    FID_SEQ_LOV_DEFAULT = 0xffffffffffffffffULL
+};
+
+static inline int
+fid_is_sane(const struct lu_fid *fid)
+{
+    return fid != NULL &&
+        ((fid->f_seq >= FID_SEQ_START && fid->f_ver == 0) ||
+         (fid->f_seq >= FID_SEQ_IGIF && fid->f_seq <= FID_SEQ_IGIF_MAX) ||
+         (fid->f_seq >= FID_SEQ_IDIF && fid->f_seq <= FID_SEQ_IDIF_MAX) ||
+         (fid->f_seq >= FID_SEQ_OST_MDT0 && fid->f_seq <= FID_SEQ_RSVD));
+}
+
+/* Dump a single record. */
 static void
 dump_changelog(struct lustre_changelog_iterator *records,
                struct changelog_rec *record)
 {
-    fprintf(records->dump_file, "");
+    char record_str[RBH_PATH_MAX] = "";
+    int left = sizeof(record_str);
+    char flag_buff[256] = "";
+    char *curr = record_str;
+    int len = 0;
+
+    if (record->cr_type == CL_HSM)
+        sprintf(flag_buff, "(%s%s,rc=%d)",
+                get_event_name(hsm_get_cl_event(record->cr_flags)),
+                hsm_get_cl_flags(record->cr_flags) & CLF_HSM_DIRTY ?
+                    ",dirty" : "",
+                hsm_get_cl_error(record->cr_flags));
+
+    len = snprintf(curr, left, CL_BASE_FORMAT,
+                   CL_BASE_ARG(records->mdt_name, record));
+    curr += len;
+    left -= len;
+
+    if (left > 0 && record->cr_namelen) {
+        /* this record has a 'name' field. */
+        len = snprintf(curr, left, " " CL_NAME_FORMAT, CL_NAME_ARG(record));
+        curr += len;
+        left -= len;
+    }
+
+    if (left <= 0) {
+        record_str[RBH_PATH_MAX - 1] = '\0';
+        goto dump;
+    }
+
+    if (record->cr_flags & CLF_RENAME) {
+        struct changelog_ext_rename *cr_rename;
+
+        cr_rename = changelog_rec_rename((CL_REC_TYPE *)record);
+        if (fid_is_sane(&cr_rename->cr_sfid)) {
+            len = snprintf(curr, left, " " CL_EXT_FORMAT,
+                           PFID(&cr_rename->cr_sfid),
+                           PFID(&cr_rename->cr_spfid),
+                           (int)changelog_rec_snamelen((CL_REC_TYPE *)record),
+                           changelog_rec_sname((CL_REC_TYPE *)record));
+            curr += len;
+            left -= len;
+        }
+    }
+
+    if (record->cr_flags & CLF_JOBID) {
+        struct changelog_ext_jobid *jobid;
+
+        jobid = changelog_rec_jobid((CL_REC_TYPE *)record);
+        if (jobid->cr_jobid[0] != '\0') {
+            len = snprintf(curr, left, " J=%s", jobid->cr_jobid);
+            curr += len;
+            left -= len;
+        }
+    }
+
+    if (left <= 0)
+        record_str[RBH_PATH_MAX - 1] = '\0';
+
+dump:
+    fprintf(records->dump_file, "%s", record_str);
 }
 
 /* BSON results:
