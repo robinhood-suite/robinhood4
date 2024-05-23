@@ -125,13 +125,15 @@ source_from_file_uri(const char *file_path,
 }
 
 static struct source *
-source_from_uri(const char *uri)
+source_from_uri(const char *uri, bool dump_logs)
 {
     struct source *source = NULL;
     struct rbh_raw_uri *raw_uri;
     char *name = NULL;
     char *username;
-    char *colon;
+    char *colon;o
+
+    (void) dump_logs;
 
     raw_uri = rbh_raw_uri_from_string(uri);
     if (raw_uri == NULL)
@@ -159,7 +161,7 @@ source_from_uri(const char *uri)
         source = source_from_file_uri(name, source_from_file);
     } else if (strcmp(raw_uri->path, "lustre") == 0) {
 #ifdef HAVE_LUSTRE
-        source = source_from_lustre_changelog(name, username);
+        source = source_from_lustre_changelog(name, username, dump_logs);
 #endif
     } else if (strcmp(raw_uri->path, "hestia") == 0) {
         source = source_from_file_uri(name, source_from_hestia_file);
@@ -175,14 +177,14 @@ source_from_uri(const char *uri)
 }
 
 static struct source *
-source_new(const char *arg)
+source_new(const char *arg, bool dump_logs)
 {
     if (strcmp(arg, "-") == 0)
         /* SOURCE is '-' (stdin) */
         return source_from_file(stdin);
 
     if (is_uri(arg))
-        return source_from_uri(arg);
+        return source_from_uri(arg, dump_logs);
 
     error(EX_USAGE, EINVAL, "%s", arg);
     __builtin_unreachable();
@@ -383,6 +385,10 @@ main(int argc, char *argv[])
             .val = 'b',
         },
         {
+            .name = "dump",
+            .val = 'd',
+        },
+        {
             .name = "enrich",
             .has_arg = required_argument,
             .val = 'e',
@@ -400,15 +406,19 @@ main(int argc, char *argv[])
     struct deduplicator_options dedup_opts = {
         .batch_size = DEFAULT_BATCH_SIZE,
     };
+    bool dump_logs = false;
     char c;
 
     /* Parse the command line */
-    while ((c = getopt_long(argc, argv, "b:e:hlr", LONG_OPTIONS, NULL)) != -1) {
+    while ((c = getopt_long(argc, argv, "b:e:hlrd", LONG_OPTIONS, NULL)) != -1) {
         switch (c) {
         case 'b':
             if (!str2size_t(optarg, &dedup_opts.batch_size))
                 error(EXIT_FAILURE, 0, "'%s' is not an integer", optarg);
 
+            break;
+        case 'd':
+            dump_logs = true;
             break;
         case 'e':
             enrich_builder = enrich_iter_builder_from_uri(optarg);
@@ -435,7 +445,7 @@ main(int argc, char *argv[])
     if (argc - optind > 2)
         error(EX_USAGE, 0, "too many arguments");
 
-    source = source_new(argv[optind++]);
+    source = source_new(argv[optind++], dump_logs);
     sink = sink_new(argv[optind++]);
 
     feed(sink, source, enrich_builder, strcmp(sink->name, "backend"),

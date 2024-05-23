@@ -31,7 +31,15 @@ struct lustre_changelog_iterator {
     char *mdt_name;
     int32_t source_mdt_index;
     uint64_t last_changelog_index;
+    bool dump_logs;
 };
+
+void
+dump_changelog(struct lustre_changelog_iterator *records,
+               struct changelog_rec *record)
+{
+    exit();
+}
 
 /* BSON results:
  * { "statx" : { "uid" : x, "gid" : y } }
@@ -913,6 +921,9 @@ retry:
 
     records->last_changelog_index = record->cr_index;
 
+    if (dump_logs)
+        dump_changelog(records, record);
+
     id = build_id(&record->cr_tfid);
     if (id == NULL) {
         rc = -1;
@@ -1044,7 +1055,8 @@ static const struct rbh_iterator LUSTRE_CHANGELOG_ITERATOR = {
 
 static void
 lustre_changelog_iter_init(struct lustre_changelog_iterator *events,
-                           const char *mdtname, const char *username)
+                           const char *mdtname, const char *username,
+                           bool dump_logs)
 {
     const char *mdtname_index;
     int rc;
@@ -1086,6 +1098,8 @@ lustre_changelog_iter_init(struct lustre_changelog_iterator *events,
     rc = str2int64_t(mdtname_index, (int64_t *) &events->source_mdt_index);
     if (rc)
         error(EXIT_FAILURE, errno, "str2int64_t");
+
+    events->dump_logs = dump_logs;
 }
 
 struct lustre_source {
@@ -1124,7 +1138,8 @@ static const struct source LUSTRE_SOURCE = {
 };
 
 struct source *
-source_from_lustre_changelog(const char *mdtname, const char *username)
+source_from_lustre_changelog(const char *mdtname, const char *username,
+                             bool dump_logs)
 {
     struct lustre_source *source;
 
@@ -1132,7 +1147,8 @@ source_from_lustre_changelog(const char *mdtname, const char *username)
     if (source == NULL)
         error(EXIT_FAILURE, errno, "malloc");
 
-    lustre_changelog_iter_init(&source->events, mdtname, username);
+    lustre_changelog_iter_init(&source->events, mdtname, username,
+                               dump_logs);
 
     initialize_source_stack(sizeof(struct rbh_value_pair) * (1 << 7));
     source->source = LUSTRE_SOURCE;
