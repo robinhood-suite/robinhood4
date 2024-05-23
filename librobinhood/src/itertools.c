@@ -364,29 +364,50 @@ int
 rbh_iter_tee(struct rbh_iterator *iterator, struct rbh_iterator *iterators[2])
 {
     struct tee_iterator *tees[2];
+    int save_errno;
 
     tees[0] = tee_iter_new(iterator);
     if (tees[0] == NULL)
         return -1;
 
     tees[1] = tee_iter_new(iterator);
-    if (tees[1] == NULL) {
-        int save_errno = errno;
-
-        rbh_queue_destroy(tees[0]->queue);
-        free(tees[0]);
-
-        errno = save_errno;
-        return -1;
-    }
+    if (tees[1] == NULL)
+        goto free;
 
     /* Link both tee_iterator with each other */
     tees[0]->clone = tees[1];
     tees[1]->clone = tees[0];
 
-    iterators[0] = &tees[0]->iterator;
-    iterators[1] = &tees[1]->iterator;
+    iterators[0] = malloc(sizeof(iterator[0]));
+    if (iterators[0] == NULL)
+        goto free;
+
+    iterators[1] = malloc(sizeof(iterator[1]));
+    if (iterators[1] == NULL)
+        goto free;
+
+    memcpy(iterators[0], &tees[0]->iterator, sizeof(sizeof(iterator[0])));
+    memcpy(iterators[1], &tees[1]->iterator, sizeof(sizeof(iterator[1])));
+
     return 0;
+
+free:
+    if (tees[0] != NULL) {
+        rbh_queue_destroy(tees[0]->queue);
+        free(tees[0]);
+    }
+
+    if (tees[1] != NULL) {
+        rbh_queue_destroy(tees[1]->queue);
+        free(tees[1]);
+    }
+
+    free(iterators[0]);
+    free(iterators[1]);
+
+    errno = save_errno;
+
+    return -1;
 }
 
 /*----------------------------------------------------------------------------*

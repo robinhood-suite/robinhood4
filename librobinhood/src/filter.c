@@ -111,7 +111,7 @@ static int
 logical_filter_copy(struct rbh_filter *dest, const struct rbh_filter *src,
                     char **buffer, size_t *bufsize)
 {
-    const struct rbh_filter **filters;
+    const struct rbh_filter **filters = NULL;
     size_t size = *bufsize;
     char *data = *buffer;
 
@@ -122,7 +122,7 @@ logical_filter_copy(struct rbh_filter *dest, const struct rbh_filter *src,
     assert(filters);
 
     for (size_t i = 0; i < src->logical.count; i++) {
-        struct rbh_filter *filter;
+        struct rbh_filter *filter = NULL;
 
         if (src->logical.filters[i] == NULL) {
             filters[i] = NULL;

@@ -48,7 +48,7 @@ fsevent_copy(struct rbh_fsevent *dest, const struct rbh_fsevent *src,
     case RBH_FET_UPSERT: /* dest->upsert */
         /* dest->upsert.statx */
         if (src->upsert.statx) {
-            struct rbh_statx *tmp;
+            struct rbh_statx *tmp = NULL;
 
             tmp = aligned_memalloc(alignof(*tmp), sizeof(*tmp), &data, &size);
             assert(tmp);

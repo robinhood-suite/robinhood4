@@ -74,8 +74,8 @@ static bool
 bson_iter_rbh_value_map(bson_iter_t *iter, struct rbh_value_map *map,
                         size_t count, char **buffer, size_t *bufsize)
 {
-    struct rbh_value_pair *pairs;
-    struct rbh_value *values;
+    struct rbh_value_pair *pairs = NULL;
+    struct rbh_value *values = NULL;
     size_t size = *bufsize;
     char *data = *buffer;
 
@@ -117,7 +117,7 @@ static bool
 bson_iter_rbh_value_sequence(bson_iter_t *iter, struct rbh_value *value,
                              size_t count, char **buffer, size_t *bufsize)
 {
-    struct rbh_value *values;
+    struct rbh_value *values = NULL;
     size_t size = *bufsize;
     char *data = *buffer;
 

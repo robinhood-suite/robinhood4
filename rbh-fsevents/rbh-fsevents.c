@@ -160,10 +160,6 @@ source_from_uri(const char *uri)
     } else if (strcmp(raw_uri->path, "lustre") == 0) {
 #ifdef HAVE_LUSTRE
         source = source_from_lustre_changelog(name, username);
-#else
-        free(raw_uri);
-        error(EX_USAGE, EINVAL, "MDT source is not available");
-        __builtin_unreachable();
 #endif
     } else if (strcmp(raw_uri->path, "hestia") == 0) {
         source = source_from_file_uri(name, source_from_hestia_file);

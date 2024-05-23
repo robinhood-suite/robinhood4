@@ -618,12 +618,8 @@ xattrs_get_magic_and_gen(int fd, struct rbh_value_pair *pairs)
         ssize_t length = XATTR_VALUE_MAX_VFS_SIZE;
 
         length = fgetxattr(fd, XATTR_LUSTRE_LOV, buffer, length);
-        if (length == -1) {
-            save_errno = errno;
-            free(buffer);
-            errno = save_errno;
+        if (length == -1)
             return -1;
-        }
 
         lov_buf = buffer;
     }

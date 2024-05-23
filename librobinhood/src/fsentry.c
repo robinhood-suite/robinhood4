@@ -28,7 +28,8 @@ rbh_fsentry_new(const struct rbh_id *id, const struct rbh_id *parent_id,
                 const struct rbh_value_map *ns_xattrs,
                 const struct rbh_value_map *xattrs, const char *symlink)
 {
-    struct rbh_fsentry *fsentry;
+    struct rbh_fsentry *fsentry = NULL;
+    struct rbh_fsentry _fsentry = {0};
     size_t symlink_length = 0;
     size_t name_length = 0;
     size_t size = 0;
@@ -52,17 +53,17 @@ rbh_fsentry_new(const struct rbh_id *id, const struct rbh_id *parent_id,
         size += name_length;
     }
     if (statxbuf) {
-        size = sizealign(size, alignof(*fsentry->statx));
+        size = sizealign(size, alignof(_fsentry.statx));
         size += sizeof(*statxbuf);
     }
     if (ns_xattrs) {
-        size = sizealign(size, alignof(*fsentry->xattrs.ns.pairs));
+        size = sizealign(size, alignof(_fsentry.xattrs.ns.pairs));
         if (value_map_data_size(ns_xattrs) < 0)
             return NULL;
         size += value_map_data_size(ns_xattrs);
     }
     if (xattrs) {
-        size = sizealign(size, alignof(*fsentry->xattrs.inode.pairs));
+        size = sizealign(size, alignof(_fsentry.xattrs.inode.pairs));
         if (value_map_data_size(xattrs) < 0)
             return NULL;
         size += value_map_data_size(xattrs);
@@ -109,7 +110,7 @@ rbh_fsentry_new(const struct rbh_id *id, const struct rbh_id *parent_id,
 
     /* fsentry->statx */
     if (statxbuf) {
-        struct rbh_statx *tmp;
+        struct rbh_statx *tmp = NULL;
 
         tmp = aligned_memalloc(alignof(*tmp), sizeof(*tmp), &data, &size);
         assert(tmp);

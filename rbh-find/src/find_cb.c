@@ -247,6 +247,14 @@ exec_command(struct find_context *ctx, struct rbh_fsentry *fsentry)
         cmd[j] = resolve_arg(ctx->exec_command[j], fsentry);
 
     child = fork();
+    if (child) {
+        for (int j = 0; j < i; j++) {
+            /* substitute_path only allocates if a substitution is required */
+            if (cmd[j] != ctx->exec_command[j])
+                free((char *)cmd[j]);
+        }
+        free(cmd);
+    }
 
     switch (child) {
     case -1:
@@ -257,12 +265,6 @@ exec_command(struct find_context *ctx, struct rbh_fsentry *fsentry)
         error(EXIT_FAILURE, errno, "failed to execute '%s'", cmd[0]);
         __builtin_unreachable();
     default:
-        for (int j = 0; j < i; j++) {
-            /* substitute_path only allocates if a substitution is required */
-            if (cmd[j] != ctx->exec_command[j])
-                free((char *)cmd[j]);
-        }
-        free(cmd);
         return wait_process(child);
     }
 }

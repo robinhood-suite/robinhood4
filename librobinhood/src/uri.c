@@ -298,9 +298,9 @@ struct rbh_uri *
 rbh_uri_from_raw_uri(const struct rbh_raw_uri *raw_uri)
 {
     size_t fragment_length = 0; /* gcc: uninitialized variable */
+    struct rbh_id *id = NULL;
     enum rbh_uri_type type;
     struct rbh_uri *uri;
-    struct rbh_id *id;
     const char *colon;
     int save_errno;
     size_t size;

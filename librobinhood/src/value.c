@@ -197,7 +197,7 @@ static int
 value_pair_copy(struct rbh_value_pair *dest, const struct rbh_value_pair *src,
                 char **buffer, size_t *bufsize)
 {
-    struct rbh_value *value;
+    struct rbh_value *value = NULL;
     size_t size = *bufsize;
     char *data = *buffer;
     size_t keylen;
@@ -238,7 +238,7 @@ int
 value_map_copy(struct rbh_value_map *dest, const struct rbh_value_map *src,
                char **buffer, size_t *bufsize)
 {
-    struct rbh_value_pair *pairs;
+    struct rbh_value_pair *pairs = NULL;
     size_t size = *bufsize;
     char *data = *buffer;
 
