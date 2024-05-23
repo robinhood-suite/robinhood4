@@ -19,3 +19,6 @@ foreach t: integration_tests
     # in parallel.
     test(t, e, is_parallel : false)
 endforeach
+
+e = find_program('dump_changelog.bash')
+test('dump_changelog', e, is_parallel : false, should_fail: true)
