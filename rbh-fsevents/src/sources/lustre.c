@@ -39,7 +39,22 @@ static void
 dump_changelog(struct lustre_changelog_iterator *records,
                struct changelog_rec *record)
 {
-    fprintf(records->dump_file, "");
+    time_t now = time(NULL);
+    char changelog[4096];
+    int rc = 0;
+
+    rc += sprintf(changelog, "%s ", records->mdt_name);
+    rc += sprintf(&changelog[rc], "%lu ", record->cr_index);
+    rc += strftime(&changelog[rc], 4096 - rc, "%d/%m/%Y %H:%M:%S ",
+                   localtime(now));
+    rc += sprintf(&changelog[rc], "%s ", changelog_type2str(record->cr_type));
+    rc += strftime(&changelog[rc], 4096 - rc, "%d/%m/%Y %H:%M:%S ",
+                   localtime(&record->cr_time));
+    rc += sprintf(&changelog[rc], "FID="DFID" ", PFID(record->cr_tfid));
+    rc += sprintf(&changelog[rc], "parent FID="DFID" ", PFID(record->cr_pfid));
+    rc += sprintf(&changelog[rc], "%s ", record->cr_name);
+
+    fprintf(records->dump_file, "%s\n", changelog);
 }
 
 /* BSON results:
