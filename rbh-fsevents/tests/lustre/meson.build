@@ -9,7 +9,7 @@ integration_tests = ['test_create_close', 'test_mkdir', 'test_symlink',
                      'test_rename', 'test_hsm', 'test_trunc', 'test_layout',
                      'test_migrate', 'test_flrw', 'test_resync',
                      'test_setxattr', 'acceptance', 'acceptance-dedup',
-                     'acknowledgement']
+                     'acknowledgement', 'dump_changelog']
 
 foreach t: integration_tests
     e = find_program(t + '.bash')
@@ -19,6 +19,3 @@ foreach t: integration_tests
     # in parallel.
     test(t, e, is_parallel : false)
 endforeach
-
-e = find_program('dump_changelog.bash')
-test('dump_changelog', e, is_parallel : false, should_fail: true)
