@@ -1,0 +1,228 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e51ef3cc_5da22af6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-05-24T09:03:18Z",
+      "side": 1,
+      "message": "typo: are",
+      "range": {
+        "startLine": 13,
+        "startChar": 41,
+        "endLine": 13,
+        "endChar": 43
+      },
+      "revId": "0dce4f36e9e17644b37647891c44b3c306a2399a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "be02d784_33fca477",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-05-24T09:03:18Z",
+      "side": 1,
+      "message": "The code could be simpler in my opinion.",
+      "revId": "0dce4f36e9e17644b37647891c44b3c306a2399a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "32ebd772_95f1657a",
+        "filename": "librobinhood/src/backends/mpi_file/mpi_file.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-05-24T09:03:18Z",
+      "side": 1,
+      "message": "major: this should be stx_mode \u0026 ~S_IFMT. Although, since dfind does not implement the -perm predicate, I don\u0027t know what MPIFileUtils is expecting but the man page of statx indicates that RBH_STATX_MODE refers to stx_mode \u0026 ~S_IFMT. Looking at the code from libarchive, it seems that the mode is the mode from the regular stat. So maybe stx_mode is correct here but you should add a test for the RBH_STATX_TYPE bit as well to be safe (even though in practice both will be set at the same time).",
+      "range": {
+        "startLine": 31,
+        "startChar": 44,
+        "endLine": 31,
+        "endChar": 62
+      },
+      "revId": "0dce4f36e9e17644b37647891c44b3c306a2399a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f055e689_b4e4549c",
+        "filename": "librobinhood/src/backends/mpi_file/mpi_file.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-05-24T09:03:18Z",
+      "side": 1,
+      "message": "minor: there is already a function fsentry_path. It is defined in rbh-find but can probably be moved to librobinhood.",
+      "range": {
+        "startLine": 71,
+        "startChar": 0,
+        "endLine": 71,
+        "endChar": 12
+      },
+      "revId": "0dce4f36e9e17644b37647891c44b3c306a2399a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "82fa8089_8c42240b",
+        "filename": "librobinhood/src/backends/mpi_file/mpi_file.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-05-24T09:03:18Z",
+      "side": 1,
+      "message": "major: I find this very strange. I understand that you don\u0027t want to store xattrs in the flist simply because this is not possible. But the name flist_append_inode_xattr suggests that this function will actually insert something in the file. If this function does nothing, it\u0027s better to simply not define it.",
+      "range": {
+        "startLine": 112,
+        "startChar": 11,
+        "endLine": 112,
+        "endChar": 32
+      },
+      "revId": "0dce4f36e9e17644b37647891c44b3c306a2399a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cdbf8f55_04812724",
+        "filename": "librobinhood/src/backends/mpi_file/mpi_file.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-05-24T09:03:18Z",
+      "side": 1,
+      "message": "minor: this should be done by the main update function and the index can be passed directly to the sub functions. No need to have a pointer.",
+      "range": {
+        "startLine": 138,
+        "startChar": 8,
+        "endLine": 138,
+        "endChar": 45
+      },
+      "revId": "0dce4f36e9e17644b37647891c44b3c306a2399a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "07a7ffa7_0ecded10",
+        "filename": "librobinhood/src/backends/mpi_file/mpi_file.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-05-24T09:03:18Z",
+      "side": 1,
+      "message": "question: why do you have to insert a new entry in the flist on an xattr event? This is not what the mongo backend does for instance. Shouldn\u0027t xattrs be a noop in this case?",
+      "range": {
+        "startLine": 149,
+        "startChar": 11,
+        "endLine": 149,
+        "endChar": 28
+      },
+      "revId": "0dce4f36e9e17644b37647891c44b3c306a2399a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e97943a2_01471e5f",
+        "filename": "librobinhood/src/backends/mpi_file/mpi_file.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-05-24T09:03:18Z",
+      "side": 1,
+      "message": "major: this is assuming that upsert is the first event. It would be more robust to compare last_id and fsevent-\u003eid on each update and update last_id when necessary. This avoids to rely on the way fsevents are ordered.",
+      "range": {
+        "startLine": 180,
+        "startChar": 9,
+        "endLine": 180,
+        "endChar": 49
+      },
+      "revId": "0dce4f36e9e17644b37647891c44b3c306a2399a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ec6c9b09_4e53b69c",
+        "filename": "librobinhood/src/backends/mpi_file/mpi_file.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-05-24T09:03:18Z",
+      "side": 1,
+      "message": "major: I\u0027m not sure that this is very robust. We could have a backend that generates completely new fsevents event though they target the same ID. In this case, \u0026fsevent-\u003eid would be different from last_id even though this is the same ID. A better implementation would be to use rbh_id_equal.",
+      "range": {
+        "startLine": 183,
+        "startChar": 12,
+        "endLine": 183,
+        "endChar": 24
+      },
+      "revId": "0dce4f36e9e17644b37647891c44b3c306a2399a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d2772913_47b4b12e",
+        "filename": "librobinhood/src/backends/mpi_file/mpi_file.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-05-24T09:03:18Z",
+      "side": 1,
+      "message": "question: why don\u0027t you create the mpi file here instead of calling update again in rbh-sync?",
+      "range": {
+        "startLine": 241,
+        "startChar": 16,
+        "endLine": 241,
+        "endChar": 32
+      },
+      "revId": "0dce4f36e9e17644b37647891c44b3c306a2399a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
