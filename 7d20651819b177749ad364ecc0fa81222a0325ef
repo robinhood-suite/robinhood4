@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d8b49c11_60ac92dd",
+        "filename": "librobinhood/src/backends/iter_mpi/iter_mpi.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-05-24T09:45:09Z",
+      "side": 1,
+      "message": "defect: you cannot do that. The id is built with the file_handle. You need to open the file and use this to build the ID. The path is not garantied to identify the same entry in the future. The file_handle will. If a file is moved or renamed for example, it keeps the same file handle. Why are you building an ID from a path? Is it because you don\u0027t have the full path in the file?",
+      "range": {
+        "startLine": 56,
+        "startChar": 20,
+        "endLine": 56,
+        "endChar": 43
+      },
+      "revId": "7d20651819b177749ad364ecc0fa81222a0325ef",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9250a161_f41cc924",
+        "filename": "librobinhood/src/backends/iter_mpi/iter_mpi.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-05-24T09:45:09Z",
+      "side": 1,
+      "message": "minor: I find \"from_mpi\" to be a bit strange. Since this is in the mpi_iterator structure, you don\u0027t have to specify it in the name. Something like build_fsentry would be acceptable. Or mpi_build_fsentry if you want to keep mpi in the name.",
+      "range": {
+        "startLine": 164,
+        "startChar": 24,
+        "endLine": 164,
+        "endChar": 41
+      },
+      "revId": "7d20651819b177749ad364ecc0fa81222a0325ef",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5edaee05_e53b3256",
+        "filename": "librobinhood/src/backends/iter_mpi/iter_mpi.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-05-24T09:45:09Z",
+      "side": 1,
+      "message": "style: space after MPI",
+      "range": {
+        "startLine": 353,
+        "startChar": 64,
+        "endLine": 353,
+        "endChar": 67
+      },
+      "revId": "7d20651819b177749ad364ecc0fa81222a0325ef",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4e472dc4_b269e080",
+        "filename": "librobinhood/src/backends/mpi_file/mpi_file.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-05-24T09:45:09Z",
+      "side": 1,
+      "message": "minor: as long as idx is less than flist-\u003elist_count, you don\u0027t need to check the return code. Or if you do, you should to it for all the elements (e.g. gid, uid...).",
+      "range": {
+        "startLine": 65,
+        "startChar": 4,
+        "endLine": 65,
+        "endChar": 20
+      },
+      "revId": "7d20651819b177749ad364ecc0fa81222a0325ef",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "873a32e1_71f45259",
+        "filename": "librobinhood/src/backends/mpi_file/mpi_file.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-05-24T09:45:09Z",
+      "side": 1,
+      "message": "typo: ctime\nsuggest: I\u0027m not a huge fan of comments like this that don\u0027t add context to the code.",
+      "range": {
+        "startLine": 76,
+        "startChar": 7,
+        "endLine": 76,
+        "endChar": 12
+      },
+      "revId": "7d20651819b177749ad364ecc0fa81222a0325ef",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a49e0624_e48b1655",
+        "filename": "librobinhood/src/backends/mpi_file/mpi_file.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-05-24T09:45:09Z",
+      "side": 1,
+      "message": "defect: this is not an acceptable behavior. We need to use the file_handle. Something like this would not work properly:\n\n```\nrbh-sync rbh:mpi-file:file.mfu rbh:mongo:test\n\nmv /mnt/lustre/a /mnt/lustre/b\n\ndwalk -o file.mfu ...\nrbh-sync rbh:mpi-file:file.mfu rbh:mongo:test\n```\n\nThe file_handle (i.e. FID of the file) didn\u0027t change. So now you have 2 entries with the same FID in the DB but two different paths.",
+      "range": {
+        "startLine": 109,
+        "startChar": 4,
+        "endLine": 112,
+        "endChar": 7
+      },
+      "revId": "7d20651819b177749ad364ecc0fa81222a0325ef",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
