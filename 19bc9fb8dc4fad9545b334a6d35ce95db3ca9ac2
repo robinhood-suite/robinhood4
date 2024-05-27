@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d08ff256_50abdd8d",
+        "filename": "rbh-find-lustre/README.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-05-27T13:42:59Z",
+      "side": 1,
+      "message": "Currently, if the fetching of root\u0027s values fail for nay reason, we error out. If it succeeds but there is no default layout, then the value associated is 0, which will be different from the user request, meaning we only show entries with that stripe count. But yeah, maybe continuing the command even if we fail to get the default value is better.",
+      "parentUuid": "2cf06b1c_28679a3a",
+      "range": {
+        "startLine": 110,
+        "startChar": 0,
+        "endLine": 110,
+        "endChar": 13
+      },
+      "revId": "19bc9fb8dc4fad9545b334a6d35ce95db3ca9ac2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "840b698a_dcdca250",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-05-22T14:37:19Z",
       "side": 1,
       "message": "minor: this is a bit of a stretch. This is not a numerical value. You could say: It behaves exactly like the \\`\\`stripe-count\u0027\u0027 predicate for with regards to the default value.",
+      "range": {
+        "startLine": 140,
+        "startChar": 36,
+        "endLine": 141,
+        "endChar": 37
+      },
+      "revId": "19bc9fb8dc4fad9545b334a6d35ce95db3ca9ac2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b26e636_df42e301",
+        "filename": "rbh-find-lustre/README.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-05-27T13:42:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "840b698a_dcdca250",
       "range": {
         "startLine": 140,
         "startChar": 36,
