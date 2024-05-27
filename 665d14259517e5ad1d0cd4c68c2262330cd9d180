@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "41911455_7c2705fb",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-05-27T09:38:07Z",
+      "side": 1,
+      "message": "Major: add a commit message",
+      "revId": "665d14259517e5ad1d0cd4c68c2262330cd9d180",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4bc397aa_dd979be9",
+        "filename": "rbh-fsevents/tests/lustre/changelog_dump.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-05-27T09:38:07Z",
+      "side": 1,
+      "message": "Maybe add a test to check if the information dump is correct.",
+      "revId": "665d14259517e5ad1d0cd4c68c2262330cd9d180",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bf25fbd1_60d5b2fd",
+        "filename": "rbh-fsevents/tests/lustre/changelog_dump.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-05-27T09:38:07Z",
+      "side": 1,
+      "message": "style: remove space",
+      "revId": "665d14259517e5ad1d0cd4c68c2262330cd9d180",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
