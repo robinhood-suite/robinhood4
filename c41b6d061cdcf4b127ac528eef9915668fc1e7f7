@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "86898922_47539bf3",
+        "filename": "rbh-fsevents/include/source.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-05-27T09:35:53Z",
+      "side": 1,
+      "message": "style: remove space",
+      "range": {
+        "startLine": 21,
+        "startChar": 70,
+        "endLine": 21,
+        "endChar": 72
+      },
+      "revId": "c41b6d061cdcf4b127ac528eef9915668fc1e7f7",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "93c92c7b_e766c000",
+        "filename": "rbh-fsevents/rbh-fsevents.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-05-27T09:35:53Z",
+      "side": 1,
+      "message": "style: remove \"o\"",
+      "range": {
+        "startLine": 134,
+        "startChar": 16,
+        "endLine": 134,
+        "endChar": 17
+      },
+      "revId": "c41b6d061cdcf4b127ac528eef9915668fc1e7f7",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f931deaf_356e1552",
+        "filename": "rbh-fsevents/src/sources/lustre.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-05-27T09:35:53Z",
+      "side": 1,
+      "message": "sugest: add static",
+      "revId": "c41b6d061cdcf4b127ac528eef9915668fc1e7f7",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "522ede32_75be1d1e",
+        "filename": "rbh-fsevents/src/sources/lustre.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-05-27T09:35:53Z",
+      "side": 1,
+      "message": "Major: I understand that the implementation is in the next patch, but `exit()` will quit the program. Maybe just do nothing or just `printf(\"\")`.",
+      "revId": "c41b6d061cdcf4b127ac528eef9915668fc1e7f7",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
