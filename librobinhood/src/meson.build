@@ -5,11 +5,13 @@
 # SPDX-License-Identifer: LGPL-3.0-or-later
 
 libdl = cc.find_library('dl', required: false)
+miniyaml = dependency('miniyaml', version: '>=0.0.0')
 
 librobinhood = library(
     'robinhood',
     sources: [
         'backend.c',
+        'config.c',
         'filter.c',
         'fsentry.c',
         'fsevent.c',
@@ -32,7 +34,7 @@ librobinhood = library(
         'value.c',
     ],
     version: meson.project_version(),
-    dependencies: [ libdl ],
+    dependencies: [ libdl, miniyaml ],
     include_directories: rbh_include,
     install: true,
 )

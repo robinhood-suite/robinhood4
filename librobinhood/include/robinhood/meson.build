@@ -6,6 +6,7 @@
 
 install_headers(
     'backend.h',
+    'config.h',
     'filter.h',
     'fsentry.h',
     'fsevent.h',
