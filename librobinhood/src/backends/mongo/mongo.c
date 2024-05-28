@@ -20,6 +20,7 @@
 
 #include <bson.h>
 #include <mongoc.h>
+#include <miniyaml.h>
 
 #include "robinhood/backends/mongo.h"
 #include "robinhood/itertools.h"
@@ -1375,9 +1376,38 @@ static const struct rbh_backend MONGO_BACKEND = {
  *----------------------------------------------------------------------------*/
 
 static const char *
-get_mongo_addr(void)
+get_mongo_addr()
 {
-    const char *addr = getenv("RBH_MONGO_DB_URI");
+    yaml_event_t event;
+    const char *addr;
+    int rc;
+
+    rc = rbh_config_find("RBH_MONGO_DB_URI", &event);
+    if (rc)
+        return NULL;
+
+    if (event.type != YAML_NO_EVENT) {
+        const char *config_addr;
+
+        if (!yaml_parse_string(&event, &config_addr, NULL)) {
+            int save_errno = errno;
+            yaml_event_delete(&event);
+            fprintf(stderr, "Failed to read the value associated to 'RBH_MONGO_DB_URI' in configuration file\n");
+            errno = save_errno;
+            return NULL;
+        }
+
+        addr = strdup(config_addr);
+        yaml_event_delete(&event);
+        if (addr == NULL)
+            return NULL;
+
+        rbh_config_reset();
+
+        return addr;
+    }
+
+    addr = getenv("RBH_MONGO_DB_URI");
 
     if (!addr)
         addr = "mongodb://localhost:27017";
@@ -1389,11 +1419,16 @@ static int
 mongo_backend_init(struct mongo_backend *mongo, const char *fsname)
 {
     mongoc_uri_t *uri;
+    const char *addr;
     int save_errno;
     int rc;
 
-    uri = mongoc_uri_new(get_mongo_addr());
+    addr = get_mongo_addr();
+    if (addr == NULL) {
+        return -1;
+    }
 
+    uri = mongoc_uri_new(addr);
     if (uri == NULL) {
         errno = EINVAL;
         return -1;
@@ -1413,14 +1448,15 @@ mongo_backend_init(struct mongo_backend *mongo, const char *fsname)
 }
 
 struct rbh_backend *
-rbh_mongo_backend_new(const char *fsname,
-                      __attribute__((unused)) struct rbh_config *config)
+rbh_mongo_backend_new(const char *fsname, struct rbh_config *config)
 {
     struct mongo_backend *mongo;
 
     mongo = malloc(sizeof(*mongo));
     if (mongo == NULL)
         return NULL;
+
+    set_rbh_config(config);
 
     if (mongo_backend_init(mongo, fsname)) {
         int save_errno = errno;

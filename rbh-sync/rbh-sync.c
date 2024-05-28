@@ -927,7 +927,7 @@ main(int argc, char *argv[])
         .fsentry_mask = RBH_FP_ALL,
         .statx_mask = RBH_STATX_ALL & ~RBH_STATX_MNT_ID,
     };
-    struct rbh_config *config = NULL;
+    int rc;
     char c;
 
     /* Parse the command line */
