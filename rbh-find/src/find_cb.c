@@ -380,11 +380,11 @@ find_parse_predicate(struct find_context *ctx, int *arg_idx)
         break;
     case PRED_PATH:
     case PRED_NAME:
-        filter = shell_regex2filter(predicate, ctx->argv[++i], 0);
+        filter = regex2filter(predicate, ctx->argv[++i], 0);
         break;
     case PRED_INAME:
-        filter = shell_regex2filter(predicate, ctx->argv[++i],
-                                    RBH_RO_CASE_INSENSITIVE);
+        filter = regex2filter(predicate, ctx->argv[++i],
+                              RBH_RO_CASE_INSENSITIVE);
         break;
     case PRED_TYPE:
         filter = filetype2filter(ctx->argv[++i]);
