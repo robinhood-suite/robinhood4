@@ -26,4 +26,17 @@ struct rbh_config {
 struct rbh_config *
 rbh_config_initialize(const char *config_file);
 
+/**
+ * Reset a rbh_config structure.
+ *
+ * Re-initialize the parser to the start of the file and skip the first two
+ * events.
+ *
+ * This function will error out the program if it fails at any point.
+ *
+ * @param config        the rbh_config to reset
+ */
+void
+rbh_config_reset(struct rbh_config *config);
+
 #endif
