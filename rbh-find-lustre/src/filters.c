@@ -39,6 +39,8 @@ static const struct rbh_filter_field predicate2filter_field[] = {
                                           .xattr = "ost"},
     [LPRED_LAYOUT_PATTERN - LPRED_MIN] = {.fsentry = RBH_FP_INODE_XATTRS,
                                           .xattr = "pattern"},
+    [LPRED_POOL - LPRED_MIN]           = {.fsentry = RBH_FP_INODE_XATTRS,
+                                          .xattr = "pool"},
     [LPRED_STRIPE_COUNT - LPRED_MIN]   = {.fsentry = RBH_FP_INODE_XATTRS,
                                           .xattr = "stripe_count"},
     [LPRED_STRIPE_SIZE - LPRED_MIN]    = {.fsentry = RBH_FP_INODE_XATTRS,
@@ -549,4 +551,11 @@ expired_at2filter(const char *expired)
         error(EXIT_FAILURE, errno, "rbh_filter_compare_uint64_new");
 
     return filter_and(filter_not(filter_inf), filter_expiration_date);
+}
+
+struct rbh_filter *
+pool2filter(const char *pool)
+{
+    return shell_regex2filter(&predicate2filter_field[LPRED_POOL - LPRED_MIN],
+                              pool, 0);
 }
