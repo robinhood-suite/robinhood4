@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9e1a9913_12bdab5b",
+        "filename": "rbh-fsevents/src/sources/lustre.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-05-28T08:21:06Z",
+      "side": 1,
+      "message": "major: all this is accessible from lustre_idl.h which I think is available to user space applications.",
+      "range": {
+        "startLine": 63,
+        "startChar": 0,
+        "endLine": 95,
+        "endChar": 1
+      },
+      "revId": "8c48be21291171c78acd5208767299b7713348a2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
