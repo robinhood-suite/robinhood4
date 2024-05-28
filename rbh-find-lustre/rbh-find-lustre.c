@@ -62,6 +62,10 @@ lustre_predicate_or_action(const char *string)
             if (!strcmp(&string[2], "sm-state"))
                 return CLT_PREDICATE;
             break;
+        case 'i':
+            if (!strcmp(&string[2], "pool"))
+                return CLT_PREDICATE;
+            break;
         case 'l':
             if (!strcmp(&string[2], "ayout-pattern"))
                 return CLT_PREDICATE;
@@ -123,6 +127,9 @@ lustre_parse_predicate(struct find_context *ctx, int *arg_idx)
         break;
     case LPRED_HSM_STATE:
         filter = hsm_state2filter(ctx->argv[++i]);
+        break;
+    case LPRED_IPOOL:
+        filter = ipool2filter(ctx->argv[++i]);
         break;
     case LPRED_LAYOUT_PATTERN:
         filter = layout_pattern2filter(ctx->argv[++i]);
