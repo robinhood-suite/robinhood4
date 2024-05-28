@@ -10,6 +10,7 @@ librobinhood = library(
     'robinhood',
     sources: [
         'backend.c',
+        'config.c',
         'filter.c',
         'fsentry.c',
         'fsevent.c',
