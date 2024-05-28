@@ -25,4 +25,15 @@ rbh_config_open(const char *config_file);
 void
 rbh_config_free();
 
+/**
+ * Reset the config.
+ *
+ * Re-initialize the parser to the start of the file and skip the first two
+ * events.
+ *
+ * @return              0 if the reset succeeded, non-zero code otherwise
+ */
+int
+rbh_config_reset();
+
 #endif
