@@ -15,6 +15,7 @@
 #include <sysexits.h>
 
 #include <robinhood.h>
+#include <robinhood/config.h>
 #include <robinhood/utils.h>
 
 #ifndef RBH_ITER_CHUNK_SIZE
@@ -895,6 +896,11 @@ main(int argc, char *argv[])
 {
     const struct option LONG_OPTIONS[] = {
         {
+            .name = "conf",
+            .has_arg = required_argument,
+            .val = 'c',
+        },
+        {
             .name = "field",
             .has_arg = required_argument,
             .val = 'f',
@@ -921,12 +927,21 @@ main(int argc, char *argv[])
         .fsentry_mask = RBH_FP_ALL,
         .statx_mask = RBH_STATX_ALL & ~RBH_STATX_MNT_ID,
     };
+    struct rbh_config *config = NULL;
     char c;
 
     /* Parse the command line */
-    while ((c = getopt_long(argc, argv, "f:hl:on", LONG_OPTIONS,
+    while ((c = getopt_long(argc, argv, "c:f:hl:on", LONG_OPTIONS,
                             NULL)) != -1) {
         switch (c) {
+        case 'c':
+            rc = rbh_config_open(optarg);
+            if (rc) {
+                fprintf(stderr, "Failed to open configuration file '%s'\n",
+                        optarg);
+                exit(errno);
+            }
+            break;
         case 'f':
             switch (optarg[0]) {
             case '+':
@@ -973,6 +988,8 @@ main(int argc, char *argv[])
     to = rbh_backend_from_uri(argv[1]);
 
     sync(&projection);
+
+    rbh_config_free();
 
     return EXIT_SUCCESS;
 }
