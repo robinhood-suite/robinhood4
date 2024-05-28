@@ -559,3 +559,13 @@ pool2filter(const char *pool)
     return shell_regex2filter(&predicate2filter_field[LPRED_POOL - LPRED_MIN],
                               pool, 0);
 }
+
+struct rbh_filter *
+ipool2filter(const char *pool)
+{
+    /* We use the same field as pool2filter because the only difference is the
+     * case insensitiveness option.
+     */
+    return shell_regex2filter(&predicate2filter_field[LPRED_POOL - LPRED_MIN],
+                              pool, RBH_RO_CASE_INSENSITIVE);
+}
