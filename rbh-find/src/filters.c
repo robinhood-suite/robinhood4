@@ -267,26 +267,26 @@ filetype2filter(const char *_filetype)
 }
 
 struct rbh_filter *
-filesize2filter(const char *_filesize)
+size2filter(const struct rbh_filter_field *field, const char *_size)
 {
-    char operator = *_filesize;
     struct rbh_filter *filter;
+    char operator = *_size;
     uint64_t unit_size;
-    uint64_t filesize;
+    uint64_t size;
     char *suffix;
 
     switch (operator) {
     case '+':
     case '-':
-        _filesize++;
+        _size++;
     }
 
-    filesize = strtoull(_filesize, &suffix, 10);
-    if (filesize == 0ULL)
+    size = strtoull(_size, &suffix, 10);
+    if (size == 0ULL)
         error(EX_USAGE, 0,
-              "arguments to -size should start with at least one digit");
-    else if (errno == ERANGE && filesize == ULLONG_MAX)
-        error(EX_USAGE, EOVERFLOW, "invalid argument `%s' to -size", _filesize);
+              "size arguments should start with at least one digit");
+    else if (errno == ERANGE && size == ULLONG_MAX)
+        error(EX_USAGE, EOVERFLOW, "invalid size argument `%s'", _size);
 
     switch (*suffix++) {
     case 'T':
@@ -315,29 +315,24 @@ filesize2filter(const char *_filesize)
         unit_size = 1;
         break;
     default:
-        error(EX_USAGE, 0, "invalid argument `%s' to -size", _filesize);
+        error(EX_USAGE, 0, "invalid size argument `%s'", _size);
     }
 
     if (*suffix)
-        error(EX_USAGE, 0, "invalid argument `%s' to -size", _filesize);
+        error(EX_USAGE, 0, "invalid size argument `%s'", _size);
 
     switch (operator) {
     case '-':
-        filter = rbh_filter_compare_uint64_new(
-                RBH_FOP_LOWER_OR_EQUAL, &predicate2filter_field[PRED_SIZE],
-                (filesize - 1) * unit_size
-                );
+        filter = rbh_filter_compare_uint64_new(RBH_FOP_LOWER_OR_EQUAL, field,
+                                               (size - 1) * unit_size);
         break;
     case '+':
-        filter = rbh_filter_compare_uint64_new(
-                RBH_FOP_STRICTLY_GREATER, &predicate2filter_field[PRED_SIZE],
-                filesize * unit_size
-                );
+        filter = rbh_filter_compare_uint64_new(RBH_FOP_STRICTLY_GREATER, field,
+                                               size * unit_size);
         break;
     default:
-        filter = filter_uint64_range_new(&predicate2filter_field[PRED_SIZE],
-                                         (filesize - 1) * unit_size,
-                                         filesize * unit_size + 1);
+        filter = filter_uint64_range_new(field, (size - 1) * unit_size,
+                                         size * unit_size + 1);
     }
 
     if (filter == NULL)
@@ -345,6 +340,12 @@ filesize2filter(const char *_filesize)
                       "filter_compare_integer");
 
     return filter;
+}
+
+struct rbh_filter *
+filesize2filter(const char *filesize)
+{
+    return size2filter(&predicate2filter_field[PRED_SIZE], filesize);
 }
 
 struct who {

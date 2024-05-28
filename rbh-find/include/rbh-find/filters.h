@@ -114,6 +114,25 @@ struct rbh_filter *
 filetype2filter(const char *filetype);
 
 /**
+ * Build a filter for predicates corresponding to a size by the following
+ * GNU-find's logic.
+ *
+ * For instance, the following will match:
+ *  - `+3k` -> all entries of size larger than 3k
+ *  - `-1M` -> all entries of size lower or equal to 0M
+ *  - `2T` -> all entries of size in interval ]1T; 2T + 1[
+ *
+ * @param field     a field to filter
+ * @param size      a string representing a size
+ *
+ * @return          a pointer to a newly allocated struct rbh_filter
+ *
+ * Exit on error
+ */
+struct rbh_filter *
+size2filter(const struct rbh_filter_field *field, const char *size);
+
+/**
  * Build a filter for the -size predicate
  *
  * @param filesize  a string representing a size
