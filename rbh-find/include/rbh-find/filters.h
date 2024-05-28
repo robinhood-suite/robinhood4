@@ -24,8 +24,23 @@
  *                      error
  */
 struct rbh_filter *
-shell_regex2filter(enum predicate predicate, const char *shell_regex,
-                   unsigned int regex_options);
+shell_regex2filter(const struct rbh_filter_field *field,
+                   const char *shell_regex, unsigned int regex_options);
+
+/**
+ * regex2filter - build a filter from a regex, will call
+ * shell_regex2filter for the actual filter creation
+ *
+ * @param field         a field to filter
+ * @param shell_regex   a shell regex
+ * @param regex_options an ORred combination of enum filter_regex_option
+ *
+ * @return              a pointer to a newly allocated struct filter, or NULL on
+ *                      error
+ */
+struct rbh_filter *
+regex2filter(enum predicate predicate, const char *shell_regex,
+             unsigned int regex_options);
 
 /**
  * numeric2filter - build a filter from a string representing a uint64_t value.
