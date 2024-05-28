@@ -1,0 +1,136 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d2fbfbb3_1f4bff01",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-05-28T08:03:31Z",
+      "side": 1,
+      "message": "Most of the modification are not necessary. I didn\u0027t see any `\u003d NULL` that solved a potential bug.",
+      "revId": "6d9983ca1bc7d5eebd209d2a34e441031bb1bd7d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cf239577_69648ecc",
+        "filename": "librobinhood/src/backends/mongo/fsentry.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-05-28T08:03:31Z",
+      "side": 1,
+      "message": "They are not necessary.",
+      "range": {
+        "startLine": 77,
+        "startChar": 32,
+        "endLine": 77,
+        "endChar": 39
+      },
+      "revId": "6d9983ca1bc7d5eebd209d2a34e441031bb1bd7d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "57fe9f8e_0ddd42de",
+        "filename": "librobinhood/src/backends/mongo/fsentry.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-05-28T08:03:31Z",
+      "side": 1,
+      "message": "Not necessary.",
+      "range": {
+        "startLine": 120,
+        "startChar": 28,
+        "endLine": 120,
+        "endChar": 35
+      },
+      "revId": "6d9983ca1bc7d5eebd209d2a34e441031bb1bd7d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4e9bb529_957d68d3",
+        "filename": "librobinhood/src/fsentry.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-05-28T08:03:31Z",
+      "side": 1,
+      "message": "I\u0027m not sure why we have this _fsentry here. It is only used in alignof. I don\u0027t know why we can\u0027t use fsentry instead in this case.",
+      "range": {
+        "startLine": 32,
+        "startChar": 23,
+        "endLine": 32,
+        "endChar": 31
+      },
+      "revId": "6d9983ca1bc7d5eebd209d2a34e441031bb1bd7d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6ccb7f51_623d6705",
+        "filename": "librobinhood/src/itertools.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 367,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-05-28T08:03:31Z",
+      "side": 1,
+      "message": "defect: save_errno is not initialized.",
+      "range": {
+        "startLine": 367,
+        "startChar": 8,
+        "endLine": 367,
+        "endChar": 18
+      },
+      "revId": "6d9983ca1bc7d5eebd209d2a34e441031bb1bd7d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "28a00e9c_98c9ff40",
+        "filename": "librobinhood/src/itertools.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 390,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-05-28T08:03:31Z",
+      "side": 1,
+      "message": "defect: this is not what the code is supposed to do. The goal is to get pointers to both iterators. You are copying only the iterator part here. You are missing the additional data stored with the iterator structure tee_iterator. The previous code was working correctly in my opinion. Why did you update it? Also, given how the code is used, this is undefined behavior since iterators[0] and iterators[1] do not point to an actual iterator since they are out parameters. See rit_basic in check_itertools.c.",
+      "range": {
+        "startLine": 389,
+        "startChar": 2,
+        "endLine": 390,
+        "endChar": 74
+      },
+      "revId": "6d9983ca1bc7d5eebd209d2a34e441031bb1bd7d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}

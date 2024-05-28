@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2eb6e107_33553f11",
+        "filename": "rbh-fsevents/rbh-fsevents.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-05-28T08:03:31Z",
+      "side": 0,
+      "message": "major: this error message is more explicit than lustre-MDT0000: uri path not supported. Why change it?",
+      "range": {
+        "startLine": 165,
+        "startChar": 33,
+        "endLine": 165,
+        "endChar": 60
+      },
+      "revId": "69fa0089c4d18ec9b3165e78dad27ddba91b19a6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
