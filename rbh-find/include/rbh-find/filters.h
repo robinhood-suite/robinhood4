@@ -114,6 +114,18 @@ struct rbh_filter *
 filetype2filter(const char *filetype);
 
 /**
+ * Build a filter for predicate corresponding to a size
+ *
+ * @param size      a string representing a size
+ *
+ * @return          a pointer to a newly allocated struct rbh_filter
+ *
+ * Exit on error
+ */
+struct rbh_filter *
+size2filter(const char *size);
+
+/**
  * Build a filter for the -size predicate
  *
  * @param filesize  a string representing a size
