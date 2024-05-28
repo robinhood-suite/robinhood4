@@ -39,4 +39,32 @@ rbh_config_initialize(const char *config_file);
 void
 rbh_config_reset(struct rbh_config *config);
 
+/**
+ * Search a key in the configuration file and return the event associated to the
+ * value of that key.
+ *
+ * Should be called after a call to `rbh_config_initialize` or
+ * `rbh_config_reset`.
+ *
+ * This call can search keys in submaps or sequences, by calling it with a key
+ * `a/b/c`, where `a` is a map/sequence containing `b` which is another
+ * map/sequence containing the key `c`.
+ *
+ * This function will error out the program if it fails parsing events.
+ *
+ * @param config        the configuration in which to search the key
+ * @param key           the key to search, can be of the form `a/b` to search
+ *                      a subkey
+ * @param event         the event corresponding to the key, NULL if the key was
+ *                      not found
+ *
+ * @return              a non-zero error code if scalar parsing of the key
+ *                      failed or an unknown event was found in the
+ *                      configuration, and errno is set
+ *                      0 otherwise
+ */
+int
+rbh_config_search(struct rbh_config *config, const char *key,
+                  yaml_event_t *event);
+
 #endif
