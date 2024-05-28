@@ -95,4 +95,14 @@ expired2filter();
 struct rbh_filter *
 expired_at2filter(const char *expired);
 
+/**
+ * Build a filter for the -pool predicate
+ *
+ * @param pool         a string representing a pool name (regex is allowed)
+ *
+ * @return             a pointer to a newly allocated struct rbh_filter
+ */
+struct rbh_filter *
+pool2filter(const char *pool);
+
 #endif
