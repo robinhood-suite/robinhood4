@@ -56,6 +56,10 @@ lustre_predicate_or_action(const char *string)
             if (!strcmp(&string[2], "st"))
                 return CLT_PREDICATE;
             break;
+        case 'p':
+            if (!strcmp(&string[2], "ool"))
+                return CLT_PREDICATE;
+            break;
         }
         break;
     }
@@ -90,6 +94,9 @@ lustre_parse_predicate(struct find_context *ctx, int *arg_idx)
         break;
     case LPRED_OST_INDEX:
         filter = ost_index2filter(ctx->argv[++i]);
+        break;
+    case LPRED_POOL:
+        filter = pool2filter(ctx->argv[++i]);
         break;
     default:
         filter = find_parse_predicate(ctx, &i);

@@ -46,4 +46,14 @@ fid2filter(const char *fid);
 struct rbh_filter *
 ost_index2filter(const char *ost_index);
 
+/**
+ * Build a filter for the -pool predicate
+ *
+ * @param pool         a string representing a pool name (regex is allowed)
+ *
+ * @return             a pointer to a newly allocated struct rbh_filter
+ */
+struct rbh_filter *
+pool2filter(const char *pool);
+
 #endif

@@ -34,6 +34,10 @@ str2lustre_predicate(const char *string)
         if (strcmp(&string[2], "st") == 0)
             return LPRED_OST_INDEX;
         break;
+    case 'p':
+        if (strcmp(&string[2], "ool") == 0)
+            return LPRED_POOL;
+        break;
     }
 
     return str2predicate(string);
@@ -43,6 +47,7 @@ static const char *__lustre_predicate2str[] = {
     [LPRED_FID - LPRED_MIN]  = "fid",
     [LPRED_HSM_STATE - LPRED_MIN]  = "hsm-state",
     [LPRED_OST_INDEX - LPRED_MIN]  = "ost",
+    [LPRED_POOL - LPRED_MIN]  = "pool",
 };
 
 const char *

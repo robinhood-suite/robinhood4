@@ -29,6 +29,8 @@ static const struct rbh_filter_field predicate2filter_field[] = {
                                      .xattr = "hsm_state"},
     [LPRED_OST_INDEX - LPRED_MIN] = {.fsentry = RBH_FP_INODE_XATTRS,
                                      .xattr = "ost"},
+    [LPRED_POOL - LPRED_MIN] =      {.fsentry = RBH_FP_INODE_XATTRS,
+                                     .xattr = "pool"},
 };
 
 static enum hsm_states
@@ -224,4 +226,11 @@ ost_index2filter(const char *ost_index)
                       "ost_index2filter");
 
     return filter;
+}
+
+struct rbh_filter *
+pool2filter(const char *pool)
+{
+    return shell_regex2filter(&predicate2filter_field[LPRED_POOL - LPRED_MIN],
+                              pool, 0);
 }
