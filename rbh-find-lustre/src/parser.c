@@ -40,6 +40,10 @@ str2lustre_predicate(const char *string)
         if (strcmp(&string[2], "sm-state") == 0)
             return LPRED_HSM_STATE;
         break;
+    case 'i':
+        if (strcmp(&string[2], "pool") == 0)
+            return LPRED_IPOOL;
+        break;
     case 'l':
         if (strcmp(&string[2], "ayout-pattern") == 0)
             return LPRED_LAYOUT_PATTERN;
@@ -69,9 +73,10 @@ static const char *__lustre_predicate2str[] = {
     [LOCAL(LPRED_EXPIRED_AT)]     = "expired-at",
     [LOCAL(LPRED_FID)]            = "fid",
     [LOCAL(LPRED_HSM_STATE)]      = "hsm-state",
+    [LOCAL(LPRED_IPOOL)]          = "ipool",
     [LOCAL(LPRED_OST_INDEX)]      = "ost",
     [LOCAL(LPRED_LAYOUT_PATTERN)] = "layout-pattern",
-    [LOCAL(LPRED_POOL)]  = "pool",
+    [LOCAL(LPRED_POOL)]           = "pool",
     [LOCAL(LPRED_STRIPE_COUNT)]   = "stripe-count",
     [LOCAL(LPRED_STRIPE_SIZE)]    = "stripe-size",
 };
