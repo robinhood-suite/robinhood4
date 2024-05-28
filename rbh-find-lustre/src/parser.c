@@ -48,6 +48,10 @@ str2lustre_predicate(const char *string)
         if (strcmp(&string[2], "st") == 0)
             return LPRED_OST_INDEX;
         break;
+    case 'p':
+        if (strcmp(&string[2], "ool") == 0)
+            return LPRED_POOL;
+        break;
     case 's':
         if (strcmp(&string[2], "tripe-count") == 0)
             return LPRED_STRIPE_COUNT;
@@ -67,6 +71,7 @@ static const char *__lustre_predicate2str[] = {
     [LOCAL(LPRED_HSM_STATE)]      = "hsm-state",
     [LOCAL(LPRED_OST_INDEX)]      = "ost",
     [LOCAL(LPRED_LAYOUT_PATTERN)] = "layout-pattern",
+    [LOCAL(LPRED_POOL)]  = "pool",
     [LOCAL(LPRED_STRIPE_COUNT)]   = "stripe-count",
     [LOCAL(LPRED_STRIPE_SIZE)]    = "stripe-size",
 };

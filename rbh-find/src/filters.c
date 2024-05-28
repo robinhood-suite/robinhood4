@@ -52,18 +52,25 @@ static const struct rbh_filter_field predicate2filter_field[] = {
 };
 
 struct rbh_filter *
-shell_regex2filter(enum predicate predicate, const char *shell_regex,
-                   unsigned int regex_options)
+shell_regex2filter(const struct rbh_filter_field *field,
+                   const char *shell_regex, unsigned int regex_options)
 {
     struct rbh_filter *filter;
 
-    filter = rbh_filter_compare_regex_new(RBH_FOP_REGEX,
-                                          &predicate2filter_field[predicate],
-                                          shell_regex, regex_options);
+    filter = rbh_filter_compare_regex_new(RBH_FOP_REGEX, field, shell_regex,
+                                          regex_options);
     if (filter == NULL)
         error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__ - 2,
                       "building a regex filter for %s", shell_regex);
     return filter;
+}
+
+struct rbh_filter *
+regex2filter(enum predicate predicate, const char *regex,
+             unsigned int regex_options)
+{
+    return shell_regex2filter(&predicate2filter_field[predicate], regex,
+                              regex_options);
 }
 
 static struct rbh_filter *
