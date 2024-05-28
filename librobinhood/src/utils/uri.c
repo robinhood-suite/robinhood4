@@ -49,8 +49,11 @@ backend_new(const char *type, const char *fsname)
 {
     const struct rbh_backend_plugin *plugin = backend_plugin_import(type);
     struct rbh_backend *backend;
+    struct rbh_config *config;
 
-    backend = rbh_backend_plugin_new(plugin, fsname);
+    config = get_rbh_config();
+
+    backend = rbh_backend_plugin_new(plugin, fsname, config);
     if (backend == NULL)
         error(EXIT_FAILURE, errno, "rbh_backend_plugin_new");
 

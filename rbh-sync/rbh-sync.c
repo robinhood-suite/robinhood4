@@ -488,7 +488,7 @@ list_capabilities(char *uri)
 
     plugin = rbh_backend_plugin_import(uri);
     if (plugin != NULL) {
-        backend = rbh_backend_plugin_new(plugin, "none");
+        backend = rbh_backend_plugin_new(plugin, "none", NULL);
     } else {
         backend = rbh_backend_from_uri(uri);
         if (backend == NULL)
@@ -908,12 +908,12 @@ main(int argc, char *argv[])
             .val = 'l',
         },
         {
-            .name = "one",
-            .val = 'o',
-        },
-        {
             .name = "no-skip",
             .val = 'n',
+        },
+        {
+            .name = "one",
+            .val = 'o',
         },
         {}
     };
@@ -924,7 +924,8 @@ main(int argc, char *argv[])
     char c;
 
     /* Parse the command line */
-    while ((c = getopt_long(argc, argv, "f:hl:on", LONG_OPTIONS, NULL)) != -1) {
+    while ((c = getopt_long(argc, argv, "f:hl:on", LONG_OPTIONS,
+                            NULL)) != -1) {
         switch (c) {
         case 'f':
             switch (optarg[0]) {

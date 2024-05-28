@@ -8,13 +8,19 @@
 #ifndef ROBINHOOD_CONFIG_H
 #define ROBINHOOD_CONFIG_H
 
+#include <yaml.h>
+
+struct rbh_config;
+
 /**
  * Create and initialize the config.
  *
  * Two `parse` calls are done to skip the initial YAML_STREAM_START_EVENT and
  * YAML_DOCUMENT_START_EVENT.
  *
- * @return              0 on success, non-zero code otherwise
+ * @param config_file   the path to the configuration file to use
+ *
+ * @return              0 on success, non-zero otherwise
  */
 int
 rbh_config_open(const char *config_file);
@@ -48,8 +54,8 @@ rbh_config_reset();
  *
  * @param key           the key to search, can be of the form `a/b` to search
  *                      a subkey
- * @param event         the event corresponding to the key, NULL if the key was
- *                      not found
+ * @param event         the event corresponding to the key, it's type is set to
+ *                      YAML_NO_EVENT if the key was not found
  *
  * @return              a non-zero error code if scalar parsing of the key
  *                      failed or an unknown event was found in the
@@ -57,6 +63,22 @@ rbh_config_reset();
  *                      0 otherwise
  */
 int
-rbh_config_find(const char *key, yaml_event_t **event);
+rbh_config_find(const char *key, yaml_event_t *event);
+
+/**
+ * Return the local config.
+ *
+ * @return              the local config
+ */
+struct rbh_config *
+get_rbh_config();
+
+/**
+ * Set the local config.
+ *
+ * @param config        the config to set
+ */
+void
+set_rbh_config(struct rbh_config *config);
 
 #endif

@@ -20,6 +20,7 @@
 #define ROBINHOOD_UTILS_H
 
 #include "robinhood/backend.h"
+#include "robinhood/config.h"
 
 /**
  * Create a backend from a URI string
