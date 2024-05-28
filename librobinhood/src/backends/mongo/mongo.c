@@ -1413,7 +1413,8 @@ mongo_backend_init(struct mongo_backend *mongo, const char *fsname)
 }
 
 struct rbh_backend *
-rbh_mongo_backend_new(const char *fsname)
+rbh_mongo_backend_new(const char *fsname,
+                      __attribute__((unused)) struct rbh_config *config)
 {
     struct mongo_backend *mongo;
 
