@@ -15,6 +15,7 @@ enum lustre_predicate {
 
     LPRED_FID = LPRED_MIN,
     LPRED_HSM_STATE,
+    LPRED_IPOOL,
     LPRED_OST_INDEX,
     LPRED_POOL,
 

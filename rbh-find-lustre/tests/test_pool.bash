@@ -32,6 +32,8 @@ test_pool()
         difflines
     rbh_lfind "rbh:mongo:$testdb" -pool test_pool | sort |
         difflines
+    rbh_lfind "rbh:mongo:$testdb" -pool TEST_POOL1 | sort |
+        difflines
     rbh_lfind "rbh:mongo:$testdb" -pool test_pool1 | sort |
         difflines "/$test_pool"
     rbh_lfind "rbh:mongo:$testdb" -pool test_pool2 | sort |
@@ -40,11 +42,35 @@ test_pool()
         difflines "/$test_pool"
 }
 
+test_ipool()
+{
+    local file="pool_file"
+
+    lfs setstripe -E 1M -p "test_pool1" -E 2G -p ""  -E -1 -p "test_pool2" \
+        "$file"
+    truncate -s 2M "$file"
+
+    rbh-sync "rbh:lustre:." "rbh:mongo:$testdb"
+
+    rbh_lfind "rbh:mongo:$testdb" -ipool blob | sort |
+        difflines
+    rbh_lfind "rbh:mongo:$testdb" -ipool test_pool | sort |
+        difflines
+    rbh_lfind "rbh:mongo:$testdb" -ipool TEST_POOL1 | sort |
+        difflines "/$test_pool"
+    rbh_lfind "rbh:mongo:$testdb" -ipool test_pool1 | sort |
+        difflines "/$test_pool"
+    rbh_lfind "rbh:mongo:$testdb" -ipool tEsT_pOoL2 | sort |
+        difflines "/$test_pool"
+    rbh_lfind "rbh:mongo:$testdb" -ipool TEST_* | sort |
+        difflines "/$test_pool"
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
-declare -a tests=(test_pool)
+declare -a tests=(test_pool test_i_pool)
 
 LUSTRE_DIR=/mnt/lustre/
 cd "$LUSTRE_DIR"
