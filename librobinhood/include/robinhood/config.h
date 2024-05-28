@@ -36,4 +36,27 @@ rbh_config_free();
 int
 rbh_config_reset();
 
+/**
+ * Search a key in the configuration file and return the event associated to the
+ * value of that key.
+ *
+ * Must be called after a call to `rbh_config_open` or `rbh_config_reset`.
+ *
+ * This call can search keys in submaps or sequences, by calling it with a key
+ * `a/b/c`, where `a` is a map containing `b` which is another
+ * map containing the key `c`.
+ *
+ * @param key           the key to search, can be of the form `a/b` to search
+ *                      a subkey
+ * @param event         the event corresponding to the key, NULL if the key was
+ *                      not found
+ *
+ * @return              a non-zero error code if scalar parsing of the key
+ *                      failed or an unknown event was found in the
+ *                      configuration, and errno is set
+ *                      0 otherwise
+ */
+int
+rbh_config_find(const char *key, yaml_event_t **event);
+
 #endif
