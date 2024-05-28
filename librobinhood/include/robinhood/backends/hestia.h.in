@@ -9,6 +9,7 @@
 #define ROBINHOOD_HESTIA_BACKEND_H
 
 #include "robinhood/backend.h"
+#include "robinhood/config.h"
 
 #define RBH_HESTIA_BACKEND_NAME "hestia"
 
@@ -23,6 +24,7 @@
  * Create a hestia backend
  *
  * @param path      a path to the root fsentry (unused)
+ * @param config    the config to use in the new backend (unused)
  *
  * @return          a pointer to a newly allocated hestia backend on success,
  *                  NULL on error and errno is set appropriately
@@ -30,7 +32,8 @@
  * @error ENOMEM    there was not enough memory available
  */
 struct rbh_backend *
-rbh_hestia_backend_new(__attribute__((unused)) const char *path);
+rbh_hestia_backend_new(__attribute__((unused)) const char *path,
+                       __attribute__((unused)) struct rbh_config *config);
 
 /**
  * Release the memory associated with the plugin

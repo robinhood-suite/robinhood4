@@ -246,18 +246,24 @@ next_line:
 }
 
 int
-rbh_config_find(const char *_key, yaml_event_t **event)
+rbh_config_find(const char *_key, yaml_event_t *event)
 {
     enum key_parse_result result;
     char *subkey;
     char *key;
 
-    *event = NULL;
+    event->type = YAML_NO_EVENT;
 
     if (_key == NULL) {
         errno = EINVAL;
         return 1;
     }
+
+    /* The configuration file wasn't opened, so consider there is no
+     * configuration file to use, and let the user decide what to do.
+     */
+    if (config == NULL)
+        return 0;
 
     key = strdup(_key);
     if (key == NULL)
@@ -282,10 +288,22 @@ rbh_config_find(const char *_key, yaml_event_t **event)
 
     free(key);
 
-    if (!yaml_parser_parse(&config->parser, *event)) {
+    if (!yaml_parser_parse(&config->parser, event)) {
         fprintf(stderr, "Failed to parse event in rbh_config_find\n");
         return 1;
     }
 
     return 0;
+}
+
+struct rbh_config *
+get_rbh_config()
+{
+    return config;
+}
+
+void
+load_rbh_config(struct rbh_config *new_config)
+{
+    config = new_config;
 }
