@@ -1120,7 +1120,8 @@ static const struct rbh_backend_operations LUSTRE_BACKEND_OPS = {
 };
 
 struct rbh_backend *
-rbh_lustre_backend_new(const char *path)
+rbh_lustre_backend_new(const char *path,
+                       __attribute__((unused)) struct rbh_config *config)
 {
     struct posix_backend *lustre;
 

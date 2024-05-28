@@ -908,12 +908,12 @@ main(int argc, char *argv[])
             .val = 'l',
         },
         {
-            .name = "one",
-            .val = 'o',
-        },
-        {
             .name = "no-skip",
             .val = 'n',
+        },
+        {
+            .name = "one",
+            .val = 'o',
         },
         {}
     };
@@ -924,7 +924,8 @@ main(int argc, char *argv[])
     char c;
 
     /* Parse the command line */
-    while ((c = getopt_long(argc, argv, "f:hl:on", LONG_OPTIONS, NULL)) != -1) {
+    while ((c = getopt_long(argc, argv, "f:hl:on", LONG_OPTIONS,
+                            NULL)) != -1) {
         switch (c) {
         case 'f':
             switch (optarg[0]) {
@@ -967,9 +968,9 @@ main(int argc, char *argv[])
         error(EX_USAGE, 0, "unexpected argument: %s", argv[2]);
 
     /* Parse SOURCE */
-    from = rbh_backend_from_uri(argv[0]);
+    from = rbh_backend_from_uri(argv[0], NULL);
     /* Parse DEST */
-    to = rbh_backend_from_uri(argv[1]);
+    to = rbh_backend_from_uri(argv[1], NULL);
 
     sync(&projection);
 

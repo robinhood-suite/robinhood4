@@ -212,7 +212,7 @@ sink_from_uri(const char *uri)
 
     if (strcmp(raw_uri->scheme, "rbh") == 0) {
         free(raw_uri);
-        return (void *) sink_from_backend(rbh_backend_from_uri(uri));
+        return (void *) sink_from_backend(rbh_backend_from_uri(uri, NULL));
     }
 
     free(raw_uri);

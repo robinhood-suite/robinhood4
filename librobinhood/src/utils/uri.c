@@ -45,12 +45,12 @@ backend_plugin_import(const char *name)
 }
 
 static struct rbh_backend *
-backend_new(const char *type, const char *fsname)
+backend_new(const char *type, const char *fsname, struct rbh_config *config)
 {
     const struct rbh_backend_plugin *plugin = backend_plugin_import(type);
     struct rbh_backend *backend;
 
-    backend = rbh_backend_plugin_new(plugin, fsname);
+    backend = rbh_backend_plugin_new(plugin, fsname, config);
     if (backend == NULL)
         error(EXIT_FAILURE, errno, "rbh_backend_plugin_new");
 
@@ -110,9 +110,10 @@ backend_branch_from_path(struct rbh_backend *backend, const char *path)
 }
 
 static struct rbh_backend *
-backend_from_uri(const struct rbh_uri *uri)
+backend_from_uri(const struct rbh_uri *uri, struct rbh_config *config)
 {
-    struct rbh_backend *backend = backend_new(uri->backend, uri->fsname);
+    struct rbh_backend *backend = backend_new(uri->backend, uri->fsname,
+                                              config);
     struct rbh_backend *branch = NULL; /* gcc: unitialized variable */
     int save_errno;
 
@@ -144,7 +145,7 @@ backend_from_uri(const struct rbh_uri *uri)
 }
 
 struct rbh_backend *
-rbh_backend_from_uri(const char *string)
+rbh_backend_from_uri(const char *string, struct rbh_config *config)
 {
     struct rbh_backend *backend;
     struct rbh_raw_uri *raw_uri;
@@ -159,7 +160,7 @@ rbh_backend_from_uri(const char *string)
         error(EXIT_FAILURE, errno, "Cannot detect given backend");
     free(raw_uri);
 
-    backend = backend_from_uri(uri);
+    backend = backend_from_uri(uri, config);
     free(uri);
     return backend;
 }

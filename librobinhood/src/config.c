@@ -145,7 +145,6 @@ rbh_config_search(struct rbh_config *config, const char *_key,
                   yaml_event_t *event)
 {
     enum key_parse_result result;
-    yaml_event_t *event;
     char *search;
     char *key;
 

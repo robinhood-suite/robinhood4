@@ -9,6 +9,7 @@
 #define ROBINHOOD_LUSTRE_BACKEND_H
 
 #include "robinhood/backend.h"
+#include "robinhood/config.h"
 
 #define RBH_LUSTRE_BACKEND_NAME "lustre"
 
@@ -30,7 +31,7 @@
  * @error ENOMEM    there was not enough memory available
  */
 struct rbh_backend *
-rbh_lustre_backend_new(const char *path);
+rbh_lustre_backend_new(const char *path, struct rbh_config *config);
 
 /**
  * Release the memory associated with the plugin

@@ -20,6 +20,7 @@
 #define ROBINHOOD_UTILS_H
 
 #include "robinhood/backend.h"
+#include "robinhood/config.h"
 
 /**
  * Create a backend from a URI string
@@ -30,6 +31,6 @@
  *              exits on error.
  */
 struct rbh_backend *
-rbh_backend_from_uri(const char *uri);
+rbh_backend_from_uri(const char *uri, struct rbh_config *config);
 
 #endif

@@ -1196,7 +1196,8 @@ rtrim(char *string, char c)
 }
 
 struct rbh_backend *
-rbh_posix_backend_new(const char *path)
+rbh_posix_backend_new(const char *path,
+                      __attribute__((unused)) struct rbh_config *config)
 {
     struct posix_backend *posix;
 
