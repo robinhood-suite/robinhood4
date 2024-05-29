@@ -81,6 +81,10 @@ lustre_predicate_or_action(const char *string)
     switch (string[0]) {
     case '-':
         switch (string[1]) {
+        case 'c':
+            if (!strcmp(&string[2], "omp-start"))
+                return CLT_PREDICATE;
+            break;
         case 'e':
             if (strncmp(&string[2], "xpired", strlen("xpired")) != 0)
                 break;
@@ -153,6 +157,9 @@ lustre_parse_predicate(struct find_context *ctx, int *arg_idx)
      * precise and meaningul error messages.
      */
     switch (predicate) {
+    case LPRED_COMP_START:
+        filter = comp_start2filter(ctx->argv[++i]);
+        break;
     case LPRED_EXPIRED:
         filter = expired2filter();
         break;

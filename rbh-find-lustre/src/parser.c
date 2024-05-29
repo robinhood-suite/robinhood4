@@ -22,6 +22,10 @@ str2lustre_predicate(const char *string)
     assert(string[0] == '-');
 
     switch (string[1]) {
+    case 'c':
+        if (strcmp(&string[2], "omp-start") == 0)
+            return LPRED_COMP_START;
+        break;
     case 'e':
         if (strncmp(&string[2], "xpired", strlen("xpired")) != 0)
             break;
@@ -69,6 +73,7 @@ str2lustre_predicate(const char *string)
 
 #define LOCAL(X) (X) - LPRED_MIN
 static const char *__lustre_predicate2str[] = {
+    [LOCAL(LPRED_COMP_START)]     = "comp-start",
     [LOCAL(LPRED_EXPIRED)]        = "expired",
     [LOCAL(LPRED_EXPIRED_AT)]     = "expired-at",
     [LOCAL(LPRED_FID)]            = "fid",
