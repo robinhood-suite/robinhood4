@@ -433,7 +433,7 @@ main(int argc, char *argv[])
         case 'e':
             enrich_builder = enrich_iter_builder_from_uri(optarg);
             if (enrich_builder == NULL)
-                error(EXIT_FAILURE, errno, "enrich_new");
+                error(EXIT_FAILURE, errno, "enrich_iter_builder_from_uri");
             break;
         case 'h':
             usage();
