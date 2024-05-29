@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d186df85_96b49076",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-05-29T14:08:41Z",
+      "side": 1,
+      "message": "I don\u0027t have anything against this patch. But I kind of understand Guillaume\u0027s thoughts: between the test\u0027s name (acceptance) and the log \"Dump to file content differs from dump to stdout\", that may mean we want to have the exact same output..",
+      "revId": "be45b3d8b8bd8fe342ed06d8edb3951434d7a920",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
