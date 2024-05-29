@@ -13,6 +13,7 @@ librbh_mpi_file = library(
     'rbh-mpi-file',
     sources: [
         'mpi_file.c',
+        'filter.c',
         '../iter_mpi/iter_mpi.c',
         'plugin.c',
     ],
