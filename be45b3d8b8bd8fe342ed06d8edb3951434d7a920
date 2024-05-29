@@ -16,6 +16,24 @@
       "message": "I don\u0027t have anything against this patch. But I kind of understand Guillaume\u0027s thoughts: between the test\u0027s name (acceptance) and the log \"Dump to file content differs from dump to stdout\", that may mean we want to have the exact same output..",
       "revId": "be45b3d8b8bd8fe342ed06d8edb3951434d7a920",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "47429cfd_ec12d035",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-05-29T14:56:22Z",
+      "side": 1,
+      "message": "I don\u0027t understand your issues, I changed the test name to \"test_dump\", and the log is you describe happens if the output of the rbh-fsevents dump to stdout is different to the output of the rbh-fsevents dump to a file.\n\nBoth of these should be the exact same yes. But they should be different from the stuff outputted by `lfs changelog`. I\u0027m not checking the rbh-fsevents dump and lfs changelog outputs are the same, I\u0027m just checking all the events found in lfs changelog are also present rbh-fsevents dump.",
+      "parentUuid": "d186df85_96b49076",
+      "revId": "be45b3d8b8bd8fe342ed06d8edb3951434d7a920",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
