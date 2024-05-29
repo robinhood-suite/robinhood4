@@ -31,6 +31,8 @@
 #include "filters.h"
 
 static const struct rbh_filter_field predicate2filter_field[] = {
+    [LPRED_COMP_START - LPRED_MIN]     = {.fsentry = RBH_FP_INODE_XATTRS,
+                                          .xattr = "begin"},
     [LPRED_FID - LPRED_MIN]            = {.fsentry = RBH_FP_INODE_XATTRS,
                                           .xattr = "fid"},
     [LPRED_HSM_STATE - LPRED_MIN]      = {.fsentry = RBH_FP_INODE_XATTRS,
@@ -504,7 +506,7 @@ expired2filter()
 
     filter_expiration_date = rbh_filter_compare_uint64_new(
         RBH_FOP_LOWER_OR_EQUAL,
-        &predicate2filter_field[LPRED_EXPIRED - LPRED_MIN],
+        get_filter_field(LPRED_EXPIRED),
         now);
     if (!filter_expiration_date)
         error(EXIT_FAILURE, errno, "rbh_filter_compare_uint64_new");
@@ -556,13 +558,18 @@ expired_at2filter(const char *expired)
 struct rbh_filter *
 pool2filter(const char *pool)
 {
-    return shell_regex2filter(&predicate2filter_field[LPRED_POOL - LPRED_MIN],
-                              pool, 0);
+    return shell_regex2filter(get_filter_field(LPRED_POOL), pool, 0);
 }
 
 struct rbh_filter *
 ipool2filter(const char *pool)
 {
-    return shell_regex2filter(&predicate2filter_field[LPRED_POOL - LPRED_MIN],
-                              pool, RBH_RO_CASE_INSENSITIVE);
+    return shell_regex2filter(get_filter_field(LPRED_POOL), pool,
+                              RBH_RO_CASE_INSENSITIVE);
+}
+
+struct rbh_filter *
+comp_start2filter(const char *start)
+{
+    return size2filter(get_filter_field(LPRED_COMP_START), start);
 }
