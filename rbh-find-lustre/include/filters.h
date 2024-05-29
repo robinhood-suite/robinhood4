@@ -116,4 +116,14 @@ pool2filter(const char *pool);
 struct rbh_filter *
 ipool2filter(const char *pool);
 
+/**
+ * Build a filter for the -comp-start predicate
+ *
+ * @param pool         a string representing an integer
+ *
+ * @return             a pointer to a newly allocated struct rbh_filter
+ */
+struct rbh_filter *
+comp_start2filter(const char *start);
+
 #endif
