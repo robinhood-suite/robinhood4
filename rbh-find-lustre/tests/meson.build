@@ -6,7 +6,7 @@
 
 integration_tests = ['test_compat', 'test_hsm_state', 'test_fid',
                      'test_ost_index', 'test_expiration', 'test_printf',
-                     'test_pool']
+                     'test_pool', 'test_comp_start']
 
 foreach t: integration_tests
     e = find_program(t + '.bash')
