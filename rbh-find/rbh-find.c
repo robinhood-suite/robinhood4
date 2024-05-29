@@ -13,6 +13,7 @@
 #include <dlfcn.h>
 #include <errno.h>
 #include <error.h>
+#include <getopt.h>
 #include <stdbool.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -35,17 +36,113 @@ on_find_exit(void)
     ctx_finish(&ctx);
 }
 
+static int
+usage(void)
+{
+    const char *message =
+        "usage: %s [-h|--help] SOURCE [PREDICATES] [ACTION]\n"
+        "\n"
+        "Query SOURCE's entries according to PREDICATE and do ACTION on each.\n"
+        "\n"
+        "Most of the predicates and actions are similar to the ones of GNU's find,\n"
+        "so we will only list the differences here.\n"
+        "\n"
+        "Positional arguments:\n"
+        "    SOURCE  a robinhood URI\n"
+        "\n"
+        "Optional arguments:\n"
+        "    -h,--help             show this message and exit\n"
+        "\n"
+        "Predicate arguments:\n"
+        "    -[acm]min [+-]TIME   filter entries based on their access,\n"
+        "                         change or modify time. TIME should represent\n"
+        "                         minutes, and the filtering will follow GNU's\n"
+        "                         find logic for '-[acm]time'\n"
+        "    -size [+-]SIZE       filter entries based of their size. Works like\n"
+        "                         GNU find's '-size' predicate except with the\n"
+        "                         addition of the 'T' modifier for terabytes\n"
+        "    -perm PERMISSIONS    filter entries based on their permissions,\n"
+        "                         the '+' prefix is not supported\n"
+        "\n"
+        "Action arguments:\n"
+        "    -count               count the number of entries that match the\n"
+        "                         requested predicates\n"
+        "    -[r]sort FIELD       sort or reverse sort entries based of the FIELD\n"
+        "                         requested\n"
+        "\n"
+        "A robinhood URI is built as follows:\n"
+        "    "RBH_SCHEME":BACKEND:FSNAME[#{PATH|ID}]\n"
+        "Where:\n"
+        "    BACKEND  is the name of a backend\n"
+        "    FSNAME   the name of the backend instance (a path for a\n"
+        "             filesystem, a database name for a database)\n"
+        "    PATH/ID  is the path/id of an fsentry managed by BACKEND:FSNAME\n"
+        "             (ID must be enclosed in square brackets '[ID]' to distinguish it\n"
+        "             from a path)\n"
+        "\n"
+        "Predicates not implemented yet:\n"
+        "    -[acm]newer    -newer\n"
+        "    -empty\n"
+        "    -false         -true\n"
+        "    -fstype        -xtype\n"
+        "    -gid           -group       -nogroup\n"
+        "    -uid           -user        -nouser\n"
+        "    -readable      -writable    -executable\n"
+        "    -iwholename    -ilname      -wholename     -lname\n"
+        "    -inum\n"
+        "    -iregex        -regex\n"
+        "    -links\n"
+        "    -used\n"
+        "    -context\n"
+        "\n"
+        "Actions not implemented yet:\n"
+        "    -prune\n"
+        "    -exec COMMANDE {} + -ok COMMANDE ;\n"
+        "    -execdir COMMANDE ; -execdir COMMANDE {} + -okdir COMMANDE ;\n";
+
+    return printf(message, program_invocation_short_name);
+}
+
+static int
+check_command_options(int argc, char *argv[])
+{
+    for (int i = 0; i < argc; i++) {
+        if (*argv[i] != '-')
+            return i;
+
+        if (strcmp(argv[i], "-h") != 0 &&
+            strcmp(argv[i], "--help") != 0)
+            error(EX_USAGE, EINVAL, "invalid option found '%s'", argv[i]);
+
+        usage();
+        exit(0);
+    }
+
+    return 0;
+}
+
 int
 main(int _argc, char *_argv[])
 {
     struct rbh_filter_sort *sorts = NULL;
     struct rbh_filter *filter;
     size_t sorts_count = 0;
+    int checked_options;
+    char **argv;
     int index;
+    int argc;
 
-    /* Discard the program's name */
-    ctx.argc = _argc - 1;
-    ctx.argv = &_argv[1];
+    if (_argc < 2)
+        error(EX_USAGE, EINVAL,
+              "invalid number of arguments, expected at least 1");
+
+    argc = _argc - 1;
+    argv = &_argv[1];
+
+    checked_options = check_command_options(argc, argv);
+
+    ctx.argc = argc - checked_options;
+    ctx.argv = &argv[checked_options];
 
     ctx.pre_action_callback = &find_pre_action;
     ctx.exec_action_callback = &find_exec_action;
