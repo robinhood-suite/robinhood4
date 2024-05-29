@@ -35,13 +35,76 @@ on_find_exit(void)
     ctx_finish(&ctx);
 }
 
+static int
+usage(void)
+{
+    const char *message =
+        "usage: %s SOURCE [-h] [PREDICATES] [ACTION]\n"
+        "\n"
+        "Query SOURCE's entries according to PREDICATE and do ACTION on each.\n"
+        "\n"
+        "Most of the predicates and actions are similar to the ones of GNU's find,\n"
+        "so we will only list the differences here.\n"
+        "\n"
+        "Positional arguments:\n"
+        "    SOURCE  a robinhood URI\n"
+        "\n"
+        "Optional arguments:\n"
+        "    -h,--help             show this message and exit\n"
+        "\n"
+        "Predicate arguments:\n"
+        "    -[acm]min [+-]TIME   filter entries based on their access,\n"
+        "                         change or modify time. TIME should represent\n"
+        "                         minutes, and the filtering will follow GNU's\n"
+        "                         find logic for '-[acm]time'\n"
+        "    -size [+-]SIZE       filter entries based of their size. Works like\n"
+        "                         GNU find's '-size' predicate except with the\n"
+        "                         addition of the 'T' modifier for terabytes\n"
+        "    -perm PERMISSIONS    filter entries based of their permissions,\n"
+        "                         except '+' is an error\n"
+        "\n"
+        "Action arguments:\n"
+        "    -count               count the number of entries that match the\n"
+        "                         requested filters\n"
+        "    -[r]sort FIELD       sort or reverse sort entries based of the FIELD\n"
+        "                         requested"
+        "\n"
+        "A robinhood URI is built as follows:\n"
+        "    "RBH_SCHEME":BACKEND:FSNAME[#{PATH|ID}]\n"
+        "Where:\n"
+        "    BACKEND  is the name of a backend\n"
+        "    FSNAME   is the name of a filesystem for BACKEND\n"
+        "    PATH/ID  is the path/id of an fsentry managed by BACKEND:FSNAME\n"
+        "             (ID must be enclosed in square brackets '[ID]' to distinguish it\n"
+        "             from a path)\n";
+
+    return printf(message, program_invocation_short_name);
+}
+
 int
 main(int _argc, char *_argv[])
 {
+    const struct option LONG_OPTIONS[] = {
+        {
+            .name = "help",
+            .val = 'h',
+        },
+        {}
+    };
+    struct rbh_filter_projection projection = {
     struct rbh_filter_sort *sorts = NULL;
     struct rbh_filter *filter;
     size_t sorts_count = 0;
     int index;
+
+    /* Parse the command line */
+    while ((c = getopt_long(argc, argv, "h", LONG_OPTIONS, NULL)) != -1) {
+        switch (c) {
+        case 'h':
+            usage();
+            return 0;
+        }
+    }
 
     /* Discard the program's name */
     ctx.argc = _argc - 1;
