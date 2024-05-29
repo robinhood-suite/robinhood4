@@ -231,13 +231,19 @@ lustre_enricher_iter_next(void *iterator)
 {
     struct enricher *enricher = iterator;
     const void *fsevent;
+    int rc;
 
+skip:
     fsevent = rbh_iter_next(enricher->fsevents);
     if (fsevent == NULL)
         return NULL;
 
-    if (enrich(enricher, fsevent))
-        return NULL;
+    rc = enrich(enricher, fsevent);
+    if (rc) {
+        fprintf(stderr, "Failed to enrich entry '%s' (%s (%d)), skipping it\n",
+                fsevent->link.name, strerror(errno), errno);
+        goto skip;
+    }
 
     return &enricher->fsevent;
 }
