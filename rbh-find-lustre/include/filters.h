@@ -67,4 +67,14 @@ pool2filter(const char *pool);
 struct rbh_filter *
 ipool2filter(const char *pool);
 
+/**
+ * Build a filter for the -begin predicate
+ *
+ * @param pool         a string representing an integer
+ *
+ * @return             a pointer to a newly allocated struct rbh_filter
+ */
+struct rbh_filter *
+begin2filter(const char *begin);
+
 #endif

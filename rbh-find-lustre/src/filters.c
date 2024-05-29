@@ -241,3 +241,9 @@ ipool2filter(const char *pool)
     return shell_regex2filter(&predicate2filter_field[LPRED_POOL - LPRED_MIN],
                               pool, RBH_RO_CASE_INSENSITIVE);
 }
+
+struct rbh_filter *
+begin2filter(const char *begin)
+{
+    return size2filter(&predicate2filter_field[LPRED_BEGIN - LPRED_MIN], begin);
+}

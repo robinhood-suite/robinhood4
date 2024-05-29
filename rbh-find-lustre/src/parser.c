@@ -22,6 +22,10 @@ str2lustre_predicate(const char *string)
     assert(string[0] == '-');
 
     switch (string[1]) {
+    case 'b':
+        if (strcmp(&string[2], "egin") == 0)
+            return LPRED_BEGIN;
+        break;
     case 'f':
         if (strcmp(&string[2], "id") == 0)
             return LPRED_FID;
@@ -48,6 +52,7 @@ str2lustre_predicate(const char *string)
 }
 
 static const char *__lustre_predicate2str[] = {
+    [LPRED_BEGIN - LPRED_MIN]  = "begin",
     [LPRED_FID - LPRED_MIN]  = "fid",
     [LPRED_HSM_STATE - LPRED_MIN]  = "hsm-state",
     [LPRED_IPOOL - LPRED_MIN]  = "ipool",
