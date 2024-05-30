@@ -12,6 +12,7 @@
 #include <errno.h>
 
 #include "robinhood/statx.h"
+#include "mpi_file.h"
 
 static void *
 rbh_value_get(struct rbh_value *value)
@@ -129,7 +130,7 @@ static const struct mfu_pred_fn filter_field_statx2mfu_fn[] = {
     [RBH_STATX_SIZE]      = _MFU_PRED_SIZE,
 };
 
-static mfu_pred_fn __attribute__((unused))
+static mfu_pred_fn
 filter2mfu_fn(struct rbh_filter *filter)
 {
     struct rbh_filter_field field = filter->compare.field;
@@ -169,7 +170,7 @@ rbh_value_regex2regex_t(char *str, unsigned int options)
     return r;
 }
 
-static void * __attribute__((unused))
+static void *
 filter2arg(mfu_pred_times *now, struct rbh_filter *filter)
 {
     struct rbh_filter_field field = filter->compare.field;
@@ -214,4 +215,67 @@ filter2arg(mfu_pred_times *now, struct rbh_filter *filter)
         errno = ENOTSUP;
         return NULL;
     }
+}
+
+static bool
+convert_comparison_filter(mfu_pred *pred, mfu_pred_times *now,
+                          struct rbh_filter *filter)
+{
+    mfu_pred_fn func;
+    void *arg;
+
+    func = filter2mfu_fn(filter);
+    if (func == NULL)
+        return false;
+
+    arg = filter2arg(now, filter);
+    if (arg == NULL)
+        return false;
+
+    mfu_pred_add(pred, func, arg);
+
+    return true;
+}
+
+static bool
+convert_logical_filter(mfu_pred *pred, mfu_pred_times *now,
+                       struct rbh_filter *filter)
+{
+    if (filter->op == RBH_FOP_NOT || filter->op == RBH_FOP_NOT) {
+        errno = ENOTSUP;
+        fprintf(stderr, "Invalid operator provided, should only be 'AND'");
+        return false;
+    }
+
+    for(uint32_t i = 0; i < filter->logical.count; i++) {
+        if (!convert_rbh_filter(pred, filter->logical.filters[i]))
+            return false;
+    }
+
+    return true;
+}
+
+bool
+convert_rbh_filter(mfu_pred *pred, mfu_pred_times *now,
+                   struct rbh_filter *filter)
+{
+    if (filter == NULL)
+        return true;
+
+    if (rbh_is_comparison_operator(filter->op))
+        return convert_comparison_filter(pred, now, filter);
+    return convert_logical_filter(pred, now, filter);
+}
+
+mfu_pred *
+rbh_filter2mfu_pred(struct rbh_filter *filter)
+{
+    mfu_pred *pred_head = mfu_pred_new();
+    mfu_pred_times *now = mfu_pred_now();
+    bool rc = false;
+
+    rc = convert_rbh_filter(pred_head, now, filter);
+    mfu_free(&now);
+
+    return rc ? pred_head : NULL;
 }
