@@ -20,6 +20,7 @@
 #include "robinhood/backends/iter_mpi_internal.h"
 #include "robinhood/backends/mpi_file.h"
 #include "robinhood/statx.h"
+#include "mpi_file.h"
 
 /*----------------------------------------------------------------------------*
  |                          mpi_file iterator                                 |
@@ -145,11 +146,9 @@ static const struct rbh_mut_iterator MPI_FILE_ITER = {
 };
 
 static struct rbh_mut_iterator *
-mpi_file_iterator_new(mfu_flist flist)
+mpi_file_iterator_new(mfu_flist flist, int prefix_len)
 {
     struct mpi_iterator *mpi_file_iter;
-    int prefix_len;
-    int rank;
 
     mpi_file_iter = malloc(sizeof(*mpi_file_iter));
     if (mpi_file_iter == NULL)
@@ -162,18 +161,6 @@ mpi_file_iterator_new(mfu_flist flist)
     mpi_file_iter->is_branch = false;
     mpi_file_iter->use_fd = false;
     mpi_file_iter->mpi_build_fsentry = fsentry_from_flist;
-
-    /**
-     * We need to broadcast to all ranks the length of the root in order to
-     * remove it from the path
-     */
-    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-    if (rank == 0) {
-        const char *root = mfu_flist_file_get_name(flist, 0);
-        prefix_len = strcmp(root, "/") ? strlen(root) : 0;
-    }
-
-    MPI_Bcast(&prefix_len, 1, MPI_INT, 0, MPI_COMM_WORLD);
     mpi_file_iter->prefix_len = prefix_len;
 
     return (struct rbh_mut_iterator *)mpi_file_iter;
@@ -381,11 +368,13 @@ mpi_file_backend_filter(void *backend, const struct rbh_filter *filter,
 {
     struct mpi_file_backend *mpi_file = backend;
     struct mpi_iterator *mpi_file_iter;
+    mfu_pred *pred_head;
+    const char *root;
+    int prefix_len;
+    int rank;
 
-    if (filter != NULL) {
-        errno = ENOTSUP;
+    if (rbh_filter_validate(filter))
         return NULL;
-    }
 
     if (options->skip > 0 || options->limit > 0 || options->sort.count > 0) {
         errno = ENOTSUP;
@@ -399,8 +388,30 @@ mpi_file_backend_filter(void *backend, const struct rbh_filter *filter,
         return NULL;
     }
 
+    /**
+     * We need to broadcast to all ranks the length of the root in order to
+     * remove it from the path
+     */
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+    if (rank == 0) {
+        root = mfu_flist_file_get_name(mpi_file->flist, 0);
+        prefix_len = strcmp(root, "/") ? strlen(root) : 0;
+    }
+    MPI_Bcast(&prefix_len, 1, MPI_INT, 0, MPI_COMM_WORLD);
+
+    if (filter != NULL) {
+        pred_head = rbh_filter2mfu_pred(filter, prefix_len);
+        if (pred_head == NULL)
+            return NULL;
+
+        mfu_flist flist = mfu_flist_filter_pred(mpi_file->flist, pred_head);
+        mfu_flist_free(&mpi_file->flist);
+        mfu_pred_free(&pred_head);
+        mpi_file->flist = flist;
+    }
+
     mpi_file_iter = (struct mpi_iterator *)
-                     mpi_file_iterator_new(mpi_file->flist);
+                     mpi_file_iterator_new(mpi_file->flist, prefix_len);
     if (mpi_file_iter == NULL)
         return NULL;
     mpi_file_iter->skip_error = options->skip_error;
