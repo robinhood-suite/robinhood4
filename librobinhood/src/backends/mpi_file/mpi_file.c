@@ -20,6 +20,7 @@
 #include "robinhood/backends/iter_mpi_internal.h"
 #include "robinhood/backends/mpi_file.h"
 #include "robinhood/statx.h"
+#include "mpi_file.h"
 
 /*----------------------------------------------------------------------------*
  |                          mpi_file iterator                                 |
@@ -391,11 +392,10 @@ mpi_file_backend_filter(void *backend, const struct rbh_filter *filter,
     struct mpi_file_backend *mpi_file = backend;
     struct mpi_iterator *mpi_file_iter;
     uint64_t global_size;
+    mfu_pred *pred_head;
 
-    if (filter != NULL) {
-        errno = ENOTSUP;
+    if (rbh_filter_validate(filter))
         return NULL;
-    }
 
     if (options->skip > 0 || options->limit > 0 || options->sort.count > 0) {
         errno = ENOTSUP;
@@ -408,6 +408,17 @@ mpi_file_backend_filter(void *backend, const struct rbh_filter *filter,
     if (global_size == 0) {
         errno = ENOENT;
         return NULL;
+    }
+
+    if (filter != NULL) {
+        pred_head = rbh_filter2mfu_pred(filter);
+        if (pred_head == NULL)
+            return NULL;
+
+        mfu_flist flist = mfu_flist_filter_pred(mpi_file->flist, pred_head);
+        mfu_flist_free(&mpi_file->flist);
+        mfu_pred_free(&pred_head);
+        mpi_file->flist = flist;
     }
 
     mpi_file_iter = (struct mpi_iterator *)
