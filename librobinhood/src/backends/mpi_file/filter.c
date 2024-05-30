@@ -18,6 +18,7 @@
 #include "robinhood/statx.h"
 #include "robinhood/value.h"
 #include "robinhood/filter.h"
+#include "mpi_file.h"
 
 /**
  * We have redefined mfu_pred_relative and MFU_PRED_SIZE from mpifileutils
@@ -152,7 +153,6 @@ statx2mfu_fn(const uint32_t statx)
     }
 }
 
-__attribute__((unused))
 static mfu_pred_fn
 filter2mfu_fn(const struct rbh_filter *filter)
 {
@@ -209,7 +209,6 @@ shell_pattern2map(int prefix_len, const char *pattern) {
     return map;
 }
 
-__attribute__((unused))
 static void *
 filter2arg(mfu_pred_times *now, const struct rbh_filter *filter, int prefix_len)
 {
@@ -265,4 +264,68 @@ filter2arg(mfu_pred_times *now, const struct rbh_filter *filter, int prefix_len)
         errno = ENOTSUP;
         return NULL;
     }
+}
+
+static bool
+convert_comparison_filter(mfu_pred *pred, mfu_pred_times *now, int prefix_len,
+                          const struct rbh_filter *filter)
+{
+    mfu_pred_fn func;
+    void *arg;
+
+    func = filter2mfu_fn(filter);
+    if (func == NULL)
+        return false;
+
+    arg = filter2arg(now, filter, prefix_len);
+    if (arg == NULL)
+        return false;
+
+    mfu_pred_add(pred, func, arg);
+
+    return true;
+}
+
+static bool
+convert_logical_filter(mfu_pred *pred, mfu_pred_times *now, int prefix_len,
+                       const struct rbh_filter *filter)
+{
+    if (filter->op == RBH_FOP_OR || filter->op == RBH_FOP_NOT) {
+        printf("Logical operator OR and NOT are not supported.\n");
+        errno = ENOTSUP;
+        return false;
+    }
+
+    for(uint32_t i = 0; i < filter->logical.count; i++) {
+        if (!convert_rbh_filter(pred, now, prefix_len,
+                                filter->logical.filters[i]))
+            return false;
+    }
+
+    return true;
+}
+
+bool
+convert_rbh_filter(mfu_pred *pred, mfu_pred_times *now, int prefix_len,
+                   const struct rbh_filter *filter)
+{
+    if (filter == NULL)
+        return true;
+
+    if (rbh_is_comparison_operator(filter->op))
+        return convert_comparison_filter(pred, now, prefix_len, filter);
+    return convert_logical_filter(pred, now, prefix_len, filter);
+}
+
+mfu_pred *
+rbh_filter2mfu_pred(const struct rbh_filter *filter, int prefix_len)
+{
+    mfu_pred *pred_head = mfu_pred_new();
+    mfu_pred_times *now = mfu_pred_now();
+    bool rc = false;
+
+    rc = convert_rbh_filter(pred_head, now, prefix_len, filter);
+    mfu_free(&now);
+
+    return rc ? pred_head : NULL;
 }
