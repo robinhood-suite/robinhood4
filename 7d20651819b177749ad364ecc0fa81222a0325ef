@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d3a53791_0c2b4c69",
+        "filename": "librobinhood/src/backends/iter_mpi/iter_mpi.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-05-30T08:47:32Z",
+      "side": 1,
+      "message": "It\u0027s something we have discussed with Yoann and Sebastien and we agreed on. If we use a file build with dwalk, there is no problem because we have the absolute path to the file. But if we use a file build from the update operation, we only have the relative path to the root (it\u0027s Robinhood convention). In this case, we can\u0027t open the file and use the file_handle.",
+      "parentUuid": "d8b49c11_60ac92dd",
+      "range": {
+        "startLine": 56,
+        "startChar": 20,
+        "endLine": 56,
+        "endChar": 43
+      },
+      "revId": "7d20651819b177749ad364ecc0fa81222a0325ef",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9250a161_f41cc924",
         "filename": "librobinhood/src/backends/iter_mpi/iter_mpi.c",
         "patchSetId": 2
@@ -37,6 +61,30 @@
       "writtenOn": "2024-05-24T09:45:09Z",
       "side": 1,
       "message": "minor: I find \"from_mpi\" to be a bit strange. Since this is in the mpi_iterator structure, you don\u0027t have to specify it in the name. Something like build_fsentry would be acceptable. Or mpi_build_fsentry if you want to keep mpi in the name.",
+      "range": {
+        "startLine": 164,
+        "startChar": 24,
+        "endLine": 164,
+        "endChar": 41
+      },
+      "revId": "7d20651819b177749ad364ecc0fa81222a0325ef",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "083a557c_75e47471",
+        "filename": "librobinhood/src/backends/iter_mpi/iter_mpi.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-05-30T08:47:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9250a161_f41cc924",
       "range": {
         "startLine": 164,
         "startChar": 24,
@@ -70,6 +118,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7baf96f5_ae35cc5b",
+        "filename": "librobinhood/src/backends/iter_mpi/iter_mpi.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-05-30T08:47:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5edaee05_e53b3256",
+      "range": {
+        "startLine": 353,
+        "startChar": 64,
+        "endLine": 353,
+        "endChar": 67
+      },
+      "revId": "7d20651819b177749ad364ecc0fa81222a0325ef",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4e472dc4_b269e080",
@@ -93,6 +165,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4dd61805_a1735d8e",
+        "filename": "librobinhood/src/backends/mpi_file/mpi_file.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-05-30T08:47:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4e472dc4_b269e080",
+      "range": {
+        "startLine": 65,
+        "startChar": 4,
+        "endLine": 65,
+        "endChar": 20
+      },
+      "revId": "7d20651819b177749ad364ecc0fa81222a0325ef",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "873a32e1_71f45259",
@@ -106,6 +202,30 @@
       "writtenOn": "2024-05-24T09:45:09Z",
       "side": 1,
       "message": "typo: ctime\nsuggest: I\u0027m not a huge fan of comments like this that don\u0027t add context to the code.",
+      "range": {
+        "startLine": 76,
+        "startChar": 7,
+        "endLine": 76,
+        "endChar": 12
+      },
+      "revId": "7d20651819b177749ad364ecc0fa81222a0325ef",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5a9f89a0_26650db7",
+        "filename": "librobinhood/src/backends/mpi_file/mpi_file.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-05-30T08:47:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "873a32e1_71f45259",
       "range": {
         "startLine": 76,
         "startChar": 7,
