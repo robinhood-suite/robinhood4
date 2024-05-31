@@ -48,6 +48,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "da1bedf2_d2fd8246",
+        "filename": "librobinhood/src/backends/iter_mpi/iter_mpi.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-05-31T08:18:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d3a53791_0c2b4c69",
+      "range": {
+        "startLine": 56,
+        "startChar": 20,
+        "endLine": 56,
+        "endChar": 43
+      },
+      "revId": "7d20651819b177749ad364ecc0fa81222a0325ef",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9250a161_f41cc924",
@@ -249,6 +273,30 @@
       "writtenOn": "2024-05-24T09:45:09Z",
       "side": 1,
       "message": "defect: this is not an acceptable behavior. We need to use the file_handle. Something like this would not work properly:\n\n```\nrbh-sync rbh:mpi-file:file.mfu rbh:mongo:test\n\nmv /mnt/lustre/a /mnt/lustre/b\n\ndwalk -o file.mfu ...\nrbh-sync rbh:mpi-file:file.mfu rbh:mongo:test\n```\n\nThe file_handle (i.e. FID of the file) didn\u0027t change. So now you have 2 entries with the same FID in the DB but two different paths.",
+      "range": {
+        "startLine": 109,
+        "startChar": 4,
+        "endLine": 112,
+        "endChar": 7
+      },
+      "revId": "7d20651819b177749ad364ecc0fa81222a0325ef",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c96d4911_0e554448",
+        "filename": "librobinhood/src/backends/mpi_file/mpi_file.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-05-31T08:18:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a49e0624_e48b1655",
       "range": {
         "startLine": 109,
         "startChar": 4,
