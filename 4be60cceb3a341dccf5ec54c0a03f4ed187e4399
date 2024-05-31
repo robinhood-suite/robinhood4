@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f4f62cf1_58df61e4",
+        "filename": "librobinhood/include/robinhood/config.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-05-31T14:01:43Z",
+      "side": 1,
+      "message": "Minor: Missing the header",
+      "revId": "4be60cceb3a341dccf5ec54c0a03f4ed187e4399",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "87ff6f36_766a2aa0",
         "filename": "librobinhood/src/config.c",
         "patchSetId": 1
