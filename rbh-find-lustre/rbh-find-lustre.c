@@ -39,6 +39,40 @@ on_find_exit(void)
 {
     ctx_finish(&ctx);
 }
+static int
+usage(void)
+{
+    const char *message =
+        "usage: %s SOURCE [-h|--help] [PREDICATES] [ACTION]\n"
+        "\n"
+        "Query SOURCE's entries according to PREDICATE and do ACTION on each.\n"
+        "This command supports all of rbh-find's predicates and actions, plus new\n"
+        "ones specific to Lustre.\n"
+        "\n"
+        "Positional arguments:\n"
+        "    SOURCE  a robinhood URI\n"
+        "\n"
+        "Optional arguments:\n"
+        "    -h,--help             show this message and exit\n"
+        "\n"
+        "Predicate arguments:\n"
+        "    -fid FID             filter entries based on their FID\n"
+        "    -hsm-state {archived, dirty, exists, lost, noarchive, none, norelease, released}\n"
+        "                         filter entries based of their HSM state.\n"
+        "    -ost-index INDEX     filter entries based of the OST they are on.\n"
+        "\n"
+        "A robinhood URI is built as follows:\n"
+        "    "RBH_SCHEME":BACKEND:FSNAME[#{PATH|ID}]\n"
+        "Where:\n"
+        "    BACKEND  is the name of a backend\n"
+        "    FSNAME   the name of the backend instance (a path for a\n"
+        "             filesystem, a database name for a database)\n"
+        "    PATH/ID  is the path/id of an fsentry managed by BACKEND:FSNAME\n"
+        "             (ID must be enclosed in square brackets '[ID]' to distinguish it\n"
+        "             from a path)\n";
+
+    return printf(message, program_invocation_short_name);
+}
 
 enum command_line_token
 lustre_predicate_or_action(const char *string)
@@ -144,6 +178,17 @@ lustre_parse_predicate(struct find_context *ctx, int *arg_idx)
     return filter;
 }
 
+static void
+handle_config_option(int argc, char *argv[], int index)
+{
+    if (index + 1 >= argc)
+        error(EX_USAGE, EINVAL, "'--config' option requires a file");
+
+    if (rbh_config_open(argv[index + 1]))
+        error(EX_USAGE, errno,
+              "Failed to open configuration file '%s'", argv[i + 1]);
+}
+
 static int
 check_command_options(int argc, char *argv[])
 {
@@ -154,19 +199,15 @@ check_command_options(int argc, char *argv[])
         if (*argv[i] != '-')
             return i;
 
-        if (strcmp(argv[i], "-c") != 0 &&
-            strcmp(argv[i], "--config") != 0)
-            error(EX_USAGE, EINVAL, "invalid option found '%s'", argv[i]);
+        if (strcmp(argv[i], "-c") == 0 && strcmp(argv[i], "--config") == 0) {
+            handle_config_option(argc, argv, i);
+            i++;
+        }
 
-        if (argc < 2)
-            error(EX_USAGE, EINVAL, "'--config' option requires a file");
-
-        rc = rbh_config_open(argv[i + 1]);
-        if (rc)
-            error(EX_USAGE, errno,
-                  "Failed to open configuration file '%s'", argv[i + 1]);
-
-        i++;
+        if (strcmp(argv[i], "-h") == 0 && strcmp(argv[i], "--help") == 0) {
+            usage();
+            exit(0);
+        }
     }
 
     return i;
@@ -175,6 +216,13 @@ check_command_options(int argc, char *argv[])
 int
 main(int _argc, char *_argv[])
 {
+    const struct option LONG_OPTIONS[] = {
+        {
+            .name = "help",
+            .val = 'h',
+        },
+        {}
+    };
     struct rbh_filter_sort *sorts = NULL;
     struct rbh_filter *filter;
     size_t sorts_count = 0;
