@@ -13,6 +13,7 @@
 #include <dlfcn.h>
 #include <errno.h>
 #include <error.h>
+#include <getopt.h>
 #include <stdbool.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -36,6 +37,39 @@ static void __attribute__((destructor))
 on_find_exit(void)
 {
     ctx_finish(&ctx);
+}
+static int
+usage(void)
+{
+    const char *message =
+        "usage: %s SOURCE [-h] [PREDICATES] [ACTION]\n"
+        "\n"
+        "Query SOURCE's entries according to PREDICATE and do ACTION on each.\n"
+        "This command supports all of rbh-find's predicates and actions, plus new\n"
+        "ones specific to Lustre.\n"
+        "\n"
+        "Positional arguments:\n"
+        "    SOURCE  a robinhood URI\n"
+        "\n"
+        "Optional arguments:\n"
+        "    -h,--help             show this message and exit\n"
+        "\n"
+        "Predicate arguments:\n"
+        "    -fid FID             filter entries based on their FID\n"
+        "    -hsm-state {archived, dirty, exists, lost, noarchive, none, norelease, released}\n"
+        "                         filter entries based of their HSM state.\n"
+        "    -ost-index INDEX     filter entries based of the OST they are on.\n"
+        "\n"
+        "A robinhood URI is built as follows:\n"
+        "    "RBH_SCHEME":BACKEND:FSNAME[#{PATH|ID}]\n"
+        "Where:\n"
+        "    BACKEND  is the name of a backend\n"
+        "    FSNAME   is the name of a filesystem for BACKEND\n"
+        "    PATH/ID  is the path/id of an fsentry managed by BACKEND:FSNAME\n"
+        "             (ID must be enclosed in square brackets '[ID]' to distinguish it\n"
+        "             from a path)\n";
+
+    return printf(message, program_invocation_short_name);
 }
 
 enum command_line_token
@@ -123,10 +157,28 @@ lustre_parse_predicate(struct find_context *ctx, int *arg_idx)
 int
 main(int _argc, char *_argv[])
 {
+    const struct option LONG_OPTIONS[] = {
+        {
+            .name = "help",
+            .val = 'h',
+        },
+        {}
+    };
     struct rbh_filter_sort *sorts = NULL;
     struct rbh_filter *filter;
     size_t sorts_count = 0;
+    char **argv = _argv;
+    int argc = _argc;
     int index;
+
+    /* Parse the command line */
+    while ((c = getopt_long(argc, argv, "h", LONG_OPTIONS, NULL)) != -1) {
+        switch (c) {
+        case 'h':
+            usage();
+            return 0;
+        }
+    }
 
     /* Discard the program's name */
     ctx.argc = _argc - 1;
