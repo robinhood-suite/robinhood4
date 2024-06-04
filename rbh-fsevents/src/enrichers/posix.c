@@ -701,7 +701,7 @@ static const struct rbh_iterator POSIX_ENRICHER_ITERATOR = {
 
 struct rbh_iterator *
 posix_iter_enrich(struct rbh_iterator *fsevents, int mount_fd,
-                  const char *mount_path)
+                  const char *mount_path, bool skip_error)
 {
     struct rbh_value_pair *pairs;
     struct enricher *enricher;
@@ -738,6 +738,7 @@ posix_iter_enrich(struct rbh_iterator *fsevents, int mount_fd,
     enricher->pairs = pairs;
     enricher->pair_count = INITIAL_PAIR_COUNT;
     enricher->symlink = symlink;
+    enricher->skip_error = skip_error;
 
     return &enricher->iterator;
 }
@@ -812,11 +813,13 @@ iter_no_partial(struct rbh_iterator *fsevents)
 
 static struct rbh_iterator *
 posix_enrich_iter_builder_build_iter(void *_builder,
-                                     struct rbh_iterator *fsevents)
+                                     struct rbh_iterator *fsevents,
+                                     bool skip_error)
 {
     struct enrich_iter_builder *builder = _builder;
 
-    return posix_iter_enrich(fsevents, builder->mount_fd, builder->mount_path);
+    return posix_iter_enrich(fsevents, builder->mount_fd, builder->mount_path,
+                             skip_error);
 }
 
 void

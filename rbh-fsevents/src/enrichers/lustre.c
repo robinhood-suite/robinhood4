@@ -240,9 +240,14 @@ skip:
 
     rc = enrich(enricher, fsevent);
     if (rc) {
-        fprintf(stderr, "Failed to enrich entry '%s' (%s (%d)), skipping it\n",
-                fsevent->link.name, strerror(errno), errno);
-        goto skip;
+        if (enricher->skip_error) {
+            fprintf(stderr,
+                    "Failed to enrich entry '%s' (%s (%d)), skipping it\n",
+                    fsevent->link.name, strerror(errno), errno);
+            goto skip;
+        } else {
+            return NULL;
+        }
     }
 
     return &enricher->fsevent;
@@ -255,10 +260,10 @@ static const struct rbh_iterator_operations LUSTRE_ENRICHER_ITER_OPS = {
 
 static struct rbh_iterator *
 lustre_iter_enrich(struct rbh_backend *backend, struct rbh_iterator *fsevents,
-                   int mount_fd, const char *mount_path)
+                   int mount_fd, const char *mount_path, bool skip_error)
 {
     struct rbh_iterator *iter = posix_iter_enrich(fsevents, mount_fd,
-                                                  mount_path);
+                                                  mount_path, skip_error);
     struct enricher *enricher = (struct enricher *)iter;
 
     if (iter == NULL)
@@ -276,12 +281,13 @@ lustre_iter_enrich(struct rbh_backend *backend, struct rbh_iterator *fsevents,
 
 static struct rbh_iterator *
 lustre_enrich_iter_builder_build_iter(void *_builder,
-                                      struct rbh_iterator *fsevents)
+                                      struct rbh_iterator *fsevents,
+                                      bool skip_error)
 {
     struct enrich_iter_builder *builder = _builder;
 
     return lustre_iter_enrich(builder->backend, fsevents, builder->mount_fd,
-                              builder->mount_path);
+                              builder->mount_path, skip_error);
 }
 
 static const struct enrich_iter_builder_operations

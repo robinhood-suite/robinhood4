@@ -312,6 +312,8 @@ destroy_enrich_point(void)
         rbh_backend_destroy(enrich_point);
 }
 
+static bool skip_error = true;
+
 static void
 feed(struct sink *sink, struct source *source,
      struct enrich_iter_builder *builder, bool allow_partials,
@@ -332,7 +334,7 @@ feed(struct sink *sink, struct source *source,
             break;
 
         if (builder != NULL)
-            fsevents = build_enrich_iter(builder, fsevents);
+            fsevents = build_enrich_iter(builder, fsevents, skip_error);
         else if (!allow_partials)
             fsevents = iter_no_partial(fsevents);
 
@@ -396,6 +398,10 @@ main(int argc, char *argv[])
             .val = 'h',
         },
         {
+            .name = "no-skip",
+            .val = 'n',
+        },
+        {
             .name = "raw",
             .val = 'r',
         },
@@ -422,6 +428,9 @@ main(int argc, char *argv[])
         case 'h':
             usage();
             return 0;
+        case 'n':
+            skip_error = false;
+            break;
         case 'r':
             /* Ignore errors on close */
             mount_fd_exit();
