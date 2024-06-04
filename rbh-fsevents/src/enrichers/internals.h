@@ -19,6 +19,8 @@ struct enricher {
     struct rbh_fsevent fsevent;
     struct rbh_statx statx;
     char *symlink;
+
+    bool skip_error;
 };
 
 int
@@ -39,7 +41,7 @@ int posix_enrich(const struct rbh_value_pair *partial,
 
 struct rbh_iterator *
 posix_iter_enrich(struct rbh_iterator *fsevents, int mount_fd,
-                  const char *mount_path);
+                  const char *mount_path, bool skip_error);
 
 void
 posix_enricher_iter_destroy(void *iterator);
