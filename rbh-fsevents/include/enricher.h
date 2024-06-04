@@ -10,7 +10,8 @@ struct enrich_iter_builder;
 
 struct enrich_iter_builder_operations {
     struct rbh_iterator *(*build_iter)(void *builder,
-                                       struct rbh_iterator *fsevents);
+                                       struct rbh_iterator *fsevents,
+                                       bool skip_error);
     void (*destroy)(void *builder);
 };
 
@@ -24,9 +25,10 @@ struct enrich_iter_builder {
 
 static inline struct rbh_iterator *
 build_enrich_iter(struct enrich_iter_builder *builder,
-                  struct rbh_iterator *fsevents)
+                  struct rbh_iterator *fsevents,
+                  bool skip_error)
 {
-    return builder->ops->build_iter(builder, fsevents);
+    return builder->ops->build_iter(builder, fsevents, skip_error);
 }
 
 static inline void
