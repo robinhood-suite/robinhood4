@@ -19,3 +19,6 @@ foreach t: integration_tests
     # in parallel.
     test(t, e, is_parallel : false)
 endforeach
+
+e = find_program('no_skip_option.bash')
+test('no_skip_option', e, is_parallel : false, should_fail: true)
