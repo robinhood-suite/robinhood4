@@ -19,8 +19,7 @@ creat_delete()
     touch file
     rm file
 
-    rbh_fsevents --batch-size 0 --enrich rbh:lustre:"$LUSTRE_DIR" \
-        "src:lustre:$LUSTRE_MDT" - > /tmp/output.yaml
+    rbh_fsevents --batch-size 0 "src:lustre:$LUSTRE_MDT" - > /tmp/output.yaml
     if ! grep "!link" /tmp/output.yaml; then
         error "Without deduplication, a link event should be emitted"
     fi
@@ -28,8 +27,7 @@ creat_delete()
         error "Without deduplication, a delete event should be emitted"
     fi
 
-    rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" \
-        "src:lustre:$LUSTRE_MDT" - > /tmp/output.yaml
+    rbh_fsevents "src:lustre:$LUSTRE_MDT" - > /tmp/output.yaml
     if grep "!link" /tmp/output.yaml; then
         error "No link event should be found after deduplication"
     fi

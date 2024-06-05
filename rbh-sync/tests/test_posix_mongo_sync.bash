@@ -257,29 +257,13 @@ test_stop_sync_on_error(){
     useradd -N -M test
     local output=$((sudo -E -H -u test bash -c "rbh-sync --no-skip rbh:posix:. \
                         rbh:mongo:$testdb") 2>&1)
+
     userdel -f -r test || true
     local db_count=$(mongo $testdb --eval "db.entries.count()")
-    if [[ $db_count -lt 1 ]]; then
-        error "Invalid number of files were synced, expected at least '1'" \
-            "entries found (root) '$db_count'."
+    if [[ $db_count -ne 0 ]]; then
+        error "Invalid number of files were synced, expected '0', found" \
+              "'$db_count' entries."
     fi
-
-    find_attribute '"ns.xattrs.path":"/"'
-
-    local first_file_att="$(find_attribute '"ns.name":"'$first_file'"')"
-    local second_file_att="$(find_attribute '"ns.name":"'$second_file'"')"
-    local third_file_att="$(find_attribute '"ns.name":"'$third_file'"')"
-
-    # Nothing guarantees the order of synchronization, the command can start
-    # with the second file and fail, or any other file or directory
-
-    # First check if any files have been synchronized, then check that the
-    # first file has been synchronized and the others have not
-
-    (echo $second_file_att | grep "No entry found" && \
-     echo $third_file_att | grep "No entry found") || \
-    error "Synchronized files that should not."
-
 }
 
 ################################################################################
