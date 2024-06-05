@@ -182,8 +182,7 @@ struct rbh_backend_operations {
             );
     ssize_t (*update)(
             void *backend,
-            struct rbh_iterator *fsevents,
-            bool skip_error
+            struct rbh_iterator *fsevents
             );
     struct rbh_backend *(*branch)(
             void *backend,
@@ -385,14 +384,14 @@ rbh_backend_set_option(struct rbh_backend *backend, unsigned int option,
  * documented by \p backend.
  */
 static inline ssize_t
-rbh_backend_update(struct rbh_backend *backend, struct rbh_iterator *fsevents,
-                   bool skip_error)
+rbh_backend_update(struct rbh_backend *backend, struct rbh_iterator *fsevents)
 {
     if (backend->ops->update == NULL) {
         errno = ENOTSUP;
         return -1;
     }
-    return backend->ops->update(backend, fsevents, skip_error);
+
+    return backend->ops->update(backend, fsevents);
 }
 
 /**

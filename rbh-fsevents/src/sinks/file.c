@@ -29,11 +29,8 @@ file_sink_process(void *_sink, struct rbh_iterator *fsevents)
         const struct rbh_fsevent *fsevent;
 
         fsevent = rbh_iter_next(fsevents);
-        if (fsevent == NULL) {
-            if (errno == ESTALE || errno == ENOENT)
-                continue;
+        if (fsevent == NULL)
             break;
-        }
 
         if (!emit_fsevent(&sink->emitter, fsevent))
             return -1;
