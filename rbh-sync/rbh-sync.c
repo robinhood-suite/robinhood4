@@ -457,7 +457,7 @@ sync(const struct rbh_filter_projection *projection)
             error(EXIT_FAILURE, errno, "while chunkifying SOURCE's entries");
         }
 
-        count = rbh_backend_update(to, chunk, skip_error);
+        count = rbh_backend_update(to, chunk);
         save_errno = errno;
         rbh_iter_destroy(chunk);
         if (count < 0) {
