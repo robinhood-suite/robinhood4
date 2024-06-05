@@ -212,6 +212,30 @@
       },
       "revId": "9ee08332ae591be68a395eb93a2ab7752d971e14",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "091c28a4_69b4268e",
+        "filename": "rbh-fsevents/tests/lustre/changelog_dump.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-06-05T08:15:37Z",
+      "side": 1,
+      "message": "What I meant was this:\n```\ndiff \u003c(lfs changelog $LUSTRE_MDT | awk \u0027{ print substr($1, 3) }\u0027) \\\n    \u003c(rbh_fsevents --dump \"-\" ... | awk \u0027{ print substr($1, 3) }\u0027)\n```\n\nYou may need adjust the $1 depending on the actual output. diff will be faster than a while loop.",
+      "parentUuid": "d851f298_9e462a82",
+      "range": {
+        "startLine": 31,
+        "startChar": 3,
+        "endLine": 38,
+        "endChar": 36
+      },
+      "revId": "9ee08332ae591be68a395eb93a2ab7752d971e14",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
