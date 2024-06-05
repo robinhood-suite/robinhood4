@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e75dc1e9_049fbc44",
+        "filename": "rbh-fsevents/rbh-fsevents.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 436,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-06-05T08:43:43Z",
+      "side": 1,
+      "message": "minor: I imagine this can fail if the URI is not correct or if the backend is not installed. This should have a better output: invalid enrich URI \u0027%s\u0027.",
+      "range": {
+        "startLine": 436,
+        "startChar": 44,
+        "endLine": 436,
+        "endChar": 72
+      },
+      "revId": "c9d74b7d373c08dc2b5ccf9753efea38a812e66d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
