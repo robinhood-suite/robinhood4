@@ -117,16 +117,21 @@ rbh_value_map_deep_copy(struct rbh_value_map *dest,
         struct rbh_value *value;
         int rc;
 
-        value = rbh_sstack_push(stack, NULL, sizeof(*value));
-        if (!value)
-            return -1;
-
-        pair->value = value;
         pair->key = rbh_sstack_push(stack, src->pairs[i].key,
                                     strlen(src->pairs[i].key) + 1);
         if (!pair->key)
             return -1;
 
+        if (src->pairs[i].value == NULL) {
+            pair->value = NULL;
+            continue;
+        }
+
+        value = rbh_sstack_push(stack, NULL, sizeof(*value));
+        if (!value)
+            return -1;
+
+        pair->value = value;
         rc = rbh_value_deep_copy(value, src->pairs[i].value, stack);
         if (rc)
             return -1;
@@ -151,6 +156,8 @@ rbh_sequence_deep_copy(struct rbh_value *dest,
 
     dest->sequence.count = src->sequence.count;
     dest->sequence.values = tmp;
+
+    memset(tmp, 0, dest->sequence.count * sizeof(*tmp));
 
     for (size_t i = 0; i < src->sequence.count; i++) {
         int rc = rbh_value_deep_copy(&tmp[i],
