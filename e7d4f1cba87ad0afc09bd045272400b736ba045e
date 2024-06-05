@@ -74,6 +74,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "53c859da_8da12e93",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-06-05T08:37:38Z",
+      "side": 1,
+      "message": "To make the command more user friendly, I think we could just test if both are - and display an error. It does not make sense for the YAML format to have changelogs in it.",
+      "parentUuid": "6bc991c3_4ea5fa2e",
+      "range": {
+        "startLine": 11,
+        "startChar": 26,
+        "endLine": 12,
+        "endChar": 25
+      },
+      "revId": "e7d4f1cba87ad0afc09bd045272400b736ba045e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2314570f_4de244aa",
         "filename": "rbh-fsevents/rbh-fsevents.c",
         "patchSetId": 3
