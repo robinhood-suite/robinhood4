@@ -56,21 +56,13 @@ shell_regex2filter(enum predicate predicate, const char *shell_regex,
                    unsigned int regex_options)
 {
     struct rbh_filter *filter;
-    char *pcre;
-
-    pcre = shell2pcre(shell_regex);
-    if (pcre == NULL)
-        error_at_line(EXIT_FAILURE, ENOMEM, __FILE__, __LINE__ - 2,
-                      "converting %s into a Perl Compatible Regular Expression",
-                      shell_regex);
 
     filter = rbh_filter_compare_regex_new(RBH_FOP_REGEX,
                                           &predicate2filter_field[predicate],
-                                          pcre, regex_options);
+                                          shell_regex, regex_options);
     if (filter == NULL)
         error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__ - 2,
-                      "building a regex filter for %s", pcre);
-    free(pcre);
+                      "building a regex filter for %s", shell_regex);
     return filter;
 }
 
