@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5dda69d9_8859ac2f",
+        "filename": "rbh-fsevents/tests/lustre/no_skip_option.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2024-06-06T14:32:14Z",
+      "side": 1,
+      "message": "My question was about the need to add the mongo backend to trigger the enrichment, not about the need to enrich before updating mongodb. Iwas just asking if you can\u0027t use the command with stdout output intead of mongodb ?",
+      "parentUuid": "1d040008_181cd081",
+      "range": {
+        "startLine": 29,
+        "startChar": 10,
+        "endLine": 29,
+        "endChar": 27
+      },
+      "revId": "896e27c6a4f27ce8ad81feb47c4608243620bc76",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b0e6605e_e13bdb3a",
         "filename": "rbh-fsevents/tests/lustre/no_skip_option.bash",
         "patchSetId": 1
