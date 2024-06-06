@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cf1d24d5_955ca550",
+        "filename": "rbh-fsevents/tests/lustre/no_skip_option.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2024-06-06T09:59:52Z",
+      "side": 1,
+      "message": "question: is it mandatory to push in mongo backend to trigger the enrichment ? Or could you simply use stdout as in the previous rbh_fsevents command line 23 to simplify this test by removing the useless mongo backend ?",
+      "range": {
+        "startLine": 29,
+        "startChar": 10,
+        "endLine": 29,
+        "endChar": 27
+      },
+      "revId": "896e27c6a4f27ce8ad81feb47c4608243620bc76",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b0e6605e_e13bdb3a",
+        "filename": "rbh-fsevents/tests/lustre/no_skip_option.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2024-06-06T09:59:52Z",
+      "side": 1,
+      "message": "question: same one",
+      "range": {
+        "startLine": 35,
+        "startChar": 10,
+        "endLine": 35,
+        "endChar": 27
+      },
+      "revId": "896e27c6a4f27ce8ad81feb47c4608243620bc76",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
