@@ -13,6 +13,13 @@ integration_tests = [
   'test_xattr',
 ]
 
+cc = meson.get_compiler('c')
+libmfu = cc.find_library('mfu', disabler: true, required: false)
+
+if libmfu.found()
+    integration_tests += ['test_mpifile']
+endif
+
 foreach t: integration_tests
     e = find_program(t + '.bash')
     test(t, e)
