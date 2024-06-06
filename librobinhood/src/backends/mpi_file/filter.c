@@ -11,9 +11,8 @@
 
 #include <errno.h>
 #include <string.h>
-#include <sys/types.h>
-#include <regex.h>
 #include <error.h>
+#include <fnmatch.h>
 
 #include "mfu.h"
 #include "robinhood/statx.h"
@@ -106,6 +105,29 @@ _MFU_PRED_SIZE(mfu_flist flist, uint64_t idx, void *arg)
     return ret;
 }
 
+static int
+_MFU_PRED_PATH(mfu_flist flist, uint64_t idx, void *arg)
+{
+    const char *name = mfu_flist_file_get_name(flist, idx);
+    struct rbh_value *value = (struct rbh_value *) arg;
+    struct rbh_value_map map = value->map;
+    struct rbh_value_pair pair;
+    const char *pattern;
+    int prefix_len;
+    int ret = 0;
+    char *path;
+
+    pair = map.pairs[0];
+    pattern = pair.value->string;
+
+    pair = map.pairs[1];
+    prefix_len = pair.value->int32;
+
+    path = strlen(name) == prefix_len ? "/" : (char *) name + prefix_len;
+    ret = fnmatch(pattern, path, FNM_PERIOD) ? 0 : 1;
+    return ret;
+}
+
 static mfu_pred_fn
 statx2mfu_fn(const uint32_t statx)
 {
@@ -152,7 +174,7 @@ filter2mfu_fn(const struct rbh_filter *filter)
         return statx2mfu_fn(field.statx);
     case RBH_FP_NAMESPACE_XATTRS:
         if (!strcmp(field.xattr, "path"))
-            return MFU_PRED_PATH;
+            return _MFU_PRED_PATH;
         break;
     default:
         break;
@@ -162,9 +184,43 @@ filter2mfu_fn(const struct rbh_filter *filter)
     return NULL;
 }
 
+static struct rbh_value *
+shell_pattern2map(int prefix_len, const char *pattern) {
+    const struct rbh_value pattern_val = {
+        .type = RBH_VT_STRING,
+        .string = pattern,
+    };
+    const struct rbh_value prefix_val = {
+        .type = RBH_VT_INT32,
+        .int32 = prefix_len,
+    };
+    struct rbh_value_pair *pairs;
+    struct rbh_value_pair *pair;
+    struct rbh_value *map;
+
+    /* It will be free by mfu_pred_free() */
+    pairs = reallocarray(NULL, 2, sizeof(*pairs));
+    if (pairs == NULL)
+        error(EXIT_FAILURE, ENOMEM, "reallocarray rbh_value_pair");
+
+    pair = &pairs[0];
+    pair->key = "pattern";
+    pair->value = &pattern_val;
+
+    pair = &pair[1];
+    pair->key = "prefix_len";
+    pair->value = &prefix_val;
+
+    map = rbh_value_map_new(pairs, 2);
+    if (map == NULL)
+        error(EXIT_FAILURE, ENOMEM, "rbh_value_map_new");
+
+    return map;
+}
+
 __attribute__((unused))
 static void *
-filter2arg(const struct rbh_filter *filter)
+filter2arg(const struct rbh_filter *filter, int prefix_len)
 {
     const struct rbh_filter_field field = filter->compare.field;
     const struct rbh_value *value = &filter->compare.value;
@@ -199,23 +255,16 @@ filter2arg(const struct rbh_filter *filter)
             return NULL;
         }
 
-        /* It will be free by mfu_pred_free() */
         switch(value->type)
         {
         case RBH_VT_STRING:
-            arg_regex = strdup(value->string);
-            break;
+            return shell_pattern2map(prefix_len, value->string);
         case RBH_VT_REGEX:
-            arg_regex = strdup(value->regex.string);
-            break;
+            return shell_pattern2map(prefix_len, value->regex.string);
         default:
             errno = ENOTSUP;
             return NULL;
         }
-
-        if (arg_regex == NULL)
-            error(EXIT_FAILURE, errno, "strdup path argument");
-        return arg_regex;
 
     case RBH_FP_STATX:
         switch(field.statx)
