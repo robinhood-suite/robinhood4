@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "898170d7_d5969fb4",
+        "filename": "rbh-sync/rbh-sync.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 459,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2024-06-06T09:33:13Z",
+      "side": 0,
+      "message": "question: Where did this \"skip_error\" come from ?",
+      "range": {
+        "startLine": 459,
+        "startChar": 46,
+        "endLine": 459,
+        "endChar": 56
+      },
+      "revId": "fd80530d522d9540b8da4a8bab4efdda665cfcfa",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
