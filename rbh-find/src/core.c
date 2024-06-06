@@ -17,8 +17,13 @@
 void
 ctx_finish(struct find_context *ctx)
 {
-    for (size_t i = 0; i < ctx->backend_count; i++)
+    const char *name;
+
+    for (size_t i = 0; i < ctx->backend_count; i++) {
+        name = ctx->backends[i]->name;
         rbh_backend_destroy(ctx->backends[i]);
+        rbh_backend_plugin_destroy(name);
+    }
     free(ctx->backends);
 }
 
