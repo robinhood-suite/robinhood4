@@ -22,6 +22,30 @@
       },
       "revId": "473474b0098939c5b5656fe0bdf9b2ff7386c69b",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5496c494_68ba0d91",
+        "filename": "rbh-fsevents/tests/lustre/meson.build",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-06-06T14:30:18Z",
+      "side": 1,
+      "message": "It was introduced two patches ago...",
+      "parentUuid": "80de72ce_d98b1340",
+      "range": {
+        "startLine": 12,
+        "startChar": 41,
+        "endLine": 12,
+        "endChar": 55
+      },
+      "revId": "473474b0098939c5b5656fe0bdf9b2ff7386c69b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
