@@ -94,6 +94,30 @@
       },
       "revId": "f9f551e2859ebd0254a9d05516b140bb59ff9791",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d471904_09190ac0",
+        "filename": "librobinhood/src/backends/lustre/lustre.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 686,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-06-07T07:28:11Z",
+      "side": 1,
+      "message": "This approach doesn\u0027t assume what the values used as defaults are. If there changes to Lustre regarding what values is used, intentional or not, this is at least still work.",
+      "parentUuid": "3decf079_29c6f527",
+      "range": {
+        "startLine": 680,
+        "startChar": 4,
+        "endLine": 686,
+        "endChar": 18
+      },
+      "revId": "f9f551e2859ebd0254a9d05516b140bb59ff9791",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
