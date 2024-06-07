@@ -3,6 +3,144 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e8106a39_31a45e45",
+        "filename": "librobinhood/include/robinhood/config.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-06-07T14:36:22Z",
+      "side": 1,
+      "message": "suggest: Must",
+      "range": {
+        "startLine": 46,
+        "startChar": 3,
+        "endLine": 46,
+        "endChar": 9
+      },
+      "revId": "39894014d0afef072beef96fa278e6a3f22a0fa8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6da15454_bed556fb",
+        "filename": "librobinhood/include/robinhood/config.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-06-07T14:36:22Z",
+      "side": 1,
+      "message": "this does not work for sequences though.\n```\nkey:\n   - { \"test\": \"a\" }\n   - 2\n   - 3\n```\n   \nHow would you query something in here?",
+      "range": {
+        "startLine": 50,
+        "startChar": 30,
+        "endLine": 50,
+        "endChar": 39
+      },
+      "revId": "39894014d0afef072beef96fa278e6a3f22a0fa8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3f37a4dc_3fe9cd87",
+        "filename": "librobinhood/include/robinhood/config.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-06-07T14:36:22Z",
+      "side": 1,
+      "message": "Again, not a fan of this.",
+      "range": {
+        "startLine": 53,
+        "startChar": 17,
+        "endLine": 53,
+        "endChar": 49
+      },
+      "revId": "39894014d0afef072beef96fa278e6a3f22a0fa8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3bfabefe_91102e89",
+        "filename": "librobinhood/include/robinhood/config.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-06-07T14:36:22Z",
+      "side": 1,
+      "message": "How can you set it to NULL if you are only passing a pointer?",
+      "range": {
+        "startLine": 58,
+        "startChar": 60,
+        "endLine": 59,
+        "endChar": 33
+      },
+      "revId": "39894014d0afef072beef96fa278e6a3f22a0fa8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e79bb051_20445339",
+        "filename": "librobinhood/include/robinhood/config.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-06-07T14:36:22Z",
+      "side": 1,
+      "message": "suggest: rbh_config_get or rbh_config_find. This is what most config API use. Search is a bit unusual.",
+      "range": {
+        "startLine": 67,
+        "startChar": 0,
+        "endLine": 67,
+        "endChar": 17
+      },
+      "revId": "39894014d0afef072beef96fa278e6a3f22a0fa8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8092dbea_268e9778",
+        "filename": "librobinhood/include/robinhood/config.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-06-07T14:36:22Z",
+      "side": 1,
+      "message": "question: can\u0027t you simply return the event? If not found, you can simply return NULL.",
+      "range": {
+        "startLine": 68,
+        "startChar": 18,
+        "endLine": 68,
+        "endChar": 37
+      },
+      "revId": "39894014d0afef072beef96fa278e6a3f22a0fa8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a4467eda_480319e6",
         "filename": "librobinhood/src/config.c",
         "patchSetId": 1
@@ -14,6 +152,115 @@
       "writtenOn": "2024-06-07T10:06:30Z",
       "side": 1,
       "message": "question: Where this function is used ?",
+      "revId": "39894014d0afef072beef96fa278e6a3f22a0fa8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b4cd6206_339a211f",
+        "filename": "librobinhood/src/config.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-06-07T14:36:22Z",
+      "side": 1,
+      "message": "empty line",
+      "revId": "39894014d0afef072beef96fa278e6a3f22a0fa8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2c5aecc1_b6255d9e",
+        "filename": "librobinhood/src/config.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-06-07T14:36:22Z",
+      "side": 1,
+      "message": "question: I\u0027m not an expert on this library. Why do you expect a scalar event? This seems to be dangerous to assert something like this. It seems to me that this would depend on the actual config file? You have to assume that it may not be formatted properly.",
+      "range": {
+        "startLine": 101,
+        "startChar": 4,
+        "endLine": 101,
+        "endChar": 44
+      },
+      "revId": "39894014d0afef072beef96fa278e6a3f22a0fa8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "080f6f13_c43d23ad",
+        "filename": "librobinhood/src/config.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-06-07T14:36:22Z",
+      "side": 1,
+      "message": "defect: \u003d\u003d 0, right? (which is why I prefer !strcmp or strcmp over \u003d\u003d 0 or !\u003d 0).",
+      "range": {
+        "startLine": 112,
+        "startChar": 33,
+        "endLine": 112,
+        "endChar": 37
+      },
+      "revId": "39894014d0afef072beef96fa278e6a3f22a0fa8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ebb2ad24_acd64f6e",
+        "filename": "librobinhood/src/config.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-06-07T14:36:22Z",
+      "side": 1,
+      "message": "question: why is this an error and not simply not found? What kind of situation would lead to this? Would an ill formed but valid YAML config trigger this?",
+      "range": {
+        "startLine": 137,
+        "startChar": 15,
+        "endLine": 137,
+        "endChar": 24
+      },
+      "revId": "39894014d0afef072beef96fa278e6a3f22a0fa8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "58ae397e_9f004ae3",
+        "filename": "librobinhood/src/config.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-06-07T14:36:22Z",
+      "side": 1,
+      "message": "suggest: key or key_to_find or subkey",
+      "range": {
+        "startLine": 161,
+        "startChar": 4,
+        "endLine": 161,
+        "endChar": 10
+      },
       "revId": "39894014d0afef072beef96fa278e6a3f22a0fa8",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
