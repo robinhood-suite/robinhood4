@@ -45,6 +45,54 @@
       },
       "revId": "448b32d9b87602380807dc1769e9363c41696645",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b6b2a7db_fa5d446f",
+        "filename": "librobinhood/src/backends/mpi_file/mpi_file.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-06-07T08:26:58Z",
+      "side": 1,
+      "message": "I don\u0027t need to do it because it\u0027s mpifileutils who does it, if you want, check the function `MFU_PRED_TYPE`. She masks it with S_IFMT to check if the entry type is the same as requested.",
+      "parentUuid": "83e43b5e_559bbaa4",
+      "range": {
+        "startLine": 30,
+        "startChar": 4,
+        "endLine": 32,
+        "endChar": 64
+      },
+      "revId": "448b32d9b87602380807dc1769e9363c41696645",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "56e9ce26_4c2ed3b4",
+        "filename": "librobinhood/src/backends/mpi_file/mpi_file.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-06-07T08:26:58Z",
+      "side": 1,
+      "message": "Yes there is one, I can set the type but it\u0027s not really usefull because mpifileutils use the mode to check the type of an entry with the predicate `--type`. Atleast it will be additional information.",
+      "parentUuid": "29dc166c_5576264f",
+      "range": {
+        "startLine": 32,
+        "startChar": 8,
+        "endLine": 32,
+        "endChar": 31
+      },
+      "revId": "448b32d9b87602380807dc1769e9363c41696645",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
