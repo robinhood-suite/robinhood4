@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "83e43b5e_559bbaa4",
+        "filename": "librobinhood/src/backends/mpi_file/mpi_file.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-06-07T08:01:15Z",
+      "side": 1,
+      "message": "major: I don\u0027t think this is the right way, you have to check if the mode is present indeed, but to set the value, you have to mask using S_IFMT.        \n        \nHere is what it looks like in the mongo backend:\n```\n        \u0026\u0026 (statxbuf-\u003estx_mask \u0026 RBH_STATX_TYPE ?                               \n                BSON_APPEND_INT32(document, statx2str(RBH_STATX_TYPE),          \n                                  statxbuf-\u003estx_mode \u0026 S_IFMT) : true)          \n        \u0026\u0026 (statxbuf-\u003estx_mask \u0026 RBH_STATX_MODE ?                               \n                BSON_APPEND_INT32(document, statx2str(RBH_STATX_MODE),          \n                                  statxbuf-\u003estx_mode \u0026 ~S_IFMT) : true)  \n```  \n\n```suggestion\n    if ((statxbuf-\u003estx_mask \u0026 RBH_STATX_MODE))\n        mfu_flist_file_set_mode(flist, idx, statxbuf-\u003estx_mode \u0026 S_IFMT);\n```",
+      "range": {
+        "startLine": 30,
+        "startChar": 4,
+        "endLine": 32,
+        "endChar": 64
+      },
+      "revId": "448b32d9b87602380807dc1769e9363c41696645",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "29dc166c_5576264f",
+        "filename": "librobinhood/src/backends/mpi_file/mpi_file.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-06-07T08:01:15Z",
+      "side": 1,
+      "message": "question: so there is no function to set the type ?",
+      "range": {
+        "startLine": 32,
+        "startChar": 8,
+        "endLine": 32,
+        "endChar": 31
+      },
+      "revId": "448b32d9b87602380807dc1769e9363c41696645",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
