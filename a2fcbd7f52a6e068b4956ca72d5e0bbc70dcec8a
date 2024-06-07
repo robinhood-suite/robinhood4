@@ -3,6 +3,75 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6ad28ada_04e71d40",
+        "filename": "librobinhood/include/robinhood/config.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-06-07T13:42:38Z",
+      "side": 1,
+      "message": "I\u0027m not sure this is a good behavior for a library. When possible, we should let the user decide what to do with the error. I\u0027m fine with memory allocation crashing the whole application but other errors that might come from user behavior is probably not a good idea.",
+      "range": {
+        "startLine": 35,
+        "startChar": 3,
+        "endLine": 35,
+        "endChar": 68
+      },
+      "revId": "a2fcbd7f52a6e068b4956ca72d5e0bbc70dcec8a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "35995795_69c7510e",
+        "filename": "librobinhood/src/config.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-06-07T13:42:38Z",
+      "side": 1,
+      "message": "defect: if you are doing an initialize here, you probably should free the previous parser: yaml_parser_delete (I think).",
+      "range": {
+        "startLine": 33,
+        "startChar": 9,
+        "endLine": 33,
+        "endChar": 31
+      },
+      "revId": "a2fcbd7f52a6e068b4956ca72d5e0bbc70dcec8a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a99f28cf_8e3c0e0b",
+        "filename": "librobinhood/src/config.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-06-07T13:42:38Z",
+      "side": 1,
+      "message": "still not a fan of exiting here",
+      "range": {
+        "startLine": 40,
+        "startChar": 9,
+        "endLine": 40,
+        "endChar": 26
+      },
+      "revId": "a2fcbd7f52a6e068b4956ca72d5e0bbc70dcec8a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "759f039f_e7431daa",
         "filename": "librobinhood/src/config.c",
         "patchSetId": 1
@@ -14,6 +83,30 @@
       "writtenOn": "2024-06-07T10:05:44Z",
       "side": 1,
       "message": "I think this function doesn\u0027t exist",
+      "range": {
+        "startLine": 41,
+        "startChar": 8,
+        "endLine": 41,
+        "endChar": 20
+      },
+      "revId": "a2fcbd7f52a6e068b4956ca72d5e0bbc70dcec8a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c076730a_535dc102",
+        "filename": "librobinhood/src/config.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-06-07T13:42:38Z",
+      "side": 1,
+      "message": "It is defined in rbh-fsevents but I didn\u0027t see it in librobinhood.",
+      "parentUuid": "759f039f_e7431daa",
       "range": {
         "startLine": 41,
         "startChar": 8,
