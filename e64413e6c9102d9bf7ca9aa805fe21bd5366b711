@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0c0cce05_1c1b9007",
+        "filename": "librobinhood/src/backends/mongo/mongo.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 1386,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-06-07T14:45:18Z",
+      "side": 1,
+      "message": "no not found?",
+      "range": {
+        "startLine": 1386,
+        "startChar": 18,
+        "endLine": 1386,
+        "endChar": 27
+      },
+      "revId": "e64413e6c9102d9bf7ca9aa805fe21bd5366b711",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d788d2e1_36f95146",
         "filename": "librobinhood/src/backends/mongo/mongo.c",
         "patchSetId": 1
@@ -19,6 +42,52 @@
         "startChar": 16,
         "endLine": 1390,
         "endChar": 26
+      },
+      "revId": "e64413e6c9102d9bf7ca9aa805fe21bd5366b711",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7708bcb4_dcac8004",
+        "filename": "librobinhood/src/backends/mongo/mongo.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 1394,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-06-07T14:45:18Z",
+      "side": 1,
+      "message": "minor: there will be a lot of this in all the parts that need to parse configuration elements. The common parsing functions should probably be defined in librobinhood. Things like integers, strings, boolean if we have those at some point...",
+      "range": {
+        "startLine": 1389,
+        "startChar": 12,
+        "endLine": 1394,
+        "endChar": 13
+      },
+      "revId": "e64413e6c9102d9bf7ca9aa805fe21bd5366b711",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "801686ec_f7824cc5",
+        "filename": "librobinhood/src/backends/mongo/mongo.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 1402,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-06-07T14:45:18Z",
+      "side": 1,
+      "message": "rbh_config_search could default the getenv if not found. This would be more convenient for testing.",
+      "range": {
+        "startLine": 1402,
+        "startChar": 11,
+        "endLine": 1402,
+        "endChar": 17
       },
       "revId": "e64413e6c9102d9bf7ca9aa805fe21bd5366b711",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
