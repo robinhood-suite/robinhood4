@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f5be5fb3_bca59369",
+        "filename": "rbh-fsevents/tests/lustre/no_skip_option.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-06-10T07:24:38Z",
+      "side": 1,
+      "message": "nit: I find this a bit strange to have this in the new line. You could cut the line just before `\u003e /dev/null`.",
+      "range": {
+        "startLine": 29,
+        "startChar": 7,
+        "endLine": 29,
+        "endChar": 12
+      },
+      "revId": "5278368819cf7f2a2190687efbff02095d203b9a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
