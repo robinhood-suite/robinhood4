@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f7b377e8_3fb8d7d1",
+        "filename": "rbh-find/include/rbh-find/filters.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-06-10T11:54:55Z",
+      "side": 1,
+      "message": "minor: it would be nice to add an few examples.",
+      "range": {
+        "startLine": 117,
+        "startChar": 50,
+        "endLine": 117,
+        "endChar": 55
+      },
+      "revId": "99ac9dfb628ac4d35e016936e7431d29650515b1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
