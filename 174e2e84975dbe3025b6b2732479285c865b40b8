@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e3350c52_8fde97c2",
+        "filename": "rbh-find-lustre/tests/test_pool.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-06-10T11:52:59Z",
+      "side": 1,
+      "message": "nit: same comment, add one more file that should match.",
+      "range": {
+        "startLine": 65,
+        "startChar": 42,
+        "endLine": 65,
+        "endChar": 47
+      },
+      "revId": "174e2e84975dbe3025b6b2732479285c865b40b8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
