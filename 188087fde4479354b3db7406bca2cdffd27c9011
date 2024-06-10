@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "035a24d7_284d5956",
+        "filename": "rbh-fsevents/rbh-fsevents.c",
+        "patchSetId": 6
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-06-10T11:40:48Z",
+      "side": 1,
+      "message": "minor: this check should probably be done in the option parsing code. Just before calling sink_new and source_new. This is a behavior of the whole application. Not specific to sinks.",
+      "range": {
+        "startLine": 229,
+        "startChar": 24,
+        "endLine": 229,
+        "endChar": 47
+      },
+      "revId": "188087fde4479354b3db7406bca2cdffd27c9011",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
