@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5a5ee6c0_fa1ffd94",
+        "filename": "rbh-find-lustre/include/filters.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-06-10T11:58:54Z",
+      "side": 1,
+      "message": "major: I know it\u0027s in progress but -begin is not a standard filter. It should document what the filter is. I assume it\u0027s for the beginning of a component? In lfs find it is called component-start as well as in lfs setstripe. Maybe it would be better to call it `-comp-start` to be more consistent with Lustre?",
+      "range": {
+        "startLine": 71,
+        "startChar": 26,
+        "endLine": 71,
+        "endChar": 42
+      },
+      "revId": "e5d6ac6e25bfb4fd75c9f4fcf4aac22f931d5d21",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7a75b6b9_d6a5bec3",
+        "filename": "rbh-find-lustre/tests/test_begin.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-06-10T11:58:54Z",
+      "side": 1,
+      "message": "defect: misspelled.",
+      "range": {
+        "startLine": 55,
+        "startChar": 35,
+        "endLine": 55,
+        "endChar": 41
+      },
+      "revId": "e5d6ac6e25bfb4fd75c9f4fcf4aac22f931d5d21",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
