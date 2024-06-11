@@ -26,6 +26,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b2a5616b_4a25b88a",
+        "filename": "rbh-find-lustre/src/filters.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-06-11T07:11:40Z",
+      "side": 1,
+      "message": "defect: i know it\u0027s in progress but `size2filter` declaration is `size2filter(const char *size)`.",
+      "revId": "e5d6ac6e25bfb4fd75c9f4fcf4aac22f931d5d21",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7a75b6b9_d6a5bec3",
         "filename": "rbh-find-lustre/tests/test_begin.bash",
         "patchSetId": 1
