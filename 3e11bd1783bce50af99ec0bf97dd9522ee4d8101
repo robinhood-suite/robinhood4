@@ -26,6 +26,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6a40401c_6da2b3cb",
+        "filename": "rbh-find/src/filters.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-06-11T07:05:11Z",
+      "side": 1,
+      "message": "defect: it doesn\u0027t correspond with his declaration in filters.h. It should be `regex2filter(enum predicate predicate, ...)`",
+      "revId": "3e11bd1783bce50af99ec0bf97dd9522ee4d8101",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b4a0b3cb_647d6601",
         "filename": "rbh-find/src/filters.c",
         "patchSetId": 1
@@ -43,6 +60,23 @@
         "endLine": 67,
         "endChar": 67
       },
+      "revId": "3e11bd1783bce50af99ec0bf97dd9522ee4d8101",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0bcbecab_40ce0b95",
+        "filename": "rbh-find/src/filters.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-06-11T07:05:11Z",
+      "side": 1,
+      "message": "defect: same as above",
       "revId": "3e11bd1783bce50af99ec0bf97dd9522ee4d8101",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
