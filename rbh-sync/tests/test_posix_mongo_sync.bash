@@ -235,7 +235,8 @@ test_continue_sync_on_error()
     find_attribute '"ns.name":"'$first_file'"'
 }
 
-test_stop_sync_on_error(){
+test_stop_sync_on_error()
+{
     local first_file="test1"
     local second_file="test2"
     local third_file="test3"
@@ -278,8 +279,32 @@ test_stop_sync_on_error(){
 
     (echo $second_file_att | grep "No entry found" && \
      echo $third_file_att | grep "No entry found") || \
-    error "Synchronized files that should not."
+        error "Synchronized files that should not."
+}
 
+test_config()
+{
+    local conf_file="conf"
+    local file="test_file"
+
+    touch $file
+
+    echo "---
+ RBH_MONGO_DB_URI: \"mongodb://localhost:27017\"
+---" > $conf_file
+
+    rbh_sync --conf $conf_file --one rbh:posix:$file rbh:mongo:$testdb
+
+    find_attribute '"ns.xattrs.path":"/"'
+
+    echo "---
+ RBH_MONGO_DB_URI: \"mongodb://localhost:12345\"
+---" > $conf_file
+
+    rbh_sync --conf $conf_file --one rbh:posix:$file rbh:mongo:$testdb &&
+        error "Sync with invalid server address is config should have failed"
+
+    return 0
 }
 
 ################################################################################
@@ -291,7 +316,7 @@ declare -a tests=(test_sync_2_files test_sync_size test_sync_3_files
                   test_sync_one_one_file test_sync_one_two_files
                   test_sync_symbolic_link test_sync_socket test_sync_fifo
                   test_sync_branch test_continue_sync_on_error
-                  test_stop_sync_on_error )
+                  test_stop_sync_on_error test_config)
 
 tmpdir=$(mktemp --directory)
 trap -- "rm -rf '$tmpdir'" EXIT
