@@ -167,12 +167,20 @@ _rbh_config_find(const char *key)
     yaml_event_type_t type;
     yaml_event_t event;
 
+next_line:
     if (!yaml_parser_parse(&config->parser, &event)) {
         fprintf(stderr, "Failed to parse event in _rbh_config_find\n");
         return KPR_ERROR;
     }
 
-    if (event.type != YAML_SCALAR_EVENT) {
+    switch (event.type) {
+    case YAML_MAPPING_END_EVENT:
+    case YAML_DOCUMENT_END_EVENT:
+    case YAML_STREAM_END_EVENT:
+        return KPR_NOT_FOUND;
+    case YAML_SCALAR_EVENT:
+        break;
+    default:
         fprintf(stderr,
                 "Found a key that is not a scalar event in _rbh_config_find\n");
         yaml_event_delete(&event);
@@ -201,12 +209,6 @@ _rbh_config_find(const char *key)
     switch (type) {
     case YAML_ALIAS_EVENT:
     case YAML_SCALAR_EVENT:
-        if (!yaml_parser_parse(&config->parser, &event)) {
-            fprintf(stderr, "Failed to parse event in _rbh_config_find\n");
-            return KPR_ERROR;
-        }
-
-        yaml_event_delete(&event);
         break;
     case YAML_SEQUENCE_START_EVENT:
     case YAML_MAPPING_START_EVENT:
@@ -217,14 +219,12 @@ _rbh_config_find(const char *key)
 
         yaml_event_delete(&event);
         break;
-    case YAML_MAPPING_END_EVENT:
-        break;
     default:
         fprintf(stderr, "Invalid event found in _rbh_config_find\n");
         return KPR_ERROR;
     }
 
-    return KPR_NOT_FOUND;
+    goto next_line;
 }
 
 enum key_parse_result

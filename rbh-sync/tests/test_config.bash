@@ -36,7 +36,8 @@ test_valid_config()
     local file="test_file"
 
     echo "---
- RBH_MONGO_DB_URI: \"mongodb://localhost:27017\"
+ blob: \"blobby\"
+ something: \"nothing\"
 ---" > $conf_file
 
     touch $file
