@@ -18,14 +18,22 @@ test_invalid_config()
     local conf_file="conf"
     local file="test_file"
 
+    touch $file
+
     echo "abcdef
 ghijkl
 blob" > $conf_file
 
-    touch $file
-
     rbh_sync --conf $conf_file --one rbh:posix:$file rbh:mongo:$testdb &&
         error "Sync with invalid configuration file should have failed"
+
+    echo "---
+ RBH_MONGO_DB_URI: \"mongodb://localhost:12345\"
+ RBH_MONGO_DB_URI: \"mongodb://localhost:27017\"
+---" > $conf_file
+
+    rbh_sync --conf $conf_file --one rbh:posix:$file rbh:mongo:$testdb &&
+        error "Sync with duplicate keys should have failed"
 
     return 0
 }
