@@ -10,6 +10,8 @@
 
 #include <yaml.h>
 
+#include "robinhood/value.h"
+
 struct rbh_config;
 
 /**
@@ -43,8 +45,8 @@ int
 rbh_config_reset();
 
 /**
- * Search a key in the configuration file and return the event associated to the
- * value of that key.
+ * Search a key in the configuration file and return the value associated to
+ * that key.
  *
  * Must be called after a call to `rbh_config_open` or `rbh_config_reset`.
  *
@@ -54,8 +56,8 @@ rbh_config_reset();
  *
  * @param key           the key to search, can be of the form `a/b` to search
  *                      a subkey
- * @param event         the event corresponding to the key, it's type is set to
- *                      YAML_NO_EVENT if the key was not found
+ * @param value         the value corresponding to the key, it's type is set to
+ *                      -1 if the key was not found
  *
  * @return              a non-zero error code if scalar parsing of the key
  *                      failed or an unknown event was found in the
@@ -63,7 +65,7 @@ rbh_config_reset();
  *                      0 otherwise
  */
 int
-rbh_config_find(const char *key, yaml_event_t *event);
+rbh_config_find(const char *key, struct rbh_value *value);
 
 /**
  * Return the local config.
