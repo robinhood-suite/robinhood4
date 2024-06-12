@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "95cc0b12_4f92a4ca",
+        "filename": "librobinhood/include/robinhood/config.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-06-12T08:18:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e8106a39_31a45e45",
+      "range": {
+        "startLine": 46,
+        "startChar": 3,
+        "endLine": 46,
+        "endChar": 9
+      },
+      "revId": "39894014d0afef072beef96fa278e6a3f22a0fa8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6da15454_bed556fb",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-06-07T14:36:22Z",
       "side": 1,
       "message": "this does not work for sequences though.\n```\nkey:\n   - { \"test\": \"a\" }\n   - 2\n   - 3\n```\n   \nHow would you query something in here?",
+      "range": {
+        "startLine": 50,
+        "startChar": 30,
+        "endLine": 50,
+        "endChar": 39
+      },
+      "revId": "39894014d0afef072beef96fa278e6a3f22a0fa8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "42e7d4aa_bc966679",
+        "filename": "librobinhood/include/robinhood/config.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-06-12T08:18:06Z",
+      "side": 1,
+      "message": "You\u0027re right, it doesn\u0027t work for sequence.",
+      "parentUuid": "6da15454_bed556fb",
       "range": {
         "startLine": 50,
         "startChar": 30,
@@ -70,6 +118,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3971f4fd_00fe985b",
+        "filename": "librobinhood/include/robinhood/config.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-06-12T08:18:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3f37a4dc_3fe9cd87",
+      "range": {
+        "startLine": 53,
+        "startChar": 17,
+        "endLine": 53,
+        "endChar": 49
+      },
+      "revId": "39894014d0afef072beef96fa278e6a3f22a0fa8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3bfabefe_91102e89",
@@ -93,6 +165,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dd04e2dc_bc768c6f",
+        "filename": "librobinhood/include/robinhood/config.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-06-12T08:18:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3bfabefe_91102e89",
+      "range": {
+        "startLine": 58,
+        "startChar": 60,
+        "endLine": 59,
+        "endChar": 33
+      },
+      "revId": "39894014d0afef072beef96fa278e6a3f22a0fa8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e79bb051_20445339",
@@ -106,6 +202,30 @@
       "writtenOn": "2024-06-07T14:36:22Z",
       "side": 1,
       "message": "suggest: rbh_config_get or rbh_config_find. This is what most config API use. Search is a bit unusual.",
+      "range": {
+        "startLine": 67,
+        "startChar": 0,
+        "endLine": 67,
+        "endChar": 17
+      },
+      "revId": "39894014d0afef072beef96fa278e6a3f22a0fa8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ced8aff8_fce8f444",
+        "filename": "librobinhood/include/robinhood/config.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-06-12T08:18:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e79bb051_20445339",
       "range": {
         "startLine": 67,
         "startChar": 0,
@@ -141,6 +261,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7022ff32_f3b75c1e",
+        "filename": "librobinhood/include/robinhood/config.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-06-12T08:18:06Z",
+      "side": 1,
+      "message": "With just that, we cannot know if NULL was returned because of an error or because the key was not found.",
+      "parentUuid": "8092dbea_268e9778",
+      "range": {
+        "startLine": 68,
+        "startChar": 18,
+        "endLine": 68,
+        "endChar": 37
+      },
+      "revId": "39894014d0afef072beef96fa278e6a3f22a0fa8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a4467eda_480319e6",
         "filename": "librobinhood/src/config.c",
         "patchSetId": 1
@@ -152,6 +296,24 @@
       "writtenOn": "2024-06-07T10:06:30Z",
       "side": 1,
       "message": "question: Where this function is used ?",
+      "revId": "39894014d0afef072beef96fa278e6a3f22a0fa8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "faef8c11_8fd769c7",
+        "filename": "librobinhood/src/config.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-06-12T08:18:06Z",
+      "side": 1,
+      "message": "Oups, code stayed in _rbh_config_search. Removed",
+      "parentUuid": "a4467eda_480319e6",
       "revId": "39894014d0afef072beef96fa278e6a3f22a0fa8",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
@@ -169,6 +331,24 @@
       "writtenOn": "2024-06-07T14:36:22Z",
       "side": 1,
       "message": "empty line",
+      "revId": "39894014d0afef072beef96fa278e6a3f22a0fa8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4fb55869_5c17fff4",
+        "filename": "librobinhood/src/config.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-06-12T08:18:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b4cd6206_339a211f",
       "revId": "39894014d0afef072beef96fa278e6a3f22a0fa8",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
@@ -196,6 +376,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "94a2cb7a_75832790",
+        "filename": "librobinhood/src/config.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-06-12T08:18:06Z",
+      "side": 1,
+      "message": "We expect a scalar here because we expect a key, which is a scalar event. But you\u0027re right about the assert and other parser_errors.",
+      "parentUuid": "2c5aecc1_b6255d9e",
+      "range": {
+        "startLine": 101,
+        "startChar": 4,
+        "endLine": 101,
+        "endChar": 44
+      },
+      "revId": "39894014d0afef072beef96fa278e6a3f22a0fa8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "080f6f13_c43d23ad",
@@ -209,6 +413,30 @@
       "writtenOn": "2024-06-07T14:36:22Z",
       "side": 1,
       "message": "defect: \u003d\u003d 0, right? (which is why I prefer !strcmp or strcmp over \u003d\u003d 0 or !\u003d 0).",
+      "range": {
+        "startLine": 112,
+        "startChar": 33,
+        "endLine": 112,
+        "endChar": 37
+      },
+      "revId": "39894014d0afef072beef96fa278e6a3f22a0fa8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c3884f7b_b3b32aea",
+        "filename": "librobinhood/src/config.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-06-12T08:18:06Z",
+      "side": 1,
+      "message": "Done. And I prefer this because I only use \"strcmp\" as \"is a equal to b\", in which case true would be the wrong condition here.",
+      "parentUuid": "080f6f13_c43d23ad",
       "range": {
         "startLine": 112,
         "startChar": 33,
@@ -244,6 +472,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b5f71ab3_fad018d8",
+        "filename": "librobinhood/src/config.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-06-12T08:18:06Z",
+      "side": 1,
+      "message": "This is an error because it is an invalid YAML file. For instance we could have a new event start here, any end of event, ... These are not expected and cannot be read, so it\u0027s an error.",
+      "parentUuid": "ebb2ad24_acd64f6e",
+      "range": {
+        "startLine": 137,
+        "startChar": 15,
+        "endLine": 137,
+        "endChar": 24
+      },
+      "revId": "39894014d0afef072beef96fa278e6a3f22a0fa8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "58ae397e_9f004ae3",
         "filename": "librobinhood/src/config.c",
         "patchSetId": 1
@@ -255,6 +507,30 @@
       "writtenOn": "2024-06-07T14:36:22Z",
       "side": 1,
       "message": "suggest: key or key_to_find or subkey",
+      "range": {
+        "startLine": 161,
+        "startChar": 4,
+        "endLine": 161,
+        "endChar": 10
+      },
+      "revId": "39894014d0afef072beef96fa278e6a3f22a0fa8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c7d8b2c5_9b016764",
+        "filename": "librobinhood/src/config.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-06-12T08:18:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "58ae397e_9f004ae3",
       "range": {
         "startLine": 161,
         "startChar": 4,
