@@ -66,7 +66,6 @@ fsevents_lib = static_library(
         'src/deduplicator/rbh_fsevent_utils.c',
         'src/enricher.c',
         'src/enrichers/posix.c',
-        'src/serialization.c',
         'src/sources/yaml_file.c',
         'src/sources/file.c',
         'src/sources/hestia.c',
