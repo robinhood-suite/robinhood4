@@ -16,6 +16,24 @@
       "message": "Not that I am against adding this as a parameter. But I can think of a few places that might use the config. Adding the parameter in all the places will be quite tedious. Have you thought about having a global config in librobinhood? This would make life a lot easier. For reference, in robinhood 3, there is a global config structure that contains all the configuration elements. So it\u0027s very easy to use.",
       "revId": "18ba8df215b4c32fa7f4b211ab30269ab398ace3",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "190c33f4_36fbeb5b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-06-12T08:18:12Z",
+      "side": 1,
+      "message": "Added the config as a global parameter, but we still need to give it to the backend_new functions because they are in different modules, so initializing the config in the main program will not work for another module.",
+      "parentUuid": "ec5f9bed_e2d73d87",
+      "revId": "18ba8df215b4c32fa7f4b211ab30269ab398ace3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
