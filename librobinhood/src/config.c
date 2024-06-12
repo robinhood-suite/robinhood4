@@ -10,9 +10,9 @@
 #include <miniyaml.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <yaml.h>
 
-#include <robinhood/config.h>
+#include "robinhood/config.h"
+#include "robinhood/serialization.h"
 
 struct rbh_config {
     FILE *file;
@@ -234,13 +234,14 @@ _rbh_config_find(const char *key)
 }
 
 int
-rbh_config_find(const char *_key, yaml_event_t *event)
+rbh_config_find(const char *_key, struct rbh_value *value)
 {
     enum key_parse_result result;
+    yaml_event_t event;
     char *subkey;
     char *key;
 
-    event->type = YAML_NO_EVENT;
+    value->type = -1;
 
     if (_key == NULL) {
         errno = EINVAL;
@@ -276,8 +277,13 @@ rbh_config_find(const char *_key, yaml_event_t *event)
 
     free(key);
 
-    if (!yaml_parser_parse(&config->parser, event)) {
+    if (!yaml_parser_parse(&config->parser, &event)) {
         fprintf(stderr, "Failed to parse event in rbh_config_find\n");
+        return 1;
+    }
+
+    if (!parse_rbh_value(&config->parser, &event, value)) {
+        fprintf(stderr, "Failed to parse value in rbh_config_find\n");
         return 1;
     }
 

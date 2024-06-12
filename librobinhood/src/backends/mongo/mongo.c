@@ -1378,27 +1378,25 @@ static const struct rbh_backend MONGO_BACKEND = {
 static const char *
 get_mongo_addr()
 {
-    yaml_event_t event;
+    struct rbh_value value = { 0 };
     const char *addr;
     int rc;
 
-    rc = rbh_config_find("RBH_MONGO_DB_URI", &event);
+    rc = rbh_config_find("RBH_MONGO_DB_URI", &value);
     if (rc)
         return NULL;
 
-    if (event.type != YAML_NO_EVENT) {
-        const char *config_addr;
-
-        if (!yaml_parse_string(&event, &config_addr, NULL)) {
-            int save_errno = errno;
-            yaml_event_delete(&event);
-            fprintf(stderr, "Failed to read the value associated to 'RBH_MONGO_DB_URI' in configuration file\n");
-            errno = save_errno;
+    if (value.type != -1) {
+        if (value.type != RBH_VT_STRING) {
+            // TODO: add a conversion value_type to string
+            fprintf(stderr,
+                    "Expected the value associated with 'RBH_MONGO_DB_URI' in configuration to be a string, found a '%d'\n",
+                    value.type);
+            errno = EINVAL;
             return NULL;
         }
 
-        addr = strdup(config_addr);
-        yaml_event_delete(&event);
+        addr = strdup(value.string);
         if (addr == NULL)
             return NULL;
 
