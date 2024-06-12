@@ -161,11 +161,70 @@ rbh_config_free()
 }
 
 static enum key_parse_result
-_rbh_config_find(const char *key)
+parse_and_set_value(yaml_parser_t *parser, struct rbh_value *value)
 {
-    const char *current_key;
+    yaml_event_t event;
+
+    if (!yaml_parser_parse(&config->parser, &event)) {
+        fprintf(stderr, "Failed to parse event in rbh_config_find\n");
+        return KPR_ERROR;
+    }
+
+    if (!parse_rbh_value(&config->parser, &event, value)) {
+        fprintf(stderr, "Failed to parse value in rbh_config_find\n");
+        return KPR_ERROR;
+    }
+
+    return KPR_FOUND;
+}
+
+static int
+skip_to_next_key()
+{
     yaml_event_type_t type;
     yaml_event_t event;
+
+    if (!yaml_parser_parse(&config->parser, &event)) {
+        fprintf(stderr, "Failed to parse event in _rbh_config_find\n");
+        return 1;
+    }
+
+    type = event.type;
+    yaml_event_delete(&event);
+
+    switch (type) {
+    case YAML_ALIAS_EVENT:
+    case YAML_SCALAR_EVENT:
+        break;
+    case YAML_SEQUENCE_START_EVENT:
+    case YAML_MAPPING_START_EVENT:
+        if (!yaml_parser_skip(&config->parser, type)) {
+            fprintf(stderr, "Failed to skip event in _rbh_config_find\n");
+            return 1;
+        }
+
+        yaml_event_delete(&event);
+        break;
+    default:
+        fprintf(stderr, "Invalid event found in _rbh_config_find\n");
+        return 1;
+    }
+
+    return 0;
+}
+
+static enum key_parse_result
+_rbh_config_find(char *key, struct rbh_value *value)
+{
+    const char *current_key;
+    bool key_found = false;
+    yaml_event_t event;
+    char *subkey;
+    int rc;
+
+    subkey = strtok(key, "/");
+    if (subkey == NULL)
+        return parse_and_set_value(&config->parser, value);
 
 next_line:
     if (!yaml_parser_parse(&config->parser, &event)) {
@@ -173,11 +232,12 @@ next_line:
         return KPR_ERROR;
     }
 
+    /* Are we at the end of the file ? */
     switch (event.type) {
     case YAML_MAPPING_END_EVENT:
     case YAML_DOCUMENT_END_EVENT:
     case YAML_STREAM_END_EVENT:
-        return KPR_NOT_FOUND;
+        return key_found ? KPR_FOUND : KPR_NOT_FOUND;
     case YAML_SCALAR_EVENT:
         break;
     default:
@@ -193,36 +253,35 @@ next_line:
         return KPR_ERROR;
     }
 
-    if (strcmp(current_key, key) == 0)
-        return KPR_FOUND;
+    if (strcmp(current_key, subkey) == 0) {
+        enum key_parse_result rc;
 
-    yaml_event_delete(&event);
-
-    if (!yaml_parser_parse(&config->parser, &event)) {
-        fprintf(stderr, "Failed to parse event in _rbh_config_find\n");
-        return KPR_ERROR;
-    }
-
-    type = event.type;
-    yaml_event_delete(&event);
-
-    switch (type) {
-    case YAML_ALIAS_EVENT:
-    case YAML_SCALAR_EVENT:
-        break;
-    case YAML_SEQUENCE_START_EVENT:
-    case YAML_MAPPING_START_EVENT:
-        if (!yaml_parser_skip(&config->parser, type)) {
-            fprintf(stderr, "Failed to skip event in _rbh_config_find\n");
+        if (key_found) {
+            fprintf(stderr,
+                    "Duplicate key '%s' found in configuration file\n",
+                    subkey);
+            yaml_event_delete(&event);
             return KPR_ERROR;
         }
 
-        yaml_event_delete(&event);
-        break;
-    default:
-        fprintf(stderr, "Invalid event found in _rbh_config_find\n");
-        return KPR_ERROR;
+        rc = _rbh_config_find(NULL, value);
+        if (rc == KPR_NOT_FOUND || rc == KPR_ERROR)
+            return rc;
+
+        key_found = true;
+
+        goto next_line;
     }
+
+    yaml_event_delete(&event);
+
+    /* If the key found is not the one we search, directly skip to the next
+     * same-level key.
+     */
+
+    rc = skip_to_next_key();
+    if (rc)
+        return KPR_ERROR;
 
     goto next_line;
 }
@@ -231,11 +290,7 @@ enum key_parse_result
 rbh_config_find(const char *_key, struct rbh_value *value)
 {
     enum key_parse_result result;
-    yaml_event_t event;
-    char *subkey;
     char *key;
-
-    value->type = -1;
 
     if (_key == NULL) {
         errno = EINVAL;
@@ -252,36 +307,15 @@ rbh_config_find(const char *_key, struct rbh_value *value)
     if (key == NULL)
         error(EXIT_FAILURE, ENOMEM, "strdup in rbh_config_find");
 
-    subkey = strtok(key, "/");
-    while (subkey != NULL) {
-        result = _rbh_config_find(subkey);
-        if (result == KPR_ERROR) {
-            free(key);
-            errno = EINVAL;
-            return result;
-        } else if (result == KPR_NOT_FOUND) {
-            fprintf(stderr, "Failed to find key '%s' in rbh_config_find\n",
-                    _key);
-            free(key);
-            return result;
-        }
-
-        subkey = strtok(NULL, "/");
-    }
-
+    result = _rbh_config_find(key, value);
     free(key);
 
-    if (!yaml_parser_parse(&config->parser, &event)) {
-        fprintf(stderr, "Failed to parse event in rbh_config_find\n");
-        return KPR_ERROR;
-    }
+    if (result == KPR_ERROR)
+        errno = EINVAL;
+    else if (result == KPR_NOT_FOUND)
+        fprintf(stderr, "Failed to find key '%s' in rbh_config_find\n", _key);
 
-    if (!parse_rbh_value(&config->parser, &event, value)) {
-        fprintf(stderr, "Failed to parse value in rbh_config_find\n");
-        return KPR_ERROR;
-    }
-
-    return KPR_FOUND;
+    return result;
 }
 
 struct rbh_config *
