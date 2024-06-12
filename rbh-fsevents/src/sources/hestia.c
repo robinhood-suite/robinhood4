@@ -12,8 +12,8 @@
 #include <miniyaml.h>
 #include <robinhood/fsevent.h>
 #include <robinhood/itertools.h>
+#include <robinhood/serialization.h>
 
-#include "serialization.h"
 #include "source.h"
 #include "yaml_file.h"
 #include "utils.h"

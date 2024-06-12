@@ -10,6 +10,8 @@
 
 #include <yaml.h>
 
+#include "robinhood/value.h"
+
 struct rbh_config;
 
 /**

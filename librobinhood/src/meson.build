@@ -25,6 +25,7 @@ librobinhood = library(
         'queue.c',
         'ring.c',
         'ringr.c',
+        'serialization.c',
         'sstack.c',
         'stack.c',
         'statx.c',
