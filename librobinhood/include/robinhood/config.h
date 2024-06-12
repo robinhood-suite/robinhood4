@@ -60,17 +60,22 @@ rbh_config_reset();
  * `a/b/c`, where `a` is a map containing `b` which is another
  * map containing the key `c`.
  *
- * @param key           the key to search, can be of the form `a/b` to search
- *                      a subkey
- * @param value         the value corresponding to the key
+ * @param key            the key to search, can be of the form `a/b` to search
+ *                       a subkey
+ * @param value          the value corresponding to the key
+ * @param expected_type  the type expected to be found in the configuration
+ *                       file. If the key isn't found in the configuration file,
+ *                       and the expected type is not a string, will not fetch
+ *                       the value of the environement variable
  *
- * @return              KPR_FOUND if the key was found,
- *                      KPR_NOT_FOUND if the key wasn't found,
- *                      KPR_ERROR if there was an error while parsing the
- *                      configuration file, and errno is set
+ * @return               KPR_FOUND if the key was found,
+ *                       KPR_NOT_FOUND if the key wasn't found,
+ *                       KPR_ERROR if there was an error while parsing the
+ *                       configuration file, and errno is set
  */
 enum key_parse_result
-rbh_config_find(const char *key, struct rbh_value *value);
+rbh_config_find(const char *key, struct rbh_value *value,
+                enum rbh_value_type expected_type);
 
 /**
  * Return the local config.
