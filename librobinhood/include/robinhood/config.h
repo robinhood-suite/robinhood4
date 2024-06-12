@@ -14,6 +14,12 @@
 
 struct rbh_config;
 
+enum key_parse_result {
+    KPR_FOUND,
+    KPR_NOT_FOUND,
+    KPR_ERROR,
+};
+
 /**
  * Create and initialize the config.
  *
@@ -59,12 +65,12 @@ rbh_config_reset();
  * @param value         the value corresponding to the key, it's type is set to
  *                      -1 if the key was not found
  *
- * @return              a non-zero error code if scalar parsing of the key
- *                      failed or an unknown event was found in the
- *                      configuration, and errno is set
- *                      0 otherwise
+ * @return              KPR_FOUND if the key was found,
+ *                      KPR_NOT_FOUND if the key wasn't found,
+ *                      KPR_ERROR if there was an error while parsing the
+ *                      configuration file, and errno is set
  */
-int
+enum key_parse_result
 rbh_config_find(const char *key, struct rbh_value *value);
 
 /**

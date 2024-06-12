@@ -1379,14 +1379,14 @@ static const char *
 get_mongo_addr()
 {
     struct rbh_value value = { 0 };
+    enum key_parse_result rc;
     const char *addr;
-    int rc;
 
     rc = rbh_config_find("RBH_MONGO_DB_URI", &value);
-    if (rc)
+    if (rc == KPR_ERROR)
         return NULL;
 
-    if (value.type != -1) {
+    if (rc == KPR_FOUND) {
         if (value.type != RBH_VT_STRING) {
             // TODO: add a conversion value_type to string
             fprintf(stderr,
