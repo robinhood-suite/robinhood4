@@ -262,6 +262,12 @@ prefix and is the reason for the deprecation of '+' as a prefix.
 So looking for all the files with a sticky bit could be done with ``/+t``. And
 ``+t`` would match on file with only the sticky bit set and no other permission.
 
+mpi-file backend
+----------------
+
+Only the ``-name``, ``-path``, ``-size``, ``-type``, ``-[acm]time`` and
+``-[acm]min`` predicates are supported by rbh-find with the mpi-file backend.
+
 Extra features
 ==============
 
