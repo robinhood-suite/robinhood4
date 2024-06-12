@@ -67,6 +67,9 @@ rbh_config_reset()
     yaml_event_t event;
     int type;
 
+    if (config == NULL)
+        return 0;
+
     if (config->parser_initialized) {
         yaml_parser_delete(&config->parser);
         config->parser_initialized = false;
@@ -286,8 +289,8 @@ next_line:
     goto next_line;
 }
 
-enum key_parse_result
-rbh_config_find(const char *_key, struct rbh_value *value)
+static enum key_parse_result
+find_in_config(const char *_key, struct rbh_value *value)
 {
     enum key_parse_result result;
     char *key;
@@ -316,6 +319,41 @@ rbh_config_find(const char *_key, struct rbh_value *value)
         fprintf(stderr, "Failed to find key '%s' in rbh_config_find\n", _key);
 
     return result;
+}
+
+enum key_parse_result
+rbh_config_find(const char *key, struct rbh_value *value,
+                enum rbh_value_type expected_type)
+{
+    enum key_parse_result rc;
+
+    rc = find_in_config(key, value);
+    if (rc == KPR_ERROR)
+        return rc;
+
+    if (rc == KPR_FOUND) {
+        if (value->type == expected_type)
+            return KPR_FOUND;
+
+        // TODO: add a conversion value_type to string
+        fprintf(stderr,
+                "Expected the value of '%s' to be a '%d', found a '%d'\n",
+                key, expected_type, value->type);
+        errno = EINVAL;
+        return KPR_ERROR;
+    }
+
+    if (expected_type != RBH_VT_STRING)
+        // XXX: handle the different types when necessary
+        return KPR_NOT_FOUND;
+
+    value->type = RBH_VT_STRING;
+    value->string = getenv(key);
+
+    if (value->string == NULL)
+        return KPR_NOT_FOUND;
+
+    return KPR_FOUND;
 }
 
 struct rbh_config *

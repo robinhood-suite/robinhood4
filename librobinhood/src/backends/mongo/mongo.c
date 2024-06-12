@@ -1380,37 +1380,17 @@ get_mongo_addr()
 {
     struct rbh_value value = { 0 };
     enum key_parse_result rc;
-    const char *addr;
 
-    rc = rbh_config_find("RBH_MONGO_DB_URI", &value);
+    rc = rbh_config_find("RBH_MONGO_DB_URI", &value, RBH_VT_STRING);
     if (rc == KPR_ERROR)
         return NULL;
 
-    if (rc == KPR_FOUND) {
-        if (value.type != RBH_VT_STRING) {
-            // TODO: add a conversion value_type to string
-            fprintf(stderr,
-                    "Expected the value associated with 'RBH_MONGO_DB_URI' in configuration to be a string, found a '%d'\n",
-                    value.type);
-            errno = EINVAL;
-            return NULL;
-        }
+    rbh_config_reset();
 
-        addr = strdup(value.string);
-        if (addr == NULL)
-            return NULL;
+    if (value.string == NULL)
+        value.string = "mongodb://localhost:27017";
 
-        rbh_config_reset();
-
-        return addr;
-    }
-
-    addr = getenv("RBH_MONGO_DB_URI");
-
-    if (!addr)
-        addr = "mongodb://localhost:27017";
-
-    return addr;
+    return value.string;
 }
 
 static int
