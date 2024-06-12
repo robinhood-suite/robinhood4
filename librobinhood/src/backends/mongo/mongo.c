@@ -1377,42 +1377,20 @@ static const struct rbh_backend MONGO_BACKEND = {
 
 #define MONGODB_ADDRESS_KEY "RBH_MONGODB_ADDRESS"
 
-static char *
+static const char *
 get_mongo_addr()
 {
     struct rbh_value value = { 0 };
     enum key_parse_result rc;
-    char *addr;
 
-    rc = rbh_config_find(MONGODB_ADDRESS_KEY, &value);
+    rc = rbh_config_find(MONGODB_ADDRESS_KEY, &value, RBH_VT_STRING);
     if (rc == KPR_ERROR)
         return NULL;
 
-    if (rc == KPR_FOUND) {
-        if (value.type != RBH_VT_STRING) {
-            // TODO: add a conversion value_type to string
-            fprintf(stderr,
-                    "Expected the value associated with '" MONGODB_ADDRESS_KEY "' in configuration to be a string, found a '%d'\n",
-                    value.type);
-            errno = EINVAL;
-            return NULL;
-        }
+    if (value.string == NULL)
+        value.string = "mongodb://localhost:27017";
 
-        addr = strdup(value.string);
-        if (addr == NULL)
-            return NULL;
-
-        rbh_config_reset();
-
-        return addr;
-    }
-
-    addr = getenv(MONGODB_ADDRESS_KEY);
-
-    if (!addr)
-        addr = "mongodb://localhost:27017";
-
-    return strdup(addr);
+    return value.string;
 }
 
 static int
@@ -1420,7 +1398,7 @@ mongo_backend_init(struct mongo_backend *mongo, const char *fsname)
 {
     mongoc_uri_t *uri;
     int save_errno;
-    char *addr;
+    const char *addr;
     int rc;
 
     addr = get_mongo_addr();
@@ -1429,7 +1407,6 @@ mongo_backend_init(struct mongo_backend *mongo, const char *fsname)
     }
 
     uri = mongoc_uri_new(addr);
-    free(addr);
     if (uri == NULL) {
         errno = EINVAL;
         return -1;
