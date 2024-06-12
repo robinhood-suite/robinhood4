@@ -23,12 +23,6 @@ struct rbh_config {
 
 static struct rbh_config *config;
 
-enum key_parse_result {
-    KPR_FOUND,
-    KPR_NOT_FOUND,
-    KPR_ERROR,
-};
-
 int
 rbh_config_open(const char *config_file)
 {
@@ -245,7 +239,7 @@ next_line:
     goto next_line;
 }
 
-int
+enum key_parse_result
 rbh_config_find(const char *_key, struct rbh_value *value)
 {
     enum key_parse_result result;
@@ -253,18 +247,16 @@ rbh_config_find(const char *_key, struct rbh_value *value)
     char *subkey;
     char *key;
 
-    value->type = -1;
-
     if (_key == NULL) {
         errno = EINVAL;
-        return 1;
+        return KPR_ERROR;
     }
 
     /* The configuration file wasn't opened, so consider there is no
      * configuration file to use, and let the user decide what to do.
      */
     if (config == NULL)
-        return 0;
+        return KPR_NOT_FOUND;
 
     key = strdup(_key);
     if (key == NULL)
@@ -276,12 +268,12 @@ rbh_config_find(const char *_key, struct rbh_value *value)
         if (result == KPR_ERROR) {
             free(key);
             errno = EINVAL;
-            return 1;
+            return result;
         } else if (result == KPR_NOT_FOUND) {
             fprintf(stderr, "Failed to find key '%s' in rbh_config_find\n",
                     _key);
             free(key);
-            return 0;
+            return result;
         }
 
         subkey = strtok(NULL, "/");
@@ -291,15 +283,15 @@ rbh_config_find(const char *_key, struct rbh_value *value)
 
     if (!yaml_parser_parse(&config->parser, &event)) {
         fprintf(stderr, "Failed to parse event in rbh_config_find\n");
-        return 1;
+        return KPR_ERROR;
     }
 
     if (!parse_rbh_value(&config->parser, &event, value)) {
         fprintf(stderr, "Failed to parse value in rbh_config_find\n");
-        return 1;
+        return KPR_ERROR;
     }
 
-    return 0;
+    return KPR_FOUND;
 }
 
 struct rbh_config *
