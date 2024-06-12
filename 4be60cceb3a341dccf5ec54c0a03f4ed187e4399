@@ -18,6 +18,24 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2817002f_29dbadef",
+        "filename": "librobinhood/include/robinhood/config.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-06-12T08:17:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f4f62cf1_58df61e4",
+      "revId": "4be60cceb3a341dccf5ec54c0a03f4ed187e4399",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e39f92d3_0ec7f57f",
@@ -41,6 +59,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b70fec42_d2421d09",
+        "filename": "librobinhood/src/config.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-06-12T08:17:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e39f92d3_0ec7f57f",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 21
+      },
+      "revId": "4be60cceb3a341dccf5ec54c0a03f4ed187e4399",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "defd8892_bd92e6ce",
@@ -54,6 +96,30 @@
       "writtenOn": "2024-06-07T13:32:41Z",
       "side": 1,
       "message": "minor: I am not sure about this. This is an error that can occur. The file could be missing, not readable, the user can enter the wrong name... Since librobinhood is a library, we should not make this error fatal. A code could check several paths for example.\n\nSomething like this:\n```\nconfig \u003d rbh_config_initalize(\"~/.config/robinhood/myconf.yaml\");\nif (!config)\n    config \u003d rbh_config_initialize(\"/etc/robinhood/global.yaml\");\n```",
+      "range": {
+        "startLine": 26,
+        "startChar": 36,
+        "endLine": 26,
+        "endChar": 66
+      },
+      "revId": "4be60cceb3a341dccf5ec54c0a03f4ed187e4399",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee69281f_a04fb902",
+        "filename": "librobinhood/src/config.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-06-12T08:17:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "defd8892_bd92e6ce",
       "range": {
         "startLine": 26,
         "startChar": 36,
@@ -101,6 +167,30 @@
       "side": 1,
       "message": "As for the comment above. It is probably better to not fail here since this may fail (I actually don\u0027t know if it can realistically fail for user related reasons).",
       "parentUuid": "87ff6f36_766a2aa0",
+      "range": {
+        "startLine": 32,
+        "startChar": 8,
+        "endLine": 32,
+        "endChar": 20
+      },
+      "revId": "4be60cceb3a341dccf5ec54c0a03f4ed187e4399",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e1500e3f_1a1dd3bc",
+        "filename": "librobinhood/src/config.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-06-12T08:17:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8a6aba1c_2bd95853",
       "range": {
         "startLine": 32,
         "startChar": 8,
