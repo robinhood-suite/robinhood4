@@ -31,29 +31,44 @@
 
 /**
  * _mfu_pred_relative is an intermediate function whose return value is used
- * by MFU_PRED_ATIME, MFU_PRED_CTIME and MFU_PRED_MTIME.
+ * by MFU_PRED_AMIN, MFU_PRED_CMIN and MFU_PRED_MMIN.
  */
+
+static uint64_t TU_MINUTE = 60;
+
 static mfu_pred_times_rel *
-_mfu_pred_relative(const struct rbh_filter *filter, const mfu_pred_times *t)
+_mfu_pred_relative(const struct rbh_filter *filter, const mfu_pred_times *now)
 {
     const struct rbh_value *value = &filter->compare.value;
     uint64_t val = value->uint64;
     uint64_t magnitude;
     int cmp;
 
+    /* We need to convert the time contained in seconds in the filter into
+     * minutes relative to the current time to use mpifileutils's comparison
+     * functions (MFU_PRED_AMIN,...).
+     */
+    magnitude = (now->secs - val) / TU_MINUTE;
+
+    /* rbh-find check if an entry's time is bigger or smaller than the filter
+     * with STRICTLY_GREATER and STRICTLY_LOWER. However, mpifileutils check if
+     * an entry's time is smaller or bigger than the filter, so we have to
+     * reverse the operators.
+     */
     switch(filter->op)
     {
     case RBH_FOP_STRICTLY_GREATER:
-        cmp = 1;
-        magnitude = val;
+        cmp = -1;
+        if (magnitude == 0)
+            cmp = 0;
         break;
     case RBH_FOP_STRICTLY_LOWER:
-        cmp = -1;
-        magnitude = val;
+        cmp = 1;
+        if (magnitude == 0)
+            cmp = 0;
         break;
     case RBH_FOP_EQUAL:
         cmp = 0;
-        magnitude = val;
         break;
     default:
         errno = ENOTSUP;
@@ -64,8 +79,8 @@ _mfu_pred_relative(const struct rbh_filter *filter, const mfu_pred_times *t)
                              MFU_MALLOC(sizeof(mfu_pred_times_rel));
     r->direction = cmp;
     r->magnitude = magnitude;
-    r->t.secs = t->secs;
-    r->t.nsecs = t->nsecs;
+    r->t.secs = now->secs;
+    r->t.nsecs = now->nsecs;
 
     return r;
 }
@@ -138,11 +153,11 @@ statx2mfu_fn(const uint32_t statx)
     switch(statx)
     {
     case RBH_STATX_ATIME_SEC:
-        return MFU_PRED_ATIME;
+        return MFU_PRED_AMIN;
     case RBH_STATX_CTIME_SEC:
-        return MFU_PRED_CTIME;
+        return MFU_PRED_CMIN;
     case RBH_STATX_MTIME_SEC:
-        return MFU_PRED_MTIME;
+        return MFU_PRED_MMIN;
     case RBH_STATX_TYPE:
         return MFU_PRED_TYPE;
     case RBH_STATX_SIZE:
@@ -318,14 +333,13 @@ convert_rbh_filter(mfu_pred *pred, mfu_pred_times *now, int prefix_len,
 }
 
 mfu_pred *
-rbh_filter2mfu_pred(const struct rbh_filter *filter, int prefix_len)
+rbh_filter2mfu_pred(const struct rbh_filter *filter, int prefix_len,
+                    mfu_pred_times *now)
 {
     mfu_pred *pred_head = mfu_pred_new();
-    mfu_pred_times *now = mfu_pred_now();
     bool rc = false;
 
     rc = convert_rbh_filter(pred_head, now, prefix_len, filter);
-    mfu_free(&now);
 
     return rc ? pred_head : NULL;
 }

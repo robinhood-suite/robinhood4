@@ -301,6 +301,8 @@ struct mpi_file_backend {
      */
     const char *path;
     mfu_flist flist;
+
+    mfu_pred_times *now;
 };
 
     /*--------------------------------------------------------------------*
@@ -418,7 +420,7 @@ mpi_file_backend_filter(void *backend, const struct rbh_filter *filter,
     MPI_Bcast(&prefix_len, 1, MPI_INT, 0, MPI_COMM_WORLD);
 
     if (filter != NULL) {
-        pred_head = rbh_filter2mfu_pred(filter, prefix_len);
+        pred_head = rbh_filter2mfu_pred(filter, prefix_len, mpi_file->now);
         if (pred_head == NULL)
             return NULL;
 
@@ -446,6 +448,7 @@ mpi_file_backend_destroy(void *backend)
 {
     struct mpi_file_backend *mpi_file = backend;
 
+    mfu_free(&mpi_file->now);
     mfu_flist_free(&mpi_file->flist);
     free((char *)mpi_file->path);
     free(mpi_file);
@@ -481,6 +484,8 @@ mpi_file_backend_init(struct mpi_file_backend *mpi_file)
     mpi_file->flist = mfu_flist_new();
     /* We tell mpifileutils that we have the stat informations */
     mfu_flist_set_detail(mpi_file->flist, 1);
+
+    mpi_file->now = mfu_pred_now();
 
     if (mpi_file->flist == NULL)
         error(EXIT_FAILURE, errno, "malloc flist");
