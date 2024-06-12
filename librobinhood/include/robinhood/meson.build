@@ -19,6 +19,7 @@ install_headers(
     'queue.h',
     'ring.h',
     'ringr.h',
+    'serialization.h',
     'sstack.h',
     'stack.h',
     'statx.h',
