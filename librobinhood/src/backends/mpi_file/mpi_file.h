@@ -14,10 +14,10 @@
 #include "robinhood/filter.h"
 
 bool
-convert_rbh_filter(mfu_pred *pred, int prefix_len,
+convert_rbh_filter(mfu_pred *pred, mfu_pred_times *now, int prefix_len,
                    const struct rbh_filter *filter);
 
 mfu_pred *
-rbh_filter2mfu_pred(const struct rbh_filter *filter, int prefix_len);
-
+rbh_filter2mfu_pred(const struct rbh_filter *filter, int prefix_len,
+                    mfu_pred_times *now);
 #endif
