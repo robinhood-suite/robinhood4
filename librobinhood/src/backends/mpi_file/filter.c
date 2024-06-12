@@ -31,22 +31,40 @@
 
 /**
  * _mfu_pred_relative is an intermediate function whose return value is used
- * by MFU_PRED_ATIME, MFU_PRED_CTIME and MFU_PRED_MTIME.
+ * by MFU_PRED_AMIN, MFU_PRED_CMIN and MFU_PRED_MMIN.
  */
+
+static uint64_t TU_MINUTE = 60;
+
 static mfu_pred_times_rel *
-_mfu_pred_relative(const struct rbh_filter *filter)
+_mfu_pred_relative(const struct rbh_filter *filter, const mfu_pred_times *now)
 {
     const struct rbh_value *value = &filter->compare.value;
-    mfu_pred_times *now = mfu_pred_now();
+    uint64_t magnitude;
     int cmp;
 
+    /* We need to convert the time contained in seconds in the filter into
+     * minutes relative to the current time to use mpifileutils's comparison
+     * functions (MFU_PRED_AMIN,...).
+     */
+    magnitude = (now->secs - value->uint64) / TU_MINUTE;
+
+    /* rbh-find check if an entry's time is bigger or smaller than the filter
+     * with STRICTLY_GREATER and STRICTLY_LOWER. However, mpifileutils check if
+     * an entry's time is smaller or bigger than the filter, so we have to
+     * reverse the operators.
+     */
     switch(filter->op)
     {
     case RBH_FOP_STRICTLY_GREATER:
-        cmp = 1;
+        cmp = -1;
+        if (magnitude == 0)
+            cmp = 0;
         break;
     case RBH_FOP_STRICTLY_LOWER:
-        cmp = -1;
+        cmp = 1;
+        if (magnitude == 0)
+            cmp = 0;
         break;
     case RBH_FOP_EQUAL:
         cmp = 0;
@@ -58,11 +76,10 @@ _mfu_pred_relative(const struct rbh_filter *filter)
 
     mfu_pred_times_rel *r = (mfu_pred_times_rel *)
                              MFU_MALLOC(sizeof(mfu_pred_times_rel));
-    r->magnitude = value->uint64;
+    r->magnitude = magnitude;
     r->t.nsecs = now->nsecs;
     r->t.secs = now->secs;
     r->direction = cmp;
-    mfu_free(&now);
 
     return r;
 }
@@ -137,17 +154,17 @@ statx2mfu_fn(const uint32_t statx)
     case RBH_STATX_ATIME:
     case RBH_STATX_ATIME_SEC:
     case RBH_STATX_ATIME_NSEC:
-        return MFU_PRED_ATIME;
+        return MFU_PRED_AMIN;
 
     case RBH_STATX_CTIME:
     case RBH_STATX_CTIME_SEC:
     case RBH_STATX_CTIME_NSEC:
-        return MFU_PRED_CTIME;
+        return MFU_PRED_CMIN;
 
     case RBH_STATX_MTIME:
     case RBH_STATX_MTIME_SEC:
     case RBH_STATX_MTIME_NSEC:
-        return MFU_PRED_MTIME;
+        return MFU_PRED_MMIN;
 
     case RBH_STATX_TYPE:
         return MFU_PRED_TYPE;
@@ -219,7 +236,7 @@ shell_pattern2map(int prefix_len, const char *pattern) {
 }
 
 static void *
-filter2arg(const struct rbh_filter *filter, int prefix_len)
+filter2arg(mfu_pred_times *now, const struct rbh_filter *filter, int prefix_len)
 {
     const struct rbh_filter_field field = filter->compare.field;
     const struct rbh_value *value = &filter->compare.value;
@@ -296,7 +313,7 @@ filter2arg(const struct rbh_filter *filter, int prefix_len)
         case RBH_STATX_MTIME:
         case RBH_STATX_MTIME_SEC:
         case RBH_STATX_MTIME_NSEC:
-            return _mfu_pred_relative(filter);
+            return _mfu_pred_relative(filter, now);
 
         default:
             errno = ENOTSUP;
@@ -310,7 +327,7 @@ filter2arg(const struct rbh_filter *filter, int prefix_len)
 }
 
 static bool
-convert_comparison_filter(mfu_pred *pred, int prefix_len,
+convert_comparison_filter(mfu_pred *pred, mfu_pred_times *now, int prefix_len,
                           const struct rbh_filter *filter)
 {
     mfu_pred_fn func;
@@ -320,7 +337,7 @@ convert_comparison_filter(mfu_pred *pred, int prefix_len,
     if (func == NULL)
         return false;
 
-    arg = filter2arg(filter, prefix_len);
+    arg = filter2arg(now, filter, prefix_len);
     if (arg == NULL)
         return false;
 
@@ -330,7 +347,7 @@ convert_comparison_filter(mfu_pred *pred, int prefix_len,
 }
 
 static bool
-convert_logical_filter(mfu_pred *pred, int prefix_len,
+convert_logical_filter(mfu_pred *pred, mfu_pred_times *now, int prefix_len,
                        const struct rbh_filter *filter)
 {
     if (filter->op == RBH_FOP_OR || filter->op == RBH_FOP_NOT) {
@@ -340,7 +357,8 @@ convert_logical_filter(mfu_pred *pred, int prefix_len,
     }
 
     for(uint32_t i = 0; i < filter->logical.count; i++) {
-        if (!convert_rbh_filter(pred, prefix_len, filter->logical.filters[i]))
+        if (!convert_rbh_filter(pred, now, prefix_len,
+                                filter->logical.filters[i]))
             return false;
     }
 
@@ -348,24 +366,25 @@ convert_logical_filter(mfu_pred *pred, int prefix_len,
 }
 
 bool
-convert_rbh_filter(mfu_pred *pred, int prefix_len,
+convert_rbh_filter(mfu_pred *pred, mfu_pred_times *now, int prefix_len,
                    const struct rbh_filter *filter)
 {
     if (filter == NULL)
         return true;
 
     if (rbh_is_comparison_operator(filter->op))
-        return convert_comparison_filter(pred, prefix_len, filter);
-    return convert_logical_filter(pred, prefix_len, filter);
+        return convert_comparison_filter(pred, now, prefix_len, filter);
+    return convert_logical_filter(pred, now, prefix_len, filter);
 }
 
 mfu_pred *
-rbh_filter2mfu_pred(const struct rbh_filter *filter, int prefix_len)
+rbh_filter2mfu_pred(const struct rbh_filter *filter, int prefix_len,
+                    mfu_pred_times *now)
 {
     mfu_pred *pred_head = mfu_pred_new();
     bool rc = false;
 
-    rc = convert_rbh_filter(pred_head, prefix_len, filter);
+    rc = convert_rbh_filter(pred_head, now, prefix_len, filter);
 
     return rc ? pred_head : NULL;
 }
