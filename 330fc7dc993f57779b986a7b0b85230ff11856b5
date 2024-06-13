@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8e5f35b2_8ba3ee9d",
+        "filename": "librobinhood/include/robinhood/config.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2024-06-13T13:45:44Z",
+      "side": 1,
+      "message": "minor: \"and\" (I guess you let only the file opening in config open and all yaml init in rbh_config_reset.)",
+      "range": {
+        "startLine": 43,
+        "startChar": 34,
+        "endLine": 43,
+        "endChar": 73
+      },
+      "revId": "330fc7dc993f57779b986a7b0b85230ff11856b5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b50940a0_93214e74",
+        "filename": "librobinhood/src/config.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2024-06-13T13:45:44Z",
+      "side": 1,
+      "message": "defect: don\u0027t you have to loop to find the good key at the same level ?",
+      "range": {
+        "startLine": 219,
+        "startChar": 10,
+        "endLine": 226,
+        "endChar": 32
+      },
+      "revId": "330fc7dc993f57779b986a7b0b85230ff11856b5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
