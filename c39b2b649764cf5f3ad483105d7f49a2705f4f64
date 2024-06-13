@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a70ab2aa_141fa2d1",
+        "filename": "librobinhood/src/config.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2024-06-13T12:54:19Z",
+      "side": 1,
+      "message": "question: is-it the yaml parser develop by Quentin ?",
+      "range": {
+        "startLine": 10,
+        "startChar": 10,
+        "endLine": 10,
+        "endChar": 19
+      },
+      "revId": "c39b2b649764cf5f3ad483105d7f49a2705f4f64",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9e7ccc30_111023d6",
+        "filename": "librobinhood/src/meson.build",
+        "patchSetId": 2
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2024-06-13T12:54:19Z",
+      "side": 1,
+      "message": "comment: why using this parameter with a \"NULL\" value ? I guess there is no negativ version value ?",
+      "range": {
+        "startLine": 8,
+        "startChar": 33,
+        "endLine": 8,
+        "endChar": 52
+      },
+      "revId": "c39b2b649764cf5f3ad483105d7f49a2705f4f64",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
