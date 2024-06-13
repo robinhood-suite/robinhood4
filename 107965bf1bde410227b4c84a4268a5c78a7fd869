@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cf9ffbb4_e28dd969",
+        "filename": "librobinhood/src/backends/mongo/mongo.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 1400,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-06-13T14:18:50Z",
+      "side": 1,
+      "message": "major: this is never freed",
+      "revId": "107965bf1bde410227b4c84a4268a5c78a7fd869",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b56600e4_7c841b01",
+        "filename": "librobinhood/src/backends/mongo/mongo.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 1459,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-06-13T14:18:50Z",
+      "side": 1,
+      "message": "question: I don\u0027t understand why before (in backend_new in the previous patch) you get the struct config and here you set the same struct config. Can the struct change ?",
+      "revId": "107965bf1bde410227b4c84a4268a5c78a7fd869",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
