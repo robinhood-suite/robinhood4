@@ -302,7 +302,15 @@ test_config()
 ---" > $conf_file
 
     rbh_sync --conf $conf_file --one rbh:posix:$file rbh:mongo:$testdb &&
-        error "Sync with invalid server address is config should have failed"
+        error "Sync with invalid server address in config should have failed"
+
+    echo "---
+ RBH_MONGO_DB_URI: !int32 12345
+---" > $conf_file
+
+    rbh_sync --conf $conf_file --one rbh:posix:$file rbh:mongo:$testdb &&
+        error "Sync with invalid typing for db address in config should have" \
+              "failed"
 
     return 0
 }
