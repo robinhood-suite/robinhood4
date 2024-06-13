@@ -1,0 +1,165 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4ac8ca5b_89099d22",
+        "filename": "librobinhood/src/backends/mpi_file/filter.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-06-13T11:06:31Z",
+      "side": 1,
+      "message": "nit: magnitude is always val",
+      "range": {
+        "startLine": 48,
+        "startChar": 8,
+        "endLine": 48,
+        "endChar": 24
+      },
+      "revId": "a6a288bf36cacea5576637c80ea2bed210197bcb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7d37249f_41348182",
+        "filename": "librobinhood/src/backends/mpi_file/filter.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-06-13T11:06:31Z",
+      "side": 1,
+      "message": "minor: no need for this variable and val, since they are always value-\u003euint64",
+      "range": {
+        "startLine": 66,
+        "startChar": 19,
+        "endLine": 66,
+        "endChar": 28
+      },
+      "revId": "a6a288bf36cacea5576637c80ea2bed210197bcb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "43a219b2_2b0aeee5",
+        "filename": "librobinhood/src/backends/mpi_file/filter.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-06-13T11:06:31Z",
+      "side": 1,
+      "message": "style",
+      "range": {
+        "startLine": 76,
+        "startChar": 0,
+        "endLine": 78,
+        "endChar": 56
+      },
+      "revId": "a6a288bf36cacea5576637c80ea2bed210197bcb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "329d3080_b2c7b362",
+        "filename": "librobinhood/src/backends/mpi_file/filter.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-06-13T11:06:31Z",
+      "side": 1,
+      "message": "minor: you can theoretically have RBH_STATX_ATIME, RBH_STATX_ATIME_SEC, RBH_STATX_ATIME_NSEC here, so having these 3 as cases, and same for ctime and mtime aswell, would be better",
+      "range": {
+        "startLine": 117,
+        "startChar": 9,
+        "endLine": 117,
+        "endChar": 28
+      },
+      "revId": "a6a288bf36cacea5576637c80ea2bed210197bcb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "78d42671_e2be7a45",
+        "filename": "librobinhood/src/backends/mpi_file/filter.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-06-13T11:06:31Z",
+      "side": 1,
+      "message": "question: are you assured it is a regex here, and not a simple string ?",
+      "range": {
+        "startLine": 171,
+        "startChar": 27,
+        "endLine": 171,
+        "endChar": 46
+      },
+      "revId": "a6a288bf36cacea5576637c80ea2bed210197bcb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8fe9cc1b_e850de10",
+        "filename": "librobinhood/src/backends/mpi_file/filter.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-06-13T11:06:31Z",
+      "side": 1,
+      "message": "suggest: \n```\nif strcmp\n    errno \u003d ENOTSUP;\n    return NULL\n    \narg_regex \u003d ...\n```",
+      "range": {
+        "startLine": 176,
+        "startChar": 12,
+        "endLine": 176,
+        "endChar": 13
+      },
+      "revId": "a6a288bf36cacea5576637c80ea2bed210197bcb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5aa0d2b5_e6d6b422",
+        "filename": "librobinhood/src/backends/mpi_file/filter.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-06-13T11:06:31Z",
+      "side": 1,
+      "message": "question: idem",
+      "range": {
+        "startLine": 178,
+        "startChar": 31,
+        "endLine": 178,
+        "endChar": 44
+      },
+      "revId": "a6a288bf36cacea5576637c80ea2bed210197bcb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
