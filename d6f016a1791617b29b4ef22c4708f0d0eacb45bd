@@ -22,6 +22,40 @@
       },
       "revId": "d6f016a1791617b29b4ef22c4708f0d0eacb45bd",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd58af70_6d437dca",
+        "filename": "librobinhood/src/config.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-06-13T13:39:34Z",
+      "side": 1,
+      "message": "again it will fclose a NULL pointer",
+      "revId": "d6f016a1791617b29b4ef22c4708f0d0eacb45bd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "64a944df_ee434773",
+        "filename": "librobinhood/src/config.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-06-13T13:39:34Z",
+      "side": 1,
+      "message": "same as above",
+      "revId": "d6f016a1791617b29b4ef22c4708f0d0eacb45bd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
