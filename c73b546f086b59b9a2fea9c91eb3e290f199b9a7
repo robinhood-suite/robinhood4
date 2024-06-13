@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a77dfada_507f648d",
+        "filename": "rbh-sync/rbh-sync.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 899,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-06-13T14:02:04Z",
+      "side": 1,
+      "message": "suggest: \"config\"",
+      "range": {
+        "startLine": 899,
+        "startChar": 20,
+        "endLine": 899,
+        "endChar": 27
+      },
+      "revId": "c73b546f086b59b9a2fea9c91eb3e290f199b9a7",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eaf3717e_b6dce89d",
+        "filename": "rbh-sync/rbh-sync.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 930,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-06-13T14:02:04Z",
+      "side": 1,
+      "message": "minor: it\u0027s never used",
+      "revId": "c73b546f086b59b9a2fea9c91eb3e290f199b9a7",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
