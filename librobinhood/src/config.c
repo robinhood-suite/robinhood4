@@ -335,10 +335,10 @@ rbh_config_find(const char *key, struct rbh_value *value,
         if (value->type == expected_type)
             return KPR_FOUND;
 
-        // TODO: add a conversion value_type to string
         fprintf(stderr,
-                "Expected the value of '%s' to be a '%d', found a '%d'\n",
-                key, expected_type, value->type);
+                "Expected the value of '%s' to be a '%s', found a '%s'\n",
+                key, value_type2str(expected_type),
+                value_type2str(value->type));
         errno = EINVAL;
         return KPR_ERROR;
     }
