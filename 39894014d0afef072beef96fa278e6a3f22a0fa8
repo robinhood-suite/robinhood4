@@ -283,6 +283,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf945fc4_4792ad35",
+        "filename": "librobinhood/include/robinhood/config.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-06-14T11:51:51Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "7022ff32_f3b75c1e",
+      "range": {
+        "startLine": 68,
+        "startChar": 18,
+        "endLine": 68,
+        "endChar": 37
+      },
+      "revId": "39894014d0afef072beef96fa278e6a3f22a0fa8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a4467eda_480319e6",
@@ -484,6 +508,30 @@
       "side": 1,
       "message": "This is an error because it is an invalid YAML file. For instance we could have a new event start here, any end of event, ... These are not expected and cannot be read, so it\u0027s an error.",
       "parentUuid": "ebb2ad24_acd64f6e",
+      "range": {
+        "startLine": 137,
+        "startChar": 15,
+        "endLine": 137,
+        "endChar": 24
+      },
+      "revId": "39894014d0afef072beef96fa278e6a3f22a0fa8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f1031dfc_8de2826f",
+        "filename": "librobinhood/src/config.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-06-14T11:51:51Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "b5f71ab3_fad018d8",
       "range": {
         "startLine": 137,
         "startChar": 15,
