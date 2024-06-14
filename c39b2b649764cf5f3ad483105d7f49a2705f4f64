@@ -18,6 +18,24 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "466c9da9_cd7cadd4",
+        "filename": "librobinhood/include/robinhood/config.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-06-14T11:51:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "88e9a9e2_bbbabaaa",
+      "revId": "c39b2b649764cf5f3ad483105d7f49a2705f4f64",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a70ab2aa_141fa2d1",
@@ -31,6 +49,30 @@
       "writtenOn": "2024-06-13T12:54:19Z",
       "side": 1,
       "message": "question: is-it the yaml parser develop by Quentin ?",
+      "range": {
+        "startLine": 10,
+        "startChar": 10,
+        "endLine": 10,
+        "endChar": 19
+      },
+      "revId": "c39b2b649764cf5f3ad483105d7f49a2705f4f64",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e8599168_a66b4c42",
+        "filename": "librobinhood/src/config.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-06-14T11:51:35Z",
+      "side": 1,
+      "message": "Yes",
+      "parentUuid": "a70ab2aa_141fa2d1",
       "range": {
         "startLine": 10,
         "startChar": 10,
@@ -58,6 +100,24 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "912b1278_67cc5ed6",
+        "filename": "librobinhood/src/config.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-06-14T11:51:35Z",
+      "side": 1,
+      "message": "Because of a very profound reason that shall not be divulged here.... Done.",
+      "parentUuid": "0fa0f57b_c91cf0cd",
+      "revId": "c39b2b649764cf5f3ad483105d7f49a2705f4f64",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8a986a33_2385a687",
@@ -71,6 +131,24 @@
       "writtenOn": "2024-06-13T13:25:37Z",
       "side": 1,
       "message": "question: why do use `calloc` and not `malloc` ?",
+      "revId": "c39b2b649764cf5f3ad483105d7f49a2705f4f64",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "65c5b5fe_d9d77c7f",
+        "filename": "librobinhood/src/config.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-06-14T11:51:35Z",
+      "side": 1,
+      "message": "So that I am sure the parser and pointer are 0, so that they can be freed without issue.",
+      "parentUuid": "8a986a33_2385a687",
       "revId": "c39b2b649764cf5f3ad483105d7f49a2705f4f64",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
@@ -92,6 +170,24 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b8502076_fa45c5d7",
+        "filename": "librobinhood/src/config.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-06-14T11:51:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "aeed3fdc_cd483979",
+      "revId": "c39b2b649764cf5f3ad483105d7f49a2705f4f64",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4331a3aa_9c99eadb",
@@ -105,6 +201,24 @@
       "writtenOn": "2024-06-13T13:25:37Z",
       "side": 1,
       "message": "same as above",
+      "revId": "c39b2b649764cf5f3ad483105d7f49a2705f4f64",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d6ebb270_f18a772f",
+        "filename": "librobinhood/src/config.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-06-14T11:51:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4331a3aa_9c99eadb",
       "revId": "c39b2b649764cf5f3ad483105d7f49a2705f4f64",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
@@ -126,6 +240,24 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "731c8dde_13cb5d7a",
+        "filename": "librobinhood/src/config.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-06-14T11:51:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bcd328ef_7a0c1f0a",
+      "revId": "c39b2b649764cf5f3ad483105d7f49a2705f4f64",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9e7ccc30_111023d6",
@@ -139,6 +271,30 @@
       "writtenOn": "2024-06-13T12:54:19Z",
       "side": 1,
       "message": "comment: why using this parameter with a \"NULL\" value ? I guess there is no negativ version value ?",
+      "range": {
+        "startLine": 8,
+        "startChar": 33,
+        "endLine": 8,
+        "endChar": 52
+      },
+      "revId": "c39b2b649764cf5f3ad483105d7f49a2705f4f64",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d7d2b07_3c3f60ea",
+        "filename": "librobinhood/src/meson.build",
+        "patchSetId": 2
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-06-14T11:51:35Z",
+      "side": 1,
+      "message": "I don\u0027t really know, I suppose it will be used for later... Doesn\u0027t really matter though",
+      "parentUuid": "9e7ccc30_111023d6",
       "range": {
         "startLine": 8,
         "startChar": 33,
