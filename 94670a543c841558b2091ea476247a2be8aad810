@@ -22,6 +22,30 @@
       },
       "revId": "94670a543c841558b2091ea476247a2be8aad810",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5e2cd407_26b9789a",
+        "filename": "rbh-fsevents/tests/lustre/dump_changelog.bash",
+        "patchSetId": 5
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-06-14T10:31:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "092918fc_4f1c568b",
+      "range": {
+        "startLine": 37,
+        "startChar": 4,
+        "endLine": 37,
+        "endChar": 41
+      },
+      "revId": "94670a543c841558b2091ea476247a2be8aad810",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
