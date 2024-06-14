@@ -47,6 +47,54 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f615171f_30e6977e",
+        "filename": "rbh-fsevents/src/enrichers/lustre.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-06-14T09:56:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0e551192_737f4192",
+      "range": {
+        "startLine": 237,
+        "startChar": 13,
+        "endLine": 237,
+        "endChar": 37
+      },
+      "revId": "4d653fb1764cbacc89a044fde197bd34aa9ca320",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5c576714_6a6cc09f",
+        "filename": "rbh-fsevents/src/enrichers/lustre.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-06-14T09:56:38Z",
+      "side": 1,
+      "message": "That would be errors in the source reader. For now these are not managed, if there is an error while trying to read a changelog, the command stops. That is something that should be added yes, but not in this stack",
+      "parentUuid": "a329ec62_c71e66c6",
+      "range": {
+        "startLine": 237,
+        "startChar": 37,
+        "endLine": 237,
+        "endChar": 50
+      },
+      "revId": "4d653fb1764cbacc89a044fde197bd34aa9ca320",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "62737892_9a5c50e8",
@@ -60,6 +108,30 @@
       "writtenOn": "2024-06-10T07:28:27Z",
       "side": 1,
       "message": "minor: to make it a bit more readable, I think we should put the string representation at the end.",
+      "range": {
+        "startLine": 244,
+        "startChar": 36,
+        "endLine": 244,
+        "endChar": 51
+      },
+      "revId": "4d653fb1764cbacc89a044fde197bd34aa9ca320",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "70cece54_250cad61",
+        "filename": "rbh-fsevents/src/enrichers/lustre.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-06-14T09:56:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "62737892_9a5c50e8",
       "range": {
         "startLine": 244,
         "startChar": 36,
