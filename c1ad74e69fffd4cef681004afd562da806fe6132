@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "db3b66e5_d5b6919d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-06-17T13:58:18Z",
+      "side": 1,
+      "message": "minor: config",
+      "range": {
+        "startLine": 9,
+        "startChar": 18,
+        "endLine": 9,
+        "endChar": 22
+      },
+      "revId": "c1ad74e69fffd4cef681004afd562da806fe6132",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "31b2bf07_319c7195",
         "filename": "rbh-sync/rbh-sync.c",
         "patchSetId": 3
