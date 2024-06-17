@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "92cb5f62_399a9661",
+        "filename": "librobinhood/include/robinhood/backends/lustre_mpi.h.in",
+        "patchSetId": 3
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-06-17T13:14:50Z",
+      "side": 1,
+      "message": "minor: documentation is not updated and I do not see a patch with a name which implies it will",
+      "range": {
+        "startLine": 34,
+        "startChar": 64,
+        "endLine": 34,
+        "endChar": 70
+      },
+      "revId": "1a1b6dfb7526581df5f4b8f9bb112606e5053453",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ff214a00_4363fd33",
+        "filename": "librobinhood/include/robinhood/config.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-06-17T13:14:50Z",
+      "side": 1,
+      "message": "typo: its",
+      "range": {
+        "startLine": 57,
+        "startChar": 60,
+        "endLine": 57,
+        "endChar": 64
+      },
+      "revId": "1a1b6dfb7526581df5f4b8f9bb112606e5053453",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
