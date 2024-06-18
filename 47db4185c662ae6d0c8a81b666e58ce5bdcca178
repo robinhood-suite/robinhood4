@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ca7e6a8d_f614e49a",
+        "filename": "librobinhood/src/backends/mongo/mongo.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 1388,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-06-18T13:28:22Z",
+      "side": 1,
+      "message": "suggest: I think it would be better to do the reset at the end of `rbh_config_find`.",
+      "revId": "47db4185c662ae6d0c8a81b666e58ce5bdcca178",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
