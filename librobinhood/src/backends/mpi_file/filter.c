@@ -221,6 +221,22 @@ convert_comparison_filter(mfu_pred *pred, mfu_pred_times *now, int prefix_len,
 }
 
 static bool
+create_mfu_pred_and(mfu_pred *curr, mfu_pred_times *now, int prefix_len,
+                    const struct rbh_filter *filter)
+{
+    mfu_pred *and = mfu_pred_new();
+
+    for (uint32_t i = 0; i < filter->logical.count; i++) {
+        if (!convert_rbh_filter(and, now, prefix_len,
+                                filter->logical.filters[i]))
+            return false;
+    }
+
+    mfu_pred_add(curr, _MFU_PRED_AND, and);
+    return true;
+}
+
+static bool
 convert_logical_filter(mfu_pred *pred, mfu_pred_times *now, int prefix_len,
                        const struct rbh_filter *filter)
 {
@@ -230,21 +246,23 @@ convert_logical_filter(mfu_pred *pred, mfu_pred_times *now, int prefix_len,
         return false;
     }
 
-    for(uint32_t i = 0; i < filter->logical.count; i++) {
-        if (!convert_rbh_filter(pred, now, prefix_len,
-                                filter->logical.filters[i]))
-            return false;
+    switch(filter->op)
+    {
+    case RBH_FOP_AND:
+        return create_mfu_pred_and(pred, now, prefix_len, filter);
+    default:
+        return false;
     }
-
-    return true;
 }
 
 bool
 convert_rbh_filter(mfu_pred *pred, mfu_pred_times *now, int prefix_len,
                    const struct rbh_filter *filter)
 {
-    if (filter == NULL)
+    if (filter == NULL) {
+        mfu_pred_add(pred, _MFU_PRED_NULL, NULL);
         return true;
+    }
 
     if (rbh_is_comparison_operator(filter->op))
         return convert_comparison_filter(pred, now, prefix_len, filter);
@@ -261,4 +279,21 @@ rbh_filter2mfu_pred(const struct rbh_filter *filter, int prefix_len,
     rc = convert_rbh_filter(pred_head, now, prefix_len, filter);
 
     return rc ? pred_head : NULL;
+}
+
+void
+_mfu_pred_free(mfu_pred *pred)
+{
+    mfu_pred *cur = pred;
+    while (cur) {
+        mfu_pred *next = cur->next;
+        if (cur->arg != NULL) {
+            if (cur->f == _MFU_PRED_AND)
+                _mfu_pred_free(cur->arg);
+            else
+                mfu_free(&cur->arg);
+        }
+        mfu_free(&cur);
+        cur = next;
+    }
 }
