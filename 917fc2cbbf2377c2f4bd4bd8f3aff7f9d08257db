@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0dc9b8cb_a8a6c9d9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-06-18T13:18:52Z",
+      "side": 1,
+      "message": "I don\u0027t think it\u0027s our job to make sure there are no duplicate keys in the config file. I think it is the user\u0027s responsibility to provide a valid config file.",
+      "revId": "917fc2cbbf2377c2f4bd4bd8f3aff7f9d08257db",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
