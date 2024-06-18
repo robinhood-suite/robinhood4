@@ -103,50 +103,52 @@ test_a_m_time()
     local unit=$1
     local predicate=$2
 
-    touch fileA
-    touch -d "5 $unit ago" fileB
-    touch -d "10 $unit ago" fileC
+    mkdir dir
+    touch dir/fileA
+    touch -d "5 $unit ago" dir/fileB
+    touch -d "10 $unit ago" dir/fileC
 
-    dwalk -q -o "../$testdb.mfu" .
+    dwalk -q -o "$testdb.mfu" dir
 
-    rbh_find "rbh:mpi-file:../$testdb.mfu" "$predicate" 0 | sort |
+    rbh_find "rbh:mpi-file:$testdb.mfu" "$predicate" 0 | sort |
         difflines "/" "/fileA"
 
-    rbh_find "rbh:mpi-file:../$testdb.mfu" "$predicate" 1 | sort |
-        difflines
+    rbh_find "rbh:mpi-file:$testdb.mfu" "$predicate" 1 | sort | difflines
 
-    rbh_find "rbh:mpi-file:../$testdb.mfu" "$predicate" +2 | sort |
+    rbh_find "rbh:mpi-file:$testdb.mfu" "$predicate" +2 | sort |
         difflines "/fileB" "/fileC"
 
-    rbh_find "rbh:mpi-file:../$testdb.mfu" "$predicate" 6 | sort |
-        difflines
+    rbh_find "rbh:mpi-file:$testdb.mfu" "$predicate" 6 | sort | difflines
 
-    rbh_find "rbh:mpi-file:../$testdb.mfu" "$predicate" -6 | sort |
+    rbh_find "rbh:mpi-file:$testdb.mfu" "$predicate" -6 | sort |
         difflines "/" "/fileA" "/fileB"
+
+    rm -rf dir
 }
 
 test_c_time()
 {
     local predicate=$1
 
-    touch file
+    mkdir dir
+    touch dir/file
 
-    dwalk -q -o "../$testdb.mfu" .
+    dwalk -q -o "$testdb.mfu" dir
 
-    rbh_find "rbh:mpi-file:../$testdb.mfu" "$predicate" 0 | sort |
+    rbh_find "rbh:mpi-file:$testdb.mfu" "$predicate" 0 | sort |
         difflines "/" "/file"
 
-    rbh_find "rbh:mpi-file:../$testdb.mfu" "$predicate" 1 | sort |
-        difflines
+    rbh_find "rbh:mpi-file:$testdb.mfu" "$predicate" 1 | sort | difflines
 
-    rbh_find "rbh:mpi-file:../$testdb.mfu" "$predicate" +0 | sort |
+    rbh_find "rbh:mpi-file:$testdb.mfu" "$predicate" +0 | sort |
         difflines "/" "/file"
 
-    rbh_find "rbh:mpi-file:../$testdb.mfu" "$predicate" +2 | sort |
-        difflines
+    rbh_find "rbh:mpi-file:$testdb.mfu" "$predicate" +2 | sort | difflines
 
-    rbh_find "rbh:mpi-file:../$testdb.mfu" "$predicate" -3 | sort |
+    rbh_find "rbh:mpi-file:$testdb.mfu" "$predicate" -3 | sort |
         difflines "/" "/file"
+
+    rm -rf dir
 }
 
 test_a_m_time_min()
@@ -163,12 +165,25 @@ test_c_time_min()
     test_c_time "-ctime"
 }
 
+test_and()
+{
+    touch empty
+    truncate --size 1025 1K+1
+
+    dwalk -q -o "$testdb.mfu" .
+
+    rbh_find "rbh:mpi-file:$testdb.mfu" -type f -size +1k | sort |
+        difflines "/1K+1"
+
+    rbh_find "rbh:mpi-file:$testdb.mfu" -type d -size -1k | sort | difflines
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
 declare -a tests=(test_type test_name test_path test_size
-                  test_a_m_time_min test_c_time_min)
+                  test_a_m_time_min test_c_time_min test_and)
 
 tmpdir=$(mktemp --directory)
 trap -- "rm -rf '$tmpdir'" EXIT
