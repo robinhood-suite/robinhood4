@@ -163,12 +163,26 @@ test_c_time_min()
     test_c_time "-ctime"
 }
 
+test_and()
+{
+    touch empty
+    truncate --size 1025 1K+1
+
+    dwalk -q -o "../$testdb.mfu" .
+
+    rbh_find "rbh:mpi-file:../$testdb.mfu" -type f -a -size +1k | sort |
+        difflines "/1K+1"
+
+    rbh_find "rbh:mpi-file:../$testdb.mfu" -type d -a -size -1k | sort |
+        difflines
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
 declare -a tests=(test_type test_name test_path test_size
-                  test_a_m_time_min test_c_time_min)
+                  test_a_m_time_min test_c_time_min test_and)
 
 tmpdir=$(mktemp --directory)
 trap -- "rm -rf '$tmpdir'" EXIT
