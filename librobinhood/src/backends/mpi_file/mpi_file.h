@@ -13,6 +13,48 @@
 #include "mfu.h"
 #include "robinhood/filter.h"
 
+/**
+ * The structure of the rbh_filter is reproduced with mfu_pred structure.
+ * Like the rbh_filter, there are logical mfu_pred and comparison mfu_pred.
+ * Each mfu_pred takes a function and an argument. The function determines if
+ * it's a logical or comparison mfu_pred.
+ *
+ * Logical mfu_pred:
+ *
+ * Logical mfu_pred are combinations of other mfu_pred.
+ *
+ * The logical mfu_pred functions are _MFU_PRED_AND and _MFU_PRED_NULL.
+ *
+ * It takes as an argument another mfu_pred containing a combination of other
+ * mfu_pred.
+ *
+ * Comparison mfu_pred:
+ *
+ * The comparison mfu_pred represents a single predicate.
+ *
+ * The comparison mfu_pred functions are _MFU_PRED_SIZE, _MFU_PRED_PATH,...,
+ * and all the functions from mpiFileUtils.
+ *
+ * It takes as an argument the predicate's value.
+ *
+ * Example:
+ * -name file -and -type f
+ *  <=>
+ *               mfu_pred
+ *  function: _MFU_PRED_AND
+ *                  |
+ *  argument:       |
+ *                  |              next
+ *               mfu_pred ---------------------> mfu_pred
+ *  function: MFU_PRED_NAME          function: MFU_PRED_TYPE
+ *                  |                                |
+ *  argument:       |                argument:       |
+ *                  |                                |
+ *                value                            value
+ *                "file"                            "f"
+ */
+
+
 /*----------------------------------------------------------------------------*
  |                                PRED FUNCTION                               |
  *----------------------------------------------------------------------------*/
@@ -25,6 +67,16 @@ _MFU_PRED_SIZE(mfu_flist flist, uint64_t idx, void *arg);
 
 int
 _MFU_PRED_PATH(mfu_flist flist, uint64_t idx, void *arg);
+
+/*----------------------------------------------------------------------------*
+ |                          PRED LOGICAL FUNCTION                             |
+ *---------------------------------------------------------------------------*/
+
+int
+_MFU_PRED_AND(mfu_flist flist, uint64_t idx, void *arg);
+
+int
+_MFU_PRED_NULL(mfu_flist flist, uint64_t idx, void *arg);
 
 /*----------------------------------------------------------------------------*
  |                                  FILTER                                    |

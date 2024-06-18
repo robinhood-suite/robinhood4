@@ -149,3 +149,19 @@ _MFU_PRED_PATH(mfu_flist flist, uint64_t idx, void *arg)
     ret = fnmatch(pattern, path, FNM_PERIOD) ? 0 : 1;
     return ret;
 }
+
+/*-----------------------------------------------------------------------------*
+ |                          PRED LOGICAL FUNCTIONS                             |
+ *----------------------------------------------------------------------------*/
+
+int
+_MFU_PRED_AND(mfu_flist flist, uint64_t idx, void *arg)
+{
+    return mfu_pred_execute(flist, idx, (mfu_pred *) arg);
+}
+
+int
+_MFU_PRED_NULL(mfu_flist flist, uint64_t idx, void *arg)
+{
+    return 1;
+}
