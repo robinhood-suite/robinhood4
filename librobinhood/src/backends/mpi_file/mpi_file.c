@@ -408,7 +408,7 @@ mpi_file_backend_filter(void *backend, const struct rbh_filter *filter,
 
         mfu_flist flist = mfu_flist_filter_pred(mpi_file->flist, pred_head);
         mfu_flist_free(&mpi_file->flist);
-        mfu_pred_free(&pred_head);
+        _mfu_pred_free(pred_head);
         mpi_file->flist = flist;
     }
 
