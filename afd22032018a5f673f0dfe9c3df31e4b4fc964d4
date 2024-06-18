@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "112b4c49_43df2b36",
+        "filename": "librobinhood/include/robinhood/config.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-06-18T12:54:36Z",
+      "side": 1,
+      "message": "minor: it\u0027s useless since we have the enum which indicates if the key was found or not.",
+      "range": {
+        "startLine": 65,
+        "startChar": 60,
+        "endLine": 66,
+        "endChar": 51
+      },
+      "revId": "afd22032018a5f673f0dfe9c3df31e4b4fc964d4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
