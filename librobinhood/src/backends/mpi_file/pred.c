@@ -171,3 +171,21 @@ _MFU_PRED_NOT(mfu_flist flist, uint64_t idx, void *arg)
 {
     return 1 - mfu_pred_execute(flist, idx, (mfu_pred *) arg);
 }
+
+int
+_MFU_PRED_OR(mfu_flist flist, uint64_t idx, void *arg)
+{
+    mfu_pred *root = (mfu_pred *) arg;
+    mfu_pred *cur = root;
+    int rc;
+
+    while (cur) {
+        if (cur->f !=NULL) {
+            rc = cur->f(flist, idx, cur->arg);
+            if (rc)
+                return 1;
+        }
+        cur = cur->next;
+    }
+    return 0;
+}
