@@ -221,18 +221,19 @@ convert_comparison_filter(mfu_pred *pred, mfu_pred_times *now, int prefix_len,
 }
 
 static bool
-create_mfu_pred_and(mfu_pred *curr, mfu_pred_times *now, int prefix_len,
-                    const struct rbh_filter *filter)
+create_mfu_pred_and_or(mfu_pred *curr, mfu_pred_times *now, int prefix_len,
+                       const struct rbh_filter *filter,
+                       mfu_pred_fn logical_func)
 {
-    mfu_pred *and = mfu_pred_new();
+    mfu_pred *pred = mfu_pred_new();
 
     for (uint32_t i = 0; i < filter->logical.count; i++) {
-        if (!convert_rbh_filter(and, now, prefix_len,
+        if (!convert_rbh_filter(pred, now, prefix_len,
                                 filter->logical.filters[i]))
             return false;
     }
 
-    mfu_pred_add(curr, _MFU_PRED_AND, and);
+    mfu_pred_add(curr, logical_func, pred);
     return true;
 }
 
@@ -253,19 +254,18 @@ static bool
 convert_logical_filter(mfu_pred *pred, mfu_pred_times *now, int prefix_len,
                        const struct rbh_filter *filter)
 {
-    if (filter->op == RBH_FOP_OR) {
-        printf("Logical operator OR is not supported.\n");
-        errno = ENOTSUP;
-        return false;
-    }
-
     switch(filter->op)
     {
     case RBH_FOP_AND:
-        return create_mfu_pred_and(pred, now, prefix_len, filter);
+        return create_mfu_pred_and_or(pred, now, prefix_len, filter,
+                                   _MFU_PRED_AND);
     case RBH_FOP_NOT:
         return create_mfu_pred_not(pred, now, prefix_len, filter);
+    case RBH_FOP_OR:
+        return create_mfu_pred_and_or(pred, now, prefix_len, filter,
+                                      _MFU_PRED_OR);
     default:
+        errno = ENOTSUP;
         return false;
     }
 }
@@ -304,7 +304,8 @@ enum mfu_pred_type {
 static enum mfu_pred_type
 check_mfu_pred_type(mfu_pred *pred)
 {
-    if (pred->f == _MFU_PRED_AND || pred->f == _MFU_PRED_NOT)
+    if (pred->f == _MFU_PRED_AND || pred->f == _MFU_PRED_NOT ||
+        pred->f == _MFU_PRED_OR)
         return MFU_LOGICAL;
     else
         return MFU_COMPARISON;

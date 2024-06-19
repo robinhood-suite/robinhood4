@@ -23,8 +23,8 @@
  *
  * Logical mfu_pred are combinations of other mfu_pred.
  *
- * The logical mfu_pred functions are _MFU_PRED_AND, _MFU_PRED_NULL and
- * _MFU_PRED_NOT.
+ * The logical mfu_pred functions are _MFU_PRED_AND, _MFU_PRED_OR, _MFU_PRED_NOT
+ * and_MFU_PRED_NULL.
  *
  * It takes as an argument a mfu_pred which is the first element of a linked
  * list of mfu_pred.
@@ -90,6 +90,9 @@ _MFU_PRED_NULL(mfu_flist flist, uint64_t idx, void *arg);
 
 int
 _MFU_PRED_NOT(mfu_flist flist, uint64_t idx, void *arg);
+
+int
+_MFU_PRED_OR(mfu_flist flist, uint64_t idx, void *arg);
 
 /*----------------------------------------------------------------------------*
  |                                  FILTER                                    |
