@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "480cedb7_29a4d5ac",
+        "filename": "rbh-sync/tests/test_posix_mongo_sync.bash",
+        "patchSetId": 3
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-06-19T13:38:51Z",
+      "side": 1,
+      "message": "question: why did this change? rbh-sync should still insert the root, right? If not, the test setup should be updated. The goal was to make sure that at least some files where sync. Otherwise, rbh-sync --no-skip could just do nothing and return and the test would still pass.",
+      "range": {
+        "startLine": 263,
+        "startChar": 23,
+        "endLine": 263,
+        "endChar": 25
+      },
+      "revId": "c7bf64e13bbc183e546b8bd2194335a734d1769b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
