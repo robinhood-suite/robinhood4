@@ -16,6 +16,24 @@
       "message": "question: is it possible to have `YAML_SEQUENCE_END_EVENT` ?",
       "revId": "eecb225b5d02935412d11c6ad91f32ebc9d01f9f",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b7ebc25c_5940f809",
+        "filename": "librobinhood/src/config.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-06-19T13:23:24Z",
+      "side": 1,
+      "message": "No, because it should be skipped on line 233.\nThe mapping/document/stream end events can occur because here we can have either the end of the base map of key, the end of the document, or the end of file.",
+      "parentUuid": "735eadf0_cab229c9",
+      "revId": "eecb225b5d02935412d11c6ad91f32ebc9d01f9f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
