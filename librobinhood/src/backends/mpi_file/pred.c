@@ -165,3 +165,9 @@ _MFU_PRED_NULL(mfu_flist flist, uint64_t idx, void *arg)
 {
     return 1;
 }
+
+int
+_MFU_PRED_NOT(mfu_flist flist, uint64_t idx, void *arg)
+{
+    return 1 - mfu_pred_execute(flist, idx, (mfu_pred *) arg);
+}
