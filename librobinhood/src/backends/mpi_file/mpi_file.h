@@ -23,7 +23,8 @@
  *
  * Logical mfu_pred are combinations of other mfu_pred.
  *
- * The logical mfu_pred functions are _MFU_PRED_AND and _MFU_PRED_NULL.
+ * The logical mfu_pred functions are _MFU_PRED_AND, _MFU_PRED_NULL and
+ * _MFU_PRED_NOT.
  *
  * It takes as an argument a mfu_pred which is the first element of a linked
  * list of mfu_pred.
@@ -38,7 +39,7 @@
  * It takes as an argument the predicate's value.
  *
  * Example:
- * -name file -and -type f
+ *  -name file -and -type f
  *  <=>
  *               mfu_pred
  *  function: _MFU_PRED_AND
@@ -49,6 +50,18 @@
  *                  |                                |
  *  argument:     value               argument:    value
  *                 "f"                              "f"
+ *
+ *  -not -type f
+ *  <=>
+ *               mfu_pred
+ *  function: _MFU_PRED_NOT
+ *                  |
+ *  argument:    mfu_pred
+ *                  |
+ *  function: MFU_PRED_TYPE
+ *                  |
+ *  argument:     value
+ *                 "f"
  */
 
 
@@ -74,6 +87,9 @@ _MFU_PRED_AND(mfu_flist flist, uint64_t idx, void *arg);
 
 int
 _MFU_PRED_NULL(mfu_flist flist, uint64_t idx, void *arg);
+
+int
+_MFU_PRED_NOT(mfu_flist flist, uint64_t idx, void *arg);
 
 /*----------------------------------------------------------------------------*
  |                                  FILTER                                    |

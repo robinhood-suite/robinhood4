@@ -237,11 +237,24 @@ create_mfu_pred_and(mfu_pred *curr, mfu_pred_times *now, int prefix_len,
 }
 
 static bool
+create_mfu_pred_not(mfu_pred *curr, mfu_pred_times *now, int prefix_len,
+                    const struct rbh_filter *filter)
+{
+    mfu_pred *not = mfu_pred_new();
+
+    if (!convert_rbh_filter(not, now, prefix_len, filter->logical.filters[0]))
+        return false;
+
+    mfu_pred_add(curr, _MFU_PRED_NOT, not);
+    return true;
+}
+
+static bool
 convert_logical_filter(mfu_pred *pred, mfu_pred_times *now, int prefix_len,
                        const struct rbh_filter *filter)
 {
-    if (filter->op == RBH_FOP_OR || filter->op == RBH_FOP_NOT) {
-        printf("Logical operator OR and NOT are not supported.\n");
+    if (filter->op == RBH_FOP_OR) {
+        printf("Logical operator OR is not supported.\n");
         errno = ENOTSUP;
         return false;
     }
@@ -250,6 +263,8 @@ convert_logical_filter(mfu_pred *pred, mfu_pred_times *now, int prefix_len,
     {
     case RBH_FOP_AND:
         return create_mfu_pred_and(pred, now, prefix_len, filter);
+    case RBH_FOP_NOT:
+        return create_mfu_pred_not(pred, now, prefix_len, filter);
     default:
         return false;
     }
@@ -289,7 +304,7 @@ enum mfu_pred_type {
 static enum mfu_pred_type
 check_mfu_pred_type(mfu_pred *pred)
 {
-    if (pred->f == _MFU_PRED_AND)
+    if (pred->f == _MFU_PRED_AND || pred->f == _MFU_PRED_NOT)
         return MFU_LOGICAL;
     else
         return MFU_COMPARISON;

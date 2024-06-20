@@ -178,12 +178,28 @@ test_and()
     rbh_find "rbh:mpi-file:$testdb.mfu" -type d -size -1k | sort | difflines
 }
 
+test_not()
+{
+    touch empty
+    truncate --size 1K 1K
+    truncate --size 1M 1M
+
+    dwalk -q -o "$testdb.mfu" .
+
+    rbh_find "rbh:mpi-file:$testdb.mfu" -not -type d | sort |
+        difflines "/1K" "/1M" "/empty"
+
+    rbh_find "rbh:mpi-file:$testdb.mfu" -name "1*" -not -size 1k | sort |
+        difflines "/1M"
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
 declare -a tests=(test_type test_name test_path test_size
-                  test_a_m_time_min test_c_time_min test_and)
+                  test_a_m_time_min test_c_time_min test_and
+                  test_not)
 
 tmpdir=$(mktemp --directory)
 trap -- "rm -rf '$tmpdir'" EXIT
