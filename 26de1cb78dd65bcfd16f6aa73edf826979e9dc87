@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "14966de4_b53a13eb",
+        "filename": "librobinhood/src/backends/mongo/mongo.c",
+        "patchSetId": 9
+      },
+      "lineNbr": 1405,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-06-21T09:14:28Z",
+      "side": 1,
+      "message": "style: no need for the {}.",
+      "range": {
+        "startLine": 1405,
+        "startChar": 20,
+        "endLine": 1405,
+        "endChar": 23
+      },
+      "revId": "26de1cb78dd65bcfd16f6aa73edf826979e9dc87",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
