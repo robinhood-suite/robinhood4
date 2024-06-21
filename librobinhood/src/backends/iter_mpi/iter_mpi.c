@@ -23,11 +23,6 @@
  |                             mpi_iterator                                   |
  *----------------------------------------------------------------------------*/
 
-static struct rbh_id ROOT_PARENT_ID = {
-    .data = NULL,
-    .size = 0,
-};
-
 struct rbh_id *
 get_parent_id(const char *path, bool use_fd, int prefix_len)
 {
@@ -159,7 +154,8 @@ skip:
      */
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     if (rank == 0 && mpi_iter->current == 0 && !mpi_iter->is_branch) {
-        mpi_fi.parent_id = &ROOT_PARENT_ID;
+        free(mpi_fi.parent_id);
+        mpi_fi.parent_id = rbh_id_new(NULL, 0);
         mpi_fi.name[0] = '\0';
     }
 
@@ -168,6 +164,7 @@ skip:
     if (fsentry == NULL && (errno == ENOENT || errno == ESTALE)) {
         /* The entry moved from under our feet */
         free(path_dup);
+        free(mpi_fi.parent_id);
         if (skip_error) {
             fprintf(stderr, "Synchronization of '%s' skipped\n",
                     path);
@@ -178,7 +175,9 @@ skip:
     }
 
     mpi_iter->current++;
+
     free(path_dup);
+    free(mpi_fi.parent_id);
 
     return fsentry;
 }

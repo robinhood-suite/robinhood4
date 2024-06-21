@@ -97,7 +97,7 @@ fsentry_from_flist(struct mpi_file_info *mpi_fi,
     ns_pairs->value = rbh_value_string_new(path);
     if (ns_pairs->value == NULL) {
         save_errno = errno;
-        goto out_free_symlink;
+        goto out_free_ns_pairs;
     }
 
     ns_xattrs.count = 1;
@@ -110,13 +110,20 @@ fsentry_from_flist(struct mpi_file_info *mpi_fi,
                               &ns_xattrs, &inode_xattrs, symlink);
     if (fsentry == NULL) {
         save_errno = errno;
-        goto out_free_symlink;
+        goto out_free_ns_pairs_value;
     }
 
+    free((struct rbh_value *) ns_pairs->value);
+    free(ns_pairs);
     free(symlink);
+    free(id);
 
     return fsentry;
 
+out_free_ns_pairs_value:
+    free((struct rbh_value *) ns_pairs->value);
+out_free_ns_pairs:
+    free(ns_pairs);
 out_free_symlink:
     free(symlink);
 out_free_id:
@@ -124,7 +131,6 @@ out_free_id:
 
     errno = save_errno;
     return NULL;
-
 }
 
 static void
@@ -316,11 +322,8 @@ static ssize_t
 mpi_file_backend_update(void *backend, struct rbh_iterator *fsevents,
                         bool skip_error)
 {
+    struct rbh_id *last_id = rbh_id_new(NULL, 0);
     struct mpi_file_backend *mpi_file = backend;
-    struct rbh_id last_id = {
-        .data = NULL,
-        .size = 0,
-    };
     int save_errno = errno;
     uint64_t index = 0;
     ssize_t count = 0;
@@ -328,6 +331,7 @@ mpi_file_backend_update(void *backend, struct rbh_iterator *fsevents,
     if (fsevents == NULL) {
         mfu_flist_summarize(mpi_file->flist);
         mfu_flist_write_cache(mpi_file->path, mpi_file->flist);
+        free(last_id);
         return 0;
     }
 
@@ -345,10 +349,11 @@ mpi_file_backend_update(void *backend, struct rbh_iterator *fsevents,
             return -1;
         }
 
-        if (!rbh_id_equal(&last_id, &fsevent->id)) {
+        if (!rbh_id_equal(last_id, &fsevent->id)) {
             index = mfu_flist_file_create(mpi_file->flist);
             struct rbh_id *id = rbh_id_new(fsevent->id.data, fsevent->id.size);
-            last_id = *id;
+            free(last_id);
+            last_id = id;
         }
 
         if(!mpi_file_update_flist(mpi_file->flist, index, fsevent))
@@ -356,6 +361,7 @@ mpi_file_backend_update(void *backend, struct rbh_iterator *fsevents,
         count++;
     } while (true);
 
+    free(last_id);
     errno = save_errno;
     return count;
 }
