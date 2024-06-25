@@ -33,6 +33,7 @@ struct entry_info {
 typedef int (*inode_xattrs_callback_t)(struct entry_info *info,
                                        struct rbh_value_pair *pairs,
                                        int available_pairs,
-                                       struct rbh_sstack *values);
+                                       struct rbh_sstack *values,
+                                       const char *retention_attribute);
 
 #endif

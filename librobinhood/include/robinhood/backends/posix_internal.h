@@ -38,6 +38,8 @@ struct posix_iterator {
     FTS *fts_handle;
     FTSENT *ftsent;
     bool skip_error;
+
+    const char *retention_attribute;
 };
 
 /**
@@ -63,7 +65,8 @@ bool
 fsentry_from_any(struct fsentry_id_pair *fip, const struct rbh_value *path,
                  char *accpath, struct rbh_id *entry_id,
                  struct rbh_id *parent_id, char *name, int statx_sync_type,
-                 inode_xattrs_callback_t inode_xattrs_callback);
+                 inode_xattrs_callback_t inode_xattrs_callback,
+                 const char *retention_attribute);
 
 /*----------------------------------------------------------------------------*
  |                              posix_operations                              |

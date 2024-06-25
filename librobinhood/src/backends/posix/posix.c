@@ -42,6 +42,25 @@ free_handle(void)
     free(handle);
 }
 
+#define XATTR_EXPIRES_KEY "RBH_RETENTION_XATTR"
+
+static const char *
+get_retention_attribute()
+{
+    struct rbh_value value = { 0 };
+    enum key_parse_result rc;
+
+    rc = rbh_config_find(XATTR_EXPIRES_KEY, &value, RBH_VT_STRING);
+    if (rc == KPR_ERROR)
+        return NULL;
+
+    if (rc == KPR_NOT_FOUND)
+        value.string = "user.ccc_expires";
+
+    return value.string;
+}
+
+
 static const struct rbh_id ROOT_PARENT_ID = {
     .data = NULL,
     .size = 0,
@@ -328,7 +347,8 @@ bool
 fsentry_from_any(struct fsentry_id_pair *fip, const struct rbh_value *path,
                  char *accpath, struct rbh_id *entry_id,
                  struct rbh_id *parent_id, char *name, int statx_sync_type,
-                 inode_xattrs_callback_t inode_xattrs_callback)
+                 inode_xattrs_callback_t inode_xattrs_callback,
+                 const char *retention_attribute)
 {
     const int statx_flags =
         AT_EMPTY_PATH | AT_SYMLINK_NOFOLLOW | AT_NO_AUTOMOUNT;
@@ -483,7 +503,8 @@ fsentry_from_any(struct fsentry_id_pair *fip, const struct rbh_value *path,
 
         callback_xattrs_count = inode_xattrs_callback(&info, &pairs[count],
                                                       pairs_count - count,
-                                                      values);
+                                                      values,
+                                                      retention_attribute);
         if (callback_xattrs_count == -1) {
             if (errno != ENOMEM) {
                 fprintf(stderr,
@@ -540,7 +561,8 @@ out_close:
 
 static struct rbh_fsentry *
 fsentry_from_ftsent(FTSENT *ftsent, int statx_sync_type, size_t prefix_len,
-                    inode_xattrs_callback_t inode_xattrs_callback)
+                    inode_xattrs_callback_t inode_xattrs_callback,
+                    const char *retention_attribute)
 {
     const struct rbh_value path = {
         .type = RBH_VT_STRING,
@@ -555,7 +577,8 @@ fsentry_from_ftsent(FTSENT *ftsent, int statx_sync_type, size_t prefix_len,
                                        ftsent->fts_pointer,
                                        ftsent->fts_parent->fts_pointer,
                                        ftsent->fts_name,
-                                       statx_sync_type, inode_xattrs_callback);
+                                       statx_sync_type, inode_xattrs_callback,
+                                       retention_attribute);
     save_errno = errno;
 
     if (!fsentry_success)
@@ -664,7 +687,8 @@ skip:
 
     fsentry = fsentry_from_ftsent(ftsent, posix_iter->statx_sync_type,
                                   posix_iter->prefix_len,
-                                  posix_iter->inode_xattrs_callback);
+                                  posix_iter->inode_xattrs_callback,
+                                  posix_iter->retention_attribute);
     if (fsentry == NULL && (errno == ENOENT || errno == ESTALE)) {
         /* The entry moved from under our feet */
         if (skip_error) {
@@ -754,6 +778,8 @@ posix_iterator_new(const char *root, const char *entry, int statx_sync_type)
         errno = save_errno;
         return NULL;
     }
+
+    posix_iter->retention_attribute = get_retention_attribute();
 
     return (struct rbh_mut_iterator *)posix_iter;
 }
@@ -1196,8 +1222,7 @@ rtrim(char *string, char c)
 }
 
 struct rbh_backend *
-rbh_posix_backend_new(const char *path,
-                      __attribute__((unused)) struct rbh_config *config)
+rbh_posix_backend_new(const char *path, struct rbh_config *config)
 {
     struct posix_backend *posix;
 
@@ -1220,6 +1245,8 @@ rbh_posix_backend_new(const char *path,
     posix->iter_new = posix_iterator_new;
     posix->statx_sync_type = AT_RBH_STATX_SYNC_AS_STAT;
     posix->backend = POSIX_BACKEND;
+
+    load_rbh_config(config);
 
     return &posix->backend;
 }
