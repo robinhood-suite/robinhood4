@@ -380,3 +380,19 @@ load_rbh_config(struct rbh_config *new_config)
 {
     config = new_config;
 }
+
+const char *
+rbh_config_get_string(const char *key, const char *default_string)
+{
+    struct rbh_value value = { 0 };
+    enum key_parse_result rc;
+
+    rc = rbh_config_find(key, &value, RBH_VT_STRING);
+    if (rc == KPR_ERROR)
+        return NULL;
+
+    if (rc == KPR_NOT_FOUND)
+        return default_string;
+
+    return value.string;
+}
