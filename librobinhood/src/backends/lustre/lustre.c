@@ -1012,7 +1012,8 @@ create_expiration_date_value_pair(const char *attribute_value,
 }
 
 static int
-xattrs_get_retention(int fd, const struct rbh_statx *statx,
+xattrs_get_retention(const char *retention_attribute, int fd,
+                     const struct rbh_statx *statx,
                      struct rbh_value_pair *pairs)
 {
     struct rbh_value *new_value;
@@ -1028,7 +1029,7 @@ xattrs_get_retention(int fd, const struct rbh_statx *statx,
         tmp[length] = 0;
     } else {
         for (int i = 0; i < *_inode_xattrs_count; ++i) {
-            if (strcmp(_inode_xattrs[i].key, XATTR_CCC_EXPIRES))
+            if (strcmp(_inode_xattrs[i].key, retention_attribute))
                 continue;
 
             if (_inode_xattrs[i].value->binary.size >= INT64_MAX_STR_LEN) {
@@ -1063,12 +1064,12 @@ xattrs_get_retention(int fd, const struct rbh_statx *statx,
     new_value->string = rbh_sstack_push(_values, tmp, strlen(tmp) + 1);
 
     if (_inode_xattrs) {
-        fill_string_pair(XATTR_CCC_EXPIRES, tmp, strlen(tmp) + 1,
+        fill_string_pair(retention_attribute, tmp, strlen(tmp) + 1,
                          &_inode_xattrs[index_to_change]);
 
         return 1;
     } else {
-        fill_string_pair(XATTR_CCC_EXPIRES, tmp, strlen(tmp) + 1, &pairs[1]);
+        fill_string_pair(retention_attribute, tmp, strlen(tmp) + 1, &pairs[1]);
 
         return 2;
     }
@@ -1080,7 +1081,8 @@ _get_attrs(struct entry_info *entry_info,
            int nb_attrs_funcs,
            struct rbh_value_pair *pairs,
            int available_pairs,
-           struct rbh_sstack *values)
+           struct rbh_sstack *values,
+           const char *retention_attribute)
 {
     int count = 0;
     int subcount;
@@ -1100,8 +1102,9 @@ _get_attrs(struct entry_info *entry_info,
         count += subcount;
     }
 
-    count += xattrs_get_retention(entry_info->fd, entry_info->statx,
-                                  &pairs[count]);
+    if (retention_attribute != NULL)
+        count += xattrs_get_retention(retention_attribute, entry_info->fd,
+                                      entry_info->statx, &pairs[count]);
 
     return count;
 }
@@ -1118,14 +1121,15 @@ lustre_get_attrs(struct entry_info *entry_info,
 
     return _get_attrs(entry_info, xattrs_funcs,
                       sizeof(xattrs_funcs) / sizeof(xattrs_funcs[0]),
-                      pairs, available_pairs, values);
+                      pairs, available_pairs, values, NULL);
 }
 
 int
 lustre_inode_xattrs_callback(struct entry_info *entry_info,
                              struct rbh_value_pair *pairs,
                              int available_pairs,
-                             struct rbh_sstack *values)
+                             struct rbh_sstack *values,
+                             const char *retention_attribute)
 {
     int (*xattrs_funcs[])(int, struct rbh_value_pair *, int) = {
         xattrs_get_fid, xattrs_get_hsm, xattrs_get_layout, xattrs_get_mdt_info
@@ -1133,7 +1137,7 @@ lustre_inode_xattrs_callback(struct entry_info *entry_info,
 
     return _get_attrs(entry_info, xattrs_funcs,
                       sizeof(xattrs_funcs) / sizeof(xattrs_funcs[0]),
-                      pairs, available_pairs, values);
+                      pairs, available_pairs, values, retention_attribute);
 }
 
 /*----------------------------------------------------------------------------*
@@ -1313,7 +1317,7 @@ rbh_lustre_backend_new(const char *path, struct rbh_config *config)
 {
     struct posix_backend *lustre;
 
-    lustre = (struct posix_backend *)rbh_posix_backend_new(path, config);
+    lustre = (struct posix_backend *) rbh_posix_backend_new(path, config);
     if (lustre == NULL)
         return NULL;
 

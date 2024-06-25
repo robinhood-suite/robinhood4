@@ -24,7 +24,8 @@ int
 lustre_inode_xattrs_callback(struct entry_info *entry_info,
                              struct rbh_value_pair *pairs,
                              int available_pairs,
-                             struct rbh_sstack *values);
+                             struct rbh_sstack *values,
+                             const char *retention_attribute);
 
 int
 lustre_get_attribute(const char *attr_name, void *_arg,

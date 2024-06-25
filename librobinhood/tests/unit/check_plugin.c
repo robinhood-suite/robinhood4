@@ -49,13 +49,14 @@ END_TEST
 
 START_TEST(rbi_posix)
 {
-    struct rbh_backend *(*rbh_posix_backend_new)(const char *path);
+    struct rbh_backend *(*rbh_posix_backend_new)(const char *path,
+                                                 void *config);
     struct rbh_backend *posix;
 
     rbh_posix_backend_new = rbh_plugin_import("posix", "rbh_posix_backend_new");
     ck_assert_ptr_nonnull(rbh_posix_backend_new);
 
-    posix = rbh_posix_backend_new("");
+    posix = rbh_posix_backend_new("", NULL);
     ck_assert_ptr_nonnull(posix);
 
     rbh_backend_destroy(posix);

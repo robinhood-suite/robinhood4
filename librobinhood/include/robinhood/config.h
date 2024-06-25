@@ -14,6 +14,12 @@
 
 struct rbh_config;
 
+/**
+ * Here are defined common configuration keys for use across multiple tools and
+ * backends.
+ */
+#define XATTR_EXPIRES_KEY "RBH_RETENTION_XATTR"
+
 enum key_parse_result {
     KPR_FOUND,
     KPR_NOT_FOUND,
@@ -92,5 +98,19 @@ get_rbh_config();
  */
 void
 load_rbh_config(struct rbh_config *config);
+
+/**
+ * Get a string from the configuration file.
+ *
+ * @param key             the key to search
+ * @param default_string  the string to default to if the key is not found in
+ *                        the configuration file
+ *
+ * @return              a string associated to the given key if present in the
+ *                      configuration file, the given default if not, or NULL if
+ *                      an error occured
+ */
+const char *
+rbh_config_get_string(const char *key, const char *default_string);
 
 #endif
