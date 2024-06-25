@@ -59,6 +59,8 @@ static __thread ssize_t *_inode_xattrs_count;
 static __thread struct rbh_sstack *_values;
 static __thread uint16_t mode;
 
+static const char *retention_attribute;
+
 static inline int
 fill_pair(const char *key, const struct rbh_value *value,
           struct rbh_value_pair *pair)
@@ -1028,7 +1030,7 @@ xattrs_get_retention(int fd, const struct rbh_statx *statx,
         tmp[length] = 0;
     } else {
         for (int i = 0; i < *_inode_xattrs_count; ++i) {
-            if (strcmp(_inode_xattrs[i].key, XATTR_CCC_EXPIRES))
+            if (strcmp(_inode_xattrs[i].key, retention_attribute))
                 continue;
 
             if (_inode_xattrs[i].value->binary.size >= INT64_MAX_STR_LEN) {
@@ -1063,12 +1065,12 @@ xattrs_get_retention(int fd, const struct rbh_statx *statx,
     new_value->string = rbh_sstack_push(_values, tmp, strlen(tmp) + 1);
 
     if (_inode_xattrs) {
-        fill_string_pair(XATTR_CCC_EXPIRES, tmp, strlen(tmp) + 1,
+        fill_string_pair(retention_attribute, tmp, strlen(tmp) + 1,
                          &_inode_xattrs[index_to_change]);
 
         return 1;
     } else {
-        fill_string_pair(XATTR_CCC_EXPIRES, tmp, strlen(tmp) + 1, &pairs[1]);
+        fill_string_pair(retention_attribute, tmp, strlen(tmp) + 1, &pairs[1]);
 
         return 2;
     }
@@ -1100,8 +1102,9 @@ _get_attrs(struct entry_info *entry_info,
         count += subcount;
     }
 
-    count += xattrs_get_retention(entry_info->fd, entry_info->statx,
-                                  &pairs[count]);
+    if (retention_attribute != NULL)
+        count += xattrs_get_retention(entry_info->fd, entry_info->statx,
+                                      &pairs[count]);
 
     return count;
 }
@@ -1313,7 +1316,7 @@ rbh_lustre_backend_new(const char *path, struct rbh_config *config)
 {
     struct posix_backend *lustre;
 
-    lustre = (struct posix_backend *)rbh_posix_backend_new(path, config);
+    lustre = (struct posix_backend *) rbh_posix_backend_new(path, config);
     if (lustre == NULL)
         return NULL;
 
@@ -1321,6 +1324,11 @@ rbh_lustre_backend_new(const char *path, struct rbh_config *config)
     lustre->backend.id = RBH_BI_LUSTRE;
     lustre->backend.name = RBH_LUSTRE_BACKEND_NAME;
     lustre->backend.ops = &LUSTRE_BACKEND_OPS;
+
+    load_rbh_config(config);
+
+    retention_attribute = rbh_config_get_string(XATTR_EXPIRES_KEY,
+                                                "user.ccc_expires");
 
     return &lustre->backend;
 }

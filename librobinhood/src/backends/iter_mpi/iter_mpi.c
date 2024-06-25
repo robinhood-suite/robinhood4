@@ -77,7 +77,8 @@ fsentry_from_mpi_fi(struct mpi_file_info *mpi_fi, int statx_sync_type,
 
     fsentry_success = fsentry_from_any(&pair, &path, (char *)mpi_fi->path,
                                        NULL, mpi_fi->parent_id, mpi_fi->name,
-                                       statx_sync_type, inode_xattrs_callback);
+                                       statx_sync_type, inode_xattrs_callback,
+                                       NULL);
     if (!fsentry_success)
         return NULL;
 
