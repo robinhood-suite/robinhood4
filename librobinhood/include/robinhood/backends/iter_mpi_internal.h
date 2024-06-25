@@ -6,8 +6,8 @@
  * SPDX-License-Identifer: LGPL-3.0-or-later
  */
 
-#ifndef RBH_LUSTRE_MPI_H
-#define RBH_LUSTRE_MPI_H
+#ifndef RBH_ITER_MPI_H
+#define RBH_ITER_MPI_H
 
 /**
  * @file
@@ -17,11 +17,11 @@
  */
 
 #include "mfu.h"
-#include "robinhood/iterator.h"
+
+#include "robinhood/backend.h"
 #include "robinhood/sstack.h"
-#include "robinhood/value.h"
-#include "robinhood/id.h"
-#include "robinhood/statx.h"
+
+#include "common.h"
 
 /*----------------------------------------------------------------------------*
  |                                mpi_iterator                                |
@@ -29,24 +29,7 @@
 
 struct mpi_iterator {
     struct rbh_mut_iterator iterator;
-
-    /**
-     * Callback for managing and filling namespace xattrs
-     *
-     * @param fd        file descriptor of the entry
-     * @param mode      mode of file examined
-     * @param pairs     list of rbh_value_pairs to fill
-     * @param values    stack that will contain every rbh_value of
-     *                  \p pairs
-     *
-     * @return          number of filled \p pairs
-     */
-    int (*inode_xattrs_callback)(const int fd, const struct rbh_statx *statx,
-                                 struct rbh_value_pair *inode_xattrs,
-                                 ssize_t *inode_xattrs_count,
-                                 struct rbh_value_pair *pairs,
-                                 struct rbh_sstack *values);
-
+    inode_xattrs_callback_t inode_xattrs_callback;
     int statx_sync_type;
     size_t prefix_len;
 
@@ -75,6 +58,16 @@ struct mpi_iterator {
 };
 
 /*----------------------------------------------------------------------------*
+ |                       mpi_iterator operations                              |
+ *----------------------------------------------------------------------------*/
+
+struct rbh_mut_iterator *
+mpi_iterator_new(const char *root, const char *entry, int statx_sync_type);
+
+void *
+mpi_iter_next(void *iterator);
+
+/*----------------------------------------------------------------------------*
  |                               mpi_file_info                                |
  *----------------------------------------------------------------------------*/
 
@@ -96,11 +89,21 @@ struct mpi_file_info {
 };
 
 /*----------------------------------------------------------------------------*
- |                       lustre_mpi operations                                |
+ |                       mpi_backend operations                               |
  *----------------------------------------------------------------------------*/
 
-struct rbh_backend *
-lustre_mpi_backend_branch(void *backend, const struct rbh_id *id,
-                          const char *path);
+struct rbh_mut_iterator *
+mpi_backend_filter(void *backend, const struct rbh_filter *filter,
+                   const struct rbh_filter_options *options);
+
+struct rbh_mut_iterator *
+mpi_branch_backend_filter(void *backend, const struct rbh_filter *filter,
+                          const struct rbh_filter_options *options);
+
+/**
+ * Release the memory associated with the plugin
+ */
+void
+rbh_mpi_plugin_destroy();
 
 #endif

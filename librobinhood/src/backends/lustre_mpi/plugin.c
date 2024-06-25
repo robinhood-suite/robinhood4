@@ -13,11 +13,12 @@
 
 #include "robinhood/backends/lustre_mpi.h"
 #include "robinhood/plugins/backend.h"
+#include "robinhood/backends/iter_mpi_internal.h"
 
 static const struct rbh_backend_plugin_operations
 LUSTRE_MPI_BACKEND_PLUGIN_OPS = {
     .new = rbh_lustre_mpi_backend_new,
-    .destroy = rbh_lustre_mpi_plugin_destroy,
+    .destroy = rbh_mpi_plugin_destroy,
 };
 
 const struct rbh_backend_plugin RBH_BACKEND_PLUGIN_SYMBOL(LUSTRE_MPI) = {

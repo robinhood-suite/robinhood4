@@ -128,11 +128,11 @@ Remote MongoDB Database
 =======================
 
 Librobinhood can use a remote mongo database for the mongo backend. To do this,
-you must define the environment variable ``RBH_MONGO_DB_URI`` with the host
+you must define the environment variable ``RBH_MONGODB_ADDRESS`` with the host
 and port where the database is located.
 
 The variable must follow the form ``mongodb://HOST:PORT``
 
 .. code:: bash
 
-    export RBH_MONGO_DB_URI=mongodb://localhost:27017
+    export RBH_MONGODB_ADDRESS=mongodb://localhost:27017

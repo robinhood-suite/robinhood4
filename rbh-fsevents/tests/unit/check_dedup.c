@@ -32,7 +32,7 @@ START_TEST(dedup_basic)
     fake_source = empty_source();
     ck_assert_ptr_nonnull(fake_source);
 
-    deduplicator = deduplicator_new(20, 10, fake_source);
+    deduplicator = deduplicator_new(20, fake_source);
     ck_assert_ptr_nonnull(deduplicator);
 
     events = rbh_mut_iter_next(deduplicator);
@@ -60,7 +60,7 @@ START_TEST(dedup_one_event)
     fake_source = event_list_source(&fake_event, 1);
     ck_assert_ptr_nonnull(fake_source);
 
-    deduplicator = deduplicator_new(20, 10, fake_source);
+    deduplicator = deduplicator_new(20, fake_source);
     ck_assert_ptr_nonnull(deduplicator);
 
     events = rbh_mut_iter_next(deduplicator);
@@ -97,7 +97,7 @@ START_TEST(dedup_many_events)
     fake_source = event_list_source(fake_events, 5);
     ck_assert_ptr_nonnull(fake_source);
 
-    deduplicator = deduplicator_new(20, 10, fake_source);
+    deduplicator = deduplicator_new(20, fake_source);
     ck_assert_ptr_nonnull(deduplicator);
 
     events = rbh_mut_iter_next(deduplicator);
@@ -141,7 +141,7 @@ START_TEST(dedup_no_dedup)
     fake_source = event_list_source(fake_events, 2);
     ck_assert_ptr_nonnull(fake_source);
 
-    deduplicator = deduplicator_new(20, 10, fake_source);
+    deduplicator = deduplicator_new(20, fake_source);
     ck_assert_ptr_nonnull(deduplicator);
 
     events = rbh_mut_iter_next(deduplicator);
@@ -182,7 +182,7 @@ START_TEST(dedup_link_unlink)
     fake_source = event_list_source(fake_events, 2);
     ck_assert_ptr_nonnull(fake_source);
 
-    deduplicator = deduplicator_new(20, 10, fake_source);
+    deduplicator = deduplicator_new(20, fake_source);
     ck_assert_ptr_nonnull(deduplicator);
 
     events = rbh_mut_iter_next(deduplicator);
@@ -216,7 +216,7 @@ START_TEST(dedup_link_unlink_same_entry_different_parents)
     fake_source = event_list_source(fake_events, 2);
     ck_assert_ptr_nonnull(fake_source);
 
-    deduplicator = deduplicator_new(20, 10, fake_source);
+    deduplicator = deduplicator_new(20, fake_source);
     ck_assert_ptr_nonnull(deduplicator);
 
     events = rbh_mut_iter_next(deduplicator);
@@ -261,7 +261,7 @@ START_TEST(dedup_create_delete)
     fake_source = event_list_source(fake_events, 4);
     ck_assert_ptr_nonnull(fake_source);
 
-    deduplicator = deduplicator_new(20, 10, fake_source);
+    deduplicator = deduplicator_new(20, fake_source);
     ck_assert_ptr_nonnull(deduplicator);
 
     events = rbh_mut_iter_next(deduplicator);
@@ -295,7 +295,7 @@ START_TEST(dedup_last_unlink)
     fake_source = event_list_source(fake_events, 3);
     ck_assert_ptr_nonnull(fake_source);
 
-    deduplicator = deduplicator_new(20, 10, fake_source);
+    deduplicator = deduplicator_new(20, fake_source);
     ck_assert_ptr_nonnull(deduplicator);
 
     events = rbh_mut_iter_next(deduplicator);
@@ -334,7 +334,7 @@ START_TEST(dedup_upsert_no_statx)
     fake_source = event_list_source(fake_events, 2);
     ck_assert_ptr_nonnull(fake_source);
 
-    deduplicator = deduplicator_new(20, 10, fake_source);
+    deduplicator = deduplicator_new(20, fake_source);
     ck_assert_ptr_nonnull(deduplicator);
 
     events = rbh_mut_iter_next(deduplicator);
@@ -386,7 +386,7 @@ START_TEST(dedup_upsert_statx)
     fake_source = event_list_source(fake_events, 4);
     ck_assert_ptr_nonnull(fake_source);
 
-    deduplicator = deduplicator_new(20, 10, fake_source);
+    deduplicator = deduplicator_new(20, fake_source);
     ck_assert_ptr_nonnull(deduplicator);
 
     events = rbh_mut_iter_next(deduplicator);
@@ -440,7 +440,7 @@ START_TEST(dedup_upsert_statx_symlink)
     fake_source = event_list_source(fake_events, 2);
     ck_assert_ptr_nonnull(fake_source);
 
-    deduplicator = deduplicator_new(20, 10, fake_source);
+    deduplicator = deduplicator_new(20, fake_source);
     ck_assert_ptr_nonnull(deduplicator);
 
     events = rbh_mut_iter_next(deduplicator);
@@ -490,7 +490,7 @@ START_TEST(dedup_same_xattr)
     fake_source = event_list_source(fake_events, 2);
     ck_assert_ptr_nonnull(fake_source);
 
-    deduplicator = deduplicator_new(20, 10, fake_source);
+    deduplicator = deduplicator_new(20, fake_source);
     ck_assert_ptr_nonnull(deduplicator);
 
     events = rbh_mut_iter_next(deduplicator);
@@ -528,7 +528,7 @@ START_TEST(dedup_different_xattrs)
     fake_source = event_list_source(fake_events, 2);
     ck_assert_ptr_nonnull(fake_source);
 
-    deduplicator = deduplicator_new(20, 10, fake_source);
+    deduplicator = deduplicator_new(20, fake_source);
     ck_assert_ptr_nonnull(deduplicator);
 
     events = rbh_mut_iter_next(deduplicator);
@@ -583,7 +583,7 @@ START_TEST(dedup_same_xattr_different_values)
     fake_source = event_list_source(fake_events, 4);
     ck_assert_ptr_nonnull(fake_source);
 
-    deduplicator = deduplicator_new(20, 10, fake_source);
+    deduplicator = deduplicator_new(20, fake_source);
     ck_assert_ptr_nonnull(deduplicator);
 
     events = rbh_mut_iter_next(deduplicator);
@@ -626,7 +626,7 @@ START_TEST(dedup_lustre_xattr)
     fake_source = event_list_source(fake_events, 2);
     ck_assert_ptr_nonnull(fake_source);
 
-    deduplicator = deduplicator_new(20, 10, fake_source);
+    deduplicator = deduplicator_new(20, fake_source);
     ck_assert_ptr_nonnull(deduplicator);
 
     events = rbh_mut_iter_next(deduplicator);
@@ -664,7 +664,7 @@ START_TEST(dedup_xattr_merge_lustre_with_xattr)
     fake_source = event_list_source(fake_events, 2);
     ck_assert_ptr_nonnull(fake_source);
 
-    deduplicator = deduplicator_new(20, 10, fake_source);
+    deduplicator = deduplicator_new(20, fake_source);
     ck_assert_ptr_nonnull(deduplicator);
 
     events = rbh_mut_iter_next(deduplicator);
@@ -713,7 +713,7 @@ START_TEST(dedup_xattr_merge_xattrs_with_lustre)
     fake_source = event_list_source(fake_events, 2);
     ck_assert_ptr_nonnull(fake_source);
 
-    deduplicator = deduplicator_new(20, 10, fake_source);
+    deduplicator = deduplicator_new(20, fake_source);
     ck_assert_ptr_nonnull(deduplicator);
 
     events = rbh_mut_iter_next(deduplicator);
@@ -757,7 +757,7 @@ START_TEST(dedup_xattr_merge_fid_with_lustre)
     fake_source = event_list_source(fake_events, 2);
     ck_assert_ptr_nonnull(fake_source);
 
-    deduplicator = deduplicator_new(20, 10, fake_source);
+    deduplicator = deduplicator_new(20, fake_source);
     ck_assert_ptr_nonnull(deduplicator);
 
     events = rbh_mut_iter_next(deduplicator);
@@ -803,7 +803,7 @@ START_TEST(dedup_xattr_merge_lustre_with_fid)
     fake_source = event_list_source(fake_events, 2);
     ck_assert_ptr_nonnull(fake_source);
 
-    deduplicator = deduplicator_new(20, 10, fake_source);
+    deduplicator = deduplicator_new(20, fake_source);
     ck_assert_ptr_nonnull(deduplicator);
 
     events = rbh_mut_iter_next(deduplicator);
@@ -843,7 +843,7 @@ START_TEST(dedup_xattr_merge_xattrs_with_fid)
     fake_source = event_list_source(fake_events, 2);
     ck_assert_ptr_nonnull(fake_source);
 
-    deduplicator = deduplicator_new(20, 10, fake_source);
+    deduplicator = deduplicator_new(20, fake_source);
     ck_assert_ptr_nonnull(deduplicator);
 
     events = rbh_mut_iter_next(deduplicator);
@@ -885,7 +885,7 @@ START_TEST(dedup_xattr_merge_xattrs_fid_and_lustre)
     fake_source = event_list_source(fake_events, 3);
     ck_assert_ptr_nonnull(fake_source);
 
-    deduplicator = deduplicator_new(20, 10, fake_source);
+    deduplicator = deduplicator_new(20, fake_source);
     ck_assert_ptr_nonnull(deduplicator);
 
     events = rbh_mut_iter_next(deduplicator);
@@ -948,7 +948,7 @@ START_TEST(dedup_check_flush_order)
     fake_source = event_list_source(fake_events, 6);
     ck_assert_ptr_nonnull(fake_source);
 
-    deduplicator = deduplicator_new(20, 10, fake_source);
+    deduplicator = deduplicator_new(20, fake_source);
     ck_assert_ptr_nonnull(deduplicator);
 
     events = rbh_mut_iter_next(deduplicator);

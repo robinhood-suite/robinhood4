@@ -11,9 +11,12 @@
 
 #include <ctype.h>
 #include <error.h>
+#include <fcntl.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sysexits.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 #include <time.h>
 
 #include <lustre/lustreapi.h>
@@ -21,21 +24,34 @@
 #include <robinhood/statx.h>
 
 #include <robinhood/backend.h>
+#include <robinhood/utils.h>
 #include <rbh-find/filters.h>
 #include <rbh-find/utils.h>
 
 #include "filters.h"
 
 static const struct rbh_filter_field predicate2filter_field[] = {
-    [LPRED_EXPIRED - LPRED_MIN] =   {.fsentry = RBH_FP_INODE_XATTRS,
-                                     .xattr = "user.ccc_expiration_date"},
-    [LPRED_FID - LPRED_MIN] =       {.fsentry = RBH_FP_INODE_XATTRS,
-                                     .xattr = "fid"},
-    [LPRED_HSM_STATE - LPRED_MIN] = {.fsentry = RBH_FP_INODE_XATTRS,
-                                     .xattr = "hsm_state"},
-    [LPRED_OST_INDEX - LPRED_MIN] = {.fsentry = RBH_FP_INODE_XATTRS,
-                                     .xattr = "ost"},
+    [LPRED_EXPIRED - LPRED_MIN]        = {.fsentry = RBH_FP_INODE_XATTRS,
+                                          .xattr = "user.ccc_expiration_date"},
+    [LPRED_FID - LPRED_MIN]            = {.fsentry = RBH_FP_INODE_XATTRS,
+                                          .xattr = "fid"},
+    [LPRED_HSM_STATE - LPRED_MIN]      = {.fsentry = RBH_FP_INODE_XATTRS,
+                                          .xattr = "hsm_state"},
+    [LPRED_OST_INDEX - LPRED_MIN]      = {.fsentry = RBH_FP_INODE_XATTRS,
+                                          .xattr = "ost"},
+    [LPRED_LAYOUT_PATTERN - LPRED_MIN] = {.fsentry = RBH_FP_INODE_XATTRS,
+                                          .xattr = "pattern"},
+    [LPRED_STRIPE_COUNT - LPRED_MIN]   = {.fsentry = RBH_FP_INODE_XATTRS,
+                                          .xattr = "stripe_count"},
+    [LPRED_STRIPE_SIZE - LPRED_MIN]    = {.fsentry = RBH_FP_INODE_XATTRS,
+                                          .xattr = "stripe_size"},
 };
+
+static inline const struct rbh_filter_field *
+get_filter_field(enum lustre_predicate predicate)
+{
+    return &predicate2filter_field[predicate - LPRED_MIN];
+}
 
 static enum hsm_states
 str2hsm_states(const char *hsm_state)
@@ -101,8 +117,7 @@ hsm_state2filter(const char *hsm_state)
             error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
                           "hsm_state2filter");
 
-        filter = rbh_filter_exists_new(
-                &predicate2filter_field[LPRED_HSM_STATE - LPRED_MIN]);
+        filter = rbh_filter_exists_new(get_filter_field(LPRED_HSM_STATE));
         if (filter == NULL)
             error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
                           "hsm_state2filter");
@@ -115,8 +130,7 @@ hsm_state2filter(const char *hsm_state)
         filter = filter_and(file_filter, filter);
     } else {
         filter = rbh_filter_compare_uint32_new(
-                RBH_FOP_BITS_ANY_SET,
-                &predicate2filter_field[LPRED_HSM_STATE - LPRED_MIN], state
+                RBH_FOP_BITS_ANY_SET, get_filter_field(LPRED_HSM_STATE), state
                 );
     }
 
@@ -192,10 +206,9 @@ fid2filter(const char *fid)
     }
 #endif
 
-    filter = rbh_filter_compare_binary_new(
-            RBH_FOP_EQUAL, &predicate2filter_field[LPRED_FID - LPRED_MIN],
-            (char *) &lu_fid, sizeof(lu_fid)
-            );
+    filter = rbh_filter_compare_binary_new(RBH_FOP_EQUAL,
+                                           get_filter_field(LPRED_FID),
+                                           (char *) &lu_fid, sizeof(lu_fid));
     if (filter == NULL)
         error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
                       "fid2filter");
@@ -222,8 +235,7 @@ ost_index2filter(const char *ost_index)
 
     index_value.uint64 = index;
     filter = rbh_filter_compare_sequence_new(
-            RBH_FOP_IN, &predicate2filter_field[LPRED_OST_INDEX - LPRED_MIN],
-            &index_value, 1
+            RBH_FOP_IN, get_filter_field(LPRED_OST_INDEX), &index_value, 1
             );
     if (filter == NULL)
         error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
@@ -289,4 +301,252 @@ expired_at2filter(const char *expired)
         error(EXIT_FAILURE, errno, "rbh_filter_compare_uint64_new");
 
     return filter_and(filter_not(filter_inf), filter_expiration_date);
+}
+
+struct rbh_filter *
+get_default_stripe_filter(void)
+{
+    struct rbh_filter_field default_field = {
+        .fsentry = RBH_FP_INODE_XATTRS,
+        .xattr = "trusted.lov",
+    };
+    struct rbh_filter *default_filter;
+    struct rbh_filter *dir_filter;
+
+    default_filter = rbh_filter_exists_new(&default_field);
+    if (default_filter == NULL)
+        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
+                      "Failed to create the default filter");
+
+    dir_filter = filetype2filter("d");
+    return filter_and(dir_filter, filter_not(default_filter));
+
+}
+
+static bool
+get_fs_default_value(struct rbh_value_pair *pair)
+{
+    struct rbh_backend *backend = rbh_backend_from_uri("rbh:lustre:.");
+    char *mount_path = NULL;
+    char pwd[PATH_MAX];
+    struct {
+        int fd;
+        uint16_t mode;
+        struct rbh_sstack *values;
+    } arg;
+    int rc;
+
+    if (backend == NULL)
+        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
+                      "Failed to create the Lustre backend for default values retrieval");
+
+    if (getcwd(pwd, sizeof(pwd)) == NULL)
+        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
+                      "Failed to get the current working directory");
+
+    rc = get_mount_path(pwd, &mount_path);
+    if (rc)
+        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
+                      "Failed to get the mount point of the current working directory '%s'",
+                      pwd);
+
+    arg.fd = open(mount_path, O_RDONLY | O_CLOEXEC);
+    if (arg.fd < 0)
+        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
+                      "Failed to open the mount point '%s' of the current working directory",
+                      mount_path);
+
+    return rbh_backend_get_attribute(backend, "dir.lov", &arg, pair, 1) == 0;
+}
+
+struct rbh_filter *
+stripe_count2filter(const char *stripe_count)
+{
+    struct rbh_filter *default_filter;
+    struct rbh_value_pair pair = {
+        .key = "stripe count",
+    };
+    struct rbh_filter *filter;
+    bool default_exists;
+
+    default_filter = get_default_stripe_filter();
+    if (strcmp(stripe_count, "default") == 0)
+        return default_filter;
+
+    default_exists = get_fs_default_value(&pair);
+
+    filter = numeric2filter(get_filter_field(LPRED_STRIPE_COUNT), stripe_count);
+    if (filter == NULL)
+        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
+                      "Invalid stripe count provided, should be '<+|->n', got '%s'",
+                      stripe_count);
+
+    if (default_exists == false)
+        return filter_and(filter, filter_not(default_filter));
+
+    switch (filter->op) {
+    case RBH_FOP_STRICTLY_LOWER:
+        if (pair.value->uint64 < filter->compare.value.uint64)
+            return filter_or(filter, default_filter);
+        break;
+    case RBH_FOP_STRICTLY_GREATER:
+        if (pair.value->uint64 > filter->compare.value.uint64)
+            return filter_or(filter, default_filter);
+        break;
+    case RBH_FOP_EQUAL:
+        if (pair.value->uint64 == filter->compare.value.uint64)
+            return filter_or(filter, default_filter);
+        break;
+    default:
+        __builtin_unreachable();
+    }
+
+    return filter_and(filter, filter_not(default_filter));
+}
+
+struct rbh_filter *
+stripe_size2filter(const char *stripe_size)
+{
+    struct rbh_filter *default_filter;
+    struct rbh_value_pair pair = {
+        .key = "stripe size",
+    };
+    struct rbh_filter *filter;
+    bool default_exists;
+
+    default_filter = get_default_stripe_filter();
+    if (strcmp(stripe_size, "default") == 0)
+        return default_filter;
+
+    default_exists = get_fs_default_value(&pair);
+
+    filter = numeric2filter(get_filter_field(LPRED_STRIPE_SIZE), stripe_size);
+    if (filter == NULL)
+        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
+                      "Invalid stripe size provided, should be '<+|->n', got '%s'",
+                      stripe_size);
+
+    if (default_exists == false)
+        return filter_and(filter, filter_not(default_filter));
+
+    switch (filter->op) {
+    case RBH_FOP_STRICTLY_LOWER:
+        if (pair.value->uint64 < filter->compare.value.uint64)
+            return filter_or(filter, default_filter);
+        break;
+    case RBH_FOP_STRICTLY_GREATER:
+        if (pair.value->uint64 > filter->compare.value.uint64)
+            return filter_or(filter, default_filter);
+        break;
+    case RBH_FOP_EQUAL:
+        if (pair.value->uint64 == filter->compare.value.uint64)
+            return filter_or(filter, default_filter);
+        break;
+    default:
+        __builtin_unreachable();
+    }
+
+    return filter_and(filter, filter_not(default_filter));
+}
+
+enum layout_patterns {
+    LAYOUT_PATTERN_INVALID,
+    LAYOUT_PATTERN_DEFAULT,
+    LAYOUT_PATTERN_RAID0,
+    LAYOUT_PATTERN_MDT,
+    LAYOUT_PATTERN_OVERSTRIPED,
+    LAYOUT_PATTERN_RELEASED
+};
+
+enum layout_patterns
+str2layout_patterns(const char *layout_pattern)
+{
+    switch (*layout_pattern) {
+    case 'd':
+        if (strcmp(&layout_pattern[1], "efault") == 0)
+            return LAYOUT_PATTERN_DEFAULT;
+        break;
+    case 'r':
+        if (strcmp(&layout_pattern[1], "aid0") == 0)
+            return LAYOUT_PATTERN_RAID0;
+        else if (strcmp(&layout_pattern[1], "eleased") == 0)
+            return LAYOUT_PATTERN_RELEASED;
+        break;
+    case 'm':
+        if (strcmp(&layout_pattern[1], "dt") == 0)
+            return LAYOUT_PATTERN_MDT;
+        break;
+    case 'o':
+        if (strcmp(&layout_pattern[1], "verstriped") == 0)
+            return LAYOUT_PATTERN_OVERSTRIPED;
+        break;
+    }
+
+    return LAYOUT_PATTERN_INVALID;
+}
+
+struct rbh_filter *
+layout_pattern2filter(const char *_layout)
+{
+    struct rbh_filter *default_filter;
+    struct rbh_value_pair pair = {
+        .key = "layout pattern",
+    };
+    enum layout_patterns layout;
+    struct rbh_filter *filter;
+    bool default_exists;
+
+    layout = str2layout_patterns(_layout);
+    if (layout == LAYOUT_PATTERN_INVALID)
+        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
+                      "Invalid layout provided, should be 'raid0', 'mdt', 'overstriped' or 'default', got '%s'",
+                      _layout);
+
+    default_filter = get_default_stripe_filter();
+    if (layout == LAYOUT_PATTERN_DEFAULT)
+        return default_filter;
+
+    default_exists = get_fs_default_value(&pair);
+
+    /* The values for comparison are taken from Lustre's source code */
+    switch (layout) {
+    case LAYOUT_PATTERN_RAID0:
+        filter = rbh_filter_compare_uint64_new(
+            RBH_FOP_EQUAL,
+            get_filter_field(LPRED_LAYOUT_PATTERN),
+            LLAPI_LAYOUT_RAID0);
+        break;
+    case LAYOUT_PATTERN_MDT:
+        filter = rbh_filter_compare_uint64_new(
+            RBH_FOP_EQUAL,
+            get_filter_field(LPRED_LAYOUT_PATTERN),
+            LLAPI_LAYOUT_MDT);
+        break;
+    case LAYOUT_PATTERN_OVERSTRIPED:
+        filter = rbh_filter_compare_uint64_new(
+            RBH_FOP_EQUAL,
+            get_filter_field(LPRED_LAYOUT_PATTERN),
+            LLAPI_LAYOUT_OVERSTRIPING);
+        break;
+    case LAYOUT_PATTERN_RELEASED:
+        filter = rbh_filter_compare_uint64_new(
+            RBH_FOP_BITS_ANY_SET,
+            get_filter_field(LPRED_LAYOUT_PATTERN),
+            LOV_PATTERN_F_RELEASED);
+        break;
+    default:
+        __builtin_unreachable();
+    }
+
+    if (filter == NULL)
+        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
+                      "Failed to create the filter for comparing a layout");
+
+    if (default_exists == false)
+        return filter_and(filter, filter_not(default_filter));
+
+    if (pair.value->uint64 == filter->compare.value.uint64)
+        return filter_or(filter, default_filter);
+
+    return filter_and(filter, filter_not(default_filter));
 }

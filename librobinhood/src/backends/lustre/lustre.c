@@ -25,6 +25,7 @@
 
 #include "robinhood/backends/posix.h"
 #include "robinhood/backends/posix_internal.h"
+#include "robinhood/backends/lustre_internal.h"
 #include "robinhood/backends/lustre.h"
 #include "robinhood/statx.h"
 
@@ -164,12 +165,15 @@ fill_sequence_pair(const char *key, struct rbh_value *values, uint64_t length,
  * @return          number of filled \p pairs
  */
 static int
-xattrs_get_fid(int fd, struct rbh_value_pair *pairs)
+xattrs_get_fid(int fd, struct rbh_value_pair *pairs, int available_pairs)
 {
     size_t handle_size = sizeof(struct lustre_file_handle);
     static struct file_handle *handle;
     int mount_id;
     int rc;
+
+    if (available_pairs < 1)
+        return -1;
 
     if (handle == NULL) {
         /* Per-thread initialization of `handle' */
@@ -214,7 +218,7 @@ retry:
  * @return          number of filled \p pairs
  */
 static int
-xattrs_get_hsm(int fd, struct rbh_value_pair *pairs)
+xattrs_get_hsm(int fd, struct rbh_value_pair *pairs, int available_pairs)
 {
     struct hsm_user_state hus;
     int subcount = 0;
@@ -223,6 +227,9 @@ xattrs_get_hsm(int fd, struct rbh_value_pair *pairs)
     if (!S_ISREG(mode))
         /* Only regular files can be archived */
         return 0;
+
+    if (available_pairs < 2)
+        return -1;
 
     rc = llapi_hsm_state_get_fd(fd, &hus);
     if (rc && rc != -ENODATA) {
@@ -431,21 +438,11 @@ xattrs_layout_iterator(struct llapi_layout *layout, void *cbdata)
 }
 
 static int
-layout_get_nb_comp(struct llapi_layout *layout, uint32_t *nb_comp)
+layout_get_nb_comp(struct llapi_layout *layout, void *cbdata)
 {
-    int rc;
+    uint32_t *nb_comp = (uint32_t *) cbdata;
 
-    rc = llapi_layout_comp_use(layout, LLAPI_LAYOUT_COMP_USE_LAST);
-    if (rc)
-        return -1;
-
-    rc = llapi_layout_comp_id_get(layout, nb_comp);
-    if (rc)
-        return -1;
-
-    rc = llapi_layout_comp_use(layout, LLAPI_LAYOUT_COMP_USE_FIRST);
-    if (rc)
-        return -1;
+    (*nb_comp)++;
 
     return 0;
 }
@@ -648,7 +645,7 @@ xattrs_get_magic_and_gen(int fd, struct rbh_value_pair *pairs)
  * @return          layout of the directory, or NULL
  */
 static struct llapi_layout *
-xattrs_get_dir_data_striping(int fd)
+get_dir_data_striping(int fd)
 {
     char tmp[XATTR_SIZE_MAX] = {0};
     struct llapi_layout *layout;
@@ -693,18 +690,19 @@ xattrs_get_dir_data_striping(int fd)
  * @return          number of filled \p pairs
  */
 static int
-xattrs_get_layout(int fd, struct rbh_value_pair *pairs)
+xattrs_get_layout(int fd, struct rbh_value_pair *pairs, int available_pairs)
 {
     struct iterator_data data = { .comp_index = 0 };
     struct llapi_layout *layout;
     uint16_t mirror_count = 0;
-    uint32_t nb_comp = 1;
+    int required_pairs = 0;
     /**
      * There are 6 layout header components in total, but OST is in its own
      * list, so we only consider 5 attributes for the main data array allocation
      */
     int save_errno = 0;
     int nb_xattrs = 5;
+    uint32_t nb_comp;
     int subcount = 0;
     uint32_t flags;
     int rc;
@@ -713,12 +711,20 @@ xattrs_get_layout(int fd, struct rbh_value_pair *pairs)
         /* no layout to fetch for links */
         return 0;
 
+    if (S_ISREG(mode))
+        required_pairs = 3;
+    else
+        required_pairs = 1;
+
+    if (available_pairs < required_pairs)
+        return -1;
+
     if (S_ISDIR(mode)) {
         /* Directories have a default striping that children can inherit from.
          * These information can be manipulated as a regular file layout but
          * they are fetched differently through the Lustre API.
          */
-        layout = xattrs_get_dir_data_striping(fd);
+        layout = get_dir_data_striping(fd);
         /* If layout is NULL and errno is ENODATA, that means the ioctl failed
          * because there is no default striping on the directory.
          */
@@ -750,7 +756,12 @@ xattrs_get_layout(int fd, struct rbh_value_pair *pairs)
         subcount += rc;
     }
 
+    available_pairs -= subcount;
+
     if (llapi_layout_is_composite(layout)) {
+        if (available_pairs < 1)
+            return -1;
+
         rc = llapi_layout_mirror_count_get(layout, &mirror_count);
         if (rc)
             goto err;
@@ -759,12 +770,16 @@ xattrs_get_layout(int fd, struct rbh_value_pair *pairs)
         if (rc)
             goto err;
 
-        rc = layout_get_nb_comp(layout, &nb_comp);
+        nb_comp = 0;
+        rc = llapi_layout_comp_iterate(layout, &layout_get_nb_comp, &nb_comp);
         if (rc)
             goto err;
 
         /** The file is composite, so we add 3 more xattrs to the main alloc */
         nb_xattrs += 3;
+        available_pairs -= 1;
+    } else {
+        nb_comp = 1;
     }
 
     rc = init_iterator_data(&data, nb_comp, nb_xattrs);
@@ -780,6 +795,14 @@ xattrs_get_layout(int fd, struct rbh_value_pair *pairs)
 
     if (rc)
         goto free_data;
+
+    if (S_ISDIR(mode))
+        required_pairs = nb_xattrs - 1;
+    else
+        required_pairs = nb_xattrs;
+
+    if (available_pairs < required_pairs)
+        return -1;
 
     rc = xattrs_fill_layout(&data, nb_xattrs, &pairs[subcount]);
     if (rc < 0)
@@ -801,10 +824,19 @@ err:
 }
 
 static int
-xattrs_get_mdt_info(int fd, struct rbh_value_pair *pairs)
+xattrs_get_mdt_info(int fd, struct rbh_value_pair *pairs, int available_pairs)
 {
+    int required_pairs = 0;
     int subcount = 0;
     int rc = 0;
+
+    if (S_ISDIR(mode))
+        required_pairs = 5;
+    else if (S_ISREG(mode))
+        required_pairs = 1;
+
+    if (available_pairs < required_pairs)
+        return -1;
 
     if (S_ISDIR(mode)) {
         /* Fetch meta data striping for directories only */
@@ -1043,68 +1075,110 @@ xattrs_get_retention(int fd, const struct rbh_statx *statx,
 }
 
 static int
-_get_attrs(const int fd, const struct rbh_statx *statx,
-           int (*attrs_funcs[])(int, struct rbh_value_pair *),
+_get_attrs(struct entry_info *entry_info,
+           int (*attrs_funcs[])(int, struct rbh_value_pair *, int),
            int nb_attrs_funcs,
-           struct rbh_value_pair *inode_xattrs,
-           ssize_t *inode_xattrs_count,
            struct rbh_value_pair *pairs,
+           int available_pairs,
            struct rbh_sstack *values)
 {
     int count = 0;
     int subcount;
 
-    _inode_xattrs_count = inode_xattrs_count;
-    _inode_xattrs = inode_xattrs;
-    mode = statx->stx_mode;
+    _inode_xattrs_count = entry_info->inode_xattrs_count;
+    _inode_xattrs = entry_info->inode_xattrs;
+    mode = entry_info->statx->stx_mode;
     _values = values;
 
     for (int i = 0; i < nb_attrs_funcs; ++i) {
-        subcount = attrs_funcs[i](fd, &pairs[count]);
+        subcount = attrs_funcs[i](entry_info->fd, &pairs[count],
+                                  available_pairs);
         if (subcount == -1)
             return -1;
 
+        available_pairs -= subcount;
         count += subcount;
     }
 
-    count += xattrs_get_retention(fd, statx, &pairs[count]);
+    count += xattrs_get_retention(entry_info->fd, entry_info->statx,
+                                  &pairs[count]);
 
     return count;
 }
 
 static int
-lustre_get_attrs(const int fd, const struct rbh_statx *statx,
+lustre_get_attrs(struct entry_info *entry_info,
                  struct rbh_value_pair *pairs,
+                 int available_pairs,
                  struct rbh_sstack *values)
 {
-    int (*xattrs_funcs[])(int, struct rbh_value_pair *) = {
+    int (*xattrs_funcs[])(int, struct rbh_value_pair *, int) = {
         xattrs_get_hsm, xattrs_get_layout, xattrs_get_mdt_info
     };
 
-    return _get_attrs(fd, statx, xattrs_funcs,
+    return _get_attrs(entry_info, xattrs_funcs,
                       sizeof(xattrs_funcs) / sizeof(xattrs_funcs[0]),
-                      NULL, NULL, pairs, values);
+                      pairs, available_pairs, values);
 }
 
 int
-lustre_inode_xattrs_callback(const int fd, const struct rbh_statx *statx,
-                             struct rbh_value_pair *inode_xattrs,
-                             ssize_t *inode_xattrs_count,
+lustre_inode_xattrs_callback(struct entry_info *entry_info,
                              struct rbh_value_pair *pairs,
+                             int available_pairs,
                              struct rbh_sstack *values)
 {
-    int (*xattrs_funcs[])(int, struct rbh_value_pair *) = {
+    int (*xattrs_funcs[])(int, struct rbh_value_pair *, int) = {
         xattrs_get_fid, xattrs_get_hsm, xattrs_get_layout, xattrs_get_mdt_info
     };
 
-    return _get_attrs(fd, statx, xattrs_funcs,
+    return _get_attrs(entry_info, xattrs_funcs,
                       sizeof(xattrs_funcs) / sizeof(xattrs_funcs[0]),
-                      inode_xattrs, inode_xattrs_count, pairs, values);
+                      pairs, available_pairs, values);
 }
 
 /*----------------------------------------------------------------------------*
  |                          lustre_backend                                    |
  *----------------------------------------------------------------------------*/
+
+static int
+lustre_get_default_stripe_value(int fd, struct rbh_value_pair *pair)
+{
+    struct llapi_layout *layout = get_dir_data_striping(fd);
+    struct rbh_value *value = malloc(sizeof(*value));
+
+    if (value == NULL)
+        return -1;
+
+    if (strcmp(pair->key, "stripe count") == 0) {
+        if (layout == NULL)
+            value->uint64 = 0;
+        else if (llapi_layout_stripe_count_get(layout, &value->uint64))
+            return -1;
+
+        value->type = RBH_VT_UINT64;
+    } else if (strcmp(pair->key, "stripe size") == 0) {
+        if (layout == NULL)
+            value->uint64 = 0;
+        else if (llapi_layout_stripe_size_get(layout, &value->uint64))
+            return -1;
+
+        value->type = RBH_VT_UINT64;
+    } else if (strcmp(pair->key, "layout pattern") == 0) {
+        if (layout == NULL)
+            value->uint64 = 0;
+        else if (llapi_layout_pattern_get(layout, &value->uint64))
+            return -1;
+
+        value->type = RBH_VT_UINT64;
+    } else {
+        errno = EOPNOTSUPP;
+        return -1;
+    }
+
+    pair->value = value;
+
+    return 0;
+}
 
     /*--------------------------------------------------------------------*
      |                          get_attribute()                           |
@@ -1112,26 +1186,36 @@ lustre_inode_xattrs_callback(const int fd, const struct rbh_statx *statx,
 
 int
 lustre_get_attribute(const char *attr_name, void *_arg,
-                     struct rbh_value_pair *data)
+                     struct rbh_value_pair *pairs, int available_pairs)
 {
     struct arg_t {
         int fd;
         struct rbh_statx *statx;
         struct rbh_sstack *values;
     };
-    struct arg_t *arg = (struct arg_t *)_arg;
+    struct arg_t *info = (struct arg_t *)_arg;
+    struct entry_info entry_info = {
+        .fd = info->fd,
+        .statx = info->statx,
+        .inode_xattrs = NULL,
+        .inode_xattrs_count = NULL,
+    };
 
-    if (strcmp(attr_name, "lustre") != 0)
-        return -1;
+    if (strcmp(attr_name, "lustre") == 0)
+        return lustre_get_attrs(&entry_info, pairs, available_pairs,
+                                info->values);
+    else if (strcmp(attr_name, "dir.lov") == 0)
+        return lustre_get_default_stripe_value(info->fd, pairs);
 
-    return lustre_get_attrs(arg->fd, arg->statx, data, arg->values);
+    return -1;
 }
 
 static int
 lustre_fts_backend_get_attribute(void *backend, const char *attr_name,
-                                 void *arg, struct rbh_value_pair *data)
+                                 void *arg, struct rbh_value_pair *pairs,
+                                 int available_pairs)
 {
-    return lustre_get_attribute(attr_name, arg, data);
+    return lustre_get_attribute(attr_name, arg, pairs, available_pairs);
 }
 
     /*--------------------------------------------------------------------*
@@ -1225,11 +1309,11 @@ static const struct rbh_backend_operations LUSTRE_BACKEND_OPS = {
 };
 
 struct rbh_backend *
-rbh_lustre_backend_new(const char *path)
+rbh_lustre_backend_new(const char *path, struct rbh_config *config)
 {
     struct posix_backend *lustre;
 
-    lustre = (struct posix_backend *)rbh_posix_backend_new(path);
+    lustre = (struct posix_backend *)rbh_posix_backend_new(path, config);
     if (lustre == NULL)
         return NULL;
 

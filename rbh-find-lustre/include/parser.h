@@ -20,6 +20,9 @@ enum lustre_predicate {
     LPRED_FID,
     LPRED_HSM_STATE,
     LPRED_OST_INDEX,
+    LPRED_LAYOUT_PATTERN,
+    LPRED_STRIPE_COUNT,
+    LPRED_STRIPE_SIZE,
 
     LPRED_MAX,
 };

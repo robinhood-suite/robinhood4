@@ -12,6 +12,7 @@
 #include <stdlib.h>
 
 #include <lustre/lustreapi.h>
+#include <linux/lustre/lustre_fid.h>
 
 #include <robinhood/itertools.h>
 #include <robinhood/fsevent.h>
@@ -27,8 +28,121 @@ struct lustre_changelog_iterator {
     void *reader;
     struct rbh_iterator *fsevents_iterator;
 
+    char *username;
+    char *mdt_name;
     int32_t source_mdt_index;
+    uint64_t last_changelog_index;
+
+    FILE *dump_file;
 };
+
+static inline time_t
+cltime2sec(uint64_t cltime)
+{
+    /* extract secs from time field */
+    return cltime >> 30;
+}
+
+static inline unsigned int
+cltime2nsec(uint64_t cltime)
+{
+    /* extract nanosecs: */
+    return cltime & ((1 << 30) - 1);
+}
+
+static const char *
+get_event_name(unsigned int cl_event)
+{
+    static const char * const event_name[] = {
+        "archive", "restore", "cancel", "release", "remove", "state",
+    };
+
+    if (cl_event >= (sizeof(event_name) / sizeof(event_name[0])))
+        return "unknown";
+    else
+        return event_name[cl_event];
+}
+
+#define RBH_PATH_MAX    PATH_MAX
+#define CL_BASE_FORMAT "%s: %llu %02d%-5s %u.%09u 0x%x%s t="DFID
+#define CL_BASE_ARG(_mdt, _rec_) (_mdt), (_rec_)->cr_index, (_rec_)->cr_type, \
+                                 changelog_type2str((_rec_)->cr_type),        \
+                                 (uint32_t)cltime2sec((_rec_)->cr_time),      \
+                                 cltime2nsec((_rec_)->cr_time),               \
+                                 (_rec_)->cr_flags & CLF_FLAGMASK, flag_buff, \
+                                 PFID(&(_rec_)->cr_tfid)
+#define CL_NAME_FORMAT "p="DFID" %.*s"
+#define CL_NAME_ARG(_rec_) PFID(&(_rec_)->cr_pfid), (_rec_)->cr_namelen, \
+        changelog_rec_name(_rec_)
+#define CL_EXT_FORMAT   "s="DFID" sp="DFID" %.*s"
+
+/* Dump a single record. */
+static void
+dump_changelog(struct lustre_changelog_iterator *records,
+               struct changelog_rec *record)
+{
+    char record_str[RBH_PATH_MAX] = "";
+    int left = sizeof(record_str);
+    char flag_buff[256] = "";
+    char *curr = record_str;
+    int len = 0;
+
+    if (record->cr_type == CL_HSM)
+        sprintf(flag_buff, "(%s%s,rc=%d)",
+                get_event_name(hsm_get_cl_event(record->cr_flags)),
+                hsm_get_cl_flags(record->cr_flags) & CLF_HSM_DIRTY ?
+                    ",dirty" : "",
+                hsm_get_cl_error(record->cr_flags));
+
+    len = snprintf(curr, left, CL_BASE_FORMAT,
+                   CL_BASE_ARG(records->mdt_name, record));
+    curr += len;
+    left -= len;
+
+    if (left > 0 && record->cr_namelen) {
+        /* this record has a 'name' field. */
+        len = snprintf(curr, left, " " CL_NAME_FORMAT, CL_NAME_ARG(record));
+        curr += len;
+        left -= len;
+    }
+
+    if (left <= 0) {
+        record_str[RBH_PATH_MAX - 1] = '\0';
+        goto dump;
+    }
+
+    if (record->cr_flags & CLF_RENAME) {
+        struct changelog_ext_rename *cr_rename;
+
+        cr_rename = changelog_rec_rename(record);
+        if (fid_is_sane(&cr_rename->cr_sfid)) {
+            len = snprintf(curr, left, " " CL_EXT_FORMAT,
+                           PFID(&cr_rename->cr_sfid),
+                           PFID(&cr_rename->cr_spfid),
+                           (int)changelog_rec_snamelen(record),
+                           changelog_rec_sname(record));
+            curr += len;
+            left -= len;
+        }
+    }
+
+    if (record->cr_flags & CLF_JOBID) {
+        struct changelog_ext_jobid *jobid;
+
+        jobid = changelog_rec_jobid(record);
+        if (jobid->cr_jobid[0] != '\0') {
+            len = snprintf(curr, left, " J=%s", jobid->cr_jobid);
+            curr += len;
+            left -= len;
+        }
+    }
+
+    if (left <= 0)
+        record_str[RBH_PATH_MAX - 1] = '\0';
+
+dump:
+    fprintf(records->dump_file, "%s\n", record_str);
+}
 
 /* BSON results:
  * { "statx" : { "uid" : x, "gid" : y } }
@@ -930,6 +1044,11 @@ retry:
         return NULL;
     }
 
+    records->last_changelog_index = record->cr_index;
+
+    if (records->dump_file)
+        dump_changelog(records, record);
+
     id = build_id(&record->cr_tfid);
     if (id == NULL) {
         rc = -1;
@@ -1033,6 +1152,23 @@ lustre_changelog_iter_destroy(void *iterator)
     llapi_changelog_fini(&records->reader);
     if (records->fsevents_iterator)
         rbh_iter_destroy(records->fsevents_iterator);
+
+    if (records->username) {
+        int rc;
+
+        rc = llapi_changelog_clear(records->mdt_name, records->username,
+                                   records->last_changelog_index);
+        if (rc < 0)
+            error(EXIT_FAILURE, -rc,
+                  "Failed to acknowledge changelogs, username '%s' may be invalid",
+                  records->username);
+
+        free(records->username);
+    }
+
+    free(records->mdt_name);
+    if (records->dump_file != NULL && records->dump_file != stdout)
+        fclose(records->dump_file);
 }
 
 static const struct rbh_iterator_operations LUSTRE_CHANGELOG_ITER_OPS = {
@@ -1046,15 +1182,18 @@ static const struct rbh_iterator LUSTRE_CHANGELOG_ITERATOR = {
 
 static void
 lustre_changelog_iter_init(struct lustre_changelog_iterator *events,
-                           const char *mdtname)
+                           const char *mdtname, const char *username,
+                           const char *dump_file)
 {
     const char *mdtname_index;
     int rc;
 
+    events->last_changelog_index = 0;
+
     rc = llapi_changelog_start(&events->reader,
                                CHANGELOG_FLAG_JOBID |
                                CHANGELOG_FLAG_EXTRA_FLAGS,
-                               mdtname, 0 /*start_rec*/);
+                               mdtname, events->last_changelog_index);
     if (rc < 0)
         error(EXIT_FAILURE, -rc, "llapi_changelog_start");
 
@@ -1069,11 +1208,33 @@ lustre_changelog_iter_init(struct lustre_changelog_iterator *events,
     events->iterator = LUSTRE_CHANGELOG_ITERATOR;
     events->fsevents_iterator = NULL;
 
+    if (username != NULL) {
+        events->username = strdup(username);
+        if (events->username == NULL)
+            error(EXIT_FAILURE, ENOMEM, "strdup");
+    } else {
+        events->username = NULL;
+    }
+
+    events->mdt_name = strdup(mdtname);
+    if (events->mdt_name == NULL)
+        error(EXIT_FAILURE, ENOMEM, "strdup");
+
     for (mdtname_index = mdtname; !isdigit(*mdtname_index); mdtname_index++);
 
     rc = str2int64_t(mdtname_index, (int64_t *) &events->source_mdt_index);
     if (rc)
         error(EXIT_FAILURE, errno, "str2int64_t");
+
+    if (dump_file == NULL) {
+        events->dump_file = NULL;
+    } else if (strcmp(dump_file, "-") == 0) {
+        events->dump_file = stdout;
+    } else {
+        events->dump_file = fopen(dump_file, "a");
+        if (events->dump_file == NULL)
+            error(EXIT_FAILURE, errno, "Failed to open the dump file");
+    }
 }
 
 struct lustre_source {
@@ -1112,7 +1273,8 @@ static const struct source LUSTRE_SOURCE = {
 };
 
 struct source *
-source_from_lustre_changelog(const char *mdtname)
+source_from_lustre_changelog(const char *mdtname, const char *username,
+                             const char *dump_file)
 {
     struct lustre_source *source;
 
@@ -1120,7 +1282,8 @@ source_from_lustre_changelog(const char *mdtname)
     if (source == NULL)
         error(EXIT_FAILURE, errno, "malloc");
 
-    lustre_changelog_iter_init(&source->events, mdtname);
+    lustre_changelog_iter_init(&source->events, mdtname, username,
+                               dump_file);
 
     initialize_source_stack(sizeof(struct rbh_value_pair) * (1 << 7));
     source->source = LUSTRE_SOURCE;

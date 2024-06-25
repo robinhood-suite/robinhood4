@@ -62,8 +62,18 @@ lustre_predicate_or_action(const char *string)
             if (!strcmp(&string[2], "sm-state"))
                 return CLT_PREDICATE;
             break;
+        case 'l':
+            if (!strcmp(&string[2], "ayout-pattern"))
+                return CLT_PREDICATE;
+            break;
         case 'o':
             if (!strcmp(&string[2], "st"))
+                return CLT_PREDICATE;
+            break;
+        case 's':
+            if (!strcmp(&string[2], "tripe-count"))
+                return CLT_PREDICATE;
+            else if (!strcmp(&string[2], "tripe-size"))
                 return CLT_PREDICATE;
             break;
         }
@@ -112,6 +122,15 @@ lustre_parse_predicate(struct find_context *ctx, int *arg_idx)
         break;
     case LPRED_OST_INDEX:
         filter = ost_index2filter(ctx->argv[++i]);
+        break;
+    case LPRED_STRIPE_COUNT:
+        filter = stripe_count2filter(ctx->argv[++i]);
+        break;
+    case LPRED_STRIPE_SIZE:
+        filter = stripe_size2filter(ctx->argv[++i]);
+        break;
+    case LPRED_LAYOUT_PATTERN:
+        filter = layout_pattern2filter(ctx->argv[++i]);
         break;
     default:
         filter = find_parse_predicate(ctx, &i);

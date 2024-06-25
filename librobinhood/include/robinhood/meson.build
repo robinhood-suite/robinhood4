@@ -6,6 +6,7 @@
 
 install_headers(
     'backend.h',
+    'config.h',
     'filter.h',
     'fsentry.h',
     'fsevent.h',
@@ -18,6 +19,7 @@ install_headers(
     'queue.h',
     'ring.h',
     'ringr.h',
+    'serialization.h',
     'sstack.h',
     'stack.h',
     'statx.h',

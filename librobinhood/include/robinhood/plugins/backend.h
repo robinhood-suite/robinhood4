@@ -13,8 +13,9 @@
 #include <stdlib.h>
 #include <errno.h>
 
-#include "robinhood/plugin.h"
 #include "robinhood/backend.h"
+#include "robinhood/config.h"
+#include "robinhood/plugin.h"
 
 struct rbh_backend_plugin {
     struct rbh_plugin plugin;
@@ -22,7 +23,7 @@ struct rbh_backend_plugin {
 };
 
 struct rbh_backend_plugin_operations {
-    struct rbh_backend *(*new)(const char *fsname);
+    struct rbh_backend *(*new)(const char *fsname, struct rbh_config *config);
     void (*destroy)();
 };
 
@@ -82,10 +83,10 @@ rbh_backend_plugin_import(const char *name);
  * @error TODO
  */
 static inline struct rbh_backend *
-rbh_backend_plugin_new(const struct rbh_backend_plugin *plugin, 
-                       const char *fsname)
+rbh_backend_plugin_new(const struct rbh_backend_plugin *plugin,
+                       const char *fsname, struct rbh_config *config)
 {
-    return plugin->ops->new(fsname);
+    return plugin->ops->new(fsname, config);
 }
 
 /**

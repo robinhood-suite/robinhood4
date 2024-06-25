@@ -35,35 +35,6 @@
         ck_assert_id_eq((X)->link.parent_id, parent); \
     } while (0)
 
-static inline const char *
-value_type2str(enum rbh_value_type type)
-{
-    switch (type) {
-    case RBH_VT_BOOLEAN:
-        return "RBH_VT_BOOLEAN";
-    case RBH_VT_INT32:
-        return "RBH_VT_INT32";
-    case RBH_VT_UINT32:
-        return "RBH_VT_UINT32";
-    case RBH_VT_INT64:
-        return "RBH_VT_INT64";
-    case RBH_VT_UINT64:
-        return "RBH_VT_UINT64";
-    case RBH_VT_STRING:
-        return "RBH_VT_STRING";
-    case RBH_VT_BINARY:
-        return "RBH_VT_BINARY";
-    case RBH_VT_REGEX:
-        return "RBH_VT_REGEX";
-    case RBH_VT_SEQUENCE:
-        return "RBH_VT_SEQUENCE";
-    case RBH_VT_MAP:
-        return "RBH_VT_MAP";
-    default:
-        return "unknown";
-    }
-}
-
 #define _ck_assert_value_type(X, OP, Y) \
     ck_assert_msg((X) OP (Y), ": %s is %s, %s is %s", \
                   #X, value_type2str(X), #Y, value_type2str(Y))

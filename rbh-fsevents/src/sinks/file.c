@@ -9,8 +9,8 @@
 #include <stdio.h>
 
 #include <miniyaml.h>
+#include <robinhood/serialization.h>
 
-#include "serialization.h"
 #include "sink.h"
 
 struct file_sink {

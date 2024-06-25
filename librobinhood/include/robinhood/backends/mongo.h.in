@@ -13,6 +13,7 @@
  */
 
 #include "robinhood/backend.h"
+#include "robinhood/config.h"
 
 #define RBH_MONGO_BACKEND_NAME "mongo"
 
@@ -27,6 +28,7 @@
  * Create a mongo backend
  *
  * @param fsname    the name of the filesystem the backend refers to
+ * @param config    the config to use in the new backend
  *
  * @return          a pointer to a newly allocated mongo backend on success,
  *                  NULL on error and errno is set appropriately
@@ -36,7 +38,7 @@
  * @error ENOMEM    there was not enough memory available
  */
 struct rbh_backend *
-rbh_mongo_backend_new(const char *fsname);
+rbh_mongo_backend_new(const char *fsname, struct rbh_config *config);
 
 /**
  * Release the memory associated with the plugin

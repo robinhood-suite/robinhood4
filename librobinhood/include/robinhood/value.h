@@ -88,6 +88,37 @@ struct rbh_value {
     };
 };
 
+static const char * const VALUE_TYPE_NAMES[] = {
+    [RBH_VT_BOOLEAN] = "boolean",
+    [RBH_VT_INT32] = "int32",
+    [RBH_VT_UINT32] = "unsigned int32",
+    [RBH_VT_INT64] = "int64",
+    [RBH_VT_UINT64] = "unsigned int64",
+    [RBH_VT_STRING] = "string",
+    [RBH_VT_BINARY] = "binary",
+    [RBH_VT_REGEX] = "regex",
+    [RBH_VT_SEQUENCE] = "sequence",
+    [RBH_VT_MAP] = "map",
+};
+
+/**
+ * Convert a rbh_value_type to a string
+ *
+ * @param type     the rbh_value_type to convert
+ *
+ * @return         "unknown" if the type is unknown, its string representation
+ *                 otherwise
+ */
+static inline const char *
+value_type2str(enum rbh_value_type type)
+{
+    if (type < RBH_VT_BOOLEAN || type > RBH_VT_MAP)
+        return "unknown";
+
+    return VALUE_TYPE_NAMES[type];
+}
+
+
 /**
  * Create a new boolean value
  *

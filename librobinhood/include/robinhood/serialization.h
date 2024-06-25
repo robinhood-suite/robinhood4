@@ -26,6 +26,10 @@ parse_rbh_value_map(yaml_parser_t *parser, struct rbh_value_map *map,
                     bool parse_first_event);
 
 bool
+parse_rbh_value(yaml_parser_t *parser, yaml_event_t *event,
+                struct rbh_value *value);
+
+bool
 parse_sequence(yaml_parser_t *parser, struct rbh_value *sequence);
 
 bool

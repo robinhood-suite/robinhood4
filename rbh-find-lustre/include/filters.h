@@ -47,6 +47,37 @@ struct rbh_filter *
 ost_index2filter(const char *ost_index);
 
 /**
+ * Build a filter for the -stripe-count predicate
+ *
+ * @param stripe_count a string representing a number
+ *
+ * @return             a pointer to a newly allocated struct rbh_filter
+ */
+struct rbh_filter *
+stripe_count2filter(const char *stripe_count);
+
+/**
+ * Build a filter for the -stripe-size predicate
+ *
+ * @param stripe_size  a string representing a number
+ *
+ * @return             a pointer to a newly allocated struct rbh_filter
+ */
+struct rbh_filter *
+stripe_size2filter(const char *stripe_size);
+
+/**
+ * Build a filter for the -layout-pattern predicate
+ *
+ * @param layout_pattern  a string representing a valid layout pattern (either
+ *                        'mdt', 'raid0' or 'default')
+ *
+ * @return             a pointer to a newly allocated struct rbh_filter
+ */
+struct rbh_filter *
+layout_pattern2filter(const char *layout_pattern);
+
+/**
  * Build a filter for the -expired predicate
  *
  * @return             a pointer to a newly allocated struct rbh_filter
@@ -55,7 +86,7 @@ struct rbh_filter *
 expired2filter();
 
 /**
- * Build a filter for the -expired predicate
+ * Build a filter for the -expired-at predicate
  *
  * @param expired      the next argument in the command line or NULL
  *

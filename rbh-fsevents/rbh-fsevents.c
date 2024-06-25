@@ -27,11 +27,9 @@
 
 struct deduplicator_options {
     size_t batch_size;
-    size_t flush_size;
 };
 
 static const size_t DEFAULT_BATCH_SIZE = 100;
-static const size_t DEFAULT_FLUSH_SIZE = 50; /* 50% */
 
 static void
 usage(void)
@@ -56,13 +54,12 @@ usage(void)
         "    -b, --batch-size NUMBER\n"
         "                    the number of fsevents to keep in memory for deduplication\n"
         "                    default: %lu\n"
+        "    -d, --dump PATH\n"
+        "                    the path to a file where the changelogs should be dumped,\n"
+        "                    can only be used with a Lustre source. Use '-' for stdout.\n"
         "    -e, --enrich MOUNTPOINT\n"
         "                    enrich changelog records by querying MOUNTPOINT as needed\n"
         "                    MOUNTPOINT is a RobinHood URI (eg. rbh:lustre:/mnt/lustre)\n"
-        "    -f, --flush-size NUMBER\n"
-        "                    the number of fsevents flushed when the batch is filled\n"
-        "                    (i.e. when we have reached the batch size)\n"
-        "                    default: %lu\n"
         "    -h, --help      print this message and exit\n"
         "    -l, --lustre    consider SOURCE is an MDT name\n"
         "    -r, --raw       do not enrich changelog records (default)\n"
@@ -70,8 +67,7 @@ usage(void)
         "Note that uploading raw records to a RobinHood backend will fail, they have to\n"
         "be enriched first.\n";
 
-    printf(message, program_invocation_short_name, DEFAULT_BATCH_SIZE,
-           DEFAULT_FLUSH_SIZE);
+    printf(message, program_invocation_short_name, DEFAULT_BATCH_SIZE);
 }
 
 static bool
@@ -88,6 +84,26 @@ is_uri(const char *string)
 
     free(raw_uri);
     return true;
+}
+
+static char *
+parse_query(const char *query)
+{
+    const char *key = query;
+    char *value;
+    char *equal;
+
+    equal = strchr(query, '=');
+    if (equal == NULL)
+        error(EXIT_FAILURE, EINVAL, "URI's query should be of the form 'key=value', got '%s'",
+              query);
+
+    value = equal + 1;
+    if (strncmp(key, "ack-user", strlen("ack-user")))
+        error(EXIT_FAILURE, EINVAL, "URI's query should only contain the option 'ack-user=<user>', option '%s' unknown",
+              query);
+
+    return value;
 }
 
 static struct source *
@@ -112,12 +128,15 @@ source_from_file_uri(const char *file_path,
 }
 
 static struct source *
-source_from_uri(const char *uri)
+source_from_uri(const char *uri, const char *dump_file)
 {
     struct source *source = NULL;
     struct rbh_raw_uri *raw_uri;
     char *name = NULL;
+    char *username;
     char *colon;
+
+    (void) dump_file;
 
     raw_uri = rbh_raw_uri_from_string(uri);
     if (raw_uri == NULL)
@@ -136,11 +155,16 @@ source_from_uri(const char *uri)
         name = colon + 1;
     }
 
+    if (raw_uri->query)
+        username = parse_query(raw_uri->query);
+    else
+        username = NULL;
+
     if (strcmp(raw_uri->path, "file") == 0) {
         source = source_from_file_uri(name, source_from_file);
     } else if (strcmp(raw_uri->path, "lustre") == 0) {
 #ifdef HAVE_LUSTRE
-        source = source_from_lustre_changelog(name);
+        source = source_from_lustre_changelog(name, username, dump_file);
 #else
         free(raw_uri);
         error(EX_USAGE, EINVAL, "MDT source is not available");
@@ -160,14 +184,14 @@ source_from_uri(const char *uri)
 }
 
 static struct source *
-source_new(const char *arg)
+source_new(const char *arg, const char *dump_file)
 {
     if (strcmp(arg, "-") == 0)
         /* SOURCE is '-' (stdin) */
         return source_from_file(stdin);
 
     if (is_uri(arg))
-        return source_from_uri(arg);
+        return source_from_uri(arg, dump_file);
 
     error(EX_USAGE, EINVAL, "%s", arg);
     __builtin_unreachable();
@@ -300,9 +324,7 @@ feed(struct sink *sink, struct source *source,
 {
     struct rbh_mut_iterator *deduplicator;
 
-    deduplicator = deduplicator_new(dedup_opts->batch_size,
-                                    dedup_opts->flush_size,
-                                    source);
+    deduplicator = deduplicator_new(dedup_opts->batch_size, source);
     if (deduplicator == NULL)
         error(EXIT_FAILURE, errno, "deduplicator_new");
 
@@ -370,14 +392,14 @@ main(int argc, char *argv[])
             .val = 'b',
         },
         {
+            .name = "dump",
+            .has_arg = required_argument,
+            .val = 'd',
+        },
+        {
             .name = "enrich",
             .has_arg = required_argument,
             .val = 'e',
-        },
-        {
-            .name = "flush-size",
-            .has_arg = required_argument,
-            .val = 'f',
         },
         {
             .name = "help",
@@ -391,27 +413,27 @@ main(int argc, char *argv[])
     };
     struct deduplicator_options dedup_opts = {
         .batch_size = DEFAULT_BATCH_SIZE,
-        .flush_size = DEFAULT_FLUSH_SIZE,
     };
+    char *dump_file = NULL;
     char c;
 
     /* Parse the command line */
-    while ((c = getopt_long(argc, argv, "b:e:f:hlr", LONG_OPTIONS, NULL)) != -1) {
+    while ((c = getopt_long(argc, argv, "b:d:e:hlr", LONG_OPTIONS, NULL)) != -1) {
         switch (c) {
         case 'b':
             if (!str2size_t(optarg, &dedup_opts.batch_size))
                 error(EXIT_FAILURE, 0, "'%s' is not an integer", optarg);
 
             break;
+        case 'd':
+            dump_file = strdup(optarg);
+            if (dump_file == NULL)
+                error(EXIT_FAILURE, ENOMEM, "strdup");
+            break;
         case 'e':
             enrich_builder = enrich_iter_builder_from_uri(optarg);
             if (enrich_builder == NULL)
-                error(EXIT_FAILURE, errno, "enrich_new");
-            break;
-        case 'f':
-            if (!str2size_t(optarg, &dedup_opts.flush_size))
-                error(EXIT_FAILURE, 0, "'%s' is not an integer", optarg);
-
+                error(EXIT_FAILURE, errno, "invalid enrich URI '%s'", optarg);
             break;
         case 'h':
             usage();
@@ -428,18 +450,16 @@ main(int argc, char *argv[])
         }
     }
 
-    /* if user asks for a flush size greater than the batch size, simply set it
-     * to the maximum instead of returning an error.
-     */
-    if (dedup_opts.flush_size > dedup_opts.batch_size)
-        dedup_opts.flush_size = dedup_opts.batch_size;
-
     if (argc - optind < 2)
         error(EX_USAGE, 0, "not enough arguments");
     if (argc - optind > 2)
         error(EX_USAGE, 0, "too many arguments");
 
-    source = source_new(argv[optind++]);
+    if (dump_file && strcmp(argv[optind + 1], dump_file) == 0)
+        error(EX_USAGE, EINVAL,
+              "Cannot output changelogs and fsevents both to stdout");
+
+    source = source_new(argv[optind++], dump_file);
     sink = sink_new(argv[optind++]);
 
     feed(sink, source, enrich_builder, strcmp(sink->name, "backend"),

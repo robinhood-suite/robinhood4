@@ -40,9 +40,19 @@ str2lustre_predicate(const char *string)
         if (strcmp(&string[2], "sm-state") == 0)
             return LPRED_HSM_STATE;
         break;
+    case 'l':
+        if (strcmp(&string[2], "ayout-pattern") == 0)
+            return LPRED_LAYOUT_PATTERN;
+        break;
     case 'o':
         if (strcmp(&string[2], "st") == 0)
             return LPRED_OST_INDEX;
+        break;
+    case 's':
+        if (strcmp(&string[2], "tripe-count") == 0)
+            return LPRED_STRIPE_COUNT;
+        else if (strcmp(&string[2], "tripe-size") == 0)
+            return LPRED_STRIPE_SIZE;
         break;
     }
 
@@ -56,6 +66,9 @@ static const char *__lustre_predicate2str[] = {
     [LOCAL(LPRED_FID)]             = "fid",
     [LOCAL(LPRED_HSM_STATE)]       = "hsm-state",
     [LOCAL(LPRED_OST_INDEX)]       = "ost",
+    [LOCAL(LPRED_LAYOUT_PATTERN)]  = "layout-pattern",
+    [LOCAL(LPRED_STRIPE_COUNT)]    = "stripe-count",
+    [LOCAL(LPRED_STRIPE_SIZE)]     = "stripe-size",
 };
 
 const char *

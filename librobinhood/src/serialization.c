@@ -18,7 +18,7 @@
 #include <miniyaml.h>
 #include <robinhood.h>
 
-#include "serialization.h"
+#include "robinhood/serialization.h"
 
 static struct {
     struct rbh_sstack *events;
@@ -427,7 +427,7 @@ parse_id(yaml_parser_t *parser, struct rbh_id *id)
 static bool
 emit_rbh_value(yaml_emitter_t *emitter, const struct rbh_value *value);
 
-static bool
+bool
 parse_rbh_value(yaml_parser_t *parser, yaml_event_t *event,
                 struct rbh_value *value);
 
@@ -921,7 +921,7 @@ emit_rbh_value(yaml_emitter_t *emitter, const struct rbh_value *value)
 }
 
 /* This function takes the ownership of `event' */
-static bool
+bool
 parse_rbh_value(yaml_parser_t *parser, yaml_event_t *event,
                 struct rbh_value *value)
 {
