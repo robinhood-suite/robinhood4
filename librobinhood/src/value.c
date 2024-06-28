@@ -457,3 +457,103 @@ out_einval:
     errno = EINVAL;
     return -1;
 }
+
+static int
+fill_pair(const char *key, const struct rbh_value *value,
+          struct rbh_value_pair *pair, struct rbh_sstack *stack)
+{
+    pair->key = key;
+    pair->value = rbh_sstack_push(stack, value, sizeof(*value));
+    if (pair->value == NULL)
+        return -1;
+
+    return 0;
+}
+
+int
+fill_int64_pair(const char *key, int64_t integer, struct rbh_value_pair *pair,
+                struct rbh_sstack *stack)
+{
+    const struct rbh_value int64_value = {
+        .type = RBH_VT_INT64,
+        .int64 = integer,
+    };
+
+    return fill_pair(key, &int64_value, pair, stack);
+}
+
+int
+fill_string_pair(const char *key, const char *str,
+                 struct rbh_value_pair *pair, struct rbh_sstack *stack)
+{
+    const struct rbh_value string_value = {
+        .type = RBH_VT_STRING,
+        .string = rbh_sstack_push(stack, str, strlen(str) + 1),
+    };
+
+    if (string_value.string == NULL)
+        return -1;
+
+    return fill_pair(key, &string_value, pair, stack);
+}
+
+int
+fill_binary_pair(const char *key, const void *data, const size_t len,
+                 struct rbh_value_pair *pair, struct rbh_sstack *stack)
+{
+    const struct rbh_value binary_value = {
+        .type = RBH_VT_BINARY,
+        .binary = {
+            .data = rbh_sstack_push(stack, data, len),
+            .size = len,
+        },
+    };
+
+    if (binary_value.binary.data == NULL)
+        return -1;
+
+    return fill_pair(key, &binary_value, pair, stack);
+}
+
+int
+fill_int32_pair(const char *key, int32_t integer, struct rbh_value_pair *pair,
+                struct rbh_sstack *stack)
+{
+    const struct rbh_value int32_value = {
+        .type = RBH_VT_INT32,
+        .int32 = integer,
+    };
+
+    return fill_pair(key, &int32_value, pair, stack);
+}
+
+int
+fill_uint32_pair(const char *key, uint32_t integer, struct rbh_value_pair *pair,
+                 struct rbh_sstack *stack)
+{
+    const struct rbh_value uint32_value = {
+        .type = RBH_VT_UINT32,
+        .uint32 = integer,
+    };
+
+    return fill_pair(key, &uint32_value, pair, stack);
+}
+
+int
+fill_sequence_pair(const char *key, struct rbh_value *values, uint64_t length,
+                   struct rbh_value_pair *pair, struct rbh_sstack *stack)
+{
+    const struct rbh_value sequence_value = {
+        .type = RBH_VT_SEQUENCE,
+        .sequence = {
+            .values = rbh_sstack_push(stack, values,
+                                      length * sizeof(*values)),
+            .count = length,
+        },
+    };
+
+    if (sequence_value.sequence.values == NULL)
+        return -1;
+
+    return fill_pair(key, &sequence_value, pair, stack);
+}
