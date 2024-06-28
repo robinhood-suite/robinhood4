@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7aa38292_79b1dc28",
+        "filename": "rbh-find/tests/test_mpifile.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-06-28T09:01:12Z",
+      "side": 1,
+      "message": "minor: no need to specify the `-a` everytime. By default, having `-type f -size +1K` already means `filter all entries that are files AND have a size of over 1K`",
+      "range": {
+        "startLine": 206,
+        "startChar": 55,
+        "endLine": 206,
+        "endChar": 58
+      },
+      "revId": "f5915bd45faf67d03677a908f44b76fc109b03ca",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
