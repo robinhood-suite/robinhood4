@@ -28,6 +28,7 @@
 #include "robinhood/backends/lustre_internal.h"
 #include "robinhood/backends/lustre.h"
 #include "robinhood/statx.h"
+#include "value.h"
 
 #ifndef HAVE_LUSTRE_FILE_HANDLE
 /* This structure is not defined before 2.15, so we define it to retrieve the
@@ -58,103 +59,6 @@ static __thread struct rbh_value_pair *_inode_xattrs;
 static __thread ssize_t *_inode_xattrs_count;
 static __thread struct rbh_sstack *_values;
 static __thread uint16_t mode;
-
-static inline int
-fill_pair(const char *key, const struct rbh_value *value,
-          struct rbh_value_pair *pair)
-{
-    pair->key = key;
-    pair->value = rbh_sstack_push(_values, value, sizeof(*value));
-    if (pair->value == NULL)
-        return -1;
-
-    return 0;
-}
-
-static inline int
-fill_binary_pair(const char *key, const void *data, const ssize_t len,
-                 struct rbh_value_pair *pair)
-{
-    const struct rbh_value binary_value = {
-        .type = RBH_VT_BINARY,
-        .binary = {
-            .data = rbh_sstack_push(_values, data, len),
-            .size = len,
-        },
-    };
-
-    if (binary_value.binary.data == NULL)
-        return -1;
-
-    return fill_pair(key, &binary_value, pair);
-}
-
-static inline int
-fill_string_pair(const char *key, const char *str, const int len,
-                 struct rbh_value_pair *pair)
-{
-    const struct rbh_value string_value = {
-        .type = RBH_VT_STRING,
-        .string = rbh_sstack_push(_values, str, len),
-    };
-
-    if (string_value.string == NULL)
-        return -1;
-
-    return fill_pair(key, &string_value, pair);
-}
-
-static inline int
-fill_int32_pair(const char *key, int32_t integer, struct rbh_value_pair *pair)
-{
-    const struct rbh_value int32_value = {
-        .type = RBH_VT_INT32,
-        .int32 = integer,
-    };
-
-    return fill_pair(key, &int32_value, pair);
-}
-
-static inline int
-fill_uint32_pair(const char *key, uint32_t integer, struct rbh_value_pair *pair)
-{
-    const struct rbh_value uint32_value = {
-        .type = RBH_VT_UINT32,
-        .uint32 = integer,
-    };
-
-    return fill_pair(key, &uint32_value, pair);
-}
-
-static inline int
-fill_int64_pair(const char *key, int64_t integer, struct rbh_value_pair *pair)
-{
-    const struct rbh_value int64_value = {
-        .type = RBH_VT_INT64,
-        .int64 = integer,
-    };
-
-    return fill_pair(key, &int64_value, pair);
-}
-
-static inline int
-fill_sequence_pair(const char *key, struct rbh_value *values, uint64_t length,
-                   struct rbh_value_pair *pair)
-{
-    const struct rbh_value sequence_value = {
-        .type = RBH_VT_SEQUENCE,
-        .sequence = {
-            .values = rbh_sstack_push(_values, values,
-                                      length * sizeof(*values)),
-            .count = length,
-        },
-    };
-
-    if (sequence_value.sequence.values == NULL)
-        return -1;
-
-    return fill_pair(key, &sequence_value, pair);
-}
 
 /**
  * Record a file's fid in \p pairs
@@ -203,7 +107,7 @@ retry:
 
     rc = fill_binary_pair(
         "fid", &((struct lustre_file_handle *)handle->f_handle)->lfh_child,
-        sizeof(struct lu_fid), pairs
+        sizeof(struct lu_fid), pairs, _values
     );
 
     return rc ? : 1;
@@ -240,12 +144,13 @@ xattrs_get_hsm(int fd, struct rbh_value_pair *pairs, int available_pairs)
     if (rc == -ENODATA || (hus.hus_archive_id == 0 && hus.hus_states == 0))
         return 0;
 
-    rc = fill_uint32_pair("hsm_state", hus.hus_states, &pairs[subcount++]);
+    rc = fill_uint32_pair("hsm_state", hus.hus_states, &pairs[subcount++],
+                          _values);
     if (rc)
         return -1;
 
     rc = fill_uint32_pair("hsm_archive_id", hus.hus_archive_id,
-                          &pairs[subcount++]);
+                          &pairs[subcount++], _values);
     if (rc)
         return -1;
 
@@ -507,7 +412,7 @@ xattrs_fill_layout(struct iterator_data *data, int nb_xattrs,
 
     for (int i = 0; i < nb_xattrs; ++i) {
         rc = fill_sequence_pair(keys[i], values[i], data->comp_index,
-                                &pairs[subcount++]);
+                                &pairs[subcount++], _values);
         if (rc)
             return -1;
     }
@@ -517,7 +422,7 @@ xattrs_fill_layout(struct iterator_data *data, int nb_xattrs,
         return subcount;
 
     rc = fill_sequence_pair("ost", data->ost, data->ost_idx,
-                            &pairs[subcount++]);
+                            &pairs[subcount++], _values);
     if (rc)
         return -1;
 
@@ -578,11 +483,11 @@ _xattrs_get_magic_and_gen(int fd, const char *lov_buf,
     }
 
     rc = fill_string_pair("magic", magic_str, magic_str_len + 1,
-                          &pairs[subcount++]);
+                          &pairs[subcount++], _values);
     if (rc)
         return -1;
 
-    rc = fill_uint32_pair("gen", gen, &pairs[subcount++]);
+    rc = fill_uint32_pair("gen", gen, &pairs[subcount++], _values);
     if (rc)
         return -1;
 
@@ -741,7 +646,7 @@ xattrs_get_layout(int fd, struct rbh_value_pair *pairs, int available_pairs)
     if (rc)
         goto err;
 
-    rc = fill_uint32_pair("flags", flags, &pairs[subcount++]);
+    rc = fill_uint32_pair("flags", flags, &pairs[subcount++], _values);
     if (rc)
         goto err;
 
@@ -766,7 +671,8 @@ xattrs_get_layout(int fd, struct rbh_value_pair *pairs, int available_pairs)
         if (rc)
             goto err;
 
-        rc = fill_uint32_pair("mirror_count", mirror_count, &pairs[subcount++]);
+        rc = fill_uint32_pair("mirror_count", mirror_count, &pairs[subcount++],
+                              _values);
         if (rc)
             goto err;
 
@@ -888,7 +794,7 @@ again:
             mdt_idx[i] = create_uint32_value(objects[i].lum_mds);
 
         rc = fill_sequence_pair("child_mdt_idx", mdt_idx, lum->lum_stripe_count,
-                                &pairs[subcount++]);
+                                &pairs[subcount++], _values);
         save_errno = errno;
         free(mdt_idx);
         errno = save_errno;
@@ -901,18 +807,18 @@ again:
          */
         rc = fill_uint32_pair("mdt_hash",
                               lum->lum_hash_type & LMV_HASH_TYPE_MASK,
-                              &pairs[subcount++]);
+                              &pairs[subcount++], _values);
         if (rc)
             goto free_lum;
 
         rc = fill_uint32_pair("mdt_hash_flags",
                               lum->lum_hash_type & ~LMV_HASH_TYPE_MASK,
-                              &pairs[subcount++]);
+                              &pairs[subcount++], _values);
         if (rc)
             goto free_lum;
 
         rc = fill_uint32_pair("mdt_count", lum->lum_stripe_count,
-                              &pairs[subcount++]);
+                              &pairs[subcount++], _values);
 
 free_lum:
         save_errno = errno;
@@ -929,7 +835,7 @@ free_lum:
         if (rc)
             return -1;
 
-        rc = fill_int32_pair("mdt_index", mdt, &pairs[subcount++]);
+        rc = fill_int32_pair("mdt_index", mdt, &pairs[subcount++], _values);
         if (rc)
             return -1;
     }
@@ -1006,7 +912,7 @@ create_expiration_date_value_pair(const char *attribute_value,
     }
 
     fill_int64_pair(XATTR_CCC_EXPIRATION_DATE, expiration_date,
-                    expiration_pair);
+                    expiration_pair, _values);
 
     return 0;
 }
@@ -1065,11 +971,12 @@ xattrs_get_retention(const char *retention_attribute, int fd,
 
     if (_inode_xattrs) {
         fill_string_pair(retention_attribute, tmp, strlen(tmp) + 1,
-                         &_inode_xattrs[index_to_change]);
+                         &_inode_xattrs[index_to_change], _values);
 
         return 1;
     } else {
-        fill_string_pair(retention_attribute, tmp, strlen(tmp) + 1, &pairs[1]);
+        fill_string_pair(retention_attribute, tmp, strlen(tmp) + 1, &pairs[1],
+                         _values);
 
         return 2;
     }

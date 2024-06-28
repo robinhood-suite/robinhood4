@@ -8,6 +8,9 @@
 #ifndef RBH_VALUE_H
 #define RBH_VALUE_H
 
+#include "robinhood/sstack.h"
+#include "robinhood/value.h"
+
 /** @file
  * A few helpers around struct rbh_value to be used internally
  */
@@ -91,5 +94,115 @@ value_map_data_size(const struct rbh_value_map *map);
 int
 value_map_copy(struct rbh_value_map *dest, const struct rbh_value_map *src,
                char **buffer, size_t *bufsize);
+
+/**
+ * Fill a given value pair with the key and int64_t provided using a sstack for
+ * allocation.
+ *
+ * @param  key      the key to fill in the rbh_value_pair
+ * @param  integer  the value to fill in the rbh_value_pair
+ * @param  pair     the rbh_value_pair to fill
+ * @param  stack    the sstack to use for allocations
+ *
+ * @return 0 on success, -1 on error
+ */
+int
+fill_int64_pair(const char *key, int64_t integer, struct rbh_value_pair *pair,
+                struct rbh_sstack *stack);
+
+/**
+ * Fill a given value pair with the key and string provided using a sstack for
+ * allocation.
+ *
+ * @param  key      the key to fill in the rbh_value_pair
+ * @param  str      the value to fill in the rbh_value_pair
+ * @param  len      the length of the value to fill in the rbh_value_pair
+ * @param  pair     the rbh_value_pair to fill
+ * @param  stack    the sstack to use for allocations
+ *
+ * @return 0 on success, -1 on error
+ */
+int
+fill_string_pair(const char *key, const char *str, const int len,
+                 struct rbh_value_pair *pair, struct rbh_sstack *stack);
+
+/**
+ * Fill a given value pair with the key and binary data provided using a sstack
+ * for allocation.
+ *
+ * @param  key      the key to fill in the rbh_value_pair
+ * @param  data     the value to fill in the rbh_value_pair
+ * @param  len      the length of the value to fill in the rbh_value_pair
+ * @param  pair     the rbh_value_pair to fill
+ * @param  stack    the sstack to use for allocations
+ *
+ * @return 0 on success, -1 on error
+ */
+int
+fill_binary_pair(const char *key, const void *data, const ssize_t len,
+                 struct rbh_value_pair *pair, struct rbh_sstack *stack);
+
+/**
+ * Fill a given value pair with the key and int32 provided using a sstack for
+ * allocation.
+ *
+ * @param  key      the key to fill in the rbh_value_pair
+ * @param  integer  the value to fill in the rbh_value_pair
+ * @param  pair     the rbh_value_pair to fill
+ * @param  stack    the sstack to use for allocations
+ *
+ * @return 0 on success, -1 on error
+ */
+int
+fill_int32_pair(const char *key, int32_t integer, struct rbh_value_pair *pair,
+                struct rbh_sstack *stack);
+
+/**
+ * Fill a given value pair with the key and uint32 provided using a sstack for
+ * allocation.
+ *
+ * @param  key      the key to fill in the rbh_value_pair
+ * @param  integer  the value to fill in the rbh_value_pair
+ * @param  pair     the rbh_value_pair to fill
+ * @param  stack    the sstack to use for allocations
+ *
+ * @return 0 on success, -1 on error
+ */
+int
+fill_uint32_pair(const char *key, uint32_t integer, struct rbh_value_pair *pair,
+                 struct rbh_sstack *stack);
+
+/**
+ * Fill a given value pair with the key and int64 provided using a sstack for
+ * allocation.
+ *
+ * @param  key      the key to fill in the rbh_value_pair
+ * @param  integer  the value to fill in the rbh_value_pair
+ * @param  pair     the rbh_value_pair to fill
+ * @param  stack    the sstack to use for allocations
+ *
+ * @return 0 on success, -1 on error
+ */
+int
+fill_int64_pair(const char *key, int64_t integer, struct rbh_value_pair *pair,
+                struct rbh_sstack *stack);
+
+/**
+ * Fill a given value pair with the key and string provided using a sstack for
+ * allocation.
+ *
+ * @param  key      the key to fill in the rbh_value_pair
+ * @param  values   the values which make up the sequence to fill in the
+ *                  rbh_value_pair
+ * @param  length   the number of values in the sequence to fill in the
+ *                  rbh_value_pair
+ * @param  pair     the rbh_value_pair to fill
+ * @param  stack    the sstack to use for allocations
+ *
+ * @return 0 on success, -1 on error
+ */
+int
+fill_sequence_pair(const char *key, struct rbh_value *values, uint64_t length,
+                   struct rbh_value_pair *pair, struct rbh_sstack *stack);
 
 #endif
