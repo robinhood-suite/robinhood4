@@ -189,12 +189,36 @@ test_printf_expiration_info()
                   "/$fileD None" "/ None"
 }
 
+test_config()
+{
+    local dir="dir"
+    local fileA="fileA"
+    local fileB="fileB"
+    local conf_file="conf_file"
+
+    echo "---
+RBH_RETENTION_XATTR: \"user.blob\"
+---" > $conf_file
+
+    mkdir $dir
+    touch $dir/$fileA
+    touch $dir/$fileB
+
+    setfattr -n user.blob -v 42 $dir/$fileA
+    setfattr -n user.expires -v 777 $dir/$fileB
+
+    rbh-sync --config $conf_file "rbh:lustre:$dir" "rbh:mongo:$testdb"
+
+    rbh_lfind --config $conf_file "rbh:mongo:$testdb" -printf "%p %e\n" | sort |
+        difflines "/$fileA 42" "/$fileB None" "/ None"
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
 declare -a tests=(test_invalid test_expired_abs test_expired_rel
-                  test_printf_expiration_info)
+                  test_printf_expiration_info test_config)
 
 tmpdir=$(mktemp --directory --tmpdir=$LUSTRE_DIR)
 trap "rm -r $tmpdir" EXIT
