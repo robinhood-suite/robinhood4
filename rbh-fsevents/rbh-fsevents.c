@@ -19,6 +19,7 @@
 
 #include <robinhood/uri.h>
 #include <robinhood/utils.h>
+#include <robinhood/config.h>
 
 #include "deduplicator.h"
 #include "enricher.h"
@@ -54,6 +55,9 @@ usage(void)
         "    -b, --batch-size NUMBER\n"
         "                    the number of fsevents to keep in memory for deduplication\n"
         "                    default: %lu\n"
+        "                    the path to a configuration file\n"
+        "    -c, --config PATH\n"
+        "                    the configuration file to use.\n"
         "    -d, --dump PATH\n"
         "                    the path to a file where the changelogs should be dumped,\n"
         "                    can only be used with a Lustre source. Use '-' for stdout.\n"
@@ -394,6 +398,11 @@ main(int argc, char *argv[])
             .val = 'b',
         },
         {
+            .name = "config",
+            .has_arg = required_argument,
+            .val = 'c',
+        },
+        {
             .name = "dump",
             .has_arg = required_argument,
             .val = 'd',
@@ -421,16 +430,25 @@ main(int argc, char *argv[])
         .batch_size = DEFAULT_BATCH_SIZE,
     };
     char *dump_file = NULL;
+    int rc;
     char c;
 
     /* Parse the command line */
-    while ((c = getopt_long(argc, argv, "b:d:e:hnr", LONG_OPTIONS,
+    while ((c = getopt_long(argc, argv, "b:c:d:e:hnr", LONG_OPTIONS,
                             NULL)) != -1) {
         switch (c) {
         case 'b':
             if (!str2size_t(optarg, &dedup_opts.batch_size))
                 error(EXIT_FAILURE, 0, "'%s' is not an integer", optarg);
 
+            break;
+        case 'c':
+            rc = rbh_config_open(optarg);
+            if (rc) {
+                fprintf(stderr, "Failed to open configuration file '%s'\n",
+                        optarg);
+                exit(errno);
+            }
             break;
         case 'd':
             dump_file = strdup(optarg);
@@ -474,6 +492,8 @@ main(int argc, char *argv[])
 
     feed(sink, source, enrich_builder, strcmp(sink->name, "backend"),
          &dedup_opts);
+
+    rbh_config_free();
 
     return error_message_count == 0 ? EXIT_SUCCESS : EXIT_FAILURE;
 }
