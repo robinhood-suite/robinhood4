@@ -18,6 +18,7 @@
 #include <robinhood/fsevent.h>
 #include <robinhood/sstack.h>
 #include <robinhood/statx.h>
+#include <robinhood/config.h>
 
 #include "source.h"
 #include "utils.h"
@@ -34,6 +35,8 @@ struct lustre_changelog_iterator {
     uint64_t last_changelog_index;
 
     FILE *dump_file;
+
+    const char *retention_attribute;
 };
 
 static inline time_t
@@ -551,7 +554,8 @@ build_create_inode_events(struct changelog_rec *record, struct rbh_id *id,
 
 static int
 build_setxattr_event(struct changelog_rec *record, struct rbh_id *id,
-                     struct rbh_iterator **fsevents_iterator)
+                     struct rbh_iterator **fsevents_iterator,
+                     const char *retention_attribute)
 {
     char *xattr = changelog_rec_xattr(record)->cr_xattr;
     struct rbh_fsevent *new_events;
@@ -561,7 +565,7 @@ build_setxattr_event(struct changelog_rec *record, struct rbh_id *id,
     /* If the attribute to enrich is the retention one, the Lustre enricher
      * already handles that, so no need to use the Posix enricher
      */
-    is_retention_attr = (strcmp(xattr, "user.ccc_expires") == 0);
+    is_retention_attr = (strcmp(xattr, retention_attribute) == 0);
     if (!is_retention_attr)
         new_events = fsevent_list_alloc(2, id);
     else
@@ -1061,7 +1065,8 @@ retry:
         rc = build_create_inode_events(record, id, &records->fsevents_iterator);
         break;
     case CL_SETXATTR:
-        rc = build_setxattr_event(record, id, &records->fsevents_iterator);
+        rc = build_setxattr_event(record, id, &records->fsevents_iterator,
+                                  records->retention_attribute);
         break;
     case CL_SETATTR:
         statx_enrich_mask = RBH_STATX_ALL;
@@ -1180,6 +1185,24 @@ static const struct rbh_iterator LUSTRE_CHANGELOG_ITERATOR = {
     .ops = &LUSTRE_CHANGELOG_ITER_OPS,
 };
 
+#define XATTR_EXPIRES_KEY "RBH_RETENTION_XATTR"
+
+static const char *
+get_retention_attribute()
+{
+    struct rbh_value value = { 0 };
+    enum key_parse_result rc;
+
+    rc = rbh_config_find(XATTR_EXPIRES_KEY, &value, RBH_VT_STRING);
+    if (rc == KPR_ERROR)
+        return NULL;
+
+    if (rc == KPR_NOT_FOUND)
+        value.string = "user.ccc_expires";
+
+    return value.string;
+}
+
 static void
 lustre_changelog_iter_init(struct lustre_changelog_iterator *events,
                            const char *mdtname, const char *username,
@@ -1235,6 +1258,10 @@ lustre_changelog_iter_init(struct lustre_changelog_iterator *events,
         if (events->dump_file == NULL)
             error(EXIT_FAILURE, errno, "Failed to open the dump file");
     }
+
+    events->retention_attribute = get_retention_attribute();
+    if (events->retention_attribute == NULL)
+        error(EXIT_FAILURE, errno, "Failed to get retention attribute");
 }
 
 struct lustre_source {
