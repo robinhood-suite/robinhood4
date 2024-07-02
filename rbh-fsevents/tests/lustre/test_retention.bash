@@ -98,11 +98,39 @@ test_retention()
         difflines "/$path_without_mount"
 }
 
+test_config()
+{
+    local entry="test_entry"
+    local conf_file="config"
+
+    echo "---
+RBH_RETENTION_XATTR: \"user.blob\"
+---" > $conf_file
+
+    clear_changelogs "$LUSTRE_MDT" "$userid"
+
+    touch $entry
+    setfattr -n user.blob -v +5 $entry
+
+    local path_without_mount="$(realpath $entry)"
+    path_without_mount="${path_without_mount#"$LUSTRE_DIR"}"
+
+    rbh_fsevents --config $conf_file --enrich rbh:lustre:"$LUSTRE_DIR" \
+        src:lustre:"$LUSTRE_MDT" "rbh:mongo:$testdb"
+
+    mongo $testdb --eval "db.entries.find()"
+
+    local exp_time="$(( $(stat -c %Y $entry) + 5))"
+    find_attribute '"xattrs.user.ccc_expiration_date": NumberLong('$exp_time')'\
+                   '"ns.name": "'$entry'"'
+    find_attribute '"xattrs.user.blob": "+5"' '"ns.name": "'$entry'"'
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
-declare -a tests=(test_retention)
+declare -a tests=(test_retention test_config)
 
 LUSTRE_DIR=/mnt/lustre/
 cd "$LUSTRE_DIR"
