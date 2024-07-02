@@ -13,6 +13,7 @@
 #include <dlfcn.h>
 #include <errno.h>
 #include <error.h>
+#include <getopt.h>
 #include <stdbool.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -21,6 +22,7 @@
 
 #include <robinhood.h>
 #include <robinhood/utils.h>
+#include <robinhood/config.h>
 
 #include <rbh-find/actions.h>
 #include <rbh-find/core.h>
@@ -142,17 +144,57 @@ lustre_parse_predicate(struct find_context *ctx, int *arg_idx)
     return filter;
 }
 
+static int
+check_command_options(int argc, char *argv[])
+{
+    int i;
+
+    for (i = 0; i < argc; i++) {
+        if (*argv[i] != '-')
+            return i;
+
+        if (strcmp(argv[i], "--config") == 0) {
+            int rc;
+
+            if (argc < 2)
+                error(EX_USAGE, EINVAL, "'--config' option requires a file");
+
+            rc = rbh_config_open(argv[i + 1]);
+            if (rc)
+                error(EX_USAGE, errno,
+                      "Failed to open configuration file '%s'", argv[i + 1]);
+
+            i++;
+        } else {
+            error(EX_USAGE, EINVAL, "invalid option found '%s'", argv[i]);
+        }
+    }
+
+    return i;
+}
+
 int
 main(int _argc, char *_argv[])
 {
     struct rbh_filter_sort *sorts = NULL;
     struct rbh_filter *filter;
     size_t sorts_count = 0;
+    int checked_options;
+    char **argv;
     int index;
+    int argc;
 
-    /* Discard the program's name */
-    ctx.argc = _argc - 1;
-    ctx.argv = &_argv[1];
+    if (_argc < 2)
+        error(EX_USAGE, EINVAL,
+              "invalid number of arguments, expected at least 1");
+
+    argc = _argc - 1;
+    argv = &_argv[1];
+
+    checked_options = check_command_options(argc, argv);
+
+    ctx.argc = argc - checked_options;
+    ctx.argv = &argv[checked_options];
 
     ctx.pre_action_callback = &find_pre_action;
     ctx.exec_action_callback = &find_exec_action;
@@ -189,6 +231,8 @@ main(int _argc, char *_argv[])
     if (!ctx.action_done)
         find(&ctx, ACT_PRINT, &index, filter, sorts, sorts_count);
     free(filter);
+
+    rbh_config_free();
 
     return EXIT_SUCCESS;
 }
