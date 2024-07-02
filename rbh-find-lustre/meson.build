@@ -10,7 +10,7 @@ project(
 	version: '0.0.0',
 	license: 'LGPL3.0-or-later',
 	default_options: [
-		'warning_level=3',
+		'warning_level=2',
 		'werror=true',
 	],
 )
