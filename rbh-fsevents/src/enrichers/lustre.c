@@ -11,6 +11,8 @@
 #include <sys/types.h>
 #include <unistd.h>
 
+#include <robinhood/config.h>
+
 #include "enricher.h"
 #include "internals.h"
 
@@ -87,7 +89,8 @@ enrich_path(const char *mount_path, const struct rbh_id *id, const char *name,
 static int
 enrich_lustre(struct rbh_backend *backend, int mount_fd,
               const struct rbh_id *id, struct rbh_sstack *xattrs_values,
-              struct rbh_value_pair *pairs, int available_pairs)
+              struct rbh_value_pair *pairs, int available_pairs,
+              const char *retention_attribute)
 {
     static const int STATX_FLAGS = AT_STATX_FORCE_SYNC | AT_EMPTY_PATH
                                  | AT_NO_AUTOMOUNT | AT_SYMLINK_NOFOLLOW;
@@ -95,6 +98,7 @@ enrich_lustre(struct rbh_backend *backend, int mount_fd,
         int fd;
         struct rbh_statx *statx;
         struct rbh_sstack *values;
+        const char *retention_attribute;
     } arg;
     struct rbh_statx statxbuf;
     int save_errno;
@@ -120,6 +124,7 @@ enrich_lustre(struct rbh_backend *backend, int mount_fd,
 
     arg.statx = &statxbuf;
     arg.values = xattrs_values;
+    arg.retention_attribute = retention_attribute;
 
     size = rbh_backend_get_attribute(backend, "lustre", &arg,
                                      pairs, available_pairs);
@@ -164,7 +169,8 @@ lustre_enrich(struct enricher *enricher, const struct rbh_value_pair *attr,
         size = enrich_lustre(
             enricher->backend, enricher->mount_fd, &original->id,
             xattrs_values, &pairs[enricher->fsevent.xattrs.count],
-            enricher->pair_count - enricher->fsevent.xattrs.count);
+            enricher->pair_count - enricher->fsevent.xattrs.count,
+            enricher->retention_attribute);
         if (size == -1)
             return -1;
 
@@ -258,6 +264,24 @@ static const struct rbh_iterator_operations LUSTRE_ENRICHER_ITER_OPS = {
     .destroy = posix_enricher_iter_destroy,
 };
 
+#define XATTR_EXPIRES_KEY "RBH_RETENTION_XATTR"
+
+static const char *
+get_retention_attribute()
+{
+    struct rbh_value value = { 0 };
+    enum key_parse_result rc;
+
+    rc = rbh_config_find(XATTR_EXPIRES_KEY, &value, RBH_VT_STRING);
+    if (rc == KPR_ERROR)
+        return NULL;
+
+    if (rc == KPR_NOT_FOUND)
+        value.string = "user.ccc_expires";
+
+    return value.string;
+}
+
 static struct rbh_iterator *
 lustre_iter_enrich(struct rbh_backend *backend, struct rbh_iterator *fsevents,
                    int mount_fd, const char *mount_path, bool skip_error)
@@ -271,6 +295,7 @@ lustre_iter_enrich(struct rbh_backend *backend, struct rbh_iterator *fsevents,
 
     enricher->backend = backend;
     enricher->iterator.ops = &LUSTRE_ENRICHER_ITER_OPS;
+    enricher->retention_attribute = get_retention_attribute();
 
     return iter;
 }

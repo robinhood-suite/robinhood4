@@ -21,6 +21,8 @@ struct enricher {
     char *symlink;
 
     bool skip_error;
+
+    const char *retention_attribute;
 };
 
 int
