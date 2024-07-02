@@ -920,7 +920,7 @@ xattrs_get_retention(int fd, const struct rbh_statx *statx,
     int index_to_change = -1;
 
     if (_inode_xattrs_count == NULL) {
-        ssize_t length = fgetxattr(fd, XATTR_CCC_EXPIRES, tmp, sizeof(tmp));
+        ssize_t length = fgetxattr(fd, retention_attribute, tmp, sizeof(tmp));
 
         if (length == -1)
             return 0;
