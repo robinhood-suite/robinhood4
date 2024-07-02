@@ -927,7 +927,7 @@ xattrs_get_retention(const char *retention_attribute, int fd,
     int index_to_change = -1;
 
     if (_inode_xattrs_count == NULL) {
-        ssize_t length = fgetxattr(fd, XATTR_CCC_EXPIRES, tmp, sizeof(tmp));
+        ssize_t length = fgetxattr(fd, retention_attribute, tmp, sizeof(tmp));
 
         if (length == -1)
             return 0;
@@ -1020,7 +1020,8 @@ static int
 lustre_get_attrs(struct entry_info *entry_info,
                  struct rbh_value_pair *pairs,
                  int available_pairs,
-                 struct rbh_sstack *values)
+                 struct rbh_sstack *values,
+                 const char *retention_attribute)
 {
     int (*xattrs_funcs[])(int, struct rbh_value_pair *, int) = {
         xattrs_get_hsm, xattrs_get_layout, xattrs_get_mdt_info
@@ -1028,7 +1029,7 @@ lustre_get_attrs(struct entry_info *entry_info,
 
     return _get_attrs(entry_info, xattrs_funcs,
                       sizeof(xattrs_funcs) / sizeof(xattrs_funcs[0]),
-                      pairs, available_pairs, values, NULL);
+                      pairs, available_pairs, values, retention_attribute);
 }
 
 int
@@ -1103,6 +1104,7 @@ lustre_get_attribute(const char *attr_name, void *_arg,
         int fd;
         struct rbh_statx *statx;
         struct rbh_sstack *values;
+        const char *retention_attribute;
     };
     struct arg_t *info = (struct arg_t *)_arg;
     struct entry_info entry_info = {
@@ -1114,7 +1116,7 @@ lustre_get_attribute(const char *attr_name, void *_arg,
 
     if (strcmp(attr_name, "lustre") == 0)
         return lustre_get_attrs(&entry_info, pairs, available_pairs,
-                                info->values);
+                                info->values, info->retention_attribute);
     else if (strcmp(attr_name, "dir.lov") == 0)
         return lustre_get_default_stripe_value(info->fd, pairs);
 
