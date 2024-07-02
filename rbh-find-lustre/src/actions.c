@@ -6,6 +6,8 @@
 
 #include <assert.h>
 
+#include <robinhood/config.h>
+
 #include "rbh-find/actions.h"
 #include "rbh-find/utils.h"
 
@@ -27,12 +29,38 @@ write_expiration_date_from_entry(const struct rbh_fsentry *fsentry,
                         time_from_timestamp(&value->int64));
 }
 
+#define XATTR_EXPIRES_KEY "RBH_RETENTION_XATTR"
+
+static const char *
+get_retention_attribute()
+{
+    struct rbh_value value = { 0 };
+    enum key_parse_result rc;
+
+    rc = rbh_config_find(XATTR_EXPIRES_KEY, &value, RBH_VT_STRING);
+    if (rc == KPR_ERROR)
+        return NULL;
+
+    if (rc == KPR_NOT_FOUND)
+        value.string = "user.ccc_expires";
+
+    return value.string;
+}
+
 static int
 write_expires_from_entry(const struct rbh_fsentry *fsentry,
                          char *output, int max_length)
 {
-    const struct rbh_value *value =
-        rbh_fsentry_find_inode_xattr(fsentry, "user.ccc_expires");
+    static const char *retention_attribute;
+    const struct rbh_value *value;
+
+    if (retention_attribute == NULL) {
+        retention_attribute = get_retention_attribute();
+        if (retention_attribute == NULL)
+            return snprintf(output, max_length, "None");
+    }
+
+    value = rbh_fsentry_find_inode_xattr(fsentry, retention_attribute);
 
     if (value == NULL || value->type != RBH_VT_STRING)
         return snprintf(output, max_length, "None");
