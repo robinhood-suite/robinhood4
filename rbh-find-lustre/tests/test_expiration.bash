@@ -75,19 +75,19 @@ test_expired_abs()
     local timeE="inf"
 
     touch "$fileA"
-    setfattr -n user.ccc_expires -v "$timeA" "$fileA"
+    setfattr -n user.expires -v "$timeA" "$fileA"
 
     touch "$fileB"
-    setfattr -n user.ccc_expires -v "$timeB" "$fileB"
+    setfattr -n user.expires -v "$timeB" "$fileB"
 
     touch "$fileC"
-    setfattr -n user.ccc_expires -v "$timeC" "$fileC"
+    setfattr -n user.expires -v "$timeC" "$fileC"
 
     touch "$fileD"
-    setfattr -n user.ccc_expires -v "$timeD" "$fileD"
+    setfattr -n user.expires -v "$timeD" "$fileD"
 
     touch "$fileE"
-    setfattr -n user.ccc_expires -v "$timeE" "$fileE"
+    setfattr -n user.expires -v "$timeE" "$fileE"
 
     rbh-sync "rbh:lustre:." "rbh:mongo:$testdb"
 
@@ -123,15 +123,15 @@ test_expired_rel()
     local timeC="+50"
 
     touch "$fileA"
-    setfattr -n user.ccc_expires -v "$timeA" "$fileA"
+    setfattr -n user.expires -v "$timeA" "$fileA"
     touch -t "$(date +%m%d%H%M.%S --date='-35 seconds')" "$fileA"
 
     touch "$fileB"
-    setfattr -n user.ccc_expires -v "$timeB" "$fileB"
+    setfattr -n user.expires -v "$timeB" "$fileB"
     touch -t "$(date +%m%d%H%M.%S --date='-105 seconds')" "$fileB"
 
     touch "$fileC"
-    setfattr -n user.ccc_expires -v "$timeC" "$fileC"
+    setfattr -n user.expires -v "$timeC" "$fileC"
 
     rbh-sync "rbh:lustre:." "rbh:mongo:$testdb"
 
@@ -170,9 +170,9 @@ test_printf_expiration_info()
     local fileD="fileD"
 
     touch "$fileA" "$fileB" "$fileC" "$fileD"
-    setfattr -n user.ccc_expires -v "$timeA" "$fileA"
-    setfattr -n user.ccc_expires -v "$timeB" "$fileB"
-    setfattr -n user.ccc_expires -v "$timeC" "$fileC"
+    setfattr -n user.expires -v "$timeA" "$fileA"
+    setfattr -n user.expires -v "$timeB" "$fileB"
+    setfattr -n user.expires -v "$timeC" "$fileC"
 
     rbh-sync "rbh:lustre:." "rbh:mongo:$testdb"
 

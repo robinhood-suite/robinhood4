@@ -843,8 +843,7 @@ free_lum:
     return subcount;
 }
 
-#define XATTR_CCC_EXPIRES "user.ccc_expires"
-#define XATTR_CCC_EXPIRATION_DATE "user.ccc_expiration_date"
+#define XATTR_CCC_EXPIRATION_DATE "user.expiration_date"
 #define INT64_MAX_STR_LEN 19
 
 static int

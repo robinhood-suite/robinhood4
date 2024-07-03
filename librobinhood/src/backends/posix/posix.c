@@ -761,7 +761,7 @@ posix_iterator_new(const char *root, const char *entry, int statx_sync_type)
     }
 
     posix_iter->retention_attribute = rbh_config_get_string(XATTR_EXPIRES_KEY,
-                                                            "user.ccc_expires");
+                                                            "user.expires");
 
     return (struct rbh_mut_iterator *)posix_iter;
 }

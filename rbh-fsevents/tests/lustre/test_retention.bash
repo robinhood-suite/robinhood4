@@ -58,7 +58,7 @@ test_retention()
     local path_without_mount="$(realpath $entry)"
     path_without_mount="${path_without_mount#"$LUSTRE_DIR"}"
 
-    setfattr -n user.ccc_expires -v +5 $entry
+    setfattr -n user.expires -v +5 $entry
 
     invoke_rbh-fsevents
 
@@ -68,9 +68,9 @@ test_retention()
 
     local exp_time="$(( $(stat -c %X $entry) + 5))"
     mongo $testdb --eval "db.entries.find()"
-    find_attribute '"xattrs.user.ccc_expiration_date": NumberLong('$exp_time')'\
+    find_attribute '"xattrs.user.expiration_date": NumberLong('$exp_time')'\
                    '"ns.name": "'$entry'"'
-    find_attribute '"xattrs.user.ccc_expires": "+5"' '"ns.name": "'$entry'"'
+    find_attribute '"xattrs.user.expires": "+5"' '"ns.name": "'$entry'"'
 
     rbh_lfind "rbh:mongo:$testdb" -expired | sort | difflines
 
@@ -86,9 +86,9 @@ test_retention()
     verify_lustre "$entry"
 
     exp_time="$(( $(stat -c %Y $entry) + 5))"
-    find_attribute '"xattrs.user.ccc_expiration_date": NumberLong('$exp_time')'\
+    find_attribute '"xattrs.user.expiration_date": NumberLong('$exp_time')'\
                    '"ns.name": "'$entry'"'
-    find_attribute '"xattrs.user.ccc_expires": "+5"' '"ns.name": "'$entry'"'
+    find_attribute '"xattrs.user.expires": "+5"' '"ns.name": "'$entry'"'
 
     rbh_lfind "rbh:mongo:$testdb" -expired | sort | difflines
 
@@ -121,7 +121,7 @@ RBH_RETENTION_XATTR: \"user.blob\"
     mongo $testdb --eval "db.entries.find()"
 
     local exp_time="$(( $(stat -c %Y $entry) + 5))"
-    find_attribute '"xattrs.user.ccc_expiration_date": NumberLong('$exp_time')'\
+    find_attribute '"xattrs.user.expiration_date": NumberLong('$exp_time')'\
                    '"ns.name": "'$entry'"'
     find_attribute '"xattrs.user.blob": "+5"' '"ns.name": "'$entry'"'
 }

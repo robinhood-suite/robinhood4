@@ -278,7 +278,7 @@ lustre_iter_enrich(struct rbh_backend *backend, struct rbh_iterator *fsevents,
     enricher->backend = backend;
     enricher->iterator.ops = &LUSTRE_ENRICHER_ITER_OPS;
     enricher->retention_attribute = rbh_config_get_string(XATTR_EXPIRES_KEY,
-                                                          "user.ccc_expires");
+                                                          "user.expires");
 
     return iter;
 }
