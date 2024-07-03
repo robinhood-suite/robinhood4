@@ -23,7 +23,7 @@ function update_directory_expiration_date
 --- !inode_xattr
 "id": !!binary $directory_ID
 "xattrs":
-  "user.ccc_expiration_date": !int64 $expiration_date
+  "user.expiration_date": !int64 $expiration_date
 ...
 EOF
 }

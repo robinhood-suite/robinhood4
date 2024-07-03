@@ -111,10 +111,10 @@ test_retention_script()
 
     mkdir $dir1 $dir2 $dir3 $dir4
     touch $dir1/$entry1 $dir2/$entry2 $dir2/$entry3
-    setfattr -n user.ccc_expires -v +10 $dir1
-    setfattr -n user.ccc_expires -v +15 $dir2
-    setfattr -n user.ccc_expires -v +5 $dir3
-    setfattr -n user.ccc_expires -v $(($(stat -c %X $dir4) + 15)) $dir4
+    setfattr -n user.expires -v +10 $dir1
+    setfattr -n user.expires -v +15 $dir2
+    setfattr -n user.expires -v +5 $dir3
+    setfattr -n user.expires -v $(($(stat -c %X $dir4) + 15)) $dir4
 
     rbh-sync rbh:lustre:. "rbh:mongo:$testdb"
 
