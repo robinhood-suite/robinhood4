@@ -1242,7 +1242,7 @@ lustre_changelog_iter_init(struct lustre_changelog_iterator *events,
     }
 
     events->retention_attribute = rbh_config_get_string(XATTR_EXPIRES_KEY,
-                                                        "user.ccc_expires");
+                                                        "user.expires");
     if (events->retention_attribute == NULL)
         error(EXIT_FAILURE, errno, "Failed to get retention attribute");
 }
