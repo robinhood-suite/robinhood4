@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d6011320_62b24535",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-07-04T06:57:38Z",
+      "side": 1,
+      "message": "typo: the",
+      "range": {
+        "startLine": 9,
+        "startChar": 15,
+        "endLine": 9,
+        "endChar": 23
+      },
+      "revId": "e4d212a7f5ce4e396d9e49292da1fe9b101f1252",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "00f9135d_32ad0a55",
+        "filename": "librobinhood/include/robinhood/backends/common.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-07-04T06:57:38Z",
+      "side": 1,
+      "message": "minor: this is specific to the retention feature. Why is the argument passed to the callback here? It should either be in the POSIX backend or the Lustre backend.",
+      "range": {
+        "startLine": 37,
+        "startChar": 38,
+        "endLine": 37,
+        "endChar": 70
+      },
+      "revId": "e4d212a7f5ce4e396d9e49292da1fe9b101f1252",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2559eeb4_e06cbed4",
+        "filename": "librobinhood/include/robinhood/config.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-07-04T06:57:38Z",
+      "side": 1,
+      "message": "style: this may be just me but I don\u0027t like upper case variables in the configuration. We could have them to be lower case in the config file and upper case in the environment.",
+      "range": {
+        "startLine": 21,
+        "startChar": 27,
+        "endLine": 21,
+        "endChar": 46
+      },
+      "revId": "e4d212a7f5ce4e396d9e49292da1fe9b101f1252",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e5352d59_c157265f",
+        "filename": "librobinhood/src/backends/posix/posix.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 763,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-07-04T06:57:38Z",
+      "side": 1,
+      "message": "minor: instead of storing it in the iterator, you could simply have it as a global variable. Since this is (for now) internal to the Lustre backend, I find it a bit weird to have it passed to the callback by posix_iter_next and have it stored in the posix_iterator. If we really don\u0027t want it as a global, I think passing the whole iterator would be better. Otherwise, this is very specific to the Lustre backend.",
+      "range": {
+        "startLine": 763,
+        "startChar": 4,
+        "endLine": 763,
+        "endChar": 35
+      },
+      "revId": "e4d212a7f5ce4e396d9e49292da1fe9b101f1252",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ee914998_ba4f9351",
+        "filename": "rbh-fsevents/tests/lustre/test_retention.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-07-04T06:57:38Z",
+      "side": 1,
+      "message": "major: to remove",
+      "range": {
+        "startLine": 70,
+        "startChar": 4,
+        "endLine": 70,
+        "endChar": 44
+      },
+      "revId": "e4d212a7f5ce4e396d9e49292da1fe9b101f1252",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
