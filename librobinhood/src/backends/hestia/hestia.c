@@ -445,6 +445,7 @@ static const struct rbh_backend HESTIA_BACKEND = {
     .id = RBH_BI_HESTIA,
     .name = RBH_HESTIA_BACKEND_NAME,
     .ops = &HESTIA_BACKEND_OPS,
+
 };
 
 struct rbh_backend *

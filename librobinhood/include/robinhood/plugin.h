@@ -60,4 +60,17 @@ rbh_plugin_import(const char *name, const char *symbol);
 #define RPV_MINOR(version) (((version) & RPV_MINOR_MASK) >> RPV_MINOR_SHIFT)
 #define RPV_REVISION(version) ((version) & RPV_REVISION_MASK)
 
+/**
+ * Binary capabilities indicator to identify the presence of options: filter,
+ * update and branch in the backends.
+ */
+#define RBH_FILTER_OPS 0b100
+#define RBH_UPDATE_OPS 0b010
+#define RBH_BRANCH_OPS 0b001
+#define RBH_FILTER_UPDATE_OPS 0b110
+#define RBH_FILTER_BRANCH_OPS 0b101
+#define RBH_UPDATE_BRANCH_OPS 0b011
+#define RBH_FILTER_UPDATE_BRANCH_OPS 0b111
+#define RBH_EMPTY_OPS 0b000
+
 #endif

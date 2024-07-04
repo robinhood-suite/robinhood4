@@ -14,6 +14,7 @@
 #include "robinhood/backends/posix_mpi.h"
 #include "robinhood/plugins/backend.h"
 #include "robinhood/backends/iter_mpi_internal.h"
+#include "robinhood/plugin.h"
 
 static const struct rbh_backend_plugin_operations
 POSIX_MPI_BACKEND_PLUGIN_OPS = {
@@ -27,4 +28,5 @@ const struct rbh_backend_plugin RBH_BACKEND_PLUGIN_SYMBOL(POSIX_MPI) = {
         .version = RBH_POSIX_MPI_BACKEND_VERSION,
     },
     .ops = &POSIX_MPI_BACKEND_PLUGIN_OPS,
+    .capabilities = RBH_FILTER_BRANCH_OPS,
 };

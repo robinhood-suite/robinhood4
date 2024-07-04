@@ -106,6 +106,7 @@ struct rbh_backend {
     const char *name;
     /** A set of operations the backend implements */
     const struct rbh_backend_operations *ops;
+
 };
 
 /**

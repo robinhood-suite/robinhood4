@@ -13,6 +13,7 @@
 
 #include "robinhood/backends/posix.h"
 #include "robinhood/plugins/backend.h"
+#include "robinhood/plugin.h"
 
 static const struct rbh_backend_plugin_operations POSIX_BACKEND_PLUGIN_OPS = {
     .new = rbh_posix_backend_new,
@@ -24,4 +25,5 @@ const struct rbh_backend_plugin RBH_BACKEND_PLUGIN_SYMBOL(POSIX) = {
         .version = RBH_POSIX_BACKEND_VERSION,
     },
     .ops = &POSIX_BACKEND_PLUGIN_OPS,
+    .capabilities = RBH_FILTER_BRANCH_OPS,
 };
