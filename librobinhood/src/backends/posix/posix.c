@@ -1182,6 +1182,7 @@ static const struct rbh_backend POSIX_BACKEND = {
     .id = RBH_BI_POSIX,
     .name = RBH_POSIX_BACKEND_NAME,
     .ops = &POSIX_BACKEND_OPS,
+    .capabilities = 0b101;
 };
 
 static size_t

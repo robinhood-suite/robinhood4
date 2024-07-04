@@ -1359,7 +1359,8 @@ mongo_backend_branch(void *backend, const struct rbh_id *id, const char *path)
 static const struct rbh_backend MONGO_BACKEND = {
     .id = RBH_BI_MONGO,
     .name = RBH_MONGO_BACKEND_NAME,
-    .ops = &MONGO_BACKEND_OPS,
+    .ops = &MONGO_BACKEND_OPS, 
+    .capabilities = 0b111;
 };
 
 /*----------------------------------------------------------------------------*

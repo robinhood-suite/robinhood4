@@ -1321,6 +1321,7 @@ rbh_lustre_backend_new(const char *path, struct rbh_config *config)
     lustre->backend.id = RBH_BI_LUSTRE;
     lustre->backend.name = RBH_LUSTRE_BACKEND_NAME;
     lustre->backend.ops = &LUSTRE_BACKEND_OPS;
+    lustre->backend.capabilities = 0b101;
 
     return &lustre->backend;
 }

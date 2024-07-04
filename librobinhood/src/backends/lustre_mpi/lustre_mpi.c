@@ -201,6 +201,7 @@ rbh_lustre_mpi_backend_new(const char *path, struct rbh_config *config)
     lustre_mpi->backend.name = RBH_LUSTRE_MPI_BACKEND_NAME;
     lustre_mpi->backend.ops = &LUSTRE_MPI_BACKEND_OPS;
     lustre_mpi->backend.id = RBH_BI_LUSTRE_MPI;
+    lustre_mpi->backend.capabilities = 0b101;
 
     return &lustre_mpi->backend;
 }
