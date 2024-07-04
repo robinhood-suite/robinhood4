@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "27d6d4f3_d4e41866",
+        "filename": "librobinhood/include/value.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-07-04T14:53:28Z",
+      "side": 1,
+      "message": "At the time I was thinking that if the length was calculated before this call, then giving it as a parameter would be better than recalculating it. But we currently have no case where that depends, so it is removed.\nDone.",
+      "parentUuid": "cb0ced8c_fbf19a7d",
+      "range": {
+        "startLine": 119,
+        "startChar": 11,
+        "endLine": 119,
+        "endChar": 14
+      },
+      "revId": "552ac5bfd7f5b3b3caea6ebd09e3c5de5cd6d66c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "630e5ac8_8e3d2967",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-07-04T07:14:02Z",
       "side": 1,
       "message": "nit: this is not really useful. All this does is prevent the implementation to modify len but since this is passed by copy the use is very limited.",
+      "range": {
+        "startLine": 126,
+        "startChar": 51,
+        "endLine": 126,
+        "endChar": 57
+      },
+      "revId": "552ac5bfd7f5b3b3caea6ebd09e3c5de5cd6d66c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "08656b9f_e97561c6",
+        "filename": "librobinhood/include/value.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-07-04T14:53:28Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "630e5ac8_8e3d2967",
       "range": {
         "startLine": 126,
         "startChar": 51,
@@ -70,6 +118,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "664f2997_84ce9251",
+        "filename": "librobinhood/include/value.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-07-04T14:53:28Z",
+      "side": 1,
+      "message": "I forgot, done.",
+      "parentUuid": "9d12f1f2_3119e15d",
+      "range": {
+        "startLine": 142,
+        "startChar": 57,
+        "endLine": 142,
+        "endChar": 66
+      },
+      "revId": "552ac5bfd7f5b3b3caea6ebd09e3c5de5cd6d66c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3c21737d_3b7e70b7",
@@ -83,6 +155,30 @@
       "writtenOn": "2024-07-04T07:14:02Z",
       "side": 1,
       "message": "major: this is not the right documentation",
+      "range": {
+        "startLine": 191,
+        "startChar": 32,
+        "endLine": 191,
+        "endChar": 60
+      },
+      "revId": "552ac5bfd7f5b3b3caea6ebd09e3c5de5cd6d66c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8897b474_81a37ad6",
+        "filename": "librobinhood/include/value.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-07-04T14:53:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3c21737d_3b7e70b7",
       "range": {
         "startLine": 191,
         "startChar": 32,
