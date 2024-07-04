@@ -13,6 +13,7 @@
 
 #include "robinhood/backends/mongo.h"
 #include "robinhood/plugins/backend.h"
+#include "robinhood/plugin.h"
 
 static const struct rbh_backend_plugin_operations MONGO_BACKEND_PLUGIN_OPS = {
     .new = rbh_mongo_backend_new,
@@ -24,4 +25,5 @@ const struct rbh_backend_plugin RBH_BACKEND_PLUGIN_SYMBOL(MONGO) = {
         .version = RBH_MONGO_BACKEND_VERSION,
     },
     .ops = &MONGO_BACKEND_PLUGIN_OPS,
+    .capabilities = RBH_ALL_OPS,
 };
