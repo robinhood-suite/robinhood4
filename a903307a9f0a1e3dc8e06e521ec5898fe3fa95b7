@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "984b8c18_cd2fbc1f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-07-04T08:33:42Z",
+      "side": 1,
+      "message": "This should have been done before in the stack. It makes the reviews of the previous patch easier as we don\u0027t have to wonder why the default values didn\u0027t change....",
+      "revId": "a903307a9f0a1e3dc8e06e521ec5898fe3fa95b7",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
