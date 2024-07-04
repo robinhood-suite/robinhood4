@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cb0ced8c_fbf19a7d",
+        "filename": "librobinhood/include/value.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-07-04T07:14:02Z",
+      "side": 1,
+      "message": "question: isn\u0027t the length strlen + 1? Why do we need to give it as an argument?",
+      "range": {
+        "startLine": 119,
+        "startChar": 11,
+        "endLine": 119,
+        "endChar": 14
+      },
+      "revId": "552ac5bfd7f5b3b3caea6ebd09e3c5de5cd6d66c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "630e5ac8_8e3d2967",
+        "filename": "librobinhood/include/value.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-07-04T07:14:02Z",
+      "side": 1,
+      "message": "nit: this is not really useful. All this does is prevent the implementation to modify len but since this is passed by copy the use is very limited.",
+      "range": {
+        "startLine": 126,
+        "startChar": 51,
+        "endLine": 126,
+        "endChar": 57
+      },
+      "revId": "552ac5bfd7f5b3b3caea6ebd09e3c5de5cd6d66c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9d12f1f2_3119e15d",
+        "filename": "librobinhood/include/value.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-07-04T07:14:02Z",
+      "side": 1,
+      "message": "question: why is the type of len different from fill_string_pair? Also, why is it a signed integer? When would it make sense to pass a negative value here?",
+      "range": {
+        "startLine": 142,
+        "startChar": 57,
+        "endLine": 142,
+        "endChar": 66
+      },
+      "revId": "552ac5bfd7f5b3b3caea6ebd09e3c5de5cd6d66c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3c21737d_3b7e70b7",
+        "filename": "librobinhood/include/value.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-07-04T07:14:02Z",
+      "side": 1,
+      "message": "major: this is not the right documentation",
+      "range": {
+        "startLine": 191,
+        "startChar": 32,
+        "endLine": 191,
+        "endChar": 60
+      },
+      "revId": "552ac5bfd7f5b3b3caea6ebd09e3c5de5cd6d66c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
