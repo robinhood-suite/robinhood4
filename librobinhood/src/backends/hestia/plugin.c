@@ -13,6 +13,7 @@
 
 #include "robinhood/backends/hestia.h"
 #include "robinhood/plugins/backend.h"
+#include "robinhood/plugin.h"
 
 static const struct rbh_backend_plugin_operations HESTIA_BACKEND_PLUGIN_OPS = {
     .new = rbh_hestia_backend_new,
@@ -24,4 +25,5 @@ const struct rbh_backend_plugin RBH_BACKEND_PLUGIN_SYMBOL(HESTIA) = {
         .version = RBH_HESTIA_BACKEND_VERSION,
     },
     .ops = &HESTIA_BACKEND_PLUGIN_OPS,
+    .capabilities = RBH_FILTER_OPS,
 };
