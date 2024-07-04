@@ -1,0 +1,370 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b92b5615_fcef5ab8",
+        "filename": "librobinhood/src/backends/hestia/hestia.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 448,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-07-04T13:57:57Z",
+      "side": 1,
+      "message": "suggest: add macros in `backend.h` to make it easier to use in the future.\nExample: `#define RBH_FILTER_OPS 0b100`.",
+      "revId": "b3461a5338c552b3fe39e32d5c4070baf93f1714",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c9d2bc6a_5ef53fe8",
+        "filename": "librobinhood/src/backends/mongo/mongo.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 1362,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-07-04T13:57:57Z",
+      "side": 1,
+      "message": "style: remove space",
+      "range": {
+        "startLine": 1362,
+        "startChar": 30,
+        "endLine": 1362,
+        "endChar": 31
+      },
+      "revId": "b3461a5338c552b3fe39e32d5c4070baf93f1714",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e4b9e2e3_9a869ed8",
+        "filename": "rbh-capabilities/include/meson.build",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-07-04T13:57:57Z",
+      "side": 1,
+      "message": "I don\u0027t think it\u0027s necessary because the functions are only used in `rbh-capabilities.c`.",
+      "revId": "b3461a5338c552b3fe39e32d5c4070baf93f1714",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7e2ce264_78a005e5",
+        "filename": "rbh-capabilities/include/meson.build",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-07-04T13:57:57Z",
+      "side": 1,
+      "message": "typo: 2024",
+      "range": {
+        "startLine": 2,
+        "startChar": 16,
+        "endLine": 2,
+        "endChar": 20
+      },
+      "revId": "b3461a5338c552b3fe39e32d5c4070baf93f1714",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e2bdb3eb_ad3e7f95",
+        "filename": "rbh-capabilities/include/meson.build",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-07-04T13:57:57Z",
+      "side": 1,
+      "message": "major: replace by `install_headers(\u0027rbh-capabilities.h\u0027) otherwise the headers are never include",
+      "revId": "b3461a5338c552b3fe39e32d5c4070baf93f1714",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b6f5f216_a10f7224",
+        "filename": "rbh-capabilities/include/rbh-capabilities.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-07-04T13:57:57Z",
+      "side": 1,
+      "message": "typo: 2024",
+      "range": {
+        "startLine": 2,
+        "startChar": 17,
+        "endLine": 2,
+        "endChar": 21
+      },
+      "revId": "b3461a5338c552b3fe39e32d5c4070baf93f1714",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "69fba30c_42b3c159",
+        "filename": "rbh-capabilities/include/rbh-capabilities.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-07-04T13:57:57Z",
+      "side": 1,
+      "message": "style:\n```\nint\ncapabilities_list(char *uri);\n```",
+      "revId": "b3461a5338c552b3fe39e32d5c4070baf93f1714",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "489b061b_ad850f84",
+        "filename": "rbh-capabilities/meson.build",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-07-04T13:57:57Z",
+      "side": 1,
+      "message": "typo: 2024",
+      "range": {
+        "startLine": 2,
+        "startChar": 16,
+        "endLine": 2,
+        "endChar": 20
+      },
+      "revId": "b3461a5338c552b3fe39e32d5c4070baf93f1714",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ed0481b7_9c8efce3",
+        "filename": "rbh-capabilities/meson.build",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-07-04T13:57:57Z",
+      "side": 1,
+      "message": "minor: no need",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 32,
+        "endChar": 58
+      },
+      "revId": "b3461a5338c552b3fe39e32d5c4070baf93f1714",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "618b7e89_807d7f15",
+        "filename": "rbh-capabilities/meson.build",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-07-04T13:57:57Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 40,
+        "startChar": 2,
+        "endLine": 40,
+        "endChar": 3
+      },
+      "revId": "b3461a5338c552b3fe39e32d5c4070baf93f1714",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "449328df_5652afa3",
+        "filename": "rbh-capabilities/meson.build",
+        "patchSetId": 1
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-07-04T13:57:57Z",
+      "side": 1,
+      "message": "major: no need",
+      "range": {
+        "startLine": 49,
+        "startChar": 0,
+        "endLine": 61,
+        "endChar": 1
+      },
+      "revId": "b3461a5338c552b3fe39e32d5c4070baf93f1714",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6a3f4a04_fa667816",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-07-04T13:57:57Z",
+      "side": 1,
+      "message": "typo: 2024",
+      "range": {
+        "startLine": 2,
+        "startChar": 17,
+        "endLine": 2,
+        "endChar": 21
+      },
+      "revId": "b3461a5338c552b3fe39e32d5c4070baf93f1714",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0b70f752_134d88f8",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-07-04T13:57:57Z",
+      "side": 1,
+      "message": "typo: add space",
+      "range": {
+        "startLine": 9,
+        "startChar": 25,
+        "endLine": 9,
+        "endChar": 26
+      },
+      "revId": "b3461a5338c552b3fe39e32d5c4070baf93f1714",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "46d1a093_4d62f405",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-07-04T13:57:57Z",
+      "side": 1,
+      "message": "question: why did you import a plugin first ? Creating a backend directly with `rbh_backend_from_uri` is not enough ?",
+      "revId": "b3461a5338c552b3fe39e32d5c4070baf93f1714",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a9284863_f11a9e36",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-07-04T13:57:57Z",
+      "side": 1,
+      "message": "defect: `printf(message, program_invocation_short_name);`",
+      "revId": "b3461a5338c552b3fe39e32d5c4070baf93f1714",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "72cb3bc5_d07ca650",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-07-04T13:57:57Z",
+      "side": 1,
+      "message": "suggest: add `[-h|--help]` with `getopt_long` to display help. See man 3 getopt_long.",
+      "revId": "b3461a5338c552b3fe39e32d5c4070baf93f1714",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a7569678_6a7c5a36",
+        "filename": "rbh-capabilities/tests/meson.build",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-07-04T13:57:57Z",
+      "side": 1,
+      "message": "No need to add the directory tests if there is no test for now.",
+      "revId": "b3461a5338c552b3fe39e32d5c4070baf93f1714",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3fcc01c7_7aa11458",
+        "filename": "rbh-capabilities/tests/meson.build",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-07-04T13:57:57Z",
+      "side": 1,
+      "message": "typo: 2024",
+      "range": {
+        "startLine": 2,
+        "startChar": 16,
+        "endLine": 2,
+        "endChar": 20
+      },
+      "revId": "b3461a5338c552b3fe39e32d5c4070baf93f1714",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
