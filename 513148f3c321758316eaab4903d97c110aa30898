@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2f646b98_3654ca51",
+        "filename": "rbh-fsevents/tests/lustre/test_retention.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-07-04T08:04:28Z",
+      "side": 1,
+      "message": "major: to remove",
+      "range": {
+        "startLine": 121,
+        "startChar": 3,
+        "endLine": 121,
+        "endChar": 44
+      },
+      "revId": "513148f3c321758316eaab4903d97c110aa30898",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e56bb7eb_e9f9fdbd",
+        "filename": "rbh-fsevents/tests/lustre/test_retention.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-07-04T08:04:28Z",
+      "side": 1,
+      "message": "major: why do you have the ccc_expiration_date here and not blob_date?",
+      "range": {
+        "startLine": 124,
+        "startChar": 33,
+        "endLine": 124,
+        "endChar": 52
+      },
+      "revId": "513148f3c321758316eaab4903d97c110aa30898",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
