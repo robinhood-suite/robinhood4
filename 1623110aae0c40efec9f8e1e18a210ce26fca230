@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "19c6e1c5_52bad097",
+        "filename": "rbh-sync/tests/test_mongo_mpifile_sync.bash",
+        "patchSetId": 8
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-07-04T13:52:06Z",
+      "side": 1,
+      "message": "style: this command can be on one line",
+      "range": {
+        "startLine": 110,
+        "startChar": 4,
+        "endLine": 111,
+        "endChar": 31
+      },
+      "revId": "1623110aae0c40efec9f8e1e18a210ce26fca230",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
