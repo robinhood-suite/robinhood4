@@ -60,6 +60,17 @@ run_tests()
 #                                    TESTS                                     #
 ################################################################################
 
+find_attribute()
+{
+    old_IFS=$IFS
+    IFS=','
+    local output="$*"
+    IFS=$old_IFS
+    local res=$(mongo --quiet $testdb --eval "db.entries.count({$output})")
+    [[ "$res" == "1" ]] && return 0 ||
+        error "No entry found with filter '$output'"
+}
+
 should_be_expired()
 {
     local output="$1"
@@ -212,11 +223,50 @@ test_retention_script()
     echo "Success"
 }
 
+test_retention_after_sync()
+{
+    local dir="dir"
+    local entry="entry"
+
+    mkdir $dir
+    touch $dir/$entry
+    setfattr -n user.expires -v +10 $dir
+
+    local expiration_date="$(( $(stat -c %Y $dir) + 10))"
+
+    rbh-sync rbh:lustre:. "rbh:mongo:$testdb"
+
+    find_attribute \
+        '"xattrs.user.expiration_date":NumberLong('$expiration_date')' \
+        '"ns.xattrs.path":"'/$dir'"'
+
+    date --set="@$(( $(stat -c %Y $dir) + 11))"
+
+    touch -m $dir/$entry
+    rbh-sync rbh:lustre:. "rbh:mongo:$testdb"
+
+    output="$($test_dir/rbh_update_retention "rbh:mongo:$testdb")"
+    should_be_updated "$output" "$dir"
+
+    expiration_date="$(( $(stat -c %Y $dir/$entry) + 11))"
+    find_attribute \
+        '"xattrs.user.expiration_date":NumberLong('$expiration_date')' \
+        '"ns.xattrs.path":"'/$dir'"'
+
+    rbh-sync rbh:lustre:. "rbh:mongo:$testdb"
+
+    # The expiration date of the directory shouldn't have changed after the
+    # sync
+    find_attribute \
+        '"xattrs.user.expiration_date":NumberLong('$expiration_date')' \
+        '"ns.xattrs.path":"'/$dir'"'
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
-declare -a tests=(test_retention_script)
+declare -a tests=(test_retention_script test_retention_after_sync)
 
 LUSTRE_DIR=/mnt/lustre/
 cd "$LUSTRE_DIR"
