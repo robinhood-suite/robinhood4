@@ -14,6 +14,7 @@
 #include "robinhood/backends/lustre_mpi.h"
 #include "robinhood/plugins/backend.h"
 #include "robinhood/backends/iter_mpi_internal.h"
+#include "robinhood/plugin.h"
 
 static const struct rbh_backend_plugin_operations
 LUSTRE_MPI_BACKEND_PLUGIN_OPS = {
@@ -27,5 +28,6 @@ const struct rbh_backend_plugin RBH_BACKEND_PLUGIN_SYMBOL(LUSTRE_MPI) = {
         .version = RBH_LUSTRE_MPI_BACKEND_VERSION,
     },
     .ops = &LUSTRE_MPI_BACKEND_PLUGIN_OPS,
+    .capabilities = RBH_FILTER_OPS | RBH_BRANCH_OPS,
 };
 
