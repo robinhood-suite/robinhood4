@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fcef93eb_9da22695",
+        "filename": "rbh-find-lustre/rbh-find-lustre.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-07-04T07:34:30Z",
+      "side": 1,
+      "message": "suggest: to avoid doing this we could enforce the config option to be the first. This would make sense in practice as well. This would be a bit weird:\n\n```\nrbh-find rbh:mongo:test -name toto --config /etc/rbh.conf -type f\n```\n\nWhereas this would be more intuitive:\n```\nrbh-find rbh:mongo:test --config /etc/rbh.conf -name toto -type f\n```\n\nOr even:\n```\nrbh-find --config /etc/rbh.conf rbh:mongo:test -name toto -type f\n```",
+      "range": {
+        "startLine": 148,
+        "startChar": 0,
+        "endLine": 148,
+        "endChar": 21
+      },
+      "revId": "6ef3e694124879851182e63f374a17a64eaa9edc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "517e09a9_2d93f7fe",
+        "filename": "rbh-find-lustre/rbh-find-lustre.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-07-04T07:34:30Z",
+      "side": 1,
+      "message": "question: why enforce --config and not -c as well?",
+      "range": {
+        "startLine": 153,
+        "startChar": 48,
+        "endLine": 153,
+        "endChar": 57
+      },
+      "revId": "6ef3e694124879851182e63f374a17a64eaa9edc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2b8b4371_cf71e08a",
+        "filename": "rbh-find-lustre/rbh-find-lustre.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-07-04T07:34:30Z",
+      "side": 1,
+      "message": "minor: you don\u0027t need to duplicate the list. You only need to copy the valid pointers in the second list.",
+      "range": {
+        "startLine": 163,
+        "startChar": 30,
+        "endLine": 163,
+        "endChar": 45
+      },
+      "revId": "6ef3e694124879851182e63f374a17a64eaa9edc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b8aac907_e35a3a41",
+        "filename": "rbh-find-lustre/src/actions.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-07-04T07:34:30Z",
+      "side": 1,
+      "message": "question: wasn\u0027t the point of the config to not enforce our use case? We should probably have a different default value. Something like \"user.expires\" or \"user.rbh_expires\" or no default value at all.",
+      "range": {
+        "startLine": 41,
+        "startChar": 52,
+        "endLine": 41,
+        "endChar": 70
+      },
+      "revId": "6ef3e694124879851182e63f374a17a64eaa9edc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
