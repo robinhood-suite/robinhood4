@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1ebb6be0_64ea05ba",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-07-04T14:53:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d6011320_62b24535",
+      "range": {
+        "startLine": 9,
+        "startChar": 15,
+        "endLine": 9,
+        "endChar": 23
+      },
+      "revId": "e4d212a7f5ce4e396d9e49292da1fe9b101f1252",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "00f9135d_32ad0a55",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-07-04T06:57:38Z",
       "side": 1,
       "message": "minor: this is specific to the retention feature. Why is the argument passed to the callback here? It should either be in the POSIX backend or the Lustre backend.",
+      "range": {
+        "startLine": 37,
+        "startChar": 38,
+        "endLine": 37,
+        "endChar": 70
+      },
+      "revId": "e4d212a7f5ce4e396d9e49292da1fe9b101f1252",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "af8bf7a5_44ffd626",
+        "filename": "librobinhood/include/robinhood/backends/common.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-07-04T14:53:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "00f9135d_32ad0a55",
       "range": {
         "startLine": 37,
         "startChar": 38,
@@ -70,6 +118,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9c44cec7_f32d4e32",
+        "filename": "librobinhood/include/robinhood/config.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-07-04T14:53:22Z",
+      "side": 1,
+      "message": "Will be done in another patch",
+      "parentUuid": "2559eeb4_e06cbed4",
+      "range": {
+        "startLine": 21,
+        "startChar": 27,
+        "endLine": 21,
+        "endChar": 46
+      },
+      "revId": "e4d212a7f5ce4e396d9e49292da1fe9b101f1252",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e5352d59_c157265f",
@@ -93,6 +165,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f394dff2_4cca7370",
+        "filename": "librobinhood/src/backends/posix/posix.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 763,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-07-04T14:53:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e5352d59_c157265f",
+      "range": {
+        "startLine": 763,
+        "startChar": 4,
+        "endLine": 763,
+        "endChar": 35
+      },
+      "revId": "e4d212a7f5ce4e396d9e49292da1fe9b101f1252",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ee914998_ba4f9351",
@@ -106,6 +202,30 @@
       "writtenOn": "2024-07-04T06:57:38Z",
       "side": 1,
       "message": "major: to remove",
+      "range": {
+        "startLine": 70,
+        "startChar": 4,
+        "endLine": 70,
+        "endChar": 44
+      },
+      "revId": "e4d212a7f5ce4e396d9e49292da1fe9b101f1252",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "744be8bc_b936b0d0",
+        "filename": "rbh-fsevents/tests/lustre/test_retention.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-07-04T14:53:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ee914998_ba4f9351",
       "range": {
         "startLine": 70,
         "startChar": 4,
