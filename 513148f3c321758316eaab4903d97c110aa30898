@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6785acf7_eebdf356",
+        "filename": "rbh-fsevents/tests/lustre/test_retention.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-07-04T14:53:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2f646b98_3654ca51",
+      "range": {
+        "startLine": 121,
+        "startChar": 3,
+        "endLine": 121,
+        "endChar": 44
+      },
+      "revId": "513148f3c321758316eaab4903d97c110aa30898",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e56bb7eb_e9f9fdbd",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-07-04T08:04:28Z",
       "side": 1,
       "message": "major: why do you have the ccc_expiration_date here and not blob_date?",
+      "range": {
+        "startLine": 124,
+        "startChar": 33,
+        "endLine": 124,
+        "endChar": 52
+      },
+      "revId": "513148f3c321758316eaab4903d97c110aa30898",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "84de4dbe_18c50957",
+        "filename": "rbh-fsevents/tests/lustre/test_retention.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-07-04T14:53:43Z",
+      "side": 1,
+      "message": "Because the expiration date attribute is different from the `user.expires` one. This one is not seen by the user and is not directly manipulated by the user, so its name can be kept as is. We didn\u0027t have to use the `ccc` at the start, that was a mistake.",
+      "parentUuid": "e56bb7eb_e9f9fdbd",
       "range": {
         "startLine": 124,
         "startChar": 33,
