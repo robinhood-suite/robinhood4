@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f67a28bd_29eb7bb1",
+        "filename": "rbh-fsevents/src/enrichers/lustre.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-07-04T08:31:44Z",
+      "side": 1,
+      "message": "major: this should be internal to the Lustre backend.",
+      "range": {
+        "startLine": 127,
+        "startChar": 4,
+        "endLine": 127,
+        "endChar": 50
+      },
+      "revId": "faa3f23778ce6cc6b5951b5bb096dd3e1d7554a4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "45c54bde_def7397f",
+        "filename": "rbh-fsevents/src/enrichers/lustre.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-07-04T08:31:44Z",
+      "side": 1,
+      "message": "This should really be internal to the backend. You are using the default value in all the tools that needs it instead of just the Lustre or POSIX backend.",
+      "range": {
+        "startLine": 281,
+        "startChar": 64,
+        "endLine": 281,
+        "endChar": 69
+      },
+      "revId": "faa3f23778ce6cc6b5951b5bb096dd3e1d7554a4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
