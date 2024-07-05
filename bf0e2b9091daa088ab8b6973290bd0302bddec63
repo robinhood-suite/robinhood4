@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "59a9e2cf_858ea969",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-07-05T07:15:42Z",
+      "side": 1,
+      "message": "I don\u0027t think this means what you think it means. overwriting would be more accurate I think.",
+      "range": {
+        "startLine": 16,
+        "startChar": 15,
+        "endLine": 16,
+        "endChar": 25
+      },
+      "revId": "bf0e2b9091daa088ab8b6973290bd0302bddec63",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
