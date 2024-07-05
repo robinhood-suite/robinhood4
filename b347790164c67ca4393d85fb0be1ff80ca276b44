@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1bf7661e_53bcd80d",
+        "filename": "rbh-find/rbh-find.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-07-05T07:19:43Z",
+      "side": 1,
+      "message": "suggest: the \u0027+\u0027 prefix is not supported\n\nI say this because \u0027+\u0027 can be used in the permission string (e.g. a\u003dr,u+w)",
+      "range": {
+        "startLine": 65,
+        "startChar": 34,
+        "endLine": 65,
+        "endChar": 56
+      },
+      "revId": "b347790164c67ca4393d85fb0be1ff80ca276b44",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
