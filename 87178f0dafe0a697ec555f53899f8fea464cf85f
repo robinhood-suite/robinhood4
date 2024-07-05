@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9613a87f_5a929865",
+        "filename": "librobinhood/src/backends/lustre/lustre.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 923,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-07-05T07:12:07Z",
+      "side": 1,
+      "message": "question: why isn\u0027t this done in the patch that introduces this variable in this file?",
+      "range": {
+        "startLine": 923,
+        "startChar": 39,
+        "endLine": 923,
+        "endChar": 58
+      },
+      "revId": "87178f0dafe0a697ec555f53899f8fea464cf85f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "34a8975c_6a59dd4c",
+        "filename": "rbh-fsevents/src/enrichers/lustre.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-07-05T07:12:07Z",
+      "side": 1,
+      "message": "question: why is this added here? If this is missing this is likely from one of the previous patches, right?",
+      "revId": "87178f0dafe0a697ec555f53899f8fea464cf85f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
