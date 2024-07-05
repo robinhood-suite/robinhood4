@@ -67,7 +67,7 @@ test_retention()
     verify_lustre "$entry"
 
     local exp_time="$(( $(stat -c %X $entry) + 5))"
-    find_attribute '"xattrs.user.expiration_date": NumberLong('$exp_time')'\
+    find_attribute '"xattrs.trusted.expiration_date": NumberLong('$exp_time')'\
                    '"ns.name": "'$entry'"'
     find_attribute '"xattrs.user.expires": "+5"' '"ns.name": "'$entry'"'
 
@@ -85,7 +85,7 @@ test_retention()
     verify_lustre "$entry"
 
     exp_time="$(( $(stat -c %Y $entry) + 5))"
-    find_attribute '"xattrs.user.expiration_date": NumberLong('$exp_time')'\
+    find_attribute '"xattrs.trusted.expiration_date": NumberLong('$exp_time')'\
                    '"ns.name": "'$entry'"'
     find_attribute '"xattrs.user.expires": "+5"' '"ns.name": "'$entry'"'
 
@@ -118,7 +118,7 @@ RBH_RETENTION_XATTR: \"user.blob\"
         src:lustre:"$LUSTRE_MDT" "rbh:mongo:$testdb"
 
     local exp_time="$(( $(stat -c %Y $entry) + 5))"
-    find_attribute '"xattrs.user.expiration_date": NumberLong('$exp_time')'\
+    find_attribute '"xattrs.trusted.expiration_date": NumberLong('$exp_time')'\
                    '"ns.name": "'$entry'"'
     find_attribute '"xattrs.user.blob": "+5"' '"ns.name": "'$entry'"'
 }

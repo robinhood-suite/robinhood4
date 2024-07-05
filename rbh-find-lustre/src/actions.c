@@ -18,7 +18,7 @@ write_expiration_date_from_entry(const struct rbh_fsentry *fsentry,
                                  char *output, int max_length)
 {
     const struct rbh_value *value =
-        rbh_fsentry_find_inode_xattr(fsentry, "user.expiration_date");
+        rbh_fsentry_find_inode_xattr(fsentry, "trusted.expiration_date");
 
     if (value == NULL || value->type != RBH_VT_INT64)
         return snprintf(output, max_length, "None");
