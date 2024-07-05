@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "15c7d4c8_3e27487e",
+        "filename": "librobinhood/src/backends/lustre/lustre.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 923,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-07-05T08:50:03Z",
+      "side": 1,
+      "message": "Because this is not the first version of this patch, and this change made sense in the first version. But it does not make sense anymore yes.",
+      "parentUuid": "9613a87f_5a929865",
+      "range": {
+        "startLine": 923,
+        "startChar": 39,
+        "endLine": 923,
+        "endChar": 58
+      },
+      "revId": "87178f0dafe0a697ec555f53899f8fea464cf85f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "34a8975c_6a59dd4c",
@@ -37,6 +61,24 @@
       "writtenOn": "2024-07-05T07:12:07Z",
       "side": 1,
       "message": "question: why is this added here? If this is missing this is likely from one of the previous patches, right?",
+      "revId": "87178f0dafe0a697ec555f53899f8fea464cf85f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "10d02c46_677843b5",
+        "filename": "rbh-fsevents/src/enrichers/lustre.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-07-05T08:50:03Z",
+      "side": 1,
+      "message": "Yep, removed, along with the patch itself",
+      "parentUuid": "34a8975c_6a59dd4c",
       "revId": "87178f0dafe0a697ec555f53899f8fea464cf85f",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
