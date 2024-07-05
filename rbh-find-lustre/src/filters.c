@@ -44,7 +44,7 @@ static const struct rbh_filter_field predicate2filter_field[] = {
     [LPRED_STRIPE_SIZE - LPRED_MIN]    = {.fsentry = RBH_FP_INODE_XATTRS,
                                           .xattr = "stripe_size"},
     [LPRED_EXPIRED - LPRED_MIN]        = {.fsentry = RBH_FP_INODE_XATTRS,
-                                          .xattr = "user.expiration_date"},
+                                          .xattr = "trusted.expiration_date"},
 };
 
 static inline const struct rbh_filter_field *
