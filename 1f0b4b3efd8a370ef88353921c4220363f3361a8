@@ -41,6 +41,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "55adca84_d0bb9661",
+        "filename": "rbh-find-lustre/rbh-find-lustre.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-07-05T08:49:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a80fc12f_84e7501c",
+      "range": {
+        "startLine": 156,
+        "startChar": 29,
+        "endLine": 156,
+        "endChar": 37
+      },
+      "revId": "1f0b4b3efd8a370ef88353921c4220363f3361a8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bb2c12dc_289828a9",
@@ -54,6 +78,30 @@
       "writtenOn": "2024-07-05T07:02:45Z",
       "side": 1,
       "message": "style: to remove nested ifs you can do:\n\n```\nif (strcmp(...) !\u003d 0)\n    error(...);\n\n...\n```",
+      "range": {
+        "startLine": 168,
+        "startChar": 10,
+        "endLine": 168,
+        "endChar": 16
+      },
+      "revId": "1f0b4b3efd8a370ef88353921c4220363f3361a8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "335c513c_246e9df2",
+        "filename": "rbh-find-lustre/rbh-find-lustre.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-07-05T08:49:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bb2c12dc_289828a9",
       "range": {
         "startLine": 168,
         "startChar": 10,

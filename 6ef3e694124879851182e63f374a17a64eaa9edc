@@ -48,6 +48,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "239ce599_94c23839",
+        "filename": "rbh-find-lustre/rbh-find-lustre.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-07-05T08:49:47Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "c5409578_82a29e71",
+      "range": {
+        "startLine": 148,
+        "startChar": 0,
+        "endLine": 148,
+        "endChar": 21
+      },
+      "revId": "6ef3e694124879851182e63f374a17a64eaa9edc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "517e09a9_2d93f7fe",
@@ -85,6 +109,30 @@
       "side": 1,
       "message": "Because `-c` is a valid predicate, and I wanted to separate the actions/predicates of the find command from its options, so options are with a double dash, while actions and predicates are with a single one. And to enforce that idea, the options will only be the long ones.",
       "parentUuid": "517e09a9_2d93f7fe",
+      "range": {
+        "startLine": 153,
+        "startChar": 48,
+        "endLine": 153,
+        "endChar": 57
+      },
+      "revId": "6ef3e694124879851182e63f374a17a64eaa9edc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ad4f728_f443db66",
+        "filename": "rbh-find-lustre/rbh-find-lustre.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-07-05T08:49:47Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "379b18be_ab3ac8b5",
       "range": {
         "startLine": 153,
         "startChar": 48,
