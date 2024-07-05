@@ -61,6 +61,8 @@ function check_expiration_date
         echo "Changing the expiration date of '$directory' to '$(date -d "@$new_expiration_date")'"
         update_directory_expiration_date "$URI" "$directory_ID" \
                                          "$new_expiration_date"
+        setfattr -n user.expiration_date -v "$new_expiration_date" \
+                                            "$mount_point/$directory"
     else
         echo "Directory '$directory' has expired"
         if [ ! -z "$delete_found" ]; then
