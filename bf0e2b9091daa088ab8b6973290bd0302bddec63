@@ -22,6 +22,30 @@
       },
       "revId": "bf0e2b9091daa088ab8b6973290bd0302bddec63",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0a74bfdd_47e2017b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-07-05T08:50:12Z",
+      "side": 1,
+      "message": "I think both are valid here, but `overwriting` makes more sense indeed",
+      "parentUuid": "59a9e2cf_858ea969",
+      "range": {
+        "startLine": 16,
+        "startChar": 15,
+        "endLine": 16,
+        "endChar": 25
+      },
+      "revId": "bf0e2b9091daa088ab8b6973290bd0302bddec63",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
