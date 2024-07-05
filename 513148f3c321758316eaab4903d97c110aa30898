@@ -93,6 +93,30 @@
       },
       "revId": "513148f3c321758316eaab4903d97c110aa30898",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7309ba6d_e9ad7a9a",
+        "filename": "rbh-fsevents/tests/lustre/test_retention.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-07-05T07:06:13Z",
+      "side": 1,
+      "message": "This should be documented. As a user I probably expect to find values that are named consistently between the config and the DB.",
+      "parentUuid": "84de4dbe_18c50957",
+      "range": {
+        "startLine": 124,
+        "startChar": 33,
+        "endLine": 124,
+        "endChar": 52
+      },
+      "revId": "513148f3c321758316eaab4903d97c110aa30898",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
