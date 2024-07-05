@@ -20,6 +20,47 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0f26751d_40f95d45",
+        "filename": "librobinhood/src/backends/hestia/hestia.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 448,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-07-05T08:04:44Z",
+      "side": 1,
+      "message": "You can even use an enum:\n\n```\nenum rbh_backend_capabilities {\n    RBC_FILTER \u003d 0b001,\n    RBC_UPDATE \u003d 0b010,\n    ...\n};\n```",
+      "parentUuid": "b92b5615_fcef5ab8",
+      "revId": "b3461a5338c552b3fe39e32d5c4070baf93f1714",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "51482e9d_fcc62de9",
+        "filename": "librobinhood/src/backends/lustre_mpi/lustre_mpi.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-07-05T08:04:44Z",
+      "side": 1,
+      "message": "as pointed out by Gauthier, it will be easier to maintain with fixed constants. In this case you could write something like this:\n\n```\nlustre_mpi-\u003ebackend.capabilities \u003d RBC_FILTER | RBC_UPDATE;\n```",
+      "range": {
+        "startLine": 204,
+        "startChar": 39,
+        "endLine": 204,
+        "endChar": 44
+      },
+      "revId": "b3461a5338c552b3fe39e32d5c4070baf93f1714",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c9d2bc6a_5ef53fe8",
         "filename": "librobinhood/src/backends/mongo/mongo.c",
         "patchSetId": 1
@@ -295,6 +336,93 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a5a44bd7_58420bd6",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-07-05T08:04:44Z",
+      "side": 1,
+      "message": "Yes, rbh_backend_from_uri will load the plugin. Those functions are not necessary.",
+      "parentUuid": "46d1a093_4d62f405",
+      "revId": "b3461a5338c552b3fe39e32d5c4070baf93f1714",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "171503b5_52709840",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-07-05T08:04:44Z",
+      "side": 1,
+      "message": "minor: to make it easier to parse in scripts, you should only print the actual capabilities. The meaning of each name should be in the helper.",
+      "range": {
+        "startLine": 33,
+        "startChar": 4,
+        "endLine": 34,
+        "endChar": 10
+      },
+      "revId": "b3461a5338c552b3fe39e32d5c4070baf93f1714",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "174e33bb_5066a5b7",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-07-05T08:04:44Z",
+      "side": 1,
+      "message": "major: this is never defined",
+      "range": {
+        "startLine": 39,
+        "startChar": 8,
+        "endLine": 39,
+        "endChar": 20
+      },
+      "revId": "b3461a5338c552b3fe39e32d5c4070baf93f1714",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aea90c08_22c91b2f",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-07-05T08:04:44Z",
+      "side": 1,
+      "message": "suggest: this is a bit misleading. If I see two names in the helper I assume that I need two arguments. You should simply write URI. Also, as a user, maybe it makes more sense to simply write the name of the backend. Something like this: `rbh-capabilities mongo` instead of having to write `rbh-capabilities rbh:mongo:somedatabase`. My understanding is that the function `backend_plugin_import` in `librobinhood/src/utils/uri.c` only needs the name of the plugin (e.g. lustre, posix, mongo...). So it would probably be easier to export this function (and give it a rbh_ prefix). But then the capabilities need to be in the `rbh_backend_plugin` structure. Or in another global symbol that can be retrived by dlsym.",
+      "range": {
+        "startLine": 55,
+        "startChar": 19,
+        "endLine": 55,
+        "endChar": 30
+      },
+      "revId": "b3461a5338c552b3fe39e32d5c4070baf93f1714",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a9284863_f11a9e36",
         "filename": "rbh-capabilities/rbh-capabilities.c",
         "patchSetId": 1
@@ -312,6 +440,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f82eb264_ce3da77d",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-07-05T08:04:44Z",
+      "side": 1,
+      "message": "style: only one empty line between functions",
+      "revId": "b3461a5338c552b3fe39e32d5c4070baf93f1714",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "72cb3bc5_d07ca650",
         "filename": "rbh-capabilities/rbh-capabilities.c",
         "patchSetId": 1
@@ -323,6 +468,46 @@
       "writtenOn": "2024-07-04T13:57:57Z",
       "side": 1,
       "message": "suggest: add `[-h|--help]` with `getopt_long` to display help. See man 3 getopt_long.",
+      "revId": "b3461a5338c552b3fe39e32d5c4070baf93f1714",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "22b26d06_5eb1b2a3",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-07-05T08:04:44Z",
+      "side": 1,
+      "message": "defect: A few things are wrong here. First, I think you meant to compare argv[2] with the string \"usages\" to show the help message not the function pointer usages. Second, the second argument is `argv[1]` not `argv[2]`. Third, in C you need to use strcmp to compare strings. strcmp returns 0 if both string are equal. So what you meant to do is this: `if (argc \u003d\u003d 2 \u0026\u0026 !strcmp(argv[1], \"usages\")`. Finally, it is more common to use `-h` or `--help` to as for the help of a command line utility (e.g. `rbh-capabilities -h` or `rbh-capabilities --help`). To do this, the standard way is to use the function `getopt_long` (see `man 3 getopt`). You can find examples on how to use it in other robinhood tools.",
+      "range": {
+        "startLine": 77,
+        "startChar": 4,
+        "endLine": 77,
+        "endChar": 47
+      },
+      "revId": "b3461a5338c552b3fe39e32d5c4070baf93f1714",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1bad5433_7f16fd1b",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-07-05T08:04:44Z",
+      "side": 1,
+      "message": "style: empty lines",
       "revId": "b3461a5338c552b3fe39e32d5c4070baf93f1714",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
