@@ -3,6 +3,52 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "de9948d4_0ed5eb7d",
+        "filename": "librobinhood/include/robinhood/backends/iter_mpi_internal.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-07-05T09:38:40Z",
+      "side": 1,
+      "message": "style: empty line between declaration and next doc",
+      "range": {
+        "startLine": 66,
+        "startChar": 0,
+        "endLine": 67,
+        "endChar": 7
+      },
+      "revId": "73f2124507bc8dc6543c37f3e2dba2afd277b4b7",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5dcaee7a_37074bd9",
+        "filename": "librobinhood/src/backends/iter_mpi/iter_mpi.c",
+        "patchSetId": 8
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-07-05T09:38:40Z",
+      "side": 1,
+      "message": "minor: *parent_id",
+      "range": {
+        "startLine": 57,
+        "startChar": 66,
+        "endLine": 57,
+        "endChar": 70
+      },
+      "revId": "73f2124507bc8dc6543c37f3e2dba2afd277b4b7",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8bbcb1b1_913dae95",
         "filename": "librobinhood/src/backends/iter_mpi/iter_mpi.c",
         "patchSetId": 8
@@ -19,6 +65,52 @@
         "startChar": 4,
         "endLine": 68,
         "endChar": 21
+      },
+      "revId": "73f2124507bc8dc6543c37f3e2dba2afd277b4b7",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1fee3031_7267f80b",
+        "filename": "librobinhood/src/backends/iter_mpi/iter_mpi.c",
+        "patchSetId": 8
+      },
+      "lineNbr": 352,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-07-05T09:38:40Z",
+      "side": 1,
+      "message": "typo: backends",
+      "range": {
+        "startLine": 352,
+        "startChar": 51,
+        "endLine": 352,
+        "endChar": 58
+      },
+      "revId": "73f2124507bc8dc6543c37f3e2dba2afd277b4b7",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "844ce662_259d9d9d",
+        "filename": "librobinhood/src/backends/mpi_file/mpi_file.c",
+        "patchSetId": 8
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-07-05T09:38:40Z",
+      "side": 1,
+      "message": "minor: *mpi_fi-\u003epath",
+      "range": {
+        "startLine": 65,
+        "startChar": 70,
+        "endLine": 65,
+        "endChar": 74
       },
       "revId": "73f2124507bc8dc6543c37f3e2dba2afd277b4b7",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
