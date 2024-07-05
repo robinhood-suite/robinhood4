@@ -129,7 +129,7 @@ test_retention_script()
 
     rbh-sync rbh:lustre:. "rbh:mongo:$testdb"
 
-    local output="$($test_dir/rbh_update_retention "rbh:mongo:$testdb")"
+    local output="$($test_dir/rbh_update_retention "rbh:mongo:$testdb" "$PWD")"
     local output_lines="$(echo "$output" | grep "No directory has expired" | \
                           wc -l)"
     if [ "$output_lines" != "1" ]; then
@@ -139,7 +139,7 @@ test_retention_script()
     date --set="@$(( $(stat -c %X $dir3) + 6))"
 
     echo "Test: 1 expired, 3 not expired, 0 updated"
-    output="$($test_dir/rbh_update_retention "rbh:mongo:$testdb")"
+    output="$($test_dir/rbh_update_retention "rbh:mongo:$testdb" "$PWD")"
     shant_be_expired "$output" "$dir1"
     shant_be_expired "$output" "$dir2"
     should_be_expired "$output" "$dir3"
@@ -149,7 +149,7 @@ test_retention_script()
     date --set="@$(( $(stat -c %X $dir1) + 11))"
 
     echo "Test: 2 expired, 2 not expired, 0 updated"
-    output="$($test_dir/rbh_update_retention "rbh:mongo:$testdb")"
+    output="$($test_dir/rbh_update_retention "rbh:mongo:$testdb" "$PWD")"
     should_be_expired "$output" "$dir1"
     shant_be_expired "$output" "$dir2"
     should_be_expired "$output" "$dir3"
@@ -160,7 +160,7 @@ test_retention_script()
     rbh-sync rbh:lustre:. "rbh:mongo:$testdb"
 
     echo "Test: 1 expired, 2 not expired, 1 updated"
-    output="$($test_dir/rbh_update_retention "rbh:mongo:$testdb")"
+    output="$($test_dir/rbh_update_retention "rbh:mongo:$testdb" "$PWD")"
     should_be_updated "$output" "$dir1"
     shant_be_expired "$output" "$dir2"
     should_be_expired "$output" "$dir3"
@@ -170,7 +170,7 @@ test_retention_script()
     date --set="@$(( $(stat -c %X $dir1/$entry1) + 11))"
 
     echo "Test: 3 expired, 0 not expired, 1 updated"
-    output="$($test_dir/rbh_update_retention "rbh:mongo:$testdb")"
+    output="$($test_dir/rbh_update_retention "rbh:mongo:$testdb" "$PWD")"
     should_be_expired "$output" "$dir1"
     should_be_updated "$output" "$dir2"
     should_be_expired "$output" "$dir3"
@@ -180,7 +180,7 @@ test_retention_script()
     date --set="@$(( $(stat -c %X $dir2/$entry3) + 16))"
 
     echo "Test: 4 expired, 0 not expired, 0 updated"
-    output="$($test_dir/rbh_update_retention "rbh:mongo:$testdb")"
+    output="$($test_dir/rbh_update_retention "rbh:mongo:$testdb" "$PWD")"
     should_be_expired "$output" "$dir1"
     should_be_expired "$output" "$dir2"
     should_be_expired "$output" "$dir3"
@@ -193,7 +193,7 @@ test_retention_script()
     # Nothing should have changed because we only updated the access time of the
     # directory, and not its modify time
     echo "Test: 4 expired, 0 not expired, 0 updated"
-    output="$($test_dir/rbh_update_retention "rbh:mongo:$testdb")"
+    output="$($test_dir/rbh_update_retention "rbh:mongo:$testdb" "$PWD")"
     should_be_expired "$output" "$dir1"
     should_be_expired "$output" "$dir2"
     should_be_expired "$output" "$dir3"
@@ -204,7 +204,7 @@ test_retention_script()
     rbh-sync rbh:lustre:. "rbh:mongo:$testdb"
 
     echo "Test: 3 expired, 0 not expired, 1 updated"
-    output="$($test_dir/rbh_update_retention "rbh:mongo:$testdb")"
+    output="$($test_dir/rbh_update_retention "rbh:mongo:$testdb" "$PWD")"
     should_be_expired "$output" "$dir1"
     should_be_expired "$output" "$dir2"
     shant_be_expired "$output" "$dir3"
@@ -214,7 +214,7 @@ test_retention_script()
     date --set="@$(( $(stat -c %X $dir3) + 6))"
 
     echo "Test: 4 deleted"
-    $test_dir/rbh_update_retention "rbh:mongo:$testdb" --delete $PWD
+    $test_dir/rbh_update_retention "rbh:mongo:$testdb" "$PWD" --delete
 
     if [ -d "$dir1" ] || [ -d "$dir2" ] || [ -d "$dir3" ] || [ -d "$dir4" ]
     then
@@ -245,7 +245,7 @@ test_retention_after_sync()
     touch -m $dir/$entry
     rbh-sync rbh:lustre:. "rbh:mongo:$testdb"
 
-    output="$($test_dir/rbh_update_retention "rbh:mongo:$testdb")"
+    output="$($test_dir/rbh_update_retention "rbh:mongo:$testdb" "$PWD")"
     should_be_updated "$output" "$dir"
 
     expiration_date="$(( $(stat -c %Y $dir/$entry) + 11))"
