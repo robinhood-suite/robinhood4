@@ -34,6 +34,24 @@
       "parentUuid": "735eadf0_cab229c9",
       "revId": "eecb225b5d02935412d11c6ad91f32ebc9d01f9f",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e2b54b7d_64ff8dac",
+        "filename": "librobinhood/src/config.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-07-05T14:29:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b7ebc25c_5940f809",
+      "revId": "eecb225b5d02935412d11c6ad91f32ebc9d01f9f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ],
   "submitRequirementResults": []
