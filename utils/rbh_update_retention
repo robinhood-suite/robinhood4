@@ -44,7 +44,7 @@ function check_expiration_date
 
     if [ -z "$max_time" ]; then
         echo "Directory '$directory' has expired and it is empty, no other check needed"
-        if [ ! -z "$mount_point" ]; then
+        if [ ! -z "$delete_found" ]; then
             rmdir "$mount_point/$directory"
         fi
         return 0
@@ -63,7 +63,7 @@ function check_expiration_date
                                          "$new_expiration_date"
     else
         echo "Directory '$directory' has expired"
-        if [ ! -z "$mount_point" ]; then
+        if [ ! -z "$delete_found" ]; then
             rm -rf "$mount_point/$directory"
         fi
     fi
@@ -80,7 +80,7 @@ function run_retention_updater
 
         if [ "${expires:0:1}" != "+" ]; then
             echo "Directory '$dir' expired on '$(date -d "@$expires")'"
-            if [ ! -z "$mount_point" ] && [ ! -z "$dir" ]; then
+            if [ ! -z "$delete_found" ] && [ ! -z "$dir" ]; then
                 rm -rf "$mount_point/$dir"
             fi
 
@@ -109,16 +109,20 @@ function print_doc
     echo "If a directory is expired, it is printed to the output, unless the"
     echo "'--delete' option is given, in which case it will be removed;"
     echo ""
-    echo "Usage: rbh-update-retention URI [--delete <mount point>]"
+    echo "Usage: rbh-update-retention URI mount_point [--delete]"
 }
 
-if [ $# -eq 0 ]; then
-    echo "Please specify a URI to update"
+if [ $# -lt 2 ]; then
+    echo "Please specify a URI to update and the mount point of the entries"
     exit 1
 fi
 
 while :
 do
+    if [ -z "$1" ]; then
+        break
+    fi
+
     case "$1" in
         --delete)
             if [ "$delete_found" == "true" ]; then
@@ -126,23 +130,30 @@ do
                 exit 1
             fi
             delete_found=true
-            shift
-            mount_point=$1
             ;;
         --help)
             print_doc
             exit 0
             ;;
         *)
-            if [ "$uri_found" == "true" ]; then
-                break;
+            if [ ! -z "$args_found" ]; then
+                echo "URI and mount point already given"
+                exit 1
             fi
-            uri_found=true
+
             URI="$1"
+            mount_point="$2"
+            args_found=true
+            shift
             ;;
     esac
 
     shift
 done
+
+if [ ! -d "$mount_point" ]; then
+    echo "Mount point provided is not a directory, please provide one"
+    exit 1
+fi
 
 run_retention_updater "$URI" "$mount_point"
