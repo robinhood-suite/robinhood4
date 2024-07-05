@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "191b5e3e_8980133d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-07-05T07:02:45Z",
+      "side": 1,
+      "message": "I stay at 0 for the -c option.",
+      "revId": "1f0b4b3efd8a370ef88353921c4220363f3361a8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a80fc12f_84e7501c",
+        "filename": "rbh-find-lustre/rbh-find-lustre.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-07-05T07:02:45Z",
+      "side": 1,
+      "message": "Now that --config is enforced to be the first, you can safely check for -c as well. There is no conflict with the other options. I say this because I know how frustrating it can be when options are not consistent across commands.",
+      "range": {
+        "startLine": 156,
+        "startChar": 29,
+        "endLine": 156,
+        "endChar": 37
+      },
+      "revId": "1f0b4b3efd8a370ef88353921c4220363f3361a8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bb2c12dc_289828a9",
+        "filename": "rbh-find-lustre/rbh-find-lustre.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-07-05T07:02:45Z",
+      "side": 1,
+      "message": "style: to remove nested ifs you can do:\n\n```\nif (strcmp(...) !\u003d 0)\n    error(...);\n\n...\n```",
+      "range": {
+        "startLine": 168,
+        "startChar": 10,
+        "endLine": 168,
+        "endChar": 16
+      },
+      "revId": "1f0b4b3efd8a370ef88353921c4220363f3361a8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
