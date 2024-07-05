@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "71d26c43_720d276e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-07-05T09:24:46Z",
+      "side": 1,
+      "message": "style: line \u003e 80 characters",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 87
+      },
+      "revId": "b3461a5338c552b3fe39e32d5c4070baf93f1714",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b92b5615_fcef5ab8",
         "filename": "librobinhood/src/backends/hestia/hestia.c",
         "patchSetId": 1
@@ -175,6 +198,29 @@
       "writtenOn": "2024-07-04T13:57:57Z",
       "side": 1,
       "message": "style:\n```\nint\ncapabilities_list(char *uri);\n```",
+      "revId": "b3461a5338c552b3fe39e32d5c4070baf93f1714",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "257deb59_6a5f4391",
+        "filename": "rbh-capabilities/include/rbh-capabilities.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-07-05T09:24:46Z",
+      "side": 1,
+      "message": "style: same as mentioned by Gauthier",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 17
+      },
       "revId": "b3461a5338c552b3fe39e32d5c4070baf93f1714",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
@@ -354,6 +400,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "23f0cfb8_5b037f7e",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-07-05T09:24:46Z",
+      "side": 1,
+      "message": "style: you do not need to add those comments, as the call literally implies what you explain",
+      "range": {
+        "startLine": 15,
+        "startChar": 45,
+        "endLine": 15,
+        "endChar": 79
+      },
+      "revId": "b3461a5338c552b3fe39e32d5c4070baf93f1714",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "171503b5_52709840",
         "filename": "rbh-capabilities/rbh-capabilities.c",
         "patchSetId": 1
@@ -393,6 +462,29 @@
         "startChar": 8,
         "endLine": 39,
         "endChar": 20
+      },
+      "revId": "b3461a5338c552b3fe39e32d5c4070baf93f1714",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "245bac7c_22c1b002",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-07-05T09:24:46Z",
+      "side": 1,
+      "message": "suggest: usage()",
+      "range": {
+        "startLine": 52,
+        "startChar": 0,
+        "endLine": 52,
+        "endChar": 6
       },
       "revId": "b3461a5338c552b3fe39e32d5c4070baf93f1714",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
