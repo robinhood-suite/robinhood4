@@ -189,7 +189,6 @@ rbh_posix_mpi_backend_new(const char *path, struct rbh_config *config)
     posix_mpi->backend.name = RBH_POSIX_MPI_BACKEND_NAME;
     posix_mpi->backend.ops = &POSIX_MPI_BACKEND_OPS;
     posix_mpi->backend.id = RBH_BI_POSIX_MPI;
-    posix_mpi->backend.capabilities = 0b101;
 
     return &posix_mpi->backend;
 }

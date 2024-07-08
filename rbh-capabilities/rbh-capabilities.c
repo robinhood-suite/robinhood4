@@ -1,37 +1,46 @@
 /* This file is part of Robinhood 4
- * Copyright (C) 2019 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2024 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifer: LGPL-3.0-or-later
  */
-#include "rbh-find/rbh-capabilities.h"
+#include <dlfcn.h>
+#include <errno.h>
+#include <error.h>
+#include <stdbool.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <sysexits.h>
+#include <getopt.h>
 
-static struct rbh-backend*
-load_backend_capabilities(char *uri)
+#include <robinhood.h>
+#include <robinhood/utils.h>
+#include <robinhood/config.h>
+
+static const struct rbh_backend_plugin *
+load_backend_capabilities(const char *name)
 {
     const struct rbh_backend_plugin *plugin;
-    struct rbh_backend *backend;
 
-    plugin = rbh_backend_plugin_import(uri); // Import backend plugin using URI
-
-    if (plugin != NULL) {
-        backend = rbh_backend_plugin_new(plugin, "none", NULL); // create a backend from a backend plugin
-
-
+    if (rbh_backend_plugin_import(name) != NULL){
+        plugin = rbh_backend_plugin_import(name);
+        return plugin;
     } else {
-        backend = rbh_backend_from_uri(uri);
-        if (backend == NULL)
-            error(EXIT_FAILURE, errno, "Unable to load backend %s", uri); // print error
-    }
-
-    return backend;
+        printf("This backend does not exist\n");
+        return NULL;
+    };
 }
 
 static int
-capabilities_translate(struct rbh_backend *backend)
+capabilities_translate(const struct rbh_backend_plugin *plugin)
 {
-    printf("### The possible capabilities are : filter / update / branch ###\n");
-    printf("Capabilities of %s :\n\n",backend->name);
+    if (plugin == NULL){
+        printf("Plugin is NULL in capabilities_translate\n");
+        return -1;
+    }
+
+    const uint8_t capabilities = plugin->capabilities;
+    printf("Capabilities of %s :\n\n",plugin->plugin.name);
     if (capabilities & 0b100)
     {
         printf("- filter\n");
@@ -44,26 +53,20 @@ capabilities_translate(struct rbh_backend *backend)
     {
         printf("- branch\n");
     }
-    return 0
+    printf("\n");
+    return 0;
 }
 
 
 static int
-usages()
+help()
 {
     const char *message =
-        "usage: %s BACKEND URI\n"
-        "print backend URI or NAME capabilities\n"
-        "\n"
-        "A robinhood URI is built as follows:\n"
-        "    "RBH_SCHEME":BACKEND:FSNAME[#{PATH|ID}]\n"
-        "Where:\n"
-        "    BACKEND  is the name of a backend\n"
-        "    FSNAME   is the name of a filesystem for BACKEND\n"
-        "    PATH/ID  is the path/id of an fsentry managed by BACKEND:FSNAME\n"
-        "             (ID must be enclosed in square brackets '[ID]' to distinguish it\n"
-        "             from a path)\n"
-    return printf(message);
+        "\nUsage:\n"
+        "  %s <name of backend>   Show capabilities with of the given backend"
+        "name\n"
+        "  --help                 Show usages information\n";
+    return printf(message,program_invocation_short_name);
 }
 
 
@@ -71,19 +74,47 @@ usages()
 int
 main(int argc, char **argv)
 {
-    if (argc == 2 && argv[2] != usages){
-        struct rbh_backend *backend = load_backend_capabilities(argv[1]);
-        capabilities_translate(backend);
-    } else if (argc == 2 && argv[2] == usages){
-        usages();
-    } else {
-        printf("Not enough arguments or no arguments");
-        usages();
+    const struct option LONG_OPTIONS[] = {
+        {
+            .name = "help",
+            .val = 'h'
+        },
+        {}
+    };
+    int option;
+
+    if (argc == 1){
+        printf("Not enough arguments or no argument\n");
+        help();
+        return 0;
     }
+
+    while ((option = getopt_long(argc, argv, "h", LONG_OPTIONS,
+                                 NULL)) != -1) {
+        switch (option) {
+        case 'h':
+            help();
+            return 0;
+        default :
+            printf("Unrecognized option\n");
+            help();
+            return 0;
+
+        }
+    }
+
+    if (optind < argc){
+        const char *arg = argv[optind];
+        printf("Argument provided: %s\n", arg);
+        const struct rbh_backend_plugin *plugin = load_backend_capabilities(arg);
+        if (plugin != NULL) {
+            capabilities_translate(plugin);
+        }
+    } else {
+        printf("Not enough arguments or no argument \n");
+        help();
+        return 0;
+    };
 
     return 0;
 }
-
-
-
-
