@@ -227,6 +227,8 @@ test_retention_after_sync()
 {
     local dir="dir"
     local entry="entry"
+    local entry2="entry2"
+    local entry3="entry3"
 
     mkdir $dir
     touch $dir/$entry
@@ -259,6 +261,29 @@ test_retention_after_sync()
     # sync
     find_attribute \
         '"xattrs.trusted.expiration_date":NumberLong('$expiration_date')' \
+        '"ns.xattrs.path":"'/$dir'"'
+
+    date --set="@$(( $(stat -c %Y $dir) + 5))"
+
+    touch $dir/$entry2
+    rbh-sync rbh:lustre:. "rbh:mongo:$testdb"
+
+    # The expiration shouldn't have changed as the created file $entry2 is too
+    # old to change it
+    find_attribute \
+        '"xattrs.user.expiration_date":NumberLong('$expiration_date')' \
+        '"ns.xattrs.path":"'/$dir'"'
+
+    date --set="@$(( $(stat -c %Y $dir) + 15))"
+
+    touch $dir/$entry3
+    rbh-sync rbh:lustre:. "rbh:mongo:$testdb"
+
+    # This time the expiration date should be pushed back, with $entry3 being
+    # created later down the line
+    expiration_date="$(( $(stat -c %Y $dir) + 10))"
+    find_attribute \
+        '"xattrs.user.expiration_date":NumberLong('$expiration_date')' \
         '"ns.xattrs.path":"'/$dir'"'
 }
 
