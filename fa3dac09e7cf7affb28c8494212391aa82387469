@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "39ba569e_0b3c7f2e",
+        "filename": "rbh-find-lustre/src/actions.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-07-09T09:37:32Z",
+      "side": 1,
+      "message": "minor: no need to check if it\u0027s NULL, `retention_attribute` is necessarily NULL as it is declared just before.",
+      "revId": "fa3dac09e7cf7affb28c8494212391aa82387469",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
