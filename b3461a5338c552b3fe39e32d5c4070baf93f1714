@@ -59,6 +59,24 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "be1062aa_f8a40441",
+        "filename": "librobinhood/src/backends/hestia/hestia.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 448,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2024-07-09T08:44:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b92b5615_fcef5ab8",
+      "revId": "b3461a5338c552b3fe39e32d5c4070baf93f1714",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "51482e9d_fcc62de9",
@@ -72,6 +90,30 @@
       "writtenOn": "2024-07-05T08:04:44Z",
       "side": 1,
       "message": "as pointed out by Gauthier, it will be easier to maintain with fixed constants. In this case you could write something like this:\n\n```\nlustre_mpi-\u003ebackend.capabilities \u003d RBC_FILTER | RBC_UPDATE;\n```",
+      "range": {
+        "startLine": 204,
+        "startChar": 39,
+        "endLine": 204,
+        "endChar": 44
+      },
+      "revId": "b3461a5338c552b3fe39e32d5c4070baf93f1714",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d8978c2_05ffac43",
+        "filename": "librobinhood/src/backends/lustre_mpi/lustre_mpi.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2024-07-09T08:44:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "51482e9d_fcc62de9",
       "range": {
         "startLine": 204,
         "startChar": 39,
@@ -105,6 +147,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "027e75ff_ba36c319",
+        "filename": "librobinhood/src/backends/mongo/mongo.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 1362,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2024-07-09T08:44:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c9d2bc6a_5ef53fe8",
+      "range": {
+        "startLine": 1362,
+        "startChar": 30,
+        "endLine": 1362,
+        "endChar": 31
+      },
+      "revId": "b3461a5338c552b3fe39e32d5c4070baf93f1714",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e4b9e2e3_9a869ed8",
@@ -118,6 +184,24 @@
       "writtenOn": "2024-07-04T13:57:57Z",
       "side": 1,
       "message": "I don\u0027t think it\u0027s necessary because the functions are only used in `rbh-capabilities.c`.",
+      "revId": "b3461a5338c552b3fe39e32d5c4070baf93f1714",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "213d7a8d_539b4bdc",
+        "filename": "rbh-capabilities/include/meson.build",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2024-07-09T08:44:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e4b9e2e3_9a869ed8",
       "revId": "b3461a5338c552b3fe39e32d5c4070baf93f1714",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
@@ -145,6 +229,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5079262c_2b506184",
+        "filename": "rbh-capabilities/include/meson.build",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2024-07-09T08:44:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7e2ce264_78a005e5",
+      "range": {
+        "startLine": 2,
+        "startChar": 16,
+        "endLine": 2,
+        "endChar": 20
+      },
+      "revId": "b3461a5338c552b3fe39e32d5c4070baf93f1714",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e2bdb3eb_ad3e7f95",
@@ -158,6 +266,24 @@
       "writtenOn": "2024-07-04T13:57:57Z",
       "side": 1,
       "message": "major: replace by `install_headers(\u0027rbh-capabilities.h\u0027) otherwise the headers are never include",
+      "revId": "b3461a5338c552b3fe39e32d5c4070baf93f1714",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6148eea4_fc952641",
+        "filename": "rbh-capabilities/include/meson.build",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2024-07-09T08:44:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e2bdb3eb_ad3e7f95",
       "revId": "b3461a5338c552b3fe39e32d5c4070baf93f1714",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
@@ -185,6 +311,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4608ef2e_1861bf29",
+        "filename": "rbh-capabilities/include/rbh-capabilities.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2024-07-09T08:44:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b6f5f216_a10f7224",
+      "range": {
+        "startLine": 2,
+        "startChar": 17,
+        "endLine": 2,
+        "endChar": 21
+      },
+      "revId": "b3461a5338c552b3fe39e32d5c4070baf93f1714",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "69fba30c_42b3c159",
@@ -202,6 +352,24 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "337067f4_0ff36e57",
+        "filename": "rbh-capabilities/include/rbh-capabilities.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2024-07-09T08:44:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "69fba30c_42b3c159",
+      "revId": "b3461a5338c552b3fe39e32d5c4070baf93f1714",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "257deb59_6a5f4391",
@@ -215,6 +383,30 @@
       "writtenOn": "2024-07-05T09:24:46Z",
       "side": 1,
       "message": "style: same as mentioned by Gauthier",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 17
+      },
+      "revId": "b3461a5338c552b3fe39e32d5c4070baf93f1714",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ba8c6862_138dd25a",
+        "filename": "rbh-capabilities/include/rbh-capabilities.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2024-07-09T08:44:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "257deb59_6a5f4391",
       "range": {
         "startLine": 21,
         "startChar": 0,
@@ -248,6 +440,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa28a245_4c2162f4",
+        "filename": "rbh-capabilities/meson.build",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2024-07-09T08:44:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "489b061b_ad850f84",
+      "range": {
+        "startLine": 2,
+        "startChar": 16,
+        "endLine": 2,
+        "endChar": 20
+      },
+      "revId": "b3461a5338c552b3fe39e32d5c4070baf93f1714",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ed0481b7_9c8efce3",
@@ -261,6 +477,30 @@
       "writtenOn": "2024-07-04T13:57:57Z",
       "side": 1,
       "message": "minor: no need",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 32,
+        "endChar": 58
+      },
+      "revId": "b3461a5338c552b3fe39e32d5c4070baf93f1714",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "deada296_f1b1da06",
+        "filename": "rbh-capabilities/meson.build",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2024-07-09T08:44:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ed0481b7_9c8efce3",
       "range": {
         "startLine": 21,
         "startChar": 0,
@@ -294,6 +534,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ffdbaf05_a3fba2cc",
+        "filename": "rbh-capabilities/meson.build",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2024-07-09T08:44:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "618b7e89_807d7f15",
+      "range": {
+        "startLine": 40,
+        "startChar": 2,
+        "endLine": 40,
+        "endChar": 3
+      },
+      "revId": "b3461a5338c552b3fe39e32d5c4070baf93f1714",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "449328df_5652afa3",
@@ -307,6 +571,30 @@
       "writtenOn": "2024-07-04T13:57:57Z",
       "side": 1,
       "message": "major: no need",
+      "range": {
+        "startLine": 49,
+        "startChar": 0,
+        "endLine": 61,
+        "endChar": 1
+      },
+      "revId": "b3461a5338c552b3fe39e32d5c4070baf93f1714",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5aaccadd_1452f747",
+        "filename": "rbh-capabilities/meson.build",
+        "patchSetId": 1
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2024-07-09T08:44:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "449328df_5652afa3",
       "range": {
         "startLine": 49,
         "startChar": 0,
@@ -340,6 +628,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb328b39_0ec391d4",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2024-07-09T08:44:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6a3f4a04_fa667816",
+      "range": {
+        "startLine": 2,
+        "startChar": 17,
+        "endLine": 2,
+        "endChar": 21
+      },
+      "revId": "b3461a5338c552b3fe39e32d5c4070baf93f1714",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0b70f752_134d88f8",
@@ -353,6 +665,30 @@
       "writtenOn": "2024-07-04T13:57:57Z",
       "side": 1,
       "message": "typo: add space",
+      "range": {
+        "startLine": 9,
+        "startChar": 25,
+        "endLine": 9,
+        "endChar": 26
+      },
+      "revId": "b3461a5338c552b3fe39e32d5c4070baf93f1714",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "73504053_9d60be44",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2024-07-09T08:44:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0b70f752_134d88f8",
       "range": {
         "startLine": 9,
         "startChar": 25,
@@ -421,6 +757,48 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e1dbf438_aa103616",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2024-07-09T08:44:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "23f0cfb8_5b037f7e",
+      "range": {
+        "startLine": 15,
+        "startChar": 45,
+        "endLine": 15,
+        "endChar": 79
+      },
+      "revId": "b3461a5338c552b3fe39e32d5c4070baf93f1714",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c66d0483_8c5ad4d0",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2024-07-09T08:44:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a5a44bd7_58420bd6",
+      "revId": "b3461a5338c552b3fe39e32d5c4070baf93f1714",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "171503b5_52709840",
@@ -434,6 +812,30 @@
       "writtenOn": "2024-07-05T08:04:44Z",
       "side": 1,
       "message": "minor: to make it easier to parse in scripts, you should only print the actual capabilities. The meaning of each name should be in the helper.",
+      "range": {
+        "startLine": 33,
+        "startChar": 4,
+        "endLine": 34,
+        "endChar": 10
+      },
+      "revId": "b3461a5338c552b3fe39e32d5c4070baf93f1714",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dc31f11d_b44156a7",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2024-07-09T08:44:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "171503b5_52709840",
       "range": {
         "startLine": 33,
         "startChar": 4,
@@ -467,6 +869,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a9bb2e30_ea34fa81",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2024-07-09T08:44:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "174e33bb_5066a5b7",
+      "range": {
+        "startLine": 39,
+        "startChar": 8,
+        "endLine": 39,
+        "endChar": 20
+      },
+      "revId": "b3461a5338c552b3fe39e32d5c4070baf93f1714",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "245bac7c_22c1b002",
@@ -490,6 +916,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "79b9faae_7214838f",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2024-07-09T08:44:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "245bac7c_22c1b002",
+      "range": {
+        "startLine": 52,
+        "startChar": 0,
+        "endLine": 52,
+        "endChar": 6
+      },
+      "revId": "b3461a5338c552b3fe39e32d5c4070baf93f1714",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "aea90c08_22c91b2f",
@@ -503,6 +953,30 @@
       "writtenOn": "2024-07-05T08:04:44Z",
       "side": 1,
       "message": "suggest: this is a bit misleading. If I see two names in the helper I assume that I need two arguments. You should simply write URI. Also, as a user, maybe it makes more sense to simply write the name of the backend. Something like this: `rbh-capabilities mongo` instead of having to write `rbh-capabilities rbh:mongo:somedatabase`. My understanding is that the function `backend_plugin_import` in `librobinhood/src/utils/uri.c` only needs the name of the plugin (e.g. lustre, posix, mongo...). So it would probably be easier to export this function (and give it a rbh_ prefix). But then the capabilities need to be in the `rbh_backend_plugin` structure. Or in another global symbol that can be retrived by dlsym.",
+      "range": {
+        "startLine": 55,
+        "startChar": 19,
+        "endLine": 55,
+        "endChar": 30
+      },
+      "revId": "b3461a5338c552b3fe39e32d5c4070baf93f1714",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b1f9c02c_77d1303f",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2024-07-09T08:44:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "aea90c08_22c91b2f",
       "range": {
         "startLine": 55,
         "startChar": 19,
@@ -587,6 +1061,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "793c26db_e874f9d0",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2024-07-09T08:44:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "22b26d06_5eb1b2a3",
+      "range": {
+        "startLine": 77,
+        "startChar": 4,
+        "endLine": 77,
+        "endChar": 47
+      },
+      "revId": "b3461a5338c552b3fe39e32d5c4070baf93f1714",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1bad5433_7f16fd1b",
@@ -600,6 +1098,24 @@
       "writtenOn": "2024-07-05T08:04:44Z",
       "side": 1,
       "message": "style: empty lines",
+      "revId": "b3461a5338c552b3fe39e32d5c4070baf93f1714",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ea80b16_8662b249",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2024-07-09T08:44:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1bad5433_7f16fd1b",
       "revId": "b3461a5338c552b3fe39e32d5c4070baf93f1714",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
