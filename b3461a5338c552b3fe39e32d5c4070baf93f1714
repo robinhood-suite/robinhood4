@@ -1004,6 +1004,24 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d53b9d8a_93d7930b",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2024-07-09T12:40:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a9284863_f11a9e36",
+      "revId": "b3461a5338c552b3fe39e32d5c4070baf93f1714",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f82eb264_ce3da77d",
@@ -1081,6 +1099,24 @@
         "endLine": 77,
         "endChar": 47
       },
+      "revId": "b3461a5338c552b3fe39e32d5c4070baf93f1714",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4f866668_8d9940c1",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2024-07-09T12:40:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "72cb3bc5_d07ca650",
       "revId": "b3461a5338c552b3fe39e32d5c4070baf93f1714",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
@@ -1168,6 +1204,30 @@
       "writtenOn": "2024-07-04T13:57:57Z",
       "side": 1,
       "message": "typo: 2024",
+      "range": {
+        "startLine": 2,
+        "startChar": 16,
+        "endLine": 2,
+        "endChar": 20
+      },
+      "revId": "b3461a5338c552b3fe39e32d5c4070baf93f1714",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f176b1d_953a0ac5",
+        "filename": "rbh-capabilities/tests/meson.build",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2024-07-09T12:40:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3fcc01c7_7aa11458",
       "range": {
         "startLine": 2,
         "startChar": 16,
