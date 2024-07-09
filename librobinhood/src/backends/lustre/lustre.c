@@ -837,13 +837,9 @@ free_lum:
     return subcount;
 }
 
-#define XATTR_EXPIRATION_DATE "trusted.expiration_date"
-#define INT64_MAX_STR_LEN 19
-
-static int
-create_expiration_date_value_pair(const char *attribute_value,
-                                  const struct rbh_statx *statx,
-                                  struct rbh_value_pair *expiration_pair)
+static int64_t
+get_expiration_date_value(const char *attribute_value,
+                          const struct rbh_statx *statx)
 {
     int64_t expiration_date;
     char *end;
@@ -904,6 +900,21 @@ create_expiration_date_value_pair(const char *attribute_value,
         }
     }
 
+    return expiration_date;
+}
+
+#define XATTR_EXPIRATION_DATE "trusted.expiration_date"
+
+static int
+create_expiration_date_value_pair(const char *attribute_value,
+                                  const struct rbh_statx *statx,
+                                  struct rbh_value_pair *expiration_pair)
+{
+    int64_t expiration_date = get_expiration_date_value(attribute_value, statx);
+
+    if (expiration_date < 0)
+        return -1;
+
     fill_int64_pair(XATTR_EXPIRATION_DATE, expiration_date,
                     expiration_pair, _values);
 
@@ -911,27 +922,40 @@ create_expiration_date_value_pair(const char *attribute_value,
 }
 
 static int
-change_expiration_date_to_int64(int index)
+update_or_cast_expiration_date(int index, char *retention_attribute,
+                               const struct rbh_statx *statx)
 {
-    const char *attribute_value = _inode_xattrs[index].value->binary.data;
-    int64_t expiration_date;
+    const char *expiration_value = _inode_xattrs[index].value->binary.data;
+    int64_t current_expiration_date;
+    int64_t calculated_expiration_date =
+        get_expiration_date_value(retention_attribute, statx);
     char *end;
 
+    if (calculated_expiration_date < 0)
+        return -1;
+
     errno = 0;
-    expiration_date = strtoul(attribute_value, &end, 10);
-    if (errno || (!expiration_date && attribute_value == end) || *end != '\0') {
+    current_expiration_date = strtoul(expiration_value, &end, 10);
+    if (errno || (!current_expiration_date && expiration_value == end) ||
+        *end != '\0') {
         fprintf(stderr,
                 "Invalid value for expiration date '%s', should be '<integer>'\n",
-                attribute_value);
+                expiration_value);
         errno = EINVAL;
         return -1;
     }
 
-    fill_int64_pair(XATTR_EXPIRATION_DATE, expiration_date,
-                    &_inode_xattrs[index], _values);
+    if (calculated_expiration_date > current_expiration_date)
+        fill_int64_pair(XATTR_EXPIRATION_DATE, calculated_expiration_date,
+                        &_inode_xattrs[index], _values);
+    else
+        fill_int64_pair(XATTR_EXPIRATION_DATE, current_expiration_date,
+                        &_inode_xattrs[index], _values);
 
     return 0;
 }
+
+#define INT64_MAX_STR_LEN 19
 
 static int
 set_buffer_to_retention_attribute(int index, char *buffer)
@@ -990,7 +1014,7 @@ xattrs_get_retention(int fd, const struct rbh_statx *statx,
         if (create_expiration_date_value_pair(tmp, statx, &pairs[0]))
             return 0;
     } else {
-        if (change_expiration_date_to_int64(expiration_date_index))
+        if (update_or_cast_expiration_date(expiration_date_index, tmp, statx))
             return 0;
     }
 

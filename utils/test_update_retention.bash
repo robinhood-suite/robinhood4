@@ -271,7 +271,7 @@ test_retention_after_sync()
     # The expiration shouldn't have changed as the created file $entry2 is too
     # old to change it
     find_attribute \
-        '"xattrs.user.expiration_date":NumberLong('$expiration_date')' \
+        '"xattrs.trusted.expiration_date":NumberLong('$expiration_date')' \
         '"ns.xattrs.path":"'/$dir'"'
 
     date --set="@$(( $(stat -c %Y $dir) + 15))"
@@ -283,7 +283,7 @@ test_retention_after_sync()
     # created later down the line
     expiration_date="$(( $(stat -c %Y $dir) + 10))"
     find_attribute \
-        '"xattrs.user.expiration_date":NumberLong('$expiration_date')' \
+        '"xattrs.trusted.expiration_date":NumberLong('$expiration_date')' \
         '"ns.xattrs.path":"'/$dir'"'
 }
 
