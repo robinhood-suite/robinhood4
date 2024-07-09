@@ -34,6 +34,24 @@
       "parentUuid": "984b8c18_cd2fbc1f",
       "revId": "a903307a9f0a1e3dc8e06e521ec5898fe3fa95b7",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3d8c9ab3_7f3ada30",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-07-09T08:45:03Z",
+      "side": 1,
+      "message": "The issue is, we can not know if the value set on previous patches will be forgotten or not on this one.",
+      "parentUuid": "3caa8794_5382b41c",
+      "revId": "a903307a9f0a1e3dc8e06e521ec5898fe3fa95b7",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
