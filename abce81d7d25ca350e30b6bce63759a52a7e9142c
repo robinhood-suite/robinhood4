@@ -1074,6 +1074,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac0b3ece_e3945102",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2024-07-09T13:37:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "39862178_ae2f0223",
+      "range": {
+        "startLine": 106,
+        "startChar": 4,
+        "endLine": 106,
+        "endChar": 23
+      },
+      "revId": "abce81d7d25ca350e30b6bce63759a52a7e9142c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "81377934_e087a8f2",
@@ -1087,6 +1111,30 @@
       "writtenOn": "2024-07-09T09:30:02Z",
       "side": 1,
       "message": "minor: remove this line",
+      "range": {
+        "startLine": 108,
+        "startChar": 8,
+        "endLine": 108,
+        "endChar": 47
+      },
+      "revId": "abce81d7d25ca350e30b6bce63759a52a7e9142c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "244d8e58_ef34ed78",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2024-07-09T13:37:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "81377934_e087a8f2",
       "range": {
         "startLine": 108,
         "startChar": 8,
@@ -1143,6 +1191,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "25c2c415_1a07e087",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2024-07-09T13:37:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c29ef102_aaac20fb",
+      "range": {
+        "startLine": 110,
+        "startChar": 8,
+        "endLine": 110,
+        "endChar": 27
+      },
+      "revId": "abce81d7d25ca350e30b6bce63759a52a7e9142c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c40d844f_1b0fd415",
@@ -1156,6 +1228,30 @@
       "writtenOn": "2024-07-09T09:30:02Z",
       "side": 1,
       "message": "if you accept the comment I made on line 106, this else isn\u0027t necessary anymore",
+      "range": {
+        "startLine": 113,
+        "startChar": 4,
+        "endLine": 117,
+        "endChar": 6
+      },
+      "revId": "abce81d7d25ca350e30b6bce63759a52a7e9142c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "badb5c32_8d75874d",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2024-07-09T13:37:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c40d844f_1b0fd415",
       "range": {
         "startLine": 113,
         "startChar": 4,
