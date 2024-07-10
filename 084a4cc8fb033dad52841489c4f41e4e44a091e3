@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2c3a6930_06f39fa6",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-07-10T07:03:10Z",
+      "side": 1,
+      "message": "minor: lustre-mpi",
+      "range": {
+        "startLine": 75,
+        "startChar": 11,
+        "endLine": 75,
+        "endChar": 21
+      },
+      "revId": "084a4cc8fb033dad52841489c4f41e4e44a091e3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "087409f4_73e51d0c",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-07-10T07:03:10Z",
+      "side": 1,
+      "message": "minor: posix-mpi",
+      "range": {
+        "startLine": 78,
+        "startChar": 11,
+        "endLine": 78,
+        "endChar": 20
+      },
+      "revId": "084a4cc8fb033dad52841489c4f41e4e44a091e3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
