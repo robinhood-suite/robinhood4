@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0279e31a_151a4054",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-07-15T12:47:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "908504d0_5fb0236f",
+      "range": {
+        "startLine": 15,
+        "startChar": 26,
+        "endLine": 15,
+        "endChar": 35
+      },
+      "revId": "8b6d0d75e2e31a286308533df70e3874111a4236",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6eb92c3b_cf9d99ab",
@@ -37,6 +61,24 @@
       "writtenOn": "2024-07-10T07:19:40Z",
       "side": 1,
       "message": "suggest: Seeing this, makes me think that it might be better to share these functions in a common file in utils, because `find_attribute` is also defined in rbh-sync and rbh-fsevents. Same for `difflines`.",
+      "revId": "8b6d0d75e2e31a286308533df70e3874111a4236",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "35dd81de_f536e799",
+        "filename": "utils/test_update_retention.bash",
+        "patchSetId": 3
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-07-15T12:47:38Z",
+      "side": 1,
+      "message": "I was also thinking that, but I did not really want to do this in this patch",
+      "parentUuid": "6eb92c3b_cf9d99ab",
       "revId": "8b6d0d75e2e31a286308533df70e3874111a4236",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
