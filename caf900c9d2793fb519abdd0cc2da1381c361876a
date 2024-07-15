@@ -22,6 +22,30 @@
       },
       "revId": "caf900c9d2793fb519abdd0cc2da1381c361876a",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "08a854f6_1ca39681",
+        "filename": "librobinhood/include/value.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-07-15T11:50:03Z",
+      "side": 1,
+      "message": "You\u0027re right, this one is not needed, there is no usage of fill_uint64_pair.",
+      "parentUuid": "c61844f6_973758ae",
+      "range": {
+        "startLine": 174,
+        "startChar": 0,
+        "endLine": 187,
+        "endChar": 42
+      },
+      "revId": "caf900c9d2793fb519abdd0cc2da1381c361876a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
