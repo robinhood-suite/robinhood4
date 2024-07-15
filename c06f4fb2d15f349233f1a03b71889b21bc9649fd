@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "edaa0eaa_c4126db3",
+        "filename": "rbh-find/tests/test_mpifile.bash",
+        "patchSetId": 4
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-07-15T07:52:13Z",
+      "side": 1,
+      "message": "nit: no need to add that line, since the whole directory will be deleted at the end of the test",
+      "range": {
+        "startLine": 126,
+        "startChar": 4,
+        "endLine": 126,
+        "endChar": 14
+      },
+      "revId": "c06f4fb2d15f349233f1a03b71889b21bc9649fd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
