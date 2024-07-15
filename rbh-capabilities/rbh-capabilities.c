@@ -10,12 +10,57 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
+#include <dirent.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
 #include <sysexits.h>
 #include <getopt.h>
 
 #include <robinhood.h>
 #include <robinhood/utils.h>
+#include <robinhood/list.h>
 #include <robinhood/config.h>
+
+#define LIB_RBH_PREFIX "librbh-"
+
+struct rbh_node_capabilities {
+    char *name;
+    struct rbh_list_node list;
+};
+
+static int
+add_list(struct rbh_list_node *head, const char *name)
+{
+    struct rbh_node_capabilities *new_node = malloc(sizeof(*new_node));
+
+    if (new_node == NULL) {
+        perror("malloc");
+        return 1;
+    }
+    new_node->name = strdup(name);
+    if (new_node->name == NULL) {
+        perror("strdup");
+        return 1;
+    }
+    rbh_list_add_tail(head, &new_node->list);
+    return 0;
+}
+
+static bool
+is_name_in_list(struct rbh_list_node *head, const char *name)
+{
+    struct rbh_node_capabilities *node;
+    if (rbh_list_empty(head)) {
+        return false;
+    }
+    rbh_list_foreach(head, node, list) {
+        if (strcmp(node->name, name) == 0)
+            return true;
+    }
+    return false;
+}
 
 static int
 capabilities_translate(const struct rbh_backend_plugin *plugin)
@@ -42,8 +87,84 @@ help()
         "Usage:"
         "  %s <name of backend>   Show capabilities of the given backend"
         " name\n"
-        "  -h --help                 Show this message and exit\n";
+        "Arguments:\n"
+        "  -h --help                 Show this message and exit\n"
+        "  -l --list                 Show the list of installed backends\n";
     return printf(message, program_invocation_short_name);
+}
+
+static int
+search_library(const char *dir, const char *prefix, struct rbh_list_node *head)
+{
+    DIR *dp = opendir(dir);
+    struct dirent *entry;
+
+    if (dp == NULL)
+        return 0;
+
+    while ((entry = readdir(dp)) != NULL) {
+        if (entry->d_type == DT_REG && strstr(entry->d_name, prefix))
+            if (is_name_in_list(head, entry->d_name) == false)
+                add_list(head, entry->d_name);
+    }
+    closedir(dp);
+    return 0;
+}
+
+static int
+print_backend_list(struct rbh_list_node *head)
+{
+    struct rbh_node_capabilities *node;
+    struct rbh_node_capabilities *tmp;
+
+    printf("List of installed backends:\n");
+
+    rbh_list_foreach_safe(head, node, tmp, list) {
+        char *backend_name = node->name + strlen(LIB_RBH_PREFIX);
+        char *suffix_backend_name = strchr(backend_name, '.');
+
+        if (suffix_backend_name) {
+            *suffix_backend_name = '\0';
+            printf("- %s\n", backend_name);
+        } else
+            continue;
+
+        free(node->name);
+        free(node);
+    }
+    return 0;
+}
+
+static int
+rbh_backend_list()
+{
+    const char *library_dirs[] = {
+        "/lib",
+        "/usr/lib",
+        "/usr/local/lib",
+        "/lib64",
+        "/usr/lib64",
+        "/usr/local/lib64",
+    };
+    int len_library = sizeof(library_dirs) / sizeof(library_dirs[0]);
+    struct rbh_list_node *head = malloc(sizeof(struct rbh_list_node));
+
+    rbh_list_init(head);
+
+    for (int i = 0; i < len_library; i++) {
+        struct stat statbuf;
+        if (lstat(library_dirs[i], &statbuf) == -1)
+            continue;
+
+        if (S_ISLNK(statbuf.st_mode))
+            continue;
+
+        search_library(library_dirs[i], LIB_RBH_PREFIX, head);
+    }
+
+    print_backend_list(head);
+    free(head);
+    return 0;
 }
 
 int
@@ -54,6 +175,10 @@ main(int argc, char **argv)
             .name = "help",
             .val = 'h'
         },
+        {
+            .name = "list",
+            .val = 'l'
+        },
         {}
     };
     const struct rbh_backend_plugin *plugin;
@@ -61,19 +186,22 @@ main(int argc, char **argv)
     int option;
 
     if (argc == 1){
-        printf("No backend name given, Please give a backend name\n");
+        fprintf(stderr, "No backend name given, Please give a backend name\n");
         help();
         return EINVAL;
     }
 
-    while ((option = getopt_long(argc, argv, "h", LONG_OPTIONS,
+    while ((option = getopt_long(argc, argv, "hl", LONG_OPTIONS,
                                  NULL)) != -1) {
         switch (option) {
         case 'h':
             help();
             return 0;
+        case 'l':
+            rbh_backend_list();
+            return 0;
         default :
-            fprintf(stderr, "Unrecognized option\n\n");
+            fprintf(stderr, "Unrecognized option\n");
             help();
             return EINVAL;
         }
