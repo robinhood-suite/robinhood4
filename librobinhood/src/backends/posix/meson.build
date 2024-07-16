@@ -9,6 +9,7 @@ librbh_posix = library(
     sources: [
         'posix.c',
         'plugin.c',
+        'xattrs_mapping.c'
     ],
     version: librbh_posix_version, # defined in include/robinhood/backends
     link_with: librobinhood,
