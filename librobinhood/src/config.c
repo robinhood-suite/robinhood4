@@ -312,12 +312,6 @@ find_in_config(const char *_key, struct rbh_value *value)
         return KPR_ERROR;
     }
 
-    /* The configuration file wasn't opened, so consider there is no
-     * configuration file to use, and let the user decide what to do.
-     */
-    if (config == NULL)
-        return KPR_NOT_FOUND;
-
     key = strdup(_key);
     if (key == NULL)
         error(EXIT_FAILURE, ENOMEM, "strdup in rbh_config_find");
@@ -336,6 +330,12 @@ rbh_config_find(const char *key, struct rbh_value *value,
                 enum rbh_value_type expected_type)
 {
     enum key_parse_result rc;
+
+    /* The configuration file wasn't opened, so consider there is no
+     * configuration file to use, and let the user decide what to do.
+     */
+    if (config == NULL)
+        return KPR_NOT_FOUND;
 
     rc = find_in_config(key, value);
     rbh_config_reset();
