@@ -1,5 +1,5 @@
 /* This file is part of RobinHood 4
- * Copyright (C) 2019 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2024 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifer: LGPL-3.0-or-later
@@ -27,6 +27,7 @@
 #include "robinhood/sstack.h"
 #include "robinhood/statx.h"
 
+#include "xattrs_mapping.h"
 
 /*----------------------------------------------------------------------------*
  |                               posix_iterator                               |
@@ -240,9 +241,6 @@ getxattrs(char *proc_fd_path, struct rbh_value_pair **_pairs,
     for (size_t i = 0; i < count; i++, name += strlen(name) + 1) {
         struct rbh_value_pair *pair = &pairs[i - skipped];
         char buffer[XATTR_VALUE_MAX_VFS_SIZE];
-        struct rbh_value value = {
-            .type = RBH_VT_BINARY,
-        };
         ssize_t length;
 
         if (i - skipped == pairs_count) {
@@ -276,12 +274,7 @@ getxattrs(char *proc_fd_path, struct rbh_value_pair **_pairs,
         }
         assert(length <= sizeof(buffer));
 
-        value.binary.data = rbh_sstack_push(xattrs, buffer, length);
-        if (value.binary.data == NULL)
-            return -1;
-        value.binary.size = length;
-
-        pair->value = rbh_sstack_push(values, &value, sizeof(value));
+        pair->value = create_value_from_xattr(name, buffer, length, xattrs);
         if (pair->value == NULL)
             return -1;
     }
