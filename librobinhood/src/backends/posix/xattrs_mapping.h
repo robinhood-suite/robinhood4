@@ -17,4 +17,7 @@ struct rbh_value *
 create_value_from_xattr(const char *name, char *buffer, ssize_t length,
                         struct rbh_sstack *xattrs);
 
+int
+set_xattrs_types_map();
+
 #endif

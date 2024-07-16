@@ -1189,8 +1189,7 @@ rtrim(char *string, char c)
 }
 
 struct rbh_backend *
-rbh_posix_backend_new(const char *path,
-                      __attribute__((unused)) struct rbh_config *config)
+rbh_posix_backend_new(const char *path, struct rbh_config *config)
 {
     struct posix_backend *posix;
 
@@ -1213,6 +1212,16 @@ rbh_posix_backend_new(const char *path,
     posix->iter_new = posix_iterator_new;
     posix->statx_sync_type = AT_RBH_STATX_SYNC_AS_STAT;
     posix->backend = POSIX_BACKEND;
+
+    load_rbh_config(config);
+    if (set_xattrs_types_map()) {
+        int save_errno = errno;
+
+        free(posix->root);
+        free(posix);
+        errno = save_errno;
+        return NULL;
+    }
 
     return &posix->backend;
 }
