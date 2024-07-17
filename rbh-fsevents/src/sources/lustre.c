@@ -18,6 +18,7 @@
 #include <robinhood/fsevent.h>
 #include <robinhood/sstack.h>
 #include <robinhood/statx.h>
+#include <robinhood/utils.h>
 
 #include "source.h"
 #include "utils.h"

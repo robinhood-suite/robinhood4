@@ -14,6 +14,7 @@
 #include <robinhood/fsevent.h>
 #include <robinhood/sstack.h>
 #include <robinhood/statx.h>
+#include <robinhood/utils.h>
 
 #include "source.h"
 #include "utils.h"
@@ -110,21 +111,4 @@ initialize_source_stack(size_t stack_size)
     if (!source_stack)
         error(EXIT_FAILURE, errno,
               "rbh_sstack_new in initialize_source_stack");
-}
-
-int
-str2int64_t(const char *input, int64_t *result)
-{
-    char *end;
-
-    errno = 0;
-    *result = strtol(input, &end, 0);
-    if (errno) {
-        return -1;
-    } else if ((!*result && input == end) || *end != '\0') {
-        errno = EINVAL;
-        return -1;
-    }
-
-    return 0;
 }

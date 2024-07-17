@@ -26,7 +26,6 @@
 #include <robinhood/backend.h>
 #include <robinhood/utils.h>
 #include <rbh-find/filters.h>
-#include <rbh-find/utils.h>
 
 #include "filters.h"
 

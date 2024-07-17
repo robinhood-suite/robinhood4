@@ -166,23 +166,6 @@ str2seconds(enum time_unit unit, const char *string)
     return delta * TIME_UNIT2SECONDS[unit];
 }
 
-int
-str2uint64_t(const char *input, uint64_t *result)
-{
-    char *end;
-
-    errno = 0;
-    *result = strtoull(input, &end, 0);
-    if (errno) {
-        return -1;
-    } else if ((!*result && input == end) || *end != '\0') {
-        errno = EINVAL;
-        return -1;
-    }
-
-    return 0;
-}
-
 const char *
 time_from_timestamp(const time_t *time)
 {
