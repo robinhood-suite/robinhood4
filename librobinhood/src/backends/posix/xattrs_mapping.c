@@ -117,6 +117,20 @@ set_value_to_uint(enum rbh_value_type type, const char *name,
     return value;
 }
 
+static struct rbh_value *
+set_value_to_string(struct rbh_sstack *xattrs, const char *buffer,
+                    ssize_t length, struct rbh_value *value)
+{
+    value->string = rbh_sstack_push(xattrs, buffer, length + 1);
+    if (value->string == NULL)
+        return NULL;
+
+    value->type = RBH_VT_STRING;
+
+    return value;
+}
+
+
 struct rbh_value *
 create_value_from_xattr(const char *name, const char *buffer, ssize_t length,
                         struct rbh_sstack *xattrs)
@@ -148,6 +162,8 @@ create_value_from_xattr(const char *name, const char *buffer, ssize_t length,
         case RBH_VT_UINT64:
             return set_value_to_uint(xattrs_types->pairs[i].value->type,
                                      name, buffer, value);
+        case RBH_VT_STRING:
+            return set_value_to_string(xattrs, buffer, length, value);
         default:
             return set_value_to_binary(xattrs, buffer, length, value);
         }
