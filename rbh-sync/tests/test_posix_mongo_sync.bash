@@ -347,7 +347,38 @@ test_config()
         error "Sync with invalid typing for db address in config should have" \
               "failed"
 
-    return 0
+    echo "---
+xattrs_map:
+    user.blob_int32: int32
+    user.blob_int64: int64
+    user.blob_uint32: unsigned int32
+    user.blob_uint64: unsigned int64
+    user.blob_string: string
+    user.blob_boolean: boolean
+---" > $conf_file
+
+    setfattr -n user.blob_int32 -v 1 $file
+    setfattr -n user.blob_int64 -v 2 $file
+    setfattr -n user.blob_uint32 -v 3 $file
+    setfattr -n user.blob_uint64 -v 4 $file
+    setfattr -n user.blob_string -v five $file
+    setfattr -n user.blob_boolean -v true $file
+
+    rbh_sync --conf $conf_file --one rbh:posix:$file rbh:mongo:$testdb
+
+    mongo $testdb --eval "db.entries.find()"
+    find_attribute '"ns.xattrs.path":"/"' \
+                   '"xattrs.user.blob_int32" : 1'
+    find_attribute '"ns.xattrs.path":"/"' \
+                   '"xattrs.user.blob_int64" : 2'
+    find_attribute '"ns.xattrs.path":"/"' \
+                   '"xattrs.user.blob_uint32" : 3'
+    find_attribute '"ns.xattrs.path":"/"' \
+                   '"xattrs.user.blob_uint64" : 4'
+    find_attribute '"ns.xattrs.path":"/"' \
+                   '"xattrs.user.blob_string" : "five"'
+    find_attribute '"ns.xattrs.path":"/"' \
+                   '"xattrs.user.blob_boolean" : true'
 }
 
 ################################################################################
