@@ -4,7 +4,8 @@
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
 
-integration_tests = ['test_mongo_mongo_sync', 'test_config']
+integration_tests = ['test_posix_mongo_sync', 'test_mongo_mongo_sync',
+                     'test_config']
 
 liblustre = dependency('lustre', disabler: true, required: false)
 
@@ -23,9 +24,6 @@ foreach t: integration_tests
     test(t, e, is_parallel: false)
 endforeach
 
-e = find_program('test_posix_mongo_sync.bash')
-test('test_posix_mongo_sync', e, is_parallel: false, should_fail: true)
-
 # Tests with MPI
 cc = meson.get_compiler('c')
 libmfu = cc.find_library('mfu', disabler: true, required: false)
@@ -37,8 +35,7 @@ if r.returncode() == 0 and libmfu.found()
     posix = find_program('test_posix_mongo_sync.bash')
     test('test_posix_mpi_mongo_sync', posix,
          is_parallel: false,
-         env: env,
-         should_fail: true)
+         env: env)
 
     if liblustre.found()
         lustre = find_program('test_lustre_mongo_sync.bash')
