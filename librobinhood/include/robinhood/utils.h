@@ -66,4 +66,26 @@ get_mount_path(const char *path, char **mount_path);
 char *
 shell2pcre(const char *shell);
 
+/**
+ * str2int64_t - convert a string into a int64_t
+ *
+ * @param input     a string representing a long
+ * @param result    a int64_t represented by \p string
+ *
+ * @return          0 on success, -1 on error
+ */
+int
+str2int64_t(const char *input, int64_t *result);
+
+/**
+ * str2uint64_t - convert a string into a uint64_t
+ *
+ * @param input     a string representing an unsigned long
+ * @param result    a uint64_t represented by \p string
+ *
+ * @return          0 on success, -1 on error
+ */
+int
+str2uint64_t(const char *input, uint64_t *result);
+
 #endif

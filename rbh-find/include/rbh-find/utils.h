@@ -49,17 +49,6 @@ unsigned long
 str2seconds(enum time_unit unit, const char *string);
 
 /**
- * str2uint64_t - convert a string into a uint64_t
- *
- * @param input     a string representing an unsigned long
- * @param result    a uint64_t represented by \p string
- *
- * @return          0 on success, -1 on error
- */
-int
-str2uint64_t(const char *input, uint64_t *result);
-
-/**
  * time_from_timestamp - convert a timestamp to a human-readable string using
  * ctime(3)
  *

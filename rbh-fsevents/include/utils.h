@@ -1,5 +1,8 @@
 /* SPDX-License-Identifier: LGPL-3.0-or-later */
 
+#ifndef RBH_FSEVENTS_UTILS_H
+#define RBH_FSEVENTS_UTILS_H
+
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif
@@ -32,5 +35,4 @@ source_stack_alloc(const void *data, size_t size);
 void
 initialize_source_stack(size_t stack_size);
 
-int
-str2int64_t(const char *input, int64_t *result);
+#endif
