@@ -29,16 +29,10 @@ free_xattrs_variables(void)
         rbh_sstack_destroy(xattrs_types_stack);
 }
 
-struct rbh_value *
-create_value_from_xattr(const char *name, char *buffer, ssize_t length,
-                        struct rbh_sstack *xattrs)
+static struct rbh_value *
+set_value_to_binary(struct rbh_sstack *xattrs, const char *buffer,
+                    ssize_t length, struct rbh_value *value)
 {
-    struct rbh_value *value;
-
-    value = rbh_sstack_push(xattrs, NULL, sizeof(*value));
-    if (value == NULL)
-        return NULL;
-
     value->binary.data = rbh_sstack_push(xattrs, buffer, length);
     if (value->binary.data == NULL)
         return NULL;
@@ -47,6 +41,35 @@ create_value_from_xattr(const char *name, char *buffer, ssize_t length,
     value->type = RBH_VT_BINARY;
 
     return value;
+}
+
+struct rbh_value *
+create_value_from_xattr(const char *name, const char *buffer, ssize_t length,
+                        struct rbh_sstack *xattrs)
+{
+    struct rbh_value *value;
+
+    value = rbh_sstack_push(xattrs, NULL, sizeof(*value));
+    if (value == NULL)
+        return NULL;
+
+    if (xattrs_types == NULL)
+        return set_value_to_binary(xattrs, buffer, length, value);
+
+    for (int i = 0; i < xattrs_types->count; i++) {
+        if (name[0] != xattrs_types->pairs[i].key[0])
+            continue;
+
+        if (strcmp(&name[1], &xattrs_types->pairs[i].key[1]))
+            continue;
+
+        switch (xattrs_types->pairs[i].value->type) {
+        default:
+            return set_value_to_binary(xattrs, buffer, length, value);
+        }
+    }
+
+    return set_value_to_binary(xattrs, buffer, length, value);
 }
 
 static int
