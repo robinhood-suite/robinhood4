@@ -43,6 +43,32 @@ set_value_to_binary(struct rbh_sstack *xattrs, const char *buffer,
     return value;
 }
 
+static struct rbh_value *
+set_value_to_boolean(const char *name, const char *buffer,
+                     ssize_t length, struct rbh_value *value)
+{
+    if (buffer[0] != 't' && buffer[0] != 'f')
+        goto err;
+
+    if (strcmp(buffer, "true") == 0)
+        value->boolean = true;
+    else if (strcmp(buffer, "false") == 0)
+        value->boolean = false;
+    else
+        goto err;
+
+    value->type = RBH_VT_BOOLEAN;
+
+    return value;
+
+err:
+    fprintf(stderr,
+            "Unexpected value for boolean-type xattr '%s', found '%s'\n",
+            name, buffer);
+    errno = EINVAL;
+    return NULL;
+}
+
 struct rbh_value *
 create_value_from_xattr(const char *name, const char *buffer, ssize_t length,
                         struct rbh_sstack *xattrs)
@@ -64,6 +90,8 @@ create_value_from_xattr(const char *name, const char *buffer, ssize_t length,
             continue;
 
         switch (xattrs_types->pairs[i].value->type) {
+        case RBH_VT_BOOLEAN:
+            return set_value_to_boolean(name, buffer, length, value);
         default:
             return set_value_to_binary(xattrs, buffer, length, value);
         }
