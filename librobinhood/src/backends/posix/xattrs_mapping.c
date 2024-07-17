@@ -92,6 +92,31 @@ set_value_to_int(enum rbh_value_type type, const char *name, const char *buffer,
     return value;
 }
 
+static struct rbh_value *
+set_value_to_uint(enum rbh_value_type type, const char *name,
+                  const char *buffer, struct rbh_value *value)
+{
+    uint64_t _value;
+    int rc;
+
+    rc = str2uint64_t(buffer, &_value);
+    if (rc) {
+        fprintf(stderr,
+                "Unexpected value for %s-type xattr '%s', found '%s'\n",
+                value_type2str(type), name, buffer);
+        return NULL;
+    }
+
+    if (type == RBH_VT_UINT32)
+        value->uint32 = _value;
+    else
+        value->uint64 = _value;
+
+    value->type = type;
+
+    return value;
+}
+
 struct rbh_value *
 create_value_from_xattr(const char *name, const char *buffer, ssize_t length,
                         struct rbh_sstack *xattrs)
@@ -119,6 +144,10 @@ create_value_from_xattr(const char *name, const char *buffer, ssize_t length,
         case RBH_VT_INT64:
             return set_value_to_int(xattrs_types->pairs[i].value->type,
                                     name, buffer, value);
+        case RBH_VT_UINT32:
+        case RBH_VT_UINT64:
+            return set_value_to_uint(xattrs_types->pairs[i].value->type,
+                                     name, buffer, value);
         default:
             return set_value_to_binary(xattrs, buffer, length, value);
         }
