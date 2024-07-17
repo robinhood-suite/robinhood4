@@ -9,6 +9,8 @@
 # include "config.h"
 #endif
 
+#include <errno.h>
+
 #include "robinhood/config.h"
 
 #include "xattrs_mapping.h"
@@ -45,6 +47,49 @@ create_value_from_xattr(const char *name, char *buffer, ssize_t length,
     value->type = RBH_VT_BINARY;
 
     return value;
+}
+
+static int
+extract_type_from_map(struct rbh_value_map map, struct rbh_value *value,
+                      int index)
+{
+    enum rbh_value_type type;
+    const char *typing;
+
+    if (map.pairs[index].value->type != RBH_VT_STRING) {
+        fprintf(stderr,
+                "A value corresponding to a typing is not specified as a string in the configuration file (key is '%s')\n",
+                map.pairs[index].key);
+        return -1;
+    }
+
+    typing = map.pairs[index].value->string;
+    type = str2value_type(typing);
+
+    switch (type) {
+    case RBH_VT_BOOLEAN:
+    case RBH_VT_INT32:
+    case RBH_VT_UINT32:
+    case RBH_VT_INT64:
+    case RBH_VT_UINT64:
+    case RBH_VT_STRING:
+    case RBH_VT_BINARY:
+        value->type = type;
+        break;
+    case RBH_VT_SEQUENCE:
+    case RBH_VT_REGEX:
+    case RBH_VT_MAP:
+        fprintf(stderr,
+                "Typings 'regex', 'sequence' and 'map' not managed yet\n");
+        errno = ENOTSUP;
+        return -1;
+    default:
+        fprintf(stderr, "Invalid typing found '%s'\n", typing);
+        errno = EINVAL;
+        return -1;
+    }
+
+    return 0;
 }
 
 int
@@ -85,10 +130,14 @@ set_xattrs_types_map()
         if (_value == NULL)
             return -1;
 
-        _value->type = RBH_VT_BINARY;
+        if (extract_type_from_map(value.map, _value, i))
+            return -1;
 
         pairs[i].value = _value;
     }
+
+    xattrs_types->pairs = pairs;
+    xattrs_types->count = value.map.count;
 
     return 0;
 }

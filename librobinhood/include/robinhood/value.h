@@ -11,6 +11,7 @@
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
+#include <string.h>
 
 struct rbh_value;
 
@@ -118,6 +119,23 @@ value_type2str(enum rbh_value_type type)
     return VALUE_TYPE_NAMES[type];
 }
 
+/**
+ * Convert a string to a rbh_value_type
+ *
+ * @param string   the string to convert
+ *
+ * @return         -1 if the string does not translate to any type,
+ *                 the translated type otherwise
+ */
+static inline enum rbh_value_type
+str2value_type(const char *string)
+{
+    for (enum rbh_value_type i = RBH_VT_BOOLEAN; i <= RBH_VT_MAP; ++i)
+        if (strcmp(string, VALUE_TYPE_NAMES[i]) == 0)
+            return i;
+
+    return -1;
+}
 
 /**
  * Create a new boolean value
