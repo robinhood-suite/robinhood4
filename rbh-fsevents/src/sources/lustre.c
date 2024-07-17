@@ -19,6 +19,7 @@
 #include <robinhood/sstack.h>
 #include <robinhood/statx.h>
 #include <robinhood/config.h>
+#include <robinhood/utils.h>
 
 #include "source.h"
 #include "utils.h"

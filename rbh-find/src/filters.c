@@ -30,6 +30,7 @@
 
 #include <robinhood/backend.h>
 #include <robinhood/sstack.h>
+#include <robinhood/utils.h>
 
 #include "rbh-find/filters.h"
 #include "rbh-find/utils.h"
