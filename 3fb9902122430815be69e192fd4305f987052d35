@@ -22,6 +22,30 @@
       },
       "revId": "3fb9902122430815be69e192fd4305f987052d35",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c9afadf5_e0128657",
+        "filename": "librobinhood/src/backends/lustre/lustre.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 1329,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-07-18T07:29:33Z",
+      "side": 1,
+      "message": "I was also thinking about this, and I came up with 3 possibilities: either change nothing to the code and rely on the fact that if the extended attribute isn\u0027t set, the feature won\u0027t be used; or have another attribute in the config file to allow/block the feature; or what you proposed",
+      "parentUuid": "515089a3_c6d3ce1c",
+      "range": {
+        "startLine": 1329,
+        "startChar": 26,
+        "endLine": 1329,
+        "endChar": 47
+      },
+      "revId": "3fb9902122430815be69e192fd4305f987052d35",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
