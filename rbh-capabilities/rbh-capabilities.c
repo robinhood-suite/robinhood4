@@ -50,9 +50,9 @@ int
 name_in_list(struct node *head, const char *name)
 {
     while (head) {
-        if (strcmp(head->name, name) == 0){
+        if (strcmp(head->name, name) == 0)
             return 1;
-        }
+
         head = head->next;
     }
     return 0;
@@ -63,10 +63,11 @@ capabilities_translate(const struct rbh_backend_plugin *plugin)
 {
     const uint8_t capabilities = plugin->capabilities;
 
-    printf("Capabilities of %s :\n\n",plugin->plugin.name);
+    printf("Capabilities of %s:\n",plugin->plugin.name);
     if (capabilities & RBH_FILTER_OPS)
         printf("- filter\n");
-
+    if (capabilities & RBH_READ_OPS)
+        printf("- read\n");
     if (capabilities & RBH_UPDATE_OPS)
         printf("- update\n");
 
@@ -83,9 +84,17 @@ help()
     const char *message =
         "Usage:\n"
         "  %s <name of backend>   Show capabilities of the given backend"
-        "name\n"
+        " name\n"
         "  --help                 Show this message and exit\n"
-        "  --list                 Show the list of backends\n\n";
+        "  --list                 Show the list of backends\n\n"
+        "Backends capabilities list:\n"
+        "- filter: The ability to read the data after filtering it according to"
+        " different criteria\n"
+        "- read  : The ability to read the data\n"
+        "- update: The ability to update information or metadata of files in"
+        " the backend\n"
+        "- branch: The ability to create a backend from another by selecting"
+        " only a subtree of the original\n";
     return printf(message, program_invocation_short_name);
 }
 
@@ -96,21 +105,18 @@ search_library(const char *dir, const char *pattern, struct node **head)
     DIR *dp = opendir(dir);
     struct dirent *entry;
 
-    if (dp == NULL) {
+    if (dp == NULL)
         return 0;
-    }
 
     while ((entry = readdir(dp)) != NULL) {
         char path[1024];
         snprintf(path, sizeof(path),"%s/%s", dir, entry->d_name);
 
-        if (stat(path, &statbuf) == -1) {
+        if (stat(path, &statbuf) == -1)
             continue;
-        }
 
-        if (S_ISREG(statbuf.st_mode) && strstr(entry->d_name, pattern)) {
+        if (S_ISREG(statbuf.st_mode) && strstr(entry->d_name, pattern))
             add_list(head, entry->d_name);
-        }
     }
     closedir(dp);
     return 0;
@@ -123,24 +129,24 @@ extract_names(struct node *head)
 
     while (head) {
         char *prefix_backend_name = strchr(head->name, '-');
-        if (prefix_backend_name) {
+        if (prefix_backend_name)
             prefix_backend_name++;
-        } else {
+        else {
             head = head->next;
             continue;
         }
 
         char *suffix_backend_name = strchr(prefix_backend_name, '.');
-        if (suffix_backend_name) {
+        if (suffix_backend_name)
             *suffix_backend_name = '\0';
-        } else {
+        else {
             head = head->next;
             continue;
         }
 
-        if (name_in_list(new_node, prefix_backend_name) == 0) {
+        if (name_in_list(new_node, prefix_backend_name) == 0)
             add_list(&new_node, prefix_backend_name);
-        }
+
         head = head->next;
     }
 
@@ -166,13 +172,12 @@ rbh_backend_list()
     struct stat statbuf;
 
     for (int i = 0; i < len_library; i++) {
-        if (lstat(library_dirs[i], &statbuf) == -1) {
+        if (lstat(library_dirs[i], &statbuf) == -1)
             continue;
-        }
 
-        if (S_ISLNK(statbuf.st_mode)) {
+        if (S_ISLNK(statbuf.st_mode))
             continue;
-        }
+
         search_library(library_dirs[i], prefix, &head);
     }
 
