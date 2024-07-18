@@ -1,0 +1,188 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "54fe4da3_45847545",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-07-18T09:33:07Z",
+      "side": 1,
+      "message": "style: commit subject too long\nsuggest: `capabilities: differentiate read and filter in backends`",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 8,
+        "endChar": 41
+      },
+      "revId": "b1abdeee3242281e4450330bd4e16e27cf9d2c0a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d6e7e87c_16e45866",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-07-18T09:33:07Z",
+      "side": 1,
+      "message": "suggest: add theses tests in a separate commit",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 63
+      },
+      "revId": "b1abdeee3242281e4450330bd4e16e27cf9d2c0a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "987756fc_c8616eda",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-07-18T09:33:07Z",
+      "side": 1,
+      "message": "minor: change to `the ability to read data over a subsection of a backend`",
+      "range": {
+        "startLine": 96,
+        "startChar": 19,
+        "endLine": 97,
+        "endChar": 40
+      },
+      "revId": "b1abdeee3242281e4450330bd4e16e27cf9d2c0a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8eb7c1b3_92df3eb9",
+        "filename": "rbh-capabilities/tests/capabilities.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-07-18T09:33:07Z",
+      "side": 1,
+      "message": "suggest: maybe in another patch, but you could try to use the conditions specified in the meson files of tests in other tools (like rbh-sync for instance) to add checks that the MPI backends are found, that the Lustre backend is found, same for Hestia",
+      "range": {
+        "startLine": 19,
+        "startChar": 4,
+        "endLine": 20,
+        "endChar": 36
+      },
+      "revId": "b1abdeee3242281e4450330bd4e16e27cf9d2c0a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "38536b9a_51c9128b",
+        "filename": "rbh-capabilities/tests/capabilities.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-07-18T09:33:07Z",
+      "side": 1,
+      "message": "minor: this one is not necessary, since it is only testing the printf you do actually prints stuff, which is not relevant here",
+      "range": {
+        "startLine": 21,
+        "startChar": 4,
+        "endLine": 21,
+        "endChar": 35
+      },
+      "revId": "b1abdeee3242281e4450330bd4e16e27cf9d2c0a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "29962d95_0c5d04ac",
+        "filename": "rbh-capabilities/tests/capabilities.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-07-18T09:33:07Z",
+      "side": 1,
+      "message": "major: this is not actually verifying the command failed. Check the tests of rbh-find-lustre to see how to verify a command fails and print a message if it didn\u0027t",
+      "range": {
+        "startLine": 41,
+        "startChar": 4,
+        "endLine": 42,
+        "endChar": 38
+      },
+      "revId": "b1abdeee3242281e4450330bd4e16e27cf9d2c0a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6bd28d2f_dd55aaf5",
+        "filename": "rbh-capabilities/tests/test_utils.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-07-18T09:33:07Z",
+      "side": 1,
+      "message": "minor: these are not used, so you can remove them",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 1
+      },
+      "revId": "b1abdeee3242281e4450330bd4e16e27cf9d2c0a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "85b68cc3_cba9e7ae",
+        "filename": "rbh-capabilities/tests/test_utils.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-07-18T09:33:07Z",
+      "side": 1,
+      "message": "minor: idem",
+      "range": {
+        "startLine": 51,
+        "startChar": 0,
+        "endLine": 54,
+        "endChar": 1
+      },
+      "revId": "b1abdeee3242281e4450330bd4e16e27cf9d2c0a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
