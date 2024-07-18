@@ -1,0 +1,165 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cc368c0a_224ed4f7",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-07-18T09:07:20Z",
+      "side": 1,
+      "message": "suggest: fprintf to stderr was not done",
+      "range": {
+        "startLine": 29,
+        "startChar": 8,
+        "endLine": 29,
+        "endChar": 14
+      },
+      "revId": "fb4c112b40a574ffd2e8662bda9339ae8514c932",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d06c9232_ca0f4b41",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-07-18T09:07:20Z",
+      "side": 1,
+      "message": "minor: unnecessary ;",
+      "range": {
+        "startLine": 31,
+        "startChar": 5,
+        "endLine": 31,
+        "endChar": 6
+      },
+      "revId": "fb4c112b40a574ffd2e8662bda9339ae8514c932",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "52b2f3a5_0ba5c750",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-07-18T09:07:20Z",
+      "side": 1,
+      "message": "suggest: if plugin is NULL, printf the message (or fprintf if you do the other change) and then outside of the if, return plugin.\n```suggestion\n    if (plugin \u003d\u003d NULL)\n        fprintf(stderr, \"This backend does not exist\\n\\n\");\n    \n    return plugin;\n```",
+      "range": {
+        "startLine": 26,
+        "startChar": 4,
+        "endLine": 31,
+        "endChar": 6
+      },
+      "revId": "fb4c112b40a574ffd2e8662bda9339ae8514c932",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c873d569_ac89258b",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-07-18T09:07:20Z",
+      "side": 1,
+      "message": "style: add an empty line after the variable declarations",
+      "range": {
+        "startLine": 38,
+        "startChar": 4,
+        "endLine": 38,
+        "endChar": 10
+      },
+      "revId": "fb4c112b40a574ffd2e8662bda9339ae8514c932",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dbfcab8f_02c123a7",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-07-18T09:07:20Z",
+      "side": 1,
+      "message": "minor: no need for any of the brackets after the if",
+      "range": {
+        "startLine": 41,
+        "startChar": 4,
+        "endLine": 41,
+        "endChar": 5
+      },
+      "revId": "fb4c112b40a574ffd2e8662bda9339ae8514c932",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "73e37b4e_804ccb61",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-07-18T09:07:20Z",
+      "side": 1,
+      "message": "minor: no need for a second \u0027\\n\u0027",
+      "range": {
+        "startLine": 92,
+        "startChar": 50,
+        "endLine": 92,
+        "endChar": 52
+      },
+      "revId": "fb4c112b40a574ffd2e8662bda9339ae8514c932",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a23df9ff_dc585d27",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-07-18T09:07:20Z",
+      "side": 1,
+      "message": "style: we declare all the variables at the start of the block (here, the start of the function), and assign them values when needed. So `arg \u003d argv[optind];` can stay here, but `const char *arg` goes at the top. Same for the line below",
+      "range": {
+        "startLine": 98,
+        "startChar": 3,
+        "endLine": 98,
+        "endChar": 20
+      },
+      "revId": "fb4c112b40a574ffd2e8662bda9339ae8514c932",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
