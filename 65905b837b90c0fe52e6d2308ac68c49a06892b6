@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "da8d64ca_647741ce",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-07-18T09:17:27Z",
+      "side": 1,
+      "message": "style: commit subject is too long\nsuggest: `capabilities: add listing of available backends`",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 8,
+        "endChar": 19
+      },
+      "revId": "65905b837b90c0fe52e6d2308ac68c49a06892b6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9ed4c34b_a7a36316",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-07-18T09:17:27Z",
+      "side": 1,
+      "message": "major: this patch can be simplified by using the API in librobinhood to create lists (albeit doubly linked ones). Check `librobinhood/include/robinhood/list.h` for more info",
+      "range": {
+        "startLine": 25,
+        "startChar": 0,
+        "endLine": 28,
+        "endChar": 2
+      },
+      "revId": "65905b837b90c0fe52e6d2308ac68c49a06892b6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "49aa77c4_a3bc39ff",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-07-18T09:17:27Z",
+      "side": 1,
+      "message": "style: inverted pyramid",
+      "range": {
+        "startLine": 95,
+        "startChar": 4,
+        "endLine": 97,
+        "endChar": 25
+      },
+      "revId": "65905b837b90c0fe52e6d2308ac68c49a06892b6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "04693f25_9507963d",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-07-18T09:17:27Z",
+      "side": 1,
+      "message": "nit: statbuf can be local to the for loop",
+      "range": {
+        "startLine": 166,
+        "startChar": 4,
+        "endLine": 166,
+        "endChar": 24
+      },
+      "revId": "65905b837b90c0fe52e6d2308ac68c49a06892b6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
