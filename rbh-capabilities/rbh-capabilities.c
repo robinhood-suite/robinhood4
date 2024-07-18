@@ -71,13 +71,13 @@ capabilities_translate(const struct rbh_backend_plugin *plugin)
 
     printf("Capabilities of %s:\n",plugin->plugin.name);
     if (capabilities & RBH_FILTER_OPS)
-        printf("- filter\n");
-
+        printf("- filter: rbh-find [source]\n");
+    if (capabilities & RBH_SYNC_OPS)
+        printf("- synchronisation: rbh-sync [source]\n");
     if (capabilities & RBH_UPDATE_OPS)
-        printf("- update\n");
-
+        printf("- update: rbh-sync [target]\n");
     if (capabilities & RBH_BRANCH_OPS)
-        printf("- branch\n");
+        printf("- branch: rbh-sync [source for partial processing]\n");
 
     return 0;
 }
@@ -91,7 +91,14 @@ help()
         " name\n"
         "Arguments:\n"
         "  -h --help                 Show this message and exit\n"
-        "  -l --list                 Show the list of installed backends\n";
+        "  -l --list                 Show the list of installed backends\n\n"
+        "Backends capabilities list:\n"
+        "- filter: The ability to read the data after filtering it according to"
+        " different criteria\n"
+        "- synchronisation: The ability to read the data\n"
+        "- update: The ability to update information or metadata of files in"
+        " the backend\n"
+        "- branch: The ability to read data over a subsection of a backend\n";
     return printf(message, program_invocation_short_name);
 }
 
