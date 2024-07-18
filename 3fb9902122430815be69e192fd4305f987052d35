@@ -46,6 +46,30 @@
       },
       "revId": "3fb9902122430815be69e192fd4305f987052d35",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "23427c95_607b84a1",
+        "filename": "librobinhood/src/backends/lustre/lustre.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 1329,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-07-18T07:35:16Z",
+      "side": 1,
+      "message": "This change can be made in another patch. This can be landed as is. But we should definitely save this for later. To gain a few extra performance, I think we should avoid computing the retentition and store it in the DB if it\u0027s not used. As for how we configure it, both option are fine. I think I prefer \"if it\u0027s not in the config, it\u0027s not used\". Rather than an explicit flag to disable it. But I don\u0027t have a strong opinion about this.",
+      "parentUuid": "c9afadf5_e0128657",
+      "range": {
+        "startLine": 1329,
+        "startChar": 26,
+        "endLine": 1329,
+        "endChar": 47
+      },
+      "revId": "3fb9902122430815be69e192fd4305f987052d35",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
