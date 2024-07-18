@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "515089a3_c6d3ce1c",
+        "filename": "librobinhood/src/backends/lustre/lustre.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 1329,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-07-18T07:21:54Z",
+      "side": 1,
+      "message": "comment: reading this makes me think about how the admin can disable this feature. Because we always have a fallback. In this case, for optional features, maybe we shouldn\u0027t have a fallback. Which means that if the key is not in the configuration, we won\u0027t retrieve the attribute.",
+      "range": {
+        "startLine": 1329,
+        "startChar": 26,
+        "endLine": 1329,
+        "endChar": 47
+      },
+      "revId": "3fb9902122430815be69e192fd4305f987052d35",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
