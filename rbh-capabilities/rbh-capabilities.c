@@ -63,10 +63,11 @@ capabilities_translate(const struct rbh_backend_plugin *plugin)
 {
     const uint8_t capabilities = plugin->capabilities;
 
-    printf("Capabilities of %s :\n\n",plugin->plugin.name);
+    printf("Capabilities of %s:\n",plugin->plugin.name);
     if (capabilities & RBH_FILTER_OPS)
         printf("- filter\n");
-
+    if (capabilities & RBH_READ_OPS)
+        printf("- read\n");
     if (capabilities & RBH_UPDATE_OPS)
         printf("- update\n");
 
@@ -83,9 +84,16 @@ help()
     const char *message =
         "Usage:\n"
         "  %s <name of backend>   Show capabilities of the given backend"
-        "name\n"
+        " name\n"
         "  --help                 Show this message and exit\n"
-        "  --list                 Show the list of backends\n\n";
+        "  --list                 Show the list of backends\n\n"
+        "Backends capabilities list:\n"
+        "- filter: The ability to read the data after filtering it according to"
+        " different criteria\n"
+        "- read  : The ability to read the data\n"
+        "- update: The ability to update information or metadata of files in"
+        " the backend\n"
+        "- branch: The ability to read data over a subsection of a backend\n";
     return printf(message, program_invocation_short_name);
 }
 
@@ -135,9 +143,9 @@ extract_names(struct node *head)
             continue;
         }
 
-        if (name_in_list(new_node, prefix_backend_name) == 0) {
+        if (name_in_list(new_node, prefix_backend_name) == 0)
             add_list(&new_node, prefix_backend_name);
-        }
+
         head = head->next;
     }
 
