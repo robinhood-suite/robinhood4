@@ -70,10 +70,10 @@ capabilities_translate(const struct rbh_backend_plugin *plugin)
     printf("Capabilities of %s:\n",plugin->plugin.name);
     if (capabilities & RBH_FILTER_OPS)
         printf("- filter\n");
-
+    if (capabilities & RBH_READ_OPS)
+        printf("- read\n");
     if (capabilities & RBH_UPDATE_OPS)
         printf("- update\n");
-
     if (capabilities & RBH_BRANCH_OPS)
         printf("- branch\n");
 
@@ -89,8 +89,14 @@ help()
         " name\n"
         "Arguments:\n"
         "  -h --help                 Show this message and exit\n"
-        "  -l --list                 Show the list of backends\n";
->>>>>>> 22c32d1 (Capabilities: Add listing of installed backends.)
+        "  -l --list                 Show the list of backends\n"
+        "Backends capabilities list:\n"
+        "- filter: The ability to read the data after filtering it according to"
+        " different criteria\n"
+        "- read  : The ability to read the data\n"
+        "- update: The ability to update information or metadata of files in"
+        " the backend\n"
+        "- branch: The ability to read data over a subsection of a backend\n";
     return printf(message, program_invocation_short_name);
 }
 
@@ -145,7 +151,7 @@ extract_names(struct rbh_list_node *head)
         else
             continue;
 
-        if (name_in_list(new_list, prefix_backend_name) == 0){
+        if (name_in_list(new_list, prefix_backend_name) == 0) {
             if (add_list(new_list, prefix_backend_name) != 0) {
                 free(new_list);
                 return NULL;
