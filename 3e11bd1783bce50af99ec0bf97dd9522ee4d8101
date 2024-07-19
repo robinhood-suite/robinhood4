@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a40916c2_73e9e919",
+        "filename": "rbh-find-lustre/tests/test_pool.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-07-19T13:22:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e48dccb0_89eab6dd",
+      "range": {
+        "startLine": 39,
+        "startChar": 40,
+        "endLine": 39,
+        "endChar": 47
+      },
+      "revId": "3e11bd1783bce50af99ec0bf97dd9522ee4d8101",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6a40401c_6da2b3cb",
@@ -37,6 +61,24 @@
       "writtenOn": "2024-06-11T07:05:11Z",
       "side": 1,
       "message": "defect: it doesn\u0027t correspond with his declaration in filters.h. It should be `regex2filter(enum predicate predicate, ...)`",
+      "revId": "3e11bd1783bce50af99ec0bf97dd9522ee4d8101",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e2f0e490_40ff5aef",
+        "filename": "rbh-find/src/filters.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-07-19T13:22:37Z",
+      "side": 1,
+      "message": "Mixed the two around, this one should be shell_regex2filter, the one below is regex2filter. Updated the declarations aswell",
+      "parentUuid": "6a40401c_6da2b3cb",
       "revId": "3e11bd1783bce50af99ec0bf97dd9522ee4d8101",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
@@ -64,6 +106,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0ecca49e_c94d8464",
+        "filename": "rbh-find/src/filters.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-07-19T13:22:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b4a0b3cb_647d6601",
+      "range": {
+        "startLine": 67,
+        "startChar": 62,
+        "endLine": 67,
+        "endChar": 67
+      },
+      "revId": "3e11bd1783bce50af99ec0bf97dd9522ee4d8101",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0bcbecab_40ce0b95",
@@ -77,6 +143,24 @@
       "writtenOn": "2024-06-11T07:05:11Z",
       "side": 1,
       "message": "defect: same as above",
+      "revId": "3e11bd1783bce50af99ec0bf97dd9522ee4d8101",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3745c82e_8bf93a7c",
+        "filename": "rbh-find/src/filters.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-07-19T13:22:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0bcbecab_40ce0b95",
       "revId": "3e11bd1783bce50af99ec0bf97dd9522ee4d8101",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
