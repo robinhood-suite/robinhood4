@@ -236,7 +236,7 @@ main(int argc, char **argv)
             rbh_backend_list();
             return 0;
         default :
-            fprintf(stderr, "Unrecognized option\n\n");
+            fprintf(stderr, "Unrecognized option\n");
             help();
             return EINVAL;
         }
