@@ -3,7 +3,6 @@
 # 		      alternatives
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
-
 project(
 	'rbh-capabilities',
 	'c',
@@ -14,12 +13,9 @@ project(
 		'werror=true',
 	],
 )
-
 # GNU extensions
 add_project_arguments(['-D_GNU_SOURCE',], language: 'c')
-
 librobinhood = dependency('robinhood', version: '>=0.0.0')
-
 executable(
 	'rbh-capabilities',
 	sources: [
@@ -28,5 +24,5 @@ executable(
 	dependencies: [librobinhood],
 	install: true,
 )
-
 subdir('tests')
+
