@@ -13,18 +13,6 @@
 SUITE=${BASH_SOURCE##*/}
 SUITE=${SUITE%.*}
 
-__rbh_find=$(PATH="$PWD:$PATH" which rbh-find)
-rbh_find()
-{
-    "$__rbh_find" "$@"
-}
-
-__mongo=$(which mongosh || which mongo)
-mongo()
-{
-    "$__mongo" --quiet "$@"
-}
-
 setup()
 {
     # Create a test directory and `cd` into it
@@ -46,11 +34,6 @@ error()
 {
     echo "$*"
     exit 1
-}
-
-difflines()
-{
-    diff -y - <([ $# -eq 0 ] && printf '' || printf '%s\n' "$@")
 }
 
 run_tests()

@@ -101,9 +101,9 @@ help()
 static int
 search_library(const char *dir, const char *pattern, struct node **head)
 {
-    struct stat statbuf;
     DIR *dp = opendir(dir);
     struct dirent *entry;
+    struct stat statbuf;
 
     if (dp == NULL)
         return 0;
@@ -169,9 +169,9 @@ rbh_backend_list()
     struct node *head = NULL;
     struct node *backends_list;
     struct node *current;
-    struct stat statbuf;
 
     for (int i = 0; i < len_library; i++) {
+        struct stat statbuf;
         if (lstat(library_dirs[i], &statbuf) == -1)
             continue;
 
@@ -217,8 +217,8 @@ main(int argc, char **argv)
         },
         {}
     };
-    const char *arg = argv[optind];
-    const struct rbh_backend_plugin *plugin = rbh_backend_plugin_import(arg);
+    const struct rbh_backend_plugin *plugin;
+    const char *arg;
     int option;
 
     if (argc == 1){
@@ -237,12 +237,14 @@ main(int argc, char **argv)
             rbh_backend_list();
             return 0;
         default :
-            fprintf(stderr, "Unrecognized option\n\n");
+            fprintf(stderr, "Unrecognized option\n");
             help();
             return EINVAL;
         }
     }
 
+    arg = argv[optind];
+    plugin = rbh_backend_plugin_import(arg);
 
     if (plugin == NULL) {
         fprintf(stderr, "This backend does not exist\n\n");
