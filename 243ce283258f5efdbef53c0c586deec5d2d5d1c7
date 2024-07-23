@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "158ecad5_6de7683a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-07-23T14:37:47Z",
+      "side": 1,
+      "message": "nit: pkg",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 9
+      },
+      "revId": "243ce283258f5efdbef53c0c586deec5d2d5d1c7",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ec0d403e_eae4abde",
+        "filename": "librobinhood/src/backends/mongo/meson.build",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-07-23T14:37:47Z",
+      "side": 1,
+      "message": "minor: why not remove it?",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 54
+      },
+      "revId": "243ce283258f5efdbef53c0c586deec5d2d5d1c7",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "72c5b265_5924117e",
+        "filename": "librobinhood/src/meson.build",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-07-23T14:37:47Z",
+      "side": 1,
+      "message": "question: does that mean this package will also need to be updated?",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 8,
+        "endChar": 2
+      },
+      "revId": "243ce283258f5efdbef53c0c586deec5d2d5d1c7",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
