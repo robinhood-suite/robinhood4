@@ -327,8 +327,6 @@ find_in_config(const char *_key, struct rbh_value *value)
 
     if (result == KPR_ERROR)
         errno = EINVAL;
-    else if (result == KPR_NOT_FOUND)
-        fprintf(stderr, "Failed to find key '%s' in rbh_config_find\n", _key);
 
     return result;
 }
