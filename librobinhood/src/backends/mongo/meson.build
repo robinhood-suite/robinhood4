@@ -7,7 +7,7 @@
 libmongoc = dependency('libmongoc-1.0', version: '>=1.3.6')
 libbson = dependency('libbson-1.0', version: '>=1.16.0')
 # This dependency will be removed soon
-miniyaml = dependency('miniyaml', version: '>=0.0.0')
+#miniyaml = dependency('miniyaml', version: '>=1.0.0')
 
 librbh_mongo = library(
     'rbh-mongo',

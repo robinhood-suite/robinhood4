@@ -5,7 +5,7 @@
 # SPDX-License-Identifer: LGPL-3.0-or-later
 
 libdl = cc.find_library('dl', required: false)
-miniyaml = dependency('miniyaml', version: '>=0.0.0')
+miniyaml = dependency('miniyaml', version: '>=0.1.0')
 
 librobinhood = library(
     'robinhood',

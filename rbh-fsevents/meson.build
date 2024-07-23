@@ -3,7 +3,7 @@
 project(
     'rbh-fsevents',
     'c',
-    version: '0.0.0',
+    version: '1.0.0',
     license: 'LGPL3.0-or-later',
     default_options: [
         'warning_level=2',
@@ -31,8 +31,8 @@ add_project_arguments(['-DHAVE_CONFIG_H',], language: 'c')
 extra_sources = []
 extra_dependencies = []
 
-librobinhood = dependency('robinhood', version: '>=0.0.0')
-miniyaml = dependency('miniyaml', version: '>=0.0.0')
+librobinhood = dependency('robinhood', version: '>=1.0.0')
+miniyaml = dependency('miniyaml', version: '>=0.1.0')
 liblustre = dependency('lustre', required: false)
 if not liblustre.found()
     liblustre = cc.find_library('lustreapi', required: false)
