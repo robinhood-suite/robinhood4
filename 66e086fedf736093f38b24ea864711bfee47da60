@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "53b3de05_eab3b936",
+        "filename": "rbh-capabilities/tests/capabilities.bash",
+        "patchSetId": 11
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2024-07-23T15:39:01Z",
+      "side": 1,
+      "message": "style: you should add an empty line to separate two functions.",
+      "range": {
+        "startLine": 18,
+        "startChar": 0,
+        "endLine": 19,
+        "endChar": 2
+      },
+      "revId": "66e086fedf736093f38b24ea864711bfee47da60",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0aea915a_70001e0e",
+        "filename": "rbh-capabilities/tests/capabilities.bash",
+        "patchSetId": 11
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2024-07-23T15:39:01Z",
+      "side": 1,
+      "message": "style: you should add an empty line to separate two functions.",
+      "range": {
+        "startLine": 25,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 2
+      },
+      "revId": "66e086fedf736093f38b24ea864711bfee47da60",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c9604bcc_4fa06e2e",
+        "filename": "rbh-capabilities/tests/capabilities.bash",
+        "patchSetId": 11
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2024-07-23T15:39:01Z",
+      "side": 1,
+      "message": "style: you should add an empty line to separate two functions.",
+      "range": {
+        "startLine": 31,
+        "startChar": 0,
+        "endLine": 33,
+        "endChar": 1
+      },
+      "revId": "66e086fedf736093f38b24ea864711bfee47da60",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "90780a32_98609912",
+        "filename": "rbh-capabilities/tests/capabilities.bash",
+        "patchSetId": 11
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2024-07-23T15:39:01Z",
+      "side": 1,
+      "message": "question: why not testing mpi and lustre backend ? Your stack was also setting capabilites for this two backends ? Are test only installing mongo and posix ?",
+      "range": {
+        "startLine": 36,
+        "startChar": 0,
+        "endLine": 38,
+        "endChar": 2
+      },
+      "revId": "66e086fedf736093f38b24ea864711bfee47da60",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e06e65fe_61255214",
+        "filename": "rbh-capabilities/tests/test_utils.bash",
+        "patchSetId": 11
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2024-07-23T15:39:01Z",
+      "side": 1,
+      "message": "question: The rbh project does not have already a testing framework available ?",
+      "range": {
+        "startLine": 39,
+        "startChar": 0,
+        "endLine": 54,
+        "endChar": 1
+      },
+      "revId": "66e086fedf736093f38b24ea864711bfee47da60",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
