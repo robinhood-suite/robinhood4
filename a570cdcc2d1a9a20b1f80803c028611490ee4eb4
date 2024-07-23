@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0a7266b3_0b7e7049",
+        "filename": "rbh-find/include/rbh-find/filters.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-07-23T09:47:32Z",
+      "side": 1,
+      "message": "suggest: lower or equal to?",
+      "range": {
+        "startLine": 122,
+        "startChar": 35,
+        "endLine": 122,
+        "endChar": 45
+      },
+      "revId": "a570cdcc2d1a9a20b1f80803c028611490ee4eb4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c77a7339_928c71c2",
+        "filename": "rbh-find/include/rbh-find/filters.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-07-23T09:47:32Z",
+      "side": 1,
+      "message": "suggest: I think `]1T; 2T]` is more understandable, but maybe you put this one because mongo request works with `lesser than` and `greater than` only?",
+      "range": {
+        "startLine": 123,
+        "startChar": 46,
+        "endLine": 123,
+        "endChar": 58
+      },
+      "revId": "a570cdcc2d1a9a20b1f80803c028611490ee4eb4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ab79c98c_4783e9a4",
+        "filename": "rbh-find/src/filters.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 295,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-07-23T09:47:32Z",
+      "side": 1,
+      "message": "typo: to remove",
+      "range": {
+        "startLine": 295,
+        "startChar": 30,
+        "endLine": 295,
+        "endChar": 32
+      },
+      "revId": "a570cdcc2d1a9a20b1f80803c028611490ee4eb4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
