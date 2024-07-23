@@ -12,12 +12,13 @@ project(
 
 specfile = configuration_data()
 specfile.set('version', meson.project_version())
+specfile.set('file', 'robinhood4.ocean.spec')
 configure_file(
     input: 'robinhood4.ocean.spec.in',
-    output: 'robinhood4.ocean.spec',
+    output: specfile.get('file'),
     configuration: specfile,
 )
-meson.add_dist_script('utils/add_specfile_to_dist.sh')
+meson.add_dist_script('utils/add_specfile_to_dist.sh', specfile.get('file'))
 custom_target('rpm',
     output: 'robinhood4-' + meson.project_version() + '.ocean.rpm',
     command: [

@@ -1,3 +1,3 @@
 #!/bin/sh
 
-cp "$MESON_BUILD_ROOT"/robinhood4.ocean.spec "$MESON_DIST_ROOT"
+cp "$MESON_BUILD_ROOT"/$1 "$MESON_DIST_ROOT"
