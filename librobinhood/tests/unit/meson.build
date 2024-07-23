@@ -11,6 +11,8 @@ if not check.found()
     subdir_done()
 endif
 
+miniyaml = dependency('miniyaml', version: '>=0.1.0')
+
 # force tests to use the newly built binaries over paths in
 # LD_LIBRARY_PATH. The problem is that recent linkers will
 # use RUNPATH when meson requests -rpath, and runpath has
@@ -31,7 +33,7 @@ foreach t: ['check_backend', 'check_filter', 'check_fsentry',
             'check_statx', 'check_uri', 'check_value']
     test(t,
          executable(t, t + '.c',
-                    dependencies: [check],
+                    dependencies: [check, miniyaml],
                     link_with: [librobinhood],
                     include_directories: rbh_include),
          env: env)
@@ -40,7 +42,7 @@ endforeach
 foreach t: ['check_posix']
     test(t,
          executable(t, t + '.c',
-                    dependencies: [check],
+                    dependencies: [check, miniyaml],
                     link_with: [librobinhood, librbh_posix],
                     include_directories: rbh_include),
          env: env)
@@ -49,7 +51,7 @@ endforeach
 foreach t: ['check_lustre']
     test(t,
          executable(t, t + '.c',
-                    dependencies: [check],
+                    dependencies: [check, miniyaml],
                     link_with: [librobinhood, librbh_lustre],
                     include_directories: rbh_include),
          env: env)
@@ -63,7 +65,7 @@ if r.returncode() == 0 and libmfu.found()
     env.prepend('CK_FORK', 'no')
     foreach t: ['check_lustre_mpi']
         executable(t, t + '.c',
-            dependencies: [check],
+            dependencies: [check, miniyaml],
             link_with: [librobinhood, librbh_lustre_mpi],
             include_directories: rbh_include)
     endforeach
@@ -75,7 +77,7 @@ if r.returncode() == 0 and libmfu.found()
 
     foreach t: ['check_posix_mpi']
         executable(t, t + '.c',
-            dependencies: [check],
+            dependencies: [check, miniyaml],
             link_with: [librobinhood, librbh_posix_mpi],
             include_directories: rbh_include)
     endforeach

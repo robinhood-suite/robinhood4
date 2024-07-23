@@ -8,10 +8,23 @@ License: LGPLv3
 URL:     https://github.com/robinhood-suite/robinhood4.git
 Source0: %{name}-%{version}.tar.xz
 
+# build options || .rpmmacros options || change to default action
+# ==============  ====================  ===========================
+# --with mfu    ||   %%_with_mfu 1    || force openmpi and libmfu as dependency
+
+%bcond_with mfu
+
+Conflicts: robinhood
+
 Requires: mongo-c-driver-libs
 # The MongoDB dependency can be found here: https://repo.mongodb.org/yum/redhat/
-Requires: mongodb-org
+Requires: (mongodb-org or mongodb)
 Requires: lustre-client
+
+%if %{with mfu}
+Requires: openmpi
+Requires: libmfu
+%endif
 
 BuildRequires: meson
 BuildRequires: gcc
@@ -22,6 +35,11 @@ BuildRequires: (lustre-client < 2.15 or lustre-devel)
 BuildRequires: libyaml-devel
 BuildRequires: pkgconf-pkg-config
 
+%if %{with mfu}
+BuildRequires: openmpi-devel
+BuildRequires: libmfu-devel
+%endif
+
 %description
 The robinhood4 tools necessary for the retention feature. Includes librobinhood
 with the Lustre backend, rbh-sync, rbh-find, rbh-find-lustre, rbh-fsevents and
@@ -30,7 +48,8 @@ It is installed on machines that run a Mongo database.
 
 %package devel
 Summary: C API for RobinHood V4 tool suite.
-Requires: robinhood4
+Conflicts: robinhood
+Requires: robinhood4 >= 1.0
 Requires: pkgconf-pkg-config
 Requires: (lustre-client < 2.15 or lustre-devel)
 
@@ -43,8 +62,8 @@ suite from a C program.
 
 %build
 export DIR=$PWD
-for project in librobinhood rbh-sync rbh-find rbh-find-lustre miniyaml \
-               rbh-fsevents utils; do
+for project in miniyaml librobinhood rbh-sync rbh-find rbh-find-lustre \
+               rbh-fsevents rbh-capabilities utils; do
     cd $project
     export LDFLAGS="$LDFLAGS -L$DIR/$project/x86_64-redhat-linux-gnu/src"
     export CFLAGS="$CFLAGS -I$DIR/$project/include -g"
@@ -55,8 +74,8 @@ for project in librobinhood rbh-sync rbh-find rbh-find-lustre miniyaml \
 done
 
 %install
-for project in librobinhood rbh-sync rbh-find rbh-find-lustre miniyaml \
-               rbh-fsevents utils; do
+for project in miniyaml librobinhood rbh-sync rbh-find rbh-find-lustre \
+               rbh-fsevents rbh-capabilities utils; do
     cd $project
     %meson_install
     if [ "$project" == "librobinhood" ]; then
@@ -69,8 +88,11 @@ done
 %files
 %{_libdir}/librobinhood.so.*
 %{_libdir}/librbh-lustre.so*
+%{_libdir}/librbh-lustre-mpi.so*
 %{_libdir}/librbh-mongo.so*
+%{_libdir}/librbh-mpi-file.so*
 %{_libdir}/librbh-posix.so*
+%{_libdir}/librbh-posix-mpi.so*
 %{_libdir}/pkgconfig/robinhood.pc
 %{_bindir}/rbh-sync
 %{_bindir}/rbh-find
@@ -80,6 +102,7 @@ done
 %{_libdir}/libminiyaml.so.*
 %{_libdir}/pkgconfig/miniyaml.pc
 %{_bindir}/rbh-fsevents
+%{_bindir}/rbh-capabilities
 %{_bindir}/rbh-update-retention
 
 %files devel
@@ -87,8 +110,12 @@ done
 %{_includedir}/robinhood.h
 %{_includedir}/robinhood/backend.h
 %{_includedir}/robinhood/backends/lustre.h
+%{_includedir}/robinhood/backends/lustre_mpi.h
 %{_includedir}/robinhood/backends/mongo.h
+%{_includedir}/robinhood/backends/mpi_file.h
 %{_includedir}/robinhood/backends/posix.h
+%{_includedir}/robinhood/backends/posix_mpi.h
+%{_includedir}/robinhood/config.h
 %{_includedir}/robinhood/filter.h
 %{_includedir}/robinhood/fsentry.h
 %{_includedir}/robinhood/fsevent.h
@@ -102,6 +129,7 @@ done
 %{_includedir}/robinhood/queue.h
 %{_includedir}/robinhood/ring.h
 %{_includedir}/robinhood/ringr.h
+%{_includedir}/robinhood/serialization.h
 %{_includedir}/robinhood/sstack.h
 %{_includedir}/robinhood/stack.h
 %{_includedir}/robinhood/statx.h
@@ -123,6 +151,9 @@ done
 ldconfig
 
 %changelog
-* Wed Feb 28 2024 - Yoann Valeri <yoann.valeri@cea.fr> - 0.1-1
-- First version
-- Support the POSIX, Mongo and Lustre backends
+* Tue Jul 23 2024 - Yoann Valeri <yoann.valeri@cea.fr> - 1.0-1
+- First version of RobinHood V4
+- Support the following backends: POSIX, Lustre, Mongo, Lustre-MPI and POSIX-MPI
+and MPI file
+- Provide the tools: rbh-sync, rbh-find, rbh-find-lustre, rbh-fsevents,
+rbh-capabilities and rbh-update-retention

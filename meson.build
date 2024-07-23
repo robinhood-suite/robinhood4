@@ -2,7 +2,7 @@
 project(
     'robinhood4',
     'c',
-    version: '0.1.0',
+    version: '1.0.0',
     license: 'LGPL3.0-or-later',
     default_options: [
         'warning_level=2',
@@ -22,6 +22,7 @@ meson.add_dist_script('utils/add_specfile_to_dist.sh', specfile.get('file'))
 custom_target('rpm',
     output: 'robinhood4-' + meson.project_version() + '.ocean.rpm',
     command: [
-        '../utils/make_rpm.sh', meson.current_build_dir(), meson.project_version()
+        # The `get_option` isn't generic at all, but it will suffice for now
+        '../utils/make_rpm.sh', meson.current_build_dir(), meson.project_version(), get_option('build_mpi').to_string()
     ],
 )
