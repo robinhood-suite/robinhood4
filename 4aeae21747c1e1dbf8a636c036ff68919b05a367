@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "508ac97b_34b77930",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2024-07-23T15:31:29Z",
+      "side": 1,
+      "message": "Except the \"merge conflict\" remaining lines, this patch seems OK to me.",
+      "revId": "4aeae21747c1e1dbf8a636c036ff68919b05a367",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a9502d06_2d216c1e",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 9
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2024-07-23T15:31:29Z",
+      "side": 1,
+      "message": "defect: you should forget to clean these lines ?",
+      "range": {
+        "startLine": 93,
+        "startChar": 0,
+        "endLine": 93,
+        "endChar": 15
+      },
+      "revId": "4aeae21747c1e1dbf8a636c036ff68919b05a367",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8aeebc3a_7fb73846",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 9
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2024-07-23T15:31:29Z",
+      "side": 1,
+      "message": "minor: Why not putting \"librbh-\" prefix definition as a simple #define at beginning of this file ? From my opinion, it increase the visibility of this usefull constant for the future of this code.",
+      "range": {
+        "startLine": 174,
+        "startChar": 4,
+        "endLine": 174,
+        "endChar": 35
+      },
+      "revId": "4aeae21747c1e1dbf8a636c036ff68919b05a367",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
