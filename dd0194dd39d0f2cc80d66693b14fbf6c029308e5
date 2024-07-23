@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e2156762_6f026d13",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-07-23T09:57:42Z",
+      "side": 1,
+      "message": "I donnot know if this is okay to define this kind of debug functions directly in the code. If everybody agrees, I will not complain.",
+      "revId": "dd0194dd39d0f2cc80d66693b14fbf6c029308e5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
