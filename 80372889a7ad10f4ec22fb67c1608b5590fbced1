@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2dd7f5e2_adf09475",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2024-07-23T15:20:07Z",
+      "side": 1,
+      "message": "typo: final dot is lacking.",
+      "range": {
+        "startLine": 12,
+        "startChar": 82,
+        "endLine": 12,
+        "endChar": 87
+      },
+      "revId": "80372889a7ad10f4ec22fb67c1608b5590fbced1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6624db5e_c79e8471",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2024-07-23T15:20:07Z",
+      "side": 1,
+      "message": "From my point of view, everything seems correct.",
+      "revId": "80372889a7ad10f4ec22fb67c1608b5590fbced1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
