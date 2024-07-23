@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "42313852_2013d4de",
+        "filename": "rbh-find-lustre/src/parser.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-07-23T07:17:11Z",
+      "side": 1,
+      "message": "style: alignment with other fields",
+      "range": {
+        "startLine": 74,
+        "startChar": 4,
+        "endLine": 74,
+        "endChar": 34
+      },
+      "revId": "39831e8a1cda015a84c7d67ed77f687a10eead83",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
