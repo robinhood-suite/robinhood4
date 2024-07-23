@@ -7,7 +7,7 @@
 project(
 	'rbh-find',
 	'c',
-	version: '0.0.0',
+	version: '1.0.0',
 	license: 'LGPL3.0-or-later',
 	default_options: [
 		'warning_level=3',
@@ -33,7 +33,8 @@ configure_file(input: 'config.h.in', output: 'config.h',
 	       configuration: conf_data)
 add_project_arguments(['-DHAVE_CONFIG_H',], language: 'c')
 
-librobinhood = dependency('robinhood', version: '>=0.0.0')
+librobinhood = dependency('robinhood', version: '>=1.0.0')
+miniyaml = dependency('miniyaml', version: '>=0.1.0')
 
 # "." is necessary for config.h
 include_dirs = include_directories('.', 'include')
@@ -49,7 +50,7 @@ executable(
 		'src/parser.c',
 		'src/utils.c',
 		],
-	dependencies: [librobinhood],
+	dependencies: [librobinhood, miniyaml],
 	include_directories: include_dirs,
 	install: true,
 )

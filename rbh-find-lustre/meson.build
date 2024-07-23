@@ -7,7 +7,7 @@
 project(
 	'rbh-find-lustre',
 	'c',
-	version: '0.0.0',
+	version: '1.0.0',
 	license: 'LGPL3.0-or-later',
 	default_options: [
 		'warning_level=2',
@@ -15,8 +15,9 @@ project(
 	],
 )
 
-librobinhood = dependency('robinhood', version: '>=0.0.0')
-librbhfind = dependency('rbh-find', version: '>=0.0.0')
+librobinhood = dependency('robinhood', version: '>=1.0.0')
+miniyaml = dependency('miniyaml', version: '>=0.1.0')
+librbhfind = dependency('rbh-find', version: '>=1.0.0')
 
 cc = meson.get_compiler('c')
 liblustre = dependency('lustre', disabler: true, required: false)
@@ -51,7 +52,7 @@ executable(
 		'src/parser.c',
 		'src/actions.c',
 		],
-	dependencies: [librobinhood, librbhfind, liblustre],
+	dependencies: [librobinhood, miniyaml, librbhfind, liblustre],
 	include_directories: include_dirs,
 	install: true,
 )

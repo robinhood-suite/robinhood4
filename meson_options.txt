@@ -1,0 +1,1 @@
+option('build_mpi', type: 'boolean', value: true)
