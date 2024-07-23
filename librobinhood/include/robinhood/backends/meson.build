@@ -8,7 +8,7 @@
 
 librbh_posix_conf = configuration_data()
 
-librbh_posix_conf.set('RBH_POSIX_BACKEND_MAJOR', 0)
+librbh_posix_conf.set('RBH_POSIX_BACKEND_MAJOR', 1)
 librbh_posix_conf.set('RBH_POSIX_BACKEND_MINOR', 0)
 librbh_posix_conf.set('RBH_POSIX_BACKEND_RELEASE', 0)
 
@@ -27,7 +27,7 @@ install_headers(librbh_posix_h, subdir: 'robinhood/backends')
 
 librbh_posix_mpi_conf = configuration_data()
 
-librbh_posix_mpi_conf.set('RBH_POSIX_MPI_BACKEND_MAJOR', 0)
+librbh_posix_mpi_conf.set('RBH_POSIX_MPI_BACKEND_MAJOR', 1)
 librbh_posix_mpi_conf.set('RBH_POSIX_MPI_BACKEND_MINOR', 0)
 librbh_posix_mpi_conf.set('RBH_POSIX_MPI_BACKEND_RELEASE', 0)
 
@@ -47,7 +47,7 @@ install_headers(librbh_posix_mpi_h, subdir: 'robinhood/backends')
 
 librbh_mongo_conf = configuration_data()
 
-librbh_mongo_conf.set('RBH_MONGO_BACKEND_MAJOR', 0)
+librbh_mongo_conf.set('RBH_MONGO_BACKEND_MAJOR', 1)
 librbh_mongo_conf.set('RBH_MONGO_BACKEND_MINOR', 0)
 librbh_mongo_conf.set('RBH_MONGO_BACKEND_RELEASE', 0)
 
@@ -66,7 +66,7 @@ install_headers(librbh_mongo_h, subdir: 'robinhood/backends')
 
 librbh_lustre_conf = configuration_data()
 
-librbh_lustre_conf.set('RBH_LUSTRE_BACKEND_MAJOR', 0)
+librbh_lustre_conf.set('RBH_LUSTRE_BACKEND_MAJOR', 1)
 librbh_lustre_conf.set('RBH_LUSTRE_BACKEND_MINOR', 0)
 librbh_lustre_conf.set('RBH_LUSTRE_BACKEND_RELEASE', 0)
 
@@ -85,7 +85,7 @@ install_headers(librbh_lustre_h, subdir: 'robinhood/backends')
 
 librbh_lustre_mpi_conf = configuration_data()
 
-librbh_lustre_mpi_conf.set('RBH_LUSTRE_MPI_BACKEND_MAJOR', 0)
+librbh_lustre_mpi_conf.set('RBH_LUSTRE_MPI_BACKEND_MAJOR', 1)
 librbh_lustre_mpi_conf.set('RBH_LUSTRE_MPI_BACKEND_MINOR', 0)
 librbh_lustre_mpi_conf.set('RBH_LUSTRE_MPI_BACKEND_RELEASE', 0)
 
