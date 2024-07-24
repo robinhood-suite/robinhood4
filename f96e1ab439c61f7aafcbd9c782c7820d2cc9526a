@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "12a3b222_7d9f52b3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-07-24T08:14:13Z",
+      "side": 1,
+      "message": "So, we may need to add in the usage, the management of the config option.",
+      "revId": "f96e1ab439c61f7aafcbd9c782c7820d2cc9526a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
