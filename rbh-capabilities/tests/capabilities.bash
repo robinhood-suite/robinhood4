@@ -37,11 +37,46 @@ tests_uninstalled_capabilities()
     output=$(rbh-capabilities not_a_backend 2>&1 || true)
     echo "$output" | grep -q "backend"
 }
+
+tests_library_path_env_not_exist()
+{
+    if [ ! -z "$LD_LIBRARY_PATH" ]; then
+        export TEMP_VAR=$LD_LIBRARY_PATH
+        unset LD_LIBRARY_PATH
+        tests_backend_installed_list
+        export LD_LIBRARY_PATH=$TEMP_VAR
+        unset TEMP_VAR
+    else
+        tests_backend_installed_list
+    fi
+}
+
+tests_library_path_env_invalid()
+{
+    if [ ! -z "$LD_LIBRARY_PATH" ]; then
+        export TEMP_VAR=$LD_LIBRARY_PATH
+        export LD_LIBRARY_PATH="/home/username/none:/tmp/none:/usr"
+        tests_backend_installed_list
+        export LD_LIBRARY_PATH="text.txt"
+        tests_backend_installed_list
+        export LD_LIBRARY_PATH=$TEMP_VAR
+        unset TEMP_VAR
+    else
+        export LD_LIBRARY_PATH="/home/username/none:/tmp/none:/usr"
+        tests_backend_installed_list
+        export LD_LIBRARY_PATH="text.txt"
+        tests_backend_installed_list
+        unset LD_LIBRARY_PATH
+    fi
+}
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 declare -a tests=(tests_backend_installed_list tests_mongo_capabilities
-                  tests_posix_capabilities tests_uninstalled_capabilities)
+                  tests_posix_capabilities tests_uninstalled_capabilities
+                  tests_library_path_env_not_exist
+                  tests_library_path_env_invalid)
+
 tmpdir=$(mktemp --directory)
 trap -- "rm -rf '$tmpdir'" EXIT
 cd "$tmpdir"
