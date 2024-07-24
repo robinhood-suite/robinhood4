@@ -146,6 +146,32 @@ print_backend_list(struct rbh_list_node *head)
 }
 
 static int
+check_ld_library_path(const char *pattern, struct rbh_list_node *head)
+{
+    const char *env = getenv("LD_LIBRARY_PATH");
+    char *ld_library_path;
+    char *path;
+
+    if (env == NULL)
+        return 0;
+
+    ld_library_path = strdup(env);
+    if (ld_library_path == NULL) {
+        perror("strdup");
+        return 0;
+    }
+
+    path = strtok(ld_library_path, ":");
+    while (path != NULL) {
+        search_library(path, pattern, head);
+        path = strtok(NULL, ":");
+    }
+
+    free(ld_library_path);
+    return 1;
+}
+
+static int
 rbh_backend_list()
 {
     const char *library_dirs[] = {
@@ -164,6 +190,12 @@ rbh_backend_list()
         return 1;
 
     rbh_list_init(head);
+
+    if (check_ld_library_path(LIB_RBH_PREFIX, head) && !rbh_list_empty(head)) {
+        print_backend_list(head);
+        free(head);
+        return 0;
+    }
 
     for (int i = 0; i < len_library; i++) {
         struct stat statbuf;
