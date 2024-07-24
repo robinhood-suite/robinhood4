@@ -128,6 +128,29 @@ print_backend_list(struct rbh_list_node *head)
 }
 
 static int
+check_ld_library_path(const char *pattern, struct rbh_list_node *head)
+{
+    const char *env = getenv("LD_LIBRARY_PATH");
+    if (env == NULL)
+        return 0;
+
+    char *ld_library_path = strdup(env);
+    if (ld_library_path == NULL) {
+        perror("strdup");
+        return 0;
+    }
+
+    char *path = strtok(ld_library_path, ":");
+    while (path != NULL) {
+        search_library(path, pattern, head);
+        path = strtok(NULL, ":");
+    }
+
+    free(ld_library_path);
+    return 1;
+}
+
+static int
 rbh_backend_list()
 {
     const char *library_dirs[] = {
@@ -142,6 +165,29 @@ rbh_backend_list()
     struct rbh_list_node *head = malloc(sizeof(struct rbh_list_node));
 
     rbh_list_init(head);
+
+    if (check_ld_library_path(LIB_RBH_PREFIX, &head) && !rbh_list_empty(&head)) {
+        backends_list = extract_names(&head);
+        if (backends_list == NULL) {
+            return 1;
+        }
+
+        printf("List of installed backends:\n");
+
+        rbh_list_foreach_safe(backends_list, node, tmp, list) {
+            printf("- %s\n", node->name);
+            free(node->name);
+            free(node);
+        }
+
+        rbh_list_foreach_safe(&head, node, tmp, list) {
+            free(node->name);
+            free(node);
+        }
+
+        free(backends_list);
+        return 0;
+    }
 
     for (int i = 0; i < len_library; i++) {
         struct stat statbuf;
