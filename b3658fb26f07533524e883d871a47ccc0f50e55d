@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dc4a792f_ac4a4c9c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1015302
+      },
+      "writtenOn": "2024-07-24T09:13:45Z",
+      "side": 1,
+      "message": "Hi,\nHere is my point on the specfile. I think there is a miss-understanding about Obsoletes statement.",
+      "revId": "b3658fb26f07533524e883d871a47ccc0f50e55d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a7a88a7b_9c5d4816",
+        "filename": "robinhood4.ocean.spec.in",
+        "patchSetId": 3
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1015302
+      },
+      "writtenOn": "2024-07-24T09:13:45Z",
+      "side": 1,
+      "message": "I checked the \u0027Obsoletes\u0027 statement and it\u0027s not what you want here.\nThis keyword says that\n  dnf install robinhood : will install robinhood4 and you will not be able to install robinhood through dnf.\nWhat you want is:\n  dnf install robinhood : will install robinhood if robinhood4 is not installed\n  dnf install robinhood4 : will install robinhood4 if robinhood is not installed\n  \nIf I\u0027m correct you should use Conflict for all packages/subpackage in the specfile.\n\nYou will use Obsoletes if robinhood4 will fully replace robinhood and this is not the case yet.",
+      "revId": "b3658fb26f07533524e883d871a47ccc0f50e55d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
