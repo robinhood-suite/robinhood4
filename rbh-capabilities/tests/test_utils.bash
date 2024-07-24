@@ -29,7 +29,7 @@ teardown()
     rm -rf "$testdir"
 }
 
- error()
+error()
 {
     echo "$*"
     exit 1
