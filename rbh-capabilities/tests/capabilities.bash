@@ -40,11 +40,44 @@ tests_not_installed_capabilities()
 
     return 0
 }
+
+tests_library_path_env_not_exist()
+{
+    if [ ! -z "$LD_LIBRARY_PATH" ]; then
+        local TEMP_VAR=$LD_LIBRARY_PATH
+        unset LD_LIBRARY_PATH
+        tests_backend_installed_list
+        export LD_LIBRARY_PATH=$TEMP_VAR
+        unset TEMP_VAR
+    else
+        tests_backend_installed_list
+    fi
+}
+
+tests_library_path_env_invalid()
+{
+    if [ ! -z "$LD_LIBRARY_PATH" ]; then
+        local TEMP_VAR=$LD_LIBRARY_PATH
+    fi
+
+    export LD_LIBRARY_PATH="/home/username/none:/tmp/none:/usr"
+    tests_backend_installed_list
+    export LD_LIBRARY_PATH="text.txt"
+    tests_backend_installed_list
+
+    if [ ! -z "$TEMP_VAR" ]; then
+        export LD_LIBRARY_PATH=$TEMP_VAR
+        unset TEMP_VAR
+    fi
+}
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 declare -a tests=(tests_backend_installed_list tests_mongo_capabilities
-                  tests_posix_capabilities tests_not_installed_capabilities)
+                  tests_posix_capabilities tests_not_installed_capabilities
+                  tests_library_path_env_not_exist
+                  tests_library_path_env_invalid)
+
 tmpdir=$(mktemp --directory)
 trap -- "rm -rf '$tmpdir'" EXIT
 cd "$tmpdir"
