@@ -41,6 +41,53 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1e6002d6_1f2a9b5a",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 9
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2024-07-24T09:08:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a9502d06_2d216c1e",
+      "range": {
+        "startLine": 93,
+        "startChar": 0,
+        "endLine": 93,
+        "endChar": 15
+      },
+      "revId": "4aeae21747c1e1dbf8a636c036ff68919b05a367",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f9cdff40_8e8e539e",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 9
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2024-07-24T09:08:52Z",
+      "side": 1,
+      "message": "I\u0027m going to delete this line !",
+      "range": {
+        "startLine": 93,
+        "startChar": 0,
+        "endLine": 93,
+        "endChar": 66
+      },
+      "revId": "4aeae21747c1e1dbf8a636c036ff68919b05a367",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8aeebc3a_7fb73846",
@@ -54,6 +101,30 @@
       "writtenOn": "2024-07-23T15:31:29Z",
       "side": 1,
       "message": "minor: Why not putting \"librbh-\" prefix definition as a simple #define at beginning of this file ? From my opinion, it increase the visibility of this usefull constant for the future of this code.",
+      "range": {
+        "startLine": 174,
+        "startChar": 4,
+        "endLine": 174,
+        "endChar": 35
+      },
+      "revId": "4aeae21747c1e1dbf8a636c036ff68919b05a367",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d152b685_437fcd4d",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 9
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2024-07-24T09:08:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8aeebc3a_7fb73846",
       "range": {
         "startLine": 174,
         "startChar": 4,
