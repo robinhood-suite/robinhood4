@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "dd3579de_8dce3eb6",
+        "filename": "librobinhood/src/backends/mongo/plugin.c",
+        "patchSetId": 12
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2024-07-25T14:02:47Z",
+      "side": 1,
+      "message": "Yes but if I understood correctly, if we can find, we can also sync !",
+      "parentUuid": "7fa5cd18_ca149e4d",
+      "range": {
+        "startLine": 28,
+        "startChar": 20,
+        "endLine": 28,
+        "endChar": 68
+      },
+      "revId": "25074385242beefff7895300f27b619173851458",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9735f603_205bb3ec",
         "filename": "rbh-capabilities/rbh-capabilities.c",
         "patchSetId": 12
@@ -37,6 +61,30 @@
       "writtenOn": "2024-07-25T09:04:50Z",
       "side": 1,
       "message": "question: something that just came up after talking with Yoann, I think this will be better having the capabilities as \"can I use this backend as an argument for xxx command\"\n\nIn this case:\n- `filter` --\u003e `rbh-find` source\n- `read` --\u003e `rbh-sync` source\n- `update` --\u003e `rbh-sync` target\n- `branch` --\u003e `rbh-sync` source for partial processing",
+      "range": {
+        "startLine": 68,
+        "startChar": 0,
+        "endLine": 68,
+        "endChar": 22
+      },
+      "revId": "25074385242beefff7895300f27b619173851458",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a0db5980_9542d6ff",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 12
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2024-07-25T14:02:47Z",
+      "side": 1,
+      "message": "I agree with you, this is better !",
+      "parentUuid": "9735f603_205bb3ec",
       "range": {
         "startLine": 68,
         "startChar": 0,
