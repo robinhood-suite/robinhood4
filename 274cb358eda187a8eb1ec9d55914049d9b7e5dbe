@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ec4fbaa3_fc6bdbaf",
+        "filename": "librobinhood/src/backends/mongo/value.c",
+        "patchSetId": 6
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-07-25T09:32:13Z",
+      "side": 1,
+      "message": "question: I do not know if this is our way to indicate the line, but I do not mind\n\nEDIT: That\u0027s a move from another file. So I suppose we can let that as it is. But spaces between the minus operator are missing.",
+      "range": {
+        "startLine": 53,
+        "startChar": 62,
+        "endLine": 53,
+        "endChar": 64
+      },
+      "revId": "274cb358eda187a8eb1ec9d55914049d9b7e5dbe",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
