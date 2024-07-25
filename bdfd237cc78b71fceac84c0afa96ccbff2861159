@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "06b86195_d8b99f20",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2024-07-25T15:18:42Z",
+      "side": 1,
+      "message": "question: using LD_LIBRARY_PATH excludes the check of the library_dirs list ?",
+      "range": {
+        "startLine": 210,
+        "startChar": 8,
+        "endLine": 210,
+        "endChar": 44
+      },
+      "revId": "bdfd237cc78b71fceac84c0afa96ccbff2861159",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
