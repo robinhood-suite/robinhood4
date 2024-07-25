@@ -97,6 +97,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f505e02e_3486e3a6",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 12
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2024-07-25T15:01:40Z",
+      "side": 1,
+      "message": "+1 (this is the way I understand this feature)",
+      "parentUuid": "a0db5980_9542d6ff",
+      "range": {
+        "startLine": 68,
+        "startChar": 0,
+        "endLine": 68,
+        "endChar": 22
+      },
+      "revId": "25074385242beefff7895300f27b619173851458",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d8f13412_e8af8a8e",
         "filename": "rbh-capabilities/rbh-capabilities.c",
         "patchSetId": 12
