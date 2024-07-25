@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b4571711_8084ac5d",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 10
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-07-25T08:49:24Z",
+      "side": 1,
+      "message": "suggest: int can be replaced by bool here",
+      "range": {
+        "startLine": 51,
+        "startChar": 0,
+        "endLine": 51,
+        "endChar": 3
+      },
+      "revId": "dfac2f7f2b540d2ce3774ff95aea951f556cec58",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2eda5296_1b416d85",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 10
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-07-25T08:49:24Z",
+      "side": 1,
+      "message": "minor: prefix",
+      "range": {
+        "startLine": 99,
+        "startChar": 44,
+        "endLine": 99,
+        "endChar": 51
+      },
+      "revId": "dfac2f7f2b540d2ce3774ff95aea951f556cec58",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7309f31f_4764c08b",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 10
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-07-25T08:49:24Z",
+      "side": 1,
+      "message": "nit: I think this is not mandatory, you can give `RBH_PREFIX` to the `search_library` call.",
+      "range": {
+        "startLine": 175,
+        "startChar": 4,
+        "endLine": 175,
+        "endChar": 36
+      },
+      "revId": "dfac2f7f2b540d2ce3774ff95aea951f556cec58",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
