@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8b5a7671_39645199",
+        "filename": "rbh-capabilities/tests/meson.build",
+        "patchSetId": 12
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-07-25T09:01:10Z",
+      "side": 1,
+      "message": "defect: you should use the `test` function of meson, you can take as example the meson.build of rbh-find.",
+      "revId": "bec82f8fb5b0c73abd609a61c4ef11522d4e6f41",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f0f3d765_a3aa28be",
+        "filename": "rbh-capabilities/tests/meson.build",
+        "patchSetId": 12
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-07-25T09:01:10Z",
+      "side": 1,
+      "message": "minor: no need, `test_utils.bash` is already source in `capabilities.bash`.",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 1
+      },
+      "revId": "bec82f8fb5b0c73abd609a61c4ef11522d4e6f41",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "abb8df70_c211df24",
+        "filename": "rbh-capabilities/tests/test_utils.bash",
+        "patchSetId": 12
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-07-25T09:01:10Z",
+      "side": 1,
+      "message": "typo: 2024",
+      "range": {
+        "startLine": 4,
+        "startChar": 16,
+        "endLine": 4,
+        "endChar": 20
+      },
+      "revId": "bec82f8fb5b0c73abd609a61c4ef11522d4e6f41",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "191ca8e3_edb0a5ee",
+        "filename": "rbh-capabilities/tests/test_utils.bash",
+        "patchSetId": 12
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-07-25T09:01:10Z",
+      "side": 1,
+      "message": "minor: you can remove it since you doesn\u0027t use a mongoDB.",
+      "revId": "bec82f8fb5b0c73abd609a61c4ef11522d4e6f41",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
