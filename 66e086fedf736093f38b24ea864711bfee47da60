@@ -189,6 +189,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "01e41df8_faa29502",
+        "filename": "rbh-capabilities/tests/capabilities.bash",
+        "patchSetId": 11
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2024-07-25T15:05:44Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "464c6753_5b33b301",
+      "range": {
+        "startLine": 36,
+        "startChar": 0,
+        "endLine": 38,
+        "endChar": 2
+      },
+      "revId": "66e086fedf736093f38b24ea864711bfee47da60",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e06e65fe_61255214",
