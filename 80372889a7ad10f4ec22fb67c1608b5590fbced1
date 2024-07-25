@@ -39,6 +39,29 @@
       "message": "From my point of view, everything seems correct.",
       "revId": "80372889a7ad10f4ec22fb67c1608b5590fbced1",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "df785ea9_f5ff6e7f",
+        "filename": "rbh-capabilities/meson.build",
+        "patchSetId": 9
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-07-25T08:11:48Z",
+      "side": 1,
+      "message": "typo: replace \u0027|\u0027 characters by spaces",
+      "range": {
+        "startLine": 3,
+        "startChar": 2,
+        "endLine": 3,
+        "endChar": 5
+      },
+      "revId": "80372889a7ad10f4ec22fb67c1608b5590fbced1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
