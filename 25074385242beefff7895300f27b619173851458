@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7fa5cd18_ca149e4d",
+        "filename": "librobinhood/src/backends/mongo/plugin.c",
+        "patchSetId": 12
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-07-25T09:04:50Z",
+      "side": 1,
+      "message": "defect: mongo can be used as a synchronisation source",
+      "range": {
+        "startLine": 28,
+        "startChar": 20,
+        "endLine": 28,
+        "endChar": 68
+      },
+      "revId": "25074385242beefff7895300f27b619173851458",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9735f603_205bb3ec",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 12
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-07-25T09:04:50Z",
+      "side": 1,
+      "message": "question: something that just came up after talking with Yoann, I think this will be better having the capabilities as \"can I use this backend as an argument for xxx command\"\n\nIn this case:\n- `filter` --\u003e `rbh-find` source\n- `read` --\u003e `rbh-sync` source\n- `update` --\u003e `rbh-sync` target\n- `branch` --\u003e `rbh-sync` source for partial processing",
+      "range": {
+        "startLine": 68,
+        "startChar": 0,
+        "endLine": 68,
+        "endChar": 22
+      },
+      "revId": "25074385242beefff7895300f27b619173851458",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d8f13412_e8af8a8e",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 12
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-07-25T09:04:50Z",
+      "side": 1,
+      "message": "comment: I think this is misleading, as I may want to use the backend that can be read with `rbh-find` without any filter, but it will not work\n\nMaybe we can say `synchronisation` instead of `read`?",
+      "range": {
+        "startLine": 98,
+        "startChar": 11,
+        "endLine": 98,
+        "endChar": 15
+      },
+      "revId": "25074385242beefff7895300f27b619173851458",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
