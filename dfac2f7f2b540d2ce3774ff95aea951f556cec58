@@ -26,6 +26,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8fe36599_66609b8f",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 10
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-07-25T08:51:26Z",
+      "side": 1,
+      "message": "minor: add static",
+      "revId": "dfac2f7f2b540d2ce3774ff95aea951f556cec58",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2eda5296_1b416d85",
         "filename": "rbh-capabilities/rbh-capabilities.c",
         "patchSetId": 10
@@ -66,6 +83,23 @@
         "endLine": 175,
         "endChar": 36
       },
+      "revId": "dfac2f7f2b540d2ce3774ff95aea951f556cec58",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f55f0fa4_c2013f72",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 10
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-07-25T08:51:26Z",
+      "side": 1,
+      "message": "minor: you don\u0027t need this variable, you can do:\n`search_library(library_dirs[i], RBH_PREFIX, \u0026head)`.",
       "revId": "dfac2f7f2b540d2ce3774ff95aea951f556cec58",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
