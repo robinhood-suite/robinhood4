@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f37e5f08_15534e16",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2024-07-25T14:59:05Z",
+      "side": 1,
+      "message": "This new version is broadly correct but take care to not set comment as \"Done\" when there are not taken into account.",
+      "revId": "c9a97feb46bf33d5acbdc9146150f37366faae90",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a6345f19_bd9d7bae",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 12
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2024-07-25T14:59:05Z",
+      "side": 1,
+      "message": "nitpick: LIB_RBH_PREFIX",
+      "range": {
+        "startLine": 26,
+        "startChar": 8,
+        "endLine": 26,
+        "endChar": 18
+      },
+      "revId": "c9a97feb46bf33d5acbdc9146150f37366faae90",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
