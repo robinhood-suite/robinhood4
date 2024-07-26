@@ -48,6 +48,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "41be86a2_8111713b",
+        "filename": "librobinhood/src/backends/mongo/plugin.c",
+        "patchSetId": 12
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2024-07-26T08:47:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dd3579de_8dce3eb6",
+      "range": {
+        "startLine": 28,
+        "startChar": 20,
+        "endLine": 28,
+        "endChar": 68
+      },
+      "revId": "25074385242beefff7895300f27b619173851458",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9735f603_205bb3ec",
@@ -180,6 +204,30 @@
       "writtenOn": "2024-07-25T09:04:50Z",
       "side": 1,
       "message": "comment: I think this is misleading, as I may want to use the backend that can be read with `rbh-find` without any filter, but it will not work\n\nMaybe we can say `synchronisation` instead of `read`?",
+      "range": {
+        "startLine": 98,
+        "startChar": 11,
+        "endLine": 98,
+        "endChar": 15
+      },
+      "revId": "25074385242beefff7895300f27b619173851458",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a7e154af_0662b65a",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 12
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2024-07-26T08:47:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d8f13412_e8af8a8e",
       "range": {
         "startLine": 98,
         "startChar": 11,
