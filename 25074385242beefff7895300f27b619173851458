@@ -121,6 +121,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "700378cf_6cea95a2",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 12
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-07-26T07:37:26Z",
+      "side": 1,
+      "message": "The only downside of doing this is that when new tools are added, we need to update this. I can think of rbh-report for example.",
+      "parentUuid": "f505e02e_3486e3a6",
+      "range": {
+        "startLine": 68,
+        "startChar": 0,
+        "endLine": 68,
+        "endChar": 22
+      },
+      "revId": "25074385242beefff7895300f27b619173851458",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d8f13412_e8af8a8e",
         "filename": "rbh-capabilities/rbh-capabilities.c",
         "patchSetId": 12
