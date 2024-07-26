@@ -22,6 +22,30 @@
       },
       "revId": "bdfd237cc78b71fceac84c0afa96ccbff2861159",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b54a48b5_17118f56",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2024-07-26T08:20:48Z",
+      "side": 1,
+      "message": "No, LD_LIBRARY_PATH doesn\u0027t contain the paths of the list, so we check the var first and then the list if we find nothing!",
+      "parentUuid": "06b86195_d8b99f20",
+      "range": {
+        "startLine": 210,
+        "startChar": 8,
+        "endLine": 210,
+        "endChar": 44
+      },
+      "revId": "bdfd237cc78b71fceac84c0afa96ccbff2861159",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
