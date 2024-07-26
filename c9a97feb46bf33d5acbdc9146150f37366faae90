@@ -39,6 +39,30 @@
       },
       "revId": "c9a97feb46bf33d5acbdc9146150f37366faae90",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5b6388b6_0d4ac380",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 12
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2024-07-26T08:14:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a6345f19_bd9d7bae",
+      "range": {
+        "startLine": 26,
+        "startChar": 8,
+        "endLine": 26,
+        "endChar": 18
+      },
+      "revId": "c9a97feb46bf33d5acbdc9146150f37366faae90",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
