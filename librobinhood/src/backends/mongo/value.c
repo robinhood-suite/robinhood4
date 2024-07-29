@@ -50,7 +50,7 @@ _bson_append_regex(bson_t *bson, const char *key, size_t key_length,
 
     pcre = shell2pcre(regex);
     if (pcre == NULL)
-        error_at_line(EXIT_FAILURE, ENOMEM, __FILE__, __LINE__-2,
+        error_at_line(EXIT_FAILURE, ENOMEM, __FILE__, __LINE__ - 2,
                       "converting %s into a Perl Compatible Regular Expression",
                       regex);
 
