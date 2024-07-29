@@ -49,7 +49,7 @@
  *  function: MFU_PRED_NAME          function: MFU_PRED_TYPE
  *                  |                                |
  *  argument:     value               argument:    value
- *                 "f"                              "f"
+ *                "file"                            "f"
  *
  *  -not -type f
  *  <=>
