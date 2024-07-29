@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "94c3c3d8_bf1c3ebf",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 17
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2024-07-29T13:01:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "888cd2be_482496c2",
+      "range": {
+        "startLine": 7,
+        "startChar": 14,
+        "endLine": 7,
+        "endChar": 64
+      },
+      "revId": "d1354e2a21d01b54dc6da981bd5004c554ec9873",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "11155668_2d6a618d",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-07-29T08:30:02Z",
       "side": 1,
       "message": "nit: add an empty output line just before this one, to separate in the helper the options from the explanation",
+      "range": {
+        "startLine": 95,
+        "startChar": 8,
+        "endLine": 95,
+        "endChar": 9
+      },
+      "revId": "d1354e2a21d01b54dc6da981bd5004c554ec9873",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d247d757_77509b10",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 17
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2024-07-29T13:01:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "11155668_2d6a618d",
       "range": {
         "startLine": 95,
         "startChar": 8,
