@@ -47,6 +47,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa4c44d1_3cb0a770",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 13
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2024-07-29T12:55:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "854d1c8f_9e5d1f77",
+      "range": {
+        "startLine": 57,
+        "startChar": 15,
+        "endLine": 57,
+        "endChar": 19
+      },
+      "revId": "7ca826f62c40919d1bebb581e98f8f76d1c2fd75",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b9670582_8f387dcc",
@@ -60,6 +84,30 @@
       "writtenOn": "2024-07-29T08:11:33Z",
       "side": 1,
       "message": "minor: \"list the installed backends\". What is written here can be interpreted as \"output the list of known RBH backends\" which doesn\u0027t take into account what is installed or any additional, custom made, backend",
+      "range": {
+        "startLine": 94,
+        "startChar": 37,
+        "endLine": 94,
+        "endChar": 62
+      },
+      "revId": "7ca826f62c40919d1bebb581e98f8f76d1c2fd75",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9a688c13_d7f54326",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 13
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2024-07-29T12:55:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b9670582_8f387dcc",
       "range": {
         "startLine": 94,
         "startChar": 37,
@@ -93,6 +141,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e849e893_45533a2d",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 13
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2024-07-29T12:55:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "801661d0_09005f37",
+      "range": {
+        "startLine": 109,
+        "startChar": 9,
+        "endLine": 115,
+        "endChar": 36
+      },
+      "revId": "7ca826f62c40919d1bebb581e98f8f76d1c2fd75",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9cd82561_c5a4d0c7",
@@ -116,6 +188,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "26fd662f_105d534c",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 13
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2024-07-29T12:55:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9cd82561_c5a4d0c7",
+      "range": {
+        "startLine": 134,
+        "startChar": 4,
+        "endLine": 134,
+        "endChar": 28
+      },
+      "revId": "7ca826f62c40919d1bebb581e98f8f76d1c2fd75",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "238ba676_578b8855",
@@ -129,6 +225,30 @@
       "writtenOn": "2024-07-29T08:11:33Z",
       "side": 1,
       "message": "minor: all of these calculations can be done when outputing the list, or can be done when adding entries to the list (at least the first strchr can be avoided with a memory cursor move to the length of the prefix)",
+      "range": {
+        "startLine": 137,
+        "startChar": 7,
+        "endLine": 147,
+        "endChar": 21
+      },
+      "revId": "7ca826f62c40919d1bebb581e98f8f76d1c2fd75",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "67ebca25_538b5c42",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 13
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2024-07-29T12:55:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "238ba676_578b8855",
       "range": {
         "startLine": 137,
         "startChar": 7,
