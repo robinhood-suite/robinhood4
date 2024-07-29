@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1e3395a1_7e97a94f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 13
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-07-29T08:11:33Z",
+      "side": 1,
+      "message": "minor: looking at the",
+      "range": {
+        "startLine": 10,
+        "startChar": 3,
+        "endLine": 10,
+        "endChar": 14
+      },
+      "revId": "7ca826f62c40919d1bebb581e98f8f76d1c2fd75",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "854d1c8f_9e5d1f77",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 13
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-07-29T08:11:33Z",
+      "side": 1,
+      "message": "nit: \"name in list\" returns true if the name is not in the list.\nsuggest: rename the function to \"is_name_in_list\", return true is yes and false if no, and interpret the result in the caller of this function",
+      "range": {
+        "startLine": 57,
+        "startChar": 15,
+        "endLine": 57,
+        "endChar": 19
+      },
+      "revId": "7ca826f62c40919d1bebb581e98f8f76d1c2fd75",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b9670582_8f387dcc",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 13
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-07-29T08:11:33Z",
+      "side": 1,
+      "message": "minor: \"list the installed backends\". What is written here can be interpreted as \"output the list of known RBH backends\" which doesn\u0027t take into account what is installed or any additional, custom made, backend",
+      "range": {
+        "startLine": 94,
+        "startChar": 37,
+        "endLine": 94,
+        "endChar": 62
+      },
+      "revId": "7ca826f62c40919d1bebb581e98f8f76d1c2fd75",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "801661d0_09005f37",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 13
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-07-29T08:11:33Z",
+      "side": 1,
+      "message": "minor: replace with a check on `entry-\u003ed_type`",
+      "range": {
+        "startLine": 109,
+        "startChar": 9,
+        "endLine": 115,
+        "endChar": 36
+      },
+      "revId": "7ca826f62c40919d1bebb581e98f8f76d1c2fd75",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9cd82561_c5a4d0c7",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 13
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-07-29T08:11:33Z",
+      "side": 1,
+      "message": "minor: this list can be avoided by simply checking on line 116 if the name to add is not already in the first list",
+      "range": {
+        "startLine": 134,
+        "startChar": 4,
+        "endLine": 134,
+        "endChar": 28
+      },
+      "revId": "7ca826f62c40919d1bebb581e98f8f76d1c2fd75",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "238ba676_578b8855",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 13
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-07-29T08:11:33Z",
+      "side": 1,
+      "message": "minor: all of these calculations can be done when outputing the list, or can be done when adding entries to the list (at least the first strchr can be avoided with a memory cursor move to the length of the prefix)",
+      "range": {
+        "startLine": 137,
+        "startChar": 7,
+        "endLine": 147,
+        "endChar": 21
+      },
+      "revId": "7ca826f62c40919d1bebb581e98f8f76d1c2fd75",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
