@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c412f3d8_c2140d02",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 18
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2024-07-29T14:45:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c63633a9_ea693c79",
+      "range": {
+        "startLine": 9,
+        "startChar": 25,
+        "endLine": 9,
+        "endChar": 30
+      },
+      "revId": "8b795feafd806fae6fd36669d0cdffdb930e5770",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "eb507c28_b969d882",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-07-29T08:32:17Z",
       "side": 1,
       "message": "major: rather than checking this, you should check the command failed. Similar checks are done in other tests, so you can take inspiration from those",
+      "range": {
+        "startLine": 39,
+        "startChar": 4,
+        "endLine": 40,
+        "endChar": 38
+      },
+      "revId": "8b795feafd806fae6fd36669d0cdffdb930e5770",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f3aef13c_13db56ce",
+        "filename": "rbh-capabilities/tests/capabilities.bash",
+        "patchSetId": 18
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2024-07-29T14:45:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eb507c28_b969d882",
       "range": {
         "startLine": 39,
         "startChar": 4,
