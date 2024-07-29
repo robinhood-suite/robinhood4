@@ -121,7 +121,6 @@ _MFU_PRED_SIZE(mfu_flist flist, uint64_t idx, void *arg)
         break;
     default:
         errno = ENOTSUP;
-        ret = 0;
         break;
     }
     return ret;

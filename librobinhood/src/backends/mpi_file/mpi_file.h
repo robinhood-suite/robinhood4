@@ -39,7 +39,7 @@
  * It takes as an argument the predicate's value.
  *
  * Example:
- *  -name file -and -type f
+ *  -name file -and -type file
  *  <=>
  *               mfu_pred
  *  function: _MFU_PRED_AND
@@ -49,9 +49,9 @@
  *  function: MFU_PRED_NAME          function: MFU_PRED_TYPE
  *                  |                                |
  *  argument:     value               argument:    value
- *                 "f"                              "f"
+ *                "file"                           "file"
  *
- *  -not -type f
+ *  -not -type file
  *  <=>
  *               mfu_pred
  *  function: _MFU_PRED_NOT
@@ -61,7 +61,7 @@
  *  function: MFU_PRED_TYPE
  *                  |
  *  argument:     value
- *                 "f"
+ *                "file"
  */
 
 
