@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4da6df1f_5cb48a11",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 6
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-07-29T08:42:14Z",
+      "side": 1,
+      "message": "style: declare the different variables at the start of the function",
+      "range": {
+        "startLine": 180,
+        "startChar": 4,
+        "endLine": 180,
+        "endChar": 14
+      },
+      "revId": "f750fa859fe94ed849663c0b1f725e6770e9c989",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3ef81166_80969170",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 6
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-07-29T08:42:14Z",
+      "side": 1,
+      "message": "major: this can easily be fused with the rest of the function, the only difference being where the list of directories come from",
+      "range": {
+        "startLine": 210,
+        "startChar": 8,
+        "endLine": 229,
+        "endChar": 17
+      },
+      "revId": "f750fa859fe94ed849663c0b1f725e6770e9c989",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ce1bc297_24a5c208",
+        "filename": "rbh-capabilities/tests/capabilities.bash",
+        "patchSetId": 6
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-07-29T08:42:14Z",
+      "side": 1,
+      "message": "minor: this variable can be kept as a local one, no need to export it",
+      "range": {
+        "startLine": 46,
+        "startChar": 8,
+        "endLine": 46,
+        "endChar": 14
+      },
+      "revId": "f750fa859fe94ed849663c0b1f725e6770e9c989",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6cf564a1_729f6ab2",
+        "filename": "rbh-capabilities/tests/capabilities.bash",
+        "patchSetId": 6
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-07-29T08:42:14Z",
+      "side": 1,
+      "message": "suggest: keep the condition here, but set the content of the if to be just setting of TEMP_VAR, then add a similar `if` after the next 4 lines.\n\n```\nif ! -z library_path\n    tmp_var \u003d ld_library path\n    \nexport ld_library_path\ntests\n...\nunset ld_library_path\n\nif ! -z tmp_var\n    ld_library_path \u003d tmp_var\n```",
+      "range": {
+        "startLine": 58,
+        "startChar": 3,
+        "endLine": 59,
+        "endChar": 40
+      },
+      "revId": "f750fa859fe94ed849663c0b1f725e6770e9c989",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
