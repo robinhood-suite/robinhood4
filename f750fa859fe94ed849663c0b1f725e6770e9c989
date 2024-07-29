@@ -118,6 +118,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c3369779_c2c2feea",
+        "filename": "rbh-capabilities/tests/capabilities.bash",
+        "patchSetId": 6
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2024-07-29T14:43:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ce1bc297_24a5c208",
+      "range": {
+        "startLine": 46,
+        "startChar": 8,
+        "endLine": 46,
+        "endChar": 14
+      },
+      "revId": "f750fa859fe94ed849663c0b1f725e6770e9c989",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6cf564a1_729f6ab2",
@@ -131,6 +155,30 @@
       "writtenOn": "2024-07-29T08:42:14Z",
       "side": 1,
       "message": "suggest: keep the condition here, but set the content of the if to be just setting of TEMP_VAR, then add a similar `if` after the next 4 lines.\n\n```\nif ! -z library_path\n    tmp_var \u003d ld_library path\n    \nexport ld_library_path\ntests\n...\nunset ld_library_path\n\nif ! -z tmp_var\n    ld_library_path \u003d tmp_var\n```",
+      "range": {
+        "startLine": 58,
+        "startChar": 3,
+        "endLine": 59,
+        "endChar": 40
+      },
+      "revId": "f750fa859fe94ed849663c0b1f725e6770e9c989",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a9fe709a_0a329604",
+        "filename": "rbh-capabilities/tests/capabilities.bash",
+        "patchSetId": 6
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2024-07-29T14:43:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6cf564a1_729f6ab2",
       "range": {
         "startLine": 58,
         "startChar": 3,
