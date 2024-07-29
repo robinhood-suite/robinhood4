@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6a89f8a7_6503f558",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 14
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-07-29T14:32:04Z",
+      "side": 1,
+      "message": "defect: you still need to free the node-\u003ename and node here",
+      "range": {
+        "startLine": 115,
+        "startChar": 12,
+        "endLine": 115,
+        "endChar": 21
+      },
+      "revId": "b17dcf4ad66bfa7711f2b98b9f967d73980a437e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9db0846a_d07b7d15",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 14
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-07-29T14:32:04Z",
+      "side": 1,
+      "message": "minor: add a check the malloc didn\u0027t return NULL",
+      "range": {
+        "startLine": 135,
+        "startChar": 33,
+        "endLine": 135,
+        "endChar": 39
+      },
+      "revId": "b17dcf4ad66bfa7711f2b98b9f967d73980a437e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}

@@ -50,6 +50,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5decb545_e23066d5",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 13
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-07-29T14:32:04Z",
+      "side": 1,
+      "message": "major: this function is important to not have duplicates in the list, it must be kept",
+      "range": {
+        "startLine": 52,
+        "startChar": 0,
+        "endLine": 52,
+        "endChar": 12
+      },
+      "revId": "7ca826f62c40919d1bebb581e98f8f76d1c2fd75",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "854d1c8f_9e5d1f77",
         "filename": "rbh-capabilities/rbh-capabilities.c",
         "patchSetId": 13
