@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b09ea765_c85aeb35",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-07-30T08:47:41Z",
+      "side": 1,
+      "message": "Seems good. I got 2 questions:\n\n1) What if the backends are not in the same path?\n2) What if the same backend is present in two different paths?",
+      "revId": "cdee41608ed4cc2b5f573f95e42be4043fc0053b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
