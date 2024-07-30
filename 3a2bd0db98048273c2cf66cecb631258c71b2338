@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6e24119c_9b2fdd7b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-07-30T09:20:14Z",
+      "side": 1,
+      "message": "Ok... I wonder if there is a way to have the specfile from an argument (env or cmd). That seems impossible from the command line. Not a huge fan of having those information hardcoded in the meson file.",
+      "revId": "3a2bd0db98048273c2cf66cecb631258c71b2338",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
