@@ -22,6 +22,30 @@
       },
       "revId": "00d0284bd5927fb91fa2cc417ec32bf5d3fd02a5",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b348b154_f073bd5d",
+        "filename": "rbh-capabilities/tests/capabilities.bash",
+        "patchSetId": 22
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2024-07-30T09:03:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "87c0bdb3_1731f27a",
+      "range": {
+        "startLine": 39,
+        "startChar": 45,
+        "endLine": 39,
+        "endChar": 72
+      },
+      "revId": "00d0284bd5927fb91fa2cc417ec32bf5d3fd02a5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
