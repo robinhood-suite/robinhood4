@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4fac5432_76bed5b6",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 16
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2024-07-30T09:00:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "69d5bb05_4ed77958",
+      "range": {
+        "startLine": 54,
+        "startChar": 4,
+        "endLine": 54,
+        "endChar": 10
+      },
+      "revId": "cd7fddb055b090faf2cf1c98ce1225fe8c7d9723",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b55a433e_4cd62574",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-07-30T08:42:57Z",
       "side": 1,
       "message": "style: add empty line after this bracket",
+      "range": {
+        "startLine": 57,
+        "startChar": 4,
+        "endLine": 57,
+        "endChar": 5
+      },
+      "revId": "cd7fddb055b090faf2cf1c98ce1225fe8c7d9723",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8cbc3eb2_1447052c",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 16
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2024-07-30T09:00:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b55a433e_4cd62574",
       "range": {
         "startLine": 57,
         "startChar": 4,
@@ -70,6 +118,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "46e407e8_bca37bae",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 16
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2024-07-30T09:00:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fb1a3081_04b42bc4",
+      "range": {
+        "startLine": 61,
+        "startChar": 4,
+        "endLine": 61,
+        "endChar": 5
+      },
+      "revId": "cd7fddb055b090faf2cf1c98ce1225fe8c7d9723",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "72ad6dcc_6d5be5a3",
@@ -93,6 +165,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5b9db421_39b2f63c",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 16
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2024-07-30T09:00:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "72ad6dcc_6d5be5a3",
+      "range": {
+        "startLine": 109,
+        "startChar": 4,
+        "endLine": 109,
+        "endChar": 5
+      },
+      "revId": "cd7fddb055b090faf2cf1c98ce1225fe8c7d9723",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7059bd22_f41a928e",
@@ -106,6 +202,30 @@
       "writtenOn": "2024-07-30T08:42:57Z",
       "side": 1,
       "message": "minor: this else isn\u0027t needed, since not going into it produces the same result because of lines 135 and 136",
+      "range": {
+        "startLine": 129,
+        "startChar": 10,
+        "endLine": 133,
+        "endChar": 9
+      },
+      "revId": "cd7fddb055b090faf2cf1c98ce1225fe8c7d9723",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8f34af52_48169c61",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 16
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2024-07-30T09:00:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7059bd22_f41a928e",
       "range": {
         "startLine": 129,
         "startChar": 10,
