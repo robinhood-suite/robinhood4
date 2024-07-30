@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "87c0bdb3_1731f27a",
+        "filename": "rbh-capabilities/tests/capabilities.bash",
+        "patchSetId": 22
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-07-30T08:44:33Z",
+      "side": 1,
+      "message": "minor: change to `Expected capabilities with an unknown backend to fail`",
+      "range": {
+        "startLine": 39,
+        "startChar": 45,
+        "endLine": 39,
+        "endChar": 72
+      },
+      "revId": "00d0284bd5927fb91fa2cc417ec32bf5d3fd02a5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
