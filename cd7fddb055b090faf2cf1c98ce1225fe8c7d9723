@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "69d5bb05_4ed77958",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 16
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-07-30T08:42:57Z",
+      "side": 1,
+      "message": "style: add empty line after this lines",
+      "range": {
+        "startLine": 54,
+        "startChar": 4,
+        "endLine": 54,
+        "endChar": 10
+      },
+      "revId": "cd7fddb055b090faf2cf1c98ce1225fe8c7d9723",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b55a433e_4cd62574",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 16
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-07-30T08:42:57Z",
+      "side": 1,
+      "message": "style: add empty line after this bracket",
+      "range": {
+        "startLine": 57,
+        "startChar": 4,
+        "endLine": 57,
+        "endChar": 5
+      },
+      "revId": "cd7fddb055b090faf2cf1c98ce1225fe8c7d9723",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fb1a3081_04b42bc4",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 16
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-07-30T08:42:57Z",
+      "side": 1,
+      "message": "style: add empty line after this bracket",
+      "range": {
+        "startLine": 61,
+        "startChar": 4,
+        "endLine": 61,
+        "endChar": 5
+      },
+      "revId": "cd7fddb055b090faf2cf1c98ce1225fe8c7d9723",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "72ad6dcc_6d5be5a3",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 16
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-07-30T08:42:57Z",
+      "side": 1,
+      "message": "style: add empty line after this bracket",
+      "range": {
+        "startLine": 109,
+        "startChar": 4,
+        "endLine": 109,
+        "endChar": 5
+      },
+      "revId": "cd7fddb055b090faf2cf1c98ce1225fe8c7d9723",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7059bd22_f41a928e",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 16
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-07-30T08:42:57Z",
+      "side": 1,
+      "message": "minor: this else isn\u0027t needed, since not going into it produces the same result because of lines 135 and 136",
+      "range": {
+        "startLine": 129,
+        "startChar": 10,
+        "endLine": 133,
+        "endChar": 9
+      },
+      "revId": "cd7fddb055b090faf2cf1c98ce1225fe8c7d9723",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
