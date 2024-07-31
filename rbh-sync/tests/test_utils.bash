@@ -37,7 +37,7 @@ setup()
     cd "$testdir"
 
     # Create test database's name
-    testdb=$SUITE-$test
+    testdb=$$-$SUITE-$test
 
     # Load MPI
     if [[ "$WITH_MPI" == "true" ]]; then

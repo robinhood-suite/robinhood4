@@ -124,7 +124,7 @@ test_other_layouts()
     local file1=test_layout_overstriped
     local file2=test_layout_released
 
-    lfs setstripe -E 1M -C 5 -E -1 -c -1 $file1
+    lfs setstripe -C 5 $file1
 
     touch $file2
     archive_file $file2
