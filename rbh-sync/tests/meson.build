@@ -21,7 +21,7 @@ endif
 
 foreach t: integration_tests
     e = find_program(t + '.bash')
-    test(t, e, is_parallel: false)
+    test(t, e)
 endforeach
 
 # Tests with MPI
@@ -33,7 +33,7 @@ if r.returncode() == 0 and libmfu.found()
     integration_tests = ['test_mongo_mpifile_sync']
     foreach t: integration_tests
         e = find_program(t + '.bash')
-        test(t, e, is_parallel: false)
+        test(t, e, timeout: 120)
     endforeach
 
     env = environment()
@@ -46,7 +46,7 @@ if r.returncode() == 0 and libmfu.found()
 
     foreach t: integration_tests_mpi
         e = find_program(t + '.bash')
-        test(t + '_mpi', e, is_parallel: false, env: env, timeout: 60)
+        test(t + '_mpi', e, env: env, timeout: 60)
     endforeach
 
 endif

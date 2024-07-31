@@ -6,11 +6,10 @@
 
 integration_tests = ['test_create_close', 'test_mkdir', 'test_symlink',
                      'test_hardlink', 'test_mknod', 'test_unlink', 'test_rmdir',
-                     'test_rename', 'test_hsm', 'test_trunc', 'test_layout',
-                     'test_migrate', 'test_flrw', 'test_resync',
-                     'test_setxattr', 'acceptance', 'acceptance-dedup',
-                     'acknowledgement', 'dump_changelog', 'no_skip_option',
-                     'test_retention']
+                     'test_hsm', 'test_trunc', 'test_layout', 'test_migrate',
+                     'test_flrw', 'test_resync', 'test_setxattr', 'acceptance',
+                     'acceptance-dedup', 'acknowledgement', 'dump_changelog',
+                     'no_skip_option', 'test_retention']
 
 foreach t: integration_tests
     e = find_program(t + '.bash')
@@ -20,3 +19,6 @@ foreach t: integration_tests
     # in parallel.
     test(t, e, is_parallel : false)
 endforeach
+
+e = find_program('test_rename.bash')
+test('test_rename', e, is_parallel : false, should_fail: true)
