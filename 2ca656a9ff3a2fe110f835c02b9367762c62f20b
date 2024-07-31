@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "324fc64b_3fa629e7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1015302
+      },
+      "writtenOn": "2024-07-31T14:39:25Z",
+      "side": 1,
+      "message": "Hi,\n\nspecfile seems good now, I give you some hints to improve it, but it\u0027s fine for me as it 😊",
+      "revId": "2ca656a9ff3a2fe110f835c02b9367762c62f20b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "47ccbafb_4609dd72",
+        "filename": "robinhood4.ocean.spec.in",
+        "patchSetId": 5
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1015302
+      },
+      "writtenOn": "2024-07-31T14:39:25Z",
+      "side": 1,
+      "message": "Since mpi dependency is optional to use robinhood4 it may be a good idea to use \u0027%bcond-with mfu\u0027 statement on top of the file. This statement creates conditional builds so you can manage different kind of build : \n%if %{with mfu}\nRequires: openmpi\nRequires: libmfu\n%endif\n\nSo by default you can enforce mpifileutils and you can deactivate it with rpmbuild command line:\n\nrpmbuild --without mfu -ba robinhood4",
+      "range": {
+        "startLine": 17,
+        "startChar": 0,
+        "endLine": 18,
+        "endChar": 16
+      },
+      "revId": "2ca656a9ff3a2fe110f835c02b9367762c62f20b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
