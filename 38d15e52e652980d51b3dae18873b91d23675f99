@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e9b52a93_8277c63e",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 17
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-07-31T06:34:10Z",
+      "side": 1,
+      "message": "style: remove the bracket",
+      "range": {
+        "startLine": 56,
+        "startChar": 3,
+        "endLine": 58,
+        "endChar": 5
+      },
+      "revId": "38d15e52e652980d51b3dae18873b91d23675f99",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
