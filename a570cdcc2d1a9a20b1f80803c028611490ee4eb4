@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "35f71905_76cd53c2",
+        "filename": "rbh-find/include/rbh-find/filters.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-08-01T14:25:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0a7266b3_0b7e7049",
+      "range": {
+        "startLine": 122,
+        "startChar": 35,
+        "endLine": 122,
+        "endChar": 45
+      },
+      "revId": "a570cdcc2d1a9a20b1f80803c028611490ee4eb4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c77a7339_928c71c2",
@@ -47,6 +71,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "41c192ff_ff00a545",
+        "filename": "rbh-find/include/rbh-find/filters.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-08-01T14:25:50Z",
+      "side": 1,
+      "message": "Exactly, and since it\u0027s the code\u0027s documentation, I\u0027d rather stick with the actual operation done to be precise, even though it\u0027s equal to what you propose",
+      "parentUuid": "c77a7339_928c71c2",
+      "range": {
+        "startLine": 123,
+        "startChar": 46,
+        "endLine": 123,
+        "endChar": 58
+      },
+      "revId": "a570cdcc2d1a9a20b1f80803c028611490ee4eb4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ab79c98c_4783e9a4",
@@ -60,6 +108,30 @@
       "writtenOn": "2024-07-23T09:47:32Z",
       "side": 1,
       "message": "typo: to remove",
+      "range": {
+        "startLine": 295,
+        "startChar": 30,
+        "endLine": 295,
+        "endChar": 32
+      },
+      "revId": "a570cdcc2d1a9a20b1f80803c028611490ee4eb4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "91cf019b_8d669ef6",
+        "filename": "rbh-find/src/filters.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 295,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-08-01T14:25:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ab79c98c_4783e9a4",
       "range": {
         "startLine": 295,
         "startChar": 30,
