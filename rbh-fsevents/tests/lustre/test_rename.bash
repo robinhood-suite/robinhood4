@@ -22,7 +22,7 @@ test_rename()
 
     invoke_rbh-fsevents
 
-    local entries=$(mongo "$testdb" --eval "db.entries.find()" | wc -l)
+    local entries=$(mongo "$testdb" --eval "db.entries.countDocuments()")
     if [[ $entries -ne $count ]]; then
         error "There should be $count entries in the database, found $entries"
     fi
@@ -33,8 +33,8 @@ test_rename()
     # Request the DB to only show the inode with name $entry_renamed, and return
     # its parent
     local entry_parent=$(mongo "$testdb" --eval \
-                         'db.entries.find({"ns.name":"'$entry_renamed'"},
-                                          {"ns.parent": 1, "_id": 0})')
+        'db.entries.find({"ns.name":"'$entry_renamed'"},
+                                   {"ns.parent": 1, "_id": 0})')
 
     # The parent is of the form
     # '{ "ns" : [ { "parent" : BinData(0,"lw...AA") } ] }'

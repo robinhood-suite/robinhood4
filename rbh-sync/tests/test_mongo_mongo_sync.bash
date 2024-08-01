@@ -54,62 +54,52 @@ error()
 
 cursordiff()
 {
+    local collection_to_check"=$1"
+    local db1="$2"
+    local db2="$3"
+    local should_fail="$4"
     local script
 
     printf -v script '
-        function every(iterable, func) {
-            for (item of iterable) {
-                if (!func(item))
-                    return false;
-            }
-            return true;
-        }
-
-        function* keys(obj) {
-            for (key in obj)
-                yield key;
-        }
-
-        function isEqual(obj1, obj2) {
-            if (typeof(obj1) !== typeof(obj2)) {
+        function compareCollection(col1, col2){
+            if(col1.countDocuments() !== col2.countDocuments()){
                 return false;
             }
-            if (typeof(obj1) === "object") {
-                return every(keys(obj1), key => isEqual(obj1[key], obj2[key]));
-            }
-            return obj1 === obj2;
+
+            var same = true;
+
+            var compared = col1.find().forEach(function(doc1){
+                var doc2 = col2.findOne({_id: doc1._id});
+
+                same = same && JSON.stringify(doc1)==JSON.stringify(doc2);
+            });
+
+            return same;
         }
 
-        function* zip(cur1, cur2) {
-            while (cur1.hasNext() && cur2.hasNext()) {
-                yield [cur1.next(), cur2.next()];
-            }
-        }
+        const db1 = db.getSiblingDB("%s");
+        const db2 = db.getSiblingDB("%s");
 
-        const cur1 = %s;
-        const cur2 = %s;
+        compareCollection(db1.getCollection("%s"), db2.getCollection("entries"));
+    ' "$db1" "$db2" "$collection_to_check"
 
-        if (cur1.size() != cur2.size())
-            quit(1);
-
-        every(zip(cur1, cur2), ([obj1, obj2]) => isEqual(obj1, obj2));
-    ' "$1" "$2"
-
-     $(mongosh --nodb --eval "$script") ||
-         error "sync resulted in different db state\n"
+    if [ "$should_fail" == "true" ]; then
+        # "compareCollection" will return 'true' or 'false' is the collections
+        # are equal or not, so we use this result as a command
+        $(mongosh "$db1" --eval "$script") &&
+            error "sync should have resulted in different db state\n"
+    else
+        $(mongosh "$db1" --eval "$script") ||
+            error "sync resulted in different db state\n"
+    fi
 }
 
 verify_databases_after_sync()
 {
+    local collection_to_check="$1"
+    local should_fail="$2"
 
-    printf -v expected 'new Mongo().getDB("%s").entries.find(%s).sort(
-        {_id: 1}
-    )' "$testdb1" "$1"
-
-    printf -v actual 'new Mongo().getDB("%s").entries.find().sort({_id: 1})' \
-        "$testdb2"
-
-    cursordiff "$actual" "$expected"
+    cursordiff "$collection_to_check" "$testdb1" "$testdb2" "$should_fail"
 }
 
 ################################################################################
@@ -126,7 +116,7 @@ test_sync_simple()
     rbh_sync "rbh:posix:." "rbh:mongo:$testdb1"
     rbh_sync "rbh:mongo:$testdb1" "rbh:mongo:$testdb2"
 
-    verify_databases_after_sync ''
+    verify_databases_after_sync "entries" "false"
 }
 
 test_sync_branch()
@@ -138,7 +128,13 @@ test_sync_branch()
     rbh_sync "rbh:posix:." "rbh:mongo:$testdb1"
     rbh_sync "rbh:mongo:$testdb1#dir" "rbh:mongo:$testdb2"
 
-    verify_databases_after_sync '{ "ns.xattrs.path": { $regex: "^/dir" }}'
+    mongo --quiet "$testdb1" --eval 'db.entries.aggregate([
+        {$match: {"ns.xattrs.path": {$regex: "^/dir"}}},
+        {$out: "new_collection"}
+    ])'
+
+    verify_databases_after_sync "entries" true
+    verify_databases_after_sync "new_collection" false
 }
 
 ################################################################################

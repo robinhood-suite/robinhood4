@@ -35,7 +35,7 @@ test_truncate()
 
     invoke_rbh-fsevents
 
-    local entries=$(mongo "$testdb" --eval "db.entries.find()" | wc -l)
+    local entries=$(mongo "$testdb" --eval "db.entries.countDocuments()")
     local count=$(find . | wc -l)
     if [[ $entries -ne $count ]]; then
         error "There should be only $count entries in the database"
@@ -49,13 +49,13 @@ test_truncate()
         error "Truncate modified more than mtime, ctime and size"
     fi
 
-    find_attribute '"statx.ctime.sec":NumberLong('$(statx +%Z "$entry")')' \
+    find_attribute '"statx.ctime.sec":NumberLong("'$(statx +%Z "$entry")'")' \
                    '"ns.name":"'$entry'"'
     find_attribute '"statx.ctime.nsec":0' '"ns.name":"'$entry'"'
-    find_attribute '"statx.mtime.sec":NumberLong('$(statx +%Y "$entry")')' \
+    find_attribute '"statx.mtime.sec":NumberLong("'$(statx +%Y "$entry")'")' \
                    '"ns.name":"'$entry'"'
     find_attribute '"statx.mtime.nsec":0' '"ns.name":"'$entry'"'
-    find_attribute '"statx.size":NumberLong('$(statx +%s "$entry")')' \
+    find_attribute '"statx.size":NumberLong("'$(statx +%s "$entry")'")' \
                    '"ns.name":"'$entry'"'
 
     verify_lustre "$entry"

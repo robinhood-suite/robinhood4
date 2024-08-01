@@ -22,7 +22,7 @@ create_entry()
 
 create_filled_entry()
 {
-    echo "test" > "$1.tmp"
+    echo "blob" | dd oflag=direct of="$1.tmp"
     ln "$1.tmp" "$1"
 }
 
@@ -33,7 +33,7 @@ test_create_hardlink()
 
     invoke_rbh-fsevents
 
-    local entries=$(mongo "$testdb" --eval "db.entries.find()" | wc -l)
+    local entries=$(mongo "$testdb" --eval "db.entries.countDocuments()")
     local count=$(find . | wc -l)
     count=$((count - 1))
     if [[ $entries -ne $count ]]; then

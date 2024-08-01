@@ -13,7 +13,7 @@ test_create_entry()
 
     invoke_rbh-fsevents
 
-    local entries=$(mongo "$testdb" --eval "db.entries.find()" | wc -l)
+    local entries=$(mongo "$testdb" --eval "db.entries.countDocuments()")
     local count=$(find . | wc -l)
     if [[ $entries != $count ]]; then
         error "There should be only $count entries in the database"
@@ -29,9 +29,6 @@ test_create_two_entries()
     local entry2="test_entry2"
     create_entry "$entry1"
 
-    invoke_rbh-fsevents
-
-    clear_changelogs "$LUSTRE_MDT" "$userid"
     create_filled_entry "$entry2"
 
     invoke_rbh-fsevents

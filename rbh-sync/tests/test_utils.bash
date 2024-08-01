@@ -73,7 +73,7 @@ build_long_array()
     local arr=($output)
 
     for i in "${!arr[@]}"; do
-        arr[$i]="NumberLong(${arr[$i]})"
+        arr[$i]="NumberLong(\"${arr[$i]}\")"
     done
 
     echo "[$(join_arr ", " ${arr[@]})]"
@@ -97,7 +97,7 @@ find_attribute()
     IFS=','
     local output="$*"
     IFS=$old_IFS
-    local res=$(mongo $testdb --eval "db.entries.count({$output})")
+    local res=$(mongo $testdb --eval "db.entries.countDocuments({$output})")
     [[ "$res" == "1" ]] && return 0 ||
         error "No entry found with filter '$output'"
 }

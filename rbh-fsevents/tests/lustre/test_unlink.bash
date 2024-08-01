@@ -39,7 +39,7 @@ test_rm_with_hsm_copy()
 
     # Since an archived copy of $entry still exists, the DB should still contain
     # $entry with no parent
-    local entries=$(mongo "$testdb" --eval "db.entries.find()" | wc -l)
+    local entries=$(mongo "$testdb" --eval "db.entries.countDocuments()")
     local count=$(find . | wc -l)
     count=$((count + 1))
     if [[ $entries -ne $count ]]; then

@@ -21,7 +21,7 @@ endif
 
 foreach t: integration_tests
     e = find_program(t + '.bash')
-    test(t, e)
+    test(t, e, timeout: 60)
 endforeach
 
 # Tests with MPI
