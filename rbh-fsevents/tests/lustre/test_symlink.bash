@@ -36,7 +36,7 @@ test_create_symlink()
 
     invoke_rbh-fsevents
 
-    local entries=$(mongo "$testdb" --eval "db.entries.find()" | wc -l)
+    local entries=$(count_documents)
     local count=$(find . | wc -l)
     if [[ $entries -ne $count ]]; then
         error "There should be $count entries in the database, found $entries"

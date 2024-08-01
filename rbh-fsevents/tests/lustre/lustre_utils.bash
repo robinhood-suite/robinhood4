@@ -397,46 +397,42 @@ statx()
     local format="$1"
     local file="$2"
 
-    local stat=$(stat -c="$format" "$file")
-    if [ -z $3 ]; then
-        echo "${stat:2}"
-    else
-        stat=${stat:2}
-        echo "ibase=$3; ${stat^^}" | bc
-    fi
+    stat -c "$format" "$file"
+    #echo "$stat"
 }
 
 verify_statx()
 {
     local entry="$1"
     local name="$(basename "$entry")"
-    local raw_mode="$(statx +%f "$entry" 16)"
+    local raw_stats="$(stat -c %f "$entry")"
+    local raw_mode="$(echo "ibase=16; ${raw_stats^^}" | bc)"
     local type=$((raw_mode & 00170000))
     local mode=$((raw_mode & ~00170000))
 
     find_attribute '"ns.name":"'$name'"'
     find_attribute '"ns.xattrs.path":"'$(mountless_path "$entry")'"'
-    find_attribute '"statx.atime.sec":NumberLong('$(statx +%X "$entry")')' \
+    find_attribute '"statx.atime.sec":NumberLong("'$(statx %X "$entry")'")' \
                    '"ns.name":"'$name'"'
     find_attribute '"statx.atime.nsec":0' '"ns.name":"'$name'"'
-    find_attribute '"statx.ctime.sec":NumberLong('$(statx +%Z "$entry")')' \
+    find_attribute '"statx.ctime.sec":NumberLong("'$(statx %Z "$entry")'")' \
                    '"ns.name":"'$name'"'
     find_attribute '"statx.ctime.nsec":0' '"ns.name":"'$name'"'
-    find_attribute '"statx.mtime.sec":NumberLong('$(statx +%Y "$entry")')' \
+    find_attribute '"statx.mtime.sec":NumberLong("'$(statx %Y "$entry")'")' \
                    '"ns.name":"'$name'"'
     find_attribute '"statx.mtime.nsec":0' '"ns.name":"'$name'"'
     find_attribute '"statx.btime.nsec":0' '"ns.name":"'$name'"'
-    find_attribute '"statx.blksize":'$(statx +%o "$entry") \
+    find_attribute '"statx.blksize":'$(statx %o "$entry") \
                    '"ns.name":"'$name'"'
-    find_attribute '"statx.blocks":NumberLong('$(statx +%b "$entry")')' \
+    find_attribute '"statx.blocks":NumberLong("'$(statx %b "$entry")'")' \
                    '"ns.name":"'$name'"'
-    find_attribute '"statx.nlink":'$(statx +%h "$entry") \
+    find_attribute '"statx.nlink":'$(statx %h "$entry") \
                    '"ns.name":"'$name'"'
-    find_attribute '"statx.ino":NumberLong("'$(statx +%i "$entry")'")' \
+    find_attribute '"statx.ino":NumberLong("'$(statx %i "$entry")'")' \
                    '"ns.name":"'$name'"'
-    find_attribute '"statx.gid":'$(statx +%g "$entry") '"ns.name":"'$name'"'
-    find_attribute '"statx.uid":'$(statx +%u "$entry") '"ns.name":"'$name'"'
-    find_attribute '"statx.size":NumberLong('$(statx +%s "$entry")')' \
+    find_attribute '"statx.gid":'$(statx %g "$entry") '"ns.name":"'$name'"'
+    find_attribute '"statx.uid":'$(statx %u "$entry") '"ns.name":"'$name'"'
+    find_attribute '"statx.size":NumberLong("'$(statx %s "$entry")'")' \
                    '"ns.name":"'$name'"'
     find_attribute '"statx.type":'$type '"ns.name":"'$name'"'
     find_attribute '"statx.mode":'$mode '"ns.name":"'$name'"'

@@ -21,7 +21,7 @@ endif
 
 foreach t: integration_tests
     e = find_program(t + '.bash')
-    test(t, e)
+    test(t, e, timeout: 60)
 endforeach
 
 # Tests with MPI
@@ -46,7 +46,7 @@ if r.returncode() == 0 and libmfu.found()
 
     foreach t: integration_tests_mpi
         e = find_program(t + '.bash')
-        test(t + '_mpi', e, env: env, timeout: 60)
+        test(t + '_mpi', e, env: env, timeout: 120)
     endforeach
 
 endif

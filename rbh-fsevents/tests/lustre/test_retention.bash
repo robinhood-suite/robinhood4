@@ -26,17 +26,6 @@ difflines()
     diff -y - <([ $# -eq 0 ] && printf '' || printf '%s\n' "$@")
 }
 
-find_attribute()
-{
-    old_IFS=$IFS
-    IFS=','
-    local output="$*"
-    IFS=$old_IFS
-    local res=$(mongo $testdb --eval "db.entries.count({$output})")
-    [[ "$res" == "1" ]] && return 0 ||
-        error "Expected 1 entry with filter '{ $output }', got '$res'"
-}
-
 retention_teardown()
 {
     # Since the test changes the system's date and time, it must be reset at the
@@ -67,8 +56,9 @@ test_retention()
     verify_lustre "$entry"
 
     local exp_time="$(( $(stat -c %X $entry) + 5))"
-    find_attribute '"xattrs.trusted.expiration_date": NumberLong('$exp_time')'\
-                   '"ns.name": "'$entry'"'
+    find_attribute \
+        '"xattrs.trusted.expiration_date": NumberLong("'$exp_time'")'\
+        '"ns.name": "'$entry'"'
     find_attribute '"xattrs.user.expires": "+5"' '"ns.name": "'$entry'"'
 
     rbh_lfind "rbh:mongo:$testdb" -expired | sort | difflines
@@ -85,8 +75,9 @@ test_retention()
     verify_lustre "$entry"
 
     exp_time="$(( $(stat -c %Y $entry) + 5))"
-    find_attribute '"xattrs.trusted.expiration_date": NumberLong('$exp_time')'\
-                   '"ns.name": "'$entry'"'
+    find_attribute \
+        '"xattrs.trusted.expiration_date": NumberLong("'$exp_time'")'\
+        '"ns.name": "'$entry'"'
     find_attribute '"xattrs.user.expires": "+5"' '"ns.name": "'$entry'"'
 
     rbh_lfind "rbh:mongo:$testdb" -expired | sort | difflines
@@ -118,8 +109,9 @@ RBH_RETENTION_XATTR: \"user.blob\"
         src:lustre:"$LUSTRE_MDT" "rbh:mongo:$testdb"
 
     local exp_time="$(( $(stat -c %Y $entry) + 5))"
-    find_attribute '"xattrs.trusted.expiration_date": NumberLong('$exp_time')'\
-                   '"ns.name": "'$entry'"'
+    find_attribute \
+        '"xattrs.trusted.expiration_date": NumberLong("'$exp_time'")'\
+        '"ns.name": "'$entry'"'
     find_attribute '"xattrs.user.blob": "+5"' '"ns.name": "'$entry'"'
 }
 
