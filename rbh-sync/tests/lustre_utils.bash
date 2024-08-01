@@ -338,19 +338,19 @@ verify_statx()
     else
         find_attribute '"ns.xattrs.path":"'$(mountless_path "$entry")'"'
     fi
-    find_attribute '"statx.atime.sec":NumberLong('$(statx +%X "$entry")')' \
+    find_attribute '"statx.atime.sec":NumberLong("'$(statx +%X "$entry")'")' \
                    '"ns.name":"'$name'"'
     find_attribute '"statx.atime.nsec":0' '"ns.name":"'$name'"'
-    find_attribute '"statx.ctime.sec":NumberLong('$(statx +%Z "$entry")')' \
+    find_attribute '"statx.ctime.sec":NumberLong("'$(statx +%Z "$entry")'")' \
                    '"ns.name":"'$name'"'
     find_attribute '"statx.ctime.nsec":0' '"ns.name":"'$name'"'
-    find_attribute '"statx.mtime.sec":NumberLong('$(statx +%Y "$entry")')' \
+    find_attribute '"statx.mtime.sec":NumberLong("'$(statx +%Y "$entry")'")' \
                    '"ns.name":"'$name'"'
     find_attribute '"statx.mtime.nsec":0' '"ns.name":"'$name'"'
     find_attribute '"statx.btime.nsec":0' '"ns.name":"'$name'"'
     find_attribute '"statx.blksize":'$(statx +%o "$entry") \
                    '"ns.name":"'$name'"'
-    find_attribute '"statx.blocks":NumberLong('$(statx +%b "$entry")')' \
+    find_attribute '"statx.blocks":NumberLong("'$(statx +%b "$entry")'")' \
                    '"ns.name":"'$name'"'
     find_attribute '"statx.nlink":'$(statx +%h "$entry") \
                    '"ns.name":"'$name'"'
@@ -358,7 +358,7 @@ verify_statx()
                    '"ns.name":"'$name'"'
     find_attribute '"statx.gid":'$(statx +%g "$entry") '"ns.name":"'$name'"'
     find_attribute '"statx.uid":'$(statx +%u "$entry") '"ns.name":"'$name'"'
-    find_attribute '"statx.size":NumberLong('$(statx +%s "$entry")')' \
+    find_attribute '"statx.size":NumberLong("'$(statx +%s "$entry")'")' \
                    '"ns.name":"'$name'"'
     find_attribute '"statx.type":'$type '"ns.name":"'$name'"'
     find_attribute '"statx.mode":'$mode '"ns.name":"'$name'"'

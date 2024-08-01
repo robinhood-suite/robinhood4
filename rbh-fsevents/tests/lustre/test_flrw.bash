@@ -28,7 +28,7 @@ test_flrw()
     invoke_rbh-fsevents
 
     clear_changelogs "$LUSTRE_MDT" "$userid"
-    echo "test_data" >> $entry
+    echo "test_data" | dd oflag=direct of="$entry"
 
     local old_version=$(mongo "$testdb" --eval \
         'db.entries.find({"ns.name":"'$entry'"},
@@ -37,7 +37,7 @@ test_flrw()
 
     invoke_rbh-fsevents
 
-    local entries=$(mongo "$testdb" --eval "db.entries.find()" | wc -l)
+    local entries=$(count_documents)
     local count=$(find . | wc -l)
     if [[ $entries -ne $count ]]; then
         error "There should be $count entries in the database, found $entries"
@@ -53,15 +53,15 @@ test_flrw()
               "and size"
     fi
 
-    find_attribute '"statx.ctime.sec":NumberLong('$(statx +%Z "$entry")')' \
+    find_attribute '"statx.ctime.sec":NumberLong("'$(statx %Z "$entry")'")' \
                    '"ns.name":"'$entry'"'
     find_attribute '"statx.ctime.nsec":0' '"ns.name":"'$entry'"'
-    find_attribute '"statx.mtime.sec":NumberLong('$(statx +%Y "$entry")')' \
+    find_attribute '"statx.mtime.sec":NumberLong("'$(statx %Y "$entry")'")' \
                    '"ns.name":"'$entry'"'
     find_attribute '"statx.mtime.nsec":0' '"ns.name":"'$entry'"'
-    find_attribute '"statx.size":NumberLong('$(statx +%s "$entry")')' \
+    find_attribute '"statx.size":NumberLong("'$(statx %s "$entry")'")' \
                    '"ns.name":"'$entry'"'
-    find_attribute '"statx.blocks":NumberLong('$(statx +%b "$entry")')' \
+    find_attribute '"statx.blocks":NumberLong("'$(statx %b "$entry")'")' \
                    '"ns.name":"'$entry'"'
 
     find_attribute '"xattrs.mirror_count":'$n_mirror '"ns.name":"'$entry'"'

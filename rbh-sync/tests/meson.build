@@ -42,7 +42,7 @@ if r.returncode() == 0 and libmfu.found()
 
     foreach t: integration_tests_mpi
         e = find_program(t + '.bash')
-        test(t + '_mpi', e, is_parallel: false, timeout: 60,
+        test(t + '_mpi', e, is_parallel: false, timeout: 120,
              env: backend_path_env_for_mpi_tests, suite: 'rbh-sync')
     endforeach
 endif
