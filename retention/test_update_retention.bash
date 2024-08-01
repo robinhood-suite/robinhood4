@@ -193,7 +193,7 @@ test_retention_after_sync()
     rbh_sync rbh:lustre:. "rbh:mongo:$testdb"
 
     find_attribute \
-        '"xattrs.trusted.expiration_date":NumberLong('$expiration_date')' \
+        '"xattrs.trusted.expiration_date":NumberLong("'$expiration_date'")' \
         '"ns.xattrs.path":"'/$dir'"'
 
     date --set="@$(( $(stat -c %Y $dir) + 11))"
@@ -206,7 +206,7 @@ test_retention_after_sync()
 
     expiration_date="$(( $(stat -c %Y $dir/$entry) + 11))"
     find_attribute \
-        '"xattrs.trusted.expiration_date":NumberLong('$expiration_date')' \
+        '"xattrs.trusted.expiration_date":NumberLong("'$expiration_date'")' \
         '"ns.xattrs.path":"'/$dir'"'
 
     rbh_sync rbh:lustre:. "rbh:mongo:$testdb"
@@ -214,7 +214,7 @@ test_retention_after_sync()
     # The expiration date of the directory shouldn't have changed after the
     # sync
     find_attribute \
-        '"xattrs.trusted.expiration_date":NumberLong('$expiration_date')' \
+        '"xattrs.trusted.expiration_date":NumberLong("'$expiration_date'")' \
         '"ns.xattrs.path":"'/$dir'"'
 
     date --set="@$(( $(stat -c %Y $dir) + 5))"
@@ -225,7 +225,7 @@ test_retention_after_sync()
     # The expiration shouldn't have changed as the created file $entry2 is too
     # old to change it
     find_attribute \
-        '"xattrs.trusted.expiration_date":NumberLong('$expiration_date')' \
+        '"xattrs.trusted.expiration_date":NumberLong("'$expiration_date'")' \
         '"ns.xattrs.path":"'/$dir'"'
 
     date --set="@$(( $(stat -c %Y $dir) + 15))"
@@ -237,7 +237,7 @@ test_retention_after_sync()
     # created later down the line
     expiration_date="$(( $(stat -c %Y $dir) + 10))"
     find_attribute \
-        '"xattrs.trusted.expiration_date":NumberLong('$expiration_date')' \
+        '"xattrs.trusted.expiration_date":NumberLong("'$expiration_date'")' \
         '"ns.xattrs.path":"'/$dir'"'
 }
 
