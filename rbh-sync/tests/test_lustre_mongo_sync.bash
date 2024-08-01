@@ -112,7 +112,7 @@ test_sync_one_file(){
 
     rbh_sync_lustre_one "fileA" "rbh:mongo:$testdb"
 
-    local count=$(mongo $testdb --eval "db.entries.count()")
+    local count=$(count_documents)
     if [[ $count -ne 1 ]]; then
         error "Invalid number of files were synced, expected '1' entries, " \
               "found '$count'."

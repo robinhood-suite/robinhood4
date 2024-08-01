@@ -14,6 +14,39 @@ test_dir=$(dirname $(readlink -e $0))
 #                                    TESTS                                     #
 ################################################################################
 
+get_binary_id_from_mongo_entry()
+{
+    local entry="$1"
+
+    # We do some bashism to only retrieve the ID part, which for Lustre starts
+    # with "lw" and ends with "AA"
+    entry="$(echo "$entry" | tr -d '\n')"
+    entry="lw${entry#*lw}"
+    entry="${entry%AA*}AA"
+
+    echo "$entry"
+}
+
+get_mongo_id_from_binary_id()
+{
+    local binary="$1"
+
+    if (( $(mongo_version) < $(version_code 5.0.0) )); then
+        echo "BinData(0, \"$binary\")"
+    else
+        echo "Binary.createFromBase64(\"$binary\", 0)"
+    fi
+}
+
+get_entry_from_binary_id()
+{
+    local id="$1"
+
+    mongo "$testdb" --eval \
+        "db.entries.find({\"_id\":$(get_mongo_id_from_binary_id "$id")},
+                         {\"_id\": 1})"
+}
+
 test_rename()
 {
     local entry="$1"
@@ -22,7 +55,7 @@ test_rename()
 
     invoke_rbh-fsevents
 
-    local entries=$(mongo "$testdb" --eval "db.entries.find()" | wc -l)
+    local entries=$(count_documents)
     if [[ $entries -ne $count ]]; then
         error "There should be $count entries in the database, found $entries"
     fi
@@ -32,21 +65,15 @@ test_rename()
 
     # Request the DB to only show the inode with name $entry_renamed, and return
     # its parent
-    local entry_parent=$(mongo "$testdb" --eval \
-                         'db.entries.find({"ns.name":"'$entry_renamed'"},
-                                          {"ns.parent": 1, "_id": 0})')
+    local entry_parent="$(mongo "$testdb" --eval \
+        'db.entries.find({"ns.name":"'$entry_renamed'"},
+                         {"ns.parent": 1, "_id": 0})')"
 
-    # The parent is of the form
-    # '{ "ns" : [ { "parent" : BinData(0,"lw...AA") } ] }'
-    # so we do some bashism to remove the start until 'BinData' and then after
-    # the first closing parenthesis
-    entry_parent="BinData${entry_parent#*BinData}"
-    entry_parent="${entry_parent%)*})"
+    local parent_id="$(get_binary_id_from_mongo_entry "$entry_parent")"
 
-    local parent=$(mongo "$testdb" --eval \
-                   'db.entries.find({"_id":'$entry_parent'}, {"_id": 1})')
+    local parent="$(get_entry_from_binary_id "$parent_id")"
 
-    if [[ "$parent" != *"$entry_parent"* ]]; then
+    if [[ "$parent" != *"$parent_id"* ]]; then
         error "'$entry_renamed' is not located in the '$parent' directory, but"
               "in '$entry_parent'"
     fi
@@ -114,8 +141,7 @@ test_rename_overwrite_data_with_hsm_copy()
                       'db.entries.find({"ns.name":"'$entry_renamed'"},
                                        {"_id": 1})')
 
-    old_entry="BinData${old_entry#*BinData}"
-    old_entry="${old_entry%)*})"
+    old_entry="$(get_binary_id_from_mongo_entry "$old_entry")"
 
     mv $entry tmp/$entry_renamed
     local count=$(find . | wc -l)
@@ -124,8 +150,14 @@ test_rename_overwrite_data_with_hsm_copy()
     test_rename $entry $entry_renamed $count
 
     # Check the overwriten entry is still in the DB but has no link anymore
-    find_attribute '"_id":'$old_entry \
-                   '"ns": { $exists : true }' '"ns": { $size : 0 }'
+    local result="$(mongo "$testdb" --eval \
+        "db.entries.find({\"_id\":$(get_mongo_id_from_binary_id "$old_entry"),
+                          \"ns\": { \$exists : true },
+                          \"ns\": { \$size : 0 }})")"
+    if [ -z "$result" ]; then
+        error "Entry '$old_entry' should still be in the DB, but with no link"
+    fi
+
     verify_lustre tmp/$entry_renamed
 }
 

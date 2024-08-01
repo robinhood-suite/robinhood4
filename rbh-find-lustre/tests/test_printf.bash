@@ -6,8 +6,6 @@
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
 
-set -xe
-
 if ! command -v rbh-sync &> /dev/null; then
     echo "This test requires rbh-sync to be installed" >&2
     exit 1
@@ -30,9 +28,9 @@ test_id()
     local IDB=$(rbh_lfind "rbh:mongo:$testdb" -name fileB -printf "%I\n")
 
     local countA="$(mongo --quiet "$testdb" --eval \
-                    "db.entries.find({\"_id\": BinData(0, \"$IDA\")}).count()")"
+                    "db.entries.countDocuments({\"_id\": BinData(0, \"$IDA\")})")"
     local countB="$(mongo --quiet "$testdb" --eval \
-                    "db.entries.find({\"_id\": BinData(0, \"$IDB\")}).count()")"
+                    "db.entries.countDocuments({\"_id\": BinData(0, \"$IDB\")})")"
 
     if [[ "$countA" != "1" ]]; then
         error "Couldn't find entry with ID '$IDA'"

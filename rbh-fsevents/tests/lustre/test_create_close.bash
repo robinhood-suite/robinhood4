@@ -21,7 +21,7 @@ create_entry()
 
 create_filled_entry()
 {
-    echo "blob" > "$1"
+    echo "blob" | dd oflag=direct of="$1"
 }
 
 ################################################################################

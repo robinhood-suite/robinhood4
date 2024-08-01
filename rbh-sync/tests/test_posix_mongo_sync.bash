@@ -120,10 +120,10 @@ test_sync_one_two_files()
     find_attribute '"statx.size" : '$length \
                    '"xattrs.user.a" : { $exists : true }'
 
-    local output_lines=$(mongo $testdb --eval "db.entries.count()")
-    if [[ $output_lines -ne 2 ]]; then
-        error "Invalid number of files were synced, expected '2' lines, " \
-              "found '$output_lines'."
+    local entries=$(count_documents)
+    if [[ $entries -ne 2 ]]; then
+        error "Invalid number of files were synced, expected '2', " \
+              "found '$entries'."
     fi
 }
 
@@ -263,7 +263,7 @@ test_continue_sync_on_error()
             error "Failed to find error on open of '$second_file'"
     fi
 
-    local db_count=$(mongo $testdb --eval "db.entries.count()")
+    local db_count=$(count_documents)
     if [[ $db_count -ne 2 ]]; then
         error "Invalid number of files were synced, expected '2' entries, " \
               "found '$db_count'."
@@ -310,7 +310,7 @@ test_stop_sync_on_error()
 
     userdel -f -r test || true
 
-    local db_count=$(mongo $testdb --eval "db.entries.count()")
+    local db_count=$(count_documents)
     if [[ $db_count -ne 0 ]]; then
         error "Invalid number of files were synced, expected '0', found" \
               "'$db_count' entries."

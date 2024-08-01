@@ -25,10 +25,38 @@ mongo()
     "$__mongo" --quiet "$@"
 }
 
+function version_code()
+{
+    eval set -- $(echo $1 | tr "[:punct:]" " ")
+
+    echo -n "$(( (${1:-0} << 16) | (${2:-0} << 8) | ${3:-0} ))"
+}
+
+function mongo_version()
+{
+    local mongo_path="$(which mongo)"
+    local version="$($mongo_path --version | head -n 1 | cut -d' ' -f4)"
+    version_code "${version:1}"
+}
 
 ################################################################################
 #                                DATABASE UTILS                                #
 ################################################################################
+
+count_documents()
+{
+    local input="$1"
+
+    if [ ! -z "$input" ]; then
+        input="{$input}"
+    fi
+
+    if (( $(mongo_version) < $(version_code 5.0.0) )); then
+        mongo $testdb --eval "db.entries.count($input)"
+    else
+        mongo $testdb --eval "db.entries.countDocuments($input)"
+    fi
+}
 
 find_attribute()
 {
@@ -36,7 +64,7 @@ find_attribute()
     IFS=','
     local output="$*"
     IFS=$old_IFS
-    local res=$(mongo $testdb --eval "db.entries.count({$output})")
+    local res="$(count_documents "$output")"
     [[ "$res" == "1" ]] && return 0 ||
         error "No entry found with filter '$output'"
 }
@@ -58,7 +86,7 @@ build_long_array()
     local arr=($output)
 
     for i in "${!arr[@]}"; do
-        arr[$i]="NumberLong(${arr[$i]})"
+        arr[$i]="NumberLong(\"${arr[$i]}\")"
     done
 
     echo "[$(join_arr ", " ${arr[@]})]"

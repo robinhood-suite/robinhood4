@@ -37,7 +37,7 @@ test_resync()
 
     invoke_rbh-fsevents
 
-    local entries=$(mongo "$testdb" --eval "db.entries.find()" | wc -l)
+    local entries=$(count_documents)
     local count=$(find . | wc -l)
     if [[ $entries -ne $count ]]; then
         error "There should be $count entries in the database, found $entries"
@@ -52,10 +52,10 @@ test_resync()
               "and size"
     fi
 
-    find_attribute '"statx.ctime.sec":NumberLong('$(statx +%Z "$entry")')' \
+    find_attribute '"statx.ctime.sec":NumberLong("'$(statx +%Z "$entry")'")' \
                    '"ns.name":"'$entry'"'
     find_attribute '"statx.ctime.nsec":0' '"ns.name":"'$entry'"'
-    find_attribute '"statx.blocks":NumberLong('$(statx +%b "$entry")')' \
+    find_attribute '"statx.blocks":NumberLong("'$(statx +%b "$entry")'")' \
                    '"ns.name":"'$entry'"'
 
     find_attribute '"xattrs.mirror_count":'$n_mirror '"ns.name":"'$entry'"'
