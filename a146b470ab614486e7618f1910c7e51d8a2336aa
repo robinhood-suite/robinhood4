@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "860f6ed4_2bc42bc2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-08-02T07:20:25Z",
+      "side": 1,
+      "message": "Guillaume is ok with having debug code in the source code.",
+      "revId": "a146b470ab614486e7618f1910c7e51d8a2336aa",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
