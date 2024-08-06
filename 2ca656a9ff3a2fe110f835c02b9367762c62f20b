@@ -39,6 +39,30 @@
       },
       "revId": "2ca656a9ff3a2fe110f835c02b9367762c62f20b",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "da134661_90836ee5",
+        "filename": "robinhood4.ocean.spec.in",
+        "patchSetId": 5
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-08-06T07:53:13Z",
+      "side": 1,
+      "message": "Done for the requires/buildrequires. Cannot be used for the files yet, as we do not have any mechanism to deactivate the building of a backend. If the dependency of a backend is present, the backend will be built, meaning that putting this condition on the files aswell will provoke an unpackaged file error at build.",
+      "parentUuid": "47ccbafb_4609dd72",
+      "range": {
+        "startLine": 17,
+        "startChar": 0,
+        "endLine": 18,
+        "endChar": 16
+      },
+      "revId": "2ca656a9ff3a2fe110f835c02b9367762c62f20b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
