@@ -22,6 +22,30 @@
       },
       "revId": "cfa580ff96bdff5d4ca1a696d7b4f9ed9b9336b1",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9dc4c7d1_2c674863",
+        "filename": "librobinhood/src/backends/posix/xattrs_mapping.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-08-07T11:18:35Z",
+      "side": 1,
+      "message": "I think it is because how parsing is generally done in RBH4. In nearly all cases, we do a switch on the first character, then only compare all (strings minus first character) to the available options. Which is faster than doing all string comparisons.",
+      "parentUuid": "bf6f8fc6_98be40be",
+      "range": {
+        "startLine": 60,
+        "startChar": 8,
+        "endLine": 64,
+        "endChar": 21
+      },
+      "revId": "cfa580ff96bdff5d4ca1a696d7b4f9ed9b9336b1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
