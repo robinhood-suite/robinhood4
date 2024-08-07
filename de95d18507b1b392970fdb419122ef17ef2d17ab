@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3545c2dd_6da95ac9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-08-07T09:35:03Z",
+      "side": 1,
+      "message": "minor: you didn\u0027t change the commit message",
+      "range": {
+        "startLine": 18,
+        "startChar": 3,
+        "endLine": 20,
+        "endChar": 56
+      },
+      "revId": "de95d18507b1b392970fdb419122ef17ef2d17ab",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
