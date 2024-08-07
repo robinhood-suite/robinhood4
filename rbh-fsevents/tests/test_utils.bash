@@ -34,8 +34,7 @@ function version_code()
 
 function mongo_version()
 {
-    local mongo_path="$(which mongo)"
-    local version="$($mongo_path --version | head -n 1 | cut -d' ' -f4)"
+    local version="$(mongod --version | head -n 1 | cut -d' ' -f3)"
     version_code "${version:1}"
 }
 

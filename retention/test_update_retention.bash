@@ -19,6 +19,37 @@ function retention_teardown()
     # Since the test changes the system's date and time, it must be reset at the
     # end of it, which is what hwclock does
     hwclock --hctosys
+
+    if (( $(mongo_version) < $(version_code 5.0.0) )); then
+        mongo --quiet "$testdb" --eval "db.dropDatabase()" >/dev/null
+    else
+        mongosh --quiet "$testdb" --eval "db.dropDatabase()" >/dev/null
+    fi
+
+    rm -rf "$testdir"
+}
+
+error()
+{
+    echo "$*"
+    exit 1
+}
+
+run_tests()
+{
+    local fail=0
+
+    for test in "$@"; do
+        (set -e; trap -- teardown EXIT; setup; "$test")
+        if !(($?)); then
+            echo "$test: ✔"
+        else
+            echo "$test: ✖"
+            fail=1
+        fi
+    done
+
+    return $fail
 }
 
 ################################################################################
@@ -261,7 +292,7 @@ RBH_RETENTION_XATTR: \"user.blob\"
     rbh_sync rbh:lustre:. "rbh:mongo:$testdb" --config $conf_file
 
     find_attribute \
-        '"xattrs.trusted.expiration_date":NumberLong('$expiration_date')' \
+        '"xattrs.trusted.expiration_date":NumberLong("'$expiration_date'")' \
         '"ns.xattrs.path":"'/$dir'"'
 
     date --set="@$(( $(stat -c %Y $dir) + 11))"
