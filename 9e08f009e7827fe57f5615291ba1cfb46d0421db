@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c5d2249e_8b9e35f7",
+        "filename": "rbh-sync/tests/test_utils.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2024-08-07T10:01:01Z",
+      "side": 1,
+      "message": "comment: this code is redundant with the rbh-fsevent version.",
+      "range": {
+        "startLine": 32,
+        "startChar": 0,
+        "endLine": 32,
+        "endChar": 23
+      },
+      "revId": "9e08f009e7827fe57f5615291ba1cfb46d0421db",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
