@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e9c90215_79d4b43c",
+        "filename": "librobinhood/src/backends/posix/xattrs_mapping.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-08-07T11:21:09Z",
+      "side": 1,
+      "message": "suggest: in this case, it may be easier to read to directly compare the string to true/false ; I don\u0027t care the code is not optimized for error cases",
+      "range": {
+        "startLine": 50,
+        "startChar": 4,
+        "endLine": 56,
+        "endChar": 31
+      },
+      "revId": "ec6d5edf6042a4843005697ccf6df818cf246298",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
