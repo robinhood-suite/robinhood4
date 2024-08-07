@@ -13,6 +13,19 @@ SUITE=${SUITE%.*}
 
 test_dir=$(dirname $(readlink -e $0))
 
+function version_code()
+{
+    eval set -- $(echo $1 | tr "[:punct:]" " ")
+
+    echo -n "$(( (${1:-0} << 16) | (${2:-0} << 8) | ${3:-0} ))"
+}
+
+function mongo_version()
+{
+    local version="$(mongod --version | head -n 1 | cut -d' ' -f3)"
+    version_code "${version:1}"
+}
+
 setup()
 {
     # Create a test directory and `cd` into it
@@ -29,7 +42,13 @@ teardown()
     # Since the test changes the system's date and time, it must be reset at the
     # end of it, which is what hwclock does
     hwclock --hctosys
-    mongo --quiet "$testdb" --eval "db.dropDatabase()" >/dev/null
+
+    if (( $(mongo_version) < $(version_code 5.0.0) )); then
+        mongo --quiet "$testdb" --eval "db.dropDatabase()" >/dev/null
+    else
+        mongosh --quiet "$testdb" --eval "db.dropDatabase()" >/dev/null
+    fi
+
     rm -rf "$testdir"
 }
 
@@ -60,14 +79,28 @@ run_tests()
 #                                    TESTS                                     #
 ################################################################################
 
+count_documents()
+{
+    local input="$1"
+
+    if [ ! -z "$input" ]; then
+        input="{$input}"
+    fi
+
+    if (( $(mongo_version) < $(version_code 5.0.0) )); then
+        mongo --quiet $testdb --eval "db.entries.count($input)"
+    else
+        mongosh --quiet $testdb --eval "db.entries.countDocuments($input)"
+    fi
+}
+
 find_attribute()
 {
     old_IFS=$IFS
     IFS=','
     local output="$*"
     IFS=$old_IFS
-    local res=$(mongo --quiet $testdb --eval \
-        "db.entries.countDocuments({$output})")
+    local res="$(count_documents "$output")"
     [[ "$res" == "1" ]] && return 0 ||
         error "No entry found with filter '$output'"
 }
