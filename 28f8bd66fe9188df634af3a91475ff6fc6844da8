@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "212bd4be_ce037bde",
+        "filename": "rbh-find/include/rbh-find/filters.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-08-07T10:05:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6251f28d_075caf33",
+      "range": {
+        "startLine": 19,
+        "startChar": 10,
+        "endLine": 19,
+        "endChar": 35
+      },
+      "revId": "28f8bd66fe9188df634af3a91475ff6fc6844da8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1d307b14_7c056fac",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-08-07T09:47:24Z",
       "side": 1,
       "message": "minor: invalid documentation",
+      "range": {
+        "startLine": 34,
+        "startChar": 10,
+        "endLine": 34,
+        "endChar": 41
+      },
+      "revId": "28f8bd66fe9188df634af3a91475ff6fc6844da8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "109a4a10_25d6dea8",
+        "filename": "rbh-find/include/rbh-find/filters.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-08-07T10:05:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1d307b14_7c056fac",
       "range": {
         "startLine": 34,
         "startChar": 10,
