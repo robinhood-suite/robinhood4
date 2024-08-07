@@ -19,7 +19,7 @@ endif
 foreach t: integration_tests
     e = find_program(t + '.bash')
     test(t, e, is_parallel: false, env: backend_path_env,
-         suite: 'rbh-sync')
+         suite: 'rbh-sync', timeout: 120)
 endforeach
 
 # Tests with MPI

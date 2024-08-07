@@ -6,8 +6,6 @@
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
 
-set -e
-
 SUITE=${BASH_SOURCE##*/}
 SUITE=${SUITE%.*}
 
@@ -261,7 +259,7 @@ RBH_RETENTION_XATTR: \"user.blob\"
     rbh_sync rbh:lustre:. "rbh:mongo:$testdb" --config $conf_file
 
     find_attribute \
-        '"xattrs.trusted.expiration_date":NumberLong('$expiration_date')' \
+        '"xattrs.trusted.expiration_date":NumberLong("'$expiration_date'")' \
         '"ns.xattrs.path":"'/$dir'"'
 
     date --set="@$(( $(stat -c %Y $dir) + 11))"
