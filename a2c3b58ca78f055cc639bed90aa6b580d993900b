@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ca5d7c21_42c99c81",
+        "filename": "rbh-find/rbh-find.c",
+        "patchSetId": 8
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-08-07T09:34:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "90ffa638_c16c1915",
+      "range": {
+        "startLine": 43,
+        "startChar": 26,
+        "endLine": 43,
+        "endChar": 37
+      },
+      "revId": "a2c3b58ca78f055cc639bed90aa6b580d993900b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5ba9568c_efa0aef8",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-08-07T09:29:04Z",
       "side": 1,
       "message": "minor: predicates",
+      "range": {
+        "startLine": 69,
+        "startChar": 44,
+        "endLine": 69,
+        "endChar": 51
+      },
+      "revId": "a2c3b58ca78f055cc639bed90aa6b580d993900b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d774152_71250cf5",
+        "filename": "rbh-find/rbh-find.c",
+        "patchSetId": 8
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-08-07T09:34:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ba9568c_efa0aef8",
       "range": {
         "startLine": 69,
         "startChar": 44,
