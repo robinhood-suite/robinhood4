@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d4716cbb_4705c8ba",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-08-07T10:05:10Z",
+      "side": 1,
+      "message": "typo: compare",
+      "range": {
+        "startLine": 10,
+        "startChar": 44,
+        "endLine": 10,
+        "endChar": 51
+      },
+      "revId": "3b5639a08d5f7e2a7992300f9d5cd9246333bbda",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "05d92ea2_59aefe33",
+        "filename": "rbh-find-lustre/tests/test_comp_start.bash",
+        "patchSetId": 4
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-08-07T10:05:10Z",
+      "side": 1,
+      "message": "minor: add a comment to explain why this is commented",
+      "range": {
+        "startLine": 39,
+        "startChar": 0,
+        "endLine": 40,
+        "endChar": 18
+      },
+      "revId": "3b5639a08d5f7e2a7992300f9d5cd9246333bbda",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
