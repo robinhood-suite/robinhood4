@@ -46,6 +46,30 @@
       },
       "revId": "cfa580ff96bdff5d4ca1a696d7b4f9ed9b9336b1",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f409b07d_4bd99be0",
+        "filename": "librobinhood/src/backends/posix/xattrs_mapping.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-08-08T14:18:15Z",
+      "side": 1,
+      "message": "Yep, exactly",
+      "parentUuid": "9dc4c7d1_2c674863",
+      "range": {
+        "startLine": 60,
+        "startChar": 8,
+        "endLine": 64,
+        "endChar": 21
+      },
+      "revId": "cfa580ff96bdff5d4ca1a696d7b4f9ed9b9336b1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
