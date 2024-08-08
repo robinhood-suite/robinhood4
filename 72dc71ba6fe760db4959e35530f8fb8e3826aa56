@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "65e29563_f5ec7374",
+        "filename": "rbh-sync/tests/test_mongo_mongo_sync.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-08-08T12:48:22Z",
+      "side": 1,
+      "message": "defect? it did not seem logic to me that we extract the fourth field here, and the third one in the `test_utils.bash` file",
+      "range": {
+        "startLine": 39,
+        "startChar": 4,
+        "endLine": 39,
+        "endChar": 67
+      },
+      "revId": "72dc71ba6fe760db4959e35530f8fb8e3826aa56",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
