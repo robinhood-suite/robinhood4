@@ -16,6 +16,24 @@
       "message": "question: why is it per-thread here ?",
       "revId": "1953707fbfe3d767e6390659b5d72c4636957dea",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "42db508e_8fcf7536",
+        "filename": "librobinhood/src/backends/posix/xattrs_mapping.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-08-08T14:18:05Z",
+      "side": 1,
+      "message": "It is not, just a remnant of some copy-paste",
+      "parentUuid": "ef1157f6_80ff27da",
+      "revId": "1953707fbfe3d767e6390659b5d72c4636957dea",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
