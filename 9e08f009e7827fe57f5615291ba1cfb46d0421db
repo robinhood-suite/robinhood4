@@ -22,6 +22,30 @@
       },
       "revId": "9e08f009e7827fe57f5615291ba1cfb46d0421db",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6d4194dc_03af2b13",
+        "filename": "rbh-sync/tests/test_utils.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-08-08T07:41:28Z",
+      "side": 1,
+      "message": "Yes, but we don\u0027t have a global utils file yet, and I don\u0027t want to do half-stuff, so I\u0027d rather wait we have one (which is soon)",
+      "parentUuid": "c5d2249e_8b9e35f7",
+      "range": {
+        "startLine": 32,
+        "startChar": 0,
+        "endLine": 32,
+        "endChar": 23
+      },
+      "revId": "9e08f009e7827fe57f5615291ba1cfb46d0421db",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
