@@ -71,20 +71,42 @@ function check_expiration_date
     fi
 }
 
+function handle_non_relative_expiration()
+{
+    local directory="$1"
+    local expiration_date="$2"
+    local expires="$3"
+    local mount_point="$4"
+
+    echo "Directory '$directory' expired on '$expiration_date'"
+
+    if [ "$expires" == "None" ]; then
+        echo "Expiration attribute is unknown, so we cannot determine if the \
+              directory is really expired or not. Skipping '$directory'"
+        return 0
+    fi
+
+    if [ ! -z "$delete_found" ] && [ ! -z "$directory" ]; then
+        rm -rf "$mount_point/$dir"
+    fi
+}
+
 function run_retention_updater
 {
     local URI="$1"
     local mount_point="$2"
     local tmp_file="$(mktemp tmp.XXXXXX)"
 
-    rbh-lfind $URI -type d -expired -printf "%p|%e|%E|%I\n" |
+    if [ ! -z "$conf_file" ]; then
+        local config_option="--config $conf_file"
+    fi
+
+    rbh-lfind $config_option $URI -type d -expired -printf "%p|%e|%E|%I\n" |
         while IFS='|' read -r dir expires expiration_date ID; do
 
         if [ "${expires:0:1}" != "+" ]; then
-            echo "Directory '$dir' expired on '$(date -d "@$expires")'"
-            if [ ! -z "$delete_found" ] && [ ! -z "$dir" ]; then
-                rm -rf "$mount_point/$dir"
-            fi
+            handle_non_relative_expiration "$dir" "$expiration_date" \
+                                           "$expires" "$mount_point"
 
             echo "true" > $tmp_file
 
@@ -126,6 +148,7 @@ do
     fi
 
     case "$1" in
+
         --delete)
             if [ "$delete_found" == "true" ]; then
                 echo "Delete option already given"
@@ -136,6 +159,16 @@ do
         --help)
             print_doc
             exit 0
+            ;;
+        --config)
+            if [ "$config_found" == "true" ]; then
+                echo "Config option already given"
+                exit 1
+            fi
+
+            config_found=true
+            conf_file="$2"
+            shift
             ;;
         *)
             if [ ! -z "$args_found" ]; then

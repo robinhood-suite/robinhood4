@@ -287,11 +287,55 @@ test_retention_after_sync()
         '"ns.xattrs.path":"'/$dir'"'
 }
 
+test_retention_with_config()
+{
+    set -x
+    local dir="dir"
+    local entry="entry"
+    local conf_file="config"
+
+    mkdir $dir
+    touch $dir/$entry
+    setfattr -n user.blob -v +10 $dir
+
+    echo "---
+RBH_RETENTION_XATTR: \"user.blob\"
+---" > $conf_file
+
+    local expiration_date="$(( $(stat -c %Y $dir) + 10))"
+
+    rbh-sync rbh:lustre:. "rbh:mongo:$testdb" --config $conf_file
+
+    find_attribute \
+        '"xattrs.trusted.expiration_date":NumberLong('$expiration_date')' \
+        '"ns.xattrs.path":"'/$dir'"'
+
+    date --set="@$(( $(stat -c %Y $dir) + 11))"
+
+    local output="$($test_dir/rbh_update_retention "rbh:mongo:$testdb" "$PWD")"
+    echo "$output" | grep -q "Skipping"
+
+    output="$($test_dir/rbh_update_retention "rbh:mongo:$testdb" "$PWD" \
+                        --config $conf_file)"
+    should_be_expired "$output" "$dir"
+
+    touch $dir/$entry
+    rbh-sync rbh:lustre:. "rbh:mongo:$testdb" --config $conf_file
+
+    output="$($test_dir/rbh_update_retention "rbh:mongo:$testdb" "$PWD")"
+    echo "$output" | grep -q "Skipping"
+
+    output="$($test_dir/rbh_update_retention "rbh:mongo:$testdb" "$PWD" \
+                        --config $conf_file)"
+    should_be_updated "$output" "$dir"
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
-declare -a tests=(test_retention_script test_retention_after_sync)
+declare -a tests=(test_retention_script test_retention_after_sync
+                  test_retention_with_config)
 
 LUSTRE_DIR=/mnt/lustre/
 cd "$LUSTRE_DIR"
