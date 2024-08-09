@@ -7,7 +7,7 @@
 # SPDX-License-Identifer: LGPL-3.0-or-later
 
 test_dir=$(dirname $(readlink -e $0))
-. $test_dir/../test_utils.bash
+. $test_dir/../../../utils/tests/framework.bash
 . $test_dir/hestia_utils.bash
 
 ################################################################################
@@ -381,4 +381,6 @@ declare -a tests=(test_update_xattrs test_update_data test_update_copy
                   test_update_data_to_mongo test_update_copy_to_mongo
                   test_update_release_to_mongo)
 
-run_tests hestia_setup hestia_teardown ${tests[@]}
+sub_setup=hestia_setup
+sub_teardown=hestia_teardown
+run_tests "${tests[@]}"
