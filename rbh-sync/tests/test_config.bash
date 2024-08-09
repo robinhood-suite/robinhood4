@@ -7,7 +7,7 @@
 # SPDX-License-Identifer: LGPL-3.0-or-later
 
 test_dir=$(dirname $(readlink -e $0))
-. $test_dir/test_utils.bash
+. $test_dir/../../utils/tests/framework.bash
 
 ################################################################################
 #                                    TESTS                                     #
@@ -59,6 +59,7 @@ test_valid_config()
 #                                     MAIN                                     #
 ################################################################################
 
+set -x
 declare -a tests=(test_invalid_config test_valid_config)
 
 tmpdir=$(mktemp --directory)

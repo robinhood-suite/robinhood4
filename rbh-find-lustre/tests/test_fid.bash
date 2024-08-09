@@ -12,7 +12,7 @@ if ! lctl get_param mdt.*.hsm_control | grep "enabled"; then
 fi
 
 test_dir=$(dirname $(readlink -e $0))
-. $test_dir/test_utils.bash
+. $test_dir/../../utils/tests/framework.bash
 
 ################################################################################
 #                                    TESTS                                     #

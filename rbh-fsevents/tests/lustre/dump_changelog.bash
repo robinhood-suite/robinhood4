@@ -7,7 +7,7 @@
 # SPDX-License-Identifer: LGPL-3.0-or-later
 
 test_dir=$(dirname $(readlink -e $0))
-. $test_dir/../test_utils.bash
+. $test_dir/../../../utils/tests/framework.bash
 . $test_dir/lustre_utils.bash
 
 ################################################################################
@@ -24,6 +24,12 @@ test_dump()
 
     local changelogs=$(lfs changelog $LUSTRE_MDT | cut -d' ' -f2)
 
+    echo lfs
+    lfs changelog $LUSTRE_MDT | awk '{ print substr($2, 3) }'
+    echo rbh
+    rbh_fsevents --dump "-" --enrich rbh:lustre:"$LUSTRE_DIR" \
+               src:lustre:"$LUSTRE_MDT" "rbh:mongo:$testdb" |
+               awk '{ print substr($3, 3) }'
     diff <(lfs changelog $LUSTRE_MDT | awk '{ print substr($2, 3) }') \
          <(rbh_fsevents --dump "-" --enrich rbh:lustre:"$LUSTRE_DIR" \
                src:lustre:"$LUSTRE_MDT" "rbh:mongo:$testdb" |
@@ -35,6 +41,10 @@ test_dump()
     rbh_fsevents --dump "$dump_file" --enrich rbh:lustre:"$LUSTRE_DIR" \
         src:lustre:"$LUSTRE_MDT" "rbh:mongo:$testdb"
 
+    echo output
+    echo "$output"
+    echo file
+    cat $dump_file
     diff <(echo "$output") $dump_file
 
     rm $dump_file
@@ -54,7 +64,10 @@ userid="$(start_changelogs "$LUSTRE_MDT")"
 
 tmpdir=$(mktemp --directory --tmpdir=$LUSTRE_DIR)
 lfs setdirstripe -D -i 0 $tmpdir
-trap -- "rm -rf '$tmpdir'; stop_changelogs '$LUSTRE_MDT' '$userid'" EXIT
+trap "rm -rf '$tmpdir'; stop_changelogs '$LUSTRE_MDT' '$userid'; \
+      rm /tmp/dump_file" EXIT
 cd "$tmpdir"
 
-run_tests lustre_setup lustre_teardown "${tests[@]}"
+sub_setup=lustre_setup
+sub_teardown=lustre_teardown
+run_tests "${tests[@]}"
