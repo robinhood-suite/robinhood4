@@ -7,7 +7,7 @@
 # SPDX-License-Identifier: LGPL-3.0-or-later
 
 test_dir=$(dirname $(readlink -e $0))
-. $test_dir/test_utils.bash
+. $test_dir/../../utils/tests/framework.bash
 
 ################################################################################
 #                                    TESTS                                     #

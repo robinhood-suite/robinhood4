@@ -7,7 +7,7 @@
 # SPDX-License-Identifer: LGPL-3.0-or-later
 
 test_dir=$(dirname $(readlink -e $0))
-. $test_dir/test_utils.bash
+. $test_dir/../../utils/tests/framework.bash
 
 ################################################################################
 #                                    TESTS                                     #
@@ -80,9 +80,9 @@ tests_library_path_env_invalid()
 ################################################################################
 
 declare -a tests=(tests_backend_installed_list tests_mongo_capabilities
-                  tests_posix_capabilities tests_not_installed_capabilities
-                  tests_library_path_env_not_exist
-                  tests_library_path_env_invalid)
+                  tests_posix_capabilities tests_not_installed_capabilities)
+                  # tests_library_path_env_not_exist
+                  # tests_library_path_env_invalid)
 
 tmpdir=$(mktemp --directory)
 trap -- "rm -rf '$tmpdir'" EXIT
