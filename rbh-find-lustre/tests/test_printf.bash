@@ -9,7 +9,7 @@
 set -xe
 
 test_dir=$(dirname $(readlink -e $0))
-. $test_dir/test_utils.bash
+. $test_dir/../../utils/tests/framework.bash
 
 ################################################################################
 #                                    TESTS                                     #
@@ -25,9 +25,9 @@ test_id()
     local IDA=$(rbh_lfind "rbh:mongo:$testdb" -name fileA -printf "%I\n")
     local IDB=$(rbh_lfind "rbh:mongo:$testdb" -name fileB -printf "%I\n")
 
-    local countA="$(mongo --quiet "$testdb" --eval \
+    local countA="$(mongo "$testdb" --eval \
                     "db.entries.find({\"_id\": BinData(0, \"$IDA\")}).count()")"
-    local countB="$(mongo --quiet "$testdb" --eval \
+    local countB="$(mongo "$testdb" --eval \
                     "db.entries.find({\"_id\": BinData(0, \"$IDB\")}).count()")"
 
     if [[ "$countA" != "1" ]]; then
