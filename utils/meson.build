@@ -4,17 +4,6 @@
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
 
-project(
-    'rbh-utils',
-    'c',
-    version: '0.0.0',
-    license: 'LGPL3.0-or-later',
-    default_options: [
-        'warning_level=2',
-        'werror=true',
-    ],
-)
-
 integration_tests = ['test_update_retention']
 
 foreach t: integration_tests
