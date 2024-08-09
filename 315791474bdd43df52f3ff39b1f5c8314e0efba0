@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1f03ae66_f9f31cca",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-08-09T12:46:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a62d0898_b1e9dd2e",
+      "range": {
+        "startLine": 9,
+        "startChar": 10,
+        "endLine": 9,
+        "endChar": 11
+      },
+      "revId": "315791474bdd43df52f3ff39b1f5c8314e0efba0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "53da7e34_168c3421",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-08-09T12:43:01Z",
       "side": 1,
       "message": "question: is it so dangerous to have two times the config that you need to exit and return an error ?",
+      "range": {
+        "startLine": 164,
+        "startChar": 16,
+        "endLine": 166,
+        "endChar": 22
+      },
+      "revId": "315791474bdd43df52f3ff39b1f5c8314e0efba0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d026cdc9_1bd80e58",
+        "filename": "utils/rbh_update_retention",
+        "patchSetId": 1
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-08-09T12:46:07Z",
+      "side": 1,
+      "message": "Which one would you take in case you have 2 or more given ? The first one, the last one ? Since it\u0027s instantly read and the error is directly returned, it\u0027s not really an issue IMO.",
+      "parentUuid": "53da7e34_168c3421",
       "range": {
         "startLine": 164,
         "startChar": 16,
