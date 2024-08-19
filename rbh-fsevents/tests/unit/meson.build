@@ -35,5 +35,5 @@ foreach t: unit_tests
                        librobinhood_dep
                    ])
 
-    test(t, e)
+    test(t, e, suite: 'rbh-fsevents')
 endforeach
