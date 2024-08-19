@@ -22,7 +22,8 @@ foreach t: ['check_backend', 'check_filter', 'check_fsentry',
                     link_with: [librobinhood],
                     include_directories: rbh_include,
                     c_args: '-DHAVE_CONFIG_H'),
-         env: backend_path_env)
+         env: backend_path_env,
+         suite: 'librobinhood')
 endforeach
 
 foreach t: ['check_posix']
@@ -32,7 +33,8 @@ foreach t: ['check_posix']
                     link_with: [librobinhood, librbh_posix],
                     include_directories: rbh_include,
                     c_args: '-DHAVE_CONFIG_H'),
-         env: backend_path_env)
+         env: backend_path_env,
+         suite: 'librobinhood')
 endforeach
 
 foreach t: ['check_lustre']
@@ -42,7 +44,8 @@ foreach t: ['check_lustre']
                     link_with: [librobinhood, librbh_lustre],
                     include_directories: rbh_include,
                     c_args: '-DHAVE_CONFIG_H'),
-         env: backend_path_env)
+         env: backend_path_env,
+         suite: 'librobinhood')
 endforeach
 
 
@@ -62,7 +65,8 @@ if r.returncode() == 0 and libmfu.found()
     builddir = meson.current_build_dir()
     test('check_lustre_mpi', bash,
          args: [files('check_lustre_mpi.sh'), builddir],
-         env: backend_path_env)
+         env: backend_path_env,
+         suite: 'librobinhood')
 
     foreach t: ['check_posix_mpi']
         executable(t, t + '.c',
@@ -73,5 +77,6 @@ if r.returncode() == 0 and libmfu.found()
 
     test('check_posix_mpi', bash,
          args: ['../tests/unit/check_posix_mpi.sh', builddir],
-         env: backend_path_env)
+         env: backend_path_env,
+         suite: 'librobinhood')
 endif

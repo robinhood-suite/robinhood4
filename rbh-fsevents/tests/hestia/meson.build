@@ -13,5 +13,6 @@ foreach t: integration_tests
     # to the same filesystem, it may lead to unintentionnal consequences on the
     # test results. To prevent this, we forbid Meson from running tests
     # in parallel.
-    test(t, e, is_parallel : false, env: backend_path_env)
+    test(t, e, is_parallel : false, env: backend_path_env,
+         suite: 'rbh-fsevents')
 endforeach

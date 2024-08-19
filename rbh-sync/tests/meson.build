@@ -21,7 +21,8 @@ endif
 
 foreach t: integration_tests
     e = find_program(t + '.bash')
-    test(t, e, is_parallel: false, env: backend_path_env)
+    test(t, e, is_parallel: false, env: backend_path_env,
+         suite: 'rbh-sync')
 endforeach
 
 # Tests with MPI
@@ -33,7 +34,8 @@ if r.returncode() == 0 and libmfu.found()
     integration_tests = ['test_mongo_mpifile_sync']
     foreach t: integration_tests
         e = find_program(t + '.bash')
-        test(t, e, is_parallel: false, env: backend_path_env)
+        test(t, e, is_parallel: false, env: backend_path_env,
+             suite: 'rbh-sync')
     endforeach
 
     env = environment()
@@ -47,6 +49,6 @@ if r.returncode() == 0 and libmfu.found()
     foreach t: integration_tests_mpi
         e = find_program(t + '.bash')
         test(t + '_mpi', e, is_parallel: false, env: env, timeout: 60,
-             env: backend_path_env)
+             env: backend_path_env, suite: 'rbh-sync')
     endforeach
 endif
