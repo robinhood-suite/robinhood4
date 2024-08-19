@@ -8,7 +8,8 @@ integration_tests = ['test_update_retention']
 
 foreach t: integration_tests
     e = find_program(t + '.bash')
-    test(t, e, env: backend_path_env)
+    test(t, e, env: backend_path_env,
+         suite: 'retention')
 endforeach
 
 install_data(

@@ -4,5 +4,8 @@
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
 
-test('capabilities', find_program('capabilities.bash'),
-     env: backend_path_env)
+test('capabilities',
+     find_program('capabilities.bash'),
+     env: backend_path_env,
+     suite: 'rbh-capabilities'
+)
