@@ -12,7 +12,7 @@ SUITE=${BASH_SOURCE##*/}
 SUITE=${SUITE%.*}
 
 test_dir=$(dirname $(readlink -e $0))
-. $test_dir/tests/framework.bash
+. $test_dir/../utils/tests/framework.bash
 
 function retention_teardown()
 {
