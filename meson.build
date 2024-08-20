@@ -37,9 +37,14 @@ add_project_arguments([
 
 miniyaml = dependency('miniyaml', version: '>=0.0.0')
 
-liblustre = dependency('lustre', disabler: true, required: false)
-if not liblustre.found()
-        liblustre = cc.find_library('lustreapi', disabler:true, required: false)
+if get_option('lustre').enabled()
+    liblustre = dependency('lustre', disabler: true, required: false)
+    if not liblustre.found()
+            liblustre = cc.find_library('lustreapi', disabler:true,
+                                        required: false)
+    endif
+else
+    liblustre = disabler()
 endif
 
 if get_option('mfu').enabled()
@@ -65,7 +70,9 @@ subdir('librobinhood')
 subdir('rbh-sync')
 subdir('rbh-find')
 subdir('rbh-fsevents')
-subdir('rbh-find-lustre')
+if get_option('lustre').enabled()
+    subdir('rbh-find-lustre')
+endif
 subdir('rbh-capabilities')
 subdir('packaging')
 subdir('utils')

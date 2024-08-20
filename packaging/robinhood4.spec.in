@@ -8,10 +8,13 @@ License: LGPLv3
 URL:     https://github.com/robinhood-suite/robinhood4.git
 Source0: %{name}-%{version}.tar.xz
 
-# build options || .rpmmacros options || change to default action
-# ==============  ====================  ===========================
-# --with mfu    ||   %%_with_mfu 1    || force openmpi and libmfu as dependency
+# build options    || .rpmmacros options || change to default action
+# =================  ====================  ===========================
+# --without lustre ||   %%_with_lustre 1 || force lustre as dependency
+# --with mfu       ||   %%_with_mfu 1    || force libmfu as dependency
+# --with hestia    ||   %%_with_hestia 1 || force hestia as dependency
 
+%bcond_without lustre
 %bcond_with mfu
 %bcond_with hestia
 
@@ -20,7 +23,9 @@ Conflicts: robinhood
 Requires: mongo-c-driver-libs
 # The MongoDB dependency can be found here: https://repo.mongodb.org/yum/redhat/
 Requires: (mongodb-org or mongodb)
+%if %{with lustre}
 Requires: lustre-client
+%endif
 
 %if %{with mfu}
 Requires: openmpi
@@ -36,7 +41,9 @@ BuildRequires: gcc
 BuildRequires: mongo-c-driver-devel
 BuildRequires: jansson-devel
 BuildRequires: check-devel
+%if %{with lustre}
 BuildRequires: (lustre-client < 2.15 or lustre-devel)
+%endif
 BuildRequires: libyaml-devel
 BuildRequires: pkgconf-pkg-config
 
@@ -60,7 +67,9 @@ Summary: C API for RobinHood V4 tool suite.
 Conflicts: robinhood
 Requires: robinhood4 >= 1.0
 Requires: pkgconf-pkg-config
+%if %{with lustre}
 Requires: (lustre-client < 2.15 or lustre-devel)
+%endif
 
 %description devel
 This package contains header files and libraries to use the robinhood4 tool
@@ -71,6 +80,12 @@ suite from a C program.
 
 %build
 OPTS=""
+%if %{with lustre}
+    OPTS+="-Dlustre=enabled "
+%else
+    OPTS+="-Dlustre=disabled "
+%endif
+
 %if %{with mfu}
     OPTS+="-Dmfu=enabled "
 %else
@@ -91,14 +106,18 @@ OPTS=""
 
 %files
 %{_libdir}/librobinhood.so.*
+%if %{with lustre}
 %{_libdir}/librbh-lustre.so*
+%endif
 %{_libdir}/librbh-mongo.so*
 %{_libdir}/librbh-posix.so*
 %if %{with hestia}
 %{_libdir}/librbh-hestia.so*
 %endif
 %if %{with mfu}
+%if %{with lustre}
 %{_libdir}/librbh-lustre-mpi.so*
+%endif
 %{_libdir}/librbh-mpi-file.so*
 %{_libdir}/librbh-posix-mpi.so*
 %endif
@@ -116,11 +135,15 @@ OPTS=""
 %{_libdir}/librobinhood.so
 %{_includedir}/robinhood.h
 %{_includedir}/robinhood/backend.h
+%if %{with lustre}
 %{_includedir}/robinhood/backends/lustre.h
+%endif
 %{_includedir}/robinhood/backends/mongo.h
 %{_includedir}/robinhood/backends/posix.h
 %if %{with mfu}
+%if %{with lustre}
 %{_includedir}/robinhood/backends/lustre_mpi.h
+%endif
 %{_includedir}/robinhood/backends/mpi_file.h
 %{_includedir}/robinhood/backends/posix_mpi.h
 %endif
