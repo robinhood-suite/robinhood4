@@ -259,7 +259,7 @@ RBH_RETENTION_XATTR: \"user.blob\"
 
     local expiration_date="$(( $(stat -c %Y $dir) + 10))"
 
-    rbh-sync rbh:lustre:. "rbh:mongo:$testdb" --config $conf_file
+    rbh_sync rbh:lustre:. "rbh:mongo:$testdb" --config $conf_file
 
     find_attribute \
         '"xattrs.trusted.expiration_date":NumberLong('$expiration_date')' \
@@ -267,20 +267,20 @@ RBH_RETENTION_XATTR: \"user.blob\"
 
     date --set="@$(( $(stat -c %Y $dir) + 11))"
 
-    local output="$($test_dir/rbh_update_retention "rbh:mongo:$testdb" "$PWD")"
+    local output="$(rbh_update_retention "rbh:mongo:$testdb" "$PWD")"
     echo "$output" | grep -q "Skipping"
 
-    output="$($test_dir/rbh_update_retention "rbh:mongo:$testdb" "$PWD" \
+    output="$(rbh_update_retention "rbh:mongo:$testdb" "$PWD" \
                         --config $conf_file)"
     should_be_expired "$output" "$dir"
 
     touch $dir/$entry
-    rbh-sync rbh:lustre:. "rbh:mongo:$testdb" --config $conf_file
+    rbh_sync rbh:lustre:. "rbh:mongo:$testdb" --config $conf_file
 
-    output="$($test_dir/rbh_update_retention "rbh:mongo:$testdb" "$PWD")"
+    output="$(rbh_update_retention "rbh:mongo:$testdb" "$PWD")"
     echo "$output" | grep -q "Skipping"
 
-    output="$($test_dir/rbh_update_retention "rbh:mongo:$testdb" "$PWD" \
+    output="$(rbh_update_retention "rbh:mongo:$testdb" "$PWD" \
                         --config $conf_file)"
     should_be_updated "$output" "$dir"
 }
