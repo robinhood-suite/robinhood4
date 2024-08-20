@@ -17,10 +17,6 @@ extra_sources = []
 extra_dependencies = []
 extra_args = []
 
-liblustre = dependency('lustre', required: false)
-if not liblustre.found()
-    liblustre = cc.find_library('lustreapi', required: false)
-endif
 if liblustre.found()
     extra_sources += [
         'src/sources/lustre.c',
@@ -29,7 +25,10 @@ if liblustre.found()
     extra_args += ['-DHAVE_LUSTRE']
 endif
 
-libhestia = dependency('hestia', disabler: false, required: false)
+if libhestia.found()
+    extra_dependencies += [ libhestia ]
+endif
+
 if libhestia.found()
     libjansson = dependency('jansson', version: '>=2.5')
     extra_dependencies += [libjansson]
@@ -59,7 +58,7 @@ fsevents_lib = static_library(
     ] + extra_sources,
     include_directories: includes,
     dependencies: [
-        librobinhood_dep, miniyaml, liblustre, libhestia
+        librobinhood_dep, miniyaml, liblustre,
     ] + extra_dependencies,
     c_args: ['-DHAVE_CONFIG_H'] + extra_args,
 )

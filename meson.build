@@ -50,6 +50,17 @@ else
     libmpi = disabler()
 endif
 
+if get_option('hestia').enabled()
+    libhestia = dependency('hestia', disabler: true, required: false)
+else
+    libhestia = disabler()
+endif
+
+check = dependency('check', disabler: true, version: '>=0.9.9', required: false)
+if not check.found()
+    message('check is missing: skipping unit testing')
+endif
+
 subdir('librobinhood')
 subdir('rbh-sync')
 subdir('rbh-find')
