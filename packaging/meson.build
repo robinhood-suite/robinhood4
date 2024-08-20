@@ -13,6 +13,7 @@ configure_file(
 )
 
 build_options = configuration_data()
+build_options.set('lustre', get_option('lustre').enabled())
 build_options.set('mfu', get_option('mfu').enabled())
 build_options.set('hestia', get_option('hestia').enabled())
 build_options.set('version', meson.project_version())

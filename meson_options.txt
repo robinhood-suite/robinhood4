@@ -1,2 +1,3 @@
+option('lustre', type: 'feature', value: 'enabled')
 option('mfu', type: 'feature', value: 'enabled')
 option('hestia', type: 'feature', value: 'disabled')
