@@ -26,5 +26,5 @@ configure_file(
 meson.add_dist_script('../utils/add_specfile_to_dist.sh')
 custom_target('rpm',
     output: 'robinhood4-' + meson.project_version() + '.rpm',
-    command: [ '../utils/make_rpm.sh', meson.build_root() ],
+    command: [ '../packaging/make_rpm.sh', meson.build_root() ],
 )
