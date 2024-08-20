@@ -4,6 +4,11 @@
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
 
+if get_option('lustre').disabled()
+    librbh_lustre_mpi = disabler()
+    subdir_done()
+endif
+
 librbh_lustre_mpi = library(
     'rbh-lustre-mpi',
     sources: [
