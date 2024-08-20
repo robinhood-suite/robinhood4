@@ -4,12 +4,9 @@
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
 
-integration_tests = ['test_posix_mongo_sync', 'test_mongo_mongo_sync',
-                     'test_config']
-
-liblustre = dependency('lustre', disabler: true, required: false)
-
-libhestia = dependency('hestia', disabler: true, required: false)
+integration_tests = [
+    'test_posix_mongo_sync', 'test_mongo_mongo_sync', 'test_config'
+]
 
 if liblustre.found()
     integration_tests += ['test_lustre_mongo_sync']
@@ -26,16 +23,13 @@ foreach t: integration_tests
 endforeach
 
 # Tests with MPI
-cc = meson.get_compiler('c')
-libmfu = cc.find_library('mfu', disabler: true, required: false)
 r = run_command('../../utils/check_mpirun.sh', check: false)
 
 if r.returncode() == 0 and libmfu.found()
     integration_tests = ['test_mongo_mpifile_sync']
     foreach t: integration_tests
         e = find_program(t + '.bash')
-        test(t, e, is_parallel: false, env: backend_path_env,
-             suite: 'rbh-sync')
+        test(t, e, is_parallel: false, env: backend_path_env, suite: 'rbh-sync')
     endforeach
 
     env = environment()

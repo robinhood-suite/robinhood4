@@ -4,12 +4,6 @@
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
 
-cc = meson.get_compiler('c')
-liblustre = dependency('lustre', disabler: true, required: false)
-if not liblustre.found()
-    liblustre = cc.find_library('lustreapi', disabler:true, required: false)
-endif
-
 # Configuration checks
 conf_data = configuration_data()
 
