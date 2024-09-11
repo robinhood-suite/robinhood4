@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f9769713_c1bb90cb",
+        "filename": "README.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-09-11T08:59:07Z",
+      "side": 1,
+      "message": "minor: and the mpi file backend",
+      "range": {
+        "startLine": 52,
+        "startChar": 65,
+        "endLine": 52,
+        "endChar": 74
+      },
+      "revId": "259366c524bef6275560c0455cb20931a7a9fcb3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
