@@ -15,21 +15,6 @@ A broad description of its internals is available here__.
 
 .. __: https://github.com/robinhood-suite/robinhood4/blob/main/librobinhood/doc/internals.rst
 
-Installation
-============
-
-Build and install with meson_ and ninja_:
-
-.. code:: bash
-
-    cd robinhood4/librobinhood
-    meson builddir
-    ninja -C builddir
-    sudo ninja -C builddir install
-
-.. _meson: https://mesonbuild.com
-.. _ninja: https://ninja-build.org
-
 Documentation
 =============
 

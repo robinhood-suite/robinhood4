@@ -10,24 +10,6 @@ rbh-sync
 
 rbh-sync allows synchronizing one backend with another.
 
-Installation
-============
-
-Install the `RobinHood library`_ first, then download the sources:
-
-Build and install with meson_ and ninja_:
-
-.. code:: bash
-
-    cd robinhoo4/rbh-sync
-    meson builddir
-    ninja -C builddir
-    sudo ninja -C builddir install
-
-.. _meson: https://mesonbuild.com
-.. _ninja: https://ninja-build.org
-.. _RobinHood library: https://github.com/robinhood-suite/robinhood4/tree/main/librobinhood
-
 Usage
 =====
 

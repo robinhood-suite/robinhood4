@@ -13,26 +13,6 @@ rbh-find-lustre is an overload of `rbh-find(1)`__.
 .. __: rbh-find_
 .. _rbh-find: https://github.com/robinhood-suite/robinhood4/tree/main/rbh-find
 
-Installation
-============
-
-Install the `RobinHood library`_ and the `rbh-find library`_ first, then
-download the sources:
-
-Build and install with meson_ and ninja_:
-
-.. code:: bash
-
-    cd robinhood4/rbh-find-lustre
-    meson builddir
-    ninja -C builddir
-    sudo ninja -C builddir install
-
-.. _meson: https://mesonbuild.com
-.. _ninja: https://ninja-build.org
-.. _RobinHood library: https://github.com/robinhood-suite/robinhood4/tree/main/librobinhood
-.. _rbh-find library: https://github.com/robinhood-suite/robinhood4/tree/main/rbh-find
-
 A work in progress
 ==================
 
