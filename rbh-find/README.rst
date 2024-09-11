@@ -13,22 +13,6 @@ rbh-find is a close twin of `find(1)`__.
 .. __: find_
 .. _find: http://man7.org/linux/man-pages/man1/find.1.html
 
-Installation
-============
-
-Build and install with meson_ and ninja_:
-
-.. code:: bash
-
-    cd robinhood4/rbh-find
-    meson builddir
-    ninja -C builddir
-    sudo ninja -C builddir install
-
-.. _meson: https://mesonbuild.com
-.. _ninja: https://ninja-build.org
-.. _RobinHood library: https://github.com/robinhood-suite/robinhood4/tree/main/librobinhood
-
 A work in progress
 ==================
 

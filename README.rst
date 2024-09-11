@@ -30,6 +30,7 @@ The main components of RobinHood are:
 .. _rbh-fsevents: https://github.com/robinhood-suite/robinhood4/tree/main/rbh-fsevents
 .. _rbh-find: https://github.com/robinhood-suite/robinhood4/tree/main/rbh-find
 .. _rbh-lfind: https://github.com/robinhood-suite/robinhood4/tree/main/rbh-find-lustre
+.. _rbh-capabilities: https://github.com/robinhood-suite/robinhood4/tree/main/rbh-capabilities
 .. _Lustre: https://lustre.org
 
 Installation
@@ -42,12 +43,16 @@ Download the sources:
     git clone https://github.com/robinhood-suite/robinhood4
     cd robinhood4
 
-For now, each component has an independent build system which means that we
-need to build and install each tool in the order of their dependencies:
- - librobinhood first
- - rbh-find before rbh-find-lustre
- - rbh-sync and rbh-fsevents can be built independently of rbh-find and
-   rbh-find-lustre
+RobinHood supports various backends that can be optionally enabled.
+To change the defaults, you need to update the file `meson_options.txt`.
+It supports 3 options:
+
+ - `lustre`: enabled by default, build the `lustre` backend and
+   the `rbh-find-lustre` command;
+ - `mfu`: enabled by default, build `posix-mpi`, `lustre-mpi` and `mpi-file`
+   backends. Both `lustre` and `mfu` must be enabled to build the `lustre-mpi`
+   backend;
+ - `hestia`: disabled by default, build the `hestia` backend;
 
 Build and install with meson_ and ninja_:
 
@@ -59,6 +64,13 @@ Build and install with meson_ and ninja_:
 
 .. _meson: https://mesonbuild.com
 .. _ninja: https://ninja-build.org
+
+You can also generate RPMs. For this you will need the `rpmbuild` command.
+
+.. code:: bash
+
+    cd builddir
+    meson compile rpm
 
 Documentation
 =============
