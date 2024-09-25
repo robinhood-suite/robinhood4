@@ -8,7 +8,8 @@ backend_path_env = environment()
 ld_library_path = ''
 
 # .. and also add paths for plugins required by tests that require one
-foreach backend: ['posix', 'lustre', 'lustre_mpi', 'posix_mpi', 'mongo']
+foreach backend: ['posix', 'lustre', 'lustre_mpi', 'posix_mpi', 'mongo',
+                  'mpi_file']
     # FIXME env.prepend does not seem to work
     # meson gives this warning:
     # Overriding previous value of environment variable 'LD_LIBRARY_PATH' with a
