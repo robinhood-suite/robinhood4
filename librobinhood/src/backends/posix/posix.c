@@ -338,8 +338,8 @@ fsentry_from_any(struct fsentry_id_pair *fip, const struct rbh_value *path,
     char proc_fd_path[64];
     char *symlink = NULL;
     struct rbh_id *id;
+    ssize_t count = 0;
     int save_errno;
-    ssize_t count;
     int fd;
 
     if (pairs == NULL) {
@@ -444,18 +444,21 @@ fsentry_from_any(struct fsentry_id_pair *fip, const struct rbh_value *path,
         }
     }
 
-    count = getxattrs(proc_fd_path, &pairs, &pairs_count, values, xattrs);
-    if (count == -1) {
-        if (errno != ENOMEM) {
-            fprintf(stderr, "Failed to get xattrs of '%s': %s (%d)\n",
-                    path->string, strerror(errno), errno);
-            /* Set errno to ESTALE to not stop the iterator for a single failed
-            * entry.
-            */
-            errno = ESTALE;
+    if (S_ISLNK(statxbuf.stx_mode) || S_ISREG(statxbuf.stx_mode) ||
+        S_ISDIR(statxbuf.stx_mode)) {
+        count = getxattrs(proc_fd_path, &pairs, &pairs_count, values, xattrs);
+        if (count == -1) {
+            if (errno != ENOMEM) {
+                fprintf(stderr, "Failed to get xattrs of '%s': %s (%d)\n",
+                        path->string, strerror(errno), errno);
+                /* Set errno to ESTALE to not stop the iterator for a single failed
+                 * entry.
+                 */
+                errno = ESTALE;
+            }
+            save_errno = errno;
+            goto out_clear_sstacks;
         }
-        save_errno = errno;
-        goto out_clear_sstacks;
     }
 
     pair = &ns_pairs[0];
