@@ -37,6 +37,14 @@ tests_posix_capabilities()
     echo "$output" | grep -q "branch"
 }
 
+tests_not_find_backend_list()
+{
+    (rbh_capabilities -l | grep -q "find") &&
+        error "rbh-capabilities -l must not return anything other than backends"
+
+    return 0
+}
+
 tests_not_installed_capabilities()
 {
     rbh_capabilities not_a_backend &&
@@ -80,7 +88,8 @@ tests_library_path_env_invalid()
 ################################################################################
 
 declare -a tests=(tests_backend_installed_list tests_mongo_capabilities
-                  tests_posix_capabilities tests_not_installed_capabilities)
+                  tests_posix_capabilities tests_not_installed_capabilities
+                  tests_not_find_backend_list)
                   # tests_library_path_env_not_exist
                   # tests_library_path_env_invalid)
 

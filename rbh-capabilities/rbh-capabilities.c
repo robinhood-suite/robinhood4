@@ -135,7 +135,8 @@ print_backend_list(struct rbh_list_node *head)
 
         if (suffix_backend_name) {
             *suffix_backend_name = '\0';
-            printf("- %s\n", backend_name);
+            if (rbh_backend_plugin_import(backend_name))
+                printf("- %s\n", backend_name);
         }
 
         free(node->name);
