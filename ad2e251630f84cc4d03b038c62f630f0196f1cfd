@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dce83d1b_437f48cc",
+        "filename": "librobinhood/src/backends/meson.build",
+        "patchSetId": 2
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2024-09-30T12:16:18Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 18,
+        "startChar": 55,
+        "endLine": 18,
+        "endChar": 57
+      },
+      "revId": "ad2e251630f84cc4d03b038c62f630f0196f1cfd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
