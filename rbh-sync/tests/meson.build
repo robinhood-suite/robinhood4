@@ -32,8 +32,7 @@ if r.returncode() == 0 and libmfu.found()
         test(t, e, is_parallel: false, env: backend_path_env, suite: 'rbh-sync')
     endforeach
 
-    env = environment()
-    env.prepend('WITH_MPI', 'true')
+    backend_path_env_for_mpi_tests.set('WITH_MPI', 'true')
     integration_tests_mpi = ['test_posix_mongo_sync', 'test_mpifile_mongo_sync']
 
     if liblustre.found()
@@ -42,7 +41,7 @@ if r.returncode() == 0 and libmfu.found()
 
     foreach t: integration_tests_mpi
         e = find_program(t + '.bash')
-        test(t + '_mpi', e, is_parallel: false, env: env, timeout: 60,
-             env: backend_path_env, suite: 'rbh-sync')
+        test(t + '_mpi', e, is_parallel: false, timeout: 60,
+             env: backend_path_env_for_mpi_tests, suite: 'rbh-sync')
     endforeach
 endif

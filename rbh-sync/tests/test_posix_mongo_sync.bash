@@ -234,19 +234,32 @@ test_continue_sync_on_error()
     # should be outputted but the command shouldn't fail.
     useradd -N -M test
 
+    path="$(dirname $__rbh_sync)"
+    while [[ "$path" != "/home" ]]; do
+        chmod o+rx $path
+        path="$(dirname $path)"
+    done
+
     if [[ "$WITH_MPI" == "true" ]]; then
         # We need to give execute permissions to the user for mpirun to run
         chmod o+x ..
         output="$(sudo -H -u test bash -c \
                 "source /etc/profile.d/modules.sh; \
-                 module load mpi/openmpi-x86_64; mpirun -np 4 \
+                 module load mpi/openmpi-x86_64; \
                  LD_LIBRARY_PATH=$LD_LIBRARY_PATH \
-                    $__rbh_sync rbh:posix-mpi:. rbh:mongo:$testdb" 2>&1)"
+                    mpirun -np 4 $__rbh_sync rbh:posix-mpi:. \
+                        rbh:mongo:$testdb" 2>&1)"
     else
         output="$(sudo -E -H -u test bash -c "\
                   LD_LIBRARY_PATH=$LD_LIBRARY_PATH \
                       $__rbh_sync rbh:posix:.  rbh:mongo:$testdb" 2>&1)"
     fi
+
+    path="$(dirname $__rbh_sync)"
+    while [[ "$path" != "/home" ]]; do
+        chmod o-rx $path
+        path="$(dirname $path)"
+    done
 
     userdel -f -r test || true
 
@@ -294,23 +307,34 @@ test_stop_sync_on_error()
     # created above. Since that user doesn't have the read or write access to
     # the second file and the directory, it cannot synchronize both, the
     # command should fail when synchronizing the second file and the directory
-
     useradd -N -M test
+
+    path="$(dirname $__rbh_sync)"
+    while [[ "$path" != "/home" ]]; do
+        chmod o+rx $path
+        path="$(dirname $path)"
+    done
 
     if [[ "$WITH_MPI" == "true" ]]; then
         # We need to give execute permissions to the user for mpirun to run
         chmod o+x ..
         local output=$(sudo -H -u test bash -c \
                         "source /etc/profile.d/modules.sh; \
-                        module load mpi/openmpi-x86_64; mpirun -np 4 \
+                        module load mpi/openmpi-x86_64; \
                         LD_LIBRARY_PATH=$LD_LIBRARY_PATH \
-                            $__rbh_sync --no-skip rbh:posix-mpi:. \
-                        rbh:mongo:$testdb" 2>&1)
+                            mpirun -np 4 $__rbh_sync --no-skip rbh:posix-mpi:. \
+                                rbh:mongo:$testdb" 2>&1)
     else
         local output=$(sudo -E -H -u test bash -c "\
                        LD_LIBRARY_PATH=$LD_LIBRARY_PATH $__rbh_sync --no-skip \
                        rbh:posix:. rbh:mongo:$testdb" 2>&1)
     fi
+
+    path="$(dirname $__rbh_sync)"
+    while [[ "$path" != "/home" ]]; do
+        chmod o-rx $path
+        path="$(dirname $path)"
+    done
 
     userdel -f -r test || true
 
