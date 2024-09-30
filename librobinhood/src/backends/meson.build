@@ -9,11 +9,14 @@ ld_library_path = ''
 
 # .. and also add paths for plugins required by tests that require one
 foreach backend: ['posix', 'lustre', 'lustre_mpi', 'posix_mpi', 'mongo',
-                  'mpi_file']
-    # FIXME env.prepend does not seem to work
-    # meson gives this warning:
+                  'mpi_file', '..']
+    # FIXME env.prepend only work with meson > 0.58.0
+    # meson gives this warning otherwise:
     # Overriding previous value of environment variable 'LD_LIBRARY_PATH' with a
     # new one
+    # XXX meson provides no way of retrieving an environement variable, so we
+    # can't get the librobinhood library (which is located into
+    # librobinhood/src) into the LD_LIBRARY_PATH except by adding .. here
     ld_library_path += ':' + meson.current_build_dir() + '/' + backend
 endforeach
 
