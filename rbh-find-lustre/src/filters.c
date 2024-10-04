@@ -516,14 +516,13 @@ expired2filter()
 struct rbh_filter *
 expired_at2filter(const char *expired)
 {
-    const struct rbh_filter_field predicate =
-        predicate2filter_field[LPRED_EXPIRED - LPRED_MIN];
+    const struct rbh_filter_field *predicate = get_filter_field(LPRED_EXPIRED);
     struct rbh_filter *filter_expiration_date;
     struct rbh_filter *filter_inf;
     int64_t inf = INT64_MAX;
 
     if (!strcmp(expired, "inf")) {
-        filter_inf = rbh_filter_compare_uint64_new(RBH_FOP_EQUAL, &predicate,
+        filter_inf = rbh_filter_compare_uint64_new(RBH_FOP_EQUAL, predicate,
                                                    inf);
         if (!filter_inf)
             error(EXIT_FAILURE, errno, "rbh_filter_compare_uint64_new");
@@ -539,7 +538,7 @@ expired_at2filter(const char *expired)
         error(EXIT_FAILURE, errno, "invalid argument `%s' to `%s'", expired,
               lustre_predicate2str(LPRED_EXPIRED_AT));
 
-    filter_expiration_date = epoch2filter(&predicate, expired);
+    filter_expiration_date = epoch2filter(predicate, expired);
     if (!filter_expiration_date)
         error(EXIT_FAILURE, errno, "epoch2filter");
 
@@ -547,7 +546,7 @@ expired_at2filter(const char *expired)
      * time, do not include those that have an infinite expiration date, as it
      * internally is equivalent to an expiration date set to INT64_MAX.
      */
-    filter_inf = rbh_filter_compare_uint64_new(RBH_FOP_EQUAL, &predicate, inf);
+    filter_inf = rbh_filter_compare_uint64_new(RBH_FOP_EQUAL, predicate, inf);
     if (!filter_inf)
         error(EXIT_FAILURE, errno, "rbh_filter_compare_uint64_new");
 
@@ -570,8 +569,54 @@ ipool2filter(const char *pool)
                               RBH_RO_CASE_INSENSITIVE);
 }
 
+/* XXX: removed in the next patch */
+static struct rbh_filter *
+filter_uint64_range_new(const struct rbh_filter_field *field, uint64_t start,
+                        uint64_t end)
+{
+    struct rbh_filter *low, *high;
+
+    low = rbh_filter_compare_uint64_new(RBH_FOP_STRICTLY_GREATER, field, start);
+    if (low == NULL)
+        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
+                      "rbh_filter_compare_time");
+
+    high = rbh_filter_compare_uint64_new(RBH_FOP_STRICTLY_LOWER, field, end);
+    if (high == NULL)
+        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
+                      "rbh_filter_compare_time");
+
+    return filter_and(low, high);
+}
+
 struct rbh_filter *
 comp_start2filter(const char *start)
 {
-    return size2filter(get_filter_field(LPRED_COMP_START), start);
+    const struct rbh_filter_field *field = get_filter_field(LPRED_COMP_START);
+    struct rbh_filter *filter;
+    uint64_t unit_size;
+    uint64_t size;
+    char operator;
+
+    get_size_parameters(start, &operator, &unit_size, &size);
+
+    switch (operator) {
+    case '-':
+        filter = rbh_filter_compare_uint64_new(RBH_FOP_LOWER_OR_EQUAL, field,
+                                               (size - 1) * unit_size);
+        break;
+    case '+':
+        filter = rbh_filter_compare_uint64_new(RBH_FOP_STRICTLY_GREATER, field,
+                                               size * unit_size);
+        break;
+    default:
+        filter = filter_uint64_range_new(field, (size - 1) * unit_size,
+                                         size * unit_size + 1);
+    }
+
+    if (filter == NULL)
+        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
+                      "filter_compare_integer");
+
+    return filter;
 }
