@@ -267,53 +267,61 @@ filetype2filter(const char *_filetype)
     return filter;
 }
 
-struct rbh_filter *
-size2filter(const struct rbh_filter_field *field, const char *_size)
+void
+get_size_parameters(const char *_size, char *operator, uint64_t *unit_size,
+                    uint64_t *size)
 {
-    struct rbh_filter *filter;
-    char operator = *_size;
-    uint64_t unit_size;
-    uint64_t size;
+    char op = *_size;
     char *suffix;
 
-    switch (operator) {
+    switch (op) {
     case '+':
+        *operator = '+';
+        break;
     case '-':
-        _size++;
+        *operator = '-';
+        break;
+    default:
+        *operator = 0;
     }
 
-    size = strtoull(_size, &suffix, 10);
-    if (size == 0ULL)
+    if (*operator)
+        _size++;
+
+    errno = 0;
+    *size = strtoull(_size, &suffix, 10);
+    if (errno)
+        error(EX_USAGE, EOVERFLOW, "invalid size argument `%s'", _size);
+
+    if (*size == 0ULL && _size == suffix)
         error(EX_USAGE, 0,
               "size arguments should start with at least one digit");
-    else if (errno == ERANGE && size == ULLONG_MAX)
-        error(EX_USAGE, EOVERFLOW, "invalid size argument `%s'", _size);
 
     switch (*suffix++) {
     case 'T':
-        unit_size = 1099511627776;
+        *unit_size = 1099511627776;
         break;
     case 'G':
-        unit_size = 1073741824;
+        *unit_size = 1073741824;
         break;
     case 'M':
-        unit_size = 1048576;
+        *unit_size = 1048576;
         break;
     case 'k':
-        unit_size = 1024;
+        *unit_size = 1024;
         break;
     case '\0':
         /* default suffix */
         suffix--;
         __attribute__((fallthrough));
     case 'b':
-        unit_size = 512;
+        *unit_size = 512;
         break;
     case 'w':
-        unit_size = 2;
+        *unit_size = 2;
         break;
     case 'c':
-        unit_size = 1;
+        *unit_size = 1;
         break;
     default:
         error(EX_USAGE, 0, "invalid size argument `%s'", _size);
@@ -321,6 +329,17 @@ size2filter(const struct rbh_filter_field *field, const char *_size)
 
     if (*suffix)
         error(EX_USAGE, 0, "invalid size argument `%s'", _size);
+}
+
+struct rbh_filter *
+size2filter(const struct rbh_filter_field *field, const char *_size)
+{
+    struct rbh_filter *filter;
+    uint64_t unit_size;
+    char operator = 0;
+    uint64_t size;
+
+    get_size_parameters(_size, &operator, &unit_size, &size);
 
     switch (operator) {
     case '-':

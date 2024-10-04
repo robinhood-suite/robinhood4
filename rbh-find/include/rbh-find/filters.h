@@ -114,6 +114,23 @@ struct rbh_filter *
 filetype2filter(const char *filetype);
 
 /**
+ * Extract the size parameters from a standard size filter string.
+ * It must follow this pattern: `[+-]\d+[cwbkMGT]`
+ *
+ * @param _size      a string representing a size following the above pattern
+ * @param operator   a character that will be either `+`, `-` or 0 if the other
+ *                   two have not been found
+ * @param unit_size  the unit size specified in the \p _size parameter, 512 by
+ *                   default if none is specified
+ * @param size       the size specified in the string
+ *
+ * Exit on error
+ */
+void
+get_size_parameters(const char *_size, char *operator, uint64_t *unit_size,
+                    uint64_t *size);
+
+/**
  * Build a filter for predicates corresponding to a size by following
  * GNU-find's logic.
  *
