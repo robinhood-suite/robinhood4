@@ -188,9 +188,20 @@ filter_data_size(const struct rbh_filter *filter)
             size += filter_data_size(filter->logical.filters[i]);
         }
         return size;
-    case RBH_FOP_ELEMMATCH:
-        errno = ENOTSUP;
-        return -1;
+    case RBH_FOP_ARRAY_MIN ... RBH_FOP_ARRAY_MAX:
+        size = filter_field_data_size(&filter->array.field);
+        size += sizeof(filter) * filter->array.count;
+        for (size_t i = 0; i < filter->array.count; i++) {
+            if (filter->array.filters[i] == NULL)
+                continue;
+
+            size = sizealign(size, alignof(*filter));
+            size += sizeof(*filter);
+            if (filter_data_size(filter->array.filters[i]) < 0)
+                return -1;
+            size += filter_data_size(filter->array.filters[i]);
+        }
+        return size;
     }
 
     errno = EINVAL;
@@ -489,6 +500,11 @@ rbh_filter_array_new(enum rbh_filter_operator op,
             .count = count
         },
     };
+
+    if (count == 0) {
+        errno = EINVAL;
+        return NULL;
+    }
 
     return rbh_filter_clone(&ARRAY);
 }
