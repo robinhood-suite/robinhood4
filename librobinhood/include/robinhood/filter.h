@@ -112,11 +112,16 @@ enum rbh_filter_operator {
     RBH_FOP_OR,
     RBH_FOP_NOT,
 
+    /* Array */
+    RBH_FOP_ELEMMATCH,
+
     /* Aliases (used to distinguish comparison filters from logical ones) */
     RBH_FOP_COMPARISON_MIN = RBH_FOP_EQUAL,
     RBH_FOP_COMPARISON_MAX = RBH_FOP_BITS_ALL_CLEAR,
     RBH_FOP_LOGICAL_MIN = RBH_FOP_AND,
     RBH_FOP_LOGICAL_MAX = RBH_FOP_NOT,
+    RBH_FOP_ARRAY_MIN = RBH_FOP_ELEMMATCH,
+    RBH_FOP_ARRAY_MAX = RBH_FOP_ELEMMATCH,
 };
 
 /**
@@ -143,6 +148,19 @@ static inline bool
 rbh_is_logical_operator(enum rbh_filter_operator op)
 {
     return RBH_FOP_LOGICAL_MIN <= op && op <= RBH_FOP_LOGICAL_MAX;
+}
+
+/**
+ * Is \p op an array operator?
+ *
+ * @param op    the operator to test
+ *
+ * @return      true if \p op is an array operator, false otherwise
+ */
+static inline bool
+rbh_is_array_operator(enum rbh_filter_operator op)
+{
+    return RBH_FOP_ARRAY_MIN <= op && op <= RBH_FOP_ARRAY_MAX;
 }
 
 /**
@@ -178,6 +196,15 @@ struct rbh_filter {
             const struct rbh_filter * const *filters;
             size_t count;
         } logical;
+
+        struct {
+            struct rbh_filter_field field;
+            /** Should only be composed of comparison filters. The filter field
+             * specified in them is irrelevant.
+             */
+            const struct rbh_filter * const *filters;
+            size_t count;
+        } array;
     };
 };
 
