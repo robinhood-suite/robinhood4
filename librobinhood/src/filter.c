@@ -634,6 +634,25 @@ logical_filter_validate(const struct rbh_filter *filter)
     return 0;
 }
 
+static int
+array_filter_validate(const struct rbh_filter *filter)
+{
+    if (filter->array.count == 0) {
+        errno = EINVAL;
+        return -1;
+    }
+
+    if (filter_field_validate(&filter->array.field))
+        return -1;
+
+    for (size_t i = 0; i < filter->array.count; i++) {
+        if (rbh_filter_validate(filter->array.filters[i]))
+            return -1;
+    }
+
+    return 0;
+}
+
 int
 rbh_filter_validate(const struct rbh_filter *filter)
 {
@@ -652,6 +671,8 @@ rbh_filter_validate(const struct rbh_filter *filter)
     case RBH_FOP_AND:
     case RBH_FOP_OR:
         return logical_filter_validate(filter);
+    case RBH_FOP_ARRAY_MIN ... RBH_FOP_ARRAY_MAX:
+        return array_filter_validate(filter);
     }
 
     errno = EINVAL;
