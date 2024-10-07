@@ -188,6 +188,20 @@ filter_data_size(const struct rbh_filter *filter)
             size += filter_data_size(filter->logical.filters[i]);
         }
         return size;
+    case RBH_FOP_ARRAY_MIN ... RBH_FOP_ARRAY_MAX:
+        size = filter_field_data_size(&filter->array.field);
+        size += sizeof(filter) * filter->logical.count;
+        for (size_t i = 0; i < filter->array.count; i++) {
+            if (filter->array.filters[i] == NULL)
+                continue;
+
+            size = sizealign(size, alignof(*filter));
+            size += sizeof(*filter);
+            if (filter_data_size(filter->array.filters[i]) < 0)
+                return -1;
+            size += filter_data_size(filter->array.filters[i]);
+        }
+        return size;
     }
 
     errno = EINVAL;
