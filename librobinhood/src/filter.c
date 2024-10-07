@@ -108,6 +108,52 @@ filter_copy(struct rbh_filter *dest, const struct rbh_filter *src,
             char **buffer, size_t *bufsize);
 
 static int
+array_filter_copy(struct rbh_filter *dest, const struct rbh_filter *src,
+                  char **buffer, size_t *bufsize)
+{
+    const struct rbh_filter **filters;
+    size_t size = *bufsize;
+    char *data = *buffer;
+
+    /* dest->logical.filters */
+    filters = aligned_memalloc(alignof(*filters),
+                               src->array.count * sizeof(*filters), &data,
+                               &size);
+    assert(filters);
+
+    /* dest->compare.field */
+    if (filter_field_copy(&dest->array.field, &src->array.field, &data,
+                          &size))
+        return -1;
+
+    for (size_t i = 0; i < src->array.count; i++) {
+        struct rbh_filter *filter;
+
+        if (src->array.filters[i] == NULL) {
+            filters[i] = NULL;
+            continue;
+        }
+
+        filter = aligned_memalloc(alignof(*filter), sizeof(*filter), &data,
+                                  &size);
+        assert(filter);
+
+        if (filter_copy(filter, src->array.filters[i], &data, &size))
+            return -1;
+
+        filters[i] = filter;
+    }
+    dest->array.filters = filters;
+
+    /* dest->logical.count */
+    dest->array.count = src->array.count;
+
+    *buffer = data;
+    *bufsize = size;
+    return 0;
+}
+
+static int
 logical_filter_copy(struct rbh_filter *dest, const struct rbh_filter *src,
                     char **buffer, size_t *bufsize)
 {
@@ -160,6 +206,8 @@ filter_copy(struct rbh_filter *dest, const struct rbh_filter *src,
     if (rbh_is_comparison_operator(src->op))
         /* dest->compare */
         return comparison_filter_copy(dest, src, buffer, bufsize);
+    else if (rbh_is_array_operator(src->op))
+        return array_filter_copy(dest, src, buffer, bufsize);
     return logical_filter_copy(dest, src, buffer, bufsize);
 }
 
