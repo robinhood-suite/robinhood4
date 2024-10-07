@@ -188,6 +188,9 @@ filter_data_size(const struct rbh_filter *filter)
             size += filter_data_size(filter->logical.filters[i]);
         }
         return size;
+    case RBH_FOP_ELEMMATCH:
+        errno = ENOTSUP;
+        return -1;
     }
 
     errno = EINVAL;
@@ -565,6 +568,9 @@ rbh_filter_validate(const struct rbh_filter *filter)
     case RBH_FOP_AND:
     case RBH_FOP_OR:
         return logical_filter_validate(filter);
+    case RBH_FOP_ELEMMATCH:
+        errno = ENOTSUP;
+        return -1;
     }
 
     errno = EINVAL;
