@@ -476,6 +476,31 @@ rbh_filter_exists_new(const struct rbh_filter_field *field)
     return rbh_filter_compare_new(RBH_FOP_EXISTS, field, &boolean_);
 }
 
+struct rbh_filter *
+rbh_filter_array_new(enum rbh_filter_operator op,
+                     const struct rbh_filter_field *field,
+                     const struct rbh_filter * const *filters, size_t count)
+{
+    const struct rbh_filter ARRAY = {
+        .op = op,
+        .array = {
+            .field = *field,
+            .filters = filters,
+            .count = count
+        },
+    };
+
+    return rbh_filter_clone(&ARRAY);
+}
+
+struct rbh_filter *
+rbh_filter_array_elemmatch_new(const struct rbh_filter_field *field,
+                               const struct rbh_filter * const *filters,
+                               size_t count)
+{
+    return rbh_filter_array_new(RBH_FOP_ELEMMATCH, field, filters, count);
+}
+
 static int
 filter_field_validate(const struct rbh_filter_field *field)
 {
