@@ -55,7 +55,7 @@ static const char * const NEGATED_FOP2STR[] = {
     [RBH_FOP_BITS_ALL_CLEAR]    = "$bitsAnySet",
     [RBH_FOP_AND]               = "$or",
     [RBH_FOP_OR]                = "$and",
-    [RBH_FOP_ELEMMATCH]         = NULL, /* XXX: will be modified */
+    [RBH_FOP_ELEMMATCH]         = "$not",
 };
 
 static const char *
@@ -395,6 +395,7 @@ bson_append_array_filter(bson_t *bson, const struct rbh_filter *filter,
     const struct rbh_filter_field *field = &filter->array.field;
     char onstack[XATTR_ONSTACK_LENGTH];
     char *buffer = onstack;
+    bson_t *negate_subdoc;
     bson_t subdocuments;
     bson_t document;
     const char *key;
@@ -406,8 +407,21 @@ bson_append_array_filter(bson_t *bson, const struct rbh_filter *filter,
     if (!bson_append_document_begin(bson, key, strlen(key), &document))
         return false;
 
-    if (!bson_append_document_begin(&document, fop2str(filter->op, negate),
-                                    strlen(fop2str(filter->op, negate)),
+    if (negate) {
+        negate_subdoc = bson_new();
+        if (negate_subdoc == NULL)
+            return false;
+
+        if (!bson_append_document_begin(&document, fop2str(filter->op, negate),
+                                        strlen(fop2str(filter->op, negate)),
+                                        negate_subdoc))
+            return false;
+    } else {
+        negate_subdoc = &document;
+    }
+
+    if (!bson_append_document_begin(negate_subdoc, fop2str(filter->op, false),
+                                    strlen(fop2str(filter->op, false)),
                                     &subdocuments))
         return false;
 
@@ -420,8 +434,15 @@ bson_append_array_filter(bson_t *bson, const struct rbh_filter *filter,
             return false;
     }
 
-    if (!bson_append_document_end(&document, &subdocuments))
+    if (!bson_append_document_end(negate_subdoc, &subdocuments))
         return false;
+
+    if (negate) {
+        if (!bson_append_document_end(&document, negate_subdoc))
+            return false;
+
+        bson_destroy(negate_subdoc);
+    }
 
     return bson_append_document_end(bson, &document);
 }
