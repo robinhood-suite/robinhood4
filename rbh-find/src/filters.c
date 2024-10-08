@@ -784,6 +784,30 @@ filter_or(struct rbh_filter *left, struct rbh_filter *right)
 }
 
 struct rbh_filter *
+filter_array_compose(struct rbh_filter *left, struct rbh_filter *right)
+{
+    const struct rbh_filter **array;
+    struct rbh_filter *filter;
+
+    filter = malloc(sizeof(*filter));
+    if (filter == NULL)
+        error(EXIT_FAILURE, errno, "malloc");
+
+    array = rbh_sstack_push(filters, NULL, sizeof(*array) * 2);
+    if (array == NULL)
+        error(EXIT_FAILURE, errno, "rbh_sstack_push");
+
+    array[0] = left;
+    array[1] = right;
+
+    filter->op = RBH_FOP_ELEMMATCH;
+    filter->array.filters = array;
+    filter->array.count = 2;
+
+    return filter;
+}
+
+struct rbh_filter *
 filter_not(struct rbh_filter *filter)
 {
     struct rbh_filter *not;

@@ -232,6 +232,23 @@ struct rbh_filter *
 filter_not(struct rbh_filter *filter);
 
 /**
+ * Create an array filter for the ELEMMATCH operator, combining 2 comparison
+ * filters for the checks.
+ *
+ * @param left  a pointer to a dynamically allocated struct rbh_filter
+ * @param right a pointer to a dynamically allocated struct rbh_filter
+ *
+ * @return      a pointer to a newly allocated struct rbh_filter
+ *
+ * \p left and \p right should not be accessed anymore after this function is
+ * called.
+ *
+ * Exit on error
+ */
+struct rbh_filter *
+filter_array_compose(struct rbh_filter *left, struct rbh_filter *right);
+
+/**
  * Build a filter field from the -sort/-rsort attribute
  *
  * @param attribute    a string representing an attribute
