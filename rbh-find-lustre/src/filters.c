@@ -569,26 +569,6 @@ ipool2filter(const char *pool)
                               RBH_RO_CASE_INSENSITIVE);
 }
 
-/* XXX: removed in the next patch */
-static struct rbh_filter *
-filter_uint64_range_new(const struct rbh_filter_field *field, uint64_t start,
-                        uint64_t end)
-{
-    struct rbh_filter *low, *high;
-
-    low = rbh_filter_compare_uint64_new(RBH_FOP_STRICTLY_GREATER, field, start);
-    if (low == NULL)
-        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
-                      "rbh_filter_compare_time");
-
-    high = rbh_filter_compare_uint64_new(RBH_FOP_STRICTLY_LOWER, field, end);
-    if (high == NULL)
-        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
-                      "rbh_filter_compare_time");
-
-    return filter_and(low, high);
-}
-
 struct rbh_filter *
 comp_start2filter(const char *start)
 {
@@ -610,8 +590,25 @@ comp_start2filter(const char *start)
                                                size * unit_size);
         break;
     default:
-        filter = filter_uint64_range_new(field, (size - 1) * unit_size,
-                                         size * unit_size + 1);
+        {
+            struct rbh_filter *left, *right;
+
+            left = rbh_filter_compare_uint64_new(RBH_FOP_STRICTLY_GREATER,
+                                                 field, (size - 1) * unit_size);
+            if (left == NULL)
+                error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
+                              "rbh_filter_compare_time");
+
+            right = rbh_filter_compare_uint64_new(RBH_FOP_STRICTLY_LOWER, field,
+                                                  size * unit_size + 1);
+            if (right == NULL)
+                error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
+                              "rbh_filter_compare_time");
+
+            filter = filter_array_compose(left, right);
+            filter->op = RBH_FOP_ELEMMATCH;
+            filter->array.field = *field;
+        }
     }
 
     if (filter == NULL)

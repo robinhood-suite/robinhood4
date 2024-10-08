@@ -231,6 +231,9 @@ filter_or(struct rbh_filter *left, struct rbh_filter *right);
 struct rbh_filter *
 filter_not(struct rbh_filter *filter);
 
+struct rbh_filter *
+filter_array_compose(struct rbh_filter *left, struct rbh_filter *right);
+
 /**
  * Build a filter field from the -sort/-rsort attribute
  *
