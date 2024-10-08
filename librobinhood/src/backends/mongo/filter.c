@@ -37,6 +37,7 @@ static const char * const FOP2STR[] = {
     [RBH_FOP_BITS_ALL_CLEAR]    = "$bitsAllClear",
     [RBH_FOP_AND]               = "$and",
     [RBH_FOP_OR]                = "$or",
+    [RBH_FOP_ELEMMATCH]         = "$elemMatch",
 };
 
 static const char * const NEGATED_FOP2STR[] = {
@@ -54,6 +55,7 @@ static const char * const NEGATED_FOP2STR[] = {
     [RBH_FOP_BITS_ALL_CLEAR]    = "$bitsAnySet",
     [RBH_FOP_AND]               = "$or",
     [RBH_FOP_OR]                = "$and",
+    [RBH_FOP_ELEMMATCH]         = NULL, /* XXX: will be modified */
 };
 
 static const char *
@@ -387,6 +389,44 @@ bson_append_logical_filter(bson_t *bson, const struct rbh_filter *filter,
 }
 
 static bool
+bson_append_array_filter(bson_t *bson, const struct rbh_filter *filter,
+                         bool negate)
+{
+    const struct rbh_filter_field *field = &filter->array.field;
+    char onstack[XATTR_ONSTACK_LENGTH];
+    char *buffer = onstack;
+    bson_t subdocuments;
+    bson_t document;
+    const char *key;
+
+    key = field2str(field, &buffer, sizeof(onstack));
+    if (key == NULL)
+        return false;
+
+    if (!bson_append_document_begin(bson, key, strlen(key), &document))
+        return false;
+
+    if (!bson_append_document_begin(&document, fop2str(filter->op, negate),
+                                    strlen(fop2str(filter->op, negate)),
+                                    &subdocuments))
+        return false;
+
+    for (uint32_t i = 0; i < filter->array.count; i++) {
+        const struct rbh_filter *subfilter = filter->array.filters[i];
+
+        if (!BSON_APPEND_RBH_VALUE(&subdocuments,
+                                   fop2str(subfilter->op, negate),
+                                   &subfilter->compare.value))
+            return false;
+    }
+
+    if (!bson_append_document_end(&document, &subdocuments))
+        return false;
+
+    return bson_append_document_end(bson, &document);
+}
+
+static bool
 bson_append_null_filter(bson_t *bson, bool negate)
 {
     bson_t document;
@@ -408,6 +448,8 @@ _bson_append_rbh_filter(bson_t *bson, const struct rbh_filter *filter,
 
     if (rbh_is_comparison_operator(filter->op))
         return bson_append_comparison_filter(bson, filter, negate);
+    else if (rbh_is_array_operator(filter->op))
+        return bson_append_array_filter(bson, filter, negate);
     return bson_append_logical_filter(bson, filter, negate);
 }
 
