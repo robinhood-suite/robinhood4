@@ -455,6 +455,23 @@ struct rbh_filter *
 rbh_filter_exists_new(const struct rbh_filter_field *field);
 
 /**
+ * Create a filter that checks a cell of an array matches multiple conditions
+ *
+ * @param field     the field corresponding to the array to check
+ * @param filters   the filters to apply to the array
+ * @param count     the number of filters to apply
+ *
+ * @return          a pointer to a newly allocated struct rbh_filter on success,
+ *                  NULL on error and errno is set appropriately
+ *
+ * @error ENOMEM    there was not enough memory available
+ */
+struct rbh_filter *
+rbh_filter_array_elemmatch_new(const struct rbh_filter_field *field,
+                               const struct rbh_filter * const *filters,
+                               size_t count);
+
+/**
  * Validate a filter
  *
  * @param filter    the filter to validate

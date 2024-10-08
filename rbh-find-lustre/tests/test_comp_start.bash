@@ -23,26 +23,18 @@ test_comp_start()
 
     rbh_sync "rbh:lustre:." "rbh:mongo:$testdb"
 
-    lfs getstripe -v "$file"
-
-    mongo $testdb --eval "db.entries.find()"
-
     rbh_lfind "rbh:mongo:$testdb" -comp-start -1k | sort |
         difflines "/$file"
     rbh_lfind "rbh:mongo:$testdb" -comp-start +1k | sort |
         difflines "/$file"
-    # XXX: this test doesn't work because we have an issue with how we handle
-    # filters on arrays in the Mongo database
-#    rbh_lfind "rbh:mongo:$testdb" -comp-start 1023k -or -comp-start 1k | sort |
-#        difflines
+    rbh_lfind "rbh:mongo:$testdb" -comp-start 1023k -or -comp-start 1k | sort |
+        difflines
     rbh_lfind "rbh:mongo:$testdb" -comp-start -2T | sort |
         difflines "/$file"
     rbh_lfind "rbh:mongo:$testdb" -comp-start 1M -comp-start 512M | sort |
         difflines "/$file"
-    # XXX: for the same reason as above, this test shouldn't output anything,
-    # but it currently doesn't
-#    rbh_lfind "rbh:mongo:$testdb" -comp-start 1M -comp-start 511M | sort |
-#        difflines
+    rbh_lfind "rbh:mongo:$testdb" -comp-start 1M -comp-start 511M | sort |
+        difflines
 }
 
 ################################################################################
