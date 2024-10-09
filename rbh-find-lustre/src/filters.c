@@ -573,12 +573,31 @@ struct rbh_filter *
 comp_start2filter(const char *start)
 {
     const struct rbh_filter_field *field = get_filter_field(LPRED_COMP_START);
+    uint64_t low_bound, high_bound;
     struct rbh_filter *filter;
     uint64_t unit_size;
+    char *comma = NULL;
     uint64_t size;
     char operator;
 
-    get_size_parameters(start, &operator, &unit_size, &size);
+    comma = strchr(start, ',');
+    if (comma) {
+        *comma = '\0';
+        get_size_parameters(start, &operator, &unit_size, &size);
+        low_bound = (size - 1) * unit_size;
+        get_size_parameters(comma + 1, &operator, &unit_size, &size);
+        high_bound = size * unit_size + 1;
+    } else {
+        get_size_parameters(start, &operator, &unit_size, &size);
+        low_bound = (size - 1) * unit_size;
+        high_bound = size * unit_size + 1;
+    }
+
+    if (high_bound < low_bound) {
+        uint64_t tmp = high_bound;
+        high_bound = low_bound;
+        low_bound = tmp;
+    }
 
     switch (operator) {
     case '-':
@@ -594,13 +613,13 @@ comp_start2filter(const char *start)
             struct rbh_filter *left, *right;
 
             left = rbh_filter_compare_uint64_new(RBH_FOP_STRICTLY_GREATER,
-                                                 field, (size - 1) * unit_size);
+                                                 field, low_bound);
             if (left == NULL)
                 error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
                               "rbh_filter_compare_uint64_new");
 
             right = rbh_filter_compare_uint64_new(RBH_FOP_STRICTLY_LOWER, field,
-                                                  size * unit_size + 1);
+                                                  high_bound);
             if (right == NULL)
                 error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
                               "rbh_filter_compare_uint64_new");
