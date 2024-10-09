@@ -116,11 +116,11 @@ default stripe count will be printed.
 
 .. code:: bash
 
-    rbh-find rbh:mongo:test -stripe-count 1
+    rbh-lfind rbh:mongo:test -stripe-count 1
     /dir/file-with-stripe-count-1
 
     lfs setstripe --stripe-count 2 /mnt/lustre
-    rbh-find rbh:mongo:test -stripe-count 2
+    rbh-lfind rbh:mongo:test -stripe-count 2
     /dir/file-with-stripe-count-2
     /directory-with-default-striping
     /
@@ -156,17 +156,17 @@ the following is applied:
 
 .. code:: bash
 
-    rbh-find rbh:mongo:test -expired-at -$(date +%s)
+    rbh-lfind rbh:mongo:test -expired-at -$(date +%s)
     ./dir/file-that-expired-1-hour-ago
 
-    rbh-find rbh:mongo:test -expired-at $(date +%s) -o \
+    rbh-lfind rbh:mongo:test -expired-at $(date +%s) -o \
         -expired-at +$(date +%s -d "5 minutes")
     ./dir/file-that-just-expired
     ./dir/file-that-expired-1-hour-ago
     ./dir/file-that-will-expire-in-10-minutes
     ./dir/file-that-will-expire-in-2-days
 
-    rbh-find rbh:mongo:test -expired-at +$(date +%s) -o \
+    rbh-lfind rbh:mongo:test -expired-at +$(date +%s) -o \
         -expired-at -$(date +%s -d "1 day")
     ./dir/file-that-will-expire-in-10-minutes
 
@@ -179,9 +179,58 @@ behaves exactly ``-expired-at $(date +%s)``.
 
 .. code:: bash
 
-    rbh-find rbh:mongo:test -expired
+    rbh-lfind rbh:mongo:test -expired
     ./dir/file-that-just-expired
     ./dir/file-that-expired-1-hour-ago
+
+-comp-start
+-----------
+
+rbh-lfind defines a ``-comp-start`` predicate that filters entries based on
+the component start (or `begin`) of any of their components. It follows the
+logic of a size filter, and thus will filters entries following this logic:
+
+.. code:: bash
+
+    rbh-lfind rbh:mongo:test -comp-start 5M # -> filter entries that have a
+    # component start within the interval ]4M ; 5M]
+
+    rbh-lfind rbh:mongo:test -comp-start +10M # -> filter entries that have a
+    # component start within the interval ]10M ; +oo[
+
+    rbh-lfind rbh:mongo:test -comp-start -10M # -> filter entries that have a
+    # component start within the interval [0 ; 9M]
+
+Be wary that filtering entries using this predicate twice will NOT filter
+entries that a component start that matches the first predicate AND the second
+predicate at the same time. Therefore, ``-comp-start +10M -comp-start -20M``
+will not give entries that a component start both superior to 10M and inferior
+to 20M. Rather, it will output entries with that have a component start
+superior to 10M and a component start inferior to 20M, whether they are the
+same component start or not.
+
+To allow the above expected behaviour, we allow the input field of the
+``comp-start`` predicate to be two values separated by a comma. In that case
+the first half is expected to be the lower bound of the interval while the
+second is the high bound (following the exact filtering behaviour).
+
+Thus, ``comp-start 10M,20M`` will filter entries that have a component start
+superior to 9M and inferior or equal to 20M.
+
+To showcase the difference:
+
+.. code:: bash
+
+    lfs setstripe -E 1G -S 256k -E -1 -S 512k "comp_start_at_0_and_1G"
+
+    rbh-lfind rbh:mongo:test -comp-start +1M -comp-start -2M
+    ./comp_start_at_0_and_1G # -> this is because the component start at 1G
+    # satisfies the first predicate and the component start at 0 satisties the
+    # second
+
+    rbh-lfind rbh:mongo:test -comp-start 1M,2M
+    # nothing is outputted because `comp_start_at_0_and_1G` doesn't have a
+    # component start in the interval ]0 ; 2M]
 
 -printf
 -------
