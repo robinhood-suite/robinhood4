@@ -117,16 +117,18 @@ the stripe size of any of their components. It behaves exactly like the
 
 rbh-lfind defines a ``-layout-pattern`` predicate that filters entries based on
 the pattern of any of their components. The only accepted values are
-``default``, ``raid0`` and ``mdt``. It behaves exactly like the
-``stripe-count`` predicate with regards to the default value otherwise.
+``default``, ``raid0``, ``mdt``, ``released`` and ``overstriped``. It behaves
+exactly like the ``stripe-count`` predicate with regards to the default value
+otherwise.
 
 -expired-at
 -----------
 
 rbh-lfind defines a ``-expired-at`` predicate that filters entries which
-expired or will expire at a given epoch. The expiration date is defined
-by the extended attribute 'user.ccc_expires', and can either be absolute
-or relative to the maximum between the atime, ctime and mtime.
+expired or will expire at a given epoch. The expiration date is defined by the
+extended attribute defined in the configuration file, or 'user.expires' by
+default, and can either be absolute or relative to the maximum between the
+atime, ctime and mtime.
 
 The predicate can be given an epoch, which can be prepended by a '+' or '-', and
 the following is applied:
@@ -149,6 +151,9 @@ the following is applied:
     rbh-lfind rbh:mongo:test -expired-at +$(date +%s) -o \
         -expired-at -$(date +%s -d "1 day")
     ./dir/file-that-will-expire-in-10-minutes
+
+The predicate can also be given `inf`, in which case it will show all entries
+that have an infinite expiration date set.
 
 -expired
 --------
