@@ -16,6 +16,29 @@
       "message": "question: How will this be handled for comparisons filters that have a field irrelevant ? A default value will be set ?",
       "revId": "010b7bd657206ba9e6c8733107dd897dbbb36deb",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7975cef1_6f8942fe",
+        "filename": "librobinhood/src/filter.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 674,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2024-10-09T09:04:18Z",
+      "side": 1,
+      "message": "comment: j\u0027ai vu qu\u0027elle était déjà utilisé au dessus, mais c\u0027est une extension spécifique à gcc, ce n\u0027est pas C standard.",
+      "range": {
+        "startLine": 674,
+        "startChar": 24,
+        "endLine": 674,
+        "endChar": 34
+      },
+      "revId": "010b7bd657206ba9e6c8733107dd897dbbb36deb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
