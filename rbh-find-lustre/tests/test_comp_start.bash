@@ -33,8 +33,12 @@ test_comp_start()
         difflines "/$file"
     rbh_lfind "rbh:mongo:$testdb" -comp-start 1M -comp-start 512M | sort |
         difflines "/$file"
+    rbh_lfind "rbh:mongo:$testdb" -comp-start 1M,512M | sort |
+        difflines "/$file"
     rbh_lfind "rbh:mongo:$testdb" -comp-start 1M -comp-start 511M | sort |
         difflines
+    rbh_lfind "rbh:mongo:$testdb" -comp-start 1M,511M | sort |
+        difflines "/$file"
     rbh_lfind "rbh:mongo:$testdb" -not '(' -comp-start 1M -comp-start 511M ')' |
         sort | difflines "/" "/$file"
 }
