@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a0a586fd_165953ac",
+        "filename": "rbh-find-lustre/rbh-find-lustre.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-10-10T08:34:46Z",
+      "side": 1,
+      "message": "style: consistency issues -\u003e some option descriptions start with a major case, and some end with a dot",
+      "range": {
+        "startLine": 92,
+        "startChar": 34,
+        "endLine": 93,
+        "endChar": 70
+      },
+      "revId": "6b3bb14e8c3d33d09d788b1c2e96b1ec83e56fc6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
