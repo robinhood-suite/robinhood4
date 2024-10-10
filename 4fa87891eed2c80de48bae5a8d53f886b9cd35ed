@@ -140,6 +140,30 @@
       },
       "revId": "4fa87891eed2c80de48bae5a8d53f886b9cd35ed",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9235930d_ff15b1b7",
+        "filename": "rbh-find-lustre/rbh-find-lustre.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-10-10T13:26:08Z",
+      "side": 1,
+      "message": "Will it generate an error if they are used here ?\n\nI think \u0027unnecessary\u0027 is not the correct meaning. Maybe something like \u0027not considered\u0027.",
+      "parentUuid": "8076a6cf_005ef1e3",
+      "range": {
+        "startLine": 65,
+        "startChar": 34,
+        "endLine": 66,
+        "endChar": 47
+      },
+      "revId": "4fa87891eed2c80de48bae5a8d53f886b9cd35ed",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
