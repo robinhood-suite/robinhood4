@@ -927,19 +927,24 @@ static int
 update_or_cast_expiration_date(int index, char *retention_attribute,
                                const struct rbh_statx *statx)
 {
-    const char *expiration_value = _inode_xattrs[index].value->binary.data;
-    int64_t current_expiration_date;
     int64_t calculated_expiration_date =
         get_expiration_date_value(retention_attribute, statx);
+    int64_t current_expiration_date;
+    const char *expiration_value;
     char *end;
 
     if (calculated_expiration_date < 0)
         return -1;
 
+    expiration_value = rbh_sstack_push(_values,
+                                       _inode_xattrs[index].value->binary.data,
+                                       _inode_xattrs[index].value->binary.size);
+
     errno = 0;
     current_expiration_date = strtoul(expiration_value, &end, 10);
     if (errno || (!current_expiration_date && expiration_value == end) ||
-        *end != '\0') {
+        (long unsigned int) (end - expiration_value) !=
+                             _inode_xattrs[index].value->binary.size) {
         fprintf(stderr,
                 "Invalid value for expiration date '%s', should be '<integer>'\n",
                 expiration_value);
