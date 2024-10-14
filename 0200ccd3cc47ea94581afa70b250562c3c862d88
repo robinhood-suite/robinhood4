@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fe111557_d57528d1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2024-10-14T12:09:47Z",
+      "side": 1,
+      "message": "Very clear document.",
+      "revId": "0200ccd3cc47ea94581afa70b250562c3c862d88",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b85f65a0_8beffba9",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2024-10-14T12:09:47Z",
+      "side": 1,
+      "message": "typo: \"...s\" ?",
+      "range": {
+        "startLine": 20,
+        "startChar": 11,
+        "endLine": 20,
+        "endChar": 14
+      },
+      "revId": "0200ccd3cc47ea94581afa70b250562c3c862d88",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0dd3001b_f1568220",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2024-10-14T12:09:47Z",
+      "side": 1,
+      "message": "minor: adding an example of a new collection could be a good idea. (from what already exists in rbhv3)",
+      "range": {
+        "startLine": 131,
+        "startChar": 52,
+        "endLine": 131,
+        "endChar": 73
+      },
+      "revId": "0200ccd3cc47ea94581afa70b250562c3c862d88",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
