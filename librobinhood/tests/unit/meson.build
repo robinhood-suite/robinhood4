@@ -62,6 +62,7 @@ if r.returncode() == 0 and libmfu.found()
     builddir = meson.current_build_dir()
     test('check_lustre_mpi', bash,
          args: [files('check_lustre_mpi.sh'), builddir],
+         depends: [librbh_lustre_mpi],
          env: backend_path_env,
          suite: 'librobinhood')
 
@@ -74,6 +75,7 @@ if r.returncode() == 0 and libmfu.found()
 
     test('check_posix_mpi', bash,
          args: [files('check_posix_mpi.sh'), builddir],
+         depends: [librbh_posix_mpi],
          env: backend_path_env,
          suite: 'librobinhood')
 endif

@@ -9,6 +9,11 @@
 test_dir=$(dirname $(readlink -e $0))
 . $test_dir/../../utils/tests/framework.bash
 
+# Depending on the libfabric's version and OS, libfabric can have network errors
+# with PSM3. To solve this, we specify the PSM3 devices as below.
+# https://github.com/easybuilders/easybuild-easyconfigs/issues/18925
+export PSM3_DEVICES="self"
+
 ################################################################################
 #                                    TESTS                                     #
 ################################################################################
