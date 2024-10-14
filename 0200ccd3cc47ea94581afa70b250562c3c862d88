@@ -20,6 +20,69 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2bd694f4_63d7b5a5",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-10-14T13:28:49Z",
+      "side": 1,
+      "message": "question: is it desired to have some way to report \"default/configured\" set of stats? like having one which will list user quotas?",
+      "revId": "0200ccd3cc47ea94581afa70b250562c3c862d88",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "09b1d129_05af72e1",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-10-14T13:28:49Z",
+      "side": 1,
+      "message": "typo: Its",
+      "range": {
+        "startLine": 11,
+        "startChar": 54,
+        "endLine": 11,
+        "endChar": 58
+      },
+      "revId": "0200ccd3cc47ea94581afa70b250562c3c862d88",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4e4a5c85_1875d33a",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-10-14T13:28:49Z",
+      "side": 1,
+      "message": "comment: we may need to be cautious with this one, I do not think this is desired directly for lustre/hestia backends for instance",
+      "range": {
+        "startLine": 12,
+        "startChar": 48,
+        "endLine": 13,
+        "endChar": 25
+      },
+      "revId": "0200ccd3cc47ea94581afa70b250562c3c862d88",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b85f65a0_8beffba9",
         "filename": "designs/rbh-report.rst",
         "patchSetId": 1
@@ -36,6 +99,144 @@
         "startChar": 11,
         "endLine": 20,
         "endChar": 14
+      },
+      "revId": "0200ccd3cc47ea94581afa70b250562c3c862d88",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a195ca32_4415fe12",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-10-14T13:28:49Z",
+      "side": 1,
+      "message": "typo: backends",
+      "range": {
+        "startLine": 20,
+        "startChar": 6,
+        "endLine": 20,
+        "endChar": 13
+      },
+      "revId": "0200ccd3cc47ea94581afa70b250562c3c862d88",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "93aed85b_8fe622cb",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-10-14T13:28:49Z",
+      "side": 1,
+      "message": "comment: that\u0027s my previous point, I know that we need to get Lustre-specific information, but not by going through the Lustre backend",
+      "range": {
+        "startLine": 31,
+        "startChar": 13,
+        "endLine": 31,
+        "endChar": 19
+      },
+      "revId": "0200ccd3cc47ea94581afa70b250562c3c862d88",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e78241cc_b9a4b409",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-10-14T13:28:49Z",
+      "side": 1,
+      "message": "typo: invert them",
+      "range": {
+        "startLine": 46,
+        "startChar": 51,
+        "endLine": 46,
+        "endChar": 71
+      },
+      "revId": "0200ccd3cc47ea94581afa70b250562c3c862d88",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fecd50f4_8a26cc11",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-10-14T13:28:49Z",
+      "side": 1,
+      "message": "typo: allow",
+      "range": {
+        "startLine": 60,
+        "startChar": 17,
+        "endLine": 60,
+        "endChar": 23
+      },
+      "revId": "0200ccd3cc47ea94581afa70b250562c3c862d88",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fa956931_c5a90602",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-10-14T13:28:49Z",
+      "side": 1,
+      "message": "suggest/typo: etc.",
+      "range": {
+        "startLine": 71,
+        "startChar": 65,
+        "endLine": 71,
+        "endChar": 68
+      },
+      "revId": "0200ccd3cc47ea94581afa70b250562c3c862d88",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f491a7fb_9ced359a",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-10-14T13:28:49Z",
+      "side": 1,
+      "message": "suggest: not necessary",
+      "range": {
+        "startLine": 71,
+        "startChar": 59,
+        "endLine": 71,
+        "endChar": 62
       },
       "revId": "0200ccd3cc47ea94581afa70b250562c3c862d88",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
