@@ -506,7 +506,6 @@ xattrs_get_magic_and_gen(int fd, struct rbh_value_pair *pairs)
 {
     char buffer[XATTR_VALUE_MAX_VFS_SIZE];
     const char *lov_buf = NULL;
-    int save_errno;
 
     if (_inode_xattrs != NULL) {
         for (int i = 0; i < *_inode_xattrs_count; ++i) {
@@ -522,12 +521,8 @@ xattrs_get_magic_and_gen(int fd, struct rbh_value_pair *pairs)
         ssize_t length = XATTR_VALUE_MAX_VFS_SIZE;
 
         length = fgetxattr(fd, XATTR_LUSTRE_LOV, buffer, length);
-        if (length == -1) {
-            save_errno = errno;
-            free(buffer);
-            errno = save_errno;
+        if (length == -1)
             return -1;
-        }
 
         lov_buf = buffer;
     }
