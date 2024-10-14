@@ -131,8 +131,7 @@ check_mode_and_type()
 {
     local entry="$1"
 
-    local raw_mode="$(statx -c="+%f" "$entry")"
-    raw_mode=${raw_mode:2}
+    local raw_mode="$(stat -c %f "$entry")"
     raw_mode=$(echo "ibase=16; ${raw_mode^^}" | bc)
     local type=$((raw_mode & 00170000))
     local mode=$((raw_mode & ~00170000))

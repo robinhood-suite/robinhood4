@@ -35,9 +35,8 @@ test_exec()
     )
 
     rbh_find "rbh:mongo:$testdb" -exec echo {}{}{} /mnt/lustre/{{}}/{} ";" |
-        sort |
-        difflines "filefilefile /mnt/lustre/{file}/file" \
-                  "... /mnt/lustre/{.}/."
+        LC_ALL=C sort | difflines "... /mnt/lustre/{.}/." \
+                                  "filefilefile /mnt/lustre/{file}/file"
 }
 
 test_delete()
