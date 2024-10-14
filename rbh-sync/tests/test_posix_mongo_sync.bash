@@ -9,6 +9,11 @@
 test_dir=$(dirname $(readlink -e $0))
 . $test_dir/../../utils/tests/framework.bash
 
+# Depending on the libfabric's version and OS, libfabric can have network errors
+# with PSM3. To solve this, we specify the PSM3 devices as below.
+# https://github.com/easybuilders/easybuild-easyconfigs/issues/18925
+export PSM3_DEVICES="self"
+
 rbh_sync_posix()
 {
     if [[ "$WITH_MPI" == "true" ]]; then
@@ -112,8 +117,7 @@ check_mode_and_type()
 {
     local entry="$1"
 
-    local raw_mode="$(statx -c="+%f" "$entry")"
-    raw_mode=${raw_mode:2}
+    local raw_mode="$(stat -c %f "$entry")"
     raw_mode=$(echo "ibase=16; ${raw_mode^^}" | bc)
     local type=$((raw_mode & 00170000))
     local mode=$((raw_mode & ~00170000))
@@ -413,7 +417,6 @@ xattrs_map:
 
     rbh_sync --conf $conf_file --one rbh:posix:$file rbh:mongo:$testdb
 
-    mongo $testdb --eval "db.entries.find()"
     find_attribute '"ns.xattrs.path":"/'$file'"' \
                    '"xattrs.user.blob_int32" : 1'
     find_attribute '"ns.xattrs.path":"/'$file'"' \
