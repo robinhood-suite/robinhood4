@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1dbbc4eb_a91b71ff",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-10-15T13:00:35Z",
+      "side": 1,
+      "message": "Sorry, I do not understand the question, could you rephrase ?",
+      "parentUuid": "2bd694f4_63d7b5a5",
+      "revId": "0200ccd3cc47ea94581afa70b250562c3c862d88",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "09b1d129_05af72e1",
         "filename": "designs/rbh-report.rst",
         "patchSetId": 1
@@ -48,6 +66,30 @@
       "writtenOn": "2024-10-14T13:28:49Z",
       "side": 1,
       "message": "typo: Its",
+      "range": {
+        "startLine": 11,
+        "startChar": 54,
+        "endLine": 11,
+        "endChar": 58
+      },
+      "revId": "0200ccd3cc47ea94581afa70b250562c3c862d88",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "96ef4454_2c52841e",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-10-15T13:00:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "09b1d129_05af72e1",
       "range": {
         "startLine": 11,
         "startChar": 54,
@@ -71,6 +113,30 @@
       "writtenOn": "2024-10-14T13:28:49Z",
       "side": 1,
       "message": "comment: we may need to be cautious with this one, I do not think this is desired directly for lustre/hestia backends for instance",
+      "range": {
+        "startLine": 12,
+        "startChar": 48,
+        "endLine": 13,
+        "endChar": 25
+      },
+      "revId": "0200ccd3cc47ea94581afa70b250562c3c862d88",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "60b265cc_61c2a44c",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-10-15T13:00:35Z",
+      "side": 1,
+      "message": "I stay generic as possible, maybe we won\u0027t ever implement something specific for Lustre or other backends, maybe we will, so better make it clear it should be doable",
+      "parentUuid": "4e4a5c85_1875d33a",
       "range": {
         "startLine": 12,
         "startChar": 48,
@@ -127,6 +193,54 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6432fcb2_4cc27b28",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-10-15T13:00:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b85f65a0_8beffba9",
+      "range": {
+        "startLine": 20,
+        "startChar": 11,
+        "endLine": 20,
+        "endChar": 14
+      },
+      "revId": "0200ccd3cc47ea94581afa70b250562c3c862d88",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c28f5406_7d4e63c1",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-10-15T13:00:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a195ca32_4415fe12",
+      "range": {
+        "startLine": 20,
+        "startChar": 6,
+        "endLine": 20,
+        "endChar": 13
+      },
+      "revId": "0200ccd3cc47ea94581afa70b250562c3c862d88",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "93aed85b_8fe622cb",
@@ -140,6 +254,30 @@
       "writtenOn": "2024-10-14T13:28:49Z",
       "side": 1,
       "message": "comment: that\u0027s my previous point, I know that we need to get Lustre-specific information, but not by going through the Lustre backend",
+      "range": {
+        "startLine": 31,
+        "startChar": 13,
+        "endLine": 31,
+        "endChar": 19
+      },
+      "revId": "0200ccd3cc47ea94581afa70b250562c3c862d88",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "60ec0445_9ab72514",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-10-15T13:00:35Z",
+      "side": 1,
+      "message": "I\u0027d rather go through the backends to fetch the information of those backends, for instance with additional calls to the backend operations",
+      "parentUuid": "93aed85b_8fe622cb",
       "range": {
         "startLine": 31,
         "startChar": 13,
@@ -173,6 +311,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9bf1e1f1_82faa278",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-10-15T13:00:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e78241cc_b9a4b409",
+      "range": {
+        "startLine": 46,
+        "startChar": 51,
+        "endLine": 46,
+        "endChar": 71
+      },
+      "revId": "0200ccd3cc47ea94581afa70b250562c3c862d88",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fecd50f4_8a26cc11",
@@ -186,6 +348,30 @@
       "writtenOn": "2024-10-14T13:28:49Z",
       "side": 1,
       "message": "typo: allow",
+      "range": {
+        "startLine": 60,
+        "startChar": 17,
+        "endLine": 60,
+        "endChar": 23
+      },
+      "revId": "0200ccd3cc47ea94581afa70b250562c3c862d88",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6f382ff2_afc4898a",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-10-15T13:00:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fecd50f4_8a26cc11",
       "range": {
         "startLine": 60,
         "startChar": 17,
@@ -242,6 +428,54 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "208afcdb_38951264",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-10-15T13:00:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa956931_c5a90602",
+      "range": {
+        "startLine": 71,
+        "startChar": 65,
+        "endLine": 71,
+        "endChar": 68
+      },
+      "revId": "0200ccd3cc47ea94581afa70b250562c3c862d88",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9d115727_aa2fe9ab",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-10-15T13:00:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f491a7fb_9ced359a",
+      "range": {
+        "startLine": 71,
+        "startChar": 59,
+        "endLine": 71,
+        "endChar": 62
+      },
+      "revId": "0200ccd3cc47ea94581afa70b250562c3c862d88",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0dd3001b_f1568220",
@@ -255,6 +489,30 @@
       "writtenOn": "2024-10-14T12:09:47Z",
       "side": 1,
       "message": "minor: adding an example of a new collection could be a good idea. (from what already exists in rbhv3)",
+      "range": {
+        "startLine": 131,
+        "startChar": 52,
+        "endLine": 131,
+        "endChar": 73
+      },
+      "revId": "0200ccd3cc47ea94581afa70b250562c3c862d88",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dace3dde_8c81e1a7",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-10-15T13:00:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0dd3001b_f1568220",
       "range": {
         "startLine": 131,
         "startChar": 52,
