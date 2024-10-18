@@ -20,6 +20,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0458d660_8118ba87",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-10-18T12:15:52Z",
+      "side": 1,
+      "message": "I would be more in favor of using a new function. Internally, backends will be able to reuse the code that creates filter from the rbh_filter struture if they want. I\u0027d rather have something explicit rather than putting everything in one function. One thing that I think makes the use of filter not a good idea is the result of rbh-report. I would assume that rbh-report would want a rbh_value as a result to display. So what we need in practice is something that takes in a rbh_filter and some additional parameters to know how to aggregate the results into an rbh_value. This function would then return an rbh_value. Something like this:\n\n```\nstruct rbh_value *\nrbh_backend_report(struct rbh_backend *backend, const struct rbh_filter *filter,\n                   ...);\n```\n\nreport may not be the best term here. Maybe aggregate?",
+      "range": {
+        "startLine": 19,
+        "startChar": 41,
+        "endLine": 20,
+        "endChar": 75
+      },
+      "revId": "fb0c211e87ad59ae8bed6e009be67f44be8fa5c3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1e436b33_1a993a93",
         "filename": "designs/rbh-report.rst",
         "patchSetId": 3
@@ -36,6 +59,397 @@
         "startChar": 62,
         "endLine": 21,
         "endChar": 65
+      },
+      "revId": "fb0c211e87ad59ae8bed6e009be67f44be8fa5c3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "02a4eb76_eaa86b8e",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-10-18T12:15:52Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 21,
+        "startChar": 64,
+        "endLine": 21,
+        "endChar": 72
+      },
+      "revId": "fb0c211e87ad59ae8bed6e009be67f44be8fa5c3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "655fb27f_30954b20",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-10-18T12:15:52Z",
+      "side": 1,
+      "message": "typo: A",
+      "range": {
+        "startLine": 26,
+        "startChar": 3,
+        "endLine": 26,
+        "endChar": 5
+      },
+      "revId": "fb0c211e87ad59ae8bed6e009be67f44be8fa5c3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "415022c8_d65d875e",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-10-18T12:15:52Z",
+      "side": 1,
+      "message": "A simpler way to say this would be: The filters will restrict the entries on which the statistics are computed.",
+      "range": {
+        "startLine": 48,
+        "startChar": 41,
+        "endLine": 49,
+        "endChar": 7
+      },
+      "revId": "fb0c211e87ad59ae8bed6e009be67f44be8fa5c3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ee27c3cb_27ea2cde",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-10-18T12:15:52Z",
+      "side": 1,
+      "message": "What does that mean ? Why may ?",
+      "range": {
+        "startLine": 49,
+        "startChar": 61,
+        "endLine": 50,
+        "endChar": 27
+      },
+      "revId": "fb0c211e87ad59ae8bed6e009be67f44be8fa5c3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "922d049e_b963b59e",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-10-18T12:15:52Z",
+      "side": 1,
+      "message": "I think some (most?) parts of librbh-find can be moved to librobinhood. This could be stated explicitly here as this is a design decision to move rbh-find features into the core of robinhood. And also, this will be part of the work to be done. So might as well document it here.\n\nI\u0027m wondering if it makes sense to move the logic of converting filters (e.g. `-size +1K`) to librobinhood as well. Functions like `size2filter` can easily be added to librobinhood. But should librobinhood \"know\" how to parse rbh-find arguments or should this be left to librbh-find? Maybe the library should be renamed librbh-filters? Or something else since it would not be specific to find anymore.",
+      "range": {
+        "startLine": 55,
+        "startChar": 35,
+        "endLine": 55,
+        "endChar": 60
+      },
+      "revId": "fb0c211e87ad59ae8bed6e009be67f44be8fa5c3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "14c4e55a_ca8c11c8",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-10-18T12:15:52Z",
+      "side": 1,
+      "message": "I think \"to specify\" is more idiomatic.",
+      "range": {
+        "startLine": 62,
+        "startChar": 35,
+        "endLine": 62,
+        "endChar": 42
+      },
+      "revId": "fb0c211e87ad59ae8bed6e009be67f44be8fa5c3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b3ebb4c8_7c36c7ce",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-10-18T12:15:52Z",
+      "side": 1,
+      "message": "for a filesystem?",
+      "range": {
+        "startLine": 64,
+        "startChar": 42,
+        "endLine": 64,
+        "endChar": 45
+      },
+      "revId": "fb0c211e87ad59ae8bed6e009be67f44be8fa5c3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bd30e560_efbf77d7",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-10-18T12:15:52Z",
+      "side": 1,
+      "message": "Have you made en inventory of what reports rbh-report can build in the V3?",
+      "range": {
+        "startLine": 72,
+        "startChar": 40,
+        "endLine": 72,
+        "endChar": 80
+      },
+      "revId": "fb0c211e87ad59ae8bed6e009be67f44be8fa5c3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6ca31adb_c5d9627d",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-10-18T12:15:52Z",
+      "side": 1,
+      "message": "I don\u0027t think this word exists.",
+      "range": {
+        "startLine": 75,
+        "startChar": 45,
+        "endLine": 75,
+        "endChar": 56
+      },
+      "revId": "fb0c211e87ad59ae8bed6e009be67f44be8fa5c3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "52f12711_183a00b9",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-10-18T12:15:52Z",
+      "side": 1,
+      "message": "This is very vague. Wouldn\u0027t it be better to list the actual use cases and example commands to get them? This design leaves a lot of open questions for the implementation. On other question that we should answer is whether we will keep a compatibility with the old rbh-report\u0027s arguments.",
+      "range": {
+        "startLine": 78,
+        "startChar": 6,
+        "endLine": 80,
+        "endChar": 10
+      },
+      "revId": "fb0c211e87ad59ae8bed6e009be67f44be8fa5c3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7bef125c_11eeac96",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-10-18T12:15:52Z",
+      "side": 1,
+      "message": "I don\u0027t think this is very practical to have overloads. I don\u0027t really like the fact that we have rbh-find and rbh-lfind. We should probably think of a better way of managing extra attributes in the backend. Maybe backends can store their name and version somewhere in the backend so that we can infer from the backend everything we need to know. Something like:\n\n```\nrbh_report_main()\n{\n    backend \u003d backend_from_uri(argv[1]);\n    id \u003d rbh_backend_get_id(backend);\n    \n    switch (id) {\n    case LUSTRE:\n       ...\n    }\n    ...\n}\n```\n\nAnd this would be useful for users as well. If they want to know how the backend was generated. Maybe something like this would be interesting (although completely outside of the scope of this document):\n\n```\nrbh-??? rbh:mongo:mydb\nsource backend: lustre\nlast sync: ...\n```\n\nJust a rough idea.",
+      "range": {
+        "startLine": 85,
+        "startChar": 1,
+        "endLine": 89,
+        "endChar": 10
+      },
+      "revId": "fb0c211e87ad59ae8bed6e009be67f44be8fa5c3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "adf215c4_481bdd9a",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-10-18T12:15:52Z",
+      "side": 1,
+      "message": "A simpler way to say this is: The parsing of command line arguments for filters should be common to both rbh-find and rbh-report. This avoids the risk of having differences between both tools.",
+      "range": {
+        "startLine": 97,
+        "startChar": 0,
+        "endLine": 99,
+        "endChar": 49
+      },
+      "revId": "fb0c211e87ad59ae8bed6e009be67f44be8fa5c3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "17ac0518_78ccd9f0",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-10-18T12:15:52Z",
+      "side": 1,
+      "message": "Simply ratio instead of by-ratio.",
+      "range": {
+        "startLine": 108,
+        "startChar": 65,
+        "endLine": 108,
+        "endChar": 69
+      },
+      "revId": "fb0c211e87ad59ae8bed6e009be67f44be8fa5c3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "869e49ab_b6d705f8",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-10-18T12:15:52Z",
+      "side": 1,
+      "message": "I think this can be viewed as the equivalent of an action in rbh-find. I don\u0027t know if other actions could be of interest. But maybe we can use this formalism from the start to prepare future extensions?",
+      "range": {
+        "startLine": 108,
+        "startChar": 42,
+        "endLine": 108,
+        "endChar": 50
+      },
+      "revId": "fb0c211e87ad59ae8bed6e009be67f44be8fa5c3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6a36ee12_2429fbe2",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-10-18T12:15:52Z",
+      "side": 1,
+      "message": "You need to add quotes to make this a legitimate command.",
+      "range": {
+        "startLine": 108,
+        "startChar": 74,
+        "endLine": 108,
+        "endChar": 88
+      },
+      "revId": "fb0c211e87ad59ae8bed6e009be67f44be8fa5c3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "05973984_7e50a00f",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-10-18T12:15:52Z",
+      "side": 1,
+      "message": "Again, I think we should be more specific. Have you looked at the things that are precomputed by rbh3?\n\nAlso, I was wondering if we could create custom indexes so that admins could declare what needs to be precomputed. I\u0027ve had discussions with people complaining that some rbh-report commands are too slow to be used in practice. Maybe having something like this could work:\n\n```\nmycustomreport:\n    filter: \"-hsm-state archived\"\n    group-by: \"size\"\n    ratio: \"[-10G; 10G-20G; +20G]\"\n```\n\nOr even precompute things per directory for example:\n\n```\nmycustomreport:\n    filter \"-path \"/path/to/my/subdir\"\n    group-by: \"size\"\n    ratio: ...\n```\n\nAnd then `rbh-report rbh:mongo:mydb -custom mycustomreport`\n\nWhat do you think?",
+      "range": {
+        "startLine": 117,
+        "startChar": 0,
+        "endLine": 118,
+        "endChar": 56
+      },
+      "revId": "fb0c211e87ad59ae8bed6e009be67f44be8fa5c3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "70ad14fb_a3f9aab6",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-10-18T12:15:52Z",
+      "side": 1,
+      "message": "We can also call them reports.",
+      "range": {
+        "startLine": 142,
+        "startChar": 28,
+        "endLine": 142,
+        "endChar": 36
       },
       "revId": "fb0c211e87ad59ae8bed6e009be67f44be8fa5c3",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
@@ -105,6 +519,29 @@
         "startChar": 20,
         "endLine": 150,
         "endChar": 29
+      },
+      "revId": "fb0c211e87ad59ae8bed6e009be67f44be8fa5c3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6e247480_4b66772e",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-10-18T12:15:52Z",
+      "side": 1,
+      "message": "Where is this comming from? This is not mentioned in the design.",
+      "range": {
+        "startLine": 150,
+        "startChar": 59,
+        "endLine": 150,
+        "endChar": 81
       },
       "revId": "fb0c211e87ad59ae8bed6e009be67f44be8fa5c3",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
