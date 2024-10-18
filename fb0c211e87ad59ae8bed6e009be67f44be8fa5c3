@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b8a743fc_0e277941",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003874
+      },
+      "writtenOn": "2024-10-18T11:39:56Z",
+      "side": 1,
+      "message": "This design is fine but very high level.\n\nThe idea of alias is good.\n\nGiven the numerous comments I got on the quota example, It think it would be worthwhile designing more precisely the syntax of the commands.\nFor example, you could take the various rbh3\u0027s reports and give their equivalent with rbh4.",
+      "revId": "fb0c211e87ad59ae8bed6e009be67f44be8fa5c3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1e436b33_1a993a93",
@@ -19,6 +36,98 @@
         "startChar": 62,
         "endLine": 21,
         "endChar": 65
+      },
+      "revId": "fb0c211e87ad59ae8bed6e009be67f44be8fa5c3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e67982f2_f7f76763",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1003874
+      },
+      "writtenOn": "2024-10-18T11:39:56Z",
+      "side": 1,
+      "message": "1) It would be logical to have \"user\" in the output.\n\n2) I think the expected value is actually sum(size).\n\n3) Is \"inodes\" an actual field? If not, how \"count(inodes)\" will be interpreted? What about a simple notation like \"count()\" (which stands for SQL\u0027s COUNT(*)) ?\n\n4) What about supporting a short notation like --output user,sum(size),count(inodes),... ?",
+      "range": {
+        "startLine": 150,
+        "startChar": 45,
+        "endLine": 150,
+        "endChar": 81
+      },
+      "revId": "fb0c211e87ad59ae8bed6e009be67f44be8fa5c3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2d2716f4_895917e3",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1003874
+      },
+      "writtenOn": "2024-10-18T11:39:56Z",
+      "side": 1,
+      "message": "you wrote it \"-group-by\" in the previous example (no double dash, and a dash between \"group\" and \"by\").",
+      "range": {
+        "startLine": 150,
+        "startChar": 30,
+        "endLine": 150,
+        "endChar": 39
+      },
+      "revId": "fb0c211e87ad59ae8bed6e009be67f44be8fa5c3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a5de4bd3_0cb9082a",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1003874
+      },
+      "writtenOn": "2024-10-18T11:39:56Z",
+      "side": 1,
+      "message": "\"size +2M\" does not fit with the use-case of user-quota",
+      "range": {
+        "startLine": 150,
+        "startChar": 20,
+        "endLine": 150,
+        "endChar": 29
+      },
+      "revId": "fb0c211e87ad59ae8bed6e009be67f44be8fa5c3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d6451d22_3e9a8563",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1003874
+      },
+      "writtenOn": "2024-10-18T11:39:56Z",
+      "side": 1,
+      "message": "(typo) follows",
+      "range": {
+        "startLine": 153,
+        "startChar": 73,
+        "endLine": 153,
+        "endChar": 79
       },
       "revId": "fb0c211e87ad59ae8bed6e009be67f44be8fa5c3",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
