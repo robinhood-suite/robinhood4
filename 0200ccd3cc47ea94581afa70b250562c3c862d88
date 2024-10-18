@@ -71,6 +71,24 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1261f9d9_e310d1bb",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-10-18T08:36:23Z",
+      "side": 1,
+      "message": "Yep, didn\u0027t put it in this design, but it is planned to have aliases for command. Though I like the name \"profile\", so we\u0027ll use that one.",
+      "parentUuid": "24fc343c_ceb77d8f",
+      "revId": "0200ccd3cc47ea94581afa70b250562c3c862d88",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "09b1d129_05af72e1",
@@ -179,6 +197,30 @@
       "side": 1,
       "message": "We may stay generic, but still precise that we need the same kind of backend implementation as for `rbh-find`. Because not all operations are implemented. I will prefer sticking to the backend notion here.",
       "parentUuid": "60b265cc_61c2a44c",
+      "range": {
+        "startLine": 12,
+        "startChar": 48,
+        "endLine": 13,
+        "endChar": 25
+      },
+      "revId": "0200ccd3cc47ea94581afa70b250562c3c862d88",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "04ac0eb3_71e913f4",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-10-18T08:36:23Z",
+      "side": 1,
+      "message": "Added the precision about the same backends types as rbh-find.",
+      "parentUuid": "cd9e8d87_c940f3ee",
       "range": {
         "startLine": 12,
         "startChar": 48,
@@ -344,6 +386,30 @@
       "side": 1,
       "message": "Need to debate on that :p. Maybe we are not talking of the same things.",
       "parentUuid": "60ec0445_9ab72514",
+      "range": {
+        "startLine": 31,
+        "startChar": 13,
+        "endLine": 31,
+        "endChar": 19
+      },
+      "revId": "0200ccd3cc47ea94581afa70b250562c3c862d88",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "28f2cb4b_80bc4e4d",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-10-18T08:36:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "861bd8cb_68a0427b",
       "range": {
         "startLine": 31,
         "startChar": 13,
