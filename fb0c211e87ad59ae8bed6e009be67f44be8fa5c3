@@ -89,6 +89,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "51bca718_61cb76b2",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-10-21T14:24:49Z",
+      "side": 1,
+      "message": "The filter function of the backends only return an iterator, so it\u0027s not an issue to me that we use the same function, as the result\u0027s interpretation will vary between the tools. But I see your point for the genericity, added the function prototype here.",
+      "parentUuid": "b7ea40cc_ee40e382",
+      "range": {
+        "startLine": 19,
+        "startChar": 41,
+        "endLine": 20,
+        "endChar": 75
+      },
+      "revId": "fb0c211e87ad59ae8bed6e009be67f44be8fa5c3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1e436b33_1a993a93",
@@ -395,6 +419,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a873f856_bb2b6a67",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-10-21T14:24:49Z",
+      "side": 1,
+      "message": "After discussing it, for a first version we will simply include librbh-find to use all of find\u0027s filters, and when we have a valid POC, we will think about future updates to include other filters, like Lustre ones.",
+      "parentUuid": "a5f30534_86a04fda",
+      "range": {
+        "startLine": 55,
+        "startChar": 35,
+        "endLine": 55,
+        "endChar": 60
+      },
+      "revId": "fb0c211e87ad59ae8bed6e009be67f44be8fa5c3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "14c4e55a_ca8c11c8",
@@ -654,6 +702,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "19276002_f1e8c714",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-10-21T14:24:49Z",
+      "side": 1,
+      "message": "For the commands I\u0027ve added, you\u0027re right I didn\u0027t think much about them, so I added a better version and put their outputs aswell.",
+      "parentUuid": "cda3080a_c298e942",
+      "range": {
+        "startLine": 78,
+        "startChar": 6,
+        "endLine": 80,
+        "endChar": 10
+      },
+      "revId": "fb0c211e87ad59ae8bed6e009be67f44be8fa5c3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7bef125c_11eeac96",
@@ -715,6 +787,30 @@
       "side": 1,
       "message": "You have the same issue with the overload style implementation. You first go through lustre specific filters then posix ones. So in rbh-lfind, lustre always have a higher priority than POSIX. What I am proposing is simply to avoid multiplying tools and find a proper way of managing backends that may or may not contain some information.",
       "parentUuid": "d3a1ed26_2958ceab",
+      "range": {
+        "startLine": 85,
+        "startChar": 1,
+        "endLine": 89,
+        "endChar": 10
+      },
+      "revId": "fb0c211e87ad59ae8bed6e009be67f44be8fa5c3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1853ce85_41e19d7e",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-10-21T14:24:49Z",
+      "side": 1,
+      "message": "Same answer as the filter one, we\u0027ll do a first version of rbh-report with POSIX only, and then think about Lustre.",
+      "parentUuid": "e12926f0_e5ef538c",
       "range": {
         "startLine": 85,
         "startChar": 1,
@@ -937,6 +1033,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5f061661_d71fb243",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-10-21T14:24:49Z",
+      "side": 1,
+      "message": "Yes we will make the as generic as rbh-find (not the same as rbh-find to be precise), so that it\u0027s easy to add actions.",
+      "parentUuid": "b9412098_600c7dbc",
+      "range": {
+        "startLine": 108,
+        "startChar": 42,
+        "endLine": 108,
+        "endChar": 50
+      },
+      "revId": "fb0c211e87ad59ae8bed6e009be67f44be8fa5c3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "05973984_7e50a00f",
@@ -1008,6 +1128,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b8a644cb_9287d520",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-10-21T14:24:49Z",
+      "side": 1,
+      "message": "After talking about it, what you want is separate collections containing the outputs of the precomputed reports you put above. That is a good idea, but it won\u0027t be part of the first version of rbh-report. Also, it needs more modification in sync/fsevents than in report.",
+      "parentUuid": "07be4761_53460b29",
+      "range": {
+        "startLine": 117,
+        "startChar": 0,
+        "endLine": 118,
+        "endChar": 56
+      },
+      "revId": "fb0c211e87ad59ae8bed6e009be67f44be8fa5c3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "70ad14fb_a3f9aab6",
@@ -1069,6 +1213,30 @@
       "side": 1,
       "message": "Why add a new term where that is not necessary. If I want a short command line to run commands that I use often to display a *report*, I don\u0027t see the problem of calling this a *report*. I often find that more words to describe similar things is not user friendly.",
       "parentUuid": "ac0f1fc6_d2543ed3",
+      "range": {
+        "startLine": 142,
+        "startChar": 28,
+        "endLine": 142,
+        "endChar": 36
+      },
+      "revId": "fb0c211e87ad59ae8bed6e009be67f44be8fa5c3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6b65d0e7_89d3362b",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-10-21T14:24:49Z",
+      "side": 1,
+      "message": "Added an example of reports below, though I still want to keep \"profiles\" as aliases to make redundant commands easy. So we have both \"profiles\" for commands and \"reports\" for precomputation.",
+      "parentUuid": "ef77a4dc_5b5ec271",
       "range": {
         "startLine": 142,
         "startChar": 28,

@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4e374914_bfc2e70a",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-10-21T14:24:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "30cbde93_e13c1126",
+      "range": {
+        "startLine": 55,
+        "startChar": 72,
+        "endLine": 55,
+        "endChar": 80
+      },
+      "revId": "8eb92e3f86c228ccaa41a6d46dc876fa06938898",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5e16b8f6_2a879325",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-10-21T11:33:05Z",
       "side": 1,
       "message": "I think range would be a better name.",
+      "range": {
+        "startLine": 122,
+        "startChar": 65,
+        "endLine": 122,
+        "endChar": 70
+      },
+      "revId": "8eb92e3f86c228ccaa41a6d46dc876fa06938898",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b2cd2879_f693cd3d",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-10-21T14:24:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5e16b8f6_2a879325",
       "range": {
         "startLine": 122,
         "startChar": 65,
@@ -83,6 +131,54 @@
       "writtenOn": "2024-10-21T11:33:05Z",
       "side": 1,
       "message": "What does it mean to group by 2 criteria? Do you want to display a matrix? And what would it look like with 3 criteria? Especially by size. Without a -ratio argument, grouping by size seems not very useful? Also, seeing this makes me wonder about how easy it would be to interpret this. I feel like for some values, it doesn\u0027t make sense to group them alone (size, stripe-size, others?). Maybe these options should only be used with another action. For example, -group-by size requires -ratio after.\n\n```\nrbh-report -size +1T -group-by size\n```\n\nOne could interpret this a divide entries between +1T and -1T and count them.",
+      "range": {
+        "startLine": 164,
+        "startChar": 41,
+        "endLine": 164,
+        "endChar": 50
+      },
+      "revId": "8eb92e3f86c228ccaa41a6d46dc876fa06938898",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "96aa5c91_c1d7a0d6",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-10-21T14:24:49Z",
+      "side": 1,
+      "message": "I\u0027m fine with keeping count as written, to differentiate it from the `count` action of rbh-find. Especially with the computation being different, as this one would be done by the backend, whereas rbh-find\u0027s count is done by the command itself.",
+      "parentUuid": "5ce39d1e_dce9c7dd",
+      "range": {
+        "startLine": 164,
+        "startChar": 52,
+        "endLine": 164,
+        "endChar": 66
+      },
+      "revId": "8eb92e3f86c228ccaa41a6d46dc876fa06938898",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1109b12e_ea341924",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-10-21T14:24:49Z",
+      "side": 1,
+      "message": "It\u0027s a simple group by on two criteria, which would then be displayed as matrix.\nFor 2 criteria, it would\n```\ncritAvalA/critBvalA: ...\ncritAvalA/critBvalB: ...\ncritAvalB/critBvalA: ...\ncritAvalB/critBvalB: ...\ncritAvalB/critBvalC: ...\n```\n\nFor 3 arguments, it\u0027d the same, with just one more \u0027/\u0027 (or any other separator). For size, we would just group by size, whether it\u0027s practical or not is up to the admin\u0027s choice.\n\nI don\u0027t really want to ranges on certain values, but rather just make each value generic enough to handle ranges. That way, we don\u0027t have to do any smart thinking, and just let the admins be logical in what they ask for.",
+      "parentUuid": "846c59c1_d0ced9e5",
       "range": {
         "startLine": 164,
         "startChar": 41,
