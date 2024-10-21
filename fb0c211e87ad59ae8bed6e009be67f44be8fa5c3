@@ -67,6 +67,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b7ea40cc_ee40e382",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-10-21T11:33:05Z",
+      "side": 1,
+      "message": "But rbh-find iterates over a list of fsentries. I don\u0027t expect rbh-report to do the same. Why would rbh-report need an fsentry? It just needs the result from the aggregation of data. Yes, we might a list of results for certain reports. But surely not a list of fsentries. This is what rbh-find is used for.\n\nI am speaking at the C API level, not the implementation of the backends. The SQLite backend I\u0027m working on does not work in the same way. I think we should avoid considering how backends work when deciding on the actual implementation at the upper layers.",
+      "parentUuid": "7f6c533a_63c83b39",
+      "range": {
+        "startLine": 19,
+        "startChar": 41,
+        "endLine": 20,
+        "endChar": 75
+      },
+      "revId": "fb0c211e87ad59ae8bed6e009be67f44be8fa5c3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1e436b33_1a993a93",
         "filename": "designs/rbh-report.rst",
         "patchSetId": 3
@@ -349,6 +373,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a5f30534_86a04fda",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-10-21T11:33:05Z",
+      "side": 1,
+      "message": "My point was that parsing filters is probably not something that should be part of the core of librobinhood. It seems odd to me that a library such as librobinhood would give an API to parse command line arguments. I understand that rbh-report makes this requirement more generic than just for rbh-find tools. So my point is:\n\n1. to state explicitly that functions of librbh-find will move to librobinhood (which ones just the xxx2filter? What about the filter building logic with filter_and...?)\n2. whether we remove librbh-find or not\n3. if we keep it, I think we should rename it",
+      "parentUuid": "a7dbc311_bacf5fbf",
+      "range": {
+        "startLine": 55,
+        "startChar": 35,
+        "endLine": 55,
+        "endChar": 60
+      },
+      "revId": "fb0c211e87ad59ae8bed6e009be67f44be8fa5c3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "14c4e55a_ca8c11c8",
         "filename": "designs/rbh-report.rst",
         "patchSetId": 3
@@ -584,6 +632,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "cda3080a_c298e942",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-10-21T11:33:05Z",
+      "side": 1,
+      "message": "We don\u0027t have to be exhaustive but there are very few examples of actual commands (at least in the PS3) and no example of actual output. I see you added some commands but you don\u0027t specify the intent behind them. For example,\n\n```\nrbh-report rbh:mongo:blob -output stripe-count,stripe-size,sum(size)\n```\n\nWhat does that mean? I assume `sum(size)` means sum the size of the entries per group. But what groups? I really don\u0027t understand the intent behind this example. I think I understand the hsm one and the user one.\n\n\nI think something like this is much more simple to understand. What do you think?\n```\nrbh-report ... -group-by stripe-count -sum size\n1: 12PB\n2: 5PB\n3: 1TB\n...\n```",
+      "parentUuid": "846727b6_36697f47",
+      "range": {
+        "startLine": 78,
+        "startChar": 6,
+        "endLine": 80,
+        "endChar": 10
+      },
+      "revId": "fb0c211e87ad59ae8bed6e009be67f44be8fa5c3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7bef125c_11eeac96",
         "filename": "designs/rbh-report.rst",
         "patchSetId": 3
@@ -619,6 +691,30 @@
       "side": 1,
       "message": "For the first part, the issue lies mostly with the filters, and how they\u0027re handled accross different backends. If two backends define the same filter, how do we chose which one to apply ? We could simply say \"there are no two same filters in different backends\", and while that may be true for filesystems (such as Lustre) that have really specific mechanics, I\u0027m not sure it holds true for other storage systems, like object store, where same concepts may be applied differently (buckets ? Pools ?)... IDK.\n\nFor the second part, I like the tool\u0027s idea, but it\u0027s not relevant to rbh-report. Added it to our todo list.",
       "parentUuid": "7bef125c_11eeac96",
+      "range": {
+        "startLine": 85,
+        "startChar": 1,
+        "endLine": 89,
+        "endChar": 10
+      },
+      "revId": "fb0c211e87ad59ae8bed6e009be67f44be8fa5c3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e12926f0_e5ef538c",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-10-21T11:33:05Z",
+      "side": 1,
+      "message": "You have the same issue with the overload style implementation. You first go through lustre specific filters then posix ones. So in rbh-lfind, lustre always have a higher priority than POSIX. What I am proposing is simply to avoid multiplying tools and find a proper way of managing backends that may or may not contain some information.",
+      "parentUuid": "d3a1ed26_2958ceab",
       "range": {
         "startLine": 85,
         "startChar": 1,
@@ -819,6 +915,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b9412098_600c7dbc",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-10-21T11:33:05Z",
+      "side": 1,
+      "message": "Not for find. I\u0027m just saying that by having this notion of action from begining in rbh-report, we might be able to add more actions like this in the future if needed. This is irrelevant for rbh-find.",
+      "parentUuid": "097ee830_02f88100",
+      "range": {
+        "startLine": 108,
+        "startChar": 42,
+        "endLine": 108,
+        "endChar": 50
+      },
+      "revId": "fb0c211e87ad59ae8bed6e009be67f44be8fa5c3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "05973984_7e50a00f",
         "filename": "designs/rbh-report.rst",
         "patchSetId": 3
@@ -866,6 +986,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "07be4761_53460b29",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-10-21T11:33:05Z",
+      "side": 1,
+      "message": "\u003e For the custom indexes, yes I thought about this, didn\u0027t put it here since it\u0027s not relevant specifically for the tool\n\nI disagree, the reason RBH3 has additional precomputed info is just so that rbh-report isn\u0027t unbearably slow. This seems very relevant to the design.\n\n\u003e (or \"class\", sicne that\u0027s what it amounts to)\n\nI\u0027m not talking about adding RBH3\u0027s fileclasses in RBH4. Fileclasses are optimizations for the policy engine, not for rbh-report. I suggesting to add configurable precomputed data in the backend. And I am not talking about DB indexes to make queries on some fields faster either.\n\nI am also not suggesting to duplicate entries into multiple collections. There is still only one entries collection with all of the data. What I suggest is to precompute things in other collections so that rbh-report has much less work to do. And it would be very nice if we could configure which tables are precomputed so that admins can tailor them to their needs.",
+      "parentUuid": "8e7cfa4e_ef8c03d3",
+      "range": {
+        "startLine": 117,
+        "startChar": 0,
+        "endLine": 118,
+        "endChar": 56
+      },
+      "revId": "fb0c211e87ad59ae8bed6e009be67f44be8fa5c3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "70ad14fb_a3f9aab6",
         "filename": "designs/rbh-report.rst",
         "patchSetId": 3
@@ -901,6 +1045,30 @@
       "side": 1,
       "message": "\"reports\" would be the output of rbh-report, so I don\u0027t like this name for input things",
       "parentUuid": "70ad14fb_a3f9aab6",
+      "range": {
+        "startLine": 142,
+        "startChar": 28,
+        "endLine": 142,
+        "endChar": 36
+      },
+      "revId": "fb0c211e87ad59ae8bed6e009be67f44be8fa5c3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ef77a4dc_5b5ec271",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-10-21T11:33:05Z",
+      "side": 1,
+      "message": "Why add a new term where that is not necessary. If I want a short command line to run commands that I use often to display a *report*, I don\u0027t see the problem of calling this a *report*. I often find that more words to describe similar things is not user friendly.",
+      "parentUuid": "ac0f1fc6_d2543ed3",
       "range": {
         "startLine": 142,
         "startChar": 28,

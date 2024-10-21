@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "30cbde93_e13c1126",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-10-21T11:33:05Z",
+      "side": 1,
+      "message": "typo: will be handled",
+      "range": {
+        "startLine": 55,
+        "startChar": 72,
+        "endLine": 55,
+        "endChar": 80
+      },
+      "revId": "8eb92e3f86c228ccaa41a6d46dc876fa06938898",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5e16b8f6_2a879325",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-10-21T11:33:05Z",
+      "side": 1,
+      "message": "I think range would be a better name.",
+      "range": {
+        "startLine": 122,
+        "startChar": 65,
+        "endLine": 122,
+        "endChar": 70
+      },
+      "revId": "8eb92e3f86c228ccaa41a6d46dc876fa06938898",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5ce39d1e_dce9c7dd",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-10-21T11:33:05Z",
+      "side": 1,
+      "message": "Or simply -count. This goes back to the discussion about the term action and potentially having multiple actions.",
+      "range": {
+        "startLine": 164,
+        "startChar": 52,
+        "endLine": 164,
+        "endChar": 66
+      },
+      "revId": "8eb92e3f86c228ccaa41a6d46dc876fa06938898",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "846c59c1_d0ced9e5",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-10-21T11:33:05Z",
+      "side": 1,
+      "message": "What does it mean to group by 2 criteria? Do you want to display a matrix? And what would it look like with 3 criteria? Especially by size. Without a -ratio argument, grouping by size seems not very useful? Also, seeing this makes me wonder about how easy it would be to interpret this. I feel like for some values, it doesn\u0027t make sense to group them alone (size, stripe-size, others?). Maybe these options should only be used with another action. For example, -group-by size requires -ratio after.\n\n```\nrbh-report -size +1T -group-by size\n```\n\nOne could interpret this a divide entries between +1T and -1T and count them.",
+      "range": {
+        "startLine": 164,
+        "startChar": 41,
+        "endLine": 164,
+        "endChar": 50
+      },
+      "revId": "8eb92e3f86c228ccaa41a6d46dc876fa06938898",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9081a8c1_c4b3c12c",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2024-10-21T11:33:05Z",
+      "side": 1,
+      "message": "I makes sense to say --report here. For me this is a custom report.",
+      "range": {
+        "startLine": 172,
+        "startChar": 30,
+        "endLine": 172,
+        "endChar": 39
+      },
+      "revId": "8eb92e3f86c228ccaa41a6d46dc876fa06938898",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
