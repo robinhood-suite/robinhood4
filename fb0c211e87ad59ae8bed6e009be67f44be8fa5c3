@@ -41,6 +41,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7f6c533a_63c83b39",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-10-21T09:45:02Z",
+      "side": 1,
+      "message": "rbh-find actually already uses the aggregate function of Mongo to filter and show information. Therefore we just need to use the same function, and add ways to change the projection/grouping of info. I made it more clear in the document that rbh-find already works in the way we want rbh-report to work.",
+      "parentUuid": "0458d660_8118ba87",
+      "range": {
+        "startLine": 19,
+        "startChar": 41,
+        "endLine": 20,
+        "endChar": 75
+      },
+      "revId": "fb0c211e87ad59ae8bed6e009be67f44be8fa5c3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1e436b33_1a993a93",
@@ -87,6 +111,54 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a4dae76e_2ca85f31",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-10-21T09:45:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "02a4eb76_eaa86b8e",
+      "range": {
+        "startLine": 21,
+        "startChar": 64,
+        "endLine": 21,
+        "endChar": 72
+      },
+      "revId": "fb0c211e87ad59ae8bed6e009be67f44be8fa5c3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "07ed2634_f44a69d9",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-10-21T09:45:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1e436b33_1a993a93",
+      "range": {
+        "startLine": 21,
+        "startChar": 62,
+        "endLine": 21,
+        "endChar": 65
+      },
+      "revId": "fb0c211e87ad59ae8bed6e009be67f44be8fa5c3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "655fb27f_30954b20",
@@ -100,6 +172,30 @@
       "writtenOn": "2024-10-18T12:15:52Z",
       "side": 1,
       "message": "typo: A",
+      "range": {
+        "startLine": 26,
+        "startChar": 3,
+        "endLine": 26,
+        "endChar": 5
+      },
+      "revId": "fb0c211e87ad59ae8bed6e009be67f44be8fa5c3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0649b90c_7b51451f",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-10-21T09:45:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "655fb27f_30954b20",
       "range": {
         "startLine": 26,
         "startChar": 3,
@@ -133,6 +229,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "829a4808_623403ec",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-10-21T09:45:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "415022c8_d65d875e",
+      "range": {
+        "startLine": 48,
+        "startChar": 41,
+        "endLine": 49,
+        "endChar": 7
+      },
+      "revId": "fb0c211e87ad59ae8bed6e009be67f44be8fa5c3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ee27c3cb_27ea2cde",
@@ -146,6 +266,30 @@
       "writtenOn": "2024-10-18T12:15:52Z",
       "side": 1,
       "message": "What does that mean ? Why may ?",
+      "range": {
+        "startLine": 49,
+        "startChar": 61,
+        "endLine": 50,
+        "endChar": 27
+      },
+      "revId": "fb0c211e87ad59ae8bed6e009be67f44be8fa5c3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "75c6f728_9d467327",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-10-21T09:45:02Z",
+      "side": 1,
+      "message": "I wanted to say they would work the same exact way, as in \"interpreted the same and handled the same\". Changed the phrasing.",
+      "parentUuid": "ee27c3cb_27ea2cde",
       "range": {
         "startLine": 49,
         "startChar": 61,
@@ -181,6 +325,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a7dbc311_bacf5fbf",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-10-21T09:45:02Z",
+      "side": 1,
+      "message": "I\u0027m not sure what you want to explicitly state here ? What you propose is exactly what I\u0027m saying, we move the management of all filters to librobinhood, meaning both their parsing and the filter creation functions. So \"size2filter\" and all other filter functions will be moved to librobinhood.",
+      "parentUuid": "922d049e_b963b59e",
+      "range": {
+        "startLine": 55,
+        "startChar": 35,
+        "endLine": 55,
+        "endChar": 60
+      },
+      "revId": "fb0c211e87ad59ae8bed6e009be67f44be8fa5c3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "14c4e55a_ca8c11c8",
         "filename": "designs/rbh-report.rst",
         "patchSetId": 3
@@ -192,6 +360,30 @@
       "writtenOn": "2024-10-18T12:15:52Z",
       "side": 1,
       "message": "I think \"to specify\" is more idiomatic.",
+      "range": {
+        "startLine": 62,
+        "startChar": 35,
+        "endLine": 62,
+        "endChar": 42
+      },
+      "revId": "fb0c211e87ad59ae8bed6e009be67f44be8fa5c3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b4f59b7e_f9102452",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-10-21T09:45:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "14c4e55a_ca8c11c8",
       "range": {
         "startLine": 62,
         "startChar": 35,
@@ -215,6 +407,30 @@
       "writtenOn": "2024-10-18T12:15:52Z",
       "side": 1,
       "message": "for a filesystem?",
+      "range": {
+        "startLine": 64,
+        "startChar": 42,
+        "endLine": 64,
+        "endChar": 45
+      },
+      "revId": "fb0c211e87ad59ae8bed6e009be67f44be8fa5c3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e4f14f87_37ed1e86",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-10-21T09:45:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b3ebb4c8_7c36c7ce",
       "range": {
         "startLine": 64,
         "startChar": 42,
@@ -250,6 +466,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "cee19eec_9fa37766",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-10-21T09:45:02Z",
+      "side": 1,
+      "message": "Yes, that\u0027s why I give some examples here. I say we should be at least on part with RBH3, so everything it provides should be also provided by RBH4.\n\nDo you want me to specify all the options here ?",
+      "parentUuid": "bd30e560_efbf77d7",
+      "range": {
+        "startLine": 72,
+        "startChar": 40,
+        "endLine": 72,
+        "endChar": 80
+      },
+      "revId": "fb0c211e87ad59ae8bed6e009be67f44be8fa5c3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6ca31adb_c5d9627d",
         "filename": "designs/rbh-report.rst",
         "patchSetId": 3
@@ -261,6 +501,30 @@
       "writtenOn": "2024-10-18T12:15:52Z",
       "side": 1,
       "message": "I don\u0027t think this word exists.",
+      "range": {
+        "startLine": 75,
+        "startChar": 45,
+        "endLine": 75,
+        "endChar": 56
+      },
+      "revId": "fb0c211e87ad59ae8bed6e009be67f44be8fa5c3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3e67478b_cf22a6b9",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-10-21T09:45:02Z",
+      "side": 1,
+      "message": "Yes it does: https://docs.oracle.com/javame/config/cldc/ref-impl/midp2.0/jsr118/javax/microedition/lcdui/Displayable.html",
+      "parentUuid": "6ca31adb_c5d9627d",
       "range": {
         "startLine": 75,
         "startChar": 45,
@@ -296,6 +560,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "846727b6_36697f47",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-10-21T09:45:02Z",
+      "side": 1,
+      "message": "IMO, just saying we should provide RBH3 can provide is enough, I can add a link to its documentation, but just dumping the same info here seems unnecessary.\n\nWhat do you mean by \"compatibility with the old rbh-report\u0027s arguments\" ? DO you mean using the exact same CLI arguments as RBH3 ? If so, yes I think that\u0027s a good idea, I can add it here.",
+      "parentUuid": "52f12711_183a00b9",
+      "range": {
+        "startLine": 78,
+        "startChar": 6,
+        "endLine": 80,
+        "endChar": 10
+      },
+      "revId": "fb0c211e87ad59ae8bed6e009be67f44be8fa5c3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7bef125c_11eeac96",
         "filename": "designs/rbh-report.rst",
         "patchSetId": 3
@@ -307,6 +595,30 @@
       "writtenOn": "2024-10-18T12:15:52Z",
       "side": 1,
       "message": "I don\u0027t think this is very practical to have overloads. I don\u0027t really like the fact that we have rbh-find and rbh-lfind. We should probably think of a better way of managing extra attributes in the backend. Maybe backends can store their name and version somewhere in the backend so that we can infer from the backend everything we need to know. Something like:\n\n```\nrbh_report_main()\n{\n    backend \u003d backend_from_uri(argv[1]);\n    id \u003d rbh_backend_get_id(backend);\n    \n    switch (id) {\n    case LUSTRE:\n       ...\n    }\n    ...\n}\n```\n\nAnd this would be useful for users as well. If they want to know how the backend was generated. Maybe something like this would be interesting (although completely outside of the scope of this document):\n\n```\nrbh-??? rbh:mongo:mydb\nsource backend: lustre\nlast sync: ...\n```\n\nJust a rough idea.",
+      "range": {
+        "startLine": 85,
+        "startChar": 1,
+        "endLine": 89,
+        "endChar": 10
+      },
+      "revId": "fb0c211e87ad59ae8bed6e009be67f44be8fa5c3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d3a1ed26_2958ceab",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-10-21T09:45:02Z",
+      "side": 1,
+      "message": "For the first part, the issue lies mostly with the filters, and how they\u0027re handled accross different backends. If two backends define the same filter, how do we chose which one to apply ? We could simply say \"there are no two same filters in different backends\", and while that may be true for filesystems (such as Lustre) that have really specific mechanics, I\u0027m not sure it holds true for other storage systems, like object store, where same concepts may be applied differently (buckets ? Pools ?)... IDK.\n\nFor the second part, I like the tool\u0027s idea, but it\u0027s not relevant to rbh-report. Added it to our todo list.",
+      "parentUuid": "7bef125c_11eeac96",
       "range": {
         "startLine": 85,
         "startChar": 1,
@@ -330,6 +642,30 @@
       "writtenOn": "2024-10-18T12:15:52Z",
       "side": 1,
       "message": "A simpler way to say this is: The parsing of command line arguments for filters should be common to both rbh-find and rbh-report. This avoids the risk of having differences between both tools.",
+      "range": {
+        "startLine": 97,
+        "startChar": 0,
+        "endLine": 99,
+        "endChar": 49
+      },
+      "revId": "fb0c211e87ad59ae8bed6e009be67f44be8fa5c3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0a145a3e_ee2cd3d1",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-10-21T09:45:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "adf215c4_481bdd9a",
       "range": {
         "startLine": 97,
         "startChar": 0,
@@ -411,6 +747,78 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "097ee830_02f88100",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-10-21T09:45:02Z",
+      "side": 1,
+      "message": "I understand, but how would this specific action work for find ? Find\u0027s goal is print every info out, grouping them would make most things unreadable/nonsensical. This one would be specific to rbh-report.",
+      "parentUuid": "869e49ab_b6d705f8",
+      "range": {
+        "startLine": 108,
+        "startChar": 42,
+        "endLine": 108,
+        "endChar": 50
+      },
+      "revId": "fb0c211e87ad59ae8bed6e009be67f44be8fa5c3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a3aa849b_652d29bc",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-10-21T09:45:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6a36ee12_2429fbe2",
+      "range": {
+        "startLine": 108,
+        "startChar": 74,
+        "endLine": 108,
+        "endChar": 88
+      },
+      "revId": "fb0c211e87ad59ae8bed6e009be67f44be8fa5c3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c6ab1ad_6743cf46",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-10-21T09:45:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "17ac0518_78ccd9f0",
+      "range": {
+        "startLine": 108,
+        "startChar": 65,
+        "endLine": 108,
+        "endChar": 69
+      },
+      "revId": "fb0c211e87ad59ae8bed6e009be67f44be8fa5c3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "05973984_7e50a00f",
         "filename": "designs/rbh-report.rst",
         "patchSetId": 3
@@ -434,6 +842,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8e7cfa4e_ef8c03d3",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-10-21T09:45:02Z",
+      "side": 1,
+      "message": "Yes, there are tables for users, groups and filesystem info. However, I don\u0027t think detailing them here is relevant, just saying how RBH3 does it is enough.\n\nFor the custom indexes, yes I thought about this, didn\u0027t put it here since it\u0027s not relevant specifically for the tool, but to the overall architecture of RBH. However, the issue I have is that we either have to store the index (or \"class\", sicne that\u0027s what it amounts to) in the database entries, or store those entries in another collection.\n\nThe issue with the first option is that I\u0027m not sure it\u0027s particularly faster to request one field than to request multiple (request \"class \u003d something\" or request \"size \u003e N \u0026\u0026 name \u003d \"/blob/*\"), but we could create a DB index on those fields, so maybe it would be, idk...\n\nThe issue with the second option is that we either duplicate information by storing the same entry in the general collection and in another collection for that class. Or if we do not duplicate entries, it becomes kinda hard to follow where that entry is, since updates have to hit a specific collection, which may become two collections in case the entry changes class whilst being updated.\n\nI like the idea, but I don\u0027t think it\u0027s required for this design yet, and it needs more thinking on our part.",
+      "parentUuid": "05973984_7e50a00f",
+      "range": {
+        "startLine": 117,
+        "startChar": 0,
+        "endLine": 118,
+        "endChar": 56
+      },
+      "revId": "fb0c211e87ad59ae8bed6e009be67f44be8fa5c3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "70ad14fb_a3f9aab6",
         "filename": "designs/rbh-report.rst",
         "patchSetId": 3
@@ -445,6 +877,30 @@
       "writtenOn": "2024-10-18T12:15:52Z",
       "side": 1,
       "message": "We can also call them reports.",
+      "range": {
+        "startLine": 142,
+        "startChar": 28,
+        "endLine": 142,
+        "endChar": 36
+      },
+      "revId": "fb0c211e87ad59ae8bed6e009be67f44be8fa5c3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac0f1fc6_d2543ed3",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-10-21T09:45:02Z",
+      "side": 1,
+      "message": "\"reports\" would be the output of rbh-report, so I don\u0027t like this name for input things",
+      "parentUuid": "70ad14fb_a3f9aab6",
       "range": {
         "startLine": 142,
         "startChar": 28,
@@ -549,6 +1005,102 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "77a6605d_41c06803",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-10-21T09:45:02Z",
+      "side": 1,
+      "message": "1) I think they should be implicit, it doesn\u0027t really make sense to ask info to be grouped by values but don\u0027t see what those values are. So here, grouping info by user should implicitly show the user in the output IMO.\n\n2) Depends on what you want to do. I\u0027ve changed the scenario here to `show me all entries larger than 1 Terabytes, group them by user and by size, and tell me the number of inodes each group has`.\n\n3) You\u0027re right it\u0027s not. Changed it to what you propose.\n\n4) Done",
+      "parentUuid": "e67982f2_f7f76763",
+      "range": {
+        "startLine": 150,
+        "startChar": 45,
+        "endLine": 150,
+        "endChar": 81
+      },
+      "revId": "fb0c211e87ad59ae8bed6e009be67f44be8fa5c3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "428c129a_2a10b784",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-10-21T09:45:02Z",
+      "side": 1,
+      "message": "It\u0027s the `statistics` part of the design. Added examples there.",
+      "parentUuid": "6e247480_4b66772e",
+      "range": {
+        "startLine": 150,
+        "startChar": 59,
+        "endLine": 150,
+        "endChar": 81
+      },
+      "revId": "fb0c211e87ad59ae8bed6e009be67f44be8fa5c3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "33f5ee36_78507e3b",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-10-21T09:45:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2d2716f4_895917e3",
+      "range": {
+        "startLine": 150,
+        "startChar": 30,
+        "endLine": 150,
+        "endChar": 39
+      },
+      "revId": "fb0c211e87ad59ae8bed6e009be67f44be8fa5c3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc1b34b9_13e6ff06",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-10-21T09:45:02Z",
+      "side": 1,
+      "message": "Changed the name",
+      "parentUuid": "a5de4bd3_0cb9082a",
+      "range": {
+        "startLine": 150,
+        "startChar": 20,
+        "endLine": 150,
+        "endChar": 29
+      },
+      "revId": "fb0c211e87ad59ae8bed6e009be67f44be8fa5c3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d6451d22_3e9a8563",
         "filename": "designs/rbh-report.rst",
         "patchSetId": 3
@@ -560,6 +1112,30 @@
       "writtenOn": "2024-10-18T11:39:56Z",
       "side": 1,
       "message": "(typo) follows",
+      "range": {
+        "startLine": 153,
+        "startChar": 73,
+        "endLine": 153,
+        "endChar": 79
+      },
+      "revId": "fb0c211e87ad59ae8bed6e009be67f44be8fa5c3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e24f4005_00449f84",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-10-21T09:45:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d6451d22_3e9a8563",
       "range": {
         "startLine": 153,
         "startChar": 73,
