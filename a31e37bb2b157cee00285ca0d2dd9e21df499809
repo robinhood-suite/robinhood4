@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "93f28632_bb79c945",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 5
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-10-22T11:20:45Z",
+      "side": 1,
+      "message": "typo: collections",
+      "range": {
+        "startLine": 197,
+        "startChar": 52,
+        "endLine": 197,
+        "endChar": 62
+      },
+      "revId": "a31e37bb2b157cee00285ca0d2dd9e21df499809",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
