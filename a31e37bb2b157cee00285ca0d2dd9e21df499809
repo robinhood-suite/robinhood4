@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8e3d0dc9_aaca99c0",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 5
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-10-23T09:06:44Z",
+      "side": 1,
+      "message": "I don\u0027t understand, the function that you describe here already exist as a backend operation. Do you want to modify the filter operation or create a new backend operation like report ?",
+      "range": {
+        "startLine": 28,
+        "startChar": 62,
+        "endLine": 37,
+        "endChar": 6
+      },
+      "revId": "a31e37bb2b157cee00285ca0d2dd9e21df499809",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "93f28632_bb79c945",
         "filename": "designs/rbh-report.rst",
         "patchSetId": 5
