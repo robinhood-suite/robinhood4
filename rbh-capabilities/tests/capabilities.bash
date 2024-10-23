@@ -83,13 +83,47 @@ tests_library_path_env_invalid()
     fi
 }
 
+tests_library_path_correctly_set()
+{
+    export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:/usr/local/lib64"
+
+    local output=$(rbh-capabilities mongo 2>&1)
+    if echo "$output" | grep -q "Capabilities of mongo:"; then
+        echo "Mongo backend imported successfully as expected"
+    else
+        error "Mongo backend import failed: Expected 'Capabilities of mongo:'
+            but got: $output"
+    fi
+
+    return 0
+}
+
+tests_mongo_backend_detection()
+{
+    local output=$(rbh_capabilities -l)
+    if echo "$output" | grep -q "mongo"; then
+        output=$(rbh_capabilities mongo 2>&1)
+        echo "$output" | grep -q "Capabilities of mongo" &&
+            echo "Mongo backend imported successfully as expected" ||
+            error "Mongo backend is listed but could not be imported"
+    else
+        output=$(rbh_capabilities mongo 2>&1)
+        echo "$output" | grep -q "This backend does not exist" &&
+            echo "Mongo backend correctly not imported as it is not listed" ||
+            error "Mongo backend should not be imported if it is not listed"
+    fi
+
+    return 0
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
 declare -a tests=(tests_backend_installed_list tests_mongo_capabilities
                   tests_posix_capabilities tests_not_installed_capabilities
-                  tests_not_find_backend_list)
+                  tests_not_find_backend_list tests_mongo_backend_detection
+                  tests_library_path_correctly_set)
                   # tests_library_path_env_not_exist
                   # tests_library_path_env_invalid)
 

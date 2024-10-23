@@ -177,10 +177,8 @@ rbh_backend_list()
     const char *library_dirs[] = {
         "/lib",
         "/usr/lib",
-        "/usr/local/lib",
         "/lib64",
         "/usr/lib64",
-        "/usr/local/lib64",
     };
     int len_library = sizeof(library_dirs) / sizeof(library_dirs[0]);
     struct rbh_list_node *head = malloc(sizeof(struct rbh_list_node));
