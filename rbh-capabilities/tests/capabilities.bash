@@ -83,13 +83,81 @@ tests_library_path_env_invalid()
     fi
 }
 
+tests_library_path_correctly_set()
+{
+    export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:/usr/lib64"
+
+    local output=$(rbh_capabilities mongo)
+    if echo "$output" | grep -q "Capabilities of mongo:"; then
+        echo "Mongo backend imported successfully as expected"
+    else
+        error "Mongo backend import failed: Expected 'Capabilities of mongo:'
+            but got: $output"
+    fi
+}
+
+tests_mongo_backend_detection()
+{
+    local backend_path="/home/$SUDO_USER/robinhood4/builddir/librobinhood/"\
+"src/backends/mongo"
+    local non_standard_path="/tmp/non_standard"
+    local TEMP=$LD_LIBRARY_PATH
+
+    sudo mkdir -p $non_standard_path
+
+    sudo test -f /usr/lib/librbh-mongo.so &&
+        sudo mv /usr/lib/librbh-mongo.so /tmp/librbh-mongo.so.lib
+    sudo test -f /usr/lib/librbh-mongo.so.1 &&
+        sudo mv /usr/lib/librbh-mongo.so.1 /tmp/librbh-mongo.so.1.lib
+    sudo test -f /usr/lib64/librbh-mongo.so &&
+        sudo mv /usr/lib64/librbh-mongo.so /tmp/librbh-mongo.so.lib64
+    sudo test -f /usr/lib64/librbh-mongo.so.1 &&
+        sudo mv /usr/lib64/librbh-mongo.so.1 /tmp/librbh-mongo.so.1.lib64
+
+    sudo mv $backend_path/librbh-mongo.so $non_standard_path
+    sudo cp $backend_path/librbh-mongo.so.1 $non_standard_path/
+
+    unset LD_LIBRARY_PATH
+    local output=$(rbh_capabilities mongo 2>&1)
+
+    if echo "$output" | grep -q "This backend does not exist"; then
+        echo "Mongo backend correctly not imported as expected"
+    else
+        error "Mongo backend was unexpectedly detected in default paths"
+    fi
+
+    export LD_LIBRARY_PATH=$non_standard_path
+    output=$(rbh_capabilities mongo 2>&1)
+    sudo mv $non_standard_path/librbh-mongo.so $backend_path
+
+    if echo "$output" | grep -q "Capabilities of mongo"; then
+        echo "Mongo backend imported successfully from non-standard path"
+    else
+        error "Mongo backend import failed from non-standard path: $output"
+        rm -rf $non_standard_path
+    fi
+
+    sudo test -f /tmp/librbh-mongo.so.lib &&
+        sudo mv /tmp/librbh-mongo.so.lib /usr/lib/librbh-mongo.so
+    sudo test -f /tmp/librbh-mongo.so.1.lib &&
+        sudo mv /tmp/librbh-mongo.so.1.lib /usr/lib/librbh-mongo.so.1
+    sudo test -f /tmp/librbh-mongo.so.lib64 &&
+        sudo mv /tmp/librbh-mongo.so.lib64 /usr/lib64/librbh-mongo.so
+    sudo test -f /tmp/librbh-mongo.so.1.lib64 &&
+        sudo mv /tmp/librbh-mongo.so.1.lib64 /usr/lib64/librbh-mongo.so.1
+
+    export LD_LIBRARY_PATH=$TEMP
+    sudo rm -rf $non_standard_path
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
 declare -a tests=(tests_backend_installed_list tests_mongo_capabilities
                   tests_posix_capabilities tests_not_installed_capabilities
-                  tests_not_find_backend_list)
+                  tests_not_find_backend_list tests_library_path_correctly_set
+                  tests_mongo_backend_detection)
                   # tests_library_path_env_not_exist
                   # tests_library_path_env_invalid)
 
