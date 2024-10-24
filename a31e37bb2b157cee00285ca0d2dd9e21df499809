@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "831a649d_322939c4",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 5
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-10-24T08:38:44Z",
+      "side": 1,
+      "message": "Forgot to change the name yes, it\u0027s a \"report\" operation, which will take in an additional parameter to specify the output wanted",
+      "parentUuid": "8e3d0dc9_aaca99c0",
+      "range": {
+        "startLine": 28,
+        "startChar": 62,
+        "endLine": 37,
+        "endChar": 6
+      },
+      "revId": "a31e37bb2b157cee00285ca0d2dd9e21df499809",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "93f28632_bb79c945",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-10-22T11:20:45Z",
       "side": 1,
       "message": "typo: collections",
+      "range": {
+        "startLine": 197,
+        "startChar": 52,
+        "endLine": 197,
+        "endChar": 62
+      },
+      "revId": "a31e37bb2b157cee00285ca0d2dd9e21df499809",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a1e672c5_f597bc10",
+        "filename": "designs/rbh-report.rst",
+        "patchSetId": 5
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-10-24T08:38:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "93f28632_bb79c945",
       "range": {
         "startLine": 197,
         "startChar": 52,
