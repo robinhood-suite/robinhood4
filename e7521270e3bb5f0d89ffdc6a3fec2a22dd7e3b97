@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "203b3b5b_c92b11b0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2024-10-25T12:06:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "245d1389_8b33575c",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 15
+      },
+      "revId": "e7521270e3bb5f0d89ffdc6a3fec2a22dd7e3b97",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0aae3ddf_27ebd47b",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-10-24T08:44:15Z",
       "side": 1,
       "message": "comment: well, they can, we just need to change the `LD_LIBRARY_PATH`",
+      "range": {
+        "startLine": 11,
+        "startChar": 27,
+        "endLine": 11,
+        "endChar": 43
+      },
+      "revId": "e7521270e3bb5f0d89ffdc6a3fec2a22dd7e3b97",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aee2bfa3_d59644ad",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2024-10-25T12:06:38Z",
+      "side": 1,
+      "message": "That\u0027s right, I edited the commit message for clarity",
+      "parentUuid": "0aae3ddf_27ebd47b",
       "range": {
         "startLine": 11,
         "startChar": 27,
