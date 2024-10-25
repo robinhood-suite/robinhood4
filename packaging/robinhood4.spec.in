@@ -184,6 +184,11 @@ OPTS=""
 ldconfig
 
 %changelog
+* Fri Oct 25 2024 - Yoann Valeri <yoann.valeri@cea.fr> - 1.1-1
+- Added xattrs type configuration with the configuration file
+- Added configuration parameter for rbh-update-retention
+- Support new filters in rbh-find-lustre
+
 * Tue Jul 23 2024 - Yoann Valeri <yoann.valeri@cea.fr> - 1.0-1
 - First version of RobinHood V4
 - Support the following backends: POSIX, Lustre, Mongo, Lustre-MPI and POSIX-MPI
