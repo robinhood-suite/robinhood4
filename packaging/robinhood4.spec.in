@@ -42,7 +42,7 @@ BuildRequires: mongo-c-driver-devel
 BuildRequires: jansson-devel
 BuildRequires: check-devel
 %if %{with lustre}
-BuildRequires: (lustre-client < 2.15 or lustre-devel)
+BuildRequires: lustre-devel
 %endif
 BuildRequires: libyaml-devel
 BuildRequires: pkgconf-pkg-config
@@ -68,7 +68,7 @@ Conflicts: robinhood
 Requires: robinhood4 >= 1.0
 Requires: pkgconf-pkg-config
 %if %{with lustre}
-Requires: (lustre-client < 2.15 or lustre-devel)
+Requires: lustre-devel
 %endif
 
 %description devel
@@ -184,6 +184,11 @@ OPTS=""
 ldconfig
 
 %changelog
+* Fri Oct 25 2024 - Yoann Valeri <yoann.valeri@cea.fr> - 1.1-1
+- Added xattrs type configuration with the configuration file
+- Added configuration parameter for rbh-update-retention
+- Support new filters in rbh-find-lustre
+
 * Tue Jul 23 2024 - Yoann Valeri <yoann.valeri@cea.fr> - 1.0-1
 - First version of RobinHood V4
 - Support the following backends: POSIX, Lustre, Mongo, Lustre-MPI and POSIX-MPI
