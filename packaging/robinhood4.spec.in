@@ -1,5 +1,5 @@
 Name:    robinhood4
-Version: @version@
+Version: 1.1.0
 Release: 1%{?dist}
 Summary: RobinHood V4 tool suite
 
@@ -10,7 +10,7 @@ Source0: %{name}-%{version}.tar.xz
 
 # build options    || .rpmmacros options || change to default action
 # =================  ====================  ===========================
-# --without lustre ||   %%_with_lustre 1 || force lustre as dependency
+# --without lustre ||   %%_with_lustre 0 || remove lustre as dependency
 # --with mfu       ||   %%_with_mfu 1    || force libmfu as dependency
 # --with hestia    ||   %%_with_hestia 1 || force hestia as dependency
 
@@ -23,6 +23,7 @@ Conflicts: robinhood
 Requires: mongo-c-driver-libs
 # The MongoDB dependency can be found here: https://repo.mongodb.org/yum/redhat/
 Requires: (mongodb-org or mongodb)
+Requires: miniyaml
 %if %{with lustre}
 Requires: lustre-client
 %endif
@@ -42,10 +43,15 @@ BuildRequires: mongo-c-driver-devel
 BuildRequires: jansson-devel
 BuildRequires: check-devel
 %if %{with lustre}
-BuildRequires: (lustre-client < 2.15 or lustre-devel)
+# Should be the following line, but there is currently an issue with repository
+# priority and yum that makes it so that lustre-client is always used if
+# available, completely ignoring lustre-devel
+#BuildRequires: (lustre-devel or lustre-client < 2.15)
+BuildRequires: lustre-devel
 %endif
 BuildRequires: libyaml-devel
 BuildRequires: pkgconf-pkg-config
+BuildRequires: miniyaml-devel
 
 %if %{with hestia}
 BuildRequires: hestia-devel
@@ -68,7 +74,8 @@ Conflicts: robinhood
 Requires: robinhood4 >= 1.0
 Requires: pkgconf-pkg-config
 %if %{with lustre}
-Requires: (lustre-client < 2.15 or lustre-devel)
+#Requires: (lustre-devel or lustre-client < 2.15)
+Requires: lustre-devel
 %endif
 
 %description devel
@@ -184,6 +191,11 @@ OPTS=""
 ldconfig
 
 %changelog
+* Fri Oct 25 2024 - Yoann Valeri <yoann.valeri@cea.fr> - 1.1-1
+- Added xattrs type configuration with the configuration file
+- Added configuration parameter for rbh-update-retention
+- Support new filters in rbh-find-lustre
+
 * Tue Jul 23 2024 - Yoann Valeri <yoann.valeri@cea.fr> - 1.0-1
 - First version of RobinHood V4
 - Support the following backends: POSIX, Lustre, Mongo, Lustre-MPI and POSIX-MPI
