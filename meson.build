@@ -70,6 +70,7 @@ subdir('librobinhood')
 subdir('rbh-sync')
 subdir('rbh-find')
 subdir('rbh-fsevents')
+subdir('rbh-report')
 if get_option('lustre').enabled()
     subdir('rbh-find-lustre')
 endif
