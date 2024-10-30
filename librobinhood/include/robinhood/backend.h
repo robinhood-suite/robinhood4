@@ -505,6 +505,33 @@ rbh_backend_filter(struct rbh_backend *backend, const struct rbh_filter *filter,
 }
 
 /**
+ * Return an iterator over fsentries that aggregate information
+ *
+ * @param backend   the backend from which to fetch fsentries
+ * @param filter    a set of criteria that the returned fsentries must match
+ * @param options   a set of filtering options (must not be NULL)
+ *
+ * @return          an iterator over mutable fsentries on success, NULL on error
+ *                  and errno is set appropriately
+ *
+ * @error ENOMEM    there was not enough memory available
+ * @error ENOTSUP   \p backend does not support filtering fsentries
+ *
+ * This function may fail and set errno to any error number specifically
+ * documented by \p backend.
+ */
+static inline struct rbh_mut_iterator *
+rbh_backend_report(struct rbh_backend *backend, const struct rbh_filter *filter,
+                   const struct rbh_filter_options *options)
+{
+    if (backend->ops->report == NULL) {
+        errno = ENOTSUP;
+        return NULL;
+    }
+    return backend->ops->report(backend, filter, options);
+}
+
+/**
  * Retrieve specific attributes from a backend
  *
  * @param backend   the backend from which to fetch attributes
