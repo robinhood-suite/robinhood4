@@ -7,6 +7,22 @@
 
 #include <stdio.h>
 
+#include <robinhood.h>
+
+static struct rbh_backend *from;
+
+static void
+report()
+{
+    if (backend->ops->report == NULL) {
+        errno = ENOTSUP;
+        return -1;
+    }
+
+    errno = ENOTSUP;
+    return -1;
+}
+
 /*----------------------------------------------------------------------------*
  |                                    cli                                     |
  *----------------------------------------------------------------------------*/
@@ -64,6 +80,19 @@ main(int argc, char *argv[])
             exit(EX_USAGE);
         }
     }
+
+    argc -= optind;
+    argv += optind;
+
+    if (argc < 2)
+        error(EX_USAGE, 0, "not enough arguments");
+    if (argc > 2)
+        error(EX_USAGE, 0, "unexpected argument: %s", argv[2]);
+
+    /* Parse SOURCE */
+    from = rbh_backend_from_uri(argv[0]);
+
+    report();
 
     return EXIT_SUCCESS;
 }
