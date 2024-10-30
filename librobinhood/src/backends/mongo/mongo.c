@@ -573,10 +573,40 @@ static struct rbh_mut_iterator *
 mongo_backend_report(void *backend, const struct rbh_filter *filter,
                      const struct rbh_filter_options *options)
 {
-    (void) backend, filter, options;
+    struct mongo_backend *mongo = backend;
+    struct mongo_iterator *mongo_iter;
+    mongoc_cursor_t *cursor;
+    bson_t *pipeline;
+    bson_t *opts;
 
-    errno = ENOTSUP;
-    return NULL;
+    if (rbh_filter_validate(filter))
+        return NULL;
+
+    pipeline = bson_pipeline_from_filter_and_options(filter, options);
+    if (pipeline == NULL)
+        return NULL;
+
+    opts = options->sort.count > 0 ? BCON_NEW("allowDiskUse", BCON_BOOL(true))
+                                   : NULL;
+    cursor = mongoc_collection_aggregate(mongo->entries, MONGOC_QUERY_NONE,
+                                         pipeline, opts, NULL);
+    bson_destroy(opts);
+    bson_destroy(pipeline);
+    if (cursor == NULL) {
+        errno = EINVAL;
+        return NULL;
+    }
+
+    mongo_iter = mongo_iterator_new(cursor);
+    if (mongo_iter == NULL) {
+        int save_errno = errno;
+
+        mongoc_cursor_destroy(cursor);
+        errno = save_errno;
+        return NULL;
+    }
+
+    return &mongo_iter->iterator;
 }
 
     /*--------------------------------------------------------------------*
