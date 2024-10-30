@@ -102,7 +102,8 @@ static const char *UINT8_TO_STR[256] = {
 
 static bson_t *
 bson_pipeline_from_filter_and_options(const struct rbh_filter *filter,
-                                      const struct rbh_filter_options *options)
+                                      const struct rbh_filter_options *options,
+                                      bool from_report)
 {
     bson_t *pipeline;
     uint8_t i = 0;
@@ -123,6 +124,10 @@ bson_pipeline_from_filter_and_options(const struct rbh_filter *filter,
      && BSON_APPEND_DOCUMENT_BEGIN(&array, UINT8_TO_STR[i], &stage) && ++i
      && BSON_APPEND_RBH_FILTER(&stage, "$match", filter)
      && bson_append_document_end(&array, &stage)
+     && (from_report ?
+            BSON_APPEND_DOCUMENT_BEGIN(&array, UINT8_TO_STR[i], &stage) && ++i
+            && BSON_APPEND_AGGREGATE_GROUP_STAGE(&array, "$group")
+            && bson_append_document_end(&array, &stage) : true)
      && (options->sort.count == 0
       || (BSON_APPEND_DOCUMENT_BEGIN(&array, UINT8_TO_STR[i], &stage) && ++i
        && BSON_APPEND_RBH_FILTER_SORTS(&stage, "$sort", options->sort.items,
@@ -538,7 +543,7 @@ mongo_backend_filter(void *backend, const struct rbh_filter *filter,
     if (rbh_filter_validate(filter))
         return NULL;
 
-    pipeline = bson_pipeline_from_filter_and_options(filter, options);
+    pipeline = bson_pipeline_from_filter_and_options(filter, options, false);
     if (pipeline == NULL)
         return NULL;
 
@@ -582,7 +587,7 @@ mongo_backend_report(void *backend, const struct rbh_filter *filter,
     if (rbh_filter_validate(filter))
         return NULL;
 
-    pipeline = bson_pipeline_from_filter_and_options(filter, options);
+    pipeline = bson_pipeline_from_filter_and_options(filter, options, true);
     if (pipeline == NULL)
         return NULL;
 

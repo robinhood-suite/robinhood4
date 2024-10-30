@@ -224,6 +224,17 @@ bson_append_rbh_filter(bson_t *bson, const char *key, size_t key_length,
     bson_append_rbh_filter(bson, key, strlen(key), filter, false)
 
     /*--------------------------------------------------------------------*
+     |                               filter                               |
+     *--------------------------------------------------------------------*/
+
+bool
+bson_append_aggregate_group_stage(bson_t *bson, const char *key,
+                                  size_t key_length);
+
+#define BSON_APPEND_AGGREGATE_GROUP_STAGE(bson, key) \
+    bson_append_aggregate_group_stage(bson, key, strlen(key))
+
+    /*--------------------------------------------------------------------*
      |                            filter_sort                             |
      *--------------------------------------------------------------------*/
 
