@@ -199,6 +199,11 @@ struct rbh_backend_operations {
             const struct rbh_filter *filter,
             const struct rbh_filter_options *options
             );
+    struct rbh_mut_iterator *(*report)(
+            void *backend,
+            const struct rbh_filter *filter,
+            const struct rbh_filter_options *options
+            );
     int (*get_attribute)(
             void *backend,
             const char *attr_name,
