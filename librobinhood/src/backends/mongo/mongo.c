@@ -566,6 +566,20 @@ mongo_backend_filter(void *backend, const struct rbh_filter *filter,
 }
 
     /*--------------------------------------------------------------------*
+     |                               report                               |
+     *--------------------------------------------------------------------*/
+
+static struct rbh_mut_iterator *
+mongo_backend_report(void *backend, const struct rbh_filter *filter,
+                     const struct rbh_filter_options *options)
+{
+    (void) backend, filter, options;
+
+    errno = ENOTSUP;
+    return NULL;
+}
+
+    /*--------------------------------------------------------------------*
      |                              destroy                               |
      *--------------------------------------------------------------------*/
 
@@ -589,6 +603,7 @@ static const struct rbh_backend_operations MONGO_BACKEND_OPS = {
     .root = mongo_root,
     .update = mongo_backend_update,
     .filter = mongo_backend_filter,
+    .report = mongo_backend_report,
     .destroy = mongo_backend_destroy,
 };
 

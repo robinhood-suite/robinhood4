@@ -14,10 +14,9 @@ static struct rbh_backend *from;
 static void
 report()
 {
-    if (backend->ops->report == NULL) {
-        errno = ENOTSUP;
-        return -1;
-    }
+    struct rbh_mut_iterator *iter = rbh_backend_report(from, NULL, NULL);
+
+    (void) iter;
 
     errno = ENOTSUP;
     return -1;
