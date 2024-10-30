@@ -15,6 +15,7 @@ librbh_mongo = library(
         'fields.c',
         'fsentry.c',
         'fsevent.c',
+        'group.c',
         'mongo.c',
         'options.c',
         'plugin.c',
