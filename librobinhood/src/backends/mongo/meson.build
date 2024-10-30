@@ -19,6 +19,7 @@ librbh_mongo = library(
         'mongo.c',
         'options.c',
         'plugin.c',
+        'projection.c',
         'value.c',
     ],
     version: librbh_mongo_version, # defined in include/robinhood/backends
