@@ -13,6 +13,34 @@
 
 #include <robinhood/uri.h>
 
+#include <robinhood.h>
+
+static struct rbh_backend *from;
+
+static void __attribute__((destructor))
+destroy_from(void)
+{
+    const char *name;
+
+    if (from) {
+        name = from->name;
+        rbh_backend_destroy(from);
+        rbh_backend_plugin_destroy(name);
+    }
+}
+
+static void
+report()
+{
+    if (from->ops->report == NULL) {
+        errno = ENOTSUP;
+        return;
+    }
+
+    errno = ENOTSUP;
+    return;
+}
+
 /*----------------------------------------------------------------------------*
  |                                    cli                                     |
  *----------------------------------------------------------------------------*/
@@ -70,6 +98,19 @@ main(int argc, char *argv[])
             exit(EX_USAGE);
         }
     }
+
+    argc -= optind;
+    argv += optind;
+
+    if (argc < 1)
+        error(EX_USAGE, 0, "not enough arguments");
+    if (argc > 1)
+        error(EX_USAGE, 0, "unexpected argument: %s", argv[1]);
+
+    /* Parse SOURCE */
+    from = rbh_backend_from_uri(argv[0]);
+
+    report();
 
     return EXIT_SUCCESS;
 }
