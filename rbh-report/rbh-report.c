@@ -11,9 +11,9 @@
 #include <stdlib.h>
 #include <sysexits.h>
 
-#include <robinhood/uri.h>
-
 #include <robinhood.h>
+#include <robinhood/backend.h>
+#include <robinhood/uri.h>
 
 static struct rbh_backend *from;
 
@@ -32,10 +32,20 @@ destroy_from(void)
 static void
 report()
 {
-    if (from->ops->report == NULL) {
-        errno = ENOTSUP;
-        return;
-    }
+    struct rbh_filter_options options = {
+        .skip = 0,
+        .limit = 0,
+        .skip_error = false,
+        .sort = {
+            .items = NULL,
+            .count = 0,
+        },
+    };
+    struct rbh_mut_iterator *iter;
+
+    iter = rbh_backend_report(from, NULL, &options);
+
+    (void) iter;
 
     errno = ENOTSUP;
     return;
