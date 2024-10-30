@@ -258,6 +258,13 @@ bson_append_rbh_filter_projection(
 #define BSON_APPEND_RBH_FILTER_PROJECTION(bson, key, projection) \
     bson_append_rbh_filter_projection(bson, key, strlen(key), projection)
 
+bool
+bson_append_aggregate_projection_stage(bson_t *bson, const char *key,
+                                       size_t key_length);
+
+#define BSON_APPEND_AGGREGATE_PROJECTION_STAGE(bson, key) \
+    bson_append_aggregate_group_stage(bson, key, strlen(key))
+
     /*--------------------------------------------------------------------*
      |                              fsevent                               |
      *--------------------------------------------------------------------*/
