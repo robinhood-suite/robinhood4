@@ -73,7 +73,7 @@ if r.returncode() == 0 and libmfu.found()
     endforeach
 
     test('check_posix_mpi', bash,
-         args: ['../tests/unit/check_posix_mpi.sh', builddir],
+         args: [files('check_posix_mpi.sh'), builddir],
          env: backend_path_env,
          suite: 'librobinhood')
 endif
