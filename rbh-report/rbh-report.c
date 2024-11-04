@@ -55,12 +55,8 @@ report()
         if (fsentry == NULL)
             break;
 
-        errno = ENOTSUP;
-        return;
+        printf("%ld\n", fsentry->statx->stx_size);
     } while (true);
-
-    errno = ENOTSUP;
-    return;
 }
 
 /*----------------------------------------------------------------------------*
