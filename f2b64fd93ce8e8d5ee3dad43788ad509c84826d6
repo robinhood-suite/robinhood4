@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "912dbe01_b51b964c",
+        "filename": "librobinhood/include/robinhood/backend.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-11-04T09:25:06Z",
+      "side": 1,
+      "message": "Yes, right now I just want to have a first version that does an aggregate and shows something",
+      "parentUuid": "e6c7bc37_b94449d0",
+      "revId": "f2b64fd93ce8e8d5ee3dad43788ad509c84826d6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "fc05dcc1_153f07e4",
         "filename": "rbh-report/rbh-report.c",
         "patchSetId": 1
@@ -31,6 +49,24 @@
       "writtenOn": "2024-10-31T09:03:31Z",
       "side": 1,
       "message": "defect: the backend is not freed",
+      "revId": "f2b64fd93ce8e8d5ee3dad43788ad509c84826d6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f1509b37_b76d89f4",
+        "filename": "rbh-report/rbh-report.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-11-04T09:25:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fc05dcc1_153f07e4",
       "revId": "f2b64fd93ce8e8d5ee3dad43788ad509c84826d6",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
