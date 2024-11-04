@@ -45,7 +45,24 @@ report()
 
     iter = rbh_backend_report(from, NULL, &options);
 
-    (void) iter;
+    if (iter == NULL)
+        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
+                      "rbh_backend_report");
+
+    do {
+        struct rbh_fsentry *fsentry;
+
+        do {
+            errno = 0;
+            fsentry = rbh_mut_iter_next(iter);
+        } while (fsentry == NULL && errno == EAGAIN);
+
+        if (fsentry == NULL)
+            break;
+
+        errno = ENOTSUP;
+        return -1;
+    } while (true);
 
     errno = ENOTSUP;
     return;
