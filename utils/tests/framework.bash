@@ -30,6 +30,12 @@ rbh_find()
     "$__rbh_find" "$@"
 }
 
+__rbh_report=$(PATH="$PWD/rbh-report:$PATH" which rbh-report)
+rbh_report()
+{
+    "$__rbh_report" "$@"
+}
+
 __rbh_fsevents=$(PATH="$PWD/rbh-fsevents:$PATH" which rbh-fsevents)
 rbh_fsevents()
 {
