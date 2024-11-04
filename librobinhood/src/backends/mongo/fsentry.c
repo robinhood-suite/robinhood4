@@ -888,6 +888,7 @@ enum fsentry_token {
     FT_SYMLINK,
     FT_XATTRS,
     FT_STATX,
+    FT_REPORT_RESULT,
 };
 
 static enum fsentry_token
@@ -902,6 +903,10 @@ fsentry_tokenizer(const char *key)
         if (strcmp(key, "s"))
             break;
         return FT_NAMESPACE;
+    case 'r': /* result */
+        if (strcmp(key, "esult"))
+            break;
+        return FT_REPORT_RESULT;
     case 's': /* statx, symlink */
         switch (*key++) {
         case 't': /* statx */
@@ -983,6 +988,8 @@ bson_iter_fsentry(bson_iter_t *iter, struct rbh_fsentry *fsentry,
             fsentry->statx = statxbuf;
             fsentry->mask |= RBH_FP_STATX;
             break;
+        case FT_REPORT_RESULT:
+            goto out_einval;
         }
     }
 
