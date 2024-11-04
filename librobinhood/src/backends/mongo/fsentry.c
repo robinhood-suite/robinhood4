@@ -989,7 +989,16 @@ bson_iter_fsentry(bson_iter_t *iter, struct rbh_fsentry *fsentry,
             fsentry->mask |= RBH_FP_STATX;
             break;
         case FT_REPORT_RESULT:
-            goto out_einval;
+            if (!BSON_ITER_HOLDS_INT64(iter))
+                goto out_einval;
+
+            statxbuf->stx_size = bson_iter_int64(iter);
+            statxbuf->stx_mask = RBH_STATX_SIZE;
+            statxbuf->stx_mode = 0;
+
+            fsentry->statx = statxbuf;
+            fsentry->mask |= RBH_FP_STATX;
+            break;
         }
     }
 
