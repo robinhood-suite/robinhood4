@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2cb30687_2f7dfca5",
+        "filename": "rbh-report/tests/meson.build",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-11-05T08:41:57Z",
+      "side": 1,
+      "message": "typo: 2024",
+      "revId": "27b847324db933a1626aaf772d5a33fe1208d0e3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
