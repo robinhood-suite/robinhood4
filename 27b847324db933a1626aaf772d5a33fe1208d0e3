@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "429d1849_f99f84c3",
+        "filename": "rbh-report/tests/acceptance.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-11-06T08:41:01Z",
+      "side": 1,
+      "message": "question: why using stat here instead of computing the product?",
+      "range": {
+        "startLine": 31,
+        "startChar": 23,
+        "endLine": 31,
+        "endChar": 38
+      },
+      "revId": "27b847324db933a1626aaf772d5a33fe1208d0e3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2cb30687_2f7dfca5",
         "filename": "rbh-report/tests/meson.build",
         "patchSetId": 1
