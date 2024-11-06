@@ -22,6 +22,30 @@
       },
       "revId": "f8c44d961b00807538e87a9b88b88f5eaeefb34a",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "16e9f0e3_fb610c01",
+        "filename": "librobinhood/src/backends/mongo/projection.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-11-06T14:23:55Z",
+      "side": 1,
+      "message": "Yes, by default Mongo always prints an id for each entry outputted, so we must specify here that we do not want to see that id in the output, which is done like this.",
+      "parentUuid": "a8ab07f8_69ff4369",
+      "range": {
+        "startLine": 26,
+        "startChar": 8,
+        "endLine": 26,
+        "endChar": 49
+      },
+      "revId": "f8c44d961b00807538e87a9b88b88f5eaeefb34a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
