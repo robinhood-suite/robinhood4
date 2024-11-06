@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a8ab07f8_69ff4369",
+        "filename": "librobinhood/src/backends/mongo/projection.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-11-06T08:33:58Z",
+      "side": 1,
+      "message": "question: you said in the commit that the projection remove the `id` field, but is still present here",
+      "range": {
+        "startLine": 26,
+        "startChar": 8,
+        "endLine": 26,
+        "endChar": 49
+      },
+      "revId": "f8c44d961b00807538e87a9b88b88f5eaeefb34a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
