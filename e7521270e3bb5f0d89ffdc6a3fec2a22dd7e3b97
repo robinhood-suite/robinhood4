@@ -97,6 +97,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ae98cf4e_85e8b5b3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-11-06T09:56:59Z",
+      "side": 1,
+      "message": "Yes, but you did not remove the first version of the commit message.",
+      "parentUuid": "aee2bfa3_d59644ad",
+      "range": {
+        "startLine": 11,
+        "startChar": 27,
+        "endLine": 11,
+        "endChar": 43
+      },
+      "revId": "e7521270e3bb5f0d89ffdc6a3fec2a22dd7e3b97",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b3d95107_b45cd3ed",
         "filename": "rbh-capabilities/tests/capabilities.bash",
         "patchSetId": 1
