@@ -50,7 +50,8 @@ lustre_mpi_iterator_new(const char *root, const char *entry,
 
 static struct rbh_mut_iterator *
 lustre_mpi_backend_filter(void *backend, const struct rbh_filter *filter,
-                          const struct rbh_filter_options *options)
+                          const struct rbh_filter_options *options,
+                          const struct rbh_filter_output *output)
 {
     return mpi_backend_filter(backend, filter, options);
 }
@@ -134,8 +135,11 @@ lustre_mpi_backend_root(void *backend,
 
 static struct rbh_mut_iterator *
 lustre_mpi_branch_backend_filter(void *backend, const struct rbh_filter *filter,
-                                 const struct rbh_filter_options *options)
+                                 const struct rbh_filter_options *options,
+                                 const struct rbh_filter_output *output)
 {
+    (void) output;
+
     return mpi_branch_backend_filter(backend, filter, options);
 }
 
