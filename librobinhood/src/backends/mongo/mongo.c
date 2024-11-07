@@ -578,13 +578,18 @@ mongo_backend_filter(void *backend, const struct rbh_filter *filter,
 
 static struct rbh_mut_iterator *
 mongo_backend_report(void *backend, const struct rbh_filter *filter,
-                     const struct rbh_filter_options *options)
+                     const struct rbh_filter_group *group,
+                     const struct rbh_filter_options *options,
+                     const struct rbh_filter_output *output)
 {
     struct mongo_backend *mongo = backend;
     struct mongo_iterator *mongo_iter;
     mongoc_cursor_t *cursor;
     bson_t *pipeline;
     bson_t *opts;
+
+    (void) group;
+    (void) output;
 
     if (rbh_filter_validate(filter))
         return NULL;

@@ -221,7 +221,9 @@ struct rbh_backend_operations {
     struct rbh_mut_iterator *(*report)(
             void *backend,
             const struct rbh_filter *filter,
-            const struct rbh_filter_options *options
+            const struct rbh_filter_group *group,
+            const struct rbh_filter_options *options,
+            const struct rbh_filter_output *output
             );
     int (*get_attribute)(
             void *backend,
@@ -541,13 +543,15 @@ rbh_backend_filter(struct rbh_backend *backend, const struct rbh_filter *filter,
  */
 static inline struct rbh_mut_iterator *
 rbh_backend_report(struct rbh_backend *backend, const struct rbh_filter *filter,
-                   const struct rbh_filter_options *options)
+                   const struct rbh_filter_group *group,
+                   const struct rbh_filter_options *options,
+                   const struct rbh_filter_output *output)
 {
     if (backend->ops->report == NULL) {
         errno = ENOTSUP;
         return NULL;
     }
-    return backend->ops->report(backend, filter, options);
+    return backend->ops->report(backend, filter, group, options, output);
 }
 
 /**

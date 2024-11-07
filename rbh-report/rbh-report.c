@@ -32,18 +32,10 @@ destroy_from(void)
 static void
 report()
 {
-    struct rbh_filter_options options = {
-        .skip = 0,
-        .limit = 0,
-        .skip_error = false,
-        .sort = {
-            .items = NULL,
-            .count = 0,
-        },
-    };
+    struct rbh_filter_options options = { 0 };
     struct rbh_mut_iterator *iter;
 
-    iter = rbh_backend_report(from, NULL, &options);
+    iter = rbh_backend_report(from, NULL, NULL, &options, NULL);
 
     if (iter == NULL)
         error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
