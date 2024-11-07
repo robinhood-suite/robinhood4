@@ -140,7 +140,8 @@ bson_pipeline_creation(const struct rbh_filter *filter,
        && bson_append_document_end(&array, &stage)))
      && (BSON_APPEND_DOCUMENT_BEGIN(&array, UINT8_TO_STR[i], &stage) && ++i
          && (from_report ?
-             BSON_APPEND_AGGREGATE_PROJECTION_STAGE(&stage, "$project") :
+             BSON_APPEND_AGGREGATE_PROJECTION_STAGE(&stage, "$project",
+                                                    output) :
              BSON_APPEND_RBH_FILTER_PROJECTION(&stage, "$project",
                                                &output->projection))
          && bson_append_document_end(&array, &stage))
