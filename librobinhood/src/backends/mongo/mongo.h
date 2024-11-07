@@ -260,10 +260,11 @@ bson_append_rbh_filter_projection(
 
 bool
 bson_append_aggregate_projection_stage(bson_t *bson, const char *key,
-                                       size_t key_length);
+                                       size_t key_length,
+                                       const struct rbh_filter_output *output);
 
-#define BSON_APPEND_AGGREGATE_PROJECTION_STAGE(bson, key) \
-    bson_append_aggregate_projection_stage(bson, key, strlen(key))
+#define BSON_APPEND_AGGREGATE_PROJECTION_STAGE(bson, key, output) \
+    bson_append_aggregate_projection_stage(bson, key, strlen(key), output)
 
     /*--------------------------------------------------------------------*
      |                              fsevent                               |
