@@ -1231,9 +1231,10 @@ lustre_fts_backend_root(void *backend,
 
 static struct rbh_mut_iterator *
 lustre_fts_backend_filter(void *backend, const struct rbh_filter *filter,
-                          const struct rbh_filter_options *options)
+                          const struct rbh_filter_options *options,
+                          const struct rbh_filter_output *output)
 {
-    return posix_backend_filter(backend, filter, options);
+    return posix_backend_filter(backend, filter, options, output);
 }
 
     /*--------------------------------------------------------------------*

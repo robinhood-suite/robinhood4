@@ -857,14 +857,15 @@ posix_backend_set_option(void *backend, unsigned int option, const void *data,
 struct rbh_fsentry *
 posix_root(void *backend, const struct rbh_filter_projection *projection)
 {
-    const struct rbh_filter_options options = {
+    const struct rbh_filter_options options = { 0 };
+    const struct rbh_filter_output output = {
         .projection = *projection,
     };
     struct rbh_mut_iterator *fsentries;
     struct rbh_fsentry *root;
     int save_errno;
 
-    fsentries = rbh_backend_filter(backend, NULL, &options);
+    fsentries = rbh_backend_filter(backend, NULL, &options, &output);
     if (fsentries == NULL)
         return NULL;
 
@@ -898,8 +899,10 @@ set_root_properties(FTSENT *root)
 }
 
 struct rbh_mut_iterator *
-posix_backend_filter(void *backend, const struct rbh_filter *filter,
-                     const struct rbh_filter_options *options)
+posix_backend_filter(
+    void *backend, const struct rbh_filter *filter,
+    const struct rbh_filter_options *options,
+    __attribute__((unused)) const struct rbh_filter_output *output)
 {
     struct posix_backend *posix = backend;
     struct posix_iterator *posix_iter;
@@ -1049,8 +1052,10 @@ posix_branch_backend_destroy(void *backend)
 }
 
 static struct rbh_mut_iterator *
-posix_branch_backend_filter(void *backend, const struct rbh_filter *filter,
-                            const struct rbh_filter_options *options)
+posix_branch_backend_filter(
+    void *backend, const struct rbh_filter *filter,
+    const struct rbh_filter_options *options,
+    __attribute__((unused)) const struct rbh_filter_output *output)
 {
     struct posix_branch_backend *branch = backend;
     struct posix_iterator *posix_iter;

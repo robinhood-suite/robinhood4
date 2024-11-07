@@ -137,12 +137,12 @@ END_TEST
  |                             rbh_backend_filter                             |
  *----------------------------------------------------------------------------*/
 
-START_TEST(rbff_unsupported)
+START_TEST(rbf_unsupported)
 {
     struct rbh_backend *backend = test_backend_new();
     struct rbh_filter_options options = {};
 
-    ck_assert_ptr_null(rbh_backend_filter(backend, NULL, &options));
+    ck_assert_ptr_null(rbh_backend_filter(backend, NULL, &options, NULL));
     ck_assert_int_eq(errno, ENOTSUP);
 
     rbh_backend_destroy(backend);
@@ -180,7 +180,7 @@ unit_suite(void)
 
     tests = tcase_create("unsupported fsentries operations");
     tcase_add_test(tests, rbu_unsupported);
-    tcase_add_test(tests, rbff_unsupported);
+    tcase_add_test(tests, rbf_unsupported);
     tcase_add_test(tests, rbb_unsupported);
 
     suite_add_tcase(suite, tests);

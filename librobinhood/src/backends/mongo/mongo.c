@@ -142,7 +142,7 @@ bson_pipeline_creation(const struct rbh_filter *filter,
          && (from_report ?
              BSON_APPEND_AGGREGATE_PROJECTION_STAGE(&stage, "$project") :
              BSON_APPEND_RBH_FILTER_PROJECTION(&stage, "$project",
-                                               &options->projection))
+                                               &output->projection))
          && bson_append_document_end(&array, &stage))
      && (options->skip == 0
       || (BSON_APPEND_DOCUMENT_BEGIN(&array, UINT8_TO_STR[i], &stage) && ++i
@@ -539,7 +539,8 @@ mongo_root(void *backend, const struct rbh_filter_projection *projection)
 
 static struct rbh_mut_iterator *
 mongo_backend_filter(void *backend, const struct rbh_filter *filter,
-                     const struct rbh_filter_options *options)
+                     const struct rbh_filter_options *options,
+                     const struct rbh_filter_output *output)
 {
     struct mongo_backend *mongo = backend;
     struct mongo_iterator *mongo_iter;
@@ -550,7 +551,7 @@ mongo_backend_filter(void *backend, const struct rbh_filter *filter,
     if (rbh_filter_validate(filter))
         return NULL;
 
-    pipeline = bson_pipeline_creation(filter, NULL, options, NULL, false);
+    pipeline = bson_pipeline_creation(filter, NULL, options, output, false);
     if (pipeline == NULL)
         return NULL;
 
@@ -656,7 +657,8 @@ static const struct rbh_backend_operations MONGO_BACKEND_OPS = {
      *--------------------------------------------------------------------*/
 
 static bson_t *
-bson_from_options(const struct rbh_filter_options *options)
+bson_from_options_and_output(const struct rbh_filter_options *options,
+                             const struct rbh_filter_output *output)
 {
     bson_t *bson;
 
@@ -667,7 +669,7 @@ bson_from_options(const struct rbh_filter_options *options)
 
     bson = bson_new();
     if (BSON_APPEND_RBH_FILTER_PROJECTION(bson, "projection",
-                                          &options->projection)
+                                          &output->projection)
      && (options->skip == 0
       || BSON_APPEND_INT64(bson, "skip", options->skip))
      && (options->limit == 0
@@ -707,11 +709,12 @@ bson_from_gc_filter(const struct rbh_filter *filter_)
 
 static struct rbh_mut_iterator *
 mongo_gc_backend_filter(void *backend, const struct rbh_filter *filter_,
-                        const struct rbh_filter_options *options_)
+                        const struct rbh_filter_options *options,
+                        const struct rbh_filter_output *output_)
 {
     const unsigned int unavailable_fields =
         RBH_FP_PARENT_ID | RBH_FP_NAME | RBH_FP_NAMESPACE_XATTRS;
-    struct rbh_filter_options options = *options_;
+    struct rbh_filter_output output = *output_;
     struct mongo_backend *mongo = backend;
     struct mongo_iterator *mongo_iter;
     mongoc_cursor_t *cursor;
@@ -722,8 +725,8 @@ mongo_gc_backend_filter(void *backend, const struct rbh_filter *filter_,
         return NULL;
 
     /* Removed unavailable projection fields */
-    options.projection.fsentry_mask &= ~unavailable_fields;
-    opts = bson_from_options(&options);
+    output.projection.fsentry_mask &= ~unavailable_fields;
+    opts = bson_from_options_and_output(options, &output);
     if (opts == NULL)
         return NULL;
 
@@ -901,6 +904,7 @@ struct branch_iterator {
     struct rbh_backend *backend;
     struct rbh_filter *filter;
     struct rbh_filter_options options;
+    struct rbh_filter_output output;
 
     struct rbh_mut_iterator *directories;
     struct rbh_mut_iterator *fsentries;
@@ -926,7 +930,8 @@ static struct rbh_mut_iterator *
 _filter_child_fsentries(struct rbh_backend *backend, size_t id_count,
                         const struct rbh_value *id_values,
                         const struct rbh_filter *filter,
-                        const struct rbh_filter_options *options)
+                        const struct rbh_filter_options *options,
+                        const struct rbh_filter_output *output)
 {
     const struct rbh_filter parent_id_filter = {
         .op = RBH_FOP_IN,
@@ -955,13 +960,14 @@ _filter_child_fsentries(struct rbh_backend *backend, size_t id_count,
         },
     };
 
-    return mongo_backend_filter(backend, &and_filter, options);
+    return mongo_backend_filter(backend, &and_filter, options, output);
 }
 
 static struct rbh_mut_iterator *
 filter_child_fsentries(struct rbh_backend *backend, struct rbh_ringr *_values,
                        struct rbh_ringr *_ids, const struct rbh_filter *filter,
-                       const struct rbh_filter_options *options)
+                       const struct rbh_filter_options *options,
+                       const struct rbh_filter_output *output)
 {
     struct rbh_mut_iterator *iterator;
     struct rbh_value *values;
@@ -977,7 +983,8 @@ filter_child_fsentries(struct rbh_backend *backend, struct rbh_ringr *_values,
     assert(readable % sizeof(*values) == 0);
     count = readable / sizeof(*values);
 
-    iterator = _filter_child_fsentries(backend, count, values, filter, options);
+    iterator = _filter_child_fsentries(backend, count, values, filter, options,
+                                       output);
     if (iterator == NULL)
         return NULL;
 
@@ -1012,7 +1019,8 @@ static const struct rbh_filter ISDIR_FILTER = {
 static int
 branch_iter_recurse(struct branch_iterator *iter)
 {
-    const struct rbh_filter_options OPTIONS = {
+    const struct rbh_filter_options OPTIONS = { 0 };
+    const struct rbh_filter_output OUTPUT = {
         .projection = {
             .fsentry_mask = RBH_FP_ID,
         },
@@ -1023,7 +1031,7 @@ branch_iter_recurse(struct branch_iterator *iter)
     _directories = filter_child_fsentries(iter->backend,
                                           iter->values[RRT_DIRECTORIES],
                                           iter->ids[RRT_DIRECTORIES],
-                                          &ISDIR_FILTER, &OPTIONS);
+                                          &ISDIR_FILTER, &OPTIONS, &OUTPUT);
     if (_directories == NULL)
         return -1;
 
@@ -1045,7 +1053,7 @@ _branch_next_fsentries(struct branch_iterator *iter)
 {
     return filter_child_fsentries(iter->backend, iter->values[RRT_FSENTRIES],
                                   iter->ids[RRT_FSENTRIES], iter->filter,
-                                  &iter->options);
+                                  &iter->options, &iter->output);
 }
 
 static struct rbh_mut_iterator *
@@ -1212,7 +1220,8 @@ static const struct rbh_mut_iterator BRANCH_ITERATOR = {
 static struct rbh_mut_iterator *
 filter_one(void *backend, const struct rbh_id *id,
            const struct rbh_filter *filter,
-           const struct rbh_filter_options *options)
+           const struct rbh_filter_options *options,
+           const struct rbh_filter_output *output)
 {
     const struct rbh_filter id_filter = {
         .op = RBH_FOP_EQUAL,
@@ -1241,7 +1250,7 @@ filter_one(void *backend, const struct rbh_id *id,
         },
     };
 
-    return mongo_backend_filter(backend, &and_filter, options);
+    return mongo_backend_filter(backend, &and_filter, options, output);
 }
 
 #define VALUE_RING_SIZE (1 << 14) /* 16MB */
@@ -1249,7 +1258,8 @@ filter_one(void *backend, const struct rbh_id *id,
 
 struct rbh_mut_iterator *
 generic_branch_backend_filter(void *backend, const struct rbh_filter *filter,
-                              const struct rbh_filter_options *options)
+                              const struct rbh_filter_options *options,
+                              const struct rbh_filter_output *output)
 {
     const struct rbh_filter_projection ID_ONLY = {
         .fsentry_mask = RBH_FP_ID,
@@ -1277,7 +1287,7 @@ generic_branch_backend_filter(void *backend, const struct rbh_filter *filter,
 
     assert(iter->directory->mask & RBH_FP_ID);
     iter->fsentries = filter_one(backend, &iter->directory->id,
-                                 filter, options);
+                                 filter, options, output);
     if (iter->fsentries == NULL) {
         save_errno = errno;
         goto out_free_directory;
@@ -1316,6 +1326,7 @@ generic_branch_backend_filter(void *backend, const struct rbh_filter *filter,
     }
 
     iter->options = *options;
+    iter->output = *output;
     iter->backend = backend;
     iter->iterator = BRANCH_ITERATOR;
 

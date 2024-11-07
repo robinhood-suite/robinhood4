@@ -33,7 +33,7 @@ static void
 report()
 {
     struct rbh_filter_options options = { 0 };
-    struct rbh_filter_output output;
+    struct rbh_filter_output output = { 0 };
     struct rbh_mut_iterator *iter;
     struct rbh_filter_group group;
 
