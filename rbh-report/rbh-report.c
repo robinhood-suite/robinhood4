@@ -33,9 +33,11 @@ static void
 report()
 {
     struct rbh_filter_options options = { 0 };
+    struct rbh_filter_output output;
     struct rbh_mut_iterator *iter;
+    struct rbh_filter_group group;
 
-    iter = rbh_backend_report(from, NULL, NULL, &options, NULL);
+    iter = rbh_backend_report(from, NULL, &group, &options, &output);
 
     if (iter == NULL)
         error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
