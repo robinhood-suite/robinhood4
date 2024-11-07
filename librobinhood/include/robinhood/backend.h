@@ -160,6 +160,25 @@ struct rbh_filter_options {
 };
 
 /**
+ * Grouping behaviour, to be used with rbh_backend_report()
+ *
+ * XXX: empty for now, will be filled later
+ */
+struct rbh_filter_group {
+
+};
+
+/**
+ * Output behaviour, to be used with rbh_backend_report() and
+ * rbh_backend_filter()
+ *
+ * XXX: empty for now, will be filled later
+ */
+struct rbh_filter_output {
+
+};
+
+/**
  * Operations backends implement
  *
  * Only the \c destroy() operation is mandatory, every other one may be set to
