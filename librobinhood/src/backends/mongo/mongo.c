@@ -62,7 +62,7 @@ dump_bson(bson_t *to_dump)
 }
 
     /*--------------------------------------------------------------------*
-     |               bson_pipeline_from_filter_and_options                |
+     |                       bson_pipeline_creation                       |
      *--------------------------------------------------------------------*/
 
 static const char *UINT8_TO_STR[256] = {
@@ -101,9 +101,9 @@ static const char *UINT8_TO_STR[256] = {
 };
 
 static bson_t *
-bson_pipeline_from_filter_and_options(const struct rbh_filter *filter,
-                                      const struct rbh_filter_options *options,
-                                      bool from_report)
+bson_pipeline_creation(const struct rbh_filter *filter,
+                       const struct rbh_filter_options *options,
+                       bool from_report)
 {
     bson_t *pipeline;
     uint8_t i = 0;
@@ -545,7 +545,7 @@ mongo_backend_filter(void *backend, const struct rbh_filter *filter,
     if (rbh_filter_validate(filter))
         return NULL;
 
-    pipeline = bson_pipeline_from_filter_and_options(filter, options, false);
+    pipeline = bson_pipeline_creation(filter, options, false);
     if (pipeline == NULL)
         return NULL;
 
@@ -594,7 +594,7 @@ mongo_backend_report(void *backend, const struct rbh_filter *filter,
     if (rbh_filter_validate(filter))
         return NULL;
 
-    pipeline = bson_pipeline_from_filter_and_options(filter, options, true);
+    pipeline = bson_pipeline_creation(filter, options, true);
     if (pipeline == NULL)
         return NULL;
 
