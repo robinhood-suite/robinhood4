@@ -74,7 +74,7 @@ START_TEST(pf_missing_root)
     ck_assert_ptr_nonnull(posix);
 
     errno = 0;
-    ck_assert_ptr_null(rbh_backend_filter(posix, NULL, &OPTIONS));
+    ck_assert_ptr_null(rbh_backend_filter(posix, NULL, &OPTIONS, NULL));
     ck_assert_int_eq(errno, ENOENT);
 
     rbh_backend_destroy(posix);
@@ -84,7 +84,8 @@ END_TEST
 START_TEST(pf_empty_root)
 {
     static const char *EMPTY = "empty";
-    const struct rbh_filter_options OPTIONS = {
+    const struct rbh_filter_options OPTIONS = { 0 };
+    const struct rbh_filter_output OUTPUT = {
         .projection = {
             .fsentry_mask = RBH_FP_PARENT_ID,
         },
@@ -98,7 +99,7 @@ START_TEST(pf_empty_root)
     posix = rbh_posix_backend_new(EMPTY, NULL);
     ck_assert_ptr_nonnull(posix);
 
-    fsentries = rbh_backend_filter(posix, NULL, &OPTIONS);
+    fsentries = rbh_backend_filter(posix, NULL, &OPTIONS, &OUTPUT);
     ck_assert_ptr_nonnull(fsentries);
 
     fsentry = rbh_mut_iter_next(fsentries);

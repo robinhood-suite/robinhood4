@@ -144,8 +144,6 @@ struct rbh_filter_sort {
  * Filtering options, to be used with rbh_backend_filter()
  */
 struct rbh_filter_options {
-    /** Fsentry fields the query should set */
-    struct rbh_filter_projection projection;
     /** The number of fsentries to skip */
     size_t skip;
     /** The maximum number of fsentries to return (0 means unlimited) */
@@ -171,11 +169,12 @@ struct rbh_filter_group {
 /**
  * Output behaviour, to be used with rbh_backend_report() and
  * rbh_backend_filter()
- *
- * XXX: empty for now, will be filled later
  */
 struct rbh_filter_output {
-
+    union {
+        /** Fsentry fields the query should set */
+        struct rbh_filter_projection projection;
+    };
 };
 
 /**
@@ -216,7 +215,8 @@ struct rbh_backend_operations {
     struct rbh_mut_iterator *(*filter)(
             void *backend,
             const struct rbh_filter *filter,
-            const struct rbh_filter_options *options
+            const struct rbh_filter_options *options,
+            const struct rbh_filter_output *output
             );
     struct rbh_mut_iterator *(*report)(
             void *backend,
@@ -504,6 +504,7 @@ rbh_backend_root(struct rbh_backend *backend,
  * @param backend   the backend from which to fetch fsentries
  * @param filter    a set of criteria that the returned fsentries must match
  * @param options   a set of filtering options (must not be NULL)
+ * @param output    the information to be outputted
  *
  * @return          an iterator over mutable fsentries on success, NULL on error
  *                  and errno is set appropriately
@@ -516,13 +517,14 @@ rbh_backend_root(struct rbh_backend *backend,
  */
 static inline struct rbh_mut_iterator *
 rbh_backend_filter(struct rbh_backend *backend, const struct rbh_filter *filter,
-                   const struct rbh_filter_options *options)
+                   const struct rbh_filter_options *options,
+                   const struct rbh_filter_output *output)
 {
     if (backend->ops->filter == NULL) {
         errno = ENOTSUP;
         return NULL;
     }
-    return backend->ops->filter(backend, filter, options);
+    return backend->ops->filter(backend, filter, options, output);
 }
 
 /**
