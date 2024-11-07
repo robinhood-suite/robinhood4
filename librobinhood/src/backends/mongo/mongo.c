@@ -102,13 +102,18 @@ static const char *UINT8_TO_STR[256] = {
 
 static bson_t *
 bson_pipeline_creation(const struct rbh_filter *filter,
+                       const struct rbh_filter_group *group,
                        const struct rbh_filter_options *options,
+                       const struct rbh_filter_output *output,
                        bool from_report)
 {
     bson_t *pipeline;
     uint8_t i = 0;
     bson_t array;
     bson_t stage;
+
+    (void) group;
+    (void) output;
 
     if (options->skip > INT64_MAX || options->limit > INT64_MAX) {
         errno = ENOTSUP;
@@ -545,7 +550,7 @@ mongo_backend_filter(void *backend, const struct rbh_filter *filter,
     if (rbh_filter_validate(filter))
         return NULL;
 
-    pipeline = bson_pipeline_creation(filter, options, false);
+    pipeline = bson_pipeline_creation(filter, NULL, options, NULL, false);
     if (pipeline == NULL)
         return NULL;
 
@@ -588,13 +593,10 @@ mongo_backend_report(void *backend, const struct rbh_filter *filter,
     bson_t *pipeline;
     bson_t *opts;
 
-    (void) group;
-    (void) output;
-
     if (rbh_filter_validate(filter))
         return NULL;
 
-    pipeline = bson_pipeline_creation(filter, options, true);
+    pipeline = bson_pipeline_creation(filter, group, options, output, true);
     if (pipeline == NULL)
         return NULL;
 
