@@ -77,20 +77,22 @@ _find(struct find_context *ctx, int backend_index, enum action action,
       size_t sorts_count)
 {
     const struct rbh_filter_options OPTIONS = {
-        .projection = {
-            .fsentry_mask = RBH_FP_ALL,
-            .statx_mask = RBH_STATX_ALL,
-        },
         .sort = {
             .items = sorts,
             .count = sorts_count
+        },
+    };
+    const struct rbh_filter_output OUTPUT = {
+        .projection = {
+            .fsentry_mask = RBH_FP_ALL,
+            .statx_mask = RBH_STATX_ALL,
         },
     };
     struct rbh_mut_iterator *fsentries;
     size_t count = 0;
 
     fsentries = rbh_backend_filter(ctx->backends[backend_index], filter,
-                                   &OPTIONS);
+                                   &OPTIONS, &OUTPUT);
     if (fsentries == NULL)
         error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
                       "filter_fsentries");

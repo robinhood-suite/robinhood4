@@ -294,12 +294,15 @@ out_destroy_iter:
 
 struct rbh_mut_iterator *
 mpi_branch_backend_filter(void *backend, const struct rbh_filter *filter,
-                          const struct rbh_filter_options *options)
+                          const struct rbh_filter_options *options,
+                          const struct rbh_filter_output *output)
 {
     struct posix_branch_backend *branch = backend;
     struct mpi_iterator *mpi_iter;
     char *root, *path;
     int save_errno;
+
+    (void) output;
 
     if (filter != NULL) {
         errno = ENOTSUP;

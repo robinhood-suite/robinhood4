@@ -372,7 +372,8 @@ mpi_file_backend_update(void *backend, struct rbh_iterator *fsevents)
 
 static struct rbh_mut_iterator *
 mpi_file_backend_filter(void *backend, const struct rbh_filter *filter,
-                        const struct rbh_filter_options *options)
+                        const struct rbh_filter_options *options,
+                        const struct rbh_filter_output *output)
 {
     struct mpi_file_backend *mpi_file = backend;
     struct mpi_iterator *mpi_file_iter;

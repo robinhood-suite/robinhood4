@@ -79,7 +79,7 @@ START_TEST(lf_missing_root)
     ck_assert_ptr_nonnull(lustre);
 
     errno = 0;
-    ck_assert_ptr_null(rbh_backend_filter(lustre, NULL, &OPTIONS));
+    ck_assert_ptr_null(rbh_backend_filter(lustre, NULL, &OPTIONS, NULL));
     ck_assert_int_eq(errno, ENOENT);
 
     rbh_backend_destroy(lustre);
@@ -88,7 +88,8 @@ END_TEST
 
 START_TEST(lf_empty_root)
 {
-    const struct rbh_filter_options OPTIONS = {
+    const struct rbh_filter_options OPTIONS = { 0 };
+    const struct rbh_filter_output OUTPUT = {
         .projection = {
             .fsentry_mask = RBH_FP_PARENT_ID,
         },
@@ -103,7 +104,7 @@ START_TEST(lf_empty_root)
     lustre = rbh_lustre_backend_new(EMPTY, NULL);
     ck_assert_ptr_nonnull(lustre);
 
-    fsentries = rbh_backend_filter(lustre, NULL, &OPTIONS);
+    fsentries = rbh_backend_filter(lustre, NULL, &OPTIONS, &OUTPUT);
     ck_assert_ptr_nonnull(fsentries);
 
     fsentry = rbh_mut_iter_next(fsentries);

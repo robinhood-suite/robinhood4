@@ -112,7 +112,8 @@ mpi_backend_filter(void *backend, const struct rbh_filter *filter,
 
 struct rbh_mut_iterator *
 mpi_branch_backend_filter(void *backend, const struct rbh_filter *filter,
-                          const struct rbh_filter_options *options);
+                          const struct rbh_filter_options *options,
+                          const struct rbh_filter_output *output);
 
 /**
  * Release the memory associated with the plugin

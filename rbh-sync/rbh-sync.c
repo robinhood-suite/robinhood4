@@ -388,11 +388,13 @@ static void
 sync(const struct rbh_filter_projection *projection)
 {
     const struct rbh_filter_options OPTIONS = {
+        .skip_error = skip_error,
+    };
+    const struct rbh_filter_output OUTPUT = {
         .projection = {
             .fsentry_mask = RBH_FP_ALL,
             .statx_mask = RBH_STATX_ALL,
         },
-        .skip_error = skip_error,
     };
     struct rbh_mut_iterator *_fsentries;
     struct rbh_iterator *fsentries;
@@ -401,7 +403,7 @@ sync(const struct rbh_filter_projection *projection)
     if (one) {
         struct rbh_fsentry *root;
 
-        root = rbh_backend_root(from, &OPTIONS.projection);
+        root = rbh_backend_root(from, &OUTPUT.projection);
         if (root == NULL)
             error(EXIT_FAILURE, errno, "rbh_backend_root");
 
@@ -410,7 +412,7 @@ sync(const struct rbh_filter_projection *projection)
             error(EXIT_FAILURE, errno, "rbh_mut_array_iterator");
     } else {
         /* "Dump" `from' */
-        _fsentries = rbh_backend_filter(from, NULL, &OPTIONS);
+        _fsentries = rbh_backend_filter(from, NULL, &OPTIONS, &OUTPUT);
         if (_fsentries == NULL)
             error(EXIT_FAILURE, errno, "rbh_backend_filter_fsentries");
     }

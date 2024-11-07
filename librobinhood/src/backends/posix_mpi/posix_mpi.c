@@ -46,7 +46,8 @@ posix_mpi_iterator_new(const char *root, const char *entry,
 
 static struct rbh_mut_iterator *
 posix_mpi_backend_filter(void *backend, const struct rbh_filter *filter,
-                         const struct rbh_filter_options *options)
+                         const struct rbh_filter_options *options,
+                         const struct rbh_filter_output *output)
 {
     return mpi_backend_filter(backend, filter, options);
 }
@@ -120,9 +121,10 @@ posix_mpi_backend_root(void *backend,
 
 static struct rbh_mut_iterator *
 posix_mpi_branch_backend_filter(void *backend, const struct rbh_filter *filter,
-                                const struct rbh_filter_options *options)
+                                const struct rbh_filter_options *options,
+                                const struct rbh_filter_output *output)
 {
-    return mpi_branch_backend_filter(backend, filter, options);
+    return mpi_branch_backend_filter(backend, filter, options, output);
 }
 
 static const struct rbh_backend_operations POSIX_MPI_BRANCH_BACKEND_OPS = {

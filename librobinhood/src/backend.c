@@ -76,14 +76,15 @@ rbh_backend_filter_one(struct rbh_backend *backend,
                        const struct rbh_filter *filter,
                        const struct rbh_filter_projection *projection)
 {
-    const struct rbh_filter_options options = {
+    const struct rbh_filter_options options = { 0 };
+    const struct rbh_filter_output output = {
         .projection = *projection,
     };
     struct rbh_mut_iterator *fsentries;
     struct rbh_fsentry *fsentry;
     int save_errno = errno;
 
-    fsentries = rbh_backend_filter(backend, filter, &options);
+    fsentries = rbh_backend_filter(backend, filter, &options, &output);
     if (fsentries == NULL)
         return NULL;
 
