@@ -167,13 +167,27 @@ struct rbh_filter_group {
 };
 
 /**
+ * Determines if a rbh_filter_output aims to output a projection of fsentries or
+ * simple values corresponding to aggregates of information in fsentries. The
+ * later has no defined structure, as it's the caller's job to determine which
+ * information to output.
+ */
+enum rbh_filter_output_type {
+    RBH_FOT_PROJECTION, /* Projection output */
+    RBH_FOT_MAP, /* Map output */
+};
+
+/**
  * Output behaviour, to be used with rbh_backend_report() and
  * rbh_backend_filter()
  */
 struct rbh_filter_output {
+    enum rbh_filter_output_type type;
     union {
         /** Fsentry fields the query should set */
         struct rbh_filter_projection projection;
+        /** Map of entries to catch and output */
+        struct rbh_value_map map;
     };
 };
 
