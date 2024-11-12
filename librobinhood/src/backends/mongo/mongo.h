@@ -250,15 +250,6 @@ bson_append_rbh_filter_sorts(bson_t *bson, const char *key, size_t key_length,
      *--------------------------------------------------------------------*/
 
 bool
-bson_append_rbh_filter_projection(
-        bson_t *bson, const char *key, size_t key_length,
-        const struct rbh_filter_projection *projection
-        );
-
-#define BSON_APPEND_RBH_FILTER_PROJECTION(bson, key, projection) \
-    bson_append_rbh_filter_projection(bson, key, strlen(key), projection)
-
-bool
 bson_append_aggregate_projection_stage(bson_t *bson, const char *key,
                                        size_t key_length,
                                        const struct rbh_filter_output *output);
