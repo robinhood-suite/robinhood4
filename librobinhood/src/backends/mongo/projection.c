@@ -122,11 +122,9 @@ bson_append_xattrs_projection(bson_t *bson, const char *key, size_t key_length,
 #define BSON_APPEND_XATTRS_PROJECTION(bson, key, map) \
     bson_append_xattrs_projection(bson, key, strlen(key), map)
 
-bool
-bson_append_rbh_filter_projection(
-        bson_t *bson, const char *key, size_t key_length,
-        const struct rbh_filter_projection *projection
-        )
+static bool
+bson_append_fot_projection(bson_t *bson, const char *key, size_t key_length,
+                           const struct rbh_filter_projection *projection)
 {
     unsigned int fsentry_mask = projection->fsentry_mask;
     bson_t document;
@@ -194,10 +192,9 @@ bson_append_rbh_filter_projection(
 /* The resulting bson will be as such:
  * { $project: { _id: 0, result: '$test'}}
  */
-bool
-bson_append_aggregate_projection_stage(bson_t *bson, const char *key,
-                                       size_t key_length,
-                                       const struct rbh_filter_output *output)
+static bool
+bson_append_fot_map(bson_t *bson, const char *key,
+                    size_t key_length, const struct rbh_value_map *map)
 {
     bson_t document;
 
@@ -205,17 +202,24 @@ bson_append_aggregate_projection_stage(bson_t *bson, const char *key,
           BSON_APPEND_INT32(&document, "_id", 0)))
         return false;
 
-    if (output->type != RBH_FOT_MAP || output->map.count == 0) {
-        if (!BSON_APPEND_UTF8(&document, "result", "$test"))
-            return false;
-    } else {
-        for (size_t i = 0; i < output->map.count; i++) {
-            const struct rbh_value_pair *pair = &output->map.pairs[i];
+    for (size_t i = 0; i < map->count; i++) {
+        const struct rbh_value_pair *pair = &map->pairs[i];
 
-            if (!BSON_APPEND_RBH_VALUE(&document, pair->key, pair->value))
-                return false;
-        }
+        if (!BSON_APPEND_RBH_VALUE(&document, pair->key, pair->value))
+            return false;
     }
 
     return bson_append_document_end(bson, &document);
+}
+
+bool
+bson_append_aggregate_projection_stage(bson_t *bson, const char *key,
+                                       size_t key_length,
+                                       const struct rbh_filter_output *output)
+{
+    if (output->type == RBH_FOT_PROJECTION)
+        return bson_append_fot_projection(bson, key, key_length,
+                                          &output->projection);
+    else
+        return bson_append_fot_map(bson, key, key_length, &output->map);
 }

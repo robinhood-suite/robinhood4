@@ -139,11 +139,7 @@ bson_pipeline_creation(const struct rbh_filter *filter,
                                        options->sort.count)
        && bson_append_document_end(&array, &stage)))
      && (BSON_APPEND_DOCUMENT_BEGIN(&array, UINT8_TO_STR[i], &stage) && ++i
-         && (from_report ?
-             BSON_APPEND_AGGREGATE_PROJECTION_STAGE(&stage, "$project",
-                                                    output) :
-             BSON_APPEND_RBH_FILTER_PROJECTION(&stage, "$project",
-                                               &output->projection))
+         && BSON_APPEND_AGGREGATE_PROJECTION_STAGE(&stage, "$project", output)
          && bson_append_document_end(&array, &stage))
      && (options->skip == 0
       || (BSON_APPEND_DOCUMENT_BEGIN(&array, UINT8_TO_STR[i], &stage) && ++i
@@ -669,8 +665,7 @@ bson_from_options_and_output(const struct rbh_filter_options *options,
     }
 
     bson = bson_new();
-    if (BSON_APPEND_RBH_FILTER_PROJECTION(bson, "projection",
-                                          &output->projection)
+    if (BSON_APPEND_AGGREGATE_PROJECTION_STAGE(bson, "projection", output)
      && (options->skip == 0
       || BSON_APPEND_INT64(bson, "skip", options->skip))
      && (options->limit == 0
