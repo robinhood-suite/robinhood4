@@ -159,11 +159,9 @@ struct rbh_filter_options {
 
 /**
  * Grouping behaviour, to be used with rbh_backend_report()
- *
- * XXX: empty for now, will be filled later
  */
 struct rbh_filter_group {
-
+    struct rbh_value_map map;
 };
 
 /**
