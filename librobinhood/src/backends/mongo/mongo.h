@@ -229,10 +229,11 @@ bson_append_rbh_filter(bson_t *bson, const char *key, size_t key_length,
 
 bool
 bson_append_aggregate_group_stage(bson_t *bson, const char *key,
-                                  size_t key_length);
+                                  size_t key_length,
+                                  const struct rbh_filter_group *group);
 
-#define BSON_APPEND_AGGREGATE_GROUP_STAGE(bson, key) \
-    bson_append_aggregate_group_stage(bson, key, strlen(key))
+#define BSON_APPEND_AGGREGATE_GROUP_STAGE(bson, key, group) \
+    bson_append_aggregate_group_stage(bson, key, strlen(key), group)
 
     /*--------------------------------------------------------------------*
      |                            filter_sort                             |
