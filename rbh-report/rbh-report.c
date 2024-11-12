@@ -40,6 +40,38 @@ destroy_from(void)
 }
 
 static void
+create_rbh_filter_group(struct rbh_filter_group *group)
+{
+    struct rbh_value_pair *pairs;
+    struct rbh_value *value;
+
+    pairs = rbh_sstack_push(values_sstack, NULL, 2 * sizeof(*pairs));
+    if (pairs == NULL)
+        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
+                      "rbh_sstack_push");
+
+    value = rbh_sstack_push(values_sstack, NULL, 2 * sizeof(*value));
+    if (value == NULL)
+        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
+                      "rbh_sstack_push");
+
+    /** XXX: this is not really generic, but it'll do for now */
+    value[0].type = RBH_VT_STRING;
+    value[0].string = "$statx.size";
+    pairs[0].key = "$sum";
+    pairs[0].value = &value[0];
+
+    value[1].type = RBH_VT_MAP;
+    value[1].map.pairs = &pairs[0];
+    value[1].map.count = 1;
+    pairs[1].key = "test";
+    pairs[1].value = &value[1];
+
+    group->map.pairs = &pairs[1];
+    group->map.count = 1;
+}
+
+static void
 create_rbh_filter_output(struct rbh_filter_output *output)
 {
     struct rbh_value_pair *pairs;
@@ -82,6 +114,7 @@ report()
     }
 
     create_rbh_filter_output(&output);
+    create_rbh_filter_group(&group);
     iter = rbh_backend_report(from, NULL, &group, &options, &output);
 
     if (iter == NULL)
