@@ -126,9 +126,9 @@ bson_pipeline_creation(const struct rbh_filter *filter,
      && BSON_APPEND_DOCUMENT_BEGIN(&array, UINT8_TO_STR[i], &stage) && ++i
      && BSON_APPEND_RBH_FILTER(&stage, "$match", filter)
      && bson_append_document_end(&array, &stage)
-     && (from_report ?
+     && (group || from_report ?
             BSON_APPEND_DOCUMENT_BEGIN(&array, UINT8_TO_STR[i], &stage) && ++i
-            && BSON_APPEND_AGGREGATE_GROUP_STAGE(&stage, "$group")
+            && BSON_APPEND_AGGREGATE_GROUP_STAGE(&stage, "$group", group)
             && bson_append_document_end(&array, &stage) : true)
      && (options->sort.count == 0
       || (BSON_APPEND_DOCUMENT_BEGIN(&array, UINT8_TO_STR[i], &stage) && ++i
