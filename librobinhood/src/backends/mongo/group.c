@@ -18,15 +18,31 @@
  */
 bool
 bson_append_aggregate_group_stage(bson_t *bson, const char *key,
-                                  size_t key_length)
+                                  size_t key_length,
+                                  const struct rbh_filter_group *group)
 {
     bson_t document;
     bson_t subdoc;
 
-    return bson_append_document_begin(bson, key, key_length, &document)
-        && BSON_APPEND_NULL(&document, "_id")
-        && (BSON_APPEND_DOCUMENT_BEGIN(&document, "test", &subdoc)
-            && BSON_APPEND_UTF8(&subdoc, "$sum", "$statx.size")
-            && bson_append_document_end(&document, &subdoc))
+    if (!(bson_append_document_begin(bson, key, key_length, &document) &&
+          BSON_APPEND_INT32(&document, "_id", 0)))
+        return false;
+
+    if (!BSON_APPEND_DOCUMENT_BEGIN(&document, "test", &subdoc))
+        return false;
+
+    if (group == NULL || group->map.count == 0) {
+        if (!BSON_APPEND_UTF8(&subdoc, "$sum", "$statx.size"))
+            return false;
+    } else {
+        for (size_t i = 0; i < group->map.count; i++) {
+            const struct rbh_value_pair *pair = &group->map.pairs[i];
+
+            if (!BSON_APPEND_RBH_VALUE(&subdoc, pair->key, pair->value))
+                return false;
+        }
+    }
+
+    return bson_append_document_end(&document, &subdoc)
         && bson_append_document_end(bson, &document);
 }

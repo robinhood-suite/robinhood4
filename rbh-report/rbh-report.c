@@ -70,8 +70,8 @@ report()
 {
     struct rbh_filter_options options = { 0 };
     struct rbh_filter_output output = { 0 };
+    struct rbh_filter_group group = { 0 };
     struct rbh_mut_iterator *iter;
-    struct rbh_filter_group group;
 
     if (values_sstack == NULL) {
         values_sstack = rbh_sstack_new(MIN_VALUES_SSTACK_ALLOC *
