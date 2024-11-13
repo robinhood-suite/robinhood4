@@ -1040,25 +1040,16 @@ fsentry_almost_clone(const struct rbh_fsentry *fsentry, const char *symlink)
 }
 
 struct rbh_fsentry *
-fsentry_from_bson(const bson_t *bson)
+fsentry_from_bson(bson_iter_t *iter)
 {
     struct rbh_fsentry fsentry;
     struct rbh_statx statxbuf;
     const char *symlink;
-    bson_iter_t iter;
     char tmp[4096]; /* TODO: figure out a better size than the arbitrary 4096 */
     size_t bufsize = sizeof(tmp);
     char *buffer = tmp;
 
-    if (!bson_iter_init(&iter, bson)) {
-        /* XXX: libbson is not quite clear on why this would happen, the code
-         *      makes me think it only happens if `bson' is malformed.
-         */
-        errno = EINVAL;
-        return NULL;
-    }
-
-    if (!bson_iter_fsentry(&iter, &fsentry, &statxbuf, &symlink, &buffer,
+    if (!bson_iter_fsentry(iter, &fsentry, &statxbuf, &symlink, &buffer,
                            &bufsize))
         /* FIXME: while it is nice to try to parse most fsentries without
          *        allocating any memory using the "on stack" buffer `tmp', there

@@ -166,6 +166,67 @@ struct mongo_iterator {
     mongoc_cursor_t *cursor;
 };
 
+enum form_token {
+    FT_UNKNOWN,
+    FT_FSENTRY,
+    FT_MAP,
+};
+
+static enum form_token
+form_tokenizer(const char *key)
+{
+    switch (*key++) {
+    case 'f': /* fsentry */
+        if (strcmp(key, "sentry"))
+            break;
+        return FT_FSENTRY;
+    case 'm': /* map */
+        if (strcmp(key, "ap"))
+            break;
+        return FT_MAP;
+    }
+
+    return FT_UNKNOWN;
+}
+
+static void *
+entry_from_bson(const bson_t *bson)
+{
+    enum form_token token;
+    bson_iter_t iter;
+    const char *key;
+
+    if (!bson_iter_init(&iter, bson)) {
+        /* XXX: libbson is not quite clear on why this would happen, the code
+         *      makes me think it only happens if `bson' is malformed.
+         */
+        goto out;
+    }
+
+    if (!bson_iter_next(&iter))
+        goto out;
+
+    key = bson_iter_key(&iter);
+    if (strcmp(key, "form") != 0)
+        goto out;
+
+    token = form_tokenizer(bson_iter_utf8(&iter, NULL));
+    if (!bson_iter_next(&iter))
+        goto out;
+
+    switch (token) {
+    case FT_UNKNOWN:
+        break;
+    case FT_MAP:
+    case FT_FSENTRY:
+        return fsentry_from_bson(&iter);
+    }
+
+out:
+    errno = EINVAL;
+    return NULL;
+}
+
 static void *
 mongo_iter_next(void *iterator)
 {
@@ -179,7 +240,7 @@ mongo_iter_next(void *iterator)
     }
 
     if (mongoc_cursor_next(mongo_iter->cursor, &doc))
-        return fsentry_from_bson(doc);
+        return entry_from_bson(doc);
 
     if (!mongoc_cursor_error(mongo_iter->cursor, &error)) {
         errno = ENODATA;
