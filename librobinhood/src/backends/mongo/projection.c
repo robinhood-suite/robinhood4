@@ -156,6 +156,7 @@ bson_append_fot_projection(bson_t *bson, const char *key, size_t key_length,
          *      better to simply filter in the "_id" field...
          */
         return bson_append_document_begin(bson, key, key_length, &document)
+            && BSON_APPEND_UTF8(&document, "form", "fsentry")
             && BSON_APPEND_BOOL(&document, MFF_ID, false)
             && BSON_APPEND_BOOL(&document, MFF_NAMESPACE, false)
             && BSON_APPEND_BOOL(&document, MFF_STATX, false)
