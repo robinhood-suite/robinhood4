@@ -49,7 +49,7 @@ bson_type_is_supported(bson_type_t type)
 /* XXX: the iterator will be consumed, libbson lacks a practical
  *      bson_iter_copy() / bson_iter_tee() / bson_iter_dup()
  */
-static size_t
+size_t
 bson_iter_count(bson_iter_t *iter)
 {
     size_t count = 0;
@@ -70,7 +70,7 @@ static bool
 bson_iter_rbh_value(bson_iter_t *iter, struct rbh_value *value,
                     char **buffer, size_t *bufsize);
 
-static bool
+bool
 bson_iter_rbh_value_map(bson_iter_t *iter, struct rbh_value_map *map,
                         size_t count, char **buffer, size_t *bufsize)
 {
@@ -889,7 +889,6 @@ enum fsentry_token {
     FT_XATTRS,
     FT_STATX,
     FT_FORM,
-    FT_RESULT_REPORT,
 };
 
 static enum fsentry_token
@@ -908,10 +907,6 @@ fsentry_tokenizer(const char *key)
         if (strcmp(key, "s"))
             break;
         return FT_NAMESPACE;
-    case 'r': /* result */
-        if (strcmp(key, "esult"))
-            break;
-        return FT_RESULT_REPORT;
     case 's': /* statx, symlink */
         switch (*key++) {
         case 't': /* statx */
@@ -993,16 +988,6 @@ bson_iter_fsentry(bson_iter_t *iter, struct rbh_fsentry *fsentry,
             fsentry->statx = statxbuf;
             fsentry->mask |= RBH_FP_STATX;
             break;
-        case FT_RESULT_REPORT:
-            if (!BSON_ITER_HOLDS_INT64(iter))
-                goto out_einval;
-
-            statxbuf->stx_size = bson_iter_int64(iter);
-            statxbuf->stx_mask = RBH_STATX_SIZE;
-            statxbuf->stx_mode = 0;
-
-            fsentry->statx = statxbuf;
-            fsentry->mask |= RBH_FP_STATX;
         case FT_FORM:
             break;
         }
