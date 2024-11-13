@@ -122,12 +122,14 @@ report()
                       "rbh_backend_report");
 
     do {
-        struct rbh_fsentry *fsentry = rbh_mut_iter_next(iter);
+        struct rbh_value_map *map = rbh_mut_iter_next(iter);
 
-        if (fsentry == NULL)
+        if (map == NULL || map->count != 1 ||
+            strcmp(map->pairs[0].key, "result") != 0 ||
+            map->pairs[0].value->type != RBH_VT_INT64)
             break;
 
-        printf("%ld\n", fsentry->statx->stx_size);
+        printf("%ld\n", map->pairs[0].value->int64);
     } while (true);
 }
 
