@@ -888,6 +888,7 @@ enum fsentry_token {
     FT_SYMLINK,
     FT_XATTRS,
     FT_STATX,
+    FT_FORM,
     FT_RESULT_REPORT,
 };
 
@@ -899,6 +900,10 @@ fsentry_tokenizer(const char *key)
         if (strcmp(key, "id"))
             break;
         return FT_ID;
+    case 'f': /* form */
+        if (strcmp(key, "orm"))
+            break;
+        return FT_FORM;
     case 'n': /* ns */
         if (strcmp(key, "s"))
             break;
@@ -998,6 +1003,7 @@ bson_iter_fsentry(bson_iter_t *iter, struct rbh_fsentry *fsentry,
 
             fsentry->statx = statxbuf;
             fsentry->mask |= RBH_FP_STATX;
+        case FT_FORM:
             break;
         }
     }
@@ -1040,25 +1046,16 @@ fsentry_almost_clone(const struct rbh_fsentry *fsentry, const char *symlink)
 }
 
 struct rbh_fsentry *
-fsentry_from_bson(const bson_t *bson)
+fsentry_from_bson(bson_iter_t *iter)
 {
     struct rbh_fsentry fsentry;
     struct rbh_statx statxbuf;
     const char *symlink;
-    bson_iter_t iter;
     char tmp[4096]; /* TODO: figure out a better size than the arbitrary 4096 */
     size_t bufsize = sizeof(tmp);
     char *buffer = tmp;
 
-    if (!bson_iter_init(&iter, bson)) {
-        /* XXX: libbson is not quite clear on why this would happen, the code
-         *      makes me think it only happens if `bson' is malformed.
-         */
-        errno = EINVAL;
-        return NULL;
-    }
-
-    if (!bson_iter_fsentry(&iter, &fsentry, &statxbuf, &symlink, &buffer,
+    if (!bson_iter_fsentry(iter, &fsentry, &statxbuf, &symlink, &buffer,
                            &bufsize))
         /* FIXME: while it is nice to try to parse most fsentries without
          *        allocating any memory using the "on stack" buffer `tmp', there
