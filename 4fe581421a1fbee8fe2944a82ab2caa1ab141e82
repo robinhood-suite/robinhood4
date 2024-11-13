@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9f3c540d_66c1f029",
+        "filename": "librobinhood/include/robinhood/backend.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-11-13T07:52:26Z",
+      "side": 1,
+      "message": "suggest: defined?",
+      "range": {
+        "startLine": 172,
+        "startChar": 16,
+        "endLine": 172,
+        "endChar": 21
+      },
+      "revId": "4fe581421a1fbee8fe2944a82ab2caa1ab141e82",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
