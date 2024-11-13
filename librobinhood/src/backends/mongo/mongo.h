@@ -209,7 +209,7 @@ bson_append_unsetxattrs(bson_t *bson, const char *prefix,
      *--------------------------------------------------------------------*/
 
 struct rbh_fsentry *
-fsentry_from_bson(const bson_t *bson);
+fsentry_from_bson(bson_iter_t *iter);
 
     /*--------------------------------------------------------------------*
      |                               filter                               |

@@ -83,6 +83,7 @@ _find(struct find_context *ctx, int backend_index, enum action action,
         },
     };
     const struct rbh_filter_output OUTPUT = {
+        .type = RBH_FOT_PROJECTION,
         .projection = {
             .fsentry_mask = RBH_FP_ALL,
             .statx_mask = RBH_STATX_ALL,

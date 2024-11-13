@@ -391,6 +391,7 @@ sync(const struct rbh_filter_projection *projection)
         .skip_error = skip_error,
     };
     const struct rbh_filter_output OUTPUT = {
+        .type = RBH_FOT_PROJECTION,
         .projection = {
             .fsentry_mask = RBH_FP_ALL,
             .statx_mask = RBH_STATX_ALL,
