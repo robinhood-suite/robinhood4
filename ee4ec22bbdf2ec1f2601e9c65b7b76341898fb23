@@ -16,6 +16,24 @@
       "message": "minor: empty line",
       "revId": "ee4ec22bbdf2ec1f2601e9c65b7b76341898fb23",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "25e99f54_9354bf1f",
+        "filename": "README.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-11-13T09:30:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "181fa2a8_a6a5cf54",
+      "revId": "ee4ec22bbdf2ec1f2601e9c65b7b76341898fb23",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
