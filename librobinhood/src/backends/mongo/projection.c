@@ -164,6 +164,7 @@ bson_append_fot_projection(bson_t *bson, const char *key, size_t key_length,
             && bson_append_document_end(bson, &document);
 
     return bson_append_document_begin(bson, key, key_length, &document)
+        && BSON_APPEND_UTF8(&document, "form", "fsentry")
         && (!(fsentry_mask & RBH_FP_ID)
          || BSON_APPEND_BOOL(&document, MFF_ID, true))
         && (!(fsentry_mask & RBH_FP_PARENT_ID ||
@@ -190,7 +191,7 @@ bson_append_fot_projection(bson_t *bson, const char *key, size_t key_length,
 }
 
 /* The resulting bson will be as such:
- * { $project: { _id: 0, result: '$test'}}
+ * { $project: { _id: 0, form: 'map', result: '$test'}}
  */
 static bool
 bson_append_fot_map(bson_t *bson, const char *key,
@@ -198,8 +199,9 @@ bson_append_fot_map(bson_t *bson, const char *key,
 {
     bson_t document;
 
-    if (!(bson_append_document_begin(bson, key, key_length, &document) &&
-          BSON_APPEND_INT32(&document, "_id", 0)))
+    if (!(bson_append_document_begin(bson, key, key_length, &document)
+          && BSON_APPEND_INT32(&document, "_id", 0)
+          && BSON_APPEND_UTF8(&document, "form", "map")))
         return false;
 
     for (size_t i = 0; i < map->count; i++) {
