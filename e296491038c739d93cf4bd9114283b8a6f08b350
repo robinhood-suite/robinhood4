@@ -22,6 +22,75 @@
       },
       "revId": "e296491038c739d93cf4bd9114283b8a6f08b350",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "351db66c_6ec5e1b7",
+        "filename": "rbh-capabilities/tests/capabilities.bash",
+        "patchSetId": 3
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-11-13T10:11:06Z",
+      "side": 1,
+      "message": "minor: unnecessary",
+      "range": {
+        "startLine": 98,
+        "startChar": 4,
+        "endLine": 98,
+        "endChar": 12
+      },
+      "revId": "e296491038c739d93cf4bd9114283b8a6f08b350",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fe6c7b9e_09ab551c",
+        "filename": "rbh-capabilities/tests/capabilities.bash",
+        "patchSetId": 3
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-11-13T10:11:06Z",
+      "side": 1,
+      "message": "major: this test is not different from any of the other above. You should instead do a test where you remove the libraries from standard paths, check capabilities cannot see them, move them to another path, set the LD_LIBRARY_PATH to that one, and check capabilities now works properly",
+      "range": {
+        "startLine": 101,
+        "startChar": 0,
+        "endLine": 101,
+        "endChar": 29
+      },
+      "revId": "e296491038c739d93cf4bd9114283b8a6f08b350",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "660a607d_183143bd",
+        "filename": "rbh-capabilities/tests/capabilities.bash",
+        "patchSetId": 3
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-11-13T10:11:06Z",
+      "side": 1,
+      "message": "minor: idem",
+      "range": {
+        "startLine": 116,
+        "startChar": 4,
+        "endLine": 116,
+        "endChar": 12
+      },
+      "revId": "e296491038c739d93cf4bd9114283b8a6f08b350",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
