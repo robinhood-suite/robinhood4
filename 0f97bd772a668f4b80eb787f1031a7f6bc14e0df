@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9fd4745f_413742de",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-11-13T09:29:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "46d4e71e_6299c426",
+      "range": {
+        "startLine": 13,
+        "startChar": 14,
+        "endLine": 13,
+        "endChar": 16
+      },
+      "revId": "0f97bd772a668f4b80eb787f1031a7f6bc14e0df",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "225ff42c_86f2adb8",
@@ -47,6 +71,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f2d61471_2ba77f7a",
+        "filename": "librobinhood/src/backends/lustre_mpi/lustre_mpi.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-11-13T09:29:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "225ff42c_86f2adb8",
+      "range": {
+        "startLine": 54,
+        "startChar": 58,
+        "endLine": 54,
+        "endChar": 64
+      },
+      "revId": "0f97bd772a668f4b80eb787f1031a7f6bc14e0df",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "92c43f8d_459fc1e9",
@@ -60,6 +108,30 @@
       "writtenOn": "2024-11-13T07:51:20Z",
       "side": 1,
       "message": "minor: voiding output?",
+      "range": {
+        "startLine": 376,
+        "startChar": 56,
+        "endLine": 376,
+        "endChar": 62
+      },
+      "revId": "0f97bd772a668f4b80eb787f1031a7f6bc14e0df",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "06686c29_96685c63",
+        "filename": "librobinhood/src/backends/mpi_file/mpi_file.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 376,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-11-13T09:29:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "92c43f8d_459fc1e9",
       "range": {
         "startLine": 376,
         "startChar": 56,
