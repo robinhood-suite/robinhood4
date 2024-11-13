@@ -170,6 +170,9 @@ const char *field2str(const struct rbh_filter_field *field, char **buffer,
  |                                bson helpers                                |
  *----------------------------------------------------------------------------*/
 
+size_t
+bson_iter_count(bson_iter_t *iter);
+
 static inline bool
 _bson_append_binary(bson_t *bson, const char *key, size_t key_length,
                     bson_subtype_t subtype, const char *data, size_t size)
@@ -210,6 +213,10 @@ bson_append_unsetxattrs(bson_t *bson, const char *prefix,
 
 struct rbh_fsentry *
 fsentry_from_bson(bson_iter_t *iter);
+
+bool
+bson_iter_rbh_value_map(bson_iter_t *iter, struct rbh_value_map *map,
+                        size_t count, char **buffer, size_t *bufsize);
 
     /*--------------------------------------------------------------------*
      |                               filter                               |

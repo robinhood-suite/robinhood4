@@ -26,6 +26,7 @@
 #include "robinhood/itertools.h"
 #include "robinhood/ringr.h"
 #include "robinhood/statx.h"
+#include "utils.h"
 
 #include "mongo.h"
 
@@ -189,6 +190,52 @@ form_tokenizer(const char *key)
     return FT_UNKNOWN;
 }
 
+static struct rbh_value_map *
+map_from_bson(bson_iter_t *iter)
+{
+    bson_iter_t iter_for_count;
+    struct rbh_value_map *map;
+    bson_iter_t subiter;
+    const char *key;
+    char tmp[4096];
+    size_t bufsize;
+    char *buffer;
+
+    bufsize = sizeof(tmp);
+    buffer = tmp;
+
+    if (!bson_iter_next(iter))
+        goto out;
+
+    key = bson_iter_key(iter);
+    if (strcmp(key, "result") != 0)
+        goto out;
+
+    if (!bson_iter_next(iter))
+        goto out;
+
+    if (!BSON_ITER_HOLDS_DOCUMENT(iter))
+        goto out;
+
+    map = aligned_memalloc(alignof(*map), sizeof(*map), &buffer, &bufsize);
+    if (map == NULL)
+        return NULL;
+
+    bson_iter_recurse(iter, &subiter);
+    bson_iter_recurse(iter, &iter_for_count);
+
+    if (!bson_iter_rbh_value_map(&subiter, map,
+                                 bson_iter_count(&iter_for_count),
+                                 &buffer, &bufsize))
+        return NULL;
+
+    return map;
+
+out:
+    errno = EINVAL;
+    return NULL;
+}
+
 static void *
 entry_from_bson(const bson_t *bson)
 {
@@ -218,6 +265,7 @@ entry_from_bson(const bson_t *bson)
     case FT_UNKNOWN:
         break;
     case FT_MAP:
+        return map_from_bson(&iter);
     case FT_FSENTRY:
         return fsentry_from_bson(&iter);
     }

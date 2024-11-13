@@ -198,20 +198,25 @@ bson_append_fot_map(bson_t *bson, const char *key,
                     size_t key_length, const struct rbh_value_map *map)
 {
     bson_t document;
+    bson_t subdoc;
 
     if (!(bson_append_document_begin(bson, key, key_length, &document)
           && BSON_APPEND_INT32(&document, "_id", 0)
           && BSON_APPEND_UTF8(&document, "form", "map")))
         return false;
 
+    if (!(BSON_APPEND_DOCUMENT_BEGIN(&document, "map", &subdoc)))
+        return false;
+
     for (size_t i = 0; i < map->count; i++) {
         const struct rbh_value_pair *pair = &map->pairs[i];
 
-        if (!BSON_APPEND_RBH_VALUE(&document, pair->key, pair->value))
+        if (!BSON_APPEND_RBH_VALUE(&subdoc, pair->key, pair->value))
             return false;
     }
 
-    return bson_append_document_end(bson, &document);
+    return bson_append_document_end(&document, &subdoc)
+        && bson_append_document_end(bson, &document);
 }
 
 bool
