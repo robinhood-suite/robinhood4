@@ -888,7 +888,7 @@ enum fsentry_token {
     FT_SYMLINK,
     FT_XATTRS,
     FT_STATX,
-    FT_REPORT_RESULT,
+    FT_RESULT_REPORT,
 };
 
 static enum fsentry_token
@@ -906,7 +906,7 @@ fsentry_tokenizer(const char *key)
     case 'r': /* result */
         if (strcmp(key, "esult"))
             break;
-        return FT_REPORT_RESULT;
+        return FT_RESULT_REPORT;
     case 's': /* statx, symlink */
         switch (*key++) {
         case 't': /* statx */
@@ -929,8 +929,8 @@ fsentry_tokenizer(const char *key)
 
 static bool
 bson_iter_fsentry(bson_iter_t *iter, struct rbh_fsentry *fsentry,
-                  struct rbh_statx *statxbuf, const char **symlink, char **buffer,
-                  size_t *bufsize)
+                  struct rbh_statx *statxbuf, const char **symlink,
+                  char **buffer, size_t *bufsize)
 {
     size_t size = *bufsize;
     char *data = *buffer;
@@ -988,7 +988,7 @@ bson_iter_fsentry(bson_iter_t *iter, struct rbh_fsentry *fsentry,
             fsentry->statx = statxbuf;
             fsentry->mask |= RBH_FP_STATX;
             break;
-        case FT_REPORT_RESULT:
+        case FT_RESULT_REPORT:
             if (!BSON_ITER_HOLDS_INT64(iter))
                 goto out_einval;
 
