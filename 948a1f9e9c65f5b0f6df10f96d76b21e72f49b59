@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1ed97c64_0d78c18f",
+        "filename": "librobinhood/src/backends/mongo/mongo.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-11-14T10:28:59Z",
+      "side": 1,
+      "message": "suggest: check the return value of ```bson_iter_recurse```",
+      "revId": "948a1f9e9c65f5b0f6df10f96d76b21e72f49b59",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8cb9b712_8e36e3ff",
+        "filename": "librobinhood/src/backends/mongo/projection.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-11-14T10:28:59Z",
+      "side": 1,
+      "message": "minor: update the documentation with the new form of the bson",
+      "range": {
+        "startLine": 193,
+        "startChar": 0,
+        "endLine": 195,
+        "endChar": 3
+      },
+      "revId": "948a1f9e9c65f5b0f6df10f96d76b21e72f49b59",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
