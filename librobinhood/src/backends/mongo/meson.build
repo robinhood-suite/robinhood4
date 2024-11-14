@@ -11,8 +11,8 @@ librbh_mongo = library(
     'rbh-mongo',
     sources: [
         'bson.c',
-        'filter.c',
         'fields.c',
+        'filter.c',
         'fsentry.c',
         'fsevent.c',
         'group.c',
@@ -20,7 +20,9 @@ librbh_mongo = library(
         'options.c',
         'plugin.c',
         'projection.c',
+        'statx.c',
         'value.c',
+        'xattrs.c',
     ],
     version: librbh_mongo_version, # defined in include/robinhood/backends
     link_with: librobinhood,
