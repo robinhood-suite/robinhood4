@@ -48,20 +48,6 @@ mongo_cleanup(void)
     mongoc_cleanup();
 }
 
-__attribute__((unused))
-static void
-dump_bson(bson_t *to_dump)
-{
-    char *dump_str;
-
-    if (!to_dump)
-        return;
-
-    dump_str = bson_as_json(to_dump, NULL);
-    fprintf(stderr, "Dumped bson = '%s'\n", dump_str);
-    free(dump_str);
-}
-
     /*--------------------------------------------------------------------*
      |                       bson_pipeline_creation                       |
      *--------------------------------------------------------------------*/
