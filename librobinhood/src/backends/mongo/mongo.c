@@ -48,20 +48,6 @@ mongo_cleanup(void)
     mongoc_cleanup();
 }
 
-__attribute__((unused))
-static void
-dump_bson(bson_t *to_dump)
-{
-    char *dump_str;
-
-    if (!to_dump)
-        return;
-
-    dump_str = bson_as_json(to_dump, NULL);
-    fprintf(stderr, "Dumped bson = '%s'\n", dump_str);
-    free(dump_str);
-}
-
     /*--------------------------------------------------------------------*
      |                       bson_pipeline_creation                       |
      *--------------------------------------------------------------------*/
@@ -710,7 +696,6 @@ mongo_backend_report(void *backend, const struct rbh_filter *filter,
     if (pipeline == NULL)
         return NULL;
 
-    dump_bson(pipeline);
     opts = options->sort.count > 0 ? BCON_NEW("allowDiskUse", BCON_BOOL(true))
                                    : NULL;
     cursor = mongoc_collection_aggregate(mongo->entries, MONGOC_QUERY_NONE,

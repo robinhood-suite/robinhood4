@@ -170,6 +170,9 @@ const char *field2str(const struct rbh_filter_field *field, char **buffer,
  |                                bson helpers                                |
  *----------------------------------------------------------------------------*/
 
+void
+dump_bson(bson_t *to_dump);
+
 size_t
 bson_iter_count(bson_iter_t *iter);
 
@@ -193,11 +196,17 @@ bson_append_rbh_id(bson_t *bson, const char *key, size_t key_length,
     bson_append_rbh_id(bson, key, strlen(key), id)
 
 bool
+bson_iter_rbh_id(bson_iter_t *iter, struct rbh_id *id);
+
+bool
 bson_append_statx(bson_t *bson, const char *key, size_t key_length,
                   const struct rbh_statx *statxbuf);
 
 #define BSON_APPEND_STATX(bson, key, statxbuf) \
     bson_append_statx(bson, key, strlen(key), statxbuf)
+
+bool
+bson_iter_statx(bson_iter_t *iter, struct rbh_statx *statxbuf);
 
 bool
 bson_append_setxattrs(bson_t *bson, const char *prefix,
@@ -206,6 +215,10 @@ bson_append_setxattrs(bson_t *bson, const char *prefix,
 bool
 bson_append_unsetxattrs(bson_t *bson, const char *prefix,
                         const struct rbh_value_map *xattrs);
+
+bool
+bson_iter_namespace(bson_iter_t *iter, struct rbh_fsentry *fsentry,
+                    char **buffer, size_t *bufsize);
 
     /*--------------------------------------------------------------------*
      |                              fsentry                               |
