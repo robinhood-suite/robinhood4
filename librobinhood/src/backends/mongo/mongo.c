@@ -190,6 +190,27 @@ form_tokenizer(const char *key)
     return FT_UNKNOWN;
 }
 
+static enum form_token
+find_form_token(const bson_t *bson)
+{
+    static enum form_token token;
+    bson_iter_t form_iter;
+
+    if (token != 0)
+        return token;
+
+    /* XXX: Mongo's output order is not guaranteed to be the same as specified
+     * in the projection stage. Therefore, to know how to convert the output,
+     * we must first search the "form" key, which we do in a secondary
+     * bson_iter_t to avoid skipping information if the key is the first one.
+     */
+    if (!bson_iter_init_find(&form_iter, bson, "form"))
+        return 0;
+
+    token = form_tokenizer(bson_iter_utf8(&form_iter, NULL));
+    return token;
+}
+
 static struct rbh_value_map *
 map_from_bson(bson_iter_t *iter)
 {
@@ -232,8 +253,7 @@ out:
 static void *
 entry_from_bson(const bson_t *bson)
 {
-    enum form_token token;
-    bson_iter_t form_iter;
+    enum form_token form_token;
     bson_iter_t iter;
 
     if (!bson_iter_init(&iter, bson)) {
@@ -243,16 +263,8 @@ entry_from_bson(const bson_t *bson)
         goto out;
     }
 
-    /* XXX: Mongo's output order is not guaranteed to be the same as specified
-     * in the projection stage. Therefore, to know how to convert the output,
-     * we must first search the "form" key, which we do in a secondary
-     * bson_iter_t to avoid skipping information if the key is the first one.
-     */
-    if (!bson_iter_init_find(&form_iter, bson, "form"))
-        goto out;
-
-    token = form_tokenizer(bson_iter_utf8(&form_iter, NULL));
-    switch (token) {
+    form_token = find_form_token(bson);
+    switch (form_token) {
     case FT_UNKNOWN:
         break;
     case FT_MAP:
