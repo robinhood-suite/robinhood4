@@ -157,11 +157,24 @@ struct rbh_filter_options {
     } sort;
 };
 
+enum field_modifier {
+    FM_NONE,
+    FM_SUM,
+};
+
+struct rbh_modifier_field {
+    enum field_modifier modifier;
+    struct rbh_filter_field field;
+};
+
 /**
  * Grouping behaviour, to be used with rbh_backend_report()
  */
-struct rbh_filter_group {
+struct rbh_group_fields {
     struct rbh_value_map map;
+
+    struct rbh_modifier_field *fields;
+    size_t count;
 };
 
 /**
@@ -186,6 +199,11 @@ struct rbh_filter_output {
         struct rbh_filter_projection projection;
         /** Map of entries to catch and output */
         struct rbh_value_map map;
+
+        struct {
+            struct rbh_modifier_field *fields;
+            size_t count;
+        } output_fields;
     };
 };
 
@@ -233,7 +251,7 @@ struct rbh_backend_operations {
     struct rbh_mut_iterator *(*report)(
             void *backend,
             const struct rbh_filter *filter,
-            const struct rbh_filter_group *group,
+            const struct rbh_group_fields *group,
             const struct rbh_filter_options *options,
             const struct rbh_filter_output *output
             );
@@ -557,7 +575,7 @@ rbh_backend_filter(struct rbh_backend *backend, const struct rbh_filter *filter,
  */
 static inline struct rbh_mut_iterator *
 rbh_backend_report(struct rbh_backend *backend, const struct rbh_filter *filter,
-                   const struct rbh_filter_group *group,
+                   const struct rbh_group_fields *group,
                    const struct rbh_filter_options *options,
                    const struct rbh_filter_output *output)
 {

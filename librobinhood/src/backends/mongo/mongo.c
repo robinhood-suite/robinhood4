@@ -89,7 +89,7 @@ static const char *UINT8_TO_STR[256] = {
 
 static bson_t *
 bson_pipeline_creation(const struct rbh_filter *filter,
-                       const struct rbh_filter_group *group,
+                       const struct rbh_group_fields *group,
                        const struct rbh_filter_options *options,
                        const struct rbh_filter_output *output,
                        bool from_report)
@@ -679,7 +679,7 @@ mongo_backend_filter(void *backend, const struct rbh_filter *filter,
 
 static struct rbh_mut_iterator *
 mongo_backend_report(void *backend, const struct rbh_filter *filter,
-                     const struct rbh_filter_group *group,
+                     const struct rbh_group_fields *group,
                      const struct rbh_filter_options *options,
                      const struct rbh_filter_output *output)
 {
