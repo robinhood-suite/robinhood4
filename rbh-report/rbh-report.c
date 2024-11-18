@@ -40,7 +40,7 @@ destroy_from(void)
 }
 
 static void
-create_rbh_filter_group(struct rbh_filter_group *group)
+create_rbh_group_fields(struct rbh_group_fields *group)
 {
     struct rbh_value_pair *pairs;
     struct rbh_value *value;
@@ -102,7 +102,7 @@ report()
 {
     struct rbh_filter_options options = { 0 };
     struct rbh_filter_output output = { 0 };
-    struct rbh_filter_group group = { 0 };
+    struct rbh_group_fields group = { 0 };
     struct rbh_mut_iterator *iter;
 
     if (values_sstack == NULL) {
@@ -114,7 +114,7 @@ report()
     }
 
     create_rbh_filter_output(&output);
-    create_rbh_filter_group(&group);
+    create_rbh_group_fields(&group);
     iter = rbh_backend_report(from, NULL, &group, &options, &output);
 
     if (iter == NULL)
