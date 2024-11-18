@@ -19,7 +19,7 @@
 bool
 bson_append_aggregate_group_stage(bson_t *bson, const char *key,
                                   size_t key_length,
-                                  const struct rbh_filter_group *group)
+                                  const struct rbh_group_fields *group)
 {
     bson_t document;
 
