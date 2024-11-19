@@ -220,6 +220,45 @@ bson_append_fot_map(bson_t *bson, const char *key,
         && bson_append_document_end(bson, &document);
 }
 
+#define XATTR_ONSTACK_LENGTH 128
+
+static bool
+bson_append_fot_values(bson_t *bson, const char *key,
+                       size_t key_length,
+                       const struct rbh_filter_output *output)
+{
+    char onstack[XATTR_ONSTACK_LENGTH];
+    char *buffer = onstack;
+    bson_t document;
+    bson_t subdoc;
+
+    if (!(bson_append_document_begin(bson, key, key_length, &document)
+          && BSON_APPEND_INT32(&document, "_id", 0)
+          && BSON_APPEND_UTF8(&document, "form", "map")
+          && BSON_APPEND_DOCUMENT_BEGIN(&document, "map", &subdoc)))
+        return false;
+
+    for (size_t i = 0; i < output->output_fields.count; i++) {
+        struct rbh_modifier_field *field = &output->output_fields.fields[i];
+        const char *field_str;
+        const char *modifier;
+
+        modifier = modifier2str(field->modifier);
+        if (modifier == NULL)
+            return false;
+
+        field_str = field2str(&field->field, &buffer, sizeof(onstack));
+        if (field_str == NULL)
+            return false;
+
+        if (!BSON_APPEND_UTF8(&subdoc, modifier, field_str))
+            return false;
+    }
+
+    return bson_append_document_end(&document, &subdoc)
+        && bson_append_document_end(bson, &document);
+}
+
 bool
 bson_append_aggregate_projection_stage(bson_t *bson, const char *key,
                                        size_t key_length,
@@ -228,6 +267,8 @@ bson_append_aggregate_projection_stage(bson_t *bson, const char *key,
     if (output->type == RBH_FOT_PROJECTION)
         return bson_append_fot_projection(bson, key, key_length,
                                           &output->projection);
-    else
+    else if (output->type == RBH_FOT_MAP)
         return bson_append_fot_map(bson, key, key_length, &output->map);
+    else
+        return bson_append_fot_values(bson, key, key_length, output);
 }

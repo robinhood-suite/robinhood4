@@ -13,7 +13,7 @@
 
 #include "mongo.h"
 
-static const char *
+const char *
 modifier2str(enum field_modifier modifier)
 {
     switch (modifier) {
