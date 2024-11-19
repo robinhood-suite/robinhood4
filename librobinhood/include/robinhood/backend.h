@@ -171,8 +171,6 @@ struct rbh_modifier_field {
  * Grouping behaviour, to be used with rbh_backend_report()
  */
 struct rbh_group_fields {
-    struct rbh_value_map map;
-
     struct rbh_modifier_field *fields;
     size_t count;
 };
