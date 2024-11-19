@@ -68,4 +68,3 @@ dump_bson(bson_t *to_dump)
     fprintf(stderr, "Dumped bson = '%s'\n", dump_str);
     free(dump_str);
 }
-
