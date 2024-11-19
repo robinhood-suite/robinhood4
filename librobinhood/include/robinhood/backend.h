@@ -186,6 +186,7 @@ struct rbh_group_fields {
 enum rbh_filter_output_type {
     RBH_FOT_PROJECTION, /* Projection output */
     RBH_FOT_MAP, /* Map output */
+    RBH_FOT_VALUES,
 };
 
 /**

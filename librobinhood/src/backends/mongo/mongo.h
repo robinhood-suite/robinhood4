@@ -166,6 +166,8 @@ const char *statx2str(const uint32_t statx);
 const char *field2str(const struct rbh_filter_field *field, char **buffer,
                       size_t bufsize);
 
+const char *modifier2str(enum field_modifier modifier);
+
 /*----------------------------------------------------------------------------*
  |                                bson helpers                                |
  *----------------------------------------------------------------------------*/
