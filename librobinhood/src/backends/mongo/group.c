@@ -13,12 +13,28 @@
 
 #include "mongo.h"
 
+static const char *
+modifier2str(enum field_modifier modifier)
+{
+    switch (modifier) {
+    case FM_SUM:
+        return "$sum";
+    default:
+        return NULL;
+    }
+}
+
 static bool
 insert_rbh_filter_value(bson_t *bson, struct rbh_modifier_field *field)
 {
+    const char *modifier;
     bson_t document;
 
     if (!BSON_APPEND_DOCUMENT_BEGIN(bson, "test", &document))
+        return false;
+
+    modifier = modifier2str(field->modifier);
+    if (modifier == NULL)
         return false;
 
     return bson_append_document_end(bson, &document);
