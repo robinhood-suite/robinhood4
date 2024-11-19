@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "370b9263_748f679d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2024-11-19T12:12:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8464c581_74d5ff63",
+      "range": {
+        "startLine": 16,
+        "startChar": 1,
+        "endLine": 16,
+        "endChar": 8
+      },
+      "revId": "e296491038c739d93cf4bd9114283b8a6f08b350",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "351db66c_6ec5e1b7",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-11-13T10:11:06Z",
       "side": 1,
       "message": "minor: unnecessary",
+      "range": {
+        "startLine": 98,
+        "startChar": 4,
+        "endLine": 98,
+        "endChar": 12
+      },
+      "revId": "e296491038c739d93cf4bd9114283b8a6f08b350",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "48b8bb5f_fac588d0",
+        "filename": "rbh-capabilities/tests/capabilities.bash",
+        "patchSetId": 3
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2024-11-19T12:12:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "351db66c_6ec5e1b7",
       "range": {
         "startLine": 98,
         "startChar": 4,
@@ -70,6 +118,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "17a1f88d_497d8b85",
+        "filename": "rbh-capabilities/tests/capabilities.bash",
+        "patchSetId": 3
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2024-11-19T12:12:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fe6c7b9e_09ab551c",
+      "range": {
+        "startLine": 101,
+        "startChar": 0,
+        "endLine": 101,
+        "endChar": 29
+      },
+      "revId": "e296491038c739d93cf4bd9114283b8a6f08b350",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "660a607d_183143bd",
@@ -83,6 +155,30 @@
       "writtenOn": "2024-11-13T10:11:06Z",
       "side": 1,
       "message": "minor: idem",
+      "range": {
+        "startLine": 116,
+        "startChar": 4,
+        "endLine": 116,
+        "endChar": 12
+      },
+      "revId": "e296491038c739d93cf4bd9114283b8a6f08b350",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "23c14cba_c6675e70",
+        "filename": "rbh-capabilities/tests/capabilities.bash",
+        "patchSetId": 3
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2024-11-19T12:12:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "660a607d_183143bd",
       "range": {
         "startLine": 116,
         "startChar": 4,
