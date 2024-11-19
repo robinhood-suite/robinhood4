@@ -27,7 +27,7 @@ modifier2str(enum field_modifier modifier)
 #define XATTR_ONSTACK_LENGTH 128
 
 static bool
-insert_rbh_filter_value(bson_t *bson, struct rbh_modifier_field *field)
+insert_rbh_modifier_field(bson_t *bson, struct rbh_modifier_field *field)
 {
     char onstack[XATTR_ONSTACK_LENGTH];
     char dollar_field[256];
@@ -68,20 +68,11 @@ bson_append_aggregate_group_stage(bson_t *bson, const char *key,
           BSON_APPEND_INT32(&document, "_id", 0)))
         return false;
 
-    if (group && group->count) {
-        for (size_t i = 0; i < group->count; i++) {
-            struct rbh_modifier_field *field = &group->fields[i];
+    for (size_t i = 0; i < group->count; i++) {
+        struct rbh_modifier_field *field = &group->fields[i];
 
-            if (!insert_rbh_filter_value(&document, field))
-                return false;
-        }
-    } else {
-        for (size_t i = 0; i < group->map.count; i++) {
-            const struct rbh_value_pair *pair = &group->map.pairs[i];
-
-            if (!BSON_APPEND_RBH_VALUE(&document, pair->key, pair->value))
-                return false;
-        }
+        if (!insert_rbh_modifier_field(&document, field))
+            return false;
     }
 
     return bson_append_document_end(bson, &document);
