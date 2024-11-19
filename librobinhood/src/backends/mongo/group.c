@@ -24,9 +24,15 @@ modifier2str(enum field_modifier modifier)
     }
 }
 
+#define XATTR_ONSTACK_LENGTH 128
+
 static bool
 insert_rbh_filter_value(bson_t *bson, struct rbh_modifier_field *field)
 {
+    char onstack[XATTR_ONSTACK_LENGTH];
+    char dollar_field[256];
+    char *buffer = onstack;
+    const char *field_str;
     const char *modifier;
     bson_t document;
 
@@ -37,7 +43,15 @@ insert_rbh_filter_value(bson_t *bson, struct rbh_modifier_field *field)
     if (modifier == NULL)
         return false;
 
-    return bson_append_document_end(bson, &document);
+    field_str = field2str(&field->field, &buffer, sizeof(onstack));
+    if (field_str == NULL)
+        return false;
+
+    if (sprintf(dollar_field, "$%s", field_str) <= 0)
+        return false;
+
+    return BSON_APPEND_UTF8(&document, modifier, dollar_field) &&
+        bson_append_document_end(bson, &document);
 }
 
 /* The resulting bson will be as such:
