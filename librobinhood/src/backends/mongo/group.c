@@ -35,9 +35,7 @@ insert_rbh_modifier_field(bson_t *bson, struct rbh_modifier_field *field)
     const char *field_str;
     const char *modifier;
     bson_t document;
-
-    if (!BSON_APPEND_DOCUMENT_BEGIN(bson, "test", &document))
-        return false;
+    char key[512];
 
     modifier = modifier2str(field->modifier);
     if (modifier == NULL)
@@ -50,8 +48,16 @@ insert_rbh_modifier_field(bson_t *bson, struct rbh_modifier_field *field)
     if (sprintf(dollar_field, "$%s", field_str) <= 0)
         return false;
 
-    return BSON_APPEND_UTF8(&document, modifier, dollar_field) &&
-        bson_append_document_end(bson, &document);
+    if (sprintf(key, "%s_%s", &modifier[1], field_str) <= 0)
+        return false;
+
+    for (int j = 0; j < strlen(key); j++)
+        if (key[j] == '.')
+            key[j] = '_';
+
+    return BSON_APPEND_DOCUMENT_BEGIN(bson, key, &document)
+        && BSON_APPEND_UTF8(&document, modifier, dollar_field)
+        && bson_append_document_end(bson, &document);
 }
 
 /* The resulting bson will be as such:

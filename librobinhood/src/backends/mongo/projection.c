@@ -242,6 +242,7 @@ bson_append_fot_values(bson_t *bson, const char *key,
         struct rbh_modifier_field *field = &output->output_fields.fields[i];
         const char *field_str;
         const char *modifier;
+        char bson_value[512];
 
         modifier = modifier2str(field->modifier);
         if (modifier == NULL)
@@ -251,7 +252,14 @@ bson_append_fot_values(bson_t *bson, const char *key,
         if (field_str == NULL)
             return false;
 
-        if (!BSON_APPEND_UTF8(&subdoc, modifier, field_str))
+        if (sprintf(bson_value, "%s_%s", modifier, field_str) <= 0)
+            return false;
+
+        for (int j = 0; j < strlen(bson_value); j++)
+            if (bson_value[j] == '.')
+                bson_value[j] = '_';
+
+        if (!BSON_APPEND_UTF8(&subdoc, "result", bson_value))
             return false;
     }
 
