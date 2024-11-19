@@ -42,33 +42,19 @@ destroy_from(void)
 static void
 create_rbh_group_fields(struct rbh_group_fields *group)
 {
-    struct rbh_value_pair *pairs;
-    struct rbh_value *value;
+    struct rbh_modifier_field *fields;
 
-    pairs = rbh_sstack_push(values_sstack, NULL, 2 * sizeof(*pairs));
-    if (pairs == NULL)
+    fields = rbh_sstack_push(values_sstack, NULL, 1 * sizeof(*fields));
+    if (fields == NULL)
         error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
                       "rbh_sstack_push");
 
-    value = rbh_sstack_push(values_sstack, NULL, 2 * sizeof(*value));
-    if (value == NULL)
-        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
-                      "rbh_sstack_push");
+    fields[0].modifier = FM_SUM;
+    fields[0].field.fsentry = RBH_FP_STATX;
+    fields[0].field.statx = RBH_STATX_SIZE;
 
-    /** XXX: this is not really generic, but it'll do for now */
-    value[0].type = RBH_VT_STRING;
-    value[0].string = "$statx.size";
-    pairs[0].key = "$sum";
-    pairs[0].value = &value[0];
-
-    value[1].type = RBH_VT_MAP;
-    value[1].map.pairs = &pairs[0];
-    value[1].map.count = 1;
-    pairs[1].key = "test";
-    pairs[1].value = &value[1];
-
-    group->map.pairs = &pairs[1];
-    group->map.count = 1;
+    group->fields = fields;
+    group->count = 1;
 }
 
 static void
