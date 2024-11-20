@@ -168,6 +168,10 @@ const char *field2str(const struct rbh_filter_field *field, char **buffer,
 
 const char *modifier2str(enum field_modifier modifier);
 
+bool
+get_modifier_field_strings(struct rbh_modifier_field *modifier_field,
+                           char *modifier, char *field, char *key);
+
 /*----------------------------------------------------------------------------*
  |                                bson helpers                                |
  *----------------------------------------------------------------------------*/
