@@ -42,6 +42,22 @@ destroy_from(void)
 static const struct rbh_modifier_field
 convert_output_string_to_modifier_field(const char *output_string)
 {
+    char *opening_parenthesis;
+    char *str;
+
+    str = strdup(output_string);
+    if (str == NULL)
+        error_at_line(EXIT_FAILURE, EINVAL, __FILE__, __LINE__, "strdup");
+
+    opening_parenthesis = strchr(str, '(');
+    if (opening_parenthesis) {
+        if (strchr(str, ')') == NULL)
+            error_at_line(EXIT_FAILURE, EINVAL, __FILE__, __LINE__,
+                          "'%s' ill-formed, missing ')'", output_string);
+
+        opening_parenthesis = '\0';
+    }
+
     struct rbh_modifier_field field = {
         .modifier = FM_SUM,
         .field = {
@@ -190,6 +206,8 @@ main(int argc, char *argv[])
         error(EX_USAGE, 0, "not enough arguments");
     if (argc > 1)
         error(EX_USAGE, 0, "unexpected argument: %s", argv[1]);
+    if (output == NULL)
+        error(EX_USAGE, 0, "missing '--output' argument");
 
     /* Parse SOURCE */
     from = rbh_backend_from_uri(argv[0]);
