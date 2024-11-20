@@ -42,9 +42,16 @@ destroy_from(void)
 static enum field_modifier
 str2modifier(const char *str)
 {
-    (void) str;
+    switch (*str++) {
+    case 's': /* sum */
+        if (strcmp(str, "um"))
+            break;
 
-    return FM_SUM;
+        return FM_SUM;
+    }
+
+    error(EX_USAGE, 0, "invalid modifier '%s'", str);
+    __builtin_unreachable();
 }
 
 static const struct rbh_modifier_field
