@@ -7,7 +7,10 @@
 # include "config.h"
 #endif
 
+#include <error.h>
+#include <string.h>
 #include <sys/stat.h>
+#include <sysexits.h>
 
 #include "robinhood/statx.h"
 
@@ -181,3 +184,169 @@ merge_statx(struct rbh_statx *original, const struct rbh_statx *override)
         original->stx_dev_minor = override->stx_dev_minor;
 }
 
+uint32_t
+str2statx(const char *string_)
+{
+    const char *string = string_;
+
+    switch (*string++) {
+    case 'a': /* atime.nsec, atime.sec, attributes */
+        if (*string++ != 't')
+            break;
+
+        switch (*string++) {
+        case 'i': /* atime.nsec, atime.sec */
+            if (strncmp(string, "me.", 3))
+                break;
+            string += 3;
+
+            switch (*string++) {
+            case 'n':
+                if (strcmp(string, "sec"))
+                    break;
+                return RBH_STATX_ATIME_NSEC;
+            case 's':
+                if (strcmp(string, "ec"))
+                    break;
+                return RBH_STATX_ATIME_SEC;
+            }
+            break;
+        case 't': /* attributes */
+            if (strcmp(string, "ributes"))
+                break;
+            return RBH_STATX_ATTRIBUTES;
+        }
+        break;
+    case 'b': /* blksize, blocks, btime.nsec, btime.sec */
+        switch (*string++) {
+        case 'l': /* blksize, blocks */
+            switch (*string++) {
+            case 'k': /* blksize */
+                if (strcmp(string, "size"))
+                    break;
+                return RBH_STATX_BLKSIZE;
+            case 'o': /* blocks */
+                if (strcmp(string, "cks"))
+                    break;
+                return RBH_STATX_BLOCKS;
+            }
+            break;
+        case 't': /* btime.nsec, btime.sec */
+            if (strncmp(string, "ime.", 4))
+                break;
+            string += 4;
+
+            switch (*string++) {
+            case 'n':
+                if (strcmp(string, "sec"))
+                    break;
+                return RBH_STATX_BTIME_NSEC;
+            case 's':
+                if (strcmp(string, "ec"))
+                    break;
+                return RBH_STATX_BTIME_SEC;
+            }
+            break;
+        }
+        break;
+    case 'c': /* ctime.nsec, ctime.sec */
+        if (strncmp(string, "time.", 5))
+            break;
+        string += 5;
+
+        switch (*string++) {
+        case 'n':
+            if (strcmp(string, "sec"))
+                break;
+            return RBH_STATX_CTIME_NSEC;
+        case 's':
+            if (strcmp(string, "ec"))
+                break;
+            return RBH_STATX_CTIME_SEC;
+        }
+        break;
+    case 'd': /* dev.major, dev.minor */
+        if (strncmp(string, "ev.m", 4))
+            break;
+        string += 4;
+
+        switch (*string++) {
+        case 'a':
+            if (strcmp(string, "jor"))
+                break;
+            return RBH_STATX_DEV_MAJOR;
+        case 'i':
+            if (strcmp(string, "nor"))
+                break;
+            return RBH_STATX_DEV_MINOR;
+        }
+        break;
+    case 'g': /* gid */
+        if (strcmp(string, "id"))
+            break;
+        return RBH_STATX_GID;
+    case 'i': /* ino */
+        if (strcmp(string, "no"))
+            break;
+        return RBH_STATX_INO;
+    case 'm': /* mode, mtime.nsec, mtime.sec */
+        switch (*string++) {
+        case 'o': /* mode */
+            if (strcmp(string, "de"))
+                break;
+            return RBH_STATX_MODE;
+        case 't': /* mtime.nsec, mtime.sec */
+            if (strncmp(string, "ime.", 4))
+                break;
+            string += 4;
+
+            switch (*string++) {
+            case 'n':
+                if (strcmp(string, "sec"))
+                    break;
+                return RBH_STATX_MTIME_NSEC;
+            case 's':
+                if (strcmp(string, "ec"))
+                    break;
+                return RBH_STATX_MTIME_SEC;
+            }
+            break;
+        }
+        break;
+    case 'n': /* nlink */
+        if (strcmp(string, "link"))
+            break;
+        return RBH_STATX_NLINK;
+    case 'r': /* rdev.major, rdev.minor */
+        if (strncmp(string, "dev.m", 5))
+            break;
+        string += 5;
+
+        switch (*string++) {
+        case 'a':
+            if (strcmp(string, "jor"))
+                break;
+            return RBH_STATX_DEV_MAJOR;
+        case 'i':
+            if (strcmp(string, "nor"))
+                break;
+            return RBH_STATX_DEV_MINOR;
+        }
+        break;
+    case 's': /* size */
+        if (strcmp(string, "ize"))
+            break;
+        return RBH_STATX_SIZE;
+    case 't': /* type */
+        if (strcmp(string, "ype"))
+            break;
+        return RBH_STATX_TYPE;
+    case 'u': /* uid */
+        if (strcmp(string, "id"))
+            break;
+        return RBH_STATX_UID;
+    }
+
+    __builtin_unreachable();
+    error(EX_USAGE, 0, "unexpected statx string: '%s'", string_);
+}
