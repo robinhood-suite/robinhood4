@@ -191,8 +191,6 @@ bson_append_fot_projection(bson_t *bson, const char *key, size_t key_length,
         && bson_append_document_end(bson, &document);
 }
 
-#define XATTR_ONSTACK_LENGTH 128
-
 /* The resulting bson will be as such:
  * { $project: { _id: 0, form: 'map', map: {
  *      'result': <modifier>_<field>, ...}}}
@@ -202,8 +200,6 @@ bson_append_fot_values(bson_t *bson, const char *key,
                        size_t key_length,
                        const struct rbh_filter_output *output)
 {
-    char onstack[XATTR_ONSTACK_LENGTH];
-    char *buffer = onstack;
     bson_t document;
     bson_t subdoc;
 
@@ -215,24 +211,12 @@ bson_append_fot_values(bson_t *bson, const char *key,
 
     for (size_t i = 0; i < output->output_fields.count; i++) {
         struct rbh_modifier_field *field = &output->output_fields.fields[i];
-        const char *field_str;
-        const char *modifier;
         char bson_value[512];
+        char field_str[256];
+        char modifier[256];
 
-        modifier = modifier2str(field->modifier);
-        if (modifier == NULL)
+        if (!get_modifier_field_strings(field, modifier, field_str, bson_value))
             return false;
-
-        field_str = field2str(&field->field, &buffer, sizeof(onstack));
-        if (field_str == NULL)
-            return false;
-
-        if (sprintf(bson_value, "%s_%s", modifier, field_str) <= 0)
-            return false;
-
-        for (int j = 0; j < strlen(bson_value); j++)
-            if (bson_value[j] == '.')
-                bson_value[j] = '_';
 
         if (!BSON_APPEND_UTF8(&subdoc, "result", bson_value))
             return false;
