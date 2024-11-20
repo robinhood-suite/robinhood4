@@ -39,32 +39,49 @@ destroy_from(void)
     }
 }
 
+static enum field_modifier
+str2modifier(const char *str)
+{
+    (void) str;
+
+    return FM_SUM;
+}
+
 static const struct rbh_modifier_field
 convert_output_string_to_modifier_field(const char *output_string)
 {
-    char *opening_parenthesis;
+    const struct rbh_filter_field *filter_field;
+    struct rbh_modifier_field field;
+    char *opening;
     char *str;
 
     str = strdup(output_string);
     if (str == NULL)
         error_at_line(EXIT_FAILURE, EINVAL, __FILE__, __LINE__, "strdup");
 
-    opening_parenthesis = strchr(str, '(');
-    if (opening_parenthesis) {
-        if (strchr(str, ')') == NULL)
+    opening = strchr(str, '(');
+    if (opening) {
+        char *closing = strchr(str, ')');
+
+        if (closing == NULL)
             error_at_line(EXIT_FAILURE, EINVAL, __FILE__, __LINE__,
                           "'%s' ill-formed, missing ')'", output_string);
 
-        opening_parenthesis = '\0';
+        *opening = '\0';
+        *closing = '\0';
+        field.modifier = str2modifier(str);
+    } else {
+        opening = str;
+        field.modifier = FM_NONE;
     }
 
-    struct rbh_modifier_field field = {
-        .modifier = FM_SUM,
-        .field = {
-            .fsentry = RBH_FP_STATX,
-            .statx = RBH_STATX_SIZE,
-        },
-    };
+    filter_field = str2filter_field(opening + 1);
+    if (filter_field == NULL)
+        error_at_line(EXIT_FAILURE, EINVAL, __FILE__, __LINE__,
+                      "'%s' ill-formed, invalid field", output_string);
+
+    field.field = *filter_field;
+    free(str);
 
     return field;
 }
