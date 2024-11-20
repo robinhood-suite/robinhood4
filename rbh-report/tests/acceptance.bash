@@ -23,7 +23,8 @@ test_report()
     local dir_size="$(stat -c %s .)"
     local size="$((1024 + 1025 + dir_size))"
 
-    rbh_report "rbh:mongo:$testdb" | difflines "$size"
+    rbh_report "rbh:mongo:$testdb" --output "sum(statx.size)" |
+        difflines "$size"
 
     truncate --size 600M "600M"
     rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
@@ -32,7 +33,8 @@ test_report()
     dir_size="$(stat -c %s .)"
     size="$((1024 + 1025 + size_600M + dir_size))"
 
-    rbh_report "rbh:mongo:$testdb" | difflines "$size"
+    rbh_report "rbh:mongo:$testdb" --output "sum(statx.size)" |
+        difflines "$size"
 }
 
 ################################################################################
