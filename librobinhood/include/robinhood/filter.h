@@ -180,6 +180,8 @@ struct rbh_filter_field {
     };
 };
 
+const struct rbh_filter_field *str2filter_field(const char *string);
+
 /**
  * A filter, to be used with rbh_backend_filter()
  *
