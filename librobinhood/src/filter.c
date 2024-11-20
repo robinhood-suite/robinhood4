@@ -11,8 +11,10 @@
 
 #include <assert.h>
 #include <errno.h>
+#include <error.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sysexits.h>
 
 #include "robinhood/filter.h"
 #include "robinhood/statx.h"
@@ -699,4 +701,89 @@ rbh_filter_validate(const struct rbh_filter *filter)
 
     errno = EINVAL;
     return -1;
+}
+
+const struct rbh_filter_field *
+str2filter_field(const char *string_)
+{
+    static struct rbh_filter_field field;
+    const char *string = string_;
+
+    switch (*string++) {
+    case 'i': /* id */
+        if (strcmp(string, "d"))
+            break;
+        field.fsentry = RBH_FP_ID;
+        return &field;
+    case 'n': /* name, ns-xattrs */
+        switch (*string++) {
+        case 'a': /* name */
+            if (strcmp(string, "me"))
+                break;
+            field.fsentry = RBH_FP_NAME;
+            return &field;
+        case 's': /* ns-xattrs */
+            if (strncmp(string, "-xattrs", 7))
+                break;
+            field.fsentry = RBH_FP_NAMESPACE_XATTRS;
+            string += 6;
+
+            switch (*string++) {
+            case '\0':
+                field.xattr = NULL;
+                return &field;
+            case '.':
+                field.xattr = string;
+                return &field;
+            }
+            break;
+        }
+        break;
+    case 'p': /* parent-id */
+        if (strcmp(string, "arent-id"))
+            break;
+        field.fsentry = RBH_FP_PARENT_ID;
+        return &field;
+    case 's': /* statx, symlink */
+        switch (*string++) {
+        case 't':
+            if (strncmp(string, "atx", 3))
+                break;
+            string += 3;
+
+            field.fsentry = RBH_FP_STATX;
+            switch (*string++) {
+            case '\0':
+                field.statx = RBH_STATX_ALL;
+                return &field;
+            case '.':
+                field.statx = str2statx(string);
+                return &field;
+            }
+            break;
+        case 'y':
+            if (strcmp(string, "mlink"))
+                break;
+            field.fsentry = RBH_FP_SYMLINK;
+            return &field;
+        }
+        break;
+    case 'x': /* xattrs */
+        if (strncmp(string, "attrs", 5))
+            break;
+        string += 5;
+
+        field.fsentry = RBH_FP_INODE_XATTRS;
+        switch (*string++) {
+        case '\0':
+            field.xattr = NULL;
+            return &field;
+        case '.':
+            field.xattr = string;
+            return &field;
+        }
+    }
+
+    __builtin_unreachable();
+    error(EX_USAGE, 0, "unexpected field string: '%s'", string_);
 }
