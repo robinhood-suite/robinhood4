@@ -26,37 +26,51 @@ modifier2str(enum field_modifier modifier)
 
 #define XATTR_ONSTACK_LENGTH 128
 
-static bool
-insert_rbh_modifier_field(bson_t *bson, struct rbh_modifier_field *field)
+bool
+get_modifier_field_strings(struct rbh_modifier_field *modifier_field,
+                           char *modifier, char *field, char *key)
 {
     char onstack[XATTR_ONSTACK_LENGTH];
-    char dollar_field[256];
+    const char *tmp_modifier;
     char *buffer = onstack;
-    const char *field_str;
-    const char *modifier;
-    bson_t document;
-    char key[512];
+    const char *tmp_field;
 
-    modifier = modifier2str(field->modifier);
-    if (modifier == NULL)
+    tmp_modifier = modifier2str(modifier_field->modifier);
+    if (tmp_modifier == NULL)
         return false;
 
-    field_str = field2str(&field->field, &buffer, sizeof(onstack));
-    if (field_str == NULL)
+    strcpy(modifier, tmp_modifier);
+
+    tmp_field = field2str(&modifier_field->field, &buffer, sizeof(onstack));
+    if (tmp_field == NULL)
         return false;
 
-    if (sprintf(dollar_field, "$%s", field_str) <= 0)
+    if (sprintf(field, "$%s", tmp_field) <= 0)
         return false;
 
-    if (sprintf(key, "%s_%s", &modifier[1], field_str) <= 0)
+    if (sprintf(key, "%s_%s", modifier, tmp_field) <= 0)
         return false;
 
     for (int j = 0; j < strlen(key); j++)
         if (key[j] == '.')
             key[j] = '_';
 
-    return BSON_APPEND_DOCUMENT_BEGIN(bson, key, &document)
-        && BSON_APPEND_UTF8(&document, modifier, dollar_field)
+    return true;
+}
+
+static bool
+insert_rbh_modifier_field(bson_t *bson, struct rbh_modifier_field *field)
+{
+    char modifier[256];
+    char field_str[256];
+    bson_t document;
+    char key[512];
+
+    if (!get_modifier_field_strings(field, modifier, field_str, key))
+        return false;
+
+    return BSON_APPEND_DOCUMENT_BEGIN(bson, &key[1], &document)
+        && BSON_APPEND_UTF8(&document, modifier, field_str)
         && bson_append_document_end(bson, &document);
 }
 
