@@ -758,6 +758,9 @@ str2filter_field(const char *string_)
                 return &field;
             case '.':
                 field.statx = str2statx(string);
+                if (field.statx == 0)
+                    return NULL;
+
                 return &field;
             }
             break;

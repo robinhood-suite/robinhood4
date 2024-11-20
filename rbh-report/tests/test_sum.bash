@@ -13,7 +13,7 @@ test_dir=$(dirname $(readlink -e $0))
 #                                    TESTS                                     #
 ################################################################################
 
-test_report()
+test_sum_size()
 {
     touch "empty"
     truncate --size 1K "1K"
@@ -37,11 +37,53 @@ test_report()
         difflines "$size"
 }
 
+test_sum_mtime()
+{
+    touch first
+    touch -d "2 hours ago" second
+    rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
+
+    local root_mtime="$(stat -c %Y .)"
+    local first_mtime="$(stat -c %Y first)"
+    local second_mtime="$(stat -c %Y second)"
+    local mtime="$((root_mtime + first_mtime + second_mtime))"
+
+    rbh_report "rbh:mongo:$testdb" --output "sum(statx.mtime.sec)" |
+        difflines "$mtime"
+
+    touch -d "+2 hours" third
+    rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
+
+    local updated_root_mtime="$(stat -c %Y .)"
+    local third_mtime="$(stat -c %Y third)"
+    mtime="$((mtime + third_mtime + (updated_root_mtime - root_mtime)))"
+
+    rbh_report "rbh:mongo:$testdb" --output "sum(statx.mtime.sec)" |
+        difflines "$mtime"
+}
+
+test_sum_ino()
+{
+    touch first
+    touch second
+    touch third
+    rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
+
+    local root_ino="$(stat -c %i .)"
+    local first_ino="$(stat -c %i first)"
+    local second_ino="$(stat -c %i second)"
+    local third_ino="$(stat -c %i third)"
+    local ino="$((root_ino + first_ino + second_ino + third_ino))"
+
+    rbh_report "rbh:mongo:$testdb" --output "sum(statx.ino)" |
+        difflines "$ino"
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
-declare -a tests=(test_report)
+declare -a tests=(test_sum_size test_sum_mtime test_sum_ino)
 
 tmpdir=$(mktemp --directory)
 trap -- "rm -rf '$tmpdir'" EXIT
