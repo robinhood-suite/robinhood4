@@ -39,8 +39,23 @@ destroy_from(void)
     }
 }
 
+static const struct rbh_modifier_field
+convert_output_string_to_modifier_field(const char *output_string)
+{
+    struct rbh_modifier_field field = {
+        .modifier = FM_SUM,
+        .field = {
+            .fsentry = RBH_FP_STATX,
+            .statx = RBH_STATX_SIZE,
+        },
+    };
+
+    return field;
+}
+
 static void
-create_rbh_filter_group_output(struct rbh_group_fields *group,
+create_rbh_filter_group_output(const char *output_string,
+                               struct rbh_group_fields *group,
                                struct rbh_filter_output *output)
 {
     struct rbh_modifier_field *fields;
@@ -50,9 +65,7 @@ create_rbh_filter_group_output(struct rbh_group_fields *group,
         error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
                       "rbh_sstack_push");
 
-    fields[0].modifier = FM_SUM;
-    fields[0].field.fsentry = RBH_FP_STATX;
-    fields[0].field.statx = RBH_STATX_SIZE;
+    fields[0] = convert_output_string_to_modifier_field(output_string);
 
     group->fields = fields;
     group->count = 1;
@@ -62,7 +75,7 @@ create_rbh_filter_group_output(struct rbh_group_fields *group,
 }
 
 static void
-report()
+report(const char *output_string)
 {
     struct rbh_filter_options options = { 0 };
     struct rbh_filter_output output = { 0 };
@@ -77,7 +90,7 @@ report()
                           "rbh_sstack_new");
     }
 
-    create_rbh_filter_group_output(&group, &output);
+    create_rbh_filter_group_output(output_string, &group, &output);
     iter = rbh_backend_report(from, NULL, &group, &options, &output);
 
     if (iter == NULL)
@@ -108,7 +121,7 @@ static int
 usage(void)
 {
     const char *message =
-        "usage: %s [-h] SOURCE\n"
+        "usage: %s [-h] SOURCE [-o|--output OUTPUT]\n"
         "\n"
         "Create a report from SOURCE's entries\n"
         "\n"
@@ -117,6 +130,11 @@ usage(void)
         "\n"
         "Optional arguments:\n"
         "    -h,--help             show this message and exit\n"
+        "\n"
+        "Output arguments:\n"
+        "    -o,--output OUTPUT    the information to output. Can be a CSV\n"
+        "                          detailling what data to output and the\n"
+        "                          order\n"
         "\n"
         "A robinhood URI is built as follows:\n"
         "    "RBH_SCHEME":BACKEND:FSNAME[#{PATH|ID}]\n"
@@ -138,16 +156,27 @@ main(int argc, char *argv[])
             .name = "help",
             .val = 'h',
         },
+        {
+            .name = "output",
+            .has_arg = required_argument,
+            .val = 'o',
+        },
         {}
     };
+    char *output = NULL;
     char c;
 
     /* Parse the command line */
-    while ((c = getopt_long(argc, argv, "h", LONG_OPTIONS, NULL)) != -1) {
+    while ((c = getopt_long(argc, argv, "ho:", LONG_OPTIONS, NULL)) != -1) {
         switch (c) {
         case 'h':
             usage();
             return 0;
+        case 'o':
+            output = strdup(optarg);
+            if (output == NULL)
+                error(EXIT_FAILURE, ENOMEM, "strdup");
+            break;
         default:
             /* getopt_long() prints meaningful error messages itself */
             exit(EX_USAGE);
@@ -165,7 +194,7 @@ main(int argc, char *argv[])
     /* Parse SOURCE */
     from = rbh_backend_from_uri(argv[0]);
 
-    report();
+    report(output);
 
     return EXIT_SUCCESS;
 }
