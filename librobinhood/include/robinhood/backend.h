@@ -183,7 +183,6 @@ struct rbh_group_fields {
  */
 enum rbh_filter_output_type {
     RBH_FOT_PROJECTION, /* Projection output */
-    RBH_FOT_MAP, /* Map output */
     RBH_FOT_VALUES,
 };
 
@@ -196,8 +195,6 @@ struct rbh_filter_output {
     union {
         /** Fsentry fields the query should set */
         struct rbh_filter_projection projection;
-        /** Map of entries to catch and output */
-        struct rbh_value_map map;
 
         struct {
             struct rbh_modifier_field *fields;
