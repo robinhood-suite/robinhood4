@@ -98,4 +98,7 @@ rbh_statx(int dirfd, const char *restrict pathname, int flags,
 void
 merge_statx(struct rbh_statx *original, const struct rbh_statx *override);
 
+uint32_t
+str2statx(const char *string);
+
 #endif
