@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2112256c_f15a69da",
+        "filename": "librobinhood/src/backends/mongo/group.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-11-21T09:32:44Z",
+      "side": 1,
+      "message": "question: If I understood correctly, there are as many document with \"test\" as modifier_field ? If so, it won\u0027t be a problem for mongo to have the same value multiple times ?",
+      "revId": "97b733705186e4834887b9c31fee07f9cc11f2d0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
