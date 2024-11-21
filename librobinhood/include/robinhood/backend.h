@@ -157,14 +157,14 @@ struct rbh_filter_options {
     } sort;
 };
 
-enum field_modifier {
-    FM_NONE,
-    FM_SUM,
-    FM_AVG,
+enum field_accumulator {
+    FA_NONE,
+    FA_SUM,
+    FA_AVG,
 };
 
-struct rbh_modifier_field {
-    enum field_modifier modifier;
+struct rbh_accumulator_field {
+    enum field_accumulator accumulator;
     struct rbh_filter_field field;
 };
 
@@ -172,7 +172,7 @@ struct rbh_modifier_field {
  * Grouping behaviour, to be used with rbh_backend_report()
  */
 struct rbh_group_fields {
-    struct rbh_modifier_field *fields;
+    struct rbh_accumulator_field *fields;
     size_t count;
 };
 
@@ -198,7 +198,7 @@ struct rbh_filter_output {
         struct rbh_filter_projection projection;
 
         struct {
-            struct rbh_modifier_field *fields;
+            struct rbh_accumulator_field *fields;
             size_t count;
         } output_fields;
     };
