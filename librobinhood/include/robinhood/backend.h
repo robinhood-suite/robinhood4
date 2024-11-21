@@ -160,6 +160,7 @@ struct rbh_filter_options {
 enum field_modifier {
     FM_NONE,
     FM_SUM,
+    FM_AVG,
 };
 
 struct rbh_modifier_field {
