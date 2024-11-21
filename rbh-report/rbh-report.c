@@ -43,6 +43,11 @@ static enum field_modifier
 str2modifier(const char *str)
 {
     switch (*str++) {
+    case 'a': /* avg */
+        if (strcmp(str, "vg"))
+            break;
+
+        return FM_AVG;
     case 's': /* sum */
         if (strcmp(str, "um"))
             break;
