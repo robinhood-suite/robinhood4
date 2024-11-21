@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6b97560c_20fbdae3",
+        "filename": "librobinhood/src/backends/mongo/projection.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-11-21T14:37:57Z",
+      "side": 1,
+      "message": "defect: I didn\u0027t point this one out, but you also need to check its return value",
+      "range": {
+        "startLine": 218,
+        "startChar": 8,
+        "endLine": 218,
+        "endChar": 34
+      },
+      "revId": "080b07434597d682be572a9bdfec9de84074d775",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
