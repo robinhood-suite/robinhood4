@@ -39,31 +39,31 @@ destroy_from(void)
     }
 }
 
-static enum field_modifier
-str2modifier(const char *str)
+static enum field_accumulator
+str2accumulator(const char *str)
 {
     switch (*str++) {
     case 'a': /* avg */
         if (strcmp(str, "vg"))
             break;
 
-        return FM_AVG;
+        return FA_AVG;
     case 's': /* sum */
         if (strcmp(str, "um"))
             break;
 
-        return FM_SUM;
+        return FA_SUM;
     }
 
-    error(EX_USAGE, 0, "invalid modifier '%s'", str);
+    error(EX_USAGE, 0, "invalid accumulator '%s'", str);
     __builtin_unreachable();
 }
 
-static const struct rbh_modifier_field
-convert_output_string_to_modifier_field(const char *output_string)
+static const struct rbh_accumulator_field
+convert_output_string_to_accumulator_field(const char *output_string)
 {
     const struct rbh_filter_field *filter_field;
-    struct rbh_modifier_field field;
+    struct rbh_accumulator_field field;
     char *opening;
     char *str;
 
@@ -81,10 +81,10 @@ convert_output_string_to_modifier_field(const char *output_string)
 
         *opening = '\0';
         *closing = '\0';
-        field.modifier = str2modifier(str);
+        field.accumulator = str2accumulator(str);
     } else {
         opening = str;
-        field.modifier = FM_NONE;
+        field.accumulator = FA_NONE;
     }
 
     filter_field = str2filter_field(opening + 1);
@@ -103,14 +103,14 @@ create_rbh_filter_group_output(const char *output_string,
                                struct rbh_group_fields *group,
                                struct rbh_filter_output *output)
 {
-    struct rbh_modifier_field *fields;
+    struct rbh_accumulator_field *fields;
 
     fields = rbh_sstack_push(values_sstack, NULL, 1 * sizeof(*fields));
     if (fields == NULL)
         error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
                       "rbh_sstack_push");
 
-    fields[0] = convert_output_string_to_modifier_field(output_string);
+    fields[0] = convert_output_string_to_accumulator_field(output_string);
 
     group->fields = fields;
     group->count = 1;
