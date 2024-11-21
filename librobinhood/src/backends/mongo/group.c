@@ -17,6 +17,8 @@ const char *
 modifier2str(enum field_modifier modifier)
 {
     switch (modifier) {
+    case FM_AVG:
+        return "$avg";
     case FM_SUM:
         return "$sum";
     default:
