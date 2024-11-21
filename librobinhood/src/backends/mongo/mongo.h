@@ -166,11 +166,11 @@ const char *statx2str(const uint32_t statx);
 const char *field2str(const struct rbh_filter_field *field, char **buffer,
                       size_t bufsize);
 
-const char *modifier2str(enum field_modifier modifier);
+const char *accumulator2str(enum field_accumulator accumulator);
 
 bool
-get_modifier_field_strings(struct rbh_modifier_field *modifier_field,
-                           char *modifier, char *field, char *key);
+get_accumulator_field_strings(struct rbh_accumulator_field *accumulator_field,
+                           char *accumulator, char *field, char *key);
 
 /*----------------------------------------------------------------------------*
  |                                bson helpers                                |
