@@ -696,6 +696,7 @@ mongo_backend_report(void *backend, const struct rbh_filter *filter,
     if (pipeline == NULL)
         return NULL;
 
+    dump_bson(pipeline);
     opts = options->sort.count > 0 ? BCON_NEW("allowDiskUse", BCON_BOOL(true))
                                    : NULL;
     cursor = mongoc_collection_aggregate(mongo->entries, MONGOC_QUERY_NONE,

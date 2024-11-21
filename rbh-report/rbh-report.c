@@ -146,11 +146,17 @@ report(const char *output_string)
         struct rbh_value_map *map = rbh_mut_iter_next(iter);
 
         if (map == NULL || map->count != 1 ||
-            strcmp(map->pairs[0].key, "result") != 0 ||
-            map->pairs[0].value->type != RBH_VT_INT64)
+            strcmp(map->pairs[0].key, "result") != 0)
             break;
 
-        printf("%ld\n", map->pairs[0].value->int64);
+        switch (map->pairs[0].value.type) {
+        case RBH_VT_INT64:
+            printf("%ld\n", map->pairs[0].value->int64);
+            break;
+        case RBH_VT_INT64:
+            printf("%ld\n", map->pairs[0].value->int64);
+            break;
+        }
     } while (true);
 }
 
