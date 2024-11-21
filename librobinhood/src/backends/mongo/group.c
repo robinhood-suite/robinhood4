@@ -14,12 +14,12 @@
 #include "mongo.h"
 
 const char *
-modifier2str(enum field_modifier modifier)
+accumulator2str(enum field_accumulator accumulator)
 {
-    switch (modifier) {
-    case FM_AVG:
+    switch (accumulator) {
+    case FA_AVG:
         return "$avg";
-    case FM_SUM:
+    case FA_SUM:
         return "$sum";
     default:
         return NULL;
@@ -29,28 +29,28 @@ modifier2str(enum field_modifier modifier)
 #define XATTR_ONSTACK_LENGTH 128
 
 bool
-get_modifier_field_strings(struct rbh_modifier_field *modifier_field,
-                           char *modifier, char *field, char *key)
+get_accumulator_field_strings(struct rbh_accumulator_field *accumulator_field,
+                           char *accumulator, char *field, char *key)
 {
     char onstack[XATTR_ONSTACK_LENGTH];
-    const char *tmp_modifier;
+    const char *tmp_accumulator;
     char *buffer = onstack;
     const char *tmp_field;
 
-    tmp_modifier = modifier2str(modifier_field->modifier);
-    if (tmp_modifier == NULL)
+    tmp_accumulator = accumulator2str(accumulator_field->accumulator);
+    if (tmp_accumulator == NULL)
         return false;
 
-    strcpy(modifier, tmp_modifier);
+    strcpy(accumulator, tmp_accumulator);
 
-    tmp_field = field2str(&modifier_field->field, &buffer, sizeof(onstack));
+    tmp_field = field2str(&accumulator_field->field, &buffer, sizeof(onstack));
     if (tmp_field == NULL)
         return false;
 
     if (sprintf(field, "$%s", tmp_field) <= 0)
         return false;
 
-    if (sprintf(key, "%s_%s", modifier, tmp_field) <= 0)
+    if (sprintf(key, "%s_%s", accumulator, tmp_field) <= 0)
         return false;
 
     for (int j = 0; j < strlen(key); j++)
@@ -61,18 +61,18 @@ get_modifier_field_strings(struct rbh_modifier_field *modifier_field,
 }
 
 static bool
-insert_rbh_modifier_field(bson_t *bson, struct rbh_modifier_field *field)
+insert_rbh_accumulator_field(bson_t *bson, struct rbh_accumulator_field *field)
 {
-    char modifier[256];
+    char accumulator[256];
     char field_str[256];
     bson_t document;
     char key[512];
 
-    if (!get_modifier_field_strings(field, modifier, field_str, key))
+    if (!get_accumulator_field_strings(field, accumulator, field_str, key))
         return false;
 
     return BSON_APPEND_DOCUMENT_BEGIN(bson, &key[1], &document)
-        && BSON_APPEND_UTF8(&document, modifier, field_str)
+        && BSON_APPEND_UTF8(&document, accumulator, field_str)
         && bson_append_document_end(bson, &document);
 }
 
@@ -91,9 +91,9 @@ bson_append_aggregate_group_stage(bson_t *bson, const char *key,
         return false;
 
     for (size_t i = 0; i < group->count; i++) {
-        struct rbh_modifier_field *field = &group->fields[i];
+        struct rbh_accumulator_field *field = &group->fields[i];
 
-        if (!insert_rbh_modifier_field(&document, field))
+        if (!insert_rbh_accumulator_field(&document, field))
             return false;
     }
 

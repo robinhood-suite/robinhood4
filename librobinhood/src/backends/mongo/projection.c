@@ -193,7 +193,7 @@ bson_append_fot_projection(bson_t *bson, const char *key, size_t key_length,
 
 /* The resulting bson will be as such:
  * { $project: { _id: 0, form: 'map', map: {
- *      'result': <modifier>_<field>, ...}}}
+ *      'result': <accumulator>_<field>, ...}}}
  */
 static bool
 bson_append_fot_values(bson_t *bson, const char *key,
@@ -210,12 +210,12 @@ bson_append_fot_values(bson_t *bson, const char *key,
         return false;
 
     for (size_t i = 0; i < output->output_fields.count; i++) {
-        struct rbh_modifier_field *field = &output->output_fields.fields[i];
+        struct rbh_accumulator_field *field = &output->output_fields.fields[i];
         char bson_value[512];
         char field_str[256];
-        char modifier[256];
+        char accumulator[256];
 
-        get_modifier_field_strings(field, modifier, field_str, bson_value);
+        get_accumulator_field_strings(field, accumulator, field_str, bson_value);
 
         if (!BSON_APPEND_UTF8(&subdoc, "result", bson_value))
             return false;
