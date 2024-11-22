@@ -1,5 +1,5 @@
 /* This file is part of RobinHood 4
- * Copyright (C) 2022 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2024 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifer: LGPL-3.0-or-later
@@ -54,6 +54,7 @@ usage(void)
         "\n"
         "Optional arguments:\n"
         "    -c, --config PATH    the configuration file to use.\n"
+        "    -a, --alias NAME     specify an alias for the operation.\n"
         "    -h, --help           show this message and exit.\n"
         "\n"
         "Predicate arguments:\n"
@@ -264,6 +265,10 @@ check_command_options(int argc, char *argv[])
         if (strcmp(argv[i], "-h") == 0 || strcmp(argv[i], "--help") == 0) {
             usage();
             exit(0);
+        }
+
+        if (strcmp(argv[i], "--alias") == 0) {
+            i++;
         }
     }
 
