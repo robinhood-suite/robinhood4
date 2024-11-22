@@ -252,35 +252,50 @@ handle_config_option(int argc, char *argv[], int index)
 }
 
 static void
-handle_alias_option(int argc, char *argv[], int index)
+handle_alias_option(int *argc, char ***argv, int index)
 {
-    if (index + 1 >= argc)
+    char **new_argv = NULL;
+    int new_argc = *argc;
+    char* alias_name;
+
+    if (index + 1 >= *argc)
         error(EX_USAGE, EINVAL, "'--alias' option requires an argument");
+
+    alias_name = (*argv)[index + 1];
 
     if (load_aliases_from_config() != 0)
         error(EXIT_FAILURE, 0, "Failed to load aliases");
+
+    if (apply_alias(alias_name, &new_argc, &new_argv, argc, *argv) != 0)
+        error(EX_USAGE, 0, "Failed to apply alias '%s'", alias_name);
+
+    *argc = new_argc;
+    *argv = new_argv;
 }
 
 static int
-check_command_options(int argc, char *argv[])
+check_command_options(int argc, char ***argv)
 {
     for (int i = 0; i < argc; i++) {
-        if (*argv[i] != '-')
+        if (*argv[0][i] != '-')
             return i;
 
-        if (strcmp(argv[i], "-c") == 0 || strcmp(argv[i], "--config") == 0) {
-            handle_config_option(argc, argv, i);
+        if (strcmp((*argv)[i], "-c") == 0 ||
+            strcmp((*argv)[i], "--config") == 0) {
+            handle_config_option(argc, *argv, i);
             i++;
         }
 
-        if (strcmp(argv[i], "-h") == 0 || strcmp(argv[i], "--help") == 0) {
+        if (strcmp((*argv)[i], "-h") == 0 ||
+            strcmp((*argv)[i], "--help") == 0) {
             usage();
             exit(0);
         }
 
-        if (strcmp(argv[i], "-a") == 0 || strcmp(argv[i], "--alias") == 0) {
-            handle_alias_option(argc, argv, i);
-            i++;
+        if (strcmp((*argv)[i], "-a") == 0 ||
+            strcmp((*argv)[i], "--alias") == 0) {
+            handle_alias_option(&argc, argv, i);
+            i--;
         }
     }
 
@@ -305,7 +320,7 @@ main(int _argc, char *_argv[])
     argc = _argc - 1;
     argv = &_argv[1];
 
-    checked_options = check_command_options(argc, argv);
+    checked_options = check_command_options(argc, &argv);
 
     ctx.argc = argc - checked_options;
     ctx.argv = &argv[checked_options];
