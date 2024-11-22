@@ -50,12 +50,29 @@ apply_alias(const char *alias_name, int *new_argc, char **new_argv[],
             j++;
             continue;
         }
+
+        if (strstr(argv[j], "rbh:") == argv[j])
+            break;
+
         extended_argv[idx++] = argv[j];
     }
 
     for (size_t k = 0; k < options->map.count; k++) {
+        if (options->map.pairs[k].key[0] == '-' &&
+            options->map.pairs[k].key[1] == '-') {
         extended_argv[idx++] = strdup(options->map.pairs[k].key);
         extended_argv[idx++] = strdup(options->map.pairs[k].value->string);
+        }
+    }
+
+    extended_argv[idx++] = argv[j++];
+
+    for (size_t k = 0; k < options->map.count; k++) {
+        if (options->map.pairs[k].key[0] == '-' &&
+            options->map.pairs[k].key[1] != '-') {
+        extended_argv[idx++] = strdup(options->map.pairs[k].key);
+        extended_argv[idx++] = strdup(options->map.pairs[k].value->string);
+        }
     }
 
     for (; j < (*argc); j++) {
