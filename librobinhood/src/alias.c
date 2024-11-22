@@ -17,6 +17,60 @@ struct alias_entry *aliases = NULL;
 size_t alias_count = 0;
 
 int
+apply_alias(const char *alias_name, int *new_argc, char **new_argv[],
+            int *argc, char *argv[])
+{
+    size_t i, j;
+    struct rbh_value *options = NULL;
+    size_t new_args_count = *argc;
+
+    for (i = 0; i < alias_count; i++) {
+        if (strcmp(aliases[i].name, alias_name) == 0) {
+            options = aliases[i].value;
+            break;
+        }
+    }
+
+    if (!options) {
+        fprintf(stderr, "Alias '%s' not found.\n", alias_name);
+        return -1;
+    }
+
+    new_args_count += options->map.count * 2 - 2;
+
+    char **extended_argv = calloc(new_args_count + 1, sizeof(char *));
+    if (!extended_argv) {
+        fprintf(stderr, "Memory allocation failed for new arguments.\n");
+        return -1;
+    }
+
+    size_t idx = 0;
+    for (j = 0; j < (*argc); j++) {
+        if (strcmp(argv[j], "-a") == 0 || strcmp(argv[j], "--alias") == 0) {
+            j++;
+            continue;
+        }
+        extended_argv[idx++] = argv[j];
+    }
+
+    for (size_t k = 0; k < options->map.count; k++) {
+        extended_argv[idx++] = strdup(options->map.pairs[k].key);
+        extended_argv[idx++] = strdup(options->map.pairs[k].value->string);
+    }
+
+    for (; j < (*argc); j++) {
+        extended_argv[idx++] = argv[j];
+    }
+
+    extended_argv[idx] = NULL;
+
+    *new_argc = (int)new_args_count;
+    *new_argv = extended_argv;
+
+    return 0;
+}
+
+int
 load_aliases_from_config(void)
 {
     struct rbh_value aliases_value = { 0 };
