@@ -23,6 +23,7 @@
 #include <robinhood.h>
 #include <robinhood/utils.h>
 #include <robinhood/config.h>
+#include <robinhood/alias.h>
 
 #include <rbh-find/actions.h>
 #include <rbh-find/core.h>
@@ -250,6 +251,16 @@ handle_config_option(int argc, char *argv[], int index)
               "Failed to open configuration file '%s'", argv[index + 1]);
 }
 
+static void
+handle_alias_option(int argc, char *argv[], int index)
+{
+    if (index + 1 >= argc)
+        error(EX_USAGE, EINVAL, "'--alias' option requires an argument");
+
+    if (load_aliases_from_config() != 0)
+        error(EXIT_FAILURE, 0, "Failed to load aliases");
+}
+
 static int
 check_command_options(int argc, char *argv[])
 {
@@ -268,6 +279,7 @@ check_command_options(int argc, char *argv[])
         }
 
         if (strcmp(argv[i], "-a") == 0 || strcmp(argv[i], "--alias") == 0) {
+            handle_alias_option(argc, argv, i);
             i++;
         }
     }
@@ -335,6 +347,7 @@ main(int _argc, char *_argv[])
     free(filter);
 
     rbh_config_free();
+    rbh_aliases_free();
 
     return EXIT_SUCCESS;
 }
