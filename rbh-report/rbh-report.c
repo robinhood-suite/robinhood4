@@ -48,6 +48,21 @@ str2accumulator(const char *str)
             break;
 
         return FA_AVG;
+    case 'm':
+        switch (*str++) {
+        case 'a': /* max */
+            if (strcmp(str, "x"))
+                break;
+
+            return FA_MAX;
+        case 'i': /* min */
+            if (strcmp(str, "n"))
+                break;
+
+            return FA_MIN;
+        }
+
+        break;
     case 's': /* sum */
         if (strcmp(str, "um"))
             break;

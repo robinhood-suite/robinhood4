@@ -159,8 +159,10 @@ struct rbh_filter_options {
 
 enum field_accumulator {
     FA_NONE,
-    FA_SUM,
     FA_AVG,
+    FA_MAX,
+    FA_MIN,
+    FA_SUM,
 };
 
 struct rbh_accumulator_field {

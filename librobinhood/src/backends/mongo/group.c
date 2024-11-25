@@ -19,6 +19,10 @@ accumulator2str(enum field_accumulator accumulator)
     switch (accumulator) {
     case FA_AVG:
         return "$avg";
+    case FA_MAX:
+        return "$max";
+    case FA_MIN:
+        return "$min";
     case FA_SUM:
         return "$sum";
     default:
