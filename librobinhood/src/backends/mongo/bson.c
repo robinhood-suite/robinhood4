@@ -32,6 +32,7 @@ bson_type_is_supported(bson_type_t type)
     case BSON_TYPE_NULL:
     case BSON_TYPE_INT32:
     case BSON_TYPE_INT64:
+    case BSON_TYPE_DOUBLE:
         return true;
     case BSON_TYPE_REGEX:
         /* TODO: support it */
