@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "faabfb9c_ae4ac09f",
+        "filename": "rbh-capabilities/tests/capabilities.bash",
+        "patchSetId": 4
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-11-25T08:51:17Z",
+      "side": 1,
+      "message": "nit: not necessary, the \"error\" call above will exit",
+      "range": {
+        "startLine": 117,
+        "startChar": 8,
+        "endLine": 117,
+        "endChar": 16
+      },
+      "revId": "980d29676edb8e07a211fb7986519fb72470aeaa",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c8d805a6_1ef51cf1",
+        "filename": "rbh-capabilities/tests/capabilities.bash",
+        "patchSetId": 4
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-11-25T08:51:17Z",
+      "side": 1,
+      "message": "nit: same",
+      "range": {
+        "startLine": 128,
+        "startChar": 8,
+        "endLine": 128,
+        "endChar": 16
+      },
+      "revId": "980d29676edb8e07a211fb7986519fb72470aeaa",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9cea9d0d_c6bd751e",
+        "filename": "rbh-capabilities/tests/capabilities.bash",
+        "patchSetId": 4
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-11-25T08:51:17Z",
+      "side": 1,
+      "message": "minor: add this mv before the if above, because if there is a failure, the mongo backend is lost for the rest of the non-regression run",
+      "range": {
+        "startLine": 130,
+        "startChar": 4,
+        "endLine": 130,
+        "endChar": 60
+      },
+      "revId": "980d29676edb8e07a211fb7986519fb72470aeaa",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
