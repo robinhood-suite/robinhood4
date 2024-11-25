@@ -91,20 +91,19 @@ str2accumulator(const char *str)
 }
 
 static const struct rbh_accumulator_field
-convert_output_string_to_accumulator_field(const char *output_string)
+convert_output_string_to_accumulator_field(char *output_string)
 {
     const struct rbh_filter_field *filter_field;
     struct rbh_accumulator_field field;
     char *opening;
-    char *str;
 
-    str = strdup(output_string);
-    if (str == NULL)
-        error_at_line(EXIT_FAILURE, EINVAL, __FILE__, __LINE__, "strdup");
+    if (strlen(output_string) == 0)
+        error_at_line(EXIT_FAILURE, EINVAL, __FILE__, __LINE__,
+                      "empty field given");
 
-    opening = strchr(str, '(');
+    opening = strchr(output_string, '(');
     if (opening) {
-        char *closing = strchr(str, ')');
+        char *closing = strchr(output_string, ')');
 
         if (closing == NULL)
             error_at_line(EXIT_FAILURE, EINVAL, __FILE__, __LINE__,
@@ -112,9 +111,9 @@ convert_output_string_to_accumulator_field(const char *output_string)
 
         *opening = '\0';
         *closing = '\0';
-        field.accumulator = str2accumulator(str);
+        field.accumulator = str2accumulator(output_string);
     } else {
-        opening = str;
+        opening = output_string;
         field.accumulator = FA_NONE;
     }
 
@@ -124,27 +123,52 @@ convert_output_string_to_accumulator_field(const char *output_string)
                       "'%s' ill-formed, invalid field", output_string);
 
     field.field = *filter_field;
-    free(str);
 
     return field;
 }
 
 static void
-create_rbh_filter_group_output(const char *output_string,
+create_rbh_filter_group_output(const char *_output_string,
                                struct rbh_group_fields *group,
                                struct rbh_filter_output *output)
 {
     struct rbh_accumulator_field *fields;
+    char *output_string;
     int count;
 
-    count = count_fields(output_string);
+    count = count_fields(_output_string);
 
     fields = rbh_sstack_push(values_sstack, NULL, count * sizeof(*fields));
     if (fields == NULL)
         error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
                       "rbh_sstack_push");
 
-    fields[0] = convert_output_string_to_accumulator_field(output_string);
+    output_string = strdup(_output_string);
+    if (output_string == NULL)
+        error_at_line(EXIT_FAILURE, EINVAL, __FILE__, __LINE__, "strdup");
+
+    if (count == 1) {
+        fields[0] = convert_output_string_to_accumulator_field(output_string);
+    } else {
+        char *current_field;
+        int counter = 0;
+        char *token;
+
+        current_field = output_string;
+        token = strchr(current_field, ',');
+        while (token) {
+            *token = '\0';
+            fields[counter++] =
+                convert_output_string_to_accumulator_field(current_field);
+            current_field = token + 1;
+            token = strchr(current_field, ',');
+        }
+
+        fields[counter] =
+            convert_output_string_to_accumulator_field(current_field);
+    }
+
+    free(output_string);
 
     group->fields = fields;
     group->count = count;
