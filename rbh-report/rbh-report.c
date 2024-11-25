@@ -39,6 +39,22 @@ destroy_from(void)
     }
 }
 
+static int
+count_fields(const char *str)
+{
+    /* Even if the string has no comma, it still has at least one field */
+    int count = 1;
+
+    while (*str) {
+        if (*str == ',')
+            count++;
+
+        str++;
+    }
+
+    return count;
+}
+
 static enum field_accumulator
 str2accumulator(const char *str)
 {
@@ -119,8 +135,11 @@ create_rbh_filter_group_output(const char *output_string,
                                struct rbh_filter_output *output)
 {
     struct rbh_accumulator_field *fields;
+    int count;
 
-    fields = rbh_sstack_push(values_sstack, NULL, 1 * sizeof(*fields));
+    count = count_fields(output_string);
+
+    fields = rbh_sstack_push(values_sstack, NULL, count * sizeof(*fields));
     if (fields == NULL)
         error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
                       "rbh_sstack_push");
@@ -128,10 +147,10 @@ create_rbh_filter_group_output(const char *output_string,
     fields[0] = convert_output_string_to_accumulator_field(output_string);
 
     group->fields = fields;
-    group->count = 1;
+    group->count = count;
     output->type = RBH_FOT_VALUES;
     output->output_fields.fields = fields;
-    output->output_fields.count = 1;
+    output->output_fields.count = count;
 }
 
 static void
