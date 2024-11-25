@@ -24,9 +24,26 @@ test_parsing()
     rbh_report rbh:mongo:blob --output &&
         error "rbh-report with '--output' but no string should have failed"
 
+    rbh_report rbh:mongo:blob --output "," &&
+        error "rbh-report with invalid output string should have failed"
+
     rbh_report rbh:mongo:blob --output "sum(something" &&
         error "rbh-report with output string missing closing parenthesis" \
               "should have failed"
+
+    rbh_report rbh:mongo:blob --output "blob(statx.size)" &&
+        error "rbh-report with output string and invalid accumulator" \
+              "should have failed"
+
+    rbh_report rbh:mongo:blob --output "sum(something)" &&
+        error "rbh-report with output string and invalid field" \
+              "should have failed"
+
+    rbh_report rbh:mongo:blob --output "sum(statx.size)," &&
+        error "rbh-report with invalid output string should have failed"
+
+    rbh_report rbh:mongo:blob --output ",sum(statx.size)" &&
+        error "rbh-report with invalid output string should have failed"
 
     return 0
 }
