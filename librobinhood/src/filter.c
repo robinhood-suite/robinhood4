@@ -787,6 +787,6 @@ str2filter_field(const char *string_)
         }
     }
 
-    __builtin_unreachable();
     error(EX_USAGE, 0, "unexpected field string: '%s'", string_);
+    __builtin_unreachable();
 }

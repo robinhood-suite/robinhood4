@@ -211,15 +211,19 @@ bson_append_fot_values(bson_t *bson, const char *key,
 
     for (size_t i = 0; i < output->output_fields.count; i++) {
         struct rbh_accumulator_field *field = &output->output_fields.fields[i];
+        char accumulator[256];
         char bson_value[512];
         char field_str[256];
-        char accumulator[256];
+        char result[524];
 
         if (!get_accumulator_field_strings(field, accumulator, field_str,
                                            bson_value))
             return false;
 
-        if (!BSON_APPEND_UTF8(&subdoc, "result", bson_value))
+        if (sprintf(result, "result_%s", bson_value) <= 0)
+            return false;
+
+        if (!BSON_APPEND_UTF8(&subdoc, result, bson_value))
             return false;
     }
 

@@ -127,7 +127,7 @@ convert_output_string_to_accumulator_field(char *output_string)
     return field;
 }
 
-static void
+static int
 create_rbh_filter_group_output(const char *_output_string,
                                struct rbh_group_fields *group,
                                struct rbh_filter_output *output)
@@ -175,6 +175,8 @@ create_rbh_filter_group_output(const char *_output_string,
     output->type = RBH_FOT_VALUES;
     output->output_fields.fields = fields;
     output->output_fields.count = count;
+
+    return count;
 }
 
 static void
@@ -184,6 +186,7 @@ report(const char *output_string)
     struct rbh_filter_output output = { 0 };
     struct rbh_group_fields group = { 0 };
     struct rbh_mut_iterator *iter;
+    int expected_field_count;
 
     if (values_sstack == NULL) {
         values_sstack = rbh_sstack_new(MIN_VALUES_SSTACK_ALLOC *
@@ -193,7 +196,8 @@ report(const char *output_string)
                           "rbh_sstack_new");
     }
 
-    create_rbh_filter_group_output(output_string, &group, &output);
+    expected_field_count = create_rbh_filter_group_output(output_string,
+                                                          &group, &output);
     iter = rbh_backend_report(from, NULL, &group, &options, &output);
 
     if (iter == NULL)
@@ -203,12 +207,25 @@ report(const char *output_string)
     do {
         struct rbh_value_map *map = rbh_mut_iter_next(iter);
 
-        if (map == NULL || map->count != 1 ||
-            strcmp(map->pairs[0].key, "result") != 0 ||
-            map->pairs[0].value->type != RBH_VT_INT64)
+        if (map == NULL)
             break;
 
-        printf("%ld\n", map->pairs[0].value->int64);
+        if (map->count != expected_field_count)
+            error_at_line(EXIT_FAILURE, EINVAL, __FILE__, __LINE__,
+                          "Failed to get the expected number of outputs in map, expected '%d', got '%ld'",
+                          expected_field_count, map->count);
+
+        for (int i = 0; i < map->count; ++i) {
+            if (map->pairs[i].value->type != RBH_VT_INT64)
+                error_at_line(EXIT_FAILURE, EINVAL, __FILE__, __LINE__,
+                              "Unexpected value type in output map, found '%s'",
+                              VALUE_TYPE_NAMES[map->pairs[i].value->type]);
+
+            printf("%ld", map->pairs[i].value->int64);
+            if (i < map->count - 1)
+                printf(",");
+        }
+        printf("\n");
     } while (true);
 }
 
