@@ -259,6 +259,13 @@ bson_iter_rbh_value(bson_iter_t *iter, struct rbh_value *value,
         value->type = RBH_VT_INT32;
         value->int32 = bson_iter_int32(iter);
         break;
+    case BSON_TYPE_DOUBLE:
+        /* Handle floating types as truncated integers, maybe we'll have to add
+         * the proper float type for rbh-value, but right now that's good enough
+         */
+        value->type = RBH_VT_INT64;
+        value->int64 = bson_iter_double(iter);
+        break;
     case BSON_TYPE_INT64:
         value->type = RBH_VT_INT64;
         value->int64 = bson_iter_int64(iter);
