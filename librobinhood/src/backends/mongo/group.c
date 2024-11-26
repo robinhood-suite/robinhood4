@@ -94,8 +94,8 @@ bson_append_aggregate_group_stage(bson_t *bson, const char *key,
           BSON_APPEND_INT32(&document, "_id", 0)))
         return false;
 
-    for (size_t i = 0; i < group->count; i++) {
-        struct rbh_accumulator_field *field = &group->fields[i];
+    for (size_t i = 0; i < group->acc_count; i++) {
+        struct rbh_accumulator_field *field = &group->acc_fields[i];
 
         if (!insert_rbh_accumulator_field(&document, field))
             return false;
