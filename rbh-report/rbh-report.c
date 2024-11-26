@@ -180,13 +180,15 @@ create_rbh_filter_group_output(const char *_output_string,
 }
 
 static void
-report(const char *output_string)
+report(const char *group_string, const char *output_string)
 {
     struct rbh_filter_options options = { 0 };
     struct rbh_filter_output output = { 0 };
     struct rbh_group_fields group = { 0 };
     struct rbh_mut_iterator *iter;
     int expected_field_count;
+
+    (void) group_string;
 
     if (values_sstack == NULL) {
         values_sstack = rbh_sstack_new(MIN_VALUES_SSTACK_ALLOC *
@@ -198,8 +200,8 @@ report(const char *output_string)
 
     expected_field_count = create_rbh_filter_group_output(output_string,
                                                           &group, &output);
-    iter = rbh_backend_report(from, NULL, &group, &options, &output);
 
+    iter = rbh_backend_report(from, NULL, &group, &options, &output);
     if (iter == NULL)
         error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
                       "rbh_backend_report");
@@ -273,6 +275,11 @@ main(int argc, char *argv[])
 {
     const struct option LONG_OPTIONS[] = {
         {
+            .name = "group-by",
+            .has_arg = required_argument,
+            .val = 'g',
+        },
+        {
             .name = "help",
             .val = 'h',
         },
@@ -284,11 +291,17 @@ main(int argc, char *argv[])
         {}
     };
     char *output = NULL;
+    char *group = NULL;
     char c;
 
     /* Parse the command line */
-    while ((c = getopt_long(argc, argv, "ho:", LONG_OPTIONS, NULL)) != -1) {
+    while ((c = getopt_long(argc, argv, "hg:o:", LONG_OPTIONS, NULL)) != -1) {
         switch (c) {
+        case 'g':
+            group = strdup(optarg);
+            if (group == NULL)
+                error(EXIT_FAILURE, ENOMEM, "strdup");
+            break;
         case 'h':
             usage();
             return 0;
@@ -316,7 +329,7 @@ main(int argc, char *argv[])
     /* Parse SOURCE */
     from = rbh_backend_from_uri(argv[0]);
 
-    report(output);
+    report(group, output);
 
     return EXIT_SUCCESS;
 }
