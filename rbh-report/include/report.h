@@ -17,4 +17,7 @@ fill_acc_and_output_fields(const char *_output_string,
                            struct rbh_group_fields *group,
                            struct rbh_filter_output *output);
 
+void
+fill_group_by_fields(const char *_group_by, struct rbh_group_fields *group);
+
 #endif

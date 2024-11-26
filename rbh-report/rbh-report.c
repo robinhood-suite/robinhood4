@@ -50,8 +50,6 @@ report(const char *group_string, const char *output_string)
     struct rbh_mut_iterator *iter;
     int expected_field_count;
 
-    (void) group_string;
-
     if (values_sstack == NULL) {
         values_sstack = rbh_sstack_new(MIN_VALUES_SSTACK_ALLOC *
                                        sizeof(struct rbh_value *));
@@ -60,6 +58,7 @@ report(const char *group_string, const char *output_string)
                           "rbh_sstack_new");
     }
 
+    fill_group_by_fields(group_string, &group);
     expected_field_count = fill_acc_and_output_fields(output_string,
                                                       &group, &output);
 
