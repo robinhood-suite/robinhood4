@@ -174,8 +174,11 @@ struct rbh_accumulator_field {
  * Grouping behaviour, to be used with rbh_backend_report()
  */
 struct rbh_group_fields {
-    struct rbh_accumulator_field *fields;
-    size_t count;
+    struct rbh_filter_field *id_fields;
+    size_t id_count;
+
+    struct rbh_accumulator_field *acc_fields;
+    size_t acc_count;
 };
 
 /**
