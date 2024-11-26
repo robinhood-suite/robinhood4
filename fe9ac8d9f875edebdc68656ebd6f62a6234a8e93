@@ -1,0 +1,303 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8ed50d40_f6f4ee6a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-11-26T10:06:32Z",
+      "side": 1,
+      "message": "minor: I didn\u0027t understand this part, could you rephrase ?",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 9
+      },
+      "revId": "fe9ac8d9f875edebdc68656ebd6f62a6234a8e93",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aa67c83d_9df62430",
+        "filename": "librobinhood/include/robinhood/alias.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-11-26T10:06:32Z",
+      "side": 1,
+      "message": "style: add empty line after",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 2
+      },
+      "revId": "fe9ac8d9f875edebdc68656ebd6f62a6234a8e93",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "29bfe4a7_68b7d675",
+        "filename": "librobinhood/src/alias.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-11-26T10:06:32Z",
+      "side": 1,
+      "message": "suggest: as explained in the main file, having an intermediary structure would make this easier to deal with, and easier to understand for readers",
+      "range": {
+        "startLine": 20,
+        "startChar": 36,
+        "endLine": 21,
+        "endChar": 35
+      },
+      "revId": "fe9ac8d9f875edebdc68656ebd6f62a6234a8e93",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ebba753a_fe7c1f79",
+        "filename": "librobinhood/src/alias.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-11-26T10:06:32Z",
+      "side": 1,
+      "message": "style: order",
+      "range": {
+        "startLine": 23,
+        "startChar": 4,
+        "endLine": 26,
+        "endChar": 2
+      },
+      "revId": "fe9ac8d9f875edebdc68656ebd6f62a6234a8e93",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "533927af_6c6ad3ba",
+        "filename": "librobinhood/src/alias.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-11-26T10:06:32Z",
+      "side": 1,
+      "message": "minor: where does this formula come from ? Adding an explanation is necessary at least",
+      "range": {
+        "startLine": 39,
+        "startChar": 19,
+        "endLine": 39,
+        "endChar": 49
+      },
+      "revId": "fe9ac8d9f875edebdc68656ebd6f62a6234a8e93",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f1c16532_5b99173b",
+        "filename": "librobinhood/src/alias.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-11-26T10:06:32Z",
+      "side": 1,
+      "message": "style: define variables at the start of the function",
+      "range": {
+        "startLine": 41,
+        "startChar": 4,
+        "endLine": 41,
+        "endChar": 11
+      },
+      "revId": "fe9ac8d9f875edebdc68656ebd6f62a6234a8e93",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "daa522f4_1791a39d",
+        "filename": "librobinhood/src/alias.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-11-26T10:06:32Z",
+      "side": 1,
+      "message": "style: idem",
+      "range": {
+        "startLine": 47,
+        "startChar": 4,
+        "endLine": 47,
+        "endChar": 15
+      },
+      "revId": "fe9ac8d9f875edebdc68656ebd6f62a6234a8e93",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "34db700b_4c0c4257",
+        "filename": "librobinhood/src/alias.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-11-26T10:06:32Z",
+      "side": 1,
+      "message": "minor: since those are freed at the end of the program, I\u0027m not sure it\u0027s necessary to duplicate them, as they\u0027ll be valid pointers until the end, and most likely not modified by anybody",
+      "range": {
+        "startLine": 57,
+        "startChar": 31,
+        "endLine": 57,
+        "endChar": 65
+      },
+      "revId": "fe9ac8d9f875edebdc68656ebd6f62a6234a8e93",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bb8f962b_dfa09be8",
+        "filename": "librobinhood/src/alias.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-11-26T10:06:32Z",
+      "side": 1,
+      "message": "minor: missing check that the result is not NULL",
+      "range": {
+        "startLine": 57,
+        "startChar": 31,
+        "endLine": 57,
+        "endChar": 37
+      },
+      "revId": "fe9ac8d9f875edebdc68656ebd6f62a6234a8e93",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "00eea802_fa45c95a",
+        "filename": "librobinhood/src/alias.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-11-26T10:06:32Z",
+      "side": 1,
+      "message": "defect: Since the first loop already changed `j` to `*argc`, this doesn\u0027t do anything",
+      "range": {
+        "startLine": 61,
+        "startChar": 4,
+        "endLine": 63,
+        "endChar": 5
+      },
+      "revId": "fe9ac8d9f875edebdc68656ebd6f62a6234a8e93",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1a65724c_1fce0c41",
+        "filename": "rbh-find-lustre/rbh-find-lustre.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-11-26T10:06:32Z",
+      "side": 1,
+      "message": "suggest: I think you would have an easier time handling this with an intermediary structure containing these two arguments. That way instead of passing it around as parameter, you can make lower-level functions (like `apply_alias` bellow) return that structure",
+      "range": {
+        "startLine": 255,
+        "startChar": 20,
+        "endLine": 255,
+        "endChar": 43
+      },
+      "revId": "fe9ac8d9f875edebdc68656ebd6f62a6234a8e93",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9dbe4b20_cfdcd112",
+        "filename": "rbh-find-lustre/rbh-find-lustre.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-11-26T10:06:32Z",
+      "side": 1,
+      "message": "style: star on the right",
+      "range": {
+        "startLine": 259,
+        "startChar": 8,
+        "endLine": 259,
+        "endChar": 11
+      },
+      "revId": "fe9ac8d9f875edebdc68656ebd6f62a6234a8e93",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "76465e15_fc313f01",
+        "filename": "rbh-find-lustre/rbh-find-lustre.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 277,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-11-26T10:06:32Z",
+      "side": 1,
+      "message": "minor: rather than change that, add two pointers as arguments for the new argc/argv, and set them to NULL initially",
+      "range": {
+        "startLine": 277,
+        "startChar": 37,
+        "endLine": 277,
+        "endChar": 44
+      },
+      "revId": "fe9ac8d9f875edebdc68656ebd6f62a6234a8e93",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
