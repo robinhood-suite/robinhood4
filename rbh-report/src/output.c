@@ -147,8 +147,8 @@ fill_acc_and_output_fields(const char *_output_string,
 
     free(output_string);
 
-    group->fields = fields;
-    group->count = count;
+    group->acc_fields = fields;
+    group->acc_count = count;
     output->type = RBH_FOT_VALUES;
     output->output_fields.fields = fields;
     output->output_fields.count = count;
