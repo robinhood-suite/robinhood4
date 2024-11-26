@@ -1,0 +1,165 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "58e579c1_0bad4972",
+        "filename": "librobinhood/include/robinhood/alias.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-11-26T09:22:44Z",
+      "side": 1,
+      "message": "defect: this is the same structure as `rbh_value_map`, no need to define an additional one",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 2
+      },
+      "revId": "4686cdefcfd562fe338f5676e69ba1deaf1405af",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "47458430_cebce2e2",
+        "filename": "librobinhood/src/alias.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-11-26T09:22:44Z",
+      "side": 1,
+      "message": "suggest: `alias`, no need for caps, no need to say it\u0027s a key , and since it\u0027s a map, we can reasonably guess there are multiple aliases",
+      "range": {
+        "startLine": 25,
+        "startChar": 26,
+        "endLine": 25,
+        "endChar": 37
+      },
+      "revId": "4686cdefcfd562fe338f5676e69ba1deaf1405af",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "da04b605_40d7df5b",
+        "filename": "librobinhood/src/alias.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-11-26T09:22:44Z",
+      "side": 1,
+      "message": "suggest: `No aliases found in configuration, skipping any alias requested`",
+      "range": {
+        "startLine": 31,
+        "startChar": 25,
+        "endLine": 31,
+        "endChar": 62
+      },
+      "revId": "4686cdefcfd562fe338f5676e69ba1deaf1405af",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b0d0e2d8_fe9c5374",
+        "filename": "librobinhood/src/alias.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-11-26T09:22:44Z",
+      "side": 1,
+      "message": "suggest: idem, mention it is not an error, and just skip this",
+      "range": {
+        "startLine": 37,
+        "startChar": 25,
+        "endLine": 37,
+        "endChar": 51
+      },
+      "revId": "4686cdefcfd562fe338f5676e69ba1deaf1405af",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "750630fb_3bb80ef6",
+        "filename": "librobinhood/src/alias.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-11-26T09:22:44Z",
+      "side": 1,
+      "message": "style: add empty line after",
+      "range": {
+        "startLine": 39,
+        "startChar": 4,
+        "endLine": 39,
+        "endChar": 5
+      },
+      "revId": "4686cdefcfd562fe338f5676e69ba1deaf1405af",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2c8a9e65_5344190c",
+        "filename": "librobinhood/src/alias.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-11-26T09:22:44Z",
+      "side": 1,
+      "message": "minor: `*aliases` instead",
+      "range": {
+        "startLine": 40,
+        "startChar": 41,
+        "endLine": 40,
+        "endChar": 59
+      },
+      "revId": "4686cdefcfd562fe338f5676e69ba1deaf1405af",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "afe8e900_95807013",
+        "filename": "librobinhood/src/alias.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-11-26T09:22:44Z",
+      "side": 1,
+      "message": "major: overall, like I said, I do not see the need to have an intermediary structure. This is just a rbh_value_map, which you already retrieved",
+      "range": {
+        "startLine": 42,
+        "startChar": 4,
+        "endLine": 52,
+        "endChar": 2
+      },
+      "revId": "4686cdefcfd562fe338f5676e69ba1deaf1405af",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
