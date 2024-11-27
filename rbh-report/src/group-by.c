@@ -19,7 +19,10 @@
 void
 fill_group_by_fields(const char *_group_by, struct rbh_group_fields *group)
 {
+    const struct rbh_filter_field *filter_field;
     struct rbh_filter_field *fields;
+    char *current_field;
+    int counter = 0;
     char *group_by;
     int count;
 
@@ -40,10 +43,19 @@ fill_group_by_fields(const char *_group_by, struct rbh_group_fields *group)
     if (group_by == NULL)
         error_at_line(EXIT_FAILURE, EINVAL, __FILE__, __LINE__, "strdup");
 
+    current_field = strtok(group_by, ",");
+    while (current_field) {
+        filter_field = str2filter_field(current_field);
+        if (filter_field == NULL)
+            error_at_line(EXIT_FAILURE, EINVAL, __FILE__, __LINE__,
+                          "'%s' ill-formed, invalid field", group_by);
 
+        fields[counter++] = *filter_field;
+        current_field = strtok(NULL, ",");
+    }
 
     free(group_by);
 
-    group->id_fields = NULL;
-    group->id_count = 0;
+    group->id_fields = fields;
+    group->id_count = count;
 }
