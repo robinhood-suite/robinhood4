@@ -16,7 +16,7 @@
 
 #include "report.h"
 
-static int
+int
 count_fields(const char *str)
 {
     /* Even if the string has no comma, it still has at least one field */
