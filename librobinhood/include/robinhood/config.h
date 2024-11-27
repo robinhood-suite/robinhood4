@@ -113,4 +113,14 @@ load_rbh_config(struct rbh_config *config);
 const char *
 rbh_config_get_string(const char *key, const char *default_string);
 
+/**
+ * Loads a configuration file based on command-line arguments or the default if
+ * not specified.
+ *
+ * @param argc   The number of command-line arguments.
+ * @param argv   The array of command-line arguments.
+ */
+void
+import_configuration_file(int *argc, char ***argv);
+
 #endif

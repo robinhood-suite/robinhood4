@@ -239,28 +239,12 @@ lustre_parse_predicate(struct find_context *ctx, int *arg_idx)
     return filter;
 }
 
-static void
-handle_config_option(int argc, char *argv[], int index)
-{
-    if (index + 1 >= argc)
-        error(EX_USAGE, EINVAL, "'--config' option requires a file");
-
-    if (rbh_config_open(argv[index + 1]))
-        error(EX_USAGE, errno,
-              "Failed to open configuration file '%s'", argv[index + 1]);
-}
-
 static int
 check_command_options(int argc, char *argv[])
 {
     for (int i = 0; i < argc; i++) {
         if (*argv[i] != '-')
             return i;
-
-        if (strcmp(argv[i], "-c") == 0 || strcmp(argv[i], "--config") == 0) {
-            handle_config_option(argc, argv, i);
-            i++;
-        }
 
         if (strcmp(argv[i], "-h") == 0 || strcmp(argv[i], "--help") == 0) {
             usage();
@@ -293,6 +277,7 @@ main(int _argc, char *_argv[])
     argc = _argc - 1;
     argv = &_argv[1];
 
+    import_configuration_file(&argc, &argv);
     checked_options = check_command_options(argc, argv);
 
     ctx.argc = argc - checked_options;

@@ -5,6 +5,7 @@
 # SPDX-License-Identifer: LGPL-3.0-or-later
 
 install_headers(
+    'alias.h',
     'backend.h',
     'config.h',
     'filter.h',
