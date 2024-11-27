@@ -90,9 +90,20 @@ bson_append_aggregate_group_stage(bson_t *bson, const char *key,
 {
     bson_t document;
 
-    if (!(bson_append_document_begin(bson, key, key_length, &document) &&
-          BSON_APPEND_INT32(&document, "_id", 0)))
+    if (!bson_append_document_begin(bson, key, key_length, &document))
         return false;
+
+    if (group->id_count == 0) {
+        if (!BSON_APPEND_INT32(&document, "_id", 0))
+            return false;
+    } else {
+        bson_t subdoc;
+
+        if (!BSON_APPEND_DOCUMENT_BEGIN(&document, "_id", &subdoc))
+            return false;
+
+        return bson_append_document_end(&document, &subdoc);
+    }
 
     for (size_t i = 0; i < group->acc_count; i++) {
         struct rbh_accumulator_field *field = &group->acc_fields[i];
