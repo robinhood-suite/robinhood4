@@ -10,6 +10,7 @@
 #include <miniyaml.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <sysexits.h>
 
 #include "robinhood/config.h"
 #include "robinhood/serialization.h"
@@ -394,3 +395,46 @@ rbh_config_get_string(const char *key, const char *default_string)
 
     return value.string;
 }
+
+static void
+handle_config_option(int argc, char *argv[], int index)
+{
+    if (index + 1 >= argc)
+        error(EX_USAGE, EINVAL, "'--config' option requires a file");
+
+    if (rbh_config_open(argv[index + 1]))
+        error(EX_USAGE, errno,
+              "Failed to open configuration file '%s'", argv[index + 1]);
+}
+
+static int
+rbh_config_open_default()
+{
+    const char* default_config = "/etc/robinhood4.d/rbh_conf.yaml";
+
+    int rc = rbh_config_open(default_config);
+
+    if (rc && errno != ENOENT) {
+        fprintf(stderr, "Warning: Failed to open default configuration file "
+                "'%s': %s\n", default_config, strerror(errno));
+        return 1;
+    }
+
+    return 0;
+}
+
+void
+import_configuration_file(int *argc, char ***argv)
+{
+    for (int i = 0; i < *argc; i++) {
+        if (strcmp((*argv)[i], "-c") == 0 ||
+            strcmp((*argv)[i], "--config") == 0) {
+            handle_config_option(*argc, *argv, i);
+
+            return;
+        }
+    }
+
+    rbh_config_open_default();
+}
+
