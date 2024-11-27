@@ -9,6 +9,7 @@ libdl = cc.find_library('dl', required: false)
 librobinhood = library(
     'robinhood',
     sources: [
+        'alias.c',
         'backend.c',
         'config.c',
         'filter.c',
