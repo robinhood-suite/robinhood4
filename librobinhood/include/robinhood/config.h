@@ -1,5 +1,5 @@
 /* This file is part of Robinhood 4
- * Copyright (C) 2024 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifer: LGPL-3.0-or-later
@@ -112,5 +112,15 @@ load_rbh_config(struct rbh_config *config);
  */
 const char *
 rbh_config_get_string(const char *key, const char *default_string);
+
+/**
+ * Loads a configuration file based on command-line arguments or the default if
+ * not specified.
+ *
+ * @param argc   The number of command-line arguments.
+ * @param argv   The array of command-line arguments.
+ */
+void
+import_configuration_file(int *argc, char ***argv);
 
 #endif
