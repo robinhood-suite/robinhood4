@@ -15,8 +15,13 @@
 #include <error.h>
 #include <sysexits.h>
 #include "config.h"
+#include "robinhood/stack.h"
+#include "robinhood/sstack.h"
 
 void
 import_configuration_file(int *argc, char ***argv);
+
+void
+apply_aliases(void);
 
 #endif
