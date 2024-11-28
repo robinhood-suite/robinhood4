@@ -347,6 +347,6 @@ str2statx(const char *string_)
         return RBH_STATX_UID;
     }
 
-    __builtin_unreachable();
     error(EX_USAGE, 0, "unexpected statx string: '%s'", string_);
+    __builtin_unreachable();
 }
