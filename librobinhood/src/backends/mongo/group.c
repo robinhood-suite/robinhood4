@@ -57,9 +57,7 @@ get_accumulator_field_strings(struct rbh_accumulator_field *accumulator_field,
     if (sprintf(key, "%s_%s", accumulator, tmp_field) <= 0)
         return false;
 
-    for (int j = 0; j < strlen(key); j++)
-        if (key[j] == '.')
-            key[j] = '_';
+    escape_field_path(key);
 
     return true;
 }
