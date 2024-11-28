@@ -15,11 +15,19 @@
 #include <error.h>
 #include <sysexits.h>
 #include "config.h"
+#include "robinhood/stack.h"
+#include "robinhood/sstack.h"
 
 void
 handle_config_option(int argc, char *argv[], int index);
 
 void
 import_configuration_file(int *argc, char ***argv);
+
+int
+load_aliases_from_config(void);
+
+void
+apply_aliases(void);
 
 #endif
