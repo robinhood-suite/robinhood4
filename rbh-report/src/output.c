@@ -110,7 +110,9 @@ fill_acc_and_output_fields(const char *_output_string,
                            struct rbh_filter_output *output)
 {
     struct rbh_accumulator_field *fields;
+    char *current_field;
     char *output_string;
+    int counter = 0;
     int count;
 
     count = count_fields(_output_string);
@@ -124,25 +126,12 @@ fill_acc_and_output_fields(const char *_output_string,
     if (output_string == NULL)
         error_at_line(EXIT_FAILURE, EINVAL, __FILE__, __LINE__, "strdup");
 
-    if (count == 1) {
-        fields[0] = convert_output_string_to_accumulator_field(output_string);
-    } else {
-        char *current_field;
-        int counter = 0;
-        char *token;
-
-        current_field = output_string;
-        token = strchr(current_field, ',');
-        while (token) {
-            *token = '\0';
-            fields[counter++] =
-                convert_output_string_to_accumulator_field(current_field);
-            current_field = token + 1;
-            token = strchr(current_field, ',');
-        }
-
-        fields[counter] =
+    current_field = strtok(output_string, ",");
+    while (current_field) {
+        fields[counter++] =
             convert_output_string_to_accumulator_field(current_field);
+
+        current_field = strtok(NULL, ",");
     }
 
     free(output_string);
