@@ -179,6 +179,9 @@ get_accumulator_field_strings(struct rbh_accumulator_field *accumulator_field,
 void
 dump_bson(bson_t *to_dump);
 
+void
+escape_field_path(char *field_path);
+
 size_t
 bson_iter_count(bson_iter_t *iter);
 

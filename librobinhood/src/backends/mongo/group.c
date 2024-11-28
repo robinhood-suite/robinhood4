@@ -57,9 +57,7 @@ get_accumulator_field_strings(struct rbh_accumulator_field *accumulator_field,
     if (sprintf(key, "%s_%s", accumulator, tmp_field) <= 0)
         return false;
 
-    for (int j = 0; j < strlen(key); j++)
-        if (key[j] == '.')
-            key[j] = '_';
+    escape_field_path(key);
 
     return true;
 }
@@ -102,7 +100,30 @@ bson_append_aggregate_group_stage(bson_t *bson, const char *key,
         if (!BSON_APPEND_DOCUMENT_BEGIN(&document, "_id", &subdoc))
             return false;
 
-        return bson_append_document_end(&document, &subdoc);
+        for (size_t i = 0; i < group->id_count; i++) {
+            struct rbh_filter_field *field = &group->id_fields[i];
+            char onstack[XATTR_ONSTACK_LENGTH];
+            char *buffer = onstack;
+            const char *tmp_field;
+            char field_str[256];
+            char field_key[256];
+
+            tmp_field = field2str(field, &buffer, sizeof(onstack));
+            if (tmp_field == NULL)
+                return false;
+
+            if (sprintf(field_str, "$%s", tmp_field) <= 0 ||
+                sprintf(field_key, "%s", tmp_field) <= 0)
+                return false;
+
+            escape_field_path(field_key);
+
+            if (!BSON_APPEND_UTF8(&subdoc, field_key, field_str))
+                return false;
+        }
+
+        if (!bson_append_document_end(&document, &subdoc))
+            return false;
     }
 
     for (size_t i = 0; i < group->acc_count; i++) {

@@ -58,6 +58,14 @@ bson_iter_count(bson_iter_t *iter)
 }
 
 void
+escape_field_path(char *field_path)
+{
+    for (int i = 0; i < strlen(field_path); i++)
+        if (field_path[i] == '.')
+            field_path[i] = '_';
+}
+
+void
 dump_bson(bson_t *to_dump)
 {
     char *dump_str;
