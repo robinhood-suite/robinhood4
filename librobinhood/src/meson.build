@@ -1,5 +1,5 @@
 # This file is part of the RobinHood Library
-# Copyright (C) 2019 Commissariat a l'energie atomique et aux energies
+# Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
@@ -9,6 +9,7 @@ libdl = cc.find_library('dl', required: false)
 librobinhood = library(
     'robinhood',
     sources: [
+        'alias.c',
         'backend.c',
         'config.c',
         'filter.c',

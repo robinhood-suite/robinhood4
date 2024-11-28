@@ -23,6 +23,7 @@
 #include <robinhood.h>
 #include <robinhood/utils.h>
 #include <robinhood/config.h>
+#include <robinhood/alias.h>
 
 #include <rbh-find/actions.h>
 #include <rbh-find/core.h>
@@ -278,6 +279,7 @@ main(int _argc, char *_argv[])
     argv = &_argv[1];
 
     import_configuration_file(&argc, &argv);
+    apply_aliases();
     checked_options = check_command_options(argc, argv);
 
     ctx.argc = argc - checked_options;
