@@ -279,7 +279,7 @@ main(int _argc, char *_argv[])
     argv = &_argv[1];
 
     import_configuration_file(&argc, &argv);
-    apply_aliases();
+    apply_aliases(&argc, &argv);
     checked_options = check_command_options(argc, argv);
 
     ctx.argc = argc - checked_options;
