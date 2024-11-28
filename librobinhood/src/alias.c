@@ -9,7 +9,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
-#include <error.h>
 #include <sysexits.h>
 #include "robinhood/alias.h"
 #include "robinhood/config.h"
@@ -18,6 +17,7 @@
 #include "robinhood/utils.h"
 
 static struct rbh_sstack *aliases_stack;
+static struct rbh_stack *history_stack;
 static struct rbh_value_map *aliases;
 
 static void __attribute__((destructor))
@@ -25,6 +25,8 @@ destroy_aliases_stack(void)
 {
     if (aliases_stack)
         rbh_sstack_destroy(aliases_stack);
+    if (history_stack)
+        rbh_stack_destroy(history_stack);
 }
 
 static int
@@ -65,115 +67,167 @@ load_aliases_from_config(void)
     }
 
     aliases->count = value.map.count;
+    history_stack = rbh_stack_new(stack_size);
+    if (!history_stack) {
+        fprintf(stderr, "Failed to create history stack.\n");
+        return -1;
+    }
 
     return 0;
 }
 
-static void
+static int
+add_args_to_argv(char **argv_dest, int dest_index, const char *args)
+{
+    char *copy = strdup(args);
+    char *arg = strtok(copy, " ");
+
+    while (arg != NULL) {
+        char *stack = rbh_sstack_push(aliases_stack, arg, strlen(arg) + 1);
+        if (stack == NULL) {
+            free(copy);
+            return dest_index;
+        }
+        argv_dest[dest_index++] = stack;
+        arg = strtok(NULL, " ");
+    }
+    free(copy);
+
+    return dest_index;
+}
+
+static int
+copy_args(char **dest, char **src, int start, int end, int dest_index)
+{
+    for (int i = start; i < end; i++) {
+        dest[dest_index++] = src[i];
+    }
+
+    return dest_index;
+}
+
+static int
 alias_resolution(int *argc, char ***argv, size_t alias_index,
                  size_t argv_alias_index)
 {
-    /* Retrieve the alias string from the configuration */
-    const char* alias_value = aliases->pairs[alias_index].value->string;
-
-    int new_argc = *argc - 2 + count_char_separated_values(alias_value, ' ');
-    int temp_index = 0;
+    const char *alias_value;
+    bool alias_found;
     char **argv_temp;
-    char *alias_copy;
-    char *arg;
+    size_t readable;
+    int parse_range;
+    int temp_index;
+    int new_argc;
+    char *data;
 
-    /* Allocate memory for argv_temp, which will hold the arguments after alias
-     * resolution
-     */
-    argv_temp = rbh_sstack_push(aliases_stack, NULL, new_argc * sizeof(char *));
+    alias_value = aliases->pairs[alias_index].value->string;
+    new_argc = *argc - 2 + count_char_separated_values(alias_value, ' ');
+    temp_index = 0;
+
+    data = rbh_stack_peek(history_stack, &readable);
+    for (size_t i = 0; i < readable;) {
+        if (strcmp(data + i, aliases->pairs[alias_index].key) == 0) {
+            fprintf(stderr, "[ERROR] Infinite loop detected for alias '%s'."
+                    "Execution stopped.\n", aliases->pairs[alias_index].key);
+            exit(EXIT_FAILURE);
+        }
+        i += strlen(data + i) + 1;
+    }
+
+    rbh_stack_push(history_stack, aliases->pairs[alias_index].key,
+                   strlen(aliases->pairs[alias_index].key) + 1);
+
+    argv_temp = malloc(new_argc * sizeof(char *));
     if (!argv_temp) {
         fprintf(stderr, "Failed to allocate memory for argv_temp.\n");
-        return;
+        return -1;
     }
 
-    /* Copy the arguments before the alias into argv_temp */
-    for (size_t i = 0; i < argv_alias_index; i++) {
-        argv_temp[temp_index++] = (*argv)[i];
-    }
+    temp_index = copy_args(argv_temp, *argv, 0, argv_alias_index, temp_index);
 
-    /* Duplicate the alias into a new string for manipulation */
-    alias_copy = strdup(alias_value);
-    if (!alias_copy) {
-        fprintf(stderr, "Failed to duplicate alias_value.\n");
-        return;
-    }
+    temp_index = add_args_to_argv(argv_temp, temp_index, alias_value);
 
-    /* Use strtok to split the alias into tokens separated by spaces
-     * Each alias has this syntax in the config file:
-     * name: <list of alias arguments>
-     */
-    arg = strtok(alias_copy, " ");
-    while (arg != NULL) {
-        argv_temp[temp_index++] = rbh_sstack_push(aliases_stack, NULL,
-                                                  strlen(arg) + 1);
-        if (!argv_temp[temp_index - 1]) {
-            fprintf(stderr, "Failed to allocate memory for token.\n");
-            free(alias_copy);
-            return;
-        }
-        strcpy(argv_temp[temp_index - 1], arg);
-        arg = strtok(NULL, " ");
-    }
+    parse_range = temp_index - argv_alias_index;
 
-    /* Copy the remaining arguments into argv_temp after the alias */
-    for (size_t i = argv_alias_index + 2; i < *argc; i++)
-        argv_temp[temp_index++] = (*argv)[i];
+    temp_index = copy_args(argv_temp, *argv, argv_alias_index + 2, *argc,
+                           temp_index);
 
-    *argc = new_argc;
+    *argc = temp_index;
     *argv = argv_temp;
 
-    free(alias_copy);
+    do {
+        alias_found = false;
+        for (int i = argv_alias_index; i < argv_alias_index + parse_range; i++) {
+            if (i < *argc && strcmp((*argv)[i], "--alias") == 0) {
+                const char *alias_name = (*argv)[i + 1];
+                int alias_index_for_res = -1;
+
+                for (int j = 0; j < aliases->count; j++) {
+                    if (strcmp(aliases->pairs[j].key, alias_name) == 0) {
+                        alias_index_for_res = j;
+                        break;
+                    }
+                }
+
+                if (alias_index_for_res != -1) {
+                    int modified_elements;
+                    modified_elements = alias_resolution(argc, argv,
+                                                         alias_index_for_res,
+                                                         i);
+
+                    if (modified_elements != 0)
+                        parse_range += modified_elements;
+
+                    alias_found = true;
+                    break;
+                } else {
+                    fprintf(stderr, "Alias '%s' not found in conf file\n",
+                            alias_name);
+                    exit(EXIT_FAILURE);
+                }
+            }
+        }
+    } while (alias_found);
+
+    rbh_stack_pop(history_stack, strlen(aliases->pairs[alias_index].key) + 1);
+
+    return parse_range - 2 ;
 }
 
 void
 apply_aliases(int *argc, char ***argv)
 {
+    bool found;
+
     if (load_aliases_from_config() != 0) {
         fprintf(stderr, "Failed to load aliases from configuration.\n");
         return;
     }
 
-    for (int i = 0; i < *argc; i++) {
-        const char* alias_name;
-        size_t alias_index;
+    do {
+        found = false;
+        for (int i = 0; i < *argc; i++) {
+            if (strcmp((*argv)[i], "--alias") == 0) {
+                const char *alias_name = (*argv)[i + 1];
+                size_t alias_index = -1;
 
-        if (strcmp((*argv)[i], "--alias") != 0)
-            continue;
+                for (int j = 0; j < aliases->count; j++) {
+                    if (strcmp(aliases->pairs[j].key, alias_name) == 0) {
+                        alias_index = j;
+                        break;
+                    }
+                }
 
-        if (i + 1 >= *argc) {
-            fprintf(stderr, "No alias name provided\n");
-            return;
-        }
-
-        alias_name = (*argv)[i + 1];
-        alias_index = -1;
-
-        for (size_t j = 0; j < aliases->count; j++) {
-            if (strcmp(aliases->pairs[j].key, alias_name) == 0) {
-                alias_index = j;
-                break;
+                if (alias_index != -1) {
+                    alias_resolution(argc, argv, alias_index, i);
+                    found = true;
+                    break;
+                } else {
+                    fprintf(stderr, "Alias '%s' not found in conf file\n",
+                            alias_name);
+                    exit(EXIT_FAILURE);
+                }
             }
         }
-
-        if (alias_index != -1) {
-            alias_resolution(argc, argv, alias_index, i);
-
-            printf("Updated argv after resolution:\n");
-            for (int k = 0; k < *argc; k++) {
-                printf("argv[%d]: %s\n", k, (*argv)[k]);
-            }
-
-            i = -1; /* reset the index of loop after an alias has been
-                     * resolved
-                     */
-        } else {
-            fprintf(stderr, "Alias '%s' not found.\n", alias_name);
-            exit(EXIT_FAILURE);
-        }
-    }
+    } while (found);
 }
+
