@@ -9,6 +9,6 @@
 #define ROBINHOOD_ALIAS_H
 
 void
-apply_aliases(void);
+apply_aliases(int *argc, char ***argv);
 
 #endif
