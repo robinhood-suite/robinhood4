@@ -34,8 +34,23 @@ apply_aliases(int *argc, char ***argv);
 int
 count_tokens(const char *str);
 
+int
+add_args_to_argv(char **argv_dest, int dest_index, const char *args);
+
+int
+copy_args(char **dest, char **src, int start, int end, int dest_index);
+
+bool
+is_alias_in_history(const char **history, size_t history_count,
+                    const char *alias_name);
+
+const char**
+update_history(const char **history, size_t history_count,
+               const char *alias_name);
+
 void
 alias_resolution(int *argc, char ***argv, size_t alias_index,
-           size_t argv_alias_index);
+                 size_t argv_alias_index, const char **history,
+                 size_t history_count);
 
 #endif
