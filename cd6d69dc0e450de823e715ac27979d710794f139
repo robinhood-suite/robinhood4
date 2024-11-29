@@ -22,6 +22,30 @@
       },
       "revId": "cd6d69dc0e450de823e715ac27979d710794f139",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e3c70b10_c67c9443",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2024-11-29T09:54:14Z",
+      "side": 1,
+      "message": "I don\u0027t know what to write because in this patch precisely it is only a pre-URI argument but I agree, in the future this will not be the case.",
+      "parentUuid": "ca98653a_73b89acf",
+      "range": {
+        "startLine": 9,
+        "startChar": 32,
+        "endLine": 9,
+        "endChar": 47
+      },
+      "revId": "cd6d69dc0e450de823e715ac27979d710794f139",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
