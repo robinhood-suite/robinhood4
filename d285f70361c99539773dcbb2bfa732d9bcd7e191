@@ -16,6 +16,24 @@
       "message": "defect: this function doesn\u0027t exist",
       "revId": "d285f70361c99539773dcbb2bfa732d9bcd7e191",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "80d31fd4_4b7baffe",
+        "filename": "librobinhood/src/backends/mongo/group.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-11-29T09:25:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8a1ec307_820b5ee4",
+      "revId": "d285f70361c99539773dcbb2bfa732d9bcd7e191",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
