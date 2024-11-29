@@ -44,8 +44,8 @@ function check_expiration_date
 
     if [ -z "$max_time" ]; then
         echo "Directory '$directory' has expired and it is empty, no other check needed"
-        if [ ! -z "$delete_found" ]; then
-            rmdir "$mount_point/$directory"
+        if [ ! -z "$delete_found" ] && [ ! -z "$directory" ]; then
+            find "$mount_point/$directory" -depth -exec "rmdir" {} ";"
         fi
         return 0
     fi
@@ -65,7 +65,7 @@ function check_expiration_date
                                                "$mount_point/$directory"
     else
         echo "Directory '$directory' has expired"
-        if [ ! -z "$delete_found" ]; then
+        if [ ! -z "$delete_found" ] && [ ! -z "$directory" ]; then
             rm -rf "$mount_point/$directory"
         fi
     fi
@@ -87,7 +87,7 @@ function handle_non_relative_expiration()
     fi
 
     if [ ! -z "$delete_found" ] && [ ! -z "$directory" ]; then
-        rm -rf "$mount_point/$dir"
+        rm -rf "$mount_point/$directory"
     fi
 }
 
@@ -148,7 +148,6 @@ do
     fi
 
     case "$1" in
-
         --delete)
             if [ "$delete_found" == "true" ]; then
                 echo "Delete option already given"
