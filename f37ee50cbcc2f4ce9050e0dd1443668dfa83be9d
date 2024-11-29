@@ -22,6 +22,30 @@
       },
       "revId": "f37ee50cbcc2f4ce9050e0dd1443668dfa83be9d",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "97645b75_cdd5da9c",
+        "filename": "librobinhood/src/alias.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2024-11-29T09:49:43Z",
+      "side": 1,
+      "message": "That\u0027s true, but I find it better because we avoid unnecessary parsing of --config later.",
+      "parentUuid": "b0db6911_021ab1d0",
+      "range": {
+        "startLine": 31,
+        "startChar": 12,
+        "endLine": 37,
+        "endChar": 19
+      },
+      "revId": "f37ee50cbcc2f4ce9050e0dd1443668dfa83be9d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
