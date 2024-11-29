@@ -16,6 +16,24 @@
       "message": "style: line too long",
       "revId": "dd4876b76f3baf70d07a530909660981b22cc457",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b2ab4b0_990fbf34",
+        "filename": "rbh-report/tests/test_group_by.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-11-29T09:26:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "469ba312_f72c3796",
+      "revId": "dd4876b76f3baf70d07a530909660981b22cc457",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
