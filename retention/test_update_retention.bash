@@ -241,7 +241,6 @@ test_retention_after_sync()
 
 test_retention_with_config()
 {
-    set -x
     local dir="dir"
     local entry="entry"
     local conf_file="config"
@@ -282,12 +281,39 @@ RBH_RETENTION_XATTR: \"user.blob\"
     should_be_updated "$output" "$dir"
 }
 
+test_retention_on_empty_dir()
+{
+    local dir1="dir1"
+    local dir2="dir2"
+    local dir3="dir3"
+
+    mkdir -p $dir1/$dir2/$dir3
+
+    setfattr -n user.expires -v +5 $dir1
+
+    rbh_sync rbh:lustre:. "rbh:mongo:$testdb"
+
+    local output="$(rbh_update_retention "rbh:mongo:$testdb" "$PWD")"
+    local output_lines="$(echo "$output" | grep "No directory has expired" | \
+                          wc -l)"
+    if [ "$output_lines" != "1" ]; then
+        error "Directory '$dir1' shouldn't have expired yet"
+    fi
+
+    date --set="@$(( $(stat -c %X $dir1) + 6))"
+
+    output="$(rbh_update_retention "rbh:mongo:$testdb" "$PWD" --delete)"
+    if [ -d $dir1 ]; then
+        error "Directory '$dir1' should have been deleted"
+    fi
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
 declare -a tests=(test_retention_script test_retention_after_sync
-                  test_retention_with_config)
+                  test_retention_with_config test_retention_on_empty_dir)
 
 LUSTRE_DIR=/mnt/lustre/
 cd "$LUSTRE_DIR"
