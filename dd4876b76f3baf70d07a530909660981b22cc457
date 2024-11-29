@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "469ba312_f72c3796",
+        "filename": "rbh-report/tests/test_group_by.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-11-29T08:32:07Z",
+      "side": 1,
+      "message": "style: line too long",
+      "revId": "dd4876b76f3baf70d07a530909660981b22cc457",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
