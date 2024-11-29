@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ca98653a_73b89acf",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-11-29T08:26:18Z",
+      "side": 1,
+      "message": "minor: didn\u0027t we say it doesn\u0027t have to be a pre-URI option ?",
+      "range": {
+        "startLine": 9,
+        "startChar": 32,
+        "endLine": 9,
+        "endChar": 47
+      },
+      "revId": "cd6d69dc0e450de823e715ac27979d710794f139",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
