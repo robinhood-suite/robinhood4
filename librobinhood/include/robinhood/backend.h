@@ -157,6 +157,12 @@ struct rbh_filter_options {
     } sort;
 };
 
+struct rbh_range_field {
+    struct rbh_filter_field field;
+    int *boundaries;
+    size_t boundaries_count;
+};
+
 enum field_accumulator {
     FA_NONE,
     FA_AVG,
@@ -176,6 +182,7 @@ struct rbh_accumulator_field {
 struct rbh_group_fields {
     struct rbh_filter_field *id_fields;
     size_t id_count;
+    //struct rbh_range_field *id_fields;
 
     struct rbh_accumulator_field *acc_fields;
     size_t acc_count;
