@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d5e38147_7a115e89",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-12-02T13:09:41Z",
+      "side": 1,
+      "message": "suggest: I am ok with having `groupby\u0027 instead of `group-by` or `group_by` for file, variable and function names, just saying",
+      "revId": "bddc09223bc3efa5493ee93c39f7765eb4e91fdb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
