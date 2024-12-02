@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f7d58d32_d0ac3d51",
+        "filename": "rbh-report/src/output.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-12-02T11:53:30Z",
+      "side": 1,
+      "message": "comment: finally you did not use `strtok`?",
+      "range": {
+        "startLine": 135,
+        "startChar": 8,
+        "endLine": 142,
+        "endChar": 9
+      },
+      "revId": "ec3cc5dd7335057d02c77e3e9eca96363de302c6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
