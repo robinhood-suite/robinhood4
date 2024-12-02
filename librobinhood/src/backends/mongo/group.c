@@ -101,14 +101,14 @@ bson_append_aggregate_group_stage(bson_t *bson, const char *key,
             return false;
 
         for (size_t i = 0; i < group->id_count; i++) {
-            struct rbh_filter_field *field = &group->id_fields[i];
+            struct rbh_range_field *field = &group->id_fields[i];
             char onstack[XATTR_ONSTACK_LENGTH];
             char *buffer = onstack;
             const char *tmp_field;
             char field_str[256];
             char field_key[256];
 
-            tmp_field = field2str(field, &buffer, sizeof(onstack));
+            tmp_field = field2str(&field->field, &buffer, sizeof(onstack));
             if (tmp_field == NULL)
                 return false;
 
