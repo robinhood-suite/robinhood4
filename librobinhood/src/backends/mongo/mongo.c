@@ -91,8 +91,7 @@ static bson_t *
 bson_pipeline_creation(const struct rbh_filter *filter,
                        const struct rbh_group_fields *group,
                        const struct rbh_filter_options *options,
-                       const struct rbh_filter_output *output,
-                       bool from_report)
+                       const struct rbh_filter_output *output)
 {
     bson_t *pipeline;
     uint8_t i = 0;
@@ -116,7 +115,11 @@ bson_pipeline_creation(const struct rbh_filter *filter,
      && BSON_APPEND_DOCUMENT_BEGIN(&array, UINT8_TO_STR[i], &stage) && ++i
      && BSON_APPEND_RBH_FILTER(&stage, "$match", filter)
      && bson_append_document_end(&array, &stage)
-     && (group || from_report ?
+     && (group && is_set_for_range_needed(group) ?
+            BSON_APPEND_DOCUMENT_BEGIN(&array, UINT8_TO_STR[i], &stage) && ++i
+            && BSON_APPEND_AGGREGATE_SET_STAGE(&stage, "$set", group)
+            && bson_append_document_end(&array, &stage) : true)
+     && (group ?
             BSON_APPEND_DOCUMENT_BEGIN(&array, UINT8_TO_STR[i], &stage) && ++i
             && BSON_APPEND_AGGREGATE_GROUP_STAGE(&stage, "$group", group)
             && bson_append_document_end(&array, &stage) : true)
@@ -646,7 +649,7 @@ mongo_backend_filter(void *backend, const struct rbh_filter *filter,
     if (rbh_filter_validate(filter))
         return NULL;
 
-    pipeline = bson_pipeline_creation(filter, NULL, options, output, false);
+    pipeline = bson_pipeline_creation(filter, NULL, options, output);
     if (pipeline == NULL)
         return NULL;
 
@@ -692,7 +695,7 @@ mongo_backend_report(void *backend, const struct rbh_filter *filter,
     if (rbh_filter_validate(filter))
         return NULL;
 
-    pipeline = bson_pipeline_creation(filter, group, options, output, true);
+    pipeline = bson_pipeline_creation(filter, group, options, output);
     if (pipeline == NULL)
         return NULL;
 

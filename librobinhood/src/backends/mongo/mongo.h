@@ -253,8 +253,19 @@ bson_append_rbh_filter(bson_t *bson, const char *key, size_t key_length,
     bson_append_rbh_filter(bson, key, strlen(key), filter, false)
 
     /*--------------------------------------------------------------------*
-     |                               filter                               |
+     |                               group                                |
      *--------------------------------------------------------------------*/
+
+bool
+is_set_for_range_needed(const struct rbh_group_fields *group);
+
+bool
+bson_append_aggregate_set_stage(bson_t *bson, const char *key,
+                                size_t key_length,
+                                const struct rbh_group_fields *group);
+
+#define BSON_APPEND_AGGREGATE_SET_STAGE(bson, key, group) \
+    bson_append_aggregate_set_stage(bson, key, strlen(key), group)
 
 bool
 bson_append_aggregate_group_stage(bson_t *bson, const char *key,
