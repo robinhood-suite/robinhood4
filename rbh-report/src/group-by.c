@@ -50,7 +50,10 @@ fill_group_by_fields(const char *_group_by, struct rbh_group_fields *group)
             error_at_line(EXIT_FAILURE, EINVAL, __FILE__, __LINE__,
                           "'%s' ill-formed, invalid field", group_by);
 
-        fields[counter++].field = *filter_field;
+        fields[counter].field = *filter_field;
+        fields[counter].boundaries = NULL;
+        fields[counter].boundaries_count = 0;
+        counter++;
         current_field = strtok(NULL, ",");
     }
 
