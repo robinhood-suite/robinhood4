@@ -34,7 +34,7 @@ accumulator2str(enum field_accumulator accumulator)
 
 bool
 get_accumulator_field_strings(struct rbh_accumulator_field *accumulator_field,
-                           char *accumulator, char *field, char *key)
+                              char *accumulator, char *field, char *key)
 {
     char onstack[XATTR_ONSTACK_LENGTH];
     const char *tmp_accumulator;
@@ -60,6 +60,29 @@ get_accumulator_field_strings(struct rbh_accumulator_field *accumulator_field,
     escape_field_path(key);
 
     return true;
+}
+
+bool
+is_set_for_range_needed(const struct rbh_group_fields *group)
+{
+    for (size_t i = 0; i < group->id_count; i++)
+        if (group->id_fields[i].boundaries_count != 0)
+            return true;
+
+    return false;
+}
+
+bool
+bson_append_aggregate_set_stage(bson_t *bson, const char *key,
+                                size_t key_length,
+                                const struct rbh_group_fields *group)
+{
+    (void) bson;
+    (void) key;
+    (void) key_length;
+    (void) group;
+
+    return false;
 }
 
 static bool
