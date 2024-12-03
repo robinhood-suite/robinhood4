@@ -46,6 +46,29 @@
       },
       "revId": "cd6d69dc0e450de823e715ac27979d710794f139",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fba01313_6a83983c",
+        "filename": "rbh-find-lustre/rbh-find-lustre.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-12-03T08:36:03Z",
+      "side": 1,
+      "message": "question: we have decided to only keep `--alias` or `-alias`, no ? Because `-a` is for the `and`",
+      "range": {
+        "startLine": 270,
+        "startChar": 12,
+        "endLine": 270,
+        "endChar": 33
+      },
+      "revId": "cd6d69dc0e450de823e715ac27979d710794f139",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
