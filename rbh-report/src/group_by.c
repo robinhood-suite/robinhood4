@@ -17,6 +17,23 @@
 #include "report.h"
 
 static void
+set_boundaries(int64_t *boundaries, char *boundaries_string)
+{
+    char *current_value;
+    int counter = 0;
+    char *saveptr;
+
+    current_value = strtok_r(boundaries_string, ";", &saveptr);
+    while (current_value) {
+        if (str2int64_t(current_value, &boundaries[counter++]))
+            error_at_line(EXIT_FAILURE, EINVAL, __FILE__, __LINE__,
+                          "'%s' ill-formed, not a number", current_value);
+
+        current_value = strtok_r(NULL, ";", &saveptr);
+    }
+}
+
+static void
 check_and_set_boundaries(struct rbh_range_field *field, char *field_string)
 {
     char *open_bracket = strchr(field_string, '[');
@@ -43,10 +60,17 @@ check_and_set_boundaries(struct rbh_range_field *field, char *field_string)
                       "'%s' ill-formed, nothing specified in boundaries",
                       field_string);
 
-    field->boundaries_count = count;
+    field->boundaries = rbh_sstack_push(values_sstack, NULL,
+                                        count * sizeof(*field->boundaries));
+    if (field->boundaries == NULL)
+        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
+                      "rbh_sstack_push");
 
     *open_bracket = '\0';
     *close_bracket = '\0';
+
+    set_boundaries(field->boundaries, open_bracket + 1);
+    field->boundaries_count = count;
 }
 
 void
@@ -57,6 +81,7 @@ fill_group_by_fields(const char *_group_by, struct rbh_group_fields *group)
     char *current_field;
     int counter = 0;
     char *group_by;
+    char *saveptr;
     int count;
 
     if (_group_by == NULL) {
@@ -76,7 +101,7 @@ fill_group_by_fields(const char *_group_by, struct rbh_group_fields *group)
     if (group_by == NULL)
         error_at_line(EXIT_FAILURE, EINVAL, __FILE__, __LINE__, "strdup");
 
-    current_field = strtok(group_by, ",");
+    current_field = strtok_r(group_by, ",", &saveptr);
     while (current_field) {
         /* If there are boundaries to set, this call will modify 'current_field'
          * to set the opening bracket to '\0', so that the 'str2filter_field'
@@ -90,10 +115,8 @@ fill_group_by_fields(const char *_group_by, struct rbh_group_fields *group)
                           "'%s' ill-formed, invalid field", group_by);
 
         fields[counter].field = *filter_field;
-        fields[counter].boundaries = NULL;
-        fields[counter].boundaries_count = 0;
         counter++;
-        current_field = strtok(NULL, ",");
+        current_field = strtok_r(NULL, ",", &saveptr);
     }
 
     free(group_by);
