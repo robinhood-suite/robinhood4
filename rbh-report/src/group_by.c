@@ -21,6 +21,7 @@ check_and_set_boundaries(struct rbh_range_field *field, char *field_string)
 {
     char *open_bracket = strchr(field_string, '[');
     char *close_bracket;
+    int count;
 
     if (open_bracket == NULL)
         return;
@@ -35,6 +36,14 @@ check_and_set_boundaries(struct rbh_range_field *field, char *field_string)
         error_at_line(EXIT_FAILURE, EINVAL, __FILE__, __LINE__,
                       "'%s' ill-formed, additional characters after ']'",
                       field_string);
+
+    count = count_char_separated_values(open_bracket + 1, ';');
+    if (count == 0)
+        error_at_line(EXIT_FAILURE, EINVAL, __FILE__, __LINE__,
+                      "'%s' ill-formed, nothing specified in boundaries",
+                      field_string);
+
+    field->boundaries_count = count;
 
     *open_bracket = '\0';
     *close_bracket = '\0';
@@ -56,7 +65,7 @@ fill_group_by_fields(const char *_group_by, struct rbh_group_fields *group)
         return;
     }
 
-    count = count_fields(_group_by);
+    count = count_char_separated_values(_group_by, ',');
 
     fields = rbh_sstack_push(values_sstack, NULL, count * sizeof(*fields));
     if (fields == NULL)
