@@ -88,4 +88,17 @@ str2int64_t(const char *input, int64_t *result);
 int
 str2uint64_t(const char *input, uint64_t *result);
 
+/**
+ * count_char_separated_values - count the number of values separated by a
+ * specific character
+ *
+ * @param str        a string
+ * @param character  a character that separates the values
+ *
+ * @return           0 if \p str is empty, number of occurences of
+ *                   \p character + 1 otherwise
+ */
+int
+count_char_separated_values(const char *str, char character);
+
 #endif
