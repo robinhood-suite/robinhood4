@@ -95,8 +95,8 @@ str2uint64_t(const char *input, uint64_t *result);
  * @param str        a string
  * @param character  a character that separates the values
  *
- * @return           0 if \p str is empty, number of occurences of
- *                   \p character + 1 otherwise
+ * @return           -1 if \p str is empty or there is an empty value,
+ *                   number of occurences of \p character + 1 otherwise
  */
 int
 count_char_separated_values(const char *str, char character);

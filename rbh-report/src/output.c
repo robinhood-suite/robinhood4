@@ -100,6 +100,9 @@ fill_acc_and_output_fields(const char *_output_string,
     int count;
 
     count = count_char_separated_values(_output_string, ',');
+    if (count == -1)
+        error_at_line(EXIT_FAILURE, EINVAL, __FILE__, __LINE__,
+                      "'%s' ill-formed, empty field", _output_string);
 
     fields = rbh_sstack_push(values_sstack, NULL, count * sizeof(*fields));
     if (fields == NULL)
