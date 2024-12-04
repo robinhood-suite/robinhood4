@@ -55,10 +55,10 @@ check_and_set_boundaries(struct rbh_range_field *field, char *field_string)
                       field_string);
 
     count = count_char_separated_values(open_bracket + 1, ';');
-    if (count == 0)
+    if (count == -1)
         error_at_line(EXIT_FAILURE, EINVAL, __FILE__, __LINE__,
-                      "'%s' ill-formed, nothing specified in boundaries",
-                      field_string);
+                      "'%s' ill-formed, empty boundary or missing value",
+                      open_bracket + 1);
 
     field->boundaries = rbh_sstack_push(values_sstack, NULL,
                                         count * sizeof(*field->boundaries));
@@ -91,6 +91,9 @@ fill_group_by_fields(const char *_group_by, struct rbh_group_fields *group)
     }
 
     count = count_char_separated_values(_group_by, ',');
+    if (count == -1)
+        error_at_line(EXIT_FAILURE, EINVAL, __FILE__, __LINE__,
+                      "'%s' ill-formed, empty field", _group_by);
 
     fields = rbh_sstack_push(values_sstack, NULL, count * sizeof(*fields));
     if (fields == NULL)
