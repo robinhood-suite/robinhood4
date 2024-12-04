@@ -46,3 +46,25 @@ str2uint64_t(const char *input, uint64_t *result)
 
     return 0;
 }
+
+int count_char_separated_values(const char *str, char character)
+{
+    int count;
+
+    if (str == NULL)
+        return 0;
+
+    /* Even if the string doesn't have any of the requested character, it still
+     * has at least one value.
+     */
+    count = 1;
+
+    while (*str) {
+        if (*str == character)
+            count++;
+
+        str++;
+    }
+
+    return count;
+}

@@ -16,22 +16,6 @@
 
 #include "report.h"
 
-int
-count_fields(const char *str)
-{
-    /* Even if the string has no comma, it still has at least one field */
-    int count = 1;
-
-    while (*str) {
-        if (*str == ',')
-            count++;
-
-        str++;
-    }
-
-    return count;
-}
-
 static enum field_accumulator
 str2accumulator(const char *str)
 {
@@ -115,7 +99,7 @@ fill_acc_and_output_fields(const char *_output_string,
     int counter = 0;
     int count;
 
-    count = count_fields(_output_string);
+    count = count_char_separated_values(_output_string, ',');
 
     fields = rbh_sstack_push(values_sstack, NULL, count * sizeof(*fields));
     if (fields == NULL)
