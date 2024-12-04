@@ -10,7 +10,7 @@ executable(
     'rbh-report',
     sources: [
         'rbh-report.c',
-        'src/group-by.c',
+        'src/group_by.c',
         'src/output.c',
     ],
     dependencies: [librobinhood_dep],

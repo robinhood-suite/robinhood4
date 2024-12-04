@@ -16,6 +16,25 @@
 
 #include "report.h"
 
+static void
+check_and_set_boundaries(struct rbh_range_field *field, char *field_string)
+{
+    char *open_bracket = strchr(field_string, '[');
+    char *close_bracket;
+
+    if (open_bracket == NULL)
+        return;
+
+    close_bracket = strchr(open_bracket, ']');
+    if (close_bracket == NULL || *(close_bracket + 1) != '\0')
+        error_at_line(EXIT_FAILURE, EINVAL, __FILE__, __LINE__,
+                      "'%s' ill-formed, missing ']' for boundaries",
+                      field_string);
+
+    *open_bracket = '\0';
+    *close_bracket = '\0';
+}
+
 void
 fill_group_by_fields(const char *_group_by, struct rbh_group_fields *group)
 {
@@ -45,6 +64,12 @@ fill_group_by_fields(const char *_group_by, struct rbh_group_fields *group)
 
     current_field = strtok(group_by, ",");
     while (current_field) {
+        /* If there are boundaries to set, this call will modify 'current_field'
+         * to set the opening bracket to '\0', so that the 'str2filter_field'
+         * only works on the field itself.
+         */
+        check_and_set_boundaries(&fields[counter], current_field);
+
         filter_field = str2filter_field(current_field);
         if (filter_field == NULL)
             error_at_line(EXIT_FAILURE, EINVAL, __FILE__, __LINE__,
