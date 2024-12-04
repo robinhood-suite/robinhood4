@@ -159,7 +159,7 @@ struct rbh_filter_options {
 
 struct rbh_range_field {
     struct rbh_filter_field field;
-    int *boundaries;
+    int64_t *boundaries;
     size_t boundaries_count;
 };
 
