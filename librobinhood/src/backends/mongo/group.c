@@ -72,6 +72,41 @@ is_set_for_range_needed(const struct rbh_group_fields *group)
     return false;
 }
 
+static bool
+get_field_range_key(char *range_key, const struct rbh_range_field *field)
+{
+    char onstack[XATTR_ONSTACK_LENGTH];
+    char *buffer = onstack;
+    const char *tmp_field;
+
+    tmp_field = field2str(&field->field, &buffer, sizeof(onstack));
+    if (tmp_field == NULL)
+        return false;
+
+    if (sprintf(range_key, "%s_range", tmp_field) <= 0)
+        return false;
+
+    escape_field_path(range_key);
+
+    return true;
+}
+
+static bool
+bson_append_range(bson_t *bson, const struct rbh_range_field *field)
+{
+    bson_t range_document;
+    char range_key[256];
+
+    if (!get_field_range_key(range_key, field))
+        return false;
+
+    if (!bson_append_document_begin(bson, range_key, strlen(range_key),
+                                    &range_document))
+        return false;
+
+    return bson_append_document_end(bson, &range_document);
+}
+
 bool
 bson_append_aggregate_set_stage(bson_t *bson, const char *key,
                                 size_t key_length,
@@ -82,6 +117,11 @@ bson_append_aggregate_set_stage(bson_t *bson, const char *key,
 
     if (!bson_append_document_begin(bson, key, key_length, &set_document))
         return false;
+
+    for (int i = 0; i < group->id_count; i++)
+        if (group->id_fields[i].boundaries_count != 0)
+            if (!bson_append_range(&set_document, &group->id_fields[i]))
+                return false;
 
     return bson_append_document_end(bson, &set_document);
 }
