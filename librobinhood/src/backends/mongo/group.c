@@ -77,12 +77,13 @@ bson_append_aggregate_set_stage(bson_t *bson, const char *key,
                                 size_t key_length,
                                 const struct rbh_group_fields *group)
 {
-    (void) bson;
-    (void) key;
-    (void) key_length;
-    (void) group;
 
-    return false;
+    bson_t set_document;
+
+    if (!bson_append_document_begin(bson, key, key_length, &set_document))
+        return false;
+
+    return bson_append_document_end(bson, &set_document);
 }
 
 static bool
