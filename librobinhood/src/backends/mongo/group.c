@@ -95,12 +95,21 @@ static bool
 bson_append_case(bson_t *bson, int stage_number, const char *field,
                  int64_t lower, int64_t upper)
 {
-    (void) bson;
-    (void) field;
-    (void) lower;
-    (void) upper;
+    bson_t *case_document;
+    const char *key;
+    char str[16];
 
-    return false;
+    bson_uint32_to_string(stage_number, &key, str, sizeof(str));
+
+    case_document = BCON_NEW(
+        "case",
+            "{", "$lte",
+                "[", BCON_UTF8(field), BCON_INT64(upper), "]",
+            "}",
+        "then",
+            "[", BCON_INT64(lower), BCON_INT64(upper), "]");
+
+    return BSON_APPEND_DOCUMENT(bson, key, case_document);
 }
 
 static bool
