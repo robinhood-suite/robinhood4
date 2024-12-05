@@ -92,6 +92,52 @@ get_field_range_key(char *range_key, const struct rbh_range_field *field)
 }
 
 static bool
+bson_append_case(bson_t *bson, int stage_number, const char *field,
+                 int64_t lower, int64_t upper)
+{
+    (void) bson;
+    (void) field;
+    (void) lower;
+    (void) upper;
+
+    return false;
+}
+
+static bool
+bson_append_switch(bson_t *bson, const struct rbh_range_field *field)
+{
+    char onstack[XATTR_ONSTACK_LENGTH];
+    bson_t branches_document;
+    bson_t switch_document;
+    char *buffer = onstack;
+    const char *tmp_field;
+    char field_str[256];
+
+    if (!BSON_APPEND_DOCUMENT_BEGIN(bson, "$switch", &switch_document))
+        return false;
+
+    if (!BSON_APPEND_ARRAY_BEGIN(&switch_document, "branches",
+                                 &branches_document))
+        return false;
+
+    tmp_field = field2str(&field->field, &buffer, sizeof(onstack));
+    if (tmp_field == NULL)
+        return false;
+
+    if (sprintf(field_str, "$%s", tmp_field) <= 0)
+        return false;
+
+    for (int i = 0; i < field->boundaries_count - 1; i++)
+        if (!bson_append_case(&branches_document, i, field_str,
+                              field->boundaries[i], field->boundaries[i + 1]))
+            return false;
+
+    return bson_append_array_end(&switch_document, &branches_document)
+        && BSON_APPEND_UTF8(&switch_document, "default", "other")
+        && bson_append_document_end(bson, &switch_document);
+}
+
+static bool
 bson_append_range(bson_t *bson, const struct rbh_range_field *field)
 {
     bson_t range_document;
@@ -100,11 +146,9 @@ bson_append_range(bson_t *bson, const struct rbh_range_field *field)
     if (!get_field_range_key(range_key, field))
         return false;
 
-    if (!bson_append_document_begin(bson, range_key, strlen(range_key),
-                                    &range_document))
-        return false;
-
-    return bson_append_document_end(bson, &range_document);
+    return BSON_APPEND_DOCUMENT_BEGIN(bson, range_key, &range_document)
+        && bson_append_switch(&range_document, field)
+        && bson_append_document_end(bson, &range_document);
 }
 
 bool
