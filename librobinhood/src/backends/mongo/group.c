@@ -73,17 +73,9 @@ is_set_for_range_needed(const struct rbh_group_fields *group)
 }
 
 static bool
-get_field_range_key(char *range_key, const struct rbh_range_field *field)
+get_field_range_key(char *range_key, const char *field)
 {
-    char onstack[XATTR_ONSTACK_LENGTH];
-    char *buffer = onstack;
-    const char *tmp_field;
-
-    tmp_field = field2str(&field->field, &buffer, sizeof(onstack));
-    if (tmp_field == NULL)
-        return false;
-
-    if (sprintf(range_key, "%s_range", tmp_field) <= 0)
+    if (sprintf(range_key, "%s_range", field) <= 0)
         return false;
 
     escape_field_path(range_key);
@@ -113,13 +105,11 @@ bson_append_case(bson_t *bson, int stage_number, const char *field,
 }
 
 static bool
-bson_append_switch(bson_t *bson, const struct rbh_range_field *field)
+bson_append_switch(bson_t *bson, const struct rbh_range_field *field,
+                   const char *_field_str)
 {
-    char onstack[XATTR_ONSTACK_LENGTH];
     bson_t branches_document;
     bson_t switch_document;
-    char *buffer = onstack;
-    const char *tmp_field;
     char field_str[256];
 
     if (!BSON_APPEND_DOCUMENT_BEGIN(bson, "$switch", &switch_document))
@@ -129,11 +119,7 @@ bson_append_switch(bson_t *bson, const struct rbh_range_field *field)
                                  &branches_document))
         return false;
 
-    tmp_field = field2str(&field->field, &buffer, sizeof(onstack));
-    if (tmp_field == NULL)
-        return false;
-
-    if (sprintf(field_str, "$%s", tmp_field) <= 0)
+    if (sprintf(field_str, "$%s", _field_str) <= 0)
         return false;
 
     for (int i = 0; i < field->boundaries_count - 1; i++)
@@ -149,14 +135,21 @@ bson_append_switch(bson_t *bson, const struct rbh_range_field *field)
 static bool
 bson_append_range(bson_t *bson, const struct rbh_range_field *field)
 {
+    char onstack[XATTR_ONSTACK_LENGTH];
+    char *buffer = onstack;
+    const char *tmp_field;
     bson_t range_document;
     char range_key[256];
 
-    if (!get_field_range_key(range_key, field))
+    tmp_field = field2str(&field->field, &buffer, sizeof(onstack));
+    if (tmp_field == NULL)
+        return false;
+
+    if (!get_field_range_key(range_key, tmp_field))
         return false;
 
     return BSON_APPEND_DOCUMENT_BEGIN(bson, range_key, &range_document)
-        && bson_append_switch(&range_document, field)
+        && bson_append_switch(&range_document, field, tmp_field)
         && bson_append_document_end(bson, &range_document);
 }
 
@@ -195,15 +188,27 @@ insert_group_id_fields(bson_t *bson, const struct rbh_group_fields *group)
         char onstack[XATTR_ONSTACK_LENGTH];
         char *buffer = onstack;
         const char *tmp_field;
-        char field_str[256];
+        char field_str[512];
         char field_key[256];
 
         tmp_field = field2str(&field->field, &buffer, sizeof(onstack));
         if (tmp_field == NULL)
             return false;
 
-        if (sprintf(field_str, "$%s", tmp_field) <= 0 ||
-            sprintf(field_key, "%s", tmp_field) <= 0)
+        if (field->boundaries_count) {
+            char field_range[256];
+
+            if (!get_field_range_key(field_range, tmp_field))
+                return false;
+
+            if (sprintf(field_str, "$%s", field_range) <= 0)
+                return false;
+        } else {
+            if (sprintf(field_str, "$%s", tmp_field) <= 0)
+                return false;
+        }
+
+        if (sprintf(field_key, "%s", tmp_field) <= 0)
             return false;
 
         escape_field_path(field_key);
