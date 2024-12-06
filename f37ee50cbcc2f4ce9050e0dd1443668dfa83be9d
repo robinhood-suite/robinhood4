@@ -50,6 +50,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e3699dcd_7a22e44a",
+        "filename": "librobinhood/src/alias.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-12-06T09:06:30Z",
+      "side": 1,
+      "message": "defect: (*argv)[i]",
+      "range": {
+        "startLine": 27,
+        "startChar": 19,
+        "endLine": 27,
+        "endChar": 26
+      },
+      "revId": "f37ee50cbcc2f4ce9050e0dd1443668dfa83be9d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b0db6911_021ab1d0",
         "filename": "librobinhood/src/alias.c",
         "patchSetId": 1
