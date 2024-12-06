@@ -44,11 +44,69 @@ test_range()
         difflines "$sum_smol_size" "$sum_large_size"
 }
 
+test_group_by_field_and_range()
+{
+    truncate --size 5 first_user_first_smol_file
+    truncate --size 5 first_user_second_smol_file
+    truncate --size 5 first_user_third_smol_file
+
+    truncate --size 50 first_user_first_large_file
+    truncate --size 50 first_user_second_large_file
+    truncate --size 50 first_user_third_large_file
+
+    truncate --size 20 second_user_first_smol_file
+    truncate --size 20 second_user_second_smol_file
+    truncate --size 20 second_user_third_smol_file
+
+    truncate --size 150 second_user_first_large_file
+    truncate --size 150 second_user_second_large_file
+    truncate --size 150 second_user_third_large_file
+
+    useradd -MN fake_user || true
+    chown fake_user: second_user_*
+
+    rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
+    userdel fake_user
+
+    local root_size="$(stat -c %s .)"
+    local sum_second_smol_size="$((20 * 3))"
+    local sum_second_large_size="$((150 * 3))"
+
+    if [[ $root_size -lt 30 ]]; then
+        local sum_first_smol_size="$((root_size + (5 * 3)))"
+        local sum_first_large_size="$((50 * 3))"
+        local expected="$(printf "%s\n%s\n%s\n%s\n" \
+                          "$sum_first_smol_size" "$sum_first_large_size" \
+                          "$sum_second_smol_size" "$sum_second_large_size" |
+                              sort -n)"
+    elif [[ $root_size -lt 70 ]]; then
+        local sum_first_smol_size="$((5 * 3))"
+        local sum_first_large_size="$((root_size + (50 * 3)))"
+        local expected="$(printf "%s\n%s\n%s\n%s\n" \
+                          "$sum_first_smol_size" "$sum_first_large_size" \
+                          "$sum_second_smol_size" "$sum_second_large_size" |
+                              sort -n)"
+    else
+        local sum_first_smol_size="$((5 * 3))"
+        local sum_first_large_size="$((50 * 3))"
+        local expected="$(printf "%s\n%s\n%s\n%s\n%s\n" \
+                          "$sum_first_smol_size" "$sum_first_large_size" \
+                          "$sum_second_smol_size" "$sum_second_large_size" \
+                          "$root_size" | sort -n)"
+    fi
+
+    # The sort is necessary here as we have no guarantee over the order of the
+    # output from Mongo until the sort is implemented by rbh-report
+    rbh_report "rbh:mongo:$testdb" --group-by "statx.uid,statx.size[0;30;70]" \
+                                   --output "sum(statx.size)" | sort -n |
+        difflines "$expected"
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
-declare -a tests=(test_range)
+declare -a tests=(test_range test_group_by_field_and_range)
 
 tmpdir=$(mktemp --directory)
 trap -- "rm -rf '$tmpdir'" EXIT
