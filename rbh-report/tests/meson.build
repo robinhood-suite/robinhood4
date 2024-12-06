@@ -11,6 +11,7 @@ integration_tests = [
   'test_min',
   'test_multi_output',
   'test_parsing',
+  'test_range',
   'test_sum',
 ]
 
