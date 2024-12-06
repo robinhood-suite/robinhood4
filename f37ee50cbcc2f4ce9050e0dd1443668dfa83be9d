@@ -26,6 +26,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f2bd6245_cc3779fd",
+        "filename": "librobinhood/include/robinhood/alias.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-12-06T09:19:43Z",
+      "side": 1,
+      "message": "minor: for this patch and the following ones, every function that isn\u0027t called by code outside of alias.c doesn\u0027t have to be declared in the .h. You only need to have the function as \"static\" the alias.c.\n\nCheck other files for how to do it",
+      "range": {
+        "startLine": 20,
+        "startChar": 0,
+        "endLine": 20,
+        "endChar": 20
+      },
+      "revId": "f37ee50cbcc2f4ce9050e0dd1443668dfa83be9d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "acf7dcb6_180d8a5e",
         "filename": "librobinhood/src/alias.c",
         "patchSetId": 1
