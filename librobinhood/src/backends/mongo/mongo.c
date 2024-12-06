@@ -201,10 +201,10 @@ find_form_token(const bson_t *bson)
 }
 
 static struct rbh_value_map *
-map_from_bson(bson_iter_t *iter)
+_map_from_bson(bson_iter_t *iter)
 {
-    bson_iter_t iter_for_count;
     struct rbh_value_map *map;
+    bson_iter_t iter_for_count;
     bson_iter_t subiter;
     char tmp[4096];
     size_t bufsize;
@@ -213,19 +213,15 @@ map_from_bson(bson_iter_t *iter)
     bufsize = sizeof(tmp);
     buffer = tmp;
 
-    if (!bson_iter_find(iter, "map"))
-        goto out;
-
-    if (!BSON_ITER_HOLDS_DOCUMENT(iter))
-        goto out;
-
     map = aligned_memalloc(alignof(*map), sizeof(*map), &buffer, &bufsize);
     if (map == NULL)
         return NULL;
 
     if (!bson_iter_recurse(iter, &subiter) ||
-        !bson_iter_recurse(iter, &iter_for_count))
-        goto out;
+        !bson_iter_recurse(iter, &iter_for_count)) {
+        errno = EINVAL;
+        return NULL;
+    }
 
     if (!bson_iter_rbh_value_map(&subiter, map,
                                  bson_iter_count(&iter_for_count),
@@ -233,6 +229,25 @@ map_from_bson(bson_iter_t *iter)
         return NULL;
 
     return map;
+}
+
+static struct rbh_value_map *
+map_from_bson(bson_iter_t *iter)
+{
+    struct rbh_value_map *content_map;
+
+    while (bson_iter_next(iter)) {
+        const char *key = bson_iter_key(iter);
+
+        if (strcmp(key, "map") == 0) {
+            if (!BSON_ITER_HOLDS_DOCUMENT(iter))
+                goto out;
+
+            content_map = _map_from_bson(iter);
+        }
+    }
+
+    return content_map;
 
 out:
     errno = EINVAL;
