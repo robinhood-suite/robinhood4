@@ -204,7 +204,7 @@ bson_append_fot_values(bson_t *bson, const char *key,
     bson_t subdoc;
 
     if (!(bson_append_document_begin(bson, key, key_length, &document)
-          && BSON_APPEND_INT32(&document, "_id", 0)
+          //&& BSON_APPEND_INT32(&document, "_id", 0)
           && BSON_APPEND_UTF8(&document, "form", "map")
           && BSON_APPEND_DOCUMENT_BEGIN(&document, "map", &subdoc)))
         return false;
