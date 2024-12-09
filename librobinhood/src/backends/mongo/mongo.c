@@ -200,6 +200,48 @@ find_form_token(const bson_t *bson)
     return token;
 }
 
+__attribute__((unused))
+static struct rbh_value_map *
+init_complete_map(struct rbh_value *id_map,
+                  struct rbh_value *content_map)
+{
+    struct rbh_value_map *complete_map;
+    struct rbh_value_pair *pairs;
+    char tmp[8192];
+    size_t bufsize;
+    /* We currently only need to read the id and content maps */
+    int count = (id_map ? 2 : 1);
+    char *buffer;
+
+    bufsize = sizeof(tmp);
+    buffer = tmp;
+
+    pairs = aligned_memalloc(alignof(*pairs), count * sizeof(*pairs), &buffer,
+                             &bufsize);
+    if (pairs == NULL)
+        return false;
+
+    complete_map = aligned_memalloc(alignof(*complete_map),
+                                    sizeof(*complete_map), &buffer, &bufsize);
+    if (complete_map == NULL)
+        return NULL;
+
+    if (id_map) {
+        pairs[0].key = "id";
+        pairs[0].value = id_map;
+        pairs[1].key = "content";
+        pairs[1].value = content_map;
+    } else {
+        pairs[0].key = "content";
+        pairs[0].value = content_map;
+    }
+
+    complete_map->pairs = pairs;
+    complete_map->count = count;
+
+    return complete_map;
+}
+
 static struct rbh_value_map *
 value_from_bson(bson_iter_t *iter, char **buffer, size_t *bufsize)
 {
