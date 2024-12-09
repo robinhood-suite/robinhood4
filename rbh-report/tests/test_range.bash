@@ -62,11 +62,11 @@ test_group_by_field_and_range()
     truncate --size 150 second_user_second_large_file
     truncate --size 150 second_user_third_large_file
 
-    useradd -MN fake_user || true
+    useradd -K MAIL_DIR=/dev/null -lMN fake_user || true
     chown fake_user: second_user_*
+    userdel fake_user || true
 
     rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
-    userdel fake_user
 
     local root_size="$(stat -c %s .)"
     local sum_second_smol_size="$((20 * 3))"
