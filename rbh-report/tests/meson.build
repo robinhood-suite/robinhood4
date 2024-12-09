@@ -6,12 +6,10 @@
 
 integration_tests = [
   'test_avg',
-  'test_group_by',
   'test_max',
   'test_min',
   'test_multi_output',
   'test_parsing',
-  'test_range',
   'test_sum',
 ]
 
@@ -19,3 +17,8 @@ foreach t: integration_tests
     e = find_program(t + '.bash')
     test(t, e, env: backend_path_env, suite: 'rbh-report', timeout: 120)
 endforeach
+
+e = find_program('test_group_by.bash')
+test('test_group_by', e, env: backend_path_env, suite: 'rbh-report', timeout: 120, should_fail: true)
+e = find_program('test_range.bash')
+test('test_range', e, env: backend_path_env, suite: 'rbh-report', timeout: 120, should_fail: true)

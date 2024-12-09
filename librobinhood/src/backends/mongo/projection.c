@@ -198,13 +198,15 @@ bson_append_fot_projection(bson_t *bson, const char *key, size_t key_length,
 static bool
 bson_append_fot_values(bson_t *bson, const char *key,
                        size_t key_length,
+                       const struct rbh_group_fields *group,
                        const struct rbh_filter_output *output)
 {
     bson_t document;
     bson_t subdoc;
 
     if (!(bson_append_document_begin(bson, key, key_length, &document)
-          //&& BSON_APPEND_INT32(&document, "_id", 0)
+          && ((group && group->id_fields == 0) ?
+                BSON_APPEND_INT64(&document, "_id", 0) : true)
           && BSON_APPEND_UTF8(&document, "form", "map")
           && BSON_APPEND_DOCUMENT_BEGIN(&document, "map", &subdoc)))
         return false;
@@ -234,11 +236,12 @@ bson_append_fot_values(bson_t *bson, const char *key,
 bool
 bson_append_aggregate_projection_stage(bson_t *bson, const char *key,
                                        size_t key_length,
+                                       const struct rbh_group_fields *group,
                                        const struct rbh_filter_output *output)
 {
     if (output->type == RBH_FOT_PROJECTION)
         return bson_append_fot_projection(bson, key, key_length,
                                           &output->projection);
     else
-        return bson_append_fot_values(bson, key, key_length, output);
+        return bson_append_fot_values(bson, key, key_length, group, output);
 }

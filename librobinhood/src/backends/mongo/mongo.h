@@ -297,10 +297,12 @@ bson_append_rbh_filter_sorts(bson_t *bson, const char *key, size_t key_length,
 bool
 bson_append_aggregate_projection_stage(bson_t *bson, const char *key,
                                        size_t key_length,
+                                       const struct rbh_group_fields *group,
                                        const struct rbh_filter_output *output);
 
-#define BSON_APPEND_AGGREGATE_PROJECTION_STAGE(bson, key, output) \
-    bson_append_aggregate_projection_stage(bson, key, strlen(key), output)
+#define BSON_APPEND_AGGREGATE_PROJECTION_STAGE(bson, key, group, output) \
+    bson_append_aggregate_projection_stage(bson, key, strlen(key), group, \
+                                           output)
 
     /*--------------------------------------------------------------------*
      |                              fsevent                               |
