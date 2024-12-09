@@ -88,7 +88,7 @@ convert_output_string_to_accumulator_field(char *output_string)
     return field;
 }
 
-int
+void
 fill_acc_and_output_fields(const char *_output_string,
                            struct rbh_group_fields *group,
                            struct rbh_filter_output *output)
@@ -128,6 +128,4 @@ fill_acc_and_output_fields(const char *_output_string,
     output->type = RBH_FOT_VALUES;
     output->output_fields.fields = fields;
     output->output_fields.count = count;
-
-    return count;
 }
