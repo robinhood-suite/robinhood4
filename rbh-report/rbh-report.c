@@ -42,6 +42,36 @@ destroy_from(void)
 }
 
 static void
+dump_value(const struct rbh_value *value)
+{
+    switch (value->type) {
+    case RBH_VT_INT64:
+        printf("%ld", value->int64);
+        break;
+    default:
+        error_at_line(EXIT_FAILURE, EINVAL, __FILE__, __LINE__,
+                      "Unexpected value type, found '%s'",
+                      VALUE_TYPE_NAMES[value->type]);
+    }
+}
+
+static void
+dump_map(const struct rbh_value_map *map, int expected_count, const char *key)
+{
+    if (map->count != expected_count)
+        error_at_line(EXIT_FAILURE, EINVAL, __FILE__, __LINE__,
+                      "Unexpected number of fields in '%s' map, expected '%d', got '%ld'",
+                      key, expected_count, map->count);
+
+    for (int i = 0; i < map->count; i++) {
+        dump_value(map->pairs[i].value);
+
+        if (i < map->count - 1)
+            printf(",");
+    }
+}
+
+static void
 report(const char *group_string, const char *output_string)
 {
     struct rbh_filter_options options = { 0 };
@@ -78,16 +108,7 @@ report(const char *group_string, const char *output_string)
                           "Failed to get the expected number of outputs in map, expected '%d', got '%ld'",
                           expected_field_count, map->count);
 
-        for (int i = 0; i < map->count; ++i) {
-            if (map->pairs[i].value->type != RBH_VT_INT64)
-                error_at_line(EXIT_FAILURE, EINVAL, __FILE__, __LINE__,
-                              "Unexpected value type in output map, found '%s'",
-                              VALUE_TYPE_NAMES[map->pairs[i].value->type]);
-
-            printf("%ld", map->pairs[i].value->int64);
-            if (i < map->count - 1)
-                printf(",");
-        }
+        dump_map(map, expected_field_count, "content");
         printf("\n");
     } while (true);
 }
