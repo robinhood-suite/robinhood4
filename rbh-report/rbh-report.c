@@ -78,7 +78,6 @@ report(const char *group_string, const char *output_string)
     struct rbh_filter_output output = { 0 };
     struct rbh_group_fields group = { 0 };
     struct rbh_mut_iterator *iter;
-    int expected_field_count;
 
     if (values_sstack == NULL) {
         values_sstack = rbh_sstack_new(MIN_VALUES_SSTACK_ALLOC *
@@ -89,8 +88,7 @@ report(const char *group_string, const char *output_string)
     }
 
     fill_group_by_fields(group_string, &group);
-    expected_field_count = fill_acc_and_output_fields(output_string,
-                                                      &group, &output);
+    fill_acc_and_output_fields(output_string, &group, &output);
 
     iter = rbh_backend_report(from, NULL, &group, &options, &output);
     if (iter == NULL)
@@ -103,12 +101,7 @@ report(const char *group_string, const char *output_string)
         if (map == NULL)
             break;
 
-        if (map->count != expected_field_count)
-            error_at_line(EXIT_FAILURE, EINVAL, __FILE__, __LINE__,
-                          "Failed to get the expected number of outputs in map, expected '%d', got '%ld'",
-                          expected_field_count, map->count);
-
-        dump_map(map, expected_field_count, "content");
+        dump_map(map, output.output_fields.count, "content");
         printf("\n");
     } while (true);
 }

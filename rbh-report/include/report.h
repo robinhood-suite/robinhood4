@@ -15,7 +15,7 @@ extern struct rbh_sstack *values_sstack;
 int
 count_fields(const char *str);
 
-int
+void
 fill_acc_and_output_fields(const char *_output_string,
                            struct rbh_group_fields *group,
                            struct rbh_filter_output *output);
