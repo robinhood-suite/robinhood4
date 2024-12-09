@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "74a0285a_7b7bb1d1",
+        "filename": "rbh-report/src/group_by.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-12-09T10:39:26Z",
+      "side": 1,
+      "message": "minor: well this may not be true, just there are some characters after the closing bracket",
+      "range": {
+        "startLine": 31,
+        "startChar": 22,
+        "endLine": 31,
+        "endChar": 67
+      },
+      "revId": "846450dc617f2a8b7d2d0497e0c7c739e1c9454f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
