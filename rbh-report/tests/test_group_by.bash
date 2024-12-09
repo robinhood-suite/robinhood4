@@ -45,11 +45,11 @@ test_group_by_user()
     truncate --size 1M first_dir/first_file
     truncate --size 1G second_dir/second_file
 
-    useradd -MN fake_user
+    useradd -K MAIL_DIR=/dev/null -lMN fake_user || true
     chown fake_user: first_dir first_dir/first_file
+    userdel fake_user || true
 
     rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
-    userdel fake_user
 
     local root_size="$(stat -c %s .)"
     local first_dir_size="$(stat -c %s first_dir)"
@@ -74,11 +74,11 @@ test_multi_group_by()
     truncate --size 1M first_dir/first_file
     truncate --size 1G second_dir/second_file
 
-    useradd -MN fake_user
+    useradd -K MAIL_DIR=/dev/null -lMN fake_user || true
     chown fake_user: first_dir first_dir/first_file
+    userdel fake_user || true
 
     rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
-    userdel fake_user
 
     local root_size="$(stat -c %s .)"
     local first_dir_size="$(stat -c %s first_dir)"
