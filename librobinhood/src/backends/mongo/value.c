@@ -126,10 +126,6 @@ bson_append_rbh_value_map(bson_t *bson, const char *key, size_t keylen,
      |                     bson_iter_rbh_value_map()                      |
      *--------------------------------------------------------------------*/
 
-static bool
-bson_iter_rbh_value(bson_iter_t *iter, struct rbh_value *value,
-                    char **buffer, size_t *bufsize);
-
 bool
 bson_iter_rbh_value_map(bson_iter_t *iter, struct rbh_value_map *map,
                         size_t count, char **buffer, size_t *bufsize)
@@ -204,7 +200,7 @@ bson_iter_rbh_value_sequence(bson_iter_t *iter, struct rbh_value *value,
     return true;
 }
 
-static bool
+bool
 bson_iter_rbh_value(bson_iter_t *iter, struct rbh_value *value,
                     char **buffer, size_t *bufsize)
 {
