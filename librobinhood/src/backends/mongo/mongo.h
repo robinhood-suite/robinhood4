@@ -237,6 +237,10 @@ struct rbh_fsentry *
 fsentry_from_bson(bson_iter_t *iter);
 
 bool
+bson_iter_rbh_value(bson_iter_t *iter, struct rbh_value *value,
+                    char **buffer, size_t *bufsize);
+
+bool
 bson_iter_rbh_value_map(bson_iter_t *iter, struct rbh_value_map *map,
                         size_t count, char **buffer, size_t *bufsize);
 
