@@ -116,7 +116,26 @@ report(const char *group_string, const char *output_string)
         if (map == NULL)
             break;
 
-        dump_map(map, output.output_fields.count, "content");
+        if (group_string == NULL && map->count != 1)
+            error_at_line(EXIT_FAILURE, EINVAL, __FILE__, __LINE__,
+                          "Expected 1 map in output, but found '%ld'",
+                          map->count);
+
+        if (group_string != NULL && map->count != 2)
+            error_at_line(EXIT_FAILURE, EINVAL, __FILE__, __LINE__,
+                          "Expected 2 maps in output, but found '%ld'",
+                          map->count);
+
+        if (map->count == 2) {
+            dump_map(&map->pairs[0].value->map, group.id_count, "id");
+            printf(": ");
+            dump_map(&map->pairs[1].value->map, output.output_fields.count,
+                     "output");
+        } else {
+            dump_map(&map->pairs[0].value->map, output.output_fields.count,
+                     "output");
+        }
+
         printf("\n");
     } while (true);
 }

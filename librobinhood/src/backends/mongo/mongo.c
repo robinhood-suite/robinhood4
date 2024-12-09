@@ -129,7 +129,8 @@ bson_pipeline_creation(const struct rbh_filter *filter,
                                        options->sort.count)
        && bson_append_document_end(&array, &stage)))
      && (BSON_APPEND_DOCUMENT_BEGIN(&array, UINT8_TO_STR[i], &stage) && ++i
-         && BSON_APPEND_AGGREGATE_PROJECTION_STAGE(&stage, "$project", output)
+         && BSON_APPEND_AGGREGATE_PROJECTION_STAGE(&stage, "$project", group,
+                                                   output)
          && bson_append_document_end(&array, &stage))
      && (options->skip == 0
       || (BSON_APPEND_DOCUMENT_BEGIN(&array, UINT8_TO_STR[i], &stage) && ++i
@@ -200,7 +201,6 @@ find_form_token(const bson_t *bson)
     return token;
 }
 
-__attribute__((unused))
 static struct rbh_value_map *
 init_complete_map(struct rbh_value *id_map,
                   struct rbh_value *content_map)
@@ -242,7 +242,7 @@ init_complete_map(struct rbh_value *id_map,
     return complete_map;
 }
 
-static struct rbh_value_map *
+static struct rbh_value *
 value_from_bson(bson_iter_t *iter, char **buffer, size_t *bufsize)
 {
     struct rbh_value *value;
@@ -257,13 +257,15 @@ value_from_bson(bson_iter_t *iter, char **buffer, size_t *bufsize)
     if (value->type != RBH_VT_MAP)
         return NULL;
 
-    return &value->map;
+    return value;
 }
 
 static struct rbh_value_map *
 map_from_bson(bson_iter_t *iter)
 {
-    struct rbh_value_map *content_map;
+    struct rbh_value *content_map = NULL;
+    struct rbh_value_map *complete_map;
+    struct rbh_value *id_map = NULL;
     char tmp[8192];
     size_t bufsize;
     char *buffer;
@@ -274,7 +276,12 @@ map_from_bson(bson_iter_t *iter)
     while (bson_iter_next(iter)) {
         const char *key = bson_iter_key(iter);
 
-        if (strcmp(key, "map") == 0) {
+        if (strcmp(key, "_id") == 0) {
+            id_map = value_from_bson(iter, &buffer, &bufsize);
+            if (id_map == NULL)
+                goto out;
+
+        } else if (strcmp(key, "map") == 0) {
             if (!BSON_ITER_HOLDS_DOCUMENT(iter))
                 goto out;
 
@@ -282,7 +289,11 @@ map_from_bson(bson_iter_t *iter)
         }
     }
 
-    return content_map;
+    complete_map = init_complete_map(id_map, content_map);
+    if (complete_map == NULL)
+        goto out;
+
+    return complete_map;
 
 out:
     errno = EINVAL;
@@ -816,7 +827,7 @@ bson_from_options_and_output(const struct rbh_filter_options *options,
     }
 
     bson = bson_new();
-    if (BSON_APPEND_AGGREGATE_PROJECTION_STAGE(bson, "projection", output)
+    if (BSON_APPEND_AGGREGATE_PROJECTION_STAGE(bson, "projection", NULL, output)
      && (options->skip == 0
       || BSON_APPEND_INT64(bson, "skip", options->skip))
      && (options->limit == 0
