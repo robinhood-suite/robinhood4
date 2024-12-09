@@ -45,8 +45,23 @@ static void
 dump_value(const struct rbh_value *value)
 {
     switch (value->type) {
+    case RBH_VT_INT32:
+        printf("%d", value->int32);
+        break;
     case RBH_VT_INT64:
         printf("%ld", value->int64);
+        break;
+    case RBH_VT_STRING:
+        printf("%s", value->string);
+        break;
+    case RBH_VT_SEQUENCE:
+        printf("[");
+        for (int j = 0; j < value->sequence.count; j++) {
+            dump_value(&value->sequence.values[j]);
+            if (j < value->sequence.count - 1)
+                printf("; ");
+        }
+        printf("]");
         break;
     default:
         error_at_line(EXIT_FAILURE, EINVAL, __FILE__, __LINE__,
