@@ -10,6 +10,7 @@ integration_tests = [
   'test_max',
   'test_min',
   'test_multi_output',
+  'test_output_format',
   'test_parsing',
   'test_range',
   'test_sum',
