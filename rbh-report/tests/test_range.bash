@@ -13,6 +13,8 @@ test_dir=$(dirname $(readlink -e $0))
 #                                    TESTS                                     #
 ################################################################################
 
+main_user_id="$(id -u)"
+
 test_range()
 {
     truncate --size 5 first_smol_file
@@ -41,7 +43,7 @@ test_range()
     # output from Mongo until the sort is implemented by rbh-report
     rbh_report "rbh:mongo:$testdb" --group-by "statx.size[0;30]" \
                                    --output "sum(statx.size)" | sort -n |
-        difflines "$sum_smol_size" "$sum_large_size"
+        difflines "[0; 30]: $sum_smol_size" "other: $sum_large_size"
 }
 
 test_group_by_field_and_range()
@@ -63,6 +65,7 @@ test_group_by_field_and_range()
     truncate --size 150 second_user_third_large_file
 
     useradd -MN fake_user || true
+    local fake_user_id="$(id -u fake_user)"
     chown fake_user: second_user_*
     userdel fake_user || true
 
@@ -76,23 +79,29 @@ test_group_by_field_and_range()
         local sum_first_smol_size="$((root_size + (5 * 3)))"
         local sum_first_large_size="$((50 * 3))"
         local expected="$(printf "%s\n%s\n%s\n%s\n" \
-                          "$sum_first_smol_size" "$sum_first_large_size" \
-                          "$sum_second_smol_size" "$sum_second_large_size" |
+                          "$main_user_id,[0; 30]: $sum_first_smol_size"
+                          "$main_user_id,[30; 70]: $sum_first_large_size" \
+                          "$fake_user_id,[0; 30]: $sum_second_smol_size" \
+                          "$fake_user_id,[30; 70]: $sum_second_large_size" |
                               sort -n)"
     elif [[ $root_size -lt 70 ]]; then
         local sum_first_smol_size="$((5 * 3))"
         local sum_first_large_size="$((root_size + (50 * 3)))"
         local expected="$(printf "%s\n%s\n%s\n%s\n" \
-                          "$sum_first_smol_size" "$sum_first_large_size" \
-                          "$sum_second_smol_size" "$sum_second_large_size" |
+                          "$main_user_id,[0; 30]: $sum_first_smol_size" \
+                          "$main_user_id,[30; 70]: $sum_first_large_size" \
+                          "$fake_user_id,[0; 30]: $sum_second_smol_size" \
+                          "$fake_user_id,[30; 70]: $sum_second_large_size" |
                               sort -n)"
     else
         local sum_first_smol_size="$((5 * 3))"
         local sum_first_large_size="$((50 * 3))"
         local expected="$(printf "%s\n%s\n%s\n%s\n%s\n" \
-                          "$sum_first_smol_size" "$sum_first_large_size" \
-                          "$sum_second_smol_size" "$sum_second_large_size" \
-                          "$root_size" | sort -n)"
+                          "$main_user_id,[0; 30]: $sum_first_smol_size" \
+                          "$main_user_id,[30; 70]: $sum_first_large_size" \
+                          "$fake_user_id,[0; 30]: $sum_second_smol_size" \
+                          "$fake_user_id,other: $sum_second_large_size" \
+                          "$main_user_id,other: $root_size" | sort -n)"
     fi
 
     # The sort is necessary here as we have no guarantee over the order of the

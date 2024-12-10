@@ -13,6 +13,10 @@ test_dir=$(dirname $(readlink -e $0))
 #                                    TESTS                                     #
 ################################################################################
 
+regular=32768
+directory=16384
+main_user_id="$(id -u)"
+
 test_group_by_type()
 {
     mkdir first_dir
@@ -35,7 +39,7 @@ test_group_by_type()
     # output from Mongo until the sort is implemented by rbh-report
     rbh_report "rbh:mongo:$testdb" --group-by "statx.type" \
                                    --output "sum(statx.size)" | sort -n |
-        difflines "$sum_dir_size" "$sum_file_size"
+        difflines "$directory: $sum_dir_size" "$regular: $sum_file_size"
 }
 
 test_group_by_user()
@@ -46,7 +50,9 @@ test_group_by_user()
     truncate --size 1G second_dir/second_file
 
     useradd -MN fake_user || true
+    local fake_user_id="$(id -u fake_user)"
     chown fake_user: first_dir first_dir/first_file
+
     userdel fake_user || true
 
     rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
@@ -64,7 +70,8 @@ test_group_by_user()
     # output from Mongo until the sort is implemented by rbh-report
     rbh_report "rbh:mongo:$testdb" --group-by "statx.uid" \
                                    --output "sum(statx.size)" | sort -n |
-        difflines "$fake_user_size" "$main_user_size"
+        difflines "$main_user_id: $main_user_size" \
+                  "$fake_user_id: $fake_user_size"
 }
 
 test_multi_group_by()
@@ -75,6 +82,7 @@ test_multi_group_by()
     truncate --size 1G second_dir/second_file
 
     useradd -MN fake_user || true
+    local fake_user_id="$(id -u fake_user)"
     chown fake_user: first_dir first_dir/first_file
     userdel fake_user || true
 
@@ -95,8 +103,10 @@ test_multi_group_by()
     # output from Mongo until the sort is implemented by rbh-report
     rbh_report "rbh:mongo:$testdb" --group-by "statx.uid,statx.type" \
                                    --output "sum(statx.size)" | sort -n |
-        difflines "$fake_user_dir_size" "$main_user_dir_size" \
-                  "$fake_user_file_size" "$main_user_file_size"
+        difflines "$main_user_id,$directory: $main_user_dir_size" \
+                  "$main_user_id,$regular: $main_user_file_size" \
+                  "$fake_user_id,$directory: $fake_user_dir_size" \
+                  "$fake_user_id,$regular: $fake_user_file_size"
 }
 
 ################################################################################
