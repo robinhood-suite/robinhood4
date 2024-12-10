@@ -87,7 +87,7 @@ dump_map(const struct rbh_value_map *map, int expected_count, const char *key)
 }
 
 static void
-report(const char *group_string, const char *output_string)
+report(const char *group_string, const char *output_string, bool ascending_sort)
 {
     struct rbh_filter_options options = { 0 };
     struct rbh_filter_output output = { 0 };
@@ -96,7 +96,7 @@ report(const char *group_string, const char *output_string)
         .field = {
             .fsentry = RBH_FP_ID,
         },
-        .ascending = true,
+        .ascending = ascending_sort,
     };
     struct rbh_mut_iterator *iter;
 
@@ -206,14 +206,19 @@ main(int argc, char *argv[])
             .has_arg = required_argument,
             .val = 'o',
         },
+        {
+            .name = "rsort",
+            .val = 'r',
+        },
         {}
     };
+    bool ascending_sort = true;
     char *output = NULL;
     char *group = NULL;
     char c;
 
     /* Parse the command line */
-    while ((c = getopt_long(argc, argv, "hg:o:", LONG_OPTIONS, NULL)) != -1) {
+    while ((c = getopt_long(argc, argv, "hg:o:r", LONG_OPTIONS, NULL)) != -1) {
         switch (c) {
         case 'g':
             group = strdup(optarg);
@@ -227,6 +232,9 @@ main(int argc, char *argv[])
             output = strdup(optarg);
             if (output == NULL)
                 error(EXIT_FAILURE, ENOMEM, "strdup");
+            break;
+        case 'r':
+            ascending_sort = false;
             break;
         default:
             /* getopt_long() prints meaningful error messages itself */
@@ -247,7 +255,7 @@ main(int argc, char *argv[])
     /* Parse SOURCE */
     from = rbh_backend_from_uri(argv[0]);
 
-    report(group, output);
+    report(group, output, ascending_sort);
 
     return EXIT_SUCCESS;
 }
