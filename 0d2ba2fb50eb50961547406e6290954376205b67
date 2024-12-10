@@ -34,6 +34,24 @@
       "parentUuid": "48f24a32_78be436d",
       "revId": "0d2ba2fb50eb50961547406e6290954376205b67",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "223ed669_d8bc8296",
+        "filename": "librobinhood/src/backends/mongo/group.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-12-10T08:23:30Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "171b2798_e70a88ab",
+      "revId": "0d2ba2fb50eb50961547406e6290954376205b67",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
