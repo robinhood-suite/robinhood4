@@ -39,10 +39,8 @@ test_range()
         local sum_large_size="$((root_size + (large_size * 3)))"
     fi
 
-    # The sort is necessary here as we have no guarantee over the order of the
-    # output from Mongo until the sort is implemented by rbh-report
     rbh_report "rbh:mongo:$testdb" --group-by "statx.size[0;30]" \
-                                   --output "sum(statx.size)" | sort -n |
+                                   --output "sum(statx.size)" |
         difflines "[0; 30]: $sum_smol_size" "[30; +inf]: $sum_large_size"
 }
 
@@ -82,8 +80,7 @@ test_group_by_field_and_range()
                           "$main_user_id,[0; 30]: $sum_first_smol_size"
                           "$main_user_id,[30; 70]: $sum_first_large_size" \
                           "$fake_user_id,[0; 30]: $sum_second_smol_size" \
-                          "$fake_user_id,[30; 70]: $sum_second_large_size" |
-                              sort -n)"
+                          "$fake_user_id,[30; 70]: $sum_second_large_size")"
     elif [[ $root_size -lt 70 ]]; then
         local sum_first_smol_size="$((5 * 3))"
         local sum_first_large_size="$((root_size + (50 * 3)))"
@@ -91,23 +88,20 @@ test_group_by_field_and_range()
                           "$main_user_id,[0; 30]: $sum_first_smol_size" \
                           "$main_user_id,[30; 70]: $sum_first_large_size" \
                           "$fake_user_id,[0; 30]: $sum_second_smol_size" \
-                          "$fake_user_id,[30; 70]: $sum_second_large_size" |
-                              sort -n)"
+                          "$fake_user_id,[30; 70]: $sum_second_large_size")"
     else
         local sum_first_smol_size="$((5 * 3))"
         local sum_first_large_size="$((50 * 3))"
         local expected="$(printf "%s\n%s\n%s\n%s\n%s\n" \
                           "$main_user_id,[0; 30]: $sum_first_smol_size" \
                           "$main_user_id,[30; 70]: $sum_first_large_size" \
+                          "$main_user_id,[70; +inf]: $root_size" \
                           "$fake_user_id,[0; 30]: $sum_second_smol_size" \
-                          "$fake_user_id,[70; +inf]: $sum_second_large_size" \
-                          "$main_user_id,[70; +inf]: $root_size" | sort -n)"
+                          "$fake_user_id,[70; +inf]: $sum_second_large_size")"
     fi
 
-    # The sort is necessary here as we have no guarantee over the order of the
-    # output from Mongo until the sort is implemented by rbh-report
     rbh_report "rbh:mongo:$testdb" --group-by "statx.uid,statx.size[0;30;70]" \
-                                   --output "sum(statx.size)" | sort -n |
+                                   --output "sum(statx.size)" |
         difflines "$expected"
 }
 
