@@ -16,6 +16,24 @@
       "message": "sugest: check the return value",
       "revId": "0d2ba2fb50eb50961547406e6290954376205b67",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "171b2798_e70a88ab",
+        "filename": "librobinhood/src/backends/mongo/group.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-12-10T08:18:41Z",
+      "side": 1,
+      "message": "according to the documentation, this call cannot fail, it will return the number of characters in the key",
+      "parentUuid": "48f24a32_78be436d",
+      "revId": "0d2ba2fb50eb50961547406e6290954376205b67",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
