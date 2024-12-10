@@ -92,6 +92,12 @@ report(const char *group_string, const char *output_string)
     struct rbh_filter_options options = { 0 };
     struct rbh_filter_output output = { 0 };
     struct rbh_group_fields group = { 0 };
+    struct rbh_filter_sort sort = {
+        .field = {
+            .fsentry = RBH_FP_ID,
+        },
+        .ascending = true,
+    };
     struct rbh_mut_iterator *iter;
 
     if (values_sstack == NULL) {
@@ -104,6 +110,9 @@ report(const char *group_string, const char *output_string)
 
     fill_group_by_fields(group_string, &group);
     fill_acc_and_output_fields(output_string, &group, &output);
+
+    options.sort.items = &sort;
+    options.sort.count = 1;
 
     iter = rbh_backend_report(from, NULL, &group, &options, &output);
     if (iter == NULL)
