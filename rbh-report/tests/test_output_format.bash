@@ -22,7 +22,7 @@ symbolic=40960
 
 main_user_id="$(id -u)"
 
-test_format_multi_group()
+test_format_multi_group_and_rsort()
 {
     mkdir first_user_dir
     cd first_user_dir
@@ -57,10 +57,8 @@ test_format_multi_group()
     local first_symlink_size="$(stat -c %s first_user_dir/first_slink)"
     local second_symlink_size="$(stat -c %s second_user_dir/second_slink)"
 
-    # The sort is necessary here as we have no guarantee over the order of the
-    # output from Mongo until the sort is implemented by rbh-report
     rbh_report "rbh:mongo:$testdb" --group-by "statx.uid,statx.type" \
-                                   --output "sum(statx.size)" | sort -n |
+                                   --output "sum(statx.size)" |
         difflines "$main_user_id,$fifo: 0" \
                   "$main_user_id,$char: 0" \
                   "$main_user_id,$directory: $first_root_size" \
@@ -73,13 +71,28 @@ test_format_multi_group()
                   "$fake_user_id,$block: 0" \
                   "$fake_user_id,$regular: 0" \
                   "$fake_user_id,$symbolic: $second_symlink_size"
+
+    rbh_report "rbh:mongo:$testdb" --group-by "statx.uid,statx.type" \
+                                   --output "sum(statx.size)" --rsort |
+        difflines "$fake_user_id,$symbolic: $second_symlink_size" \
+                  "$fake_user_id,$regular: 0" \
+                  "$fake_user_id,$block: 0" \
+                  "$fake_user_id,$directory: $second_root_size" \
+                  "$fake_user_id,$char: 0" \
+                  "$fake_user_id,$fifo: 0" \
+                  "$main_user_id,$symbolic: $first_symlink_size" \
+                  "$main_user_id,$regular: 0" \
+                  "$main_user_id,$block: 0" \
+                  "$main_user_id,$directory: $first_root_size" \
+                  "$main_user_id,$char: 0" \
+                  "$main_user_id,$fifo: 0"
 }
 
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
-declare -a tests=(test_format_multi_group)
+declare -a tests=(test_format_multi_group_and_rsort)
 
 tmpdir=$(mktemp --directory)
 trap -- "rm -rf '$tmpdir'" EXIT
