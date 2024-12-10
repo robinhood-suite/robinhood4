@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "48f24a32_78be436d",
+        "filename": "librobinhood/src/backends/mongo/group.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-12-10T08:08:47Z",
+      "side": 1,
+      "message": "sugest: check the return value",
+      "revId": "0d2ba2fb50eb50961547406e6290954376205b67",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
