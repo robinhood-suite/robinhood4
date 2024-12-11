@@ -16,6 +16,29 @@
       "message": "style",
       "revId": "c492833ac0d8669c27f92992033bba841f8659e5",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fe77e423_2573fb57",
+        "filename": "librobinhood/src/backends/mongo/mongo.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-12-11T10:10:30Z",
+      "side": 1,
+      "message": "style: wrong order",
+      "range": {
+        "startLine": 207,
+        "startChar": 4,
+        "endLine": 207,
+        "endChar": 31
+      },
+      "revId": "c492833ac0d8669c27f92992033bba841f8659e5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
