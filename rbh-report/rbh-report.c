@@ -91,13 +91,11 @@ report(const char *group_string, const char *output_string, bool ascending_sort)
                           map->count);
 
         if (map->count == 2) {
-            dump_map(&map->pairs[0].value->map, group.id_count, "id");
+            dump_id_map(&map->pairs[0].value->map, group);
             printf(": ");
-            dump_map(&map->pairs[1].value->map, output.output_fields.count,
-                     "output");
+            dump_output_map(&map->pairs[1].value->map, output);
         } else {
-            dump_map(&map->pairs[0].value->map, output.output_fields.count,
-                     "output");
+            dump_output_map(&map->pairs[0].value->map, output);
         }
 
         printf("\n");

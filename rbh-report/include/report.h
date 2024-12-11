@@ -24,6 +24,10 @@ void
 fill_group_by_fields(const char *_group_by, struct rbh_group_fields *group);
 
 void
-dump_map(const struct rbh_value_map *map, int expected_count, const char *key);
+dump_id_map(const struct rbh_value_map *map, struct rbh_group_fields group);
+
+void
+dump_output_map(const struct rbh_value_map *map,
+                struct rbh_filter_output output);
 
 #endif

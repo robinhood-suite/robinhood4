@@ -47,12 +47,29 @@ dump_value(const struct rbh_value *value)
 }
 
 void
-dump_map(const struct rbh_value_map *map, int expected_count, const char *key)
+dump_id_map(const struct rbh_value_map *map, struct rbh_group_fields group)
 {
-    if (map->count != expected_count)
+    if (map->count != group.id_count)
         error_at_line(EXIT_FAILURE, EINVAL, __FILE__, __LINE__,
-                      "Unexpected number of fields in '%s' map, expected '%d', got '%ld'",
-                      key, expected_count, map->count);
+                      "Unexpected number of fields in id map, expected '%ld', got '%ld'",
+                      group.id_count, map->count);
+
+    for (int i = 0; i < map->count; i++) {
+        dump_value(map->pairs[i].value);
+
+        if (i < map->count - 1)
+            printf(",");
+    }
+}
+
+void
+dump_output_map(const struct rbh_value_map *map,
+                const struct rbh_filter_output output)
+{
+    if (map->count != output.output_fields.count)
+        error_at_line(EXIT_FAILURE, EINVAL, __FILE__, __LINE__,
+                      "Unexpected number of fields in output map, expected '%ld', got '%ld'",
+                      output.output_fields.count, map->count);
 
     for (int i = 0; i < map->count; i++) {
         dump_value(map->pairs[i].value);
