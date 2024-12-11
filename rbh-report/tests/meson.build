@@ -6,6 +6,7 @@
 
 integration_tests = [
   'test_avg',
+  'test_count',
   'test_group_by',
   'test_max',
   'test_min',
