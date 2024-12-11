@@ -74,7 +74,8 @@ check_and_set_boundaries(struct rbh_range_field *field, char *field_string)
 }
 
 void
-fill_group_by_fields(const char *_group_by, struct rbh_group_fields *group)
+fill_group_by_fields(const char *_group_by, struct rbh_group_fields *group,
+                     struct result_columns *columns)
 {
     const struct rbh_filter_field *filter_field;
     struct rbh_range_field *fields;
@@ -103,6 +104,8 @@ fill_group_by_fields(const char *_group_by, struct rbh_group_fields *group)
     group_by = strdup(_group_by);
     if (group_by == NULL)
         error_at_line(EXIT_FAILURE, EINVAL, __FILE__, __LINE__, "strdup");
+
+    init_id_columns(columns, count);
 
     current_field = strtok_r(group_by, ",", &saveptr);
     while (current_field) {

@@ -53,6 +53,7 @@ report(const char *group_string, const char *output_string, bool ascending_sort)
         },
         .ascending = ascending_sort,
     };
+    struct result_columns columns;
     struct rbh_mut_iterator *iter;
 
     if (values_sstack == NULL) {
@@ -63,8 +64,8 @@ report(const char *group_string, const char *output_string, bool ascending_sort)
                           "rbh_sstack_new");
     }
 
-    fill_group_by_fields(group_string, &group);
-    fill_acc_and_output_fields(output_string, &group, &output);
+    fill_group_by_fields(group_string, &group, &columns);
+    fill_acc_and_output_fields(output_string, &group, &output, &columns);
 
     options.sort.items = &sort;
     options.sort.count = 1;
