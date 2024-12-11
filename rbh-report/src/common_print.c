@@ -5,15 +5,9 @@
  * SPDX-License-Identifer: LGPL-3.0-or-later
  */
 
-#include <errno.h>
-#include <getopt.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <sysexits.h>
+#include <sys/stat.h>
 
 #include <robinhood.h>
-#include <robinhood/backend.h>
-#include <robinhood/uri.h>
 
 #include "report.h"
 
@@ -47,16 +41,49 @@ dump_value(const struct rbh_value *value, char *buffer)
     __builtin_unreachable();
 }
 
+static int
+dump_type_value(const struct rbh_value *value, char *buffer)
+{
+    if (value->type != RBH_VT_INT32)
+        error_at_line(EXIT_FAILURE, EINVAL, __FILE__, __LINE__,
+                      "Unexpected value type, expected 'int32', found '%s'",
+                      VALUE_TYPE_NAMES[value->type]);
+
+    switch (value->int32) {
+    case S_IFBLK:
+        return sprintf(buffer, "block");
+    case S_IFCHR:
+        return sprintf(buffer, "char");
+    case S_IFDIR:
+        return sprintf(buffer, "directory");
+    case S_IFREG:
+        return sprintf(buffer, "file");
+    case S_IFLNK:
+        return sprintf(buffer, "link");
+    case S_IFIFO:
+        return sprintf(buffer, "fifo");
+    case S_IFSOCK:
+        return sprintf(buffer, "socket");
+    default:
+        error_at_line(EXIT_FAILURE, EINVAL, __FILE__, __LINE__,
+                      "unexpected file type '%d'", value->type);
+    }
+
+    __builtin_unreachable();
+}
+
 int
 dump_decorated_value(const struct rbh_value *value,
                      const struct rbh_filter_field *field,
                      char *buffer)
 {
     switch (field->fsentry) {
+    case RBH_FP_STATX:
+        if (field->statx == RBH_STATX_TYPE)
+            return dump_type_value(value, buffer);
     default:
         return dump_value(value, buffer);
     }
 
     __builtin_unreachable();
 }
-
