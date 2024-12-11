@@ -22,6 +22,30 @@
       },
       "revId": "0cb72d6e4f9baa197d3fd861e01160cd282f5ac8",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "76a49bb8_3a33fe2b",
+        "filename": "rbh-report/tests/test_range.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-12-11T08:19:23Z",
+      "side": 1,
+      "message": "Yes, if there is no value falling in an interval or outside of those intervals, Mongo returns nothing, and there is nothing to output. For instance, if there is no entry that has a size between 30 and 70 bytes, nothing is outputted for those intervals, only for [0; 30] and for the sizes \u003e 70 bytes.",
+      "parentUuid": "41f43b93_dea86f31",
+      "range": {
+        "startLine": 100,
+        "startChar": 47,
+        "endLine": 100,
+        "endChar": 76
+      },
+      "revId": "0cb72d6e4f9baa197d3fd861e01160cd282f5ac8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
