@@ -12,6 +12,7 @@ executable(
         'rbh-report.c',
         'src/group_by.c',
         'src/output.c',
+        'src/print.c',
     ],
     dependencies: [librobinhood_dep],
     include_directories: include_dir,
