@@ -166,6 +166,7 @@ struct rbh_range_field {
 enum field_accumulator {
     FA_NONE,
     FA_AVG,
+    FA_COUNT,
     FA_MAX,
     FA_MIN,
     FA_SUM,

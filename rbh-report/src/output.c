@@ -25,6 +25,11 @@ str2accumulator(const char *str)
             break;
 
         return FA_AVG;
+    case 'c': /* count */
+        if (strcmp(str, "ount"))
+            break;
+
+        return FA_COUNT;
     case 'm':
         switch (*str++) {
         case 'a': /* max */
@@ -77,6 +82,9 @@ convert_output_string_to_accumulator_field(char *output_string)
         opening = output_string;
         field.accumulator = FA_NONE;
     }
+
+    if (field.accumulator == FA_COUNT)
+        return field;
 
     filter_field = str2filter_field(opening + 1);
     if (filter_field == NULL)
