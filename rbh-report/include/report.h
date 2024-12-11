@@ -23,4 +23,7 @@ fill_acc_and_output_fields(const char *_output_string,
 void
 fill_group_by_fields(const char *_group_by, struct rbh_group_fields *group);
 
+void
+dump_map(const struct rbh_value_map *map, int expected_count, const char *key);
+
 #endif
