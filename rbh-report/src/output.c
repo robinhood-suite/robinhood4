@@ -99,7 +99,8 @@ convert_output_string_to_accumulator_field(char *output_string)
 void
 fill_acc_and_output_fields(const char *_output_string,
                            struct rbh_group_fields *group,
-                           struct rbh_filter_output *output)
+                           struct rbh_filter_output *output,
+                           struct result_columns *columns)
 {
     struct rbh_accumulator_field *fields;
     char *current_field;
@@ -120,6 +121,8 @@ fill_acc_and_output_fields(const char *_output_string,
     output_string = strdup(_output_string);
     if (output_string == NULL)
         error_at_line(EXIT_FAILURE, EINVAL, __FILE__, __LINE__, "strdup");
+
+    init_output_columns(columns, count);
 
     current_field = strtok(output_string, ",");
     while (current_field) {
