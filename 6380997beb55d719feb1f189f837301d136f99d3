@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c7821aba_c560efda",
+        "filename": "rbh-report/tests/test_group_by.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-12-11T09:58:09Z",
+      "side": 1,
+      "message": "major: I think it\u0027s important to display \"file\" or \"directory\" rather than a number. It\u0027s easier to understand. It can be done in a futur patch",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 15
+      },
+      "revId": "6380997beb55d719feb1f189f837301d136f99d3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
