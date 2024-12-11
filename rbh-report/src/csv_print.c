@@ -29,7 +29,8 @@ dump_id_map(const struct rbh_value_map *map, struct rbh_group_fields group)
                       group.id_count, map->count);
 
     for (int i = 0; i < map->count; i++) {
-        dump_value(map->pairs[i].value, buffer);
+        dump_decorated_value(map->pairs[i].value, &group.id_fields[i].field,
+                             buffer);
         printf("%s", buffer);
 
         if (i < map->count - 1)

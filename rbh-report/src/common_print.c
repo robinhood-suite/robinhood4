@@ -46,3 +46,17 @@ dump_value(const struct rbh_value *value, char *buffer)
 
     __builtin_unreachable();
 }
+
+int
+dump_decorated_value(const struct rbh_value *value,
+                     const struct rbh_filter_field *field,
+                     char *buffer)
+{
+    switch (field->fsentry) {
+    default:
+        return dump_value(value, buffer);
+    }
+
+    __builtin_unreachable();
+}
+

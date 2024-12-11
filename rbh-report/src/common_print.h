@@ -13,4 +13,8 @@
 int
 dump_value(const struct rbh_value *value, char *buffer);
 
+int
+dump_decorated_value(const struct rbh_value *value,
+                     const struct rbh_filter_field *field, char *buffer);
+
 #endif
