@@ -10,6 +10,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <sysexits.h>
+#include <sys/stat.h>
 
 #include <robinhood.h>
 #include <robinhood/backend.h>
@@ -71,12 +72,80 @@ dump_value(const struct rbh_value *value)
 }
 
 static void
-dump_map(const struct rbh_value_map *map, int expected_count, const char *key)
+dump_type_value(const struct rbh_value *value)
+{
+    if (value->type != RBH_VT_INT32)
+        error_at_line(EXIT_FAILURE, EINVAL, __FILE__, __LINE__,
+                      "Unexpected value type, expected 'int32', found '%s'",
+                      VALUE_TYPE_NAMES[value->type]);
+
+    switch (value->int64) {
+    case S_IFBLK:
+        printf("block");
+        break;
+    case S_IFCHR:
+        printf("char");
+        break;
+    case S_IFDIR:
+        printf("directory");
+        break;
+    case S_IFREG:
+        printf("file");
+        break;
+    case S_IFLNK:
+        printf("link");
+        break;
+    case S_IFIFO:
+        printf("fifo");
+        break;
+    case S_IFSOCK:
+        printf("socket");
+        break;
+    default:
+        error_at_line(EXIT_FAILURE, EINVAL, __FILE__, __LINE__,
+                      "unexpected file type '%ld'", value->int64);
+    }
+}
+
+static void
+dump_decorated_value(const struct rbh_value *value,
+                     const struct rbh_filter_field *field)
+{
+    switch (field->fsentry) {
+    case RBH_FP_STATX:
+        if (field->statx == RBH_STATX_TYPE) {
+            dump_type_value(value);
+            return;
+        }
+    default:
+        dump_value(value);
+    }
+}
+
+static void
+dump_group_id_map(const struct rbh_value_map *map,
+                  struct rbh_group_fields group)
+{
+    if (map->count != group.id_count)
+        error_at_line(EXIT_FAILURE, EINVAL, __FILE__, __LINE__,
+                      "Unexpected number of fields in id map, expected '%ld', got '%ld'",
+                      group.id_count, map->count);
+
+    for (int i = 0; i < map->count; i++) {
+        dump_decorated_value(map->pairs[i].value, &group.id_fields[i].field);
+
+        if (i < map->count - 1)
+            printf(",");
+    }
+}
+
+static void
+dump_output_map(const struct rbh_value_map *map, int expected_count)
 {
     if (map->count != expected_count)
         error_at_line(EXIT_FAILURE, EINVAL, __FILE__, __LINE__,
-                      "Unexpected number of fields in '%s' map, expected '%d', got '%ld'",
-                      key, expected_count, map->count);
+                      "Unexpected number of fields in output map, expected '%d', got '%ld'",
+                      expected_count, map->count);
 
     for (int i = 0; i < map->count; i++) {
         dump_value(map->pairs[i].value);
@@ -136,13 +205,13 @@ report(const char *group_string, const char *output_string, bool ascending_sort)
                           map->count);
 
         if (map->count == 2) {
-            dump_map(&map->pairs[0].value->map, group.id_count, "id");
+            dump_group_id_map(&map->pairs[0].value->map, group);
             printf(": ");
-            dump_map(&map->pairs[1].value->map, output.output_fields.count,
-                     "output");
+            dump_output_map(&map->pairs[1].value->map,
+                            output.output_fields.count);
         } else {
-            dump_map(&map->pairs[0].value->map, output.output_fields.count,
-                     "output");
+            dump_output_map(&map->pairs[0].value->map,
+                            output.output_fields.count);
         }
 
         printf("\n");
