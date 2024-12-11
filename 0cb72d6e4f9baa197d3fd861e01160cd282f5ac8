@@ -46,6 +46,30 @@
       },
       "revId": "0cb72d6e4f9baa197d3fd861e01160cd282f5ac8",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e6c5e541_9f27032b",
+        "filename": "rbh-report/tests/test_range.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-12-11T08:50:33Z",
+      "side": 1,
+      "message": "Okay, that may be difficult to parse if some combinations do not have an output. I hope that will be clarify with the final state of the output :).",
+      "parentUuid": "76a49bb8_3a33fe2b",
+      "range": {
+        "startLine": 100,
+        "startChar": 47,
+        "endLine": 100,
+        "endChar": 76
+      },
+      "revId": "0cb72d6e4f9baa197d3fd861e01160cd282f5ac8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
