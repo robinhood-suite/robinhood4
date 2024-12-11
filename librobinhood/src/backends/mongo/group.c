@@ -19,6 +19,11 @@ accumulator2str(enum field_accumulator accumulator)
     switch (accumulator) {
     case FA_AVG:
         return "$avg";
+    case FA_COUNT:
+        /* the count operator is only available after Mongo 5.0, but it is
+         * functionaly equivalent (as per the documentation) to `$sum: 1`.
+         */
+        return "$sum";
     case FA_MAX:
         return "$max";
     case FA_MIN:
@@ -47,15 +52,23 @@ get_accumulator_field_strings(struct rbh_accumulator_field *accumulator_field,
 
     strcpy(accumulator, tmp_accumulator);
 
-    tmp_field = field2str(&accumulator_field->field, &buffer, sizeof(onstack));
-    if (tmp_field == NULL)
-        return false;
+    if (accumulator_field->accumulator == FA_COUNT) {
+        field[0] = '\0';
+        if (sprintf(key, "%s_entries", accumulator) <= 0)
+            return false;
 
-    if (sprintf(field, "$%s", tmp_field) <= 0)
-        return false;
+    } else {
+        tmp_field = field2str(&accumulator_field->field, &buffer,
+                              sizeof(onstack));
+        if (tmp_field == NULL)
+            return false;
 
-    if (sprintf(key, "%s_%s", accumulator, tmp_field) <= 0)
-        return false;
+        if (sprintf(field, "$%s", tmp_field) <= 0)
+            return false;
+
+        if (sprintf(key, "%s_%s", accumulator, tmp_field) <= 0)
+            return false;
+    }
 
     escape_field_path(key);
 
@@ -249,6 +262,12 @@ insert_rbh_accumulator_field(bson_t *bson, struct rbh_accumulator_field *field)
 
     if (!get_accumulator_field_strings(field, accumulator, field_str, key))
         return false;
+
+    if (field->accumulator == FA_COUNT) {
+        return BSON_APPEND_DOCUMENT_BEGIN(bson, &key[1], &document)
+            && BSON_APPEND_INT64(&document, accumulator, 1)
+            && bson_append_document_end(bson, &document);
+    }
 
     return BSON_APPEND_DOCUMENT_BEGIN(bson, &key[1], &document)
         && BSON_APPEND_UTF8(&document, accumulator, field_str)
