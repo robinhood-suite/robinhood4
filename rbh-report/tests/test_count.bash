@@ -13,9 +13,6 @@ test_dir=$(dirname $(readlink -e $0))
 #                                    TESTS                                     #
 ################################################################################
 
-regular=32768
-directory=16384
-
 test_count()
 {
     for i in {0..25}; do
@@ -30,7 +27,7 @@ test_count()
 
     rbh_report "rbh:mongo:$testdb" --group-by "statx.type" \
                                    --output "count()" |
-        difflines "$directory: 27" "$regular: 26"
+        difflines "directory: 27" "file: 26"
 }
 
 ################################################################################

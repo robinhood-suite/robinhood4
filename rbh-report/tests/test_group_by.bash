@@ -13,8 +13,6 @@ test_dir=$(dirname $(readlink -e $0))
 #                                    TESTS                                     #
 ################################################################################
 
-regular=32768
-directory=16384
 main_user_id="$(id -u)"
 
 test_group_by_type()
@@ -37,7 +35,7 @@ test_group_by_type()
 
     rbh_report "rbh:mongo:$testdb" --group-by "statx.type" \
                                    --output "sum(statx.size)" |
-        difflines "$directory: $sum_dir_size" "$regular: $sum_file_size"
+        difflines "directory: $sum_dir_size" "file: $sum_file_size"
 }
 
 test_group_by_user()
@@ -97,10 +95,10 @@ test_multi_group_by()
 
     rbh_report "rbh:mongo:$testdb" --group-by "statx.uid,statx.type" \
                                    --output "sum(statx.size)" |
-        difflines "$main_user_id,$directory: $main_user_dir_size" \
-                  "$main_user_id,$regular: $main_user_file_size" \
-                  "$fake_user_id,$directory: $fake_user_dir_size" \
-                  "$fake_user_id,$regular: $fake_user_file_size"
+        difflines "$main_user_id,directory: $main_user_dir_size" \
+                  "$main_user_id,file: $main_user_file_size" \
+                  "$fake_user_id,directory: $fake_user_dir_size" \
+                  "$fake_user_id,file: $fake_user_file_size"
 }
 
 ################################################################################

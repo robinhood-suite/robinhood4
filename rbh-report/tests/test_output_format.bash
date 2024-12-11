@@ -13,13 +13,6 @@ test_dir=$(dirname $(readlink -e $0))
 #                                    TESTS                                     #
 ################################################################################
 
-fifo=4096
-char=8192
-directory=16384
-block=24576
-regular=32768
-symbolic=40960
-
 main_user_id="$(id -u)"
 
 test_format_multi_group_and_rsort()
@@ -59,33 +52,33 @@ test_format_multi_group_and_rsort()
 
     rbh_report "rbh:mongo:$testdb" --group-by "statx.uid,statx.type" \
                                    --output "sum(statx.size)" |
-        difflines "$main_user_id,$fifo: 0" \
-                  "$main_user_id,$char: 0" \
-                  "$main_user_id,$directory: $first_root_size" \
-                  "$main_user_id,$block: 0" \
-                  "$main_user_id,$regular: 0" \
-                  "$main_user_id,$symbolic: $first_symlink_size" \
-                  "$fake_user_id,$fifo: 0" \
-                  "$fake_user_id,$char: 0" \
-                  "$fake_user_id,$directory: $second_root_size" \
-                  "$fake_user_id,$block: 0" \
-                  "$fake_user_id,$regular: 0" \
-                  "$fake_user_id,$symbolic: $second_symlink_size"
+        difflines "$main_user_id,fifo: 0" \
+                  "$main_user_id,char: 0" \
+                  "$main_user_id,directory: $first_root_size" \
+                  "$main_user_id,block: 0" \
+                  "$main_user_id,file: 0" \
+                  "$main_user_id,link: $first_symlink_size" \
+                  "$fake_user_id,fifo: 0" \
+                  "$fake_user_id,char: 0" \
+                  "$fake_user_id,directory: $second_root_size" \
+                  "$fake_user_id,block: 0" \
+                  "$fake_user_id,file: 0" \
+                  "$fake_user_id,link: $second_symlink_size"
 
     rbh_report "rbh:mongo:$testdb" --group-by "statx.uid,statx.type" \
                                    --output "sum(statx.size)" --rsort |
-        difflines "$fake_user_id,$symbolic: $second_symlink_size" \
-                  "$fake_user_id,$regular: 0" \
-                  "$fake_user_id,$block: 0" \
-                  "$fake_user_id,$directory: $second_root_size" \
-                  "$fake_user_id,$char: 0" \
-                  "$fake_user_id,$fifo: 0" \
-                  "$main_user_id,$symbolic: $first_symlink_size" \
-                  "$main_user_id,$regular: 0" \
-                  "$main_user_id,$block: 0" \
-                  "$main_user_id,$directory: $first_root_size" \
-                  "$main_user_id,$char: 0" \
-                  "$main_user_id,$fifo: 0"
+        difflines "$fake_user_id,link: $second_symlink_size" \
+                  "$fake_user_id,file: 0" \
+                  "$fake_user_id,block: 0" \
+                  "$fake_user_id,directory: $second_root_size" \
+                  "$fake_user_id,char: 0" \
+                  "$fake_user_id,fifo: 0" \
+                  "$main_user_id,link: $first_symlink_size" \
+                  "$main_user_id,file: 0" \
+                  "$main_user_id,block: 0" \
+                  "$main_user_id,directory: $first_root_size" \
+                  "$main_user_id,char: 0" \
+                  "$main_user_id,fifo: 0"
 }
 
 ################################################################################
