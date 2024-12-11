@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "41f43b93_dea86f31",
+        "filename": "rbh-report/tests/test_range.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-12-11T08:04:48Z",
+      "side": 1,
+      "message": "question: I suppose we may have 6 different output lines here, but depending on the root size, we consider 4 to 5 lines only, does that mean that we do not output \u00270\u0027 values?",
+      "range": {
+        "startLine": 100,
+        "startChar": 47,
+        "endLine": 100,
+        "endChar": 76
+      },
+      "revId": "0cb72d6e4f9baa197d3fd861e01160cd282f5ac8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
