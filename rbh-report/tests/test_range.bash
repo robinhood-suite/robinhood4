@@ -43,7 +43,7 @@ test_range()
     # output from Mongo until the sort is implemented by rbh-report
     rbh_report "rbh:mongo:$testdb" --group-by "statx.size[0;30]" \
                                    --output "sum(statx.size)" | sort -n |
-        difflines "[0; 30]: $sum_smol_size" "other: $sum_large_size"
+        difflines "[0; 30]: $sum_smol_size" "[30; +inf]: $sum_large_size"
 }
 
 test_group_by_field_and_range()
@@ -100,8 +100,8 @@ test_group_by_field_and_range()
                           "$main_user_id,[0; 30]: $sum_first_smol_size" \
                           "$main_user_id,[30; 70]: $sum_first_large_size" \
                           "$fake_user_id,[0; 30]: $sum_second_smol_size" \
-                          "$fake_user_id,other: $sum_second_large_size" \
-                          "$main_user_id,other: $root_size" | sort -n)"
+                          "$fake_user_id,[70; +inf]: $sum_second_large_size" \
+                          "$main_user_id,[70; +inf]: $root_size" | sort -n)"
     fi
 
     # The sort is necessary here as we have no guarantee over the order of the
