@@ -43,10 +43,4 @@ dump_results(const struct rbh_value_map *result_map,
              const struct rbh_group_fields group,
              const struct rbh_filter_output output);
 
-void
-init_id_columns(struct result_columns *columns, int id_count);
-
-void
-init_output_columns(struct result_columns *columns, int output_count);
-
 #endif
