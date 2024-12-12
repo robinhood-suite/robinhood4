@@ -14,6 +14,7 @@
 
 void
 check_columns_lengths(const struct rbh_value_map *id_map,
+                      const struct rbh_group_fields group,
                       const struct rbh_value_map *output_map,
                       struct result_columns *columns);
 
