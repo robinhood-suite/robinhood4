@@ -91,7 +91,7 @@ report(const char *group_string, const char *output_string, bool ascending_sort)
                           "Expected 2 maps in output, but found '%ld'",
                           map->count);
 
-        dump_results(map, group, output);
+        dump_results(map, group, output, &columns);
         printf("\n");
     } while (true);
 }

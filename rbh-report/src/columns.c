@@ -12,6 +12,16 @@
 #include "report.h"
 
 void
+check_columns_lengthes(const struct rbh_value_map *id_map,
+                       const struct rbh_value_map *output_map,
+                       struct result_columns *columns)
+{
+    (void) id_map;
+    (void) output_map;
+    (void) columns;
+}
+
+void
 init_id_columns(struct result_columns *columns, int id_count)
 {
     columns->id_count = id_count;
@@ -39,4 +49,14 @@ init_output_columns(struct result_columns *columns, int output_count)
     if (columns->output_columns == NULL)
         error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
                       "rbh_sstack_push");
+}
+
+void
+init_column(struct column *column, const char *string)
+{
+    column->header = strdup(string);
+    if (column->header == NULL)
+        error_at_line(EXIT_FAILURE, EINVAL, __FILE__, __LINE__, "strdup");
+
+    column->length = strlen(string);
 }
