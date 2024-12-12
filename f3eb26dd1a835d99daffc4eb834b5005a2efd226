@@ -16,6 +16,24 @@
       "message": "question: why it\u0027s not the same order with the Mongo sort ?",
       "revId": "f3eb26dd1a835d99daffc4eb834b5005a2efd226",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2835c17f_967b83d7",
+        "filename": "rbh-report/tests/test_range.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-12-12T15:20:26Z",
+      "side": 1,
+      "message": "Because of Mongo\u0027s sorting. Strings have a higher level than arrays, to it sorts the values is that order. I\u0027ll modify it so these \"other\" values are put last in their columns",
+      "parentUuid": "a868c1b1_4ba69e5e",
+      "revId": "f3eb26dd1a835d99daffc4eb834b5005a2efd226",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
