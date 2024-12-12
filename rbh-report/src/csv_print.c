@@ -76,7 +76,7 @@ dump_results(const struct rbh_value_map *result_map,
         output_map = &result_map->pairs[0].value->map;
     }
 
-    check_columns_lengthes(id_map, output_map, columns);
+    check_columns_lengthes(id_map, group, output_map, columns);
 
     if (id_map) {
         dump_id_map(id_map, group);

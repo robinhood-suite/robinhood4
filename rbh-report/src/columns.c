@@ -9,16 +9,34 @@
 
 #include <robinhood.h>
 
+#include "common_print.h"
 #include "report.h"
 
 void
 check_columns_lengthes(const struct rbh_value_map *id_map,
+                       const struct rbh_group_fields group,
                        const struct rbh_value_map *output_map,
                        struct result_columns *columns)
 {
-    (void) id_map;
-    (void) output_map;
-    (void) columns;
+    char buffer[1024];
+
+    if (id_map) {
+        for (int i = 0; i < id_map->count; i++) {
+            int length = dump_decorated_value(id_map->pairs[i].value,
+                                              &group.id_fields[i].field,
+                                              buffer);
+
+            if (length > columns->id_columns[i].length)
+                columns->id_columns[i].length = length;
+        }
+    }
+
+    for (int i = 0; i < output_map->count; i++) {
+        int length = dump_value(output_map->pairs[i].value, buffer);
+
+        if (length > columns->output_columns[i].length)
+            columns->output_columns[i].length = length;
+    }
 }
 
 void
