@@ -105,6 +105,24 @@ bson_append_case(bson_t *bson, int stage_number, const char *field,
 }
 
 static bool
+bson_append_default(bson_t *bson, int64_t lower)
+{
+    const char *second_key;
+    const char *first_key;
+    bson_t default_array;
+    char second_str[16];
+    char first_str[16];
+
+    bson_uint32_to_string(0, &first_key, first_str, sizeof(first_str));
+    bson_uint32_to_string(1, &second_key, second_str, sizeof(second_str));
+
+    return BSON_APPEND_ARRAY_BEGIN(bson, "default", &default_array)
+        && BSON_APPEND_INT64(&default_array, first_key, lower)
+        && BSON_APPEND_UTF8(&default_array, second_key, "+inf")
+        && bson_append_array_end(bson, &default_array);
+}
+
+static bool
 bson_append_switch(bson_t *bson, const struct rbh_range_field *field,
                    const char *_field_str)
 {
@@ -128,7 +146,8 @@ bson_append_switch(bson_t *bson, const struct rbh_range_field *field,
             return false;
 
     return bson_append_array_end(&switch_document, &branches_document)
-        && BSON_APPEND_UTF8(&switch_document, "default", "other")
+        && bson_append_default(&switch_document,
+                               field->boundaries[field->boundaries_count - 1])
         && bson_append_document_end(bson, &switch_document);
 }
 
