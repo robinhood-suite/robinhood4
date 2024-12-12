@@ -14,6 +14,7 @@
 #include <robinhood/backend.h>
 #include <robinhood/uri.h>
 
+#include "columns.h"
 #include "report.h"
 
 static void
@@ -40,8 +41,11 @@ check_and_set_boundaries(struct rbh_range_field *field, char *field_string)
     char *close_bracket;
     int count;
 
-    if (open_bracket == NULL)
+    if (open_bracket == NULL) {
+        field->boundaries = NULL;
+        field->boundaries_count = 0;
         return;
+    }
 
     close_bracket = strchr(open_bracket, ']');
     if (close_bracket == NULL)
@@ -88,6 +92,7 @@ fill_group_by_fields(const char *_group_by, struct rbh_group_fields *group,
     if (_group_by == NULL) {
         group->id_fields = NULL;
         group->id_count = 0;
+        init_id_columns(columns, 0);
         return;
     }
 
@@ -114,6 +119,8 @@ fill_group_by_fields(const char *_group_by, struct rbh_group_fields *group,
          * only works on the field itself.
          */
         check_and_set_boundaries(&fields[counter], current_field);
+
+        init_column(&columns->id_columns[counter], current_field);
 
         filter_field = str2filter_field(current_field);
         if (filter_field == NULL)

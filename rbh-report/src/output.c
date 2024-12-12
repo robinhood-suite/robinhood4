@@ -14,6 +14,7 @@
 #include <robinhood/backend.h>
 #include <robinhood/uri.h>
 
+#include "columns.h"
 #include "report.h"
 
 static enum field_accumulator
@@ -126,6 +127,8 @@ fill_acc_and_output_fields(const char *_output_string,
 
     current_field = strtok(output_string, ",");
     while (current_field) {
+        init_column(&columns->output_columns[counter], current_field);
+
         fields[counter++] =
             convert_output_string_to_accumulator_field(current_field);
 

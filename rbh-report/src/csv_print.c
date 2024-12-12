@@ -15,8 +15,9 @@
 #include <robinhood/backend.h>
 #include <robinhood/uri.h>
 
-#include "report.h"
+#include "columns.h"
 #include "common_print.h"
+#include "report.h"
 
 static void
 dump_id_map(const struct rbh_value_map *map, struct rbh_group_fields group)
@@ -61,13 +62,26 @@ dump_output_map(const struct rbh_value_map *map,
 void
 dump_results(const struct rbh_value_map *result_map,
              const struct rbh_group_fields group,
-             const struct rbh_filter_output output)
+             const struct rbh_filter_output output,
+             struct result_columns *columns)
 {
+    const struct rbh_value_map *output_map;
+    const struct rbh_value_map *id_map;
+
     if (result_map->count == 2) {
-        dump_id_map(&result_map->pairs[0].value->map, group);
-        printf(": ");
-        dump_output_map(&result_map->pairs[1].value->map, output);
+        id_map = &result_map->pairs[0].value->map;
+        output_map = &result_map->pairs[1].value->map;
     } else {
-        dump_output_map(&result_map->pairs[0].value->map, output);
+        id_map = NULL;
+        output_map = &result_map->pairs[0].value->map;
     }
+
+    check_columns_lengthes(id_map, output_map, columns);
+
+    if (id_map) {
+        dump_id_map(id_map, group);
+        printf(": ");
+    }
+
+    dump_output_map(output_map, output);
 }
