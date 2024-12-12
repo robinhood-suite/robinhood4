@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5659f268_77ac4644",
+        "filename": "README.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-12-12T15:19:57Z",
+      "side": 1,
+      "message": "style: empty line",
+      "revId": "ea40eedff59c317be0b4d4d5bc46503a39024b29",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
