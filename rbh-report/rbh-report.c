@@ -42,7 +42,8 @@ destroy_from(void)
 }
 
 static void
-report(const char *group_string, const char *output_string, bool ascending_sort)
+report(const char *group_string, const char *output_string, bool ascending_sort,
+       bool pretty_print)
 {
     struct rbh_filter_options options = { 0 };
     struct rbh_filter_output output = { 0 };
@@ -154,18 +155,23 @@ main(int argc, char *argv[])
             .val = 'o',
         },
         {
+            .name = "pretty-print",
+            .val = 'p',
+        },
+        {
             .name = "rsort",
             .val = 'r',
         },
         {}
     };
     bool ascending_sort = true;
+    bool pretty_print = false;
     char *output = NULL;
     char *group = NULL;
     char c;
 
     /* Parse the command line */
-    while ((c = getopt_long(argc, argv, "hg:o:r", LONG_OPTIONS, NULL)) != -1) {
+    while ((c = getopt_long(argc, argv, "hg:o:pr", LONG_OPTIONS, NULL)) != -1) {
         switch (c) {
         case 'g':
             group = strdup(optarg);
@@ -179,6 +185,9 @@ main(int argc, char *argv[])
             output = strdup(optarg);
             if (output == NULL)
                 error(EXIT_FAILURE, ENOMEM, "strdup");
+            break;
+        case 'p':
+            pretty_print = true;
             break;
         case 'r':
             ascending_sort = false;
@@ -202,7 +211,7 @@ main(int argc, char *argv[])
     /* Parse SOURCE */
     from = rbh_backend_from_uri(argv[0]);
 
-    report(group, output, ascending_sort);
+    report(group, output, ascending_sort, pretty_print);
 
     return EXIT_SUCCESS;
 }
