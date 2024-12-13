@@ -84,6 +84,35 @@ skip_id:
     return written;
 }
 
+static void
+pretty_print_values(const struct rbh_value_map *id_map,
+                    const struct rbh_group_fields group,
+                    const struct rbh_value_map *output_map,
+                    struct result_columns *columns)
+{
+    if (id_map) {
+        for (int i = 0; i < id_map->count; i++) {
+            pretty_print_padded_value(columns->id_columns[i].length,
+                                      id_map->pairs[i].value);
+
+            if (i < id_map->count - 1)
+                printf("|");
+        }
+
+        printf("||");
+    }
+
+    for (int i = 0; i < output_map->count; i++) {
+        pretty_print_padded_value(columns->output_columns[i].length,
+                                  output_map->pairs[i].value);
+
+        if (i < output_map->count - 1)
+            printf("|");
+    }
+
+    printf("\n");
+}
+
 void
 pretty_print_results(struct rbh_value_map *result_maps, int count_results,
                      const struct rbh_group_fields group,
@@ -118,4 +147,16 @@ pretty_print_results(struct rbh_value_map *result_maps, int count_results,
         dash_line[i] = '-';
 
     printf("%s\n", dash_line);
+
+    for (int i = 0; i < count_results; ++i) {
+        if (result_maps[i].count == 2) {
+            id_map = &result_maps[i].pairs[0].value->map;
+            output_map = &result_maps[i].pairs[1].value->map;
+        } else {
+            id_map = NULL;
+            output_map = &result_maps[i].pairs[0].value->map;
+        }
+
+        pretty_print_values(id_map, group, output_map, columns);
+    }
 }
