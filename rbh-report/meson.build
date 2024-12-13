@@ -12,6 +12,7 @@ executable(
         'rbh-report.c',
         'src/group_by.c',
         'src/output.c',
+        'src/csv_print.c',
         'src/common_print.c',
     ],
     dependencies: [librobinhood_dep],
