@@ -92,6 +92,8 @@ pretty_print_results(struct rbh_value_map *result_maps, int count_results,
 {
     const struct rbh_value_map *output_map;
     const struct rbh_value_map *id_map;
+    char dash_line[4096];
+    int line_size;
 
     (void) output;
 
@@ -107,5 +109,12 @@ pretty_print_results(struct rbh_value_map *result_maps, int count_results,
         check_columns_lengths(id_map, group, output_map, columns);
     }
 
-    pretty_print_headers(columns, id_map != NULL);
+    line_size = pretty_print_headers(columns, id_map != NULL);
+
+    assert(line_size < sizeof(dash_line));
+
+    dash_line[line_size] = '\0';
+    memset(dash_line, '-', line_size);
+
+    printf("%s\n", dash_line);
 }
