@@ -9,16 +9,37 @@
 
 #include <robinhood.h>
 
+#include "common_print.h"
 #include "columns.h"
 #include "report.h"
 
 static int
 pretty_print_padded_value(int max_length, const struct rbh_value *value)
 {
-    (void) max_length;
-    (void) value;
+    /* Include a starting and ending whitespace */
+    int printed_length = max_length + 2;
+    char *buffer;
+    int done = 0;
 
-    return 0;
+    buffer = rbh_sstack_push(values_sstack, NULL, printed_length + 1);
+    if (buffer == NULL)
+        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
+                      "rbh_sstack_push");
+
+    buffer[printed_length] = '\0';
+    buffer[done++] = ' ';
+    done += dump_value(value, buffer + done);
+
+    for (int i = done; i < printed_length; ++i)
+        buffer[i] = ' ';
+
+    printf("%s", buffer);
+
+    if (rbh_sstack_pop(values_sstack, printed_length + 1))
+        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
+                      "rbh_sstack_pop");
+
+    return printed_length;
 }
 
 static int
