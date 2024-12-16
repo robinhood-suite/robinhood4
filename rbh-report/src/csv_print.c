@@ -62,8 +62,7 @@ dump_output_map(const struct rbh_value_map *map,
 void
 dump_results(const struct rbh_value_map *result_map,
              const struct rbh_group_fields group,
-             const struct rbh_filter_output output,
-             struct result_columns *columns)
+             const struct rbh_filter_output output)
 {
     const struct rbh_value_map *output_map;
     const struct rbh_value_map *id_map;
@@ -75,8 +74,6 @@ dump_results(const struct rbh_value_map *result_map,
         id_map = NULL;
         output_map = &result_map->pairs[0].value->map;
     }
-
-    check_columns_lengthes(id_map, group, output_map, columns);
 
     if (id_map) {
         dump_id_map(id_map, group);

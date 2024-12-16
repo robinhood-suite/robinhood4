@@ -9,36 +9,29 @@
 
 #include <robinhood.h>
 
+#include "columns.h"
 #include "report.h"
 
-static void
-pretty_print_results(const struct rbh_value_map *id_map,
+void
+pretty_print_results(struct rbh_value_map *result_maps, int count_results,
                      const struct rbh_group_fields group,
-                     const struct rbh_value_map *output_map,
+                     const struct rbh_filter_output output,
                      struct result_columns *columns)
 {
     const struct rbh_value_map *output_map;
     const struct rbh_value_map *id_map;
 
-    if (result_map->count == 2) {
-        id_map = &result_map->pairs[0].value->map;
-        output_map = &result_map->pairs[1].value->map;
-    } else {
-        id_map = NULL;
-        output_map = &result_map->pairs[0].value->map;
+    (void) output;
+
+    for (int i = 0; i < count_results; ++i) {
+        if (result_maps[i].count == 2) {
+            id_map = &result_maps[i].pairs[0].value->map;
+            output_map = &result_maps[i].pairs[1].value->map;
+        } else {
+            id_map = NULL;
+            output_map = &result_maps[i].pairs[0].value->map;
+        }
+
+        check_columns_lengthes(id_map, group, output_map, columns);
     }
-
-    check_columns_lengthes(id_map, group, output_map, columns);
-
-    if (pretty_print) {
-        pretty_print_results(id_map, group, output_map, columns);
-        return;
-    }
-
-    if (id_map) {
-        dump_id_map(id_map, group);
-        printf(": ");
-    }
-
-    dump_output_map(output_map, output);
 }

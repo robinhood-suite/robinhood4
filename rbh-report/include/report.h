@@ -41,8 +41,12 @@ fill_group_by_fields(const char *_group_by, struct rbh_group_fields *group,
 void
 dump_results(const struct rbh_value_map *result_map,
              const struct rbh_group_fields group,
-             const struct rbh_filter_output output,
-             struct result_columns *columns,
-             bool pretty_print);
+             const struct rbh_filter_output output);
+
+void
+pretty_print_results(struct rbh_value_map *result_maps, int count_results,
+                     const struct rbh_group_fields group,
+                     const struct rbh_filter_output output,
+                     struct result_columns *columns);
 
 #endif
