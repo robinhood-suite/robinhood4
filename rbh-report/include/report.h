@@ -43,4 +43,10 @@ dump_results(const struct rbh_value_map *result_map,
              const struct rbh_group_fields group,
              const struct rbh_filter_output output);
 
+void
+pretty_print_results(struct rbh_value_map *result_maps, int count_results,
+                     const struct rbh_group_fields group,
+                     const struct rbh_filter_output output,
+                     struct result_columns *columns);
+
 #endif
