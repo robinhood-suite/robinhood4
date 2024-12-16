@@ -14,6 +14,7 @@
 #include <robinhood.h>
 #include <robinhood/backend.h>
 #include <robinhood/uri.h>
+#include <robinhood/value.h>
 
 #include "report.h"
 
@@ -56,6 +57,11 @@ report(const char *group_string, const char *output_string, bool ascending_sort,
     };
     struct result_columns columns;
     struct rbh_mut_iterator *iter;
+    struct rbh_value_map *results;
+    char _buffer[4096];
+    size_t bufsize;
+    int count = 0;
+    char *buffer;
 
     if (values_sstack == NULL) {
         values_sstack = rbh_sstack_new(MIN_VALUES_SSTACK_ALLOC *
@@ -65,11 +71,21 @@ report(const char *group_string, const char *output_string, bool ascending_sort,
                           "rbh_sstack_new");
     }
 
+    if (pretty_print) {
+        results = rbh_sstack_push(values_sstack, NULL, 32 * sizeof(*results));
+        if (results == NULL)
+            error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
+                          "rbh_sstack_push");
+    }
+
     fill_group_by_fields(group_string, &group, &columns);
     fill_acc_and_output_fields(output_string, &group, &output, &columns);
 
     options.sort.items = &sort;
     options.sort.count = 1;
+
+    buffer = _buffer;
+    bufsize = sizeof(_buffer);
 
     iter = rbh_backend_report(from, NULL, &group, &options, &output);
     if (iter == NULL)
@@ -92,9 +108,22 @@ report(const char *group_string, const char *output_string, bool ascending_sort,
                           "Expected 2 maps in output, but found '%ld'",
                           map->count);
 
-        dump_results(map, group, output);
-        printf("\n");
+        if (pretty_print == false) {
+            dump_results(map, group, output);
+            printf("\n");
+        } else {
+            assert(count < sizeof(results));
+
+            if (value_map_copy(&results[count++], map, &buffer, &bufsize))
+                error_at_line(EXIT_FAILURE, EINVAL, __FILE__, __LINE__,
+                              "Expected 2 maps in output, but found '%ld'",
+                              map->count);
+        }
+
     } while (true);
+
+    if (pretty_print)
+        pretty_print_results(results, count, group, output, &columns);
 }
 
 /*----------------------------------------------------------------------------*

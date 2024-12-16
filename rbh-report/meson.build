@@ -15,6 +15,7 @@ executable(
         'src/columns.c',
         'src/common_print.c',
         'src/csv_print.c',
+        'src/pretty_print.c',
     ],
     dependencies: [librobinhood_dep],
     include_directories: include_dir,
