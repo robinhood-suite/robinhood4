@@ -26,6 +26,7 @@
 #include "robinhood/itertools.h"
 #include "robinhood/ringr.h"
 #include "robinhood/statx.h"
+#include "robinhood/sstack.h"
 #include "utils.h"
 
 #include "mongo.h"
@@ -46,6 +47,16 @@ static void
 mongo_cleanup(void)
 {
     mongoc_cleanup();
+}
+
+#define MIN_VALUES_SSTACK_ALLOC (1 << 6)
+struct rbh_sstack *values_sstack;
+
+static void __attribute__((destructor))
+destroy_values_sstack(void)
+{
+    if (values_sstack)
+        rbh_sstack_destroy(values_sstack);
 }
 
     /*--------------------------------------------------------------------*
@@ -208,22 +219,14 @@ init_complete_map(struct rbh_value *id_map,
 {
     struct rbh_value_map *complete_map;
     struct rbh_value_pair *pairs;
-    char tmp[8192];
-    size_t bufsize;
     /* We currently only need to read the id and content maps */
     int count = (id_map ? 2 : 1);
-    char *buffer;
 
-    bufsize = sizeof(tmp);
-    buffer = tmp;
-
-    pairs = aligned_memalloc(alignof(*pairs), count * sizeof(*pairs), &buffer,
-                             &bufsize);
+    pairs = rbh_sstack_push(values_sstack, NULL, count * sizeof(*pairs));
     if (pairs == NULL)
-        return false;
+        return NULL;
 
-    complete_map = aligned_memalloc(alignof(*complete_map),
-                                    sizeof(*complete_map), &buffer, &bufsize);
+    complete_map = rbh_sstack_push(values_sstack, NULL, sizeof(*complete_map));
     if (complete_map == NULL)
         return NULL;
 
@@ -248,7 +251,7 @@ value_from_bson(bson_iter_t *iter, char **buffer, size_t *bufsize)
 {
     struct rbh_value *value;
 
-    value = aligned_memalloc(alignof(*value), sizeof(*value), buffer, bufsize);
+    value = rbh_sstack_push(values_sstack, NULL, sizeof(*value));
     if (value == NULL)
         return NULL;
 
@@ -273,6 +276,13 @@ map_from_bson(bson_iter_t *iter)
 
     bufsize = sizeof(tmp);
     buffer = tmp;
+
+    if (values_sstack == NULL) {
+        values_sstack = rbh_sstack_new(MIN_VALUES_SSTACK_ALLOC *
+                                       sizeof(struct rbh_value *));
+        if (values_sstack == NULL)
+            goto out;
+    }
 
     while (bson_iter_next(iter)) {
         const char *key = bson_iter_key(iter);
