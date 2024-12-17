@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c108fac9_511e11a7",
+        "filename": "rbh-report/rbh-report.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-12-17T09:50:17Z",
+      "side": 1,
+      "message": "question: Why 32 ?",
+      "range": {
+        "startLine": 75,
+        "startChar": 55,
+        "endLine": 75,
+        "endChar": 76
+      },
+      "revId": "03ec970f93a6de2568f4677a63dc29703d6778d2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0bf17fdb_45c5e221",
+        "filename": "rbh-report/rbh-report.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-12-17T09:50:17Z",
+      "side": 1,
+      "message": "question: Are you sure of this ? If I understand well, you can put 32 maps in results but the assert is not checking that ? No ?",
+      "revId": "03ec970f93a6de2568f4677a63dc29703d6778d2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
