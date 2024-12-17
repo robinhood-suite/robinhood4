@@ -22,6 +22,30 @@
       },
       "revId": "571ae71cde327e22149bb0c4410f9db8ca0ea56e",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2a357275_950de9ce",
+        "filename": "librobinhood/src/backends/mongo/group.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-12-17T08:59:18Z",
+      "side": 1,
+      "message": "Because in case Mongo changes the way it\u0027s handling array, this code won\u0027t have to be modified. Moreover, according to the documentation, if the integer given is less than a thousand, the library simply returns an entry in an array corresponding to the requested value. That means the time taken is the exact same (minus the calls to a function).",
+      "parentUuid": "9022a41e_4c0dae89",
+      "range": {
+        "startLine": 120,
+        "startChar": 45,
+        "endLine": 120,
+        "endChar": 54
+      },
+      "revId": "571ae71cde327e22149bb0c4410f9db8ca0ea56e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
