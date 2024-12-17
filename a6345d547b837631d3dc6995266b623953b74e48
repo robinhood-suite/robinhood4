@@ -16,6 +16,24 @@
       "message": "major: the header is never freed",
       "revId": "a6345d547b837631d3dc6995266b623953b74e48",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e0ff45c5_bc94f742",
+        "filename": "rbh-report/src/columns.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-12-17T10:06:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ea6cc115_a7f1f920",
+      "revId": "a6345d547b837631d3dc6995266b623953b74e48",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
