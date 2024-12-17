@@ -33,7 +33,7 @@ test_group_by_type()
     local sum_dir_size="$((root_size + first_dir_size + second_dir_size))"
     local sum_file_size="$((first_file_size + second_file_size))"
 
-    rbh_report "rbh:mongo:$testdb" --group-by "statx.type" \
+    rbh_report --csv "rbh:mongo:$testdb" --group-by "statx.type" \
                                    --output "sum(statx.size)" |
         difflines "directory: $sum_dir_size" "file: $sum_file_size"
 }
@@ -62,7 +62,7 @@ test_group_by_user()
     local main_user_size="$((root_size + second_dir_size + second_file_size))"
     local fake_user_size="$((first_dir_size + first_file_size))"
 
-    rbh_report "rbh:mongo:$testdb" --group-by "statx.uid" \
+    rbh_report --csv "rbh:mongo:$testdb" --group-by "statx.uid" \
                                    --output "sum(statx.size)" |
         difflines "$main_user_id: $main_user_size" \
                   "$fake_user_id: $fake_user_size"
@@ -93,7 +93,7 @@ test_multi_group_by()
     local fake_user_dir_size="$((first_dir_size))"
     local fake_user_file_size="$((first_file_size))"
 
-    rbh_report "rbh:mongo:$testdb" --group-by "statx.uid,statx.type" \
+    rbh_report --csv "rbh:mongo:$testdb" --group-by "statx.uid,statx.type" \
                                    --output "sum(statx.size)" |
         difflines "$main_user_id,directory: $main_user_dir_size" \
                   "$main_user_id,file: $main_user_file_size" \

@@ -35,7 +35,8 @@ test_multi_output()
     local min_ino="$(stat -c %i .)"
     local max_mtime="$(stat -c %Y third)"
 
-    rbh_report "rbh:mongo:$testdb" --output "sum(statx.size),avg(statx.size),min(statx.ino),max(statx.mtime.sec)" |
+    rbh_report --csv "rbh:mongo:$testdb" \
+        --output "sum(statx.size),avg(statx.size),min(statx.ino),max(statx.mtime.sec)" |
         difflines "$sum_size,$avg_size,$min_ino,$max_mtime"
 }
 
