@@ -14,7 +14,8 @@
 #include "report.h"
 
 static int
-pretty_print_padded_value(int max_length, const struct rbh_value *value)
+pretty_print_padded_value(int max_length, struct rbh_filter_field *field,
+                          const struct rbh_value *value)
 {
     /* Include a starting and ending whitespace */
     int printed_length = max_length + 2;
@@ -28,7 +29,10 @@ pretty_print_padded_value(int max_length, const struct rbh_value *value)
 
     buffer[printed_length] = '\0';
     buffer[done++] = ' ';
-    done += dump_value(value, buffer + done);
+    if (field)
+        done += dump_decorated_value(value, field, buffer + done);
+    else
+        done += dump_value(value, buffer + done);
 
     for (int i = done; i < printed_length; ++i)
         buffer[i] = ' ';
@@ -57,7 +61,7 @@ pretty_print_headers(struct result_columns *columns, bool print_id)
         };
 
         written += pretty_print_padded_value(columns->id_columns[i].length,
-                                             &value);
+                                             NULL, &value);
 
         if (i < columns->id_count - 1)
             written += printf("|");
@@ -73,7 +77,7 @@ skip_id:
         };
 
         written += pretty_print_padded_value(columns->output_columns[i].length,
-                                             &value);
+                                             NULL, &value);
 
         if (i < columns->output_count - 1)
             written += printf("|");
@@ -88,11 +92,13 @@ static void
 pretty_print_values(const struct rbh_value_map *id_map,
                     const struct rbh_group_fields group,
                     const struct rbh_value_map *output_map,
+                    const struct rbh_filter_output output,
                     struct result_columns *columns)
 {
     if (id_map) {
         for (int i = 0; i < id_map->count; i++) {
             pretty_print_padded_value(columns->id_columns[i].length,
+                                      &group.id_fields[i].field,
                                       id_map->pairs[i].value);
 
             if (i < id_map->count - 1)
@@ -104,6 +110,7 @@ pretty_print_values(const struct rbh_value_map *id_map,
 
     for (int i = 0; i < output_map->count; i++) {
         pretty_print_padded_value(columns->output_columns[i].length,
+                                  &output.output_fields.fields[i].field,
                                   output_map->pairs[i].value);
 
         if (i < output_map->count - 1)
@@ -156,6 +163,6 @@ pretty_print_results(struct rbh_value_map *result_maps, int count_results,
             output_map = &result_maps[i].pairs[0].value->map;
         }
 
-        pretty_print_values(id_map, group, output_map, columns);
+        pretty_print_values(id_map, group, output_map, output, columns);
     }
 }
