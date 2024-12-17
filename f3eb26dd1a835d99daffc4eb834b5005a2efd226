@@ -34,6 +34,24 @@
       "parentUuid": "a868c1b1_4ba69e5e",
       "revId": "f3eb26dd1a835d99daffc4eb834b5005a2efd226",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dee7f941_1673e979",
+        "filename": "rbh-report/tests/test_range.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-12-17T08:53:25Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "2835c17f_967b83d7",
+      "revId": "f3eb26dd1a835d99daffc4eb834b5005a2efd226",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
