@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1cddbfc3_cd78d001",
+        "filename": "rbh-report/rbh-report.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-12-17T10:06:26Z",
+      "side": 1,
+      "message": "Right now I just want this to work within a reasonable limit, so keeping 32 maps in memory seemed enough to me, but I\u0027ve changed it up to 256. The goal with this will be to instead use a linked list, but I did not want to bother with it for now.",
+      "parentUuid": "c108fac9_511e11a7",
+      "range": {
+        "startLine": 75,
+        "startChar": 55,
+        "endLine": 75,
+        "endChar": 76
+      },
+      "revId": "03ec970f93a6de2568f4677a63dc29703d6778d2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0bf17fdb_45c5e221",
         "filename": "rbh-report/rbh-report.c",
         "patchSetId": 2
@@ -37,6 +61,24 @@
       "writtenOn": "2024-12-17T09:50:17Z",
       "side": 1,
       "message": "question: Are you sure of this ? If I understand well, you can put 32 maps in results but the assert is not checking that ? No ?",
+      "revId": "03ec970f93a6de2568f4677a63dc29703d6778d2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a9749205_753d6f6e",
+        "filename": "rbh-report/rbh-report.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-12-17T10:06:26Z",
+      "side": 1,
+      "message": "You\u0027re right this doesn\u0027t check that because `results` is not an array, it\u0027s just a vestige of something I tried. Changed `results` to be an array instead, so this assert works fine now.",
+      "parentUuid": "0bf17fdb_45c5e221",
       "revId": "03ec970f93a6de2568f4677a63dc29703d6778d2",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
