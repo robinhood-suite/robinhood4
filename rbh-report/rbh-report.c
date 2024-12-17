@@ -131,7 +131,7 @@ static int
 usage(void)
 {
     const char *message =
-        "usage: %s [-h] SOURCE [-o|--output OUTPUT]\n"
+        "usage: %s [-h] SOURCE [-c|--csv] [-r|--rsort] [-g|--group-by GROUP-BY] [-o|--output OUTPUT]\n"
         "\n"
         "Create a report from SOURCE's entries\n"
         "\n"
@@ -139,9 +139,16 @@ usage(void)
         "    SOURCE  a robinhood URI\n"
         "\n"
         "Optional arguments:\n"
+        "    -c,--csv              print the report in CSV format\n"
+        "    -g,--group-by GROUP-BY\n"
+        "                          the data to group entries on. Can be a CSV\n"
+        "                          to group on multiple fields. If not\n"
+        "                          specified, will group every entry in one\n"
         "    -h,--help             show this message and exit\n"
+        "    -r,--rsort            reverse sort the output based on the\n"
+        "                          grouping requested\n"
         "\n"
-        "Output arguments:\n"
+        "Output arguments (mandatory):\n"
         "    -o,--output OUTPUT    the information to output. Can be a CSV\n"
         "                          detailling what data to output and the\n"
         "                          order\n"
