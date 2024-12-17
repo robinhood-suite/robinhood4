@@ -44,7 +44,7 @@ destroy_from(void)
 
 static void
 report(const char *group_string, const char *output_string, bool ascending_sort,
-       bool pretty_print)
+       bool csv_print)
 {
     struct rbh_filter_options options = { 0 };
     struct rbh_filter_output output = { 0 };
@@ -101,7 +101,7 @@ report(const char *group_string, const char *output_string, bool ascending_sort,
                           "Expected 2 maps in output, but found '%ld'",
                           map->count);
 
-        if (pretty_print == false) {
+        if (csv_print) {
             dump_results(map, group, output);
             printf("\n");
         } else {
@@ -115,7 +115,7 @@ report(const char *group_string, const char *output_string, bool ascending_sort,
 
     } while (true);
 
-    if (pretty_print)
+    if (!csv_print)
         pretty_print_results(results, count, group, output, &columns);
 }
 
@@ -163,6 +163,10 @@ main(int argc, char *argv[])
 {
     const struct option LONG_OPTIONS[] = {
         {
+            .name = "csv",
+            .val = 'c',
+        },
+        {
             .name = "group-by",
             .has_arg = required_argument,
             .val = 'g',
@@ -177,24 +181,23 @@ main(int argc, char *argv[])
             .val = 'o',
         },
         {
-            .name = "pretty-print",
-            .val = 'p',
-        },
-        {
             .name = "rsort",
             .val = 'r',
         },
         {}
     };
     bool ascending_sort = true;
-    bool pretty_print = false;
+    bool csv_print = false;
     char *output = NULL;
     char *group = NULL;
     char c;
 
     /* Parse the command line */
-    while ((c = getopt_long(argc, argv, "hg:o:pr", LONG_OPTIONS, NULL)) != -1) {
+    while ((c = getopt_long(argc, argv, "chg:o:r", LONG_OPTIONS, NULL)) != -1) {
         switch (c) {
+        case 'c':
+            csv_print = true;
+            break;
         case 'g':
             group = strdup(optarg);
             if (group == NULL)
@@ -207,9 +210,6 @@ main(int argc, char *argv[])
             output = strdup(optarg);
             if (output == NULL)
                 error(EXIT_FAILURE, ENOMEM, "strdup");
-            break;
-        case 'p':
-            pretty_print = true;
             break;
         case 'r':
             ascending_sort = false;
@@ -233,7 +233,7 @@ main(int argc, char *argv[])
     /* Parse SOURCE */
     from = rbh_backend_from_uri(argv[0]);
 
-    report(group, output, ascending_sort, pretty_print);
+    report(group, output, ascending_sort, csv_print);
 
     return EXIT_SUCCESS;
 }

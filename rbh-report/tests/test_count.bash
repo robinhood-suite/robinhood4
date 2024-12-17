@@ -22,10 +22,10 @@ test_count()
 
     rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
 
-    rbh_report "rbh:mongo:$testdb" --output "count()" |
+    rbh_report --csv "rbh:mongo:$testdb" --output "count()" |
         difflines "53"
 
-    rbh_report "rbh:mongo:$testdb" --group-by "statx.type" \
+    rbh_report --csv "rbh:mongo:$testdb" --group-by "statx.type" \
                                    --output "count()" |
         difflines "directory: 27" "file: 26"
 }
