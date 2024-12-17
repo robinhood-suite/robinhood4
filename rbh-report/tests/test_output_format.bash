@@ -15,7 +15,7 @@ test_dir=$(dirname $(readlink -e $0))
 
 main_user_id="$(id -u)"
 
-test_format_multi_group_and_rsort()
+complete_setup()
 {
     mkdir first_user_dir
     cd first_user_dir
@@ -38,9 +38,14 @@ test_format_multi_group_and_rsort()
     cd ..
 
     useradd -MN fake_user || true
-    local fake_user_id="$(id -u fake_user)"
+    fake_user_id="$(id -u fake_user)"
     chown -R fake_user: second_user_dir
     userdel fake_user || true
+}
+
+test_format_multi_group_and_rsort()
+{
+    complete_setup
 
     rbh_sync "rbh:posix:first_user_dir" "rbh:mongo:$testdb"
     rbh_sync "rbh:posix:second_user_dir" "rbh:mongo:$testdb"
@@ -81,11 +86,59 @@ test_format_multi_group_and_rsort()
                   "$main_user_id,fifo: 0"
 }
 
+check_output_has_line()
+{
+    local output="$1"
+    shift 1
+
+    for string in "$@"; do
+        output="$(echo "$output" | grep "$string")"
+        if [ -z "$output" ]; then
+            error "'$output' doesn't contain '$string'"
+        fi
+    done
+}
+
+test_format_pretty_print()
+{
+    complete_setup
+
+    rbh_sync "rbh:posix:first_user_dir" "rbh:mongo:$testdb"
+    rbh_sync "rbh:posix:second_user_dir" "rbh:mongo:$testdb"
+
+    local first_root_size="$(stat -c %s first_user_dir)"
+    local second_root_size="$(stat -c %s second_user_dir)"
+    local first_symlink_size="$(stat -c %s first_user_dir/first_slink)"
+    local second_symlink_size="$(stat -c %s second_user_dir/second_slink)"
+
+    local output="$(rbh_report "rbh:mongo:$testdb" --pretty-print \
+                        --group-by "statx.uid,statx.type" \
+                        --output "sum(statx.size)")"
+
+    check_output_has_line "$output" "statx.uid" "statx.type" "sum(statx.size)"
+    check_output_has_line "$output" "$main_user_id" "fifo" "0"
+    check_output_has_line "$output" "$main_user_id" "char" "0"
+    check_output_has_line "$output" "$main_user_id" "directory" \
+                                    "$first_root_size"
+    check_output_has_line "$output" "$main_user_id" "block" "0"
+    check_output_has_line "$output" "$main_user_id" "file" "0"
+    check_output_has_line "$output" "$main_user_id" "link" \
+                                    "$first_symlink_size"
+    check_output_has_line "$output" "$fake_user_id" "fifo" "0"
+    check_output_has_line "$output" "$fake_user_id" "char" "0"
+    check_output_has_line "$output" "$fake_user_id" "directory" \
+                                    "$second_root_size"
+    check_output_has_line "$output" "$fake_user_id" "block" "0"
+    check_output_has_line "$output" "$fake_user_id" "file" "0"
+    check_output_has_line "$output" "$fake_user_id" "link" \
+                                    "$second_symlink_size"
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
-declare -a tests=(test_format_multi_group_and_rsort)
+declare -a tests=(test_format_multi_group_and_rsort test_format_pretty_print)
 
 tmpdir=$(mktemp --directory)
 trap -- "rm -rf '$tmpdir'" EXIT
