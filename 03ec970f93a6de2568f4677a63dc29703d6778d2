@@ -48,6 +48,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1087bf8b_1273f82a",
+        "filename": "rbh-report/rbh-report.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-12-18T07:58:49Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "1cddbfc3_cd78d001",
+      "range": {
+        "startLine": 75,
+        "startChar": 55,
+        "endLine": 75,
+        "endChar": 76
+      },
+      "revId": "03ec970f93a6de2568f4677a63dc29703d6778d2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0bf17fdb_45c5e221",
@@ -79,6 +103,24 @@
       "side": 1,
       "message": "You\u0027re right this doesn\u0027t check that because `results` is not an array, it\u0027s just a vestige of something I tried. Changed `results` to be an array instead, so this assert works fine now.",
       "parentUuid": "0bf17fdb_45c5e221",
+      "revId": "03ec970f93a6de2568f4677a63dc29703d6778d2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0387d491_0ca0c045",
+        "filename": "rbh-report/rbh-report.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-12-18T07:58:49Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "a9749205_753d6f6e",
       "revId": "03ec970f93a6de2568f4677a63dc29703d6778d2",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
