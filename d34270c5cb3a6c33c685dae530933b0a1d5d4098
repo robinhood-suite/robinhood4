@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e2ca0bcb_3dda1461",
+        "filename": "rbh-report/tests/test_output_format.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-12-18T08:20:07Z",
+      "side": 1,
+      "message": "minor: if we have `main_user_id fifo 10`, it will works because grep has found a 0.",
+      "range": {
+        "startLine": 119,
+        "startChar": 59,
+        "endLine": 119,
+        "endChar": 62
+      },
+      "revId": "d34270c5cb3a6c33c685dae530933b0a1d5d4098",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
