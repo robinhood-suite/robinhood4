@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "70b6d270_0b6f5589",
+        "filename": "rbh-report/src/pretty_print.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-12-18T15:18:19Z",
+      "side": 1,
+      "message": "comment: will you modify this using `%*s` decorator?",
+      "range": {
+        "startLine": 33,
+        "startChar": 4,
+        "endLine": 34,
+        "endChar": 24
+      },
+      "revId": "48da8a55db2bbde28ff735693286cfab8d73e5b5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
