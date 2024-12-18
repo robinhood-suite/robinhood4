@@ -58,6 +58,9 @@ check_and_set_boundaries(struct rbh_range_field *field, char *field_string)
                       "'%s' ill-formed, additional characters after ']'",
                       field_string);
 
+    *open_bracket = '\0';
+    *close_bracket = '\0';
+
     count = count_char_separated_values(open_bracket + 1, ';');
     if (count == -1)
         error_at_line(EXIT_FAILURE, EINVAL, __FILE__, __LINE__,
@@ -69,9 +72,6 @@ check_and_set_boundaries(struct rbh_range_field *field, char *field_string)
     if (field->boundaries == NULL)
         error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
                       "rbh_sstack_push");
-
-    *open_bracket = '\0';
-    *close_bracket = '\0';
 
     set_boundaries(field->boundaries, open_bracket + 1);
     field->boundaries_count = count;
