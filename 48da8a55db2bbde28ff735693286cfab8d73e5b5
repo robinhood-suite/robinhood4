@@ -22,6 +22,30 @@
       },
       "revId": "48da8a55db2bbde28ff735693286cfab8d73e5b5",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b79834d1_2a24f41a",
+        "filename": "rbh-report/src/pretty_print.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2024-12-18T15:19:43Z",
+      "side": 1,
+      "message": "Yes, done in the last patch of this stack",
+      "parentUuid": "70b6d270_0b6f5589",
+      "range": {
+        "startLine": 33,
+        "startChar": 4,
+        "endLine": 34,
+        "endChar": 24
+      },
+      "revId": "48da8a55db2bbde28ff735693286cfab8d73e5b5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
