@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "17b8ee85_c78f26df",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-12-18T13:51:14Z",
+      "side": 1,
+      "message": "Ok with the patch, except for the defect raised by Gauthier.",
+      "revId": "d8780de09abf8edf9133f015e247de3cc42234c4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6771fc94_2a23a33e",
