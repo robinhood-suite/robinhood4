@@ -64,8 +64,8 @@ csv_print_results(const struct rbh_value_map *result_map,
                   const struct rbh_group_fields group,
                   const struct rbh_filter_output output)
 {
-    const struct rbh_value_map *output_map;
-    const struct rbh_value_map *id_map;
+    const struct rbh_value_map *output_map = NULL;
+    const struct rbh_value_map *id_map = NULL;
 
     if (result_map->count == 2) {
         id_map = &result_map->pairs[0].value->map;
@@ -81,4 +81,5 @@ csv_print_results(const struct rbh_value_map *result_map,
     }
 
     csv_print_output_map(output_map, output);
+    printf("\n");
 }

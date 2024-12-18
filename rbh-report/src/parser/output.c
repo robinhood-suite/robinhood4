@@ -58,7 +58,7 @@ str2accumulator(const char *str)
 }
 
 static const struct rbh_accumulator_field
-convert_output_string_to_accumulator_field(char *output_string)
+convert_string_to_accumulator_field(char *output_string)
 {
     const struct rbh_filter_field *filter_field;
     struct rbh_accumulator_field field;
@@ -98,10 +98,8 @@ convert_output_string_to_accumulator_field(char *output_string)
 }
 
 void
-fill_acc_and_output_fields(const char *_output_string,
-                           struct rbh_group_fields *group,
-                           struct rbh_filter_output *output,
-                           struct result_columns *columns)
+parse_output(const char *_output_string, struct rbh_group_fields *group,
+             struct rbh_filter_output *output, struct result_columns *columns)
 {
     struct rbh_accumulator_field *fields;
     char *current_field;
@@ -130,7 +128,7 @@ fill_acc_and_output_fields(const char *_output_string,
         init_column(&columns->output_columns[counter], current_field);
 
         fields[counter++] =
-            convert_output_string_to_accumulator_field(current_field);
+            convert_string_to_accumulator_field(current_field);
 
         current_field = strtok(NULL, ",");
     }
