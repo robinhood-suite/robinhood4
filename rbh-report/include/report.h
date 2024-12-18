@@ -25,18 +25,14 @@ struct result_columns {
     int output_count;
 };
 
-int
-count_fields(const char *str);
+void
+parse_group_by(const char *_group_by, struct rbh_group_fields *group,
+               struct result_columns *columns);
 
 void
-fill_acc_and_output_fields(const char *_output_string,
-                           struct rbh_group_fields *group,
-                           struct rbh_filter_output *output,
-                           struct result_columns *columns);
+parse_output(const char *_output_string, struct rbh_group_fields *group,
+             struct rbh_filter_output *output, struct result_columns *columns);
 
-void
-fill_group_by_fields(const char *_group_by, struct rbh_group_fields *group,
-                     struct result_columns *columns);
 
 void
 csv_print_results(const struct rbh_value_map *result_map,

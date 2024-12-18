@@ -78,8 +78,8 @@ check_and_set_boundaries(struct rbh_range_field *field, char *field_string)
 }
 
 void
-fill_group_by_fields(const char *_group_by, struct rbh_group_fields *group,
-                     struct result_columns *columns)
+parse_group_by(const char *_group_by, struct rbh_group_fields *group,
+               struct result_columns *columns)
 {
     const struct rbh_filter_field *filter_field;
     struct rbh_range_field *fields;
