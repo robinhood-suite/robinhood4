@@ -51,7 +51,7 @@ int count_char_separated_values(const char *str, char character)
 {
     int count;
 
-    if (str == NULL)
+    if (str == NULL || *str == '\0' || *str == character)
         return -1;
 
     /* Even if the string doesn't have any of the requested character, it still
@@ -59,6 +59,7 @@ int count_char_separated_values(const char *str, char character)
      */
     count = 1;
 
+    str++;
     while (*str) {
         if (*str == character) {
             if (*(str + 1) == character || *(str + 1) == '\0')
