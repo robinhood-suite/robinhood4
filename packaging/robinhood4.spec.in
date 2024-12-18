@@ -1,5 +1,5 @@
 Name:    robinhood4
-Version: 1.1.0
+Version: 1.2.0
 Release: 1%{?dist}
 Summary: RobinHood V4 tool suite
 
@@ -137,6 +137,7 @@ OPTS=""
 %{_bindir}/rbh-fsevents
 %{_bindir}/rbh-capabilities
 %{_bindir}/rbh-update-retention
+%{_bindir}/rbh-report
 
 %files devel
 %{_libdir}/librobinhood.so
@@ -191,6 +192,10 @@ OPTS=""
 ldconfig
 
 %changelog
+* Wed Dec 18 2024 - Yoann Valeri <yoann.valeri@cea.fr> - 1.2-1
+- Added rbh-report tool to retrieve aggregated information about the mirror
+system
+
 * Fri Oct 25 2024 - Yoann Valeri <yoann.valeri@cea.fr> - 1.1-1
 - Added xattrs type configuration with the configuration file
 - Added configuration parameter for rbh-update-retention
