@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ba19e341_a74976b4",
+        "filename": "rbh-report/include/report.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2024-12-18T13:40:44Z",
+      "side": 0,
+      "message": "comment: strange to remove it whereas it was added two patches ago\n\nWe talked about it IRL, it seems that some cleanings are missing..",
+      "range": {
+        "startLine": 45,
+        "startChar": 13,
+        "endLine": 45,
+        "endChar": 43
+      },
+      "revId": "1c53222a36e806574095443d4763cef5e493ebb0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
