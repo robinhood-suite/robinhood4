@@ -20,7 +20,7 @@
 #include "report.h"
 
 static void
-dump_id_map(const struct rbh_value_map *map, struct rbh_group_fields group)
+csv_print_id_map(const struct rbh_value_map *map, struct rbh_group_fields group)
 {
     char buffer[1024];
 
@@ -40,7 +40,7 @@ dump_id_map(const struct rbh_value_map *map, struct rbh_group_fields group)
 }
 
 static void
-dump_output_map(const struct rbh_value_map *map,
+csv_print_output_map(const struct rbh_value_map *map,
                 const struct rbh_filter_output output)
 {
     char buffer[1024];
@@ -60,9 +60,9 @@ dump_output_map(const struct rbh_value_map *map,
 }
 
 void
-dump_results(const struct rbh_value_map *result_map,
-             const struct rbh_group_fields group,
-             const struct rbh_filter_output output)
+csv_print_results(const struct rbh_value_map *result_map,
+                  const struct rbh_group_fields group,
+                  const struct rbh_filter_output output)
 {
     const struct rbh_value_map *output_map;
     const struct rbh_value_map *id_map;
@@ -76,9 +76,9 @@ dump_results(const struct rbh_value_map *result_map,
     }
 
     if (id_map) {
-        dump_id_map(id_map, group);
+        csv_print_id_map(id_map, group);
         printf(": ");
     }
 
-    dump_output_map(output_map, output);
+    csv_print_output_map(output_map, output);
 }
