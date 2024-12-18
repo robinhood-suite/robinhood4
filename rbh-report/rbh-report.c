@@ -102,7 +102,7 @@ report(const char *group_string, const char *output_string, bool ascending_sort,
                           map->count);
 
         if (csv_print) {
-            dump_results(map, group, output);
+            csv_print_results(map, group, output);
             printf("\n");
         } else {
             assert(count < (sizeof(results) / sizeof(results[0])));
