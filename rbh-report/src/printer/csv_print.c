@@ -81,4 +81,5 @@ csv_print_results(const struct rbh_value_map *result_map,
     }
 
     csv_print_output_map(output_map, output);
+    printf("\n");
 }

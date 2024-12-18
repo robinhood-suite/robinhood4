@@ -71,14 +71,14 @@ report(const char *group_string, const char *output_string, bool ascending_sort,
                           "rbh_sstack_new");
     }
 
-    fill_group_by_fields(group_string, &group, &columns);
-    fill_acc_and_output_fields(output_string, &group, &output, &columns);
-
     options.sort.items = &sort;
     options.sort.count = 1;
 
     buffer = _buffer;
     bufsize = sizeof(_buffer);
+
+    parse_group_by(group_string, &group, &columns);
+    parse_output(output_string, &group, &output, &columns);
 
     iter = rbh_backend_report(from, NULL, &group, &options, &output);
     if (iter == NULL)
@@ -103,14 +103,12 @@ report(const char *group_string, const char *output_string, bool ascending_sort,
 
         if (csv_print) {
             csv_print_results(map, group, output);
-            printf("\n");
         } else {
             assert(count < (sizeof(results) / sizeof(results[0])));
 
             if (value_map_copy(&results[count++], map, &buffer, &bufsize))
                 error_at_line(EXIT_FAILURE, EINVAL, __FILE__, __LINE__,
-                              "Expected 2 maps in output, but found '%ld'",
-                              map->count);
+                              "Failed to copy result map");
         }
 
     } while (true);

@@ -17,33 +17,27 @@ static int
 pretty_print_padded_value(int max_length, struct rbh_filter_field *field,
                           const struct rbh_value *value)
 {
-    /* Include a starting and ending whitespace */
-    int printed_length = max_length + 2;
     char *buffer;
-    int done = 0;
 
-    buffer = rbh_sstack_push(values_sstack, NULL, printed_length + 1);
+    buffer = rbh_sstack_push(values_sstack, NULL, max_length + 1);
     if (buffer == NULL)
         error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
                       "rbh_sstack_push");
 
-    buffer[printed_length] = '\0';
-    buffer[done++] = ' ';
+    buffer[max_length] = '\0';
     if (field)
-        done += dump_decorated_value(value, field, buffer + done);
+        dump_decorated_value(value, field, buffer);
     else
-        done += dump_value(value, buffer + done);
+        dump_value(value, buffer);
 
-    for (int i = done; i < printed_length; ++i)
-        buffer[i] = ' ';
+    printf(" %*s ", max_length, buffer);
 
-    printf("%s", buffer);
-
-    if (rbh_sstack_pop(values_sstack, printed_length + 1))
+    if (rbh_sstack_pop(values_sstack, max_length + 1))
         error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
                       "rbh_sstack_pop");
 
-    return printed_length;
+    /* Account for the starting and ending space */
+    return max_length + 2;
 }
 
 static int
