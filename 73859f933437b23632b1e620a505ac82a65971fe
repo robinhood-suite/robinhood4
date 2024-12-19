@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5cf2c2ac_5f08461c",
+        "filename": "rbh-report/rbh-report.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2024-12-19T08:31:28Z",
+      "side": 1,
+      "message": "sugest: add the range option for the group-by",
+      "range": {
+        "startLine": 134,
+        "startChar": 54,
+        "endLine": 134,
+        "endChar": 79
+      },
+      "revId": "73859f933437b23632b1e620a505ac82a65971fe",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
