@@ -186,7 +186,7 @@ create_string_value(char *str, size_t len)
 {
     struct rbh_value val = {
         .type = RBH_VT_STRING,
-        .string = rbh_sstack_push(_values, str, len),
+        .string = RBH_SSTACK_PUSH(_values, str, len),
     };
 
     return val;
@@ -931,7 +931,7 @@ update_or_cast_expiration_date(int index, char *retention_attribute,
     if (calculated_expiration_date < 0)
         return -1;
 
-    expiration_value = rbh_sstack_push(_values,
+    expiration_value = RBH_SSTACK_PUSH(_values,
                                        _inode_xattrs[index].value->binary.data,
                                        _inode_xattrs[index].value->binary.size);
 

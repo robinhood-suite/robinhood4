@@ -105,9 +105,7 @@ rbh_value_map_deep_copy(struct rbh_value_map *dest,
 {
     struct rbh_value_pair *tmp;
 
-    tmp = rbh_sstack_push(stack, NULL, src->count * sizeof(*src->pairs));
-    if (!tmp)
-        return -1;
+    tmp = RBH_SSTACK_PUSH(stack, NULL, src->count * sizeof(*src->pairs));
 
     dest->count = src->count;
     dest->pairs = tmp;
@@ -117,7 +115,7 @@ rbh_value_map_deep_copy(struct rbh_value_map *dest,
         struct rbh_value *value;
         int rc;
 
-        pair->key = rbh_sstack_push(stack, src->pairs[i].key,
+        pair->key = RBH_SSTACK_PUSH(stack, src->pairs[i].key,
                                     strlen(src->pairs[i].key) + 1);
         if (!pair->key)
             return -1;
@@ -127,9 +125,7 @@ rbh_value_map_deep_copy(struct rbh_value_map *dest,
             continue;
         }
 
-        value = rbh_sstack_push(stack, NULL, sizeof(*value));
-        if (!value)
-            return -1;
+        value = RBH_SSTACK_PUSH(stack, NULL, sizeof(*value));
 
         pair->value = value;
         rc = rbh_value_deep_copy(value, src->pairs[i].value, stack);
@@ -147,12 +143,7 @@ rbh_sequence_deep_copy(struct rbh_value *dest,
 {
     struct rbh_value *tmp;
 
-    tmp = rbh_sstack_push(
-        stack, NULL, src->sequence.count * sizeof(*tmp)
-        );
-
-    if (!tmp)
-        return -1;
+    tmp = RBH_SSTACK_PUSH(stack, NULL, src->sequence.count * sizeof(*tmp));
 
     dest->sequence.count = src->sequence.count;
     dest->sequence.values = tmp;
@@ -187,24 +178,24 @@ rbh_value_deep_copy(struct rbh_value *dest, const struct rbh_value *src,
         return 0;
     case RBH_VT_STRING:
         dest->type = RBH_VT_STRING;
-        dest->string = rbh_sstack_push(stack, src->string,
+        dest->string = RBH_SSTACK_PUSH(stack, src->string,
                                        strlen(src->string) + 1);
 
-        return dest->string != NULL ? 0 : -1;
+        return 0;
     case RBH_VT_BINARY:
         dest->type = RBH_VT_BINARY;
         dest->binary.size = src->binary.size;
-        dest->binary.data = rbh_sstack_push(stack, src->binary.data,
+        dest->binary.data = RBH_SSTACK_PUSH(stack, src->binary.data,
                                             src->binary.size);
 
-        return dest->binary.data != NULL ? 0 : -1;
+        return 0;
     case RBH_VT_REGEX:
         dest->type = RBH_VT_REGEX;
         dest->regex.options = src->regex.options;
-        dest->regex.string = rbh_sstack_push(stack, src->regex.string,
+        dest->regex.string = RBH_SSTACK_PUSH(stack, src->regex.string,
                                              strlen(src->regex.string) + 1);
 
-        return dest->regex.string != NULL ? 0 : -1;
+        return 0;
     case RBH_VT_SEQUENCE:
         dest->type = RBH_VT_SEQUENCE;
         return rbh_sequence_deep_copy(dest, src, stack);
@@ -228,9 +219,7 @@ rbh_fsevent_deep_copy(struct rbh_fsevent *dst,
 
     dst->type = src->type;
     dst->id.size = src->id.size;
-    dst->id.data = rbh_sstack_push(stack, src->id.data, src->id.size);
-    if (!dst->id.data)
-        return -1;
+    dst->id.data = RBH_SSTACK_PUSH(stack, src->id.data, src->id.size);
 
     if (src->xattrs.count > 0) {
         rc = rbh_value_map_deep_copy(&dst->xattrs, &src->xattrs, stack);
@@ -240,62 +229,43 @@ rbh_fsevent_deep_copy(struct rbh_fsevent *dst,
 
     switch (src->type) {
     case RBH_FET_UPSERT:
-        if (src->upsert.statx) {
-            dst->upsert.statx = rbh_sstack_push(stack, src->upsert.statx,
+        if (src->upsert.statx)
+            dst->upsert.statx = RBH_SSTACK_PUSH(stack, src->upsert.statx,
                                                 sizeof(*src->upsert.statx));
-            if (!dst->upsert.statx)
-                return -1;
-        }
 
-        if (src->upsert.symlink) {
-            dst->upsert.symlink = rbh_sstack_push(
+        if (src->upsert.symlink)
+            dst->upsert.symlink = RBH_SSTACK_PUSH(
                 stack, src->upsert.symlink, strlen(src->upsert.symlink) + 1
                 );
-            if (!dst->upsert.symlink)
-                return -1;
-        }
 
         break;
     case RBH_FET_LINK:
     case RBH_FET_UNLINK:
-        parent = rbh_sstack_push(stack, NULL, sizeof(*parent));
-        if (!parent)
-            return -1;
+        parent = RBH_SSTACK_PUSH(stack, NULL, sizeof(*parent));
 
         parent->size = src->link.parent_id->size;
-        parent->data = rbh_sstack_push(stack, src->link.parent_id->data,
+        parent->data = RBH_SSTACK_PUSH(stack, src->link.parent_id->data,
                                        src->link.parent_id->size);
-        if (!parent->data)
-            return -1;
 
         dst->link.parent_id = parent;
-        dst->link.name = rbh_sstack_push(stack, src->link.name,
+        dst->link.name = RBH_SSTACK_PUSH(stack, src->link.name,
                                          strlen(src->link.name) + 1);
-        if (!dst->link.name)
-            return -1;
 
         break;
     case RBH_FET_XATTR:
         if (src->ns.parent_id) {
-            parent = rbh_sstack_push(stack, NULL, sizeof(*parent));
-            if (!parent)
-                return -1;
+            parent = RBH_SSTACK_PUSH(stack, NULL, sizeof(*parent));
 
             parent->size = src->ns.parent_id->size;
-            parent->data = rbh_sstack_push(
+            parent->data = RBH_SSTACK_PUSH(
                 stack, src->ns.parent_id->data, src->ns.parent_id->size);
-            if (!parent->data)
-                return -1;
 
             dst->ns.parent_id = parent;
         }
 
-        if (src->ns.name) {
-            dst->ns.name = rbh_sstack_push(
+        if (src->ns.name)
+            dst->ns.name = RBH_SSTACK_PUSH(
                 stack, src->ns.name, strlen(src->ns.name) + 1);
-            if (!dst->ns.name)
-                return -1;
-        }
 
         break;
     case RBH_FET_DELETE:

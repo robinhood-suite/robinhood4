@@ -61,9 +61,7 @@ build_pair(const char *key, struct rbh_value *(*part_builder)(void *),
     if (PAIR[0].value == NULL && part_builder != NULL)
         return NULL;
 
-    pair = rbh_sstack_push(source_stack, NULL, sizeof(*pair));
-    if (pair == NULL)
-        return NULL;
+    pair = RBH_SSTACK_PUSH(source_stack, NULL, sizeof(*pair));
     memcpy(pair, PAIR, sizeof(*pair));
 
     return pair;
@@ -83,7 +81,7 @@ build_empty_map(void *arg)
     };
     struct rbh_value *enrich;
 
-    return rbh_sstack_push(source_stack, &ENRICH, sizeof(*enrich));
+    return RBH_SSTACK_PUSH(source_stack, &ENRICH, sizeof(*enrich));
 }
 
 struct rbh_value_map
@@ -101,7 +99,7 @@ build_enrich_map(struct rbh_value *(*part_builder)(void *),
 void *
 source_stack_alloc(const void *data, size_t size)
 {
-    return rbh_sstack_push(source_stack, data, size);
+    return RBH_SSTACK_PUSH(source_stack, data, size);
 }
 
 void

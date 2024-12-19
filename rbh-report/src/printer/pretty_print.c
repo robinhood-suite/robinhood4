@@ -19,11 +19,7 @@ pretty_print_padded_value(int max_length, struct rbh_filter_field *field,
 {
     char *buffer;
 
-    buffer = rbh_sstack_push(values_sstack, NULL, max_length + 1);
-    if (buffer == NULL)
-        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
-                      "rbh_sstack_push");
-
+    buffer = RBH_SSTACK_PUSH(values_sstack, NULL, max_length + 1);
     buffer[max_length] = '\0';
     if (field)
         dump_decorated_value(value, field, buffer);
