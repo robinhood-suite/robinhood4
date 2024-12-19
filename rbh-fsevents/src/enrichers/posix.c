@@ -504,18 +504,10 @@ enrich_xattrs(const struct rbh_value *xattrs_to_enrich,
         if (length == -1) {
             value = NULL;
         } else {
-            value = rbh_sstack_push(xattrs_values, NULL, sizeof(*value));
-            if (value == NULL) {
-                rc = -1;
-                goto err;
-            }
+            value = RBH_SSTACK_PUSH(xattrs_values, NULL, sizeof(*value));
 
             value->type = RBH_VT_BINARY;
-            value->binary.data = rbh_sstack_push(xattrs_values, buffer, length);
-            if (value->binary.data == NULL) {
-                rc = -1;
-                goto err;
-            }
+            value->binary.data = RBH_SSTACK_PUSH(xattrs_values, buffer, length);
 
             value->binary.size = length;
         }

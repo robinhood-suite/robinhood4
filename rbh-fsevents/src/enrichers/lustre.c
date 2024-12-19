@@ -37,9 +37,7 @@ enrich_path(const char *mount_path, const struct rbh_id *id, const char *name,
     char *path;
     int rc;
 
-    path = rbh_sstack_push(xattrs_values, NULL, PATH_MAX);
-    if (path == NULL)
-        return -1;
+    path = RBH_SSTACK_PUSH(xattrs_values, NULL, PATH_MAX);
 
     rc = sprintf(fid_str, DFID, PFID(fid));
     if (rc < 0)
@@ -74,9 +72,7 @@ enrich_path(const char *mount_path, const struct rbh_id *id, const char *name,
     path[path_length] = '/';
     strcpy(&path[path_length + 1], name);
 
-    *_value = rbh_sstack_push(xattrs_values, NULL, sizeof(**_value));
-    if (*_value == NULL)
-        return -1;
+    *_value = RBH_SSTACK_PUSH(xattrs_values, NULL, sizeof(**_value));
 
     (*_value)->type = RBH_VT_STRING;
     (*_value)->string = path;

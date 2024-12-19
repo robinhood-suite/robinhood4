@@ -34,9 +34,7 @@ static struct rbh_value *
 set_value_to_binary(struct rbh_sstack *xattrs, const char *buffer,
                     ssize_t length, struct rbh_value *value)
 {
-    value->binary.data = rbh_sstack_push(xattrs, buffer, length + 1);
-    if (value->binary.data == NULL)
-        return NULL;
+    value->binary.data = RBH_SSTACK_PUSH(xattrs, buffer, length + 1);
 
     value->binary.size = length;
     value->type = RBH_VT_BINARY;
@@ -121,10 +119,7 @@ static struct rbh_value *
 set_value_to_string(struct rbh_sstack *xattrs, const char *buffer,
                     ssize_t length, struct rbh_value *value)
 {
-    value->string = rbh_sstack_push(xattrs, buffer, length + 1);
-    if (value->string == NULL)
-        return NULL;
-
+    value->string = RBH_SSTACK_PUSH(xattrs, buffer, length + 1);
     value->type = RBH_VT_STRING;
 
     return value;
@@ -137,9 +132,7 @@ create_value_from_xattr(const char *name, const char *buffer, ssize_t length,
 {
     struct rbh_value *value;
 
-    value = rbh_sstack_push(xattrs, NULL, sizeof(*value));
-    if (value == NULL)
-        return NULL;
+    value = RBH_SSTACK_PUSH(xattrs, NULL, sizeof(*value));
 
     if (xattrs_types == NULL)
         return set_value_to_binary(xattrs, buffer, length, value);
@@ -235,23 +228,17 @@ set_xattrs_types_map()
     if (xattrs_types_stack == NULL)
         return false;
 
-    xattrs_types = rbh_sstack_push(xattrs_types_stack, NULL,
+    xattrs_types = RBH_SSTACK_PUSH(xattrs_types_stack, NULL,
                                    sizeof(*xattrs_types));
-    if (xattrs_types == NULL)
-        return -1;
 
-    pairs = rbh_sstack_push(xattrs_types_stack, NULL,
+    pairs = RBH_SSTACK_PUSH(xattrs_types_stack, NULL,
                             value.map.count * sizeof(*pairs));
-    if (pairs == NULL)
-        return -1;
 
     for (int i = 0; i < value.map.count; i++) {
         struct rbh_value *_value;
 
         pairs[i].key = value.map.pairs[i].key;
-        _value = rbh_sstack_push(xattrs_types_stack, NULL, sizeof(*_value));
-        if (_value == NULL)
-            return -1;
+        _value = RBH_SSTACK_PUSH(xattrs_types_stack, NULL, sizeof(*_value));
 
         if (extract_type_from_map(value.map, _value, i))
             return -1;

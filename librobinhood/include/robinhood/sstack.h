@@ -158,6 +158,18 @@ rbh_sstack_new(size_t chunk_size);
 void *
 rbh_sstack_push(struct rbh_sstack *sstack, const void *data, size_t size);
 
+#define RBH_SSTACK_PUSH(_sstack, _data, _size) \
+    ({ \
+        void *_result = rbh_sstack_push(_sstack, _data, _size); \
+        if (!_result) { \
+            fprintf(stderr, \
+                    "Error: rbh_sstack_push failed at %s (%d): %s (%d)\n", \
+                    __FILE__, __LINE__, strerror(errno), errno); \
+            exit(EXIT_FAILURE); \
+        } \
+        _result; \
+    })
+
 /**
  * Peek at data in an sstack
  *

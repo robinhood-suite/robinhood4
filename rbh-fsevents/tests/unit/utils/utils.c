@@ -43,7 +43,7 @@ sstack_destroy(void)
 static void *
 alloc(size_t size)
 {
-    return rbh_sstack_push(fake_events_container, NULL, size);
+    return RBH_SSTACK_PUSH(fake_events_container, NULL, size);
 }
 
 static const void *
