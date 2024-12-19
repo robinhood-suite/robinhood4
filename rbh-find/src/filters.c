@@ -757,9 +757,7 @@ filter_compose(enum rbh_filter_operator op, struct rbh_filter *left,
     if (filter == NULL)
         error(EXIT_FAILURE, errno, "malloc");
 
-    array = rbh_sstack_push(filters, NULL, sizeof(*array) * 2);
-    if (array == NULL)
-        error(EXIT_FAILURE, errno, "rbh_sstack_push");
+    array = RBH_SSTACK_PUSH(filters, NULL, sizeof(*array) * 2);
 
     array[0] = left;
     array[1] = right;
@@ -793,9 +791,7 @@ filter_array_compose(struct rbh_filter *left, struct rbh_filter *right)
     if (filter == NULL)
         error(EXIT_FAILURE, errno, "malloc");
 
-    array = rbh_sstack_push(filters, NULL, sizeof(*array) * 2);
-    if (array == NULL)
-        error(EXIT_FAILURE, errno, "rbh_sstack_push");
+    array = RBH_SSTACK_PUSH(filters, NULL, sizeof(*array) * 2);
 
     array[0] = left;
     array[1] = right;
@@ -816,9 +812,7 @@ filter_not(struct rbh_filter *filter)
     if (not == NULL)
         error(EXIT_FAILURE, errno, "malloc");
 
-    not->logical.filters = rbh_sstack_push(filters, &filter, sizeof(filter));
-    if (not->logical.filters == NULL)
-        error(EXIT_FAILURE, errno, "rbh_sstack_push");
+    not->logical.filters = RBH_SSTACK_PUSH(filters, &filter, sizeof(filter));
 
     not->op = RBH_FOP_NOT;
     not->logical.count = 1;

@@ -152,7 +152,7 @@ event_list_alloc(struct rbh_fsevent_pool *pool)
         return node;
     }
 
-    return rbh_sstack_push(pool->list_container, NULL,
+    return RBH_SSTACK_PUSH(pool->list_container, NULL,
                            sizeof(struct rbh_list_node));
 }
 
@@ -176,7 +176,7 @@ fsevent_node_alloc(struct rbh_fsevent_pool *pool)
         return node;
     }
 
-    node = rbh_sstack_push(pool->list_container, NULL,
+    node = RBH_SSTACK_PUSH(pool->list_container, NULL,
                            sizeof(struct rbh_fsevent_node));
 
     node->copy_data = rbh_sstack_new(1 << 10);
@@ -218,7 +218,7 @@ id_node_alloc(struct rbh_fsevent_pool *pool)
         return id_node;
     }
 
-    return rbh_sstack_push(pool->list_container, NULL,
+    return RBH_SSTACK_PUSH(pool->list_container, NULL,
                            sizeof(struct rbh_id_node));
 }
 
@@ -281,10 +281,8 @@ map_insert_pair(struct rbh_fsevent_node *cached_event,
     size_t *count_ref;
     void **ptr;
 
-    tmp = rbh_sstack_push(cached_event->copy_data, NULL,
+    tmp = RBH_SSTACK_PUSH(cached_event->copy_data, NULL,
                           sizeof(*tmp) * (map->count + 1));
-    if (!tmp)
-        error(EXIT_FAILURE, errno, "rbh_sstack_push in map_insert_pair");
 
     memcpy(tmp, map->pairs, map->count * sizeof(*map->pairs));
     memcpy(&tmp[map->count], pair, sizeof(*pair));
@@ -310,12 +308,10 @@ sequence_insert_value(struct rbh_fsevent_node *cached_event,
     size_t *count_ref;
     void **ptr;
 
-    tmp = rbh_sstack_push(
+    tmp = RBH_SSTACK_PUSH(
         cached_event->copy_data, NULL,
         (sequence->sequence.count + 1) * sizeof(*sequence->sequence.values)
         );
-    if (!tmp)
-        error(EXIT_FAILURE, errno, "rbh_sstack_push in sequence_insert_value");
 
     memcpy(tmp, sequence->sequence.values,
            sequence->sequence.count * sizeof(*sequence->sequence.values));
@@ -346,8 +342,7 @@ insert_new_fsevents_map(struct rbh_fsevent_node *cached_event)
     };
     struct rbh_value_pair rbh_fsevents_pair = {
         .key = "rbh-fsevents",
-        .value = rbh_sstack_push(cached_event->copy_data,
-                                 &rbh_fsevents_value,
+        .value = RBH_SSTACK_PUSH(cached_event->copy_data, &rbh_fsevents_value,
                                  sizeof(rbh_fsevents_value)),
     };
     const struct rbh_value_pair *last_pair;
@@ -370,7 +365,7 @@ insert_new_xattrs_string_sequence(struct rbh_fsevent_node *cached_event,
 {
     struct rbh_value xattr_string = {
         .type = RBH_VT_STRING,
-        .string = rbh_sstack_push(cached_event->copy_data,
+        .string = RBH_SSTACK_PUSH(cached_event->copy_data,
                                   first_string->string,
                                   strlen(first_string->string) + 1),
     };
@@ -378,27 +373,22 @@ insert_new_xattrs_string_sequence(struct rbh_fsevent_node *cached_event,
         .type = RBH_VT_SEQUENCE,
         .sequence = {
             .count = 1,
-            .values = rbh_sstack_push(cached_event->copy_data,
+            .values = RBH_SSTACK_PUSH(cached_event->copy_data,
                                       &xattr_string, sizeof(xattr_string)),
         },
     };
     struct rbh_value_pair xattrs_pair = {
         .key = "xattrs",
-        .value = rbh_sstack_push(cached_event->copy_data,
+        .value = RBH_SSTACK_PUSH(cached_event->copy_data,
                                  &xattrs_sequence, sizeof(xattrs_sequence)),
     };
-
-    if (!xattrs_sequence.sequence.values ||
-        !xattrs_pair.value)
-        error(EXIT_FAILURE, errno,
-              "rbh_sstack_push in insert_new_xattrs_string_sequence");
 
     // XXX we discard const here
     map_insert_pair(cached_event, (struct rbh_value_map *)rbh_fsevents,
                     &xattrs_pair);
 }
 
-static int
+static void
 insert_partial_xattr(struct rbh_fsevent_node *cached_event,
                      const struct rbh_value *partial_xattr)
 {
@@ -414,7 +404,6 @@ insert_partial_xattr(struct rbh_fsevent_node *cached_event,
         rbh_fsevents_map = insert_new_fsevents_map(cached_event);
         insert_new_xattrs_string_sequence(cached_event, rbh_fsevents_map,
                                           partial_xattr);
-        return 0;
     }
 
     xattrs_sequence = rbh_map_find(rbh_fsevents_map, "xattrs");
@@ -422,12 +411,12 @@ insert_partial_xattr(struct rbh_fsevent_node *cached_event,
         /* the map may not exist if first event was "lustre" */
         insert_new_xattrs_string_sequence(cached_event, rbh_fsevents_map,
                                           partial_xattr);
-        return 0;
+        return;
     }
 
     struct rbh_value xattr_string = {
         .type = RBH_VT_STRING,
-        .string = rbh_sstack_push(cached_event->copy_data,
+        .string = RBH_SSTACK_PUSH(cached_event->copy_data,
                                   partial_xattr->string,
                                   strlen(partial_xattr->string) + 1),
     };
@@ -435,8 +424,6 @@ insert_partial_xattr(struct rbh_fsevent_node *cached_event,
     // XXX we discard const here
     sequence_insert_value(cached_event, (struct rbh_value *)xattrs_sequence,
                           &xattr_string);
-
-    return 0;
 }
 
 static void
@@ -457,7 +444,7 @@ dedup_partial_xattr(struct rbh_fsevent_node *cached_event,
     insert_partial_xattr(cached_event, partial_xattr);
 }
 
-static int
+static void
 insert_enrich_element(struct rbh_fsevent_node *cached_event,
                       const struct rbh_value_pair *xattr)
 {
@@ -471,14 +458,14 @@ insert_enrich_element(struct rbh_fsevent_node *cached_event,
             .type = RBH_VT_MAP,
             .map = {
                 .count = 1,
-                .pairs = rbh_sstack_push(cached_event->copy_data,
+                .pairs = RBH_SSTACK_PUSH(cached_event->copy_data,
                                          xattr,
                                          sizeof(*xattr)),
             },
         };
         struct rbh_value_pair rbh_fsevents_map = {
             .key = "rbh-fsevents",
-            .value = rbh_sstack_push(cached_event->copy_data,
+            .value = RBH_SSTACK_PUSH(cached_event->copy_data,
                                      &rbh_fsevents_value,
                                      sizeof(rbh_fsevents_value)),
         };
@@ -486,14 +473,12 @@ insert_enrich_element(struct rbh_fsevent_node *cached_event,
         map_insert_pair(cached_event, &cached_event->fsevent.xattrs,
                         &rbh_fsevents_map);
 
-        return 0;
+        return;
     }
 
     // XXX we discard const here
     map_insert_pair(cached_event, (struct rbh_value_map *)rbh_fsevents_map,
                     xattr);
-
-    return 0;
 }
 
 static void
@@ -511,17 +496,16 @@ dedup_enrich_element(struct rbh_fsevent_node *cached_event,
     insert_enrich_element(cached_event, xattr);
 }
 
-static int
+static void
 insert_xattr(struct rbh_fsevent_node *cached_event,
              const struct rbh_value_pair *xattr)
 {
     struct rbh_value_pair *tmp;
 
-    tmp = rbh_sstack_push(cached_event->copy_data, NULL,
-                          sizeof(*tmp) * (cached_event->fsevent.xattrs.count +
-                                          1));
-    if (!tmp)
-        return -1;
+    tmp = RBH_SSTACK_PUSH(
+        cached_event->copy_data, NULL,
+        sizeof(*tmp) * (cached_event->fsevent.xattrs.count + 1)
+    );
 
     memcpy(tmp, cached_event->fsevent.xattrs.pairs,
            cached_event->fsevent.xattrs.count * sizeof(*tmp));
@@ -529,8 +513,6 @@ insert_xattr(struct rbh_fsevent_node *cached_event,
 
     cached_event->fsevent.xattrs.count++;
     cached_event->fsevent.xattrs.pairs = tmp;
-
-    return 0;
 }
 
 static void
@@ -593,7 +575,7 @@ dedup_xattrs(const struct rbh_fsevent *event,
     }
 }
 
-static int
+static void
 insert_symlink(struct rbh_fsevent_node *cached_event)
 {
     const struct rbh_value_map *rbh_fsevents_map;
@@ -603,7 +585,7 @@ insert_symlink(struct rbh_fsevent_node *cached_event)
     };
     struct rbh_value_pair symlink_pair = {
         .key = "symlink",
-        .value = rbh_sstack_push(cached_event->copy_data, &symlink_value,
+        .value = RBH_SSTACK_PUSH(cached_event->copy_data, &symlink_value,
                                  sizeof(symlink_value))
     };
 
@@ -613,11 +595,9 @@ insert_symlink(struct rbh_fsevent_node *cached_event)
     // XXX we discard const here
     map_insert_pair(cached_event, (struct rbh_value_map *)rbh_fsevents_map,
                     &symlink_pair);
-
-    return 0;
 }
 
-static int
+static void
 dedup_upsert(const struct rbh_fsevent *event,
              struct rbh_fsevent_node *cached_upsert)
 {
@@ -636,7 +616,7 @@ dedup_upsert(const struct rbh_fsevent *event,
      * "rbh-fsevents": "symlink".
      */
     if (!rbh_fsevents_map)
-        return 0;
+        return;
 
     for (size_t i = 0; i < rbh_fsevents_map->count; i++) {
         const struct rbh_value_pair *xattr = &rbh_fsevents_map->pairs[i];
@@ -654,8 +634,6 @@ dedup_upsert(const struct rbh_fsevent *event,
             insert_symlink(cached_upsert);
         }
     }
-
-    return 0;
 }
 
 static void

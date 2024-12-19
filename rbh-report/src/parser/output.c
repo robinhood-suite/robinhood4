@@ -112,10 +112,7 @@ parse_output(const char *_output_string, struct rbh_group_fields *group,
         error_at_line(EXIT_FAILURE, EINVAL, __FILE__, __LINE__,
                       "'%s' ill-formed, empty field", _output_string);
 
-    fields = rbh_sstack_push(values_sstack, NULL, count * sizeof(*fields));
-    if (fields == NULL)
-        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
-                      "rbh_sstack_push");
+    fields = RBH_SSTACK_PUSH(values_sstack, NULL, count * sizeof(*fields));
 
     output_string = strdup(_output_string);
     if (output_string == NULL)

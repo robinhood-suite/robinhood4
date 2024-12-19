@@ -222,13 +222,8 @@ init_complete_map(struct rbh_value *id_map,
     /* We currently only need to read the id and content maps */
     int count = (id_map ? 2 : 1);
 
-    pairs = rbh_sstack_push(values_sstack, NULL, count * sizeof(*pairs));
-    if (pairs == NULL)
-        return NULL;
-
-    complete_map = rbh_sstack_push(values_sstack, NULL, sizeof(*complete_map));
-    if (complete_map == NULL)
-        return NULL;
+    pairs = RBH_SSTACK_PUSH(values_sstack, NULL, count * sizeof(*pairs));
+    complete_map = RBH_SSTACK_PUSH(values_sstack, NULL, sizeof(*complete_map));
 
     if (id_map) {
         pairs[0].key = "id";
@@ -251,9 +246,7 @@ value_from_bson(bson_iter_t *iter, char **buffer, size_t *bufsize)
 {
     struct rbh_value *value;
 
-    value = rbh_sstack_push(values_sstack, NULL, sizeof(*value));
-    if (value == NULL)
-        return NULL;
+    value = RBH_SSTACK_PUSH(values_sstack, NULL, sizeof(*value));
 
     if (!bson_iter_rbh_value(iter, value, buffer, bufsize))
         return NULL;

@@ -463,11 +463,7 @@ fsentry_from_any(struct fsentry_id_pair *fip, const struct rbh_value *path,
 
     pair = &ns_pairs[0];
     pair->key = "path";
-    pair->value = rbh_sstack_push(ns_values, path, sizeof(*path));
-    if (pair->value == NULL) {
-        save_errno = errno;
-        goto out_clear_sstacks;
-    }
+    pair->value = RBH_SSTACK_PUSH(ns_values, path, sizeof(*path));
 
     ns_xattrs.count = 1;
     ns_xattrs.pairs = ns_pairs;
