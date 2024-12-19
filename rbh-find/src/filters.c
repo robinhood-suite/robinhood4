@@ -1,5 +1,5 @@
 /* This file is part of RobinHood 4
- * Copyright (C) 2019 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifer: LGPL-3.0-or-later
@@ -42,14 +42,15 @@ static const struct rbh_filter_field predicate2filter_field[] = {
     [PRED_BTIME]    = {.fsentry = RBH_FP_STATX, .statx = RBH_STATX_BTIME_SEC},
     [PRED_CMIN]     = {.fsentry = RBH_FP_STATX, .statx = RBH_STATX_CTIME_SEC},
     [PRED_CTIME]    = {.fsentry = RBH_FP_STATX, .statx = RBH_STATX_CTIME_SEC},
-    [PRED_NAME]     = {.fsentry = RBH_FP_NAME},
     [PRED_INAME]    = {.fsentry = RBH_FP_NAME},
-    [PRED_PATH]     = {.fsentry = RBH_FP_NAMESPACE_XATTRS, .xattr = "path"},
     [PRED_MMIN]     = {.fsentry = RBH_FP_STATX, .statx = RBH_STATX_MTIME_SEC},
     [PRED_MTIME]    = {.fsentry = RBH_FP_STATX, .statx = RBH_STATX_MTIME_SEC},
-    [PRED_TYPE]     = {.fsentry = RBH_FP_STATX, .statx = RBH_STATX_TYPE},
-    [PRED_SIZE]     = {.fsentry = RBH_FP_STATX, .statx = RBH_STATX_SIZE},
+    [PRED_NAME]     = {.fsentry = RBH_FP_NAME},
+    [PRED_PATH]     = {.fsentry = RBH_FP_NAMESPACE_XATTRS, .xattr = "path"},
     [PRED_PERM]     = {.fsentry = RBH_FP_STATX, .statx = RBH_STATX_MODE},
+    [PRED_SIZE]     = {.fsentry = RBH_FP_STATX, .statx = RBH_STATX_SIZE},
+    [PRED_TYPE]     = {.fsentry = RBH_FP_STATX, .statx = RBH_STATX_TYPE},
+    [PRED_UID]      = {.fsentry = RBH_FP_STATX, .statx = RBH_STATX_UID},
 };
 
 struct rbh_filter *
@@ -121,6 +122,13 @@ struct rbh_filter *
 numeric2filter(const struct rbh_filter_field *field, const char *_numeric)
 {
     return _numeric2filter(field, _numeric, RBH_FOP_EQUAL);
+}
+
+struct rbh_filter *
+number2filter(enum predicate predicate, const char *_numeric)
+{
+    return _numeric2filter(&predicate2filter_field[predicate], _numeric,
+                           RBH_FOP_EQUAL);
 }
 
 struct rbh_filter *
