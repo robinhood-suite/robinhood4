@@ -58,6 +58,18 @@ struct rbh_filter *
 numeric2filter(const struct rbh_filter_field *field, const char *_numeric);
 
 /**
+ * number2filter - build a filter from a string representing a uint64_t value.
+ *
+ * @param predicate     a predicate
+ * @param _numeric      a string representing a uint64_t
+ *
+ * @return              a pointer to a newly allocated struct filter, or NULL on
+ *                      error
+ */
+struct rbh_filter *
+number2filter(enum predicate predicate, const char *_numeric);
+
+/**
  * epoch2filter - build a filter from a string representing a uint64_t value.
  * If the given value is preceded with a '+' or '-', will filter entries
  * with \p field greater or lower than \p _numeric. Else, it will filter entries
