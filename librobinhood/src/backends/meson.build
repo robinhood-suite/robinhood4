@@ -34,6 +34,7 @@ backend_path_env_for_mpi_tests.set('LD_LIBRARY_PATH', ld_library_path)
 subdir('mongo')
 subdir('posix')
 subdir('lustre')
+subdir('retention')
 
 if get_option('hestia').enabled()
     subdir('hestia')
