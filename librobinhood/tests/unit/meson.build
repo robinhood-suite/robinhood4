@@ -34,6 +34,21 @@ foreach t: ['check_posix']
          suite: 'librobinhood')
 endforeach
 
+foreach t: ['check_retention']
+    test(t,
+         executable(t, t + '.c',
+                    dependencies: [check],
+                    link_with: [
+                        librobinhood,
+                        librbh_posix,
+                        librbh_posix_retention_ext
+                    ],
+                    include_directories: rbh_include,
+                    c_args: '-DHAVE_CONFIG_H'),
+         env: backend_path_env,
+         suite: 'librobinhood')
+endforeach
+
 foreach t: ['check_lustre']
     test(t,
          executable(t, t + '.c',
