@@ -16,6 +16,14 @@ struct rbh_plugin {
     uint64_t version;
 };
 
+struct rbh_plugin_extension {
+    const char *super;
+    const char *name;
+    uint64_t version;
+    uint64_t min_version;
+    uint64_t max_version;
+};
+
 /**
  * Import a plugin
  *
