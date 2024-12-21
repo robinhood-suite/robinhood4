@@ -42,6 +42,22 @@ struct rbh_backend_plugin_operations {
 #define RBH_BACKEND_PLUGIN_SYMBOL(name) _RBH_ ## name ## _BACKEND_PLUGIN
 
 /**
+ * Macro plugins should use to name the struct rbh_plugin_extension exported
+ * by backend extensions
+ *
+ * @param super the name of the plugin that is extended in capital letters
+ * @param name  the name of the extension
+ *
+ * @return      a symbol to export
+ *
+ * Failure to use an all cap \p super and \p name will result in
+ * rbh_plugin_extension_symbol() returning the wrong symbol and ultimately in
+ * your extension plugin being impossible to use.
+ */
+#define RBH_BACKEND_EXTENDS(super, name) \
+    _RBH_ ## super ## _ ## name ## _PLUGIN_EXTENSION
+
+/**
  * Build the name of the symbol a robinhood backend plugin should export
  *
  * @param name      the name of the plugin
@@ -69,6 +85,44 @@ rbh_backend_plugin_symbol(const char *name);
  */
 const struct rbh_backend_plugin *
 rbh_backend_plugin_import(const char *name);
+
+/**
+ * Build the name of the symbol that should be exported by the extension
+ * \p name to the robinhood backend \p super
+ *
+ * @param super     the name of the plugin that is extented
+ * @param name      the name of the extension
+ *
+ * @return          a pointer to a newly allocated string that represent the
+ *                  extension's symbol
+ *
+ * @error ENOMEM    there was not enough memory available
+ */
+char *
+rbh_plugin_extension_symbol(const char *super, const char *name);
+
+/**
+ * Import the backend extension \p name that extents the robinhood plugin
+ * \p super. The rbh_plugin_extension returned by this function can be embedded
+ * in a backend specific structure that will only be known by the backend and
+ * the extension itself. librobinhood will treat this pointer as a simple
+ * struct rbh_plugin_extension much like the way rbh_iterator works.
+ *
+ *
+ * @param super     the plugin that is extended by \p name
+ * @param name      the name of the extension
+ *
+ * @return          a constant pointer to the extension on success,
+ *                  NULL on error in which case either errno is set
+ *                  appropriately, or dlerror() can be used to establish a
+ *                  diagnostic.
+ *
+ * @error ENOMEM    there was not enough memory available
+ * @error ERANGE    the version of \p super is not supported by the extension
+ * @error EINVAL    \p name does not extend \p super
+ */
+const struct rbh_plugin_extension *
+rbh_plugin_load_extension(const struct rbh_plugin *super, const char *name);
 
 /**
  * Create a backend from a backend plugin
