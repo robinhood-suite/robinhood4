@@ -84,6 +84,24 @@ if get_option('hestia').enabled()
     install_headers(librbh_hestia_h, subdir: 'robinhood/backends')
 endif
 
+librbh_retention_conf = configuration_data()
+
+librbh_retention_conf.set('RBH_RETENTION_PLUGIN_MAJOR', 0)
+librbh_retention_conf.set('RBH_RETENTION_PLUGIN_MINOR', 0)
+librbh_retention_conf.set('RBH_RETENTION_PLUGIN_RELEASE', 0)
+
+librbh_retention_version = '@0@.@1@.@2@'.format(
+    librbh_retention_conf.get('RBH_RETENTION_PLUGIN_MAJOR'),
+    librbh_retention_conf.get('RBH_RETENTION_PLUGIN_MINOR'),
+    librbh_retention_conf.get('RBH_RETENTION_PLUGIN_RELEASE')
+)
+
+librbh_retention_h = configure_file(input: 'retention.h.in',
+                                    output: 'retention.h',
+                                    configuration: librbh_retention_conf)
+
+install_headers(librbh_retention_h, subdir: 'robinhood/backends')
+
 if not build_mfu
     subdir_done()
 endif
