@@ -1,0 +1,20 @@
+/* This file is part of RobinHood 4
+ * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
+ *                    alternatives
+ *
+ * SPDX-License-Identifer: LGPL-3.0-or-later
+ */
+
+#ifndef ROBINHOOD_RETENTION_POSIX_H
+#define ROBINHOOD_RETENTION_POSIX_H
+
+#define RBH_RETENTION_PLUGIN_NAME "retention"
+
+#mesondefine RBH_RETENTION_PLUGIN_MAJOR
+#mesondefine RBH_RETENTION_PLUGIN_MINOR
+#mesondefine RBH_RETENTION_PLUGIN_RELEASE
+#define RBH_RETENTION_PLUGIN_VERSION RPV(RBH_RETENTION_PLUGIN_MAJOR, \
+                                         RBH_RETENTION_PLUGIN_MINOR, \
+                                         RBH_RETENTION_PLUGIN_RELEASE)
+
+#endif
