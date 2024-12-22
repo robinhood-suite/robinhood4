@@ -176,7 +176,9 @@ static const struct rbh_backend_operations POSIX_MPI_BACKEND_OPS = {
 
 struct rbh_backend *
 rbh_posix_mpi_backend_new(const struct rbh_backend_plugin *self,
-                          const char *path, struct rbh_config *config)
+                          const char *type,
+                          const char *path,
+                          struct rbh_config *config)
 {
     struct posix_backend *posix_mpi;
     int flag;
@@ -187,7 +189,7 @@ rbh_posix_mpi_backend_new(const struct rbh_backend_plugin *self,
         mfu_init();
     }
 
-    posix_mpi = (struct posix_backend *)rbh_posix_backend_new(self, path,
+    posix_mpi = (struct posix_backend *)rbh_posix_backend_new(self, type, path,
                                                               config);
     if (posix_mpi == NULL)
         return NULL;
