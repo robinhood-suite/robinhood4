@@ -76,7 +76,7 @@ START_TEST(lf_missing_root)
     const struct rbh_filter_options OPTIONS = {};
     struct rbh_backend *lustre_mpi;
 
-    lustre_mpi = rbh_lustre_mpi_backend_new(NULL, "missing", NULL);
+    lustre_mpi = rbh_lustre_mpi_backend_new(NULL, NULL, "missing", NULL);
     ck_assert_ptr_nonnull(lustre_mpi);
 
     errno = 0;
@@ -102,7 +102,7 @@ START_TEST(lf_empty_root)
 
     ck_assert_int_eq(mkdir(EMPTY, S_IRWXU), 0);
 
-    lustre_mpi = rbh_lustre_mpi_backend_new(NULL, EMPTY, NULL);
+    lustre_mpi = rbh_lustre_mpi_backend_new(NULL, NULL, EMPTY, NULL);
     ck_assert_ptr_nonnull(lustre_mpi);
 
     fsentries = rbh_backend_filter(lustre_mpi, NULL, &OPTIONS, &OUTPUT);
