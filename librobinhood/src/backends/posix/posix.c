@@ -1347,7 +1347,8 @@ load_enrichers(const struct rbh_backend_plugin *self,
             return -1;
         }
 
-        extension->setup_enricher();
+        if (extension->setup_enricher)
+            extension->setup_enricher();
         *iter++ = extension->enrich;
     }
     *iter = NULL;

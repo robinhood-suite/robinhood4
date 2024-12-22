@@ -948,6 +948,13 @@ lustre_get_default_stripe_value(int fd, struct rbh_value_pair *pair)
     return 0;
 }
 
+int
+rbh_lustre_enrich(struct entry_info *einfo, struct rbh_value_pair *pairs,
+                  struct rbh_sstack *values)
+{
+    return 0;
+}
+
     /*--------------------------------------------------------------------*
      |                          get_attribute()                           |
      *--------------------------------------------------------------------*/
@@ -1105,7 +1112,8 @@ rbh_lustre_backend_new(const struct rbh_backend_plugin *self,
          */
         retention = rbh_posix_load_extension(&self->plugin, "retention");
         if (retention) {
-            retention->setup_enricher();
+            if (retention->setup_enricher)
+                retention->setup_enricher();
             retention_enricher = retention->enrich;
         }
     }
