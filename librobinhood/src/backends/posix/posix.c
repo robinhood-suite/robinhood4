@@ -336,7 +336,8 @@ bool
 fsentry_from_any(struct fsentry_id_pair *fip, const struct rbh_value *path,
                  char *accpath, struct rbh_id *entry_id,
                  struct rbh_id *parent_id, char *name, int statx_sync_type,
-                 inode_xattrs_callback_t inode_xattrs_callback)
+                 inode_xattrs_callback_t inode_xattrs_callback,
+                 enricher_t *enrichers)
 {
     const int statx_flags =
         AT_EMPTY_PATH | AT_SYMLINK_NOFOLLOW | AT_NO_AUTOMOUNT;
@@ -506,8 +507,38 @@ fsentry_from_any(struct fsentry_id_pair *fip, const struct rbh_value *path,
             save_errno = errno;
             goto out_clear_sstacks;
         }
-
         count += callback_xattrs_count;
+    }
+
+    if (enrichers != NULL) {
+        struct entry_info info = {
+            .fd = fd,
+            .statx = &statxbuf,
+            .inode_xattrs = pairs,
+            .inode_xattrs_count = &count,
+        };
+        int callback_xattrs_count;
+
+        while (*enrichers != NULL) {
+            callback_xattrs_count = (*enrichers)(&info, 0, &pairs[count],
+                                                 pairs_count - count,
+                                                 values);
+            if (callback_xattrs_count == -1) {
+                if (errno != ENOMEM) {
+                    fprintf(stderr,
+                            "Failed to get inode xattrs of '%s': %s (%d)\n",
+                            path->string, strerror(errno), errno);
+                    /* Set errno to ESTALE to not stop the iterator for a single
+                     * failed entry.
+                     */
+                    errno = ESTALE;
+                }
+                save_errno = errno;
+                goto out_clear_sstacks;
+            }
+            enrichers++;
+            count += callback_xattrs_count;
+        }
     }
 
     inode_xattrs.pairs = pairs;
@@ -549,7 +580,8 @@ out_close:
 
 static struct rbh_fsentry *
 fsentry_from_ftsent(FTSENT *ftsent, int statx_sync_type, size_t prefix_len,
-                    inode_xattrs_callback_t inode_xattrs_callback)
+                    inode_xattrs_callback_t inode_xattrs_callback,
+                    enricher_t *enrichers)
 {
     const struct rbh_value path = {
         .type = RBH_VT_STRING,
@@ -564,7 +596,8 @@ fsentry_from_ftsent(FTSENT *ftsent, int statx_sync_type, size_t prefix_len,
                                        ftsent->fts_pointer,
                                        ftsent->fts_parent->fts_pointer,
                                        ftsent->fts_name,
-                                       statx_sync_type, inode_xattrs_callback);
+                                       statx_sync_type, inode_xattrs_callback,
+                                       enrichers);
     save_errno = errno;
 
     if (!fsentry_success)
@@ -674,7 +707,8 @@ skip:
 
     fsentry = fsentry_from_ftsent(ftsent, posix_iter->statx_sync_type,
                                   posix_iter->prefix_len,
-                                  posix_iter->inode_xattrs_callback);
+                                  posix_iter->inode_xattrs_callback,
+                                  posix_iter->enrichers);
     if (fsentry == NULL && (errno == ENOENT || errno == ESTALE)) {
         /* The entry moved from under our feet */
         if (skip_error) {
@@ -701,7 +735,7 @@ posix_iter_destroy(void *iterator)
             fts_set(posix_iter->fts_handle, ftsent, FTS_SKIP);
             break;
         case FTS_DP:
-            /* fsentry_from_ftsent() memorizes ids of directories */
+            /* fsentry_from_ftsent() memoizes ids of directories */
             free(ftsent->fts_pointer);
             break;
         }
@@ -958,6 +992,7 @@ posix_backend_filter(
                   posix->iter_new(options->one ? root : posix->root,
                                   options->one ? full_path + strlen(root) : NULL,
                                   posix->statx_sync_type);
+    posix_iter->enrichers = posix->enrichers;
     if (posix_iter == NULL)
         return NULL;
     posix_iter->skip_error = options->skip_error;
@@ -1109,6 +1144,7 @@ posix_branch_backend_filter(
                   branch->posix.iter_new(root, path + strlen(root),
                                          branch->posix.statx_sync_type);
     posix_iter->skip_error = options->skip_error;
+    posix_iter->enrichers = branch->posix.enrichers;
     save_errno = errno;
     free(path);
     free(root);
@@ -1310,13 +1346,11 @@ load_enrichers(const struct rbh_backend_plugin *self,
 {
     size_t count = enrichers->sequence.count + 1; /* NULL terminated */
     const struct rbh_posix_extension *extension;
-    enricher_t *iter;
 
     /* if we arrive here, we have at least one enricher to load */
     assert(count >= 2);
 
     posix->enrichers = malloc(sizeof(*posix->enrichers) * count);
-    iter = posix->enrichers;
 
     for (size_t i = 0; i < enrichers->sequence.count; i++) {
         const struct rbh_value *value = &enrichers->sequence.values[i];
@@ -1332,9 +1366,9 @@ load_enrichers(const struct rbh_backend_plugin *self,
 
         if (extension->setup_enricher)
             extension->setup_enricher();
-        *iter++ = extension->enrich;
+        posix->enrichers[i] = extension->enrich;
     }
-    *iter = NULL;
+    posix->enrichers[count - 1] = NULL;
 
     return 0;
 }

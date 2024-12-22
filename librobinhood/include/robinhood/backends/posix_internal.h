@@ -33,6 +33,7 @@
 struct posix_iterator {
     struct rbh_mut_iterator iterator;
     inode_xattrs_callback_t inode_xattrs_callback;
+    enricher_t *enrichers;
     int statx_sync_type;
     size_t prefix_len;
     FTS *fts_handle;
@@ -65,7 +66,8 @@ bool
 fsentry_from_any(struct fsentry_id_pair *fip, const struct rbh_value *path,
                  char *accpath, struct rbh_id *entry_id,
                  struct rbh_id *parent_id, char *name, int statx_sync_type,
-                 inode_xattrs_callback_t inode_xattrs_callback);
+                 inode_xattrs_callback_t inode_xattrs_callback,
+                 enricher_t *enrichers);
 
 /*----------------------------------------------------------------------------*
  |                              posix_operations                              |
