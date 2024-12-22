@@ -5,6 +5,8 @@
  * SPDX-License-Identifer: LGPL-3.0-or-later
  */
 
+#include "backend.h"
+#include "value.h"
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif
@@ -25,6 +27,7 @@
 #include "robinhood/backends/posix.h"
 #include "robinhood/backends/posix_internal.h"
 #include "robinhood/backend.h"
+#include "robinhood/backends/posix_extension.h"
 #include "robinhood/plugins/backend.h"
 #include "robinhood/sstack.h"
 #include "robinhood/statx.h"
@@ -991,6 +994,7 @@ posix_backend_destroy(void *backend)
 {
     struct posix_backend *posix = backend;
 
+    free(posix->enrichers);
     free(posix->root);
     free(posix);
 }
@@ -1125,12 +1129,45 @@ static const struct rbh_backend POSIX_BRANCH_BACKEND = {
     .ops = &POSIX_BRANCH_BACKEND_OPS,
 };
 
+static int
+enrichers_count(enricher_t *enrichers)
+{
+    int count = 0;
+
+    while (*enrichers) {
+        enrichers++;
+        count++;
+    }
+
+    return count;
+}
+
+static enricher_t *
+dup_enrichers(enricher_t *enrichers)
+{
+    enricher_t *dup;
+    int count;
+
+    if (!enrichers)
+        return NULL;
+
+    count = enrichers_count(enrichers);
+    dup = malloc(sizeof(*dup) * (count + 1)); // + 1 for NULL at the end
+    if (!dup)
+        return NULL;
+
+    memcpy(dup, enrichers, sizeof(*enrichers) * (count + 1));
+
+    return dup;
+}
+
 struct rbh_backend *
 posix_backend_branch(void *backend, const struct rbh_id *id, const char *path)
 {
     struct posix_backend *posix = backend;
     struct posix_branch_backend *branch;
     size_t data_size;
+    int save_errno;
     char *data;
 
     if (id == NULL && path == NULL) {
@@ -1153,22 +1190,15 @@ posix_backend_branch(void *backend, const struct rbh_id *id, const char *path)
 
     branch->posix.root = strdup(posix->root);
     if (branch->posix.root == NULL) {
-        int save_errno = errno;
-
-        free(branch);
-        errno = save_errno;
-        return NULL;
+        save_errno = errno;
+        goto free_branch;
     }
 
     if (path) {
         branch->path = strdup(path);
         if (branch->path == NULL) {
-            int save_errno = errno;
-
-            free(branch->posix.root);
-            free(branch);
-            errno = save_errno;
-            return NULL;
+            save_errno = errno;
+            goto free_root;
         }
     } else {
         branch->path = NULL;
@@ -1180,10 +1210,26 @@ posix_backend_branch(void *backend, const struct rbh_id *id, const char *path)
         branch->id.size = 0;
 
     branch->posix.iter_new = posix_iterator_new;
+    errno = 0;
+    branch->posix.enrichers = dup_enrichers(posix->enrichers);
+    if (!branch->posix.enrichers && errno != 0) {
+        save_errno = errno;
+        goto free_path;
+    }
+
     branch->posix.statx_sync_type = posix->statx_sync_type;
     branch->posix.backend = POSIX_BRANCH_BACKEND;
 
     return &branch->posix.backend;
+
+free_path:
+    free(branch->path);
+free_root:
+    free(branch->posix.root);
+free_branch:
+    free(branch);
+    errno = save_errno;
+    return NULL;
 }
 
 static const struct rbh_backend_operations POSIX_BACKEND_OPS = {
@@ -1212,6 +1258,135 @@ rtrim(char *string, char c)
     return length;
 }
 
+static char *
+config_iterator_key(struct rbh_config *config, const char *type)
+{
+    char *key;
+
+    if (asprintf(&key, "backends/%s/iterator", type) == -1)
+        return NULL;
+
+    return key;
+}
+
+static int
+load_iterator(const struct rbh_backend_plugin *self,
+              struct posix_backend *posix,
+              const char *iterator,
+              const char *type)
+{
+    const struct rbh_posix_extension *extension;
+
+    if (!strcmp(iterator, "fts"))
+        return 0;
+
+    extension = rbh_posix_load_extension(&self->plugin, iterator);
+    if (!extension) {
+        rbh_backend_error_printf("failed to load iterator '%s' for backend '%s'",
+                                 iterator, type);
+        return -1;
+    }
+
+    /* TODO store iterator in posix backend */
+    return 0;
+}
+
+static char *
+config_enrichers_key(struct rbh_config *config, const char *type)
+{
+    char *key;
+
+    if (asprintf(&key, "backends/%s/enrichers", type) == -1)
+        return NULL;
+
+    return key;
+}
+
+static int
+load_enrichers(const struct rbh_backend_plugin *self,
+               struct posix_backend *posix,
+               const struct rbh_value *enrichers,
+               const char *type)
+{
+    size_t count = enrichers->sequence.count + 1; /* NULL terminated */
+    const struct rbh_posix_extension *extension;
+    enricher_t *iter;
+
+    /* if we arrive here, we have at least one enricher to load */
+    assert(count >= 2);
+
+    posix->enrichers = malloc(sizeof(*posix->enrichers) * count);
+    iter = posix->enrichers;
+
+    for (size_t i = 0; i < enrichers->sequence.count; i++) {
+        const struct rbh_value *value = &enrichers->sequence.values[i];
+
+        assert(value->type == RBH_VT_STRING);
+
+        extension = rbh_posix_load_extension(&self->plugin, value->string);
+        if (!extension) {
+            rbh_backend_error_printf("failed to load extension '%s' for backend '%s'",
+                                     value->string, type);
+            return -1;
+        }
+
+        extension->setup_enricher();
+        *iter++ = extension->enrich;
+    }
+    *iter = NULL;
+
+    return 0;
+}
+
+static int
+load_posix_extensions(const struct rbh_backend_plugin *self,
+                      struct posix_backend *posix,
+                      const char *type,
+                      struct rbh_config *config)
+{
+    struct rbh_value enrichers;
+    struct rbh_value iterator;
+    char *key;
+    int rc;
+
+    if (!config)
+        return 0;
+
+    key = config_iterator_key(config, type);
+    rc = rbh_config_find(key, &iterator, RBH_VT_STRING);
+    free(key);
+    switch (rc) {
+    case KPR_FOUND:
+        if (load_iterator(self, posix, iterator.string, type) == -1)
+            return -1;
+        break;
+    case KPR_NOT_FOUND:
+        break;
+    default:
+        rbh_backend_error_printf("failed to retrieve 'iterator' key in configuration: %s",
+                                 strerror(errno));
+        return -1;
+    }
+
+    key = config_enrichers_key(config, type);
+    rc = rbh_config_find(key, &enrichers, RBH_VT_SEQUENCE);
+    free(key);
+    switch (rc) {
+    case KPR_FOUND:
+        if (load_enrichers(self, posix, &enrichers, type) == -1)
+            return -1;
+        break;
+    case KPR_NOT_FOUND:
+        break;
+    default:
+        rbh_backend_error_printf("failed to retrieve 'enrichers' key in configuration: %s",
+                                 strerror(errno));
+        return -1;
+    }
+
+    return 0;
+}
+
 struct rbh_backend *
 rbh_posix_backend_new(const struct rbh_backend_plugin *self,
                       const char *type,
@@ -1219,6 +1394,7 @@ rbh_posix_backend_new(const struct rbh_backend_plugin *self,
                       struct rbh_config *config)
 {
     struct posix_backend *posix;
+    int save_errno = 0;
 
     posix = malloc(sizeof(*posix));
     if (posix == NULL)
@@ -1226,11 +1402,8 @@ rbh_posix_backend_new(const struct rbh_backend_plugin *self,
 
     posix->root = strdup(*path == '\0' ? "." : path);
     if (posix->root == NULL) {
-        int save_errno = errno;
-
-        free(posix);
-        errno = save_errno;
-        return NULL;
+        save_errno = errno;
+        goto free_backend;
     }
 
     if (rtrim(posix->root, '/') == 0)
@@ -1239,16 +1412,29 @@ rbh_posix_backend_new(const struct rbh_backend_plugin *self,
     posix->iter_new = posix_iterator_new;
     posix->statx_sync_type = AT_RBH_STATX_SYNC_AS_STAT;
     posix->backend = POSIX_BACKEND;
+    posix->enrichers = NULL;
 
     load_rbh_config(config);
-    if (set_xattrs_types_map()) {
-        int save_errno = errno;
 
-        free(posix->root);
-        free(posix);
-        errno = save_errno;
-        return NULL;
+    if (type) {
+        if (load_posix_extensions(self, posix, type, config) == -1) {
+            save_errno = errno;
+            goto free_root;
+        }
+    }
+
+    if (set_xattrs_types_map()) {
+        save_errno = errno;
+        goto free_root;
     }
 
     return &posix->backend;
+
+free_root:
+    free(posix->root);
+free_backend:
+    free(posix);
+    errno = save_errno;
+
+    return NULL;
 }
