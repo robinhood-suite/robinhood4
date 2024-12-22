@@ -15,6 +15,8 @@
 
 #include "enricher.h"
 #include "internals.h"
+#include <robinhood/backends/lustre.h>
+#include <robinhood/utils.h>
 
 #define MIN_XATTR_VALUES_ALLOC (1 << 14)
 static __thread struct rbh_sstack *xattrs_values;
@@ -118,8 +120,11 @@ enrich_lustre(struct rbh_backend *backend, int mount_fd,
     arg.statx = &statxbuf;
     arg.values = xattrs_values;
 
-    size = rbh_backend_get_attribute(backend, "lustre", &arg,
-                                     pairs, available_pairs);
+    size = rbh_backend_get_attribute(
+        backend,
+        RBH_LEF_LUSTRE | RBH_LEF_ALL_NOFID,
+        &arg, pairs, available_pairs
+        );
 
     save_errno = errno;
     close(arg.fd);
