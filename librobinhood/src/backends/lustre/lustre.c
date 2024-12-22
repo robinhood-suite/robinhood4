@@ -1080,12 +1080,15 @@ static const struct rbh_backend_operations LUSTRE_BACKEND_OPS = {
 
 struct rbh_backend *
 rbh_lustre_backend_new(const struct rbh_backend_plugin *self,
-                       const char *path, struct rbh_config *config)
+                       const char *type,
+                       const char *path,
+                       struct rbh_config *config)
 {
     const struct rbh_posix_extension *retention;
     struct posix_backend *lustre;
 
-    lustre = (struct posix_backend *) rbh_posix_backend_new(self, path, config);
+    lustre = (struct posix_backend *) rbh_posix_backend_new(self, NULL, path,
+                                                            config);
     if (lustre == NULL)
         return NULL;
 

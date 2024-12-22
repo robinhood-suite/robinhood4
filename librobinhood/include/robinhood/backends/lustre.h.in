@@ -24,6 +24,8 @@
 /**
  * Create a lustre backend
  *
+ * @param self      the lustre plugin
+ * @param type      the name used to load the backend (unused)
  * @param path      a path to the root fsentry
  * @param config    the config to use in the new backend
  *
@@ -34,7 +36,9 @@
  */
 struct rbh_backend *
 rbh_lustre_backend_new(const struct rbh_backend_plugin *self,
-                       const char *path, struct rbh_config *config);
+                       const char *type,
+                       const char *path,
+                       struct rbh_config *config);
 
 /**
  * Release the memory associated with the plugin
