@@ -496,7 +496,7 @@ list_capabilities(char *uri)
 
     plugin = rbh_backend_plugin_import(uri);
     if (plugin != NULL) {
-        backend = rbh_backend_plugin_new(plugin, "none", NULL);
+        backend = rbh_backend_plugin_new(plugin, NULL, "none", NULL);
     } else {
         backend = rbh_backend_from_uri(uri);
         if (backend == NULL)

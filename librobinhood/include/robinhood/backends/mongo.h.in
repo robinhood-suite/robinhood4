@@ -28,6 +28,8 @@
 /**
  * Create a mongo backend
  *
+ * @param self      the mongo plugin
+ * @param type      the name used to load the backend (unused)
  * @param fsname    the name of the filesystem the backend refers to
  * @param config    the config to use in the new backend
  *
@@ -40,7 +42,9 @@
  */
 struct rbh_backend *
 rbh_mongo_backend_new(const struct rbh_backend_plugin *self,
-                      const char *fsname, struct rbh_config *config);
+                      const char *type,
+                      const char *fsname,
+                      struct rbh_config *config);
 
 /**
  * Release the memory associated with the plugin

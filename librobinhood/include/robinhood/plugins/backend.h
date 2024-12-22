@@ -25,6 +25,7 @@ struct rbh_backend_plugin {
 
 struct rbh_backend_plugin_operations {
     struct rbh_backend *(*new)(const struct rbh_backend_plugin *self,
+                               const char *type,
                                const char *fsname,
                                struct rbh_config *config);
     void (*destroy)();
@@ -130,6 +131,8 @@ rbh_plugin_load_extension(const struct rbh_plugin *super, const char *name);
  * Create a backend from a backend plugin
  *
  * @param plugin    the plugin to create a backend from
+ * @param type      if not NULL, it is the name given in the URI. If NULL, the
+ *                  name in the URI was the same as the plugin name
  * @param fsname    a string that identifies which filesystem to load a backend
  *                  for
  *
@@ -138,12 +141,15 @@ rbh_plugin_load_extension(const struct rbh_plugin *super, const char *name);
  *
  * @error ENOMEM    there was not enough memory available
  * @error TODO
+ *
  */
 static inline struct rbh_backend *
 rbh_backend_plugin_new(const struct rbh_backend_plugin *plugin,
-                       const char *fsname, struct rbh_config *config)
+                       const char *type,
+                       const char *fsname,
+                       struct rbh_config *config)
 {
-    return plugin->ops->new(plugin, fsname, config);
+    return plugin->ops->new(plugin, type, fsname, config);
 }
 
 /**

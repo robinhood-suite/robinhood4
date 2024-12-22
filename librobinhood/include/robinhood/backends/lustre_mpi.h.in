@@ -34,6 +34,8 @@
  */
 struct rbh_backend *
 rbh_lustre_mpi_backend_new(const struct rbh_backend_plugin *self,
-                           const char *path, struct rbh_config *config);
+                           const char *type,
+                           const char *path,
+                           struct rbh_config *config);
 
 #endif
