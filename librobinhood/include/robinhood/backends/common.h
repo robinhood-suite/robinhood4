@@ -8,6 +8,9 @@
 #ifndef RBH_COMMON_H
 #define RBH_COMMON_H
 
+#include <sys/types.h> /* ssize_t */
+#include "robinhood/sstack.h"
+
 /**
  * This structure corresponds to the information available about an entry for
  * other backends.

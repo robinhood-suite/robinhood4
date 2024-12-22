@@ -8,7 +8,6 @@
 #ifndef RBH_LUSTRE_H
 #define RBH_LUSTRE_H
 
-#include "robinhood/backend.h"
 #include "robinhood/sstack.h"
 
 #include "common.h"

@@ -6,6 +6,7 @@
  */
 
 #include "backends/posix.h"
+#include "backends/lustre.h"
 #include "retention_internals.h"
 #include "robinhood/backends/retention.h"
 #include "robinhood/backends/posix_extension.h"
@@ -13,11 +14,25 @@
 
 const struct rbh_posix_extension RBH_BACKEND_EXTENDS(POSIX, RETENTION) = {
     .extension = {
-        .super = RBH_POSIX_BACKEND_NAME,
-        .name = RBH_RETENTION_PLUGIN_NAME,
-        .version = RBH_RETENTION_PLUGIN_VERSION,
+        .super       = RBH_POSIX_BACKEND_NAME,
+        .name        = RBH_RETENTION_PLUGIN_NAME,
+        .version     = RBH_RETENTION_PLUGIN_VERSION,
         .min_version = RBH_POSIX_BACKEND_VERSION,
         .max_version = RBH_POSIX_BACKEND_VERSION,
     },
-    .enrich = rbh_retention_enrich,
+    .enrich         = rbh_retention_enrich,
+    .setup_enricher = rbh_retention_setup,
+};
+
+/* For backward compatibility, make the retention extend the Lustre plugin */
+const struct rbh_posix_extension RBH_BACKEND_EXTENDS(LUSTRE, RETENTION) = {
+    .extension = {
+        .super       = RBH_LUSTRE_BACKEND_NAME,
+        .name        = RBH_RETENTION_PLUGIN_NAME,
+        .version     = RBH_RETENTION_PLUGIN_VERSION,
+        .min_version = RBH_POSIX_BACKEND_VERSION,
+        .max_version = RBH_POSIX_BACKEND_VERSION,
+    },
+    .enrich         = rbh_retention_enrich,
+    .setup_enricher = rbh_retention_setup,
 };

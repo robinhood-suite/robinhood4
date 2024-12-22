@@ -12,7 +12,15 @@
 #ifndef ROBINHOOD_RETENTION_INTERNALS_H
 #define ROBINHOOD_RETENTION_INTERNALS_H
 
+struct entry_info;
+struct rbh_value_pair;
+struct rbh_sstack;
+
 int
-rbh_retention_enrich(void);
+rbh_retention_setup(void);
+
+int
+rbh_retention_enrich(struct entry_info *einfo, struct rbh_value_pair *pairs,
+                     struct rbh_sstack *values);
 
 #endif

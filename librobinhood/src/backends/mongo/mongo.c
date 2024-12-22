@@ -1666,7 +1666,8 @@ mongo_backend_init(struct mongo_backend *mongo, const char *fsname)
 }
 
 struct rbh_backend *
-rbh_mongo_backend_new(const char *fsname, struct rbh_config *config)
+rbh_mongo_backend_new(const struct rbh_backend_plugin *self,
+                      const char *fsname, struct rbh_config *config)
 {
     struct mongo_backend *mongo;
 

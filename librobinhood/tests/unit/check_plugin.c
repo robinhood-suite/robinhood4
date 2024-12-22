@@ -47,16 +47,22 @@ END_TEST
  |                            rbh_plugin_import()                             |
  *----------------------------------------------------------------------------*/
 
+struct rbh_backend_plugin;
+struct rbh_config;
+
+typedef struct rbh_backend *(*new_t)(const struct rbh_backend_plugin *,
+                                     const char *,
+                                     struct rbh_config *config);
+
 START_TEST(rbi_posix)
 {
-    struct rbh_backend *(*rbh_posix_backend_new)(const char *path,
-                                                 void *config);
+    new_t rbh_posix_backend_new;
     struct rbh_backend *posix;
 
     rbh_posix_backend_new = rbh_plugin_import("posix", "rbh_posix_backend_new");
     ck_assert_ptr_nonnull(rbh_posix_backend_new);
 
-    posix = rbh_posix_backend_new("", NULL);
+    posix = rbh_posix_backend_new(NULL, "", NULL);
     ck_assert_ptr_nonnull(posix);
 
     rbh_backend_destroy(posix);

@@ -6,6 +6,7 @@
  *
  * SPDX-License-Identifer: LGPL-3.0-or-later
  */
+#include "plugins/backend.h"
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif
@@ -25,6 +26,7 @@
 
 #include "robinhood/backends/posix.h"
 #include "robinhood/backends/posix_internal.h"
+#include "robinhood/backends/posix_extension.h"
 #include "robinhood/backends/lustre_internal.h"
 #include "robinhood/backends/lustre.h"
 #include "robinhood/statx.h"
@@ -60,7 +62,7 @@ static __thread ssize_t *_inode_xattrs_count;
 static __thread struct rbh_sstack *_values;
 static __thread uint16_t mode;
 
-static const char *retention_attribute;
+static enricher_t retention_enricher;
 
 /**
  * Record a file's fid in \p pairs
@@ -835,207 +837,6 @@ get_mdt_idx:
     return subcount;
 }
 
-static int64_t
-get_expiration_date_value(const char *attribute_value,
-                          const struct rbh_statx *statx)
-{
-    int64_t expiration_date;
-    char *end;
-
-    switch (attribute_value[0]) {
-    case 'i':
-        if (strcmp(attribute_value + 1, "nf")) {
-            fprintf(stderr,
-                    "Invalid value for expiration attribute '%s', should be 'inf'\n",
-                    attribute_value);
-            errno = EINVAL;
-            return -1;
-        }
-
-        expiration_date = INT64_MAX;
-        break;
-    case '+':
-        errno = 0;
-        expiration_date = strtoul(attribute_value + 1, &end, 10);
-        if (errno) {
-            fprintf(stderr,
-                    "Invalid value for expiration attribute '%s', should be '+<integer>'\n",
-                    attribute_value);
-            return -1;
-        }
-
-        if ((!expiration_date && attribute_value == end) || *end != '\0') {
-            fprintf(stderr,
-                    "Invalid value for expiration attribute '%s', should be '+<integer>'\n",
-                    attribute_value);
-            errno = EINVAL;
-            return -1;
-        }
-
-        if (INT64_MAX - statx->stx_mtime.tv_sec < expiration_date)
-            /* If the result overflows, set the expiration date to the max */
-            expiration_date = INT64_MAX;
-        else
-            expiration_date += statx->stx_mtime.tv_sec;
-
-        break;
-    default:
-        errno = 0;
-        expiration_date = strtoul(attribute_value, &end, 10);
-        if (errno) {
-            fprintf(stderr,
-                    "Invalid value for expiration attribute '%s', should be an integer\n",
-                    attribute_value);
-            return -1;
-        }
-
-        if ((!expiration_date && attribute_value == end) || *end != '\0') {
-            fprintf(stderr,
-                    "Invalid value for expiration attribute '%s', should be an integer\n",
-                    attribute_value);
-            errno = EINVAL;
-            return -1;
-        }
-    }
-
-    return expiration_date;
-}
-
-#define XATTR_EXPIRATION_DATE "trusted.expiration_date"
-
-static int
-create_expiration_date_value_pair(const char *attribute_value,
-                                  const struct rbh_statx *statx,
-                                  struct rbh_value_pair *expiration_pair)
-{
-    int64_t expiration_date = get_expiration_date_value(attribute_value, statx);
-
-    if (expiration_date < 0)
-        return -1;
-
-    fill_int64_pair(XATTR_EXPIRATION_DATE, expiration_date,
-                    expiration_pair, _values);
-
-    return 0;
-}
-
-static int
-update_or_cast_expiration_date(int index, char *retention_attribute,
-                               const struct rbh_statx *statx)
-{
-    int64_t calculated_expiration_date =
-        get_expiration_date_value(retention_attribute, statx);
-    int64_t current_expiration_date;
-    const char *expiration_value;
-    char *end;
-
-    if (calculated_expiration_date < 0)
-        return -1;
-
-    expiration_value = RBH_SSTACK_PUSH(_values,
-                                       _inode_xattrs[index].value->binary.data,
-                                       _inode_xattrs[index].value->binary.size);
-
-    errno = 0;
-    current_expiration_date = strtoul(expiration_value, &end, 10);
-    if (errno || (!current_expiration_date && expiration_value == end) ||
-        (long unsigned int) (end - expiration_value) !=
-                             _inode_xattrs[index].value->binary.size) {
-        fprintf(stderr,
-                "Invalid value for expiration date '%s', should be '<integer>'\n",
-                expiration_value);
-        errno = EINVAL;
-        return -1;
-    }
-
-    if (calculated_expiration_date > current_expiration_date)
-        fill_int64_pair(XATTR_EXPIRATION_DATE, calculated_expiration_date,
-                        &_inode_xattrs[index], _values);
-    else
-        fill_int64_pair(XATTR_EXPIRATION_DATE, current_expiration_date,
-                        &_inode_xattrs[index], _values);
-
-    return 0;
-}
-
-#define INT64_MAX_STR_LEN 19
-
-static int
-set_buffer_to_retention_attribute(int index, char *buffer)
-{
-    if (_inode_xattrs[index].value->binary.size >= INT64_MAX_STR_LEN) {
-        fprintf(stderr,
-                "Invalid value for expiration attribute '%.*s', too long, max size is '%d'\n",
-                (int) _inode_xattrs[index].value->binary.size,
-                _inode_xattrs[index].value->binary.data,
-                INT64_MAX_STR_LEN);
-        errno = EINVAL;
-        return -1;
-    }
-
-    memcpy(buffer, _inode_xattrs[index].value->binary.data,
-           _inode_xattrs[index].value->binary.size);
-    buffer[_inode_xattrs[index].value->binary.size] = 0;
-
-    return 0;
-}
-
-static int
-xattrs_get_retention(int fd, const struct rbh_statx *statx,
-                     struct rbh_value_pair *pairs)
-{
-    int retention_attribute_index = -1;
-    int expiration_date_index = -1;
-    char tmp[INT64_MAX_STR_LEN];
-
-    if (_inode_xattrs_count == NULL) {
-        ssize_t length = fgetxattr(fd, retention_attribute, tmp, sizeof(tmp));
-
-        if (length == -1)
-            return 0;
-
-        tmp[length] = 0;
-    } else {
-        for (int i = 0; i < *_inode_xattrs_count; ++i) {
-            if (strcmp(_inode_xattrs[i].key, XATTR_EXPIRATION_DATE) == 0) {
-                expiration_date_index = i;
-                continue;
-            }
-
-            if (strcmp(_inode_xattrs[i].key, retention_attribute) == 0) {
-                retention_attribute_index = i;
-                if (set_buffer_to_retention_attribute(i, tmp))
-                    return 0;
-            }
-        }
-
-        if (retention_attribute_index == -1)
-            return 0;
-    }
-
-    if (expiration_date_index == -1) {
-        if (create_expiration_date_value_pair(tmp, statx, &pairs[0]))
-            return 0;
-    } else {
-        if (update_or_cast_expiration_date(expiration_date_index, tmp, statx))
-            return 0;
-    }
-
-    if (retention_attribute_index == -1) {
-        fill_string_pair(retention_attribute, tmp, &pairs[1], _values);
-
-        return 2;
-    }
-
-    fill_string_pair(retention_attribute, tmp,
-                     &_inode_xattrs[retention_attribute_index], _values);
-
-    if (expiration_date_index == -1)
-        return 1;
-
-    return 0;
-}
-
 static int
 _get_attrs(struct entry_info *entry_info,
            int (*attrs_funcs[])(int, struct rbh_value_pair *, int),
@@ -1062,9 +863,8 @@ _get_attrs(struct entry_info *entry_info,
         count += subcount;
     }
 
-    if (retention_attribute != NULL)
-        count += xattrs_get_retention(entry_info->fd, entry_info->statx,
-                                      &pairs[count]);
+    if (retention_enricher)
+        count += retention_enricher(entry_info, &pairs[count], values);
 
     return count;
 }
@@ -1274,11 +1074,13 @@ static const struct rbh_backend_operations LUSTRE_BACKEND_OPS = {
 };
 
 struct rbh_backend *
-rbh_lustre_backend_new(const char *path, struct rbh_config *config)
+rbh_lustre_backend_new(const struct rbh_backend_plugin *self,
+                       const char *path, struct rbh_config *config)
 {
+    const struct rbh_posix_extension *retention;
     struct posix_backend *lustre;
 
-    lustre = (struct posix_backend *) rbh_posix_backend_new(path, config);
+    lustre = (struct posix_backend *) rbh_posix_backend_new(self, path, config);
     if (lustre == NULL)
         return NULL;
 
@@ -1289,8 +1091,16 @@ rbh_lustre_backend_new(const char *path, struct rbh_config *config)
 
     load_rbh_config(config);
 
-    retention_attribute = rbh_config_get_string(XATTR_EXPIRES_KEY,
-                                                "user.expires");
+    if (self) {
+        /* For backward compatibility, Lustre explicitly loads the retention
+         * extension. This will be removed later.
+         */
+        retention = rbh_posix_load_extension(&self->plugin, "retention");
+        if (retention) {
+            retention->setup_enricher();
+            retention_enricher = retention->enrich;
+        }
+    }
 
     return &lustre->backend;
 }

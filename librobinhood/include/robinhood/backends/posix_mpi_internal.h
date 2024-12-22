@@ -13,6 +13,8 @@
  |                        posix_mpi operations                                |
  *----------------------------------------------------------------------------*/
 
+#include "robinhood/id.h"
+
 struct rbh_backend *
 posix_mpi_backend_branch(void *backend, const struct rbh_id *id,
                          const char *path);

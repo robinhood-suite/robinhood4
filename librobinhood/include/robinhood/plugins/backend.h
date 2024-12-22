@@ -24,7 +24,9 @@ struct rbh_backend_plugin {
 };
 
 struct rbh_backend_plugin_operations {
-    struct rbh_backend *(*new)(const char *fsname, struct rbh_config *config);
+    struct rbh_backend *(*new)(const struct rbh_backend_plugin *self,
+                               const char *fsname,
+                               struct rbh_config *config);
     void (*destroy)();
 };
 
@@ -141,7 +143,7 @@ static inline struct rbh_backend *
 rbh_backend_plugin_new(const struct rbh_backend_plugin *plugin,
                        const char *fsname, struct rbh_config *config)
 {
-    return plugin->ops->new(fsname, config);
+    return plugin->ops->new(plugin, fsname, config);
 }
 
 /**
