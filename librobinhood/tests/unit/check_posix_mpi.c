@@ -68,7 +68,7 @@ START_TEST(lf_missing_root)
     const struct rbh_filter_options OPTIONS = {};
     struct rbh_backend *posix_mpi;
 
-    posix_mpi = rbh_posix_mpi_backend_new("missing", NULL);
+    posix_mpi = rbh_posix_mpi_backend_new(NULL, "missing", NULL);
     ck_assert_ptr_nonnull(posix_mpi);
 
     errno = 0;
@@ -94,7 +94,7 @@ START_TEST(lf_empty_root)
 
     ck_assert_int_eq(mkdir(EMPTY, S_IRWXU), 0);
 
-    posix_mpi = rbh_posix_mpi_backend_new(EMPTY, NULL);
+    posix_mpi = rbh_posix_mpi_backend_new(NULL, EMPTY, NULL);
     ck_assert_ptr_nonnull(posix_mpi);
 
     fsentries = rbh_backend_filter(posix_mpi, NULL, &OPTIONS, &OUTPUT);

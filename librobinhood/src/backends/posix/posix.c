@@ -25,6 +25,7 @@
 #include "robinhood/backends/posix.h"
 #include "robinhood/backends/posix_internal.h"
 #include "robinhood/backend.h"
+#include "robinhood/plugins/backend.h"
 #include "robinhood/sstack.h"
 #include "robinhood/statx.h"
 #include "robinhood/open.h"
@@ -1212,7 +1213,8 @@ rtrim(char *string, char c)
 }
 
 struct rbh_backend *
-rbh_posix_backend_new(const char *path, struct rbh_config *config)
+rbh_posix_backend_new(const struct rbh_backend_plugin *self,
+                      const char *path, struct rbh_config *config)
 {
     struct posix_backend *posix;
 

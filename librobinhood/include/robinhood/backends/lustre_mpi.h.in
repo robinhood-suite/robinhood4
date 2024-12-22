@@ -8,6 +8,7 @@
 #ifndef ROBINHOOD_LUSTRE_MPI_BACKEND_H
 #define ROBINHOOD_LUSTRE_MPI_BACKEND_H
 
+#include "robinhood/plugins/backend.h"
 #include "robinhood/backend.h"
 #include "robinhood/config.h"
 
@@ -32,6 +33,7 @@
  * @error ENOMEM    there was not enough memory available
  */
 struct rbh_backend *
-rbh_lustre_mpi_backend_new(const char *path, struct rbh_config *config);
+rbh_lustre_mpi_backend_new(const struct rbh_backend_plugin *self,
+                           const char *path, struct rbh_config *config);
 
 #endif

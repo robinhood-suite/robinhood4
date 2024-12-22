@@ -16,3 +16,16 @@ librbh_posix_retention_ext = library(
     install: true,
     c_args: '-DHAVE_CONFIG_H',
 )
+
+librbh_lustre_retention_ext = library(
+    'rbh-lustre-retention-ext',
+    sources: [
+        'plugin.c',
+        'retention.c',
+    ],
+    version: librbh_retention_version, # defined in include/robinhood/backends
+    link_with: librobinhood,
+    include_directories: rbh_include,
+    install: true,
+    c_args: '-DHAVE_CONFIG_H',
+)

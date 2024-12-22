@@ -22,7 +22,6 @@
 #include <unistd.h>
 
 #include "robinhood/backend.h"
-#include "robinhood/sstack.h"
 
 #include "common.h"
 
