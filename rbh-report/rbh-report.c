@@ -211,11 +211,14 @@ main(int argc, char *argv[])
     bool csv_print = false;
     char *output = NULL;
     char *group = NULL;
+    int rc;
     char c;
 
-    /* Alias resolution */
-    import_configuration_file(&argc, &argv);
-    apply_aliases(&argc, &argv);
+    rc = rbh_config_from_args(argc - 1, argv + 1);
+    if (rc)
+        error(EXIT_FAILURE, errno, "failed to load configuration file");
+
+    rbh_apply_aliases(&argc, &argv);
 
     /* Parse the command line */
     while ((c = getopt_long(argc, argv, "chgd:o:r", LONG_OPTIONS, NULL)) != -1) {
@@ -240,7 +243,7 @@ main(int argc, char *argv[])
             ascending_sort = false;
             break;
         case 'd':
-            display_resolved_argv(NULL, &argc, &argv);
+            rbh_display_resolved_argv(NULL, &argc, &argv);
             return EXIT_SUCCESS;
         case 'x':
             break;
