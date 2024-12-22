@@ -272,7 +272,7 @@ struct rbh_backend_operations {
             );
     int (*get_attribute)(
             void *backend,
-            const char *attr_name,
+            uint64_t flags,
             void *arg,
             struct rbh_value_pair *pairs,
             int available_pairs
@@ -601,6 +601,15 @@ rbh_backend_report(struct rbh_backend *backend, const struct rbh_filter *filter,
     return backend->ops->report(backend, filter, group, options, output);
 }
 
+
+#define RBH_ATTR_MASK     0x00ffffffffffffff
+#define RBH_ATTR_SHIFT    56
+
+#define RBH_ATTR_FLAG(flag) ((uint64_t)(flag & RBH_ATTR_MASK))
+#define RBH_ATTR_BACKEND(flags) (flags >> RBH_ATTR_SHIFT)
+#define RBH_ATTR_BACKEND_VALUE(backend) \
+    ((uint64_t)(RBH_BI_ ## backend) << RBH_ATTR_SHIFT)
+
 /**
  * Retrieve specific attributes from a backend
  *
@@ -616,7 +625,7 @@ rbh_backend_report(struct rbh_backend *backend, const struct rbh_filter *filter,
  *                  the number of fetched attributes otherwise
  */
 static inline int
-rbh_backend_get_attribute(struct rbh_backend *backend, const char *attr_name,
+rbh_backend_get_attribute(struct rbh_backend *backend, uint64_t flags,
                           void *arg, struct rbh_value_pair *pairs,
                           int available_pairs)
 {
@@ -624,7 +633,7 @@ rbh_backend_get_attribute(struct rbh_backend *backend, const char *attr_name,
         errno = ENOTSUP;
         return -1;
     }
-    return backend->ops->get_attribute(backend, attr_name, arg, pairs,
+    return backend->ops->get_attribute(backend, flags, arg, pairs,
                                        available_pairs);
 }
 

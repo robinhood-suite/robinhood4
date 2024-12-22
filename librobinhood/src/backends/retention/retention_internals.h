@@ -5,12 +5,15 @@
  * SPDX-License-Identifer: LGPL-3.0-or-later
  */
 
+#ifndef ROBINHOOD_RETENTION_INTERNALS_H
+#define ROBINHOOD_RETENTION_INTERNALS_H
+
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif
 
-#ifndef ROBINHOOD_RETENTION_INTERNALS_H
-#define ROBINHOOD_RETENTION_INTERNALS_H
+#include <stddef.h>
+#include <stdint.h>
 
 struct entry_info;
 struct rbh_value_pair;
@@ -20,7 +23,9 @@ int
 rbh_retention_setup(void);
 
 int
-rbh_retention_enrich(struct entry_info *einfo, struct rbh_value_pair *pairs,
+rbh_retention_enrich(struct entry_info *einfo, uint64_t flags,
+                     struct rbh_value_pair *pairs,
+                     size_t pairs_count,
                      struct rbh_sstack *values);
 
 #endif

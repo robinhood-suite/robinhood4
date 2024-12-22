@@ -21,6 +21,23 @@
                                        RBH_LUSTRE_BACKEND_MINOR, \
                                        RBH_LUSTRE_BACKEND_RELEASE)
 
+static inline bool rbh_attr_is_lustre(uint64_t flags)
+{
+    return RBH_ATTR_BACKEND(flags) == RBH_BI_LUSTRE;
+}
+
+enum rbh_lustre_enrich_flags {
+    RBH_LEF_LUSTRE         = RBH_ATTR_BACKEND_VALUE(LUSTRE),
+    RBH_LEF_ALL            = 0x1f,
+    RBH_LEF_DIR_LOV        = 0x01,
+    RBH_LEF_FID            = 0x02,
+    RBH_LEF_STRIPE_COUNT   = 0x04,
+    RBH_LEF_STRIPE_SIZE    = 0x08,
+    RBH_LEF_STRIPE_PATTERN = 0x10,
+    RBH_LEF_ALL_NOFID      = (RBH_LEF_ALL & ~RBH_LEF_FID),
+};
+
+
 /**
  * Create a lustre backend
  *
