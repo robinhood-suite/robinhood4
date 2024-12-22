@@ -90,8 +90,13 @@ backend_new(const char *type, const char *fsname)
     plugin = backend_plugin_import(resolve_config_plugin_name(config, type));
 
     backend = rbh_backend_plugin_new(plugin, type, fsname, config);
-    if (backend == NULL)
+    if (backend == NULL) {
+
+        if (errno == RBH_BACKEND_ERROR)
+            error(EXIT_FAILURE, 0, "%s", rbh_backend_error);
+
         error(EXIT_FAILURE, errno, "rbh_backend_plugin_new");
+    }
 
     return backend;
 }
