@@ -122,13 +122,13 @@ check_command_options(int argc, char *argv[])
         }
 
         if (strcmp(argv[i], "-d") == 0 || strcmp(argv[i], "--dry-run") == 0) {
-            display_resolved_argv(program_invocation_short_name, &argc, &argv);
+            rbh_display_resolved_argv(program_invocation_short_name, &argc,
+                                      &argv);
             exit(0);
         }
 
-        if (strcmp(argv[i], "-c") == 0 || strcmp(argv[i], "--config") == 0) {
+        if (strcmp(argv[i], "-c") == 0 || strcmp(argv[i], "--config") == 0)
             i++;
-        }
     }
 
     return 0;
@@ -144,6 +144,7 @@ main(int _argc, char *_argv[])
     char **argv;
     int index;
     int argc;
+    int rc;
 
     if (_argc < 2)
         error(EX_USAGE, EINVAL,
@@ -152,8 +153,11 @@ main(int _argc, char *_argv[])
     argc = _argc - 1;
     argv = &_argv[1];
 
-    import_configuration_file(&argc, &argv);
-    apply_aliases(&argc, &argv);
+    rc = rbh_config_from_args(argc, argv);
+    if (rc)
+        error(EXIT_FAILURE, errno, "failed to load configuration file");
+
+    rbh_apply_aliases(&argc, &argv);
     checked_options = check_command_options(argc, argv);
 
     ctx.argc = argc - checked_options;

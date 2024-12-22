@@ -5,11 +5,11 @@
  * SPDX-License-Identifer: LGPL-3.0-or-later
  */
 
-#include <error.h>
 #include <errno.h>
+#include <error.h>
 #include <miniyaml.h>
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <sysexits.h>
 
 #include "robinhood/config.h"
@@ -56,7 +56,30 @@ free_config:
     rbh_config_free();
     errno = save_errno;
 
-    return 1;
+    return -1;
+}
+
+static int
+rbh_config_try_open_env(void)
+{
+    const char *cfg_path;
+
+    if (config)
+        /* Already opened */
+        return 0;
+
+    cfg_path = rbh_config_env_name();
+    if (!cfg_path)
+        /* No env specified, no config to open */
+        return 0;
+
+    return rbh_config_open(cfg_path);
+}
+
+const char *
+rbh_config_env_name(void)
+{
+    return getenv("RBH_CONFIG_PATH");
 }
 
 int
@@ -393,43 +416,56 @@ rbh_config_get_string(const char *key, const char *default_string)
     return value.string;
 }
 
-static void
-handle_config_option(int argc, char *argv[], int index)
+static int
+rbh_config_open_default(void)
 {
-    if (index + 1 >= argc)
-        error(EX_USAGE, EINVAL, "'--config' option requires a file");
+    const char *default_config = "/etc/robinhood4.d/default.yaml";
+    int rc;
 
-    if (rbh_config_open(argv[index + 1]))
-        error(EX_USAGE, errno,
-              "Failed to open configuration file '%s'", argv[index + 1]);
+    rc = rbh_config_open(default_config);
+
+    return (rc == 0 || errno == ENOENT) ? 0 : -1;
 }
 
 static void
-rbh_config_open_default()
+move_arg_at(char **argv, int src, int dst)
 {
-    const char* default_config = "/etc/robinhood4.d/rbh_conf.yaml";
+    char *tmp = argv[src];
 
-    int rc = rbh_config_open(default_config);
-
-    if (rc && errno != ENOENT)
-        fprintf(stderr,
-                "Warning: Failed to open default configuration file '%s': %s\n",
-                default_config, strerror(errno));
-    else if (rc)
-        errno = 0;
+    argv[src] = argv[dst];
+    argv[dst] = tmp;
 }
 
-void
-import_configuration_file(int *argc, char ***argv)
+int
+rbh_config_from_args(int argc, char **argv)
 {
-    for (int i = 0; i < *argc; i++) {
-        if (strcmp((*argv)[i], "-c") == 0 ||
-            strcmp((*argv)[i], "--config") == 0) {
-            handle_config_option(*argc, *argv, i);
+    const char *option;
+    int index = 0;
+    int rc;
 
-            return;
+    while (index < argc && (option = argv[index])) {
+        if (!strcmp(option, "-c") || !strcmp(option, "--config")) {
+            if (index + 1 >= argc || argv[index + 1] == NULL) {
+                errno = EINVAL;
+                return -1;
+            }
+
+            rc = rbh_config_open(argv[index + 1]);
+            if (rc)
+                return rc;
+
+            move_arg_at(argv, index,     0);
+            move_arg_at(argv, index + 1, 1);
+
+            return 0;
         }
+
+        index++;
     }
 
-    rbh_config_open_default();
+    rc = rbh_config_try_open_env();
+    if (rc || config)
+        return rc;
+
+    return rbh_config_open_default();
 }
