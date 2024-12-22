@@ -14,6 +14,17 @@
 
 #include "rbh-find/core.h"
 
+int
+rbh_find_count_args_before_uri(int argc, char **argv)
+{
+    size_t count = 0;
+
+    while (count < argc && !rbh_is_uri(argv[count]))
+        count++;
+
+    return count;
+}
+
 void
 ctx_finish(struct find_context *ctx)
 {

@@ -199,4 +199,12 @@ parse_expression(struct find_context *ctx, int *arg_idx,
                  const struct rbh_filter *_filter,
                  struct rbh_filter_sort **sorts, size_t *sorts_count);
 
+/**
+ * Count the number of arguments to rbh-find like commands before reaching
+ * the first URI. This function is useful when rbh-find like commands want
+ * to count the number of arguments that are used before predicates and URIs.
+ */
+int
+rbh_find_count_args_before_uri(int argc, char **argv);
+
 #endif

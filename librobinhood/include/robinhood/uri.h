@@ -47,6 +47,16 @@ struct rbh_raw_uri {
 struct rbh_raw_uri *
 rbh_raw_uri_from_string(const char *string);
 
+/**
+ * Test if the given string is a valid URI
+ *
+ * @param string    the URI string to check
+ *
+ * @return          a true if \p string is a valid URI, false otherwise
+ */
+bool
+rbh_is_uri(const char *string);
+
 /*----------------------------------------------------------------------------*
  |                                rbh_raw_uri                                 |
  *----------------------------------------------------------------------------*/
@@ -122,15 +132,5 @@ rbh_uri_from_raw_uri(const struct rbh_raw_uri *raw_uri);
  */
 ssize_t
 rbh_percent_decode(char *dest, const char *src, size_t n);
-
-/**
- * Verify if the string is a URI
- *
- * @param string    the string checked
- *
- * @return          true if the given string is a URI, false otherwise
- */
-bool
-is_uri(const char *string);
 
 #endif

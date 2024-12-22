@@ -383,7 +383,7 @@ main(int argc, char **argv)
     if (argc > 1)
         error(EX_USAGE, 0, "unexpected argument: %s\n", argv[1]);
 
-    if (!is_uri(argv[0])) {
+    if (!rbh_is_uri(argv[0])) {
         plugin = rbh_backend_plugin_import(argv[0]);
         if (plugin == NULL) {
             fprintf(stderr, "This backend does not exist\n");
