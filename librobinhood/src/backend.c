@@ -10,6 +10,8 @@
 #endif
 
 #include <assert.h>
+#include <stdarg.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -244,4 +246,16 @@ rbh_backend_fsentry_from_path(struct rbh_backend *backend, const char *path_,
     free(path);
     errno = save_errno;
     return fsentry;
+}
+
+void
+rbh_backend_error_printf(const char *fmt, ...)
+{
+    va_list args;
+
+    va_start(args, fmt);
+    vsnprintf(rbh_backend_error, sizeof(rbh_backend_error), fmt, args);
+    va_end(args);
+
+    errno = RBH_BACKEND_ERROR;
 }
