@@ -332,8 +332,9 @@ get_fs_default_dir_lov(uint64_t flags)
                       mount_path);
 
     arg.flags = flags;
-    if (rbh_backend_get_attribute(backend, RBH_LEF_DIR_LOV | flags, &arg,
-                                  &pair, 1) == -1)
+    if (rbh_backend_get_attribute(backend,
+                                  RBH_LEF_LUSTRE | RBH_LEF_DIR_LOV | flags,
+                                  &arg, &pair, 1) == -1)
         return NULL;
 
     return pair.value;

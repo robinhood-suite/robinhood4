@@ -959,6 +959,10 @@ rbh_lustre_enrich(struct entry_info *einfo, uint64_t flags,
                   size_t pairs_count,
                   struct rbh_sstack *values)
 {
+    if (!rbh_attr_is_lustre(flags))
+        /* No lustre flags to retrieve */
+        return 0;
+
     if (flags == (RBH_LEF_LUSTRE | RBH_LEF_ALL_NOFID))
         return lustre_get_attrs(einfo, pairs, pairs_count, values);
     else if (flags == 0 || flags == (RBH_LEF_LUSTRE | RBH_LEF_ALL))
