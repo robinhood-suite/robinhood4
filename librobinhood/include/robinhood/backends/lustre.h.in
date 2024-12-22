@@ -23,7 +23,7 @@
 
 static inline bool rbh_attr_is_lustre(uint64_t flags)
 {
-    return RBH_ATTR_BACKEND(flags) == RBH_BI_LUSTRE;
+    return flags == 0 || RBH_ATTR_BACKEND(flags) == RBH_BI_LUSTRE;
 }
 
 enum rbh_lustre_enrich_flags {

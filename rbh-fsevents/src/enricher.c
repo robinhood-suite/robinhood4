@@ -14,23 +14,21 @@
 #include "enrichers/internals.h"
 
 struct enrich_iter_builder *
-enrich_iter_builder_from_backend(struct rbh_backend *backend,
+enrich_iter_builder_from_backend(const char *type,
+                                 struct rbh_backend *backend,
                                  const char *mount_path)
 {
-    switch (backend->id) {
-        case RBH_BI_POSIX:
-            return posix_enrich_iter_builder(backend, mount_path);
+    if (!strcmp(type, "posix"))
+        return posix_enrich_iter_builder(backend, mount_path);
 #ifdef HAVE_LUSTRE
-        case RBH_BI_LUSTRE:
-            return lustre_enrich_iter_builder(backend, mount_path);
+    else if (!strcmp(type, "lustre"))
+        return lustre_enrich_iter_builder(backend, mount_path);
 #endif
 #ifdef HAVE_HESTIA
-        case RBH_BI_HESTIA:
-            return hestia_enrich_iter_builder(backend);
+    else if (!strcmp(type, "hestia"))
+        return hestia_enrich_iter_builder(backend);
 #endif
-        default:
-            error(EX_USAGE, EINVAL, "enricher type not allowed");
-    }
 
+    error(EX_USAGE, EINVAL, "enricher type '%s' not allowed", type);
     __builtin_unreachable();
 }

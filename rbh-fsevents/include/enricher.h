@@ -38,7 +38,8 @@ enrich_iter_builder_destroy(struct enrich_iter_builder *builder)
 }
 
 struct enrich_iter_builder *
-enrich_iter_builder_from_backend(struct rbh_backend *rbh_backend,
+enrich_iter_builder_from_backend(const char *type,
+                                 struct rbh_backend *rbh_backend,
                                  const char *mount_path);
 
 struct rbh_iterator *
