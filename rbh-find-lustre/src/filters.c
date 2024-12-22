@@ -5,6 +5,7 @@
  * SPDX-License-Identifer: LGPL-3.0-or-later
  */
 
+#include "backends/lustre.h"
 #if HAVE_CONFIG_H
 #include "config.h"
 #endif
@@ -295,16 +296,18 @@ get_default_stripe_filter(void)
     return filter_and(dir_filter, filter_not(default_filter));
 }
 
-static bool
-get_fs_default_value(struct rbh_value_pair *pair)
+static const struct rbh_value *
+get_fs_default_dir_lov(uint64_t flags)
 {
     struct rbh_backend *backend = rbh_backend_from_uri("rbh:lustre:.");
+    struct rbh_value_pair pair;
     char *mount_path = NULL;
     char pwd[PATH_MAX];
     struct {
         int fd;
         uint16_t mode;
         struct rbh_sstack *values;
+        uint64_t flags;
     } arg;
     int rc;
 
@@ -328,24 +331,26 @@ get_fs_default_value(struct rbh_value_pair *pair)
                       "Failed to open the mount point '%s' of the current working directory",
                       mount_path);
 
-    return rbh_backend_get_attribute(backend, "dir.lov", &arg, pair, 1) == 0;
+    arg.flags = flags;
+    if (rbh_backend_get_attribute(backend, RBH_LEF_DIR_LOV | flags, &arg,
+                                  &pair, 1) == -1)
+        return NULL;
+
+    return pair.value;
 }
 
 struct rbh_filter *
 stripe_count2filter(const char *stripe_count)
 {
+    const struct rbh_value *default_stripe_count;
     struct rbh_filter *default_filter;
-    struct rbh_value_pair pair = {
-        .key = "stripe count",
-    };
     struct rbh_filter *filter;
-    bool default_exists;
 
     default_filter = get_default_stripe_filter();
     if (strcmp(stripe_count, "default") == 0)
         return default_filter;
 
-    default_exists = get_fs_default_value(&pair);
+    default_stripe_count = get_fs_default_dir_lov(RBH_LEF_STRIPE_COUNT);
 
     filter = numeric2filter(get_filter_field(LPRED_STRIPE_COUNT), stripe_count);
     if (filter == NULL)
@@ -353,20 +358,20 @@ stripe_count2filter(const char *stripe_count)
                       "Invalid stripe count provided, should be '<+|->n', got '%s'",
                       stripe_count);
 
-    if (default_exists == false)
+    if (!default_stripe_count)
         return filter_and(filter, filter_not(default_filter));
 
     switch (filter->op) {
     case RBH_FOP_STRICTLY_LOWER:
-        if (pair.value->uint64 < filter->compare.value.uint64)
+        if (default_stripe_count->uint64 < filter->compare.value.uint64)
             return filter_or(filter, default_filter);
         break;
     case RBH_FOP_STRICTLY_GREATER:
-        if (pair.value->uint64 > filter->compare.value.uint64)
+        if (default_stripe_count->uint64 > filter->compare.value.uint64)
             return filter_or(filter, default_filter);
         break;
     case RBH_FOP_EQUAL:
-        if (pair.value->uint64 == filter->compare.value.uint64)
+        if (default_stripe_count->uint64 == filter->compare.value.uint64)
             return filter_or(filter, default_filter);
         break;
     default:
@@ -380,17 +385,14 @@ struct rbh_filter *
 stripe_size2filter(const char *stripe_size)
 {
     struct rbh_filter *default_filter;
-    struct rbh_value_pair pair = {
-        .key = "stripe size",
-    };
+    const struct rbh_value *default_stripe_size;
     struct rbh_filter *filter;
-    bool default_exists;
 
     default_filter = get_default_stripe_filter();
     if (strcmp(stripe_size, "default") == 0)
         return default_filter;
 
-    default_exists = get_fs_default_value(&pair);
+    default_stripe_size = get_fs_default_dir_lov(RBH_LEF_STRIPE_SIZE);
 
     filter = numeric2filter(get_filter_field(LPRED_STRIPE_SIZE), stripe_size);
     if (filter == NULL)
@@ -398,20 +400,20 @@ stripe_size2filter(const char *stripe_size)
                       "Invalid stripe size provided, should be '<+|->n', got '%s'",
                       stripe_size);
 
-    if (default_exists == false)
+    if (!default_stripe_size)
         return filter_and(filter, filter_not(default_filter));
 
     switch (filter->op) {
     case RBH_FOP_STRICTLY_LOWER:
-        if (pair.value->uint64 < filter->compare.value.uint64)
+        if (default_stripe_size->uint64 < filter->compare.value.uint64)
             return filter_or(filter, default_filter);
         break;
     case RBH_FOP_STRICTLY_GREATER:
-        if (pair.value->uint64 > filter->compare.value.uint64)
+        if (default_stripe_size->uint64 > filter->compare.value.uint64)
             return filter_or(filter, default_filter);
         break;
     case RBH_FOP_EQUAL:
-        if (pair.value->uint64 == filter->compare.value.uint64)
+        if (default_stripe_size->uint64 == filter->compare.value.uint64)
             return filter_or(filter, default_filter);
         break;
     default:
@@ -460,13 +462,10 @@ str2layout_patterns(const char *layout_pattern)
 struct rbh_filter *
 layout_pattern2filter(const char *_layout)
 {
+    const struct rbh_value *default_pattern;
     struct rbh_filter *default_filter;
-    struct rbh_value_pair pair = {
-        .key = "layout pattern",
-    };
     enum layout_patterns layout;
     struct rbh_filter *filter;
-    bool default_exists;
 
     layout = str2layout_patterns(_layout);
     if (layout == LAYOUT_PATTERN_INVALID)
@@ -478,7 +477,7 @@ layout_pattern2filter(const char *_layout)
     if (layout == LAYOUT_PATTERN_DEFAULT)
         return default_filter;
 
-    default_exists = get_fs_default_value(&pair);
+    default_pattern = get_fs_default_dir_lov(RBH_LEF_STRIPE_PATTERN);
 
     /* The values for comparison are taken from Lustre's source code */
     switch (layout) {
@@ -514,10 +513,10 @@ layout_pattern2filter(const char *_layout)
         error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
                       "Failed to create the filter for comparing a layout");
 
-    if (default_exists == false)
+    if (!default_pattern)
         return filter_and(filter, filter_not(default_filter));
 
-    if (pair.value->uint64 == filter->compare.value.uint64)
+    if (default_pattern->uint64 == filter->compare.value.uint64)
         return filter_or(filter, default_filter);
 
     return filter_and(filter, filter_not(default_filter));

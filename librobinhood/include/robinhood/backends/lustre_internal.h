@@ -8,6 +8,8 @@
 #ifndef RBH_LUSTRE_H
 #define RBH_LUSTRE_H
 
+#include <stdint.h>
+
 #include "robinhood/sstack.h"
 
 #include "common.h"
@@ -26,7 +28,7 @@ lustre_inode_xattrs_callback(struct entry_info *entry_info,
                              struct rbh_sstack *values);
 
 int
-lustre_get_attribute(const char *attr_name, void *_arg,
-                     struct rbh_value_pair *pairs, int available_pairs);
+lustre_get_attribute(uint64_t flags, void *_arg, struct rbh_value_pair *pairs,
+                     int available_pairs);
 
 #endif

@@ -62,12 +62,12 @@ lustre_mpi_backend_filter(
      *--------------------------------------------------------------------*/
 
 static int
-lustre_mpi_backend_get_attribute(void *backend, const char *attr_name,
+lustre_mpi_backend_get_attribute(void *backend, uint64_t flags,
                                  void *arg, struct rbh_value_pair *pairs,
                                  int available_pairs)
 {
     (void) backend;
-    return lustre_get_attribute(attr_name, arg, pairs, available_pairs);
+    return lustre_get_attribute(flags, arg, pairs, available_pairs);
 }
 
 

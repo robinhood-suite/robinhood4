@@ -21,7 +21,9 @@ struct entry_info;
 struct rbh_sstack;
 
 typedef int (*enricher_t)(struct entry_info *einfo,
+                          uint64_t flags,
                           struct rbh_value_pair *pairs,
+                          size_t pairs_count,
                           struct rbh_sstack *values);
 
 typedef int (*iter_new_t)(void);

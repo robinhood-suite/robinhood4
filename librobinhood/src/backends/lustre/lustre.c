@@ -25,6 +25,7 @@
 #include <linux/lustre/lustre_idl.h>
 
 #include "robinhood/backends/posix.h"
+#include "robinhood/utils.h"
 #include "robinhood/backends/posix_internal.h"
 #include "robinhood/backends/posix_extension.h"
 #include "robinhood/backends/lustre_internal.h"
@@ -869,7 +870,9 @@ _get_attrs(struct entry_info *entry_info,
     }
 
     if (retention_enricher)
-        count += retention_enricher(entry_info, &pairs[count], values);
+        count += retention_enricher(entry_info, 0, &pairs[count],
+                                    available_pairs,
+                                    values);
 
     return count;
 }
@@ -908,50 +911,67 @@ lustre_inode_xattrs_callback(struct entry_info *entry_info,
  |                          lustre_backend                                    |
  *----------------------------------------------------------------------------*/
 
-static int
-lustre_get_default_stripe_value(int fd, struct rbh_value_pair *pair)
+static struct rbh_value *
+lustre_get_default_dir_stripe(int fd, uint64_t flags)
 {
-    struct llapi_layout *layout = get_dir_data_striping(fd);
-    struct rbh_value *value = malloc(sizeof(*value));
+    struct llapi_layout *layout;
+    struct rbh_value *value;
 
-    if (value == NULL)
-        return -1;
+    assert(flags & RBH_LEF_DIR_LOV);
 
-    if (strcmp(pair->key, "stripe count") == 0) {
-        if (layout == NULL)
+    value = malloc(sizeof(*value));
+    if (!value)
+        return NULL;
+
+    layout = get_dir_data_striping(fd);
+
+    if (flags & RBH_LEF_STRIPE_COUNT) {
+        if (!layout)
             value->uint64 = 0;
         else if (llapi_layout_stripe_count_get(layout, &value->uint64))
-            return -1;
+            return NULL;
 
         value->type = RBH_VT_UINT64;
-    } else if (strcmp(pair->key, "stripe size") == 0) {
-        if (layout == NULL)
+
+    } else if (flags & RBH_LEF_STRIPE_SIZE) {
+        if (!layout)
             value->uint64 = 0;
         else if (llapi_layout_stripe_size_get(layout, &value->uint64))
-            return -1;
+            return NULL;
 
         value->type = RBH_VT_UINT64;
-    } else if (strcmp(pair->key, "layout pattern") == 0) {
-        if (layout == NULL)
+
+    } else if (flags & RBH_LEF_STRIPE_PATTERN) {
+        if (!layout)
             value->uint64 = 0;
         else if (llapi_layout_pattern_get(layout, &value->uint64))
-            return -1;
+            return NULL;
 
         value->type = RBH_VT_UINT64;
-    } else {
-        errno = EOPNOTSUPP;
-        return -1;
     }
 
-    pair->value = value;
-
-    return 0;
+    return value;
 }
 
 int
-rbh_lustre_enrich(struct entry_info *einfo, struct rbh_value_pair *pairs,
+rbh_lustre_enrich(struct entry_info *einfo, uint64_t flags,
+                  struct rbh_value_pair *pairs,
+                  size_t pairs_count,
                   struct rbh_sstack *values)
 {
+    if (flags == (RBH_LEF_LUSTRE | RBH_LEF_ALL_NOFID))
+        return lustre_get_attrs(einfo, pairs, pairs_count, values);
+    else if (flags == 0 || flags == (RBH_LEF_LUSTRE | RBH_LEF_ALL))
+        return lustre_inode_xattrs_callback(einfo, pairs, pairs_count, values);
+
+    if (flags & RBH_LEF_DIR_LOV) {
+        pairs->value = lustre_get_default_dir_stripe(einfo->fd, flags);
+        if (!pairs->value)
+            return -1;
+
+        return 1;
+    }
+
     return 0;
 }
 
@@ -960,8 +980,8 @@ rbh_lustre_enrich(struct entry_info *einfo, struct rbh_value_pair *pairs,
      *--------------------------------------------------------------------*/
 
 int
-lustre_get_attribute(const char *attr_name, void *_arg,
-                     struct rbh_value_pair *pairs, int available_pairs)
+lustre_get_attribute(uint64_t flags, void *_arg, struct rbh_value_pair *pairs,
+                     int available_pairs)
 {
     struct arg_t {
         int fd;
@@ -976,22 +996,17 @@ lustre_get_attribute(const char *attr_name, void *_arg,
         .inode_xattrs_count = NULL,
     };
 
-    if (strcmp(attr_name, "lustre") == 0)
-        return lustre_get_attrs(&entry_info, pairs, available_pairs,
-                                info->values);
-    else if (strcmp(attr_name, "dir.lov") == 0)
-        return lustre_get_default_stripe_value(info->fd, pairs);
-
-    return -1;
+    return rbh_lustre_enrich(&entry_info, flags, pairs, available_pairs,
+                             info->values);
 }
 
 static int
-lustre_fts_backend_get_attribute(void *backend, const char *attr_name,
+lustre_fts_backend_get_attribute(void *backend, uint64_t flags,
                                  void *arg, struct rbh_value_pair *pairs,
                                  int available_pairs)
 {
     (void) backend;
-    return lustre_get_attribute(attr_name, arg, pairs, available_pairs);
+    return lustre_get_attribute(flags, arg, pairs, available_pairs);
 }
 
     /*--------------------------------------------------------------------*
@@ -1091,7 +1106,6 @@ rbh_lustre_backend_new(const struct rbh_backend_plugin *self,
                        const char *path,
                        struct rbh_config *config)
 {
-    const struct rbh_posix_extension *retention;
     struct posix_backend *lustre;
 
     lustre = (struct posix_backend *) rbh_posix_backend_new(self, NULL, path,
@@ -1107,6 +1121,8 @@ rbh_lustre_backend_new(const struct rbh_backend_plugin *self,
     load_rbh_config(config);
 
     if (self) {
+        const struct rbh_posix_extension *retention;
+
         /* For backward compatibility, Lustre explicitly loads the retention
          * extension. This will be removed later.
          */
@@ -1114,6 +1130,7 @@ rbh_lustre_backend_new(const struct rbh_backend_plugin *self,
         if (retention) {
             if (retention->setup_enricher)
                 retention->setup_enricher();
+
             retention_enricher = retention->enrich;
         }
     }
