@@ -43,13 +43,11 @@ load_aliases_from_config(void)
     }
 
     if (rc == KPR_NOT_FOUND) {
-        fprintf(stderr, "No aliases found in configuration.\n");
         aliases = NULL;
         return -1;
     }
 
     if (value.map.count == 0) {
-        fprintf(stderr, "An empty alias section found in configuration.\n");
         aliases = NULL;
         return -1;
     }
@@ -181,7 +179,7 @@ alias_resolution(int *argc, char ***argv, size_t alias_index,
     *argc = temp_index;
     *argv = argv_temp;
 
-    process_args(argc,argv);
+    process_args(argc, argv);
 
     do {
         alias_found = false;
@@ -223,16 +221,14 @@ alias_resolution(int *argc, char ***argv, size_t alias_index,
 }
 
 void
-apply_aliases(int *argc, char ***argv)
+rbh_apply_aliases(int *argc, char ***argv)
 {
     bool found;
 
-    if (load_aliases_from_config() != 0) {
-        fprintf(stderr, "Failed to load aliases from configuration.\n");
+    if (load_aliases_from_config() != 0)
         return;
-    }
 
-    process_args(argc,argv);
+    process_args(argc, argv);
 
     do {
         found = false;
@@ -263,10 +259,10 @@ apply_aliases(int *argc, char ***argv)
 }
 
 void
-display_resolved_argv(char* name, int *argc, char ***argv)
+rbh_display_resolved_argv(char* name, int *argc, char ***argv)
 {
 
-    apply_aliases(argc, argv);
+    rbh_apply_aliases(argc, argv);
 
     printf("Command after alias resolution:\n");
     if (name != NULL)

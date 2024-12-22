@@ -83,8 +83,8 @@ function handle_non_relative_expiration()
     echo "Directory '$directory' expired on '$expiration_date'"
 
     if [ "$expires" == "None" ]; then
-        echo "Expiration attribute is unknown, so we cannot determine if the \
-              directory is really expired or not. Skipping '$directory'"
+        echo "Expiration attribute is unknown, so we cannot determine if the" \
+             "directory is really expired or not. Skipping '$directory'"
         return 0
     fi
 

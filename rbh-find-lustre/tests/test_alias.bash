@@ -32,7 +32,7 @@ EOF
 test_config_default()
 {
     mkdir -p /etc/robinhood4.d
-    cat > /etc/robinhood4.d/rbh_conf.yaml <<EOF
+    cat > /etc/robinhood4.d/default.yaml <<EOF
 alias:
    a1: "-pool namer -layout-pattern default -stripe-count default"
 EOF
@@ -43,7 +43,7 @@ EOF
     if ! echo "$command_output" | grep -q "$pattern"; then
         error "The command failed when using the default config file."
     fi
-    rm -rf /etc/robinhood4.d/rbh_conf.yaml
+    rm -rf /etc/robinhood4.d/default.yaml
 }
 
 test_multiple_alias()
