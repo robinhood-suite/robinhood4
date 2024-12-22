@@ -24,7 +24,7 @@ test_invalid_config()
 ghijkl
 blob" > $conf_file
 
-    rbh_sync --conf $conf_file --one rbh:posix:$file rbh:mongo:$testdb &&
+    rbh_sync --config $conf_file --one rbh:posix:$file rbh:mongo:$testdb &&
         error "Sync with invalid configuration file should have failed"
 
     echo "---
@@ -32,7 +32,7 @@ blob" > $conf_file
  RBH_MONGODB_ADDRESS: \"mongodb://localhost:27017\"
 ---" > $conf_file
 
-    rbh_sync --conf $conf_file --one rbh:posix:$file rbh:mongo:$testdb &&
+    rbh_sync --config $conf_file --one rbh:posix:$file rbh:mongo:$testdb &&
         error "Sync with duplicate keys should have failed"
 
     return 0
@@ -50,16 +50,35 @@ test_valid_config()
 
     touch $file
 
-    rbh_sync --conf $conf_file --one rbh:posix:$file rbh:mongo:$testdb
+    rbh_sync --config $conf_file --one rbh:posix:$file rbh:mongo:$testdb
 
     find_attribute '"ns.xattrs.path":"/'$file'"'
+}
+
+test_env()
+{
+    local conf_file="conf"
+    local file="test_file"
+
+    cat <<- EOF > "$conf_file"
+abcdef
+ghijkl
+blob
+EOF
+
+    export RBH_CONFIG_PATH="$conf_file"
+
+    rbh_sync --one rbh:posix:$file rbh:mongo:$testdb &&
+        error "Sync with invalid configuration file should have failed"
+
+    return 0
 }
 
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
-declare -a tests=(test_invalid_config test_valid_config)
+declare -a tests=(test_invalid_config test_valid_config test_env)
 
 tmpdir=$(mktemp --directory)
 trap -- "rm -rf '$tmpdir'" EXIT

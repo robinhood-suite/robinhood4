@@ -9,9 +9,9 @@
 #define ROBINHOOD_ALIAS_H
 
 void
-apply_aliases(int *argc, char ***argv);
+rbh_apply_aliases(int *argc, char ***argv);
 
 void
-display_resolved_argv(char* name, int *argc, char ***argv);
+rbh_display_resolved_argv(char* name, int *argc, char ***argv);
 
 #endif

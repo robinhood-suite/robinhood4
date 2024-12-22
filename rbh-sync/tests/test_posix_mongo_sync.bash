@@ -373,7 +373,7 @@ test_config()
  RBH_MONGODB_ADDRESS: \"mongodb://localhost:27017\"
 ---" > $conf_file
 
-    rbh_sync --conf $conf_file --one rbh:posix:$file rbh:mongo:$testdb
+    rbh_sync --config $conf_file --one rbh:posix:$file rbh:mongo:$testdb
 
     find_attribute '"ns.xattrs.path":"/'$file'"'
 
@@ -381,14 +381,14 @@ test_config()
  RBH_MONGODB_ADDRESS: \"mongodb://localhost:12345\"
 ---" > $conf_file
 
-    rbh_sync --conf $conf_file --one rbh:posix:$file rbh:mongo:$testdb &&
+    rbh_sync --config $conf_file --one rbh:posix:$file rbh:mongo:$testdb &&
         error "Sync with invalid server address in config should have failed"
 
     echo "---
  RBH_MONGODB_ADDRESS: !int32 12345
 ---" > $conf_file
 
-    rbh_sync --conf $conf_file --one rbh:posix:$file rbh:mongo:$testdb &&
+    rbh_sync --config $conf_file --one rbh:posix:$file rbh:mongo:$testdb &&
         error "Sync with invalid typing for db address in config should have" \
               "failed"
 
@@ -409,7 +409,7 @@ xattrs_map:
     setfattr -n user.blob_string -v five $file
     setfattr -n user.blob_boolean -v true $file
 
-    rbh_sync --conf $conf_file --one rbh:posix:$file rbh:mongo:$testdb
+    rbh_sync --config $conf_file --one rbh:posix:$file rbh:mongo:$testdb
 
     find_attribute '"ns.xattrs.path":"/'$file'"' \
                    '"xattrs.user.blob_int32" : 1'

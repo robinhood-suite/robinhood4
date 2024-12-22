@@ -135,6 +135,22 @@ rbh_raw_uri_from_string(const char *string_)
     return raw_uri;
 }
 
+bool
+rbh_is_uri(const char *string)
+{
+    struct rbh_raw_uri *uri;
+    int save_errno = errno;
+    bool res;
+
+    uri = rbh_raw_uri_from_string(string);
+    res = (uri != NULL);
+    free(uri);
+
+    /* preserve errno */
+    errno = save_errno;
+    return res;
+}
+
 /*----------------------------------------------------------------------------*
  |                            rbh_percent_decode()                            |
  *----------------------------------------------------------------------------*/
