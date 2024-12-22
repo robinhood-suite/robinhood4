@@ -88,9 +88,15 @@ test_config()
     local entry="test_entry"
     local conf_file="config"
 
-    echo "---
-RBH_RETENTION_XATTR: \"user.blob\"
----" > $conf_file
+    cat << EOF > $conf_file
+RBH_RETENTION_XATTR: "user.blob"
+backends:
+    lustre:
+        extends: posix
+        enrichers:
+            - lustre
+            - retention
+EOF
 
     clear_changelogs "$LUSTRE_MDT" "$userid"
 
@@ -126,6 +132,8 @@ tmpdir=$(mktemp --directory --tmpdir=$LUSTRE_DIR)
 lfs setdirstripe -D -i 0 $tmpdir
 trap -- "rm -rf '$tmpdir'; stop_changelogs '$LUSTRE_MDT' '$userid'" EXIT
 cd "$tmpdir"
+
+export RBH_CONFIG_PATH="$test_dir/../../../utils/tests/test_config.yaml"
 
 sub_setup=lustre_setup
 sub_teardown=lustre_teardown
