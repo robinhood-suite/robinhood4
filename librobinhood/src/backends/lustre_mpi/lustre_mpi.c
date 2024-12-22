@@ -189,7 +189,8 @@ static const struct rbh_backend_operations LUSTRE_MPI_BACKEND_OPS = {
 };
 
 struct rbh_backend *
-rbh_lustre_mpi_backend_new(const char *path, struct rbh_config *config)
+rbh_lustre_mpi_backend_new(const struct rbh_backend_plugin *self,
+                           const char *path, struct rbh_config *config)
 {
     struct posix_backend *lustre_mpi;
     int flag;
@@ -200,7 +201,8 @@ rbh_lustre_mpi_backend_new(const char *path, struct rbh_config *config)
         mfu_init();
     }
 
-    lustre_mpi = (struct posix_backend *)rbh_posix_backend_new(path, config);
+    lustre_mpi = (struct posix_backend *)rbh_posix_backend_new(self, path,
+                                                               config);
     if (lustre_mpi == NULL)
         return NULL;
 
