@@ -34,10 +34,26 @@ enum key_parse_result {
  *
  * @param config_file   the path to the configuration file to use
  *
- * @return              0 on success, non-zero otherwise
+ * @return              0 on success, -1 on error and set errno accordingly
  */
 int
 rbh_config_open(const char *config_file);
+
+/**
+ * Try to open the configuration from CLI args. If no config arg is given, try
+ * to find it from the environment variable RBH_CONFIG_PATH. Finally, try to
+ * open the default configuration from "/etc/robinhood4.d/default.yaml"
+ *
+ * @return       0 on success, -1 on error and set errno accordingly
+ */
+int
+rbh_config_from_args(int argc, char **argv);
+
+/**
+ * Return the value of RBH_CONFIG_PATH
+ */
+const char *
+rbh_config_env_name(void);
 
 /**
  * Free the config.
@@ -112,15 +128,5 @@ load_rbh_config(struct rbh_config *config);
  */
 const char *
 rbh_config_get_string(const char *key, const char *default_string);
-
-/**
- * Loads a configuration file based on command-line arguments or the default if
- * not specified.
- *
- * @param argc   The number of command-line arguments.
- * @param argv   The array of command-line arguments.
- */
-void
-import_configuration_file(int *argc, char ***argv);
 
 #endif

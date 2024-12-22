@@ -487,6 +487,7 @@ sync(const struct rbh_filter_projection *projection)
 /*----------------------------------------------------------------------------*
  |                                list capabilities                           |
  *----------------------------------------------------------------------------*/
+
 static void
 list_capabilities(char *uri)
 {
@@ -690,21 +691,18 @@ main(int argc, char *argv[])
     int rc;
     char c;
 
-    /* Alias resolution */
-    import_configuration_file(&argc, &argv);
-    apply_aliases(&argc, &argv);
+    rc = rbh_config_from_args(argc - 1, argv + 1);
+    if (rc)
+        error(EXIT_FAILURE, errno, "failed to open configuration file");
+
+    rbh_apply_aliases(&argc, &argv);
 
     /* Parse the command line */
     while ((c = getopt_long(argc, argv, "c:f:hl:on:d", LONG_OPTIONS,
                             NULL)) != -1) {
         switch (c) {
         case 'c':
-            rc = rbh_config_open(optarg);
-            if (rc) {
-                fprintf(stderr, "Failed to open configuration file '%s'\n",
-                        optarg);
-                exit(errno);
-            }
+            /* already parsed */
             break;
         case 'f':
             switch (optarg[0]) {
@@ -732,7 +730,7 @@ main(int argc, char *argv[])
             skip_error = false;
             break;
         case 'd':
-            display_resolved_argv(NULL, &argc, &argv);
+            rbh_display_resolved_argv(NULL, &argc, &argv);
             return EXIT_SUCCESS;
         case '?':
         default:
