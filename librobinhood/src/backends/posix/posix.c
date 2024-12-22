@@ -1243,12 +1243,50 @@ posix_backend_branch(void *backend, const struct rbh_id *id, const char *path)
     return &branch->posix.backend;
 }
 
+static int
+posix_get_attribute(void *backend, uint64_t flags,
+                    void *arg, struct rbh_value_pair *pairs,
+                    int available_pairs)
+
+{
+    struct posix_backend *posix = backend;
+    enricher_t *enrichers = posix->enrichers;
+    struct arg_t {
+        int fd;
+        struct rbh_statx *statx;
+        struct rbh_sstack *values;
+    };
+    struct arg_t *info = arg;
+    struct entry_info einfo = {
+        .fd = info->fd,
+        .statx = info->statx,
+        .inode_xattrs = NULL,
+        .inode_xattrs_count = NULL,
+    };
+    size_t count = 0;
+
+    while (*enrichers != NULL) {
+        size_t subcount;
+
+        subcount = (*enrichers)(&einfo, flags, &pairs[count],
+                                available_pairs - count,
+                                info->values);
+        if (subcount == -1)
+            return -1;
+        count += subcount;
+        enrichers++;
+    }
+
+    return count;
+}
+
 static const struct rbh_backend_operations POSIX_BACKEND_OPS = {
     .get_option = posix_backend_get_option,
     .set_option = posix_backend_set_option,
     .branch = posix_backend_branch,
     .root = posix_root,
     .filter = posix_backend_filter,
+    .get_attribute = posix_get_attribute,
     .destroy = posix_backend_destroy,
 };
 
