@@ -12,6 +12,7 @@
  * exposes, those operations should be defined here.
  */
 
+#include "robinhood/plugins/backend.h"
 #include "robinhood/backend.h"
 #include "robinhood/config.h"
 
@@ -38,7 +39,8 @@
  * @error ENOMEM    there was not enough memory available
  */
 struct rbh_backend *
-rbh_mongo_backend_new(const char *fsname, struct rbh_config *config);
+rbh_mongo_backend_new(const struct rbh_backend_plugin *self,
+                      const char *fsname, struct rbh_config *config);
 
 /**
  * Release the memory associated with the plugin
