@@ -52,6 +52,7 @@ struct rbh_config;
 
 typedef struct rbh_backend *(*new_t)(const struct rbh_backend_plugin *,
                                      const char *,
+                                     const char *,
                                      struct rbh_config *config);
 
 START_TEST(rbi_posix)
@@ -62,7 +63,7 @@ START_TEST(rbi_posix)
     rbh_posix_backend_new = rbh_plugin_import("posix", "rbh_posix_backend_new");
     ck_assert_ptr_nonnull(rbh_posix_backend_new);
 
-    posix = rbh_posix_backend_new(NULL, "", NULL);
+    posix = rbh_posix_backend_new(NULL, NULL, "", NULL);
     ck_assert_ptr_nonnull(posix);
 
     rbh_backend_destroy(posix);

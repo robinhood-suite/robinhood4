@@ -33,7 +33,9 @@
  * @error ENOMEM    there was not enough memory available
  */
 struct rbh_backend *
-rbh_mpi_file_backend_new(const struct rbh_backend_plugin *self, const char *path,
+rbh_mpi_file_backend_new(const struct rbh_backend_plugin *self,
+                         const char *type,
+                         const char *path,
                          __attribute__((unused)) struct rbh_config *config);
 
 #endif

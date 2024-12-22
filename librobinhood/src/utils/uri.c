@@ -89,7 +89,7 @@ backend_new(const char *type, const char *fsname)
     config = get_rbh_config();
     plugin = backend_plugin_import(resolve_config_plugin_name(config, type));
 
-    backend = rbh_backend_plugin_new(plugin, fsname, config);
+    backend = rbh_backend_plugin_new(plugin, type, fsname, config);
     if (backend == NULL)
         error(EXIT_FAILURE, errno, "rbh_backend_plugin_new");
 
