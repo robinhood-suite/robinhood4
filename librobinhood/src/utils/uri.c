@@ -1,10 +1,11 @@
 /* This file is part of the RobinHood Library
- * Copyright (C) 2019 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifer: LGPL-3.0-or-later
  */
 
+#include "value.h"
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif
@@ -43,14 +44,50 @@ backend_plugin_import(const char *name)
     return plugin;
 }
 
+static char *
+config_extends_key(const char *backend)
+{
+    char *key;
+
+    if (asprintf(&key, "backends/%s/extends", backend) == -1)
+        error(EXIT_FAILURE, ENOMEM, "Failed to build extends key");
+
+    return key;
+}
+
+static const char *
+resolve_config_plugin_name(struct rbh_config *config, const char *backend)
+{
+    enum key_parse_result rc;
+    struct rbh_value plugin;
+    char *key;
+
+    if (!config)
+        return backend;
+
+    key = config_extends_key(backend);
+    rc = rbh_config_find(key, &plugin, RBH_VT_STRING);
+    free(key);
+    switch (rc) {
+        case KPR_NOT_FOUND:
+            return backend;
+        case KPR_FOUND:
+            return plugin.string;
+        default:
+            error(EXIT_FAILURE, errno, "Failed to retrieve plugin from config");
+    }
+    __builtin_unreachable();
+}
+
 static struct rbh_backend *
 backend_new(const char *type, const char *fsname)
 {
-    const struct rbh_backend_plugin *plugin = backend_plugin_import(type);
+    const struct rbh_backend_plugin *plugin;
     struct rbh_backend *backend;
     struct rbh_config *config;
 
     config = get_rbh_config();
+    plugin = backend_plugin_import(resolve_config_plugin_name(config, type));
 
     backend = rbh_backend_plugin_new(plugin, fsname, config);
     if (backend == NULL)
