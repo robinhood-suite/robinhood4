@@ -1,0 +1,9 @@
+---
+backends:
+    lustre:
+        extends: posix
+        iterator: fts
+        enrichers:
+            - retention
+            - lustre
+---

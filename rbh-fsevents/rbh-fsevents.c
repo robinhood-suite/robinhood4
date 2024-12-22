@@ -272,7 +272,8 @@ enrich_iter_builder_from_uri(const char *uri)
         uri_backend = rbh_backend_from_uri(uri);
     }
 
-    builder = enrich_iter_builder_from_backend(uri_backend, rbh_uri->fsname);
+    builder = enrich_iter_builder_from_backend(rbh_uri->backend, uri_backend,
+                                               rbh_uri->fsname);
     save_errno = errno;
     free(rbh_uri);
     errno = save_errno;
@@ -349,7 +350,7 @@ feed(struct sink *sink, struct source *source,
     case ENODATA:
         break;
     case RBH_BACKEND_ERROR:
-        error(EXIT_FAILURE, 0, "unhandled error: %s\n", rbh_backend_error);
+        error(EXIT_FAILURE, 0, "%s\n", rbh_backend_error);
         __builtin_unreachable();
     default:
         error(EXIT_FAILURE, errno, "could not get the next batch of fsevents");
