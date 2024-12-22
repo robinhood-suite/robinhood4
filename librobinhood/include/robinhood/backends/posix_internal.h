@@ -22,6 +22,7 @@
 #include <unistd.h>
 
 #include "robinhood/backend.h"
+#include "robinhood/backends/posix_extension.h"
 
 #include "common.h"
 
@@ -103,6 +104,7 @@ struct posix_backend {
     struct rbh_mut_iterator *(*iter_new)(const char *, const char *, int);
     char *root;
     int statx_sync_type;
+    enricher_t *enrichers;
 };
 
 struct posix_branch_backend {
