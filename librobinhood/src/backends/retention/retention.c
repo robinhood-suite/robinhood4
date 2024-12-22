@@ -14,6 +14,7 @@
 
 #include "retention_internals.h"
 #include "robinhood/statx.h"
+#include "robinhood/utils.h"
 #include "robinhood/config.h"
 #include "robinhood/backends/common.h"
 #include "sstack.h"
@@ -257,13 +258,14 @@ enrich_from_xattrs(const struct rbh_statx *statx, struct rbh_value_pair *pairs)
 }
 
 int
-rbh_retention_enrich(struct entry_info *einfo, struct rbh_value_pair *pairs,
+rbh_retention_enrich(struct entry_info *einfo, uint64_t flags,
+                     struct rbh_value_pair *pairs,
+                     size_t pairs_count,
                      struct rbh_sstack *values)
 {
     if (!_retention_attribute)
         _retention_attribute = rbh_config_get_string(XATTR_EXPIRES_KEY,
                                                      "user.expires");
-    fprintf(stderr, "retention attr: %s\n", _retention_attribute);
     _inode_xattrs = einfo->inode_xattrs;
     _inode_xattrs_count = einfo->inode_xattrs_count;
     _values = values;
