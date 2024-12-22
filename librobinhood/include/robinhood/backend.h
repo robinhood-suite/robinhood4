@@ -54,6 +54,10 @@
  */
 extern __thread char rbh_backend_error[512];
 
+__attribute__((format(printf, 1, 2)))
+void
+rbh_backend_error_printf(const char *fmt, ...);
+
 /**
  * A unique backend identifier
  *
