@@ -448,7 +448,9 @@ static const struct rbh_backend HESTIA_BACKEND = {
 };
 
 struct rbh_backend *
-rbh_hestia_backend_new(__attribute__((unused)) const char *path,
+rbh_hestia_backend_new(__attribute__((unused)) const struct rbh_backend_plugin *self,
+                       __attribute__((unused)) const char *type,
+                       __attribute__((unused)) const char *path,
                        __attribute__((unused)) struct rbh_config *config)
 {
     struct hestia_backend *hestia;
