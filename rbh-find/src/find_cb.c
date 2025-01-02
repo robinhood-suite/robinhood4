@@ -347,6 +347,20 @@ find_post_action(struct find_context *ctx, const int index,
     }
 }
 
+bool
+predicate_needs_argument(enum predicate predicate)
+{
+    switch (predicate) {
+    case PRED_NOGROUP:
+    case PRED_NOUSER:
+        return false;
+    default:
+        return true;
+    }
+
+    __builtin_unreachable();
+}
+
 struct rbh_filter *
 find_parse_predicate(struct find_context *ctx, int *arg_idx)
 {
@@ -356,7 +370,7 @@ find_parse_predicate(struct find_context *ctx, int *arg_idx)
 
     predicate = str2predicate(ctx->argv[i]);
 
-    if (i + 1 >= ctx->argc && predicate != PRED_NOUSER)
+    if (i + 1 >= ctx->argc && predicate_needs_argument(predicate))
         error(EX_USAGE, 0, "missing argument to `%s'", ctx->argv[i]);
 
     /* In the following block, functions should call error() themselves rather
@@ -392,6 +406,9 @@ find_parse_predicate(struct find_context *ctx, int *arg_idx)
     case PRED_NAME:
     case PRED_PATH:
         filter = regex2filter(predicate, ctx->argv[++i], 0);
+        break;
+    case PRED_NOGROUP:
+        filter = nogroup2filter();
         break;
     case PRED_NOUSER:
         filter = nouser2filter();
