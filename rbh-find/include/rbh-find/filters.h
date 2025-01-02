@@ -186,6 +186,16 @@ struct rbh_filter *
 username2filter(const char *username);
 
 /**
+ * Build a filter for the -nouser predicate
+ *
+ * @return          a pointer to a newly allocated struct rbh_filter
+ *
+ * Exit on error
+ */
+struct rbh_filter *
+nouser2filter();
+
+/**
  * Build a filter for the -group predicate
  *
  * @param groupname a string representing a username

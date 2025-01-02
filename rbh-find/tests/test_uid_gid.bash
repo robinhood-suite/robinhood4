@@ -32,7 +32,11 @@ test_uid_user_equal()
     rbh_find "rbh:mongo:$testdb" -user $me | sort | difflines "/" "/my_file"
     rbh_find "rbh:mongo:$testdb" -user you | sort | difflines "/your_file"
 
+    rbh_find "rbh:mongo:$testdb" -nouser | sort | difflines
+
     userdel you
+
+    rbh_find "rbh:mongo:$testdb" -nouser | sort | difflines "/your_file"
 }
 
 test_gid_group_equal()
