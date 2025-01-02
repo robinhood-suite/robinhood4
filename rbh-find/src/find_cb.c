@@ -399,6 +399,9 @@ find_parse_predicate(struct find_context *ctx, int *arg_idx)
     case PRED_TYPE:
         filter = filetype2filter(ctx->argv[++i]);
         break;
+    case PRED_USER:
+        filter = username2filter(ctx->argv[++i]);
+        break;
     case PRED_XATTR:
         filter = xattr2filter(ctx->argv[++i]);
         break;

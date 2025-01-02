@@ -13,21 +13,26 @@ test_dir=$(dirname $(readlink -e $0))
 #                                    TESTS                                     #
 ################################################################################
 
-test_uid_equal()
+test_uid_user_equal()
 {
     touch "my_file"
     touch "your_file"
 
     useradd -MU you
+    me=$(whoami)
     my_id=$(id -u)
     your_id=$(id -u you)
     chown you "your_file"
-    userdel you
 
     rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
 
     rbh_find "rbh:mongo:$testdb" -uid $my_id | sort | difflines "/" "/my_file"
     rbh_find "rbh:mongo:$testdb" -uid $your_id | sort | difflines "/your_file"
+
+    rbh_find "rbh:mongo:$testdb" -user $me | sort | difflines "/" "/my_file"
+    rbh_find "rbh:mongo:$testdb" -user you | sort | difflines "/your_file"
+
+    userdel you
 }
 
 test_gid_equal()
@@ -51,10 +56,10 @@ test_gid_equal()
 #                                     MAIN                                     #
 ################################################################################
 
-declare -a tests=(test_gid_equal test_uid_equal)
+declare -a tests=(test_gid_equal test_uid_user_equal)
 
 tmpdir=$(mktemp --directory)
-trap -- "rm -rf '$tmpdir'" EXIT
+trap -- "rm -rf '$tmpdir'; userdel test || true" EXIT
 cd "$tmpdir"
 
 run_tests ${tests[@]}
