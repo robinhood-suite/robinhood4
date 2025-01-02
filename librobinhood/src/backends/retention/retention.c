@@ -17,6 +17,7 @@
 #include "robinhood/utils.h"
 #include "robinhood/config.h"
 #include "robinhood/backends/common.h"
+#include "robinhood/backends/retention.h"
 #include "sstack.h"
 #include "value.h"
 
@@ -263,6 +264,9 @@ rbh_retention_enrich(struct entry_info *einfo, uint64_t flags,
                      size_t pairs_count,
                      struct rbh_sstack *values)
 {
+    if (!rbh_attr_is_retention(flags))
+        return 0;
+
     if (!_retention_attribute)
         _retention_attribute = rbh_config_get_string(XATTR_EXPIRES_KEY,
                                                      "user.expires");

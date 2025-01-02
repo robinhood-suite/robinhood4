@@ -8,6 +8,8 @@
 #ifndef ROBINHOOD_RETENTION_POSIX_H
 #define ROBINHOOD_RETENTION_POSIX_H
 
+#include "robinhood/backend.h"
+
 #define RBH_RETENTION_PLUGIN_NAME "retention"
 
 #mesondefine RBH_RETENTION_PLUGIN_MAJOR
@@ -16,5 +18,18 @@
 #define RBH_RETENTION_PLUGIN_VERSION RPV(RBH_RETENTION_PLUGIN_MAJOR, \
                                          RBH_RETENTION_PLUGIN_MINOR, \
                                          RBH_RETENTION_PLUGIN_RELEASE)
+
+#define RBH_RETENTION_ATTR_FLAG(bits) RBH_ATTR_BACKEND_VALUE(RETENTION, bits)
+
+static inline bool rbh_attr_is_retention(uint64_t flags)
+{
+    return flags == 0 || RBH_ATTR_BACKEND(flags) == RBH_BI_RETENTION;
+}
+
+enum rbh_retention_enrich_flag {
+    RBH_REF_ALL        = 0x1,
+    RBH_REF_EXPIRATION = 0x1,
+    RBH_REF_RETENTION  = RBH_ATTR_BACKEND_VALUE(RETENTION),
+};
 
 #endif
