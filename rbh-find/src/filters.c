@@ -12,6 +12,7 @@
 #include <assert.h>
 #include <errno.h>
 #include <error.h>
+#include <grp.h>
 #include <inttypes.h>
 #include <limits.h>
 #include <pwd.h>
@@ -46,6 +47,7 @@ static const struct rbh_filter_field predicate2filter_field[] = {
     [PRED_CTIME]    = {.fsentry = RBH_FP_STATX, .statx = RBH_STATX_CTIME_SEC},
     [PRED_INAME]    = {.fsentry = RBH_FP_NAME},
     [PRED_GID]      = {.fsentry = RBH_FP_STATX, .statx = RBH_STATX_GID},
+    [PRED_GROUP]    = {.fsentry = RBH_FP_STATX, .statx = RBH_STATX_GID},
     [PRED_MMIN]     = {.fsentry = RBH_FP_STATX, .statx = RBH_STATX_MTIME_SEC},
     [PRED_MTIME]    = {.fsentry = RBH_FP_STATX, .statx = RBH_STATX_MTIME_SEC},
     [PRED_NAME]     = {.fsentry = RBH_FP_NAME},
@@ -397,6 +399,27 @@ username2filter(const char *username)
     if (filter == NULL)
         error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
                       "username2filter");
+
+    return filter;
+}
+
+struct rbh_filter *
+groupname2filter(const char *groupname)
+{
+    struct group *grp = getgrnam(groupname);
+    struct rbh_filter *filter;
+
+    if (grp == NULL)
+        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
+                      "groupname2gid");
+
+    filter = rbh_filter_compare_uint64_new(RBH_FOP_EQUAL,
+                                           &predicate2filter_field[PRED_GROUP],
+                                           grp->gr_gid);
+
+    if (filter == NULL)
+        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
+                      "groupname2filter");
 
     return filter;
 }

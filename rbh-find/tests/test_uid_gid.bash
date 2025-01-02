@@ -19,7 +19,7 @@ test_uid_user_equal()
     touch "your_file"
 
     useradd -MU you
-    me=$(whoami)
+    me=$(id -un)
     my_id=$(id -u)
     your_id=$(id -u you)
     chown you "your_file"
@@ -34,19 +34,24 @@ test_uid_user_equal()
     userdel you
 }
 
-test_gid_equal()
+test_gid_group_equal()
 {
     touch "my_file"
     touch "your_file"
 
     groupadd grptest
-    my_grp=$(id -g)
-    test_grp=$(getent group grptest | cut -d: -f3)
+    my_grp=$(id -gn)
+    my_gid=$(id -g)
+    test_gid=$(getent group grptest | cut -d: -f3)
     chgrp grptest "your_file"
     rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
 
-    rbh_find "rbh:mongo:$testdb" -gid $my_grp | sort | difflines "/" "/my_file"
-    rbh_find "rbh:mongo:$testdb" -gid $test_grp | sort | difflines "/your_file"
+    rbh_find "rbh:mongo:$testdb" -gid $my_gid | sort | difflines "/" "/my_file"
+    rbh_find "rbh:mongo:$testdb" -gid $test_gid | sort | difflines "/your_file"
+
+    rbh_find "rbh:mongo:$testdb" -group $my_grp | sort |
+        difflines "/" "/my_file"
+    rbh_find "rbh:mongo:$testdb" -group grptest | sort | difflines "/your_file"
 
     groupdel grptest
 }
@@ -55,7 +60,7 @@ test_gid_equal()
 #                                     MAIN                                     #
 ################################################################################
 
-declare -a tests=(test_gid_equal test_uid_user_equal)
+declare -a tests=(test_gid_group_equal test_uid_user_equal)
 
 tmpdir=$(mktemp --directory)
 trap -- "rm -rf '$tmpdir'" EXIT
