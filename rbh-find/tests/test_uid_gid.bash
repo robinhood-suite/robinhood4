@@ -57,7 +57,11 @@ test_gid_group_equal()
         difflines "/" "/my_file"
     rbh_find "rbh:mongo:$testdb" -group grptest | sort | difflines "/your_file"
 
+    rbh_find "rbh:mongo:$testdb" -nogroup | sort | difflines
+
     groupdel grptest
+
+    rbh_find "rbh:mongo:$testdb" -nogroup | sort | difflines "/your_file"
 }
 
 ################################################################################
