@@ -208,6 +208,16 @@ struct rbh_filter *
 groupname2filter(const char *groupname);
 
 /**
+ * Build a filter for the -nogroup predicate
+ *
+ * @return          a pointer to a newly allocated struct rbh_filter
+ *
+ * Exit on error
+ */
+struct rbh_filter *
+nogroup2filter();
+
+/**
  * Build a filter for the -perm predicate
  *
  * @param mode_arg a string representing an octal or symbol mode
