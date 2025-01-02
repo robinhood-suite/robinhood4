@@ -13,7 +13,7 @@ test_dir=$(dirname $(readlink -e $0))
 #                                    TESTS                                     #
 ################################################################################
 
-test_equal()
+test_uid_equal()
 {
     touch "my_file"
     touch "your_file"
@@ -30,11 +30,28 @@ test_equal()
     rbh_find "rbh:mongo:$testdb" -uid $your_id | sort | difflines "/your_file"
 }
 
+test_gid_equal()
+{
+    touch "my_file"
+    touch "your_file"
+
+    groupadd grptest
+    my_grp=$(id -g)
+    test_grp=$(getent group grptest | cut -d: -f3)
+    chgrp grptest "your_file"
+    groupdel grptest
+
+    rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
+
+    rbh_find "rbh:mongo:$testdb" -gid $my_grp | sort | difflines "/" "/my_file"
+    rbh_find "rbh:mongo:$testdb" -gid $test_grp | sort | difflines "/your_file"
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
-declare -a tests=(test_equal)
+declare -a tests=(test_gid_equal test_uid_equal)
 
 tmpdir=$(mktemp --directory)
 trap -- "rm -rf '$tmpdir'" EXIT
