@@ -882,6 +882,44 @@ filter_not(struct rbh_filter *filter)
     return not;
 }
 
+struct rbh_filter *
+nouser2filter()
+{
+    struct rbh_filter *filter = NULL;
+    struct passwd *pwd;
+
+    for (pwd = getpwent(); pwd != NULL; pwd = getpwent()) {
+        struct rbh_filter *subfilter = rbh_filter_compare_uint64_new(
+            RBH_FOP_EQUAL, &predicate2filter_field[PRED_USER], pwd->pw_uid);
+
+        if (subfilter == NULL)
+            error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
+                          "uid2filter");
+
+        if (filter == NULL) {
+            filter = subfilter;
+            continue;
+        }
+
+        filter = filter_or(subfilter, filter);
+
+        if (filter == NULL)
+            error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
+                          "uid2or_filter");
+    }
+
+    /* must at least take root user */
+    assert(filter);
+
+    filter = filter_not(filter);
+
+    if (filter == NULL)
+        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
+                      "uid2not_filter");
+
+    return filter;
+}
+
 struct rbh_filter_field
 str2field(const char *attribute)
 {
