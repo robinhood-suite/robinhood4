@@ -920,6 +920,44 @@ nouser2filter()
     return filter;
 }
 
+struct rbh_filter *
+nogroup2filter()
+{
+    struct rbh_filter *filter = NULL;
+    struct group *grp;
+
+    for (grp = getgrent(); grp != NULL; grp = getgrent()) {
+        struct rbh_filter *subfilter = rbh_filter_compare_uint64_new(
+            RBH_FOP_EQUAL, &predicate2filter_field[PRED_GROUP], grp->gr_gid);
+
+        if (subfilter == NULL)
+            error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
+                          "gid2filter");
+
+        if (filter == NULL) {
+            filter = subfilter;
+            continue;
+        }
+
+        filter = filter_or(subfilter, filter);
+
+        if (filter == NULL)
+            error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
+                          "gid2or_filter");
+    }
+
+    /* must at least take root group */
+    assert(filter);
+
+    filter = filter_not(filter);
+
+    if (filter == NULL)
+        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
+                      "gid2not_filter");
+
+    return filter;
+}
+
 struct rbh_filter_field
 str2field(const char *attribute)
 {
