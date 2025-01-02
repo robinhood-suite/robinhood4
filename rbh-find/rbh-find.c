@@ -1,5 +1,5 @@
 /* This file is part of Robinhood 4
- * Copyright (C) 2019 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifer: LGPL-3.0-or-later
@@ -58,12 +58,13 @@ usage(void)
         "                         change or modify time. TIME should represent\n"
         "                         minutes, and the filtering will follow GNU's\n"
         "                         find logic for '-[acm]time'\n"
+        "    -gid GID             filter entries based on their owner's GID\n"
         "    -size [+-]SIZE       filter entries based of their size. Works like\n"
         "                         GNU find's '-size' predicate except with the\n"
         "                         addition of the 'T' modifier for terabytes\n"
         "    -perm PERMISSIONS    filter entries based on their permissions,\n"
         "                         the '+' prefix is not supported\n"
-        "    -uid UID             filter entries based on their owner ID\n"
+        "    -uid UID             filter entries based on their owner's ID\n"
         "\n"
         "Action arguments:\n"
         "    -count               count the number of entries that match the\n"
@@ -86,7 +87,7 @@ usage(void)
         "    -empty\n"
         "    -false         -true\n"
         "    -fstype        -xtype\n"
-        "    -gid           -group       -nogroup\n"
+        "    -group         -nogroup\n"
         "    -user          -nouser\n"
         "    -readable      -writable    -executable\n"
         "    -iwholename    -ilname      -wholename     -lname\n"

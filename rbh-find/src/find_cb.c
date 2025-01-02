@@ -1,5 +1,5 @@
 /* This file is part of RobinHood 4
- * Copyright (C) 2024 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifer: LGPL-3.0-or-later
@@ -382,6 +382,10 @@ find_parse_predicate(struct find_context *ctx, int *arg_idx)
         filter = regex2filter(predicate, ctx->argv[++i],
                               RBH_RO_CASE_INSENSITIVE);
         break;
+    case PRED_GID:
+    case PRED_UID:
+        filter = number2filter(predicate, ctx->argv[++i]);
+        break;
     case PRED_NAME:
     case PRED_PATH:
         filter = regex2filter(predicate, ctx->argv[++i], 0);
@@ -394,9 +398,6 @@ find_parse_predicate(struct find_context *ctx, int *arg_idx)
         break;
     case PRED_TYPE:
         filter = filetype2filter(ctx->argv[++i]);
-        break;
-    case PRED_UID:
-        filter = number2filter(predicate, ctx->argv[++i]);
         break;
     case PRED_XATTR:
         filter = xattr2filter(ctx->argv[++i]);
