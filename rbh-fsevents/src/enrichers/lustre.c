@@ -15,6 +15,7 @@
 #include "internals.h"
 #include <robinhood/backends/lustre.h>
 #include <robinhood/utils.h>
+#include <robinhood/backends/retention.h>
 
 #define MIN_XATTR_VALUES_ALLOC (1 << 14)
 static __thread struct rbh_sstack *xattrs_values;
@@ -46,6 +47,9 @@ enrich_path(const char *mount_path, const struct rbh_id *id, const char *name,
         return -1;
 
     /* lustre path */
+    // FIXME this should be moved to the lustre extension otherwise the support
+    // of lustre in rbh-fsevents is ditermined at compile time not by the
+    // presence of the lustre extension.
     path[0] = '/';
     rc = llapi_fid2path(mount_path, fid_str, path + 1,
                         PATH_MAX - name_length - 2, &recno, &linkno);
@@ -124,6 +128,22 @@ enrich_lustre(struct rbh_backend *backend, int mount_fd,
         RBH_LEF_LUSTRE | RBH_LEF_ALL_NOFID,
         &arg, pairs, available_pairs
         );
+    if (size != -1) {
+        size_t tmp;
+
+        /* FIXME for now, the retention is hardcoded in the lustre enricher.
+         * rbh-fsevents needs some rework to be able to create enrichers from
+         * the configuration.
+         */
+        tmp = rbh_backend_get_attribute(backend,
+                                        RBH_REF_RETENTION | RBH_REF_ALL,
+                                        &arg, &pairs[size],
+                                        available_pairs - size);
+        if (tmp != -1)
+            size += tmp;
+        else
+            size = tmp;
+    }
 
     save_errno = errno;
     close(arg.fd);
