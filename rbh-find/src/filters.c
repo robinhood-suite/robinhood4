@@ -1,5 +1,5 @@
 /* This file is part of RobinHood 4
- * Copyright (C) 2024 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifer: LGPL-3.0-or-later
@@ -43,6 +43,7 @@ static const struct rbh_filter_field predicate2filter_field[] = {
     [PRED_CMIN]     = {.fsentry = RBH_FP_STATX, .statx = RBH_STATX_CTIME_SEC},
     [PRED_CTIME]    = {.fsentry = RBH_FP_STATX, .statx = RBH_STATX_CTIME_SEC},
     [PRED_INAME]    = {.fsentry = RBH_FP_NAME},
+    [PRED_GID]      = {.fsentry = RBH_FP_STATX, .statx = RBH_STATX_GID},
     [PRED_MMIN]     = {.fsentry = RBH_FP_STATX, .statx = RBH_STATX_MTIME_SEC},
     [PRED_MTIME]    = {.fsentry = RBH_FP_STATX, .statx = RBH_STATX_MTIME_SEC},
     [PRED_NAME]     = {.fsentry = RBH_FP_NAME},
