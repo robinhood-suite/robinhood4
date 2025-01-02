@@ -174,6 +174,18 @@ struct rbh_filter *
 filesize2filter(const char *filesize);
 
 /**
+ * Build a filter for the -user predicate
+ *
+ * @param username  a string representing a username
+ *
+ * @return          a pointer to a newly allocated struct rbh_filter
+ *
+ * Exit on error
+ */
+struct rbh_filter *
+username2filter(const char *username);
+
+/**
  * Build a filter for the -perm predicate
  *
  * @param mode_arg a string representing an octal or symbol mode

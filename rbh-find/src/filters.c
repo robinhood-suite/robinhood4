@@ -14,6 +14,7 @@
 #include <error.h>
 #include <inttypes.h>
 #include <limits.h>
+#include <pwd.h>
 #include <string.h>
 #include <stdbool.h>
 #include <stdio.h>
@@ -22,6 +23,7 @@
 #include <ctype.h>
 
 #include <sys/stat.h>
+#include <sys/types.h>
 
 #include <robinhood/statx.h>
 #ifndef HAVE_STATX
@@ -52,6 +54,7 @@ static const struct rbh_filter_field predicate2filter_field[] = {
     [PRED_SIZE]     = {.fsentry = RBH_FP_STATX, .statx = RBH_STATX_SIZE},
     [PRED_TYPE]     = {.fsentry = RBH_FP_STATX, .statx = RBH_STATX_TYPE},
     [PRED_UID]      = {.fsentry = RBH_FP_STATX, .statx = RBH_STATX_UID},
+    [PRED_USER]     = {.fsentry = RBH_FP_STATX, .statx = RBH_STATX_UID},
 };
 
 struct rbh_filter *
@@ -375,6 +378,27 @@ struct rbh_filter *
 filesize2filter(const char *filesize)
 {
     return size2filter(&predicate2filter_field[PRED_SIZE], filesize);
+}
+
+struct rbh_filter *
+username2filter(const char *username)
+{
+    struct passwd *pwd = getpwnam(username);
+    struct rbh_filter *filter;
+
+    if (pwd == NULL)
+        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
+                      "username2uid");
+
+    filter = rbh_filter_compare_uint64_new(RBH_FOP_EQUAL,
+                                           &predicate2filter_field[PRED_USER],
+                                           pwd->pw_uid);
+
+    if (filter == NULL)
+        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
+                      "username2filter");
+
+    return filter;
 }
 
 struct who {
