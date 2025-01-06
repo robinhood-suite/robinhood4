@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "63c213f4_b64c3442",
+        "filename": "librobinhood/include/robinhood/alias.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-01-06T14:31:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "389d0388_dac99117",
+      "range": {
+        "startLine": 8,
+        "startChar": 8,
+        "endLine": 8,
+        "endChar": 15
+      },
+      "revId": "f37ee50cbcc2f4ce9050e0dd1443668dfa83be9d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f2bd6245_cc3779fd",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-12-06T09:19:43Z",
       "side": 1,
       "message": "minor: for this patch and the following ones, every function that isn\u0027t called by code outside of alias.c doesn\u0027t have to be declared in the .h. You only need to have the function as \"static\" the alias.c.\n\nCheck other files for how to do it",
+      "range": {
+        "startLine": 20,
+        "startChar": 0,
+        "endLine": 20,
+        "endChar": 20
+      },
+      "revId": "f37ee50cbcc2f4ce9050e0dd1443668dfa83be9d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "97789372_78343d1a",
+        "filename": "librobinhood/include/robinhood/alias.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-01-06T14:31:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f2bd6245_cc3779fd",
       "range": {
         "startLine": 20,
         "startChar": 0,
@@ -94,6 +142,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e8eec39e_d43fe1f5",
+        "filename": "librobinhood/src/alias.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-01-06T14:31:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ba5efec2_6e09bcb9",
+      "range": {
+        "startLine": 24,
+        "startChar": 39,
+        "endLine": 24,
+        "endChar": 51
+      },
+      "revId": "f37ee50cbcc2f4ce9050e0dd1443668dfa83be9d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e3699dcd_7a22e44a",
@@ -107,6 +179,30 @@
       "writtenOn": "2024-12-06T09:06:30Z",
       "side": 1,
       "message": "defect: (*argv)[i]",
+      "range": {
+        "startLine": 27,
+        "startChar": 19,
+        "endLine": 27,
+        "endChar": 26
+      },
+      "revId": "f37ee50cbcc2f4ce9050e0dd1443668dfa83be9d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea124da2_3d43ac63",
+        "filename": "librobinhood/src/alias.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-01-06T14:31:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e3699dcd_7a22e44a",
       "range": {
         "startLine": 27,
         "startChar": 19,
