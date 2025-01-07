@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a361e96e_d923cb50",
+        "filename": "rbh-capabilities/tests/capabilities.bash",
+        "patchSetId": 6
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-01-07T09:47:43Z",
+      "side": 1,
+      "message": "nitpick: you can use the `$non_standard_path` variable",
+      "range": {
+        "startLine": 108,
+        "startChar": 44,
+        "endLine": 108,
+        "endChar": 62
+      },
+      "revId": "168477a30cd3117c7c7aa381e5555f5908dfcf67",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
