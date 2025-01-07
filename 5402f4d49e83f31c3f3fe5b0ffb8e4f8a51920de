@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "67d07d2d_bdcc1f0a",
+        "filename": "rbh-find-lustre/rbh-find-lustre.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-01-07T12:15:08Z",
+      "side": 1,
+      "message": "minor: it\u0027s just `--alias` now",
+      "range": {
+        "startLine": 57,
+        "startChar": 13,
+        "endLine": 57,
+        "endChar": 16
+      },
+      "revId": "5402f4d49e83f31c3f3fe5b0ffb8e4f8a51920de",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
