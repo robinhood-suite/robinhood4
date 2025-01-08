@@ -231,3 +231,16 @@ apply_aliases(int *argc, char ***argv)
     } while (found);
 }
 
+void
+display_resolved_argv(char* name, int *argc, char ***argv)
+{
+
+    apply_aliases(argc, argv);
+
+    printf("Command after alias resolution:\n");
+    printf("%s ", name);
+    for (int i = 0; i < *argc; i++) {
+        printf("%s ", (*argv)[i]);
+    }
+    printf("\n");
+}
