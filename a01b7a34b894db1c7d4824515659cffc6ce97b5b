@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "67d98f07_002fe2a7",
+        "filename": "librobinhood/src/alias.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-01-08T09:36:04Z",
+      "side": 1,
+      "message": "style: add empty line",
+      "revId": "a01b7a34b894db1c7d4824515659cffc6ce97b5b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3a0d9157_a4db8635",
+        "filename": "librobinhood/src/alias.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-01-08T09:36:04Z",
+      "side": 1,
+      "message": "defect: If your using a sstack, you need to free it (check in rbh-report for an exemple)",
+      "revId": "a01b7a34b894db1c7d4824515659cffc6ce97b5b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
