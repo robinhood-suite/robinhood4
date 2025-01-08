@@ -57,6 +57,7 @@ usage(void)
         "    -c, --config PATH    the configuration file to use.\n"
         "    -h, --help           show this message and exit.\n"
         "    --alias NAME         specify an alias for the operation.\n"
+        "    -dr, --dry-run       displays the command after alias management\n"
         "\n"
         "Predicate arguments:\n"
         "    -fid FID             filter entries based on their FID.\n"
@@ -250,6 +251,15 @@ check_command_options(int argc, char *argv[])
         if (strcmp(argv[i], "-h") == 0 || strcmp(argv[i], "--help") == 0) {
             usage();
             exit(0);
+        }
+
+        if (strcmp(argv[i], "-dr") == 0 || strcmp(argv[i], "--dry-run") == 0) {
+            display_resolved_argv("rbh-find", &argc, &argv);
+            exit(0);
+        }
+
+        if (strcmp(argv[i], "-c") == 0 || strcmp(argv[i], "--config") == 0) {
+            i++;
         }
 
         if (strcmp(argv[i], "--alias") == 0) {

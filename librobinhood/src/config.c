@@ -417,12 +417,6 @@ import_configuration_file(int *argc, char ***argv)
             strcmp((*argv)[i], "--config") == 0) {
             handle_config_option(*argc, *argv, i);
 
-            for (int j = i; j < *argc - 2; j++) {
-                (*argv)[j] = (*argv)[j + 2];
-            }
-
-            *argc -= 2;
-
             return;
         }
     }
