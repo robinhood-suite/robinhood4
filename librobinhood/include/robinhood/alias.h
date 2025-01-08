@@ -11,4 +11,7 @@
 void
 apply_aliases(int *argc, char ***argv);
 
+void
+display_resolved_argv(char* name, int *argc, char ***argv);
+
 #endif
