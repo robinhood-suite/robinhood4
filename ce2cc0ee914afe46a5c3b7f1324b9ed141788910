@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5a57b2c6_427c6f3c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-01-09T14:03:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e31df351_2eedbda9",
+      "range": {
+        "startLine": 10,
+        "startChar": 47,
+        "endLine": 10,
+        "endChar": 51
+      },
+      "revId": "ce2cc0ee914afe46a5c3b7f1324b9ed141788910",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b72eb111_fdfa0fdb",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-01-08T09:40:46Z",
       "side": 1,
       "message": "sugest: you don\u0027t need to use a pointer for argc and argv: `(int argc, char **argv)` is supposed to be enough",
+      "range": {
+        "startLine": 20,
+        "startChar": 26,
+        "endLine": 20,
+        "endChar": 49
+      },
+      "revId": "ce2cc0ee914afe46a5c3b7f1324b9ed141788910",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6127100e_1ab8bc41",
+        "filename": "librobinhood/include/robinhood/alias.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-01-09T14:03:08Z",
+      "side": 1,
+      "message": "In this function, we remove the `--config conf` arguments from the argv table. To do this, we need to update both argc (to reflect the new number of arguments) and argv (to adjust the table of arguments). This requires passing pointers to argc and argv: hence the `(int *argc, char ***argv)` signature.",
+      "parentUuid": "b72eb111_fdfa0fdb",
       "range": {
         "startLine": 20,
         "startChar": 26,
