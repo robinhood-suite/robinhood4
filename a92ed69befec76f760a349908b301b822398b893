@@ -18,6 +18,24 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ff4e5447_11d26b87",
+        "filename": "librobinhood/src/alias.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-01-09T14:04:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1c7e6b2c_d84cd517",
+      "revId": "a92ed69befec76f760a349908b301b822398b893",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "128cd2ca_f4d3a7b9",
@@ -31,6 +49,30 @@
       "writtenOn": "2025-01-08T10:25:02Z",
       "side": 1,
       "message": "sugest: you can use your function `copy_args`",
+      "range": {
+        "startLine": 187,
+        "startChar": 7,
+        "endLine": 189,
+        "endChar": 9
+      },
+      "revId": "a92ed69befec76f760a349908b301b822398b893",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fe373bd8_d1ae3713",
+        "filename": "librobinhood/src/alias.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-01-09T14:04:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "128cd2ca_f4d3a7b9",
       "range": {
         "startLine": 187,
         "startChar": 7,
@@ -64,6 +106,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ce8c367_1d35ab84",
+        "filename": "librobinhood/src/alias.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-01-09T14:04:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "18e638af_4c8880e8",
+      "range": {
+        "startLine": 199,
+        "startChar": 4,
+        "endLine": 199,
+        "endChar": 20
+      },
+      "revId": "a92ed69befec76f760a349908b301b822398b893",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1be1dc61_41dd5ba1",
@@ -77,6 +143,24 @@
       "writtenOn": "2025-01-08T10:25:02Z",
       "side": 1,
       "message": "sugest: add some comments to explain how the aliases are added to argv.",
+      "revId": "a92ed69befec76f760a349908b301b822398b893",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "223db52b_532f57d3",
+        "filename": "librobinhood/src/alias.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-01-09T14:04:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1be1dc61_41dd5ba1",
       "revId": "a92ed69befec76f760a349908b301b822398b893",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
@@ -120,6 +204,54 @@
       "range": {
         "startLine": 215,
         "startChar": 0,
+        "endLine": 240,
+        "endChar": 5
+      },
+      "revId": "a92ed69befec76f760a349908b301b822398b893",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aabc53b7_d51052d2",
+        "filename": "librobinhood/src/alias.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-01-09T14:04:34Z",
+      "side": 1,
+      "message": "This part is crucial for handling alias recursion effectively. It ensures that the alias history is preserved across recursive calls to detect circular references and avoid infinite loops. By not resetting the alias history each time `alias_resolution` is called, we maintain the necessary context to track which aliases have already been processed, ensuring detection of alias cycles.",
+      "parentUuid": "556b0e89_8ef27b28",
+      "range": {
+        "startLine": 215,
+        "startChar": 0,
+        "endLine": 240,
+        "endChar": 5
+      },
+      "revId": "a92ed69befec76f760a349908b301b822398b893",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a5799cb1_1466e881",
+        "filename": "librobinhood/src/alias.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-01-09T14:04:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7c5e8b9c_9783f843",
+      "range": {
+        "startLine": 215,
+        "startChar": 1,
         "endLine": 240,
         "endChar": 5
       },
