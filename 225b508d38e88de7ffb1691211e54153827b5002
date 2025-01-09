@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "db749108_0054f763",
+        "filename": "librobinhood/src/alias.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-01-09T07:55:08Z",
+      "side": 1,
+      "message": "sugest: `count_empty_space` or something like that",
+      "revId": "225b508d38e88de7ffb1691211e54153827b5002",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
