@@ -14,7 +14,7 @@ foreach t: integration_tests
 endforeach
 
 non_parallel_integration_tests = ['test_stripe_count', 'test_stripe_size',
-                                  'test_layout_pattern']
+                                  'test_layout_pattern', 'test_alias']
 foreach t: non_parallel_integration_tests
     e = find_program(t + '.bash')
     test(t, e, is_parallel: false, env: backend_path_env,
