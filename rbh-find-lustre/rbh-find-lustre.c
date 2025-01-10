@@ -254,7 +254,7 @@ check_command_options(int argc, char *argv[])
         }
 
         if (strcmp(argv[i], "-dr") == 0 || strcmp(argv[i], "--dry-run") == 0) {
-            display_resolved_argv("rbh-find", &argc, &argv);
+            display_resolved_argv("rbh-lfind", &argc, &argv);
             exit(0);
         }
 
