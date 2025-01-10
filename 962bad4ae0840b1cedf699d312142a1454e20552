@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3393ac00_fa1c9ecb",
+        "filename": "librobinhood/include/robinhood/alias.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-01-10T14:25:27Z",
+      "side": 1,
+      "message": "It\u0027s actually useless in this patch to name this file like that but useful later.\nAfter reading all the comments, I agree with putting import_configuration_file in \"config.h\".",
+      "parentUuid": "a82ae55f_8b331eeb",
+      "range": {
+        "startLine": 8,
+        "startChar": 8,
+        "endLine": 8,
+        "endChar": 23
+      },
+      "revId": "962bad4ae0840b1cedf699d312142a1454e20552",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4a24d23d_83e7990d",
         "filename": "librobinhood/include/robinhood/alias.h",
         "patchSetId": 3
@@ -54,6 +78,30 @@
       "writtenOn": "2025-01-10T10:47:22Z",
       "side": 1,
       "message": "question: why did youn add all these imports here ? This header file does not contain anything that needs something special coming from theses headers ?\n\nHave I been missing something special about the structure of the RBH4 sources ?",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 19
+      },
+      "revId": "962bad4ae0840b1cedf699d312142a1454e20552",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b2145da4_6ea59e84",
+        "filename": "librobinhood/include/robinhood/alias.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-01-10T14:25:27Z",
+      "side": 1,
+      "message": "These files are useful for the code in the c file. I include the files in the .h to avoid having to do it in the .c",
+      "parentUuid": "4a24d23d_83e7990d",
       "range": {
         "startLine": 11,
         "startChar": 0,
@@ -89,6 +137,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e69d7b34_3bf43c3b",
+        "filename": "librobinhood/src/alias.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-01-10T14:25:27Z",
+      "side": 1,
+      "message": "Not at all, it\u0027s a habit that I have to avoid the multiplication of incude in .c.\nI can change this if it is better in rbh.",
+      "parentUuid": "7e4e58ca_b72ea446",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 8,
+        "endChar": 18
+      },
+      "revId": "962bad4ae0840b1cedf699d312142a1454e20552",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3faad6a5_e8eaad3b",
         "filename": "librobinhood/src/alias.c",
         "patchSetId": 3
@@ -100,6 +172,30 @@
       "writtenOn": "2025-01-10T10:47:22Z",
       "side": 1,
       "message": "question: from where comes this \"rbh_config_open\" ? If it comes from a \"config\" header, why not adding the new function \"import_configuration_file\" to this header ? Instead of the alias one ...",
+      "range": {
+        "startLine": 16,
+        "startChar": 8,
+        "endLine": 16,
+        "endChar": 23
+      },
+      "revId": "962bad4ae0840b1cedf699d312142a1454e20552",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b2c50f4c_f1df78db",
+        "filename": "librobinhood/src/alias.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-01-10T14:25:27Z",
+      "side": 1,
+      "message": "Yes this function comes from a \"config\" header, and it\u0027s true we could perfectly put the \"import_configuration_file\" function in the \"config.h\" file.",
+      "parentUuid": "3faad6a5_e8eaad3b",
       "range": {
         "startLine": 16,
         "startChar": 8,
