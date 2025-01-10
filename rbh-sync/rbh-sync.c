@@ -17,6 +17,7 @@
 #include <robinhood.h>
 #include <robinhood/config.h>
 #include <robinhood/utils.h>
+#include <robinhood/alias.h>
 
 #ifndef RBH_ITER_CHUNK_SIZE
 # define RBH_ITER_CHUNK_SIZE (1 << 12)
@@ -533,6 +534,7 @@ usage(void)
         "    -o,--one              only consider the root of SOURCE\n"
         "    -n,--no-skip          do not skip errors when synchronizing backends,\n"
         "                          instead stop on the first error.\n"
+        "    --alias NAME          specify an alias for the operation.\n"
         "\n"
         "Capability arguments:\n"
         "    -l,--list-capabilities URI|NAME\n"
@@ -933,6 +935,9 @@ main(int argc, char *argv[])
     };
     int rc;
     char c;
+
+    /* Alias resolution */
+    apply_aliases(&argc, &argv);
 
     /* Parse the command line */
     while ((c = getopt_long(argc, argv, "c:f:hl:on", LONG_OPTIONS,
