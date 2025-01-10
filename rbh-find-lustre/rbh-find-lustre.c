@@ -57,7 +57,7 @@ usage(void)
         "    -c, --config PATH    the configuration file to use.\n"
         "    -h, --help           show this message and exit.\n"
         "    --alias NAME         specify an alias for the operation.\n"
-        "    -d, --dry-run       displays the command after alias management\n"
+        "    -d, --dry-run        displays the command after alias management\n"
         "\n"
         "Predicate arguments:\n"
         "    -fid FID             filter entries based on their FID.\n"
