@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "21994b95_c3ffd375",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2025-01-10T10:47:22Z",
+      "side": 1,
+      "message": "Why not using robinhood/config.h ?",
+      "revId": "962bad4ae0840b1cedf699d312142a1454e20552",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a82ae55f_8b331eeb",
+        "filename": "librobinhood/include/robinhood/alias.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2025-01-10T10:47:22Z",
+      "side": 1,
+      "message": "major: I think it will make sense in the future of this stack... But why naming this header \"alias.h\" whereas it contains only a function dealing with config ?\n\nBeyond this comment, I think it could be better to have a header dedicated to config separated from the one dedicated to alias.\n\n(added after discovering the existing rbh_config_open function)\nWhy not added this function into robinhood/config.h ?",
+      "range": {
+        "startLine": 8,
+        "startChar": 8,
+        "endLine": 8,
+        "endChar": 23
+      },
+      "revId": "962bad4ae0840b1cedf699d312142a1454e20552",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4a24d23d_83e7990d",
+        "filename": "librobinhood/include/robinhood/alias.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2025-01-10T10:47:22Z",
+      "side": 1,
+      "message": "question: why did youn add all these imports here ? This header file does not contain anything that needs something special coming from theses headers ?\n\nHave I been missing something special about the structure of the RBH4 sources ?",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 19
+      },
+      "revId": "962bad4ae0840b1cedf699d312142a1454e20552",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7e4e58ca_b72ea446",
+        "filename": "librobinhood/src/alias.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2025-01-10T10:47:22Z",
+      "side": 1,
+      "message": "question: is it a choice of all RBH4 code to include headers only in header and not in c file ?",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 8,
+        "endChar": 18
+      },
+      "revId": "962bad4ae0840b1cedf699d312142a1454e20552",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3faad6a5_e8eaad3b",
+        "filename": "librobinhood/src/alias.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2025-01-10T10:47:22Z",
+      "side": 1,
+      "message": "question: from where comes this \"rbh_config_open\" ? If it comes from a \"config\" header, why not adding the new function \"import_configuration_file\" to this header ? Instead of the alias one ...",
+      "range": {
+        "startLine": 16,
+        "startChar": 8,
+        "endLine": 16,
+        "endChar": 23
+      },
+      "revId": "962bad4ae0840b1cedf699d312142a1454e20552",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
