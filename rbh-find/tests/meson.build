@@ -26,3 +26,11 @@ if r.returncode() == 0 and libmfu.found()
     test('test_mpifile', e, is_parallel: false,
          env: backend_path_env, suite: 'rbh-find', timeout: 120)
 endif
+
+non_parallel_integration_tests = ['test_alias']
+
+foreach t: non_parallel_integration_tests
+    e = find_program(t + '.bash')
+    test(t, e, is_parallel: false, env: backend_path_env,
+         suite: 'rbh-find')
+endforeach
