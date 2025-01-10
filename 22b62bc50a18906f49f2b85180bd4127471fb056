@@ -73,6 +73,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a6ec91a0_244926d9",
+        "filename": "librobinhood/src/alias.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2025-01-10T14:25:42Z",
+      "side": 1,
+      "message": "major: I effectively think that yaml_parse_string gives back a const char * pointer directly from the parsed opened config file.\n\nI think you could do simpler without duplicating the value returned by rbh_config_find.?",
+      "parentUuid": "b1194f78_0e732c19",
+      "range": {
+        "startLine": 76,
+        "startChar": 3,
+        "endLine": 76,
+        "endChar": 69
+      },
+      "revId": "22b62bc50a18906f49f2b85180bd4127471fb056",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d900f74d_266bfa6e",
         "filename": "librobinhood/src/alias.c",
         "patchSetId": 1
