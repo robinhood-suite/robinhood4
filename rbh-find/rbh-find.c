@@ -1,5 +1,5 @@
 /* This file is part of Robinhood 4
- * Copyright (C) 2019 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifer: LGPL-3.0-or-later
@@ -21,6 +21,7 @@
 
 #include <robinhood.h>
 #include <robinhood/utils.h>
+#include <robinhood/alias.h>
 
 #include "rbh-find/actions.h"
 #include "rbh-find/core.h"
@@ -52,6 +53,7 @@ usage(void)
         "\n"
         "Optional arguments:\n"
         "    -h,--help             show this message and exit\n"
+        "    --alias NAME          specify an alias for the operation.\n"
         "\n"
         "Predicate arguments:\n"
         "    -[acm]min [+-]TIME   filter entries based on their access,\n"
@@ -110,12 +112,19 @@ check_command_options(int argc, char *argv[])
         if (*argv[i] != '-')
             return i;
 
-        if (strcmp(argv[i], "-h") != 0 &&
-            strcmp(argv[i], "--help") != 0)
-            error(EX_USAGE, EINVAL, "invalid option found '%s'", argv[i]);
+        if (strcmp(argv[i], "-h") == 0 && strcmp(argv[i], "--help") == 0) {
+            usage();
+            exit(0);
+        }
 
-        usage();
-        exit(0);
+        if (strcmp(argv[i], "-dr") == 0 || strcmp(argv[i], "--dry-run") == 0) {
+            display_resolved_argv("rbh-find", &argc, &argv);
+            exit(0);
+        }
+
+        if (strcmp(argv[i], "-c") == 0 || strcmp(argv[i], "--config") == 0) {
+            i++;
+        }
     }
 
     return 0;
@@ -139,6 +148,8 @@ main(int _argc, char *_argv[])
     argc = _argc - 1;
     argv = &_argv[1];
 
+    import_configuration_file(&argc, &argv);
+    apply_aliases(&argc, &argv);
     checked_options = check_command_options(argc, argv);
 
     ctx.argc = argc - checked_options;
