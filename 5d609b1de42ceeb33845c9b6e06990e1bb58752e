@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e9cbe4b9_fb19e32b",
+        "filename": "librobinhood/src/alias.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2025-01-10T14:49:11Z",
+      "side": 1,
+      "message": "major: to help anyone to understand this piece of code, could you add some comments into your code. For example, it could be usefull to know the expected syntax of the alias config value.",
+      "range": {
+        "startLine": 124,
+        "startChar": 0,
+        "endLine": 188,
+        "endChar": 1
+      },
+      "revId": "5d609b1de42ceeb33845c9b6e06990e1bb58752e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a95abff9_56ad09f0",
+        "filename": "librobinhood/src/alias.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2025-01-10T14:49:11Z",
+      "side": 1,
+      "message": "minor: I think this error message is useless and could be now removed.",
+      "range": {
+        "startLine": 198,
+        "startChar": 4,
+        "endLine": 201,
+        "endChar": 5
+      },
+      "revId": "5d609b1de42ceeb33845c9b6e06990e1bb58752e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9089759c_a10d2704",
+        "filename": "librobinhood/src/alias.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2025-01-10T14:49:11Z",
+      "side": 1,
+      "message": "minor: I guess this line deserves a comment.",
+      "range": {
+        "startLine": 230,
+        "startChar": 12,
+        "endLine": 230,
+        "endChar": 19
+      },
+      "revId": "5d609b1de42ceeb33845c9b6e06990e1bb58752e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
