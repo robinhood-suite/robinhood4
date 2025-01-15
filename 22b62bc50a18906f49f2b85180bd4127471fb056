@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "cc3e1e4b_2abf1e0b",
+        "filename": "librobinhood/include/robinhood/alias.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-01-15T08:55:27Z",
+      "side": 1,
+      "message": "Well, I do not think so.\n\nFor sure, adding unnecessary imports in header files will slow down the compilation. So \"historically\", we do our imports in source files.\n\nThere is some people that said that importing tends to be delicate, that order matters, and having all of that in the header is easier. That\u0027s kind of true. But guarding our headers with the following pragmas avoid those issues:\n\n```c\n#ifndef BLABLA_H\n#define BLABLA_H\n\nxxx\n\n#endif\n```\n\nI will conclude saying this is just a case of developer laziness, as usual..",
+      "parentUuid": "36adfd1d_b2268264",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 20,
+        "endChar": 2
+      },
+      "revId": "22b62bc50a18906f49f2b85180bd4127471fb056",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b1194f78_0e732c19",
         "filename": "librobinhood/src/alias.c",
         "patchSetId": 1
