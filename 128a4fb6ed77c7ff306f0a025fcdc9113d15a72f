@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2b87cab0_2416a68f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-01-15T08:45:04Z",
+      "side": 1,
+      "message": "I kind of agree with Patrice: having the function in config.h, and not adding useless includes in header files.",
+      "revId": "128a4fb6ed77c7ff306f0a025fcdc9113d15a72f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
