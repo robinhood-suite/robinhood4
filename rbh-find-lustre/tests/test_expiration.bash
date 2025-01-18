@@ -176,12 +176,12 @@ test_printf_expiration_info()
     local expB="$(date -d "@$timeB" "+%a %b %e %T %Y")"
 
     rbh_lfind "rbh:mongo:$testdb" -printf "%p %E\n" | sort |
-        difflines "/$fileA $expA" "/$fileB $expB" "/$fileC Inf" \
-                  "/$fileD None" "/ None"
+        difflines "/ None" "/$fileA $expA" "/$fileB $expB" "/$fileC Inf" \
+                  "/$fileD None"
 
     rbh_lfind "rbh:mongo:$testdb" -printf "%p %e\n" | sort |
-        difflines "/$fileA $timeA" "/$fileB $timeB" "/$fileC $timeC" \
-                  "/$fileD None" "/ None"
+        difflines "/ None" "/$fileA $timeA" "/$fileB $timeB" "/$fileC $timeC" \
+                  "/$fileD None"
 }
 
 test_config()
@@ -205,7 +205,7 @@ RBH_RETENTION_XATTR: \"user.blob\"
     rbh_sync --config $conf_file "rbh:lustre:$dir" "rbh:mongo:$testdb"
 
     rbh_lfind --config $conf_file "rbh:mongo:$testdb" -printf "%p %e\n" | sort |
-        difflines "/$fileA 42" "/$fileB None" "/ None"
+        difflines "/ None" "/$fileA 42" "/$fileB None"
 }
 
 ################################################################################
