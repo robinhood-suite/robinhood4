@@ -223,7 +223,7 @@ test_type()
     rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
 
     rbh_find "rbh:mongo:$testdb" -printf "%p %y\n" | sort |
-        difflines "/block b" "/char c" "/ d" "/fifo p" "/file f" "/hlink f" \
+        difflines "/ d" "/block b" "/char c" "/fifo p" "/file f" "/hlink f" \
             "/slink l"
 }
 

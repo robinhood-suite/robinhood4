@@ -21,9 +21,9 @@ test_exec()
     rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
 
     # XXX for now, rbh-find -exec only works at the root of the filesystem
-    # We don't know where the filesystem coresponding to the data base is stored
-    # A possible solution would be to store the FS name when creating the
-    # database
+    # We don't know where the filesystem corresponding to the data base is
+    # stored. A possible solution would be to store the FS name when creating
+    # the database.
     rbh_find "rbh:mongo:$testdb" -exec grep -H "test data" {} ";" | sort |
         difflines "file:test data"
 
@@ -36,8 +36,7 @@ test_exec()
 
     rbh_find "rbh:mongo:$testdb" -exec echo {}{}{} /mnt/lustre/{{}}/{} ";" |
         sort |
-        difflines "filefilefile /mnt/lustre/{file}/file" \
-                  "... /mnt/lustre/{.}/."
+        difflines "... /mnt/lustre/{.}/." "filefilefile /mnt/lustre/{file}/file"
 }
 
 test_delete()
