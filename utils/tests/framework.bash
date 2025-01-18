@@ -23,6 +23,10 @@ if [[ "$WITH_MPI" == "true" ]]; then
     source /etc/profile.d/modules.sh
 fi
 
+# Some tests rely on the output of date and the sorting order of sort.
+# Both of these are local dependant. So we fix the local to C.
+export LC_ALL=C
+
 __rbh_sync=$(PATH="$PWD/rbh-sync:$PATH" which rbh-sync)
 rbh_sync()
 {
