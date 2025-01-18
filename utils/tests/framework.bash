@@ -29,7 +29,7 @@ __rbh_sync=$(PATH="$PWD/rbh-sync:$PATH" which rbh-sync)
 rbh_sync()
 {
     if [[ "$WITH_MPI" == "true" ]]; then
-        mpirun --allow-run-as-root -np 4 "$__rbh_sync" "$@"
+        mpirun --allow-run-as-root "$__rbh_sync" "$@"
     else
         "$__rbh_sync" "$@"
     fi
