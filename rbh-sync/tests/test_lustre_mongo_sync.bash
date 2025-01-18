@@ -503,7 +503,7 @@ test_mdt_index_file()
 
 test_mdt_index_dir()
 {
-    local mdt_count=$(lfs mdts | wc -l)
+    local mdt_count=$(lfs mdts | grep "MDT.*UUID" | wc -l)
 
     mkdir "test_mdt_index0"
     lfs migrate -m 0 "test_mdt_index0"
@@ -530,9 +530,9 @@ test_mdt_index_dir()
         # Retrieve the last two stripe count lines of the getdirstripe output,
         # as getdirstripe -m will only show the first one, and create an array
         # with these values
-        mdt_indexes=$(lfs getdirstripe -y 'test_mdt_index2' |
-                      tail -n "$mdt_stripe" | awk '{print $1","}' | tr -d '\n')
-        mdt_indexes="[${mdt_indexes##-1}]"
+        mdt_indexes=$(lfs getdirstripe 'test_mdt_index2' |
+                      tail -n +3 | awk '{print $1}' | xargs | tr ' ' ',')
+        mdt_indexes="[$mdt_indexes]"
         find_attribute '"xattrs.child_mdt_idx":'$mdt_indexes \
                        '"ns.xattrs.path":"/test_mdt_index2"'
     fi
