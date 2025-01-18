@@ -34,6 +34,7 @@ test_atime()
     if [[ "$date" != "$atime" ]]; then
         error "printf atime: '$date' != actual '$atime'"
     fi
+    echo $?
 }
 
 test_ctime()
