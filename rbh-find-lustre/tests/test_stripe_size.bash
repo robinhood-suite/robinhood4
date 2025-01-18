@@ -118,7 +118,7 @@ test_default_stripe_size()
     local file=test_default_stripe_size
 
     mkdir $dir
-    lfs setstripe -S 4M $file
+    lfs setstripe -S 8M $file
 
     local fourM="$(lfs getstripe -S $file | xargs)"
     local threeM="$(($fourM * 3 / 4))"
