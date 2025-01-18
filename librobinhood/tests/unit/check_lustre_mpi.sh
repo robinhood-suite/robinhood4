@@ -7,4 +7,4 @@ module load mpi/openmpi-x86_64
 # https://github.com/easybuilders/easybuild-easyconfigs/issues/18925
 export PSM3_DEVICES="self"
 
-mpirun --allow-run-as-root -np 4 "$1"/check_lustre_mpi
+mpirun --allow-run-as-root "$1"/check_lustre_mpi
