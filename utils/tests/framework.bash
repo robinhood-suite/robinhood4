@@ -19,6 +19,10 @@ SUITE=${SUITE%.*}
 # duration. The self BTL does not have this sleep.
 export OMPI_MCA_btl=self
 
+# Some tests rely on the output of date and the sorting order of sort.
+# Both of these are local dependant. So we fix the local to C.
+export LC_ALL=C
+
 __rbh_sync=$(PATH="$PWD/rbh-sync:$PATH" which rbh-sync)
 rbh_sync()
 {
