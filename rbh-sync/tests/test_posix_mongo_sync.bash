@@ -247,7 +247,7 @@ test_continue_sync_on_error()
                 "source /etc/profile.d/modules.sh; \
                  module load mpi/openmpi-x86_64; \
                  LD_LIBRARY_PATH=$LD_LIBRARY_PATH \
-                    mpirun -np 4 $__rbh_sync rbh:posix-mpi:. \
+                    mpirun $__rbh_sync rbh:posix-mpi:. \
                         rbh:mongo:$testdb" 2>&1)"
     else
         output="$(sudo -E -H -u test bash -c "\
@@ -322,7 +322,7 @@ test_stop_sync_on_error()
                         "source /etc/profile.d/modules.sh; \
                         module load mpi/openmpi-x86_64; \
                         LD_LIBRARY_PATH=$LD_LIBRARY_PATH \
-                            mpirun -np 4 $__rbh_sync --no-skip rbh:posix-mpi:. \
+                            mpirun $__rbh_sync --no-skip rbh:posix-mpi:. \
                                 rbh:mongo:$testdb" 2>&1)
     else
         local output=$(sudo -E -H -u test bash -c "\
