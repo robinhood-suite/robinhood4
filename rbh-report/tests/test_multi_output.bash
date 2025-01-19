@@ -32,6 +32,7 @@ test_multi_output()
     local sum_size="$((root_size + first_size + second_size + third_size))"
     local avg_size="$((sum_size / 4))"
 
+    # FIXME this can fail, the dir is not necessarily the smallest inode
     local min_ino="$(stat -c %i .)"
     local max_mtime="$(stat -c %Y third)"
 
