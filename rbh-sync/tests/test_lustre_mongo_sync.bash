@@ -96,7 +96,8 @@ test_branch_sync()
     find_attribute '"ns.xattrs.path":"'/$second_dir/$third_dir/$entry'"'
 }
 
-test_sync_one_file(){
+test_sync_one_file()
+{
     truncate -s 1k "fileA"
 
     rbh_sync_lustre_one "fileA" "rbh:mongo:$testdb"
