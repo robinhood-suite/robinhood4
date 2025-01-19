@@ -22,6 +22,17 @@
 #include "robinhood/backend.h"
 #include "robinhood/config.h"
 
+#define debug(fmt, ...) _debug(__FILE__, __LINE__, __func__, fmt, __VA_ARGS__)
+#define entry() debug("entry")
+
+#define _debug(file, line, func, fmt, ...)          \
+    ({                         \
+      fprintf(stderr, "%s:%d:%s: ", (file), (line), (func)); \
+      fprintf(stderr, fmt __VA_OPT__(,) __VA_ARGS__); \
+      fprintf(stderr, "\n");   \
+    })
+
+
 /**
  * Create a backend from a URI string
  *
