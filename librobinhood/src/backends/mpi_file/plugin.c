@@ -14,6 +14,7 @@
 #include "robinhood/backends/mpi_file.h"
 #include "robinhood/plugins/backend.h"
 #include "robinhood/backends/iter_mpi_internal.h"
+#include "robinhood/plugin.h"
 
 static const struct rbh_backend_plugin_operations
 MPI_FILE_BACKEND_PLUGIN_OPS = {
@@ -27,5 +28,6 @@ const struct rbh_backend_plugin RBH_BACKEND_PLUGIN_SYMBOL(MPI_FILE) = {
         .version = RBH_MPI_FILE_BACKEND_VERSION,
     },
     .ops = &MPI_FILE_BACKEND_PLUGIN_OPS,
+    .capabilities = RBH_SYNC_OPS | RBH_FILTER_OPS | RBH_UPDATE_OPS,
 };
 
