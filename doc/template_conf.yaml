@@ -1,0 +1,31 @@
+# The connection string to indicate to the mongo backend where and how to
+# connect to the MongoDB database. If not set, the mongo backend will use
+# "mongodb://localhost:27017".
+#
+# See https://www.mongodb.com/docs/manual/reference/connection-string/ for more
+# information about connection string.
+RBH_MONGO_DB_ADDRESS: "mongodb://localhost:27017"
+
+# Map to indicate the type of each xattrs expected to find and to use the
+# appropriate type to store them in Mongo. If not set, all xattrs will be stored
+# as a binary. Also, all xattrs not set in the map will be store as a binary.
+#
+# The types available are: int32, int64, uint32, uint64, string, boolean and
+# binary
+#
+# The map should be construct as follow:
+# xattrs_map:
+#       xattr_1: type
+#       xattr_2: type
+#       ...
+#
+# Example:
+# xattrs_map:
+#    user.blob_int32: int32
+#    user.blob_string: string
+#    user.blob_boolean: boolean
+
+# Name of the xattr used to store the expiration date of a file or directory.
+# It will be used by the retention. If not set, the retention will search the
+# "user.expires" xattr by default.
+RBH_RETENTION_XATTR: user.expires
