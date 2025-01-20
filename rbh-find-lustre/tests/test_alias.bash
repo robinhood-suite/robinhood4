@@ -37,6 +37,8 @@ alias:
    a1: "-pool namer -layout-pattern default -stripe-count default"
 EOF
 
+    # Do not use global default config
+    unset RBH_CONFIG_PATH
     command_output=$(rbh_lfind --dry-run "rbh:mongo:$testdb" --alias a1)
     pattern="\-pool namer \-layout-pattern default \-stripe-count default"
 

@@ -25,6 +25,9 @@ export OMPI_MCA_btl=self
 # Both of these are local dependant. So we fix the local to C.
 export LC_ALL=C
 
+# BASH_SOURCE[0] is the relative path to this file.
+export RBH_CONFIG_PATH="$(dirname ${BASH_SOURCE[0]})/test_config.yaml"
+
 __rbh_sync=$(PATH="$PWD/rbh-sync:$PATH" which rbh-sync)
 rbh_sync()
 {
