@@ -20,6 +20,7 @@
 #include "check-compat.h"
 #include "robinhood.h"
 #include "robinhood/backends/posix_mpi.h"
+#include "robinhood/backends/posix.h"
 #ifndef HAVE_STATX
 # include "robinhood/statx.h"
 #endif
@@ -66,9 +67,13 @@ unchecked_teardown_tmpdir(void)
 START_TEST(lf_missing_root)
 {
     const struct rbh_filter_options OPTIONS = {};
+    const struct rbh_backend_plugin *posix;
     struct rbh_backend *posix_mpi;
 
-    posix_mpi = rbh_posix_mpi_backend_new(NULL, NULL, "missing", NULL);
+    posix = rbh_backend_plugin_import("posix");
+    ck_assert_ptr_nonnull(posix);
+
+    posix_mpi = rbh_posix_backend_new(posix, "posix-mpi", "missing", NULL);
     ck_assert_ptr_nonnull(posix_mpi);
 
     errno = 0;
@@ -87,6 +92,7 @@ START_TEST(lf_empty_root)
             .fsentry_mask = RBH_FP_PARENT_ID,
         },
     };
+    const struct rbh_backend_plugin *posix;
     struct rbh_mut_iterator *fsentries;
     static const char *EMPTY = "empty";
     struct rbh_backend *posix_mpi;
@@ -94,7 +100,10 @@ START_TEST(lf_empty_root)
 
     ck_assert_int_eq(mkdir(EMPTY, S_IRWXU), 0);
 
-    posix_mpi = rbh_posix_mpi_backend_new(NULL, NULL, EMPTY, NULL);
+    posix = rbh_backend_plugin_import("posix");
+    ck_assert_ptr_nonnull(posix);
+
+    posix_mpi = rbh_posix_backend_new(posix, "posix-mpi", EMPTY, NULL);
     ck_assert_ptr_nonnull(posix_mpi);
 
     fsentries = rbh_backend_filter(posix_mpi, NULL, &OPTIONS, &OUTPUT);

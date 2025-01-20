@@ -31,6 +31,7 @@
 #include "robinhood/sstack.h"
 #include "robinhood/statx.h"
 #include "robinhood/open.h"
+#include <robinhood/utils.h>
 
 #include "xattrs_mapping.h"
 
@@ -708,11 +709,21 @@ posix_root(void *backend, const struct rbh_filter_projection *projection)
     const struct rbh_filter_output output = {
         .projection = *projection,
     };
+    struct posix_backend *posix = backend;
     struct rbh_mut_iterator *fsentries;
     struct rbh_fsentry *root;
+    iter_new_t old_iter_new;
     int save_errno;
 
+    /* Since root only fetches one entry, no need to use a custom iterator for
+     * this. This prevents the mfu iterator from walking the whole filesystem
+     * just to fetch one entry.
+     */
+    old_iter_new = posix->iter_new;
+    posix->iter_new = fts_iter_new;
+
     fsentries = rbh_backend_filter(backend, NULL, &options, &output);
+    posix->iter_new = old_iter_new;
     if (fsentries == NULL)
         return NULL;
 
@@ -1024,7 +1035,7 @@ posix_backend_branch(void *backend, const struct rbh_id *id, const char *path)
     else
         branch->id.size = 0;
 
-    branch->posix.iter_new = fts_iter_new;
+    branch->posix.iter_new = posix->iter_new;
     errno = 0;
     branch->posix.enrichers = dup_enrichers(posix->enrichers);
     if (!branch->posix.enrichers && errno != 0) {
@@ -1140,7 +1151,8 @@ load_iterator(const struct rbh_backend_plugin *self,
         return -1;
     }
 
-    /* TODO store iterator in posix backend */
+    posix->iter_new = extension->iter_new;
+
     return 0;
 }
 
