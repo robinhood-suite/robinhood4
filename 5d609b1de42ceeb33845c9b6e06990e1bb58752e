@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c30c0ec0_12ddbed6",
+        "filename": "librobinhood/src/alias.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-01-20T08:17:03Z",
+      "side": 1,
+      "message": "style/suggest:\n\n```\nchar *copy \u003d strdup(str);\nint count \u003d 0;\nchar *token;\n\ntoken \u003d strtok(copy, \" \");\nwhile (token !\u003d NULL) {\n    ...\n}\n```",
+      "range": {
+        "startLine": 127,
+        "startChar": 4,
+        "endLine": 129,
+        "endChar": 36
+      },
+      "revId": "5d609b1de42ceeb33845c9b6e06990e1bb58752e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e9cbe4b9_fb19e32b",
         "filename": "librobinhood/src/alias.c",
         "patchSetId": 5
@@ -49,6 +72,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e36ac8dc_8a4120c6",
+        "filename": "librobinhood/src/alias.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-01-20T08:17:03Z",
+      "side": 1,
+      "message": "+1; I do not think it was a good log, even before.",
+      "parentUuid": "a95abff9_56ad09f0",
+      "range": {
+        "startLine": 198,
+        "startChar": 4,
+        "endLine": 201,
+        "endChar": 5
+      },
+      "revId": "5d609b1de42ceeb33845c9b6e06990e1bb58752e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9089759c_a10d2704",
         "filename": "librobinhood/src/alias.c",
         "patchSetId": 5
@@ -65,6 +112,29 @@
         "startChar": 12,
         "endLine": 230,
         "endChar": 19
+      },
+      "revId": "5d609b1de42ceeb33845c9b6e06990e1bb58752e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6f551991_51bd57b3",
+        "filename": "librobinhood/src/alias.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-01-20T08:17:03Z",
+      "side": 1,
+      "message": "major: in this case, do we not need to fail the command?",
+      "range": {
+        "startLine": 232,
+        "startChar": 12,
+        "endLine": 232,
+        "endChar": 67
       },
       "revId": "5d609b1de42ceeb33845c9b6e06990e1bb58752e",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
