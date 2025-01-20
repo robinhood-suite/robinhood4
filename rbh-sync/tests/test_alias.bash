@@ -37,12 +37,14 @@ alias:
    a1: "--no-skip -l"
 EOF
 
+    # Do not use global default config
+    unset RBH_CONFIG_PATH
     command_output=$(rbh_sync --dry-run "rbh:posix:." "rbh:mongo:$testdb" \
-                    --alias a1)
+                     --alias a1)
     pattern="\--no-skip \-l"
 
     if ! echo "$command_output" | grep -q "$pattern"; then
-        error "The command failed when using the default config file."
+        error "rbh-sync --dry-run error. Expected '$pattern', got '$command_output'"
     fi
     rm -f /etc/robinhood4.d/default.yaml
 }

@@ -1079,21 +1079,6 @@ lustre_fts_backend_destroy(void *backend)
     posix_backend_destroy(backend);
 }
 
-struct rbh_mut_iterator *
-lustre_iterator_new(const char *root, const char *entry, int statx_sync_type)
-{
-    struct posix_iterator *lustre_iter;
-
-    lustre_iter = (struct posix_iterator *)
-                   posix_iterator_new(root, entry, statx_sync_type);
-    if (lustre_iter == NULL)
-        return NULL;
-
-    lustre_iter->inode_xattrs_callback = lustre_inode_xattrs_callback;
-
-    return (struct rbh_mut_iterator *)lustre_iter;
-}
-
 static const struct rbh_backend_operations LUSTRE_BACKEND_OPS = {
     .get_option = lustre_fts_backend_get_option,
     .set_option = lustre_fts_backend_set_option,
@@ -1117,7 +1102,7 @@ rbh_lustre_backend_new(const struct rbh_backend_plugin *self,
     if (lustre == NULL)
         return NULL;
 
-    lustre->iter_new = lustre_iterator_new;
+    lustre->iter_new = fts_iter_new;
     lustre->backend.id = RBH_BI_LUSTRE;
     lustre->backend.name = RBH_LUSTRE_BACKEND_NAME;
     lustre->backend.ops = &LUSTRE_BACKEND_OPS;

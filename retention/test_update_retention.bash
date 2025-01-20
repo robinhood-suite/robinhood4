@@ -248,6 +248,12 @@ test_retention_with_config()
 
     echo "---
 RBH_RETENTION_XATTR: \"user.blob\"
+backends:
+    lustre:
+        extends: posix
+        enrichers:
+            - lustre
+            - retention
 ---" > $conf_file
 
     local expiration_date="$(( $(stat -c %Y $dir) + 10))"

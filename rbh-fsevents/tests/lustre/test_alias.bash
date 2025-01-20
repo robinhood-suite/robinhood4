@@ -37,6 +37,8 @@ alias:
    a1: "--enrich rbh:lustre:test"
 EOF
 
+    # Do not use global default config
+    unset RBH_CONFIG_PATH
     command_output=$(rbh_fsevents --dry-run --alias a1 src:lustre:test -)
     pattern="\--enrich rbh:lustre:test"
 

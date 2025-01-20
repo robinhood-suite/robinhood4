@@ -107,6 +107,24 @@ lustre_mpi_backend_destroy(void *backend)
     |                          root()                                     |
     *---------------------------------------------------------------------*/
 
+/* XXX since for now, the lustre-mpi backend doesn't look at the configuration
+ * it doesn't know that Lustre is a custom enricher. So we still need to
+ * have this hardcoded dependency until the MPIFileUtils iterator is
+ * implemented.
+ */
+static struct rbh_mut_iterator *
+lustre_iter_new(const char *root, const char *entry, int statx_sync_type)
+{
+    struct posix_iterator *iter;
+
+    iter = (struct posix_iterator *)fts_iter_new(root, entry, statx_sync_type);
+    if (!iter)
+        return NULL;
+
+    iter->inode_xattrs_callback = lustre_inode_xattrs_callback;
+    return &iter->iterator;
+}
+
 static struct rbh_fsentry *
 lustre_mpi_backend_root(void *backend,
                         const struct rbh_filter_projection *projection)
@@ -124,7 +142,7 @@ lustre_mpi_backend_root(void *backend,
 
     (void) backend;
 
-    lustre_mpi_root->iter_new = lustre_iterator_new;
+    lustre_mpi_root->iter_new = lustre_iter_new;
     lustre_mpi_root->backend.ops = &LUSTRE_MPI_ROOT_BACKEND_OPS;
 
     return posix_root(backend, projection);

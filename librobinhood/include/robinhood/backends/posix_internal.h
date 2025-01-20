@@ -18,7 +18,6 @@
  * posix_iterator field, which may add extended attributes to the namespace.
  */
 
-#include <fts.h>
 #include <unistd.h>
 
 #include "robinhood/backend.h"
@@ -36,9 +35,8 @@ struct posix_iterator {
     enricher_t *enrichers;
     int statx_sync_type;
     size_t prefix_len;
-    FTS *fts_handle;
-    FTSENT *ftsent;
     bool skip_error;
+    char *path;
 };
 
 /**
@@ -55,6 +53,15 @@ struct fsentry_id_pair {
 
 struct rbh_mut_iterator *
 posix_iterator_new(const char *root, const char *entry, int statx_sync_type);
+
+struct rbh_mut_iterator *
+fts_iter_new(const char *, const char *, int);
+
+int
+fts_iter_root_setup(struct posix_iterator *_iter);
+
+bool
+rbh_posix_iter_is_fts(struct posix_iterator *iter);
 
 struct rbh_id *
 id_from_fd(int fd);

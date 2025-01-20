@@ -193,6 +193,12 @@ test_config()
 
     echo "---
 RBH_RETENTION_XATTR: \"user.blob\"
+backends:
+    lustre:
+        extends: posix
+        enrichers:
+            - lustre
+            - retention
 ---" > $conf_file
 
     mkdir $dir
