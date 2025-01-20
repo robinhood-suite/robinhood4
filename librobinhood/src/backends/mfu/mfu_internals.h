@@ -12,12 +12,41 @@
 # include "config.h"
 #endif
 
+#include <mfu.h>
 #include <stddef.h>
 #include <stdint.h>
+
+#include <robinhood/backends/posix_extension.h>
+
+/*----------------------------------------------------------------------------*
+ |                          POSIX iterator interface                          |
+ *----------------------------------------------------------------------------*/
 
 struct rbh_mut_iterator *
 rbh_posix_mfu_iter_new(const char *root,
                        const char *entry,
                        int statx_sync_type);
+
+/*----------------------------------------------------------------------------*
+ |                             Utility functions                              |
+ *----------------------------------------------------------------------------*/
+
+mfu_flist
+walk_path(const char* path);
+
+struct rbh_id *
+get_parent_id(const char *path, bool use_fd, int prefix_len, short backend_id);
+
+struct file_info {
+    /** File path from the root */
+    const char *path;
+    /** File name */
+    char *name;
+    /** rbh_id of parent entry */
+    struct rbh_id *parent_id;
+};
+
+struct rbh_fsentry *
+fsentry_from_fi(struct file_info *fi, struct posix_iterator *posix);
 
 #endif
