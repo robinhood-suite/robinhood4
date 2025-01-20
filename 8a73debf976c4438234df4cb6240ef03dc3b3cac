@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fe581114_1cd11550",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-01-20T09:47:45Z",
+      "side": 1,
+      "message": "Same comment than for the previous patch, need to check some command results.",
+      "revId": "8a73debf976c4438234df4cb6240ef03dc3b3cac",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "39739ef7_15d55385",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-01-20T09:47:45Z",
+      "side": 1,
+      "message": "Same comment than for the previous patch, need to check some command results",
+      "revId": "8a73debf976c4438234df4cb6240ef03dc3b3cac",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
