@@ -20,6 +20,7 @@ librobinhood = library(
         'itertools.c',
         'list.c',
         'lu_fid.c',
+        'mpi_rc.c',
         'plugin.c',
         'plugins/backend.c',
         'queue.c',

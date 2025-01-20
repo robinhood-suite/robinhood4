@@ -21,6 +21,8 @@
 #include "robinhood/backends/mpi_file.h"
 #include "robinhood/backend.h"
 #include "robinhood/statx.h"
+#include "robinhood/mpi_rc.h"
+#include "robinhood/utils.h"
 #include "mpi_file.h"
 
 /*----------------------------------------------------------------------------*
@@ -464,15 +466,22 @@ static const struct rbh_backend MPI_FILE_BACKEND = {
 };
 
 static void
-mpi_file_backend_init(struct mpi_file_backend *mpi_file)
+mpi_initialize(void)
 {
-    int flag;
+    int initialized;
 
-    MPI_Initialized(&flag);
-    if (!flag) {
+    MPI_Initialized(&initialized);
+    if (!initialized) {
+        debug("initialize");
         MPI_Init(NULL, NULL);
         mfu_init();
     }
+}
+
+static void
+mpi_file_backend_init(struct mpi_file_backend *mpi_file)
+{
+    rbh_mpi_inc_ref(mpi_initialize);
 
     mpi_file->flist = mfu_flist_new();
     /* We tell mpifileutils that we have the stat informations */
