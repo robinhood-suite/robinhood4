@@ -14,7 +14,12 @@
 #include <robinhood/backends/posix_extension.h>
 #include <robinhood/backends/posix_internal.h>
 #include <robinhood/value.h>
-#include <robinhood/utils.h>
+
+struct fts_iterator {
+    struct posix_iterator posix;
+    FTS *fts_handle;
+    FTSENT *ftsent;
+};
 
 static struct rbh_fsentry *
 fsentry_from_ftsent(FTSENT *ftsent, int statx_sync_type, size_t prefix_len,
@@ -57,21 +62,21 @@ fsentry_from_ftsent(FTSENT *ftsent, int statx_sync_type, size_t prefix_len,
 static void *
 fts_iter_next(void *iterator)
 {
-    struct posix_iterator *posix_iter = iterator;
-    bool skip_error = posix_iter->skip_error;
+    struct fts_iterator *iter = iterator;
+    bool skip_error = iter->posix.skip_error;
     struct rbh_fsentry *fsentry;
     int save_errno = errno;
     FTSENT *ftsent;
 
 skip:
     errno = 0;
-    ftsent = fts_read(posix_iter->fts_handle);
+    ftsent = fts_read(iter->fts_handle);
     if (ftsent == NULL) {
         errno = errno ? : ENODATA;
         return NULL;
     }
     errno = save_errno;
-    posix_iter->ftsent = ftsent;
+    iter->ftsent = ftsent;
 
     switch (ftsent->fts_info) {
     case FTS_DP:
@@ -140,10 +145,10 @@ skip:
             return NULL;
     }
 
-    fsentry = fsentry_from_ftsent(ftsent, posix_iter->statx_sync_type,
-                                  posix_iter->prefix_len,
-                                  posix_iter->inode_xattrs_callback,
-                                  posix_iter->enrichers);
+    fsentry = fsentry_from_ftsent(ftsent, iter->posix.statx_sync_type,
+                                  iter->posix.prefix_len,
+                                  iter->posix.inode_xattrs_callback,
+                                  iter->posix.enrichers);
     if (fsentry == NULL && (errno == ENOENT || errno == ESTALE)) {
         /* The entry moved from under our feet */
         if (skip_error) {
@@ -161,13 +166,13 @@ skip:
 static void
 fts_iter_destroy(void *iterator)
 {
-    struct posix_iterator *posix_iter = iterator;
+    struct fts_iterator *iter = iterator;
     FTSENT *ftsent;
 
-    while ((ftsent = fts_read(posix_iter->fts_handle)) != NULL) {
+    while ((ftsent = fts_read(iter->fts_handle)) != NULL) {
         switch (ftsent->fts_info) {
         case FTS_D:
-            fts_set(posix_iter->fts_handle, ftsent, FTS_SKIP);
+            fts_set(iter->fts_handle, ftsent, FTS_SKIP);
             break;
         case FTS_DP:
             /* fsentry_from_ftsent() memoizes ids of directories */
@@ -175,8 +180,8 @@ fts_iter_destroy(void *iterator)
             break;
         }
     }
-    fts_close(posix_iter->fts_handle);
-    free(posix_iter);
+    fts_close(iter->fts_handle);
+    free(iter);
 }
 
 static const struct rbh_mut_iterator_operations FTS_ITER_OPS = {
@@ -184,7 +189,91 @@ static const struct rbh_mut_iterator_operations FTS_ITER_OPS = {
     .destroy = fts_iter_destroy,
 };
 
-const struct rbh_mut_iterator FTS_ITER = {
+static const struct rbh_mut_iterator FTS_ITER = {
     .ops = &FTS_ITER_OPS,
 };
 
+struct rbh_mut_iterator *
+fts_iter_new(const char *root, const char *entry, int statx_sync_type)
+{
+    char *paths[2] = {NULL, NULL};
+    struct fts_iterator *iter;
+    int save_errno;
+    int rc;
+
+    iter = malloc(sizeof(*iter));
+    if (!iter)
+        return NULL;
+
+    rc = posix_iterator_setup(&iter->posix, root, entry, statx_sync_type);
+    save_errno = errno;
+    if (rc == -1)
+        goto free_iter;
+
+    paths[0] = iter->posix.path;
+    iter->fts_handle = fts_open(paths, FTS_PHYSICAL | FTS_NOSTAT | FTS_XDEV,
+                                NULL);
+
+    save_errno = errno;
+    free(iter->posix.path);
+    if (!iter->fts_handle)
+        goto free_iter;
+
+    iter->posix.iterator = FTS_ITER;
+
+    return (struct rbh_mut_iterator *)iter;
+
+free_iter:
+    save_errno = errno;
+    free(iter);
+    errno = save_errno;
+
+    return NULL;
+}
+
+static const struct rbh_id ROOT_PARENT_ID = {
+    .data = NULL,
+    .size = 0,
+};
+
+/* Modify the root's name and parent ID to match RobinHood's conventions */
+static void
+set_root_properties(FTSENT *root)
+{
+    /* The content of fts_pointer is only ever read, so casting away the
+     * const modifier of `ROOT_PARENT_ID' is harmless.
+     */
+    root->fts_parent->fts_pointer = (void *)&ROOT_PARENT_ID;
+
+    /* XXX: could this mess up fts' internal buffers?
+     *
+     * It does not seem to.
+     */
+    root->fts_name[0] = '\0';
+    root->fts_namelen = 0;
+}
+
+int
+fts_iter_root_setup(struct posix_iterator *_iter)
+{
+    struct fts_iterator *iter = (struct fts_iterator *)_iter;
+    struct rbh_fsentry *fsentry;
+
+    fsentry = rbh_mut_iter_next(&_iter->iterator);
+    if (fsentry == NULL)
+        return -1;
+
+    free(fsentry);
+
+    set_root_properties(iter->ftsent);
+    if (fts_set(iter->fts_handle, iter->ftsent, FTS_AGAIN))
+        return -1;
+
+    return 0;
+}
+
+bool
+rbh_posix_iter_is_fts(struct posix_iterator *iter)
+{
+    return iter->iterator.ops == &FTS_ITER_OPS;
+}

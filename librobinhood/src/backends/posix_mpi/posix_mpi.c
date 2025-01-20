@@ -111,7 +111,7 @@ posix_mpi_backend_root(void *backend,
     };
     struct posix_backend *posix_mpi_root = backend;
 
-    posix_mpi_root->iter_new = posix_iterator_new;
+    posix_mpi_root->iter_new = fts_iter_new;
     posix_mpi_root->backend.ops = &POSIX_MPI_ROOT_BACKEND_OPS;
 
     return posix_root(backend, projection);

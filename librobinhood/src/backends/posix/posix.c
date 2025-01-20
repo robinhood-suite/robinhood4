@@ -32,8 +32,6 @@
 
 #include "xattrs_mapping.h"
 
-extern const struct rbh_mut_iterator FTS_ITER;
-
 /*----------------------------------------------------------------------------*
  |                               posix_iterator                               |
  *----------------------------------------------------------------------------*/
@@ -47,11 +45,6 @@ free_handle(void)
 {
     free(handle);
 }
-
-static const struct rbh_id ROOT_PARENT_ID = {
-    .data = NULL,
-    .size = 0,
-};
 
 struct rbh_id *
 id_from_fd(int fd)
@@ -575,13 +568,12 @@ out_close:
     return false;
 }
 
-struct rbh_mut_iterator *
-posix_iterator_new(const char *root, const char *entry, int statx_sync_type)
+int
+posix_iterator_setup(struct posix_iterator *iter,
+                     const char *root,
+                     const char *entry,
+                     int statx_sync_type)
 {
-    struct posix_iterator *posix_iter;
-    char *paths[2] = {NULL, NULL};
-    int save_errno;
-
     /* `root' must not be empty, nor end with a '/' (except if `root' == "/")
      *
      * Otherwise, the "path" xattr will not be correct
@@ -590,39 +582,21 @@ posix_iterator_new(const char *root, const char *entry, int statx_sync_type)
     assert(strcmp(root, "/") == 0 || root[strlen(root) - 1] != '/');
 
     if (entry == NULL) {
-        paths[0] = strdup(root);
+        iter->path = strdup(root);
     } else {
         assert(strcmp(root, "/") == 0 || *entry == '/' || *entry == '\0');
-        if (asprintf(&paths[0], "%s%s", root, entry) < 0)
-            paths[0] = NULL;
+        if (asprintf(&iter->path, "%s%s", root, entry) < 0)
+            iter->path = NULL;
     }
 
-    if (paths[0] == NULL)
-        return NULL;
+    if (iter->path == NULL)
+        return 0;
 
-    posix_iter = malloc(sizeof(*posix_iter));
-    if (posix_iter == NULL) {
-        save_errno = errno;
-        free(paths[0]);
-        errno = save_errno;
-        return NULL;
-    }
+    iter->inode_xattrs_callback = NULL;
+    iter->statx_sync_type = statx_sync_type;
+    iter->prefix_len = strcmp(root, "/") ? strlen(root) : 0;
 
-    posix_iter->iterator = FTS_ITER;
-    posix_iter->inode_xattrs_callback = NULL;
-    posix_iter->statx_sync_type = statx_sync_type;
-    posix_iter->prefix_len = strcmp(root, "/") ? strlen(root) : 0;
-    posix_iter->fts_handle =
-        fts_open(paths, FTS_PHYSICAL | FTS_NOSTAT | FTS_XDEV, NULL);
-    save_errno = errno;
-    free(paths[0]);
-    if (posix_iter->fts_handle == NULL) {
-        free(posix_iter);
-        errno = save_errno;
-        return NULL;
-    }
-
-    return (struct rbh_mut_iterator *)posix_iter;
+    return 0;
 }
 
 /*----------------------------------------------------------------------------*
@@ -750,23 +724,6 @@ posix_root(void *backend, const struct rbh_filter_projection *projection)
      |                              filter()                              |
      *--------------------------------------------------------------------*/
 
-/* Modify the root's name and parent ID to match RobinHood's conventions */
-static void
-set_root_properties(FTSENT *root)
-{
-    /* The content of fts_pointer is only ever read, so casting away the
-     * const modifier of `ROOT_PARENT_ID' is harmless.
-     */
-    root->fts_parent->fts_pointer = (void *)&ROOT_PARENT_ID;
-
-    /* XXX: could this mess up fts' internal buffers?
-     *
-     * It does not seem to.
-     */
-    root->fts_name[0] = '\0';
-    root->fts_namelen = 0;
-}
-
 struct rbh_mut_iterator *
 posix_backend_filter(
     void *backend, const struct rbh_filter *filter,
@@ -775,7 +732,6 @@ posix_backend_filter(
 {
     struct posix_backend *posix = backend;
     struct posix_iterator *posix_iter;
-    struct rbh_fsentry *fsentry;
     char full_path[PATH_MAX];
     char root[PATH_MAX];
     int save_errno;
@@ -817,19 +773,16 @@ posix_backend_filter(
     posix_iter->enrichers = posix->enrichers;
     if (posix_iter == NULL)
         return NULL;
+
+    posix_iter->enrichers = posix->enrichers;
     posix_iter->skip_error = options->skip_error;
 
     if (options->one)
         /* Doesn't set the root's name to '\0' to keep the real root's name */
         return &posix_iter->iterator;
 
-    fsentry = rbh_mut_iter_next(&posix_iter->iterator);
-    if (fsentry == NULL)
-        goto out_destroy_iter;
-    free(fsentry);
-
-    set_root_properties(posix_iter->ftsent);
-    if (fts_set(posix_iter->fts_handle, posix_iter->ftsent, FTS_AGAIN))
+    if (rbh_posix_iter_is_fts(posix_iter) &&
+        fts_iter_root_setup(posix_iter) == -1)
         /* This should never happen */
         goto out_destroy_iter;
 
@@ -1064,7 +1017,7 @@ posix_backend_branch(void *backend, const struct rbh_id *id, const char *path)
     else
         branch->id.size = 0;
 
-    branch->posix.iter_new = posix_iterator_new;
+    branch->posix.iter_new = fts_iter_new;
     branch->posix.enrichers = posix->enrichers;
     branch->posix.statx_sync_type = posix->statx_sync_type;
     branch->posix.backend = POSIX_BRANCH_BACKEND;
@@ -1286,7 +1239,7 @@ rbh_posix_backend_new(const struct rbh_backend_plugin *self,
     if (rtrim(posix->root, '/') == 0)
         *posix->root = '/';
 
-    posix->iter_new = posix_iterator_new;
+    posix->iter_new = fts_iter_new;
     posix->statx_sync_type = AT_RBH_STATX_SYNC_AS_STAT;
     posix->backend = POSIX_BACKEND;
     posix->enrichers = NULL;
