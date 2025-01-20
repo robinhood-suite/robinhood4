@@ -34,7 +34,7 @@ foreach t: ['check_posix']
          suite: 'librobinhood')
 endforeach
 
-foreach t: ['check_retention']
+foreach t: ['check_retention', 'check_mfu']
     test(t,
          executable(t, t + '.c',
                     dependencies: [check ],
