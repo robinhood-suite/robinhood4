@@ -18,6 +18,7 @@
 
 #include "robinhood/backends/posix_internal.h"
 #include "robinhood/backends/iter_mpi_internal.h"
+#include "robinhood/mpi_rc.h"
 
 /*----------------------------------------------------------------------------*
  |                             mpi_iterator                                   |
@@ -346,14 +347,24 @@ mpi_branch_backend_filter(void *backend, const struct rbh_filter *filter,
      |                          destroy()                                 |
      *--------------------------------------------------------------------*/
 
-void
-rbh_mpi_plugin_destroy()
+static void
+mpi_finalize(void)
 {
-    int flag;
+    int initialized;
+    int finalized;
+
     /* Prevents finalizing twice MPI if we use two backends with MPI */
-    MPI_Finalized(&flag);
-    if (!flag) {
+    MPI_Initialized(&initialized);
+    MPI_Finalized(&finalized);
+
+    if (initialized && !finalized) {
         mfu_finalize();
         MPI_Finalize();
     }
+}
+
+void
+rbh_mpi_plugin_destroy()
+{
+    rbh_mpi_dec_ref(mpi_finalize);
 }
