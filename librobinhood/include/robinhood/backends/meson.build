@@ -106,6 +106,26 @@ if not build_mfu
     subdir_done()
 endif
 
+# Posix MPIFileUtils extension plugin
+
+librbh_mfu_conf = configuration_data()
+
+librbh_mfu_conf.set('RBH_MFU_PLUGIN_MAJOR', 1)
+librbh_mfu_conf.set('RBH_MFU_PLUGIN_MINOR', 0)
+librbh_mfu_conf.set('RBH_MFU_PLUGIN_RELEASE', 0)
+
+librbh_mfu_version = '@0@.@1@.@2@'.format(
+    librbh_mfu_conf.get('RBH_MFU_PLUGIN_MAJOR'),
+    librbh_mfu_conf.get('RBH_MFU_PLUGIN_MINOR'),
+    librbh_mfu_conf.get('RBH_MFU_PLUGIN_RELEASE')
+)
+
+librbh_mfu_h = configure_file(input: 'mfu.h.in',
+                                    output: 'mfu.h',
+                                    configuration: librbh_mfu_conf)
+
+install_headers(librbh_mfu_h, subdir: 'robinhood/backends')
+
 # Posix MPI backend
 
 librbh_posix_mpi_conf = configuration_data()

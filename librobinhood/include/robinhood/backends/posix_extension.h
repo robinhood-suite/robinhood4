@@ -26,7 +26,7 @@ typedef int (*enricher_t)(struct entry_info *einfo,
                           size_t pairs_count,
                           struct rbh_sstack *values);
 
-typedef int (*iter_new_t)(void);
+typedef struct rbh_mut_iterator *(*iter_new_t)(const char *, const char *, int);
 
 struct rbh_posix_extension {
     struct rbh_plugin_extension extension;
