@@ -15,6 +15,7 @@
 #include "robinhood/backends/lustre_mpi.h"
 #include "robinhood/backends/lustre_internal.h"
 #include "robinhood/backends/iter_mpi_internal.h"
+#include "robinhood/mpi_rc.h"
 
 static struct rbh_backend *
 lustre_mpi_backend_branch(void *backend, const struct rbh_id *id,
@@ -206,6 +207,18 @@ static const struct rbh_backend_operations LUSTRE_MPI_BACKEND_OPS = {
     .destroy = lustre_mpi_backend_destroy,
 };
 
+static void
+mpi_initialize(void)
+{
+    int initilized;
+
+    MPI_Initialized(&initilized);
+    if (!initilized) {
+        MPI_Init(NULL, NULL);
+        mfu_init();
+    }
+}
+
 struct rbh_backend *
 rbh_lustre_mpi_backend_new(const struct rbh_backend_plugin *self,
                            const char *type,
@@ -213,13 +226,8 @@ rbh_lustre_mpi_backend_new(const struct rbh_backend_plugin *self,
                            struct rbh_config *config)
 {
     struct posix_backend *lustre_mpi;
-    int flag;
 
-    MPI_Initialized(&flag);
-    if (!flag) {
-        MPI_Init(NULL, NULL);
-        mfu_init();
-    }
+    rbh_mpi_inc_ref(mpi_initialize);
 
     lustre_mpi = (struct posix_backend *)rbh_posix_backend_new(self, type, path,
                                                                config);

@@ -6,4 +6,12 @@ backends:
         enrichers:
             - retention
             - lustre
+    posix-mpi:
+        extends: posix
+        iterator: mfu
+    lustre-mpi:
+        extends: posix
+        iterator: mfu
+        enrichers:
+            - lustre
 ---

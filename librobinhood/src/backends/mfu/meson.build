@@ -7,11 +7,16 @@
 librbh_posix_mfu_ext = library(
     'rbh-posix-mfu-ext',
     sources: [
-        'plugin.c',
         'iterator.c',
+        'plugin.c',
+        'utils.c',
     ],
     version: librbh_mfu_version, # defined in include/robinhood/backends
-    link_with: librobinhood,
+    link_with: [ librobinhood, librbh_posix ],
+    dependencies: [
+        libmfu,
+        libmpi
+    ],
     include_directories: rbh_include,
     install: true,
     c_args: '-DHAVE_CONFIG_H',

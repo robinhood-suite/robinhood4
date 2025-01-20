@@ -65,31 +65,33 @@ bash = find_program('bash', disabler: true, required: false)
 
 if test_mfu
     backend_path_env.prepend('CK_FORK', 'no')
+    backend_path_env.prepend('RBH_CONFIG_PATH',
+        meson.current_source_dir() + '../../../utils/tests/test_config.yaml')
+    builddir = meson.current_build_dir()
+
     foreach t: ['check_lustre_mpi']
         executable(t, t + '.c',
             dependencies: [check, miniyaml],
-            link_with: [librobinhood, librbh_lustre_mpi],
+            link_with: [librobinhood, librbh_lustre_mpi, librbh_posix],
             include_directories: rbh_include,
             c_args: '-DHAVE_CONFIG_H')
-    endforeach
+        test(t, bash,
+             args: [files(t + '.sh'), builddir],
+             depends: [librbh_lustre_mpi],
+             env: backend_path_env,
+             suite: 'librobinhood')
 
-    builddir = meson.current_build_dir()
-    test('check_lustre_mpi', bash,
-         args: [files('check_lustre_mpi.sh'), builddir],
-         depends: [librbh_lustre_mpi],
-         env: backend_path_env,
-         suite: 'librobinhood')
+    endforeach
 
     foreach t: ['check_posix_mpi']
         executable(t, t + '.c',
             dependencies: [check, miniyaml],
-            link_with: [librobinhood, librbh_posix_mpi],
+            link_with: [librobinhood, librbh_posix_mpi, librbh_posix],
             include_directories: rbh_include)
+        test(t, bash,
+             args: [files(t + '.sh'), builddir],
+             depends: [librbh_posix_mpi],
+             env: backend_path_env,
+             suite: 'librobinhood')
     endforeach
-
-    test('check_posix_mpi', bash,
-         args: [files('check_posix_mpi.sh'), builddir],
-         depends: [librbh_posix_mpi],
-         env: backend_path_env,
-         suite: 'librobinhood')
 endif
