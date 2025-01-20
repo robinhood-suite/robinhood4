@@ -37,6 +37,8 @@ alias:
    a1: "-perm 001 -name file"
 EOF
 
+    # Do not use global default config
+    unset RBH_CONFIG_PATH
     command_output=$(rbh_find --dry-run "rbh:mongo:$testdb" --alias a1)
     pattern="\-perm 001 \-name file"
 

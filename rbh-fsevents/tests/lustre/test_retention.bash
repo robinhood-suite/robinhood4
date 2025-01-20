@@ -133,8 +133,6 @@ lfs setdirstripe -D -i 0 $tmpdir
 trap -- "rm -rf '$tmpdir'; stop_changelogs '$LUSTRE_MDT' '$userid'" EXIT
 cd "$tmpdir"
 
-export RBH_CONFIG_PATH="$test_dir/../../../utils/tests/test_config.yaml"
-
 sub_setup=lustre_setup
 sub_teardown=lustre_teardown
 run_tests "${tests[@]}"
