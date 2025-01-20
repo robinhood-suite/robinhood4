@@ -38,6 +38,8 @@ alias:
    a1: "--rsort"
 EOF
 
+    # Do not use global default config
+    unset RBH_CONFIG_PATH
     command_output=$(rbh_report --dry-run "rbh:mongo:$testdb" --output \
                     sum\(statx.size\) --alias a1)
     pattern="\--rsort"

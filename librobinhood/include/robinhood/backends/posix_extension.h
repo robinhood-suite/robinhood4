@@ -42,4 +42,12 @@ rbh_posix_load_extension(const struct rbh_plugin *plugin, const char *name)
         rbh_plugin_load_extension(plugin, name);
 }
 
+struct posix_iterator;
+
+int
+posix_iterator_setup(struct posix_iterator *iter,
+                     const char *root,
+                     const char *entry,
+                     int statx_sync_type);
+
 #endif
