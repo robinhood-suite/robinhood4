@@ -17,7 +17,7 @@ ld_library_path = ''
 
 # .. and also add paths for plugins required by tests that require one
 foreach backend: ['posix', 'lustre', 'lustre_mpi', 'posix_mpi', 'mongo',
-                  'mpi_file', '..', 'retention']
+                  'mpi_file', '..', 'retention', 'mfu']
     # FIXME env.prepend only work with meson > 0.58.0
     # meson gives this warning otherwise:
     # Overriding previous value of environment variable 'LD_LIBRARY_PATH' with a
@@ -41,6 +41,7 @@ if get_option('hestia').enabled()
 endif
 
 if build_mfu
+    subdir('mfu')
     subdir('posix_mpi')
     subdir('lustre_mpi')
     subdir('mpi_file')
