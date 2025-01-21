@@ -9,21 +9,6 @@ if get_option('lustre').disabled()
     subdir_done()
 endif
 
-# TODO remove once lustre is no longer a backend
-librbh_lustre = library(
-    'rbh-lustre',
-    sources: [
-        'lustre.c',
-        'plugin.c',
-    ],
-    version: librbh_lustre_version, # defined in include/robinhood/backends
-    link_with: [librobinhood, librbh_posix],
-    dependencies: [liblustre],
-    include_directories: rbh_include,
-    install: true,
-    c_args: '-DHAVE_CONFIG_H',
-)
-
 librbh_posix_lustre_ext = library(
     'rbh-posix-lustre-ext',
     sources: [

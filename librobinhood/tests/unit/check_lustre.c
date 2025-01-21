@@ -73,9 +73,12 @@ unchecked_teardown_tmpdir(void)
 START_TEST(lf_missing_root)
 {
     const struct rbh_filter_options OPTIONS = {};
+    const struct rbh_backend_plugin *posix;
     struct rbh_backend *lustre;
 
-    lustre = rbh_lustre_backend_new(NULL, NULL, "missing", NULL);
+    posix = rbh_backend_plugin_import("posix");
+    ck_assert_ptr_nonnull(posix);
+    lustre = rbh_backend_plugin_new(posix, "lustre", "missing", NULL);
     ck_assert_ptr_nonnull(lustre);
 
     errno = 0;
@@ -94,6 +97,7 @@ START_TEST(lf_empty_root)
             .fsentry_mask = RBH_FP_PARENT_ID,
         },
     };
+    const struct rbh_backend_plugin *posix;
     struct rbh_mut_iterator *fsentries;
     static const char *EMPTY = "empty";
     struct rbh_fsentry *fsentry;
@@ -101,7 +105,9 @@ START_TEST(lf_empty_root)
 
     ck_assert_int_eq(mkdir(EMPTY, S_IRWXU), 0);
 
-    lustre = rbh_lustre_backend_new(NULL, NULL, EMPTY, NULL);
+    posix = rbh_backend_plugin_import("posix");
+    ck_assert_ptr_nonnull(posix);
+    lustre = rbh_backend_plugin_new(posix, "lustre", EMPTY, NULL);
     ck_assert_ptr_nonnull(lustre);
 
     fsentries = rbh_backend_filter(lustre, NULL, &OPTIONS, &OUTPUT);

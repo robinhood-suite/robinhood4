@@ -53,7 +53,7 @@ foreach t: ['check_lustre']
     test(t,
          executable(t, t + '.c',
                     dependencies: [check, miniyaml],
-                    link_with: [librobinhood, librbh_lustre],
+                    link_with: [librobinhood, librbh_posix],
                     include_directories: rbh_include,
                     c_args: '-DHAVE_CONFIG_H'),
          env: backend_path_env,
@@ -72,12 +72,12 @@ if test_mfu
     foreach t: ['check_lustre_mpi']
         executable(t, t + '.c',
             dependencies: [check, miniyaml],
-            link_with: [librobinhood, librbh_lustre_mpi, librbh_posix],
+            link_with: [librobinhood, librbh_posix],
             include_directories: rbh_include,
             c_args: '-DHAVE_CONFIG_H')
         test(t, bash,
              args: [files(t + '.sh'), builddir],
-             depends: [librbh_lustre_mpi],
+             depends: [librbh_posix],
              env: backend_path_env,
              suite: 'librobinhood')
 
@@ -86,11 +86,11 @@ if test_mfu
     foreach t: ['check_posix_mpi']
         executable(t, t + '.c',
             dependencies: [check, miniyaml],
-            link_with: [librobinhood, librbh_posix_mpi, librbh_posix],
+            link_with: [librobinhood, librbh_posix],
             include_directories: rbh_include)
         test(t, bash,
              args: [files(t + '.sh'), builddir],
-             depends: [librbh_posix_mpi],
+             depends: [librbh_posix],
              env: backend_path_env,
              suite: 'librobinhood')
     endforeach
