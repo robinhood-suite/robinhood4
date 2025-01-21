@@ -20,6 +20,8 @@
 #include <unistd.h>
 #include <error.h>
 
+#include <robinhood/utils.h>
+
 #include <sys/stat.h>
 #include <sys/xattr.h>
 
@@ -796,6 +798,7 @@ posix_backend_filter(
         /* Doesn't set the root's name to '\0' to keep the real root's name */
         return &posix_iter->iterator;
 
+    /* FIXME move to iter_new? */
     if (rbh_posix_iter_is_fts(posix_iter) &&
         fts_iter_root_setup(posix_iter) == -1)
         /* This should never happen */
@@ -1035,6 +1038,7 @@ posix_backend_branch(void *backend, const struct rbh_id *id, const char *path)
     else
         branch->id.size = 0;
 
+    branch->posix.backend = POSIX_BRANCH_BACKEND;
     branch->posix.iter_new = posix->iter_new;
     errno = 0;
     branch->posix.enrichers = dup_enrichers(posix->enrichers);
@@ -1044,7 +1048,6 @@ posix_backend_branch(void *backend, const struct rbh_id *id, const char *path)
     }
 
     branch->posix.statx_sync_type = posix->statx_sync_type;
-    branch->posix.backend = POSIX_BRANCH_BACKEND;
 
     return &branch->posix.backend;
 
@@ -1273,10 +1276,11 @@ rbh_posix_backend_new(const struct rbh_backend_plugin *self,
     if (rtrim(posix->root, '/') == 0)
         *posix->root = '/';
 
-    posix->iter_new = fts_iter_new;
     posix->statx_sync_type = AT_RBH_STATX_SYNC_AS_STAT;
     posix->backend = POSIX_BACKEND;
     posix->enrichers = NULL;
+    /* Default to FTS iterator */
+    posix->iter_new = fts_iter_new;
 
     load_rbh_config(config);
 

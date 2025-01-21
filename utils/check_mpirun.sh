@@ -6,6 +6,8 @@
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
 
+source /etc/profile.d/modules.sh
+
 if ! type -t module ; then
     echo "'module' not found"
     exit 1
