@@ -52,7 +52,7 @@ test_valid_config()
 
     rbh_sync --conf $conf_file --one rbh:posix:$file rbh:mongo:$testdb
 
-    find_attribute '"ns.xattrs.path":"/"'
+    find_attribute '"ns.xattrs.path":"/'$file'"'
 }
 
 ################################################################################
