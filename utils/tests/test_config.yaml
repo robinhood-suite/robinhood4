@@ -14,4 +14,8 @@ backends:
         iterator: mfu
         enrichers:
             - lustre
+    retention:
+        extends: posix
+        enrichers:
+            - retention
 ---

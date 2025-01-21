@@ -9,8 +9,6 @@
 # include "config.h"
 #endif
 
-#include <stdlib.h>
-
 #include "robinhood/backends/posix.h"
 #include "robinhood/plugins/backend.h"
 #include "robinhood/plugin.h"

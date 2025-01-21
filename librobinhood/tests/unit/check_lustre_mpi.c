@@ -80,8 +80,7 @@ START_TEST(lf_missing_root)
     posix = rbh_backend_plugin_import("posix");
     ck_assert_ptr_nonnull(posix);
 
-    lustre_mpi = rbh_posix_backend_new(posix, "lustre-mpi", "missing",
-                                            NULL);
+    lustre_mpi = rbh_backend_plugin_new(posix, "lustre-mpi", "missing", NULL);
     ck_assert_ptr_nonnull(lustre_mpi);
 
     errno = 0;
@@ -111,7 +110,7 @@ START_TEST(lf_empty_root)
     posix = rbh_backend_plugin_import("posix");
     ck_assert_ptr_nonnull(posix);
 
-    lustre_mpi = rbh_posix_backend_new(posix, "lustre-mpi", EMPTY, NULL);
+    lustre_mpi = rbh_backend_plugin_new(posix, "lustre-mpi", EMPTY, NULL);
     ck_assert_ptr_nonnull(lustre_mpi);
 
     fsentries = rbh_backend_filter(lustre_mpi, NULL, &OPTIONS, &OUTPUT);
@@ -170,7 +169,7 @@ main(void)
     srunner_run_all(runner, CK_NORMAL);
     number_failed = srunner_ntests_failed(runner);
     srunner_free(runner);
-    rbh_backend_plugin_destroy("lustre-mpi");
+    rbh_backend_plugin_destroy("posix");
 
     return (number_failed == 0) ? EXIT_SUCCESS : EXIT_FAILURE;
 }

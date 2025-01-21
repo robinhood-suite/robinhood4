@@ -240,6 +240,7 @@ rbh_backend_list()
     rbh_list_init(head);
 
     if (check_ld_library_path(LIB_RBH_PREFIX, head) && !rbh_list_empty(head)) {
+        // FIXME We don't go through library_dirs if LD_LIBRARY_PATH is set
         print_backend_list(head);
         free(head);
         return 0;

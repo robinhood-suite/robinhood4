@@ -5,7 +5,6 @@
  * SPDX-License-Identifer: LGPL-3.0-or-later
  */
 
-#include "plugin.h"
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif
@@ -16,6 +15,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "robinhood/plugin.h"
 #include "robinhood/plugins/backend.h"
 
 static char *
@@ -65,7 +65,7 @@ const struct rbh_backend_plugin *
 rbh_backend_plugin_import(const char *name)
 {
     const struct rbh_backend_plugin *plugin;
-    int save_errno = errno;
+    int save_errno;
     char *symbol;
 
     symbol = rbh_backend_plugin_symbol(name);
@@ -73,6 +73,7 @@ rbh_backend_plugin_import(const char *name)
         return NULL;
 
     plugin = rbh_plugin_import(name, symbol);
+    save_errno = errno;
     free(symbol);
     errno = save_errno;
 
