@@ -857,7 +857,9 @@ posix_backend_set_option(void *backend, unsigned int option, const void *data,
 struct rbh_fsentry *
 posix_root(void *backend, const struct rbh_filter_projection *projection)
 {
-    const struct rbh_filter_options options = { 0 };
+    const struct rbh_filter_options options = {
+        .one = true,
+    };
     const struct rbh_filter_output output = {
         .projection = *projection,
     };
@@ -907,6 +909,8 @@ posix_backend_filter(
     struct posix_backend *posix = backend;
     struct posix_iterator *posix_iter;
     struct rbh_fsentry *fsentry;
+    char full_path[PATH_MAX];
+    char root[PATH_MAX];
     int save_errno;
 
     /* TODO: make use of `fsentries_mask' and `statx_mask' */
@@ -921,21 +925,43 @@ posix_backend_filter(
         return NULL;
     }
 
+    if (options->one) {
+        if (posix->root[0] == '/') {
+            if (snprintf(root, 2, "/") == -1)
+                error(EXIT_FAILURE, errno, "snprintf with '%s' and '/'", root);
+
+            if (snprintf(full_path, PATH_MAX, "%s", posix->root) == -1)
+                error(EXIT_FAILURE, errno, "snprintf with '%s' and '%s'",
+                      full_path, posix->root);
+        } else {
+            if (getcwd(root, sizeof(root)) == NULL)
+                error(EXIT_FAILURE, errno, "getcwd");
+
+            if (snprintf(full_path, PATH_MAX, "%s/%s", root, posix->root) == -1)
+                error(EXIT_FAILURE, errno, "snprintf with '%s', '%s' and '%s'",
+                      full_path, root, posix->root);
+        }
+    }
+
     posix_iter = (struct posix_iterator *)
-                  posix->iter_new(posix->root, NULL, posix->statx_sync_type);
+                  posix->iter_new(options->one ? root : posix->root,
+                                  options->one ? full_path + strlen(root) : NULL,
+                                  posix->statx_sync_type);
     if (posix_iter == NULL)
         return NULL;
     posix_iter->skip_error = options->skip_error;
 
-    fsentry = rbh_mut_iter_next(&posix_iter->iterator);
-    if (fsentry == NULL)
-        goto out_destroy_iter;
-    free(fsentry);
+    if (!options->one) {
+        fsentry = rbh_mut_iter_next(&posix_iter->iterator);
+        if (fsentry == NULL)
+            goto out_destroy_iter;
+        free(fsentry);
 
-    set_root_properties(posix_iter->ftsent);
-    if (fts_set(posix_iter->fts_handle, posix_iter->ftsent, FTS_AGAIN))
-        /* This should never happen */
-        goto out_destroy_iter;
+        set_root_properties(posix_iter->ftsent);
+        if (fts_set(posix_iter->fts_handle, posix_iter->ftsent, FTS_AGAIN))
+            /* This should never happen */
+            goto out_destroy_iter;
+    }
 
     return &posix_iter->iterator;
 

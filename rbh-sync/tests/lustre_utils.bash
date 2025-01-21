@@ -201,15 +201,13 @@ get_flags()
 
 verify_lustre()
 {
-    # Check if we want to verify an entry synced with the option -o with
-    # rbh-sync. In this case, rbh set his name to "" and his path to "/"
     if [[ "$1" == "-o" ]]; then
         local entry="$2"
-        local name=""
     else
         local entry="$1"
-        local name="$(basename "$entry")"
     fi
+
+    local name="$(basename "$entry")"
 
     if [ -L $entry ] || [ -b $entry ] || [ -c $entry ] || [ -p $entry ]; then
         return 0
@@ -225,7 +223,7 @@ verify_lustre()
 
     find_attribute '"ns.name":"'$name'"'
     if [[ "$1" == "-o" ]]; then
-        find_attribute '"ns.xattrs.path":"/"'
+        find_attribute '"ns.xattrs.path":"/'$entry'"'
     else
         find_attribute '"ns.xattrs.path":"'$(mountless_path "$entry")'"'
     fi
@@ -319,25 +317,25 @@ statx()
 
 verify_statx()
 {
-    # Check if we want to verify an entry synced with the option -o with
-    # rbh-sync. In this case, rbh set his name to "" and his path to "/"
     if [[ "$1" == "-o" ]]; then
         local entry="$2"
-        local name=""
     else
         local entry="$1"
-        local name="$(basename "$entry")"
     fi
+
+    local name="$(basename "$entry")"
+
     local raw_mode="$(statx +%f "$entry" 16)"
     local type=$((raw_mode & 00170000))
     local mode=$((raw_mode & ~00170000))
 
     find_attribute '"ns.name":"'$name'"'
     if [[ "$1" == "-o" ]]; then
-        find_attribute '"ns.xattrs.path":"/"'
+        find_attribute '"ns.xattrs.path":"/'$entry'"'
     else
         find_attribute '"ns.xattrs.path":"'$(mountless_path "$entry")'"'
     fi
+
     find_attribute '"statx.atime.sec":NumberLong("'$(statx +%X "$entry")'")' \
                    '"ns.name":"'$name'"'
     find_attribute '"statx.atime.nsec":0' '"ns.name":"'$name'"'

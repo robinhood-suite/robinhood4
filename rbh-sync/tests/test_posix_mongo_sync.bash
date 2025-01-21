@@ -108,6 +108,39 @@ test_sync_one_one_file()
     find_attribute '"statx.size" : '$length
 }
 
+check_mode_and_type()
+{
+    local entry="$1"
+
+    local raw_mode="$(statx -c="+%f" "$entry")"
+    raw_mode=${raw_mode:2}
+    raw_mode=$(echo "ibase=16; ${raw_mode^^}" | bc)
+    local type=$((raw_mode & 00170000))
+    local mode=$((raw_mode & ~00170000))
+
+    find_attribute '"statx.type":'$type
+    find_attribute '"statx.mode":'$mode
+}
+
+test_sync_one()
+{
+    mkdir "dir"
+    touch "dir/file"
+    ln -s "dir/file" "file_link"
+
+    rbh_sync_posix_one "file_link" "rbh:mongo:$testdb"
+    check_mode_and_type "file_link"
+    rbh_sync_posix_one "dir" "rbh:mongo:$testdb"
+    rbh_sync_posix_one "dir/file" "rbh:mongo:$testdb"
+
+    find_attribute '"ns.name":"file_link"'
+    find_attribute '"ns.xattrs.path":"/file_link"'
+    find_attribute '"ns.name":"dir"'
+    find_attribute '"ns.xattrs.path":"/dir"'
+    find_attribute '"ns.name":"file"'
+    find_attribute '"ns.xattrs.path":"/dir/file"'
+}
+
 test_sync_one_two_files()
 {
     truncate -s 1k "fileA"
@@ -125,20 +158,6 @@ test_sync_one_two_files()
         error "Invalid number of files were synced, expected '2', " \
               "found '$entries'."
     fi
-}
-
-check_mode_and_type()
-{
-    local entry="$1"
-
-    local raw_mode="$(statx -c="+%f" "$entry")"
-    raw_mode=${raw_mode:2}
-    raw_mode=$(echo "ibase=16; ${raw_mode^^}" | bc)
-    local type=$((raw_mode & 00170000))
-    local mode=$((raw_mode & ~00170000))
-
-    find_attribute '"statx.type":'$type
-    find_attribute '"statx.mode":'$mode
 }
 
 test_sync_symbolic_link()
@@ -319,7 +338,7 @@ test_stop_sync_on_error()
         # We need to give execute permissions to the user for mpirun to run
         chmod o+x ..
         local output=$(sudo -H -u test bash -c \
-                        "source /etc/profile.d/modules.sh; \
+                       "source /etc/profile.d/modules.sh; \
                         module load mpi/openmpi-x86_64; \
                         LD_LIBRARY_PATH=$LD_LIBRARY_PATH \
                             mpirun -np 4 $__rbh_sync --no-skip rbh:posix-mpi:. \
@@ -358,7 +377,7 @@ test_config()
 
     rbh_sync --conf $conf_file --one rbh:posix:$file rbh:mongo:$testdb
 
-    find_attribute '"ns.xattrs.path":"/"'
+    find_attribute '"ns.xattrs.path":"/'$file'"'
 
     echo "---
  RBH_MONGODB_ADDRESS: \"mongodb://localhost:12345\"
@@ -395,17 +414,17 @@ xattrs_map:
     rbh_sync --conf $conf_file --one rbh:posix:$file rbh:mongo:$testdb
 
     mongo $testdb --eval "db.entries.find()"
-    find_attribute '"ns.xattrs.path":"/"' \
+    find_attribute '"ns.xattrs.path":"/'$file'"' \
                    '"xattrs.user.blob_int32" : 1'
-    find_attribute '"ns.xattrs.path":"/"' \
+    find_attribute '"ns.xattrs.path":"/'$file'"' \
                    '"xattrs.user.blob_int64" : 2'
-    find_attribute '"ns.xattrs.path":"/"' \
+    find_attribute '"ns.xattrs.path":"/'$file'"' \
                    '"xattrs.user.blob_uint32" : 3'
-    find_attribute '"ns.xattrs.path":"/"' \
+    find_attribute '"ns.xattrs.path":"/'$file'"' \
                    '"xattrs.user.blob_uint64" : 4'
-    find_attribute '"ns.xattrs.path":"/"' \
+    find_attribute '"ns.xattrs.path":"/'$file'"' \
                    '"xattrs.user.blob_string" : "five"'
-    find_attribute '"ns.xattrs.path":"/"' \
+    find_attribute '"ns.xattrs.path":"/'$file'"' \
                    '"xattrs.user.blob_boolean" : true'
 }
 
@@ -415,7 +434,7 @@ xattrs_map:
 
 declare -a tests=(test_sync_2_files test_sync_size test_sync_3_files
                   test_sync_xattrs test_sync_subdir test_sync_large_tree
-                  test_sync_one_one_file test_sync_one_two_files
+                  test_sync_one_one_file test_sync_one test_sync_one_two_files
                   test_sync_symbolic_link test_sync_socket test_sync_fifo
                   test_sync_branch test_continue_sync_on_error
                   test_stop_sync_on_error test_config)

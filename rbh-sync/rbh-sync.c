@@ -389,6 +389,7 @@ sync(const struct rbh_filter_projection *projection)
 {
     const struct rbh_filter_options OPTIONS = {
         .skip_error = skip_error,
+        .one = one,
     };
     const struct rbh_filter_output OUTPUT = {
         .type = RBH_FOT_PROJECTION,

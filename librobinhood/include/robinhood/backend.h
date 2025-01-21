@@ -150,6 +150,8 @@ struct rbh_filter_options {
     size_t limit;
     /** Allow to skip error while generating fsevents */
     bool skip_error;
+    /** Boolean to indicate it's a sync one */
+    bool one;
     /** A sequence of sorting options */
     struct {
         const struct rbh_filter_sort *items;
