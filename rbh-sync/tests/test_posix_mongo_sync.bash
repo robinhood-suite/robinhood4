@@ -269,6 +269,7 @@ test_continue_sync_on_error()
                 "source /etc/profile.d/modules.sh; \
                  module load mpi/openmpi-x86_64; \
                  LD_LIBRARY_PATH=$LD_LIBRARY_PATH \
+                 RBH_CONFIG_PATH=$RBH_CONFIG_PATH \
                     mpirun $__rbh_sync rbh:posix-mpi:. \
                         rbh:mongo:$testdb" 2>&1)"
     else
@@ -341,6 +342,7 @@ test_stop_sync_on_error()
                        "source /etc/profile.d/modules.sh; \
                         module load mpi/openmpi-x86_64; \
                         LD_LIBRARY_PATH=$LD_LIBRARY_PATH \
+                        RBH_CONFIG_PATH=$RBH_CONFIG_PATH \
                             mpirun $__rbh_sync --no-skip rbh:posix-mpi:. \
                                 rbh:mongo:$testdb" 2>&1)
     else

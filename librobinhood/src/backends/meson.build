@@ -42,7 +42,5 @@ endif
 
 if build_mfu
     subdir('mfu')
-    subdir('posix_mpi')
-    subdir('lustre_mpi')
     subdir('mpi_file')
 endif

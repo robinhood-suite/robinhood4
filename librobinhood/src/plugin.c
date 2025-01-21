@@ -15,6 +15,7 @@
 #include <stdlib.h>
 
 #include "robinhood/plugin.h"
+#include "robinhood/utils.h"
 
 static char *
 rbh_plugin_library(const char *name)
@@ -40,12 +41,19 @@ rbh_plugin_import(const char *name, const char *symbol)
         return NULL;
 
     dlhandle = dlopen(libname, RTLD_NOW | RTLD_NODELETE | RTLD_LOCAL);
-    free(libname);
-    if (dlhandle == NULL)
+    if (dlhandle == NULL) {
+        rbh_backend_error_printf("failed to load library '%s': %s",
+                                 libname, dlerror());
+        free(libname);
         return NULL;
+    }
 
-    dlerror();
     sym = dlsym(dlhandle, symbol);
+    if (!sym)
+        rbh_backend_error_printf("could not retrive symbol '%s' from '%s': %s",
+                                 symbol, libname, dlerror());
+
+    free(libname);
     dlclose(dlhandle);
 
     return sym;
