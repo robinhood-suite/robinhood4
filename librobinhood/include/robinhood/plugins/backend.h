@@ -164,8 +164,12 @@ rbh_backend_plugin_destroy(const char *name)
     const struct rbh_backend_plugin *plugin;
 
     plugin = rbh_backend_plugin_import(name);
-    if (plugin == NULL)
+    if (plugin == NULL) {
+        if (errno == RBH_BACKEND_ERROR)
+            error(EXIT_FAILURE, 0, "%s", rbh_backend_error);
+
         error(EXIT_FAILURE, errno, "failed to load robinhood plugin %s", name);
+    }
 
     if (plugin->ops->destroy)
         plugin->ops->destroy();
