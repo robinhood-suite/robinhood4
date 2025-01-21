@@ -22,6 +22,29 @@
       },
       "revId": "05a3ac39ac01a50e4be07dac5daac00bc45d76dc",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "61125e3f_7e27a07c",
+        "filename": "utils/tests/framework.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2025-01-21T09:24:44Z",
+      "side": 1,
+      "message": "question: why setting this value enforces the behaviour of the date or sort commands ?",
+      "range": {
+        "startLine": 19,
+        "startChar": 7,
+        "endLine": 19,
+        "endChar": 15
+      },
+      "revId": "05a3ac39ac01a50e4be07dac5daac00bc45d76dc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
