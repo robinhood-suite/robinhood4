@@ -45,6 +45,30 @@
       },
       "revId": "05a3ac39ac01a50e4be07dac5daac00bc45d76dc",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6b4ce82d_7e235bb6",
+        "filename": "utils/tests/framework.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-01-21T09:38:39Z",
+      "side": 1,
+      "message": "You can look at `man 7 locale`. But the short answer is that `LC_*` environment variables determine which locale should be used in certain cases. `LC_ALL` overrides all the specific variables. And the C locale is a default local that is always available on POSIX systems.",
+      "parentUuid": "61125e3f_7e27a07c",
+      "range": {
+        "startLine": 19,
+        "startChar": 7,
+        "endLine": 19,
+        "endChar": 15
+      },
+      "revId": "05a3ac39ac01a50e4be07dac5daac00bc45d76dc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
