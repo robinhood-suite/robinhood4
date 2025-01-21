@@ -22,6 +22,30 @@
       },
       "revId": "d865232c336cf9eb1c7e2fcecc49ffc09e3d5d11",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3eb28b6b_be32fda0",
+        "filename": "librobinhood/tests/unit/check_lustre_mpi.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-01-21T09:31:26Z",
+      "side": 1,
+      "message": "This file contains the definition of the module function. This file is sourced automatically when you open an interactive session (e.g. by running `bash` or `ssh host`). But is not sourced when running single commands (e.g. `bash -c \"ls\"` or `ssh host echo test`). If not source, `module` is not defined, so we can load the MPI module which means that `mpirun` is not found... By sourcing it manually, we avoid this issue. The thing that I did not investigate was why does this work on our regular test VMs but not on my VM which is also an ocean based VM.",
+      "parentUuid": "7a2736b3_6b7cfac6",
+      "range": {
+        "startLine": 3,
+        "startChar": 0,
+        "endLine": 3,
+        "endChar": 32
+      },
+      "revId": "d865232c336cf9eb1c7e2fcecc49ffc09e3d5d11",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
