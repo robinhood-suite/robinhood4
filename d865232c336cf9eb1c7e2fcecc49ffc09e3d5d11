@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7a2736b3_6b7cfac6",
+        "filename": "librobinhood/tests/unit/check_lustre_mpi.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-01-21T09:26:08Z",
+      "side": 1,
+      "message": "question: why do you source this? does it have the MPI default number of tasks?",
+      "range": {
+        "startLine": 3,
+        "startChar": 0,
+        "endLine": 3,
+        "endChar": 32
+      },
+      "revId": "d865232c336cf9eb1c7e2fcecc49ffc09e3d5d11",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
