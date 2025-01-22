@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "74988c57_092910ea",
+        "filename": "doc/template_conf.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-01-22T15:02:07Z",
+      "side": 1,
+      "message": "minor: I think it is better to have them as examples in the comment instead of here, in case the template is setup without modification",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 24,
+        "endChar": 30
+      },
+      "revId": "176d39809b48fee64238c13a70ecb1a5eee1e70c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
