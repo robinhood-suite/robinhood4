@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "22199f32_4932200c",
+        "filename": "rbh-find/tests/test_printf.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-01-22T08:12:38Z",
+      "side": 1,
+      "message": "question: why do add this echo ?",
+      "range": {
+        "startLine": 37,
+        "startChar": 3,
+        "endLine": 37,
+        "endChar": 11
+      },
+      "revId": "ec8e164a292fe545966259e5ffabfd869c36be32",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
