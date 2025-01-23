@@ -1,0 +1,228 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "052db1f1_337c14d8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-01-23T08:24:16Z",
+      "side": 1,
+      "message": "typo: extensions (also appear below and in the ADR)",
+      "range": {
+        "startLine": 11,
+        "startChar": 60,
+        "endLine": 11,
+        "endChar": 70
+      },
+      "revId": "c0f85860f9990696792e288429e01203886973e5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fe3ba78b_3e02f23e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-01-23T08:24:16Z",
+      "side": 1,
+      "message": "Great job!",
+      "revId": "c0f85860f9990696792e288429e01203886973e5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3bab27ff_0d939b69",
+        "filename": "librobinhood/doc/enrichers_and_iterators.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-01-23T08:24:16Z",
+      "side": 1,
+      "message": "comment: well, that\u0027s right for POSIX-like backends, but how do you manage the mongo one? will you consider two kinds of backends, some that are implemented as full backends and some that are a combination of iterator/enricher(/extensionS)?",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 6
+      },
+      "revId": "c0f85860f9990696792e288429e01203886973e5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3167c0c3_a5792ffb",
+        "filename": "librobinhood/doc/enrichers_and_iterators.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-01-23T08:24:16Z",
+      "side": 1,
+      "message": "comment: maybe you can add this in the example",
+      "range": {
+        "startLine": 54,
+        "startChar": 23,
+        "endLine": 54,
+        "endChar": 62
+      },
+      "revId": "c0f85860f9990696792e288429e01203886973e5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b1cb4b32_ccbae17b",
+        "filename": "librobinhood/doc/enrichers_and_iterators.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-01-23T08:24:16Z",
+      "side": 1,
+      "message": "question: can you explain that? did you mean liborobinhood backend?",
+      "range": {
+        "startLine": 56,
+        "startChar": 26,
+        "endLine": 56,
+        "endChar": 65
+      },
+      "revId": "c0f85860f9990696792e288429e01203886973e5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "248371f6_d5a8ba29",
+        "filename": "librobinhood/doc/enrichers_and_iterators.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-01-23T08:24:16Z",
+      "side": 1,
+      "message": "question: I\u0027m not familiar with this kind of expression, is it valid? if so, what does it mean?",
+      "range": {
+        "startLine": 65,
+        "startChar": 3,
+        "endLine": 65,
+        "endChar": 64
+      },
+      "revId": "c0f85860f9990696792e288429e01203886973e5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5e28c9a0_1bc43e77",
+        "filename": "librobinhood/doc/enrichers_and_iterators.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-01-23T08:24:16Z",
+      "side": 1,
+      "message": "typo: extensions",
+      "range": {
+        "startLine": 83,
+        "startChar": 6,
+        "endLine": 83,
+        "endChar": 15
+      },
+      "revId": "c0f85860f9990696792e288429e01203886973e5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7316faf9_c45deaf6",
+        "filename": "librobinhood/doc/enrichers_and_iterators.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-01-23T08:24:16Z",
+      "side": 1,
+      "message": "suggest: as posix is an enricher, maybe I would prefer something like that:\n\n```yaml\n    lustre:\n        iterator: fts\n        enricher: posix\n        extensions:\n            - lustre\n            - retention\n```",
+      "range": {
+        "startLine": 91,
+        "startChar": 11,
+        "endLine": 95,
+        "endChar": 26
+      },
+      "revId": "c0f85860f9990696792e288429e01203886973e5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e6ebf7ad_003a3663",
+        "filename": "librobinhood/doc/enrichers_and_iterators.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-01-23T08:24:16Z",
+      "side": 1,
+      "message": "question: as extensions are backend specific, is it mandatory to indicate the base enricher?",
+      "range": {
+        "startLine": 100,
+        "startChar": 11,
+        "endLine": 100,
+        "endChar": 18
+      },
+      "revId": "c0f85860f9990696792e288429e01203886973e5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2be6cf0c_4f859a38",
+        "filename": "librobinhood/doc/enrichers_and_iterators.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-01-23T08:24:16Z",
+      "side": 1,
+      "message": "question: I do not know if this is relevant, or just not considered, but why not separate the FTS iterator and the POSIX enricher from the POSIX backend? and maybe load a FTS iterator as a default one?\n\nThen we may propose some default backends like POSIX as a POSIX enricher and a FTS iterator.",
+      "range": {
+        "startLine": 117,
+        "startChar": 40,
+        "endLine": 119,
+        "endChar": 33
+      },
+      "revId": "c0f85860f9990696792e288429e01203886973e5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
