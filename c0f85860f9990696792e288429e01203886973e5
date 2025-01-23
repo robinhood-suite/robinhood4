@@ -66,6 +66,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "255d3360_436d0c37",
+        "filename": "librobinhood/doc/enrichers_and_iterators.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-01-23T08:58:45Z",
+      "side": 1,
+      "message": "Extensions are specific to a backend. I can write an extension for any backend if I want. But ultimately, it is up to the backend to decide if they want to load extensions or not. Right now, I don\u0027t see a use case for having extensions to the mongo backend. So we won\u0027t have any. I think extensions will only ever be used by POSIX. I don\u0027t see other use cases at the moment. But their isn\u0027t much difference in having generic extensions vs POSIX specific extensions code wise. So I went with the generic approach.\n\nThe way I see it is that an extension cannot be loaded by any backend. Just the one it extends. Which is why the name of the \"base\" backend is embedded in the symbol exported by the extension. So the notion of iterator and enricher are specific to POSIX because they will only be used by extensions of the POSIX backend.\n\nIn short, mongo won\u0027t change, only POSIX (and its derivatives).",
+      "parentUuid": "3bab27ff_0d939b69",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 6
+      },
+      "revId": "c0f85860f9990696792e288429e01203886973e5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3167c0c3_a5792ffb",
         "filename": "librobinhood/doc/enrichers_and_iterators.rst",
         "patchSetId": 1
@@ -77,6 +101,30 @@
       "writtenOn": "2025-01-23T08:24:16Z",
       "side": 1,
       "message": "comment: maybe you can add this in the example",
+      "range": {
+        "startLine": 54,
+        "startChar": 23,
+        "endLine": 54,
+        "endChar": 62
+      },
+      "revId": "c0f85860f9990696792e288429e01203886973e5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fe2c5bc8_f6b1796e",
+        "filename": "librobinhood/doc/enrichers_and_iterators.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-01-23T08:58:45Z",
+      "side": 1,
+      "message": "This is the example below. The behavior is copied from the current behavior of backends. I just used a different symbol to specify that this is an extension, not a full backend.",
+      "parentUuid": "3167c0c3_a5792ffb",
       "range": {
         "startLine": 54,
         "startChar": 23,
@@ -112,6 +160,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5d006c33_255b0184",
+        "filename": "librobinhood/doc/enrichers_and_iterators.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-01-23T08:58:45Z",
+      "side": 1,
+      "message": "No, I mean that functions in librobinhood that deal with the content of an extension will not know its type. For instance, the function that loads an extension will have this signature:\n\n```\nvoid *\nrbh_plugin_load_extension(...);\n```\n\nWhere as the function that loads a backend is like this:\n```\nstruct rbh_backend *\nrbh_backed_plugin_import(...);\n```\n\nlibrobinhood knows that a backend contains the definition of a struct rbh_backend. For extensions, librobinhood doesn\u0027t know the type returned by `rbh_backend_load_extension` since the type is backend specific.",
+      "parentUuid": "b1cb4b32_ccbae17b",
+      "range": {
+        "startLine": 56,
+        "startChar": 26,
+        "endLine": 56,
+        "endChar": 65
+      },
+      "revId": "c0f85860f9990696792e288429e01203886973e5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "248371f6_d5a8ba29",
         "filename": "librobinhood/doc/enrichers_and_iterators.rst",
         "patchSetId": 1
@@ -123,6 +195,30 @@
       "writtenOn": "2025-01-23T08:24:16Z",
       "side": 1,
       "message": "question: I\u0027m not familiar with this kind of expression, is it valid? if so, what does it mean?",
+      "range": {
+        "startLine": 65,
+        "startChar": 3,
+        "endLine": 65,
+        "endChar": 64
+      },
+      "revId": "c0f85860f9990696792e288429e01203886973e5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "462cab77_1d1aa1e7",
+        "filename": "librobinhood/doc/enrichers_and_iterators.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-01-23T08:58:45Z",
+      "side": 1,
+      "message": "It expands to the symbol `_RBH_POSIX_LUSTRE_PLUGIN_EXTENSION`. This is copied from the implementation of backends.",
+      "parentUuid": "248371f6_d5a8ba29",
       "range": {
         "startLine": 65,
         "startChar": 3,
@@ -181,6 +277,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4dc7289f_9130684c",
+        "filename": "librobinhood/doc/enrichers_and_iterators.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-01-23T08:58:45Z",
+      "side": 1,
+      "message": "The extends keyword means \"when I say `lustre`, load `posix`\". This has nothing to do with the behavior of the POSIX backend. If someday we find a use case for extensions to the mongo backend for instance, we would write:\n\n```\nmybackend:\n    extends: mongo\n    someparam: somevalue\n```\n\n`someparam` and `somevalue` would be something that only the mongo backend would understand. And it may not use the `iterator` or `enrichers` keys that the POSIX backend use.",
+      "parentUuid": "7316faf9_c45deaf6",
+      "range": {
+        "startLine": 91,
+        "startChar": 11,
+        "endLine": 95,
+        "endChar": 26
+      },
+      "revId": "c0f85860f9990696792e288429e01203886973e5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e6ebf7ad_003a3663",
         "filename": "librobinhood/doc/enrichers_and_iterators.rst",
         "patchSetId": 1
@@ -204,6 +324,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2fef57bb_86ba3019",
+        "filename": "librobinhood/doc/enrichers_and_iterators.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-01-23T08:58:45Z",
+      "side": 1,
+      "message": "Yes, otherwise you don\u0027t know which backend to load when you see a URI like this: `rbh:lustre-mpi:/mnt/lustre`. Also, the notion of enricher is (at least for now) specific to POSIX in this document. If one day we have a use case for mongo extensions, it may not use the notion of enricher at all. So posix here does not mean enricher. It means backend. I could have made some more \"extreme\" (but utimately pointless) where the posix enrichement is itself an extension to the posix backend. So we would have something like this:\n\n```\nbackends:\n    mybackend:\n        extends: posix\n        enrichers:\n            - posix\n            - retention\n    myweirdbackend:\n        extends: posix\n        enrichers:\n            - retention \u003c- retention only, no statx, xattrs...\n```\n\nIn this example, extends means \"load posix\". But the posix in the enrichers section tells the posix backend that it should load the posix extension.",
+      "parentUuid": "e6ebf7ad_003a3663",
+      "range": {
+        "startLine": 100,
+        "startChar": 11,
+        "endLine": 100,
+        "endChar": 18
+      },
+      "revId": "c0f85860f9990696792e288429e01203886973e5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2be6cf0c_4f859a38",
         "filename": "librobinhood/doc/enrichers_and_iterators.rst",
         "patchSetId": 1
@@ -215,6 +359,30 @@
       "writtenOn": "2025-01-23T08:24:16Z",
       "side": 1,
       "message": "question: I do not know if this is relevant, or just not considered, but why not separate the FTS iterator and the POSIX enricher from the POSIX backend? and maybe load a FTS iterator as a default one?\n\nThen we may propose some default backends like POSIX as a POSIX enricher and a FTS iterator.",
+      "range": {
+        "startLine": 117,
+        "startChar": 40,
+        "endLine": 119,
+        "endChar": 33
+      },
+      "revId": "c0f85860f9990696792e288429e01203886973e5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aeae606f_9f99869f",
+        "filename": "librobinhood/doc/enrichers_and_iterators.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-01-23T08:58:45Z",
+      "side": 1,
+      "message": "The reason I did not do it is because I don\u0027t see a reason to make it dynamically loadable. If we want to make it the default anyway, we might as well keep it in the backend. And if we want to change the default we can still do something like this:\n\n```\nbackends:\n    posix:\n        extends: posix\n        iterator: mfu\n```",
+      "parentUuid": "2be6cf0c_4f859a38",
       "range": {
         "startLine": 117,
         "startChar": 40,
