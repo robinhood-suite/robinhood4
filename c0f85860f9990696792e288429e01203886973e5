@@ -445,6 +445,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "12164b82_0fd7be30",
+        "filename": "librobinhood/doc/enrichers_and_iterators.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-01-23T12:40:18Z",
+      "side": 1,
+      "message": "My last sentence may be misinterpreted. It was just saying that every backend can be extended the way it was desired, we are not forced to have the same kind of mechanism (replacement vs. addition) between the keywords. So I am ok with what you propose here.\n\nMy point was around what you just said:\n\n\u003e Since there is only one iterator, it makes sense to me that it replaces the default one.\n\nI agree, even if (as discussed in the other comment) the `enrichers` keyword could also mean \"I replace the default one with the following enrichers\". And I am not sure this will be the case for every person that will configure RBH.\n\nBut we can easily clear all doubts with the backend extension documentation.",
+      "parentUuid": "959f56ca_6aa7278a",
+      "range": {
+        "startLine": 91,
+        "startChar": 11,
+        "endLine": 95,
+        "endChar": 26
+      },
+      "revId": "c0f85860f9990696792e288429e01203886973e5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e6ebf7ad_003a3663",
         "filename": "librobinhood/doc/enrichers_and_iterators.rst",
         "patchSetId": 1
@@ -528,6 +552,30 @@
       "side": 1,
       "message": "Maybe someday we will want to implement a tool that traverses a posix filesystem but doesn\u0027t do any enrichement or just the retention for example. There already the `struct rbh_filter_projection` for this. I don\u0027t have a strong objection to export the POSIX enrichment in a POSIX extension that would always be loaded and may be deactivated through the config. But I\u0027m not going to implement that for now.",
       "parentUuid": "83f547c6_41d89a04",
+      "range": {
+        "startLine": 100,
+        "startChar": 11,
+        "endLine": 100,
+        "endChar": 18
+      },
+      "revId": "c0f85860f9990696792e288429e01203886973e5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4a1e85b2_217c1d51",
+        "filename": "librobinhood/doc/enrichers_and_iterators.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-01-23T12:40:18Z",
+      "side": 1,
+      "message": "I agree, this is not needed for now. And I accepted the fact that a backend lets itself be extended the way it intended.",
+      "parentUuid": "246749d7_c0fa239c",
       "range": {
         "startLine": 100,
         "startChar": 11,
