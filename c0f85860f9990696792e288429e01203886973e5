@@ -88,6 +88,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e34331ed_45174ce8",
+        "filename": "librobinhood/doc/enrichers_and_iterators.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-01-23T09:58:31Z",
+      "side": 1,
+      "message": "Ok, I think I misunderstood the PoV. Mainly because it was discussed, maybe only in the first talks about refactoring backends, that every backend will need to browse file/object system, and enrich them (Hestia do that for instance, kind of different with Mongo, I agree). So I thought you proposed to split every backend like that.\n\nBut no, you only want to let anyone overload/extend any part of any backend. As here, you care about the POSIX backend, you extent for both the iterator and the enricher, because those are our use cases. And in the future, we may have other kind of extensions. I think I get it now.\n\nThe need of \"genericity\" of an extension i.e. its ability to extend any backend, is not a requirement for now.",
+      "parentUuid": "255d3360_436d0c37",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 6
+      },
+      "revId": "c0f85860f9990696792e288429e01203886973e5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3167c0c3_a5792ffb",
@@ -125,6 +149,30 @@
       "side": 1,
       "message": "This is the example below. The behavior is copied from the current behavior of backends. I just used a different symbol to specify that this is an extension, not a full backend.",
       "parentUuid": "3167c0c3_a5792ffb",
+      "range": {
+        "startLine": 54,
+        "startChar": 23,
+        "endLine": 54,
+        "endChar": 62
+      },
+      "revId": "c0f85860f9990696792e288429e01203886973e5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ef577236_89566f94",
+        "filename": "librobinhood/doc/enrichers_and_iterators.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-01-23T09:58:31Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "fe2c5bc8_f6b1796e",
       "range": {
         "startLine": 54,
         "startChar": 23,
@@ -182,6 +230,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c2776cb_d5c4256f",
+        "filename": "librobinhood/doc/enrichers_and_iterators.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-01-23T09:58:31Z",
+      "side": 1,
+      "message": "Okay, that seems logical.",
+      "parentUuid": "5d006c33_255b0184",
+      "range": {
+        "startLine": 56,
+        "startChar": 26,
+        "endLine": 56,
+        "endChar": 65
+      },
+      "revId": "c0f85860f9990696792e288429e01203886973e5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "248371f6_d5a8ba29",
@@ -219,6 +291,30 @@
       "side": 1,
       "message": "It expands to the symbol `_RBH_POSIX_LUSTRE_PLUGIN_EXTENSION`. This is copied from the implementation of backends.",
       "parentUuid": "248371f6_d5a8ba29",
+      "range": {
+        "startLine": 65,
+        "startChar": 3,
+        "endLine": 65,
+        "endChar": 64
+      },
+      "revId": "c0f85860f9990696792e288429e01203886973e5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bc03d662_787231a1",
+        "filename": "librobinhood/doc/enrichers_and_iterators.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-01-23T09:58:31Z",
+      "side": 1,
+      "message": "I didn\u0027t even know it was there (or it was too long ago).",
+      "parentUuid": "462cab77_1d1aa1e7",
       "range": {
         "startLine": 65,
         "startChar": 3,
@@ -301,6 +397,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8a72ef76_101dac55",
+        "filename": "librobinhood/doc/enrichers_and_iterators.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-01-23T09:58:31Z",
+      "side": 1,
+      "message": "Ok, so every backend may propose a way to extend them using the configuration file.\n\nSomething that is not consistent though: `iterator` is a replacement keyword and `enrichers` is an addition keyword. But because every backend has its own implementation, it can specify the difference...",
+      "parentUuid": "4dc7289f_9130684c",
+      "range": {
+        "startLine": 91,
+        "startChar": 11,
+        "endLine": 95,
+        "endChar": 26
+      },
+      "revId": "c0f85860f9990696792e288429e01203886973e5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e6ebf7ad_003a3663",
         "filename": "librobinhood/doc/enrichers_and_iterators.rst",
         "patchSetId": 1
@@ -336,6 +456,30 @@
       "side": 1,
       "message": "Yes, otherwise you don\u0027t know which backend to load when you see a URI like this: `rbh:lustre-mpi:/mnt/lustre`. Also, the notion of enricher is (at least for now) specific to POSIX in this document. If one day we have a use case for mongo extensions, it may not use the notion of enricher at all. So posix here does not mean enricher. It means backend. I could have made some more \"extreme\" (but utimately pointless) where the posix enrichement is itself an extension to the posix backend. So we would have something like this:\n\n```\nbackends:\n    mybackend:\n        extends: posix\n        enrichers:\n            - posix\n            - retention\n    myweirdbackend:\n        extends: posix\n        enrichers:\n            - retention \u003c- retention only, no statx, xattrs...\n```\n\nIn this example, extends means \"load posix\". But the posix in the enrichers section tells the posix backend that it should load the posix extension.",
       "parentUuid": "e6ebf7ad_003a3663",
+      "range": {
+        "startLine": 100,
+        "startChar": 11,
+        "endLine": 100,
+        "endChar": 18
+      },
+      "revId": "c0f85860f9990696792e288429e01203886973e5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "83f547c6_41d89a04",
+        "filename": "librobinhood/doc/enrichers_and_iterators.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-01-23T09:58:31Z",
+      "side": 1,
+      "message": "Yeah, that may be extreme, but more understandable in a way? Well, the backend defines what it wants, so it may not be an issue, as I said earlier.\n\n\u003e If you want to implement a POSIX backend extension for the enricher, notice that the POSIX enrichment is always done.",
+      "parentUuid": "2fef57bb_86ba3019",
       "range": {
         "startLine": 100,
         "startChar": 11,
@@ -383,6 +527,30 @@
       "side": 1,
       "message": "The reason I did not do it is because I don\u0027t see a reason to make it dynamically loadable. If we want to make it the default anyway, we might as well keep it in the backend. And if we want to change the default we can still do something like this:\n\n```\nbackends:\n    posix:\n        extends: posix\n        iterator: mfu\n```",
       "parentUuid": "2be6cf0c_4f859a38",
+      "range": {
+        "startLine": 117,
+        "startChar": 40,
+        "endLine": 119,
+        "endChar": 33
+      },
+      "revId": "c0f85860f9990696792e288429e01203886973e5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "822449a3_45aafc40",
+        "filename": "librobinhood/doc/enrichers_and_iterators.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-01-23T09:58:31Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "aeae606f_9f99869f",
       "range": {
         "startLine": 117,
         "startChar": 40,
