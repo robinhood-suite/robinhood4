@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e9f5aabe_ad4e1d12",
+        "filename": "rbh-fsevents/src/deduplicator/fsevent_pool.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-01-23T08:50:23Z",
+      "side": 1,
+      "message": "comment: I wonder if this return value is checked by the caller, if so the code needs to be modified",
+      "range": {
+        "startLine": 221,
+        "startChar": 11,
+        "endLine": 221,
+        "endChar": 26
+      },
+      "revId": "3e6491a58d263c7fd36309767cce54177f112df7",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
