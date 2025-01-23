@@ -421,6 +421,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "959f56ca_6aa7278a",
+        "filename": "librobinhood/doc/enrichers_and_iterators.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-01-23T12:08:10Z",
+      "side": 1,
+      "message": "I\u0027m not sure I understand the issue with iterator and enrichers. Since there is only one iterator, it makes sense to me that it replaces the default one. Maybe what isn\u0027t clear in this document is that in practice, the struct `rbh_posix_extension` will contain function pointers depending on what behavior they implement. For instance:\n\n``` c\n// librobinhood/src/backends/retention/plugin.c\nstruct rbh_posix_extension RBH_PLUGING_EXTENDS(POSIX, RETENTION) \u003d {\n    // ...\n    .enrich \u003d rbh_posix_retention_enrich,\n};\n\n// librobinhood/src/backends/lustre/plugin.c\nstruct rbh_posix_extension RBH_PLUGIN_EXTENDS(POSIX, LUSTRE) \u003d {\n    // ...\n    .enrich \u003d rbh_posix_lustre_enrich,\n};\n\n// librobinhood/src/backends/mfu/plugin.c\nstruct rbh_posix_extentsion RBH_PLUGIN_EXTENDS(POSIX, MFU) \u003d {\n    // ...\n    .iter_new \u003d rbh_posix_mfu_iter_new,\n};\n```\n\nSo when the POSIX backend loads the extension specified in the iterator key, it expects it to contain a non-NULL iter_new pointer. And the same goes for the enrich function and the enrichers key. Which means that in theory, we could implement an extension that would provide both an iterator and an enricher. Although I\u0027m not sure this would be useful in practice.\n\nI didn\u0027t explain the implementation details of enrichers and iterators in this document because the goal is to see whether the idea of having extensions is acceptable to everyone. The fact that the document describes the posix backend in the beginning is just to provide a justification for this feature. Then when I push the implementation of posix extensions we will discuss the actual code.\n\nMy goal with this document is to see if the feature is interesting and what the configuration would look like. The POSIX backend here is just a means to provide example use cases.",
+      "parentUuid": "8a72ef76_101dac55",
+      "range": {
+        "startLine": 91,
+        "startChar": 11,
+        "endLine": 95,
+        "endChar": 26
+      },
+      "revId": "c0f85860f9990696792e288429e01203886973e5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e6ebf7ad_003a3663",
         "filename": "librobinhood/doc/enrichers_and_iterators.rst",
         "patchSetId": 1
@@ -480,6 +504,30 @@
       "side": 1,
       "message": "Yeah, that may be extreme, but more understandable in a way? Well, the backend defines what it wants, so it may not be an issue, as I said earlier.\n\n\u003e If you want to implement a POSIX backend extension for the enricher, notice that the POSIX enrichment is always done.",
       "parentUuid": "2fef57bb_86ba3019",
+      "range": {
+        "startLine": 100,
+        "startChar": 11,
+        "endLine": 100,
+        "endChar": 18
+      },
+      "revId": "c0f85860f9990696792e288429e01203886973e5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "246749d7_c0fa239c",
+        "filename": "librobinhood/doc/enrichers_and_iterators.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-01-23T12:08:10Z",
+      "side": 1,
+      "message": "Maybe someday we will want to implement a tool that traverses a posix filesystem but doesn\u0027t do any enrichement or just the retention for example. There already the `struct rbh_filter_projection` for this. I don\u0027t have a strong objection to export the POSIX enrichment in a POSIX extension that would always be loaded and may be deactivated through the config. But I\u0027m not going to implement that for now.",
+      "parentUuid": "83f547c6_41d89a04",
       "range": {
         "startLine": 100,
         "startChar": 11,
