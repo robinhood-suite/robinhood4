@@ -26,6 +26,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "834e4898_1917023f",
+        "filename": "librobinhood/src/alias.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-01-27T15:03:12Z",
+      "side": 1,
+      "message": "nit: this can be a `rbh_sstack_push` too",
+      "range": {
+        "startLine": 153,
+        "startChar": 34,
+        "endLine": 153,
+        "endChar": 46
+      },
+      "revId": "297dff89ba17e3d52636cbdcc65e93684b3c2624",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f1ca7cbc_8ddcef40",
         "filename": "librobinhood/src/alias.c",
         "patchSetId": 5
@@ -42,6 +65,53 @@
         "startChar": 47,
         "endLine": 186,
         "endChar": 68
+      },
+      "revId": "297dff89ba17e3d52636cbdcc65e93684b3c2624",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3af90a06_abec3e3c",
+        "filename": "librobinhood/src/alias.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-01-27T15:03:12Z",
+      "side": 1,
+      "message": "TBH, seeing the code, I\u0027d say a secondary sstack just for history, which has its content popped after finishing the management of an alias, might be easier to keep track of, and can prevent multiple allocation more easily.",
+      "parentUuid": "f1ca7cbc_8ddcef40",
+      "range": {
+        "startLine": 186,
+        "startChar": 47,
+        "endLine": 186,
+        "endChar": 68
+      },
+      "revId": "297dff89ba17e3d52636cbdcc65e93684b3c2624",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "637913c6_456fb021",
+        "filename": "librobinhood/src/alias.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-01-27T15:03:12Z",
+      "side": 1,
+      "message": "nit: move this function below `alias_resolution`, as it is the first one called",
+      "range": {
+        "startLine": 198,
+        "startChar": 0,
+        "endLine": 225,
+        "endChar": 1
       },
       "revId": "297dff89ba17e3d52636cbdcc65e93684b3c2624",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
@@ -66,6 +136,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4578dfe5_90a2021f",
+        "filename": "librobinhood/src/alias.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-01-27T15:03:12Z",
+      "side": 1,
+      "message": "defect: To be complete, the issue comes from line 279 which checks the whole new argv, which may contain other aliases. Thus we won\u0027t have an empty history in this check",
+      "parentUuid": "71f30ef2_f603a5ad",
+      "revId": "297dff89ba17e3d52636cbdcc65e93684b3c2624",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "24f9b8a3_d8eae3e7",
         "filename": "librobinhood/src/alias.c",
         "patchSetId": 5
@@ -82,6 +170,53 @@
         "startChar": 8,
         "endLine": 244,
         "endChar": 46
+      },
+      "revId": "297dff89ba17e3d52636cbdcc65e93684b3c2624",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "82d30029_8df07ade",
+        "filename": "librobinhood/src/alias.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-01-27T15:03:12Z",
+      "side": 1,
+      "message": "I\u0027d say fail the command, an infinite loop isn\u0027t skipped, it crashes",
+      "parentUuid": "24f9b8a3_d8eae3e7",
+      "range": {
+        "startLine": 244,
+        "startChar": 8,
+        "endLine": 244,
+        "endChar": 46
+      },
+      "revId": "297dff89ba17e3d52636cbdcc65e93684b3c2624",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b710a223_d60786a5",
+        "filename": "librobinhood/src/alias.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-01-27T15:03:12Z",
+      "side": 1,
+      "message": "defect: see the other one for more info, but here you should only check between indexes of your newly added arguments",
+      "range": {
+        "startLine": 279,
+        "startChar": 9,
+        "endLine": 279,
+        "endChar": 29
       },
       "revId": "297dff89ba17e3d52636cbdcc65e93684b3c2624",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
