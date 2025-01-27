@@ -33,6 +33,29 @@
       "message": "Same comment than for the previous patch, need to check some command results",
       "revId": "8a73debf976c4438234df4cb6240ef03dc3b3cac",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "168b517f_59847c43",
+        "filename": "rbh-find/tests/test_alias.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-01-27T15:30:09Z",
+      "side": 1,
+      "message": "defect: -eq",
+      "range": {
+        "startLine": 71,
+        "startChar": 13,
+        "endLine": 71,
+        "endChar": 15
+      },
+      "revId": "8a73debf976c4438234df4cb6240ef03dc3b3cac",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
