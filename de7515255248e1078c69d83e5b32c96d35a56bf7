@@ -16,6 +16,29 @@
       "message": "I think you may need to check commands with alias return the right result",
       "revId": "de7515255248e1078c69d83e5b32c96d35a56bf7",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c4edfb9c_4449bd98",
+        "filename": "rbh-find-lustre/tests/test_alias.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-01-27T15:28:51Z",
+      "side": 1,
+      "message": "defect: -eq",
+      "range": {
+        "startLine": 71,
+        "startChar": 13,
+        "endLine": 71,
+        "endChar": 15
+      },
+      "revId": "de7515255248e1078c69d83e5b32c96d35a56bf7",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
