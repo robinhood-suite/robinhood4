@@ -24,6 +24,75 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "617402ff_7097a71d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-01-28T10:42:01Z",
+      "side": 1,
+      "message": "typo: such as",
+      "range": {
+        "startLine": 11,
+        "startChar": 20,
+        "endLine": 11,
+        "endChar": 25
+      },
+      "revId": "c0f85860f9990696792e288429e01203886973e5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6bd461a1_499620e1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-01-28T10:42:01Z",
+      "side": 1,
+      "message": "question: Is it really considered an extension ? It does not add or remove anything, but is rather a different way to iterate through entries",
+      "range": {
+        "startLine": 29,
+        "startChar": 24,
+        "endLine": 29,
+        "endChar": 32
+      },
+      "revId": "c0f85860f9990696792e288429e01203886973e5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "915b3fec_300daafd",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-01-28T10:42:01Z",
+      "side": 1,
+      "message": "suggest: `Once this is implemented, librobinhood will have the backends posix, mpi-file, hestia and mongo, and the extensions lustre and retention`",
+      "range": {
+        "startLine": 28,
+        "startChar": 0,
+        "endLine": 29,
+        "endChar": 44
+      },
+      "revId": "c0f85860f9990696792e288429e01203886973e5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "fe3ba78b_3e02f23e",
@@ -460,6 +529,29 @@
       "range": {
         "startLine": 91,
         "startChar": 11,
+        "endLine": 95,
+        "endChar": 26
+      },
+      "revId": "c0f85860f9990696792e288429e01203886973e5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "795b1158_7a429ac9",
+        "filename": "librobinhood/doc/enrichers_and_iterators.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-01-28T10:42:01Z",
+      "side": 1,
+      "message": "question: to be sure I understand everything correctly.\n\nHere you declare a backend called \"lustre\", it can be used in the URI for commands. \n\nIt extends \"posix\", but is \"posix\" here a backend that could be inside this very same list of backends, or the base default one ?\n\nIt uses the iterator \"fts\", does that mean the \"posix\" backend doesn\u0027t rely on fts by default anymore, and these backends HAVE to specify an iterator to use ?\nIf posix uses fts by default, and the backend (here \"lustre\") specifies another iterator, it replaces the default one, so we assume that the extended backends can be used with this new iterator ?\n\nThe enrichers are the extensions you speak of, which will be loaded, but there is no correlation between the name of an extension and the name of a backend, i.e. the \"lustre\" of line 90 is not linked to the \"lustre\" of line 94, they just happen to use the same name ?",
+      "range": {
+        "startLine": 90,
+        "startChar": 7,
         "endLine": 95,
         "endChar": 26
       },
