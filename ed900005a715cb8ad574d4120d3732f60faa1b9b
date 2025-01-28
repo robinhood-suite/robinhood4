@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8031c517_9e05570c",
+        "filename": "librobinhood/src/backends/posix/posix.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 933,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-01-28T08:49:06Z",
+      "side": 1,
+      "message": "minor: this should rather be PATH_MAX, as this parameter corresponds to the available size in the buffer. Here, the call is equivalent to `sprint(full_path, \"%s\", posix-\u003eroot)`",
+      "range": {
+        "startLine": 933,
+        "startChar": 36,
+        "endLine": 933,
+        "endChar": 59
+      },
+      "revId": "ed900005a715cb8ad574d4120d3732f60faa1b9b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e4139ca4_43ce8993",
+        "filename": "librobinhood/src/backends/posix/posix.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 941,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-01-28T08:49:06Z",
+      "side": 1,
+      "message": "minor: idem, PATH_MAX here",
+      "range": {
+        "startLine": 941,
+        "startChar": 36,
+        "endLine": 941,
+        "endChar": 74
+      },
+      "revId": "ed900005a715cb8ad574d4120d3732f60faa1b9b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "57c4c9f8_17f8fbbc",
+        "filename": "librobinhood/src/backends/posix/posix.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 956,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-01-28T08:49:06Z",
+      "side": 1,
+      "message": "question: why is this necessary ?",
+      "range": {
+        "startLine": 956,
+        "startChar": 4,
+        "endLine": 956,
+        "endChar": 24
+      },
+      "revId": "ed900005a715cb8ad574d4120d3732f60faa1b9b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
