@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "85c86cf3_46db9a62",
+        "filename": "rbh-find/rbh-find.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-01-28T08:58:18Z",
+      "side": 1,
+      "message": "typo: here and below, `owner\u0027s GID`",
+      "range": {
+        "startLine": 61,
+        "startChar": 64,
+        "endLine": 61,
+        "endChar": 69
+      },
+      "revId": "56830077cb79fb3d4be50f314ab775836968bae4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "41b7dafd_f74f22f2",
+        "filename": "rbh-find/tests/test_uid.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-01-28T08:58:18Z",
+      "side": 1,
+      "message": "nit: same, move after the chgrp",
+      "range": {
+        "startLine": 47,
+        "startChar": 4,
+        "endLine": 47,
+        "endChar": 20
+      },
+      "revId": "56830077cb79fb3d4be50f314ab775836968bae4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
