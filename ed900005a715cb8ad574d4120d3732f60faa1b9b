@@ -140,6 +140,30 @@
       },
       "revId": "ed900005a715cb8ad574d4120d3732f60faa1b9b",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4d1ffdc7_8048caf0",
+        "filename": "librobinhood/src/backends/posix/posix.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 956,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-01-28T12:52:06Z",
+      "side": 1,
+      "message": "Then it\u0027d be easier to read with the other way around: if options-\u003eone, return line 966 with an added comment to explain the logic",
+      "parentUuid": "167b10c3_323b140a",
+      "range": {
+        "startLine": 956,
+        "startChar": 4,
+        "endLine": 956,
+        "endChar": 24
+      },
+      "revId": "ed900005a715cb8ad574d4120d3732f60faa1b9b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
