@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc37fc54_5aa49f9c",
+        "filename": "librobinhood/src/backends/posix/posix.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 933,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-01-28T09:43:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8031c517_9e05570c",
+      "range": {
+        "startLine": 933,
+        "startChar": 36,
+        "endLine": 933,
+        "endChar": 59
+      },
+      "revId": "ed900005a715cb8ad574d4120d3732f60faa1b9b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e4139ca4_43ce8993",
@@ -47,6 +71,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f666369c_ad5173b5",
+        "filename": "librobinhood/src/backends/posix/posix.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 941,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-01-28T09:43:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e4139ca4_43ce8993",
+      "range": {
+        "startLine": 941,
+        "startChar": 36,
+        "endLine": 941,
+        "endChar": 74
+      },
+      "revId": "ed900005a715cb8ad574d4120d3732f60faa1b9b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "57c4c9f8_17f8fbbc",
@@ -60,6 +108,30 @@
       "writtenOn": "2025-01-28T08:49:06Z",
       "side": 1,
       "message": "question: why is this necessary ?",
+      "range": {
+        "startLine": 956,
+        "startChar": 4,
+        "endLine": 956,
+        "endChar": 24
+      },
+      "revId": "ed900005a715cb8ad574d4120d3732f60faa1b9b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "167b10c3_323b140a",
+        "filename": "librobinhood/src/backends/posix/posix.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 956,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-01-28T09:43:18Z",
+      "side": 1,
+      "message": "It\u0027s to keep the name of the root, otherwise the name is replace by `\\0`",
+      "parentUuid": "57c4c9f8_17f8fbbc",
       "range": {
         "startLine": 956,
         "startChar": 4,
