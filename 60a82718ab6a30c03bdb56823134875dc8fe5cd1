@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e6718d27_6b6759e0",
+        "filename": "doc/template_conf.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-01-28T08:26:03Z",
+      "side": 1,
+      "message": "minor: I\u0027m not sure but I think that it\u0027s not required to have these dashes. But if you put them, I think you have to put the other ones at the end of the file aswell.",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 3
+      },
+      "revId": "60a82718ab6a30c03bdb56823134875dc8fe5cd1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c60a6494_4fd14a0f",
+        "filename": "doc/template_conf.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-01-28T08:26:03Z",
+      "side": 1,
+      "message": "typo: stored",
+      "range": {
+        "startLine": 11,
+        "startChar": 74,
+        "endLine": 11,
+        "endChar": 79
+      },
+      "revId": "60a82718ab6a30c03bdb56823134875dc8fe5cd1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0a29af22_055d388e",
+        "filename": "doc/template_conf.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-01-28T08:26:03Z",
+      "side": 1,
+      "message": "major: as a binary",
+      "range": {
+        "startLine": 12,
+        "startChar": 7,
+        "endLine": 12,
+        "endChar": 13
+      },
+      "revId": "60a82718ab6a30c03bdb56823134875dc8fe5cd1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b1ed46c9_c71b0490",
+        "filename": "doc/template_conf.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-01-28T08:26:03Z",
+      "side": 1,
+      "message": "major: binary",
+      "range": {
+        "startLine": 12,
+        "startChar": 70,
+        "endLine": 12,
+        "endChar": 76
+      },
+      "revId": "60a82718ab6a30c03bdb56823134875dc8fe5cd1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "353f0261_0a851f77",
+        "filename": "doc/template_conf.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-01-28T08:26:03Z",
+      "side": 1,
+      "message": "minor: and binary",
+      "range": {
+        "startLine": 14,
+        "startChar": 75,
+        "endLine": 14,
+        "endChar": 76
+      },
+      "revId": "60a82718ab6a30c03bdb56823134875dc8fe5cd1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
