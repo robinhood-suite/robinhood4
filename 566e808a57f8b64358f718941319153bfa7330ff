@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "407832bb_eedffda6",
+        "filename": "rbh-find/src/filters.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-01-28T08:55:13Z",
+      "side": 1,
+      "message": "typo: 2025",
+      "range": {
+        "startLine": 2,
+        "startChar": 20,
+        "endLine": 2,
+        "endChar": 21
+      },
+      "revId": "566e808a57f8b64358f718941319153bfa7330ff",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "00eed26d_07e5d7d8",
+        "filename": "rbh-find/tests/test_uid.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-01-28T08:55:13Z",
+      "side": 1,
+      "message": "nit: do this after the chown",
+      "range": {
+        "startLine": 30,
+        "startChar": 4,
+        "endLine": 30,
+        "endChar": 15
+      },
+      "revId": "566e808a57f8b64358f718941319153bfa7330ff",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
