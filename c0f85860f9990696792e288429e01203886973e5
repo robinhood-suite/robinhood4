@@ -703,6 +703,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0884c7aa_f4d14971",
+        "filename": "librobinhood/doc/enrichers_and_iterators.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-01-28T10:43:53Z",
+      "side": 1,
+      "message": "The goal is that extensions will replace the lustre, lustre-mpi and posix-mpi backends. My plan was to simply remove the backends once extensions are implemented. Maybe we could hardcode some default backends.\n\nThe way I have implemented this is that `rbh_posix_backend_new` has a new argument named `type` that contains the custom backend name given in the URI. So for the URI `rbh:lustre-mpi:/mnt/lustre`, it would be `lustre-mpi`. With this, the posix backend can lookup which extensions should be loaded inside the config.\n\nI can hardcode the values lustre-mpi, posix-mpi and lustre to match their current behavior. So that, without config, we keep the current behavior. So the posix backend would first look for `lustre-mpi` inside the config. If not found, default to loading the `mfu` iterator and `lustre` enricher if the extensions are installed.",
+      "parentUuid": "e4bec6c2_da36d969",
+      "range": {
+        "startLine": 108,
+        "startChar": 5,
+        "endLine": 109,
+        "endChar": 57
+      },
+      "revId": "c0f85860f9990696792e288429e01203886973e5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2be6cf0c_4f859a38",
         "filename": "librobinhood/doc/enrichers_and_iterators.rst",
         "patchSetId": 1
