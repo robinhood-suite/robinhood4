@@ -119,6 +119,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "b8b54072_f5bbb738",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-01-29T09:07:28Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "0d70db6f_087f00de",
+      "range": {
+        "startLine": 29,
+        "startChar": 24,
+        "endLine": 29,
+        "endChar": 32
+      },
+      "revId": "c0f85860f9990696792e288429e01203886973e5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "fe3ba78b_3e02f23e",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
@@ -597,6 +621,30 @@
       "side": 1,
       "message": "\u003e Here you declare a backend called \"lustre\", it can be used in the URI for commands. \n\nYes\n\n\u003e It extends \"posix\", but is \"posix\" here a backend that could be inside this very same list of backends, or the base default one ?\n\nYes, posix can be inside the list of backends. For instance, if we want to use retention:\n```\nbackends:\n    posix:\n        extends: posix\n        enrichers:\n            - retention\n```\n\u003e It uses the iterator \"fts\", does that mean the \"posix\" backend doesn\u0027t rely on fts by default anymore, and these backends HAVE to specify an iterator to use ?\n\nNo, fts is not necessary. The iterators key can be omitted if we want to use FTS.\nThe code for the FTS iterator will still be in the posix iterator. It will just be reorganized to make it more explicit.\n\n\u003e If posix uses fts by default, and the backend (here \"lustre\") specifies another iterator, it replaces the default one, so we assume that the extended backends can be used with this new iterator ?\n\nYes, the assumption is that an extension is specific to a backend. So if the lustre extension extends the posix backend, then it can be used. Lets say that I have a phobos iterator for instance. There is no reason that this iterator should extend the posix backend. So POSIX won\u0027t even be able to load this phobos extension.\n\n\u003e The enrichers are the extensions you speak of, which will be loaded, but there is no correlation between the name of an extension and the name of a backend, i.e. the \"lustre\" of line 90 is not linked to the \"lustre\" of line 94, they just happen to use the same name ?\n\nYes, the name of the custom backend can be anything we want and it has no link with the actual backends (e.g. `librbh-posix.so`) and extensions (e.g. `librbh-posix-lustre-ext.so`).",
       "parentUuid": "795b1158_7a429ac9",
+      "range": {
+        "startLine": 90,
+        "startChar": 7,
+        "endLine": 95,
+        "endChar": 26
+      },
+      "revId": "c0f85860f9990696792e288429e01203886973e5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f709889c_19f3af5f",
+        "filename": "librobinhood/doc/enrichers_and_iterators.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-01-29T09:07:28Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "27cd1e66_877e3c5a",
       "range": {
         "startLine": 90,
         "startChar": 7,
