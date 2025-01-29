@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0decaa53_dd53733f",
+        "filename": "rbh-find/include/rbh-find/filters.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-01-29T08:42:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "577d8a4a_ae97d7b2",
+      "range": {
+        "startLine": 213,
+        "startChar": 3,
+        "endLine": 213,
+        "endChar": 4
+      },
+      "revId": "61d1a56d56050d2e44005a9bcd3f83f38ec421d1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3a61d56a_38071d6e",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-01-28T09:19:49Z",
       "side": 1,
       "message": "suggest: add this check in another function, to that these types of exceptions are easier to see and handle",
+      "range": {
+        "startLine": 359,
+        "startChar": 4,
+        "endLine": 360,
+        "endChar": 62
+      },
+      "revId": "61d1a56d56050d2e44005a9bcd3f83f38ec421d1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "562928ac_44458e0b",
+        "filename": "rbh-find/src/find_cb.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 360,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-01-29T08:42:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3a61d56a_38071d6e",
       "range": {
         "startLine": 359,
         "startChar": 4,
