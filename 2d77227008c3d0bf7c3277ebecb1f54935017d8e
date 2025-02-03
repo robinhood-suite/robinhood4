@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eb20bd6f_1ba8f4c5",
+        "filename": "packaging/robinhood4.spec.in",
+        "patchSetId": 2
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-02-03T08:47:21Z",
+      "side": 1,
+      "message": "sugest: It would be nice to mention and install the conf template of robinhood",
+      "revId": "2d77227008c3d0bf7c3277ebecb1f54935017d8e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
