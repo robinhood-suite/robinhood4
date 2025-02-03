@@ -72,6 +72,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e5d39ea9_3cc222bd",
+        "filename": "librobinhood/include/robinhood/alias.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-02-03T14:57:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cc3e1e4b_2abf1e0b",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 20,
+        "endChar": 2
+      },
+      "revId": "22b62bc50a18906f49f2b85180bd4127471fb056",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b1194f78_0e732c19",
@@ -133,6 +157,30 @@
       "side": 1,
       "message": "I agree, the rbh_value gave to `rbh_config_find` already contains a rbh_value_map with the value find in the conf. You don\u0027t need to duplicate it as a global variable as you are only using it in `apply_aliases`",
       "parentUuid": "a6ec91a0_244926d9",
+      "range": {
+        "startLine": 76,
+        "startChar": 3,
+        "endLine": 76,
+        "endChar": 69
+      },
+      "revId": "22b62bc50a18906f49f2b85180bd4127471fb056",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aadd9c1a_35e88574",
+        "filename": "librobinhood/src/alias.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-02-03T14:57:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "aa7301bf_1310228c",
       "range": {
         "startLine": 76,
         "startChar": 3,
