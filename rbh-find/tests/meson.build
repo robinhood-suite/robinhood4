@@ -14,14 +14,15 @@ integration_tests = [
   'test_xattr',
 ]
 
-cc = meson.get_compiler('c')
-libmfu = cc.find_library('mfu', disabler: true, required: false)
-
-if libmfu.found()
-    integration_tests += ['test_mpifile']
-endif
-
 foreach t: integration_tests
     e = find_program(t + '.bash')
     test(t, e, env: backend_path_env, suite: 'rbh-find', timeout: 120)
 endforeach
+
+r = run_command('../../utils/check_mpirun.sh', check: false)
+
+if r.returncode() == 0 and libmfu.found()
+    e = find_program('test_mpifile.bash')
+    test('test_mpifile', e, is_parallel: false,
+         env: backend_path_env, suite: 'rbh-find', timeout: 120)
+endif
