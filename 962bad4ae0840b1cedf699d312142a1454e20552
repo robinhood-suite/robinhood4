@@ -65,6 +65,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e24483dc_2eccb49d",
+        "filename": "librobinhood/include/robinhood/alias.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-02-03T14:57:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3393ac00_fa1c9ecb",
+      "range": {
+        "startLine": 8,
+        "startChar": 8,
+        "endLine": 8,
+        "endChar": 23
+      },
+      "revId": "962bad4ae0840b1cedf699d312142a1454e20552",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4a24d23d_83e7990d",
@@ -136,6 +160,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5cded88e_ab0f7e57",
+        "filename": "librobinhood/include/robinhood/alias.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-02-03T14:57:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4e34b7b6_6dcf1566",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 19
+      },
+      "revId": "962bad4ae0840b1cedf699d312142a1454e20552",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7e4e58ca_b72ea446",
@@ -183,6 +231,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2264b35d_cea87418",
+        "filename": "librobinhood/src/alias.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-02-03T14:57:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e69d7b34_3bf43c3b",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 8,
+        "endChar": 18
+      },
+      "revId": "962bad4ae0840b1cedf699d312142a1454e20552",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3faad6a5_e8eaad3b",
@@ -220,6 +292,30 @@
       "side": 1,
       "message": "Yes this function comes from a \"config\" header, and it\u0027s true we could perfectly put the \"import_configuration_file\" function in the \"config.h\" file.",
       "parentUuid": "3faad6a5_e8eaad3b",
+      "range": {
+        "startLine": 16,
+        "startChar": 8,
+        "endLine": 16,
+        "endChar": 23
+      },
+      "revId": "962bad4ae0840b1cedf699d312142a1454e20552",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aeda80d6_22ffd47a",
+        "filename": "librobinhood/src/alias.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-02-03T14:57:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b2c50f4c_f1df78db",
       "range": {
         "startLine": 16,
         "startChar": 8,
