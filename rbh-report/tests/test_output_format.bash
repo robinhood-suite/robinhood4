@@ -23,7 +23,7 @@ complete_setup()
     ln first_file first_hlink
     ln -s first_file first_slink
     mkfifo first_fifo
-    mknod first_block b 0 0
+    mknod first_block b 0 0 || exit 77
     mknod first_char c 0 0
     cd ..
 
