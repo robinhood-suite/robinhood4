@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cfb258bc_c6644941",
+        "filename": "librobinhood/include/robinhood/meson.build",
+        "patchSetId": 5
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-02-04T08:04:51Z",
+      "side": 1,
+      "message": "minor: Move it to the next patch",
+      "range": {
+        "startLine": 8,
+        "startChar": 3,
+        "endLine": 8,
+        "endChar": 14
+      },
+      "revId": "5af863c223f831938b76df08bca059ffe32c324d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8cbd65bb_1b56f3e2",
+        "filename": "librobinhood/src/meson.build",
+        "patchSetId": 5
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-02-04T08:04:51Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 12,
+        "startChar": 8,
+        "endLine": 12,
+        "endChar": 18
+      },
+      "revId": "5af863c223f831938b76df08bca059ffe32c324d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
