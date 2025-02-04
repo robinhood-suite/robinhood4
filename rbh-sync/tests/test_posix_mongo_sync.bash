@@ -257,7 +257,7 @@ test_continue_sync_on_error()
     # synchronizing the second file and the directory
 
     path="$(dirname $__rbh_sync)"
-    while [[ "$path" != "/home" ]]; do
+    while [[ "$path" != "/home" ]] && [[ "$path" != "/" ]]; do
         chmod o+rx $path
         path="$(dirname $path)"
     done
@@ -278,7 +278,7 @@ test_continue_sync_on_error()
     fi
 
     path="$(dirname $__rbh_sync)"
-    while [[ "$path" != "/home" ]]; do
+    while [[ "$path" != "/home" ]] && [[ "$path" != "/" ]]; do
         chmod o-rx $path
         path="$(dirname $path)"
     done
@@ -329,7 +329,7 @@ test_stop_sync_on_error()
     # synchronizing the second file and the directory
 
     path="$(dirname $__rbh_sync)"
-    while [[ "$path" != "/home" ]]; do
+    while [[ "$path" != "/home" ]] && [[ "$path" != "/" ]]; do
         chmod o+rx $path
         path="$(dirname $path)"
     done
@@ -350,7 +350,7 @@ test_stop_sync_on_error()
     fi
 
     path="$(dirname $__rbh_sync)"
-    while [[ "$path" != "/home" ]]; do
+    while [[ "$path" != "/home" ]] && [[ "$path" != "/" ]]; do
         chmod o-rx $path
         path="$(dirname $path)"
     done

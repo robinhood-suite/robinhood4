@@ -237,11 +237,20 @@ run_tests()
          setup "$sub_setup"
          "$test"
         )
-        if !(($?)); then
+        rc=$?
+        echo "rc = '$rc'"
+        if ((rc == 77)); then
+            echo "$test: SKIP"
+            if ((fail == 0)); then
+                fail="77"
+            fi
+        elif !((rc)); then
             echo "$test: ✔"
         else
             echo "$test: ✖"
-            fail=1
+            if ((fail == 0 || fail == 77)); then
+                fail="$rc"
+            fi
         fi
     done
 

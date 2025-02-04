@@ -219,7 +219,7 @@ test_type()
     ln file hlink
     ln -s file slink
     mkfifo fifo
-    mknod block b 0 0
+    mknod block b 0 0 || exit 77
     mknod char c 0 0
 
     rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
@@ -320,7 +320,7 @@ test_symbolic_permission()
     touch special2
     chmod 7777 special2
     mkdir dir
-    mknod block b 1 2
+    mknod block b 1 2 || exit 77
 
     rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
 

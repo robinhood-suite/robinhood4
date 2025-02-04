@@ -66,8 +66,12 @@ retry:
     if (name_to_handle_at(fd, "", handle, &mount_id, AT_EMPTY_PATH)) {
         struct file_handle *tmp;
 
-        if (errno != EOVERFLOW || handle->handle_bytes <= handle_size)
+        if (errno != EOVERFLOW || handle->handle_bytes <= handle_size) {
+            if (errno == ENOTSUP)
+                fprintf(stderr,
+                        "'name_to_handle_at' call is not supported, cannot continue synchronization.\n");
             return NULL;
+        }
 
         tmp = malloc(sizeof(*tmp) + handle->handle_bytes);
         if (tmp == NULL)
@@ -255,7 +259,7 @@ getxattrs(char *proc_fd_path, struct rbh_value_pair **_pairs,
         assert(i - skipped < pairs_count);
 
         pair->key = name;
-        length = getxattr(proc_fd_path, name, &buffer, sizeof(buffer));
+        length = getxattr(proc_fd_path, name, buffer, sizeof(buffer));
         if (length == -1) {
             switch (errno) {
             case E2BIG:
@@ -273,6 +277,7 @@ getxattrs(char *proc_fd_path, struct rbh_value_pair **_pairs,
             }
         }
         assert((size_t)length <= sizeof(buffer));
+        buffer[length] = '\0';
 
         pair->value = create_value_from_xattr(name, buffer, length, xattrs);
         if (pair->value == NULL)
