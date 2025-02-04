@@ -27,13 +27,18 @@
  |                     fixtures to run tests in isolation                     |
  *----------------------------------------------------------------------------*/
 
-static const char TMPDIR[] = "/tmp/tmp.d.XXXXXX";
-static __thread char tmpdir[sizeof(TMPDIR)];
+static const char TMPDIR[] = "tmp.d.XXXXXX";
+static __thread char tmpdir[PATH_MAX];
 
 static void
 unchecked_setup_tmpdir(void)
 {
-    memcpy(tmpdir, TMPDIR, sizeof(tmpdir));
+    char *env_tmpdir = getenv("TMPDIR");
+
+    if (env_tmpdir == NULL)
+        env_tmpdir = "/tmp";
+
+    snprintf(tmpdir, PATH_MAX, "%s/%s", env_tmpdir, TMPDIR);
     ck_assert_ptr_nonnull(mkdtemp(tmpdir));
     ck_assert_int_eq(chdir(tmpdir), 0);
 }

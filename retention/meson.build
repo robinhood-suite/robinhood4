@@ -4,6 +4,10 @@
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
 
+if get_option('lustre').disabled()
+    subdir_done()
+endif
+
 integration_tests = ['test_update_retention']
 
 foreach t: integration_tests
