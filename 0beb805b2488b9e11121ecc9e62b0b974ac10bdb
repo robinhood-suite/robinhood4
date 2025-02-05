@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bbe54034_da9b8898",
+        "filename": "librobinhood/src/alias.c",
+        "patchSetId": 6
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-02-05T10:14:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "04bd8072_e08ba9af",
+      "range": {
+        "startLine": 75,
+        "startChar": 3,
+        "endLine": 75,
+        "endChar": 68
+      },
+      "revId": "0beb805b2488b9e11121ecc9e62b0b974ac10bdb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e0c4d83f_1e6c6f4a",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-02-04T08:15:02Z",
       "side": 1,
       "message": "style: maybe check in the projet how comments are stylized, here we have 3 different styles",
+      "range": {
+        "startLine": 103,
+        "startChar": 4,
+        "endLine": 104,
+        "endChar": 19
+      },
+      "revId": "0beb805b2488b9e11121ecc9e62b0b974ac10bdb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d8dfd3d_d7337d2a",
+        "filename": "librobinhood/src/alias.c",
+        "patchSetId": 6
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-02-05T10:14:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e0c4d83f_1e6c6f4a",
       "range": {
         "startLine": 103,
         "startChar": 4,
