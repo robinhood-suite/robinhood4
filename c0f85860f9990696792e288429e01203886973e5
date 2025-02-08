@@ -465,6 +465,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "caf5f12d_da7d0f2c",
+        "filename": "librobinhood/doc/enrichers_and_iterators.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-02-08T16:45:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5e28c9a0_1bc43e77",
+      "range": {
+        "startLine": 83,
+        "startChar": 6,
+        "endLine": 83,
+        "endChar": 15
+      },
+      "revId": "c0f85860f9990696792e288429e01203886973e5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7316faf9_c45deaf6",
@@ -648,6 +672,30 @@
       "range": {
         "startLine": 90,
         "startChar": 7,
+        "endLine": 95,
+        "endChar": 26
+      },
+      "revId": "c0f85860f9990696792e288429e01203886973e5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "296617f3_fd36b1ef",
+        "filename": "librobinhood/doc/enrichers_and_iterators.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-02-08T16:45:36Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "12164b82_0fd7be30",
+      "range": {
+        "startLine": 91,
+        "startChar": 11,
         "endLine": 95,
         "endChar": 26
       },
