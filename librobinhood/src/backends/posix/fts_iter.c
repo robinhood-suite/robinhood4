@@ -23,7 +23,6 @@ struct fts_iterator {
 
 static struct rbh_fsentry *
 fsentry_from_ftsent(FTSENT *ftsent, int statx_sync_type, size_t prefix_len,
-                    inode_xattrs_callback_t inode_xattrs_callback,
                     enricher_t *enrichers)
 {
     const struct rbh_value path = {
@@ -39,7 +38,7 @@ fsentry_from_ftsent(FTSENT *ftsent, int statx_sync_type, size_t prefix_len,
                                        ftsent->fts_pointer,
                                        ftsent->fts_parent->fts_pointer,
                                        ftsent->fts_name,
-                                       statx_sync_type, inode_xattrs_callback,
+                                       statx_sync_type,
                                        enrichers);
     save_errno = errno;
 
@@ -147,7 +146,6 @@ skip:
 
     fsentry = fsentry_from_ftsent(ftsent, iter->posix.statx_sync_type,
                                   iter->posix.prefix_len,
-                                  iter->posix.inode_xattrs_callback,
                                   iter->posix.enrichers);
     if (fsentry == NULL && (errno == ENOENT || errno == ESTALE)) {
         /* The entry moved from under our feet */
