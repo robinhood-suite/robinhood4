@@ -27,22 +27,6 @@
 #include <robinhood/iterator.h>
 #include <robinhood/sstack.h>
 
-/**
- * Callback for managing and filling inode xattrs
- *
- * @param info                 Information about an entry
- * @param pairs                list of rbh_value_pairs to fill
- * @param available_pairs      the number of pairs that can be filled
- * @param values               stack that will contain every rbh_value of
- *                             \p pairs
- *
- * @return                     number of filled \p pairs
- */
-typedef int (*inode_xattrs_callback_t)(struct entry_info *info,
-                                       struct rbh_value_pair *pairs,
-                                       int available_pairs,
-                                       struct rbh_sstack *values);
-
 struct rbh_value_pair;
 struct rbh_statx;
 struct entry_info;
@@ -58,7 +42,6 @@ typedef struct rbh_mut_iterator *(*iter_new_t)(const char *, const char *, int);
 
 struct posix_iterator {
     struct rbh_mut_iterator iterator;
-    inode_xattrs_callback_t inode_xattrs_callback;
     enricher_t *enrichers;
     int statx_sync_type;
     size_t prefix_len;
@@ -122,7 +105,6 @@ bool
 fsentry_from_any(struct fsentry_id_pair *fip, const struct rbh_value *path,
                  char *accpath, struct rbh_id *entry_id,
                  struct rbh_id *parent_id, char *name, int statx_sync_type,
-                 inode_xattrs_callback_t inode_xattrs_callback,
                  enricher_t *enrichers);
 
 char *
