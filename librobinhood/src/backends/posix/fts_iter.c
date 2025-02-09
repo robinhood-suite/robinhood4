@@ -10,9 +10,9 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <fcntl.h>
+#include <unistd.h>
 
 #include <robinhood/backends/posix_extension.h>
-#include <robinhood/backends/posix_internal.h>
 #include <robinhood/value.h>
 
 struct fts_iterator {
