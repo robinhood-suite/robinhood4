@@ -8,7 +8,10 @@
 #ifndef ROBINHOOD_MFU_POSIX_H
 #define ROBINHOOD_MFU_POSIX_H
 
-#include "robinhood/backend.h"
+#include <mfu.h>
+#include <robinhood/iterator.h>
+#include <robinhood/plugin.h>
+#include <robinhood/backends/posix_extension.h>
 
 #define RBH_MFU_PLUGIN_NAME "mfu"
 
@@ -18,5 +21,44 @@
 #define RBH_MFU_PLUGIN_VERSION RPV(RBH_MFU_PLUGIN_MAJOR, \
                                    RBH_MFU_PLUGIN_MINOR, \
                                    RBH_MFU_PLUGIN_RELEASE)
+
+struct file_info {
+    /** File path from the root */
+    const char *path;
+    /** File name */
+    char *name;
+    /** rbh_id of parent entry */
+    struct rbh_id *parent_id;
+};
+
+struct mfu_iterator {
+    struct posix_iterator posix;
+    /** Index of current file in the flist in the process */
+    uint64_t current;
+    /**
+     * Size of the flist in the process, this is not the global size of the
+     * flist
+     */
+    uint64_t total;
+    /** List of files processed by a given MPI process  */
+    mfu_flist files;
+    bool is_branch;
+    /** true if the backend using the iterator is mpi-file */
+    bool is_mpifile;
+
+    struct rbh_fsentry *
+    (*fsentry_new)(struct file_info *fi,
+                   struct posix_iterator *iter);
+
+};
+
+struct rbh_mut_iterator *
+rbh_mpi_file_mfu_iter_new(mfu_flist flist, size_t prefix_len);
+
+void
+rbh_mpi_initialize(void);
+
+void
+rbh_mpi_finalize(void);
 
 #endif

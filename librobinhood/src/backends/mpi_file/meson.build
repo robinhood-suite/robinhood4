@@ -10,13 +10,13 @@ librbh_mpi_file = library(
         'mpi_file.c',
         'filter.c',
         'pred.c',
-        '../iter_mpi/iter_mpi.c',
         'plugin.c',
     ],
     version: librbh_mpi_file_version, # defined in include/robinhood/backends
     link_with: [librobinhood, librbh_posix],
     dependencies: [
         libmfu,
+        librbh_posix_mfu_ext_dep,
         libmpi
     ],
     include_directories: rbh_include,
