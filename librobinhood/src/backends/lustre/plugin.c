@@ -9,27 +9,11 @@
 # include "config.h"
 #endif
 
-#include <stdlib.h>
+#include <robinhood/backends/posix.h>
+#include <robinhood/backends/posix_extension.h>
+#include <robinhood/backends/lustre.h>
 
-#include "robinhood/backends/lustre.h"
 #include "lustre_internals.h"
-#include "robinhood/backends/posix.h"
-#include "robinhood/backends/posix_extension.h"
-#include "robinhood/plugins/backend.h"
-#include "robinhood/plugin.h"
-
-static const struct rbh_backend_plugin_operations LUSTRE_BACKEND_PLUGIN_OPS = {
-    .new = rbh_lustre_backend_new,
-};
-
-const struct rbh_backend_plugin RBH_BACKEND_PLUGIN_SYMBOL(LUSTRE) = {
-    .plugin = {
-        .name = RBH_LUSTRE_BACKEND_NAME,
-        .version = RBH_LUSTRE_BACKEND_VERSION,
-    },
-    .ops = &LUSTRE_BACKEND_PLUGIN_OPS,
-    .capabilities = RBH_SYNC_OPS | RBH_BRANCH_OPS,
-};
 
 const struct rbh_posix_extension RBH_BACKEND_EXTENDS(POSIX, LUSTRE) = {
     .extension = {

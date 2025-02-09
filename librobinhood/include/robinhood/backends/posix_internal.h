@@ -52,9 +52,6 @@ struct fsentry_id_pair {
 };
 
 struct rbh_mut_iterator *
-posix_iterator_new(const char *root, const char *entry, int statx_sync_type);
-
-struct rbh_mut_iterator *
 fts_iter_new(const char *, const char *, int);
 
 int
@@ -75,31 +72,6 @@ fsentry_from_any(struct fsentry_id_pair *fip, const struct rbh_value *path,
                  struct rbh_id *parent_id, char *name, int statx_sync_type,
                  inode_xattrs_callback_t inode_xattrs_callback,
                  enricher_t *enrichers);
-
-/*----------------------------------------------------------------------------*
- |                              posix_operations                              |
- *----------------------------------------------------------------------------*/
-
-int
-posix_backend_get_option(void *backend, unsigned int option, void *data,
-                         size_t *data_size);
-int
-posix_backend_set_option(void *backend, unsigned int option, const void *data,
-                         size_t data_size);
-
-struct rbh_backend *
-posix_backend_branch(void *backend, const struct rbh_id *id, const char *path);
-
-struct rbh_fsentry *
-posix_root(void *backend, const struct rbh_filter_projection *projection);
-
-struct rbh_mut_iterator *
-posix_backend_filter(void *backend, const struct rbh_filter *filter,
-                     const struct rbh_filter_options *options,
-                     const struct rbh_filter_output *output);
-
-void
-posix_backend_destroy(void *backend);
 
 char *
 id2path(const char *root, const struct rbh_id *id);
