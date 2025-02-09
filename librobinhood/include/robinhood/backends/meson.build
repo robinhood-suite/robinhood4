@@ -126,48 +126,6 @@ librbh_mfu_h = configure_file(input: 'mfu.h.in',
 
 install_headers(librbh_mfu_h, subdir: 'robinhood/backends')
 
-# Posix MPI backend
-
-librbh_posix_mpi_conf = configuration_data()
-
-librbh_posix_mpi_conf.set('RBH_POSIX_MPI_BACKEND_MAJOR', 1)
-librbh_posix_mpi_conf.set('RBH_POSIX_MPI_BACKEND_MINOR', 0)
-librbh_posix_mpi_conf.set('RBH_POSIX_MPI_BACKEND_RELEASE', 0)
-
-librbh_posix_mpi_version = '@0@.@1@.@2@'.format(
-    librbh_posix_mpi_conf.get('RBH_POSIX_MPI_BACKEND_MAJOR'),
-    librbh_posix_mpi_conf.get('RBH_POSIX_MPI_BACKEND_MINOR'),
-    librbh_posix_mpi_conf.get('RBH_POSIX_MPI_BACKEND_RELEASE')
-)
-
-librbh_posix_mpi_h = configure_file(input: 'posix_mpi.h.in',
-                                    output: 'posix_mpi.h',
-                                    configuration: librbh_posix_mpi_conf)
-
-install_headers(librbh_posix_mpi_h, subdir: 'robinhood/backends')
-
-# Lustre MPI backend
-
-if get_option('lustre').enabled()
-    librbh_lustre_mpi_conf = configuration_data()
-
-    librbh_lustre_mpi_conf.set('RBH_LUSTRE_MPI_BACKEND_MAJOR', 1)
-    librbh_lustre_mpi_conf.set('RBH_LUSTRE_MPI_BACKEND_MINOR', 0)
-    librbh_lustre_mpi_conf.set('RBH_LUSTRE_MPI_BACKEND_RELEASE', 0)
-
-    librbh_lustre_mpi_version = '@0@.@1@.@2@'.format(
-        librbh_lustre_mpi_conf.get('RBH_LUSTRE_MPI_BACKEND_MAJOR'),
-        librbh_lustre_mpi_conf.get('RBH_LUSTRE_MPI_BACKEND_MINOR'),
-        librbh_lustre_mpi_conf.get('RBH_LUSTRE_MPI_BACKEND_RELEASE')
-    )
-
-    librbh_lustre_mpi_h = configure_file(input: 'lustre_mpi.h.in',
-                                         output: 'lustre_mpi.h',
-                                         configuration: librbh_lustre_mpi_conf)
-
-    install_headers(librbh_lustre_mpi_h, subdir: 'robinhood/backends')
-endif
-
 # MPI-FILE backend
 
 librbh_mpi_file_conf = configuration_data()
