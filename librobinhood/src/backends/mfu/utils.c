@@ -96,7 +96,6 @@ fsentry_from_fi(struct file_info *fi,
     fsentry_success = fsentry_from_any(&pair, &path, (char *)fi->path,
                                        NULL, fi->parent_id, fi->name,
                                        statx_sync_type,
-                                       posix->inode_xattrs_callback,
                                        posix->enrichers);
     if (!fsentry_success)
         return NULL;
