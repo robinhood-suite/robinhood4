@@ -14,6 +14,15 @@
 SUITE=${BASH_SOURCE[1]##*/}
 SUITE=${SUITE%.*}
 
+# The default OFI BTL has a hard coded 1s sleep on MPI_Finalize(). Since
+# we do a lot of small MPI jobs, this has a huge impact on the test
+# duration. The self BTL does not have this sleep.
+export OMPI_MCA_btl=self
+
+if [[ "$WITH_MPI" == "true" ]]; then
+    source /etc/profile.d/modules.sh
+fi
+
 __rbh_sync=$(PATH="$PWD/rbh-sync:$PATH" which rbh-sync)
 rbh_sync()
 {
