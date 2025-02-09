@@ -6,7 +6,6 @@
  *
  * SPDX-License-Identifer: LGPL-3.0-or-later
  */
-#include "plugins/backend.h"
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif
@@ -24,12 +23,10 @@
 #include <lustre/lustre_user.h>
 #include <linux/lustre/lustre_idl.h>
 
-#include "robinhood/backends/posix.h"
-#include "robinhood/utils.h"
+#include "robinhood/backends/lustre.h"
 #include "robinhood/backends/posix_internal.h"
 #include "robinhood/backends/posix_extension.h"
-#include "robinhood/backends/lustre_internal.h"
-#include "robinhood/backends/lustre.h"
+
 #include "robinhood/statx.h"
 #include "value.h"
 
@@ -887,7 +884,7 @@ lustre_get_attrs(struct entry_info *entry_info,
                       pairs, available_pairs, values);
 }
 
-int
+static int
 lustre_inode_xattrs_callback(struct entry_info *entry_info,
                              struct rbh_value_pair *pairs,
                              int available_pairs,
@@ -901,10 +898,6 @@ lustre_inode_xattrs_callback(struct entry_info *entry_info,
                       sizeof(xattrs_funcs) / sizeof(xattrs_funcs[0]),
                       pairs, available_pairs, values);
 }
-
-/*----------------------------------------------------------------------------*
- |                          lustre_backend                                    |
- *----------------------------------------------------------------------------*/
 
 static struct rbh_value *
 lustre_get_default_dir_stripe(int fd, uint64_t flags)
@@ -948,6 +941,10 @@ lustre_get_default_dir_stripe(int fd, uint64_t flags)
     return value;
 }
 
+    /*--------------------------------------------------------------------*
+     |                          extension enricher                        |
+     *--------------------------------------------------------------------*/
+
 int
 rbh_lustre_enrich(struct entry_info *einfo, uint64_t flags,
                   struct rbh_value_pair *pairs,
@@ -972,152 +969,4 @@ rbh_lustre_enrich(struct entry_info *einfo, uint64_t flags,
     }
 
     return 0;
-}
-
-    /*--------------------------------------------------------------------*
-     |                          get_attribute()                           |
-     *--------------------------------------------------------------------*/
-
-int
-lustre_get_attribute(uint64_t flags, void *_arg, struct rbh_value_pair *pairs,
-                     int available_pairs)
-{
-    struct arg_t {
-        int fd;
-        struct rbh_statx *statx;
-        struct rbh_sstack *values;
-    };
-    struct arg_t *info = (struct arg_t *)_arg;
-    struct entry_info entry_info = {
-        .fd = info->fd,
-        .statx = info->statx,
-        .inode_xattrs = NULL,
-        .inode_xattrs_count = NULL,
-    };
-
-    return rbh_lustre_enrich(&entry_info, flags, pairs, available_pairs,
-                             info->values);
-}
-
-static int
-lustre_fts_backend_get_attribute(void *backend, uint64_t flags,
-                                 void *arg, struct rbh_value_pair *pairs,
-                                 int available_pairs)
-{
-    (void) backend;
-    return lustre_get_attribute(flags, arg, pairs, available_pairs);
-}
-
-    /*--------------------------------------------------------------------*
-     |                          get_option()                              |
-     *--------------------------------------------------------------------*/
-
-static int
-lustre_fts_backend_get_option(void *backend, unsigned int option, void *data,
-                              size_t *data_size)
-{
-    return posix_backend_get_option(backend, option, data, data_size);
-}
-
-    /*--------------------------------------------------------------------*
-     |                          set_option()                              |
-     *--------------------------------------------------------------------*/
-
-static int
-lustre_fts_backend_set_option(void *backend, unsigned int option,
-                              const void *data, size_t data_size)
-{
-    return posix_backend_set_option(backend, option, data, data_size);
-}
-
-    /*--------------------------------------------------------------------*
-     |                          branch()                                  |
-     *--------------------------------------------------------------------*/
-
-static struct rbh_backend *
-lustre_fts_backend_branch(void *backend, const struct rbh_id *id,
-                          const char *path)
-{
-    return posix_backend_branch(backend, id, path);
-}
-
-    /*--------------------------------------------------------------------*
-     |                          root()                                    |
-     *--------------------------------------------------------------------*/
-
-static struct rbh_fsentry *
-lustre_fts_backend_root(void *backend,
-                        const struct rbh_filter_projection *projection)
-{
-    return posix_root(backend, projection);
-}
-
-    /*--------------------------------------------------------------------*
-     |                          filter()                                  |
-     *--------------------------------------------------------------------*/
-
-static struct rbh_mut_iterator *
-lustre_fts_backend_filter(void *backend, const struct rbh_filter *filter,
-                          const struct rbh_filter_options *options,
-                          const struct rbh_filter_output *output)
-{
-    return posix_backend_filter(backend, filter, options, output);
-}
-
-    /*--------------------------------------------------------------------*
-     |                          destroy()                                 |
-     *--------------------------------------------------------------------*/
-
-static void
-lustre_fts_backend_destroy(void *backend)
-{
-    posix_backend_destroy(backend);
-}
-
-static const struct rbh_backend_operations LUSTRE_BACKEND_OPS = {
-    .get_option = lustre_fts_backend_get_option,
-    .set_option = lustre_fts_backend_set_option,
-    .branch = lustre_fts_backend_branch,
-    .root = lustre_fts_backend_root,
-    .filter = lustre_fts_backend_filter,
-    .get_attribute = lustre_fts_backend_get_attribute,
-    .destroy = lustre_fts_backend_destroy,
-};
-
-struct rbh_backend *
-rbh_lustre_backend_new(const struct rbh_backend_plugin *self,
-                       const char *type,
-                       const char *path,
-                       struct rbh_config *config)
-{
-    struct posix_backend *lustre;
-
-    lustre = (struct posix_backend *) rbh_posix_backend_new(self, NULL, path,
-                                                            config);
-    if (lustre == NULL)
-        return NULL;
-
-    lustre->iter_new = fts_iter_new;
-    lustre->backend.id = RBH_BI_LUSTRE;
-    lustre->backend.name = RBH_LUSTRE_BACKEND_NAME;
-    lustre->backend.ops = &LUSTRE_BACKEND_OPS;
-
-    load_rbh_config(config);
-
-    if (self) {
-        const struct rbh_posix_extension *retention;
-
-        /* For backward compatibility, Lustre explicitly loads the retention
-         * extension. This will be removed later.
-         */
-        retention = rbh_posix_load_extension(&self->plugin, "retention");
-        if (retention) {
-            if (retention->setup_enricher)
-                retention->setup_enricher();
-
-            retention_enricher = retention->enrich;
-        }
-    }
-
-    return &lustre->backend;
 }
