@@ -25,9 +25,10 @@
 #include <sys/stat.h>
 #include <sys/xattr.h>
 
-#include "robinhood/backends/posix.h"
-#include "robinhood/backends/posix_internal.h"
+#include "posix_internals.h"
 #include "robinhood/backends/posix_extension.h"
+#include "robinhood/backends/posix.h"
+
 #include "robinhood/plugins/backend.h"
 #include "robinhood/sstack.h"
 #include "robinhood/statx.h"
