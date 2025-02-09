@@ -18,10 +18,10 @@
 
 #include "mfu.h"
 
-#include "common.h"
-#include "robinhood/iterator.h"
-#include "robinhood/filter.h"
 #include "robinhood/backend.h"
+#include "robinhood/backends/posix_extension.h"
+#include "robinhood/filter.h"
+#include "robinhood/iterator.h"
 
 /*----------------------------------------------------------------------------*
  |                               mpi_file_info                                |
