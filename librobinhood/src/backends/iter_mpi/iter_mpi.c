@@ -16,7 +16,6 @@
 #include <error.h>
 #include <libgen.h>
 
-#include "robinhood/backends/posix_internal.h"
 #include "robinhood/backends/iter_mpi_internal.h"
 #include "robinhood/backend.h"
 #include "robinhood/mpi_rc.h"
