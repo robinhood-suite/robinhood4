@@ -15,14 +15,13 @@
 #include <assert.h>
 #include <libgen.h>
 
-#include "mfu.h"
+#include <mfu.h>
 #include "robinhood/backends/posix_extension.h"
-#include "robinhood/backends/iter_mpi_internal.h"
+#include "robinhood/backends/mfu.h"
 #include "robinhood/backends/mpi_file.h"
 #include "robinhood/backend.h"
 #include "robinhood/statx.h"
 #include "robinhood/mpi_rc.h"
-#include "robinhood/utils.h"
 #include "mpi_file.h"
 
 /*----------------------------------------------------------------------------*
@@ -51,9 +50,10 @@ flist_file2statx(mfu_flist flist, uint64_t idx, struct rbh_statx *statxbuf)
 }
 
 static struct rbh_fsentry *
-fsentry_from_flist(struct mpi_file_info *mpi_fi,
-                   struct mpi_iterator *iterator)
+fsentry_from_flist(struct file_info *mpi_fi,
+                   struct posix_iterator *posix)
 {
+    struct mfu_iterator *mfu = (struct mfu_iterator *)posix;
     struct rbh_value_map inode_xattrs;
     struct rbh_value_pair *ns_pairs;
     struct rbh_value_map ns_xattrs;
@@ -63,21 +63,21 @@ fsentry_from_flist(struct mpi_file_info *mpi_fi,
     struct rbh_id *id;
     int save_errno;
 
-    const char *path = strlen(mpi_fi->path) == iterator->prefix_len ?
-                        "/" : mpi_fi->path + iterator->prefix_len;
+    const char *path = strlen(mpi_fi->path) == posix->prefix_len ?
+                        "/" : mpi_fi->path + posix->prefix_len;
     /**
      * Unlike with posix, we use the relative path of an entry to
      * create an unique ID
      */
     id = rbh_id_new_with_id(mpi_fi->path,
                             (strlen(mpi_fi->path) + 1) * sizeof(*mpi_fi->path),
-                            iterator->backend_id);
+                            mfu->is_mpifile ? RBH_BI_POSIX_MPI : RBH_BI_POSIX);
     if (id == NULL) {
         save_errno = errno;
         return NULL;
     }
 
-    flist_file2statx(iterator->flist, iterator->current, &statxbuf);
+    flist_file2statx(mfu->files, mfu->current, &statxbuf);
 
     if (S_ISLNK(statxbuf.stx_mode)) {
         static_assert(sizeof(size_t) == sizeof(statxbuf.stx_size), "");
@@ -136,45 +136,6 @@ out_free_id:
 
     errno = save_errno;
     return NULL;
-}
-
-static void
-mpi_file_iter_destroy(void *iterator)
-{
-    struct mpi_iterator *mpi_file_iter = iterator;
-
-    free(mpi_file_iter);
-}
-
-static const struct rbh_mut_iterator_operations MPI_FILE_ITER_OPS = {
-    .next = mpi_iter_next,
-    .destroy = mpi_file_iter_destroy,
-};
-
-static const struct rbh_mut_iterator MPI_FILE_ITER = {
-    .ops = &MPI_FILE_ITER_OPS,
-};
-
-static struct rbh_mut_iterator *
-mpi_file_iterator_new(mfu_flist flist, int prefix_len)
-{
-    struct mpi_iterator *mpi_file_iter;
-
-    mpi_file_iter = malloc(sizeof(*mpi_file_iter));
-    if (mpi_file_iter == NULL)
-        error(EXIT_FAILURE, errno, "malloc mpi_iterator");
-
-    mpi_file_iter->backend_id = RBH_BI_MPI_FILE;
-    mpi_file_iter->iterator = MPI_FILE_ITER;
-    mpi_file_iter->flist = flist;
-    mpi_file_iter->current = 0;
-    mpi_file_iter->total = mfu_flist_size(flist);
-    mpi_file_iter->is_branch = false;
-    mpi_file_iter->use_fd = false;
-    mpi_file_iter->mpi_build_fsentry = fsentry_from_flist;
-    mpi_file_iter->prefix_len = prefix_len;
-
-    return (struct rbh_mut_iterator *)mpi_file_iter;
 }
 
 /*----------------------------------------------------------------------------*
@@ -382,7 +343,7 @@ mpi_file_backend_filter(
     __attribute__((unused)) const struct rbh_filter_output *output)
 {
     struct mpi_file_backend *mpi_file = backend;
-    struct mpi_iterator *mpi_file_iter;
+    struct mfu_iterator *mpi_file_iter;
     mfu_pred *pred_head;
     const char *root;
     int prefix_len;
@@ -403,9 +364,8 @@ mpi_file_backend_filter(
         return NULL;
     }
 
-    /**
-     * We need to broadcast to all ranks the length of the root in order to
-     * remove it from the path
+    /* We need to broadcast to all ranks the length of the root in order to
+     * remove it from the path.
      */
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     if (rank == 0) {
@@ -425,13 +385,15 @@ mpi_file_backend_filter(
         mpi_file->flist = flist;
     }
 
-    mpi_file_iter = (struct mpi_iterator *)
-                     mpi_file_iterator_new(mpi_file->flist, prefix_len);
+    mpi_file_iter = (struct mfu_iterator *)
+         rbh_mpi_file_mfu_iter_new(mpi_file->flist, prefix_len);
     if (mpi_file_iter == NULL)
         return NULL;
-    mpi_file_iter->skip_error = options->skip_error;
 
-    return &mpi_file_iter->iterator;
+    mpi_file_iter->fsentry_new = fsentry_from_flist;
+    mpi_file_iter->posix.skip_error = options->skip_error;
+
+    return &mpi_file_iter->posix.iterator;
 }
 
     /*--------------------------------------------------------------------*
@@ -466,22 +428,9 @@ static const struct rbh_backend MPI_FILE_BACKEND = {
 };
 
 static void
-mpi_initialize(void)
-{
-    int initialized;
-
-    MPI_Initialized(&initialized);
-    if (!initialized) {
-        debug("initialize");
-        MPI_Init(NULL, NULL);
-        mfu_init();
-    }
-}
-
-static void
 mpi_file_backend_init(struct mpi_file_backend *mpi_file)
 {
-    rbh_mpi_inc_ref(mpi_initialize);
+    rbh_mpi_inc_ref(rbh_mpi_initialize);
 
     mpi_file->flist = mfu_flist_new();
     /* We tell mpifileutils that we have the stat informations */
@@ -525,4 +474,10 @@ rbh_mpi_file_backend_new(const struct rbh_backend_plugin *self,
     mpi_file->backend = MPI_FILE_BACKEND;
 
     return &mpi_file->backend;
+}
+
+void
+rbh_mpi_file_plugin_destroy(void)
+{
+    rbh_mpi_dec_ref(rbh_mpi_finalize);
 }

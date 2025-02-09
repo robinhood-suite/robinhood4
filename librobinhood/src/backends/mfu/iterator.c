@@ -11,23 +11,9 @@
 
 #include "mfu_internals.h"
 
-#include <robinhood/backends/iter_mpi_internal.h>
+#include <robinhood/backends/mfu.h>
 #include <robinhood/backends/posix_extension.h>
 #include <robinhood/mpi_rc.h>
-
-struct mfu_iterator {
-    struct posix_iterator posix;
-    /** Index of current file in the flist in the process */
-    uint64_t current;
-    /**
-     * Size of the flist in the process, this is not the global size of the
-     * flist
-     */
-    uint64_t total;
-    /** List of files processed by a given MPI process  */
-    mfu_flist files;
-    bool is_branch;
-};
 
 static void *
 mfu_iter_next(void *_iter)
@@ -43,18 +29,23 @@ mfu_iter_next(void *_iter)
 skip:
     if (iter->current == iter->total) {
         errno = ENODATA;
+        /* the flist belongs to the backend, do not free it */
+        iter->files = NULL;
         return NULL;
     }
 
     path = mfu_flist_file_get_name(iter->files, iter->current);
     path_dup = strdup(path);
-    if (path_dup == NULL)
+    if (path_dup == NULL) {
+        /* the flist belongs to the backend, do not free it */
+        iter->files = NULL;
         return NULL;
+    }
 
     fi.path = path;
     fi.name = basename(path_dup);
-    /* FIXME for now we don't support mfu files so we hardcode the use of fd */
-    fi.parent_id = get_parent_id(path, true, iter->posix.prefix_len,
+    fi.parent_id = get_parent_id(path, !iter->is_mpifile,
+                                 iter->posix.prefix_len,
                                  RBH_BI_POSIX);
 
     if (fi.parent_id == NULL) {
@@ -65,6 +56,9 @@ skip:
             iter->current++;
             goto skip;
         }
+
+        /* the flist belongs to the backend, do not free it */
+        iter->files = NULL;
         return NULL;
     }
 
@@ -78,7 +72,7 @@ skip:
         fi.name[0] = '\0';
     }
 
-    fsentry = fsentry_from_fi(&fi, &iter->posix);
+    fsentry = iter->fsentry_new(&fi, &iter->posix);
 
     if (fsentry == NULL && (errno == ENOENT || errno == ESTALE)) {
         /* The entry moved from under our feet */
@@ -90,6 +84,8 @@ skip:
             iter->current++;
             goto skip;
         }
+        /* the flist belongs to the backend, do not free it */
+        iter->files = NULL;
         return NULL;
     }
 
@@ -102,29 +98,15 @@ skip:
 }
 
 static void
-mpi_finalize(void)
-{
-    int initialized;
-    int finalized;
-
-    /* Prevents finalizing twice MPI if we use two backends with MPI */
-    MPI_Initialized(&initialized);
-    MPI_Finalized(&finalized);
-
-    if (initialized && !finalized) {
-        mfu_finalize();
-        MPI_Finalize();
-    }
-}
-
-static void
 mfu_iter_destroy(void *iterator)
 {
     struct mfu_iterator *iter = iterator;
 
-    mfu_flist_free(&iter->files);
+    if (iter->files)
+        mfu_flist_free(&iter->files);
+
     free(iter);
-    rbh_mpi_dec_ref(mpi_finalize);
+    rbh_mpi_dec_ref(rbh_mpi_finalize);
 }
 
 static const struct rbh_mut_iterator_operations MFU_ITER_OPS = {
@@ -136,45 +118,43 @@ static const struct rbh_mut_iterator MFU_ITER = {
     .ops = &MFU_ITER_OPS,
 };
 
-static void
-mpi_initialize(void)
-{
-    int initialized;
-
-    MPI_Initialized(&initialized);
-    if (!initialized) {
-        MPI_Init(NULL, NULL);
-        mfu_init();
-    }
-}
-
-struct rbh_mut_iterator *
-rbh_posix_mfu_iter_new(const char *root,
-                       const char *entry,
-                       int statx_sync_type)
+static struct rbh_mut_iterator *
+mfu_iter_new(const char *root, const char *entry, int statx_sync_type,
+             size_t prefix_len, mfu_flist flist)
 {
     struct mfu_iterator *mfu;
     int save_errno;
     int rc;
 
-    rbh_mpi_inc_ref(mpi_initialize);
+    rbh_mpi_inc_ref(rbh_mpi_initialize);
 
     mfu = malloc(sizeof(*mfu));
     if (!mfu)
         return NULL;
 
-    rc = posix_iterator_setup(&mfu->posix, root, entry, statx_sync_type);
-    save_errno = errno;
-    if (rc == -1)
-        goto free_iter;
+    if (flist) {
+        mfu->posix.prefix_len = prefix_len;
+        mfu->files = flist;
+        mfu->is_mpifile = true;
+        /* Will be setup by caller in mpi-file backend */
+        mfu->fsentry_new = NULL;
+    } else {
+        rc = posix_iterator_setup(&mfu->posix, root, entry, statx_sync_type);
+        save_errno = errno;
+        if (rc == -1)
+            goto free_iter;
+
+        mfu->files = walk_path(mfu->posix.path);
+        mfu->is_mpifile = false;
+        mfu->fsentry_new = fsentry_from_fi;
+
+        free(mfu->posix.path);
+    }
 
     mfu->posix.iterator = MFU_ITER;
-    mfu->files = walk_path(mfu->posix.path);
     mfu->total = mfu_flist_size(mfu->files);
     mfu->current = 0;
     mfu->is_branch = (entry != NULL);
-
-    free(mfu->posix.path);
 
     return (struct rbh_mut_iterator *)mfu;
 
@@ -183,4 +163,18 @@ free_iter:
     errno = save_errno;
 
     return NULL;
+}
+
+struct rbh_mut_iterator *
+rbh_posix_mfu_iter_new(const char *root,
+                       const char *entry,
+                       int statx_sync_type)
+{
+    return mfu_iter_new(root, entry, statx_sync_type, 0, NULL);
+}
+
+struct rbh_mut_iterator *
+rbh_mpi_file_mfu_iter_new(mfu_flist flist, size_t prefix_len)
+{
+    return mfu_iter_new(NULL, NULL, 0, prefix_len, flist);
 }
