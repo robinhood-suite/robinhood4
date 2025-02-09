@@ -332,7 +332,6 @@ bool
 fsentry_from_any(struct fsentry_id_pair *fip, const struct rbh_value *path,
                  char *accpath, struct rbh_id *entry_id,
                  struct rbh_id *parent_id, char *name, int statx_sync_type,
-                 inode_xattrs_callback_t inode_xattrs_callback,
                  enricher_t *enrichers)
 {
     const int statx_flags =
@@ -476,34 +475,6 @@ fsentry_from_any(struct fsentry_id_pair *fip, const struct rbh_value *path,
     ns_xattrs.count = 1;
     ns_xattrs.pairs = ns_pairs;
 
-    if (inode_xattrs_callback != NULL) {
-        struct entry_info info = {
-            .fd = fd,
-            .statx = &statxbuf,
-            .inode_xattrs = pairs,
-            .inode_xattrs_count = &count,
-        };
-        int callback_xattrs_count;
-
-        callback_xattrs_count = inode_xattrs_callback(&info, &pairs[count],
-                                                      pairs_count - count,
-                                                      values);
-        if (callback_xattrs_count == -1) {
-            if (errno != ENOMEM) {
-                fprintf(stderr,
-                        "Failed to get inode xattrs of '%s': %s (%d)\n",
-                        path->string, strerror(errno), errno);
-                /* Set errno to ESTALE to not stop the iterator for a single
-                 * failed entry.
-                 */
-                errno = ESTALE;
-            }
-            save_errno = errno;
-            goto out_clear_sstacks;
-        }
-        count += callback_xattrs_count;
-    }
-
     if (enrichers != NULL) {
         struct entry_info info = {
             .fd = fd,
@@ -596,7 +567,6 @@ posix_iterator_setup(struct posix_iterator *iter,
     if (iter->path == NULL)
         return 0;
 
-    iter->inode_xattrs_callback = NULL;
     iter->statx_sync_type = statx_sync_type;
     iter->prefix_len = strcmp(root, "/") ? strlen(root) : 0;
 
