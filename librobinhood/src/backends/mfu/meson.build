@@ -21,3 +21,9 @@ librbh_posix_mfu_ext = library(
     install: true,
     c_args: '-DHAVE_CONFIG_H',
 )
+
+librbh_posix_mfu_ext_dep = declare_dependency(
+    link_with: librbh_posix_mfu_ext,
+    include_directories: rbh_include
+)
+

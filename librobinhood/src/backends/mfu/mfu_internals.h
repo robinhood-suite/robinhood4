@@ -16,6 +16,7 @@
 #include <stddef.h>
 #include <stdint.h>
 
+#include <robinhood/backends/mfu.h>
 #include <robinhood/backends/posix_extension.h>
 
 /*----------------------------------------------------------------------------*
@@ -36,15 +37,6 @@ walk_path(const char* path);
 
 struct rbh_id *
 get_parent_id(const char *path, bool use_fd, int prefix_len);
-
-struct file_info {
-    /** File path from the root */
-    const char *path;
-    /** File name */
-    char *name;
-    /** rbh_id of parent entry */
-    struct rbh_id *parent_id;
-};
 
 struct rbh_fsentry *
 fsentry_from_fi(struct file_info *fi, struct posix_iterator *posix);

@@ -101,3 +101,30 @@ fsentry_from_fi(struct file_info *fi,
     return pair.fsentry;
 }
 
+void
+rbh_mpi_initialize(void)
+{
+    int initialized;
+
+    MPI_Initialized(&initialized);
+    if (!initialized) {
+        MPI_Init(NULL, NULL);
+        mfu_init();
+    }
+}
+
+void
+rbh_mpi_finalize(void)
+{
+    int initialized;
+    int finalized;
+
+    /* Prevents finalizing twice MPI if we use two backends with MPI */
+    MPI_Initialized(&initialized);
+    MPI_Finalized(&finalized);
+
+    if (initialized && !finalized) {
+        mfu_finalize();
+        MPI_Finalize();
+    }
+}
