@@ -17,9 +17,9 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#include "check-compat.h"
-#include "robinhood.h"
-#include "robinhood/backends/posix.h"
+#include <check.h>
+
+#include <robinhood/plugins/backend.h>
 
 /*----------------------------------------------------------------------------*
  |                     fixtures to run tests in isolation                     |
