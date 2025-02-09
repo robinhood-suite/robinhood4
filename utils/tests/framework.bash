@@ -231,30 +231,38 @@ teardown()
 run_tests()
 {
     local fail=0
+    local timefile=$(mktemp)
 
     for test in "$@"; do
         (
          set -e
          trap -- "teardown $sub_teardown" EXIT
+
+         # The time needs to be stored in a file because we can't propagate bash
+         # or env variable outside of this subshell.
+         date +%s > "$timefile"
+
          setup "$sub_setup"
          "$test"
         )
-        rc=$?
-        echo "rc = '$rc'"
-        if ((rc == 77)); then
+        local rc=$?
+        local end=$(date +%s)
+        local duration=$(( $end - $(cat "$timefile") ))
+
+        if (( rc == 0 )); then
+            echo "$test: ✔  (${duration}s)"
+        elif (( rc == 77 )); then
             echo "$test: SKIP"
-            if ((fail == 0)); then
+            if (( fail == 0 )); then
                 fail="77"
             fi
-        elif !((rc)); then
-            echo "$test: ✔"
         else
-            echo "$test: ✖"
-            if ((fail == 0 || fail == 77)); then
-                fail="$rc"
-            fi
+            echo "$test: ✖  (${duration}s)"
+            fail=$rc
         fi
     done
+
+    rm "$timefile"
 
     return $fail
 }
