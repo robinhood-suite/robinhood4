@@ -17,13 +17,9 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#include "check-compat.h"
-#include "robinhood.h"
-#include "robinhood/backends/posix_mpi.h"
-#include "robinhood/backends/posix.h"
-#ifndef HAVE_STATX
-# include "robinhood/statx.h"
-#endif
+#include <check.h>
+
+#include <robinhood/plugins/backend.h>
 
 /*----------------------------------------------------------------------------*
  |                     fixtures to run tests in isolation                     |
