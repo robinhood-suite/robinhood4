@@ -207,18 +207,25 @@ teardown()
 run_tests()
 {
     local fail=0
+    local timefile=$(mktemp)
 
     for test in "$@"; do
         (
          set -e
          trap -- "teardown $sub_teardown" EXIT
+         local begin=$(date +%s)
          setup "$sub_setup"
          "$test"
+         local rc=$?
+         local end=$(date +%s)
+         echo $(( end - begin )) > $timefile
+         exit $rc
         )
+        local duration=$(cat $timefile)
         if !(($?)); then
-            echo "$test: ✔"
+            echo "$test: ✔  ($duration)"
         else
-            echo "$test: ✖"
+            echo "$test: ✖  ($duration)"
             fail=1
         fi
     done
