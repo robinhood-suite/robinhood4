@@ -24,7 +24,6 @@
 #include <linux/lustre/lustre_idl.h>
 
 #include "robinhood/backends/lustre.h"
-#include "robinhood/backends/posix_internal.h"
 #include "robinhood/backends/posix_extension.h"
 
 #include "robinhood/statx.h"

@@ -12,7 +12,7 @@
 #include "mfu_internals.h"
 
 #include <robinhood/backends/iter_mpi_internal.h>
-#include <robinhood/backends/posix_internal.h>
+#include <robinhood/backends/posix_extension.h>
 #include <robinhood/mpi_rc.h>
 
 struct mfu_iterator {

@@ -16,7 +16,7 @@
 #include <libgen.h>
 
 #include "mfu.h"
-#include "robinhood/backends/posix_internal.h"
+#include "robinhood/backends/posix_extension.h"
 #include "robinhood/backends/iter_mpi_internal.h"
 #include "robinhood/backends/mpi_file.h"
 #include "robinhood/statx.h"

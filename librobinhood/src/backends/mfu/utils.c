@@ -11,7 +11,7 @@
 #include <libgen.h>
 #include <string.h>
 
-#include <robinhood/backends/posix_internal.h>
+#include <robinhood/backends/posix_extension.h>
 #include <robinhood/id.h>
 
 #include "mfu_internals.h"
