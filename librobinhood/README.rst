@@ -121,3 +121,16 @@ The variable must follow the form ``mongodb://HOST:PORT``
 .. code:: bash
 
     export RBH_MONGODB_ADDRESS=mongodb://localhost:27017
+
+Known Issues
+============
+
+There is currently a known issue with rbh-sync_ where during each
+synchronization using the basic traverser FTS_, the `access time` of directories
+is updated after each pass. This is due to the traverser FTS_ opening
+directories for traversal without a `O_NOATIME` flag.
+
+This is not an issue that occurs with the MPI_ traverser, as this issue has been
+patched out.
+
+.. _FTS: https://man7.org/linux/man-pages/man3/fts.3.html
