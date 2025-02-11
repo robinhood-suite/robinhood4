@@ -24,6 +24,54 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "27f05734_3e7cd7db",
+        "filename": "librobinhood/src/alias.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-02-11T15:09:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2b89b6f1_52b24758",
+      "range": {
+        "startLine": 152,
+        "startChar": 4,
+        "endLine": 152,
+        "endChar": 25
+      },
+      "revId": "297dff89ba17e3d52636cbdcc65e93684b3c2624",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "adc8edfe_419858f8",
+        "filename": "librobinhood/src/alias.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-02-11T15:09:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2b89b6f1_52b24758",
+      "range": {
+        "startLine": 152,
+        "startChar": 4,
+        "endLine": 152,
+        "endChar": 25
+      },
+      "revId": "297dff89ba17e3d52636cbdcc65e93684b3c2624",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "834e4898_1917023f",
@@ -37,6 +85,30 @@
       "writtenOn": "2025-01-27T15:03:12Z",
       "side": 1,
       "message": "nit: this can be a `rbh_sstack_push` too",
+      "range": {
+        "startLine": 153,
+        "startChar": 34,
+        "endLine": 153,
+        "endChar": 46
+      },
+      "revId": "297dff89ba17e3d52636cbdcc65e93684b3c2624",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4d1747d5_5d1c9896",
+        "filename": "librobinhood/src/alias.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-02-11T15:09:29Z",
+      "side": 1,
+      "message": "Using `rbh_sstack_push` here adds unnecessary complexity, as strdup is simpler, more readable, and sufficient for handling memory.",
+      "parentUuid": "834e4898_1917023f",
       "range": {
         "startLine": 153,
         "startChar": 34,
@@ -94,6 +166,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0a758950_3e4eba77",
+        "filename": "librobinhood/src/alias.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-02-11T15:09:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3af90a06_abec3e3c",
+      "range": {
+        "startLine": 186,
+        "startChar": 47,
+        "endLine": 186,
+        "endChar": 68
+      },
+      "revId": "297dff89ba17e3d52636cbdcc65e93684b3c2624",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "637913c6_456fb021",
@@ -107,6 +203,30 @@
       "writtenOn": "2025-01-27T15:03:12Z",
       "side": 1,
       "message": "nit: move this function below `alias_resolution`, as it is the first one called",
+      "range": {
+        "startLine": 198,
+        "startChar": 0,
+        "endLine": 225,
+        "endChar": 1
+      },
+      "revId": "297dff89ba17e3d52636cbdcc65e93684b3c2624",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ff4d4707_4a3db6da",
+        "filename": "librobinhood/src/alias.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-02-11T15:09:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "637913c6_456fb021",
       "range": {
         "startLine": 198,
         "startChar": 0,
@@ -148,6 +268,24 @@
       "side": 1,
       "message": "defect: To be complete, the issue comes from line 279 which checks the whole new argv, which may contain other aliases. Thus we won\u0027t have an empty history in this check",
       "parentUuid": "71f30ef2_f603a5ad",
+      "revId": "297dff89ba17e3d52636cbdcc65e93684b3c2624",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cf9e7bae_f2c589b0",
+        "filename": "librobinhood/src/alias.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-02-11T15:09:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4578dfe5_90a2021f",
       "revId": "297dff89ba17e3d52636cbdcc65e93684b3c2624",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
@@ -199,6 +337,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "99223a69_fb8787b9",
+        "filename": "librobinhood/src/alias.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-02-11T15:09:29Z",
+      "side": 1,
+      "message": "I skip so that a poorly configured alias doesn\u0027t influence the parsing of the aliases that follow but I could crash the command! I\u0027m not sure which approach is the best, what do you prefer?",
+      "parentUuid": "82d30029_8df07ade",
+      "range": {
+        "startLine": 244,
+        "startChar": 8,
+        "endLine": 244,
+        "endChar": 46
+      },
+      "revId": "297dff89ba17e3d52636cbdcc65e93684b3c2624",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b710a223_d60786a5",
@@ -212,6 +374,30 @@
       "writtenOn": "2025-01-27T15:03:12Z",
       "side": 1,
       "message": "defect: see the other one for more info, but here you should only check between indexes of your newly added arguments",
+      "range": {
+        "startLine": 279,
+        "startChar": 9,
+        "endLine": 279,
+        "endChar": 29
+      },
+      "revId": "297dff89ba17e3d52636cbdcc65e93684b3c2624",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7db666ca_8094c439",
+        "filename": "librobinhood/src/alias.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-02-11T15:09:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b710a223_d60786a5",
       "range": {
         "startLine": 279,
         "startChar": 9,
