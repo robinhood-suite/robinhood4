@@ -121,3 +121,14 @@ The variable must follow the form ``mongodb://HOST:PORT``
 .. code:: bash
 
     export RBH_MONGODB_ADDRESS=mongodb://localhost:27017
+
+Limits
+======
+
+Maximum File Path Length
+------------------------
+
+RobinHood4 handles paths up to 4096 characters total. If a checked path is too
+long, the error is printed out and then skipped. That is unless the `--no-skip`
+flag is set by the calling application, in which case the application is also
+stopped.
