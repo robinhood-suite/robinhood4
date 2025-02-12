@@ -22,6 +22,30 @@
       },
       "revId": "c87584063d49e1ff7649b07694efda851380088d",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3dabc6b2_0aa80666",
+        "filename": "librobinhood/src/config.c",
+        "patchSetId": 7
+      },
+      "lineNbr": 413,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-02-12T09:10:09Z",
+      "side": 1,
+      "message": "To follow Linux conventions for directories containing configuration files",
+      "parentUuid": "2976b121_0ac15d69",
+      "range": {
+        "startLine": 413,
+        "startChar": 49,
+        "endLine": 413,
+        "endChar": 51
+      },
+      "revId": "c87584063d49e1ff7649b07694efda851380088d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
