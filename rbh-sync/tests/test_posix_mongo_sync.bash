@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # This file is part of RobinHood 4
-# Copyright (C) 2021 Commissariat a l'energie atomique et aux energies
+# Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
@@ -17,18 +17,18 @@ export PSM3_DEVICES="self"
 rbh_sync_posix()
 {
     if [[ "$WITH_MPI" == "true" ]]; then
-        rbh_sync "rbh:posix-mpi:$1" "$2"
+        rbh_sync "rbh:posix-mpi:$1" "$2" $3
     else
-        rbh_sync "rbh:posix:$1" "$2"
+        rbh_sync "rbh:posix:$1" "$2" $3
     fi
 }
 
 rbh_sync_posix_one()
 {
     if [[ "$WITH_MPI" == "true" ]]; then
-        rbh_sync -o "rbh:posix-mpi:$1" "$2"
+        rbh_sync -o "rbh:posix-mpi:$1" "$2" $3
     else
-        rbh_sync -o "rbh:posix:$1" "$2"
+        rbh_sync -o "rbh:posix:$1" "$2" $3
     fi
 }
 
@@ -429,6 +429,48 @@ xattrs_map:
                    '"xattrs.user.blob_string" : "five"'
     find_attribute '"ns.xattrs.path":"/'$file'"' \
                    '"xattrs.user.blob_boolean" : true'
+}
+
+test_sync_large_path()
+{
+    # We will create strings of length 4064 and 4096 by creating a file
+    # hierarchy where each directory is of either 126 or 127 characters,
+    # repeated 32 times, with an additionnal 32 '/'
+    local lengthA=126
+    local lengthB=127
+
+    local long_pathA="$(printf '%*s' "$lengthA" | sed 's/ /a/g')"
+    local long_pathB="$(printf '%*s' "$lengthB" | sed 's/ /b/g')"
+
+    local full_pathA
+    local full_pathB
+
+    for i in $(seq 1 32);
+    do
+        full_pathA="$full_pathA/$long_pathA"
+        full_pathB="$full_pathB/$long_pathB"
+    done
+
+    mkdir -p ./$full_pathA
+    mkdir -p ./$full_pathB
+
+    # The path A should be synced properly, as its size is 4064 characters
+    # total, but the path B shouldn't be, as it exceeds the path size limit
+    rbh_sync_posix "." "rbh:mongo:$testdb"
+
+    find_attribute '"ns.xattrs.path":"'$full_pathA'"'
+    ! (find_attribute '"ns.xattrs.path":"'$full_pathB'"')
+
+set +e
+    rbh_sync_posix "." "rbh:mongo:$testdb" "--no-skip"
+    local rc=3
+set -e
+
+ENAMETOOLONG=36
+
+    if ((rc != ENAMETOOLONG)); then
+        error "Sync should have failed because second path is too long"
+    fi
 }
 
 ################################################################################
