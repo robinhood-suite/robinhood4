@@ -603,6 +603,7 @@ skip:
         return NULL;
     case FTS_DNR:
     case FTS_ERR:
+    case FTS_NS: /* May include ENAMETOOLONG errors */
         errno = ftsent->fts_errno;
         fprintf(stderr, "FTS: failed to read entry '%s': %s (%d)\n",
                 ftsent->fts_path, strerror(errno), errno);
@@ -611,9 +612,6 @@ skip:
                      ftsent->fts_path);
              goto skip;
         }
-        return NULL;
-    case FTS_NS:
-        errno = ftsent->fts_errno;
         return NULL;
     }
 
@@ -672,6 +670,7 @@ skip:
                     ftsent->fts_path);
             goto skip;
         }
+
         return NULL;
     }
 
@@ -690,7 +689,7 @@ posix_iter_destroy(void *iterator)
             fts_set(posix_iter->fts_handle, ftsent, FTS_SKIP);
             break;
         case FTS_DP:
-            /* fsentry_from_ftsent() memoizes ids of directories */
+            /* fsentry_from_ftsent() memorizes ids of directories */
             free(ftsent->fts_pointer);
             break;
         }
