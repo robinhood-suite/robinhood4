@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "2b97e150_55fd8814",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-02-13T14:59:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1e33e02f_7cfa75fa",
+      "range": {
+        "startLine": 9,
+        "startChar": 7,
+        "endLine": 9,
+        "endChar": 9
+      },
+      "revId": "cab738e9580712643a6cbb59b3327c6216e9ba0f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "27932a4e_0b244707",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 7
@@ -64,6 +88,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "173372cc_22663b11",
+        "filename": "rbh-find-lustre/rbh-find-lustre.c",
+        "patchSetId": 7
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-02-13T14:59:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "380417e4_e26dd4ef",
+      "range": {
+        "startLine": 60,
+        "startChar": 13,
+        "endLine": 60,
+        "endChar": 16
+      },
+      "revId": "cab738e9580712643a6cbb59b3327c6216e9ba0f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fa2569cf_482b0145",
@@ -77,6 +125,30 @@
       "writtenOn": "2025-02-13T10:58:51Z",
       "side": 1,
       "message": "suggest: use `program_invocation_short_name` as done on line 116\n```suggestion\n            display_resolved_argv(program_invocation_short_name, \u0026argc, \u0026argv);\n```",
+      "range": {
+        "startLine": 257,
+        "startChar": 34,
+        "endLine": 257,
+        "endChar": 44
+      },
+      "revId": "cab738e9580712643a6cbb59b3327c6216e9ba0f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8da4a066_155fa6db",
+        "filename": "rbh-find-lustre/rbh-find-lustre.c",
+        "patchSetId": 7
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-02-13T14:59:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa2569cf_482b0145",
       "range": {
         "startLine": 257,
         "startChar": 34,
