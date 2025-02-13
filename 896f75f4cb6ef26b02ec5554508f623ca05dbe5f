@@ -188,6 +188,30 @@
       },
       "revId": "896f75f4cb6ef26b02ec5554508f623ca05dbe5f",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0b30e6e0_1f562be7",
+        "filename": "rbh-find-lustre/tests/test_alias.bash",
+        "patchSetId": 7
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-02-13T15:42:49Z",
+      "side": 1,
+      "message": "Adding this test to the loop of non-parallel tests will be easier to read and understand IMO",
+      "parentUuid": "217171b9_39fa65a9",
+      "range": {
+        "startLine": 34,
+        "startChar": 4,
+        "endLine": 38,
+        "endChar": 18
+      },
+      "revId": "896f75f4cb6ef26b02ec5554508f623ca05dbe5f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
