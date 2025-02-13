@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # This file is part of RobinHood4
-# Copyright (C) 2024 Commissariat a l'energie atomique et aux energies
+# Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
@@ -31,8 +31,7 @@ should_be_expired()
     local output_lines="$(echo "$output" | grep "$directory" | grep "expired" |
                           wc -l)"
     if [ "$output_lines" != "1" ]; then
-        echo "output = '$output'"
-        error "Directory '$directory' should be expired"
+        error "Directory '$directory' should be expired: '$output'"
     fi
 }
 
@@ -44,8 +43,7 @@ shant_be_expired()
     local output_lines="$(echo "$output" | grep "$directory" | grep "expired" |
                           wc -l)"
     if [ "$output_lines" != "0" ]; then
-        echo "output = '$output'"
-        error "Directory '$directory' shouldn't be expired"
+        error "Directory '$directory' shouldn't be expired: '$output'"
     fi
 }
 
@@ -57,8 +55,7 @@ should_be_updated()
     local output_lines="$(echo "$output" | grep "$directory" | grep "Changing" |
                           wc -l)"
     if [ "$output_lines" != "1" ]; then
-        echo "output = '$output'"
-        error "Directory '$directory's expiration date should have been updated"
+        error "Directory '$directory's expiration date should have been updated: '$output'"
     fi
 }
 
@@ -85,7 +82,7 @@ test_retention_script()
     local output_lines="$(echo "$output" | grep "No directory has expired" | \
                           wc -l)"
     if [ "$output_lines" != "1" ]; then
-        error "The 4 directories shouldn't have expired yet"
+        error "The 4 directories shouldn't have expired yet: '$output'"
     fi
 
     date --set="@$(( $(stat -c %X $dir3) + 6))"
