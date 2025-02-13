@@ -70,6 +70,30 @@
       },
       "revId": "c87584063d49e1ff7649b07694efda851380088d",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "31d8ad23_6c645112",
+        "filename": "librobinhood/src/config.c",
+        "patchSetId": 7
+      },
+      "lineNbr": 413,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-02-13T10:46:39Z",
+      "side": 1,
+      "message": "Currently nowhere since there isn\u0027t a default one yet. That can be added in this patch or later, but this path is pretty standard and different from rbh3\u0027s.\n\nWhen we add the default one, we can put it there without issue",
+      "parentUuid": "ea54e9ae_d8004d3a",
+      "range": {
+        "startLine": 413,
+        "startChar": 49,
+        "endLine": 413,
+        "endChar": 51
+      },
+      "revId": "c87584063d49e1ff7649b07694efda851380088d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
