@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "074892c0_b29b4206",
+        "filename": "librobinhood/src/alias.c",
+        "patchSetId": 10
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-02-13T15:43:36Z",
+      "side": 1,
+      "message": "defect: I do not think this is correct, where `stack` is used?",
+      "range": {
+        "startLine": 86,
+        "startChar": 8,
+        "endLine": 92,
+        "endChar": 32
+      },
+      "revId": "f308dbe0e9831fd7eedd059ca446b367993a23e0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
