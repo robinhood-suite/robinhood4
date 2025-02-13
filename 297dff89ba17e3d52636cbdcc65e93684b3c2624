@@ -121,6 +121,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ce53d801_dfbda189",
+        "filename": "librobinhood/src/alias.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-02-13T10:38:58Z",
+      "side": 1,
+      "message": "defect: as discussed IRL, this will be better for the memory management\n\nFor now, `arg` is not released.",
+      "parentUuid": "4d1747d5_5d1c9896",
+      "range": {
+        "startLine": 153,
+        "startChar": 34,
+        "endLine": 153,
+        "endChar": 46
+      },
+      "revId": "297dff89ba17e3d52636cbdcc65e93684b3c2624",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f1ca7cbc_8ddcef40",
         "filename": "librobinhood/src/alias.c",
         "patchSetId": 5
