@@ -46,6 +46,30 @@
       },
       "revId": "c87584063d49e1ff7649b07694efda851380088d",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ea54e9ae_d8004d3a",
+        "filename": "librobinhood/src/config.c",
+        "patchSetId": 7
+      },
+      "lineNbr": 413,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-02-13T08:09:48Z",
+      "side": 1,
+      "message": "That raises me a question: where the configuration file is put when installing the RPM?",
+      "parentUuid": "3dabc6b2_0aa80666",
+      "range": {
+        "startLine": 413,
+        "startChar": 49,
+        "endLine": 413,
+        "endChar": 51
+      },
+      "revId": "c87584063d49e1ff7649b07694efda851380088d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
