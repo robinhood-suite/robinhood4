@@ -92,6 +92,30 @@
       },
       "revId": "896f75f4cb6ef26b02ec5554508f623ca05dbe5f",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fc561efe_f0c8f9cc",
+        "filename": "rbh-find-lustre/tests/test_alias.bash",
+        "patchSetId": 7
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-02-13T13:13:48Z",
+      "side": 1,
+      "message": "I figured as much, but there is a loop for non_parallel tests in the meson, and this one wasn\u0027t added to it...",
+      "parentUuid": "baed2189_12cee30b",
+      "range": {
+        "startLine": 34,
+        "startChar": 4,
+        "endLine": 38,
+        "endChar": 18
+      },
+      "revId": "896f75f4cb6ef26b02ec5554508f623ca05dbe5f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
