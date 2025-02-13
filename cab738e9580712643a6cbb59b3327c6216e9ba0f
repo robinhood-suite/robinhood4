@@ -24,6 +24,23 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "27932a4e_0b244707",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-02-13T12:27:14Z",
+      "side": 1,
+      "message": "Don\u0027t you also need to document this option in the README file? If it exists of course.",
+      "revId": "cab738e9580712643a6cbb59b3327c6216e9ba0f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "380417e4_e26dd4ef",
