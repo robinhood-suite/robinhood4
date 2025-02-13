@@ -1,5 +1,5 @@
 .. This file is part of the RobinHood Library
-   Copyright (C) 2019 Commissariat a l'energie atomique et aux energies
+   Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
                       alternatives
 
    SPDX-License-Identifer: LGPL-3.0-or-later
@@ -169,20 +169,24 @@ attributes correspond to.
 __ https://wiki.lustre.org/Main_Page
 
 The Lustre backend also supports retention attributes. To do so, it will
-interpret the regular xattr ``user.ccc_expires``. This attribute must have a
-value corresponding to an epoch, and can be preceded by a plus sign.
+interpret the regular xattr ``user.expires``. This attribute can be changed by
+providing a configuration file to the used application, and setting the
+`RBH_RETENTION_XATTR` key.
 
-If the value is solely an epoch, it will be considered as the expiration date of
-the file, regardless of when it was last accessed.
+This attribute must have a value corresponding to either an epoch or a number
+of seconds preceded by a plus sign.
 
-If the value is preceded by a plus sign, the given epoch will be compared to the
-maximum between the file's access time and modification time. This means that
-the file will expire when **max(atime, mtime) + epoch <= queried_epoch**. This
-calculation is only performed when synchronizing, and not when querying expired
-files.
+If the value is solely an epoch, it will be considered as the expiration date
+of the file, regardless of when it was last accessed.
+
+If the value is a number preceded by a plus sign, that number will be
+compared to the maximum between the file's access time and modification time.
+This means that the file will expire when **max(atime, mtime) + number <=
+queried_epoch**. This calculation is only performed when synchronizing, and not
+when querying expired files.
 
 **The retention support is in the Lustre backend for the time being, but will
-soon be changed to a general command-line option using a configuration file.**
+soon be its own backend.**
 
 FSEntry
 -------

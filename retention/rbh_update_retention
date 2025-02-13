@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # This file is part of RobinHood 4
-# Copyright (C) 2024 Commissariat a l'energie atomique et aux energies
+# Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
@@ -64,9 +64,11 @@ function check_expiration_date
         setfattr -n trusted.expiration_date -v "$new_expiration_date" \
                                                "$mount_point/$directory"
     else
-        echo "Directory '$directory' has expired"
         if [ ! -z "$delete_found" ] && [ ! -z "$directory" ]; then
+            echo "Directory '$directory' has expired and will be deleted"
             rm -rf "$mount_point/$directory"
+        else
+            echo "Directory '$directory' has expired"
         fi
     fi
 }
@@ -128,12 +130,17 @@ function run_retention_updater
 
 function print_doc
 {
-    echo "This script will update the retention of attributes of any directory"
-    echo "that is expired, based on their content's last accessed time."
-    echo "If a directory is expired, it is printed to the output, unless the"
-    echo "'--delete' option is given, in which case it will be removed;"
+    echo "Usage: rbh-update-retention URI mount_point [--delete] [--config PATH] [--help]"
     echo ""
-    echo "Usage: rbh-update-retention URI mount_point [--delete]"
+    echo "Update the retention of attributes of any directory that is expired,"
+    echo "based on their content's last accessed time."
+    echo "If a directory is expired, it is printed to the output."
+    echo ""
+    echo "'--config PATH'   path to a configuration file, used to determine the"
+    echo "                  expiration attribute to check for"
+    echo "'--delete'        delete the expired directories instead of just printing"
+    echo "'--help'          print this message"
+    echo ""
 }
 
 if [ $# -lt 2 ]; then
