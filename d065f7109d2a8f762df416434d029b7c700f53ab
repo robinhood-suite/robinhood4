@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1a10c52b_bf66cdae",
+        "filename": "librobinhood/src/config.c",
+        "patchSetId": 7
+      },
+      "lineNbr": 424,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-02-13T10:58:51Z",
+      "side": 0,
+      "message": "minor: something like this should be done in the original patch or in another one. This specific change does not relate to the current patch",
+      "range": {
+        "startLine": 420,
+        "startChar": 12,
+        "endLine": 424,
+        "endChar": 23
+      },
+      "revId": "d065f7109d2a8f762df416434d029b7c700f53ab",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}

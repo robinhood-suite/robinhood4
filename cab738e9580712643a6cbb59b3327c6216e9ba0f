@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1e33e02f_7cfa75fa",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-02-13T10:58:51Z",
+      "side": 1,
+      "message": "typo: a",
+      "range": {
+        "startLine": 9,
+        "startChar": 7,
+        "endLine": 9,
+        "endChar": 9
+      },
+      "revId": "cab738e9580712643a6cbb59b3327c6216e9ba0f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "380417e4_e26dd4ef",
+        "filename": "rbh-find-lustre/rbh-find-lustre.c",
+        "patchSetId": 7
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-02-13T10:58:51Z",
+      "side": 1,
+      "message": "minor: short flags are almost always single letter. `-d` is enough IMO",
+      "range": {
+        "startLine": 60,
+        "startChar": 13,
+        "endLine": 60,
+        "endChar": 16
+      },
+      "revId": "cab738e9580712643a6cbb59b3327c6216e9ba0f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fa2569cf_482b0145",
+        "filename": "rbh-find-lustre/rbh-find-lustre.c",
+        "patchSetId": 7
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-02-13T10:58:51Z",
+      "side": 1,
+      "message": "suggest: use `program_invocation_short_name` as done on line 116\n```suggestion\n            display_resolved_argv(program_invocation_short_name, \u0026argc, \u0026argv);\n```",
+      "range": {
+        "startLine": 257,
+        "startChar": 34,
+        "endLine": 257,
+        "endChar": 44
+      },
+      "revId": "cab738e9580712643a6cbb59b3327c6216e9ba0f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
