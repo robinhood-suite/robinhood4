@@ -768,7 +768,7 @@ again:
             case E2BIG:
                 goto again;
             case ENODATA:
-                return 0;
+                goto get_mdt_idx;
             default:
                 return rc;
             }
@@ -819,6 +819,7 @@ free_lum:
             return -1;
     }
 
+get_mdt_idx:
     if (S_ISREG(mode) || S_ISDIR(mode)) {
         int32_t mdt;
 
