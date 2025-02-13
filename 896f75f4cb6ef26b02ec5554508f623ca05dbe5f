@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "06a05508_e7b185fe",
+        "filename": "rbh-find-lustre/rbh-find-lustre.c",
+        "patchSetId": 7
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-02-13T14:59:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8d913bd2_8acf7dd5",
+      "range": {
+        "startLine": 257,
+        "startChar": 34,
+        "endLine": 257,
+        "endChar": 45
+      },
+      "revId": "896f75f4cb6ef26b02ec5554508f623ca05dbe5f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c45baa76_cdf0e428",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-02-13T13:11:57Z",
       "side": 1,
       "message": "style: trailing spaces at the end of this line and the two following",
+      "range": {
+        "startLine": 12,
+        "startChar": 80,
+        "endLine": 12,
+        "endChar": 81
+      },
+      "revId": "896f75f4cb6ef26b02ec5554508f623ca05dbe5f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e9edd993_c5bcce34",
+        "filename": "rbh-find-lustre/tests/test_alias.bash",
+        "patchSetId": 7
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-02-13T14:59:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c45baa76_cdf0e428",
       "range": {
         "startLine": 12,
         "startChar": 80,
@@ -108,6 +156,30 @@
       "side": 1,
       "message": "I figured as much, but there is a loop for non_parallel tests in the meson, and this one wasn\u0027t added to it...",
       "parentUuid": "baed2189_12cee30b",
+      "range": {
+        "startLine": 34,
+        "startChar": 4,
+        "endLine": 38,
+        "endChar": 18
+      },
+      "revId": "896f75f4cb6ef26b02ec5554508f623ca05dbe5f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "217171b9_39fa65a9",
+        "filename": "rbh-find-lustre/tests/test_alias.bash",
+        "patchSetId": 7
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-02-13T14:59:13Z",
+      "side": 1,
+      "message": "That\u0027s what Sebastien said, I discussed this with Guillaume and he told me that I could do like that.",
+      "parentUuid": "fc561efe_f0c8f9cc",
       "range": {
         "startLine": 34,
         "startChar": 4,
