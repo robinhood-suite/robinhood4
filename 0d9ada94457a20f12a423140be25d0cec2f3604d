@@ -164,6 +164,30 @@
       },
       "revId": "0d9ada94457a20f12a423140be25d0cec2f3604d",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0ce10b46_4961579d",
+        "filename": "retention/README.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-02-14T14:01:45Z",
+      "side": 1,
+      "message": "Yes I meant an RST interpreter. But yes I understand and agree that a bash one won\u0027t work if you copy paster the code as is.\n\nOther READMEs don\u0027t have the dollar signs before commands, but they still have the outputs shown, so copy-pasting the code won\u0027t work either. I\u0027m not opposed to either, keeping the `$` to separate code and output and have the rst documentation clearer; or removing the dollar sign and the outputs, thus copy-pasting code in bash will work, but the documentation will be less helpful.",
+      "parentUuid": "3798262b_812bf1e8",
+      "range": {
+        "startLine": 76,
+        "startChar": 4,
+        "endLine": 78,
+        "endChar": 31
+      },
+      "revId": "0d9ada94457a20f12a423140be25d0cec2f3604d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
