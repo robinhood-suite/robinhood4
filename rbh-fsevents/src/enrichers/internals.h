@@ -23,9 +23,6 @@ struct enricher {
     bool skip_error;
 };
 
-int
-open_by_id(int mound_fd, const struct rbh_id *id, int flags);
-
 /*----------------------------------------------------------------------------*
  *                              posix internals                               *
  *----------------------------------------------------------------------------*/

@@ -15,6 +15,7 @@ install_headers(
     'iterator.h',
     'itertools.h',
     'list.h',
+    'open.h',
     'plugin.h',
     'queue.h',
     'ring.h',

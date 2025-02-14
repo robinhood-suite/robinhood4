@@ -167,6 +167,7 @@ OPTS=""
 %{_includedir}/robinhood/iterator.h
 %{_includedir}/robinhood/itertools.h
 %{_includedir}/robinhood/list.h
+%{_includedir}/robinhodd/open.h
 %{_includedir}/robinhood/plugin.h
 %{_includedir}/robinhood/plugins/backend.h
 %{_includedir}/robinhood/queue.h
