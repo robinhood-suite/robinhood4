@@ -106,6 +106,64 @@ copy_args(char **dest, char **src, int start, int end, int dest_index)
     return dest_index;
 }
 
+static void
+process_args(int *argc, char ***argv) {
+    char **new_argv = NULL;
+    int new_argc = 0;
+
+    for (int i = 0; i < *argc; i++) {
+        if (strcmp((*argv)[i], "--alias") == 0 && i + 1 < *argc) {
+            char *aliases = strtok((*argv)[++i], ",");
+            while (aliases != NULL) {
+                char *alias = rbh_sstack_push(aliases_stack, "--alias",
+                                              strlen("--alias") + 1);
+                if (alias == NULL) {
+                    fprintf(stderr, "Failed to push '--alias' to stack\n");
+                    exit(EXIT_FAILURE);
+                }
+
+                char *alias_value = rbh_sstack_push(aliases_stack, aliases,
+                                                    strlen(aliases) + 1);
+                if (alias_value == NULL) {
+                    fprintf(stderr, "Failed to push alias '%s' to stack\n",
+                            aliases);
+                    exit(EXIT_FAILURE);
+                }
+
+                new_argv = rbh_sstack_push(aliases_stack, new_argv,
+                                           (new_argc + 2) * sizeof(char *));
+                if (new_argv == NULL) {
+                    fprintf(stderr, "Failed to push new_argv to stack\n");
+                    exit(EXIT_FAILURE);
+                }
+                new_argv[new_argc++] = alias;
+                new_argv[new_argc++] = alias_value;
+
+                aliases = strtok(NULL, ",");
+            }
+        } else {
+            char *arg = rbh_sstack_push(aliases_stack, (*argv)[i],
+                                        strlen((*argv)[i]) + 1);
+            if (arg == NULL) {
+                fprintf(stderr, "Failed to push argument '%s' to stack\n",
+                        (*argv)[i]);
+                exit(EXIT_FAILURE);
+            }
+
+            new_argv = rbh_sstack_push(aliases_stack, new_argv,
+                                       (new_argc + 1) * sizeof(char *));
+            if (new_argv == NULL) {
+                fprintf(stderr, "Failed to push new_argv to stack\n");
+                exit(EXIT_FAILURE);
+            }
+            new_argv[new_argc++] = arg;
+        }
+    }
+
+    *argc = new_argc;
+    *argv = new_argv;
+}
+
 static int
 alias_resolution(int *argc, char ***argv, size_t alias_index,
                  size_t argv_alias_index)
@@ -153,6 +211,8 @@ alias_resolution(int *argc, char ***argv, size_t alias_index,
 
     *argc = temp_index;
     *argv = argv_temp;
+
+    process_args(argc,argv);
 
     do {
         alias_found = false;
@@ -202,6 +262,8 @@ apply_aliases(int *argc, char ***argv)
         fprintf(stderr, "Failed to load aliases from configuration.\n");
         return;
     }
+
+    process_args(argc,argv);
 
     do {
         found = false;
