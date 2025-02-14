@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "86770ff8_368a5c41",
+        "filename": "retention/README.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-02-14T08:38:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da0f172a_85782eef",
+      "range": {
+        "startLine": 44,
+        "startChar": 30,
+        "endLine": 44,
+        "endChar": 34
+      },
+      "revId": "0d9ada94457a20f12a423140be25d0cec2f3604d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "80ad73b4_fd1b9b65",
@@ -47,6 +71,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b7a99ae6_c9629111",
+        "filename": "retention/README.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-02-14T08:38:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "80ad73b4_fd1b9b65",
+      "range": {
+        "startLine": 67,
+        "startChar": 12,
+        "endLine": 67,
+        "endChar": 16
+      },
+      "revId": "0d9ada94457a20f12a423140be25d0cec2f3604d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9e5fcc29_700be01b",
@@ -60,6 +108,30 @@
       "writtenOn": "2025-02-14T07:24:15Z",
       "side": 1,
       "message": "question: as you put this in a code section, I assume those lines can be put in an interpreter, but those are printed lines from the `rbh-update-retention` script\n\nWe have the same issue with the `$` lines.\n\nIf that\u0027s how the other README.md are written, ok for me.",
+      "range": {
+        "startLine": 76,
+        "startChar": 4,
+        "endLine": 78,
+        "endChar": 31
+      },
+      "revId": "0d9ada94457a20f12a423140be25d0cec2f3604d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "632df145_231ee6b6",
+        "filename": "retention/README.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-02-14T08:38:07Z",
+      "side": 1,
+      "message": "Other READMEs are not written like this, commands and outputs are not separated by a preceding symbol like `$`. But since the script outputs many information, and I\u0027ve written more commands than the simple rbh command call, I found it easier and more readable to add the dollar signs for commands and the output without symbol.\n\nAn online interpreter I\u0027ve tried read these correctly, as they\u0027re in a code section, but if you prefer I keep it the same way as the other READMEs, tell me",
+      "parentUuid": "9e5fcc29_700be01b",
       "range": {
         "startLine": 76,
         "startChar": 4,
