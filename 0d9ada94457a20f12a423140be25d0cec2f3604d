@@ -140,6 +140,30 @@
       },
       "revId": "0d9ada94457a20f12a423140be25d0cec2f3604d",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3798262b_812bf1e8",
+        "filename": "retention/README.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-02-14T12:42:28Z",
+      "side": 1,
+      "message": "When you said interpreter, you mean RST interpreter? I meant a bash one.\n\nMy take is if I copy the code section and try to execute it, will it run without failure. In this case, it seams not. That\u0027s why I asked about the other README files.\n\nBut maybe we do not want that here.",
+      "parentUuid": "632df145_231ee6b6",
+      "range": {
+        "startLine": 76,
+        "startChar": 4,
+        "endLine": 78,
+        "endChar": 31
+      },
+      "revId": "0d9ada94457a20f12a423140be25d0cec2f3604d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
