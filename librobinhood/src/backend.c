@@ -245,3 +245,4 @@ rbh_backend_fsentry_from_path(struct rbh_backend *backend, const char *path_,
     errno = save_errno;
     return fsentry;
 }
+
