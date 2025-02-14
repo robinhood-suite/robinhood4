@@ -376,24 +376,6 @@ str2partial_field(const char *string)
     return PF_UNKNOWN;
 }
 
-int
-open_by_id(int mount_fd, const struct rbh_id *id, int flags)
-{
-    struct file_handle *handle;
-    int save_errno;
-    int fd;
-
-    handle = rbh_file_handle_from_id(id);
-    if (handle == NULL)
-        return -1;
-
-    fd = open_by_handle_at(mount_fd, handle, flags);
-    save_errno = errno;
-    free(handle);
-    errno = save_errno;
-    return fd;
-}
-
 static int
 enrich_statx(struct rbh_statx *dest, const struct rbh_id *id, int mount_fd,
              uint32_t mask, const struct rbh_statx *original)
@@ -405,7 +387,7 @@ enrich_statx(struct rbh_statx *dest, const struct rbh_id *id, int mount_fd,
     int rc;
     int fd;
 
-    fd = open_by_id(mount_fd, id, O_RDONLY | O_CLOEXEC | O_NOFOLLOW | O_PATH);
+    fd = open_by_id_opath(mount_fd, id);
     if (fd == -1)
         return -1;
 
@@ -473,11 +455,7 @@ enrich_xattrs(const struct rbh_value *xattrs_to_enrich,
     xattrs_seq = xattrs_to_enrich->sequence.values;
     xattrs_count = xattrs_to_enrich->sequence.count;
 
-    fd = open_by_id(mount_fd, id, O_RDONLY | O_CLOEXEC | O_NOFOLLOW);
-    if (fd < 0 && errno == ELOOP)
-        /* If the file to open is a symlink, reopen it with O_PATH set */
-        fd = open_by_id(mount_fd, id, O_RDONLY | O_CLOEXEC | O_NOFOLLOW |
-                        O_PATH);
+    fd = open_by_id_generic(mount_fd, id);
 
     if (fd < 0) {
         rc = -1;
@@ -535,7 +513,7 @@ enrich_symlink(char symlink[SYMLINK_MAX_SIZE], const struct rbh_id *id,
     ssize_t rc;
     int fd;
 
-    fd = open_by_id(mount_fd, id, O_RDONLY | O_CLOEXEC | O_NOFOLLOW | O_PATH);
+    fd = open_by_id_opath(mount_fd, id);
     if (fd == -1)
         return -1;
 

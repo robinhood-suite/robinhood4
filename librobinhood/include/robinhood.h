@@ -16,6 +16,7 @@
 #include "robinhood/id.h"
 #include "robinhood/iterator.h"
 #include "robinhood/itertools.h"
+#include "robinhood/open.h"
 #include "robinhood/plugin.h"
 #include "robinhood/plugins/backend.h"
 #include "robinhood/queue.h"

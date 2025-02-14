@@ -27,6 +27,7 @@
 #include "robinhood/backend.h"
 #include "robinhood/sstack.h"
 #include "robinhood/statx.h"
+#include "robinhood/open.h"
 
 #include "xattrs_mapping.h"
 
@@ -997,35 +998,6 @@ posix_backend_destroy(void *backend)
      |                              branch()                              |
      *--------------------------------------------------------------------*/
 
-static int
-open_by_id(const char *root, const struct rbh_id *id, int flags)
-{
-    struct file_handle *handle;
-    int save_errno;
-    int mount_fd;
-    int fd = -1;
-
-    handle = rbh_file_handle_from_id(id);
-    if (handle == NULL)
-        return -1;
-
-    mount_fd = open(root, O_RDONLY | O_CLOEXEC);
-    save_errno = errno;
-    if (mount_fd < 0)
-        goto out_free_handle;
-
-    fd = open_by_handle_at(mount_fd, handle, flags);
-    save_errno = errno;
-
-    /* Ignore errors on close */
-    close(mount_fd);
-
-out_free_handle:
-    free(handle);
-    errno = save_errno;
-    return fd;
-}
-
 static char *
 fd2path(int fd)
 {
@@ -1059,11 +1031,16 @@ out:
 char *
 id2path(const char *root, const struct rbh_id *id)
 {
+    int save_errno;
+    int mount_fd;
     char *path;
     int fd;
-    int save_errno;
 
-    fd = open_by_id(root, id, O_RDONLY | O_CLOEXEC | O_NOFOLLOW | O_PATH);
+    mount_fd = mount_fd_by_root(root);
+    if (mount_fd < 0)
+        return NULL;
+
+    fd = open_by_id_opath(mount_fd, id);
     if (fd < 0)
         return NULL;
 
