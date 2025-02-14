@@ -114,13 +114,50 @@ EOF
     fi
 }
 
+test_aliases_in_single_argument()
+{
+    cat > test_conf.yaml <<EOF
+alias:
+   a1: "-pool namer"
+   a2: "-print"
+   a3: "-print"
+EOF
+
+    command_output=$(rbh-lfind --config test_conf.yaml --dry-run \
+                    "rbh:mongo:$testdb" --alias a1,a2,a3)
+    pattern="\-pool namer \-print \-print"
+
+    if ! echo "$command_output" | grep -q "$pattern"; then
+        error "The command failed when using aliases separated commas"
+    fi
+}
+
+test_aliases_in_single_argument_recursive()
+{
+    cat > test_conf.yaml <<EOF
+alias:
+   a1: "-pool namer --alias a2,a3"
+   a2: "-print"
+   a3: "-print"
+EOF
+
+    command_output=$(rbh-lfind --config test_conf.yaml --dry-run \
+                    "rbh:mongo:$testdb" --alias a1)
+    pattern="\-pool namer \-print \-print"
+
+    if ! echo "$command_output" | grep -q "$pattern"; then
+        error "The command failed when using aliases separated commas"
+    fi
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
 declare -a tests=(test_config_specified test_config_default test_multiple_alias
                   test_recursive_alias test_recursive_alias_loop
-                  test_alias_repeated)
+                  test_alias_repeated test_aliases_in_single_argument
+                  test_aliases_in_single_argument_recursive)
 
 tmpdir=$(mktemp --directory)
 trap -- "rm -rf '$tmpdir'; rm -rf /etc/robinhood4" EXIT
