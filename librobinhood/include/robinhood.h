@@ -27,5 +27,6 @@
 #include "robinhood/uri.h"
 #include "robinhood/utils.h"
 #include "robinhood/value.h"
+#include "robinhood/open.h"
 
 #endif
