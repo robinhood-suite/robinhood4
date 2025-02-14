@@ -106,6 +106,53 @@ copy_args(char **dest, char **src, int start, int end, int dest_index)
     return dest_index;
 }
 
+static void
+process_args(int *argc, char ***argv)
+{
+    int capacity = *argc;
+    int new_argc = 0;
+    char **new_argv;
+
+    new_argv = malloc(capacity * sizeof(char *));
+    if (new_argv == NULL) {
+        fprintf(stderr,"Failed to allocate memory");
+        exit(EXIT_FAILURE);
+    }
+
+    for (int i = 0; i < *argc; i++) {
+        if (strcmp((*argv)[i], "--alias") == 0 && i + 1 < *argc) {
+            char *aliases = strtok((*argv)[++i], ",");
+            while (aliases != NULL) {
+                if (new_argc >= capacity) {
+                    capacity *= 2;
+                    new_argv = realloc(new_argv, capacity * sizeof(char *));
+                    if (new_argv == NULL) {
+                        fprintf(stderr,"Failed to reallocate memory");
+                        exit(EXIT_FAILURE);
+                    }
+                }
+                new_argv[new_argc++] = "--alias";
+                new_argv[new_argc++] = aliases;
+                aliases = strtok(NULL, ",");
+            }
+        } else {
+            if (new_argc >= capacity) {
+                capacity *= 2;
+                new_argv = realloc(new_argv, capacity * sizeof(char *));
+                if (new_argv == NULL) {
+                    fprintf(stderr,"Failed to reallocate memory");
+                    exit(EXIT_FAILURE);
+                }
+            }
+            new_argv[new_argc++] = (*argv)[i];
+        }
+    }
+
+    *argc = new_argc;
+    *argv = new_argv;
+    //free(new_argv);
+}
+
 static int
 alias_resolution(int *argc, char ***argv, size_t alias_index,
                  size_t argv_alias_index)
@@ -153,6 +200,8 @@ alias_resolution(int *argc, char ***argv, size_t alias_index,
 
     *argc = temp_index;
     *argv = argv_temp;
+
+    process_args(argc,argv);
 
     do {
         alias_found = false;
@@ -202,6 +251,8 @@ apply_aliases(int *argc, char ***argv)
         fprintf(stderr, "Failed to load aliases from configuration.\n");
         return;
     }
+
+    process_args(argc,argv);
 
     do {
         found = false;
