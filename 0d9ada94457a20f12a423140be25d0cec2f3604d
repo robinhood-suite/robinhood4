@@ -188,6 +188,30 @@
       },
       "revId": "0d9ada94457a20f12a423140be25d0cec2f3604d",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "78fa733f_157fd26e",
+        "filename": "retention/README.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-02-14T14:42:03Z",
+      "side": 1,
+      "message": "Ok, in this case I prefer the way you write it for this patch :).",
+      "parentUuid": "0ce10b46_4961579d",
+      "range": {
+        "startLine": 76,
+        "startChar": 4,
+        "endLine": 78,
+        "endChar": 31
+      },
+      "revId": "0d9ada94457a20f12a423140be25d0cec2f3604d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
