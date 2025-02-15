@@ -84,8 +84,7 @@ if get_option('hestia').enabled()
     install_headers(librbh_hestia_h, subdir: 'robinhood/backends')
 endif
 
-if get_option('mfu').disabled()
-    message('Do not compile with MPI File Utils')
+if not build_mfu
     subdir_done()
 endif
 
