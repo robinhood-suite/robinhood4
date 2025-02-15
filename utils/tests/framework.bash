@@ -218,8 +218,16 @@ setup()
 teardown()
 {
     local sub_teardown="$1"
+    # Execute the full teardown regardless of errors otherwise, things aren't
+    # properly cleaned.
+    set +e
 
-    mongo "$testdb" --eval "db.dropDatabase()" >/dev/null
+    local output=$(mongo "$testdb" --eval "db.dropDatabase()" 2>&1)
+    if (( $? != 0 )); then
+        echo "Failed to drop '$testdb':"
+        echo "$output"
+    fi
+
     rm -rf "$testdir"
     if [ "$(type -t $test_teardown)" == "function" ]; then
         $test_teardown
