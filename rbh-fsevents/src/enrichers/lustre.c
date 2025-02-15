@@ -16,6 +16,8 @@
 #include "enricher.h"
 #include "internals.h"
 #include <robinhood/backends/lustre.h>
+#include <robinhood/backends/posix_extension.h>
+#include <robinhood/backends/common.h>
 #include <robinhood/utils.h>
 #include <robinhood/backends/retention.h>
 
@@ -95,39 +97,34 @@ enrich_lustre(struct rbh_backend *backend, int mount_fd,
 {
     static const int STATX_FLAGS = AT_STATX_FORCE_SYNC | AT_EMPTY_PATH
                                  | AT_NO_AUTOMOUNT | AT_SYMLINK_NOFOLLOW;
-    struct {
-        int fd;
-        struct rbh_statx *statx;
-        struct rbh_sstack *values;
-    } arg;
+    struct rbh_posix_enrich_ctx ctx = {0};
     struct rbh_statx statxbuf;
     int save_errno;
     int size;
     int rc;
 
-    arg.fd = open_by_id_generic(mount_fd, id);
-    if (arg.fd < 0 && errno == ELOOP)
+    ctx.einfo.fd = open_by_id_generic(mount_fd, id);
+    if (ctx.einfo.fd < 0 && errno == ELOOP)
         /* If the file to open is a symlink, reopen it with O_PATH set */
-        arg.fd = open_by_id_opath(mount_fd, id);
-
-    if (arg.fd < 0)
+        ctx.einfo.fd = open_by_id_opath(mount_fd, id);
+    if (ctx.einfo.fd < 0)
         return -1;
 
-    rc = rbh_statx(arg.fd, "", STATX_FLAGS, RBH_STATX_MODE, &statxbuf);
+    rc = rbh_statx(ctx.einfo.fd, "", STATX_FLAGS, RBH_STATX_MODE, &statxbuf);
     if (rc == -1) {
         save_errno = errno;
-        close(arg.fd);
+        close(ctx.einfo.fd);
         errno = save_errno;
         return -1;
     }
 
-    arg.statx = &statxbuf;
-    arg.values = xattrs_values;
+    ctx.einfo.statx = &statxbuf;
+    ctx.values = xattrs_values;
 
     size = rbh_backend_get_attribute(
         backend,
         RBH_LEF_LUSTRE | RBH_LEF_ALL_NOFID,
-        &arg, pairs, available_pairs
+        &ctx, pairs, available_pairs
         );
     if (size != -1) {
         size_t tmp;
@@ -138,7 +135,7 @@ enrich_lustre(struct rbh_backend *backend, int mount_fd,
          */
         tmp = rbh_backend_get_attribute(backend,
                                         RBH_REF_RETENTION | RBH_REF_ALL,
-                                        &arg, &pairs[size],
+                                        &ctx, &pairs[size],
                                         available_pairs - size);
         if (tmp != -1)
             size += tmp;
@@ -147,7 +144,7 @@ enrich_lustre(struct rbh_backend *backend, int mount_fd,
     }
 
     save_errno = errno;
-    close(arg.fd);
+    close(ctx.einfo.fd);
     errno = save_errno;
 
     return size;
@@ -161,8 +158,8 @@ lustre_enrich(struct enricher *enricher, const struct rbh_value_pair *attr,
     int size;
 
     if (xattrs_values == NULL) {
-        xattrs_values = rbh_sstack_new(MIN_XATTR_VALUES_ALLOC
-                                     * sizeof(struct rbh_value *));
+        xattrs_values = rbh_sstack_new(MIN_XATTR_VALUES_ALLOC *
+                                       sizeof(struct rbh_value *));
         if (xattrs_values == NULL)
             return -1;
     }
