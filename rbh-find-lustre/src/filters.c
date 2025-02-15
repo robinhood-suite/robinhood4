@@ -25,6 +25,7 @@
 #include <robinhood/statx.h>
 
 #include <robinhood/backend.h>
+#include <robinhood/backends/posix_extension.h>
 #include <robinhood/utils.h>
 #include <rbh-find/filters.h>
 
@@ -300,15 +301,10 @@ static const struct rbh_value *
 get_fs_default_dir_lov(uint64_t flags)
 {
     struct rbh_backend *backend = rbh_backend_from_uri("rbh:lustre:.");
+    struct rbh_posix_enrich_ctx ctx = {0};
     struct rbh_value_pair pair;
     char *mount_path = NULL;
     char pwd[PATH_MAX];
-    struct {
-        int fd;
-        uint16_t mode;
-        struct rbh_sstack *values;
-        uint64_t flags;
-    } arg;
     int rc;
 
     if (backend == NULL)
@@ -325,16 +321,15 @@ get_fs_default_dir_lov(uint64_t flags)
                       "Failed to get the mount point of the current working directory '%s'",
                       pwd);
 
-    arg.fd = open(mount_path, O_RDONLY | O_CLOEXEC);
-    if (arg.fd < 0)
+    ctx.einfo.fd = open(mount_path, O_RDONLY | O_CLOEXEC);
+    if (ctx.einfo.fd < 0)
         error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
                       "Failed to open the mount point '%s' of the current working directory",
                       mount_path);
 
-    arg.flags = flags;
     if (rbh_backend_get_attribute(backend,
                                   RBH_LEF_LUSTRE | RBH_LEF_DIR_LOV | flags,
-                                  &arg, &pair, 1) == -1)
+                                  &ctx, &pair, 1) == -1)
         return NULL;
 
     return pair.value;

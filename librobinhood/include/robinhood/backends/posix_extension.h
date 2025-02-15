@@ -68,6 +68,11 @@ struct rbh_posix_extension {
     int (*setup_enricher)(void);
 };
 
+struct rbh_posix_enrich_ctx {
+    struct entry_info einfo;
+    struct rbh_sstack *values;
+};
+
 struct posix_backend {
     struct rbh_backend backend;
     struct rbh_mut_iterator *(*iter_new)(const char *, const char *, int);
