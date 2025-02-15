@@ -1054,26 +1054,15 @@ posix_get_attribute(void *backend, uint64_t flags,
 {
     struct posix_backend *posix = backend;
     enricher_t *enrichers = posix->enrichers;
-    struct arg_t {
-        int fd;
-        struct rbh_statx *statx;
-        struct rbh_sstack *values;
-    };
-    struct arg_t *info = arg;
-    struct entry_info einfo = {
-        .fd = info->fd,
-        .statx = info->statx,
-        .inode_xattrs = NULL,
-        .inode_xattrs_count = NULL,
-    };
+    struct rbh_posix_enrich_ctx *ctx = arg;
     size_t count = 0;
 
     while (*enrichers != NULL) {
         size_t subcount;
 
-        subcount = (*enrichers)(&einfo, flags, &pairs[count],
+        subcount = (*enrichers)(&ctx->einfo, flags, &pairs[count],
                                 available_pairs - count,
-                                info->values);
+                                ctx->values);
         if (subcount == -1)
             return -1;
         count += subcount;
