@@ -46,10 +46,9 @@ foreach t: ['check_lustre']
 endforeach
 
 
-r = run_command('../../../utils/check_mpirun.sh', check: false)
 bash = find_program('bash', disabler: true, required: false)
 
-if r.returncode() == 0 and libmfu.found()
+if test_mfu
     backend_path_env.prepend('CK_FORK', 'no')
     foreach t: ['check_lustre_mpi']
         executable(t, t + '.c',
