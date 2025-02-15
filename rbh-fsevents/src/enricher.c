@@ -11,7 +11,7 @@
 #include <sys/types.h>
 
 #include "enricher.h"
-#include "enrichers/internals.h"
+#include "enrichers/posix/internals.h"
 
 struct enrich_iter_builder *
 enrich_iter_builder_from_backend(const char *type,
