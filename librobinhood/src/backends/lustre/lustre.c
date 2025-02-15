@@ -869,10 +869,10 @@ _get_attrs(struct entry_info *entry_info,
 }
 
 static int
-lustre_get_attrs(struct entry_info *entry_info,
-                 struct rbh_value_pair *pairs,
-                 int available_pairs,
-                 struct rbh_sstack *values)
+lustre_attrs_get_no_fid(struct entry_info *entry_info,
+                        struct rbh_value_pair *pairs,
+                        int available_pairs,
+                        struct rbh_sstack *values)
 {
     int (*xattrs_funcs[])(int, struct rbh_value_pair *, int) = {
         xattrs_get_hsm, xattrs_get_layout, xattrs_get_mdt_info
@@ -884,10 +884,10 @@ lustre_get_attrs(struct entry_info *entry_info,
 }
 
 static int
-lustre_inode_xattrs_callback(struct entry_info *entry_info,
-                             struct rbh_value_pair *pairs,
-                             int available_pairs,
-                             struct rbh_sstack *values)
+lustre_attrs_get_all(struct entry_info *entry_info,
+                     struct rbh_value_pair *pairs,
+                     int available_pairs,
+                     struct rbh_sstack *values)
 {
     int (*xattrs_funcs[])(int, struct rbh_value_pair *, int) = {
         xattrs_get_fid, xattrs_get_hsm, xattrs_get_layout, xattrs_get_mdt_info
@@ -955,9 +955,9 @@ rbh_lustre_enrich(struct entry_info *einfo, uint64_t flags,
         return 0;
 
     if (flags == (RBH_LEF_LUSTRE | RBH_LEF_ALL_NOFID))
-        return lustre_get_attrs(einfo, pairs, pairs_count, values);
+        return lustre_attrs_get_no_fid(einfo, pairs, pairs_count, values);
     else if (flags == 0 || flags == (RBH_LEF_LUSTRE | RBH_LEF_ALL))
-        return lustre_inode_xattrs_callback(einfo, pairs, pairs_count, values);
+        return lustre_attrs_get_all(einfo, pairs, pairs_count, values);
 
     if (flags & RBH_LEF_DIR_LOV) {
         pairs->value = lustre_get_default_dir_stripe(einfo->fd, flags);
