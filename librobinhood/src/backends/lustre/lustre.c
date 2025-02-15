@@ -59,8 +59,6 @@ static __thread ssize_t *_inode_xattrs_count;
 static __thread struct rbh_sstack *_values;
 static __thread uint16_t mode;
 
-static enricher_t retention_enricher;
-
 /**
  * Record a file's fid in \p pairs
  *
@@ -591,11 +589,11 @@ xattrs_get_layout(int fd, struct rbh_value_pair *pairs, int available_pairs)
     struct llapi_layout *layout;
     uint16_t mirror_count = 0;
     int required_pairs = 0;
+    int save_errno = 0;
     /**
      * There are 6 layout header components in total, but OST is in its own
      * list, so we only consider 5 attributes for the main data array allocation
      */
-    int save_errno = 0;
     int nb_xattrs = 5;
     uint32_t nb_comp;
     int subcount = 0;
@@ -864,11 +862,6 @@ _get_attrs(struct entry_info *entry_info,
         available_pairs -= subcount;
         count += subcount;
     }
-
-    if (retention_enricher)
-        count += retention_enricher(entry_info, 0, &pairs[count],
-                                    available_pairs,
-                                    values);
 
     return count;
 }
