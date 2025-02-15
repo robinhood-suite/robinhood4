@@ -39,7 +39,7 @@ if get_option('hestia').enabled()
     subdir('hestia')
 endif
 
-if get_option('mfu').enabled()
+if build_mfu
     subdir('posix_mpi')
     subdir('lustre_mpi')
     subdir('mpi_file')
