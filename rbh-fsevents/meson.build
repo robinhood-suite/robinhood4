@@ -20,7 +20,7 @@ extra_args = []
 if liblustre.found()
     extra_sources += [
         'src/sources/lustre.c',
-        'src/enrichers/lustre.c',
+        'src/enrichers/posix/lustre.c',
     ]
     extra_args += ['-DHAVE_LUSTRE']
 endif
@@ -48,7 +48,7 @@ fsevents_lib = static_library(
         'src/deduplicator/hash.c',
         'src/deduplicator/rbh_fsevent_utils.c',
         'src/enricher.c',
-        'src/enrichers/posix.c',
+        'src/enrichers/posix/posix.c',
         'src/sources/yaml_file.c',
         'src/sources/file.c',
         'src/sources/hestia.c',
