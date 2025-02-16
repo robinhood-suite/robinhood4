@@ -5,6 +5,16 @@
 
 #include <robinhood.h>
 
+struct enricher;
+
+typedef int (*enrich_xattr_t)(struct enricher *enricher,
+                              const struct rbh_value_pair *xattr
+                              );
+
+struct posix_enricher {
+    enrich_xattr_t enrich_xattr;
+};
+
 struct enricher {
     struct rbh_iterator iterator;
     struct rbh_backend *backend;
@@ -21,6 +31,8 @@ struct enricher {
     char *symlink;
 
     bool skip_error;
+    struct posix_enricher *extension_enrichers;
+    size_t n_extensions;
 };
 
 /*----------------------------------------------------------------------------*
@@ -30,11 +42,12 @@ struct enricher {
 /* The Linux VFS doesn't allow for symlinks of more than 64KiB */
 #define SYMLINK_MAX_SIZE (1 << 16)
 
-int posix_enrich(const struct rbh_value_pair *partial,
-                 struct rbh_value_pair **pairs, size_t *pair_count,
+int posix_enrich(struct enricher *enricher,
+                 const struct rbh_value_pair *partial,
+                 struct rbh_value_pair **pairs,
+                 size_t *pair_count,
                  struct rbh_fsevent *enriched,
-                 const struct rbh_fsevent *original, int mount_fd,
-                 struct rbh_statx *statxbuf, char symlink[SYMLINK_MAX_SIZE]);
+                 const struct rbh_fsevent *original);
 
 struct rbh_iterator *
 posix_iter_enrich(struct rbh_iterator *fsevents, int mount_fd,
