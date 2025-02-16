@@ -426,10 +426,26 @@ exit_xattrs_values(void)
 }
 
 static int
+posix_extension_enrich_xattr(struct enricher *enricher,
+                             const struct rbh_fsevent *original)
+{
+    for (size_t i = 0; i < enricher->n_extensions; i++) {
+        enrich_xattr_t ext_enrich =
+            enricher->extension_enrichers[i].enrich_xattr;
+
+        if (ext_enrich(enricher, NULL) == -1)
+            return -1;
+    }
+
+    return 0;
+}
+
+static int
 enrich_xattrs(const struct rbh_value *xattrs_to_enrich,
               struct rbh_value_pair **pairs, size_t *pair_count,
               struct rbh_fsevent *enriched,
-              const struct rbh_id *id, int mount_fd)
+              const struct rbh_id *id, int mount_fd,
+              struct enricher *enricher)
 {
     char buffer[XATTR_VALUE_MAX_VFS_SIZE];
     const struct rbh_value *xattrs_seq;
@@ -456,7 +472,6 @@ enrich_xattrs(const struct rbh_value *xattrs_to_enrich,
     xattrs_count = xattrs_to_enrich->sequence.count;
 
     fd = open_by_id_generic(mount_fd, id);
-
     if (fd < 0) {
         rc = -1;
         goto err;
@@ -529,12 +544,16 @@ enrich_symlink(char symlink[SYMLINK_MAX_SIZE], const struct rbh_id *id,
 }
 
 int
-posix_enrich(const struct rbh_value_pair *partial,
-             struct rbh_value_pair **pairs, size_t *pair_count,
+posix_enrich(struct enricher *enricher,
+             const struct rbh_value_pair *partial,
+             struct rbh_value_pair **pairs,
+             size_t *pair_count,
              struct rbh_fsevent *enriched,
-             const struct rbh_fsevent *original, int mount_fd,
-             struct rbh_statx *statxbuf, char symlink[SYMLINK_MAX_SIZE])
+             const struct rbh_fsevent *original)
 {
+    struct rbh_statx *statxbuf = &enricher->statx;
+    int mount_fd = enricher->mount_fd;
+    char *symlink = enricher->symlink;
     uint32_t statx_mask;
 
     switch (str2partial_field(partial->key)) {
@@ -549,6 +568,7 @@ posix_enrich(const struct rbh_value_pair *partial,
 
         if (parse_statx_mask(&statx_mask, partial->value))
             return -1;
+
         if (enrich_statx(statxbuf, &original->id, mount_fd, statx_mask,
                          original->upsert.statx))
             return -1;
@@ -562,7 +582,7 @@ posix_enrich(const struct rbh_value_pair *partial,
         }
 
         if (enrich_xattrs(partial->value, pairs, pair_count, enriched,
-                          &original->id, mount_fd))
+                          &original->id, mount_fd, enricher))
             return -1;
 
         break;
@@ -578,7 +598,9 @@ posix_enrich(const struct rbh_value_pair *partial,
         enriched->upsert.symlink = symlink;
         break;
     }
-    return 0;
+
+    /* TODO will be properly implemented in the next patch */
+    return posix_extension_enrich_xattr(enricher, original);
 }
 
 static int
@@ -619,9 +641,9 @@ enrich(struct enricher *enricher, const struct rbh_fsevent *original)
         partials = &pair->value->map;
 
         for (size_t i = 0; i < partials->count; i++) {
-            if (posix_enrich(&partials->pairs[i], &pairs, &pair_count, enriched,
-                             original, enricher->mount_fd, &enricher->statx,
-                             enricher->symlink))
+            if (posix_enrich(enricher, &partials->pairs[i],
+                             &pairs, &pair_count, enriched,
+                             original))
                 return -1;
         }
 
@@ -709,6 +731,8 @@ posix_iter_enrich(struct rbh_iterator *fsevents, int mount_fd,
     enricher->pair_count = INITIAL_PAIR_COUNT;
     enricher->symlink = symlink;
     enricher->skip_error = skip_error;
+    enricher->extension_enrichers = NULL;
+    enricher->n_extensions = 0;
 
     return &enricher->iterator;
 }
