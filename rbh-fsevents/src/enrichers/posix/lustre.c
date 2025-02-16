@@ -192,9 +192,8 @@ lustre_enrich(struct enricher *enricher, const struct rbh_value_pair *attr,
         return size;
     }
 
-    return posix_enrich(attr, &pairs, &enricher->pair_count, &enricher->fsevent,
-                        original, enricher->mount_fd, &enricher->statx,
-                        enricher->symlink);
+    return posix_enrich(enricher, attr, &pairs, &enricher->pair_count,
+                        &enricher->fsevent, original);
 }
 
 static int
