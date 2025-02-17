@@ -5,7 +5,8 @@
 # SPDX-License-Identifer: LGPL-3.0-or-later
 
 integration_tests = [
-    'test_posix_mongo_sync', 'test_mongo_mongo_sync', 'test_config'
+    'test_posix_mongo_sync', 'test_mongo_mongo_sync', 'test_config',
+    'test_alias'
 ]
 
 if liblustre.found()
