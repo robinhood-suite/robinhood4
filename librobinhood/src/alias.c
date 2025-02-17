@@ -300,7 +300,8 @@ display_resolved_argv(char* name, int *argc, char ***argv)
     apply_aliases(argc, argv);
 
     printf("Command after alias resolution:\n");
-    printf("%s ", name);
+    if (name != NULL)
+        printf("%s ", name);
     for (int i = 0; i < *argc; i++) {
         printf("%s ", (*argv)[i]);
     }

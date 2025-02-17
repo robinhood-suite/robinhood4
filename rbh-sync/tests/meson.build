@@ -22,6 +22,13 @@ foreach t: integration_tests
          suite: 'rbh-sync', timeout: 120)
 endforeach
 
+non_parallel_integration_tests = ['test_alias']
+foreach t: non_parallel_integration_tests
+    e = find_program(t + '.bash')
+    test(t, e, is_parallel: false, env: backend_path_env,
+         suite: 'rbh-sync')
+endforeach
+
 # Tests with MPI
 r = run_command('../../utils/check_mpirun.sh', check: false)
 
@@ -44,5 +51,13 @@ if r.returncode() == 0 and libmfu.found()
         e = find_program(t + '.bash')
         test(t + '_mpi', e, is_parallel: false, timeout: 120,
              env: backend_path_env_for_mpi_tests, suite: 'rbh-sync')
+    endforeach
+
+
+    non_parallel_integration_tests = ['test_alias']
+    foreach t: non_parallel_integration_tests
+        e = find_program(t + '.bash')
+        test(t, e, is_parallel: false, env: backend_path_env_for_mpi_tests,
+             suite: 'rbh-sync')
     endforeach
 endif
