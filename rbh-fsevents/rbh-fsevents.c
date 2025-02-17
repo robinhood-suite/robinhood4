@@ -20,6 +20,7 @@
 #include <robinhood/uri.h>
 #include <robinhood/utils.h>
 #include <robinhood/config.h>
+#include <robinhood/alias.h>
 
 #include "deduplicator.h"
 #include "enricher.h"
@@ -67,6 +68,8 @@ usage(void)
         "    -h, --help      print this message and exit\n"
         "    -l, --lustre    consider SOURCE is an MDT name\n"
         "    -r, --raw       do not enrich changelog records (default)\n"
+        "    --alias NAME    specify an alias for the operation.\n"
+        "    --dry-run       displays the command after alias management\n"
         "\n"
         "Note that uploading raw records to a RobinHood backend will fail, they have to\n"
         "be enriched first.\n";
@@ -424,6 +427,11 @@ main(int argc, char *argv[])
             .name = "raw",
             .val = 'r',
         },
+        {
+            .name = "dry-run",
+            .has_arg = no_argument,
+            .val = 'x',
+        },
         {}
     };
     struct deduplicator_options dedup_opts = {
@@ -432,6 +440,10 @@ main(int argc, char *argv[])
     char *dump_file = NULL;
     int rc;
     char c;
+
+    /* Alias resolution */
+    import_configuration_file(&argc, &argv);
+    apply_aliases(&argc, &argv);
 
     /* Parse the command line */
     while ((c = getopt_long(argc, argv, "b:c:d:e:hnr", LONG_OPTIONS,
@@ -471,6 +483,9 @@ main(int argc, char *argv[])
             mount_fd_exit();
             mount_fd = -1;
             break;
+        case 'x':
+            display_resolved_argv(NULL, &argc, &argv);
+            return EXIT_SUCCESS;
         case '?':
         default:
             /* getopt_long() prints meaningful error messages itself */
