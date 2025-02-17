@@ -1,5 +1,5 @@
 /* This file is part of Robinhood 4
- * Copyright (C) 2024 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifer: LGPL-3.0-or-later
@@ -15,6 +15,8 @@
 #include <robinhood/backend.h>
 #include <robinhood/uri.h>
 #include <robinhood/value.h>
+#include <robinhood/config.h>
+#include <robinhood/alias.h>
 
 #include "report.h"
 
@@ -137,7 +139,9 @@ usage(void)
         "    SOURCE  a robinhood URI\n"
         "\n"
         "Optional arguments:\n"
+        "    --alias NAME          specify an alias for the operation.\n"
         "    -c,--csv              print the report in CSV format\n"
+        "    -d,--dry-run          displays the command after alias management\n"
         "    -g,--group-by GROUP-BY\n"
         "                          the data to group entries on. Can be a CSV\n"
         "                          to group on multiple fields. Fields can\n"
@@ -148,6 +152,7 @@ usage(void)
         "    -h,--help             show this message and exit\n"
         "    -r,--rsort            reverse sort the output based on the\n"
         "                          grouping requested\n"
+        "    --config PATH         the configuration file to use.\n"
         "\n"
         "Output arguments (mandatory):\n"
         "    -o,--output OUTPUT    the information to output. Can be a CSV\n"
@@ -192,6 +197,14 @@ main(int argc, char *argv[])
             .name = "rsort",
             .val = 'r',
         },
+        {
+            .name = "dry-run",
+            .val = 'd',
+        },
+        {
+            .name = "config",
+            .val = 'x',
+        },
         {}
     };
     bool ascending_sort = true;
@@ -200,8 +213,12 @@ main(int argc, char *argv[])
     char *group = NULL;
     char c;
 
+    /* Alias resolution */
+    import_configuration_file(&argc, &argv);
+    apply_aliases(&argc, &argv);
+
     /* Parse the command line */
-    while ((c = getopt_long(argc, argv, "chg:o:r", LONG_OPTIONS, NULL)) != -1) {
+    while ((c = getopt_long(argc, argv, "chgd:o:r", LONG_OPTIONS, NULL)) != -1) {
         switch (c) {
         case 'c':
             csv_print = true;
@@ -221,6 +238,11 @@ main(int argc, char *argv[])
             break;
         case 'r':
             ascending_sort = false;
+            break;
+        case 'd':
+            display_resolved_argv(NULL, &argc, &argv);
+            return EXIT_SUCCESS;
+        case 'x':
             break;
         default:
             /* getopt_long() prints meaningful error messages itself */
