@@ -288,7 +288,7 @@ display_resolved_argv(char* name, int *argc, char ***argv)
     apply_aliases(argc, argv);
 
     printf("Command after alias resolution:\n");
-    if (strcmp(name, "rbh-sync") != 0)
+    if (strcmp(name, "rbh-sync") != 0 && (strcmp(name, "rbh-fsevents") != 0))
         printf("%s ", name);
     for (int i = 0; i < *argc; i++) {
         printf("%s ", (*argv)[i]);
