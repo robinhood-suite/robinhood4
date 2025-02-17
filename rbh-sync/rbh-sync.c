@@ -1,5 +1,5 @@
 /* This file is part of Robinhood 4
- * Copyright (C) 2019 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifer: LGPL-3.0-or-later
@@ -17,6 +17,7 @@
 #include <robinhood.h>
 #include <robinhood/config.h>
 #include <robinhood/utils.h>
+#include <robinhood/alias.h>
 
 #ifndef RBH_ITER_CHUNK_SIZE
 # define RBH_ITER_CHUNK_SIZE (1 << 12)
@@ -535,6 +536,8 @@ usage(void)
         "    -o,--one              only consider the root of SOURCE\n"
         "    -n,--no-skip          do not skip errors when synchronizing backends,\n"
         "                          instead stop on the first error.\n"
+        "    --alias NAME          specify an alias for the operation.\n"
+        "    -d,--dry-run          displays the command after alias management\n"
         "\n"
         "Capability arguments:\n"
         "    -l,--list-capabilities URI|NAME\n"
@@ -674,6 +677,10 @@ main(int argc, char *argv[])
             .name = "one",
             .val = 'o',
         },
+        {
+            .name = "dry-run",
+            .val = 'd',
+        },
         {}
     };
     struct rbh_filter_projection projection = {
@@ -683,8 +690,12 @@ main(int argc, char *argv[])
     int rc;
     char c;
 
+    /* Alias resolution */
+    import_configuration_file(&argc, &argv);
+    apply_aliases(&argc, &argv);
+
     /* Parse the command line */
-    while ((c = getopt_long(argc, argv, "c:f:hl:on", LONG_OPTIONS,
+    while ((c = getopt_long(argc, argv, "c:f:hl:on:d", LONG_OPTIONS,
                             NULL)) != -1) {
         switch (c) {
         case 'c':
@@ -720,6 +731,9 @@ main(int argc, char *argv[])
         case 'n':
             skip_error = false;
             break;
+        case 'd':
+            display_resolved_argv(NULL, &argc, &argv);
+            return EXIT_SUCCESS;
         case '?':
         default:
             /* getopt_long() prints meaningful error messages itself */
