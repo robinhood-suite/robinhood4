@@ -118,6 +118,30 @@
       },
       "revId": "8c00a380cde86e829d34b4ada2b50799d11379e4",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "13e0c51a_2f9d22d6",
+        "filename": "librobinhood/src/alias.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-02-18T10:07:47Z",
+      "side": 1,
+      "message": "We need this printf for `rbh-lfind` and `rbh-find` because the command name is removed for argv in these commands, code :\n\n`argc \u003d _argc - 1;\nargv \u003d \u0026_argv[1];`",
+      "parentUuid": "b7289e00_ba271ca6",
+      "range": {
+        "startLine": 291,
+        "startChar": 4,
+        "endLine": 292,
+        "endChar": 28
+      },
+      "revId": "8c00a380cde86e829d34b4ada2b50799d11379e4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
