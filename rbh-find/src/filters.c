@@ -383,6 +383,31 @@ filesize2filter(const char *filesize)
 }
 
 struct rbh_filter *
+empty2filter()
+{
+    const struct rbh_filter_field *field_s = &predicate2filter_field[PRED_SIZE];
+    const struct rbh_filter_field *field_t = &predicate2filter_field[PRED_TYPE];
+    struct rbh_filter *filter_size, *filter_type;
+    struct rbh_filter *filter;
+
+    filter_size = rbh_filter_compare_uint64_new(RBH_FOP_EQUAL, field_s, 0);
+    if (filter_size == NULL)
+        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
+                      "filter_compare_integer");
+
+    filter_type = rbh_filter_compare_int32_new(RBH_FOP_EQUAL, field_t, S_IFREG);
+    if (filter_type == NULL)
+        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
+                      "filter_compare_integer");
+
+    filter = filter_and(filter_size, filter_type);
+    if (filter == NULL)
+        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__, "filter_and");
+
+    return filter;
+}
+
+struct rbh_filter *
 username2filter(const char *username)
 {
     struct passwd *pwd = getpwnam(username);
