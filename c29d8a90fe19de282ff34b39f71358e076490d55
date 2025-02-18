@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d72100d6_85cfcdda",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-02-18T09:04:29Z",
+      "side": 1,
+      "message": "suggest: `allow --alias A,B,C`",
+      "range": {
+        "startLine": 7,
+        "startChar": 7,
+        "endLine": 7,
+        "endChar": 70
+      },
+      "revId": "c29d8a90fe19de282ff34b39f71358e076490d55",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dab9d107_e75747ca",
+        "filename": "librobinhood/src/alias.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-02-18T09:04:29Z",
+      "side": 1,
+      "message": "minor: sizeof(*new_argv)",
+      "range": {
+        "startLine": 116,
+        "startChar": 40,
+        "endLine": 116,
+        "endChar": 47
+      },
+      "revId": "c29d8a90fe19de282ff34b39f71358e076490d55",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "98b4f72e_ea7b7d2d",
+        "filename": "librobinhood/src/alias.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-02-18T09:04:29Z",
+      "side": 1,
+      "message": "minor: use a stack push here, because this can\u0027t be freed until the end of the program",
+      "range": {
+        "startLine": 116,
+        "startChar": 4,
+        "endLine": 120,
+        "endChar": 5
+      },
+      "revId": "c29d8a90fe19de282ff34b39f71358e076490d55",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
