@@ -351,6 +351,7 @@ bool
 predicate_needs_argument(enum predicate predicate)
 {
     switch (predicate) {
+    case PRED_EMPTY:
     case PRED_NOGROUP:
     case PRED_NOUSER:
         return false;
@@ -391,6 +392,9 @@ find_parse_predicate(struct find_context *ctx, int *arg_idx)
     case PRED_MTIME:
     case PRED_CTIME:
         filter = xtime2filter(predicate, ctx->argv[++i]);
+        break;
+    case PRED_EMPTY:
+        filter = empty2filter();
         break;
     case PRED_INAME:
         filter = regex2filter(predicate, ctx->argv[++i],
