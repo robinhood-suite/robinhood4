@@ -60,12 +60,7 @@ load_aliases_from_config(void)
         return -1;
     }
 
-    aliases = rbh_sstack_push(aliases_stack, &value.map, sizeof(value.map));
-    if (aliases == NULL) {
-        fprintf(stderr, "Failed to push alias structure.\n");
-        return -1;
-    }
-
+    aliases = RBH_SSTACK_PUSH(aliases_stack, &value.map, sizeof(value.map));
     aliases->count = value.map.count;
     history_stack = rbh_stack_new(stack_size);
     if (!history_stack) {
@@ -83,11 +78,7 @@ add_args_to_argv(char **argv_dest, int dest_index, const char *args)
     char *arg = strtok(copy, " ");
 
     while (arg != NULL) {
-        char *stack = rbh_sstack_push(aliases_stack, arg, strlen(arg) + 1);
-        if (stack == NULL) {
-            free(copy);
-            return dest_index;
-        }
+        char *stack = RBH_SSTACK_PUSH(aliases_stack, arg, strlen(arg) + 1);
         argv_dest[dest_index++] = stack;
         arg = strtok(NULL, " ");
     }
