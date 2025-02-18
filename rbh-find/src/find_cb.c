@@ -397,7 +397,10 @@ find_parse_predicate(struct find_context *ctx, int *arg_idx)
         filter = empty2filter();
         break;
     case PRED_INAME:
-        filter = regex2filter(predicate, ctx->argv[++i],
+        filter = regex2filter(predicate, ctx->argv[++i], RBH_RO_ALL);
+        break;
+    case PRED_IREGEX:
+        filter = regex2filter(PRED_PATH, ctx->argv[++i],
                               RBH_RO_CASE_INSENSITIVE);
         break;
     case PRED_GID:
@@ -409,7 +412,7 @@ find_parse_predicate(struct find_context *ctx, int *arg_idx)
         break;
     case PRED_NAME:
     case PRED_PATH:
-        filter = regex2filter(predicate, ctx->argv[++i], 0);
+        filter = regex2filter(predicate, ctx->argv[++i], RBH_RO_SHELL_PATTERN);
         break;
     case PRED_NOGROUP:
         filter = nogroup2filter();
@@ -419,6 +422,9 @@ find_parse_predicate(struct find_context *ctx, int *arg_idx)
         break;
     case PRED_PERM:
         filter = mode2filter(ctx->argv[++i]);
+        break;
+    case PRED_REGEX:
+        filter = regex2filter(PRED_PATH, ctx->argv[++i], 0);
         break;
     case PRED_SIZE:
         filter = filesize2filter(ctx->argv[++i]);

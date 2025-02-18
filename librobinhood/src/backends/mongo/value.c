@@ -46,19 +46,23 @@ _bson_append_regex(bson_t *bson, const char *key, size_t key_length,
                    const char *regex, unsigned int options)
 {
     char mongo_regex_options[8] = {'s', '\0',};
+    char *pcre = NULL;
     uint8_t i = 1;
-    char *pcre;
 
-    pcre = shell2pcre(regex);
-    if (pcre == NULL)
-        error_at_line(EXIT_FAILURE, ENOMEM, __FILE__, __LINE__ - 2,
-                      "converting %s into a Perl Compatible Regular Expression",
-                      regex);
+    /* If it's a shell pattern, we need to convert to PCRE for mongo */
+    if (options & RBH_RO_SHELL_PATTERN) {
+        pcre = shell2pcre(regex);
+        if (pcre == NULL)
+            error_at_line(EXIT_FAILURE, ENOMEM, __FILE__, __LINE__ - 2,
+                          "converting %s into a Perl Compatible Regular "
+                          "Expression", regex);
+    }
 
     if (options & RBH_RO_CASE_INSENSITIVE)
         mongo_regex_options[i++] = 'i';
 
-    return bson_append_regex(bson, key, key_length, pcre, mongo_regex_options);
+    return bson_append_regex(bson, key, key_length, pcre == NULL ? regex : pcre,
+                             mongo_regex_options);
 }
 
 bool
