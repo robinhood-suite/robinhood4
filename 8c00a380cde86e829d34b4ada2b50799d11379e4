@@ -70,6 +70,30 @@
       },
       "revId": "8c00a380cde86e829d34b4ada2b50799d11379e4",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4adc0913_6ec09730",
+        "filename": "librobinhood/src/alias.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-02-18T09:52:33Z",
+      "side": 1,
+      "message": "I already do it, the problem here for sync is that rbh-sync is in argv and if I add it in the display here I will have rbh-sync twice in stdout",
+      "parentUuid": "1da20ed7_93bffdeb",
+      "range": {
+        "startLine": 291,
+        "startChar": 4,
+        "endLine": 292,
+        "endChar": 28
+      },
+      "revId": "8c00a380cde86e829d34b4ada2b50799d11379e4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
