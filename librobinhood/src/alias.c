@@ -60,12 +60,7 @@ load_aliases_from_config(void)
         return -1;
     }
 
-    aliases = rbh_sstack_push(aliases_stack, &value.map, sizeof(value.map));
-    if (aliases == NULL) {
-        fprintf(stderr, "Failed to push alias structure.\n");
-        return -1;
-    }
-
+    aliases = RBH_SSTACK_PUSH(aliases_stack, &value.map, sizeof(value.map));
     aliases->count = value.map.count;
     history_stack = rbh_stack_new(stack_size);
     if (!history_stack) {
@@ -83,11 +78,7 @@ add_args_to_argv(char **argv_dest, int dest_index, const char *args)
     char *arg = strtok(copy, " ");
 
     while (arg != NULL) {
-        char *stack = rbh_sstack_push(aliases_stack, arg, strlen(arg) + 1);
-        if (stack == NULL) {
-            free(copy);
-            return dest_index;
-        }
+        char *stack = RBH_SSTACK_PUSH(aliases_stack, arg, strlen(arg) + 1);
         argv_dest[dest_index++] = stack;
         arg = strtok(NULL, " ");
     }
@@ -114,22 +105,12 @@ static void process_args(int *argc, char ***argv) {
         if (strcmp((*argv)[i], "--alias") == 0 && i + 1 < *argc) {
             char *aliases = strtok((*argv)[++i], ",");
             while (aliases != NULL) {
-                char *alias = rbh_sstack_push(aliases_stack, "--alias",
+                char *alias = RBH_SSTACK_PUSH(aliases_stack, "--alias",
                                               strlen("--alias") + 1);
-                if (alias == NULL) {
-                    fprintf(stderr, "Failed to push '--alias' to stack\n");
-                    exit(EXIT_FAILURE);
-                }
-
-                char *alias_value = rbh_sstack_push(aliases_stack, aliases,
+                char *alias_value = RBH_SSTACK_PUSH(aliases_stack, aliases,
                                                     strlen(aliases) + 1);
-                if (alias_value == NULL) {
-                    fprintf(stderr, "Failed to push alias '%s' to stack\n",
-                            aliases);
-                    exit(EXIT_FAILURE);
-                }
 
-                new_argv = rbh_sstack_push(aliases_stack, new_argv,
+                new_argv = RBH_SSTACK_PUSH(aliases_stack, new_argv,
                                            (new_argc + 2) * sizeof(char *));
                 new_argv[new_argc++] = alias;
                 new_argv[new_argc++] = alias_value;
@@ -137,15 +118,10 @@ static void process_args(int *argc, char ***argv) {
                 aliases = strtok(NULL, ",");
             }
         } else {
-            char *arg = rbh_sstack_push(aliases_stack, (*argv)[i],
+            char *arg = RBH_SSTACK_PUSH(aliases_stack, (*argv)[i],
                                         strlen((*argv)[i]) + 1);
-            if (arg == NULL) {
-                fprintf(stderr, "Failed to push argument '%s' to stack\n",
-                        (*argv)[i]);
-                exit(EXIT_FAILURE);
-            }
 
-            new_argv = rbh_sstack_push(aliases_stack, new_argv,
+            new_argv = RBH_SSTACK_PUSH(aliases_stack, new_argv,
                                        (new_argc + 1) * sizeof(char *));
             new_argv[new_argc++] = arg;
         }
