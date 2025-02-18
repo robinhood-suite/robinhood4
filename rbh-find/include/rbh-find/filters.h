@@ -174,6 +174,19 @@ struct rbh_filter *
 filesize2filter(const char *filesize);
 
 /**
+ * Build a filter for the -empty predicate
+ *
+ * For now, works only on files. The behavior for the directories will be added
+ * in the future.
+ *
+ * @return          a pointer to a newly allocated struct rbh_filter
+ *
+ * Exit on error
+ */
+struct rbh_filter *
+empty2filter();
+
+/**
  * Build a filter for the -user predicate
  *
  * @param username  a string representing a username
