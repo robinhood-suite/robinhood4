@@ -9,6 +9,7 @@ integration_tests = [
   'test_empty',
   'test_perm',
   'test_printf',
+  'test_regex',
   'test_size',
   'test_time',
   'test_uid_gid',
