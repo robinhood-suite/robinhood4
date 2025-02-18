@@ -94,6 +94,30 @@
       },
       "revId": "8c00a380cde86e829d34b4ada2b50799d11379e4",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b7289e00_ba271ca6",
+        "filename": "librobinhood/src/alias.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-02-18T09:56:42Z",
+      "side": 1,
+      "message": "Then why not let the command in argv be written ? If you\u0027re assured it is in argv, no need for this printf then",
+      "parentUuid": "4adc0913_6ec09730",
+      "range": {
+        "startLine": 291,
+        "startChar": 4,
+        "endLine": 292,
+        "endChar": 28
+      },
+      "revId": "8c00a380cde86e829d34b4ada2b50799d11379e4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
