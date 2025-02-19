@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "707e9d35_b06788d7",
+        "filename": "rbh-find/tests/test_regex.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-02-19T10:51:42Z",
+      "side": 1,
+      "message": "suggest: add another find with a `-regex` to highlight the result difference",
+      "range": {
+        "startLine": 45,
+        "startChar": 34,
+        "endLine": 45,
+        "endChar": 40
+      },
+      "revId": "4fa8eac5bcde3c9bf545163a1d11344423490f6e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
