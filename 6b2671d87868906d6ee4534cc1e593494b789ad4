@@ -1,0 +1,234 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e80d7ecb_63a87438",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-02-19T09:57:45Z",
+      "side": 1,
+      "message": "question: We really want to let the users the possibility to do a `rbh-sync` and have their own database ?",
+      "range": {
+        "startLine": 57,
+        "startChar": 0,
+        "endLine": 58,
+        "endChar": 29
+      },
+      "revId": "6b2671d87868906d6ee4534cc1e593494b789ad4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e744b90d_073bcbd9",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-02-19T09:57:45Z",
+      "side": 1,
+      "message": "comment: I think it\u0027s not the main database but a replica to reduce the workload on the main database",
+      "range": {
+        "startLine": 59,
+        "startChar": 11,
+        "endLine": 59,
+        "endChar": 24
+      },
+      "revId": "6b2671d87868906d6ee4534cc1e593494b789ad4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "09a57bfb_a1530b36",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-02-19T09:57:45Z",
+      "side": 1,
+      "message": "typo: created",
+      "range": {
+        "startLine": 61,
+        "startChar": 21,
+        "endLine": 61,
+        "endChar": 27
+      },
+      "revId": "6b2671d87868906d6ee4534cc1e593494b789ad4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "66f28b19_a06fb0df",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-02-19T09:57:45Z",
+      "side": 1,
+      "message": "typo: to remove",
+      "range": {
+        "startLine": 78,
+        "startChar": 37,
+        "endLine": 78,
+        "endChar": 39
+      },
+      "revId": "6b2671d87868906d6ee4534cc1e593494b789ad4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "25395703_0e421643",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-02-19T09:57:45Z",
+      "side": 1,
+      "message": "typo? can\u0027t",
+      "range": {
+        "startLine": 78,
+        "startChar": 9,
+        "endLine": 78,
+        "endChar": 12
+      },
+      "revId": "6b2671d87868906d6ee4534cc1e593494b789ad4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "db927f56_eba0c18c",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-02-19T09:57:45Z",
+      "side": 1,
+      "message": "typo: adapted",
+      "range": {
+        "startLine": 106,
+        "startChar": 28,
+        "endLine": 106,
+        "endChar": 35
+      },
+      "revId": "6b2671d87868906d6ee4534cc1e593494b789ad4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f4db80a6_2a0b9b55",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-02-19T09:57:45Z",
+      "side": 1,
+      "message": "typo: remote server is written",
+      "range": {
+        "startLine": 114,
+        "startChar": 5,
+        "endLine": 114,
+        "endChar": 29
+      },
+      "revId": "6b2671d87868906d6ee4534cc1e593494b789ad4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "597617a9_2295164a",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-02-19T09:57:45Z",
+      "side": 1,
+      "message": "typo: enforce",
+      "range": {
+        "startLine": 124,
+        "startChar": 38,
+        "endLine": 124,
+        "endChar": 44
+      },
+      "revId": "6b2671d87868906d6ee4534cc1e593494b789ad4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "50d51c6f_a889e987",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-02-19T09:57:45Z",
+      "side": 1,
+      "message": "typo: developed",
+      "range": {
+        "startLine": 155,
+        "startChar": 37,
+        "endLine": 155,
+        "endChar": 47
+      },
+      "revId": "6b2671d87868906d6ee4534cc1e593494b789ad4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1cfd5d97_07edf3de",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-02-19T09:57:45Z",
+      "side": 1,
+      "message": "typo: no",
+      "range": {
+        "startLine": 165,
+        "startChar": 68,
+        "endLine": 165,
+        "endChar": 70
+      },
+      "revId": "6b2671d87868906d6ee4534cc1e593494b789ad4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
