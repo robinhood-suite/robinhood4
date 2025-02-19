@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "38cb277b_07c722ea",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-02-19T13:00:15Z",
+      "side": 1,
+      "message": "comment: I understand the need for a user to have access to `rbh-sync`, but I do not think it will allow them to synchronize to an administration mongo backend\n\nIn this case, they may be able to store the metadata backend in a personal location, meaning there is no need for HTTP servers and identification/authentification.\n\nI agree that we can still discuss this in this design document.\n\nEDIT: well, this will not be discussed here :D. In this cas, I may think it is better to not talk about `rbh-sync`.",
+      "range": {
+        "startLine": 48,
+        "startChar": 3,
+        "endLine": 48,
+        "endChar": 13
+      },
+      "revId": "6b2671d87868906d6ee4534cc1e593494b789ad4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e80d7ecb_63a87438",
         "filename": "designs/userland_robinhood.rst",
         "patchSetId": 1
@@ -72,6 +95,52 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7d35e4a0_791df537",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-02-19T13:00:15Z",
+      "side": 1,
+      "message": "typo: to remove",
+      "range": {
+        "startLine": 72,
+        "startChar": 68,
+        "endLine": 72,
+        "endChar": 69
+      },
+      "revId": "6b2671d87868906d6ee4534cc1e593494b789ad4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2bdf0a6a_a8882c99",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-02-19T13:00:15Z",
+      "side": 1,
+      "message": "suggest: wrapper calls? to force the usage of `--uid` and `-gid` filters",
+      "range": {
+        "startLine": 73,
+        "startChar": 0,
+        "endLine": 73,
+        "endChar": 11
+      },
+      "revId": "6b2671d87868906d6ee4534cc1e593494b789ad4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "66f28b19_a06fb0df",
         "filename": "designs/userland_robinhood.rst",
         "patchSetId": 1
@@ -118,6 +187,52 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5003bbf1_5b4a48fb",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-02-19T13:00:15Z",
+      "side": 1,
+      "message": "typo: to remove",
+      "range": {
+        "startLine": 78,
+        "startChar": 37,
+        "endLine": 78,
+        "endChar": 39
+      },
+      "revId": "6b2671d87868906d6ee4534cc1e593494b789ad4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9c52ac3e_dc55ab7c",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-02-19T13:00:15Z",
+      "side": 1,
+      "message": "question: what is the use case for a user modifying the mongo database?",
+      "range": {
+        "startLine": 89,
+        "startChar": 23,
+        "endLine": 89,
+        "endChar": 35
+      },
+      "revId": "6b2671d87868906d6ee4534cc1e593494b789ad4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "db927f56_eba0c18c",
         "filename": "designs/userland_robinhood.rst",
         "patchSetId": 1
@@ -127,6 +242,29 @@
         "id": 1037727
       },
       "writtenOn": "2025-02-19T09:57:45Z",
+      "side": 1,
+      "message": "typo: adapted",
+      "range": {
+        "startLine": 106,
+        "startChar": 28,
+        "endLine": 106,
+        "endChar": 35
+      },
+      "revId": "6b2671d87868906d6ee4534cc1e593494b789ad4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "07974b63_2b8a7658",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-02-19T13:00:15Z",
       "side": 1,
       "message": "typo: adapted",
       "range": {
@@ -164,6 +302,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fb34eccf_cd128092",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-02-19T13:00:15Z",
+      "side": 1,
+      "message": "typo: a remote server",
+      "range": {
+        "startLine": 114,
+        "startChar": 8,
+        "endLine": 114,
+        "endChar": 21
+      },
+      "revId": "6b2671d87868906d6ee4534cc1e593494b789ad4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "597617a9_2295164a",
         "filename": "designs/userland_robinhood.rst",
         "patchSetId": 1
@@ -180,6 +341,29 @@
         "startChar": 38,
         "endLine": 124,
         "endChar": 44
+      },
+      "revId": "6b2671d87868906d6ee4534cc1e593494b789ad4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4d35596a_0315c3f8",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-02-19T13:00:15Z",
+      "side": 1,
+      "message": "typo: approaches",
+      "range": {
+        "startLine": 146,
+        "startChar": 5,
+        "endLine": 146,
+        "endChar": 14
       },
       "revId": "6b2671d87868906d6ee4534cc1e593494b789ad4",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
@@ -210,6 +394,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "61455c8f_c78ee4a9",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-02-19T13:00:15Z",
+      "side": 1,
+      "message": "comment: discussed IRL, we may have to only send through HTTP the command line, thus not being forced to convert data multiple times\n\nA dry parsing can still be done before submitting to the HTTP backend, just to ensure the command line is well-formatted.",
+      "range": {
+        "startLine": 157,
+        "startChar": 5,
+        "endLine": 159,
+        "endChar": 61
+      },
+      "revId": "6b2671d87868906d6ee4534cc1e593494b789ad4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1cfd5d97_07edf3de",
         "filename": "designs/userland_robinhood.rst",
         "patchSetId": 1
@@ -226,6 +433,52 @@
         "startChar": 68,
         "endLine": 165,
         "endChar": 70
+      },
+      "revId": "6b2671d87868906d6ee4534cc1e593494b789ad4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c29e7579_a1f8ac36",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-02-19T13:00:15Z",
+      "side": 1,
+      "message": "typo: Its",
+      "range": {
+        "startLine": 169,
+        "startChar": 0,
+        "endLine": 169,
+        "endChar": 4
+      },
+      "revId": "6b2671d87868906d6ee4534cc1e593494b789ad4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b245be7b_01fbb3bf",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-02-19T13:00:15Z",
+      "side": 1,
+      "message": "question: I do not know how the backends extension can be expanded, but will it be possible to have a backend that do not need to enter the `\u003cdistant_server\u003e` part?\n\n```\nrbh-find rbh:http -size +3G -type f\n```\n\nMaybe that\u0027s what you proposed below, with the `rbh_remote_server_address` env variable.\n\nHaving a defined alias may be the better solution:\n\n```\nalias rbhfind\u003d\u0027rbh-find rbh:http:\u003cdistant_server\u003e\u0027\n```",
+      "range": {
+        "startLine": 184,
+        "startChar": 13,
+        "endLine": 184,
+        "endChar": 38
       },
       "revId": "6b2671d87868906d6ee4534cc1e593494b789ad4",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
