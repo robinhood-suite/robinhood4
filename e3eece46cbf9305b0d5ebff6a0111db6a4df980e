@@ -1,0 +1,228 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "005ebf17_8089b38c",
+        "filename": "librobinhood/include/robinhood.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-02-19T10:59:43Z",
+      "side": 1,
+      "message": "nit: alphabetical order",
+      "range": {
+        "startLine": 30,
+        "startChar": 0,
+        "endLine": 30,
+        "endChar": 27
+      },
+      "revId": "e3eece46cbf9305b0d5ebff6a0111db6a4df980e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c0bbae24_07aece22",
+        "filename": "librobinhood/include/robinhood/open.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-02-19T10:59:43Z",
+      "side": 1,
+      "message": "typo: 2025",
+      "range": {
+        "startLine": 2,
+        "startChar": 17,
+        "endLine": 2,
+        "endChar": 21
+      },
+      "revId": "e3eece46cbf9305b0d5ebff6a0111db6a4df980e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0c7f44b3_b643553f",
+        "filename": "librobinhood/src/backend.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-02-19T10:59:43Z",
+      "side": 1,
+      "message": "minor: remove empty line",
+      "revId": "e3eece46cbf9305b0d5ebff6a0111db6a4df980e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6df3bb04_b6c338bc",
+        "filename": "librobinhood/src/backends/posix/posix.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 1027,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-02-19T10:59:43Z",
+      "side": 1,
+      "message": "style: spaces instead of tabs",
+      "range": {
+        "startLine": 1027,
+        "startChar": 0,
+        "endLine": 1027,
+        "endChar": 1
+      },
+      "revId": "e3eece46cbf9305b0d5ebff6a0111db6a4df980e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9ae9be08_bfeaf7d6",
+        "filename": "librobinhood/src/backends/posix/posix.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 1029,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-02-19T10:59:43Z",
+      "side": 1,
+      "message": "style: remove empty space at end of line",
+      "range": {
+        "startLine": 1029,
+        "startChar": 35,
+        "endLine": 1029,
+        "endChar": 36
+      },
+      "revId": "e3eece46cbf9305b0d5ebff6a0111db6a4df980e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6d53e23e_c557f613",
+        "filename": "librobinhood/src/utils/open.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-02-19T10:59:43Z",
+      "side": 1,
+      "message": "style: the code uses spaces instead of tabs",
+      "range": {
+        "startLine": 22,
+        "startChar": 0,
+        "endLine": 22,
+        "endChar": 1
+      },
+      "revId": "e3eece46cbf9305b0d5ebff6a0111db6a4df980e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "494a4337_6e9bbb78",
+        "filename": "librobinhood/src/utils/open.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-02-19T10:59:43Z",
+      "side": 1,
+      "message": "minor: setting this has no effect, since errno keeps his value even if we error out",
+      "range": {
+        "startLine": 25,
+        "startChar": 1,
+        "endLine": 25,
+        "endChar": 20
+      },
+      "revId": "e3eece46cbf9305b0d5ebff6a0111db6a4df980e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8136bdfc_4f12a4dd",
+        "filename": "librobinhood/src/utils/open.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-02-19T10:59:43Z",
+      "side": 1,
+      "message": "minor: nothing happened in-between, so errno still has the same value",
+      "range": {
+        "startLine": 29,
+        "startChar": 1,
+        "endLine": 29,
+        "endChar": 20
+      },
+      "revId": "e3eece46cbf9305b0d5ebff6a0111db6a4df980e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "09c6fe6e_f06938cd",
+        "filename": "rbh-fsevents/src/enrichers/lustre.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-02-19T10:59:43Z",
+      "side": 1,
+      "message": "major: the goal of the patch was to remove these from here, and have the flags in the mutualized file, so that there is one way to open files in different tools. Rather than getting the flags as parameter, you could have two functions, one which does a generic open_by_id for any type of file (line 102 here) and then the specific one in case of errors (line 106 here), and a second function which opens an entry when we already know it\u0027s type. The latter could be used in the `enrich_symlink` function in this file for instance",
+      "range": {
+        "startLine": 102,
+        "startChar": 38,
+        "endLine": 103,
+        "endChar": 48
+      },
+      "revId": "e3eece46cbf9305b0d5ebff6a0111db6a4df980e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2b3c72e1_d6e15a30",
+        "filename": "rbh-fsevents/src/enrichers/lustre.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-02-19T10:59:43Z",
+      "side": 1,
+      "message": "style: missing space",
+      "range": {
+        "startLine": 104,
+        "startChar": 0,
+        "endLine": 104,
+        "endChar": 3
+      },
+      "revId": "e3eece46cbf9305b0d5ebff6a0111db6a4df980e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
