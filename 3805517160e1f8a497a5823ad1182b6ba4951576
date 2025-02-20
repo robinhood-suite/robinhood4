@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "39ae0947_467a782f",
+        "filename": "librobinhood/src/alias.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-02-20T15:46:22Z",
+      "side": 1,
+      "message": "style: you shouldn\u0027t modify the prototype style:\n\n```\nstatic void\nprocess_args(int *argc, char ***argv)\n{\n```",
+      "range": {
+        "startLine": 109,
+        "startChar": 0,
+        "endLine": 109,
+        "endChar": 51
+      },
+      "revId": "3805517160e1f8a497a5823ad1182b6ba4951576",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3d9803e2_2f75cc0f",
+        "filename": "librobinhood/src/alias.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-02-20T15:46:22Z",
+      "side": 1,
+      "message": "defect: `new_argv` is not verified",
+      "range": {
+        "startLine": 132,
+        "startChar": 16,
+        "endLine": 132,
+        "endChar": 24
+      },
+      "revId": "3805517160e1f8a497a5823ad1182b6ba4951576",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6698173f_296a06a3",
+        "filename": "librobinhood/src/alias.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-02-20T15:46:22Z",
+      "side": 1,
+      "message": "defect: same",
+      "range": {
+        "startLine": 148,
+        "startChar": 12,
+        "endLine": 148,
+        "endChar": 20
+      },
+      "revId": "3805517160e1f8a497a5823ad1182b6ba4951576",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
