@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d1ad2a31_70503e5d",
+        "filename": "librobinhood/src/config.c",
+        "patchSetId": 11
+      },
+      "lineNbr": 418,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-02-20T15:42:08Z",
+      "side": 1,
+      "message": "suggest: you can mutualize the conditions:\n\n```\nif (rc \u0026\u0026 errno !\u003d ENOENT) {\n    fprintf(stderr, \"...\");\n    return 1;\n}\n\nreturn 0;\n```",
+      "range": {
+        "startLine": 417,
+        "startChar": 4,
+        "endLine": 418,
+        "endChar": 30
+      },
+      "revId": "840b8315ba940b77296e7bf8ccad11a341bb594f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
