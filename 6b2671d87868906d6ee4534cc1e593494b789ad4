@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2dc04716_d72904bd",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-02-20T15:33:04Z",
+      "side": 1,
+      "message": "I agree. I think that regarding this document, this is not correct to mention it, as we talk about going though the HTTP backend.",
+      "parentUuid": "3033d529_64bc0b82",
+      "range": {
+        "startLine": 48,
+        "startChar": 3,
+        "endLine": 48,
+        "endChar": 13
+      },
+      "revId": "6b2671d87868906d6ee4534cc1e593494b789ad4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e80d7ecb_63a87438",
         "filename": "designs/userland_robinhood.rst",
         "patchSetId": 1
@@ -461,6 +485,30 @@
       "side": 1,
       "message": "They could adjust the times of their files to not be subjected to purge policies for instance or change the size of entries to stay under quota limits",
       "parentUuid": "9c52ac3e_dc55ab7c",
+      "range": {
+        "startLine": 89,
+        "startChar": 23,
+        "endLine": 89,
+        "endChar": 35
+      },
+      "revId": "6b2671d87868906d6ee4534cc1e593494b789ad4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e274dc9f_724c7fd9",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-02-20T15:33:04Z",
+      "side": 1,
+      "message": "Ok, but that will be taken into account with the \"daemon\" `rbh-fsevents` right? The worst case is they ask that after a purge is triggered (too bad for them)..",
+      "parentUuid": "68f9469c_6429962e",
       "range": {
         "startLine": 89,
         "startChar": 23,
@@ -978,6 +1026,30 @@
       "side": 1,
       "message": "Per URI\u0027s RFC, we still have to include the second `:`, but the rest can be empty, which is what we do for the Hestia backend. That\u0027s what I\u0027ve written in the second example.\n\nThe alias can also be used indeed",
       "parentUuid": "b245be7b_01fbb3bf",
+      "range": {
+        "startLine": 184,
+        "startChar": 13,
+        "endLine": 184,
+        "endChar": 38
+      },
+      "revId": "6b2671d87868906d6ee4534cc1e593494b789ad4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0c658fb5_a9bacca7",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-02-20T15:33:04Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "74e15136_223153a7",
       "range": {
         "startLine": 184,
         "startChar": 13,
