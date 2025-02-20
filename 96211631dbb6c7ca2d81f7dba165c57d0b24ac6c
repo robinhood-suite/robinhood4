@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ef030e8f_df3fc692",
+        "filename": "librobinhood/src/config.c",
+        "patchSetId": 10
+      },
+      "lineNbr": 419,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-02-20T10:08:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c7ec42e0_26335828",
+      "range": {
+        "startLine": 419,
+        "startChar": 41,
+        "endLine": 419,
+        "endChar": 48
+      },
+      "revId": "96211631dbb6c7ca2d81f7dba165c57d0b24ac6c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bf2c16c6_f8f24dd4",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-02-20T09:24:29Z",
       "side": 1,
       "message": "minor: if the open fails for anything other than an ENOENT, return an error",
+      "range": {
+        "startLine": 421,
+        "startChar": 8,
+        "endLine": 421,
+        "endChar": 17
+      },
+      "revId": "96211631dbb6c7ca2d81f7dba165c57d0b24ac6c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "588e64ef_79bf10d6",
+        "filename": "librobinhood/src/config.c",
+        "patchSetId": 10
+      },
+      "lineNbr": 421,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-02-20T10:08:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bf2c16c6_f8f24dd4",
       "range": {
         "startLine": 421,
         "startChar": 8,
