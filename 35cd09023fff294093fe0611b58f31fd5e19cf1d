@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "14bd3120_12588165",
+        "filename": "librobinhood/src/alias.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-02-20T08:59:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "13b663cf_a8433a08",
+      "range": {
+        "startLine": 128,
+        "startChar": 67,
+        "endLine": 128,
+        "endChar": 73
+      },
+      "revId": "35cd09023fff294093fe0611b58f31fd5e19cf1d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bf5c51bc_8a065e4e",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-02-19T08:09:55Z",
       "side": 1,
       "message": "defect: how do you manage the previous arg list? `argv_temp` in `alias_resolution()` is lost for example",
+      "range": {
+        "startLine": 152,
+        "startChar": 5,
+        "endLine": 152,
+        "endChar": 9
+      },
+      "revId": "35cd09023fff294093fe0611b58f31fd5e19cf1d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "06d27dee_40c94720",
+        "filename": "librobinhood/src/alias.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-02-20T08:59:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bf5c51bc_8a065e4e",
       "range": {
         "startLine": 152,
         "startChar": 5,
