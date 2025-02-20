@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ea5e4e79_20a0bb53",
+        "filename": "rbh-fsevents/src/enrichers/posix.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 480,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-02-20T08:31:48Z",
+      "side": 0,
+      "message": "suggest: thinking about it, since symlink cannot hold extended attributes, the call to this function shouldn\u0027t be possible theoretically, hence this error management is unnecessary",
+      "range": {
+        "startLine": 477,
+        "startChar": 4,
+        "endLine": 480,
+        "endChar": 32
+      },
+      "revId": "3f8c54e7f3ef709b39dd0512e112b19426bd3811",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
