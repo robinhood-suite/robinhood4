@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3033d529_64bc0b82",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-02-20T09:20:46Z",
+      "side": 1,
+      "message": "You\u0027re right they shouldn\u0027t be able to sync to the main database, but syncing to a local one should be allowed, if possible. I briefly talk about it in the next two paragraphs, but it\u0027s not a huge concern if the local database is ensured access to only by the user who created it.\n\nOtherwise yes, using sync on the HTTP backend shouldn\u0027t be possible, and I think the corresponding functions for update shouldn\u0027t even be defined.",
+      "parentUuid": "38cb277b_07c722ea",
+      "range": {
+        "startLine": 48,
+        "startChar": 3,
+        "endLine": 48,
+        "endChar": 13
+      },
+      "revId": "6b2671d87868906d6ee4534cc1e593494b789ad4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e80d7ecb_63a87438",
         "filename": "designs/userland_robinhood.rst",
         "patchSetId": 1
@@ -37,6 +61,30 @@
       "writtenOn": "2025-02-19T09:57:45Z",
       "side": 1,
       "message": "question: We really want to let the users the possibility to do a `rbh-sync` and have their own database ?",
+      "range": {
+        "startLine": 57,
+        "startChar": 0,
+        "endLine": 58,
+        "endChar": 29
+      },
+      "revId": "6b2671d87868906d6ee4534cc1e593494b789ad4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c361307a_4c0efa8a",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-02-20T09:20:46Z",
+      "side": 1,
+      "message": "Users can already do a rbh-sync, they can already have their own database. I\u0027d say as long as they don\u0027t interfere with the main database, they can do whatever they want",
+      "parentUuid": "e80d7ecb_63a87438",
       "range": {
         "startLine": 57,
         "startChar": 0,
@@ -70,6 +118,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "444b165d_99bf7b01",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-02-20T09:20:46Z",
+      "side": 1,
+      "message": "Whether it is the actual main DB or a replica should be left up to the admin. But yes, having a replica of the main one that the remote server would target is doable",
+      "parentUuid": "e744b90d_073bcbd9",
+      "range": {
+        "startLine": 59,
+        "startChar": 11,
+        "endLine": 59,
+        "endChar": 24
+      },
+      "revId": "6b2671d87868906d6ee4534cc1e593494b789ad4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "09a57bfb_a1530b36",
@@ -83,6 +155,30 @@
       "writtenOn": "2025-02-19T09:57:45Z",
       "side": 1,
       "message": "typo: created",
+      "range": {
+        "startLine": 61,
+        "startChar": 21,
+        "endLine": 61,
+        "endChar": 27
+      },
+      "revId": "6b2671d87868906d6ee4534cc1e593494b789ad4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9ece83df_92b6eeb8",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-02-20T09:20:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "09a57bfb_a1530b36",
       "range": {
         "startLine": 61,
         "startChar": 21,
@@ -116,6 +212,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bb890db4_92586f5b",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-02-20T09:20:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7d35e4a0_791df537",
+      "range": {
+        "startLine": 72,
+        "startChar": 68,
+        "endLine": 72,
+        "endChar": 69
+      },
+      "revId": "6b2671d87868906d6ee4534cc1e593494b789ad4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2bdf0a6a_a8882c99",
@@ -129,6 +249,30 @@
       "writtenOn": "2025-02-19T13:00:15Z",
       "side": 1,
       "message": "suggest: wrapper calls? to force the usage of `--uid` and `-gid` filters",
+      "range": {
+        "startLine": 73,
+        "startChar": 0,
+        "endLine": 73,
+        "endChar": 11
+      },
+      "revId": "6b2671d87868906d6ee4534cc1e593494b789ad4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1fa6e828_29adfe9d",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-02-20T09:20:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2bdf0a6a_a8882c99",
       "range": {
         "startLine": 73,
         "startChar": 0,
@@ -208,6 +352,78 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a63ba00d_340ec563",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-02-20T09:20:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5003bbf1_5b4a48fb",
+      "range": {
+        "startLine": 78,
+        "startChar": 37,
+        "endLine": 78,
+        "endChar": 39
+      },
+      "revId": "6b2671d87868906d6ee4534cc1e593494b789ad4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4184070b_61ca9534",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-02-20T09:20:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "66f28b19_a06fb0df",
+      "range": {
+        "startLine": 78,
+        "startChar": 37,
+        "endLine": 78,
+        "endChar": 39
+      },
+      "revId": "6b2671d87868906d6ee4534cc1e593494b789ad4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a33238b_7d3dfcb2",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-02-20T09:20:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "25395703_0e421643",
+      "range": {
+        "startLine": 78,
+        "startChar": 9,
+        "endLine": 78,
+        "endChar": 12
+      },
+      "revId": "6b2671d87868906d6ee4534cc1e593494b789ad4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9c52ac3e_dc55ab7c",
@@ -221,6 +437,30 @@
       "writtenOn": "2025-02-19T13:00:15Z",
       "side": 1,
       "message": "question: what is the use case for a user modifying the mongo database?",
+      "range": {
+        "startLine": 89,
+        "startChar": 23,
+        "endLine": 89,
+        "endChar": 35
+      },
+      "revId": "6b2671d87868906d6ee4534cc1e593494b789ad4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "68f9469c_6429962e",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-02-20T09:20:46Z",
+      "side": 1,
+      "message": "They could adjust the times of their files to not be subjected to purge policies for instance or change the size of entries to stay under quota limits",
+      "parentUuid": "9c52ac3e_dc55ab7c",
       "range": {
         "startLine": 89,
         "startChar": 23,
@@ -277,6 +517,54 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c908b7c2_35315fd8",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-02-20T09:20:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "db927f56_eba0c18c",
+      "range": {
+        "startLine": 106,
+        "startChar": 28,
+        "endLine": 106,
+        "endChar": 35
+      },
+      "revId": "6b2671d87868906d6ee4534cc1e593494b789ad4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dd9dd58a_90238ad2",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-02-20T09:20:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "07974b63_2b8a7658",
+      "range": {
+        "startLine": 106,
+        "startChar": 28,
+        "endLine": 106,
+        "endChar": 35
+      },
+      "revId": "6b2671d87868906d6ee4534cc1e593494b789ad4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f4db80a6_2a0b9b55",
@@ -323,6 +611,54 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b340942_f21a5e74",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-02-20T09:20:46Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "f4db80a6_2a0b9b55",
+      "range": {
+        "startLine": 114,
+        "startChar": 5,
+        "endLine": 114,
+        "endChar": 29
+      },
+      "revId": "6b2671d87868906d6ee4534cc1e593494b789ad4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2dba4e92_c6aa476b",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-02-20T09:20:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fb34eccf_cd128092",
+      "range": {
+        "startLine": 114,
+        "startChar": 8,
+        "endLine": 114,
+        "endChar": 21
+      },
+      "revId": "6b2671d87868906d6ee4534cc1e593494b789ad4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "597617a9_2295164a",
@@ -336,6 +672,30 @@
       "writtenOn": "2025-02-19T09:57:45Z",
       "side": 1,
       "message": "typo: enforce",
+      "range": {
+        "startLine": 124,
+        "startChar": 38,
+        "endLine": 124,
+        "endChar": 44
+      },
+      "revId": "6b2671d87868906d6ee4534cc1e593494b789ad4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a24374b8_61bd5155",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-02-20T09:20:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "597617a9_2295164a",
       "range": {
         "startLine": 124,
         "startChar": 38,
@@ -369,6 +729,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9107650f_de1ccb95",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-02-20T09:20:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4d35596a_0315c3f8",
+      "range": {
+        "startLine": 146,
+        "startChar": 5,
+        "endLine": 146,
+        "endChar": 14
+      },
+      "revId": "6b2671d87868906d6ee4534cc1e593494b789ad4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "50d51c6f_a889e987",
@@ -382,6 +766,30 @@
       "writtenOn": "2025-02-19T09:57:45Z",
       "side": 1,
       "message": "typo: developed",
+      "range": {
+        "startLine": 155,
+        "startChar": 37,
+        "endLine": 155,
+        "endChar": 47
+      },
+      "revId": "6b2671d87868906d6ee4534cc1e593494b789ad4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8864e434_88b6cf54",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-02-20T09:20:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "50d51c6f_a889e987",
       "range": {
         "startLine": 155,
         "startChar": 37,
@@ -415,6 +823,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "80ec5a63_44143481",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-02-20T09:20:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "61455c8f_c78ee4a9",
+      "range": {
+        "startLine": 157,
+        "startChar": 5,
+        "endLine": 159,
+        "endChar": 61
+      },
+      "revId": "6b2671d87868906d6ee4534cc1e593494b789ad4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1cfd5d97_07edf3de",
@@ -428,6 +860,30 @@
       "writtenOn": "2025-02-19T09:57:45Z",
       "side": 1,
       "message": "typo: no",
+      "range": {
+        "startLine": 165,
+        "startChar": 68,
+        "endLine": 165,
+        "endChar": 70
+      },
+      "revId": "6b2671d87868906d6ee4534cc1e593494b789ad4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb8d7886_8754bee9",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-02-20T09:20:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1cfd5d97_07edf3de",
       "range": {
         "startLine": 165,
         "startChar": 68,
@@ -461,6 +917,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f74ad105_1100f821",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-02-20T09:20:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c29e7579_a1f8ac36",
+      "range": {
+        "startLine": 169,
+        "startChar": 0,
+        "endLine": 169,
+        "endChar": 4
+      },
+      "revId": "6b2671d87868906d6ee4534cc1e593494b789ad4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b245be7b_01fbb3bf",
@@ -474,6 +954,30 @@
       "writtenOn": "2025-02-19T13:00:15Z",
       "side": 1,
       "message": "question: I do not know how the backends extension can be expanded, but will it be possible to have a backend that do not need to enter the `\u003cdistant_server\u003e` part?\n\n```\nrbh-find rbh:http -size +3G -type f\n```\n\nMaybe that\u0027s what you proposed below, with the `rbh_remote_server_address` env variable.\n\nHaving a defined alias may be the better solution:\n\n```\nalias rbhfind\u003d\u0027rbh-find rbh:http:\u003cdistant_server\u003e\u0027\n```",
+      "range": {
+        "startLine": 184,
+        "startChar": 13,
+        "endLine": 184,
+        "endChar": 38
+      },
+      "revId": "6b2671d87868906d6ee4534cc1e593494b789ad4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "74e15136_223153a7",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-02-20T09:20:46Z",
+      "side": 1,
+      "message": "Per URI\u0027s RFC, we still have to include the second `:`, but the rest can be empty, which is what we do for the Hestia backend. That\u0027s what I\u0027ve written in the second example.\n\nThe alias can also be used indeed",
+      "parentUuid": "b245be7b_01fbb3bf",
       "range": {
         "startLine": 184,
         "startChar": 13,
