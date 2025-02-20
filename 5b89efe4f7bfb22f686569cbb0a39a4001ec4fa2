@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e036c6d3_e6f7dc56",
+        "filename": "librobinhood/src/backends/posix/posix.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 1027,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-02-20T10:02:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a11db811_b412be4e",
+      "range": {
+        "startLine": 1024,
+        "startChar": 4,
+        "endLine": 1027,
+        "endChar": 17
+      },
+      "revId": "5b89efe4f7bfb22f686569cbb0a39a4001ec4fa2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0404e0e6_45f96803",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-02-20T08:31:48Z",
       "side": 1,
       "message": "defect: add error management in case the `mount_fd_by_root` fails",
+      "range": {
+        "startLine": 1029,
+        "startChar": 4,
+        "endLine": 1029,
+        "endChar": 38
+      },
+      "revId": "5b89efe4f7bfb22f686569cbb0a39a4001ec4fa2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5a29f270_013c1764",
+        "filename": "librobinhood/src/backends/posix/posix.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 1029,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-02-20T10:02:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0404e0e6_45f96803",
       "range": {
         "startLine": 1029,
         "startChar": 4,
@@ -70,6 +118,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b18155c1_cee6dbfd",
+        "filename": "librobinhood/src/utils/open.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-02-20T10:02:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "885fe158_f441e62b",
+      "range": {
+        "startLine": 71,
+        "startChar": 0,
+        "endLine": 71,
+        "endChar": 16
+      },
+      "revId": "5b89efe4f7bfb22f686569cbb0a39a4001ec4fa2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "90896945_9d3110bd",
@@ -83,6 +155,30 @@
       "writtenOn": "2025-02-20T08:31:48Z",
       "side": 1,
       "message": "minor: `return open_by_id(...)` here and for the other 3",
+      "range": {
+        "startLine": 75,
+        "startChar": 9,
+        "endLine": 75,
+        "endChar": 19
+      },
+      "revId": "5b89efe4f7bfb22f686569cbb0a39a4001ec4fa2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "98ae25c2_48dfe9e6",
+        "filename": "librobinhood/src/utils/open.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-02-20T10:02:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "90896945_9d3110bd",
       "range": {
         "startLine": 75,
         "startChar": 9,
