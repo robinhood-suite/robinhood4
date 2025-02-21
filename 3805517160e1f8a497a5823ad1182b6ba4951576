@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a0579607_f7a43b74",
+        "filename": "librobinhood/src/alias.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-02-21T08:07:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "39ae0947_467a782f",
+      "range": {
+        "startLine": 109,
+        "startChar": 0,
+        "endLine": 109,
+        "endChar": 51
+      },
+      "revId": "3805517160e1f8a497a5823ad1182b6ba4951576",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3d9803e2_2f75cc0f",
@@ -47,6 +71,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b8061f4_fa47bbcd",
+        "filename": "librobinhood/src/alias.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-02-21T08:07:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3d9803e2_2f75cc0f",
+      "range": {
+        "startLine": 132,
+        "startChar": 16,
+        "endLine": 132,
+        "endChar": 24
+      },
+      "revId": "3805517160e1f8a497a5823ad1182b6ba4951576",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6698173f_296a06a3",
@@ -60,6 +108,30 @@
       "writtenOn": "2025-02-20T15:46:22Z",
       "side": 1,
       "message": "defect: same",
+      "range": {
+        "startLine": 148,
+        "startChar": 12,
+        "endLine": 148,
+        "endChar": 20
+      },
+      "revId": "3805517160e1f8a497a5823ad1182b6ba4951576",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cf67ac8f_6947d73d",
+        "filename": "librobinhood/src/alias.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-02-21T08:07:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6698173f_296a06a3",
       "range": {
         "startLine": 148,
         "startChar": 12,
