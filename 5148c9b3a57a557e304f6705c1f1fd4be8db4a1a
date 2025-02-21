@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c448ce99_cebe6458",
+        "filename": "librobinhood/src/alias.c",
+        "patchSetId": 6
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-02-21T10:30:29Z",
+      "side": 1,
+      "message": "minor: no need to check when using `RBH_SSTACK_PUSH`",
+      "range": {
+        "startLine": 116,
+        "startChar": 16,
+        "endLine": 119,
+        "endChar": 17
+      },
+      "revId": "5148c9b3a57a557e304f6705c1f1fd4be8db4a1a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
