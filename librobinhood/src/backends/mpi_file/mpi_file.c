@@ -19,6 +19,7 @@
 #include "robinhood/backends/posix_internal.h"
 #include "robinhood/backends/iter_mpi_internal.h"
 #include "robinhood/backends/mpi_file.h"
+#include "robinhood/backend.h"
 #include "robinhood/statx.h"
 #include "mpi_file.h"
 
@@ -51,6 +52,7 @@ static struct rbh_fsentry *
 fsentry_from_flist(struct mpi_file_info *mpi_fi,
                    struct mpi_iterator *iterator)
 {
+    unsigned short backend_id = RBH_BI_MPI_FILE;
     struct rbh_value_map inode_xattrs;
     struct rbh_value_pair *ns_pairs;
     struct rbh_value_map ns_xattrs;
@@ -66,8 +68,9 @@ fsentry_from_flist(struct mpi_file_info *mpi_fi,
      * Unlike with posix, we use the relative path of an entry to
      * create an unique ID
      */
-    id = rbh_id_new(mpi_fi->path,
-                    (strlen(mpi_fi->path) + 1) * sizeof(*mpi_fi->path));
+    id = rbh_id_new_with_id(mpi_fi->path,
+                            (strlen(mpi_fi->path) + 1) * sizeof(*mpi_fi->path),
+                            backend_id);
     if (id == NULL) {
         save_errno = errno;
         return NULL;

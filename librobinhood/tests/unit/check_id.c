@@ -13,6 +13,7 @@
 #include <fcntl.h>
 #include <stdlib.h>
 
+#include "robinhood/backend.h"
 #include "check-compat.h"
 #include "check_macros.h"
 #include "robinhood/id.h"
@@ -102,6 +103,31 @@ START_TEST(rin_empty)
 }
 END_TEST
 
+START_TEST(rin_with_id)
+{
+    const unsigned short test_id = RBH_BI_POSIX;
+    const char *test_data = "abcdefg";
+    char *tmp;
+
+    char DATA[sizeof(test_data) + sizeof(short)];
+    const struct rbh_id ID = {
+        .data = DATA,
+        .size = sizeof(DATA),
+    };
+
+    struct rbh_id *id;
+
+    tmp = mempcpy(DATA, &test_id, sizeof(short));
+    memcpy(tmp, test_data, sizeof(&test_data));
+
+    id = rbh_id_new_with_id(test_data, sizeof(test_data), test_id);
+    ck_assert_ptr_nonnull(id);
+    ck_assert_ptr_ne(id->data, DATA);
+    ck_assert_id_eq(id, &ID);
+
+    free(id);
+}
+
 /*----------------------------------------------------------------------------*
  |                         rbh_id_from_file_handle()                          |
  *----------------------------------------------------------------------------*/
@@ -126,26 +152,29 @@ END_TEST
 
 START_TEST(riffh_basic)
 {
-    struct file_handle *fh;
+    const unsigned short test_id = RBH_BI_POSIX;
     const char F_HANDLE[] = "abcdefg";
+    struct file_handle *fh;
+    char *tmp;
+
+    char data[sizeof(short) + sizeof(int) + sizeof(F_HANDLE)];
     char fh_buffer[sizeof(*fh) + sizeof(F_HANDLE)];
-    char data[sizeof(int) + sizeof(F_HANDLE)];
     const struct rbh_id ID = {
         .data = data,
         .size = sizeof(data),
     };
     struct rbh_id *id;
-    char *tmp;
 
     fh = (struct file_handle *)fh_buffer;
     fh->handle_bytes = sizeof(F_HANDLE);
     fh->handle_type = 0x01234567;
     memcpy(fh->f_handle, F_HANDLE, sizeof(F_HANDLE));
 
-    tmp = mempcpy(data, &fh->handle_type, sizeof(int));
+    tmp = mempcpy(data, &test_id, sizeof(short));
+    tmp = mempcpy(tmp, &fh->handle_type, sizeof(int));
     memcpy(tmp, F_HANDLE, sizeof(F_HANDLE));
 
-    id = rbh_id_from_file_handle(fh);
+    id = rbh_id_from_file_handle(fh, test_id);
     ck_assert_ptr_nonnull(id);
     ck_assert_id_eq(id, &ID);
 
@@ -155,18 +184,24 @@ END_TEST
 
 START_TEST(riffh_empty)
 {
+    const unsigned short test_id = RBH_BI_POSIX;
+    char *tmp;
     const struct file_handle FH = {
         .handle_bytes = 0,
         .handle_type = 0x01234567,
         .f_handle = "",
     };
+    char data[sizeof(short) + sizeof(FH.handle_type)];
     const struct rbh_id ID = {
-        .data = (char *)&FH.handle_type,
-        .size = sizeof(FH.handle_type),
+        .data = data,
+        .size = sizeof(FH.handle_type) + sizeof(short),
     };
+    tmp = mempcpy(data, &test_id, sizeof(short));
+    memcpy(tmp, &FH.handle_type, sizeof(FH.handle_type));
+
     struct rbh_id *id;
 
-    id = rbh_id_from_file_handle(&FH);
+    id = rbh_id_from_file_handle(&FH, test_id);
     ck_assert_ptr_nonnull(id);
     ck_assert_id_eq(id, &ID);
 
@@ -184,21 +219,21 @@ END_TEST
 
 START_TEST(riflf_basic)
 {
-    const int FILEID_LUSTRE = 0x97;
+    const unsigned short test_id = RBH_BI_LUSTRE;
     struct lu_fid FID = {
         .f_seq = 0,
         .f_oid = 1,
         .f_ver = 2,
     };
-    char data[sizeof(FILEID_LUSTRE) + 2 * sizeof(FID)];
+    char data[sizeof(short) + 2 * sizeof(FID)];
+    char *tmp;
     const struct rbh_id ID = {
         .data = data,
         .size = sizeof(data),
     };
     struct rbh_id *id;
-    char *tmp;
 
-    tmp = mempcpy(data, &FILEID_LUSTRE, sizeof(FILEID_LUSTRE));
+    tmp = mempcpy(data, &test_id, sizeof(short));
     tmp = mempcpy(tmp, &FID, sizeof(FID));
     memset(tmp, 0, sizeof(FID));
 
@@ -216,16 +251,20 @@ END_TEST
 
 START_TEST(rfhfi_basic)
 {
+    const unsigned short test_id = RBH_BI_POSIX;
     const char F_HANDLE[] = "abcdefg";
-    char data[sizeof(int) + sizeof(F_HANDLE)];
+    char *tmp;
+
+    char data[sizeof(short) + sizeof(int) + sizeof(F_HANDLE)];
     const struct rbh_id ID = {
         .data = data,
         .size = sizeof(data),
     };
     struct file_handle *fh;
 
-    memcpy(data, &(int){1234}, sizeof(int));
-    memcpy(data + sizeof(int), F_HANDLE, sizeof(F_HANDLE));
+    tmp = mempcpy(data, &test_id, sizeof(short));
+    tmp = mempcpy(tmp, &(int){1234}, sizeof(int));
+    memcpy(tmp, F_HANDLE, sizeof(F_HANDLE));
 
     fh = rbh_file_handle_from_id(&ID);
     ck_assert_ptr_nonnull(fh);
@@ -266,6 +305,7 @@ unit_suite(void)
     tests = tcase_create("rbh_id_new()");
     tcase_add_test(tests, rin_basic);
     tcase_add_test(tests, rin_empty);
+    tcase_add_test(tests, rin_with_id);
 
     suite_add_tcase(suite, tests);
 

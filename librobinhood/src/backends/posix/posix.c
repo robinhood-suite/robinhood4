@@ -24,6 +24,7 @@
 
 #include "robinhood/backends/posix.h"
 #include "robinhood/backends/posix_internal.h"
+#include "robinhood/backend.h"
 #include "robinhood/sstack.h"
 #include "robinhood/statx.h"
 
@@ -49,7 +50,7 @@ static const struct rbh_id ROOT_PARENT_ID = {
 };
 
 struct rbh_id *
-id_from_fd(int fd)
+id_from_fd(int fd, unsigned short backend_id)
 {
     int mount_id;
 
@@ -79,7 +80,7 @@ retry:
         goto retry;
     }
 
-    return rbh_id_from_file_handle(handle);
+    return rbh_id_from_file_handle(handle, backend_id);
 }
 
 char *
@@ -335,6 +336,7 @@ fsentry_from_any(struct fsentry_id_pair *fip, const struct rbh_value *path,
     struct rbh_fsentry *fsentry;
     size_t pairs_count = 1 << 7;
     struct rbh_statx statxbuf;
+    unsigned short backend_id;
     char proc_fd_path[64];
     char *symlink = NULL;
     struct rbh_id *id;
@@ -404,7 +406,8 @@ fsentry_from_any(struct fsentry_id_pair *fip, const struct rbh_value *path,
     /* The root entry might already have its ID computed and stored in
      * `entry_id'.
      */
-    id = entry_id ? : id_from_fd(fd);
+    backend_id = (inode_xattrs_callback == NULL) ? RBH_BI_POSIX : RBH_BI_LUSTRE;
+    id = entry_id ? : id_from_fd(fd, backend_id);
     if (id == NULL) {
         save_errno = errno;
         goto out_close;
@@ -457,6 +460,7 @@ fsentry_from_any(struct fsentry_id_pair *fip, const struct rbh_value *path,
                 errno = ESTALE;
             }
             save_errno = errno;
+
             goto out_clear_sstacks;
         }
     }
@@ -576,6 +580,7 @@ posix_iter_next(void *iterator)
     struct posix_iterator *posix_iter = iterator;
     bool skip_error = posix_iter->skip_error;
     struct rbh_fsentry *fsentry;
+    unsigned short backend_id;
     int save_errno = errno;
     FTSENT *ftsent;
 
@@ -649,7 +654,9 @@ skip:
             return NULL;
         }
 
-        ftsent->fts_parent->fts_pointer = id_from_fd(fd);
+        backend_id = (posix_iter->inode_xattrs_callback == NULL)
+                      ? RBH_BI_POSIX : RBH_BI_LUSTRE;
+        ftsent->fts_parent->fts_pointer = id_from_fd(fd, backend_id);
         save_errno = errno;
         close(fd);
         free(path_dup);
