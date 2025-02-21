@@ -1,0 +1,524 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "02617fc4_facc1051",
+        "filename": "librobinhood/include/robinhood/backends/iter_mpi_internal.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-02-21T15:20:54Z",
+      "side": 1,
+      "message": "sugest: use a boolean",
+      "revId": "7cb98964071947cca5f990a9cef111f233db32ab",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "238c8b63_977dc219",
+        "filename": "librobinhood/include/robinhood/id.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-02-21T15:20:54Z",
+      "side": 1,
+      "message": "minor: add the backend id",
+      "revId": "7cb98964071947cca5f990a9cef111f233db32ab",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c922332e_edd6bdec",
+        "filename": "librobinhood/include/robinhood/id.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-02-21T15:20:54Z",
+      "side": 1,
+      "message": "sugest: backend_id",
+      "range": {
+        "startLine": 101,
+        "startChar": 39,
+        "endLine": 101,
+        "endChar": 44
+      },
+      "revId": "7cb98964071947cca5f990a9cef111f233db32ab",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "70efcea3_1e09e634",
+        "filename": "librobinhood/src/backends/iter_mpi/iter_mpi.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-02-21T15:20:54Z",
+      "side": 1,
+      "message": "sugest: use a boolean",
+      "revId": "7cb98964071947cca5f990a9cef111f233db32ab",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5f824862_8775e9a6",
+        "filename": "librobinhood/src/backends/iter_mpi/iter_mpi.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-02-21T15:20:54Z",
+      "side": 1,
+      "message": "style: the variables are declared in pyramid",
+      "revId": "7cb98964071947cca5f990a9cef111f233db32ab",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a0d22091_0b0c1d56",
+        "filename": "librobinhood/src/backends/iter_mpi/iter_mpi.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-02-21T15:20:54Z",
+      "side": 1,
+      "message": "sugest: `backend_id \u003d with_lustre \u003d\u003d NULL ? RBH_BI_POSIX : RBH_BI_LUSTRE`",
+      "range": {
+        "startLine": 56,
+        "startChar": 8,
+        "endLine": 59,
+        "endChar": 34
+      },
+      "revId": "7cb98964071947cca5f990a9cef111f233db32ab",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e331af38_0351c21d",
+        "filename": "librobinhood/src/backends/iter_mpi/iter_mpi.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-02-21T15:20:54Z",
+      "side": 1,
+      "message": "sugest: make a new function that take as input the data, data_size and backend_id and prepend the backend_id in data.\n```\nrbh_id_new_with_id(char *data, size_t size, short backend_id)\n\n{\n    // prepend the backend_id to data\n    ...\n\n    id \u003d rbh_id_new(data, size);\n    return id;\n}\n```",
+      "range": {
+        "startLine": 61,
+        "startChar": 8,
+        "endLine": 66,
+        "endChar": 66
+      },
+      "revId": "7cb98964071947cca5f990a9cef111f233db32ab",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cd2154c4_5768b560",
+        "filename": "librobinhood/src/backends/iter_mpi/iter_mpi.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-02-21T15:20:54Z",
+      "side": 1,
+      "message": "sugest: use a boolean",
+      "revId": "7cb98964071947cca5f990a9cef111f233db32ab",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "36cb27e1_36ad2add",
+        "filename": "librobinhood/src/backends/mpi_file/mpi_file.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-02-21T15:20:54Z",
+      "side": 1,
+      "message": "style: order",
+      "revId": "7cb98964071947cca5f990a9cef111f233db32ab",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ea2a1588_16bb9d3d",
+        "filename": "librobinhood/src/backends/mpi_file/mpi_file.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-02-21T15:20:54Z",
+      "side": 1,
+      "message": "sugest: backend_id",
+      "range": {
+        "startLine": 60,
+        "startChar": 19,
+        "endLine": 60,
+        "endChar": 24
+      },
+      "revId": "7cb98964071947cca5f990a9cef111f233db32ab",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bd466a29_b42982e5",
+        "filename": "librobinhood/src/backends/mpi_file/mpi_file.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-02-21T15:20:54Z",
+      "side": 1,
+      "message": "idem: in a new function",
+      "range": {
+        "startLine": 71,
+        "startChar": 4,
+        "endLine": 76,
+        "endChar": 56
+      },
+      "revId": "7cb98964071947cca5f990a9cef111f233db32ab",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cb01715a_f5f3403c",
+        "filename": "librobinhood/src/backends/mpi_file/mpi_file.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 333,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-02-21T15:20:54Z",
+      "side": 1,
+      "message": "sugest: backend_id",
+      "range": {
+        "startLine": 333,
+        "startChar": 19,
+        "endLine": 333,
+        "endChar": 24
+      },
+      "revId": "7cb98964071947cca5f990a9cef111f233db32ab",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d237b054_5bfa4792",
+        "filename": "librobinhood/src/backends/mpi_file/mpi_file.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 366,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-02-21T15:20:54Z",
+      "side": 1,
+      "message": "defect: you don\u0027t need to add the backend_id to the rbh_id here, at this stage, the rbh_id has already the backend_id. You add it twice",
+      "range": {
+        "startLine": 361,
+        "startChar": 12,
+        "endLine": 366,
+        "endChar": 55
+      },
+      "revId": "7cb98964071947cca5f990a9cef111f233db32ab",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "239e4aba_d550c0ef",
+        "filename": "librobinhood/src/backends/posix/posix.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-02-21T15:20:54Z",
+      "side": 1,
+      "message": "defect: `id_from_fd` can be called from the posix and lustre backend.\nYou can do something like this:\n```\nid_from_fd(int df, short backend_id)\n{\n   ...\n   return rbh_id_from_file_handle(handle, backend_id);\n}\n\nfsentry_from_any(...)\n{\n   ...\n   backend_id \u003d inode_xattrs_callback \u003d\u003d NULL ? RBH_BI_POSIX : RBH_BI_LUSTRE;\n   id \u003d entry_id ? : id_from_fd(fd, backend_id);\n   ...\n}\n```",
+      "revId": "7cb98964071947cca5f990a9cef111f233db32ab",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "de2afdbb_e1129567",
+        "filename": "librobinhood/src/id.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-02-21T15:20:54Z",
+      "side": 1,
+      "message": "sugest: add in the comment a new step with the add of the backend ID",
+      "revId": "7cb98964071947cca5f990a9cef111f233db32ab",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6ce7c118_0bcf1001",
+        "filename": "librobinhood/src/id.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-02-21T15:20:54Z",
+      "side": 1,
+      "message": "minor: you are using `unsigned short` or `short`, try to be consistent",
+      "range": {
+        "startLine": 106,
+        "startChar": 24,
+        "endLine": 106,
+        "endChar": 38
+      },
+      "revId": "7cb98964071947cca5f990a9cef111f233db32ab",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "be514f35_55ef0186",
+        "filename": "librobinhood/src/id.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-02-21T15:20:54Z",
+      "side": 1,
+      "message": "sugest: idem, add a new step with the add of the backend ID in data",
+      "revId": "7cb98964071947cca5f990a9cef111f233db32ab",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a9e1f73c_a0d2f108",
+        "filename": "librobinhood/src/id.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-02-21T15:20:54Z",
+      "side": 1,
+      "message": "defect: use RBH_BI_LUSTRE",
+      "range": {
+        "startLine": 178,
+        "startChar": 31,
+        "endLine": 178,
+        "endChar": 32
+      },
+      "revId": "7cb98964071947cca5f990a9cef111f233db32ab",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3211eb56_63b83b3c",
+        "filename": "librobinhood/src/id.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-02-21T15:20:54Z",
+      "side": 1,
+      "message": "defect: use RBH_BI_LUSTRE",
+      "range": {
+        "startLine": 201,
+        "startChar": 31,
+        "endLine": 201,
+        "endChar": 32
+      },
+      "revId": "7cb98964071947cca5f990a9cef111f233db32ab",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "16f27caa_ad1416fd",
+        "filename": "librobinhood/tests/unit/check_id.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-02-21T15:20:54Z",
+      "side": 1,
+      "message": "minor: we try to include the file in alphabetical order",
+      "revId": "7cb98964071947cca5f990a9cef111f233db32ab",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7364fe9f_b92b2249",
+        "filename": "librobinhood/tests/unit/check_id.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-02-21T15:20:54Z",
+      "side": 1,
+      "message": "minor: I think, it will be better to not modify this test and add a new test for the new function `rbh_id_new_with_id`",
+      "revId": "7cb98964071947cca5f990a9cef111f233db32ab",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "52c81ace_4cd5f034",
+        "filename": "librobinhood/tests/unit/check_id.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-02-21T15:20:54Z",
+      "side": 1,
+      "message": "style: order",
+      "range": {
+        "startLine": 74,
+        "startChar": 4,
+        "endLine": 76,
+        "endChar": 52
+      },
+      "revId": "7cb98964071947cca5f990a9cef111f233db32ab",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ac107a02_106f1d5f",
+        "filename": "librobinhood/tests/unit/check_id.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-02-21T15:20:54Z",
+      "side": 1,
+      "message": "minor: we declare all the variable at the start of the function",
+      "range": {
+        "startLine": 83,
+        "startChar": 4,
+        "endLine": 83,
+        "endChar": 14
+      },
+      "revId": "7cb98964071947cca5f990a9cef111f233db32ab",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2f117aa0_a001b17c",
+        "filename": "librobinhood/tests/unit/check_id.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-02-21T15:20:54Z",
+      "side": 1,
+      "message": "style: order",
+      "revId": "7cb98964071947cca5f990a9cef111f233db32ab",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0f5e43d0_9359bfd7",
+        "filename": "librobinhood/tests/unit/check_id.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-02-21T15:20:54Z",
+      "side": 1,
+      "message": "question: Where does the sizeof(int) come from?",
+      "range": {
+        "startLine": 173,
+        "startChar": 30,
+        "endLine": 173,
+        "endChar": 41
+      },
+      "revId": "7cb98964071947cca5f990a9cef111f233db32ab",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c90bfa0b_d1376cdb",
+        "filename": "librobinhood/tests/unit/check_id.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-02-21T15:20:54Z",
+      "side": 1,
+      "message": "style: add a space after the line",
+      "revId": "7cb98964071947cca5f990a9cef111f233db32ab",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
