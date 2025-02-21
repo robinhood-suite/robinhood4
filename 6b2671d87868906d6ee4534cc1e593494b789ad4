@@ -119,6 +119,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b158f4f6_1ba1ca6e",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-02-21T09:17:24Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "c361307a_4c0efa8a",
+      "range": {
+        "startLine": 57,
+        "startChar": 0,
+        "endLine": 58,
+        "endChar": 29
+      },
+      "revId": "6b2671d87868906d6ee4534cc1e593494b789ad4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e744b90d_073bcbd9",
