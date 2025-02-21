@@ -102,13 +102,15 @@ rbh_id_new(const char *data, size_t size)
  *                                     sizeof(handle_type) + handle_bytes
  */
 struct rbh_id *
-rbh_id_from_file_handle(const struct file_handle *handle)
+rbh_id_from_file_handle(const struct file_handle *handle,
+                        unsigned short bc_id)
 {
     struct rbh_id *id;
     size_t size;
     char *data;
 
-    size = sizeof(handle->handle_type) + handle->handle_bytes;
+    size = sizeof(short) + sizeof(handle->handle_type)
+           + handle->handle_bytes;
     id = malloc(sizeof(*id) + size);
     if (id == NULL)
         return NULL;
@@ -116,6 +118,7 @@ rbh_id_from_file_handle(const struct file_handle *handle)
 
     /* id->data */
     id->data = data;
+    data = mempcpy(data, &bc_id, sizeof(short));
     data = mempcpy(data, &handle->handle_type, sizeof(handle->handle_type));
     memcpy(data, handle->f_handle, handle->handle_bytes);
 
@@ -165,14 +168,14 @@ rbh_id_from_file_handle(const struct file_handle *handle)
  * -------------------------------------       -----------------------------
  */
 static const size_t LUSTRE_FH_SIZE = 2 * sizeof(struct lu_fid);
-static const int FILEID_LUSTRE = 0x97;
 
-const size_t LUSTRE_ID_SIZE = LUSTRE_FH_SIZE + sizeof(FILEID_LUSTRE);
+const size_t LUSTRE_ID_SIZE = LUSTRE_FH_SIZE + sizeof(short);
 
 struct rbh_id *
 rbh_id_from_lu_fid(const struct lu_fid *fid)
 {
     struct rbh_id *id;
+    unsigned short lustre_id = 4;
     char *data;
 
     id = malloc(sizeof(*id) + LUSTRE_ID_SIZE);
@@ -182,7 +185,7 @@ rbh_id_from_lu_fid(const struct lu_fid *fid)
 
     /* id->data */
     id->data = data;
-    data = mempcpy(data, &FILEID_LUSTRE, sizeof(FILEID_LUSTRE));
+    data = mempcpy(data, &lustre_id, sizeof(short));
     data = mempcpy(data, fid, sizeof(*fid));
     memset(data, 0, sizeof(*fid));
 
@@ -195,9 +198,9 @@ rbh_id_from_lu_fid(const struct lu_fid *fid)
 const struct lu_fid *
 rbh_lu_fid_from_id(const struct rbh_id *id)
 {
-    assert(*(int *)id->data == FILEID_LUSTRE);
+    assert(*(int *)id->data == 4);
 
-    return (const struct lu_fid *) (id->data + sizeof(FILEID_LUSTRE));
+    return (const struct lu_fid *) (id->data + sizeof(short));
 }
 
 struct file_handle *
@@ -210,14 +213,17 @@ rbh_file_handle_from_id(const struct rbh_id *id)
         return NULL;
     }
 
-    handle = malloc(sizeof(*handle) + id->size - sizeof(handle->handle_bytes));
+    handle = malloc(sizeof(*handle) + id->size - sizeof(short)
+                    - sizeof(handle->handle_bytes));
     if (handle == NULL)
         return NULL;
 
-    handle->handle_bytes = id->size - sizeof(handle->handle_type);
-    memcpy(&handle->handle_type, id->data, sizeof(handle->handle_type));
-    memcpy(&handle->f_handle, id->data + sizeof(handle->handle_type),
-           handle->handle_bytes);
+    handle->handle_bytes = id->size - sizeof(short)
+                           - sizeof(handle->handle_type);
+    memcpy(&handle->handle_type, id->data + sizeof(short),
+           sizeof(handle->handle_type));
+    memcpy(&handle->f_handle, id->data + sizeof(short)
+           + sizeof(handle->handle_type), handle->handle_bytes);
 
     return handle;
 }

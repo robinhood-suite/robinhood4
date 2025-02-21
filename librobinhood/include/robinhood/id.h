@@ -97,7 +97,8 @@ struct file_handle;
  * The returned ID does not share data with \p handle.
  */
 struct rbh_id *
-rbh_id_from_file_handle(const struct file_handle *handle);
+rbh_id_from_file_handle(const struct file_handle *handle,
+                        unsigned short bc_id);
 
 /**
  * The size of a Lustre ID as built by rbh_id_from_lu_fid()
