@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "217d73f1_e93098c4",
+        "filename": "librobinhood/include/robinhood/open.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-02-21T13:13:51Z",
+      "side": 1,
+      "message": "comment: don\u0027t we need to have some documentation for the functions?",
+      "revId": "921a93664e88bd95e5ce64bd0ab8d04eb9f47970",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b304f1ab_32eb0fdb",
+        "filename": "librobinhood/include/robinhood/open.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-02-21T13:13:51Z",
+      "side": 1,
+      "message": "question: which function? open_by_id_opath? usually the comments of a function are put just above it\n\n```\nint\nopen_by_id_generic(...);\n\n/* This function handles ...\n */\nint\nopen_by_id_opath(...);\n```",
+      "range": {
+        "startLine": 24,
+        "startChar": 1,
+        "endLine": 27,
+        "endChar": 3
+      },
+      "revId": "921a93664e88bd95e5ce64bd0ab8d04eb9f47970",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2a207abc_2c6f3f97",
+        "filename": "librobinhood/src/utils/open.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-02-21T13:13:51Z",
+      "side": 1,
+      "message": "question: is this function used in another code than the both below? if not, it is not needed to externalize it, and maybe having:\n\n```\nopen.c:\n\nstatic int\n_open_by_id()\n{ ... }\n\nint\nopen_by_id(... O_NONBLOCK)\n{ ... }\n\nint\nopen_by_id_opath(... O_PATH)\n{ ... }\n```\n\n```\nopen.h:\n\nint\nopen_by_id(... O_NONBLOCK);\n\nint\nopen_by_id_opath(... O_PATH);\n```",
+      "range": {
+        "startLine": 30,
+        "startChar": 0,
+        "endLine": 31,
+        "endChar": 60
+      },
+      "revId": "921a93664e88bd95e5ce64bd0ab8d04eb9f47970",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
