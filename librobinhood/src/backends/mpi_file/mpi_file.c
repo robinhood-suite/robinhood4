@@ -19,6 +19,7 @@
 #include "robinhood/backends/posix_internal.h"
 #include "robinhood/backends/iter_mpi_internal.h"
 #include "robinhood/backends/mpi_file.h"
+#include "robinhood/backend.h"
 #include "robinhood/statx.h"
 #include "mpi_file.h"
 
@@ -56,6 +57,7 @@ fsentry_from_flist(struct mpi_file_info *mpi_fi,
     struct rbh_value_map ns_xattrs;
     struct rbh_fsentry *fsentry;
     struct rbh_statx statxbuf;
+    unsigned short bc_id = RBH_BI_MPI_FILE;
     char *symlink = NULL;
     struct rbh_id *id;
     int save_errno;
@@ -66,8 +68,12 @@ fsentry_from_flist(struct mpi_file_info *mpi_fi,
      * Unlike with posix, we use the relative path of an entry to
      * create an unique ID
      */
-    id = rbh_id_new(mpi_fi->path,
-                    (strlen(mpi_fi->path) + 1) * sizeof(*mpi_fi->path));
+    size_t size = (strlen(mpi_fi->path) + 1) * sizeof(*mpi_fi->path);
+    char data[size];
+    char *tmp;
+    tmp = mempcpy(data, &bc_id, sizeof(short));
+    memcpy(tmp, mpi_fi->path, size);
+    id = rbh_id_new(mpi_fi->path, size + sizeof(short));
     if (id == NULL) {
         save_errno = errno;
         return NULL;
@@ -324,6 +330,7 @@ mpi_file_backend_update(void *backend, struct rbh_iterator *fsevents)
 {
     struct rbh_id *last_id = rbh_id_new(NULL, 0);
     struct mpi_file_backend *mpi_file = backend;
+    unsigned short bc_id = RBH_BI_MPI_FILE;
     int save_errno = errno;
     uint64_t index = 0;
     ssize_t count = 0;
@@ -351,7 +358,12 @@ mpi_file_backend_update(void *backend, struct rbh_iterator *fsevents)
 
         if (!rbh_id_equal(last_id, &fsevent->id)) {
             index = mfu_flist_file_create(mpi_file->flist);
-            struct rbh_id *id = rbh_id_new(fsevent->id.data, fsevent->id.size);
+            char data[fsevent->id.size + sizeof(short)];
+            char *tmp;
+            tmp = mempcpy(data, &bc_id, sizeof(short));
+            memcpy(tmp, fsevent->id.data, fsevent->id.size);
+            size_t size = fsevent->id.size + sizeof(short);
+            struct rbh_id *id = rbh_id_new(data, size);
             free(last_id);
             last_id = id;
         }

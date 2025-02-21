@@ -94,7 +94,8 @@ struct mpi_iterator {
  *----------------------------------------------------------------------------*/
 
 struct rbh_id *
-get_parent_id(const char *path, bool use_fd, int prefix_len);
+get_parent_id(const char *path, bool use_fd, int prefix_len,
+              inode_xattrs_callback_t inode_xattrs_callback);
 
 struct rbh_mut_iterator *
 mpi_iterator_new(const char *root, const char *entry, int statx_sync_type);

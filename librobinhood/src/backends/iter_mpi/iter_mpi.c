@@ -18,17 +18,20 @@
 
 #include "robinhood/backends/posix_internal.h"
 #include "robinhood/backends/iter_mpi_internal.h"
+#include "robinhood/backend.h"
 
 /*----------------------------------------------------------------------------*
  |                             mpi_iterator                                   |
  *----------------------------------------------------------------------------*/
 
 struct rbh_id *
-get_parent_id(const char *path, bool use_fd, int prefix_len)
+get_parent_id(const char *path, bool use_fd, int prefix_len,
+              inode_xattrs_callback_t inode_xattrs_callback)
 {
     struct rbh_id *parent_id;
     int save_errno = errno;
     char *parent_path;
+    unsigned short bc_id;
     char *tmp_path;
     int fd;
 
@@ -50,8 +53,17 @@ get_parent_id(const char *path, bool use_fd, int prefix_len)
     } else {
         parent_path = dirname(strlen(tmp_path) == prefix_len ? tmp_path :
                               tmp_path + prefix_len);
-        parent_id = rbh_id_new(parent_path,
-                               (strlen(parent_path) + 1) * sizeof(*parent_id));
+        if (inode_xattrs_callback == NULL)
+            bc_id = RBH_BI_POSIX;
+        else
+            bc_id = RBH_BI_LUSTRE;
+
+        char *tmp;
+        size_t size = (strlen(parent_path) + 1) * sizeof(*parent_id);
+        char data[size + sizeof(short)];
+        tmp = mempcpy(data, &bc_id, sizeof(short));
+        memcpy(tmp, parent_path, size);
+        parent_id = rbh_id_new(parent_path, size + sizeof(short));
     }
 
     save_errno = errno;
@@ -134,7 +146,8 @@ skip:
     mpi_fi.path = path;
     mpi_fi.name = basename(path_dup);
     mpi_fi.parent_id = get_parent_id(path, mpi_iter->use_fd,
-                                     mpi_iter->prefix_len);
+                                     mpi_iter->prefix_len,
+                                     mpi_iter->inode_xattrs_callback);
 
     if (mpi_fi.parent_id == NULL) {
         fprintf(stderr, "Failed to get parent id of '%s'\n", path);

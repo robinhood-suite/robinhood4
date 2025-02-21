@@ -24,6 +24,7 @@
 
 #include "robinhood/backends/posix.h"
 #include "robinhood/backends/posix_internal.h"
+#include "robinhood/backend.h"
 #include "robinhood/sstack.h"
 #include "robinhood/statx.h"
 
@@ -79,7 +80,7 @@ retry:
         goto retry;
     }
 
-    return rbh_id_from_file_handle(handle);
+    return rbh_id_from_file_handle(handle, RBH_BI_POSIX);
 }
 
 char *
