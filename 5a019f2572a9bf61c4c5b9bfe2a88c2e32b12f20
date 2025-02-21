@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f935543e_373ff57c",
+        "filename": "rbh-find/rbh-find.c",
+        "patchSetId": 12
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-02-21T08:15:41Z",
+      "side": 1,
+      "message": "major: `strcmp() \u003d\u003d 0 || strcmp() \u003d\u003d 0)`",
+      "range": {
+        "startLine": 120,
+        "startChar": 39,
+        "endLine": 120,
+        "endChar": 41
+      },
+      "revId": "5a019f2572a9bf61c4c5b9bfe2a88c2e32b12f20",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
