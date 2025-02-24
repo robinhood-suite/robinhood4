@@ -19,6 +19,7 @@
 #include "robinhood/backends/posix_internal.h"
 #include "robinhood/backends/iter_mpi_internal.h"
 #include "robinhood/backends/mpi_file.h"
+#include "robinhood/backend.h"
 #include "robinhood/statx.h"
 #include "mpi_file.h"
 
@@ -66,8 +67,9 @@ fsentry_from_flist(struct mpi_file_info *mpi_fi,
      * Unlike with posix, we use the relative path of an entry to
      * create an unique ID
      */
-    id = rbh_id_new(mpi_fi->path,
-                    (strlen(mpi_fi->path) + 1) * sizeof(*mpi_fi->path));
+    id = rbh_id_new_with_id(mpi_fi->path,
+                            (strlen(mpi_fi->path) + 1) * sizeof(*mpi_fi->path),
+                            iterator->backend_id);
     if (id == NULL) {
         save_errno = errno;
         return NULL;
@@ -160,6 +162,7 @@ mpi_file_iterator_new(mfu_flist flist, int prefix_len)
     if (mpi_file_iter == NULL)
         error(EXIT_FAILURE, errno, "malloc mpi_iterator");
 
+    mpi_file_iter->backend_id = RBH_BI_MPI_FILE;
     mpi_file_iter->iterator = MPI_FILE_ITER;
     mpi_file_iter->flist = flist;
     mpi_file_iter->current = 0;
