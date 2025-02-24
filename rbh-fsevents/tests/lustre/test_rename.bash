@@ -19,10 +19,10 @@ get_binary_id_from_mongo_entry()
     local entry="$1"
 
     # We do some bashism to only retrieve the ID part, which for Lustre starts
-    # with "lw" and ends with "AA"
+    # with "BA" and ends with "AA="
     entry="$(echo "$entry" | tr -d '\n')"
-    entry="lw${entry#*lw}"
-    entry="${entry%AA*}AA"
+    entry="BA${entry#*BA}"
+    entry="${entry%AA*}AA="
 
     echo "$entry"
 }
