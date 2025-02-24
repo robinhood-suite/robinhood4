@@ -15,6 +15,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "robinhood/backend.h"
 #include "robinhood/id.h"
 
 #include "lu_fid.h"
@@ -75,6 +76,21 @@ rbh_id_clone(const struct rbh_id *id)
 }
 
 struct rbh_id *
+rbh_id_new_with_id(const char *data, size_t size, short backend_id)
+{
+    char DATA[size + sizeof(short)];
+    const struct rbh_id ID = {
+        .data = DATA,
+        .size = size + sizeof(short),
+    };
+    char *tmp;
+
+    tmp = mempcpy(DATA, &backend_id, sizeof(short));
+    memcpy(tmp, data, size);
+    return rbh_id_clone(&ID);
+}
+
+struct rbh_id *
 rbh_id_new(const char *data, size_t size)
 {
     const struct rbh_id ID = {
@@ -92,30 +108,35 @@ rbh_id_new(const char *data, size_t size)
  *
  * The data of a file handle is mapped in a struct rbh_id as follows:
  *
- * -----------------------------       ------------------------------
- * |     file handle           |       |             ID             |
- * |---------------------------|       |----------------------------|
- * | handle_bytes |          4 |  <=>  | data  | 0x0123456789abcdef |
- * | handle_type  | 0x01234567 |       | size  |                  8 | <--
- * | f_handle     | 0x89abcdef |       ------------------------------   |
- * -----------------------------                                        |
- *                                     sizeof(handle_type) + handle_bytes
+ * -----------------------------       ----------------------------------
+ * |     file handle           |       |                ID              |
+ * |---------------------------|       |--------------------------------|
+ * | handle_bytes |          4 | ---=> | data  | 0x01000123456789abcdef |
+ * | handle_type  | 0x01234567 |   |   | size  |                     10 | <--
+ * | f_handle     | 0x89abcdef |   |   ----------------------------------   |
+ * -----------------------------   |                                        |
+ *                                 |                                        |
+ *   + backend_id | RBH_BI_POSIX ---       sizeof(handle_type) + handle_bytes
+ *                                         + sizeof(short)
  */
 struct rbh_id *
-rbh_id_from_file_handle(const struct file_handle *handle)
+rbh_id_from_file_handle(const struct file_handle *handle, short backend_id)
 {
     struct rbh_id *id;
     size_t size;
     char *data;
 
-    size = sizeof(handle->handle_type) + handle->handle_bytes;
+    size = sizeof(short) + sizeof(handle->handle_type)
+           + handle->handle_bytes;
     id = malloc(sizeof(*id) + size);
     if (id == NULL)
         return NULL;
+
     data = (char *)id + sizeof(*id);
 
     /* id->data */
     id->data = data;
+    data = mempcpy(data, &backend_id, sizeof(short));
     data = mempcpy(data, &handle->handle_type, sizeof(handle->handle_type));
     memcpy(data, handle->f_handle, handle->handle_bytes);
 
@@ -156,22 +177,22 @@ rbh_id_from_file_handle(const struct file_handle *handle)
  * -------------------------------------       -----------------------------
  * |         file handle               |       |             ID            |
  * |-----------------------------------|       |----------------------------
- * | handle_bytes |                 32 |  <=>  | data | 0x00970123456789ab |
- * | handle_type  |             0x0097 |       |      |   cdeffdecba987654 |
- * | f_handle     | 0x0123456789abcdef |       |      |   3210000000000000 |
+ * | handle_bytes |                 32 |  <=>  | data | 0x0100009701234567 |
+ * | handle_type  |             0x0097 |       |      |   89abcdeffdecba98 |
+ * | f_handle     | 0x0123456789abcdef |       |      |   7654321000000000 |
  * |              |   fedcba9876543210 |       |      |   0000000000000000 |
- * |              |   0000000000000000 |       |      |   0000             |
- * |              |   0000000000000000 |       | size |                 36 |
+ * |              |   0000000000000000 |       |      |   00000000         |
+ * |              |   0000000000000000 |       | size |                 38 |
  * -------------------------------------       -----------------------------
  */
 static const size_t LUSTRE_FH_SIZE = 2 * sizeof(struct lu_fid);
-static const int FILEID_LUSTRE = 0x97;
 
-const size_t LUSTRE_ID_SIZE = LUSTRE_FH_SIZE + sizeof(FILEID_LUSTRE);
+const size_t LUSTRE_ID_SIZE = LUSTRE_FH_SIZE + sizeof(short);
 
 struct rbh_id *
 rbh_id_from_lu_fid(const struct lu_fid *fid)
 {
+    short lustre_id = RBH_BI_LUSTRE;
     struct rbh_id *id;
     char *data;
 
@@ -182,7 +203,7 @@ rbh_id_from_lu_fid(const struct lu_fid *fid)
 
     /* id->data */
     id->data = data;
-    data = mempcpy(data, &FILEID_LUSTRE, sizeof(FILEID_LUSTRE));
+    data = mempcpy(data, &lustre_id, sizeof(short));
     data = mempcpy(data, fid, sizeof(*fid));
     memset(data, 0, sizeof(*fid));
 
@@ -195,9 +216,9 @@ rbh_id_from_lu_fid(const struct lu_fid *fid)
 const struct lu_fid *
 rbh_lu_fid_from_id(const struct rbh_id *id)
 {
-    assert(*(int *)id->data == FILEID_LUSTRE);
+    assert(*(int *)id->data == RBH_BI_LUSTRE);
 
-    return (const struct lu_fid *) (id->data + sizeof(FILEID_LUSTRE));
+    return (const struct lu_fid *) (id->data + sizeof(short));
 }
 
 struct file_handle *
@@ -210,14 +231,17 @@ rbh_file_handle_from_id(const struct rbh_id *id)
         return NULL;
     }
 
-    handle = malloc(sizeof(*handle) + id->size - sizeof(handle->handle_bytes));
+    handle = malloc(sizeof(*handle) + id->size - sizeof(short)
+                    - sizeof(handle->handle_bytes));
     if (handle == NULL)
         return NULL;
 
-    handle->handle_bytes = id->size - sizeof(handle->handle_type);
-    memcpy(&handle->handle_type, id->data, sizeof(handle->handle_type));
-    memcpy(&handle->f_handle, id->data + sizeof(handle->handle_type),
-           handle->handle_bytes);
+    handle->handle_bytes = id->size - sizeof(short)
+                           - sizeof(handle->handle_type);
+    memcpy(&handle->handle_type, id->data + sizeof(short),
+           sizeof(handle->handle_type));
+    memcpy(&handle->f_handle, id->data + sizeof(short)
+           + sizeof(handle->handle_type), handle->handle_bytes);
 
     return handle;
 }

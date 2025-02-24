@@ -18,13 +18,14 @@
 
 #include "robinhood/backends/posix_internal.h"
 #include "robinhood/backends/iter_mpi_internal.h"
+#include "robinhood/backend.h"
 
 /*----------------------------------------------------------------------------*
  |                             mpi_iterator                                   |
  *----------------------------------------------------------------------------*/
 
 struct rbh_id *
-get_parent_id(const char *path, bool use_fd, int prefix_len)
+get_parent_id(const char *path, bool use_fd, int prefix_len, short backend_id)
 {
     struct rbh_id *parent_id;
     int save_errno = errno;
@@ -46,12 +47,14 @@ get_parent_id(const char *path, bool use_fd, int prefix_len)
             return NULL;
         }
 
-        parent_id = id_from_fd(fd);
+        parent_id = id_from_fd(fd, backend_id);
     } else {
         parent_path = dirname(strlen(tmp_path) == prefix_len ? tmp_path :
                               tmp_path + prefix_len);
-        parent_id = rbh_id_new(parent_path,
-                               (strlen(parent_path) + 1) * sizeof(*parent_id));
+
+        parent_id = rbh_id_new_with_id(parent_path,
+                                       (strlen(parent_path) + 1)
+                                       * sizeof(*parent_id), backend_id);
     }
 
     save_errno = errno;
@@ -134,7 +137,8 @@ skip:
     mpi_fi.path = path;
     mpi_fi.name = basename(path_dup);
     mpi_fi.parent_id = get_parent_id(path, mpi_iter->use_fd,
-                                     mpi_iter->prefix_len);
+                                     mpi_iter->prefix_len,
+                                     mpi_iter->backend_id);
 
     if (mpi_fi.parent_id == NULL) {
         fprintf(stderr, "Failed to get parent id of '%s'\n", path);
