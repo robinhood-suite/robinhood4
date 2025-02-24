@@ -694,6 +694,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9b835a8b_496f0ff1",
+        "filename": "librobinhood/tests/unit/check_id.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-02-24T15:46:10Z",
+      "side": 1,
+      "message": "Yes but tmp can be declared below",
+      "parentUuid": "99ebe203_f82e894d",
+      "revId": "6298634b953384f288003dfbff9fe87229105f4d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "03ac478d_172a57ce",
         "filename": "librobinhood/tests/unit/check_id.c",
         "patchSetId": 3
@@ -899,6 +917,24 @@
       "side": 1,
       "message": "same as above",
       "parentUuid": "47200fae_f1466a22",
+      "revId": "6298634b953384f288003dfbff9fe87229105f4d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f372ea6c_81d3a747",
+        "filename": "librobinhood/tests/unit/check_id.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-02-24T15:46:10Z",
+      "side": 1,
+      "message": "tmp can be declared below",
+      "parentUuid": "b05464b0_edf26f21",
       "revId": "6298634b953384f288003dfbff9fe87229105f4d",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
