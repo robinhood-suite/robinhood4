@@ -10,6 +10,7 @@
 # include "config.h"
 #endif
 
+#include "robinhood/backend.h"
 #include "robinhood/backends/posix.h"
 #include "robinhood/backends/posix_internal.h"
 #include "robinhood/backends/lustre_mpi.h"
@@ -35,6 +36,7 @@ lustre_mpi_iterator_new(const char *root, const char *entry,
     if (mpi_iter == NULL)
         return NULL;
 
+    mpi_iter->backend_id = RBH_BI_LUSTRE;
     mpi_iter->inode_xattrs_callback = lustre_inode_xattrs_callback;
 
     return (struct rbh_mut_iterator *)mpi_iter;
