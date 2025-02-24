@@ -332,6 +332,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b0513fe2_1efc7fdf",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-02-24T12:14:34Z",
+      "side": 1,
+      "message": "My point is that the only thing preventing users from using this tool is the fact that we use the trusted namespace for the attribute. Which is required if we want to prevent users from tempering with the retention logic. But this logic could be made available to users with another extended attribute.",
+      "parentUuid": "28157743_5f48a8d1",
+      "range": {
+        "startLine": 44,
+        "startChar": 60,
+        "endLine": 44,
+        "endChar": 70
+      },
+      "revId": "aedc2d90186ec8e8e77a40e46c0584997fa7d4cb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "18a69365_29332444",
         "filename": "designs/userland_robinhood.rst",
         "patchSetId": 3
@@ -367,6 +391,30 @@
       "side": 1,
       "message": "In the previous paragraph, I\u0027m saying they cannot use the tools, here I\u0027m saying they also have no need to use the tools. So only granting access to the three specified in enough.",
       "parentUuid": "18a69365_29332444",
+      "range": {
+        "startLine": 47,
+        "startChar": 0,
+        "endLine": 47,
+        "endChar": 8
+      },
+      "revId": "aedc2d90186ec8e8e77a40e46c0584997fa7d4cb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aa2efa38_46435ecb",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-02-24T12:14:34Z",
+      "side": 1,
+      "message": "I disagree. If they could use rbh-fsevents that would be even better.",
+      "parentUuid": "14f8b421_1765591b",
       "range": {
         "startLine": 47,
         "startChar": 0,
@@ -520,6 +568,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d666d07f_0797f3bb",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-02-24T12:14:34Z",
+      "side": 1,
+      "message": "I don\u0027t understand what you mean by \"wrapping calls to rbh-find\". The solution you propose at the end is not a wrapper. This is a new backend with an HTTP server. For me, a wrapper in this context means:\n\nIf the user wants `rbh-find ... -name test`, I wrap it with `rbh-find ... -uid \u003cuid\u003e -gid \u003cgid\u003e -name test` which is obviously not what you want to do.",
+      "parentUuid": "43b288f5_b7f152d1",
+      "range": {
+        "startLine": 72,
+        "startChar": 48,
+        "endLine": 74,
+        "endChar": 34
+      },
+      "revId": "aedc2d90186ec8e8e77a40e46c0584997fa7d4cb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "63840527_028f9875",
         "filename": "designs/userland_robinhood.rst",
         "patchSetId": 3
@@ -602,6 +674,30 @@
       "side": 1,
       "message": "What about the mode ? Isn\u0027t a file\u0027s mode checked with the UID and GID ?",
       "parentUuid": "ffb3c9bd_ae2ceafc",
+      "range": {
+        "startLine": 77,
+        "startChar": 22,
+        "endLine": 77,
+        "endChar": 34
+      },
+      "revId": "aedc2d90186ec8e8e77a40e46c0584997fa7d4cb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3a189f44_f53489cd",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-02-24T12:14:34Z",
+      "side": 1,
+      "message": "The mode determines what actions are allowed. If a file is 666, anybody can read it. If it is 600 then only the owner can access it, the GID is irrelevant. You must take the mode into consideration.",
+      "parentUuid": "47722fa4_eeb10c70",
       "range": {
         "startLine": 77,
         "startChar": 22,
@@ -708,6 +804,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f00b1b4a_f4d8816e",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-02-24T12:14:34Z",
+      "side": 1,
+      "message": "In the end you are limited by your database. You can have as many workers as you like, if the DB cannot handle it, then this is pointless. Before using such a bloated tool, we should probably do some benchmarks. The GRH relies on the scalability of the underlying system to scale. If the DB doesn\u0027t scale, the GRH will be of no use. I suggest we start with a simple REST API and build from there. Database servers like mongodb are designed to be able to scale and manage multiple concurrent requests.\n\nAnd if I where to implement this, I would probably redo it from scratch anyway. I find the client code to be more complicated than it needs to be and it doesn\u0027t handle a some HTTP features (for instance it doesn\u0027t understand the error code 500).",
+      "parentUuid": "0fc75be1_e6a4f1f8",
+      "range": {
+        "startLine": 109,
+        "startChar": 0,
+        "endLine": 116,
+        "endChar": 78
+      },
+      "revId": "aedc2d90186ec8e8e77a40e46c0584997fa7d4cb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "53848dc0_d6cb351f",
         "filename": "designs/userland_robinhood.rst",
         "patchSetId": 3
@@ -790,6 +910,30 @@
       "side": 1,
       "message": "This is more about parallel handling of the requests than anything, especially since the commands may take a long time",
       "parentUuid": "011cf635_dcf733b7",
+      "range": {
+        "startLine": 132,
+        "startChar": 7,
+        "endLine": 132,
+        "endChar": 74
+      },
+      "revId": "aedc2d90186ec8e8e77a40e46c0584997fa7d4cb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "05841244_7628ee7c",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-02-24T12:14:34Z",
+      "side": 1,
+      "message": "But the database server is able to do this parallelisation. And can do it more efficiently than us. It knows whether to requests can be run in parallel, we don\u0027t. And if you want to limit the number of concurrent requests, you can easily do it with a simple pool of threads on the HTTP server. mongo probably even has async request submission functions that we can leverage to avoid having a thread pool. We can push requests in a queue and the threads pops them. No need to have a fully distributes request handler for such a simple task.",
+      "parentUuid": "d8b4357e_c3527b17",
       "range": {
         "startLine": 132,
         "startChar": 7,
@@ -896,6 +1040,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "006f260b_9b44aadc",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-02-24T12:14:34Z",
+      "side": 1,
+      "message": "The issue is that I don\u0027t understand the paragraph. What does \"tools that are more like options of rbh-find and rbh-report than anything\" mean? And I also don\u0027t understand this \"we cannot implement options the basic tools\".",
+      "parentUuid": "fe02a587_4960a9de",
+      "range": {
+        "startLine": 151,
+        "startChar": 11,
+        "endLine": 154,
+        "endChar": 24
+      },
+      "revId": "aedc2d90186ec8e8e77a40e46c0584997fa7d4cb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5bb35a00_23fb377c",
         "filename": "designs/userland_robinhood.rst",
         "patchSetId": 3
@@ -978,6 +1146,30 @@
       "side": 1,
       "message": "What do you mean ? You mean we should do the double conversion to be generic ? I\u0027m fine with that if that\u0027s what you mean",
       "parentUuid": "a550d8cb_7318eb72",
+      "range": {
+        "startLine": 162,
+        "startChar": 0,
+        "endLine": 164,
+        "endChar": 28
+      },
+      "revId": "aedc2d90186ec8e8e77a40e46c0584997fa7d4cb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "20104210_f68943e1",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-02-24T12:14:34Z",
+      "side": 1,
+      "message": "I mean: do in the http backend `rbh_filter -\u003e GET /type/d/name/test` then on the server `GET /type/d/name/test -\u003e filter_and(filter_type(\"d\"), filter_name(\"test\"))`.",
+      "parentUuid": "38015196_a17c9daa",
       "range": {
         "startLine": 162,
         "startChar": 0,

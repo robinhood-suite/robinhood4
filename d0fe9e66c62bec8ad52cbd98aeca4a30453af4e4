@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "20dbf517_2ccc2c1d",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 5
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-02-24T12:14:34Z",
+      "side": 1,
+      "message": "The way this is phrased indicates that you want to do this:\n\n```\ncat secure-rbh-find\n#!/usr/bin/env bash\n\nuri\u003d$1\nshift\n\nrbh-find \"$uri\" -uid $UID -gid $GID \"$@\"\n```\n\nWhich is obviously not secure. This is why I suggested the other way of phrasing this by explicitly stating that there is an intermidiate server.",
+      "range": {
+        "startLine": 57,
+        "startChar": 0,
+        "endLine": 60,
+        "endChar": 22
+      },
+      "revId": "d0fe9e66c62bec8ad52cbd98aeca4a30453af4e4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "789a10ae_962c93fa",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 5
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-02-24T12:14:34Z",
+      "side": 1,
+      "message": "This only works if this is done by an intermediate server. You should mention this explicitly here.",
+      "range": {
+        "startLine": 63,
+        "startChar": 37,
+        "endLine": 65,
+        "endChar": 36
+      },
+      "revId": "d0fe9e66c62bec8ad52cbd98aeca4a30453af4e4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4f07c1e7_84c3eb77",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 5
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-02-24T12:14:34Z",
+      "side": 1,
+      "message": "If I understand this correctly this is not secure. As long as users can access the mongodb database, they can forge requests. You have to use an authentication protocol. HTTP with something like Kerberos is probably the easiest.",
+      "range": {
+        "startLine": 173,
+        "startChar": 0,
+        "endLine": 178,
+        "endChar": 2
+      },
+      "revId": "d0fe9e66c62bec8ad52cbd98aeca4a30453af4e4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
