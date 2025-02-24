@@ -82,22 +82,43 @@ rbh_id_equal(const struct rbh_id *first, const struct rbh_id *second);
 struct rbh_id *
 rbh_id_new(const char *data, size_t size);
 
+/**
+ * Create a new struct rbh_id with a backend id as a parameter
+ *
+ * @param data        a pointer to \p size bytes of arbitrary data
+ * @param size        the number of bytes \p data points at
+ * @param backend_id  the backend id that prepend the rbh_id,
+ *                    backend id is from the backend.h enum
+ *
+ * @return            a pointer to a newly allocated struct rbh_id on success,
+ *                    NULL on error and errno is set appropriately
+ *
+ * @error ENOMEM      not enough memory available
+ *
+ * The returned ID points at an internally managed copy of \p data.
+ */
+struct rbh_id *
+rbh_id_new_with_id(const char *data, size_t size, short backend_id);
+
 struct file_handle;
 
 /**
  * Create a new struct rbh_id from a struct file_handle
  *
- * @param handle    the file handle to use
+ * @param handle      the file handle to use
  *
- * @return          a pointer to a newly allocated struct rbh_id on success,
- *                  NULL on error and errno is set appropriately
+ * @param backend_id  the backend id that prepend the rbh_id,
+ *                    backend id is from the backend.h enum
  *
- * @error ENOMEM    not enough memory available
+ * @return            a pointer to a newly allocated struct rbh_id on success,
+ *                    NULL on error and errno is set appropriately
+ *
+ * @error ENOMEM      not enough memory available
  *
  * The returned ID does not share data with \p handle.
  */
 struct rbh_id *
-rbh_id_from_file_handle(const struct file_handle *handle);
+rbh_id_from_file_handle(const struct file_handle *handle, short backend_id);
 
 /**
  * The size of a Lustre ID as built by rbh_id_from_lu_fid()
