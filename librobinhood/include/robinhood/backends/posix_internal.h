@@ -56,7 +56,7 @@ struct rbh_mut_iterator *
 posix_iterator_new(const char *root, const char *entry, int statx_sync_type);
 
 struct rbh_id *
-id_from_fd(int fd);
+id_from_fd(int fd, short backend_id);
 
 char *
 freadlink(int fd, const char *path, size_t *size_);
