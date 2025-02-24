@@ -114,6 +114,19 @@ struct rbh_filter *
 xtime2filter(enum predicate predicate, const char *days);
 
 /**
+ * Build a filter for the -newer predicate
+ *
+ * @param predicate a predicate
+ * @param path      path of the mtime entry to compare with
+ *
+ * @return          a pointer to a newly allocated struct rbh_filter
+ *
+ * Exit on error
+ */
+struct rbh_filter *
+newer2filter(enum predicate predicate, const char *path);
+
+/**
  * Build a filter for the -type predicate
  *
  * @param filetype  a string representing a filetype
