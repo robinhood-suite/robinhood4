@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2d4c878d_dff7009a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-02-24T10:27:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6227ffab_87d0c2e2",
+      "range": {
+        "startLine": 7,
+        "startChar": 23,
+        "endLine": 7,
+        "endChar": 31
+      },
+      "revId": "aedc2d90186ec8e8e77a40e46c0584997fa7d4cb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c6c8bf43_1499999f",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-02-24T09:29:06Z",
       "side": 1,
       "message": "Again, not a fan of userland in this context.",
+      "range": {
+        "startLine": 11,
+        "startChar": 69,
+        "endLine": 11,
+        "endChar": 76
+      },
+      "revId": "aedc2d90186ec8e8e77a40e46c0584997fa7d4cb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "754322b4_98ac0cfb",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-02-24T10:27:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c6c8bf43_1499999f",
       "range": {
         "startLine": 11,
         "startChar": 69,
@@ -70,6 +118,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "09cf1582_67d09364",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-02-24T10:27:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "be91a33b_4e469fba",
+      "range": {
+        "startLine": 21,
+        "startChar": 22,
+        "endLine": 21,
+        "endChar": 31
+      },
+      "revId": "aedc2d90186ec8e8e77a40e46c0584997fa7d4cb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fe5e9607_c20b61cc",
@@ -83,6 +155,30 @@
       "writtenOn": "2025-02-24T09:29:06Z",
       "side": 1,
       "message": "typo",
+      "range": {
+        "startLine": 23,
+        "startChar": 25,
+        "endLine": 23,
+        "endChar": 34
+      },
+      "revId": "aedc2d90186ec8e8e77a40e46c0584997fa7d4cb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1eb13513_3f749504",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-02-24T10:27:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fe5e9607_c20b61cc",
       "range": {
         "startLine": 23,
         "startChar": 25,
@@ -116,6 +212,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0c94c9f7_0a9ed55f",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-02-24T10:27:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "528ae2b1_9d42f66c",
+      "range": {
+        "startLine": 23,
+        "startChar": 63,
+        "endLine": 24,
+        "endChar": 54
+      },
+      "revId": "aedc2d90186ec8e8e77a40e46c0584997fa7d4cb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e1851e50_b19f02f6",
@@ -129,6 +249,30 @@
       "writtenOn": "2025-02-24T09:29:06Z",
       "side": 1,
       "message": "Again, this is a database configuration issue. A mongo database can be accessible as readonly to users.",
+      "range": {
+        "startLine": 27,
+        "startChar": 3,
+        "endLine": 27,
+        "endChar": 18
+      },
+      "revId": "aedc2d90186ec8e8e77a40e46c0584997fa7d4cb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "854db261_3373cfa8",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-02-24T10:27:55Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "e1851e50_b19f02f6",
       "range": {
         "startLine": 27,
         "startChar": 3,
@@ -164,6 +308,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "28157743_5f48a8d1",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-02-24T10:27:55Z",
+      "side": 1,
+      "message": "That is what I meant by \"requiring elevated access\", figured it was more explicit than saying \"in the trusted namespace\", but alright.\n\nAs it currently stands, `rbh-update`retention` is a binary, it takes an URI in, has flags, does some operation on the backend and update it. It is a tool. That may change in the future, but at the time of writing, it is a tool, not a policy.",
+      "parentUuid": "24d905a4_b30fd2f3",
+      "range": {
+        "startLine": 44,
+        "startChar": 60,
+        "endLine": 44,
+        "endChar": 70
+      },
+      "revId": "aedc2d90186ec8e8e77a40e46c0584997fa7d4cb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "18a69365_29332444",
         "filename": "designs/userland_robinhood.rst",
         "patchSetId": 3
@@ -175,6 +343,30 @@
       "writtenOn": "2025-02-24T09:29:06Z",
       "side": 1,
       "message": "nit: I find moreover a bit weird in this context. I might be wrong but for me this word should be used to add on the previous argument. Here, you are only stating the conclusion of your previous argument. \"Hence\" would be more appropriate I think.",
+      "range": {
+        "startLine": 47,
+        "startChar": 0,
+        "endLine": 47,
+        "endChar": 8
+      },
+      "revId": "aedc2d90186ec8e8e77a40e46c0584997fa7d4cb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "14f8b421_1765591b",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-02-24T10:27:55Z",
+      "side": 1,
+      "message": "In the previous paragraph, I\u0027m saying they cannot use the tools, here I\u0027m saying they also have no need to use the tools. So only granting access to the three specified in enough.",
+      "parentUuid": "18a69365_29332444",
       "range": {
         "startLine": 47,
         "startChar": 0,
@@ -208,6 +400,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1f37af83_b5bc4335",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-02-24T10:27:55Z",
+      "side": 1,
+      "message": "I\u0027m saying more in a general manner, \"users should only be able to use sync, find and report\". Then, I later say that even sync is not needed, and yes I\u0027m concerned with the second issue.",
+      "parentUuid": "25a97bc1_4e075305",
+      "range": {
+        "startLine": 48,
+        "startChar": 4,
+        "endLine": 48,
+        "endChar": 12
+      },
+      "revId": "aedc2d90186ec8e8e77a40e46c0584997fa7d4cb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4699fad5_caa6abdf",
@@ -221,6 +437,30 @@
       "writtenOn": "2025-02-24T09:29:06Z",
       "side": 1,
       "message": "This has nothing to do with robinhood. This is a database configuration issue.",
+      "range": {
+        "startLine": 53,
+        "startChar": 0,
+        "endLine": 61,
+        "endChar": 34
+      },
+      "revId": "aedc2d90186ec8e8e77a40e46c0584997fa7d4cb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ebb99436_7f8112ad",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-02-24T10:27:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4699fad5_caa6abdf",
       "range": {
         "startLine": 53,
         "startChar": 0,
@@ -256,6 +496,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "43b288f5_b7f152d1",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-02-24T10:27:55Z",
+      "side": 1,
+      "message": "I\u0027m sorry I don\u0027t understand the issue. What you state is the same as I",
+      "parentUuid": "8d4db376_2b70031d",
+      "range": {
+        "startLine": 72,
+        "startChar": 48,
+        "endLine": 74,
+        "endChar": 34
+      },
+      "revId": "aedc2d90186ec8e8e77a40e46c0584997fa7d4cb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "63840527_028f9875",
         "filename": "designs/userland_robinhood.rst",
         "patchSetId": 3
@@ -267,6 +531,30 @@
       "writtenOn": "2025-02-24T09:29:06Z",
       "side": 1,
       "message": "Be more specific: \"the intermediate server must check user credentials (e.g. Kerberos ticket) and retrieve the UID/GID associated to it and filter entries based on this UID/GID\"",
+      "range": {
+        "startLine": 76,
+        "startChar": 12,
+        "endLine": 76,
+        "endChar": 16
+      },
+      "revId": "aedc2d90186ec8e8e77a40e46c0584997fa7d4cb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "18f20230_066191f7",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-02-24T10:27:55Z",
+      "side": 1,
+      "message": "Done (in the following paragraph)",
+      "parentUuid": "63840527_028f9875",
       "range": {
         "startLine": 76,
         "startChar": 12,
@@ -302,6 +590,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "47722fa4_eeb10c70",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-02-24T10:27:55Z",
+      "side": 1,
+      "message": "What about the mode ? Isn\u0027t a file\u0027s mode checked with the UID and GID ?",
+      "parentUuid": "ffb3c9bd_ae2ceafc",
+      "range": {
+        "startLine": 77,
+        "startChar": 22,
+        "endLine": 77,
+        "endChar": 34
+      },
+      "revId": "aedc2d90186ec8e8e77a40e46c0584997fa7d4cb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bd39800c_046a85f7",
         "filename": "designs/userland_robinhood.rst",
         "patchSetId": 3
@@ -313,6 +625,30 @@
       "writtenOn": "2025-02-24T09:29:06Z",
       "side": 1,
       "message": "For more clarity, I think you should reorganize the Security and Information Boundaries sections. You could say something like this:\n\n1. users only need a read access to the database\n2. we need to enforce a filtering based on POSIX rules (UID/GID/mode)\n3. to achieve this we need an intermidiate server that will enforce the filtering\n4. this server will have a read only access to the whole database\n5. users can only send authenticated requests to this server (e.g. using Kerberos)",
+      "range": {
+        "startLine": 86,
+        "startChar": 1,
+        "endLine": 86,
+        "endChar": 8
+      },
+      "revId": "aedc2d90186ec8e8e77a40e46c0584997fa7d4cb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e14589ac_92de6236",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-02-24T10:27:55Z",
+      "side": 1,
+      "message": "Done for the most part, I had already changed the paragraphs when you reviewed",
+      "parentUuid": "bd39800c_046a85f7",
       "range": {
         "startLine": 86,
         "startChar": 1,
@@ -348,6 +684,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0fc75be1_e6a4f1f8",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-02-24T10:27:55Z",
+      "side": 1,
+      "message": "Considering multiple users may do parallel requests, the server may get saturated, so isn\u0027t something like Celery required ?\n\nI also added the GRH here because it has all the requirements needed, and if we could avoid having to develop a server with authentication and parallel requests, from scratch, that\u0027d be nice.",
+      "parentUuid": "6b791011_af080257",
+      "range": {
+        "startLine": 109,
+        "startChar": 0,
+        "endLine": 116,
+        "endChar": 78
+      },
+      "revId": "aedc2d90186ec8e8e77a40e46c0584997fa7d4cb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "53848dc0_d6cb351f",
         "filename": "designs/userland_robinhood.rst",
         "patchSetId": 3
@@ -359,6 +719,30 @@
       "writtenOn": "2025-02-24T09:29:06Z",
       "side": 1,
       "message": "major: I don\u0027t think you want to support actions. Actions will only be managed by the client.",
+      "range": {
+        "startLine": 130,
+        "startChar": 65,
+        "endLine": 130,
+        "endChar": 70
+      },
+      "revId": "aedc2d90186ec8e8e77a40e46c0584997fa7d4cb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cdbfa418_a28e94ba",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-02-24T10:27:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "53848dc0_d6cb351f",
       "range": {
         "startLine": 130,
         "startChar": 65,
@@ -394,6 +778,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d8b4357e_c3527b17",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-02-24T10:27:55Z",
+      "side": 1,
+      "message": "This is more about parallel handling of the requests than anything, especially since the commands may take a long time",
+      "parentUuid": "011cf635_dcf733b7",
+      "range": {
+        "startLine": 132,
+        "startChar": 7,
+        "endLine": 132,
+        "endChar": 74
+      },
+      "revId": "aedc2d90186ec8e8e77a40e46c0584997fa7d4cb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bf6c1da3_25f74330",
         "filename": "designs/userland_robinhood.rst",
         "patchSetId": 3
@@ -405,6 +813,30 @@
       "writtenOn": "2025-02-24T09:29:06Z",
       "side": 1,
       "message": "why?",
+      "range": {
+        "startLine": 135,
+        "startChar": 54,
+        "endLine": 135,
+        "endChar": 79
+      },
+      "revId": "aedc2d90186ec8e8e77a40e46c0584997fa7d4cb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "79b71139_fa63bdec",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-02-24T10:27:55Z",
+      "side": 1,
+      "message": "I was refering to the status loop that would be built-in the http backend, but best not to mention it indeed",
+      "parentUuid": "bf6c1da3_25f74330",
       "range": {
         "startLine": 135,
         "startChar": 54,
@@ -440,6 +872,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fe02a587_4960a9de",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-02-24T10:27:55Z",
+      "side": 1,
+      "message": "I don\u0027t understand the issue, what you propose is the second option I propose",
+      "parentUuid": "88827978_c4d6a6b4",
+      "range": {
+        "startLine": 151,
+        "startChar": 11,
+        "endLine": 154,
+        "endChar": 24
+      },
+      "revId": "aedc2d90186ec8e8e77a40e46c0584997fa7d4cb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5bb35a00_23fb377c",
         "filename": "designs/userland_robinhood.rst",
         "patchSetId": 3
@@ -451,6 +907,30 @@
       "writtenOn": "2025-02-24T09:29:06Z",
       "side": 1,
       "message": "You could make this more explicit:\n\nThe http backend on the client command has to convert the rbh_filter to an HTTP request. Then the HTTP serveur has to convert the HTTP request to an rbh_filter.",
+      "range": {
+        "startLine": 158,
+        "startChar": 11,
+        "endLine": 159,
+        "endChar": 67
+      },
+      "revId": "aedc2d90186ec8e8e77a40e46c0584997fa7d4cb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d762a84_baff1c9c",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-02-24T10:27:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5bb35a00_23fb377c",
       "range": {
         "startLine": 158,
         "startChar": 11,
@@ -486,6 +966,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "38015196_a17c9daa",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-02-24T10:27:55Z",
+      "side": 1,
+      "message": "What do you mean ? You mean we should do the double conversion to be generic ? I\u0027m fine with that if that\u0027s what you mean",
+      "parentUuid": "a550d8cb_7318eb72",
+      "range": {
+        "startLine": 162,
+        "startChar": 0,
+        "endLine": 164,
+        "endChar": 28
+      },
+      "revId": "aedc2d90186ec8e8e77a40e46c0584997fa7d4cb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c0166e5b_f4192529",
         "filename": "designs/userland_robinhood.rst",
         "patchSetId": 3
@@ -497,6 +1001,30 @@
       "writtenOn": "2025-02-24T09:29:06Z",
       "side": 1,
       "message": "I don\u0027t understand this. You suggest in the first sentence that you won\u0027t to a double conversion.",
+      "range": {
+        "startLine": 165,
+        "startChar": 67,
+        "endLine": 166,
+        "endChar": 7
+      },
+      "revId": "aedc2d90186ec8e8e77a40e46c0584997fa7d4cb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d0ca5da5_877c3ef7",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-02-24T10:27:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c0166e5b_f4192529",
       "range": {
         "startLine": 165,
         "startChar": 67,
@@ -532,6 +1060,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "45b98bdf_bcddec76",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-02-24T10:27:55Z",
+      "side": 1,
+      "message": "We don\u0027t need it if we don\u0027t use Celery I agree, but I\u0027m not sure it\u0027s doable without it, the server may be overloaded with requests quickly",
+      "parentUuid": "d34ec720_3f4a5edb",
+      "range": {
+        "startLine": 178,
+        "startChar": 3,
+        "endLine": 178,
+        "endChar": 48
+      },
+      "revId": "aedc2d90186ec8e8e77a40e46c0584997fa7d4cb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "00a83bfb_83b6bd96",
         "filename": "designs/userland_robinhood.rst",
         "patchSetId": 3
@@ -543,6 +1095,30 @@
       "writtenOn": "2025-02-24T09:29:06Z",
       "side": 1,
       "message": "typo",
+      "range": {
+        "startLine": 184,
+        "startChar": 43,
+        "endLine": 184,
+        "endChar": 70
+      },
+      "revId": "aedc2d90186ec8e8e77a40e46c0584997fa7d4cb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "403e8071_8310576b",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-02-24T10:27:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "00a83bfb_83b6bd96",
       "range": {
         "startLine": 184,
         "startChar": 43,
@@ -566,6 +1142,30 @@
       "writtenOn": "2025-02-24T09:29:06Z",
       "side": 1,
       "message": "question: this should support hostname:port and maybe have a path in the end (depending on how admins want to configure the HTTP servers. Is that compatible with the URI standard?",
+      "range": {
+        "startLine": 188,
+        "startChar": 22,
+        "endLine": 188,
+        "endChar": 38
+      },
+      "revId": "aedc2d90186ec8e8e77a40e46c0584997fa7d4cb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0ce481c6_ddb6b35e",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-02-24T10:27:55Z",
+      "side": 1,
+      "message": "All of those are supported by the URI standard and the URI conversion done in RBH4 yes",
+      "parentUuid": "a6120eeb_66862db6",
       "range": {
         "startLine": 188,
         "startChar": 22,
