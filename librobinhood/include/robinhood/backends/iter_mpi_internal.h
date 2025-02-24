@@ -51,6 +51,7 @@ struct mpi_file_info {
 struct mpi_iterator {
     struct rbh_mut_iterator iterator;
     inode_xattrs_callback_t inode_xattrs_callback;
+    enum rbh_backend_id backend_id;
     int statx_sync_type;
     size_t prefix_len;
 
@@ -94,7 +95,7 @@ struct mpi_iterator {
  *----------------------------------------------------------------------------*/
 
 struct rbh_id *
-get_parent_id(const char *path, bool use_fd, int prefix_len);
+get_parent_id(const char *path, bool use_fd, int prefix_len, short backend_id);
 
 struct rbh_mut_iterator *
 mpi_iterator_new(const char *root, const char *entry, int statx_sync_type);
