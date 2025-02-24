@@ -659,6 +659,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "255bd6c0_a2b7156a",
+        "filename": "librobinhood/src/id.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-02-24T12:52:43Z",
+      "side": 1,
+      "message": "You\u0027re correct, however I don\u0027t think it\u0027s necessary to use an unsigned short. The backend ID should always be initialize from the backend_id enum which are always positive. If you want to use an unsigned short, you can do `sizeof(bc_id)` for instance and it will use unsigned short",
+      "parentUuid": "1b957d8e_f37941f6",
+      "range": {
+        "startLine": 106,
+        "startChar": 24,
+        "endLine": 106,
+        "endChar": 38
+      },
+      "revId": "7cb98964071947cca5f990a9cef111f233db32ab",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "be514f35_55ef0186",
         "filename": "librobinhood/src/id.c",
         "patchSetId": 1
