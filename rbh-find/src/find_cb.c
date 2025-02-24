@@ -397,6 +397,10 @@ find_parse_predicate(struct find_context *ctx, int *arg_idx)
     case PRED_CTIME:
         filter = xtime2filter(predicate, ctx->argv[++i]);
         break;
+    case PRED_CNEWER:
+        ctx->need_prefind = true;
+        filter = newer2filter(PRED_CTIME, ctx->argv[++i]);
+        break;
     case PRED_EMPTY:
         filter = empty2filter();
         break;
