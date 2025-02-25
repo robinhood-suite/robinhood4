@@ -254,7 +254,10 @@ parse_expression(struct find_context *ctx, int *arg_idx,
             }
 
             /* Build the resulting filter and continue */
-            filter = filter_and(filter, tmp);
+            if (filter == NULL)
+                filter = tmp;
+            else
+                filter = filter_and(filter, tmp);
             break;
         case CLT_PARENTHESIS_CLOSE:
             if (previous_token == CLT_PARENTHESIS_OPEN)
@@ -282,7 +285,10 @@ parse_expression(struct find_context *ctx, int *arg_idx,
                 negate = false;
             }
 
-            filter = filter_and(filter, tmp);
+            if (filter == NULL)
+                filter = tmp;
+            else
+                filter = filter_and(filter, tmp);
             break;
         case CLT_ACTION:
             ctx->action_done = true;
