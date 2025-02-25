@@ -556,7 +556,8 @@ expired_at2filter(const char *expired)
 struct rbh_filter *
 pool2filter(const char *pool)
 {
-    return shell_regex2filter(get_filter_field(LPRED_POOL), pool, 0);
+    return shell_regex2filter(get_filter_field(LPRED_POOL), pool,
+                              RBH_RO_SHELL_PATTERN);
 }
 
 struct rbh_filter *
@@ -565,8 +566,7 @@ ipool2filter(const char *pool)
     /* We use the same field as pool2filter because the only difference is the
      * case insensitive option.
      */
-    return shell_regex2filter(get_filter_field(LPRED_POOL), pool,
-                              RBH_RO_CASE_INSENSITIVE);
+    return shell_regex2filter(get_filter_field(LPRED_POOL), pool, RBH_RO_ALL);
 }
 
 struct rbh_filter *
