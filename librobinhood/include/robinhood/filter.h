@@ -501,6 +501,23 @@ rbh_filter_array_elemmatch_new(const struct rbh_filter_field *field,
                                size_t count);
 
 /**
+ * Create a filter composed of two filters, one which should be completed
+ * before the other
+ *
+ * @param filter         the filter to complete
+ * @param fsentry_to_get the filter of the fsentry to retrieve to complete the
+ *                       the first filter
+ *
+ * @return          a pointer to a newly allocated struct rbh_filter on success,
+ *                  NULL on error and errno is set appropriately
+ *
+ * @error ENOMEM    there was not enough memory available
+ */
+struct rbh_filter *
+rbh_filter_get_new(struct rbh_filter *filter,
+                   const struct rbh_filter *fsentry_to_get);
+
+/**
  * Validate a filter
  *
  * @param filter    the filter to validate
