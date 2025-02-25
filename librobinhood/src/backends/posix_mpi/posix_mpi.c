@@ -65,7 +65,7 @@ posix_mpi_backend_get_option(void *backend, unsigned int option, void *data,
 }
 
     /*--------------------------------------------------------------------*
-     |                        set_option()                                |
+     |                          set_option()                              |
      *--------------------------------------------------------------------*/
 
 static int
