@@ -48,10 +48,10 @@ rbh_lfind()
     "$__rbh_lfind" "$@"
 }
 
-__rbh_capabilities=$(PATH="$PWD/rbh-capabilities:$PATH" which rbh-capabilities)
-rbh_capabilities()
+__rbh_info=$(PATH="$PWD/rbh-info:$PATH" which rbh-info)
+rbh_info()
 {
-    "$__rbh_capabilities" "$@"
+    "$__rbh_info" "$@"
 }
 
 __rbh_update_retention=$(PATH="$PWD/../retention:$PATH" which rbh_update_retention)
