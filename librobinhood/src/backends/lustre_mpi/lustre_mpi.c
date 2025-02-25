@@ -72,7 +72,6 @@ lustre_mpi_backend_get_attribute(void *backend, const char *attr_name,
     return lustre_get_attribute(attr_name, arg, pairs, available_pairs);
 }
 
-
     /* -------------------------------------------------------------------*
      |                          get_option()                              |
      *--------------------------------------------------------------------*/
