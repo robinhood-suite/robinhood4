@@ -39,9 +39,10 @@ struct rbh_value_map {
 };
 
 enum rbh_regex_option {
-    RBH_RO_CASE_INSENSITIVE = 0x1,
+    RBH_RO_CASE_INSENSITIVE = (1 << 0),
+    RBH_RO_SHELL_PATTERN = (1 << 1),
 
-    RBH_RO_ALL = 0x1
+    RBH_RO_ALL = RBH_RO_CASE_INSENSITIVE | RBH_RO_SHELL_PATTERN,
 };
 
 struct rbh_value {
