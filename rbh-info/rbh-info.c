@@ -25,7 +25,7 @@
 
 #define LIB_RBH_PREFIX "librbh-"
 
-struct rbh_node_capabilities {
+struct rbh_node_info {
     char *name;
     struct rbh_list_node list;
 };
@@ -33,7 +33,7 @@ struct rbh_node_capabilities {
 static int
 add_list(struct rbh_list_node *head, const char *name)
 {
-    struct rbh_node_capabilities *new_node = malloc(sizeof(*new_node));
+    struct rbh_node_info *new_node = malloc(sizeof(*new_node));
 
     if (new_node == NULL) {
         perror("malloc");
@@ -51,7 +51,7 @@ add_list(struct rbh_list_node *head, const char *name)
 static bool
 is_name_in_list(struct rbh_list_node *head, const char *name)
 {
-    struct rbh_node_capabilities *node;
+    struct rbh_node_info *node;
 
     if (rbh_list_empty(head))
         return false;
@@ -65,18 +65,18 @@ is_name_in_list(struct rbh_list_node *head, const char *name)
 }
 
 static int
-capabilities_translate(const struct rbh_backend_plugin *plugin)
+info_translate(const struct rbh_backend_plugin *plugin)
 {
-    const uint8_t capabilities = plugin->capabilities;
+    const uint8_t info = plugin->info;
 
-    printf("Capabilities of %s:\n",plugin->plugin.name);
-    if (capabilities & RBH_FILTER_OPS)
+    printf("Infos of %s:\n",plugin->plugin.name);
+    if (info & RBH_FILTER_OPS)
         printf("- filter: rbh-find [source]\n");
-    if (capabilities & RBH_SYNC_OPS)
+    if (info & RBH_SYNC_OPS)
         printf("- synchronisation: rbh-sync [source]\n");
-    if (capabilities & RBH_UPDATE_OPS)
+    if (info & RBH_UPDATE_OPS)
         printf("- update: rbh-sync [target]\n");
-    if (capabilities & RBH_BRANCH_OPS)
+    if (info & RBH_BRANCH_OPS)
         printf("- branch: rbh-sync [source for partial processing]\n");
 
     return 0;
@@ -87,12 +87,12 @@ help()
 {
     const char *message =
         "Usage:"
-        "  %s <name of backend>   Show capabilities of the given backend"
+        "  %s <name of backend>   Show info of the given backend"
         " name\n"
         "Arguments:\n"
         "  -h --help                 Show this message and exit\n"
         "  -l --list                 Show the list of installed backends\n\n"
-        "Backends capabilities list:\n"
+        "Backends info list:\n"
         "- filter: The ability to read the data after filtering it according to"
         " different criteria\n"
         "- synchronisation: The ability to read the data\n"
@@ -124,8 +124,8 @@ search_library(const char *dir, const char *prefix, struct rbh_list_node *head)
 static int
 print_backend_list(struct rbh_list_node *head)
 {
-    struct rbh_node_capabilities *node;
-    struct rbh_node_capabilities *tmp;
+    struct rbh_node_info *node;
+    struct rbh_node_info *tmp;
 
     printf("List of installed backends:\n");
 
@@ -261,7 +261,7 @@ main(int argc, char **argv)
         fprintf(stderr, "This backend does not exist\n");
         return EINVAL;
     } else {
-        capabilities_translate(plugin);
+        info_translate(plugin);
         return 0;
     }
 }
