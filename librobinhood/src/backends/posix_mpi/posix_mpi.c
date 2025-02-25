@@ -65,7 +65,7 @@ posix_mpi_backend_get_option(void *backend, unsigned int option, void *data,
 }
 
     /*--------------------------------------------------------------------*
-     |                        set_option()                                |
+     |                          set_option()                              |
      *--------------------------------------------------------------------*/
 
 static int
@@ -73,6 +73,15 @@ posix_mpi_backend_set_option(void *backend, unsigned int option,
                              const void *data, size_t data_size)
 {
     return posix_backend_set_option(backend, option, data, data_size);
+}
+    /*--------------------------------------------------------------------*
+     |                          get_info()                                |
+     *--------------------------------------------------------------------*/
+
+void
+posix_mpi_backend_get_info(void *backend)
+{
+    return;
 }
 
     /*--------------------------------------------------------------------*
@@ -170,6 +179,7 @@ static const struct rbh_backend_operations POSIX_MPI_BACKEND_OPS = {
     .branch = posix_mpi_backend_branch,
     .root = posix_mpi_backend_root,
     .filter = posix_mpi_backend_filter,
+    .get_info = posix_mpi_backend_get_info,
     .destroy = posix_mpi_backend_destroy,
 };
 

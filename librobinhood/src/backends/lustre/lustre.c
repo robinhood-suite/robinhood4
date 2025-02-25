@@ -1238,6 +1238,16 @@ lustre_fts_backend_filter(void *backend, const struct rbh_filter *filter,
 }
 
     /*--------------------------------------------------------------------*
+     |                          get_info()                                |
+     *--------------------------------------------------------------------*/
+
+void
+lustre_fts_backend_get_info(void *backend)
+{
+    return;
+}
+
+    /*--------------------------------------------------------------------*
      |                          destroy()                                 |
      *--------------------------------------------------------------------*/
 
@@ -1269,6 +1279,7 @@ static const struct rbh_backend_operations LUSTRE_BACKEND_OPS = {
     .root = lustre_fts_backend_root,
     .filter = lustre_fts_backend_filter,
     .get_attribute = lustre_fts_backend_get_attribute,
+    .get_info = lustre_fts_backend_get_info,
     .destroy = lustre_fts_backend_destroy,
 };
 
