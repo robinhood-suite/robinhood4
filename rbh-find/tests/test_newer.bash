@@ -22,32 +22,61 @@ test_newer()
 
     rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
 
-    rbh_find "rbh:mongo:$testdb" -newer /fileC | sort |
+    rbh_find "rbh:mongo:$testdb" "$1" /fileC | sort |
         difflines "/" "/fileA" "/fileB"
-    rbh_find "rbh:mongo:$testdb" -newer /fileB | sort |
+    rbh_find "rbh:mongo:$testdb" "$1" /fileB | sort |
         difflines "/" "/fileA"
 
-    rbh_find "rbh:mongo:$testdb" -newer /fileA | sort |
-        difflines "/"
-    rbh_find "rbh:mongo:$testdb" -not -newer /fileA | sort |
+    rbh_find "rbh:mongo:$testdb" "$1" /fileA | sort |
+            difflines "/"
+    rbh_find "rbh:mongo:$testdb" -not "$1" /fileA | sort |
         difflines "/fileA" "/fileB" "/fileC"
 
-    rbh_find "rbh:mongo:$testdb" -newer / | sort | difflines
+    rbh_find "rbh:mongo:$testdb" "$1" / | sort | difflines
 
-    rbh_find "rbh:mongo:$testdb" -newer /fileB -a -newer /fileC | sort |
+    rbh_find "rbh:mongo:$testdb" "$1" /fileB -a "$1" /fileC | sort |
         difflines "/" "/fileA"
-    rbh_find "rbh:mongo:$testdb" -newer /fileB -o -newer /fileC | sort |
+    rbh_find "rbh:mongo:$testdb" "$1" /fileB -o "$1" /fileC | sort |
         difflines "/" "/fileA" "/fileB"
 
     # /file doesn't exist, it should return nothing
-    rbh_find "rbh:mongo:$testdb" -newer /file | sort | difflines
+    rbh_find "rbh:mongo:$testdb" "$1" /file | sort | difflines
+}
+
+test_anewer()
+{
+    touch fileA
+    sleep 1
+    touch -d "5 minutes ago" fileB
+    touch -d "10 minutes ago" fileC
+
+    rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
+
+    rbh_find "rbh:mongo:$testdb" "$1" /fileC | sort |
+        difflines "/" "/fileA" "/fileB"
+    rbh_find "rbh:mongo:$testdb" "$1" /fileB | sort |
+        difflines "/" "/fileA"
+
+    rbh_find "rbh:mongo:$testdb" "$1" /fileA | sort | difflines
+    rbh_find "rbh:mongo:$testdb" -not "$1" /fileA | sort |
+        difflines "/" "/fileA" "/fileB" "/fileC"
+
+    rbh_find "rbh:mongo:$testdb" "$1" / | sort | difflines
+
+    rbh_find "rbh:mongo:$testdb" "$1" /fileB -a "$1" /fileC | sort |
+        difflines "/" "/fileA"
+    rbh_find "rbh:mongo:$testdb" "$1" /fileB -o "$1" /fileC | sort |
+        difflines "/" "/fileA" "/fileB"
+
+    # /file doesn't exist, it should return nothing
+    rbh_find "rbh:mongo:$testdb" "$1" /file | sort | difflines
 }
 
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
-declare -a tests=(test_newer)
+declare -a tests=(test_newer test_anewer)
 
 tmpdir=$(mktemp --directory)
 trap -- "rm -rf '$tmpdir'"  EXIT

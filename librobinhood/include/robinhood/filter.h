@@ -233,6 +233,7 @@ struct rbh_filter {
              * filter
              */
             const struct rbh_filter *fsentry_to_get;
+            struct rbh_filter_field field;
         } get;
     };
 };
@@ -507,6 +508,7 @@ rbh_filter_array_elemmatch_new(const struct rbh_filter_field *field,
  * @param filter         the filter to complete
  * @param fsentry_to_get the filter of the fsentry to retrieve to complete the
  *                       the first filter
+ * @param field          the field corresponding of the value to retrieve
  *
  * @return          a pointer to a newly allocated struct rbh_filter on success,
  *                  NULL on error and errno is set appropriately
@@ -515,7 +517,8 @@ rbh_filter_array_elemmatch_new(const struct rbh_filter_field *field,
  */
 struct rbh_filter *
 rbh_filter_get_new(struct rbh_filter *filter,
-                   const struct rbh_filter *fsentry_to_get);
+                   const struct rbh_filter *fsentry_to_get,
+                   const struct rbh_filter_field *field);
 
 /**
  * Validate a filter

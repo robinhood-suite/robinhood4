@@ -387,6 +387,10 @@ find_parse_predicate(struct find_context *ctx, int *arg_idx)
     case PRED_CMIN:
         filter = xmin2filter(predicate, ctx->argv[++i]);
         break;
+    case PRED_ANEWER:
+        ctx->need_prefetch = true;
+        filter = newer2filter(PRED_ATIME, ctx->argv[++i]);
+        break;
     case PRED_ATIME:
     case PRED_BTIME:
     case PRED_MTIME:
