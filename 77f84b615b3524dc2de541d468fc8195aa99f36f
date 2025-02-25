@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "342e3465_c09ade22",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-02-25T10:09:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6c051ed4_ec38e210",
+      "range": {
+        "startLine": 9,
+        "startChar": 59,
+        "endLine": 9,
+        "endChar": 67
+      },
+      "revId": "77f84b615b3524dc2de541d468fc8195aa99f36f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a6534b28_36971540",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-02-25T09:03:24Z",
       "side": 1,
       "message": "suggest: need_prefetch",
+      "range": {
+        "startLine": 40,
+        "startChar": 9,
+        "endLine": 40,
+        "endChar": 21
+      },
+      "revId": "77f84b615b3524dc2de541d468fc8195aa99f36f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0ad7b8d8_0e603414",
+        "filename": "rbh-find/include/rbh-find/core.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-02-25T10:09:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a6534b28_36971540",
       "range": {
         "startLine": 40,
         "startChar": 9,
@@ -70,6 +118,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "77c5b250_7a85d132",
+        "filename": "rbh-find/src/core.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-02-25T10:09:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d6eae191_ff4e1367",
+      "range": {
+        "startLine": 131,
+        "startChar": 4,
+        "endLine": 132,
+        "endChar": 2
+      },
+      "revId": "77f84b615b3524dc2de541d468fc8195aa99f36f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "23f901de_a598e79e",
@@ -83,6 +155,30 @@
       "writtenOn": "2025-02-25T09:03:24Z",
       "side": 1,
       "message": "suggest: -1, if we don\u0027t have a logical or a get",
+      "range": {
+        "startLine": 162,
+        "startChar": 11,
+        "endLine": 162,
+        "endChar": 12
+      },
+      "revId": "77f84b615b3524dc2de541d468fc8195aa99f36f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0469d456_5de970c1",
+        "filename": "rbh-find/src/core.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-02-25T10:09:34Z",
+      "side": 1,
+      "message": "If we have a comparison or a array filter, I don\u0027t want to return an error",
+      "parentUuid": "23f901de_a598e79e",
       "range": {
         "startLine": 162,
         "startChar": 11,
