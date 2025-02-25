@@ -261,7 +261,8 @@ newer2filter(enum predicate predicate, const char *path)
         }
     };
 
-    filter_get = rbh_filter_get_new(&filter, &fsentry);
+    filter_get = rbh_filter_get_new(&filter, &fsentry,
+                                    &predicate2filter_field[PRED_MTIME]);
 
     if (filter_get == NULL)
         error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
