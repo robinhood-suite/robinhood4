@@ -26,4 +26,5 @@ const struct rbh_backend_plugin RBH_BACKEND_PLUGIN_SYMBOL(HESTIA) = {
     },
     .ops = &HESTIA_BACKEND_PLUGIN_OPS,
     .capabilities = RBH_SYNC_OPS,
+    .info = 0,
 };
