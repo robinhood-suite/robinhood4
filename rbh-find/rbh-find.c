@@ -181,6 +181,7 @@ main(int _argc, char *_argv[])
         ctx.uris[i] = ctx.argv[i];
         ctx.backend_count++;
     }
+    ctx.need_prefetch = false;
     filter = parse_expression(&ctx, &index, NULL, &sorts, &sorts_count);
     if (index != ctx.argc)
         error(EX_USAGE, 0, "you have too many ')'");
