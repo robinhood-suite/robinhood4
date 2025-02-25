@@ -74,6 +74,6 @@ subdir('rbh-report')
 if get_option('lustre').enabled()
     subdir('rbh-find-lustre')
 endif
-subdir('rbh-capabilities')
+subdir('rbh-info')
 subdir('retention')
 subdir('packaging')

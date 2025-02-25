@@ -5,9 +5,9 @@
 # SPDX-License-Identifer: LGPL-3.0-or-later
 
 executable(
-    'rbh-capabilities',
+    'rbh-info',
     sources: [
-        'rbh-capabilities.c',
+        'rbh-info.c',
     ],
     dependencies: [librobinhood_dep],
     install: true,

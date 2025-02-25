@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# This file is part of rbh-capabilities.
+# This file is part of rbh-info.
 # Copyright (C) 2024 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #
@@ -15,7 +15,7 @@ test_dir=$(dirname $(readlink -e $0))
 
 tests_backend_installed_list()
 {
-    local output=$(rbh_capabilities --list)
+    local output=$(rbh_info --list)
     echo "$output" | grep -q "mongo"
     echo "$output" | grep -q "posix"
     echo "$output" | grep -q "List"
@@ -23,7 +23,7 @@ tests_backend_installed_list()
 
 tests_mongo_capabilities()
 {
-    local output=$(rbh_capabilities mongo)
+    local output=$(rbh_info mongo)
     echo "$output" | grep -q "update"
     echo "$output" | grep -q "filter"
     echo "$output" | grep -q "synchronisation"
@@ -32,23 +32,23 @@ tests_mongo_capabilities()
 
 tests_posix_capabilities()
 {
-    local output=$(rbh_capabilities posix)
+    local output=$(rbh_info posix)
     echo "$output" | grep -q "synchronisation"
     echo "$output" | grep -q "branch"
 }
 
 tests_not_find_backend_list()
 {
-    (rbh_capabilities -l | grep -q "find") &&
-        error "rbh-capabilities -l must not return anything other than backends"
+    (rbh_info -l | grep -q "find") &&
+        error "rbh-info -l must not return anything other than backends"
 
     return 0
 }
 
 tests_not_installed_capabilities()
 {
-    rbh_capabilities not_a_backend &&
-        error "Expected capabilities with an unknown backend to fail"
+    rbh_info not_a_backend &&
+        error "Expected info with an unknown backend to fail"
 
     return 0
 }
@@ -87,7 +87,7 @@ tests_library_path_correctly_set()
 {
     export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:/usr/lib64"
 
-    local output=$(rbh_capabilities mongo)
+    local output=$(rbh_info mongo)
     if echo "$output" | grep -q "Capabilities of mongo:"; then
         echo "Mongo backend imported successfully as expected"
     else
@@ -98,7 +98,7 @@ tests_library_path_correctly_set()
 
 tests_mongo_backend_detection()
 {
-    local backend_path="/home/$SUDO_USER/robinhood4/builddir/librobinhood/"\
+    local backend_path="$test_dir/../../builddir/librobinhood/"\
 "src/backends/mongo"
     local non_standard_path="/tmp/non_standard"
     local TEMP=$LD_LIBRARY_PATH
@@ -118,7 +118,7 @@ tests_mongo_backend_detection()
     cp $backend_path/librbh-mongo.so.1 $non_standard_path/
 
     unset LD_LIBRARY_PATH
-    local output=$(rbh_capabilities mongo 2>&1)
+    local output=$(rbh_info mongo 2>&1)
 
     if echo "$output" | grep -q "This backend does not exist"; then
         echo "Mongo backend correctly not imported as expected"
@@ -127,7 +127,7 @@ tests_mongo_backend_detection()
     fi
 
     export LD_LIBRARY_PATH=$non_standard_path
-    output=$(rbh_capabilities mongo 2>&1)
+    output=$(rbh_info mongo 2>&1)
     mv $non_standard_path/librbh-mongo.so $backend_path
 
     if echo "$output" | grep -q "Capabilities of mongo"; then
