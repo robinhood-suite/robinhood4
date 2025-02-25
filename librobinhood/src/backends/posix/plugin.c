@@ -25,5 +25,5 @@ const struct rbh_backend_plugin RBH_BACKEND_PLUGIN_SYMBOL(POSIX) = {
         .version = RBH_POSIX_BACKEND_VERSION,
     },
     .ops = &POSIX_BACKEND_PLUGIN_OPS,
-    .capabilities = RBH_SYNC_OPS | RBH_BRANCH_OPS,
+    .info = RBH_SYNC_OPS | RBH_BRANCH_OPS,
 };

@@ -30,7 +30,7 @@ The main components of RobinHood are:
 .. _rbh-fsevents: https://github.com/robinhood-suite/robinhood4/tree/main/rbh-fsevents
 .. _rbh-find: https://github.com/robinhood-suite/robinhood4/tree/main/rbh-find
 .. _rbh-lfind: https://github.com/robinhood-suite/robinhood4/tree/main/rbh-find-lustre
-.. _rbh-capabilities: https://github.com/robinhood-suite/robinhood4/tree/main/rbh-capabilities
+.. _rbh-info: https://github.com/robinhood-suite/robinhood4/tree/main/rbh-info
 .. _Lustre: https://lustre.org
 
 Installation

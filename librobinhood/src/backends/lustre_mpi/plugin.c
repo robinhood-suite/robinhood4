@@ -28,6 +28,6 @@ const struct rbh_backend_plugin RBH_BACKEND_PLUGIN_SYMBOL(LUSTRE_MPI) = {
         .version = RBH_LUSTRE_MPI_BACKEND_VERSION,
     },
     .ops = &LUSTRE_MPI_BACKEND_PLUGIN_OPS,
-    .capabilities = RBH_SYNC_OPS | RBH_BRANCH_OPS,
+    .info = RBH_SYNC_OPS | RBH_BRANCH_OPS,
 };
 
