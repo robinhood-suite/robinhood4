@@ -788,6 +788,16 @@ mongo_backend_report(void *backend, const struct rbh_filter *filter,
 }
 
     /*--------------------------------------------------------------------*
+     |                              get_info()                            |
+     *--------------------------------------------------------------------*/
+
+void
+mongo_backend_get_info(void *backend)
+{
+    return;
+}
+
+    /*--------------------------------------------------------------------*
      |                              destroy                               |
      *--------------------------------------------------------------------*/
 
@@ -812,6 +822,7 @@ static const struct rbh_backend_operations MONGO_BACKEND_OPS = {
     .update = mongo_backend_update,
     .filter = mongo_backend_filter,
     .report = mongo_backend_report,
+    .get_info = mongo_backend_get_info,
     .destroy = mongo_backend_destroy,
 };
 
