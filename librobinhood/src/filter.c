@@ -252,6 +252,9 @@ filter_data_size(const struct rbh_filter *filter)
             size += filter_data_size(filter->array.filters[i]);
         }
         return size;
+    case RBH_FOP_GET:
+        errno = ENOTSUP;
+        return -1;
     }
 
     errno = EINVAL;
@@ -697,6 +700,9 @@ rbh_filter_validate(const struct rbh_filter *filter)
         return logical_filter_validate(filter);
     case RBH_FOP_ARRAY_MIN ... RBH_FOP_ARRAY_MAX:
         return array_filter_validate(filter);
+    case RBH_FOP_GET:
+        errno = ENOTSUP;
+        return -1;
     }
 
     errno = EINVAL;
