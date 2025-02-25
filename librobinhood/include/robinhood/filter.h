@@ -115,6 +115,9 @@ enum rbh_filter_operator {
     /* Array */
     RBH_FOP_ELEMMATCH,
 
+    /* Get */
+    RBH_FOP_GET,
+
     /* Aliases (used to distinguish comparison filters from logical ones) */
     RBH_FOP_COMPARISON_MIN = RBH_FOP_EQUAL,
     RBH_FOP_COMPARISON_MAX = RBH_FOP_BITS_ALL_CLEAR,
@@ -122,6 +125,8 @@ enum rbh_filter_operator {
     RBH_FOP_LOGICAL_MAX = RBH_FOP_NOT,
     RBH_FOP_ARRAY_MIN = RBH_FOP_ELEMMATCH,
     RBH_FOP_ARRAY_MAX = RBH_FOP_ELEMMATCH,
+    RBH_FOP_GET_MIN = RBH_FOP_GET,
+    RBH_FOP_GET_MAX = RBH_FOP_GET,
 };
 
 /**
@@ -161,6 +166,19 @@ static inline bool
 rbh_is_array_operator(enum rbh_filter_operator op)
 {
     return RBH_FOP_ARRAY_MIN <= op && op <= RBH_FOP_ARRAY_MAX;
+}
+
+/**
+ * Is \p op a get operator?
+ *
+ * @param op    the operator to test
+ *
+ * @return      true if \p op is an array operator, false otherwise
+ */
+static inline bool
+rbh_is_get_operator(enum rbh_filter_operator op)
+{
+    return RBH_FOP_GET_MIN <= op && op <= RBH_FOP_GET_MAX;
 }
 
 /**
@@ -207,6 +225,15 @@ struct rbh_filter {
             const struct rbh_filter * const *filters;
             size_t count;
         } array;
+
+        struct {
+            struct rbh_filter *filter;
+            /**
+             * Comparison filter of the fsentry to retrieve to finalize the
+             * filter
+             */
+            const struct rbh_filter *fsentry_to_get;
+        } get;
     };
 };
 
