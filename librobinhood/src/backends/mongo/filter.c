@@ -471,6 +471,8 @@ _bson_append_rbh_filter(bson_t *bson, const struct rbh_filter *filter,
         return bson_append_comparison_filter(bson, filter, negate);
     else if (rbh_is_array_operator(filter->op))
         return bson_append_array_filter(bson, filter, negate);
+    else if (rbh_is_get_operator(filter->op))
+        return bson_append_comparison_filter(bson, filter->get.filter, negate);
     return bson_append_logical_filter(bson, filter, negate);
 }
 
