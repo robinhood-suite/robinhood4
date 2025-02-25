@@ -164,6 +164,9 @@ get_filter_copy(struct rbh_filter *dest, const struct rbh_filter *src,
     size_t size = *bufsize;
     char *data = *buffer;
 
+    if (filter_field_copy(&dest->get.field, &src->get.field, &data, &size))
+        return -1;
+
     fsentry = aligned_memalloc(alignof(*fsentry), sizeof(*fsentry), &data,
                                &size);
     assert(fsentry);
@@ -283,6 +286,7 @@ filter_data_size(const struct rbh_filter *filter)
         }
         return size;
     case RBH_FOP_GET_MIN ... RBH_FOP_GET_MAX:
+        size = filter_field_data_size(&filter->get.field);
         size += sizeof(filter) * 2;
 
         size = sizealign(size, alignof(*filter));
@@ -615,13 +619,15 @@ rbh_filter_array_elemmatch_new(const struct rbh_filter_field *field,
 
 struct rbh_filter *
 rbh_filter_get_new(struct rbh_filter *filter,
-                   const struct rbh_filter *fsentry_to_get)
+                   const struct rbh_filter *fsentry_to_get,
+                   const struct rbh_filter_field *field)
 {
     const struct rbh_filter GET = {
         .op = RBH_FOP_GET,
         .get = {
             .filter = filter,
             .fsentry_to_get = fsentry_to_get,
+            .field = *field,
         },
     };
 
@@ -741,6 +747,9 @@ array_filter_validate(const struct rbh_filter *filter)
 static int
 get_filter_validate(const struct rbh_filter *filter)
 {
+    if (filter_field_validate(&filter->get.field))
+        return -1;
+
     return comparison_filter_validate(filter->get.filter) &&
            comparison_filter_validate(filter->get.fsentry_to_get);
 }
