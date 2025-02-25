@@ -235,6 +235,42 @@ xtime2filter(enum predicate predicate, const char *days)
 }
 
 struct rbh_filter *
+newer2filter(enum predicate predicate, const char *path)
+{
+    const struct rbh_filter_field field = predicate2filter_field[predicate];
+    struct rbh_filter *filter_get;
+
+    struct rbh_filter filter = {
+        .op = RBH_FOP_STRICTLY_GREATER,
+        .compare = {
+            .field = field,
+            .value = {
+                .type = RBH_VT_UINT64,
+            }
+        }
+    };
+
+    struct rbh_filter fsentry = {
+        .op = RBH_FOP_EQUAL,
+        .compare = {
+            .field = predicate2filter_field[PRED_PATH],
+            .value = {
+                .type = RBH_VT_STRING,
+                .string = path
+            }
+        }
+    };
+
+    filter_get = rbh_filter_get_new(&filter, &fsentry);
+
+    if (filter_get == NULL)
+        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
+                      "rbh_filter_get_new");
+
+    return filter_get;
+}
+
+struct rbh_filter *
 filetype2filter(const char *_filetype)
 {
     struct rbh_filter *filter;
