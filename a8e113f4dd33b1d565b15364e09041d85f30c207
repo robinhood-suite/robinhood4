@@ -16,6 +16,97 @@
       "message": "Forgot to put backend_id in mpi_iter",
       "revId": "a8e113f4dd33b1d565b15364e09041d85f30c207",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "69fa3a0a_95e57c37",
+        "filename": "librobinhood/src/backends/iter_mpi/iter_mpi.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-02-25T07:51:31Z",
+      "side": 1,
+      "message": "defect: you\u0027re not using it",
+      "range": {
+        "startLine": 206,
+        "startChar": 17,
+        "endLine": 206,
+        "endChar": 47
+      },
+      "revId": "a8e113f4dd33b1d565b15364e09041d85f30c207",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f8f6bc73_46a2234a",
+        "filename": "librobinhood/src/backends/lustre_mpi/lustre_mpi.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-02-25T07:51:31Z",
+      "side": 1,
+      "message": "sugest: you don\u0027t need to give the backend id to `mpi_iterator_new`. You can assign the value below as it is done for `inode_xattrs_callback`.",
+      "revId": "a8e113f4dd33b1d565b15364e09041d85f30c207",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "04fc0924_c896e675",
+        "filename": "librobinhood/src/backends/mpi_file/mpi_file.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-02-25T07:51:31Z",
+      "side": 1,
+      "message": "minor: You don\u0027t need it anymore as you have the backend id in the iterator now",
+      "revId": "a8e113f4dd33b1d565b15364e09041d85f30c207",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "14447176_3ee972f8",
+        "filename": "librobinhood/src/backends/posix/posix.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 341,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-02-25T07:51:31Z",
+      "side": 1,
+      "message": "style: order",
+      "revId": "a8e113f4dd33b1d565b15364e09041d85f30c207",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "51c744c1_e48742de",
+        "filename": "librobinhood/src/backends/posix_mpi/posix_mpi.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-02-25T07:51:31Z",
+      "side": 1,
+      "message": "sugest: idem",
+      "revId": "a8e113f4dd33b1d565b15364e09041d85f30c207",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
