@@ -70,7 +70,6 @@ lustre_mpi_backend_get_attribute(void *backend, const char *attr_name,
     return lustre_get_attribute(attr_name, arg, pairs, available_pairs);
 }
 
-
     /* -------------------------------------------------------------------*
      |                          get_option()                              |
      *--------------------------------------------------------------------*/
@@ -91,6 +90,16 @@ lustre_mpi_backend_set_option(void *backend, unsigned int option,
                               const void *data, size_t data_size)
 {
     return posix_backend_set_option(backend, option, data, data_size);
+}
+
+    /* -------------------------------------------------------------------*
+     |                          get_info()                                |
+     *--------------------------------------------------------------------*/
+
+void
+lustre_mpi_backend_get_info(void *backend)
+{
+    return;
 }
 
     /* -------------------------------------------------------------------*
@@ -185,6 +194,7 @@ static const struct rbh_backend_operations LUSTRE_MPI_BACKEND_OPS = {
     .root = lustre_mpi_backend_root,
     .filter = lustre_mpi_backend_filter,
     .get_attribute = lustre_mpi_backend_get_attribute,
+    .get_info = lustre_mpi_backend_get_info,
     .destroy = lustre_mpi_backend_destroy,
 };
 

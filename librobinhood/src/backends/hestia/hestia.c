@@ -422,6 +422,15 @@ hestia_backend_filter(void *backend, const struct rbh_filter *filter,
 
     return &hestia_iter->iterator;
 }
+    /*--------------------------------------------------------------------*
+     |                             get_info()                             |
+     *--------------------------------------------------------------------*/
+
+void
+hestia_backend_get_info(void *backend)
+{
+    return;
+}
 
     /*--------------------------------------------------------------------*
      |                             destroy()                              |
@@ -438,6 +447,7 @@ hestia_backend_destroy(void *backend)
 
 static const struct rbh_backend_operations HESTIA_BACKEND_OPS = {
     .filter = hestia_backend_filter,
+    .get_info = hestia_backend_get_info,
     .destroy = hestia_backend_destroy,
 };
 
