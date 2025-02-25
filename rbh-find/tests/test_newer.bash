@@ -43,11 +43,39 @@ test_newer()
     rbh_find "rbh:mongo:$testdb" -newer /file | sort | difflines
 }
 
+test_anewer()
+{
+    touch fileA
+    touch -d "5 minutes ago" fileB
+    touch -d "10 minutes ago" fileC
+
+    rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
+
+    rbh_find "rbh:mongo:$testdb" -anewer /fileC | sort |
+        difflines "/" "/fileA" "/fileB"
+    rbh_find "rbh:mongo:$testdb" -anewer /fileB | sort |
+        difflines "/" "/fileA"
+
+    rbh_find "rbh:mongo:$testdb" -anewer /fileA | sort | difflines
+    rbh_find "rbh:mongo:$testdb" -not -anewer /fileA | sort |
+        difflines "/" "/fileA" "/fileB" "/fileC"
+
+    rbh_find "rbh:mongo:$testdb" -anewer / | sort | difflines
+
+    rbh_find "rbh:mongo:$testdb" -anewer /fileB -a -anewer /fileC | sort |
+        difflines "/" "/fileA"
+    rbh_find "rbh:mongo:$testdb" -anewer /fileB -o -anewer /fileC | sort |
+        difflines "/" "/fileA" "/fileB"
+
+    # /file doesn't exist, it should return nothing
+    rbh_find "rbh:mongo:$testdb" -anewer /file | sort | difflines
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
-declare -a tests=(test_newer)
+declare -a tests=(test_newer test_anewer)
 
 tmpdir=$(mktemp --directory)
 trap -- "rm -rf '$tmpdir'"  EXIT
