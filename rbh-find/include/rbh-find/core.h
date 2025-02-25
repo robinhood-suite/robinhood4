@@ -36,6 +36,9 @@ struct find_context {
     /** If an action was already executed in this specific execution */
     bool action_done;
 
+    /** If a filter need to be completed by an information of the backend */
+    bool need_prefetch;
+
     /** The file that should contain the results of an action, if specified */
     FILE *action_file;
 
