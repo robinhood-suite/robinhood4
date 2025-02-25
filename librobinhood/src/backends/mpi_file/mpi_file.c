@@ -428,6 +428,15 @@ mpi_file_backend_filter(
 
     return &mpi_file_iter->iterator;
 }
+    /*--------------------------------------------------------------------*
+     |                          get_info()                                |
+     *--------------------------------------------------------------------*/
+
+void
+mpi_file_backend_get_info(void *backend)
+{
+    return;
+}
 
     /*--------------------------------------------------------------------*
      |                          destroy()                                 |
@@ -451,6 +460,7 @@ mpi_file_backend_destroy(void *backend)
 static const struct rbh_backend_operations MPI_FILE_BACKEND_OPS = {
     .update = mpi_file_backend_update,
     .filter = mpi_file_backend_filter,
+    .get_info = mpi_file_backend_get_info,
     .destroy = mpi_file_backend_destroy,
 };
 

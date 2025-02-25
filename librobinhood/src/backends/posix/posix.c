@@ -984,6 +984,16 @@ posix_backend_destroy(void *backend)
 }
 
     /*--------------------------------------------------------------------*
+     |                             get_info()                             |
+     *--------------------------------------------------------------------*/
+
+void
+posix_backend_get_info(void *backend)
+{
+    return;
+}
+
+    /*--------------------------------------------------------------------*
      |                              branch()                              |
      *--------------------------------------------------------------------*/
 
@@ -1204,6 +1214,7 @@ static const struct rbh_backend_operations POSIX_BACKEND_OPS = {
     .branch = posix_backend_branch,
     .root = posix_root,
     .filter = posix_backend_filter,
+    .get_info = posix_backend_get_info,
     .destroy = posix_backend_destroy,
 };
 
