@@ -25,5 +25,7 @@ const struct rbh_backend_plugin RBH_BACKEND_PLUGIN_SYMBOL(MONGO) = {
         .version = RBH_MONGO_BACKEND_VERSION,
     },
     .ops = &MONGO_BACKEND_PLUGIN_OPS,
-    .capabilities = RBH_FILTER_OPS | RBH_SYNC_OPS | RBH_UPDATE_OPS | RBH_BRANCH_OPS,
+    .capabilities = RBH_FILTER_OPS | RBH_SYNC_OPS | RBH_UPDATE_OPS |
+                    RBH_BRANCH_OPS,
+    .info = 0,
 };
