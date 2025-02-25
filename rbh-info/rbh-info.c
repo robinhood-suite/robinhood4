@@ -25,7 +25,7 @@
 
 #define LIB_RBH_PREFIX "librbh-"
 
-struct rbh_node_capabilities {
+struct rbh_node_info {
     char *name;
     struct rbh_list_node list;
 };
@@ -33,7 +33,7 @@ struct rbh_node_capabilities {
 static int
 add_list(struct rbh_list_node *head, const char *name)
 {
-    struct rbh_node_capabilities *new_node = malloc(sizeof(*new_node));
+    struct rbh_node_info *new_node = malloc(sizeof(*new_node));
 
     if (new_node == NULL) {
         perror("malloc");
@@ -51,7 +51,7 @@ add_list(struct rbh_list_node *head, const char *name)
 static bool
 is_name_in_list(struct rbh_list_node *head, const char *name)
 {
-    struct rbh_node_capabilities *node;
+    struct rbh_node_info *node;
 
     if (rbh_list_empty(head))
         return false;
@@ -87,7 +87,7 @@ help()
 {
     const char *message =
         "Usage:"
-        "  %s <name of backend>   Show capabilities of the given backend"
+        "  %s <name of backend>   Show info about the given backend"
         " name\n"
         "Arguments:\n"
         "  -h --help                 Show this message and exit\n"
@@ -124,8 +124,8 @@ search_library(const char *dir, const char *prefix, struct rbh_list_node *head)
 static int
 print_backend_list(struct rbh_list_node *head)
 {
-    struct rbh_node_capabilities *node;
-    struct rbh_node_capabilities *tmp;
+    struct rbh_node_info *node;
+    struct rbh_node_info *tmp;
 
     printf("List of installed backends:\n");
 
