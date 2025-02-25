@@ -414,6 +414,10 @@ find_parse_predicate(struct find_context *ctx, int *arg_idx)
     case PRED_PATH:
         filter = regex2filter(predicate, ctx->argv[++i], RBH_RO_SHELL_PATTERN);
         break;
+    case PRED_NEWER:
+        ctx->need_prefetch = true;
+        filter = newer2filter(PRED_MTIME, ctx->argv[++i]);
+        break;
     case PRED_NOGROUP:
         filter = nogroup2filter();
         break;
