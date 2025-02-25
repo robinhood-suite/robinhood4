@@ -738,6 +738,13 @@ array_filter_validate(const struct rbh_filter *filter)
     return 0;
 }
 
+static int
+get_filter_validate(const struct rbh_filter *filter)
+{
+    return comparison_filter_validate(filter->get.filter) &&
+           comparison_filter_validate(filter->get.fsentry_to_get);
+}
+
 int
 rbh_filter_validate(const struct rbh_filter *filter)
 {
@@ -758,9 +765,8 @@ rbh_filter_validate(const struct rbh_filter *filter)
         return logical_filter_validate(filter);
     case RBH_FOP_ARRAY_MIN ... RBH_FOP_ARRAY_MAX:
         return array_filter_validate(filter);
-    case RBH_FOP_GET:
-        errno = ENOTSUP;
-        return -1;
+    case RBH_FOP_GET_MIN ... RBH_FOP_GET_MAX:
+        return get_filter_validate(filter);
     }
 
     errno = EINVAL;
