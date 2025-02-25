@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c7a4d596_56923478",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 5
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-02-25T08:15:00Z",
+      "side": 1,
+      "message": "OK I understand, but this is not what is stated here, simply that the find++ has to retrieve the credentials and filter on them. Whether its a server or another method is not relevant at this point of the document",
+      "parentUuid": "20dbf517_2ccc2c1d",
+      "range": {
+        "startLine": 57,
+        "startChar": 0,
+        "endLine": 60,
+        "endChar": 22
+      },
+      "revId": "d0fe9e66c62bec8ad52cbd98aeca4a30453af4e4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "789a10ae_962c93fa",
@@ -47,6 +71,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "85411e31_6fa5a247",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 5
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-02-25T08:15:00Z",
+      "side": 1,
+      "message": "I\u0027d rather not, the next section explains it well enough",
+      "parentUuid": "789a10ae_962c93fa",
+      "range": {
+        "startLine": 63,
+        "startChar": 37,
+        "endLine": 65,
+        "endChar": 36
+      },
+      "revId": "d0fe9e66c62bec8ad52cbd98aeca4a30453af4e4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4f07c1e7_84c3eb77",
@@ -60,6 +108,30 @@
       "writtenOn": "2025-02-24T12:14:34Z",
       "side": 1,
       "message": "If I understand this correctly this is not secure. As long as users can access the mongodb database, they can forge requests. You have to use an authentication protocol. HTTP with something like Kerberos is probably the easiest.",
+      "range": {
+        "startLine": 173,
+        "startChar": 0,
+        "endLine": 178,
+        "endChar": 2
+      },
+      "revId": "d0fe9e66c62bec8ad52cbd98aeca4a30453af4e4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf6b6721_fca23d9f",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 5
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-02-25T08:15:00Z",
+      "side": 1,
+      "message": "You\u0027re right, removed the whole solution, as it\u0027s not secure at all.",
+      "parentUuid": "4f07c1e7_84c3eb77",
       "range": {
         "startLine": 173,
         "startChar": 0,

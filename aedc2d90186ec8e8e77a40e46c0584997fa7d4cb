@@ -354,6 +354,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5227473b_c144ae5c",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-02-25T08:15:00Z",
+      "side": 1,
+      "message": "I see, yes it could, but not planned for now",
+      "parentUuid": "b0513fe2_1efc7fdf",
+      "range": {
+        "startLine": 44,
+        "startChar": 60,
+        "endLine": 44,
+        "endChar": 70
+      },
+      "revId": "aedc2d90186ec8e8e77a40e46c0584997fa7d4cb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "18a69365_29332444",
@@ -415,6 +439,30 @@
       "side": 1,
       "message": "I disagree. If they could use rbh-fsevents that would be even better.",
       "parentUuid": "14f8b421_1765591b",
+      "range": {
+        "startLine": 47,
+        "startChar": 0,
+        "endLine": 47,
+        "endChar": 8
+      },
+      "revId": "aedc2d90186ec8e8e77a40e46c0584997fa7d4cb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d3263dd3_b650d1a2",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-02-25T08:15:00Z",
+      "side": 1,
+      "message": "On their own database yes, but not on the main one. They don\u0027t have to and shouldn\u0027t be able to upsert the main database. They should be able to create and update their own, but that\u0027s not possible ATM",
+      "parentUuid": "aa2efa38_46435ecb",
       "range": {
         "startLine": 47,
         "startChar": 0,
@@ -592,6 +640,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "66e399f7_bc8ecc6c",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-02-25T08:15:00Z",
+      "side": 1,
+      "message": "I mean that figuratively. In spirit, changing `rbh-find ... -name test` to `rbh-find ... -uid \u003cuid\u003e -gid \u003cgid\u003e -name test` (+- the mode checks) is exactly what we want to do, but with the intermediary server to ensure credentials.",
+      "parentUuid": "d666d07f_0797f3bb",
+      "range": {
+        "startLine": 72,
+        "startChar": 48,
+        "endLine": 74,
+        "endChar": 34
+      },
+      "revId": "aedc2d90186ec8e8e77a40e46c0584997fa7d4cb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "63840527_028f9875",
         "filename": "designs/userland_robinhood.rst",
         "patchSetId": 3
@@ -698,6 +770,30 @@
       "side": 1,
       "message": "The mode determines what actions are allowed. If a file is 666, anybody can read it. If it is 600 then only the owner can access it, the GID is irrelevant. You must take the mode into consideration.",
       "parentUuid": "47722fa4_eeb10c70",
+      "range": {
+        "startLine": 77,
+        "startChar": 22,
+        "endLine": 77,
+        "endChar": 34
+      },
+      "revId": "aedc2d90186ec8e8e77a40e46c0584997fa7d4cb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a46f2fd_8cd40d70",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-02-25T08:15:00Z",
+      "side": 1,
+      "message": "Ah you\u0027re right, I forgot about that, done",
+      "parentUuid": "3a189f44_f53489cd",
       "range": {
         "startLine": 77,
         "startChar": 22,
@@ -826,6 +922,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e5302582_f09ff55f",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-02-25T08:15:00Z",
+      "side": 1,
+      "message": "OK I understand your point, and I agree. Kept the GRH for reference, but removed mention of Celery, and indicated we may start from the GRH or from scratch, depending on our needs and timeline.",
+      "parentUuid": "f00b1b4a_f4d8816e",
+      "range": {
+        "startLine": 109,
+        "startChar": 0,
+        "endLine": 116,
+        "endChar": 78
+      },
+      "revId": "aedc2d90186ec8e8e77a40e46c0584997fa7d4cb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "53848dc0_d6cb351f",
@@ -934,6 +1054,30 @@
       "side": 1,
       "message": "But the database server is able to do this parallelisation. And can do it more efficiently than us. It knows whether to requests can be run in parallel, we don\u0027t. And if you want to limit the number of concurrent requests, you can easily do it with a simple pool of threads on the HTTP server. mongo probably even has async request submission functions that we can leverage to avoid having a thread pool. We can push requests in a queue and the threads pops them. No need to have a fully distributes request handler for such a simple task.",
       "parentUuid": "d8b4357e_c3527b17",
+      "range": {
+        "startLine": 132,
+        "startChar": 7,
+        "endLine": 132,
+        "endChar": 74
+      },
+      "revId": "aedc2d90186ec8e8e77a40e46c0584997fa7d4cb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fba97f3a_49fc5896",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-02-25T08:15:00Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "05841244_7628ee7c",
       "range": {
         "startLine": 132,
         "startChar": 7,
@@ -1064,6 +1208,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a2de1855_c1fbdf26",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-02-25T08:15:00Z",
+      "side": 1,
+      "message": "I mean that if we created two other find/report tools, like rbh-user-find and rbh-user-report, we could ensure that those would forcefully add the uid and gid filters (plus mode check). But having two new tools just to add this is not really efficient, especially since they are just the -uid and -gid of rbh-find.\n\nRemoved the part in parenthesis.",
+      "parentUuid": "006f260b_9b44aadc",
+      "range": {
+        "startLine": 151,
+        "startChar": 11,
+        "endLine": 154,
+        "endChar": 24
+      },
+      "revId": "aedc2d90186ec8e8e77a40e46c0584997fa7d4cb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5bb35a00_23fb377c",
         "filename": "designs/userland_robinhood.rst",
         "patchSetId": 3
@@ -1170,6 +1338,30 @@
       "side": 1,
       "message": "I mean: do in the http backend `rbh_filter -\u003e GET /type/d/name/test` then on the server `GET /type/d/name/test -\u003e filter_and(filter_type(\"d\"), filter_name(\"test\"))`.",
       "parentUuid": "38015196_a17c9daa",
+      "range": {
+        "startLine": 162,
+        "startChar": 0,
+        "endLine": 164,
+        "endChar": 28
+      },
+      "revId": "aedc2d90186ec8e8e77a40e46c0584997fa7d4cb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d9869e7a_8434bc5e",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-02-25T08:15:00Z",
+      "side": 1,
+      "message": "Here that\u0027s outside of my knowledge, is this generic ?\nWouldn\u0027t `GET /type/d/name/test` and `GET /name/test/type/d` be the exact same, but correspond to two different rules ?\nWouldn\u0027t we have to define a ton of rules for all the combinations ?\nHow would you manage `or` and parentheses ?",
+      "parentUuid": "20104210_f68943e1",
       "range": {
         "startLine": 162,
         "startChar": 0,
