@@ -273,6 +273,9 @@ struct rbh_backend_operations {
             struct rbh_value_pair *pairs,
             int available_pairs
             );
+    void (*get_info)(
+            void *backend
+            );
     void (*destroy)(
             void *backend
             );
