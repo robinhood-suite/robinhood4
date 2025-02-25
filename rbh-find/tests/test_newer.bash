@@ -71,11 +71,34 @@ test_anewer()
     rbh_find "rbh:mongo:$testdb" -anewer /file | sort | difflines
 }
 
+test_cnewer()
+{
+    touch fileA
+    sleep 1
+    touch fileB
+
+    rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
+
+    rbh_find "rbh:mongo:$testdb" -cnewer /fileB | sort | difflines
+    rbh_find "rbh:mongo:$testdb" -not -cnewer /fileB | sort |
+        difflines "/" "/fileA" "/fileB"
+
+    rbh_find "rbh:mongo:$testdb" -cnewer /fileA | sort |
+        difflines "/" "/fileB"
+
+    rbh_find "rbh:mongo:$testdb" -cnewer /fileA -a -cnewer /fileB | sort |
+        difflines
+    rbh_find "rbh:mongo:$testdb" -cnewer /fileA -o -cnewer /fileB | sort |
+        difflines "/" "/fileB"
+
+    rbh_find "rbh:mongo:$testdb" -cnewer /file | sort | difflines
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
-declare -a tests=(test_newer test_anewer)
+declare -a tests=(test_newer test_anewer test_cnewer)
 
 tmpdir=$(mktemp --directory)
 trap -- "rm -rf '$tmpdir'"  EXIT
