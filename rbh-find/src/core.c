@@ -108,7 +108,7 @@ update_rbh_value(struct rbh_filter *filter, struct rbh_fsentry *fsentry)
 {
     switch (filter->compare.field.fsentry) {
     case RBH_FP_STATX:
-        return update_statx_rbh_value(filter, fsentry->statx);
+        return update_statx_rbh_value(filter, field, fsentry->statx);
     default:
         return;
     }
