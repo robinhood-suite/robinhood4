@@ -93,7 +93,6 @@ usage(void)
         "             from a path)\n"
         "\n"
         "Predicates not implemented yet:\n"
-        "    -[cm]newer\n"
         "    -false         -true\n"
         "    -fstype        -xtype\n"
         "    -readable      -writable    -executable\n"
