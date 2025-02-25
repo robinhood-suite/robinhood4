@@ -92,9 +92,11 @@ complete_logical_filter(const struct rbh_filter *filter,
 }
 
 static void
-update_statx_rbh_value(struct rbh_filter *filter, const struct rbh_statx *statx)
+update_statx_rbh_value(struct rbh_filter *filter,
+                       const struct rbh_filter_field *field,
+                       const struct rbh_statx *statx)
 {
-    switch (filter->compare.field.statx) {
+    switch (field->statx) {
     case RBH_STATX_MTIME_SEC:
         filter->compare.value.uint64 = statx->stx_mtime.tv_sec;
         return;
@@ -104,11 +106,13 @@ update_statx_rbh_value(struct rbh_filter *filter, const struct rbh_statx *statx)
 }
 
 static void
-update_rbh_value(struct rbh_filter *filter, struct rbh_fsentry *fsentry)
+update_rbh_value(struct rbh_filter *filter,
+                 const struct rbh_filter_field *field,
+                 struct rbh_fsentry *fsentry)
 {
-    switch (filter->compare.field.fsentry) {
+    switch (field->fsentry) {
     case RBH_FP_STATX:
-        return update_statx_rbh_value(filter, fsentry->statx);
+        return update_statx_rbh_value(filter, field, fsentry->statx);
     default:
         return;
     }
@@ -135,7 +139,7 @@ complete_get_filter(const struct rbh_filter *filter,
         return -1;
     }
 
-    update_rbh_value(filter->get.filter, fsentry);
+    update_rbh_value(filter->get.filter, &filter->get.field, fsentry);
 
     free(fsentry);
     rbh_mut_iter_destroy(fsentries);
