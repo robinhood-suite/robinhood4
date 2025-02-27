@@ -24,6 +24,24 @@
 #include <robinhood/config.h>
 
 #define LIB_RBH_PREFIX "librbh-"
+#define RBH_SIZE_FLAG 0x00000001U
+#define RBH_FIRST_SYNC_FLAG 0x00000002U
+#define RBH_LAST_SYNC_FLAG 0x00000004U
+#define RBH_CAPABILITIES_FLAG 0x00000008U
+
+static struct rbh_backend *from;
+
+static void __attribute__((destructor))
+destroy_from(void)
+{
+    const char *name;
+
+    if(from) {
+        name = from->name;
+        rbh_backend_destroy(from);
+        rbh_backend_plugin_destroy(name);
+    }
+}
 
 struct rbh_node_info {
     char *name;
@@ -64,7 +82,7 @@ is_name_in_list(struct rbh_list_node *head, const char *name)
     return false;
 }
 
-static int
+static void
 capabilities_translate(const struct rbh_backend_plugin *plugin)
 {
     const uint8_t capabilities = plugin->capabilities;
@@ -78,8 +96,12 @@ capabilities_translate(const struct rbh_backend_plugin *plugin)
         printf("- update: rbh-sync [target]\n");
     if (capabilities & RBH_BRANCH_OPS)
         printf("- branch: rbh-sync [source for partial processing]\n");
+}
 
-    return 0;
+static void
+info_translate(const struct rbh_backend_plugin *plugin)
+{
+    printf("Available info for backend '%s': \n", plugin->plugin.name);
 }
 
 static int
@@ -87,12 +109,16 @@ help()
 {
     const char *message =
         "Usage:"
-        "  %s <name of backend>   Show info about the given backend"
-        " name\n"
+        "  %s <URI> -uri_arguments   Show info about the given URI\n"
+        "URI arguments:\n"
         "Arguments:\n"
+        "Usage:"
+        "  %s -arguments General informations about rbh-info command\n"
         "  -h --help                 Show this message and exit\n"
         "  -l --list                 Show the list of installed backends\n\n"
         "Backends capabilities list:\n"
+        "Usage:"
+        "  rbh-info <backend name>   Show capabilities of the given backend\n"
         "- filter: The ability to read the data after filtering it according to"
         " different criteria\n"
         "- synchronisation: The ability to read the data\n"
@@ -224,10 +250,22 @@ main(int argc, char **argv)
             .name = "list",
             .val = 'l'
         },
+        {
+            .name = "size",
+            .val = 's',
+        },
+        {
+            .name = "first_sync",
+            .val = 'f',
+        },
+        {
+            .name = "last_sync",
+            .val = 'y',
+        },
         {}
     };
     const struct rbh_backend_plugin *plugin;
-    const char *arg;
+    int flags = 0;
     int option;
 
     if (argc == 1){
@@ -252,14 +290,36 @@ main(int argc, char **argv)
         }
     }
 
-    arg = argv[optind];
-    plugin = rbh_backend_plugin_import(arg);
+    argc -= optind;
+    argv += optind;
+
+    if (argc < 1)
+        error(EX_USAGE, 0, "not enough arguments\n");
+    if (argc > 1)
+        error(EX_USAGE, 0, "unexpected argument: %s\n", argv[1]);
+
+    if (!is_uri(argv[0])) {
+        plugin = rbh_backend_plugin_import(argv[0]);
+        if (plugin == NULL) {
+            fprintf(stderr, "This backend does not exist\n");
+            return EINVAL;
+        }
+        capabilities_translate(plugin);
+        return 0;
+    }
+
+    from = rbh_backend_from_uri(argv[0]);
+    plugin = rbh_backend_plugin_import(from->name);
 
     if (plugin == NULL) {
         fprintf(stderr, "This backend does not exist\n");
         return EINVAL;
-    } else {
-        capabilities_translate(plugin);
+    }
+
+    if (!flags) {
+        info_translate(plugin);
         return 0;
     }
+
+    return EXIT_SUCCESS;
 }
