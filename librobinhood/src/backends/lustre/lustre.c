@@ -1242,7 +1242,7 @@ lustre_fts_backend_filter(void *backend, const struct rbh_filter *filter,
      *--------------------------------------------------------------------*/
 
 void
-lustre_fts_backend_get_info(void *backend)
+lustre_fts_backend_get_info(void *backend, enum rbh_get_info info)
 {
     return;
 }

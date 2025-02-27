@@ -79,7 +79,7 @@ posix_mpi_backend_set_option(void *backend, unsigned int option,
      *--------------------------------------------------------------------*/
 
 void
-posix_mpi_backend_get_info(void *backend)
+posix_mpi_backend_get_info(void *backend, enum rbh_get_info info)
 {
     return;
 }

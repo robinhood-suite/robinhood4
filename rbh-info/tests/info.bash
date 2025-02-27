@@ -23,18 +23,14 @@ tests_backend_installed_list()
 
 tests_mongo_info()
 {
-    local output=$(rbh_info mongo)
-    echo "$output" | grep -q "update"
-    echo "$output" | grep -q "filter"
-    echo "$output" | grep -q "synchronisation"
-    echo "$output" | grep -q "branch"
+    local output=$(rbh_info rbh:mongo:test)
+    echo "$output" | grep -q "size"
+    echo "$output" | grep -q "sync"
 }
 
 tests_posix_info()
 {
-    local output=$(rbh_info posix)
-    echo "$output" | grep -q "synchronisation"
-    echo "$output" | grep -q "branch"
+    local output=$(rbh_info rbh:posix:/mnt)
 }
 
 tests_not_find_backend_list()

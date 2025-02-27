@@ -427,7 +427,7 @@ hestia_backend_filter(void *backend, const struct rbh_filter *filter,
      *--------------------------------------------------------------------*/
 
 void
-hestia_backend_get_info(void *backend)
+hestia_backend_get_info(void *backend, enum rbh_get_info info)
 {
     return;
 }

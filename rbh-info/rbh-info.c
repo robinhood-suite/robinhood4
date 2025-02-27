@@ -24,6 +24,12 @@
 #include <robinhood/config.h>
 
 #define LIB_RBH_PREFIX "librbh-"
+#define RBH_SIZE_FLAG 0x00000001U
+#define RBH_FIRST_SYNC_FLAG 0x00000002U
+#define RBH_LAST_SYNC_FLAG 0x00000004U
+#define RBH_CAPABILITIES_FLAG 0x00000008U
+
+static struct rbh_backend *from;
 
 struct rbh_node_info {
     char *name;
@@ -69,7 +75,7 @@ capabilities_translate(const struct rbh_backend_plugin *plugin)
 {
     const uint8_t capabilities = plugin->capabilities;
 
-    printf("Infos of %s:\n",plugin->plugin.name);
+    printf("Capabilities of %s:\n",plugin->plugin.name);
     if (capabilities & RBH_FILTER_OPS)
         printf("- filter: rbh-find [source]\n");
     if (capabilities & RBH_SYNC_OPS)
@@ -78,7 +84,21 @@ capabilities_translate(const struct rbh_backend_plugin *plugin)
         printf("- update: rbh-sync [target]\n");
     if (capabilities & RBH_BRANCH_OPS)
         printf("- branch: rbh-sync [source for partial processing]\n");
+    return 0;
+}
 
+static int
+info_translate(const struct rbh_backend_plugin *plugin)
+{
+    const uint8_t info = plugin->info;
+
+    printf("Info of %s:\n", plugin->plugin.name);
+    if (info & RBH_INFO_FIRST_SYNC)
+        printf("- first sync: -f to get info about the first rbh-sync\n");
+    if (info & RBH_INFO_LAST_SYNC)
+        printf("- last sync:  -y to get info about the last rbh-sync\n");
+    if (info & RBH_INFO_SIZE)
+        printf("- size: -s give info about the size of the given backend\n");
     return 0;
 }
 
@@ -87,12 +107,17 @@ help()
 {
     const char *message =
         "Usage:"
-        "  %s <name of backend>   Show info about the given backend"
-        " name\n"
+        "  %s <URI>                  Show info about the given backend\n\n"
         "Arguments:\n"
         "  -h --help                 Show this message and exit\n"
         "  -l --list                 Show the list of installed backends\n\n"
+        "Backends info list:\n"
+        "- size                      Show the size of the given backend\n"
+        "- first_sync                Show info about the first rbh-sync done\n"
+        "- last_sync                 Show about the last rbh-sync done\n\n"
         "Backends capabilities list:\n"
+        "Usage:"
+        "  %s <backend name> -c      Show capabilities of the given backend\n"
         "- filter: The ability to read the data after filtering it according to"
         " different criteria\n"
         "- synchronisation: The ability to read the data\n"
@@ -214,6 +239,22 @@ rbh_backend_list()
     return 0;
 }
 
+static int
+backend_size(const struct rbh_backend_plugin *plugin, enum rbh_get_info size)
+{
+    const uint8_t info = plugin->info;
+
+    if (info & RBH_INFO_SIZE) {
+        printf("This is the size of the %s backend: \n", from->name);
+        rbh_backend_get_info(from, info);
+    } else {
+        printf("Size not available for %s backend, Please refer to the helper\n"
+               , from->name);
+        return 0;
+    }
+    return 0;
+}
+
 int
 main(int argc, char **argv)
 {
@@ -226,10 +267,26 @@ main(int argc, char **argv)
             .name = "list",
             .val = 'l'
         },
+        {
+            .name = "size",
+            .val = 's',
+        },
+        {
+            .name = "capabilities",
+            .val = 'c',
+        },
+        {
+            .name = "first_sync",
+            .val = 'f',
+        },
+        {
+            .name = "last_sync",
+            .val = 'y',
+        },
         {}
     };
     const struct rbh_backend_plugin *plugin;
-    const char *arg;
+    int flags = 0;
     int option;
 
     if (argc == 1){
@@ -238,7 +295,7 @@ main(int argc, char **argv)
         return EINVAL;
     }
 
-    while ((option = getopt_long(argc, argv, "hl", LONG_OPTIONS,
+    while ((option = getopt_long(argc, argv, "hlscfy", LONG_OPTIONS,
                                  NULL)) != -1) {
         switch (option) {
         case 'h':
@@ -247,6 +304,18 @@ main(int argc, char **argv)
         case 'l':
             rbh_backend_list();
             return 0;
+        case 's':
+            flags |= RBH_SIZE_FLAG;
+            break;
+        case 'c':
+            flags |= RBH_CAPABILITIES_FLAG;
+            break;
+        case 'f':
+            flags |= RBH_FIRST_SYNC_FLAG;
+            break;
+        case 'y':
+            flags |= RBH_LAST_SYNC_FLAG;
+            break;
         default :
             fprintf(stderr, "Unrecognized option\n");
             help();
@@ -254,14 +323,36 @@ main(int argc, char **argv)
         }
     }
 
-    arg = argv[optind];
-    plugin = rbh_backend_plugin_import(arg);
+    argc -= optind;
+    argv += optind;
 
-    if (plugin == NULL) {
+    if (argc < 1)
+        error(EX_USAGE, 0, "not enough arguments\n");
+    if (argc > 1)
+        error(EX_USAGE, 0, "unexpected argument: %s\n", argv[1]);
+
+    from = rbh_backend_from_uri(argv[0]);
+    plugin = rbh_backend_plugin_import(from->name);
+
+    if(plugin == NULL) {
         fprintf(stderr, "This backend does not exist\n");
         return EINVAL;
-    } else {
+    }
+    if (flags & RBH_CAPABILITIES_FLAG) {
         capabilities_translate(plugin);
+    }
+    if (flags & RBH_SIZE_FLAG) {
+        backend_size(plugin, RBH_INFO_SIZE);
+    }
+    if (flags & RBH_FIRST_SYNC_FLAG) {
+        printf("First sync of %s: \n", from->name);
+    }
+    if (flags & RBH_LAST_SYNC_FLAG) {
+        printf("Last sync of %s: \n", from->name);
+    }
+    if (!flags) {
+        info_translate(plugin);
         return 0;
     }
+    return 0;
 }

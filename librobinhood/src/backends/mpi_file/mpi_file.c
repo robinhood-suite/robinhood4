@@ -433,7 +433,7 @@ mpi_file_backend_filter(
      *--------------------------------------------------------------------*/
 
 void
-mpi_file_backend_get_info(void *backend)
+mpi_file_backend_get_info(void *backend, enum rbh_get_info info)
 {
     return;
 }

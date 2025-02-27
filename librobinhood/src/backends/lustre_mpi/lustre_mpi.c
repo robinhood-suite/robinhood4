@@ -97,7 +97,7 @@ lustre_mpi_backend_set_option(void *backend, unsigned int option,
      *--------------------------------------------------------------------*/
 
 void
-lustre_mpi_backend_get_info(void *backend)
+lustre_mpi_backend_get_info(void *backend, enum rbh_get_info info)
 {
     return;
 }

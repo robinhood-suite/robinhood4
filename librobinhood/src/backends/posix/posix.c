@@ -988,7 +988,7 @@ posix_backend_destroy(void *backend)
      *--------------------------------------------------------------------*/
 
 void
-posix_backend_get_info(void *backend)
+posix_backend_get_info(void *backend, enum rbh_get_info info)
 {
     return;
 }
