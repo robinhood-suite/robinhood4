@@ -409,6 +409,7 @@ struct mongo_backend {
     struct rbh_backend backend;
     mongoc_client_t *client;
     mongoc_collection_t *entries;
+    mongoc_collection_t *info;
 };
 
 static int
@@ -792,9 +793,28 @@ mongo_backend_report(void *backend, const struct rbh_filter *filter,
      *--------------------------------------------------------------------*/
 
 void
-mongo_backend_get_info(void *backend)
+mongo_backend_get_info(void *backend, enum rbh_info info)
 {
-    return;
+    bson_t* opts = BCON_NEW("skip", BCON_INT64(5));
+    struct mongo_backend *mongo = backend;
+    bson_error_t error;
+    int64_t count;
+
+    switch (info){
+    case RBH_INFO_SIZE:
+        count = mongoc_collection_estimated_document_count(mongo->entries, opts,
+                                                           NULL, NULL, &error);
+        bson_destroy(opts);
+
+        if (count < 0) {
+            fprintf(stderr, "Count failed: %s\n", error.message);
+            return;
+        }
+        printf("%" PRId64 "documents counted.\n", count);
+        break;
+    default:
+        return;
+    }
 }
 
     /*--------------------------------------------------------------------*
@@ -1573,6 +1593,13 @@ mongo_backend_init_from_uri(struct mongo_backend *mongo,
     }
 
     mongo->entries = mongoc_client_get_collection(mongo->client, db, "entries");
+    if (mongo->entries == NULL) {
+        mongoc_client_destroy(mongo->client);
+        errno = ENOMEM;
+        return -1;
+    }
+
+    mongo->info = mongoc_client_get_collection(mongo->client, db, "info");
     if (mongo->entries == NULL) {
         mongoc_client_destroy(mongo->client);
         errno = ENOMEM;

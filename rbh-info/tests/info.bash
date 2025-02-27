@@ -21,7 +21,7 @@ tests_backend_installed_list()
     echo "$output" | grep -q "List"
 }
 
-tests_mongo_info()
+tests_mongo_capabilities()
 {
     local output=$(rbh_info mongo)
     echo "$output" | grep -q "update"
@@ -30,11 +30,18 @@ tests_mongo_info()
     echo "$output" | grep -q "branch"
 }
 
-tests_posix_info()
+tests_posix_capabilities()
 {
     local output=$(rbh_info posix)
     echo "$output" | grep -q "synchronisation"
     echo "$output" | grep -q "branch"
+}
+
+tests_mongo_info()
+{
+    local output=$(rbh_info rbh:mongo:test)
+    echo "$output" | grep -q "size"
+    echo "$output" | grep -q "sync"
 }
 
 tests_not_find_backend_list()
@@ -88,8 +95,8 @@ tests_library_path_env_invalid()
 ################################################################################
 
 declare -a tests=(tests_backend_installed_list tests_mongo_info
-                  tests_posix_info tests_not_installed_info
-                  tests_not_find_backend_list)
+                  tests_mongo_capabilities tests_posix_capabilities
+                  tests_not_installed_info tests_not_find_backend_list)
                   # tests_library_path_env_not_exist
                   # tests_library_path_env_invalid)
 
