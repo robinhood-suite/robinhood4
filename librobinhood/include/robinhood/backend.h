@@ -219,6 +219,13 @@ struct rbh_filter_output {
 };
 
 /**
+ * Determines which info will be displayed by rbh-info.
+ */
+enum rbh_info {
+    RBH_INFO_SIZE = 1,
+};
+
+/**
  * Operations backends implement
  *
  * Only the \c destroy() operation is mandatory, every other one may be set to
@@ -274,7 +281,8 @@ struct rbh_backend_operations {
             int available_pairs
             );
     void (*get_info)(
-            void *backend
+            void *backend,
+            enum rbh_info info
             );
     void (*destroy)(
             void *backend
@@ -625,6 +633,23 @@ rbh_backend_get_attribute(struct rbh_backend *backend, const char *attr_name,
     }
     return backend->ops->get_attribute(backend, attr_name, arg, pairs,
                                        available_pairs);
+}
+
+/**
+ * Retrieve info from a given backend (such as size, first sync, last sync...)
+ *
+ * @param backend   a pointer to the struct rbh_backend to reclaim
+ * @param info      enum of the required infos
+ */
+
+static inline void
+rbh_backend_get_info(struct rbh_backend *backend, enum rbh_info info)
+{
+    if (backend->ops->get_info == NULL) {
+        errno = ENOTSUP;
+        return;
+    }
+    return backend->ops->get_info(backend, info);
 }
 
 /**
