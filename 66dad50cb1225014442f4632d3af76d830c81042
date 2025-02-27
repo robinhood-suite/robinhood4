@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aa01f1f3_a92b79c2",
+        "filename": "librobinhood/src/backends/hestia/hestia.c",
+        "patchSetId": 7
+      },
+      "lineNbr": 452,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-02-27T08:45:56Z",
+      "side": 1,
+      "message": "style: remove the spaces",
+      "range": {
+        "startLine": 452,
+        "startChar": 0,
+        "endLine": 452,
+        "endChar": 4
+      },
+      "revId": "66dad50cb1225014442f4632d3af76d830c81042",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
