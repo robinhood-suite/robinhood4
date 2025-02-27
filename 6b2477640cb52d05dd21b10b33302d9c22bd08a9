@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "df4a3b7c_f5f54708",
+        "filename": "librobinhood/src/id.c",
+        "patchSetId": 8
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-02-27T07:43:43Z",
+      "side": 1,
+      "message": "sugest: `assert(*(int *)id-\u003edata + sizeof(short) \u003d\u003d FILEID_LUSTRE);`",
+      "range": {
+        "startLine": 225,
+        "startChar": 4,
+        "endLine": 225,
+        "endChar": 48
+      },
+      "revId": "6b2477640cb52d05dd21b10b33302d9c22bd08a9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
