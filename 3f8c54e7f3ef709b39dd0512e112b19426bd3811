@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3c47f9a2_62a9dac9",
+        "filename": "librobinhood/src/id.c",
+        "patchSetId": 8
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-02-27T09:15:57Z",
+      "side": 0,
+      "message": "minor: add back this sign, otherwise we might think that you can\u0027t convert an ID back to a file handle anymore",
+      "range": {
+        "startLine": 98,
+        "startChar": 34,
+        "endLine": 98,
+        "endChar": 35
+      },
+      "revId": "3f8c54e7f3ef709b39dd0512e112b19426bd3811",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
