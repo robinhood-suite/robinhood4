@@ -409,6 +409,7 @@ struct mongo_backend {
     struct rbh_backend backend;
     mongoc_client_t *client;
     mongoc_collection_t *entries;
+    mongoc_collection_t *info;
 };
 
 static int
@@ -792,7 +793,8 @@ mongo_backend_report(void *backend, const struct rbh_filter *filter,
      *--------------------------------------------------------------------*/
 
 void
-mongo_backend_get_info(__attribute__((unused)) void *backend)
+mongo_backend_get_info(__attribute__((unused)) void *backend,
+                       __attribute__((unused)) enum rbh_info info)
 {
     return;
 }
@@ -1573,6 +1575,13 @@ mongo_backend_init_from_uri(struct mongo_backend *mongo,
     }
 
     mongo->entries = mongoc_client_get_collection(mongo->client, db, "entries");
+    if (mongo->entries == NULL) {
+        mongoc_client_destroy(mongo->client);
+        errno = ENOMEM;
+        return -1;
+    }
+
+    mongo->info = mongoc_client_get_collection(mongo->client, db, "info");
     if (mongo->entries == NULL) {
         mongoc_client_destroy(mongo->client);
         errno = ENOMEM;
