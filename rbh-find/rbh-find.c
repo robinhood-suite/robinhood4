@@ -98,7 +98,6 @@ usage(void)
         "    -readable      -writable    -executable\n"
         "    -iwholename    -ilname      -wholename     -lname\n"
         "    -inum\n"
-        "    -links\n"
         "    -used\n"
         "    -context\n"
         "\n"
