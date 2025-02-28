@@ -7,6 +7,7 @@
 integration_tests = [
   'test_actions',
   'test_empty',
+  'test_links',
   'test_newer',
   'test_perm',
   'test_printf',
