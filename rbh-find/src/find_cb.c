@@ -418,6 +418,9 @@ find_parse_predicate(struct find_context *ctx, int *arg_idx)
     case PRED_GROUP:
         filter = groupname2filter(ctx->argv[++i]);
         break;
+    case PRED_LINKS:
+        filter = number2filter(predicate, ctx->argv[++i]);
+        break;
     case PRED_NAME:
     case PRED_PATH:
         filter = regex2filter(predicate, ctx->argv[++i], RBH_RO_SHELL_PATTERN);
