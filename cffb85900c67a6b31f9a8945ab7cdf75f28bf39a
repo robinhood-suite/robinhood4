@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "97d3e996_0fa3456e",
+        "filename": "rbh-find/src/filters.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-02-28T08:48:08Z",
+      "side": 1,
+      "message": "suggest: do not set this value, here it looks like it has a meaning, but it doesn\u0027t and will be erased",
+      "range": {
+        "startLine": 249,
+        "startChar": 16,
+        "endLine": 249,
+        "endChar": 28
+      },
+      "revId": "cffb85900c67a6b31f9a8945ab7cdf75f28bf39a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "184ce45d_20d6495a",
+        "filename": "rbh-find/tests/test_newer.bash",
+        "patchSetId": 4
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-02-28T08:48:08Z",
+      "side": 1,
+      "message": "comment: having an `-older` filter might be a good idea, since this will target files with a modify time equal to /fileA, not only older ones",
+      "range": {
+        "startLine": 32,
+        "startChar": 33,
+        "endLine": 32,
+        "endChar": 44
+      },
+      "revId": "cffb85900c67a6b31f9a8945ab7cdf75f28bf39a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
