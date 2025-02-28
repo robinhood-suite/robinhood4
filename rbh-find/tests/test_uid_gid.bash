@@ -18,11 +18,11 @@ test_uid_user_equal()
     touch "my_file"
     touch "your_file"
 
-    useradd -MU you
+    add_test_user $test_user
     me=$(id -un)
     my_id=$(id -u)
-    your_id=$(id -u you)
-    chown you "your_file"
+    your_id=$(id -u $test_user)
+    chown $test_user "your_file"
 
     rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
 
@@ -30,11 +30,12 @@ test_uid_user_equal()
     rbh_find "rbh:mongo:$testdb" -uid $your_id | sort | difflines "/your_file"
 
     rbh_find "rbh:mongo:$testdb" -user $me | sort | difflines "/" "/my_file"
-    rbh_find "rbh:mongo:$testdb" -user you | sort | difflines "/your_file"
+    rbh_find "rbh:mongo:$testdb" -user $test_user | sort |
+        difflines "/your_file"
 
     rbh_find "rbh:mongo:$testdb" -nouser | sort | difflines
 
-    userdel you
+    delete_test_user $test_user
 
     rbh_find "rbh:mongo:$testdb" -nouser | sort | difflines "/your_file"
 }
@@ -44,7 +45,7 @@ test_gid_group_equal()
     touch "my_file"
     touch "your_file"
 
-    groupadd grptest
+    groupadd grptest || true
     my_grp=$(id -gn)
     my_gid=$(id -g)
     test_gid=$(getent group grptest | cut -d: -f3)
@@ -73,7 +74,8 @@ test_gid_group_equal()
 declare -a tests=(test_gid_group_equal test_uid_user_equal)
 
 tmpdir=$(mktemp --directory)
-trap -- "rm -rf '$tmpdir'; userdel test || true; groupdel grptest || true" EXIT
+test_user="$(get_test_user "$(basename "$0")")"
+trap -- "rm -rf '$tmpdir'; delete_test_user $test_user || true; groupdel grptest || true" EXIT
 cd "$tmpdir"
 
 run_tests ${tests[@]}

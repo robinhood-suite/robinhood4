@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # This file is part of RobinHood 4
-# Copyright (C) 2024 Commissariat a l'energie atomique et aux energies
+# Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
@@ -45,11 +45,8 @@ test_group_by_user()
     truncate --size 1M first_dir/first_file
     truncate --size 1G second_dir/second_file
 
-    useradd -K MAIL_DIR=/dev/null -lMN fake_user || true
-    local fake_user_id="$(id -u fake_user)"
-    chown fake_user: first_dir first_dir/first_file
-
-    userdel fake_user || true
+    local fake_user_id="$(id -u $test_user)"
+    chown $test_user: first_dir first_dir/first_file
 
     rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
 
@@ -75,10 +72,8 @@ test_multi_group_by()
     truncate --size 1M first_dir/first_file
     truncate --size 1G second_dir/second_file
 
-    useradd -K MAIL_DIR=/dev/null -lMN fake_user || true
-    local fake_user_id="$(id -u fake_user)"
-    chown fake_user: first_dir first_dir/first_file
-    userdel fake_user || true
+    local fake_user_id="$(id -u $test_user)"
+    chown $test_user: first_dir first_dir/first_file
 
     rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
 
@@ -108,7 +103,9 @@ test_multi_group_by()
 declare -a tests=(test_group_by_type test_group_by_user test_multi_group_by)
 
 tmpdir=$(mktemp --directory)
-trap -- "rm -rf '$tmpdir'" EXIT
+test_user="$(get_test_user "$(basename "$0")")"
+add_test_user $test_user
+trap -- "rm -rf '$tmpdir'; delete_test_user $test_user || true" EXIT
 cd "$tmpdir"
 
 run_tests ${tests[@]}
