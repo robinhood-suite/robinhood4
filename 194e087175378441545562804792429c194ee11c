@@ -1,0 +1,107 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e206ebb8_dc5cbbc4",
+        "filename": "rbh-report/rbh-report.c",
+        "patchSetId": 8
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-02-28T07:49:33Z",
+      "side": 1,
+      "message": "style: alphabetical order",
+      "range": {
+        "startLine": 153,
+        "startChar": 8,
+        "endLine": 155,
+        "endChar": 81
+      },
+      "revId": "194e087175378441545562804792429c194ee11c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "571119fa_ac3b8e74",
+        "filename": "rbh-report/rbh-report.c",
+        "patchSetId": 8
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-02-28T07:49:33Z",
+      "side": 1,
+      "message": "major: add `x` for the config",
+      "revId": "194e087175378441545562804792429c194ee11c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "113b0f29_72da2f0a",
+        "filename": "rbh-report/rbh-report.c",
+        "patchSetId": 8
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-02-28T07:49:33Z",
+      "side": 1,
+      "message": "defect? you need to open the config no ?",
+      "revId": "194e087175378441545562804792429c194ee11c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "80aba65b_1e7c0c0d",
+        "filename": "rbh-report/tests/test_alias.bash",
+        "patchSetId": 8
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-02-28T07:49:33Z",
+      "side": 1,
+      "message": "minor: use `rbh_report`",
+      "range": {
+        "startLine": 23,
+        "startChar": 21,
+        "endLine": 23,
+        "endChar": 31
+      },
+      "revId": "194e087175378441545562804792429c194ee11c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1e601ce7_242976bd",
+        "filename": "rbh-report/tests/test_alias.bash",
+        "patchSetId": 8
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-02-28T07:49:33Z",
+      "side": 1,
+      "message": "sugest: `--group-by` or `--output` to see the difference between alias a1 and a2",
+      "range": {
+        "startLine": 56,
+        "startChar": 2,
+        "endLine": 56,
+        "endChar": 16
+      },
+      "revId": "194e087175378441545562804792429c194ee11c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
