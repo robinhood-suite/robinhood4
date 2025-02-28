@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0efc8c99_9b7c2bd0",
+        "filename": "rbh-info/rbh-info.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-02-28T07:54:45Z",
+      "side": 1,
+      "message": "minor: Keep \"Capabilities\", this function print the capabilities of a backend",
+      "range": {
+        "startLine": 72,
+        "startChar": 12,
+        "endLine": 72,
+        "endChar": 17
+      },
+      "revId": "2133cba533e49c60d82da4db4831587f9df18d92",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
