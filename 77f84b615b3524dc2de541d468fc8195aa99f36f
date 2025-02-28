@@ -211,6 +211,30 @@
       },
       "revId": "77f84b615b3524dc2de541d468fc8195aa99f36f",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a133f705_4f6613f4",
+        "filename": "rbh-find/src/core.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-02-28T08:47:18Z",
+      "side": 1,
+      "message": "Yes, but if we do `rbh-find rbh:mongo:... -type f -newer /file`, the need_prefetch variable will be set to true for the -newer filter but we also have a comparison filter",
+      "parentUuid": "d5d40859_bea32103",
+      "range": {
+        "startLine": 162,
+        "startChar": 11,
+        "endLine": 162,
+        "endChar": 12
+      },
+      "revId": "77f84b615b3524dc2de541d468fc8195aa99f36f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
