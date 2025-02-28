@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a39e9226_22ae5996",
+        "filename": "librobinhood/include/robinhood/plugins/backend.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-02-28T09:58:40Z",
+      "side": 1,
+      "message": "minor: add explanations about this field in the commit message, as talked about",
+      "range": {
+        "startLine": 24,
+        "startChar": 4,
+        "endLine": 24,
+        "endChar": 23
+      },
+      "revId": "2133cba533e49c60d82da4db4831587f9df18d92",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0efc8c99_9b7c2bd0",
         "filename": "rbh-info/rbh-info.c",
         "patchSetId": 5
