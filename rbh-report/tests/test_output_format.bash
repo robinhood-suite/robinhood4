@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # This file is part of RobinHood 4
-# Copyright (C) 2024 Commissariat a l'energie atomique et aux energies
+# Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
@@ -37,10 +37,8 @@ complete_setup()
     mknod second_char c 0 0
     cd ..
 
-    useradd -MN fake_user || true
-    fake_user_id="$(id -u fake_user)"
-    chown -R fake_user: second_user_dir
-    userdel fake_user || true
+    fake_user_id="$(id -u $test_user)"
+    chown -R $test_user: second_user_dir
 }
 
 test_format_multi_group_and_rsort()
@@ -148,7 +146,9 @@ test_format_pretty_print()
 declare -a tests=(test_format_multi_group_and_rsort test_format_pretty_print)
 
 tmpdir=$(mktemp --directory)
-trap -- "rm -rf '$tmpdir'" EXIT
+test_user="$(get_test_user "$(basename "$0")")"
+add_test_user $test_user
+trap -- "rm -rf '$tmpdir'; delete_test_user $test_user || true" EXIT
 cd "$tmpdir"
 
 run_tests ${tests[@]}
