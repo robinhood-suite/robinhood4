@@ -22,6 +22,30 @@
       },
       "revId": "8229e166b178079ed375ec3859651a98b6ee445d",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "53c46771_b75a6528",
+        "filename": "rbh-find/rbh-find.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-02-28T09:14:26Z",
+      "side": 0,
+      "message": "`-mnewer` doesn\u0027t exist in find, and `-mnewer` and `-newer` are exactly the same predicate. `-newer` compares the mtime of all entries with the mtime of a specified entry, just as the `-mnewer` predicate would.",
+      "parentUuid": "85c8629a_02a6d88a",
+      "range": {
+        "startLine": 105,
+        "startChar": 16,
+        "endLine": 105,
+        "endChar": 17
+      },
+      "revId": "8229e166b178079ed375ec3859651a98b6ee445d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
