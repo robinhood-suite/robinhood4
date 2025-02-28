@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # This file is part of the RobinHood Library
-# Copyright (C) 2023 Commissariat a l'energie atomique et aux energies
+# Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
@@ -131,11 +131,13 @@ test_username()
 {
     touch file
     touch file_without_user
-    useradd test
-    chown test: file_without_user
+
+    local test_user="$(get_test_user $FUNCNAME)"
+    add_test_user $test_user
+    chown $test_user: file_without_user
 
     rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
-    userdel test
+    delete_test_user $test_user
 
     local u=$(rbh_find "rbh:mongo:$testdb" -name file -printf "%u\n")
     local name=$(stat -c %U file)
@@ -157,11 +159,13 @@ test_groupname()
 {
     touch file
     touch file_without_user
-    useradd test
-    chown test: file_without_user
+
+    local test_user="$(get_test_user $FUNCNAME)"
+    useradd -K MAIL_DIR=/dev/null -lMU $test_user
+    chown $test_user: file_without_user
 
     rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
-    userdel test
+    userdel $test_user
 
     local g=$(rbh_find "rbh:mongo:$testdb" -name file -printf "%g\n")
     local name=$(stat -c %G file)

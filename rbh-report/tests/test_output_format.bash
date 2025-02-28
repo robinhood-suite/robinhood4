@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # This file is part of RobinHood 4
-# Copyright (C) 2024 Commissariat a l'energie atomique et aux energies
+# Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
@@ -37,10 +37,12 @@ complete_setup()
     mknod second_char c 0 0
     cd ..
 
-    useradd -MN fake_user || true
-    fake_user_id="$(id -u fake_user)"
-    chown -R fake_user: second_user_dir
-    userdel fake_user || true
+    local test_user="$(get_test_user $FUNCNAME)"
+    add_test_user $test_user
+    fake_user_id="$(id -u $test_user)"
+    chown -R $test_user: second_user_dir
+    delete_test_user $test_user
+
 }
 
 test_format_multi_group_and_rsort()
