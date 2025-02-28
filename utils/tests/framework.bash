@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # This file is part of RobinHood 4
-# Copyright (C) 2024 Commissariat a l'energie atomique et aux energies
+# Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
@@ -165,6 +165,28 @@ archive_file()
     while ! lfs hsm_state "$file" | grep "archive_id:"; do
         sleep 0.5
     done
+}
+
+get_test_user()
+{
+    local test_name="$1"
+
+    local user_name="user_$test_name"
+    echo "${user_name:0:31}"
+}
+
+add_test_user()
+{
+    local test_user="$1"
+
+    useradd -K MAIL_DIR=/dev/null -lMN $test_user
+}
+
+delete_test_user()
+{
+    local test_user="$1"
+
+    userdel $test_user
 }
 
 ################################################################################

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # This file is part of RobinHood 4
-# Copyright (C) 2021 Commissariat a l'energie atomique et aux energies
+# Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
@@ -255,7 +255,8 @@ test_continue_sync_on_error()
     # created above. Since that user doesn't have the read or write access to
     # the second file and the directory, it cannot synchronize both, so errors
     # should be outputted but the command shouldn't fail.
-    useradd -N -M test
+    local test_user="$(get_test_user $FUNCNAME)"
+    add_test_user $test_user
 
     path="$(dirname $__rbh_sync)"
     while [[ "$path" != "/home" ]]; do
@@ -266,14 +267,14 @@ test_continue_sync_on_error()
     if [[ "$WITH_MPI" == "true" ]]; then
         # We need to give execute permissions to the user for mpirun to run
         chmod o+x ..
-        output="$(sudo -H -u test bash -c \
+        output="$(sudo -H -u "$test_user" bash -c \
                 "source /etc/profile.d/modules.sh; \
                  module load mpi/openmpi-x86_64; \
                  LD_LIBRARY_PATH=$LD_LIBRARY_PATH \
                     mpirun -np 4 $__rbh_sync rbh:posix-mpi:. \
                         rbh:mongo:$testdb" 2>&1)"
     else
-        output="$(sudo -E -H -u test bash -c "\
+        output="$(sudo -E -H -u "$test_user" bash -c "\
                   LD_LIBRARY_PATH=$LD_LIBRARY_PATH \
                       $__rbh_sync rbh:posix:.  rbh:mongo:$testdb" 2>&1)"
     fi
@@ -284,7 +285,7 @@ test_continue_sync_on_error()
         path="$(dirname $path)"
     done
 
-    userdel -f -r test || true
+    userdel $test_user
 
     echo "$output" | grep "open '/$second_file'" ||
         error "Failed to find error on open of '$second_file'"
@@ -330,7 +331,8 @@ test_stop_sync_on_error()
     # created above. Since that user doesn't have the read or write access to
     # the second file and the directory, it cannot synchronize both, the
     # command should fail when synchronizing the second file and the directory
-    useradd -N -M test
+    local test_user="$(get_test_user $FUNCNAME)"
+    add_test_user $test_user
 
     path="$(dirname $__rbh_sync)"
     while [[ "$path" != "/home" ]]; do
@@ -341,14 +343,14 @@ test_stop_sync_on_error()
     if [[ "$WITH_MPI" == "true" ]]; then
         # We need to give execute permissions to the user for mpirun to run
         chmod o+x ..
-        local output=$(sudo -H -u test bash -c \
+        local output=$(sudo -H -u "$test_user" bash -c \
                        "source /etc/profile.d/modules.sh; \
                         module load mpi/openmpi-x86_64; \
                         LD_LIBRARY_PATH=$LD_LIBRARY_PATH \
                             mpirun -np 4 $__rbh_sync --no-skip rbh:posix-mpi:. \
                                 rbh:mongo:$testdb" 2>&1)
     else
-        local output=$(sudo -E -H -u test bash -c "\
+        local output=$(sudo -E -H -u "$test_user" bash -c "\
                        LD_LIBRARY_PATH=$LD_LIBRARY_PATH $__rbh_sync --no-skip \
                        rbh:posix:. rbh:mongo:$testdb" 2>&1)
     fi
@@ -359,7 +361,7 @@ test_stop_sync_on_error()
         path="$(dirname $path)"
     done
 
-    userdel -f -r test || true
+    userdel $test_user
 
     local db_count=$(count_documents)
     if [[ $db_count -ne 0 ]]; then

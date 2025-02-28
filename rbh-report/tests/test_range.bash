@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # This file is part of RobinHood 4
-# Copyright (C) 2024 Commissariat a l'energie atomique et aux energies
+# Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
@@ -62,10 +62,11 @@ test_group_by_field_and_range()
     truncate --size 150 second_user_second_large_file
     truncate --size 150 second_user_third_large_file
 
-    useradd -K MAIL_DIR=/dev/null -lMN fake_user || true
-    local fake_user_id="$(id -u fake_user)"
-    chown fake_user: second_user_*
-    userdel fake_user || true
+    local test_user="$(get_test_user)"
+    add_test_user $test_user
+    fake_user_id="$(id -u $test_user)"
+    chown $test_user: second_user_*
+    del_test_user $test_user
 
     rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
 
