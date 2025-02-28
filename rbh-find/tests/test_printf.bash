@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # This file is part of the RobinHood Library
-# Copyright (C) 2023 Commissariat a l'energie atomique et aux energies
+# Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
@@ -131,11 +131,12 @@ test_username()
 {
     touch file
     touch file_without_user
-    useradd test
-    chown test: file_without_user
+
+    add_test_user $test_user
+    chown $test_user: file_without_user
+    delete_test_user $test_user
 
     rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
-    userdel test
 
     local u=$(rbh_find "rbh:mongo:$testdb" -name file -printf "%u\n")
     local name=$(stat -c %U file)
@@ -149,7 +150,7 @@ test_username()
     local uid=$(stat -c %u file_without_user)
 
     if [[ $u != $uid ]]; then
-        error "printf UID: $u != actual $uid"
+        error "printf UID: '$u' != actual '$uid'"
     fi
 }
 
@@ -157,11 +158,12 @@ test_groupname()
 {
     touch file
     touch file_without_user
-    useradd test
-    chown test: file_without_user
+
+    useradd -K MAIL_DIR=/dev/null -lMU $test_user
+    chown $test_user: file_without_user
+    userdel $test_user
 
     rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
-    userdel test
 
     local g=$(rbh_find "rbh:mongo:$testdb" -name file -printf "%g\n")
     local name=$(stat -c %G file)
@@ -175,7 +177,7 @@ test_groupname()
     local gid=$(stat -c %g file_without_user)
 
     if [[ $g != $gid ]]; then
-        error "printf GID: $g != actual $gid"
+        error "printf GID: '$g' != actual '$gid'"
     fi
 }
 
@@ -405,7 +407,8 @@ declare -a tests=(test_atime test_ctime test_mtime test_filename test_inode
                   test_hardlink test_path_without_start)
 
 tmpdir=$(mktemp --directory)
-trap -- "rm -rf '$tmpdir'" EXIT
+test_user="$(get_test_user "$(basename "$0")")"
+trap -- "rm -rf '$tmpdir'; delete_test_user $test_user || true" EXIT
 cd "$tmpdir"
 
 run_tests ${tests[@]}

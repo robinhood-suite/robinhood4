@@ -251,11 +251,10 @@ test_continue_sync_on_error()
     chmod o-rw $second_file
     chmod o-rw $dir
 
-    # Here, we create a test user, and use it to run a rbh-sync on the files
-    # created above. Since that user doesn't have the read or write access to
-    # the second file and the directory, it cannot synchronize both, so errors
-    # should be outputted but the command shouldn't fail.
-    useradd -N -M test
+    # Here, we run a rbh-sync on the files created above as a fake user. Since
+    # that user doesn't have the read or write access to the second file and
+    # the directory, it cannot synchronize both, the command should fail when
+    # synchronizing the second file and the directory
 
     path="$(dirname $__rbh_sync)"
     while [[ "$path" != "/home" ]]; do
@@ -266,14 +265,14 @@ test_continue_sync_on_error()
     if [[ "$WITH_MPI" == "true" ]]; then
         # We need to give execute permissions to the user for mpirun to run
         chmod o+x ..
-        output="$(sudo -H -u test bash -c \
+        output="$(sudo -H -u "$test_user" bash -c \
                 "source /etc/profile.d/modules.sh; \
                  module load mpi/openmpi-x86_64; \
                  LD_LIBRARY_PATH=$LD_LIBRARY_PATH \
                     mpirun -np 4 $__rbh_sync rbh:posix-mpi:. \
                         rbh:mongo:$testdb" 2>&1)"
     else
-        output="$(sudo -E -H -u test bash -c "\
+        output="$(sudo -E -H -u "$test_user" bash -c "\
                   LD_LIBRARY_PATH=$LD_LIBRARY_PATH \
                       $__rbh_sync rbh:posix:.  rbh:mongo:$testdb" 2>&1)"
     fi
@@ -283,8 +282,6 @@ test_continue_sync_on_error()
         chmod o-rx $path
         path="$(dirname $path)"
     done
-
-    userdel -f -r test || true
 
     echo "$output" | grep "open '/$second_file'" ||
         error "Failed to find error on open of '$second_file'"
@@ -326,11 +323,10 @@ test_stop_sync_on_error()
     chmod o-rw $second_file
     chmod o-rw $dir
 
-    # Here, we create a test user, and use it to run a rbh-sync on the files
-    # created above. Since that user doesn't have the read or write access to
-    # the second file and the directory, it cannot synchronize both, the
-    # command should fail when synchronizing the second file and the directory
-    useradd -N -M test
+    # Here, we run a rbh-sync on the files created above as a fake user. Since
+    # that user doesn't have the read or write access to the second file and
+    # the directory, it cannot synchronize both, the command should fail when
+    # synchronizing the second file and the directory
 
     path="$(dirname $__rbh_sync)"
     while [[ "$path" != "/home" ]]; do
@@ -341,14 +337,14 @@ test_stop_sync_on_error()
     if [[ "$WITH_MPI" == "true" ]]; then
         # We need to give execute permissions to the user for mpirun to run
         chmod o+x ..
-        local output=$(sudo -H -u test bash -c \
+        local output=$(sudo -H -u "$test_user" bash -c \
                        "source /etc/profile.d/modules.sh; \
                         module load mpi/openmpi-x86_64; \
                         LD_LIBRARY_PATH=$LD_LIBRARY_PATH \
                             mpirun -np 4 $__rbh_sync --no-skip rbh:posix-mpi:. \
                                 rbh:mongo:$testdb" 2>&1)
     else
-        local output=$(sudo -E -H -u test bash -c "\
+        local output=$(sudo -E -H -u "$test_user" bash -c "\
                        LD_LIBRARY_PATH=$LD_LIBRARY_PATH $__rbh_sync --no-skip \
                        rbh:posix:. rbh:mongo:$testdb" 2>&1)
     fi
@@ -358,8 +354,6 @@ test_stop_sync_on_error()
         chmod o-rx $path
         path="$(dirname $path)"
     done
-
-    userdel -f -r test || true
 
     local db_count=$(count_documents)
     if [[ $db_count -ne 0 ]]; then
@@ -485,7 +479,9 @@ declare -a tests=(test_sync_2_files test_sync_size test_sync_3_files
                   test_stop_sync_on_error test_config)
 
 tmpdir=$(mktemp --directory)
-trap -- "rm -rf '$tmpdir'; userdel test" EXIT
+test_user="$(get_test_user "$(basename "$0")")"
+add_test_user $test_user
+trap -- "rm -rf '$tmpdir'; delete_test_user $test_user" EXIT
 cd "$tmpdir"
 
 run_tests ${tests[@]}
