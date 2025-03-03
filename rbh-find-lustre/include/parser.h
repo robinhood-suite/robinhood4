@@ -1,5 +1,5 @@
 /* This file is part of RobinHood 4
- * Copyright (C) 2022 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifer: LGPL-3.0-or-later
@@ -15,7 +15,8 @@
 enum lustre_predicate {
     LPRED_MIN = PRED_LAST,
 
-    LPRED_COMP_START = LPRED_MIN,
+    LPRED_COMP_END = LPRED_MIN,
+    LPRED_COMP_START,
     LPRED_EXPIRED,
     LPRED_EXPIRED_AT,
     LPRED_FID,
