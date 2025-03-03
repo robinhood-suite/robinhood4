@@ -404,6 +404,9 @@ find_parse_predicate(struct find_context *ctx, int *arg_idx)
     case PRED_EMPTY:
         filter = empty2filter();
         break;
+    case PRED_ILNAME:
+        filter = lname2filter(predicate, ctx->argv[++i], RBH_RO_ALL);
+        break;
     case PRED_INAME:
         filter = regex2filter(predicate, ctx->argv[++i], RBH_RO_ALL);
         break;
@@ -420,6 +423,9 @@ find_parse_predicate(struct find_context *ctx, int *arg_idx)
         break;
     case PRED_LINKS:
         filter = number2filter(predicate, ctx->argv[++i]);
+        break;
+    case PRED_LNAME:
+        filter = lname2filter(predicate, ctx->argv[++i], RBH_RO_SHELL_PATTERN);
         break;
     case PRED_NAME:
     case PRED_PATH:
