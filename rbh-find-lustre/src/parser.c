@@ -1,5 +1,5 @@
 /* This file is part of RobinHood 4
- * Copyright (C) 2022 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifer: LGPL-3.0-or-later
@@ -23,8 +23,21 @@ str2lustre_predicate(const char *string)
 
     switch (string[1]) {
     case 'c':
-        if (strcmp(&string[2], "omp-start") == 0)
-            return LPRED_COMP_START;
+        if (strncmp(&string[2], "omp-", 4))
+            break;
+
+        switch (string[6]) {
+        case 'e':
+            if (!strcmp(&string[7], "nd"))
+                return LPRED_COMP_END;
+
+            break;
+        case 's':
+            if (!strcmp(&string[7], "tart"))
+                return LPRED_COMP_START;
+
+            break;
+        }
         break;
     case 'e':
         if (strncmp(&string[2], "xpired", strlen("xpired")) != 0)
@@ -73,6 +86,7 @@ str2lustre_predicate(const char *string)
 
 #define LOCAL(X) (X) - LPRED_MIN
 static const char *__lustre_predicate2str[] = {
+    [LOCAL(LPRED_COMP_END)]       = "comp-end",
     [LOCAL(LPRED_COMP_START)]     = "comp-start",
     [LOCAL(LPRED_EXPIRED)]        = "expired",
     [LOCAL(LPRED_EXPIRED_AT)]     = "expired-at",

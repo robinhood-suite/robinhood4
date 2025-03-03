@@ -1,5 +1,5 @@
 /* This file is part of RobinHood 4
- * Copyright (C) 2022 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifer: LGPL-3.0-or-later
@@ -95,6 +95,10 @@ usage(void)
         "                         filter entries based on their component's\n"
         "                         start values. `+` or `-` signs are\n"
         "                         not considered if given an interval in CSV.\n"
+        "    -comp-end   [+-]SIZE[,SIZE]\n"
+        "                         filter entries based on their component's\n"
+        "                         end values. `+` or `-` signs are\n"
+        "                         not considered if given an interval in CSV.\n"
         "\n"
         "Action arguments:\n"
         "    -printf STRING       output entries' information by following\n"
@@ -120,8 +124,22 @@ lustre_predicate_or_action(const char *string)
     case '-':
         switch (string[1]) {
         case 'c':
-            if (!strcmp(&string[2], "omp-start"))
-                return CLT_PREDICATE;
+            if (strncmp(&string[2], "omp-", 4))
+                break;
+
+            switch (string[6]) {
+            case 'e':
+                if (!strcmp(&string[7], "nd"))
+                    return CLT_PREDICATE;
+
+                break;
+            case 's':
+                if (!strcmp(&string[7], "tart"))
+                    return CLT_PREDICATE;
+
+                break;
+            }
+
             break;
         case 'e':
             if (strncmp(&string[2], "xpired", strlen("xpired")) != 0)
@@ -195,6 +213,9 @@ lustre_parse_predicate(struct find_context *ctx, int *arg_idx)
      * precise and meaningul error messages.
      */
     switch (predicate) {
+    case LPRED_COMP_END:
+        filter = comp_end2filter(ctx->argv[++i]);
+        break;
     case LPRED_COMP_START:
         filter = comp_start2filter(ctx->argv[++i]);
         break;
