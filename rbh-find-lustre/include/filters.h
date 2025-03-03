@@ -1,5 +1,5 @@
 /* This file is part of RobinHood 4
- * Copyright (C) 2022 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifer: LGPL-3.0-or-later
@@ -125,5 +125,15 @@ ipool2filter(const char *pool);
  */
 struct rbh_filter *
 comp_start2filter(const char *start);
+
+/**
+ * Build a filter for the -comp-end predicate
+ *
+ * @param pool         a string representing an integer
+ *
+ * @return             a pointer to a newly allocated struct rbh_filter
+ */
+struct rbh_filter *
+comp_end2filter(const char *end);
 
 #endif

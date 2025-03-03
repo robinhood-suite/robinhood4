@@ -1,5 +1,5 @@
 /* This file is part of RobinHood 4
- * Copyright (C) 2022 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifer: LGPL-3.0-or-later
@@ -30,6 +30,8 @@
 #include "filters.h"
 
 static const struct rbh_filter_field predicate2filter_field[] = {
+    [LPRED_COMP_END - LPRED_MIN]       = {.fsentry = RBH_FP_INODE_XATTRS,
+                                          .xattr = "end"},
     [LPRED_COMP_START - LPRED_MIN]     = {.fsentry = RBH_FP_INODE_XATTRS,
                                           .xattr = "begin"},
     [LPRED_FID - LPRED_MIN]            = {.fsentry = RBH_FP_INODE_XATTRS,
@@ -569,10 +571,10 @@ ipool2filter(const char *pool)
                               RBH_RO_CASE_INSENSITIVE);
 }
 
-struct rbh_filter *
-comp_start2filter(const char *start)
+static struct rbh_filter *
+comp2filter(const char *comp, bool is_start_filter)
 {
-    const struct rbh_filter_field *field = get_filter_field(LPRED_COMP_START);
+    const struct rbh_filter_field *field;
     uint64_t low_bound, high_bound;
     struct rbh_filter *filter;
     uint64_t unit_size;
@@ -580,15 +582,20 @@ comp_start2filter(const char *start)
     uint64_t size;
     char operator;
 
-    comma = strchr(start, ',');
+    if (is_start_filter)
+        field = get_filter_field(LPRED_COMP_START);
+    else
+        field = get_filter_field(LPRED_COMP_END);
+
+    comma = strchr(comp, ',');
     if (comma) {
         *comma = '\0';
-        get_size_parameters(start, &operator, &unit_size, &size);
+        get_size_parameters(comp, &operator, &unit_size, &size);
         low_bound = (size - 1) * unit_size;
         get_size_parameters(comma + 1, &operator, &unit_size, &size);
         high_bound = size * unit_size + 1;
     } else {
-        get_size_parameters(start, &operator, &unit_size, &size);
+        get_size_parameters(comp, &operator, &unit_size, &size);
         low_bound = (size - 1) * unit_size;
         high_bound = size * unit_size + 1;
     }
@@ -601,8 +608,37 @@ comp_start2filter(const char *start)
 
     switch (operator) {
     case '-':
-        filter = rbh_filter_compare_uint64_new(RBH_FOP_LOWER_OR_EQUAL, field,
-                                               (size - 1) * unit_size);
+        if (is_start_filter) {
+            filter = rbh_filter_compare_uint64_new(RBH_FOP_LOWER_OR_EQUAL,
+                                                   field,
+                                                   (size - 1) * unit_size);
+        } else {
+            struct rbh_filter *left, *right;
+
+            /* Lustre stores the component end of the last component as -1. This
+             * means that if we query all entries which have a component end of
+             * less than any size, we will get all the entries with components,
+             * as the last one automatically has a component end of -1. To solve
+             * this issue, we simply search for the entries which have a
+             * component end value inferior to the requested one but superior
+             * to 0 (as a file cannot have a component end of 0 anyway).
+             */
+            left = rbh_filter_compare_uint64_new(RBH_FOP_STRICTLY_GREATER,
+                                                 field, 0);
+            if (left == NULL)
+                error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
+                              "rbh_filter_compare_uint64_new");
+
+            right = rbh_filter_compare_uint64_new(RBH_FOP_LOWER_OR_EQUAL, field,
+                                                  (size - 1) * unit_size);
+            if (right == NULL)
+                error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
+                              "rbh_filter_compare_uint64_new");
+
+            filter = filter_array_compose(left, right);
+            filter->array.field = *field;
+        }
+
         break;
     case '+':
         filter = rbh_filter_compare_uint64_new(RBH_FOP_STRICTLY_GREATER, field,
@@ -634,4 +670,16 @@ comp_start2filter(const char *start)
                       "filter_compare_integer");
 
     return filter;
+}
+
+struct rbh_filter *
+comp_start2filter(const char *start)
+{
+    return comp2filter(start, true);
+}
+
+struct rbh_filter *
+comp_end2filter(const char *end)
+{
+    return comp2filter(end, false);
 }
