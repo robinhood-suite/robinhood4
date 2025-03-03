@@ -17,6 +17,7 @@ struct enrich_iter_builder_operations {
 
 struct enrich_iter_builder {
     const char *name;
+    const char *type;
     struct rbh_backend *backend;
     const struct enrich_iter_builder_operations *ops;
     int mount_fd;

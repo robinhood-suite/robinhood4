@@ -36,8 +36,6 @@ struct lustre_changelog_iterator {
     uint64_t last_changelog_index;
 
     FILE *dump_file;
-
-    const char *retention_attribute;
 };
 
 static inline time_t
@@ -555,37 +553,24 @@ build_create_inode_events(struct changelog_rec *record, struct rbh_id *id,
 
 static int
 build_setxattr_event(struct changelog_rec *record, struct rbh_id *id,
-                     struct rbh_iterator **fsevents_iterator,
-                     const char *retention_attribute)
+                     struct rbh_iterator **fsevents_iterator)
 {
     char *xattr = changelog_rec_xattr(record)->cr_xattr;
     struct rbh_fsevent *new_events;
     uint32_t statx_enrich_mask = 0;
-    bool is_retention_attr;
 
-    /* If the attribute to enrich is the retention one, the Lustre enricher
-     * already handles that, so no need to use the Posix enricher
-     */
-    is_retention_attr = (strcmp(xattr, retention_attribute) == 0);
-    if (!is_retention_attr)
-        new_events = fsevent_list_alloc(2, id);
-    else
-        new_events = fsevent_list_alloc(1, id);
+    new_events = fsevent_list_alloc(2, id);
 
     statx_enrich_mask = RBH_STATX_CTIME_SEC | RBH_STATX_CTIME_NSEC;
     if (build_statx_event(statx_enrich_mask, &new_events[0], NULL))
         return -1;
 
-    if (!is_retention_attr) {
-        new_events[1].type = RBH_FET_XATTR;
-        new_events[1].xattrs = build_enrich_map(fill_inode_xattrs, xattr);
-        if (new_events[1].xattrs.pairs == NULL)
-            return -1;
+    new_events[1].type = RBH_FET_XATTR;
+    new_events[1].xattrs = build_enrich_map(fill_inode_xattrs, xattr);
+    if (new_events[1].xattrs.pairs == NULL)
+        return -1;
 
-        *fsevents_iterator = rbh_iter_array(new_events, sizeof(*new_events), 2);
-    } else {
-        *fsevents_iterator = rbh_iter_array(new_events, sizeof(*new_events), 1);
-    }
+    *fsevents_iterator = rbh_iter_array(new_events, sizeof(*new_events), 2);
 
     return 0;
 }
@@ -1066,8 +1051,7 @@ retry:
         rc = build_create_inode_events(record, id, &records->fsevents_iterator);
         break;
     case CL_SETXATTR:
-        rc = build_setxattr_event(record, id, &records->fsevents_iterator,
-                                  records->retention_attribute);
+        rc = build_setxattr_event(record, id, &records->fsevents_iterator);
         break;
     case CL_SETATTR:
         statx_enrich_mask = RBH_STATX_ALL;
@@ -1241,11 +1225,6 @@ lustre_changelog_iter_init(struct lustre_changelog_iterator *events,
         if (events->dump_file == NULL)
             error(EXIT_FAILURE, errno, "Failed to open the dump file");
     }
-
-    events->retention_attribute = rbh_config_get_string(XATTR_EXPIRES_KEY,
-                                                        "user.expires");
-    if (events->retention_attribute == NULL)
-        error(EXIT_FAILURE, errno, "Failed to get retention attribute");
 }
 
 struct lustre_source {
