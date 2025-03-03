@@ -7,9 +7,10 @@
 librbh_posix = library(
     'rbh-posix',
     sources: [
+        'extension.c',
         'fts_iter.c',
-        'posix.c',
         'plugin.c',
+        'posix.c',
         'xattrs_mapping.c'
     ],
     version: librbh_posix_version, # defined in include/robinhood/backends
@@ -17,4 +18,9 @@ librbh_posix = library(
     include_directories: rbh_include,
     install: true,
     c_args: '-DHAVE_CONFIG_H',
+)
+
+librbh_posix_dep = declare_dependency(
+    link_with: librbh_posix,
+    include_directories: rbh_include
 )

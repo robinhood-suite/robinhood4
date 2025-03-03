@@ -49,6 +49,7 @@ fsevents_lib = static_library(
         'src/deduplicator/rbh_fsevent_utils.c',
         'src/enricher.c',
         'src/enrichers/posix/posix.c',
+        'src/enrichers/posix/retention.c',
         'src/sources/yaml_file.c',
         'src/sources/file.c',
         'src/sources/hestia.c',
@@ -58,7 +59,7 @@ fsevents_lib = static_library(
     ] + extra_sources,
     include_directories: includes,
     dependencies: [
-        librobinhood_dep, miniyaml, liblustre,
+        librobinhood_dep, librbh_posix_dep, miniyaml, liblustre,
     ] + extra_dependencies,
     c_args: ['-DHAVE_CONFIG_H'] + extra_args,
 )
