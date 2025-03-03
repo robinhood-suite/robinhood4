@@ -100,7 +100,7 @@ usage(void)
         "    -false         -true\n"
         "    -fstype        -xtype\n"
         "    -readable      -writable    -executable\n"
-        "    -iwholename    -ilname      -wholename     -lname\n"
+        "    -iwholename    -wholename\n"
         "    -inum\n"
         "    -used\n"
         "    -context\n"

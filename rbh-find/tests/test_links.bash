@@ -35,11 +35,53 @@ test_links()
         difflines "/" "/blob" "/soft_link"
 }
 
+test_lname()
+{
+    touch file
+    touch blob
+
+    ln -s file file_link
+    ln -s file file_link_bis
+    ln -s blob blob_link
+
+    rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
+
+    rbh_find "rbh:mongo:$testdb" -lname file | sort |
+        difflines "/file_link" "/file_link_bis"
+
+    rbh_find "rbh:mongo:$testdb" -lname toto | sort | difflines
+
+    rbh_find "rbh:mongo:$testdb" -lname '*' | sort |
+        difflines "/blob_link" "/file_link" "/file_link_bis"
+
+    rbh_find "rbh:mongo:$testdb" -not -lname file | sort |
+        difflines "/" "/blob" "/blob_link" "/file"
+
+    rbh_find "rbh:mongo:$testdb" -lname blob -o -lname file | sort |
+        difflines "/blob_link" "/file_link" "/file_link_bis"
+}
+
+test_ilname()
+{
+    touch file
+    touch blob
+
+    ln -s file file_link
+    ln -s file file_link_bis
+    ln -s blob blob_link
+
+    rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
+
+    rbh_find "rbh:mongo:$testdb" -lname Blob | sort | difflines
+    rbh_find "rbh:mongo:$testdb" -ilname Blob | sort |
+        difflines "/blob_link"
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
-declare -a tests=(test_links)
+declare -a tests=(test_links test_lname test_ilname)
 
 tmpdir=$(mktemp --directory)
 trap -- "rm -rf '$tmpdir'"  EXIT
