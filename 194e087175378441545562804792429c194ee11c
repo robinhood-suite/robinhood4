@@ -141,6 +141,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "946fe342_addd68d9",
+        "filename": "rbh-report/tests/test_alias.bash",
+        "patchSetId": 8
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-03-03T15:18:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "80aba65b_1e7c0c0d",
+      "range": {
+        "startLine": 23,
+        "startChar": 21,
+        "endLine": 23,
+        "endChar": 31
+      },
+      "revId": "194e087175378441545562804792429c194ee11c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1e601ce7_242976bd",
@@ -154,6 +178,30 @@
       "writtenOn": "2025-02-28T07:49:33Z",
       "side": 1,
       "message": "sugest: `--group-by` or `--output` to see the difference between alias a1 and a2",
+      "range": {
+        "startLine": 56,
+        "startChar": 2,
+        "endLine": 56,
+        "endChar": 16
+      },
+      "revId": "194e087175378441545562804792429c194ee11c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "96a57b22_00f4e646",
+        "filename": "rbh-report/tests/test_alias.bash",
+        "patchSetId": 8
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-03-03T15:18:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1e601ce7_242976bd",
       "range": {
         "startLine": 56,
         "startChar": 2,
