@@ -18,16 +18,16 @@ enrich_iter_builder_from_backend(const char *type,
                                  struct rbh_backend *backend,
                                  const char *mount_path)
 {
-    if (!strcmp(type, "posix"))
-        return posix_enrich_iter_builder(backend, mount_path);
-#ifdef HAVE_LUSTRE
-    else if (!strcmp(type, "lustre"))
-        return lustre_enrich_iter_builder(backend, mount_path);
-#endif
+    switch (backend->id) {
+    case RBH_BI_POSIX:
+        return posix_enrich_iter_builder(backend, type, mount_path);
 #ifdef HAVE_HESTIA
-    else if (!strcmp(type, "hestia"))
+    case RBH_BI_HESTIA:
         return hestia_enrich_iter_builder(backend);
 #endif
+    default:
+        break;
+    }
 
     error(EX_USAGE, EINVAL, "enricher type '%s' not allowed", type);
     __builtin_unreachable();

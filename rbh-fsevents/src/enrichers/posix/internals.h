@@ -4,16 +4,47 @@
 #define ENRICHER_INTERNALS_H
 
 #include <robinhood.h>
+#include <robinhood/backends/posix_extension.h>
 
 struct enricher;
 
+enum enrich_type {
+    ET_INVAL, /* don't let 0 be a valid value to avoid 0 initialized struct's
+               * to be misinterpreted as statx requests.
+               */
+    ET_STATX,
+    ET_XATTR,
+};
+
+struct enrich_request {
+    enum enrich_type type;
+    union {
+        const struct rbh_value_pair *xattr;
+        uint64_t statx_mask;
+    };
+};
+
 typedef int (*enrich_xattr_t)(struct enricher *enricher,
-                              const struct rbh_value_pair *xattr
+                              const struct enrich_request *req,
+                              struct rbh_posix_enrich_ctx *ctx,
+                              const struct rbh_fsevent *original
                               );
 
 struct posix_enricher {
     enrich_xattr_t enrich_xattr;
 };
+
+int
+lustre_enrich_fsevent(struct enricher *enricher,
+                      const struct enrich_request *req,
+                      struct rbh_posix_enrich_ctx *ctx,
+                      const struct rbh_fsevent *original);
+
+int
+retention_enrich_fsevent(struct enricher *enricher,
+                         const struct enrich_request *req,
+                         struct rbh_posix_enrich_ctx *ctx,
+                         const struct rbh_fsevent *original);
 
 struct enricher {
     struct rbh_iterator iterator;
@@ -47,10 +78,12 @@ int posix_enrich(struct enricher *enricher,
                  struct rbh_value_pair **pairs,
                  size_t *pair_count,
                  struct rbh_fsevent *enriched,
-                 const struct rbh_fsevent *original);
+                 const struct rbh_fsevent *original,
+                 struct rbh_posix_enrich_ctx *ctx);
 
 struct rbh_iterator *
-posix_iter_enrich(struct rbh_iterator *fsevents, int mount_fd,
+posix_iter_enrich(struct rbh_backend *backend, const char *type,
+                  struct rbh_iterator *fsevents, int mount_fd,
                   const char *mount_path, bool skip_error);
 
 void
@@ -64,7 +97,9 @@ posix_enrich_iter_builder_destroy(void *_enrich);
  *----------------------------------------------------------------------------*/
 
 struct enrich_iter_builder *
-posix_enrich_iter_builder(struct rbh_backend *backend, const char *mount_path);
+posix_enrich_iter_builder(struct rbh_backend *backend,
+                          const char *type,
+                          const char *mount_path);
 
 #ifdef HAVE_LUSTRE
 struct enrich_iter_builder *
