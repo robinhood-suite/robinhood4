@@ -43,6 +43,20 @@ regex2filter(enum predicate predicate, const char *shell_regex,
              unsigned int regex_options);
 
 /**
+ * lname2filter - build a filter from a shell regex on symlink target
+ *
+ * @param predicate     a predicate
+ * @param shell_regex   a shell regex
+ * @param regex_options an ORred combination of enum filter_regex_option
+ *
+ * @return              a pointer to a newly allocated struct filter, or NULL on
+ *                      error
+ */
+struct rbh_filter *
+lname2filter(enum predicate predicate, const char *shell_regex,
+             unsigned int regex_options);
+
+/**
  * numeric2filter - build a filter from a string representing a uint64_t value.
  * If the given value is preceded with a '+' or '-', will filter entries
  * with \p field greater or lower than \p _numeric.
