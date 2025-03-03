@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f7447615_7a383b2a",
+        "filename": "librobinhood/include/robinhood/plugins/backend.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-03-03T13:07:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a39e9226_22ae5996",
+      "range": {
+        "startLine": 24,
+        "startChar": 4,
+        "endLine": 24,
+        "endChar": 23
+      },
+      "revId": "2133cba533e49c60d82da4db4831587f9df18d92",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0efc8c99_9b7c2bd0",
