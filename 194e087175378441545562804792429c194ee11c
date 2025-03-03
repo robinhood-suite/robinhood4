@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f024491_5cc9706a",
+        "filename": "rbh-report/rbh-report.c",
+        "patchSetId": 8
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-03-03T15:12:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e206ebb8_dc5cbbc4",
+      "range": {
+        "startLine": 153,
+        "startChar": 8,
+        "endLine": 155,
+        "endChar": 81
+      },
+      "revId": "194e087175378441545562804792429c194ee11c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "571119fa_ac3b8e74",
@@ -41,6 +65,24 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cdd828e0_7a8e0396",
+        "filename": "rbh-report/rbh-report.c",
+        "patchSetId": 8
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-03-03T15:12:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "571119fa_ac3b8e74",
+      "revId": "194e087175378441545562804792429c194ee11c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "113b0f29_72da2f0a",
@@ -54,6 +96,24 @@
       "writtenOn": "2025-02-28T07:49:33Z",
       "side": 1,
       "message": "defect? you need to open the config no ?",
+      "revId": "194e087175378441545562804792429c194ee11c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2616a2dc_f9cbd35c",
+        "filename": "rbh-report/rbh-report.c",
+        "patchSetId": 8
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-03-03T15:12:19Z",
+      "side": 1,
+      "message": "The config is loaded previously with the function : `import_configuration_file`. we use x or config in LONG OPTIONS so that the parsing does not fail even when crossing --config or -x",
+      "parentUuid": "113b0f29_72da2f0a",
       "revId": "194e087175378441545562804792429c194ee11c",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
