@@ -22,6 +22,30 @@
       },
       "revId": "66dad50cb1225014442f4632d3af76d830c81042",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7fb6417e_1aa5c2ea",
+        "filename": "librobinhood/src/backends/hestia/hestia.c",
+        "patchSetId": 7
+      },
+      "lineNbr": 452,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-03-03T13:14:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "aa01f1f3_a92b79c2",
+      "range": {
+        "startLine": 452,
+        "startChar": 0,
+        "endLine": 452,
+        "endChar": 4
+      },
+      "revId": "66dad50cb1225014442f4632d3af76d830c81042",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
