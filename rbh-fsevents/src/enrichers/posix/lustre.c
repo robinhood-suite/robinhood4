@@ -127,7 +127,7 @@ enrich_lustre(struct rbh_backend *backend, int mount_fd,
         &ctx, pairs, available_pairs
         );
     if (size != -1) {
-        size_t tmp;
+        int tmp;
 
         /* FIXME for now, the retention is hardcoded in the lustre enricher.
          * rbh-fsevents needs some rework to be able to create enrichers from
@@ -193,7 +193,7 @@ lustre_enrich(struct enricher *enricher, const struct rbh_value_pair *attr,
     }
 
     return posix_enrich(enricher, attr, &pairs, &enricher->pair_count,
-                        &enricher->fsevent, original);
+                        &enricher->fsevent, original, NULL);
 }
 
 static int
@@ -280,14 +280,13 @@ static struct rbh_iterator *
 lustre_iter_enrich(struct rbh_backend *backend, struct rbh_iterator *fsevents,
                    int mount_fd, const char *mount_path, bool skip_error)
 {
-    struct rbh_iterator *iter = posix_iter_enrich(fsevents, mount_fd,
+    struct rbh_iterator *iter = posix_iter_enrich(backend, NULL, fsevents, mount_fd,
                                                   mount_path, skip_error);
     struct enricher *enricher = (struct enricher *)iter;
 
     if (iter == NULL)
         return NULL;
 
-    enricher->backend = backend;
     enricher->iterator.ops = &LUSTRE_ENRICHER_ITER_OPS;
 
     return iter;
@@ -340,4 +339,76 @@ lustre_enrich_iter_builder(struct rbh_backend *backend, const char *mount_path)
         error(EXIT_FAILURE, ENOMEM, "strdup: %s", mount_path);
 
     return builder;
+}
+
+static int
+lustre_enrich_xattr(struct enricher *enricher,
+                    const struct rbh_value_pair *xattr,
+                    struct rbh_posix_enrich_ctx *ctx,
+                    const struct rbh_fsevent *original)
+{
+    static const int STATX_FLAGS = AT_STATX_FORCE_SYNC | AT_EMPTY_PATH
+                                 | AT_NO_AUTOMOUNT | AT_SYMLINK_NOFOLLOW;
+    struct rbh_value_pair *pairs;
+    size_t n_xattrs;
+
+    n_xattrs = enricher->fsevent.xattrs.count;
+    pairs = enricher->pairs;
+
+    if (!strcmp(xattr->key, "lustre")) {
+        int rc;
+
+        rc = rbh_posix_enrich_open_by_id(ctx, enricher->mount_fd,
+                                         &original->id);
+        if (rc == -1)
+            return rc;
+
+        rc = rbh_posix_enrich_statx(ctx, STATX_FLAGS, RBH_STATX_MODE,
+                                    &enricher->statx);
+        if (rc == -1)
+            return rc;
+
+        return rbh_backend_get_attribute(enricher->backend,
+                                         RBH_LEF_LUSTRE | RBH_LEF_ALL_NOFID,
+                                         ctx,
+                                         &pairs[n_xattrs],
+                                         enricher->pair_count - n_xattrs);
+
+    } else if (!strcmp(xattr->key, "path")) {
+        struct rbh_value *value;
+        int size;
+
+        size = enrich_path(enricher->mount_path, original->link.parent_id,
+                           original->link.name, ctx->values, &value);
+        if (size == -1)
+            return -1;
+
+        pairs[enricher->fsevent.xattrs.count].key = "path";
+        pairs[enricher->fsevent.xattrs.count].value = value;
+
+        return size;
+    } else {
+        errno = ENOTSUP;
+        return -1;
+    }
+}
+
+int
+lustre_enrich_fsevent(struct enricher *enricher,
+                      const struct enrich_request *req,
+                      struct rbh_posix_enrich_ctx *ctx,
+                      const struct rbh_fsevent *original)
+{
+    switch (req->type) {
+    case ET_STATX:
+        errno = ENOTSUP;
+        return -1;
+    case ET_XATTR:
+        return lustre_enrich_xattr(enricher, req->xattr, ctx, original);
+    case ET_INVAL:
+        errno = ENOTSUP;
+        return -1;
+    }
+
+    __builtin_unreachable();
 }
