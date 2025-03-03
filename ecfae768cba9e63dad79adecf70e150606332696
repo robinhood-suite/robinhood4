@@ -24,6 +24,54 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d1c30706_f41f3489",
+        "filename": "rbh-fsevents/rbh-fsevents.c",
+        "patchSetId": 8
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-03-03T15:12:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e388a37d_7b2079b6",
+      "range": {
+        "startLine": 71,
+        "startChar": 8,
+        "endLine": 72,
+        "endChar": 75
+      },
+      "revId": "ecfae768cba9e63dad79adecf70e150606332696",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d597c87b_d5edcf6b",
+        "filename": "rbh-fsevents/rbh-fsevents.c",
+        "patchSetId": 8
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-03-03T15:12:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e388a37d_7b2079b6",
+      "range": {
+        "startLine": 71,
+        "startChar": 8,
+        "endLine": 72,
+        "endChar": 75
+      },
+      "revId": "ecfae768cba9e63dad79adecf70e150606332696",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fb02b623_6deb9ee5",
@@ -37,6 +85,30 @@
       "writtenOn": "2025-02-25T08:19:35Z",
       "side": 1,
       "message": "defect: you forgot to add the dry-run argument",
+      "range": {
+        "startLine": 449,
+        "startChar": 41,
+        "endLine": 449,
+        "endChar": 52
+      },
+      "revId": "ecfae768cba9e63dad79adecf70e150606332696",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ca1ac0a_afd1bc02",
+        "filename": "rbh-fsevents/rbh-fsevents.c",
+        "patchSetId": 8
+      },
+      "lineNbr": 449,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-03-03T15:12:22Z",
+      "side": 1,
+      "message": "discussed in person",
+      "parentUuid": "fb02b623_6deb9ee5",
       "range": {
         "startLine": 449,
         "startChar": 41,
