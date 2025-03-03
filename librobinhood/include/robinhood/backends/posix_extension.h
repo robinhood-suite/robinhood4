@@ -73,6 +73,15 @@ struct rbh_posix_enrich_ctx {
     struct rbh_sstack *values;
 };
 
+int
+rbh_posix_enrich_open_by_id(struct rbh_posix_enrich_ctx *ctx,
+                            int parent_fd,
+                            const struct rbh_id *id);
+
+int
+rbh_posix_enrich_statx(struct rbh_posix_enrich_ctx *ctx, int flags,
+                       unsigned int mask, struct rbh_statx *restrict statxbuf);
+
 struct posix_backend {
     struct rbh_backend backend;
     struct rbh_mut_iterator *(*iter_new)(const char *, const char *, int);
@@ -103,6 +112,10 @@ posix_iterator_setup(struct posix_iterator *iter,
                      const char *root,
                      const char *entry,
                      int statx_sync_type);
+
+int
+rbh_posix_enrichers_list(struct rbh_config *config, const char *type,
+                         struct rbh_value *enrichers);
 
 struct rbh_id *
 id_from_fd(int fd);

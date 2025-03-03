@@ -24,9 +24,11 @@
 
 #define _debug(file, line, func, fmt, ...)          \
     ({                         \
+      int save_errno = errno; \
       fprintf(stderr, "%s:%d:%s: ", (file), (line), (func)); \
       fprintf(stderr, fmt __VA_OPT__(,) __VA_ARGS__); \
       fprintf(stderr, "\n");   \
+      errno = save_errno; \
     })
 
 #define debug(fmt, ...) _debug(__FILE__, __LINE__, __func__, fmt, __VA_ARGS__)

@@ -160,7 +160,7 @@ find_attribute()
     IFS=$old_IFS
     local res="$(count_documents "$output")"
     [[ "$res" == "1" ]] && return 0 ||
-        error "No entry found with filter '$output'"
+        error "No entry found with filter '$output' (in $(caller))"
 }
 
 difflines()

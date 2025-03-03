@@ -1179,6 +1179,20 @@ load_enrichers(const struct rbh_backend_plugin *self,
     return 0;
 }
 
+int
+rbh_posix_enrichers_list(struct rbh_config *config, const char *type,
+                         struct rbh_value *enrichers)
+{
+    char *key;
+    int rc;
+
+    key = config_enrichers_key(config, type);
+    rc = rbh_config_find(key, enrichers, RBH_VT_SEQUENCE);
+    free(key);
+
+    return rc;
+}
+
 static int
 load_posix_extensions(const struct rbh_backend_plugin *self,
                       struct posix_backend *posix,
@@ -1209,9 +1223,7 @@ load_posix_extensions(const struct rbh_backend_plugin *self,
         return -1;
     }
 
-    key = config_enrichers_key(config, type);
-    rc = rbh_config_find(key, &enrichers, RBH_VT_SEQUENCE);
-    free(key);
+    rc = rbh_posix_enrichers_list(config, type, &enrichers);
     switch (rc) {
     case KPR_FOUND:
         if (load_enrichers(self, posix, &enrichers, type) == -1)

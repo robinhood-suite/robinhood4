@@ -65,6 +65,7 @@ test_retention()
 
     truncate -s 300 $entry
 
+    lfs changelog "$LUSTRE_MDT" "$userid"
     invoke_rbh-fsevents
 
     verify_lustre "$entry"
