@@ -45,10 +45,12 @@ static const struct rbh_filter_field predicate2filter_field[] = {
     [PRED_BTIME]    = {.fsentry = RBH_FP_STATX, .statx = RBH_STATX_BTIME_SEC},
     [PRED_CMIN]     = {.fsentry = RBH_FP_STATX, .statx = RBH_STATX_CTIME_SEC},
     [PRED_CTIME]    = {.fsentry = RBH_FP_STATX, .statx = RBH_STATX_CTIME_SEC},
+    [PRED_ILNAME]   = {.fsentry = RBH_FP_SYMLINK},
     [PRED_INAME]    = {.fsentry = RBH_FP_NAME},
     [PRED_GID]      = {.fsentry = RBH_FP_STATX, .statx = RBH_STATX_GID},
     [PRED_GROUP]    = {.fsentry = RBH_FP_STATX, .statx = RBH_STATX_GID},
     [PRED_LINKS]    = {.fsentry = RBH_FP_STATX, .statx = RBH_STATX_NLINK},
+    [PRED_LNAME]    = {.fsentry = RBH_FP_SYMLINK},
     [PRED_MMIN]     = {.fsentry = RBH_FP_STATX, .statx = RBH_STATX_MTIME_SEC},
     [PRED_MTIME]    = {.fsentry = RBH_FP_STATX, .statx = RBH_STATX_MTIME_SEC},
     [PRED_NAME]     = {.fsentry = RBH_FP_NAME},
@@ -80,6 +82,30 @@ regex2filter(enum predicate predicate, const char *regex,
 {
     return shell_regex2filter(&predicate2filter_field[predicate], regex,
                               regex_options);
+}
+
+struct rbh_filter *
+lname2filter(enum predicate predicate, const char *regex,
+             unsigned int regex_options)
+{
+    struct rbh_filter *filter_type, *filter_regex;
+    struct rbh_filter *filter;
+
+    filter_type = filetype2filter("l");
+    if (filter_type == NULL)
+        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
+                      "filetype2filter");
+
+    filter_regex = regex2filter(predicate, regex, regex_options);
+    if (filter_type == NULL)
+        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
+                      "regex2filter");
+
+    filter = filter_and(filter_type, filter_regex);
+    if (filter == NULL)
+        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__, "filter_and");
+
+    return filter;
 }
 
 static struct rbh_filter *
