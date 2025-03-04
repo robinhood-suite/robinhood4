@@ -792,25 +792,70 @@ mongo_backend_report(void *backend, const struct rbh_filter *filter,
      |                              get_info()                            |
      *--------------------------------------------------------------------*/
 
+int32_t
+get_collection_size(const struct mongo_backend *mongo) {
+    bson_error_t error;
+    bson_iter_t iter;
+    bson_t *command;
+    bson_t reply;
+    int32_t size;
+
+    command = BCON_NEW("collStats", BCON_UTF8("entries"));
+
+    if (mongoc_collection_command_simple(mongo->entries, command, NULL, &reply,
+                                         &error)) {
+        if (bson_iter_init(&iter, &reply) &&
+            bson_iter_find(&iter, "size")) {
+            if (BSON_ITER_HOLDS_INT32(&iter)) {
+                size = bson_iter_int32(&iter);
+                if (size >= 1073741824) //GB
+                    printf("Entries size: %.2d GB\n", size / 1073741824);
+                else if (size >= 1048576) //MB
+                    printf("Entries size: %.2d MB\n", size / 1048576);
+                else if (size >= 1024) //KB
+                    printf("Entries size: %.2d KB\n", size / 1024);
+                else {
+                    printf("Entries size: %d bytes\n", size);
+                }
+            }
+        }
+    }
+
+    bson_destroy(command);
+    bson_destroy(&reply);
+    return size;
+}
+
+
 void
 mongo_backend_get_info(void *backend, enum rbh_get_info info)
 {
     struct mongo_backend *mongo = backend;
 
-    bson_error_t error;
-    int64_t count;
-    bson_t* opts = BCON_NEW("skip", BCON_INT64(5));
+    mongoc_cursor_t *cursor;
+    const bson_t *doc;
+    bson_t *pipeline;
+    char *json;
 
     switch (info){
     case RBH_INFO_SIZE:
-        count = mongoc_collection_estimated_document_count(mongo->entries, opts,
-                                                           NULL, NULL, &error);
-        bson_destroy(opts);
+        get_collection_size(mongo);
+        break;
+    case RBH_INFO_FIRST_SYNC:
+        pipeline = BCON_NEW("pipeline", "[", "]");
 
-        if (count < 0)
-            fprintf(stderr, "Count failed: %s\n", error.message);
+        cursor = mongoc_collection_aggregate(mongo->entries, MONGOC_QUERY_NONE,
+                                             pipeline, NULL, NULL);
 
-        printf("%" PRId64 "documents counted.\n", count);
+        while (mongoc_cursor_next(cursor, &doc)) {
+            json = bson_as_canonical_extended_json(doc, NULL);
+            printf("Full document: \n");
+            printf("%s\n", json);
+            bson_free(json);
+        }
+
+        bson_destroy(pipeline);
+        mongoc_cursor_destroy(cursor);
         break;
     default:
         return;
