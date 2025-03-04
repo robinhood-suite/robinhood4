@@ -247,7 +247,6 @@ backend_size(const struct rbh_backend_plugin *plugin, enum rbh_info size)
     const uint8_t info = plugin->info;
 
     if (info & RBH_INFO_SIZE) {
-        printf("This is the size of the %s backend: \n", from->name);
         rbh_backend_get_info(from, info);
     } else {
         printf("Size unavailable for %s backend, Please refer to the helper\n",
@@ -342,10 +341,8 @@ main(int argc, char **argv)
         backend_size(plugin, RBH_INFO_SIZE);
     }
     if (flags & RBH_FIRST_SYNC_FLAG) {
-        printf("First sync of %s: \n", from->name);
     }
     if (flags & RBH_LAST_SYNC_FLAG) {
-        printf("Last sync of %s: \n", from->name);
     }
     if (!flags) {
         info_translate(plugin);
