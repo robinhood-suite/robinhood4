@@ -47,6 +47,16 @@ struct rbh_filter *
 ost_index2filter(const char *ost_index);
 
 /**
+ * Build a filter for the -mdt-index predicate
+ *
+ * @param mdt_index    a string representing a single integer
+ *
+ * @return             a pointer to a newly allocated struct rbh_filter
+ */
+struct rbh_filter *
+mdt_index2filter(const char *mdt_index);
+
+/**
  * Build a filter for the -stripe-count predicate
  *
  * @param stripe_count a string representing a number
