@@ -101,7 +101,11 @@ capabilities_translate(const struct rbh_backend_plugin *plugin)
 static void
 info_translate(const struct rbh_backend_plugin *plugin)
 {
+    const uint8_t info = plugin->info;
+
     printf("Info of %s:\n", plugin->plugin.name);
+    if (info & RBH_INFO_SIZE)
+        printf("- size:  -s   get the size of the given backend\n");
 }
 
 static int
@@ -111,6 +115,7 @@ help()
         "Usage:"
         "  %s <URI> -uri_arguments   Show info about the given URI\n"
         "URI arguments:\n"
+        "  -s --size                 Show the size of a given backend\n\n"
         "Arguments:\n"
         "Usage:"
         "  %s -arguments General informations about rbh-info command\n"
@@ -240,6 +245,21 @@ rbh_backend_list()
     return 0;
 }
 
+static int
+backend_size(const struct rbh_backend_plugin *plugin, enum rbh_info size)
+{
+    const uint8_t info = plugin->info;
+
+    if (info & RBH_INFO_SIZE) {
+        rbh_backend_get_info(from, info);
+    } else {
+        printf("Size unavailable for %s backend, Please refer to the helper\n",
+               from->name);
+        return 0;
+    }
+    return 0;
+}
+
 int
 main(int argc, char **argv)
 {
@@ -276,7 +296,7 @@ main(int argc, char **argv)
         return EINVAL;
     }
 
-    while ((option = getopt_long(argc, argv, "hl", LONG_OPTIONS,
+    while ((option = getopt_long(argc, argv, "hls", LONG_OPTIONS,
                                  NULL)) != -1) {
         switch (option) {
         case 'h':
@@ -285,6 +305,9 @@ main(int argc, char **argv)
         case 'l':
             rbh_backend_list();
             return 0;
+        case 's':
+            flags |= RBH_SIZE_FLAG;
+            break;
         default :
             fprintf(stderr, "Unrecognized option\n");
             help();
@@ -312,7 +335,9 @@ main(int argc, char **argv)
         fprintf(stderr, "This backend does not exist\n");
         return EINVAL;
     }
-
+    if (flags & RBH_SIZE_FLAG) {
+        backend_size(plugin, RBH_INFO_SIZE);
+    }
     if (!flags) {
         info_translate(plugin);
         return 0;
