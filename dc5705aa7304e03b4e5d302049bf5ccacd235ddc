@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f804fc55_391f1880",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-03-04T12:24:06Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 7,
+        "startChar": 23,
+        "endLine": 7,
+        "endChar": 29
+      },
+      "revId": "dc5705aa7304e03b4e5d302049bf5ccacd235ddc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "34b1b7eb_2d30bc23",
+        "filename": "librobinhood/src/backends/posix/posix.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-03-04T12:24:06Z",
+      "side": 1,
+      "message": "comment: it looks like a bugfix, and not an adjustment",
+      "range": {
+        "startLine": 262,
+        "startChar": 8,
+        "endLine": 262,
+        "endChar": 70
+      },
+      "revId": "dc5705aa7304e03b4e5d302049bf5ccacd235ddc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d716224d_8e2a06c2",
+        "filename": "podman/Dockerfile",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-03-04T12:24:06Z",
+      "side": 1,
+      "message": "minor: bad comment",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 54
+      },
+      "revId": "dc5705aa7304e03b4e5d302049bf5ccacd235ddc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "192c351e_4ec028a1",
+        "filename": "rbh-find/tests/test_printf.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-03-04T12:24:06Z",
+      "side": 1,
+      "message": "question: can you explain this? well I understand this will be captured by the test manager, but why would it fail? I saw that",
+      "range": {
+        "startLine": 222,
+        "startChar": 21,
+        "endLine": 222,
+        "endChar": 32
+      },
+      "revId": "dc5705aa7304e03b4e5d302049bf5ccacd235ddc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
