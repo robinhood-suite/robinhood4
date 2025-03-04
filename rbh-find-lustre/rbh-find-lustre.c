@@ -69,6 +69,7 @@ usage(void)
         "                         of their components. If given default, will\n"
         "                         fetch the default pattern of the current\n"
         "                         Lustre FS and use it for filtering.\n"
+        "    -mdt-index INDEX     filter entries based on the MDT they are on.\n"
         "    -pool NAME           filter entries based on the pool their\n"
         "                         components belong to (case sensitive, regex\n"
         "                         allowed).\n"
@@ -152,6 +153,10 @@ lustre_predicate_or_action(const char *string)
             if (!strcmp(&string[2], "ayout-pattern"))
                 return CLT_PREDICATE;
             break;
+        case 'm':
+            if (!strcmp(&string[2], "dt-index"))
+                return CLT_PREDICATE;
+            break;
         case 'o':
             if (!strcmp(&string[2], "st"))
                 return CLT_PREDICATE;
@@ -218,6 +223,9 @@ lustre_parse_predicate(struct find_context *ctx, int *arg_idx)
         break;
     case LPRED_LAYOUT_PATTERN:
         filter = layout_pattern2filter(ctx->argv[++i]);
+        break;
+    case LPRED_MDT_INDEX:
+        filter = mdt_index2filter(ctx->argv[++i]);
         break;
     case LPRED_OST_INDEX:
         filter = ost_index2filter(ctx->argv[++i]);
