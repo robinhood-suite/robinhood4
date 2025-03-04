@@ -245,7 +245,6 @@ backend_size(const struct rbh_backend_plugin *plugin, enum rbh_get_info size)
     const uint8_t info = plugin->info;
 
     if (info & RBH_INFO_SIZE) {
-        printf("This is the size of the %s backend: \n", from->name);
         rbh_backend_get_info(from, info);
     } else {
         printf("Size not available for %s backend, Please refer to the helper\n"
