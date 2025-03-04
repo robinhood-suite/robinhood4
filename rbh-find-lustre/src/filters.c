@@ -36,10 +36,12 @@ static const struct rbh_filter_field predicate2filter_field[] = {
                                           .xattr = "fid"},
     [LPRED_HSM_STATE - LPRED_MIN]      = {.fsentry = RBH_FP_INODE_XATTRS,
                                           .xattr = "hsm_state"},
-    [LPRED_OST_INDEX - LPRED_MIN]      = {.fsentry = RBH_FP_INODE_XATTRS,
-                                          .xattr = "ost"},
     [LPRED_LAYOUT_PATTERN - LPRED_MIN] = {.fsentry = RBH_FP_INODE_XATTRS,
                                           .xattr = "pattern"},
+    [LPRED_MDT_INDEX - LPRED_MIN]      = {.fsentry = RBH_FP_INODE_XATTRS,
+                                          .xattr = "mdt_index"},
+    [LPRED_OST_INDEX - LPRED_MIN]      = {.fsentry = RBH_FP_INODE_XATTRS,
+                                          .xattr = "ost"},
     [LPRED_POOL - LPRED_MIN]           = {.fsentry = RBH_FP_INODE_XATTRS,
                                           .xattr = "pool"},
     [LPRED_STRIPE_COUNT - LPRED_MIN]   = {.fsentry = RBH_FP_INODE_XATTRS,
@@ -243,6 +245,29 @@ ost_index2filter(const char *ost_index)
     if (filter == NULL)
         error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
                       "ost_index2filter");
+
+    return filter;
+}
+
+struct rbh_filter *
+mdt_index2filter(const char *mdt_index)
+{
+    struct rbh_filter *filter;
+    uint64_t index;
+    int rc;
+
+    if (!isdigit(*mdt_index))
+        error(EX_USAGE, 0, "invalid mdt index: `%s'", mdt_index);
+
+    rc = str2uint64_t(mdt_index, &index);
+    if (rc)
+        error(EX_USAGE, errno, "invalid mdt index: `%s'", mdt_index);
+
+    filter = rbh_filter_compare_uint64_new(
+               RBH_FOP_EQUAL, get_filter_field(LPRED_MDT_INDEX), index);
+    if (filter == NULL)
+        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
+                      "mdt_index2filter");
 
     return filter;
 }
