@@ -6,6 +6,7 @@
 
 integration_tests = [
   'test_actions',
+  'test_blocks',
   'test_empty',
   'test_links',
   'test_newer',

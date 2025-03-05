@@ -1,5 +1,5 @@
 /* This file is part of RobinHood 4
- * Copyright (C) 2019 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifer: LGPL-3.0-or-later
@@ -40,6 +40,10 @@ str2predicate(const char *string)
         break;
     case 'b':
         switch (string[2]) {
+        case 'l':
+            if (strcmp(&string[3], "ocks") == 0)
+                return PRED_BLOCKS;
+            break;
         case 'm':
             if (strcmp(&string[3], "in") == 0)
                 return PRED_BMIN;
@@ -300,6 +304,7 @@ static const char *__predicate2str[] = {
     [PRED_AMIN]         = "amin",
     [PRED_ANEWER]       = "anewer",
     [PRED_ATIME]        = "atime",
+    [PRED_BLOCKS]       = "blocks",
     [PRED_BMIN]         = "bmin",
     [PRED_BNEWER]       = "bnewer",
     [PRED_BTIME]        = "btime",
