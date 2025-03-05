@@ -414,6 +414,7 @@ find_parse_predicate(struct find_context *ctx, int *arg_idx)
         filter = regex2filter(PRED_PATH, ctx->argv[++i],
                               RBH_RO_CASE_INSENSITIVE);
         break;
+    case PRED_BLOCKS:
     case PRED_GID:
     case PRED_LINKS:
     case PRED_UID:

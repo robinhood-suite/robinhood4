@@ -61,6 +61,7 @@ usage(void)
         "                         change or modify time. TIME should represent\n"
         "                         minutes, and the filtering will follow GNU's\n"
         "                         find logic for '-[acm]time'\n"
+        "    -blocks [+-]N        filter entries based on their number of blocks\n"
         "    -empty               filter entries that are empty and is either\n"
         "                         a regular file or a directory. Works only\n"
         "                         with regular files for now\n"
