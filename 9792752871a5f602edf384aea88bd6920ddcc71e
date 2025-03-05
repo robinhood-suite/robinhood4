@@ -16,6 +16,24 @@
       "message": "style: double empty line",
       "revId": "9792752871a5f602edf384aea88bd6920ddcc71e",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9d1344b2_b56ef30e",
+        "filename": "librobinhood/src/backends/mongo/mongo.c",
+        "patchSetId": 9
+      },
+      "lineNbr": 804,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-03-05T12:44:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "947f11a1_8ca453cd",
+      "revId": "9792752871a5f602edf384aea88bd6920ddcc71e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
