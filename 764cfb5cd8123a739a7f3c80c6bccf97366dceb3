@@ -60,6 +60,80 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e130077f_cd2b9642",
+        "filename": "librobinhood/include/robinhood/backend.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 645,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-05T08:35:32Z",
+      "side": 1,
+      "message": "minor: add the info parameter in the doc",
+      "revId": "764cfb5cd8123a739a7f3c80c6bccf97366dceb3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c8b0dd5d_41787e1e",
+        "filename": "librobinhood/src/backends/mongo/mongo.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 799,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-05T08:35:32Z",
+      "side": 1,
+      "message": "style: remove empty line",
+      "revId": "764cfb5cd8123a739a7f3c80c6bccf97366dceb3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a2ebe49c_29b7a786",
+        "filename": "librobinhood/src/backends/mongo/mongo.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 802,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-05T08:35:32Z",
+      "side": 1,
+      "message": "style: order",
+      "revId": "764cfb5cd8123a739a7f3c80c6bccf97366dceb3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dae5db4a_b127b5e5",
+        "filename": "librobinhood/src/backends/mongo/mongo.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 812,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-05T08:35:32Z",
+      "side": 1,
+      "message": "major: You need to exit the function or switch in case of an error. Here, if there is an error, you are going to print \"Count failed\" and \"documents counted\".",
+      "range": {
+        "startLine": 810,
+        "startChar": 8,
+        "endLine": 812,
+        "endChar": 2
+      },
+      "revId": "764cfb5cd8123a739a7f3c80c6bccf97366dceb3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4ee930b8_b0ce1582",
         "filename": "librobinhood/src/backends/mongo/mongo.c~",
         "patchSetId": 1
@@ -100,6 +174,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "92baf6ee_25f298a8",
+        "filename": "rbh-info/rbh-info.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-05T08:35:32Z",
+      "side": 1,
+      "message": "major: Add all the new arguments you added to the helper\n```\n-c --capabilities\n-s --size\n...\n```",
+      "revId": "764cfb5cd8123a739a7f3c80c6bccf97366dceb3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1fec2d0f_8a761903",
         "filename": "rbh-info/rbh-info.c",
         "patchSetId": 1
@@ -123,6 +214,86 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3c8bb21b_7d61ebc4",
+        "filename": "rbh-info/rbh-info.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-05T08:35:32Z",
+      "side": 1,
+      "message": "major: here you said we can just give the backend name with the -c option, but below, you expect to have a uri to create the backend",
+      "range": {
+        "startLine": 120,
+        "startChar": 14,
+        "endLine": 120,
+        "endChar": 28
+      },
+      "revId": "764cfb5cd8123a739a7f3c80c6bccf97366dceb3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fe906037_f3ae893d",
+        "filename": "rbh-info/rbh-info.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-05T08:35:32Z",
+      "side": 1,
+      "message": "style: we always put commas at the end of the line, not at the beginning.",
+      "range": {
+        "startLine": 252,
+        "startChar": 15,
+        "endLine": 252,
+        "endChar": 16
+      },
+      "revId": "764cfb5cd8123a739a7f3c80c6bccf97366dceb3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fd074137_e2893c0d",
+        "filename": "rbh-info/rbh-info.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 334,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-05T08:35:32Z",
+      "side": 1,
+      "message": "defect: the backend is not freed, you can look in rbh-sync to see how it\u0027s done",
+      "revId": "764cfb5cd8123a739a7f3c80c6bccf97366dceb3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "800c6275_33f7dd58",
+        "filename": "rbh-info/rbh-info.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 340,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-05T08:35:32Z",
+      "side": 1,
+      "message": "style: add space between the if",
+      "revId": "764cfb5cd8123a739a7f3c80c6bccf97366dceb3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e2c00be2_16834c59",
         "filename": "rbh-info/tests/info.bash",
         "patchSetId": 1
@@ -139,6 +310,29 @@
         "startChar": 4,
         "endLine": 28,
         "endChar": 35
+      },
+      "revId": "764cfb5cd8123a739a7f3c80c6bccf97366dceb3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ddd3f3ee_659feb53",
+        "filename": "rbh-info/tests/info.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-05T08:35:32Z",
+      "side": 1,
+      "message": "defect: you should keep the old tests for capabilities and make new ones for info.\nfurthermore, this test does nothing here",
+      "range": {
+        "startLine": 33,
+        "startChar": 4,
+        "endLine": 33,
+        "endChar": 43
       },
       "revId": "764cfb5cd8123a739a7f3c80c6bccf97366dceb3",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
