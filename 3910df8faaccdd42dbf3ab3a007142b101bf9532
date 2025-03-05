@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f9e25071_b5f84aa0",
+        "filename": "rbh-capabilities/tests/capabilities.bash",
+        "patchSetId": 7
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-03-05T12:52:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "73c98cb8_333b25c8",
+      "range": {
+        "startLine": 117,
+        "startChar": 4,
+        "endLine": 117,
+        "endChar": 18
+      },
+      "revId": "3910df8faaccdd42dbf3ab3a007142b101bf9532",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "437b9ea1_6993cac1",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-03-05T11:51:54Z",
       "side": 1,
       "message": "major: this should only be done if the removal was also done earlier.",
+      "range": {
+        "startLine": 135,
+        "startChar": 4,
+        "endLine": 136,
+        "endChar": 51
+      },
+      "revId": "3910df8faaccdd42dbf3ab3a007142b101bf9532",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "84ec7a7f_749eb5dc",
+        "filename": "rbh-capabilities/tests/capabilities.bash",
+        "patchSetId": 7
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-03-05T12:52:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "437b9ea1_6993cac1",
       "range": {
         "startLine": 135,
         "startChar": 4,
