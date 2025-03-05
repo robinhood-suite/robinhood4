@@ -792,53 +792,83 @@ mongo_backend_report(void *backend, const struct rbh_filter *filter,
      |                              get_info()                            |
      *--------------------------------------------------------------------*/
 
-int32_t
-get_collection_size(const struct mongo_backend *mongo) {
+struct rbh_value_pair *
+get_collection_size(const struct mongo_backend *mongo)
+{
+    struct rbh_value_pair *pair;
+    struct rbh_value *value;
     bson_error_t error;
     bson_iter_t iter;
     bson_t *command;
     bson_t reply;
-    int32_t size;
+    int32_t size = 0;
+
+    pair = malloc(sizeof(*pair));
+    value = malloc(sizeof(*value));
+    if (!value || !pair)
+        goto out;
 
     command = BCON_NEW("collStats", BCON_UTF8("entries"));
 
-    if (mongoc_collection_command_simple(mongo->entries, command, NULL, &reply,
-                                         &error)) {
-        if (bson_iter_init(&iter, &reply) &&
-            bson_iter_find(&iter, "size")) {
-            if (BSON_ITER_HOLDS_INT32(&iter)) {
-                size = bson_iter_int32(&iter);
-                if (size >= 1073741824) //GB
-                    printf("Entries size: %.2d GB\n", size / 1073741824);
-                else if (size >= 1048576) //MB
-                    printf("Entries size: %.2d MB\n", size / 1048576);
-                else if (size >= 1024) //KB
-                    printf("Entries size: %.2d KB\n", size / 1024);
-                else {
-                    printf("Entries size: %d bytes\n", size);
-                }
-            }
+    if (!mongoc_collection_command_simple(mongo->entries, command, NULL,
+                                          &reply, &error))
+        goto out;
+
+    if (bson_iter_init(&iter, &reply) && bson_iter_find(&iter, "size")) {
+        if (BSON_ITER_HOLDS_INT32(&iter)) {
+            size = bson_iter_int32(&iter);
+        } else {
+            goto out;
+        }
+    } else {
+        goto out;
+    }
+
+    value->type = RBH_VT_INT32;
+    value->int32 = size;
+
+    pair->key = "size";
+    pair->value = value;
+
+out:
+    if (command)
+        bson_destroy(command);
+    bson_destroy(&reply);
+
+    if (!size) {
+        fprintf(stderr, "Size not avalaible\n");
+        free(pair);
+        free(value);
+        return NULL;
+    }
+
+    return pair;
+}
+
+static struct rbh_value_map *
+mongo_backend_get_info(void *backend, int info_flags)
+{
+    struct mongo_backend *mongo = backend;
+    struct rbh_value_pair *pairs = NULL;
+    size_t count = 0;
+
+    pairs = malloc(3 * sizeof(struct rbh_value_pair));
+    if(!pairs)
+        return NULL;
+
+    if (info_flags & RBH_INFO_SIZE) {
+        struct rbh_value_pair *size_pair = get_collection_size(mongo);
+        if (size_pair) {
+            pairs[count++] = *size_pair;
+            free(size_pair);
         }
     }
 
-    bson_destroy(command);
-    bson_destroy(&reply);
-    return size;
-}
+    struct rbh_value *map_value = rbh_value_map_new(pairs, count);
 
+    free(pairs);
 
-void
-mongo_backend_get_info(void *backend, enum rbh_info info)
-{
-    struct mongo_backend *mongo = backend;
-
-    switch (info){
-    case RBH_INFO_SIZE:
-        get_collection_size(mongo);
-        break;
-    default:
-        return;
-    }
+    return map_value ? &map_value->map : NULL;
 }
 
     /*--------------------------------------------------------------------*
