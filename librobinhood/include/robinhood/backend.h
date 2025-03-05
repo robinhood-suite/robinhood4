@@ -222,9 +222,9 @@ struct rbh_filter_output {
  * Determines which info will be displayed by rbh-info.
  */
 enum rbh_info {
-    RBH_INFO_FIRST_SYNC = 1,
-    RBH_INFO_LAST_SYNC,
-    RBH_INFO_SIZE,
+    RBH_INFO_FIRST_SYNC = 0x00000001U,
+    RBH_INFO_LAST_SYNC = 0x0000002U,
+    RBH_INFO_SIZE = 0x0000004U,
 };
 
 
@@ -283,9 +283,9 @@ struct rbh_backend_operations {
             struct rbh_value_pair *pairs,
             int available_pairs
             );
-    void (*get_info)(
+    struct rbh_value_map *(*get_info)(
             void *backend,
-            enum rbh_info
+            int info_flags
             );
     void (*destroy)(
             void *backend
@@ -645,14 +645,14 @@ rbh_backend_get_attribute(struct rbh_backend *backend, const char *attr_name,
  * @param info      enum of the required infos
  */
 
-static inline void
-rbh_backend_get_info(struct rbh_backend *backend, enum rbh_info info)
+static inline struct rbh_value_map *
+rbh_backend_get_info(struct rbh_backend *backend, int info_flags)
 {
     if (backend->ops->get_info == NULL) {
         errno = ENOTSUP;
-        return;
+        return NULL;
     }
-    return backend->ops->get_info(backend, info);
+    return backend->ops->get_info(backend, info_flags);
 }
 
 /**

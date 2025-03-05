@@ -24,9 +24,6 @@
 #include <robinhood/config.h>
 
 #define LIB_RBH_PREFIX "librbh-"
-#define RBH_SIZE_FLAG 0x00000001U
-#define RBH_FIRST_SYNC_FLAG 0x00000002U
-#define RBH_LAST_SYNC_FLAG 0x00000004U
 #define RBH_CAPABILITIES_FLAG 0x00000008U
 
 static struct rbh_backend *from;
@@ -241,21 +238,6 @@ rbh_backend_list()
     return 0;
 }
 
-static int
-backend_size(const struct rbh_backend_plugin *plugin, enum rbh_info size)
-{
-    const uint8_t info = plugin->info;
-
-    if (info & RBH_INFO_SIZE) {
-        rbh_backend_get_info(from, info);
-    } else {
-        printf("Size unavailable for %s backend, Please refer to the helper\n",
-               from->name);
-        return 0;
-    }
-    return 0;
-}
-
 int
 main(int argc, char **argv)
 {
@@ -302,13 +284,13 @@ main(int argc, char **argv)
             rbh_backend_list();
             return 0;
         case 's':
-            flags |= RBH_SIZE_FLAG;
+            flags |= RBH_INFO_SIZE;
             break;
         case 'f':
-            flags |= RBH_FIRST_SYNC_FLAG;
+            flags |= RBH_INFO_FIRST_SYNC;
             break;
         case 'y':
-            flags |= RBH_LAST_SYNC_FLAG;
+            flags |= RBH_INFO_LAST_SYNC;
             break;
         default :
             fprintf(stderr, "Unrecognized option\n");
@@ -337,16 +319,10 @@ main(int argc, char **argv)
         fprintf(stderr, "This backend does not exist\n");
         return EINVAL;
     }
-    if (flags & RBH_SIZE_FLAG) {
-        backend_size(plugin, RBH_INFO_SIZE);
-    }
-    if (flags & RBH_FIRST_SYNC_FLAG) {
-    }
-    if (flags & RBH_LAST_SYNC_FLAG) {
-    }
-    if (!flags) {
+    if (flags) {
+        rbh_backend_get_info(from, flags);
+    } else {
         info_translate(plugin);
-        return 0;
     }
 
     rbh_config_free();
