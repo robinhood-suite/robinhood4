@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d9c917dd_9bf9f9bb",
+        "filename": "rbh-find-lustre/include/filters.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-03-05T11:00:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1338d0fd_b978c649",
+      "range": {
+        "startLine": 132,
+        "startChar": 10,
+        "endLine": 132,
+        "endChar": 14
+      },
+      "revId": "a8a6736a3065ba6d7259edd9051c1789c84509d7",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7e861478_62490798",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-03-04T09:50:07Z",
       "side": 1,
       "message": "sugest: instead of using a boolean, you can give the predicate as an argument to directly retrieve the associated field",
+      "range": {
+        "startLine": 585,
+        "startChar": 4,
+        "endLine": 588,
+        "endChar": 49
+      },
+      "revId": "a8a6736a3065ba6d7259edd9051c1789c84509d7",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ff6d2d7a_93f6f128",
+        "filename": "rbh-find-lustre/src/filters.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 588,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-03-05T11:00:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7e861478_62490798",
       "range": {
         "startLine": 585,
         "startChar": 4,
@@ -70,6 +118,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d76885ed_6a09e3d6",
+        "filename": "rbh-find-lustre/tests/test_comp.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-03-05T11:00:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "88156fc1_7d443693",
+      "range": {
+        "startLine": 56,
+        "startChar": 4,
+        "endLine": 57,
+        "endChar": 44
+      },
+      "revId": "a8a6736a3065ba6d7259edd9051c1789c84509d7",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "be155bc6_a2f3fbcc",
@@ -83,6 +155,30 @@
       "writtenOn": "2025-03-04T09:50:07Z",
       "side": 1,
       "message": "question: Why the result is different here ? It shouldn\u0027t be the same as above ?",
+      "range": {
+        "startLine": 73,
+        "startChar": 4,
+        "endLine": 74,
+        "endChar": 26
+      },
+      "revId": "a8a6736a3065ba6d7259edd9051c1789c84509d7",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f1cb0817_8d3db334",
+        "filename": "rbh-find-lustre/tests/test_comp.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-03-05T11:00:28Z",
+      "side": 1,
+      "message": "That\u0027s an interval here. Above it requests entries with a component end at 1M and a component end at 511M. Here it requests entries with a component end between 1M and 511M, which, due to  how sizes are handled, does match with the entry, while the test above doesn\u0027t",
+      "parentUuid": "be155bc6_a2f3fbcc",
       "range": {
         "startLine": 73,
         "startChar": 4,
