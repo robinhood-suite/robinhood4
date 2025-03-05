@@ -60,6 +60,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1f4578db_bf707af3",
+        "filename": "librobinhood/include/robinhood/backend.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-03-05T10:25:38Z",
+      "side": 1,
+      "message": "`rbh_avail_info` ? `rbh_info` simply ?",
+      "parentUuid": "1fe0f4b7_4f4bb6f0",
+      "range": {
+        "startLine": 225,
+        "startChar": 5,
+        "endLine": 225,
+        "endChar": 17
+      },
+      "revId": "764cfb5cd8123a739a7f3c80c6bccf97366dceb3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e130077f_cd2b9642",
         "filename": "librobinhood/include/robinhood/backend.h",
         "patchSetId": 1
@@ -145,6 +169,52 @@
       "writtenOn": "2025-03-04T13:20:27Z",
       "side": 1,
       "message": "defect: same",
+      "revId": "764cfb5cd8123a739a7f3c80c6bccf97366dceb3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "44db2a42_eb39b059",
+        "filename": "rbh-info/rbh-info.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-03-05T10:25:38Z",
+      "side": 1,
+      "message": "nit: this function can return void, since it always returns the same value and cannot fail",
+      "range": {
+        "startLine": 73,
+        "startChar": 7,
+        "endLine": 73,
+        "endChar": 10
+      },
+      "revId": "764cfb5cd8123a739a7f3c80c6bccf97366dceb3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8fb92e6e_3915648b",
+        "filename": "rbh-info/rbh-info.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-03-05T10:25:38Z",
+      "side": 1,
+      "message": "minor: this function can return void, since it always returns the same value and cannot fail",
+      "range": {
+        "startLine": 90,
+        "startChar": 7,
+        "endLine": 90,
+        "endChar": 10
+      },
       "revId": "764cfb5cd8123a739a7f3c80c6bccf97366dceb3",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
