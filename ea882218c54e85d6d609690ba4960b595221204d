@@ -22,6 +22,30 @@
       },
       "revId": "ea882218c54e85d6d609690ba4960b595221204d",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a83807c3_d986565b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-03-05T15:13:25Z",
+      "side": 1,
+      "message": "The info field will only be used to determine which info the backend can provide. The field capabilities will be used to get the capabilities it supports.\n\nThe main goal of rbh-info patch is to keep capabilities functions as they were and add a new part of rbh-capabilities for delivering info of a backend.\n\n- info will be called using an uri.\n- capabilities using only the backend name (essentially, the same as in rbh-capabilities)",
+      "parentUuid": "3ed3322b_86841d72",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 50
+      },
+      "revId": "ea882218c54e85d6d609690ba4960b595221204d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
