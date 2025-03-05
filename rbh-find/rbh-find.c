@@ -58,6 +58,7 @@ usage(void)
         "                         change or modify time. TIME should represent\n"
         "                         minutes, and the filtering will follow GNU's\n"
         "                         find logic for '-[acm]time'\n"
+        "    -blocks [+-]N        filter entries based on their number of blocks\n"
         "    -gid GID             filter entries based on their owner's GID\n"
         "    -group GROUP         filter entries based on their owner's group name\n"
         "    -nogroup             select entries without valid owner group IDs\n"
