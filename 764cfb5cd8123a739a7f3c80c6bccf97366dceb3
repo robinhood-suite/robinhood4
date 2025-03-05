@@ -18,6 +18,24 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1959227f_0ee0dd92",
+        "filename": "librobinhood/include/robinhood/.backend.h.swn",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-03-05T15:21:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8330b226_56356291",
+      "revId": "764cfb5cd8123a739a7f3c80c6bccf97366dceb3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3da0317a_76a803c1",
@@ -31,6 +49,24 @@
       "writtenOn": "2025-03-04T13:20:27Z",
       "side": 1,
       "message": "style: empty line not needed",
+      "revId": "764cfb5cd8123a739a7f3c80c6bccf97366dceb3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6971dcfd_1d6c08c4",
+        "filename": "librobinhood/include/robinhood/backend.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-03-05T15:21:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3da0317a_76a803c1",
       "revId": "764cfb5cd8123a739a7f3c80c6bccf97366dceb3",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
@@ -84,6 +120,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "faad317b_6d99bb7f",
+        "filename": "librobinhood/include/robinhood/backend.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-03-05T15:21:36Z",
+      "side": 1,
+      "message": "I chose rbh_info, if it\u0027s okay for you @Sebastien",
+      "parentUuid": "1f4578db_bf707af3",
+      "range": {
+        "startLine": 225,
+        "startChar": 5,
+        "endLine": 225,
+        "endChar": 17
+      },
+      "revId": "764cfb5cd8123a739a7f3c80c6bccf97366dceb3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e130077f_cd2b9642",
         "filename": "librobinhood/include/robinhood/backend.h",
         "patchSetId": 1
@@ -95,6 +155,24 @@
       "writtenOn": "2025-03-05T08:35:32Z",
       "side": 1,
       "message": "minor: add the info parameter in the doc",
+      "revId": "764cfb5cd8123a739a7f3c80c6bccf97366dceb3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c69cf321_b0f33041",
+        "filename": "librobinhood/include/robinhood/backend.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 645,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-03-05T15:21:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e130077f_cd2b9642",
       "revId": "764cfb5cd8123a739a7f3c80c6bccf97366dceb3",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
@@ -116,6 +194,24 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "693db8d4_02b5a771",
+        "filename": "librobinhood/src/backends/mongo/mongo.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 799,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-03-05T15:21:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c8b0dd5d_41787e1e",
+      "revId": "764cfb5cd8123a739a7f3c80c6bccf97366dceb3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a2ebe49c_29b7a786",
@@ -129,6 +225,24 @@
       "writtenOn": "2025-03-05T08:35:32Z",
       "side": 1,
       "message": "style: order",
+      "revId": "764cfb5cd8123a739a7f3c80c6bccf97366dceb3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f4964b2_cd1d0d19",
+        "filename": "librobinhood/src/backends/mongo/mongo.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 802,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-03-05T15:21:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a2ebe49c_29b7a786",
       "revId": "764cfb5cd8123a739a7f3c80c6bccf97366dceb3",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
@@ -156,6 +270,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "67301992_79e9fb08",
+        "filename": "librobinhood/src/backends/mongo/mongo.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 812,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-03-05T15:21:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dae5db4a_b127b5e5",
+      "range": {
+        "startLine": 810,
+        "startChar": 8,
+        "endLine": 812,
+        "endChar": 2
+      },
+      "revId": "764cfb5cd8123a739a7f3c80c6bccf97366dceb3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4ee930b8_b0ce1582",
@@ -173,6 +311,24 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "76472d5d_506028ba",
+        "filename": "librobinhood/src/backends/mongo/mongo.c~",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-03-05T15:21:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4ee930b8_b0ce1582",
+      "revId": "764cfb5cd8123a739a7f3c80c6bccf97366dceb3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "44db2a42_eb39b059",
@@ -186,6 +342,30 @@
       "writtenOn": "2025-03-05T10:25:38Z",
       "side": 1,
       "message": "nit: this function can return void, since it always returns the same value and cannot fail",
+      "range": {
+        "startLine": 73,
+        "startChar": 7,
+        "endLine": 73,
+        "endChar": 10
+      },
+      "revId": "764cfb5cd8123a739a7f3c80c6bccf97366dceb3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c0a16f40_53c04a08",
+        "filename": "rbh-info/rbh-info.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-03-05T15:21:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "44db2a42_eb39b059",
       "range": {
         "startLine": 73,
         "startChar": 7,
@@ -219,6 +399,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "df845977_0c9febb7",
+        "filename": "rbh-info/rbh-info.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-03-05T15:21:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8fb92e6e_3915648b",
+      "range": {
+        "startLine": 90,
+        "startChar": 7,
+        "endLine": 90,
+        "endChar": 10
+      },
+      "revId": "764cfb5cd8123a739a7f3c80c6bccf97366dceb3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a8fb373a_dd21f0d6",
@@ -242,6 +446,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "71f3caf6_7ecf34dc",
+        "filename": "rbh-info/rbh-info.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-03-05T15:21:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a8fb373a_dd21f0d6",
+      "range": {
+        "startLine": 101,
+        "startChar": 15,
+        "endLine": 101,
+        "endChar": 46
+      },
+      "revId": "764cfb5cd8123a739a7f3c80c6bccf97366dceb3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "92baf6ee_25f298a8",
@@ -255,6 +483,24 @@
       "writtenOn": "2025-03-05T08:35:32Z",
       "side": 1,
       "message": "major: Add all the new arguments you added to the helper\n```\n-c --capabilities\n-s --size\n...\n```",
+      "revId": "764cfb5cd8123a739a7f3c80c6bccf97366dceb3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "62fabed0_669d3311",
+        "filename": "rbh-info/rbh-info.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-03-05T15:21:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "92baf6ee_25f298a8",
       "revId": "764cfb5cd8123a739a7f3c80c6bccf97366dceb3",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
@@ -305,6 +551,54 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cba9e193_06e7565a",
+        "filename": "rbh-info/rbh-info.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-03-05T15:21:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1fec2d0f_8a761903",
+      "range": {
+        "startLine": 120,
+        "startChar": 10,
+        "endLine": 120,
+        "endChar": 72
+      },
+      "revId": "764cfb5cd8123a739a7f3c80c6bccf97366dceb3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3627c010_6bbecbca",
+        "filename": "rbh-info/rbh-info.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-03-05T15:21:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3c8bb21b_7d61ebc4",
+      "range": {
+        "startLine": 120,
+        "startChar": 14,
+        "endLine": 120,
+        "endChar": 28
+      },
+      "revId": "764cfb5cd8123a739a7f3c80c6bccf97366dceb3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fe906037_f3ae893d",
@@ -318,6 +612,30 @@
       "writtenOn": "2025-03-05T08:35:32Z",
       "side": 1,
       "message": "style: we always put commas at the end of the line, not at the beginning.",
+      "range": {
+        "startLine": 252,
+        "startChar": 15,
+        "endLine": 252,
+        "endChar": 16
+      },
+      "revId": "764cfb5cd8123a739a7f3c80c6bccf97366dceb3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dbf89bf1_1842ad01",
+        "filename": "rbh-info/rbh-info.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-03-05T15:21:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fe906037_f3ae893d",
       "range": {
         "startLine": 252,
         "startChar": 15,
@@ -345,6 +663,24 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "58829ba2_cd1987fb",
+        "filename": "rbh-info/rbh-info.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 334,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-03-05T15:21:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fd074137_e2893c0d",
+      "revId": "764cfb5cd8123a739a7f3c80c6bccf97366dceb3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "800c6275_33f7dd58",
@@ -358,6 +694,24 @@
       "writtenOn": "2025-03-05T08:35:32Z",
       "side": 1,
       "message": "style: add space between the if",
+      "revId": "764cfb5cd8123a739a7f3c80c6bccf97366dceb3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7771f814_55d6e8e6",
+        "filename": "rbh-info/rbh-info.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 340,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-03-05T15:21:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "800c6275_33f7dd58",
       "revId": "764cfb5cd8123a739a7f3c80c6bccf97366dceb3",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
@@ -385,6 +739,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b15738c_f24c87a1",
+        "filename": "rbh-info/tests/info.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-03-05T15:21:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e2c00be2_16834c59",
+      "range": {
+        "startLine": 26,
+        "startChar": 4,
+        "endLine": 28,
+        "endChar": 35
+      },
+      "revId": "764cfb5cd8123a739a7f3c80c6bccf97366dceb3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ddd3f3ee_659feb53",
@@ -398,6 +776,30 @@
       "writtenOn": "2025-03-05T08:35:32Z",
       "side": 1,
       "message": "defect: you should keep the old tests for capabilities and make new ones for info.\nfurthermore, this test does nothing here",
+      "range": {
+        "startLine": 33,
+        "startChar": 4,
+        "endLine": 33,
+        "endChar": 43
+      },
+      "revId": "764cfb5cd8123a739a7f3c80c6bccf97366dceb3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "33145ef8_35fdf3d2",
+        "filename": "rbh-info/tests/info.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-03-05T15:21:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ddd3f3ee_659feb53",
       "range": {
         "startLine": 33,
         "startChar": 4,
