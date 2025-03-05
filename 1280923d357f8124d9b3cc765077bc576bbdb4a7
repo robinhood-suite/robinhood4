@@ -22,6 +22,30 @@
       },
       "revId": "1280923d357f8124d9b3cc765077bc576bbdb4a7",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "98472886_5b3af5b1",
+        "filename": "librobinhood/src/backends/mongo/mongo.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 819,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-03-05T10:27:40Z",
+      "side": 1,
+      "message": "Currently no, that\u0027s a good idea, it will be also be useful for rbh-find and rbh-report",
+      "parentUuid": "c1c07def_4c916402",
+      "range": {
+        "startLine": 811,
+        "startChar": 15,
+        "endLine": 819,
+        "endChar": 17
+      },
+      "revId": "1280923d357f8124d9b3cc765077bc576bbdb4a7",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
