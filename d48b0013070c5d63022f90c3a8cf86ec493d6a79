@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a85bc671_60e5bf8a",
+        "filename": "rbh-capabilities/tests/capabilities.bash",
+        "patchSetId": 8
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-03-05T13:39:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "66b91794_804f2bd3",
+      "range": {
+        "startLine": 108,
+        "startChar": 3,
+        "endLine": 109,
+        "endChar": 39
+      },
+      "revId": "d48b0013070c5d63022f90c3a8cf86ec493d6a79",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6192be31_2b475a28",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-03-05T13:11:19Z",
       "side": 1,
       "message": "defect: this test is moot since you ensure they are deleted on lines 108 and 109.",
+      "range": {
+        "startLine": 134,
+        "startChar": 5,
+        "endLine": 135,
+        "endChar": 8
+      },
+      "revId": "d48b0013070c5d63022f90c3a8cf86ec493d6a79",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1c9da82f_bd334d6b",
+        "filename": "rbh-capabilities/tests/capabilities.bash",
+        "patchSetId": 8
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-03-05T13:39:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6192be31_2b475a28",
       "range": {
         "startLine": 134,
         "startChar": 5,
