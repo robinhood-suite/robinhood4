@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e94cdfa4_e8cfcfbf",
+        "filename": "rbh-capabilities/tests/capabilities.bash",
+        "patchSetId": 9
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-03-05T14:12:37Z",
+      "side": 1,
+      "message": "okay, that\u0027s not what I meant.\n\nSince you\u0027re dealing with files outside of your test directory, you MUST ensure the system stays as it was after the test. This means that if there are files in `/usr/lib` or `/usr/lib64`, they must be restored after the test.\n\nIn this test, you remove the mongo library in `/usr/lib` and `/usr/lib64` without knowing if they exist in the first place, and then you copy the libraries from the built in the RBH directory (which may even be different from the ones in `/usr`) to those locations.\n\nTherefore, if none of the libraries exist beforehand, you\u0027re adding them back in. And if they do exist, you\u0027re possible adding a different version.\n\nAlso, for this particular patchset, you remove the libraries in `/usr/lib` and `/usr/lib64`, but only copy back the library in `/usr/lib64`.",
+      "range": {
+        "startLine": 137,
+        "startChar": 4,
+        "endLine": 138,
+        "endChar": 51
+      },
+      "revId": "1d25f59a072c45266614309e1e5f089b91ae95a1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
