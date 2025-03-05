@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7889d75b_6e477c3d",
+        "filename": "rbh-find/rbh-find.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-03-05T08:36:28Z",
+      "side": 1,
+      "message": "typo: without space",
+      "range": {
+        "startLine": 72,
+        "startChar": 20,
+        "endLine": 72,
+        "endChar": 26
+      },
+      "revId": "3f4832ca05ed681cb8f2f77f56ac5ae55a532e69",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
