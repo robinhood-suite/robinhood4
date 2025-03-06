@@ -46,6 +46,30 @@
       },
       "revId": "ea882218c54e85d6d609690ba4960b595221204d",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b4729c68_16d7b4ff",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-03-06T14:43:38Z",
+      "side": 1,
+      "message": "Okay, the `info` field only concerns instantiated backends. And capabilities are available for backends, in general. Even if they can also be retrieved for instantiated backends. `rbh-info -c rbh:mongo:demo` could be a valid command.\n\nMaybe the issue is the command try to target two \"kind of\" different things. Well, if that\u0027s ok with the other devs, I will not block this patch.",
+      "parentUuid": "a83807c3_d986565b",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 50
+      },
+      "revId": "ea882218c54e85d6d609690ba4960b595221204d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
