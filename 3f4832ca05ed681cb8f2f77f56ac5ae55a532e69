@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d6f6224d_ffa02683",
+        "filename": "rbh-find/rbh-find.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-06T07:56:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7889d75b_6e477c3d",
+      "range": {
+        "startLine": 72,
+        "startChar": 20,
+        "endLine": 72,
+        "endChar": 26
+      },
+      "revId": "3f4832ca05ed681cb8f2f77f56ac5ae55a532e69",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "addecaed_20acc9ea",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-03-05T15:28:19Z",
       "side": 1,
       "message": "suggest: put this above the PRED_GID and PRED_UID cases",
+      "range": {
+        "startLine": 421,
+        "startChar": 4,
+        "endLine": 421,
+        "endChar": 20
+      },
+      "revId": "3f4832ca05ed681cb8f2f77f56ac5ae55a532e69",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fe6767bb_9dac4490",
+        "filename": "rbh-find/src/find_cb.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 421,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-06T07:56:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "addecaed_20acc9ea",
       "range": {
         "startLine": 421,
         "startChar": 4,
