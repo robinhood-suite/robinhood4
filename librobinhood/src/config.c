@@ -1,5 +1,5 @@
 /* This file is part of Robinhood 4
- * Copyright (C) 2024 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifer: LGPL-3.0-or-later
@@ -41,11 +41,8 @@ rbh_config_open(const char *config_file)
     }
 
     config->file = fopen(config_file, "r");
-    if (config->file == NULL) {
-        fprintf(stderr, "Failed to open '%s' in rbh_config_open\n",
-                config_file);
+    if (config->file == NULL)
         goto free_config;
-    }
 
     config->parser_initialized = false;
 

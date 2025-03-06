@@ -43,7 +43,6 @@ load_aliases_from_config(void)
     }
 
     if (rc == KPR_NOT_FOUND) {
-        fprintf(stderr, "No aliases found in configuration.\n");
         aliases = NULL;
         return -1;
     }
@@ -227,10 +226,8 @@ apply_aliases(int *argc, char ***argv)
 {
     bool found;
 
-    if (load_aliases_from_config() != 0) {
-        fprintf(stderr, "Failed to load aliases from configuration.\n");
+    if (load_aliases_from_config() != 0)
         return;
-    }
 
     process_args(argc,argv);
 
