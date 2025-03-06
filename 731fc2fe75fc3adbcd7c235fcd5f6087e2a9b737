@@ -22,6 +22,30 @@
       },
       "revId": "731fc2fe75fc3adbcd7c235fcd5f6087e2a9b737",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ecc90b20_3c28df8e",
+        "filename": "rbh-capabilities/tests/capabilities.bash",
+        "patchSetId": 10
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-03-06T13:34:00Z",
+      "side": 1,
+      "message": "indeed, it\u0027s useless",
+      "parentUuid": "0270376d_6fdd3175",
+      "range": {
+        "startLine": 108,
+        "startChar": 4,
+        "endLine": 108,
+        "endChar": 8
+      },
+      "revId": "731fc2fe75fc3adbcd7c235fcd5f6087e2a9b737",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
