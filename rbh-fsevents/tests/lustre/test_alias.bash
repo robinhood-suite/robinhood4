@@ -20,7 +20,7 @@ alias:
    a1: "--enrich rbh:lustre:test"
 EOF
 
-    command_output=$(rbh-fsevents --config test_conf.yaml --dry-run \
+    command_output=$(rbh_fsevents --config test_conf.yaml --dry-run \
                     --alias a1 src:lustre:test -)
     pattern="\--enrich rbh:lustre:test"
 
@@ -37,7 +37,7 @@ alias:
    a1: "--enrich rbh:lustre:test"
 EOF
 
-    command_output=$(rbh-fsevents --dry-run --alias a1 src:lustre:test -)
+    command_output=$(rbh_fsevents --dry-run --alias a1 src:lustre:test -)
     pattern="\--enrich rbh:lustre:test"
 
     if ! echo "$command_output" | grep -q "$pattern"; then
@@ -54,7 +54,7 @@ alias:
    a2: "-r"
 EOF
 
-    command_output=$(rbh-fsevents --config test_conf.yaml --dry-run \
+    command_output=$(rbh_fsevents --config test_conf.yaml --dry-run \
                     --alias a2 --alias a1 --alias a2 src:lustre:test -)
     pattern="\-r \--enrich rbh:lustre:test \-r"
 
@@ -72,7 +72,7 @@ alias:
    a3: "--enrich rbh:lustre:test"
 EOF
 
-    command_output=$(rbh-fsevents --config test_conf.yaml --dry-run \
+    command_output=$(rbh_fsevents --config test_conf.yaml --dry-run \
                     --alias a1 src:lustre:test -)
     pattern="\--enrich rbh:lustre:test"
 
@@ -89,7 +89,7 @@ alias:
    a2: "--alias a1"
 EOF
 
-    command_output=$(rbh-fsevents --config test_conf.yaml --dry-run \
+    command_output=$(rbh_fsevents --config test_conf.yaml --dry-run \
                     --alias a1 src:lustre:test - 2>&1 || true)
     pattern="\[ERROR\] Infinite loop detected for alias 'a1'.Execution stopped."
 
@@ -105,7 +105,7 @@ alias:
    a1: "-r"
 EOF
 
-    command_output=$(rbh-fsevents --config test_conf.yaml --dry-run \
+    command_output=$(rbh_fsevents --config test_conf.yaml --dry-run \
                     --alias a1 --alias a1 src:lustre:test -)
     pattern="\-r \-r"
 
@@ -123,7 +123,7 @@ alias:
    a3: "-r"
 EOF
 
-    command_output=$(rbh-fsevents --config test_conf.yaml --dry-run \
+    command_output=$(rbh_fsevents --config test_conf.yaml --dry-run \
                     --alias a1,a2,a3 src:lustre:test -)
     pattern="\-r \-r \-r"
 
@@ -141,7 +141,7 @@ alias:
    a3: "-r"
 EOF
 
-    command_output=$(rbh-fsevents --config test_conf.yaml --dry-run \
+    command_output=$(rbh_fsevents --config test_conf.yaml --dry-run \
                     --alias a1 src:lustre:test -)
     pattern="\-r \-r \-r"
 

@@ -20,7 +20,7 @@ alias:
    a1: "-perm 001 -name file -printf '%A'"
 EOF
 
-    command_output=$(rbh-find --config test_conf.yaml --dry-run \
+    command_output=$(rbh_find --config test_conf.yaml --dry-run \
                     "rbh:mongo:$testdb" --alias a1)
     pattern="\-perm 001 \-name file \-printf '%A'"
 
@@ -37,7 +37,7 @@ alias:
    a1: "-perm 001 -name file"
 EOF
 
-    command_output=$(rbh-find --dry-run "rbh:mongo:$testdb" --alias a1)
+    command_output=$(rbh_find --dry-run "rbh:mongo:$testdb" --alias a1)
     pattern="\-perm 001 \-name file"
 
     if ! echo "$command_output" | grep -q "$pattern"; then
@@ -54,7 +54,7 @@ alias:
    a2: "-printf '%A'"
 EOF
 
-    command_output=$(rbh-find --config test_conf.yaml --dry-run \
+    command_output=$(rbh_find --config test_conf.yaml --dry-run \
                     "rbh:mongo:$testdb" --alias a2 --alias a1 --alias a2)
     pattern="\-printf '%A' \-perm 001 \-name file \-printf '%A'"
 
@@ -72,7 +72,7 @@ alias:
    a3: "-printf '%A'"
 EOF
 
-    command_output=$(rbh-find --config test_conf.yaml --dry-run \
+    command_output=$(rbh_find --config test_conf.yaml --dry-run \
                     "rbh:mongo:$testdb" --alias a1)
     pattern="\-printf '%A'"
 
@@ -89,7 +89,7 @@ alias:
    a2: "--alias a1"
 EOF
 
-    command_output=$(rbh-find --config test_conf.yaml --dry-run \
+    command_output=$(rbh_find --config test_conf.yaml --dry-run \
                     "rbh:mongo:$testdb" --alias a1 2>&1 || true)
     pattern="\[ERROR\] Infinite loop detected for alias 'a1'.Execution stopped."
 
@@ -105,7 +105,7 @@ alias:
    a1: "-printf '%A'"
 EOF
 
-    command_output=$(rbh-lfind --config test_conf.yaml --dry-run \
+    command_output=$(rbh_find --config test_conf.yaml --dry-run \
                     "rbh:mongo:$testdb" --alias a1 --alias a1)
     pattern="\-printf '%A' \-printf '%A'"
 
@@ -130,10 +130,10 @@ alias:
   a1: "-printf %p"
 EOF
 
-    command_output_with_alias=$(rbh-find --config test_conf.yaml \
+    command_output_with_alias=$(rbh_find --config test_conf.yaml \
                                "rbh:mongo:$testdb" --alias a1)
 
-    command_output_without_alias=$(rbh-find --config test_conf.yaml \
+    command_output_without_alias=$(rbh_find --config test_conf.yaml \
                                   "rbh:mongo:$testdb" -printf '%p')
 
     if [[ "$command_output_with_alias" != "$command_output_without_alias" ]];
@@ -151,7 +151,7 @@ alias:
    a3: "-printf '%A'"
 EOF
 
-    command_output=$(rbh-lfind --config test_conf.yaml --dry-run \
+    command_output=$(rbh_find --config test_conf.yaml --dry-run \
                     "rbh:mongo:$testdb" --alias a1,a2,a3)
     pattern="\-printf '%A' \-printf '%A' \-printf '%A'"
 
@@ -169,7 +169,7 @@ alias:
    a3: "-printf '%A'"
 EOF
 
-    command_output=$(rbh-lfind --config test_conf.yaml --dry-run \
+    command_output=$(rbh_find --config test_conf.yaml --dry-run \
                     "rbh:mongo:$testdb" --alias a1)
     pattern="\-printf '%A' \-printf '%A' \-printf '%A'"
 
