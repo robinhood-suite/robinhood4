@@ -42,8 +42,6 @@ rbh_config_open(const char *config_file)
 
     config->file = fopen(config_file, "r");
     if (config->file == NULL) {
-        fprintf(stderr, "Failed to open '%s' in rbh_config_open\n",
-                config_file);
         goto free_config;
     }
 
