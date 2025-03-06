@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6820b4a3_0962492d",
+        "filename": "rbh-find-lustre/src/filters.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-06T08:17:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4f3af820_a9daf2bf",
+      "range": {
+        "startLine": 259,
+        "startChar": 4,
+        "endLine": 261,
+        "endChar": 2
+      },
+      "revId": "67d6cad830fa4903fc1ef862896f597efff55f4f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6446a64b_39d4c5a2",
@@ -47,6 +71,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d7c9f245_b1a95723",
+        "filename": "rbh-find-lustre/tests/test_mdt_index.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-06T08:17:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6446a64b_39d4c5a2",
+      "range": {
+        "startLine": 10,
+        "startChar": 4,
+        "endLine": 10,
+        "endChar": 44
+      },
+      "revId": "67d6cad830fa4903fc1ef862896f597efff55f4f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3229fc62_abec0488",
@@ -60,6 +108,30 @@
       "writtenOn": "2025-03-05T13:06:43Z",
       "side": 1,
       "message": "minor: put these lines at the bottom",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 16
+      },
+      "revId": "67d6cad830fa4903fc1ef862896f597efff55f4f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0047037b_a1596369",
+        "filename": "rbh-find-lustre/tests/test_mdt_index.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-06T08:17:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3229fc62_abec0488",
       "range": {
         "startLine": 12,
         "startChar": 0,
