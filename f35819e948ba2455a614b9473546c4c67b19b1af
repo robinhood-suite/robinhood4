@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e1ea08fd_e60cae65",
+        "filename": "rbh-info/rbh-info.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 346,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-03-06T12:55:12Z",
+      "side": 1,
+      "message": "minor: in this case, just remove them",
+      "range": {
+        "startLine": 343,
+        "startChar": 4,
+        "endLine": 346,
+        "endChar": 5
+      },
+      "revId": "f35819e948ba2455a614b9473546c4c67b19b1af",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
