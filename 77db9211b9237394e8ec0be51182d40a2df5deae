@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "79b417d6_b0b7ba2d",
+        "filename": "rbh-find/rbh-find.c",
+        "patchSetId": 7
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-06T07:54:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e35edd76_ee6a2331",
+      "range": {
+        "startLine": 61,
+        "startChar": 14,
+        "endLine": 61,
+        "endChar": 17
+      },
+      "revId": "77db9211b9237394e8ec0be51182d40a2df5deae",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3ada847d_6ef54147",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-03-05T08:10:51Z",
       "side": 1,
       "message": "question: sorry, I only see that here, why this `sleep`?",
+      "range": {
+        "startLine": 49,
+        "startChar": 4,
+        "endLine": 49,
+        "endChar": 11
+      },
+      "revId": "77db9211b9237394e8ec0be51182d40a2df5deae",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a092663b_023286fe",
+        "filename": "rbh-find/tests/test_newer.bash",
+        "patchSetId": 7
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-06T07:54:20Z",
+      "side": 1,
+      "message": "It\u0027s to have a a/mtime different on the root than on fileA, otherwise / and /fileA have a a/mtime in the same second.",
+      "parentUuid": "3ada847d_6ef54147",
       "range": {
         "startLine": 49,
         "startChar": 4,
