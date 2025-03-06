@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0270376d_6fdd3175",
+        "filename": "rbh-capabilities/tests/capabilities.bash",
+        "patchSetId": 10
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-03-06T13:27:26Z",
+      "side": 1,
+      "message": "question: sorry, only seeing this now too, why are all the commands ran with sudo ? The tests are run as root, so sudo doesn\u0027t seem necessary",
+      "range": {
+        "startLine": 108,
+        "startChar": 4,
+        "endLine": 108,
+        "endChar": 8
+      },
+      "revId": "731fc2fe75fc3adbcd7c235fcd5f6087e2a9b737",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
