@@ -70,6 +70,30 @@
       },
       "revId": "ea882218c54e85d6d609690ba4960b595221204d",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "00de56b1_b0253ffc",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-03-06T15:05:16Z",
+      "side": 1,
+      "message": "We talked about this specific point: a `-c` or `--capabilities` will take in a value corresponding to a backend name, not an instance; `-l` or `--list` won\u0027t take any argument and will give the list of installed backend; otherwise the command will take in a URI and do the requests operations of those.",
+      "parentUuid": "b4729c68_16d7b4ff",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 50
+      },
+      "revId": "ea882218c54e85d6d609690ba4960b595221204d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
