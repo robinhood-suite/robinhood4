@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "17e36f98_c7041270",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-03-06T13:06:53Z",
+      "side": 1,
+      "message": "minor: I prefer this title\n\nbugfix: non-reg failed for alias tests due to incorrect path",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 13
+      },
+      "revId": "01708f1ea8987b24c061f009c5fbf180bc75d32b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "42a0020b_610a6eb4",
+        "filename": "rbh-find/tests/test_alias.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-03-06T13:06:53Z",
+      "side": 1,
+      "message": "defect: rbh_find",
+      "range": {
+        "startLine": 108,
+        "startChar": 21,
+        "endLine": 108,
+        "endChar": 30
+      },
+      "revId": "01708f1ea8987b24c061f009c5fbf180bc75d32b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ec355532_63eace95",
+        "filename": "rbh-find/tests/test_alias.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-03-06T13:06:53Z",
+      "side": 1,
+      "message": "defect: rbh_find",
+      "range": {
+        "startLine": 154,
+        "startChar": 21,
+        "endLine": 154,
+        "endChar": 30
+      },
+      "revId": "01708f1ea8987b24c061f009c5fbf180bc75d32b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "624d5e92_4ae0a949",
+        "filename": "rbh-find/tests/test_alias.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-03-06T13:06:53Z",
+      "side": 1,
+      "message": "defect: rbh_find",
+      "range": {
+        "startLine": 172,
+        "startChar": 21,
+        "endLine": 172,
+        "endChar": 30
+      },
+      "revId": "01708f1ea8987b24c061f009c5fbf180bc75d32b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
