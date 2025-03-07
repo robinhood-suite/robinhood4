@@ -77,7 +77,8 @@ str2seconds(enum time_unit unit, const char *string)
     return delta * TIME_UNIT2SECONDS[unit];
 }
 
-int count_char_separated_values(const char *str, char character)
+int
+count_char_separated_values(const char *str, char character)
 {
     int count;
 
@@ -114,4 +115,23 @@ time_from_timestamp(const time_t *time)
     res[len - 1] = '\0';
 
     return res;
+}
+
+int
+size_printer(char *buffer, size_t buffer_size, size_t size)
+{
+    size_t sfx_value = (size_t)1 << 60;
+    const char *sfx = "EPTGMK";
+    int sfx_idx = 0;
+
+    while (sfx_value > 1 && size < sfx_value) {
+        sfx_value >>= 10;
+        sfx_idx++;
+    }
+
+    if (sfx_value > 1)
+        return snprintf(buffer, buffer_size, "%.2f %cB",
+                        (double)size / sfx_value, sfx[sfx_idx]);
+    else
+        return snprintf(buffer, buffer_size, "%zu Bytes", size);
 }
