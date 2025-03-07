@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b9a1f322_11b2cbab",
+        "filename": "librobinhood/include/robinhood/utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-03-07T14:03:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "08d58f94_e46fb28c",
+      "range": {
+        "startLine": 111,
+        "startChar": 0,
+        "endLine": 111,
+        "endChar": 12
+      },
+      "revId": "4ac40c030bbad2543fcfdd52d8abb4e094b5934e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "10cf541e_d71048d1",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-03-07T10:40:40Z",
       "side": 1,
       "message": "suggest: use size_t in this function instead, since it\u0027s a `size` type",
+      "range": {
+        "startLine": 79,
+        "startChar": 13,
+        "endLine": 79,
+        "endChar": 20
+      },
+      "revId": "4ac40c030bbad2543fcfdd52d8abb4e094b5934e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e9a03213_fe28e673",
+        "filename": "librobinhood/src/utils/utils.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-03-07T14:03:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "10cf541e_d71048d1",
       "range": {
         "startLine": 79,
         "startChar": 13,
@@ -70,6 +118,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5f3dd262_5a5be73e",
+        "filename": "librobinhood/src/utils/utils.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-03-07T14:03:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b89f524c_69e01aa3",
+      "range": {
+        "startLine": 89,
+        "startChar": 34,
+        "endLine": 89,
+        "endChar": 42
+      },
+      "revId": "4ac40c030bbad2543fcfdd52d8abb4e094b5934e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cdb5324e_1efa4a0c",
@@ -83,6 +155,30 @@
       "writtenOn": "2025-03-07T10:40:40Z",
       "side": 1,
       "message": "minor: the buffer should only contain the output of `%.2f PB` and not the `Size:` or line return.",
+      "range": {
+        "startLine": 91,
+        "startChar": 16,
+        "endLine": 91,
+        "endChar": 31
+      },
+      "revId": "4ac40c030bbad2543fcfdd52d8abb4e094b5934e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5f529017_8e7577e4",
+        "filename": "librobinhood/src/utils/utils.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-03-07T14:03:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cdb5324e_1efa4a0c",
       "range": {
         "startLine": 91,
         "startChar": 16,
