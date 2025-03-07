@@ -101,4 +101,15 @@ str2uint64_t(const char *input, uint64_t *result);
 int
 count_char_separated_values(const char *str, char character);
 
+/**
+ * formats a given size into a human-readable string
+ *
+ * @param buffer      buffer filled with the human-readable string
+ * @param buffer_size size of the buffer
+ * @param size        the size formatted by the function
+ *
+ */
+void
+size_printer(char *buffer,size_t buffer_size, size_t size);
+
 #endif
