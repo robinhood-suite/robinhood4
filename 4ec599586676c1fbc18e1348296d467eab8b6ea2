@@ -1,0 +1,182 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "93dd4f1a_d50c2927",
+        "filename": "librobinhood/include/robinhood/backend.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-03-07T09:53:33Z",
+      "side": 1,
+      "message": "minor: until you\u0027ve added both, you should not have the last sync and first sync here",
+      "range": {
+        "startLine": 225,
+        "startChar": 4,
+        "endLine": 227,
+        "endChar": 18
+      },
+      "revId": "4ec599586676c1fbc18e1348296d467eab8b6ea2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7961ea19_786f5106",
+        "filename": "librobinhood/include/robinhood/backend.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-03-07T09:53:33Z",
+      "side": 1,
+      "message": "minor: RBH_INFO_COUNT, since there\u0027s the number of entries in the backend and it\u0027s actual size",
+      "range": {
+        "startLine": 227,
+        "startChar": 4,
+        "endLine": 227,
+        "endChar": 17
+      },
+      "revId": "4ec599586676c1fbc18e1348296d467eab8b6ea2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "48066c4c_16dd378c",
+        "filename": "librobinhood/include/robinhood/backend.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-03-07T09:53:33Z",
+      "side": 1,
+      "message": "style: remove one empty line",
+      "revId": "4ec599586676c1fbc18e1348296d467eab8b6ea2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b5071781_44f22551",
+        "filename": "librobinhood/include/robinhood/backend.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-03-07T09:53:33Z",
+      "side": 1,
+      "message": "style: missing name for the parameter",
+      "range": {
+        "startLine": 288,
+        "startChar": 12,
+        "endLine": 288,
+        "endChar": 25
+      },
+      "revId": "4ec599586676c1fbc18e1348296d467eab8b6ea2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d432b7a2_46ec33aa",
+        "filename": "librobinhood/src/backends/mongo/mongo.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 804,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-03-07T09:53:33Z",
+      "side": 1,
+      "message": "minor: it\u0027s more a count than a size",
+      "range": {
+        "startLine": 804,
+        "startChar": 9,
+        "endLine": 804,
+        "endChar": 22
+      },
+      "revId": "4ec599586676c1fbc18e1348296d467eab8b6ea2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f5d7cea7_8ad3afe1",
+        "filename": "librobinhood/src/backends/mongo/plugin.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-03-07T09:53:33Z",
+      "side": 1,
+      "message": "minor: idem, while these aren\u0027t actually usable, do not define them",
+      "range": {
+        "startLine": 30,
+        "startChar": 28,
+        "endLine": 30,
+        "endChar": 69
+      },
+      "revId": "4ec599586676c1fbc18e1348296d467eab8b6ea2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2de17bfd_0d6afb96",
+        "filename": "rbh-info/rbh-info.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-03-07T09:53:33Z",
+      "side": 1,
+      "message": "minor: I\u0027m more in favor of adding their description when they are implemented rather than now",
+      "range": {
+        "startLine": 111,
+        "startChar": 10,
+        "endLine": 111,
+        "endChar": 77
+      },
+      "revId": "4ec599586676c1fbc18e1348296d467eab8b6ea2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "50c9c8ab_72038439",
+        "filename": "rbh-info/rbh-info.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 329,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-03-07T09:53:33Z",
+      "side": 1,
+      "message": "major: instead of trying to import the first argument, add a check that the requested flags is 0. If it is, we are requesting the backend\u0027s capabilities, otherwise we request specific values.\n\nBut in the end, this should be a `-c` or `--capabilites` option",
+      "range": {
+        "startLine": 329,
+        "startChar": 8,
+        "endLine": 329,
+        "endChar": 52
+      },
+      "revId": "4ec599586676c1fbc18e1348296d467eab8b6ea2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
