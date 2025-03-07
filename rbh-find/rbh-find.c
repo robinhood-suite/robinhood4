@@ -97,7 +97,6 @@ usage(void)
         "    -fstype        -xtype\n"
         "    -readable      -writable    -executable\n"
         "    -iwholename    -ilname      -wholename     -lname\n"
-        "    -inum\n"
         "    -iregex        -regex\n"
         "    -links\n"
         "    -used\n"
