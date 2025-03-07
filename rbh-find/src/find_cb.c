@@ -416,6 +416,7 @@ find_parse_predicate(struct find_context *ctx, int *arg_idx)
         break;
     case PRED_BLOCKS:
     case PRED_GID:
+    case PRED_INUM:
     case PRED_LINKS:
     case PRED_UID:
         filter = number2filter(predicate, ctx->argv[++i]);

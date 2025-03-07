@@ -98,7 +98,6 @@ usage(void)
         "    -fstype        -xtype\n"
         "    -readable      -writable    -executable\n"
         "    -iwholename    -wholename\n"
-        "    -inum\n"
         "    -used\n"
         "    -context\n"
         "\n"
