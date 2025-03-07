@@ -94,6 +94,30 @@
       },
       "revId": "ea882218c54e85d6d609690ba4960b595221204d",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d720fb77_520e3711",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-03-07T15:00:17Z",
+      "side": 1,
+      "message": "I chose that rbh-info should work as follows: \n\n- ./rbh-info \u003cURI\u003e -uri_arguements     Will get us the info desired from the given URI \n                                       \n- ./rbh-info \u003cbackend name\u003e            Will simply display the capabilities of the backend (as it was in rbh-capabilities)\n\nIn one of the following patches the helper has been enhanced to distinguish between calling rbh-info with an \u003cURI\u003e and with a backend name. \n\nIs it ok for both of you ?",
+      "parentUuid": "00de56b1_b0253ffc",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 50
+      },
+      "revId": "ea882218c54e85d6d609690ba4960b595221204d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
