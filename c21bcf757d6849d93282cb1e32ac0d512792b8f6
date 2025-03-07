@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e05374f7_4294387e",
+        "filename": "librobinhood/src/utils/utils.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-03-07T14:25:50Z",
+      "side": 1,
+      "message": "defect: this will give you size of a char *, i.e the size of a pointer, not the available space in the buffer. This has to be given by the caller of this function",
+      "range": {
+        "startLine": 81,
+        "startChar": 26,
+        "endLine": 81,
+        "endChar": 39
+      },
+      "revId": "c21bcf757d6849d93282cb1e32ac0d512792b8f6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "de76c760_a1beee6c",
+        "filename": "librobinhood/src/utils/utils.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-03-07T14:25:50Z",
+      "side": 1,
+      "message": "nit: should be size_t here",
+      "range": {
+        "startLine": 82,
+        "startChar": 10,
+        "endLine": 82,
+        "endChar": 17
+      },
+      "revId": "c21bcf757d6849d93282cb1e32ac0d512792b8f6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1b424ca8_906d615a",
+        "filename": "librobinhood/src/utils/utils.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-03-07T14:25:50Z",
+      "side": 1,
+      "message": "minor: should be `f` here and the (double) for the conversion of the division\u0027s result is in fact necessary",
+      "range": {
+        "startLine": 90,
+        "startChar": 42,
+        "endLine": 90,
+        "endChar": 44
+      },
+      "revId": "c21bcf757d6849d93282cb1e32ac0d512792b8f6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "71ede870_d11f7f21",
+        "filename": "librobinhood/src/utils/utils.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-03-07T14:25:50Z",
+      "side": 1,
+      "message": "minor: since the buffer is given as parameter and filled, there is no need to return it, it\u0027s the exact same as the one given by the user",
+      "range": {
+        "startLine": 104,
+        "startChar": 4,
+        "endLine": 104,
+        "endChar": 18
+      },
+      "revId": "c21bcf757d6849d93282cb1e32ac0d512792b8f6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
