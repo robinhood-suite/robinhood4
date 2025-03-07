@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9608becf_ac376d74",
+        "filename": "librobinhood/src/backends/mongo/mongo.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 804,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-03-07T10:36:48Z",
+      "side": 1,
+      "message": "minor: use `*pair` here instead",
+      "range": {
+        "startLine": 804,
+        "startChar": 48,
+        "endLine": 804,
+        "endChar": 69
+      },
+      "revId": "f3e820e2028fdd9cc1d7ea0a9abc2ff09dddd87d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "13a7e700_936f15b7",
+        "filename": "librobinhood/src/backends/mongo/mongo.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 804,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-03-07T10:36:48Z",
+      "side": 1,
+      "message": "style: put the definitions at the start of the function, and the assignments here",
+      "range": {
+        "startLine": 804,
+        "startChar": 4,
+        "endLine": 804,
+        "endChar": 31
+      },
+      "revId": "f3e820e2028fdd9cc1d7ea0a9abc2ff09dddd87d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "11d0cecf_f3e1d527",
+        "filename": "librobinhood/src/backends/mongo/mongo.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 805,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-03-07T10:36:48Z",
+      "side": 1,
+      "message": "minor: same with `*value`",
+      "range": {
+        "startLine": 805,
+        "startChar": 44,
+        "endLine": 805,
+        "endChar": 60
+      },
+      "revId": "f3e820e2028fdd9cc1d7ea0a9abc2ff09dddd87d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "74bb40d1_1ca86d1f",
+        "filename": "librobinhood/src/backends/mongo/mongo.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 826,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-03-07T10:36:48Z",
+      "side": 1,
+      "message": "defect: in those cases, `size` has no meaningful value, but the function still continues as normal",
+      "range": {
+        "startLine": 820,
+        "startChar": 12,
+        "endLine": 826,
+        "endChar": 70
+      },
+      "revId": "f3e820e2028fdd9cc1d7ea0a9abc2ff09dddd87d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
