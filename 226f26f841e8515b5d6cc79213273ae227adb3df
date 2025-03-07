@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "05556845_02b2ec7c",
+        "filename": "rbh-find/src/find_cb.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 416,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-03-07T10:55:46Z",
+      "side": 1,
+      "message": "I should have been more specific, I meant only the `case PRED_LINKS`, the case\u0027s content is the exact same as pred gid and uid, so just add the case and not its content",
+      "range": {
+        "startLine": 415,
+        "startChar": 8,
+        "endLine": 416,
+        "endChar": 14
+      },
+      "revId": "226f26f841e8515b5d6cc79213273ae227adb3df",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
