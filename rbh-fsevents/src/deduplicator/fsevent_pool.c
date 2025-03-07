@@ -861,7 +861,6 @@ struct rbh_iterator *
 rbh_fsevent_pool_flush(struct rbh_fsevent_pool *pool)
 {
     struct rbh_fsevent_node *elem, *tmp;
-    size_t count = 0;
 
     rbh_list_foreach_safe(&pool->events, elem, tmp, link) {
         fsevent_node_free(pool, elem);
@@ -885,7 +884,6 @@ rbh_fsevent_pool_flush(struct rbh_fsevent_pool *pool)
         events = (void *)rbh_hashmap_pop(pool->pool, first_id->id);
         event_list_free(pool, events);
         pool->count--;
-        count++;
     }
 
     return rbh_iter_list(&pool->events,
