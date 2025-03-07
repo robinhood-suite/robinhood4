@@ -47,7 +47,8 @@ str2uint64_t(const char *input, uint64_t *result)
     return 0;
 }
 
-int count_char_separated_values(const char *str, char character)
+int
+count_char_separated_values(const char *str, char character)
 {
     int count;
 
@@ -72,4 +73,23 @@ int count_char_separated_values(const char *str, char character)
     }
 
     return count;
+}
+
+void
+size_printer(char *buffer, size_t buffer_size, size_t size)
+{
+    size_t sfx_value = (size_t)1 << 60;
+    const char *sfx = "EPTGMK";
+    int sfx_idx = 0;
+
+    while (sfx_value > 1 && size < sfx_value) {
+        sfx_value >>= 10;
+        sfx_idx++;
+    }
+
+    if (sfx_value > 1)
+        snprintf(buffer, buffer_size, "%.2f %cB", (double)size / sfx_value,
+                 sfx[sfx_idx]);
+    else
+        snprintf(buffer, buffer_size, "%zu Bytes", size);
 }
