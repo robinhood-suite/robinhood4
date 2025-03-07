@@ -3,6 +3,52 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "932c847e_12740666",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-03-07T09:19:10Z",
+      "side": 1,
+      "message": "question: mutualized or mutualised ? American or English variant ?",
+      "range": {
+        "startLine": 15,
+        "startChar": 31,
+        "endLine": 15,
+        "endChar": 41
+      },
+      "revId": "169a4af11a45bccab885a0b34cb7a6c27d9fa2b5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4d7384a0_4b24cfa1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-03-07T09:19:10Z",
+      "side": 1,
+      "message": "suggest: `with this proposal, \"rbh-find\" and \"rbh-lfind\" would be mutualized in the same tool, and wouldn\u0027t require additionnal user input`.",
+      "range": {
+        "startLine": 14,
+        "startChar": 69,
+        "endLine": 16,
+        "endChar": 37
+      },
+      "revId": "169a4af11a45bccab885a0b34cb7a6c27d9fa2b5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e108e073_c79308b9",
         "filename": "designs/filter_mutualization.rst",
         "patchSetId": 1
@@ -72,6 +118,98 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "85052650_620a9a6e",
+        "filename": "designs/filter_mutualization.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-03-07T09:19:10Z",
+      "side": 1,
+      "message": "minor: there must be a distinction between the \"command\" parser that verifies if the given options are predicates, actions or common tokens, and the \"backend\" parser that verifies a predicate or action is known and valid.",
+      "range": {
+        "startLine": 68,
+        "startChar": 4,
+        "endLine": 68,
+        "endChar": 10
+      },
+      "revId": "169a4af11a45bccab885a0b34cb7a6c27d9fa2b5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7fe95da1_c8e4cce6",
+        "filename": "designs/filter_mutualization.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-03-07T09:19:10Z",
+      "side": 1,
+      "message": "or common token",
+      "range": {
+        "startLine": 69,
+        "startChar": 40,
+        "endLine": 69,
+        "endChar": 60
+      },
+      "revId": "169a4af11a45bccab885a0b34cb7a6c27d9fa2b5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "426da5af_95501ae9",
+        "filename": "designs/filter_mutualization.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-03-07T09:19:10Z",
+      "side": 1,
+      "message": "typo: on",
+      "range": {
+        "startLine": 97,
+        "startChar": 18,
+        "endLine": 97,
+        "endChar": 20
+      },
+      "revId": "169a4af11a45bccab885a0b34cb7a6c27d9fa2b5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a58409df_d5e7928f",
+        "filename": "designs/filter_mutualization.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-03-07T09:19:10Z",
+      "side": 1,
+      "message": "major: looking at the rest of the document, I feel like no additionnal library is defined, but rather filter parsing/conversion is integrated to the librobinhood regular backends",
+      "range": {
+        "startLine": 140,
+        "startChar": 6,
+        "endLine": 142,
+        "endChar": 2
+      },
+      "revId": "169a4af11a45bccab885a0b34cb7a6c27d9fa2b5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b99c5b65_c0ce6ecc",
         "filename": "designs/filter_mutualization.rst",
         "patchSetId": 1
@@ -88,6 +226,29 @@
         "startChar": 0,
         "endLine": 171,
         "endChar": 159
+      },
+      "revId": "169a4af11a45bccab885a0b34cb7a6c27d9fa2b5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0c1f679b_c5d1c174",
+        "filename": "designs/filter_mutualization.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-03-07T09:19:10Z",
+      "side": 1,
+      "message": "question: to be clear, there is no new library being created ? So after retrieving the backends used to sync in the DB, we have to open those backends, and ask them to create the appropriated filter ?",
+      "range": {
+        "startLine": 189,
+        "startChar": 42,
+        "endLine": 190,
+        "endChar": 16
       },
       "revId": "169a4af11a45bccab885a0b34cb7a6c27d9fa2b5",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
