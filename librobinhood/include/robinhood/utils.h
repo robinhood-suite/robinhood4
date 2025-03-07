@@ -101,4 +101,13 @@ str2uint64_t(const char *input, uint64_t *result);
 int
 count_char_separated_values(const char *str, char character);
 
+/**
+ * print the size in PB, EB, TB, GB, MB, Bytes
+ *
+ * @param size       an int64 representing the size
+ *
+ */
+void
+size_printer(char *buffer,size_t buffer_size, size_t size);
+
 #endif

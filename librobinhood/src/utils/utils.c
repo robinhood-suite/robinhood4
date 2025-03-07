@@ -47,7 +47,8 @@ str2uint64_t(const char *input, uint64_t *result)
     return 0;
 }
 
-int count_char_separated_values(const char *str, char character)
+int
+count_char_separated_values(const char *str, char character)
 {
     int count;
 
@@ -72,4 +73,32 @@ int count_char_separated_values(const char *str, char character)
     }
 
     return count;
+}
+
+void
+size_printer(char *buffer, size_t buffer_size, size_t size)
+{
+    const size_t EB = (size_t)1 << 60;
+    const size_t PB = (size_t)1 << 50;
+    const size_t TB = (size_t)1 << 40;
+    const size_t GB = (size_t)1 << 30;
+    const size_t MB = (size_t)1 << 20;
+    const size_t KB = (size_t)1 << 10;
+
+    if (size >= EB)
+        snprintf(buffer, buffer_size, "%.2f EB", (double)size / EB);
+    else if (size >= PB)
+        snprintf(buffer, buffer_size, "%.2f PB", (double)size / PB);
+    else if (size >= TB)
+        snprintf(buffer, buffer_size, "%.2f TB", (double)size / TB);
+    else if (size >= GB)
+        snprintf(buffer, buffer_size, "%.2f GB", (double)size / GB);
+    else if (size >= MB)
+        snprintf(buffer, buffer_size, "%.2f MB", (double)size / MB);
+    else if (size >= KB)
+        snprintf(buffer, buffer_size, "%.2f KB", (double)size / KB);
+    else
+        snprintf(buffer, buffer_size, "%.2zu Bytes", size);
+
+    return;
 }
