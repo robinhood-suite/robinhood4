@@ -101,11 +101,6 @@ posix_enrich_iter_builder(struct rbh_backend *backend,
                           const char *type,
                           const char *mount_path);
 
-#ifdef HAVE_LUSTRE
-struct enrich_iter_builder *
-lustre_enrich_iter_builder(struct rbh_backend *backend, const char *mount_path);
-#endif
-
 #ifdef HAVE_HESTIA
 struct enrich_iter_builder *
 hestia_enrich_iter_builder(struct rbh_backend *backend);
