@@ -37,6 +37,12 @@ tests_posix_capabilities()
     echo "$output" | grep -q "branch"
 }
 
+tests_mongo_info()
+{
+    local output=$(rbh_info rbh:mongo:$testdb)
+    echo "$output" | grep -q "size"
+}
+
 tests_not_find_backend_list()
 {
     (rbh_info -l | grep -q "find") &&
