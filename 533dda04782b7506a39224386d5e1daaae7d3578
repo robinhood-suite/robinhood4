@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4867020b_f74d2f19",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-03-10T09:48:17Z",
+      "side": 1,
+      "message": "question: do we want to add some unit tests?",
+      "revId": "533dda04782b7506a39224386d5e1daaae7d3578",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ab5ad21f_ebfc3620",
+        "filename": "librobinhood/src/utils/utils.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-03-10T09:48:17Z",
+      "side": 1,
+      "message": "suggest:\n\n```\nvoid\nsize_printer(char *buffer, size_t buffer_size, size_t size)\n{\n    const char *sfx \u003d \"EPTGMK\";\n    size_t sfx_value \u003d (size_t)1 \u003c\u003c 60; \n    int sfx_idx \u003d 0;\n\n    while (sfx_value \u003e 1 \u0026\u0026 size \u003c sfx_value) {\n        sfx_value \u003d sfx_value \u003e\u003e 10; \n        sfx_idx++;\n    }   \n\n    if (sfx_value \u003e 1)\n        snprintf(buffer, buffer_size, \"%.2f %cB\", (double)size / sfx_value, sfx[sfx_idx]);\n    else\n        snprintf(buffer, buffer_size, \"%zu Bytes\", size);\n}\n```",
+      "range": {
+        "startLine": 79,
+        "startChar": 0,
+        "endLine": 79,
+        "endChar": 59
+      },
+      "revId": "533dda04782b7506a39224386d5e1daaae7d3578",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7a244fde_a4e4fe81",
+        "filename": "librobinhood/src/utils/utils.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-03-10T09:48:17Z",
+      "side": 1,
+      "message": "nit: %zu",
+      "range": {
+        "startLine": 101,
+        "startChar": 39,
+        "endLine": 101,
+        "endChar": 44
+      },
+      "revId": "533dda04782b7506a39224386d5e1daaae7d3578",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
