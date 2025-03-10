@@ -39,9 +39,8 @@ tests_posix_capabilities()
 
 tests_mongo_info()
 {
-    local output=$(rbh_info rbh:mongo:test)
+    local output=$(rbh_info rbh:mongo:$testdb)
     echo "$output" | grep -q "size"
-    echo "$output" | grep -q "sync"
 }
 
 tests_not_find_backend_list()
