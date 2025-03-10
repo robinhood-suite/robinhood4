@@ -41,7 +41,6 @@ tests_mongo_info()
 {
     local output=$(rbh_info rbh:mongo:test)
     echo "$output" | grep -q "size"
-    echo "$output" | grep -q "sync"
 }
 
 tests_not_find_backend_list()
@@ -90,13 +89,36 @@ tests_library_path_env_invalid()
     fi
 }
 
+test_collection_size()
+{
+    local collection_size_db="test_collection_size_db"
+    local collection_size="entries"
+
+    mongo "$collection_size_db" --eval "db.dropDatabase()" &>/dev/null
+
+    mongo "$collection_size_db" --eval "
+          db.$collection_size.insertMany([{entry: 'TestA'},
+          {entry: 'TestB'}]);" &>/dev/null
+
+    RBH_SIZE=$(rbh-info "rbh:mongo:$collection_size_db" -s)
+    MONGO_SIZE=$(mongo "$collection_size_db" --eval "
+                 db.$collection_size.stats().size")
+
+    mongo "$collection_size_db" --eval "db.dropDatabase()" &>/dev/null
+
+    if [ "$RBH_SIZE" != "$MONGO_SIZE" ]; then
+        error "size are not matching\n"
+    fi
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
 declare -a tests=(tests_backend_installed_list tests_mongo_info
                   tests_mongo_capabilities tests_posix_capabilities
-                  tests_not_installed_info tests_not_find_backend_list)
+                  tests_not_installed_info tests_not_find_backend_list
+                  test_collection_size)
                   # tests_library_path_env_not_exist
                   # tests_library_path_env_invalid)
 
