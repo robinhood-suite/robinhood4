@@ -21,7 +21,6 @@
 #include "robinhood/utils.h"
 #include "robinhood/uri.h"
 
-
 #include <stdio.h>
 #include <limits.h>
 
@@ -165,6 +164,20 @@ rbh_backend_from_uri(const char *string)
     backend = backend_from_uri(uri);
     free(uri);
     return backend;
+}
+
+bool
+is_uri(const char *string)
+{
+    int colon_count = 0;
+
+    while (*string != '\0') {
+        if (*string == ':')
+            colon_count++;
+        string++;
+    }
+
+    return colon_count == 2;
 }
 
 // vim: expandtab:ts=4:sw=4
