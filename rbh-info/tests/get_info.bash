@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+
+# This file is part of rbh-info.
+# Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
+#                    alternatives
+#
+# SPDX-License-Identifer: LGPL-3.0-or-later
+
+test_dir=$(dirname $(readlink -e $0))
+. $test_dir/../../utils/tests/framework.bash
+
+################################################################################
+#                                    TESTS                                     #
+################################################################################
+
+test_collection_size()
+{
+    rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
+
+    local rbh_info_size=$(rbh_info "rbh:mongo:$testdb" -s)
+    local mongo_size=$(mongo "$testdb" --eval " db.entries.stats().size")
+
+    if [ "$rbh_info_size" != "$mongo_size" ]; then
+        error "sizes are not matching\n"
+    fi
+}
+
+################################################################################
+#                                     MAIN                                     #
+################################################################################
+
+declare -a tests=(test_collection_size)
+
+tmpdir=$(mktemp --directory)
+trap -- "rm -rf '$tmpdir'" EXIT
+cd "$tmpdir"
+
+run_tests ${tests[@]}
