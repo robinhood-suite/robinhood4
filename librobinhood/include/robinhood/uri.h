@@ -11,6 +11,7 @@
 #include <sys/types.h>
 
 #include "robinhood/fsentry.h"
+#include "robinhood/uri.h"
 
 #define RBH_SCHEME "rbh"
 #define RBH_SOURCE "src"
@@ -121,5 +122,15 @@ rbh_uri_from_raw_uri(const struct rbh_raw_uri *raw_uri);
  */
 ssize_t
 rbh_percent_decode(char *dest, const char *src, size_t n);
+
+/**
+ * Verify if the string is a URI
+ *
+ * @param string    the string checked
+ *
+ * @return          true if the given is a URI, false otherwise
+ */
+bool
+is_uri(const char *string);
 
 #endif
