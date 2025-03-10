@@ -77,22 +77,6 @@ usage(void)
     printf(message, program_invocation_short_name, DEFAULT_BATCH_SIZE);
 }
 
-static bool
-is_uri(const char *string)
-{
-    struct rbh_raw_uri *raw_uri;
-
-    raw_uri = rbh_raw_uri_from_string(string);
-    if (raw_uri == NULL) {
-        if (errno == EINVAL)
-            return false;
-        error(EXIT_FAILURE, errno, "cannot parse URI '%s'", string);
-    }
-
-    free(raw_uri);
-    return true;
-}
-
 static char *
 parse_query(const char *query)
 {
