@@ -47,6 +47,54 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dbfed7f2_37ae66c3",
+        "filename": "librobinhood/include/robinhood/backend.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-03-11T09:09:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7961ea19_786f5106",
+      "range": {
+        "startLine": 227,
+        "startChar": 4,
+        "endLine": 227,
+        "endChar": 17
+      },
+      "revId": "4ec599586676c1fbc18e1348296d467eab8b6ea2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b420d041_e3332ebf",
+        "filename": "librobinhood/include/robinhood/backend.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-03-11T09:09:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "93dd4f1a_d50c2927",
+      "range": {
+        "startLine": 225,
+        "startChar": 4,
+        "endLine": 227,
+        "endChar": 18
+      },
+      "revId": "4ec599586676c1fbc18e1348296d467eab8b6ea2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "48066c4c_16dd378c",
@@ -64,6 +112,24 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bcf6e34b_94fea90c",
+        "filename": "librobinhood/include/robinhood/backend.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-03-11T09:09:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "48066c4c_16dd378c",
+      "revId": "4ec599586676c1fbc18e1348296d467eab8b6ea2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b5071781_44f22551",
@@ -77,6 +143,30 @@
       "writtenOn": "2025-03-07T09:53:33Z",
       "side": 1,
       "message": "style: missing name for the parameter",
+      "range": {
+        "startLine": 288,
+        "startChar": 12,
+        "endLine": 288,
+        "endChar": 25
+      },
+      "revId": "4ec599586676c1fbc18e1348296d467eab8b6ea2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3d2c26b1_e674a335",
+        "filename": "librobinhood/include/robinhood/backend.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-03-11T09:09:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b5071781_44f22551",
       "range": {
         "startLine": 288,
         "startChar": 12,
@@ -112,6 +202,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "923e1464_25a8a6c7",
+        "filename": "librobinhood/src/backends/mongo/mongo.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 804,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-03-11T09:09:47Z",
+      "side": 1,
+      "message": "you\u0027re right, but I dont think it belongs to this patch. I will delete and add it in another patch later.",
+      "parentUuid": "d432b7a2_46ec33aa",
+      "range": {
+        "startLine": 804,
+        "startChar": 9,
+        "endLine": 804,
+        "endChar": 22
+      },
+      "revId": "4ec599586676c1fbc18e1348296d467eab8b6ea2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f5d7cea7_8ad3afe1",
         "filename": "librobinhood/src/backends/mongo/plugin.c",
         "patchSetId": 2
@@ -123,6 +237,30 @@
       "writtenOn": "2025-03-07T09:53:33Z",
       "side": 1,
       "message": "minor: idem, while these aren\u0027t actually usable, do not define them",
+      "range": {
+        "startLine": 30,
+        "startChar": 28,
+        "endLine": 30,
+        "endChar": 69
+      },
+      "revId": "4ec599586676c1fbc18e1348296d467eab8b6ea2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "74a83329_980a3cea",
+        "filename": "librobinhood/src/backends/mongo/plugin.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-03-11T09:09:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f5d7cea7_8ad3afe1",
       "range": {
         "startLine": 30,
         "startChar": 28,
@@ -156,6 +294,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9c7827a7_e707947b",
+        "filename": "rbh-info/rbh-info.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-03-11T09:09:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2de17bfd_0d6afb96",
+      "range": {
+        "startLine": 111,
+        "startChar": 10,
+        "endLine": 111,
+        "endChar": 77
+      },
+      "revId": "4ec599586676c1fbc18e1348296d467eab8b6ea2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "50c9c8ab_72038439",
@@ -169,6 +331,30 @@
       "writtenOn": "2025-03-07T09:53:33Z",
       "side": 1,
       "message": "major: instead of trying to import the first argument, add a check that the requested flags is 0. If it is, we are requesting the backend\u0027s capabilities, otherwise we request specific values.\n\nBut in the end, this should be a `-c` or `--capabilites` option",
+      "range": {
+        "startLine": 329,
+        "startChar": 8,
+        "endLine": 329,
+        "endChar": 52
+      },
+      "revId": "4ec599586676c1fbc18e1348296d467eab8b6ea2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6e4951aa_1406a24c",
+        "filename": "rbh-info/rbh-info.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 329,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-03-11T09:09:47Z",
+      "side": 1,
+      "message": "This was to keep the ./rbh-info \u003cbackend name\u003e functionnality. As we already discussed it and agreed that i will do it in a patch next week, should i remove it from this patch ? or do I let it here ?",
+      "parentUuid": "50c9c8ab_72038439",
       "range": {
         "startLine": 329,
         "startChar": 8,
