@@ -51,12 +51,15 @@ mongo_cleanup(void)
 
 #define MIN_VALUES_SSTACK_ALLOC (1 << 6)
 struct rbh_sstack *values_sstack;
+struct rbh_sstack *info_sstack;
 
 static void __attribute__((destructor))
-destroy_values_sstack(void)
+destroy_sstack(void)
 {
     if (values_sstack)
         rbh_sstack_destroy(values_sstack);
+    if (info_sstack)
+        rbh_sstack_destroy(info_sstack);
 }
 
     /*--------------------------------------------------------------------*
@@ -792,10 +795,10 @@ mongo_backend_report(void *backend, const struct rbh_filter *filter,
      |                              get_info()                            |
      *--------------------------------------------------------------------*/
 
-struct rbh_value_pair *
-get_collection_size(const struct mongo_backend *mongo)
+static int
+get_collection_size(const struct mongo_backend *mongo,
+                    struct rbh_value_pair *pair)
 {
-    struct rbh_value_pair *pair;
     struct rbh_value *value;
     bson_error_t error;
     bson_iter_t iter;
@@ -803,10 +806,7 @@ get_collection_size(const struct mongo_backend *mongo)
     bson_t reply;
     int32_t size = 0;
 
-    pair = malloc(sizeof(*pair));
-    value = malloc(sizeof(*value));
-    if (!value || !pair)
-        goto out;
+    value = RBH_SSTACK_PUSH(info_sstack, NULL, sizeof(*value));
 
     command = BCON_NEW("collStats", BCON_UTF8("entries"));
 
@@ -837,38 +837,55 @@ out:
 
     if (!size) {
         fprintf(stderr, "Size not avalaible\n");
-        free(pair);
         free(value);
-        return NULL;
+        return 0;
     }
 
-    return pair;
+    return 1;
 }
 
 static struct rbh_value_map *
 mongo_backend_get_info(void *backend, int info_flags)
 {
     struct mongo_backend *mongo = backend;
-    struct rbh_value_pair *pairs = NULL;
-    size_t count = 0;
+    struct rbh_value_map *map_value;
+    struct rbh_value_pair *pairs;
+    int tmp_flags = info_flags;
+    int count = 0;
+    int idx = 0;
 
-    pairs = malloc(3 * sizeof(struct rbh_value_pair));
-    if(!pairs)
-        return NULL;
-
-    if (info_flags & RBH_INFO_SIZE) {
-        struct rbh_value_pair *size_pair = get_collection_size(mongo);
-        if (size_pair) {
-            pairs[count++] = *size_pair;
-            free(size_pair);
-        }
+    while (tmp_flags) {
+        count += tmp_flags & 1;
+        tmp_flags >>= 1;
     }
 
-    struct rbh_value *map_value = rbh_value_map_new(pairs, count);
+    if (info_sstack == NULL) {
+        info_sstack = rbh_sstack_new(MIN_VALUES_SSTACK_ALLOC *
+                                    (sizeof(struct rbh_value_map *)));
+        if (!info_sstack)
+            goto out;
+    }
 
-    free(pairs);
+    pairs = RBH_SSTACK_PUSH(info_sstack, NULL, count * sizeof(*pairs));
+    if (!pairs)
+        goto out;
 
-    return map_value ? &map_value->map : NULL;
+    map_value = RBH_SSTACK_PUSH(info_sstack, NULL, sizeof(*map_value));
+    if (!map_value)
+        goto out;
+
+    if (info_flags & RBH_INFO_SIZE) {
+        if (!get_collection_size(mongo, &pairs[idx++]))
+            goto out;
+    }
+
+    map_value->pairs = pairs;
+    map_value->count = idx;
+
+    return map_value;
+out:
+    errno = EINVAL;
+    return NULL;
 }
 
     /*--------------------------------------------------------------------*
