@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fe8c7cff_7b790193",
+        "filename": "librobinhood/src/backends/retention/meson.build",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-11T14:22:47Z",
+      "side": 1,
+      "message": "question: this library is temporary ? It\u0027s just for backward compatibility ?",
+      "revId": "62d1f3e6ad2a147d9cf241a83406a4301e3d5531",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
