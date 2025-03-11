@@ -47,6 +47,54 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "601e8c6f_dfb79980",
+        "filename": "librobinhood/src/backends/mongo/mongo.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 804,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-03-11T14:07:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "13a7e700_936f15b7",
+      "range": {
+        "startLine": 804,
+        "startChar": 4,
+        "endLine": 804,
+        "endChar": 31
+      },
+      "revId": "f3e820e2028fdd9cc1d7ea0a9abc2ff09dddd87d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a7c44852_3cf09f55",
+        "filename": "librobinhood/src/backends/mongo/mongo.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 804,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-03-11T14:07:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9608becf_ac376d74",
+      "range": {
+        "startLine": 804,
+        "startChar": 48,
+        "endLine": 804,
+        "endChar": 69
+      },
+      "revId": "f3e820e2028fdd9cc1d7ea0a9abc2ff09dddd87d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "11d0cecf_f3e1d527",
@@ -70,6 +118,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e89c93b5_c21a07b3",
+        "filename": "librobinhood/src/backends/mongo/mongo.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 805,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-03-11T14:07:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "11d0cecf_f3e1d527",
+      "range": {
+        "startLine": 805,
+        "startChar": 44,
+        "endLine": 805,
+        "endChar": 60
+      },
+      "revId": "f3e820e2028fdd9cc1d7ea0a9abc2ff09dddd87d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "74bb40d1_1ca86d1f",
@@ -83,6 +155,30 @@
       "writtenOn": "2025-03-07T10:36:48Z",
       "side": 1,
       "message": "defect: in those cases, `size` has no meaningful value, but the function still continues as normal",
+      "range": {
+        "startLine": 820,
+        "startChar": 12,
+        "endLine": 826,
+        "endChar": 70
+      },
+      "revId": "f3e820e2028fdd9cc1d7ea0a9abc2ff09dddd87d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "45fed32d_1792f77c",
+        "filename": "librobinhood/src/backends/mongo/mongo.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 826,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-03-11T14:07:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "74bb40d1_1ca86d1f",
       "range": {
         "startLine": 820,
         "startChar": 12,
