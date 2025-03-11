@@ -44,6 +44,11 @@ struct rbh_node_info {
     struct rbh_list_node list;
 };
 
+struct rbh_info_fields {
+    char *field_name;
+    void (*value_function)(const struct rbh_value *value);
+};
+
 static int
 add_list(struct rbh_list_node *head, const char *name)
 {
@@ -240,22 +245,33 @@ rbh_backend_list()
 }
 
 static void
-rbh_backend_info(int flags)
+_get_collection_size(const struct rbh_value *value)
+{
+    printf("%d\n", value->int32);
+}
+
+static struct rbh_info_fields INFO_FIELDS[] = {
+    { "size", _get_collection_size },
+};
+
+void
+print_info_fields(int flags)
 {
     struct rbh_value_map *info_map = rbh_backend_get_info(from, flags);
+    size_t field_count = sizeof(INFO_FIELDS) / sizeof(INFO_FIELDS[0]);
 
     if (info_map == NULL) {
         printf("Failed to retrieve backend info");
         return;
     }
 
-    for (size_t i = 0; i < info_map->count; i++) {
+    for (size_t i = 0 ; i < info_map->count ; i++) {
         const struct rbh_value_pair *pair = &info_map->pairs[i];
 
-        if (strcmp(pair->key, "size") == 0 &&
-            pair->value->type == RBH_VT_INT32) {
-            printf("%d\n", pair->value->int32);
-            //Enhanced with human-readable printer later.
+        for (size_t j = 0 ; j < field_count ; j++) {
+            if (strcmp(pair->key, INFO_FIELDS[j].field_name) == 0) {
+                INFO_FIELDS[j].value_function(pair->value);
+            }
         }
     }
 }
@@ -287,8 +303,7 @@ main(int argc, char **argv)
         {}
     };
     const struct rbh_backend_plugin *plugin;
-    int flags = 0;
-    int option;
+    int flags = 0, option;
 
     if (argc == 1){
         fprintf(stderr, "No backend name given, Please give a backend name\n");
@@ -336,7 +351,7 @@ main(int argc, char **argv)
         return EINVAL;
     }
     if (flags)
-        rbh_backend_info(flags);
+        print_info_fields(flags);
     if (!flags)
         info_translate(plugin);
 
