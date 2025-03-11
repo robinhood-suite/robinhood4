@@ -45,6 +45,11 @@ struct rbh_node_info {
     struct rbh_list_node list;
 };
 
+struct rbh_info_fields {
+    char *key;
+    int (*value)(const struct rbh_value *value);
+};
+
 static int
 add_list(struct rbh_list_node *head, const char *name)
 {
@@ -241,24 +246,34 @@ rbh_backend_list()
     return 0;
 }
 
-static void
-rbh_backend_info(int flags)
+static int
+_get_collection_size(const struct rbh_value *value)
+{
+    printf("%d\n", value->int32);
+    return value->int32;
+}
+
+static struct rbh_info_fields INFO_FIELDS[] = {
+    {"size", _get_collection_size },
+};
+
+void
+update_info_map(struct rbh_info_fields *info_fields, size_t field_count,
+                int flags)
 {
     struct rbh_value_map *info_map = rbh_backend_get_info(from, flags);
 
-        if (info_map) {
-            for (size_t i = 0; i < info_map->count; i++) {
-                const struct rbh_value_pair *pair = &info_map->pairs[i];
+    if (!info_map) return;
 
-                if (strcmp(pair->key, "size") == 0 &&
-                    pair->value->type == RBH_VT_INT32) {
-                    printf("%d\n", pair->value->int32);
-                    //Enhanced with human-readable printer later.
-                }
+    for (size_t i = 0 ; i < info_map->count ; i++) {
+        const struct rbh_value_pair *pair = &info_map->pairs[i];
+
+        for (size_t j = 0 ; j < field_count ; j++) {
+            if (strcmp(pair->key, info_fields[j].key) == 0) {
+                info_fields[j].value(pair->value);
             }
-        } else {
-            printf("Failed to retrieve collection info.\n");
         }
+    }
 }
 
 int
@@ -287,9 +302,8 @@ main(int argc, char **argv)
         },
         {}
     };
+    int flags = 0, option, field_count;
     const struct rbh_backend_plugin *plugin;
-    int flags = 0;
-    int option;
 
     if (argc == 1){
         fprintf(stderr, "No backend name given, Please give a backend name\n");
@@ -308,6 +322,7 @@ main(int argc, char **argv)
             return 0;
         case 's':
             flags |= RBH_INFO_SIZE;
+            field_count++;
             break;
         default :
             fprintf(stderr, "Unrecognized option\n");
@@ -336,8 +351,9 @@ main(int argc, char **argv)
         fprintf(stderr, "This backend does not exist\n");
         return EINVAL;
     }
-    if (flags)
-        rbh_backend_info(flags);
+    if (flags) {
+        update_info_map(INFO_FIELDS, field_count, flags);
+    }
     if (!flags)
         info_translate(plugin);
 
