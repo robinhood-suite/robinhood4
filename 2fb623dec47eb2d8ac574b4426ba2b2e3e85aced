@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "035c79a7_172022e5",
+        "filename": "librobinhood/src/plugins/backend.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-11T13:45:33Z",
+      "side": 1,
+      "message": "question: should we not set extension to NULL if the plugin name or version is inconsistent?",
+      "revId": "2fb623dec47eb2d8ac574b4426ba2b2e3e85aced",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
