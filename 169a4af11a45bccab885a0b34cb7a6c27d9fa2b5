@@ -66,6 +66,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c921d945_f240e5a0",
+        "filename": "designs/filter_mutualization.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-03-12T13:31:04Z",
+      "side": 1,
+      "message": "I\u0027m not sure I understand what you mean by common tokens. When the term token is used when parsing a langage, it usually refers to the individual elements that can be used to make up expressions. So in the case of robinhood\u0027s filters, I would say that we have tokens that are predicates and actions. But also tokens like `(`, `)`, `;` (for exec), predicate arguments and things like and, not and or.\n\nWe could look at the syntax of filters as a formal grammar. From the point of view of someone wanting to extend this grammar for a particular backend, I would say that `not`, `and`, `or` and `sort` are reserved keywords that can\u0027t be overloaded. But predicates and actions can be overloaded. So I would split tokens in predicates, actions (that can both be overloaded/extended) and reserved tokens (`(`, `)`, `;`, `-and`, `-sort`...).",
+      "range": {
+        "startLine": 36,
+        "startChar": 40,
+        "endLine": 36,
+        "endChar": 53
+      },
+      "revId": "169a4af11a45bccab885a0b34cb7a6c27d9fa2b5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e108e073_c79308b9",
         "filename": "designs/filter_mutualization.rst",
         "patchSetId": 1
@@ -158,6 +181,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7288c2bb_4df46ff8",
+        "filename": "designs/filter_mutualization.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-03-12T13:31:04Z",
+      "side": 1,
+      "message": "If we take the definitions used in formal grammars, a parser is something that takes in tokens not strings. And the parser converts tokens into something else (usually a syntax tree in compilers and interpreters). So in robinhood\u0027s case, the parser is a function from list[token] to rbh_filter.",
+      "range": {
+        "startLine": 68,
+        "startChar": 40,
+        "endLine": 68,
+        "endChar": 71
+      },
+      "revId": "169a4af11a45bccab885a0b34cb7a6c27d9fa2b5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7fe95da1_c8e4cce6",
         "filename": "designs/filter_mutualization.rst",
         "patchSetId": 1
@@ -174,6 +220,29 @@
         "startChar": 40,
         "endLine": 69,
         "endChar": 60
+      },
+      "revId": "169a4af11a45bccab885a0b34cb7a6c27d9fa2b5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c1652e23_5d549b2d",
+        "filename": "designs/filter_mutualization.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-03-12T13:31:04Z",
+      "side": 1,
+      "message": "This is a minor detail that can be ignored but the parser only creates one filter per action. But a filter can be composed of several filters. So in the end, we don\u0027t have one filter per predicate but one filter per action.",
+      "range": {
+        "startLine": 80,
+        "startChar": 22,
+        "endLine": 80,
+        "endChar": 32
       },
       "revId": "169a4af11a45bccab885a0b34cb7a6c27d9fa2b5",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
@@ -202,6 +271,75 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "ecbe6280_acfb1736",
+        "filename": "designs/filter_mutualization.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-03-12T13:31:04Z",
+      "side": 1,
+      "message": "I think what you mean here is that you want to move the parsers into librobinhood but keep the overloads, right? If so you should make it explicit.",
+      "range": {
+        "startLine": 111,
+        "startChar": 0,
+        "endLine": 112,
+        "endChar": 18
+      },
+      "revId": "169a4af11a45bccab885a0b34cb7a6c27d9fa2b5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "68e57eae_fd696e2a",
+        "filename": "designs/filter_mutualization.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-03-12T13:31:04Z",
+      "side": 1,
+      "message": "Again, I think you should be explicit here.",
+      "range": {
+        "startLine": 115,
+        "startChar": 5,
+        "endLine": 115,
+        "endChar": 28
+      },
+      "revId": "169a4af11a45bccab885a0b34cb7a6c27d9fa2b5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3a94e84d_83543053",
+        "filename": "designs/filter_mutualization.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-03-12T13:31:04Z",
+      "side": 1,
+      "message": "typo: tools",
+      "range": {
+        "startLine": 116,
+        "startChar": 37,
+        "endLine": 116,
+        "endChar": 42
+      },
+      "revId": "169a4af11a45bccab885a0b34cb7a6c27d9fa2b5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "7397a273_87f3efb9",
@@ -215,6 +353,29 @@
       "writtenOn": "2025-03-12T08:14:25Z",
       "side": 1,
       "message": "comment: no really fan of this solution",
+      "revId": "169a4af11a45bccab885a0b34cb7a6c27d9fa2b5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d4f53105_724b00b9",
+        "filename": "designs/filter_mutualization.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-03-12T13:31:04Z",
+      "side": 1,
+      "message": "nit: you could split this setence between synchronisation and to load. I had to read it twice to understand it properly. :)",
+      "range": {
+        "startLine": 136,
+        "startChar": 43,
+        "endLine": 136,
+        "endChar": 66
+      },
       "revId": "169a4af11a45bccab885a0b34cb7a6c27d9fa2b5",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
@@ -354,6 +515,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "cf9136c0_feddf49c",
+        "filename": "designs/filter_mutualization.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-03-12T13:31:04Z",
+      "side": 1,
+      "message": "you can use the term plugin to refer to both",
+      "range": {
+        "startLine": 197,
+        "startChar": 110,
+        "endLine": 197,
+        "endChar": 126
+      },
+      "revId": "169a4af11a45bccab885a0b34cb7a6c27d9fa2b5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "edf895e0_cbb8f455",
         "filename": "designs/filter_mutualization.rst",
         "patchSetId": 1
@@ -365,6 +549,98 @@
       "writtenOn": "2025-03-12T08:14:25Z",
       "side": 1,
       "message": "question: If we have a POSIX backend with a Lustre enricher and we\u0027re using a Lustre filter, we need to test all the backends and enrichers to find the one that can handle it ?",
+      "revId": "169a4af11a45bccab885a0b34cb7a6c27d9fa2b5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7606bfe8_53bcf3fc",
+        "filename": "designs/filter_mutualization.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-03-12T13:31:04Z",
+      "side": 1,
+      "message": "major: we have to be very carreful here. With the extension feature, there is no lustre or retention backend. There is a lustre plugin though. Is the backend argument really necessary? Do we expect to have to call backend specific functions to build filters? We should really try to avoid the need for the backend argument and make this a plugin operation. Also, note that apart from rbh-lfind that creates a lustre backend for some filters to fetch default stripe info, rbh-find doesn\u0027t build filesytem specific backends currently.\n\nYou need to make sure that this is necessary and if not I think we are better off making this a plugin operation instead.\n\nAnother point against having a backend as an argument is that some backends are not easy to open. We have done a hack in rbh-lfind, we open \"rbh:lustre:.\". Which only works if you are on the mount point you are interested in.",
+      "range": {
+        "startLine": 229,
+        "startChar": 17,
+        "endLine": 229,
+        "endChar": 24
+      },
+      "revId": "169a4af11a45bccab885a0b34cb7a6c27d9fa2b5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e6360a72_8e2cfe09",
+        "filename": "designs/filter_mutualization.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-03-12T13:31:04Z",
+      "side": 1,
+      "message": "simply argc/argv?",
+      "range": {
+        "startLine": 230,
+        "startChar": 18,
+        "endLine": 230,
+        "endChar": 25
+      },
+      "revId": "169a4af11a45bccab885a0b34cb7a6c27d9fa2b5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "daf49e3f_5813e6a8",
+        "filename": "designs/filter_mutualization.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-03-12T13:31:04Z",
+      "side": 1,
+      "message": "Could document the distinction between both variables?",
+      "range": {
+        "startLine": 231,
+        "startChar": 15,
+        "endLine": 232,
+        "endChar": 30
+      },
+      "revId": "169a4af11a45bccab885a0b34cb7a6c27d9fa2b5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a7e161a2_bb00d822",
+        "filename": "designs/filter_mutualization.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-03-12T13:31:04Z",
+      "side": 1,
+      "message": "suggest: to make the application code a bit cleaner, we could do something like this:\n\n```\nif (!rbh_plugin_check_valid_token(lustre_plugin, \"-size\"))\n    goto try_next_plugin;\n\nfilter \u003d rbh_plugin_build_filter(lustre_plugin, \u0026argc, \u0026argv);\n```\n\nOtherwise, you have to do something like this:\n\n```\nfilter \u003d rbh_plugin_parse_predicate(...);\nif (!filter \u0026\u0026 errno \u003d ENOTSUP)\n    goto try_next_plugin;\n```",
+      "range": {
+        "startLine": 237,
+        "startChar": 27,
+        "endLine": 237,
+        "endChar": 50
+      },
       "revId": "169a4af11a45bccab885a0b34cb7a6c27d9fa2b5",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
