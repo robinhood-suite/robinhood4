@@ -49,6 +49,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6b392049_2785bf5a",
+        "filename": "designs/filter_mutualization.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-12T08:14:25Z",
+      "side": 1,
+      "message": "comment: This is the first time I hear about this tool. It\u0027s not in the repo?",
+      "revId": "169a4af11a45bccab885a0b34cb7a6c27d9fa2b5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e108e073_c79308b9",
         "filename": "designs/filter_mutualization.rst",
         "patchSetId": 1
@@ -185,6 +202,23 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7397a273_87f3efb9",
+        "filename": "designs/filter_mutualization.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-12T08:14:25Z",
+      "side": 1,
+      "message": "comment: no really fan of this solution",
+      "revId": "169a4af11a45bccab885a0b34cb7a6c27d9fa2b5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a58409df_d5e7928f",
@@ -198,6 +232,30 @@
       "writtenOn": "2025-03-07T09:19:10Z",
       "side": 1,
       "message": "major: looking at the rest of the document, I feel like no additionnal library is defined, but rather filter parsing/conversion is integrated to the librobinhood regular backends",
+      "range": {
+        "startLine": 140,
+        "startChar": 6,
+        "endLine": 142,
+        "endChar": 2
+      },
+      "revId": "169a4af11a45bccab885a0b34cb7a6c27d9fa2b5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a990c918_a9da0efa",
+        "filename": "designs/filter_mutualization.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-12T08:14:25Z",
+      "side": 1,
+      "message": "idem",
+      "parentUuid": "a58409df_d5e7928f",
       "range": {
         "startLine": 140,
         "startChar": 6,
@@ -227,6 +285,23 @@
         "endLine": 171,
         "endChar": 159
       },
+      "revId": "169a4af11a45bccab885a0b34cb7a6c27d9fa2b5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0bcb5c7e_a9831e6b",
+        "filename": "designs/filter_mutualization.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-12T08:14:25Z",
+      "side": 1,
+      "message": "minor: this can be done with what Karl does (rbh-info), no ?",
       "revId": "169a4af11a45bccab885a0b34cb7a6c27d9fa2b5",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
@@ -273,6 +348,23 @@
         "endLine": 197,
         "endChar": 127
       },
+      "revId": "169a4af11a45bccab885a0b34cb7a6c27d9fa2b5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "edf895e0_cbb8f455",
+        "filename": "designs/filter_mutualization.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-12T08:14:25Z",
+      "side": 1,
+      "message": "question: If we have a POSIX backend with a Lustre enricher and we\u0027re using a Lustre filter, we need to test all the backends and enrichers to find the one that can handle it ?",
       "revId": "169a4af11a45bccab885a0b34cb7a6c27d9fa2b5",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
