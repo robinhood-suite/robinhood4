@@ -224,6 +224,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e7d4cac9_39ce5334",
+        "filename": "librobinhood/src/backends/mongo/mongo.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 804,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-03-12T11:55:40Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "923e1464_25a8a6c7",
+      "range": {
+        "startLine": 804,
+        "startChar": 9,
+        "endLine": 804,
+        "endChar": 22
+      },
+      "revId": "4ec599586676c1fbc18e1348296d467eab8b6ea2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f5d7cea7_8ad3afe1",
@@ -355,6 +379,30 @@
       "side": 1,
       "message": "This was to keep the ./rbh-info \u003cbackend name\u003e functionnality. As we already discussed it and agreed that i will do it in a patch next week, should i remove it from this patch ? or do I let it here ?",
       "parentUuid": "50c9c8ab_72038439",
+      "range": {
+        "startLine": 329,
+        "startChar": 8,
+        "endLine": 329,
+        "endChar": 52
+      },
+      "revId": "4ec599586676c1fbc18e1348296d467eab8b6ea2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "201cba07_262b2ffa",
+        "filename": "rbh-info/rbh-info.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 329,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-03-12T11:55:40Z",
+      "side": 1,
+      "message": "You can modify that later to use the \"isURI\" function instead, no need to change it now",
+      "parentUuid": "6e4951aa_1406a24c",
       "range": {
         "startLine": 329,
         "startChar": 8,
