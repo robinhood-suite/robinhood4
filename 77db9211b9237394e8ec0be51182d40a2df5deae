@@ -165,6 +165,30 @@
       },
       "revId": "77db9211b9237394e8ec0be51182d40a2df5deae",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d7b5d01c_8f1da4cf",
+        "filename": "rbh-find/tests/test_newer.bash",
+        "patchSetId": 7
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-12T12:14:02Z",
+      "side": 1,
+      "message": "Using `touch --date...` doesn\u0027t solve it, I don\u0027t want to only modify the mtime or atime of fileB and fileC. I want to have a mtime different on the root and fileA. Without the sleep, fileB and fileC are created within the same second as fileA. With the sleep, the mtime of the root is different than the mtime of fileA. All entries have a mtime different.\n\nAnd I removed the sleep in `test_anewer` as its has no impact on the atime.",
+      "parentUuid": "c0938bdc_2165fb78",
+      "range": {
+        "startLine": 49,
+        "startChar": 4,
+        "endLine": 49,
+        "endChar": 11
+      },
+      "revId": "77db9211b9237394e8ec0be51182d40a2df5deae",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
