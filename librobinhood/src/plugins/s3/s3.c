@@ -47,13 +47,18 @@ static const struct rbh_backend_operations S3_BACKEND_OPS = {
 };
 
 static const struct rbh_backend S3_BACKEND = {
+    .id = RBH_BI_S3,
     .name = RBH_S3_BACKEND_NAME,
     .ops = &S3_BACKEND_OPS,
 };
 
 struct rbh_backend *
-rbh_s3_backend_new(__attribute__((unused)) const char *path,
-                   struct rbh_config *config)
+rbh_s3_backend_new(__attribute__((unused))
+                   const struct rbh_backend_plugin *self,
+                   __attribute__((unused)) const char *type,
+                   __attribute__((unused)) const char *path,
+                   struct rbh_config *config,
+                   bool read_only)
 {
     struct rbh_value value = { 0 };
     struct s3_backend *s3;
