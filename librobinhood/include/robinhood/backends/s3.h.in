@@ -20,4 +20,8 @@
                                    RBH_S3_BACKEND_MINOR, \
                                    RBH_S3_BACKEND_RELEASE)
 
+struct rbh_backend *
+rbh_s3_backend_new(__attribute__((unused)) const char *path,
+                   struct rbh_config *config);
+
 #endif
