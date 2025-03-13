@@ -110,6 +110,10 @@ info_translate(const struct rbh_backend_plugin *plugin)
         return;
     }
     printf("Available info for backend '%s': \n", plugin->plugin.name);
+    if (info & RBH_INFO_AVG_OBJ_SIZE) {
+        printf("- a: give the average size of objects inside entries ");
+        printf("collection\n");
+    }
     if (info & RBH_INFO_COUNT) {
         printf("- c: retrieve the amount of document inside entries ");
         printf("collection\n");
@@ -125,6 +129,8 @@ help()
         "Usage:"
         "  %s <URI> -uri_arguments   Show info about the given URI\n"
         "URI arguments:\n"
+        "  -a --avg_obj_size         Show the average size of objects inside "
+        "a given backend\n"
         "  -c --count                Show the amount of document inside a "
         "given backend\n"
         "  -s --size                 Show the size of entries collection\n\n"
@@ -258,6 +264,12 @@ rbh_backend_list()
 }
 
 static void
+_get_collection_avg_obj_size(const struct rbh_value *value)
+{
+    printf("%d\n", value->int32);
+}
+
+static void
 _get_collection_size(const struct rbh_value *value)
 {
     printf("%d\n", value->int32);
@@ -270,6 +282,7 @@ _get_collection_count(const struct rbh_value *value)
 }
 
 static struct rbh_info_fields INFO_FIELDS[] = {
+    { "avgObjSize", _get_collection_avg_obj_size },
     { "count", _get_collection_count },
     { "size", _get_collection_size },
 };
@@ -317,6 +330,10 @@ main(int argc, char **argv)
             .val = 'c',
         },
         {
+            .name = "avg_obj_size",
+            .val = 'a',
+        },
+        {
             .name = "first_sync",
             .val = 'f',
         },
@@ -335,7 +352,7 @@ main(int argc, char **argv)
         return EINVAL;
     }
 
-    while ((option = getopt_long(argc, argv, "hlsc", LONG_OPTIONS,
+    while ((option = getopt_long(argc, argv, "hlsca", LONG_OPTIONS,
                                  NULL)) != -1) {
         switch (option) {
         case 'h':
@@ -349,6 +366,9 @@ main(int argc, char **argv)
             break;
         case 'c':
             flags |= RBH_INFO_COUNT;
+            break;
+        case 'a':
+            flags |= RBH_INFO_AVG_OBJ_SIZE;
             break;
         default :
             fprintf(stderr, "Unrecognized option\n");

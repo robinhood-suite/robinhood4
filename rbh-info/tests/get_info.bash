@@ -37,11 +37,25 @@ test_collection_count()
     fi
 }
 
+test_collection_avg_obj_size()
+{
+    rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
+
+    local rbh_info_avg_obj_size=$(rbh_info "rbh:mongo:$testdb" -a)
+    local mongo_avg_obj_size=$(mongo "$testdb" --eval "
+                               db.entries.stats().avgObjSize")
+
+    if [ "$rbh_info_avg_obj_size" != "$mongo_avg_obj_size" ]; then
+        error "average objects size are not matching\n"
+    fi
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
-declare -a tests=(test_collection_size test_collection_count)
+declare -a tests=(test_collection_size test_collection_count
+                  test_collection_avg_obj_size)
 
 tmpdir=$(mktemp --directory)
 trap -- "rm -rf '$tmpdir'" EXIT
