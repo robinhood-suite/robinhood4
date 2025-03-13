@@ -104,7 +104,16 @@ info_translate(const struct rbh_backend_plugin *plugin)
 {
     const uint8_t info = plugin->info;
 
+    if (!info) {
+        printf("Currently no info available for %s backend\n",
+               plugin->plugin.name);
+        return;
+    }
     printf("Available info for backend '%s': \n", plugin->plugin.name);
+    if (info & RBH_INFO_COUNT) {
+        printf("- c: retrieve the amount of document inside entries ");
+        printf("collection\n");
+    }
     if (info & RBH_INFO_SIZE)
         printf("-s: size of entries collection\n");
 }
@@ -116,6 +125,8 @@ help()
         "Usage:"
         "  %s <URI> -uri_arguments   Show info about the given URI\n"
         "URI arguments:\n"
+        "  -c --count                Show the amount of document inside a "
+        "given backend\n"
         "  -s --size                 Show the size of entries collection\n\n"
         "Arguments:\n"
         "Usage:"
@@ -250,7 +261,14 @@ _get_collection_size(const struct rbh_value *value)
     printf("%d\n", value->int32);
 }
 
+static void
+_get_collection_count(const struct rbh_value *value)
+{
+    printf("%ld\n", value->int64);
+}
+
 static struct rbh_info_fields INFO_FIELDS[] = {
+    { "count", _get_collection_count },
     { "size", _get_collection_size },
 };
 
@@ -293,6 +311,10 @@ main(int argc, char **argv)
             .val = 's',
         },
         {
+            .name = "count",
+            .val = 'c',
+        },
+        {
             .name = "first_sync",
             .val = 'f',
         },
@@ -311,7 +333,7 @@ main(int argc, char **argv)
         return EINVAL;
     }
 
-    while ((option = getopt_long(argc, argv, "hls", LONG_OPTIONS,
+    while ((option = getopt_long(argc, argv, "hlsc", LONG_OPTIONS,
                                  NULL)) != -1) {
         switch (option) {
         case 'h':
@@ -322,6 +344,9 @@ main(int argc, char **argv)
             return 0;
         case 's':
             flags |= RBH_INFO_SIZE;
+            break;
+        case 'c':
+            flags |= RBH_INFO_COUNT;
             break;
         default :
             fprintf(stderr, "Unrecognized option\n");
