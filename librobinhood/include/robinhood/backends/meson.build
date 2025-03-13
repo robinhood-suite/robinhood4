@@ -65,6 +65,27 @@ if get_option('lustre').enabled()
     install_headers(librbh_lustre_h, subdir: 'robinhood/backends')
 endif
 
+# S3 backend
+
+if get_option('s3').enabled()
+    librbh_s3_conf = configuration_data()
+
+    librbh_s3_conf.set('RBH_S3_BACKEND_MAJOR', 0)
+    librbh_s3_conf.set('RBH_S3_BACKEND_MINOR', 0)
+    librbh_s3_conf.set('RBH_S3_BACKEND_RELEASE', 0)
+
+    librbh_s3_version = '@0@.@1@.@2@'.format(
+        librbh_s3_conf.get('RBH_S3_BACKEND_MAJOR'),
+        librbh_s3_conf.get('RBH_S3_BACKEND_MINOR'),
+        librbh_s3_conf.get('RBH_S3_BACKEND_RELEASE')
+    )
+
+    librbh_s3_h = configure_file(input: 's3.h.in', output: 's3.h',
+                                     configuration: librbh_s3_conf)
+
+    install_headers(librbh_s3_h, subdir: 'robinhood/backends')
+endif
+
 # Hestia backend
 
 if get_option('hestia').enabled()
