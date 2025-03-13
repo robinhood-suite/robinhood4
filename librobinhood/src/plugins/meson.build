@@ -25,6 +25,7 @@ library_dirs = [
     'posix/enrichers/lustre',
     'posix/enrichers/retention',
     'posix/iterators/mfu',
+    's3',
 ]
 foreach backend: library_dirs
     # FIXME env.prepend only work with meson > 0.58.0
@@ -45,6 +46,10 @@ subdir('posix')
 
 if get_option('hestia').enabled()
     subdir('hestia')
+endif
+
+if get_option('s3').enabled()
+    subdir('s3')
 endif
 
 if build_mfu
