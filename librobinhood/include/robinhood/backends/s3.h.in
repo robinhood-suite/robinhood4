@@ -8,6 +8,7 @@
 #ifndef ROBINHOOD_S3_BACKEND_H
 #define ROBINHOOD_S3_BACKEND_H
 
+#include "robinhood/plugins/backend.h"
 #include "robinhood/backend.h"
 #include "robinhood/config.h"
 
@@ -19,5 +20,12 @@
 #define RBH_S3_BACKEND_VERSION RPV(RBH_S3_BACKEND_MAJOR, \
                                    RBH_S3_BACKEND_MINOR, \
                                    RBH_S3_BACKEND_RELEASE)
+
+struct rbh_backend *
+rbh_s3_backend_new(__attribute__((unused))
+                   const struct rbh_backend_plugin *self,
+                   __attribute__((unused)) const char *type,
+                   __attribute__((unused)) const char *path,
+                   struct rbh_config *config);
 
 #endif
