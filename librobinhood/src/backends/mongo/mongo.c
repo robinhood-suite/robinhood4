@@ -796,6 +796,57 @@ mongo_backend_report(void *backend, const struct rbh_filter *filter,
      *--------------------------------------------------------------------*/
 
 static int
+get_collection_avg_obj_size(const struct mongo_backend *mongo,
+                            struct rbh_value_pair *pair)
+{
+    int32_t avg_obj_size = 0;
+    struct rbh_value *value;
+    bson_error_t error;
+    bson_iter_t iter;
+    bson_t *command;
+    bson_t reply;
+
+    value = malloc(sizeof(*value));
+    if (!value)
+        goto avg_obj_size_out;
+
+    command = BCON_NEW("collStats", BCON_UTF8("entries"));
+
+    if (!mongoc_collection_command_simple(mongo->entries, command, NULL,
+                                          &reply, &error))
+        goto avg_obj_size_out;
+
+    if (bson_iter_init(&iter, &reply) && bson_iter_find(&iter, "avgObjSize")) {
+        if (BSON_ITER_HOLDS_INT32(&iter)) {
+            avg_obj_size = bson_iter_int32(&iter);
+        } else {
+            goto avg_obj_size_out;
+        }
+    } else {
+        goto avg_obj_size_out;
+    }
+
+    value->type = RBH_VT_INT32;
+    value->int32 = avg_obj_size;
+
+    pair->key = "avgObjSize";
+    pair->value = value;
+
+avg_obj_size_out:
+    if (command)
+        bson_destroy(command);
+    bson_destroy(&reply);
+
+    if (!avg_obj_size) {
+        fprintf(stderr, "Average object size not avalaible\n");
+        free(value);
+        return 0;
+    }
+
+    return 1;
+}
+
+static int
 get_collection_count(const struct mongo_backend *mongo,
                      struct rbh_value_pair *pair)
 {
@@ -915,6 +966,12 @@ mongo_backend_get_info(void *backend, int info_flags)
         struct rbh_value_pair count_pair;
         if (get_collection_count(mongo, &count_pair))
             pairs[idx++] = count_pair;
+    }
+
+    if (info_flags & RBH_INFO_AVG_OBJ_SIZE) {
+        struct rbh_value_pair avg_obj_size_pair;
+        if (get_collection_avg_obj_size(mongo, &avg_obj_size_pair))
+            pairs[idx++] = avg_obj_size_pair;
     }
 
     struct rbh_value *map_value = rbh_value_map_new(pairs, idx);
