@@ -222,7 +222,8 @@ struct rbh_filter_output {
  * Determines which info will be displayed by rbh-info.
  */
 enum rbh_info {
-    RBH_INFO_SIZE = 0x0000004U,
+    RBH_INFO_SIZE = 0x0000002U,
+    RBH_INFO_COUNT = 0x0000004U,
 };
 
 /**
