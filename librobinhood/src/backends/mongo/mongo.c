@@ -833,8 +833,8 @@ out:
 }
 
 static int
-get_collection_size(const struct mongo_backend *mongo,
-                    struct rbh_value_pair *pair)
+get_collection_stats(const struct mongo_backend *mongo, char *stats_to_find,
+                     struct rbh_value_pair *pair)
 {
     struct rbh_value *value;
     bson_error_t error;
@@ -851,7 +851,8 @@ get_collection_size(const struct mongo_backend *mongo,
                                           &reply, &error))
         goto out;
 
-    if (bson_iter_init(&iter, &reply) && bson_iter_find(&iter, "size")) {
+    if (bson_iter_init(&iter, &reply) && bson_iter_find(&iter, stats_to_find))
+    {
         if (BSON_ITER_HOLDS_INT32(&iter)) {
             size = bson_iter_int32(&iter);
         } else {
@@ -864,7 +865,7 @@ get_collection_size(const struct mongo_backend *mongo,
     value->type = RBH_VT_INT32;
     value->int32 = size;
 
-    pair->key = "size";
+    pair->key = stats_to_find;
     pair->value = value;
 
 out:
@@ -873,7 +874,7 @@ out:
     bson_destroy(&reply);
 
     if (!size) {
-        fprintf(stderr, "Size not avalaible\n");
+        fprintf(stderr, "Stats not avalaible\n");
         free(value);
         return 0;
     }
@@ -911,13 +912,18 @@ mongo_backend_get_info(void *backend, int info_flags)
     if (!map_value)
         goto out;
 
+    if (info_flags & RBH_INFO_AVG_OBJ_SIZE) {
+        if (!get_collection_stats(mongo, "avgObjSize", &pairs[idx++]))
+            goto out;
+    }
+
     if (info_flags & RBH_INFO_COUNT) {
         if (!get_collection_count(mongo, &pairs[idx++]))
             goto out;
     }
 
     if (info_flags & RBH_INFO_SIZE) {
-        if (!get_collection_size(mongo, &pairs[idx++]))
+        if (!get_collection_stats(mongo, "size", &pairs[idx++]))
             goto out;
     }
 
