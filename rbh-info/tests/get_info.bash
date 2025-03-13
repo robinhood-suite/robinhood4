@@ -25,11 +25,29 @@ test_collection_size()
     fi
 }
 
+test_collection_count()
+{
+    rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
+
+    local rbh_info_count=$(rbh_info "rbh:mongo:$testdb" -c)
+
+    if (( $(mongo_version) < $(version_code 5.0.0) )); then
+        local mongo_count=$(mongo "$testdb" --eval "db.entries.count()")
+    else
+        local mongo_count=$(mongo "$testdb" --eval
+                            "db.entries.countDocuments()")
+    fi
+
+    if [ "$rbh_info_count" != "$mongo_count" ]; then
+        error "count are not matching\n"
+    fi
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
-declare -a tests=(test_collection_size)
+declare -a tests=(test_collection_size test_collection_count)
 
 tmpdir=$(mktemp --directory)
 trap -- "rm -rf '$tmpdir'" EXIT
