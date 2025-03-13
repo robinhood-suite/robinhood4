@@ -90,6 +90,7 @@ enum rbh_backend_id {
     RBH_BI_LUSTRE_MPI,
     RBH_BI_HESTIA,
     RBH_BI_MPI_FILE,
+    RBH_BI_S3,
     /* User defined backends should use an ID so that:
      * RBI_RESERVED_MAX < ID <= 255
      */
