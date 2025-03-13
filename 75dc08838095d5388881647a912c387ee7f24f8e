@@ -22,6 +22,30 @@
       },
       "revId": "75dc08838095d5388881647a912c387ee7f24f8e",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "973f37c9_3b52d3ef",
+        "filename": "librobinhood/src/config.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-03-13T11:14:59Z",
+      "side": 0,
+      "message": "Acknowledged",
+      "parentUuid": "1c3febc9_38040378",
+      "range": {
+        "startLine": 45,
+        "startChar": 8,
+        "endLine": 46,
+        "endChar": 29
+      },
+      "revId": "75dc08838095d5388881647a912c387ee7f24f8e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
