@@ -23,6 +23,7 @@ enum lustre_predicate {
     LPRED_HSM_STATE,
     LPRED_IPOOL,
     LPRED_LAYOUT_PATTERN,
+    LPRED_MDT_COUNT,
     LPRED_MDT_INDEX,
     LPRED_OST_INDEX,
     LPRED_POOL,

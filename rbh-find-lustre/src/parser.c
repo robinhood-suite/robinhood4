@@ -66,9 +66,15 @@ str2lustre_predicate(const char *string)
             return LPRED_LAYOUT_PATTERN;
         break;
     case 'm':
-        if (strcmp(&string[2], "dt-index") == 0)
+        if (strncmp(&string[2], "dt-", 3))
+            break;
+
+        if (strcmp(&string[5], "count") == 0)
+            return LPRED_MDT_COUNT;
+
+        if (strcmp(&string[5], "index") == 0)
             return LPRED_MDT_INDEX;
-    break;
+        break;
     case 'o':
         if (strcmp(&string[2], "st") == 0)
             return LPRED_OST_INDEX;
@@ -98,6 +104,7 @@ static const char *__lustre_predicate2str[] = {
     [LOCAL(LPRED_HSM_STATE)]      = "hsm-state",
     [LOCAL(LPRED_IPOOL)]          = "ipool",
     [LOCAL(LPRED_LAYOUT_PATTERN)] = "layout-pattern",
+    [LOCAL(LPRED_MDT_COUNT)]      = "mdt-count",
     [LOCAL(LPRED_MDT_INDEX)]      = "mdt-index",
     [LOCAL(LPRED_OST_INDEX)]      = "ost",
     [LOCAL(LPRED_POOL)]           = "pool",

@@ -146,4 +146,14 @@ comp_start2filter(const char *start);
 struct rbh_filter *
 comp_end2filter(const char *end);
 
+/**
+ * Build a filter for the -mdt-count predicate
+ *
+ * @param end          a string representing an integer
+ *
+ * @return             a pointer to a newly allocated struct rbh_filter
+ */
+struct rbh_filter *
+mdt_count2filter(const char *mdt_count);
+
 #endif
