@@ -46,6 +46,7 @@ static const struct rbh_backend_operations S3_BACKEND_OPS = {
 };
 
 static const struct rbh_backend S3_BACKEND = {
+    .id = RBH_BI_S3,
     .name = RBH_S3_BACKEND_NAME,
     .ops = &S3_BACKEND_OPS,
 };
