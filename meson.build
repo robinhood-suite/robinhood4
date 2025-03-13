@@ -81,6 +81,12 @@ else
     libhestia = disabler()
 endif
 
+if get_option('s3').enabled()
+    libs3 = dependency('aws-cpp-sdk-s3', disabler: true, required: true)
+else
+    libs3 = disabler()
+endif
+
 check = dependency('check', disabler: true, version: '>=0.9.9', required: false)
 if not check.found()
     message('check is missing: skipping unit testing')
