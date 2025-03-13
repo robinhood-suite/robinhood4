@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d948d560_555208d4",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 6
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-03-13T08:54:48Z",
+      "side": 1,
+      "message": "If we want to be accurate, the ticket gives us the username then we need to retrieve the UID/GID from the username (usually through LDAP in practice). But the kerberos ticket won\u0027t give us the UID/GID directly.",
+      "range": {
+        "startLine": 66,
+        "startChar": 0,
+        "endLine": 66,
+        "endChar": 33
+      },
+      "revId": "f64608d00d0e9f3c49e63ecdec2d49cb0d8816de",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b11d00eb_cf634728",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 6
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-03-13T08:54:48Z",
+      "side": 1,
+      "message": "frontend would be better I think.",
+      "range": {
+        "startLine": 93,
+        "startChar": 42,
+        "endLine": 93,
+        "endChar": 48
+      },
+      "revId": "f64608d00d0e9f3c49e63ecdec2d49cb0d8816de",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}

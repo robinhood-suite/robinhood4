@@ -1232,6 +1232,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3c8f1ac7_47edfe0b",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-03-13T08:54:48Z",
+      "side": 1,
+      "message": "There is one thing that I don\u0027t find clear. Are you suggesting that one option is something like this:\n\n```\n$ cat rbh-user-find\n#!/usr/bin/env bash\n\nrbh-find \u003csome URI\u003e -uid $UID -gid $GID -and \"(\" \"$@\" \")\"\n```\n\nThis is not secure. I ommited the `-perm` for simplicity.",
+      "parentUuid": "a2de1855_c1fbdf26",
+      "range": {
+        "startLine": 151,
+        "startChar": 11,
+        "endLine": 154,
+        "endChar": 24
+      },
+      "revId": "aedc2d90186ec8e8e77a40e46c0584997fa7d4cb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5bb35a00_23fb377c",
         "filename": "designs/userland_robinhood.rst",
         "patchSetId": 3
@@ -1362,6 +1386,30 @@
       "side": 1,
       "message": "Here that\u0027s outside of my knowledge, is this generic ?\nWouldn\u0027t `GET /type/d/name/test` and `GET /name/test/type/d` be the exact same, but correspond to two different rules ?\nWouldn\u0027t we have to define a ton of rules for all the combinations ?\nHow would you manage `or` and parentheses ?",
       "parentUuid": "20104210_f68943e1",
+      "range": {
+        "startLine": 162,
+        "startChar": 0,
+        "endLine": 164,
+        "endChar": 28
+      },
+      "revId": "aedc2d90186ec8e8e77a40e46c0584997fa7d4cb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6f42de82_5fe258af",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-03-13T08:54:48Z",
+      "side": 1,
+      "message": "My point is that you should at least give one example of an HTTP request that would be sent. From what I understand, you are suggesting something like this:\n\n```\nPOST /mongo/dbname\nBody:\n\"-type d -name test\"\n```\n\nAnd the server would retrieve the filters in the body and simply append them to a base rbh-find command adding the uid/gid/perm filters. Is this what you have in mind?\n\nI don\u0027t like this approach. I think you should make things clear by giving an example.",
+      "parentUuid": "d9869e7a_8434bc5e",
       "range": {
         "startLine": 162,
         "startChar": 0,
