@@ -48,6 +48,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "45460e15_6996f2e3",
+        "filename": "rbh-find-lustre/src/filters.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-13T13:02:32Z",
+      "side": 1,
+      "message": "I put it back, this allows not to accept the indexes: \u0027-1\u0027 or \u0027+1\u0027 as for the ost_index filter",
+      "parentUuid": "6820b4a3_0962492d",
+      "range": {
+        "startLine": 259,
+        "startChar": 4,
+        "endLine": 261,
+        "endChar": 2
+      },
+      "revId": "67d6cad830fa4903fc1ef862896f597efff55f4f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6446a64b_39d4c5a2",
