@@ -40,6 +40,8 @@ static const struct rbh_filter_field predicate2filter_field[] = {
                                           .xattr = "hsm_state"},
     [LPRED_LAYOUT_PATTERN - LPRED_MIN] = {.fsentry = RBH_FP_INODE_XATTRS,
                                           .xattr = "pattern"},
+    [LPRED_MDT_COUNT - LPRED_MIN]      = {.fsentry = RBH_FP_INODE_XATTRS,
+                                          .xattr = "mdt_count"},
     [LPRED_MDT_INDEX - LPRED_MIN]      = {.fsentry = RBH_FP_INODE_XATTRS,
                                           .xattr = "mdt_index"},
     [LPRED_OST_INDEX - LPRED_MIN]      = {.fsentry = RBH_FP_INODE_XATTRS,
@@ -291,7 +293,6 @@ get_default_stripe_filter(void)
 
     dir_filter = filetype2filter("d");
     return filter_and(dir_filter, filter_not(default_filter));
-
 }
 
 static bool
@@ -701,4 +702,10 @@ struct rbh_filter *
 comp_end2filter(const char *end)
 {
     return comp2filter(end, get_filter_field(LPRED_COMP_END));
+}
+
+struct rbh_filter *
+mdt_count2filter(const char *mdt_count)
+{
+    return numeric2filter(get_filter_field(LPRED_MDT_COUNT), mdt_count);
 }
