@@ -223,7 +223,8 @@ struct rbh_filter_output {
  */
 enum rbh_info {
     RBH_CAPABILITIES_FLAG = 0x0000001U,
-    RBH_INFO_SIZE = 0x0000004U,
+    RBH_INFO_SIZE = 0x0000002U,
+    RBH_INFO_COUNT = 0x0000004U,
 };
 
 /**
