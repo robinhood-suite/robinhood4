@@ -796,15 +796,50 @@ mongo_backend_report(void *backend, const struct rbh_filter *filter,
      *--------------------------------------------------------------------*/
 
 static int
+get_collection_count(const struct mongo_backend *mongo,
+                     struct rbh_value_pair *pair)
+{
+    bson_t *filter = bson_new();
+    bson_t *opts = bson_new();
+    struct rbh_value *value;
+    bson_error_t error;
+    int64_t count;
+
+    value = RBH_SSTACK_PUSH(info_sstack, NULL, sizeof(*value));
+
+    count = mongoc_collection_count_documents(mongo->entries, filter, opts,
+                                              NULL, NULL, &error);
+    if (count < 0)
+        goto out;
+
+    value->type = RBH_VT_INT64;
+    value->int64 = count;
+
+    pair->key = "count";
+    pair->value = value;
+
+out:
+    bson_destroy(filter);
+    bson_destroy(opts);
+
+    if (count < 0) {
+        fprintf(stderr, "Error while counting\n");
+        return 0;
+    }
+
+    return 1;
+}
+
+static int
 get_collection_size(const struct mongo_backend *mongo,
                     struct rbh_value_pair *pair)
 {
     struct rbh_value *value;
     bson_error_t error;
     bson_iter_t iter;
+    int32_t size = 0;
     bson_t *command;
     bson_t reply;
-    int32_t size = 0;
 
     value = RBH_SSTACK_PUSH(info_sstack, NULL, sizeof(*value));
 
@@ -873,6 +908,11 @@ mongo_backend_get_info(void *backend, int info_flags)
     map_value = RBH_SSTACK_PUSH(info_sstack, NULL, sizeof(*map_value));
     if (!map_value)
         goto out;
+
+    if (info_flags & RBH_INFO_COUNT) {
+        if (!get_collection_count(mongo, &pairs[idx++]))
+            goto out;
+    }
 
     if (info_flags & RBH_INFO_SIZE) {
         if (!get_collection_size(mongo, &pairs[idx++]))
