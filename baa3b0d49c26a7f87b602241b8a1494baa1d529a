@@ -18,6 +18,24 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0192e354_548ab9e3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1038646
+      },
+      "writtenOn": "2025-03-14T10:26:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dc0dee63_7761e9a7",
+      "revId": "baa3b0d49c26a7f87b602241b8a1494baa1d529a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4833ee1e_452c96ea",
@@ -31,6 +49,30 @@
       "writtenOn": "2025-03-14T07:53:22Z",
       "side": 1,
       "message": "style: alignement",
+      "range": {
+        "startLine": 20,
+        "startChar": 34,
+        "endLine": 21,
+        "endChar": 57
+      },
+      "revId": "baa3b0d49c26a7f87b602241b8a1494baa1d529a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "af1592c8_20f426ff",
+        "filename": "librobinhood/include/robinhood/backends/s3.h.in",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1038646
+      },
+      "writtenOn": "2025-03-14T10:26:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4833ee1e_452c96ea",
       "range": {
         "startLine": 20,
         "startChar": 34,
@@ -58,6 +100,24 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6f46312c_5ae3f365",
+        "filename": "librobinhood/include/robinhood/backends/s3.h.in",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1038646
+      },
+      "writtenOn": "2025-03-14T10:26:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3e7aca16_784d5c2a",
+      "revId": "baa3b0d49c26a7f87b602241b8a1494baa1d529a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c0ad4d1e_911a460b",
@@ -71,6 +131,24 @@
       "writtenOn": "2025-03-14T07:53:22Z",
       "side": 1,
       "message": "minor: to remove no ?",
+      "revId": "baa3b0d49c26a7f87b602241b8a1494baa1d529a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7faa5544_569308ac",
+        "filename": "librobinhood/src/backends/s3/s3.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1038646
+      },
+      "writtenOn": "2025-03-14T10:26:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c0ad4d1e_911a460b",
       "revId": "baa3b0d49c26a7f87b602241b8a1494baa1d529a",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
@@ -92,6 +170,24 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b0302856_56dd16e7",
+        "filename": "librobinhood/src/backends/s3/s3.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1038646
+      },
+      "writtenOn": "2025-03-14T10:26:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "590ee331_7e4d7930",
+      "revId": "baa3b0d49c26a7f87b602241b8a1494baa1d529a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d5c6d211_09f91a39",
@@ -109,6 +205,24 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9a379f59_c77dab94",
+        "filename": "librobinhood/src/backends/s3/s3.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1038646
+      },
+      "writtenOn": "2025-03-14T10:26:03Z",
+      "side": 1,
+      "message": "adding it in the next patch with the backend.h update",
+      "parentUuid": "d5c6d211_09f91a39",
+      "revId": "baa3b0d49c26a7f87b602241b8a1494baa1d529a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f4fe0cfd_f1304dd3",
@@ -122,6 +236,30 @@
       "writtenOn": "2025-03-14T07:53:22Z",
       "side": 1,
       "message": "minor: you can remove this attribute as you are uusing the config",
+      "range": {
+        "startLine": 68,
+        "startChar": 19,
+        "endLine": 68,
+        "endChar": 42
+      },
+      "revId": "baa3b0d49c26a7f87b602241b8a1494baa1d529a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "98190692_7bddd723",
+        "filename": "librobinhood/src/backends/s3/s3.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1038646
+      },
+      "writtenOn": "2025-03-14T10:26:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f4fe0cfd_f1304dd3",
       "range": {
         "startLine": 68,
         "startChar": 19,
@@ -155,6 +293,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3cf62945_cdc36646",
+        "filename": "librobinhood/src/backends/s3/s3.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1038646
+      },
+      "writtenOn": "2025-03-14T10:26:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1046766a_349a8842",
+      "range": {
+        "startLine": 82,
+        "startChar": 21,
+        "endLine": 82,
+        "endChar": 36
+      },
+      "revId": "baa3b0d49c26a7f87b602241b8a1494baa1d529a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a814a9c4_b6933752",
@@ -168,6 +330,30 @@
       "writtenOn": "2025-03-14T07:53:22Z",
       "side": 1,
       "message": "minor: \"||\"",
+      "range": {
+        "startLine": 89,
+        "startChar": 17,
+        "endLine": 89,
+        "endChar": 18
+      },
+      "revId": "baa3b0d49c26a7f87b602241b8a1494baa1d529a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "56241be8_6d661fcc",
+        "filename": "librobinhood/src/backends/s3/s3.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1038646
+      },
+      "writtenOn": "2025-03-14T10:26:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a814a9c4_b6933752",
       "range": {
         "startLine": 89,
         "startChar": 17,
