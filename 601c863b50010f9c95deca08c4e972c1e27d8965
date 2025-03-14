@@ -18,6 +18,24 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "439643c2_d09f7c56",
+        "filename": "librobinhood/src/backends/s3/s3_wrapper.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1038646
+      },
+      "writtenOn": "2025-03-14T14:52:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d904913d_aa053adb",
+      "revId": "601c863b50010f9c95deca08c4e972c1e27d8965",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fee62b61_ab3ec173",
@@ -52,6 +70,42 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e8d665ae_f7bf640f",
+        "filename": "librobinhood/src/backends/s3/s3_wrapper.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1038646
+      },
+      "writtenOn": "2025-03-14T14:52:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b57573f9_c5a79b18",
+      "revId": "601c863b50010f9c95deca08c4e972c1e27d8965",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aff7d022_2f1a8090",
+        "filename": "librobinhood/src/backends/s3/s3_wrapper.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1038646
+      },
+      "writtenOn": "2025-03-14T14:52:13Z",
+      "side": 1,
+      "message": "Fixed with unique_ptr",
+      "parentUuid": "fee62b61_ab3ec173",
+      "revId": "601c863b50010f9c95deca08c4e972c1e27d8965",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0fa9839e_c229e58e",
@@ -65,6 +119,24 @@
       "writtenOn": "2025-03-14T07:43:57Z",
       "side": 1,
       "message": "question: `HTTPS` is available ? if so, can we use both ?",
+      "revId": "601c863b50010f9c95deca08c4e972c1e27d8965",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8e7d937d_1d5fb6c5",
+        "filename": "librobinhood/src/backends/s3/s3_wrapper.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1038646
+      },
+      "writtenOn": "2025-03-14T14:52:13Z",
+      "side": 1,
+      "message": "It would seems so https://sdk.amazonaws.com/cpp/api/LATEST/root/html/md_docs_2_client_configuration___parameters.html\nDo I add a boolean in the conf file to choose between http and https ?",
+      "parentUuid": "0fa9839e_c229e58e",
       "revId": "601c863b50010f9c95deca08c4e972c1e27d8965",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
@@ -86,6 +158,24 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e7ca46da_33e3e3f8",
+        "filename": "librobinhood/src/backends/s3/s3_wrapper.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1038646
+      },
+      "writtenOn": "2025-03-14T14:52:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "365765cd_cde3bd7a",
+      "revId": "601c863b50010f9c95deca08c4e972c1e27d8965",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8c85910c_b7d706f4",
@@ -99,6 +189,24 @@
       "writtenOn": "2025-03-14T07:43:57Z",
       "side": 1,
       "message": "sugest: it would be nice to have some documentation, as we do in other robinhood headers, to get information on the parameters and the behavior of the function",
+      "revId": "601c863b50010f9c95deca08c4e972c1e27d8965",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6b296f1a_f4f1ccb7",
+        "filename": "librobinhood/src/backends/s3/s3_wrapper.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1038646
+      },
+      "writtenOn": "2025-03-14T14:52:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8c85910c_b7d706f4",
       "revId": "601c863b50010f9c95deca08c4e972c1e27d8965",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
