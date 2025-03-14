@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d904913d_aa053adb",
+        "filename": "librobinhood/src/backends/s3/s3_wrapper.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-14T07:43:57Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "601c863b50010f9c95deca08c4e972c1e27d8965",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fee62b61_ab3ec173",
+        "filename": "librobinhood/src/backends/s3/s3_wrapper.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-14T07:43:57Z",
+      "side": 1,
+      "message": "question: do we need to free the client when we call `Destroy_API` ?",
+      "revId": "601c863b50010f9c95deca08c4e972c1e27d8965",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b57573f9_c5a79b18",
+        "filename": "librobinhood/src/backends/s3/s3_wrapper.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-14T07:43:57Z",
+      "side": 1,
+      "message": "major? It should be static no ?",
+      "revId": "601c863b50010f9c95deca08c4e972c1e27d8965",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0fa9839e_c229e58e",
+        "filename": "librobinhood/src/backends/s3/s3_wrapper.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-14T07:43:57Z",
+      "side": 1,
+      "message": "question: `HTTPS` is available ? if so, can we use both ?",
+      "revId": "601c863b50010f9c95deca08c4e972c1e27d8965",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "365765cd_cde3bd7a",
+        "filename": "librobinhood/src/backends/s3/s3_wrapper.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-14T07:43:57Z",
+      "side": 1,
+      "message": "minor: add the robinhood copyright",
+      "revId": "601c863b50010f9c95deca08c4e972c1e27d8965",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8c85910c_b7d706f4",
+        "filename": "librobinhood/src/backends/s3/s3_wrapper.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-14T07:43:57Z",
+      "side": 1,
+      "message": "sugest: it would be nice to have some documentation, as we do in other robinhood headers, to get information on the parameters and the behavior of the function",
+      "revId": "601c863b50010f9c95deca08c4e972c1e27d8965",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
