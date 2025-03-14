@@ -1,0 +1,181 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dc0dee63_7761e9a7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-14T07:53:22Z",
+      "side": 1,
+      "message": "nitpick: we generally use the name of the backend or tool as a prefix to the title, so here \"s3\" instead of \"Backend S3\"",
+      "revId": "baa3b0d49c26a7f87b602241b8a1494baa1d529a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4833ee1e_452c96ea",
+        "filename": "librobinhood/include/robinhood/backends/s3.h.in",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-14T07:53:22Z",
+      "side": 1,
+      "message": "style: alignement",
+      "range": {
+        "startLine": 20,
+        "startChar": 34,
+        "endLine": 21,
+        "endChar": 57
+      },
+      "revId": "baa3b0d49c26a7f87b602241b8a1494baa1d529a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3e7aca16_784d5c2a",
+        "filename": "librobinhood/include/robinhood/backends/s3.h.in",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-14T07:53:22Z",
+      "side": 1,
+      "message": "sugest: you can add it in the next patch as the s3 plugin is not yet added",
+      "revId": "baa3b0d49c26a7f87b602241b8a1494baa1d529a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c0ad4d1e_911a460b",
+        "filename": "librobinhood/src/backends/s3/s3.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-14T07:53:22Z",
+      "side": 1,
+      "message": "minor: to remove no ?",
+      "revId": "baa3b0d49c26a7f87b602241b8a1494baa1d529a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "590ee331_7e4d7930",
+        "filename": "librobinhood/src/backends/s3/s3.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-14T07:53:22Z",
+      "side": 1,
+      "message": "defect: we need to call the `Destroy_API` function",
+      "revId": "baa3b0d49c26a7f87b602241b8a1494baa1d529a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d5c6d211_09f91a39",
+        "filename": "librobinhood/src/backends/s3/s3.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-14T07:53:22Z",
+      "side": 1,
+      "message": "defect: this ID is not defined",
+      "revId": "baa3b0d49c26a7f87b602241b8a1494baa1d529a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f4fe0cfd_f1304dd3",
+        "filename": "librobinhood/src/backends/s3/s3.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-14T07:53:22Z",
+      "side": 1,
+      "message": "minor: you can remove this attribute as you are uusing the config",
+      "range": {
+        "startLine": 68,
+        "startChar": 19,
+        "endLine": 68,
+        "endChar": 42
+      },
+      "revId": "baa3b0d49c26a7f87b602241b8a1494baa1d529a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1046766a_349a8842",
+        "filename": "librobinhood/src/backends/s3/s3.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-14T07:53:22Z",
+      "side": 1,
+      "message": "sugest: rather than defining 3 separate variables, since we are in Yaml, I will define a map to group them.\n\n\nSomething like this:\n```\n\nRBH_S3:\n   S3_ADDRESS: \"\"\n   S3_USER: \"\"\n   S3_PASSWORD: \"\"\n```",
+      "range": {
+        "startLine": 82,
+        "startChar": 21,
+        "endLine": 82,
+        "endChar": 36
+      },
+      "revId": "baa3b0d49c26a7f87b602241b8a1494baa1d529a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a814a9c4_b6933752",
+        "filename": "librobinhood/src/backends/s3/s3.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-14T07:53:22Z",
+      "side": 1,
+      "message": "minor: \"||\"",
+      "range": {
+        "startLine": 89,
+        "startChar": 17,
+        "endLine": 89,
+        "endChar": 18
+      },
+      "revId": "baa3b0d49c26a7f87b602241b8a1494baa1d529a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
