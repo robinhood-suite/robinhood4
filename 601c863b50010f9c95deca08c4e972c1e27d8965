@@ -177,6 +177,24 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c5e181ec_c66f066a",
+        "filename": "librobinhood/src/backends/s3/s3_wrapper.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1038646
+      },
+      "writtenOn": "2025-03-17T14:02:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4e1eea7c_20f70f05",
+      "revId": "601c863b50010f9c95deca08c4e972c1e27d8965",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "365765cd_cde3bd7a",
