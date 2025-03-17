@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "15c8e432_21e56996",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-17T12:42:16Z",
+      "side": 1,
+      "message": "sugest: It would be nice to add an example in the conf template",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 24
+      },
+      "revId": "a72919965d3dff62b93f142b851222258e2acebb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "624ba7ca_21b38a02",
+        "filename": "librobinhood/src/utils/uri.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-17T12:42:16Z",
+      "side": 1,
+      "message": "nitpick: 2025",
+      "range": {
+        "startLine": 2,
+        "startChar": 17,
+        "endLine": 2,
+        "endChar": 21
+      },
+      "revId": "a72919965d3dff62b93f142b851222258e2acebb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
