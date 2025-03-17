@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "011a46c0_59fd97af",
+        "filename": "rbh-info/tests/info.bash",
+        "patchSetId": 5
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-03-17T12:18:12Z",
+      "side": 1,
+      "message": "minor: use `$testdb` here instead",
+      "range": {
+        "startLine": 42,
+        "startChar": 38,
+        "endLine": 42,
+        "endChar": 42
+      },
+      "revId": "c6346d58ceceae479528b0ac3b8320745556e594",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b956ab4d_0fcd9759",
+        "filename": "rbh-info/tests/info.bash",
+        "patchSetId": 5
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-03-17T12:18:12Z",
+      "side": 1,
+      "message": "minor: to remove, non necessary if you use `$testdb`",
+      "range": {
+        "startLine": 97,
+        "startChar": 4,
+        "endLine": 97,
+        "endChar": 70
+      },
+      "revId": "c6346d58ceceae479528b0ac3b8320745556e594",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dab0f22a_13ef042b",
+        "filename": "rbh-info/tests/info.bash",
+        "patchSetId": 5
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-03-17T12:18:12Z",
+      "side": 1,
+      "message": "major: use `$testdb` here instead, it\u0027s a variable defined for every test to ensure each test has their own DB and no overlap occurs. It will be deleted after each test",
+      "range": {
+        "startLine": 99,
+        "startChar": 12,
+        "endLine": 99,
+        "endChar": 30
+      },
+      "revId": "c6346d58ceceae479528b0ac3b8320745556e594",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9bbbb51d_be9c1071",
+        "filename": "rbh-info/tests/info.bash",
+        "patchSetId": 5
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-03-17T12:18:12Z",
+      "side": 1,
+      "message": "major: do a simple rbh-sync, it will be way easier to read, understand, and test",
+      "range": {
+        "startLine": 99,
+        "startChar": 4,
+        "endLine": 101,
+        "endChar": 42
+      },
+      "revId": "c6346d58ceceae479528b0ac3b8320745556e594",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4cece885_4aab42b8",
+        "filename": "rbh-info/tests/info.bash",
+        "patchSetId": 5
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-03-17T12:18:12Z",
+      "side": 1,
+      "message": "defect: `rbh_info`",
+      "range": {
+        "startLine": 103,
+        "startChar": 18,
+        "endLine": 103,
+        "endChar": 19
+      },
+      "revId": "c6346d58ceceae479528b0ac3b8320745556e594",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "196b6863_60667fed",
+        "filename": "rbh-info/tests/info.bash",
+        "patchSetId": 5
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-03-17T12:18:12Z",
+      "side": 1,
+      "message": "major: no need for that line if you use `$testdb`, that DB is cleared after each test",
+      "range": {
+        "startLine": 107,
+        "startChar": 4,
+        "endLine": 107,
+        "endChar": 70
+      },
+      "revId": "c6346d58ceceae479528b0ac3b8320745556e594",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7c71e526_591c8539",
+        "filename": "rbh-info/tests/info.bash",
+        "patchSetId": 4
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-03-17T12:18:12Z",
+      "side": 1,
+      "message": "major: do this in another test file for better readability",
+      "range": {
+        "startLine": 121,
+        "startChar": 18,
+        "endLine": 121,
+        "endChar": 38
+      },
+      "revId": "3761df1a36a45a6cbc7bb360b79eca41ae3be57e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
