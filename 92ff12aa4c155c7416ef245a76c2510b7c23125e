@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a82df786_dd010735",
+        "filename": "librobinhood/include/robinhood/backends/s3.h.in",
+        "patchSetId": 6
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-17T08:24:22Z",
+      "side": 1,
+      "message": "minor: no need to define it as your not using it",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 27,
+        "endChar": 24
+      },
+      "revId": "92ff12aa4c155c7416ef245a76c2510b7c23125e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "66a2370d_da404c0f",
+        "filename": "librobinhood/src/backends/s3/meson.build",
+        "patchSetId": 6
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-17T08:24:22Z",
+      "side": 1,
+      "message": "sugest: `sources: [ ... ],`",
+      "range": {
+        "startLine": 9,
+        "startChar": 4,
+        "endLine": 10,
+        "endChar": 19
+      },
+      "revId": "92ff12aa4c155c7416ef245a76c2510b7c23125e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2711992f_a7abbe1e",
+        "filename": "librobinhood/src/backends/s3/meson.build",
+        "patchSetId": 6
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-17T08:24:22Z",
+      "side": 1,
+      "message": "minor: It would be better do retrieve the dependency in the main meson.build, like we do with Lustre or MFU. It\u0027s easier to see all the dependencies required.",
+      "range": {
+        "startLine": 11,
+        "startChar": 19,
+        "endLine": 11,
+        "endChar": 63
+      },
+      "revId": "92ff12aa4c155c7416ef245a76c2510b7c23125e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
