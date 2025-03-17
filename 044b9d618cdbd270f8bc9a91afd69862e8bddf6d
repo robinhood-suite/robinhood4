@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "cfb4d40d_e0325974",
+        "filename": "rbh-info/rbh-info.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-03-17T08:16:51Z",
+      "side": 1,
+      "message": "minor: do this modification in the patch where this string is introduced",
+      "range": {
+        "startLine": 105,
+        "startChar": 29,
+        "endLine": 105,
+        "endChar": 35
+      },
+      "revId": "044b9d618cdbd270f8bc9a91afd69862e8bddf6d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a87fb9e8_3eb0f949",
         "filename": "rbh-info/rbh-info.c",
         "patchSetId": 2

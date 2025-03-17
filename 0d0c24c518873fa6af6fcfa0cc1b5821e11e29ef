@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0029d29b_78bbad90",
+        "filename": "rbh-info/rbh-info.c",
+        "patchSetId": 6
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-03-17T08:16:51Z",
+      "side": 1,
+      "message": "suggest:\n```\nif (info_map \u003d\u003d NULL) {\n    printf(...)\n    return\n}\n\nfor (size_t i \u003d 0...\n```",
+      "range": {
+        "startLine": 250,
+        "startChar": 4,
+        "endLine": 250,
+        "endChar": 19
+      },
+      "revId": "0d0c24c518873fa6af6fcfa0cc1b5821e11e29ef",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
