@@ -106,6 +106,24 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c10df02_5630065c",
+        "filename": "librobinhood/src/backends/s3/s3_wrapper.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-17T07:48:10Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "aff7d022_2f1a8090",
+      "revId": "601c863b50010f9c95deca08c4e972c1e27d8965",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0fa9839e_c229e58e",
@@ -137,6 +155,24 @@
       "side": 1,
       "message": "It would seems so https://sdk.amazonaws.com/cpp/api/LATEST/root/html/md_docs_2_client_configuration___parameters.html\nDo I add a boolean in the conf file to choose between http and https ?",
       "parentUuid": "0fa9839e_c229e58e",
+      "revId": "601c863b50010f9c95deca08c4e972c1e27d8965",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4e1eea7c_20f70f05",
+        "filename": "librobinhood/src/backends/s3/s3_wrapper.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-17T07:48:10Z",
+      "side": 1,
+      "message": "Ok, I would prefer to have HTTPS than HTTP. And according to the doc you can\u0027t have both at the same time so no need to make it configurable.",
+      "parentUuid": "8e7d937d_1d5fb6c5",
       "revId": "601c863b50010f9c95deca08c4e972c1e27d8965",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
