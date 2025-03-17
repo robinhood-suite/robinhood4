@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f4256a14_c3edf4f2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-03-17T12:31:18Z",
+      "side": 1,
+      "message": "typo: dynamically",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 11
+      },
+      "revId": "f1f4d8158193daeeae703d179c215963ea6f9503",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "db2dc98e_60ca21a8",
+        "filename": "rbh-info/rbh-info.c",
+        "patchSetId": 7
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-03-17T12:31:18Z",
+      "side": 1,
+      "message": "minor: use better names than `key` and `value`",
+      "range": {
+        "startLine": 49,
+        "startChar": 10,
+        "endLine": 49,
+        "endChar": 13
+      },
+      "revId": "f1f4d8158193daeeae703d179c215963ea6f9503",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f6cfa9d2_c34a2614",
+        "filename": "rbh-info/rbh-info.c",
+        "patchSetId": 7
+      },
+      "lineNbr": 358,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-03-17T12:31:18Z",
+      "side": 1,
+      "message": "question: what does `update_info_map` mean here ? Which map is updated ? How is it updated ?",
+      "range": {
+        "startLine": 358,
+        "startChar": 8,
+        "endLine": 358,
+        "endChar": 23
+      },
+      "revId": "f1f4d8158193daeeae703d179c215963ea6f9503",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0586bea0_ecaa1fda",
+        "filename": "rbh-info/rbh-info.c",
+        "patchSetId": 7
+      },
+      "lineNbr": 358,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-03-17T12:31:18Z",
+      "side": 1,
+      "message": "suggest: no need to pass this array to the function, since it is defined globally",
+      "range": {
+        "startLine": 358,
+        "startChar": 24,
+        "endLine": 358,
+        "endChar": 35
+      },
+      "revId": "f1f4d8158193daeeae703d179c215963ea6f9503",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
