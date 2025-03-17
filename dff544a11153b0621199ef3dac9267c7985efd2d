@@ -22,6 +22,30 @@
       },
       "revId": "dff544a11153b0621199ef3dac9267c7985efd2d",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "279eeec9_dfcf608c",
+        "filename": "librobinhood/src/backends/s3/s3.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-17T08:12:47Z",
+      "side": 1,
+      "message": "There are two ways of doing this, you can retrieve a map from the config just like you did. Or you can retrieve directly the value from the config with `rbh_config_find(\"RBH_S3/S3_ADDRESS\", \u0026value, RBH_VT_STRING);`",
+      "parentUuid": "38984c3c_93c16ef5",
+      "range": {
+        "startLine": 54,
+        "startChar": 0,
+        "endLine": 65,
+        "endChar": 0
+      },
+      "revId": "dff544a11153b0621199ef3dac9267c7985efd2d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
