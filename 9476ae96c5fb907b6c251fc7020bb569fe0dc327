@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "511e15ed_ecf27b32",
+        "filename": "librobinhood/include/robinhood/uri.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-03-17T12:45:32Z",
+      "side": 1,
+      "message": "minor: `true if the given string is a URI, false otherwise`",
+      "range": {
+        "startLine": 131,
+        "startChar": 20,
+        "endLine": 131,
+        "endChar": 28
+      },
+      "revId": "9476ae96c5fb907b6c251fc7020bb569fe0dc327",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
