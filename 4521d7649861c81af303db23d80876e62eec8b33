@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2706a135_efe41d31",
+        "filename": "retention/build_retention.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-17T13:25:23Z",
+      "side": 1,
+      "message": "sugest: aims to add",
+      "range": {
+        "startLine": 17,
+        "startChar": 22,
+        "endLine": 17,
+        "endChar": 45
+      },
+      "revId": "4521d7649861c81af303db23d80876e62eec8b33",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "fa3ecab1_67198683",
         "filename": "retention/build_retention.rst",
         "patchSetId": 1
@@ -157,6 +180,29 @@
         "startChar": 30,
         "endLine": 109,
         "endChar": 45
+      },
+      "revId": "4521d7649861c81af303db23d80876e62eec8b33",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "54dd2058_7c28d202",
+        "filename": "retention/run_retention.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-17T13:25:23Z",
+      "side": 1,
+      "message": "minor: rbh-sync is not Lustre specific",
+      "range": {
+        "startLine": 23,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 6
       },
       "revId": "4521d7649861c81af303db23d80876e62eec8b33",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
