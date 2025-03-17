@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8837b00f_d84271f8",
+        "filename": "rbh-info/rbh-info.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-03-17T09:17:20Z",
+      "side": 1,
+      "message": "true, however in the previous patch it was correct. I think I messed up with the conflict gestion.",
+      "parentUuid": "cfb4d40d_e0325974",
+      "range": {
+        "startLine": 105,
+        "startChar": 29,
+        "endLine": 105,
+        "endChar": 35
+      },
+      "revId": "044b9d618cdbd270f8bc9a91afd69862e8bddf6d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a87fb9e8_3eb0f949",
         "filename": "rbh-info/rbh-info.c",
         "patchSetId": 2
