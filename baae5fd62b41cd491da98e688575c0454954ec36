@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "908bbccc_5e9574da",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-03-17T12:42:49Z",
+      "side": 1,
+      "message": "in the patch overall, be more specific of the `average size` retrieved. I.E. it\u0027s not the average of each `statx.size` but rather the size of each entry of the backend in bytes",
+      "range": {
+        "startLine": 7,
+        "startChar": 16,
+        "endLine": 7,
+        "endChar": 33
+      },
+      "revId": "baae5fd62b41cd491da98e688575c0454954ec36",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "00ebaabc_9c7f1f9f",
+        "filename": "librobinhood/src/backends/mongo/mongo.c",
+        "patchSetId": 8
+      },
+      "lineNbr": 837,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-03-17T12:42:49Z",
+      "side": 1,
+      "message": "suggest: `stat_to_find`",
+      "range": {
+        "startLine": 837,
+        "startChar": 62,
+        "endLine": 837,
+        "endChar": 65
+      },
+      "revId": "baae5fd62b41cd491da98e688575c0454954ec36",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9660c977_9a5f8f74",
+        "filename": "rbh-info/rbh-info.c",
+        "patchSetId": 8
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-03-17T12:42:49Z",
+      "side": 1,
+      "message": "major: not a fan of this spelling, since it\u0027s Mongo specific",
+      "range": {
+        "startLine": 289,
+        "startChar": 7,
+        "endLine": 289,
+        "endChar": 17
+      },
+      "revId": "baae5fd62b41cd491da98e688575c0454954ec36",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
