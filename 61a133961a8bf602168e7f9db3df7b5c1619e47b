@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "66bfa45d_f6b0ac2c",
+        "filename": "librobinhood/include/robinhood/utils.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-03-17T12:48:13Z",
+      "side": 1,
+      "message": "suggest: `to be formatted`",
+      "range": {
+        "startLine": 109,
+        "startChar": 31,
+        "endLine": 109,
+        "endChar": 40
+      },
+      "revId": "61a133961a8bf602168e7f9db3df7b5c1619e47b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e8b517aa_fdb9b474",
+        "filename": "librobinhood/src/utils/utils.c",
+        "patchSetId": 6
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-03-17T12:48:13Z",
+      "side": 1,
+      "message": "minor: return the results of snprintf, to let the caller know the size filled in the buffer",
+      "range": {
+        "startLine": 94,
+        "startChar": 8,
+        "endLine": 94,
+        "endChar": 16
+      },
+      "revId": "61a133961a8bf602168e7f9db3df7b5c1619e47b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
