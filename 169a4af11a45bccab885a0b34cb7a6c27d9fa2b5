@@ -107,6 +107,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e814cba7_f8fea476",
+        "filename": "designs/filter_mutualization.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-03-17T13:00:28Z",
+      "side": 1,
+      "message": "Ok for `reserved tokens`.\n\nThinking of it, there is a chance `-sort` will be overloaded: in case we want to filter according to a specific attribute.",
+      "parentUuid": "c921d945_f240e5a0",
+      "range": {
+        "startLine": 36,
+        "startChar": 40,
+        "endLine": 36,
+        "endChar": 53
+      },
+      "revId": "169a4af11a45bccab885a0b34cb7a6c27d9fa2b5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e108e073_c79308b9",
         "filename": "designs/filter_mutualization.rst",
         "patchSetId": 1
@@ -118,6 +142,30 @@
       "writtenOn": "2025-03-06T09:48:23Z",
       "side": 1,
       "message": "typo: trimming spaces",
+      "range": {
+        "startLine": 47,
+        "startChar": 0,
+        "endLine": 47,
+        "endChar": 2
+      },
+      "revId": "169a4af11a45bccab885a0b34cb7a6c27d9fa2b5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3fb7f83f_b5278a44",
+        "filename": "designs/filter_mutualization.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-03-17T13:00:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e108e073_c79308b9",
       "range": {
         "startLine": 47,
         "startChar": 0,
@@ -151,6 +199,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6743f38a_64c6ef94",
+        "filename": "designs/filter_mutualization.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-03-17T13:00:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dcb52d6e_4638b1f9",
+      "range": {
+        "startLine": 59,
+        "startChar": 5,
+        "endLine": 59,
+        "endChar": 6
+      },
+      "revId": "169a4af11a45bccab885a0b34cb7a6c27d9fa2b5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "60d338ff_6d028cd6",
@@ -164,6 +236,30 @@
       "writtenOn": "2025-03-06T09:48:23Z",
       "side": 1,
       "message": "typo: trimming spaces",
+      "range": {
+        "startLine": 61,
+        "startChar": 5,
+        "endLine": 61,
+        "endChar": 6
+      },
+      "revId": "169a4af11a45bccab885a0b34cb7a6c27d9fa2b5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a2e0767d_454f41f0",
+        "filename": "designs/filter_mutualization.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-03-17T13:00:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "60d338ff_6d028cd6",
       "range": {
         "startLine": 61,
         "startChar": 5,
@@ -220,6 +316,54 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9dc5983a_de9d802d",
+        "filename": "designs/filter_mutualization.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-03-17T13:00:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7288c2bb_4df46ff8",
+      "range": {
+        "startLine": 68,
+        "startChar": 40,
+        "endLine": 68,
+        "endChar": 71
+      },
+      "revId": "169a4af11a45bccab885a0b34cb7a6c27d9fa2b5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0ec1df1a_6c6aaf34",
+        "filename": "designs/filter_mutualization.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-03-17T13:00:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "85052650_620a9a6e",
+      "range": {
+        "startLine": 68,
+        "startChar": 4,
+        "endLine": 68,
+        "endChar": 10
+      },
+      "revId": "169a4af11a45bccab885a0b34cb7a6c27d9fa2b5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7fe95da1_c8e4cce6",
@@ -233,6 +377,30 @@
       "writtenOn": "2025-03-07T09:19:10Z",
       "side": 1,
       "message": "or common token",
+      "range": {
+        "startLine": 69,
+        "startChar": 40,
+        "endLine": 69,
+        "endChar": 60
+      },
+      "revId": "169a4af11a45bccab885a0b34cb7a6c27d9fa2b5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8e8c2635_9e4636a7",
+        "filename": "designs/filter_mutualization.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-03-17T13:00:28Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "7fe95da1_c8e4cce6",
       "range": {
         "startLine": 69,
         "startChar": 40,
@@ -268,6 +436,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9565dcf3_3fd0f406",
+        "filename": "designs/filter_mutualization.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-03-17T13:00:28Z",
+      "side": 1,
+      "message": "If we consider what is given to the `find()` call, you are right. But the `parse_expression()` call is trickier, and in fact, either a (sub-)filter is generated for nearly each token or a call to `find()` is done.\n\nI think this process will not be changed in this design, just the (sub-)filter generation is moved to the plugin part.",
+      "parentUuid": "c1652e23_5d549b2d",
+      "range": {
+        "startLine": 80,
+        "startChar": 22,
+        "endLine": 80,
+        "endChar": 32
+      },
+      "revId": "169a4af11a45bccab885a0b34cb7a6c27d9fa2b5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "426da5af_95501ae9",
         "filename": "designs/filter_mutualization.rst",
         "patchSetId": 1
@@ -279,6 +471,30 @@
       "writtenOn": "2025-03-07T09:19:10Z",
       "side": 1,
       "message": "typo: on",
+      "range": {
+        "startLine": 97,
+        "startChar": 18,
+        "endLine": 97,
+        "endChar": 20
+      },
+      "revId": "169a4af11a45bccab885a0b34cb7a6c27d9fa2b5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "56db899a_ee803ab4",
+        "filename": "designs/filter_mutualization.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-03-17T13:00:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "426da5af_95501ae9",
       "range": {
         "startLine": 97,
         "startChar": 18,
@@ -312,6 +528,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c1ec1e2d_e95bbc3f",
+        "filename": "designs/filter_mutualization.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-03-17T13:00:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ecbe6280_acfb1736",
+      "range": {
+        "startLine": 111,
+        "startChar": 0,
+        "endLine": 112,
+        "endChar": 18
+      },
+      "revId": "169a4af11a45bccab885a0b34cb7a6c27d9fa2b5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "68e57eae_fd696e2a",
@@ -335,6 +575,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "45cec63a_5ce02a96",
+        "filename": "designs/filter_mutualization.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-03-17T13:00:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "68e57eae_fd696e2a",
+      "range": {
+        "startLine": 115,
+        "startChar": 5,
+        "endLine": 115,
+        "endChar": 28
+      },
+      "revId": "169a4af11a45bccab885a0b34cb7a6c27d9fa2b5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3a94e84d_83543053",
@@ -348,6 +612,30 @@
       "writtenOn": "2025-03-12T13:31:04Z",
       "side": 1,
       "message": "typo: tools",
+      "range": {
+        "startLine": 116,
+        "startChar": 37,
+        "endLine": 116,
+        "endChar": 42
+      },
+      "revId": "169a4af11a45bccab885a0b34cb7a6c27d9fa2b5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9ce242ce_b71c33c5",
+        "filename": "designs/filter_mutualization.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-03-17T13:00:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3a94e84d_83543053",
       "range": {
         "startLine": 116,
         "startChar": 37,
@@ -388,6 +676,30 @@
       "writtenOn": "2025-03-12T13:31:04Z",
       "side": 1,
       "message": "nit: you could split this setence between synchronisation and to load. I had to read it twice to understand it properly. :)",
+      "range": {
+        "startLine": 136,
+        "startChar": 43,
+        "endLine": 136,
+        "endChar": 66
+      },
+      "revId": "169a4af11a45bccab885a0b34cb7a6c27d9fa2b5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "db2288ca_f1e88d16",
+        "filename": "designs/filter_mutualization.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-03-17T13:00:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d4f53105_724b00b9",
       "range": {
         "startLine": 136,
         "startChar": 43,
@@ -445,6 +757,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7a46950a_4488b7de",
+        "filename": "designs/filter_mutualization.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-03-17T13:00:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a990c918_a9da0efa",
+      "range": {
+        "startLine": 140,
+        "startChar": 6,
+        "endLine": 142,
+        "endChar": 2
+      },
+      "revId": "169a4af11a45bccab885a0b34cb7a6c27d9fa2b5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b99c5b65_c0ce6ecc",
@@ -458,6 +794,30 @@
       "writtenOn": "2025-03-06T09:48:23Z",
       "side": 1,
       "message": "style: too many characters",
+      "range": {
+        "startLine": 171,
+        "startChar": 0,
+        "endLine": 171,
+        "endChar": 159
+      },
+      "revId": "169a4af11a45bccab885a0b34cb7a6c27d9fa2b5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9040004a_1c9ccbd4",
+        "filename": "designs/filter_mutualization.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-03-17T13:00:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b99c5b65_c0ce6ecc",
       "range": {
         "startLine": 171,
         "startChar": 0,
@@ -528,6 +888,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fd597ddd_21a1a6be",
+        "filename": "designs/filter_mutualization.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-03-17T13:00:28Z",
+      "side": 1,
+      "message": "That\u0027s right, no new library. I tried to remove those artifacts from the text.",
+      "parentUuid": "0c1f679b_c5d1c174",
+      "range": {
+        "startLine": 189,
+        "startChar": 42,
+        "endLine": 190,
+        "endChar": 16
+      },
+      "revId": "169a4af11a45bccab885a0b34cb7a6c27d9fa2b5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "911ffe9b_1217d9a1",
         "filename": "designs/filter_mutualization.rst",
         "patchSetId": 1
@@ -572,6 +956,54 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "692e1a6c_a66a9eeb",
+        "filename": "designs/filter_mutualization.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-03-17T13:00:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cf9136c0_feddf49c",
+      "range": {
+        "startLine": 197,
+        "startChar": 110,
+        "endLine": 197,
+        "endChar": 126
+      },
+      "revId": "169a4af11a45bccab885a0b34cb7a6c27d9fa2b5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d8cfca3_8f33bcc9",
+        "filename": "designs/filter_mutualization.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-03-17T13:00:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "911ffe9b_1217d9a1",
+      "range": {
+        "startLine": 197,
+        "startChar": 0,
+        "endLine": 197,
+        "endChar": 127
+      },
+      "revId": "169a4af11a45bccab885a0b34cb7a6c27d9fa2b5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "edf895e0_cbb8f455",
@@ -591,6 +1023,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6836971c_6bfb9e55",
+        "filename": "designs/filter_mutualization.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-03-17T13:00:28Z",
+      "side": 1,
+      "message": "As the synchronisation stored in the database that POSIX and Lustre were used, we will try both plugins. That\u0027s exactly what is doing currently in `rbh-find-lustre`.",
+      "parentUuid": "edf895e0_cbb8f455",
+      "revId": "169a4af11a45bccab885a0b34cb7a6c27d9fa2b5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7606bfe8_53bcf3fc",
         "filename": "designs/filter_mutualization.rst",
         "patchSetId": 1
@@ -602,6 +1052,30 @@
       "writtenOn": "2025-03-12T13:31:04Z",
       "side": 1,
       "message": "major: we have to be very carreful here. With the extension feature, there is no lustre or retention backend. There is a lustre plugin though. Is the backend argument really necessary? Do we expect to have to call backend specific functions to build filters? We should really try to avoid the need for the backend argument and make this a plugin operation. Also, note that apart from rbh-lfind that creates a lustre backend for some filters to fetch default stripe info, rbh-find doesn\u0027t build filesytem specific backends currently.\n\nYou need to make sure that this is necessary and if not I think we are better off making this a plugin operation instead.\n\nAnother point against having a backend as an argument is that some backends are not easy to open. We have done a hack in rbh-lfind, we open \"rbh:lustre:.\". Which only works if you are on the mount point you are interested in.",
+      "range": {
+        "startLine": 229,
+        "startChar": 17,
+        "endLine": 229,
+        "endChar": 24
+      },
+      "revId": "169a4af11a45bccab885a0b34cb7a6c27d9fa2b5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bcc1c4c3_6b2260d9",
+        "filename": "designs/filter_mutualization.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-03-17T13:00:28Z",
+      "side": 1,
+      "message": "I thought of plugins when writing the design.",
+      "parentUuid": "7606bfe8_53bcf3fc",
       "range": {
         "startLine": 229,
         "startChar": 17,
@@ -635,6 +1109,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "72f0a32c_a6d226e8",
+        "filename": "designs/filter_mutualization.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-03-17T13:00:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e6360a72_8e2cfe09",
+      "range": {
+        "startLine": 230,
+        "startChar": 18,
+        "endLine": 230,
+        "endChar": 25
+      },
+      "revId": "169a4af11a45bccab885a0b34cb7a6c27d9fa2b5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "daf49e3f_5813e6a8",
@@ -648,6 +1146,30 @@
       "writtenOn": "2025-03-12T13:31:04Z",
       "side": 1,
       "message": "Could document the distinction between both variables?",
+      "range": {
+        "startLine": 231,
+        "startChar": 15,
+        "endLine": 232,
+        "endChar": 30
+      },
+      "revId": "169a4af11a45bccab885a0b34cb7a6c27d9fa2b5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5611df64_9925cd33",
+        "filename": "designs/filter_mutualization.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-03-17T13:00:28Z",
+      "side": 1,
+      "message": "Done, following the current implementation.",
+      "parentUuid": "daf49e3f_5813e6a8",
       "range": {
         "startLine": 231,
         "startChar": 15,
@@ -681,6 +1203,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "94d603cc_a5dcbd2a",
+        "filename": "designs/filter_mutualization.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-03-17T13:00:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a7e161a2_bb00d822",
+      "range": {
+        "startLine": 237,
+        "startChar": 27,
+        "endLine": 237,
+        "endChar": 50
+      },
+      "revId": "169a4af11a45bccab885a0b34cb7a6c27d9fa2b5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5df53ab1_e8313e7e",
@@ -694,6 +1240,30 @@
       "writtenOn": "2025-03-06T09:48:23Z",
       "side": 1,
       "message": "typo: trimming spaces",
+      "range": {
+        "startLine": 254,
+        "startChar": 73,
+        "endLine": 254,
+        "endChar": 74
+      },
+      "revId": "169a4af11a45bccab885a0b34cb7a6c27d9fa2b5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b825d1e5_844c1145",
+        "filename": "designs/filter_mutualization.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-03-17T13:00:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5df53ab1_e8313e7e",
       "range": {
         "startLine": 254,
         "startChar": 73,
