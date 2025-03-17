@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "528baf7f_edcae443",
+        "filename": "rbh-info/rbh-info.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 321,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-17T13:49:28Z",
+      "side": 1,
+      "message": "minor: no need, the config is not loaded",
+      "revId": "ead0fd8413124bb5730dde10ebe7d3d88d2adab6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
