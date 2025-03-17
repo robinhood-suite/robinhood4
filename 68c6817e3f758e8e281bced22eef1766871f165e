@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e868770d_ad5ee664",
+        "filename": "librobinhood/src/backends/mongo/mongo.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-03-17T12:28:27Z",
+      "side": 1,
+      "message": "nit: `destroy_sstacks`",
+      "range": {
+        "startLine": 57,
+        "startChar": 0,
+        "endLine": 57,
+        "endChar": 21
+      },
+      "revId": "68c6817e3f758e8e281bced22eef1766871f165e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9025ff67_6aef4a9d",
+        "filename": "librobinhood/src/backends/mongo/mongo.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 852,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-03-17T12:28:27Z",
+      "side": 1,
+      "message": "style: we avoid defining multiple variables on the same line, even if they have the same type",
+      "range": {
+        "startLine": 852,
+        "startChar": 4,
+        "endLine": 852,
+        "endChar": 51
+      },
+      "revId": "68c6817e3f758e8e281bced22eef1766871f165e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2da898c0_2515c0a1",
+        "filename": "librobinhood/src/backends/mongo/mongo.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 872,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-03-17T12:28:27Z",
+      "side": 1,
+      "message": "major: missing management if the call fails",
+      "range": {
+        "startLine": 872,
+        "startChar": 8,
+        "endLine": 872,
+        "endChar": 12
+      },
+      "revId": "68c6817e3f758e8e281bced22eef1766871f165e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7b0b6d53_4f986b66",
+        "filename": "librobinhood/src/backends/mongo/mongo.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 873,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-03-17T12:28:27Z",
+      "side": 1,
+      "message": "minor: no need for the `size_pair` variable, just pass `\u0026pairs[idx]` to the `get_collection_size` function",
+      "range": {
+        "startLine": 871,
+        "startChar": 8,
+        "endLine": 873,
+        "endChar": 37
+      },
+      "revId": "68c6817e3f758e8e281bced22eef1766871f165e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6f275fcd_de0e497c",
+        "filename": "librobinhood/src/backends/mongo/mongo.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 876,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-03-17T12:28:27Z",
+      "side": 1,
+      "message": "minor: this is never freed. Underneath, the `rbh_value_map_new` will do a malloc and copy to create the map, and the result should be freed. To handle this better, you can instead push a map onto the info sstack, and use `value_map_copy` instead.",
+      "range": {
+        "startLine": 876,
+        "startChar": 4,
+        "endLine": 876,
+        "endChar": 64
+      },
+      "revId": "68c6817e3f758e8e281bced22eef1766871f165e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
