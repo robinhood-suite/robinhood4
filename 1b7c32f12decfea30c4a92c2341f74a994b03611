@@ -22,6 +22,30 @@
       },
       "revId": "1b7c32f12decfea30c4a92c2341f74a994b03611",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9419fb6f_de66ed20",
+        "filename": "librobinhood/src/config.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 461,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-03-18T09:20:01Z",
+      "side": 1,
+      "message": "I think with this patch, what you wrote would be valid. And we probably don\u0027t want this... I\u0027ll probably need a different function for find like tools...",
+      "parentUuid": "347c53bb_62f1cdef",
+      "range": {
+        "startLine": 460,
+        "startChar": 12,
+        "endLine": 461,
+        "endChar": 44
+      },
+      "revId": "1b7c32f12decfea30c4a92c2341f74a994b03611",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
