@@ -404,20 +404,19 @@ handle_config_option(int argc, char *argv[], int index)
               "Failed to open configuration file '%s'", argv[index + 1]);
 }
 
-static int
+static void
 rbh_config_open_default()
 {
     const char* default_config = "/etc/robinhood4.d/rbh_conf.yaml";
 
     int rc = rbh_config_open(default_config);
 
-    if (rc && errno != ENOENT) {
-        fprintf(stderr, "Warning: Failed to open default configuration file "
-                "'%s': %s\n", default_config, strerror(errno));
-        return 1;
-    }
-
-    return 0;
+    if (rc && errno != ENOENT)
+        fprintf(stderr,
+                "Warning: Failed to open default configuration file '%s': %s\n",
+                default_config, strerror(errno));
+    else if (rc)
+        errno = 0;
 }
 
 void
@@ -434,4 +433,3 @@ import_configuration_file(int *argc, char ***argv)
 
     rbh_config_open_default();
 }
-
