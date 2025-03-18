@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b51ca1c4_108e2870",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-03-18T10:29:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f4256a14_c3edf4f2",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 11
+      },
+      "revId": "f1f4d8158193daeeae703d179c215963ea6f9503",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "db2dc98e_60ca21a8",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-03-17T12:31:18Z",
       "side": 1,
       "message": "minor: use better names than `key` and `value`",
+      "range": {
+        "startLine": 49,
+        "startChar": 10,
+        "endLine": 49,
+        "endChar": 13
+      },
+      "revId": "f1f4d8158193daeeae703d179c215963ea6f9503",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d32cda55_79b66416",
+        "filename": "rbh-info/rbh-info.c",
+        "patchSetId": 7
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-03-18T10:29:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "db2dc98e_60ca21a8",
       "range": {
         "startLine": 49,
         "startChar": 10,
@@ -83,6 +131,54 @@
       "writtenOn": "2025-03-17T12:31:18Z",
       "side": 1,
       "message": "suggest: no need to pass this array to the function, since it is defined globally",
+      "range": {
+        "startLine": 358,
+        "startChar": 24,
+        "endLine": 358,
+        "endChar": 35
+      },
+      "revId": "f1f4d8158193daeeae703d179c215963ea6f9503",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "333fd4ae_93d21a5f",
+        "filename": "rbh-info/rbh-info.c",
+        "patchSetId": 7
+      },
+      "lineNbr": 358,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-03-18T10:29:05Z",
+      "side": 1,
+      "message": "I meant update_rbh_info_fields. this function goal is to update the rbh_info_field by calling its second field (when we saw a match between pairs-\u003ekey and info_fields-\u003ekey).",
+      "parentUuid": "f6cfa9d2_c34a2614",
+      "range": {
+        "startLine": 358,
+        "startChar": 8,
+        "endLine": 358,
+        "endChar": 23
+      },
+      "revId": "f1f4d8158193daeeae703d179c215963ea6f9503",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c2183f49_3ddaa3cf",
+        "filename": "rbh-info/rbh-info.c",
+        "patchSetId": 7
+      },
+      "lineNbr": 358,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-03-18T10:29:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0586bea0_ecaa1fda",
       "range": {
         "startLine": 358,
         "startChar": 24,
