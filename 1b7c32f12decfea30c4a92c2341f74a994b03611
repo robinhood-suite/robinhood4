@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "347c53bb_62f1cdef",
+        "filename": "librobinhood/src/config.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 461,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-03-18T08:43:03Z",
+      "side": 1,
+      "message": "question: I understand you want to move the args to the beginning of the command line, and then \"forget\" them when parsing the command line\n\nNot sure about the contents of the command line at this moment, but if, for a find, the command is this one:\n\n```\nrbh-find rbh:mongo:test -size +10G --config cfg.yaml -print\n```\n\nI think, at first reading, it will be converted to:\n\n```\nrbh-find --config cfg.yaml +10G rbh:mongo:test -size -print\n```\n\nIs there previous manipulations/checks to ensure this is not possible?",
+      "range": {
+        "startLine": 460,
+        "startChar": 12,
+        "endLine": 461,
+        "endChar": 44
+      },
+      "revId": "1b7c32f12decfea30c4a92c2341f74a994b03611",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
