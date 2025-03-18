@@ -140,6 +140,30 @@
       },
       "revId": "baae5fd62b41cd491da98e688575c0454954ec36",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "57c0b0b0_3f057217",
+        "filename": "rbh-info/rbh-info.c",
+        "patchSetId": 8
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-03-18T14:10:23Z",
+      "side": 1,
+      "message": "The good way to do this is to let the mongo backend convert the rbh key to `avgObjSize`.\n\nI agree with Yoann here.",
+      "parentUuid": "e3bac0dc_205e7583",
+      "range": {
+        "startLine": 289,
+        "startChar": 7,
+        "endLine": 289,
+        "endChar": 17
+      },
+      "revId": "baae5fd62b41cd491da98e688575c0454954ec36",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
