@@ -16,6 +16,29 @@
       "message": "defect: this is never freed",
       "revId": "a62c39eadcdf775182589702d22824ddcecba06b",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fabccc6a_fa0bd035",
+        "filename": "librobinhood/src/backends/posix/posix.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 1307,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-18T09:03:36Z",
+      "side": 1,
+      "message": "question: can the setup fail ?",
+      "range": {
+        "startLine": 1307,
+        "startChar": 8,
+        "endLine": 1307,
+        "endChar": 36
+      },
+      "revId": "a62c39eadcdf775182589702d22824ddcecba06b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
