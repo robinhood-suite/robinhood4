@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a7710449_0358d8ee",
+        "filename": "librobinhood/src/backends/s3/s3.c",
+        "patchSetId": 8
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-03-18T10:15:08Z",
+      "side": 1,
+      "message": "suggest: it may be better to prefix the init and destroy functions by `s3_`",
+      "range": {
+        "startLine": 42,
+        "startChar": 4,
+        "endLine": 42,
+        "endChar": 15
+      },
+      "revId": "f92ae2cc68eb6d3fedc1fa7203f116051c4712d3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
