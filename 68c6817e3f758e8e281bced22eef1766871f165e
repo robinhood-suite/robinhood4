@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "937b6206_fadce600",
+        "filename": "librobinhood/src/backends/mongo/mongo.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-03-18T10:29:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e868770d_ad5ee664",
+      "range": {
+        "startLine": 57,
+        "startChar": 0,
+        "endLine": 57,
+        "endChar": 21
+      },
+      "revId": "68c6817e3f758e8e281bced22eef1766871f165e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9025ff67_6aef4a9d",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-03-17T12:28:27Z",
       "side": 1,
       "message": "style: we avoid defining multiple variables on the same line, even if they have the same type",
+      "range": {
+        "startLine": 852,
+        "startChar": 4,
+        "endLine": 852,
+        "endChar": 51
+      },
+      "revId": "68c6817e3f758e8e281bced22eef1766871f165e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d984ac49_8c39e4a7",
+        "filename": "librobinhood/src/backends/mongo/mongo.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 852,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-03-18T10:29:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9025ff67_6aef4a9d",
       "range": {
         "startLine": 852,
         "startChar": 4,
@@ -70,6 +118,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5f0b797a_426a858b",
+        "filename": "librobinhood/src/backends/mongo/mongo.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 872,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-03-18T10:29:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2da898c0_2515c0a1",
+      "range": {
+        "startLine": 872,
+        "startChar": 8,
+        "endLine": 872,
+        "endChar": 12
+      },
+      "revId": "68c6817e3f758e8e281bced22eef1766871f165e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7b0b6d53_4f986b66",
@@ -93,6 +165,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c5368416_a6dbcad1",
+        "filename": "librobinhood/src/backends/mongo/mongo.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 873,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-03-18T10:29:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7b0b6d53_4f986b66",
+      "range": {
+        "startLine": 871,
+        "startChar": 8,
+        "endLine": 873,
+        "endChar": 37
+      },
+      "revId": "68c6817e3f758e8e281bced22eef1766871f165e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6f275fcd_de0e497c",
@@ -106,6 +202,30 @@
       "writtenOn": "2025-03-17T12:28:27Z",
       "side": 1,
       "message": "minor: this is never freed. Underneath, the `rbh_value_map_new` will do a malloc and copy to create the map, and the result should be freed. To handle this better, you can instead push a map onto the info sstack, and use `value_map_copy` instead.",
+      "range": {
+        "startLine": 876,
+        "startChar": 4,
+        "endLine": 876,
+        "endChar": 64
+      },
+      "revId": "68c6817e3f758e8e281bced22eef1766871f165e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a8ef80d7_8532ebdb",
+        "filename": "librobinhood/src/backends/mongo/mongo.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 876,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-03-18T10:29:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6f275fcd_de0e497c",
       "range": {
         "startLine": 876,
         "startChar": 4,
