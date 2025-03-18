@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8e9745ba_d3b3858b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-03-18T13:07:25Z",
+      "side": 1,
+      "message": "I asked a question in the previous patchset ;).",
+      "revId": "447b0e59889b18e7d02560c8c80da981b6bb9de6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
