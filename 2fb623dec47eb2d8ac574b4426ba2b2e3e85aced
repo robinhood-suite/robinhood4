@@ -41,6 +41,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6fcb6ca5_a04d986e",
+        "filename": "librobinhood/include/robinhood/plugins/backend.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-03-18T20:31:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a654450a_efeeda6f",
+      "range": {
+        "startLine": 105,
+        "startChar": 45,
+        "endLine": 105,
+        "endChar": 52
+      },
+      "revId": "2fb623dec47eb2d8ac574b4426ba2b2e3e85aced",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "035c79a7_172022e5",
@@ -54,6 +78,24 @@
       "writtenOn": "2025-03-11T13:45:33Z",
       "side": 1,
       "message": "question: should we not set extension to NULL if the plugin name or version is inconsistent?",
+      "revId": "2fb623dec47eb2d8ac574b4426ba2b2e3e85aced",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b441e62c_74554cc8",
+        "filename": "librobinhood/src/plugins/backend.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-03-18T20:31:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "035c79a7_172022e5",
       "revId": "2fb623dec47eb2d8ac574b4426ba2b2e3e85aced",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
