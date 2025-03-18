@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "82bbc9ba_4dd227e6",
+        "filename": "rbh-info/tests/get_info.bash",
+        "patchSetId": 8
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-03-18T10:40:30Z",
+      "side": 1,
+      "message": "defect? Not sure this works, since the `mongo` command is overloaded in the test utils, and has a `--quiet` flag already, so this call will have two quiet flags, and mongo outputs an error for that",
+      "range": {
+        "startLine": 33,
+        "startChar": 40,
+        "endLine": 33,
+        "endChar": 48
+      },
+      "revId": "7f25151b64b3d7206cc04c12f69d54856c1f0ef3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
