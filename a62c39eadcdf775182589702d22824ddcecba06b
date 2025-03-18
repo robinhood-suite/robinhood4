@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "67e014dc_a6a3e618",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-03-18T09:31:31Z",
+      "side": 1,
+      "message": "Good for me, except for the defect raised by Gauthier.",
+      "revId": "a62c39eadcdf775182589702d22824ddcecba06b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "127973f7_1ac480a7",
