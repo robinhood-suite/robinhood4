@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ffb9b45d_d3826655",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-03-18T13:12:33Z",
+      "side": 1,
+      "message": "I forgot Yoann\u0027s comments on the commit message.",
+      "revId": "03d08528cefcd08f2817a56e066fe17bbe35be5b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}

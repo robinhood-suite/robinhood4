@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc0cda5c_7ad16d97",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-03-18T13:12:33Z",
+      "side": 1,
+      "message": "I rather choose the English one.",
+      "parentUuid": "932c847e_12740666",
+      "range": {
+        "startLine": 15,
+        "startChar": 31,
+        "endLine": 15,
+        "endChar": 41
+      },
+      "revId": "169a4af11a45bccab885a0b34cb7a6c27d9fa2b5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4d7384a0_4b24cfa1",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-03-07T09:19:10Z",
       "side": 1,
       "message": "suggest: `with this proposal, \"rbh-find\" and \"rbh-lfind\" would be mutualized in the same tool, and wouldn\u0027t require additionnal user input`.",
+      "range": {
+        "startLine": 14,
+        "startChar": 69,
+        "endLine": 16,
+        "endChar": 37
+      },
+      "revId": "169a4af11a45bccab885a0b34cb7a6c27d9fa2b5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2d743ee3_425e8ff0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-03-18T13:12:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4d7384a0_4b24cfa1",
       "range": {
         "startLine": 14,
         "startChar": 69,
