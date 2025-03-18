@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9d539267_28be30b9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-18T09:42:34Z",
+      "side": 1,
+      "message": "Yes, in `doc/template_conf.yaml``",
+      "parentUuid": "85fbcc3a_f7768b69",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 24
+      },
+      "revId": "a72919965d3dff62b93f142b851222258e2acebb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8f043e84_a8b00a25",
         "filename": "/COMMIT_MSG",
         "patchSetId": 1
