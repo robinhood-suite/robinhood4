@@ -22,6 +22,30 @@
       },
       "revId": "7f25151b64b3d7206cc04c12f69d54856c1f0ef3",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3925dbc6_335129f4",
+        "filename": "rbh-info/tests/get_info.bash",
+        "patchSetId": 8
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-03-18T10:53:27Z",
+      "side": 1,
+      "message": "True, mb on that, I was trying sth and forgot to remove it after.",
+      "parentUuid": "82bbc9ba_4dd227e6",
+      "range": {
+        "startLine": 33,
+        "startChar": 40,
+        "endLine": 33,
+        "endChar": 48
+      },
+      "revId": "7f25151b64b3d7206cc04c12f69d54856c1f0ef3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
