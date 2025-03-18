@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fe80eeaa_8bc7d967",
+        "filename": "librobinhood/include/robinhood/backend.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-03-18T10:29:10Z",
+      "side": 1,
+      "message": "The value 1 is used by RBH_CAPABILITIES_FLAG inside rbh_info/rbh_info.c",
+      "parentUuid": "1f956e84_3c571f86",
+      "range": {
+        "startLine": 225,
+        "startChar": 20,
+        "endLine": 225,
+        "endChar": 30
+      },
+      "revId": "2834f2cfd3692aba1051668e8561d39b8d19f6ea",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "cf6905cc_3a8862e1",
         "filename": "librobinhood/src/backends/mongo/mongo.c",
         "patchSetId": 6
@@ -37,6 +61,30 @@
       "writtenOn": "2025-03-17T12:39:47Z",
       "side": 1,
       "message": "minor: use the sstack here instead",
+      "range": {
+        "startLine": 808,
+        "startChar": 12,
+        "endLine": 808,
+        "endChar": 18
+      },
+      "revId": "2834f2cfd3692aba1051668e8561d39b8d19f6ea",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "933c1dbe_156cac6f",
+        "filename": "librobinhood/src/backends/mongo/mongo.c",
+        "patchSetId": 6
+      },
+      "lineNbr": 808,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-03-18T10:29:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cf6905cc_3a8862e1",
       "range": {
         "startLine": 808,
         "startChar": 12,
@@ -70,6 +118,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ff4e77d0_8ead2fb3",
+        "filename": "librobinhood/src/backends/mongo/mongo.c",
+        "patchSetId": 6
+      },
+      "lineNbr": 813,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-03-18T10:29:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c1e0d04c_38b56aa1",
+      "range": {
+        "startLine": 813,
+        "startChar": 45,
+        "endLine": 813,
+        "endChar": 47
+      },
+      "revId": "2834f2cfd3692aba1051668e8561d39b8d19f6ea",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9e684b11_3b5f4baf",
@@ -83,6 +155,30 @@
       "writtenOn": "2025-03-17T12:39:47Z",
       "side": 1,
       "message": "minor: this if cannot be true, since an error line 814 will change `count`\u0027s value to 0, and no error will make a 0 or positive.\n\nUnless the malloc fails, but that\u0027s not intended I hope",
+      "range": {
+        "startLine": 830,
+        "startChar": 4,
+        "endLine": 831,
+        "endChar": 17
+      },
+      "revId": "2834f2cfd3692aba1051668e8561d39b8d19f6ea",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "da761492_d68c9f6b",
+        "filename": "librobinhood/src/backends/mongo/mongo.c",
+        "patchSetId": 6
+      },
+      "lineNbr": 831,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-03-18T10:29:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9e684b11_3b5f4baf",
       "range": {
         "startLine": 830,
         "startChar": 4,
@@ -116,6 +212,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4080fbda_61384716",
+        "filename": "rbh-info/rbh-info.c",
+        "patchSetId": 6
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-03-18T10:29:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a48fd80b_2060c18b",
+      "range": {
+        "startLine": 113,
+        "startChar": 12,
+        "endLine": 113,
+        "endChar": 16
+      },
+      "revId": "2834f2cfd3692aba1051668e8561d39b8d19f6ea",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "60186741_84b53804",
@@ -129,6 +249,30 @@
       "writtenOn": "2025-03-17T12:39:47Z",
       "side": 1,
       "message": "minor: no point in returning a value in these functions",
+      "range": {
+        "startLine": 272,
+        "startChar": 4,
+        "endLine": 272,
+        "endChar": 24
+      },
+      "revId": "2834f2cfd3692aba1051668e8561d39b8d19f6ea",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "16918933_0873c164",
+        "filename": "rbh-info/rbh-info.c",
+        "patchSetId": 6
+      },
+      "lineNbr": 272,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-03-18T10:29:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "60186741_84b53804",
       "range": {
         "startLine": 272,
         "startChar": 4,
