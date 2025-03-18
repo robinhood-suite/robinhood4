@@ -16,8 +16,17 @@ backend_path_env_for_mpi_tests = environment()
 ld_library_path = ''
 
 # .. and also add paths for plugins required by tests that require one
-foreach backend: ['posix', 'lustre', 'lustre_mpi', 'posix_mpi', 'mongo',
-                  'mpi_file', '..', 'retention', 'mfu']
+library_dirs = [
+    '..',
+    'hestia',
+    'mongo',
+    'mpi_file',
+    'posix',
+    'posix/enrichers/lustre',
+    'posix/enrichers/retention',
+    'posix/iterators/mfu',
+]
+foreach backend: library_dirs
     # FIXME env.prepend only work with meson > 0.58.0
     # meson gives this warning otherwise:
     # Overriding previous value of environment variable 'LD_LIBRARY_PATH' with a
@@ -33,14 +42,11 @@ backend_path_env_for_mpi_tests.set('LD_LIBRARY_PATH', ld_library_path)
 
 subdir('mongo')
 subdir('posix')
-subdir('lustre')
-subdir('retention')
 
 if get_option('hestia').enabled()
     subdir('hestia')
 endif
 
 if build_mfu
-    subdir('mfu')
     subdir('mpi_file')
 endif
