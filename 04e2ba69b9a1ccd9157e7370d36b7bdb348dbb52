@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd072aa3_8463eccd",
+        "filename": "librobinhood/include/robinhood/backends/hestia.h.in",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-03-18T20:50:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1efdc045_c0df57c0",
+      "range": {
+        "startLine": 37,
+        "startChar": 23,
+        "endLine": 37,
+        "endChar": 40
+      },
+      "revId": "04e2ba69b9a1ccd9157e7370d36b7bdb348dbb52",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "71988949_d8d3b391",
@@ -71,6 +95,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "92f58aa0_7ab12adb",
+        "filename": "librobinhood/src/backends/hestia/hestia.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 454,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-03-18T20:50:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "07d7afbe_0aee6638",
+      "range": {
+        "startLine": 454,
+        "startChar": 73,
+        "endLine": 454,
+        "endChar": 74
+      },
+      "revId": "04e2ba69b9a1ccd9157e7370d36b7bdb348dbb52",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e208d45d_041a9348",
@@ -84,6 +132,30 @@
       "writtenOn": "2025-03-17T13:00:09Z",
       "side": 1,
       "message": "question: Why `NULL` here and not with the lustre_mpi backend ?",
+      "range": {
+        "startLine": 1085,
+        "startChar": 66,
+        "endLine": 1085,
+        "endChar": 70
+      },
+      "revId": "04e2ba69b9a1ccd9157e7370d36b7bdb348dbb52",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4de60f7b_55fddc33",
+        "filename": "librobinhood/src/backends/lustre/lustre.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 1085,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-03-18T20:50:27Z",
+      "side": 1,
+      "message": "The type argument is only useful for the posix backend when it will actually lookup the config and load the extensions. Currently, the lustre backend is still using the old \"overload\" mecanism to add the lustre enrichment. Therefore, the posix backend should not load any extension when used like this with the lustre backend. Hence the NULL type here. This part of the code will be removed anyway. The purpose of this is just to keep the tests happy while I progressively move functionalities to the new extension feature.",
+      "parentUuid": "e208d45d_041a9348",
       "range": {
         "startLine": 1085,
         "startChar": 66,
