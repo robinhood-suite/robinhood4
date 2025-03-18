@@ -187,6 +187,30 @@
       },
       "revId": "f1f4d8158193daeeae703d179c215963ea6f9503",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "516cc6de_a1539680",
+        "filename": "rbh-info/rbh-info.c",
+        "patchSetId": 7
+      },
+      "lineNbr": 358,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-03-18T10:37:05Z",
+      "side": 1,
+      "message": "But what is updated ? I don\u0027t see any value modification in the function, only printing",
+      "parentUuid": "333fd4ae_93d21a5f",
+      "range": {
+        "startLine": 358,
+        "startChar": 8,
+        "endLine": 358,
+        "endChar": 23
+      },
+      "revId": "f1f4d8158193daeeae703d179c215963ea6f9503",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
