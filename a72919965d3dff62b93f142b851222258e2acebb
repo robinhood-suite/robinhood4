@@ -74,6 +74,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "beda157b_4e1d992d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-03-18T20:39:01Z",
+      "side": 1,
+      "message": "I\u0027ll add this in a new patch. Although, the best way to handle this kind of info would be a man page.",
+      "parentUuid": "9d539267_28be30b9",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 24
+      },
+      "revId": "a72919965d3dff62b93f142b851222258e2acebb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8f043e84_a8b00a25",
         "filename": "/COMMIT_MSG",
         "patchSetId": 1
@@ -166,6 +190,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "094c06b8_eec44727",
+        "filename": "librobinhood/src/utils/uri.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-03-18T20:39:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "624ba7ca_21b38a02",
+      "range": {
+        "startLine": 2,
+        "startChar": 17,
+        "endLine": 2,
+        "endChar": 21
+      },
+      "revId": "a72919965d3dff62b93f142b851222258e2acebb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ca89aa15_53637632",
@@ -179,6 +227,30 @@
       "writtenOn": "2025-03-18T08:51:05Z",
       "side": 1,
       "message": "typo: space",
+      "range": {
+        "startLine": 53,
+        "startChar": 21,
+        "endLine": 53,
+        "endChar": 22
+      },
+      "revId": "a72919965d3dff62b93f142b851222258e2acebb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9d4fd750_47241ea3",
+        "filename": "librobinhood/src/utils/uri.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-03-18T20:39:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ca89aa15_53637632",
       "range": {
         "startLine": 53,
         "startChar": 21,
