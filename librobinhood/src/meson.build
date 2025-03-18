@@ -49,4 +49,4 @@ librobinhood_dep = declare_dependency(
     include_directories: rbh_include
 )
 
-subdir('backends')
+subdir('plugins')
