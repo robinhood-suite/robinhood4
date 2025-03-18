@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "63fa9af9_ce0dfdc7",
+        "filename": "librobinhood/src/backends/mongo/mongo.c",
+        "patchSetId": 7
+      },
+      "lineNbr": 811,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-03-18T10:34:23Z",
+      "side": 1,
+      "message": "nit: since you use the macro RBH_SSTACK_PUSH, the if is not necessary",
+      "range": {
+        "startLine": 810,
+        "startChar": 4,
+        "endLine": 811,
+        "endChar": 17
+      },
+      "revId": "f9afb91ce9c270a3b2c3384482d54b912ee322fd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
