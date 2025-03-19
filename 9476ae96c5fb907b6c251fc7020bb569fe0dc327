@@ -65,6 +65,24 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "92b260b4_5d872f25",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-03-19T09:10:54Z",
+      "side": 1,
+      "message": "in rbh-info I want to check if the argv[0] is a URI or simply the backend name. If the backend name is provided it will show the backend capabilities (as rbh-capabilities did) and if it\u0027s a URI we can call the new functionnalities such as --size, --count etc.",
+      "parentUuid": "ca190e05_aa1753e2",
+      "revId": "9476ae96c5fb907b6c251fc7020bb569fe0dc327",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "511e15ed_ecf27b32",
