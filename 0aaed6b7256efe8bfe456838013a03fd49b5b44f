@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7c6ea8ce_a5518927",
+        "filename": "designs/filter_mutualization.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-03-19T09:45:17Z",
+      "side": 1,
+      "message": "Just to be clear: we can either do the first version explained here, which is to add a `parse_predicate` callback to the plugins operations that will both parse the given argc/argv, check their are a known predicate, and return a corresponding filter.\n\nOr we can do the second version, which is to have 2 callbacks, one `check_valid_token` to verify if a predicate is known or not, and another `build_filter` to create a filter from an identified predicate.\n\nCould you be more explicit about that difference, if there indeed is one, in this section ?",
+      "range": {
+        "startLine": 219,
+        "startChar": 0,
+        "endLine": 219,
+        "endChar": 18
+      },
+      "revId": "0aaed6b7256efe8bfe456838013a03fd49b5b44f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "089743d5_8d116fce",
+        "filename": "designs/filter_mutualization.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-03-19T09:45:17Z",
+      "side": 1,
+      "message": "major: we thought there were no specific action at first, but there\u0027s actually the printf actions, with directives specific to the different tools (currently only retention for Lustre, but we\u0027re assured it will change)",
+      "range": {
+        "startLine": 238,
+        "startChar": 2,
+        "endLine": 238,
+        "endChar": 26
+      },
+      "revId": "0aaed6b7256efe8bfe456838013a03fd49b5b44f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
