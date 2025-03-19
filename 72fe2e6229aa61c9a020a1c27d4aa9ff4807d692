@@ -119,6 +119,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac5a396e_a07da539",
+        "filename": "librobinhood/src/backends/posix/posix.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 507,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-19T10:14:22Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "37b9d43b_4b7e7dce",
+      "range": {
+        "startLine": 481,
+        "startChar": 4,
+        "endLine": 507,
+        "endChar": 5
+      },
+      "revId": "72fe2e6229aa61c9a020a1c27d4aa9ff4807d692",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3af2c835_de55d7a3",
@@ -156,6 +180,30 @@
       "side": 1,
       "message": "Nope. Memoization is a thing. It is when a function remembers the state of previous function calls to avoid recomputing things. The original comment was using memoize but was change later so I reverted the change. :)",
       "parentUuid": "3af2c835_de55d7a3",
+      "range": {
+        "startLine": 731,
+        "startChar": 37,
+        "endLine": 731,
+        "endChar": 46
+      },
+      "revId": "72fe2e6229aa61c9a020a1c27d4aa9ff4807d692",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf7c2bb8_52843b5d",
+        "filename": "librobinhood/src/backends/posix/posix.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 731,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-19T10:14:22Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "bfd21122_331044f2",
       "range": {
         "startLine": 731,
         "startChar": 37,
