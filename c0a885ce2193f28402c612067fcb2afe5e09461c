@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0c595360_62d54344",
+        "filename": "rbh-fsevents/src/enrichers/lustre.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-19T10:46:53Z",
+      "side": 1,
+      "message": "question: Here if I understand correctly, we still have the Lustre backend, so the get_attribute function will call the `rbh_lustre_enrich` according to the previous patches, except that this function does not recognize the flags for retention? Nothing will be done no ?\nThe retention will be already done in the previous get_attribute I think",
+      "revId": "c0a885ce2193f28402c612067fcb2afe5e09461c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
