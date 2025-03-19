@@ -25,6 +25,10 @@ ctx_finish(struct find_context *ctx)
         rbh_backend_plugin_destroy(name);
     }
     free(ctx->backends);
+    for (size_t i = 0; i < ctx->info_plugin_count; i++)
+        rbh_backend_plugin_destroy(ctx->info_plugins[i]->plugin.name);
+
+    free(ctx->info_plugins);
 }
 
 enum command_line_token
