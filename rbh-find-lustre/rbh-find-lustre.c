@@ -370,6 +370,28 @@ main(int _argc, char *_argv[])
         ctx.uris[i] = ctx.argv[i];
         ctx.backend_count++;
     }
+
+    ctx.info_plugin_count = 1;
+    ctx.info_plugins = malloc(ctx.info_plugin_count *
+                              sizeof(*ctx.info_plugins));
+    if (ctx.info_plugins == NULL)
+        error(EXIT_FAILURE, errno, "malloc");
+
+    ctx.info_plugins[0] = rbh_backend_plugin_import("posix");
+    if (ctx.info_plugins[0] == NULL)
+        error(EXIT_FAILURE, errno, "rbh_backend_plugin_import");
+
+    ctx.info_extension_count = 1;
+    ctx.info_extensions = malloc(ctx.info_extension_count *
+                                 sizeof(*ctx.info_extensions));
+    if (ctx.info_extensions == NULL)
+        error(EXIT_FAILURE, errno, "malloc");
+
+    ctx.info_extensions[0] =
+        rbh_plugin_load_extension(&ctx.info_plugins[0]->plugin, "lustre");
+    if (ctx.info_extensions[0] == NULL)
+        error(EXIT_FAILURE, errno, "rbh_plugin_load_extension");
+
     filter = parse_expression(&ctx, &index, NULL, &sorts, &sorts_count);
     if (index != ctx.argc)
         error(EX_USAGE, 0, "you have too many ')'");
