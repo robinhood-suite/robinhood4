@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c2b17d69_719a0392",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-19T11:22:21Z",
+      "side": 1,
+      "message": "Is this because it also lists extensions?",
+      "revId": "9a54f2e16ecf50ead130d03037c441517d09397c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
