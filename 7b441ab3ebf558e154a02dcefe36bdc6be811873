@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "975babaa_fefe597b",
+        "filename": "librobinhood/src/backends/mongo/mongo.c",
+        "patchSetId": 12
+      },
+      "lineNbr": 853,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-03-19T10:11:36Z",
+      "side": 1,
+      "message": "style:\n```\n    if (bson_iter_init(\u0026iter, \u0026reply) \u0026\u0026\n        bson_iter_find(\u0026iter, stats_to_find)) {```",
+      "range": {
+        "startLine": 852,
+        "startChar": 4,
+        "endLine": 853,
+        "endChar": 5
+      },
+      "revId": "7b441ab3ebf558e154a02dcefe36bdc6be811873",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "dc7fa7d7_aa6ec3f0",
         "filename": "librobinhood/src/backends/mongo/mongo.c",
         "patchSetId": 12
