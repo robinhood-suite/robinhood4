@@ -48,6 +48,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5c374f4e_dee33928",
+        "filename": "librobinhood/src/backends/iter_mpi/iter_mpi.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 363,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-19T13:08:54Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "9243cd11_f5220d9a",
+      "range": {
+        "startLine": 357,
+        "startChar": 4,
+        "endLine": 363,
+        "endChar": 5
+      },
+      "revId": "e352f88659500ddaf4475c89317bd2d241f03534",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4c2e86ae_04d23a6e",
@@ -102,6 +126,30 @@
       "side": 1,
       "message": "This use is that we have a global variable that is shared across threads so that only one of them calls MPI_Finalize. This is to prevent multi threading issues if/when we use it. Regarding multiple processes, this is fine because each process must call MPI_Finalize. No bugs here.",
       "parentUuid": "b096411d_4a4a682d",
+      "range": {
+        "startLine": 23,
+        "startChar": 4,
+        "endLine": 28,
+        "endChar": 36
+      },
+      "revId": "e352f88659500ddaf4475c89317bd2d241f03534",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3bc8c5f6_0ebe5235",
+        "filename": "librobinhood/src/mpi_rc.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-19T13:08:54Z",
+      "side": 1,
+      "message": "I didn\u0027t understand since we don\u0027t have threads. I don\u0027t know if there was a need to do it right away.",
+      "parentUuid": "6434ce43_9a014765",
       "range": {
         "startLine": 23,
         "startChar": 4,
