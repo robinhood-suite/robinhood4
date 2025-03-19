@@ -1,5 +1,5 @@
 /* This file is part of RobinHood 4
- * Copyright (C) 2022 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifer: LGPL-3.0-or-later
@@ -28,6 +28,10 @@ struct find_context {
     size_t backend_count;
     struct rbh_backend **backends;
     const char **uris;
+
+    /** The type of information stored in the backends */
+    const struct rbh_backend_plugin **info_plugins;
+    size_t info_plugin_count;
 
     /** The command-line arguments to parse */
     int argc;

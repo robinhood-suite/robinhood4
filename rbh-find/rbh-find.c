@@ -167,10 +167,10 @@ main(int _argc, char *_argv[])
     ctx.print_directive = &fsentry_print_directive;
 
     /* Parse the command line */
-    for (index = 0; index < ctx.argc; index++) {
+    for (index = 0; index < ctx.argc; index++)
         if (str2command_line_token(&ctx, ctx.argv[index]) != CLT_URI)
             break;
-    }
+
     if (index == 0)
         error(EX_USAGE, 0, "missing at least one robinhood URI");
 
@@ -187,6 +187,23 @@ main(int _argc, char *_argv[])
         ctx.uris[i] = ctx.argv[i];
         ctx.backend_count++;
     }
+
+    ctx.info_plugin_count = 2;
+    ctx.info_plugins = malloc(ctx.info_plugin_count *
+                              sizeof(*ctx.info_plugins));
+    if (ctx.info_plugins == NULL)
+        error(EXIT_FAILURE, errno, "malloc");
+
+    /* XXX: Ugly but necessary until we can retrieve the list of backends
+     * used to construct the mirror system from the mirror system itself.
+     */
+    ctx.info_plugins[0] = rbh_backend_plugin_import("posix");
+    if (ctx.info_plugins[0] == NULL)
+        error(EXIT_FAILURE, errno, "rbh_backend_plugin_import");
+    ctx.info_plugins[1] = rbh_backend_plugin_import("mpi-file");
+    if (ctx.info_plugins[1] == NULL)
+        ctx.info_plugin_count = 1;
+
     ctx.need_prefetch = false;
     filter = parse_expression(&ctx, &index, NULL, &sorts, &sorts_count);
     if (index != ctx.argc)
