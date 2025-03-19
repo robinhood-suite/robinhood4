@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bee37d99_a5650e65",
+        "filename": "rbh-fsevents/src/enrichers/posix/internals.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-19T15:39:18Z",
+      "side": 1,
+      "message": "defect: I know we don\u0027t use Hestia, but hestia needs this function and probably other functions in this file.",
+      "revId": "ae9b2ad226ab8d4bb4380335faf7d24abb0fb430",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
