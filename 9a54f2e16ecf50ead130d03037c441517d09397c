@@ -16,6 +16,24 @@
       "message": "Is this because it also lists extensions?",
       "revId": "9a54f2e16ecf50ead130d03037c441517d09397c",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e1f6479c_85a7c177",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-03-19T12:56:29Z",
+      "side": 1,
+      "message": "Yes, probably something I left to remember to think about this issue but then complitely forgot about...",
+      "parentUuid": "c2b17d69_719a0392",
+      "revId": "9a54f2e16ecf50ead130d03037c441517d09397c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
