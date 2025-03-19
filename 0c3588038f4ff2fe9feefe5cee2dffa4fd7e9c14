@@ -48,6 +48,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a1481eea_e8f1922e",
+        "filename": "utils/tests/framework.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-03-19T14:27:32Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "8d037bf0_2f96a46b",
+      "range": {
+        "startLine": 216,
+        "startChar": 9,
+        "endLine": 217,
+        "endChar": 27
+      },
+      "revId": "0c3588038f4ff2fe9feefe5cee2dffa4fd7e9c14",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "906bffc8_e03d517d",
