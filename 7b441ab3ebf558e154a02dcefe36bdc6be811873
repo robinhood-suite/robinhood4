@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b56cd27f_f7669bab",
+        "filename": "librobinhood/src/backends/mongo/mongo.c",
+        "patchSetId": 12
+      },
+      "lineNbr": 853,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-03-19T15:20:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "975babaa_fefe597b",
+      "range": {
+        "startLine": 852,
+        "startChar": 4,
+        "endLine": 853,
+        "endChar": 5
+      },
+      "revId": "7b441ab3ebf558e154a02dcefe36bdc6be811873",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dc7fa7d7_aa6ec3f0",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-03-18T14:10:23Z",
       "side": 1,
       "message": "minor: instead of stats, you can directly print `stats_to_find`",
+      "range": {
+        "startLine": 875,
+        "startChar": 25,
+        "endLine": 875,
+        "endChar": 30
+      },
+      "revId": "7b441ab3ebf558e154a02dcefe36bdc6be811873",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "caf346a8_3d31a98d",
+        "filename": "librobinhood/src/backends/mongo/mongo.c",
+        "patchSetId": 12
+      },
+      "lineNbr": 875,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-03-19T15:20:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dc7fa7d7_aa6ec3f0",
       "range": {
         "startLine": 875,
         "startChar": 25,
