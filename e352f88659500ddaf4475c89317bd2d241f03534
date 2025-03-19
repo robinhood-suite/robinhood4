@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "977e1414_27b1474d",
+        "filename": "librobinhood/src/backends/iter_mpi/iter_mpi.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 363,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-19T11:17:48Z",
+      "side": 1,
+      "message": "major: It\u0027s the same as `rbh_mpi_dec_ref` for me.",
+      "range": {
+        "startLine": 357,
+        "startChar": 4,
+        "endLine": 363,
+        "endChar": 5
+      },
+      "revId": "e352f88659500ddaf4475c89317bd2d241f03534",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4c2e86ae_04d23a6e",
+        "filename": "librobinhood/src/backends/mfu/utils.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-19T11:17:48Z",
+      "side": 1,
+      "message": "style: remove empty line",
+      "revId": "e352f88659500ddaf4475c89317bd2d241f03534",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b096411d_4a4a682d",
+        "filename": "librobinhood/src/mpi_rc.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-19T11:17:48Z",
+      "side": 1,
+      "message": "question: I wonder how it works for multi-process, the lock will block all threads but here we have processes. Also in iter_mpi.c, it is already managed by `MPI_Initialized` and `MPI_Finalized`, I don\u0027t see the use",
+      "range": {
+        "startLine": 23,
+        "startChar": 4,
+        "endLine": 28,
+        "endChar": 36
+      },
+      "revId": "e352f88659500ddaf4475c89317bd2d241f03534",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
