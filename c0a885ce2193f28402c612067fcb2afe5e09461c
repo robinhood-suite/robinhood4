@@ -16,6 +16,24 @@
       "message": "question: Here if I understand correctly, we still have the Lustre backend, so the get_attribute function will call the `rbh_lustre_enrich` according to the previous patches, except that this function does not recognize the flags for retention? Nothing will be done no ?\nThe retention will be already done in the previous get_attribute I think",
       "revId": "c0a885ce2193f28402c612067fcb2afe5e09461c",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2d3f5d96_214e4f05",
+        "filename": "rbh-fsevents/src/enrichers/lustre.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-03-19T11:17:33Z",
+      "side": 1,
+      "message": "IIRC at this point of the stack, this calls the get_attribute of the posix backend which will call all the enrichers.\n\nThe Lustre backend is not involved in this. The lustre extension is used here (as you said `rbh_lustre_enrich` is called).\n\nWe are calling the posix implementation of get_attribute which calls all the enrichers. So both the lustre and retention enrichers are called. On the first call, since the flag RBH_LEF_LUSTRE is set, the retention enricher will do nothing. On the second call, since RBH_REF_RETENTION is set, the lustre enricher will do nothing.\n\nThe second call is removed after I refactor rbh-fsevents to manage extensions as well. This is another temporary fix to not break tests.",
+      "parentUuid": "0c595360_62d54344",
+      "revId": "c0a885ce2193f28402c612067fcb2afe5e09461c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
