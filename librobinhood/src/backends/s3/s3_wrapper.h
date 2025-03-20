@@ -21,7 +21,7 @@ extern "C" {
     /**
      * Initialize the aws client
      *
-     * Init_API is called to initialize the AWS API and generate a client using
+     * s3_init_api is called to initialize the AWS API and generate a client using
      * the credentials given
      *
      * @param address   the s3 server address (ex: 127.0.0.1:9000)
@@ -31,14 +31,41 @@ extern "C" {
      * @param password  the s3 password
      */
     void
-    Init_API(const char* address, const char* username,
-             const char* password);
+    s3_init_api(const char *address, const char* username,
+                const char* password);
 
     /**
      * Shutdown the AWS API
      */
     void
-    Destroy_API();
+    s3_destroy_api();
+
+    /**
+    * Gives an array of the names of the buckets, along with
+    * the length of the array
+    *
+    * @param number_buckets     pass by pointer the number of buckets on the
+    *                           server
+    * @param bucket_list        pass by pointer the list of the names of
+    *                           the buckets
+    */
+    void
+    get_bucket_list(size_t *ptr_number_buckets, char ***ptr_bucket_list);
+
+    /**
+    * Gives an array of the names of the objects contained in a bucket, along
+    * with the length of the arraya
+    *
+    * @param bucket_name          the name of the bucket from which the objects
+    *                             are being retrieved
+    * @param list_objects         pass by pointer the list of the names of
+    *                             the objects
+    * @param object_list_length   pass by pointer the number of objects in
+    *                             the specified bucket
+    */
+    void
+    get_object_list(const char* bucket_name, size_t *object_list_length,
+                    char ***list_objects);
 
 #ifdef __cplusplus
 }
