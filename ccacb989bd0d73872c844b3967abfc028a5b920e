@@ -1,0 +1,323 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b0f96d6b_57910527",
+        "filename": "librobinhood/src/backends/s3/s3.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-20T10:22:27Z",
+      "side": 1,
+      "message": "question: Why using a pointer ? It would be easier without",
+      "range": {
+        "startLine": 49,
+        "startChar": 4,
+        "endLine": 52,
+        "endChar": 56
+      },
+      "revId": "ccacb989bd0d73872c844b3967abfc028a5b920e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5898aa54_09bd3e08",
+        "filename": "librobinhood/src/backends/s3/s3.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-20T10:22:27Z",
+      "side": 1,
+      "message": "question: Why \"+ 1\", I think `curr_obj_id \u003d\u003d obj_length\" does exactly the same thing",
+      "revId": "ccacb989bd0d73872c844b3967abfc028a5b920e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7ba6f9c1_7f69375c",
+        "filename": "librobinhood/src/backends/s3/s3.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-20T10:22:27Z",
+      "side": 1,
+      "message": "major: In Robinhood, we use errno to indicate why an error occurs or why a function returns NULL, for example. Here, you should set errno to ENODATA to indicate that the iterator returns NULL because there are no more buckets/objects to list.",
+      "revId": "ccacb989bd0d73872c844b3967abfc028a5b920e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c0aad4f6_8797b1ba",
+        "filename": "librobinhood/src/backends/s3/s3.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-20T10:22:27Z",
+      "side": 1,
+      "message": "defect: You don\u0027t need to a second alloc",
+      "revId": "ccacb989bd0d73872c844b3967abfc028a5b920e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "80742094_db861299",
+        "filename": "librobinhood/src/backends/s3/s3.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-20T10:22:27Z",
+      "side": 1,
+      "message": "defect: You need to `bkt_data.list` and `obj_data.list`",
+      "revId": "ccacb989bd0d73872c844b3967abfc028a5b920e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bff04059_c1e52b48",
+        "filename": "librobinhood/src/backends/s3/s3.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-20T10:22:27Z",
+      "side": 1,
+      "message": "minor: add `static` as you don\u0027t use it outside this file",
+      "revId": "ccacb989bd0d73872c844b3967abfc028a5b920e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "112c007b_96407535",
+        "filename": "librobinhood/src/backends/s3/s3.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-20T10:22:27Z",
+      "side": 1,
+      "message": "sugest: Instead of using temporary variables, you can use bkt_data.list_length and bkt_data.list",
+      "revId": "ccacb989bd0d73872c844b3967abfc028a5b920e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4f766e61_3c34e716",
+        "filename": "librobinhood/src/backends/s3/s3.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-20T10:22:27Z",
+      "side": 1,
+      "message": "defect: You don\u0027t need to do a second alloc here, `tmp_bucket_list` is already alloc in `get_bucket_list`",
+      "revId": "ccacb989bd0d73872c844b3967abfc028a5b920e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "70845e1c_71c0c683",
+        "filename": "librobinhood/src/backends/s3/s3.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-20T10:22:27Z",
+      "side": 1,
+      "message": "defect: You need to free `s3_iter`",
+      "revId": "ccacb989bd0d73872c844b3967abfc028a5b920e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "745000ad_57cd33b0",
+        "filename": "librobinhood/src/backends/s3/s3.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-20T10:22:27Z",
+      "side": 1,
+      "message": "idem: You can use `obj_data.list` and `obj_data.list_length`",
+      "revId": "ccacb989bd0d73872c844b3967abfc028a5b920e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9bd46dd7_ddecf2ff",
+        "filename": "librobinhood/src/backends/s3/s3.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-20T10:22:27Z",
+      "side": 1,
+      "message": "idem: Don\u0027t need to do an alloc",
+      "revId": "ccacb989bd0d73872c844b3967abfc028a5b920e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "42a0b62a_2a7b26ff",
+        "filename": "librobinhood/src/backends/s3/s3.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-20T10:22:27Z",
+      "side": 1,
+      "message": "idem: You need to free `s3_iter` and `bkt_data.list`",
+      "revId": "ccacb989bd0d73872c844b3967abfc028a5b920e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2d69fd28_c8485e12",
+        "filename": "librobinhood/src/backends/s3/s3_wrapper.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-20T10:22:27Z",
+      "side": 1,
+      "message": "defect: if an error occurs, set the number of bucket to 0 and the bucket list to NULL",
+      "revId": "ccacb989bd0d73872c844b3967abfc028a5b920e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "582a59e3_783a3769",
+        "filename": "librobinhood/src/backends/s3/s3_wrapper.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-20T10:22:27Z",
+      "side": 1,
+      "message": "minor: no need to specify that it is a pointer",
+      "range": {
+        "startLine": 47,
+        "startChar": 32,
+        "endLine": 47,
+        "endChar": 47
+      },
+      "revId": "ccacb989bd0d73872c844b3967abfc028a5b920e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6f11057a_4711bba6",
+        "filename": "librobinhood/src/backends/s3/s3_wrapper.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-20T10:22:27Z",
+      "side": 1,
+      "message": "minor: remove the \"ptr\" prefix",
+      "range": {
+        "startLine": 53,
+        "startChar": 28,
+        "endLine": 53,
+        "endChar": 32
+      },
+      "revId": "ccacb989bd0d73872c844b3967abfc028a5b920e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "23b1bf8c_f025c786",
+        "filename": "librobinhood/src/backends/s3/s3_wrapper.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-20T10:22:27Z",
+      "side": 1,
+      "message": "typo:",
+      "range": {
+        "startLine": 57,
+        "startChar": 34,
+        "endLine": 57,
+        "endChar": 35
+      },
+      "revId": "ccacb989bd0d73872c844b3967abfc028a5b920e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f8eebbaa_e0fe5684",
+        "filename": "librobinhood/src/backends/s3/s3_wrapper.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-20T10:22:27Z",
+      "side": 1,
+      "message": "minor: invert order with object_list_length",
+      "range": {
+        "startLine": 61,
+        "startChar": 4,
+        "endLine": 62,
+        "endChar": 45
+      },
+      "revId": "ccacb989bd0d73872c844b3967abfc028a5b920e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
