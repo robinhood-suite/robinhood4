@@ -3,6 +3,75 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "dc3648f4_0b913853",
+        "filename": "designs/filter_mutualization.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-03-20T12:09:31Z",
+      "side": 1,
+      "message": "reserved",
+      "range": {
+        "startLine": 55,
+        "startChar": 6,
+        "endLine": 55,
+        "endChar": 12
+      },
+      "revId": "0aaed6b7256efe8bfe456838013a03fd49b5b44f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b47d43b8_22279fe4",
+        "filename": "designs/filter_mutualization.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-03-20T12:09:31Z",
+      "side": 1,
+      "message": "typo: To that extend I think?",
+      "range": {
+        "startLine": 70,
+        "startChar": 48,
+        "endLine": 70,
+        "endChar": 54
+      },
+      "revId": "0aaed6b7256efe8bfe456838013a03fd49b5b44f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d93a1402_8764e59e",
+        "filename": "designs/filter_mutualization.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-03-20T12:09:31Z",
+      "side": 1,
+      "message": "typo: just load",
+      "range": {
+        "startLine": 136,
+        "startChar": 15,
+        "endLine": 136,
+        "endChar": 21
+      },
+      "revId": "0aaed6b7256efe8bfe456838013a03fd49b5b44f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7c6ea8ce_a5518927",
         "filename": "designs/filter_mutualization.rst",
         "patchSetId": 3
