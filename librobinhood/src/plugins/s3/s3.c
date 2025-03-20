@@ -22,12 +22,136 @@
 #include "s3_wrapper.h"
 
 /*----------------------------------------------------------------------------*
+ |                                s3_iterator                                 |
+ *----------------------------------------------------------------------------*/
+
+struct item_data {
+    size_t length;
+    size_t current_id;
+    char **list;
+};
+
+struct s3_iterator {
+    struct rbh_mut_iterator iterator;
+    struct item_data bkt_data;
+    struct item_data obj_data;
+};
+
+char *
+get_next_object(struct s3_iterator *s3_iter)
+{
+    size_t *curr_bkt_id = &s3_iter->bkt_data.current_id;
+    size_t *curr_obj_id = &s3_iter->obj_data.current_id;
+
+    if (s3_iter->bkt_data.length == 0) {
+        errno = ENODATA;
+        return NULL;
+    }
+
+    if (*curr_obj_id == s3_iter->obj_data.length - 1) {
+        do {
+            (*curr_bkt_id)++;
+            if (*curr_bkt_id >= s3_iter->bkt_data.length) {
+                errno = ENODATA;
+                return NULL;
+            }
+
+            s3_delete_list(s3_iter->obj_data.length, s3_iter->obj_data.list);
+            s3_get_object_list(s3_iter->bkt_data.list[*curr_bkt_id],
+                               &s3_iter->obj_data.length,
+                               &s3_iter->obj_data.list);
+        } while (s3_iter->obj_data.length == 0);
+
+        *curr_obj_id = 0;
+    } else {
+        (*curr_obj_id)++;
+    }
+    return s3_iter->obj_data.list[*curr_obj_id];
+}
+
+static void
+s3_iter_destroy(void *iterator)
+{
+    struct s3_iterator *s3_iter = iterator;
+    s3_delete_list(s3_iter->obj_data.length, s3_iter->obj_data.list);
+    s3_delete_list(s3_iter->bkt_data.length, s3_iter->bkt_data.list);
+
+    free(s3_iter);
+}
+
+static const struct rbh_mut_iterator_operations S3_ITER_OPS = {
+    //.next = s3_iter_next,
+    .destroy = s3_iter_destroy,
+};
+
+static const struct rbh_mut_iterator S3_ITER = {
+    .ops = &S3_ITER_OPS,
+};
+
+static struct s3_iterator *
+s3_iterator_new()
+{
+    struct s3_iterator *s3_iter = NULL;
+
+    s3_iter = malloc(sizeof(*s3_iter));
+    if (s3_iter == NULL)
+        return NULL;
+
+    s3_get_bucket_list(&s3_iter->bkt_data.length, &s3_iter->bkt_data.list);
+
+    if (s3_iter->bkt_data.length == -1) {
+        free(s3_iter);
+        return NULL;
+    }
+
+    if (s3_iter->bkt_data.length > 0)
+        s3_get_object_list(s3_iter->bkt_data.list[0], &s3_iter->obj_data.length,
+                           &s3_iter->obj_data.list);
+
+    s3_iter->bkt_data.current_id = 0;
+    s3_iter->obj_data.current_id = 0;
+    s3_iter->iterator = S3_ITER;
+
+    return s3_iter;
+}
+
+/*----------------------------------------------------------------------------*
  |                                  s3_backend                                |
  *----------------------------------------------------------------------------*/
 
 struct s3_backend {
     struct rbh_backend backend;
+    struct s3_iterator *(*iter_new)();
 };
+
+    /*--------------------------------------------------------------------*
+     |                              filter()                              |
+     *--------------------------------------------------------------------*/
+
+static struct rbh_mut_iterator *
+s3_backend_filter(void *backend, const struct rbh_filter *filter,
+                  const struct rbh_filter_options *options,
+                  const struct rbh_filter_output *output)
+{
+    struct s3_backend *s3 = backend;
+    struct s3_iterator *s3_iter;
+
+    if (filter != NULL) {
+        errno = ENOTSUP;
+        return NULL;
+    }
+
+    if (options->skip > 0 || options->limit > 0 || options->sort.count > 0) {
+        errno = ENOTSUP;
+        return NULL;
+    }
+
+    s3_iter = s3->iter_new();
+    if (s3_iter == NULL)
+        return NULL;
+
+    return &s3_iter->iterator;
+}
 
     /*--------------------------------------------------------------------*
      |                             destroy()                              |
@@ -42,6 +166,7 @@ s3_backend_destroy(void *backend)
 }
 
 static const struct rbh_backend_operations S3_BACKEND_OPS = {
+    .filter = s3_backend_filter,
     .destroy = s3_backend_destroy,
 };
 
@@ -81,6 +206,7 @@ rbh_s3_backend_new(__attribute__((unused))
         return NULL;
 
     s3_init_api(address, user, password);
+    s3->iter_new = s3_iterator_new;
     s3->backend = S3_BACKEND;
 
     return &s3->backend;
