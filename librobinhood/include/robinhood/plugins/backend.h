@@ -15,6 +15,7 @@
 
 #include "robinhood/backend.h"
 #include "robinhood/config.h"
+#include "robinhood/filter.h"
 #include "robinhood/plugin.h"
 
 struct rbh_backend_plugin {
@@ -26,6 +27,8 @@ struct rbh_backend_plugin {
 
 struct rbh_backend_plugin_operations {
     struct rbh_backend *(*new)(const char *fsname, struct rbh_config *config);
+    enum rbh_parser_token (*check_valid_token)(const char *token);
+    struct rbh_filter *(*build_filter)(const char **argv, int argc, int *index);
     void (*destroy)();
 };
 
@@ -108,6 +111,55 @@ rbh_backend_plugin_destroy(const char *name)
 
     if (plugin->ops->destroy)
         plugin->ops->destroy();
+}
+
+/**
+ * Check the given token corresponds to a predicate or action known by the
+ * plugin.
+ *
+ * @param plugin    the plugin to check the token with
+ * @param token     a string that represents a token the plugin should identify
+ *
+ * @return          RBH_TOKEN_PREDICATE if the token is a predicate
+ *                  RBH_TOKEN_ACTION if the token is an action
+ *                  RBH_TOKEN_UNKOWN if the token is not valid
+ *                  RBH_TOKEN_ERROR if an error occur
+ */
+
+static inline enum rbh_token
+rbh_plugin_check_valid_token(const struct rbh_backend_plugin *plugin,
+                             const char *token)
+{
+    if (plugin->ops->check_valid_token)
+        return plugin->ops->check_valid_token(token);
+
+    errno = ENOTSUP;
+    return RBH_TOKEN_ERROR;
+}
+
+/**
+ * Create a filter from the given command line arguments and position in that
+ * command line
+ *
+ * @param plugin    the plugin to build a filter from
+ * @param argv      the list of arguments given to the command
+ * @param argc      the number of strings in \p argv
+ * @param index     the argument currently being parsed, should be updated by
+ *                  the plugin if necessary to skip optionnal values
+ *
+ * @return          a pointer to newly allocated struct rbh_filter on success,
+ *                  NULL on error and errno is set appropriately
+ */
+
+static inline struct rbh_filter *
+rbh_plugin_build_filter(const struct rbh_backend_plugin *plugin,
+                        const char **argv, int argc, int *index)
+{
+    if (plugin->ops->build_filter)
+        return plugin->ops->build_filter(argv, argc, argv_idx);
+
+    errno = ENOTSUP;
+    return NULL;
 }
 
 #endif
