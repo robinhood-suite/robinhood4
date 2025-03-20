@@ -88,6 +88,16 @@
 #include "robinhood/value.h"
 
 /**
+ * Type of token
+ */
+enum rbh_token {
+    RBH_TOKEN_PREDICATE,
+    RBH_TOKEN_ACTION,
+    RBH_TOKEN_UNKOWN,
+    RBH_TOKEN_ERROR,
+};
+
+/**
  * Filter operator
  *
  * There are two types of operators: comparison operators and logical operators.

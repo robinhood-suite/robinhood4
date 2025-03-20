@@ -15,6 +15,7 @@
 
 #include "robinhood/backend.h"
 #include "robinhood/config.h"
+#include "robinhood/filter.h"
 #include "robinhood/plugin.h"
 
 struct rbh_backend_plugin {
@@ -26,6 +27,10 @@ struct rbh_backend_plugin {
 struct rbh_backend_plugin_operations {
     struct rbh_backend *(*new)(const char *fsname, struct rbh_config *config);
     void (*destroy)();
+
+    enum rbh_token (*check_valid_token)(const char *token);
+    struct rbh_filter *(*build_filter)(const char **argv, const int argc,
+                                       int *argv_idx);
 };
 
 /**
@@ -107,6 +112,51 @@ rbh_backend_plugin_destroy(const char *name)
 
     if (plugin->ops->destroy)
         plugin->ops->destroy();
+}
+
+/**
+ * Check if the plugin can handle the token
+ *
+ * @param plugin    the plugin
+ * @param token     the token to check
+ *
+ * @return          RBH_TOKEN_PREDICATE if the token is a predicate
+ *                  RBH_TOKEN_ACTION if the token is an action
+ *                  RBH_TOKEN_UNKOWN if the token is not valid
+ *                  RBH_TOKEN_ERROR if an error occur
+ */
+
+static inline enum rbh_token
+rbh_plugin_check_valid_token(const struct rbh_backend_plugin *plugin,
+                             const char *token)
+{
+    if (plugin->ops->check_valid_token)
+        return plugin->ops->check_valid_token(token);
+
+    errno = ENOTSUP;
+    return RBH_TOKEN_ERROR;
+}
+
+/**
+ * Build a filter from a token
+ *
+ * @param plugin    the plugin
+ * @param argv      the command line to parse
+ * @param argc      the number of element in the command line
+ * @param argv_idx  the current index of where to start parsing
+ *
+ * @return          a filter that represents the parsed token and NULL on error
+ */
+
+static inline struct rbh_filter *
+rbh_plugin_build_filter(const struct rbh_backend_plugin *plugin,
+                        const char **argv, const int argc, int *argv_idx)
+{
+    if (plugin->ops->build_filter)
+        return plugin->ops->build_filter(argv, argc, argv_idx);
+
+    errno = ENOTSUP;
+    return NULL;
 }
 
 #endif
