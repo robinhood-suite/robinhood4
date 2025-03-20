@@ -1,5 +1,5 @@
 /* This file is part of RobinHood 4
- * Copyright (C) 2019 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifer: LGPL-3.0-or-later
@@ -86,6 +86,13 @@
 
 #include "robinhood/fsentry.h"
 #include "robinhood/value.h"
+
+enum rbh_parser_token {
+    RBH_TOKEN_ERROR,
+    RBH_TOKEN_UNKNOWN,
+    RBH_TOKEN_PREDICATE,
+    RBH_TOKEN_ACTION,
+};
 
 /**
  * Filter operator

@@ -1,5 +1,5 @@
 /* This file is part of RobinHood 4
- * Copyright (C) 2019 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifer: LGPL-3.0-or-later
@@ -15,6 +15,7 @@
 
 #include "robinhood/backend.h"
 #include "robinhood/config.h"
+#include "robinhood/filter.h"
 #include "robinhood/plugin.h"
 
 struct rbh_backend_plugin {
@@ -29,6 +30,9 @@ struct rbh_backend_plugin_operations {
                                const char *type,
                                const char *fsname,
                                struct rbh_config *config);
+    enum rbh_parser_token (*check_valid_token)(const char *token);
+    struct rbh_filter *(*build_filter)(const char **argv, int argc, int *index,
+                                       bool *need_prefetch);
     void (*destroy)();
 };
 
@@ -174,6 +178,59 @@ rbh_backend_plugin_destroy(const char *name)
 
     if (plugin->ops->destroy)
         plugin->ops->destroy();
+}
+
+/**
+ * Check the given token corresponds to a predicate or action known by the
+ * plugin.
+ *
+ * @param plugin    the plugin to check the token with
+ * @param token     a string that represents a token the plugin should identify
+ *
+ * @return          RBH_TOKEN_PREDICATE if the token is a predicate
+ *                  RBH_TOKEN_ACTION if the token is an action
+ *                  RBH_TOKEN_UNKNOWN if the token is not valid
+ *                  RBH_TOKEN_ERROR if an error occur
+ */
+
+static inline enum rbh_parser_token
+rbh_plugin_check_valid_token(const struct rbh_backend_plugin *plugin,
+                             const char *token)
+{
+    if (plugin->ops->check_valid_token)
+        return plugin->ops->check_valid_token(token);
+
+    errno = ENOTSUP;
+    return RBH_TOKEN_ERROR;
+}
+
+/**
+ * Create a filter from the given command line arguments and position in that
+ * command line
+ *
+ * @param plugin         the plugin to build a filter from
+ * @param argv           the list of arguments given to the command
+ * @param argc           the number of strings in \p argv
+ * @param index          the argument currently being parsed, should be updated
+ *                       by the plugin if necessary to skip optionnal values
+ * @param need_prefetch  boolean value set by posix to indicate if a filter
+ *                       needs to be completed
+
+ *
+ * @return               a pointer to newly allocated struct rbh_filter on
+ *                       success, NULL on error and errno is set appropriately
+ */
+
+static inline struct rbh_filter *
+rbh_plugin_build_filter(const struct rbh_backend_plugin *plugin,
+                        const char **argv, int argc, int *index,
+                        bool *need_prefetch)
+{
+    if (plugin->ops->build_filter)
+        return plugin->ops->build_filter(argv, argc, index, need_prefetch);
+
+    errno = ENOTSUP;
+    return NULL;
 }
 
 #endif
