@@ -22,6 +22,30 @@
       },
       "revId": "345931686d366f6764ec4e73a2566d0c6753408f",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ca8546dc_3e5b8fdb",
+        "filename": "librobinhood/src/plugins/backend.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-03-20T12:38:43Z",
+      "side": 1,
+      "message": "Save errno is used to prevent free from changing errno. Why is it initialized to errno is a good question though. I have probably copied it from the other functions.",
+      "parentUuid": "e3201143_b2a5b77c",
+      "range": {
+        "startLine": 110,
+        "startChar": 3,
+        "endLine": 110,
+        "endChar": 27
+      },
+      "revId": "345931686d366f6764ec4e73a2566d0c6753408f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
