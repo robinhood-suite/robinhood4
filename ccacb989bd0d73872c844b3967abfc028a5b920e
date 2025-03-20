@@ -58,6 +58,24 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "21eb8323_006c32b2",
+        "filename": "librobinhood/src/backends/s3/s3.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1038646
+      },
+      "writtenOn": "2025-03-20T15:23:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7ba6f9c1_7f69375c",
+      "revId": "ccacb989bd0d73872c844b3967abfc028a5b920e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c0aad4f6_8797b1ba",
@@ -71,6 +89,24 @@
       "writtenOn": "2025-03-20T10:22:27Z",
       "side": 1,
       "message": "defect: You don\u0027t need to a second alloc",
+      "revId": "ccacb989bd0d73872c844b3967abfc028a5b920e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "23bb3c4d_b46d94c2",
+        "filename": "librobinhood/src/backends/s3/s3.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1038646
+      },
+      "writtenOn": "2025-03-20T15:23:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c0aad4f6_8797b1ba",
       "revId": "ccacb989bd0d73872c844b3967abfc028a5b920e",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
@@ -92,6 +128,24 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6de2347e_3ffa10b2",
+        "filename": "librobinhood/src/backends/s3/s3.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1038646
+      },
+      "writtenOn": "2025-03-20T15:23:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "80742094_db861299",
+      "revId": "ccacb989bd0d73872c844b3967abfc028a5b920e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bff04059_c1e52b48",
@@ -105,6 +159,24 @@
       "writtenOn": "2025-03-20T10:22:27Z",
       "side": 1,
       "message": "minor: add `static` as you don\u0027t use it outside this file",
+      "revId": "ccacb989bd0d73872c844b3967abfc028a5b920e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "156fa923_cce86824",
+        "filename": "librobinhood/src/backends/s3/s3.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1038646
+      },
+      "writtenOn": "2025-03-20T15:23:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bff04059_c1e52b48",
       "revId": "ccacb989bd0d73872c844b3967abfc028a5b920e",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
@@ -126,6 +198,24 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "95013c8c_2d44b98e",
+        "filename": "librobinhood/src/backends/s3/s3.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1038646
+      },
+      "writtenOn": "2025-03-20T15:23:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "112c007b_96407535",
+      "revId": "ccacb989bd0d73872c844b3967abfc028a5b920e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4f766e61_3c34e716",
@@ -139,6 +229,24 @@
       "writtenOn": "2025-03-20T10:22:27Z",
       "side": 1,
       "message": "defect: You don\u0027t need to do a second alloc here, `tmp_bucket_list` is already alloc in `get_bucket_list`",
+      "revId": "ccacb989bd0d73872c844b3967abfc028a5b920e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a92ee883_0b8f32f0",
+        "filename": "librobinhood/src/backends/s3/s3.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1038646
+      },
+      "writtenOn": "2025-03-20T15:23:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4f766e61_3c34e716",
       "revId": "ccacb989bd0d73872c844b3967abfc028a5b920e",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
@@ -160,6 +268,24 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4f9f1e06_7ddc3401",
+        "filename": "librobinhood/src/backends/s3/s3.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1038646
+      },
+      "writtenOn": "2025-03-20T15:23:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "70845e1c_71c0c683",
+      "revId": "ccacb989bd0d73872c844b3967abfc028a5b920e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "745000ad_57cd33b0",
@@ -173,6 +299,24 @@
       "writtenOn": "2025-03-20T10:22:27Z",
       "side": 1,
       "message": "idem: You can use `obj_data.list` and `obj_data.list_length`",
+      "revId": "ccacb989bd0d73872c844b3967abfc028a5b920e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "94e613d2_a0bc116f",
+        "filename": "librobinhood/src/backends/s3/s3.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1038646
+      },
+      "writtenOn": "2025-03-20T15:23:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "745000ad_57cd33b0",
       "revId": "ccacb989bd0d73872c844b3967abfc028a5b920e",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
@@ -194,6 +338,24 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2c43812f_8152b316",
+        "filename": "librobinhood/src/backends/s3/s3.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1038646
+      },
+      "writtenOn": "2025-03-20T15:23:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9bd46dd7_ddecf2ff",
+      "revId": "ccacb989bd0d73872c844b3967abfc028a5b920e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "42a0b62a_2a7b26ff",
@@ -207,6 +369,24 @@
       "writtenOn": "2025-03-20T10:22:27Z",
       "side": 1,
       "message": "idem: You need to free `s3_iter` and `bkt_data.list`",
+      "revId": "ccacb989bd0d73872c844b3967abfc028a5b920e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a37e765_bdcb7ce6",
+        "filename": "librobinhood/src/backends/s3/s3.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1038646
+      },
+      "writtenOn": "2025-03-20T15:23:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "42a0b62a_2a7b26ff",
       "revId": "ccacb989bd0d73872c844b3967abfc028a5b920e",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
@@ -228,6 +408,24 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f0a07174_1325ec16",
+        "filename": "librobinhood/src/backends/s3/s3_wrapper.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1038646
+      },
+      "writtenOn": "2025-03-20T15:23:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2d69fd28_c8485e12",
+      "revId": "ccacb989bd0d73872c844b3967abfc028a5b920e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "582a59e3_783a3769",
@@ -241,6 +439,30 @@
       "writtenOn": "2025-03-20T10:22:27Z",
       "side": 1,
       "message": "minor: no need to specify that it is a pointer",
+      "range": {
+        "startLine": 47,
+        "startChar": 32,
+        "endLine": 47,
+        "endChar": 47
+      },
+      "revId": "ccacb989bd0d73872c844b3967abfc028a5b920e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "33949f9b_1da967bf",
+        "filename": "librobinhood/src/backends/s3/s3_wrapper.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1038646
+      },
+      "writtenOn": "2025-03-20T15:23:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "582a59e3_783a3769",
       "range": {
         "startLine": 47,
         "startChar": 32,
@@ -274,6 +496,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec98b0a5_bb478a25",
+        "filename": "librobinhood/src/backends/s3/s3_wrapper.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1038646
+      },
+      "writtenOn": "2025-03-20T15:23:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6f11057a_4711bba6",
+      "range": {
+        "startLine": 53,
+        "startChar": 28,
+        "endLine": 53,
+        "endChar": 32
+      },
+      "revId": "ccacb989bd0d73872c844b3967abfc028a5b920e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "23b1bf8c_f025c786",
@@ -297,6 +543,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "05e93bd2_c8f406d9",
+        "filename": "librobinhood/src/backends/s3/s3_wrapper.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1038646
+      },
+      "writtenOn": "2025-03-20T15:23:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "23b1bf8c_f025c786",
+      "range": {
+        "startLine": 57,
+        "startChar": 34,
+        "endLine": 57,
+        "endChar": 35
+      },
+      "revId": "ccacb989bd0d73872c844b3967abfc028a5b920e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f8eebbaa_e0fe5684",
@@ -310,6 +580,30 @@
       "writtenOn": "2025-03-20T10:22:27Z",
       "side": 1,
       "message": "minor: invert order with object_list_length",
+      "range": {
+        "startLine": 61,
+        "startChar": 4,
+        "endLine": 62,
+        "endChar": 45
+      },
+      "revId": "ccacb989bd0d73872c844b3967abfc028a5b920e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "55e6dc70_f1fac7d7",
+        "filename": "librobinhood/src/backends/s3/s3_wrapper.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1038646
+      },
+      "writtenOn": "2025-03-20T15:23:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f8eebbaa_e0fe5684",
       "range": {
         "startLine": 61,
         "startChar": 4,
