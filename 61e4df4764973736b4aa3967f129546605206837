@@ -22,6 +22,30 @@
       },
       "revId": "61e4df4764973736b4aa3967f129546605206837",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3a3b417f_304746ed",
+        "filename": "librobinhood/src/backends/retention/meson.build",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-03-20T10:41:31Z",
+      "side": 1,
+      "message": "This is only necessary if the retention plugin uses functions defined in the posix backend. I know that the mfu iterator uses posix functions. I don\u0027t remember if it\u0027s also the case for lustre and the retention. But I think they don\u0027t. So no we don\u0027t have to link against librbh_posix IIRC.",
+      "parentUuid": "3dfdb807_201ddca5",
+      "range": {
+        "startLine": 14,
+        "startChar": 4,
+        "endLine": 14,
+        "endChar": 28
+      },
+      "revId": "61e4df4764973736b4aa3967f129546605206837",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
