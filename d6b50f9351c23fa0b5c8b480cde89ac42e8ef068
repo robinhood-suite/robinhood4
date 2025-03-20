@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6759a9cf_d4f97424",
+        "filename": "librobinhood/tests/unit/check_retention.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-03-20T10:41:34Z",
+      "side": 1,
+      "message": "style: order",
+      "range": {
+        "startLine": 99,
+        "startChar": 3,
+        "endLine": 101,
+        "endChar": 20
+      },
+      "revId": "d6b50f9351c23fa0b5c8b480cde89ac42e8ef068",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
