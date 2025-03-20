@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e3201143_b2a5b77c",
+        "filename": "librobinhood/src/plugins/backend.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-03-20T08:33:12Z",
+      "side": 1,
+      "message": "question: why use a save_errno here, and not just use errno ? I see this in the backend_plugin_import function aswell, but what\u0027s the point ? Since errno is modified later to save_errno in case of errors, why bother with an intermediate variable",
+      "range": {
+        "startLine": 110,
+        "startChar": 3,
+        "endLine": 110,
+        "endChar": 27
+      },
+      "revId": "345931686d366f6764ec4e73a2566d0c6753408f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
