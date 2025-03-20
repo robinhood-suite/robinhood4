@@ -38,6 +38,38 @@ extern "C" {
     void
     s3_destroy_api();
 
+    /**
+     * Gives an array of the names of the buckets, along with
+     * the length of the array
+     *
+     * @param number_of_buckets     the number of buckets on the server
+     * @param buckets_list        the list of the names of the buckets
+     */
+    void
+    s3_get_bucket_list(size_t *number_of_buckets, char ***buckets_list);
+
+    /**
+     * Gives an array of the names of the objects contained in a bucket, along
+     * with the length of the array
+     *
+     * @param bucket_name          the name of the bucket from which the objects
+     *                             are being retrieved
+     * @param object_list_length   the number of objects in the specified bucket
+     * @param list_objects         the list of the names of the objects
+     */
+    void
+    s3_get_object_list(const char *bucket_name, size_t *object_list_length,
+                       char ***list_objects);
+
+    /**
+     * Free an array declared in c++ (used for bucket and object lists)
+     *
+     * @param list_length    the length of the array
+     * @param list           the list to delete
+     */
+    void
+    s3_delete_list(size_t list_length, char **list);
+
 #ifdef __cplusplus
 }
 #endif
