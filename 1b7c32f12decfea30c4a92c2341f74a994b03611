@@ -70,6 +70,30 @@
       },
       "revId": "1b7c32f12decfea30c4a92c2341f74a994b03611",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4c549244_c49a5868",
+        "filename": "librobinhood/src/config.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 461,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-03-20T15:36:04Z",
+      "side": 1,
+      "message": "From what I remember, what you proposed Sebastien isn\u0027t possible, because `--config` is a pre-URI option. If placed after the URI, we made it so it isn\u0027t understood as the config option but rather a tool option, which will most likely not recognise it",
+      "parentUuid": "c433e77c_00f74e51",
+      "range": {
+        "startLine": 460,
+        "startChar": 12,
+        "endLine": 461,
+        "endChar": 44
+      },
+      "revId": "1b7c32f12decfea30c4a92c2341f74a994b03611",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
