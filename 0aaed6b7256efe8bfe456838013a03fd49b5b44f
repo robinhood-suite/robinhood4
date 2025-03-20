@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c904696d_e1fef316",
+        "filename": "designs/filter_mutualization.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-03-20T08:36:20Z",
+      "side": 1,
+      "message": "This is now explained, I hope so.",
+      "parentUuid": "7c6ea8ce_a5518927",
+      "range": {
+        "startLine": 219,
+        "startChar": 0,
+        "endLine": 219,
+        "endChar": 18
+      },
+      "revId": "0aaed6b7256efe8bfe456838013a03fd49b5b44f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "089743d5_8d116fce",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-03-19T09:45:17Z",
       "side": 1,
       "message": "major: we thought there were no specific action at first, but there\u0027s actually the printf actions, with directives specific to the different tools (currently only retention for Lustre, but we\u0027re assured it will change)",
+      "range": {
+        "startLine": 238,
+        "startChar": 2,
+        "endLine": 238,
+        "endChar": 26
+      },
+      "revId": "0aaed6b7256efe8bfe456838013a03fd49b5b44f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b13fd6be_b07f135d",
+        "filename": "designs/filter_mutualization.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-03-20T08:36:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "089743d5_8d116fce",
       "range": {
         "startLine": 238,
         "startChar": 2,
