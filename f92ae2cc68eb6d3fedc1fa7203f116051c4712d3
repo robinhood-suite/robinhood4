@@ -120,6 +120,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b778ae4a_5e9a38f1",
+        "filename": "librobinhood/src/backends/s3/s3.c",
+        "patchSetId": 8
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1038646
+      },
+      "writtenOn": "2025-03-21T09:20:36Z",
+      "side": 1,
+      "message": "Tried to do that but it is not possible right now. A ticket has been created for this issue",
+      "parentUuid": "c6e37a0b_30a6e23b",
+      "range": {
+        "startLine": 70,
+        "startChar": 4,
+        "endLine": 75,
+        "endChar": 24
+      },
+      "revId": "f92ae2cc68eb6d3fedc1fa7203f116051c4712d3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f921d0e0_a85198ad",
         "filename": "librobinhood/src/backends/s3/s3.c",
         "patchSetId": 8
