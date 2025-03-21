@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e5514176_512a4fc4",
+        "filename": "librobinhood/src/backends/s3/s3.c",
+        "patchSetId": 8
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1038646
+      },
+      "writtenOn": "2025-03-21T09:02:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3d8f6257_0c262320",
+      "range": {
+        "startLine": 29,
+        "startChar": 0,
+        "endLine": 29,
+        "endChar": 1
+      },
+      "revId": "f92ae2cc68eb6d3fedc1fa7203f116051c4712d3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a7710449_0358d8ee",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-03-18T10:15:08Z",
       "side": 1,
       "message": "suggest: it may be better to prefix the init and destroy functions by `s3_`",
+      "range": {
+        "startLine": 42,
+        "startChar": 4,
+        "endLine": 42,
+        "endChar": 15
+      },
+      "revId": "f92ae2cc68eb6d3fedc1fa7203f116051c4712d3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "610cbacc_d173dd11",
+        "filename": "librobinhood/src/backends/s3/s3.c",
+        "patchSetId": 8
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1038646
+      },
+      "writtenOn": "2025-03-21T09:02:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a7710449_0358d8ee",
       "range": {
         "startLine": 42,
         "startChar": 4,
@@ -83,6 +131,24 @@
       "writtenOn": "2025-03-20T10:33:09Z",
       "side": 1,
       "message": "remove empty line",
+      "revId": "f92ae2cc68eb6d3fedc1fa7203f116051c4712d3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8d679216_df71e4ec",
+        "filename": "librobinhood/src/backends/s3/s3.c",
+        "patchSetId": 8
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1038646
+      },
+      "writtenOn": "2025-03-21T09:02:43Z",
+      "side": 1,
+      "message": "gerrit-related issue",
+      "parentUuid": "f921d0e0_a85198ad",
       "revId": "f92ae2cc68eb6d3fedc1fa7203f116051c4712d3",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
