@@ -191,6 +191,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "46a086ec_53a0301b",
+        "filename": "librobinhood/src/backends/s3/s3.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1038646
+      },
+      "writtenOn": "2025-03-21T10:00:47Z",
+      "side": 1,
+      "message": "and replace bkt_data.list by bkt_data.list_length",
+      "parentUuid": "46fb46df_92058539",
+      "range": {
+        "startLine": 99,
+        "startChar": 4,
+        "endLine": 103,
+        "endChar": 5
+      },
+      "revId": "6957fc5b7e186773c3c02d977c1f723473794d23",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5a0f3e19_fcab6b9e",
         "filename": "librobinhood/src/backends/s3/s3_wrapper.cpp",
         "patchSetId": 2
