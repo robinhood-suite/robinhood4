@@ -197,6 +197,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5abfc032_a1bd626a",
+        "filename": "designs/filter_mutualization.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-03-21T09:18:36Z",
+      "side": 1,
+      "message": "I think for sort, we won\u0027t have to because this is the filter implementation in the database backend that will do this right? If we have custom attributes they are stored as xattrs and any backend should be able to sort entries based on those? We may have some fields that require custom handling. But I think for now this is not necessary. I would expect `-sort ost-index` to just work but I might be wrong on this. Maybe something would be required to get the type of an attribute if the sort option of the backend is type dependant. I don\u0027t know. Is the sort option of the mongo backend type specific? For SQLite, I don\u0027t think so. A `SORT BY \u003cwhatever field\u003e` should just work.",
+      "parentUuid": "e814cba7_f8fea476",
+      "range": {
+        "startLine": 36,
+        "startChar": 40,
+        "endLine": 36,
+        "endChar": 53
+      },
+      "revId": "169a4af11a45bccab885a0b34cb7a6c27d9fa2b5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e108e073_c79308b9",
         "filename": "designs/filter_mutualization.rst",
         "patchSetId": 1
@@ -514,6 +538,30 @@
       "side": 1,
       "message": "If we consider what is given to the `find()` call, you are right. But the `parse_expression()` call is trickier, and in fact, either a (sub-)filter is generated for nearly each token or a call to `find()` is done.\n\nI think this process will not be changed in this design, just the (sub-)filter generation is moved to the plugin part.",
       "parentUuid": "c1652e23_5d549b2d",
+      "range": {
+        "startLine": 80,
+        "startChar": 22,
+        "endLine": 80,
+        "endChar": 32
+      },
+      "revId": "169a4af11a45bccab885a0b34cb7a6c27d9fa2b5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "949d92f4_1be4bf90",
+        "filename": "designs/filter_mutualization.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-03-21T09:18:36Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "9565dcf3_3fd0f406",
       "range": {
         "startLine": 80,
         "startChar": 22,

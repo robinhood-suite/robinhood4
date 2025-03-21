@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6d681504_79efd362",
+        "filename": "designs/filter_mutualization.rst",
+        "patchSetId": 5
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-03-21T09:18:36Z",
+      "side": 1,
+      "message": "Not a fan of this name as it implies that we are looking for something in the plugin, not building a filter. I actually don\u0027t know what this is supposed to do. I suppose this is the plugin specific version of `_find()`?",
+      "range": {
+        "startLine": 263,
+        "startChar": 7,
+        "endLine": 263,
+        "endChar": 22
+      },
+      "revId": "d594050bf05514b37dd3a13863ade105e636182f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b0642241_8ee49a42",
+        "filename": "designs/filter_mutualization.rst",
+        "patchSetId": 5
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-03-21T09:18:36Z",
+      "side": 1,
+      "message": "Just a thought but I suppose only `-*printf` will need special handling? So I am tempted to add a callback for this specific option. That would make the callback less generic therefore easier to implement. For instance, the printf callback could be something that just takes in the format characters and output to a buffer the data we want. Something like this:\n\n\n```\nssize_t\nrbh_lustre_printf(...,\n                  const struct rbh_fsentry *fsentry,\n                  const char *format, size_t format_len,\n                  char *buf, size_t buf_len)\n{\n    ssize_t len \u003d -1;\n\n    if (format[0] !\u003d \u0027L\u0027) {\n        errno \u003d EINVAL;\n        return -1;\n    }\n\n    switch (format[1]) {\n    case \u0027f\u0027:\n        len \u003d format_fid(fsentry, buf, buf_len);\n        break;\n    ...\n    }\n    return len;\n}\n```",
+      "range": {
+        "startLine": 268,
+        "startChar": 9,
+        "endLine": 268,
+        "endChar": 16
+      },
+      "revId": "d594050bf05514b37dd3a13863ade105e636182f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
