@@ -16,6 +16,24 @@
       "message": "question: If `bkt_data.list[0]` is NULL because there is no bucket in the system, does `get_object_list` set `obj_data.list_length` to 0 and `obj_data.list` to NULL ?",
       "revId": "55dbb04464aad43ff70b5f688481af58817ab7f4",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "af4b0b42_9eab39ed",
+        "filename": "librobinhood/src/backends/s3/s3.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1038646
+      },
+      "writtenOn": "2025-03-21T10:57:00Z",
+      "side": 1,
+      "message": "It does now",
+      "parentUuid": "9e847283_b465d7ca",
+      "revId": "55dbb04464aad43ff70b5f688481af58817ab7f4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
