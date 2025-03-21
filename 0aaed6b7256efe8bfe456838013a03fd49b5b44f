@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "42b0ddb5_8cf4afab",
+        "filename": "designs/filter_mutualization.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-03-21T08:54:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dc3648f4_0b913853",
+      "range": {
+        "startLine": 55,
+        "startChar": 6,
+        "endLine": 55,
+        "endChar": 12
+      },
+      "revId": "0aaed6b7256efe8bfe456838013a03fd49b5b44f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b47d43b8_22279fe4",
@@ -49,6 +73,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "61a456cf_48c9a4db",
+        "filename": "designs/filter_mutualization.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-03-21T08:54:27Z",
+      "side": 1,
+      "message": "Apparently, `extent` is correct here: https://ell.stackexchange.com/questions/72472/when-to-use-extend-and-when-to-use-extent",
+      "parentUuid": "b47d43b8_22279fe4",
+      "range": {
+        "startLine": 70,
+        "startChar": 48,
+        "endLine": 70,
+        "endChar": 54
+      },
+      "revId": "0aaed6b7256efe8bfe456838013a03fd49b5b44f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d93a1402_8764e59e",
         "filename": "designs/filter_mutualization.rst",
         "patchSetId": 3
@@ -60,6 +108,30 @@
       "writtenOn": "2025-03-20T12:09:31Z",
       "side": 1,
       "message": "typo: just load",
+      "range": {
+        "startLine": 136,
+        "startChar": 15,
+        "endLine": 136,
+        "endChar": 21
+      },
+      "revId": "0aaed6b7256efe8bfe456838013a03fd49b5b44f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f6a82816_c6f22cc9",
+        "filename": "designs/filter_mutualization.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-03-21T08:54:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d93a1402_8764e59e",
       "range": {
         "startLine": 136,
         "startChar": 15,
