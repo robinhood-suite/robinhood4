@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e0e90069_81f3fc16",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-03-21T08:44:11Z",
+      "side": 1,
+      "message": "typo: oh, the \u0027a\u0027 just disappeared",
+      "range": {
+        "startLine": 14,
+        "startChar": 13,
+        "endLine": 14,
+        "endChar": 21
+      },
+      "revId": "391a8c11bf9484fb9a56b34978f01d64d36653ec",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
