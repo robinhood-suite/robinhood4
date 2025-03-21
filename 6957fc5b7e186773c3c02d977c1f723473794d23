@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "09caffbe_9c57c160",
+        "filename": "librobinhood/src/backends/s3/s3.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-21T10:13:52Z",
+      "side": 1,
+      "message": "ping",
+      "parentUuid": "572de12a_fdd778e2",
+      "range": {
+        "startLine": 28,
+        "startChar": 0,
+        "endLine": 32,
+        "endChar": 2
+      },
+      "revId": "6957fc5b7e186773c3c02d977c1f723473794d23",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d3000812_2ac12adb",
         "filename": "librobinhood/src/backends/s3/s3.c",
         "patchSetId": 2
@@ -203,6 +227,30 @@
       "side": 1,
       "message": "and replace bkt_data.list by bkt_data.list_length",
       "parentUuid": "46fb46df_92058539",
+      "range": {
+        "startLine": 99,
+        "startChar": 4,
+        "endLine": 103,
+        "endChar": 5
+      },
+      "revId": "6957fc5b7e186773c3c02d977c1f723473794d23",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5f2b1860_6c35ea31",
+        "filename": "librobinhood/src/backends/s3/s3.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-21T10:13:52Z",
+      "side": 1,
+      "message": "more like this:\n```\nrc \u003d get_bucket_list(...);\nif (rc) {\n   free(s3_iter);\n   return NULL;\n}\n```\n\nIf there is no bucket, data.list will be NULL, and data.list_length will be 0, but this is not an error. Even with an empty system, we need to return an iterator. When calling iter_next, it will return NULL with errno \u003d ENODATA to indicate that there is no data to retrieve.",
+      "parentUuid": "46a086ec_53a0301b",
       "range": {
         "startLine": 99,
         "startChar": 4,
