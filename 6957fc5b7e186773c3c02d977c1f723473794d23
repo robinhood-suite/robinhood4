@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0e049804_846bf5f3",
+        "filename": "librobinhood/src/backends/s3/s3.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-21T08:12:22Z",
+      "side": 1,
+      "message": "minor: You don\u0027t need to declare two different structures as they are exactly the same",
+      "range": {
+        "startLine": 28,
+        "startChar": 0,
+        "endLine": 32,
+        "endChar": 2
+      },
+      "revId": "6957fc5b7e186773c3c02d977c1f723473794d23",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d3000812_2ac12adb",
+        "filename": "librobinhood/src/backends/s3/s3.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-21T08:12:22Z",
+      "side": 1,
+      "message": "style: add a space between data and {",
+      "range": {
+        "startLine": 34,
+        "startChar": 19,
+        "endLine": 34,
+        "endChar": 20
+      },
+      "revId": "6957fc5b7e186773c3c02d977c1f723473794d23",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "25d7a384_f92e5c1b",
+        "filename": "librobinhood/src/backends/s3/s3.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-21T08:12:22Z",
+      "side": 1,
+      "message": "style: add a space",
+      "range": {
+        "startLine": 100,
+        "startChar": 39,
+        "endLine": 100,
+        "endChar": 40
+      },
+      "revId": "6957fc5b7e186773c3c02d977c1f723473794d23",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "97a90c17_cd0be205",
+        "filename": "librobinhood/src/backends/s3/s3.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-21T08:12:22Z",
+      "side": 1,
+      "message": "major: I just thought of it but here we need to return NULL only if the function failed and not if there no data retrieved. Instead of checking if data.list is NULL, it would be better to return -1 if it\u0027s failed and 0 otherwise, even if there is no data.",
+      "range": {
+        "startLine": 99,
+        "startChar": 4,
+        "endLine": 103,
+        "endChar": 5
+      },
+      "revId": "6957fc5b7e186773c3c02d977c1f723473794d23",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5a0f3e19_fcab6b9e",
+        "filename": "librobinhood/src/backends/s3/s3_wrapper.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-21T08:12:22Z",
+      "side": 1,
+      "message": "style: add space `} else {`",
+      "range": {
+        "startLine": 85,
+        "startChar": 5,
+        "endLine": 85,
+        "endChar": 10
+      },
+      "revId": "6957fc5b7e186773c3c02d977c1f723473794d23",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}

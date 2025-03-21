@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5292a2d4_0de7c4e8",
+        "filename": "librobinhood/src/backends/s3/s3.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-21T08:12:22Z",
+      "side": 1,
+      "message": "style: `} else {`",
+      "range": {
+        "startLine": 66,
+        "startChar": 5,
+        "endLine": 66,
+        "endChar": 10
+      },
+      "revId": "de3be1f8be450a10a057f658f8773bc91efc70e9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
