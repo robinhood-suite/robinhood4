@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0b59698d_ca4812a8",
+        "filename": "librobinhood/src/backends/s3/s3_wrapper.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-03-21T14:03:44Z",
+      "side": 1,
+      "message": "Yes, but that must be the same without, those variables will be destroyed at the end of the function?",
+      "parentUuid": "d050d550_17cd1117",
+      "range": {
+        "startLine": 28,
+        "startChar": 4,
+        "endLine": 36,
+        "endChar": 5
+      },
+      "revId": "7265b0576b9b427d19c267c357229ddbe9f4070a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6c4dbe33_23432869",
         "filename": "librobinhood/src/backends/s3/s3_wrapper.h",
         "patchSetId": 4
