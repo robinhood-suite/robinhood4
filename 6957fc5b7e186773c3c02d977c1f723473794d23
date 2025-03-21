@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "572de12a_fdd778e2",
+        "filename": "librobinhood/src/backends/s3/s3.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1038646
+      },
+      "writtenOn": "2025-03-21T09:59:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0e049804_846bf5f3",
+      "range": {
+        "startLine": 28,
+        "startChar": 0,
+        "endLine": 32,
+        "endChar": 2
+      },
+      "revId": "6957fc5b7e186773c3c02d977c1f723473794d23",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d3000812_2ac12adb",
@@ -47,6 +71,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "53148991_9eee0adc",
+        "filename": "librobinhood/src/backends/s3/s3.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1038646
+      },
+      "writtenOn": "2025-03-21T09:59:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d3000812_2ac12adb",
+      "range": {
+        "startLine": 34,
+        "startChar": 19,
+        "endLine": 34,
+        "endChar": 20
+      },
+      "revId": "6957fc5b7e186773c3c02d977c1f723473794d23",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "25d7a384_f92e5c1b",
@@ -60,6 +108,30 @@
       "writtenOn": "2025-03-21T08:12:22Z",
       "side": 1,
       "message": "style: add a space",
+      "range": {
+        "startLine": 100,
+        "startChar": 39,
+        "endLine": 100,
+        "endChar": 40
+      },
+      "revId": "6957fc5b7e186773c3c02d977c1f723473794d23",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "515f2186_bf6b60b2",
+        "filename": "librobinhood/src/backends/s3/s3.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1038646
+      },
+      "writtenOn": "2025-03-21T09:59:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "25d7a384_f92e5c1b",
       "range": {
         "startLine": 100,
         "startChar": 39,
@@ -95,6 +167,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "46fb46df_92058539",
+        "filename": "librobinhood/src/backends/s3/s3.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1038646
+      },
+      "writtenOn": "2025-03-21T09:59:07Z",
+      "side": 1,
+      "message": "something like\n\"\nif (s3_iter-\u003ebkt_data.list \u003d\u003d -1){\n        free(s3_iter);\n        return NULL;\n    } else if (s3_iter-\u003ebkt_data.list \u003d\u003d 0){\n        free(s3_iter);\n    }\n\"\n?",
+      "parentUuid": "97a90c17_cd0be205",
+      "range": {
+        "startLine": 99,
+        "startChar": 4,
+        "endLine": 103,
+        "endChar": 5
+      },
+      "revId": "6957fc5b7e186773c3c02d977c1f723473794d23",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5a0f3e19_fcab6b9e",
         "filename": "librobinhood/src/backends/s3/s3_wrapper.cpp",
         "patchSetId": 2
@@ -106,6 +202,30 @@
       "writtenOn": "2025-03-21T08:12:22Z",
       "side": 1,
       "message": "style: add space `} else {`",
+      "range": {
+        "startLine": 85,
+        "startChar": 5,
+        "endLine": 85,
+        "endChar": 10
+      },
+      "revId": "6957fc5b7e186773c3c02d977c1f723473794d23",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "366511d7_8ab59860",
+        "filename": "librobinhood/src/backends/s3/s3_wrapper.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1038646
+      },
+      "writtenOn": "2025-03-21T09:59:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a0f3e19_fcab6b9e",
       "range": {
         "startLine": 85,
         "startChar": 5,
