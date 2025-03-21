@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3465b470_00318931",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-03-21T10:41:18Z",
+      "side": 1,
+      "message": "style: too long",
+      "range": {
+        "startLine": 12,
+        "startChar": 6,
+        "endLine": 15,
+        "endChar": 2
+      },
+      "revId": "c0a885ce2193f28402c612067fcb2afe5e09461c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0c595360_62d54344",
         "filename": "rbh-fsevents/src/enrichers/lustre.c",
         "patchSetId": 2
