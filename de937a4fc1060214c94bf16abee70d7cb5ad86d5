@@ -35,6 +35,24 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dd10251a_55319033",
+        "filename": "rbh-fsevents/src/enrichers/posix/posix.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 511,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-03-22T21:55:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "22e1f92b_64084404",
+      "revId": "de937a4fc1060214c94bf16abee70d7cb5ad86d5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "50e0f224_aa53f6eb",
@@ -54,6 +72,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0393ff07_3601875d",
+        "filename": "rbh-fsevents/src/enrichers/posix/posix.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 972,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-03-22T21:55:03Z",
+      "side": 1,
+      "message": "I think the enrich_iter_builder is never free\u0027d since it is allocated only once for the whole duration of the program. So mount_fd, builder and mount_path are never explicitly released. They are released at the end of the program.",
+      "parentUuid": "50e0f224_aa53f6eb",
+      "revId": "de937a4fc1060214c94bf16abee70d7cb5ad86d5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1ed38d3c_ca07ab01",
         "filename": "rbh-fsevents/tests/lustre/test_retention.bash",
         "patchSetId": 2
@@ -65,6 +101,24 @@
       "writtenOn": "2025-03-20T15:18:17Z",
       "side": 1,
       "message": "minor: to remove",
+      "revId": "de937a4fc1060214c94bf16abee70d7cb5ad86d5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dd20281d_feadb32f",
+        "filename": "rbh-fsevents/tests/lustre/test_retention.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-03-22T21:55:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1ed38d3c_ca07ab01",
       "revId": "de937a4fc1060214c94bf16abee70d7cb5ad86d5",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
