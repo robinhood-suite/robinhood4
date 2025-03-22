@@ -104,8 +104,7 @@ tests_library_path_correctly_set()
 
 tests_mongo_backend_detection()
 {
-    local backend_path="$test_dir/../../builddir/librobinhood/"\
-"src/backends/mongo"
+    local backend_path="$MESON_BUILDDIR/librobinhood/src/backends/mongo"
     local non_standard_path="/tmp/non_standard"
     local TEMP=$LD_LIBRARY_PATH
 
