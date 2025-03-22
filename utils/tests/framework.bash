@@ -14,6 +14,8 @@
 SUITE=${BASH_SOURCE[1]##*/}
 SUITE=${SUITE%.*}
 
+MESON_BUILDDIR=$PWD
+
 __rbh_sync=$(PATH="$PWD/rbh-sync:$PATH" which rbh-sync)
 rbh_sync()
 {
