@@ -34,6 +34,24 @@
       "parentUuid": "c2b17d69_719a0392",
       "revId": "9a54f2e16ecf50ead130d03037c441517d09397c",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e80debee_82409e96",
+        "filename": "rbh-capabilities/rbh-capabilities.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-03-22T21:30:42Z",
+      "side": 1,
+      "message": "I remembered why I left this here. We don\u0027t check the other lib dirs if LD_LIBRARY_PATH is set.",
+      "parentUuid": "e1f6479c_85a7c177",
+      "revId": "9a54f2e16ecf50ead130d03037c441517d09397c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
