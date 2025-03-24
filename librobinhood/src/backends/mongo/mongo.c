@@ -11,6 +11,7 @@
 
 #include <assert.h>
 #include <stdlib.h>
+#include <time.h>
 
 /* This backend uses libmongoc, from the "mongo-c-driver" project to interact
  * with a MongoDB database.
@@ -413,6 +414,7 @@ struct mongo_backend {
     mongoc_client_t *client;
     mongoc_collection_t *entries;
     mongoc_collection_t *info;
+    time_t _id;
 };
 
 static int
@@ -673,6 +675,73 @@ mongo_backend_update(void *backend, struct rbh_iterator *fsevents)
     bson_destroy(&reply);
 
     return count;
+}
+
+    /*--------------------------------------------------------------------*
+     |                      update_backend_source                          |
+     *--------------------------------------------------------------------*/
+
+static int
+insert_mongo_source(mongoc_collection_t *collection, time_t _id,
+                  bson_t *value_to_update)
+{
+    bson_error_t error;
+    bson_t *filter;
+    bson_t *update;
+    bson_t *opts;
+    int rc = 0;
+
+    filter = BCON_NEW("_id", BCON_INT64(_id));
+    update = BCON_NEW("$set", BCON_DOCUMENT(value_to_update));
+    opts = BCON_NEW("upsert", BCON_BOOL(true));
+
+    if (!mongoc_collection_update_one(collection, filter, update,
+                                      opts, NULL, &error)) {
+        fprintf(stderr, "Upsert failed: %s\n", error.message);
+        goto out;
+    }
+
+    rc = 1;
+out:
+    bson_destroy(filter);
+    bson_destroy(opts);
+
+    return rc;
+}
+
+static int
+mongo_backend_insert_source(void *backend,
+                            const struct rbh_value *backend_type)
+{
+    if (backend == NULL || backend_type == NULL)
+        return 0;
+
+    struct mongo_backend *mongo = backend;
+    bson_t *backend_source;
+    bson_t array;
+    char key[16];
+    int rc = 0;
+
+    backend_source = bson_new();
+
+    if (BSON_APPEND_ARRAY_BEGIN(backend_source, "backend_source", &array)) {
+        for (uint8_t i = 0 ; i < backend_type->sequence.count ; i++) {
+            snprintf(key, sizeof(key), "source_%d", i);
+            BSON_APPEND_UTF8(&array, key,
+                             backend_type->sequence.values[i].string);
+        }
+
+        bson_append_array_end(backend_source, &array);
+
+        if (!insert_mongo_source(mongo->info, mongo->_id, backend_source))
+            goto out;
+    }
+
+    rc = 1;
+out:
+    bson_destroy(backend_source);
+
+    return rc;
 }
 
     /*--------------------------------------------------------------------*
@@ -960,6 +1029,7 @@ static const struct rbh_backend_operations MONGO_BACKEND_OPS = {
     .branch = mongo_backend_branch,
     .root = mongo_root,
     .update = mongo_backend_update,
+    .insert_source = mongo_backend_insert_source,
     .filter = mongo_backend_filter,
     .report = mongo_backend_report,
     .get_info = mongo_backend_get_info,
@@ -1764,9 +1834,23 @@ mongo_backend_branch(void *backend, const struct rbh_id *id, const char *path)
  |                               MONGO_BACKEND                                |
  *----------------------------------------------------------------------------*/
 
+static const struct rbh_value MONGO_STRING_TYPE = {
+    .type = RBH_VT_STRING,
+    .string = "mongo"
+};
+
+static const struct rbh_value RBH_MONGO_BACKEND_TYPE = {
+    .type = RBH_VT_SEQUENCE,
+    .sequence = {
+        .values = &MONGO_STRING_TYPE,
+        .count = 1,
+    },
+};
+
 static const struct rbh_backend MONGO_BACKEND = {
     .id = RBH_BI_MONGO,
     .name = RBH_MONGO_BACKEND_NAME,
+    .backend_type = &RBH_MONGO_BACKEND_TYPE,
     .ops = &MONGO_BACKEND_OPS,
 };
 
@@ -1843,6 +1927,8 @@ rbh_mongo_backend_new(const char *fsname, struct rbh_config *config)
     }
 
     mongo->backend = MONGO_BACKEND;
+
+    mongo->_id = time(NULL);
 
     return &mongo->backend;
 }

@@ -756,6 +756,8 @@ main(int argc, char *argv[])
 
     sync(&projection);
 
+    rbh_backend_insert_source(to, from->backend_type);
+
     rbh_config_free();
 
     return EXIT_SUCCESS;
