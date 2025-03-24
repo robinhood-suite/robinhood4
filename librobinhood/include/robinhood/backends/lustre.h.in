@@ -1,5 +1,5 @@
 /* This file is part of RobinHood 4
- * Copyright (C) 2022 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifer: LGPL-3.0-or-later
@@ -33,6 +33,19 @@
  */
 struct rbh_backend *
 rbh_lustre_backend_new(const char *path, struct rbh_config *config);
+
+/**
+ * Check the given token is a valid Lustre action or predicate
+ *
+ * @param token     the token to check
+ *
+ * @return          RBH_TOKEN_ACTION if the token is a Lustre action
+ *                  RBH_TOKEN_PREDICATE if the token is a Lustre predicate
+ *                  RBH_TOKEN_UNKNOWN if the token is not a Lustre token
+ *                  RBH_TOKEN_ERROR otherwise
+ */
+enum rbh_parser_token
+rbh_lustre_check_valid_token(const char *token);
 
 /**
  * Release the memory associated with the plugin
