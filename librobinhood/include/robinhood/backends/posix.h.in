@@ -1,5 +1,5 @@
 /* This file is part of RobinHood 4
- * Copyright (C) 2019 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifer: LGPL-3.0-or-later
@@ -10,6 +10,7 @@
 
 #include "robinhood/plugins/backend.h"
 #include "robinhood/backend.h"
+#include "robinhood/filter.h"
 #include "robinhood/config.h"
 
 #define RBH_POSIX_BACKEND_NAME "posix"
@@ -40,6 +41,20 @@ rbh_posix_backend_new(const struct rbh_backend_plugin *self,
                       const char *type,
                       const char *path,
                       struct rbh_config *config);
+
+/**
+ * Check the given token corresponds to a predicate or action known by POSIX
+ *
+ * @param token   a string that represents a token POSIX should identify
+ *
+ * @return        RBH_TOKEN_PREDICATE if the token is a predicate
+ *                RBH_TOKEN_ACTION if the token is an action
+ *                RBH_TOKEN_UNKNOWN if the token is not valid
+ *                RBH_TOKEN_ERROR if an error occur and errno is set
+ *                appropriately
+ */
+enum rbh_parser_token
+rbh_posix_check_valid_token(const char *token);
 
 /**
  * Release the memory associated with the plugin
