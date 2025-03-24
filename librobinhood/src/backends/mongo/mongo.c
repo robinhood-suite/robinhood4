@@ -11,6 +11,7 @@
 
 #include <assert.h>
 #include <stdlib.h>
+#include <time.h>
 
 /* This backend uses libmongoc, from the "mongo-c-driver" project to interact
  * with a MongoDB database.
@@ -413,6 +414,8 @@ struct mongo_backend {
     mongoc_client_t *client;
     mongoc_collection_t *entries;
     mongoc_collection_t *info;
+    mongoc_collection_t *log;
+    time_t _id;
 };
 
 static int
@@ -426,6 +429,33 @@ mongo_set_option(void *backend, unsigned int option, const void *data,
     /*--------------------------------------------------------------------*
      |                               update                               |
      *--------------------------------------------------------------------*/
+
+static int
+update_metadata(mongoc_collection_t *collection, char *field_to_update,
+                time_t _id, const char *value_to_update, bool upsert) {
+    bson_t *filter, *update, *opts;
+    bool insert_success = false;
+    bson_error_t error;
+
+    filter = BCON_NEW("_id", BCON_INT64(_id));
+    update = BCON_NEW("$set", "{", field_to_update, BCON_UTF8(value_to_update),
+                      "}");
+    opts = BCON_NEW("upsert", BCON_BOOL(upsert));
+
+    if (!mongoc_collection_update_one(collection, filter, update, opts, NULL,
+                                      &error)) {
+        fprintf(stderr, "Insert failed: %s\n", error.message);
+        goto out;
+    }
+
+    insert_success = true;
+out:
+    bson_destroy(update);
+    bson_destroy(filter);
+    bson_destroy(opts);
+
+    return insert_success ? 1 : 0;
+}
 
 static mongoc_bulk_operation_t *
 _mongoc_collection_create_bulk_operation(
@@ -673,6 +703,65 @@ mongo_backend_update(void *backend, struct rbh_iterator *fsevents)
     bson_destroy(&reply);
 
     return count;
+}
+
+    /*--------------------------------------------------------------------*
+     |                      update_backend_source                          |
+     *--------------------------------------------------------------------*/
+
+enum rbh_backend_source
+get_backend_source(const char *source_name) {
+    if (source_name == NULL)
+        return RBH_UNKNOWN;
+
+    if (strcmp(source_name, "lustre") == 0)
+        return RBH_LUSTRE;
+    if (strcmp(source_name, "posix") == 0)
+        return RBH_POSIX;
+    if (strcmp(source_name, "mpi") == 0)
+        return RBH_MPI_FILE;
+    if (strcmp(source_name, "lustre_mpi") == 0)
+        return RBH_LUSTRE_MPI;
+    if (strcmp(source_name, "posix_mpi") == 0)
+        return RBH_POSIX_MPI;
+    if (strcmp(source_name, "hestia") == 0)
+        return RBH_HESTIA;
+
+    return RBH_UNKNOWN;
+}
+
+static int
+mongo_backend_update_source(void *backend, struct rbh_backend *source) {
+    struct mongo_backend *mongo = backend;
+    const char *insert_value = NULL;
+    char array_str[254];
+
+    enum rbh_backend_source enum_source = get_backend_source(source->name);
+
+    switch (enum_source) {
+        case RBH_LUSTRE:
+            snprintf(array_str, sizeof(array_str), "[lustre, posix]");
+            break;
+        case RBH_LUSTRE_MPI:
+            snprintf(array_str, sizeof(array_str),
+                     "[lustre, posix, mpi]");
+            break;
+        case RBH_POSIX_MPI:
+            snprintf(array_str, sizeof(array_str), "[posix,mpi]");
+            break;
+        default:
+            insert_value = source->name;
+            break;
+    }
+
+    if (insert_value)
+        return (!update_metadata(mongo->info, "backend_source", mongo->_id,
+                                 insert_value, true)) ? 0 : 1;
+    if (array_str[0] != '\0')
+        return (!update_metadata(mongo->info, "backend_source", mongo->_id,
+                                 array_str, true)) ? 0 : 1;
+
+    return 0;
 }
 
     /*--------------------------------------------------------------------*
@@ -960,6 +1049,7 @@ static const struct rbh_backend_operations MONGO_BACKEND_OPS = {
     .branch = mongo_backend_branch,
     .root = mongo_root,
     .update = mongo_backend_update,
+    .update_source = mongo_backend_update_source,
     .filter = mongo_backend_filter,
     .report = mongo_backend_report,
     .get_info = mongo_backend_get_info,
@@ -1726,6 +1816,13 @@ mongo_backend_init_from_uri(struct mongo_backend *mongo,
         return -1;
     }
 
+    mongo->log = mongoc_client_get_collection(mongo->client, db, "log");
+    if (mongo->log == NULL) {
+        mongoc_client_destroy(mongo->client);
+        errno = ENOMEM;
+        return -1;
+    }
+
     return 0;
 }
 
@@ -1843,6 +1940,8 @@ rbh_mongo_backend_new(const char *fsname, struct rbh_config *config)
     }
 
     mongo->backend = MONGO_BACKEND;
+
+    mongo->_id = time(NULL);
 
     return &mongo->backend;
 }

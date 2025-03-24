@@ -758,6 +758,9 @@ main(int argc, char *argv[])
 
     rbh_config_free();
 
+    if (rbh_backend_update_source(to, from) != 1)
+        printf("source not inserted\n");
+
     return EXIT_SUCCESS;
 }
 

@@ -54,6 +54,17 @@
  */
 extern __thread char rbh_backend_error[512];
 
+enum rbh_backend_source {
+    RBH_POSIX,
+    RBH_POSIX_MPI,
+    RBH_MONGO,
+    RBH_LUSTRE,
+    RBH_LUSTRE_MPI,
+    RBH_HESTIA,
+    RBH_MPI_FILE,
+    RBH_UNKNOWN,
+};
+
 /**
  * A unique backend identifier
  *
@@ -253,6 +264,10 @@ struct rbh_backend_operations {
     ssize_t (*update)(
             void *backend,
             struct rbh_iterator *fsevents
+            );
+    int (*update_source)(
+            void *backend,
+            struct rbh_backend *source
             );
     struct rbh_backend *(*branch)(
             void *backend,
@@ -476,6 +491,17 @@ rbh_backend_update(struct rbh_backend *backend, struct rbh_iterator *fsevents)
     return backend->ops->update(backend, fsevents);
 }
 
+static inline int
+rbh_backend_update_source(struct rbh_backend *backend,
+                          struct rbh_backend *source)
+{
+    if (backend->ops->update_source == NULL) {
+        errno = ENOTSUP;
+        return -1;
+    }
+
+    return backend->ops->update_source(backend, source);
+}
 /**
  * Create a sub-backend instance
  *
