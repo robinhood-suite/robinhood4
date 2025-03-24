@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6c85255c_a0c378c2",
+        "filename": "rbh-fsevents/src/enrichers/posix/internals.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-03-24T12:34:05Z",
+      "side": 1,
+      "message": "style: should be on line above",
+      "range": {
+        "startLine": 12,
+        "startChar": 28,
+        "endLine": 12,
+        "endChar": 32
+      },
+      "revId": "8a56daf71a123df19989576bb2198fe2193a348a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "be02c15b_9610e3ff",
+        "filename": "rbh-fsevents/src/enrichers/posix/posix.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 452,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-03-24T12:34:05Z",
+      "side": 1,
+      "message": "defect: don\u0027t know if it\u0027s changed in a next patch, but since `extension_enrichers` is defined to NULL in `posix_iter_enrich`, this will segfault",
+      "range": {
+        "startLine": 452,
+        "startChar": 22,
+        "endLine": 452,
+        "endChar": 44
+      },
+      "revId": "8a56daf71a123df19989576bb2198fe2193a348a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
