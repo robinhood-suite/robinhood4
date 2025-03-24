@@ -11,6 +11,7 @@
 
 #include <assert.h>
 #include <stdlib.h>
+#include <time.h>
 
 /* This backend uses libmongoc, from the "mongo-c-driver" project to interact
  * with a MongoDB database.
@@ -960,6 +961,7 @@ static const struct rbh_backend_operations MONGO_BACKEND_OPS = {
     .branch = mongo_backend_branch,
     .root = mongo_root,
     .update = mongo_backend_update,
+    .insert_source = mongo_backend_insert_source,
     .filter = mongo_backend_filter,
     .report = mongo_backend_report,
     .get_info = mongo_backend_get_info,

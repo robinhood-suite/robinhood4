@@ -28,6 +28,7 @@
 #include "robinhood/backends/lustre_internal.h"
 #include "robinhood/backends/lustre.h"
 #include "robinhood/statx.h"
+#include "robinhood/value.h"
 #include "value.h"
 
 #ifndef HAVE_LUSTRE_FILE_HANDLE
