@@ -189,6 +189,29 @@ static const struct rbh_backend_operations LUSTRE_MPI_BACKEND_OPS = {
     .destroy = lustre_mpi_backend_destroy,
 };
 
+static const struct rbh_value POSIX_STRING_TYPE = {
+    .type = RBH_VT_STRING,
+    .string = "posix",
+};
+
+static const struct rbh_value LUSTRE_STRING_TYPE = {
+    .type = RBH_VT_STRING,
+    .string = "lustre",
+};
+
+static const struct rbh_value values[] = {
+    LUSTRE_STRING_TYPE,
+    POSIX_STRING_TYPE,
+};
+
+static const struct rbh_value RBH_LUSTRE_MPI_BACKEND_TYPE = {
+    .type = RBH_VT_SEQUENCE,
+    .sequence = {
+        .values = values,
+        .count = 2,
+    },
+};
+
 struct rbh_backend *
 rbh_lustre_mpi_backend_new(const char *path, struct rbh_config *config)
 {
@@ -207,6 +230,7 @@ rbh_lustre_mpi_backend_new(const char *path, struct rbh_config *config)
 
     lustre_mpi->iter_new = lustre_mpi_iterator_new;
     lustre_mpi->backend.name = RBH_LUSTRE_MPI_BACKEND_NAME;
+    lustre_mpi->backend.backend_info = &RBH_LUSTRE_MPI_BACKEND_TYPE;
     lustre_mpi->backend.ops = &LUSTRE_MPI_BACKEND_OPS;
     lustre_mpi->backend.id = RBH_BI_LUSTRE_MPI;
 

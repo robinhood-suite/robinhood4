@@ -11,6 +11,7 @@
 
 #include <assert.h>
 #include <stdlib.h>
+#include <time.h>
 
 /* This backend uses libmongoc, from the "mongo-c-driver" project to interact
  * with a MongoDB database.
@@ -676,6 +677,57 @@ mongo_backend_update(void *backend, struct rbh_iterator *fsevents)
 }
 
     /*--------------------------------------------------------------------*
+     |                      update_backend_source                          |
+     *--------------------------------------------------------------------*/
+
+static int
+insert_mongo_source(mongoc_collection_t *collection, const char *backend)
+{
+    bson_error_t error;
+    bson_t *update;
+    bson_t *filter;
+    bson_t *opts;
+    int rc = 0;
+
+    filter = BCON_NEW("_id", "backend_info");
+    update = BCON_NEW("$addToSet", BCON_DOCUMENT(BCON_NEW("backend_source",
+                                                          BCON_UTF8(backend))));
+    opts = BCON_NEW("upsert", BCON_BOOL(true));
+
+    if (!mongoc_collection_update_one(collection, filter, update,
+                                      opts, NULL, &error)) {
+        fprintf(stderr, "Upsert failed: %s\n", error.message);
+        goto out;
+    }
+
+    rc = 1;
+out:
+    bson_destroy(filter);
+    bson_destroy(opts);
+
+    return rc;
+}
+
+static int
+mongo_backend_insert_source(void *backend,
+                            const struct rbh_value *backend_source)
+{
+    if (backend == NULL || backend_source == NULL)
+        return 0;
+
+    struct mongo_backend *mongo = backend;
+
+    for (uint8_t i = 0 ; i < backend_source->sequence.count ; i++) {
+        const char *backend_name = backend_source->sequence.values[i].string;
+
+        if (!insert_mongo_source(mongo->info, backend_name))
+            return -1;
+    }
+
+    return 0;
+}
+
+    /*--------------------------------------------------------------------*
      |                                root                                |
      *--------------------------------------------------------------------*/
 
@@ -960,6 +1012,7 @@ static const struct rbh_backend_operations MONGO_BACKEND_OPS = {
     .branch = mongo_backend_branch,
     .root = mongo_root,
     .update = mongo_backend_update,
+    .insert_source = mongo_backend_insert_source,
     .filter = mongo_backend_filter,
     .report = mongo_backend_report,
     .get_info = mongo_backend_get_info,
@@ -1764,9 +1817,23 @@ mongo_backend_branch(void *backend, const struct rbh_id *id, const char *path)
  |                               MONGO_BACKEND                                |
  *----------------------------------------------------------------------------*/
 
+static const struct rbh_value MONGO_STRING_TYPE = {
+    .type = RBH_VT_STRING,
+    .string = "mongo"
+};
+
+static const struct rbh_value RBH_MONGO_BACKEND_TYPE = {
+    .type = RBH_VT_SEQUENCE,
+    .sequence = {
+        .values = &MONGO_STRING_TYPE,
+        .count = 1,
+    },
+};
+
 static const struct rbh_backend MONGO_BACKEND = {
     .id = RBH_BI_MONGO,
     .name = RBH_MONGO_BACKEND_NAME,
+    .backend_info = &RBH_MONGO_BACKEND_TYPE,
     .ops = &MONGO_BACKEND_OPS,
 };
 

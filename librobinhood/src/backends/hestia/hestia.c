@@ -441,9 +441,23 @@ static const struct rbh_backend_operations HESTIA_BACKEND_OPS = {
     .destroy = hestia_backend_destroy,
 };
 
+static const struct rbh_value HESTIA_STRING_TYPE = {
+    .type = RBH_VT_STRING,
+    .string = "hestia"
+};
+
+static const struct rbh_value RBH_HESTIA_BACKEND_TYPE = {
+    .type = RBH_VT_SEQUENCE,
+    .sequence = {
+        .values = &HESTIA_STRING_TYPE,
+        .count = 1,
+    },
+};
+
 static const struct rbh_backend HESTIA_BACKEND = {
     .id = RBH_BI_HESTIA,
     .name = RBH_HESTIA_BACKEND_NAME,
+    .backend_info = &RBH_HESTIA_BACKEND_TYPE,
     .ops = &HESTIA_BACKEND_OPS,
 };
 
