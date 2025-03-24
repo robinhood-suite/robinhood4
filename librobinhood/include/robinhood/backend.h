@@ -254,6 +254,10 @@ struct rbh_backend_operations {
             void *backend,
             struct rbh_iterator *fsevents
             );
+    int (*insert_source)(
+            void *backend,
+            const struct rbh_value *backend_source
+            );
     struct rbh_backend *(*branch)(
             void *backend,
             const struct rbh_id *id,
@@ -474,6 +478,27 @@ rbh_backend_update(struct rbh_backend *backend, struct rbh_iterator *fsevents)
     }
 
     return backend->ops->update(backend, fsevents);
+}
+
+/**
+ * Insert the backend source of rbh-sync
+ *
+ * @param backend         the backend in which to insert the source
+ * @param backend_source  a rbh_value sequence to retrieve the backend name
+ *                        and its potential overload
+ *
+ * @return                0 on success, -1 on error
+ */
+static inline int
+rbh_backend_insert_source(struct rbh_backend *backend,
+                          const struct rbh_value *backend_source)
+{
+    if (backend->ops->insert_source == NULL) {
+        errno = ENOTSUP;
+        return -1;
+    }
+
+    return backend->ops->insert_source(backend, backend_source);
 }
 
 /**
