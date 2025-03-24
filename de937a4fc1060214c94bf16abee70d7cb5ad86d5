@@ -3,6 +3,75 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8279c1b6_3d893792",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-03-24T13:11:54Z",
+      "side": 1,
+      "message": "typo: represents",
+      "range": {
+        "startLine": 12,
+        "startChar": 5,
+        "endLine": 12,
+        "endChar": 14
+      },
+      "revId": "de937a4fc1060214c94bf16abee70d7cb5ad86d5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "df4d0889_a7111944",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-03-24T13:11:54Z",
+      "side": 1,
+      "message": "question: what about symlinks ?",
+      "range": {
+        "startLine": 14,
+        "startChar": 11,
+        "endLine": 15,
+        "endChar": 5
+      },
+      "revId": "de937a4fc1060214c94bf16abee70d7cb5ad86d5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3d0ffa91_05d738e1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-03-24T13:11:54Z",
+      "side": 1,
+      "message": "typo: dynamically",
+      "range": {
+        "startLine": 47,
+        "startChar": 23,
+        "endLine": 47,
+        "endChar": 32
+      },
+      "revId": "de937a4fc1060214c94bf16abee70d7cb5ad86d5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "fe9a686d_1bc9203f",
         "filename": "librobinhood/src/backends/posix/extension.c",
         "patchSetId": 2
@@ -14,6 +83,52 @@
       "writtenOn": "2025-03-20T15:18:17Z",
       "side": 1,
       "message": "comment: Karl as done a patch which mutualize all the open function declared in rbh-fsevent and librobinhood in librobinhood",
+      "revId": "de937a4fc1060214c94bf16abee70d7cb5ad86d5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "690fc963_878acbe8",
+        "filename": "rbh-fsevents/src/enrichers/posix/lustre.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 395,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-03-24T13:11:54Z",
+      "side": 1,
+      "message": "minor: can just be the set of errno + return -1, return 0 is not necessary",
+      "range": {
+        "startLine": 390,
+        "startChar": 6,
+        "endLine": 395,
+        "endChar": 13
+      },
+      "revId": "de937a4fc1060214c94bf16abee70d7cb5ad86d5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dc8f81c3_c3fc1b3a",
+        "filename": "rbh-fsevents/src/enrichers/posix/posix.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 476,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-03-24T13:11:54Z",
+      "side": 1,
+      "message": "question: what\u0027s the issue with handling this case now ? We\u0027ll do a few more checks sure, but we won\u0027t have to change this in the future",
+      "range": {
+        "startLine": 472,
+        "startChar": 8,
+        "endLine": 476,
+        "endChar": 23
+      },
       "revId": "de937a4fc1060214c94bf16abee70d7cb5ad86d5",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
@@ -84,6 +199,29 @@
       "side": 1,
       "message": "I think the enrich_iter_builder is never free\u0027d since it is allocated only once for the whole duration of the program. So mount_fd, builder and mount_path are never explicitly released. They are released at the end of the program.",
       "parentUuid": "50e0f224_aa53f6eb",
+      "revId": "de937a4fc1060214c94bf16abee70d7cb5ad86d5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "36ea00f4_f7a07007",
+        "filename": "rbh-fsevents/src/enrichers/posix/retention.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-03-24T13:11:54Z",
+      "side": 1,
+      "message": "question: it\u0027s been a long time, but doesn\u0027t this assume that the binary xattr is the last one in the list (or the only one) ? If it\u0027s the first one, this won\u0027t work",
+      "range": {
+        "startLine": 52,
+        "startChar": 4,
+        "endLine": 53,
+        "endChar": 37
+      },
       "revId": "de937a4fc1060214c94bf16abee70d7cb5ad86d5",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
