@@ -1,5 +1,5 @@
 # This file is part of RobinHood 4
-# Copyright (C) 2019 Commissariat a l'energie atomique et aux energies
+# Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
@@ -10,6 +10,7 @@ librbh_posix = library(
         'extension.c',
         'fts_iter.c',
         'plugin.c',
+        'parser.c',
         'posix.c',
         'xattrs_mapping.c'
     ],
