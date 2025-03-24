@@ -1,5 +1,5 @@
 # This file is part of RobinHood 4
-# Copyright (C) 2022 Commissariat a l'energie atomique et aux energies
+# Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
@@ -13,6 +13,7 @@ librbh_posix_lustre_ext = library(
     'rbh-posix-lustre-ext',
     sources: [
         'lustre.c',
+        'parser.c',
         'plugin.c',
     ],
     version: librbh_lustre_version, # defined in include/robinhood/backends
