@@ -41,4 +41,14 @@ enum lustre_predicate {
 int
 str2lustre_predicate(const char *string);
 
+/**
+ * predicate2str - convert a predicate or lustre_predicate to a string
+ *
+ * @param predicate a predicate
+ *
+ * @return          the string that represents \p predicate
+ */
+const char *
+lustre_predicate2str(int predicate);
+
 #endif

@@ -27,41 +27,41 @@
 #include <robinhood/backend.h>
 #include <robinhood/backends/posix_extension.h>
 #include <robinhood/utils.h>
-#include <rbh-find/filters.h>
+#include <robinhood/filter.h>
 
-#include "filters.h"
+#include "parser.h"
 
 static const struct rbh_filter_field predicate2filter_field[] = {
-    [LPRED_COMP_END - LPRED_MIN]       = {.fsentry = RBH_FP_INODE_XATTRS,
-                                          .xattr = "end"},
-    [LPRED_COMP_START - LPRED_MIN]     = {.fsentry = RBH_FP_INODE_XATTRS,
-                                          .xattr = "begin"},
-    [LPRED_FID - LPRED_MIN]            = {.fsentry = RBH_FP_INODE_XATTRS,
-                                          .xattr = "fid"},
-    [LPRED_HSM_STATE - LPRED_MIN]      = {.fsentry = RBH_FP_INODE_XATTRS,
-                                          .xattr = "hsm_state"},
-    [LPRED_LAYOUT_PATTERN - LPRED_MIN] = {.fsentry = RBH_FP_INODE_XATTRS,
-                                          .xattr = "pattern"},
-    [LPRED_MDT_COUNT - LPRED_MIN]      = {.fsentry = RBH_FP_INODE_XATTRS,
-                                          .xattr = "mdt_count"},
-    [LPRED_MDT_INDEX - LPRED_MIN]      = {.fsentry = RBH_FP_INODE_XATTRS,
-                                          .xattr = "mdt_index"},
-    [LPRED_OST_INDEX - LPRED_MIN]      = {.fsentry = RBH_FP_INODE_XATTRS,
-                                          .xattr = "ost"},
-    [LPRED_POOL - LPRED_MIN]           = {.fsentry = RBH_FP_INODE_XATTRS,
-                                          .xattr = "pool"},
-    [LPRED_STRIPE_COUNT - LPRED_MIN]   = {.fsentry = RBH_FP_INODE_XATTRS,
-                                          .xattr = "stripe_count"},
-    [LPRED_STRIPE_SIZE - LPRED_MIN]    = {.fsentry = RBH_FP_INODE_XATTRS,
-                                          .xattr = "stripe_size"},
-    [LPRED_EXPIRED - LPRED_MIN]        = {.fsentry = RBH_FP_INODE_XATTRS,
-                                          .xattr = "trusted.expiration_date"},
+    [LPRED_COMP_END]       = {.fsentry = RBH_FP_INODE_XATTRS,
+                              .xattr = "end"},
+    [LPRED_COMP_START]     = {.fsentry = RBH_FP_INODE_XATTRS,
+                              .xattr = "begin"},
+    [LPRED_FID]            = {.fsentry = RBH_FP_INODE_XATTRS,
+                              .xattr = "fid"},
+    [LPRED_HSM_STATE]      = {.fsentry = RBH_FP_INODE_XATTRS,
+                              .xattr = "hsm_state"},
+    [LPRED_LAYOUT_PATTERN] = {.fsentry = RBH_FP_INODE_XATTRS,
+                              .xattr = "pattern"},
+    [LPRED_MDT_COUNT]      = {.fsentry = RBH_FP_INODE_XATTRS,
+                              .xattr = "mdt_count"},
+    [LPRED_MDT_INDEX]      = {.fsentry = RBH_FP_INODE_XATTRS,
+                              .xattr = "mdt_index"},
+    [LPRED_OST_INDEX]      = {.fsentry = RBH_FP_INODE_XATTRS,
+                              .xattr = "ost"},
+    [LPRED_POOL]           = {.fsentry = RBH_FP_INODE_XATTRS,
+                              .xattr = "pool"},
+    [LPRED_STRIPE_COUNT]   = {.fsentry = RBH_FP_INODE_XATTRS,
+                              .xattr = "stripe_count"},
+    [LPRED_STRIPE_SIZE]    = {.fsentry = RBH_FP_INODE_XATTRS,
+                              .xattr = "stripe_size"},
+    [LPRED_EXPIRED]        = {.fsentry = RBH_FP_INODE_XATTRS,
+                              .xattr = "trusted.expiration_date"},
 };
 
 static inline const struct rbh_filter_field *
 get_filter_field(enum lustre_predicate predicate)
 {
-    return &predicate2filter_field[predicate - LPRED_MIN];
+    return &predicate2filter_field[predicate];
 }
 
 static enum hsm_states
@@ -114,7 +114,7 @@ str2hsm_states(const char *hsm_state)
     __builtin_unreachable();
 }
 
-struct rbh_filter *
+static struct rbh_filter *
 hsm_state2filter(const char *hsm_state)
 {
     enum hsm_states state = str2hsm_states(hsm_state);
@@ -180,7 +180,7 @@ check_balanced_braces(const char *fid)
         (*fid == '[' ? last == ']' : true);
 }
 
-struct rbh_filter *
+static struct rbh_filter *
 fid2filter(const char *fid)
 {
     struct rbh_filter *filter;
@@ -227,7 +227,7 @@ fid2filter(const char *fid)
     return filter;
 }
 
-struct rbh_filter *
+static struct rbh_filter *
 ost_index2filter(const char *ost_index)
 {
     struct rbh_value index_value = {
@@ -255,7 +255,7 @@ ost_index2filter(const char *ost_index)
     return filter;
 }
 
-struct rbh_filter *
+static struct rbh_filter *
 mdt_index2filter(const char *mdt_index)
 {
     struct rbh_filter *filter;
@@ -278,7 +278,7 @@ mdt_index2filter(const char *mdt_index)
     return filter;
 }
 
-struct rbh_filter *
+static struct rbh_filter *
 get_default_stripe_filter(void)
 {
     struct rbh_filter_field default_field = {
@@ -335,7 +335,7 @@ get_fs_default_dir_lov(uint64_t flags)
     return pair.value;
 }
 
-struct rbh_filter *
+static struct rbh_filter *
 stripe_count2filter(const char *stripe_count)
 {
     const struct rbh_value *default_stripe_count;
@@ -378,7 +378,7 @@ stripe_count2filter(const char *stripe_count)
     return rbh_filter_and(filter, rbh_filter_not(default_filter));
 }
 
-struct rbh_filter *
+static struct rbh_filter *
 stripe_size2filter(const char *stripe_size)
 {
     const struct rbh_value *default_stripe_size;
@@ -430,7 +430,7 @@ enum layout_patterns {
     LAYOUT_PATTERN_RELEASED
 };
 
-enum layout_patterns
+static enum layout_patterns
 str2layout_patterns(const char *layout_pattern)
 {
     switch (*layout_pattern) {
@@ -457,7 +457,7 @@ str2layout_patterns(const char *layout_pattern)
     return LAYOUT_PATTERN_INVALID;
 }
 
-struct rbh_filter *
+static struct rbh_filter *
 layout_pattern2filter(const char *_layout)
 {
     const struct rbh_value *default_pattern;
@@ -520,7 +520,7 @@ layout_pattern2filter(const char *_layout)
     return rbh_filter_and(filter, rbh_filter_not(default_filter));
 }
 
-struct rbh_filter *
+static struct rbh_filter *
 expired2filter()
 {
     struct rbh_filter *filter_expiration_date;
@@ -538,7 +538,7 @@ expired2filter()
     return filter_expiration_date;
 }
 
-struct rbh_filter *
+static struct rbh_filter *
 expired_at2filter(const char *expired)
 {
     const struct rbh_filter_field *predicate = get_filter_field(LPRED_EXPIRED);
@@ -578,14 +578,14 @@ expired_at2filter(const char *expired)
     return rbh_filter_and(rbh_filter_not(filter_inf), filter_expiration_date);
 }
 
-struct rbh_filter *
+static struct rbh_filter *
 pool2filter(const char *pool)
 {
     return rbh_shell_regex2filter(get_filter_field(LPRED_POOL), pool,
                                   RBH_RO_SHELL_PATTERN);
 }
 
-struct rbh_filter *
+static struct rbh_filter *
 ipool2filter(const char *pool)
 {
     /* We use the same field as pool2filter because the only difference is the
@@ -690,21 +690,98 @@ comp2filter(const char *comp, const struct rbh_filter_field *field)
     return filter;
 }
 
-struct rbh_filter *
+static struct rbh_filter *
 comp_start2filter(const char *start)
 {
     return comp2filter(start, get_filter_field(LPRED_COMP_START));
 }
 
-struct rbh_filter *
+static struct rbh_filter *
 comp_end2filter(const char *end)
 {
     return comp2filter(end, get_filter_field(LPRED_COMP_END));
 }
 
-struct rbh_filter *
+static struct rbh_filter *
 mdt_count2filter(const char *mdt_count)
 {
     return rbh_numeric2filter(get_filter_field(LPRED_MDT_COUNT), mdt_count,
                               RBH_FOP_EQUAL);
+}
+
+static bool
+predicate_has_argument(int predicate)
+{
+    return predicate != LPRED_EXPIRED;
+}
+
+struct rbh_filter *
+rbh_lustre_build_filter(const char **argv, int argc, int *index,
+                        __attribute__((unused)) bool *need_prefetch)
+{
+    struct rbh_filter *filter;
+    int i = *index;
+    int predicate;
+
+    predicate = str2lustre_predicate(argv[i]);
+
+    if (predicate_has_argument(predicate) && i + 1 >= argc)
+        error(EX_USAGE, 0, "missing argument to `%s'", argv[i]);
+
+    /* In the following block, functions should call error() themselves rather
+     * than returning.
+     *
+     * Errors are most likely fatal (not recoverable), and this allows for
+     * precise and meaningul error messages.
+     */
+    switch (predicate) {
+    case LPRED_COMP_END:
+        filter = comp_end2filter(argv[++i]);
+        break;
+    case LPRED_COMP_START:
+        filter = comp_start2filter(argv[++i]);
+        break;
+    case LPRED_EXPIRED:
+        filter = expired2filter();
+        break;
+    case LPRED_EXPIRED_AT:
+        filter = expired_at2filter(argv[++i]);
+        break;
+    case LPRED_FID:
+        filter = fid2filter(argv[++i]);
+        break;
+    case LPRED_HSM_STATE:
+        filter = hsm_state2filter(argv[++i]);
+        break;
+    case LPRED_IPOOL:
+        filter = ipool2filter(argv[++i]);
+        break;
+    case LPRED_LAYOUT_PATTERN:
+        filter = layout_pattern2filter(argv[++i]);
+        break;
+    case LPRED_MDT_COUNT:
+        filter = mdt_count2filter(argv[++i]);
+        break;
+    case LPRED_MDT_INDEX:
+        filter = mdt_index2filter(argv[++i]);
+        break;
+    case LPRED_OST_INDEX:
+        filter = ost_index2filter(argv[++i]);
+        break;
+    case LPRED_POOL:
+        filter = pool2filter(argv[++i]);
+        break;
+    case LPRED_STRIPE_COUNT:
+        filter = stripe_count2filter(argv[++i]);
+        break;
+    case LPRED_STRIPE_SIZE:
+        filter = stripe_size2filter(argv[++i]);
+        break;
+    default:
+        error(EX_USAGE, 0, "invalid filter found `%s'", argv[i]);
+    }
+    assert(filter != NULL);
+
+    *index = i;
+    return filter;
 }

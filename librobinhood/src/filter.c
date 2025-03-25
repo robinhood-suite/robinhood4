@@ -907,6 +907,12 @@ rbh_numeric2filter(const struct rbh_filter_field *field, const char *_numeric,
 }
 
 struct rbh_filter *
+rbh_epoch2filter(const struct rbh_filter_field *field, const char *_epoch)
+{
+    return rbh_numeric2filter(field, _epoch, RBH_FOP_LOWER_OR_EQUAL);
+}
+
+struct rbh_filter *
 rbh_shell_regex2filter(const struct rbh_filter_field *field,
                        const char *shell_regex, unsigned int regex_options)
 {
