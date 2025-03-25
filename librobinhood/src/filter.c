@@ -1,5 +1,5 @@
 /* This file is part of the RobinHood Library
- * Copyright (C) 2019 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifer: LGPL-3.0-or-later
@@ -13,11 +13,13 @@
 #include <errno.h>
 #include <error.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
 #include <sysexits.h>
 
 #include "robinhood/filter.h"
 #include "robinhood/statx.h"
+#include "robinhood/sstack.h"
 
 #include "utils.h"
 #include "value.h"
@@ -632,6 +634,118 @@ rbh_filter_get_new(struct rbh_filter *filter,
     };
 
     return rbh_filter_clone(&GET);
+}
+
+static struct rbh_sstack *filters;
+
+static void __attribute__((constructor))
+init_filters(void)
+{
+    const int MIN_FILTER_ALLOC = 32;
+
+    filters = rbh_sstack_new(MIN_FILTER_ALLOC * sizeof(struct rbh_filter *));
+    if (filters == NULL)
+        error(EXIT_FAILURE, errno, "rbh_sstack_new");
+}
+
+static void __attribute__((destructor))
+exit_filters(void)
+{
+    struct rbh_filter **filter;
+    size_t size;
+
+    while (true) {
+        int rc;
+
+        filter = rbh_sstack_peek(filters, &size);
+        if (size == 0)
+            break;
+
+        assert(size % sizeof(*filter) == 0);
+
+        for (size_t i = 0; i < size / sizeof(*filter); i++, filter++)
+            free(*filter);
+
+        rc = rbh_sstack_pop(filters, size);
+        assert(rc == 0);
+    }
+    rbh_sstack_destroy(filters);
+}
+
+static struct rbh_filter *
+filter_compose(enum rbh_filter_operator op, struct rbh_filter *left,
+               struct rbh_filter *right)
+{
+    const struct rbh_filter **array;
+    struct rbh_filter *filter;
+
+    assert(op == RBH_FOP_AND || op == RBH_FOP_OR);
+
+    filter = malloc(sizeof(*filter));
+    if (filter == NULL)
+        error(EXIT_FAILURE, errno, "malloc");
+
+    array = RBH_SSTACK_PUSH(filters, NULL, sizeof(*array) * 2);
+
+    array[0] = left;
+    array[1] = right;
+
+    filter->op = op;
+    filter->logical.filters = array;
+    filter->logical.count = 2;
+
+    return filter;
+}
+
+struct rbh_filter *
+rbh_filter_and(struct rbh_filter *left, struct rbh_filter *right)
+{
+    return filter_compose(RBH_FOP_AND, left, right);
+}
+
+struct rbh_filter *
+rbh_filter_or(struct rbh_filter *left, struct rbh_filter *right)
+{
+    return filter_compose(RBH_FOP_OR, left, right);
+}
+
+struct rbh_filter *
+rbh_filter_array_compose(struct rbh_filter *left, struct rbh_filter *right)
+{
+    const struct rbh_filter **array;
+    struct rbh_filter *filter;
+
+    filter = malloc(sizeof(*filter));
+    if (filter == NULL)
+        error(EXIT_FAILURE, errno, "malloc");
+
+    array = RBH_SSTACK_PUSH(filters, NULL, sizeof(*array) * 2);
+
+    array[0] = left;
+    array[1] = right;
+
+    filter->op = RBH_FOP_ELEMMATCH;
+    filter->array.filters = array;
+    filter->array.count = 2;
+
+    return filter;
+}
+
+struct rbh_filter *
+rbh_filter_not(struct rbh_filter *filter)
+{
+    struct rbh_filter *not;
+
+    not = malloc(sizeof(*not));
+    if (not == NULL)
+        error(EXIT_FAILURE, errno, "malloc");
+
+    not->logical.filters = RBH_SSTACK_PUSH(filters, &filter, sizeof(filter));
+
+    not->op = RBH_FOP_NOT;
+    not->logical.count = 1;
+
+    return not;
 }
 
 static int

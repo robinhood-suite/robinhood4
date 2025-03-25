@@ -1,5 +1,5 @@
 /* This file is part of RobinHood 4
- * Copyright (C) 2022 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifer: LGPL-3.0-or-later
@@ -341,7 +341,7 @@ parse_expression(struct find_context *ctx, int *arg_idx,
             /* "OR" the part of the left filter we parsed ourselves (ie. not
              * `_filter') and the right filter.
             */
-            filter = filter_or(filter, tmp);
+            filter = rbh_filter_or(filter, tmp);
 
             /* Update arg_idx and return */
             *arg_idx = i;
@@ -361,7 +361,7 @@ parse_expression(struct find_context *ctx, int *arg_idx,
 
             /* Negate the sub-expression's filter, if need be */
             if (negate) {
-                tmp = filter_not(tmp);
+                tmp = rbh_filter_not(tmp);
                 negate = false;
             }
 
@@ -369,7 +369,7 @@ parse_expression(struct find_context *ctx, int *arg_idx,
             if (filter == NULL)
                 filter = tmp;
             else
-                filter = filter_and(filter, tmp);
+                filter = rbh_filter_and(filter, tmp);
             break;
         case CLT_PARENTHESIS_CLOSE:
             if (previous_token == CLT_PARENTHESIS_OPEN)
@@ -393,14 +393,14 @@ parse_expression(struct find_context *ctx, int *arg_idx,
             /* Build a filter from the predicate and its arguments */
             tmp = ctx->parse_predicate_callback(ctx, &i);
             if (negate) {
-                tmp = filter_not(tmp);
+                tmp = rbh_filter_not(tmp);
                 negate = false;
             }
 
             if (filter == NULL)
                 filter = tmp;
             else
-                filter = filter_and(filter, tmp);
+                filter = rbh_filter_and(filter, tmp);
             break;
         case CLT_ACTION:
             ctx->action_done = true;

@@ -528,6 +528,69 @@ rbh_filter_get_new(struct rbh_filter *filter,
                    const struct rbh_filter_field *field);
 
 /**
+ * AND two dynamically allocated filters
+ *
+ * @param left  a pointer to a dynamically allocated struct rbh_filter
+ * @param right a pointer to a dynamically allocated struct rbh_filter
+ *
+ * @return      a pointer to a newly allocated struct rbh_filter
+ *
+ * \p left and \p right should not be accessed anymore after this function is
+ * called.
+ *
+ * Exit on error
+ */
+struct rbh_filter *
+rbh_filter_and(struct rbh_filter *left, struct rbh_filter *right);
+
+/**
+ * OR two dynamically allocated filters
+ *
+ * @param left  a pointer to a dynamically allocated struct rbh_filter
+ * @param right a pointer to a dynamically allocated struct rbh_filter
+ *
+ * @return      a pointer to a newly allocated struct rbh_filter
+ *
+ * \p left and \p right should not be accessed anymore after this function is
+ * called.
+ *
+ * Exit on error
+ */
+struct rbh_filter *
+rbh_filter_or(struct rbh_filter *left, struct rbh_filter *right);
+
+/**
+ * Negate a dynamically allocated filter
+ *
+ * @param filter    a pointer to a dynamically allocated struct rbh_filter
+ *
+ * @return          a pointer to a newly allocated struct rbh_filter
+ *
+ * \p filter should not be accessed anymore after this function is called.
+ *
+ * Exit on error
+ */
+struct rbh_filter *
+rbh_filter_not(struct rbh_filter *filter);
+
+/**
+ * Create an array filter for the ELEMMATCH operator, combining 2 comparison
+ * filters for the checks.
+ *
+ * @param left  a pointer to a dynamically allocated struct rbh_filter
+ * @param right a pointer to a dynamically allocated struct rbh_filter
+ *
+ * @return      a pointer to a newly allocated struct rbh_filter
+ *
+ * \p left and \p right should not be accessed anymore after this function is
+ * called.
+ *
+ * Exit on error
+ */
+struct rbh_filter *
+rbh_filter_array_compose(struct rbh_filter *left, struct rbh_filter *right);
+
+/**
  * Validate a filter
  *
  * @param filter    the filter to validate
