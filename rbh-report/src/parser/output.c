@@ -1,5 +1,5 @@
 /* This file is part of Robinhood 4
- * Copyright (C) 2024 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifer: LGPL-3.0-or-later
@@ -80,8 +80,9 @@ convert_string_to_accumulator_field(char *output_string)
         *closing = '\0';
         field.accumulator = str2accumulator(output_string);
     } else {
-        opening = output_string;
-        field.accumulator = FA_NONE;
+        error_at_line(EXIT_FAILURE, EINVAL, __FILE__, __LINE__,
+                      "'%s' ill-formed, should be \"<accumulator>(<field>)\"",
+                      output_string);
     }
 
     if (field.accumulator == FA_COUNT)
