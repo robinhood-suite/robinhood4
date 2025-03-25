@@ -10,6 +10,7 @@
 
 #include <assert.h>
 #include <error.h>
+#include <stdbool.h>
 #include <stdlib.h>
 #include <errno.h>
 
@@ -215,7 +216,6 @@ rbh_plugin_check_valid_token(const struct rbh_backend_plugin *plugin,
  *                       by the plugin if necessary to skip optionnal values
  * @param need_prefetch  boolean value set by posix to indicate if a filter
  *                       needs to be completed
-
  *
  * @return               a pointer to newly allocated struct rbh_filter on
  *                       success, NULL on error and errno is set appropriately
