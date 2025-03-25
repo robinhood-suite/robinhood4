@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a1d27cc0_1291a65d",
+        "filename": "librobinhood/include/robinhood/uri.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-03-25T08:47:27Z",
+      "side": 1,
+      "message": "major: is_uri already exists. Either suppress it or change it, but don\u0027t keep both.",
+      "range": {
+        "startLine": 50,
+        "startChar": 0,
+        "endLine": 58,
+        "endChar": 31
+      },
+      "revId": "71d6e2ec89fc07fc7b3334ac90949de7252be2ae",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
