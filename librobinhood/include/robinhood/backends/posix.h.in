@@ -1,5 +1,5 @@
 /* This file is part of RobinHood 4
- * Copyright (C) 2019 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifer: LGPL-3.0-or-later
@@ -48,6 +48,24 @@ rbh_posix_backend_new(const char *path, struct rbh_config *config);
  */
 enum rbh_parser_token
 rbh_posix_check_valid_token(const char *token);
+
+/**
+ * Create a filter from the given command line arguments and position in that
+ * command line
+ *
+ * @param argv           the list of arguments given to the command
+ * @param argc           the number of strings in \p argv
+ * @param index          the argument currently being parsed, should be updated
+ *                       if necessary to skip optionnal values
+ * @param need_prefetch  boolean value set by posix to indicate if a filter
+ *                       needs to be completed
+ *
+ * @return          a pointer to newly allocated struct rbh_filter on success,
+ *                  NULL on error and errno is set appropriately
+ */
+struct rbh_filter *
+rbh_posix_build_filter(const char **argv, int argc, int *index,
+                       bool *need_prefetch);
 
 /**
  * Release the memory associated with the plugin
