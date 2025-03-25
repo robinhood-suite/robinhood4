@@ -42,11 +42,11 @@ static const struct rbh_filter_field predicate2filter_field[] = {
     [PRED_PATH]     = {.fsentry = RBH_FP_NAMESPACE_XATTRS, .xattr = "path"},
     [PRED_PERM]     = {.fsentry = RBH_FP_STATX, .statx = RBH_STATX_MODE},
     [PRED_SIZE]     = {.fsentry = RBH_FP_STATX, .statx = RBH_STATX_SIZE},
+    [PRED_TYPE]     = {.fsentry = RBH_FP_STATX, .statx = RBH_STATX_TYPE},
     [PRED_UID]      = {.fsentry = RBH_FP_STATX, .statx = RBH_STATX_UID},
     [PRED_USER]     = {.fsentry = RBH_FP_STATX, .statx = RBH_STATX_UID},
 };
 
-__attribute__((unused))
 static struct rbh_filter *
 empty2filter()
 {
@@ -745,4 +745,129 @@ static struct rbh_filter *
 xtime2filter(enum predicate predicate, const char *days)
 {
     return timedelta2filter(predicate, TU_DAY, days);
+}
+
+static bool
+predicate_needs_argument(enum predicate predicate)
+{
+    switch (predicate) {
+    case PRED_EMPTY:
+    case PRED_NOGROUP:
+    case PRED_NOUSER:
+        return false;
+    default:
+        return true;
+    }
+
+    __builtin_unreachable();
+}
+
+struct rbh_filter *
+rbh_posix_build_filter(const char **argv, int argc, int *index,
+                       bool *need_prefetch)
+{
+    struct rbh_filter *filter;
+    enum predicate predicate;
+    int i = *index;
+
+    predicate = str2predicate(argv[i]);
+
+    if (i + 1 >= argc && predicate_needs_argument(predicate))
+        error(EX_USAGE, 0, "missing arguments to '%s'", argv[i]);
+
+    /* In the following block, functions should call error() themselves rather
+     * than returning.
+     *
+     * Errors are most likely fatal (not recoverable), and this allows for
+     * precise and meaningful error messages.
+     */
+    switch (predicate) {
+    case PRED_AMIN:
+    case PRED_BMIN:
+    case PRED_MMIN:
+    case PRED_CMIN:
+        filter = xmin2filter(predicate, argv[++i]);
+        break;
+    case PRED_ANEWER:
+        *need_prefetch = true;
+        filter = newer2filter(PRED_ATIME, argv[++i]);
+        break;
+    case PRED_ATIME:
+    case PRED_BTIME:
+    case PRED_MTIME:
+    case PRED_CTIME:
+        filter = xtime2filter(predicate, argv[++i]);
+        break;
+    case PRED_CNEWER:
+        *need_prefetch = true;
+        filter = newer2filter(PRED_CTIME, argv[++i]);
+        break;
+    case PRED_EMPTY:
+        filter = empty2filter();
+        break;
+    case PRED_ILNAME:
+        filter = lname2filter(predicate, argv[++i], RBH_RO_ALL);
+        break;
+    case PRED_INAME:
+        filter = regex2filter(predicate, argv[++i], RBH_RO_ALL);
+        break;
+    case PRED_IREGEX:
+        filter = regex2filter(PRED_PATH, argv[++i],
+                              RBH_RO_CASE_INSENSITIVE);
+        break;
+    case PRED_BLOCKS:
+    case PRED_GID:
+    case PRED_INUM:
+    case PRED_LINKS:
+    case PRED_UID:
+        filter = number2filter(predicate, argv[++i]);
+        break;
+    case PRED_GROUP:
+        filter = groupname2filter(argv[++i]);
+        break;
+    case PRED_LNAME:
+        filter = lname2filter(predicate, argv[++i], RBH_RO_SHELL_PATTERN);
+        break;
+    case PRED_NAME:
+    case PRED_PATH:
+        filter = regex2filter(predicate, argv[++i], RBH_RO_SHELL_PATTERN);
+        break;
+    case PRED_NEWER:
+        *need_prefetch = true;
+        filter = newer2filter(PRED_MTIME, argv[++i]);
+        break;
+    case PRED_NOGROUP:
+        filter = nogroup2filter();
+        break;
+    case PRED_NOUSER:
+        filter = nouser2filter();
+        break;
+    case PRED_PERM:
+        filter = mode2filter(argv[++i]);
+        break;
+    case PRED_REGEX:
+        filter = regex2filter(PRED_PATH, argv[++i], 0);
+        break;
+    case PRED_SIZE:
+        filter = filesize2filter(argv[++i]);
+        break;
+    case PRED_TYPE:
+        filter = rbh_filetype2filter(argv[++i]);
+        break;
+    case PRED_USER:
+        filter = username2filter(argv[++i]);
+        break;
+    case PRED_XATTR:
+        filter = xattr2filter(argv[++i]);
+        break;
+    default:
+        error(EXIT_FAILURE, ENOSYS, "%s", argv[i]);
+        /* clang: -Wsometimes-unitialized: `filter` */
+        __builtin_unreachable();
+    }
+
+    assert(filter != NULL);
+
+    *index = i;
+    return filter;
 }
