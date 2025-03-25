@@ -1217,7 +1217,14 @@ static struct rbh_backend *
 lustre_fts_backend_branch(void *backend, const struct rbh_id *id,
                           const char *path)
 {
-    return posix_backend_branch(backend, id, path);
+    struct posix_branch_backend *branch = posix_create_backend_branch(backend,
+                                                                      id, path);
+    if (branch == NULL)
+        return NULL;
+
+    branch->posix.iter_new = lustre_iterator_new;
+
+    return &branch->posix.backend;
 }
 
     /*--------------------------------------------------------------------*
