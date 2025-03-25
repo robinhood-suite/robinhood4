@@ -123,7 +123,7 @@ hsm_state2filter(const char *hsm_state)
     if (state == HS_NONE) {
         struct rbh_filter *file_filter;
 
-        file_filter = filetype2filter("f");
+        file_filter = rbh_filetype2filter("f");
         if (file_filter == NULL)
             error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
                           "hsm_state2filter");
@@ -293,7 +293,7 @@ get_default_stripe_filter(void)
         error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
                       "Failed to create the default filter");
 
-    dir_filter = filetype2filter("d");
+    dir_filter = rbh_filetype2filter("d");
     return rbh_filter_and(dir_filter, rbh_filter_not(default_filter));
 }
 
@@ -348,7 +348,8 @@ stripe_count2filter(const char *stripe_count)
 
     default_stripe_count = get_fs_default_dir_lov(RBH_LEF_STRIPE_COUNT);
 
-    filter = numeric2filter(get_filter_field(LPRED_STRIPE_COUNT), stripe_count);
+    filter = rbh_numeric2filter(get_filter_field(LPRED_STRIPE_COUNT),
+                                stripe_count, RBH_FOP_EQUAL);
     if (filter == NULL)
         error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
                       "Invalid stripe count provided, should be '<+|->n', got '%s'",
@@ -390,7 +391,8 @@ stripe_size2filter(const char *stripe_size)
 
     default_stripe_size = get_fs_default_dir_lov(RBH_LEF_STRIPE_SIZE);
 
-    filter = numeric2filter(get_filter_field(LPRED_STRIPE_SIZE), stripe_size);
+    filter = rbh_numeric2filter(get_filter_field(LPRED_STRIPE_SIZE),
+                                stripe_size, RBH_FOP_EQUAL);
     if (filter == NULL)
         error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
                       "Invalid stripe size provided, should be '<+|->n', got '%s'",
@@ -579,8 +581,8 @@ expired_at2filter(const char *expired)
 struct rbh_filter *
 pool2filter(const char *pool)
 {
-    return shell_regex2filter(get_filter_field(LPRED_POOL), pool,
-                              RBH_RO_SHELL_PATTERN);
+    return rbh_shell_regex2filter(get_filter_field(LPRED_POOL), pool,
+                                  RBH_RO_SHELL_PATTERN);
 }
 
 struct rbh_filter *
@@ -589,7 +591,8 @@ ipool2filter(const char *pool)
     /* We use the same field as pool2filter because the only difference is the
      * case insensitive option.
      */
-    return shell_regex2filter(get_filter_field(LPRED_POOL), pool, RBH_RO_ALL);
+    return rbh_shell_regex2filter(get_filter_field(LPRED_POOL), pool,
+                                  RBH_RO_ALL);
 }
 
 static struct rbh_filter *
@@ -605,12 +608,12 @@ comp2filter(const char *comp, const struct rbh_filter_field *field)
     comma = strchr(comp, ',');
     if (comma) {
         *comma = '\0';
-        get_size_parameters(comp, &operator, &unit_size, &size);
+        rbh_get_size_parameters(comp, &operator, &unit_size, &size);
         low_bound = (size - 1) * unit_size;
-        get_size_parameters(comma + 1, &operator, &unit_size, &size);
+        rbh_get_size_parameters(comma + 1, &operator, &unit_size, &size);
         high_bound = size * unit_size + 1;
     } else {
-        get_size_parameters(comp, &operator, &unit_size, &size);
+        rbh_get_size_parameters(comp, &operator, &unit_size, &size);
         low_bound = (size - 1) * unit_size;
         high_bound = size * unit_size + 1;
     }
@@ -702,5 +705,6 @@ comp_end2filter(const char *end)
 struct rbh_filter *
 mdt_count2filter(const char *mdt_count)
 {
-    return numeric2filter(get_filter_field(LPRED_MDT_COUNT), mdt_count);
+    return rbh_numeric2filter(get_filter_field(LPRED_MDT_COUNT), mdt_count,
+                              RBH_FOP_EQUAL);
 }
