@@ -1828,7 +1828,8 @@ struct rbh_backend *
 rbh_mongo_backend_new(const struct rbh_backend_plugin *self,
                       const char *type,
                       const char *fsname,
-                      struct rbh_config *config)
+                      struct rbh_config *config,
+                      bool read_only)
 {
     struct mongo_backend *mongo;
 

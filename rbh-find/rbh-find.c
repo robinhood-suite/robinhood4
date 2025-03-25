@@ -223,7 +223,7 @@ main(int _argc, char *_argv[])
         error(EXIT_FAILURE, errno, "malloc");
 
     for (int i = 0; i < index; i++) {
-        ctx.backends[i] = rbh_backend_from_uri(ctx.argv[i]);
+        ctx.backends[i] = rbh_backend_from_uri(ctx.argv[i], true);
         ctx.uris[i] = ctx.argv[i];
         ctx.backend_count++;
 

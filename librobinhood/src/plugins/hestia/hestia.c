@@ -451,7 +451,8 @@ struct rbh_backend *
 rbh_hestia_backend_new(__attribute__((unused)) const struct rbh_backend_plugin *self,
                        __attribute__((unused)) const char *type,
                        __attribute__((unused)) const char *path,
-                       __attribute__((unused)) struct rbh_config *config)
+                       __attribute__((unused)) struct rbh_config *config,
+                       __attribute__((unused)) bool read_only)
 {
     struct hestia_backend *hestia;
 

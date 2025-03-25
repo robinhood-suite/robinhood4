@@ -496,9 +496,9 @@ list_capabilities(char *uri)
 
     plugin = rbh_backend_plugin_import(uri);
     if (plugin != NULL) {
-        backend = rbh_backend_plugin_new(plugin, NULL, "none", NULL);
+        backend = rbh_backend_plugin_new(plugin, NULL, "none", NULL, false);
     } else {
-        backend = rbh_backend_from_uri(uri);
+        backend = rbh_backend_from_uri(uri, true);
         if (backend == NULL)
             error(EXIT_FAILURE, errno, "Unable to load backend %s", uri);
     }
@@ -748,9 +748,9 @@ main(int argc, char *argv[])
         error(EX_USAGE, 0, "unexpected argument: %s", argv[2]);
 
     /* Parse SOURCE */
-    from = rbh_backend_from_uri(argv[0]);
+    from = rbh_backend_from_uri(argv[0], true);
     /* Parse DEST */
-    to = rbh_backend_from_uri(argv[1]);
+    to = rbh_backend_from_uri(argv[1], false);
 
     sync(&projection);
 

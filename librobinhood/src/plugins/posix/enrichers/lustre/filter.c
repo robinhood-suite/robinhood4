@@ -298,7 +298,7 @@ get_default_stripe_filter(void)
 static const struct rbh_value *
 get_fs_default_dir_lov(uint64_t flags)
 {
-    struct rbh_backend *backend = rbh_backend_from_uri("rbh:lustre:.");
+    struct rbh_backend *backend = rbh_backend_from_uri("rbh:lustre:.", true);
     struct rbh_posix_enrich_ctx ctx = {0};
     struct rbh_value_pair pair;
     char *mount_path = NULL;
