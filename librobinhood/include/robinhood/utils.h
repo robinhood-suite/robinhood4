@@ -1,5 +1,5 @@
 /* This file is part of RobinHood 4
- * Copyright (C) 2019 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifer: LGPL-3.0-or-later
@@ -99,6 +99,27 @@ str2int64_t(const char *input, int64_t *result);
  */
 int
 str2uint64_t(const char *input, uint64_t *result);
+
+enum time_unit {
+    TU_SECOND,
+    TU_MINUTE,
+    TU_HOUR,
+    TU_DAY,
+};
+
+extern const unsigned long TIME_UNIT2SECONDS[];
+
+/**
+ * str2seconds - convert a string into a number of seconds
+ *
+ * @param unit      a time unit in which to interpret \p string
+ * @param string    a string representing an unsigned long
+ *
+ * @return          an unsigned long representing \p string converted into
+ *                  seconds
+ */
+unsigned long
+str2seconds(enum time_unit unit, const char *string);
 
 /**
  * count_char_separated_values - count the number of values separated by a
