@@ -108,3 +108,121 @@ sqlite_cursor_step(struct sqlite_cursor *cursor)
     errno = EAGAIN;
     return true;
 }
+
+bool
+sqlite_cursor_bind_int64(struct sqlite_cursor *cursor, int64_t value)
+{
+    int rc;
+
+    rc = sqlite3_bind_int64(cursor->stmt, cursor->index++, value);
+    if (rc != SQLITE_OK)
+        return sqlite_db_fail(cursor->db, "failed to bind int64 '%ld'", value);
+
+    return true;
+}
+
+int64_t
+sqlite_cursor_get_int64(struct sqlite_cursor *cursor)
+{
+    return sqlite3_column_int(cursor->stmt, cursor->col++);
+}
+
+uint64_t
+sqlite_cursor_get_uint64(struct sqlite_cursor *trans)
+{
+    int64_t value = sqlite_cursor_get_int64(trans);
+
+    assert(value >= 0);
+
+    return (uint64_t)value;
+}
+
+uint32_t
+sqlite_cursor_get_uint32(struct sqlite_cursor *trans)
+{
+    int64_t value = sqlite_cursor_get_int64(trans);
+
+    assert(value >= 0 && value <= UINT32_MAX);
+
+    return (uint32_t)value;
+}
+
+uint16_t
+sqlite_cursor_get_uint16(struct sqlite_cursor *trans)
+{
+    int64_t value = sqlite_cursor_get_int64(trans);
+
+    assert(value >= 0 && value <= UINT16_MAX);
+
+    return (uint16_t)value;
+}
+
+
+static char *
+uchar2char_str(const unsigned char *str, int size)
+{
+    char *buf;
+
+    if (!str)
+        return NULL;
+
+    buf = malloc(size + 1);
+    if (!buf)
+        return NULL;
+
+    for (int i = 0; i < size; i++)
+        buf[i] = str[i];
+
+    buf[size] = '\0';
+    return buf;
+}
+
+bool
+sqlite_cursor_bind_string(struct sqlite_cursor *cursor, const char *string)
+{
+    int rc;
+
+    rc = sqlite3_bind_text(cursor->stmt, cursor->index++, string, -1,
+                           SQLITE_STATIC);
+    if (rc != SQLITE_OK)
+        return sqlite_db_fail(cursor->db, "failed to bind string '%s'", string);
+
+    return true;
+}
+
+const char *
+sqlite_cursor_get_string(struct sqlite_cursor *cursor)
+{
+    int col = cursor->col++;
+
+    return uchar2char_str(sqlite3_column_text(cursor->stmt, col),
+                          sqlite3_column_bytes(cursor->stmt, col));
+}
+
+bool
+sqlite_cursor_bind_id(struct sqlite_cursor *cursor, const struct rbh_id *id)
+{
+    int rc;
+
+    rc = sqlite3_bind_blob(cursor->stmt, cursor->index++, id->data, id->size,
+                           SQLITE_STATIC);
+    if (rc != SQLITE_OK)
+        return sqlite_db_fail(cursor->db, "failed to bind binary value");
+
+    return true;
+}
+
+bool
+sqlite_cursor_get_id(struct sqlite_cursor *cursor, struct rbh_id *dst)
+{
+    int col = cursor->col++;
+
+    dst->size = sqlite3_column_bytes(cursor->stmt, col);
+    dst->data = malloc(dst->size);
+    if (!dst->data)
+        return sqlite_fail("failed to allocate buffer");
+
+    memcpy((char *)dst->data, sqlite3_column_blob(cursor->stmt, col), dst->size);
+
+    return true;
+}

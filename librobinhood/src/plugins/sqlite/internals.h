@@ -80,4 +80,32 @@ sqlite_cursor_exec(struct sqlite_cursor *cursor);
 bool
 sqlite_cursor_step(struct sqlite_cursor *cursor);
 
+
+bool
+sqlite_cursor_bind_int64(struct sqlite_cursor *cursor, int64_t value);
+
+int64_t
+sqlite_cursor_get_int64(struct sqlite_cursor *cursor);
+
+uint64_t
+sqlite_cursor_get_uint64(struct sqlite_cursor *trans);
+
+uint32_t
+sqlite_cursor_get_uint32(struct sqlite_cursor *trans);
+
+uint16_t
+sqlite_cursor_get_uint16(struct sqlite_cursor *trans);
+
+bool
+sqlite_cursor_bind_string(struct sqlite_cursor *cursor, const char *string);
+
+const char *
+sqlite_cursor_get_string(struct sqlite_cursor *cursor);
+
+bool
+sqlite_cursor_bind_id(struct sqlite_cursor *cursor, const struct rbh_id *id);
+
+bool
+sqlite_cursor_get_id(struct sqlite_cursor *cursor, struct rbh_id *dst);
+
 #endif
