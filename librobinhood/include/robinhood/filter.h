@@ -591,6 +591,66 @@ struct rbh_filter *
 rbh_filter_array_compose(struct rbh_filter *left, struct rbh_filter *right);
 
 /**
+ * Build a filter for the -type predicate
+ *
+ * @param filetype  a string representing a filetype
+ *
+ * @return          a pointer to a newly allocated struct rbh_filter
+ *
+ * Exit on error
+ */
+struct rbh_filter *
+rbh_filetype2filter(const char *filetype);
+
+/**
+ * Extract the size parameters from a standard size filter string.
+ * It must follow this pattern: `[+-]\d+[cwbkMGT]`
+ *
+ * @param _size      a string representing a size following the above pattern
+ * @param operator   a character that will be either `+`, `-` or 0 if the other
+ *                   two have not been found
+ * @param unit_size  the unit size specified in the \p _size parameter, 512 by
+ *                   default if none is specified
+ * @param size       the size specified in the string
+ *
+ * Exit on error
+ */
+void
+rbh_get_size_parameters(const char *_size, char *operator, uint64_t *unit_size,
+                        uint64_t *size);
+
+/**
+ * build a filter from a string representing a uint64_t value.
+ * If the given value is preceded with a '+' or '-', will filter entries
+ * with \p field greater or lower than \p _numeric.
+ *
+ * @param field         a field to filter
+ * @param _numeric      a string representing a uint64_t, optionnally prefixed
+ *                      with either a '+' or '-' sign
+   @param no_sign_op    a filter operator if there is no sign in _numeric
+ *
+ * @return              a pointer to a newly allocated struct filter, or NULL on
+ *                      error
+ */
+struct rbh_filter *
+rbh_numeric2filter(const struct rbh_filter_field *field, const char *_numeric,
+                   enum rbh_filter_operator no_sign_op);
+
+/**
+ * build a filter from a shell regex
+ *
+ * @param field         a field to filter
+ * @param shell_regex   a shell regex
+ * @param regex_options an ORred combination of enum filter_regex_option
+ *
+ * @return              a pointer to a newly allocated struct filter, or NULL on
+ *                      error
+ */
+struct rbh_filter *
+rbh_shell_regex2filter(const struct rbh_filter_field *field,
+                       const char *shell_regex, unsigned int regex_options);
+
+/**
  * Validate a filter
  *
  * @param filter    the filter to validate
