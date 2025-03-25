@@ -210,7 +210,7 @@ main(int _argc, char *_argv[])
         if (ctx.info_plugins[0] == NULL)
             error(EXIT_FAILURE, errno, "rbh_backend_plugin_import");
     } else if (ctx.info_plugin_count == 2) {
-        ctx.info_plugins[0] = rbh_backend_plugin_import("mpi_file");
+        ctx.info_plugins[0] = rbh_backend_plugin_import("mpi-file");
         ctx.info_plugins[1] = rbh_backend_plugin_import("posix");
         if (ctx.info_plugins[0] == NULL || ctx.info_plugins[1] == NULL)
             error(EXIT_FAILURE, errno, "rbh_backend_plugin_import");

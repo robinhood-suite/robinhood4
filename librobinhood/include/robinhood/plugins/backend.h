@@ -10,6 +10,7 @@
 
 #include <assert.h>
 #include <error.h>
+#include <stdbool.h>
 #include <stdlib.h>
 #include <errno.h>
 
@@ -28,7 +29,8 @@ struct rbh_backend_plugin {
 struct rbh_backend_plugin_operations {
     struct rbh_backend *(*new)(const char *fsname, struct rbh_config *config);
     enum rbh_parser_token (*check_valid_token)(const char *token);
-    struct rbh_filter *(*build_filter)(const char **argv, int argc, int *index);
+    struct rbh_filter *(*build_filter)(const char **argv, int argc, int *index,
+                                       bool need_prefetch);
     void (*destroy)();
 };
 
@@ -141,11 +143,14 @@ rbh_plugin_check_valid_token(const struct rbh_backend_plugin *plugin,
  * Create a filter from the given command line arguments and position in that
  * command line
  *
- * @param plugin    the plugin to build a filter from
- * @param argv      the list of arguments given to the command
- * @param argc      the number of strings in \p argv
- * @param index     the argument currently being parsed, should be updated by
- *                  the plugin if necessary to skip optionnal values
+ * @param plugin        the plugin to build a filter from
+ * @param argv          the list of arguments given to the command
+ * @param argc          the number of strings in \p argv
+ * @param index         the argument currently being parsed, should be updated
+ *                      by
+ *                      the plugin if necessary to skip optionnal values
+ * @param need_prefetch boolean value set by the plugin to indicate if a filter
+ *                      needs to be complete
  *
  * @return          a pointer to newly allocated struct rbh_filter on success,
  *                  NULL on error and errno is set appropriately
@@ -153,10 +158,11 @@ rbh_plugin_check_valid_token(const struct rbh_backend_plugin *plugin,
 
 static inline struct rbh_filter *
 rbh_plugin_build_filter(const struct rbh_backend_plugin *plugin,
-                        const char **argv, int argc, int *index)
+                        const char **argv, int argc, int *index,
+                        bool need_prefetch)
 {
     if (plugin->ops->build_filter)
-        return plugin->ops->build_filter(argv, argc, index);
+        return plugin->ops->build_filter(argv, argc, index, need_prefetch);
 
     errno = ENOTSUP;
     return NULL;
