@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c23a99ca_272e428e",
+        "filename": "librobinhood/src/backends/mfu/utils.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-03-25T08:58:59Z",
+      "side": 1,
+      "message": "question: why remove those functions ? Aren\u0027t they still used in mpi backends ? I see one usage in the last function of mpi_file.c",
+      "range": {
+        "startLine": 105,
+        "startChar": 0,
+        "endLine": 105,
+        "endChar": 24
+      },
+      "revId": "04747edc1781c33ccec9438d7d63bd387c39f4ec",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
