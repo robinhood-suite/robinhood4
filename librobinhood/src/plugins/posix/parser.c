@@ -297,7 +297,6 @@ rbh_posix_check_valid_token(const char *token)
     return RBH_TOKEN_UNKNOWN;
 }
 
-__attribute__((unused))
 enum predicate
 str2predicate(const char *string)
 {
@@ -632,7 +631,6 @@ static const char *__predicate2str[] = {
     [PRED_XTYPE]        = "xtype",
 };
 
-__attribute__((unused))
 const char *
 predicate2str(enum predicate predicate)
 {
