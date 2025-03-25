@@ -65,25 +65,11 @@ static const struct rbh_filter_field predicate2filter_field[] = {
 };
 
 struct rbh_filter *
-shell_regex2filter(const struct rbh_filter_field *field,
-                   const char *shell_regex, unsigned int regex_options)
-{
-    struct rbh_filter *filter;
-
-    filter = rbh_filter_compare_regex_new(RBH_FOP_REGEX, field, shell_regex,
-                                          regex_options);
-    if (filter == NULL)
-        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__ - 2,
-                      "building a regex filter for %s", shell_regex);
-    return filter;
-}
-
-struct rbh_filter *
 regex2filter(enum predicate predicate, const char *regex,
              unsigned int regex_options)
 {
-    return shell_regex2filter(&predicate2filter_field[predicate], regex,
-                              regex_options);
+    return rbh_shell_regex2filter(&predicate2filter_field[predicate], regex,
+                                  regex_options);
 }
 
 struct rbh_filter *
@@ -93,7 +79,7 @@ lname2filter(enum predicate predicate, const char *regex,
     struct rbh_filter *filter_type, *filter_regex;
     struct rbh_filter *filter;
 
-    filter_type = filetype2filter("l");
+    filter_type = rbh_filetype2filter("l");
     if (filter_type == NULL)
         error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
                       "filetype2filter");
@@ -110,66 +96,17 @@ lname2filter(enum predicate predicate, const char *regex,
     return filter;
 }
 
-static struct rbh_filter *
-_numeric2filter(const struct rbh_filter_field *field, const char *_numeric,
-                const enum rbh_filter_operator no_sign_op)
-{
-    const char *numeric = _numeric;
-    struct rbh_filter *filter;
-    char operator = *numeric;
-    uint64_t value;
-    int save_errno;
-
-    switch (operator) {
-    case '-':
-    case '+':
-        numeric++;
-    }
-
-    save_errno = errno;
-    if (str2uint64_t(numeric, &value))
-        return NULL;
-
-    errno = save_errno;
-
-    switch (operator) {
-    case '-':
-        filter = rbh_filter_compare_uint64_new(RBH_FOP_STRICTLY_LOWER, field,
-                                               value);
-        break;
-    case '+':
-        filter = rbh_filter_compare_uint64_new(RBH_FOP_STRICTLY_GREATER, field,
-                                               value);
-        break;
-    default:
-        filter = rbh_filter_compare_uint64_new(no_sign_op, field, value);
-        break;
-    }
-
-    if (filter == NULL)
-        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
-                      "rbh_filter_compare_uint64_new");
-
-    return filter;
-}
-
-struct rbh_filter *
-numeric2filter(const struct rbh_filter_field *field, const char *_numeric)
-{
-    return _numeric2filter(field, _numeric, RBH_FOP_EQUAL);
-}
-
 struct rbh_filter *
 number2filter(enum predicate predicate, const char *_numeric)
 {
-    return _numeric2filter(&predicate2filter_field[predicate], _numeric,
-                           RBH_FOP_EQUAL);
+    return rbh_numeric2filter(&predicate2filter_field[predicate], _numeric,
+                              RBH_FOP_EQUAL);
 }
 
 struct rbh_filter *
 epoch2filter(const struct rbh_filter_field *field, const char *_epoch)
 {
-    return _numeric2filter(field, _epoch, RBH_FOP_LOWER_OR_EQUAL);
+    return rbh_numeric2filter(field, _epoch, RBH_FOP_LOWER_OR_EQUAL);
 }
 
 static struct rbh_filter *
@@ -301,117 +238,6 @@ newer2filter(enum predicate predicate, const char *path)
 }
 
 struct rbh_filter *
-filetype2filter(const char *_filetype)
-{
-    struct rbh_filter *filter;
-    int filetype;
-
-    if (_filetype[0] == '\0' || _filetype[1] != '\0')
-        error(EX_USAGE, 0, "arguments to -type should only contain one letter");
-
-    switch (_filetype[0]) {
-    case 'b':
-        filetype = S_IFBLK;
-        break;
-    case 'c':
-        filetype = S_IFCHR;
-        break;
-    case 'd':
-        filetype = S_IFDIR;
-        break;
-    case 'f':
-        filetype = S_IFREG;
-        break;
-    case 'l':
-        filetype = S_IFLNK;
-        break;
-    case 'p':
-        filetype = S_IFIFO;
-        break;
-    case 's':
-        filetype = S_IFSOCK;
-        break;
-    default:
-        error(EX_USAGE, 0, "unknown argument to -type: %s", _filetype);
-        /* clang: -Wsometimes-unitialized: `filtetype` */
-        __builtin_unreachable();
-    }
-
-    filter = rbh_filter_compare_int32_new(RBH_FOP_EQUAL,
-                                          &predicate2filter_field[PRED_TYPE],
-                                          filetype);
-    if (filter == NULL)
-        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
-                      "filter_compare_integer");
-
-    return filter;
-}
-
-void
-get_size_parameters(const char *_size, char *operator, uint64_t *unit_size,
-                    uint64_t *size)
-{
-    char op = *_size;
-    char *suffix;
-
-    switch (op) {
-    case '+':
-        *operator = '+';
-        break;
-    case '-':
-        *operator = '-';
-        break;
-    default:
-        *operator = 0;
-    }
-
-    if (*operator)
-        _size++;
-
-    errno = 0;
-    *size = strtoull(_size, &suffix, 10);
-    if (errno)
-        error(EX_USAGE, EOVERFLOW, "invalid size argument `%s'", _size);
-
-    if (*size == 0ULL && _size == suffix)
-        error(EX_USAGE, 0,
-              "size arguments should start with at least one digit");
-
-    switch (*suffix++) {
-    case 'T':
-        *unit_size = 1099511627776;
-        break;
-    case 'G':
-        *unit_size = 1073741824;
-        break;
-    case 'M':
-        *unit_size = 1048576;
-        break;
-    case 'k':
-        *unit_size = 1024;
-        break;
-    case '\0':
-        /* default suffix */
-        suffix--;
-        __attribute__((fallthrough));
-    case 'b':
-        *unit_size = 512;
-        break;
-    case 'w':
-        *unit_size = 2;
-        break;
-    case 'c':
-        *unit_size = 1;
-        break;
-    default:
-        error(EX_USAGE, 0, "invalid size argument `%s'", _size);
-    }
-
-    if (*suffix)
-        error(EX_USAGE, 0, "invalid size argument `%s'", _size);
-}
-
-struct rbh_filter *
 size2filter(const struct rbh_filter_field *field, const char *_size)
 {
     struct rbh_filter *filter;
@@ -419,7 +245,7 @@ size2filter(const struct rbh_filter_field *field, const char *_size)
     char operator = 0;
     uint64_t size;
 
-    get_size_parameters(_size, &operator, &unit_size, &size);
+    rbh_get_size_parameters(_size, &operator, &unit_size, &size);
 
     switch (operator) {
     case '-':
