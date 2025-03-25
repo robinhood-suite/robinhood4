@@ -1,5 +1,5 @@
 /* This file is part of RobinHood 4
- * Copyright (C) 2024 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifer: LGPL-3.0-or-later
@@ -1069,8 +1069,9 @@ posix_branch_backend_filter(
     __attribute__((unused)) const struct rbh_filter_output *output)
 {
     struct posix_branch_backend *branch = backend;
-    struct posix_iterator *posix_iter;
-    char *root, *path;
+    struct posix_iterator *posix_iter = NULL;
+    char *root = NULL;
+    char *path = NULL;
     int save_errno;
 
     if (filter != NULL) {
@@ -1091,12 +1092,16 @@ posix_branch_backend_filter(
         path = branch->path;
     } else {
         path = id2path(root, &branch->id);
-        save_errno = errno;
         if (path == NULL) {
-            free(root);
-            errno = save_errno;
-            return NULL;
+            posix_iter = NULL;
+            goto out;
         }
+    }
+
+    path = realpath(path, NULL);
+    if (path == NULL) {
+        posix_iter = NULL;
+        goto out;
     }
 
     assert(strncmp(root, path, strlen(root)) == 0);
@@ -1104,6 +1109,8 @@ posix_branch_backend_filter(
                   branch->posix.iter_new(root, path + strlen(root),
                                          branch->posix.statx_sync_type);
     posix_iter->skip_error = options->skip_error;
+
+out:
     save_errno = errno;
     free(path);
     free(root);
