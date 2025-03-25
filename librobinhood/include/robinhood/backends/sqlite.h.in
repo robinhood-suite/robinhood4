@@ -1,0 +1,53 @@
+/* This file is part of RobinHood 4
+ * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
+ *                    alternatives
+ *
+ * SPDX-License-Identifer: LGPL-3.0-or-later
+ */
+
+#ifndef ROBINHOOD_SQLITE_BACKEND_H
+#define ROBINHOOD_SQLITE_BACKEND_H
+
+/* If the sqlite backend ever supports more operations than the plugin interface
+ * exposes, those operations should be defined here.
+ */
+
+#include "robinhood/plugins/backend.h"
+#include "robinhood/backend.h"
+#include "robinhood/config.h"
+
+#define RBH_SQLITE_BACKEND_NAME "sqlite"
+
+#mesondefine RBH_SQLITE_BACKEND_MAJOR
+#mesondefine RBH_SQLITE_BACKEND_MINOR
+#mesondefine RBH_SQLITE_BACKEND_RELEASE
+#define RBH_SQLITE_BACKEND_VERSION RPV(RBH_SQLITE_BACKEND_MAJOR, \
+                                      RBH_SQLITE_BACKEND_MINOR, \
+                                      RBH_SQLITE_BACKEND_RELEASE)
+
+/**
+ * Create an sqlite backend
+ *
+ * @param self        the sqlite plugin
+ * @param type        the name used to load the backend (unused)
+ * @param path        path to the SQLite file
+ * @param config      the config to use in the new backend
+ * @param read_only   whether to open the SQLite DB in read only mode or
+ *                    read/write
+ *
+ *
+ * @return          a pointer to a newly allocated sqlite backend on success,
+ *                  NULL on error and errno is set appropriately
+ *
+ * @error EINVAL    the backend's configuration is invalid (either a wrong
+ *                  value is used, or a required one is missing)
+ * @error ENOMEM    there was not enough memory available
+ */
+struct rbh_backend *
+rbh_sqlite_backend_new(const struct rbh_backend_plugin *self,
+                       const char *type,
+                       const char *path,
+                       struct rbh_config *config,
+                       bool read_only);
+
+#endif

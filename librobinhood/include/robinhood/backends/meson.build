@@ -1,5 +1,5 @@
 # This file is part of RobinHood 4
-# Copyright (C) 2019 Commissariat a l'energie atomique et aux energies
+# Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
@@ -41,6 +41,22 @@ librbh_mongo_h = configure_file(input: 'mongo.h.in', output: 'mongo.h',
                                 configuration: librbh_mongo_conf)
 
 install_headers(librbh_mongo_h, subdir: 'robinhood/backends')
+
+# SQLite backend
+
+librbh_sqlite_conf = configuration_data()
+librbh_sqlite_conf.set('RBH_SQLITE_BACKEND_MAJOR', 0)
+librbh_sqlite_conf.set('RBH_SQLITE_BACKEND_MINOR', 0)
+librbh_sqlite_conf.set('RBH_SQLITE_BACKEND_RELEASE', 0)
+
+librbh_sqlite_version = '@0@.@1@.@2@'.format(
+    librbh_sqlite_conf.get('RBH_SQLITE_BACKEND_MAJOR'),
+    librbh_sqlite_conf.get('RBH_SQLITE_BACKEND_MINOR'),
+    librbh_sqlite_conf.get('RBH_SQLITE_BACKEND_RELEASE')
+)
+
+librbh_sqlite_h = configure_file(input: 'sqlite.h.in', output: 'sqlite.h',
+                                 configuration: librbh_sqlite_conf)
 
 # Lustre backend
 
