@@ -20,35 +20,6 @@
 
 #include "rbh-find/utils.h"
 
-const unsigned long TIME_UNIT2SECONDS[] = {
-    [TU_SECOND] = 1,
-    [TU_MINUTE] = 60,
-    [TU_HOUR] = 3600,
-    [TU_DAY] = 86400,
-};
-
-unsigned long
-str2seconds(enum time_unit unit, const char *string)
-{
-    unsigned long delta;
-    char *endptr;
-
-    delta = strtoul(string, &endptr, 10);
-    if ((errno == ERANGE && delta == ULONG_MAX) || (errno != 0 && delta == 0))
-        return delta;
-    if (*endptr != '\0') {
-        errno = EINVAL;
-        return 0;
-    }
-
-    if (ULONG_MAX / TIME_UNIT2SECONDS[unit] < delta) {
-        errno = ERANGE;
-        return ULONG_MAX;
-    }
-
-    return delta * TIME_UNIT2SECONDS[unit];
-}
-
 const char *
 time_from_timestamp(const time_t *time)
 {
