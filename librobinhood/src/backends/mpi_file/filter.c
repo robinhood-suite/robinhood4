@@ -258,7 +258,7 @@ convert_logical_filter(mfu_pred *pred, mfu_pred_times *now, int prefix_len,
     {
     case RBH_FOP_AND:
         return create_mfu_pred_and_or(pred, now, prefix_len, filter,
-                                   _MFU_PRED_AND);
+                                      _MFU_PRED_AND);
     case RBH_FOP_NOT:
         return create_mfu_pred_not(pred, now, prefix_len, filter);
     case RBH_FOP_OR:
