@@ -45,6 +45,30 @@
       },
       "revId": "8a56daf71a123df19989576bb2198fe2193a348a",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f67a5242_c966d17d",
+        "filename": "rbh-fsevents/src/enrichers/posix/posix.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 452,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-03-25T06:42:44Z",
+      "side": 1,
+      "message": "No because n_extensions is 0 in this case",
+      "parentUuid": "be02c15b_9610e3ff",
+      "range": {
+        "startLine": 452,
+        "startChar": 22,
+        "endLine": 452,
+        "endChar": 44
+      },
+      "revId": "8a56daf71a123df19989576bb2198fe2193a348a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
