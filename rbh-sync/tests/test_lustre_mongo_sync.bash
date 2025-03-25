@@ -67,6 +67,8 @@ test_branch_sync()
     find_attribute '"ns.xattrs.path":"'/$second_dir/$third_dir'"'
     find_attribute '"ns.name":"'$entry'"'
     find_attribute '"ns.xattrs.path":"'/$second_dir/$third_dir/$entry'"'
+    find_attribute '"ns.xattrs.path":"'/$second_dir/$third_dir/$entry'"' \
+                   '"xattrs.stripe_count": 1'
 
     mongo $testdb --eval "db.dropDatabase()"
 
@@ -82,6 +84,8 @@ test_branch_sync()
     find_attribute '"ns.xattrs.path":"'/$second_dir/$third_dir'"'
     find_attribute '"ns.name":"'$entry'"'
     find_attribute '"ns.xattrs.path":"'/$second_dir/$third_dir/$entry'"'
+    find_attribute '"ns.xattrs.path":"'/$second_dir/$third_dir/$entry'"' \
+                   '"xattrs.stripe_count": 1'
 
     mongo $testdb --eval "db.dropDatabase()"
 
@@ -94,6 +98,8 @@ test_branch_sync()
     find_attribute '"ns.xattrs.path":"'/$second_dir/$third_dir'"'
     find_attribute '"ns.name":"'$entry'"'
     find_attribute '"ns.xattrs.path":"'/$second_dir/$third_dir/$entry'"'
+    find_attribute '"ns.xattrs.path":"'/$second_dir/$third_dir/$entry'"' \
+                   '"xattrs.stripe_count": 1'
 }
 
 test_sync_one_file()
