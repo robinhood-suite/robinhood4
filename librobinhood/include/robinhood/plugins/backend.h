@@ -1,5 +1,5 @@
 /* This file is part of RobinHood 4
- * Copyright (C) 2019 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifer: LGPL-3.0-or-later
@@ -10,6 +10,7 @@
 
 #include <assert.h>
 #include <error.h>
+#include <stdbool.h>
 #include <stdlib.h>
 #include <errno.h>
 
@@ -149,7 +150,6 @@ rbh_plugin_check_valid_token(const struct rbh_backend_plugin *plugin,
  *                       by the plugin if necessary to skip optionnal values
  * @param need_prefetch  boolean value set by posix to indicate if a filter
  *                       needs to be completed
-
  *
  * @return               a pointer to newly allocated struct rbh_filter on
  *                       success, NULL on error and errno is set appropriately
