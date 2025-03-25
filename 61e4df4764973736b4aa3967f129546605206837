@@ -46,6 +46,30 @@
       },
       "revId": "61e4df4764973736b4aa3967f129546605206837",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e2dfe870_3362bc21",
+        "filename": "librobinhood/src/backends/retention/meson.build",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-03-25T08:43:16Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "3a3b417f_304746ed",
+      "range": {
+        "startLine": 14,
+        "startChar": 4,
+        "endLine": 14,
+        "endChar": 28
+      },
+      "revId": "61e4df4764973736b4aa3967f129546605206837",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
