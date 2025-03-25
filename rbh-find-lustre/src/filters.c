@@ -133,12 +133,12 @@ hsm_state2filter(const char *hsm_state)
             error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
                           "hsm_state2filter");
 
-        filter = filter_not(filter);
+        filter = rbh_filter_not(filter);
         if (filter == NULL)
             error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
                           "hsm_state2filter");
 
-        filter = filter_and(file_filter, filter);
+        filter = rbh_filter_and(file_filter, filter);
     } else {
         filter = rbh_filter_compare_uint32_new(
                 RBH_FOP_BITS_ANY_SET, get_filter_field(LPRED_HSM_STATE), state
@@ -294,7 +294,7 @@ get_default_stripe_filter(void)
                       "Failed to create the default filter");
 
     dir_filter = filetype2filter("d");
-    return filter_and(dir_filter, filter_not(default_filter));
+    return rbh_filter_and(dir_filter, rbh_filter_not(default_filter));
 }
 
 static const struct rbh_value *
@@ -355,26 +355,26 @@ stripe_count2filter(const char *stripe_count)
                       stripe_count);
 
     if (!default_stripe_count)
-        return filter_and(filter, filter_not(default_filter));
+        return rbh_filter_and(filter, rbh_filter_not(default_filter));
 
     switch (filter->op) {
     case RBH_FOP_STRICTLY_LOWER:
         if (default_stripe_count->uint64 < filter->compare.value.uint64)
-            return filter_or(filter, default_filter);
+            return rbh_filter_or(filter, default_filter);
         break;
     case RBH_FOP_STRICTLY_GREATER:
         if (default_stripe_count->uint64 > filter->compare.value.uint64)
-            return filter_or(filter, default_filter);
+            return rbh_filter_or(filter, default_filter);
         break;
     case RBH_FOP_EQUAL:
         if (default_stripe_count->uint64 == filter->compare.value.uint64)
-            return filter_or(filter, default_filter);
+            return rbh_filter_or(filter, default_filter);
         break;
     default:
         __builtin_unreachable();
     }
 
-    return filter_and(filter, filter_not(default_filter));
+    return rbh_filter_and(filter, rbh_filter_not(default_filter));
 }
 
 struct rbh_filter *
@@ -397,26 +397,26 @@ stripe_size2filter(const char *stripe_size)
                       stripe_size);
 
     if (!default_stripe_size)
-        return filter_and(filter, filter_not(default_filter));
+        return rbh_filter_and(filter, rbh_filter_not(default_filter));
 
     switch (filter->op) {
     case RBH_FOP_STRICTLY_LOWER:
         if (default_stripe_size->uint64 < filter->compare.value.uint64)
-            return filter_or(filter, default_filter);
+            return rbh_filter_or(filter, default_filter);
         break;
     case RBH_FOP_STRICTLY_GREATER:
         if (default_stripe_size->uint64 > filter->compare.value.uint64)
-            return filter_or(filter, default_filter);
+            return rbh_filter_or(filter, default_filter);
         break;
     case RBH_FOP_EQUAL:
         if (default_stripe_size->uint64 == filter->compare.value.uint64)
-            return filter_or(filter, default_filter);
+            return rbh_filter_or(filter, default_filter);
         break;
     default:
         __builtin_unreachable();
     }
 
-    return filter_and(filter, filter_not(default_filter));
+    return rbh_filter_and(filter, rbh_filter_not(default_filter));
 }
 
 enum layout_patterns {
@@ -510,12 +510,12 @@ layout_pattern2filter(const char *_layout)
                       "Failed to create the filter for comparing a layout");
 
     if (!default_pattern)
-        return filter_and(filter, filter_not(default_filter));
+        return rbh_filter_and(filter, rbh_filter_not(default_filter));
 
     if (default_pattern->uint64 == filter->compare.value.uint64)
-        return filter_or(filter, default_filter);
+        return rbh_filter_or(filter, default_filter);
 
-    return filter_and(filter, filter_not(default_filter));
+    return rbh_filter_and(filter, rbh_filter_not(default_filter));
 }
 
 struct rbh_filter *
@@ -573,7 +573,7 @@ expired_at2filter(const char *expired)
     if (!filter_inf)
         error(EXIT_FAILURE, errno, "rbh_filter_compare_uint64_new");
 
-    return filter_and(filter_not(filter_inf), filter_expiration_date);
+    return rbh_filter_and(rbh_filter_not(filter_inf), filter_expiration_date);
 }
 
 struct rbh_filter *
@@ -650,7 +650,7 @@ comp2filter(const char *comp, const struct rbh_filter_field *field)
                 error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
                               "rbh_filter_compare_uint64_new");
 
-            filter = filter_array_compose(left, right);
+            filter = rbh_filter_array_compose(left, right);
             filter->array.field = *field;
         }
 
@@ -675,7 +675,7 @@ comp2filter(const char *comp, const struct rbh_filter_field *field)
                 error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
                               "rbh_filter_compare_uint64_new");
 
-            filter = filter_array_compose(left, right);
+            filter = rbh_filter_array_compose(left, right);
             filter->array.field = *field;
         }
     }
