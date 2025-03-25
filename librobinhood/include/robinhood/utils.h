@@ -37,13 +37,15 @@
 /**
  * Create a backend from a URI string
  *
- * @param uri   the URI (a string) to use
+ * @param uri        the URI (a string) to use
+ * @param read_only  whether we intend to open the backend in read only or
+ *                   read/write mode
  *
- * @return      a pointer to a newly allocated backend on success,
- *              exits on error.
+ * @return           a pointer to a newly allocated backend on success,
+ *                   exits on error.
  */
 struct rbh_backend *
-rbh_backend_from_uri(const char *uri);
+rbh_backend_from_uri(const char *uri, bool read_only);
 
 /**
  * Retrieves the mount path of a filesystem, given an entry under this mount

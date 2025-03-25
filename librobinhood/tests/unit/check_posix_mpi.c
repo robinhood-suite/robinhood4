@@ -69,7 +69,8 @@ START_TEST(lf_missing_root)
     posix = rbh_backend_plugin_import("posix");
     ck_assert_ptr_nonnull(posix);
 
-    posix_mpi = rbh_backend_plugin_new(posix, "posix-mpi", "missing", NULL);
+    posix_mpi = rbh_backend_plugin_new(posix, "posix-mpi", "missing", NULL,
+                                       false);
     ck_assert_ptr_nonnull(posix_mpi);
 
     errno = 0;
@@ -99,7 +100,8 @@ START_TEST(lf_empty_root)
     posix = rbh_backend_plugin_import("posix");
     ck_assert_ptr_nonnull(posix);
 
-    posix_mpi = rbh_backend_plugin_new(posix, "posix-mpi", EMPTY, NULL);
+    posix_mpi = rbh_backend_plugin_new(posix, "posix-mpi", EMPTY, NULL,
+                                       false);
     ck_assert_ptr_nonnull(posix_mpi);
 
     fsentries = rbh_backend_filter(posix_mpi, NULL, &OPTIONS, &OUTPUT);

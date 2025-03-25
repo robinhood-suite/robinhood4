@@ -1223,7 +1223,8 @@ struct rbh_backend *
 rbh_posix_backend_new(const struct rbh_backend_plugin *self,
                       const char *type,
                       const char *path,
-                      struct rbh_config *config)
+                      struct rbh_config *config,
+                      bool read_only)
 {
     struct posix_backend *posix;
     int save_errno = 0;
