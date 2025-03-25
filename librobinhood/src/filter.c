@@ -1,5 +1,5 @@
 /* This file is part of the RobinHood Library
- * Copyright (C) 2019 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifer: LGPL-3.0-or-later
@@ -904,6 +904,12 @@ rbh_numeric2filter(const struct rbh_filter_field *field, const char *_numeric,
                       "rbh_filter_compare_uint64_new");
 
     return filter;
+}
+
+struct rbh_filter *
+rbh_epoch2filter(const struct rbh_filter_field *field, const char *_epoch)
+{
+    return rbh_numeric2filter(field, _epoch, RBH_FOP_LOWER_OR_EQUAL);
 }
 
 struct rbh_filter *

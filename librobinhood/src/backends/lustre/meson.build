@@ -9,9 +9,22 @@ if get_option('lustre').disabled()
     subdir_done()
 endif
 
+lustre_conf_data = configuration_data()
+
+lustre_conf_data.merge_from(conf_data)
+
+have_fid_parse = cc.has_function('llapi_fid_parse', args: '-D_GNU_SOURCE',
+                                 dependencies: [liblustre],
+                                 prefix: '#include <lustre/lustreapi.h>')
+lustre_conf_data.set('HAVE_FID_PARSE', have_fid_parse)
+
+configure_file(input: 'config.h.in', output: 'config.h',
+               configuration: lustre_conf_data)
+
 librbh_lustre = library(
     'rbh-lustre',
     sources: [
+        'filters.c',
         'lustre.c',
         'parser.c',
         'plugin.c',
