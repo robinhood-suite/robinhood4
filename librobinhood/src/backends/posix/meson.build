@@ -7,6 +7,7 @@
 librbh_posix = library(
     'rbh-posix',
     sources: [
+        'filter.c',
         'posix.c',
         'plugin.c',
         'parser.c',
