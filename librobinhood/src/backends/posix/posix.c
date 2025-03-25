@@ -1127,8 +1127,9 @@ static const struct rbh_backend POSIX_BRANCH_BACKEND = {
     .ops = &POSIX_BRANCH_BACKEND_OPS,
 };
 
-struct rbh_backend *
-posix_backend_branch(void *backend, const struct rbh_id *id, const char *path)
+struct posix_branch_backend *
+posix_create_backend_branch(void *backend, const struct rbh_id *id,
+                            const char *path)
 {
     struct posix_backend *posix = backend;
     struct posix_branch_backend *branch;
@@ -1184,6 +1185,17 @@ posix_backend_branch(void *backend, const struct rbh_id *id, const char *path)
     branch->posix.iter_new = posix_iterator_new;
     branch->posix.statx_sync_type = posix->statx_sync_type;
     branch->posix.backend = POSIX_BRANCH_BACKEND;
+
+    return branch;
+}
+
+struct rbh_backend *
+posix_backend_branch(void *backend, const struct rbh_id *id, const char *path)
+{
+    struct posix_branch_backend *branch = posix_create_backend_branch(backend,
+                                                                      id, path);
+    if (branch == NULL)
+        return NULL;
 
     return &branch->posix.backend;
 }

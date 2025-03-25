@@ -1,5 +1,5 @@
 /* This file is part of RobinHood 4
- * Copyright (C) 2022 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifer: LGPL-3.0-or-later
@@ -77,6 +77,10 @@ posix_backend_get_option(void *backend, unsigned int option, void *data,
 int
 posix_backend_set_option(void *backend, unsigned int option, const void *data,
                          size_t data_size);
+
+struct posix_branch_backend *
+posix_create_backend_branch(void *backend, const struct rbh_id *id,
+                            const char *path);
 
 struct rbh_backend *
 posix_backend_branch(void *backend, const struct rbh_id *id, const char *path);
