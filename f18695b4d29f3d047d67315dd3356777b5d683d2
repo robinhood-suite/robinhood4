@@ -1,0 +1,181 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bcecfae3_8ee45556",
+        "filename": "librobinhood/src/backends/s3/s3.c",
+        "patchSetId": 6
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-25T14:59:43Z",
+      "side": 1,
+      "message": "sugest: length",
+      "range": {
+        "startLine": 29,
+        "startChar": 11,
+        "endLine": 29,
+        "endChar": 22
+      },
+      "revId": "f18695b4d29f3d047d67315dd3356777b5d683d2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "64fc8b64_15eca274",
+        "filename": "librobinhood/src/backends/s3/s3.c",
+        "patchSetId": 6
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-25T14:59:43Z",
+      "side": 1,
+      "message": "sugest: `*curr_obj_id \u003d\u003d s3_iter-\u003eobj_data.length - 1`",
+      "range": {
+        "startLine": 46,
+        "startChar": 8,
+        "endLine": 46,
+        "endChar": 57
+      },
+      "revId": "f18695b4d29f3d047d67315dd3356777b5d683d2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bd27ef54_f2c1e5c6",
+        "filename": "librobinhood/src/backends/s3/s3.c",
+        "patchSetId": 6
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-25T14:59:43Z",
+      "side": 1,
+      "message": "defect: remove the `+ 1` otherwise the last bucket is not retrieved\n`*curr_bkt_id \u003d\u003d s3_iter-\u003ebjt_data.length`",
+      "range": {
+        "startLine": 49,
+        "startChar": 16,
+        "endLine": 49,
+        "endChar": 32
+      },
+      "revId": "f18695b4d29f3d047d67315dd3356777b5d683d2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "43d74ff7_d1729374",
+        "filename": "librobinhood/src/backends/s3/s3.c",
+        "patchSetId": 6
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-25T14:59:43Z",
+      "side": 1,
+      "message": "defect: you need to free the object list before retrieving a new",
+      "revId": "f18695b4d29f3d047d67315dd3356777b5d683d2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "66e91d04_e7c38da3",
+        "filename": "librobinhood/src/backends/s3/s3.c",
+        "patchSetId": 6
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-25T14:59:43Z",
+      "side": 1,
+      "message": "defect: You need to free the bucket list and obj list with the wrapper.\nYou can do something like this:\n\n```\nvoid\ns3_free_bucket_list(int count, char **bucket)\n{\n    for (int i \u003d 0; i \u003c count; i++)\n        delete[] bucket[i];\n    delete[] bucket;\n}\n```",
+      "revId": "f18695b4d29f3d047d67315dd3356777b5d683d2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "60c420fb_762dace3",
+        "filename": "librobinhood/src/backends/s3/s3.c",
+        "patchSetId": 6
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-25T14:59:43Z",
+      "side": 1,
+      "message": "sugest: if `s3_iter-\u003ebkt_data.length \u003d\u003d 0`, you don\u0027t need to retrieve the objects",
+      "revId": "f18695b4d29f3d047d67315dd3356777b5d683d2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c0e8289b_a095131b",
+        "filename": "librobinhood/src/backends/s3/s3_wrapper.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-25T14:59:43Z",
+      "side": 1,
+      "message": "minor: `s3_get_bucket_list`",
+      "revId": "f18695b4d29f3d047d67315dd3356777b5d683d2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b2b8f767_30624ba3",
+        "filename": "librobinhood/src/backends/s3/s3_wrapper.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-25T14:59:43Z",
+      "side": 1,
+      "message": "defect: inverse line 78 and 79",
+      "revId": "f18695b4d29f3d047d67315dd3356777b5d683d2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4f56c2dd_27eb1989",
+        "filename": "librobinhood/src/backends/s3/s3_wrapper.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-25T14:59:43Z",
+      "side": 1,
+      "message": "minor: `s3_get_obejct_list`",
+      "range": {
+        "startLine": 93,
+        "startChar": 0,
+        "endLine": 93,
+        "endChar": 15
+      },
+      "revId": "f18695b4d29f3d047d67315dd3356777b5d683d2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}

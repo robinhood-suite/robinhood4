@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5de119e7_c8f95496",
+        "filename": "librobinhood/src/backends/s3/s3.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-25T14:59:43Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "b0f96d6b_57910527",
+      "range": {
+        "startLine": 49,
+        "startChar": 4,
+        "endLine": 52,
+        "endChar": 56
+      },
+      "revId": "ccacb989bd0d73872c844b3967abfc028a5b920e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5898aa54_09bd3e08",
@@ -37,6 +61,24 @@
       "writtenOn": "2025-03-20T10:22:27Z",
       "side": 1,
       "message": "question: Why \"+ 1\", I think `curr_obj_id \u003d\u003d obj_length\" does exactly the same thing",
+      "revId": "ccacb989bd0d73872c844b3967abfc028a5b920e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f9f6d6d4_c26a2b28",
+        "filename": "librobinhood/src/backends/s3/s3.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-25T14:59:43Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "5898aa54_09bd3e08",
       "revId": "ccacb989bd0d73872c844b3967abfc028a5b920e",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
