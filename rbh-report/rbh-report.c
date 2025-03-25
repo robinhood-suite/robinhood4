@@ -218,7 +218,8 @@ main(int argc, char *argv[])
     apply_aliases(&argc, &argv);
 
     /* Parse the command line */
-    while ((c = getopt_long(argc, argv, "chgd:o:r", LONG_OPTIONS, NULL)) != -1) {
+    while ((c = getopt_long(argc, argv, "chg:d:o:r",
+                            LONG_OPTIONS, NULL)) != -1) {
         switch (c) {
         case 'c':
             csv_print = true;
