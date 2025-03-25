@@ -212,7 +212,7 @@ sink_from_uri(const char *uri)
 
     if (strcmp(raw_uri->scheme, "rbh") == 0) {
         free(raw_uri);
-        return (void *) sink_from_backend(rbh_backend_from_uri(uri));
+        return (void *) sink_from_backend(rbh_backend_from_uri(uri, false));
     }
 
     free(raw_uri);
@@ -273,7 +273,7 @@ enrich_iter_builder_from_uri(const char *uri)
 
         uri_backend->id = RBH_BI_HESTIA;
     } else {
-        uri_backend = rbh_backend_from_uri(uri);
+        uri_backend = rbh_backend_from_uri(uri, true);
     }
 
     builder = enrich_iter_builder_from_backend(rbh_uri->backend, uri_backend,
