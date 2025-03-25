@@ -1,0 +1,16 @@
+/* This file is part of RobinHood 4
+ * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
+ *                    alternatives
+ *
+ * SPDX-License-Identifer: LGPL-3.0-or-later
+ */
+
+#mesondefine HAVE_FID_PARSE
+#mesondefine HAVE_LOV_USER_MAGIC_FOREIGN
+#mesondefine HAVE_LOV_USER_MAGIC_SEL
+#mesondefine HAVE_LUSTRE_FILE_HANDLE
+#mesondefine HAVE_STATX
+#mesondefine HAVE_STATX_ATTR_DAX
+#mesondefine HAVE_STATX_ATTR_MOUNT_ROOT
+#mesondefine HAVE_STATX_ATTR_VERITY
+#mesondefine HAVE_STX_MNT_ID

@@ -620,7 +620,7 @@ rbh_get_size_parameters(const char *_size, char *operator, uint64_t *unit_size,
                         uint64_t *size);
 
 /**
- * build a filter from a string representing a uint64_t value.
+ * Build a filter from a string representing a uint64_t value.
  * If the given value is preceded with a '+' or '-', will filter entries
  * with \p field greater or lower than \p _numeric.
  *
@@ -637,7 +637,23 @@ rbh_numeric2filter(const struct rbh_filter_field *field, const char *_numeric,
                    enum rbh_filter_operator no_sign_op);
 
 /**
- * build a filter from a shell regex
+ * Build a filter from a string representing a uint64_t value.
+ * If the given value is preceded with a '+' or '-', will filter entries
+ * with \p field greater or lower than \p _numeric. Else, it will filter entries
+ * with \p field lower or equal to \p _epoch.
+ *
+ * @param field         a field to filter
+ * @param _epoch        a string representing a uint64_t, optionnally prefixed
+ *                      with either a '+' or '-' sign
+ *
+ * @return              a pointer to a newly allocated struct filter, or NULL on
+ *                      error
+ */
+struct rbh_filter *
+rbh_epoch2filter(const struct rbh_filter_field *field, const char *_epoch);
+
+/**
+ * Build a filter from a shell regex
  *
  * @param field         a field to filter
  * @param shell_regex   a shell regex

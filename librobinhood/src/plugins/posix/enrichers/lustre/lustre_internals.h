@@ -36,4 +36,21 @@ rbh_lustre_enrich(struct entry_info *einfo, uint64_t flags,
 enum rbh_parser_token
 rbh_lustre_check_valid_token(const char *token);
 
+/**
+ * Build a filter based on the given predicate at argv[*index] and increase
+ * index if the predicate requires an argument.
+ *
+ * @param argv           the list of arguments given to the command
+ * @param argc           the number of strings in \p argv
+ * @param index          the argument currently being parsed, should be updated
+ *                       if necessary to skip optionnal values
+ * @param need_prefetch  boolean value to indicate if a filter needs to be
+ *                       completed
+ *
+ * This function will exit if \p string is not a valid predicate
+ */
+struct rbh_filter *
+rbh_lustre_build_filter(const char **argv, int argc, int *index,
+                        bool *need_prefetch);
+
 #endif
