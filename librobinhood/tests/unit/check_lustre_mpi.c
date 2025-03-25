@@ -80,7 +80,8 @@ START_TEST(lf_missing_root)
     posix = rbh_backend_plugin_import("posix");
     ck_assert_ptr_nonnull(posix);
 
-    lustre_mpi = rbh_backend_plugin_new(posix, "lustre-mpi", "missing", NULL);
+    lustre_mpi = rbh_backend_plugin_new(posix, "lustre-mpi", "missing", NULL,
+                                        false);
     ck_assert_ptr_nonnull(lustre_mpi);
 
     errno = 0;
@@ -110,7 +111,8 @@ START_TEST(lf_empty_root)
     posix = rbh_backend_plugin_import("posix");
     ck_assert_ptr_nonnull(posix);
 
-    lustre_mpi = rbh_backend_plugin_new(posix, "lustre-mpi", EMPTY, NULL);
+    lustre_mpi = rbh_backend_plugin_new(posix, "lustre-mpi", EMPTY, NULL,
+                                        false);
     ck_assert_ptr_nonnull(lustre_mpi);
 
     fsentries = rbh_backend_filter(lustre_mpi, NULL, &OPTIONS, &OUTPUT);

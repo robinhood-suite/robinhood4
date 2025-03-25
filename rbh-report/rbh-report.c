@@ -286,7 +286,7 @@ main(int argc, char *argv[])
         error(EX_USAGE, 0, "missing '--output' argument");
 
     /* Parse SOURCE */
-    from = rbh_backend_from_uri(argv[0]);
+    from = rbh_backend_from_uri(argv[0], true);
 
     report(group, output, ascending_sort, csv_print);
 

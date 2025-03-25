@@ -394,7 +394,7 @@ main(int argc, char **argv)
         return 0;
     }
 
-    from = rbh_backend_from_uri(argv[0]);
+    from = rbh_backend_from_uri(argv[0], true);
     plugin = rbh_backend_plugin_import(from->name);
 
     if (plugin == NULL) {

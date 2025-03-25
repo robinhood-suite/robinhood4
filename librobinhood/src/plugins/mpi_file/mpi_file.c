@@ -446,7 +446,8 @@ struct rbh_backend *
 rbh_mpi_file_backend_new(const struct rbh_backend_plugin *self,
                          const char *type,
                          const char *path,
-                         __attribute__((unused)) struct rbh_config *config)
+                         __attribute__((unused)) struct rbh_config *config,
+                         bool read_only)
 {
     struct mpi_file_backend *mpi_file;
     int save_errno;
