@@ -27,6 +27,22 @@
         sqlite_fail(fmt ": %s" __VA_OPT__(,)          \
                     __VA_ARGS__, sqlite3_errmsg(db));
 
+/**
+ * Elements of this structure should only be accessed inside db_cursor.c
+ */
+struct sqlite_cursor {
+    /** reference to the backend's open DB */
+    sqlite3 *db;
+    /** SQL statement to execute */
+    sqlite3_stmt *stmt;
+    /** index of current parameter to bind to query (cf. sqlite_bind_xxx)*/
+    int index;
+    /** column of the current element to read for the query's result's current
+     * row
+     */
+    int col;
+};
+
 struct sqlite_backend {
     struct rbh_backend backend;
     const char *path;
@@ -47,5 +63,21 @@ sqlite_backend_open(struct sqlite_backend *sqlite,
 
 void
 sqlite_backend_close(struct sqlite_backend *sqlite);
+
+bool
+sqlite_cursor_setup(struct sqlite_backend *backend,
+                    struct sqlite_cursor *cursor);
+
+bool
+sqlite_cursor_fini(struct sqlite_cursor *cursor);
+
+bool
+sqlite_setup_query(struct sqlite_cursor *cursor, const char *query);
+
+bool
+sqlite_cursor_exec(struct sqlite_cursor *cursor);
+
+bool
+sqlite_cursor_step(struct sqlite_cursor *cursor);
 
 #endif
