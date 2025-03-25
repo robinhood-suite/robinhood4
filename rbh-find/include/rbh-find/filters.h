@@ -14,20 +14,6 @@
 #include <robinhood/filter.h>
 
 /**
- * shell_regex2filter - build a filter from a shell regex
- *
- * @param field         a field to filter
- * @param shell_regex   a shell regex
- * @param regex_options an ORred combination of enum filter_regex_option
- *
- * @return              a pointer to a newly allocated struct filter, or NULL on
- *                      error
- */
-struct rbh_filter *
-shell_regex2filter(const struct rbh_filter_field *field,
-                   const char *shell_regex, unsigned int regex_options);
-
-/**
  * regex2filter - build a filter from a regex, will call
  * shell_regex2filter for the actual filter creation
  *
@@ -55,21 +41,6 @@ regex2filter(enum predicate predicate, const char *shell_regex,
 struct rbh_filter *
 lname2filter(enum predicate predicate, const char *shell_regex,
              unsigned int regex_options);
-
-/**
- * numeric2filter - build a filter from a string representing a uint64_t value.
- * If the given value is preceded with a '+' or '-', will filter entries
- * with \p field greater or lower than \p _numeric.
- *
- * @param field         a field to filter
- * @param _numeric      a string representing a uint64_t, optionnally prefixed
- *                      with either a '+' or '-' sign
- *
- * @return              a pointer to a newly allocated struct filter, or NULL on
- *                      error
- */
-struct rbh_filter *
-numeric2filter(const struct rbh_filter_field *field, const char *_numeric);
 
 /**
  * number2filter - build a filter from a string representing a uint64_t value.
@@ -139,35 +110,6 @@ xtime2filter(enum predicate predicate, const char *days);
  */
 struct rbh_filter *
 newer2filter(enum predicate predicate, const char *path);
-
-/**
- * Build a filter for the -type predicate
- *
- * @param filetype  a string representing a filetype
- *
- * @return          a pointer to a newly allocated struct rbh_filter
- *
- * Exit on error
- */
-struct rbh_filter *
-filetype2filter(const char *filetype);
-
-/**
- * Extract the size parameters from a standard size filter string.
- * It must follow this pattern: `[+-]\d+[cwbkMGT]`
- *
- * @param _size      a string representing a size following the above pattern
- * @param operator   a character that will be either `+`, `-` or 0 if the other
- *                   two have not been found
- * @param unit_size  the unit size specified in the \p _size parameter, 512 by
- *                   default if none is specified
- * @param size       the size specified in the string
- *
- * Exit on error
- */
-void
-get_size_parameters(const char *_size, char *operator, uint64_t *unit_size,
-                    uint64_t *size);
 
 /**
  * Build a filter for predicates corresponding to a size by following

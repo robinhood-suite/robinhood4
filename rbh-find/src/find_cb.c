@@ -451,7 +451,7 @@ find_parse_predicate(struct find_context *ctx, int *arg_idx)
         filter = filesize2filter(ctx->argv[++i]);
         break;
     case PRED_TYPE:
-        filter = filetype2filter(ctx->argv[++i]);
+        filter = rbh_filetype2filter(ctx->argv[++i]);
         break;
     case PRED_USER:
         filter = username2filter(ctx->argv[++i]);
