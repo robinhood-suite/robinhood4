@@ -91,7 +91,7 @@ rbh_plugin_import(const char *name, const char *symbol);
 #define RBH_FILTER_OPS 0b1000
 #define RBH_UPDATE_OPS 0b0100
 #define RBH_BRANCH_OPS 0b0010
-#define RBH_SYNC_OPS 0b0001
-#define RBH_EMPTY_OPS 0b0000
+#define RBH_SYNC_OPS   0b0001
+#define RBH_EMPTY_OPS  0b0000
 
 #endif

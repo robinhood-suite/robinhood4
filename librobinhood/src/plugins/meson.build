@@ -1,5 +1,5 @@
 # This file is part of RobinHood 4
-# Copyright (C) 2019 Commissariat a l'energie atomique et aux energies
+# Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
@@ -43,6 +43,7 @@ backend_path_env_for_mpi_tests.set('LD_LIBRARY_PATH', ld_library_path)
 
 subdir('mongo')
 subdir('posix')
+subdir('sqlite')
 
 if get_option('hestia').enabled()
     subdir('hestia')
