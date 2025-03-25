@@ -13,6 +13,7 @@ librbh_sqlite = library(
         'backend.c',
         'plugin.c',
         'schema.c',
+        'update.c',
     ],
     version: librbh_sqlite_version, # defined in include/robinhood/backends
     dependencies: [ sqlite3, jansson, librobinhood_dep ],
