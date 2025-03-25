@@ -103,12 +103,6 @@ number2filter(enum predicate predicate, const char *_numeric)
                               RBH_FOP_EQUAL);
 }
 
-struct rbh_filter *
-epoch2filter(const struct rbh_filter_field *field, const char *_epoch)
-{
-    return rbh_numeric2filter(field, _epoch, RBH_FOP_LOWER_OR_EQUAL);
-}
-
 static struct rbh_filter *
 filter_uint64_range_new(const struct rbh_filter_field *field, uint64_t start,
                         uint64_t end)
