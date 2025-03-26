@@ -79,10 +79,7 @@ str2command_line_token(struct find_context *ctx, const char *string,
             }
         }
 
-        /* XXX: will be removed once backend-specific actions are moved to the
-         * backends
-         */
-        return ctx->pred_or_action_callback(string);
+        return CLT_ACTION;
     }
     return CLT_URI;
 }
