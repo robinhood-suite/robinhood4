@@ -11,6 +11,7 @@
 #include "robinhood/plugins/backend.h"
 #include "robinhood/backend.h"
 #include "robinhood/config.h"
+#include "robinhood/fsentry.h"
 
 #define RBH_LUSTRE_BACKEND_NAME "lustre"
 
