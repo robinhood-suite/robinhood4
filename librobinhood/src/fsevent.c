@@ -317,3 +317,26 @@ rbh_fsevent_ns_xattr_new(const struct rbh_id *id,
 
     return fsevent_clone(&ns_xattr);
 }
+
+const char *
+rbh_fsevent_path(const struct rbh_fsevent *fsevent)
+{
+    const struct rbh_value_map *xattrs = &fsevent->xattrs;
+
+    for (size_t i = 0; i < xattrs->count; i++) {
+        const struct rbh_value_pair *xattr = &xattrs->pairs[i];
+
+        if (strcmp(xattr->key, "path"))
+            continue;
+
+        if (xattr->value->type != RBH_VT_STRING) {
+            errno = EFAULT;
+            return NULL;
+        }
+
+        return xattr->value->string;
+    }
+
+    errno = ENODATA;
+    return NULL;
+}
