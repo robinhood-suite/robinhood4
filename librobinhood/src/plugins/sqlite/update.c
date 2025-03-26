@@ -98,7 +98,15 @@ static bool
 sqlite_process_delete(struct sqlite_backend *sqlite,
                       const struct rbh_fsevent *fsevent)
 {
-    return true;
+    struct sqlite_cursor *cursor = &sqlite->cursor;
+
+    return sqlite_setup_query(cursor, "delete from entries where id = ?") &&
+        sqlite_cursor_bind_id(cursor, &fsevent->id) &&
+        sqlite_cursor_exec(cursor) &&
+
+        sqlite_setup_query(cursor, "delete from ns where id = ?") &&
+        sqlite_cursor_bind_id(cursor, &fsevent->id) &&
+        sqlite_cursor_exec(cursor);
 }
 
 static bool
