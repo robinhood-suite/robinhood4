@@ -12,6 +12,7 @@
 # include "config.h"
 #endif
 
+#include <jansson.h>
 #include <sqlite3.h>
 
 #include <robinhood/backends/sqlite.h>
@@ -45,6 +46,7 @@ struct sqlite_cursor {
 
 struct sqlite_backend {
     struct rbh_backend backend;
+    struct sqlite_cursor cursor;
     const char *path;
     sqlite3 *db;
 };
