@@ -264,7 +264,20 @@ find_exec_action(struct find_context *ctx,
 {
     switch (action) {
     case ACT_DELETE:
-        return unlink(fsentry_relative_path(fsentry));
+        /* XXX: will be changed once all plugins handle delete properly */
+        if (ctx->info_plugin_count != 0) {
+            int rc;
+
+            for (int i = 0; i < ctx->info_plugin_count; ++i) {
+                rc = rbh_plugin_delete_entry(ctx->info_plugins[i], fsentry);
+                if (rc == 0)
+                    return rc;
+            }
+
+            return rc;
+        } else {
+            return unlink(fsentry_relative_path(fsentry));
+        }
     case ACT_EXEC:
         return exec_command(ctx, fsentry);
     case ACT_PRINT:
