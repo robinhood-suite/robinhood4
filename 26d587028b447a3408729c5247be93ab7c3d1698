@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9f843a6e_5786ce75",
+        "filename": "librobinhood/src/backends/s3/s3.c",
+        "patchSetId": 8
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1038646
+      },
+      "writtenOn": "2025-03-26T11:00:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ec430e1_8149aa9a",
+      "range": {
+        "startLine": 97,
+        "startChar": 39,
+        "endLine": 97,
+        "endChar": 40
+      },
+      "revId": "26d587028b447a3408729c5247be93ab7c3d1698",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2a9731e0_1039c189",
@@ -64,6 +88,48 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "846f121d_ef520550",
+        "filename": "librobinhood/src/backends/s3/s3.c",
+        "patchSetId": 8
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1038646
+      },
+      "writtenOn": "2025-03-26T11:00:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2a9731e0_1039c189",
+      "range": {
+        "startLine": 100,
+        "startChar": 4,
+        "endLine": 100,
+        "endChar": 9
+      },
+      "revId": "26d587028b447a3408729c5247be93ab7c3d1698",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "50ac2d22_05bc0c21",
+        "filename": "librobinhood/src/backends/s3/s3.c",
+        "patchSetId": 8
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1038646
+      },
+      "writtenOn": "2025-03-26T11:00:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2f049726_51070868",
+      "revId": "26d587028b447a3408729c5247be93ab7c3d1698",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5f5bb261_e4989dc5",
@@ -81,6 +147,24 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "87b2d17b_cc23be36",
+        "filename": "librobinhood/src/backends/s3/s3_wrapper.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1038646
+      },
+      "writtenOn": "2025-03-26T11:00:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5f5bb261_e4989dc5",
+      "revId": "26d587028b447a3408729c5247be93ab7c3d1698",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ac1a280a_b5ed92c9",
@@ -94,6 +178,24 @@
       "writtenOn": "2025-03-26T09:27:47Z",
       "side": 1,
       "message": "style: remove empty line",
+      "revId": "26d587028b447a3408729c5247be93ab7c3d1698",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "296c7b55_81c73034",
+        "filename": "librobinhood/src/backends/s3/s3_wrapper.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1038646
+      },
+      "writtenOn": "2025-03-26T11:00:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ac1a280a_b5ed92c9",
       "revId": "26d587028b447a3408729c5247be93ab7c3d1698",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
@@ -121,6 +223,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "73d69606_39e25c8e",
+        "filename": "librobinhood/src/backends/s3/s3_wrapper.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1038646
+      },
+      "writtenOn": "2025-03-26T11:00:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d427ec18_2122827b",
+      "range": {
+        "startLine": 98,
+        "startChar": 16,
+        "endLine": 98,
+        "endChar": 20
+      },
+      "revId": "26d587028b447a3408729c5247be93ab7c3d1698",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "22b76b1e_8358ef14",
@@ -138,6 +264,24 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b6fd4817_9e006ae1",
+        "filename": "librobinhood/src/backends/s3/s3_wrapper.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1038646
+      },
+      "writtenOn": "2025-03-26T11:00:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "22b76b1e_8358ef14",
+      "revId": "26d587028b447a3408729c5247be93ab7c3d1698",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bdab32da_a2ec881a",
@@ -151,6 +295,30 @@
       "writtenOn": "2025-03-26T09:27:47Z",
       "side": 1,
       "message": "minor: you don\u0027t need parentheses",
+      "range": {
+        "startLine": 151,
+        "startChar": 25,
+        "endLine": 151,
+        "endChar": 31
+      },
+      "revId": "26d587028b447a3408729c5247be93ab7c3d1698",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "45e5a249_b02b2880",
+        "filename": "librobinhood/src/backends/s3/s3_wrapper.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1038646
+      },
+      "writtenOn": "2025-03-26T11:00:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bdab32da_a2ec881a",
       "range": {
         "startLine": 151,
         "startChar": 25,
@@ -184,6 +352,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c4958a9d_bbc37ab8",
+        "filename": "librobinhood/src/backends/s3/s3_wrapper.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1038646
+      },
+      "writtenOn": "2025-03-26T11:00:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d6515c58_73da8ff1",
+      "range": {
+        "startLine": 42,
+        "startChar": 4,
+        "endLine": 42,
+        "endChar": 5
+      },
+      "revId": "26d587028b447a3408729c5247be93ab7c3d1698",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c8b1c027_b33f4dc4",
@@ -197,6 +389,30 @@
       "writtenOn": "2025-03-26T09:27:47Z",
       "side": 1,
       "message": "typo: `number_of_buckets`",
+      "range": {
+        "startLine": 45,
+        "startChar": 13,
+        "endLine": 45,
+        "endChar": 27
+      },
+      "revId": "26d587028b447a3408729c5247be93ab7c3d1698",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd849822_83ba8007",
+        "filename": "librobinhood/src/backends/s3/s3_wrapper.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1038646
+      },
+      "writtenOn": "2025-03-26T11:00:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c8b1c027_b33f4dc4",
       "range": {
         "startLine": 45,
         "startChar": 13,
@@ -230,6 +446,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3999243b_7db1384c",
+        "filename": "librobinhood/src/backends/s3/s3_wrapper.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1038646
+      },
+      "writtenOn": "2025-03-26T11:00:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b69dc065_cbe6c97a",
+      "range": {
+        "startLine": 46,
+        "startChar": 13,
+        "endLine": 46,
+        "endChar": 19
+      },
+      "revId": "26d587028b447a3408729c5247be93ab7c3d1698",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "835727cf_674ce7e7",
@@ -243,6 +483,24 @@
       "writtenOn": "2025-03-26T09:27:47Z",
       "side": 1,
       "message": "style: alignment",
+      "revId": "26d587028b447a3408729c5247be93ab7c3d1698",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "99880ffa_cf7974fb",
+        "filename": "librobinhood/src/backends/s3/s3_wrapper.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1038646
+      },
+      "writtenOn": "2025-03-26T11:00:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "835727cf_674ce7e7",
       "revId": "26d587028b447a3408729c5247be93ab7c3d1698",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
