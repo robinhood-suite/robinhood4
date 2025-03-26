@@ -10,6 +10,7 @@
 
 #include "robinhood/backend.h"
 #include "robinhood/config.h"
+#include "robinhood/fsentry.h"
 
 #define RBH_LUSTRE_BACKEND_NAME "lustre"
 
@@ -63,6 +64,16 @@ rbh_lustre_check_valid_token(const char *token);
 struct rbh_filter *
 rbh_lustre_build_filter(const char **argv, int argc, int *index,
                         bool *need_prefetch);
+
+/**
+ * Delete an entry from the plugin
+ *
+ * @param fsentry        the entry to delete
+ *
+ * @return               0 on success, -1 on error and errno is set
+ */
+int
+rbh_lustre_delete_entry(struct rbh_fsentry *fsentry);
 
 /**
  * Release the memory associated with the plugin
