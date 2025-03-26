@@ -154,15 +154,48 @@ sqlite_iterator_new(void)
     return iter;
 }
 
+static bool
+sqlite_statement_from_filter(struct sqlite_iterator *iter,
+                             const struct rbh_filter *filter,
+                             const struct rbh_filter_options *options)
+{
+    char *query =
+        "select entries.id, parent_id, name, "
+        "mask, blksize, nlink, uid, gid, "
+        "mode, type, ino, size, blocks, attributes, "
+        "atime_sec, atime_nsec, "
+        "btime_sec, btime_nsec, "
+        "ctime_sec, ctime_nsec, "
+        "mtime_sec, mtime_nsec, "
+        "rdev_major, rdev_minor, "
+        "dev_major, dev_minor, mnt_id, "
+        "entries.xattrs, ns.xattrs, symlink "
+        "from entries join ns on entries.id = ns.id";
+
+    if (!sqlite_setup_query(&iter->cursor, query))
+        return false;
+
+    return true;
+}
+
 struct rbh_mut_iterator *
 sqlite_backend_filter(void *backend, const struct rbh_filter *filter,
                       const struct rbh_filter_options *options,
                       const struct rbh_filter_output *output)
 {
     struct sqlite_iterator *iter = sqlite_iterator_new();
+    struct sqlite_backend *sqlite = backend;
 
     if (!iter)
         return NULL;
+
+    sqlite_cursor_setup(sqlite, &iter->cursor);
+    if (!sqlite_statement_from_filter(iter, filter, options)) {
+        int save_errno = errno;
+        sqlite_iter_destroy(iter);
+        errno = save_errno;
+        return NULL;
+    }
 
     return &iter->iter;
 }
