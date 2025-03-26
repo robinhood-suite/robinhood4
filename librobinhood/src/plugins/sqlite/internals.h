@@ -51,6 +51,10 @@ struct sqlite_backend {
     sqlite3 *db;
 };
 
+struct sqlite_iterator {
+    struct rbh_mut_iterator iter;
+};
+
 ssize_t
 sqlite_backend_update(void *backend, struct rbh_iterator *fsevents);
 
