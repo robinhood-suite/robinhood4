@@ -128,10 +128,26 @@ Limits
 Maximum File Path Length
 ------------------------
 
-RobinHood4 handles paths up to 4096 characters total. If a checked path is too
-long, the error is printed out and then skipped. That is unless the `--no-skip`
-flag is set by the calling application, in which case the application is also
-stopped.
+RobinHood4, using the basic traverser FTS_, can theoretically handle paths up to
+USHRT_MAX (65,535 characters). However, testing shows that the actual maximum
+path length falls between 36,000 and 38,000 characters, depending on the size of
+directory names in the tree.
+
+To minimize frequent memory allocations, FTS_ allocates slightly more than twice
+the space needed to store the last discovered path. The formula used to
+determine the new required size is:
+
+max_path = max_path + strlen(new_path) + 256 + 1, with max_path initially set to
+MAXPATHLEN.
+
+If a checked path is too long, FTS_ returns an error, causing the application to
+stop. Using the --no-skip flag prevents the application from stopping with an
+error, but it will still terminate as if there were no more entries to process.
+
+With the mpiFileUtils traverser, RobinHood4 supports paths up to 4,096
+characters. If a checked path exceeds this limit, an error is printed, and
+mpiFileUtils skips the path. Since mpiFileUtils automatically skips too long
+paths, using the --no-skip flag does not cause the application to stop.
 
 Known Issues
 ============

@@ -447,10 +447,12 @@ xattrs_map:
 test_sync_large_path()
 {
     # We will create strings of length 4064 and 4096 by creating a file
-    # hierarchy where each directory is of either 126 or 127 characters,
-    # repeated 32 times, with an additionnal 32 '/'
-    local lengthA=126
-    local lengthB=127
+    # hierarchy, with an additionnal 32 '/'
+    local root_len=$(realpath . | wc -c)
+    local path_len=$((4096 - $root_len - 32))
+
+    local lengthA=$(($path_len / 32))
+    local lengthB=$((($path_len / 32) + 1))
 
     local long_pathA="$(printf '%*s' "$lengthA" | sed 's/ /a/g')"
     local long_pathB="$(printf '%*s' "$lengthB" | sed 's/ /b/g')"
@@ -473,17 +475,6 @@ test_sync_large_path()
 
     find_attribute '"ns.xattrs.path":"'$full_pathA'"'
     ! (find_attribute '"ns.xattrs.path":"'$full_pathB'"')
-
-set +e
-    rbh_sync_posix "." "rbh:$db:$testdb" "--no-skip"
-    local rc=3
-set -e
-
-ENAMETOOLONG=36
-
-    if ((rc != ENAMETOOLONG)); then
-        error "Sync should have failed because second path is too long"
-    fi
 }
 
 test_sync_number_children()
@@ -558,7 +549,7 @@ declare -a tests=(test_sync_2_files test_sync_size test_sync_3_files
                   test_stop_sync_on_error test_config test_sync_number_children)
 
 if [[ $WITH_MPI == true ]]; then
-    tests+=(test_sync_number_children_mpi)
+    tests+=(test_sync_number_children_mpi test_sync_large_path)
 fi
 
 tmpdir=$(mktemp --directory)
