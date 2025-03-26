@@ -174,7 +174,8 @@ main(int _argc, char *_argv[])
 
     /* Parse the command line */
     for (index = 0; index < ctx.argc; index++)
-        if (str2command_line_token(&ctx, ctx.argv[index]) != CLT_URI)
+        if (str2command_line_token(&ctx, ctx.argv[index], NULL,
+                                   NULL) != CLT_URI)
             break;
 
     if (index == 0)
