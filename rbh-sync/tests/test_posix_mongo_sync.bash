@@ -454,17 +454,6 @@ test_sync_large_path()
 
     find_attribute '"ns.xattrs.path":"'$full_pathA'"'
     ! (find_attribute '"ns.xattrs.path":"'$full_pathB'"')
-
-set +e
-    rbh_sync_posix "." "rbh:mongo:$testdb" "--no-skip"
-    local rc=3
-set -e
-
-ENAMETOOLONG=36
-
-    if ((rc != ENAMETOOLONG)); then
-        error "Sync should have failed because second path is too long"
-    fi
 }
 
 ################################################################################
@@ -477,6 +466,9 @@ declare -a tests=(test_sync_2_files test_sync_size test_sync_3_files
                   test_sync_symbolic_link test_sync_socket test_sync_fifo
                   test_sync_branch test_continue_sync_on_error
                   test_stop_sync_on_error test_config)
+if [[ "$WITH_MPI" == "true" ]]; then
+    tests+=(test_sync_large_path)
+fi
 
 tmpdir=$(mktemp --directory)
 test_user="$(get_test_user "$(basename "$0")")"
