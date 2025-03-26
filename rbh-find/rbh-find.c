@@ -172,9 +172,13 @@ main(int _argc, char *_argv[])
     ctx.pred_or_action_callback = &find_predicate_or_action;
     ctx.print_directive = &fsentry_print_directive;
 
+    ctx.info_plugin_count = 0;
+    ctx.info_plugins = NULL;
+
     /* Parse the command line */
     for (index = 0; index < ctx.argc; index++)
-        if (str2command_line_token(&ctx, ctx.argv[index]) != CLT_URI)
+        if (str2command_line_token(&ctx, ctx.argv[index], NULL,
+                                   NULL) != CLT_URI)
             break;
 
     if (index == 0)
