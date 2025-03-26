@@ -92,14 +92,52 @@ static bool
 sqlite_process_ns_xattr(struct sqlite_backend *sqlite,
                         const struct rbh_fsevent *fsevent)
 {
-    return true;
+    const char *query =
+        "insert into ns (id, parent_id, name, xattrs) "
+        "values (?, ?, ?, ?) on conflict(id, parent_id, name) do "
+        "update set xattrs = json_patch(ns.xattrs, excluded.xattrs)";
+    struct sqlite_cursor *cursor = &sqlite->cursor;
+    const char *xattrs;
+    bool res;
+
+    xattrs = sqlite_xattr2json(&fsevent->xattrs);
+    if (!xattrs)
+        return false;
+
+    res = sqlite_setup_query(cursor, query) &&
+        sqlite_cursor_bind_id(cursor, &fsevent->id) &&
+        sqlite_cursor_bind_id(cursor, fsevent->ns.parent_id) &&
+        sqlite_cursor_bind_string(cursor, fsevent->ns.name) &&
+        sqlite_cursor_bind_string(cursor, xattrs) &&
+        sqlite_cursor_exec(cursor);
+    free((void *)xattrs);
+
+    return res;
 }
 
 static bool
 sqlite_process_xattr(struct sqlite_backend *sqlite,
                      const struct rbh_fsevent *fsevent)
 {
-    return true;
+    const char *query =
+        "insert into entries (id, xattrs) "
+        "values (?, ?) on conflict(id) do "
+        "update set xattrs=json_patch(entries.xattrs, excluded.xattrs)";
+    struct sqlite_cursor *cursor = &sqlite->cursor;
+    const char *xattrs;
+    bool res;
+
+    xattrs = sqlite_xattr2json(&fsevent->xattrs);
+    if (!xattrs)
+        return false;
+
+    res = sqlite_setup_query(cursor, query) &&
+        sqlite_cursor_bind_id(cursor, &fsevent->id) &&
+        sqlite_cursor_bind_string(cursor, xattrs) &&
+        sqlite_cursor_exec(cursor);
+    free((void *)xattrs);
+
+    return res;
 }
 
 static bool
