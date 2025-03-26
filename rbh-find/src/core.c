@@ -1,5 +1,5 @@
 /* This file is part of RobinHood 4
- * Copyright (C) 2022 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifer: LGPL-3.0-or-later
@@ -32,7 +32,8 @@ ctx_finish(struct find_context *ctx)
 }
 
 enum command_line_token
-str2command_line_token(struct find_context *ctx, const char *string)
+str2command_line_token(struct find_context *ctx, const char *string,
+                       int *plugin_index)
 {
     switch (string[0]) {
     case '(':
@@ -70,6 +71,20 @@ str2command_line_token(struct find_context *ctx, const char *string)
                 return CLT_SORT;
             break;
         }
+
+        for (int i = 0; i < ctx->info_plugin_count; ++i) {
+            enum rbh_parser_token token =
+                rbh_plugin_check_valid_token(ctx->info_plugins[i], string);
+
+            if (token == RBH_TOKEN_PREDICATE) {
+                *plugin_index = i;
+                return CLT_PREDICATE;
+            }
+        }
+
+        /* XXX: will be removed once backend-specific actions are moved to the
+         * backends
+         */
         return ctx->pred_or_action_callback(string);
     }
     return CLT_URI;
@@ -276,8 +291,9 @@ parse_expression(struct find_context *ctx, int *arg_idx,
         enum command_line_token previous_token = token;
         struct rbh_filter *tmp;
         bool ascending = true;
+        int plugin_index = -1;
 
-        token = str2command_line_token(ctx, ctx->argv[i]);
+        token = str2command_line_token(ctx, ctx->argv[i], &plugin_index);
         switch (token) {
         case CLT_URI:
             error(EX_USAGE, 0, "paths must preceed expression: %s",
@@ -382,8 +398,11 @@ parse_expression(struct find_context *ctx, int *arg_idx,
                                          str2field(ctx->argv[++i]), ascending);
             break;
         case CLT_PREDICATE:
+            assert(plugin_index != -1);
             /* Build a filter from the predicate and its arguments */
-            tmp = ctx->parse_predicate_callback(ctx, &i);
+            tmp = rbh_plugin_build_filter(ctx->info_plugins[plugin_index],
+                                          (const char **) ctx->argv, ctx->argc,
+                                          &i, &ctx->need_prefetch);
             if (negate) {
                 tmp = rbh_filter_not(tmp);
                 negate = false;
