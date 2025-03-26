@@ -11,6 +11,7 @@
 #include "robinhood/plugins/backend.h"
 #include "robinhood/backend.h"
 #include "robinhood/filter.h"
+#include "robinhood/fsentry.h"
 #include "robinhood/config.h"
 
 #define RBH_POSIX_BACKEND_NAME "posix"
@@ -73,6 +74,16 @@ rbh_posix_check_valid_token(const char *token);
 struct rbh_filter *
 rbh_posix_build_filter(const char **argv, int argc, int *index,
                        bool *need_prefetch);
+
+/**
+ * Delete an entry from the plugin
+ *
+ * @param fsentry        the entry to delete
+ *
+ * @return               0 on success, -1 on error and errno is set
+ */
+int
+rbh_posix_delete_entry(struct rbh_fsentry *fsentry);
 
 /**
  * Release the memory associated with the plugin
