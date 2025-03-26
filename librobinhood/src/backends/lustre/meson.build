@@ -24,6 +24,7 @@ configure_file(input: 'config.h.in', output: 'config.h',
 librbh_lustre = library(
     'rbh-lustre',
     sources: [
+        'action.c',
         'filter.c',
         'lustre.c',
         'parser.c',
