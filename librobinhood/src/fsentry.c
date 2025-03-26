@@ -1,5 +1,5 @@
 /* This file is part of the RobinHood Library
- * Copyright (C) 2019 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifer: LGPL-3.0-or-later
@@ -192,4 +192,37 @@ rbh_fsentry_find_inode_xattr(const struct rbh_fsentry *entry,
     free(key);
 
     return value;
+}
+
+const char *
+fsentry_path(const struct rbh_fsentry *fsentry)
+{
+    if (!(fsentry->mask & RBH_FP_NAMESPACE_XATTRS))
+        return NULL;
+
+    for (size_t i = 0; i < fsentry->xattrs.ns.count; i++) {
+        const struct rbh_value_pair *pair = &fsentry->xattrs.ns.pairs[i];
+
+        if (strcmp(pair->key, "path"))
+            continue;
+
+        if (pair->value->type != RBH_VT_STRING)
+            /* XXX: should probably say something... */
+            continue;
+
+        return pair->value->string;
+    }
+
+    return NULL;
+}
+
+const char *
+fsentry_relative_path(const struct rbh_fsentry *fsentry)
+{
+    const char *path = fsentry_path(fsentry);
+
+    if (path[0] == '/' && path[1] == '\0')
+        return ".";
+    else
+        return &path[1];
 }
