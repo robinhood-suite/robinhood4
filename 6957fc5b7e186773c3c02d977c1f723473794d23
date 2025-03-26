@@ -309,6 +309,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ab31de73_58e961dc",
+        "filename": "librobinhood/src/backends/s3/s3.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-03-26T09:27:47Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "e9e687e8_90567185",
+      "range": {
+        "startLine": 99,
+        "startChar": 4,
+        "endLine": 103,
+        "endChar": 5
+      },
+      "revId": "6957fc5b7e186773c3c02d977c1f723473794d23",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5a0f3e19_fcab6b9e",
