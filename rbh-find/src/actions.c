@@ -245,28 +245,6 @@ fsentry_print_ls_dils(FILE *file, const struct rbh_fsentry *fsentry)
     fprintf(file, "\n");
 }
 
-const char *
-fsentry_path(const struct rbh_fsentry *fsentry)
-{
-    if (!(fsentry->mask & RBH_FP_NAMESPACE_XATTRS))
-        return NULL;
-
-    for (size_t i = 0; i < fsentry->xattrs.ns.count; i++) {
-        const struct rbh_value_pair *pair = &fsentry->xattrs.ns.pairs[i];
-
-        if (strcmp(pair->key, "path"))
-            continue;
-
-        if (pair->value->type != RBH_VT_STRING)
-            /* XXX: should probably say something... */
-            continue;
-
-        return pair->value->string;
-    }
-
-    return NULL;
-}
-
 #define MAX_OUTPUT_SIZE (PATH_MAX + 256)
 
 static const char*

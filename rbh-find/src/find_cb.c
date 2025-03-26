@@ -122,17 +122,6 @@ wait_process(pid_t child)
     return 0;
 }
 
-static const char *
-fsentry_relative_path(const struct rbh_fsentry *fsentry)
-{
-    const char *path = fsentry_path(fsentry);
-
-    if (path[0] == '/' && path[1] == '\0')
-        return ".";
-    else
-        return &path[1];
-}
-
 static size_t
 count_exec_command_args(char **exec_command)
 {

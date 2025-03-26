@@ -1,5 +1,5 @@
 /* This file is part of RobinHood 4
- * Copyright (C) 2019 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifer: LGPL-3.0-or-later
@@ -152,5 +152,33 @@ rbh_fsentry_new(const struct rbh_id *id, const struct rbh_id *parent_id,
  */
 const struct rbh_value *
 rbh_fsentry_find_inode_xattr(const struct rbh_fsentry *entry, const char *key);
+
+/**
+ * Retrieve an entry's path from its namespace attribute
+ *
+ * @param fsentry       the entry who's path should be retrieved
+ *
+ * @return              the entry's path
+ */
+const char *
+fsentry_path(const struct rbh_fsentry *fsentry);
+
+/**
+ * Retrieve an entry's path relative to the mount point used to sync the mirror
+ * system.
+ *
+ * This function is necessary because paths are kept relative to a mount point
+ * specified with the sync's source URI. Therefore, paths in the mirror system
+ * are kept as `/a/b` for instance, so doing action on those entries will error
+ * out since `/a/b` most likely doesn't exist on the current system.
+ * Furthermore, the mount point itself is kept as `/`, so doing actions on a
+ * system's root would most certainly be an issue.
+ *
+ * @param fsentry       the entry who's relative path should be retrieved
+ *
+ * @return              the entry's relative path
+ */
+const char *
+fsentry_relative_path(const struct rbh_fsentry *fsentry);
 
 #endif
