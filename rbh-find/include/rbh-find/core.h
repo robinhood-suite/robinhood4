@@ -94,27 +94,6 @@ struct find_context {
                                  const enum action action, const size_t count);
 
     /**
-     * Callback to parse a predicate in the command line
-     *
-     * @param ctx            find's context for this execution
-     * @param arg_idx        index of the predicate to parse in the command line
-     *
-     * @return               a filter corresponding to the predicate
-     */
-    struct rbh_filter *(*parse_predicate_callback)(struct find_context *ctx,
-                                                   int *arg_idx);
-
-    /**
-     * Callback to convert a string to a command_line_token
-     *
-     * @param string    the string to convert
-     *
-     * @return          the command line token that represents \p string
-     */
-    enum command_line_token
-    (*pred_or_action_callback)(const char *string);
-
-    /**
      * Callback to print directives
      *
      * @param output      buffer in which to print the directive's result
