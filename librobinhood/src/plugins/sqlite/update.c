@@ -27,7 +27,19 @@ static bool
 sqlite_process_unlink(struct sqlite_backend *sqlite,
                       const struct rbh_fsevent *fsevent)
 {
-    return true;
+    const char *query =
+        fsevent->link.parent_id->size > 0 ?
+            "delete from ns where id = ? and parent_id = ? and name = ?" :
+            "delete from ns where id = ? and parent_id is NULL and name = ?";
+    struct sqlite_cursor *cursor = &sqlite->cursor;
+
+    return sqlite_setup_query(cursor, query) &&
+        sqlite_cursor_bind_id(cursor, &fsevent->id) &&
+        (fsevent->link.parent_id->size > 0 ?
+            sqlite_cursor_bind_id(cursor, fsevent->link.parent_id) :
+            true) &&
+        sqlite_cursor_bind_string(cursor, fsevent->link.name) &&
+        sqlite_cursor_exec(cursor);
 }
 
 static bool
