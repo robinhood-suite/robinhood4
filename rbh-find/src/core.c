@@ -205,9 +205,18 @@ _find(struct find_context *ctx, int backend_index, enum action action,
 
     fsentries = rbh_backend_filter(ctx->backends[backend_index], filter,
                                    &OPTIONS, &OUTPUT);
-    if (fsentries == NULL)
-        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
-                      "filter_fsentries");
+    if (fsentries == NULL) {
+        switch (errno) {
+        case ENODATA:
+            exit(0);
+        case RBH_BACKEND_ERROR:
+            error(EXIT_FAILURE, 0, "%s", rbh_backend_error);
+        default:
+            error(EXIT_FAILURE, errno,
+                  "failed to execute filter on backend '%s'",
+                  ctx->backends[backend_index]->name);
+        }
+    }
 
     do {
         struct rbh_fsentry *fsentry;
