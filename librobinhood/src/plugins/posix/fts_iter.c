@@ -118,8 +118,8 @@ skip:
         rbh_sstack_pop(sstack, sizeof(int));
 
         if (current_counter > 0)
-            fsentry = posix_build_fsentry_nb_children(ftsent->fts_pointer,
-                                                      current_counter);
+            fsentry = build_fsentry_nb_children(ftsent->fts_pointer,
+                                                current_counter);
 
         /* fsentry_from_ftsent() memoizes ids of directories */
         free(ftsent->fts_pointer);

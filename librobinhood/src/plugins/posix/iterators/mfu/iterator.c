@@ -8,12 +8,22 @@
 #include <assert.h>
 #include <mfu.h>
 #include <sys/xattr.h>
+#include <libgen.h>
 
 #include "mfu_internals.h"
 
 #include <robinhood/backends/mfu.h>
 #include <robinhood/backends/posix_extension.h>
 #include <robinhood/mpi_rc.h>
+
+static __thread struct rbh_id *current_parent_id = NULL;
+static __thread char *current_parent = NULL;
+static __thread int current_children = 0;
+
+static struct rbh_id ROOT_PARENT_ID = {
+    .data = NULL,
+    .size = 0,
+};
 
 static void *
 mfu_iter_next(void *_iter)
@@ -23,11 +33,26 @@ mfu_iter_next(void *_iter)
     struct rbh_fsentry *fsentry = NULL;
     struct file_info fi;
     const char *path;
+    char *parent_dup;
     char *path_dup;
+    char *parent;
     int rank;
 
 skip:
     if (iter->current == iter->total) {
+        if (current_parent_id != NULL) {
+            fsentry = build_fsentry_nb_children(current_parent_id,
+                                                current_children);
+
+            free(current_parent);
+            free(current_parent_id);
+
+            current_parent = NULL;
+            current_parent_id = NULL;
+
+            return fsentry;
+        }
+
         errno = ENODATA;
         /* the flist belongs to the backend, do not free it */
         iter->files = NULL;
@@ -35,28 +60,46 @@ skip:
     }
 
     path = mfu_flist_file_get_name(iter->files, iter->current);
-    path_dup = strdup(path);
-    if (path_dup == NULL) {
-        /* the flist belongs to the backend, do not free it */
-        iter->files = NULL;
-        return NULL;
+
+    parent_dup = strdup(path);
+    parent = dirname(parent_dup);
+
+    /* Only for the root */
+    if (current_parent == NULL) {
+        current_parent = strdup(parent);
+        current_parent_id = get_parent_id(path, !iter->is_mpifile,
+                                          iter->posix.prefix_len,
+                                          RBH_BI_POSIX);
+    }
+
+    if (strcmp(current_parent, parent) != 0) {
+        struct rbh_id *tmp_id = current_parent_id;
+        int tmp_children = current_children;
+
+        free(current_parent);
+
+        current_children = 0;
+        current_parent = strdup(parent);
+        current_parent_id = get_parent_id(path, !iter->is_mpifile,
+                                          iter->posix.prefix_len,
+                                          RBH_BI_POSIX);
+
+        if (!rbh_id_equal(tmp_id, &ROOT_PARENT_ID))
+            fsentry = build_fsentry_nb_children(tmp_id, tmp_children);
+
+        free(tmp_id);
+
+        if (fsentry)
+            return fsentry;
+        else
+            current_children++;
+    } else {
+        current_children++;
     }
 
     fi.path = path;
-    fi.name = basename(path_dup);
-    fi.parent_id = get_parent_id(path, !iter->is_mpifile,
-                                 iter->posix.prefix_len,
-                                 RBH_BI_POSIX);
-
-    if (fi.parent_id == NULL) {
-        fprintf(stderr, "Failed to get parent id of '%s'\n", path);
-        free(path_dup);
-        if (skip_error) {
-            fprintf(stderr, "Synchronization of '%s' skipped\n", path);
-            iter->current++;
-            goto skip;
-        }
-
+    path_dup = strdup(path);
+    if (path_dup == NULL) {
         /* the flist belongs to the backend, do not free it */
         iter->files = NULL;
         return NULL;
@@ -67,9 +110,29 @@ skip:
      */
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     if (rank == 0 && iter->current == 0 && !iter->is_branch) {
-        free(fi.parent_id);
-        fi.parent_id = rbh_id_new(NULL, 0);
-        fi.name[0] = '\0';
+        free(current_parent_id);
+        current_parent_id = rbh_id_new(NULL, 0);
+        fi.parent_id = current_parent_id;
+        fi.name = "\0";
+    } else {
+        fi.name = basename(path_dup);
+        fi.parent_id = current_parent_id;
+    }
+
+    if (fi.parent_id == NULL) {
+        fprintf(stderr, "Failed to get parent id of '%s'\n", path);
+        free(path_dup);
+        free(parent_dup);
+        if (skip_error) {
+            fprintf(stderr, "Synchronization of '%s' skipped\n", path);
+            iter->current++;
+            current_children--;
+            goto skip;
+        }
+
+        /* the flist belongs to the backend, do not free it */
+        iter->files = NULL;
+        return NULL;
     }
 
     fsentry = iter->fsentry_new(&fi, &iter->posix);
@@ -77,11 +140,12 @@ skip:
     if (fsentry == NULL && (errno == ENOENT || errno == ESTALE)) {
         /* The entry moved from under our feet */
         free(path_dup);
-        free(fi.parent_id);
+        free(parent_dup);
         if (skip_error) {
             fprintf(stderr, "Synchronization of '%s' skipped\n",
                     path);
             iter->current++;
+            current_children--;
             goto skip;
         }
         /* the flist belongs to the backend, do not free it */
@@ -92,7 +156,7 @@ skip:
     iter->current++;
 
     free(path_dup);
-    free(fi.parent_id);
+    free(parent_dup);
 
     return fsentry;
 }
@@ -152,6 +216,7 @@ mfu_iter_new(const char *root, const char *entry, int statx_sync_type,
 {
     struct mfu_iterator *mfu;
     int save_errno;
+    char *path;
     int rc;
 
     rbh_mpi_inc_ref(rbh_mpi_initialize);
@@ -167,7 +232,11 @@ mfu_iter_new(const char *root, const char *entry, int statx_sync_type,
         /* Will be setup by caller in mpi-file backend */
         mfu->fsentry_new = NULL;
     } else {
-        rc = posix_iterator_setup(&mfu->posix, root, entry, statx_sync_type);
+        path = realpath(root, NULL);
+        if (path == NULL)
+            goto free_iter;
+
+        rc = posix_iterator_setup(&mfu->posix, path, entry, statx_sync_type);
         save_errno = errno;
         if (rc == -1)
             goto free_iter;
@@ -176,6 +245,7 @@ mfu_iter_new(const char *root, const char *entry, int statx_sync_type,
         mfu->is_mpifile = false;
         mfu->fsentry_new = fsentry_from_fi;
 
+        free(path);
         free(mfu->posix.path);
     }
 
