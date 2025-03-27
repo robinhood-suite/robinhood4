@@ -5,15 +5,15 @@
 # SPDX-License-Identifer: LGPL-3.0-or-later
 
 integration_tests = [
-    'test_posix_mongo_sync', 'test_mongo_mongo_sync', 'test_config'
+    'test_posix_db_sync', 'test_db_db_sync', 'test_config'
 ]
 
 if liblustre.found()
-    integration_tests += ['test_lustre_mongo_sync']
+    integration_tests += ['test_lustre_db_sync']
 endif
 
 if libhestia.found()
-    integration_tests += ['test_hestia_mongo_sync']
+    integration_tests += ['test_hestia_db_sync']
 endif
 
 foreach t: integration_tests
@@ -41,10 +41,10 @@ if r.returncode() == 0 and libmfu.found()
     endforeach
 
     backend_path_env_for_mpi_tests.set('WITH_MPI', 'true')
-    integration_tests_mpi = ['test_posix_mongo_sync', 'test_mpifile_mongo_sync']
+    integration_tests_mpi = ['test_posix_db_sync', 'test_mpifile_mongo_sync']
 
     if liblustre.found()
-        integration_tests_mpi += ['test_lustre_mongo_sync']
+        integration_tests_mpi += ['test_lustre_db_sync']
     endif
 
     foreach t: integration_tests_mpi
