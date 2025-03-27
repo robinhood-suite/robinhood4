@@ -1,0 +1,343 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ccf0045_4190d043",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003874
+      },
+      "writtenOn": "2025-03-27T08:46:22Z",
+      "side": 1,
+      "message": "The overall solution looks good.\n\nHowever, there are some clarifications and additions to be made:\n1) It is not always clear that the filtering is done server-side.\n2) Secondary groups are not considered at all.\n3) Since the solution is aimed at end-users who have no idea about the DB address for each filesystem, a simpler interface should be proposed for the user to specify the requested filesystem.",
+      "revId": "bc76f63eba95a95a110859fb8d3155688426a2b8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd5dd082_c7f71dfd",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 8
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1003874
+      },
+      "writtenOn": "2025-03-27T08:46:22Z",
+      "side": 1,
+      "message": "(suggest) another user",
+      "range": {
+        "startLine": 54,
+        "startChar": 36,
+        "endLine": 54,
+        "endChar": 43
+      },
+      "revId": "bc76f63eba95a95a110859fb8d3155688426a2b8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "761f199a_48ce5c6e",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 8
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1003874
+      },
+      "writtenOn": "2025-03-27T08:46:22Z",
+      "side": 1,
+      "message": "Precise: based on uid, gid and secondary groups?",
+      "range": {
+        "startLine": 55,
+        "startChar": 27,
+        "endLine": 55,
+        "endChar": 28
+      },
+      "revId": "bc76f63eba95a95a110859fb8d3155688426a2b8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a295f5dc_b41aef0c",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 8
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1003874
+      },
+      "writtenOn": "2025-03-27T08:46:22Z",
+      "side": 1,
+      "message": "(defect) Not as simple as just UID and GID, because the list of his secondary groups must also be taken into account.",
+      "range": {
+        "startLine": 57,
+        "startChar": 67,
+        "endLine": 57,
+        "endChar": 78
+      },
+      "revId": "bc76f63eba95a95a110859fb8d3155688426a2b8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c0c08aa7_61e3d65c",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 8
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1003874
+      },
+      "writtenOn": "2025-03-27T08:46:22Z",
+      "side": 1,
+      "message": "To be safe, the filtering must be done on the server side, because the client could be modified by the user.",
+      "range": {
+        "startLine": 59,
+        "startChar": 38,
+        "endLine": 59,
+        "endChar": 49
+      },
+      "revId": "bc76f63eba95a95a110859fb8d3155688426a2b8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "50137190_541e4e79",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 8
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1003874
+      },
+      "writtenOn": "2025-03-27T08:46:22Z",
+      "side": 1,
+      "message": "(typo) and",
+      "range": {
+        "startLine": 66,
+        "startChar": 16,
+        "endLine": 66,
+        "endChar": 20
+      },
+      "revId": "bc76f63eba95a95a110859fb8d3155688426a2b8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a683c6eb_d8e8da04",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 8
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1003874
+      },
+      "writtenOn": "2025-03-27T08:46:22Z",
+      "side": 1,
+      "message": "and the list of secondary groups",
+      "range": {
+        "startLine": 67,
+        "startChar": 0,
+        "endLine": 67,
+        "endChar": 3
+      },
+      "revId": "bc76f63eba95a95a110859fb8d3155688426a2b8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "73a404cd_4a10e6bb",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 8
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1003874
+      },
+      "writtenOn": "2025-03-27T08:46:22Z",
+      "side": 1,
+      "message": "(Warning) Exposing the main database to user requests may result in overloading the database and prevent normal file system management operations from running with sufficient performance. Is there a feature in MongoDB to prevent this (like a slave DB copy...)?",
+      "range": {
+        "startLine": 78,
+        "startChar": 33,
+        "endLine": 78,
+        "endChar": 51
+      },
+      "revId": "bc76f63eba95a95a110859fb8d3155688426a2b8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1e5c02ad_7ed5acd9",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 8
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1003874
+      },
+      "writtenOn": "2025-03-27T08:46:22Z",
+      "side": 1,
+      "message": "OK",
+      "range": {
+        "startLine": 97,
+        "startChar": 0,
+        "endLine": 97,
+        "endChar": 70
+      },
+      "revId": "bc76f63eba95a95a110859fb8d3155688426a2b8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "487eea7e_3735d666",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 8
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1003874
+      },
+      "writtenOn": "2025-03-27T08:46:22Z",
+      "side": 1,
+      "message": "(defect) This should be done server side, not in the client command.",
+      "range": {
+        "startLine": 131,
+        "startChar": 42,
+        "endLine": 133,
+        "endChar": 23
+      },
+      "revId": "bc76f63eba95a95a110859fb8d3155688426a2b8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "16e9fe7c_fd442905",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 8
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1003874
+      },
+      "writtenOn": "2025-03-27T08:46:22Z",
+      "side": 1,
+      "message": "This sounds like a good solution.",
+      "range": {
+        "startLine": 158,
+        "startChar": 0,
+        "endLine": 158,
+        "endChar": 69
+      },
+      "revId": "bc76f63eba95a95a110859fb8d3155688426a2b8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3b5fb970_95dff05d",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 8
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1003874
+      },
+      "writtenOn": "2025-03-27T08:46:22Z",
+      "side": 1,
+      "message": "This argument does not look user friendly. The user doesn\u0027t have to manage DB address by himself. This should be configurable by the administrators of the compute center.\nWhat about retrieving the current directory in the client context and having some kind of mapping between the managed filesystem and the corresponding DB or URL?",
+      "range": {
+        "startLine": 175,
+        "startChar": 13,
+        "endLine": 175,
+        "endChar": 39
+      },
+      "revId": "bc76f63eba95a95a110859fb8d3155688426a2b8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "613816f0_619ae1c3",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 8
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1003874
+      },
+      "writtenOn": "2025-03-27T08:46:22Z",
+      "side": 1,
+      "message": "Not user friendly.",
+      "range": {
+        "startLine": 180,
+        "startChar": 15,
+        "endLine": 180,
+        "endChar": 24
+      },
+      "revId": "bc76f63eba95a95a110859fb8d3155688426a2b8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "39b3344d_2a9ec1b2",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 8
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1003874
+      },
+      "writtenOn": "2025-03-27T08:46:22Z",
+      "side": 1,
+      "message": "This should be per filesystem.",
+      "range": {
+        "startLine": 185,
+        "startChar": 0,
+        "endLine": 185,
+        "endChar": 27
+      },
+      "revId": "bc76f63eba95a95a110859fb8d3155688426a2b8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c22030fc_e281bc7d",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 8
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1003874
+      },
+      "writtenOn": "2025-03-27T08:46:22Z",
+      "side": 1,
+      "message": "Good point.",
+      "range": {
+        "startLine": 185,
+        "startChar": 31,
+        "endLine": 185,
+        "endChar": 69
+      },
+      "revId": "bc76f63eba95a95a110859fb8d3155688426a2b8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
