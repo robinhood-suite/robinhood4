@@ -1,5 +1,5 @@
 /* This file is part of RobinHood 4
- * Copyright (C) 2019 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifer: LGPL-3.0-or-later
@@ -121,5 +121,15 @@ str2seconds(enum time_unit unit, const char *string);
  */
 int
 count_char_separated_values(const char *str, char character);
+
+/**
+ * Return the given timestamp as a string
+ *
+ * @param time       the timestamp to convert
+ *
+ * @return           \p time as a NULL-terminated string
+ */
+const char *
+time_from_timestamp(const time_t *time);
 
 #endif

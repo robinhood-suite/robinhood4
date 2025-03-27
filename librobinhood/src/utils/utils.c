@@ -1,5 +1,5 @@
 /* This file is part of the RobinHood Library
- * Copyright (C) 2024 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifer: LGPL-3.0-or-later
@@ -102,4 +102,16 @@ int count_char_separated_values(const char *str, char character)
     }
 
     return count;
+}
+
+const char *
+time_from_timestamp(const time_t *time)
+{
+    char *res = ctime(time);
+    size_t len = strlen(res);
+
+    /* ctime adds an extra \n at then end of the buffer, remove it */
+    res[len - 1] = '\0';
+
+    return res;
 }
