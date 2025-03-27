@@ -275,6 +275,39 @@ set_permission()
     done
 }
 
+sync_with_other_user()
+{
+    local skip_option=$1
+    local path="$(dirname $__rbh_sync)"
+    set_permission $path "+"
+
+    local path_config="$(realpath $RBH_CONFIG_PATH)"
+    set_permission $path_config "+"
+
+    if [[ "$WITH_MPI" == "true" ]]; then
+        # We need to give execute permissions to the user for mpirun to run
+        chmod o+x ..
+        local output="$(sudo -H -u "$test_user" bash -c \
+                        "source /etc/profile.d/modules.sh; \
+                         module load mpi/openmpi-x86_64; \
+                         LD_LIBRARY_PATH=$LD_LIBRARY_PATH \
+                         RBH_CONFIG_PATH=$RBH_CONFIG_PATH \
+                         mpirun $__rbh_sync --config $path_config $skip_option \
+                         rbh:posix-mpi:. rbh:mongo:$testdb" 2>&1)"
+    else
+        local output="$(sudo -E -H -u "$test_user" bash -c "\
+                        LD_LIBRARY_PATH=$LD_LIBRARY_PATH \
+                        $__rbh_sync --config $path_config $skip_option \
+                        rbh:posix:. rbh:mongo:$testdb" 2>&1)"
+    fi
+
+    set_permission $path "-"
+
+    set_permission $path_config "-"
+
+    echo "$output"
+}
+
 test_continue_sync_on_error()
 {
     local first_file="test1"
@@ -292,48 +325,21 @@ test_continue_sync_on_error()
     # the directory, it cannot synchronize both, the command should fail when
     # synchronizing the second file and the directory
 
-    path="$(dirname $__rbh_sync)"
-    set_permission $path "+"
-
-    path="$(realpath $RBH_CONFIG_PATH)"
-    set_permission $path "+"
-
-    if [[ "$WITH_MPI" == "true" ]]; then
-        # We need to give execute permissions to the user for mpirun to run
-        chmod o+x ..
-        output="$(sudo -H -u "$test_user" bash -c \
-                "source /etc/profile.d/modules.sh; \
-                 module load mpi/openmpi-x86_64; \
-                 LD_LIBRARY_PATH=$LD_LIBRARY_PATH \
-                 RBH_CONFIG_PATH=$RBH_CONFIG_PATH \
-                    mpirun $__rbh_sync --config $path rbh:posix-mpi:. \
-                        rbh:mongo:$testdb" 2>&1)"
-    else
-        output="$(sudo -E -H -u "$test_user" bash -c "\
-                  LD_LIBRARY_PATH=$LD_LIBRARY_PATH \
-                      $__rbh_sync --config $path rbh:posix:. \
-                      rbh:mongo:$testdb" 2>&1)"
-    fi
-
-    path="$(dirname $__rbh_sync)"
-    set_permission $path "-"
-
-    path="$(realpath $RBH_CONFIG_PATH)"
-    set_permission $path "-"
+    local output=$(sync_with_other_user)
 
     echo "$output" | grep "open '/$second_file'" ||
         error "Failed to find error on open of '$second_file'"
     echo "$output" | grep "open '/$dir'" ||
-        error "Failed to find error on open of '$second_file'"
+        error "Failed to find error on open of '$dir'"
 
     if [[ "$WITH_MPI" == "true" ]]; then
         # We check if there is an error from mpifileutils while opening /dir
         echo "$output" | \
         grep "ERROR: Failed to open directory with opendir: './$dir'" || \
-        error "Failed to find error on open of '$second_file'"
+        error "Failed to find error on open of '$dir'"
     else
         echo "$output" | grep "FTS" | grep "read entry './$dir'" ||
-            error "Failed to find error on open of '$second_file'"
+            error "Failed to find error on open of '$dir'"
     fi
 
     local db_count=$(count_documents)
@@ -343,6 +349,7 @@ test_continue_sync_on_error()
     fi
 
     find_attribute '"ns.xattrs.path":"/"'
+    find_attribute '"ns.xattrs.path":"/"' '"xattrs.nb_children": 1'
     find_attribute '"ns.name":"'$first_file'"'
 }
 
@@ -366,34 +373,7 @@ test_stop_sync_on_error()
     # the directory, it cannot synchronize both, the command should fail when
     # synchronizing the second file and the directory
 
-    path="$(dirname $__rbh_sync)"
-    set_permission $path "+"
-
-    path="$(realpath $RBH_CONFIG_PATH)"
-    set_permission $path "+"
-
-    if [[ "$WITH_MPI" == "true" ]]; then
-        # We need to give execute permissions to the user for mpirun to run
-        chmod o+x ..
-        local output=$(sudo -H -u "$test_user" bash -c \
-                       "source /etc/profile.d/modules.sh; \
-                        module load mpi/openmpi-x86_64; \
-                        LD_LIBRARY_PATH=$LD_LIBRARY_PATH \
-                        RBH_CONFIG_PATH=$RBH_CONFIG_PATH \
-                            mpirun $__rbh_sync --config $path --no-skip \
-                            rbh:posix-mpi:. rbh:mongo:$testdb" 2>&1)
-    else
-        local output=$(sudo -E -H -u "$test_user" bash -c "\
-                       LD_LIBRARY_PATH=$LD_LIBRARY_PATH \
-                       $__rbh_sync --config $path --no-skip \
-                       rbh:posix:. rbh:mongo:$testdb" 2>&1)
-    fi
-
-    path="$(dirname $__rbh_sync)"
-    set_permission $path "-"
-
-    path="$(realpath $RBH_CONFIG_PATH)"
-    set_permission $path "-"
+    local output=$(sync_with_other_user "--no-skip")
 
     local db_count=$(count_documents)
     if [[ $db_count -ne 0 ]]; then
@@ -507,6 +487,30 @@ ENAMETOOLONG=36
     fi
 }
 
+test_sync_number_children()
+{
+    mkdir -p dir1/dir2/dir3
+    touch dir1/fileA dir1/fileB dir1/dir2/fileC
+
+    # dir_locked and file_locked shouldn't be counted
+    mkdir dir_locked
+    touch dir_locked/fileD
+    touch file_locked
+
+    chmod o-rw dir_locked
+    chmod o-rw file_locked
+
+    local output=$(sync_with_other_user)
+
+    find_attribute '"ns.xattrs.path": "/"' '"xattrs.nb_children": 1'
+    find_attribute '"ns.xattrs.path": "/dir1"' '"xattrs.nb_children": 3'
+    find_attribute '"ns.xattrs.path": "/dir1/dir2"' '"xattrs.nb_children": 2'
+    find_attribute '"ns.xattrs.path": "/dir1/dir2/dir3"'\
+                   '"xattrs.nb_children": 0'
+    ! (find_attribute '"ns.xattrs.path": "/dir1/fileA"' \
+                      '"xattrs.nb_children": {$exists: true}')
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
@@ -517,6 +521,12 @@ declare -a tests=(test_sync_2_files test_sync_size test_sync_3_files
                   test_sync_symbolic_link test_sync_socket test_sync_fifo
                   test_sync_branch test_continue_sync_on_error
                   test_stop_sync_on_error test_config)
+
+# Temporary check until the number of children of directory is added to the
+# mfu iterator
+if [[ "$WITH_MPI" == "false" ]]; then
+    tests+=(test_sync_number_children)
+fi
 
 tmpdir=$(mktemp --directory)
 test_user="$(get_test_user "$(basename "$0")")"
