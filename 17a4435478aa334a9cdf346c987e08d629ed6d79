@@ -47,6 +47,54 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ff55671e_7bb67592",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-03-27T10:18:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0b0cf490_170c2c0d",
+      "range": {
+        "startLine": 7,
+        "startChar": 4,
+        "endLine": 7,
+        "endChar": 16
+      },
+      "revId": "17a4435478aa334a9cdf346c987e08d629ed6d79",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "91194add_323d9423",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-03-27T10:18:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "47220680_7593370e",
+      "range": {
+        "startLine": 7,
+        "startChar": 48,
+        "endLine": 7,
+        "endChar": 60
+      },
+      "revId": "17a4435478aa334a9cdf346c987e08d629ed6d79",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "acf8f030_32a12bed",
@@ -60,6 +108,30 @@
       "writtenOn": "2025-03-25T08:33:20Z",
       "side": 1,
       "message": "major: `\u003ctest_dire\u003e/../../builddir`",
+      "range": {
+        "startLine": 10,
+        "startChar": 6,
+        "endLine": 10,
+        "endChar": 42
+      },
+      "revId": "17a4435478aa334a9cdf346c987e08d629ed6d79",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c325b36b_702237dd",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-03-27T10:18:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "acf8f030_32a12bed",
       "range": {
         "startLine": 10,
         "startChar": 6,
