@@ -21,6 +21,16 @@ struct fts_iterator {
     FTSENT *ftsent;
 };
 
+static __thread struct rbh_sstack *sstack;
+
+__attribute__((destructor))
+static void
+free_sstack(void)
+{
+    if (sstack)
+        rbh_sstack_destroy(sstack);
+}
+
 static struct rbh_fsentry *
 fsentry_from_ftsent(FTSENT *ftsent, int statx_sync_type, size_t prefix_len,
                     enricher_t *enrichers)
@@ -58,14 +68,24 @@ fsentry_from_ftsent(FTSENT *ftsent, int statx_sync_type, size_t prefix_len,
     return pair.fsentry;
 }
 
+static __thread int counter_children = 0;
+
 static void *
 fts_iter_next(void *iterator)
 {
     struct fts_iterator *iter = iterator;
     bool skip_error = iter->posix.skip_error;
-    struct rbh_fsentry *fsentry;
+    struct rbh_fsentry *fsentry = NULL;
     int save_errno = errno;
+    int current_counter;
+    size_t readable;
     FTSENT *ftsent;
+
+    if (sstack == NULL) {
+        sstack = rbh_sstack_new(1 << 10);
+        if (sstack == NULL)
+            return NULL;
+    }
 
 skip:
     errno = 0;
@@ -78,9 +98,44 @@ skip:
     iter->ftsent = ftsent;
 
     switch (ftsent->fts_info) {
+    case FTS_D:
+        counter_children++;
+        /* Save the current counter to be retrieved after exploring this
+         * new directory
+         */
+        RBH_SSTACK_PUSH(sstack, &counter_children, sizeof(int));
+        counter_children = 0;
+        break;
+    case FTS_F:
+    case FTS_NSOK:
+        counter_children++;
+        break;
     case FTS_DP:
+        current_counter = counter_children;
+
+        /* Retrieve the counter of the parent directory */
+        counter_children = *(int *) rbh_sstack_peek(sstack, &readable);
+        rbh_sstack_pop(sstack, sizeof(int));
+
+        if (current_counter > 0)
+            fsentry = posix_build_fsentry_nb_children(ftsent->fts_pointer,
+                                                      current_counter);
+
         /* fsentry_from_ftsent() memoizes ids of directories */
         free(ftsent->fts_pointer);
+
+        if (fsentry == NULL && current_counter > 0) {
+            if (skip_error) {
+                fprintf(stderr,
+                        "Update of number of children of '%s' skipped\n",
+                        ftsent->fts_path);
+                goto skip;
+            }
+            return NULL;
+        }
+
+        if (fsentry)
+            return fsentry;
         goto skip;
     case FTS_DC:
         errno = ELOOP;
@@ -94,6 +149,12 @@ skip:
         if (skip_error) {
              fprintf(stderr, "Synchronization of '%s' skipped\n",
                      ftsent->fts_path);
+             /* If we can't read a directory, retrieve the parent's counter */
+             if (ftsent->fts_info == FTS_DNR) {
+                counter_children = *(int *) rbh_sstack_peek(sstack, &readable);
+                rbh_sstack_pop(sstack, sizeof(int));
+                counter_children--;
+             }
              goto skip;
         }
         return NULL;
@@ -147,11 +208,13 @@ skip:
     fsentry = fsentry_from_ftsent(ftsent, iter->posix.statx_sync_type,
                                   iter->posix.prefix_len,
                                   iter->posix.enrichers);
+
     if (fsentry == NULL && (errno == ENOENT || errno == ESTALE)) {
         /* The entry moved from under our feet */
         if (skip_error) {
             fprintf(stderr, "Synchronization of '%s' skipped\n",
                     ftsent->fts_path);
+            counter_children--;
             goto skip;
         }
 

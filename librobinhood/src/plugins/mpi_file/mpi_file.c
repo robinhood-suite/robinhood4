@@ -315,6 +315,13 @@ mpi_file_backend_update(void *backend, struct rbh_iterator *fsevents)
             return -1;
         }
 
+        /* We skip the fsevents that only update the xattrs as mpifile doesn't
+         * support it.
+         */
+        if (fsevent->type == RBH_FET_UPSERT && fsevent->upsert.statx == NULL &&
+            fsevent->upsert.symlink == NULL)
+            continue;
+
         if (!rbh_id_equal(last_id, &fsevent->id)) {
             index = mfu_flist_file_create(mpi_file->flist);
             struct rbh_id *id = rbh_id_new(fsevent->id.data, fsevent->id.size);

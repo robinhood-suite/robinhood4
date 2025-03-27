@@ -324,16 +324,16 @@ test_continue_sync_on_error()
     echo "$output" | grep "open '/$second_file'" ||
         error "Failed to find error on open of '$second_file'"
     echo "$output" | grep "open '/$dir'" ||
-        error "Failed to find error on open of '$second_file'"
+        error "Failed to find error on open of '$dir'"
 
     if [[ "$WITH_MPI" == "true" ]]; then
         # We check if there is an error from mpifileutils while opening /dir
         echo "$output" | \
         grep "ERROR: Failed to open directory with opendir: './$dir'" || \
-        error "Failed to find error on open of '$second_file'"
+        error "Failed to find error on open of '$dir'"
     else
         echo "$output" | grep "FTS" | grep "read entry './$dir'" ||
-            error "Failed to find error on open of '$second_file'"
+            error "Failed to find error on open of '$dir'"
     fi
 
     local db_count=$(count_documents)
@@ -343,6 +343,7 @@ test_continue_sync_on_error()
     fi
 
     find_attribute '"ns.xattrs.path":"/"'
+    find_attribute '"ns.xattrs.path":"/"' '"xattrs.nb_children": 1'
     find_attribute '"ns.name":"'$first_file'"'
 }
 
@@ -507,6 +508,22 @@ ENAMETOOLONG=36
     fi
 }
 
+test_sync_number_children()
+{
+    mkdir -p dir1/dir2/dir3
+    touch dir1/fileA dir1/fileB dir1/dir2/fileC
+
+    rbh_sync_posix "." "rbh:mongo:$testdb"
+
+    find_attribute '"ns.xattrs.path": "/"' '"xattrs.nb_children": 1'
+    find_attribute '"ns.xattrs.path": "/dir1"' '"xattrs.nb_children": 3'
+    find_attribute '"ns.xattrs.path": "/dir1/dir2"' '"xattrs.nb_children": 2'
+    find_attribute '"ns.xattrs.path": "/dir1/dir2/dir3"'\
+                   '"xattrs.nb_children": 0'
+    ! (find_attribute '"ns.xattrs.path": "/dir1/fileA"' \
+                      '"xattrs.nb_children": {$exists: true}')
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
@@ -517,6 +534,12 @@ declare -a tests=(test_sync_2_files test_sync_size test_sync_3_files
                   test_sync_symbolic_link test_sync_socket test_sync_fifo
                   test_sync_branch test_continue_sync_on_error
                   test_stop_sync_on_error test_config)
+
+# Temporary check until the number of children of directory is added to the
+# mfu iterator
+if [[ "$WITH_MPI" == "false" ]]; then
+    tests+=(test_sync_number_children)
+fi
 
 tmpdir=$(mktemp --directory)
 test_user="$(get_test_user "$(basename "$0")")"
