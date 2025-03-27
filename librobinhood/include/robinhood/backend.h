@@ -227,7 +227,8 @@ enum rbh_info {
     RBH_CAPABILITIES_FLAG = 0x0000001U,
     RBH_INFO_SIZE = 0x0000002U,
     RBH_INFO_COUNT = 0x0000004U,
-    RBH_INFO_AVG_OBJ_SIZE = 0x0000008U
+    RBH_INFO_AVG_OBJ_SIZE = 0x0000008U,
+    RBH_INFO_BACKEND_SOURCE = 0x0000010U
 };
 
 /**
@@ -258,7 +259,7 @@ struct rbh_backend_operations {
             );
     int (*insert_source)(
             void *backend,
-            const struct rbh_value *backend_source
+            const struct rbh_backend *backend_source
             );
     struct rbh_backend *(*branch)(
             void *backend,
@@ -493,7 +494,7 @@ rbh_backend_update(struct rbh_backend *backend, struct rbh_iterator *fsevents)
  */
 static inline int
 rbh_backend_insert_source(struct rbh_backend *backend,
-                          const struct rbh_value *backend_source)
+                          const struct rbh_backend *backend_source)
 {
     if (backend->ops->insert_source == NULL) {
         errno = ENOTSUP;

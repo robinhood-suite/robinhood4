@@ -677,57 +677,6 @@ mongo_backend_update(void *backend, struct rbh_iterator *fsevents)
 }
 
     /*--------------------------------------------------------------------*
-     |                      update_backend_source                          |
-     *--------------------------------------------------------------------*/
-
-static int
-insert_mongo_source(mongoc_collection_t *collection, const char *backend)
-{
-    bson_error_t error;
-    bson_t *update;
-    bson_t *filter;
-    bson_t *opts;
-    int rc = 0;
-
-    filter = BCON_NEW("_id", "backend_info");
-    update = BCON_NEW("$addToSet", BCON_DOCUMENT(BCON_NEW("backend_source",
-                                                          BCON_UTF8(backend))));
-    opts = BCON_NEW("upsert", BCON_BOOL(true));
-
-    if (!mongoc_collection_update_one(collection, filter, update,
-                                      opts, NULL, &error)) {
-        fprintf(stderr, "Upsert failed: %s\n", error.message);
-        goto out;
-    }
-
-    rc = 1;
-out:
-    bson_destroy(filter);
-    bson_destroy(opts);
-
-    return rc;
-}
-
-static int
-mongo_backend_insert_source(void *backend,
-                            const struct rbh_value *backend_source)
-{
-    if (backend == NULL || backend_source == NULL)
-        return 0;
-
-    struct mongo_backend *mongo = backend;
-
-    for (uint8_t i = 0 ; i < backend_source->sequence.count ; i++) {
-        const char *backend_name = backend_source->sequence.values[i].string;
-
-        if (!insert_mongo_source(mongo->info, backend_name))
-            return -1;
-    }
-
-    return 0;
-}
-
-    /*--------------------------------------------------------------------*
      |                                root                                |
      *--------------------------------------------------------------------*/
 
@@ -846,6 +795,54 @@ mongo_backend_report(void *backend, const struct rbh_filter *filter,
     /*--------------------------------------------------------------------*
      |                              get_info()                            |
      *--------------------------------------------------------------------*/
+
+static bool
+get_collection_info(const struct mongo_backend *mongo, char *field_to_find,
+                    struct rbh_value_pair *pair)
+{
+    struct rbh_value *value;
+    mongoc_cursor_t *cursor;
+    size_t buffsize = 1024;
+    const bson_t *doc;
+    bson_iter_t iter;
+    char *buffer;
+    int rc = 0;
+
+    value = RBH_SSTACK_PUSH(info_sstack, NULL, sizeof(*value));
+
+    buffer = malloc(buffsize);
+    if (!buffer)
+        return false;
+
+    bson_t *filter = BCON_NEW("_id", "backend_info");
+
+    cursor = mongoc_collection_find_with_opts(mongo->info, filter, NULL, NULL);
+    if (!mongoc_cursor_next(cursor, &doc))
+        goto out;
+
+    if (!bson_iter_init(&iter, doc))
+        goto out;
+
+    while (bson_iter_next(&iter)) {
+        const char *key = bson_iter_key(&iter);
+
+        if (strcmp(key, field_to_find) == 0) {
+            if (!bson_iter_rbh_value(&iter, value, &buffer, &buffsize))
+                goto out;
+
+            pair->key = field_to_find;
+            pair->value = value;
+
+            rc = 1;
+        }
+    }
+
+out:
+    if (cursor) mongoc_cursor_destroy(cursor);
+    if (filter) bson_destroy(filter);
+
+    return rc;
+}
 
 static int
 get_collection_count(const struct mongo_backend *mongo,
@@ -980,6 +977,11 @@ mongo_backend_get_info(void *backend, int info_flags)
             goto out;
     }
 
+    if (info_flags & RBH_INFO_BACKEND_SOURCE) {
+        if (!get_collection_info(mongo, "backend_source", &pairs[idx++]))
+            goto out;
+    }
+
     map_value->pairs = pairs;
     map_value->count = idx;
 
@@ -987,6 +989,71 @@ mongo_backend_get_info(void *backend, int info_flags)
 out:
     errno = EINVAL;
     return NULL;
+}
+
+    /*--------------------------------------------------------------------*
+     |                      update_backend_source                          |
+     *--------------------------------------------------------------------*/
+
+static int
+insert_mongo_source(mongoc_collection_t *collection,
+                    const struct rbh_value *backend_value)
+{
+    bson_error_t error;
+    bson_t *update;
+    bson_t *filter;
+    bson_t *opts;
+    int rc = 0;
+
+    filter = BCON_NEW("_id", "backend_info");
+
+    for (uint8_t i = 0 ; i < backend_value->sequence.count ; i++) {
+        const char *backend_name = backend_value->sequence.values[i].string;
+        printf("%s\n", backend_name);
+
+        update = BCON_NEW("$addToSet", BCON_DOCUMENT(BCON_NEW("backend_source",
+                                                     BCON_UTF8(backend_name))));
+        opts = BCON_NEW("upsert", BCON_BOOL(true));
+
+        if (!mongoc_collection_update_one(collection, filter, update,
+                                          opts, NULL, &error)) {
+            fprintf(stderr, "Upsert failed: %s\n", error.message);
+            goto out;
+        }
+    }
+
+    rc = 1;
+out:
+    bson_destroy(filter);
+    bson_destroy(opts);
+
+    return rc;
+}
+
+static int
+mongo_backend_insert_source(void *backend,
+                            const struct rbh_backend *backend_source)
+{
+    const struct rbh_value *value_source = backend_source->backend_info;
+    struct mongo_backend *mongo = backend;
+
+    if (mongo == NULL || value_source == NULL)
+        return 0;
+
+    if (strcmp(backend_source->name, "mongo") == 0) {
+        struct rbh_value_map *info_map;
+
+        info_map = mongo_backend_get_info((void*)backend_source,
+                                          RBH_INFO_BACKEND_SOURCE);
+
+        if (insert_mongo_source(mongo->info, info_map->pairs[0].value))
+            return 0;
+    }
+
+    if (insert_mongo_source(mongo->info, value_source))
+            return 0;
+
+    return 0;
 }
 
     /*--------------------------------------------------------------------*
