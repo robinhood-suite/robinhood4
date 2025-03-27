@@ -18,23 +18,23 @@ test_exec()
     local current_dir=$PWD
 
     echo "test data" > file
-    rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:posix:." "rbh:$db:$testdb"
 
     # XXX for now, rbh-find -exec only works at the root of the filesystem
     # We don't know where the filesystem corresponding to the data base is
     # stored. A possible solution would be to store the FS name when creating
     # the database.
-    rbh_find "rbh:mongo:$testdb" -exec grep -H "test data" {} ";" | sort |
+    rbh_find "rbh:$db:$testdb" -exec grep -H "test data" {} ";" | sort |
         difflines "file:test data"
 
     (
      cd /tmp
      # Given the absolute path, grep should work on file
-     rbh_find "rbh:mongo:$testdb" -exec grep -H "test data" "$current_dir/{}" ";" |
+     rbh_find "rbh:$db:$testdb" -exec grep -H "test data" "$current_dir/{}" ";" |
          sort | difflines "$current_dir/file:test data"
     )
 
-    rbh_find "rbh:mongo:$testdb" -exec echo {}{}{} /mnt/lustre/{{}}/{} ";" |
+    rbh_find "rbh:$db:$testdb" -exec echo {}{}{} /mnt/lustre/{{}}/{} ";" |
         sort |
         difflines "... /mnt/lustre/{.}/." "filefilefile /mnt/lustre/{file}/file"
 }
@@ -44,8 +44,8 @@ test_delete()
     touch to_delete
     touch do_not_delete
 
-    rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
-    rbh_find "rbh:mongo:$testdb" -name to_delete -delete
+    rbh_sync "rbh:posix:." "rbh:$db:$testdb"
+    rbh_find "rbh:$db:$testdb" -name to_delete -delete
     if [[ -f to_delete ]]; then
         error "File 'to_delete' should have been deleted"
     fi

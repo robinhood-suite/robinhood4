@@ -21,17 +21,17 @@ test_generic_a_m_time()
 
     sleep 1
 
-    rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:posix:." "rbh:$db:$testdb"
 
-    rbh_find "rbh:mongo:$testdb" "$2" 0 | sort |
+    rbh_find "rbh:$db:$testdb" "$2" 0 | sort |
         difflines "/" "/fileA"
-    rbh_find "rbh:mongo:$testdb" "$2" 1 | sort |
+    rbh_find "rbh:$db:$testdb" "$2" 1 | sort |
         difflines
-    rbh_find "rbh:mongo:$testdb" "$2" +2 | sort |
+    rbh_find "rbh:$db:$testdb" "$2" +2 | sort |
         difflines "/fileB" "/fileC"
-    rbh_find "rbh:mongo:$testdb" "$2" 6 | sort |
+    rbh_find "rbh:$db:$testdb" "$2" 6 | sort |
         difflines
-    rbh_find "rbh:mongo:$testdb" "$2" -6 | sort |
+    rbh_find "rbh:$db:$testdb" "$2" -6 | sort |
         difflines "/" "/fileA" "/fileB"
 }
 
@@ -51,17 +51,17 @@ test_generic_b_c_time()
 
     sleep 1
 
-    rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:posix:." "rbh:$db:$testdb"
 
-    rbh_find "rbh:mongo:$testdb" "$1" 0 | sort |
+    rbh_find "rbh:$db:$testdb" "$1" 0 | sort |
         difflines "/" "/filetest"
-    rbh_find "rbh:mongo:$testdb" "$1" 1 | sort |
+    rbh_find "rbh:$db:$testdb" "$1" 1 | sort |
         difflines
-    rbh_find "rbh:mongo:$testdb" "$1" +0 | sort |
+    rbh_find "rbh:$db:$testdb" "$1" +0 | sort |
         difflines "/" "/filetest"
-    rbh_find "rbh:mongo:$testdb" "$1" +2 | sort |
+    rbh_find "rbh:$db:$testdb" "$1" +2 | sort |
         difflines
-    rbh_find "rbh:mongo:$testdb" "$1" -3 | sort |
+    rbh_find "rbh:$db:$testdb" "$1" -3 | sort |
         difflines  "/" "/filetest"
 
 }

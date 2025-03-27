@@ -39,19 +39,19 @@ function test_octal
         chmod "$perm" "$dir/file.$perm"
     done
 
-    rbh_sync "rbh:posix:$dir" "rbh:mongo:$testdb"
+    rbh_sync "rbh:posix:$dir" "rbh:$db:$testdb"
 
     for ((i = 0; i < ${#perms[@]}; i++)); do
-        local num=$(rbh_find "rbh:mongo:$testdb" -perm "${perms[i]}" | wc -l)
+        local num=$(rbh_find "rbh:$db:$testdb" -perm "${perms[i]}" | wc -l)
 
         (( "$num" == 1 )) ||
             error "rbh-find -perm ${perms[i]}: $num != 1"
 
-        num=$(rbh_find "rbh:mongo:$testdb" -perm "-${perms[i]}" -type f | wc -l)
+        num=$(rbh_find "rbh:$db:$testdb" -perm "-${perms[i]}" -type f | wc -l)
         (( "$num" == "${perm_minus[i]}" )) ||
             error "rbh-find -perm -${perms[i]}: $num != ${perm_minus[i]}"
 
-        num=$(rbh_find "rbh:mongo:$testdb" -perm "/${perms[i]}" -type f | wc -l)
+        num=$(rbh_find "rbh:$db:$testdb" -perm "/${perms[i]}" -type f | wc -l)
         (( "$num" == "${perm_slash[i]}" )) ||
             error "rbh-find -perm /${perms[i]}: $num != ${perm_slash[i]}"
     done
@@ -75,13 +75,13 @@ function test_symbolic
         chmod "$perm" "$dir/file.$perm"
     done
 
-    rbh_sync "rbh:posix:$dir" "rbh:mongo:$testdb"
+    rbh_sync "rbh:posix:$dir" "rbh:$db:$testdb"
 
     for (( i = 0; i < ${#symbolic[@]}; i++ )); do
-        local num=$(rbh_find "rbh:mongo:$testdb" -perm "${symbolic[i]}" | wc -l)
+        local num=$(rbh_find "rbh:$db:$testdb" -perm "${symbolic[i]}" | wc -l)
 
         (( $num == 1 )) ||
-            error "rbh-find rbh:mongo:$testdb -perm ${symbolic[i]}: $num != 1"
+            error "rbh-find rbh:$db:$testdb -perm ${symbolic[i]}: $num != 1"
     done
 }
 
@@ -95,13 +95,13 @@ function test_null_perm
     touch "$dir/file.000"
     chmod 000 "$dir/file.000"
 
-    rbh_sync "rbh:posix:$dir" "rbh:mongo:$testdb"
+    rbh_sync "rbh:posix:$dir" "rbh:$db:$testdb"
 
     for (( i = 0; i < ${#symbolic[@]}; i++ )); do
-        local num=$(rbh_find "rbh:mongo:$testdb" -perm "${symbolic[i]}" | wc -l)
+        local num=$(rbh_find "rbh:$db:$testdb" -perm "${symbolic[i]}" | wc -l)
 
         (( $num == 1 )) ||
-            error "rbh-find rbh:mongo:$testdb -perm ${symbolic[i]}: $num != 1"
+            error "rbh-find rbh:$db:$testdb -perm ${symbolic[i]}: $num != 1"
     done
 }
 
@@ -112,10 +112,10 @@ function test_error_perm
                 ug=gu uo=ou urw u+xg+x a=r,u+x,
                 / - a u=r,u u,u=r)
 
-    rbh_sync "rbh:posix:$dir" "rbh:mongo:$testdb"
+    rbh_sync "rbh:posix:$dir" "rbh:$db:$testdb"
 
     for err in "${tests[@]}"; do
-        if rbh_find "rbh:mongo:$testdb" -perm "$err"; then
+        if rbh_find "rbh:$db:$testdb" -perm "$err"; then
             error "rbh-find -perm $err: parsing should have failed"
         fi
     done

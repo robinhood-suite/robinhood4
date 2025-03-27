@@ -20,6 +20,7 @@ library_dirs = [
     '..',
     'hestia',
     'mongo',
+    'sqlite',
     'mpi_file',
     'posix',
     'posix/enrichers/lustre',

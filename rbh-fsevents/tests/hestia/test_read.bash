@@ -75,7 +75,7 @@ test_read_to_mongo()
     hestia object get_data --file /dev/null "$obj"
     local time=$(hestia_get_attr "$obj" "content_accessed_time")
 
-    invoke_rbh_fsevents "rbh:mongo:$testdb"
+    invoke_rbh_fsevents "rbh:$db:$testdb"
 
     find_time_attribute "atime" "$time"
 }

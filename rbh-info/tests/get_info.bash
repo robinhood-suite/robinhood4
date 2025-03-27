@@ -15,9 +15,9 @@ test_dir=$(dirname $(readlink -e $0))
 
 test_collection_size()
 {
-    rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:posix:." "rbh:$db:$testdb"
 
-    local rbh_info_size=$(rbh_info "rbh:mongo:$testdb" -s)
+    local rbh_info_size=$(rbh_info "rbh:$db:$testdb" -s)
     local mongo_size=$(mongo "$testdb" --eval " db.entries.stats().size")
 
     if [ "$rbh_info_size" != "$mongo_size" ]; then
@@ -27,9 +27,9 @@ test_collection_size()
 
 test_collection_count()
 {
-    rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:posix:." "rbh:$db:$testdb"
 
-    local rbh_info_count=$(rbh_info "rbh:mongo:$testdb" -c)
+    local rbh_info_count=$(rbh_info "rbh:$db:$testdb" -c)
 
     if (( $(mongo_version) < $(version_code 5.0.0) )); then
         local mongo_count=$(mongo "$testdb" --eval "db.entries.count()")
@@ -45,9 +45,9 @@ test_collection_count()
 
 test_collection_avg_obj_size()
 {
-    rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:posix:." "rbh:$db:$testdb"
 
-    local rbh_info_avg_obj_size=$(rbh_info "rbh:mongo:$testdb" -a)
+    local rbh_info_avg_obj_size=$(rbh_info "rbh:$db:$testdb" -a)
     local mongo_avg_obj_size=$(mongo "$testdb" --eval "
                                db.entries.stats().avgObjSize")
 

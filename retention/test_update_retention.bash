@@ -76,9 +76,9 @@ test_retention_script()
     setfattr -n user.expires -v +5 $dir3
     setfattr -n user.expires -v $(($(stat -c %X $dir4) + 15)) $dir4
 
-    rbh_sync rbh:lustre:. "rbh:mongo:$testdb"
+    rbh_sync rbh:lustre:. "rbh:$db:$testdb"
 
-    local output="$(rbh_update_retention "rbh:mongo:$testdb" "$PWD")"
+    local output="$(rbh_update_retention "rbh:$db:$testdb" "$PWD")"
     local output_lines="$(echo "$output" | grep "No directory has expired" | \
                           wc -l)"
     if [ "$output_lines" != "1" ]; then
@@ -88,7 +88,7 @@ test_retention_script()
     date --set="@$(( $(stat -c %X $dir3) + 6))"
 
     echo "Test: 1 expired, 3 not expired, 0 updated"
-    output="$(rbh_update_retention "rbh:mongo:$testdb" "$PWD")"
+    output="$(rbh_update_retention "rbh:$db:$testdb" "$PWD")"
     shant_be_expired "$output" "$dir1"
     shant_be_expired "$output" "$dir2"
     should_be_expired "$output" "$dir3"
@@ -98,7 +98,7 @@ test_retention_script()
     date --set="@$(( $(stat -c %X $dir1) + 11))"
 
     echo "Test: 2 expired, 2 not expired, 0 updated"
-    output="$(rbh_update_retention "rbh:mongo:$testdb" "$PWD")"
+    output="$(rbh_update_retention "rbh:$db:$testdb" "$PWD")"
     should_be_expired "$output" "$dir1"
     shant_be_expired "$output" "$dir2"
     should_be_expired "$output" "$dir3"
@@ -106,10 +106,10 @@ test_retention_script()
     echo "Success"
 
     touch -a $dir1/$entry1 $dir2/$entry3
-    rbh_sync rbh:lustre:. "rbh:mongo:$testdb"
+    rbh_sync rbh:lustre:. "rbh:$db:$testdb"
 
     echo "Test: 1 expired, 2 not expired, 1 updated"
-    output="$(rbh_update_retention "rbh:mongo:$testdb" "$PWD")"
+    output="$(rbh_update_retention "rbh:$db:$testdb" "$PWD")"
     should_be_updated "$output" "$dir1"
     shant_be_expired "$output" "$dir2"
     should_be_expired "$output" "$dir3"
@@ -119,7 +119,7 @@ test_retention_script()
     date --set="@$(( $(stat -c %X $dir1/$entry1) + 11))"
 
     echo "Test: 3 expired, 0 not expired, 1 updated"
-    output="$(rbh_update_retention "rbh:mongo:$testdb" "$PWD")"
+    output="$(rbh_update_retention "rbh:$db:$testdb" "$PWD")"
     should_be_expired "$output" "$dir1"
     should_be_updated "$output" "$dir2"
     should_be_expired "$output" "$dir3"
@@ -129,7 +129,7 @@ test_retention_script()
     date --set="@$(( $(stat -c %X $dir2/$entry3) + 16))"
 
     echo "Test: 4 expired, 0 not expired, 0 updated"
-    output="$(rbh_update_retention "rbh:mongo:$testdb" "$PWD")"
+    output="$(rbh_update_retention "rbh:$db:$testdb" "$PWD")"
     should_be_expired "$output" "$dir1"
     should_be_expired "$output" "$dir2"
     should_be_expired "$output" "$dir3"
@@ -137,12 +137,12 @@ test_retention_script()
     echo "Success"
 
     touch -a $dir3
-    rbh_sync rbh:lustre:. "rbh:mongo:$testdb"
+    rbh_sync rbh:lustre:. "rbh:$db:$testdb"
 
     # Nothing should have changed because we only updated the access time of the
     # directory, and not its modify time
     echo "Test: 4 expired, 0 not expired, 0 updated"
-    output="$(rbh_update_retention "rbh:mongo:$testdb" "$PWD")"
+    output="$(rbh_update_retention "rbh:$db:$testdb" "$PWD")"
     should_be_expired "$output" "$dir1"
     should_be_expired "$output" "$dir2"
     should_be_expired "$output" "$dir3"
@@ -150,10 +150,10 @@ test_retention_script()
     echo "Success"
 
     touch -m $dir3
-    rbh_sync rbh:lustre:. "rbh:mongo:$testdb"
+    rbh_sync rbh:lustre:. "rbh:$db:$testdb"
 
     echo "Test: 3 expired, 0 not expired, 1 updated"
-    output="$(rbh_update_retention "rbh:mongo:$testdb" "$PWD")"
+    output="$(rbh_update_retention "rbh:$db:$testdb" "$PWD")"
     should_be_expired "$output" "$dir1"
     should_be_expired "$output" "$dir2"
     shant_be_expired "$output" "$dir3"
@@ -163,7 +163,7 @@ test_retention_script()
     date --set="@$(( $(stat -c %X $dir3) + 6))"
 
     echo "Test: 4 deleted"
-    rbh_update_retention "rbh:mongo:$testdb" "$PWD" --delete
+    rbh_update_retention "rbh:$db:$testdb" "$PWD" --delete
 
     if [ -d "$dir1" ] || [ -d "$dir2" ] || [ -d "$dir3" ] || [ -d "$dir4" ]
     then
@@ -185,7 +185,7 @@ test_retention_after_sync()
 
     local expiration_date="$(( $(stat -c %Y $dir) + 10))"
 
-    rbh_sync rbh:lustre:. "rbh:mongo:$testdb"
+    rbh_sync rbh:lustre:. "rbh:$db:$testdb"
 
     find_attribute \
         '"xattrs.trusted.expiration_date":NumberLong("'$expiration_date'")' \
@@ -194,9 +194,9 @@ test_retention_after_sync()
     date --set="@$(( $(stat -c %Y $dir) + 11))"
 
     touch -m $dir/$entry
-    rbh_sync rbh:lustre:. "rbh:mongo:$testdb"
+    rbh_sync rbh:lustre:. "rbh:$db:$testdb"
 
-    output="$(rbh_update_retention "rbh:mongo:$testdb" "$PWD")"
+    output="$(rbh_update_retention "rbh:$db:$testdb" "$PWD")"
     should_be_updated "$output" "$dir"
 
     expiration_date="$(( $(stat -c %Y $dir/$entry) + 11))"
@@ -204,7 +204,7 @@ test_retention_after_sync()
         '"xattrs.trusted.expiration_date":NumberLong("'$expiration_date'")' \
         '"ns.xattrs.path":"'/$dir'"'
 
-    rbh_sync rbh:lustre:. "rbh:mongo:$testdb"
+    rbh_sync rbh:lustre:. "rbh:$db:$testdb"
 
     # The expiration date of the directory shouldn't have changed after the
     # sync
@@ -215,7 +215,7 @@ test_retention_after_sync()
     date --set="@$(( $(stat -c %Y $dir) + 5))"
 
     touch $dir/$entry2
-    rbh_sync rbh:lustre:. "rbh:mongo:$testdb"
+    rbh_sync rbh:lustre:. "rbh:$db:$testdb"
 
     # The expiration shouldn't have changed as the created file $entry2 is too
     # old to change it
@@ -226,7 +226,7 @@ test_retention_after_sync()
     date --set="@$(( $(stat -c %Y $dir) + 15))"
 
     touch $dir/$entry3
-    rbh_sync rbh:lustre:. "rbh:mongo:$testdb"
+    rbh_sync rbh:lustre:. "rbh:$db:$testdb"
 
     # This time the expiration date should be pushed back, with $entry3 being
     # created later down the line
@@ -258,7 +258,7 @@ backends:
 
     local expiration_date="$(( $(stat -c %Y $dir) + 10))"
 
-    rbh_sync rbh:lustre:. "rbh:mongo:$testdb" --config $conf_file
+    rbh_sync rbh:lustre:. "rbh:$db:$testdb" --config $conf_file
 
     find_attribute \
         '"xattrs.trusted.expiration_date":NumberLong("'$expiration_date'")' \
@@ -266,20 +266,20 @@ backends:
 
     date --set="@$(( $(stat -c %Y $dir) + 11))"
 
-    local output="$(rbh_update_retention "rbh:mongo:$testdb" "$PWD")"
+    local output="$(rbh_update_retention "rbh:$db:$testdb" "$PWD")"
     echo "$output" | grep -q "Skipping"
 
-    output="$(rbh_update_retention "rbh:mongo:$testdb" "$PWD" \
+    output="$(rbh_update_retention "rbh:$db:$testdb" "$PWD" \
                         --config $conf_file)"
     should_be_expired "$output" "$dir"
 
     touch $dir/$entry
-    rbh_sync rbh:lustre:. "rbh:mongo:$testdb" --config $conf_file
+    rbh_sync rbh:lustre:. "rbh:$db:$testdb" --config $conf_file
 
-    output="$(rbh_update_retention "rbh:mongo:$testdb" "$PWD")"
+    output="$(rbh_update_retention "rbh:$db:$testdb" "$PWD")"
     echo "$output" | grep -q "Skipping"
 
-    output="$(rbh_update_retention "rbh:mongo:$testdb" "$PWD" \
+    output="$(rbh_update_retention "rbh:$db:$testdb" "$PWD" \
                         --config $conf_file)"
     should_be_updated "$output" "$dir"
 }
@@ -294,9 +294,9 @@ test_retention_on_empty_dir()
 
     setfattr -n user.expires -v +5 $dir1
 
-    rbh_sync rbh:lustre:. "rbh:mongo:$testdb"
+    rbh_sync rbh:lustre:. "rbh:$db:$testdb"
 
-    local output="$(rbh_update_retention "rbh:mongo:$testdb" "$PWD")"
+    local output="$(rbh_update_retention "rbh:$db:$testdb" "$PWD")"
     local output_lines="$(echo "$output" | grep "No directory has expired" | \
                           wc -l)"
     if [ "$output_lines" != "1" ]; then
@@ -305,7 +305,7 @@ test_retention_on_empty_dir()
 
     date --set="@$(( $(stat -c %X $dir1) + 6))"
 
-    output="$(rbh_update_retention "rbh:mongo:$testdb" "$PWD" --delete)"
+    output="$(rbh_update_retention "rbh:$db:$testdb" "$PWD" --delete)"
     if [ -d $dir1 ]; then
         error "Directory '$dir1' should have been deleted"
     fi

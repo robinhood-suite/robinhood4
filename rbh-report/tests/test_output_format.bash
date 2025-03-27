@@ -45,15 +45,15 @@ test_format_multi_group_and_rsort()
 {
     complete_setup
 
-    rbh_sync "rbh:posix:first_user_dir" "rbh:mongo:$testdb"
-    rbh_sync "rbh:posix:second_user_dir" "rbh:mongo:$testdb"
+    rbh_sync "rbh:posix:first_user_dir" "rbh:$db:$testdb"
+    rbh_sync "rbh:posix:second_user_dir" "rbh:$db:$testdb"
 
     local first_root_size="$(stat -c %s first_user_dir)"
     local second_root_size="$(stat -c %s second_user_dir)"
     local first_symlink_size="$(stat -c %s first_user_dir/first_slink)"
     local second_symlink_size="$(stat -c %s second_user_dir/second_slink)"
 
-    rbh_report --csv "rbh:mongo:$testdb" --group-by "statx.uid,statx.type" \
+    rbh_report --csv "rbh:$db:$testdb" --group-by "statx.uid,statx.type" \
                                    --output "sum(statx.size)" |
         difflines "$main_user_id,fifo: 0" \
                   "$main_user_id,char: 0" \
@@ -68,7 +68,7 @@ test_format_multi_group_and_rsort()
                   "$fake_user_id,file: 0" \
                   "$fake_user_id,link: $second_symlink_size"
 
-    rbh_report --csv "rbh:mongo:$testdb" --group-by "statx.uid,statx.type" \
+    rbh_report --csv "rbh:$db:$testdb" --group-by "statx.uid,statx.type" \
                                    --output "sum(statx.size)" --rsort |
         difflines "$fake_user_id,link: $second_symlink_size" \
                   "$fake_user_id,file: 0" \
@@ -108,15 +108,15 @@ test_format_pretty_print()
 {
     complete_setup
 
-    rbh_sync "rbh:posix:first_user_dir" "rbh:mongo:$testdb"
-    rbh_sync "rbh:posix:second_user_dir" "rbh:mongo:$testdb"
+    rbh_sync "rbh:posix:first_user_dir" "rbh:$db:$testdb"
+    rbh_sync "rbh:posix:second_user_dir" "rbh:$db:$testdb"
 
     local first_root_size="$(stat -c %s first_user_dir)"
     local second_root_size="$(stat -c %s second_user_dir)"
     local first_symlink_size="$(stat -c %s first_user_dir/first_slink)"
     local second_symlink_size="$(stat -c %s second_user_dir/second_slink)"
 
-    local output="$(rbh_report "rbh:mongo:$testdb" \
+    local output="$(rbh_report "rbh:$db:$testdb" \
                         --group-by "statx.uid,statx.type" \
                         --output "sum(statx.size)")"
 

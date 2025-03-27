@@ -21,7 +21,7 @@ alias:
 EOF
 
     command_output=$(rbh_lfind --config test_conf.yaml --dry-run \
-                    "rbh:mongo:$testdb" --alias a1)
+                    "rbh:$db:$testdb" --alias a1)
     pattern="\-pool namer \-layout-pattern default \-stripe-count default"
 
     if ! echo "$command_output" | grep -q "$pattern"; then
@@ -39,7 +39,7 @@ EOF
 
     # Do not use global default config
     unset RBH_CONFIG_PATH
-    command_output=$(rbh_lfind --dry-run "rbh:mongo:$testdb" --alias a1)
+    command_output=$(rbh_lfind --dry-run "rbh:$db:$testdb" --alias a1)
     pattern="\-pool namer \-layout-pattern default \-stripe-count default"
 
     if ! echo "$command_output" | grep -q "$pattern"; then
@@ -57,7 +57,7 @@ alias:
 EOF
 
     command_output=$(rbh_lfind --config test_conf.yaml --dry-run \
-                    "rbh:mongo:$testdb" --alias a2 --alias a1 --alias a2)
+                    "rbh:$db:$testdb" --alias a2 --alias a1 --alias a2)
     pattern="\-print \-pool namer \-layout-pattern default \-print"
 
     if ! echo "$command_output" | grep -q "$pattern"; then
@@ -75,7 +75,7 @@ alias:
 EOF
 
     command_output=$(rbh_lfind --config test_conf.yaml --dry-run \
-                    "rbh:mongo:$testdb" --alias a1)
+                    "rbh:$db:$testdb" --alias a1)
     pattern="\-print"
 
     if ! echo "$command_output" | grep -q "$pattern"; then
@@ -92,7 +92,7 @@ alias:
 EOF
 
     command_output=$(rbh_lfind --config test_conf.yaml --dry-run \
-                    "rbh:mongo:$testdb" --alias a1 2>&1 || true)
+                    "rbh:$db:$testdb" --alias a1 2>&1 || true)
     pattern="\[ERROR\] Infinite loop detected for alias 'a1'.Execution stopped."
 
     if ! echo "$command_output" | grep -q "$pattern"; then
@@ -108,7 +108,7 @@ alias:
 EOF
 
     command_output=$(rbh_lfind --config test_conf.yaml --dry-run \
-                    "rbh:mongo:$testdb" --alias a1 --alias a1)
+                    "rbh:$db:$testdb" --alias a1 --alias a1)
     pattern="\-pool namer \-print \-pool namer \-print"
 
     if ! echo "$command_output" | grep -q "$pattern"; then
@@ -126,7 +126,7 @@ alias:
 EOF
 
     command_output=$(rbh_lfind --config test_conf.yaml --dry-run \
-                    "rbh:mongo:$testdb" --alias a1,a2,a3)
+                    "rbh:$db:$testdb" --alias a1,a2,a3)
     pattern="\-pool namer \-print \-print"
 
     if ! echo "$command_output" | grep -q "$pattern"; then
@@ -144,7 +144,7 @@ alias:
 EOF
 
     command_output=$(rbh_lfind --config test_conf.yaml --dry-run \
-                    "rbh:mongo:$testdb" --alias a1)
+                    "rbh:$db:$testdb" --alias a1)
     pattern="\-pool namer \-print \-print"
 
     if ! echo "$command_output" | grep -q "$pattern"; then

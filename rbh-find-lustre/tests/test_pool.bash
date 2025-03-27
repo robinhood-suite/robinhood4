@@ -23,19 +23,19 @@ test_pool()
     truncate -s 2M "$file"
     lfs setstripe -p "test_pool3" "$file2"
 
-    rbh_sync "rbh:lustre:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
 
-    rbh_lfind "rbh:mongo:$testdb" -pool blob | sort |
+    rbh_lfind "rbh:$db:$testdb" -pool blob | sort |
         difflines
-    rbh_lfind "rbh:mongo:$testdb" -pool test_pool | sort |
+    rbh_lfind "rbh:$db:$testdb" -pool test_pool | sort |
         difflines
-    rbh_lfind "rbh:mongo:$testdb" -pool TEST_POOL1 | sort |
+    rbh_lfind "rbh:$db:$testdb" -pool TEST_POOL1 | sort |
         difflines
-    rbh_lfind "rbh:mongo:$testdb" -pool test_pool1 | sort |
+    rbh_lfind "rbh:$db:$testdb" -pool test_pool1 | sort |
         difflines "/$file"
-    rbh_lfind "rbh:mongo:$testdb" -pool test_pool2 | sort |
+    rbh_lfind "rbh:$db:$testdb" -pool test_pool2 | sort |
         difflines "/$file"
-    rbh_lfind "rbh:mongo:$testdb" -pool test_* | sort |
+    rbh_lfind "rbh:$db:$testdb" -pool test_* | sort |
         difflines "/$file" "/$file2"
 }
 
@@ -49,19 +49,19 @@ test_ipool()
     truncate -s 2M "$file"
     lfs setstripe -p "test_pool3" "$file2"
 
-    rbh_sync "rbh:lustre:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
 
-    rbh_lfind "rbh:mongo:$testdb" -ipool blob | sort |
+    rbh_lfind "rbh:$db:$testdb" -ipool blob | sort |
         difflines
-    rbh_lfind "rbh:mongo:$testdb" -ipool test_pool | sort |
+    rbh_lfind "rbh:$db:$testdb" -ipool test_pool | sort |
         difflines
-    rbh_lfind "rbh:mongo:$testdb" -ipool TEST_POOL1 | sort |
+    rbh_lfind "rbh:$db:$testdb" -ipool TEST_POOL1 | sort |
         difflines "/$file"
-    rbh_lfind "rbh:mongo:$testdb" -ipool test_pool1 | sort |
+    rbh_lfind "rbh:$db:$testdb" -ipool test_pool1 | sort |
         difflines "/$file"
-    rbh_lfind "rbh:mongo:$testdb" -ipool tEsT_pOoL2 | sort |
+    rbh_lfind "rbh:$db:$testdb" -ipool tEsT_pOoL2 | sort |
         difflines "/$file"
-    rbh_lfind "rbh:mongo:$testdb" -ipool TEST_* | sort |
+    rbh_lfind "rbh:$db:$testdb" -ipool TEST_* | sort |
         difflines "/$file" "/$file2"
 }
 

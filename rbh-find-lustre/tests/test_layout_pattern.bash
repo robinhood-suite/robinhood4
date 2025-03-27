@@ -18,10 +18,10 @@ cd "$LUSTRE_DIR"
 
 test_invalid()
 {
-    rbh_lfind "rbh:mongo:$testdb" -layout-pattern 42 &&
+    rbh_lfind "rbh:$db:$testdb" -layout-pattern 42 &&
         error "find with an invalid layout should have failed"
 
-    rbh_lfind "rbh:mongo:$testdb" -layout-pattern invalid &&
+    rbh_lfind "rbh:$db:$testdb" -layout-pattern invalid &&
         error "find with an invalid layout should have failed"
 
     return 0
@@ -33,21 +33,21 @@ test_default()
 
     mkdir $dir
 
-    rbh_sync "rbh:lustre:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
 
-    rbh_lfind "rbh:mongo:$testdb" -layout-pattern default | sort |
+    rbh_lfind "rbh:$db:$testdb" -layout-pattern default | sort |
         difflines "/" "/$dir"
 
     lfs setstripe -L mdt -E 1M $dir
-    rbh_sync "rbh:lustre:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
 
-    rbh_lfind "rbh:mongo:$testdb" -layout-pattern default | sort |
+    rbh_lfind "rbh:$db:$testdb" -layout-pattern default | sort |
         difflines "/"
 
     lfs setstripe -L raid0 $dir
-    rbh_sync "rbh:lustre:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
 
-    rbh_lfind "rbh:mongo:$testdb" -layout-pattern default | sort |
+    rbh_lfind "rbh:$db:$testdb" -layout-pattern default | sort |
         difflines "/"
 }
 
@@ -62,27 +62,27 @@ test_layout()
     lfs setstripe -L raid0 -c 1 .
     lfs setstripe -L mdt -E 1M $dir
 
-    rbh_sync "rbh:lustre:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
 
-    rbh_lfind "rbh:mongo:$testdb" -layout-pattern raid0 | sort |
+    rbh_lfind "rbh:$db:$testdb" -layout-pattern raid0 | sort |
         difflines "/" "/$dir/$file"
-    rbh_lfind "rbh:mongo:$testdb" -layout-pattern mdt | sort |
+    rbh_lfind "rbh:$db:$testdb" -layout-pattern mdt | sort |
         difflines "/$dir"
 
     lfs migrate -L mdt -E 1M $dir/$file
-    rbh_sync "rbh:lustre:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
 
-    rbh_lfind "rbh:mongo:$testdb" -layout-pattern raid0 | sort |
+    rbh_lfind "rbh:$db:$testdb" -layout-pattern raid0 | sort |
         difflines "/"
-    rbh_lfind "rbh:mongo:$testdb" -layout-pattern mdt | sort |
+    rbh_lfind "rbh:$db:$testdb" -layout-pattern mdt | sort |
         difflines "/$dir" "/$dir/$file"
 
     lfs setstripe -L mdt -E 1M .
-    rbh_sync "rbh:lustre:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
 
-    rbh_lfind "rbh:mongo:$testdb" -layout-pattern raid0 | sort |
+    rbh_lfind "rbh:$db:$testdb" -layout-pattern raid0 | sort |
         difflines
-    rbh_lfind "rbh:mongo:$testdb" -layout-pattern mdt | sort |
+    rbh_lfind "rbh:$db:$testdb" -layout-pattern mdt | sort |
         difflines "/" "/$dir" "/$dir/$file"
 }
 
@@ -94,23 +94,23 @@ test_default_layout()
     mkdir $dir
     lfs setstripe -L raid0 -c 1 $file
 
-    rbh_sync "rbh:lustre:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
 
-    rbh_lfind "rbh:mongo:$testdb" -layout-pattern mdt | sort |
+    rbh_lfind "rbh:$db:$testdb" -layout-pattern mdt | sort |
         difflines
 
     lfs setstripe -L mdt -E 1M $LUSTRE_DIR
 
-    rbh_lfind "rbh:mongo:$testdb" -layout-pattern mdt | sort |
+    rbh_lfind "rbh:$db:$testdb" -layout-pattern mdt | sort |
         difflines "/" "/$dir"
-    rbh_lfind "rbh:mongo:$testdb" -layout-pattern raid0 | sort |
+    rbh_lfind "rbh:$db:$testdb" -layout-pattern raid0 | sort |
         difflines "/$file"
 
     lfs setstripe -L raid0 -c 1 $LUSTRE_DIR
 
-    rbh_lfind "rbh:mongo:$testdb" -layout-pattern mdt | sort |
+    rbh_lfind "rbh:$db:$testdb" -layout-pattern mdt | sort |
         difflines
-    rbh_lfind "rbh:mongo:$testdb" -layout-pattern raid0 | sort |
+    rbh_lfind "rbh:$db:$testdb" -layout-pattern raid0 | sort |
         difflines "/" "/$file" "/$dir"
 }
 
@@ -125,11 +125,11 @@ test_other_layouts()
     archive_file $file2
     lfs hsm_release $file2
 
-    rbh_sync "rbh:lustre:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
 
-    rbh_lfind "rbh:mongo:$testdb" -layout-pattern overstriped | sort |
+    rbh_lfind "rbh:$db:$testdb" -layout-pattern overstriped | sort |
         difflines "/$file1"
-    rbh_lfind "rbh:mongo:$testdb" -layout-pattern released | sort |
+    rbh_lfind "rbh:$db:$testdb" -layout-pattern released | sort |
         difflines "/$file2"
 }
 
