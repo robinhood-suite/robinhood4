@@ -24,6 +24,7 @@ const struct rbh_posix_extension RBH_BACKEND_EXTENDS(POSIX, LUSTRE) = {
         .max_version = RBH_POSIX_BACKEND_VERSION,
         .check_valid_token = rbh_lustre_check_valid_token,
         .build_filter = rbh_lustre_build_filter,
+        .fill_entry_info = rbh_lustre_fill_entry_info,
         .delete_entry = NULL,
     },
     .enrich = rbh_lustre_enrich,
