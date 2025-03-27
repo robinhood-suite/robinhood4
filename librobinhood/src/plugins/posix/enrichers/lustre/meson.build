@@ -24,6 +24,7 @@ configure_file(input: 'config.h.in', output: 'config.h',
 librbh_posix_lustre_ext = library(
     'rbh-posix-lustre-ext',
     sources: [
+        'action.c',
         'filter.c',
         'lustre.c',
         'parser.c',
