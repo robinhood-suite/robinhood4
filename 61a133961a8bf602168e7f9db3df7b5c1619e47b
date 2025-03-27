@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "468e6804_7c8ed4c3",
+        "filename": "librobinhood/include/robinhood/utils.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-03-27T13:54:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "66bfa45d_f6b0ac2c",
+      "range": {
+        "startLine": 109,
+        "startChar": 31,
+        "endLine": 109,
+        "endChar": 40
+      },
+      "revId": "61a133961a8bf602168e7f9db3df7b5c1619e47b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e8b517aa_fdb9b474",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-03-17T12:48:13Z",
       "side": 1,
       "message": "minor: return the results of snprintf, to let the caller know the size filled in the buffer",
+      "range": {
+        "startLine": 94,
+        "startChar": 8,
+        "endLine": 94,
+        "endChar": 16
+      },
+      "revId": "61a133961a8bf602168e7f9db3df7b5c1619e47b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0465dec2_a1021646",
+        "filename": "librobinhood/src/utils/utils.c",
+        "patchSetId": 6
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-03-27T13:54:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e8b517aa_fdb9b474",
       "range": {
         "startLine": 94,
         "startChar": 8,
