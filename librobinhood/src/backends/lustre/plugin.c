@@ -19,6 +19,7 @@ static const struct rbh_backend_plugin_operations LUSTRE_BACKEND_PLUGIN_OPS = {
     .new = rbh_lustre_backend_new,
     .check_valid_token = rbh_lustre_check_valid_token,
     .build_filter = rbh_lustre_build_filter,
+    .fill_entry_info = rbh_lustre_fill_entry_info,
     .delete_entry = rbh_lustre_delete_entry,
 };
 
