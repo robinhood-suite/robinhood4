@@ -35,6 +35,9 @@ struct rbh_backend_plugin_operations {
     enum rbh_parser_token (*check_valid_token)(const char *token);
     struct rbh_filter *(*build_filter)(const char **argv, int argc, int *index,
                                        bool *need_prefetch);
+    int (*fill_entry_info)(char *output, int max_length,
+                           const struct rbh_fsentry *fsentry,
+                           const char *directive, const char *backend);
     int (*delete_entry)(struct rbh_fsentry *fsentry);
     void (*destroy)();
 };
@@ -233,7 +236,38 @@ rbh_plugin_build_filter(const struct rbh_backend_plugin *plugin,
     return NULL;
 }
 
-/*
+/**
+ * Fill information about an entry according to a given directive into a buffer
+ *
+ * @param plugin         the plugin that will print info
+ * @param output         an array in which the information can be printed
+ *                       according to \p directive. Size of the array should be
+ *                       \p max_length
+ * @param max_length     size of the \p output array
+ * @param fsentry        fsentry to print
+ * @param directive      which information about \p fsentry to print
+ * @param backend        the backend to print (XXX: may not be necessary)
+ *
+ * @return               the number of characters written to \p output on
+ *                       success
+ *                       0 if the plugin doesn't know the directive requested
+ *                       -1 on error
+ */
+static inline int
+rbh_plugin_fill_entry_info(const struct rbh_backend_plugin *plugin,
+                           char *output, int max_length,
+                           const struct rbh_fsentry *fsentry,
+                           const char *directive, const char *backend)
+{
+    if (plugin->ops->fill_entry_info)
+        return plugin->ops->fill_entry_info(output, max_length, fsentry,
+                                            directive, backend);
+
+    errno = ENOTSUP;
+    return -1;
+}
+
+/**
  * Delete an entry from the plugin
  *
  * @param plugin         the plugin to delete an entry from
@@ -301,6 +335,37 @@ rbh_extension_build_filter(const struct rbh_plugin_extension *extension,
 
     errno = ENOTSUP;
     return NULL;
+}
+
+/**
+ * Fill information about an entry according to a given directive into a buffer
+ *
+ * @param extension      the extension that will print entry info
+ * @param output         an array in which the information can be printed
+ *                       according to \p directive. Size of the array should be
+ *                       \p max_length
+ * @param max_length     size of the \p output array
+ * @param fsentry        fsentry to print
+ * @param directive      which information about \p fsentry to print
+ * @param backend        the backend to print (XXX: may not be necessary)
+ *
+ * @return               the number of characters written to \p output on
+ *                       success
+ *                       0 if the plugin doesn't know the directive requested
+ *                       -1 on error
+ */
+static inline int
+rbh_extension_fill_entry_info(const struct rbh_plugin_extension *extension,
+                              char *output, int max_length,
+                              const struct rbh_fsentry *fsentry,
+                              const char *directive, const char *backend)
+{
+    if (extension->fill_entry_info)
+        return extension->fill_entry_info(output, max_length, fsentry,
+                                          directive, backend);
+
+    errno = ENOTSUP;
+    return -1;
 }
 
 /*
