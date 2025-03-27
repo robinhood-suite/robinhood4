@@ -264,7 +264,7 @@ test_update_release()
     check_size "${events[0]}" "$(stat -c %s /etc/hosts)"
 }
 
-test_update_xattrs_to_mongo()
+test_update_xattrs_to_db()
 {
     local obj=$(hestia object --verbosity 1 create blob)
 
@@ -287,7 +287,7 @@ test_update_xattrs_to_mongo()
     find_attribute '"statx.size": 0'
 }
 
-test_update_data_to_mongo()
+test_update_data_to_db()
 {
     local obj=$(hestia object --verbosity 1 create blob)
 
@@ -312,7 +312,7 @@ test_update_data_to_mongo()
     find_attribute '"statx.size": NumberLong('$size')'
 }
 
-test_update_copy_to_mongo()
+test_update_copy_to_db()
 {
     local obj=$(hestia object --verbosity 1 create blob)
 
@@ -344,7 +344,7 @@ test_update_copy_to_mongo()
     find_attribute '"statx.size": NumberLong('$size')'
 }
 
-test_update_release_to_mongo()
+test_update_release_to_db()
 {
     local obj=$(hestia object --verbosity 1 create blob)
 
@@ -377,9 +377,9 @@ test_update_release_to_mongo()
 ################################################################################
 
 declare -a tests=(test_update_xattrs test_update_data test_update_copy
-                  test_update_release test_update_xattrs_to_mongo
-                  test_update_data_to_mongo test_update_copy_to_mongo
-                  test_update_release_to_mongo)
+                  test_update_release test_update_xattrs_to_db
+                  test_update_data_to_db test_update_copy_to_db
+                  test_update_release_to_db)
 
 sub_setup=hestia_setup
 sub_teardown=hestia_teardown
