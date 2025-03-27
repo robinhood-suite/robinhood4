@@ -19,12 +19,12 @@ test_empty_file()
     truncate --size 1K file
     ln -s empty empty_link
 
-    rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:posix:." "rbh:$db:$testdb"
 
-    rbh_find "rbh:mongo:$testdb" -empty | sort | difflines "/empty"
-    rbh_find "rbh:mongo:$testdb" -not -empty | sort |
+    rbh_find "rbh:$db:$testdb" -empty | sort | difflines "/empty"
+    rbh_find "rbh:$db:$testdb" -not -empty | sort |
         difflines "/" "/empty_link" "/file"
-    rbh_find "rbh:mongo:$testdb" -not -empty -or -empty | sort |
+    rbh_find "rbh:$db:$testdb" -not -empty -or -empty | sort |
         difflines "/" "/empty" "/empty_link" "/file"
 }
 

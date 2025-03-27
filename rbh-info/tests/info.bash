@@ -39,7 +39,7 @@ tests_posix_capabilities()
 
 tests_mongo_info()
 {
-    local output=$(rbh_info rbh:mongo:$testdb)
+    local output=$(rbh_info rbh:$db:$testdb)
     echo "$output" | grep -q "size"
 }
 

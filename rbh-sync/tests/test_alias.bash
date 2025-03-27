@@ -21,7 +21,7 @@ alias:
 EOF
 
     command_output=$(rbh_sync --config test_conf.yaml --dry-run \
-                    "rbh:posix:." "rbh:mongo:$testdb" --alias a1)
+                    "rbh:posix:." "rbh:$db:$testdb" --alias a1)
     pattern="\--no-skip \-l"
 
     if ! echo "$command_output" | grep -q "$pattern"; then
@@ -39,7 +39,7 @@ EOF
 
     # Do not use global default config
     unset RBH_CONFIG_PATH
-    command_output=$(rbh_sync --dry-run "rbh:posix:." "rbh:mongo:$testdb" \
+    command_output=$(rbh_sync --dry-run "rbh:posix:." "rbh:$db:$testdb" \
                      --alias a1)
     pattern="\--no-skip \-l"
 
@@ -58,7 +58,7 @@ alias:
 EOF
 
     command_output=$(rbh_sync --config test_conf.yaml --dry-run \
-                    "rbh:posix:." "rbh:mongo:$testdb" --alias a2 --alias a1 \
+                    "rbh:posix:." "rbh:$db:$testdb" --alias a2 --alias a1 \
                     --alias a2)
     pattern="\-l \--no-skip \-l"
 
@@ -77,7 +77,7 @@ alias:
 EOF
 
     command_output=$(rbh_sync --config test_conf.yaml --dry-run \
-                    "rbh:posix:." "rbh:mongo:$testdb" --alias a1)
+                    "rbh:posix:." "rbh:$db:$testdb" --alias a1)
     pattern="\--no-skip"
 
     if ! echo "$command_output" | grep -q "$pattern"; then
@@ -94,7 +94,7 @@ alias:
 EOF
 
     command_output=$(rbh_sync --config test_conf.yaml --dry-run \
-                    "rbh:posix:." "rbh:mongo:$testdb" --alias a1 2>&1 || true)
+                    "rbh:posix:." "rbh:$db:$testdb" --alias a1 2>&1 || true)
     pattern="\[ERROR\] Infinite loop detected for alias 'a1'.Execution stopped."
 
     if ! echo "$command_output" | grep -q "$pattern"; then
@@ -110,7 +110,7 @@ alias:
 EOF
 
     command_output=$(rbh_sync --config test_conf.yaml --dry-run \
-                    "rbh:posix:." "rbh:mongo:$testdb" --alias a1 --alias a1)
+                    "rbh:posix:." "rbh:$db:$testdb" --alias a1 --alias a1)
     pattern="\-l \-l"
 
     if ! echo "$command_output" | grep -q "$pattern"; then
@@ -128,7 +128,7 @@ alias:
 EOF
 
     command_output=$(rbh_sync --config test_conf.yaml --dry-run \
-                    "rbh:posix:." "rbh:mongo:$testdb" --alias a1,a2,a3)
+                    "rbh:posix:." "rbh:$db:$testdb" --alias a1,a2,a3)
     pattern="\--no-skip \-l \--no-skip"
 
     if ! echo "$command_output" | grep -q "$pattern"; then
@@ -146,7 +146,7 @@ alias:
 EOF
 
     command_output=$(rbh_sync --config test_conf.yaml --dry-run \
-                    "rbh:posix:." "rbh:mongo:$testdb" --alias a1)
+                    "rbh:posix:." "rbh:$db:$testdb" --alias a1)
     pattern="\--no-skip \-l \--no-skip"
 
     if ! echo "$command_output" | grep -q "$pattern"; then

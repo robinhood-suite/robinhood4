@@ -19,10 +19,10 @@ test_id()
     touch fileA
     touch fileB
 
-    rbh_sync "rbh:lustre:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
 
-    local IDA=$(rbh_lfind "rbh:mongo:$testdb" -name fileA -printf "%I\n")
-    local IDB=$(rbh_lfind "rbh:mongo:$testdb" -name fileB -printf "%I\n")
+    local IDA=$(rbh_lfind "rbh:$db:$testdb" -name fileA -printf "%I\n")
+    local IDB=$(rbh_lfind "rbh:$db:$testdb" -name fileB -printf "%I\n")
 
     local countA="$(mongo "$testdb" --eval \
                     "db.entries.countDocuments({\"_id\": BinData(0, \"$IDA\")})")"

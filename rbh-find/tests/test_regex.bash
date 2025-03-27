@@ -19,18 +19,18 @@ test_regex()
     touch test/toto/blob2025 test/alice/BLob1980
     touch test/toto/lorem.txt
 
-    rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:posix:." "rbh:$db:$testdb"
 
-    rbh_find "rbh:mongo:$testdb" -regex ".*" | sort |
+    rbh_find "rbh:$db:$testdb" -regex ".*" | sort |
         difflines "/" "/test" "/test/alice" "/test/alice/BLob1980" "/test/toto" \
             "/test/toto/blob2025" "/test/toto/lorem.txt"
-    rbh_find "rbh:mongo:$testdb" -regex "^/test/toto/.*" | sort |
+    rbh_find "rbh:$db:$testdb" -regex "^/test/toto/.*" | sort |
         difflines "/test/toto/blob2025" "/test/toto/lorem.txt"
-    rbh_find "rbh:mongo:$testdb" -regex "^/test/toto/.*\.txt$" | sort |
+    rbh_find "rbh:$db:$testdb" -regex "^/test/toto/.*\.txt$" | sort |
         difflines "/test/toto/lorem.txt"
-    rbh_find "rbh:mongo:$testdb" -regex ".*/blob.*[0-9](\..*)?$" | sort |
+    rbh_find "rbh:$db:$testdb" -regex ".*/blob.*[0-9](\..*)?$" | sort |
         difflines "/test/toto/blob2025"
-    rbh_find "rbh:mongo:$testdb" -regex ".*/BLob.*" | sort |
+    rbh_find "rbh:$db:$testdb" -regex ".*/BLob.*" | sort |
         difflines "/test/alice/BLob1980"
 }
 
@@ -40,16 +40,16 @@ test_iregex()
     touch test/tOtO/blob2025 test/alice/BLob1980
     touch test/tOtO/lorem.txt
 
-    rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:posix:." "rbh:$db:$testdb"
 
-    rbh_find "rbh:mongo:$testdb" -iregex "^/test/toto/.*" | sort |
+    rbh_find "rbh:$db:$testdb" -iregex "^/test/toto/.*" | sort |
         difflines "/test/tOtO/blob2025" "/test/tOtO/lorem.txt"
-    rbh_find "rbh:mongo:$testdb" -regex "^/test/toto/.*" | sort |
+    rbh_find "rbh:$db:$testdb" -regex "^/test/toto/.*" | sort |
         difflines
 
-    rbh_find "rbh:mongo:$testdb" -iregex "^/test/toto/.*\.txt$" | sort |
+    rbh_find "rbh:$db:$testdb" -iregex "^/test/toto/.*\.txt$" | sort |
         difflines "/test/tOtO/lorem.txt"
-    rbh_find "rbh:mongo:$testdb" -iregex ".*/blob.*[0-9](\..*)?$" | sort |
+    rbh_find "rbh:$db:$testdb" -iregex ".*/blob.*[0-9](\..*)?$" | sort |
         difflines "/test/alice/BLob1980" "/test/tOtO/blob2025"
 }
 

@@ -18,13 +18,13 @@ cd "$LUSTRE_DIR"
 
 test_invalid()
 {
-    rbh_lfind "rbh:mongo:$testdb" -stripe-size $(echo 2^64 | bc) &&
+    rbh_lfind "rbh:$db:$testdb" -stripe-size $(echo 2^64 | bc) &&
         error "find with a stripe size too big should have failed"
 
-    rbh_lfind "rbh:mongo:$testdb" -stripe-size 42blob &&
+    rbh_lfind "rbh:$db:$testdb" -stripe-size 42blob &&
         error "find with an invalid stripe size should have failed"
 
-    rbh_lfind "rbh:mongo:$testdb" -stripe-size invalid &&
+    rbh_lfind "rbh:$db:$testdb" -stripe-size invalid &&
         error "find with an invalid stripe size should have failed"
 
     return 0
@@ -37,21 +37,21 @@ test_default()
     local default_stripe_size="$(lfs getstripe -S $LUSTRE_DIR | xargs)"
     mkdir $dir
 
-    rbh_sync "rbh:lustre:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
 
-    rbh_lfind "rbh:mongo:$testdb" -stripe-size default | sort |
+    rbh_lfind "rbh:$db:$testdb" -stripe-size default | sort |
         difflines "/" "/$dir"
 
     lfs setstripe -S $((default_stripe_size * 2)) $dir
-    rbh_sync "rbh:lustre:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
 
-    rbh_lfind "rbh:mongo:$testdb" -stripe-size default | sort |
+    rbh_lfind "rbh:$db:$testdb" -stripe-size default | sort |
         difflines "/"
 
     lfs setstripe -S $((default_stripe_size)) $dir
-    rbh_sync "rbh:lustre:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
 
-    rbh_lfind "rbh:mongo:$testdb" -stripe-size default | sort |
+    rbh_lfind "rbh:$db:$testdb" -stripe-size default | sort |
         difflines "/"
 }
 
@@ -71,44 +71,44 @@ test_stripe_size()
     local threeM="$(($oneM * 3))"
     local fourM="$(($oneM * 4))"
 
-    rbh_sync "rbh:lustre:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
 
-    rbh_lfind "rbh:mongo:$testdb" -stripe-size $oneM | sort |
+    rbh_lfind "rbh:$db:$testdb" -stripe-size $oneM | sort |
         difflines "/$dir/$file"
-    rbh_lfind "rbh:mongo:$testdb" -stripe-size $twoM | sort |
+    rbh_lfind "rbh:$db:$testdb" -stripe-size $twoM | sort |
         difflines "/$dir"
-    rbh_lfind "rbh:mongo:$testdb" -stripe-size $threeM | sort |
+    rbh_lfind "rbh:$db:$testdb" -stripe-size $threeM | sort |
         difflines "/"
 
-    rbh_lfind "rbh:mongo:$testdb" -stripe-size -$fourM | sort |
+    rbh_lfind "rbh:$db:$testdb" -stripe-size -$fourM | sort |
         difflines "/" "/$dir" "/$dir/$file"
-    rbh_lfind "rbh:mongo:$testdb" -stripe-size -$((threeM - 1)) | sort |
+    rbh_lfind "rbh:$db:$testdb" -stripe-size -$((threeM - 1)) | sort |
         difflines "/$dir" "/$dir/$file"
-    rbh_lfind "rbh:mongo:$testdb" -stripe-size -$twoM | sort |
+    rbh_lfind "rbh:$db:$testdb" -stripe-size -$twoM | sort |
         difflines "/$dir/$file"
 
-    rbh_lfind "rbh:mongo:$testdb" -stripe-size +0 | sort |
+    rbh_lfind "rbh:$db:$testdb" -stripe-size +0 | sort |
         difflines "/" "/$dir" "/$dir/$file"
-    rbh_lfind "rbh:mongo:$testdb" -stripe-size +$oneM | sort |
+    rbh_lfind "rbh:$db:$testdb" -stripe-size +$oneM | sort |
         difflines "/" "/$dir"
-    rbh_lfind "rbh:mongo:$testdb" -stripe-size +$twoM | sort |
+    rbh_lfind "rbh:$db:$testdb" -stripe-size +$twoM | sort |
         difflines "/"
 
     lfs migrate -S $threeM $dir/$file
-    rbh_sync "rbh:lustre:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
 
-    rbh_lfind "rbh:mongo:$testdb" -stripe-size $threeM | sort |
+    rbh_lfind "rbh:$db:$testdb" -stripe-size $threeM | sort |
         difflines "/" "/$dir/$file"
 
     lfs setstripe -S $threeM $dir
-    rbh_sync "rbh:lustre:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
 
-    rbh_lfind "rbh:mongo:$testdb" -stripe-size $threeM | sort |
+    rbh_lfind "rbh:$db:$testdb" -stripe-size $threeM | sort |
         difflines "/" "/$dir" "/$dir/$file"
 
-    rbh_lfind "rbh:mongo:$testdb" -stripe-size +$twoM | sort |
+    rbh_lfind "rbh:$db:$testdb" -stripe-size +$twoM | sort |
         difflines "/" "/$dir" "/$dir/$file"
-    rbh_lfind "rbh:mongo:$testdb" -stripe-size -$fourM | sort |
+    rbh_lfind "rbh:$db:$testdb" -stripe-size -$fourM | sort |
         difflines "/" "/$dir" "/$dir/$file"
 }
 
@@ -124,24 +124,24 @@ test_default_stripe_size()
     local threeM="$(($fourM * 3 / 4))"
     local twoM="$(($fourM / 2))"
 
-    rbh_sync "rbh:lustre:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
 
-    rbh_lfind "rbh:mongo:$testdb" \
+    rbh_lfind "rbh:$db:$testdb" \
         -stripe-size $(lfs getstripe -S $LUSTRE_DIR | xargs) | sort |
         difflines
 
     lfs setstripe -S $threeM $LUSTRE_DIR
 
-    rbh_lfind "rbh:mongo:$testdb" -stripe-size $threeM | sort |
+    rbh_lfind "rbh:$db:$testdb" -stripe-size $threeM | sort |
         difflines "/" "/$dir"
 
-    rbh_lfind "rbh:mongo:$testdb" -stripe-size -$threeM | sort |
+    rbh_lfind "rbh:$db:$testdb" -stripe-size -$threeM | sort |
         difflines
-    rbh_lfind "rbh:mongo:$testdb" -stripe-size -$(($fourM << 1)) | sort |
+    rbh_lfind "rbh:$db:$testdb" -stripe-size -$(($fourM << 1)) | sort |
         difflines "/" "/$file" "/$dir"
-    rbh_lfind "rbh:mongo:$testdb" -stripe-size +$threeM | sort |
+    rbh_lfind "rbh:$db:$testdb" -stripe-size +$threeM | sort |
         difflines "/$file"
-    rbh_lfind "rbh:mongo:$testdb" -stripe-size +$twoM | sort |
+    rbh_lfind "rbh:$db:$testdb" -stripe-size +$twoM | sort |
         difflines "/" "/$file" "/$dir"
 }
 

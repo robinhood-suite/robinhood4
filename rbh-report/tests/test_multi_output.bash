@@ -23,7 +23,7 @@ test_multi_output()
     truncate --size 3M second
     touch -d "+2 hours" third
 
-    rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:posix:." "rbh:$db:$testdb"
 
     local root_size="$(stat -c %s .)"
     local first_size="$(stat -c %s first)"
@@ -35,7 +35,7 @@ test_multi_output()
     local min_ino="$(find -printf "%i\n" | sort -n | head -n 1)"
     local max_mtime="$(stat -c %Y third)"
 
-    rbh_report --csv "rbh:mongo:$testdb" \
+    rbh_report --csv "rbh:$db:$testdb" \
         --output "sum(statx.size),avg(statx.size),min(statx.ino),max(statx.mtime.sec)" |
         difflines "$sum_size,$avg_size,$min_ino,$max_mtime"
 }

@@ -25,7 +25,7 @@ test_sync_simple_from_dwalk()
     touch dir/file1
 
     dwalk -q -o "$testdb.mfu" .
-    rbh_sync "rbh:mpi-file:$testdb.mfu" "rbh:mongo:$testdb"
+    rbh_sync "rbh:mpi-file:$testdb.mfu" "rbh:$db:$testdb"
 
     find_attribute '"ns.xattrs.path": "/"'
     find_attribute '"ns.xattrs.path": "/fileA"'
@@ -40,7 +40,7 @@ test_sync_simple_from_robinhood()
     touch dir/file1
 
     rbh_sync "rbh:posix-mpi:." "rbh:mpi-file:$testdb.mfu"
-    rbh_sync "rbh:mpi-file:$testdb.mfu" "rbh:mongo:$testdb"
+    rbh_sync "rbh:mpi-file:$testdb.mfu" "rbh:$db:$testdb"
 
     find_attribute '"ns.xattrs.path": "/"'
     find_attribute '"ns.xattrs.path": "/fileA"'
@@ -54,7 +54,7 @@ test_sync_size()
     local size=$(stat -c %s "fileA")
 
     dwalk -q -o "$testdb.mfu" .
-    rbh_sync "rbh:mpi-file:$testdb.mfu" "rbh:mongo:$testdb"
+    rbh_sync "rbh:mpi-file:$testdb.mfu" "rbh:$db:$testdb"
 
     find_attribute '"ns.xattrs.path":"/fileA"' '"statx.size":'$size
 }
@@ -67,7 +67,7 @@ test_sync_time()
     local ctime=$(stat -c %Z "fileA")
 
     dwalk -q -o "$testdb.mfu" .
-    rbh_sync "rbh:mpi-file:$testdb.mfu" "rbh:mongo:$testdb"
+    rbh_sync "rbh:mpi-file:$testdb.mfu" "rbh:$db:$testdb"
 
     find_attribute '"ns.xattrs.path":"/fileA"' '"statx.atime.sec":'$atime
     find_attribute '"ns.xattrs.path":"/fileA"' '"statx.mtime.sec":'$mtime

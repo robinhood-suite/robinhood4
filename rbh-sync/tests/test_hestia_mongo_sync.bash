@@ -45,7 +45,7 @@ test_sync()
     hestia_obj put_data $obj1 --file /etc/hosts
     hestia_obj put_data $obj2 --file /etc/hosts
 
-    rbh_sync "rbh:hestia:" "rbh:mongo:$testdb"
+    rbh_sync "rbh:hestia:" "rbh:$db:$testdb"
 
     find_attribute '"ns.name":"'$obj1'"'
     find_attribute '"ns.xattrs.path":"'$obj1'"'
@@ -58,7 +58,7 @@ test_put_data()
     local obj=$(hestia_obj create)
     hestia_obj put_data $obj --file /etc/hosts
 
-    rbh_sync "rbh:hestia:" "rbh:mongo:$testdb"
+    rbh_sync "rbh:hestia:" "rbh:$db:$testdb"
 
     local size=$(stat -c %s /etc/hosts)
 
@@ -83,7 +83,7 @@ test_copy()
     hestia_obj put_data $obj --file /etc/hosts
     hestia_obj copy_data $obj --source 0 --target 1
 
-    rbh_sync "rbh:hestia:" "rbh:mongo:$testdb"
+    rbh_sync "rbh:hestia:" "rbh:$db:$testdb"
 
     local size=$(stat -c %s /etc/hosts)
 
@@ -99,7 +99,7 @@ test_move()
     hestia_obj put_data $obj --file /etc/hosts
     hestia_obj move_data $obj --source 0 --target 1
 
-    rbh_sync "rbh:hestia:" "rbh:mongo:$testdb"
+    rbh_sync "rbh:hestia:" "rbh:$db:$testdb"
 
     local size=$(stat -c %s /etc/hosts)
 
@@ -123,7 +123,7 @@ test_user_attributes()
     hestia metadata update --id_fmt=parent_id --input_fmt=key_value $obj2 <<< \
         data.mic=test
 
-    rbh_sync "rbh:hestia:" "rbh:mongo:$testdb"
+    rbh_sync "rbh:hestia:" "rbh:$db:$testdb"
 
     find_attribute '"xattrs.user_metadata.my_keys":"alicia"' \
                    '"ns.name":"'$obj1'"'
