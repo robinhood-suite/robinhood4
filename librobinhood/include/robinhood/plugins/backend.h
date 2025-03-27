@@ -17,6 +17,7 @@
 #include "robinhood/backend.h"
 #include "robinhood/config.h"
 #include "robinhood/filter.h"
+#include "robinhood/fsentry.h"
 #include "robinhood/plugin.h"
 
 struct rbh_backend_plugin {
@@ -31,6 +32,7 @@ struct rbh_backend_plugin_operations {
     enum rbh_parser_token (*check_valid_token)(const char *token);
     struct rbh_filter *(*build_filter)(const char **argv, int argc, int *index,
                                        bool *need_prefetch);
+    int (*delete_entry)(struct rbh_fsentry *fsentry);
     void (*destroy)();
 };
 
@@ -165,6 +167,25 @@ rbh_plugin_build_filter(const struct rbh_backend_plugin *plugin,
 
     errno = ENOTSUP;
     return NULL;
+}
+
+/**
+ * Delete an entry from the plugin
+ *
+ * @param plugin         the plugin to delete an entry from
+ * @param fsentry        the entry to delete
+ *
+ * @return               0 on success, -1 on error and errno is set
+ */
+static inline int
+rbh_plugin_delete_entry(const struct rbh_backend_plugin *plugin,
+                        struct rbh_fsentry *fsentry)
+{
+    if (plugin->ops->delete_entry)
+        return plugin->ops->delete_entry(fsentry);
+
+    errno = ENOTSUP;
+    return -1;
 }
 
 #endif
