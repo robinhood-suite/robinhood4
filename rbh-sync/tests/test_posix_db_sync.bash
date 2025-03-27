@@ -316,6 +316,10 @@ test_stop_sync_on_error()
     local third_file="test3"
     local dir="dir"
 
+    if [[ $db != mongo ]]; then
+        skip "This test relies on the batching behavior of the mongo backend"
+    fi
+
     touch $first_file
     touch $second_file
     mkdir $dir
@@ -368,6 +372,10 @@ test_config()
 {
     local conf_file="conf"
     local file="test_file"
+
+    if [[ $db != mongo ]]; then
+        skip "test_config can only be run with mongo backend"
+    fi
 
     touch $file
 

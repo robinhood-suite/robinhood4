@@ -102,8 +102,14 @@ function mongo_version()
 
 error()
 {
-    echo "$*"
+    >&2 echo "$*"
     exit 1
+}
+
+skip()
+{
+    >&2 echo "$*"
+    exit 77
 }
 
 join_arr()
@@ -209,7 +215,11 @@ setup()
     cd "$testdir"
 
     # Create test database's name
-    testdb=$SUITE-$test
+    if [[ $db == sqlite ]]; then
+        testdb=/tmp/$SUITE-$test.db
+    else
+        testdb=$SUITE-$test
+    fi
 
     # Load MPI
     if [[ "$WITH_MPI" == "true" ]]; then
@@ -244,6 +254,7 @@ run_tests()
 {
     local fail=0
     local timefile=$(mktemp)
+    local all_skipped=true
 
     if [[ "$WITH_MPI" != "true" ]]; then
         db=${RBH_TEST_DB:-mongo}
@@ -270,19 +281,23 @@ run_tests()
         local duration=$(( $end - $(cat "$timefile") ))
 
         if (( rc == 0 )); then
+            all_skipped=false
             echo "$test: ✔  (${duration}s)"
         elif (( rc == 77 )); then
             echo "$test: SKIP"
-            if (( fail == 0 )); then
-                fail="77"
-            fi
         else
+            all_skipped=false
             echo "$test: ✖  (${duration}s)"
             fail=$rc
         fi
     done
 
     rm "$timefile"
+
+    # Mark the whole test as skipped if all the subtests where skipped
+    if $all_skipped; then
+        return 77
+    fi
 
     return $fail
 }

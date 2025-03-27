@@ -387,7 +387,6 @@ statx()
     local file="$2"
 
     stat -c "$format" "$file"
-    #echo "$stat"
 }
 
 verify_statx()
