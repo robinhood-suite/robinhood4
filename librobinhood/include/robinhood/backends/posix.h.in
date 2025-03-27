@@ -76,6 +76,25 @@ rbh_posix_build_filter(const char **argv, int argc, int *index,
                        bool *need_prefetch);
 
 /**
+ * Fill information about an entry according to a given directive into a buffer
+ *
+ * @param output         an array in which the information can be printed
+ *                       according to \p directive. Size of the array should be
+ *                       \p max_length
+ * @param max_length     size of the \p output array
+ * @param fsentry        fsentry to print
+ * @param directive      which information about \p fsentry to print
+ * @param backend        the backend to print (XXX: may not be necessary)
+ *
+ * @return               the number of characters written to \p output, -1 on
+ *                       error
+ */
+int
+rbh_posix_fill_entry_info(char *output, int max_length,
+                          const struct rbh_fsentry *fsentry,
+                          const char *directive, const char *backend);
+
+/**
  * Delete an entry from the plugin
  *
  * @param fsentry        the entry to delete
