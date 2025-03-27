@@ -332,11 +332,13 @@ free_ns_data(void)
 }
 
 static void
-build_pair_nb_children(struct rbh_value_pair *pair, int nb_children)
+build_pair_nb_children(struct rbh_value_pair *pair, int nb_children,
+                       struct rbh_sstack *sstack)
 {
     struct rbh_value *value;
 
-    value = RBH_SSTACK_PUSH(xattrs, NULL, sizeof(*pair->value));
+    value = RBH_SSTACK_PUSH(sstack, NULL, sizeof(*pair->value));
+
     value->type = RBH_VT_INT64;
     value->int64 = nb_children;
 
@@ -345,14 +347,18 @@ build_pair_nb_children(struct rbh_value_pair *pair, int nb_children)
 }
 
 struct rbh_fsentry *
-build_fsentry_nb_children(struct rbh_id *id, int nb_children)
+build_fsentry_nb_children(struct rbh_id *id, int nb_children,
+                          struct rbh_sstack *sstack)
 {
     struct rbh_value_pair *pair;
     struct rbh_value_map xattr;
 
-    pair = RBH_SSTACK_PUSH(xattrs, NULL, sizeof(*pair));
+    if (sstack == NULL && xattrs != NULL)
+        sstack = xattrs;
 
-    build_pair_nb_children(pair, nb_children);
+    pair = RBH_SSTACK_PUSH(sstack, NULL, sizeof(*pair));
+
+    build_pair_nb_children(pair, nb_children, sstack);
 
     xattr.count = 1;
     xattr.pairs = pair;
@@ -539,7 +545,7 @@ fsentry_from_any(struct fsentry_id_pair *fip, const struct rbh_value *path,
     }
 
     if (S_ISDIR(statxbuf.stx_mode)) {
-        build_pair_nb_children(&pairs[count], 0);
+        build_pair_nb_children(&pairs[count], 0, xattrs);
         count++;
     }
 
@@ -548,6 +554,7 @@ fsentry_from_any(struct fsentry_id_pair *fip, const struct rbh_value *path,
 
     fsentry = rbh_fsentry_new(id, parent_id, name, &statxbuf,
                               &ns_xattrs, &inode_xattrs, symlink);
+
     if (fsentry == NULL) {
         save_errno = errno;
         goto out_clear_sstacks;
