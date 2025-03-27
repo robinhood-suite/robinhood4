@@ -155,7 +155,7 @@ do_db()
 
 count_documents()
 {
-    do_db count "$testdb"
+    do_db count "$testdb" "$@"
 }
 
 find_attribute()
