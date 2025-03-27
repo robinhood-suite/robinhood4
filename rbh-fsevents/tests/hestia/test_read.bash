@@ -64,7 +64,7 @@ test_read()
     fi
 }
 
-test_read_to_mongo()
+test_read_to_db()
 {
     local obj=$(hestia object --verbosity 1 create blob)
 
@@ -84,7 +84,7 @@ test_read_to_mongo()
 #                                     MAIN                                     #
 ################################################################################
 
-declare -a tests=(test_read test_read_to_mongo)
+declare -a tests=(test_read test_read_to_db)
 
 sub_setup=hestia_setup
 sub_teardown=hestia_teardown
