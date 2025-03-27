@@ -332,8 +332,9 @@ test_continue_sync_on_error()
 
     if [[ "$WITH_MPI" == "true" ]]; then
         # We check if there is an error from mpifileutils while opening /dir
+        local realpath=$(realpath $dir)
         echo "$output" | \
-        grep "ERROR: Failed to open directory with opendir: './$dir'" || \
+        grep "ERROR: Failed to open directory with opendir: '$realpath'" || \
         error "Failed to find error on open of '$dir'"
     else
         echo "$output" | grep "FTS" | grep "read entry './$dir'" ||
@@ -347,11 +348,7 @@ test_continue_sync_on_error()
     fi
 
     find_attribute '"ns.xattrs.path":"/"'
-    # Temporary check until the number of children of directory is added to the
-    # mfu iterator
-    if [[ "$WITH_MPI" == "false" ]]; then
-        find_attribute '"ns.xattrs.path":"/"' '"xattrs.nb_children": 1'
-    fi
+    find_attribute '"ns.xattrs.path":"/"' '"xattrs.nb_children": 1'
     find_attribute '"ns.name":"'$first_file'"'
 }
 
@@ -513,6 +510,42 @@ test_sync_number_children()
                       '"xattrs.nb_children": {$exists: true}')
 }
 
+test_sync_number_children_mpi()
+{
+    mkdir -p root/dir{1..5}/dir{1..5}/dir{1..5}
+
+    touch root/file{1..100}
+    touch root/dir{1..5}/file{1..100}
+    touch root/dir{1..5}/dir{1..5}/file{1..100}
+    touch root/dir{1..5}/dir{1..5}/dir{1..5}/file{1..105}
+
+    rbh_sync_posix "root" "rbh:$db:$testdb"
+
+    local expected_children=105
+    local directories=()
+    while IFS= read -r -d $'\0'; do
+        directories+=("$REPLY")
+    done < <(find root -type d -print0)
+
+    local expected_nb_directories=${#directories[@]}
+    local nb_directories=$(count_documents '"xattrs.nb_children": {$gt: 0}')
+
+    if [[ $expected_nb_directories != $nb_directories ]]; then
+        error "There should be $expected_nb_directories with a number of" \
+              "children greater than 0, got $nb_directories"
+    fi
+
+    for dir in ${directories[@]}; do
+        local name=${dir#"root"}
+        if [[ -z "$name" ]]; then
+            name="/"
+        fi
+
+        find_attribute '"ns.xattrs.path": "'"$name"'"'\
+                       '"xattrs.nb_children": '"$expected_children"''
+    done
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
@@ -522,12 +555,10 @@ declare -a tests=(test_sync_2_files test_sync_size test_sync_3_files
                   test_sync_one_one_file test_sync_one test_sync_one_two_files
                   test_sync_symbolic_link test_sync_socket test_sync_fifo
                   test_sync_branch test_continue_sync_on_error
-                  test_stop_sync_on_error test_config)
+                  test_stop_sync_on_error test_config test_sync_number_children)
 
-# Temporary check until the number of children of directory is added to the
-# mfu iterator
-if [[ "$WITH_MPI" == "false" ]]; then
-    tests+=(test_sync_number_children)
+if [[ $WITH_MPI == true ]]; then
+    tests+=(test_sync_number_children_mpi)
 fi
 
 tmpdir=$(mktemp --directory)

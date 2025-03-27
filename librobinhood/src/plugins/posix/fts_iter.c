@@ -136,7 +136,7 @@ skip:
          */
         if (current_counter > 0)
             fsentry = build_fsentry_nb_children(ftsent->fts_pointer,
-                                                current_counter);
+                                                current_counter, NULL);
 
         /* fsentry_from_ftsent() memoizes ids of directories */
         free(ftsent->fts_pointer);
