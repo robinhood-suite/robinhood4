@@ -26,14 +26,14 @@ test_dump()
 
     diff <(lfs changelog $LUSTRE_MDT | awk '{ print substr($2, 3) }') \
          <(rbh_fsevents --dump "-" --enrich rbh:lustre:"$LUSTRE_DIR" \
-               src:lustre:"$LUSTRE_MDT" "rbh:mongo:$testdb" |
+               src:lustre:"$LUSTRE_MDT" "rbh:$db:$testdb" |
                awk '{ print substr($3, 3) }')
 
     local output=$(rbh_fsevents --dump "-" --enrich rbh:lustre:"$LUSTRE_DIR" \
-                       src:lustre:"$LUSTRE_MDT" "rbh:mongo:$testdb")
+                       src:lustre:"$LUSTRE_MDT" "rbh:$db:$testdb")
 
     rbh_fsevents --dump "$dump_file" --enrich rbh:lustre:"$LUSTRE_DIR" \
-        src:lustre:"$LUSTRE_MDT" "rbh:mongo:$testdb"
+        src:lustre:"$LUSTRE_MDT" "rbh:$db:$testdb"
 
     diff <(echo "$output") $dump_file
 

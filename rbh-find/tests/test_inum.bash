@@ -40,20 +40,20 @@ test_inum()
         $(echo "${inode_to_path_sorted[3]}" | cut -d' ' -f2)
     )
 
-    rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:posix:." "rbh:$db:$testdb"
 
-    rbh_find "rbh:mongo:$testdb" -inum ${ino[1]} -sort ino |
+    rbh_find "rbh:$db:$testdb" -inum ${ino[1]} -sort ino |
         difflines "${path[1]}"
-    rbh_find "rbh:mongo:$testdb" -inum +${ino[1]} -sort ino |
+    rbh_find "rbh:$db:$testdb" -inum +${ino[1]} -sort ino |
         difflines "${path[2]}" "${path[3]}"
-    rbh_find "rbh:mongo:$testdb" -inum -${ino[2]} -sort ino |
+    rbh_find "rbh:$db:$testdb" -inum -${ino[2]} -sort ino |
         difflines "${path[0]}" "${path[1]}"
 
-    rbh_find "rbh:mongo:$testdb" -inum ${ino[0]} -o -inum +${ino[2]} -sort ino |
+    rbh_find "rbh:$db:$testdb" -inum ${ino[0]} -o -inum +${ino[2]} -sort ino |
         difflines "${path[0]}" "${path[3]}"
-    rbh_find "rbh:mongo:$testdb" -inum +${ino[2]} -a -inum -${ino[2]} -sort ino |
+    rbh_find "rbh:$db:$testdb" -inum +${ino[2]} -a -inum -${ino[2]} -sort ino |
         difflines
-    rbh_find "rbh:mongo:$testdb" -not -inum ${ino[2]} -sort ino |
+    rbh_find "rbh:$db:$testdb" -not -inum ${ino[2]} -sort ino |
         difflines "${path[0]}" "${path[1]}" "${path[3]}"
 }
 

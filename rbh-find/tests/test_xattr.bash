@@ -16,20 +16,20 @@ test_dir=$(dirname $(readlink -e $0))
 test_xattr_exists_no_arg()
 {
     touch "file"
-    rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:posix:." "rbh:$db:$testdb"
 
-    ! rbh_find "rbh:mongo:$testdb" -xattr
+    ! rbh_find "rbh:$db:$testdb" -xattr
 }
 
 test_xattr_exists()
 {
     touch "file"
     setfattr --name user.key --value val file
-    rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:posix:." "rbh:$db:$testdb"
 
-    rbh_find "rbh:mongo:$testdb" -xattr user | sort |
+    rbh_find "rbh:$db:$testdb" -xattr user | sort |
         difflines "/file"
-    rbh_find "rbh:mongo:$testdb" -xattr user.key | sort |
+    rbh_find "rbh:$db:$testdb" -xattr user.key | sort |
         difflines "/file"
 }
 
@@ -37,25 +37,25 @@ test_xattr_not_exists()
 {
     touch "file"
     setfattr --name user.key --value val file
-    rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:posix:." "rbh:$db:$testdb"
 
-    rbh_find "rbh:mongo:$testdb" -xattr blob | sort | difflines
-    rbh_find "rbh:mongo:$testdb" -xattr user.err | sort | difflines
+    rbh_find "rbh:$db:$testdb" -xattr blob | sort | difflines
+    rbh_find "rbh:$db:$testdb" -xattr user.err | sort | difflines
 }
 
 test_not_xattr_exists()
 {
     touch "file"
     setfattr --name user.key --value val file
-    rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:posix:." "rbh:$db:$testdb"
 
-    rbh_find "rbh:mongo:$testdb" -not -xattr user | sort |
+    rbh_find "rbh:$db:$testdb" -not -xattr user | sort |
         difflines "/"
-    rbh_find "rbh:mongo:$testdb" -not -xattr user.key | sort |
+    rbh_find "rbh:$db:$testdb" -not -xattr user.key | sort |
         difflines "/"
-    rbh_find "rbh:mongo:$testdb" -not -xattr user.err | sort |
+    rbh_find "rbh:$db:$testdb" -not -xattr user.err | sort |
         difflines "/" "/file"
-    rbh_find "rbh:mongo:$testdb" -not -xattr err | sort |
+    rbh_find "rbh:$db:$testdb" -not -xattr err | sort |
         difflines "/" "/file"
 }
 

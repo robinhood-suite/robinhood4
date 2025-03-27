@@ -82,7 +82,7 @@ test_create()
 test_create_to_mongo()
 {
     local obj=$(hestia object --verbosity 1 create blob)
-    invoke_rbh_fsevents "rbh:mongo:$testdb"
+    invoke_rbh_fsevents "rbh:$db:$testdb"
 
     find_attribute '"ns.name":"'$obj'"'
     find_attribute '"ns.xattrs.path":"'$obj'"'

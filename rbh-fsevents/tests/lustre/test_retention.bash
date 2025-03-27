@@ -56,11 +56,11 @@ test_retention()
         '"ns.name": "'$entry'"'
     find_attribute '"xattrs.user.expires": "+5"' '"ns.name": "'$entry'"'
 
-    rbh_lfind "rbh:mongo:$testdb" -expired | sort | difflines
+    rbh_lfind "rbh:$db:$testdb" -expired | sort | difflines
 
     date --set="@$(( $(stat -c %X $entry) + 6))"
 
-    rbh_lfind "rbh:mongo:$testdb" -expired | sort |
+    rbh_lfind "rbh:$db:$testdb" -expired | sort |
         difflines "/$path_without_mount"
 
     truncate -s 300 $entry
@@ -75,11 +75,11 @@ test_retention()
         '"ns.name": "'$entry'"'
     find_attribute '"xattrs.user.expires": "+5"' '"ns.name": "'$entry'"'
 
-    rbh_lfind "rbh:mongo:$testdb" -expired | sort | difflines
+    rbh_lfind "rbh:$db:$testdb" -expired | sort | difflines
 
     date --set="@$(( $(stat -c %Y $entry) + 6))"
 
-    rbh_lfind "rbh:mongo:$testdb" -expired | sort |
+    rbh_lfind "rbh:$db:$testdb" -expired | sort |
         difflines "/$path_without_mount"
 }
 
@@ -107,7 +107,7 @@ EOF
     path_without_mount="${path_without_mount#"$LUSTRE_DIR"}"
 
     rbh_fsevents --config $conf_file --enrich rbh:lustre:"$LUSTRE_DIR" \
-        src:lustre:"$LUSTRE_MDT" "rbh:mongo:$testdb"
+        src:lustre:"$LUSTRE_MDT" "rbh:$db:$testdb"
 
     local exp_time="$(( $(stat -c %Y $entry) + 5))"
     find_attribute \

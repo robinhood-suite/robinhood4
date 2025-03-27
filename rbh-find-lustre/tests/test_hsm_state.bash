@@ -24,11 +24,11 @@ test_none()
     touch "archived"
     archive_file "archived"
 
-    rbh_sync "rbh:lustre:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
 
-    rbh_lfind "rbh:mongo:$testdb" -hsm-state none | sort |
+    rbh_lfind "rbh:$db:$testdb" -hsm-state none | sort |
         difflines "/none"
-    rbh_lfind "rbh:mongo:$testdb" -hsm-state archived | sort |
+    rbh_lfind "rbh:$db:$testdb" -hsm-state archived | sort |
         difflines "/archived"
 }
 
@@ -47,10 +47,10 @@ test_archived_states()
         fi
     done
 
-    rbh_sync "rbh:lustre:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
 
     for state in "${states[@]}"; do
-        rbh_lfind "rbh:mongo:$testdb" -hsm-state "$state" | sort |
+        rbh_lfind "rbh:$db:$testdb" -hsm-state "$state" | sort |
             difflines "/$state"
     done
 }
@@ -66,10 +66,10 @@ test_independant_states()
         sudo lfs hsm_set "--$state" "$state"
     done
 
-    rbh_sync "rbh:lustre:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
 
     for state in "${states[@]}"; do
-        rbh_lfind "rbh:mongo:$testdb" -hsm-state "$state" | sort |
+        rbh_lfind "rbh:$db:$testdb" -hsm-state "$state" | sort |
             difflines "/$state"
     done
 }
@@ -92,7 +92,7 @@ test_multiple_states()
         done
     done
 
-    rbh_sync "rbh:lustre:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
 
     for i in $(seq 0 $length); do
         local state=${states[$i]}
@@ -105,7 +105,7 @@ test_multiple_states()
         # prefixed with a "/"
         substates=("${substates[@]/#/\/}")
 
-        rbh_lfind "rbh:mongo:$testdb" -hsm-state "$state" | sort |
+        rbh_lfind "rbh:$db:$testdb" -hsm-state "$state" | sort |
             difflines "${substates[@]}"
     done
 }

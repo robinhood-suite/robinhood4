@@ -38,7 +38,7 @@ test_simple_sync()
     touch "dir/fileA"
     touch "dir/fileB"
 
-    rbh_sync_lustre "." "rbh:mongo:$testdb"
+    rbh_sync_lustre "." "rbh:$db:$testdb"
 
     find_attribute '"ns.xattrs.path":"/"'
     find_attribute '"ns.xattrs.path":"/dir"'
@@ -57,7 +57,7 @@ test_branch_sync()
     mkdir -p $first_dir/$second_dir/$third_dir
     touch $first_dir/$second_dir/$third_dir/$entry
 
-    rbh_sync_lustre "$first_dir#$second_dir" "rbh:mongo:$testdb"
+    rbh_sync_lustre "$first_dir#$second_dir" "rbh:$db:$testdb"
 
     ! (find_attribute '"ns.name":"'$first_dir'"')
 
@@ -74,7 +74,7 @@ test_branch_sync()
 
     local abs_path="$(realpath $first_dir)"
 
-    rbh_sync_lustre "$abs_path#$second_dir" "rbh:mongo:$testdb"
+    rbh_sync_lustre "$abs_path#$second_dir" "rbh:$db:$testdb"
 
     ! (find_attribute '"ns.name":"'$abs_path'"')
 
@@ -89,7 +89,7 @@ test_branch_sync()
 
     mongo $testdb --eval "db.dropDatabase()"
 
-    rbh_sync_lustre "$first_dir#$second_dir/$third_dir" "rbh:mongo:$testdb"
+    rbh_sync_lustre "$first_dir#$second_dir/$third_dir" "rbh:$db:$testdb"
 
     ! (find_attribute '"ns.name":"'$first_dir'"')
     ! (find_attribute '"ns.name":"'$second_dir'"')
@@ -106,7 +106,7 @@ test_sync_one_file()
 {
     truncate -s 1k "fileA"
 
-    rbh_sync_lustre_one "fileA" "rbh:mongo:$testdb"
+    rbh_sync_lustre_one "fileA" "rbh:$db:$testdb"
 
     local count=$(count_documents)
     if [[ $count -ne 1 ]]; then
@@ -136,7 +136,7 @@ test_hsm_state_none()
     touch "archived"
     archive_file "archived"
 
-    rbh_sync_lustre "." "rbh:mongo:$testdb"
+    rbh_sync_lustre "." "rbh:$db:$testdb"
 
     find_attribute '"xattrs.hsm_state": { $exists : false }' \
                    '"ns.xattrs.path" : "/none"'
@@ -159,7 +159,7 @@ test_hsm_state_archived_states()
         fi
     done
 
-    rbh_sync_lustre "." "rbh:mongo:$testdb"
+    rbh_sync_lustre "." "rbh:$db:$testdb"
 
     for state in "${states[@]}"; do
         find_attribute '"xattrs.hsm_state":'$(get_hsm_state_value "$state") \
@@ -178,7 +178,7 @@ test_hsm_state_independant_states()
         sudo lfs hsm_set "--$state" "$state"
     done
 
-    rbh_sync_lustre "." "rbh:mongo:$testdb"
+    rbh_sync_lustre "." "rbh:$db:$testdb"
 
     for state in "${states[@]}"; do
         find_attribute '"xattrs.hsm_state":'$(get_hsm_state_value "$state") \
@@ -204,7 +204,7 @@ test_hsm_state_multiple_states()
         done
     done
 
-    rbh_sync_lustre "." "rbh:mongo:$testdb"
+    rbh_sync_lustre "." "rbh:$db:$testdb"
 
     for state in "${states[@]}"; do
         find_attribute '"xattrs.hsm_state":'$(get_hsm_state_value "$state") \
@@ -217,7 +217,7 @@ test_hsm_archive_id()
     touch "archive-id-1"
     archive_file "archive-id-1"
 
-    rbh_sync_lustre "." "rbh:mongo:$testdb"
+    rbh_sync_lustre "." "rbh:$db:$testdb"
 
     local id_1=$(lfs hsm_state "archive-id-1" | cut -d ':' -f3)
     find_attribute '"xattrs.hsm_archive_id":'$id_1 \
@@ -229,7 +229,7 @@ test_flags()
 {
     lfs setstripe -E 1k -c 2 -E -1 -c -1 "test_flags"
 
-    rbh_sync_lustre "." "rbh:mongo:$testdb"
+    rbh_sync_lustre "." "rbh:$db:$testdb"
 
     local flags=$(lfs getstripe -v "test_flags" | grep "lcm_flags" | \
                   cut -d ':' -f2 | xargs)
@@ -244,7 +244,7 @@ test_gen()
     lfs setstripe -E 1M -c 2 -S 256k -E -1 -c -1 "test_gen_2"
     truncate -s 4M test_gen_2
 
-    rbh_sync_lustre "." "rbh:mongo:$testdb"
+    rbh_sync_lustre "." "rbh:$db:$testdb"
 
     local gen_1=$(lfs getstripe -v "test_gen_1" | grep "lcm_layout_gen" | \
                   cut -d ':' -f2 | xargs)
@@ -264,7 +264,7 @@ test_mirror_count()
     lfs mirror extend -N2 "test_mc2"
     lfs mirror extend -N4 "test_mc4"
 
-    rbh_sync_lustre "." "rbh:mongo:$testdb"
+    rbh_sync_lustre "." "rbh:$db:$testdb"
 
     local mc=$(lfs getstripe -v "test_mc" | grep "lcm_mirror_count" | \
                cut -d ':' -f2 | xargs)
@@ -285,7 +285,7 @@ test_stripe_count()
     lfs setstripe -E 1M -c 2 -E 2M -c 1 -E -1 -c -1 "test_sc"
     truncate -s 2M "test_sc"
 
-    rbh_sync_lustre "." "rbh:mongo:$testdb"
+    rbh_sync_lustre "." "rbh:$db:$testdb"
 
     local sc_array=$(lfs getstripe -v "test_sc" | grep "lmm_stripe_count" | \
                      cut -d ':' -f2 | xargs)
@@ -300,7 +300,7 @@ test_stripe_size()
     lfs setstripe -E 1M -S 256k -E 2M -S 1M -E -1 -S 1G "test_ss"
     truncate -s 2M "test_ss"
 
-    rbh_sync_lustre "." "rbh:mongo:$testdb"
+    rbh_sync_lustre "." "rbh:$db:$testdb"
 
     local ss_array=$(lfs getstripe -v "test_ss" | grep "lmm_stripe_size" | \
                      cut -d ':' -f2 | xargs)
@@ -319,7 +319,7 @@ test_pattern()
     truncate -s 2M "test_pattern_mdt"
     truncate -s 2M "test_pattern_overstriping"
 
-    rbh_sync_lustre "." "rbh:mongo:$testdb"
+    rbh_sync_lustre "." "rbh:$db:$testdb"
 
     local patterns_r=$(lfs getstripe -v "test_pattern_raid0" | \
                        grep "lmm_pattern" | cut -d ':' -f2 | xargs)
@@ -353,7 +353,7 @@ test_comp_flags()
     lfs setstripe -E 1M -S 256k -E 2M -S 1M -E -1 -S 1G "test_comp_flags"
     truncate -s 1M "test_comp_flags"
 
-    rbh_sync_lustre "." "rbh:mongo:$testdb"
+    rbh_sync_lustre "." "rbh:$db:$testdb"
 
     local flags=$(lfs getstripe -v "test_comp_flags" | grep "lcme_flags" | \
                   cut -d ':' -f2 | xargs)
@@ -370,7 +370,7 @@ test_pool()
         "test_pool"
     truncate -s 2M "test_pool"
 
-    rbh_sync_lustre "." "rbh:mongo:$testdb"
+    rbh_sync_lustre "." "rbh:$db:$testdb"
 
     local pools=()
 
@@ -394,7 +394,7 @@ test_mirror_id()
     lfs setstripe -E 1M -c 2 -E 2M -c 1 -E -1 -c -1 "test_mirror_id"
     truncate -s 1M "test_mirror_id"
 
-    rbh_sync_lustre "." "rbh:mongo:$testdb"
+    rbh_sync_lustre "." "rbh:$db:$testdb"
 
     local mids=$(lfs getstripe -v "test_mirror_id" | grep "lcme_mirror_id" | \
                  cut -d ':' -f2 | xargs)
@@ -410,7 +410,7 @@ test_begin()
         "test_begin"
     truncate -s 1M "test_begin"
 
-    rbh_sync_lustre "." "rbh:mongo:$testdb"
+    rbh_sync_lustre "." "rbh:$db:$testdb"
 
     local begins=$(lfs getstripe -v "test_begin" | \
                    grep "lcme_extent.e_start" | cut -d ':' -f2 | xargs)
@@ -427,7 +427,7 @@ test_end()
         "test_end"
     truncate -s 2M "test_end"
 
-    rbh_sync_lustre "." "rbh:mongo:$testdb"
+    rbh_sync_lustre "." "rbh:$db:$testdb"
 
     local ends=$(lfs getstripe -v "test_end" | grep "lcme_extent.e_end" | \
                  cut -d ':' -f2 | xargs)
@@ -446,7 +446,7 @@ test_ost()
     truncate -s 1k "test_ost1"
     truncate -s 2M "test_ost2"
 
-    rbh_sync_lustre "." "rbh:mongo:$testdb"
+    rbh_sync_lustre "." "rbh:$db:$testdb"
 
     local ost1s=$(lfs getstripe -v "test_ost1" | grep "l_ost_idx" | \
                   cut -d ':' -f3 | cut -d ',' -f1 | xargs)
@@ -485,7 +485,7 @@ test_mdt_index_file()
 {
     touch "test_mdt_index"
 
-    rbh_sync_lustre "." "rbh:mongo:$testdb"
+    rbh_sync_lustre "." "rbh:$db:$testdb"
 
     local mdt_index=$(lfs getstripe -m "test_mdt_index")
 
@@ -507,7 +507,7 @@ test_mdt_index_dir()
         lfs migrate -m 0,$((mdt_count - 1)) "test_mdt_index2"
     fi
 
-    rbh_sync_lustre "." "rbh:mongo:$testdb"
+    rbh_sync_lustre "." "rbh:$db:$testdb"
 
     local mdt_indexes="[$(lfs getdirstripe -m 'test_mdt_index0')]"
     find_attribute '"xattrs.child_mdt_idx":'$mdt_indexes \
@@ -537,7 +537,7 @@ test_mdt_hash()
     mkdir "test_mdt_hash2"
     lfs migrate -m 0 -H fnv_1a_64 "test_mdt_hash2"
 
-    rbh_sync_lustre "." "rbh:mongo:$testdb"
+    rbh_sync_lustre "." "rbh:$db:$testdb"
 
     local mdt_hash1=$(lfs getdirstripe -H "test_mdt_hash1" | cut -d',' -f1)
     mdt_hash1="${mdt_hash1//all_char/1}"
@@ -556,7 +556,7 @@ test_mdt_count()
 
     lfs setdirstripe -c $mdt_count "test_mdt_count"
 
-    rbh_sync_lustre "." "rbh:mongo:$testdb"
+    rbh_sync_lustre "." "rbh:$db:$testdb"
 
     local mdt_count=$(lfs getdirstripe -c "test_mdt_count")
 
