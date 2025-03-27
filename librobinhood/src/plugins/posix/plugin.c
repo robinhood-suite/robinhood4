@@ -17,6 +17,7 @@ static const struct rbh_backend_plugin_operations POSIX_BACKEND_PLUGIN_OPS = {
     .new = rbh_posix_backend_new,
     .check_valid_token = rbh_posix_check_valid_token,
     .build_filter = rbh_posix_build_filter,
+    .fill_entry_info = rbh_posix_fill_entry_info,
     .delete_entry = rbh_posix_delete_entry,
 };
 
