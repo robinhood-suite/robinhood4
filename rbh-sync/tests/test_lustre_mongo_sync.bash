@@ -584,11 +584,8 @@ test_sync_number_children()
 #                                     MAIN                                     #
 ################################################################################
 
-declare -a tests=(test_simple_sync test_branch_sync test_sync_one_file)
-
-if [[ "$WITH_MPI" == "false" ]]; then
-    tests+=(test_sync_number_children)
-fi
+declare -a tests=(test_simple_sync test_branch_sync test_sync_one_file
+                  test_sync_number_children)
 
 if lctl get_param mdt.*.hsm_control | grep "enabled"; then
     tests+=(test_hsm_state_none test_hsm_state_archived_states
