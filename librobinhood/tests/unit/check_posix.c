@@ -1,5 +1,5 @@
 /* This file is part of the RobinHood Library
- * Copyright (C) 2019 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifer: LGPL-3.0-or-later
@@ -88,16 +88,17 @@ END_TEST
 
 START_TEST(pf_empty_root)
 {
-    static const char *EMPTY = "empty";
     const struct rbh_filter_options OPTIONS = { 0 };
     const struct rbh_filter_output OUTPUT = {
         .projection = {
             .fsentry_mask = RBH_FP_PARENT_ID,
         },
     };
-    struct rbh_backend *posix;
+    static const char *EMPTY = "empty";
     struct rbh_mut_iterator *fsentries;
     struct rbh_fsentry *fsentry;
+    struct rbh_backend *posix;
+
 
     ck_assert_int_eq(mkdir(EMPTY, S_IRWXU), 0);
 
