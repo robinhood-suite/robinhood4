@@ -58,10 +58,10 @@ test_min_ino()
     touch third
     rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
 
-    local root_ino="$(stat -c %i .)"
+    local min_ino="$(find -printf "%i\n" | sort -n | head -n 1)"
 
     rbh_report --csv "rbh:mongo:$testdb" --output "min(statx.ino)" |
-        difflines "$root_ino"
+        difflines "$min_ino"
 }
 
 ################################################################################
