@@ -25,7 +25,7 @@ test_range()
     truncate --size 50 second_large_file
     truncate --size 50 third_large_file
 
-    rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:posix:." "rbh:$db:$testdb"
 
     local root_size="$(stat -c %s .)"
     local smol_size="$(stat -c %s first_smol_file)"
@@ -39,7 +39,7 @@ test_range()
         local sum_large_size="$((root_size + (large_size * 3)))"
     fi
 
-    rbh_report --csv "rbh:mongo:$testdb" --group-by "statx.size[0;30]" \
+    rbh_report --csv "rbh:$db:$testdb" --group-by "statx.size[0;30]" \
                                          --output "sum(statx.size)" |
         difflines "[0; 30]: $sum_smol_size" "[30; +inf]: $sum_large_size"
 }
@@ -65,7 +65,7 @@ test_group_by_field_and_range()
     fake_user_id="$(id -u $test_user)"
     chown $test_user: second_user_*
 
-    rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:posix:." "rbh:$db:$testdb"
 
     local root_size="$(stat -c %s .)"
     local sum_second_smol_size="$((20 * 3))"
@@ -98,7 +98,7 @@ test_group_by_field_and_range()
                           "$fake_user_id,[70; +inf]: $sum_second_large_size")"
     fi
 
-    rbh_report --csv "rbh:mongo:$testdb" \
+    rbh_report --csv "rbh:$db:$testdb" \
         --group-by "statx.uid,statx.size[0;30;70]" --output "sum(statx.size)" |
         difflines "$expected"
 }

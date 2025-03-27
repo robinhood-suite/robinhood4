@@ -22,33 +22,33 @@ test_syntax_error()
 {
     touch "dummy"
 
-    rbh_sync "rbh:lustre:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
 
-    rbh_lfind "rbh:mongo:$testdb" -fid fail &&
+    rbh_lfind "rbh:$db:$testdb" -fid fail &&
         error "command should have failed because of invalid syntax"
-    rbh_lfind "rbh:mongo:$testdb" -fid 0x3 &&
+    rbh_lfind "rbh:$db:$testdb" -fid 0x3 &&
         error "command should have failed because of invalid syntax"
-    rbh_lfind "rbh:mongo:$testdb" -fid 0x3:0x4 &&
+    rbh_lfind "rbh:$db:$testdb" -fid 0x3:0x4 &&
         error "command should have failed because of invalid syntax"
-    rbh_lfind "rbh:mongo:$testdb" -fid "0x3:0x4:0x5]" &&
+    rbh_lfind "rbh:$db:$testdb" -fid "0x3:0x4:0x5]" &&
         error "command should have failed because of invalid syntax"
-    rbh_lfind "rbh:mongo:$testdb" -fid "0x3:0x4:0x5]]" &&
+    rbh_lfind "rbh:$db:$testdb" -fid "0x3:0x4:0x5]]" &&
         error "command should have failed because of invalid syntax"
-    rbh_lfind "rbh:mongo:$testdb" -fid "[0x3:0x4:0x5" &&
+    rbh_lfind "rbh:$db:$testdb" -fid "[0x3:0x4:0x5" &&
         error "command should have failed because of invalid syntax"
-    rbh_lfind "rbh:mongo:$testdb" -fid "[[0x3:0x4:0x5" &&
+    rbh_lfind "rbh:$db:$testdb" -fid "[[0x3:0x4:0x5" &&
         error "command should have failed because of invalid syntax"
-    rbh_lfind "rbh:mongo:$testdb" -fid "[[0x3:0x4:0x5]" &&
+    rbh_lfind "rbh:$db:$testdb" -fid "[[0x3:0x4:0x5]" &&
         error "command should have failed because of invalid syntax"
-    rbh_lfind "rbh:mongo:$testdb" -fid "[0x3:0x4:0x5]]" &&
+    rbh_lfind "rbh:$db:$testdb" -fid "[0x3:0x4:0x5]]" &&
         error "command should have failed because of invalid syntax"
-    rbh_lfind "rbh:mongo:$testdb" -fid "[0x3:0x4:0x5]invalid" &&
+    rbh_lfind "rbh:$db:$testdb" -fid "[0x3:0x4:0x5]invalid" &&
         error "command should have failed because of invalid syntax"
-    rbh_lfind "rbh:mongo:$testdb" -fid "[0x3:0x4:0x5)" &&
+    rbh_lfind "rbh:$db:$testdb" -fid "[0x3:0x4:0x5)" &&
         error "command should have failed because of invalid syntax"
-    rbh_lfind "rbh:mongo:$testdb" -fid "]0x3:0x4:0x5[" &&
+    rbh_lfind "rbh:$db:$testdb" -fid "]0x3:0x4:0x5[" &&
         error "command should have failed because of invalid syntax"
-    rbh_lfind "rbh:mongo:$testdb" -fid "[0x3:0x4:0x5][]" &&
+    rbh_lfind "rbh:$db:$testdb" -fid "[0x3:0x4:0x5][]" &&
         error "command should have failed because of invalid syntax"
 
     return 0
@@ -58,9 +58,9 @@ test_unknown_fid()
 {
     touch "unknown_fid"
 
-    rbh_sync "rbh:lustre:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
 
-    rbh_lfind "rbh:mongo:$testdb" -fid 0x0:0x0:0x0 | sort |
+    rbh_lfind "rbh:$db:$testdb" -fid 0x0:0x0:0x0 | sort |
         difflines
 }
 
@@ -70,15 +70,15 @@ test_known_fid()
 
     touch "$file"
 
-    rbh_sync "rbh:lustre:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
 
     local fid=$(lfs path2fid "$file")
-    rbh_lfind "rbh:mongo:$testdb" -fid "$fid" | sort |
+    rbh_lfind "rbh:$db:$testdb" -fid "$fid" | sort |
         difflines "/$file"
 
     # remove braces around fid
     fid="${fid:1:-1}"
-    rbh_lfind "rbh:mongo:$testdb" -fid "$fid" | sort |
+    rbh_lfind "rbh:$db:$testdb" -fid "$fid" | sort |
         difflines "/$file"
 }
 

@@ -18,13 +18,13 @@ cd "$LUSTRE_DIR"
 
 test_invalid()
 {
-    rbh_lfind "rbh:mongo:$testdb" -stripe-count $(echo 2^64 | bc) &&
+    rbh_lfind "rbh:$db:$testdb" -stripe-count $(echo 2^64 | bc) &&
         error "find with an ost index too big should have failed"
 
-    rbh_lfind "rbh:mongo:$testdb" -stripe-count 42blob &&
+    rbh_lfind "rbh:$db:$testdb" -stripe-count 42blob &&
         error "find with an invalid ost index should have failed"
 
-    rbh_lfind "rbh:mongo:$testdb" -stripe-count invalid &&
+    rbh_lfind "rbh:$db:$testdb" -stripe-count invalid &&
         error "find with an invalid ost index should have failed"
 
     return 0
@@ -37,21 +37,21 @@ test_default()
     local default_stripe_count="$(lfs getstripe -c $LUSTRE_DIR | xargs)"
     mkdir $dir
 
-    rbh_sync "rbh:lustre:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
 
-    rbh_lfind "rbh:mongo:$testdb" -stripe-count default | sort |
+    rbh_lfind "rbh:$db:$testdb" -stripe-count default | sort |
         difflines "/" "/$dir"
 
     lfs setstripe -c $((default_stripe_count + 1)) $dir
-    rbh_sync "rbh:lustre:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
 
-    rbh_lfind "rbh:mongo:$testdb" -stripe-count default | sort |
+    rbh_lfind "rbh:$db:$testdb" -stripe-count default | sort |
         difflines "/"
 
     lfs setstripe -c $((default_stripe_count)) $dir
-    rbh_sync "rbh:lustre:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
 
-    rbh_lfind "rbh:mongo:$testdb" -stripe-count default | sort |
+    rbh_lfind "rbh:$db:$testdb" -stripe-count default | sort |
         difflines "/"
 }
 
@@ -66,44 +66,44 @@ test_stripe_count()
     lfs setstripe -c 2 $dir
     lfs setstripe -c 3 .
 
-    rbh_sync "rbh:lustre:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
 
-    rbh_lfind "rbh:mongo:$testdb" -stripe-count 1 | sort |
+    rbh_lfind "rbh:$db:$testdb" -stripe-count 1 | sort |
         difflines "/$dir/$file"
-    rbh_lfind "rbh:mongo:$testdb" -stripe-count 2 | sort |
+    rbh_lfind "rbh:$db:$testdb" -stripe-count 2 | sort |
         difflines "/$dir"
-    rbh_lfind "rbh:mongo:$testdb" -stripe-count 3 | sort |
+    rbh_lfind "rbh:$db:$testdb" -stripe-count 3 | sort |
         difflines "/"
 
-    rbh_lfind "rbh:mongo:$testdb" -stripe-count -4 | sort |
+    rbh_lfind "rbh:$db:$testdb" -stripe-count -4 | sort |
         difflines "/" "/$dir" "/$dir/$file"
-    rbh_lfind "rbh:mongo:$testdb" -stripe-count -3 | sort |
+    rbh_lfind "rbh:$db:$testdb" -stripe-count -3 | sort |
         difflines "/$dir" "/$dir/$file"
-    rbh_lfind "rbh:mongo:$testdb" -stripe-count -2 | sort |
+    rbh_lfind "rbh:$db:$testdb" -stripe-count -2 | sort |
         difflines "/$dir/$file"
 
-    rbh_lfind "rbh:mongo:$testdb" -stripe-count +0 | sort |
+    rbh_lfind "rbh:$db:$testdb" -stripe-count +0 | sort |
         difflines "/" "/$dir" "/$dir/$file"
-    rbh_lfind "rbh:mongo:$testdb" -stripe-count +1 | sort |
+    rbh_lfind "rbh:$db:$testdb" -stripe-count +1 | sort |
         difflines "/" "/$dir"
-    rbh_lfind "rbh:mongo:$testdb" -stripe-count +2 | sort |
+    rbh_lfind "rbh:$db:$testdb" -stripe-count +2 | sort |
         difflines "/"
 
     lfs migrate -c 3 $dir/$file
-    rbh_sync "rbh:lustre:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
 
-    rbh_lfind "rbh:mongo:$testdb" -stripe-count 3 | sort |
+    rbh_lfind "rbh:$db:$testdb" -stripe-count 3 | sort |
         difflines "/" "/$dir/$file"
 
     lfs setstripe -c 3 $dir
-    rbh_sync "rbh:lustre:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
 
-    rbh_lfind "rbh:mongo:$testdb" -stripe-count 3 | sort |
+    rbh_lfind "rbh:$db:$testdb" -stripe-count 3 | sort |
         difflines "/" "/$dir" "/$dir/$file"
 
-    rbh_lfind "rbh:mongo:$testdb" -stripe-count +2 | sort |
+    rbh_lfind "rbh:$db:$testdb" -stripe-count +2 | sort |
         difflines "/" "/$dir" "/$dir/$file"
-    rbh_lfind "rbh:mongo:$testdb" -stripe-count -4 | sort |
+    rbh_lfind "rbh:$db:$testdb" -stripe-count -4 | sort |
         difflines "/" "/$dir" "/$dir/$file"
 }
 
@@ -115,24 +115,24 @@ test_default_stripe_count()
     lfs mkdir $dir
     lfs setstripe -c 4 $file
 
-    rbh_sync "rbh:lustre:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
 
-    rbh_lfind "rbh:mongo:$testdb" \
+    rbh_lfind "rbh:$db:$testdb" \
         -stripe-count $(lfs getstripe -c $LUSTRE_DIR | xargs) | sort |
         difflines
 
     lfs setstripe -c 3 $LUSTRE_DIR
 
-    rbh_lfind "rbh:mongo:$testdb" -stripe-count 3 | sort |
+    rbh_lfind "rbh:$db:$testdb" -stripe-count 3 | sort |
         difflines "/" "/$dir"
 
-    rbh_lfind "rbh:mongo:$testdb" -stripe-count -3 | sort |
+    rbh_lfind "rbh:$db:$testdb" -stripe-count -3 | sort |
         difflines
-    rbh_lfind "rbh:mongo:$testdb" -stripe-count -5 | sort |
+    rbh_lfind "rbh:$db:$testdb" -stripe-count -5 | sort |
         difflines "/" "/$file" "/$dir"
-    rbh_lfind "rbh:mongo:$testdb" -stripe-count +3 | sort |
+    rbh_lfind "rbh:$db:$testdb" -stripe-count +3 | sort |
         difflines "/$file"
-    rbh_lfind "rbh:mongo:$testdb" -stripe-count +2 | sort |
+    rbh_lfind "rbh:$db:$testdb" -stripe-count +2 | sort |
         difflines "/" "/$file" "/$dir"
 }
 

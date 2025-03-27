@@ -40,7 +40,7 @@ test_sync_2_files()
 {
     truncate -s 1k "fileA"
 
-    rbh_sync_posix "." "rbh:mongo:$testdb"
+    rbh_sync_posix "." "rbh:$db:$testdb"
     find_attribute '"ns.xattrs.path":"/"'
     find_attribute '"ns.xattrs.path":"/fileA"'
 }
@@ -50,7 +50,7 @@ test_sync_size()
     truncate -s 1025 "fileA"
     local length=$(stat -c %s "fileA")
 
-    rbh_sync_posix "." "rbh:mongo:$testdb"
+    rbh_sync_posix "." "rbh:$db:$testdb"
     find_attribute '"ns.xattrs.path":"/fileA"' '"statx.size" : '$length
 }
 
@@ -59,7 +59,7 @@ test_sync_3_files()
     truncate -s 1k "fileA"
     truncate -s 1k "fileB"
 
-    rbh_sync_posix "." "rbh:mongo:$testdb"
+    rbh_sync_posix "." "rbh:$db:$testdb"
     find_attribute '"ns.xattrs.path":"/"'
     find_attribute '"ns.xattrs.path":"/fileA"'
     find_attribute '"ns.xattrs.path":"/fileB"'
@@ -72,7 +72,7 @@ test_sync_xattrs()
     truncate -s 1k "fileB"
     setfattr -n user.c -v d "fileB"
 
-    rbh_sync_posix "." "rbh:mongo:$testdb"
+    rbh_sync_posix "." "rbh:$db:$testdb"
     find_attribute '"ns.xattrs.path":"/fileA"' \
                    '"xattrs.user.a" : { $exists : true }'
     find_attribute '"ns.xattrs.path":"/fileB"' \
@@ -86,7 +86,7 @@ test_sync_subdir()
     truncate -s 1k "fileA"
     truncate -s 1k "fileB"
 
-    rbh_sync_posix "." "rbh:mongo:$testdb"
+    rbh_sync_posix "." "rbh:$db:$testdb"
     find_attribute '"ns.xattrs.path":"/"'
     find_attribute '"ns.xattrs.path":"/fileA"'
     find_attribute '"ns.xattrs.path":"/fileB"'
@@ -98,7 +98,7 @@ test_sync_large_tree()
 {
     mkdir -p {1..9}/{1..9}
 
-    rbh_sync_posix "." "rbh:mongo:$testdb"
+    rbh_sync_posix "." "rbh:$db:$testdb"
     for i in $(find *); do
         find_attribute '"ns.xattrs.path":"/'$i'"'
     done
@@ -109,7 +109,7 @@ test_sync_one_one_file()
     truncate -s 1k "fileA"
     local length=$(stat -c %s "fileA")
 
-    rbh_sync_posix_one "fileA" "rbh:mongo:$testdb"
+    rbh_sync_posix_one "fileA" "rbh:$db:$testdb"
     find_attribute '"statx.size" : '$length
 }
 
@@ -132,10 +132,10 @@ test_sync_one()
     touch "dir/file"
     ln -s "dir/file" "file_link"
 
-    rbh_sync_posix_one "file_link" "rbh:mongo:$testdb"
+    rbh_sync_posix_one "file_link" "rbh:$db:$testdb"
     check_mode_and_type "file_link"
-    rbh_sync_posix_one "dir" "rbh:mongo:$testdb"
-    rbh_sync_posix_one "dir/file" "rbh:mongo:$testdb"
+    rbh_sync_posix_one "dir" "rbh:$db:$testdb"
+    rbh_sync_posix_one "dir/file" "rbh:$db:$testdb"
 
     find_attribute '"ns.name":"file_link"'
     find_attribute '"ns.xattrs.path":"/file_link"'
@@ -152,8 +152,8 @@ test_sync_one_two_files()
     setfattr -n user.a -v b "fileB"
     local length=$(stat -c %s "fileB")
 
-    rbh_sync_posix_one "fileA" "rbh:mongo:$testdb"
-    rbh_sync_posix_one "fileB" "rbh:mongo:$testdb"
+    rbh_sync_posix_one "fileA" "rbh:$db:$testdb"
+    rbh_sync_posix_one "fileB" "rbh:$db:$testdb"
     find_attribute '"statx.size" : '$length \
                    '"xattrs.user.a" : { $exists : true }'
 
@@ -171,7 +171,7 @@ test_sync_symbolic_link()
     touch ${entry}_target
     ln -s ${entry}_target $entry
 
-    rbh_sync -o "rbh:posix:$entry" "rbh:mongo:$testdb"
+    rbh_sync -o "rbh:posix:$entry" "rbh:$db:$testdb"
     check_mode_and_type $entry
 }
 
@@ -183,7 +183,7 @@ test_sync_socket()
                 sock = s.socket(s.AF_UNIX); \
                 sock.bind('$entry')"
 
-    rbh_sync_posix_one "$entry" "rbh:mongo:$testdb"
+    rbh_sync_posix_one "$entry" "rbh:$db:$testdb"
     check_mode_and_type $entry
 }
 
@@ -193,7 +193,7 @@ test_sync_fifo()
 
     mkfifo $entry
 
-    rbh_sync_posix_one "$entry" "rbh:mongo:$testdb"
+    rbh_sync_posix_one "$entry" "rbh:$db:$testdb"
     check_mode_and_type $entry
 }
 
@@ -207,7 +207,7 @@ test_sync_branch()
     mkdir -p $first_dir/$second_dir/$third_dir
     touch $first_dir/$second_dir/$third_dir/$entry
 
-    rbh_sync_posix "$first_dir#$second_dir" "rbh:mongo:$testdb"
+    rbh_sync_posix "$first_dir#$second_dir" "rbh:$db:$testdb"
 
     find_attribute '"ns.name":"'$second_dir'"'
     find_attribute '"ns.xattrs.path":"'/$second_dir'"'
@@ -220,7 +220,7 @@ test_sync_branch()
 
     local abs_path="$(realpath $first_dir)"
 
-    rbh_sync_posix "$abs_path#$second_dir" "rbh:mongo:$testdb"
+    rbh_sync_posix "$abs_path#$second_dir" "rbh:$db:$testdb"
 
     find_attribute '"ns.name":"'$second_dir'"'
     find_attribute '"ns.xattrs.path":"'/$second_dir'"'
@@ -231,7 +231,7 @@ test_sync_branch()
 
     mongo $testdb --eval "db.dropDatabase()"
 
-    rbh_sync_posix "$first_dir#$second_dir/$third_dir" "rbh:mongo:$testdb"
+    rbh_sync_posix "$first_dir#$second_dir/$third_dir" "rbh:$db:$testdb"
 
     find_attribute '"ns.name":"'$third_dir'"'
     find_attribute '"ns.xattrs.path":"'/$second_dir/$third_dir'"'
@@ -240,7 +240,7 @@ test_sync_branch()
 
     mongo $testdb --eval "db.dropDatabase()"
 
-    rbh_sync_posix "./$first_dir#$second_dir/$third_dir" "rbh:mongo:$testdb"
+    rbh_sync_posix "./$first_dir#$second_dir/$third_dir" "rbh:$db:$testdb"
 
     find_attribute '"ns.name":"'$third_dir'"'
     find_attribute '"ns.xattrs.path":"'/$second_dir/$third_dir'"'
@@ -250,7 +250,7 @@ test_sync_branch()
     mongo $testdb --eval "db.dropDatabase()"
 
     rbh_sync_posix "$first_dir/../$first_dir/./$second_dir#$third_dir" \
-                   "rbh:mongo:$testdb"
+                   "rbh:$db:$testdb"
 
     mongo $testdb --eval "db.entries.find()"
 
@@ -307,12 +307,12 @@ test_continue_sync_on_error()
                  LD_LIBRARY_PATH=$LD_LIBRARY_PATH \
                  RBH_CONFIG_PATH=$RBH_CONFIG_PATH \
                     mpirun $__rbh_sync --config $path rbh:posix-mpi:. \
-                        rbh:mongo:$testdb" 2>&1)"
+                        rbh:$db:$testdb" 2>&1)"
     else
         output="$(sudo -E -H -u "$test_user" bash -c "\
                   LD_LIBRARY_PATH=$LD_LIBRARY_PATH \
                       $__rbh_sync --config $path rbh:posix:. \
-                      rbh:mongo:$testdb" 2>&1)"
+                      rbh:$db:$testdb" 2>&1)"
     fi
 
     path="$(dirname $__rbh_sync)"
@@ -381,12 +381,12 @@ test_stop_sync_on_error()
                         LD_LIBRARY_PATH=$LD_LIBRARY_PATH \
                         RBH_CONFIG_PATH=$RBH_CONFIG_PATH \
                             mpirun $__rbh_sync --config $path --no-skip \
-                            rbh:posix-mpi:. rbh:mongo:$testdb" 2>&1)
+                            rbh:posix-mpi:. rbh:$db:$testdb" 2>&1)
     else
         local output=$(sudo -E -H -u "$test_user" bash -c "\
                        LD_LIBRARY_PATH=$LD_LIBRARY_PATH \
                        $__rbh_sync --config $path --no-skip \
-                       rbh:posix:. rbh:mongo:$testdb" 2>&1)
+                       rbh:posix:. rbh:$db:$testdb" 2>&1)
     fi
 
     path="$(dirname $__rbh_sync)"
@@ -413,7 +413,7 @@ test_config()
  RBH_MONGODB_ADDRESS: \"mongodb://localhost:27017\"
 ---" > $conf_file
 
-    rbh_sync --config $conf_file --one rbh:posix:$file rbh:mongo:$testdb
+    rbh_sync --config $conf_file --one rbh:posix:$file rbh:$db:$testdb
 
     find_attribute '"ns.xattrs.path":"/'$file'"'
 
@@ -421,14 +421,14 @@ test_config()
  RBH_MONGODB_ADDRESS: \"mongodb://localhost:12345\"
 ---" > $conf_file
 
-    rbh_sync --config $conf_file --one rbh:posix:$file rbh:mongo:$testdb &&
+    rbh_sync --config $conf_file --one rbh:posix:$file rbh:$db:$testdb &&
         error "Sync with invalid server address in config should have failed"
 
     echo "---
  RBH_MONGODB_ADDRESS: !int32 12345
 ---" > $conf_file
 
-    rbh_sync --config $conf_file --one rbh:posix:$file rbh:mongo:$testdb &&
+    rbh_sync --config $conf_file --one rbh:posix:$file rbh:$db:$testdb &&
         error "Sync with invalid typing for db address in config should have" \
               "failed"
 
@@ -449,7 +449,7 @@ xattrs_map:
     setfattr -n user.blob_string -v five $file
     setfattr -n user.blob_boolean -v true $file
 
-    rbh_sync --config $conf_file --one rbh:posix:$file rbh:mongo:$testdb
+    rbh_sync --config $conf_file --one rbh:posix:$file rbh:$db:$testdb
 
     find_attribute '"ns.xattrs.path":"/'$file'"' \
                    '"xattrs.user.blob_int32" : 1'
@@ -490,13 +490,13 @@ test_sync_large_path()
 
     # The path A should be synced properly, as its size is 4064 characters
     # total, but the path B shouldn't be, as it exceeds the path size limit
-    rbh_sync_posix "." "rbh:mongo:$testdb"
+    rbh_sync_posix "." "rbh:$db:$testdb"
 
     find_attribute '"ns.xattrs.path":"'$full_pathA'"'
     ! (find_attribute '"ns.xattrs.path":"'$full_pathB'"')
 
 set +e
-    rbh_sync_posix "." "rbh:mongo:$testdb" "--no-skip"
+    rbh_sync_posix "." "rbh:$db:$testdb" "--no-skip"
     local rc=3
 set -e
 

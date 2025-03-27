@@ -27,8 +27,8 @@ test_sync_simple()
     mkdir dir
     touch dir/file1
 
-    rbh_sync "rbh:posix:." "rbh:mongo:$testdb1"
-    rbh_sync "rbh:mongo:$testdb1" "rbh:mongo:$testdb2"
+    rbh_sync "rbh:posix:." "rbh:$db:$testdb1"
+    rbh_sync "rbh:$db:$testdb1" "rbh:$db:$testdb2"
 
     local db1entries="$(mongo "$testdb1" --eval \
         "db.entries.find({}, {\"_id\": 0, \"ns.parent\": 0})
@@ -51,8 +51,8 @@ test_sync_branch()
     mkdir dir
     touch dir/fileB
 
-    rbh_sync "rbh:posix:." "rbh:mongo:$testdb1"
-    rbh_sync "rbh:mongo:$testdb1#dir" "rbh:mongo:$testdb2"
+    rbh_sync "rbh:posix:." "rbh:$db:$testdb1"
+    rbh_sync "rbh:$db:$testdb1#dir" "rbh:$db:$testdb2"
 
     local db1entries="$(mongo "$testdb1" --eval \
         "db.entries.find({}, {\"_id\": 0, \"ns.parent\": 0})

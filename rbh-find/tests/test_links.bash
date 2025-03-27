@@ -20,18 +20,18 @@ test_links()
     ln file hard_link
     ln -s file soft_link
 
-    rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:posix:." "rbh:$db:$testdb"
 
-    rbh_find "rbh:mongo:$testdb" -links 1 | sort |
+    rbh_find "rbh:$db:$testdb" -links 1 | sort |
         difflines "/blob" "/soft_link"
-    rbh_find "rbh:mongo:$testdb" -links +2 | sort | difflines "/"
-    rbh_find "rbh:mongo:$testdb" -links -3 | sort |
+    rbh_find "rbh:$db:$testdb" -links +2 | sort | difflines "/"
+    rbh_find "rbh:$db:$testdb" -links -3 | sort |
         difflines "/blob" "/dir" "/file" "/hard_link" "/soft_link"
 
-    rbh_find "rbh:mongo:$testdb" -links 1 -o -links +2 | sort |
+    rbh_find "rbh:$db:$testdb" -links 1 -o -links +2 | sort |
         difflines "/" "/blob" "/soft_link"
-    rbh_find "rbh:mongo:$testdb" -links 1 -a -links +2 | sort | difflines
-    rbh_find "rbh:mongo:$testdb" -not -links 2 | sort |
+    rbh_find "rbh:$db:$testdb" -links 1 -a -links +2 | sort | difflines
+    rbh_find "rbh:$db:$testdb" -not -links 2 | sort |
         difflines "/" "/blob" "/soft_link"
 }
 
@@ -44,20 +44,20 @@ test_lname()
     ln -s file file_link_bis
     ln -s blob blob_link
 
-    rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:posix:." "rbh:$db:$testdb"
 
-    rbh_find "rbh:mongo:$testdb" -lname file | sort |
+    rbh_find "rbh:$db:$testdb" -lname file | sort |
         difflines "/file_link" "/file_link_bis"
 
-    rbh_find "rbh:mongo:$testdb" -lname toto | sort | difflines
+    rbh_find "rbh:$db:$testdb" -lname toto | sort | difflines
 
-    rbh_find "rbh:mongo:$testdb" -lname '*' | sort |
+    rbh_find "rbh:$db:$testdb" -lname '*' | sort |
         difflines "/blob_link" "/file_link" "/file_link_bis"
 
-    rbh_find "rbh:mongo:$testdb" -not -lname file | sort |
+    rbh_find "rbh:$db:$testdb" -not -lname file | sort |
         difflines "/" "/blob" "/blob_link" "/file"
 
-    rbh_find "rbh:mongo:$testdb" -lname blob -o -lname file | sort |
+    rbh_find "rbh:$db:$testdb" -lname blob -o -lname file | sort |
         difflines "/blob_link" "/file_link" "/file_link_bis"
 }
 
@@ -70,10 +70,10 @@ test_ilname()
     ln -s file file_link_bis
     ln -s blob blob_link
 
-    rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:posix:." "rbh:$db:$testdb"
 
-    rbh_find "rbh:mongo:$testdb" -lname Blob | sort | difflines
-    rbh_find "rbh:mongo:$testdb" -ilname Blob | sort |
+    rbh_find "rbh:$db:$testdb" -lname Blob | sort | difflines
+    rbh_find "rbh:$db:$testdb" -ilname Blob | sort |
         difflines "/blob_link"
 }
 
