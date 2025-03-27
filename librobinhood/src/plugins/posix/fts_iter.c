@@ -21,6 +21,16 @@ struct fts_iterator {
     FTSENT *ftsent;
 };
 
+static __thread struct rbh_sstack *sstack;
+
+__attribute__((destructor))
+static void
+free_sstack(void)
+{
+    if (sstack)
+        rbh_sstack_destroy(sstack);
+}
+
 static struct rbh_fsentry *
 fsentry_from_ftsent(FTSENT *ftsent, int statx_sync_type, size_t prefix_len,
                     enricher_t *enrichers)
@@ -58,14 +68,33 @@ fsentry_from_ftsent(FTSENT *ftsent, int statx_sync_type, size_t prefix_len,
     return pair.fsentry;
 }
 
+/* When discovering a directory, the current children_counter is incremented and
+ * it is saved to the sstack. Then, its own counter is initialized to 0. For
+ * each entry inside, the counter is incremented; if an error occurs, it is
+ * decremented since the entry will not be synchronized. When exiting a
+ * directory (post-order), the directory’s counter is set aside, and the
+ * parent’s counter is retrieved from the sstack to continue processing. An
+ * fsevent is then generated to update the current directory (the one being
+ * exited) in the destination backend.
+ */
+static __thread int children_counter = 0;
+
 static void *
 fts_iter_next(void *iterator)
 {
     struct fts_iterator *iter = iterator;
     bool skip_error = iter->posix.skip_error;
-    struct rbh_fsentry *fsentry;
+    struct rbh_fsentry *fsentry = NULL;
     int save_errno = errno;
+    int current_counter;
+    size_t readable;
     FTSENT *ftsent;
+
+    if (sstack == NULL) {
+        sstack = rbh_sstack_new(1 << 10);
+        if (sstack == NULL)
+            return NULL;
+    }
 
 skip:
     errno = 0;
@@ -78,9 +107,52 @@ skip:
     iter->ftsent = ftsent;
 
     switch (ftsent->fts_info) {
+    case FTS_D:
+        /* Increment the counter and save it to be retrieved after exploring
+         * this new directory
+         */
+        children_counter++;
+        RBH_SSTACK_PUSH(sstack, &children_counter, sizeof(int));
+        /* Set the counter to 0 as we are exploring a new directory */
+        children_counter = 0;
+        break;
+    case FTS_F:
+    case FTS_NSOK:
+        children_counter++;
+        break;
     case FTS_DP:
+        /* Save the current counter in a temporary variable */
+        current_counter = children_counter;
+
+        /* Retrieve the counter of the parent directory as we will continue to
+         * explore the parent directory and update 'counter_children' in the
+         * next call of 'fts_iter_next'
+         */
+        children_counter = *(int *) rbh_sstack_peek(sstack, &readable);
+        rbh_sstack_pop(sstack, sizeof(int));
+
+        /* If the directory we are leaving has children, we generate a fsevent
+         * to update the destination backend
+         */
+        if (current_counter > 0)
+            fsentry = build_fsentry_nb_children(ftsent->fts_pointer,
+                                                current_counter);
+
         /* fsentry_from_ftsent() memoizes ids of directories */
         free(ftsent->fts_pointer);
+
+        if (fsentry == NULL && current_counter > 0) {
+            if (skip_error) {
+                fprintf(stderr,
+                        "Update of number of children of '%s' skipped\n",
+                        ftsent->fts_path);
+                goto skip;
+            }
+            return NULL;
+        }
+
+        if (fsentry)
+            return fsentry;
         goto skip;
     case FTS_DC:
         errno = ELOOP;
@@ -94,6 +166,14 @@ skip:
         if (skip_error) {
              fprintf(stderr, "Synchronization of '%s' skipped\n",
                      ftsent->fts_path);
+             /* If we can't read a directory, retrieve the parent's counter
+              * as we will continue to explore the parent's directory.
+              */
+             if (ftsent->fts_info == FTS_DNR) {
+                children_counter = *(int *) rbh_sstack_peek(sstack, &readable);
+                rbh_sstack_pop(sstack, sizeof(int));
+                children_counter--;
+             }
              goto skip;
         }
         return NULL;
@@ -147,11 +227,13 @@ skip:
     fsentry = fsentry_from_ftsent(ftsent, iter->posix.statx_sync_type,
                                   iter->posix.prefix_len,
                                   iter->posix.enrichers);
+
     if (fsentry == NULL && (errno == ENOENT || errno == ESTALE)) {
         /* The entry moved from under our feet */
         if (skip_error) {
             fprintf(stderr, "Synchronization of '%s' skipped\n",
                     ftsent->fts_path);
+            children_counter--;
             goto skip;
         }
 
