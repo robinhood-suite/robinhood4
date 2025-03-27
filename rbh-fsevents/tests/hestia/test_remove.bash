@@ -45,7 +45,7 @@ test_remove()
     fi
 }
 
-test_remove_to_mongo()
+test_remove_to_db()
 {
     local obj=$(hestia object --verbosity 1 create blob)
     invoke_rbh_fsevents "rbh:$db:$testdb"
@@ -67,7 +67,7 @@ test_remove_to_mongo()
 #                                     MAIN                                     #
 ################################################################################
 
-declare -a tests=(test_remove test_remove_to_mongo)
+declare -a tests=(test_remove test_remove_to_db)
 
 sub_setup=hestia_setup
 sub_teardown=hestia_teardown
