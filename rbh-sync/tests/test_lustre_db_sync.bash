@@ -564,11 +564,31 @@ test_mdt_count()
                    '"ns.xattrs.path":"/test_mdt_count"'
 }
 
+test_sync_number_children()
+{
+    mkdir -p dir1/dir2/dir3
+    touch dir1/fileA dir1/fileB dir1/dir2/fileC
+
+    rbh_sync_lustre "." "rbh:$db:$testdb"
+
+    find_attribute '"ns.xattrs.path": "/"' '"xattrs.nb_children": 1'
+    find_attribute '"ns.xattrs.path": "/dir1"' '"xattrs.nb_children": 3'
+    find_attribute '"ns.xattrs.path": "/dir1/dir2"' '"xattrs.nb_children": 2'
+    find_attribute '"ns.xattrs.path": "/dir1/dir2/dir3"'\
+                   '"xattrs.nb_children": 0'
+    ! (find_attribute '"ns.xattrs.path": "/dir1/fileA"' \
+                      '"xattrs.nb_children": {$exists: true}')
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
 declare -a tests=(test_simple_sync test_branch_sync test_sync_one_file)
+
+if [[ "$WITH_MPI" == "false" ]]; then
+    tests+=(test_sync_number_children)
+fi
 
 if lctl get_param mdt.*.hsm_control | grep "enabled"; then
     tests+=(test_hsm_state_none test_hsm_state_archived_states
