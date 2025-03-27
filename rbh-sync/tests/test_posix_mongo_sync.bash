@@ -467,6 +467,23 @@ ENAMETOOLONG=36
     fi
 }
 
+test_sync_insert_source()
+{
+   local source="posix"
+
+   rbh_sync "rbh:$source:." "rbh:mongo:$testdb"
+
+   local db_info
+   db_info=$(mongo "$testdb" --eval "db.info.find({},
+           {"backend_source": 1 }).limit(1).toArray()[0].backend_source")
+
+   db_info_grep=$(echo "$db_info" | tr -d '[:space:][]""')
+
+   if [[ "$db_info_grep" != "$source"* ]]; then
+       error "sources aren't matching\n"
+   fi
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
@@ -476,7 +493,7 @@ declare -a tests=(test_sync_2_files test_sync_size test_sync_3_files
                   test_sync_one_one_file test_sync_one test_sync_one_two_files
                   test_sync_symbolic_link test_sync_socket test_sync_fifo
                   test_sync_branch test_continue_sync_on_error
-                  test_stop_sync_on_error test_config)
+                  test_stop_sync_on_error test_config test_sync_insert_source)
 
 tmpdir=$(mktemp --directory)
 test_user="$(get_test_user "$(basename "$0")")"
