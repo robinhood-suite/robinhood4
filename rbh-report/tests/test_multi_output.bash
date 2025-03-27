@@ -32,7 +32,7 @@ test_multi_output()
     local sum_size="$((root_size + first_size + second_size + third_size))"
     local avg_size="$((sum_size / 4))"
 
-    local min_ino="$(stat -c %i .)"
+    local min_ino="$(find -printf "%i\n" | sort -n | head -n 1)"
     local max_mtime="$(stat -c %Y third)"
 
     rbh_report --csv "rbh:mongo:$testdb" \

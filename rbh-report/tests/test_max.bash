@@ -59,10 +59,10 @@ test_max_ino()
     touch third
     rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
 
-    local third_ino="$(stat -c %i third)"
+    local max_ino="$(find -printf "%i\n" | sort -nr | head -n 1)"
 
     rbh_report --csv "rbh:mongo:$testdb" --output "max(statx.ino)" |
-        difflines "$third_ino"
+        difflines "$max_ino"
 }
 
 ################################################################################
