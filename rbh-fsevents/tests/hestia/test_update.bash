@@ -273,7 +273,7 @@ test_update_xattrs_to_mongo()
     hestia metadata update --id_fmt=parent_id --input_fmt=key_value $obj <<< \
         data.my_key=my_value
 
-    invoke_rbh_fsevents "rbh:mongo:$testdb"
+    invoke_rbh_fsevents "rbh:$db:$testdb"
 
     find_attribute '"xattrs.tiers": { $size: 0 }'
     find_attribute '"xattrs.user_metadata": { "my_key": "my_value" }'
@@ -295,7 +295,7 @@ test_update_data_to_mongo()
 
     hestia object put_data --file /etc/hosts $obj
 
-    invoke_rbh_fsevents "rbh:mongo:$testdb"
+    invoke_rbh_fsevents "rbh:$db:$testdb"
 
     local size="$(stat -c %s /etc/hosts)"
 
@@ -322,7 +322,7 @@ test_update_copy_to_mongo()
 
     hestia object copy_data $obj --source 0 --target 1
 
-    invoke_rbh_fsevents "rbh:mongo:$testdb"
+    invoke_rbh_fsevents "rbh:$db:$testdb"
 
     local size="$(stat -c %s /etc/hosts)"
 
@@ -355,7 +355,7 @@ test_update_release_to_mongo()
 
     hestia object release_data $obj --tier 0
 
-    invoke_rbh_fsevents "rbh:mongo:$testdb"
+    invoke_rbh_fsevents "rbh:$db:$testdb"
 
     local size="$(stat -c %s /etc/hosts)"
 

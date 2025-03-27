@@ -21,7 +21,7 @@ alias:
 EOF
 
     command_output=$(rbh_report --config test_conf.yaml --dry-run \
-                    "rbh:mongo:$testdb" --output sum\(statx.size\) --alias a1)
+                    "rbh:$db:$testdb" --output sum\(statx.size\) --alias a1)
     pattern="\--rsort"
 
     if ! echo "$command_output" | grep -q "$pattern"; then
@@ -40,7 +40,7 @@ EOF
 
     # Do not use global default config
     unset RBH_CONFIG_PATH
-    command_output=$(rbh_report --dry-run "rbh:mongo:$testdb" --output \
+    command_output=$(rbh_report --dry-run "rbh:$db:$testdb" --output \
                     sum\(statx.size\) --alias a1)
     pattern="\--rsort"
 
@@ -59,7 +59,7 @@ alias:
 EOF
 
     command_output=$(rbh_report --config test_conf.yaml --dry-run \
-                    "rbh:mongo:$testdb" --output sum\(statx.size\) --alias a2 \
+                    "rbh:$db:$testdb" --output sum\(statx.size\) --alias a2 \
                     --alias a1 --alias a2)
     pattern="\--rsort \--output \--rsort"
 
@@ -78,7 +78,7 @@ alias:
 EOF
 
     command_output=$(rbh_report --config test_conf.yaml --dry-run \
-                    "rbh:mongo:$testdb" --output sum\(statx.size\) --alias a1)
+                    "rbh:$db:$testdb" --output sum\(statx.size\) --alias a1)
     pattern="\--rsort"
 
     if ! echo "$command_output" | grep -q "$pattern"; then
@@ -95,7 +95,7 @@ alias:
 EOF
 
     command_output=$(rbh_report --config test_conf.yaml --dry-run \
-                    "rbh:mongo:$testdb" --output sum\(statx.size\) \
+                    "rbh:$db:$testdb" --output sum\(statx.size\) \
                     --alias a1 2>&1 || true)
     pattern="\[ERROR\] Infinite loop detected for alias 'a1'.Execution stopped."
 
@@ -112,7 +112,7 @@ alias:
 EOF
 
     command_output=$(rbh_report --config test_conf.yaml --dry-run \
-                    "rbh:mongo:$testdb" --output sum\(statx.size\) \
+                    "rbh:$db:$testdb" --output sum\(statx.size\) \
                     --alias a1 --alias a1)
     pattern="\--rsort \--rsort"
 
@@ -131,7 +131,7 @@ alias:
 EOF
 
     command_output=$(rbh_report --config test_conf.yaml --dry-run \
-                    "rbh:mongo:$testdb" --output sum\(statx.size\) \
+                    "rbh:$db:$testdb" --output sum\(statx.size\) \
                     --alias a1,a2,a3)
     pattern="\--rsort \--rsort \--rsort"
 
@@ -150,7 +150,7 @@ alias:
 EOF
 
     command_output=$(rbh_report --config test_conf.yaml --dry-run \
-                    "rbh:mongo:$testdb" --output sum\(statx.size\) \
+                    "rbh:$db:$testdb" --output sum\(statx.size\) \
                     --alias a1)
     pattern="\--rsort \--rsort \--rsort"
 

@@ -18,17 +18,17 @@ test_max_size()
     touch "empty"
     truncate --size 1K "1K"
     truncate --size 1025 "1K+1"
-    rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:posix:." "rbh:$db:$testdb"
 
-    rbh_report --csv "rbh:mongo:$testdb" --output "max(statx.size)" |
+    rbh_report --csv "rbh:$db:$testdb" --output "max(statx.size)" |
         difflines "1025"
 
     truncate --size 600M "600M"
-    rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:posix:." "rbh:$db:$testdb"
 
     local size_600M="$(stat -c %s 600M)"
 
-    rbh_report --csv "rbh:mongo:$testdb" --output "max(statx.size)" |
+    rbh_report --csv "rbh:$db:$testdb" --output "max(statx.size)" |
         difflines "$size_600M"
 }
 
@@ -36,19 +36,19 @@ test_max_mtime()
 {
     touch first
     touch -d "2 hours ago" second
-    rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:posix:." "rbh:$db:$testdb"
 
     local first_mtime="$(stat -c %Y first)"
 
-    rbh_report --csv "rbh:mongo:$testdb" --output "max(statx.mtime.sec)" |
+    rbh_report --csv "rbh:$db:$testdb" --output "max(statx.mtime.sec)" |
         difflines "$first_mtime"
 
     touch -d "+2 hours" third
-    rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:posix:." "rbh:$db:$testdb"
 
     local third_mtime="$(stat -c %Y third)"
 
-    rbh_report --csv "rbh:mongo:$testdb" --output "max(statx.mtime.sec)" |
+    rbh_report --csv "rbh:$db:$testdb" --output "max(statx.mtime.sec)" |
         difflines "$third_mtime"
 }
 
@@ -57,11 +57,11 @@ test_max_ino()
     touch first
     touch second
     touch third
-    rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:posix:." "rbh:$db:$testdb"
 
     local max_ino="$(find -printf "%i\n" | sort -nr | head -n 1)"
 
-    rbh_report --csv "rbh:mongo:$testdb" --output "max(statx.ino)" |
+    rbh_report --csv "rbh:$db:$testdb" --output "max(statx.ino)" |
         difflines "$max_ino"
 }
 

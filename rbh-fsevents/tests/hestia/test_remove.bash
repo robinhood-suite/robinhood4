@@ -48,14 +48,14 @@ test_remove()
 test_remove_to_mongo()
 {
     local obj=$(hestia object --verbosity 1 create blob)
-    invoke_rbh_fsevents "rbh:mongo:$testdb"
+    invoke_rbh_fsevents "rbh:$db:$testdb"
 
     clear_event_feed
 
     hestia object remove "$obj"
 
     find_attribute '"ns.name":"'$obj'"'
-    invoke_rbh_fsevents "rbh:mongo:$testdb"
+    invoke_rbh_fsevents "rbh:$db:$testdb"
 
     local count=$(mongo $testdb --eval "db.entries.count()")
     if (( $count != 0 )); then

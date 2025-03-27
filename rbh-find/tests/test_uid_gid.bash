@@ -24,20 +24,20 @@ test_uid_user_equal()
     your_id=$(id -u $test_user)
     chown $test_user "your_file"
 
-    rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:posix:." "rbh:$db:$testdb"
 
-    rbh_find "rbh:mongo:$testdb" -uid $my_id | sort | difflines "/" "/my_file"
-    rbh_find "rbh:mongo:$testdb" -uid $your_id | sort | difflines "/your_file"
+    rbh_find "rbh:$db:$testdb" -uid $my_id | sort | difflines "/" "/my_file"
+    rbh_find "rbh:$db:$testdb" -uid $your_id | sort | difflines "/your_file"
 
-    rbh_find "rbh:mongo:$testdb" -user $me | sort | difflines "/" "/my_file"
-    rbh_find "rbh:mongo:$testdb" -user $test_user | sort |
+    rbh_find "rbh:$db:$testdb" -user $me | sort | difflines "/" "/my_file"
+    rbh_find "rbh:$db:$testdb" -user $test_user | sort |
         difflines "/your_file"
 
-    rbh_find "rbh:mongo:$testdb" -nouser | sort | difflines
+    rbh_find "rbh:$db:$testdb" -nouser | sort | difflines
 
     delete_test_user $test_user
 
-    rbh_find "rbh:mongo:$testdb" -nouser | sort | difflines "/your_file"
+    rbh_find "rbh:$db:$testdb" -nouser | sort | difflines "/your_file"
 }
 
 test_gid_group_equal()
@@ -51,20 +51,20 @@ test_gid_group_equal()
     test_gid=$(getent group grptest | cut -d: -f3)
     chgrp grptest "your_file"
 
-    rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:posix:." "rbh:$db:$testdb"
 
-    rbh_find "rbh:mongo:$testdb" -gid $my_gid | sort | difflines "/" "/my_file"
-    rbh_find "rbh:mongo:$testdb" -gid $test_gid | sort | difflines "/your_file"
+    rbh_find "rbh:$db:$testdb" -gid $my_gid | sort | difflines "/" "/my_file"
+    rbh_find "rbh:$db:$testdb" -gid $test_gid | sort | difflines "/your_file"
 
-    rbh_find "rbh:mongo:$testdb" -group $my_grp | sort |
+    rbh_find "rbh:$db:$testdb" -group $my_grp | sort |
         difflines "/" "/my_file"
-    rbh_find "rbh:mongo:$testdb" -group grptest | sort | difflines "/your_file"
+    rbh_find "rbh:$db:$testdb" -group grptest | sort | difflines "/your_file"
 
-    rbh_find "rbh:mongo:$testdb" -nogroup | sort | difflines
+    rbh_find "rbh:$db:$testdb" -nogroup | sort | difflines
 
     groupdel grptest
 
-    rbh_find "rbh:mongo:$testdb" -nogroup | sort | difflines "/your_file"
+    rbh_find "rbh:$db:$testdb" -nogroup | sort | difflines "/your_file"
 }
 
 ################################################################################

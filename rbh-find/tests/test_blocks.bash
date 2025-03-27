@@ -24,20 +24,20 @@ test_blocks()
     local blocks2="$(stat -c %b file2)"
     local blocks3="$(stat -c %b file3)"
 
-    rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:posix:." "rbh:$db:$testdb"
 
-    rbh_find "rbh:mongo:$testdb" -blocks $blocks1 | sort |
+    rbh_find "rbh:$db:$testdb" -blocks $blocks1 | sort |
         difflines "/" "/file1"
-    rbh_find "rbh:mongo:$testdb" -blocks +$blocks1 | sort |
+    rbh_find "rbh:$db:$testdb" -blocks +$blocks1 | sort |
         difflines "/file2" "/file3"
-    rbh_find "rbh:mongo:$testdb" -blocks -$blocks3 | sort |
+    rbh_find "rbh:$db:$testdb" -blocks -$blocks3 | sort |
         difflines "/" "/file1" "/file2"
 
-    rbh_find "rbh:mongo:$testdb" -blocks $blocks2 -o -blocks +$blocks2 | sort |
+    rbh_find "rbh:$db:$testdb" -blocks $blocks2 -o -blocks +$blocks2 | sort |
         difflines "/file2" "/file3"
-    rbh_find "rbh:mongo:$testdb" -blocks +$blocks2 -a -blocks -$blocks2 | sort |
+    rbh_find "rbh:$db:$testdb" -blocks +$blocks2 -a -blocks -$blocks2 | sort |
         difflines
-    rbh_find "rbh:mongo:$testdb" -not -blocks $blocks2 | sort |
+    rbh_find "rbh:$db:$testdb" -not -blocks $blocks2 | sort |
         difflines "/" "/file1" "/file3"
 }
 

@@ -34,7 +34,7 @@ acceptance()
 
     hestia object remove $obj3
 
-    invoke_rbh_fsevents "rbh:mongo:$testdb"
+    invoke_rbh_fsevents "rbh:$db:$testdb"
 
     local count=$(mongo $testdb --eval "db.entries.count()")
     if (( $count != 2 )); then
