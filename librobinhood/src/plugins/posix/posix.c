@@ -331,6 +331,35 @@ free_ns_data(void)
         rbh_sstack_destroy(xattrs);
 }
 
+static void
+build_pair_nb_children(struct rbh_value_pair *pair, int nb_children)
+{
+    struct rbh_value *value;
+
+    value = RBH_SSTACK_PUSH(xattrs, NULL, sizeof(*pair->value));
+    value->type = RBH_VT_INT64;
+    value->int64 = nb_children;
+
+    pair->key = "nb_children";
+    pair->value = value;
+}
+
+struct rbh_fsentry *
+build_fsentry_nb_children(struct rbh_id *id, int nb_children)
+{
+    struct rbh_value_pair *pair;
+    struct rbh_value_map xattr;
+
+    pair = RBH_SSTACK_PUSH(xattrs, NULL, sizeof(*pair));
+
+    build_pair_nb_children(pair, nb_children);
+
+    xattr.count = 1;
+    xattr.pairs = pair;
+
+    return rbh_fsentry_new(id, NULL, NULL, NULL, NULL, &xattr, NULL);
+}
+
 bool
 fsentry_from_any(struct fsentry_id_pair *fip, const struct rbh_value *path,
                  char *accpath, struct rbh_id *entry_id,
@@ -509,6 +538,11 @@ fsentry_from_any(struct fsentry_id_pair *fip, const struct rbh_value *path,
             n_enricher++;
             count += callback_xattrs_count;
         }
+    }
+
+    if (S_ISDIR(statxbuf.stx_mode)) {
+        build_pair_nb_children(&pairs[count], 0);
+        count++;
     }
 
     inode_xattrs.pairs = pairs;

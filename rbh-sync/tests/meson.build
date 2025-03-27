@@ -4,6 +4,7 @@
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
 
+backend_path_env.set('WITH_MPI', 'false')
 integration_tests = [
     'test_posix_db_sync', 'test_db_db_sync', 'test_config'
 ]
