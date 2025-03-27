@@ -23,9 +23,9 @@
 #include <sys/sysmacros.h>
 
 #include <robinhood/statx.h>
+#include <robinhood/utils.h>
 
 #include "rbh-find/actions.h"
-#include "rbh-find/utils.h"
 
 static struct tm now;
 

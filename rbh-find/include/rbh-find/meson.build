@@ -11,6 +11,5 @@ install_headers(
     'find_cb.h',
     'parser.h',
     'rbh-find.h',
-    'utils.h',
     subdir: 'rbh-find'
 )

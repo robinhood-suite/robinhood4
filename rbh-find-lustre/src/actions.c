@@ -7,9 +7,9 @@
 #include <assert.h>
 
 #include <robinhood/config.h>
+#include <robinhood/utils.h>
 
 #include "rbh-find/actions.h"
-#include "rbh-find/utils.h"
 
 #include "actions.h"
 
