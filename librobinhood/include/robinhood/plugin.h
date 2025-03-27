@@ -13,6 +13,7 @@
 #include <stdint.h>
 
 #include <robinhood/filter.h>
+#include <robinhood/fsentry.h>
 
 struct rbh_plugin {
     const char *name;
@@ -28,6 +29,7 @@ struct rbh_plugin_extension {
     enum rbh_parser_token (*check_valid_token)(const char *token);
     struct rbh_filter *(*build_filter)(const char **argv, int argc, int *index,
                                        bool *need_prefetch);
+    int (*delete_entry)(struct rbh_fsentry *fsentry);
 };
 
 /**
