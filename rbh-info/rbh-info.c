@@ -279,10 +279,20 @@ _get_collection_count(const struct rbh_value *value)
     printf("%ld\n", value->int64);
 }
 
+static void
+_get_backend_source(const struct rbh_value *value)
+{
+    assert(value->type == RBH_VT_SEQUENCE);
+
+    for(size_t i = 0 ; i < value->sequence.count ; i++)
+        printf("%s\n", value->sequence.values[i].string);
+}
+
 static struct rbh_info_fields INFO_FIELDS[] = {
     { "average_object_size", _get_collection_avg_obj_size },
     { "count", _get_collection_count },
     { "size", _get_collection_size },
+    { "backend_source", _get_backend_source},
 };
 
 void
@@ -339,6 +349,10 @@ main(int argc, char **argv)
             .name = "last_sync",
             .val = 'y',
         },
+        {
+            .name = "backend_source",
+            .val = 'b',
+        },
         {}
     };
     const struct rbh_backend_plugin *plugin;
@@ -350,7 +364,7 @@ main(int argc, char **argv)
         return EINVAL;
     }
 
-    while ((option = getopt_long(argc, argv, "hlsca", LONG_OPTIONS,
+    while ((option = getopt_long(argc, argv, "hlscab", LONG_OPTIONS,
                                  NULL)) != -1) {
         switch (option) {
         case 'h':
@@ -367,6 +381,9 @@ main(int argc, char **argv)
             break;
         case 'a':
             flags |= RBH_INFO_AVG_OBJ_SIZE;
+            break;
+        case 'b':
+            flags |= RBH_INFO_BACKEND_SOURCE;
             break;
         default :
             fprintf(stderr, "Unrecognized option\n");

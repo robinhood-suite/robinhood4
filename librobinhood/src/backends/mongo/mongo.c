@@ -847,6 +847,54 @@ mongo_backend_report(void *backend, const struct rbh_filter *filter,
      |                              get_info()                            |
      *--------------------------------------------------------------------*/
 
+static bool
+get_backend_source(const struct mongo_backend *mongo,
+                   struct rbh_value_pair *pair)
+{
+    bool is_retrieved = false;
+    struct rbh_value *value;
+    mongoc_cursor_t *cursor;
+    size_t buffsize = 1024;
+    const bson_t *doc;
+    bson_iter_t iter;
+    char *buffer;
+
+    value = RBH_SSTACK_PUSH(info_sstack, NULL, sizeof(*value));
+
+    buffer = malloc(buffsize);
+    if (!buffer)
+        return false;
+
+    bson_t *filter = BCON_NEW("_id", "backend_info");
+
+    cursor = mongoc_collection_find_with_opts(mongo->info, filter, NULL, NULL);
+    if (!mongoc_cursor_next(cursor, &doc))
+        goto out;
+
+    if (!bson_iter_init(&iter, doc))
+        goto out;
+
+    while (bson_iter_next(&iter)) {
+        const char *key = bson_iter_key(&iter);
+
+        if (strcmp(key, "backend_source") == 0) {
+            if (!bson_iter_rbh_value(&iter, value, &buffer, &buffsize))
+                goto out;
+
+            pair->key = "backend_source";
+            pair->value = value;
+
+            is_retrieved = true;
+        }
+    }
+
+out:
+    if (cursor) mongoc_cursor_destroy(cursor);
+    if (filter) bson_destroy(filter);
+
+    return is_retrieved;
+}
+
 static int
 get_collection_count(const struct mongo_backend *mongo,
                      struct rbh_value_pair *pair)
@@ -977,6 +1025,11 @@ mongo_backend_get_info(void *backend, int info_flags)
 
     if (info_flags & RBH_INFO_SIZE) {
         if (!get_collection_stats(mongo, "size", &pairs[idx++]))
+            goto out;
+    }
+
+    if (info_flags & RBH_INFO_BACKEND_SOURCE) {
+        if (!get_backend_source(mongo, &pairs[idx++]))
             goto out;
     }
 
