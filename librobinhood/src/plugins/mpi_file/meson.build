@@ -7,8 +7,10 @@
 librbh_mpi_file = library(
     'rbh-mpi-file',
     sources: [
+        'action.c',
         'filter.c',
         'mpi_file.c',
+        'parser.c',
         'plugin.c',
         'plugin_callback_common.c',
         'pred.c',
