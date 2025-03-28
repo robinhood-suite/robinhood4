@@ -285,6 +285,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "93aa853a_9277cebe",
+        "filename": "librobinhood/include/robinhood/backend.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 492,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-03-28T10:19:14Z",
+      "side": 1,
+      "message": "If Mongo failed to upsert the info, the function should return -1. 0 is in case of success, a non-zero value indicates an error in RBH.\n\nThis should also be done for branches, but that\u0027s a patch for another time.",
+      "parentUuid": "ae01348e_ea36a44f",
+      "range": {
+        "startLine": 492,
+        "startChar": 57,
+        "endLine": 492,
+        "endChar": 74
+      },
+      "revId": "f5330625ac6a0228029f95aa6d825ca7b3e0b3ff",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6d08f086_ea9834c6",
         "filename": "librobinhood/src/backends/lustre_mpi/lustre_mpi.c",
         "patchSetId": 2
@@ -438,6 +462,30 @@
       "side": 1,
       "message": "I\u0027am not sure this is where you wanted this to be.",
       "parentUuid": "fb92f085_d01868cf",
+      "range": {
+        "startLine": 759,
+        "startChar": 4,
+        "endLine": 759,
+        "endChar": 54
+      },
+      "revId": "f5330625ac6a0228029f95aa6d825ca7b3e0b3ff",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "68174df6_acef2e6b",
+        "filename": "rbh-sync/rbh-sync.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 759,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-03-28T10:19:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b8e0297c_3cd9b7f8",
       "range": {
         "startLine": 759,
         "startChar": 4,

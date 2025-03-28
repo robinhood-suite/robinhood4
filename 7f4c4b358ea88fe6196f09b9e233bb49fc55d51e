@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5361b2f8_f2ae1a71",
+        "filename": "librobinhood/src/backends/mongo/mongo.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 730,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-03-28T10:19:14Z",
+      "side": 1,
+      "message": "minor: no need for a `rc` variable or a goto, if an insert fails, return -1, otherwise just return 0",
+      "range": {
+        "startLine": 725,
+        "startChar": 12,
+        "endLine": 730,
+        "endChar": 14
+      },
+      "revId": "7f4c4b358ea88fe6196f09b9e233bb49fc55d51e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
