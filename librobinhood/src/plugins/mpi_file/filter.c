@@ -1,5 +1,5 @@
 /* This file is part of RobinHood 4
- * Copyright (C) 2024 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifer: LGPL-3.0-or-later
@@ -14,11 +14,14 @@
 #include <error.h>
 #include <fnmatch.h>
 
-#include "mfu.h"
 #include "robinhood/statx.h"
 #include "robinhood/value.h"
 #include "robinhood/filter.h"
+#include "robinhood/plugins/backend.h"
+
+#include "mfu.h"
 #include "mpi_file.h"
+#include "plugin_callback_common.h"
 
 static mfu_pred_fn
 statx2mfu_fn(const uint32_t statx)
@@ -329,4 +332,16 @@ _mfu_pred_free(mfu_pred *pred)
         mfu_free(&cur);
         cur = next;
     }
+}
+
+struct rbh_filter *
+rbh_mpi_file_build_filter(const char **argv, int argc, int *index,
+                          bool *need_prefetch)
+{
+    if (posix_plugin == NULL)
+        if (import_posix_plugin())
+            return NULL;
+
+    return rbh_plugin_build_filter(posix_plugin, argv, argc, index,
+                                   need_prefetch);
 }
