@@ -40,6 +40,7 @@ on_find_exit(void)
 {
     ctx_finish(&ctx);
 }
+
 static int
 usage(void)
 {
@@ -187,7 +188,6 @@ main(int _argc, char *_argv[])
     ctx.pre_action_callback = &find_pre_action;
     ctx.exec_action_callback = &find_exec_action;
     ctx.post_action_callback = &find_post_action;
-    ctx.print_directive = &fsentry_print_lustre_directive;
 
     ctx.info_plugin_count = 0;
     ctx.info_plugins = NULL;
