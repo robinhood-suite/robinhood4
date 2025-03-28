@@ -264,8 +264,7 @@ find_exec_action(struct find_context *ctx,
 {
     switch (action) {
     case ACT_DELETE:
-        /* XXX: will be changed once all plugins handle delete properly */
-        if (ctx->info_plugin_count != 0 || ctx->info_extension_count != 0) {
+        {
             int rc;
 
             for (int i = 0; i < ctx->info_extension_count; ++i) {
@@ -282,8 +281,6 @@ find_exec_action(struct find_context *ctx,
             }
 
             return rc;
-        } else {
-            return unlink(fsentry_relative_path(fsentry));
         }
     case ACT_EXEC:
         return exec_command(ctx, fsentry);
