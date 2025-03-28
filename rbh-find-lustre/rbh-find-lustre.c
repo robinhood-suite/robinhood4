@@ -29,10 +29,6 @@
 #include <rbh-find/core.h>
 #include <rbh-find/find_cb.h>
 
-#include "filters.h"
-#include "parser.h"
-#include "actions.h"
-
 static struct find_context ctx;
 
 static void __attribute__((destructor))
