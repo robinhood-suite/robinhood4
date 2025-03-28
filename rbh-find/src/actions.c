@@ -25,6 +25,7 @@
 #include <robinhood/statx.h>
 #include <robinhood/utils.h>
 
+#include "rbh-find/core.h"
 #include "rbh-find/actions.h"
 
 static struct tm now;
@@ -501,25 +502,45 @@ fsentry_print_regular_char(char *output, int max_length,
 }
 
 void
-fsentry_printf_format(FILE *file, const struct rbh_fsentry *fsentry,
-                      const char *format_string, const char *backend,
-                      int (*print_directive)(char *, int,
-                                             const struct rbh_fsentry *,
-                                             const char *, const char *))
+fsentry_printf_format(struct find_context *ctx, size_t backend_index,
+                      const struct rbh_fsentry *fsentry)
 {
+    const char *format_string = ctx->format_string;
+    const char *backend = ctx->uris[backend_index];
     size_t length = strlen(format_string);
     int max_length = MAX_OUTPUT_SIZE;
+    FILE *file = ctx->action_file;
     char output[MAX_OUTPUT_SIZE];
     size_t output_length = 0;
 
     for (size_t i = 0; i < length; i++) {
-        int tmp_length;
+        int tmp_length = 0;
 
         switch (format_string[i]) {
         case '%':
-            tmp_length = print_directive(&output[output_length], max_length,
-                                         fsentry, format_string + i + 1,
-                                         backend);
+            {
+                bool found_in_plugin = false;
+
+                for (int j = 0; j < ctx->info_plugin_count; ++j) {
+                    tmp_length =
+                        rbh_plugin_fill_entry_info(ctx->info_plugins[j],
+                                                   &output[output_length],
+                                                   max_length, fsentry,
+                                                   format_string + i + 1,
+                                                   backend);
+
+                    if (tmp_length > 0) {
+                        found_in_plugin = true;
+                        break;
+                    }
+                }
+
+                if (!found_in_plugin)
+                    tmp_length = ctx->print_directive(&output[output_length],
+                                                      max_length, fsentry,
+                                                      format_string + i + 1,
+                                                      backend);
+            }
             /* Go over the directive that was just printed */
             i++;
             break;

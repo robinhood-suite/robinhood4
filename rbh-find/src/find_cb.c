@@ -302,14 +302,11 @@ find_exec_action(struct find_context *ctx,
         fsentry_print_ls_dils(stdout, fsentry);
         break;
     case ACT_FPRINTF:
-        fsentry_printf_format(ctx->action_file, fsentry, ctx->format_string,
-                              ctx->uris[backend_index],
-                              ctx->print_directive);
+        fsentry_printf_format(ctx, backend_index, fsentry);
         break;
     case ACT_PRINTF:
-        fsentry_printf_format(stdout, fsentry, ctx->format_string,
-                              ctx->uris[backend_index],
-                              ctx->print_directive);
+        ctx->action_file = stdout;
+        fsentry_printf_format(ctx, backend_index, fsentry);
         break;
     case ACT_COUNT:
         return 1;
