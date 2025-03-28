@@ -226,7 +226,7 @@ test_type()
 
     rbh_find "rbh:mongo:$testdb" -printf "%p %y\n" | sort |
         difflines "/ d" "/block b" "/char c" "/fifo p" "/file f" "/hlink f" \
-            "/slink l"
+                  "/slink l"
 }
 
 test_symlink()

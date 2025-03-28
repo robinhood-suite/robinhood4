@@ -7,6 +7,8 @@
 
 #include <robinhood/fsentry.h>
 
+struct find_context;
+
 void
 fsentry_print_ls_dils(FILE *file, const struct rbh_fsentry *fsentry);
 
@@ -20,10 +22,7 @@ fsentry_print_directive(char *output, int max_length,
                         const char *backend);
 
 void
-fsentry_printf_format(FILE *file, const struct rbh_fsentry *fsentry,
-                      const char *format_string, const char *backend,
-                      int (*print_directive)(char *, int,
-                                             const struct rbh_fsentry *,
-                                             const char *, const char *));
+fsentry_printf_format(struct find_context *ctx, size_t backend_index,
+                      const struct rbh_fsentry *fsentry);
 
 #endif
