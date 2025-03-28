@@ -134,11 +134,48 @@ check_command_options(int argc, char *argv[])
     return 0;
 }
 
+/* XXX: Ugly but necessary until we can retrieve the list of backends
+ * used to construct the mirror system from the mirror system itself.
+ */
+static void
+import_plugins(bool mongo_found, bool mpi_found)
+{
+    int plugin_index = 0;
+
+    if (mongo_found)
+        ctx.info_plugin_count++;
+    else if (mpi_found)
+        ctx.info_plugin_count++;
+
+    ctx.info_plugins = malloc(ctx.info_plugin_count *
+                              sizeof(*ctx.info_plugins));
+    if (ctx.info_plugins == NULL)
+        error(EXIT_FAILURE, errno, "malloc");
+
+    if (mongo_found) {
+        ctx.info_plugins[plugin_index] = rbh_backend_plugin_import("posix");
+        if (ctx.info_plugins[plugin_index] == NULL)
+            error(EXIT_FAILURE, errno, "rbh_backend_plugin_import");
+
+        plugin_index++;
+    }
+
+    if (mpi_found) {
+        ctx.info_plugins[plugin_index] = rbh_backend_plugin_import("mpi-file");
+        if (ctx.info_plugins[plugin_index] == NULL)
+            error(EXIT_FAILURE, errno, "rbh_backend_plugin_import");
+
+        plugin_index++;
+    }
+}
+
 int
 main(int _argc, char *_argv[])
 {
     struct rbh_filter_sort *sorts = NULL;
     struct rbh_filter *filter;
+    bool mongo_found = false;
+    bool mpi_found = false;
     size_t sorts_count = 0;
     int checked_options;
     int nb_cli_args;
@@ -172,6 +209,8 @@ main(int _argc, char *_argv[])
 
     ctx.info_plugin_count = 0;
     ctx.info_plugins = NULL;
+    ctx.info_extension_count = 0;
+    ctx.info_extensions = NULL;
 
     /* Parse the command line */
     for (index = 0; index < ctx.argc; index++)
@@ -194,24 +233,17 @@ main(int _argc, char *_argv[])
         ctx.backends[i] = rbh_backend_from_uri(ctx.argv[i]);
         ctx.uris[i] = ctx.argv[i];
         ctx.backend_count++;
+
+        /* XXX: Ugly but necessary until we can retrieve the list of backends
+         * used to construct the mirror system from the mirror system itself.
+         */
+        if (!mongo_found || strcmp(ctx.backends[i]->name, "mongo") == 0)
+            mongo_found = true;
+        else if (!mpi_found || strcmp(ctx.backends[i]->name, "mpi-file") == 0)
+            mpi_found = true;
     }
 
-    ctx.info_plugin_count = 2;
-    ctx.info_plugins = malloc(ctx.info_plugin_count *
-                              sizeof(*ctx.info_plugins));
-    if (ctx.info_plugins == NULL)
-        error(EXIT_FAILURE, errno, "malloc");
-
-    /* XXX: Ugly but necessary until we can retrieve the list of backends
-     * used to construct the mirror system from the mirror system itself.
-     */
-    ctx.info_plugins[0] = rbh_backend_plugin_import("posix");
-    if (ctx.info_plugins[0] == NULL)
-        error(EXIT_FAILURE, errno, "rbh_backend_plugin_import");
-
-    ctx.info_plugins[1] = rbh_backend_plugin_import("mpi-file");
-    if (ctx.info_plugins[1] == NULL)
-        ctx.info_plugin_count = 1;
+    import_plugins(mongo_found, mpi_found);
 
     ctx.need_prefetch = false;
     filter = parse_expression(&ctx, &index, NULL, &sorts, &sorts_count);
