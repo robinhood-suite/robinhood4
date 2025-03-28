@@ -7,11 +7,12 @@
 librbh_mpi_file = library(
     'rbh-mpi-file',
     sources: [
-        'mpi_file.c',
         'filter.c',
+        'mpi_file.c',
+        'plugin.c',
+        'plugin_callback_common.c',
         'pred.c',
         '../iter_mpi/iter_mpi.c',
-        'plugin.c',
     ],
     version: librbh_mpi_file_version, # defined in include/robinhood/backends
     link_with: [librobinhood, librbh_posix],
