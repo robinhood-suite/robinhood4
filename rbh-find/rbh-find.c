@@ -208,7 +208,6 @@ main(int _argc, char *_argv[])
     ctx.pre_action_callback = &find_pre_action;
     ctx.exec_action_callback = &find_exec_action;
     ctx.post_action_callback = &find_post_action;
-    ctx.print_directive = &fsentry_print_directive;
 
     /* Parse the command line */
     for (index = 0; index < ctx.argc; index++)
