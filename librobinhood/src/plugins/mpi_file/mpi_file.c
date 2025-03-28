@@ -49,22 +49,41 @@ flist_file2statx(mfu_flist flist, uint64_t idx, struct rbh_statx *statxbuf)
     statxbuf->stx_size = mfu_flist_file_get_size(flist, idx);
 }
 
+static __thread struct rbh_sstack *sstack;
+
+__attribute__((destructor))
+static void
+free_sstack(void)
+{
+    if (sstack)
+        rbh_sstack_destroy(sstack);
+}
+
 static struct rbh_fsentry *
 fsentry_from_flist(struct file_info *mpi_fi,
                    struct posix_iterator *posix)
 {
     struct mfu_iterator *mfu = (struct mfu_iterator *)posix;
     struct rbh_value_map inode_xattrs;
-    struct rbh_value_pair *ns_pairs;
     struct rbh_value_map ns_xattrs;
+    struct rbh_value_pair *pairs;
+    struct rbh_value_pair *pair;
     struct rbh_fsentry *fsentry;
     struct rbh_statx statxbuf;
+    struct rbh_value *value;
     char *symlink = NULL;
     struct rbh_id *id;
     int save_errno;
 
+    if (sstack == NULL) {
+        sstack = rbh_sstack_new(1 << 10);
+        if (sstack == NULL)
+            return NULL;
+    }
+
     const char *path = strlen(mpi_fi->path) == posix->prefix_len ?
                         "/" : mpi_fi->path + posix->prefix_len;
+
     /**
      * Unlike with posix, we use the relative path of an entry to
      * create an unique ID
@@ -92,42 +111,44 @@ fsentry_from_flist(struct file_info *mpi_fi,
         }
     }
 
-    ns_pairs = malloc(sizeof(*ns_pairs));
-    if (ns_pairs == NULL) {
-        save_errno = errno;
-        goto out_free_symlink;
-    }
-    ns_pairs->key = "path";
-    ns_pairs->value = rbh_value_string_new(path);
-    if (ns_pairs->value == NULL) {
-        save_errno = errno;
-        goto out_free_ns_pairs;
-    }
+    pairs = RBH_SSTACK_PUSH(sstack, NULL, sizeof(*pairs) * 2);
+
+    pair = &pairs[0];
+    pair->key = "path";
+    value = RBH_SSTACK_PUSH(sstack, NULL, sizeof(*value));
+    value->type = RBH_VT_STRING;
+    value->string = RBH_SSTACK_PUSH(sstack, path, strlen(path) + 1);
+    pair->value = value;
 
     ns_xattrs.count = 1;
-    ns_xattrs.pairs = ns_pairs;
+    ns_xattrs.pairs = pair;
 
-    inode_xattrs.pairs = NULL;
-    inode_xattrs.count = 0;
+    if (S_ISDIR(statxbuf.stx_mode)) {
+        pair = &pairs[1];
+        build_pair_nb_children(pair, 0);
+        inode_xattrs.pairs = pair;
+        inode_xattrs.count = 1;
+    } else {
+        inode_xattrs.pairs = NULL;
+        inode_xattrs.count = 0;
+    }
 
     fsentry = rbh_fsentry_new(id, mpi_fi->parent_id, mpi_fi->name, &statxbuf,
                               &ns_xattrs, &inode_xattrs, symlink);
+
+    if (S_ISDIR(statxbuf.stx_mode))
+        free((struct rbh_value *) pairs[1].value);
+
     if (fsentry == NULL) {
         save_errno = errno;
-        goto out_free_ns_pairs_value;
+        goto out_free_symlink;
     }
 
-    free((struct rbh_value *) ns_pairs->value);
-    free(ns_pairs);
     free(symlink);
     free(id);
 
     return fsentry;
 
-out_free_ns_pairs_value:
-    free((struct rbh_value *) ns_pairs->value);
-out_free_ns_pairs:
-    free(ns_pairs);
 out_free_symlink:
     free(symlink);
 out_free_id:

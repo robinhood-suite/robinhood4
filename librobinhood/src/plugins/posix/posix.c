@@ -331,7 +331,7 @@ free_ns_data(void)
         rbh_sstack_destroy(xattrs);
 }
 
-static int
+int
 build_pair_nb_children(struct rbh_value_pair *pair, int nb_children)
 {
     struct rbh_value *value;

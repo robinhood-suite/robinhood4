@@ -119,6 +119,9 @@ id_from_fd(int fd, short backend_id);
 char *
 freadlink(int fd, const char *path, size_t *size_);
 
+int
+build_pair_nb_children(struct rbh_value_pair *pair, int nb_children);
+
 struct rbh_fsentry *
 build_fsentry_nb_children(struct rbh_id *id, int nb_children);
 
