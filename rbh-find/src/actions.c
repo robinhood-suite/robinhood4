@@ -518,28 +518,15 @@ fsentry_printf_format(struct find_context *ctx, size_t backend_index,
 
         switch (format_string[i]) {
         case '%':
-            {
-                bool found_in_plugin = false;
+            for (int j = 0; j < ctx->info_plugin_count; ++j) {
+                tmp_length = rbh_plugin_fill_entry_info(ctx->info_plugins[j],
+                                                        &output[output_length],
+                                                        max_length, fsentry,
+                                                        format_string + i + 1,
+                                                        backend);
 
-                for (int j = 0; j < ctx->info_plugin_count; ++j) {
-                    tmp_length =
-                        rbh_plugin_fill_entry_info(ctx->info_plugins[j],
-                                                   &output[output_length],
-                                                   max_length, fsentry,
-                                                   format_string + i + 1,
-                                                   backend);
-
-                    if (tmp_length > 0) {
-                        found_in_plugin = true;
-                        break;
-                    }
-                }
-
-                if (!found_in_plugin)
-                    tmp_length = ctx->print_directive(&output[output_length],
-                                                      max_length, fsentry,
-                                                      format_string + i + 1,
-                                                      backend);
+                if (tmp_length > 0)
+                    break;
             }
             /* Go over the directive that was just printed */
             i++;
