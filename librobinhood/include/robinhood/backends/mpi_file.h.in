@@ -1,5 +1,5 @@
 /* This file is part of RobinHood 4
- * Copyright (C) 2024 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifer: LGPL-3.0-or-later
@@ -37,5 +37,47 @@ rbh_mpi_file_backend_new(const struct rbh_backend_plugin *self,
                          const char *type,
                          const char *path,
                          __attribute__((unused)) struct rbh_config *config);
+
+/**
+ * Check the given token corresponds to a predicate or action known by mpi-file
+ *
+ * @param token   a string that represents a token mpi-file should identify
+ *
+ * @return        RBH_TOKEN_PREDICATE if the token is a predicate
+ *                RBH_TOKEN_ACTION if the token is an action
+ *                RBH_TOKEN_UNKNOWN if the token is not valid
+ *                RBH_TOKEN_ERROR if an error occur and errno is set
+ *                appropriately
+ */
+enum rbh_parser_token
+rbh_mpi_file_check_valid_token(const char *token);
+
+/**
+ * Create a filter from the given command line arguments and position in that
+ * command line
+ *
+ * @param argv           the list of arguments given to the command
+ * @param argc           the number of strings in \p argv
+ * @param index          the argument currently being parsed, should be updated
+ *                       if necessary to skip optionnal values
+ * @param need_prefetch  boolean value set by mpi-file to indicate if a filter
+ *                       needs to be completed
+ *
+ * @return               a pointer to newly allocated struct rbh_filter on
+ *                       success, NULL on error and errno is set appropriately
+ */
+struct rbh_filter *
+rbh_mpi_file_build_filter(const char **argv, int argc, int *index,
+                          bool *need_prefetch);
+
+/**
+ * Delete an entry from the plugin
+ *
+ * @param fsentry        the entry to delete
+ *
+ * @return               0 on success, -1 on error and errno is set
+ */
+int
+rbh_mpi_file_delete_entry(struct rbh_fsentry *fsentry);
 
 #endif
