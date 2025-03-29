@@ -31,7 +31,7 @@ test_rm_with_hsm_copy()
 
     invoke_rbh-fsevents
 
-    hsm_archive_file $entry
+    archive_file $entry
     clear_changelogs "$LUSTRE_MDT" "$userid"
     rm_entry $entry
 

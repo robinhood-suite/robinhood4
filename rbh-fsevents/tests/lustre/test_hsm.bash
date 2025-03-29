@@ -50,7 +50,7 @@ test_hsm_archive()
 {
     local entry="test_entry"
     touch $entry
-    hsm_archive_file $entry
+    archive_file $entry
 
     test_hsm $entry
 }
@@ -59,7 +59,7 @@ test_hsm_release()
 {
     local entry="test_entry"
     touch $entry
-    hsm_archive_file $entry
+    archive_file $entry
 
     invoke_rbh-fsevents
 
@@ -72,7 +72,7 @@ test_hsm_restore()
 {
     local entry="test_entry"
     touch $entry
-    hsm_archive_file $entry
+    archive_file $entry
     hsm_release_file $entry
 
     invoke_rbh-fsevents
@@ -86,7 +86,7 @@ test_hsm_remove()
 {
     local entry="test_entry"
     touch $entry
-    hsm_archive_file $entry
+    archive_file $entry
 
     invoke_rbh-fsevents
 
@@ -99,7 +99,7 @@ test_hsm_remove_and_rm()
 {
     local entry="test_entry"
     touch $entry
-    hsm_archive_file $entry
+    archive_file $entry
     hsm_remove_file $entry
     rm $entry
 
