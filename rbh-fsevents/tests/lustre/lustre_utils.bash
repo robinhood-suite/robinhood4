@@ -21,17 +21,6 @@ invoke_rbh-fsevents()
 #                                 LUSTRE UTILS                                 #
 ################################################################################
 
-hsm_archive_file()
-{
-    local file="$1"
-
-    lfs hsm_archive "$file"
-
-    while ! lfs hsm_state "$file" | grep "archive_id:"; do
-        sleep 0.5
-    done
-}
-
 hsm_release_file()
 {
     local file="$1"

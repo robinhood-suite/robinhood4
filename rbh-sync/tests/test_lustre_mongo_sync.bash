@@ -10,17 +10,6 @@ test_dir=$(dirname $(readlink -e $0))
 . $test_dir/../../utils/tests/framework.bash
 . $test_dir/lustre_utils.bash
 
-archive_file()
-{
-    local file="$1"
-
-    sudo lfs hsm_archive "$file"
-
-    while ! lfs hsm_state "$file" | grep "archive_id:"; do
-        sleep 0.5;
-    done
-}
-
 rbh_sync_lustre()
 {
     if [[ "$WITH_MPI" == "true" ]]; then
@@ -219,11 +208,7 @@ test_hsm_state_multiple_states()
 test_hsm_archive_id()
 {
     touch "archive-id-1"
-
-    lfs hsm_archive "archive-id-1"
-    while ! lfs hsm_state "archive-id-1" | grep "archived"; do
-        sleep 0.5;
-    done
+    archive_file "archive-id-1"
 
     rbh_sync_lustre "." "rbh:mongo:$testdb"
 
