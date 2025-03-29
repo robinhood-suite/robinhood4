@@ -173,7 +173,7 @@ archive_file()
 
     sudo lfs hsm_archive "$file"
 
-    while ! lfs hsm_state "$file" | grep "archive_id:"; do
+    while ! lfs hsm_state "$file" | awk -F')' '{print $2}' | grep "archived"; do
         sleep 0.5
     done
 }

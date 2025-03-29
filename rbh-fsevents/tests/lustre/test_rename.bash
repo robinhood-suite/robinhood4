@@ -132,7 +132,7 @@ test_rename_overwrite_data_with_hsm_copy()
 
     invoke_rbh-fsevents
 
-    hsm_archive_file tmp/$entry_renamed
+    archive_file tmp/$entry_renamed
     clear_changelogs "$LUSTRE_MDT" "$userid"
 
     # Retrieve the overwriten link's id to test the link was deleted but the

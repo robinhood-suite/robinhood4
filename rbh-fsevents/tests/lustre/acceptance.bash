@@ -38,7 +38,7 @@ acceptance()
     mknod $dir1/$nod2 p
     mv $dir1/$file2 $dir1/$file5
 
-    hsm_archive_file $file1
+    archive_file $file1
     setfattr -n user.test -v 42 $file1
 
     touch $file6
