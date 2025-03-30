@@ -183,8 +183,8 @@ test_groupname()
 
 test_backend_name()
 {
-    mongo "other" --eval "db.dropDatabase()" >/dev/null
-    mongo "${testdb}2" --eval "db.dropDatabase()" >/dev/null
+    do_db drop "other"
+    do_db drop "${testdb}2"
 
     rbh_sync "rbh:posix:." "rbh:$db:other"
     touch file
@@ -195,8 +195,8 @@ test_backend_name()
         -name file -printf "%H\n" | sort |
             difflines "rbh:$db:$testdb" "rbh:$db:${testdb}2"
 
-    mongo "other" --eval "db.dropDatabase()" >/dev/null
-    mongo "${testdb}2" --eval "db.dropDatabase()" >/dev/null
+    do_db drop "other"
+    do_db drop "${testdb}2"
 }
 
 test_size()

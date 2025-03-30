@@ -16,6 +16,12 @@ setup_double_db()
     testdb2=$SUITE-2$test
 }
 
+teardown_dbs()
+{
+    do_db drop "$testdb1"
+    do_db drop "$testdb2"
+}
+
 ################################################################################
 #                                    TESTS                                     #
 ################################################################################
@@ -30,15 +36,8 @@ test_sync_simple()
     rbh_sync "rbh:posix:." "rbh:$db:$testdb1"
     rbh_sync "rbh:$db:$testdb1" "rbh:$db:$testdb2"
 
-    local db1entries="$(mongo "$testdb1" --eval \
-        "db.entries.find({}, {\"_id\": 0, \"ns.parent\": 0})
-                   .sort({\"ns.name\": 1})")"
-    local db2entries="$(mongo "$testdb2" --eval \
-        "db.entries.find({}, {\"_id\": 0, \"ns.parent\": 0})
-                   .sort({\"ns.name\": 1})")"
-
-    mongo "$testdb1" --eval "db.dropDatabase()"
-    mongo "$testdb2" --eval "db.dropDatabase()"
+    local db1entries="$(do_db dump "$testdb1")"
+    local db2entries="$(do_db dump "$testdb2")"
 
     if [ "$db1entries" != "$db2entries" ]; then
         error "sync resulted in different db state\n"
@@ -54,27 +53,15 @@ test_sync_branch()
     rbh_sync "rbh:posix:." "rbh:$db:$testdb1"
     rbh_sync "rbh:$db:$testdb1#dir" "rbh:$db:$testdb2"
 
-    local db1entries="$(mongo "$testdb1" --eval \
-        "db.entries.find({}, {\"_id\": 0, \"ns.parent\": 0})
-                   .sort({\"ns.name\": 1})")"
-    local db2entries="$(mongo "$testdb2" --eval \
-        "db.entries.find({}, {\"_id\": 0, \"ns.parent\": 0})
-                   .sort({\"ns.name\": 1})")"
+    local db1entries="$(do_db dump "$testdb1")"
+    local db2entries="$(do_db dump "$testdb2")"
 
     if [ "$db1entries" == "$db2entries" ]; then
-        mongo "$testdb1" --eval "db.dropDatabase()"
-        mongo "$testdb2" --eval "db.dropDatabase()"
-
         error "sync should have resulted in different db state\n"
     fi
 
-    db1entries="$(mongo "$testdb1" --eval \
-        "db.entries.find({\"ns.xattrs.path\": {\$regex: \"^/dir\"}},
-                         {\"_id\": 0, \"ns.parent\": 0})
-                   .sort({\"ns.name\": 1})")"
-
-    mongo "$testdb1" --eval "db.dropDatabase()"
-    mongo "$testdb2" --eval "db.dropDatabase()"
+    db1entries="$(do_db dump "$testdb1" \
+        '"ns.xattrs.path": {$regex: "^/dir"}')"
 
     if [ "$db1entries" != "$db2entries" ]; then
         error "sync with branching resulted in different db state\n"
@@ -92,4 +79,5 @@ trap -- "rm -rf '$tmpdir'" EXIT
 cd "$tmpdir"
 
 sub_setup=setup_double_db
+sub_teardown=teardown_dbs
 run_tests ${tests[@]}

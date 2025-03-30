@@ -90,9 +90,8 @@ test_setxattr_replace()
 
     find_attribute '"xattrs.user":{$exists: true}' '"ns.name":"'$entry'"'
     find_attribute '"xattrs.user.test":{$exists: true}' '"ns.name":"'$entry'"'
-    local old_value=$(mongo "$testdb" --eval \
-        'db.entries.find({"xattrs.user.test":{$exists: true}},
-                         {_id: 0, "xattrs.user.test": 1})')
+    local old_value=$(do_db get "$testdb" \
+        '{"xattrs.user.test":{$exists: true}}, {_id: 0, "xattrs.user.test": 1}')
 
     clear_changelogs "$LUSTRE_MDT" "$userid"
     setfattr -n user.test -v 43 "$entry"
@@ -101,9 +100,8 @@ test_setxattr_replace()
 
     find_attribute '"xattrs.user":{$exists: true}' '"ns.name":"'$entry'"'
     find_attribute '"xattrs.user.test":{$exists: true}' '"ns.name":"'$entry'"'
-    local new_value=$(mongo "$testdb" --eval \
-        'db.entries.find({"xattrs.user.test":{$exists: true}},
-                         {_id: 0, "xattrs.user.test": 1})')
+    local new_value=$(do_db get "$testdb" \
+        '{"xattrs.user.test":{$exists: true}}, {_id: 0, "xattrs.user.test": 1}')
 
     if [ "$old_value" == "$new_value" ]; then
         error "xattrs values should be different after an update:" \

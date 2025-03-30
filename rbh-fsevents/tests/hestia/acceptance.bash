@@ -36,7 +36,7 @@ acceptance()
 
     invoke_rbh_fsevents "rbh:$db:$testdb"
 
-    local count=$(mongo $testdb --eval "db.entries.count()")
+    local count=$(do_db count "$testdb")
     if (( $count != 2 )); then
         error "There should be 2 entries in the DB"
     fi
