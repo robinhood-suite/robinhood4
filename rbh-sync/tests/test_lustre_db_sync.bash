@@ -70,7 +70,7 @@ test_branch_sync()
     find_attribute '"ns.xattrs.path":"'/$second_dir/$third_dir/$entry'"' \
                    '"xattrs.stripe_count": 1'
 
-    mongo $testdb --eval "db.dropDatabase()"
+    do_db drop $testdb
 
     local abs_path="$(realpath $first_dir)"
 
@@ -87,7 +87,7 @@ test_branch_sync()
     find_attribute '"ns.xattrs.path":"'/$second_dir/$third_dir/$entry'"' \
                    '"xattrs.stripe_count": 1'
 
-    mongo $testdb --eval "db.dropDatabase()"
+    do_db drop $testdb
 
     rbh_sync_lustre "$first_dir#$second_dir/$third_dir" "rbh:$db:$testdb"
 

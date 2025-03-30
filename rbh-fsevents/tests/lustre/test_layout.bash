@@ -24,9 +24,8 @@ test_layout()
     clear_changelogs "$LUSTRE_MDT" "$userid"
     lfs migrate -E 1k -c 2 -E -1 -c 1 $entry
 
-    local old_version=$(mongo "$testdb" --eval \
-        'db.entries.find({"ns.name":"'$entry'"},
-                         {"statx.ctime":0, "xattrs":0})')
+    local old_version=$(do_db get "$testdb" \
+        '"ns.name":"'$entry'"' '"statx.ctime":0, "xattrs":0')
 
     invoke_rbh-fsevents
 
@@ -36,9 +35,8 @@ test_layout()
         error "There should be $count entries in the database, found $entries"
     fi
 
-    local updated_version=$(mongo "$testdb" --eval \
-        'db.entries.find({"ns.name":"'$entry'"},
-                         {"statx.ctime":0, "xattrs":0})')
+    local updated_version=$(do_db get "$testdb" \
+        '"ns.name":"'$entry'"' '"statx.ctime":0, "xattrs":0')
 
     if [ "$old_version" != "$updated_version" ]; then
         error "Layout event modified other statx elements than ctime"
