@@ -28,9 +28,9 @@ test_truncate()
 
     # retrieve the version before the truncate and after, to check there is no
     # difference between the two except the fields that should be modified
-    local old_version=$(mongo "$testdb" --eval \
-        'db.entries.find({"ns.name":"'$entry'"},
-                         {"statx.mtime":0, "statx.ctime":0, "statx.size":0})')
+    local old_version=$(do_db get "$testdb" \
+        '"ns.name":"'$entry'"' \
+        '"statx.mtime":0, "statx.ctime":0, "statx.size":0')
     truncate -s 300 $entry
 
     invoke_rbh-fsevents
@@ -41,9 +41,9 @@ test_truncate()
         error "There should be only $count entries in the database"
     fi
 
-    local updated_version=$(mongo "$testdb" --eval \
-        'db.entries.find({"ns.name":"'$entry'"},
-                         {"statx.mtime":0, "statx.ctime":0, "statx.size":0})')
+    local updated_version=$(do_db get "$testdb" \
+        '"ns.name":"'$entry'"' \
+        '"statx.mtime":0, "statx.ctime":0, "statx.size":0')
 
     if [ "$old_version" != "$updated_version" ]; then
         error "Truncate modified more than mtime, ctime and size"

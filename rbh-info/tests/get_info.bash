@@ -18,9 +18,9 @@ test_collection_size()
     rbh_sync "rbh:posix:." "rbh:$db:$testdb"
 
     local rbh_info_size=$(rbh_info "rbh:$db:$testdb" -s)
-    local mongo_size=$(mongo "$testdb" --eval " db.entries.stats().size")
+    local db_size=$(do_db size "$testdb")
 
-    if [ "$rbh_info_size" != "$mongo_size" ]; then
+    if [ "$rbh_info_size" != "$db_size" ]; then
         error "sizes are not matching\n"
     fi
 }
@@ -30,15 +30,9 @@ test_collection_count()
     rbh_sync "rbh:posix:." "rbh:$db:$testdb"
 
     local rbh_info_count=$(rbh_info "rbh:$db:$testdb" -c)
+    local db_count=$(do_db count "$testdb")
 
-    if (( $(mongo_version) < $(version_code 5.0.0) )); then
-        local mongo_count=$(mongo "$testdb" --eval "db.entries.count()")
-    else
-        local mongo_count=$(mongo "$testdb" --eval
-                            "db.entries.countDocuments()")
-    fi
-
-    if [ "$rbh_info_count" != "$mongo_count" ]; then
+    if [ "$rbh_info_count" != "$db_count" ]; then
         error "count are not matching\n"
     fi
 }
@@ -48,10 +42,9 @@ test_collection_avg_obj_size()
     rbh_sync "rbh:posix:." "rbh:$db:$testdb"
 
     local rbh_info_avg_obj_size=$(rbh_info "rbh:$db:$testdb" -a)
-    local mongo_avg_obj_size=$(mongo "$testdb" --eval "
-                               db.entries.stats().avgObjSize")
+    local db_avg_obj_size=$(do_db avgsize "$testdb")
 
-    if [ "$rbh_info_avg_obj_size" != "$mongo_avg_obj_size" ]; then
+    if [ "$rbh_info_avg_obj_size" != "$db_avg_obj_size" ]; then
         error "average objects size are not matching\n"
     fi
 }

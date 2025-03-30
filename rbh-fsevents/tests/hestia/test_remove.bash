@@ -57,7 +57,7 @@ test_remove_to_db()
     find_attribute '"ns.name":"'$obj'"'
     invoke_rbh_fsevents "rbh:$db:$testdb"
 
-    local count=$(mongo $testdb --eval "db.entries.count()")
+    local count=$(do_db count "$testdb")
     if (( $count != 0 )); then
         error "Remove event should have deleted sole record in the DB"
     fi

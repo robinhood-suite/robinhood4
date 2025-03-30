@@ -24,10 +24,8 @@ test_id()
     local IDA=$(rbh_lfind "rbh:$db:$testdb" -name fileA -printf "%I\n")
     local IDB=$(rbh_lfind "rbh:$db:$testdb" -name fileB -printf "%I\n")
 
-    local countA="$(mongo "$testdb" --eval \
-                    "db.entries.countDocuments({\"_id\": BinData(0, \"$IDA\")})")"
-    local countB="$(mongo "$testdb" --eval \
-                    "db.entries.countDocuments({\"_id\": BinData(0, \"$IDB\")})")"
+    local countA=$(do_db count "$testdb" '"_id": BinData(0, "'$IDA'")')
+    local countB=$(do_db count "$testdb" '"_id": BinData(0, "'$IDB'")')
 
     if [[ "$countA" != "1" ]]; then
         error "Couldn't find entry with ID '$IDA'"

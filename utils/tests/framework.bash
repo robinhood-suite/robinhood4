@@ -28,6 +28,8 @@ export LC_ALL=C
 # BASH_SOURCE[0] is the relative path to this file.
 export RBH_CONFIG_PATH="$(dirname ${BASH_SOURCE[0]})/test_config.yaml"
 
+__db_cmd_path="$(dirname ${BASH_SOURCE[0]})"
+
 __rbh_sync=$(PATH="$PWD/rbh-sync:$PATH" which rbh-sync)
 rbh_sync()
 {
@@ -146,30 +148,19 @@ build_string_array()
     echo "[$(join_arr ", " ${arr[@]})]"
 }
 
+do_db()
+{
+    "$__db_cmd_path/db_cmd_$db" "$@"
+}
+
 count_documents()
 {
-    local input="$1"
-
-    if [ ! -z "$input" ]; then
-        input="{$input}"
-    fi
-
-    if (( $(mongo_version) < $(version_code 5.0.0) )); then
-        mongo $testdb --eval "db.entries.count($input)"
-    else
-        mongo $testdb --eval "db.entries.countDocuments($input)"
-    fi
+    do_db count "$testdb"
 }
 
 find_attribute()
 {
-    old_IFS=$IFS
-    IFS=','
-    local output="$*"
-    IFS=$old_IFS
-    local res="$(count_documents "$output")"
-    [[ "$res" == "1" ]] && return 0 ||
-        error "No entry found with filter '$output' (in $(caller))"
+    do_db find "$testdb" "$@"
 }
 
 difflines()
@@ -241,7 +232,7 @@ teardown()
     # properly cleaned.
     set +e
 
-    local output=$(mongo "$testdb" --eval "db.dropDatabase()" 2>&1)
+    local output=$(do_db drop "$testdb" 2>&1)
     if (( $? != 0 )); then
         echo "Failed to drop '$testdb':"
         echo "$output"
