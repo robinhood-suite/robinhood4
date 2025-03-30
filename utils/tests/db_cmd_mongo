@@ -1,0 +1,115 @@
+#!/usr/bin/env bash
+
+# test_dir="$(dirname ${BASH_SOURCE[0]})/"
+# source "$test_dir/framework.bash"
+
+error()
+{
+    echo "$*"
+    exit 1
+}
+
+__mongo=$(which mongosh || which mongo)
+mongo()
+{
+    "$__mongo" --quiet "$@"
+}
+
+function version_code()
+{
+    eval set -- $(echo $1 | tr "[:punct:]" " ")
+
+    echo -n "$(( (${1:-0} << 16) | (${2:-0} << 8) | ${3:-0} ))"
+}
+
+function mongo_version()
+{
+    local version="$(mongod --version | head -n 1 | cut -d' ' -f3)"
+    version_code "${version:1}"
+}
+
+args_to_filter()
+{
+    old_IFS=$IFS
+    IFS=','
+
+    local filter="$*"
+
+    IFS=$old_IFS
+    echo "$filter"
+}
+
+count_documents()
+{
+    local db="$1"
+    shift
+    local filter="$(args_to_filter "$@")"
+
+    if (( $(mongo_version) < $(version_code 5.0.0) )); then
+        mongo $db --eval "db.entries.count({ $filter })"
+    else
+        mongo $db --eval "db.entries.countDocuments({ $filter })"
+    fi
+}
+
+get_attribute()
+{
+    local db="$1"
+    local query="$2"
+    local output="$3"
+
+    mongo "$db" --eval "db.entries.find({ $query }, { $output })"
+}
+
+find_attribute()
+{
+    local db="$1"
+
+    shift
+
+    local count="$(count_documents "$db" "$@")"
+    if (( count != 1 )); then
+        error "No entry found with filter '$@'"
+    fi
+
+    return 0
+}
+
+cmd="$1"
+db="$2"
+shift 2
+
+case "$cmd" in
+    count)
+        count_documents "$db" "$@"
+        ;;
+    find)
+        find_attribute "$db" "$@"
+        ;;
+    get)
+        get_attribute "$db" "$@"
+        ;;
+    avgsize)
+        mongo "$db" --eval "db.entries.stats().avgObjSize"
+        ;;
+    size)
+        mongo "$db" --eval "db.entries.stats().size"
+        ;;
+    dump)
+        mongo "$db" --eval \
+            'db.entries.find({'"$(args_to_filter "$@")"'},
+                             {"_id": 0, "ns.parent": 0})
+                       .sort({"ns.name": 1})'
+        ;;
+    drop)
+        output=$(mongo "$db" --eval "db.dropDatabase()" 2>&1)
+        rc=$?
+        if (( rc != 0 )); then
+            echo "$output"
+        fi
+        exit $rc
+        ;;
+    *)
+        echo "Unknown command '$cmd'"
+        exit 1
+esac

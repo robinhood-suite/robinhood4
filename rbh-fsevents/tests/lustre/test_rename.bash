@@ -42,9 +42,8 @@ get_entry_from_binary_id()
 {
     local id="$1"
 
-    mongo "$testdb" --eval \
-        "db.entries.find({\"_id\":$(get_mongo_id_from_binary_id "$id")},
-                         {\"_id\": 1})"
+    do_db get "$testdb" \
+        '"_id":'"$(get_mongo_id_from_binary_id "$id")" '"_id": 1'
 }
 
 test_rename()
@@ -65,9 +64,8 @@ test_rename()
 
     # Request the DB to only show the inode with name $entry_renamed, and return
     # its parent
-    local entry_parent="$(mongo "$testdb" --eval \
-        'db.entries.find({"ns.name":"'$entry_renamed'"},
-                         {"ns.parent": 1, "_id": 0})')"
+    local entry_parent="$(do_db get "$testdb" \
+        '"ns.name":"'$entry_renamed'"' '"ns.parent": 1, "_id": 0')"
 
     local parent_id="$(get_binary_id_from_mongo_entry "$entry_parent")"
 
@@ -137,9 +135,8 @@ test_rename_overwrite_data_with_hsm_copy()
 
     # Retrieve the overwriten link's id to test the link was deleted but the
     # inode still exists since an archived copy is still valid
-    local old_entry=$(mongo "$testdb" --eval \
-                      'db.entries.find({"ns.name":"'$entry_renamed'"},
-                                       {"_id": 1})')
+    local old_entry=$(do_db get "$testdb" \
+                      '"ns.name":"'$entry_renamed'"' '"_id": 1')
 
     old_entry="$(get_binary_id_from_mongo_entry "$old_entry")"
 
@@ -150,10 +147,10 @@ test_rename_overwrite_data_with_hsm_copy()
     test_rename $entry $entry_renamed $count
 
     # Check the overwriten entry is still in the DB but has no link anymore
-    local result="$(mongo "$testdb" --eval \
-        "db.entries.find({\"_id\":$(get_mongo_id_from_binary_id "$old_entry"),
-                          \"ns\": { \$exists : true },
-                          \"ns\": { \$size : 0 }})")"
+    local result="$(do_db get "$testdb" \
+        '"_id":'"$(get_mongo_id_from_binary_id "$old_entry")"',
+         "ns": { $exists : true },
+         "ns": { $size : 0 }')"
     if [ -z "$result" ]; then
         error "Entry '$old_entry' should still be in the DB, but with no link"
     fi

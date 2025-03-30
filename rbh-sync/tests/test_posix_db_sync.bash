@@ -216,7 +216,7 @@ test_sync_branch()
     find_attribute '"ns.name":"'$entry'"'
     find_attribute '"ns.xattrs.path":"'/$second_dir/$third_dir/$entry'"'
 
-    mongo $testdb --eval "db.dropDatabase()"
+    do_db drop $testdb
 
     local abs_path="$(realpath $first_dir)"
 
@@ -229,7 +229,7 @@ test_sync_branch()
     find_attribute '"ns.name":"'$entry'"'
     find_attribute '"ns.xattrs.path":"'/$second_dir/$third_dir/$entry'"'
 
-    mongo $testdb --eval "db.dropDatabase()"
+    do_db drop $testdb
 
     rbh_sync_posix "$first_dir#$second_dir/$third_dir" "rbh:$db:$testdb"
 
@@ -238,7 +238,7 @@ test_sync_branch()
     find_attribute '"ns.name":"'$entry'"'
     find_attribute '"ns.xattrs.path":"'/$second_dir/$third_dir/$entry'"'
 
-    mongo $testdb --eval "db.dropDatabase()"
+    do_db drop $testdb
 
     rbh_sync_posix "./$first_dir#$second_dir/$third_dir" "rbh:$db:$testdb"
 
@@ -247,12 +247,10 @@ test_sync_branch()
     find_attribute '"ns.name":"'$entry'"'
     find_attribute '"ns.xattrs.path":"'/$second_dir/$third_dir/$entry'"'
 
-    mongo $testdb --eval "db.dropDatabase()"
+    do_db drop $testdb
 
     rbh_sync_posix "$first_dir/../$first_dir/./$second_dir#$third_dir" \
                    "rbh:$db:$testdb"
-
-    mongo $testdb --eval "db.entries.find()"
 
     find_attribute '"ns.name":"'$third_dir'"'
     find_attribute '"ns.xattrs.path":"'/$third_dir'"'
