@@ -30,10 +30,10 @@ test_flrw()
     clear_changelogs "$LUSTRE_MDT" "$userid"
     echo "test_data" | dd oflag=direct of="$entry"
 
-    local old_version=$(mongo "$testdb" --eval \
-        'db.entries.find({"ns.name":"'$entry'"},
-                         {"statx.ctime":0, "statx.mtime":0, "statx.size":0,
-                          "statx.blocks":0, "xattrs":0})')
+    local old_version=$(do_db get "$testdb" \
+        '"ns.name":"'$entry'"' \
+        '"statx.ctime":0, "statx.mtime":0, "statx.size":0,
+         "statx.blocks":0, "xattrs":0')
 
     invoke_rbh-fsevents
 
@@ -43,10 +43,10 @@ test_flrw()
         error "There should be $count entries in the database, found $entries"
     fi
 
-    local updated_version=$(mongo "$testdb" --eval \
-        'db.entries.find({"ns.name":"'$entry'"},
-                         {"statx.ctime":0, "statx.mtime":0, "statx.size":0,
-                          "statx.blocks":0, "xattrs":0})')
+    local updated_version=$(do_db get "$testdb" \
+        '"ns.name":"'$entry'"' \
+        '"statx.ctime":0, "statx.mtime":0, "statx.size":0,
+         "statx.blocks":0, "xattrs":0')
 
     if [ "$old_version" != "$updated_version" ]; then
         error "Layout event modified other statx elements than ctime, mtime "
