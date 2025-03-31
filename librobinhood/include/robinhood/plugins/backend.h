@@ -201,7 +201,7 @@ rbh_plugin_check_valid_token(const struct rbh_backend_plugin *plugin,
         return plugin->ops->check_valid_token(token);
 
     errno = ENOTSUP;
-    return RBH_TOKEN_ERROR;
+    return RBH_TOKEN_UNKNOWN;
 }
 
 /**
