@@ -68,11 +68,15 @@ usage(void)
         "                    enrich changelog records by querying MOUNTPOINT as needed\n"
         "                    MOUNTPOINT is a RobinHood URI (eg. rbh:lustre:/mnt/lustre)\n"
         "    -h, --help      print this message and exit\n"
-        "    -l, --lustre    consider SOURCE is an MDT name\n"
         "    -r, --raw       do not enrich changelog records (default)\n"
         "\n"
         "Note that uploading raw records to a RobinHood backend will fail, they have to\n"
-        "be enriched first.\n";
+        "be enriched first.\n"
+        "\n"
+        "For Lustre sources, changelogs are not acknowledged by default. To\n"
+        "enable this feature, you must specify in the Source URI the user\n"
+        "with whom the acknowledge should be done, i.e.\n"
+        "'src:lustre:lustre-MDT0000?ack-user=cl1'.\n";
 
     printf(message, program_invocation_short_name, DEFAULT_BATCH_SIZE);
 }
