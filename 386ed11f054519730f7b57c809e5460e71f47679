@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd76a08a_9d588b8d",
+        "filename": "librobinhood/src/plugins/meson.build",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-03-31T13:15:54Z",
+      "side": 1,
+      "message": "nit: that does not seem mandatory for now",
+      "range": {
+        "startLine": 23,
+        "startChar": 4,
+        "endLine": 23,
+        "endChar": 13
+      },
+      "revId": "386ed11f054519730f7b57c809e5460e71f47679",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
