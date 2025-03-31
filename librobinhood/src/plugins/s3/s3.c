@@ -18,6 +18,8 @@
 
 #include "robinhood/backends/s3.h"
 #include "robinhood/config.h"
+#include "robinhood/sstack.h"
+#include "robinhood/statx.h"
 
 #include "s3_wrapper.h"
 
@@ -33,6 +35,7 @@ struct item_data {
 
 struct s3_iterator {
     struct rbh_mut_iterator iterator;
+    struct rbh_sstack *values;
     struct item_data bkt_data;
     struct item_data obj_data;
 };
@@ -69,10 +72,156 @@ get_next_object(struct s3_iterator *s3_iter)
     return s3_iter->obj_data.list[*curr_obj_id];
 }
 
+static int
+fill_path(char *path, struct rbh_value_pair **_pairs, struct rbh_sstack *values)
+{
+    struct rbh_value *path_value;
+    struct rbh_value_pair *pair;
+
+    path_value = rbh_sstack_push(values, NULL, sizeof(*path_value));
+    if (path_value == NULL)
+        return -1;
+
+    path_value->type = RBH_VT_STRING;
+    path_value->string = path;
+
+    pair = rbh_sstack_push(values, NULL, sizeof(*pair));
+    if (pair == NULL)
+        return -1;
+
+    pair->key = "path";
+    pair->value = path_value;
+
+    *_pairs = pair;
+
+    return 0;
+}
+
+static void
+fill_user_metadata(struct rbh_value_pair *pairs,
+                   struct rbh_sstack *values)
+{
+    size_t custom_size = s3_get_custom_size();
+    struct rbh_value *map_value = rbh_sstack_push(values, NULL,
+                                                  sizeof(*map_value));
+    struct rbh_value_pair *user_pairs = rbh_sstack_push(values, NULL,
+                                                        sizeof(*user_pairs) *
+                                                        custom_size);
+    struct rbh_value_map map;
+
+    if (map_value == NULL || user_pairs == NULL)
+        error(EXIT_FAILURE, ENOMEM,
+              "rbh_sstack_push in fill_user_metadata");
+
+    for (size_t i = 0; i < custom_size; ++i) {
+        struct rbh_value *attr_value;
+        struct map_entry *entry;
+
+        entry = s3_get_map_entry();
+
+        attr_value = rbh_sstack_push(values, NULL, sizeof(*attr_value));
+        if (attr_value == NULL)
+            error(EXIT_FAILURE, ENOMEM,
+                  "rbh_sstack_push on attr_value in fill_user_metadata");
+
+        attr_value->type = RBH_VT_STRING;
+        attr_value->string = rbh_sstack_push(values, entry->key,
+                                             strlen(entry->key) + 1);
+        if (attr_value->string == NULL)
+            error(EXIT_FAILURE, ENOMEM,
+                  "rbh_sstack_push on value string in fill_user_metadata");
+
+        user_pairs[i].key = rbh_sstack_push(values, entry->value,
+                                            strlen(entry->value) + 1);
+        if (user_pairs[i].key == NULL)
+            error(EXIT_FAILURE, ENOMEM,
+                  "rbh_sstack_push on key pair in fill_user_metadata");
+
+        user_pairs[i].value = attr_value;
+    }
+
+    map.count = custom_size;
+    map.pairs = user_pairs;
+
+    map_value->type = RBH_VT_MAP;
+    map_value->map = map;
+
+    pairs->key = "user_metadata";
+    pairs->value = map_value;
+}
+
+static void *
+s3_iter_next(void *iterator)
+{
+    struct s3_iterator *s3_iter = iterator;
+    struct rbh_fsentry *fsentry = NULL;
+    struct rbh_value_pair *inode_pairs;
+    struct rbh_value_map inode_xattrs;
+    struct rbh_value_pair *ns_pairs;
+    struct rbh_value_map ns_xattrs;
+    struct rbh_statx statx = {0};
+    struct rbh_id parent_id;
+    char *current_bucket;
+    char *current_object;
+    struct rbh_id id;
+    char *full_path;
+    int rc;
+
+    current_object = get_next_object(s3_iter);
+    if (current_object == NULL)
+        return NULL;
+
+    current_bucket = s3_iter->bkt_data.list[s3_iter->bkt_data.current_id];
+
+    s3_create_meta_struct(current_bucket, current_object);
+
+    full_path = malloc(strlen(current_bucket) + strlen(current_object) + 2);
+    strcpy(full_path, current_bucket);
+    strcat(full_path, "/");
+    strcat(full_path, current_object);
+
+    id.data = rbh_sstack_push(s3_iter->values, full_path,
+                              strlen(full_path) + 1);
+    id.size = strlen(full_path);
+
+    parent_id.size = 0;
+
+    statx.stx_mask = RBH_STATX_SIZE | RBH_STATX_MTIME;
+    statx.stx_size = s3_get_size();
+    statx.stx_mtime.tv_sec = s3_get_mtime();
+
+    rc = fill_path(full_path, &ns_pairs, s3_iter->values);
+    if (rc)
+        goto err;
+
+    ns_xattrs.pairs = ns_pairs;
+    ns_xattrs.count = 1;
+
+    inode_pairs = rbh_sstack_push(s3_iter->values, NULL,
+                                  sizeof(*inode_pairs));
+
+    if (inode_pairs == NULL)
+        error(EXIT_FAILURE, errno, "rbh_sstack_push error");
+
+    fill_user_metadata(&inode_pairs[0], s3_iter->values);
+
+    inode_xattrs.pairs = inode_pairs;
+    inode_xattrs.count = 1;
+
+    fsentry = rbh_fsentry_new(&id, &parent_id, current_object, &statx,
+                              &ns_xattrs, &inode_xattrs, NULL);
+err:
+    free(full_path);
+    return fsentry;
+}
+
 static void
 s3_iter_destroy(void *iterator)
 {
     struct s3_iterator *s3_iter = iterator;
+
+    rbh_sstack_destroy(s3_iter->values);
+
     s3_delete_list(s3_iter->obj_data.length, s3_iter->obj_data.list);
     s3_delete_list(s3_iter->bkt_data.length, s3_iter->bkt_data.list);
 
@@ -80,7 +229,7 @@ s3_iter_destroy(void *iterator)
 }
 
 static const struct rbh_mut_iterator_operations S3_ITER_OPS = {
-    //.next = s3_iter_next,
+    .next = s3_iter_next,
     .destroy = s3_iter_destroy,
 };
 
@@ -109,8 +258,12 @@ s3_iterator_new()
                            &s3_iter->obj_data.list);
 
     s3_iter->bkt_data.current_id = 0;
-    s3_iter->obj_data.current_id = 0;
+    s3_iter->obj_data.current_id = -1;
     s3_iter->iterator = S3_ITER;
+
+    s3_iter->values = rbh_sstack_new(1 << 10);
+    if (s3_iter->values == NULL)
+        return NULL;
 
     return s3_iter;
 }
