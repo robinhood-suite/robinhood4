@@ -193,7 +193,6 @@ rbh_backend_plugin_destroy(const char *name)
  *                  RBH_TOKEN_UNKNOWN if the token is not valid
  *                  RBH_TOKEN_ERROR if an error occur
  */
-
 static inline enum rbh_parser_token
 rbh_plugin_check_valid_token(const struct rbh_backend_plugin *plugin,
                              const char *token)
@@ -220,7 +219,6 @@ rbh_plugin_check_valid_token(const struct rbh_backend_plugin *plugin,
  * @return               a pointer to newly allocated struct rbh_filter on
  *                       success, NULL on error and errno is set appropriately
  */
-
 static inline struct rbh_filter *
 rbh_plugin_build_filter(const struct rbh_backend_plugin *plugin,
                         const char **argv, int argc, int *index,
