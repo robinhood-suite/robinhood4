@@ -13,6 +13,10 @@
  * been made to make it compatible with the rbh backend in c
  */
 
+struct map_entry {
+    const char *key;
+    const char *value;
+};
 
 #ifdef __cplusplus
 extern "C" {
@@ -69,6 +73,52 @@ extern "C" {
      */
     void
     s3_delete_list(size_t list_length, char **list);
+
+    /**
+     * Create the metadata struct for a given object and bucket.
+     * Needs to be called before any of the following s3_get functions
+     *
+     * @param bucket_name   the name of the bucket
+     * @param object_name   the name of the object
+     */
+    bool
+    s3_create_meta_struct(const char *bucket_name,
+                          const char *object_name);
+
+    /**
+     * Return the modified time from the metadata struct created previously
+     *
+     * @return  the mtime in seconds
+     */
+    time_t
+    s3_get_mtime();
+
+    /**
+     * Return the size of the file from the metadata struct created previously
+     *
+     * @return  the size of the file
+     */
+    size_t
+    s3_get_size();
+
+    /**
+     * Return a single entry of the map containing the user metadata from
+     * the metadata struct created previously
+     *
+     * @return  a map_entry struct containing the key and value, return NULL
+     *          when there is no more entry to retrieve
+     */
+    struct map_entry*
+    s3_get_map_entry();
+
+    /**
+     * Return the size of the user metadata map from the metadata
+     * struct created previously
+     *
+     * @return  the number of entries in the user metadata map
+     */
+    size_t
+    s3_get_custom_size();
 
 #ifdef __cplusplus
 }
