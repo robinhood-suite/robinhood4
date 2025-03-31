@@ -104,6 +104,8 @@ struct rbh_backend {
     unsigned int id;
     /** A unique name (mostly for logging purposes) */
     const char *name;
+    /** A list of the type of information stored by this backend*/
+    const struct rbh_value *backend_info;
     /** A set of operations the backend implements */
     const struct rbh_backend_operations *ops;
 };
@@ -483,12 +485,13 @@ rbh_backend_update(struct rbh_backend *backend, struct rbh_iterator *fsevents)
 /**
  * Insert the backend source of rbh-sync
  *
- * @param backend         the backend in which to insert the source
- * @param backend_source  a rbh_value sequence to retrieve the backend name
- *                        and its potential overload
+ * @param backend        the backend in which to insert the source
+ * @param backend_source a rbh_value sequence to retrieve the backend name
+ *                       and its potential overload
  *
- * @return                0 on success, -1 on error
+ * return                0 on success, -1 on error
  */
+
 static inline int
 rbh_backend_insert_source(struct rbh_backend *backend,
                           const struct rbh_value *backend_source)

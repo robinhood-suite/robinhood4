@@ -1194,9 +1194,23 @@ static const struct rbh_backend_operations POSIX_BACKEND_OPS = {
     .destroy = posix_backend_destroy,
 };
 
+static const struct rbh_value POSIX_STRING_INFO = {
+    .type = RBH_VT_STRING,
+    .string = "posix"
+};
+
+static const struct rbh_value RBH_POSIX_BACKEND_INFO = {
+    .type = RBH_VT_SEQUENCE,
+    .sequence = {
+        .values = &POSIX_STRING_INFO,
+        .count = 1,
+    },
+};
+
 static const struct rbh_backend POSIX_BACKEND = {
     .id = RBH_BI_POSIX,
     .name = RBH_POSIX_BACKEND_NAME,
+    .backend_info = &RBH_POSIX_BACKEND_INFO,
     .ops = &POSIX_BACKEND_OPS,
 };
 

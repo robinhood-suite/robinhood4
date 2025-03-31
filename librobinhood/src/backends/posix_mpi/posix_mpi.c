@@ -175,6 +175,19 @@ static const struct rbh_backend_operations POSIX_MPI_BACKEND_OPS = {
     .destroy = posix_mpi_backend_destroy,
 };
 
+static const struct rbh_value POSIX_MPI_STRING_INFO = {
+    .type = RBH_VT_STRING,
+    .string = "posix"
+};
+
+static const struct rbh_value RBH_POSIX_MPI_BACKEND_INFO = {
+    .type = RBH_VT_SEQUENCE,
+    .sequence = {
+        .values = &POSIX_MPI_STRING_INFO,
+        .count = 1,
+    },
+};
+
 struct rbh_backend *
 rbh_posix_mpi_backend_new(const char *path, struct rbh_config *config)
 {
@@ -193,6 +206,7 @@ rbh_posix_mpi_backend_new(const char *path, struct rbh_config *config)
 
     posix_mpi->iter_new = posix_mpi_iterator_new;
     posix_mpi->backend.name = RBH_POSIX_MPI_BACKEND_NAME;
+    posix_mpi->backend.backend_info = &RBH_POSIX_MPI_BACKEND_INFO;
     posix_mpi->backend.ops = &POSIX_MPI_BACKEND_OPS;
     posix_mpi->backend.id = RBH_BI_POSIX_MPI;
 
