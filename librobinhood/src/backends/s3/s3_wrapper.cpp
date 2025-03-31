@@ -18,13 +18,23 @@
 #include <fstream>
 #include <memory>
 #include <string>
+#include <chrono>
+#include <ctime>
 
 #include "s3_wrapper.h"
 
 #define SIGNING_POLICY Aws::Client::AWSAuthV4Signer::PayloadSigningPolicy
 #define S3CLIENT Aws::S3::S3Client
 
+struct metadata {
+    Aws::Map<Aws::String, Aws::String> user_meta;
+    size_t user_meta_size;
+    time_t mtime;
+    size_t size;
+};
+
 std::unique_ptr<S3CLIENT> s3_client_ptr = nullptr;
+std::unique_ptr<metadata> s3_metadata_ptr = nullptr;
 
 /*----------------------------------------------------------------------------*
  |                                      API                                   |
@@ -42,12 +52,14 @@ s3_init_api(const char *address, const char *username, const char *password)
     s3_client_ptr = std::unique_ptr<S3CLIENT>(new S3CLIENT(credentials,
                                               config, SIGNING_POLICY::Never,
                                               false));
+    s3_metadata_ptr = std::unique_ptr<metadata>(new metadata());
 }
 
 void
 s3_destroy_api()
 {
     s3_client_ptr.reset();
+    s3_metadata_ptr.reset();
     Aws::SDKOptions options;
     Aws::ShutdownAPI(options);
 }
@@ -132,6 +144,79 @@ s3_get_object_list(const char *bucket_name, size_t *object_list_length,
         std::strcpy(results[i], objects_vector[i].c_str());
     }
     *list_objects = results;
+}
+
+/*----------------------------------------------------------------------------*
+ |                                   Metadata                                 |
+ *----------------------------------------------------------------------------*/
+
+bool
+s3_create_meta_struct(const char *bucket_name,
+                      const char *object_name)
+{
+    Aws::S3::Model::HeadObjectRequest request;
+    request.SetBucket(bucket_name);
+    request.SetKey(object_name);
+
+    auto outcome = s3_client_ptr->HeadObject(request);
+    if (outcome.IsSuccess()) {
+        Aws::Map<Aws::String, Aws::String> custom_meta;
+        std::chrono::seconds sec;
+        long long tp;
+        time_t timeT;
+        size_t size;
+
+        auto results = outcome.GetResultWithOwnership();
+        size = results.GetContentLength();
+        tp = results.GetLastModified().CurrentTimeMillis();
+        sec = std::chrono::seconds(tp / 1000);
+        timeT = sec.count();
+
+        custom_meta = results.GetMetadata();
+
+        s3_metadata_ptr->user_meta_size = custom_meta.size();
+        s3_metadata_ptr->user_meta = custom_meta;
+        s3_metadata_ptr->mtime = timeT;
+        s3_metadata_ptr->size = size;
+    }
+
+    return outcome.IsSuccess();
+}
+
+time_t
+s3_get_mtime()
+{
+    return s3_metadata_ptr->mtime;
+}
+
+size_t
+s3_get_size()
+{
+    return s3_metadata_ptr->size;
+}
+
+size_t
+s3_get_custom_size()
+{
+    return s3_metadata_ptr->user_meta_size;
+}
+
+struct map_entry*
+s3_get_map_entry()
+{
+    auto mapIterator = s3_metadata_ptr->user_meta.begin();
+    struct map_entry *entry;
+
+    if (mapIterator == s3_metadata_ptr->user_meta.end()) {
+        return NULL;
+    } else {
+        entry = new struct map_entry;
+        entry->key = mapIterator->first.c_str();
+        entry->value = mapIterator->second.c_str();
+    }
+
+    ++mapIterator;
+    return entry;
 }
 
 /*----------------------------------------------------------------------------*
