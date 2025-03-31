@@ -48,6 +48,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0e79c4cd_adb0efcf",
+        "filename": "designs/filter_mutualization.rst",
+        "patchSetId": 5
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-03-31T14:42:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8b098ad2_a32577d5",
+      "range": {
+        "startLine": 263,
+        "startChar": 7,
+        "endLine": 263,
+        "endChar": 22
+      },
+      "revId": "d594050bf05514b37dd3a13863ade105e636182f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b0642241_8ee49a42",
@@ -85,6 +109,30 @@
       "side": 1,
       "message": "You\u0027re right, that\u0027s what we started talking about. I can change the ADR to propose that instead.",
       "parentUuid": "b0642241_8ee49a42",
+      "range": {
+        "startLine": 268,
+        "startChar": 9,
+        "endLine": 268,
+        "endChar": 16
+      },
+      "revId": "d594050bf05514b37dd3a13863ade105e636182f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d97bc55c_3547319d",
+        "filename": "designs/filter_mutualization.rst",
+        "patchSetId": 5
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-03-31T14:42:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0420a6dd_2a44a8fa",
       "range": {
         "startLine": 268,
         "startChar": 9,

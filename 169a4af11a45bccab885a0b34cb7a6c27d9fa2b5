@@ -245,6 +245,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4c9cb18f_4b465eb5",
+        "filename": "designs/filter_mutualization.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-03-31T14:42:27Z",
+      "side": 1,
+      "message": "Okay, the `rbh_filter_sort` returns a FSEntry field, so no backend-specific. But to build the field, we need to parse the argument, which is backend-specific.\n\nBut, we may mutualize this with the filter parsing which will already be located in the backends.\n\nI update the doc.",
+      "parentUuid": "a589ebf4_658659f0",
+      "range": {
+        "startLine": 36,
+        "startChar": 40,
+        "endLine": 36,
+        "endChar": 53
+      },
+      "revId": "169a4af11a45bccab885a0b34cb7a6c27d9fa2b5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e108e073_c79308b9",
         "filename": "designs/filter_mutualization.rst",
         "patchSetId": 1
