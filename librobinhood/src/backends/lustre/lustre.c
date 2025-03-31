@@ -1279,6 +1279,29 @@ static const struct rbh_backend_operations LUSTRE_BACKEND_OPS = {
     .destroy = lustre_fts_backend_destroy,
 };
 
+static const struct rbh_value POSIX_STRING_INFO = {
+    .type = RBH_VT_STRING,
+    .string = "posix"
+};
+
+static const struct rbh_value LUSTRE_STRING_INFO = {
+    .type = RBH_VT_STRING,
+    .string = "lustre"
+};
+
+static const struct rbh_value values[] = {
+    LUSTRE_STRING_INFO,
+    POSIX_STRING_INFO,
+};
+
+static const struct rbh_value RBH_LUSTRE_BACKEND_INFO = {
+    .type = RBH_VT_SEQUENCE,
+    .sequence = {
+        .values = values,
+        .count = 2,
+    },
+};
+
 struct rbh_backend *
 rbh_lustre_backend_new(const char *path, struct rbh_config *config)
 {
@@ -1291,6 +1314,7 @@ rbh_lustre_backend_new(const char *path, struct rbh_config *config)
     lustre->iter_new = lustre_iterator_new;
     lustre->backend.id = RBH_BI_LUSTRE;
     lustre->backend.name = RBH_LUSTRE_BACKEND_NAME;
+    lustre->backend.backend_info = &RBH_LUSTRE_BACKEND_INFO;
     lustre->backend.ops = &LUSTRE_BACKEND_OPS;
 
     load_rbh_config(config);

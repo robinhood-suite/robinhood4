@@ -961,7 +961,6 @@ static const struct rbh_backend_operations MONGO_BACKEND_OPS = {
     .branch = mongo_backend_branch,
     .root = mongo_root,
     .update = mongo_backend_update,
-    .insert_source = mongo_backend_insert_source,
     .filter = mongo_backend_filter,
     .report = mongo_backend_report,
     .get_info = mongo_backend_get_info,
@@ -1766,9 +1765,23 @@ mongo_backend_branch(void *backend, const struct rbh_id *id, const char *path)
  |                               MONGO_BACKEND                                |
  *----------------------------------------------------------------------------*/
 
+static const struct rbh_value MONGO_STRING_INFO = {
+    .type = RBH_VT_STRING,
+    .string = "mongo"
+};
+
+static const struct rbh_value RBH_MONGO_BACKEND_INFO = {
+    .type = RBH_VT_SEQUENCE,
+    .sequence = {
+        .values = &MONGO_STRING_INFO,
+        .count = 1,
+    },
+};
+
 static const struct rbh_backend MONGO_BACKEND = {
     .id = RBH_BI_MONGO,
     .name = RBH_MONGO_BACKEND_NAME,
+    .backend_info = &RBH_MONGO_BACKEND_INFO,
     .ops = &MONGO_BACKEND_OPS,
 };
 

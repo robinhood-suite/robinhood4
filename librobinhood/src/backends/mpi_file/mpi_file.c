@@ -457,9 +457,23 @@ static const struct rbh_backend_operations MPI_FILE_BACKEND_OPS = {
     .destroy = mpi_file_backend_destroy,
 };
 
+static const struct rbh_value MPI_STRING_INFO = {
+    .type = RBH_VT_STRING,
+    .string = "mpi-file"
+};
+
+static const struct rbh_value RBH_MPI_BACKEND_INFO = {
+    .type = RBH_VT_SEQUENCE,
+    .sequence = {
+        .values = &MPI_STRING_INFO,
+        .count = 1,
+    },
+};
+
 static const struct rbh_backend MPI_FILE_BACKEND = {
     .id = RBH_BI_MPI_FILE,
     .name = RBH_MPI_FILE_BACKEND_NAME,
+    .backend_info = &RBH_MPI_BACKEND_INFO,
     .ops = &MPI_FILE_BACKEND_OPS,
 };
 
