@@ -754,6 +754,8 @@ main(int argc, char *argv[])
     /* Parse DEST */
     to = rbh_backend_from_uri(argv[1]);
 
+    rbh_backend_insert_source(to, from->backend_info);
+
     sync(&projection);
 
     rbh_config_free();
