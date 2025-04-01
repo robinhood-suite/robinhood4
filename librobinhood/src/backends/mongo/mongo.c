@@ -832,6 +832,10 @@ get_collection_info(const struct mongo_backend *mongo, char *field_to_find,
             pair->key = field_to_find;
             pair->value = value;
 
+            if (pair->value->type == RBH_VT_SEQUENCE) {
+                for (uint8_t i = 0 ; i < pair->value->sequence.count ; i++)
+                    printf("%s\n", pair->value->sequence.values[i].string);
+            }
             rc = 1;
         }
     }
@@ -995,8 +999,8 @@ out:
      *--------------------------------------------------------------------*/
 
 static int
-insert_mongo_source(mongoc_collection_t *collection,
-                    const struct rbh_value *backend_sequence)
+set_mongo_source(mongoc_collection_t *collection,
+                 const struct rbh_value *backend_sequence)
 {
     assert(backend_sequence->type == RBH_VT_SEQUENCE);
 
@@ -1010,15 +1014,15 @@ insert_mongo_source(mongoc_collection_t *collection,
         const char *backend_name = backend_sequence->sequence.values[i].string;
 
         filter = BCON_NEW("_id", "backend_info");
+        opts = BCON_NEW("upsert", BCON_BOOL(true));
         update = BCON_NEW("$addToSet",
                           BCON_DOCUMENT(BCON_NEW("backend_source",
                                                  BCON_UTF8(backend_name))));
-        opts = BCON_NEW("upsert", BCON_BOOL(true));
 
-        if (!mongoc_collection_update_one(collection, filter, update, opts, NULL,
-                                          &error)) {
-            fprintf(stderr, "Upsert failed: %s\n", error.message);
-            goto out;
+        if (!mongoc_collection_update_one(collection, filter, update, opts,
+                                          NULL, &error)) {
+                fprintf(stderr, "Upsert failed: %s\n", error.message);
+                goto out;
         }
     }
 
@@ -1031,16 +1035,41 @@ out:
 }
 
 static int
-mongo_backend_insert_source(void *backend,
-                            const struct rbh_value *backend_source)
+call_get_info_to_insert_mongo_source(struct mongo_backend *mongo,
+                                     const struct rbh_backend *backend_source)
 {
+    const struct rbh_value_pair *pair;
+    struct rbh_value_map *info_map;
+
+    info_map = rbh_backend_get_info((void*)backend_source,
+                                    RBH_INFO_BACKEND_SOURCE);
+    pair = &info_map->pairs[0];
+
+    assert(pair->value->type == RBH_VT_SEQUENCE);
+
+    if (!set_mongo_source(mongo->info, pair->value))
+        return -1;
+
+    return 0;
+}
+
+static int
+mongo_backend_insert_source(void *backend,
+                            const struct rbh_backend *backend_source)
+{
+    const struct rbh_value *value_source = backend_source->backend_info;
     struct mongo_backend *mongo = backend;
 
-    if (mongo == NULL || backend_source == NULL)
+    if (mongo == NULL || value_source == NULL)
         return -1;
 
-    if (!insert_mongo_source(mongo->info, backend_source))
-        return -1;
+    if (strcmp(backend_source->name, "mongo") == 0) {
+        if (!call_get_info_to_insert_mongo_source(mongo, backend_source))
+            return -1;
+    } else {
+        if (!set_mongo_source(mongo->info, value_source))
+            return -1;
+    }
 
     return 0;
 }
