@@ -938,6 +938,61 @@ out:
 }
 
     /*--------------------------------------------------------------------*
+     |                       insert_backend_source                        |
+     *--------------------------------------------------------------------*/
+
+static int
+insert_mongo_source(mongoc_collection_t *collection,
+                    const struct rbh_value *backend_sequence)
+{
+    assert(backend_sequence->type == RBH_VT_SEQUENCE);
+
+    bson_error_t error;
+    bson_t *update;
+    bson_t *filter;
+    bson_t *opts;
+    int rc = 0;
+
+    for (uint8_t i = 0 ; i < backend_sequence->sequence.count ; i++) {
+        const char *backend_name = backend_sequence->sequence.values[i].string;
+
+        filter = BCON_NEW("_id", "backend_info");
+        update = BCON_NEW("$addToSet",
+                          BCON_DOCUMENT(BCON_NEW("backend_source",
+                                                 BCON_UTF8(backend_name))));
+        opts = BCON_NEW("upsert", BCON_BOOL(true));
+
+        if (!mongoc_collection_update_one(collection, filter, update, opts, NULL,
+                                          &error)) {
+            fprintf(stderr, "Upsert failed: %s\n", error.message);
+            goto out;
+        }
+    }
+
+    rc = 1;
+out:
+    bson_destroy(filter);
+    bson_destroy(opts);
+
+    return rc;
+}
+
+static int
+mongo_backend_insert_source(void *backend,
+                            const struct rbh_value *backend_source)
+{
+    struct mongo_backend *mongo = backend;
+
+    if (mongo == NULL || backend_source == NULL)
+        return -1;
+
+    if (!insert_mongo_source(mongo->info, backend_source))
+        return -1;
+
+    return 0;
+}
+
+    /*--------------------------------------------------------------------*
      |                              destroy                               |
      *--------------------------------------------------------------------*/
 
@@ -963,6 +1018,7 @@ static const struct rbh_backend_operations MONGO_BACKEND_OPS = {
     .filter = mongo_backend_filter,
     .report = mongo_backend_report,
     .get_info = mongo_backend_get_info,
+    .insert_source = mongo_backend_insert_source,
     .destroy = mongo_backend_destroy,
 };
 
