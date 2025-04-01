@@ -830,7 +830,7 @@ get_collection_info(const struct mongo_backend *mongo, char *field_to_find,
                 goto out;
 
             pair->key = field_to_find;
-            pair->value = value;
+            pair->value = value_clone(value);
 
             rc = 1;
         }
@@ -995,10 +995,10 @@ out:
      *--------------------------------------------------------------------*/
 
 static int
-insert_mongo_source(mongoc_collection_t *collection,
-                    const struct rbh_value *backend_sequence)
+set_mongo_source(struct mongo_backend *mongo,
+                 const struct rbh_value *value_source)
 {
-    assert(backend_sequence->type == RBH_VT_SEQUENCE);
+    assert(value_source->type == RBH_VT_SEQUENCE);
 
     bson_error_t error;
     bson_t *update;
@@ -1006,17 +1006,18 @@ insert_mongo_source(mongoc_collection_t *collection,
     bson_t *opts;
     int rc = 0;
 
-    for (uint8_t i = 0 ; i < backend_sequence->sequence.count ; i++) {
-        const char *backend_name = backend_sequence->sequence.values[i].string;
+    for (uint8_t i = 0 ; i < value_source->sequence.count ; i++) {
+        const char *backend_name = value_source->sequence.values[i].string;
 
         filter = BCON_NEW("_id", "backend_info");
+        opts = BCON_NEW("upsert", BCON_BOOL(true));
+
         update = BCON_NEW("$addToSet",
                           BCON_DOCUMENT(BCON_NEW("backend_source",
                                                  BCON_UTF8(backend_name))));
-        opts = BCON_NEW("upsert", BCON_BOOL(true));
 
-        if (!mongoc_collection_update_one(collection, filter, update, opts, NULL,
-                                          &error)) {
+        if (!mongoc_collection_update_one(mongo->info, filter, update, opts,
+                                          NULL, &error)) {
             fprintf(stderr, "Upsert failed: %s\n", error.message);
             goto out;
         }
@@ -1032,14 +1033,14 @@ out:
 
 static int
 mongo_backend_insert_source(void *backend,
-                            const struct rbh_value *backend_source)
+                            const struct rbh_value *value_source)
 {
     struct mongo_backend *mongo = backend;
 
-    if (mongo == NULL || backend_source == NULL)
+    if (mongo == NULL || value_source == NULL)
         return -1;
 
-    if (!insert_mongo_source(mongo->info, backend_source))
+    if (!set_mongo_source(mongo, value_source))
         return -1;
 
     return 0;

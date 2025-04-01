@@ -138,6 +138,9 @@ str2value_type(const char *string)
     return -1;
 }
 
+struct rbh_value *
+value_clone(const struct rbh_value  *value);
+
 /**
  * Create a new boolean value
  *
@@ -310,5 +313,4 @@ rbh_value_validate(const struct rbh_value *value);
 int
 value_map_copy(struct rbh_value_map *dest, const struct rbh_value_map *src,
                char **buffer, size_t *bufsize);
-
 #endif
