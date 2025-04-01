@@ -1,5 +1,5 @@
 /* This file is part of RobinHood 4
- * Copyright (C) 2019 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifer: LGPL-3.0-or-later
@@ -54,6 +54,17 @@ value_data_size(const struct rbh_value *value, size_t offset);
 int
 value_copy(struct rbh_value *dest, const struct rbh_value *src, char **buffer,
            size_t *bufsize);
+
+/**
+ * Clone the given \p value
+ *
+ * @param value     the value to clone
+ *
+ * @return          the cloned value on success, NULL on error and errno is set
+ *                  appropriately
+ */
+struct rbh_value *
+value_clone(const struct rbh_value *value);
 
 /**
  * Compute the size of the data a map points at
