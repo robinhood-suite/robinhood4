@@ -239,6 +239,21 @@ test_sync_branch()
     find_attribute '"ns.xattrs.path":"'/$second_dir/$third_dir/$entry'"'
 }
 
+set_permission()
+{
+    local path=$1
+    local sign=$2
+
+    while [[ "$path" != "/home" ]] && [[ "$path" != "/" ]]; do
+        if [[ "$sign" == "+" ]]; then
+            chmod o+rx $path
+        else
+            chmod o-rx $path
+        fi
+        path="$(dirname $path)"
+    done
+}
+
 test_continue_sync_on_error()
 {
     local first_file="test1"
@@ -257,10 +272,10 @@ test_continue_sync_on_error()
     # synchronizing the second file and the directory
 
     path="$(dirname $__rbh_sync)"
-    while [[ "$path" != "/home" ]] && [[ "$path" != "/" ]]; do
-        chmod o+rx $path
-        path="$(dirname $path)"
-    done
+    set_permission $path "+"
+
+    path="$(realpath $RBH_CONFIG_PATH)"
+    set_permission $path "+"
 
     if [[ "$WITH_MPI" == "true" ]]; then
         # We need to give execute permissions to the user for mpirun to run
@@ -270,19 +285,20 @@ test_continue_sync_on_error()
                  module load mpi/openmpi-x86_64; \
                  LD_LIBRARY_PATH=$LD_LIBRARY_PATH \
                  RBH_CONFIG_PATH=$RBH_CONFIG_PATH \
-                    mpirun $__rbh_sync rbh:posix-mpi:. \
+                    mpirun $__rbh_sync --config $path rbh:posix-mpi:. \
                         rbh:mongo:$testdb" 2>&1)"
     else
         output="$(sudo -E -H -u "$test_user" bash -c "\
                   LD_LIBRARY_PATH=$LD_LIBRARY_PATH \
-                      $__rbh_sync rbh:posix:.  rbh:mongo:$testdb" 2>&1)"
+                      $__rbh_sync --config $path rbh:posix:. \
+                      rbh:mongo:$testdb" 2>&1)"
     fi
 
     path="$(dirname $__rbh_sync)"
-    while [[ "$path" != "/home" ]] && [[ "$path" != "/" ]]; do
-        chmod o-rx $path
-        path="$(dirname $path)"
-    done
+    set_permission $path "-"
+
+    path="$(realpath $RBH_CONFIG_PATH)"
+    set_permission $path "-"
 
     echo "$output" | grep "open '/$second_file'" ||
         error "Failed to find error on open of '$second_file'"
@@ -330,10 +346,10 @@ test_stop_sync_on_error()
     # synchronizing the second file and the directory
 
     path="$(dirname $__rbh_sync)"
-    while [[ "$path" != "/home" ]] && [[ "$path" != "/" ]]; do
-        chmod o+rx $path
-        path="$(dirname $path)"
-    done
+    set_permission $path "+"
+
+    path="$(realpath $RBH_CONFIG_PATH)"
+    set_permission $path "+"
 
     if [[ "$WITH_MPI" == "true" ]]; then
         # We need to give execute permissions to the user for mpirun to run
@@ -343,19 +359,20 @@ test_stop_sync_on_error()
                         module load mpi/openmpi-x86_64; \
                         LD_LIBRARY_PATH=$LD_LIBRARY_PATH \
                         RBH_CONFIG_PATH=$RBH_CONFIG_PATH \
-                            mpirun $__rbh_sync --no-skip rbh:posix-mpi:. \
-                                rbh:mongo:$testdb" 2>&1)
+                            mpirun $__rbh_sync --config $path --no-skip \
+                            rbh:posix-mpi:. rbh:mongo:$testdb" 2>&1)
     else
         local output=$(sudo -E -H -u "$test_user" bash -c "\
-                       LD_LIBRARY_PATH=$LD_LIBRARY_PATH $__rbh_sync --no-skip \
+                       LD_LIBRARY_PATH=$LD_LIBRARY_PATH \
+                       $__rbh_sync --config $path --no-skip \
                        rbh:posix:. rbh:mongo:$testdb" 2>&1)
     fi
 
     path="$(dirname $__rbh_sync)"
-    while [[ "$path" != "/home" ]] && [[ "$path" != "/" ]]; do
-        chmod o-rx $path
-        path="$(dirname $path)"
-    done
+    set_permission $path "-"
+
+    path="$(realpath $RBH_CONFIG_PATH)"
+    set_permission $path "-"
 
     local db_count=$(count_documents)
     if [[ $db_count -ne 0 ]]; then
