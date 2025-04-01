@@ -1,5 +1,5 @@
 /* This file is part of RobinHood 4
- * Copyright (C) 2019 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifer: LGPL-3.0-or-later
@@ -938,6 +938,61 @@ out:
 }
 
     /*--------------------------------------------------------------------*
+     |                       insert_backend_source                        |
+     *--------------------------------------------------------------------*/
+
+static int
+mongo_insert_source(void *backend, const struct rbh_value *backend_sequence)
+{
+    struct mongo_backend *mongo = backend;
+    mongoc_collection_t *collection;
+    bson_t *filter;
+    bson_t *opts;
+    int rc = 0;
+
+    assert(backend_sequence->type == RBH_VT_SEQUENCE);
+
+    collection = mongo->info;
+    filter = BCON_NEW("_id", "backend_info");
+    opts = BCON_NEW("upsert", BCON_BOOL(true));
+
+    for (uint8_t i = 0 ; i < backend_sequence->sequence.count ; i++) {
+        bson_t backend_source;
+        bson_error_t error;
+        bson_t *update;
+        bool result;
+
+        update = bson_new();
+
+        if (!(BSON_APPEND_DOCUMENT_BEGIN(update, "$addToSet", &backend_source)
+              && BSON_APPEND_RBH_VALUE_MAP(
+                     &backend_source,
+                     "backend_source",
+                     &backend_sequence->sequence.values[i].map
+                 )
+              && bson_append_document_end(update, &backend_source))) {
+            bson_destroy(update);
+            rc = 1;
+            break;
+        }
+
+        result = mongoc_collection_update_one(collection, filter, update, opts,
+                                              NULL, &error);
+        bson_destroy(update);
+        if (!result) {
+            fprintf(stderr, "Upsert failed: %s\n", error.message);
+            rc = 1;
+            break;
+        }
+    }
+
+    bson_destroy(filter);
+    bson_destroy(opts);
+
+    return rc;
+}
+
+    /*--------------------------------------------------------------------*
      |                              destroy                               |
      *--------------------------------------------------------------------*/
 
@@ -964,6 +1019,7 @@ static const struct rbh_backend_operations MONGO_BACKEND_OPS = {
     .filter = mongo_backend_filter,
     .report = mongo_backend_report,
     .get_info = mongo_backend_get_info,
+    .insert_source = mongo_insert_source,
     .destroy = mongo_backend_destroy,
 };
 
