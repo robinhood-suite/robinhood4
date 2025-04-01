@@ -27,6 +27,7 @@
 #include "robinhood/ringr.h"
 #include "robinhood/statx.h"
 #include "robinhood/sstack.h"
+#include "value.h"
 #include "utils.h"
 
 #include "mongo.h"
@@ -796,6 +797,58 @@ mongo_backend_report(void *backend, const struct rbh_filter *filter,
      *--------------------------------------------------------------------*/
 
 static int
+get_collection_info(const struct mongo_backend *mongo, char *field_to_find,
+                    struct rbh_value_pair *pair)
+{
+    struct rbh_value *value;
+    mongoc_cursor_t *cursor;
+    char _buffer[4096];
+    const bson_t *doc;
+    bson_iter_t iter;
+    size_t bufsize;
+    char *buffer;
+    int rc = 0;
+
+    buffer = _buffer;
+    bufsize = sizeof(_buffer);
+    value = RBH_SSTACK_PUSH(info_sstack, NULL, sizeof(*value));
+
+    bson_t *filter = BCON_NEW("_id", "backend_info");
+    cursor = mongoc_collection_find_with_opts(mongo->info, filter, NULL, NULL);
+    if (!mongoc_cursor_next(cursor, &doc)) {
+        rc = 1;
+        goto out;
+    }
+
+    if (!bson_iter_init(&iter, doc)) {
+        rc = 1;
+        goto out;
+    }
+
+    while (bson_iter_next(&iter)) {
+        const char *key = bson_iter_key(&iter);
+
+        if (strcmp(key, field_to_find) == 0) {
+            if (!bson_iter_rbh_value(&iter, value, &buffer, &bufsize)) {
+                rc = 1;
+                goto out;
+            }
+
+            pair->key = field_to_find;
+            pair->value = value_clone(value);
+        }
+    }
+
+out:
+    if (cursor)
+        mongoc_cursor_destroy(cursor);
+    if (filter)
+        bson_destroy(filter);
+
+    return rc;
+}
+
+static int
 get_collection_count(const struct mongo_backend *mongo,
                      struct rbh_value_pair *pair)
 {
@@ -915,6 +968,11 @@ mongo_backend_get_info(void *backend, int info_flags)
 
     if (info_flags & RBH_INFO_AVG_OBJ_SIZE) {
         if (!get_collection_stats(mongo, "avgObjSize", &pairs[idx++]))
+            goto out;
+    }
+
+    if (info_flags & RBH_INFO_BACKEND_SOURCE) {
+        if (!get_collection_info(mongo, "backend_source", &pairs[idx++]))
             goto out;
     }
 
