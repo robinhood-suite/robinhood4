@@ -1,5 +1,5 @@
 /* This file is part of the RobinHood Library
- * Copyright (C) 2019 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifer: LGPL-3.0-or-later
@@ -262,7 +262,7 @@ value_map_copy(struct rbh_value_map *dest, const struct rbh_value_map *src,
     return 0;
 }
 
-static struct rbh_value *
+struct rbh_value *
 value_clone(const struct rbh_value *value)
 {
     struct rbh_value *clone;
