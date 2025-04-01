@@ -16,6 +16,24 @@
       "message": "Well, returning to this patch I saw that my comment about having some unit tests was resolved without any response..",
       "revId": "01df70612c3b96d7b1b590bbf639c1c39788aba9",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f96881d9_0674620e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-04-01T12:13:01Z",
+      "side": 1,
+      "message": "sorry, forgot about it ! I will do so :) !",
+      "parentUuid": "9443501f_6a72a5ef",
+      "revId": "01df70612c3b96d7b1b590bbf639c1c39788aba9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
