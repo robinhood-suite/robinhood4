@@ -947,6 +947,7 @@ mongo_backend_destroy(void *backend)
     struct mongo_backend *mongo = backend;
 
     mongoc_collection_destroy(mongo->entries);
+    mongoc_collection_destroy(mongo->info);
     mongoc_client_destroy(mongo->client);
     free(mongo);
 }
