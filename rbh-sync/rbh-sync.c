@@ -60,9 +60,33 @@ destroy_chunks(void)
 
 static bool one = false;
 static bool skip_error = true;
+
 /*----------------------------------------------------------------------------*
  |                                   sync()                                   |
  *----------------------------------------------------------------------------*/
+
+static void
+sync_source()
+{
+    const struct rbh_value_pair *pair;
+    const struct rbh_value *sources;
+    struct rbh_value_map *info_map;
+
+    info_map = rbh_backend_get_info(from, RBH_INFO_BACKEND_SOURCE);
+    if (info_map == NULL) {
+        fprintf(stderr, "Failed to retrieve backend info\n");
+        return;
+    }
+
+    assert(info_map->count == 1);
+
+    pair = &info_map->pairs[0];
+    assert(strcmp(pair->key, "backend_source") == 0);
+    sources = pair->value;
+
+    if (rbh_backend_insert_source(to, sources))
+        fprintf(stderr, "Failed to set backend_info\n");
+}
 
     /*--------------------------------------------------------------------*
      |                           mut_iter_one()                           |
@@ -751,6 +775,8 @@ main(int argc, char *argv[])
     from = rbh_backend_from_uri(argv[0]);
     /* Parse DEST */
     to = rbh_backend_from_uri(argv[1]);
+
+    sync_source();
 
     sync(&projection);
 
