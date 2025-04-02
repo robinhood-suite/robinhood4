@@ -185,13 +185,9 @@ main(int _argc, char *_argv[])
     ctx.exec_action_callback = &find_exec_action;
     ctx.post_action_callback = &find_post_action;
 
-    ctx.info_plugin_count = 0;
-    ctx.info_plugins = NULL;
-
     /* Parse the command line */
     for (index = 0; index < ctx.argc; index++) {
-        if (str2command_line_token(&ctx, ctx.argv[index], NULL,
-                                   NULL) != CLT_URI)
+        if (str2command_line_token(&ctx, ctx.argv[index], NULL) != CLT_URI)
             break;
     }
     if (index == 0)
@@ -211,25 +207,22 @@ main(int _argc, char *_argv[])
         ctx.backend_count++;
     }
 
-    ctx.info_plugin_count = 1;
-    ctx.info_plugins = malloc(ctx.info_plugin_count *
-                              sizeof(*ctx.info_plugins));
-    if (ctx.info_plugins == NULL)
+    ctx.info_pe_count = 2;
+    ctx.info_pe = malloc(ctx.info_pe_count * sizeof(*ctx.info_pe));
+    if (ctx.info_pe == NULL)
         error(EXIT_FAILURE, errno, "malloc");
 
-    ctx.info_plugins[0] = rbh_backend_plugin_import("posix");
-    if (ctx.info_plugins[0] == NULL)
+    ctx.info_pe[0].is_plugin = true;
+    ctx.info_pe[0].plugin = rbh_backend_plugin_import("posix");
+    if (ctx.info_pe[0].plugin == NULL)
         error(EXIT_FAILURE, errno, "rbh_backend_plugin_import");
 
-    ctx.info_extension_count = 1;
-    ctx.info_extensions = malloc(ctx.info_extension_count *
-                                 sizeof(*ctx.info_extensions));
-    if (ctx.info_extensions == NULL)
-        error(EXIT_FAILURE, errno, "malloc");
-
-    ctx.info_extensions[0] =
-        rbh_plugin_load_extension(&ctx.info_plugins[0]->plugin, "lustre");
-    if (ctx.info_extensions[0] == NULL)
+    ctx.info_pe[1].is_plugin = false;
+    ctx.info_pe[1].extension = rbh_plugin_load_extension(
+        &ctx.info_pe[0].plugin->plugin,
+        "lustre"
+    );
+    if (ctx.info_pe[1].extension == NULL)
         error(EXIT_FAILURE, errno, "rbh_plugin_load_extension");
 
     filter = parse_expression(&ctx, &index, NULL, &sorts, &sorts_count);

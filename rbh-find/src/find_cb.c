@@ -267,15 +267,11 @@ find_exec_action(struct find_context *ctx,
         {
             int rc;
 
-            for (int i = 0; i < ctx->info_extension_count; ++i) {
-                rc = rbh_extension_delete_entry(ctx->info_extensions[i],
-                                                fsentry);
-                if (rc == 0)
-                    return rc;
-            }
+            for (int i = 0; i < ctx->info_pe_count; ++i) {
+                const struct rbh_pe_common_operations *common_ops =
+                    get_common_operations(&ctx->info_pe[i]);
 
-            for (int i = 0; i < ctx->info_plugin_count; ++i) {
-                rc = rbh_plugin_delete_entry(ctx->info_plugins[i], fsentry);
+                rc = rbh_pe_common_ops_delete_entry(common_ops, fsentry);
                 if (rc == 0)
                     return rc;
             }
