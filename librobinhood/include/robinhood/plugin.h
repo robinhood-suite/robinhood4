@@ -15,6 +15,8 @@
 #include <robinhood/filter.h>
 #include <robinhood/fsentry.h>
 
+#include <robinhood/plugins/common_ops.h>
+
 struct rbh_plugin {
     const char *name;
     uint64_t version;
@@ -26,6 +28,9 @@ struct rbh_plugin_extension {
     uint64_t version;
     uint64_t min_version;
     uint64_t max_version;
+
+    const struct rbh_pe_common_operations *common_ops;
+
     enum rbh_parser_token (*check_valid_token)(const char *token);
     struct rbh_filter *(*build_filter)(const char **argv, int argc, int *index,
                                        bool *need_prefetch);
