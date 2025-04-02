@@ -15,6 +15,13 @@
 
 #include "lustre_internals.h"
 
+static const struct rbh_pe_common_operations LUSTRE_EXTENSION_COMMON_OPS = {
+    .check_valid_token = rbh_lustre_check_valid_token,
+    .build_filter = rbh_lustre_build_filter,
+    .fill_entry_info = rbh_lustre_fill_entry_info,
+    .delete_entry = NULL,
+};
+
 const struct rbh_posix_extension RBH_BACKEND_EXTENDS(POSIX, LUSTRE) = {
     .extension = {
         .super       = RBH_POSIX_BACKEND_NAME,
@@ -22,6 +29,7 @@ const struct rbh_posix_extension RBH_BACKEND_EXTENDS(POSIX, LUSTRE) = {
         .version     = RBH_LUSTRE_BACKEND_VERSION,
         .min_version = RBH_POSIX_BACKEND_VERSION,
         .max_version = RBH_POSIX_BACKEND_VERSION,
+        .common_ops  = &LUSTRE_EXTENSION_COMMON_OPS,
         .check_valid_token = rbh_lustre_check_valid_token,
         .build_filter = rbh_lustre_build_filter,
         .fill_entry_info = rbh_lustre_fill_entry_info,
