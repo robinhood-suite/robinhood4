@@ -66,7 +66,7 @@ get_parent_id(const char *path, bool use_fd, int prefix_len, short backend_id)
                               tmp_path + prefix_len);
         parent_id = rbh_id_new_with_id(
             parent_path,
-            (strlen(parent_path) + 1) * sizeof(*parent_id),
+            (strlen(parent_path) + 1) * sizeof(*parent_path),
             backend_id
             );
     }
