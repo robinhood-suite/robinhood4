@@ -47,10 +47,6 @@ struct find_context {
     const char **uris;
 
     /** The type of information stored in the backends */
-    const struct rbh_backend_plugin **info_plugins;
-    size_t info_plugin_count;
-    const struct rbh_plugin_extension **info_extensions;
-    size_t info_extension_count;
     struct rbh_plugin_or_extension *info_pe;
     size_t info_pe_count;
 
@@ -128,10 +124,8 @@ ctx_finish(struct find_context *ctx);
  *
  * @param ctx              find's context for this execution
  * @param string           the string to classify
- * @param plugin_index     the index of the plugin that recognizes the predicate
- *                         if \p string is a predicate
- * @param extension_index  the index of the extension that recognizes the
- *                         predicate if \p string is a predicate
+ * @param pe_index         the index of the plugin or extension that recognizes
+ *                         \p string
  *
  * @return          the command_line_token that represents \p string
  *
@@ -139,7 +133,7 @@ ctx_finish(struct find_context *ctx);
  */
 enum command_line_token
 str2command_line_token(struct find_context *ctx, const char *string,
-                       int *plugin_index, int *extension_index);
+                       int *pe_index);
 
 /**
  * Filter through every fsentries in a specific backend, executing the
