@@ -20,6 +20,23 @@
 #include "rbh-find/filters.h"
 #include "rbh-find/parser.h"
 
+struct rbh_plugin_or_extension {
+    bool is_plugin;
+    union {
+        const struct rbh_backend_plugin *plugin;
+        const struct rbh_plugin_extension *extension;
+    };
+};
+
+static inline const struct rbh_pe_common_operations *
+get_common_operations(struct rbh_plugin_or_extension *pe)
+{
+    if (pe->is_plugin)
+        return pe->plugin->common_ops;
+    else
+        return pe->extension->common_ops;
+}
+
 /**
  * Find's library context
  */
@@ -34,6 +51,8 @@ struct find_context {
     size_t info_plugin_count;
     const struct rbh_plugin_extension **info_extensions;
     size_t info_extension_count;
+    struct rbh_plugin_or_extension *info_pe;
+    size_t info_pe_count;
 
     /** The command-line arguments to parse */
     int argc;
