@@ -18,16 +18,12 @@ static const struct rbh_pe_common_operations
     MPI_FILE_BACKEND_PLUGIN_COMMON_OPS = {
     .check_valid_token = rbh_mpi_file_check_valid_token,
     .build_filter = rbh_mpi_file_build_filter,
-    .fill_entry_info = rbh_mpi_file_fill_entry_info,
     .delete_entry = rbh_mpi_file_delete_entry,
 };
 
 static const struct rbh_backend_plugin_operations
 MPI_FILE_BACKEND_PLUGIN_OPS = {
     .new = rbh_mpi_file_backend_new,
-    .check_valid_token = rbh_mpi_file_check_valid_token,
-    .build_filter = rbh_mpi_file_build_filter,
-    .delete_entry = rbh_mpi_file_delete_entry,
     .destroy = rbh_mpi_file_plugin_destroy,
 };
 
