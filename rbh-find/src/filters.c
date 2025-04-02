@@ -36,6 +36,7 @@
 #include <robinhood/utils.h>
 
 #include "rbh-find/filters.h"
+#include "rbh-find/utils.h"
 
 struct rbh_filter_field
 str2field(const char *attribute)
