@@ -34,7 +34,7 @@ foreach t: ['check_posix']
          suite: 'librobinhood')
 endforeach
 
-foreach t: ['check_retention', 'check_mfu']
+foreach t: ['check_retention']
     test(t,
          executable(t, t + '.c',
                     dependencies: [check],
@@ -49,17 +49,18 @@ foreach t: ['check_retention', 'check_mfu']
          suite: 'librobinhood')
 endforeach
 
-foreach t: ['check_lustre']
-    test(t,
-         executable(t, t + '.c',
-                    dependencies: [check, miniyaml],
-                    link_with: [librobinhood, librbh_posix],
-                    include_directories: rbh_include,
-                    c_args: '-DHAVE_CONFIG_H'),
-         env: backend_path_env,
-         suite: 'librobinhood')
-endforeach
-
+if liblustre.found()
+    foreach t: ['check_lustre']
+        test(t,
+             executable(t, t + '.c',
+                        dependencies: [check, miniyaml],
+                        link_with: [librobinhood, librbh_posix],
+                        include_directories: rbh_include,
+                        c_args: '-DHAVE_CONFIG_H'),
+            env: backend_path_env,
+            suite: 'librobinhood')
+    endforeach
+endif
 
 bash = find_program('bash', disabler: true, required: false)
 
@@ -69,7 +70,21 @@ if test_mfu
         meson.current_source_dir() + '../../../utils/tests/test_config.yaml')
     builddir = meson.current_build_dir()
 
-    foreach t: ['check_lustre_mpi']
+    foreach t: ['check_mfu']
+    test(t,
+         executable(t, t + '.c',
+                    dependencies: [check, miniyaml],
+                    link_with: [
+                        librobinhood,
+                        librbh_posix,
+                    ],
+                    include_directories: rbh_include,
+                    c_args: '-DHAVE_CONFIG_H'),
+         env: backend_path_env,
+         suite: 'librobinhood')
+    endforeach
+
+    foreach t: ['check_posix_mpi']
         executable(t, t + '.c',
             dependencies: [check, miniyaml],
             link_with: [librobinhood, librbh_posix],
@@ -80,18 +95,20 @@ if test_mfu
              depends: [librbh_posix],
              env: backend_path_env,
              suite: 'librobinhood')
-
     endforeach
 
-    foreach t: ['check_posix_mpi']
-        executable(t, t + '.c',
-            dependencies: [check, miniyaml],
-            link_with: [librobinhood, librbh_posix],
-            include_directories: rbh_include)
-        test(t, bash,
-             args: [files(t + '.sh'), builddir],
-             depends: [librbh_posix],
-             env: backend_path_env,
-             suite: 'librobinhood')
-    endforeach
+    if liblustre.found()
+        foreach t: ['check_lustre_mpi']
+            executable(t, t + '.c',
+                dependencies: [check, miniyaml],
+                link_with: [librobinhood, librbh_posix],
+                include_directories: rbh_include,
+                c_args: '-DHAVE_CONFIG_H')
+            test(t, bash,
+                 args: [files(t + '.sh'), builddir],
+                depends: [librbh_posix],
+                env: backend_path_env,
+                suite: 'librobinhood')
+        endforeach
+    endif
 endif
