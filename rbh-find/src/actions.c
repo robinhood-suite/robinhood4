@@ -305,29 +305,18 @@ fsentry_printf_format(struct find_context *ctx, size_t backend_index,
 
         switch (format_string[i]) {
         case '%':
-            for (int j = 0; j < ctx->info_extension_count; ++j) {
-                tmp_length =
-                    rbh_extension_fill_entry_info(ctx->info_extensions[j],
-                                                  &output[output_length],
-                                                  max_length, fsentry,
-                                                  format_string + i + 1,
-                                                  backend);
-                if (tmp_length > 0)
-                    goto end_directive;
-            }
+            for (int j = 0; j < ctx->info_pe_count; ++j) {
+                const struct rbh_pe_common_operations *common_ops =
+                    get_common_operations(&ctx->info_pe[j]);
 
-            for (int j = 0; j < ctx->info_plugin_count; ++j) {
-                tmp_length = rbh_plugin_fill_entry_info(ctx->info_plugins[j],
-                                                        &output[output_length],
-                                                        max_length, fsentry,
-                                                        format_string + i + 1,
-                                                        backend);
+                tmp_length = rbh_pe_common_ops_fill_entry_info(
+                    common_ops, &output[output_length], max_length, fsentry,
+                    format_string + i + 1, backend
+                );
 
                 if (tmp_length > 0)
-                    goto end_directive;
+                    break;
             }
-
-end_directive:
             /* Go over the directive that was just printed */
             i++;
             break;

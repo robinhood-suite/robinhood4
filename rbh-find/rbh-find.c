@@ -140,35 +140,32 @@ check_command_options(int argc, char *argv[])
 static void
 import_plugins(bool mongo_found, bool mpi_found)
 {
-    int plugin_index = 0;
-
-    ctx.info_plugin_count = 0;
-    ctx.info_plugins = NULL;
-    ctx.info_extension_count = 0;
-    ctx.info_extensions = NULL;
+    int pe_index = 0;
 
     if (mongo_found)
-        ctx.info_plugin_count++;
+        ctx.info_pe_count++;
     else if (mpi_found)
-        ctx.info_plugin_count++;
+        ctx.info_pe_count++;
 
-    ctx.info_plugins = malloc(ctx.info_plugin_count *
-                              sizeof(*ctx.info_plugins));
-    if (ctx.info_plugins == NULL)
+    ctx.info_pe = malloc(ctx.info_pe_count * sizeof(*ctx.info_pe));
+    if (ctx.info_pe == NULL)
         error(EXIT_FAILURE, errno, "malloc");
 
     if (mongo_found) {
-        ctx.info_plugins[plugin_index] = rbh_backend_plugin_import("posix");
-        if (ctx.info_plugins[plugin_index] == NULL)
+        ctx.info_pe[pe_index].plugin = rbh_backend_plugin_import("posix");
+        if (ctx.info_pe[pe_index].plugin == NULL)
             error(EXIT_FAILURE, errno, "rbh_backend_plugin_import");
 
-        plugin_index++;
+        ctx.info_pe[pe_index].is_plugin = true;
+        pe_index++;
     }
 
     if (mpi_found) {
-        ctx.info_plugins[plugin_index] = rbh_backend_plugin_import("mpi-file");
-        if (ctx.info_plugins[plugin_index] == NULL)
+        ctx.info_pe[pe_index].plugin = rbh_backend_plugin_import("mpi-file");
+        if (ctx.info_pe[pe_index].plugin == NULL)
             error(EXIT_FAILURE, errno, "rbh_backend_plugin_import");
+
+        ctx.info_pe[pe_index].is_plugin = true;
     }
 }
 
@@ -211,8 +208,7 @@ main(int _argc, char *_argv[])
 
     /* Parse the command line */
     for (index = 0; index < ctx.argc; index++)
-        if (str2command_line_token(&ctx, ctx.argv[index], NULL,
-                                   NULL) != CLT_URI)
+        if (str2command_line_token(&ctx, ctx.argv[index], NULL) != CLT_URI)
             break;
 
     if (index == 0)
