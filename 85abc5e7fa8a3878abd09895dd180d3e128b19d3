@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7267b605_ec29de89",
+        "filename": "librobinhood/include/robinhood/backends/s3.h.in",
+        "patchSetId": 14
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1038646
+      },
+      "writtenOn": "2025-04-02T06:41:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9691b5b3_464a4597",
+      "range": {
+        "startLine": 25,
+        "startChar": 0,
+        "endLine": 25,
+        "endChar": 81
+      },
+      "revId": "85abc5e7fa8a3878abd09895dd180d3e128b19d3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8fb9e650_00b6a0d2",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-04-01T14:21:26Z",
       "side": 1,
       "message": "style: \u003e80 characters",
+      "range": {
+        "startLine": 55,
+        "startChar": 19,
+        "endLine": 55,
+        "endChar": 81
+      },
+      "revId": "85abc5e7fa8a3878abd09895dd180d3e128b19d3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3a4341fd_3c453910",
+        "filename": "librobinhood/src/plugins/s3/s3.c",
+        "patchSetId": 14
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1038646
+      },
+      "writtenOn": "2025-04-02T06:41:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8fb9e650_00b6a0d2",
       "range": {
         "startLine": 55,
         "startChar": 19,
