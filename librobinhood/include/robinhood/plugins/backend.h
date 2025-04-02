@@ -187,18 +187,6 @@ rbh_backend_plugin_destroy(const char *name)
         plugin->ops->destroy();
 }
 
-/**
- * Check the given token corresponds to a predicate or action known by the
- * plugin.
- *
- * @param plugin    the plugin to check the token with
- * @param token     a string that represents a token the plugin should identify
- *
- * @return          RBH_TOKEN_PREDICATE if the token is a predicate
- *                  RBH_TOKEN_ACTION if the token is an action
- *                  RBH_TOKEN_UNKNOWN if the token is not valid
- *                  RBH_TOKEN_ERROR if an error occur
- */
 static inline enum rbh_parser_token
 rbh_plugin_check_valid_token(const struct rbh_backend_plugin *plugin,
                              const char *token)
@@ -210,21 +198,6 @@ rbh_plugin_check_valid_token(const struct rbh_backend_plugin *plugin,
     return RBH_TOKEN_UNKNOWN;
 }
 
-/**
- * Create a filter from the given command line arguments and position in that
- * command line
- *
- * @param plugin         the plugin to build a filter from
- * @param argv           the list of arguments given to the command
- * @param argc           the number of strings in \p argv
- * @param index          the argument currently being parsed, should be updated
- *                       by the plugin if necessary to skip optionnal values
- * @param need_prefetch  boolean value set by the plugin to indicate if a filter
- *                       needs to be completed
- *
- * @return               a pointer to newly allocated struct rbh_filter on
- *                       success, NULL on error and errno is set appropriately
- */
 static inline struct rbh_filter *
 rbh_plugin_build_filter(const struct rbh_backend_plugin *plugin,
                         const char **argv, int argc, int *index,
@@ -237,23 +210,6 @@ rbh_plugin_build_filter(const struct rbh_backend_plugin *plugin,
     return NULL;
 }
 
-/**
- * Fill information about an entry according to a given directive into a buffer
- *
- * @param plugin         the plugin that will print info
- * @param output         an array in which the information can be printed
- *                       according to \p directive. Size of the array should be
- *                       \p max_length
- * @param max_length     size of the \p output array
- * @param fsentry        fsentry to print
- * @param directive      which information about \p fsentry to print
- * @param backend        the backend to print (XXX: may not be necessary)
- *
- * @return               the number of characters written to \p output on
- *                       success
- *                       0 if the plugin doesn't know the directive requested
- *                       -1 on error
- */
 static inline int
 rbh_plugin_fill_entry_info(const struct rbh_backend_plugin *plugin,
                            char *output, int max_length,
@@ -268,14 +224,6 @@ rbh_plugin_fill_entry_info(const struct rbh_backend_plugin *plugin,
     return -1;
 }
 
-/**
- * Delete an entry from the plugin
- *
- * @param plugin         the plugin to delete an entry from
- * @param fsentry        the entry to delete
- *
- * @return               0 on success, -1 on error and errno is set
- */
 static inline int
 rbh_plugin_delete_entry(const struct rbh_backend_plugin *plugin,
                         struct rbh_fsentry *fsentry)
@@ -287,19 +235,6 @@ rbh_plugin_delete_entry(const struct rbh_backend_plugin *plugin,
     return -1;
 }
 
-/**
- * Check the given token corresponds to a predicate or action known by the
- * extension.
- *
- * @param extension  the extension to check the token with
- * @param token      a string that represents a token the extension should
- *                   identify
- *
- * @return           RBH_TOKEN_PREDICATE if the token is a predicate
- *                   RBH_TOKEN_ACTION if the token is an action
- *                   RBH_TOKEN_UNKNOWN if the token is not valid
- *                   RBH_TOKEN_ERROR if an error occur
- */
 static inline enum rbh_parser_token
 rbh_extension_check_valid_token(const struct rbh_plugin_extension *extension,
                                 const char *token)
@@ -311,21 +246,6 @@ rbh_extension_check_valid_token(const struct rbh_plugin_extension *extension,
     return RBH_TOKEN_ERROR;
 }
 
-/**
- * Create a filter from the given command line arguments and position in that
- * command line
- *
- * @param extension      the extension to build a filter from
- * @param argv           the list of arguments given to the command
- * @param argc           the number of strings in \p argv
- * @param index          the argument currently being parsed, should be updated
- *                       by the plugin if necessary to skip optionnal values
- * @param need_prefetch  boolean value that should be modified to indicate if a
- *                       filter needs to be completed
- *
- * @return               a pointer to newly allocated struct rbh_filter on
- *                       success, NULL on error and errno is set appropriately
- */
 static inline struct rbh_filter *
 rbh_extension_build_filter(const struct rbh_plugin_extension *extension,
                            const char **argv, int argc, int *index,
@@ -338,23 +258,6 @@ rbh_extension_build_filter(const struct rbh_plugin_extension *extension,
     return NULL;
 }
 
-/**
- * Fill information about an entry according to a given directive into a buffer
- *
- * @param extension      the extension that will print entry info
- * @param output         an array in which the information can be printed
- *                       according to \p directive. Size of the array should be
- *                       \p max_length
- * @param max_length     size of the \p output array
- * @param fsentry        fsentry to print
- * @param directive      which information about \p fsentry to print
- * @param backend        the backend to print (XXX: may not be necessary)
- *
- * @return               the number of characters written to \p output on
- *                       success
- *                       0 if the plugin doesn't know the directive requested
- *                       -1 on error
- */
 static inline int
 rbh_extension_fill_entry_info(const struct rbh_plugin_extension *extension,
                               char *output, int max_length,
@@ -369,14 +272,6 @@ rbh_extension_fill_entry_info(const struct rbh_plugin_extension *extension,
     return -1;
 }
 
-/*
- * Delete an entry from the extension
- *
- * @param extension      the extension to delete an entry from
- * @param fsentry        the entry to delete
- *
- * @return               0 on success, -1 on error and errno is set
- */
 static inline int
 rbh_extension_delete_entry(const struct rbh_plugin_extension *extension,
                            struct rbh_fsentry *fsentry)
