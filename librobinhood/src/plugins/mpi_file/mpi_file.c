@@ -69,8 +69,7 @@ fsentry_from_flist(struct file_info *mpi_fi,
      * Unlike with posix, we use the relative path of an entry to
      * create an unique ID
      */
-    id = rbh_id_new_with_id(mpi_fi->path,
-                            (strlen(mpi_fi->path) + 1) * sizeof(*mpi_fi->path),
+    id = rbh_id_new_with_id(path, (strlen(path) + 1) * sizeof(*path),
                             RBH_BI_MPI_FILE);
     if (id == NULL) {
         save_errno = errno;
