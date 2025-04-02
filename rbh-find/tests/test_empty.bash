@@ -13,26 +13,30 @@ test_dir=$(dirname $(readlink -e $0))
 #                                    TESTS                                     #
 ################################################################################
 
-test_empty_file()
+test_empty()
 {
-    touch empty
-    truncate --size 1K file
+    mkdir dir1 dir2
+
+    touch empty dir2/fileA
+    truncate --size 1K fileB
     ln -s empty empty_link
 
     rbh_sync "rbh:posix:." "rbh:$db:$testdb"
 
-    rbh_find "rbh:$db:$testdb" -empty | sort | difflines "/empty"
+    rbh_find "rbh:$db:$testdb" -empty | sort |
+        difflines "/dir1" "/dir2/fileA" "/empty"
     rbh_find "rbh:$db:$testdb" -not -empty | sort |
-        difflines "/" "/empty_link" "/file"
+        difflines "/" "/dir2" "/empty_link" "/fileB"
     rbh_find "rbh:$db:$testdb" -not -empty -or -empty | sort |
-        difflines "/" "/empty" "/empty_link" "/file"
+        difflines "/" "/dir1" "/dir2" "/dir2/fileA" "/empty" "/empty_link" \
+                  "/fileB"
 }
 
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
-declare -a tests=(test_empty_file)
+declare -a tests=(test_empty)
 
 tmpdir=$(mktemp --directory)
 trap -- "rm -rf '$tmpdir'"  EXIT

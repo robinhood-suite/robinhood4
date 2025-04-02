@@ -48,7 +48,7 @@ static const struct rbh_filter_field predicate2filter_field[] = {
 };
 
 static struct rbh_filter *
-empty2filter()
+empty_file_filter()
 {
     const struct rbh_filter_field *field_s = &predicate2filter_field[PRED_SIZE];
     const struct rbh_filter_field *field_t = &predicate2filter_field[PRED_TYPE];
@@ -68,6 +68,50 @@ empty2filter()
     filter = rbh_filter_and(filter_size, filter_type);
     if (filter == NULL)
         error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__, "filter_and");
+
+    return filter;
+}
+
+static struct rbh_filter *
+empty_dir_filter()
+{
+    const struct rbh_filter_field *field_t = &predicate2filter_field[PRED_TYPE];
+    struct rbh_filter *filter_type, *filter_nb;
+    struct rbh_filter_field field = {
+        .fsentry = RBH_FP_INODE_XATTRS,
+        .xattr = "nb_children",
+    };
+    struct rbh_filter *filter;
+
+    filter_type = rbh_filter_compare_int32_new(RBH_FOP_EQUAL, field_t, S_IFDIR);
+    if (filter_type == NULL)
+        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
+                      "filter_compare_integer");
+
+    filter_nb = rbh_filter_compare_int64_new(RBH_FOP_EQUAL, &field, 0);
+    if (filter_nb == NULL)
+        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
+                      "filter_compare_integer");
+
+    filter = rbh_filter_and(filter_type, filter_nb);
+    if (filter == NULL)
+        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__, "filter_and");
+
+    return filter;
+}
+
+struct rbh_filter *
+empty2filter()
+{
+    struct rbh_filter *filter_file, *filter_dir;
+    struct rbh_filter *filter;
+
+    filter_file = empty_file_filter();
+    filter_dir = empty_dir_filter();
+
+    filter = rbh_filter_or(filter_file, filter_dir);
+    if (filter == NULL)
+        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__, "filter_or");
 
     return filter;
 }
