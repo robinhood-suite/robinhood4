@@ -1,13 +1,14 @@
 #!/usr/bin/env bash
 
 # This file is part of RobinHood 4
-# Copyright (C) 2024 Commissariat a l'energie atomique et aux energies
+# Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
 
 test_dir=$(dirname $(readlink -e $0))
 . $test_dir/../../utils/tests/framework.bash
+. $test_dir/utils.bash
 
 # Depending on the libfabric's version and OS, libfabric can have network errors
 # with PSM3. To solve this, we specify the PSM3 devices as below.
@@ -22,7 +23,7 @@ test_sync_simple_from_dwalk()
 {
     touch fileA
     mkdir dir
-    touch dir/file1
+    touch dir/fileB
 
     dwalk -q -o "$testdb.mfu" .
     rbh_sync "rbh:mpi-file:$testdb.mfu" "rbh:mongo:$testdb"
@@ -30,14 +31,17 @@ test_sync_simple_from_dwalk()
     find_attribute '"ns.xattrs.path": "/"'
     find_attribute '"ns.xattrs.path": "/fileA"'
     find_attribute '"ns.xattrs.path": "/dir"'
-    find_attribute '"ns.xattrs.path": "/dir/file1"'
+    find_attribute '"ns.xattrs.path": "/dir/fileB"'
+
+    entries=("/dir" "/fileA" "/dir/fileB")
+    check_id_parent_id ${entries[@]}
 }
 
 test_sync_simple_from_robinhood()
 {
     touch fileA
     mkdir dir
-    touch dir/file1
+    touch dir/fileB
 
     rbh_sync "rbh:posix-mpi:." "rbh:mpi-file:$testdb.mfu"
     rbh_sync "rbh:mpi-file:$testdb.mfu" "rbh:mongo:$testdb"
@@ -45,7 +49,10 @@ test_sync_simple_from_robinhood()
     find_attribute '"ns.xattrs.path": "/"'
     find_attribute '"ns.xattrs.path": "/fileA"'
     find_attribute '"ns.xattrs.path": "/dir"'
-    find_attribute '"ns.xattrs.path": "/dir/file1"'
+    find_attribute '"ns.xattrs.path": "/dir/fileB"'
+
+    entries=("/dir" "/fileA" "/dir/fileB")
+    check_id_parent_id ${entries[@]}
 }
 
 test_sync_size()
