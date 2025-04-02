@@ -86,7 +86,7 @@ skip:
         current_parent = RBH_SSTACK_PUSH(sstack, parent, strlen(parent) + 1);
         current_parent_id = get_parent_id(path, !iter->is_mpifile,
                                           iter->posix.prefix_len,
-                                          RBH_BI_POSIX);
+                                          iter->backend_id);
     }
 
     /* If parent is different of current_parent, it means that we are iterating
@@ -102,7 +102,7 @@ skip:
         current_parent = RBH_SSTACK_PUSH(sstack, parent, strlen(parent) + 1);
         current_parent_id = get_parent_id(path, !iter->is_mpifile,
                                           iter->posix.prefix_len,
-                                          RBH_BI_POSIX);
+                                          iter->backend_id);
 
         if (!rbh_id_equal(tmp_id, &ROOT_PARENT_ID))
             fsentry = build_fsentry_nb_children(tmp_id, tmp_children, sstack);
@@ -220,7 +220,7 @@ rbh_mpi_initialize(void)
 
 static struct rbh_mut_iterator *
 mfu_iter_new(const char *root, const char *entry, int statx_sync_type,
-             size_t prefix_len, mfu_flist flist)
+             size_t prefix_len, mfu_flist flist, short backend_id)
 {
     struct mfu_iterator *mfu;
     int save_errno;
@@ -258,6 +258,7 @@ mfu_iter_new(const char *root, const char *entry, int statx_sync_type,
     }
 
     mfu->posix.iterator = MFU_ITER;
+    mfu->backend_id = backend_id;
     mfu->total = mfu_flist_size(mfu->files);
     mfu->current = 0;
     mfu->is_branch = (entry != NULL);
@@ -276,11 +277,11 @@ rbh_posix_mfu_iter_new(const char *root,
                        const char *entry,
                        int statx_sync_type)
 {
-    return mfu_iter_new(root, entry, statx_sync_type, 0, NULL);
+    return mfu_iter_new(root, entry, statx_sync_type, 0, NULL, RBH_BI_POSIX);
 }
 
 struct rbh_mut_iterator *
 rbh_mpi_file_mfu_iter_new(mfu_flist flist, size_t prefix_len)
 {
-    return mfu_iter_new(NULL, NULL, 0, prefix_len, flist);
+    return mfu_iter_new(NULL, NULL, 0, prefix_len, flist, RBH_BI_MPI_FILE);
 }

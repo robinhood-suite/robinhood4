@@ -33,6 +33,7 @@ struct file_info {
 
 struct mfu_iterator {
     struct posix_iterator posix;
+    short backend_id;
     /** Index of current file in the flist in the process */
     uint64_t current;
     /**
