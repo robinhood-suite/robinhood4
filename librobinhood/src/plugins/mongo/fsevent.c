@@ -25,12 +25,9 @@ bson_from_upsert(const struct rbh_value_map *xattrs,
 {
     bson_t *bson = bson_new();
     int save_errno = ENOBUFS;
-    bson_t set, unset;
+    bson_t set, unset, inc;
 
     bson_init(&set);
-    if (!bson_append_document_begin(bson, "$set", strlen("$set"), &set))
-        goto out_destroy_set;
-
     if (statxbuf) {
         if (!BSON_APPEND_STATX(&set, MFF_STATX, statxbuf))
             goto out_destroy_set;
@@ -46,8 +43,11 @@ bson_from_upsert(const struct rbh_value_map *xattrs,
         goto out_destroy_set;
     }
 
-    if (!bson_append_document_end(bson, &set))
-        goto out_destroy_set;
+    /* Empty $set documents are not allowed */
+    if (!bson_empty(&set)) {
+        if (!BSON_APPEND_DOCUMENT(bson, "$set", &set))
+            goto out_destroy_set;
+    }
 
     bson_init(&unset);
     if (!bson_append_unsetxattrs(&unset, MFF_XATTRS, xattrs)) {
@@ -61,10 +61,25 @@ bson_from_upsert(const struct rbh_value_map *xattrs,
             goto out_destroy_unset;
     }
 
+    bson_init(&inc);
+    if (!bson_append_incxattrs(&inc, MFF_XATTRS, xattrs)) {
+        save_errno = errno;
+        goto out_destroy_inc;
+    }
+
+    /* Empty $inc documents are not allowed */
+    if (!bson_empty(&inc)) {
+        if (!BSON_APPEND_DOCUMENT(bson, "$inc", &inc))
+            goto out_destroy_inc;
+    }
+
+    bson_destroy(&inc);
     bson_destroy(&unset);
     bson_destroy(&set);
     return bson;
 
+out_destroy_inc:
+    bson_destroy(&inc);
 out_destroy_unset:
     bson_destroy(&unset);
 out_destroy_set:
@@ -121,7 +136,7 @@ bson_from_xattrs(const char *prefix, const struct rbh_value_map *xattrs)
 {
     bson_t *bson = bson_new();
     int save_errno = ENOBUFS;
-    bson_t set, unset;
+    bson_t set, unset, inc;
 
     bson_init(&set);
     if (!bson_append_setxattrs(&set, prefix, xattrs)) {
@@ -135,6 +150,12 @@ bson_from_xattrs(const char *prefix, const struct rbh_value_map *xattrs)
         goto out_destroy_unset;
     }
 
+    bson_init(&inc);
+    if (!bson_append_incxattrs(&inc, MFF_XATTRS, xattrs)) {
+        save_errno = errno;
+        goto out_destroy_inc;
+    }
+
     /* Empty $set or $unset documents are not allowed */
     if (!bson_empty(&set)) {
         if (!BSON_APPEND_DOCUMENT(bson, "$set", &set))
@@ -146,10 +167,19 @@ bson_from_xattrs(const char *prefix, const struct rbh_value_map *xattrs)
             goto out_destroy_unset;
     }
 
+    /* Empty $inc documents are not allowed */
+    if (!bson_empty(&inc)) {
+        if (!BSON_APPEND_DOCUMENT(bson, "$inc", &inc))
+            goto out_destroy_inc;
+    }
+
+    bson_destroy(&inc);
     bson_destroy(&unset);
     bson_destroy(&set);
     return bson;
 
+out_destroy_inc:
+    bson_destroy(&inc);
 out_destroy_unset:
     bson_destroy(&unset);
 out_destroy_set:
