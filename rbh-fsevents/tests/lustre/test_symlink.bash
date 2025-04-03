@@ -45,6 +45,7 @@ test_create_symlink()
     verify_statx "$entry"
     verify_statx "$entry.tmp"
     find_attribute "\"ns.name\":\"$entry\"" "\"symlink\":\"$entry.tmp\""
+    find_attribute '"xattrs.nb_children": '"$NB_ENTRY"''
 }
 
 test_symlink_other_mdt()
@@ -78,6 +79,7 @@ test_symlink_other_mdt()
 #                                     MAIN                                     #
 ################################################################################
 
+NB_ENTRY=2
 source $test_dir/test_create_inode.bash
 
 declare -a tests=(test_create_symlink test_create_two_entries

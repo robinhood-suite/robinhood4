@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # This file is part of RobinHood 4
-# Copyright (C) 2023 Commissariat a l'energie atomique et aux energies
+# Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
@@ -41,6 +41,7 @@ test_create_hardlink()
     fi
 
     find_attribute "\"ns.name\":\"$entry.tmp\"" "\"ns.name\":\"$entry\""
+    find_attribute '"xattrs.nb_children": '"$NB_ENTRY"''
     verify_statx "$entry"
     verify_statx "$entry.tmp"
     verify_lustre "$entry"
@@ -50,6 +51,7 @@ test_create_hardlink()
 #                                     MAIN                                     #
 ################################################################################
 
+NB_ENTRY=2
 source $test_dir/test_create_inode.bash
 
 declare -a tests=(test_create_hardlink test_create_two_entries)

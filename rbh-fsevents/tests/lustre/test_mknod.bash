@@ -42,12 +42,15 @@ test_create_mknod()
     verify_lustre "$entry.1"
     verify_statx "$entry.2"
     verify_lustre "$entry.2"
+
+    find_attribute '"xattrs.nb_children": '"$(($NB_ENTRY * 2))"''
 }
 
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
+NB_ENTRY=1
 source $test_dir/test_create_inode.bash
 
 declare -a tests=(test_create_mknod test_create_two_entries)
