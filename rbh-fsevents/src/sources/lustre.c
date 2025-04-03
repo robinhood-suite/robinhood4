@@ -204,6 +204,26 @@ fill_xattrs_mdt_index(void *arg)
     return value;
 }
 
+/* BSON results:
+ * { "xattrs": { "nb_children" : x [+-]1 } }
+ */
+static struct rbh_value *
+fill_xattrs_nb_children(void *arg)
+{
+    struct rbh_value nb_children_value;
+    int64_t inc = *((int64_t *) arg);
+    struct rbh_value *value;
+
+    nb_children_value.type = RBH_VT_INT64;
+    nb_children_value.int64 = inc;
+
+    value = source_stack_alloc(&nb_children_value, sizeof(nb_children_value));
+    if (value == NULL)
+        return NULL;
+
+    return value;
+}
+
 static struct rbh_value *
 build_statx_mask(void *arg)
 {
@@ -494,6 +514,28 @@ update_parent_acmtime_event(struct lu_fid *parent_id,
     return 0;
 }
 
+static int
+update_parent_nb_children_event(struct lu_fid *parent_id, int64_t inc,
+                                struct rbh_fsevent *fsevent)
+{
+    struct rbh_id *id;
+    id = build_id(parent_id);
+    if (id == NULL)
+        return -1;
+
+    fsevent->id.data = id->data;
+    fsevent->id.size = id->size;
+
+    fsevent->type = RBH_FET_XATTR;
+    if (build_enrich_xattr_fsevent(&fsevent->xattrs,
+                                   "nb_children",
+                                   fill_xattrs_nb_children(&inc),
+                                   NULL))
+        return -1;
+
+    return 0;
+}
+
 /* Initialize a batch of \p n_events fsevents, and copy a given rbh_id \p id
  * to each event in the batch.
  */
@@ -525,7 +567,7 @@ build_create_inode_events(struct changelog_rec *record, struct rbh_id *id,
 {
     struct rbh_fsevent *new_events;
 
-    new_events = fsevent_list_alloc(4, id);
+    new_events = fsevent_list_alloc(5, id);
 
     if (new_link_inode_event(record, &new_events[0]))
         return -1;
@@ -546,7 +588,10 @@ build_create_inode_events(struct changelog_rec *record, struct rbh_id *id,
     if (update_parent_acmtime_event(&record->cr_pfid, &new_events[3]))
         return -1;
 
-    *fsevents_iterator = rbh_iter_array(new_events, sizeof(*new_events), 4);
+    if (update_parent_nb_children_event(&record->cr_pfid, 1, &new_events[4]))
+        return -1;
+
+    *fsevents_iterator = rbh_iter_array(new_events, sizeof(*new_events), 5);
 
     return 0;
 }
@@ -601,7 +646,7 @@ build_softlink_events(struct changelog_rec *record, struct rbh_id *id,
 {
     struct rbh_fsevent *new_events;
 
-    new_events = fsevent_list_alloc(5, id);
+    new_events = fsevent_list_alloc(6, id);
 
     if (new_link_inode_event(record, &new_events[0]))
         return -1;
@@ -622,13 +667,16 @@ build_softlink_events(struct changelog_rec *record, struct rbh_id *id,
     if (update_parent_acmtime_event(&record->cr_pfid, &new_events[3]))
         return -1;
 
-    /* Mark the event for enrichment of the symlink target */
-    new_events[4].type = RBH_FET_UPSERT;
-    new_events[4].xattrs = build_enrich_map(build_symlink_enrich_map, NULL);
-    if (new_events[4].xattrs.pairs == NULL)
+    if (update_parent_nb_children_event(&record->cr_pfid, 1, &new_events[4]))
         return -1;
 
-    *fsevents_iterator = rbh_iter_array(new_events, sizeof(*new_events), 5);
+    /* Mark the event for enrichment of the symlink target */
+    new_events[5].type = RBH_FET_UPSERT;
+    new_events[5].xattrs = build_enrich_map(build_symlink_enrich_map, NULL);
+    if (new_events[5].xattrs.pairs == NULL)
+        return -1;
+
+    *fsevents_iterator = rbh_iter_array(new_events, sizeof(*new_events), 6);
 
     return 0;
 }
@@ -650,7 +698,7 @@ build_hardlink_or_mknod_events(struct changelog_rec *record, struct rbh_id *id,
      * Therefore, the build of a hardlink or mknod event is subset of the
      * operations done to build a inode creation event.
      */
-    new_events = fsevent_list_alloc(4, id);
+    new_events = fsevent_list_alloc(5, id);
 
     if (new_link_inode_event(record, &new_events[0]))
         return -1;
@@ -662,14 +710,17 @@ build_hardlink_or_mknod_events(struct changelog_rec *record, struct rbh_id *id,
     if (update_parent_acmtime_event(&record->cr_pfid, &new_events[2]))
         return -1;
 
+    if (update_parent_nb_children_event(&record->cr_pfid, 1, &new_events[3]))
+        return -1;
+
     new_events[3].type = RBH_FET_XATTR;
-    if (build_enrich_xattr_fsevent(&new_events[3].xattrs,
+    if (build_enrich_xattr_fsevent(&new_events[4].xattrs,
                                    "rbh-fsevents",
                                    build_empty_map("lustre"),
                                    NULL))
         return -1;
 
-    *fsevents_iterator = rbh_iter_array(new_events, sizeof(*new_events), 4);
+    *fsevents_iterator = rbh_iter_array(new_events, sizeof(*new_events), 5);
 
     return 0;
 }
@@ -714,7 +765,7 @@ build_unlink_or_rmdir_events(struct changelog_rec *record, struct rbh_id *id,
                      !(record->cr_flags & CLF_UNLINK_HSM_EXISTS);
     struct rbh_fsevent *new_events;
 
-    new_events = fsevent_list_alloc(2, id);
+    new_events = fsevent_list_alloc(3, id);
 
     if (unlink_inode_event(&record->cr_pfid, changelog_rec_name(record),
                            record->cr_namelen, last_copy, &new_events[0]))
@@ -723,7 +774,10 @@ build_unlink_or_rmdir_events(struct changelog_rec *record, struct rbh_id *id,
     if (update_parent_acmtime_event(&record->cr_pfid, &new_events[1]))
         return -1;
 
-    *fsevents_iterator = rbh_iter_array(new_events, sizeof(*new_events), 2);
+    if (update_parent_nb_children_event(&record->cr_pfid, -1, &new_events[2]))
+        return -1;
+
+    *fsevents_iterator = rbh_iter_array(new_events, sizeof(*new_events), 3);
 
     return 0;
 }
@@ -751,17 +805,8 @@ build_rename_events(struct changelog_rec *record, struct rbh_id *id,
                      !(record->cr_flags & CLF_RENAME_LAST_EXISTS);
     struct rbh_fsevent *new_events;
     struct rbh_id *renamed_id;
+    int n_events = 7;
     int counter = 0;
-    int n_events;
-
-    /* Unlink of the overwriten link is the first step done, but if the target
-     * fid is 0, nothing was overwritten, so we don't need a corresponding
-     * event.
-     */
-    if (fid_is_zero(&record->cr_tfid))
-        n_events = 5;
-    else
-        n_events = 6;
 
     renamed_id = build_id(&rename_log->cr_sfid);
     if (renamed_id == NULL)
@@ -801,6 +846,14 @@ build_rename_events(struct changelog_rec *record, struct rbh_id *id,
 
     counter++;
 
+    if (fid_is_zero(&record->cr_tfid)) {
+        if (update_parent_nb_children_event(&record->cr_pfid, 1,
+                                            &new_events[counter]))
+            return -1;
+
+        counter++;
+    }
+
     if (unlink_inode_event(&rename_log->cr_spfid, changelog_rec_sname(record),
                            changelog_rec_snamelen(record),
                            false, &new_events[counter]))
@@ -811,6 +864,13 @@ build_rename_events(struct changelog_rec *record, struct rbh_id *id,
     if (update_parent_acmtime_event(&rename_log->cr_spfid,
                                     &new_events[counter]))
         return -1;
+
+    counter++;
+
+    if (update_parent_nb_children_event(&rename_log->cr_spfid, -1,
+                                        &new_events[counter]))
+        return -1;
+
 
     *fsevents_iterator = rbh_iter_array(new_events, sizeof(*new_events),
                                        n_events);
