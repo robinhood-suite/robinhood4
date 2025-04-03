@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # This file is part of RobinHood 4
-# Copyright (C) 2023 Commissariat a l'energie atomique et aux energies
+# Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
@@ -21,6 +21,8 @@ test_create_entry()
 
     verify_statx "$entry"
     verify_lustre "$entry"
+
+    find_attribute '"xattrs.nb_children": '"$NB_ENTRY"''
 }
 
 test_create_two_entries()
@@ -37,4 +39,6 @@ test_create_two_entries()
     verify_lustre "$entry1"
     verify_statx "$entry2"
     verify_lustre "$entry2"
+
+    find_attribute '"xattrs.nb_children": '"$(($NB_ENTRY * 2))"''
 }
