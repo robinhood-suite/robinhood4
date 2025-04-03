@@ -161,6 +161,62 @@ remove_start_point(const char *path, const char *backend)
     return &path[branch_len + 2];
 }
 
+static const char table[64] = {
+    'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H',
+    'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P',
+    'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X',
+    'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f',
+    'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n',
+    'o', 'p', 'q', 'r', 's', 't', 'u', 'v',
+    'w', 'x', 'y', 'z', '0', '1', '2', '3',
+    '4', '5', '6', '7', '8', '9', '+', '/',
+};
+
+size_t
+base64_encode(char *dest, const char *src, size_t n)
+{
+    const uint8_t *data = (const unsigned char *)src;
+    size_t i, j = 0;
+
+    for (i = 0; i + 2 < n; i += 3) {
+        dest[j++] = table[data[i] >> 2];
+        dest[j++] = table[(data[i] & 0x3) << 4 | data[i + 1] >> 4];
+        dest[j++] = table[(data[i + 1] & 0xf) << 2 | data[i + 2] >> 6];
+        dest[j++] = table[data[i + 2] & 0x3f];
+    }
+
+    switch (n % 3) {
+    case 0:
+        break;
+    case 1:
+        dest[j++] = table[data[i] >> 2];
+        dest[j++] = table[(data[i] & 0x3) << 4];
+        dest[j++] = '=';
+        dest[j++] = '=';
+        break;
+    case 2:
+        dest[j++] = table[data[i] >> 2];
+        dest[j++] = table[(data[i] & 0x3) << 4 | data[i + 1] >> 4];
+        dest[j++] = table[(data[i + 1] & 0xf) << 2];
+        dest[j++] = '=';
+        break;
+    }
+
+    dest[j] = '\0';
+    return j;
+}
+
+static int
+write_base64_ID(const struct rbh_fsentry *fsentry, char *output, int max_length)
+{
+    char buffer[1024]; // More than enough to hold the converted ID
+
+    if (base64_encode(buffer, fsentry->id.data, fsentry->id.size) == 0)
+        return -1;
+
+    return snprintf(output, max_length, "%s", buffer);
+}
+
 int
 rbh_posix_fill_entry_info(char *output, int max_length,
                           const struct rbh_fsentry *fsentry,
@@ -215,6 +271,8 @@ rbh_posix_fill_entry_info(char *output, int max_length,
         return snprintf(output, max_length, "%s", backend);
     case 'i':
         return snprintf(output, max_length, "%lu", fsentry->statx->stx_ino);
+    case 'I':
+        return write_base64_ID(fsentry, output, max_length);
     case 'l':
         if (!S_ISLNK(fsentry->statx->stx_mode))
             return 0;
