@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # This file is part of RobinHood 4
-# Copyright (C) 2023 Commissariat a l'energie atomique et aux energies
+# Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
@@ -28,6 +28,7 @@ create_filled_entry()
 #                                     MAIN                                     #
 ################################################################################
 
+NB_ENTRY=1
 source $test_dir/test_create_inode.bash
 
 declare -a tests=(test_create_entry test_create_two_entries)
