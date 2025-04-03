@@ -87,6 +87,8 @@ test_rename_same_dir()
     local count=$(find . | wc -l)
     test_rename $entry $entry_renamed $count
 
+    find_attribute '"xattrs.nb_children": 1'
+
     verify_lustre $entry_renamed
 }
 
@@ -100,6 +102,9 @@ test_rename_different_dir()
 
     local count=$(find . | wc -l)
     test_rename $entry $entry_renamed $count
+
+    find_attribute '"ns.name": "tmp"' '"xattrs.nb_children": 1'
+    find_attribute '"ns": {$exists: false}' '"xattrs.nb_children": 1'
 
     verify_lustre tmp/$entry_renamed
 }
@@ -117,6 +122,9 @@ test_rename_overwrite_data()
 
     test_rename $entry $entry_renamed $count
 
+    find_attribute '"ns.name": "tmp"' '"xattrs.nb_children": 1'
+    find_attribute '"ns": {$exists: false}' '"xattrs.nb_children": 1'
+
     verify_lustre tmp/$entry_renamed
 }
 
@@ -129,6 +137,9 @@ test_rename_overwrite_data_with_hsm_copy()
     touch tmp/$entry_renamed
 
     invoke_rbh-fsevents
+
+    find_attribute '"ns.name": "tmp"' '"xattrs.nb_children": 1'
+    find_attribute '"ns": {$exists: false}' '"xattrs.nb_children": 2'
 
     archive_file tmp/$entry_renamed
     clear_changelogs "$LUSTRE_MDT" "$userid"
@@ -145,6 +156,9 @@ test_rename_overwrite_data_with_hsm_copy()
     count=$((count + 1))
 
     test_rename $entry $entry_renamed $count
+
+    find_attribute '"ns.name": "tmp"' '"xattrs.nb_children": 1'
+    find_attribute '"ns": {$exists: false}' '"xattrs.nb_children": 1'
 
     # Check the overwriten entry is still in the DB but has no link anymore
     local result="$(do_db get "$testdb" \
