@@ -30,6 +30,9 @@ rbh_retention_enrich(struct entry_info *einfo, uint64_t flags,
                      size_t pairs_count,
                      struct rbh_sstack *values);
 
+enum rbh_parser_token
+rbh_retention_check_valid_token(const char *token);
+
 struct rbh_filter *
 rbh_retention_build_filter(const char **argv, int argc, int *index,
                            bool *need_prefetch);
