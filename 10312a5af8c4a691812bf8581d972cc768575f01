@@ -16,6 +16,24 @@
       "message": "Can this fix come with a test? To check the branching of a lustre backend is correct?",
       "revId": "10312a5af8c4a691812bf8581d972cc768575f01",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a368a1a9_f71b081e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-03T13:32:56Z",
+      "side": 1,
+      "message": "Added the test, but the rest is now obsolete anyway after the rebase",
+      "parentUuid": "bcaf1585_b7f415da",
+      "revId": "10312a5af8c4a691812bf8581d972cc768575f01",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
