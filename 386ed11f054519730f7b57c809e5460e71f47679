@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "817d7e6d_4f1f6ac8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-03T10:11:51Z",
+      "side": 1,
+      "message": "Aside from the defect I\u0027ve put, I think that all the sync tests should be renamed to be more generic, aside from the ones that specifically test Mongo/SQLite which should keep their name and the URI as they are, so the tests mongo -\u003e mongo, sqlite -\u003e sqlite, mongo -\u003e sqlite and sqlite -\u003e mongo (last 3 not implemented yet)",
+      "revId": "386ed11f054519730f7b57c809e5460e71f47679",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dd76a08a_9d588b8d",
@@ -19,6 +36,29 @@
         "startChar": 4,
         "endLine": 23,
         "endChar": 13
+      },
+      "revId": "386ed11f054519730f7b57c809e5460e71f47679",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "23664d67_92a30517",
+        "filename": "rbh-sync/tests/test_mongo_mongo_sync.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-03T10:11:51Z",
+      "side": 1,
+      "message": "defect: putting this here but it\u0027s valid for the whole file: this a test that check a sync from mongo to mongo works as expected, and as such it uses the mongo command and and uses mongo specific behaviour. I\u0027m against trying to make it generic, and I\u0027d rather have instead a SQLite specific test for this behaviour",
+      "range": {
+        "startLine": 30,
+        "startChar": 32,
+        "endLine": 30,
+        "endChar": 35
       },
       "revId": "386ed11f054519730f7b57c809e5460e71f47679",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
