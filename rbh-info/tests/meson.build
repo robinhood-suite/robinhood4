@@ -1,13 +1,16 @@
 # This file is part of RobinHood 4
-# Copyright (C) 2024 Commissariat a l'energie atomique et aux energies
+# Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
 #               alternatives
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
 
 integration_tests = [
-  'info',
-  'get_info',
+    'info', 'get_info',
 ]
+
+if liblustre.found()
+    integration_tests += ['test_lustre_mongo_source']
+endif
 
 foreach t: integration_tests
     e = find_program(t + '.bash')
