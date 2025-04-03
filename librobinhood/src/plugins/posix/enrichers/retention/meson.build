@@ -8,6 +8,8 @@ librbh_posix_retention_ext = library(
     'rbh-posix-retention-ext',
     sources: [
         'action.c',
+        'filter.c',
+        'parser.c',
         'plugin.c',
         'retention.c',
     ],
