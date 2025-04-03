@@ -18,7 +18,6 @@
 static const struct rbh_pe_common_operations LUSTRE_EXTENSION_COMMON_OPS = {
     .check_valid_token = rbh_lustre_check_valid_token,
     .build_filter = rbh_lustre_build_filter,
-    .fill_entry_info = rbh_lustre_fill_entry_info,
     .delete_entry = NULL,
 };
 
