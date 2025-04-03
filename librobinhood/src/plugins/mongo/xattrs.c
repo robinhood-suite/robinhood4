@@ -60,7 +60,7 @@ bson_append_setxattrs(bson_t *bson, const char *prefix,
         const char *xattr = xattrs->pairs[i].key;
 
         /* Skip xattrs that are to be unset */
-        if (value == NULL)
+        if (value == NULL || strcmp(xattr, "nb_children") == 0)
             continue;
 
         if (!bson_append_xattr(bson, prefix, xattr, value))
@@ -83,11 +83,35 @@ bson_append_unsetxattrs(bson_t *bson, const char *prefix,
         const char *xattr = xattrs->pairs[i].key;
 
         /* Skip xattrs that are to be set */
-        if (value)
+        if (value || strcmp(xattr, "nb_children") == 0)
             continue;
 
         if (!bson_append_xattr(bson, prefix, xattr, NULL))
             return false;
+    }
+
+    return true;
+}
+
+/*----------------------------------------------------------------------------*
+ |                         bson_append_incxattrs()                            |
+ *----------------------------------------------------------------------------*/
+
+bool
+bson_append_incxattrs(bson_t *bson, const char *prefix,
+                      const struct rbh_value_map *xattrs)
+{
+    for (size_t i = 0; i < xattrs->count; i++) {
+        const struct rbh_value *value = xattrs->pairs[i].value;
+        const char *xattr = xattrs->pairs[i].key;
+
+        /* Skip xattrs that are to be set */
+        if (strcmp(xattr, "nb_children"))
+            continue;
+
+        if (!bson_append_xattr(bson, prefix, xattr, value))
+            return false;
+        break;
     }
 
     return true;
