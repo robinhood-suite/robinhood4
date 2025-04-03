@@ -54,8 +54,6 @@ static const struct rbh_filter_field predicate2filter_field[] = {
                               .xattr = "stripe_count"},
     [LPRED_STRIPE_SIZE]    = {.fsentry = RBH_FP_INODE_XATTRS,
                               .xattr = "stripe_size"},
-    [LPRED_EXPIRED]        = {.fsentry = RBH_FP_INODE_XATTRS,
-                              .xattr = "trusted.expiration_date"},
 };
 
 static inline const struct rbh_filter_field *
@@ -521,64 +519,6 @@ layout_pattern2filter(const char *_layout)
 }
 
 static struct rbh_filter *
-expired2filter()
-{
-    struct rbh_filter *filter_expiration_date;
-    uint64_t now;
-
-    now = time(NULL);
-
-    filter_expiration_date = rbh_filter_compare_uint64_new(
-        RBH_FOP_LOWER_OR_EQUAL,
-        get_filter_field(LPRED_EXPIRED),
-        now);
-    if (!filter_expiration_date)
-        error(EXIT_FAILURE, errno, "rbh_filter_compare_uint64_new");
-
-    return filter_expiration_date;
-}
-
-static struct rbh_filter *
-expired_at2filter(const char *expired)
-{
-    const struct rbh_filter_field *predicate = get_filter_field(LPRED_EXPIRED);
-    struct rbh_filter *filter_expiration_date;
-    struct rbh_filter *filter_inf;
-    int64_t inf = INT64_MAX;
-
-    if (!strcmp(expired, "inf")) {
-        filter_inf = rbh_filter_compare_uint64_new(RBH_FOP_EQUAL, predicate,
-                                                   inf);
-        if (!filter_inf)
-            error(EXIT_FAILURE, errno, "rbh_filter_compare_uint64_new");
-
-        return filter_inf;
-    }
-
-    if (!isdigit(expired[0]) && expired[0] != '+' && expired[0] != '-')
-        error(EXIT_FAILURE, errno, "invalid argument `%s' to `%s'", expired,
-              lustre_predicate2str(LPRED_EXPIRED_AT));
-
-    if ((expired[0] == '+' || expired[0] == '-') && !isdigit(expired[1]))
-        error(EXIT_FAILURE, errno, "invalid argument `%s' to `%s'", expired,
-              lustre_predicate2str(LPRED_EXPIRED_AT));
-
-    filter_expiration_date = rbh_epoch2filter(predicate, expired);
-    if (!filter_expiration_date)
-        error(EXIT_FAILURE, errno, "epoch2filter");
-
-    /* If we want to check all the entries that will be expired after a certain
-     * time, do not include those that have an infinite expiration date, as it
-     * internally is equivalent to an expiration date set to INT64_MAX.
-     */
-    filter_inf = rbh_filter_compare_uint64_new(RBH_FOP_EQUAL, predicate, inf);
-    if (!filter_inf)
-        error(EXIT_FAILURE, errno, "rbh_filter_compare_uint64_new");
-
-    return rbh_filter_and(rbh_filter_not(filter_inf), filter_expiration_date);
-}
-
-static struct rbh_filter *
 pool2filter(const char *pool)
 {
     return rbh_shell_regex2filter(get_filter_field(LPRED_POOL), pool,
@@ -709,12 +649,6 @@ mdt_count2filter(const char *mdt_count)
                               RBH_FOP_EQUAL);
 }
 
-static bool
-predicate_has_argument(int predicate)
-{
-    return predicate != LPRED_EXPIRED;
-}
-
 struct rbh_filter *
 rbh_lustre_build_filter(const char **argv, int argc, int *index,
                         __attribute__((unused)) bool *need_prefetch)
@@ -725,7 +659,7 @@ rbh_lustre_build_filter(const char **argv, int argc, int *index,
 
     predicate = str2lustre_predicate(argv[i]);
 
-    if (predicate_has_argument(predicate) && i + 1 >= argc)
+    if (i + 1 >= argc)
         error(EX_USAGE, 0, "missing argument to `%s'", argv[i]);
 
     /* In the following block, functions should call error() themselves rather
@@ -740,12 +674,6 @@ rbh_lustre_build_filter(const char **argv, int argc, int *index,
         break;
     case LPRED_COMP_START:
         filter = comp_start2filter(argv[++i]);
-        break;
-    case LPRED_EXPIRED:
-        filter = expired2filter();
-        break;
-    case LPRED_EXPIRED_AT:
-        filter = expired_at2filter(argv[++i]);
         break;
     case LPRED_FID:
         filter = fid2filter(argv[++i]);
