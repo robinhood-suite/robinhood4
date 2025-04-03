@@ -15,7 +15,7 @@ test_dir=$(dirname $(readlink -e $0))
 
 test_collection_backend_source_lustre()
 {
-    rbh_sync "rbh:lustre:/mnt/lustre" "rbh:mongo:$testdb"
+    rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
 
     local rbh_info_backend_source=$(rbh_info "rbh:mongo:$testdb" -b)
     local -a info_array
