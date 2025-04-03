@@ -13,7 +13,7 @@
 #include <robinhood/fsentry.h>
 #include <robinhood/utils.h>
 
-#include "lustre_internals.h"
+#include "retention_internals.h"
 
 static int
 write_expiration_date_from_entry(const struct rbh_fsentry *fsentry,
@@ -54,9 +54,9 @@ write_expires_from_entry(const struct rbh_fsentry *fsentry,
 }
 
 int
-rbh_lustre_fill_entry_info(char *output, int max_length,
-                           const struct rbh_fsentry *fsentry,
-                           const char *directive, const char *backend)
+rbh_retention_fill_entry_info(char *output, int max_length,
+                              const struct rbh_fsentry *fsentry,
+                              const char *directive, const char *backend)
 {
     assert(directive != NULL);
     assert(*directive != '\0');
