@@ -35,17 +35,6 @@ str2lustre_predicate(const char *string)
             break;
         }
         break;
-    /* XXX: will be moved to the retention extension later */
-    case 'e':
-        if (strncmp(&string[2], "xpired", strlen("xpired")) != 0)
-            break;
-
-        if (string[strlen("-expired")] == 0)
-            return LPRED_EXPIRED;
-
-        if (strcmp(&string[strlen("-expired")], "-at") == 0)
-            return LPRED_EXPIRED_AT;
-        break;
     case 'f':
         if (strcmp(&string[2], "id") == 0)
             return LPRED_FID;
@@ -103,8 +92,6 @@ rbh_lustre_check_valid_token(const char *token)
 static const char *__lustre_predicate2str[] = {
     [LPRED_COMP_END]       = "comp-end",
     [LPRED_COMP_START]     = "comp-start",
-    [LPRED_EXPIRED]        = "expired",
-    [LPRED_EXPIRED_AT]     = "expired-at",
     [LPRED_FID]            = "fid",
     [LPRED_HSM_STATE]      = "hsm-state",
     [LPRED_IPOOL]          = "ipool",
