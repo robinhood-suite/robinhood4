@@ -226,6 +226,10 @@ bson_append_unsetxattrs(bson_t *bson, const char *prefix,
                         const struct rbh_value_map *xattrs);
 
 bool
+bson_append_incxattrs(bson_t *bson, const char *prefix,
+                      const struct rbh_value_map *xattrs);
+
+bool
 bson_iter_namespace(bson_iter_t *iter, struct rbh_fsentry *fsentry,
                     char **buffer, size_t *bufsize);
 
