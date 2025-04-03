@@ -33,6 +33,15 @@ str2retention_predicate(const char *string)
     return -1;
 }
 
+enum rbh_parser_token
+rbh_retention_check_valid_token(const char *token)
+{
+    if (str2retention_predicate(token) != -1)
+        return RBH_TOKEN_PREDICATE;
+
+    return RBH_TOKEN_UNKNOWN;
+}
+
 static const char *__lustre_predicate2str[] = {
     [RPRED_EXPIRED]        = "expired",
     [RPRED_EXPIRED_AT]     = "expired-at",
