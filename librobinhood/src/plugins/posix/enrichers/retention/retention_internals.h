@@ -15,6 +15,8 @@
 #include <stddef.h>
 #include <stdint.h>
 
+#include <robinhood/fsentry.h>
+
 struct entry_info;
 struct rbh_value_pair;
 struct rbh_sstack;
@@ -27,5 +29,10 @@ rbh_retention_enrich(struct entry_info *einfo, uint64_t flags,
                      struct rbh_value_pair *pairs,
                      size_t pairs_count,
                      struct rbh_sstack *values);
+
+int
+rbh_retention_fill_entry_info(char *output, int max_length,
+                              const struct rbh_fsentry *fsentry,
+                              const char *directive, const char *backend);
 
 #endif
