@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "791a6884_3727c207",
+        "filename": "rbh-sync/tests/test_db_db_sync.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-03T10:15:30Z",
+      "side": 0,
+      "message": "defect: meson build is not changed",
+      "revId": "386ed11f054519730f7b57c809e5460e71f47679",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
