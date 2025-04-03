@@ -11,6 +11,10 @@
 #include "robinhood/backends/posix_extension.h"
 #include "robinhood/plugins/backend.h"
 
+static const struct rbh_pe_common_operations RETENTION_EXTENSION_COMMON_OPS = {
+    .fill_entry_info = rbh_retention_fill_entry_info,
+};
+
 const struct rbh_posix_extension RBH_BACKEND_EXTENDS(POSIX, RETENTION) = {
     .extension = {
         .super       = RBH_POSIX_BACKEND_NAME,
@@ -18,6 +22,7 @@ const struct rbh_posix_extension RBH_BACKEND_EXTENDS(POSIX, RETENTION) = {
         .version     = RBH_RETENTION_PLUGIN_VERSION,
         .min_version = RBH_POSIX_BACKEND_VERSION,
         .max_version = RBH_POSIX_BACKEND_VERSION,
+        .common_ops  = &RETENTION_EXTENSION_COMMON_OPS,
     },
     .enrich         = rbh_retention_enrich,
     .setup_enricher = rbh_retention_setup,
