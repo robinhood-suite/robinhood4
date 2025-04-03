@@ -95,10 +95,6 @@ rbh_fsevent_find_xattr(const struct rbh_fsevent *fsevent,
 }
 
 static int
-rbh_value_deep_copy(struct rbh_value *dest, const struct rbh_value *src,
-                    struct rbh_sstack *stack);
-
-static int
 rbh_value_map_deep_copy(struct rbh_value_map *dest,
                         const struct rbh_value_map *src,
                         struct rbh_sstack *stack)
@@ -161,7 +157,7 @@ rbh_sequence_deep_copy(struct rbh_value *dest,
     return 0;
 }
 
-static int
+int
 rbh_value_deep_copy(struct rbh_value *dest, const struct rbh_value *src,
                     struct rbh_sstack *stack)
 {

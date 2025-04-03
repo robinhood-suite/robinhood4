@@ -501,6 +501,7 @@ insert_xattr(struct rbh_fsevent_node *cached_event,
              const struct rbh_value_pair *xattr)
 {
     struct rbh_value_pair *tmp;
+    struct rbh_value *value;
 
     tmp = RBH_SSTACK_PUSH(
         cached_event->copy_data, NULL,
@@ -510,6 +511,11 @@ insert_xattr(struct rbh_fsevent_node *cached_event,
     memcpy(tmp, cached_event->fsevent.xattrs.pairs,
            cached_event->fsevent.xattrs.count * sizeof(*tmp));
     memcpy(&tmp[cached_event->fsevent.xattrs.count], xattr, sizeof(*xattr));
+
+    value = RBH_SSTACK_PUSH(cached_event->copy_data, NULL, sizeof(*value));
+    tmp[cached_event->fsevent.xattrs.count].value = value;
+
+    rbh_value_deep_copy(value, xattr->value, cached_event->copy_data);
 
     cached_event->fsevent.xattrs.count++;
     cached_event->fsevent.xattrs.pairs = tmp;
@@ -530,11 +536,16 @@ dedup_xattr(struct rbh_fsevent_node *cached_event,
     const struct rbh_value_pair *cached_xattr;
 
     cached_xattr = rbh_fsevent_find_xattr(&cached_event->fsevent, xattr->key);
-    if (cached_xattr)
+    if (cached_xattr) {
+        if (strcmp(xattr->key, "nb_children") == 0)
+            ((struct rbh_value *) xattr->value)->int64 +=
+                ((struct rbh_value *) cached_xattr->value)->int64;
+
         /* xattr found, do not add it to the cached fsevent */
         update_xattr_value((void *)cached_xattr->value, xattr->value);
-    else
+    } else {
         insert_xattr(cached_event, xattr);
+    }
 }
 
 static void
