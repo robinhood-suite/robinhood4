@@ -89,7 +89,7 @@ rbh_pe_common_ops_check_valid_token(
     const char *token
 )
 {
-    if (common_ops->check_valid_token)
+    if (common_ops && common_ops->check_valid_token)
         return common_ops->check_valid_token(token);
 
     errno = ENOTSUP;
@@ -102,7 +102,7 @@ rbh_pe_common_ops_build_filter(
     const char **argv, int argc, int *index, bool *need_prefetch
 )
 {
-    if (common_ops->build_filter)
+    if (common_ops && common_ops->build_filter)
         return common_ops->build_filter(argv, argc, index, need_prefetch);
 
     errno = ENOTSUP;
@@ -116,7 +116,7 @@ rbh_pe_common_ops_fill_entry_info(
     const char *directive, const char *backend
 )
 {
-    if (common_ops->fill_entry_info)
+    if (common_ops && common_ops->fill_entry_info)
         return common_ops->fill_entry_info(output, max_length, fsentry,
                                             directive, backend);
 
@@ -130,7 +130,7 @@ rbh_pe_common_ops_delete_entry(
     struct rbh_fsentry *fsentry
 )
 {
-    if (common_ops->delete_entry)
+    if (common_ops && common_ops->delete_entry)
         return common_ops->delete_entry(fsentry);
 
     errno = ENOTSUP;
