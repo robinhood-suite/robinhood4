@@ -207,7 +207,7 @@ main(int _argc, char *_argv[])
         ctx.backend_count++;
     }
 
-    ctx.info_pe_count = 2;
+    ctx.info_pe_count = 3;
     ctx.info_pe = malloc(ctx.info_pe_count * sizeof(*ctx.info_pe));
     if (ctx.info_pe == NULL)
         error(EXIT_FAILURE, errno, "malloc");
@@ -223,6 +223,14 @@ main(int _argc, char *_argv[])
         "lustre"
     );
     if (ctx.info_pe[1].extension == NULL)
+        error(EXIT_FAILURE, errno, "rbh_plugin_load_extension");
+
+    ctx.info_pe[2].is_plugin = false;
+    ctx.info_pe[2].extension = rbh_plugin_load_extension(
+        &ctx.info_pe[0].plugin->plugin,
+        "retention"
+    );
+    if (ctx.info_pe[2].extension == NULL)
         error(EXIT_FAILURE, errno, "rbh_plugin_load_extension");
 
     filter = parse_expression(&ctx, &index, NULL, &sorts, &sorts_count);
