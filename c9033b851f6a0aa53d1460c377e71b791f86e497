@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb54bf5f_4931d1c5",
+        "filename": "librobinhood/include/robinhood/plugins/backend.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-04T14:34:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "77bbdb03_a03c1699",
+      "range": {
+        "startLine": 150,
+        "startChar": 46,
+        "endLine": 150,
+        "endChar": 51
+      },
+      "revId": "c9033b851f6a0aa53d1460c377e71b791f86e497",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "273ef02e_40ce569f",
@@ -37,6 +61,24 @@
       "writtenOn": "2025-03-28T10:46:42Z",
       "side": 1,
       "message": "typo: remove empty line",
+      "revId": "c9033b851f6a0aa53d1460c377e71b791f86e497",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "543c0a62_a46e8cc7",
+        "filename": "librobinhood/include/robinhood/plugins/backend.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-04T14:34:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "273ef02e_40ce569f",
       "revId": "c9033b851f6a0aa53d1460c377e71b791f86e497",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
