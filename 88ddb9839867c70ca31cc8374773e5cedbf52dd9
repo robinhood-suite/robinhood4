@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e843d010_854bc627",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-04-04T08:58:22Z",
+      "side": 1,
+      "message": "typo: posix and lustre ?",
+      "range": {
+        "startLine": 9,
+        "startChar": 59,
+        "endLine": 9,
+        "endChar": 65
+      },
+      "revId": "88ddb9839867c70ca31cc8374773e5cedbf52dd9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1f5e2cd9_8657bda4",
+        "filename": "librobinhood/src/plugins/posix/enrichers/lustre/plugin.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-04-04T08:58:22Z",
+      "side": 1,
+      "message": "question: Lustre doesn\u0027t have a delete callback ?",
+      "range": {
+        "startLine": 27,
+        "startChar": 8,
+        "endLine": 27,
+        "endChar": 29
+      },
+      "revId": "88ddb9839867c70ca31cc8374773e5cedbf52dd9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
