@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "067aff15_9785cbda",
+        "filename": "rbh-find/rbh-find.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-04-04T08:40:44Z",
+      "side": 1,
+      "message": "question: Do we need to also set `info_extension_count` to 0 ?",
+      "revId": "d242876e64a5a03aa4e665a97deef0ba7c8aad1d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
