@@ -41,6 +41,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "90e8973f_001fe94a",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 8
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-04T07:20:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dd5dd082_c7f71dfd",
+      "range": {
+        "startLine": 54,
+        "startChar": 36,
+        "endLine": 54,
+        "endChar": 43
+      },
+      "revId": "bc76f63eba95a95a110859fb8d3155688426a2b8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "761f199a_48ce5c6e",
@@ -54,6 +78,30 @@
       "writtenOn": "2025-03-27T08:46:22Z",
       "side": 1,
       "message": "Precise: based on uid, gid and secondary groups?",
+      "range": {
+        "startLine": 55,
+        "startChar": 27,
+        "endLine": 55,
+        "endChar": 28
+      },
+      "revId": "bc76f63eba95a95a110859fb8d3155688426a2b8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0aac28c7_1ea75c63",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 8
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-04T07:20:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "761f199a_48ce5c6e",
       "range": {
         "startLine": 55,
         "startChar": 27,
@@ -87,6 +135,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "428acfb0_21ebe116",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 8
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-04T07:20:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a295f5dc_b41aef0c",
+      "range": {
+        "startLine": 57,
+        "startChar": 67,
+        "endLine": 57,
+        "endChar": 78
+      },
+      "revId": "bc76f63eba95a95a110859fb8d3155688426a2b8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c0c08aa7_61e3d65c",
@@ -100,6 +172,30 @@
       "writtenOn": "2025-03-27T08:46:22Z",
       "side": 1,
       "message": "To be safe, the filtering must be done on the server side, because the client could be modified by the user.",
+      "range": {
+        "startLine": 59,
+        "startChar": 38,
+        "endLine": 59,
+        "endChar": 49
+      },
+      "revId": "bc76f63eba95a95a110859fb8d3155688426a2b8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "51671115_70f912e5",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 8
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-04T07:20:01Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "c0c08aa7_61e3d65c",
       "range": {
         "startLine": 59,
         "startChar": 38,
@@ -133,6 +229,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d786b068_4a0116d9",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 8
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-04T07:20:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "50137190_541e4e79",
+      "range": {
+        "startLine": 66,
+        "startChar": 16,
+        "endLine": 66,
+        "endChar": 20
+      },
+      "revId": "bc76f63eba95a95a110859fb8d3155688426a2b8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a683c6eb_d8e8da04",
@@ -146,6 +266,30 @@
       "writtenOn": "2025-03-27T08:46:22Z",
       "side": 1,
       "message": "and the list of secondary groups",
+      "range": {
+        "startLine": 67,
+        "startChar": 0,
+        "endLine": 67,
+        "endChar": 3
+      },
+      "revId": "bc76f63eba95a95a110859fb8d3155688426a2b8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f74fbb9_adb2d6f6",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 8
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-04T07:20:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a683c6eb_d8e8da04",
       "range": {
         "startLine": 67,
         "startChar": 0,
@@ -179,6 +323,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c9fb7098_cae10dc7",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 8
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-04T07:20:01Z",
+      "side": 1,
+      "message": "While it is doable to copy a database, the copy will rarely be up-to-date with the main db, so the info the user retrieves may be inacurate. We can however throttle the number of concurrent requests handled by the server side, so that the load on the DB is not as heavy. I\u0027ve added a small comment about it when talking about the Apache frontend.",
+      "parentUuid": "73a404cd_4a10e6bb",
+      "range": {
+        "startLine": 78,
+        "startChar": 33,
+        "endLine": 78,
+        "endChar": 51
+      },
+      "revId": "bc76f63eba95a95a110859fb8d3155688426a2b8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1e5c02ad_7ed5acd9",
@@ -192,6 +360,30 @@
       "writtenOn": "2025-03-27T08:46:22Z",
       "side": 1,
       "message": "OK",
+      "range": {
+        "startLine": 97,
+        "startChar": 0,
+        "endLine": 97,
+        "endChar": 70
+      },
+      "revId": "bc76f63eba95a95a110859fb8d3155688426a2b8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "754e6f89_98a4e5b3",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 8
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-04T07:20:01Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "1e5c02ad_7ed5acd9",
       "range": {
         "startLine": 97,
         "startChar": 0,
@@ -225,6 +417,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b03bd30_25553a5d",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 8
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-04T07:20:01Z",
+      "side": 1,
+      "message": "Yes, this is just a first idea, not the final choice, for the reason you mention mostly.",
+      "parentUuid": "487eea7e_3735d666",
+      "range": {
+        "startLine": 131,
+        "startChar": 42,
+        "endLine": 133,
+        "endChar": 23
+      },
+      "revId": "bc76f63eba95a95a110859fb8d3155688426a2b8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "16e9fe7c_fd442905",
@@ -238,6 +454,30 @@
       "writtenOn": "2025-03-27T08:46:22Z",
       "side": 1,
       "message": "This sounds like a good solution.",
+      "range": {
+        "startLine": 158,
+        "startChar": 0,
+        "endLine": 158,
+        "endChar": 69
+      },
+      "revId": "bc76f63eba95a95a110859fb8d3155688426a2b8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8e4f8289_cd7a7a4c",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 8
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-04T07:20:01Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "16e9fe7c_fd442905",
       "range": {
         "startLine": 158,
         "startChar": 0,
@@ -271,6 +511,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c5b1a3c5_58b78dce",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 8
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-04T07:20:01Z",
+      "side": 1,
+      "message": "This URI will be managed by the configuration file, we of course don\u0027t expect the users to know the address by hand, and they don\u0027t even need to know it. Therefore, it will be based around the configuration file. But if they do somehow know it, they\u0027ll be able to do this command specifically.",
+      "parentUuid": "3b5fb970_95dff05d",
+      "range": {
+        "startLine": 175,
+        "startChar": 13,
+        "endLine": 175,
+        "endChar": 39
+      },
+      "revId": "bc76f63eba95a95a110859fb8d3155688426a2b8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "613816f0_619ae1c3",
@@ -284,6 +548,30 @@
       "writtenOn": "2025-03-27T08:46:22Z",
       "side": 1,
       "message": "Not user friendly.",
+      "range": {
+        "startLine": 180,
+        "startChar": 15,
+        "endLine": 180,
+        "endChar": 24
+      },
+      "revId": "bc76f63eba95a95a110859fb8d3155688426a2b8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a84843e_1bf7d23c",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 8
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-04T07:20:01Z",
+      "side": 1,
+      "message": "Yeah this in particular really isn\u0027t, but it\u0027s allowed by URI\u0027s RFC, so it is doable",
+      "parentUuid": "613816f0_619ae1c3",
       "range": {
         "startLine": 180,
         "startChar": 15,
@@ -330,6 +618,54 @@
       "writtenOn": "2025-03-27T08:46:22Z",
       "side": 1,
       "message": "Good point.",
+      "range": {
+        "startLine": 185,
+        "startChar": 31,
+        "endLine": 185,
+        "endChar": 69
+      },
+      "revId": "bc76f63eba95a95a110859fb8d3155688426a2b8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "30ca6aab_8ab7a1ed",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 8
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-04T07:20:01Z",
+      "side": 1,
+      "message": "Currently there is only one configuration file, but yes we have plans to have multiple usable",
+      "parentUuid": "39b3344d_2a9ec1b2",
+      "range": {
+        "startLine": 185,
+        "startChar": 0,
+        "endLine": 185,
+        "endChar": 27
+      },
+      "revId": "bc76f63eba95a95a110859fb8d3155688426a2b8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "50bb9b9b_2bf8f68e",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 8
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-04T07:20:01Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "c22030fc_e281bc7d",
       "range": {
         "startLine": 185,
         "startChar": 31,
