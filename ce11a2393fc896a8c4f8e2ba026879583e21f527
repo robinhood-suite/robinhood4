@@ -22,6 +22,30 @@
       },
       "revId": "ce11a2393fc896a8c4f8e2ba026879583e21f527",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "faf3f7b4_e392cff1",
+        "filename": "librobinhood/src/backends/posix/parser.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 303,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-04T14:36:08Z",
+      "side": 1,
+      "message": "Maybe adding a list of seen predicates in a global list would work, but that\u0027s an issue for another time I\u0027d say",
+      "parentUuid": "9f59f03e_8b098c06",
+      "range": {
+        "startLine": 300,
+        "startChar": 0,
+        "endLine": 303,
+        "endChar": 1
+      },
+      "revId": "ce11a2393fc896a8c4f8e2ba026879583e21f527",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
