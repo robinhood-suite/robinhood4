@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "95b43370_0a394fc0",
+        "filename": "librobinhood/include/robinhood/plugin.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-04T14:39:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "16adc87f_5a5482fb",
+      "range": {
+        "startLine": 2,
+        "startChar": 17,
+        "endLine": 2,
+        "endChar": 21
+      },
+      "revId": "df5e45c39ae2bf7f4044d644debebccb2627138c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c19dc93b_7a9d702c",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-04-04T08:24:12Z",
       "side": 1,
       "message": "minor: For plugins, we return `RBH_TOKEN_ERROR`, it would be nice to uniform the return value between plugins and extensions",
+      "range": {
+        "startLine": 71,
+        "startChar": 11,
+        "endLine": 71,
+        "endChar": 28
+      },
+      "revId": "df5e45c39ae2bf7f4044d644debebccb2627138c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ca41d637_5927eebb",
+        "filename": "librobinhood/include/robinhood/plugin.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-04T14:39:27Z",
+      "side": 1,
+      "message": "The other functions also returns UNKNOWN now.",
+      "parentUuid": "c19dc93b_7a9d702c",
       "range": {
         "startLine": 71,
         "startChar": 11,
