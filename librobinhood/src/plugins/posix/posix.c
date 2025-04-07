@@ -1081,6 +1081,91 @@ destroy_info_sstack(void)
         rbh_sstack_destroy(info_sstack);
 }
 
+/**
+ * Output map will look like this for plugins:
+ * `{"type": "plugin", "plugin": "posix"}`
+ *
+ * And like this for extensions:
+ * `{"type": "extension", "plugin": "posix", "extension": "<extension_name>"}`
+ */
+static struct rbh_value_map
+get_source_map(bool is_plugin, const char *extension_name)
+{
+    int count = (is_plugin ? 2 : 3);
+    struct rbh_value_map full_map;
+    struct rbh_value_pair *pairs;
+    struct rbh_value *values;
+
+    pairs = RBH_SSTACK_PUSH(info_sstack, NULL, count * sizeof(*pairs));
+    values = RBH_SSTACK_PUSH(info_sstack, NULL, count * sizeof(*values));
+
+    pairs[0].key = "type";
+    values[0].type = RBH_VT_STRING;
+    values[0].string = (is_plugin ? "plugin" : "extension");
+    pairs[0].value = &values[0];
+
+    pairs[1].key = "plugin";
+    values[1].type = RBH_VT_STRING;
+    values[1].string = "posix";
+    pairs[1].value = &values[1];
+
+    if (!is_plugin) {
+        pairs[2].key = "extension";
+        values[2].type = RBH_VT_STRING;
+        values[2].string = extension_name;
+        pairs[2].value = &values[2];
+    }
+
+    full_map.pairs = pairs;
+    full_map.count = count;
+
+    return full_map;
+}
+
+/**
+ * Output pair will look like this:
+ * `"backend_source": [{<plugin or extension>}, {<plugin or extension>}, ...]`
+ */
+static int
+get_source_backend(const struct posix_backend *posix,
+                   struct rbh_value_pair *pair)
+{
+    struct rbh_value *backends_source_sequence;
+    struct rbh_value *backends;
+    int count = 0;
+    int i;
+
+    // Count all registered enrichers
+    while (posix->enrichers && posix->enrichers[count] != NULL)
+        count++;
+
+    count += 1; // And add the POSIX plugin itself
+
+    backends = RBH_SSTACK_PUSH(info_sstack, NULL, count * sizeof(*backends));
+    for (i = 0; i < count - 1; ++i) {
+        backends[i].type = RBH_VT_MAP;
+        backends[i].map = get_source_map(false,
+                                         posix->enrichers[i]->extension.name);
+    }
+
+    backends[i].type = RBH_VT_MAP;
+    backends[i].map = get_source_map(true, NULL);
+
+    backends_source_sequence = RBH_SSTACK_PUSH(
+        info_sstack,
+        NULL,
+        sizeof(*backends_source_sequence)
+    );
+    backends_source_sequence->type = RBH_VT_SEQUENCE;
+    backends_source_sequence->sequence.values = backends;
+    backends_source_sequence->sequence.count = count;
+
+    pair->key = "backend_source";
+    pair->value = backends_source_sequence;
+
+    return 0;
+}
+
 static struct rbh_value_map *
 posix_get_info(void *backend, int info_flags)
 {
@@ -1089,8 +1174,7 @@ posix_get_info(void *backend, int info_flags)
     struct rbh_value_pair *pairs;
     int tmp_flags = info_flags;
     int count = 0;
-
-    (void) posix;
+    int idx = 0;
 
     while (tmp_flags) {
         count += tmp_flags & 1;
@@ -1112,8 +1196,12 @@ posix_get_info(void *backend, int info_flags)
     if (!map_value)
         goto out;
 
+    if (info_flags & RBH_INFO_BACKEND_SOURCE)
+        if (get_source_backend(posix, &pairs[idx++]))
+            goto out;
+
     map_value->pairs = pairs;
-    map_value->count = count;
+    map_value->count = idx;
 
     return map_value;
 out:
