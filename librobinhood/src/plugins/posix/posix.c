@@ -1068,6 +1068,90 @@ destroy_info_sstack(void)
         rbh_sstack_destroy(info_sstack);
 }
 
+/**
+ * Output sequence will look like this:
+ * `["enricher1", "enricher2", ...]`
+ */
+struct rbh_value *
+get_enricher_sequence(const struct posix_backend *posix)
+{
+    struct rbh_value *enricher_values = NULL;
+    struct rbh_value *enricher_sequence;
+    int count = 0;
+
+    enricher_sequence = RBH_SSTACK_PUSH(info_sstack, NULL,
+                                        sizeof(*enricher_sequence));
+    enricher_sequence->type = RBH_VT_SEQUENCE;
+
+    if (posix->enrichers == NULL)
+        goto end;
+
+    while (posix->enrichers[count] != NULL)
+        count++;
+
+    if (count == 0)
+        goto end;
+
+    enricher_values = RBH_SSTACK_PUSH(info_sstack, NULL,
+                                      count * sizeof(*enricher_values));
+    count = 0;
+
+    while (posix->enrichers[count] != NULL) {
+        const struct rbh_posix_extension *extension = posix->enrichers[count];
+
+        enricher_values[count].type = RBH_VT_STRING;
+        enricher_values[count].string = RBH_SSTACK_PUSH(
+            info_sstack,
+            extension->extension.name,
+            strlen(extension->extension.name) + 1
+        );
+        count++;
+    }
+
+end:
+    enricher_sequence->sequence.count = count;
+    enricher_sequence->sequence.values = enricher_values;
+
+    return enricher_sequence;
+}
+
+/**
+ * Output pair will look like this:
+ * `"backend_source": [{"posix": <enricher_sequence>}]`
+ */
+int
+get_source_backend(const struct posix_backend *posix,
+                   struct rbh_value_pair *pair)
+{
+    struct rbh_value *backend_source_sequence;
+    struct rbh_value_pair *map_pair;
+    struct rbh_value *map_plugin;
+    struct rbh_value_map *map;
+
+    map_pair = RBH_SSTACK_PUSH(info_sstack, NULL, sizeof(*map_pair));
+    map_pair->value = get_enricher_sequence(posix);
+    map_pair->key = "posix";
+
+    map = RBH_SSTACK_PUSH(info_sstack, NULL, sizeof(*map));
+    map->pairs = map_pair;
+    map->count = 1;
+
+    map_plugin = RBH_SSTACK_PUSH(info_sstack, NULL, sizeof(*map_plugin));
+    map_plugin->type = RBH_VT_MAP;
+    map_plugin->map = *map;
+
+    backend_source_sequence = RBH_SSTACK_PUSH(info_sstack, NULL,
+                                              sizeof(*backend_source_sequence));
+    backend_source_sequence->type = RBH_VT_SEQUENCE;
+    backend_source_sequence->sequence.values = map_plugin;
+    backend_source_sequence->sequence.count = 1;
+
+    pair->key = "backend_source";
+    pair->value = backend_source_sequence;
+
+    return 0;
+}
+
 static struct rbh_value_map *
 posix_get_info(void *backend, int info_flags)
 {
@@ -1099,6 +1183,10 @@ posix_get_info(void *backend, int info_flags)
     map_value = RBH_SSTACK_PUSH(info_sstack, NULL, sizeof(*map_value));
     if (!map_value)
         goto out;
+
+    if (info_flags & RBH_INFO_BACKEND_SOURCE)
+        if (get_source_backend(posix, &pairs[idx++]))
+            goto out;
 
     map_value->pairs = pairs;
     map_value->count = idx;
