@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ce20d84_48a6d233",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-07T07:26:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e843d010_854bc627",
+      "range": {
+        "startLine": 9,
+        "startChar": 59,
+        "endLine": 9,
+        "endChar": 65
+      },
+      "revId": "88ddb9839867c70ca31cc8374773e5cedbf52dd9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1f5e2cd9_8657bda4",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-04-04T08:58:22Z",
       "side": 1,
       "message": "question: Lustre doesn\u0027t have a delete callback ?",
+      "range": {
+        "startLine": 27,
+        "startChar": 8,
+        "endLine": 27,
+        "endChar": 29
+      },
+      "revId": "88ddb9839867c70ca31cc8374773e5cedbf52dd9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "de613047_ebe88337",
+        "filename": "librobinhood/src/plugins/posix/enrichers/lustre/plugin.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-07T07:26:59Z",
+      "side": 1,
+      "message": "No need for it. Since it is a filesystem similar to POSIX, and we don\u0027t have a need to do specific actions in Lustre for removal, we might as well use POSIX\u0027s delete callback",
+      "parentUuid": "1f5e2cd9_8657bda4",
       "range": {
         "startLine": 27,
         "startChar": 8,
