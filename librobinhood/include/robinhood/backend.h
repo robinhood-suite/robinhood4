@@ -228,10 +228,11 @@ struct rbh_filter_output {
  * Determines which info will be displayed by rbh-info.
  */
 enum rbh_info {
-    RBH_CAPABILITIES_FLAG = 0x0000001U,
-    RBH_INFO_SIZE = 0x0000002U,
-    RBH_INFO_COUNT = 0x0000004U,
-    RBH_INFO_AVG_OBJ_SIZE = 0x0000008U
+    RBH_CAPABILITIES_FLAG   = 1 << 0,
+    RBH_INFO_SIZE           = 1 << 1,
+    RBH_INFO_COUNT          = 1 << 2,
+    RBH_INFO_AVG_OBJ_SIZE   = 1 << 3,
+    RBH_INFO_BACKEND_SOURCE = 1 << 4,
 };
 
 /**
