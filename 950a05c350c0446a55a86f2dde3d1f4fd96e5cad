@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8d8bbc39_7035fbbe",
+        "filename": "librobinhood/src/plugins/s3/s3_wrapper.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-04-07T07:37:21Z",
+      "side": 1,
+      "message": "style: remove empty line",
+      "revId": "950a05c350c0446a55a86f2dde3d1f4fd96e5cad",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "72a075df_9da414a1",
+        "filename": "librobinhood/src/plugins/s3/s3_wrapper.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-04-07T07:37:21Z",
+      "side": 1,
+      "message": "style: alignment",
+      "range": {
+        "startLine": 46,
+        "startChar": 34,
+        "endLine": 46,
+        "endChar": 37
+      },
+      "revId": "950a05c350c0446a55a86f2dde3d1f4fd96e5cad",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
