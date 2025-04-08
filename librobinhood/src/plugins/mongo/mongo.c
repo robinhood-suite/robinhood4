@@ -435,6 +435,46 @@ mongo_set_option(void *backend, unsigned int option, const void *data,
      |                               update                               |
      *--------------------------------------------------------------------*/
 
+static int
+insert_metadata_mongo_log(struct mongo_backend *mongo, double sync_duration,
+                          time_t end_time)
+{
+    bson_error_t error;
+    bson_t *filter;
+    bson_t *update;
+    bson_t *opts;
+    bool result;
+    bson_t *doc;
+    int rc = 0;
+
+    filter = BCON_NEW("_id", BCON_INT64(mongo->_time_id));
+    opts = BCON_NEW("upsert", BCON_BOOL(true));
+
+    update = bson_new();
+    doc = bson_new();
+
+    BSON_APPEND_INT64(doc, "sync_debut", mongo->_time_id);
+    BSON_APPEND_DOUBLE(doc, "sync_duration", sync_duration);
+    BSON_APPEND_INT64(doc, "sync_end", end_time);
+
+    BSON_APPEND_DOCUMENT(update, "$set", doc);
+
+    result = mongoc_collection_update_one(mongo->log, filter, update, opts,
+                                          NULL, &error);
+
+    bson_destroy(update);
+
+    if (!result) {
+        fprintf(stderr, "Upsert failed: %s\n", error.message);
+        rc = 1;
+    }
+
+    bson_destroy(filter);
+    bson_destroy(opts);
+
+    return rc;
+}
+
 static mongoc_bulk_operation_t *
 _mongoc_collection_create_bulk_operation(
         mongoc_collection_t *collection, bool ordered,
@@ -806,6 +846,72 @@ mongo_backend_report(void *backend, const struct rbh_filter *filter,
      *--------------------------------------------------------------------*/
 
 static int
+get_collection_sync(const struct mongo_backend *mongo, char *field_to_find,
+                    struct rbh_value_pair *pair)
+{
+    struct rbh_value *value;
+    mongoc_cursor_t *cursor;
+    bson_t *opts = NULL;
+    char _buffer[4096];
+    const bson_t *doc;
+    bson_iter_t iter;
+    size_t buffsize;
+    bson_t *filter;
+    char *buffer;
+    int rc = 0;
+
+    buffer = _buffer;
+    buffsize = sizeof(_buffer);
+    value = RBH_SSTACK_PUSH(info_sstack, NULL, sizeof(*value));
+
+    filter = bson_new();
+
+    if (strcmp(field_to_find, "last_sync") == 0) {
+        if (!opts)
+            opts = BCON_NEW("sort", "{", "_id", BCON_INT32(-1), "}");
+        cursor = mongoc_collection_find_with_opts(mongo->log, filter, opts,
+                                                  NULL);
+    }
+
+    if (strcmp(field_to_find, "first_sync") == 0) {
+        if (!opts)
+            opts = BCON_NEW("sort", "{", "_id", BCON_INT32(1), "}");
+        cursor = mongoc_collection_find_with_opts(mongo->log, filter, opts,
+                                                  NULL);
+    }
+
+    if (!cursor) {
+        fprintf(stderr, "Failed to create cursor for field:%s\n",
+                field_to_find);
+        goto out;
+    }
+
+    if (mongoc_cursor_next(cursor, &doc)) {
+        if (bson_iter_init(&iter, doc)) {
+            while (bson_iter_next(&iter)) {
+                if (!bson_iter_rbh_value(&iter, value, &buffer, &buffsize)) {
+                    rc = 1;
+                    goto out;
+                }
+
+                pair->key = field_to_find;
+                pair->value = value;
+            }
+        }
+    }
+
+out:
+    if (cursor)
+        mongoc_cursor_destroy(cursor);
+    if (opts)
+        bson_destroy(opts);
+    if (filter)
+        bson_destroy(filter);
+
+    return rc;
+}
+
+static int
 get_collection_count(const struct mongo_backend *mongo,
                      struct rbh_value_pair *pair)
 {
@@ -938,6 +1044,16 @@ mongo_backend_get_info(void *backend, int info_flags)
             goto out;
     }
 
+    if (info_flags & RBH_INFO_FIRST_SYNC) {
+        if (get_collection_sync(mongo, "first-sync", &pairs[idx++]) == 1)
+            goto out;
+    }
+
+    if (info_flags & RBH_INFO_LAST_SYNC) {
+        if (get_collection_sync(mongo, "last-sync", &pairs[idx++]) == 1)
+            goto out;
+    }
+
     map_value->pairs = pairs;
     map_value->count = idx;
 
@@ -958,6 +1074,9 @@ mongo_backend_destroy(void *backend)
     time_t end_time = time(NULL);
     __attribute__ ((unused))
         double sync_duration = difftime(end_time, mongo->_time_id);
+
+    if (insert_metadata_mongo_log(mongo, sync_duration, end_time) == 1)
+        printf("metadatas not inserted inside mongo->log \n");
 
     mongoc_collection_destroy(mongo->entries);
     mongoc_collection_destroy(mongo->info);
