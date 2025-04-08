@@ -71,6 +71,7 @@ subdir('rbh-sync')
 subdir('rbh-find')
 subdir('rbh-fsevents')
 subdir('rbh-report')
+subdir('rbh-policy')
 if get_option('lustre').enabled()
     subdir('rbh-find-lustre')
 endif
