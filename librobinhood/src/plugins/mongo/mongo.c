@@ -413,6 +413,7 @@ struct mongo_backend {
     mongoc_client_t *client;
     mongoc_collection_t *entries;
     mongoc_collection_t *info;
+    time_t _time_id;
 };
 
 static int
@@ -1846,6 +1847,7 @@ rbh_mongo_backend_new(const struct rbh_backend_plugin *self,
         return NULL;
     }
 
+    mongo->_time_id = time(NULL);
     mongo->backend = MONGO_BACKEND;
 
     return &mongo->backend;
