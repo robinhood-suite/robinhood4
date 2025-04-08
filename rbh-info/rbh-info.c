@@ -176,16 +176,33 @@ print_backend_list(struct rbh_list_node *head)
     struct rbh_node_info *node;
     struct rbh_node_info *tmp;
 
-    printf("List of installed backends:\n");
+    printf("List of installed backends and their extensions:\n");
 
     rbh_list_foreach_safe(head, node, tmp, list) {
         char *backend_name = node->name + strlen(LIB_RBH_PREFIX);
         char *suffix_backend_name = strchr(backend_name, '.');
+        char *backend_name_copy = strdup(backend_name);
 
         if (suffix_backend_name) {
             *suffix_backend_name = '\0';
-            if (rbh_backend_plugin_import(backend_name))
-                printf("- %s\n", backend_name);
+
+            char *first_part = strtok(backend_name_copy, "-");
+            char *second_part = strtok(NULL, "-");
+
+            if (second_part == NULL || strstr(second_part, "file")) {
+                if (rbh_backend_plugin_import(backend_name))
+                    printf("- %s\n", backend_name);
+            }
+
+            else {
+                const struct rbh_backend_plugin *backend_plugin;
+                if ((backend_plugin = rbh_backend_plugin_import(first_part))
+                    != NULL) {
+                    if (rbh_plugin_load_extension(&backend_plugin->plugin,
+                                                  second_part))
+                        printf("    - %s\n", second_part);
+                }
+            }
         }
 
         free(node->name);
