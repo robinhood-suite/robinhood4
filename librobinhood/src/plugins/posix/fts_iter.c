@@ -23,7 +23,7 @@ struct fts_iterator {
 
 static struct rbh_fsentry *
 fsentry_from_ftsent(FTSENT *ftsent, int statx_sync_type, size_t prefix_len,
-                    enricher_t *enrichers)
+                    const struct rbh_posix_extension **enrichers)
 {
     const struct rbh_value path = {
         .type = RBH_VT_STRING,
