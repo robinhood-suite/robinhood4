@@ -435,6 +435,46 @@ mongo_set_option(void *backend, unsigned int option, const void *data,
      |                               update                               |
      *--------------------------------------------------------------------*/
 
+static int
+insert_metadata_mongo_log(struct mongo_backend *mongo, double sync_duration,
+                          time_t end_time)
+{
+    bson_error_t error;
+    bson_t *filter;
+    bson_t *update;
+    bson_t *opts;
+    bool result;
+    bson_t *doc;
+    int rc = 0;
+
+    filter = BCON_NEW("_id", BCON_INT64(mongo->_time_id));
+    opts = BCON_NEW("upsert", BCON_BOOL(true));
+
+    update = bson_new();
+    doc = bson_new();
+
+    BSON_APPEND_INT64(doc, "sync_debut", mongo->_time_id);
+    BSON_APPEND_DOUBLE(doc, "sync_duration", sync_duration);
+    BSON_APPEND_INT64(doc, "sync_end", end_time);
+
+    BSON_APPEND_DOCUMENT(update, "$set", doc);
+
+    result = mongoc_collection_update_one(mongo->log, filter, update, opts,
+                                          NULL, &error);
+
+    bson_destroy(update);
+
+    if (!result) {
+        fprintf(stderr, "Upsert failed: %s\n", error.message);
+        rc = 1;
+    }
+
+    bson_destroy(filter);
+    bson_destroy(opts);
+
+    return rc;
+}
+
 static mongoc_bulk_operation_t *
 _mongoc_collection_create_bulk_operation(
         mongoc_collection_t *collection, bool ordered,
@@ -956,8 +996,14 @@ mongo_backend_destroy(void *backend)
 {
     struct mongo_backend *mongo = backend;
     time_t end_time = time(NULL);
-    __attribute__ ((unused))
-        double sync_duration = difftime(end_time, mongo->_time_id);
+    double sync_duration = difftime(end_time, mongo->_time_id);
+
+    if (mongo->need_update == SHOULD_UPDATE) {
+        if (insert_metadata_mongo_log(mongo, sync_duration, end_time) == 1)
+            printf("metadatas not inserted inside mongo->log \n");
+
+        mongo->need_update = END_UPDATE;
+    }
 
     mongoc_collection_destroy(mongo->entries);
     mongoc_collection_destroy(mongo->info);
