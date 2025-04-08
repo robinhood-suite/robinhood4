@@ -42,7 +42,7 @@ typedef struct rbh_mut_iterator *(*iter_new_t)(const char *, const char *, int);
 
 struct posix_iterator {
     struct rbh_mut_iterator iterator;
-    enricher_t *enrichers;
+    struct rbh_posix_extension *enrichers;
     int statx_sync_type;
     size_t prefix_len;
     bool skip_error;
@@ -87,7 +87,7 @@ struct posix_backend {
     struct rbh_mut_iterator *(*iter_new)(const char *, const char *, int);
     char *root;
     int statx_sync_type;
-    enricher_t *enrichers;
+    struct rbh_posix_extension *enrichers;
 };
 
 struct posix_branch_backend {
@@ -123,7 +123,7 @@ bool
 fsentry_from_any(struct fsentry_id_pair *fip, const struct rbh_value *path,
                  char *accpath, struct rbh_id *entry_id,
                  struct rbh_id *parent_id, char *name, int statx_sync_type,
-                 enricher_t *enrichers);
+                 struct rbh_posix_extension *enrichers);
 
 char *
 id2path(const char *root, const struct rbh_id *id);
