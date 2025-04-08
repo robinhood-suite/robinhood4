@@ -413,6 +413,7 @@ struct mongo_backend {
     mongoc_client_t *client;
     mongoc_collection_t *entries;
     mongoc_collection_t *info;
+    time_t _time_id;
 };
 
 static int
@@ -945,6 +946,9 @@ static void
 mongo_backend_destroy(void *backend)
 {
     struct mongo_backend *mongo = backend;
+    time_t end_time = time(NULL);
+    __attribute__ ((unused))
+        double sync_duration = difftime(end_time, mongo->_time_id);
 
     mongoc_collection_destroy(mongo->entries);
     mongoc_collection_destroy(mongo->info);
@@ -1846,6 +1850,7 @@ rbh_mongo_backend_new(const struct rbh_backend_plugin *self,
         return NULL;
     }
 
+    mongo->_time_id = time(NULL);
     mongo->backend = MONGO_BACKEND;
 
     return &mongo->backend;
