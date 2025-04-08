@@ -413,6 +413,7 @@ struct mongo_backend {
     mongoc_client_t *client;
     mongoc_collection_t *entries;
     mongoc_collection_t *info;
+    mongoc_collection_t *log;
     time_t _time_id;
 };
 
@@ -1726,6 +1727,13 @@ mongo_backend_init_from_uri(struct mongo_backend *mongo,
 
     mongo->info = mongoc_client_get_collection(mongo->client, db, "info");
     if (mongo->info == NULL) {
+        mongoc_client_destroy(mongo->client);
+        errno = ENOMEM;
+        return -1;
+    }
+
+    mongo->log = mongoc_client_get_collection(mongo->client, db, "log");
+    if (mongo->log == NULL) {
         mongoc_client_destroy(mongo->client);
         errno = ENOMEM;
         return -1;
