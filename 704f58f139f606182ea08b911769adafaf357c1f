@@ -79,6 +79,24 @@
       "message": "question: Why did you add a \u0027!\u0027 to the return value ?",
       "revId": "704f58f139f606182ea08b911769adafaf357c1f",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4ef21166_9136b868",
+        "filename": "librobinhood/src/plugins/s3/s3_wrapper.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1038646
+      },
+      "writtenOn": "2025-04-08T09:25:58Z",
+      "side": 1,
+      "message": "to return 0 if success and 1 otherwise. i though the create_metadata should return 1 only if there is a problem",
+      "parentUuid": "e4e03731_c609e3d4",
+      "revId": "704f58f139f606182ea08b911769adafaf357c1f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
