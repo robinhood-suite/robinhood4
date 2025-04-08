@@ -408,12 +408,18 @@ mongo_iterator_new(mongoc_cursor_t *cursor)
  |                             MONGO_BACKEND_OPS                              |
  *----------------------------------------------------------------------------*/
 
+enum should_update_log {
+    SHOULD_UPDATE = 0x00000001U,
+    END_UPDATE = 0x00000002U
+};
+
 struct mongo_backend {
     struct rbh_backend backend;
     mongoc_client_t *client;
     mongoc_collection_t *entries;
     mongoc_collection_t *info;
     mongoc_collection_t *log;
+    enum should_update_log need_update;
     time_t _time_id;
 };
 
@@ -629,6 +635,8 @@ mongo_backend_update(void *backend, struct rbh_iterator *fsevents)
     ssize_t count;
     bson_t reply;
     uint32_t rc;
+
+    mongo->need_update = SHOULD_UPDATE;
 
     if (fsevents == NULL)
         return 0;
