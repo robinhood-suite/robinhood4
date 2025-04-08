@@ -335,7 +335,7 @@ bool
 fsentry_from_any(struct fsentry_id_pair *fip, const struct rbh_value *path,
                  char *accpath, struct rbh_id *entry_id,
                  struct rbh_id *parent_id, char *name, int statx_sync_type,
-                 enricher_t *enrichers)
+                 const struct rbh_posix_extension **enrichers)
 {
     const int statx_flags =
         AT_EMPTY_PATH | AT_SYMLINK_NOFOLLOW | AT_NO_AUTOMOUNT;
@@ -486,11 +486,13 @@ fsentry_from_any(struct fsentry_id_pair *fip, const struct rbh_value *path,
             .inode_xattrs_count = &count,
         };
         int callback_xattrs_count;
+        int n_enricher = 0;
 
-        while (*enrichers != NULL) {
-            callback_xattrs_count = (*enrichers)(&info, 0, &pairs[count],
-                                                 pairs_count - count,
-                                                 values);
+        while (enrichers[n_enricher]) {
+            callback_xattrs_count = (*enrichers[n_enricher]->enrich)(&info, 0,
+                                                                     &pairs[count],
+                                                                     pairs_count - count,
+                                                                     values);
             if (callback_xattrs_count == -1) {
                 if (errno != ENOMEM) {
                     fprintf(stderr,
@@ -504,7 +506,7 @@ fsentry_from_any(struct fsentry_id_pair *fip, const struct rbh_value *path,
                 save_errno = errno;
                 goto out_clear_sstacks;
             }
-            enrichers++;
+            n_enricher++;
             count += callback_xattrs_count;
         }
     }
@@ -761,7 +763,6 @@ posix_backend_filter(
     if (posix_iter == NULL)
         return NULL;
 
-    posix_iter->enrichers = posix->enrichers;
     posix_iter->skip_error = options->skip_error;
 
     if (options->one)
@@ -930,22 +931,20 @@ static const struct rbh_backend POSIX_BRANCH_BACKEND = {
 };
 
 static int
-enrichers_count(enricher_t *enrichers)
+enrichers_count(const struct rbh_posix_extension **enrichers)
 {
     int count = 0;
 
-    while (*enrichers) {
-        enrichers++;
+    while (enrichers[count])
         count++;
-    }
 
     return count;
 }
 
-static enricher_t *
-dup_enrichers(enricher_t *enrichers)
+static const struct rbh_posix_extension **
+dup_enrichers(const struct rbh_posix_extension **enrichers)
 {
-    enricher_t *dup;
+    const struct rbh_posix_extension **dup;
     int count;
 
     if (!enrichers)
@@ -1039,20 +1038,21 @@ posix_get_attribute(void *backend, uint64_t flags,
 
 {
     struct posix_backend *posix = backend;
-    enricher_t *enrichers = posix->enrichers;
+    const struct rbh_posix_extension **enrichers = posix->enrichers;
     struct rbh_posix_enrich_ctx *ctx = arg;
+    int n_enricher = 0;
     size_t count = 0;
 
-    while (*enrichers != NULL) {
+    while (enrichers[n_enricher]) {
         size_t subcount;
 
-        subcount = (*enrichers)(&ctx->einfo, flags, &pairs[count],
-                                available_pairs - count,
-                                ctx->values);
+        subcount = (*enrichers[n_enricher]->enrich)(&ctx->einfo, flags, &pairs[count],
+                                                    available_pairs - count,
+                                                    ctx->values);
         if (subcount == -1)
             return -1;
         count += subcount;
-        enrichers++;
+        n_enricher++;
     }
 
     return count;
@@ -1158,7 +1158,7 @@ load_enrichers(const struct rbh_backend_plugin *self,
 
         if (extension->setup_enricher)
             extension->setup_enricher();
-        posix->enrichers[i] = extension->enrich;
+        posix->enrichers[i] = extension;
     }
     posix->enrichers[count - 1] = NULL;
 
