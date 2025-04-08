@@ -1058,6 +1058,45 @@ posix_get_attribute(void *backend, uint64_t flags,
     return count;
 }
 
+static struct rbh_value_map *
+posix_get_info(void *backend, int info_flags)
+{
+    struct posix_backend *posix = backend;
+    struct rbh_value_map *map_value;
+    struct rbh_value_pair *pairs;
+    int tmp_flags = info_flags;
+    int count = 0;
+    int idx = 0;
+
+    while (tmp_flags) {
+        count += tmp_flags & 1;
+        tmp_flags >>= 1;
+    }
+
+    if (info_sstack == NULL) {
+        info_sstack = rbh_sstack_new(MIN_VALUES_SSTACK_ALLOC *
+                                    (sizeof(struct rbh_value_map *)));
+        if (!info_sstack)
+            goto out;
+    }
+
+    pairs = RBH_SSTACK_PUSH(info_sstack, NULL, count * sizeof(*pairs));
+    if (!pairs)
+        goto out;
+
+    map_value = RBH_SSTACK_PUSH(info_sstack, NULL, sizeof(*map_value));
+    if (!map_value)
+        goto out;
+
+    map_value->pairs = pairs;
+    map_value->count = idx;
+
+    return map_value;
+out:
+    errno = EINVAL;
+    return NULL;
+}
+
 static const struct rbh_backend_operations POSIX_BACKEND_OPS = {
     .get_option = posix_backend_get_option,
     .set_option = posix_backend_set_option,
@@ -1065,6 +1104,7 @@ static const struct rbh_backend_operations POSIX_BACKEND_OPS = {
     .root = posix_root,
     .filter = posix_backend_filter,
     .get_attribute = posix_get_attribute,
+    .get_info = posix_get_info,
     .destroy = posix_backend_destroy,
 };
 
