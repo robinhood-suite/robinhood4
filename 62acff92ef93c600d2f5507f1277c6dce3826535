@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f321992_91ac477e",
+        "filename": "librobinhood/include/robinhood/plugins/backend.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 267,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-09T11:54:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2006b172_45099ae7",
+      "range": {
+        "startLine": 267,
+        "startChar": 46,
+        "endLine": 267,
+        "endChar": 51
+      },
+      "revId": "62acff92ef93c600d2f5507f1277c6dce3826535",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bc8f6127_d3bbab49",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-04-07T09:43:53Z",
       "side": 1,
       "message": "question: I thought we could only have one extension?",
+      "range": {
+        "startLine": 83,
+        "startChar": 8,
+        "endLine": 83,
+        "endChar": 60
+      },
+      "revId": "62acff92ef93c600d2f5507f1277c6dce3826535",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "13b4e485_66830498",
+        "filename": "rbh-find/src/core.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-09T11:54:17Z",
+      "side": 1,
+      "message": "No we can have as many as needed, for instance the lustre backend in the test conf has both lustre and retention as extensions.",
+      "parentUuid": "bc8f6127_d3bbab49",
       "range": {
         "startLine": 83,
         "startChar": 8,
