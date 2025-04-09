@@ -846,6 +846,57 @@ mongo_backend_report(void *backend, const struct rbh_filter *filter,
      *--------------------------------------------------------------------*/
 
 static int
+get_collection_sync(const struct mongo_backend *mongo, char *field_to_find,
+                    struct rbh_value_pair *pair)
+{
+    struct rbh_value *value;
+    mongoc_cursor_t *cursor;
+    bson_t *opts = NULL;
+    char _buffer[4096];
+    const bson_t *doc;
+    bson_iter_t iter;
+    size_t buffsize;
+    bson_t *filter;
+    char *buffer;
+    int rc = 0;
+
+    buffer = _buffer;
+    buffsize = sizeof(_buffer);
+    value = RBH_SSTACK_PUSH(info_sstack, NULL, sizeof(*value));
+
+    filter = bson_new();
+
+    if (strcmp(field_to_find, "last_sync") == 0) {
+        if (!opts)
+            opts = BCON_NEW("sort", "{", "_id", BCON_INT32(-1), "}");
+        cursor = mongoc_collection_find_with_opts(mongo->log, filter, opts,
+                                                  NULL);
+    }
+
+    if (strcmp(field_to_find, "first_sync") == 0) {
+        if (!opts)
+            opts = BCON_NEW("sort", "{", "_id", BCON_INT32(1), "}");
+        cursor = mongoc_collection_find_with_opts(mongo->log, filter, opts,
+                                                  NULL);
+    }
+
+    if (!cursor) {
+        fprintf(stderr, "Failed to create cursor for field:%s\n",
+                field_to_find);
+        goto out;
+    }
+
+    if (mongoc_cursor_next(cursor, &doc)) {
+        if (bson_iter_init(&iter, doc)) {
+            while (bson_iter_next(&iter)) {
+                if (!bson_iter_rbh_value(&iter, value, &buffer, &buffsize)) {
+                    rc = 1;
+                    goto out;
+                }
+
+                pair->key = field_to_find;
+
+static int
 get_collection_count(const struct mongo_backend *mongo,
                      struct rbh_value_pair *pair)
 {
@@ -975,6 +1026,16 @@ mongo_backend_get_info(void *backend, int info_flags)
 
     if (info_flags & RBH_INFO_SIZE) {
         if (!get_collection_stats(mongo, "size", &pairs[idx++]))
+            goto out;
+    }
+
+    if (info_flags & RBH_INFO_FIRST_SYNC) {
+        if (get_collection_sync(mongo, "first_sync", &pairs[idx++]))
+            goto out;
+    }
+
+    if (info_flags & RBH_INFO_LAST_SYNC) {
+        if (get_collection_sync(mongo, "last_sync", &pairs[idx++]))
             goto out;
     }
 
