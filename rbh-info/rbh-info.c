@@ -289,10 +289,15 @@ _get_collection_count(const struct rbh_value *value)
 static void
 _get_collection_sync(const struct rbh_value *value)
 {
-    assert(value->type == RBH_VT_SEQUENCE);
+    for (size_t i = 0 ; i < value->map.count ; i++) {
+        const struct rbh_value_pair sync_pair = value->map.pairs[i];
 
-    for (size_t i = 0 ; i < value->sequence.count ; i++)
-        printf("%s\n", value->sequence.values[i].string);
+        if (sync_pair.value->type == RBH_VT_BOOLEAN)
+            printf("%s: %d\n", sync_pair.key, sync_pair.value->boolean);
+
+        if (sync_pair.value->type == RBH_VT_INT64)
+            printf("%s: %ld\n", sync_pair.key, sync_pair.value->int64);
+    }
 }
 
 static struct rbh_info_fields INFO_FIELDS[] = {
