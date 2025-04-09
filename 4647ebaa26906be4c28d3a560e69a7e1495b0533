@@ -43,6 +43,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f5c7d96c_3a2c2f4f",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-04-09T09:40:23Z",
+      "side": 1,
+      "message": "question: The policy to execute are in the config ? Maybe I\u0027m wrong, but rbh will retrieve the policy to execute from the config. No needs to give them as arguments",
+      "range": {
+        "startLine": 18,
+        "startChar": 23,
+        "endLine": 18,
+        "endChar": 45
+      },
+      "revId": "4647ebaa26906be4c28d3a560e69a7e1495b0533",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1a876d27_9bf4e7bf",
         "filename": "designs/rbh-policy.rst",
         "patchSetId": 1
@@ -135,6 +158,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2bb63762_05ac4e12",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-04-09T09:40:23Z",
+      "side": 1,
+      "message": "question: From what I understand, you planned to do the configuration in Python. Will there be an RBH Python API to call functions from RBH that are written in C?",
+      "range": {
+        "startLine": 134,
+        "startChar": 44,
+        "endLine": 134,
+        "endChar": 58
+      },
+      "revId": "4647ebaa26906be4c28d3a560e69a7e1495b0533",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "fcb6427c_bbdcd887",
         "filename": "designs/rbh-policy.rst",
         "patchSetId": 1
@@ -174,6 +220,29 @@
         "startChar": 54,
         "endLine": 190,
         "endChar": 72
+      },
+      "revId": "4647ebaa26906be4c28d3a560e69a7e1495b0533",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8ce3eda7_4996d04a",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-04-09T09:40:23Z",
+      "side": 1,
+      "message": "question: It is seconds, minutes, hours ? Will be there a format to specify if this is minutes or days for exemple ?",
+      "range": {
+        "startLine": 220,
+        "startChar": 40,
+        "endLine": 220,
+        "endChar": 42
       },
       "revId": "4647ebaa26906be4c28d3a560e69a7e1495b0533",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
@@ -243,6 +312,29 @@
         "startChar": 0,
         "endLine": 248,
         "endChar": 13
+      },
+      "revId": "4647ebaa26906be4c28d3a560e69a7e1495b0533",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1000dd42_85972497",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 251,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-04-09T09:40:23Z",
+      "side": 1,
+      "message": "minor: use a generic path",
+      "range": {
+        "startLine": 251,
+        "startChar": 22,
+        "endLine": 251,
+        "endChar": 41
       },
       "revId": "4647ebaa26906be4c28d3a560e69a7e1495b0533",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
