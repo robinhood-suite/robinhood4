@@ -22,6 +22,30 @@
       },
       "revId": "2ac7a999a7a3c66b6c4a088cb64c4d38b0087054",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3b58df00_502c4e79",
+        "filename": "librobinhood/include/robinhood/plugins/backend.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-09T12:05:54Z",
+      "side": 1,
+      "message": "It corresponds to the %H directive of find, which prints the `Starting-point under which file was found.` For us, we decided it translates to the URI the entry has been found it",
+      "parentUuid": "6b9de440_98589af6",
+      "range": {
+        "startLine": 249,
+        "startChar": 25,
+        "endLine": 249,
+        "endChar": 45
+      },
+      "revId": "2ac7a999a7a3c66b6c4a088cb64c4d38b0087054",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
