@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2b01582d_9fdc58ca",
+        "filename": "librobinhood/src/plugins/mpi_file/mpi_file.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 323,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-04-09T09:31:26Z",
+      "side": 1,
+      "message": "question: why this code is added in this patch? it will not work without?",
+      "range": {
+        "startLine": 318,
+        "startChar": 8,
+        "endLine": 323,
+        "endChar": 21
+      },
+      "revId": "ad7dad3624d512131e84fc2465a8c6a7a074680b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
