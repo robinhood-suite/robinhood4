@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1937d871_67edba4c",
+        "filename": "retention/build_retention.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-09T15:21:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2706a135_efe41d31",
+      "range": {
+        "startLine": 17,
+        "startChar": 22,
+        "endLine": 17,
+        "endChar": 45
+      },
+      "revId": "4521d7649861c81af303db23d80876e62eec8b33",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fa3ecab1_67198683",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-03-17T12:05:28Z",
       "side": 1,
       "message": "typo: is to ensure",
+      "range": {
+        "startLine": 18,
+        "startChar": 22,
+        "endLine": 18,
+        "endChar": 31
+      },
+      "revId": "4521d7649861c81af303db23d80876e62eec8b33",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "20a977b8_0b7a92a6",
+        "filename": "retention/build_retention.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-09T15:21:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa3ecab1_67198683",
       "range": {
         "startLine": 18,
         "startChar": 22,
@@ -70,6 +118,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "70a1d2ab_a98b3b11",
+        "filename": "retention/build_retention.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-09T15:21:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "151d527d_40907a51",
+      "range": {
+        "startLine": 22,
+        "startChar": 55,
+        "endLine": 22,
+        "endChar": 61
+      },
+      "revId": "4521d7649861c81af303db23d80876e62eec8b33",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "49ae4c50_6598d852",
@@ -83,6 +155,30 @@
       "writtenOn": "2025-03-17T12:05:28Z",
       "side": 1,
       "message": "style: not sure about how this structure is written\n\nDon\u0027t you need to init a code section here?\n\nThe path can be written in the first sentence.",
+      "range": {
+        "startLine": 43,
+        "startChar": 0,
+        "endLine": 60,
+        "endChar": 37
+      },
+      "revId": "4521d7649861c81af303db23d80876e62eec8b33",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "937a2d0d_4b75477c",
+        "filename": "retention/build_retention.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-09T15:21:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "49ae4c50_6598d852",
       "range": {
         "startLine": 43,
         "startChar": 0,
@@ -116,6 +212,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4f9bf74e_7533fa1e",
+        "filename": "retention/build_retention.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-09T15:21:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3abcce96_cbd5d29e",
+      "range": {
+        "startLine": 74,
+        "startChar": 10,
+        "endLine": 74,
+        "endChar": 14
+      },
+      "revId": "4521d7649861c81af303db23d80876e62eec8b33",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a67034fe_52c178ab",
@@ -129,6 +249,30 @@
       "writtenOn": "2025-03-17T12:05:28Z",
       "side": 1,
       "message": "typo: commands",
+      "range": {
+        "startLine": 75,
+        "startChar": 0,
+        "endLine": 75,
+        "endChar": 7
+      },
+      "revId": "4521d7649861c81af303db23d80876e62eec8b33",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "02840d31_50b2b6ac",
+        "filename": "retention/build_retention.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-09T15:21:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a67034fe_52c178ab",
       "range": {
         "startLine": 75,
         "startChar": 0,
@@ -162,6 +306,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "95d6e272_fd76da9d",
+        "filename": "retention/build_retention.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-09T15:21:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3057225c_e8e69241",
+      "range": {
+        "startLine": 83,
+        "startChar": 27,
+        "endLine": 83,
+        "endChar": 36
+      },
+      "revId": "4521d7649861c81af303db23d80876e62eec8b33",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e83287b0_30492d32",
@@ -175,6 +343,30 @@
       "writtenOn": "2025-03-17T12:05:28Z",
       "side": 1,
       "message": "typo: on their files?",
+      "range": {
+        "startLine": 109,
+        "startChar": 30,
+        "endLine": 109,
+        "endChar": 45
+      },
+      "revId": "4521d7649861c81af303db23d80876e62eec8b33",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c4e07daf_51d1fbb5",
+        "filename": "retention/build_retention.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-09T15:21:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e83287b0_30492d32",
       "range": {
         "startLine": 109,
         "startChar": 30,
@@ -208,6 +400,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "eac2d639_42a1e9b9",
+        "filename": "retention/run_retention.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-09T15:21:35Z",
+      "side": 1,
+      "message": "For retention it was, now it\u0027s not, done.",
+      "parentUuid": "54dd2058_7c28d202",
+      "range": {
+        "startLine": 23,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 6
+      },
+      "revId": "4521d7649861c81af303db23d80876e62eec8b33",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "852500c3_6897f745",
@@ -231,6 +447,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "371a5640_d38840a8",
+        "filename": "retention/run_retention.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-09T15:21:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "852500c3_6897f745",
+      "range": {
+        "startLine": 176,
+        "startChar": 48,
+        "endLine": 176,
+        "endChar": 59
+      },
+      "revId": "4521d7649861c81af303db23d80876e62eec8b33",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d7be3f0a_09a0bb94",
@@ -244,6 +484,30 @@
       "writtenOn": "2025-03-17T12:05:28Z",
       "side": 1,
       "message": "typo: duplicate",
+      "range": {
+        "startLine": 201,
+        "startChar": 14,
+        "endLine": 201,
+        "endChar": 27
+      },
+      "revId": "4521d7649861c81af303db23d80876e62eec8b33",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ff11e71_230ea3a0",
+        "filename": "retention/run_retention.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-09T15:21:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d7be3f0a_09a0bb94",
       "range": {
         "startLine": 201,
         "startChar": 14,
