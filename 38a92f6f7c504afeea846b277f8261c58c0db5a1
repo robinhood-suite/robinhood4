@@ -22,6 +22,30 @@
       },
       "revId": "38a92f6f7c504afeea846b277f8261c58c0db5a1",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b36e3909_f45682df",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-09T12:09:58Z",
+      "side": 1,
+      "message": "It is removed because the function has been moved elsewhere in a previous patch, but we forgot to remove it from the header.\nAdded a comment about that",
+      "parentUuid": "9b4328f6_7506c696",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 15
+      },
+      "revId": "38a92f6f7c504afeea846b277f8261c58c0db5a1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
