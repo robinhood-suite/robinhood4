@@ -120,6 +120,10 @@ info_translate(const struct rbh_backend_plugin *plugin)
     }
     if (info & RBH_INFO_SIZE)
         printf("-s: size of entries collection\n");
+    if (info & RBH_INFO_FIRST_SYNC)
+        printf("-f: info about first_sync\n");
+    if (info & RBH_INFO_LAST_SYNC)
+        printf("-y: info about last_sync\n");
 }
 
 static int
@@ -133,7 +137,9 @@ help()
         "a given backend\n"
         "  -c --count                Show the amount of document inside a "
         "given backend\n"
-        "  -s --size                 Show the size of entries collection\n\n"
+        "  -s --size                 Show the size of entries collection\n"
+        "  -f --first-sync           Show infos about the first sync done\n"
+        "  -y --last-sync            Show infos about the last sync done\n\n"
         "Arguments:\n"
         "Usage:"
         "  %s -arguments General informations about rbh-info command\n"
@@ -280,10 +286,21 @@ _get_collection_count(const struct rbh_value *value)
     printf("%ld\n", value->int64);
 }
 
+static void
+_get_collection_sync(const struct rbh_value *value)
+{
+    assert(value->type == RBH_VT_SEQUENCE);
+
+    for (size_t i = 0 ; i < value->sequence.count ; i++)
+        printf("%s\n", value->sequence.values[i].string);
+}
+
 static struct rbh_info_fields INFO_FIELDS[] = {
     { "average_object_size", _get_collection_avg_obj_size },
     { "count", _get_collection_count },
     { "size", _get_collection_size },
+    { "first_sync", _get_collection_sync},
+    { "last_sync", _get_collection_sync},
 };
 
 void
@@ -351,7 +368,7 @@ main(int argc, char **argv)
         return EINVAL;
     }
 
-    while ((option = getopt_long(argc, argv, "hlsca", LONG_OPTIONS,
+    while ((option = getopt_long(argc, argv, "hlscafy", LONG_OPTIONS,
                                  NULL)) != -1) {
         switch (option) {
         case 'h':
@@ -368,6 +385,12 @@ main(int argc, char **argv)
             break;
         case 'a':
             flags |= RBH_INFO_AVG_OBJ_SIZE;
+            break;
+        case 'f':
+            flags |= RBH_INFO_FIRST_SYNC;
+            break;
+         case 'y':
+            flags |= RBH_INFO_LAST_SYNC;
             break;
         default :
             fprintf(stderr, "Unrecognized option\n");
