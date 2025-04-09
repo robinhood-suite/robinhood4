@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "30eaa149_c343f21e",
+        "filename": "librobinhood/include/robinhood/fsentry.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-09T11:56:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b721f70a_2eb4f81f",
+      "range": {
+        "startLine": 159,
+        "startChar": 34,
+        "endLine": 159,
+        "endChar": 37
+      },
+      "revId": "3e494b2d2653453b0e28d4a34b183926c4c77a1b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1357b3b0_6750f319",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-04-08T11:57:36Z",
       "side": 1,
       "message": "typo: whose",
+      "range": {
+        "startLine": 177,
+        "startChar": 34,
+        "endLine": 177,
+        "endChar": 39
+      },
+      "revId": "3e494b2d2653453b0e28d4a34b183926c4c77a1b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9721d9aa_4ab10b40",
+        "filename": "librobinhood/include/robinhood/fsentry.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-09T11:56:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1357b3b0_6750f319",
       "range": {
         "startLine": 177,
         "startChar": 34,
