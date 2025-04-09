@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "7bd8bbe9_127a84ab",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-09T12:03:18Z",
+      "side": 1,
+      "message": "ATM no, but for instance Lustre could have a `delete` operation that would also remove the entry and its archived copy if it is, whereas a basic `delete` wouldn\u0027t rm the copy.\n\nFor the retention, off the top of my head, the `rbh-update-retention` tool could be done with the `delete` operation. Not necessary for now (or even if we want to do it), but it is doable",
+      "parentUuid": "ec7d1dd9_7fedd6e5",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 9
+      },
+      "revId": "69503af5c49f45d598b8b2504697ba673447fe09",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "3ada0bbb_3d4e77b0",
