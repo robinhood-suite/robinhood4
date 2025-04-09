@@ -1,5 +1,5 @@
 /* This file is part of RobinHood 4
- * Copyright (C) 2024 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifer: LGPL-3.0-or-later
@@ -397,6 +397,93 @@ mpi_file_backend_filter(
 }
 
     /*--------------------------------------------------------------------*
+     |                         get_info()                                 |
+     *--------------------------------------------------------------------*/
+
+#define MIN_VALUES_SSTACK_ALLOC (1 << 6)
+static __thread struct rbh_sstack *info_sstack;
+
+static void __attribute__((destructor))
+destroy_info_sstack(void)
+{
+    if (info_sstack)
+        rbh_sstack_destroy(info_sstack);
+}
+
+static const struct rbh_value RBH_MPI_EXTENSIONS = {
+    .type = RBH_VT_SEQUENCE,
+    .sequence = {
+        .values = NULL,
+        .count = 0,
+    },
+};
+
+static const struct rbh_value_pair RBH_MPI_SOURCE_PAIR = {
+    .key = "mpi-file",
+    .value = &RBH_MPI_EXTENSIONS,
+};
+
+static const struct rbh_value RBH_MPI_SOURCE_MAP = {
+    .type = RBH_VT_MAP,
+    .map = {
+        .pairs = &RBH_MPI_SOURCE_PAIR,
+        .count = 1,
+    },
+};
+
+static const struct rbh_value RBH_MPI_BACKEND_SEQUENCE = {
+    .type = RBH_VT_SEQUENCE,
+    .sequence = {
+        .values = &RBH_MPI_SOURCE_MAP,
+        .count = 1,
+    },
+};
+
+static struct rbh_value_map *
+mpi_file_backend_get_info(__attribute__((unused)) void *backend, int info_flags)
+{
+    struct rbh_value_map *map_value;
+    struct rbh_value_pair *pairs;
+    int tmp_flags = info_flags;
+    int count = 0;
+    int idx = 0;
+
+    while (tmp_flags) {
+        count += tmp_flags & 1;
+        tmp_flags >>= 1;
+    }
+
+    if (info_sstack == NULL) {
+        info_sstack = rbh_sstack_new(MIN_VALUES_SSTACK_ALLOC *
+                                     (sizeof(struct rbh_value_map *)));
+        if (!info_sstack)
+            goto out;
+    }
+
+    pairs = RBH_SSTACK_PUSH(info_sstack, NULL, count * sizeof(*pairs));
+    if (!pairs)
+        goto out;
+
+    map_value = RBH_SSTACK_PUSH(info_sstack, NULL, sizeof(*map_value));
+    if (!map_value)
+        goto out;
+
+    if (info_flags & RBH_INFO_BACKEND_SOURCE) {
+        pairs[idx].key = "backend_source";
+        pairs[idx++].value = &RBH_MPI_BACKEND_SEQUENCE;
+    }
+
+    map_value->pairs = pairs;
+    map_value->count = idx;
+
+    return map_value;
+
+out:
+    errno = EINVAL;
+    return NULL;
+}
+
+    /*--------------------------------------------------------------------*
      |                          destroy()                                 |
      *--------------------------------------------------------------------*/
 
@@ -418,6 +505,7 @@ mpi_file_backend_destroy(void *backend)
 static const struct rbh_backend_operations MPI_FILE_BACKEND_OPS = {
     .update = mpi_file_backend_update,
     .filter = mpi_file_backend_filter,
+    .get_info = mpi_file_backend_get_info,
     .destroy = mpi_file_backend_destroy,
 };
 
