@@ -11,6 +11,7 @@ non_parallel_integration_tests = [
 parallel_integration_tests = [
   'get_info',
   'test_posix',
+  'test_mongo',
 ]
 
 if liblustre.found()
