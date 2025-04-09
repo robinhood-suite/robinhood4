@@ -41,6 +41,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e287f148_6110df83",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-04-09T14:42:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "38b08206_7a047904",
+      "range": {
+        "startLine": 14,
+        "startChar": 11,
+        "endLine": 14,
+        "endChar": 16
+      },
+      "revId": "4647ebaa26906be4c28d3a560e69a7e1495b0533",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f5c7d96c_3a2c2f4f",
@@ -54,6 +78,30 @@
       "writtenOn": "2025-04-09T09:40:23Z",
       "side": 1,
       "message": "question: The policy to execute are in the config ? Maybe I\u0027m wrong, but rbh will retrieve the policy to execute from the config. No needs to give them as arguments",
+      "range": {
+        "startLine": 18,
+        "startChar": 23,
+        "endLine": 18,
+        "endChar": 45
+      },
+      "revId": "4647ebaa26906be4c28d3a560e69a7e1495b0533",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "91c782d5_d642a629",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-04-09T14:42:28Z",
+      "side": 1,
+      "message": "We will have two choices, the first is to execute a policy by specifying it\u0027s name with the command and the second choice will be to let the daemon do it based on the trigger. The command is a way to \"force\" the execution of a policy by the admin.\nBut in both cases, the policies are defined in the configuration file yes.",
+      "parentUuid": "f5c7d96c_3a2c2f4f",
       "range": {
         "startLine": 18,
         "startChar": 23,
@@ -87,6 +135,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3941fad8_37c8d626",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-04-09T14:42:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a876d27_9bf4e7bf",
+      "range": {
+        "startLine": 25,
+        "startChar": 62,
+        "endLine": 25,
+        "endChar": 68
+      },
+      "revId": "4647ebaa26906be4c28d3a560e69a7e1495b0533",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0240a0d1_223b336b",
@@ -100,6 +172,30 @@
       "writtenOn": "2025-04-07T07:54:42Z",
       "side": 1,
       "message": "minor: already said in the previous section, also not sure this is a goal",
+      "range": {
+        "startLine": 29,
+        "startChar": 0,
+        "endLine": 30,
+        "endChar": 72
+      },
+      "revId": "4647ebaa26906be4c28d3a560e69a7e1495b0533",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "19e79a2e_8b85c235",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-04-09T14:42:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0240a0d1_223b336b",
       "range": {
         "startLine": 29,
         "startChar": 0,
@@ -135,6 +231,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "bdd04106_3e64fa20",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-04-09T14:42:28Z",
+      "side": 1,
+      "message": "I modified the design to add a part explaining the choice of python in overview",
+      "parentUuid": "6f011fa1_fd8c252b",
+      "range": {
+        "startLine": 31,
+        "startChar": 0,
+        "endLine": 32,
+        "endChar": 45
+      },
+      "revId": "4647ebaa26906be4c28d3a560e69a7e1495b0533",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "92157dc4_095180f6",
         "filename": "designs/rbh-policy.rst",
         "patchSetId": 1
@@ -146,6 +266,30 @@
       "writtenOn": "2025-04-07T07:54:42Z",
       "side": 1,
       "message": "major: what is this in Python? a variable? a field? how does it work?",
+      "range": {
+        "startLine": 71,
+        "startChar": 21,
+        "endLine": 71,
+        "endChar": 25
+      },
+      "revId": "4647ebaa26906be4c28d3a560e69a7e1495b0533",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3a9f7a69_e0324eee",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-04-09T14:42:28Z",
+      "side": 1,
+      "message": "You can see the following patch for more details, but it is an instance of a ConfigCondition class that defines the operator overloads to be able to have this kind of syntax in the python file",
+      "parentUuid": "92157dc4_095180f6",
       "range": {
         "startLine": 71,
         "startChar": 21,
@@ -181,6 +325,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0cd1120c_a7a98c32",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-04-09T14:42:28Z",
+      "side": 1,
+      "message": "To call C-coded functions in Python, you can use the ctype library, which allows you to load .so files and thus use C functions in Python code.\nAnother solution is to use Cpython to compile C code into a Python module (not necessarily the easier of the two).",
+      "parentUuid": "2bb63762_05ac4e12",
+      "range": {
+        "startLine": 134,
+        "startChar": 44,
+        "endLine": 134,
+        "endChar": 58
+      },
+      "revId": "4647ebaa26906be4c28d3a560e69a7e1495b0533",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "fcb6427c_bbdcd887",
         "filename": "designs/rbh-policy.rst",
         "patchSetId": 1
@@ -192,6 +360,30 @@
       "writtenOn": "2025-04-07T07:54:42Z",
       "side": 1,
       "message": "style: invert the code and the explanation",
+      "range": {
+        "startLine": 151,
+        "startChar": 9,
+        "endLine": 152,
+        "endChar": 60
+      },
+      "revId": "4647ebaa26906be4c28d3a560e69a7e1495b0533",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "17a1f0de_2c07b114",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-04-09T14:42:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fcb6427c_bbdcd887",
       "range": {
         "startLine": 151,
         "startChar": 9,
@@ -225,6 +417,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e0c3432e_2de2e6b0",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-04-09T14:42:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "86cc2cfb_64551320",
+      "range": {
+        "startLine": 190,
+        "startChar": 54,
+        "endLine": 190,
+        "endChar": 72
+      },
+      "revId": "4647ebaa26906be4c28d3a560e69a7e1495b0533",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8ce3eda7_4996d04a",
@@ -238,6 +454,30 @@
       "writtenOn": "2025-04-09T09:40:23Z",
       "side": 1,
       "message": "question: It is seconds, minutes, hours ? Will be there a format to specify if this is minutes or days for exemple ?",
+      "range": {
+        "startLine": 220,
+        "startChar": 40,
+        "endLine": 220,
+        "endChar": 42
+      },
+      "revId": "4647ebaa26906be4c28d3a560e69a7e1495b0533",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "57ba6b2d_0e0db743",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-04-09T14:42:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8ce3eda7_4996d04a",
       "range": {
         "startLine": 220,
         "startChar": 40,
@@ -271,6 +511,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b54ddebc_61424ba3",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-04-09T14:42:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "98869d55_d1bb3fbb",
+      "range": {
+        "startLine": 187,
+        "startChar": 0,
+        "endLine": 224,
+        "endChar": 5
+      },
+      "revId": "4647ebaa26906be4c28d3a560e69a7e1495b0533",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d7750298_7dcff2e3",
@@ -284,6 +548,30 @@
       "writtenOn": "2025-04-07T07:54:42Z",
       "side": 1,
       "message": "minor: defines\n\nThe automation is not described yet, and will not work magically from the definition",
+      "range": {
+        "startLine": 226,
+        "startChar": 12,
+        "endLine": 226,
+        "endChar": 21
+      },
+      "revId": "4647ebaa26906be4c28d3a560e69a7e1495b0533",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1654b3f6_a27e0ce2",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-04-09T14:42:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d7750298_7dcff2e3",
       "range": {
         "startLine": 226,
         "startChar": 12,
@@ -317,6 +605,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dbd10c09_7046af42",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-04-09T14:42:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2dff019f_7115257a",
+      "range": {
+        "startLine": 245,
+        "startChar": 0,
+        "endLine": 248,
+        "endChar": 13
+      },
+      "revId": "4647ebaa26906be4c28d3a560e69a7e1495b0533",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1000dd42_85972497",
@@ -330,6 +642,30 @@
       "writtenOn": "2025-04-09T09:40:23Z",
       "side": 1,
       "message": "minor: use a generic path",
+      "range": {
+        "startLine": 251,
+        "startChar": 22,
+        "endLine": 251,
+        "endChar": 41
+      },
+      "revId": "4647ebaa26906be4c28d3a560e69a7e1495b0533",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "097a31c5_bdd67be7",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 251,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-04-09T14:42:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1000dd42_85972497",
       "range": {
         "startLine": 251,
         "startChar": 22,
