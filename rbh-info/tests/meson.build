@@ -27,3 +27,9 @@ foreach t: parallel_integration_tests
     e = find_program(t + '.bash')
     test(t, e, env: backend_path_env, suite: 'rbh-info', is_parallel: true)
 endforeach
+
+if test_mfu
+    e = find_program('test_mpi_file.bash')
+    test('test_mpi_file', e, timeout: 120,
+         env: backend_path_env_for_mpi_tests, suite: 'rbh-info')
+endif
