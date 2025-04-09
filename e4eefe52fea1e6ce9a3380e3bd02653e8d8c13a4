@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "83090ea8_bc247eaf",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 9
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-04-09T08:59:33Z",
+      "side": 1,
+      "message": "typo: to remove",
+      "range": {
+        "startLine": 11,
+        "startChar": 66,
+        "endLine": 11,
+        "endChar": 68
+      },
+      "revId": "e4eefe52fea1e6ce9a3380e3bd02653e8d8c13a4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f4f47623_3f8f96b6",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 9
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-04-09T08:59:33Z",
+      "side": 1,
+      "message": "typo: another",
+      "range": {
+        "startLine": 54,
+        "startChar": 33,
+        "endLine": 54,
+        "endChar": 42
+      },
+      "revId": "e4eefe52fea1e6ce9a3380e3bd02653e8d8c13a4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
