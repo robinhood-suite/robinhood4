@@ -46,6 +46,30 @@
       },
       "revId": "2ac7a999a7a3c66b6c4a088cb64c4d38b0087054",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d4712f0f_84c5fe65",
+        "filename": "librobinhood/include/robinhood/plugins/backend.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-04-10T12:55:24Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "3b58df00_502c4e79",
+      "range": {
+        "startLine": 249,
+        "startChar": 25,
+        "endLine": 249,
+        "endChar": 45
+      },
+      "revId": "2ac7a999a7a3c66b6c4a088cb64c4d38b0087054",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
