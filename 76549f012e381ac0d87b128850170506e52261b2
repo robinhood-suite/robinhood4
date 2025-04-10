@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1fb0e7cb_894db178",
+        "filename": "rbh-info/rbh-info.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-04-10T07:35:03Z",
+      "side": 1,
+      "message": "minor: avg-obj-size",
+      "range": {
+        "startLine": 134,
+        "startChar": 16,
+        "endLine": 134,
+        "endChar": 28
+      },
+      "revId": "76549f012e381ac0d87b128850170506e52261b2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "756aa262_6291f644",
+        "filename": "rbh-info/rbh-info.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-04-10T07:35:03Z",
+      "side": 1,
+      "message": "minor: backend-source",
+      "range": {
+        "startLine": 136,
+        "startChar": 16,
+        "endLine": 136,
+        "endChar": 30
+      },
+      "revId": "76549f012e381ac0d87b128850170506e52261b2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd462b25_0d13ad0d",
+        "filename": "rbh-info/rbh-info.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-04-10T07:35:03Z",
+      "side": 1,
+      "message": "question: I don\u0027t understand the purpose of this code, why not directly print the plugin/extension only if the key is \"plugin\" or \"extension\".",
+      "range": {
+        "startLine": 298,
+        "startChar": 8,
+        "endLine": 308,
+        "endChar": 44
+      },
+      "revId": "76549f012e381ac0d87b128850170506e52261b2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
