@@ -420,6 +420,7 @@ struct mongo_backend {
     mongoc_collection_t *info;
     mongoc_collection_t *log;
     enum should_update_log need_update;
+    ssize_t entries_count;
     time_t _time_id;
 };
 
@@ -437,7 +438,7 @@ mongo_set_option(void *backend, unsigned int option, const void *data,
 
 static int
 insert_metadata_mongo_log(struct mongo_backend *mongo, double sync_duration,
-                          time_t end_time)
+                          time_t end_time, ssize_t entries_count)
 {
     bson_error_t error;
     bson_t *filter;
@@ -456,6 +457,7 @@ insert_metadata_mongo_log(struct mongo_backend *mongo, double sync_duration,
     BSON_APPEND_INT64(doc, "sync_debut", mongo->_time_id);
     BSON_APPEND_DOUBLE(doc, "sync_duration", sync_duration);
     BSON_APPEND_INT64(doc, "sync_end", end_time);
+    BSON_APPEND_INT64(doc, "entries_count", (int64_t)entries_count);
 
     BSON_APPEND_DOCUMENT(update, "$set", doc);
 
@@ -721,6 +723,8 @@ mongo_backend_update(void *backend, struct rbh_iterator *fsevents)
         return -1;
     }
     bson_destroy(&reply);
+
+    mongo->entries_count += count;
 
     return count;
 }
@@ -1085,7 +1089,8 @@ mongo_backend_destroy(void *backend)
     double sync_duration = difftime(end_time, mongo->_time_id);
 
     if (mongo->need_update == SHOULD_UPDATE) {
-        if (insert_metadata_mongo_log(mongo, sync_duration, end_time) == 1)
+        if (insert_metadata_mongo_log(mongo, sync_duration, end_time,
+                                      mongo->entries_count) == 1)
             printf("metadatas not inserted inside mongo->log \n");
 
         mongo->need_update = END_UPDATE;
