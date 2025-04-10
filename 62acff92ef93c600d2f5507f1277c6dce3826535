@@ -93,6 +93,30 @@
       },
       "revId": "62acff92ef93c600d2f5507f1277c6dce3826535",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e615df7d_8c35bf70",
+        "filename": "rbh-find/src/core.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-04-10T12:53:05Z",
+      "side": 1,
+      "message": "My bad, I wanted to say one plugin, not one extension. You answered it IRL, for now we scan them all until information is available in the database.\n\nSo ack.",
+      "parentUuid": "13b4e485_66830498",
+      "range": {
+        "startLine": 83,
+        "startChar": 8,
+        "endLine": 83,
+        "endChar": 60
+      },
+      "revId": "62acff92ef93c600d2f5507f1277c6dce3826535",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
