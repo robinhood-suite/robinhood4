@@ -698,6 +698,30 @@
       },
       "revId": "bc76f63eba95a95a110859fb8d3155688426a2b8",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ba091453_0ef0d9b7",
+        "filename": "designs/userland_robinhood.rst",
+        "patchSetId": 8
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1003874
+      },
+      "writtenOn": "2025-04-10T10:08:17Z",
+      "side": 1,
+      "message": "I see 2 possible ways to do it:\n- have a single configuration file with an exhaustive mapping between FS_name \u003c-\u003e URI. A drawback is you need to manage the deployment of the client configuration and make sure is it consistent between nodes.\n- have a configuration in the root of the filesystem like for ccc_hsm, so the command can easily find the configuration related to the current filesystem, whatever it is. The advantage is you don\u0027t have to manage the synchronization and update of the configuration on the clients, as it is embedded in the filsystem. + config changes are effective immediately.",
+      "parentUuid": "30ca6aab_8ab7a1ed",
+      "range": {
+        "startLine": 185,
+        "startChar": 0,
+        "endLine": 185,
+        "endChar": 27
+      },
+      "revId": "bc76f63eba95a95a110859fb8d3155688426a2b8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
