@@ -59,6 +59,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "56bc6901_2f4151c0",
+        "filename": "librobinhood/src/plugins/posix/enrichers/retention/parser.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-10T14:26:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "05f19105_bd493638",
+      "range": {
+        "startLine": 36,
+        "startChar": 21,
+        "endLine": 36,
+        "endChar": 28
+      },
+      "revId": "b3cb3e954f5304891cef1467314f66f9906fb55d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "97288490_a5cbed47",
@@ -72,6 +96,30 @@
       "writtenOn": "2025-04-10T07:16:24Z",
       "side": 1,
       "message": "idem",
+      "range": {
+        "startLine": 46,
+        "startChar": 13,
+        "endLine": 46,
+        "endChar": 19
+      },
+      "revId": "b3cb3e954f5304891cef1467314f66f9906fb55d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a5afba7_174dce89",
+        "filename": "librobinhood/src/plugins/posix/enrichers/retention/parser.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-10T14:26:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "97288490_a5cbed47",
       "range": {
         "startLine": 46,
         "startChar": 13,
