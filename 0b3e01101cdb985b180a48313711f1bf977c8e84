@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ea82243a_0be71896",
+        "filename": "librobinhood/src/plugins/posix/iterators/mfu/iterator.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-11T10:08:56Z",
+      "side": 1,
+      "message": "suggest: use a sstack here, because there are a lot of strdup being done",
+      "range": {
+        "startLine": 64,
+        "startChar": 17,
+        "endLine": 64,
+        "endChar": 23
+      },
+      "revId": "0b3e01101cdb985b180a48313711f1bf977c8e84",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "85194041_1ce46ae7",
         "filename": "librobinhood/src/plugins/posix/posix.c",
         "patchSetId": 1
