@@ -47,6 +47,54 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "770a5d9e_13283236",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-04-11T14:06:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1620317c_62e8bf37",
+      "range": {
+        "startLine": 11,
+        "startChar": 36,
+        "endLine": 11,
+        "endChar": 45
+      },
+      "revId": "306d6b164c26da266b79c89f9b763e2b2fae61fd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "60694e93_3825dc1a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-04-11T14:06:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8c12ccb9_395c6b0b",
+      "range": {
+        "startLine": 11,
+        "startChar": 23,
+        "endLine": 11,
+        "endChar": 32
+      },
+      "revId": "306d6b164c26da266b79c89f9b763e2b2fae61fd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fdc19908_88b34b74",
@@ -60,6 +108,30 @@
       "writtenOn": "2025-04-11T11:17:41Z",
       "side": 1,
       "message": "suggest: isn\u0027t `NB_ENTRY` always equal to `$count` here ? Since the `create_entry` and `create_filled_entry` always create entries in the current directory",
+      "range": {
+        "startLine": 25,
+        "startChar": 45,
+        "endLine": 25,
+        "endChar": 53
+      },
+      "revId": "306d6b164c26da266b79c89f9b763e2b2fae61fd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8fa0de47_04dc0e8b",
+        "filename": "rbh-fsevents/tests/lustre/test_create_inode.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-04-11T14:06:25Z",
+      "side": 1,
+      "message": "Here yes, but in `test_create_two_entries` it\u0027s not always true, with the mkdir test, count will be equal to 3 entries but the root has only 2 children.",
+      "parentUuid": "fdc19908_88b34b74",
       "range": {
         "startLine": 25,
         "startChar": 45,
