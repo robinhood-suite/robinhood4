@@ -22,6 +22,30 @@
       },
       "revId": "d325e558e05dfc1362c8591f6d0471b4b8f8766b",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ac14e5e7_ecf17285",
+        "filename": "librobinhood/src/plugins/mpi_file/plugin.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-11T09:16:19Z",
+      "side": 0,
+      "message": "It has been removed earlier and shouldn\u0027t be in this patch either. I\u0027ve removed the line from the commit that added it.\n\nOtherwise, it\u0027s because MPI can only print specific information, so we can\u0027t use POSIX\u0027s function, and we must define our own function. I decided to do it in a separate patch, since it\u0027ll also be a lot of copy/paste, but since there is no test yet for rbh-find on a mpifile with a -printf, it\u0027s not urgent.",
+      "parentUuid": "e11f6f5f_b3b189c5",
+      "range": {
+        "startLine": 21,
+        "startChar": 4,
+        "endLine": 21,
+        "endChar": 52
+      },
+      "revId": "d325e558e05dfc1362c8591f6d0471b4b8f8766b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
