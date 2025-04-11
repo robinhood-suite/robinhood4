@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "995e9a04_834185e4",
+        "filename": "librobinhood/src/plugins/mpi_file/mpi_file.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 323,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-04-11T14:06:09Z",
+      "side": 1,
+      "message": "Because mpi-file expects fsevents for the same entry (with the same ID) to be received consecutively. If mpi-file receives an fsevent with a different ID, it creates a new entry in the flist. However, because this new fsevent has no statx, name, etc., mpi-file will crash when attempting to write the flist as an MFU file.",
+      "parentUuid": "2b01582d_9fdc58ca",
+      "range": {
+        "startLine": 318,
+        "startChar": 8,
+        "endLine": 323,
+        "endChar": 21
+      },
+      "revId": "ad7dad3624d512131e84fc2465a8c6a7a074680b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a1f7f1f8_207af06a",
         "filename": "librobinhood/src/plugins/posix/fts_iter.c",
         "patchSetId": 1
@@ -37,6 +61,30 @@
       "writtenOn": "2025-04-11T09:54:11Z",
       "side": 1,
       "message": "nit: children_counter",
+      "range": {
+        "startLine": 71,
+        "startChar": 20,
+        "endLine": 71,
+        "endChar": 36
+      },
+      "revId": "ad7dad3624d512131e84fc2465a8c6a7a074680b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "02503e9a_ad414986",
+        "filename": "librobinhood/src/plugins/posix/fts_iter.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-04-11T14:06:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a1f7f1f8_207af06a",
       "range": {
         "startLine": 71,
         "startChar": 20,
@@ -72,6 +120,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "42714522_3b0d3c7a",
+        "filename": "librobinhood/src/plugins/posix/fts_iter.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-04-11T14:06:09Z",
+      "side": 1,
+      "message": "Yes, if we can\u0027t read a directory, it doesn\u0027t mean the directory doesn\u0027t exist — it just won\u0027t be synchronized. I need to decrement the counter because it was incremented when the directory was discovered and saved in the sstack.",
+      "parentUuid": "8adba1d3_0d7fcd00",
+      "range": {
+        "startLine": 153,
+        "startChar": 13,
+        "endLine": 157,
+        "endChar": 14
+      },
+      "revId": "ad7dad3624d512131e84fc2465a8c6a7a074680b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "36ff869a_72803ea8",
         "filename": "rbh-sync/tests/test_lustre_mongo_sync.bash",
         "patchSetId": 1
@@ -83,6 +155,30 @@
       "writtenOn": "2025-04-11T09:54:11Z",
       "side": 1,
       "message": "suggest: ajouter un test avec un fichier qui ne peut pas être synchro, pour vérifier que le nb_children a quand même la bonne valeur",
+      "range": {
+        "startLine": 572,
+        "startChar": 4,
+        "endLine": 572,
+        "endChar": 43
+      },
+      "revId": "ad7dad3624d512131e84fc2465a8c6a7a074680b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d6fbfeea_d36a92e8",
+        "filename": "rbh-sync/tests/test_lustre_mongo_sync.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 572,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-04-11T14:06:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "36ff869a_72803ea8",
       "range": {
         "startLine": 572,
         "startChar": 4,
