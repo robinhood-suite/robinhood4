@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "57b026b9_4e9d88e9",
+        "filename": "librobinhood/src/plugins/mongo/mongo.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 727,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-04-11T12:53:43Z",
+      "side": 1,
+      "message": "question: is this initialized with the initial number of entries in the DB? You might be doing a partial scan. Also this is not multiprocess safe.\n\nIf I have 2 processes inserting in the DB, they will both insert the number of entries they added.",
+      "range": {
+        "startLine": 727,
+        "startChar": 1,
+        "endLine": 727,
+        "endChar": 34
+      },
+      "revId": "959c8ce1b652585e9a169c39aebaa298b5b1f092",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
