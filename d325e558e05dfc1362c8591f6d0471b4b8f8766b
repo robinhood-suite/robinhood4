@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e11f6f5f_b3b189c5",
+        "filename": "librobinhood/src/plugins/mpi_file/plugin.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-04-11T08:55:15Z",
+      "side": 0,
+      "message": "question: why this one is removed?",
+      "range": {
+        "startLine": 21,
+        "startChar": 4,
+        "endLine": 21,
+        "endChar": 52
+      },
+      "revId": "d325e558e05dfc1362c8591f6d0471b4b8f8766b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
