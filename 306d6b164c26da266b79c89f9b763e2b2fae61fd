@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1620317c_62e8bf37",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-11T11:17:41Z",
+      "side": 1,
+      "message": "typo: decremented",
+      "range": {
+        "startLine": 11,
+        "startChar": 36,
+        "endLine": 11,
+        "endChar": 45
+      },
+      "revId": "306d6b164c26da266b79c89f9b763e2b2fae61fd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8c12ccb9_395c6b0b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-11T11:17:41Z",
+      "side": 1,
+      "message": "typo: incremented",
+      "range": {
+        "startLine": 11,
+        "startChar": 23,
+        "endLine": 11,
+        "endChar": 32
+      },
+      "revId": "306d6b164c26da266b79c89f9b763e2b2fae61fd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fdc19908_88b34b74",
+        "filename": "rbh-fsevents/tests/lustre/test_create_inode.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-11T11:17:41Z",
+      "side": 1,
+      "message": "suggest: isn\u0027t `NB_ENTRY` always equal to `$count` here ? Since the `create_entry` and `create_filled_entry` always create entries in the current directory",
+      "range": {
+        "startLine": 25,
+        "startChar": 45,
+        "endLine": 25,
+        "endChar": 53
+      },
+      "revId": "306d6b164c26da266b79c89f9b763e2b2fae61fd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
