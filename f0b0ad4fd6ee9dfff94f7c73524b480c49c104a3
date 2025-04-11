@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2306a51e_9328bc0b",
+        "filename": "librobinhood/src/plugins/mongo/mongo.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 414,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-04-11T13:00:02Z",
+      "side": 1,
+      "message": "This is a boolean. Do you intend to add values to this enum later?",
+      "range": {
+        "startLine": 411,
+        "startChar": 0,
+        "endLine": 414,
+        "endChar": 2
+      },
+      "revId": "f0b0ad4fd6ee9dfff94f7c73524b480c49c104a3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
