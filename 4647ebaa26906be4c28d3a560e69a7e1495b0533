@@ -114,6 +114,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "74130c92_e84e3664",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-11T14:27:34Z",
+      "side": 1,
+      "message": "Add this distinction in the document then, it is important",
+      "parentUuid": "91c782d5_d642a629",
+      "range": {
+        "startLine": 18,
+        "startChar": 23,
+        "endLine": 18,
+        "endChar": 45
+      },
+      "revId": "4647ebaa26906be4c28d3a560e69a7e1495b0533",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1a876d27_9bf4e7bf",
         "filename": "designs/rbh-policy.rst",
         "patchSetId": 1

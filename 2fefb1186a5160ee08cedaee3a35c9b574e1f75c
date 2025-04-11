@@ -1,0 +1,257 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "650e4518_52f366b9",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-11T14:27:34Z",
+      "side": 1,
+      "message": "minor: remove",
+      "range": {
+        "startLine": 87,
+        "startChar": 1,
+        "endLine": 87,
+        "endChar": 27
+      },
+      "revId": "2fefb1186a5160ee08cedaee3a35c9b574e1f75c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "548a4187_d704a52f",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-11T14:27:34Z",
+      "side": 1,
+      "message": "nit: missing the `f` before the string",
+      "range": {
+        "startLine": 148,
+        "startChar": 23,
+        "endLine": 148,
+        "endChar": 24
+      },
+      "revId": "2fefb1186a5160ee08cedaee3a35c9b574e1f75c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2ed2a269_3eb5ec48",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-11T14:27:34Z",
+      "side": 1,
+      "message": "major: doesn\u0027t really optional to me, since this defines when the policy should be ran. Without this info, when is the policy run ?",
+      "range": {
+        "startLine": 156,
+        "startChar": 16,
+        "endLine": 156,
+        "endChar": 24
+      },
+      "revId": "2fefb1186a5160ee08cedaee3a35c9b574e1f75c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eb0341e9_00831320",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-11T14:27:34Z",
+      "side": 1,
+      "message": "comment: thinking about this now, but we\u0027ll most likely have to separate the plugin/extension-specific policies and fileclasses. Since the daemon may be usable for POSIX only, the Lustre-specific policies and fileclasses may not be needed (and available even)",
+      "range": {
+        "startLine": 160,
+        "startChar": 14,
+        "endLine": 160,
+        "endChar": 23
+      },
+      "revId": "2fefb1186a5160ee08cedaee3a35c9b574e1f75c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "115791d0_e415552e",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-11T14:27:34Z",
+      "side": 1,
+      "message": "minor: `1M`, else it looks like all files larger than 1 megabyte",
+      "range": {
+        "startLine": 164,
+        "startChar": 62,
+        "endLine": 164,
+        "endChar": 66
+      },
+      "revId": "2fefb1186a5160ee08cedaee3a35c9b574e1f75c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b7cd5d00_d76e9275",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-11T14:27:34Z",
+      "side": 1,
+      "message": "suggest: most likely will be more precise in future iterations of the document and feature, but this should rather be a `Count \u003e 1M`",
+      "range": {
+        "startLine": 164,
+        "startChar": 61,
+        "endLine": 164,
+        "endChar": 73
+      },
+      "revId": "2fefb1186a5160ee08cedaee3a35c9b574e1f75c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bf6d6698_50b7dc42",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 251,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-11T14:27:34Z",
+      "side": 1,
+      "message": "question: will this encompass all rbh-find allowed filters ?",
+      "range": {
+        "startLine": 251,
+        "startChar": 0,
+        "endLine": 251,
+        "endChar": 17
+      },
+      "revId": "2fefb1186a5160ee08cedaee3a35c9b574e1f75c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9b120607_ee9d214e",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-11T14:27:34Z",
+      "side": 1,
+      "message": "question: why restrict the file types ? At least symlinks should also be available",
+      "range": {
+        "startLine": 270,
+        "startChar": 22,
+        "endLine": 270,
+        "endChar": 54
+      },
+      "revId": "2fefb1186a5160ee08cedaee3a35c9b574e1f75c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "11db2182_f93617bb",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-11T14:27:34Z",
+      "side": 1,
+      "message": "question: why is this filter allowed and not count ? It isn\u0027t even in rbh-find",
+      "range": {
+        "startLine": 286,
+        "startChar": 0,
+        "endLine": 288,
+        "endChar": 62
+      },
+      "revId": "2fefb1186a5160ee08cedaee3a35c9b574e1f75c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "31207d19_53a53098",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-11T14:27:34Z",
+      "side": 1,
+      "message": "nit: don\u0027t really think it\u0027s necessary to explain those signs...",
+      "range": {
+        "startLine": 311,
+        "startChar": 10,
+        "endLine": 311,
+        "endChar": 20
+      },
+      "revId": "2fefb1186a5160ee08cedaee3a35c9b574e1f75c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1705dde7_e2fc74f0",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 362,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-11T14:27:34Z",
+      "side": 1,
+      "message": "minor: `group !\u003d \"research\"`, that\u0027s not really a good example of the conditions",
+      "range": {
+        "startLine": 362,
+        "startChar": 4,
+        "endLine": 362,
+        "endChar": 26
+      },
+      "revId": "2fefb1186a5160ee08cedaee3a35c9b574e1f75c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
