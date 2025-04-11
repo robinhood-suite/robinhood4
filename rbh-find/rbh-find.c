@@ -138,8 +138,10 @@ check_command_options(int argc, char *argv[])
  * used to construct the mirror system from the mirror system itself.
  */
 static void
-import_plugins(bool mongo_found, bool mpi_found)
+import_plugins(bool mongo_found, bool mpi_found,
+               struct rbh_value_map **info_maps)
 {
+    int pe_count = 0;
     int pe_index = 0;
 
     if (mongo_found)
@@ -167,12 +169,21 @@ import_plugins(bool mongo_found, bool mpi_found)
 
         ctx.info_pe[pe_index].is_plugin = true;
     }
+
+    for (int i = 0; i < ctx.backend_count; ++i) {
+        assert(info_maps[i]->count == 1);
+        assert(strcmp(info_maps[i]->pairs->key, "backend_source") == 0);
+        assert(info_maps[i]->pairs[0].value->type == RBH_VT_SEQUENCE);
+
+        pe_count += info_maps[i]->pairs[0].value->sequence.count;
+    }
 }
 
 int
 main(int _argc, char *_argv[])
 {
     struct rbh_filter_sort *sorts = NULL;
+    struct rbh_value_map **info_maps;
     struct rbh_filter *filter;
     bool mongo_found = false;
     bool mpi_found = false;
@@ -222,10 +233,21 @@ main(int _argc, char *_argv[])
     if (!ctx.uris)
         error(EXIT_FAILURE, errno, "malloc");
 
+    info_maps = malloc(index * sizeof(*info_maps));
+    if (!info_maps)
+        error(EXIT_FAILURE, errno, "malloc");
+
     for (int i = 0; i < index; i++) {
         ctx.backends[i] = rbh_backend_from_uri(ctx.argv[i], true);
         ctx.uris[i] = ctx.argv[i];
         ctx.backend_count++;
+
+        info_maps[i] = rbh_backend_get_info(ctx.backends[i],
+                                            RBH_INFO_BACKEND_SOURCE);
+        if (info_maps[i] == NULL)
+            error(EXIT_FAILURE, errno,
+                  "Failed to retrieve the source backends from URI '%s', aborting\n",
+                  ctx.argv[i]);
 
         /* XXX: Ugly but necessary until we can retrieve the list of backends
          * used to construct the mirror system from the mirror system itself.
@@ -236,7 +258,8 @@ main(int _argc, char *_argv[])
             mpi_found = true;
     }
 
-    import_plugins(mongo_found, mpi_found);
+    import_plugins(mongo_found, mpi_found, info_maps);
+    free(info_maps);
 
     ctx.need_prefetch = false;
     filter = parse_expression(&ctx, &index, NULL, &sorts, &sorts_count);
