@@ -66,6 +66,10 @@ sqlite_backend_filter(void *backend, const struct rbh_filter *filter,
                       const struct rbh_filter_options *options,
                       const struct rbh_filter_output *output);
 
+struct rbh_fsentry *
+sqlite_backend_root(void *backend,
+                   const struct rbh_filter_projection *projection);
+
 void
 sqlite_backend_destroy(void *backend);
 
@@ -132,6 +136,9 @@ sqlite_xattr2json(const struct rbh_value_map *xattrs);
 
 bool
 sqlite_json2xattrs(const char *json, struct rbh_value_map *xattrs);
+
+void
+bin2hex(const struct rbh_value *binary, char *buf);
 
 bool
 setup_custom_functions(sqlite3 *db);
