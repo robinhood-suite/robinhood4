@@ -11,9 +11,13 @@ test_dir=$(dirname $(readlink -e $0))
 
 setup_double_db()
 {
-    # Create test databases' names
-    testdb1=$SUITE-1$test
-    testdb2=$SUITE-2$test
+    if [[ $db == mongo ]]; then
+        testdb1=${SUITE}-${test}1
+        testdb2=${SUITE}-${test}2
+    else
+        testdb1=/tmp/${SUITE}-${test}1.db
+        testdb2=/tmp/${SUITE}-${test}2.db
+    fi
 }
 
 teardown_dbs()
