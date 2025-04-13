@@ -108,7 +108,13 @@ const char *
 time_from_timestamp(const time_t *time)
 {
     char *res = ctime(time);
-    size_t len = strlen(res);
+    size_t len;
+
+    if (!res)
+        /* ctime can return NULL if time is an invalid time (e.g. time < 0) */
+        return "???";
+
+    len = strlen(res);
 
     /* ctime adds an extra \n at then end of the buffer, remove it */
     res[len - 1] = '\0';
