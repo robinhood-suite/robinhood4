@@ -62,6 +62,30 @@ setup_schema(struct sqlite_backend *sqlite)
     return true;
 }
 
+static bool
+load_modules(sqlite3 *db)
+{
+    const char *modules[] = {
+        "/usr/lib64/sqlite3/pcre.so",
+    };
+    int rc;
+
+    rc = sqlite3_enable_load_extension(db, 1);
+    if (rc != SQLITE_OK)
+        return sqlite_db_fail(db, "failed to enable module loading");
+
+    for (size_t i = 0; i < sizeof(modules) / sizeof(modules[0]); i++) {
+        char *err_msg;
+
+        rc = sqlite3_load_extension(db, modules[i], 0, &err_msg);
+        if (rc != SQLITE_OK)
+            return sqlite_db_fail(db, "failed to load '%s': %s",
+                                  modules[i], err_msg);
+    }
+
+    return true;
+}
+
 bool
 sqlite_backend_open(struct sqlite_backend *sqlite,
                     const char *path,
@@ -88,6 +112,13 @@ sqlite_backend_open(struct sqlite_backend *sqlite,
     }
 
 ok:
+
+    if (!(load_modules(sqlite->db) &&
+          setup_custom_functions(sqlite->db))) {
+        sqlite3_close_v2(sqlite->db);
+        return false;
+    }
+
     /* sqlite will set errno to ENOENT if the DB does not exist but it will
      * create it so reset errno.
      */
