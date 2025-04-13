@@ -18,7 +18,7 @@ test_blocks()
     touch file1 file2 file3
 
     dd oflag=direct if=/dev/urandom of=file2 bs=1M count=1
-    dd oflag=direct if=/dev/urandom of=file3 bs=1G count=1
+    dd oflag=direct if=/dev/urandom of=file3 bs=2M count=1
 
     local blocks1="$(stat -c %b file1)"
     local blocks2="$(stat -c %b file2)"
