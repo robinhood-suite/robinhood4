@@ -193,7 +193,7 @@ const size_t LUSTRE_ID_SIZE = LUSTRE_FH_SIZE + sizeof(FILEID_LUSTRE)
 struct rbh_id *
 rbh_id_from_lu_fid(const struct lu_fid *fid)
 {
-    short lustre_id = RBH_BI_LUSTRE;
+    short lustre_id = RBH_BI_POSIX;
     struct rbh_id *id;
     char *data;
 
@@ -218,7 +218,7 @@ rbh_id_from_lu_fid(const struct lu_fid *fid)
 const struct lu_fid *
 rbh_lu_fid_from_id(const struct rbh_id *id)
 {
-    assert(*(short *)id->data == RBH_BI_LUSTRE);
+    assert(*(short *)id->data == RBH_BI_POSIX);
     assert(*(int *)((char *)id->data + sizeof(short)) == FILEID_LUSTRE);
 
     return (const struct lu_fid *) (id->data + sizeof(FILEID_LUSTRE)
