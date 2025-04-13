@@ -218,7 +218,7 @@ END_TEST
 START_TEST(riflf_basic)
 {
     static const int FILEID_LUSTRE = 0x97;
-    const short test_id = RBH_BI_LUSTRE;
+    const short test_id = RBH_BI_POSIX;
     struct lu_fid FID = {
         .f_seq = 0,
         .f_oid = 1,
