@@ -18,6 +18,8 @@ test_invalid_config()
     local conf_file="conf"
     local file="test_file"
 
+    mongo_only_test
+
     touch $file
 
     echo "abcdef

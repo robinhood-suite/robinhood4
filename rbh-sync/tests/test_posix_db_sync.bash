@@ -351,6 +351,8 @@ test_stop_sync_on_error()
     local third_file="test3"
     local dir="dir"
 
+    mongo_only_test
+
     touch $first_file
     touch $second_file
     mkdir $dir
@@ -404,6 +406,8 @@ test_config()
 {
     local conf_file="conf"
     local file="test_file"
+
+    mongo_only_test
 
     touch $file
 

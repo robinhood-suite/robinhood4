@@ -16,6 +16,8 @@ test_dir=$(dirname $(readlink -e $0))
 
 test_id()
 {
+    mongo_only_test
+
     touch fileA
     touch fileB
 
