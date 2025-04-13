@@ -1,0 +1,242 @@
+#!/usr/bin/env python3
+
+import sqlite3
+import sys
+import re
+from typing import List
+import logging
+import pathlib
+
+logging.basicConfig(level=logging.INFO, handlers=[logging.StreamHandler()])
+logger = logging.getLogger(__name__)
+
+
+class UnManagedFilter(Exception):
+
+    def __init__(self, _filter):
+        self.filter = _filter
+
+
+class MissingQuotes(Exception):
+
+    def __init__(self, _filter):
+        self.filter = _filter
+
+
+def remove_quotes(string: str) -> str:
+    if not string[0] == '"' or not string[-1] == '"':
+        return string
+    return string[1:-1]
+
+
+def statx_to_column(column: str) -> str:
+    pattern = re.compile("^[acbm]time\\.")
+    if pattern.match(column):
+        return column.replace(".", "_")
+    else:
+        return column
+
+
+class NumberLong:
+
+    def __init__(self, value):
+        self.value = int(value)
+
+
+def parse_filter(filters: List[str]):
+    for f in filters:
+        key, value = f.split(":", 1)
+        key = key.strip()
+        value = value.strip()
+
+        if not key[0] == '"' or not key[-1] == '"':
+            raise MissingQuotes(f)
+
+        key = remove_quotes(key)
+        if key == "ns.name":
+            yield ("ns", "name", key[len("ns.name"):], value)
+        elif key == "ns":
+            yield ("ns", "", "", value)
+        elif key == "ns.xattrs.parent_id":
+            yield ("ns", "parent_id", key[len("ns.xattrs.parent_id"):], value)
+        elif key.startswith("ns.xattrs."):
+            yield ("ns", "xattrs", key[len("ns.xattrs."):], value)
+        elif key.startswith("xattrs."):
+            yield ("entries", "xattrs", key[len("xattrs."):], value)
+        elif key.startswith("statx."):
+            yield ("entries", statx_to_column(key[len("statx."):]), "", value)
+        elif key == "symlink":
+            yield ("entries", "symlink", "", value)
+        else:
+            raise UnManagedFilter(f)
+
+
+def remove_type(value: str) -> str:
+    if value.startswith("NumberLong("):
+        return value[len("NumberLong("):-1]
+
+    return value
+
+# TODO
+# - '"ns": { $exists : true }' '"ns": { $size : 1 }' '"ns.name":"'$entry_renamed'"'
+# - local entry_parent="$(mongo "$testdb" --eval \
+#       'db.entries.find({"ns.name":"'$entry_renamed'"},
+#       {"ns.parent": 1, "_id": 0})')"
+# -   local old_value=$(mongo "$testdb" --eval \
+#         'db.entries.find({"xattrs.user.test":{$exists: true}},
+#                          {_id: 0, "xattrs.user.test": 1})')
+
+
+def eval_value(value: str):
+    # mongo uses lower case true/false, replace them with uppercase versions
+    value = value.replace('true', 'True')
+    value = value.replace('false', 'False')
+    value = value.replace('$exists', '"$exists"')
+    value = value.replace('$size', '"$size"')
+    value = value.replace('$regex', '"$regex"')
+    value = value.replace('_id', '"_id"')
+
+    return eval(value)
+
+
+def build_query(output: str, filters: List[str]):
+    query = f"select {output} from entries join ns on entries.id = ns.id where "
+    data = ()
+
+    for table, column, attribute, value in parse_filter(filters):
+        v = eval_value(value)
+        if isinstance(v, dict):
+            if "$exists" in v:
+                # Logic is reversed: exists: true means not NULL
+                negate = "not " if v["$exists"] else "not "
+                query += f"json_extract({table}.{column}, '$.{attribute}') is {negate}NULL and "
+            elif "$size" in v:
+                data = data + (v["$size"],)
+                logger.error("$size not supported yet")
+                sys.exit(1)
+        else:
+            data = data + (value,)
+            if len(attribute) > 0:
+                query += f"json_extract({table}.{column}, '$.{attribute}') = ? and "
+            else:
+                query += table + "." + column + " = ? and "
+
+    if query.endswith(" and "):
+        query = query[:-len(" and ")]
+    if query.endswith(" where "):
+        query = query[:-len(" where ")]
+
+    return (query, data)
+
+
+def count_entries(db: str, filters: List[str]):
+    with sqlite3.connect(db) as con:
+        cursor = con.cursor()
+        if len(filters) > 0:
+            query, data = build_query("count(*)", filters)
+        else:
+            # With rbh-fsevents, it is possible that some entries have never
+            # had an "ns_xattr" fsevent and therefore don't have a row in the
+            # ns table. This means that these rows are not listed by the query
+            # "entries join ns".
+            query = "select count(*) from entries"
+            data = ()
+
+        res = cursor.execute(query, data)
+        count = res.fetchone()
+        print(count[0])
+
+
+def find_entry(db: str, filters: List[str]):
+    pass
+
+
+def key2column(key: str) -> str:
+    if key.startswith("xattrs."):
+        xattr = key[len("xattrs."):]
+        return f"json_extract(entries.xattrs, '$.{xattr}')"
+    else:
+        return key
+
+
+def get_entry(db: str, filters: List[str]):
+    with sqlite3.connect(db) as con:
+        cursor = con.cursor()
+        output = eval_value(f"{{ {filters[1]} }}")
+
+        output = ", ".join((key2column(key) for key in output if output[key]))
+        query, data = build_query(output, [ filters[0] ])
+        res = cursor.execute(query, data)
+        for row in res.fetchall():
+            print(row)
+
+
+def drop_db(db: str, filters: List[str]):
+    try:
+        pathlib.Path(db).unlink()
+    except:
+        pass
+
+
+def dump_db(db: str, filters: List[str]):
+    with sqlite3.connect(db) as con:
+        con.enable_load_extension(True)
+        con.load_extension("/usr/lib64/sqlite3/pcre.so")
+        regex = ""
+        if len(filters) > 0:
+            if "ns.xattrs.path" in filters[0]:
+                if "$regex" in filters[0]:
+                    d = eval_value(f"{{ {filters[0]} }}")
+                    r = d["ns.xattrs.path"]["$regex"]
+                    regex = f"where json_extract(ns.xattrs, '$.path') regexp '{r}'"
+
+        cursor = con.cursor()
+        query = f"select * from entries join ns on entries.id = ns.id {regex} order by entries.id"
+        res = cursor.execute(query)
+        for row in res.fetchall():
+            print(row)
+
+
+def db_size(db: str, filters: List[str]):
+    pass
+
+
+def db_avgsize(db: str, filters: List[str]):
+    pass
+
+
+def usage(progname: str):
+    print(f"usage: {progname} <cmd> <dbname> <filter> [<filters>]")
+
+
+if __name__ == '__main__':
+    if len(sys.argv) < 3:
+        usage(sys.argv[0])
+        sys.exit(1)
+
+    commands = {
+        "count": count_entries,
+        "find": find_entry,
+        "get": get_entry,
+        "drop": drop_db,
+        "dump": dump_db,
+        "size": db_size,
+        "avgsize": db_avgsize,
+    }
+
+    cmd = sys.argv[1]
+    if cmd not in commands:
+        logger.error(f"Unknown command {cmd}")
+        sys.exit(1)
+
+    db = sys.argv[2]
+    args = sys.argv[3:]
+
+    try:
+        commands[cmd](db, args)
+    except UnManagedFilter as err:
+        logger.error(f"unmanaged filter: {err}")
+        sys.exit(1)
+    except MissingQuotes as err:
+        logger.error(f"missing quotes: {err}")
+        sys.exit(1)
