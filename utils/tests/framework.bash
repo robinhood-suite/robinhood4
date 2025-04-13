@@ -100,11 +100,18 @@ function mongo_version()
 
 error()
 {
-    echo "$*"
+    >&2 echo "$*"
     exit 1
 }
 
-join_arr() {
+skip()
+{
+    >&2 echo "$*"
+    exit 77
+}
+
+join_arr()
+{
     local IFS="$1"
 
     shift
@@ -252,6 +259,7 @@ run_tests()
 {
     local fail=0
     local timefile=$(mktemp)
+    local all_skipped=true
 
     for test in "$@"; do
         (
@@ -270,19 +278,23 @@ run_tests()
         local duration=$(( $end - $(cat "$timefile") ))
 
         if (( rc == 0 )); then
+            all_skipped=false
             echo "$test: ✔  (${duration}s)"
         elif (( rc == 77 )); then
             echo "$test: SKIP"
-            if (( fail == 0 )); then
-                fail="77"
-            fi
         else
+            all_skipped=false
             echo "$test: ✖  (${duration}s)"
             fail=$rc
         fi
     done
 
     rm "$timefile"
+
+    # Mark the whole test as skipped if all the subtests where skipped
+    if $all_skipped; then
+        return 77
+    fi
 
     return $fail
 }
