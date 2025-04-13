@@ -215,7 +215,11 @@ setup()
     cd "$testdir"
 
     # Create test database's name
-    testdb=$SUITE-$test
+    if [[ $db == sqlite ]]; then
+        testdb=/tmp/$SUITE-$test.db
+    else
+        testdb=$SUITE-$test
+    fi
 
     # Load MPI
     if [[ "$WITH_MPI" == "true" ]]; then
