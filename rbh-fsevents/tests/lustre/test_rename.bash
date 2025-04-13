@@ -52,6 +52,8 @@ test_rename()
     local entry_renamed="$2"
     local count=$3
 
+    mongo_only_test
+
     invoke_rbh-fsevents
 
     local entries=$(count_documents)
