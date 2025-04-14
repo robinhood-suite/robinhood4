@@ -312,7 +312,8 @@ static struct rbh_mut_iterator *
 s3_branch_backend_filter(
     void *backend, const struct rbh_filter *filter,
     const struct rbh_filter_options *options,
-    const struct rbh_filter_output *output)
+    const struct rbh_filter_output *output,
+    __attribute__((unused)) struct rbh_metadata *metadata)
 {
     struct s3_branch_backend *branch = backend;
     struct s3_iterator *s3_iter;
@@ -388,7 +389,8 @@ s3_backend_branch(void *backend, const struct rbh_id *id,
 static struct rbh_mut_iterator *
 s3_backend_filter(void *backend, const struct rbh_filter *filter,
                   const struct rbh_filter_options *options,
-                  const struct rbh_filter_output *output)
+                  const struct rbh_filter_output *output,
+                  __attribute__((unused)) struct rbh_metadata *metadata)
 {
     struct s3_backend *s3 = backend;
     struct s3_iterator *s3_iter;

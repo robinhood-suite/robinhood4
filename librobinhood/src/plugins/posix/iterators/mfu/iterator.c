@@ -190,6 +190,9 @@ skip:
 
     iter->current++;
 
+    if (iter->metadata)
+        iter->metadata->converted_entries++;
+
     return fsentry;
 }
 
@@ -243,8 +246,9 @@ rbh_mpi_initialize(void)
 }
 
 static struct rbh_mut_iterator *
-mfu_iter_new(const char *root, const char *entry, int statx_sync_type,
-             size_t prefix_len, mfu_flist flist, short backend_id)
+mfu_iter_new(struct rbh_metadata *metadata, const char *root, const char *entry,
+             int statx_sync_type, size_t prefix_len, mfu_flist flist,
+             short backend_id)
 {
     struct mfu_iterator *mfu;
     int save_errno;
@@ -280,6 +284,7 @@ mfu_iter_new(const char *root, const char *entry, int statx_sync_type,
         free(mfu->posix.path);
     }
 
+    mfu->metadata = metadata ? metadata : NULL;
     mfu->posix.iterator = MFU_ITER;
     mfu->backend_id = backend_id;
     mfu->total = mfu_flist_size(mfu->files);
@@ -297,15 +302,18 @@ free_iter:
 }
 
 struct rbh_mut_iterator *
-rbh_posix_mfu_iter_new(const char *root,
+rbh_posix_mfu_iter_new(struct rbh_metadata *metadata,
+                       const char *root,
                        const char *entry,
                        int statx_sync_type)
 {
-    return mfu_iter_new(root, entry, statx_sync_type, 0, NULL, RBH_BI_POSIX);
+    return mfu_iter_new(metadata, root, entry, statx_sync_type, 0, NULL,
+                        RBH_BI_POSIX);
 }
 
 struct rbh_mut_iterator *
 rbh_mpi_file_mfu_iter_new(mfu_flist flist, size_t prefix_len)
 {
-    return mfu_iter_new(NULL, NULL, 0, prefix_len, flist, RBH_BI_MPI_FILE);
+    return mfu_iter_new(NULL, NULL, NULL, 0, prefix_len, flist,
+                        RBH_BI_MPI_FILE);
 }
