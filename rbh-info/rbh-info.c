@@ -118,8 +118,12 @@ info_translate(const struct rbh_backend_plugin *plugin)
         printf("- c: retrieve the amount of document inside entries ");
         printf("collection\n");
     }
+    if (info & RBH_INFO_FIRST_SYNC)
+        printf("- f: info about the first rbh-sync done\n");
     if (info & RBH_INFO_SIZE)
-        printf("-s: size of entries collection\n");
+        printf("- s: size of entries collection\n");
+    if (info & RBH_INFO_LAST_SYNC)
+        printf("- y: info about the last rbh-sync done\n");
 }
 
 static int
@@ -129,11 +133,13 @@ help()
         "Usage:"
         "  %s <URI> -uri_arguments   Show info about the given URI\n"
         "URI arguments:\n"
-        "  -a --avg_obj_size         Show the average size of objects inside "
+        "  -a --avg-obj-size         Show the average size of objects inside "
         "a given backend\n"
         "  -c --count                Show the amount of document inside a "
         "given backend\n"
-        "  -s --size                 Show the size of entries collection\n\n"
+        "  -f --first-sync           Show infos about the first rbh-sync done\n"
+        "  -s --size                 Show the size of entries collection\n"
+        "  -y --last-sync            Show infos about the last rbh-sync done\n"
         "Arguments:\n"
         "Usage:"
         "  %s -arguments General informations about rbh-info command\n"
@@ -280,9 +286,16 @@ _get_collection_count(const struct rbh_value *value)
     printf("%ld\n", value->int64);
 }
 
+static void
+_get_collection_sync(const struct rbh_value *value)
+{
+}
+
 static struct rbh_info_fields INFO_FIELDS[] = {
     { "average_object_size", _get_collection_avg_obj_size },
     { "count", _get_collection_count },
+    { "first_sync", _get_collection_sync },
+    { "last_sync", _get_collection_sync },
     { "size", _get_collection_size },
 };
 
@@ -313,8 +326,24 @@ main(int argc, char **argv)
 {
     const struct option LONG_OPTIONS[] = {
         {
+            .name = "avg-obj-size",
+            .val = 'a',
+        },
+        {
+            .name = "count",
+            .val = 'c',
+        },
+        {
+            .name = "first-sync",
+            .val = 'f',
+        },
+        {
             .name = "help",
             .val = 'h'
+        },
+        {
+            .name = "last-sync",
+            .val = 'y',
         },
         {
             .name = "list",
@@ -323,22 +352,6 @@ main(int argc, char **argv)
         {
             .name = "size",
             .val = 's',
-        },
-        {
-            .name = "count",
-            .val = 'c',
-        },
-        {
-            .name = "avg_obj_size",
-            .val = 'a',
-        },
-        {
-            .name = "first_sync",
-            .val = 'f',
-        },
-        {
-            .name = "last_sync",
-            .val = 'y',
         },
         {}
     };
@@ -351,9 +364,18 @@ main(int argc, char **argv)
         return EINVAL;
     }
 
-    while ((option = getopt_long(argc, argv, "hlsca", LONG_OPTIONS,
+    while ((option = getopt_long(argc, argv, "acfhlsy", LONG_OPTIONS,
                                  NULL)) != -1) {
         switch (option) {
+        case 'a':
+            flags |= RBH_INFO_AVG_OBJ_SIZE;
+            break;
+        case 'c':
+            flags |= RBH_INFO_COUNT;
+            break;
+        case 'f':
+            flags |= RBH_INFO_FIRST_SYNC;
+            break;
         case 'h':
             help();
             return 0;
@@ -363,11 +385,8 @@ main(int argc, char **argv)
         case 's':
             flags |= RBH_INFO_SIZE;
             break;
-        case 'c':
-            flags |= RBH_INFO_COUNT;
-            break;
-        case 'a':
-            flags |= RBH_INFO_AVG_OBJ_SIZE;
+        case 'y':
+            flags |= RBH_INFO_LAST_SYNC;
             break;
         default :
             fprintf(stderr, "Unrecognized option\n");
