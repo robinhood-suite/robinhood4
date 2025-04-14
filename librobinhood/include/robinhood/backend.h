@@ -242,6 +242,18 @@ enum rbh_info {
 };
 
 /**
+ * Determines metadata type to help with insertion.
+ *
+ * When calling metadata_type_to_insert, ensure that all the data inserted are
+ * of the same metadata_type (i.e you can not have a rbh_value_map with DT_INFO
+ * & DT_LOG data at the same time).
+ */
+enum metadata_type_to_insert {
+    RBH_DT_INFO,
+    RBH_DT_LOG,
+};
+
+/**
  * Operations backends implement
  *
  * Only the \c destroy() operation is mandatory, every other one may be set to
@@ -273,7 +285,8 @@ struct rbh_backend_operations {
             );
     int (*insert_metadata)(
             void *backend,
-            struct rbh_value_map *map
+            struct rbh_value_map *value_map,
+            enum metadata_type_to_insert mdt
             );
     struct rbh_backend *(*branch)(
             void *backend,
@@ -501,10 +514,32 @@ rbh_backend_update(struct rbh_backend *backend, struct rbh_iterator *fsevents)
  * Insert the source backends in the target backend
  *
  * @param backend         the backend in which to insert the source
- * @param backend_source  a rbh_value sequence containing the source backend
- *                        names
+ * @param value_map       a rbh_value map containing metadata to insert
+ * @param dt              type of metadata which will help to determine where
+ *                        to insert them
  *
  * @return                0 on success, -1 on error
+ */
+static inline int
+rbh_backend_insert_metadata(struct rbh_backend *backend,
+                            struct rbh_value_map *value_map,
+                            enum metadata_type_to_insert mdt)
+{
+    if (backend->ops->insert_metadata == NULL) {
+        errno = ENOTSUP;
+        return -1;
+    }
+
+    return backend->ops->insert_metadata(backend, value_map, mdt);
+}
+
+/**
+ * Insert source backends into a writing backend
+ *
+ * @param backend          the backend in which to insert metadata
+ * @param backend_source   the source backends to insert
+ *
+ * @return            0 if inserted successfully, -1 on error
  */
 static inline int
 rbh_backend_insert_source(struct rbh_backend *backend,
@@ -516,26 +551,6 @@ rbh_backend_insert_source(struct rbh_backend *backend,
     }
 
     return backend->ops->insert_source(backend, backend_source);
-}
-
-/**
- * Insert metadata into a writing backend
- *
- * @param backend     the backend in which to insert metadata
- * @param map         rbh_value_map with metadata to insert
- *
- * @return            0 if inserted successfully, -1 on error
- */
-static inline int
-rbh_backend_insert_metadata(struct rbh_backend *backend,
-                            struct rbh_value_map *map)
-{
-    if (backend->ops->insert_metadata == NULL) {
-        errno = ENOTSUP;
-        return -1;
-    }
-
-    return backend->ops->insert_metadata(backend, map);
 }
 
 /**
