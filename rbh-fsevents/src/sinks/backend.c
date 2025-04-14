@@ -9,6 +9,7 @@
 #include <stdlib.h>
 
 #include <robinhood/backend.h>
+#include "robinhood/sstack.h"
 
 #include "sink.h"
 
@@ -25,12 +26,41 @@ backend_sink_process(void *_sink, struct rbh_iterator *fsevents)
     return rbh_backend_update(sink->backend, fsevents) >= 0 ? 0 : -1;
 }
 
+static __thread struct rbh_sstack *metadata_sstack;
+
+static void __attribute__ ((destructor))
+destroy_metadata_sstack(void)
+{
+    if (metadata_sstack)
+        rbh_sstack_destroy(metadata_sstack);
+}
+
 static int
 backend_sink_insert_source(void *_sink, const struct rbh_value *backend_source)
 {
-    struct backend_sink *sink = _sink;
+    if (backend_source == NULL)
+        return -1;
 
-    return rbh_backend_insert_source(sink->backend, backend_source);
+    struct backend_sink *sink = _sink;
+    struct rbh_value_map *value_map;
+    struct rbh_value_pair *pair;
+
+    if (metadata_sstack == NULL) {
+        metadata_sstack = rbh_sstack_new(sizeof(struct rbh_value_map));
+        if (!metadata_sstack)
+            return -1;
+    }
+
+    value_map = RBH_SSTACK_PUSH(metadata_sstack, NULL, sizeof(*value_map));
+    pair = RBH_SSTACK_PUSH(metadata_sstack, NULL, sizeof(*pair));
+
+    pair[0].key = "backend_source";
+    pair[0].value = backend_source;
+
+    value_map->pairs = pair;
+    value_map->count = 1;
+
+    return rbh_backend_insert_metadata(sink->backend, value_map, RBH_DT_INFO);
 }
 
 static void
