@@ -271,6 +271,10 @@ struct rbh_backend_operations {
             void *backend,
             const struct rbh_value *backend_source
             );
+    int (*insert_metadata)(
+            void *backend,
+            struct rbh_value_map *map
+            );
     struct rbh_backend *(*branch)(
             void *backend,
             const struct rbh_id *id,
@@ -512,6 +516,26 @@ rbh_backend_insert_source(struct rbh_backend *backend,
     }
 
     return backend->ops->insert_source(backend, backend_source);
+}
+
+/**
+ * Insert metadata into a writing backend
+ *
+ * @param backend     the backend in which to insert metadata
+ * @param map         rbh_value_map with metadata to insert
+ *
+ * @return            0 if inserted successfully, -1 on error
+ */
+static inline int
+rbh_backend_insert_metadata(struct rbh_backend *backend,
+                            struct rbh_value_map *map)
+{
+    if (backend->ops->insert_metadata == NULL) {
+        errno = ENOTSUP;
+        return -1;
+    }
+
+    return backend->ops->insert_metadata(backend, map);
 }
 
 /**
