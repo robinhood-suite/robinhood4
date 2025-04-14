@@ -260,6 +260,11 @@ struct rbh_backend_operations {
             void *backend,
             struct rbh_iterator *fsevents
             );
+    int (*insert_metadata)(
+            void *backend,
+            time_t sync_debut,
+            time_t sync_end
+            );
     struct rbh_backend *(*branch)(
             void *backend,
             const struct rbh_id *id,
@@ -480,6 +485,28 @@ rbh_backend_update(struct rbh_backend *backend, struct rbh_iterator *fsevents)
     }
 
     return backend->ops->update(backend, fsevents);
+}
+
+/**
+ * Insert rbh-sync metadata inside log collection
+ *
+ * @param backend     the backend on which to insert \p start_time and \p
+ *                    end_time
+ * @param start_time  debut of the sync
+ * @param end_time    end of the sync
+ *
+ * @return            0 if inserted successfully, 1 on error
+ */
+__attribute__ ((unused)) static int
+rbh_backend_insert_metadata(struct rbh_backend *backend, time_t sync_debut,
+                            time_t sync_end)
+{
+    if (backend->ops->insert_metadata == NULL) {
+        errno = ENOTSUP;
+        return -1;
+    }
+
+    return backend->ops->insert_metadata(backend, sync_debut, sync_end);
 }
 
 /**
