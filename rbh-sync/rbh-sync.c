@@ -385,7 +385,7 @@ iter_convert(struct rbh_iterator *fsentries,
     return &convert->iterator;
 }
 
-static void
+static ssize_t
 sync(const struct rbh_filter_projection *projection)
 {
     const struct rbh_filter_options OPTIONS = {
@@ -402,6 +402,7 @@ sync(const struct rbh_filter_projection *projection)
     struct rbh_mut_iterator *_fsentries;
     struct rbh_iterator *fsentries;
     struct rbh_iterator *fsevents;
+    ssize_t total_entries = 0;
 
     if (one) {
         struct rbh_fsentry *root;
@@ -463,6 +464,7 @@ sync(const struct rbh_filter_projection *projection)
         }
 
         count = rbh_backend_update(to, chunk);
+        total_entries += count;
         save_errno = errno;
         rbh_iter_destroy(chunk);
         if (count < 0) {
@@ -475,13 +477,15 @@ sync(const struct rbh_filter_projection *projection)
     switch (errno) {
     case ENODATA:
         rbh_backend_update(to, NULL);
-        return;
+        return total_entries;
     case RBH_BACKEND_ERROR:
         error(EXIT_FAILURE, 0, "unhandled error: %s", rbh_backend_error);
         __builtin_unreachable();
     default:
         error(EXIT_FAILURE, errno, "while iterating over SOURCE's entries");
     }
+
+    return total_entries;
 }
 
 /*----------------------------------------------------------------------------*
@@ -688,6 +692,7 @@ main(int argc, char *argv[])
         .fsentry_mask = RBH_FP_ALL,
         .statx_mask = RBH_STATX_ALL & ~RBH_STATX_MNT_ID,
     };
+    ssize_t upserted_entries;
     time_t sync_debut;
     time_t sync_end;
     int rc;
@@ -755,10 +760,10 @@ main(int argc, char *argv[])
     to = rbh_backend_from_uri(argv[1]);
 
     sync_debut = time(NULL);
-    sync(&projection);
+    upserted_entries = sync(&projection);
     sync_end = time(NULL);
 
-    rbh_backend_insert_metadata(to, sync_debut, sync_end);
+    rbh_backend_insert_metadata(to, sync_debut, sync_end, upserted_entries);
 
     rbh_config_free();
 

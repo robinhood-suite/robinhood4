@@ -681,7 +681,8 @@ mongo_backend_update(void *backend, struct rbh_iterator *fsevents)
      *--------------------------------------------------------------------*/
 
 static int
-mongo_backend_insert_metadata(void *backend, time_t sync_debut, time_t sync_end)
+mongo_backend_insert_metadata(void *backend, time_t sync_debut, time_t sync_end,
+                              ssize_t upserted_entries)
 {
     struct mongo_backend *mongo = backend;
     double sync_duration;
@@ -704,6 +705,7 @@ mongo_backend_insert_metadata(void *backend, time_t sync_debut, time_t sync_end)
     BSON_APPEND_INT64(doc, "sync_debut", sync_debut);
     BSON_APPEND_DOUBLE(doc, "sync_duration", sync_duration);
     BSON_APPEND_INT64(doc, "sync_end", sync_end);
+    BSON_APPEND_INT64(doc, "upserted_entries", (int64_t)upserted_entries);
 
     BSON_APPEND_DOCUMENT(update, "$set", doc);
 

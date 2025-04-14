@@ -265,7 +265,8 @@ struct rbh_backend_operations {
     int (*insert_metadata)(
             void *backend,
             time_t sync_debut,
-            time_t sync_end
+            time_t sync_end,
+            ssize_t upserted_entries
             );
     struct rbh_backend *(*branch)(
             void *backend,
@@ -501,14 +502,15 @@ rbh_backend_update(struct rbh_backend *backend, struct rbh_iterator *fsevents)
  */
 static inline int
 rbh_backend_insert_metadata(struct rbh_backend *backend, time_t sync_debut,
-                            time_t sync_end)
+                            time_t sync_end, ssize_t upserted_entries)
 {
     if (backend->ops->insert_metadata == NULL) {
         errno = ENOTSUP;
         return -1;
     }
 
-    return backend->ops->insert_metadata(backend, sync_debut, sync_end);
+    return backend->ops->insert_metadata(backend, sync_debut, sync_end,
+                                         upserted_entries);
 }
 
 /**
