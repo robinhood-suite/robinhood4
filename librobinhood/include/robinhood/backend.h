@@ -186,6 +186,13 @@ struct rbh_accumulator_field {
 };
 
 /**
+ * Metadata storage structure
+ */
+struct rbh_metadata {
+    ssize_t converted_entries;
+};
+
+/**
  * Grouping behaviour, to be used with rbh_backend_report()
  */
 struct rbh_group_fields {
@@ -293,7 +300,8 @@ struct rbh_backend_operations {
             void *backend,
             const struct rbh_filter *filter,
             const struct rbh_filter_options *options,
-            const struct rbh_filter_output *output
+            const struct rbh_filter_output *output,
+            struct rbh_metadata *metadata
             );
     struct rbh_mut_iterator *(*report)(
             void *backend,
@@ -622,13 +630,14 @@ rbh_backend_root(struct rbh_backend *backend,
 static inline struct rbh_mut_iterator *
 rbh_backend_filter(struct rbh_backend *backend, const struct rbh_filter *filter,
                    const struct rbh_filter_options *options,
-                   const struct rbh_filter_output *output)
+                   const struct rbh_filter_output *output,
+                   struct rbh_metadata *metadata)
 {
     if (backend->ops->filter == NULL) {
         errno = ENOTSUP;
         return NULL;
     }
-    return backend->ops->filter(backend, filter, options, output);
+    return backend->ops->filter(backend, filter, options, output, metadata);
 }
 
 /**

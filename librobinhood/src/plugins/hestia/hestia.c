@@ -401,7 +401,9 @@ struct hestia_backend {
 
 static struct rbh_mut_iterator *
 hestia_backend_filter(void *backend, const struct rbh_filter *filter,
-                      const struct rbh_filter_options *options)
+                      const struct rbh_filter_options *options,
+                      __attribute__((unused))
+                      struct rbh_metadata *metadata)
 {
     struct hestia_backend *hestia = backend;
     struct hestia_iterator *hestia_iter;

@@ -29,8 +29,16 @@ static int
 backend_sink_insert_source(void *_sink, const struct rbh_value *backend_source)
 {
     struct backend_sink *sink = _sink;
+    struct rbh_value_map *value_map = malloc(sizeof(*value_map));
+    struct rbh_value_pair *pair = malloc(sizeof(*pair));
 
-    return rbh_backend_insert_source(sink->backend, backend_source);
+    pair[0].key = "backend_source";
+    pair[0].value = backend_source;
+
+    value_map->pairs = pair;
+    value_map->count = 1;
+
+    return rbh_backend_insert_metadata(sink->backend, value_map, RBH_DT_INFO);
 }
 
 static void

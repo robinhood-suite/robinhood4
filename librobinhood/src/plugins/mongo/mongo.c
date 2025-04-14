@@ -846,7 +846,8 @@ mongo_root(void *backend, const struct rbh_filter_projection *projection)
 static struct rbh_mut_iterator *
 mongo_backend_filter(void *backend, const struct rbh_filter *filter,
                      const struct rbh_filter_options *options,
-                     const struct rbh_filter_output *output)
+                     const struct rbh_filter_output *output,
+                     __attribute__((unused)) struct rbh_metadata *metadata)
 {
     struct mongo_backend *mongo = backend;
     struct mongo_iterator *mongo_iter;
@@ -1302,7 +1303,9 @@ bson_from_gc_filter(const struct rbh_filter *filter_)
 static struct rbh_mut_iterator *
 mongo_gc_backend_filter(void *backend, const struct rbh_filter *filter_,
                         const struct rbh_filter_options *options,
-                        const struct rbh_filter_output *output_)
+                        const struct rbh_filter_output *output_,
+                        __attribute__((unused))
+                        struct rbh_metadata *metadata)
 {
     const unsigned int unavailable_fields =
         RBH_FP_PARENT_ID | RBH_FP_NAME | RBH_FP_NAMESPACE_XATTRS;

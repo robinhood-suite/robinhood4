@@ -737,7 +737,7 @@ posix_root(void *backend, const struct rbh_filter_projection *projection)
     old_iter_new = posix->iter_new;
     posix->iter_new = fts_iter_new;
 
-    fsentries = rbh_backend_filter(backend, NULL, &options, &output);
+    fsentries = rbh_backend_filter(backend, NULL, &options, &output, NULL);
     posix->iter_new = old_iter_new;
     if (fsentries == NULL)
         return NULL;
@@ -758,7 +758,8 @@ static struct rbh_mut_iterator *
 posix_backend_filter(
     void *backend, const struct rbh_filter *filter,
     const struct rbh_filter_options *options,
-    __attribute__((unused)) const struct rbh_filter_output *output)
+    __attribute__((unused)) const struct rbh_filter_output *output,
+    struct rbh_metadata *metadata)
 {
     struct posix_backend *posix = backend;
     struct posix_iterator *posix_iter;
@@ -797,7 +798,7 @@ posix_backend_filter(
     }
 
     posix_iter = (struct posix_iterator *)
-                  posix->iter_new(options->one ? root : posix->root,
+                  posix->iter_new(metadata, options->one ? root : posix->root,
                                   options->one ? full_path + strlen(root) : NULL,
                                   posix->statx_sync_type);
     posix_iter->enrichers = posix->enrichers;
@@ -902,7 +903,8 @@ static struct rbh_mut_iterator *
 posix_branch_backend_filter(
     void *backend, const struct rbh_filter *filter,
     const struct rbh_filter_options *options,
-    __attribute__((unused)) const struct rbh_filter_output *output)
+    __attribute__((unused)) const struct rbh_filter_output *output,
+    struct rbh_metadata *metadata)
 {
     struct posix_branch_backend *branch = backend;
     struct posix_iterator *posix_iter = NULL;
@@ -942,7 +944,7 @@ posix_branch_backend_filter(
 
     assert(strncmp(root, path, strlen(root)) == 0);
     posix_iter = (struct posix_iterator *)
-                  branch->posix.iter_new(root, path + strlen(root),
+                  branch->posix.iter_new(metadata, root, path + strlen(root),
                                          branch->posix.statx_sync_type);
     posix_iter->skip_error = options->skip_error;
     posix_iter->enrichers = branch->posix.enrichers;

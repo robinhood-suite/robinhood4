@@ -17,6 +17,7 @@
 
 struct fts_iterator {
     struct posix_iterator posix;
+    struct rbh_metadata *metadata;
     FTS *fts_handle;
     FTSENT *ftsent;
 };
@@ -72,7 +73,7 @@ fsentry_from_ftsent(FTSENT *ftsent, int statx_sync_type, size_t prefix_len,
  * it is saved to the sstack. Then, its own counter is initialized to 0. For
  * each entry inside, the counter is incremented; if an error occurs, it is
  * decremented since the entry will not be synchronized. When exiting a
- * directory (post-order), the directory’s counter is set aside, and the
+ * directory (pos²t-order), the directory’s counter is set aside, and the
  * parent’s counter is retrieved from the sstack to continue processing. An
  * fsevent is then generated to update the current directory (the one being
  * exited) in the destination backend.
@@ -151,8 +152,11 @@ skip:
             return NULL;
         }
 
-        if (fsentry)
+        if (fsentry) {
+            if (iter->metadata != NULL)
+                iter->metadata->converted_entries++;
             return fsentry;
+        }
         goto skip;
     case FTS_DC:
         errno = ELOOP;
@@ -240,6 +244,10 @@ skip:
         return NULL;
     }
 
+
+    if (iter->metadata != NULL)
+        iter->metadata->converted_entries++;
+
     return fsentry;
 }
 
@@ -274,7 +282,8 @@ static const struct rbh_mut_iterator FTS_ITER = {
 };
 
 struct rbh_mut_iterator *
-fts_iter_new(const char *root, const char *entry, int statx_sync_type)
+fts_iter_new(struct rbh_metadata *metadata, const char *root, const char *entry,
+             int statx_sync_type)
 {
     char *paths[2] = {NULL, NULL};
     struct fts_iterator *iter;
@@ -285,7 +294,7 @@ fts_iter_new(const char *root, const char *entry, int statx_sync_type)
     if (!iter)
         return NULL;
 
-    rc = posix_iterator_setup(&iter->posix, root, entry, statx_sync_type);
+   rc = posix_iterator_setup(&iter->posix, root, entry, statx_sync_type);
     save_errno = errno;
     if (rc == -1)
         goto free_iter;
@@ -300,6 +309,11 @@ fts_iter_new(const char *root, const char *entry, int statx_sync_type)
         goto free_iter;
 
     iter->posix.iterator = FTS_ITER;
+
+    if (metadata)
+        iter->metadata = metadata;
+    else
+        iter->metadata = NULL;
 
     return (struct rbh_mut_iterator *)iter;
 
