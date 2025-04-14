@@ -648,6 +648,60 @@ projection_set(struct rbh_filter_projection *projection,
     }
 }
 
+#define MIN_VALUES_SSTACK_ALLOC (1 << 6)
+static __thread struct rbh_sstack *metadata_sstack;
+
+static void __attribute__ ((destructor))
+destroy_metadata_sstack(void)
+{
+    if (metadata_sstack)
+        rbh_sstack_destroy(metadata_sstack);
+}
+
+struct rbh_value_map *
+sync_metadata_value_map(time_t sync_debut, time_t sync_end)
+{
+    struct rbh_value_map *value_map;
+    struct rbh_value_pair *pairs;
+    struct rbh_value *values;
+    double sync_duration;
+    int count = 3;
+
+    sync_duration = difftime(sync_end, sync_debut);
+
+    if (metadata_sstack == NULL) {
+        metadata_sstack = rbh_sstack_new(MIN_VALUES_SSTACK_ALLOC *
+                                         (sizeof(struct rbh_value_map *)));
+        if (!metadata_sstack)
+            return NULL;
+    }
+
+    value_map = RBH_SSTACK_PUSH(metadata_sstack, NULL,
+                                count * sizeof(*value_map));
+    values = RBH_SSTACK_PUSH(metadata_sstack, NULL, count * sizeof(*values));
+    pairs = RBH_SSTACK_PUSH(metadata_sstack, NULL, count * sizeof(*pairs));
+
+    pairs[0].key = "sync_debut";
+    values[0].type = RBH_VT_INT64;
+    values[0].int64 = (int64_t)sync_debut;
+    pairs[0].value = &values[0];
+
+    pairs[1].key = "sync_duration";
+    values[1].type = RBH_VT_INT64;
+    values[1].int64 = (int64_t)sync_duration;
+    pairs[1].value = &values[1];
+
+    pairs[2].key = "sync_end";
+    values[2].type = RBH_VT_INT64;
+    values[2].int64 = (int64_t)sync_end;
+    pairs[2].value = &values[2];
+
+    value_map->pairs = pairs;
+    value_map->count = count;
+
+    return value_map;
+}
+
 int
 main(int argc, char *argv[])
 {
@@ -688,6 +742,9 @@ main(int argc, char *argv[])
         .fsentry_mask = RBH_FP_ALL,
         .statx_mask = RBH_STATX_ALL & ~RBH_STATX_MNT_ID,
     };
+    struct rbh_value_map *metadata_map;
+    time_t sync_debut;
+    time_t sync_end;
     int rc;
     char c;
 
@@ -752,7 +809,13 @@ main(int argc, char *argv[])
     /* Parse DEST */
     to = rbh_backend_from_uri(argv[1]);
 
+    sync_debut = time(NULL);
     sync(&projection);
+    sync_end = time(NULL);
+
+    metadata_map = sync_metadata_value_map(sync_debut, sync_end);
+
+    rbh_backend_insert_metadata(to, metadata_map);
 
     rbh_config_free();
 
