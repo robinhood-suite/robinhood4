@@ -122,6 +122,12 @@ info_translate(const struct rbh_backend_plugin *plugin)
 
     if (info & RBH_INFO_SIZE)
         printf("- s: size of entries collection\n");
+
+    if (info & RBH_INFO_FIRST_SYNC)
+        printf("- f: info about the first rbh-sync done\n");
+
+    if (info & RBH_INFO_LAST_SYNC)
+        printf("- y: info about the last rbh-sync done\n");
 }
 
 static int
@@ -172,6 +178,8 @@ help()
         "                           rbh-syncs\n"
         "    -c, --count            Show the amount of document inside a\n"
         "                           given backend\n"
+        "    -f, --first-sync       Show infos about the first rbh-sync done\n"
+        "    -y, --last-sync        Show infos about the last rbh-sync done\n"
         "    -s, --size             Show the size of entries collection\n"
         "\n"
         "A robinhood URI is built as follows:\n"
@@ -354,9 +362,16 @@ _get_backend_source(const struct rbh_value *value)
     }
 }
 
+static void
+_get_collection_sync(const struct rbh_value *value)
+{
+}
+
 static struct rbh_info_fields INFO_FIELDS[] = {
     { "average_object_size", _get_collection_avg_obj_size },
     { "count", _get_collection_count },
+    { "first_sync", _get_collection_sync },
+    { "last_sync", _get_collection_sync },
     { "size", _get_collection_size },
     { "backend_source", _get_backend_source},
 };
@@ -412,20 +427,36 @@ main(int _argc, char **_argv)
 {
     const struct option LONG_OPTIONS[] = {
         {
-            .name = "size",
-            .val = 's',
-        },
-        {
-            .name = "count",
-            .val = 'c',
-        },
-        {
             .name = "avg-obj-size",
             .val = 'a',
         },
         {
             .name = "backend-source",
             .val = 'b',
+        },
+        {
+            .name = "count",
+            .val = 'c',
+        },
+        {
+            .name = "first-sync",
+            .val = 'f',
+        },
+        {
+            .name = "help",
+            .val = 'h'
+        },
+        {
+            .name = "last-sync",
+            .val = 'y',
+        },
+        {
+            .name = "list",
+            .val = 'l'
+        },
+        {
+            .name = "size",
+            .val = 's',
         },
         {}
     };
@@ -446,7 +477,7 @@ main(int _argc, char **_argv)
         argv = &_argv[nb_cli_args];
     }
 
-    while ((option = getopt_long(argc, argv, "scab", LONG_OPTIONS,
+    while ((option = getopt_long(argc, argv, "abcfhlsy", LONG_OPTIONS,
                                  NULL)) != -1) {
         switch (option) {
         case 'a':
@@ -458,8 +489,20 @@ main(int _argc, char **_argv)
         case 'c':
             flags |= RBH_INFO_COUNT;
             break;
+        case 'f':
+            flags |= RBH_INFO_FIRST_SYNC;
+            break;
+        case 'h':
+            help();
+            return 0;
+        case 'l':
+            rbh_backend_list();
+            return 0;
         case 's':
             flags |= RBH_INFO_SIZE;
+            break;
+        case 'y':
+            flags |= RBH_INFO_LAST_SYNC;
             break;
         default :
             fprintf(stderr, "Unrecognized option\n");
