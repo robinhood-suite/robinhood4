@@ -289,6 +289,15 @@ _get_collection_count(const struct rbh_value *value)
 static void
 _get_collection_sync(const struct rbh_value *value)
 {
+    assert(value->type == RBH_VT_MAP);
+
+    const struct rbh_value_map metadata_map = value->map;
+
+    for (size_t i = 0 ; i < metadata_map.count ; i++) {
+        const struct rbh_value_pair *pair = &metadata_map.pairs[i];
+
+        printf("%s: %ld\n", pair->key, pair->value->int64);
+    }
 }
 
 static struct rbh_info_fields INFO_FIELDS[] = {
