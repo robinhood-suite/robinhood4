@@ -16,6 +16,11 @@ struct sqlite_filter_where {
     size_t clause_len;
 };
 
+struct sqlite_query_options {
+    char limit[28]; /* " limit <SIZE_MAX>" */
+    size_t limit_len;
+};
+
 __attribute__((format(printf, 2, 3)))
 static bool
 sfw_clause_format(struct sqlite_filter_where *where, const char *fmt, ...)
@@ -35,6 +40,28 @@ sfw_clause_format(struct sqlite_filter_where *where, const char *fmt, ...)
         return sqlite_fail("vsnprintf: truncated string, buffer too small");
 
     where->clause_len += len;
+    return true;
+}
+
+__attribute__((format(printf, 2, 3)))
+static bool
+sqo_limit_format(struct sqlite_query_options *options, const char *fmt, ...)
+{
+    va_list args;
+    int len;
+
+    va_start(args, fmt);
+    len = vsnprintf(options->limit + options->limit_len,
+                    sizeof(options->limit) - options->limit_len,
+                    fmt, args);
+    va_end(args);
+    if (len == -1)
+        return sqlite_fail("vsnprintf: failed to format characters");
+
+    if (len > (sizeof(options->limit) - options->limit_len))
+        return sqlite_fail("vsnprintf: truncated string, buffer too small");
+
+    options->limit_len += len;
     return true;
 }
 
@@ -860,6 +887,17 @@ bind_filter_values(struct sqlite_cursor *cursor,
 }
 
 static bool
+options2sql(const struct rbh_filter_options *options,
+            struct sqlite_query_options *query_options)
+{
+    if (options->limit > 0 &&
+        !sqo_limit_format(query_options, " limit %lu", options->limit))
+        return false;
+
+    return true;
+}
+
+static bool
 sqlite_statement_from_filter(struct sqlite_iterator *iter,
                              const struct rbh_filter *filter,
                              const struct rbh_filter_options *options)
@@ -876,9 +914,13 @@ sqlite_statement_from_filter(struct sqlite_iterator *iter,
         "dev_major, dev_minor, mnt_id, "
         "entries.xattrs, ns.xattrs, symlink "
         "from entries join ns on entries.id = ns.id";
+    struct sqlite_query_options query_options = {0};
     struct sqlite_filter_where where = {0};
     char *full_query = query;
     int save_errno;
+
+    if (rbh_filter_validate(filter) == -1)
+        return NULL;
 
     if (filter) {
         int rc;
@@ -886,8 +928,12 @@ sqlite_statement_from_filter(struct sqlite_iterator *iter,
         if (!filter2where_clause(filter, options, &where))
             return false;
 
+        if (!options2sql(options, &query_options))
+            return false;
+
         if (where.clause_len > 0) {
-            rc = asprintf(&full_query, "%s where %s", query, where.clause);
+            rc = asprintf(&full_query, "%s where %s%s", query, where.clause,
+                          options->limit > 0 ? query_options.limit : "");
             if (rc == -1) {
                 errno = ENOMEM;
                 return false;
