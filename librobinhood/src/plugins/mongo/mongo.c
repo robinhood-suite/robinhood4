@@ -683,7 +683,27 @@ mongo_backend_update(void *backend, struct rbh_iterator *fsevents)
 static int
 mongo_backend_insert_metadata(void *backend, struct rbh_value_map *log_map)
 {
-    return 0;
+    struct mongo_backend *mongo = backend;
+    bson_t doc;
+    int rc = 0;
+
+    bson_init(&doc);
+
+    if (!bson_append_rbh_value_map(&doc, "sync_metadata", 13, log_map)) {
+        fprintf(stderr, "Error while appending rbh_value_map to bson\n");
+        rc = 1;
+        goto out;
+    }
+
+    if (!mongoc_collection_insert_one(mongo->log, &doc, NULL, NULL, NULL)) {
+        fprintf(stderr, "Failed to insert sync metadatas inside log\n");
+        rc = 1;
+    }
+
+out:
+    bson_destroy(&doc);
+
+    return rc;
 }
 
     /*--------------------------------------------------------------------*
