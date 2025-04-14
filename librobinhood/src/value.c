@@ -262,7 +262,7 @@ value_map_copy(struct rbh_value_map *dest, const struct rbh_value_map *src,
     return 0;
 }
 
-static struct rbh_value *
+struct rbh_value *
 value_clone(const struct rbh_value *value)
 {
     struct rbh_value *clone;

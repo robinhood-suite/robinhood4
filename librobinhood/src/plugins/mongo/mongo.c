@@ -28,6 +28,7 @@
 #include "robinhood/statx.h"
 #include "robinhood/sstack.h"
 #include "utils.h"
+#include "value.h"
 
 #include "mongo.h"
 
@@ -914,6 +915,73 @@ out:
     return 1;
 }
 
+static int
+get_collection_sync(const struct mongo_backend *mongo, char *field_to_find,
+                    struct rbh_value_pair *pair)
+{
+    struct rbh_value *value;
+    mongoc_cursor_t *cursor;
+    char _buffer[4096];
+    const bson_t *doc;
+    bson_iter_t iter;
+    bson_t *filter;
+    size_t bufsize;
+    bson_t *opts;
+    char *buffer;
+    int rc = 0;
+
+    buffer = _buffer;
+    filter = bson_new();
+    bufsize = sizeof(_buffer);
+    value = RBH_SSTACK_PUSH(info_sstack, NULL, sizeof(*value));
+
+    if (strcmp(field_to_find, "first_sync") == 0)
+        opts = BCON_NEW("sort", "{", "_id", BCON_INT32(1), "}");
+
+    if (strcmp(field_to_find, "last_sync") == 0)
+        opts = BCON_NEW("sort", "{", "_id", BCON_INT32(-1), "}");
+
+    cursor = mongoc_collection_find_with_opts(mongo->log, filter, opts, NULL);
+    if (!cursor) {
+        rc = 1;
+        goto out;
+    }
+
+    if (!mongoc_cursor_next(cursor, &doc)) {
+        rc = 1;
+        goto out;
+    }
+
+    if (!bson_iter_init(&iter, doc)) {
+        rc = 1;
+        goto out;
+    }
+
+    while (bson_iter_next(&iter)) {
+        const char *key = bson_iter_key(&iter);
+
+        if (strcmp(key, "sync_metadata") == 0) {
+            if (!bson_iter_rbh_value(&iter, value, &buffer, &bufsize)) {
+                rc = 1;
+                goto out;
+            }
+
+            pair->key = field_to_find;
+            pair->value = value_clone(value);
+        }
+    }
+
+out:
+    if (cursor)
+        mongoc_cursor_destroy(cursor);
+    if (filter)
+        bson_destroy(filter);
+    if (opts)
+        bson_destroy(opts);
+
+    return rc;
+}
+
 static struct rbh_value_map *
 mongo_backend_get_info(void *backend, int info_flags)
 {
@@ -954,8 +1022,18 @@ mongo_backend_get_info(void *backend, int info_flags)
             goto out;
     }
 
+    if (info_flags & RBH_INFO_FIRST_SYNC) {
+        if (get_collection_sync(mongo, "first_sync", &pairs[idx++]))
+            goto out;
+    }
+
     if (info_flags & RBH_INFO_SIZE) {
         if (!get_collection_stats(mongo, "size", &pairs[idx++]))
+            goto out;
+    }
+
+    if (info_flags & RBH_INFO_LAST_SYNC) {
+        if (get_collection_sync(mongo, "last_sync", &pairs[idx++]))
             goto out;
     }
 
@@ -963,6 +1041,7 @@ mongo_backend_get_info(void *backend, int info_flags)
     map_value->count = idx;
 
     return map_value;
+
 out:
     errno = EINVAL;
     return NULL;
