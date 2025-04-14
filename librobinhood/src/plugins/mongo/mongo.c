@@ -670,6 +670,16 @@ mongo_backend_update(void *backend, struct rbh_iterator *fsevents)
 }
 
     /*--------------------------------------------------------------------*
+     |                          insert_metadata                           |
+     *--------------------------------------------------------------------*/
+
+static int
+mongo_backend_insert_metadata(void *backend, struct rbh_value_map *map)
+{
+    return 0;
+}
+
+    /*--------------------------------------------------------------------*
      |                                root                                |
      *--------------------------------------------------------------------*/
 
@@ -1074,6 +1084,7 @@ static const struct rbh_backend_operations MONGO_BACKEND_OPS = {
     .branch = mongo_backend_branch,
     .root = mongo_root,
     .update = mongo_backend_update,
+    .insert_metadata = mongo_backend_insert_metadata,
     .filter = mongo_backend_filter,
     .report = mongo_backend_report,
     .get_info = mongo_backend_get_info,
