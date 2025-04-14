@@ -56,6 +56,17 @@ value_copy(struct rbh_value *dest, const struct rbh_value *src, char **buffer,
            size_t *bufsize);
 
 /**
+ * Clone the given \p value
+ *
+ * @param value     the value to clone
+ *
+ * @return          the cloned value on success, NULL on error and errno is set
+ *                  appropriately
+ */
+struct rbh_value *
+value_clone(const struct rbh_value *value);
+
+/**
  * Compute the size of the data a map points at
  *
  * @param map       the map whose data size to compute
