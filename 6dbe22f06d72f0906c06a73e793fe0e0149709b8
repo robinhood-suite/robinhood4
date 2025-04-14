@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2a5399d6_7b56bdf2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-04-14T11:44:14Z",
+      "side": 1,
+      "message": "typo: frees",
+      "range": {
+        "startLine": 9,
+        "startChar": 33,
+        "endLine": 9,
+        "endChar": 37
+      },
+      "revId": "6dbe22f06d72f0906c06a73e793fe0e0149709b8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
