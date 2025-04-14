@@ -688,6 +688,8 @@ main(int argc, char *argv[])
         .fsentry_mask = RBH_FP_ALL,
         .statx_mask = RBH_STATX_ALL & ~RBH_STATX_MNT_ID,
     };
+    time_t sync_debut;
+    time_t sync_end;
     int rc;
     char c;
 
@@ -752,7 +754,11 @@ main(int argc, char *argv[])
     /* Parse DEST */
     to = rbh_backend_from_uri(argv[1]);
 
+    sync_debut = time(NULL);
     sync(&projection);
+    sync_end = time(NULL);
+
+    rbh_backend_insert_metadata(to, sync_debut, sync_end);
 
     rbh_config_free();
 
