@@ -47,6 +47,8 @@ struct mfu_iterator {
     /** true if the backend using the iterator is mpi-file */
     bool is_mpifile;
 
+    struct rbh_metadata *metadata;
+
     struct rbh_fsentry *
     (*fsentry_new)(struct file_info *fi,
                    struct posix_iterator *iter);
