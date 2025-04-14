@@ -683,7 +683,43 @@ mongo_backend_update(void *backend, struct rbh_iterator *fsevents)
 static int
 mongo_backend_insert_metadata(void *backend, time_t sync_debut, time_t sync_end)
 {
-    return 0;
+    struct mongo_backend *mongo = backend;
+    double sync_duration;
+    bson_error_t error;
+    bson_t *filter;
+    bson_t *update;
+    bson_t *opts;
+    bson_t *doc;
+    bool result;
+    int rc = 0;
+
+    sync_duration = difftime(sync_end, sync_debut);
+
+    filter = BCON_NEW("_id", BCON_INT64(sync_debut));
+    opts = BCON_NEW("upsert", BCON_BOOL(true));
+
+    update = bson_new();
+    doc = bson_new();
+
+    BSON_APPEND_INT64(doc, "sync_debut", sync_debut);
+    BSON_APPEND_DOUBLE(doc, "sync_duration", sync_duration);
+    BSON_APPEND_INT64(doc, "sync_end", sync_end);
+
+    BSON_APPEND_DOCUMENT(update, "$set", doc);
+
+    result = mongoc_collection_update_one(mongo->log, filter, update, opts,
+                                          NULL, &error);
+
+    if (!result) {
+        fprintf(stderr, "Upsert Failed! %s\n", error.message);
+        rc = 1;
+    }
+
+    bson_destroy(update);
+    bson_destroy(filter);
+    bson_destroy(opts);
+
+    return rc;
 }
 
     /*--------------------------------------------------------------------*

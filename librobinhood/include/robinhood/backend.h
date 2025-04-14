@@ -497,7 +497,7 @@ rbh_backend_update(struct rbh_backend *backend, struct rbh_iterator *fsevents)
  *
  * @return            0 if inserted successfully, 1 on error
  */
-__attribute__ ((unused)) static int
+static int
 rbh_backend_insert_metadata(struct rbh_backend *backend, time_t sync_debut,
                             time_t sync_end)
 {
