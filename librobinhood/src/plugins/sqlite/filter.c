@@ -19,6 +19,8 @@ struct sqlite_filter_where {
 struct sqlite_query_options {
     char limit[28]; /* " limit <SIZE_MAX>" */
     size_t limit_len;
+    char skip[29]; /* " offset <SIZE_MAX>" */
+    size_t skip_len;
     char sort[512];
     size_t sort_len;
 };
@@ -86,6 +88,28 @@ sqo_sort_format(struct sqlite_query_options *options, const char *fmt, ...)
         return sqlite_fail("vsnprintf: truncated string, buffer too small");
 
     options->sort_len += len;
+    return true;
+}
+
+__attribute__((format(printf, 2, 3)))
+static bool
+sqo_skip_format(struct sqlite_query_options *options, const char *fmt, ...)
+{
+    va_list args;
+    int len;
+
+    va_start(args, fmt);
+    len = vsnprintf(options->skip + options->skip_len,
+                    sizeof(options->skip) - options->skip_len,
+                    fmt, args);
+    va_end(args);
+    if (len == -1)
+        return sqlite_fail("vsnprintf: failed to format characters");
+
+    if (len > (sizeof(options->skip) - options->skip_len))
+        return sqlite_fail("vsnprintf: truncated string, buffer too small");
+
+    options->skip_len += len;
     return true;
 }
 
@@ -952,6 +976,10 @@ options2sql(const struct rbh_filter_options *options,
         !sqo_limit_format(query_options, " limit %lu", options->limit))
         return false;
 
+    if (options->skip > 0 &&
+        !sqo_skip_format(query_options, " offset %lu", options->skip))
+        return false;
+
     if (options->sort.count > 0) {
         if (!sqo_sort_format(query_options, " order by"))
             return false;
@@ -1005,9 +1033,10 @@ sqlite_statement_from_filter(struct sqlite_iterator *iter,
             return false;
 
         if (where.clause_len > 0) {
-            rc = asprintf(&full_query, "%s where %s%s%s", query, where.clause,
+            rc = asprintf(&full_query, "%s where %s%s%s%s", query, where.clause,
                           options->sort.count > 0 ? query_options.sort : "",
-                          options->limit > 0 ? query_options.limit : "");
+                          options->limit > 0 ? query_options.limit : "",
+                          options->skip > 0 ? query_options.skip : "");
             if (rc == -1) {
                 errno = ENOMEM;
                 return false;
