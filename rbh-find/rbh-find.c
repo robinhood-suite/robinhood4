@@ -134,10 +134,60 @@ check_command_options(int argc, char *argv[])
     return 0;
 }
 
+static bool
+check_pe_already_registered(int pe_count, const char *pe_string)
+{
+    return true;
+}
+
 static int
 import_backend_source(int pe_count, const struct rbh_value_map *backend_source)
 {
-    return 0;
+    const struct rbh_value *extension_value = NULL;
+    const struct rbh_value *plugin_value = NULL;
+    const struct rbh_backend_plugin *plugin;
+    bool is_plugin;
+
+    for (int i = 0; i < backend_source->count; ++i) {
+        const struct rbh_value_pair *pair = &backend_source->pairs[i];
+
+        assert(pair->value->type == RBH_VT_STRING);
+
+        if (strcmp(pair->key, "type") == 0)
+            is_plugin = (strcmp(pair->value->string, "plugin") == 0);
+        else if (strcmp(pair->key, "plugin") == 0)
+            plugin_value = pair->value;
+        else if (strcmp(pair->key, "extension") == 0)
+            extension_value = pair->value;
+    }
+
+    assert(plugin_value != NULL);
+
+    if (is_plugin && check_pe_already_registered(pe_count,
+                                                 plugin_value->string))
+        return 0;
+    else if (!is_plugin && check_pe_already_registered(pe_count,
+                                                       extension_value->string))
+        return 0;
+
+    plugin = rbh_backend_plugin_import(plugin_value->string);
+    if (plugin == NULL)
+        error(EXIT_FAILURE, errno, "rbh_backend_plugin_import");
+
+    if (is_plugin) {
+        ctx.info_pe[pe_count].plugin = plugin;
+        ctx.info_pe[pe_count].is_plugin = true;
+    } else {
+        ctx.info_pe[pe_count].is_plugin = false;
+        ctx.info_pe[pe_count].extension = rbh_plugin_load_extension(
+            &plugin->plugin,
+            extension_value->string
+        );
+        if (ctx.info_pe[pe_count].extension == NULL)
+            error(EXIT_FAILURE, errno, "rbh_plugin_load_extension");
+    }
+
+    return 1;
 }
 
 /* XXX: Ugly but necessary until we can retrieve the list of backends
