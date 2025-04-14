@@ -19,6 +19,8 @@ struct sqlite_filter_where {
 struct sqlite_query_options {
     char limit[28]; /* " limit <SIZE_MAX>" */
     size_t limit_len;
+    char sort[512];
+    size_t sort_len;
 };
 
 __attribute__((format(printf, 2, 3)))
@@ -62,6 +64,28 @@ sqo_limit_format(struct sqlite_query_options *options, const char *fmt, ...)
         return sqlite_fail("vsnprintf: truncated string, buffer too small");
 
     options->limit_len += len;
+    return true;
+}
+
+__attribute__((format(printf, 2, 3)))
+static bool
+sqo_sort_format(struct sqlite_query_options *options, const char *fmt, ...)
+{
+    va_list args;
+    int len;
+
+    va_start(args, fmt);
+    len = vsnprintf(options->sort + options->sort_len,
+                    sizeof(options->sort) - options->sort_len,
+                    fmt, args);
+    va_end(args);
+    if (len == -1)
+        return sqlite_fail("vsnprintf: failed to format characters");
+
+    if (len > (sizeof(options->sort) - options->sort_len))
+        return sqlite_fail("vsnprintf: truncated string, buffer too small");
+
+    options->sort_len += len;
     return true;
 }
 
@@ -886,6 +910,40 @@ bind_filter_values(struct sqlite_cursor *cursor,
         abort();
 }
 
+static const char *
+sort_field2str(const struct rbh_filter_field *field)
+{
+    static char str[512] = {0};
+    int len;
+
+    switch (field->fsentry) {
+    case RBH_FP_ID:
+        return "entries.id";
+    case RBH_FP_PARENT_ID:
+        return "parent_id";
+    case RBH_FP_NAME:
+        return "name";
+    case RBH_FP_STATX:
+        return statx_field2str(field->statx);
+    case RBH_FP_SYMLINK:
+        return "symlink";
+    case RBH_FP_NAMESPACE_XATTRS:
+        len = snprintf(str, sizeof(str), "json_extract(ns.xattrs, '$.%s')",
+                       field->xattr);
+        if (len == -1 || len > sizeof(str))
+            return NULL;
+        break;
+    case RBH_FP_INODE_XATTRS:
+        len = snprintf(str, sizeof(str), "json_extract(entries.xattrs, '$.%s')",
+                       field->xattr);
+        if (len == -1 || len > sizeof(str))
+            return NULL;
+        break;
+    }
+
+    return str;
+}
+
 static bool
 options2sql(const struct rbh_filter_options *options,
             struct sqlite_query_options *query_options)
@@ -893,6 +951,21 @@ options2sql(const struct rbh_filter_options *options,
     if (options->limit > 0 &&
         !sqo_limit_format(query_options, " limit %lu", options->limit))
         return false;
+
+    if (options->sort.count > 0) {
+        if (!sqo_sort_format(query_options, " order by"))
+            return false;
+
+        for (size_t i = 0; i < options->sort.count; i++) {
+            const char *field = sort_field2str(&options->sort.items[i].field);
+
+            if (!sqo_sort_format(query_options, " %s %s",
+                                 field,
+                                 options->sort.items[i].ascending ?
+                                    "ASC" : "DESC"))
+                return false;
+        }
+    }
 
     return true;
 }
@@ -932,7 +1005,8 @@ sqlite_statement_from_filter(struct sqlite_iterator *iter,
             return false;
 
         if (where.clause_len > 0) {
-            rc = asprintf(&full_query, "%s where %s%s", query, where.clause,
+            rc = asprintf(&full_query, "%s where %s%s%s", query, where.clause,
+                          options->sort.count > 0 ? query_options.sort : "",
                           options->limit > 0 ? query_options.limit : "");
             if (rc == -1) {
                 errno = ENOMEM;
