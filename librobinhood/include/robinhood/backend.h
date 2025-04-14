@@ -229,10 +229,12 @@ struct rbh_filter_output {
  */
 enum rbh_info {
     RBH_CAPABILITIES_FLAG   = 1 << 0,
-    RBH_INFO_SIZE           = 1 << 1,
-    RBH_INFO_COUNT          = 1 << 2,
-    RBH_INFO_AVG_OBJ_SIZE   = 1 << 3,
-    RBH_INFO_BACKEND_SOURCE = 1 << 4,
+    RBH_INFO_AVG_OBJ_SIZE   = 1 << 1,
+    RBH_INFO_BACKEND_SOURCE = 1 << 2,
+    RBH_INFO_COUNT          = 1 << 3,
+    RBH_INFO_FIRST_SYNC     = 1 << 4,
+    RBH_INFO_SIZE           = 1 << 5,
+    RBH_INFO_LAST_SYNC      = 1 << 6,
 };
 
 /**
