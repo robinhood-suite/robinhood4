@@ -67,7 +67,7 @@ _find(struct find_context *ctx, int backend_index, enum action action,
         return count;
 
     fsentries = rbh_backend_filter(ctx->backends[backend_index], filter,
-                                   options, &OUTPUT);
+                                   options, &OUTPUT, NULL);
     if (fsentries == NULL)
         error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
                       "filter_fsentries");

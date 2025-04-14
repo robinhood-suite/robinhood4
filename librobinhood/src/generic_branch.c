@@ -95,7 +95,7 @@ _filter_child_fsentries(struct rbh_backend *backend, size_t id_count,
         },
     };
 
-    return backend_filter(backend, &and_filter, options, output);
+    return backend_filter(backend, &and_filter, options, output, NULL);
 }
 
 static struct rbh_mut_iterator *
@@ -387,7 +387,7 @@ filter_one(void *backend, const struct rbh_id *id,
         },
     };
 
-    return backend_filter(backend, &and_filter, options, output);
+    return backend_filter(backend, &and_filter, options, output, NULL);
 }
 #define VALUE_RING_SIZE (1 << 14) /* 16MB */
 #define ID_RING_SIZE (1 << 14) /* 16MB */
@@ -395,7 +395,9 @@ filter_one(void *backend, const struct rbh_id *id,
 struct rbh_mut_iterator *
 generic_branch_backend_filter(void *backend, const struct rbh_filter *filter,
                               const struct rbh_filter_options *options,
-                              const struct rbh_filter_output *output)
+                              const struct rbh_filter_output *output,
+                              __attribute__((unused))
+                              struct rbh_metadata *metadata)
 {
     const struct rbh_filter_projection ID_ONLY = {
         .fsentry_mask = RBH_FP_ID,
