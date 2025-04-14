@@ -69,8 +69,6 @@ static bool skip_error = true;
 static void
 sync_source()
 {
-    const struct rbh_value_pair *pair;
-    const struct rbh_value *sources;
     struct rbh_value_map *info_map;
 
     info_map = rbh_backend_get_info(from, RBH_INFO_BACKEND_SOURCE);
@@ -79,13 +77,7 @@ sync_source()
         return;
     }
 
-    assert(info_map->count == 1);
-
-    pair = &info_map->pairs[0];
-    assert(strcmp(pair->key, "backend_source") == 0);
-    sources = pair->value;
-
-    if (rbh_backend_insert_source(to, sources))
+    if (rbh_backend_insert_metadata(to, info_map, RBH_DT_INFO) == 1)
         fprintf(stderr, "Failed to set backend_info\n");
 }
 
@@ -601,6 +593,59 @@ usage(void)
     return printf(message, program_invocation_short_name);
 }
 
+#define MIN_VALUES_SSTACK_ALLOC (1 << 6)
+static __thread struct rbh_sstack *metadata_sstack;
+
+static void __attribute__ ((destructor))
+destroy_metadata_sstack(void)
+{
+    if (metadata_sstack)
+        rbh_sstack_destroy(metadata_sstack);
+}
+
+struct rbh_value_map *
+sync_metadata_value_map(time_t sync_debut, time_t sync_end)
+{
+    struct rbh_value_map *value_map;
+    struct rbh_value_pair *pairs;
+    struct rbh_value *values;
+    double sync_duration;
+    int count = 3;
+
+    sync_duration = difftime(sync_end, sync_debut);
+
+    if (metadata_sstack == NULL) {
+        metadata_sstack = rbh_sstack_new(MIN_VALUES_SSTACK_ALLOC *
+                                         (sizeof(struct rbh_value_map *)));
+        if (!metadata_sstack)
+            return NULL;
+    }
+
+    value_map = RBH_SSTACK_PUSH(metadata_sstack, NULL, sizeof(*value_map));
+    values = RBH_SSTACK_PUSH(metadata_sstack, NULL, count * sizeof(*values));
+    pairs = RBH_SSTACK_PUSH(metadata_sstack, NULL, count * sizeof(*pairs));
+
+    pairs[0].key = "sync_debut";
+    values[0].type = RBH_VT_INT64;
+    values[0].int64 = (int64_t)sync_debut;
+    pairs[0].value = &values[0];
+
+    pairs[1].key = "sync_duration";
+    values[1].type = RBH_VT_INT64;
+    values[1].int64 = (int64_t)sync_duration;
+    pairs[1].value = &values[1];
+
+    pairs[2].key = "sync_end";
+    values[2].type = RBH_VT_INT64;
+    values[2].int64 = (int64_t)sync_end;
+    pairs[2].value = &values[2];
+
+    value_map->pairs = pairs;
+    value_map->count = count;
+
+    return value_map;
+}
+
 int
 main(int argc, char *argv[])
 {
@@ -641,6 +686,9 @@ main(int argc, char *argv[])
         .fsentry_mask = RBH_FP_ALL,
         .statx_mask = RBH_STATX_ALL & ~RBH_STATX_MNT_ID,
     };
+    struct rbh_value_map *metadata_map;
+    time_t sync_debut;
+    time_t sync_end;
     int rc;
     char c;
 
@@ -663,7 +711,8 @@ main(int argc, char *argv[])
                 rbh_projection_add(&projection, str2filter_field(optarg + 1));
                 break;
             case '-':
-                rbh_projection_remove(&projection, str2filter_field(optarg + 1));
+                rbh_projection_remove(&projection,
+                                      str2filter_field(optarg + 1));
                 break;
             default:
                 rbh_projection_set(&projection, str2filter_field(optarg));
@@ -707,7 +756,13 @@ main(int argc, char *argv[])
 
     sync_source();
 
+    sync_debut = time(NULL);
     sync(&projection);
+    sync_end = time(NULL);
+
+    metadata_map = sync_metadata_value_map(sync_debut, sync_end);
+
+    rbh_backend_insert_metadata(to, metadata_map, RBH_DT_LOG);
 
     rbh_config_free();
 
