@@ -24,7 +24,8 @@
  *----------------------------------------------------------------------------*/
 
 struct rbh_mut_iterator *
-rbh_posix_mfu_iter_new(const char *root,
+rbh_posix_mfu_iter_new(struct rbh_metadata *metadata,
+                       const char *root,
                        const char *entry,
                        int statx_sync_type);
 

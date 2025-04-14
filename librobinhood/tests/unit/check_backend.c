@@ -142,7 +142,7 @@ START_TEST(rbf_unsupported)
     struct rbh_backend *backend = test_backend_new();
     struct rbh_filter_options options = {};
 
-    ck_assert_ptr_null(rbh_backend_filter(backend, NULL, &options, NULL));
+    ck_assert_ptr_null(rbh_backend_filter(backend, NULL, &options, NULL, NULL));
     ck_assert_int_eq(errno, ENOTSUP);
 
     rbh_backend_destroy(backend);
