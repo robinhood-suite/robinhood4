@@ -674,10 +674,141 @@ mongo_backend_update(void *backend, struct rbh_iterator *fsevents)
      |                          insert_metadata                           |
      *--------------------------------------------------------------------*/
 
+#define SAFE_CLEANUP(x) if ((x) != NULL) { bson_destroy((x)); (x) = NULL; }
+
 static int
-mongo_backend_insert_metadata(void *backend, struct rbh_value_map *map)
+mongo_insert_source(mongoc_collection_t *collection, char *id_name,
+                    const struct rbh_value *backend_sequence)
 {
-    return 0;
+    char *field_to_insert;
+    char *option_key;
+    bson_t *filter;
+    bson_t *opts;
+    bool result;
+    int rc = 0;
+
+    if (strcmp(id_name, "backend_info") == 0) {
+        field_to_insert = "backend_source";
+        option_key = "$addToSet";
+    }
+
+    filter = BCON_NEW("_id", id_name);
+    opts = BCON_NEW("upsert", BCON_BOOL(true));
+
+    for (size_t i = 0 ; i < backend_sequence->sequence.count ; i++) {
+        bson_t metadata_doc;
+        bson_error_t error;
+        bson_t *update;
+
+        update = bson_new();
+
+        if (!(BSON_APPEND_DOCUMENT_BEGIN(update, option_key, &metadata_doc)
+             && BSON_APPEND_RBH_VALUE_MAP(
+                     &metadata_doc,
+                     field_to_insert,
+                     &backend_sequence->sequence.values[i].map
+                )
+             && bson_append_document_end(update, &metadata_doc))) {
+            SAFE_CLEANUP(update);
+            rc = -1;
+            break;
+        }
+
+        result = mongoc_collection_update_one(collection, filter, update, opts,
+                                              NULL, &error);
+        if (!result) {
+            fprintf(stderr, "Upsert failed: %s\n", error.message);
+            rc = -1;
+            break;
+        }
+
+        SAFE_CLEANUP(update);
+    }
+
+    SAFE_CLEANUP(filter);
+    SAFE_CLEANUP(opts);
+
+    return rc;
+}
+
+static int
+mongo_insert_sync_metadata(mongoc_collection_t *collection,
+                           const struct rbh_value_map *map_value)
+{
+    bson_t metadata_doc;
+    bson_error_t error;
+    bson_t *filter;
+    bson_t *update;
+    bson_t *opts;
+    int result;
+    int rc;
+
+    update = bson_new();
+
+    filter = BCON_NEW("_id", BCON_INT64(time(NULL)));
+    opts = BCON_NEW("upsert", BCON_BOOL(true));
+
+    if (!(BSON_APPEND_DOCUMENT_BEGIN(update, "$set", &metadata_doc)
+        && BSON_APPEND_RBH_VALUE_MAP(
+                &metadata_doc,
+                "sync_metadata",
+                map_value
+            )
+        && bson_append_document_end(update, &metadata_doc))) {
+        fprintf(stderr, "Error while appending rbh_value to bson\n");
+        rc = -1;
+        goto skip_update;
+    }
+
+    result = mongoc_collection_update_one(collection, filter, update, opts,
+                                          NULL, &error);
+    if (!result) {
+        fprintf(stderr, "Upsert failed: %s\n", error.message);
+        rc = -1;
+    }
+
+skip_update:
+    SAFE_CLEANUP(filter);
+    SAFE_CLEANUP(update);
+    SAFE_CLEANUP(opts);
+
+    return rc;
+}
+
+static int
+mongo_insert_metadata(void *backend, struct rbh_value_map *map_value,
+                      enum metadata_type_to_insert mdt)
+{
+    mongoc_collection_t *collection = NULL;
+    struct mongo_backend *mongo = backend;
+    int rc = 0;
+
+    switch (mdt) {
+    case RBH_DT_INFO:
+        collection = mongo->info;
+        break;
+    case RBH_DT_LOG:
+        collection = mongo->log;
+        break;
+    default:
+        fprintf(stderr, "Unknown Data_type\n");
+        return -1;
+    }
+
+    for (size_t i = 0 ; i < map_value->count ; i++) {
+        const struct rbh_value *value = map_value->pairs[i].value;
+
+        if (value->type == RBH_VT_SEQUENCE) {
+            rc = mongo_insert_source(collection, "backend_info",
+                                     value);
+            goto exit_loop;
+        }
+    }
+
+    rc = mongo_insert_sync_metadata(collection, map_value);
+
+exit_loop:
+    return rc;
 }
 
     /*--------------------------------------------------------------------*
@@ -1007,61 +1138,6 @@ out:
 }
 
     /*--------------------------------------------------------------------*
-     |                       insert_backend_source                        |
-     *--------------------------------------------------------------------*/
-
-static int
-mongo_insert_source(void *backend, const struct rbh_value *backend_sequence)
-{
-    struct mongo_backend *mongo = backend;
-    mongoc_collection_t *collection;
-    bson_t *filter;
-    bson_t *opts;
-    int rc = 0;
-
-    assert(backend_sequence->type == RBH_VT_SEQUENCE);
-
-    collection = mongo->info;
-    filter = BCON_NEW("_id", "backend_info");
-    opts = BCON_NEW("upsert", BCON_BOOL(true));
-
-    for (uint8_t i = 0 ; i < backend_sequence->sequence.count ; i++) {
-        bson_t backend_source;
-        bson_error_t error;
-        bson_t *update;
-        bool result;
-
-        update = bson_new();
-
-        if (!(BSON_APPEND_DOCUMENT_BEGIN(update, "$addToSet", &backend_source)
-              && BSON_APPEND_RBH_VALUE_MAP(
-                     &backend_source,
-                     "backend_source",
-                     &backend_sequence->sequence.values[i].map
-                 )
-              && bson_append_document_end(update, &backend_source))) {
-            bson_destroy(update);
-            rc = 1;
-            break;
-        }
-
-        result = mongoc_collection_update_one(collection, filter, update, opts,
-                                              NULL, &error);
-        bson_destroy(update);
-        if (!result) {
-            fprintf(stderr, "Upsert failed: %s\n", error.message);
-            rc = 1;
-            break;
-        }
-    }
-
-    bson_destroy(filter);
-    bson_destroy(opts);
-
-    return rc;
-}
-
-    /*--------------------------------------------------------------------*
      |                              destroy                               |
      *--------------------------------------------------------------------*/
 
@@ -1086,11 +1162,10 @@ static const struct rbh_backend_operations MONGO_BACKEND_OPS = {
     .branch = mongo_backend_branch,
     .root = mongo_root,
     .update = mongo_backend_update,
-    .insert_metadata = mongo_backend_insert_metadata,
     .filter = mongo_backend_filter,
     .report = mongo_backend_report,
     .get_info = mongo_backend_get_info,
-    .insert_source = mongo_insert_source,
+    .insert_metadata = mongo_insert_metadata,
     .destroy = mongo_backend_destroy,
 };
 
