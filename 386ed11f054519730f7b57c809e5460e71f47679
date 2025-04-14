@@ -16,6 +16,24 @@
       "message": "defect: meson build is not changed",
       "revId": "386ed11f054519730f7b57c809e5460e71f47679",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2c9c27d0_086377f6",
+        "filename": "rbh-sync/tests/test_db_db_sync.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-04-14T18:21:24Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "791a6884_3727c207",
+      "revId": "386ed11f054519730f7b57c809e5460e71f47679",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
