@@ -134,6 +134,12 @@ check_command_options(int argc, char *argv[])
     return 0;
 }
 
+static int
+import_backend_source(int pe_count, const struct rbh_value_map *backend_source)
+{
+    return 0;
+}
+
 /* XXX: Ugly but necessary until we can retrieve the list of backends
  * used to construct the mirror system from the mirror system itself.
  */
@@ -143,6 +149,39 @@ import_plugins(bool mongo_found, bool mpi_found,
 {
     int pe_count = 0;
     int pe_index = 0;
+
+    for (int i = 0; i < ctx.backend_count; ++i) {
+        assert(info_maps[i]->count == 1);
+        assert(strcmp(info_maps[i]->pairs->key, "backend_source") == 0);
+        assert(info_maps[i]->pairs[0].value->type == RBH_VT_SEQUENCE);
+
+        ctx.info_pe_count += info_maps[i]->pairs[0].value->sequence.count;
+    }
+
+    ctx.info_pe = malloc(ctx.info_pe_count * sizeof(*ctx.info_pe));
+    if (ctx.info_pe == NULL)
+        error(EXIT_FAILURE, errno, "malloc");
+
+    pe_count = 0;
+
+    for (int i = 0; i < ctx.backend_count; ++i) {
+        const struct rbh_value *backend_source_sequence =
+            info_maps[i]->pairs[0].value;
+
+        for (int j = 0; j < backend_source_sequence->sequence.count; ++j) {
+            const struct rbh_value *backend_source =
+                &backend_source_sequence->sequence.values[j];
+
+            assert(backend_source->type == RBH_VT_MAP);
+            pe_count += import_backend_source(pe_count, &backend_source->map);
+        }
+    }
+
+    ctx.info_pe_count = pe_count;
+
+    // XXX: temporary, will be removed
+    free(ctx.info_pe);
+    ctx.info_pe_count = 0;
 
     if (mongo_found)
         ctx.info_pe_count++;
@@ -169,15 +208,6 @@ import_plugins(bool mongo_found, bool mpi_found,
 
         ctx.info_pe[pe_index].is_plugin = true;
     }
-
-    for (int i = 0; i < ctx.backend_count; ++i) {
-        assert(info_maps[i]->count == 1);
-        assert(strcmp(info_maps[i]->pairs->key, "backend_source") == 0);
-        assert(info_maps[i]->pairs[0].value->type == RBH_VT_SEQUENCE);
-
-        pe_count += info_maps[i]->pairs[0].value->sequence.count;
-    }
-    printf("pe count = '%d'\n", pe_count);
 }
 
 int
