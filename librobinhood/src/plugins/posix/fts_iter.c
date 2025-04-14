@@ -17,6 +17,7 @@
 
 struct fts_iterator {
     struct posix_iterator posix;
+    struct rbh_metadata *metadata;
     FTS *fts_handle;
     FTSENT *ftsent;
 };
@@ -151,8 +152,9 @@ skip:
             return NULL;
         }
 
-        if (fsentry)
+        if (fsentry) {
             return fsentry;
+        }
         goto skip;
     case FTS_DC:
         errno = ELOOP;
@@ -240,6 +242,9 @@ skip:
         return NULL;
     }
 
+    if (iter->metadata != NULL)
+        iter->metadata->converted_entries++;
+
     return fsentry;
 }
 
@@ -274,7 +279,8 @@ static const struct rbh_mut_iterator FTS_ITER = {
 };
 
 struct rbh_mut_iterator *
-fts_iter_new(const char *root, const char *entry, int statx_sync_type)
+fts_iter_new(struct rbh_metadata *metadata, const char *root, const char *entry,
+             int statx_sync_type)
 {
     char *paths[2] = {NULL, NULL};
     struct fts_iterator *iter;
@@ -285,7 +291,7 @@ fts_iter_new(const char *root, const char *entry, int statx_sync_type)
     if (!iter)
         return NULL;
 
-    rc = posix_iterator_setup(&iter->posix, root, entry, statx_sync_type);
+   rc = posix_iterator_setup(&iter->posix, root, entry, statx_sync_type);
     save_errno = errno;
     if (rc == -1)
         goto free_iter;
@@ -300,6 +306,15 @@ fts_iter_new(const char *root, const char *entry, int statx_sync_type)
         goto free_iter;
 
     iter->posix.iterator = FTS_ITER;
+
+    if (metadata) {
+        iter->metadata = metadata;
+        /* As fts_iter count the parent directory entry twice, we need to
+         * substract one converted entries from the final count.
+         */
+        iter->metadata->converted_entries--;
+    } else
+        iter->metadata = NULL;
 
     return (struct rbh_mut_iterator *)iter;
 

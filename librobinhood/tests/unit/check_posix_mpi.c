@@ -74,7 +74,8 @@ START_TEST(lf_missing_root)
     ck_assert_ptr_nonnull(posix_mpi);
 
     errno = 0;
-    ck_assert_ptr_null(rbh_backend_filter(posix_mpi, NULL, &OPTIONS, NULL));
+    ck_assert_ptr_null(rbh_backend_filter(posix_mpi, NULL, &OPTIONS, NULL,
+                                          NULL));
     ck_assert_int_eq(errno, ENOENT);
 
     rbh_backend_destroy(posix_mpi);
@@ -104,7 +105,7 @@ START_TEST(lf_empty_root)
                                        false);
     ck_assert_ptr_nonnull(posix_mpi);
 
-    fsentries = rbh_backend_filter(posix_mpi, NULL, &OPTIONS, &OUTPUT);
+    fsentries = rbh_backend_filter(posix_mpi, NULL, &OPTIONS, &OUTPUT, NULL);
     ck_assert_ptr_nonnull(fsentries);
 
     fsentry = rbh_mut_iter_next(fsentries);

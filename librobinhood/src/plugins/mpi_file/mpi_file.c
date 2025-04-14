@@ -364,7 +364,8 @@ static struct rbh_mut_iterator *
 mpi_file_backend_filter(
     void *backend, const struct rbh_filter *filter,
     const struct rbh_filter_options *options,
-    __attribute__((unused)) const struct rbh_filter_output *output)
+    __attribute__((unused)) const struct rbh_filter_output *output,
+    __attribute__((unused)) struct rbh_metadata *metadata)
 {
     struct mpi_file_backend *mpi_file = backend;
     struct mfu_iterator *mpi_file_iter;

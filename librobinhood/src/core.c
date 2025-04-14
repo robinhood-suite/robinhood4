@@ -172,7 +172,7 @@ complete_get_filter(const struct rbh_filter *filter,
     struct rbh_fsentry *fsentry;
 
     fsentries = rbh_backend_filter(backend, filter->get.fsentry_to_get, options,
-                                   output);
+                                   output, NULL);
     if (fsentries == NULL)
         error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
                       "filter_fsentries");

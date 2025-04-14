@@ -82,7 +82,7 @@ START_TEST(lf_missing_root)
     ck_assert_ptr_nonnull(lustre);
 
     errno = 0;
-    ck_assert_ptr_null(rbh_backend_filter(lustre, NULL, &OPTIONS, NULL));
+    ck_assert_ptr_null(rbh_backend_filter(lustre, NULL, &OPTIONS, NULL, NULL));
     ck_assert_int_eq(errno, ENOENT);
 
     rbh_backend_destroy(lustre);
@@ -110,7 +110,7 @@ START_TEST(lf_empty_root)
     lustre = rbh_backend_plugin_new(posix, "lustre", EMPTY, NULL, false);
     ck_assert_ptr_nonnull(lustre);
 
-    fsentries = rbh_backend_filter(lustre, NULL, &OPTIONS, &OUTPUT);
+    fsentries = rbh_backend_filter(lustre, NULL, &OPTIONS, &OUTPUT, NULL);
     ck_assert_ptr_nonnull(fsentries);
 
     fsentry = rbh_mut_iter_next(fsentries);
