@@ -413,6 +413,7 @@ struct mongo_backend {
     mongoc_client_t *client;
     mongoc_collection_t *entries;
     mongoc_collection_t *info;
+    mongoc_collection_t *log;
 };
 
 static int
@@ -958,6 +959,7 @@ mongo_backend_destroy(void *backend)
 
     mongoc_collection_destroy(mongo->entries);
     mongoc_collection_destroy(mongo->info);
+    mongoc_collection_destroy(mongo->log);
     mongoc_client_destroy(mongo->client);
     free(mongo);
 }
@@ -1738,6 +1740,12 @@ mongo_backend_init_from_uri(struct mongo_backend *mongo,
         return -1;
     }
 
+    mongo->log = mongoc_client_get_collection(mongo->client, db, "log");
+    if (mongo->log == NULL) {
+        mongoc_client_destroy(mongo->client);
+        errno = ENOMEM;
+        return -1;
+    }
     return 0;
 }
 
