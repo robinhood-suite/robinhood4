@@ -385,7 +385,7 @@ iter_convert(struct rbh_iterator *fsentries,
     return &convert->iterator;
 }
 
-static void
+static ssize_t
 sync(const struct rbh_filter_projection *projection)
 {
     const struct rbh_filter_options OPTIONS = {
@@ -402,6 +402,7 @@ sync(const struct rbh_filter_projection *projection)
     struct rbh_mut_iterator *_fsentries;
     struct rbh_iterator *fsentries;
     struct rbh_iterator *fsevents;
+    ssize_t total_entries = 0;
 
     if (one) {
         struct rbh_fsentry *root;
@@ -463,6 +464,7 @@ sync(const struct rbh_filter_projection *projection)
         }
 
         count = rbh_backend_update(to, chunk);
+        total_entries += count;
         save_errno = errno;
         rbh_iter_destroy(chunk);
         if (count < 0) {
@@ -475,13 +477,15 @@ sync(const struct rbh_filter_projection *projection)
     switch (errno) {
     case ENODATA:
         rbh_backend_update(to, NULL);
-        return;
+        return total_entries;
     case RBH_BACKEND_ERROR:
         error(EXIT_FAILURE, 0, "unhandled error: %s", rbh_backend_error);
         __builtin_unreachable();
     default:
         error(EXIT_FAILURE, errno, "while iterating over SOURCE's entries");
     }
+
+    return total_entries;
 }
 
 /*----------------------------------------------------------------------------*
@@ -659,13 +663,14 @@ destroy_metadata_sstack(void)
 }
 
 struct rbh_value_map *
-sync_metadata_value_map(time_t sync_debut, time_t sync_end)
+sync_metadata_value_map(time_t sync_debut, time_t sync_end,
+                        ssize_t upserted_entries)
 {
     struct rbh_value_map *value_map;
     struct rbh_value_pair *pairs;
     struct rbh_value *values;
     double sync_duration;
-    int count = 3;
+    int count = 4;
 
     sync_duration = difftime(sync_end, sync_debut);
 
@@ -695,6 +700,12 @@ sync_metadata_value_map(time_t sync_debut, time_t sync_end)
     values[2].type = RBH_VT_INT64;
     values[2].int64 = (int64_t)sync_end;
     pairs[2].value = &values[2];
+
+    pairs[3].key = "upserted_entries";
+    values[3].type = RBH_VT_INT64;
+    values[3].int64 = (int64_t)upserted_entries / 2;
+    pairs[3].value = &values[3];
+
 
     value_map->pairs = pairs;
     value_map->count = count;
@@ -743,6 +754,7 @@ main(int argc, char *argv[])
         .statx_mask = RBH_STATX_ALL & ~RBH_STATX_MNT_ID,
     };
     struct rbh_value_map *metadata_map;
+    ssize_t upserted_entries;
     time_t sync_debut;
     time_t sync_end;
     int rc;
@@ -810,10 +822,11 @@ main(int argc, char *argv[])
     to = rbh_backend_from_uri(argv[1]);
 
     sync_debut = time(NULL);
-    sync(&projection);
+    upserted_entries = sync(&projection);
     sync_end = time(NULL);
 
-    metadata_map = sync_metadata_value_map(sync_debut, sync_end);
+    metadata_map = sync_metadata_value_map(sync_debut, sync_end,
+                                           upserted_entries);
 
     rbh_backend_insert_metadata(to, metadata_map);
 
