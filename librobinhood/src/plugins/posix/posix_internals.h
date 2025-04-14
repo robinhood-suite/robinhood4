@@ -17,7 +17,8 @@
 #include <robinhood/backend.h>
 
 struct rbh_mut_iterator *
-fts_iter_new(const char *root, const char *entry, int statx_sync_type);
+fts_iter_new(struct rbh_metadata *metadata, const char *root, const char *entry,
+             int statx_sync_type);
 
 int
 fts_iter_root_setup(struct posix_iterator *_iter);
