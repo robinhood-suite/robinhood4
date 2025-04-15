@@ -353,6 +353,7 @@ rbh_s3_backend_new(__attribute__((unused))
 {
     struct rbh_value value = { 0 };
     struct s3_backend *s3;
+    const char *crt_path;
     const char *password;
     const char *address;
     const char *user;
@@ -363,20 +364,22 @@ rbh_s3_backend_new(__attribute__((unused))
 
     load_rbh_config(config);
 
-    rbh_config_find("RBH_S3/S3_PASSWORD", &value, RBH_VT_STRING);
+    rbh_config_find("s3/password", &value, RBH_VT_STRING);
     password = value.string;
-    rbh_config_find("RBH_S3/S3_ADDRESS", &value, RBH_VT_STRING);
+    rbh_config_find("s3/address", &value, RBH_VT_STRING);
     address = value.string;
-    rbh_config_find("RBH_S3/S3_USER", &value, RBH_VT_STRING);
+    rbh_config_find("s3/user", &value, RBH_VT_STRING);
     user = value.string;
+    rbh_config_find("s3/crt_path", &value, RBH_VT_STRING);
+    crt_path = value.string;
 
-    if (!address || !user || !password) {
+    if (!address || !user || !password || !crt_path) {
         rbh_backend_error_printf("could not retrieve the s3 setup variables \
                                  from the config file");
         return NULL;
     }
 
-    s3_init_api(address, user, password);
+    s3_init_api(address, user, password, crt_path);
     s3->iter_new = s3_iterator_new;
     s3->backend = S3_BACKEND;
 
