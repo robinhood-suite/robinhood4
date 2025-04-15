@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "82be2539_ef895c54",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-04-15T07:38:11Z",
+      "side": 1,
+      "message": "typo: elements",
+      "range": {
+        "startLine": 14,
+        "startChar": 19,
+        "endLine": 14,
+        "endChar": 26
+      },
+      "revId": "b6972eb90eeec97e4e4bc306a966aae31929d8a9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "da8566c5_d685b824",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-04-15T07:38:11Z",
+      "side": 1,
+      "message": "comment: well if you want to talk about files in this document, what you can do is saying in the introduction that you will only discuss for files, but it will handle any kind of storage element\n\nThus, no need to change \"file\" in the entire document.",
+      "range": {
+        "startLine": 44,
+        "startChar": 9,
+        "endLine": 44,
+        "endChar": 13
+      },
+      "revId": "b6972eb90eeec97e4e4bc306a966aae31929d8a9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ff8e4ac9_67b5a7e3",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 445,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-04-15T07:38:11Z",
+      "side": 1,
+      "message": "style: size \u003e80 characters",
+      "range": {
+        "startLine": 445,
+        "startChar": 0,
+        "endLine": 445,
+        "endChar": 81
+      },
+      "revId": "b6972eb90eeec97e4e4bc306a966aae31929d8a9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0b9bc607_f9fb4f0d",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 475,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-04-15T07:38:11Z",
+      "side": 1,
+      "message": "style: size \u003e80 characters",
+      "range": {
+        "startLine": 475,
+        "startChar": 0,
+        "endLine": 475,
+        "endChar": 81
+      },
+      "revId": "b6972eb90eeec97e4e4bc306a966aae31929d8a9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4de3cd80_2f8bfc09",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 506,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-04-15T07:38:11Z",
+      "side": 1,
+      "message": "question: if I understood correctly, if you have 10 different rules, the policy engine will run 10 different find commands?",
+      "range": {
+        "startLine": 506,
+        "startChar": 2,
+        "endLine": 506,
+        "endChar": 61
+      },
+      "revId": "b6972eb90eeec97e4e4bc306a966aae31929d8a9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e5d0cbe2_d11d3e72",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 553,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-04-15T07:38:11Z",
+      "side": 1,
+      "message": "question: does that mean that even the retrieval is not done? a real skip?",
+      "range": {
+        "startLine": 551,
+        "startChar": 0,
+        "endLine": 553,
+        "endChar": 53
+      },
+      "revId": "b6972eb90eeec97e4e4bc306a966aae31929d8a9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}

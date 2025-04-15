@@ -303,6 +303,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "85d1b553_30519c67",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-04-15T07:38:11Z",
+      "side": 1,
+      "message": "Not sure it answered my question..\n\nHere I think you need to remove \"Python\" from this goal.",
+      "parentUuid": "bdd04106_3e64fa20",
+      "range": {
+        "startLine": 31,
+        "startChar": 0,
+        "endLine": 32,
+        "endChar": 45
+      },
+      "revId": "4647ebaa26906be4c28d3a560e69a7e1495b0533",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "92157dc4_095180f6",
         "filename": "designs/rbh-policy.rst",
         "patchSetId": 1
@@ -338,6 +362,30 @@
       "side": 1,
       "message": "You can see the following patch for more details, but it is an instance of a ConfigCondition class that defines the operator overloads to be able to have this kind of syntax in the python file",
       "parentUuid": "92157dc4_095180f6",
+      "range": {
+        "startLine": 71,
+        "startChar": 21,
+        "endLine": 71,
+        "endChar": 25
+      },
+      "revId": "4647ebaa26906be4c28d3a560e69a7e1495b0533",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c8c30b46_0c4a76cc",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-04-15T07:38:11Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "3a9f7a69_e0324eee",
       "range": {
         "startLine": 71,
         "startChar": 21,
