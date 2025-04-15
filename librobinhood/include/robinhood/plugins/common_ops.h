@@ -8,10 +8,33 @@
 #ifndef ROBINHOOD_BACKEND_COMMON_OPS_H
 #define ROBINHOOD_BACKEND_COMMON_OPS_H
 
+#include "robinhood/config.h"
+
 /**
  * Define a list of operations common to both plugins and extensions.
  */
 struct rbh_pe_common_operations {
+    /**
+     * Show the plugin or extension's helper, detailling specific predicates and
+     * directives.
+     *
+     * @param backend            the backend specified by user, which may be
+     *                           present in \p config, which this plugin or
+     *                           extension may use to fetch additionnal helper
+     * @param config             the config to use to determine which other
+     *                           plugins or extensions' helpers should be
+     *                           fetched
+     * @param predicate_helper   the output helper for predicates, should be
+     *                           freed by the caller with free()
+     * @param directive_helper   the output helper for directives, should be
+     *                           freed by the caller with free()
+     *
+     * @return                   the plugin or extension's helper for predicates
+     *                           and directives
+     */
+    void (*helper)(const char *backend, struct rbh_config *config,
+                   char **predicate_helper, char **directive_helper);
+
     /**
      * Check the given token corresponds to a predicate or action.
      *
@@ -83,6 +106,22 @@ struct rbh_pe_common_operations {
  * For each of their documentation, check the documentation of the common_ops
  * functions.
  */
+static inline void
+rbh_pe_common_ops_helper(
+    const struct rbh_pe_common_operations *common_ops, const char *backend,
+    struct rbh_config *config, char **predicate_helper, char **directive_helper
+)
+{
+    if (common_ops && common_ops->helper) {
+        common_ops->helper(backend, config, predicate_helper, directive_helper);
+        return;
+    }
+
+    errno = ENOTSUP;
+    *predicate_helper = NULL;
+    *directive_helper = NULL;
+}
+
 static inline enum rbh_parser_token
 rbh_pe_common_ops_check_valid_token(
     const struct rbh_pe_common_operations *common_ops,

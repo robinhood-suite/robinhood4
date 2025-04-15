@@ -28,16 +28,7 @@ struct rbh_plugin_extension {
     uint64_t version;
     uint64_t min_version;
     uint64_t max_version;
-
     const struct rbh_pe_common_operations *common_ops;
-
-    enum rbh_parser_token (*check_valid_token)(const char *token);
-    struct rbh_filter *(*build_filter)(const char **argv, int argc, int *index,
-                                       bool *need_prefetch);
-    int (*fill_entry_info)(char *output, int max_length,
-                           const struct rbh_fsentry *fsentry,
-                           const char *directive, const char *backend);
-    int (*delete_entry)(struct rbh_fsentry *fsentry);
 };
 
 /**
