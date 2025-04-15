@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a7edf90d_08b43e3e",
+        "filename": "librobinhood/src/plugins/mongo/mongo.c",
+        "patchSetId": 6
+      },
+      "lineNbr": 805,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-15T11:21:36Z",
+      "side": 1,
+      "message": "We can\u0027t know the size required in advance, it seems enough for now, and I don\u0027t really want to bother adding reallocs everywhere for something that most likely won\u0027t ever break",
+      "parentUuid": "e0f546c4_17de27fd",
+      "range": {
+        "startLine": 805,
+        "startChar": 17,
+        "endLine": 805,
+        "endChar": 21
+      },
+      "revId": "10928b5932b5af337344ae766f8134f4373dbef6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0daa195a_f6cbc235",
@@ -47,6 +71,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "36017eef_ce553506",
+        "filename": "librobinhood/src/plugins/mongo/mongo.c",
+        "patchSetId": 6
+      },
+      "lineNbr": 816,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-15T11:21:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0daa195a_f6cbc235",
+      "range": {
+        "startLine": 816,
+        "startChar": 4,
+        "endLine": 816,
+        "endChar": 18
+      },
+      "revId": "10928b5932b5af337344ae766f8134f4373dbef6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a208ce72_5e4d1cdf",
@@ -60,6 +108,24 @@
       "writtenOn": "2025-04-15T07:10:30Z",
       "side": 1,
       "message": "sugest: You can exit the while loop here",
+      "revId": "10928b5932b5af337344ae766f8134f4373dbef6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "857fc105_36b01582",
+        "filename": "librobinhood/src/plugins/mongo/mongo.c",
+        "patchSetId": 6
+      },
+      "lineNbr": 838,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-15T11:21:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a208ce72_5e4d1cdf",
       "revId": "10928b5932b5af337344ae766f8134f4373dbef6",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
