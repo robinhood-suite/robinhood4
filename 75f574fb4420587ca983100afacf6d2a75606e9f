@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "646a5a33_b139ed23",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-15T11:21:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2ad3ac30_d2e495de",
+      "range": {
+        "startLine": 10,
+        "startChar": 25,
+        "endLine": 10,
+        "endChar": 34
+      },
+      "revId": "75f574fb4420587ca983100afacf6d2a75606e9f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3d0b41a7_64d31a16",
@@ -55,6 +79,24 @@
       "side": 1,
       "message": "I completely agree, introducing a generic call like `rbh_backend_insert_info` to handle different types of information is a great idea. It would make the code more scalable.",
       "parentUuid": "3d0b41a7_64d31a16",
+      "revId": "75f574fb4420587ca983100afacf6d2a75606e9f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b9d4b33c_55189350",
+        "filename": "librobinhood/include/robinhood/backend.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 499,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-15T11:21:51Z",
+      "side": 1,
+      "message": "Yes, it will be added later, and will take in a map to add to the DB",
+      "parentUuid": "a734ab9a_74bf5fa3",
       "revId": "75f574fb4420587ca983100afacf6d2a75606e9f",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
