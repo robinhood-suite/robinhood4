@@ -9,3 +9,7 @@ subdir('posix')
 if test_mfu
     subdir('mpifile')
 endif
+
+if get_option('lustre').enabled()
+    subdir('lustre')
+endif

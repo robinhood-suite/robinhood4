@@ -9,7 +9,7 @@
 set -e
 
 test_dir=$(dirname $(readlink -e $0))
-. $test_dir/../../utils/tests/framework.bash
+. $test_dir/../../../utils/tests/framework.bash
 
 LUSTRE_DIR=/mnt/lustre/
 cd "$LUSTRE_DIR"
