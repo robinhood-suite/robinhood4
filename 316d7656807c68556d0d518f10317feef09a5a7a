@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ddd0ca32_c42f6357",
+        "filename": "rbh-info/tests/test_mpi_file.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-04-15T07:31:09Z",
+      "side": 1,
+      "message": "sugest: You don\u0027t need to create files and directories",
+      "range": {
+        "startLine": 18,
+        "startChar": 4,
+        "endLine": 20,
+        "endChar": 19
+      },
+      "revId": "316d7656807c68556d0d518f10317feef09a5a7a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
