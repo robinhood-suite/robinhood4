@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 
 # This file is part of RobinHood 4
-# Copyright (C) 2023 Commissariat a l'energie atomique et aux energies
+# Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
 # alternatives
 
 test_dir=$(dirname $(readlink -e $0))
-. $test_dir/../../utils/tests/framework.bash
+. $test_dir/../../../utils/tests/framework.bash
 
 dirs=(`mktemp --dir; mktemp --dir; mktemp --dir; mktemp --dir`)
 # mktemp creates directory with permission 700 which conflicts with some tests
