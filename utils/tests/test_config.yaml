@@ -18,4 +18,10 @@ backends:
         extends: posix
         enrichers:
             - retention
+
+s3:
+    address: 127.0.0.1:9000
+    user: minioadmin
+    password: minioadmin
+    crt_path: /root/minio/certs/public.crt
 ---

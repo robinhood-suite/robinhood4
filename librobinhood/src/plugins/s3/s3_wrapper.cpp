@@ -36,20 +36,24 @@ struct metadata {
 std::unique_ptr<S3CLIENT> s3_client_ptr = nullptr;
 std::unique_ptr<metadata> s3_metadata_ptr = nullptr;
 std::unique_ptr<map_entry> entry_ptr = nullptr;
+std::shared_ptr<Aws::SDKOptions> options_ptr =
+    std::make_shared<Aws::SDKOptions>();
 
 /*----------------------------------------------------------------------------*
  |                                      API                                   |
  *----------------------------------------------------------------------------*/
 
 void
-s3_init_api(const char *address, const char *username, const char *password)
+s3_init_api(const char *address, const char *username, const char *password,
+            const char *crt_path)
 {
-    Aws::SDKOptions options;
-    Aws::InitAPI(options);
+    Aws::InitAPI(*options_ptr);
     Aws::S3::S3ClientConfiguration config;
     config.endpointOverride = address;
     config.scheme = Aws::Http::Scheme::HTTPS;
     Aws::Auth::AWSCredentials credentials(username, password);
+    config.caFile = crt_path;
+    config.verifySSL = true;
     s3_client_ptr = std::unique_ptr<S3CLIENT>(new S3CLIENT(credentials,
                                               config, SIGNING_POLICY::Never,
                                               false));
@@ -62,8 +66,13 @@ s3_destroy_api()
     s3_client_ptr.reset();
     s3_metadata_ptr.reset();
     entry_ptr.reset();
-    Aws::SDKOptions options;
-    Aws::ShutdownAPI(options);
+
+    /**
+     * The attribute destructor in rbh-sync causes this function to segfault
+     * Temporarily commented out until a solution is found.
+     */
+    //Aws::ShutdownAPI(*options_ptr);
+    options_ptr.reset();
 }
 
 /*----------------------------------------------------------------------------*
