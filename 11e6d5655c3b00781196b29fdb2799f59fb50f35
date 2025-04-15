@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e6622fcd_75471e9f",
+        "filename": "rbh-fsevents/tests/lustre/test_rename.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-04-15T08:08:36Z",
+      "side": 1,
+      "message": "minor: the code has changed but not the comment: does the ID changed?",
+      "range": {
+        "startLine": 22,
+        "startChar": 10,
+        "endLine": 22,
+        "endChar": 35
+      },
+      "revId": "11e6d5655c3b00781196b29fdb2799f59fb50f35",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
