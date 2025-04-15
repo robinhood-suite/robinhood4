@@ -16,6 +16,10 @@ if libhestia.found()
     integration_tests += ['test_hestia_mongo_sync']
 endif
 
+if libs3.found()
+    integration_tests += ['test_s3_mongo_sync']
+endif
+
 foreach t: integration_tests
     e = find_program(t + '.bash')
     test(t, e, is_parallel: false, env: backend_path_env,
