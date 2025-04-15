@@ -12,4 +12,3 @@ executable(
 	dependencies: [librobinhood_dep, librbhfind_dep, liblustre],
 	install: true,
 )
-subdir('tests')

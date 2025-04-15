@@ -19,8 +19,12 @@ static int
 write_expiration_date_from_entry(const struct rbh_fsentry *fsentry,
                                  char *output, int max_length)
 {
-    const struct rbh_value *value =
-        rbh_fsentry_find_inode_xattr(fsentry, "trusted.expiration_date");
+    const struct rbh_value *value;
+
+    if ((fsentry->mask & RBH_FP_INODE_XATTRS) == 0)
+        return snprintf(output, max_length, "None");
+
+    value = rbh_fsentry_find_inode_xattr(fsentry, "trusted.expiration_date");
 
     if (value == NULL || value->type != RBH_VT_INT64)
         return snprintf(output, max_length, "None");
@@ -43,6 +47,8 @@ write_expires_from_entry(const struct rbh_fsentry *fsentry,
                                                     "user.expires");
 
     if (retention_attribute == NULL)
+        return snprintf(output, max_length, "None");
+    if ((fsentry->mask & RBH_FP_INODE_XATTRS) == 0)
         return snprintf(output, max_length, "None");
 
     value = rbh_fsentry_find_inode_xattr(fsentry, retention_attribute);
