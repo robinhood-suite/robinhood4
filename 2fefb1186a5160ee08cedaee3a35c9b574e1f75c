@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3e2e6d38_fb539bb5",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-04-15T07:14:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "650e4518_52f366b9",
+      "range": {
+        "startLine": 87,
+        "startChar": 1,
+        "endLine": 87,
+        "endChar": 27
+      },
+      "revId": "2fefb1186a5160ee08cedaee3a35c9b574e1f75c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "548a4187_d704a52f",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-04-11T14:27:34Z",
       "side": 1,
       "message": "nit: missing the `f` before the string",
+      "range": {
+        "startLine": 148,
+        "startChar": 23,
+        "endLine": 148,
+        "endChar": 24
+      },
+      "revId": "2fefb1186a5160ee08cedaee3a35c9b574e1f75c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b78b8d4f_73302615",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-04-15T07:14:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "548a4187_d704a52f",
       "range": {
         "startLine": 148,
         "startChar": 23,
@@ -70,6 +118,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d9d2bd76_a51ffd91",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-04-15T07:14:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2ed2a269_3eb5ec48",
+      "range": {
+        "startLine": 156,
+        "startChar": 16,
+        "endLine": 156,
+        "endChar": 24
+      },
+      "revId": "2fefb1186a5160ee08cedaee3a35c9b574e1f75c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "eb0341e9_00831320",
@@ -83,6 +155,30 @@
       "writtenOn": "2025-04-11T14:27:34Z",
       "side": 1,
       "message": "comment: thinking about this now, but we\u0027ll most likely have to separate the plugin/extension-specific policies and fileclasses. Since the daemon may be usable for POSIX only, the Lustre-specific policies and fileclasses may not be needed (and available even)",
+      "range": {
+        "startLine": 160,
+        "startChar": 14,
+        "endLine": 160,
+        "endChar": 23
+      },
+      "revId": "2fefb1186a5160ee08cedaee3a35c9b574e1f75c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4e2a18fe_0c3b61c7",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-04-15T07:14:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eb0341e9_00831320",
       "range": {
         "startLine": 160,
         "startChar": 14,
@@ -139,6 +235,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1eea610c_df601a7f",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-04-15T07:14:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "115791d0_e415552e",
+      "range": {
+        "startLine": 164,
+        "startChar": 62,
+        "endLine": 164,
+        "endChar": 66
+      },
+      "revId": "2fefb1186a5160ee08cedaee3a35c9b574e1f75c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bf6d6698_50b7dc42",
@@ -152,6 +272,30 @@
       "writtenOn": "2025-04-11T14:27:34Z",
       "side": 1,
       "message": "question: will this encompass all rbh-find allowed filters ?",
+      "range": {
+        "startLine": 251,
+        "startChar": 0,
+        "endLine": 251,
+        "endChar": 17
+      },
+      "revId": "2fefb1186a5160ee08cedaee3a35c9b574e1f75c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a29d1360_593653b9",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 251,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-04-15T07:14:56Z",
+      "side": 1,
+      "message": "This will be possible, I started by listing only the main ones",
+      "parentUuid": "bf6d6698_50b7dc42",
       "range": {
         "startLine": 251,
         "startChar": 0,
@@ -185,6 +329,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2864b7b9_f4099af7",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-04-15T07:14:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9b120607_ee9d214e",
+      "range": {
+        "startLine": 270,
+        "startChar": 22,
+        "endLine": 270,
+        "endChar": 54
+      },
+      "revId": "2fefb1186a5160ee08cedaee3a35c9b574e1f75c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "11db2182_f93617bb",
@@ -198,6 +366,30 @@
       "writtenOn": "2025-04-11T14:27:34Z",
       "side": 1,
       "message": "question: why is this filter allowed and not count ? It isn\u0027t even in rbh-find",
+      "range": {
+        "startLine": 286,
+        "startChar": 0,
+        "endLine": 288,
+        "endChar": 62
+      },
+      "revId": "2fefb1186a5160ee08cedaee3a35c9b574e1f75c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9c265dc4_10008b13",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-04-15T07:14:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "11db2182_f93617bb",
       "range": {
         "startLine": 286,
         "startChar": 0,
@@ -233,6 +425,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "535f7f61_e1dca25b",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-04-15T07:14:56Z",
+      "side": 1,
+      "message": "Python is not know by all admin ;) (But it\u0027s true, I made a list of operators and units so I did the same thing for everyone ven the obvious ones)",
+      "parentUuid": "31207d19_53a53098",
+      "range": {
+        "startLine": 311,
+        "startChar": 10,
+        "endLine": 311,
+        "endChar": 20
+      },
+      "revId": "2fefb1186a5160ee08cedaee3a35c9b574e1f75c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1705dde7_e2fc74f0",
         "filename": "designs/rbh-policy.rst",
         "patchSetId": 2
@@ -244,6 +460,30 @@
       "writtenOn": "2025-04-11T14:27:34Z",
       "side": 1,
       "message": "minor: `group !\u003d \"research\"`, that\u0027s not really a good example of the conditions",
+      "range": {
+        "startLine": 362,
+        "startChar": 4,
+        "endLine": 362,
+        "endChar": 26
+      },
+      "revId": "2fefb1186a5160ee08cedaee3a35c9b574e1f75c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "807b2491_9be24b96",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 362,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-04-15T07:14:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1705dde7_e2fc74f0",
       "range": {
         "startLine": 362,
         "startChar": 4,
