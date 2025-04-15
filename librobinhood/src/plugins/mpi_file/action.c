@@ -17,5 +17,5 @@ rbh_mpi_file_delete_entry(struct rbh_fsentry *fsentry)
         if (import_posix_plugin())
             return -1;
 
-    return rbh_plugin_delete_entry(posix_plugin, fsentry);
+    return rbh_pe_common_ops_delete_entry(posix_plugin->common_ops, fsentry);
 }
