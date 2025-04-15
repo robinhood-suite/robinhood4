@@ -16,6 +16,24 @@
       "message": "typo: iterates",
       "revId": "440d17b7f57be21b657c1bb34c650a41fad66d03",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9f9f9f87_699fcc7f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-04-15T11:11:04Z",
+      "side": 1,
+      "message": "I think iterate is correct in this context.",
+      "parentUuid": "2d1d8f24_de07e08f",
+      "revId": "440d17b7f57be21b657c1bb34c650a41fad66d03",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
