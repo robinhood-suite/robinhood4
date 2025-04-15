@@ -144,6 +144,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a3eaa2fb_77a34a0a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-04-15T07:17:50Z",
+      "side": 1,
+      "message": "Not done",
+      "parentUuid": "ccc078e9_bf954be3",
+      "range": {
+        "startLine": 11,
+        "startChar": 61,
+        "endLine": 11,
+        "endChar": 64
+      },
+      "revId": "b9194139813c03d819e4c676134ab8965c1aacf9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "35fe91eb_a16110b0",
         "filename": "/COMMIT_MSG",
         "patchSetId": 1
