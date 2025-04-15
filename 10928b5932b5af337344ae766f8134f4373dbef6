@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0daa195a_f6cbc235",
+        "filename": "librobinhood/src/plugins/mongo/mongo.c",
+        "patchSetId": 6
+      },
+      "lineNbr": 816,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-04-15T07:10:30Z",
+      "side": 1,
+      "message": "minor: declare it above",
+      "range": {
+        "startLine": 816,
+        "startChar": 4,
+        "endLine": 816,
+        "endChar": 18
+      },
+      "revId": "10928b5932b5af337344ae766f8134f4373dbef6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a208ce72_5e4d1cdf",
+        "filename": "librobinhood/src/plugins/mongo/mongo.c",
+        "patchSetId": 6
+      },
+      "lineNbr": 838,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-04-15T07:10:30Z",
+      "side": 1,
+      "message": "sugest: You can exit the while loop here",
+      "revId": "10928b5932b5af337344ae766f8134f4373dbef6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
