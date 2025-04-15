@@ -342,6 +342,6 @@ rbh_mpi_file_build_filter(const char **argv, int argc, int *index,
         if (import_posix_plugin())
             return NULL;
 
-    return rbh_plugin_build_filter(posix_plugin, argv, argc, index,
-                                   need_prefetch);
+    return rbh_pe_common_ops_build_filter(posix_plugin->common_ops, argv, argc,
+                                          index, need_prefetch);
 }
