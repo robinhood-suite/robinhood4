@@ -34,13 +34,6 @@ struct rbh_backend_plugin_operations {
                                const char *fsname,
                                struct rbh_config *config,
                                bool read_only);
-    enum rbh_parser_token (*check_valid_token)(const char *token);
-    struct rbh_filter *(*build_filter)(const char **argv, int argc, int *index,
-                                       bool *need_prefetch);
-    int (*fill_entry_info)(char *output, int max_length,
-                           const struct rbh_fsentry *fsentry,
-                           const char *directive, const char *backend);
-    int (*delete_entry)(struct rbh_fsentry *fsentry);
     void (*destroy)();
 };
 
@@ -189,102 +182,6 @@ rbh_backend_plugin_destroy(const char *name)
 
     if (plugin->ops->destroy)
         plugin->ops->destroy();
-}
-
-static inline enum rbh_parser_token
-rbh_plugin_check_valid_token(const struct rbh_backend_plugin *plugin,
-                             const char *token)
-{
-    if (plugin->ops->check_valid_token)
-        return plugin->ops->check_valid_token(token);
-
-    errno = ENOTSUP;
-    return RBH_TOKEN_UNKNOWN;
-}
-
-static inline struct rbh_filter *
-rbh_plugin_build_filter(const struct rbh_backend_plugin *plugin,
-                        const char **argv, int argc, int *index,
-                        bool *need_prefetch)
-{
-    if (plugin->ops->build_filter)
-        return plugin->ops->build_filter(argv, argc, index, need_prefetch);
-
-    errno = ENOTSUP;
-    return NULL;
-}
-
-static inline int
-rbh_plugin_fill_entry_info(const struct rbh_backend_plugin *plugin,
-                           char *output, int max_length,
-                           const struct rbh_fsentry *fsentry,
-                           const char *directive, const char *backend)
-{
-    if (plugin->ops->fill_entry_info)
-        return plugin->ops->fill_entry_info(output, max_length, fsentry,
-                                            directive, backend);
-
-    errno = ENOTSUP;
-    return -1;
-}
-
-static inline int
-rbh_plugin_delete_entry(const struct rbh_backend_plugin *plugin,
-                        struct rbh_fsentry *fsentry)
-{
-    if (plugin->ops->delete_entry)
-        return plugin->ops->delete_entry(fsentry);
-
-    errno = ENOTSUP;
-    return -1;
-}
-
-static inline enum rbh_parser_token
-rbh_extension_check_valid_token(const struct rbh_plugin_extension *extension,
-                                const char *token)
-{
-    if (extension->check_valid_token)
-        return extension->check_valid_token(token);
-
-    errno = ENOTSUP;
-    return RBH_TOKEN_ERROR;
-}
-
-static inline struct rbh_filter *
-rbh_extension_build_filter(const struct rbh_plugin_extension *extension,
-                           const char **argv, int argc, int *index,
-                           bool *need_prefetch)
-{
-    if (extension->build_filter)
-        return extension->build_filter(argv, argc, index, need_prefetch);
-
-    errno = ENOTSUP;
-    return NULL;
-}
-
-static inline int
-rbh_extension_fill_entry_info(const struct rbh_plugin_extension *extension,
-                              char *output, int max_length,
-                              const struct rbh_fsentry *fsentry,
-                              const char *directive, const char *backend)
-{
-    if (extension->fill_entry_info)
-        return extension->fill_entry_info(output, max_length, fsentry,
-                                          directive, backend);
-
-    errno = ENOTSUP;
-    return -1;
-}
-
-static inline int
-rbh_extension_delete_entry(const struct rbh_plugin_extension *extension,
-                           struct rbh_fsentry *fsentry)
-{
-    if (extension->delete_entry)
-        return extension->delete_entry(fsentry);
-
-    errno = ENOTSUP;
-    return -1;
 }
 
 #endif
