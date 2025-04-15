@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d79c54a6_114cdaa7",
+        "filename": "rbh-info/tests/test_lustre.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-15T11:21:20Z",
+      "side": 1,
+      "message": "Since we have the POSIX plugin and the lustre/retention extensions here, I\u0027m kinda tired of writing \"plugin and extension\" everywhere... We\u0027ll most likely have to do a patch for naming convention, but later",
+      "parentUuid": "ce9a0d7c_b7bd0136",
+      "range": {
+        "startLine": 24,
+        "startChar": 21,
+        "endLine": 24,
+        "endChar": 29
+      },
+      "revId": "21990064f7205ac740c9b4952108c50a610552d6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e15b0e8b_53fb66d0",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-04-15T07:24:37Z",
       "side": 1,
       "message": "suggest: extension/enricher",
+      "range": {
+        "startLine": 31,
+        "startChar": 26,
+        "endLine": 31,
+        "endChar": 33
+      },
+      "revId": "21990064f7205ac740c9b4952108c50a610552d6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6b9f339e_c5b1810e",
+        "filename": "rbh-info/tests/test_lustre.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-15T11:21:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e15b0e8b_53fb66d0",
       "range": {
         "startLine": 31,
         "startChar": 26,
