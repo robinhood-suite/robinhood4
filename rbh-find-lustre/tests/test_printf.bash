@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # This file is part of the RobinHood Library
-# Copyright (C) 2023 Commissariat a l'energie atomique et aux energies
+# Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
@@ -21,8 +21,8 @@ test_id()
 
     rbh_sync "rbh:lustre:." "rbh:mongo:$testdb"
 
-    local IDA=$(rbh_lfind "rbh:mongo:$testdb" -name fileA -printf "%I\n")
-    local IDB=$(rbh_lfind "rbh:mongo:$testdb" -name fileB -printf "%I\n")
+    local IDA=$(rbh_find "rbh:mongo:$testdb" -name fileA -printf "%I\n")
+    local IDB=$(rbh_find "rbh:mongo:$testdb" -name fileB -printf "%I\n")
 
     local countA="$(mongo "$testdb" --eval \
                     "db.entries.countDocuments({\"_id\": BinData(0, \"$IDA\")})")"
