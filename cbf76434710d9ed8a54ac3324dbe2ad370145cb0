@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "79500bf5_1700fc3c",
+        "filename": "librobinhood/src/plugins/posix/posix.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 1104,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-04-15T07:17:48Z",
+      "side": 1,
+      "message": "defect: it should be `count`, `idx` is not used",
+      "range": {
+        "startLine": 1104,
+        "startChar": 23,
+        "endLine": 1104,
+        "endChar": 26
+      },
+      "revId": "cbf76434710d9ed8a54ac3324dbe2ad370145cb0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
