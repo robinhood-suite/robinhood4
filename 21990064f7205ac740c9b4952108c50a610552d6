@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e15b0e8b_53fb66d0",
+        "filename": "rbh-info/tests/test_lustre.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-04-15T07:24:37Z",
+      "side": 1,
+      "message": "suggest: extension/enricher",
+      "range": {
+        "startLine": 31,
+        "startChar": 26,
+        "endLine": 31,
+        "endChar": 33
+      },
+      "revId": "21990064f7205ac740c9b4952108c50a610552d6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
