@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # This file is part of RobinHood 4
-# Copyright (C) 2024 Commissariat a l'energie atomique et aux energies
+# Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
@@ -25,17 +25,17 @@ test_pool()
 
     rbh_sync "rbh:lustre:." "rbh:mongo:$testdb"
 
-    rbh_lfind "rbh:mongo:$testdb" -pool blob | sort |
+    rbh_find "rbh:mongo:$testdb" -pool blob | sort |
         difflines
-    rbh_lfind "rbh:mongo:$testdb" -pool test_pool | sort |
+    rbh_find "rbh:mongo:$testdb" -pool test_pool | sort |
         difflines
-    rbh_lfind "rbh:mongo:$testdb" -pool TEST_POOL1 | sort |
+    rbh_find "rbh:mongo:$testdb" -pool TEST_POOL1 | sort |
         difflines
-    rbh_lfind "rbh:mongo:$testdb" -pool test_pool1 | sort |
+    rbh_find "rbh:mongo:$testdb" -pool test_pool1 | sort |
         difflines "/$file"
-    rbh_lfind "rbh:mongo:$testdb" -pool test_pool2 | sort |
+    rbh_find "rbh:mongo:$testdb" -pool test_pool2 | sort |
         difflines "/$file"
-    rbh_lfind "rbh:mongo:$testdb" -pool test_* | sort |
+    rbh_find "rbh:mongo:$testdb" -pool test_* | sort |
         difflines "/$file" "/$file2"
 }
 
@@ -51,17 +51,17 @@ test_ipool()
 
     rbh_sync "rbh:lustre:." "rbh:mongo:$testdb"
 
-    rbh_lfind "rbh:mongo:$testdb" -ipool blob | sort |
+    rbh_find "rbh:mongo:$testdb" -ipool blob | sort |
         difflines
-    rbh_lfind "rbh:mongo:$testdb" -ipool test_pool | sort |
+    rbh_find "rbh:mongo:$testdb" -ipool test_pool | sort |
         difflines
-    rbh_lfind "rbh:mongo:$testdb" -ipool TEST_POOL1 | sort |
+    rbh_find "rbh:mongo:$testdb" -ipool TEST_POOL1 | sort |
         difflines "/$file"
-    rbh_lfind "rbh:mongo:$testdb" -ipool test_pool1 | sort |
+    rbh_find "rbh:mongo:$testdb" -ipool test_pool1 | sort |
         difflines "/$file"
-    rbh_lfind "rbh:mongo:$testdb" -ipool tEsT_pOoL2 | sort |
+    rbh_find "rbh:mongo:$testdb" -ipool tEsT_pOoL2 | sort |
         difflines "/$file"
-    rbh_lfind "rbh:mongo:$testdb" -ipool TEST_* | sort |
+    rbh_find "rbh:mongo:$testdb" -ipool TEST_* | sort |
         difflines "/$file" "/$file2"
 }
 

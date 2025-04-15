@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # This file is part of RobinHood 4
-# Copyright (C) 2021 Commissariat a l'energie atomique et aux energies
+# Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
@@ -21,7 +21,7 @@ test_equal_1K()
 
     rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
 
-    rbh_lfind "rbh:mongo:$testdb" -size 1k | sort |
+    rbh_find "rbh:mongo:$testdb" -size 1k | sort |
         difflines "/" "/1K"
 }
 
@@ -37,7 +37,7 @@ test_plus_1K_minus_1M()
     # Filtering on size +1k and size -1M is supposed to match nothing, as
     # +1k ensures we only get files of length 2k and more, while -1M
     # only matches files of length 0.
-    rbh_lfind "rbh:mongo:$testdb" -size +1k -size -1M | sort | difflines
+    rbh_find "rbh:mongo:$testdb" -size +1k -size -1M | sort | difflines
 }
 
 test_branch_equal_1K()
@@ -50,7 +50,7 @@ test_branch_equal_1K()
 
     rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
 
-    rbh_lfind "rbh:mongo:$testdb#dir" -size 1k | sort |
+    rbh_find "rbh:mongo:$testdb#dir" -size 1k | sort |
         difflines "/dir" "/dir/1K"
 }
 
@@ -65,7 +65,7 @@ test_branch_plus_1K_minus_1M()
 
     rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
 
-    rbh_lfind "rbh:mongo:$testdb#dir" -size +1k -size -1M | sort | difflines
+    rbh_find "rbh:mongo:$testdb#dir" -size +1k -size -1M | sort | difflines
 }
 
 test_octal()
@@ -83,7 +83,7 @@ test_octal()
     rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
 
     for ((i = 0; i < ${#perms[@]}; i++)); do
-        rbh_lfind "rbh:mongo:$testdb" -perm "${perms[i]}" | sort |
+        rbh_find "rbh:mongo:$testdb" -perm "${perms[i]}" | sort |
             difflines "/file.${perms[i]}" || error "incorrect match"
     done
 }
@@ -102,7 +102,7 @@ test_symbolic()
     rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
 
     for (( i = 0; i < ${#symbolic[@]}; i++ )); do
-        rbh_lfind "rbh:mongo:$testdb" -perm "${symbolic[i]}" | sort |
+        rbh_find "rbh:mongo:$testdb" -perm "${symbolic[i]}" | sort |
             difflines "/file.${perms[i]}" || error "incorrect match"
     done
 }
@@ -114,9 +114,9 @@ test_xattr_exists()
 
     rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
 
-    rbh_lfind "rbh:mongo:$testdb" -xattr user | sort |
+    rbh_find "rbh:mongo:$testdb" -xattr user | sort |
         difflines "/file"
-    rbh_lfind "rbh:mongo:$testdb" -xattr user.key | sort |
+    rbh_find "rbh:mongo:$testdb" -xattr user.key | sort |
         difflines "/file"
 }
 
@@ -127,8 +127,8 @@ test_xattr_not_exists()
 
     rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
 
-    rbh_lfind "rbh:mongo:$testdb" -xattr blob | sort | difflines
-    rbh_lfind "rbh:mongo:$testdb" -xattr user.err | sort | difflines
+    rbh_find "rbh:mongo:$testdb" -xattr blob | sort | difflines
+    rbh_find "rbh:mongo:$testdb" -xattr user.err | sort | difflines
 }
 
 ################################################################################
