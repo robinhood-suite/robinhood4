@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # This file is part of RobinHood 4
-# Copyright (C) 2024 Commissariat a l'energie atomique et aux energies
+# Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
@@ -18,10 +18,10 @@ cd "$LUSTRE_DIR"
 
 test_invalid()
 {
-    rbh_lfind "rbh:$db:$testdb" -layout-pattern 42 &&
+    rbh_find "rbh:$db:$testdb" -layout-pattern 42 &&
         error "find with an invalid layout should have failed"
 
-    rbh_lfind "rbh:$db:$testdb" -layout-pattern invalid &&
+    rbh_find "rbh:$db:$testdb" -layout-pattern invalid &&
         error "find with an invalid layout should have failed"
 
     return 0
@@ -35,19 +35,19 @@ test_default()
 
     rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
 
-    rbh_lfind "rbh:$db:$testdb" -layout-pattern default | sort |
+    rbh_find "rbh:$db:$testdb" -layout-pattern default | sort |
         difflines "/" "/$dir"
 
     lfs setstripe -L mdt -E 1M $dir
     rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
 
-    rbh_lfind "rbh:$db:$testdb" -layout-pattern default | sort |
+    rbh_find "rbh:$db:$testdb" -layout-pattern default | sort |
         difflines "/"
 
     lfs setstripe -L raid0 $dir
     rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
 
-    rbh_lfind "rbh:$db:$testdb" -layout-pattern default | sort |
+    rbh_find "rbh:$db:$testdb" -layout-pattern default | sort |
         difflines "/"
 }
 
@@ -64,25 +64,25 @@ test_layout()
 
     rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
 
-    rbh_lfind "rbh:$db:$testdb" -layout-pattern raid0 | sort |
+    rbh_find "rbh:$db:$testdb" -layout-pattern raid0 | sort |
         difflines "/" "/$dir/$file"
-    rbh_lfind "rbh:$db:$testdb" -layout-pattern mdt | sort |
+    rbh_find "rbh:$db:$testdb" -layout-pattern mdt | sort |
         difflines "/$dir"
 
     lfs migrate -L mdt -E 1M $dir/$file
     rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
 
-    rbh_lfind "rbh:$db:$testdb" -layout-pattern raid0 | sort |
+    rbh_find "rbh:$db:$testdb" -layout-pattern raid0 | sort |
         difflines "/"
-    rbh_lfind "rbh:$db:$testdb" -layout-pattern mdt | sort |
+    rbh_find "rbh:$db:$testdb" -layout-pattern mdt | sort |
         difflines "/$dir" "/$dir/$file"
 
     lfs setstripe -L mdt -E 1M .
     rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
 
-    rbh_lfind "rbh:$db:$testdb" -layout-pattern raid0 | sort |
+    rbh_find "rbh:$db:$testdb" -layout-pattern raid0 | sort |
         difflines
-    rbh_lfind "rbh:$db:$testdb" -layout-pattern mdt | sort |
+    rbh_find "rbh:$db:$testdb" -layout-pattern mdt | sort |
         difflines "/" "/$dir" "/$dir/$file"
 }
 
@@ -96,21 +96,21 @@ test_default_layout()
 
     rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
 
-    rbh_lfind "rbh:$db:$testdb" -layout-pattern mdt | sort |
+    rbh_find "rbh:$db:$testdb" -layout-pattern mdt | sort |
         difflines
 
     lfs setstripe -L mdt -E 1M $LUSTRE_DIR
 
-    rbh_lfind "rbh:$db:$testdb" -layout-pattern mdt | sort |
+    rbh_find "rbh:$db:$testdb" -layout-pattern mdt | sort |
         difflines "/" "/$dir"
-    rbh_lfind "rbh:$db:$testdb" -layout-pattern raid0 | sort |
+    rbh_find "rbh:$db:$testdb" -layout-pattern raid0 | sort |
         difflines "/$file"
 
     lfs setstripe -L raid0 -c 1 $LUSTRE_DIR
 
-    rbh_lfind "rbh:$db:$testdb" -layout-pattern mdt | sort |
+    rbh_find "rbh:$db:$testdb" -layout-pattern mdt | sort |
         difflines
-    rbh_lfind "rbh:$db:$testdb" -layout-pattern raid0 | sort |
+    rbh_find "rbh:$db:$testdb" -layout-pattern raid0 | sort |
         difflines "/" "/$file" "/$dir"
 }
 
@@ -127,9 +127,9 @@ test_other_layouts()
 
     rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
 
-    rbh_lfind "rbh:$db:$testdb" -layout-pattern overstriped | sort |
+    rbh_find "rbh:$db:$testdb" -layout-pattern overstriped | sort |
         difflines "/$file1"
-    rbh_lfind "rbh:$db:$testdb" -layout-pattern released | sort |
+    rbh_find "rbh:$db:$testdb" -layout-pattern released | sort |
         difflines "/$file2"
 }
 

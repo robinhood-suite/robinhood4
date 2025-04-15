@@ -20,15 +20,15 @@ fi
 
 test_invalid()
 {
-    if rbh_lfind "rbh:$db:$testdb" -mdt-count $(echo 2^64 | bc); then
+    if rbh_find "rbh:$db:$testdb" -mdt-count $(echo 2^64 | bc); then
         error "find with an mdt count too big should have failed"
     fi
 
-    if rbh_lfind "rbh:$db:$testdb" -mdt-count 42blob; then
+    if rbh_find "rbh:$db:$testdb" -mdt-count 42blob; then
         error "find with an invalid mdt count should have failed"
     fi
 
-    if rbh_lfind "rbh:$db:$testdb" -mdt-count invalid; then
+    if rbh_find "rbh:$db:$testdb" -mdt-count invalid; then
         error "find with an invalid mdt count should have failed"
     fi
 }
@@ -41,22 +41,22 @@ test_mdt_count()
 
     rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
 
-    rbh_lfind "rbh:$db:$testdb" -mdt-count 1 | sort |
+    rbh_find "rbh:$db:$testdb" -mdt-count 1 | sort |
         difflines "/" "/dir1"
-    rbh_lfind "rbh:$db:$testdb" -mdt-count 0 | sort |
+    rbh_find "rbh:$db:$testdb" -mdt-count 0 | sort |
         difflines
-    rbh_lfind "rbh:$db:$testdb" -mdt-count +3 | sort |
+    rbh_find "rbh:$db:$testdb" -mdt-count +3 | sort |
         difflines
-    rbh_lfind "rbh:$db:$testdb" -mdt-count -3 | sort |
+    rbh_find "rbh:$db:$testdb" -mdt-count -3 | sort |
         difflines "/" "/dir1" "/dir2"
 
-    rbh_lfind "rbh:$db:$testdb" -mdt-count 0 -mdt-count 1 | sort |
+    rbh_find "rbh:$db:$testdb" -mdt-count 0 -mdt-count 1 | sort |
         difflines
 
-    rbh_lfind "rbh:$db:$testdb" -mdt-count 1 -o -mdt-count 2 | sort |
+    rbh_find "rbh:$db:$testdb" -mdt-count 1 -o -mdt-count 2 | sort |
         difflines "/" "/dir1" "/dir2"
 
-    rbh_lfind "rbh:$db:$testdb" -not -mdt-count 1 | sort |
+    rbh_find "rbh:$db:$testdb" -not -mdt-count 1 | sort |
         difflines "/dir2" "/dir3"
 }
 
