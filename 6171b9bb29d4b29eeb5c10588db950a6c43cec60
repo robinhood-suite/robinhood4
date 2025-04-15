@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3e30beda_50885a01",
+        "filename": "rbh-info/rbh-info.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-04-15T14:14:39Z",
+      "side": 1,
+      "message": "suggest: separate setter and condition\n\n```\nconst struct rbh_backend_plugin *backend_plugin;\n\nbackend_plugin \u003d rbh_backend_plugin_import(first_part);\nif (backend_plugin !\u003d NULL) {\n    ...\n}\n```",
+      "range": {
+        "startLine": 199,
+        "startChar": 20,
+        "endLine": 200,
+        "endChar": 27
+      },
+      "revId": "6171b9bb29d4b29eeb5c10588db950a6c43cec60",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6fa843ac_272e6f2d",
+        "filename": "rbh-info/rbh-info.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-04-15T14:14:39Z",
+      "side": 1,
+      "message": "question: how can we ensure the extensions follow their parent plugin?",
+      "range": {
+        "startLine": 203,
+        "startChar": 32,
+        "endLine": 203,
+        "endChar": 42
+      },
+      "revId": "6171b9bb29d4b29eeb5c10588db950a6c43cec60",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
