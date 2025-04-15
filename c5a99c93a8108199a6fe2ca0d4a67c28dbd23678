@@ -1,0 +1,95 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4c9f9a35_de33831b",
+        "filename": "rbh-sync/tests/test_lustre_mongo_sync.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-04-15T08:37:36Z",
+      "side": 1,
+      "message": "major: we need to have the same function for SQLite and not only mongo",
+      "range": {
+        "startLine": 73,
+        "startChar": 4,
+        "endLine": 73,
+        "endChar": 44
+      },
+      "revId": "c5a99c93a8108199a6fe2ca0d4a67c28dbd23678",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "73b34725_55fc0d35",
+        "filename": "rbh-sync/tests/test_lustre_mongo_sync.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-04-15T08:37:36Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "c5a99c93a8108199a6fe2ca0d4a67c28dbd23678",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d3c3f9b1_5f2def77",
+        "filename": "rbh-sync/tests/test_posix_mongo_sync.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-04-15T08:37:36Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "c5a99c93a8108199a6fe2ca0d4a67c28dbd23678",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a1792096_a0240196",
+        "filename": "rbh-sync/tests/test_posix_mongo_sync.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-04-15T08:37:36Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "c5a99c93a8108199a6fe2ca0d4a67c28dbd23678",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f837c596_0a23aad1",
+        "filename": "rbh-sync/tests/test_posix_mongo_sync.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-04-15T08:37:36Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "c5a99c93a8108199a6fe2ca0d4a67c28dbd23678",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
