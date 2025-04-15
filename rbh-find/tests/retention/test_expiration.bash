@@ -1,18 +1,13 @@
 #!/usr/bin/env bash
 
-# This file is part of rbh-find-lustre
+# This file is part of RobinHood 4
 # Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
 
-set -e
-
 test_dir=$(dirname $(readlink -e $0))
-. $test_dir/../../utils/tests/framework.bash
-
-LUSTRE_DIR=/mnt/lustre/
-cd "$LUSTRE_DIR"
+. $test_dir/../../../utils/tests/framework.bash
 
 ################################################################################
 #                                    TESTS                                     #
@@ -84,7 +79,7 @@ test_expired_abs()
     touch "$fileE"
     setfattr -n user.expires -v "$timeE" "$fileE"
 
-    rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
+    rbh_sync "rbh:retention:." "rbh:$db:$testdb"
 
     rbh_find "rbh:$db:$testdb" -expired-at $(date +%s) | sort |
         difflines "/$fileA" "/$fileC"
@@ -128,7 +123,7 @@ test_expired_rel()
     touch "$fileC"
     setfattr -n user.expires -v "$timeC" "$fileC"
 
-    rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
+    rbh_sync "rbh:retention:." "rbh:$db:$testdb"
 
     rbh_find "rbh:$db:$testdb" -expired-at $(date +%s) | sort |
         difflines "/$fileA" "/$fileB"
@@ -169,7 +164,7 @@ test_printf_expiration_info()
     setfattr -n user.expires -v "$timeB" "$fileB"
     setfattr -n user.expires -v "$timeC" "$fileC"
 
-    rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
+    rbh_sync "rbh:retention:." "rbh:$db:$testdb"
 
     local expA="$(stat -c %X $fileA)"
     expA="$(date -d "@$((expA + timeA))" "+%a %b %e %T %Y")"
@@ -194,10 +189,9 @@ test_config()
     echo "---
 RBH_RETENTION_XATTR: \"user.blob\"
 backends:
-    lustre:
+    retention:
         extends: posix
         enrichers:
-            - lustre
             - retention
 ---" > $conf_file
 
@@ -208,7 +202,7 @@ backends:
     setfattr -n user.blob -v 42 $dir/$fileA
     setfattr -n user.expires -v 777 $dir/$fileB
 
-    rbh_sync --config $conf_file "rbh:lustre:$dir" "rbh:$db:$testdb"
+    rbh_sync --config $conf_file "rbh:retention:$dir" "rbh:$db:$testdb"
 
     rbh_find --config $conf_file "rbh:$db:$testdb" -printf "%p %e\n" | sort |
         difflines "/ None" "/$fileA 42" "/$fileB None"
@@ -223,7 +217,6 @@ declare -a tests=(test_invalid test_expired_abs test_expired_rel
 
 tmpdir=$(mktemp --directory --tmpdir=$LUSTRE_DIR)
 trap "rm -r $tmpdir" EXIT
-
 cd "$tmpdir"
 
 run_tests "${tests[@]}"
