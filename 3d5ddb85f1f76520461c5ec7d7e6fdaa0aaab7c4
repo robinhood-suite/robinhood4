@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6037615a_679f806a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-04-15T13:46:01Z",
+      "side": 1,
+      "message": "typo: adds",
+      "range": {
+        "startLine": 12,
+        "startChar": 16,
+        "endLine": 12,
+        "endChar": 19
+      },
+      "revId": "3d5ddb85f1f76520461c5ec7d7e6fdaa0aaab7c4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "85bbbfaf_2a2af681",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-04-15T13:46:01Z",
+      "side": 1,
+      "message": "typo: certificate, I presume.",
+      "range": {
+        "startLine": 12,
+        "startChar": 51,
+        "endLine": 12,
+        "endChar": 63
+      },
+      "revId": "3d5ddb85f1f76520461c5ec7d7e6fdaa0aaab7c4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2002d7d2_ef9b41e9",
+        "filename": "librobinhood/src/plugins/s3/s3.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 351,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-04-15T13:46:01Z",
+      "side": 1,
+      "message": "style: put crt_path before password",
+      "revId": "3d5ddb85f1f76520461c5ec7d7e6fdaa0aaab7c4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
