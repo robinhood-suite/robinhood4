@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # This file is part of RobinHood 4
-# Copyright (C) 2024 Commissariat a l'energie atomique et aux energies
+# Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
@@ -18,13 +18,13 @@ cd "$LUSTRE_DIR"
 
 test_invalid()
 {
-    rbh_lfind "rbh:$db:$testdb" -stripe-count $(echo 2^64 | bc) &&
+    rbh_find "rbh:$db:$testdb" -stripe-count $(echo 2^64 | bc) &&
         error "find with an ost index too big should have failed"
 
-    rbh_lfind "rbh:$db:$testdb" -stripe-count 42blob &&
+    rbh_find "rbh:$db:$testdb" -stripe-count 42blob &&
         error "find with an invalid ost index should have failed"
 
-    rbh_lfind "rbh:$db:$testdb" -stripe-count invalid &&
+    rbh_find "rbh:$db:$testdb" -stripe-count invalid &&
         error "find with an invalid ost index should have failed"
 
     return 0
@@ -39,19 +39,19 @@ test_default()
 
     rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
 
-    rbh_lfind "rbh:$db:$testdb" -stripe-count default | sort |
+    rbh_find "rbh:$db:$testdb" -stripe-count default | sort |
         difflines "/" "/$dir"
 
     lfs setstripe -c $((default_stripe_count + 1)) $dir
     rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
 
-    rbh_lfind "rbh:$db:$testdb" -stripe-count default | sort |
+    rbh_find "rbh:$db:$testdb" -stripe-count default | sort |
         difflines "/"
 
     lfs setstripe -c $((default_stripe_count)) $dir
     rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
 
-    rbh_lfind "rbh:$db:$testdb" -stripe-count default | sort |
+    rbh_find "rbh:$db:$testdb" -stripe-count default | sort |
         difflines "/"
 }
 
@@ -68,42 +68,42 @@ test_stripe_count()
 
     rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
 
-    rbh_lfind "rbh:$db:$testdb" -stripe-count 1 | sort |
+    rbh_find "rbh:$db:$testdb" -stripe-count 1 | sort |
         difflines "/$dir/$file"
-    rbh_lfind "rbh:$db:$testdb" -stripe-count 2 | sort |
+    rbh_find "rbh:$db:$testdb" -stripe-count 2 | sort |
         difflines "/$dir"
-    rbh_lfind "rbh:$db:$testdb" -stripe-count 3 | sort |
+    rbh_find "rbh:$db:$testdb" -stripe-count 3 | sort |
         difflines "/"
 
-    rbh_lfind "rbh:$db:$testdb" -stripe-count -4 | sort |
+    rbh_find "rbh:$db:$testdb" -stripe-count -4 | sort |
         difflines "/" "/$dir" "/$dir/$file"
-    rbh_lfind "rbh:$db:$testdb" -stripe-count -3 | sort |
+    rbh_find "rbh:$db:$testdb" -stripe-count -3 | sort |
         difflines "/$dir" "/$dir/$file"
-    rbh_lfind "rbh:$db:$testdb" -stripe-count -2 | sort |
+    rbh_find "rbh:$db:$testdb" -stripe-count -2 | sort |
         difflines "/$dir/$file"
 
-    rbh_lfind "rbh:$db:$testdb" -stripe-count +0 | sort |
+    rbh_find "rbh:$db:$testdb" -stripe-count +0 | sort |
         difflines "/" "/$dir" "/$dir/$file"
-    rbh_lfind "rbh:$db:$testdb" -stripe-count +1 | sort |
+    rbh_find "rbh:$db:$testdb" -stripe-count +1 | sort |
         difflines "/" "/$dir"
-    rbh_lfind "rbh:$db:$testdb" -stripe-count +2 | sort |
+    rbh_find "rbh:$db:$testdb" -stripe-count +2 | sort |
         difflines "/"
 
     lfs migrate -c 3 $dir/$file
     rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
 
-    rbh_lfind "rbh:$db:$testdb" -stripe-count 3 | sort |
+    rbh_find "rbh:$db:$testdb" -stripe-count 3 | sort |
         difflines "/" "/$dir/$file"
 
     lfs setstripe -c 3 $dir
     rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
 
-    rbh_lfind "rbh:$db:$testdb" -stripe-count 3 | sort |
+    rbh_find "rbh:$db:$testdb" -stripe-count 3 | sort |
         difflines "/" "/$dir" "/$dir/$file"
 
-    rbh_lfind "rbh:$db:$testdb" -stripe-count +2 | sort |
+    rbh_find "rbh:$db:$testdb" -stripe-count +2 | sort |
         difflines "/" "/$dir" "/$dir/$file"
-    rbh_lfind "rbh:$db:$testdb" -stripe-count -4 | sort |
+    rbh_find "rbh:$db:$testdb" -stripe-count -4 | sort |
         difflines "/" "/$dir" "/$dir/$file"
 }
 
@@ -117,22 +117,22 @@ test_default_stripe_count()
 
     rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
 
-    rbh_lfind "rbh:$db:$testdb" \
+    rbh_find "rbh:$db:$testdb" \
         -stripe-count $(lfs getstripe -c $LUSTRE_DIR | xargs) | sort |
         difflines
 
     lfs setstripe -c 3 $LUSTRE_DIR
 
-    rbh_lfind "rbh:$db:$testdb" -stripe-count 3 | sort |
+    rbh_find "rbh:$db:$testdb" -stripe-count 3 | sort |
         difflines "/" "/$dir"
 
-    rbh_lfind "rbh:$db:$testdb" -stripe-count -3 | sort |
+    rbh_find "rbh:$db:$testdb" -stripe-count -3 | sort |
         difflines
-    rbh_lfind "rbh:$db:$testdb" -stripe-count -5 | sort |
+    rbh_find "rbh:$db:$testdb" -stripe-count -5 | sort |
         difflines "/" "/$file" "/$dir"
-    rbh_lfind "rbh:$db:$testdb" -stripe-count +3 | sort |
+    rbh_find "rbh:$db:$testdb" -stripe-count +3 | sort |
         difflines "/$file"
-    rbh_lfind "rbh:$db:$testdb" -stripe-count +2 | sort |
+    rbh_find "rbh:$db:$testdb" -stripe-count +2 | sort |
         difflines "/" "/$file" "/$dir"
 }
 

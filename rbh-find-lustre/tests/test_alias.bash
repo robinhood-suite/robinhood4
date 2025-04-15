@@ -20,7 +20,7 @@ alias:
    a1: "-pool namer -layout-pattern default -stripe-count default"
 EOF
 
-    command_output=$(rbh_lfind --config test_conf.yaml --dry-run \
+    command_output=$(rbh_find --config test_conf.yaml --dry-run \
                     "rbh:$db:$testdb" --alias a1)
     pattern="\-pool namer \-layout-pattern default \-stripe-count default"
 
@@ -39,7 +39,7 @@ EOF
 
     # Do not use global default config
     unset RBH_CONFIG_PATH
-    command_output=$(rbh_lfind --dry-run "rbh:$db:$testdb" --alias a1)
+    command_output=$(rbh_find --dry-run "rbh:$db:$testdb" --alias a1)
     pattern="\-pool namer \-layout-pattern default \-stripe-count default"
 
     if ! echo "$command_output" | grep -q "$pattern"; then
@@ -56,7 +56,7 @@ alias:
    a2: "-print"
 EOF
 
-    command_output=$(rbh_lfind --config test_conf.yaml --dry-run \
+    command_output=$(rbh_find --config test_conf.yaml --dry-run \
                     "rbh:$db:$testdb" --alias a2 --alias a1 --alias a2)
     pattern="\-print \-pool namer \-layout-pattern default \-print"
 
@@ -74,7 +74,7 @@ alias:
    a3: "-print"
 EOF
 
-    command_output=$(rbh_lfind --config test_conf.yaml --dry-run \
+    command_output=$(rbh_find --config test_conf.yaml --dry-run \
                     "rbh:$db:$testdb" --alias a1)
     pattern="\-print"
 
@@ -91,7 +91,7 @@ alias:
    a2: "--alias a1"
 EOF
 
-    command_output=$(rbh_lfind --config test_conf.yaml --dry-run \
+    command_output=$(rbh_find --config test_conf.yaml --dry-run \
                     "rbh:$db:$testdb" --alias a1 2>&1 || true)
     pattern="\[ERROR\] Infinite loop detected for alias 'a1'.Execution stopped."
 
@@ -107,7 +107,7 @@ alias:
    a1: "-pool namer -print"
 EOF
 
-    command_output=$(rbh_lfind --config test_conf.yaml --dry-run \
+    command_output=$(rbh_find --config test_conf.yaml --dry-run \
                     "rbh:$db:$testdb" --alias a1 --alias a1)
     pattern="\-pool namer \-print \-pool namer \-print"
 
@@ -125,7 +125,7 @@ alias:
    a3: "-print"
 EOF
 
-    command_output=$(rbh_lfind --config test_conf.yaml --dry-run \
+    command_output=$(rbh_find --config test_conf.yaml --dry-run \
                     "rbh:$db:$testdb" --alias a1,a2,a3)
     pattern="\-pool namer \-print \-print"
 
@@ -143,7 +143,7 @@ alias:
    a3: "-print"
 EOF
 
-    command_output=$(rbh_lfind --config test_conf.yaml --dry-run \
+    command_output=$(rbh_find --config test_conf.yaml --dry-run \
                     "rbh:$db:$testdb" --alias a1)
     pattern="\-pool namer \-print \-print"
 

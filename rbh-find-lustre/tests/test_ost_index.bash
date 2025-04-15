@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # This file is part of RobinHood 4
-# Copyright (C) 2022 Commissariat a l'energie atomique et aux energies
+# Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
@@ -18,19 +18,19 @@ cd "$LUSTRE_DIR"
 
 test_invalid()
 {
-    if rbh_lfind "rbh:$db:$testdb" -ost -1; then
+    if rbh_find "rbh:$db:$testdb" -ost -1; then
         error "find with a negative ost index should have failed"
     fi
 
-    if rbh_lfind "rbh:$db:$testdb" -ost $(echo 2^64 | bc); then
+    if rbh_find "rbh:$db:$testdb" -ost $(echo 2^64 | bc); then
         error "find with an ost index too big should have failed"
     fi
 
-    if rbh_lfind "rbh:$db:$testdb" -ost 42blob; then
+    if rbh_find "rbh:$db:$testdb" -ost 42blob; then
         error "find with an invalid ost index should have failed"
     fi
 
-    if rbh_lfind "rbh:$db:$testdb" -ost invalid; then
+    if rbh_find "rbh:$db:$testdb" -ost invalid; then
         error "find with an invalid ost index should have failed"
     fi
 }
@@ -43,11 +43,11 @@ test_one_match()
 
     rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
 
-    rbh_lfind "rbh:$db:$testdb" -ost 0 | sort |
+    rbh_find "rbh:$db:$testdb" -ost 0 | sort |
         difflines "/$file"
-    rbh_lfind "rbh:$db:$testdb" -ost 0x0 | sort |
+    rbh_find "rbh:$db:$testdb" -ost 0x0 | sort |
         difflines "/$file"
-    rbh_lfind "rbh:$db:$testdb" -ost 00 | sort |
+    rbh_find "rbh:$db:$testdb" -ost 00 | sort |
         difflines "/$file"
 }
 
@@ -59,11 +59,11 @@ test_none()
 
     rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
 
-    rbh_lfind "rbh:$db:$testdb" -ost 1 | sort |
+    rbh_find "rbh:$db:$testdb" -ost 1 | sort |
         difflines
-    rbh_lfind "rbh:$db:$testdb" -ost 0x1 | sort |
+    rbh_find "rbh:$db:$testdb" -ost 0x1 | sort |
         difflines
-    rbh_lfind "rbh:$db:$testdb" -ost 01 | sort |
+    rbh_find "rbh:$db:$testdb" -ost 01 | sort |
         difflines
 }
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # This file is part of RobinHood 4
-# Copyright (C) 2022 Commissariat a l'energie atomique et aux energies
+# Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
@@ -26,9 +26,9 @@ test_none()
 
     rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
 
-    rbh_lfind "rbh:$db:$testdb" -hsm-state none | sort |
+    rbh_find "rbh:$db:$testdb" -hsm-state none | sort |
         difflines "/none"
-    rbh_lfind "rbh:$db:$testdb" -hsm-state archived | sort |
+    rbh_find "rbh:$db:$testdb" -hsm-state archived | sort |
         difflines "/archived"
 }
 
@@ -50,7 +50,7 @@ test_archived_states()
     rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
 
     for state in "${states[@]}"; do
-        rbh_lfind "rbh:$db:$testdb" -hsm-state "$state" | sort |
+        rbh_find "rbh:$db:$testdb" -hsm-state "$state" | sort |
             difflines "/$state"
     done
 }
@@ -69,7 +69,7 @@ test_independant_states()
     rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
 
     for state in "${states[@]}"; do
-        rbh_lfind "rbh:$db:$testdb" -hsm-state "$state" | sort |
+        rbh_find "rbh:$db:$testdb" -hsm-state "$state" | sort |
             difflines "/$state"
     done
 }
@@ -105,7 +105,7 @@ test_multiple_states()
         # prefixed with a "/"
         substates=("${substates[@]/#/\/}")
 
-        rbh_lfind "rbh:$db:$testdb" -hsm-state "$state" | sort |
+        rbh_find "rbh:$db:$testdb" -hsm-state "$state" | sort |
             difflines "${substates[@]}"
     done
 }

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # This file is part of rbh-find-lustre
-# Copyright (C) 2022 Commissariat a l'energie atomique et aux energies
+# Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
@@ -20,37 +20,37 @@ cd "$LUSTRE_DIR"
 
 test_invalid()
 {
-    rbh_lfind "rbh:$db:$testdb" -expired blob &&
+    rbh_find "rbh:$db:$testdb" -expired blob &&
         error "find with -expired shouldn't have any argument"
 
-    rbh_lfind "rbh:$db:$testdb" -expired-at "" &&
+    rbh_find "rbh:$db:$testdb" -expired-at "" &&
         error "find with an invalid expired-at epoch should have failed"
 
-    rbh_lfind "rbh:$db:$testdb" -expired-at $(echo 2^64 | bc) &&
+    rbh_find "rbh:$db:$testdb" -expired-at $(echo 2^64 | bc) &&
         error "find with an expired-at epoch too big should have failed"
 
-    rbh_lfind "rbh:$db:$testdb" -expired-at 42blob &&
+    rbh_find "rbh:$db:$testdb" -expired-at 42blob &&
         error "find with an invalid expired-at epoch should have failed"
 
-    rbh_lfind "rbh:$db:$testdb" -expired-at invalid &&
+    rbh_find "rbh:$db:$testdb" -expired-at invalid &&
         error "find with an invalid expired-at epoch should have failed"
 
-    rbh_lfind "rbh:$db:$testdb" -expired-at +$(echo 2^64 | bc) &&
+    rbh_find "rbh:$db:$testdb" -expired-at +$(echo 2^64 | bc) &&
         error "find with an expired epoch-at too big should have failed"
 
-    rbh_lfind "rbh:$db:$testdb" -expired-at +42blob &&
+    rbh_find "rbh:$db:$testdb" -expired-at +42blob &&
         error "find with an invalid expired-at epoch should have failed"
 
-    rbh_lfind "rbh:$db:$testdb" -expired-at +invalid &&
+    rbh_find "rbh:$db:$testdb" -expired-at +invalid &&
         error "find with an invalid expired-at epoch should have failed"
 
-    rbh_lfind "rbh:$db:$testdb" -expired-at -$(echo 2^64 | bc) &&
+    rbh_find "rbh:$db:$testdb" -expired-at -$(echo 2^64 | bc) &&
         error "find with an expired-at epoch too big should have failed"
 
-    rbh_lfind "rbh:$db:$testdb" -expired-at -42blob &&
+    rbh_find "rbh:$db:$testdb" -expired-at -42blob &&
         error "find with an invalid expired-at epoch should have failed"
 
-    rbh_lfind "rbh:$db:$testdb" -expired-at -invalid &&
+    rbh_find "rbh:$db:$testdb" -expired-at -invalid &&
         error "find with an invalid expired-at epoch should have failed"
 
     return 0
@@ -86,25 +86,25 @@ test_expired_abs()
 
     rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
 
-    rbh_lfind "rbh:$db:$testdb" -expired-at $(date +%s) | sort |
+    rbh_find "rbh:$db:$testdb" -expired-at $(date +%s) | sort |
         difflines "/$fileA" "/$fileC"
-    rbh_lfind "rbh:$db:$testdb" -expired | sort |
+    rbh_find "rbh:$db:$testdb" -expired | sort |
         difflines "/$fileA" "/$fileC"
-    rbh_lfind "rbh:$db:$testdb" -expired-at $timeA | sort |
+    rbh_find "rbh:$db:$testdb" -expired-at $timeA | sort |
         difflines "/$fileA" "/$fileC"
-    rbh_lfind "rbh:$db:$testdb" -expired-at +$timeA | sort |
+    rbh_find "rbh:$db:$testdb" -expired-at +$timeA | sort |
         difflines "/$fileB" "/$fileD"
-    rbh_lfind "rbh:$db:$testdb" -expired-at -$timeD | sort |
+    rbh_find "rbh:$db:$testdb" -expired-at -$timeD | sort |
         difflines "/$fileA" "/$fileB" "/$fileC"
-    rbh_lfind "rbh:$db:$testdb" -expired-at +$timeD | sort |
+    rbh_find "rbh:$db:$testdb" -expired-at +$timeD | sort |
         difflines
-    rbh_lfind "rbh:$db:$testdb" -expired-at -$timeC | sort |
+    rbh_find "rbh:$db:$testdb" -expired-at -$timeC | sort |
         difflines
-    rbh_lfind "rbh:$db:$testdb" -expired-at 18446744073709551615 | sort |
+    rbh_find "rbh:$db:$testdb" -expired-at 18446744073709551615 | sort |
         difflines "/$fileA" "/$fileB" "/$fileC" "/$fileD"
-    rbh_lfind "rbh:$db:$testdb" -expired-at +18446744073709551614 | sort |
+    rbh_find "rbh:$db:$testdb" -expired-at +18446744073709551614 | sort |
         difflines
-    rbh_lfind "rbh:$db:$testdb" -expired-at inf | sort |
+    rbh_find "rbh:$db:$testdb" -expired-at inf | sort |
         difflines "/$fileE"
 }
 
@@ -130,26 +130,26 @@ test_expired_rel()
 
     rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
 
-    rbh_lfind "rbh:$db:$testdb" -expired-at $(date +%s) | sort |
+    rbh_find "rbh:$db:$testdb" -expired-at $(date +%s) | sort |
         difflines "/$fileA" "/$fileB"
-    rbh_lfind "rbh:$db:$testdb" -expired | sort |
+    rbh_find "rbh:$db:$testdb" -expired | sort |
         difflines "/$fileA" "/$fileB"
-    rbh_lfind "rbh:$db:$testdb" -expired-at +$(date +%s) | sort |
+    rbh_find "rbh:$db:$testdb" -expired-at +$(date +%s) | sort |
         difflines "/$fileC"
-    rbh_lfind "rbh:$db:$testdb" -expired-at -$(date +%s) | sort |
+    rbh_find "rbh:$db:$testdb" -expired-at -$(date +%s) | sort |
         difflines "/$fileA" "/$fileB"
     # List all files that will be expired in an hour, which includes $fileA
     # which expired 5 seconds ago, $fileB which expired 5 seconds ago, and
     # $fileC which will be expired in 50 seconds.
-    rbh_lfind "rbh:$db:$testdb" -expired-at -$(date +%s --date='1 hour') |
+    rbh_find "rbh:$db:$testdb" -expired-at -$(date +%s --date='1 hour') |
         sort | difflines "/$fileA" "/$fileB" "/$fileC"
-    rbh_lfind "rbh:$db:$testdb" -expired-at \
+    rbh_find "rbh:$db:$testdb" -expired-at \
         $(($(stat --format='+%X' "$fileA") + timeA)) | sort |
         difflines "/$fileA" "/$fileB"
-    rbh_lfind "rbh:$db:$testdb" \
+    rbh_find "rbh:$db:$testdb" \
         -expired-at +$(date +%s) -expired-at -$(date +%s --date='1 minute') |
         sort | difflines "/$fileC"
-    rbh_lfind "rbh:$db:$testdb" \
+    rbh_find "rbh:$db:$testdb" \
         -expired-at +$(date +%s --date='-1 hours') -expired-at -$(date +%s) |
         sort | difflines "/$fileA" "/$fileB"
 }
@@ -175,11 +175,11 @@ test_printf_expiration_info()
     expA="$(date -d "@$((expA + timeA))" "+%a %b %e %T %Y")"
     local expB="$(date -d "@$timeB" "+%a %b %e %T %Y")"
 
-    rbh_lfind "rbh:$db:$testdb" -printf "%p %E\n" | sort |
+    rbh_find "rbh:$db:$testdb" -printf "%p %E\n" | sort |
         difflines "/ None" "/$fileA $expA" "/$fileB $expB" "/$fileC Inf" \
                   "/$fileD None"
 
-    rbh_lfind "rbh:$db:$testdb" -printf "%p %e\n" | sort |
+    rbh_find "rbh:$db:$testdb" -printf "%p %e\n" | sort |
         difflines "/ None" "/$fileA $timeA" "/$fileB $timeB" "/$fileC $timeC" \
                   "/$fileD None"
 }
@@ -210,7 +210,7 @@ backends:
 
     rbh_sync --config $conf_file "rbh:lustre:$dir" "rbh:$db:$testdb"
 
-    rbh_lfind --config $conf_file "rbh:$db:$testdb" -printf "%p %e\n" | sort |
+    rbh_find --config $conf_file "rbh:$db:$testdb" -printf "%p %e\n" | sort |
         difflines "/ None" "/$fileA 42" "/$fileB None"
 }
 
