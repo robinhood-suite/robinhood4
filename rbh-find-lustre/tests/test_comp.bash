@@ -23,23 +23,23 @@ test_comp_start()
 
     rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
 
-    rbh_lfind "rbh:$db:$testdb" -comp-start -1k | sort |
+    rbh_find "rbh:$db:$testdb" -comp-start -1k | sort |
         difflines "/$file"
-    rbh_lfind "rbh:$db:$testdb" -comp-start +1k | sort |
+    rbh_find "rbh:$db:$testdb" -comp-start +1k | sort |
         difflines "/$file"
-    rbh_lfind "rbh:$db:$testdb" -comp-start 1023k -or -comp-start 1k | sort |
+    rbh_find "rbh:$db:$testdb" -comp-start 1023k -or -comp-start 1k | sort |
         difflines
-    rbh_lfind "rbh:$db:$testdb" -comp-start -2T | sort |
+    rbh_find "rbh:$db:$testdb" -comp-start -2T | sort |
         difflines "/$file"
-    rbh_lfind "rbh:$db:$testdb" -comp-start 1M -comp-start 512M | sort |
+    rbh_find "rbh:$db:$testdb" -comp-start 1M -comp-start 512M | sort |
         difflines "/$file"
-    rbh_lfind "rbh:$db:$testdb" -comp-start 1M,512M | sort |
+    rbh_find "rbh:$db:$testdb" -comp-start 1M,512M | sort |
         difflines "/$file"
-    rbh_lfind "rbh:$db:$testdb" -comp-start 1M -comp-start 511M | sort |
+    rbh_find "rbh:$db:$testdb" -comp-start 1M -comp-start 511M | sort |
         difflines
-    rbh_lfind "rbh:$db:$testdb" -comp-start 1M,511M | sort |
+    rbh_find "rbh:$db:$testdb" -comp-start 1M,511M | sort |
         difflines "/$file"
-    rbh_lfind "rbh:$db:$testdb" -not '(' -comp-start 1M -comp-start 511M ')' |
+    rbh_find "rbh:$db:$testdb" -not '(' -comp-start 1M -comp-start 511M ')' |
         sort | difflines "/" "/$file"
 }
 
@@ -53,23 +53,23 @@ test_comp_end()
 
     rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
 
-    rbh_lfind "rbh:$db:$testdb" -comp-end -1k | sort |
+    rbh_find "rbh:$db:$testdb" -comp-end -1k | sort |
         difflines
-    rbh_lfind "rbh:$db:$testdb" -comp-end +1k | sort |
+    rbh_find "rbh:$db:$testdb" -comp-end +1k | sort |
         difflines "/$file"
-    rbh_lfind "rbh:$db:$testdb" -comp-end 1023k -or -comp-end 1k | sort |
+    rbh_find "rbh:$db:$testdb" -comp-end 1023k -or -comp-end 1k | sort |
         difflines
-    rbh_lfind "rbh:$db:$testdb" -comp-end -2T | sort |
+    rbh_find "rbh:$db:$testdb" -comp-end -2T | sort |
         difflines "/$file"
-    rbh_lfind "rbh:$db:$testdb" -comp-end 1M -comp-end 512M | sort |
+    rbh_find "rbh:$db:$testdb" -comp-end 1M -comp-end 512M | sort |
         difflines "/$file"
-    rbh_lfind "rbh:$db:$testdb" -comp-end 1M,512M | sort |
+    rbh_find "rbh:$db:$testdb" -comp-end 1M,512M | sort |
         difflines "/$file"
-    rbh_lfind "rbh:$db:$testdb" -comp-end 1M -comp-end 511M | sort |
+    rbh_find "rbh:$db:$testdb" -comp-end 1M -comp-end 511M | sort |
         difflines
-    rbh_lfind "rbh:$db:$testdb" -comp-end 1M,511M | sort |
+    rbh_find "rbh:$db:$testdb" -comp-end 1M,511M | sort |
         difflines "/$file"
-    rbh_lfind "rbh:$db:$testdb" -not '(' -comp-end 1M -comp-end 511M ')' |
+    rbh_find "rbh:$db:$testdb" -not '(' -comp-end 1M -comp-end 511M ')' |
         sort | difflines "/" "/$file"
 }
 
