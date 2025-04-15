@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 
 # This file is part of the RobinHood Library
-# Copyright (C) 2024 Commissariat a l'energie atomique et aux energies
+# Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
 
 test_dir=$(dirname $(readlink -e $0))
-. $test_dir/../../utils/tests/framework.bash
+. $test_dir/../../../utils/tests/framework.bash
 
 # Depending on the libfabric's version and OS, libfabric can have network errors
 # with PSM3. To solve this, we specify the PSM3 devices as below.
