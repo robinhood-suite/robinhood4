@@ -26,6 +26,7 @@ rbh_s3_backend_new(__attribute__((unused))
                    const struct rbh_backend_plugin *self,
                    __attribute__((unused)) const char *type,
                    __attribute__((unused)) const char *path,
-                   struct rbh_config *config);
+                   struct rbh_config *config,
+                   bool read_only);
 
 #endif
