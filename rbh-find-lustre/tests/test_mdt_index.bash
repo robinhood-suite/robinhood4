@@ -20,19 +20,19 @@ fi
 
 test_invalid()
 {
-    if rbh_lfind "rbh:mongo:$testdb" -mdt-index -1; then
+    if rbh_find "rbh:mongo:$testdb" -mdt-index -1; then
         error "find with a negative mdt index should have failed"
     fi
 
-    if rbh_lfind "rbh:mongo:$testdb" -mdt-index $(echo 2^64 | bc); then
+    if rbh_find "rbh:mongo:$testdb" -mdt-index $(echo 2^64 | bc); then
         error "find with an mdt index too big should have failed"
     fi
 
-    if rbh_lfind "rbh:mongo:$testdb" -mdt-index 42blob; then
+    if rbh_find "rbh:mongo:$testdb" -mdt-index 42blob; then
         error "find with an invalid mdt index should have failed"
     fi
 
-    if rbh_lfind "rbh:mongo:$testdb" -mdt-index invalid; then
+    if rbh_find "rbh:mongo:$testdb" -mdt-index invalid; then
         error "find with an invalid mdt index should have failed"
     fi
 }
@@ -50,22 +50,22 @@ test_mdt_index()
 
     rbh_sync "rbh:lustre:." "rbh:mongo:$testdb"
 
-    rbh_lfind "rbh:mongo:$testdb" -mdt-index 1 | sort |
+    rbh_find "rbh:mongo:$testdb" -mdt-index 1 | sort |
         difflines "/dir1" "/dir1/file1"
 
-    rbh_lfind "rbh:mongo:$testdb" -mdt-index 0 | sort |
+    rbh_find "rbh:mongo:$testdb" -mdt-index 0 | sort |
         difflines "/" "/file2"
 
-    rbh_lfind "rbh:mongo:$testdb" -mdt-index 3 | sort |
+    rbh_find "rbh:mongo:$testdb" -mdt-index 3 | sort |
         difflines
 
-    rbh_lfind "rbh:mongo:$testdb" -mdt-index 0 -mdt-index 1 | sort |
+    rbh_find "rbh:mongo:$testdb" -mdt-index 0 -mdt-index 1 | sort |
         difflines
 
-    rbh_lfind "rbh:mongo:$testdb" -mdt-index 1 -o -mdt-index 2 | sort |
+    rbh_find "rbh:mongo:$testdb" -mdt-index 1 -o -mdt-index 2 | sort |
         difflines "/dir1" "/dir1/file1" "/dir2"
 
-    rbh_lfind "rbh:mongo:$testdb" -not -mdt-index 1 | sort |
+    rbh_find "rbh:mongo:$testdb" -not -mdt-index 1 | sort |
         difflines "/" "/dir2" "/file2"
 }
 
