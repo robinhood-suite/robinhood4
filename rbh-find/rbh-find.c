@@ -137,7 +137,16 @@ check_command_options(int argc, char *argv[])
 static bool
 check_pe_already_registered(int pe_count, const char *pe_string)
 {
-    return true;
+    for (int i = 0; i < pe_count; ++i) {
+        if (ctx.info_pe[i].is_plugin &&
+            strcmp(ctx.info_pe[i].plugin->plugin.name, pe_string) == 0)
+            return true;
+        else if (!ctx.info_pe[i].is_plugin &&
+                 strcmp(ctx.info_pe[i].extension->name, pe_string) == 0)
+            return true;
+    }
+
+    return false;
 }
 
 static int
@@ -190,15 +199,10 @@ import_backend_source(int pe_count, const struct rbh_value_map *backend_source)
     return 1;
 }
 
-/* XXX: Ugly but necessary until we can retrieve the list of backends
- * used to construct the mirror system from the mirror system itself.
- */
 static void
-import_plugins(bool mongo_found, bool mpi_found,
-               struct rbh_value_map **info_maps)
+import_plugins(struct rbh_value_map **info_maps)
 {
     int pe_count = 0;
-    int pe_index = 0;
 
     for (int i = 0; i < ctx.backend_count; ++i) {
         assert(info_maps[i]->count == 1);
@@ -229,34 +233,13 @@ import_plugins(bool mongo_found, bool mpi_found,
 
     ctx.info_pe_count = pe_count;
 
-    // XXX: temporary, will be removed
-    free(ctx.info_pe);
-    ctx.info_pe_count = 0;
-
-    if (mongo_found)
-        ctx.info_pe_count++;
-    else if (mpi_found)
-        ctx.info_pe_count++;
-
-    ctx.info_pe = malloc(ctx.info_pe_count * sizeof(*ctx.info_pe));
-    if (ctx.info_pe == NULL)
-        error(EXIT_FAILURE, errno, "malloc");
-
-    if (mongo_found) {
-        ctx.info_pe[pe_index].plugin = rbh_backend_plugin_import("posix");
-        if (ctx.info_pe[pe_index].plugin == NULL)
-            error(EXIT_FAILURE, errno, "rbh_backend_plugin_import");
-
-        ctx.info_pe[pe_index].is_plugin = true;
-        pe_index++;
-    }
-
-    if (mpi_found) {
-        ctx.info_pe[pe_index].plugin = rbh_backend_plugin_import("mpi-file");
-        if (ctx.info_pe[pe_index].plugin == NULL)
-            error(EXIT_FAILURE, errno, "rbh_backend_plugin_import");
-
-        ctx.info_pe[pe_index].is_plugin = true;
+    for (int i = 0; i < ctx.info_pe_count; ++i) {
+        if (ctx.info_pe[i].is_plugin)
+            fprintf(stderr, "%s (%d): plugin = '%s'\n", __FILE__, __LINE__,
+                    ctx.info_pe[i].plugin->plugin.name);
+        else
+            fprintf(stderr, "%s (%d): extension = '%s'\n", __FILE__, __LINE__,
+                    ctx.info_pe[i].extension->name);
     }
 }
 
@@ -266,8 +249,6 @@ main(int _argc, char *_argv[])
     struct rbh_filter_sort *sorts = NULL;
     struct rbh_value_map **info_maps;
     struct rbh_filter *filter;
-    bool mongo_found = false;
-    bool mpi_found = false;
     size_t sorts_count = 0;
     int checked_options;
     int nb_cli_args;
@@ -329,17 +310,9 @@ main(int _argc, char *_argv[])
             error(EXIT_FAILURE, errno,
                   "Failed to retrieve the source backends from URI '%s', aborting\n",
                   ctx.argv[i]);
-
-        /* XXX: Ugly but necessary until we can retrieve the list of backends
-         * used to construct the mirror system from the mirror system itself.
-         */
-        if (!mongo_found || strcmp(ctx.backends[i]->name, "mongo") == 0)
-            mongo_found = true;
-        else if (!mpi_found || strcmp(ctx.backends[i]->name, "mpi-file") == 0)
-            mpi_found = true;
     }
 
-    import_plugins(mongo_found, mpi_found, info_maps);
+    import_plugins(info_maps);
 
     ctx.need_prefetch = false;
     filter = parse_expression(&ctx, &index, NULL, &sorts, &sorts_count);
