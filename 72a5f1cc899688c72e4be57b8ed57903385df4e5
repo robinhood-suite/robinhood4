@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "263ce1b3_1bd50857",
+        "filename": "librobinhood/include/robinhood/backend.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-04-15T14:05:32Z",
+      "side": 1,
+      "message": "question: why not have a more generic callback? I assume at some point we will want to add additional info. Something like this would be better I think:\n\n```\nint (*set_info)(\n    void *backend,\n    const char *key,\n    const struct rbh_value *value\n    );\n```",
+      "range": {
+        "startLine": 263,
+        "startChar": 9,
+        "endLine": 263,
+        "endChar": 24
+      },
+      "revId": "72a5f1cc899688c72e4be57b8ed57903385df4e5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
