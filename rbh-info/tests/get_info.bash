@@ -49,12 +49,53 @@ test_collection_avg_obj_size()
     fi
 }
 
+test_collection_sync()
+{
+    local info_flag=$1
+
+    rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
+
+    local output=$(rbh_info "rbh:mongo:$testdb" "$info_flag")
+    local n_lines=$(echo "$output" | wc -l)
+
+    if ((n_lines != 4)); then
+        error "There should be four infos about posix sync"
+    fi
+
+    echo "$output" | grep "sync_debut" ||
+        error "sync_debut should have been retrieved"
+
+    echo "$output" | grep "sync_duration" ||
+        error "sync_duration should have been retrieved"
+
+    echo "$output" | grep "sync_end" ||
+        error "sync_end should have been retrieved"
+
+    local converted_entries=$(echo "$output" | \
+        awk -F': ' '/converted_entries/ {print $2}')
+
+    echo "converted_entries = $converted_entries"
+
+    if [ ! "$converted_entries" -gt 0 ]; then
+       error "converted_entries should be greater than zero"
+    fi
+}
+
+test_collection_first_sync() {
+    test_collection_sync "--first-sync"
+}
+
+test_collection_last_sync() {
+    test_collection_sync "--last-sync"
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
 declare -a tests=(test_collection_size test_collection_count
-                  test_collection_avg_obj_size)
+                  test_collection_avg_obj_size test_collection_first_sync
+                  test_collection_last_sync)
 
 tmpdir=$(mktemp --directory)
 trap -- "rm -rf '$tmpdir'" EXIT
