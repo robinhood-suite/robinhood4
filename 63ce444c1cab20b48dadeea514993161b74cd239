@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3ecd55da_175d3b4f",
+        "filename": "librobinhood/src/plugins/posix/fts_iter.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-04-15T07:15:46Z",
+      "side": 1,
+      "message": "minor: sorry, what?",
+      "range": {
+        "startLine": 134,
+        "startChar": 11,
+        "endLine": 134,
+        "endChar": 56
+      },
+      "revId": "63ce444c1cab20b48dadeea514993161b74cd239",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
