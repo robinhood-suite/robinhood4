@@ -31,10 +31,11 @@ extern "C" {
      * @param address   the s3 server address (ex: 127.0.0.1:9000)
      * @param username  the s3 username
      * @param password  the s3 password
+     * @param crt_path  the path to the crt file
      */
     void
     s3_init_api(const char *address, const char *username,
-                const char *password);
+                const char *password, const char *crt_path);
 
     /**
      * Shutdown the AWS API
