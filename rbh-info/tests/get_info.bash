@@ -72,8 +72,8 @@ test_collection_sync()
     local output=$(rbh_info "rbh:mongo:$testdb" "$info_flag")
     local n_lines=$(echo "$output" | wc -l)
 
-    if ((n_lines != 5)); then
-        error "There should be five infos about posix sync"
+    if ((n_lines != 6)); then
+        error "There should be six infos about posix sync"
     fi
 
     echo "$output" | grep "sync_debut" ||
@@ -92,6 +92,14 @@ test_collection_sync()
 
     if [ "$mountpoint" != "$(pwd)" ]; then
         error "Invalid mountpoint"
+    fi
+
+    local command_line=$(grep 'command_line' <<< "$output" |
+                         sed -n 's/.*rbh-sync/rbh-sync/p')
+
+    if [ "$command_line" != "rbh-sync rbh:posix:. rbh:mongo:$testdb" ];
+    then
+        error "command lines are not matching"
     fi
 }
 
