@@ -8,6 +8,7 @@ integration_tests = [
   'test_actions',
   'test_blocks',
   'test_empty',
+  'test_posix_helper',
   'test_inum',
   'test_links',
   'test_newer',
