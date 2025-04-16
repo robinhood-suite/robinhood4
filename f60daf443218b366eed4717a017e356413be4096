@@ -1,0 +1,112 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bb5a51bd_89dd79cb",
+        "filename": "rbh-sync/tests/test_s3_mongo_sync.bash",
+        "patchSetId": 14
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-04-16T08:38:02Z",
+      "side": 1,
+      "message": "major: I don\u0027t think this part should be here. Launching MinIO should be handled by our non-regression script, just like we do with Mongo or Lustre.",
+      "range": {
+        "startLine": 14,
+        "startChar": 4,
+        "endLine": 32,
+        "endChar": 8
+      },
+      "revId": "f60daf443218b366eed4717a017e356413be4096",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "11103edd_ee7c1a53",
+        "filename": "rbh-sync/tests/test_s3_mongo_sync.bash",
+        "patchSetId": 14
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-04-16T08:38:02Z",
+      "side": 1,
+      "message": "comment: this line can stay",
+      "revId": "f60daf443218b366eed4717a017e356413be4096",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6b96c880_04d266eb",
+        "filename": "rbh-sync/tests/test_s3_mongo_sync.bash",
+        "patchSetId": 14
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-04-16T08:38:02Z",
+      "side": 1,
+      "message": "sugest: You can also check the atime",
+      "revId": "f60daf443218b366eed4717a017e356413be4096",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c96e5d9f_282223d3",
+        "filename": "rbh-sync/tests/test_s3_mongo_sync.bash",
+        "patchSetId": 14
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-04-16T08:38:02Z",
+      "side": 1,
+      "message": "sugest: It would be nice to have a test with an empty bucket also",
+      "revId": "f60daf443218b366eed4717a017e356413be4096",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dae6351a_c871854f",
+        "filename": "rbh-sync/tests/test_s3_mongo_sync.bash",
+        "patchSetId": 14
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-04-16T08:38:02Z",
+      "side": 1,
+      "message": "minor: remove",
+      "revId": "f60daf443218b366eed4717a017e356413be4096",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "495b6a72_5f42fb2a",
+        "filename": "rbh-sync/tests/test_s3_mongo_sync.bash",
+        "patchSetId": 14
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-04-16T08:38:02Z",
+      "side": 1,
+      "message": "question: Can we remove the local alias without stopping Minio ?",
+      "revId": "f60daf443218b366eed4717a017e356413be4096",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
