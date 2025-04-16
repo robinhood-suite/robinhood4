@@ -22,6 +22,30 @@
       },
       "revId": "648cca356eb1ccc448b8600878b50c6133f6f263",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "82a4daf9_fbf54146",
+        "filename": "librobinhood/src/plugins/posix/posix.c",
+        "patchSetId": 6
+      },
+      "lineNbr": 1139,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-16T09:39:47Z",
+      "side": 1,
+      "message": "Then the `posix-\u003eenrichers` condition won\u0027t be triggered, and we will only get the `posix` source backend",
+      "parentUuid": "95cb52f6_9299966e",
+      "range": {
+        "startLine": 1138,
+        "startChar": 0,
+        "endLine": 1139,
+        "endChar": 16
+      },
+      "revId": "648cca356eb1ccc448b8600878b50c6133f6f263",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
