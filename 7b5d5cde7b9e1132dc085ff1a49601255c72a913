@@ -16,6 +16,75 @@
       "message": "defect: `info_maps` is never freed",
       "revId": "7b5d5cde7b9e1132dc085ff1a49601255c72a913",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4eeded06_16fc5b93",
+        "filename": "rbh-find/rbh-find.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-04-16T09:12:33Z",
+      "side": 1,
+      "message": "defect: I don\u0027t see where infos_maps is freed in the code.",
+      "range": {
+        "startLine": 237,
+        "startChar": 4,
+        "endLine": 237,
+        "endChar": 51
+      },
+      "revId": "7b5d5cde7b9e1132dc085ff1a49601255c72a913",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "37f47d80_5c72ad39",
+        "filename": "rbh-find/rbh-find.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 251,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-04-16T09:12:33Z",
+      "side": 1,
+      "message": "question: We want that if a single backend fails, all other backends are ignored ?",
+      "range": {
+        "startLine": 245,
+        "startChar": 1,
+        "endLine": 251,
+        "endChar": 31
+      },
+      "revId": "7b5d5cde7b9e1132dc085ff1a49601255c72a913",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "29f1d564_07e1da3b",
+        "filename": "rbh-find/rbh-find.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 251,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-04-16T09:12:33Z",
+      "side": 1,
+      "message": "defect: If a call to `rbh_backend_get_info` fails, the program immediately stops with error. This means that entries already allocated in `info_maps` are never freed ?",
+      "range": {
+        "startLine": 246,
+        "startChar": 0,
+        "endLine": 251,
+        "endChar": 31
+      },
+      "revId": "7b5d5cde7b9e1132dc085ff1a49601255c72a913",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
