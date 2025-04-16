@@ -22,6 +22,52 @@
       },
       "revId": "a15217d8d3ec3f51305158bebf59d920a0446b36",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e654357e_383294fb",
+        "filename": "rbh-info/rbh-info.c",
+        "patchSetId": 6
+      },
+      "lineNbr": 367,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-04-16T08:43:48Z",
+      "side": 1,
+      "message": "minor: avg-obj-size",
+      "range": {
+        "startLine": 367,
+        "startChar": 21,
+        "endLine": 367,
+        "endChar": 33
+      },
+      "revId": "a15217d8d3ec3f51305158bebf59d920a0446b36",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "17b4e1f4_83b37a30",
+        "filename": "rbh-info/rbh-info.c",
+        "patchSetId": 6
+      },
+      "lineNbr": 371,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-04-16T08:43:48Z",
+      "side": 1,
+      "message": "minor: backend-source",
+      "range": {
+        "startLine": 371,
+        "startChar": 21,
+        "endLine": 371,
+        "endChar": 35
+      },
+      "revId": "a15217d8d3ec3f51305158bebf59d920a0446b36",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
