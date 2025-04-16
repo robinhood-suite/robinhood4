@@ -26,7 +26,7 @@ config_iterator_key(struct rbh_config *config, const char *type)
 }
 
 static int
-load_iterator(const struct rbh_backend_plugin *self,
+load_iterator(const struct rbh_plugin *self,
               struct posix_backend *posix,
               const char *iterator,
               const char *type)
@@ -36,7 +36,7 @@ load_iterator(const struct rbh_backend_plugin *self,
     if (!strcmp(iterator, "fts"))
         return 0;
 
-    extension = rbh_posix_load_extension(&self->plugin, iterator);
+    extension = rbh_posix_load_extension(self, iterator);
     if (!extension) {
         rbh_backend_error_printf("failed to load iterator '%s' for backend '%s'",
                                  iterator, type);
@@ -60,7 +60,7 @@ config_enrichers_key(struct rbh_config *config, const char *type)
 }
 
 static int
-load_enrichers(const struct rbh_backend_plugin *self,
+load_enrichers(const struct rbh_plugin *self,
                struct posix_backend *posix,
                const struct rbh_value *enrichers,
                const char *type)
@@ -78,15 +78,13 @@ load_enrichers(const struct rbh_backend_plugin *self,
 
         assert(value->type == RBH_VT_STRING);
 
-        extension = rbh_posix_load_extension(&self->plugin, value->string);
+        extension = rbh_posix_load_extension(self, value->string);
         if (!extension) {
             rbh_backend_error_printf("failed to load extension '%s' for backend '%s'",
                                      value->string, type);
             return -1;
         }
 
-        if (extension->setup_enricher)
-            extension->setup_enricher();
         posix->enrichers[i] = extension;
     }
     posix->enrichers[count - 1] = NULL;
@@ -109,7 +107,7 @@ rbh_posix_enrichers_list(struct rbh_config *config, const char *type,
 }
 
 int
-load_posix_extensions(const struct rbh_backend_plugin *self,
+load_posix_extensions(const struct rbh_plugin *self,
                       struct posix_backend *posix,
                       const char *type,
                       struct rbh_config *config)
