@@ -449,6 +449,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7f7a4338_9ee4537c",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-16T09:15:01Z",
+      "side": 1,
+      "message": "I\u0027d argue it\u0027s not really Python but basic arithmetic and boolean logic, but sure",
+      "parentUuid": "535f7f61_e1dca25b",
+      "range": {
+        "startLine": 311,
+        "startChar": 10,
+        "endLine": 311,
+        "endChar": 20
+      },
+      "revId": "2fefb1186a5160ee08cedaee3a35c9b574e1f75c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1705dde7_e2fc74f0",
         "filename": "designs/rbh-policy.rst",
         "patchSetId": 2
@@ -484,6 +508,30 @@
       "side": 1,
       "message": "Done",
       "parentUuid": "1705dde7_e2fc74f0",
+      "range": {
+        "startLine": 362,
+        "startChar": 4,
+        "endLine": 362,
+        "endChar": 26
+      },
+      "revId": "2fefb1186a5160ee08cedaee3a35c9b574e1f75c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c3ada11c_bcab2760",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 362,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-16T09:15:01Z",
+      "side": 1,
+      "message": "Not really, my point wasn\u0027t about \"group\" and \"research\", but about \"~\" and \"\u003d\u003d\" here",
+      "parentUuid": "807b2491_9be24b96",
       "range": {
         "startLine": 362,
         "startChar": 4,
