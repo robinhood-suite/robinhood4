@@ -44,67 +44,6 @@ rbh_posix_backend_new(const struct rbh_backend_plugin *self,
                       struct rbh_config *config);
 
 /**
- * Check the given token corresponds to a predicate or action known by POSIX
- *
- * @param token   a string that represents a token POSIX should identify
- *
- * @return        RBH_TOKEN_PREDICATE if the token is a predicate
- *                RBH_TOKEN_ACTION if the token is an action
- *                RBH_TOKEN_UNKNOWN if the token is not valid
- *                RBH_TOKEN_ERROR if an error occur and errno is set
- *                appropriately
- */
-enum rbh_parser_token
-rbh_posix_check_valid_token(const char *token);
-
-/**
- * Create a filter from the given command line arguments and position in that
- * command line
- *
- * @param argv           the list of arguments given to the command
- * @param argc           the number of strings in \p argv
- * @param index          the argument currently being parsed, should be updated
- *                       if necessary to skip optionnal values
- * @param need_prefetch  boolean value set by posix to indicate if a filter
- *                       needs to be completed
- *
- * @return               a pointer to newly allocated struct rbh_filter on
- *                       success, NULL on error and errno is set appropriately
- */
-struct rbh_filter *
-rbh_posix_build_filter(const char **argv, int argc, int *index,
-                       bool *need_prefetch);
-
-/**
- * Fill information about an entry according to a given directive into a buffer
- *
- * @param output         an array in which the information can be printed
- *                       according to \p directive. Size of the array should be
- *                       \p max_length
- * @param max_length     size of the \p output array
- * @param fsentry        fsentry to print
- * @param directive      which information about \p fsentry to print
- * @param backend        the backend to print (XXX: may not be necessary)
- *
- * @return               the number of characters written to \p output, -1 on
- *                       error
- */
-int
-rbh_posix_fill_entry_info(char *output, int max_length,
-                          const struct rbh_fsentry *fsentry,
-                          const char *directive, const char *backend);
-
-/**
- * Delete an entry from the plugin
- *
- * @param fsentry        the entry to delete
- *
- * @return               0 on success, -1 on error and errno is set
- */
-int
-rbh_posix_delete_entry(struct rbh_fsentry *fsentry);
-
-/**
  * Release the memory associated with the plugin
  */
 void
