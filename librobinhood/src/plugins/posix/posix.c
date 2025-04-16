@@ -1225,6 +1225,107 @@ static const struct rbh_backend POSIX_BACKEND = {
     .ops = &POSIX_BACKEND_OPS,
 };
 
+void
+rbh_posix_helper(const char *type, struct rbh_config *config,
+                 char **predicate_helper, char **directive_helper)
+{
+    struct posix_backend *posix = NULL;
+    char ext_predicate_helper[8192];
+    char ext_directive_helper[8192];
+    size_t predicate_offset;
+    size_t directive_offset;
+    int count = 0;
+
+    posix = malloc(sizeof(*posix));
+    if (posix == NULL)
+        goto err;
+
+    posix->enrichers = NULL;
+
+    if (type) {
+        const struct rbh_plugin plugin = {
+            .name = RBH_POSIX_BACKEND_NAME,
+            .version = RBH_POSIX_BACKEND_VERSION,
+        };
+
+        if (load_posix_extensions(&plugin, posix, type, config) == -1)
+            goto err;
+    }
+
+    ext_predicate_helper[0] = '\0';
+    ext_directive_helper[0] = '\0';
+    predicate_offset = 0;
+    directive_offset = 0;
+
+    while (posix->enrichers && posix->enrichers[count]) {
+        char *ext_predicate = NULL;
+        char *ext_directive = NULL;
+
+        rbh_pe_common_ops_helper(posix->enrichers[count]->extension.common_ops,
+                                 NULL, NULL, &ext_predicate, &ext_directive);
+
+        if (ext_predicate) {
+            size_t len = strlen(ext_predicate);
+
+            memcpy(&ext_predicate_helper[predicate_offset], ext_predicate, len);
+            ext_predicate_helper[len] = '\n';
+            predicate_offset += len + 1;
+        }
+
+        if (ext_directive) {
+            size_t len = strlen(ext_directive);
+
+            memcpy(&ext_directive_helper[directive_offset], ext_directive, len);
+            ext_directive_helper[len] = '\n';
+            directive_offset += len + 1;
+        }
+
+        count++;
+        free(ext_predicate);
+        free(ext_directive);
+    }
+
+    asprintf(predicate_helper,
+        "  - POSIX: *Are listed only the differences between GNU's find and\n"
+        "            rbh-find's POSIX predicates*:\n"
+        "    -[acm]min [+-]TIME   filter entries based on their access,\n"
+        "                         change or modify time. TIME should represent\n"
+        "                         minutes, and the filtering will follow GNU's\n"
+        "                         find logic for '-[acm]time'\n"
+        "    -blocks [+-]N        filter entries based on their number of blocks\n"
+        "    -empty               filter entries that are empty and is either\n"
+        "                         a regular file or a directory. Works only\n"
+        "                         with regular files for now\n"
+        "    -gid GID             filter entries based on their owner's GID\n"
+        "    -group GROUP         filter entries based on their owner's group name\n"
+        "    -nogroup             select entries without valid owner group IDs\n"
+        "    -nouser              select entries without valid owner IDs\n"
+        "    -size [+-]SIZE       filter entries based of their size. Works like\n"
+        "                         GNU find's '-size' predicate except with the\n"
+        "                         addition of the 'T' modifier for terabytes\n"
+        "    -perm PERMISSIONS    filter entries based on their permissions,\n"
+        "                         the '+' prefix is not supported\n"
+        "    -uid UID             filter entries based on their owner's ID\n"
+        "    -user USER           filter entries based on their owner's name\n"
+        "\n"
+        "%s", ext_predicate_helper);
+
+    if (ext_directive_helper[0] != '\0') {
+        asprintf(directive_helper, "%s", ext_directive_helper);
+    } else {
+        *directive_helper = NULL;
+    }
+
+    free(posix);
+
+    return;
+
+err:
+    *predicate_helper = NULL;
+    *directive_helper = NULL;
+    free(posix);
+}
+
 static size_t
 rtrim(char *string, char c)
 {
