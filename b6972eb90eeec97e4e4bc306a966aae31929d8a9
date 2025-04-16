@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "56487ba0_d852d5c0",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-04-16T08:03:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "82be2539_ef895c54",
+      "range": {
+        "startLine": 14,
+        "startChar": 19,
+        "endLine": 14,
+        "endChar": 26
+      },
+      "revId": "b6972eb90eeec97e4e4bc306a966aae31929d8a9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "da8566c5_d685b824",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-04-15T07:38:11Z",
       "side": 1,
       "message": "comment: well if you want to talk about files in this document, what you can do is saying in the introduction that you will only discuss for files, but it will handle any kind of storage element\n\nThus, no need to change \"file\" in the entire document.",
+      "range": {
+        "startLine": 44,
+        "startChar": 9,
+        "endLine": 44,
+        "endChar": 13
+      },
+      "revId": "b6972eb90eeec97e4e4bc306a966aae31929d8a9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "356fc31a_328aface",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-04-16T08:03:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da8566c5_d685b824",
       "range": {
         "startLine": 44,
         "startChar": 9,
@@ -70,6 +118,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c8ed5e9b_80a119f5",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 445,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-04-16T08:03:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ff8e4ac9_67b5a7e3",
+      "range": {
+        "startLine": 445,
+        "startChar": 0,
+        "endLine": 445,
+        "endChar": 81
+      },
+      "revId": "b6972eb90eeec97e4e4bc306a966aae31929d8a9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0b9bc607_f9fb4f0d",
@@ -83,6 +155,30 @@
       "writtenOn": "2025-04-15T07:38:11Z",
       "side": 1,
       "message": "style: size \u003e80 characters",
+      "range": {
+        "startLine": 475,
+        "startChar": 0,
+        "endLine": 475,
+        "endChar": 81
+      },
+      "revId": "b6972eb90eeec97e4e4bc306a966aae31929d8a9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "930e1efa_643429cb",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 475,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-04-16T08:03:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0b9bc607_f9fb4f0d",
       "range": {
         "startLine": 475,
         "startChar": 0,
@@ -118,6 +214,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "dbd225dd_d729dede",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 506,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-04-16T08:03:08Z",
+      "side": 1,
+      "message": "Yes, that\u0027s it! But for performance reasons, we can do these finds in parallel.",
+      "parentUuid": "4de3cd80_2f8bfc09",
+      "range": {
+        "startLine": 506,
+        "startChar": 2,
+        "endLine": 506,
+        "endChar": 61
+      },
+      "revId": "b6972eb90eeec97e4e4bc306a966aae31929d8a9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e5d0cbe2_d11d3e72",
         "filename": "designs/rbh-policy.rst",
         "patchSetId": 4
@@ -129,6 +249,30 @@
       "writtenOn": "2025-04-15T07:38:11Z",
       "side": 1,
       "message": "question: does that mean that even the retrieval is not done? a real skip?",
+      "range": {
+        "startLine": 551,
+        "startChar": 0,
+        "endLine": 553,
+        "endChar": 53
+      },
+      "revId": "b6972eb90eeec97e4e4bc306a966aae31929d8a9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b93473fe_b5d60f1b",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 553,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-04-16T08:03:08Z",
+      "side": 1,
+      "message": "Good question, it\u0027s true that it\u0027s poorly explained here but yes if the action is on none it means that the corresponding entries will not be processed so we will not do any retrieval. In fact we will just add the opposite criterion in the filtering of the next rules.",
+      "parentUuid": "e5d0cbe2_d11d3e72",
       "range": {
         "startLine": 551,
         "startChar": 0,

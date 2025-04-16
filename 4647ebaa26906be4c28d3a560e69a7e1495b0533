@@ -325,6 +325,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "41e0f1b2_7e31bfeb",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-04-16T08:03:08Z",
+      "side": 1,
+      "message": "So yes the configuration will be in python.",
+      "parentUuid": "85d1b553_30519c67",
+      "range": {
+        "startLine": 31,
+        "startChar": 0,
+        "endLine": 32,
+        "endChar": 45
+      },
+      "revId": "4647ebaa26906be4c28d3a560e69a7e1495b0533",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "92157dc4_095180f6",
