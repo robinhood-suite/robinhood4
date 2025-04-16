@@ -64,7 +64,7 @@ BuildRequires: libmfu-devel
 
 %description
 The robinhood4 tools necessary for the retention feature. Includes librobinhood
-with the Lustre backend, rbh-sync, rbh-find, rbh-find-lustre, rbh-fsevents and
+with the Lustre backend, rbh-sync, rbh-find, rbh-fsevents and
 rbh-update-retention.
 It is installed on machines that run a Mongo database.
 
@@ -133,7 +133,6 @@ OPTS=""
 %{_bindir}/rbh-find
 %{_libdir}/librbh-find.so.*
 %{_libdir}/pkgconfig/rbh-find.pc
-%{_bindir}/rbh-lfind
 %{_bindir}/rbh-fsevents
 %{_bindir}/rbh-capabilities
 %{_bindir}/rbh-update-retention

@@ -6,7 +6,7 @@
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
 
-for program in rbh-sync rbh-find rbh-lfind rbh-fsevents; do
+for program in rbh-sync rbh-find rbh-fsevents; do
     if ! command -v $program &> /dev/null; then
         echo "This command requires $program to be installed"
         exit 1
@@ -103,7 +103,7 @@ function run_retention_updater
         local config_option="--config $conf_file"
     fi
 
-    rbh-lfind $config_option $URI -type d -expired -printf "%p|%e|%E|%I\n" |
+    rbh-find $config_option $URI -type d -expired -printf "%p|%e|%E|%I\n" |
         while IFS='|' read -r dir expires expiration_date ID; do
 
         if [ "${expires:0:1}" != "+" ]; then
