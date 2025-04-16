@@ -58,8 +58,8 @@ test_collection_sync()
     local output=$(rbh_info "rbh:mongo:$testdb" "$info_flag")
     local n_lines=$(echo "$output" | wc -l)
 
-    if ((n_lines != 5)); then
-        error "There should be five infos about posix sync"
+    if ((n_lines != 6)); then
+        error "There should be six infos about posix sync"
     fi
 
     echo "$output" | grep "sync_debut" ||
@@ -82,6 +82,9 @@ test_collection_sync()
 
     echo "$output" | grep "mountpoint" ||
         error "mountpoint should have been retrieved"
+
+    echo "$output" | grep "command_line" ||
+        error "command_line should have been retrieved"
 }
 
 test_collection_first_sync() {
