@@ -12,6 +12,7 @@
 #include "robinhood/plugins/backend.h"
 
 static const struct rbh_pe_common_operations RETENTION_EXTENSION_COMMON_OPS = {
+    .helper = rbh_retention_helper,
     .check_valid_token = rbh_retention_check_valid_token,
     .build_filter = rbh_retention_build_filter,
     .fill_entry_info = rbh_retention_fill_entry_info,
