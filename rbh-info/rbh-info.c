@@ -295,8 +295,13 @@ _get_collection_sync(const struct rbh_value *value)
 
     for (size_t i = 0 ; i < metadata_map.count ; i++) {
         const struct rbh_value_pair *pair = &metadata_map.pairs[i];
+        printf("%s: ", pair->key);
 
-        printf("%s: %ld\n", pair->key, pair->value->int64);
+        if (pair->value->type == RBH_VT_INT64)
+            printf("%ld\n", pair->value->int64);
+
+        if (pair->value->type == RBH_VT_STRING)
+            printf("%s\n", pair->value->string);
     }
 }
 
