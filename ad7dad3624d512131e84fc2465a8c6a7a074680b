@@ -166,6 +166,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fd86c4dc_236f9e80",
+        "filename": "librobinhood/src/plugins/posix/fts_iter.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-16T07:27:23Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "42714522_3b0d3c7a",
+      "range": {
+        "startLine": 153,
+        "startChar": 13,
+        "endLine": 157,
+        "endChar": 14
+      },
+      "revId": "ad7dad3624d512131e84fc2465a8c6a7a074680b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "36ff869a_72803ea8",
