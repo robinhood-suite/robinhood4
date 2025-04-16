@@ -129,4 +129,15 @@ load_rbh_config(struct rbh_config *config);
 const char *
 rbh_config_get_string(const char *key, const char *default_string);
 
+/**
+ * Get the plugin that is extended by a given backend.
+ *
+ * @param backend   the backend from which to output the extended plugin
+ *
+ * @return          the extended plugin, or the backend itself if it corresponds
+ *                  to an actual plugin
+ */
+const char *
+rbh_config_get_extended_plugin(const char *backend);
+
 #endif
