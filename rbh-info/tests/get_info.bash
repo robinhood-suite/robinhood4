@@ -72,8 +72,8 @@ test_collection_sync()
     local output=$(rbh_info "rbh:mongo:$testdb" "$info_flag")
     local n_lines=$(echo "$output" | wc -l)
 
-    if ((n_lines != 4)); then
-        error "There should be four infos about posix sync"
+    if ((n_lines != 5)); then
+        error "There should be five infos about posix sync"
     fi
 
     echo "$output" | grep "sync_debut" ||
@@ -87,6 +87,12 @@ test_collection_sync()
 
     echo "$output" | grep "converted_entries" ||
         error "converted_entries should have been retrieved"
+
+    local mountpoint=$(awk -F': ' '/mountpoint/ {print $2}' <<< "$output")
+
+    if [ "$mountpoint" != "$(pwd)" ]; then
+        error "Invalid mountpoint"
+    fi
 }
 
 test_collection_first_sync() {
