@@ -431,7 +431,6 @@ The RobinHood project includes several tools:
 * rbh-sync_
 * rbh-fsevents_
 * rbh-find_
-* rbh-find-lustre_
 
 rbh-sync
 --------
@@ -468,11 +467,3 @@ more information.
 
 .. _(gnu-)find: https://www.gnu.org/software/findutils/
 __ https://github.com/cea-hpc/rbh-find
-
-rbh-find-lustre
----------------
-
-This is an overload of rbh-find_ which implements specific predicates to query
-Lustre attributes. Refer to the project's documentation__ for more information.
-
-__ https://github.com/cea-hpc/rbh-find-lustre
