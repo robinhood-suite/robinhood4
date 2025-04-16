@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3b720b77_07831c67",
+        "filename": "librobinhood/src/plugins/s3/s3.c",
+        "patchSetId": 17
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-04-16T07:44:15Z",
+      "side": 1,
+      "message": "minor: by using the macro `RBH_SSTACK_PUSH`, you don\u0027t need to check the return value (map_value, user_pairs, ...). If the alloc failed, the macro will exit.",
+      "range": {
+        "startLine": 112,
+        "startChar": 4,
+        "endLine": 114,
+        "endChar": 55
+      },
+      "revId": "05850a3fb2b3b137bcad0938587dd2286b7decde",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f230a77b_6b25b713",
+        "filename": "librobinhood/src/plugins/s3/s3.c",
+        "patchSetId": 17
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-04-16T07:44:15Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 123,
+        "startChar": 8,
+        "endLine": 125,
+        "endChar": 73
+      },
+      "revId": "05850a3fb2b3b137bcad0938587dd2286b7decde",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2b083be1_60be4fa3",
+        "filename": "librobinhood/src/plugins/s3/s3.c",
+        "patchSetId": 17
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-04-16T07:44:15Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 130,
+        "startChar": 8,
+        "endLine": 132,
+        "endChar": 75
+      },
+      "revId": "05850a3fb2b3b137bcad0938587dd2286b7decde",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0ea8037c_80122e1b",
+        "filename": "librobinhood/src/plugins/s3/s3.c",
+        "patchSetId": 17
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-04-16T07:44:15Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 136,
+        "startChar": 8,
+        "endLine": 138,
+        "endChar": 71
+      },
+      "revId": "05850a3fb2b3b137bcad0938587dd2286b7decde",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
