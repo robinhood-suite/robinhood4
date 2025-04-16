@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "15a27b10_eced2866",
+        "filename": "rbh-find/rbh-find.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-04-16T08:54:43Z",
+      "side": 1,
+      "message": "defect: `info_maps` is never freed",
+      "revId": "7b5d5cde7b9e1132dc085ff1a49601255c72a913",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
