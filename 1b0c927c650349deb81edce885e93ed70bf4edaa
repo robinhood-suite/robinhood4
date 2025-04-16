@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "77c5c43e_9a386603",
+        "filename": "librobinhood/src/plugins/s3/s3.c",
+        "patchSetId": 15
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-16T08:21:20Z",
+      "side": 1,
+      "message": "minor: this will be printed as-is, so if an error occurs, we will in the logs:\n```\n\"could not retrieve the s3 setup variables from                               the config file\"\n```",
+      "range": {
+        "startLine": 78,
+        "startChar": 33,
+        "endLine": 79,
+        "endChar": 49
+      },
+      "revId": "1b0c927c650349deb81edce885e93ed70bf4edaa",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
