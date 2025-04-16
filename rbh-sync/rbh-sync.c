@@ -664,7 +664,7 @@ destroy_metadata_sstack(void)
 
 struct rbh_value_map *
 sync_metadata_value_map(time_t sync_debut, time_t sync_end, char *from,
-                        ssize_t upserted_entries)
+                        ssize_t upserted_entries, char *command_line)
 {
     struct rbh_value_map *value_map;
     struct rbh_value_pair *pairs;
@@ -673,7 +673,7 @@ sync_metadata_value_map(time_t sync_debut, time_t sync_end, char *from,
     struct rbh_uri *uri;
     double sync_duration;
     char abs_path[4096];
-    int count = 5;
+    int count = 6;
 
     sync_duration = difftime(sync_end, sync_debut);
 
@@ -709,6 +709,7 @@ sync_metadata_value_map(time_t sync_debut, time_t sync_end, char *from,
     values[3].int64 = (int64_t)upserted_entries / 2;
     pairs[3].value = &values[3];
 
+
     raw_uri = rbh_raw_uri_from_string(from);
     if (raw_uri == NULL)
         error(EXIT_FAILURE, errno, "Sync map: cannot detect backend uri");
@@ -737,10 +738,37 @@ sync_metadata_value_map(time_t sync_debut, time_t sync_end, char *from,
     values[4].string = abs_path;
     pairs[4].value = &values[4];
 
+    pairs[5].key = "command_line";
+    values[5].type = RBH_VT_STRING;
+    values[5].string = command_line;
+    pairs[5].value = &values[5];
+
     value_map->pairs = pairs;
     value_map->count = count;
 
     return value_map;
+}
+
+char *
+get_command_line(int argc, char *argv[]) {
+    size_t total_len = 0;
+    char *cmd_line;
+
+    for (int i = 0 ; i < argc ; i++)
+        total_len += strlen(argv[i]) + 1;
+
+    cmd_line = malloc(total_len);
+    if (!cmd_line)
+        return NULL;
+
+    cmd_line[0] = '\0';
+    for (int i = 0 ; i < argc ; i++) {
+        strcat(cmd_line, argv[i]);
+        if (i < argc - 1)
+            strcat(cmd_line, " ");
+    }
+
+    return cmd_line;
 }
 
 int
@@ -785,10 +813,13 @@ main(int argc, char *argv[])
     };
     struct rbh_value_map *metadata_map;
     ssize_t upserted_entries;
+    char *command_line;
     time_t sync_debut;
     time_t sync_end;
     int rc;
     char c;
+
+    command_line = get_command_line(argc, argv);
 
     rc = rbh_config_from_args(argc - 1, argv + 1);
     if (rc)
@@ -856,7 +887,7 @@ main(int argc, char *argv[])
     sync_end = time(NULL);
 
     metadata_map = sync_metadata_value_map(sync_debut, sync_end, argv[0],
-                                           upserted_entries);
+                                           upserted_entries, command_line);
 
     rbh_backend_insert_metadata(to, metadata_map);
 
