@@ -16,6 +16,7 @@
 #include "lustre_internals.h"
 
 static const struct rbh_pe_common_operations LUSTRE_EXTENSION_COMMON_OPS = {
+    .helper = rbh_lustre_helper,
     .check_valid_token = rbh_lustre_check_valid_token,
     .build_filter = rbh_lustre_build_filter,
     .delete_entry = NULL,
