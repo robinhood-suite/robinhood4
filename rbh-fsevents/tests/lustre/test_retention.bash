@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # This file is part of RobinHood 4
-# Copyright (C) 2023 Commissariat a l'energie atomique et aux energies
+# Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
@@ -9,12 +9,6 @@
 test_dir=$(dirname $(readlink -e $0))
 . $test_dir/../../../utils/tests/framework.bash
 . $test_dir/lustre_utils.bash
-
-__rbh_lfind=$(PATH="$PWD/rbh-find-lustre:$PATH" which rbh-lfind)
-rbh_lfind()
-{
-    "$__rbh_lfind" "$@"
-}
 
 difflines()
 {
@@ -56,11 +50,11 @@ test_retention()
         '"ns.name": "'$entry'"'
     find_attribute '"xattrs.user.expires": "+5"' '"ns.name": "'$entry'"'
 
-    rbh_lfind "rbh:mongo:$testdb" -expired | sort | difflines
+    rbh_find "rbh:mongo:$testdb" -expired | sort | difflines
 
     date --set="@$(( $(stat -c %X $entry) + 6))"
 
-    rbh_lfind "rbh:mongo:$testdb" -expired | sort |
+    rbh_find "rbh:mongo:$testdb" -expired | sort |
         difflines "/$path_without_mount"
 
     truncate -s 300 $entry
@@ -75,11 +69,11 @@ test_retention()
         '"ns.name": "'$entry'"'
     find_attribute '"xattrs.user.expires": "+5"' '"ns.name": "'$entry'"'
 
-    rbh_lfind "rbh:mongo:$testdb" -expired | sort | difflines
+    rbh_find "rbh:mongo:$testdb" -expired | sort | difflines
 
     date --set="@$(( $(stat -c %Y $entry) + 6))"
 
-    rbh_lfind "rbh:mongo:$testdb" -expired | sort |
+    rbh_find "rbh:mongo:$testdb" -expired | sort |
         difflines "/$path_without_mount"
 }
 

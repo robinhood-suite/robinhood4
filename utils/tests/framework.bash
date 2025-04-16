@@ -56,12 +56,6 @@ rbh_fsevents()
     "$__rbh_fsevents" "$@"
 }
 
-__rbh_lfind=$(PATH="$PWD/rbh-find-lustre:$PATH" which rbh-lfind)
-rbh_lfind()
-{
-    "$__rbh_lfind" "$@"
-}
-
 __rbh_info=$(PATH="$PWD/rbh-info:$PATH" which rbh-info)
 rbh_info()
 {
@@ -69,7 +63,6 @@ rbh_info()
 }
 
 __rbh_update_retention=$(PATH="$PWD/../retention:$PATH" which rbh_update_retention)
-__update_retention_PATH="$PWD/rbh-find-lustre:"
 __update_retention_PATH+="$PWD/rbh-sync:"
 __update_retention_PATH+="$PWD/rbh-fsevents:"
 __update_retention_PATH+="$PWD/rbh-find"

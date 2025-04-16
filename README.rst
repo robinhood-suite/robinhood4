@@ -23,13 +23,11 @@ The main components of RobinHood are:
  - rbh-sync_ to synchronize two backends
  - rbh-fsevents_ to update a backend with changelog events
  - rbh-find_ to query a backend and filter entries
- - rbh-lfind_ an overload of rbh-find specific to Lustre
 
 .. _librobinhood: https://github.com/robinhood-suite/robinhood4/tree/main/librobinhood
 .. _rbh-sync: https://github.com/robinhood-suite/robinhood4/tree/main/rbh-sync
 .. _rbh-fsevents: https://github.com/robinhood-suite/robinhood4/tree/main/rbh-fsevents
 .. _rbh-find: https://github.com/robinhood-suite/robinhood4/tree/main/rbh-find
-.. _rbh-lfind: https://github.com/robinhood-suite/robinhood4/tree/main/rbh-find-lustre
 .. _rbh-info: https://github.com/robinhood-suite/robinhood4/tree/main/rbh-info
 .. _Lustre: https://lustre.org
 
@@ -47,8 +45,7 @@ RobinHood supports various backends that can be optionally enabled.
 To change the defaults, you need to update the file `meson_options.txt`.
 It supports 3 options:
 
- - `lustre`: enabled by default, build the `lustre` backend and
-   the `rbh-find-lustre` command;
+ - `lustre`: enabled by default, build the `lustre` extention;
  - `mfu`: enabled by default, build `posix-mpi`, `lustre-mpi` and `mpi-file`
    backends. Both `lustre` and `mfu` must be enabled to build the `lustre-mpi`
    backend;
