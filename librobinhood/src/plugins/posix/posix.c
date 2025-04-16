@@ -1269,9 +1269,18 @@ rbh_posix_backend_new(const struct rbh_backend_plugin *self,
     load_rbh_config(config);
 
     if (type) {
-        if (load_posix_extensions(self, posix, type, config) == -1) {
+        int count = 0;
+
+        if (load_posix_extensions(&self->plugin, posix, type, config) == -1) {
             save_errno = errno;
             goto free_root;
+        }
+
+        while (posix->enrichers && posix->enrichers[count]) {
+            if (posix->enrichers[count]->setup_enricher)
+                posix->enrichers[count]->setup_enricher();
+
+            count++;
         }
     }
 

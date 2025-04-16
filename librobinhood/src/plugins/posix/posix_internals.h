@@ -26,7 +26,7 @@ bool
 rbh_posix_iter_is_fts(struct posix_iterator *iter);
 
 int
-load_posix_extensions(const struct rbh_backend_plugin *self,
+load_posix_extensions(const struct rbh_plugin *self,
                       struct posix_backend *posix,
                       const char *type,
                       struct rbh_config *config);
