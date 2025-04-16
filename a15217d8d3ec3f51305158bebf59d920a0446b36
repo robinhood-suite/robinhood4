@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "392dc604_7a0f900d",
+        "filename": "rbh-info/rbh-info.c",
+        "patchSetId": 6
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-04-16T07:53:31Z",
+      "side": 1,
+      "message": "question: as I understand, the printings do not distinguish plugins and extensions, is it desired?",
+      "range": {
+        "startLine": 310,
+        "startChar": 8,
+        "endLine": 313,
+        "endChar": 63
+      },
+      "revId": "a15217d8d3ec3f51305158bebf59d920a0446b36",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
