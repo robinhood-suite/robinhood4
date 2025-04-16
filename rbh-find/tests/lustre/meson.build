@@ -6,6 +6,7 @@
 
 integration_tests = [
     'test_compat',
+    'test_lustre_helper',
     'test_hsm_state',
     'test_fid',
     'test_ost_index',
