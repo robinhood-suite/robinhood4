@@ -974,3 +974,54 @@ rbh_lustre_enrich(struct entry_info *einfo, uint64_t flags,
 
     return 0;
 }
+
+    /*--------------------------------------------------------------------*
+     |                               helper                               |
+     *--------------------------------------------------------------------*/
+
+void
+rbh_lustre_helper(__attribute__((unused)) const char *backend,
+                  __attribute__((unused)) struct rbh_config *config,
+                  char **predicate_helper, char **directive_helper)
+{
+    asprintf(predicate_helper,
+        "  - Lustre:\n"
+        "    -fid FID             filter entries based on their FID.\n"
+        "    -hsm-state {archived, dirty, exists, lost, noarchive, none, norelease, released}\n"
+        "                         filter entries based on their HSM state.\n"
+        "    -ost-index INDEX     filter entries based on the OST they are on.\n"
+        "    -layout-pattern {default, raid0, released, mdt, overstriped}\n"
+        "                         filter entries based on the layout pattern\n"
+        "                         of their components. If given default, will\n"
+        "                         fetch the default pattern of the current\n"
+        "                         Lustre FS and use it for filtering.\n"
+        "    -mdt-index INDEX     filter entries based on the MDT they are on.\n"
+        "    -pool NAME           filter entries based on the pool their\n"
+        "                         components belong to (case sensitive, regex\n"
+        "                         allowed).\n"
+        "    -ipool NAME          filter entries based on the pool their\n"
+        "                         components belong to (case insensitive,\n"
+        "                         regex allowed).\n"
+        "    -stripe-count {[+-]COUNT, default}\n"
+        "                         filter entries based on their component's\n"
+        "                         stripe count. If given default, will fetch\n"
+        "                         the default stripe count of the current\n"
+        "                         Lustre FS and use it for filtering.\n"
+        "    -stripe-size {[+-]SIZE, default}\n"
+        "                         filter entries based on their component's\n"
+        "                         stripe size. If given default, will fetch\n"
+        "                         the default stripe size of the current\n"
+        "                         Lustre FS and use it for filtering.\n"
+        "    -comp-start [+-]SIZE[,SIZE]\n"
+        "                         filter entries based on their component's\n"
+        "                         start values. `+` or `-` signs are\n"
+        "                         not considered if given an interval in CSV.\n"
+        "    -comp-end   [+-]SIZE[,SIZE]\n"
+        "                         filter entries based on their component's\n"
+        "                         end values. `+` or `-` signs are\n"
+        "                         not considered if given an interval in CSV.\n"
+        "    -mdt-count  [+-]COUNT\n"
+        "                         filter entries based on their MDT count.\n");
+
+    *directive_helper = NULL;
+}
