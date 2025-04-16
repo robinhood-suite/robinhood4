@@ -22,6 +22,30 @@
       },
       "revId": "1b0c927c650349deb81edce885e93ed70bf4edaa",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4964b7b8_af584f23",
+        "filename": "librobinhood/src/plugins/s3/s3.c",
+        "patchSetId": 15
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-16T08:22:08Z",
+      "side": 1,
+      "message": "You should add quotes after `from` and before `the`, or better, just don\u0027t split the lines",
+      "parentUuid": "77c5c43e_9a386603",
+      "range": {
+        "startLine": 78,
+        "startChar": 33,
+        "endLine": 79,
+        "endChar": 49
+      },
+      "revId": "1b0c927c650349deb81edce885e93ed70bf4edaa",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
