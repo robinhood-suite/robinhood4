@@ -16,6 +16,7 @@
 #include "posix_internals.h"
 
 static const struct rbh_pe_common_operations POSIX_BACKEND_PLUGIN_COMMON_OPS = {
+    .helper = rbh_posix_helper,
     .check_valid_token = rbh_posix_check_valid_token,
     .build_filter = rbh_posix_build_filter,
     .fill_entry_info = rbh_posix_fill_entry_info,

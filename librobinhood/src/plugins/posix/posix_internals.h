@@ -32,6 +32,25 @@ load_posix_extensions(const struct rbh_plugin *self,
                       struct rbh_config *config);
 
 /**
+ * Show POSIX and its extensions helper, detailling specific predicates and
+ * directives.
+ *
+ * @param backend            the backend specified by user, which may be
+ *                           present in \p config, which POSIX may use to fetch
+ *                           additionnal helper
+ * @param config             the config to use to determine which other
+ *                           extensions' helpers should be fetched
+ * @param predicate_helper   the output helper for predicates
+ * @param directive_helper   the output helper for directives
+ *
+ * @return                   POSIX and its extension's helper for predicates
+ *                           and directives
+ */
+void
+rbh_posix_helper(const char *backend, struct rbh_config *config,
+                 char **predicate_helper, char **directive_helper);
+
+/**
  * Check the given token corresponds to a predicate or action known by POSIX
  *
  * @param token   a string that represents a token POSIX should identify
