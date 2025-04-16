@@ -116,15 +116,12 @@ usage(const char *backend)
     return count_chars;
 }
 
-static int
-check_command_options(int argc, char *argv[])
+static void
+check_command_options(int pre_uri_args, int argc, char *argv[])
 {
-    for (int i = 0; i < argc; i++) {
-        if (*argv[i] != '-')
-            return i;
-
+    for (int i = 0; i < pre_uri_args; i++) {
         if (strcmp(argv[i], "-h") == 0 || strcmp(argv[i], "--help") == 0) {
-            if (i + 1 < argc && strchr(argv[i + 1], ':') == NULL)
+            if (i + 1 < pre_uri_args)
                 usage(argv[i + 1]);
             else
                 usage(NULL);
@@ -141,8 +138,6 @@ check_command_options(int argc, char *argv[])
         if (strcmp(argv[i], "-c") == 0 || strcmp(argv[i], "--config") == 0)
             i++;
     }
-
-    return 0;
 }
 
 static bool
@@ -250,7 +245,6 @@ main(int _argc, char *_argv[])
     struct rbh_value_map **info_maps;
     struct rbh_filter *filter;
     size_t sorts_count = 0;
-    int checked_options;
     int nb_cli_args;
     char **argv;
     int index;
@@ -270,10 +264,12 @@ main(int _argc, char *_argv[])
         error(EXIT_FAILURE, errno, "failed to load configuration file");
 
     rbh_apply_aliases(&argc, &argv);
-    checked_options = check_command_options(argc, argv);
 
-    ctx.argc = argc - checked_options;
-    ctx.argv = &argv[checked_options];
+    nb_cli_args = rbh_find_count_args_before_uri(argc, argv);
+    check_command_options(nb_cli_args, argc, argv);
+
+    ctx.argc = argc - nb_cli_args;
+    ctx.argv = &argv[nb_cli_args];
 
     ctx.pre_action_callback = &find_pre_action;
     ctx.exec_action_callback = &find_exec_action;
