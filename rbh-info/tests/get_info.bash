@@ -65,7 +65,7 @@ test_collection_sync()
     local output=$(rbh_info "rbh:mongo:$testdb" "$info_flag")
     local n_lines=$(echo "$output" | wc -l)
 
-    if ((n_lines != 4)); then
+    if ((n_lines != 5)); then
         error "There should be four infos about posix sync"
     fi
 
@@ -78,9 +78,11 @@ test_collection_sync()
     echo "$output" | grep "sync_end" ||
         error "sync_end should have been retrieved"
 
-
     echo "$output" | grep "upserted_entries" ||
         error "upserted_entries should have been retrieved"
+
+    echo "$output" | grep "mount_point" ||
+        error "mount_point should have been retrieved"
 }
 
 test_collection_first_sync() {

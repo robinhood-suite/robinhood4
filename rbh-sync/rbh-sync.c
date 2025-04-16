@@ -663,14 +663,17 @@ destroy_metadata_sstack(void)
 }
 
 struct rbh_value_map *
-sync_metadata_value_map(time_t sync_debut, time_t sync_end,
+sync_metadata_value_map(time_t sync_debut, time_t sync_end, char *from,
                         ssize_t upserted_entries)
 {
     struct rbh_value_map *value_map;
     struct rbh_value_pair *pairs;
+    struct rbh_raw_uri *raw_uri;
     struct rbh_value *values;
     double sync_duration;
-    int count = 4;
+    struct rbh_uri *uri;
+    char abs_path[4096];
+    int count = 5;
 
     sync_duration = difftime(sync_end, sync_debut);
 
@@ -706,6 +709,33 @@ sync_metadata_value_map(time_t sync_debut, time_t sync_end,
     values[3].int64 = (int64_t)upserted_entries / 2;
     pairs[3].value = &values[3];
 
+    raw_uri = rbh_raw_uri_from_string(from);
+    if (raw_uri == NULL)
+        error(EXIT_FAILURE, errno, "Sync map: cannot detect backend uri");
+
+    uri = rbh_uri_from_raw_uri(raw_uri);
+    if (uri == NULL)
+        error(EXIT_FAILURE, errno, "Sync map: cannot detect given backend");
+    free(raw_uri);
+
+    if (uri->fsname[0] != '/') {
+        if (!realpath(uri->fsname, abs_path)) {
+            strncpy(abs_path, from, sizeof(abs_path));
+        }
+    } else {
+        if (uri->fsname)
+            strncpy(abs_path, uri->fsname, sizeof(abs_path));
+        else
+            strncpy(abs_path, from, sizeof(abs_path));
+    }
+
+    free(uri);
+    abs_path[sizeof(abs_path) - 1] = '\0';
+
+    pairs[4].key = "mount_point";
+    values[4].type = RBH_VT_STRING;
+    values[4].string = abs_path;
+    pairs[4].value = &values[4];
 
     value_map->pairs = pairs;
     value_map->count = count;
@@ -825,7 +855,7 @@ main(int argc, char *argv[])
     upserted_entries = sync(&projection);
     sync_end = time(NULL);
 
-    metadata_map = sync_metadata_value_map(sync_debut, sync_end,
+    metadata_map = sync_metadata_value_map(sync_debut, sync_end, argv[0],
                                            upserted_entries);
 
     rbh_backend_insert_metadata(to, metadata_map);
