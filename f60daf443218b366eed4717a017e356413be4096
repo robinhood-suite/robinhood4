@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4c5eec67_83cf5ab2",
+        "filename": "rbh-sync/tests/test_s3_mongo_sync.bash",
+        "patchSetId": 14
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1038646
+      },
+      "writtenOn": "2025-04-16T09:51:46Z",
+      "side": 1,
+      "message": "so i can remove the teardown too then ?",
+      "parentUuid": "bb5a51bd_89dd79cb",
+      "range": {
+        "startLine": 14,
+        "startChar": 4,
+        "endLine": 32,
+        "endChar": 8
+      },
+      "revId": "f60daf443218b366eed4717a017e356413be4096",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "11103edd_ee7c1a53",
         "filename": "rbh-sync/tests/test_s3_mongo_sync.bash",
         "patchSetId": 14
@@ -88,6 +112,24 @@
       "writtenOn": "2025-04-16T08:38:02Z",
       "side": 1,
       "message": "minor: remove",
+      "revId": "f60daf443218b366eed4717a017e356413be4096",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1edab550_f1f1f8b8",
+        "filename": "rbh-sync/tests/test_s3_mongo_sync.bash",
+        "patchSetId": 14
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1038646
+      },
+      "writtenOn": "2025-04-16T09:51:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dae6351a_c871854f",
       "revId": "f60daf443218b366eed4717a017e356413be4096",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
