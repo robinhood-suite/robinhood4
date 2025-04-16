@@ -24,31 +24,18 @@ rbh_lustre_enrich(struct entry_info *einfo, uint64_t flags,
                   struct rbh_sstack *values);
 
 /**
- * Check the given token is a valid Lustre action or predicate
- *
- * @param token     the token to check
- *
- * @return          RBH_TOKEN_ACTION if the token is a Lustre action
- *                  RBH_TOKEN_PREDICATE if the token is a Lustre predicate
- *                  RBH_TOKEN_UNKNOWN if the token is not a Lustre token
- *                  RBH_TOKEN_ERROR otherwise
+ * The following functions are implementations of the different callbacks of the
+ * `rbh_pe_common_operations` structure. Their documentation is the same as the
+ * one given for the structure's callbacks.
  */
+void
+rbh_lustre_helper(__attribute__((unused)) const char *backend,
+                  __attribute__((unused)) struct rbh_config *config,
+                  char **predicate_helper, char **directive_helper);
+
 enum rbh_parser_token
 rbh_lustre_check_valid_token(const char *token);
 
-/**
- * Build a filter based on the given predicate at argv[*index] and increase
- * index if the predicate requires an argument.
- *
- * @param argv           the list of arguments given to the command
- * @param argc           the number of strings in \p argv
- * @param index          the argument currently being parsed, should be updated
- *                       if necessary to skip optionnal values
- * @param need_prefetch  boolean value to indicate if a filter needs to be
- *                       completed
- *
- * This function will exit if \p string is not a valid predicate
- */
 struct rbh_filter *
 rbh_lustre_build_filter(const char **argv, int argc, int *index,
                         bool *need_prefetch);
