@@ -48,6 +48,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0c30b882_573f92ee",
+        "filename": "utils/tests/db_cmd_mongo",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-04-16T09:28:31Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "f076acfb_5f971474",
+      "range": {
+        "startLine": 12,
+        "startChar": 1,
+        "endLine": 16,
+        "endChar": 1
+      },
+      "revId": "fd4cb1cb8ca5d9ecfbab9e2de3b6d149d909b07a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "efa532b0_2d79ede9",
