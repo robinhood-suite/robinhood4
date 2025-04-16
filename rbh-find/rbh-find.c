@@ -38,15 +38,12 @@ on_find_exit(void)
 }
 
 static int
-usage(void)
+usage(const char *backend)
 {
     const char *message =
         "usage: %s [-h|--help] SOURCE [PREDICATES] [ACTION]\n"
         "\n"
         "Query SOURCE's entries according to PREDICATE and do ACTION on each.\n"
-        "\n"
-        "Most of the predicates and actions are similar to the ones of GNU's find,\n"
-        "so we will only list the differences here.\n"
         "\n"
         "Positional arguments:\n"
         "    SOURCE  a robinhood URI\n"
@@ -56,33 +53,16 @@ usage(void)
         "    --alias NAME          specify an alias for the operation.\n"
         "    -d,--dry-run          displays the command after alias management\n"
         "\n"
-        "Predicate arguments:\n"
-        "    -[acm]min [+-]TIME   filter entries based on their access,\n"
-        "                         change or modify time. TIME should represent\n"
-        "                         minutes, and the filtering will follow GNU's\n"
-        "                         find logic for '-[acm]time'\n"
-        "    -blocks [+-]N        filter entries based on their number of blocks\n"
-        "    -empty               filter entries that are empty and is either\n"
-        "                         a regular file or a directory. Works only\n"
-        "                         with regular files for now\n"
-        "    -gid GID             filter entries based on their owner's GID\n"
-        "    -group GROUP         filter entries based on their owner's group name\n"
-        "    -nogroup             select entries without valid owner group IDs\n"
-        "    -nouser              select entries without valid owner IDs\n"
-        "    -size [+-]SIZE       filter entries based of their size. Works like\n"
-        "                         GNU find's '-size' predicate except with the\n"
-        "                         addition of the 'T' modifier for terabytes\n"
-        "    -perm PERMISSIONS    filter entries based on their permissions,\n"
-        "                         the '+' prefix is not supported\n"
-        "    -uid UID             filter entries based on their owner's ID\n"
-        "    -user USER           filter entries based on their owner's name\n"
-        "\n"
+        "%s"
+        "%s"
         "Action arguments:\n"
         "    -count               count the number of entries that match the\n"
         "                         requested predicates\n"
         "    -[r]sort FIELD       sort or reverse sort entries based of the FIELD\n"
         "                         requested\n"
         "\n"
+        "%s"
+        "%s"
         "A robinhood URI is built as follows:\n"
         "    "RBH_SCHEME":BACKEND:FSNAME[#{PATH|ID}]\n"
         "Where:\n"
@@ -105,8 +85,35 @@ usage(void)
         "    -prune\n"
         "    -exec COMMANDE {} + -ok COMMANDE ;\n"
         "    -execdir COMMANDE ; -execdir COMMANDE {} + -okdir COMMANDE ;\n";
+    const struct rbh_backend_plugin *plugin;
+    struct rbh_config *config;
+    const char *plugin_str;
+    char *predicate_helper;
+    char *directive_helper;
+    int count_chars;
 
-    return printf(message, program_invocation_short_name);
+    if (backend == NULL)
+        return printf(message, program_invocation_short_name, "", "", "", "");
+
+    plugin_str = rbh_config_get_extended_plugin(backend);
+    plugin = rbh_backend_plugin_import(plugin_str);
+    if (plugin == NULL)
+        error(EXIT_FAILURE, errno, "rbh_backend_plugin_import");
+
+    config = get_rbh_config();
+    rbh_pe_common_ops_helper(plugin->common_ops, backend, config,
+                             &predicate_helper, &directive_helper);
+
+    count_chars = printf(message, program_invocation_short_name,
+                         predicate_helper ? "Predicate arguments:\n" : "",
+                         predicate_helper ? : "",
+                         directive_helper ? "Printf directives:\n" : "",
+                         directive_helper ? : "");
+
+    free(predicate_helper);
+    free(directive_helper);
+
+    return count_chars;
 }
 
 static int
@@ -117,7 +124,11 @@ check_command_options(int argc, char *argv[])
             return i;
 
         if (strcmp(argv[i], "-h") == 0 || strcmp(argv[i], "--help") == 0) {
-            usage();
+            if (i + 1 < argc && strchr(argv[i + 1], ':') == NULL)
+                usage(argv[i + 1]);
+            else
+                usage(NULL);
+
             exit(0);
         }
 
