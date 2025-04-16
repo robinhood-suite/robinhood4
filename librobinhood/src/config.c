@@ -482,3 +482,30 @@ rbh_config_from_args(int argc, char **argv)
 
     return rbh_config_open_default();
 }
+
+static char *
+config_extends_key(const char *type)
+{
+    char *key;
+
+    if (asprintf(&key, "backends/%s/extends", type) == -1)
+        return NULL;
+
+    return key;
+}
+
+const char *
+rbh_config_get_extended_plugin(const char *backend)
+{
+    const char *result;
+    char *key;
+
+    if (!config)
+        return NULL;
+
+    key = config_extends_key(backend);
+    result = rbh_config_get_string(key, backend);
+    free(key);
+
+    return result;
+}

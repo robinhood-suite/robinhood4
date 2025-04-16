@@ -15,7 +15,7 @@
 #include "robinhood/backends/posix_extension.h"
 
 static char *
-config_iterator_key(struct rbh_config *config, const char *type)
+config_iterator_key(const char *type)
 {
     char *key;
 
@@ -49,7 +49,7 @@ load_iterator(const struct rbh_plugin *self,
 }
 
 static char *
-config_enrichers_key(struct rbh_config *config, const char *type)
+config_enrichers_key(const char *type)
 {
     char *key;
 
@@ -99,7 +99,7 @@ rbh_posix_enrichers_list(struct rbh_config *config, const char *type,
     char *key;
     int rc;
 
-    key = config_enrichers_key(config, type);
+    key = config_enrichers_key(type);
     rc = rbh_config_find(key, enrichers, RBH_VT_SEQUENCE);
     free(key);
 
@@ -120,7 +120,7 @@ load_posix_extensions(const struct rbh_plugin *self,
     if (!config)
         return 0;
 
-    key = config_iterator_key(config, type);
+    key = config_iterator_key(type);
     rc = rbh_config_find(key, &iterator, RBH_VT_STRING);
     free(key);
     switch (rc) {
