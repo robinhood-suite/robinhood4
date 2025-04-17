@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "df0086e0_76b2d73c",
+        "filename": "librobinhood/src/plugins/posix/posix.c",
+        "patchSetId": 7
+      },
+      "lineNbr": 495,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-04-17T06:47:39Z",
+      "side": 1,
+      "message": "style: maybe something like that\n\n```\ncallback_xattrs_count \u003d (*enrichers[n_enricher]-\u003eenrich)(\n    \u0026info, 0, \u0026pairs[count],\n    pairs_count - count, values\n);\n```",
+      "range": {
+        "startLine": 492,
+        "startChar": 11,
+        "endLine": 495,
+        "endChar": 77
+      },
+      "revId": "fe7dc3f7eb92b48c2c393464c4e1cd8dae715dee",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2920887d_a84f9e66",
+        "filename": "librobinhood/src/plugins/posix/posix.c",
+        "patchSetId": 7
+      },
+      "lineNbr": 1051,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-04-17T06:47:39Z",
+      "side": 1,
+      "message": "style",
+      "range": {
+        "startLine": 1049,
+        "startChar": 8,
+        "endLine": 1051,
+        "endChar": 65
+      },
+      "revId": "fe7dc3f7eb92b48c2c393464c4e1cd8dae715dee",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
