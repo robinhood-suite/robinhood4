@@ -1088,8 +1088,8 @@ destroy_info_sstack(void)
  * And like this for extensions:
  * `{"type": "extension", "plugin": "posix", "extension": "<extension_name>"}`
  */
-static struct rbh_value_map
-get_source_map(bool is_plugin, const char *extension_name)
+struct rbh_value_map
+rbh_posix_get_source_map(bool is_plugin, const char *extension_name)
 {
     int count = (is_plugin ? 2 : 3);
     struct rbh_value_map full_map;
@@ -1144,12 +1144,14 @@ get_source_backend(const struct posix_backend *posix,
     backends = RBH_SSTACK_PUSH(info_sstack, NULL, count * sizeof(*backends));
     for (i = 0; i < count - 1; ++i) {
         backends[i].type = RBH_VT_MAP;
-        backends[i].map = get_source_map(false,
-                                         posix->enrichers[i]->extension.name);
+        backends[i].map = rbh_posix_get_source_map(
+            false,
+            posix->enrichers[i]->extension.name
+        );
     }
 
     backends[i].type = RBH_VT_MAP;
-    backends[i].map = get_source_map(true, NULL);
+    backends[i].map = rbh_posix_get_source_map(true, NULL);
 
     backends_source_sequence = RBH_SSTACK_PUSH(
         info_sstack,
@@ -1189,12 +1191,7 @@ posix_get_info(void *backend, int info_flags)
     }
 
     pairs = RBH_SSTACK_PUSH(info_sstack, NULL, count * sizeof(*pairs));
-    if (!pairs)
-        goto out;
-
     map_value = RBH_SSTACK_PUSH(info_sstack, NULL, sizeof(*map_value));
-    if (!map_value)
-        goto out;
 
     if (info_flags & RBH_INFO_BACKEND_SOURCE)
         if (get_source_backend(posix, &pairs[idx++]))
