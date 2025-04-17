@@ -109,6 +109,10 @@ posix_iterator_setup(struct posix_iterator *iter,
                      const char *entry,
                      int statx_sync_type);
 
+struct rbh_value_map
+rbh_posix_get_source_map(bool is_plugin, const char *extension_name,
+                         struct rbh_sstack *sstack);
+
 int
 rbh_posix_enrichers_list(struct rbh_config *config, const char *type,
                          struct rbh_value *enrichers);

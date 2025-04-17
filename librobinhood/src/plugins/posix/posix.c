@@ -1088,16 +1088,17 @@ destroy_info_sstack(void)
  * And like this for extensions:
  * `{"type": "extension", "plugin": "posix", "extension": "<extension_name>"}`
  */
-static struct rbh_value_map
-get_source_map(bool is_plugin, const char *extension_name)
+struct rbh_value_map
+rbh_posix_get_source_map(bool is_plugin, const char *extension_name,
+                         struct rbh_sstack *sstack)
 {
     int count = (is_plugin ? 2 : 3);
     struct rbh_value_map full_map;
     struct rbh_value_pair *pairs;
     struct rbh_value *values;
 
-    pairs = RBH_SSTACK_PUSH(info_sstack, NULL, count * sizeof(*pairs));
-    values = RBH_SSTACK_PUSH(info_sstack, NULL, count * sizeof(*values));
+    pairs = RBH_SSTACK_PUSH(sstack, NULL, count * sizeof(*pairs));
+    values = RBH_SSTACK_PUSH(sstack, NULL, count * sizeof(*values));
 
     pairs[0].key = "type";
     values[0].type = RBH_VT_STRING;
@@ -1144,12 +1145,15 @@ get_source_backend(const struct posix_backend *posix,
     backends = RBH_SSTACK_PUSH(info_sstack, NULL, count * sizeof(*backends));
     for (i = 0; i < count - 1; ++i) {
         backends[i].type = RBH_VT_MAP;
-        backends[i].map = get_source_map(false,
-                                         posix->enrichers[i]->extension.name);
+        backends[i].map = rbh_posix_get_source_map(
+            false,
+            posix->enrichers[i]->extension.name,
+            info_sstack
+        );
     }
 
     backends[i].type = RBH_VT_MAP;
-    backends[i].map = get_source_map(true, NULL);
+    backends[i].map = rbh_posix_get_source_map(true, NULL, info_sstack);
 
     backends_source_sequence = RBH_SSTACK_PUSH(
         info_sstack,
@@ -1189,12 +1193,7 @@ posix_get_info(void *backend, int info_flags)
     }
 
     pairs = RBH_SSTACK_PUSH(info_sstack, NULL, count * sizeof(*pairs));
-    if (!pairs)
-        goto out;
-
     map_value = RBH_SSTACK_PUSH(info_sstack, NULL, sizeof(*map_value));
-    if (!map_value)
-        goto out;
 
     if (info_flags & RBH_INFO_BACKEND_SOURCE)
         if (get_source_backend(posix, &pairs[idx++]))

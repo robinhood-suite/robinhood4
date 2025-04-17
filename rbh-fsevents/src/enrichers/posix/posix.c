@@ -759,9 +759,11 @@ setup_enrichers(struct enricher *enricher, const char *type,
         name = enrichers->sequence.values[i].string;
 
         if (!strcmp(name, "lustre")) {
+            enricher->extension_enrichers[i].name = "lustre";
             enricher->extension_enrichers[i].enrich_xattr = lustre_enrich_fsevent;
             continue;
         } else if (!strcmp(name, "retention")) {
+            enricher->extension_enrichers[i].name = "retention";
             enricher->extension_enrichers[i].enrich_xattr = retention_enrich_fsevent;
             continue;
         } else {
@@ -923,12 +925,68 @@ posix_enrich_iter_builder_build_iter(void *_builder,
                              skip_error);
 }
 
-static struct rbh_value_map *
-posix_enrich_iter_builder_get_source_backends(void *builder)
-{
-    (void) builder;
+#define MIN_VALUES_SSTACK_ALLOC (1 << 6)
+struct rbh_sstack *source_backends_sstack;
 
-    return NULL;
+static void __attribute__((destructor))
+destroy_source_backends_sstack(void)
+{
+    if (source_backends_sstack)
+        rbh_sstack_destroy(source_backends_sstack);
+}
+
+static struct rbh_value_map *
+posix_enrich_iter_builder_get_source_backends(void *_builder)
+{
+    struct enrich_iter_builder *builder = _builder;
+    struct rbh_value *backend_source_sequence;
+    struct enricher enricher = { 0 };
+    struct rbh_value_map *map_value;
+    struct rbh_value_pair *pair;
+    struct rbh_value *backends;
+    int i;
+
+    setup_fsevent_enrichers(&enricher, get_rbh_config(), builder->type);
+
+    if (source_backends_sstack == NULL) {
+        source_backends_sstack = rbh_sstack_new(
+            MIN_VALUES_SSTACK_ALLOC * (sizeof(struct rbh_value_map *))
+        );
+        if (!source_backends_sstack)
+            return NULL;
+    }
+
+    backends = RBH_SSTACK_PUSH(source_backends_sstack, NULL,
+                               (enricher.n_extensions + 1) * sizeof(*backends));
+
+    for (i = 0; i < enricher.n_extensions; ++i) {
+        const char *name = enricher.extension_enrichers[i].name;
+
+        backends[i].type = RBH_VT_MAP;
+        backends[i].map = rbh_posix_get_source_map(false, name,
+                                                   source_backends_sstack);
+    }
+
+    backends[i].type = RBH_VT_MAP;
+    backends[i].map = rbh_posix_get_source_map(true, NULL,
+                                               source_backends_sstack);
+
+    backend_source_sequence = RBH_SSTACK_PUSH(source_backends_sstack, NULL,
+                                              sizeof(*backend_source_sequence));
+    backend_source_sequence->type = RBH_VT_SEQUENCE;
+    backend_source_sequence->sequence.values = backends;
+    backend_source_sequence->sequence.count = enricher.n_extensions + 1;
+
+    pair = RBH_SSTACK_PUSH(source_backends_sstack, NULL, sizeof(*pair));
+    pair->key = "backend_source";
+    pair->value = backend_source_sequence;
+
+    map_value = RBH_SSTACK_PUSH(source_backends_sstack, NULL,
+                                sizeof(*map_value));
+    map_value->pairs = pair;
+    map_value->count = 1;
+
+    return map_value;
 }
 
 void
