@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1e88139a_2ec3d473",
+        "filename": "rbh-sync/rbh-sync.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 708,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-17T08:46:11Z",
+      "side": 1,
+      "message": "question: what\u0027s this ?",
+      "range": {
+        "startLine": 708,
+        "startChar": 47,
+        "endLine": 708,
+        "endChar": 52
+      },
+      "revId": "5fa186d870f57ff44b4ea736e039579584ec3b17",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
