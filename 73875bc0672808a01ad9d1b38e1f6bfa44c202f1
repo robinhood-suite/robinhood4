@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a4bdf40d_690a7290",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 12
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-04-17T07:02:32Z",
+      "side": 1,
+      "message": "question: is it always possible?\n\nMaybe I am wrong, but are we sure that every storage backend will not lose information when synchronizing from one to another? Mongo to mongo seems to logically keep all information, but if we are synchronizing from Mongo to MPI File?\n\nI do understand why you want that feature to be in, and I agree. Just not sure we can ensure that, and for every storage backend.",
+      "range": {
+        "startLine": 18,
+        "startChar": 0,
+        "endLine": 22,
+        "endChar": 64
+      },
+      "revId": "73875bc0672808a01ad9d1b38e1f6bfa44c202f1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
