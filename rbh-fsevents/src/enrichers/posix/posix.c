@@ -923,6 +923,14 @@ posix_enrich_iter_builder_build_iter(void *_builder,
                              skip_error);
 }
 
+static struct rbh_value_map *
+posix_enrich_iter_builder_get_source_backends(void *builder)
+{
+    (void) builder;
+
+    return NULL;
+}
+
 void
 posix_enrich_iter_builder_destroy(void *_builder)
 {
@@ -937,6 +945,7 @@ posix_enrich_iter_builder_destroy(void *_builder)
 static const struct enrich_iter_builder_operations
 POSIX_ENRICH_ITER_BUILDER_OPS = {
     .build_iter = posix_enrich_iter_builder_build_iter,
+    .get_source_backends = posix_enrich_iter_builder_get_source_backends,
     .destroy = posix_enrich_iter_builder_destroy,
 };
 

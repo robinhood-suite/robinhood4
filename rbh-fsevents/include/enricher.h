@@ -12,6 +12,7 @@ struct enrich_iter_builder_operations {
     struct rbh_iterator *(*build_iter)(void *builder,
                                        struct rbh_iterator *fsevents,
                                        bool skip_error);
+    struct rbh_value_map *(*get_source_backends)(void *builder);
     void (*destroy)(void *builder);
 };
 
@@ -30,6 +31,16 @@ build_enrich_iter(struct enrich_iter_builder *builder,
                   bool skip_error)
 {
     return builder->ops->build_iter(builder, fsevents, skip_error);
+}
+
+static inline struct rbh_value_map *
+enrich_iter_builder_get_source_backends(struct enrich_iter_builder *builder)
+{
+    if (builder->ops->get_source_backends)
+        return builder->ops->get_source_backends(builder);
+
+    errno = ENOTSUP;
+    return NULL;
 }
 
 static inline void

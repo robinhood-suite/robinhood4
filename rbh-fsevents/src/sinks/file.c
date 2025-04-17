@@ -52,6 +52,7 @@ file_sink_destroy(void *_sink)
 
 static const struct sink_operations FILE_SINK_OPS = {
     .process = file_sink_process,
+    .insert_source = NULL,
     .destroy = file_sink_destroy,
 };
 
