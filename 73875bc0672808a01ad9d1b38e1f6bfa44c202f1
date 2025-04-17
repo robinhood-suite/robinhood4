@@ -22,6 +22,30 @@
       },
       "revId": "73875bc0672808a01ad9d1b38e1f6bfa44c202f1",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e8bf18b1_ef0f1f56",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 12
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-17T10:21:25Z",
+      "side": 1,
+      "message": "This works fine for write-to backends that can store xattrs and all statx info. Others will just ignore some of the given values, like mpifile, which will not keep \"posix\" and \"lustre\" as source backends but just \"mpifile\", since it can\u0027t do everything \"posix\" can, and cannot do anything \"lustre\" related.\n\nThe calls will be generic, but what each backend does with that information will be their own decision.",
+      "parentUuid": "a4bdf40d_690a7290",
+      "range": {
+        "startLine": 18,
+        "startChar": 0,
+        "endLine": 22,
+        "endChar": 64
+      },
+      "revId": "73875bc0672808a01ad9d1b38e1f6bfa44c202f1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
