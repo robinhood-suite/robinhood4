@@ -22,6 +22,30 @@
       },
       "revId": "1a85ff6343273b5457d31b6295433a4fe9a7da23",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "86ce97f3_be95d5ec",
+        "filename": "rbh-find/rbh-find.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-17T10:27:46Z",
+      "side": 1,
+      "message": "The `strchr` above ensures we don\u0027t treat URIs as valid arguments for the helper. And anyway, we are not supposed to give this helper a URI, but rather just a plugin or backend name.\n\nThe second-to-last patch of this stack ensures we only read pre-URI arguments here, so the strchr becomes useless in it.",
+      "parentUuid": "2115e2e6_11665a4b",
+      "range": {
+        "startLine": 122,
+        "startChar": 16,
+        "endLine": 122,
+        "endChar": 35
+      },
+      "revId": "1a85ff6343273b5457d31b6295433a4fe9a7da23",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
