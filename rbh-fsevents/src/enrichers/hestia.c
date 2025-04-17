@@ -208,6 +208,7 @@ hestia_iter_builder_destroy(void *_builder)
 static const struct enrich_iter_builder_operations
 HESTIA_ENRICH_ITER_BUILDER_OPS = {
     .build_iter = hestia_build_enrich_iter,
+    .get_source_backends = NULL,
     .destroy = hestia_iter_builder_destroy,
 };
 
