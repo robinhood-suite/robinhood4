@@ -31,6 +31,7 @@ typedef int (*enrich_xattr_t)(struct enricher *enricher,
                               );
 
 struct posix_enricher {
+    const char *name;
     enrich_xattr_t enrich_xattr;
 };
 
