@@ -471,6 +471,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a384d735_e85b4397",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-04-17T14:13:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7f7a4338_9ee4537c",
+      "range": {
+        "startLine": 311,
+        "startChar": 10,
+        "endLine": 311,
+        "endChar": 20
+      },
+      "revId": "2fefb1186a5160ee08cedaee3a35c9b574e1f75c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1705dde7_e2fc74f0",
@@ -532,6 +556,30 @@
       "side": 1,
       "message": "Not really, my point wasn\u0027t about \"group\" and \"research\", but about \"~\" and \"\u003d\u003d\" here",
       "parentUuid": "807b2491_9be24b96",
+      "range": {
+        "startLine": 362,
+        "startChar": 4,
+        "endLine": 362,
+        "endChar": 26
+      },
+      "revId": "2fefb1186a5160ee08cedaee3a35c9b574e1f75c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7e47474e_5e936975",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 362,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-04-17T14:13:48Z",
+      "side": 1,
+      "message": "Ok I see, I added a more complex condition to illustrate",
+      "parentUuid": "c3ada11c_bcab2760",
       "range": {
         "startLine": 362,
         "startChar": 4,
