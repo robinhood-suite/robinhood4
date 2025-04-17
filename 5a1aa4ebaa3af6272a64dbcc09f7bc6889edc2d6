@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "36b23f5f_bd8a6853",
+        "filename": "rbh-info/tests/get_info.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-17T09:07:52Z",
+      "side": 1,
+      "message": "style: remove empty line",
+      "revId": "5a1aa4ebaa3af6272a64dbcc09f7bc6889edc2d6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "00ebe009_b36e75ce",
+        "filename": "rbh-info/tests/get_info.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-17T09:07:52Z",
+      "side": 1,
+      "message": "minor: these are the exact same functions except for one flag",
+      "range": {
+        "startLine": 84,
+        "startChar": 0,
+        "endLine": 84,
+        "endChar": 25
+      },
+      "revId": "5a1aa4ebaa3af6272a64dbcc09f7bc6889edc2d6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
