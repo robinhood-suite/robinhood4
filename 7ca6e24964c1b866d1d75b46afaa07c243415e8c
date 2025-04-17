@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "de987e3f_422f1616",
+        "filename": "librobinhood/src/plugins/mongo/mongo.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 692,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-17T08:13:02Z",
+      "side": 1,
+      "message": "nit: BSON_APPEND_RBH_VALUE_MAP",
+      "range": {
+        "startLine": 692,
+        "startChar": 9,
+        "endLine": 692,
+        "endChar": 34
+      },
+      "revId": "7ca6e24964c1b866d1d75b46afaa07c243415e8c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1d9a3bb3_b2a61d8f",
+        "filename": "librobinhood/src/plugins/mongo/mongo.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 698,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-17T08:13:02Z",
+      "side": 1,
+      "message": "major: inserting into log by default is not a good idea IMO, you should check the keys first and then decide where to insert them",
+      "range": {
+        "startLine": 698,
+        "startChar": 39,
+        "endLine": 698,
+        "endChar": 48
+      },
+      "revId": "7ca6e24964c1b866d1d75b46afaa07c243415e8c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3062479a_c1a1b0bf",
+        "filename": "rbh-sync/rbh-sync.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 672,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-17T08:13:02Z",
+      "side": 1,
+      "message": "minor: use the sstack instead",
+      "range": {
+        "startLine": 672,
+        "startChar": 16,
+        "endLine": 672,
+        "endChar": 22
+      },
+      "revId": "7ca6e24964c1b866d1d75b46afaa07c243415e8c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4720c329_a0817933",
+        "filename": "rbh-sync/rbh-sync.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 678,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-17T08:13:02Z",
+      "side": 1,
+      "message": "minor: you use the size of a map as the sstack\u0027s size, but only push values or pairs in it",
+      "range": {
+        "startLine": 678,
+        "startChar": 49,
+        "endLine": 678,
+        "endChar": 71
+      },
+      "revId": "7ca6e24964c1b866d1d75b46afaa07c243415e8c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
