@@ -196,6 +196,7 @@ struct rbh_accumulator_field {
  */
 struct rbh_metadata {
     ssize_t converted_entries;
+    ssize_t skipped_entries;
 };
 
 /**
