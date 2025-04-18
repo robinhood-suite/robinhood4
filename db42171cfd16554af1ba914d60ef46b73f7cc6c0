@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f8121c27_4dd1c5ee",
+        "filename": "librobinhood/src/plugins/mongo/mongo.c",
+        "patchSetId": 6
+      },
+      "lineNbr": 693,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-18T08:01:53Z",
+      "side": 1,
+      "message": "minor: iterate over the count of pairs in the map first, to insert all the pairs and not just the first one",
+      "range": {
+        "startLine": 693,
+        "startChar": 14,
+        "endLine": 693,
+        "endChar": 29
+      },
+      "revId": "db42171cfd16554af1ba914d60ef46b73f7cc6c0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b726b215_d3394ce0",
+        "filename": "librobinhood/src/plugins/mongo/mongo.c",
+        "patchSetId": 6
+      },
+      "lineNbr": 693,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-18T08:01:53Z",
+      "side": 1,
+      "message": "suggest: add a function that returns where a pair should be inserted based on its name",
+      "range": {
+        "startLine": 693,
+        "startChar": 8,
+        "endLine": 693,
+        "endChar": 39
+      },
+      "revId": "db42171cfd16554af1ba914d60ef46b73f7cc6c0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b2a129f7_3209f472",
+        "filename": "librobinhood/src/plugins/mongo/mongo.c",
+        "patchSetId": 6
+      },
+      "lineNbr": 703,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-18T08:01:53Z",
+      "side": 1,
+      "message": "suggest: using the function I suggested above, this strcmp is not needed",
+      "range": {
+        "startLine": 703,
+        "startChar": 6,
+        "endLine": 703,
+        "endChar": 46
+      },
+      "revId": "db42171cfd16554af1ba914d60ef46b73f7cc6c0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
