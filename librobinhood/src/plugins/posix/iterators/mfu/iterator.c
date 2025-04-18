@@ -155,6 +155,7 @@ skip:
     if (fi.parent_id == NULL) {
         fprintf(stderr, "Failed to get parent id of '%s'\n", path);
         if (skip_error) {
+            iter->metadata->skipped_entries++;
             fprintf(stderr, "Synchronization of '%s' skipped\n", path);
             iter->current++;
             current_children--;
@@ -171,6 +172,7 @@ skip:
     if (fsentry == NULL && (errno == ENOENT || errno == ESTALE)) {
         /* The entry moved from under our feet */
         if (skip_error) {
+            iter->metadata->skipped_entries++;
             fprintf(stderr, "Synchronization of '%s' skipped\n",
                     path);
             iter->current++;

@@ -58,8 +58,8 @@ test_collection_sync()
     local output=$(rbh_info "rbh:mongo:$testdb" "$info_flag")
     local n_lines=$(echo "$output" | wc -l)
 
-    if ((n_lines != 6)); then
-        error "There should be six infos about posix sync"
+    if ((n_lines != 7)); then
+        error "There should be seven infos about posix sync"
     fi
 
     echo "$output" | grep "sync_debut" ||
@@ -87,6 +87,9 @@ test_collection_sync()
     then
         error "command lines are not matching"
     fi
+
+    echo "$output" | grep "skipped_entries" ||
+        error "skipped_entries should have been retrieved"
 }
 
 test_collection_first_sync() {
