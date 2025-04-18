@@ -101,6 +101,10 @@ case "$cmd" in
                              {"_id": 0, "ns.parent": 0})
                        .sort({"ns.name": 1})'
         ;;
+    source)
+        mongo "$db" --eval \
+            'db.info.find({}, {"_id": 0, "backend_source": 1})'
+        ;;
     drop)
         output=$(mongo "$db" --eval "db.dropDatabase()" 2>&1)
         rc=$?
