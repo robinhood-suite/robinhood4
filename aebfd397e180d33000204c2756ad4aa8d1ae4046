@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4ab2ce72_cfbf188f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-04-18T07:07:15Z",
+      "side": 1,
+      "message": "typo: remove this",
+      "range": {
+        "startLine": 10,
+        "startChar": 31,
+        "endLine": 10,
+        "endChar": 34
+      },
+      "revId": "aebfd397e180d33000204c2756ad4aa8d1ae4046",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
