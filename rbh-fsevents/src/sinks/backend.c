@@ -28,10 +28,9 @@ backend_sink_process(void *_sink, struct rbh_iterator *fsevents)
 static int
 backend_sink_insert_source(void *_sink, const struct rbh_value *backend_source)
 {
-    (void) _sink;
-    (void) backend_source;
+    struct backend_sink *sink = _sink;
 
-    return 0;
+    return rbh_backend_insert_source(sink->backend, backend_source);
 }
 
 static void
