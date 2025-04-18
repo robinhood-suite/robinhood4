@@ -259,6 +259,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a0a94fc1_d2457d68",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-18T07:47:05Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "b7cd5d00_d76e9275",
+      "range": {
+        "startLine": 164,
+        "startChar": 61,
+        "endLine": 164,
+        "endChar": 73
+      },
+      "revId": "2fefb1186a5160ee08cedaee3a35c9b574e1f75c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bf6d6698_50b7dc42",
@@ -296,6 +320,30 @@
       "side": 1,
       "message": "This will be possible, I started by listing only the main ones",
       "parentUuid": "bf6d6698_50b7dc42",
+      "range": {
+        "startLine": 251,
+        "startChar": 0,
+        "endLine": 251,
+        "endChar": 17
+      },
+      "revId": "2fefb1186a5160ee08cedaee3a35c9b574e1f75c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "963da0c8_99269853",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 251,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-18T07:47:05Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "a29d1360_593653b9",
       "range": {
         "startLine": 251,
         "startChar": 0,
@@ -580,6 +628,30 @@
       "side": 1,
       "message": "Ok I see, I added a more complex condition to illustrate",
       "parentUuid": "c3ada11c_bcab2760",
+      "range": {
+        "startLine": 362,
+        "startChar": 4,
+        "endLine": 362,
+        "endChar": 26
+      },
+      "revId": "2fefb1186a5160ee08cedaee3a35c9b574e1f75c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7bb37450_fb80c30d",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 362,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-18T07:47:05Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "7e47474e_5e936975",
       "range": {
         "startLine": 362,
         "startChar": 4,

@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "830411f6_52616567",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 6
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-18T07:47:05Z",
+      "side": 1,
+      "message": "minor: threshold is never really explained, and seems like a catchall type of parameters",
+      "range": {
+        "startLine": 172,
+        "startChar": 57,
+        "endLine": 172,
+        "endChar": 66
+      },
+      "revId": "f7ea735803903ec3dccf969f0343614326c56eb9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6714a5b5_b1213c00",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 6
+      },
+      "lineNbr": 401,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-18T07:47:05Z",
+      "side": 1,
+      "message": "typo: import",
+      "range": {
+        "startLine": 401,
+        "startChar": 49,
+        "endLine": 401,
+        "endChar": 56
+      },
+      "revId": "f7ea735803903ec3dccf969f0343614326c56eb9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "72d75a55_aeb33a74",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 6
+      },
+      "lineNbr": 759,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-18T07:47:05Z",
+      "side": 1,
+      "message": "suggest: `trigger conditions are met`",
+      "range": {
+        "startLine": 759,
+        "startChar": 14,
+        "endLine": 759,
+        "endChar": 60
+      },
+      "revId": "f7ea735803903ec3dccf969f0343614326c56eb9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "34a23920_fd51fe41",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 6
+      },
+      "lineNbr": 765,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-18T07:47:05Z",
+      "side": 1,
+      "message": "question: should the daemon perform a bunch of regular scan/rbh-find/whatever, regularly, and use their results to check against the triggers define, or base the scan around the trigger directly ?\n\nFor instance, if you have a single policy `all files older than a year should be deleted`, do you run a full set of scan on the filesystem and a set of rbh-find/report, or simply do the rbh-find command associated to the trigger, and nothing else ?",
+      "range": {
+        "startLine": 763,
+        "startChar": 10,
+        "endLine": 765,
+        "endChar": 32
+      },
+      "revId": "f7ea735803903ec3dccf969f0343614326c56eb9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
