@@ -26,6 +26,16 @@
 
 static struct rbh_backend *from, *to;
 
+#define MIN_VALUES_SSTACK_ALLOC (1 << 6)
+static __thread struct rbh_sstack *metadata_sstack;
+
+static void __attribute__ ((destructor))
+destroy_metadata_sstack(void)
+{
+    if (metadata_sstack)
+        rbh_sstack_destroy(metadata_sstack);
+}
+
 static void __attribute__((destructor))
 destroy_from(void)
 {
@@ -402,7 +412,7 @@ iter_convert(struct rbh_iterator *fsentries,
     return &convert->iterator;
 }
 
-static ssize_t
+static struct rbh_metadata *
 sync(const struct rbh_filter_projection *projection)
 {
     const struct rbh_filter_options OPTIONS = {
@@ -426,6 +436,7 @@ sync(const struct rbh_filter_projection *projection)
         return 0;
 
     metadata->converted_entries = 0;
+    metadata->skipped_entries = 0;
 
     if (one) {
         struct rbh_fsentry *root;
@@ -501,7 +512,7 @@ sync(const struct rbh_filter_projection *projection)
     switch (errno) {
     case ENODATA:
         rbh_backend_update(to, NULL);
-        return metadata->converted_entries;
+        return metadata;
     case RBH_BACKEND_ERROR:
         error(EXIT_FAILURE, 0, "unhandled error: %s", rbh_backend_error);
         __builtin_unreachable();
@@ -509,7 +520,7 @@ sync(const struct rbh_filter_projection *projection)
         error(EXIT_FAILURE, errno, "while iterating over SOURCE's entries");
     }
 
-    return metadata->converted_entries;
+    return metadata;
 }
 
 /*----------------------------------------------------------------------------*
@@ -604,19 +615,9 @@ usage(void)
     return printf(message, program_invocation_short_name);
 }
 
-#define MIN_VALUES_SSTACK_ALLOC (1 << 6)
-static __thread struct rbh_sstack *metadata_sstack;
-
-static void __attribute__ ((destructor))
-destroy_metadata_sstack(void)
-{
-    if (metadata_sstack)
-        rbh_sstack_destroy(metadata_sstack);
-}
-
 struct rbh_value_map *
 sync_metadata_value_map(time_t sync_debut, time_t sync_end, char *from,
-                        ssize_t upserted_entries, char *command_line)
+                        struct rbh_metadata *metadata, char *command_line)
 {
     struct rbh_value_map *value_map;
     struct rbh_value_pair *pairs;
@@ -625,7 +626,7 @@ sync_metadata_value_map(time_t sync_debut, time_t sync_end, char *from,
     double sync_duration;
     struct rbh_uri *uri;
     char abs_path[4096];
-    int count = 6;
+    int count = 7;
 
     sync_duration = difftime(sync_end, sync_debut);
 
@@ -655,11 +656,6 @@ sync_metadata_value_map(time_t sync_debut, time_t sync_end, char *from,
     values[2].int64 = (int64_t)sync_end;
     pairs[2].value = &values[2];
 
-    pairs[3].key = "converted_entries";
-    values[3].type = RBH_VT_INT64;
-    values[3].int64 = (int64_t)upserted_entries;
-    pairs[3].value = &values[3];
-
     raw_uri = rbh_raw_uri_from_string(from);
     if (raw_uri == NULL)
         error(EXIT_FAILURE, errno, "Sync map: cannot detect backend uri");
@@ -683,15 +679,25 @@ sync_metadata_value_map(time_t sync_debut, time_t sync_end, char *from,
     free(uri);
     abs_path[sizeof(abs_path) - 1] = '\0';
 
-    pairs[4].key = "mountpoint";
+    pairs[3].key = "mountpoint";
+    values[3].type = RBH_VT_STRING;
+    values[3].string = abs_path;
+    pairs[3].value = &values[3];
+
+    pairs[4].key = "command_line";
     values[4].type = RBH_VT_STRING;
-    values[4].string = abs_path;
+    values[4].string = command_line;
     pairs[4].value = &values[4];
 
-    pairs[5].key = "command_line";
-    values[5].type = RBH_VT_STRING;
-    values[5].string = command_line;
+    pairs[5].key = "converted_entries";
+    values[5].type = RBH_VT_INT64;
+    values[5].int64 = (int64_t)metadata->converted_entries;
     pairs[5].value = &values[5];
+
+    pairs[6].key = "skipped_entries";
+    values[6].type = RBH_VT_INT64;
+    values[6].int64 = (int64_t)metadata->skipped_entries;
+    pairs[6].value = &values[6];
 
     value_map->pairs = pairs;
     value_map->count = count;
@@ -762,7 +768,7 @@ main(int argc, char *argv[])
         .statx_mask = RBH_STATX_ALL & ~RBH_STATX_MNT_ID,
     };
     struct rbh_value_map *metadata_map;
-    ssize_t upserted_entries;
+    struct rbh_metadata *metadata;
     char *command_line;
     time_t sync_debut;
     time_t sync_end;
@@ -836,11 +842,11 @@ main(int argc, char *argv[])
     sync_source();
 
     sync_debut = time(NULL);
-    upserted_entries = sync(&projection);
+    metadata = sync(&projection);
     sync_end = time(NULL);
 
     metadata_map = sync_metadata_value_map(sync_debut, sync_end, argv[0],
-                                           upserted_entries, command_line);
+                                           metadata, command_line);
 
     rbh_backend_insert_metadata(to, metadata_map, RBH_DT_LOG);
 
