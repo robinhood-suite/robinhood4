@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "38fce3fe_6babe08f",
+        "filename": "retention/run_retention.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-04-18T07:00:03Z",
+      "side": 1,
+      "message": "minor: depending on the stack, it\u0027s `rbh-find`",
+      "range": {
+        "startLine": 23,
+        "startChar": 40,
+        "endLine": 23,
+        "endChar": 49
+      },
+      "revId": "af79c95f52862a01802a5c5e3d5740ad2fe4464c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
