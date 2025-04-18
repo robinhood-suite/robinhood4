@@ -363,21 +363,27 @@ feed(struct sink *sink, struct source *source,
     rbh_mut_iter_destroy(deduplicator);
 }
 
-static bool
-str2size_t(const char *input, size_t *result)
+static void
+insert_backend_source()
 {
-    char *end;
+    const struct rbh_value_pair *pair;
+    const struct rbh_value *sources;
+    struct rbh_value_map *info_map;
 
-    errno = 0;
-    *result = strtoull(input, &end, 0);
-    if (errno) {
-        return -1;
-    } else if ((!*result && input == end) || *end != '\0') {
-        errno = EINVAL;
-        return false;
+    info_map = enrich_iter_builder_get_source_backends(enrich_builder);
+    if (info_map == NULL) {
+        fprintf(stderr, "Failed to retrieve source backends from enricher\n");
+        return;
     }
 
-    return true;
+    assert(info_map->count == 1);
+
+    pair = &info_map->pairs[0];
+    assert(strcmp(pair->key, "backend_source") == 0);
+    sources = pair->value;
+
+    if (sink_insert_source(sink, sources))
+        fprintf(stderr, "Failed to set backend_info\n");
 }
 
 int
@@ -441,7 +447,7 @@ main(int argc, char *argv[])
                             NULL)) != -1) {
         switch (c) {
         case 'b':
-            if (!str2size_t(optarg, &dedup_opts.batch_size))
+            if (str2uint64_t(optarg, &dedup_opts.batch_size))
                 error(EXIT_FAILURE, 0, "'%s' is not an integer", optarg);
 
             break;
@@ -490,6 +496,9 @@ main(int argc, char *argv[])
 
     source = source_new(argv[optind++], dump_file);
     sink = sink_new(argv[optind++]);
+
+    if (enrich_builder)
+        insert_backend_source();
 
     feed(sink, source, enrich_builder, strcmp(sink->name, "backend"),
          &dedup_opts);

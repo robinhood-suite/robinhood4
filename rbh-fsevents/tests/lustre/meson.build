@@ -10,7 +10,7 @@ integration_tests = ['test_create_close', 'test_mkdir', 'test_symlink',
                      'test_migrate', 'test_flrw', 'test_resync',
                      'test_setxattr', 'acceptance', 'acceptance-dedup',
                      'acknowledgement', 'dump_changelog', 'no_skip_option',
-                     'test_alias']
+                     'test_alias', 'test_retention']
 
 foreach t: integration_tests
     e = find_program(t + '.bash')
@@ -20,14 +20,4 @@ foreach t: integration_tests
     # in parallel.
     test(t, e, is_parallel : false, env: backend_path_env,
          suite: 'rbh-fsevents', timeout: 120)
-endforeach
-
-# XXX: this test relies on rbh-find and rbh-fsevents, but cannot work at the
-# moment because fsevents doesn't insert the source backends in the database
-integration_tests = ['test_retention']
-
-foreach t: integration_tests
-    e = find_program(t + '.bash')
-    test(t, e, is_parallel : false, env: backend_path_env,
-         suite: 'rbh-fsevents', timeout: 120, should_fail: true)
 endforeach
