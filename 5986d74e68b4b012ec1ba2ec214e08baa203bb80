@@ -22,6 +22,29 @@
       },
       "revId": "5986d74e68b4b012ec1ba2ec214e08baa203bb80",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9fca4af0_be652037",
+        "filename": "rbh-info/rbh-info.c",
+        "patchSetId": 6
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-04-18T09:01:09Z",
+      "side": 1,
+      "message": "question: why this function does nothing ?",
+      "range": {
+        "startLine": 289,
+        "startChar": 0,
+        "endLine": 292,
+        "endChar": 1
+      },
+      "revId": "5986d74e68b4b012ec1ba2ec214e08baa203bb80",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
