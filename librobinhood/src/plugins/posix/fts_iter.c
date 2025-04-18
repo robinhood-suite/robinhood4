@@ -168,6 +168,7 @@ skip:
         fprintf(stderr, "FTS: failed to read entry '%s': %s (%d)\n",
                 ftsent->fts_path, strerror(errno), errno);
         if (skip_error) {
+             iter->metadata->skipped_entries++;
              fprintf(stderr, "Synchronization of '%s' skipped\n",
                      ftsent->fts_path);
              /* If we can't read a directory, retrieve the parent's counter
@@ -235,6 +236,7 @@ skip:
     if (fsentry == NULL && (errno == ENOENT || errno == ESTALE)) {
         /* The entry moved from under our feet */
         if (skip_error) {
+            iter->metadata->skipped_entries++;
             fprintf(stderr, "Synchronization of '%s' skipped\n",
                     ftsent->fts_path);
             children_counter--;
