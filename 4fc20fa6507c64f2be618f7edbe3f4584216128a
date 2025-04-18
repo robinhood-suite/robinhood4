@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "948091a1_756ab902",
+        "filename": "rbh-info/tests/get_info.bash",
+        "patchSetId": 3
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-18T08:26:17Z",
+      "side": 1,
+      "message": "minor: check the mount point is actually valid",
+      "range": {
+        "startLine": 84,
+        "startChar": 4,
+        "endLine": 84,
+        "endChar": 39
+      },
+      "revId": "4fc20fa6507c64f2be618f7edbe3f4584216128a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
