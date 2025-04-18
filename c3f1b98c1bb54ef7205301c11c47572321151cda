@@ -22,6 +22,30 @@
       },
       "revId": "c3f1b98c1bb54ef7205301c11c47572321151cda",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "979b31f9_17a222bd",
+        "filename": "rbh-info/tests/meson.build",
+        "patchSetId": 7
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-18T08:28:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c64742ae_7ad9aeed",
+      "range": {
+        "startLine": 33,
+        "startChar": 29,
+        "endLine": 33,
+        "endChar": 41
+      },
+      "revId": "c3f1b98c1bb54ef7205301c11c47572321151cda",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
