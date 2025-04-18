@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5d8bf77d_8a575ce4",
+        "filename": "librobinhood/include/robinhood/backend.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 495,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-04-18T07:44:28Z",
+      "side": 1,
+      "message": "minor: -1 on error like you do in code below",
+      "range": {
+        "startLine": 495,
+        "startChar": 50,
+        "endLine": 495,
+        "endChar": 60
+      },
+      "revId": "83b91279837200f4471b596eb22c9845602b13bc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
