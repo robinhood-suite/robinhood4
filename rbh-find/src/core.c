@@ -12,6 +12,8 @@
 #include <string.h>
 #include <sysexits.h>
 
+#include "actions.h"
+#include "filters.h"
 #include "core.h"
 
 int
@@ -188,7 +190,20 @@ complete_rbh_filter(const struct rbh_filter *filter,
     return 0;
 }
 
-size_t
+/**
+ * Filter through every fsentries in a specific backend, executing the
+ * requested action on each of them
+ *
+ * @param ctx            find's context for this execution
+ * @param backend_index  index of the backend to go through
+ * @param action         the type of action to execute
+ * @param filter         the filter to apply to each fsentry
+ * @param sorts          how the list of retrieved fsentries is sorted
+ * @param sorts_count    how many fsentries to sort
+ *
+ * @return               the number of fsentries checked
+ */
+static size_t
 _find(struct find_context *ctx, int backend_index, enum action action,
       const struct rbh_filter *filter, const struct rbh_filter_sort *sorts,
       size_t sorts_count)
