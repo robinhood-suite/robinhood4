@@ -68,6 +68,29 @@
       },
       "revId": "db42171cfd16554af1ba914d60ef46b73f7cc6c0",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d956feff_9eab2247",
+        "filename": "rbh-sync/rbh-sync.c",
+        "patchSetId": 6
+      },
+      "lineNbr": 680,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-04-22T08:07:08Z",
+      "side": 1,
+      "message": "minor: You need to alloc only one value_map",
+      "range": {
+        "startLine": 680,
+        "startChar": 32,
+        "endLine": 680,
+        "endChar": 39
+      },
+      "revId": "db42171cfd16554af1ba914d60ef46b73f7cc6c0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
