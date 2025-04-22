@@ -12,7 +12,7 @@
 #include <string.h>
 #include <sysexits.h>
 
-#include "rbh-find/core.h"
+#include "core.h"
 
 int
 rbh_find_count_args_before_uri(int argc, char **argv)

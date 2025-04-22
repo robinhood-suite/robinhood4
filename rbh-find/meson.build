@@ -1,5 +1,5 @@
 # This file is part of RobinHood 4
-# Copyright (C) 2019 Commissariat a l'energie atomique et aux energies
+# Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
@@ -17,27 +17,22 @@ configure_file(input: 'config.h.in', output: 'config.h',
                configuration: conf_data)
 
 # "." is necessary for config.h
-rbhfind_include = include_directories('.', 'include')
-
-subdir('include')
-subdir('src')
+include_dirs = include_directories('.', 'include')
 
 executable(
     'rbh-find',
     sources: [
         'rbh-find.c',
+        'src/actions.c',
+        'src/core.c',
+        'src/filters.c',
+        'src/find_cb.c',
+        'src/parser.c',
     ],
-    dependencies: [librobinhood_dep, librbhfind_dep],
+    dependencies: [librobinhood_dep],
+    include_directories: include_dirs,
     install: true,
     c_args: '-DHAVE_CONFIG_H',
 )
 
-pkg_mod = import('pkgconfig')
-pkg_mod.generate(
-        libraries: librbhfind,
-        version: meson.project_version(),
-        name: 'librbh-find',
-        filebase: 'rbh-find',
-        description: 'C-API to librobinhood find-like mechanism'
-)
 subdir('tests')
