@@ -1,0 +1,91 @@
+#!/bin/bash
+
+# This file is part of RobinHood 4
+# Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
+#                    alternatives
+#
+# SPDX-License-Identifer: LGPL-3.0-or-later
+
+function rbh_set_retention
+{
+    exit 0
+}
+
+function print_doc
+{
+    echo "Usage: rbh-retention entry retention_date [--relative]"
+    echo ""
+    echo "Set an entry's retention date."
+    echo "The retention date should be given as a 'date(1)'-compatible format,"
+    echo "and if the '--relative' flag is given, will be relative to the"
+    echo "entry's modification time."
+    echo ""
+    echo "'--relative'      whether the given retention date should be relative"
+    echo "                  to the entry's modification time"
+    echo "'--help'          print this message"
+    echo ""
+    echo "See 'date(1)''s man page for additional information about compatible formats."
+    echo ""
+}
+
+if [ $# -lt 2 ]; then
+    echo "Please specify the entry to set the retention on and the retention date"
+    echo ""
+    print_doc
+    exit 1
+fi
+
+while :
+do
+    if [ -z "$1" ]; then
+        break
+    fi
+
+    case "$1" in
+        --relative)
+            relative_found=true
+            ;;
+        --help)
+            print_doc
+            exit 0
+            ;;
+        *)
+            if [ -z "$entry" ]; then
+                entry="$1"
+                shift
+                continue
+            fi
+
+            if [ -z "$retention_date" ]; then
+                retention_date="$1"
+                shift
+                continue
+            fi
+
+            echo "Entry and retention date already given"
+            exit 1
+            ;;
+    esac
+
+    shift
+done
+
+if [ -z "$entry" ] || [ -z "$retention_date" ]; then
+    echo "Please specify the entry to set the retention on and the retention date"
+    echo ""
+    print_doc
+    exit 1
+fi
+
+full_path="$(realpath "$entry")"
+check_exists="$(stat "$full_path")"
+rc=$?
+
+if (( rc != 0 )); then
+    echo "'$full_path' does not exist"
+    echo ""
+    print_doc
+    exit 1
+fi
+
+rbh_set_retention "$full_path" "$retention_date"
