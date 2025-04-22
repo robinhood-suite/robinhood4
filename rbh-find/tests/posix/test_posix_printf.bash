@@ -395,6 +395,28 @@ test_path_without_start()
         difflines "" "test" "test/blob"
 }
 
+test_id()
+{
+    touch fileA
+    touch fileB
+
+    rbh_sync "rbh:posix:." "rbh:$db:$testdb"
+
+    local IDA=$(rbh_find "rbh:$db:$testdb" -name fileA -printf "%I\n")
+    local IDB=$(rbh_find "rbh:$db:$testdb" -name fileB -printf "%I\n")
+
+    local countA=$(do_db count "$testdb" '"_id": BinData(0, "'$IDA'")')
+    local countB=$(do_db count "$testdb" '"_id": BinData(0, "'$IDB'")')
+
+    if [[ "$countA" != "1" ]]; then
+        error "Couldn't find entry with ID '$IDA'"
+    fi
+
+    if [[ "$countB" != "1" ]]; then
+        error "Couldn't find entry with ID '$IDB'"
+    fi
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
@@ -404,7 +426,7 @@ declare -a tests=(test_atime test_ctime test_mtime test_filename test_inode
                   test_backend_name test_size test_type test_symlink
                   test_percent_sign test_blocks test_depth test_device
                   test_dirname test_symbolic_permission test_octal_permission
-                  test_hardlink test_path_without_start)
+                  test_hardlink test_path_without_start test_id)
 
 tmpdir=$(mktemp --directory)
 test_user="$(get_test_user "$(basename "$0")")"

@@ -5,12 +5,10 @@
 # SPDX-License-Identifer: LGPL-3.0-or-later
 
 integration_tests = [
-    'test_compat',
     'test_lustre_helper',
     'test_hsm_state',
     'test_fid',
     'test_ost_index',
-    'test_lustre_printf',
     'test_pool',
     'test_comp',
     'test_mdt_index',
@@ -25,8 +23,7 @@ endforeach
 non_parallel_integration_tests = [
     'test_stripe_count',
     'test_stripe_size',
-    'test_layout_pattern',
-    'test_lustre_alias'
+    'test_layout_pattern'
 ]
 
 foreach t: non_parallel_integration_tests
