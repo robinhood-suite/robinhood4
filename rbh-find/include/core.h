@@ -16,8 +16,6 @@
 #include <robinhood.h>
 #include <robinhood/utils.h>
 
-#include "actions.h"
-#include "filters.h"
 #include "parser.h"
 
 struct rbh_plugin_or_extension {
@@ -95,24 +93,6 @@ ctx_finish(struct find_context *ctx);
 enum command_line_token
 str2command_line_token(struct find_context *ctx, const char *string,
                        int *pe_index);
-
-/**
- * Filter through every fsentries in a specific backend, executing the
- * requested action on each of them
- *
- * @param ctx            find's context for this execution
- * @param backend_index  index of the backend to go through
- * @param action         the type of action to execute
- * @param filter         the filter to apply to each fsentry
- * @param sorts          how the list of retrieved fsentries is sorted
- * @param sorts_count    how many fsentries to sort
- *
- * @return               the number of fsentries checked
- */
-size_t
-_find(struct find_context *ctx, int backend_index, enum action action,
-      const struct rbh_filter *filter, const struct rbh_filter_sort *sorts,
-      size_t sorts_count);
 
 /**
  * Execute a find search corresponding to an action on each backend
