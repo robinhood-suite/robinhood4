@@ -23,11 +23,11 @@
 #include <robinhood/utils.h>
 #include <robinhood/alias.h>
 
-#include "rbh-find/actions.h"
-#include "rbh-find/core.h"
-#include "rbh-find/filters.h"
-#include "rbh-find/find_cb.h"
-#include "rbh-find/parser.h"
+#include "actions.h"
+#include "core.h"
+#include "filters.h"
+#include "find_cb.h"
+#include "parser.h"
 
 static struct find_context ctx;
 

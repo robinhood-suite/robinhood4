@@ -16,7 +16,7 @@
 #include <unistd.h>
 #include <stdio.h>
 
-#include "rbh-find/find_cb.h"
+#include "find_cb.h"
 
 static void
 open_action_file(struct find_context *ctx, const char *filename)
