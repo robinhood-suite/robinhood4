@@ -45,6 +45,29 @@
       },
       "revId": "ae39d465b2be822910684bfdafbb79a214f116bd",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "99def8ae_ba44eeaa",
+        "filename": "rbh-sync/rbh-sync.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 759,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-04-22T08:24:07Z",
+      "side": 1,
+      "message": "defect: `cmd_line` is never freed",
+      "range": {
+        "startLine": 759,
+        "startChar": 4,
+        "endLine": 759,
+        "endChar": 33
+      },
+      "revId": "ae39d465b2be822910684bfdafbb79a214f116bd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
