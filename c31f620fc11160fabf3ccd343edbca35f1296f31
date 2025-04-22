@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bb75a62d_3ea1c0aa",
+        "filename": "librobinhood/src/plugins/s3/s3.c",
+        "patchSetId": 21
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1038646
+      },
+      "writtenOn": "2025-04-22T08:47:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f1956881_608dc05a",
+      "range": {
+        "startLine": 261,
+        "startChar": 32,
+        "endLine": 261,
+        "endChar": 33
+      },
+      "revId": "c31f620fc11160fabf3ccd343edbca35f1296f31",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "227ebd87_e6163048",
@@ -47,6 +71,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "81789273_bc8c1b72",
+        "filename": "librobinhood/src/plugins/s3/s3_wrapper.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1038646
+      },
+      "writtenOn": "2025-04-22T08:47:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "227ebd87_e6163048",
+      "range": {
+        "startLine": 37,
+        "startChar": 44,
+        "endLine": 37,
+        "endChar": 51
+      },
+      "revId": "c31f620fc11160fabf3ccd343edbca35f1296f31",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dfec0a87_5a91afa1",
@@ -60,6 +108,24 @@
       "writtenOn": "2025-04-22T06:53:22Z",
       "side": 1,
       "message": "style: remove empty line",
+      "revId": "c31f620fc11160fabf3ccd343edbca35f1296f31",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e05506be_58880cd3",
+        "filename": "librobinhood/src/plugins/s3/s3_wrapper.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1038646
+      },
+      "writtenOn": "2025-04-22T08:47:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dfec0a87_5a91afa1",
       "revId": "c31f620fc11160fabf3ccd343edbca35f1296f31",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
