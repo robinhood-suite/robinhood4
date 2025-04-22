@@ -145,6 +145,8 @@ function print_doc
 
 if [ $# -lt 2 ]; then
     echo "Please specify a URI to update and the mount point of the entries"
+    echo ""
+    print_doc
     exit 1
 fi
 
