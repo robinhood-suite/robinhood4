@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "09b857a5_af64bb62",
+        "filename": "rbh-info/tests/get_info.bash",
+        "patchSetId": 3
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-04-22T08:21:45Z",
+      "side": 1,
+      "message": "minor: five infos",
+      "range": {
+        "startLine": 69,
+        "startChar": 31,
+        "endLine": 69,
+        "endChar": 35
+      },
+      "revId": "4fc20fa6507c64f2be618f7edbe3f4584216128a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "948091a1_756ab902",
         "filename": "rbh-info/tests/get_info.bash",
         "patchSetId": 3
