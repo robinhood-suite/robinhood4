@@ -26,7 +26,6 @@
 #include "actions.h"
 #include "core.h"
 #include "filters.h"
-#include "find_cb.h"
 #include "parser.h"
 
 static struct find_context ctx;
@@ -270,10 +269,6 @@ main(int _argc, char *_argv[])
 
     ctx.argc = argc - nb_cli_args;
     ctx.argv = &argv[nb_cli_args];
-
-    ctx.pre_action_callback = &find_pre_action;
-    ctx.exec_action_callback = &find_exec_action;
-    ctx.post_action_callback = &find_post_action;
 
     /* Parse the command line */
     for (index = 0; index < ctx.argc; index++)
