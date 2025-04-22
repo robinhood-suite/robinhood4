@@ -18,6 +18,24 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "806c587a_9d729b3a",
+        "filename": "README.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-22T11:05:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e514246c_b6232461",
+      "revId": "f239688bad20841fc36bcab692e9a82192520cb7",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "caf68aaa_d8551e83",
@@ -31,6 +49,24 @@
       "writtenOn": "2025-04-22T07:43:15Z",
       "side": 1,
       "message": "question: Do we want to exit if it fails ?",
+      "revId": "f239688bad20841fc36bcab692e9a82192520cb7",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8da19cb8_53e7eb3c",
+        "filename": "rbh-fsevents/rbh-fsevents.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 501,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-04-22T11:05:35Z",
+      "side": 1,
+      "message": "We don\u0027t in rbh-sync, but one the other hand we won\u0027t be able to filter through a DB produced only with rbh-fsevents if it fails... Done.",
+      "parentUuid": "caf68aaa_d8551e83",
       "revId": "f239688bad20841fc36bcab692e9a82192520cb7",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
