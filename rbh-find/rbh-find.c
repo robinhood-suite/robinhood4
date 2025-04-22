@@ -23,10 +23,7 @@
 #include <robinhood/utils.h>
 #include <robinhood/alias.h>
 
-#include "actions.h"
 #include "core.h"
-#include "filters.h"
-#include "parser.h"
 
 static struct find_context ctx;
 
