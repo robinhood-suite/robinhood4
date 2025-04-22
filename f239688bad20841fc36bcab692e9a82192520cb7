@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e514246c_b6232461",
+        "filename": "README.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-04-22T07:43:15Z",
+      "side": 1,
+      "message": "style: remove empty line",
+      "revId": "f239688bad20841fc36bcab692e9a82192520cb7",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "caf68aaa_d8551e83",
+        "filename": "rbh-fsevents/rbh-fsevents.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 501,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-04-22T07:43:15Z",
+      "side": 1,
+      "message": "question: Do we want to exit if it fails ?",
+      "revId": "f239688bad20841fc36bcab692e9a82192520cb7",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
