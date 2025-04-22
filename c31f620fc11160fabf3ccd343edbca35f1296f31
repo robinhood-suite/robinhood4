@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dfec0a87_5a91afa1",
+        "filename": "librobinhood/src/plugins/s3/s3_wrapper.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-04-22T06:53:22Z",
+      "side": 1,
+      "message": "style: remove empty line",
+      "revId": "c31f620fc11160fabf3ccd343edbca35f1296f31",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
