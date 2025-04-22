@@ -4,9 +4,9 @@
 
    SPDX-License-Identifer: LGPL-3.0-or-later
 
-################
-Lustre extension
-################
+###################
+Retention extension
+###################
 
 The Lustre extension is an enricher for the POSIX plugin.
 It is comprised of two parts: the information enrichment and the information
