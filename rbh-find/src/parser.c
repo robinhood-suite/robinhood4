@@ -14,7 +14,7 @@
 #include <string.h>
 #include <sysexits.h>
 
-#include "rbh-find/parser.h"
+#include "parser.h"
 
 enum action
 str2action(const char *string)

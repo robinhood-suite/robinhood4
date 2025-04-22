@@ -16,9 +16,9 @@
 #include <robinhood.h>
 #include <robinhood/utils.h>
 
-#include "rbh-find/actions.h"
-#include "rbh-find/filters.h"
-#include "rbh-find/parser.h"
+#include "actions.h"
+#include "filters.h"
+#include "parser.h"
 
 struct rbh_plugin_or_extension {
     bool is_plugin;
