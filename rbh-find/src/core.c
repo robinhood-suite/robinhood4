@@ -235,7 +235,7 @@ _find(struct find_context *ctx, int backend_index, enum action action,
         if (fsentry == NULL)
             break;
 
-        count += ctx->exec_action_callback(ctx, backend_index, action, fsentry);
+        count += find_exec_action(ctx, backend_index, action, fsentry);
         free(fsentry);
     } while (true);
 
@@ -258,12 +258,12 @@ find(struct find_context *ctx, enum action action, int *arg_idx,
 
     ctx->action_done = true;
 
-    i += ctx->pre_action_callback(ctx, i, action);
+    i += find_pre_action(ctx, i, action);
 
     for (size_t i = 0; i < ctx->backend_count; i++)
         count += _find(ctx, i, action, filter, sorts, sorts_count);
 
-    ctx->post_action_callback(ctx, i, action, count);
+    find_post_action(ctx, i, action, count);
 
     *arg_idx = i;
 }
