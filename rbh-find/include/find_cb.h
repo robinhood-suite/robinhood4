@@ -8,7 +8,7 @@
 #ifndef RBH_FIND_FIND_CB_H
 #define RBH_FIND_FIND_CB_H
 
-#include "rbh-find/core.h"
+#include "core.h"
 
 /**
  * Find pre_action function, see `pre_action_callback` in `struct
