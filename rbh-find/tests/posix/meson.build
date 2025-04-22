@@ -26,7 +26,7 @@ foreach t: integration_tests
     test(t, e, env: backend_path_env, suite: 'rbh-find', timeout: 120)
 endforeach
 
-non_parallel_integration_tests = ['test_posix_alias']
+non_parallel_integration_tests = ['test_alias']
 
 foreach t: non_parallel_integration_tests
     e = find_program(t + '.bash')
