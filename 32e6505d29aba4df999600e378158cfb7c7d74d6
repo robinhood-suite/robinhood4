@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "306c5b49_e07fcae6",
+        "filename": "librobinhood/src/plugins/posix/enrichers/lustre/README.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-04-23T07:18:41Z",
+      "side": 0,
+      "message": "question: You removed `%I` from the printf directives for retention, does `%I` no longer exist?",
+      "range": {
+        "startLine": 227,
+        "startChar": 1,
+        "endLine": 227,
+        "endChar": 46
+      },
+      "revId": "32e6505d29aba4df999600e378158cfb7c7d74d6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
