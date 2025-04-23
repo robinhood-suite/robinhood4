@@ -66,7 +66,43 @@ function rbh_set_retention
 
 function rbh_get_retention
 {
-    exit 0
+    local entry="$1"
+
+    local retention_attr="$(get_retention_attribute)"
+
+    local retention="$(getfattr -h -n "$retention_attr" --only-values $entry)"
+    local rc=$?
+
+    if (( rc != 0 )); then
+        echo "'$entry' has no retention date set"
+        exit $rc
+    fi
+
+    local relative="${retention:0:1}"
+    if [ "$relative" == "+" ]; then
+        retention="${retention:1}"
+
+        if ! is_numeric "$retention"; then
+            echo "Retention value set on '$entry' is not a number"
+            exit 1
+        fi
+
+        local entry_mtime="$(stat -c "%Y" "$entry")"
+        local expiration="$(( entry_mtime + retention ))"
+
+        echo "'$entry' is set to expire $retention seconds after it's last" \
+             "modification time, so '$entry' expires on '$(date --date="@$expiration")'"
+    else
+        local date="$(date --date="@$retention")"
+        local rc=$?
+
+        if (( rc != 0 )); then
+            echo "Recorded retention date is not a valid date: '$date'"
+            exit $rc
+        fi
+
+        echo "'$entry' is set to expire on '$date'"
+    fi
 }
 
 function print_doc
