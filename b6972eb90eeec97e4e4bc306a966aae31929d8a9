@@ -238,6 +238,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "048677c6_95457874",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 506,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-04-23T11:57:49Z",
+      "side": 1,
+      "message": "I\u0027m not sure this is useful. The first global filter will be done against the DB. Then for each entry, you will check the specific rules against the filesystem. You can check them in the order they are defined. Otherwise, if you are going to do 10 filters anyway, you might as well create one filter per rule (rule specfic filter + global filter) and run them instead. But since you have to check the filter on the FS anyway, you can simply do one request to the DB and process them one by one in the order of rule declaration.",
+      "parentUuid": "dbd225dd_d729dede",
+      "range": {
+        "startLine": 506,
+        "startChar": 2,
+        "endLine": 506,
+        "endChar": 61
+      },
+      "revId": "b6972eb90eeec97e4e4bc306a966aae31929d8a9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e5d0cbe2_d11d3e72",
         "filename": "designs/rbh-policy.rst",
         "patchSetId": 4
