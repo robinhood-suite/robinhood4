@@ -6,9 +6,26 @@
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
 
+function get_retention_attribute
+{
+    local config_file="/etc/robinhood4.d/default.yaml"
+
+    if [ ! -f "$config_file" ]; then
+        echo "user.expires"
+        return 0
+    fi
+
+    local retention_attr="$(cat $config_file | grep "RBH_RETENTION_XATTR" |
+                                               cut -d':' -f2 | xargs)"
+    echo "${retention_attr//\"}"
+}
+
 function rbh_set_retention
 {
-    exit 0
+    local entry="$entry"
+    local retention="$retention"
+
+    local retention_attr="$(get_retention_attribute)"
 }
 
 function print_doc
