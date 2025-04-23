@@ -64,11 +64,20 @@ function rbh_set_retention
     setfattr -h -n "$retention_attr" -v "$prefix$date" "$entry"
 }
 
+function rbh_get_retention
+{
+    exit 0
+}
+
 function print_doc
 {
-    echo "Usage: rbh-retention entry retention_date [--relative]"
+    echo "Usage: rbh-retention entry [retention_date [--relative]]"
     echo ""
-    echo "Set an entry's retention date."
+    echo "Interact with an entry's retention date."
+    echo "If only an entry's path is provided, show its retention date."
+    echo "If both an entry and a retention date are given, set the entry's"
+    echo "retention date."
+    echo ""
     echo "The retention date should be given as a 'date(1)'-compatible format,"
     echo "and if the '--relative' flag is given, will be relative to the"
     echo "entry's modification time."
@@ -81,8 +90,8 @@ function print_doc
     echo ""
 }
 
-if [ $# -lt 2 ]; then
-    echo "Please specify the entry to set the retention on and the retention date"
+if [ $# -lt 1 ]; then
+    echo "Please specify the entry from/on which to get/set the retention date"
     echo ""
     print_doc
     exit 1
@@ -123,8 +132,8 @@ do
     shift
 done
 
-if [ -z "$entry" ] || [ -z "$retention_date" ]; then
-    echo "Please specify the entry to set the retention on and the retention date"
+if [ -z "$entry" ]; then
+    echo "Please specify the entry from/on which to get/set the retention date"
     echo ""
     print_doc
     exit 1
@@ -141,4 +150,8 @@ if (( rc != 0 )); then
     exit 1
 fi
 
-rbh_set_retention "$full_path" "$retention_date"
+if [ -z "$retention_date" ]; then
+    rbh_get_retention "$full_path"
+else
+    rbh_set_retention "$full_path" "$retention_date"
+fi
