@@ -6,6 +6,18 @@
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
 
+function is_numeric
+{
+    local date="$1"
+
+    re='^[0-9]+$'
+    if ! [[ $date =~ $re ]] ; then
+        return 1
+    fi
+
+    return 0
+}
+
 function get_retention_attribute
 {
     local config_file="/etc/robinhood4.d/default.yaml"
@@ -22,10 +34,34 @@ function get_retention_attribute
 
 function rbh_set_retention
 {
-    local entry="$entry"
-    local retention="$retention"
+    local entry="$1"
+    local retention="$2"
+    local prefix
+    local date
+    local rc
+
+    if is_numeric "$retention"; then
+        date="$(date --date="@$retention" +%s)"
+        rc=$?
+    else
+        date="$(date --date="$retention" +%s)"
+        rc=$?
+    fi
+
+    if (( rc != 0 )); then
+        echo "$date"
+        exit $rc
+    fi
 
     local retention_attr="$(get_retention_attribute)"
+
+    if [ ! -z "$relative_found" ]; then
+        prefix="+"
+        local current_date="$(date +%s)"
+        date="$(( date - current_date ))"
+    fi
+
+    setfattr -h -n "$retention_attr" -v "$prefix$date" "$entry"
 }
 
 function print_doc
