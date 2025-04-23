@@ -38,11 +38,47 @@ function test_parsing
     return 0
 }
 
+function test_set_retention
+{
+    local dir="dir"
+    local file="file"
+    local symlink="symlink"
+
+    touch $file
+    mkdir $dir
+    ln -s $file $symlink
+
+    local date="$(date -d "now - 5 minutes" +%s)"
+    rbh_retention $dir "now - 5 minutes"
+    local attr="$(getfattr -n user.expires --only-values $dir)"
+    if [ "$attr" != "$date" ]; then
+        error "'user.expires' value should be set at '$date' for '$dir'"
+    fi
+
+    rbh_retention $dir "5 minutes" --relative
+    local attr="$(getfattr -n user.expires --only-values $dir)"
+    if [ "$attr" != "+300" ]; then
+        error "'user.expires' value should be set at '+300' for '$dir'"
+    fi
+
+    rbh_retention $file --relative "3 hours"
+    local attr="$(getfattr -n user.expires --only-values $file)"
+    if [ "$attr" != "+10800" ]; then
+        error "'user.expires' value should be set at '+10800' for '$file'"
+    fi
+
+    rbh_retention --relative $symlink "1 day"
+    local attr="$(getfattr -n user.expires --only-values $symlink)"
+    if [ "$attr" != "+86400" ]; then
+        error "'user.expires' value should be set at '+86400' for '$symlink'"
+    fi
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
-declare -a tests=(test_parsing)
+declare -a tests=(test_parsing test_set_retention)
 
 tmpdir=$(mktemp --directory)
 trap "rm -r $tmpdir" EXIT
