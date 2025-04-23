@@ -74,6 +74,12 @@ rbh_update_retention()
     PATH="$__update_retention_PATH:$PATH" "$__rbh_update_retention" "$@"
 }
 
+__rbh_retention=$(PATH="$PWD/../retention:$PATH" which rbh_retention)
+
+rbh_retention()
+{
+    PATH="$__retention_PATH:$PATH" "$__rbh_retention" "$@"
+}
 __mongo=$(which mongosh || which mongo)
 mongo()
 {
