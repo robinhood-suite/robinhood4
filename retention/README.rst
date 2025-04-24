@@ -68,7 +68,7 @@ The following examples all assume you have a backend set up at
     $ mkdir dir
     $ touch dir/file
     $ setfattr -n user.expires -v +5 dir
-    $ rbh-sync rbh:lustre:. rbh:mongo:testdb
+    $ rbh-sync rbh:retention:. rbh:mongo:testdb
 
     # Wait 10 seconds, then check if that directory is truly expired
     $ sleep 10
@@ -80,7 +80,7 @@ The following examples all assume you have a backend set up at
     # If we then touch the file in dir again, sync them again, and check if
     # that directory is truly expired
     $ touch dir/file
-    $ rbh-sync rbh:lustre:. rbh:mongo:testdb
+    $ rbh-sync rbh:retention:. rbh:mongo:testdb
     $ rbh-update-retention rbh:mongo:testdb .
     Directory 'dir' expiration date is set to '{current time - 5 seconds}'
     The last accessed file in it was accessed on '{current time - 10 seconds}'

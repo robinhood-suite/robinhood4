@@ -1,12 +1,8 @@
 # This file is part of RobinHood 4
-# Copyright (C) 2021 Commissariat a l'energie atomique et aux energies
+# Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
-
-if get_option('lustre').disabled()
-    subdir_done()
-endif
 
 integration_tests = ['test_update_retention']
 
