@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "02b04ec8_24a2d718",
+        "filename": "librobinhood/src/plugins/s3/s3_wrapper.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-04-28T07:38:10Z",
+      "side": 1,
+      "message": "suggest? I think you can use `auto` here, and thus remove `bucket` and `length` from above\n\n```\nfor (size_t i \u003d 0; i \u003c num_bucket; ++i) {\n    auto bucket_name \u003d bucket_list[i].GetName();\n    \n    bucket_name_list[i] \u003d new char[bucket_name.length() + 1];\n    std::strcpy(bucket_name_list[i], bucket_name.c_str());\n}\n```",
+      "range": {
+        "startLine": 75,
+        "startChar": 13,
+        "endLine": 75,
+        "endChar": 37
+      },
+      "revId": "31188f07ac3f89070fad697c9dd0efb008ebdd96",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ed9ad364_19a9e25a",
+        "filename": "librobinhood/src/plugins/s3/s3_wrapper.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-04-28T07:38:10Z",
+      "side": 1,
+      "message": "minor: std::cerr?",
+      "range": {
+        "startLine": 83,
+        "startChar": 13,
+        "endLine": 83,
+        "endChar": 17
+      },
+      "revId": "31188f07ac3f89070fad697c9dd0efb008ebdd96",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8582346c_adfcfaba",
+        "filename": "librobinhood/src/plugins/s3/s3_wrapper.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-04-28T07:38:10Z",
+      "side": 1,
+      "message": "suggest: not sure this variable is really needed here, just directly use `outcome.GetResult().GetContents()` below",
+      "range": {
+        "startLine": 112,
+        "startChar": 12,
+        "endLine": 113,
+        "endChar": 54
+      },
+      "revId": "31188f07ac3f89070fad697c9dd0efb008ebdd96",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
