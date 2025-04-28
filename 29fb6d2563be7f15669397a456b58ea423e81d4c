@@ -22,6 +22,30 @@
       },
       "revId": "29fb6d2563be7f15669397a456b58ea423e81d4c",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4a600d9b_435eaf30",
+        "filename": "librobinhood/src/plugins/s3/s3.c",
+        "patchSetId": 24
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1038646
+      },
+      "writtenOn": "2025-04-28T12:30:04Z",
+      "side": 1,
+      "message": "I going to test it but it should be good. ```s3_get_user_metadata_entry()``` returns an entry and iterate to the next one so it should retrieve all custom metadata. I should probably rename it to ```s3_get_next_user_metadata_entry()``` though",
+      "parentUuid": "4d4df4c0_71d74753",
+      "range": {
+        "startLine": 116,
+        "startChar": 0,
+        "endLine": 116,
+        "endChar": 2
+      },
+      "revId": "29fb6d2563be7f15669397a456b58ea423e81d4c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
