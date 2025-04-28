@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "05bfbb78_db8482f2",
+        "filename": "rbh-sync/tests/test_s3_db_sync.bash",
+        "patchSetId": 20
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-04-28T07:53:08Z",
+      "side": 1,
+      "message": "suggest: you can check with multiple user metadata, to see if what I saw in the previous patch is correct or not",
+      "range": {
+        "startLine": 82,
+        "startChar": 0,
+        "endLine": 93,
+        "endChar": 1
+      },
+      "revId": "458eea42dfd50e14897b43009353a8aacedcd9b9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
