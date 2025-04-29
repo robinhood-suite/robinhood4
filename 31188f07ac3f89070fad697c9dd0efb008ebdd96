@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "67cf926b_7a1cc715",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 21
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1038646
+      },
+      "writtenOn": "2025-04-29T08:07:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3cf56026_6b7a55f9",
+      "range": {
+        "startLine": 9,
+        "startChar": 27,
+        "endLine": 9,
+        "endChar": 35
+      },
+      "revId": "31188f07ac3f89070fad697c9dd0efb008ebdd96",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "02b04ec8_24a2d718",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-04-28T07:38:10Z",
       "side": 1,
       "message": "suggest? I think you can use `auto` here, and thus remove `bucket` and `length` from above\n\n```\nfor (size_t i \u003d 0; i \u003c num_bucket; ++i) {\n    auto bucket_name \u003d bucket_list[i].GetName();\n    \n    bucket_name_list[i] \u003d new char[bucket_name.length() + 1];\n    std::strcpy(bucket_name_list[i], bucket_name.c_str());\n}\n```",
+      "range": {
+        "startLine": 75,
+        "startChar": 13,
+        "endLine": 75,
+        "endChar": 37
+      },
+      "revId": "31188f07ac3f89070fad697c9dd0efb008ebdd96",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4b6c3b7f_29dbe5d2",
+        "filename": "librobinhood/src/plugins/s3/s3_wrapper.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1038646
+      },
+      "writtenOn": "2025-04-29T08:07:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "02b04ec8_24a2d718",
       "range": {
         "startLine": 75,
         "startChar": 13,
@@ -70,6 +118,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc5f4b22_1d97e367",
+        "filename": "librobinhood/src/plugins/s3/s3_wrapper.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1038646
+      },
+      "writtenOn": "2025-04-29T08:07:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ed9ad364_19a9e25a",
+      "range": {
+        "startLine": 83,
+        "startChar": 13,
+        "endLine": 83,
+        "endChar": 17
+      },
+      "revId": "31188f07ac3f89070fad697c9dd0efb008ebdd96",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8582346c_adfcfaba",
@@ -83,6 +155,30 @@
       "writtenOn": "2025-04-28T07:38:10Z",
       "side": 1,
       "message": "suggest: not sure this variable is really needed here, just directly use `outcome.GetResult().GetContents()` below",
+      "range": {
+        "startLine": 112,
+        "startChar": 12,
+        "endLine": 113,
+        "endChar": 54
+      },
+      "revId": "31188f07ac3f89070fad697c9dd0efb008ebdd96",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0bff3bed_5fe9fab3",
+        "filename": "librobinhood/src/plugins/s3/s3_wrapper.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1038646
+      },
+      "writtenOn": "2025-04-29T08:07:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8582346c_adfcfaba",
       "range": {
         "startLine": 112,
         "startChar": 12,
