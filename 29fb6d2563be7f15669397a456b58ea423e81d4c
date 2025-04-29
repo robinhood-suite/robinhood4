@@ -46,6 +46,30 @@
       },
       "revId": "29fb6d2563be7f15669397a456b58ea423e81d4c",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "64427ebf_1ab81660",
+        "filename": "librobinhood/src/plugins/s3/s3.c",
+        "patchSetId": 24
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1038646
+      },
+      "writtenOn": "2025-04-29T07:45:59Z",
+      "side": 1,
+      "message": "Added a ```static``` to ```auto mapIterator \u003d s3_metadata_ptr-\u003euser_meta.begin();``` in ```s3_get_user_metadata_entry()``` to avoid retrieving the same entry over and over",
+      "parentUuid": "4a600d9b_435eaf30",
+      "range": {
+        "startLine": 116,
+        "startChar": 0,
+        "endLine": 116,
+        "endChar": 2
+      },
+      "revId": "29fb6d2563be7f15669397a456b58ea423e81d4c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
