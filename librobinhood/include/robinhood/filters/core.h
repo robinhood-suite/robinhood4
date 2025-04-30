@@ -47,4 +47,8 @@ struct filters_context {
 void
 filters_ctx_finish(struct filters_context *ctx);
 
+void
+import_plugins(struct filters_context *ctx, struct rbh_value_map **info_maps,
+               int backend_count);
+
 #endif
