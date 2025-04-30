@@ -49,6 +49,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ce70c203_b1b78c61",
+        "filename": "librobinhood/src/plugins/sqlite/backend.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-04-30T07:23:18Z",
+      "side": 1,
+      "message": "Yes because they are not static functions. They are definied the header file.",
+      "parentUuid": "58d78a91_f9ddc923",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 27,
+        "endChar": 1
+      },
+      "revId": "06048f03c3511da1a4a903c8836de3b6fab41c52",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bdff3720_8e7a92ca",
         "filename": "librobinhood/src/plugins/sqlite/plugin.c",
         "patchSetId": 3
