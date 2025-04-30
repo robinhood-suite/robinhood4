@@ -18,3 +18,6 @@ configure_file(input: 'config.h.in', output: 'config.h',
 
 # "." is necessary for config.h
 include_dirs = include_directories('.', 'include')
+
+subdir('include')
+subdir('src')
