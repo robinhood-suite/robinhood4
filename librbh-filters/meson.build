@@ -15,3 +15,9 @@ conf_data.set('HAVE_STATX', have_statx)
 
 configure_file(input: 'config.h.in', output: 'config.h',
                configuration: conf_data)
+
+# "." is necessary for config.h
+include_dirs = include_directories('.', 'include')
+
+subdir('include')
+subdir('src')
