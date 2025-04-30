@@ -4,4 +4,6 @@
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
 
-install_headers('core.h', subdir: 'robinhood/filters')
+install_headers('core.h',
+                'parser.h',
+                subdir: 'robinhood/filters')
