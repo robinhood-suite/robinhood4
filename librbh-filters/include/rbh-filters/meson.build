@@ -6,5 +6,6 @@
 
 install_headers(
     'core.h',
+    'parser.h',
     subdir: 'rbh-filters'
 )

@@ -8,6 +8,7 @@ librbhfilters = library(
     'rbh-filters',
     sources: [
         'core.c',
+        'parser.c',
     ],
     version: meson.project_version(),
     dependencies: [librobinhood_dep],
