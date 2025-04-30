@@ -33,3 +33,4 @@ install_headers(
 
 subdir('backends')
 subdir('plugins')
+subdir('filters')
