@@ -5,12 +5,14 @@
  * SPDX-License-Identifer: LGPL-3.0-or-later
  */
 
-#ifndef RBH_LIBFILTERS_CORE_H
-#define RBH_LIBFILTERS_CORE_H
+#ifndef RBH_FILTERS_CORE_H
+#define RBH_FILTERS_CORE_H
 
 #include <stdlib.h>
 
 #include <robinhood.h>
+
+#include "rbh-filters/parser.h"
 
 struct rbh_plugin_or_extension {
     bool is_plugin;
