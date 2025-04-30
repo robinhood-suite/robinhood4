@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "246dcc2d_01ff853e",
+        "filename": "librobinhood/include/robinhood/backends/sqlite.h.in",
+        "patchSetId": 3
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-04-30T07:07:59Z",
+      "side": 1,
+      "message": "style: alignment",
+      "range": {
+        "startLine": 25,
+        "startChar": 38,
+        "endLine": 26,
+        "endChar": 65
+      },
+      "revId": "06048f03c3511da1a4a903c8836de3b6fab41c52",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "58d78a91_f9ddc923",
+        "filename": "librobinhood/src/plugins/sqlite/backend.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-04-30T07:07:59Z",
+      "side": 1,
+      "message": "question: will the compilation succeed without `__attribute__((unused))`?",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 27,
+        "endChar": 1
+      },
+      "revId": "06048f03c3511da1a4a903c8836de3b6fab41c52",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bdff3720_8e7a92ca",
+        "filename": "librobinhood/src/plugins/sqlite/plugin.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-04-30T07:07:59Z",
+      "side": 1,
+      "message": "style: line length",
+      "range": {
+        "startLine": 25,
+        "startChar": 4,
+        "endLine": 25,
+        "endChar": 84
+      },
+      "revId": "06048f03c3511da1a4a903c8836de3b6fab41c52",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
