@@ -9,6 +9,7 @@
 # include <config.h>
 #endif
 
+#include <stdbool.h>
 #include <string.h>
 #include <sysexits.h>
 
