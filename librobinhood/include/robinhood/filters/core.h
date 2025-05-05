@@ -37,6 +37,9 @@ struct filters_context {
 
     /** If a filter needs to be completed by an information of the backend */
     bool need_prefetch;
+
+    int argc;
+    char **argv;
 };
 
 /**
