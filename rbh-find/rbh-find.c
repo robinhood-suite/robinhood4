@@ -19,6 +19,8 @@
 #include <stdio.h>
 #include <sysexits.h>
 
+#include <rbh-filters/core.h>
+#include <rbh-filters/parser.h>
 #include <robinhood.h>
 #include <robinhood/utils.h>
 #include <robinhood/alias.h>
@@ -136,104 +138,6 @@ check_command_options(int pre_uri_args, int argc, char *argv[])
     }
 }
 
-static bool
-check_pe_already_registered(int pe_count, const char *pe_string)
-{
-    for (int i = 0; i < pe_count; ++i) {
-        if (ctx.info_pe[i].is_plugin &&
-            strcmp(ctx.info_pe[i].plugin->plugin.name, pe_string) == 0)
-            return true;
-        else if (!ctx.info_pe[i].is_plugin &&
-                 strcmp(ctx.info_pe[i].extension->name, pe_string) == 0)
-            return true;
-    }
-
-    return false;
-}
-
-static int
-import_backend_source(int pe_count, const struct rbh_value_map *backend_source)
-{
-    const struct rbh_value *extension_value = NULL;
-    const struct rbh_value *plugin_value = NULL;
-    const struct rbh_backend_plugin *plugin;
-    bool is_plugin;
-
-    for (int i = 0; i < backend_source->count; ++i) {
-        const struct rbh_value_pair *pair = &backend_source->pairs[i];
-
-        assert(pair->value->type == RBH_VT_STRING);
-
-        if (strcmp(pair->key, "type") == 0)
-            is_plugin = (strcmp(pair->value->string, "plugin") == 0);
-        else if (strcmp(pair->key, "plugin") == 0)
-            plugin_value = pair->value;
-        else if (strcmp(pair->key, "extension") == 0)
-            extension_value = pair->value;
-    }
-
-    assert(plugin_value != NULL);
-
-    if (is_plugin && check_pe_already_registered(pe_count,
-                                                 plugin_value->string))
-        return 0;
-    else if (!is_plugin && check_pe_already_registered(pe_count,
-                                                       extension_value->string))
-        return 0;
-
-    plugin = rbh_backend_plugin_import(plugin_value->string);
-    if (plugin == NULL)
-        error(EXIT_FAILURE, errno, "rbh_backend_plugin_import");
-
-    if (is_plugin) {
-        ctx.info_pe[pe_count].plugin = plugin;
-        ctx.info_pe[pe_count].is_plugin = true;
-    } else {
-        ctx.info_pe[pe_count].is_plugin = false;
-        ctx.info_pe[pe_count].extension = rbh_plugin_load_extension(
-            &plugin->plugin,
-            extension_value->string
-        );
-        if (ctx.info_pe[pe_count].extension == NULL)
-            error(EXIT_FAILURE, errno, "rbh_plugin_load_extension");
-    }
-
-    return 1;
-}
-
-static void
-import_plugins(struct rbh_value_map **info_maps)
-{
-    int pe_count = 0;
-
-    for (int i = 0; i < ctx.backend_count; ++i) {
-        assert(info_maps[i]->count == 1);
-        assert(strcmp(info_maps[i]->pairs->key, "backend_source") == 0);
-        assert(info_maps[i]->pairs[0].value->type == RBH_VT_SEQUENCE);
-
-        ctx.info_pe_count += info_maps[i]->pairs[0].value->sequence.count;
-    }
-
-    ctx.info_pe = malloc(ctx.info_pe_count * sizeof(*ctx.info_pe));
-    if (ctx.info_pe == NULL)
-        error(EXIT_FAILURE, errno, "malloc");
-
-    for (int i = 0; i < ctx.backend_count; ++i) {
-        const struct rbh_value *backend_source_sequence =
-            info_maps[i]->pairs[0].value;
-
-        for (int j = 0; j < backend_source_sequence->sequence.count; ++j) {
-            const struct rbh_value *backend_source =
-                &backend_source_sequence->sequence.values[j];
-
-            assert(backend_source->type == RBH_VT_MAP);
-            pe_count += import_backend_source(pe_count, &backend_source->map);
-        }
-    }
-
-    ctx.info_pe_count = pe_count;
-}
-
 int
 main(int _argc, char *_argv[])
 {
@@ -269,7 +173,8 @@ main(int _argc, char *_argv[])
 
     /* Parse the command line */
     for (index = 0; index < ctx.argc; index++)
-        if (str2command_line_token(&ctx, ctx.argv[index], NULL) != CLT_URI)
+        if (str2command_line_token(&ctx.f_ctx, ctx.argv[index], NULL) !=
+            CLT_URI)
             break;
 
     if (index == 0)
@@ -300,11 +205,12 @@ main(int _argc, char *_argv[])
                   ctx.argv[i]);
     }
 
-    import_plugins(info_maps);
+    import_plugins(&ctx.f_ctx, info_maps, ctx.backend_count);
     free(info_maps);
 
-    ctx.need_prefetch = false;
-    filter = parse_expression(&ctx, &index, NULL, &sorts, &sorts_count);
+    ctx.f_ctx.need_prefetch = false;
+    filter = parse_expression(&ctx.f_ctx, ctx.argc, ctx.argv, &index, NULL,
+                              &sorts, &sorts_count, find_parse_callback, &ctx);
     if (index != ctx.argc)
         error(EX_USAGE, 0, "you have too many ')'");
 
