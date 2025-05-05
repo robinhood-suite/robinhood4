@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bc7d8976_f12b1e2e",
+        "filename": "retention/rbh_retention",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-05-05T08:55:16Z",
+      "side": 1,
+      "message": "question: Does this mean that the only format allowed is a number and not other date formats (e.g., YYYY-MM-DD, relative dates)?",
+      "range": {
+        "startLine": 62,
+        "startChar": 16,
+        "endLine": 62,
+        "endChar": 29
+      },
+      "revId": "cb639651d27f7b829ed073676adb5599eb9a65a2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
