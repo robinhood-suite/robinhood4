@@ -308,9 +308,9 @@ fsentry_printf_format(struct find_context *ctx, size_t backend_index,
 
         switch (format_string[i]) {
         case '%':
-            for (int j = 0; j < ctx->info_pe_count; ++j) {
+            for (int j = 0; j < ctx->f_ctx.info_pe_count; ++j) {
                 const struct rbh_pe_common_operations *common_ops =
-                    get_common_operations(&ctx->info_pe[j]);
+                    get_common_operations(&ctx->f_ctx.info_pe[j]);
 
                 tmp_length = rbh_pe_common_ops_fill_entry_info(
                     common_ops, &output[output_length], max_length, fsentry,
@@ -602,9 +602,9 @@ find_exec_action(struct find_context *ctx,
         {
             int rc;
 
-            for (int i = 0; i < ctx->info_pe_count; ++i) {
+            for (int i = 0; i < ctx->f_ctx.info_pe_count; ++i) {
                 const struct rbh_pe_common_operations *common_ops =
-                    get_common_operations(&ctx->info_pe[i]);
+                    get_common_operations(&ctx->f_ctx.info_pe[i]);
 
                 rc = rbh_pe_common_ops_delete_entry(common_ops, fsentry);
                 if (rc == 0)
