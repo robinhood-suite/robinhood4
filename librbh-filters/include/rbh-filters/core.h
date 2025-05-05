@@ -12,8 +12,6 @@
 
 #include <robinhood.h>
 
-#include "rbh-filters/parser.h"
-
 struct rbh_plugin_or_extension {
     bool is_plugin;
     union {
