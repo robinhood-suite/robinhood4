@@ -13,27 +13,11 @@
 #include <stdlib.h>
 #include <sysexits.h>
 
+#include <robinhood/filter.h>
 #include <robinhood.h>
 #include <robinhood/utils.h>
 
 #include "parser.h"
-
-struct rbh_plugin_or_extension {
-    bool is_plugin;
-    union {
-        const struct rbh_backend_plugin *plugin;
-        const struct rbh_plugin_extension *extension;
-    };
-};
-
-static inline const struct rbh_pe_common_operations *
-get_common_operations(struct rbh_plugin_or_extension *pe)
-{
-    if (pe->is_plugin)
-        return pe->plugin->common_ops;
-    else
-        return pe->extension->common_ops;
-}
 
 /**
  * Find's library context
@@ -44,9 +28,10 @@ struct find_context {
     struct rbh_backend **backends;
     const char **uris;
 
-    /** The type of information stored in the backends */
-    struct rbh_plugin_or_extension *info_pe;
-    size_t info_pe_count;
+    /** The filters context which contains all the information related to the
+     * filters.
+     */
+    struct filters_context f_ctx;
 
     /** The command-line arguments to parse */
     int argc;
@@ -54,9 +39,6 @@ struct find_context {
 
     /** If an action was already executed in this specific execution */
     bool action_done;
-
-    /** If a filter need to be completed by an information of the backend */
-    bool need_prefetch;
 
     /** The file that should contain the results of an action, if specified */
     FILE *action_file;
@@ -79,22 +61,6 @@ void
 ctx_finish(struct find_context *ctx);
 
 /**
- * str2command_line_token - command line token classifier
- *
- * @param ctx              find's context for this execution
- * @param string           the string to classify
- * @param pe_index         the index of the plugin or extension that recognizes
- *                         \p string
- *
- * @return                 the command_line_token that represents \p string
- *
- * \p string does not need to be a valid token
- */
-enum command_line_token
-str2command_line_token(struct find_context *ctx, const char *string,
-                       int *pe_index);
-
-/**
  * Execute a find search corresponding to an action on each backend
  *
  * @param ctx            find's context for this execution
@@ -108,25 +74,6 @@ void
 find(struct find_context *ctx, enum action action, int *arg_idx,
      const struct rbh_filter *filter, const struct rbh_filter_sort *sorts,
      size_t sorts_count);
-
-/**
- * parse_expression - parse a find expression (predicates / operators / actions)
- *
- * @param ctx           find's context for this execution
- * @param arg_idx       a pointer to the index of argv to start parsing at
- * @param _filter       a filter (the part of the cli already parsed)
- * @param sorts         an array of filtering options
- * @param sorts_count   the size of \p sorts
- *
- * @return              a filter that represents the parsed expression
- *
- * Note this function is recursive and will call find() itself if it parses an
- * action
- */
-struct rbh_filter *
-parse_expression(struct find_context *ctx, int *arg_idx,
-                 const struct rbh_filter *_filter,
-                 struct rbh_filter_sort **sorts, size_t *sorts_count);
 
 /**
  * Count the number of arguments to rbh-find like commands before reaching
