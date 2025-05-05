@@ -15,3 +15,4 @@ configure_file(
   install_mode: ['rwxr-xr-x', 0, 0]
 )
 
+subdir('daemon')

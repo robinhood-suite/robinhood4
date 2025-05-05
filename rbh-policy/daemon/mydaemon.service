@@ -1,0 +1,14 @@
+[Unit]
+Description=Simple Python Daemon
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/python3 /usr/local/bin/mydaemon.py
+Restart=always
+User=root
+Group=root
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
