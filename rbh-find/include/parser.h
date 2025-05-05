@@ -8,18 +8,7 @@
 #ifndef RBH_FIND_PARSER_H
 #define RBH_FIND_PARSER_H
 
-enum command_line_token {
-    CLT_URI,
-    CLT_AND,
-    CLT_OR,
-    CLT_NOT,
-    CLT_PARENTHESIS_OPEN,
-    CLT_PARENTHESIS_CLOSE,
-    CLT_PREDICATE,
-    CLT_ACTION,
-    CLT_SORT,
-    CLT_RSORT,
-};
+#include <rbh-filters/parser.h>
 
 enum action {
     ACT_COUNT,

@@ -28,7 +28,7 @@ executable(
         'src/filters.c',
         'src/parser.c',
     ],
-    dependencies: [librobinhood_dep],
+    dependencies: [librobinhood_dep, librbhfilters_dep],
     include_directories: include_dirs,
     install: true,
     c_args: '-DHAVE_CONFIG_H',
