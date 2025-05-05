@@ -8,7 +8,7 @@
 #ifndef ROBINHOOD_PARSER_H
 #define ROBINHOOD_PARSER_H
 
-#include "robinhood/filters.h"
+#include "robinhood/filters/core.h"
 
 enum command_line_token {
     CLT_URI,
