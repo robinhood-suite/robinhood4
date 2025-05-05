@@ -8,18 +8,7 @@
 #ifndef RBH_FIND_PARSER_H
 #define RBH_FIND_PARSER_H
 
-enum command_line_token {
-    CLT_URI,
-    CLT_AND,
-    CLT_OR,
-    CLT_NOT,
-    CLT_PARENTHESIS_OPEN,
-    CLT_PARENTHESIS_CLOSE,
-    CLT_PREDICATE,
-    CLT_ACTION,
-    CLT_SORT,
-    CLT_RSORT,
-};
+#include <robinhood/filters/parser.h>
 
 enum action {
     ACT_COUNT,
@@ -61,5 +50,23 @@ str2action(const char *string);
  */
 const char *
 action2str(enum action action);
+
+/**
+ * find_parse_callback - parse an expression  that have a specific handle for
+ *                       find
+ *
+ * @param ctx           filters context
+ * @param arg_idx       a pointer to the index of argv to start parsing at
+ * @param filter        a filter (the part of the cli already parsed)
+ * @param sorts         an array of filtering options
+ * @param sorts_count   the size of \p sorts
+ * @param token         the token to parse
+ * @param param         callback argument
+ */
+void
+find_parse_callback(struct filters_context *ctx, int *arg_idx,
+                    const struct rbh_filter *filter,
+                    struct rbh_filter_sort **sorts, size_t *sorts_count,
+                    enum command_line_token token, void *param);
 
 #endif
