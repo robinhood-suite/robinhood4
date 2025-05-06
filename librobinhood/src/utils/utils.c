@@ -12,6 +12,7 @@
 #include <errno.h>
 #include <limits.h>
 
+#include "robinhood/uri.h"
 #include "robinhood/utils.h"
 
 int
@@ -140,4 +141,15 @@ size_printer(char *buffer, size_t buffer_size, size_t size)
                         (double)size / sfx_value, sfx[sfx_idx]);
     else
         return snprintf(buffer, buffer_size, "%zu Bytes", size);
+}
+
+int
+rbh_count_args_before_uri(int argc, char **argv)
+{
+    size_t count = 0;
+
+    while (count < argc && !rbh_is_uri(argv[count]))
+        count++;
+
+    return count;
 }

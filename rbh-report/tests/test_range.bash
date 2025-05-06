@@ -39,7 +39,7 @@ test_range()
         local sum_large_size="$((root_size + (large_size * 3)))"
     fi
 
-    rbh_report --csv "rbh:$db:$testdb" --group-by "statx.size[0;30]" \
+    rbh_report "rbh:$db:$testdb" --csv --group-by "statx.size[0;30]" \
                                          --output "sum(statx.size)" |
         difflines "[0; 30]: $sum_smol_size" "[30; +inf]: $sum_large_size"
 }
@@ -98,7 +98,7 @@ test_group_by_field_and_range()
                           "$fake_user_id,[70; +inf]: $sum_second_large_size")"
     fi
 
-    rbh_report --csv "rbh:$db:$testdb" \
+    rbh_report "rbh:$db:$testdb" --csv \
         --group-by "statx.uid,statx.size[0;30;70]" --output "sum(statx.size)" |
         difflines "$expected"
 }

@@ -23,7 +23,7 @@ test_avg_size()
     local dir_size="$(stat -c %s .)"
     local size="$(((1024 + 1025 + dir_size) / 4))"
 
-    rbh_report --csv "rbh:$db:$testdb" --output "avg(statx.size)" |
+    rbh_report "rbh:$db:$testdb" --csv --output "avg(statx.size)" |
         difflines "$size"
 
     truncate --size 600M "600M"
@@ -33,7 +33,7 @@ test_avg_size()
     dir_size="$(stat -c %s .)"
     size="$(((1024 + 1025 + size_600M + dir_size) / 5))"
 
-    rbh_report --csv "rbh:$db:$testdb" --output "avg(statx.size)" |
+    rbh_report "rbh:$db:$testdb" --csv --output "avg(statx.size)" |
         difflines "$size"
 }
 
@@ -48,7 +48,7 @@ test_avg_mtime()
     local second_mtime="$(stat -c %Y second)"
     local mtime="$(((root_mtime + first_mtime + second_mtime) / 3))"
 
-    rbh_report --csv "rbh:$db:$testdb" --output "avg(statx.mtime.sec)" |
+    rbh_report "rbh:$db:$testdb" --csv --output "avg(statx.mtime.sec)" |
         difflines "$mtime"
 
     touch -d "+2 hours" third
@@ -60,7 +60,7 @@ test_avg_mtime()
     local third_mtime="$(stat -c %Y third)"
     mtime="$(((root_mtime + first_mtime + second_mtime + third_mtime) / 4))"
 
-    rbh_report --csv "rbh:$db:$testdb" --output "avg(statx.mtime.sec)" |
+    rbh_report "rbh:$db:$testdb" --csv --output "avg(statx.mtime.sec)" |
         difflines "$mtime"
 }
 
@@ -77,7 +77,7 @@ test_avg_ino()
     local third_ino="$(stat -c %i third)"
     local ino="$(((root_ino + first_ino + second_ino + third_ino) / 4))"
 
-    rbh_report --csv "rbh:$db:$testdb" --output "avg(statx.ino)" |
+    rbh_report "rbh:$db:$testdb" --csv --output "avg(statx.ino)" |
         difflines "$ino"
 }
 
