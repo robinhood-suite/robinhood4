@@ -697,7 +697,7 @@ sync_metadata_value_map(time_t sync_debut, time_t sync_end, char *from,
     double sync_duration;
     struct rbh_uri *uri;
     char abs_path[4096];
-    int count = 7;
+    int count = 8;
 
     sync_duration = difftime(sync_end, sync_debut);
 
@@ -769,6 +769,12 @@ sync_metadata_value_map(time_t sync_debut, time_t sync_end, char *from,
     values[6].type = RBH_VT_INT64;
     values[6].int64 = (int64_t)metadata->skipped_entries;
     pairs[6].value = &values[6];
+
+    pairs[7].key = "total_entries_seen";
+    values[7].type = RBH_VT_INT64;
+    values[7].int64 = (int64_t)(metadata->converted_entries +
+                                metadata->skipped_entries);
+    pairs[7].value = &values[7];
 
     value_map->pairs = pairs;
     value_map->count = count;
