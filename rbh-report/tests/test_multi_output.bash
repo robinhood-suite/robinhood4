@@ -35,7 +35,7 @@ test_multi_output()
     local min_ino="$(find -printf "%i\n" | sort -n | head -n 1)"
     local max_mtime="$(stat -c %Y third)"
 
-    rbh_report --csv "rbh:$db:$testdb" \
+    rbh_report "rbh:$db:$testdb" --csv \
         --output "sum(statx.size),avg(statx.size),min(statx.ino),max(statx.mtime.sec)" |
         difflines "$sum_size,$avg_size,$min_ino,$max_mtime"
 }

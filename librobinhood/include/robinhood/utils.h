@@ -146,4 +146,15 @@ count_char_separated_values(const char *str, char character);
 const char *
 time_from_timestamp(const time_t *time);
 
+/**
+ * Return the number of arguments before the URI
+ *
+ * @param argc   the number of argument in the command line
+ * @param argv   the command line to parse
+ *
+ * @return       the number of arguments before the URI
+ */
+int
+rbh_count_args_before_uri(int argc, char **argv);
+
 #endif
