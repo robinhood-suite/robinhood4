@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # This file is part of RobinHood 4
-# Copyright (C) 2024 Commissariat a l'energie atomique et aux energies
+# Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
@@ -20,6 +20,9 @@ test_parsing()
 
     rbh_report rbh:$db:blob &&
         error "rbh-report with no '--output' should have failed"
+
+    rbh_report -type f rbh:$db:blob &&
+        error "rbh-report with a filter before an URI should have failed"
 
     return 0
 }
