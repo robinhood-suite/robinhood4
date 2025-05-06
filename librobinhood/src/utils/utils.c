@@ -12,6 +12,7 @@
 #include <errno.h>
 #include <limits.h>
 
+#include "robinhood/uri.h"
 #include "robinhood/utils.h"
 
 int
@@ -120,4 +121,15 @@ time_from_timestamp(const time_t *time)
     res[len - 1] = '\0';
 
     return res;
+}
+
+int
+rbh_count_args_before_uri(int argc, char **argv)
+{
+    size_t count = 0;
+
+    while (count < argc && !rbh_is_uri(argv[count]))
+        count++;
+
+    return count;
 }
