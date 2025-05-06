@@ -20,7 +20,7 @@ test_max_size()
     truncate --size 1025 "1K+1"
     rbh_sync "rbh:posix:." "rbh:$db:$testdb"
 
-    rbh_report --csv "rbh:$db:$testdb" --output "max(statx.size)" |
+    rbh_report "rbh:$db:$testdb" --csv --output "max(statx.size)" |
         difflines "1025"
 
     truncate --size 600M "600M"
@@ -28,7 +28,7 @@ test_max_size()
 
     local size_600M="$(stat -c %s 600M)"
 
-    rbh_report --csv "rbh:$db:$testdb" --output "max(statx.size)" |
+    rbh_report "rbh:$db:$testdb" --csv --output "max(statx.size)" |
         difflines "$size_600M"
 }
 
@@ -40,7 +40,7 @@ test_max_mtime()
 
     local first_mtime="$(stat -c %Y first)"
 
-    rbh_report --csv "rbh:$db:$testdb" --output "max(statx.mtime.sec)" |
+    rbh_report "rbh:$db:$testdb" --csv --output "max(statx.mtime.sec)" |
         difflines "$first_mtime"
 
     touch -d "+2 hours" third
@@ -48,7 +48,7 @@ test_max_mtime()
 
     local third_mtime="$(stat -c %Y third)"
 
-    rbh_report --csv "rbh:$db:$testdb" --output "max(statx.mtime.sec)" |
+    rbh_report "rbh:$db:$testdb" --csv --output "max(statx.mtime.sec)" |
         difflines "$third_mtime"
 }
 
@@ -61,7 +61,7 @@ test_max_ino()
 
     local max_ino="$(find -printf "%i\n" | sort -nr | head -n 1)"
 
-    rbh_report --csv "rbh:$db:$testdb" --output "max(statx.ino)" |
+    rbh_report "rbh:$db:$testdb" --csv --output "max(statx.ino)" |
         difflines "$max_ino"
 }
 

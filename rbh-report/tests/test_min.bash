@@ -21,13 +21,13 @@ test_min_size()
 
     local root_size="$(stat -c %s .)"
 
-    rbh_report --csv "rbh:$db:$testdb" --output "min(statx.size)" |
+    rbh_report "rbh:$db:$testdb" --csv --output "min(statx.size)" |
         difflines "$root_size"
 
     touch blob
     rbh_sync "rbh:posix:." "rbh:$db:$testdb"
 
-    rbh_report --csv "rbh:$db:$testdb" --output "min(statx.size)" |
+    rbh_report "rbh:$db:$testdb" --csv --output "min(statx.size)" |
         difflines "0"
 }
 
@@ -39,7 +39,7 @@ test_min_mtime()
 
     local first_mtime="$(stat -c %Y first)"
 
-    rbh_report --csv "rbh:$db:$testdb" --output "min(statx.mtime.sec)" |
+    rbh_report "rbh:$db:$testdb" --csv --output "min(statx.mtime.sec)" |
         difflines "$first_mtime"
 
     touch -d "-2 hours" third
@@ -47,7 +47,7 @@ test_min_mtime()
 
     local third_mtime="$(stat -c %Y third)"
 
-    rbh_report --csv "rbh:$db:$testdb" --output "min(statx.mtime.sec)" |
+    rbh_report "rbh:$db:$testdb" --csv --output "min(statx.mtime.sec)" |
         difflines "$third_mtime"
 }
 
@@ -60,7 +60,7 @@ test_min_ino()
 
     local min_ino="$(find -printf "%i\n" | sort -n | head -n 1)"
 
-    rbh_report --csv "rbh:$db:$testdb" --output "min(statx.ino)" |
+    rbh_report "rbh:$db:$testdb" --csv --output "min(statx.ino)" |
         difflines "$min_ino"
 }
 

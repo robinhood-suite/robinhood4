@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-# This file is part of RobinHood 4
-# Copyright (C) 2024 Commissariat a l'energie atomique et aux energies
+# This file is part of the RobinHood Library
+# Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
@@ -13,28 +13,31 @@ test_dir=$(dirname $(readlink -e $0))
 #                                    TESTS                                     #
 ################################################################################
 
-test_count()
+test_helper_invalid()
 {
-    for i in {0..25}; do
-        mkdir dir$i
-        truncate --size $i dir$i/file$i
-    done
+    rbh_find --help | grep "POSIX" &&
+        error "Find's helper without argument shouldn't have given POSIX's helper"
 
-    rbh_sync "rbh:posix:." "rbh:$db:$testdb"
+    rbh_find --help rbh:mongo:blob | grep "POSIX" &&
+        error "Find's helper without argument shouldn't have given POSIX's helper"
 
-    rbh_report "rbh:$db:$testdb" --csv --output "count()" |
-        difflines "53"
+    rbh_find --help non_existing_backend &&
+        error "Find's helper with non-existing backend should have failed"
 
-    rbh_report "rbh:$db:$testdb" --csv --group-by "statx.type" \
-                                   --output "count()" |
-        difflines "directory: 27" "file: 26"
+    return 0
+}
+
+test_helper()
+{
+    rbh_find --help posix | grep "POSIX" ||
+        error "Find's helper with POSIX plugin should have succeeded"
 }
 
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
-declare -a tests=(test_count)
+declare -a tests=(test_helper_invalid test_helper)
 
 tmpdir=$(mktemp --directory)
 trap -- "rm -rf '$tmpdir'" EXIT

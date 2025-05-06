@@ -23,7 +23,7 @@ test_sum_size()
     local dir_size="$(stat -c %s .)"
     local size="$((1024 + 1025 + dir_size))"
 
-    rbh_report --csv "rbh:$db:$testdb" --output "sum(statx.size)" |
+    rbh_report "rbh:$db:$testdb" --csv --output "sum(statx.size)" |
         difflines "$size"
 
     truncate --size 600M "600M"
@@ -33,7 +33,7 @@ test_sum_size()
     dir_size="$(stat -c %s .)"
     size="$((1024 + 1025 + size_600M + dir_size))"
 
-    rbh_report --csv "rbh:$db:$testdb" --output "sum(statx.size)" |
+    rbh_report "rbh:$db:$testdb" --csv --output "sum(statx.size)" |
         difflines "$size"
 }
 
@@ -48,7 +48,7 @@ test_sum_mtime()
     local second_mtime="$(stat -c %Y second)"
     local mtime="$((root_mtime + first_mtime + second_mtime))"
 
-    rbh_report --csv "rbh:$db:$testdb" --output "sum(statx.mtime.sec)" |
+    rbh_report "rbh:$db:$testdb" --csv --output "sum(statx.mtime.sec)" |
         difflines "$mtime"
 
     touch -d "+2 hours" third
@@ -58,7 +58,7 @@ test_sum_mtime()
     local third_mtime="$(stat -c %Y third)"
     mtime="$((mtime + third_mtime + (updated_root_mtime - root_mtime)))"
 
-    rbh_report --csv "rbh:$db:$testdb" --output "sum(statx.mtime.sec)" |
+    rbh_report "rbh:$db:$testdb" --csv --output "sum(statx.mtime.sec)" |
         difflines "$mtime"
 }
 
@@ -75,7 +75,7 @@ test_sum_ino()
     local third_ino="$(stat -c %i third)"
     local ino="$((root_ino + first_ino + second_ino + third_ino))"
 
-    rbh_report --csv "rbh:$db:$testdb" --output "sum(statx.ino)" |
+    rbh_report "rbh:$db:$testdb" --csv --output "sum(statx.ino)" |
         difflines "$ino"
 }
 

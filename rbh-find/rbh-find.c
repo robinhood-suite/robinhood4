@@ -158,14 +158,14 @@ main(int _argc, char *_argv[])
     argc = _argc - 1;
     argv = &_argv[1];
 
-    nb_cli_args = rbh_find_count_args_before_uri(argc, argv);
+    nb_cli_args = rbh_count_args_before_uri(argc, argv);
     rc = rbh_config_from_args(nb_cli_args, argv);
     if (rc)
         error(EXIT_FAILURE, errno, "failed to load configuration file");
 
     rbh_apply_aliases(&argc, &argv);
 
-    nb_cli_args = rbh_find_count_args_before_uri(argc, argv);
+    nb_cli_args = rbh_count_args_before_uri(argc, argv);
     check_command_options(nb_cli_args, argc, argv);
 
     ctx.argc = argc - nb_cli_args;
