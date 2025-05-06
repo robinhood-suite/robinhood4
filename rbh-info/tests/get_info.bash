@@ -58,8 +58,8 @@ test_collection_sync()
     local output=$(rbh_info "rbh:mongo:$testdb" "$info_flag")
     local n_lines=$(echo "$output" | wc -l)
 
-    if ((n_lines != 7)); then
-        error "There should be seven infos about posix sync"
+    if ((n_lines != 8)); then
+        error "There should be eight infos about posix sync"
     fi
 
     echo "$output" | grep "sync_debut" ||
@@ -70,9 +70,6 @@ test_collection_sync()
 
     echo "$output" | grep "sync_end" ||
         error "sync_end should have been retrieved"
-
-    echo "$output" | grep "converted_entries" ||
-        error "converted_entries should have been retrieved"
 
     local mountpoint=$(awk -F': ' '/mountpoint/ {print $2}' <<< "$output")
 
@@ -88,8 +85,28 @@ test_collection_sync()
         error "command lines are not matching"
     fi
 
-    echo "$output" | grep "skipped_entries" ||
-        error "skipped_entries should have been retrieved"
+    local converted_entries=$(echo "$output" | \
+        awk -F': ' '/converted_entries/ {print $2}')
+
+    local skipped_entries=$(echo "$output" | \
+        awk -F': ' '/skipped_entries/ {print $2}')
+
+    local total_entries=$(echo "$output" | \
+        awk -F': ' '/total_entries_seen/ {print $2}')
+
+    local sum_entries=$((skipped_entries + converted_entries))
+
+    local find_entries=$(find . | wc -l)
+
+    if [ "$sum_entries" != "$find_entries" ]; then
+        error "The sum of converted and skipped entries does not match the
+               number of entries inside the directory"
+    fi
+
+    if [ "$sum_entries" != "$total_entries" ]; then
+        error "The sum of converted and skipped entries does not match
+               total_entries_seen"
+    fi
 }
 
 test_collection_first_sync() {
