@@ -76,64 +76,69 @@ test_parsing_output()
 
 test_parsing_group()
 {
-    rbh_report rbh:$db:blob --output "sum(statx.size)" --group &&
-        error "rbh-report with '--group' but no string should have failed"
+    rbh_report rbh:$db:blob --output "sum(statx.size)" --group-by &&
+        error "rbh-report with '--group-by' but no string should have failed"
 
-    rbh_report rbh:$db:blob --output "sum(statx.size)" --group "," &&
-        error "rbh-report with invalid group string should have failed"
+    rbh_report rbh:$db:blob --output "sum(statx.size)" --group-by "," &&
+        error "rbh-report with invalid group-by string should have failed"
 
-    rbh_report rbh:$db:blob --output "sum(statx.size)" --group "blob" &&
-        error "rbh-report with invalid field in group string should have failed"
-
-    rbh_report rbh:$db:blob --output "sum(statx.size)" \
-                              --group "statx.type," &&
-        error "rbh-report with invalid comma in group string should have failed"
+    rbh_report rbh:$db:blob --output "sum(statx.size)" --group-by "blob" &&
+        error "rbh-report with invalid field in group-by string should have" \
+              "failed"
 
     rbh_report rbh:$db:blob --output "sum(statx.size)" \
-                              --group ",statx.type" &&
-        error "rbh-report with invalid comma in group string should have failed"
+                              --group-by "statx.type," &&
+        error "rbh-report with invalid comma in group-by string should have" \
+              "failed"
 
     rbh_report rbh:$db:blob --output "sum(statx.size)" \
-                              --group "statx.type,blob" &&
-        error "rbh-report with invalid field in group string should have failed"
+                              --group-by ",statx.type" &&
+        error "rbh-report with invalid comma in group-by string should have" \
+              "failed"
 
     rbh_report rbh:$db:blob --output "sum(statx.size)" \
-                              --group "statx.type,statx.uid," &&
-        error "rbh-report with invalid comma in group string should have failed"
+                              --group-by "statx.type,blob" &&
+        error "rbh-report with invalid field in group-by string should have" \
+              "failed"
 
     rbh_report rbh:$db:blob --output "sum(statx.size)" \
-                              --group "statx.type[,statx.uid" &&
+                              --group-by "statx.type,statx.uid," &&
+        error "rbh-report with invalid comma in group-by string should have" \
+              "failed"
+
+    rbh_report rbh:$db:blob --output "sum(statx.size)" \
+                              --group-by "statx.type[,statx.uid" &&
         error "rbh-report with missing closing bracket should have failed"
 
     rbh_report rbh:$db:blob --output "sum(statx.size)" \
-                              --group "statx.type[],statx.uid" &&
+                              --group-by "statx.type[],statx.uid" &&
         error "rbh-report with empty brackets should have failed"
 
     rbh_report rbh:$db:blob --output "sum(statx.size)" \
-                              --group "statx.type[,statx.uid,]" &&
+                              --group-by "statx.type[,statx.uid,]" &&
         error "rbh-report with brackets containing invalid values" \
               "should have failed"
 
     rbh_report rbh:$db:blob --output "sum(statx.size)" \
-                              --group "statx.type[statx.uid]" &&
+                              --group-by "statx.type[statx.uid]" &&
         error "rbh-report with brackets containing invalid values" \
               "should have failed"
 
     rbh_report rbh:$db:blob --output "sum(statx.size)" \
-                              --group "statx.type[;],statx.uid" &&
+                              --group-by "statx.type[;],statx.uid" &&
         error "rbh-report with brackets containing semi-colon but no values" \
               "should have failed"
 
     rbh_report rbh:$db:blob --output "sum(statx.size)" \
-                              --group "statx.type[10;],statx.uid" &&
+                              --group-by "statx.type[10;],statx.uid" &&
         error "rbh-report with invalid values in brackets should have failed"
 
     rbh_report rbh:$db:blob --output "sum(statx.size)" \
-                              --group "statx.type[;10],statx.uid" &&
+                              --group-by "statx.type[;10],statx.uid" &&
         error "rbh-report with invalid values in brackets should have failed"
 
     rbh_report rbh:$db:blob --output "sum(statx.size)" \
-                              --group "statx.type[10;blob],statx.uid" &&
+                              --group-by "statx.type[10;blob],statx.uid" &&
         error "rbh-report with invalid values in brackets should have failed"
 
     return 0
