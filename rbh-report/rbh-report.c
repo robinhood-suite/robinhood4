@@ -11,6 +11,8 @@
 #include <stdlib.h>
 #include <sysexits.h>
 
+#include <rbh-filters/core.h>
+#include <rbh-filters/parser.h>
 #include <robinhood.h>
 #include <robinhood/backend.h>
 #include <robinhood/uri.h>
@@ -46,7 +48,7 @@ destroy_from(void)
 
 static void
 report(const char *group_string, const char *output_string, bool ascending_sort,
-       bool csv_print)
+       bool csv_print, struct rbh_filter *filter)
 {
     struct rbh_filter_options options = { 0 };
     struct rbh_filter_output output = { 0 };
@@ -82,7 +84,7 @@ report(const char *group_string, const char *output_string, bool ascending_sort,
     parse_group_by(group_string, &group, &columns);
     parse_output(output_string, &group, &output, &columns);
 
-    iter = rbh_backend_report(from, NULL, &group, &options, &output);
+    iter = rbh_backend_report(from, filter, &group, &options, &output);
     if (iter == NULL)
         error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
                       "rbh_backend_report");
@@ -131,7 +133,7 @@ static int
 usage(void)
 {
     const char *message =
-        "usage: %s [-h] SOURCE [-c|--csv] [-r|--rsort] [-g|--group-by GROUP-BY] [-o|--output OUTPUT]\n"
+        "usage: %s [--help] [--config] SOURCE [--alias NAME] [--dry-run] [--csv] [--rsort] [--group-by GROUP-BY] [--output OUTPUT] [PREDICATES]\n"
         "\n"
         "Create a report from SOURCE's entries\n"
         "\n"
@@ -140,22 +142,22 @@ usage(void)
         "\n"
         "Optional arguments:\n"
         "    --alias NAME          specify an alias for the operation.\n"
-        "    -c,--csv              print the report in CSV format\n"
-        "    -d,--dry-run          displays the command after alias management\n"
-        "    -g,--group-by GROUP-BY\n"
+        "    --csv                 print the report in CSV format\n"
+        "    --dry-run             displays the command after alias management\n"
+        "    --group-by GROUP-BY\n"
         "                          the data to group entries on. Can be a CSV\n"
         "                          to group on multiple fields. Fields can\n"
         "                          include a range to create subgroups on\n"
         "                          that field. If not specified, will group\n"
         "                          every entry in one.\n"
         "                          Example: \"statx.size[0;500;10000]\"\n"
-        "    -h,--help             show this message and exit\n"
-        "    -r,--rsort            reverse sort the output based on the\n"
+        "    --help                show this message and exit\n"
+        "    --rsort               reverse sort the output based on the\n"
         "                          grouping requested\n"
         "    --config PATH         the configuration file to use.\n"
         "\n"
         "Output arguments (mandatory):\n"
-        "    -o,--output OUTPUT    the information to output. Can be a CSV\n"
+        "    --output OUTPUT       the information to output. Can be a CSV\n"
         "                          detailling what data to output and the\n"
         "                          order\n"
         "\n"
@@ -179,6 +181,9 @@ usage(void)
         "    rbh-report rbh:mongo:test --output \"max(statx.size),avg(statx.size)\"\n"
         "    rbh-report rbh:mongo:test --group-by \"statx.uid\" --output \"min(statx.ino),count()\"\n"
         "    rbh-report rbh:mongo:test --group-by \"statx.uid,statx.type\" --output \"sum(statx.size),avg(statx.size)\"\n"
+        "\n"
+        "The available predicates are the same as those used in rbh-find.\n"
+        "Refer to the rbh-find helper for more information.\n"
         "\n"
         "A robinhood URI is built as follows:\n"
         "    "RBH_SCHEME":BACKEND:FSNAME[#{PATH|ID}]\n"
@@ -205,15 +210,18 @@ cleanup(char **others, char *output, char *group)
 int
 main(int argc, char *argv[])
 {
+    struct filters_context f_ctx = {0};
+    struct rbh_value_map *info_map;
     bool ascending_sort = true;
+    struct rbh_filter *filter;
     bool csv_print = false;
     char **new_argv = NULL;
     char **others = NULL;
     int others_count = 0;
     char *output = NULL;
     char *group = NULL;
+    int index = 1;
     int new_argc;
-    int idx = 0;
     int rc;
 
     rc = rbh_config_from_args(argc - 1, argv + 1);
@@ -227,10 +235,10 @@ main(int argc, char *argv[])
     for (int i = 1; i < argc; ++i) {
         char *arg = argv[i];
 
-        if (strcmp(arg, "-c") == 0 || strcmp(arg, "--csv") == 0) {
+        if (strcmp(arg, "--csv") == 0) {
             csv_print = true;
 
-        } else if (strcmp(arg, "-g") == 0 || strcmp(arg, "--group-by") == 0) {
+        } else if (strcmp(arg, "--group-by") == 0) {
             if (i + 1 >= argc)
                 error(EXIT_FAILURE, EINVAL, "Missing argument for %s", arg);
 
@@ -238,11 +246,11 @@ main(int argc, char *argv[])
             if (!group)
                 error(EXIT_FAILURE, ENOMEM, "strdup");
 
-        } else if (strcmp(arg, "-h") == 0 || strcmp(arg, "--help") == 0) {
+        } else if (strcmp(arg, "--help") == 0) {
             usage();
             return 0;
 
-        } else if (strcmp(arg, "-o") == 0 || strcmp(arg, "--output") == 0) {
+        } else if (strcmp(arg, "--output") == 0) {
             if (i + 1 >= argc)
                 error(EXIT_FAILURE, EINVAL, "Missing argument for %s", arg);
 
@@ -250,10 +258,10 @@ main(int argc, char *argv[])
             if (!output)
                 error(EXIT_FAILURE, ENOMEM, "strdup");
 
-        } else if (strcmp(arg, "-r") == 0 || strcmp(arg, "--rsort") == 0) {
+        } else if (strcmp(arg, "--rsort") == 0) {
             ascending_sort = false;
 
-        } else if (strcmp(arg, "-d") == 0 || strcmp(arg, "--dry-run") == 0) {
+        } else if (strcmp(arg, "--dry-run") == 0) {
             cleanup(others, output, group);
             rbh_display_resolved_argv(NULL, &argc, &argv);
             return 0;
@@ -267,7 +275,7 @@ main(int argc, char *argv[])
     new_argv = malloc(sizeof(char*) * (new_argc + 1));
 
     for (int i = 0; i < others_count; ++i)
-        new_argv[idx++] = others[i];
+        new_argv[i] = others[i];
     new_argv[new_argc] = NULL;
 
     argc = new_argc;
@@ -278,14 +286,30 @@ main(int argc, char *argv[])
     if (output == NULL)
         error(EX_USAGE, 0, "missing '--output' argument");
     if (!rbh_is_uri(argv[0]))
-        error(EX_USAGE, 0, "first argument is not an URI");
+        error(EX_USAGE, 0, "There is a filter before the URI");
 
     from = rbh_backend_from_uri(argv[0], true);
 
-    report(group, output, ascending_sort, csv_print);
+    info_map = rbh_backend_get_info(from, RBH_INFO_BACKEND_SOURCE);
+    if (info_map == NULL)
+        error(EXIT_FAILURE, errno,
+              "Failed to retrieve the source backends from URI '%s', aborting",
+              argv[0]);
+
+    import_plugins(&f_ctx, &info_map, 1);
+    f_ctx.need_prefetch = false;
+
+    filter = parse_expression(&f_ctx, argc, argv, &index, NULL, NULL, NULL,
+                              NULL, NULL);
+    if (index != argc)
+        error(EX_USAGE, 0, "you have too many ')'");
+
+    report(group, output, ascending_sort, csv_print, filter);
 
     cleanup(others, output, group);
+    filters_ctx_finish(&f_ctx);
     free(new_argv);
+    free(filter);
 
     return EXIT_SUCCESS;
 }

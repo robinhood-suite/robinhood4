@@ -17,7 +17,7 @@ executable(
         'src/printer/csv_print.c',
         'src/printer/pretty_print.c',
     ],
-    dependencies: [librobinhood_dep],
+    dependencies: [librobinhood_dep, librbhfilters_dep],
     include_directories: include_dir,
     install: true,
 )
