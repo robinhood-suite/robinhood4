@@ -1,5 +1,5 @@
 # This file is part of RobinHood 4
-# Copyright (C) 2024 Commissariat a l'energie atomique et aux energies
+# Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
@@ -7,6 +7,7 @@
 integration_tests = [
   'test_avg',
   'test_count',
+  'test_filter',
   'test_group_by',
   'test_helper',
   'test_max',
@@ -17,6 +18,10 @@ integration_tests = [
   'test_range',
   'test_sum',
 ]
+
+if liblustre.found()
+    integration_tests += ['test_lustre_filter']
+endif
 
 foreach t: integration_tests
     e = find_program(t + '.bash')
