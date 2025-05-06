@@ -192,48 +192,29 @@ usage(void)
     return printf(message, program_invocation_short_name);
 }
 
+void
+cleanup(char **others, char *output, char *group)
+{
+    if (group)
+        free(group);
+    if (output)
+        free(output);
+    free(others);
+}
+
 int
 main(int argc, char *argv[])
 {
-    const struct option LONG_OPTIONS[] = {
-        {
-            .name = "csv",
-            .val = 'c',
-        },
-        {
-            .name = "group-by",
-            .has_arg = required_argument,
-            .val = 'g',
-        },
-        {
-            .name = "help",
-            .val = 'h',
-        },
-        {
-            .name = "output",
-            .has_arg = required_argument,
-            .val = 'o',
-        },
-        {
-            .name = "rsort",
-            .val = 'r',
-        },
-        {
-            .name = "dry-run",
-            .val = 'd',
-        },
-        {
-            .name = "config",
-            .val = 'x',
-        },
-        {}
-    };
     bool ascending_sort = true;
     bool csv_print = false;
+    char **new_argv = NULL;
+    char **others = NULL;
+    int others_count = 0;
     char *output = NULL;
     char *group = NULL;
+    int new_argc;
+    int idx = 0;
     int rc;
-    char c;
 
     rc = rbh_config_from_args(argc - 1, argv + 1);
     if (rc)
@@ -241,54 +222,70 @@ main(int argc, char *argv[])
 
     rbh_apply_aliases(&argc, &argv);
 
-    /* Parse the command line */
-    while ((c = getopt_long(argc, argv, "chg:d:o:r",
-                            LONG_OPTIONS, NULL)) != -1) {
-        switch (c) {
-        case 'c':
+    others = malloc(sizeof(char*) * argc);
+
+    for (int i = 1; i < argc; ++i) {
+        char *arg = argv[i];
+
+        if (strcmp(arg, "-c") == 0 || strcmp(arg, "--csv") == 0) {
             csv_print = true;
-            break;
-        case 'g':
-            group = strdup(optarg);
-            if (group == NULL)
+
+        } else if (strcmp(arg, "-g") == 0 || strcmp(arg, "--group-by") == 0) {
+            if (i + 1 >= argc)
+                error(EXIT_FAILURE, EINVAL, "Missing argument for %s", arg);
+
+            group = strdup(argv[++i]);
+            if (!group)
                 error(EXIT_FAILURE, ENOMEM, "strdup");
-            break;
-        case 'h':
+
+        } else if (strcmp(arg, "-h") == 0 || strcmp(arg, "--help") == 0) {
             usage();
             return 0;
-        case 'o':
-            output = strdup(optarg);
-            if (output == NULL)
+
+        } else if (strcmp(arg, "-o") == 0 || strcmp(arg, "--output") == 0) {
+            if (i + 1 >= argc)
+                error(EXIT_FAILURE, EINVAL, "Missing argument for %s", arg);
+
+            output = strdup(argv[++i]);
+            if (!output)
                 error(EXIT_FAILURE, ENOMEM, "strdup");
-            break;
-        case 'r':
+
+        } else if (strcmp(arg, "-r") == 0 || strcmp(arg, "--rsort") == 0) {
             ascending_sort = false;
-            break;
-        case 'd':
+
+        } else if (strcmp(arg, "-d") == 0 || strcmp(arg, "--dry-run") == 0) {
+            cleanup(others, output, group);
             rbh_display_resolved_argv(NULL, &argc, &argv);
-            return EXIT_SUCCESS;
-        case 'x':
-            break;
-        default:
-            /* getopt_long() prints meaningful error messages itself */
-            exit(EX_USAGE);
+            return 0;
+
+        } else {
+            others[others_count++] = arg;
         }
     }
 
-    argc -= optind;
-    argv += optind;
+    new_argc = others_count;
+    new_argv = malloc(sizeof(char*) * (new_argc + 1));
+
+    for (int i = 0; i < others_count; ++i)
+        new_argv[idx++] = others[i];
+    new_argv[new_argc] = NULL;
+
+    argc = new_argc;
+    argv = new_argv;
 
     if (argc < 1)
         error(EX_USAGE, 0, "not enough arguments");
-    if (argc > 1)
-        error(EX_USAGE, 0, "unexpected argument: %s", argv[1]);
     if (output == NULL)
         error(EX_USAGE, 0, "missing '--output' argument");
+    if (!rbh_is_uri(argv[0]))
+        error(EX_USAGE, 0, "first argument is not an URI");
 
-    /* Parse SOURCE */
     from = rbh_backend_from_uri(argv[0], true);
 
     report(group, output, ascending_sort, csv_print);
+
+    cleanup(others, output, group);
+    free(new_argv);
 
     return EXIT_SUCCESS;
 }
