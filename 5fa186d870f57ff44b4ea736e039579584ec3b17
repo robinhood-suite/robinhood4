@@ -70,6 +70,30 @@
       },
       "revId": "5fa186d870f57ff44b4ea736e039579584ec3b17",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1679eaaf_f1a11ffd",
+        "filename": "rbh-sync/rbh-sync.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 708,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-05-06T09:23:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9f383dd2_afc472e9",
+      "range": {
+        "startLine": 708,
+        "startChar": 47,
+        "endLine": 708,
+        "endChar": 52
+      },
+      "revId": "5fa186d870f57ff44b4ea736e039579584ec3b17",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
