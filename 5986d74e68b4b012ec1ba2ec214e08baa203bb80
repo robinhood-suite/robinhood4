@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b84d0ca9_7fd434f1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-05-06T09:21:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "15d25ab7_0fc42e1d",
+      "range": {
+        "startLine": 7,
+        "startChar": 33,
+        "endLine": 7,
+        "endChar": 41
+      },
+      "revId": "5986d74e68b4b012ec1ba2ec214e08baa203bb80",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9fca4af0_be652037",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-04-18T09:01:09Z",
       "side": 1,
       "message": "question: why this function does nothing ?",
+      "range": {
+        "startLine": 289,
+        "startChar": 0,
+        "endLine": 292,
+        "endChar": 1
+      },
+      "revId": "5986d74e68b4b012ec1ba2ec214e08baa203bb80",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9a12d647_ce8f741f",
+        "filename": "rbh-info/rbh-info.c",
+        "patchSetId": 6
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-05-06T09:21:20Z",
+      "side": 1,
+      "message": "It\u0027s only the skeleton of the function, the function will be filled in the following patches. This function will print what\u0027s inside mongo log collection.",
+      "parentUuid": "9fca4af0_be652037",
       "range": {
         "startLine": 289,
         "startChar": 0,
