@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a5579363_9167d20e",
+        "filename": "rbh-filters/include/rbh-filters/core.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-05-07T07:36:53Z",
+      "side": 1,
+      "message": "question: is it not already defined in a librobinhood header?",
+      "range": {
+        "startLine": 15,
+        "startChar": 0,
+        "endLine": 22,
+        "endChar": 2
+      },
+      "revId": "a6ac1c29d845a399b236b63cd50b255cdf6c692b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
