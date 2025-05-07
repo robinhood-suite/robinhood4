@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "92cbb52f_6c46dd1f",
+        "filename": "rbh-report/tests/test_parsing.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-05-07T07:51:09Z",
+      "side": 1,
+      "message": "minor: you need to update this to `group-by`",
+      "range": {
+        "startLine": 80,
+        "startChar": 34,
+        "endLine": 80,
+        "endChar": 39
+      },
+      "revId": "e2a9fece3c9669e4c3b1b80cbd8505f7cc710b52",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
