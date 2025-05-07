@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "19a32e83_62b8416e",
+        "filename": "librobinhood/src/plugins/sqlite/db_cursor.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-05-07T07:34:15Z",
+      "side": 1,
+      "message": "question: why not use a `memcpy` here?",
+      "range": {
+        "startLine": 177,
+        "startChar": 4,
+        "endLine": 178,
+        "endChar": 24
+      },
+      "revId": "e746e019cfa5f4c934d08e39b3b9786d3504f928",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cbf50e53_cc5dadf8",
+        "filename": "librobinhood/src/plugins/sqlite/db_cursor.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-05-07T07:34:15Z",
+      "side": 1,
+      "message": "style: len \u003e 80c",
+      "range": {
+        "startLine": 244,
+        "startChar": 4,
+        "endLine": 244,
+        "endChar": 81
+      },
+      "revId": "e746e019cfa5f4c934d08e39b3b9786d3504f928",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
