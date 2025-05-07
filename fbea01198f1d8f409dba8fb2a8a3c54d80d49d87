@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5b356aef_a7cb1eff",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-05-07T08:41:04Z",
+      "side": 1,
+      "message": "Just wondering if it will not be easier to implement in another language...",
+      "revId": "fbea01198f1d8f409dba8fb2a8a3c54d80d49d87",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
