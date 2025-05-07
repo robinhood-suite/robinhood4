@@ -53,4 +53,18 @@ void
 import_plugins(struct filters_context *ctx, struct rbh_value_map **info_maps,
                int backend_count);
 
+/**
+ * Complete filter that need information to be fetch from a backend.
+ *
+ * @param  filter   the filter to complete
+ * @param  backend  the backend from which to fetch the information
+ * @param  options  a set of filtering options (must no be NULL)
+ * @param  output   the information to be outputted
+ */
+int
+complete_rbh_filter(const struct rbh_filter *filter,
+                    struct rbh_backend *backend,
+                    const struct rbh_filter_options *options,
+                    const struct rbh_filter_output *output);
+
 #endif
