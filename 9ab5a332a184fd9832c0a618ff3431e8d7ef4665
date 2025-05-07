@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1ac6604e_3a1ff441",
+        "filename": "retention/rbh_retention",
+        "patchSetId": 1
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-05-07T08:45:32Z",
+      "side": 1,
+      "message": "defect: ${retention:1}",
+      "range": {
+        "startLine": 83,
+        "startChar": 20,
+        "endLine": 83,
+        "endChar": 35
+      },
+      "revId": "9ab5a332a184fd9832c0a618ff3431e8d7ef4665",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
