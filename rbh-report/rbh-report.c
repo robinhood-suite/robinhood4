@@ -358,6 +358,19 @@ main(int _argc, char *_argv[])
     if (index != f_ctx.argc)
         error(EX_USAGE, 0, "you have too many ')'");
 
+    const struct rbh_filter_options OPTIONS = {0};
+    const struct rbh_filter_output OUTPUT = {
+        .type = RBH_FOT_PROJECTION,
+        .projection = {
+            .fsentry_mask = RBH_FP_ALL,
+            .statx_mask = RBH_STATX_ALL,
+        },
+    };
+
+    if (f_ctx.need_prefetch &&
+        complete_rbh_filter(filter, from, &OPTIONS, &OUTPUT))
+        error(EXIT_FAILURE, errno, "Failed to complete filters");
+
     report(group, output, ascending_sort, csv_print, filter);
 
     cleanup(others, output, group);
