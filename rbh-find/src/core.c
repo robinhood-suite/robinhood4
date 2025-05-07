@@ -13,6 +13,8 @@
 #include <string.h>
 #include <sysexits.h>
 
+#include <robinhood/filters/core.h>
+
 #include "actions.h"
 #include "filters.h"
 #include "core.h"
@@ -29,97 +31,6 @@ ctx_finish(struct find_context *ctx)
     }
     free(ctx->backends);
     filters_ctx_finish(&ctx->f_ctx);
-}
-
-static int complete_rbh_filter(const struct rbh_filter *filter,
-                               struct rbh_backend *backend,
-                               const struct rbh_filter_options *options,
-                               const struct rbh_filter_output *output);
-
-static int
-complete_logical_filter(const struct rbh_filter *filter,
-                        struct rbh_backend *backend,
-                        const struct rbh_filter_options *options,
-                        const struct rbh_filter_output *output)
-{
-    for (uint32_t i = 0; i < filter->logical.count; i++) {
-        if (complete_rbh_filter(filter->logical.filters[i], backend, options,
-                                output))
-            return -1;
-    }
-
-    return 0;
-}
-
-static void
-update_statx_rbh_value(struct rbh_filter *filter,
-                       const struct rbh_filter_field *field,
-                       const struct rbh_statx *statx)
-{
-    switch (field->statx) {
-    case RBH_STATX_MTIME_SEC:
-        filter->compare.value.uint64 = statx->stx_mtime.tv_sec;
-        return;
-    default:
-        return;
-    }
-}
-
-static void
-update_rbh_value(struct rbh_filter *filter,
-                 const struct rbh_filter_field *field,
-                 struct rbh_fsentry *fsentry)
-{
-    switch (field->fsentry) {
-    case RBH_FP_STATX:
-        return update_statx_rbh_value(filter, field, fsentry->statx);
-    default:
-        return;
-    }
-}
-
-static int
-complete_get_filter(const struct rbh_filter *filter,
-                    struct rbh_backend *backend,
-                    const struct rbh_filter_options *options,
-                    const struct rbh_filter_output *output)
-{
-    struct rbh_mut_iterator *fsentries;
-    struct rbh_fsentry *fsentry;
-
-    fsentries = rbh_backend_filter(backend, filter->get.fsentry_to_get, options,
-                                   output);
-    if (fsentries == NULL)
-        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
-                      "filter_fsentries");
-
-    fsentry = rbh_mut_iter_next(fsentries);
-    if (fsentry == NULL) {
-        rbh_mut_iter_destroy(fsentries);
-        return -1;
-    }
-
-    update_rbh_value(filter->get.filter, &filter->get.field, fsentry);
-
-    free(fsentry);
-    rbh_mut_iter_destroy(fsentries);
-
-    return 0;
-}
-
-static int
-complete_rbh_filter(const struct rbh_filter *filter,
-                    struct rbh_backend *backend,
-                    const struct rbh_filter_options *options,
-                    const struct rbh_filter_output *output)
-{
-    if (rbh_is_logical_operator(filter->op))
-        return complete_logical_filter(filter, backend, options, output);
-
-    if (rbh_is_get_operator(filter->op))
-        return complete_get_filter(filter, backend, options, output);
-
-    return 0;
 }
 
 /**
