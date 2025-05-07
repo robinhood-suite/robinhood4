@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "889cc1c0_89f63494",
+        "filename": "librobinhood/src/plugins/sqlite/json/encode.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-05-07T12:10:20Z",
+      "side": 1,
+      "message": "nit: double break",
+      "range": {
+        "startLine": 31,
+        "startChar": 8,
+        "endLine": 31,
+        "endChar": 14
+      },
+      "revId": "912f392060d24dfbe4411f0c41515b1c5f61acf2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
