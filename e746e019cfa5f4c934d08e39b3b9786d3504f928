@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3e543a47_47075829",
+        "filename": "librobinhood/src/plugins/sqlite/db_cursor.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-05-07T08:01:57Z",
+      "side": 1,
+      "message": "I think I need to check whether this is necessary or not but IIRC the goal is to convert from uchar to char. I think I had issues when simply doing a cast but I don\u0027t remember exactly. There might be an issue depending on how sqlite encodes non ASCII characters but I didn\u0027t test this. This implementation has probably the same effect as simply casting the whole buffer from uchar[] to char[] which is not what it should be doing I think.",
+      "parentUuid": "19a32e83_62b8416e",
+      "range": {
+        "startLine": 177,
+        "startChar": 4,
+        "endLine": 178,
+        "endChar": 24
+      },
+      "revId": "e746e019cfa5f4c934d08e39b3b9786d3504f928",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "cbf50e53_cc5dadf8",
         "filename": "librobinhood/src/plugins/sqlite/db_cursor.c",
         "patchSetId": 3
