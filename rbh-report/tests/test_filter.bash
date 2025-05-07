@@ -56,11 +56,33 @@ test_filter_size()
         -type d -a -size 1k | difflines "$dir_size"
 }
 
+test_filter_to_complete()
+{
+    truncate --size 1K "1K"
+    touch -d "1 minutes ago" "1K"
+    truncate --size 1025 "1K+1"
+    touch -d "5 minutes ago" "1K+1"
+    touch -d "10 minutes ago" empty
+
+    rbh_sync "rbh:posix:." "rbh:$db:$testdb"
+
+    local dir_size="$(stat -c %s .)"
+
+    rbh_report "rbh:$db:$testdb" --output "sum(statx.size)" --csv \
+        -newer /empty | difflines "$(($dir_size + 1024 + 1025))"
+    rbh_report "rbh:$db:$testdb" --output "sum(statx.size)" --csv \
+        -newer "/1K+1" | difflines "$(($dir_size + 1024))"
+    rbh_report "rbh:$db:$testdb" --output "sum(statx.size)" --csv -newer "/1K" |
+        difflines "$dir_size"
+    rbh_report "rbh:$db:$testdb" --output "sum(statx.size)" --csv -newer "/" |
+        difflines
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
-declare -a tests=(test_filter_type test_filter_size)
+declare -a tests=(test_filter_type test_filter_size test_filter_to_complete)
 
 tmpdir=$(mktemp --directory)
 trap -- "rm -rf '$tmpdir'" EXIT
