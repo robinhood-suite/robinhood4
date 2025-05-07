@@ -196,11 +196,8 @@ form_tokenizer(const char *key)
 static enum form_token
 find_form_token(const bson_t *bson)
 {
-    static enum form_token token;
+    enum form_token token;
     bson_iter_t form_iter;
-
-    if (token != 0)
-        return token;
 
     /* XXX: Mongo's output order is not guaranteed to be the same as specified
      * in the projection stage. Therefore, to know how to convert the output,
