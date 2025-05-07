@@ -260,6 +260,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "71cf7038_4fcd0309",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 506,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-05-07T12:02:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "048677c6_95457874",
+      "range": {
+        "startLine": 506,
+        "startChar": 2,
+        "endLine": 506,
+        "endChar": 61
+      },
+      "revId": "b6972eb90eeec97e4e4bc306a966aae31929d8a9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e5d0cbe2_d11d3e72",
