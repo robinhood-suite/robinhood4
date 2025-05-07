@@ -67,6 +67,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "047e7b5d_76a24a5d",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 7
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-05-07T13:12:09Z",
+      "side": 1,
+      "message": "My view is that we should make things as modular as possible while making it possible to reuse configuration. Lets say we have a directory `/etc/robinhood4.d/policies`. rbh-policy can look into this directory by default and be smart enough to append `.py` extensions. So for instance, you would do something like this `rbh-policy run myfs:archive` and this would load the file `/etc/robinhood4.d/policies/myfs.py` and run the policy named \"archive\".\n\nWe could also have something like this: `rbh-policy run \"myfs:archive(max-volume\u003d50TB)\"` for instance.\n\nOr even: `rbh-policies run \"myfs:archive(...)\" \"myotherfs:purge\"` to run 2 policies from 2 different configs in a single command.\n\nI would be cautious with the `--config` argument as for all the other tools this refers to the YAML config... And we can definitly imagine that `rbh-policy` will need the config file at some point (for instance to get the mongodb address).\n\nOne last thought: it could be interesting to have the possibility to split the config into seperate files. I imagine something like this:\n\n```\n$ ls /etc/robinhood4.d/policies/myfs/\nfileclasses.py\narchive.py\nmigrations.py\n```\n\nrbh-policy would make it so that elements of any file can be referenced in others. I don\u0027t know how easy this would be as I assume there might be dependencies between them. For instance, we cannot load archive.py without fileclasses.py in this example. One solution used in other tools on linux is to prefix them by numbers `01-fileclasses.py`, `02-archive.py`... and rbh-policy would load files in lexical order.\n\nThere wouldn\u0027t be a correlation between policy names and filenames. It just adds the possibility to split files logically. Also, we would still allow everything to be declared in a single file like so: `/etc/robinhood4.d/policies/myfs.py`. rbh-policy would be smart enough to detect whether `myfs` is a directory or not. This leaves the question of what if both the directory and the file exist? In this case, we can either return an error or simply load everything anyway.\n\nThis also lets us use declare things that can be common across different filesystems. Having a defaults directory for instance (`/etc/robinhood4.d/policies/defaults/basic_fileclasses.py`).",
+      "parentUuid": "dd5a279a_dd8a3f1f",
+      "range": {
+        "startLine": 18,
+        "startChar": 1,
+        "endLine": 18,
+        "endChar": 18
+      },
+      "revId": "cde4d3e6e4f5f3b5410c372028c32700ad3ae4bf",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "19592080_8820435d",
         "filename": "designs/rbh-policy.rst",
         "patchSetId": 7
@@ -102,6 +126,30 @@
       "side": 1,
       "message": "The term file is used to refer to any type of storage element.",
       "parentUuid": "19592080_8820435d",
+      "range": {
+        "startLine": 40,
+        "startChar": 0,
+        "endLine": 41,
+        "endChar": 8
+      },
+      "revId": "cde4d3e6e4f5f3b5410c372028c32700ad3ae4bf",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad83e831_e9b96485",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 7
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-05-07T13:12:09Z",
+      "side": 1,
+      "message": "But what is a storage element?",
+      "parentUuid": "dbae849d_db4aea42",
       "range": {
         "startLine": 40,
         "startChar": 0,
@@ -513,6 +561,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "cd467eca_5c554a53",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 7
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-05-07T13:12:09Z",
+      "side": 1,
+      "message": "This is not the same thing. The feature that I suggest is this (with the volume per ost as this is simpler to understand):\n\n1. trigger the policy if OstVolume \u003e MaxVolume\n2. then run the policy:\n```\ncurrent_volume \u003d get_ost_volume(i)\nwhile current_volume \u003e MinVolume:\n    fsentry \u003d next(iter)\n    rm fsentry # Purge policy for instance\n    current_volume -\u003d fsentry.statx.blocks * 512\n```\n\nThis code will run the policy when the volume of one OST reaches MaxVolume but not MinVolume. It will remove files as long as the OST\u0027s volume is higher than MinVolume.",
+      "parentUuid": "5ffc8b97_aca234d7",
+      "range": {
+        "startLine": 180,
+        "startChar": 7,
+        "endLine": 180,
+        "endChar": 32
+      },
+      "revId": "cde4d3e6e4f5f3b5410c372028c32700ad3ae4bf",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1c9482ee_b7b04f2d",
         "filename": "designs/rbh-policy.rst",
         "patchSetId": 7
@@ -548,6 +620,30 @@
       "side": 1,
       "message": "We chose the dictionary format primarily for ease of implementation: action functions in Python can accept **kwargs, making it easy to pass variable parameters depending on the action.",
       "parentUuid": "1c9482ee_b7b04f2d",
+      "range": {
+        "startLine": 188,
+        "startChar": 7,
+        "endLine": 188,
+        "endChar": 17
+      },
+      "revId": "cde4d3e6e4f5f3b5410c372028c32700ad3ae4bf",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "65b16965_be226cb8",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 7
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-05-07T13:12:09Z",
+      "side": 1,
+      "message": "Right but the goal here is to make the action of writing policies easy for admins.",
+      "parentUuid": "a7257a05_815b488b",
       "range": {
         "startLine": 188,
         "startChar": 7,
@@ -877,6 +973,30 @@
       "side": 1,
       "message": "recent_files is declared in the configuration file using declare_fileclass, This registers the condition in a dictionary (fileclasses) and also injects it as a global variable into the config module. So later, expressions like ~recent_files \u0026 (Size \u003c \"10MB\") can reference this variable directly. The ~ operator applies logical negation to the associated condition.",
       "parentUuid": "d7dfd5f6_ba385ade",
+      "range": {
+        "startLine": 390,
+        "startChar": 5,
+        "endLine": 390,
+        "endChar": 17
+      },
+      "revId": "cde4d3e6e4f5f3b5410c372028c32700ad3ae4bf",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ef6cc6a7_68640b80",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 7
+      },
+      "lineNbr": 390,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-05-07T13:12:09Z",
+      "side": 1,
+      "message": "You should give a complete example showing how it was declared.",
+      "parentUuid": "75fce060_2c5612f8",
       "range": {
         "startLine": 390,
         "startChar": 5,

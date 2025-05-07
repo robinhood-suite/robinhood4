@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7d445398_136b2f89",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 8
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-05-07T13:12:09Z",
+      "side": 1,
+      "message": "I think it would be simpler to identify users like this:\n\nUser(\"toto\") means user \u003d\u003d \"toto\"\nUsers(\"toto\", \"tutu\") means user \u003d\u003d \"toto\" or user \u003d\u003d \"tutu\"\n\nThe same goes for pools, groups...\nAnd we should support clustershell syntax in the strings as well.\n\nSo I would rewrite this like that `UsersFileCount(\"user42\", \"user99\") \u003e 1000000`\n\nBy the way the filter `FileCount \u003d\u003d 1000000` is wrong in this example as it represents the file count of the whole filesystem I presume. Hence my attempt with `UsersFileCount`.\n\nWith my suggestions, you would also have `UserFileCount(\"toto\") \u003e 10` for instance. We could also simply accept this `UserFileCount(\"toto\", \"tutu\")` and not both with the plural equivalents which is probably acceptable as well.",
+      "range": {
+        "startLine": 175,
+        "startChar": 21,
+        "endLine": 176,
+        "endChar": 37
+      },
+      "revId": "0e121a44451856f95756e70e96ae9b2fad2a6467",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "90ec64f8_ec5f2dd0",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 8
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-05-07T13:12:09Z",
+      "side": 1,
+      "message": "How about: `(Pool(\"data_pool1\") | Pool(\"data_pool2\")) \u0026 Usage \u003e \"80%\"` ? Or better yet: `Pool(\"data_pool[1-2]\") \u0026 Volume \u003e \"80%\"`.",
+      "range": {
+        "startLine": 187,
+        "startChar": 21,
+        "endLine": 188,
+        "endChar": 17
+      },
+      "revId": "0e121a44451856f95756e70e96ae9b2fad2a6467",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "58b10068_eaa1242b",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 8
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-05-07T13:12:09Z",
+      "side": 1,
+      "message": "We have to be carefull here. What does action None mean? No action or default action? Maybe a magic keywork for default is preferable?",
+      "range": {
+        "startLine": 245,
+        "startChar": 16,
+        "endLine": 245,
+        "endChar": 29
+      },
+      "revId": "0e121a44451856f95756e70e96ae9b2fad2a6467",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
