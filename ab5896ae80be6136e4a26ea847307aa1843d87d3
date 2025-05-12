@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f3bf49fd_e5fb4cbd",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-05-12T10:54:42Z",
+      "side": 1,
+      "message": "style: too long",
+      "range": {
+        "startLine": 9,
+        "startChar": 59,
+        "endLine": 10,
+        "endChar": 51
+      },
+      "revId": "ab5896ae80be6136e4a26ea847307aa1843d87d3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "75f4c1bc_7d732d13",
         "filename": "rbh-find/include/parser.h",
         "patchSetId": 2
