@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "456c6a47_d283e52a",
+        "filename": "rbh-report/tests/test_filter.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-05-12T08:28:42Z",
+      "side": 1,
+      "message": "style: add a line break after }",
+      "range": {
+        "startLine": 57,
+        "startChar": 0,
+        "endLine": 57,
+        "endChar": 1
+      },
+      "revId": "504c7f7e572dd2040391b53357add38408aab535",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
