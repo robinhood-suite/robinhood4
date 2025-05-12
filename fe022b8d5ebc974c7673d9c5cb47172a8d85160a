@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "adf1d950_c3d316e0",
+        "filename": "rbh-find/include/core.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-05-12T08:19:05Z",
+      "side": 1,
+      "message": "suggest: Maybe add a comment for this field, as is done for the others in this struct",
+      "range": {
+        "startLine": 31,
+        "startChar": 0,
+        "endLine": 31,
+        "endChar": 33
+      },
+      "revId": "fe022b8d5ebc974c7673d9c5cb47172a8d85160a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
