@@ -267,6 +267,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "350d89ab_8ba87a02",
+        "filename": "designs/filter_mutualization.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-05-12T09:50:37Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "4c9cb18f_4b465eb5",
+      "range": {
+        "startLine": 36,
+        "startChar": 40,
+        "endLine": 36,
+        "endChar": 53
+      },
+      "revId": "169a4af11a45bccab885a0b34cb7a6c27d9fa2b5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e108e073_c79308b9",
