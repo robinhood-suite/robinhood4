@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c82b6e46_6a80e397",
+        "filename": "meson.build",
+        "patchSetId": 2
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-05-12T09:48:49Z",
+      "side": 1,
+      "message": "major: je serais plus d\u0027avis de mettre cette librairie dans librobinhood",
+      "range": {
+        "startLine": 90,
+        "startChar": 0,
+        "endLine": 90,
+        "endChar": 24
+      },
+      "revId": "680ae9f61d943fe973f7dae365ccf34db31eb708",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
