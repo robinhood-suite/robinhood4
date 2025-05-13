@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "059f0dc3_56a14f30",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-05-13T07:58:44Z",
+      "side": 1,
+      "message": "I think with a mix of getopt_long and opterr being set, the call can be kept. It will be easier than managing another array and the options by hand I think",
+      "range": {
+        "startLine": 9,
+        "startChar": 20,
+        "endLine": 9,
+        "endChar": 31
+      },
+      "revId": "0fab30e6f3d808de929fa6e3a18af18258dbb694",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8772b581_bc7ea34b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-05-13T07:58:44Z",
+      "side": 1,
+      "message": "style: too long",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 48
+      },
+      "revId": "0fab30e6f3d808de929fa6e3a18af18258dbb694",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f3d1e006_2a3b4372",
+        "filename": "rbh-report/rbh-report.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-05-13T07:58:44Z",
+      "side": 1,
+      "message": "minor: this `idx` variable doesn\u0027t seem necessary",
+      "range": {
+        "startLine": 270,
+        "startChar": 17,
+        "endLine": 270,
+        "endChar": 20
+      },
+      "revId": "0fab30e6f3d808de929fa6e3a18af18258dbb694",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
