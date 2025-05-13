@@ -64,6 +64,52 @@ function rbh_set_retention
     setfattr -h -n "$retention_attr" -v "$prefix$date" "$entry"
 }
 
+function get_complete_timedate
+{
+    local retention="$1"
+    local timer=()
+
+    local seconds=$((retention % 60))
+    ((retention /= 60))
+    local minutes=$((retention % 60))
+    ((retention /= 60))
+    local hours=$((retention % 24))
+    ((retention /= 24))
+    local days=$((retention % 365))
+
+    if (( days != 0 )); then
+        timer+=("$(printf "%d days" $days)")
+    fi
+
+    if (( hours != 0 )); then
+        timer+=("$(printf "%d hours" $hours)")
+    fi
+
+    if (( minutes != 0 )); then
+        timer+=("$(printf "%d minutes" $minutes)")
+    fi
+
+    if (( seconds != 0 )); then
+        timer+=("$(printf "%d seconds" $seconds)")
+    fi
+
+    local timestamp
+    if (( ${#timer[@]} == 1 )); then
+        timestamp="${timer[0]}"
+    elif (( ${#timer[@]} == 2 )); then
+        timestamp="${timer[0]} and ${timer[1]}"
+    else
+        # some bashism to get all array elements but the last one, surround
+        # each with ", ", remove the starting two, and add a " and " between
+        # the second-to-last and last elements
+        timestamp=$(printf ", %s" "${timer[@]::${#timer[@]}-1}")
+        timestamp=${timestamp:2}
+        timestamp="$timestamp and ${timer[-1]}"
+    fi
+
+    echo "$timestamp"
+}
+
 function rbh_get_retention
 {
     local entry="$1"
@@ -87,10 +133,11 @@ function rbh_get_retention
             exit 1
         fi
 
+        local timedate="$(get_complete_timedate "$retention")"
         local entry_mtime="$(stat -c "%Y" "$entry")"
         local expiration="$(( entry_mtime + retention ))"
 
-        echo "'$entry' is set to expire $retention seconds after it's last" \
+        echo "'$entry' is set to expire $timedate after it's last" \
              "modification time, so '$entry' expires on '$(date --date="@$expiration")'"
     else
         local date="$(date --date="@$retention")"
