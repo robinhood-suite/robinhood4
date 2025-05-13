@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "feef1085_b005410e",
+        "filename": "rbh-info/tests/get_info.bash",
+        "patchSetId": 4
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-05-13T09:12:03Z",
+      "side": 1,
+      "message": "minor: why `greater than 0`, you know the exact number of entries to be found here",
+      "range": {
+        "startLine": 79,
+        "startChar": 32,
+        "endLine": 79,
+        "endChar": 38
+      },
+      "revId": "939408670af9176b9296d87e8a3b1032828a263a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
