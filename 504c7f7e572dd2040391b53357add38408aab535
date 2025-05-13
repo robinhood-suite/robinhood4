@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "32d7bc6f_27495e65",
+        "filename": "rbh-report/tests/meson.build",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-05-13T08:28:00Z",
+      "side": 1,
+      "message": "major: it\u0027d be nice to extend this test, not only for 2 or 3 filters, but more as an \"acceptance\" test that would be common between rbh-find and rbh-report, to show the same filters behave the same way for both tools",
+      "range": {
+        "startLine": 10,
+        "startChar": 3,
+        "endLine": 10,
+        "endChar": 14
+      },
+      "revId": "504c7f7e572dd2040391b53357add38408aab535",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "456c6a47_d283e52a",
         "filename": "rbh-report/tests/test_filter.bash",
         "patchSetId": 2
