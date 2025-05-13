@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8e21b2e2_235ed3a7",
+        "filename": "rbh-report/rbh-report.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-05-13T08:15:30Z",
+      "side": 1,
+      "message": "suggest: having the same helper printing mecanism as rbh-find here would be nice too",
+      "range": {
+        "startLine": 185,
+        "startChar": 7,
+        "endLine": 186,
+        "endChar": 62
+      },
+      "revId": "e3b46f2c5c3bd1efd5eb9aadb67092faee8ec7ac",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
