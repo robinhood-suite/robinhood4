@@ -22,6 +22,30 @@
       },
       "revId": "cb639651d27f7b829ed073676adb5599eb9a65a2",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "367511ac_76343b64",
+        "filename": "retention/rbh_retention",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-05-13T11:18:17Z",
+      "side": 1,
+      "message": "You\u0027re right, and it is changed in a next patch, so I\u0027ll just remove this here instead, to not have the confusion",
+      "parentUuid": "bc7d8976_f12b1e2e",
+      "range": {
+        "startLine": 62,
+        "startChar": 16,
+        "endLine": 62,
+        "endChar": 29
+      },
+      "revId": "cb639651d27f7b829ed073676adb5599eb9a65a2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
