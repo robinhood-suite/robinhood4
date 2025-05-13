@@ -22,6 +22,30 @@
       },
       "revId": "a2ecef0166626a05e4fe1aa5d7190845d5c3e5c2",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "76a4b175_94eeb822",
+        "filename": "retention/rbh_retention",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-05-13T11:20:20Z",
+      "side": 1,
+      "message": "I meant config_file, it\u0027s just a (11) typo",
+      "parentUuid": "3911aba9_6f0c74a7",
+      "range": {
+        "startLine": 13,
+        "startChar": 16,
+        "endLine": 13,
+        "endChar": 27
+      },
+      "revId": "a2ecef0166626a05e4fe1aa5d7190845d5c3e5c2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
