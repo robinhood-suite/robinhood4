@@ -22,6 +22,30 @@
       },
       "revId": "fe1abae2cd958cee68e363a17c0712e9d1633c97",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a52538d5_08fac80c",
+        "filename": "retention/test_retention.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-05-13T11:24:43Z",
+      "side": 1,
+      "message": "Remnants of old versions, changed.",
+      "parentUuid": "f5688071_49515c4a",
+      "range": {
+        "startLine": 61,
+        "startChar": 54,
+        "endLine": 61,
+        "endChar": 57
+      },
+      "revId": "fe1abae2cd958cee68e363a17c0712e9d1633c97",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
