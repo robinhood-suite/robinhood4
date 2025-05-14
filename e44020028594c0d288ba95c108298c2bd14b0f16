@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a871a215_ac4be6fe",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-05-14T08:06:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1146d7d6_5305652c",
+      "range": {
+        "startLine": 13,
+        "startChar": 41,
+        "endLine": 15,
+        "endChar": 12
+      },
+      "revId": "e44020028594c0d288ba95c108298c2bd14b0f16",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a4d282d3_b216c8de",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-05-12T10:53:11Z",
       "side": 1,
       "message": "suggest: I think these could be added to the context, as they\u0027ll be generic between tools",
+      "range": {
+        "startLine": 66,
+        "startChar": 46,
+        "endLine": 67,
+        "endChar": 64
+      },
+      "revId": "e44020028594c0d288ba95c108298c2bd14b0f16",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1d074a11_eb6f83b0",
+        "filename": "librbh-filters/include/rbh-filters/parser.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-05-14T08:06:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a4d282d3_b216c8de",
       "range": {
         "startLine": 66,
         "startChar": 46,
