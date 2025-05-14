@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "14efd8bd_5e33d704",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-05-14T07:35:36Z",
+      "side": 1,
+      "message": "One more thing that is really important is to have a `--dry-run` option. So that you can run it and see what it is supposed to do without touching the filesystem.",
+      "parentUuid": "ddbba2c8_236589fe",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 8,
+        "endChar": 12
+      },
+      "revId": "9ba4dfd65e71e62f27fc380e80a5c2db22e5ae03",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "dc9ea8b4_b904bd73",
         "filename": "designs/rbh-undelete.rst",
         "patchSetId": 1
@@ -556,6 +580,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "15d6e49e_6246e257",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-05-14T07:35:36Z",
+      "side": 1,
+      "message": "By full path I mean: if the user provides a full path, it should contain the mount point not the \"path\" stored in the DB by robinhood without mountpoint. But it can also be a relative path, in which case the command is expected to be run in the right directory.\n\nOr more simply, open should always work on the path provided by the user.",
+      "parentUuid": "07f2016c_967d1dba",
+      "range": {
+        "startLine": 37,
+        "startChar": 0,
+        "endLine": 40,
+        "endChar": 55
+      },
+      "revId": "9ba4dfd65e71e62f27fc380e80a5c2db22e5ae03",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f5dda364_8a6a30de",
         "filename": "designs/rbh-undelete.rst",
         "patchSetId": 1
@@ -810,6 +858,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9011e11c_53d597de",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-05-14T07:35:36Z",
+      "side": 1,
+      "message": "In v3, you have to provide either -R or -L. Providing nothing simply displays the help. This command can be quite dangerous. If you don\u0027t run it properly you might lose a file or some data. It don\u0027t think we should do a restore by default.",
+      "parentUuid": "de40a6e3_694521c4",
+      "range": {
+        "startLine": 66,
+        "startChar": 41,
+        "endLine": 66,
+        "endChar": 50
+      },
+      "revId": "9ba4dfd65e71e62f27fc380e80a5c2db22e5ae03",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c1c70e30_e88e8c1a",
         "filename": "designs/rbh-undelete.rst",
         "patchSetId": 1
@@ -902,6 +974,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7607f495_87dcf0a2",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-05-14T07:35:36Z",
+      "side": 1,
+      "message": "-1",
+      "parentUuid": "6add8f8c_ba374962",
+      "range": {
+        "startLine": 92,
+        "startChar": 50,
+        "endLine": 92,
+        "endChar": 73
+      },
+      "revId": "9ba4dfd65e71e62f27fc380e80a5c2db22e5ae03",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "464f0a31_ddb9b26d",
         "filename": "designs/rbh-undelete.rst",
         "patchSetId": 1
@@ -913,6 +1009,30 @@
       "writtenOn": "2025-05-14T07:14:34Z",
       "side": 1,
       "message": "question: why is this a `rbh-undelete` mode? we cannot use a `rbh-find` command to retrieve this information?",
+      "range": {
+        "startLine": 93,
+        "startChar": 3,
+        "endLine": 93,
+        "endChar": 53
+      },
+      "revId": "9ba4dfd65e71e62f27fc380e80a5c2db22e5ae03",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5c2c61c8_b3147b3e",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-05-14T07:35:36Z",
+      "side": 1,
+      "message": "This is what v3\u0027s undelete does. We can definitly support this in rbh-find as well but the usual approach is to run `rbh-undelete -L` first to see what is available and then `rbh-undelete -R` if appropriate. This makes it easier for people running the command. Also, note that these sort of commands are usually not run by robinhood experts so we should make it as simple as possible.",
+      "parentUuid": "464f0a31_ddb9b26d",
       "range": {
         "startLine": 93,
         "startChar": 3,
