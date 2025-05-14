@@ -134,6 +134,8 @@ OPTS=""
 %{_bindir}/rbh-update-retention
 %{_bindir}/rbh-report
 
+%config(noreplace) %{_sysconfdir}/robinhood4.d/default.yaml
+
 %files devel
 %{_libdir}/librobinhood.so
 %{_includedir}/robinhood.h
