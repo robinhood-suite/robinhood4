@@ -1276,6 +1276,7 @@ rbh_posix_helper(const char *type, struct rbh_config *config,
     size_t predicate_offset;
     size_t directive_offset;
     int count = 0;
+    int rc;
 
     posix = malloc(sizeof(*posix));
     if (posix == NULL)
@@ -1326,7 +1327,7 @@ rbh_posix_helper(const char *type, struct rbh_config *config,
         free(ext_directive);
     }
 
-    asprintf(predicate_helper,
+    rc = asprintf(predicate_helper,
         "  - POSIX: *Are listed only the differences between GNU's find and\n"
         "            rbh-find's POSIX predicates*:\n"
         "    -[acm]min [+-]TIME   filter entries based on their access,\n"
@@ -1342,8 +1343,14 @@ rbh_posix_helper(const char *type, struct rbh_config *config,
         "\n"
         "%s", ext_predicate_helper);
 
+    if (rc == -1)
+        goto err;
+
     if (ext_directive_helper[0] != '\0') {
-        asprintf(directive_helper, "%s", ext_directive_helper);
+        if (asprintf(directive_helper, "%s", ext_directive_helper) == -1) {
+            free(*predicate_helper);
+            goto err;
+        }
     } else {
         *directive_helper = NULL;
     }
