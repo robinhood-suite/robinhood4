@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "518b8779_7f4b3468",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-05-14T08:05:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "55855f7f_3e37316c",
+      "range": {
+        "startLine": 10,
+        "startChar": 44,
+        "endLine": 11,
+        "endChar": 23
+      },
+      "revId": "5ffdef2b7d2927b09cbca23f6659478f8790b409",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "36e17cf5_d1fc2cb9",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-05-12T07:57:58Z",
       "side": 1,
       "message": "typo: needs",
+      "range": {
+        "startLine": 40,
+        "startChar": 20,
+        "endLine": 40,
+        "endChar": 24
+      },
+      "revId": "5ffdef2b7d2927b09cbca23f6659478f8790b409",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b070db7e_b816dfec",
+        "filename": "librbh-filters/include/rbh-filters/core.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-05-14T08:05:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "36e17cf5_d1fc2cb9",
       "range": {
         "startLine": 40,
         "startChar": 20,
