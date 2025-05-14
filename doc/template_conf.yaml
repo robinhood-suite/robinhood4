@@ -13,7 +13,7 @@ RBH_MONGO_DB_ADDRESS: "mongodb://localhost:27017"
 # The types available are: int32, int64, uint32, uint64, string, boolean and
 # binary
 #
-# The map should be construct as follow:
+# The map should be constructed as follow:
 # xattrs_map:
 #       xattr_1: type
 #       xattr_2: type
@@ -29,3 +29,43 @@ RBH_MONGO_DB_ADDRESS: "mongodb://localhost:27017"
 # It will be used by the retention. If not set, the retention will search the
 # "user.expires" xattr by default.
 RBH_RETENTION_XATTR: user.expires
+
+# Map of the backends available for synchronisation. Each backend has a name
+# which is usable as the rbh-sync backend name, and must correspond to a map
+# containing at least the 'extends' key, specifying the plugin to extend. This
+# same map can also contain other values ('iterator' for POSIX plugins for
+# instance), and they will be read by the plugin to determine additional
+# behaviour.
+backends:
+    lustre:
+        extends: posix
+        iterator: fts
+        enrichers:
+            - retention
+            - lustre
+    posix-mpi:
+        extends: posix
+        iterator: mfu
+    lustre-mpi:
+        extends: posix
+        iterator: mfu
+        enrichers:
+            - lustre
+    retention:
+        extends: posix
+        enrichers:
+            - retention
+
+# Map containing aliases to define a list of pre-filled parameters that will
+# be put as-is if requested in the tools implementing aliases.
+#
+# The map should be constructed as follow:
+# alias:
+#     first_alias: string
+#     second_alias: string
+#
+# Example:
+# alias:
+#     blob1: "-name blob -printf '%A'"
+#     blob2: "-type dir -user blob"
+#     ...
