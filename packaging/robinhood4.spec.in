@@ -1,5 +1,5 @@
 Name:    robinhood4
-Version: 1.2.0
+Version: 1.3.0
 Release: 1%{?dist}
 Summary: RobinHood V4 tool suite
 
@@ -71,7 +71,7 @@ It is installed on machines that run a Mongo database.
 %package devel
 Summary: C API for RobinHood V4 tool suite.
 Conflicts: robinhood
-Requires: robinhood4 >= 1.0
+Requires: robinhood4 >= 1.3
 Requires: pkgconf-pkg-config
 %if %{with lustre}
 #Requires: (lustre-devel or lustre-client < 2.15)
@@ -81,6 +81,13 @@ Requires: lustre-devel
 %description devel
 This package contains header files and libraries to use the robinhood4 tool
 suite from a C program.
+
+%package client-retention
+Summary: Userland tools for RobinHood V4 tool suite.
+
+%description client-retention
+This package contains the rbh-retention tool for usage by regular (non-admin)
+users.
 
 %prep
 %autosetup
@@ -184,10 +191,27 @@ OPTS=""
 %{_includedir}/robinhood/utils.h
 %{_includedir}/robinhood/value.h
 
+%files client-retention
+%{_bindir}/rbh-retention
+%config(noreplace) %{_sysconfdir}/robinhood4.d/default.yaml
+
 %post
 ldconfig
 
 %changelog
+* Wed May 14 2025 - Yoann Valeri <yoann.valeri@cea.fr> - 1.3-1
+- Reorganized plugins and backends with extensions. Removed the following
+backends: Lustre-MPI and POSIX-MPI. Added the following extensions to the POSIX
+plugin: Lustre, Retention and MFU
+- Removed the retention feature from the Lustre plugin, now a POSIX extension
+instead
+- Renamed rbh-capabilities to rbh-info
+- Removed the rbh-find library and rbh-find-lustre tool, as Lustre filters can
+now be used with rbh-find instead
+- Added filtering to rbh-report
+- Added new "client-retention" package that will contain the rbh-retention tool
+for client/user nodes
+
 * Wed Dec 18 2024 - Yoann Valeri <yoann.valeri@cea.fr> - 1.2-1
 - Added rbh-report tool to retrieve aggregated information about the mirror
 system
