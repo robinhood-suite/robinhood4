@@ -47,6 +47,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "08845198_da03f6cb",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-05-14T08:06:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8772b581_bc7ea34b",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 48
+      },
+      "revId": "0fab30e6f3d808de929fa6e3a18af18258dbb694",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f3d1e006_2a3b4372",
@@ -60,6 +84,30 @@
       "writtenOn": "2025-05-13T07:58:44Z",
       "side": 1,
       "message": "minor: this `idx` variable doesn\u0027t seem necessary",
+      "range": {
+        "startLine": 270,
+        "startChar": 17,
+        "endLine": 270,
+        "endChar": 20
+      },
+      "revId": "0fab30e6f3d808de929fa6e3a18af18258dbb694",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac9d640a_8b409f33",
+        "filename": "rbh-report/rbh-report.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-05-14T08:06:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f3d1e006_2a3b4372",
       "range": {
         "startLine": 270,
         "startChar": 17,
