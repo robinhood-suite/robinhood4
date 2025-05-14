@@ -984,7 +984,9 @@ rbh_lustre_helper(__attribute__((unused)) const char *backend,
                   __attribute__((unused)) struct rbh_config *config,
                   char **predicate_helper, char **directive_helper)
 {
-    asprintf(predicate_helper,
+    int rc;
+
+    rc = asprintf(predicate_helper,
         "  - Lustre:\n"
         "    -fid FID             filter entries based on their FID.\n"
         "    -hsm-state {archived, dirty, exists, lost, noarchive, none, norelease, released}\n"
@@ -1022,6 +1024,9 @@ rbh_lustre_helper(__attribute__((unused)) const char *backend,
         "                         not considered if given an interval in CSV.\n"
         "    -mdt-count  [+-]COUNT\n"
         "                         filter entries based on their MDT count.\n");
+
+    if (rc == -1)
+        *predicate_helper = NULL;
 
     *directive_helper = NULL;
 }
