@@ -1,5 +1,5 @@
 Name:    robinhood4
-Version: 1.2.0
+Version: 1.3.0
 Release: 1%{?dist}
 Summary: RobinHood V4 tool suite
 
@@ -186,6 +186,17 @@ OPTS=""
 ldconfig
 
 %changelog
+* Wed May 14 2025 - Yoann Valeri <yoann.valeri@cea.fr> - 1.3-1
+- Reorganized plugins and backends with extensions. Removed the following
+backends: Lustre-MPI and POSIX-MPI. Added the following extensions to the POSIX
+plugin: Lustre, Retention and MFU
+- Removed the retention feature from the Lustre plugin, now a POSIX extension
+instead
+- Renamed rbh-capabilities to rbh-info
+- Removed the rbh-find library and rbh-find-lustre tool, as Lustre filters can
+now be used with rbh-find instead
+- Added filtering to rbh-report
+
 * Wed Dec 18 2024 - Yoann Valeri <yoann.valeri@cea.fr> - 1.2-1
 - Added rbh-report tool to retrieve aggregated information about the mirror
 system
