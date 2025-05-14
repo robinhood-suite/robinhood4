@@ -159,6 +159,8 @@ OPTS=""
 %endif
 %{_includedir}/robinhood/config.h
 %{_includedir}/robinhood/filter.h
+%{_includedir}/robinhood/filters/core.h
+%{_includedir}/robinhood/filters/parser.h
 %{_includedir}/robinhood/fsentry.h
 %{_includedir}/robinhood/fsevent.h
 %{_includedir}/robinhood/hashmap.h

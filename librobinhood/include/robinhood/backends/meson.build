@@ -23,6 +23,8 @@ librbh_posix_h = configure_file(input: 'posix.h.in', output: 'posix.h',
 
 install_headers(librbh_posix_h, subdir: 'robinhood/backends')
 
+install_headers('common.h', 'posix_extension.h', subdir: 'robinhood/backends')
+
 # Mongo backend
 
 librbh_mongo_conf = configuration_data()
