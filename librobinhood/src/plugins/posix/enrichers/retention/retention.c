@@ -292,7 +292,9 @@ rbh_retention_helper(__attribute__((unused)) const char *backend,
                      __attribute__((unused)) struct rbh_config *config,
                      char **predicate_helper, char **directive_helper)
 {
-    asprintf(predicate_helper,
+    int rc;
+
+    rc = asprintf(predicate_helper,
         "  - Retention:\n"
         "    -expired-at {[+-]EPOCH, inf}\n"
         "                         filter entries based on if they expired\n"
@@ -303,6 +305,9 @@ rbh_retention_helper(__attribute__((unused)) const char *backend,
         "                         have an infinite expiration date.\n"
         "    -expired             filter entries based on if they're expired\n"
         "                         at the time of command's invocation.\n");
+
+    if (rc == -1)
+        *predicate_helper = NULL;
 
     *directive_helper = NULL;
 }

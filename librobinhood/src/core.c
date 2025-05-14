@@ -41,7 +41,7 @@ import_backend_source(struct filters_context *ctx,
     const struct rbh_value *extension_value = NULL;
     const struct rbh_value *plugin_value = NULL;
     const struct rbh_backend_plugin *plugin;
-    bool is_plugin;
+    bool is_plugin = true;
 
     for (int i = 0; i < backend_source->count; ++i) {
         const struct rbh_value_pair *pair = &backend_source->pairs[i];
