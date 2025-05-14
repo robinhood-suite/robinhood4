@@ -16,3 +16,9 @@ install_data(
     install_dir: get_option('bindir'),
     rename: 'rbh-update-retention'
 )
+
+install_data(
+    'rbh_retention',
+    install_dir: get_option('bindir'),
+    rename: 'rbh-retention'
+)
