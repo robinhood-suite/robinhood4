@@ -87,6 +87,7 @@ if not check.found()
 endif
 
 subdir('librobinhood')
+subdir('utils/tests')
 subdir('rbh-sync')
 subdir('rbh-find')
 subdir('rbh-fsevents')
