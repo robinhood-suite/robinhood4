@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4fca639a_06dda0b4",
+        "filename": "rbh-report/tests/meson.build",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-05-14T08:06:32Z",
+      "side": 1,
+      "message": "I agree, I\u0027m going to create a ticket in incoming.",
+      "parentUuid": "32d7bc6f_27495e65",
+      "range": {
+        "startLine": 10,
+        "startChar": 3,
+        "endLine": 10,
+        "endChar": 14
+      },
+      "revId": "504c7f7e572dd2040391b53357add38408aab535",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "456c6a47_d283e52a",
         "filename": "rbh-report/tests/test_filter.bash",
         "patchSetId": 2
@@ -37,6 +61,30 @@
       "writtenOn": "2025-05-12T08:28:42Z",
       "side": 1,
       "message": "style: add a line break after }",
+      "range": {
+        "startLine": 57,
+        "startChar": 0,
+        "endLine": 57,
+        "endChar": 1
+      },
+      "revId": "504c7f7e572dd2040391b53357add38408aab535",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c2d0ca0d_ce2037c8",
+        "filename": "rbh-report/tests/test_filter.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-05-14T08:06:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "456c6a47_d283e52a",
       "range": {
         "startLine": 57,
         "startChar": 0,
