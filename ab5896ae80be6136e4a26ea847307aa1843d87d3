@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a074cc69_71498a27",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-05-14T08:06:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f3bf49fd_e5fb4cbd",
+      "range": {
+        "startLine": 9,
+        "startChar": 59,
+        "endLine": 10,
+        "endChar": 51
+      },
+      "revId": "ab5896ae80be6136e4a26ea847307aa1843d87d3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "75f4c1bc_7d732d13",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-05-12T08:13:11Z",
       "side": 1,
       "message": "suggest: use sorts_count instead, as it represents the size of sorts argument",
+      "range": {
+        "startLine": 74,
+        "startChar": 10,
+        "endLine": 74,
+        "endChar": 20
+      },
+      "revId": "ab5896ae80be6136e4a26ea847307aa1843d87d3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8f5bd2c9_684a7cb4",
+        "filename": "rbh-find/include/parser.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-05-14T08:06:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "75f4c1bc_7d732d13",
       "range": {
         "startLine": 74,
         "startChar": 10,
