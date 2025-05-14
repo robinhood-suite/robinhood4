@@ -113,50 +113,48 @@ OPTS=""
 
 %files
 %{_libdir}/librobinhood.so.*
-%if %{with lustre}
-%{_libdir}/librbh-lustre.so*
-%endif
 %{_libdir}/librbh-mongo.so*
 %{_libdir}/librbh-posix.so*
-%if %{with hestia}
-%{_libdir}/librbh-hestia.so*
+%{_libdir}/librbh-posix-retention-ext.so*
+%if %{with lustre}
+%{_libdir}/librbh-posix-lustre-ext.so*
 %endif
 %if %{with mfu}
-%if %{with lustre}
-%{_libdir}/librbh-lustre-mpi.so*
-%endif
+%{_libdir}/librbh-posix-mfu-ext.so*
 %{_libdir}/librbh-mpi-file.so*
-%{_libdir}/librbh-posix-mpi.so*
+%endif
+%if %{with hestia}
+%{_libdir}/librbh-hestia.so*
 %endif
 %{_libdir}/pkgconfig/robinhood.pc
 %{_bindir}/rbh-sync
 %{_bindir}/rbh-find
-%{_libdir}/librbh-find.so.*
-%{_libdir}/pkgconfig/rbh-find.pc
 %{_bindir}/rbh-fsevents
-%{_bindir}/rbh-capabilities
+%{_bindir}/rbh-info
 %{_bindir}/rbh-update-retention
 %{_bindir}/rbh-report
 
 %files devel
 %{_libdir}/librobinhood.so
 %{_includedir}/robinhood.h
+%{_includedir}/robinhood/alias.h
 %{_includedir}/robinhood/backend.h
-%if %{with lustre}
-%{_includedir}/robinhood/backends/lustre.h
-%endif
-%{_includedir}/robinhood/backends/mongo.h
-%{_includedir}/robinhood/backends/posix.h
-%if %{with mfu}
-%if %{with lustre}
-%{_includedir}/robinhood/backends/lustre_mpi.h
-%endif
-%{_includedir}/robinhood/backends/mpi_file.h
-%{_includedir}/robinhood/backends/posix_mpi.h
-%endif
+%{_includedir}/robinhood/backends/common.h
 %if %{with hestia}
 %{_includedir}/robinhood/backends/hestia.h
 %endif
+%if %{with lustre}
+%{_includedir}/robinhood/backends/lustre.h
+%endif
+%if %{with mfu}
+%{_includedir}/robinhood/backends/mfu.h
+%{_includedir}/robinhood/backends/mpi_file.h
+%{_includedir}/robinhood/backends/posix_mpi_internal.h
+%endif
+%{_includedir}/robinhood/backends/mongo.h
+%{_includedir}/robinhood/backends/posix.h
+%{_includedir}/robinhood/backends/posix_extension.h
+%{_includedir}/robinhood/backends/retention.h
 %{_includedir}/robinhood/config.h
 %{_includedir}/robinhood/filter.h
 %{_includedir}/robinhood/filters/core.h
@@ -168,9 +166,11 @@ OPTS=""
 %{_includedir}/robinhood/iterator.h
 %{_includedir}/robinhood/itertools.h
 %{_includedir}/robinhood/list.h
+%{_includedir}/robinhood/mpi_rc.h
 %{_includedir}/robinhood/open.h
 %{_includedir}/robinhood/plugin.h
 %{_includedir}/robinhood/plugins/backend.h
+%{_includedir}/robinhood/plugins/common_ops.h
 %{_includedir}/robinhood/queue.h
 %{_includedir}/robinhood/ring.h
 %{_includedir}/robinhood/ringr.h
@@ -181,14 +181,6 @@ OPTS=""
 %{_includedir}/robinhood/uri.h
 %{_includedir}/robinhood/utils.h
 %{_includedir}/robinhood/value.h
-%{_libdir}/librbh-find.so
-%{_includedir}/rbh-find/actions.h
-%{_includedir}/rbh-find/core.h
-%{_includedir}/rbh-find/filters.h
-%{_includedir}/rbh-find/find_cb.h
-%{_includedir}/rbh-find/parser.h
-%{_includedir}/rbh-find/rbh-find.h
-%{_includedir}/rbh-find/utils.h
 
 %post
 ldconfig
