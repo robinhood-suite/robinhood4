@@ -91,6 +91,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d89db135_eb5bf478",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 7
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-05-14T10:37:12Z",
+      "side": 1,
+      "message": "Interesting, I noted all that and added elements in the design, even if at first a simple option is preferred. Making the import of the config as flexible as possible is a goal of this policy engine",
+      "parentUuid": "047e7b5d_76a24a5d",
+      "range": {
+        "startLine": 18,
+        "startChar": 1,
+        "endLine": 18,
+        "endChar": 18
+      },
+      "revId": "cde4d3e6e4f5f3b5410c372028c32700ad3ae4bf",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "19592080_8820435d",
         "filename": "designs/rbh-policy.rst",
         "patchSetId": 7
@@ -150,6 +174,30 @@
       "side": 1,
       "message": "But what is a storage element?",
       "parentUuid": "dbae849d_db4aea42",
+      "range": {
+        "startLine": 40,
+        "startChar": 0,
+        "endLine": 41,
+        "endChar": 8
+      },
+      "revId": "cde4d3e6e4f5f3b5410c372028c32700ad3ae4bf",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c8da34ad_60059c87",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 7
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-05-14T10:37:12Z",
+      "side": 1,
+      "message": "This refers to any possible type of entry.",
+      "parentUuid": "ad83e831_e9b96485",
       "range": {
         "startLine": 40,
         "startChar": 0,
@@ -585,6 +633,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "be78b7a5_0b6beccc",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 7
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-05-14T10:37:12Z",
+      "side": 1,
+      "message": "If I understand correctly, this behavior is possible today in the action itself. But I understand that integrating it as a native capability of the engine could make this logic simpler to express, more traceable and more optimizable. What do you think is better? Keep everything related to the actions in the actions themselves or apply this to the triggers and put threshold criteria?",
+      "parentUuid": "cd467eca_5c554a53",
+      "range": {
+        "startLine": 180,
+        "startChar": 7,
+        "endLine": 180,
+        "endChar": 32
+      },
+      "revId": "cde4d3e6e4f5f3b5410c372028c32700ad3ae4bf",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1c9482ee_b7b04f2d",
         "filename": "designs/rbh-policy.rst",
         "patchSetId": 7
@@ -644,6 +716,30 @@
       "side": 1,
       "message": "Right but the goal here is to make the action of writing policies easy for admins.",
       "parentUuid": "a7257a05_815b488b",
+      "range": {
+        "startLine": 188,
+        "startChar": 7,
+        "endLine": 188,
+        "endChar": 17
+      },
+      "revId": "cde4d3e6e4f5f3b5410c372028c32700ad3ae4bf",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c9426353_a8fab5a6",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 7
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-05-14T10:37:12Z",
+      "side": 1,
+      "message": "After discussion in the dev team, the dictionary solution seems to be suitable for better visibility. Using functions instead of the dictionary does not really improve visibility and certainly gives consistency with the rest on one side but removes it on the other compared to the current key\u003d system",
+      "parentUuid": "65b16965_be226cb8",
       "range": {
         "startLine": 188,
         "startChar": 7,
@@ -936,6 +1032,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0def0e93_8f02a275",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 7
+      },
+      "lineNbr": 363,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-05-14T10:37:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "787f9c99_5d5075d0",
+      "range": {
+        "startLine": 363,
+        "startChar": 0,
+        "endLine": 363,
+        "endChar": 16
+      },
+      "revId": "cde4d3e6e4f5f3b5410c372028c32700ad3ae4bf",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d7dfd5f6_ba385ade",
@@ -997,6 +1117,30 @@
       "side": 1,
       "message": "You should give a complete example showing how it was declared.",
       "parentUuid": "75fce060_2c5612f8",
+      "range": {
+        "startLine": 390,
+        "startChar": 5,
+        "endLine": 390,
+        "endChar": 17
+      },
+      "revId": "cde4d3e6e4f5f3b5410c372028c32700ad3ae4bf",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5e1c7279_14f1bc78",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 7
+      },
+      "lineNbr": 390,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-05-14T10:37:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ef6cc6a7_68640b80",
       "range": {
         "startLine": 390,
         "startChar": 5,
@@ -1101,6 +1245,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9f4fdfd2_318e7483",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 7
+      },
+      "lineNbr": 458,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-05-14T10:37:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b941ae27_a0d1774a",
+      "range": {
+        "startLine": 456,
+        "startChar": 51,
+        "endLine": 458,
+        "endChar": 19
+      },
+      "revId": "cde4d3e6e4f5f3b5410c372028c32700ad3ae4bf",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e3c57d8c_f287818b",
@@ -1138,6 +1306,30 @@
       "side": 1,
       "message": "I added this in the Manual Mode part of rbh-policy Command part",
       "parentUuid": "e3c57d8c_f287818b",
+      "range": {
+        "startLine": 500,
+        "startChar": 31,
+        "endLine": 500,
+        "endChar": 61
+      },
+      "revId": "cde4d3e6e4f5f3b5410c372028c32700ad3ae4bf",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cd45787e_d0bae3fc",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 7
+      },
+      "lineNbr": 500,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-05-14T10:37:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ba89b843_25035ce5",
       "range": {
         "startLine": 500,
         "startChar": 31,
@@ -1383,6 +1575,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8742d468_1efc8470",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 7
+      },
+      "lineNbr": 596,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-05-14T10:37:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "816e24ec_9543c881",
+      "range": {
+        "startLine": 596,
+        "startChar": 25,
+        "endLine": 596,
+        "endChar": 57
+      },
+      "revId": "cde4d3e6e4f5f3b5410c372028c32700ad3ae4bf",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1b473e39_010ca9ad",
@@ -1477,6 +1693,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b697eeb5_90762733",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 7
+      },
+      "lineNbr": 717,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-05-14T10:37:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8c71a3af_55af235e",
+      "range": {
+        "startLine": 717,
+        "startChar": 10,
+        "endLine": 717,
+        "endChar": 39
+      },
+      "revId": "cde4d3e6e4f5f3b5410c372028c32700ad3ae4bf",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "08bf01c5_45736539",
@@ -1514,6 +1754,30 @@
       "side": 1,
       "message": "This is possible in rbh3. This can be useful if you want to ignore a policy without modifying the configuration file directly (this is equivalent to commenting out a policy in the configuration file).",
       "parentUuid": "08bf01c5_45736539",
+      "range": {
+        "startLine": 728,
+        "startChar": 35,
+        "endLine": 728,
+        "endChar": 51
+      },
+      "revId": "cde4d3e6e4f5f3b5410c372028c32700ad3ae4bf",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "64d73c69_1883b373",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 7
+      },
+      "lineNbr": 728,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-05-14T10:37:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1293117c_87033741",
       "range": {
         "startLine": 728,
         "startChar": 35,

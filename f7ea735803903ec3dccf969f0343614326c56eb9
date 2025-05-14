@@ -187,6 +187,30 @@
       },
       "revId": "f7ea735803903ec3dccf969f0343614326c56eb9",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6cd041bd_b0e156ba",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 6
+      },
+      "lineNbr": 765,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-05-14T10:37:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c34a534b_a8a18478",
+      "range": {
+        "startLine": 763,
+        "startChar": 10,
+        "endLine": 765,
+        "endChar": 32
+      },
+      "revId": "f7ea735803903ec3dccf969f0343614326c56eb9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }

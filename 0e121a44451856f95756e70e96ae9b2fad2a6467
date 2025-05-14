@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "086876ce_8ed82e77",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 8
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-05-14T10:37:12Z",
+      "side": 1,
+      "message": "I like the idea, I revised this part of the design on triggers to make it more understandable and clear",
+      "parentUuid": "7d445398_136b2f89",
+      "range": {
+        "startLine": 175,
+        "startChar": 21,
+        "endLine": 176,
+        "endChar": 37
+      },
+      "revId": "0e121a44451856f95756e70e96ae9b2fad2a6467",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "90ec64f8_ec5f2dd0",
@@ -47,6 +71,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a174db2_5c72b30a",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 8
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-05-14T10:37:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "90ec64f8_ec5f2dd0",
+      "range": {
+        "startLine": 187,
+        "startChar": 21,
+        "endLine": 188,
+        "endChar": 17
+      },
+      "revId": "0e121a44451856f95756e70e96ae9b2fad2a6467",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "58b10068_eaa1242b",
@@ -60,6 +108,30 @@
       "writtenOn": "2025-05-07T13:12:09Z",
       "side": 1,
       "message": "We have to be carefull here. What does action None mean? No action or default action? Maybe a magic keywork for default is preferable?",
+      "range": {
+        "startLine": 245,
+        "startChar": 16,
+        "endLine": 245,
+        "endChar": 29
+      },
+      "revId": "0e121a44451856f95756e70e96ae9b2fad2a6467",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e2b16e34_f4f57179",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 8
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-05-14T10:37:12Z",
+      "side": 1,
+      "message": "That\u0027s true, I think this should be clearly documented but \"None\" means no action",
+      "parentUuid": "58b10068_eaa1242b",
       "range": {
         "startLine": 245,
         "startChar": 16,
