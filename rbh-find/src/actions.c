@@ -600,7 +600,7 @@ find_exec_action(struct find_context *ctx,
     switch (action) {
     case ACT_DELETE:
         {
-            int rc;
+            int rc = 0;
 
             for (int i = 0; i < ctx->info_pe_count; ++i) {
                 const struct rbh_pe_common_operations *common_ops =
