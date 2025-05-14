@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5b45b3fe_c2581744",
+        "filename": "retention/rbh_retention",
+        "patchSetId": 1
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-05-14T06:46:44Z",
+      "side": 1,
+      "message": "question: why? the retention can not go over a year?",
+      "range": {
+        "startLine": 78,
+        "startChar": 28,
+        "endLine": 78,
+        "endChar": 33
+      },
+      "revId": "5955979e9d526c7be360613cbed4c1003c8a6696",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "60caedc8_b3db5240",
+        "filename": "retention/rbh_retention",
+        "patchSetId": 1
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-05-14T06:46:44Z",
+      "side": 1,
+      "message": "typo: its",
+      "range": {
+        "startLine": 140,
+        "startChar": 56,
+        "endLine": 140,
+        "endChar": 60
+      },
+      "revId": "5955979e9d526c7be360613cbed4c1003c8a6696",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
