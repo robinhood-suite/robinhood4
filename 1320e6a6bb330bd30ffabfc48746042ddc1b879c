@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "549aa656_52fb27f6",
+        "filename": "retention/test_retention.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-05-14T06:48:09Z",
+      "side": 1,
+      "message": "fun: don\u0027t you want to also manage `s` presence in the string :D?",
+      "range": {
+        "startLine": 119,
+        "startChar": 40,
+        "endLine": 119,
+        "endChar": 41
+      },
+      "revId": "1320e6a6bb330bd30ffabfc48746042ddc1b879c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
