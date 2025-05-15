@@ -69,6 +69,30 @@
       },
       "revId": "76084445b8b013abdd891e616ee79528f02f6fd4",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "20bdc40e_c2c62149",
+        "filename": "librbh-filters/include/rbh-filters/parser.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-05-15T07:19:50Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "dbca7f9f_5c738030",
+      "range": {
+        "startLine": 22,
+        "startChar": 4,
+        "endLine": 23,
+        "endChar": 14
+      },
+      "revId": "76084445b8b013abdd891e616ee79528f02f6fd4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
