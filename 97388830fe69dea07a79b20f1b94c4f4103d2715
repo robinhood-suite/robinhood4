@@ -22,6 +22,30 @@
       },
       "revId": "97388830fe69dea07a79b20f1b94c4f4103d2715",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cce5073e_8fcaa729",
+        "filename": "rbh-sync/tests/test_s3_db_sync.bash",
+        "patchSetId": 25
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1038646
+      },
+      "writtenOn": "2025-05-16T06:37:18Z",
+      "side": 1,
+      "message": "They will be removed because ```minio_teardown()``` is called after each test.\nI should probably remove this line and line 111 as well, since they are redundant.",
+      "parentUuid": "baca0e3d_4820ee38",
+      "range": {
+        "startLine": 138,
+        "startChar": 8,
+        "endLine": 138,
+        "endChar": 42
+      },
+      "revId": "97388830fe69dea07a79b20f1b94c4f4103d2715",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
