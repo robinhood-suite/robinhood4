@@ -43,6 +43,9 @@ function rbh_set_retention
     if is_numeric "$retention"; then
         date="$(date --date="@$retention" +%s)"
         rc=$?
+    elif [ "$retention" == "inf" ]; then
+        date="inf"
+        rc=0
     else
         date="$(date --date="$retention" +%s)"
         rc=$?
@@ -124,6 +127,11 @@ function rbh_get_retention
         exit $rc
     fi
 
+    if [ "$retention" == "inf" ]; then
+        echo "'$entry' has an infinite retention date set"
+        exit 0
+    fi
+
     local relative="${retention:0:1}"
     if [ "$relative" == "+" ]; then
         retention="${retention:1}"
@@ -161,9 +169,11 @@ function print_doc
     echo "If both an entry and a retention date are given, set the entry's"
     echo "retention date."
     echo ""
-    echo "The retention date should be given as a 'date(1)'-compatible format,"
-    echo "and if the '--relative' flag is given, will be relative to the"
-    echo "entry's modification time."
+    echo "The retention date should be given either as a 'date(1)'-compatible"
+    echo "format, a timestamp, or the word 'inf' (in which case the entry is"
+    echo "set to have an infinite retention date). If the '--relative' flag is"
+    echo "given, the entry's expiration date will be relative to its"
+    echo "modification time."
     echo ""
     echo "'--relative'      whether the given retention date should be relative"
     echo "                  to the entry's modification time"
