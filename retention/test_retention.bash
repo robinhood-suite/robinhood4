@@ -141,12 +141,45 @@ function test_inf_retention
     fi
 }
 
+function test_rm_retention
+{
+    local file="file"
+
+    touch $file
+
+    rbh_retention --remove $file
+    local attr="$(getfattr -n user.expires --only-values $file)"
+    if [ ! -z "$attr" ]; then
+        error "'$file' shouldn't have any retention date set"
+    fi
+
+    rbh_retention --remove $file "30 minutes"
+    local attr="$(getfattr -n user.expires --only-values $file)"
+    if [ ! -z "$attr" ]; then
+        error "'$file' shouldn't have any retention date set"
+    fi
+
+    setfattr -n user.expires -v "+10" $file
+    rbh_retention --remove $file "30 minutes"
+    local attr="$(getfattr -n user.expires --only-values $file)"
+    if [ ! -z "$attr" ]; then
+        error "Retention attribute should have been removed on '$file'"
+    fi
+
+    setfattr -n user.expires -v "+10" $file
+    rbh_retention $file --remove
+    local attr="$(getfattr -n user.expires --only-values $file)"
+    if [ ! -z "$attr" ]; then
+        error "Retention attribute should have been removed on '$file'"
+    fi
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
 declare -a tests=(test_parsing test_set_retention test_get_retention
-                  test_inf_retention)
+                  test_inf_retention test_rm_retention)
 
 tmpdir=$(mktemp --directory)
 trap "rm -r $tmpdir" EXIT

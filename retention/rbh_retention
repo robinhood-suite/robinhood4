@@ -160,9 +160,17 @@ function rbh_get_retention
     fi
 }
 
+function rbh_rm_retention
+{
+    local entry="$1"
+
+    local retention_attr="$(get_retention_attribute)"
+    setfattr --remove="$retention_attr" "$entry"
+}
+
 function print_doc
 {
-    echo "Usage: rbh-retention entry [retention_date [--relative]]"
+    echo "Usage: rbh-retention entry [retention_date [--relative]] [--remove] [--help]"
     echo ""
     echo "Interact with an entry's retention date."
     echo "If only an entry's path is provided, show its retention date."
@@ -175,6 +183,7 @@ function print_doc
     echo "given, the entry's expiration date will be relative to its"
     echo "modification time."
     echo ""
+    echo "'--remove'        remove the entry's retention date"
     echo "'--relative'      whether the given retention date should be relative"
     echo "                  to the entry's modification time"
     echo "'--help'          print this message"
@@ -197,6 +206,9 @@ do
     fi
 
     case "$1" in
+        --remove)
+            remove_found=true
+            ;;
         --relative)
             relative_found=true
             ;;
@@ -241,6 +253,11 @@ if (( rc != 0 )); then
     echo ""
     print_doc
     exit 1
+fi
+
+if [ ! -z "$remove_found" ]; then
+    rbh_rm_retention "$full_path"
+    exit 0
 fi
 
 if [ -z "$retention_date" ]; then
