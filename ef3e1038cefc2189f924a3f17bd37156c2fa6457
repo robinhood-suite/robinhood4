@@ -22,6 +22,30 @@
       },
       "revId": "ef3e1038cefc2189f924a3f17bd37156c2fa6457",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6194c9ad_e9a14f55",
+        "filename": "librobinhood/src/plugins/s3/s3.c",
+        "patchSetId": 23
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1038646
+      },
+      "writtenOn": "2025-05-16T06:48:44Z",
+      "side": 1,
+      "message": "In ```s3_iterator_new()``` I do ```obj_data.current_id \u003d -1```(\u003d0 in this patch but it is changed to -1 in the next one) which isn\u0027t possible with a size_t",
+      "parentUuid": "72324ea8_d881a315",
+      "range": {
+        "startLine": 30,
+        "startChar": 4,
+        "endLine": 30,
+        "endChar": 7
+      },
+      "revId": "ef3e1038cefc2189f924a3f17bd37156c2fa6457",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
