@@ -128,11 +128,25 @@ function test_get_retention
     fi
 }
 
+function test_inf_retention
+{
+    local file="file"
+
+    touch $file
+
+    rbh_retention $file "inf"
+    local attr="$(rbh_retention $file)"
+    if [[ "$attr" != *"infinite"* ]]; then
+        error "'$file' should have an infinite retention date"
+    fi
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
-declare -a tests=(test_parsing test_set_retention test_get_retention)
+declare -a tests=(test_parsing test_set_retention test_get_retention
+                  test_inf_retention)
 
 tmpdir=$(mktemp --directory)
 trap "rm -r $tmpdir" EXIT
