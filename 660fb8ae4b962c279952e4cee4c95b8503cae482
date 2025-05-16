@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b997bc9a_59c68074",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-05-16T06:06:10Z",
+      "side": 1,
+      "message": "question: is this a common practice to retrieve the test configuration file for the installation? don\u0027t we need to have a kind of \"official\" configuration file in the root directory? and maybe having the test file being a symbolic link of the root file, as long as they remain the same?",
+      "range": {
+        "startLine": 7,
+        "startChar": 15,
+        "endLine": 7,
+        "endChar": 33
+      },
+      "revId": "660fb8ae4b962c279952e4cee4c95b8503cae482",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b8c48161_31c8b3e8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-05-16T06:06:10Z",
+      "side": 1,
+      "message": "typo: of the test",
+      "range": {
+        "startLine": 9,
+        "startChar": 31,
+        "endLine": 9,
+        "endChar": 39
+      },
+      "revId": "660fb8ae4b962c279952e4cee4c95b8503cae482",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
