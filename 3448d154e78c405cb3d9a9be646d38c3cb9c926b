@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "15b486b4_f4eeb900",
+        "filename": "librobinhood/src/plugins/sqlite/custom_functions.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-05-16T13:30:26Z",
+      "side": 1,
+      "message": "typo: custom_func_t",
+      "range": {
+        "startLine": 76,
+        "startChar": 15,
+        "endLine": 76,
+        "endChar": 28
+      },
+      "revId": "3448d154e78c405cb3d9a9be646d38c3cb9c926b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
