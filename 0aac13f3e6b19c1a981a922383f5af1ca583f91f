@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "baa0d0c4_6bf8c017",
+        "filename": "librobinhood/src/plugins/sqlite/json/decode.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-05-16T12:52:45Z",
+      "side": 1,
+      "message": "ack this todo ;p\n\nIs this done in a future patch?",
+      "range": {
+        "startLine": 87,
+        "startChar": 29,
+        "endLine": 87,
+        "endChar": 66
+      },
+      "revId": "0aac13f3e6b19c1a981a922383f5af1ca583f91f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
