@@ -3,6 +3,144 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "580d705a_2f104648",
+        "filename": "designs/rbh-policy/01-OverviewAndGoals.rst",
+        "patchSetId": 10
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-05-16T13:45:11Z",
+      "side": 1,
+      "message": "style: files should be in snake case, not pascal",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 13
+      },
+      "revId": "1b7640bc500782c7d735c5cfa2bff718da9f4481",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5c792387_8f078240",
+        "filename": "designs/rbh-policy/01-OverviewAndGoals.rst",
+        "patchSetId": 10
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-05-16T13:45:11Z",
+      "side": 1,
+      "message": "typo: filesystem\u0027s",
+      "range": {
+        "startLine": 33,
+        "startChar": 0,
+        "endLine": 33,
+        "endChar": 10
+      },
+      "revId": "1b7640bc500782c7d735c5cfa2bff718da9f4481",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0e531fcd_828b1c3d",
+        "filename": "designs/rbh-policy/01-OverviewAndGoals.rst",
+        "patchSetId": 10
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-05-16T13:45:11Z",
+      "side": 1,
+      "message": "nit: this should be in its own section at the end, and not in the introduction",
+      "range": {
+        "startLine": 40,
+        "startChar": 0,
+        "endLine": 40,
+        "endChar": 37
+      },
+      "revId": "1b7640bc500782c7d735c5cfa2bff718da9f4481",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8682dd5c_9c57942c",
+        "filename": "designs/rbh-policy/01-OverviewAndGoals.rst",
+        "patchSetId": 10
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-05-16T13:45:11Z",
+      "side": 1,
+      "message": "question: cannot this simply be managed by the configurations importing the default files and structures ? I feel like this doesn\u0027t really require extra effort on this design, but is simply imports that will done by the configs to access admin-defined defaults.",
+      "range": {
+        "startLine": 64,
+        "startChar": 0,
+        "endLine": 69,
+        "endChar": 66
+      },
+      "revId": "1b7640bc500782c7d735c5cfa2bff718da9f4481",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cc2a7c02_a72ddb3b",
+        "filename": "designs/rbh-policy/01-OverviewAndGoals.rst",
+        "patchSetId": 10
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-05-16T13:45:11Z",
+      "side": 1,
+      "message": "nit: see my previous comment: this isn\u0027t part of the \"future improvements\", but rather part of the actual overview",
+      "range": {
+        "startLine": 80,
+        "startChar": 0,
+        "endLine": 80,
+        "endChar": 22
+      },
+      "revId": "1b7640bc500782c7d735c5cfa2bff718da9f4481",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c3e6c22a_51ad55fa",
+        "filename": "designs/rbh-policy/01-OverviewAndGoals.rst",
+        "patchSetId": 10
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-05-16T13:45:11Z",
+      "side": 1,
+      "message": "typo: not sure it\u0027s the right word here... Either they can \"implement advanced or handle unforeseen behaviors\", or simply \"implement advanced non-default behaviors\"",
+      "range": {
+        "startLine": 83,
+        "startChar": 12,
+        "endLine": 83,
+        "endChar": 22
+      },
+      "revId": "1b7640bc500782c7d735c5cfa2bff718da9f4481",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ba411916_929c02cb",
         "filename": "designs/rbh-policy/01-OverviewAndGoals.rst",
         "patchSetId": 10
@@ -26,6 +164,98 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c16c296e_f6e5b7fe",
+        "filename": "designs/rbh-policy/01-OverviewAndGoals.rst",
+        "patchSetId": 10
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-05-16T13:45:11Z",
+      "side": 1,
+      "message": "I think this is a pretty important point that might need more explanation",
+      "range": {
+        "startLine": 91,
+        "startChar": 0,
+        "endLine": 92,
+        "endChar": 8
+      },
+      "revId": "1b7640bc500782c7d735c5cfa2bff718da9f4481",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bdfb3751_a2534072",
+        "filename": "designs/rbh-policy/03-PolicyConditionFilters.rst",
+        "patchSetId": 10
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-05-16T13:45:11Z",
+      "side": 1,
+      "message": "question: why not allow the whole list of possible files",
+      "range": {
+        "startLine": 33,
+        "startChar": 29,
+        "endLine": 33,
+        "endChar": 68
+      },
+      "revId": "1b7640bc500782c7d735c5cfa2bff718da9f4481",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5792ae95_0ed236cb",
+        "filename": "designs/rbh-policy/03-PolicyConditionFilters.rst",
+        "patchSetId": 10
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-05-16T13:45:11Z",
+      "side": 1,
+      "message": "suggest: I think \"user\" would be better, more aligned with the rbh-find filter",
+      "range": {
+        "startLine": 37,
+        "startChar": 4,
+        "endLine": 37,
+        "endChar": 9
+      },
+      "revId": "1b7640bc500782c7d735c5cfa2bff718da9f4481",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "513b81d4_1cb929ac",
+        "filename": "designs/rbh-policy/03-PolicyConditionFilters.rst",
+        "patchSetId": 10
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-05-16T13:45:11Z",
+      "side": 1,
+      "message": "minor: missing GID filter",
+      "range": {
+        "startLine": 45,
+        "startChar": 4,
+        "endLine": 45,
+        "endChar": 9
+      },
+      "revId": "1b7640bc500782c7d735c5cfa2bff718da9f4481",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c1788835_d484e2b6",
         "filename": "designs/rbh-policy/03-PolicyConditionFilters.rst",
         "patchSetId": 10
@@ -37,6 +267,30 @@
       "writtenOn": "2025-05-16T08:43:00Z",
       "side": 1,
       "message": "question: how the management of backend-specific conditions will be handled?",
+      "range": {
+        "startLine": 71,
+        "startChar": 0,
+        "endLine": 73,
+        "endChar": 57
+      },
+      "revId": "1b7640bc500782c7d735c5cfa2bff718da9f4481",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1c5b5056_18f99ed3",
+        "filename": "designs/rbh-policy/03-PolicyConditionFilters.rst",
+        "patchSetId": 10
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-05-16T13:45:11Z",
+      "side": 1,
+      "message": "+1, this is an important part IMO",
+      "parentUuid": "c1788835_d484e2b6",
       "range": {
         "startLine": 71,
         "startChar": 0,
@@ -95,6 +349,144 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "62151bf5_9da26c60",
+        "filename": "designs/rbh-policy/04-ImplementationOverview.rst",
+        "patchSetId": 10
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-05-16T13:45:11Z",
+      "side": 1,
+      "message": "minor: I don\u0027t think it\u0027s something that can be postponed, there should be a check each time anything is declared that it\u0027s content is of the expected type",
+      "range": {
+        "startLine": 70,
+        "startChar": 28,
+        "endLine": 71,
+        "endChar": 34
+      },
+      "revId": "1b7640bc500782c7d735c5cfa2bff718da9f4481",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "631f4151_4dec34eb",
+        "filename": "designs/rbh-policy/04-ImplementationOverview.rst",
+        "patchSetId": 10
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-05-16T13:45:11Z",
+      "side": 1,
+      "message": "nit: `is performed` rather than a double negation",
+      "range": {
+        "startLine": 130,
+        "startChar": 64,
+        "endLine": 130,
+        "endChar": 79
+      },
+      "revId": "1b7640bc500782c7d735c5cfa2bff718da9f4481",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "356973e6_51946062",
+        "filename": "designs/rbh-policy/04-ImplementationOverview.rst",
+        "patchSetId": 10
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-05-16T13:45:11Z",
+      "side": 1,
+      "message": "question: what\u0027s that ?",
+      "range": {
+        "startLine": 136,
+        "startChar": 60,
+        "endLine": 136,
+        "endChar": 75
+      },
+      "revId": "1b7640bc500782c7d735c5cfa2bff718da9f4481",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9cfd05c1_e5b81316",
+        "filename": "designs/rbh-policy/04-ImplementationOverview.rst",
+        "patchSetId": 10
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-05-16T13:45:11Z",
+      "side": 1,
+      "message": "question: might be premature, but will this be scans corresponding to the policies\u0027 triggers, or just a list of generic checks ? What I mean is that if I only have policies set to trigger at a specific time, will the scans also check the filesystem\u0027s capacitiy, even though it does not matter to any policy ?",
+      "range": {
+        "startLine": 141,
+        "startChar": 2,
+        "endLine": 142,
+        "endChar": 18
+      },
+      "revId": "1b7640bc500782c7d735c5cfa2bff718da9f4481",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6fa08720_cb339f06",
+        "filename": "designs/rbh-policy/04-ImplementationOverview.rst",
+        "patchSetId": 10
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-05-16T13:45:11Z",
+      "side": 1,
+      "message": "minor: as requested in other parts, this may need its own section IMHO",
+      "range": {
+        "startLine": 146,
+        "startChar": 1,
+        "endLine": 149,
+        "endChar": 14
+      },
+      "revId": "1b7640bc500782c7d735c5cfa2bff718da9f4481",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f50d2fd0_a4700034",
+        "filename": "designs/rbh-policy/04-ImplementationOverview.rst",
+        "patchSetId": 10
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-05-16T13:45:11Z",
+      "side": 1,
+      "message": "major: here however is it necessary to check the global condition for each entry anew, since the DB counterpart may be obsolete in that regard. The negation of previous rules is still unnecessary though",
+      "range": {
+        "startLine": 234,
+        "startChar": 0,
+        "endLine": 243,
+        "endChar": 77
+      },
+      "revId": "1b7640bc500782c7d735c5cfa2bff718da9f4481",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "70a18723_9282604f",
         "filename": "designs/rbh-policy/04-ImplementationOverview.rst",
         "patchSetId": 10
@@ -111,6 +503,52 @@
         "startChar": 39,
         "endLine": 280,
         "endChar": 62
+      },
+      "revId": "1b7640bc500782c7d735c5cfa2bff718da9f4481",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3787352e_e0511fdb",
+        "filename": "designs/rbh-policy/04-ImplementationOverview.rst",
+        "patchSetId": 10
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-05-16T13:45:11Z",
+      "side": 1,
+      "message": "minor: to remove",
+      "range": {
+        "startLine": 286,
+        "startChar": 25,
+        "endLine": 286,
+        "endChar": 31
+      },
+      "revId": "1b7640bc500782c7d735c5cfa2bff718da9f4481",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "21c3c3bd_7c1f13e0",
+        "filename": "designs/rbh-policy/04-ImplementationOverview.rst",
+        "patchSetId": 10
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-05-16T13:45:11Z",
+      "side": 1,
+      "message": "minor: I\u0027m not sure I understand this properly: to me, if an entry matches the global condition and a rule, but that rule has no action associated, then the entry is simply skipped. Since it matched a rule, no other rule is checked, and we simply continue to the next entry",
+      "range": {
+        "startLine": 284,
+        "startChar": 54,
+        "endLine": 289,
+        "endChar": 2
       },
       "revId": "1b7640bc500782c7d735c5cfa2bff718da9f4481",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
