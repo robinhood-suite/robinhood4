@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "baca0e3d_4820ee38",
+        "filename": "rbh-sync/tests/test_s3_db_sync.bash",
+        "patchSetId": 25
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-05-16T06:25:02Z",
+      "side": 1,
+      "message": "defect: all buckets are not removed",
+      "range": {
+        "startLine": 138,
+        "startChar": 8,
+        "endLine": 138,
+        "endChar": 42
+      },
+      "revId": "97388830fe69dea07a79b20f1b94c4f4103d2715",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
