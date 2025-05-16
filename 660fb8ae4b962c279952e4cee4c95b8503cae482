@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5925a1e9_59e4925f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-05-16T14:17:34Z",
+      "side": 1,
+      "message": "Not really, but if only we had a configuration file already made, maybe with each parameter DOCumented, maybe we could use it as a template, and call it `template_conf.yaml`... But alas...\n\nDone",
+      "parentUuid": "b997bc9a_59c68074",
+      "range": {
+        "startLine": 7,
+        "startChar": 15,
+        "endLine": 7,
+        "endChar": 33
+      },
+      "revId": "660fb8ae4b962c279952e4cee4c95b8503cae482",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b8c48161_31c8b3e8",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-05-16T06:06:10Z",
       "side": 1,
       "message": "typo: of the test",
+      "range": {
+        "startLine": 9,
+        "startChar": 31,
+        "endLine": 9,
+        "endChar": 39
+      },
+      "revId": "660fb8ae4b962c279952e4cee4c95b8503cae482",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c939c612_9bdd1473",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-05-16T14:17:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b8c48161_31c8b3e8",
       "range": {
         "startLine": 9,
         "startChar": 31,
