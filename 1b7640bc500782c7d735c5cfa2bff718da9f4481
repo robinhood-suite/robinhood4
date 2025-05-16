@@ -1,0 +1,165 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ba411916_929c02cb",
+        "filename": "designs/rbh-policy/01-OverviewAndGoals.rst",
+        "patchSetId": 10
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-05-16T08:43:00Z",
+      "side": 1,
+      "message": "typo: missing a `.`",
+      "range": {
+        "startLine": 91,
+        "startChar": 0,
+        "endLine": 92,
+        "endChar": 8
+      },
+      "revId": "1b7640bc500782c7d735c5cfa2bff718da9f4481",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c1788835_d484e2b6",
+        "filename": "designs/rbh-policy/03-PolicyConditionFilters.rst",
+        "patchSetId": 10
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-05-16T08:43:00Z",
+      "side": 1,
+      "message": "question: how the management of backend-specific conditions will be handled?",
+      "range": {
+        "startLine": 71,
+        "startChar": 0,
+        "endLine": 73,
+        "endChar": 57
+      },
+      "revId": "1b7640bc500782c7d735c5cfa2bff718da9f4481",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2fd2c1b8_665da9cb",
+        "filename": "designs/rbh-policy/04-ImplementationOverview.rst",
+        "patchSetId": 10
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-05-16T08:43:00Z",
+      "side": 1,
+      "message": "typo: function",
+      "range": {
+        "startLine": 35,
+        "startChar": 48,
+        "endLine": 35,
+        "endChar": 56
+      },
+      "revId": "1b7640bc500782c7d735c5cfa2bff718da9f4481",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f163d361_58395946",
+        "filename": "designs/rbh-policy/04-ImplementationOverview.rst",
+        "patchSetId": 10
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-05-16T08:43:00Z",
+      "side": 1,
+      "message": "typo: it is (better form in a written document)",
+      "range": {
+        "startLine": 38,
+        "startChar": 0,
+        "endLine": 38,
+        "endChar": 4
+      },
+      "revId": "1b7640bc500782c7d735c5cfa2bff718da9f4481",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "70a18723_9282604f",
+        "filename": "designs/rbh-policy/04-ImplementationOverview.rst",
+        "patchSetId": 10
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-05-16T08:43:00Z",
+      "side": 1,
+      "message": "minor: not clear, is it the rule? anything else?",
+      "range": {
+        "startLine": 280,
+        "startChar": 39,
+        "endLine": 280,
+        "endChar": 62
+      },
+      "revId": "1b7640bc500782c7d735c5cfa2bff718da9f4481",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a4b4d3cb_d56f501b",
+        "filename": "designs/rbh-policy/04-ImplementationOverview.rst",
+        "patchSetId": 10
+      },
+      "lineNbr": 295,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-05-16T08:43:00Z",
+      "side": 1,
+      "message": "typo: without uppercase",
+      "range": {
+        "startLine": 295,
+        "startChar": 16,
+        "endLine": 295,
+        "endChar": 32
+      },
+      "revId": "1b7640bc500782c7d735c5cfa2bff718da9f4481",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0e394389_8048c529",
+        "filename": "designs/rbh-policy/05-rbh-policyCommand.rst",
+        "patchSetId": 10
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-05-16T08:43:00Z",
+      "side": 1,
+      "message": "comment: maybe list the entries in different files according to which policy matches them",
+      "range": {
+        "startLine": 87,
+        "startChar": 2,
+        "endLine": 87,
+        "endChar": 50
+      },
+      "revId": "1b7640bc500782c7d735c5cfa2bff718da9f4481",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
