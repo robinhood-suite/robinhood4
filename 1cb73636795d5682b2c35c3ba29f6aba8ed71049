@@ -49,6 +49,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0939b0cd_d4af3d25",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-05-19T08:58:08Z",
+      "side": 1,
+      "message": "minor: the wording is still weird, maybe something like this?\n\n\n```\n... that have been previously archived. This can be done using their metadata, that are still stored in RobinHood database.\n```",
+      "range": {
+        "startLine": 13,
+        "startChar": 9,
+        "endLine": 13,
+        "endChar": 42
+      },
+      "revId": "1cb73636795d5682b2c35c3ba29f6aba8ed71049",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "282a1e3d_9d8fb093",
         "filename": "designs/rbh-undelete.rst",
         "patchSetId": 2
@@ -65,6 +88,29 @@
         "startChar": 24,
         "endLine": 15,
         "endChar": 39
+      },
+      "revId": "1cb73636795d5682b2c35c3ba29f6aba8ed71049",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "860869a6_d3601a92",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-05-19T08:58:08Z",
+      "side": 1,
+      "message": "typo: backends",
+      "range": {
+        "startLine": 23,
+        "startChar": 55,
+        "endLine": 23,
+        "endChar": 62
       },
       "revId": "1cb73636795d5682b2c35c3ba29f6aba8ed71049",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
@@ -95,6 +141,52 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6c135bae_7c5b1f62",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-05-19T08:58:08Z",
+      "side": 1,
+      "message": "comment: well, is it really a filtering mechanic? to retrieve a sole entry using its path?",
+      "range": {
+        "startLine": 24,
+        "startChar": 27,
+        "endLine": 25,
+        "endChar": 35
+      },
+      "revId": "1cb73636795d5682b2c35c3ba29f6aba8ed71049",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1e97117b_cce5f32f",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-05-19T08:58:08Z",
+      "side": 1,
+      "message": "typo: information",
+      "range": {
+        "startLine": 25,
+        "startChar": 23,
+        "endLine": 25,
+        "endChar": 35
+      },
+      "revId": "1cb73636795d5682b2c35c3ba29f6aba8ed71049",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a15f2da2_e6f8b9fc",
         "filename": "designs/rbh-undelete.rst",
         "patchSetId": 2
@@ -109,6 +201,29 @@
       "range": {
         "startLine": 27,
         "startChar": 0,
+        "endLine": 28,
+        "endChar": 40
+      },
+      "revId": "1cb73636795d5682b2c35c3ba29f6aba8ed71049",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5bfae630_68dbe33e",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-05-19T08:58:08Z",
+      "side": 1,
+      "message": "comment: not a huge fan of the wording",
+      "range": {
+        "startLine": 28,
+        "startChar": 2,
         "endLine": 28,
         "endChar": 40
       },
@@ -134,6 +249,29 @@
         "startChar": 20,
         "endLine": 31,
         "endChar": 70
+      },
+      "revId": "1cb73636795d5682b2c35c3ba29f6aba8ed71049",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c64350f3_03ffd871",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-05-19T08:58:08Z",
+      "side": 1,
+      "message": "question: is the term correct?",
+      "range": {
+        "startLine": 31,
+        "startChar": 12,
+        "endLine": 31,
+        "endChar": 19
       },
       "revId": "1cb73636795d5682b2c35c3ba29f6aba8ed71049",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
@@ -233,6 +371,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8794ace3_3ddba2a9",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-05-19T08:58:08Z",
+      "side": 1,
+      "message": "minor: I do understand this code is issued from the Lustre API, but some arguments are not documented",
+      "range": {
+        "startLine": 53,
+        "startChar": 31,
+        "endLine": 53,
+        "endChar": 55
+      },
+      "revId": "1cb73636795d5682b2c35c3ba29f6aba8ed71049",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "08706874_1996915c",
         "filename": "designs/rbh-undelete.rst",
         "patchSetId": 2
@@ -288,6 +449,52 @@
         "id": 1019048
       },
       "writtenOn": "2025-05-19T07:53:51Z",
+      "side": 1,
+      "message": "typo: handled",
+      "range": {
+        "startLine": 77,
+        "startChar": 4,
+        "endLine": 77,
+        "endChar": 10
+      },
+      "revId": "1cb73636795d5682b2c35c3ba29f6aba8ed71049",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7dc2c662_487b6017",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-05-19T08:58:08Z",
+      "side": 1,
+      "message": "comment: why `not properly`? as long as we do not need deleted paths, why storing them?",
+      "range": {
+        "startLine": 77,
+        "startChar": 11,
+        "endLine": 77,
+        "endChar": 19
+      },
+      "revId": "1cb73636795d5682b2c35c3ba29f6aba8ed71049",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "85811941_725a797d",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-05-19T08:58:08Z",
       "side": 1,
       "message": "typo: handled",
       "range": {
@@ -479,6 +686,29 @@
         "startChar": 65,
         "endLine": 100,
         "endChar": 15
+      },
+      "revId": "1cb73636795d5682b2c35c3ba29f6aba8ed71049",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6aa9fd20_d594bd03",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-05-19T08:58:08Z",
+      "side": 1,
+      "message": "question: what do you mean by `right directory`? if it\u0027s only to say that the relative path must be valid, that\u0027s kind of obvious",
+      "range": {
+        "startLine": 102,
+        "startChar": 25,
+        "endLine": 102,
+        "endChar": 40
       },
       "revId": "1cb73636795d5682b2c35c3ba29f6aba8ed71049",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
@@ -755,6 +985,29 @@
         "startChar": 53,
         "endLine": 220,
         "endChar": 59
+      },
+      "revId": "1cb73636795d5682b2c35c3ba29f6aba8ed71049",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a491dff3_026dcc1d",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-05-19T08:58:08Z",
+      "side": 1,
+      "message": "comment: you can say something like `let one backend retrieve the entry and then call the undelete/rebind function of the backend`, this wording does not need to precice Lustre nor POSIX specificities",
+      "range": {
+        "startLine": 220,
+        "startChar": 25,
+        "endLine": 221,
+        "endChar": 20
       },
       "revId": "1cb73636795d5682b2c35c3ba29f6aba8ed71049",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
