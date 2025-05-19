@@ -94,6 +94,30 @@
       },
       "revId": "ef3e1038cefc2189f924a3f17bd37156c2fa6457",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9b9d9f96_10aadf90",
+        "filename": "librobinhood/src/plugins/s3/s3.c",
+        "patchSetId": 23
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-05-19T09:53:15Z",
+      "side": 1,
+      "message": "Well, as you do some comparisons between both, behaviors are not the same when dealing with huge numbers. But ok, we may think we will not reach them (an half integer is 2^31, not that huge).\n\nIf the others agree..",
+      "parentUuid": "22829106_ecc931d2",
+      "range": {
+        "startLine": 30,
+        "startChar": 4,
+        "endLine": 30,
+        "endChar": 7
+      },
+      "revId": "ef3e1038cefc2189f924a3f17bd37156c2fa6457",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
