@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9d45d8bb_7b4cfe3b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-05-19T14:42:56Z",
+      "side": 1,
+      "message": "Except the minor item, it seems good to me!",
+      "revId": "98a26789ca62012514a6983b91478c20949eaa08",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fd5057a9_d6e48f2b",
+        "filename": "librobinhood/src/plugins/sqlite/filter.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 558,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-05-19T14:42:56Z",
+      "side": 1,
+      "message": "minor: this clause does not seem to do anything, as `needs_paren` is set to `false`",
+      "range": {
+        "startLine": 558,
+        "startChar": 33,
+        "endLine": 558,
+        "endChar": 52
+      },
+      "revId": "98a26789ca62012514a6983b91478c20949eaa08",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "270aa51d_47ae8e32",
+        "filename": "librobinhood/src/plugins/sqlite/filter.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 583,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-05-19T14:42:56Z",
+      "side": 1,
+      "message": "typo: no",
+      "range": {
+        "startLine": 583,
+        "startChar": 28,
+        "endLine": 583,
+        "endChar": 31
+      },
+      "revId": "98a26789ca62012514a6983b91478c20949eaa08",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ec0dc906_4186ecf1",
+        "filename": "librobinhood/src/plugins/sqlite/filter.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 597,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-05-19T14:42:56Z",
+      "side": 1,
+      "message": "typo: comparison",
+      "range": {
+        "startLine": 597,
+        "startChar": 57,
+        "endLine": 597,
+        "endChar": 68
+      },
+      "revId": "98a26789ca62012514a6983b91478c20949eaa08",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
