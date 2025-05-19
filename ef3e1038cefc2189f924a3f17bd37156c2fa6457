@@ -70,6 +70,30 @@
       },
       "revId": "ef3e1038cefc2189f924a3f17bd37156c2fa6457",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "22829106_ecc931d2",
+        "filename": "librobinhood/src/plugins/s3/s3.c",
+        "patchSetId": 23
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1038646
+      },
+      "writtenOn": "2025-05-19T07:44:54Z",
+      "side": 1,
+      "message": "I use the current_id only to access specific index of obj_data.list so using size_t or int shouldn\u0027t change anything. But I can keep using size_t for the length",
+      "parentUuid": "2a092bb4_08c663c2",
+      "range": {
+        "startLine": 30,
+        "startChar": 4,
+        "endLine": 30,
+        "endChar": 7
+      },
+      "revId": "ef3e1038cefc2189f924a3f17bd37156c2fa6457",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
