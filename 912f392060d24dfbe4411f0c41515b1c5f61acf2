@@ -22,6 +22,75 @@
       },
       "revId": "912f392060d24dfbe4411f0c41515b1c5f61acf2",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "173553df_09edc293",
+        "filename": "librobinhood/src/plugins/sqlite/json/encode.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-05-20T08:20:06Z",
+      "side": 1,
+      "message": "nit: double `;`",
+      "range": {
+        "startLine": 60,
+        "startChar": 39,
+        "endLine": 60,
+        "endChar": 40
+      },
+      "revId": "912f392060d24dfbe4411f0c41515b1c5f61acf2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0597c94f_30d5997c",
+        "filename": "librobinhood/src/plugins/sqlite/json/encode.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-05-20T08:20:06Z",
+      "side": 1,
+      "message": "minor: result not checked",
+      "range": {
+        "startLine": 126,
+        "startChar": 13,
+        "endLine": 126,
+        "endChar": 20
+      },
+      "revId": "912f392060d24dfbe4411f0c41515b1c5f61acf2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "00152a21_3c508931",
+        "filename": "librobinhood/src/plugins/sqlite/json/encode.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-05-20T08:20:06Z",
+      "side": 1,
+      "message": "suggest: this whole patch could be used outside of json to, if we want to dump entries elsewhere, or simply for debug. I\u0027d say put this function and the others in a utils file",
+      "range": {
+        "startLine": 184,
+        "startChar": 0,
+        "endLine": 184,
+        "endChar": 17
+      },
+      "revId": "912f392060d24dfbe4411f0c41515b1c5f61acf2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
