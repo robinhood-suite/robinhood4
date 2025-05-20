@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e224b4c6_fb2b181f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-05-20T10:50:21Z",
+      "side": 1,
+      "message": "Same issue as the last patch IMO, but otherwise it works",
+      "revId": "107490ea2ff59bac475822ebc9d6e82fc35bdd5e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
