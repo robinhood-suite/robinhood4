@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6aa1544f_405d2525",
+        "filename": "librobinhood/src/plugins/sqlite/filter.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 558,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-05-20T07:05:26Z",
+      "side": 1,
+      "message": "Yes, I need to use this in a futur patch. For now it only works with simple queries.",
+      "parentUuid": "fd5057a9_d6e48f2b",
+      "range": {
+        "startLine": 558,
+        "startChar": 33,
+        "endLine": 558,
+        "endChar": 52
+      },
+      "revId": "98a26789ca62012514a6983b91478c20949eaa08",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "270aa51d_47ae8e32",
         "filename": "librobinhood/src/plugins/sqlite/filter.c",
         "patchSetId": 2
