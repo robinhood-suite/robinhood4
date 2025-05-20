@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f95d69fc_a90d02a5",
+        "filename": "librobinhood/src/plugins/sqlite/backend.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-05-20T09:07:13Z",
+      "side": 1,
+      "message": "minor: missing the `RBH_FILTER_OPS` from the plugin declaration for the capabilities",
+      "range": {
+        "startLine": 12,
+        "startChar": 15,
+        "endLine": 12,
+        "endChar": 36
+      },
+      "revId": "8d70d2515b67da98834a7cbc06b69f192da839b1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
