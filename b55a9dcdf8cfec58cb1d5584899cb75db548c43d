@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ea0aacf1_640b9931",
+        "filename": "librobinhood/src/plugins/sqlite/filter.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 931,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-05-20T10:48:50Z",
+      "side": 1,
+      "message": "major: this shouldn\u0027t be in the filter clause conversion, since you can sort or limit the output without filtering it",
+      "range": {
+        "startLine": 931,
+        "startChar": 13,
+        "endLine": 931,
+        "endChar": 24
+      },
+      "revId": "b55a9dcdf8cfec58cb1d5584899cb75db548c43d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
