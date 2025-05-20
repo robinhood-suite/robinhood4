@@ -160,6 +160,30 @@
       },
       "revId": "7833c9d1c1e25c895b5b07345322c17b6d357176",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c14ff6b8_483e1a57",
+        "filename": "librobinhood/src/plugins/sqlite/update.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 361,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-05-20T09:32:38Z",
+      "side": 1,
+      "message": "I\u0027d have to test but I think that the query would be invalid as for instance, if you don\u0027t update `atime` then `excluded.atime` is not valid.",
+      "parentUuid": "2ace25bc_09448abd",
+      "range": {
+        "startLine": 346,
+        "startChar": 4,
+        "endLine": 361,
+        "endChar": 59
+      },
+      "revId": "7833c9d1c1e25c895b5b07345322c17b6d357176",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
