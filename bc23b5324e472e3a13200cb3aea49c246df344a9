@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3c21cab9_81884395",
+        "filename": "utils/tests/db_cmd_sqlite",
+        "patchSetId": 2
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-05-20T09:27:12Z",
+      "side": 1,
+      "message": "IIRC this is used in one of the tests I skipped. So it would be nice to have to increase test coverage.",
+      "parentUuid": "ee55bd98_2a47af24",
+      "range": {
+        "startLine": 80,
+        "startChar": 0,
+        "endLine": 87,
+        "endChar": 61
+      },
+      "revId": "bc23b5324e472e3a13200cb3aea49c246df344a9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "aa724971_5d386fec",
         "filename": "utils/tests/db_cmd_sqlite",
         "patchSetId": 2
