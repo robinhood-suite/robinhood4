@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "71d36bc1_683c09a5",
+        "filename": "librobinhood/src/plugins/sqlite/json/decode.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-05-20T09:37:36Z",
+      "side": 1,
+      "message": "minor: no check on the result",
+      "range": {
+        "startLine": 60,
+        "startChar": 24,
+        "endLine": 60,
+        "endChar": 30
+      },
+      "revId": "0aac13f3e6b19c1a981a922383f5af1ca583f91f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "baa0d0c4_6bf8c017",
         "filename": "librobinhood/src/plugins/sqlite/json/decode.c",
         "patchSetId": 3
