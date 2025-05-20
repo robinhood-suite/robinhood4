@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5dc3b395_d68f67fc",
+        "filename": "rbh-fsevents/tests/lustre/test_rename.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-05-20T10:57:11Z",
+      "side": 1,
+      "message": "question: do you plan on adding similar tests for sqlite ?",
+      "range": {
+        "startLine": 55,
+        "startChar": 4,
+        "endLine": 55,
+        "endChar": 19
+      },
+      "revId": "d420e071acc7c6e63adab6b83db435b19cf98140",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bd8c39ab_a98ab60f",
+        "filename": "rbh-sync/tests/test_config.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-05-20T10:57:11Z",
+      "side": 1,
+      "message": "minor: divide the function in two, so that the first check is done for both DBs, but the second one is mongo only",
+      "range": {
+        "startLine": 21,
+        "startChar": 4,
+        "endLine": 21,
+        "endChar": 19
+      },
+      "revId": "d420e071acc7c6e63adab6b83db435b19cf98140",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "87b9be92_1d444123",
+        "filename": "rbh-sync/tests/test_posix_db_sync.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 354,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-05-20T10:57:11Z",
+      "side": 1,
+      "message": "question: how is this test mongo only ?",
+      "range": {
+        "startLine": 354,
+        "startChar": 4,
+        "endLine": 354,
+        "endChar": 19
+      },
+      "revId": "d420e071acc7c6e63adab6b83db435b19cf98140",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
