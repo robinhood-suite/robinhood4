@@ -119,10 +119,9 @@ function rbh_get_retention
 
     local retention_attr="$(get_retention_attribute)"
 
-    local retention="$(getfattr -h -n "$retention_attr" --only-values $entry)"
-    local rc=$?
+    local retention="$(getfattr -h -n "$retention_attr" --only-values --absolute-names $entry 2>/dev/null)"
 
-    if (( rc != 0 )); then
+    if [ -z "$retention" ]; then
         echo "'$entry' has no retention date set"
         exit $rc
     fi
