@@ -20,7 +20,11 @@ function is_numeric
 
 function get_retention_attribute
 {
-    local config_file="/etc/robinhood4.d/default.yaml"
+    local config_file="$RBH_CONFIG_PATH"
+
+    if [ -z "$config_file" ]; then
+        config_file="/etc/robinhood4.d/default.yaml"
+    fi
 
     if [ ! -f "$config_file" ]; then
         echo "user.expires"

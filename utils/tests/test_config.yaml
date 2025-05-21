@@ -1,4 +1,5 @@
 ---
+RBH_RETENTION_XATTR: "user.expires"
 backends:
     lustre:
         extends: posix
