@@ -49,6 +49,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "874815d4_25af6d9e",
+        "filename": "rbh-sync/tests/test_config.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-05-21T09:20:16Z",
+      "side": 1,
+      "message": "After thinking about it, no need to divide anything, just use another config element than the mongodb address. For instance, two xattrs map would do the same job of detecting duplicates",
+      "parentUuid": "bd8c39ab_a98ab60f",
+      "range": {
+        "startLine": 21,
+        "startChar": 4,
+        "endLine": 21,
+        "endChar": 19
+      },
+      "revId": "d420e071acc7c6e63adab6b83db435b19cf98140",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "87b9be92_1d444123",
         "filename": "rbh-sync/tests/test_posix_db_sync.bash",
         "patchSetId": 2
