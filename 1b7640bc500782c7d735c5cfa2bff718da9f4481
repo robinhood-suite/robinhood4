@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "adac1f12_8fa22ccb",
+        "filename": "designs/rbh-policy/01-OverviewAndGoals.rst",
+        "patchSetId": 10
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-05-21T07:22:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "580d705a_2f104648",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 13
+      },
+      "revId": "1b7640bc500782c7d735c5cfa2bff718da9f4481",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5c792387_8f078240",
@@ -47,6 +71,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d23880ac_af6e8e21",
+        "filename": "designs/rbh-policy/01-OverviewAndGoals.rst",
+        "patchSetId": 10
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-05-21T07:22:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5c792387_8f078240",
+      "range": {
+        "startLine": 33,
+        "startChar": 0,
+        "endLine": 33,
+        "endChar": 10
+      },
+      "revId": "1b7640bc500782c7d735c5cfa2bff718da9f4481",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0e531fcd_828b1c3d",
@@ -60,6 +108,30 @@
       "writtenOn": "2025-05-16T13:45:11Z",
       "side": 1,
       "message": "nit: this should be in its own section at the end, and not in the introduction",
+      "range": {
+        "startLine": 40,
+        "startChar": 0,
+        "endLine": 40,
+        "endChar": 37
+      },
+      "revId": "1b7640bc500782c7d735c5cfa2bff718da9f4481",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "830e6a28_6d00667c",
+        "filename": "designs/rbh-policy/01-OverviewAndGoals.rst",
+        "patchSetId": 10
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-05-21T07:22:08Z",
+      "side": 1,
+      "message": "I put it here because it directly referenced what was above. \nI moved it to the end of the design in a section dedicated to future improvements.",
+      "parentUuid": "0e531fcd_828b1c3d",
       "range": {
         "startLine": 40,
         "startChar": 0,
@@ -95,6 +167,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "442c63cb_1174c283",
+        "filename": "designs/rbh-policy/01-OverviewAndGoals.rst",
+        "patchSetId": 10
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-05-21T07:22:08Z",
+      "side": 1,
+      "message": "Yes, that\u0027s true. I put this in a future improvement section because it\u0027s not essential, but in order to make the config as simple as possible for admins, this suggestion was made by Guillaume.",
+      "parentUuid": "8682dd5c_9c57942c",
+      "range": {
+        "startLine": 64,
+        "startChar": 0,
+        "endLine": 69,
+        "endChar": 66
+      },
+      "revId": "1b7640bc500782c7d735c5cfa2bff718da9f4481",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "cc2a7c02_a72ddb3b",
         "filename": "designs/rbh-policy/01-OverviewAndGoals.rst",
         "patchSetId": 10
@@ -106,6 +202,30 @@
       "writtenOn": "2025-05-16T13:45:11Z",
       "side": 1,
       "message": "nit: see my previous comment: this isn\u0027t part of the \"future improvements\", but rather part of the actual overview",
+      "range": {
+        "startLine": 80,
+        "startChar": 0,
+        "endLine": 80,
+        "endChar": 22
+      },
+      "revId": "1b7640bc500782c7d735c5cfa2bff718da9f4481",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "36a72c4b_9806e808",
+        "filename": "designs/rbh-policy/01-OverviewAndGoals.rst",
+        "patchSetId": 10
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-05-21T07:22:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cc2a7c02_a72ddb3b",
       "range": {
         "startLine": 80,
         "startChar": 0,
@@ -129,6 +249,30 @@
       "writtenOn": "2025-05-16T13:45:11Z",
       "side": 1,
       "message": "typo: not sure it\u0027s the right word here... Either they can \"implement advanced or handle unforeseen behaviors\", or simply \"implement advanced non-default behaviors\"",
+      "range": {
+        "startLine": 83,
+        "startChar": 12,
+        "endLine": 83,
+        "endChar": 22
+      },
+      "revId": "1b7640bc500782c7d735c5cfa2bff718da9f4481",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "860f8176_a26f0d44",
+        "filename": "designs/rbh-policy/01-OverviewAndGoals.rst",
+        "patchSetId": 10
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-05-21T07:22:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c3e6c22a_51ad55fa",
       "range": {
         "startLine": 83,
         "startChar": 12,
@@ -185,6 +329,54 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d2eb0f26_c292fe5d",
+        "filename": "designs/rbh-policy/01-OverviewAndGoals.rst",
+        "patchSetId": 10
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-05-21T07:22:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ba411916_929c02cb",
+      "range": {
+        "startLine": 91,
+        "startChar": 0,
+        "endLine": 92,
+        "endChar": 8
+      },
+      "revId": "1b7640bc500782c7d735c5cfa2bff718da9f4481",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "32a8393c_d1943225",
+        "filename": "designs/rbh-policy/01-OverviewAndGoals.rst",
+        "patchSetId": 10
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-05-21T07:22:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c16c296e_f6e5b7fe",
+      "range": {
+        "startLine": 91,
+        "startChar": 0,
+        "endLine": 92,
+        "endChar": 8
+      },
+      "revId": "1b7640bc500782c7d735c5cfa2bff718da9f4481",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bdfb3751_a2534072",
@@ -198,6 +390,30 @@
       "writtenOn": "2025-05-16T13:45:11Z",
       "side": 1,
       "message": "question: why not allow the whole list of possible files",
+      "range": {
+        "startLine": 33,
+        "startChar": 29,
+        "endLine": 33,
+        "endChar": 68
+      },
+      "revId": "1b7640bc500782c7d735c5cfa2bff718da9f4481",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f3958e5c_31c2cf9e",
+        "filename": "designs/rbh-policy/03-PolicyConditionFilters.rst",
+        "patchSetId": 10
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-05-21T07:22:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bdfb3751_a2534072",
       "range": {
         "startLine": 33,
         "startChar": 29,
@@ -231,6 +447,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1e46b42a_eabb920a",
+        "filename": "designs/rbh-policy/03-PolicyConditionFilters.rst",
+        "patchSetId": 10
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-05-21T07:22:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5792ae95_0ed236cb",
+      "range": {
+        "startLine": 37,
+        "startChar": 4,
+        "endLine": 37,
+        "endChar": 9
+      },
+      "revId": "1b7640bc500782c7d735c5cfa2bff718da9f4481",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "513b81d4_1cb929ac",
@@ -244,6 +484,30 @@
       "writtenOn": "2025-05-16T13:45:11Z",
       "side": 1,
       "message": "minor: missing GID filter",
+      "range": {
+        "startLine": 45,
+        "startChar": 4,
+        "endLine": 45,
+        "endChar": 9
+      },
+      "revId": "1b7640bc500782c7d735c5cfa2bff718da9f4481",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "80893892_d9db5df9",
+        "filename": "designs/rbh-policy/03-PolicyConditionFilters.rst",
+        "patchSetId": 10
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-05-21T07:22:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "513b81d4_1cb929ac",
       "range": {
         "startLine": 45,
         "startChar": 4,
@@ -324,6 +588,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e513d813_15a77cfc",
+        "filename": "designs/rbh-policy/04-ImplementationOverview.rst",
+        "patchSetId": 10
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-05-21T07:22:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2fd2c1b8_665da9cb",
+      "range": {
+        "startLine": 35,
+        "startChar": 48,
+        "endLine": 35,
+        "endChar": 56
+      },
+      "revId": "1b7640bc500782c7d735c5cfa2bff718da9f4481",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f163d361_58395946",
@@ -337,6 +625,30 @@
       "writtenOn": "2025-05-16T08:43:00Z",
       "side": 1,
       "message": "typo: it is (better form in a written document)",
+      "range": {
+        "startLine": 38,
+        "startChar": 0,
+        "endLine": 38,
+        "endChar": 4
+      },
+      "revId": "1b7640bc500782c7d735c5cfa2bff718da9f4481",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0c0170fb_89a9fbfd",
+        "filename": "designs/rbh-policy/04-ImplementationOverview.rst",
+        "patchSetId": 10
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-05-21T07:22:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f163d361_58395946",
       "range": {
         "startLine": 38,
         "startChar": 0,
@@ -508,6 +820,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5323e651_08bce2b5",
+        "filename": "designs/rbh-policy/04-ImplementationOverview.rst",
+        "patchSetId": 10
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-05-21T07:22:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "70a18723_9282604f",
+      "range": {
+        "startLine": 280,
+        "startChar": 39,
+        "endLine": 280,
+        "endChar": 62
+      },
+      "revId": "1b7640bc500782c7d735c5cfa2bff718da9f4481",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3787352e_e0511fdb",
@@ -577,6 +913,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a6f415ba_cc55a163",
+        "filename": "designs/rbh-policy/04-ImplementationOverview.rst",
+        "patchSetId": 10
+      },
+      "lineNbr": 295,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-05-21T07:22:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a4b4d3cb_d56f501b",
+      "range": {
+        "startLine": 295,
+        "startChar": 16,
+        "endLine": 295,
+        "endChar": 32
+      },
+      "revId": "1b7640bc500782c7d735c5cfa2bff718da9f4481",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0e394389_8048c529",
@@ -590,6 +950,30 @@
       "writtenOn": "2025-05-16T08:43:00Z",
       "side": 1,
       "message": "comment: maybe list the entries in different files according to which policy matches them",
+      "range": {
+        "startLine": 87,
+        "startChar": 2,
+        "endLine": 87,
+        "endChar": 50
+      },
+      "revId": "1b7640bc500782c7d735c5cfa2bff718da9f4481",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d868a930_cad7fb10",
+        "filename": "designs/rbh-policy/05-rbh-policyCommand.rst",
+        "patchSetId": 10
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-05-21T07:22:08Z",
+      "side": 1,
+      "message": "This is a good idea, I added a part in the `Verbosity Control` section to explain this idea.",
+      "parentUuid": "0e394389_8048c529",
       "range": {
         "startLine": 87,
         "startChar": 2,
