@@ -20,7 +20,11 @@ function is_numeric
 
 function get_retention_attribute
 {
-    local config_file="/etc/robinhood4.d/default.yaml"
+    local config_file="$RBH_CONFIG_PATH"
+
+    if [ -z "$config_file" ]; then
+        config_file="/etc/robinhood4.d/default.yaml"
+    fi
 
     if [ ! -f "$config_file" ]; then
         echo "user.expires"
@@ -40,6 +44,8 @@ function rbh_set_retention
     local date
     local rc
 
+    local retention_attr="$(get_retention_attribute)"
+
     if is_numeric "$retention"; then
         date="$(date --date="@$retention" +%s)"
         rc=$?
@@ -55,8 +61,6 @@ function rbh_set_retention
         echo "$date"
         exit $rc
     fi
-
-    local retention_attr="$(get_retention_attribute)"
 
     if [ ! -z "$relative_found" ]; then
         prefix="+"
