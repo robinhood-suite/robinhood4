@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "299d4635_cb2f5632",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-05-21T13:39:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "99ea14ff_83c2e9d8",
+      "range": {
+        "startLine": 12,
+        "startChar": 35,
+        "endLine": 12,
+        "endChar": 51
+      },
+      "revId": "1cb73636795d5682b2c35c3ba29f6aba8ed71049",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "92e5587b_1df44488",
@@ -70,6 +94,54 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b5974f2_ce1a758a",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-05-21T13:39:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0939b0cd_d4af3d25",
+      "range": {
+        "startLine": 13,
+        "startChar": 9,
+        "endLine": 13,
+        "endChar": 42
+      },
+      "revId": "1cb73636795d5682b2c35c3ba29f6aba8ed71049",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2c9c600c_b22e8082",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-05-21T13:39:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "92e5587b_1df44488",
+      "range": {
+        "startLine": 13,
+        "startChar": 9,
+        "endLine": 13,
+        "endChar": 29
+      },
+      "revId": "1cb73636795d5682b2c35c3ba29f6aba8ed71049",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "282a1e3d_9d8fb093",
@@ -93,6 +165,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "aba85c67_a14f4c21",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-05-21T13:39:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "282a1e3d_9d8fb093",
+      "range": {
+        "startLine": 15,
+        "startChar": 24,
+        "endLine": 15,
+        "endChar": 39
+      },
+      "revId": "1cb73636795d5682b2c35c3ba29f6aba8ed71049",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "860869a6_d3601a92",
@@ -106,6 +202,30 @@
       "writtenOn": "2025-05-19T08:58:08Z",
       "side": 1,
       "message": "typo: backends",
+      "range": {
+        "startLine": 23,
+        "startChar": 55,
+        "endLine": 23,
+        "endChar": 62
+      },
+      "revId": "1cb73636795d5682b2c35c3ba29f6aba8ed71049",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b0575bc6_49c469ed",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-05-21T13:39:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "860869a6_d3601a92",
       "range": {
         "startLine": 23,
         "startChar": 55,
@@ -185,6 +305,54 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8bd60867_81980f31",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-05-21T13:39:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1e97117b_cce5f32f",
+      "range": {
+        "startLine": 25,
+        "startChar": 23,
+        "endLine": 25,
+        "endChar": 35
+      },
+      "revId": "1cb73636795d5682b2c35c3ba29f6aba8ed71049",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "46294587_187fbfa8",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-05-21T13:39:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c75cd8b2_ac35f6ee",
+      "range": {
+        "startLine": 22,
+        "startChar": 60,
+        "endLine": 25,
+        "endChar": 36
+      },
+      "revId": "1cb73636795d5682b2c35c3ba29f6aba8ed71049",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a15f2da2_e6f8b9fc",
@@ -224,6 +392,54 @@
       "range": {
         "startLine": 28,
         "startChar": 2,
+        "endLine": 28,
+        "endChar": 40
+      },
+      "revId": "1cb73636795d5682b2c35c3ba29f6aba8ed71049",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b6ef6294_4ef53c05",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-05-21T13:39:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5bfae630_68dbe33e",
+      "range": {
+        "startLine": 28,
+        "startChar": 2,
+        "endLine": 28,
+        "endChar": 40
+      },
+      "revId": "1cb73636795d5682b2c35c3ba29f6aba8ed71049",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "14e05cd3_6da95181",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-05-21T13:39:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a15f2da2_e6f8b9fc",
+      "range": {
+        "startLine": 27,
+        "startChar": 0,
         "endLine": 28,
         "endChar": 40
       },
@@ -277,6 +493,54 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5392bc8d_bde7431d",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-05-21T13:39:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8e8d85e5_625369d9",
+      "range": {
+        "startLine": 31,
+        "startChar": 20,
+        "endLine": 31,
+        "endChar": 70
+      },
+      "revId": "1cb73636795d5682b2c35c3ba29f6aba8ed71049",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0238ec0c_ea7a23a4",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-05-21T13:39:27Z",
+      "side": 1,
+      "message": "This is the past tense of rebind. I can modify my sentence to use rebind instead if you find it clearer.",
+      "parentUuid": "c64350f3_03ffd871",
+      "range": {
+        "startLine": 31,
+        "startChar": 12,
+        "endLine": 31,
+        "endChar": 19
+      },
+      "revId": "1cb73636795d5682b2c35c3ba29f6aba8ed71049",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d6039484_296bb230",
@@ -290,6 +554,30 @@
       "writtenOn": "2025-05-19T07:53:51Z",
       "side": 1,
       "message": "typo: `V3\u0027s`",
+      "range": {
+        "startLine": 39,
+        "startChar": 0,
+        "endLine": 39,
+        "endChar": 2
+      },
+      "revId": "1cb73636795d5682b2c35c3ba29f6aba8ed71049",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f457baff_fb862739",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-05-21T13:39:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d6039484_296bb230",
       "range": {
         "startLine": 39,
         "startChar": 0,
@@ -323,6 +611,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "441d3d1e_0120002b",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-05-21T13:39:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e5a7a689_c26234e4",
+      "range": {
+        "startLine": 41,
+        "startChar": 0,
+        "endLine": 42,
+        "endChar": 14
+      },
+      "revId": "1cb73636795d5682b2c35c3ba29f6aba8ed71049",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c8bb34c5_89b5814e",
@@ -336,6 +648,30 @@
       "writtenOn": "2025-05-19T07:53:51Z",
       "side": 1,
       "message": "minor: to remove",
+      "range": {
+        "startLine": 44,
+        "startChar": 19,
+        "endLine": 44,
+        "endChar": 64
+      },
+      "revId": "1cb73636795d5682b2c35c3ba29f6aba8ed71049",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e095edf6_561f04aa",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-05-21T13:39:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c8bb34c5_89b5814e",
       "range": {
         "startLine": 44,
         "startChar": 19,
@@ -369,6 +705,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9e76f388_94f22d62",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-05-21T13:39:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "948dc842_d872237b",
+      "range": {
+        "startLine": 50,
+        "startChar": 18,
+        "endLine": 50,
+        "endChar": 35
+      },
+      "revId": "1cb73636795d5682b2c35c3ba29f6aba8ed71049",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8794ace3_3ddba2a9",
@@ -392,6 +752,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d5de3cf3_e220865a",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-05-21T13:39:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8794ace3_3ddba2a9",
+      "range": {
+        "startLine": 53,
+        "startChar": 31,
+        "endLine": 53,
+        "endChar": 55
+      },
+      "revId": "1cb73636795d5682b2c35c3ba29f6aba8ed71049",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "08706874_1996915c",
@@ -405,6 +789,30 @@
       "writtenOn": "2025-05-19T07:53:51Z",
       "side": 1,
       "message": "typo: to remove",
+      "range": {
+        "startLine": 76,
+        "startChar": 72,
+        "endLine": 76,
+        "endChar": 73
+      },
+      "revId": "1cb73636795d5682b2c35c3ba29f6aba8ed71049",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f4d47dbd_05c55140",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-05-21T13:39:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "08706874_1996915c",
       "range": {
         "startLine": 76,
         "startChar": 72,
@@ -507,6 +915,102 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "62a2b62c_d5beb700",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-05-21T13:39:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a8f5b663_ae2ffcb9",
+      "range": {
+        "startLine": 77,
+        "startChar": 4,
+        "endLine": 77,
+        "endChar": 10
+      },
+      "revId": "1cb73636795d5682b2c35c3ba29f6aba8ed71049",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6bc65774_5613c660",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-05-21T13:39:27Z",
+      "side": 1,
+      "message": "It was for rbh-undelete context since we need deleted paths, but you are right no need to save them if we are not using them :)",
+      "parentUuid": "7dc2c662_487b6017",
+      "range": {
+        "startLine": 77,
+        "startChar": 11,
+        "endLine": 77,
+        "endChar": 19
+      },
+      "revId": "1cb73636795d5682b2c35c3ba29f6aba8ed71049",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1fab23e5_eb5a4738",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-05-21T13:39:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e8d94b8e_8947c109",
+      "range": {
+        "startLine": 75,
+        "startChar": 0,
+        "endLine": 77,
+        "endChar": 36
+      },
+      "revId": "1cb73636795d5682b2c35c3ba29f6aba8ed71049",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "20372566_3aa96b8c",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-05-21T13:39:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "85811941_725a797d",
+      "range": {
+        "startLine": 77,
+        "startChar": 4,
+        "endLine": 77,
+        "endChar": 10
+      },
+      "revId": "1cb73636795d5682b2c35c3ba29f6aba8ed71049",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "88a1f1bc_04e510e6",
@@ -520,6 +1024,30 @@
       "writtenOn": "2025-05-19T07:53:51Z",
       "side": 1,
       "message": "minor: `as part of the` instead",
+      "range": {
+        "startLine": 79,
+        "startChar": 53,
+        "endLine": 79,
+        "endChar": 62
+      },
+      "revId": "1cb73636795d5682b2c35c3ba29f6aba8ed71049",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "49a11e8e_bbf19c2f",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-05-21T13:39:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "88a1f1bc_04e510e6",
       "range": {
         "startLine": 79,
         "startChar": 53,
@@ -553,6 +1081,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a0f3cf4_36ec9071",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-05-21T13:39:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a8f24dfa_49378d5c",
+      "range": {
+        "startLine": 80,
+        "startChar": 59,
+        "endLine": 80,
+        "endChar": 71
+      },
+      "revId": "1cb73636795d5682b2c35c3ba29f6aba8ed71049",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "64f30944_d0c85ffb",
@@ -566,6 +1118,30 @@
       "writtenOn": "2025-05-19T07:53:51Z",
       "side": 1,
       "message": "minor: add `but the entry\u0027s metadata is kept`",
+      "range": {
+        "startLine": 81,
+        "startChar": 48,
+        "endLine": 81,
+        "endChar": 66
+      },
+      "revId": "1cb73636795d5682b2c35c3ba29f6aba8ed71049",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0f3285cf_d77b8836",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-05-21T13:39:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "64f30944_d0c85ffb",
       "range": {
         "startLine": 81,
         "startChar": 48,
@@ -599,6 +1175,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a5bf54a9_acc696b0",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-05-21T13:39:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c62a6354_d76f1072",
+      "range": {
+        "startLine": 82,
+        "startChar": 17,
+        "endLine": 82,
+        "endChar": 24
+      },
+      "revId": "1cb73636795d5682b2c35c3ba29f6aba8ed71049",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "88c715a1_a4a4da5f",
@@ -612,6 +1212,30 @@
       "writtenOn": "2025-05-19T07:53:51Z",
       "side": 1,
       "message": "suggest: remove this sentence, and instead explain why the original issue is thus fixed",
+      "range": {
+        "startLine": 84,
+        "startChar": 0,
+        "endLine": 85,
+        "endChar": 58
+      },
+      "revId": "1cb73636795d5682b2c35c3ba29f6aba8ed71049",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7444c87d_2401169b",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-05-21T13:39:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "88c715a1_a4a4da5f",
       "range": {
         "startLine": 84,
         "startChar": 0,
@@ -645,6 +1269,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c5c9045c_b787a3b1",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-05-21T13:39:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "84b5927f_94202725",
+      "range": {
+        "startLine": 87,
+        "startChar": 0,
+        "endLine": 92,
+        "endChar": 2
+      },
+      "revId": "1cb73636795d5682b2c35c3ba29f6aba8ed71049",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "74d1c820_d24529c8",
@@ -658,6 +1306,30 @@
       "writtenOn": "2025-05-19T07:53:51Z",
       "side": 1,
       "message": "sugges: `The time field here refers to the date of the log corresponding to the file deletion, not the actuel deletion time, nor when rbh-fsevents handled the event`",
+      "range": {
+        "startLine": 93,
+        "startChar": 6,
+        "endLine": 95,
+        "endChar": 2
+      },
+      "revId": "1cb73636795d5682b2c35c3ba29f6aba8ed71049",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1ca559e7_faa3492f",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-05-21T13:39:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "74d1c820_d24529c8",
       "range": {
         "startLine": 93,
         "startChar": 6,
@@ -691,6 +1363,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a42a31ef_47b0b3f4",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-05-21T13:39:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b898da6c_6cb04491",
+      "range": {
+        "startLine": 99,
+        "startChar": 65,
+        "endLine": 100,
+        "endChar": 15
+      },
+      "revId": "1cb73636795d5682b2c35c3ba29f6aba8ed71049",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6aa9fd20_d594bd03",
@@ -704,6 +1400,30 @@
       "writtenOn": "2025-05-19T08:58:08Z",
       "side": 1,
       "message": "question: what do you mean by `right directory`? if it\u0027s only to say that the relative path must be valid, that\u0027s kind of obvious",
+      "range": {
+        "startLine": 102,
+        "startChar": 25,
+        "endLine": 102,
+        "endChar": 40
+      },
+      "revId": "1cb73636795d5682b2c35c3ba29f6aba8ed71049",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "684b311b_6a68b549",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-05-21T13:39:27Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "6aa9fd20_d594bd03",
       "range": {
         "startLine": 102,
         "startChar": 25,
@@ -737,6 +1457,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "38efc60b_56278532",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-05-21T13:39:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "072f138e_7f404de9",
+      "range": {
+        "startLine": 109,
+        "startChar": 1,
+        "endLine": 111,
+        "endChar": 36
+      },
+      "revId": "1cb73636795d5682b2c35c3ba29f6aba8ed71049",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "69b86d8f_5dcddabb",
@@ -750,6 +1494,30 @@
       "writtenOn": "2025-05-19T07:53:51Z",
       "side": 1,
       "message": "minor: how will other backends work then ?",
+      "range": {
+        "startLine": 116,
+        "startChar": 44,
+        "endLine": 116,
+        "endChar": 64
+      },
+      "revId": "1cb73636795d5682b2c35c3ba29f6aba8ed71049",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "46bdf1d5_54475c32",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-05-21T13:39:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "69b86d8f_5dcddabb",
       "range": {
         "startLine": 116,
         "startChar": 44,
@@ -783,6 +1551,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c199513e_240f3042",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-05-21T13:39:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3569bbec_4477cc6d",
+      "range": {
+        "startLine": 146,
+        "startChar": 0,
+        "endLine": 146,
+        "endChar": 25
+      },
+      "revId": "1cb73636795d5682b2c35c3ba29f6aba8ed71049",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8b1c33d5_e7324f18",
@@ -796,6 +1588,30 @@
       "writtenOn": "2025-05-19T07:53:51Z",
       "side": 1,
       "message": "major: how will it work for other backends ?",
+      "range": {
+        "startLine": 160,
+        "startChar": 0,
+        "endLine": 160,
+        "endChar": 3
+      },
+      "revId": "1cb73636795d5682b2c35c3ba29f6aba8ed71049",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e42f9c55_61f0d5c7",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-05-21T13:39:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8b1c33d5_e7324f18",
       "range": {
         "startLine": 160,
         "startChar": 0,
@@ -829,6 +1645,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "128ea653_5cfdd160",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-05-21T13:39:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "811a5507_1aa53432",
+      "range": {
+        "startLine": 170,
+        "startChar": 38,
+        "endLine": 170,
+        "endChar": 62
+      },
+      "revId": "1cb73636795d5682b2c35c3ba29f6aba8ed71049",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "447feb6e_3dd56f28",
@@ -842,6 +1682,30 @@
       "writtenOn": "2025-05-19T07:53:51Z",
       "side": 1,
       "message": "suggest: I think these should be combined, maybe with a verbose level or something",
+      "range": {
+        "startLine": 179,
+        "startChar": 1,
+        "endLine": 180,
+        "endChar": 38
+      },
+      "revId": "1cb73636795d5682b2c35c3ba29f6aba8ed71049",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "627008fe_0e263104",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-05-21T13:39:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "447feb6e_3dd56f28",
       "range": {
         "startLine": 179,
         "startChar": 1,
@@ -875,6 +1739,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c2cf4276_f4e75d2f",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-05-21T13:39:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b5bdd60f_fd6dcc32",
+      "range": {
+        "startLine": 184,
+        "startChar": 0,
+        "endLine": 184,
+        "endChar": 11
+      },
+      "revId": "1cb73636795d5682b2c35c3ba29f6aba8ed71049",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f9a70f1f_54f1dabc",
@@ -888,6 +1776,30 @@
       "writtenOn": "2025-05-19T07:53:51Z",
       "side": 1,
       "message": "typo: genericity",
+      "range": {
+        "startLine": 211,
+        "startChar": 0,
+        "endLine": 211,
+        "endChar": 10
+      },
+      "revId": "1cb73636795d5682b2c35c3ba29f6aba8ed71049",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5a08204d_21a1d7fb",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-05-21T13:39:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f9a70f1f_54f1dabc",
       "range": {
         "startLine": 211,
         "startChar": 0,
@@ -921,6 +1833,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d5c32cdd_3b69eabc",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-05-21T13:39:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "631e426a_ac7f87e8",
+      "range": {
+        "startLine": 216,
+        "startChar": 65,
+        "endLine": 216,
+        "endChar": 76
+      },
+      "revId": "1cb73636795d5682b2c35c3ba29f6aba8ed71049",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7e506607_03a273df",
@@ -944,6 +1880,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd3b394a_df836178",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-05-21T13:39:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7e506607_03a273df",
+      "range": {
+        "startLine": 216,
+        "startChar": 42,
+        "endLine": 217,
+        "endChar": 34
+      },
+      "revId": "1cb73636795d5682b2c35c3ba29f6aba8ed71049",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2a62d73c_193a876a",
@@ -957,6 +1917,30 @@
       "writtenOn": "2025-05-19T07:53:51Z",
       "side": 1,
       "message": "typo: `be involved` or `involve`",
+      "range": {
+        "startLine": 219,
+        "startChar": 41,
+        "endLine": 219,
+        "endChar": 51
+      },
+      "revId": "1cb73636795d5682b2c35c3ba29f6aba8ed71049",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e59a2fdf_f8bf1d0d",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-05-21T13:39:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2a62d73c_193a876a",
       "range": {
         "startLine": 219,
         "startChar": 41,
@@ -992,6 +1976,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9f6f5a47_48f9b2c3",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-05-21T13:39:27Z",
+      "side": 1,
+      "message": "I was thinking about Lustre\u0027s fid for example, since V3 use this to rebind the file to its content.",
+      "parentUuid": "2a946693_52ffa2c0",
+      "range": {
+        "startLine": 220,
+        "startChar": 53,
+        "endLine": 220,
+        "endChar": 59
+      },
+      "revId": "1cb73636795d5682b2c35c3ba29f6aba8ed71049",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a491dff3_026dcc1d",
         "filename": "designs/rbh-undelete.rst",
         "patchSetId": 2
@@ -1003,6 +2011,30 @@
       "writtenOn": "2025-05-19T08:58:08Z",
       "side": 1,
       "message": "comment: you can say something like `let one backend retrieve the entry and then call the undelete/rebind function of the backend`, this wording does not need to precice Lustre nor POSIX specificities",
+      "range": {
+        "startLine": 220,
+        "startChar": 25,
+        "endLine": 221,
+        "endChar": 20
+      },
+      "revId": "1cb73636795d5682b2c35c3ba29f6aba8ed71049",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "65d1749f_010c48b7",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-05-21T13:39:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a491dff3_026dcc1d",
       "range": {
         "startLine": 220,
         "startChar": 25,
@@ -1036,6 +2068,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3c131878_e721fcd0",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-05-21T13:39:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d0c58752_715b7d5d",
+      "range": {
+        "startLine": 227,
+        "startChar": 22,
+        "endLine": 227,
+        "endChar": 34
+      },
+      "revId": "1cb73636795d5682b2c35c3ba29f6aba8ed71049",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6a30d152_e8c15529",
@@ -1059,6 +2115,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3b5a579e_7be04a30",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-05-21T13:39:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6a30d152_e8c15529",
+      "range": {
+        "startLine": 235,
+        "startChar": 19,
+        "endLine": 235,
+        "endChar": 37
+      },
+      "revId": "1cb73636795d5682b2c35c3ba29f6aba8ed71049",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c4d2aadf_2188ecbc",
@@ -1072,6 +2152,30 @@
       "writtenOn": "2025-05-19T07:53:51Z",
       "side": 1,
       "message": "defect: so the generic backend has a lustre-specific parameter ?",
+      "range": {
+        "startLine": 236,
+        "startChar": 19,
+        "endLine": 236,
+        "endChar": 43
+      },
+      "revId": "1cb73636795d5682b2c35c3ba29f6aba8ed71049",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "db5c5a60_e1dc3c78",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-05-21T13:39:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c4d2aadf_2188ecbc",
       "range": {
         "startLine": 236,
         "startChar": 19,
