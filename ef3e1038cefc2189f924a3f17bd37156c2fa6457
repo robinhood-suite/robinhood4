@@ -118,6 +118,30 @@
       },
       "revId": "ef3e1038cefc2189f924a3f17bd37156c2fa6457",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a17258de_6e660dda",
+        "filename": "librobinhood/src/plugins/s3/s3.c",
+        "patchSetId": 23
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1038646
+      },
+      "writtenOn": "2025-05-21T12:07:38Z",
+      "side": 1,
+      "message": "Replaced both ```length``` and ```current_id``` with int64_t as instructed by Gauthier, it should solve the problem",
+      "parentUuid": "9b9d9f96_10aadf90",
+      "range": {
+        "startLine": 30,
+        "startChar": 4,
+        "endLine": 30,
+        "endChar": 7
+      },
+      "revId": "ef3e1038cefc2189f924a3f17bd37156c2fa6457",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
