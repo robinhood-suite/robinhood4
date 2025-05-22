@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "42132e0c_bdbb8dde",
+        "filename": "packaging/test_config.yaml",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-05-22T07:09:32Z",
+      "side": 1,
+      "message": "question: what is the purpose of this file? doesn\u0027t it need to be installed with the RPM?",
+      "revId": "77a3617c3f4692c8a991255810d80afd5bb5ff9b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
