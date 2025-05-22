@@ -377,6 +377,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d0f264e8_b1d1cf5e",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-05-22T13:42:35Z",
+      "side": 1,
+      "message": "Ack, by definition.",
+      "parentUuid": "c75b2199_4988d960",
+      "range": {
+        "startLine": 24,
+        "startChar": 27,
+        "endLine": 25,
+        "endChar": 35
+      },
+      "revId": "1cb73636795d5682b2c35c3ba29f6aba8ed71049",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a15f2da2_e6f8b9fc",
