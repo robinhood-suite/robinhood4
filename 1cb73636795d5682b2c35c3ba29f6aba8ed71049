@@ -355,6 +355,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c75b2199_4988d960",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-05-22T09:04:26Z",
+      "side": 1,
+      "message": "Yes, it\u0027s just a filtering on the entry\u0027s ID, just a filter one of sorts",
+      "parentUuid": "6c135bae_7c5b1f62",
+      "range": {
+        "startLine": 24,
+        "startChar": 27,
+        "endLine": 25,
+        "endChar": 35
+      },
+      "revId": "1cb73636795d5682b2c35c3ba29f6aba8ed71049",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a15f2da2_e6f8b9fc",
         "filename": "designs/rbh-undelete.rst",
         "patchSetId": 2
@@ -1988,6 +2012,30 @@
       "side": 1,
       "message": "I was thinking about Lustre\u0027s fid for example, since V3 use this to rebind the file to its content.",
       "parentUuid": "2a946693_52ffa2c0",
+      "range": {
+        "startLine": 220,
+        "startChar": 53,
+        "endLine": 220,
+        "endChar": 59
+      },
+      "revId": "1cb73636795d5682b2c35c3ba29f6aba8ed71049",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2152fac5_41823581",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-05-22T09:04:26Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "9f6f5a47_48f9b2c3",
       "range": {
         "startLine": 220,
         "startChar": 53,

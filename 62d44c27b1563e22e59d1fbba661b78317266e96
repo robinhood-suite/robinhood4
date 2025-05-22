@@ -1,0 +1,510 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "34dcd480_1ec5b5ec",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-05-22T09:04:26Z",
+      "side": 1,
+      "message": "minor: objects are not from filesystems",
+      "range": {
+        "startLine": 17,
+        "startChar": 22,
+        "endLine": 17,
+        "endChar": 46
+      },
+      "revId": "62d44c27b1563e22e59d1fbba661b78317266e96",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "12f9f52d_6d5e5913",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-05-22T09:04:26Z",
+      "side": 1,
+      "message": "minor: don\u0027t think that sentence is necessary",
+      "range": {
+        "startLine": 28,
+        "startChar": 0,
+        "endLine": 29,
+        "endChar": 20
+      },
+      "revId": "62d44c27b1563e22e59d1fbba661b78317266e96",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a1b8ec0c_252a121a",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-05-22T09:04:26Z",
+      "side": 1,
+      "message": "suggest: `the tool will first retrieve the metadata of the entry from the database, and then create it anew with those same metadata`\nDon\u0027t think mentionning the FID or statx info is necessary here, since those are specific to Lustre and POSIX",
+      "range": {
+        "startLine": 31,
+        "startChar": 25,
+        "endLine": 34,
+        "endChar": 49
+      },
+      "revId": "62d44c27b1563e22e59d1fbba661b78317266e96",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "46ab562a_de5d8f67",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-05-22T09:04:26Z",
+      "side": 1,
+      "message": "suggest: `its archived version in the HSM backend can be linked to the newly-created entry`",
+      "range": {
+        "startLine": 35,
+        "startChar": 26,
+        "endLine": 35,
+        "endChar": 74
+      },
+      "revId": "62d44c27b1563e22e59d1fbba661b78317266e96",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e9c83fb3_d7cb99fd",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-05-22T09:04:26Z",
+      "side": 1,
+      "message": "suggest: add a sentence here explaining the state of the system here with regards to the new entry, the old entry and the archive, and then move the next sentence to another paragraph below, to show the `--restore` is not necessary for the tool to work",
+      "range": {
+        "startLine": 36,
+        "startChar": 21,
+        "endLine": 36,
+        "endChar": 24
+      },
+      "revId": "62d44c27b1563e22e59d1fbba661b78317266e96",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a7647cdb_023f30c4",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-05-22T09:04:26Z",
+      "side": 1,
+      "message": "nit: FID should be capitalized",
+      "range": {
+        "startLine": 40,
+        "startChar": 29,
+        "endLine": 40,
+        "endChar": 32
+      },
+      "revId": "62d44c27b1563e22e59d1fbba661b78317266e96",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "54a100bb_d2e8559c",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-05-22T09:04:26Z",
+      "side": 1,
+      "message": "suggest: add a sentence back to explain the purpose of the rebind. No nneed to be extensive, since you talked about it before, but not under that name",
+      "range": {
+        "startLine": 40,
+        "startChar": 41,
+        "endLine": 40,
+        "endChar": 50
+      },
+      "revId": "62d44c27b1563e22e59d1fbba661b78317266e96",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fced729d_fdee96d2",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-05-22T09:04:26Z",
+      "side": 1,
+      "message": "suggest: `In the case of Lustre, we use the file\u0027s FID...`",
+      "range": {
+        "startLine": 40,
+        "startChar": 0,
+        "endLine": 40,
+        "endChar": 12
+      },
+      "revId": "62d44c27b1563e22e59d1fbba661b78317266e96",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e79afc08_3b892b70",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-05-22T09:04:26Z",
+      "side": 1,
+      "message": "suggest: invert the two, the inode is first created, and then it is rebound to the archive",
+      "range": {
+        "startLine": 42,
+        "startChar": 60,
+        "endLine": 43,
+        "endChar": 23
+      },
+      "revId": "62d44c27b1563e22e59d1fbba661b78317266e96",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7d6178ce_31732155",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-05-22T09:04:26Z",
+      "side": 1,
+      "message": "minor: I think this paragraph should be rephrased: start by what is the rebind process, say what is needed for the rebind in a generic way, and in another paragraph, talk about it would work for Lustre specifically.",
+      "range": {
+        "startLine": 45,
+        "startChar": 36,
+        "endLine": 45,
+        "endChar": 37
+      },
+      "revId": "62d44c27b1563e22e59d1fbba661b78317266e96",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9d173a98_b4ca2c32",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-05-22T09:04:26Z",
+      "side": 1,
+      "message": "major: I still think there should be a separation in the arguments: the ones specific to the tool and the one specific to the plugins behind. We do not need to explain the tool should be given a FID or a path or a bucket or whatever, but say that it requires the backend-related unique identifier. and then, later in the document, when you explain the Lustre specific behaviour, you explain what is this unique identifier",
+      "range": {
+        "startLine": 50,
+        "startChar": 1,
+        "endLine": 51,
+        "endChar": 52
+      },
+      "revId": "62d44c27b1563e22e59d1fbba661b78317266e96",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ada64d4c_9cdd5c9c",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-05-22T09:04:26Z",
+      "side": 1,
+      "message": "major: as we talked about, this should be in the Lustre-specific section, and not in the generic one",
+      "range": {
+        "startLine": 74,
+        "startChar": 0,
+        "endLine": 74,
+        "endChar": 3
+      },
+      "revId": "62d44c27b1563e22e59d1fbba661b78317266e96",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "63b06d9b_0baa214d",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-05-22T09:04:26Z",
+      "side": 1,
+      "message": "nit: not so much \"choose\" rather than \"give\", they\u0027ll give input, the Lustre extension interprets it as a FID or path later",
+      "range": {
+        "startLine": 81,
+        "startChar": 42,
+        "endLine": 81,
+        "endChar": 48
+      },
+      "revId": "62d44c27b1563e22e59d1fbba661b78317266e96",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1ee9b697_4a91192e",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-05-22T09:04:26Z",
+      "side": 1,
+      "message": "nit: lowercase l",
+      "range": {
+        "startLine": 90,
+        "startChar": 38,
+        "endLine": 90,
+        "endChar": 39
+      },
+      "revId": "62d44c27b1563e22e59d1fbba661b78317266e96",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "32f7a99c_311d983a",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-05-22T09:04:26Z",
+      "side": 1,
+      "message": "suggest: depending on the level of verbosity available inside the tool, user can generally give either a verbose level (here 1) or use multiple `v`. However, if there is only one verbose level, as I reckon the tool will have, a simple `-v` works, no need for a verbose level to be given",
+      "range": {
+        "startLine": 107,
+        "startChar": 39,
+        "endLine": 107,
+        "endChar": 43
+      },
+      "revId": "62d44c27b1563e22e59d1fbba661b78317266e96",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "81529030_a702244a",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-05-22T09:04:26Z",
+      "side": 1,
+      "message": "minor: use the `rbh_statx` structure instead",
+      "range": {
+        "startLine": 150,
+        "startChar": 19,
+        "endLine": 150,
+        "endChar": 23
+      },
+      "revId": "62d44c27b1563e22e59d1fbba661b78317266e96",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0789c179_5530fbd5",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-05-22T09:04:26Z",
+      "side": 1,
+      "message": "suggest: remove this sentence, and put the next ones in a new paragraph",
+      "range": {
+        "startLine": 198,
+        "startChar": 48,
+        "endLine": 199,
+        "endChar": 10
+      },
+      "revId": "62d44c27b1563e22e59d1fbba661b78317266e96",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7adafaad_efdf60e9",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-05-22T09:04:26Z",
+      "side": 1,
+      "message": "typo: parent",
+      "range": {
+        "startLine": 219,
+        "startChar": 39,
+        "endLine": 219,
+        "endChar": 46
+      },
+      "revId": "62d44c27b1563e22e59d1fbba661b78317266e96",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "14a8fe7e_00c24f54",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-05-22T09:04:26Z",
+      "side": 1,
+      "message": "typo: call",
+      "range": {
+        "startLine": 240,
+        "startChar": 9,
+        "endLine": 240,
+        "endChar": 14
+      },
+      "revId": "62d44c27b1563e22e59d1fbba661b78317266e96",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c281a0d5_bc9effec",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-05-22T09:04:26Z",
+      "side": 1,
+      "message": "typo: an",
+      "range": {
+        "startLine": 240,
+        "startChar": 15,
+        "endLine": 240,
+        "endChar": 16
+      },
+      "revId": "62d44c27b1563e22e59d1fbba661b78317266e96",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "02cb473a_219bd984",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-05-22T09:04:26Z",
+      "side": 1,
+      "message": "typo: `an inode` or `inodes`",
+      "range": {
+        "startLine": 242,
+        "startChar": 61,
+        "endLine": 242,
+        "endChar": 66
+      },
+      "revId": "62d44c27b1563e22e59d1fbba661b78317266e96",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "029a7175_aabc5b52",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-05-22T09:04:26Z",
+      "side": 1,
+      "message": "suggest: `Some HSM backends, for instance Phobos (lien vers Phobos et le repo lustre-hsm-phobos) support versionning, i.e. multiple versions of the same entry are available for restore. Thus, we will allow displaying all versions of an archived entry, and restoring a particular version of that entry when undeleting it.`",
+      "range": {
+        "startLine": 254,
+        "startChar": 0,
+        "endLine": 257,
+        "endChar": 50
+      },
+      "revId": "62d44c27b1563e22e59d1fbba661b78317266e96",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
