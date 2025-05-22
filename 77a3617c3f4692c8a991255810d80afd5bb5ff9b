@@ -34,6 +34,24 @@
       "parentUuid": "42132e0c_bdbb8dde",
       "revId": "77a3617c3f4692c8a991255810d80afd5bb5ff9b",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "147be8a1_5b69aaa6",
+        "filename": "packaging/test_config.yaml",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-05-22T14:51:02Z",
+      "side": 1,
+      "message": "Shouldn\u0027t have said done: I forgot to delete this file when I switched to the template config file. So I removed it now",
+      "parentUuid": "bab00235_645d346d",
+      "revId": "77a3617c3f4692c8a991255810d80afd5bb5ff9b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
