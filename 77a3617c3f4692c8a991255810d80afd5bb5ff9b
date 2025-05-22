@@ -16,6 +16,24 @@
       "message": "question: what is the purpose of this file? doesn\u0027t it need to be installed with the RPM?",
       "revId": "77a3617c3f4692c8a991255810d80afd5bb5ff9b",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bab00235_645d346d",
+        "filename": "packaging/test_config.yaml",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-05-22T13:12:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "42132e0c_bdbb8dde",
+      "revId": "77a3617c3f4692c8a991255810d80afd5bb5ff9b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
