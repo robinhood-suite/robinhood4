@@ -24,25 +24,42 @@ verbose = False
 changelog = False
 
 def remove(path):
-    return 0
+    verb_print("unlink '" + path + "'")
+    os.unlink(path)
 
 def rename(path):
-    return 0
+    new_path = path + "_bis"
+    verb_print("rename '" + path + "' to '" + new_path + "'")
+    os.rename(path, new_path)
+    return new_path
 
-def setstripe(path):
-    return 0
+def setstripe(path, is_dir):
+    if is_dir:
+        os.mkdir(path)
 
-def setdirstripe(path):
-    return 0
+    verb_print("setstripe '" + path + "'")
+    os.system("lfs setstripe -E 1k -c 2 -E -1 -c 1 " + path)
+    return path
+
+def setdirstripe(path, is_dir):
+    verb_print("setdirstripe '" + path + "'")
+    os.system("lfs setdirstripe -H crush " + path)
+    return path
 
 def archive(path):
-    return 0
+    verb_print("archive '" + path + "'")
+    os.system("lfs hsm_archive " + path)
+    return path
 
 def truncate(path):
-    return 0
+    verb_print("truncate '" + path + "'")
+    os.truncate(path, 300)
+    return path
 
 def setxattr(path):
-    return 0
+    verb_print("setxattr '" + path + "'")
+    os.setxattr(path, "user.test", "blob".encode("utf-8"))
+    return path
 
 def create_and_generate_changelog(path, is_dir):
     if is_dir:
@@ -53,12 +70,15 @@ def create_and_generate_changelog(path, is_dir):
 
     function = random.choice(permitted_changelogs)
 
-    if is_dir:
-        os.mkdir(path)
+    if function in [setstripe, setdirstripe]:
+        return function(path, is_dir)
     else:
-        open(path, "a")
+        if is_dir:
+            os.mkdir(path)
+        else:
+            open(path, "a")
 
-    return function(path)
+        return function(path)
 
 def create_files(path, nb_file):
     global total_inode_count, inode_count, changelog
