@@ -10,6 +10,26 @@
 #include <robinhood.h>
 #include <robinhood/config.h>
 
+static struct rbh_backend *metadata_source, *target_entry;
+
+static void __attribute__((destructor))
+destroy_metadata_source_and_target_entry(void)
+{
+    const char *name;
+
+    if (metadata_source) {
+        name = metadata_source->name;
+        rbh_backend_destroy(metadata_source);
+        rbh_backend_plugin_destroy(name);
+    }
+
+    if (target_entry) {
+        name = target_entry->name;
+        rbh_backend_destroy(target_entry);
+        rbh_backend_plugin_destroy(name);
+    }
+}
+
 /*----------------------------------------------------------------------------*
  |                                    cli                                     |
  *----------------------------------------------------------------------------*/
@@ -22,11 +42,20 @@ static int
 usage()
 {
     const char *message =
-        "Usage: %s [-h] \n"
+        "Usage: %s [-h|--help] SOURCE DEST\n"
         "\n"
-        "General information about rbh-undelete command\n"
+        "Undelete DEST's entry using SOURCES's metadata\n"
+        "\n"
+        "Positional arguments:\n"
+        "    SOURCE   a robinhood URI\n"
+        "    DEST     a robinhood URI\n"
+        "\n"
         "Optional arguments:\n"
-        "  -h, --help            Show this message and exit\n";
+        "    -h,--help            Show this message and exit\n"
+        "\n"
+        "A robinhood URI is built as follows:\n"
+        "    "RBH_SCHEME":BACKEND:FSNAME[#{PATH|ID}]\n\n";
+
     return printf(message, program_invocation_short_name);
 }
 
@@ -50,6 +79,17 @@ main(int argc, char **argv)
             return 0;
         }
     }
+
+    argc -= optind;
+    argv += optind;
+
+    if (argc < 1)
+        error(EX_USAGE, 0, "not enough arguments");
+    if (argc > 2)
+        error(EX_USAGE, 0, "too many arguments");
+
+    metadata_source = rbh_backend_from_uri(argv[0], true);
+    target_entry = rbh_backend_from_uri(argv[1], true);
 
     return EXIT_SUCCESS;
 }
