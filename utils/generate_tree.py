@@ -2,6 +2,7 @@ import os
 import sys
 import math
 import shutil
+import random
 from multiprocessing import Pool
 from argparse import ArgumentParser
 from argparse import ArgumentTypeError
@@ -20,17 +21,56 @@ nb_dir = 0
 nb_mdt = 1
 nb_inode_mdt = 0
 verbose = False
+changelog = False
 
-def generate_changelog(path, is_dir):
+def remove(path):
     return 0
 
+def rename(path):
+    return 0
+
+def setstripe(path):
+    return 0
+
+def setdirstripe(path):
+    return 0
+
+def archive(path):
+    return 0
+
+def truncate(path):
+    return 0
+
+def setxattr(path):
+    return 0
+
+def create_and_generate_changelog(path, is_dir):
+    if is_dir:
+        permitted_changelogs = [rename, setstripe, setdirstripe, setxattr]
+    else:
+        permitted_changelogs = [remove, rename, setstripe, archive, truncate,
+                                setxattr]
+
+    function = random.choice(permitted_changelogs)
+
+    if is_dir:
+        os.mkdir(path)
+    else:
+        open(path, "a")
+
+    return function(path)
+
 def create_files(path, nb_file):
-    global total_inode_count , inode_count
+    global total_inode_count, inode_count, changelog
 
     for i in range(1, nb_file + 1):
         file_path = os.path.join(path, "file_" + str(i))
-        open(file_path, "a")
-        generate_changelog(file_path, False)
+
+        if changelog:
+            create_and_generate_changelog(file_path, False)
+        else:
+            open(file_path, "a")
+
         inode_count += 1
         total_inode_count += 1
 
@@ -38,8 +78,12 @@ def create_dir(path, index):
     global total_inode_count, inode_count
 
     dir_path = os.path.join(path, "dir_" + str(index))
-    os.mkdir(dir_path)
-    generate_changelog(dir_path, True)
+
+    if changelog:
+        dir_path = create_and_generate_changelog(dir_path, True)
+    else:
+        os.mkdir(dir_path)
+
     inode_count += 1
     total_inode_count += 1
 
@@ -84,7 +128,8 @@ def default_int_values(value):
     return value
 
 def main():
-    global nb_inode_mdt, total_inode_count, inode_count, verbose, depth, file_per_dir, file_only_root, nb_dir,usage, nb_mdt, ROOT
+    global nb_inode_mdt, total_inode_count, inode_count, verbose, changelog, \
+           depth, file_per_dir, file_only_root, nb_dir,usage, nb_mdt, ROOT
 
     parser = ArgumentParser(prog='generate_tree')
     parser.add_argument('inodes', type=int,
