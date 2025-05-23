@@ -6,6 +6,8 @@
  */
 #include <dlfcn.h>
 #include <stdlib.h>
+#include <error.h>
+#include <errno.h>
 #include <stdio.h>
 #include <string.h>
 #include <dirent.h>
@@ -18,12 +20,27 @@
 #include <robinhood.h>
 #include <robinhood/config.h>
 
+static struct rbh_backend *from;
+
+static void __attribute__((destructor))
+destroy_from(void)
+{
+    const char *name;
+
+    if (from) {
+        name = from->name;
+        rbh_backend_destroy(from);
+        rbh_backend_plugin_destroy(name);
+    }
+}
+
 static int
 undelete_helper()
 {
     const char *message =
         "Usage:"
-        "  %s -arguments General informations about rbh-undelete command\n"
+        "  %s <URI> -arguments       General informations about rbh-undelete"
+        " command\n"
         "  -h --help                 Show this message and exit\n";
     return printf(message, program_invocation_short_name);
 }
@@ -48,6 +65,18 @@ main(int argc, char **argv)
             return 0;
         }
     }
+
+    argc -= optind;
+    argv += optind;
+
+    if (argc < 1)
+        error(EX_USAGE, 0, "not enough arguments");
+    if (argc > 2)
+        error(EX_USAGE, 0, "too much arguments");
+
+    from = rbh_backend_from_uri(argv[0], true);
+
+    printf("backend name: %s\n", from->name);
 
     return EXIT_SUCCESS;
 }
