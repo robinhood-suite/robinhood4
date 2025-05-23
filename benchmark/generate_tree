@@ -49,28 +49,45 @@ class Entry:
             os.remove(self.path)
 
 def remove(entry):
-    return 0
+    verb_print("unlink '" + entry.path + "'")
+    entry.delete_entry()
 
 def rename(entry):
-    return 0
+    new_path = entry.path + "_bis"
+    verb_print("rename '" + entry.path + "' to '" + new_path + "'")
+    os.rename(entry.path, new_path)
+    entry.path = new_path
 
 def setstripe(entry):
-    return 0
+    # Cannot setstripe on an already existing file
+    if not entry.is_dir:
+        entry.delete_entry()
+
+    verb_print("setstripe '" + entry.path + "'")
+    os.system("lfs setstripe -E 1k -c 2 -E -1 -c 1 " + entry.path)
 
 def setdirstripe(entry):
-    return 0
+    # Cannot setdirstripe on an already existing directory
+    if entry.is_dir:
+        entry.delete_entry()
+
+    verb_print("setdirstripe '" + entry.path + "'")
+    os.system("lfs setdirstripe -H crush " + entry.path)
 
 def archive(entry):
-    return 0
+    verb_print("archive '" + entry.path + "'")
+    os.system("lfs hsm_archive " + entry.path)
 
 def truncate(entry):
-    return 0
+    verb_print("truncate '" + entry.path + "'")
+    os.truncate(entry.path, 300)
 
 def setxattr(entry):
-    return 0
+    verb_print("setxattr '" + entry.path + "'")
+    os.setxattr(entry.path, "user.test", "blob".encode("utf-8"))
 
 def create_and_generate_changelog(entry):
-    if is_dir:
+    if entry.is_dir:
         actions = [rename, setstripe, setdirstripe, setxattr]
     else:
         actions = [remove, rename, setstripe, archive, truncate, setxattr]
@@ -105,7 +122,7 @@ def create_dir(path, index):
     inode_count += 1
     total_inode_count += 1
 
-    return dir_path
+    return entry.path
 
 def create_tree(path, current_depth):
     total_file = file_per_dir
