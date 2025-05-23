@@ -16,8 +16,6 @@ from argparse import ArgumentTypeError
 
 ROOT = "/mnt/lustre/"
 ROOT_NAME = "benchmark"
-PREFIX_DIR = "dir_"
-PREFIX_FILE = "file_"
 PREFIX_MDT = "mdt"
 
 total_inode_count = 0
@@ -31,37 +29,37 @@ nb_mdt = 1
 nb_inode_mdt = 0
 verbose = False
 
-def create_file(path, nb_file):
+def create_files(path, nb_file):
     global total_inode_count , inode_count
 
     for i in range(1, nb_file + 1):
-        file_path = os.path.join(path, PREFIX_FILE + str(i))
+        file_path = os.path.join(path, "file_" + str(i))
         open(file_path, "a")
         inode_count += 1
         total_inode_count += 1
 
-def create_dir(path, nb_dir):
+def create_dir(path, index):
     global total_inode_count, inode_count
 
-    for i in range(1, nb_dir + 1):
-        dir_path = os.path.join(path, PREFIX_DIR + str(i))
-        os.mkdir(dir_path)
-        inode_count += 1
-        total_inode_count += 1
+    dir_path = os.path.join(path, "dir_" + str(index))
+    os.mkdir(dir_path)
+    inode_count += 1
+    total_inode_count += 1
+
+    return dir_path
 
 def create_tree(path, current_depth):
     total_file = file_per_dir
     if current_depth == 0:
         total_file += file_only_root
-    create_file(path, total_file)
+    create_files(path, total_file)
 
-    if current_depth + 1 < depth:
-        create_dir(path, nb_dir)
-        current_depth += 1
-        if current_depth < depth:
-            for d in range(1, nb_dir + 1):
-                new_path = os.path.join(path, PREFIX_DIR + str(d))
-                create_tree(new_path, current_depth)
+    if current_depth + 1 >= depth:
+        return 0
+
+    for i in range(1, nb_dir + 1):
+        new_path = create_dir(path, i)
+        create_tree(new_path, current_depth + 1)
 
 def task_create_tree(i):
     global inode_count
