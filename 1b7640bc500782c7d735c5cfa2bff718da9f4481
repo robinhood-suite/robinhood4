@@ -189,6 +189,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "43d37177_67dec724",
+        "filename": "designs/rbh-policy/01-OverviewAndGoals.rst",
+        "patchSetId": 10
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-05-23T14:26:31Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "442c63cb_1174c283",
+      "range": {
+        "startLine": 64,
+        "startChar": 0,
+        "endLine": 69,
+        "endChar": 66
+      },
+      "revId": "1b7640bc500782c7d735c5cfa2bff718da9f4481",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cc2a7c02_a72ddb3b",
@@ -367,6 +391,30 @@
       "side": 1,
       "message": "Done",
       "parentUuid": "c16c296e_f6e5b7fe",
+      "range": {
+        "startLine": 91,
+        "startChar": 0,
+        "endLine": 92,
+        "endChar": 8
+      },
+      "revId": "1b7640bc500782c7d735c5cfa2bff718da9f4481",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6ae29fd5_eef21ca5",
+        "filename": "designs/rbh-policy/01-OverviewAndGoals.rst",
+        "patchSetId": 10
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-05-23T14:26:31Z",
+      "side": 1,
+      "message": "I meant mostly that the policy engine could work with other types of storage, i.e. object stores",
+      "parentUuid": "32a8393c_d1943225",
       "range": {
         "startLine": 91,
         "startChar": 0,
@@ -871,6 +919,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5993cc87_1c40d8f8",
+        "filename": "designs/rbh-policy/04-ImplementationOverview.rst",
+        "patchSetId": 10
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-05-23T14:26:31Z",
+      "side": 1,
+      "message": "Should add a sentence to be explicit about that, but I\u0027m fine with that otherwise",
+      "parentUuid": "831a88ad_300e18a5",
+      "range": {
+        "startLine": 141,
+        "startChar": 2,
+        "endLine": 142,
+        "endChar": 18
+      },
+      "revId": "1b7640bc500782c7d735c5cfa2bff718da9f4481",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6fa08720_cb339f06",
@@ -908,6 +980,30 @@
       "side": 1,
       "message": "Yes, I agree and this will be discussed in the `07-base_API_and_extensibility` section",
       "parentUuid": "6fa08720_cb339f06",
+      "range": {
+        "startLine": 146,
+        "startChar": 1,
+        "endLine": 149,
+        "endChar": 14
+      },
+      "revId": "1b7640bc500782c7d735c5cfa2bff718da9f4481",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a338d964_726c537b",
+        "filename": "designs/rbh-policy/04-ImplementationOverview.rst",
+        "patchSetId": 10
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-05-23T14:26:31Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "46e4615f_44863cca",
       "range": {
         "startLine": 146,
         "startChar": 1,
@@ -1096,6 +1192,30 @@
       "side": 1,
       "message": "Yes, that\u0027s right, you understand well. I deleted that part because it didn\u0027t make sense after proposing two approaches earlier. It will depend on the approach you choose.",
       "parentUuid": "21c3c3bd_7c1f13e0",
+      "range": {
+        "startLine": 284,
+        "startChar": 54,
+        "endLine": 289,
+        "endChar": 2
+      },
+      "revId": "1b7640bc500782c7d735c5cfa2bff718da9f4481",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b691560e_fe4862c8",
+        "filename": "designs/rbh-policy/04-ImplementationOverview.rst",
+        "patchSetId": 10
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-05-23T14:26:31Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "875c7f52_f20b83ea",
       "range": {
         "startLine": 284,
         "startChar": 54,

@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7968d673_9da675df",
+        "filename": "designs/rbh-policy/05-rbh-policy_command.rst",
+        "patchSetId": 12
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-05-23T14:26:31Z",
+      "side": 1,
+      "message": "nit: not sure it\u0027s necessary to talk about the terminal here, I think everybody who can read this document knows what foreground/background means",
+      "range": {
+        "startLine": 234,
+        "startChar": 22,
+        "endLine": 234,
+        "endChar": 50
+      },
+      "revId": "609026d86f5de58f42105cfaf15c1c040f0c89cf",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "37637ccf_6a76403e",
+        "filename": "designs/rbh-policy/05-rbh-policy_command.rst",
+        "patchSetId": 12
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-05-23T14:26:31Z",
+      "side": 1,
+      "message": "nit: to remove IMO",
+      "range": {
+        "startLine": 240,
+        "startChar": 0,
+        "endLine": 240,
+        "endChar": 36
+      },
+      "revId": "609026d86f5de58f42105cfaf15c1c040f0c89cf",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c896c2e6_4918777c",
+        "filename": "designs/rbh-policy/09-future_improvements.rst",
+        "patchSetId": 12
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-05-23T14:26:31Z",
+      "side": 1,
+      "message": "typo: `Modular`, uppercase M",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 7
+      },
+      "revId": "609026d86f5de58f42105cfaf15c1c040f0c89cf",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "40c12aa4_2b813f39",
+        "filename": "designs/rbh-policy/09-future_improvements.rst",
+        "patchSetId": 12
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-05-23T14:26:31Z",
+      "side": 1,
+      "message": "suggest: to remove, we\u0027re already in the `future` document",
+      "range": {
+        "startLine": 51,
+        "startChar": 0,
+        "endLine": 51,
+        "endChar": 6
+      },
+      "revId": "609026d86f5de58f42105cfaf15c1c040f0c89cf",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0ec40f30_8f55116a",
+        "filename": "designs/rbh-policy/09-future_improvements.rst",
+        "patchSetId": 12
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-05-23T14:26:31Z",
+      "side": 1,
+      "message": "IMO it\u0027s a good idea to have them, especially in the case of multi-files configurations, so that admins can know if the additionnal configs they load or use are indeed seen by the policy engine",
+      "range": {
+        "startLine": 71,
+        "startChar": 0,
+        "endLine": 71,
+        "endChar": 38
+      },
+      "revId": "609026d86f5de58f42105cfaf15c1c040f0c89cf",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0d5388b4_a024a2d5",
+        "filename": "designs/rbh-policy/09-future_improvements.rst",
+        "patchSetId": 12
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-05-23T14:26:31Z",
+      "side": 1,
+      "message": "minor: not needed",
+      "range": {
+        "startLine": 74,
+        "startChar": 0,
+        "endLine": 76,
+        "endChar": 60
+      },
+      "revId": "609026d86f5de58f42105cfaf15c1c040f0c89cf",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
