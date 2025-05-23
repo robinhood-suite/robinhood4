@@ -567,6 +567,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ebde1738_5d1d6eb3",
+        "filename": "designs/rbh-policy/03-PolicyConditionFilters.rst",
+        "patchSetId": 10
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-05-23T14:09:45Z",
+      "side": 1,
+      "message": "There are several solutions, some more complex than others. The first is simply to import all filters regardless of the backend. We then simply ignore the filters that aren\u0027t compatible.\nAnother solution is to only load the filters of the backend concerned, for this we will have the URI field present in the config",
+      "parentUuid": "1c5b5056_18f99ed3",
+      "range": {
+        "startLine": 71,
+        "startChar": 0,
+        "endLine": 73,
+        "endChar": 57
+      },
+      "revId": "1b7640bc500782c7d735c5cfa2bff718da9f4481",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2fd2c1b8_665da9cb",
         "filename": "designs/rbh-policy/04-ImplementationOverview.rst",
         "patchSetId": 10
@@ -682,6 +706,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "00b2a099_642d3692",
+        "filename": "designs/rbh-policy/04-ImplementationOverview.rst",
+        "patchSetId": 10
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-05-23T14:09:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "62151bf5_9da26c60",
+      "range": {
+        "startLine": 70,
+        "startChar": 28,
+        "endLine": 71,
+        "endChar": 34
+      },
+      "revId": "1b7640bc500782c7d735c5cfa2bff718da9f4481",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "631f4151_4dec34eb",
@@ -705,6 +753,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc88c16d_7c7b02cf",
+        "filename": "designs/rbh-policy/04-ImplementationOverview.rst",
+        "patchSetId": 10
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-05-23T14:09:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "631f4151_4dec34eb",
+      "range": {
+        "startLine": 130,
+        "startChar": 64,
+        "endLine": 130,
+        "endChar": 79
+      },
+      "revId": "1b7640bc500782c7d735c5cfa2bff718da9f4481",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "356973e6_51946062",
@@ -718,6 +790,30 @@
       "writtenOn": "2025-05-16T13:45:11Z",
       "side": 1,
       "message": "question: what\u0027s that ?",
+      "range": {
+        "startLine": 136,
+        "startChar": 60,
+        "endLine": 136,
+        "endChar": 75
+      },
+      "revId": "1b7640bc500782c7d735c5cfa2bff718da9f4481",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b6fcc6bf_0d89d270",
+        "filename": "designs/rbh-policy/04-ImplementationOverview.rst",
+        "patchSetId": 10
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-05-23T14:09:45Z",
+      "side": 1,
+      "message": "I meant complete by writing full",
+      "parentUuid": "356973e6_51946062",
       "range": {
         "startLine": 136,
         "startChar": 60,
@@ -753,6 +849,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "831a88ad_300e18a5",
+        "filename": "designs/rbh-policy/04-ImplementationOverview.rst",
+        "patchSetId": 10
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-05-23T14:09:45Z",
+      "side": 1,
+      "message": "I think not. The engine only evaluates triggers defined by active policies. No generic or global analysis is performed independently of policy definitions.\nIn other words:\n-If a policy defines a trigger based on file system capacity (e.g., GlobalUsage \u003e 90%), the engine will monitor that metric.\n-If no policy depends on that metric (e.g., if all triggers are scheduled or user-based), the engine will not perform any checks related to capacity or other unused triggers.",
+      "parentUuid": "9cfd05c1_e5b81316",
+      "range": {
+        "startLine": 141,
+        "startChar": 2,
+        "endLine": 142,
+        "endChar": 18
+      },
+      "revId": "1b7640bc500782c7d735c5cfa2bff718da9f4481",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6fa08720_cb339f06",
         "filename": "designs/rbh-policy/04-ImplementationOverview.rst",
         "patchSetId": 10
@@ -776,6 +896,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "46e4615f_44863cca",
+        "filename": "designs/rbh-policy/04-ImplementationOverview.rst",
+        "patchSetId": 10
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-05-23T14:09:45Z",
+      "side": 1,
+      "message": "Yes, I agree and this will be discussed in the `07-base_API_and_extensibility` section",
+      "parentUuid": "6fa08720_cb339f06",
+      "range": {
+        "startLine": 146,
+        "startChar": 1,
+        "endLine": 149,
+        "endChar": 14
+      },
+      "revId": "1b7640bc500782c7d735c5cfa2bff718da9f4481",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f50d2fd0_a4700034",
         "filename": "designs/rbh-policy/04-ImplementationOverview.rst",
         "patchSetId": 10
@@ -787,6 +931,30 @@
       "writtenOn": "2025-05-16T13:45:11Z",
       "side": 1,
       "message": "major: here however is it necessary to check the global condition for each entry anew, since the DB counterpart may be obsolete in that regard. The negation of previous rules is still unnecessary though",
+      "range": {
+        "startLine": 234,
+        "startChar": 0,
+        "endLine": 243,
+        "endChar": 77
+      },
+      "revId": "1b7640bc500782c7d735c5cfa2bff718da9f4481",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f7ccc422_7c8267a8",
+        "filename": "designs/rbh-policy/04-ImplementationOverview.rst",
+        "patchSetId": 10
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-05-23T14:09:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f50d2fd0_a4700034",
       "range": {
         "startLine": 234,
         "startChar": 0,
@@ -867,6 +1035,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f01c2923_69b5faf5",
+        "filename": "designs/rbh-policy/04-ImplementationOverview.rst",
+        "patchSetId": 10
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-05-23T14:09:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3787352e_e0511fdb",
+      "range": {
+        "startLine": 286,
+        "startChar": 25,
+        "endLine": 286,
+        "endChar": 31
+      },
+      "revId": "1b7640bc500782c7d735c5cfa2bff718da9f4481",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "21c3c3bd_7c1f13e0",
@@ -880,6 +1072,30 @@
       "writtenOn": "2025-05-16T13:45:11Z",
       "side": 1,
       "message": "minor: I\u0027m not sure I understand this properly: to me, if an entry matches the global condition and a rule, but that rule has no action associated, then the entry is simply skipped. Since it matched a rule, no other rule is checked, and we simply continue to the next entry",
+      "range": {
+        "startLine": 284,
+        "startChar": 54,
+        "endLine": 289,
+        "endChar": 2
+      },
+      "revId": "1b7640bc500782c7d735c5cfa2bff718da9f4481",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "875c7f52_f20b83ea",
+        "filename": "designs/rbh-policy/04-ImplementationOverview.rst",
+        "patchSetId": 10
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-05-23T14:09:45Z",
+      "side": 1,
+      "message": "Yes, that\u0027s right, you understand well. I deleted that part because it didn\u0027t make sense after proposing two approaches earlier. It will depend on the approach you choose.",
+      "parentUuid": "21c3c3bd_7c1f13e0",
       "range": {
         "startLine": 284,
         "startChar": 54,
