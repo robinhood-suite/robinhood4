@@ -303,6 +303,10 @@ struct rbh_backend_operations {
             void *backend,
             int info_flags
             );
+    int (*undelete)(
+            void *backend,
+            char *destination[]
+            );
     void (*destroy)(
             void *backend
             );
@@ -699,6 +703,23 @@ rbh_backend_get_info(struct rbh_backend *backend, int info_flags)
         return NULL;
     }
     return backend->ops->get_info(backend, info_flags);
+}
+
+/**
+ * Undelete an entry from a given backend
+ *
+ * @param backend       a pointer to the backend where the metadata of the file
+ *                      will be retrieved
+ * @param destination   Reference used to access the original file
+ */
+static inline int
+rbh_backend_undelete(struct rbh_backend *backend, char *destination[])
+{
+    if (backend->ops->undelete == NULL) {
+        errno = ENOTSUP;
+        return -1;
+    }
+    return backend->ops->undelete(backend, destination);
 }
 
 /**
