@@ -10,6 +10,7 @@ import os
 import sys
 import math
 import shutil
+import random
 from multiprocessing import Pool
 from argparse import ArgumentParser
 from argparse import ArgumentTypeError
@@ -47,8 +48,35 @@ class Entry:
         else:
             os.remove(self.path)
 
-def generate_changelog(entry):
+def remove(entry):
     return 0
+
+def rename(entry):
+    return 0
+
+def setstripe(entry):
+    return 0
+
+def setdirstripe(entry):
+    return 0
+
+def archive(entry):
+    return 0
+
+def truncate(entry):
+    return 0
+
+def setxattr(entry):
+    return 0
+
+def create_and_generate_changelog(entry):
+    if is_dir:
+        actions = [rename, setstripe, setdirstripe, setxattr]
+    else:
+        actions = [remove, rename, setstripe, archive, truncate, setxattr]
+
+    action = random.choice(actions)
+    action(entry)
 
 def create_files(path, nb_file):
     global total_inode_count, inode_count, changelog
@@ -59,7 +87,7 @@ def create_files(path, nb_file):
         entry.create_entry()
 
         if changelog:
-            generate_changelog(entry)
+            create_and_generate_changelog(entry)
 
         inode_count += 1
         total_inode_count += 1
@@ -72,7 +100,7 @@ def create_dir(path, index):
     entry.create_entry()
 
     if changelog:
-        generate_changelog(entry)
+        create_and_generate_changelog(entry)
 
     inode_count += 1
     total_inode_count += 1
@@ -118,7 +146,8 @@ def default_int_values(value):
     return value
 
 def main():
-    global nb_inode_mdt, total_inode_count, inode_count, verbose, depth, file_per_dir, file_only_root, nb_dir,usage, nb_mdt, ROOT
+    global nb_inode_mdt, total_inode_count, inode_count, verbose, changelog, \
+           depth, file_per_dir, file_only_root, nb_dir,usage, nb_mdt, ROOT
 
     parser = ArgumentParser(prog='generate_tree')
     parser.add_argument('inodes', type=int,
