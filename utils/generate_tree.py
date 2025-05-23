@@ -23,6 +23,35 @@ nb_dir = 0
 nb_mdt = 1
 nb_inode_mdt = 0
 verbose = False
+                             'entry created, randomly, amongst: remove, ' +
+                             'rename, setstripe, setdirstripe, archive, truncate, setxattr')
+def remove(path):
+    return 0
+
+def rename(path):
+    return 0
+
+def setstripe(path):
+    return 0
+
+def setdirstripe(path):
+    return 0
+
+def archive(path):
+    return 0
+
+def truncate(path):
+    return 0
+
+def setxattr(path):
+    return 0
+
+def generate_changelog(path, is_dir):
+    if is_dir:
+        permitted_changelogs = [setstripe, setdirstripe, setxattr]
+    else:
+        permitted_changelogs = [remove, rename, setstripe, archive, truncate,
+                                setxattr]
 
 def create_files(path, nb_file):
     global total_inode_count , inode_count
@@ -102,6 +131,11 @@ def main():
     parser.add_argument('-r', '--root', type=str, default="/tmp",
                         help=('where to create the file tree,'
                               'by default: /tmp'))
+    parser.add_argument('--changelogs', action='store_true',
+                        help='generate one additionnal changelog for each ' +
+                             'entry created, randomly, amongst: remove, ' +
+                             'rename, setstripe, setdirstripe, archive, ' +
+                             'truncate, setxattr')
 
     args = parser.parse_args()
 
@@ -111,6 +145,7 @@ def main():
     clean = args.clean
     verbose = args.verbose
     ROOT = os.path.abspath(args.root)
+    changelog = args.changelog
 
     nb_inode = args.inodes
 
