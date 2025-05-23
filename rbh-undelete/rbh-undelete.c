@@ -10,6 +10,32 @@
 #include <robinhood.h>
 #include <robinhood/config.h>
 
+static struct rbh_backend *from, *to;
+
+static void __attribute__((destructor))
+destroy_from(void)
+{
+    const char *name;
+
+    if (from) {
+        name = from->name;
+        rbh_backend_destroy(from);
+        rbh_backend_plugin_destroy(name);
+    }
+}
+
+static void __attribute__((destructor))
+destroy_to(void)
+{
+    const char *name;
+
+    if (to) {
+        name = to->name;
+        rbh_backend_destroy(to);
+        rbh_backend_plugin_destroy(name);
+    }
+}
+
 /*----------------------------------------------------------------------------*
  |                                    cli                                     |
  *----------------------------------------------------------------------------*/
@@ -22,11 +48,16 @@ static int
 usage()
 {
     const char *message =
-        "Usage: %s [-h] \n"
+        "Usage: %s [-h|--help] SOURCE DEST\n"
         "\n"
-        "General information about rbh-undelete command\n"
+        "Undelete DEST's entry using SOURCES's metadata\n"
+        "\n"
+        "Positional arguments:\n"
+        "    SOURCE   a robinhood URI\n"
+        "    DEST     a robinhood URI\n"
+        "\n"
         "Optional arguments:\n"
-        "  -h, --help            Show this message and exit\n";
+        "    -h,--help            Show this message and exit\n";
     return printf(message, program_invocation_short_name);
 }
 
@@ -50,6 +81,17 @@ main(int argc, char **argv)
             return 0;
         }
     }
+
+    argc -= optind;
+    argv += optind;
+
+    if (argc < 1)
+        error(EX_USAGE, 0, "not enough arguments");
+    if (argc > 2)
+        error(EX_USAGE, 0, "too many arguments");
+
+    from = rbh_backend_from_uri(argv[0], true);
+    to = rbh_backend_from_uri(argv[1], true);
 
     return EXIT_SUCCESS;
 }
