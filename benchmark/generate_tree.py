@@ -28,21 +28,52 @@ nb_dir = 0
 nb_mdt = 1
 nb_inode_mdt = 0
 verbose = False
+changelog = False
+
+class Entry:
+    def __init__(self, path, is_dir):
+        self.path = path
+        self.is_dir = is_dir
+
+    def create_entry(self):
+        if self.is_dir:
+            os.mkdir(self.path)
+        else:
+            open(self.path, "a")
+
+    def delete_entry(self):
+        if self.is_dir:
+            os.rmdir(self.path)
+        else:
+            os.remove(self.path)
+
+def generate_changelog(entry):
+    return 0
 
 def create_files(path, nb_file):
-    global total_inode_count , inode_count
+    global total_inode_count, inode_count, changelog
 
     for i in range(1, nb_file + 1):
         file_path = os.path.join(path, "file_" + str(i))
-        open(file_path, "a")
+        entry = Entry(file_path, False)
+        entry.create_entry()
+
+        if changelog:
+            generate_changelog(entry)
+
         inode_count += 1
         total_inode_count += 1
 
 def create_dir(path, index):
-    global total_inode_count, inode_count
+    global total_inode_count, inode_count, changelog
 
     dir_path = os.path.join(path, "dir_" + str(index))
-    os.mkdir(dir_path)
+    entry = Entry(dir_path, True)
+    entry.create_entry()
+
+    if changelog:
+        generate_changelog(entry)
+
     inode_count += 1
     total_inode_count += 1
 
@@ -107,6 +138,11 @@ def main():
     parser.add_argument('-r', '--root', type=str, default="/tmp",
                         help=('where to create the file tree,'
                               'by default: /tmp'))
+    parser.add_argument('--changelog', action='store_true',
+                        help='generate one additionnal changelog for each ' +
+                             'entry created, randomly, amongst: remove, ' +
+                             'rename, setstripe, setdirstripe, archive, ' +
+                             'truncate, setxattr')
 
     args = parser.parse_args()
 
@@ -116,6 +152,7 @@ def main():
     clean = args.clean
     verbose = args.verbose
     ROOT = os.path.abspath(args.root)
+    changelog = args.changelog
 
     nb_inode = args.inodes
 
