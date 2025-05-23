@@ -19,6 +19,10 @@
 
 #include <robinhood.h>
 #include <robinhood/config.h>
+#include <robinhood/uri.h>
+#include <robinhood/value.h>
+#include <robinhood/filter.h>
+#include <robinhood/filters/parser.h>
 
 static struct rbh_backend *from;
 
@@ -45,38 +49,67 @@ undelete_helper()
     return printf(message, program_invocation_short_name);
 }
 
-int
-main(int argc, char **argv)
+static void
+get_command_options(int argc, char *argv[], struct command_context *context)
 {
-    const struct option LONG_OPTIONS[] = {
-        {
-            .name = "help",
-            .val = 'h'
-        },
-        {}
-    };
-    int option;
+    for (int i = 0; i < argc; i++) {
+        if (strcmp(argv[i], "-h") == 0 || strcmp(argv[i], "--help") == 0) {
+            context->helper = true;
+            if (i + 1 < argc)
+                context->helper_target = argv[i + 1];
+        }
 
-    while ((option = getopt_long(argc, argv, "h", LONG_OPTIONS,
-                                 NULL)) != -1) {
-        switch (option) {
-        case 'h':
-            undelete_helper();
-            return 0;
+        if (strcmp(argv[i], "-c") == 0 || strcmp(argv[i], "--config") == 0) {
+            if (i + 1 >= argc)
+                error(EXIT_FAILURE, EINVAL,
+                      "missing configuration file value");
+
+            context->config_file = argv[i + 1];
         }
     }
+}
 
-    argc -= optind;
-    argv += optind;
+static void
+apply_command_options(struct command_context *context, int argc, char *argv[])
+{
+    if (context->helper) {
+        if (context->helper_target)
+            undelete_helper();
+        else
+            undelete_helper();
 
-    if (argc < 1)
-        error(EX_USAGE, 0, "not enough arguments");
-    if (argc > 2)
-        error(EX_USAGE, 0, "too much arguments");
+        exit(0);
+    }
+}
+
+int
+main(int _argc, char *_argv[])
+{
+    struct command_context command_context = {0};
+    int nb_cli_args;
+    char **argv;
+    int argc;
+
+    if (_argc < 2)
+        error(EX_USAGE, EINVAL,
+              "invalid number of arguments, expected at least 1");
+
+    argc = _argc - 1;
+    argv = &_argv[1];
+
+    nb_cli_args = rbh_count_args_before_uri(argc, argv);
+    get_command_options(nb_cli_args, argv, &command_context);
+
+    rbh_config_load_from_path(command_context.config_file);
+
+    nb_cli_args = rbh_count_args_before_uri(argc, argv);
+    get_command_options(nb_cli_args, argv, &command_context);
+    apply_command_options(&command_context, argc, argv);
+
+    argc = argc - nb_cli_args;
+    argv = &argv[nb_cli_args];
 
     from = rbh_backend_from_uri(argv[0], true);
-
-    printf("backend name: %s\n", from->name);
 
     return EXIT_SUCCESS;
 }
