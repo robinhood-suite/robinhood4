@@ -1,0 +1,5 @@
+# Disclaimer
+
+The scripts in the `benchmark` directory have been tested and used for our
+internal benchmarks, but they haven't been added to the continuous integration.
+We therefore cannot guarantee they work as expected.
