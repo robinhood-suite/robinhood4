@@ -45,6 +45,30 @@
       },
       "revId": "0aac13f3e6b19c1a981a922383f5af1ca583f91f",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1723f7de_7bbd4863",
+        "filename": "librobinhood/src/plugins/sqlite/json/decode.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-05-24T08:15:24Z",
+      "side": 1,
+      "message": "I\u0027ll leave it here for now. I\u0027ll do a patch at the end of the stack to properly manage memory allocations. I know there are a few memory leaks in the current implementation.",
+      "parentUuid": "baa0d0c4_6bf8c017",
+      "range": {
+        "startLine": 87,
+        "startChar": 29,
+        "endLine": 87,
+        "endChar": 66
+      },
+      "revId": "0aac13f3e6b19c1a981a922383f5af1ca583f91f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
