@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "465455bd_dbd58950",
+        "filename": "rbh-fsevents/tests/lustre/test_rename.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-05-24T09:06:22Z",
+      "side": 1,
+      "message": "Since I\u0027m not planning on using sqlite with rbh-fsevents for the moment, this is not a very high priority task. And it should just work as sqlite implements the necessary fsevents to support this test. The way to fix this is to implement the query run by find_attribute in the db_cmd_sqlite tool. But since this is non trivial and not very useful, I did not implement it.",
+      "parentUuid": "5dc3b395_d68f67fc",
+      "range": {
+        "startLine": 55,
+        "startChar": 4,
+        "endLine": 55,
+        "endChar": 19
+      },
+      "revId": "d420e071acc7c6e63adab6b83db435b19cf98140",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bd8c39ab_a98ab60f",
         "filename": "rbh-sync/tests/test_config.bash",
         "patchSetId": 2
@@ -84,6 +108,30 @@
       "writtenOn": "2025-05-20T10:57:11Z",
       "side": 1,
       "message": "question: how is this test mongo only ?",
+      "range": {
+        "startLine": 354,
+        "startChar": 4,
+        "endLine": 354,
+        "endChar": 19
+      },
+      "revId": "d420e071acc7c6e63adab6b83db435b19cf98140",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e219ea85_82469955",
+        "filename": "rbh-sync/tests/test_posix_db_sync.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 354,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-05-24T09:06:22Z",
+      "side": 1,
+      "message": "The \"stop on error\" tests rely on the batching behavior of the mongo backend.",
+      "parentUuid": "87b9be92_1d444123",
       "range": {
         "startLine": 354,
         "startChar": 4,
