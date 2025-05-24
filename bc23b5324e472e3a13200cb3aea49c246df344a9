@@ -140,6 +140,30 @@
       },
       "revId": "bc23b5324e472e3a13200cb3aea49c246df344a9",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ef571787_f6658225",
+        "filename": "utils/tests/db_cmd_sqlite",
+        "patchSetId": 2
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-05-24T09:15:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "aa724971_5d386fec",
+      "range": {
+        "startLine": 111,
+        "startChar": 16,
+        "endLine": 111,
+        "endChar": 59
+      },
+      "revId": "bc23b5324e472e3a13200cb3aea49c246df344a9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
