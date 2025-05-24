@@ -41,6 +41,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a9eaabf9_9d8f1b96",
+        "filename": "librobinhood/src/plugins/sqlite/filter.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 315,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-05-24T08:34:20Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "34df646b_e42cbbc2",
+      "range": {
+        "startLine": 315,
+        "startChar": 38,
+        "endLine": 315,
+        "endChar": 69
+      },
+      "revId": "98a26789ca62012514a6983b91478c20949eaa08",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fed7b561_d2cd9eb5",
@@ -64,6 +88,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ffa7bb35_a3604278",
+        "filename": "librobinhood/src/plugins/sqlite/filter.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 332,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-05-24T08:34:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fed7b561_d2cd9eb5",
+      "range": {
+        "startLine": 332,
+        "startChar": 53,
+        "endLine": 332,
+        "endChar": 69
+      },
+      "revId": "98a26789ca62012514a6983b91478c20949eaa08",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2b98eaa0_59e7233c",
@@ -77,6 +125,30 @@
       "writtenOn": "2025-05-20T10:44:23Z",
       "side": 1,
       "message": "defect: missing GREATER_OR_EQUAL",
+      "range": {
+        "startLine": 395,
+        "startChar": 9,
+        "endLine": 395,
+        "endChar": 33
+      },
+      "revId": "98a26789ca62012514a6983b91478c20949eaa08",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "da07946b_d3563f21",
+        "filename": "librobinhood/src/plugins/sqlite/filter.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 395,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-05-24T08:34:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2b98eaa0_59e7233c",
       "range": {
         "startLine": 395,
         "startChar": 9,
@@ -112,6 +184,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "63b732c1_b3c6a8b6",
+        "filename": "librobinhood/src/plugins/sqlite/filter.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 420,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-05-24T08:34:20Z",
+      "side": 1,
+      "message": "It depends on the actual filter. I can give an example but there are a lot of possibilities.",
+      "parentUuid": "8dfbb39b_a462e839",
+      "range": {
+        "startLine": 406,
+        "startChar": 12,
+        "endLine": 420,
+        "endChar": 13
+      },
+      "revId": "98a26789ca62012514a6983b91478c20949eaa08",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4dd6f1b4_50d15782",
         "filename": "librobinhood/src/plugins/sqlite/filter.c",
         "patchSetId": 2
@@ -123,6 +219,30 @@
       "writtenOn": "2025-05-20T10:44:23Z",
       "side": 1,
       "message": "minor: missing check this one works (like line 519)",
+      "range": {
+        "startLine": 532,
+        "startChar": 12,
+        "endLine": 532,
+        "endChar": 29
+      },
+      "revId": "98a26789ca62012514a6983b91478c20949eaa08",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "30e474a6_a8433cb1",
+        "filename": "librobinhood/src/plugins/sqlite/filter.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 532,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-05-24T08:34:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4dd6f1b4_50d15782",
       "range": {
         "startLine": 532,
         "startChar": 12,
@@ -227,6 +347,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f3c125f6_92b34760",
+        "filename": "librobinhood/src/plugins/sqlite/filter.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 564,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-05-24T08:34:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e1849703_3eb29f45",
+      "range": {
+        "startLine": 564,
+        "startChar": 12,
+        "endLine": 564,
+        "endChar": 29
+      },
+      "revId": "98a26789ca62012514a6983b91478c20949eaa08",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "270aa51d_47ae8e32",
@@ -240,6 +384,30 @@
       "writtenOn": "2025-05-19T14:42:56Z",
       "side": 1,
       "message": "typo: no",
+      "range": {
+        "startLine": 583,
+        "startChar": 28,
+        "endLine": 583,
+        "endChar": 31
+      },
+      "revId": "98a26789ca62012514a6983b91478c20949eaa08",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a71eefe8_f3be5eba",
+        "filename": "librobinhood/src/plugins/sqlite/filter.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 583,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-05-24T08:34:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "270aa51d_47ae8e32",
       "range": {
         "startLine": 583,
         "startChar": 28,
@@ -273,6 +441,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8d21ef6f_5fe93ca3",
+        "filename": "librobinhood/src/plugins/sqlite/filter.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 597,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-05-24T08:34:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ec0dc906_4186ecf1",
+      "range": {
+        "startLine": 597,
+        "startChar": 57,
+        "endLine": 597,
+        "endChar": 68
+      },
+      "revId": "98a26789ca62012514a6983b91478c20949eaa08",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "585979d9_0561846a",
@@ -286,6 +478,30 @@
       "writtenOn": "2025-05-20T10:44:23Z",
       "side": 1,
       "message": "suggest: adding a comment on each of the filter/bind functions showing what the output looks like would be nice",
+      "range": {
+        "startLine": 886,
+        "startChar": 13,
+        "endLine": 886,
+        "endChar": 32
+      },
+      "revId": "98a26789ca62012514a6983b91478c20949eaa08",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "955506b6_ce47372c",
+        "filename": "librobinhood/src/plugins/sqlite/filter.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 886,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-05-24T08:34:20Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "585979d9_0561846a",
       "range": {
         "startLine": 886,
         "startChar": 13,
