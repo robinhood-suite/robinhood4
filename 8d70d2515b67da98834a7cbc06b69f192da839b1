@@ -22,6 +22,30 @@
       },
       "revId": "8d70d2515b67da98834a7cbc06b69f192da839b1",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "77bee3aa_403370b4",
+        "filename": "librobinhood/src/plugins/sqlite/backend.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-05-24T08:12:49Z",
+      "side": 1,
+      "message": "I\u0027m not sure I understand the issue. The sqlite plugin declaration already has the RBH_FILTER_OPS bit set.",
+      "parentUuid": "f95d69fc_a90d02a5",
+      "range": {
+        "startLine": 12,
+        "startChar": 15,
+        "endLine": 12,
+        "endChar": 36
+      },
+      "revId": "8d70d2515b67da98834a7cbc06b69f192da839b1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
