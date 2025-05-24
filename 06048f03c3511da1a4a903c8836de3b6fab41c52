@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cbb781a4_5697faea",
+        "filename": "librobinhood/include/robinhood/backends/sqlite.h.in",
+        "patchSetId": 3
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-05-24T07:41:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "246dcc2d_01ff853e",
+      "range": {
+        "startLine": 25,
+        "startChar": 38,
+        "endLine": 26,
+        "endChar": 65
+      },
+      "revId": "06048f03c3511da1a4a903c8836de3b6fab41c52",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "58d78a91_f9ddc923",
@@ -108,6 +132,30 @@
       "writtenOn": "2025-04-30T07:07:59Z",
       "side": 1,
       "message": "style: line length",
+      "range": {
+        "startLine": 25,
+        "startChar": 4,
+        "endLine": 25,
+        "endChar": 84
+      },
+      "revId": "06048f03c3511da1a4a903c8836de3b6fab41c52",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6fc81b61_664a1f0b",
+        "filename": "librobinhood/src/plugins/sqlite/plugin.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-05-24T07:41:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bdff3720_8e7a92ca",
       "range": {
         "startLine": 25,
         "startChar": 4,
