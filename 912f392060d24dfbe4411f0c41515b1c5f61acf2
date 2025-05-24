@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "12442dd8_6e69d537",
+        "filename": "librobinhood/src/plugins/sqlite/json/encode.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-05-24T07:54:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "889cc1c0_89f63494",
+      "range": {
+        "startLine": 31,
+        "startChar": 8,
+        "endLine": 31,
+        "endChar": 14
+      },
+      "revId": "912f392060d24dfbe4411f0c41515b1c5f61acf2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "173553df_09edc293",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-05-20T08:20:06Z",
       "side": 1,
       "message": "nit: double `;`",
+      "range": {
+        "startLine": 60,
+        "startChar": 39,
+        "endLine": 60,
+        "endChar": 40
+      },
+      "revId": "912f392060d24dfbe4411f0c41515b1c5f61acf2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9ccc23d8_cfac42cb",
+        "filename": "librobinhood/src/plugins/sqlite/json/encode.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-05-24T07:54:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "173553df_09edc293",
       "range": {
         "startLine": 60,
         "startChar": 39,
@@ -70,6 +118,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6960833f_f1f70424",
+        "filename": "librobinhood/src/plugins/sqlite/json/encode.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-05-24T07:54:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0597c94f_30d5997c",
+      "range": {
+        "startLine": 126,
+        "startChar": 13,
+        "endLine": 126,
+        "endChar": 20
+      },
+      "revId": "912f392060d24dfbe4411f0c41515b1c5f61acf2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "00152a21_3c508931",
@@ -83,6 +155,30 @@
       "writtenOn": "2025-05-20T08:20:06Z",
       "side": 1,
       "message": "suggest: this whole patch could be used outside of json to, if we want to dump entries elsewhere, or simply for debug. I\u0027d say put this function and the others in a utils file",
+      "range": {
+        "startLine": 184,
+        "startChar": 0,
+        "endLine": 184,
+        "endChar": 17
+      },
+      "revId": "912f392060d24dfbe4411f0c41515b1c5f61acf2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "82017aeb_08025bc5",
+        "filename": "librobinhood/src/plugins/sqlite/json/encode.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-05-24T07:54:38Z",
+      "side": 1,
+      "message": "If someone needs it, he can move the code.",
+      "parentUuid": "00152a21_3c508931",
       "range": {
         "startLine": 184,
         "startChar": 0,
