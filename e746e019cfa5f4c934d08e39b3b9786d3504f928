@@ -48,6 +48,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a520af57_93d537a4",
+        "filename": "librobinhood/src/plugins/sqlite/db_cursor.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-05-25T09:00:58Z",
+      "side": 1,
+      "message": "Simply casting to char * seems to work. I removed the buffer copy.",
+      "parentUuid": "3e543a47_47075829",
+      "range": {
+        "startLine": 177,
+        "startChar": 4,
+        "endLine": 178,
+        "endChar": 24
+      },
+      "revId": "e746e019cfa5f4c934d08e39b3b9786d3504f928",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cbf50e53_cc5dadf8",
