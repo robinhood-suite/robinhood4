@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2dc66359_6dd57de2",
+        "filename": "utils/generate_tree.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-05-26T08:49:12Z",
+      "side": 1,
+      "message": "sugest: always create the file/dir and generate a changelog only if the option is set. Also, remove the mkdir/open in the generate changelog function.",
+      "range": {
+        "startLine": 69,
+        "startChar": 8,
+        "endLine": 72,
+        "endChar": 32
+      },
+      "revId": "a9623533c6e987df1c31ea3933c6d1f74fba36fe",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
