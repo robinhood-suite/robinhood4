@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "36ea3d91_3bdc5e61",
+        "filename": "designs/rbh-policy/05-rbh-policy_command.rst",
+        "patchSetId": 12
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-05-26T08:58:18Z",
+      "side": 1,
+      "message": "I said that here to highlight the difference with `--detach`, but it\u0027s true that just writing \"it runs in the foreground by default\" can be enough here.",
+      "parentUuid": "7968d673_9da675df",
+      "range": {
+        "startLine": 234,
+        "startChar": 22,
+        "endLine": 234,
+        "endChar": 50
+      },
+      "revId": "609026d86f5de58f42105cfaf15c1c040f0c89cf",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "37637ccf_6a76403e",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-05-23T14:26:31Z",
       "side": 1,
       "message": "nit: to remove IMO",
+      "range": {
+        "startLine": 240,
+        "startChar": 0,
+        "endLine": 240,
+        "endChar": 36
+      },
+      "revId": "609026d86f5de58f42105cfaf15c1c040f0c89cf",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "11aa3553_3b357eec",
+        "filename": "designs/rbh-policy/05-rbh-policy_command.rst",
+        "patchSetId": 12
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-05-26T08:58:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "37637ccf_6a76403e",
       "range": {
         "startLine": 240,
         "startChar": 0,
@@ -70,6 +118,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a5adbff9_65c14da2",
+        "filename": "designs/rbh-policy/09-future_improvements.rst",
+        "patchSetId": 12
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-05-26T08:58:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c896c2e6_4918777c",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 7
+      },
+      "revId": "609026d86f5de58f42105cfaf15c1c040f0c89cf",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "40c12aa4_2b813f39",
@@ -83,6 +155,30 @@
       "writtenOn": "2025-05-23T14:26:31Z",
       "side": 1,
       "message": "suggest: to remove, we\u0027re already in the `future` document",
+      "range": {
+        "startLine": 51,
+        "startChar": 0,
+        "endLine": 51,
+        "endChar": 6
+      },
+      "revId": "609026d86f5de58f42105cfaf15c1c040f0c89cf",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "50d5ec13_cadf13e6",
+        "filename": "designs/rbh-policy/09-future_improvements.rst",
+        "patchSetId": 12
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-05-26T08:58:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "40c12aa4_2b813f39",
       "range": {
         "startLine": 51,
         "startChar": 0,
@@ -129,6 +225,30 @@
       "writtenOn": "2025-05-23T14:26:31Z",
       "side": 1,
       "message": "minor: not needed",
+      "range": {
+        "startLine": 74,
+        "startChar": 0,
+        "endLine": 76,
+        "endChar": 60
+      },
+      "revId": "609026d86f5de58f42105cfaf15c1c040f0c89cf",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6926dcb3_b5945551",
+        "filename": "designs/rbh-policy/09-future_improvements.rst",
+        "patchSetId": 12
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-05-26T08:58:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0d5388b4_a024a2d5",
       "range": {
         "startLine": 74,
         "startChar": 0,
