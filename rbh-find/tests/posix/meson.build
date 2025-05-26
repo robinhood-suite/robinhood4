@@ -18,6 +18,7 @@ integration_tests = [
   'test_size',
   'test_time',
   'test_uid_gid',
+  'test_verbose',
   'test_xattr',
 ]
 
