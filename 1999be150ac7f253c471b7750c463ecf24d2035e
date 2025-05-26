@@ -3,6 +3,144 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "23cf39a4_25532e31",
+        "filename": "librobinhood/src/plugins/mongo/mongo.c",
+        "patchSetId": 7
+      },
+      "lineNbr": 707,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-05-26T09:06:48Z",
+      "side": 1,
+      "message": "defect: You need to cleanup update also if it succeed",
+      "range": {
+        "startLine": 707,
+        "startChar": 8,
+        "endLine": 707,
+        "endChar": 28
+      },
+      "revId": "1999be150ac7f253c471b7750c463ecf24d2035e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f4053f96_f834ddcb",
+        "filename": "librobinhood/src/plugins/mongo/mongo.c",
+        "patchSetId": 7
+      },
+      "lineNbr": 717,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-05-26T09:06:48Z",
+      "side": 1,
+      "message": "minor: `rc \u003d -1`",
+      "range": {
+        "startLine": 717,
+        "startChar": 12,
+        "endLine": 717,
+        "endChar": 18
+      },
+      "revId": "1999be150ac7f253c471b7750c463ecf24d2035e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "10745579_e1162041",
+        "filename": "librobinhood/src/plugins/mongo/mongo.c",
+        "patchSetId": 7
+      },
+      "lineNbr": 725,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-05-26T09:06:48Z",
+      "side": 1,
+      "message": "minor: idem",
+      "range": {
+        "startLine": 725,
+        "startChar": 12,
+        "endLine": 725,
+        "endChar": 19
+      },
+      "revId": "1999be150ac7f253c471b7750c463ecf24d2035e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "563e1a3b_50145743",
+        "filename": "librobinhood/src/plugins/mongo/mongo.c",
+        "patchSetId": 7
+      },
+      "lineNbr": 761,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-05-26T09:06:48Z",
+      "side": 1,
+      "message": "minor: `rc \u003d -1`",
+      "range": {
+        "startLine": 761,
+        "startChar": 8,
+        "endLine": 761,
+        "endChar": 15
+      },
+      "revId": "1999be150ac7f253c471b7750c463ecf24d2035e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6ead9f50_234f0cc6",
+        "filename": "librobinhood/src/plugins/mongo/mongo.c",
+        "patchSetId": 7
+      },
+      "lineNbr": 769,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-05-26T09:06:48Z",
+      "side": 1,
+      "message": "minor: idem",
+      "range": {
+        "startLine": 769,
+        "startChar": 8,
+        "endLine": 769,
+        "endChar": 15
+      },
+      "revId": "1999be150ac7f253c471b7750c463ecf24d2035e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "82ca0090_0a8a1fbf",
+        "filename": "librobinhood/src/plugins/mongo/mongo.c",
+        "patchSetId": 7
+      },
+      "lineNbr": 797,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-05-26T09:06:48Z",
+      "side": 1,
+      "message": "minor: We return -1 for an error in rbh",
+      "range": {
+        "startLine": 797,
+        "startChar": 8,
+        "endLine": 797,
+        "endChar": 17
+      },
+      "revId": "1999be150ac7f253c471b7750c463ecf24d2035e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "62a59832_0ee411bf",
         "filename": "librobinhood/src/plugins/mongo/mongo.c",
         "patchSetId": 7
