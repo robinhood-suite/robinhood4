@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e9c6631c_fbfc69eb",
+        "filename": "rbh-info/tests/get_info.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-05-26T09:34:27Z",
+      "side": 1,
+      "message": "minor: add a test that check that the value of skipped_entries is right",
+      "range": {
+        "startLine": 89,
+        "startChar": 4,
+        "endLine": 90,
+        "endChar": 58
+      },
+      "revId": "e8a08de6cd8045d33eae287582617509b483926f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
