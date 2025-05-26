@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4cca9c94_fdc45057",
+        "filename": "librobinhood/include/robinhood/backend.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 620,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-05-26T09:28:38Z",
+      "side": 1,
+      "message": "minor: add the metadata argument",
+      "revId": "ec86f6b1a61c5940604423557fa19d58d690a34f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0857b8eb_97120915",
+        "filename": "librobinhood/src/plugins/posix/fts_iter.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-05-26T09:28:38Z",
+      "side": 1,
+      "message": "minor: to remove",
+      "range": {
+        "startLine": 76,
+        "startChar": 17,
+        "endLine": 76,
+        "endChar": 18
+      },
+      "revId": "ec86f6b1a61c5940604423557fa19d58d690a34f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3b1c349f_ccc94b72",
+        "filename": "librobinhood/src/plugins/posix/fts_iter.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-05-26T09:28:38Z",
+      "side": 1,
+      "message": "defect: You don\u0027t need to increment the value of converted_entries. Here, we generate a fsentry to update the counter of children of the directory but the entry already exist in the destination backend. With this, you count twice each directory.",
+      "range": {
+        "startLine": 155,
+        "startChar": 8,
+        "endLine": 159,
+        "endChar": 9
+      },
+      "revId": "ec86f6b1a61c5940604423557fa19d58d690a34f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8e5006eb_421af55d",
+        "filename": "librobinhood/src/plugins/posix/iterators/mfu/iterator.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-05-26T09:28:38Z",
+      "side": 1,
+      "message": "defect: idem, here we just update the counter of an entry that already exist.",
+      "range": {
+        "startLine": 130,
+        "startChar": 8,
+        "endLine": 132,
+        "endChar": 52
+      },
+      "revId": "ec86f6b1a61c5940604423557fa19d58d690a34f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "86648c0f_26b0e6a1",
+        "filename": "rbh-fsevents/src/sinks/backend.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-05-26T09:28:38Z",
+      "side": 1,
+      "message": "question: The map and pair are freed somewhere ?",
+      "range": {
+        "startLine": 32,
+        "startChar": 3,
+        "endLine": 33,
+        "endChar": 56
+      },
+      "revId": "ec86f6b1a61c5940604423557fa19d58d690a34f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
