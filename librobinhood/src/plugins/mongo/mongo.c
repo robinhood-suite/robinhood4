@@ -699,6 +699,24 @@ mongo_root(void *backend, const struct rbh_filter_projection *projection)
      |                               filter                               |
      *--------------------------------------------------------------------*/
 
+static void
+print_pipeline_and_opts(bson_t *pipeline, bson_t *opts)
+{
+    char *pipeline_str = NULL;
+    char *opts_str = NULL;
+
+    pipeline_str = bson_as_canonical_extended_json(pipeline, NULL);
+    if (opts)
+        opts_str = bson_as_canonical_extended_json(opts, NULL);
+
+    printf("Pipeline filter = '%s'%s", pipeline_str, opts ? " " : "\n");
+    if (opts)
+        printf("with options '%s'\n", opts_str);
+
+    free(pipeline_str);
+    free(opts_str);
+}
+
 static struct rbh_mut_iterator *
 mongo_backend_filter(void *backend, const struct rbh_filter *filter,
                      const struct rbh_filter_options *options,
@@ -719,6 +737,10 @@ mongo_backend_filter(void *backend, const struct rbh_filter *filter,
 
     opts = options->sort.count > 0 ? BCON_NEW("allowDiskUse", BCON_BOOL(true))
                                    : NULL;
+
+    if (options->verbose)
+        print_pipeline_and_opts(pipeline, opts);
+
     cursor = mongoc_collection_aggregate(mongo->entries, MONGOC_QUERY_NONE,
                                          pipeline, opts, NULL);
     bson_destroy(opts);
