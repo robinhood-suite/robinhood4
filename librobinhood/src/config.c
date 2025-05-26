@@ -427,35 +427,27 @@ rbh_config_open_default(void)
     return (rc == 0 || errno == ENOENT) ? 0 : -1;
 }
 
-static void
-move_arg_forward(char **argv, int index)
+int
+rbh_load_config_from_path(const char *config_path)
 {
-    char *tmp;
+    int rc;
 
-    tmp = argv[index];
-    argv[index] = argv[index + 1];
-    argv[index + 1] = tmp;
-}
+    if (config_path)
+        return rbh_config_open(config_path);
 
-static void
-move_args_to(char **argv, int count, int src, int dst)
-{
-    if (dst == src || count == 0)
-        return;
+    rc = rbh_config_try_open_env();
+    if (rc || config)
+        return rc;
 
-    assert(dst < src);
-
-    for (int i = 0; i < count; i++)
-        for (int j = src + i - 1; j >= dst + i; j--)
-            move_arg_forward(argv, j);
+    return rbh_config_open_default();
 }
 
 int
 rbh_config_from_args(int argc, char **argv)
 {
+    char *config_file = NULL;
     const char *option;
     int index = 0;
-    int rc;
 
     while (index < argc && (option = argv[index])) {
         if (!strcmp(option, "-c") || !strcmp(option, "--config")) {
@@ -464,23 +456,13 @@ rbh_config_from_args(int argc, char **argv)
                 return -1;
             }
 
-            rc = rbh_config_open(argv[index + 1]);
-            if (rc)
-                return rc;
-
-            move_args_to(argv, 2, index, 0);
-
-            return 0;
+            config_file = argv[index + 1];
         }
 
         index++;
     }
 
-    rc = rbh_config_try_open_env();
-    if (rc || config)
-        return rc;
-
-    return rbh_config_open_default();
+    return rbh_load_config_from_path(config_file);
 }
 
 static char *

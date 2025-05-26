@@ -116,6 +116,20 @@ void
 load_rbh_config(struct rbh_config *config);
 
 /**
+ * Load the config from the given file path.
+ *
+ * If the file path given is not NULL, try to load it, and return an error if
+ * it fails.
+ * If the file path given is NULL, try to load the configuration file from the
+ * environement variable if it exists, otherwise load the default configuration
+ * file.
+ *
+ * @param config        the config file path to load, can be NULL
+ */
+int
+rbh_load_config_from_path(const char *config);
+
+/**
  * Get a string from the configuration file.
  *
  * @param key             the key to search

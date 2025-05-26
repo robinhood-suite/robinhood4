@@ -54,6 +54,13 @@ void
 import_plugins(struct filters_context *ctx, struct rbh_value_map **info_maps,
                int backend_count);
 
+struct command_context {
+    char *config_file;
+    char *helper_target;
+    bool helper;
+    bool dry_run;
+};
+
 /**
  * Complete filter that need information to be fetch from a backend.
  *
