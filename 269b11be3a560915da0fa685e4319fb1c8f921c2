@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "67e69ae5_159a11c7",
+        "filename": "utils/generate_tree.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-05-26T08:51:26Z",
+      "side": 1,
+      "message": "comment: I think if you do the sugest in the previous patch, this is not necessary.",
+      "range": {
+        "startLine": 37,
+        "startChar": 3,
+        "endLine": 38,
+        "endChar": 22
+      },
+      "revId": "269b11be3a560915da0fa685e4319fb1c8f921c2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
