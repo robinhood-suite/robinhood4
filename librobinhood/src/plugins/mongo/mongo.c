@@ -1489,7 +1489,7 @@ rbh_mongo_backend_new(const struct rbh_backend_plugin *self,
     if (mongo == NULL)
         return NULL;
 
-    load_rbh_config(config);
+    rbh_load_config(config);
 
     if (mongo_backend_init(mongo, fsname)) {
         int save_errno = errno;

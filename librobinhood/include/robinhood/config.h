@@ -27,19 +27,6 @@ enum key_parse_result {
 };
 
 /**
- * Create and initialize the config.
- *
- * Two `parse` calls are done to skip the initial YAML_STREAM_START_EVENT and
- * YAML_DOCUMENT_START_EVENT.
- *
- * @param config_file   the path to the configuration file to use
- *
- * @return              0 on success, -1 on error and set errno accordingly
- */
-int
-rbh_config_open(const char *config_file);
-
-/**
  * Try to open the configuration from CLI args. If no config arg is given, try
  * to find it from the environment variable RBH_CONFIG_PATH. Finally, try to
  * open the default configuration from "/etc/robinhood4.d/default.yaml"
@@ -50,27 +37,10 @@ int
 rbh_config_from_args(int argc, char **argv);
 
 /**
- * Return the value of RBH_CONFIG_PATH
- */
-const char *
-rbh_config_env_name(void);
-
-/**
  * Free the config.
  */
 void
 rbh_config_free();
-
-/**
- * Reset the config.
- *
- * Re-initialize the parser to the start of the file and skip the first two
- * events.
- *
- * @return              0 if the reset succeeded, non-zero code otherwise
- */
-int
-rbh_config_reset();
 
 /**
  * Search a key in the configuration file and return the value associated to
@@ -113,7 +83,7 @@ get_rbh_config();
  * @param config        the config to load
  */
 void
-load_rbh_config(struct rbh_config *config);
+rbh_load_config(struct rbh_config *config);
 
 /**
  * Load the config from the given file path.

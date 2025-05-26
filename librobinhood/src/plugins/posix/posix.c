@@ -1405,7 +1405,7 @@ rbh_posix_backend_new(const struct rbh_backend_plugin *self,
     /* Default to FTS iterator */
     posix->iter_new = fts_iter_new;
 
-    load_rbh_config(config);
+    rbh_load_config(config);
 
     if (type) {
         int count = 0;
