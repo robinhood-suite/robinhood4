@@ -60,6 +60,7 @@ action2str(enum action action);
  * @param filter        a filter (the part of the cli already parsed)
  * @param sorts         an array of filtering options
  * @param sorts_count   the size of \p sorts
+ * @param verbose       if verbose mode is enabled
  * @param token         the token to parse
  * @param param         callback argument
  */
@@ -67,6 +68,6 @@ void
 find_parse_callback(struct filters_context *ctx, int *arg_idx,
                     const struct rbh_filter *filter,
                     struct rbh_filter_sort **sorts, size_t *sorts_count,
-                    enum command_line_token token, void *param);
+                    bool verbose, enum command_line_token token, void *param);
 
 #endif
