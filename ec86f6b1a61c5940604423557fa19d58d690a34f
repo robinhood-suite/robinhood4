@@ -18,6 +18,24 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9471137f_bf6a43e0",
+        "filename": "librobinhood/include/robinhood/backend.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 620,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-05-26T14:16:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4cca9c94_fdc45057",
+      "revId": "ec86f6b1a61c5940604423557fa19d58d690a34f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0857b8eb_97120915",
@@ -31,6 +49,30 @@
       "writtenOn": "2025-05-26T09:28:38Z",
       "side": 1,
       "message": "minor: to remove",
+      "range": {
+        "startLine": 76,
+        "startChar": 17,
+        "endLine": 76,
+        "endChar": 18
+      },
+      "revId": "ec86f6b1a61c5940604423557fa19d58d690a34f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "795f21a3_5c370e19",
+        "filename": "librobinhood/src/plugins/posix/fts_iter.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-05-26T14:16:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0857b8eb_97120915",
       "range": {
         "startLine": 76,
         "startChar": 17,
@@ -64,6 +106,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f7d19db2_514d13c0",
+        "filename": "librobinhood/src/plugins/posix/fts_iter.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-05-26T14:16:02Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "3b1c349f_ccc94b72",
+      "range": {
+        "startLine": 155,
+        "startChar": 8,
+        "endLine": 159,
+        "endChar": 9
+      },
+      "revId": "ec86f6b1a61c5940604423557fa19d58d690a34f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8e5006eb_421af55d",
@@ -87,6 +153,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "25820eda_939b0c73",
+        "filename": "librobinhood/src/plugins/posix/iterators/mfu/iterator.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-05-26T14:16:02Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "8e5006eb_421af55d",
+      "range": {
+        "startLine": 130,
+        "startChar": 8,
+        "endLine": 132,
+        "endChar": 52
+      },
+      "revId": "ec86f6b1a61c5940604423557fa19d58d690a34f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "86648c0f_26b0e6a1",
@@ -100,6 +190,30 @@
       "writtenOn": "2025-05-26T09:28:38Z",
       "side": 1,
       "message": "question: The map and pair are freed somewhere ?",
+      "range": {
+        "startLine": 32,
+        "startChar": 3,
+        "endLine": 33,
+        "endChar": 56
+      },
+      "revId": "ec86f6b1a61c5940604423557fa19d58d690a34f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2f8d1d62_5f9d3457",
+        "filename": "rbh-fsevents/src/sinks/backend.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-05-26T14:16:02Z",
+      "side": 1,
+      "message": "You\u0027re right, I don\u0027t think they\u0027re freed elsewhere. Anyway, I moved this change to the second patch.",
+      "parentUuid": "86648c0f_26b0e6a1",
       "range": {
         "startLine": 32,
         "startChar": 3,
