@@ -138,9 +138,34 @@ check_command_options(int pre_uri_args, int argc, char *argv[])
     }
 }
 
+static void
+get_command_options(int argc, char *argv[],
+                    struct command_context *context)
+{
+    for (int i = 0; i < argc; i++) {
+        if (strcmp(argv[i], "-h") == 0 || strcmp(argv[i], "--help") == 0) {
+            context->helper = true;
+            if (i + 1 < argc)
+                context->helper_target = argv[i + 1];
+        }
+
+        if (strcmp(argv[i], "-d") == 0 || strcmp(argv[i], "--dry-run") == 0)
+            context->dry_run = true;
+
+        if (strcmp(argv[i], "-c") == 0 || strcmp(argv[i], "--config") == 0) {
+            if (i + 1 >= argc)
+                error(EXIT_FAILURE, EINVAL,
+                      "missing configuration file value");
+
+            context->config_file = argv[i + 1];
+        }
+    }
+}
+
 int
 main(int _argc, char *_argv[])
 {
+    struct command_context command_context = {0};
     struct rbh_filter_sort *sorts = NULL;
     struct rbh_value_map **info_maps;
     struct rbh_filter *filter;
@@ -149,7 +174,6 @@ main(int _argc, char *_argv[])
     char **argv;
     int index;
     int argc;
-    int rc;
 
     if (_argc < 2)
         error(EX_USAGE, EINVAL,
@@ -159,10 +183,9 @@ main(int _argc, char *_argv[])
     argv = &_argv[1];
 
     nb_cli_args = rbh_count_args_before_uri(argc, argv);
-    rc = rbh_config_from_args(nb_cli_args, argv);
-    if (rc)
-        error(EXIT_FAILURE, errno, "failed to load configuration file");
+    get_command_options(argc, argv, &command_context);
 
+    rbh_load_config_from_path(command_context.config_file);
     rbh_apply_aliases(&argc, &argv);
 
     nb_cli_args = rbh_count_args_before_uri(argc, argv);
