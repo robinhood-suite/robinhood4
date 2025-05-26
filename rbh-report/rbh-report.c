@@ -208,7 +208,7 @@ usage(const char *backend)
     if (plugin == NULL)
         error(EXIT_FAILURE, errno, "rbh_backend_plugin_import");
 
-    config = get_rbh_config();
+    config = rbh_config_get();
     rbh_pe_common_ops_helper(plugin->common_ops, backend, config,
                              &predicate_helper, &directive_helper);
 
