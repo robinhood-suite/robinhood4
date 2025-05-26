@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ab51655c_e07a347f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-05-26T14:16:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f3add8a8_fe87f870",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 77
+      },
+      "revId": "ae39d465b2be822910684bfdafbb79a214f116bd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "67fa99d7_4193d19a",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-04-18T08:25:55Z",
       "side": 1,
       "message": "minor: you can have a better test than just a grep here",
+      "range": {
+        "startLine": 87,
+        "startChar": 4,
+        "endLine": 87,
+        "endChar": 41
+      },
+      "revId": "ae39d465b2be822910684bfdafbb79a214f116bd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "815487f0_e22e9fe8",
+        "filename": "rbh-info/tests/get_info.bash",
+        "patchSetId": 3
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-05-26T14:16:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "67fa99d7_4193d19a",
       "range": {
         "startLine": 87,
         "startChar": 4,
@@ -81,6 +129,30 @@
         "id": 1037727
       },
       "writtenOn": "2025-05-26T09:31:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "99def8ae_ba44eeaa",
+      "range": {
+        "startLine": 759,
+        "startChar": 4,
+        "endLine": 759,
+        "endChar": 33
+      },
+      "revId": "ae39d465b2be822910684bfdafbb79a214f116bd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "430c5759_ca9d9fca",
+        "filename": "rbh-sync/rbh-sync.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 759,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-05-26T14:16:35Z",
       "side": 1,
       "message": "Done",
       "parentUuid": "99def8ae_ba44eeaa",
