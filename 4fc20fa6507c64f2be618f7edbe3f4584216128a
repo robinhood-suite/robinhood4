@@ -48,6 +48,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "86632620_cb8853b8",
+        "filename": "rbh-info/tests/get_info.bash",
+        "patchSetId": 3
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-05-26T14:16:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "09b857a5_af64bb62",
+      "range": {
+        "startLine": 69,
+        "startChar": 31,
+        "endLine": 69,
+        "endChar": 35
+      },
+      "revId": "4fc20fa6507c64f2be618f7edbe3f4584216128a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "948091a1_756ab902",
@@ -85,6 +109,30 @@
       "side": 1,
       "message": "ping",
       "parentUuid": "948091a1_756ab902",
+      "range": {
+        "startLine": 84,
+        "startChar": 4,
+        "endLine": 84,
+        "endChar": 39
+      },
+      "revId": "4fc20fa6507c64f2be618f7edbe3f4584216128a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "81d3655e_9261d6ea",
+        "filename": "rbh-info/tests/get_info.bash",
+        "patchSetId": 3
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-05-26T14:16:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bee49b8d_0fc075c6",
       "range": {
         "startLine": 84,
         "startChar": 4,
