@@ -75,7 +75,7 @@ struct rbh_filter *
 parse_expression(struct filters_context *ctx, int *arg_idx,
                  const struct rbh_filter *_filter,
                  struct rbh_filter_sort **sorts, size_t *sorts_count,
-                 parse_callback cb, void *cb_param)
+                 bool verbose, parse_callback cb, void *cb_param)
 {
     static enum command_line_token token = CLT_URI;
     struct rbh_filter *filter = NULL;
@@ -150,7 +150,7 @@ parse_expression(struct filters_context *ctx, int *arg_idx,
 
             /* Parse the filter at the right of -o/-or */
             tmp = parse_expression(ctx, &i, &negated_left_filter,
-                                   sorts, sorts_count, cb, cb_param);
+                                   sorts, sorts_count, verbose, cb, cb_param);
             /* parse_expression() returned, so it must have seen a closing
              * parenthesis or reached the end of the command line, we should
              * return here too.
@@ -172,8 +172,8 @@ parse_expression(struct filters_context *ctx, int *arg_idx,
             i++;
 
             /* Parse the sub-expression */
-            tmp = parse_expression(ctx, &i, &left_filter, sorts,
-                                   sorts_count, cb, cb_param);
+            tmp = parse_expression(ctx, &i, &left_filter, sorts, sorts_count,
+                                   verbose, cb, cb_param);
             if (i >= ctx->argc || token != CLT_PARENTHESIS_CLOSE)
                 error(EX_USAGE, 0,
                       "invalid expression; I was expecting to find a ')' somewhere but did not see one.");
@@ -221,7 +221,8 @@ parse_expression(struct filters_context *ctx, int *arg_idx,
             break;
         default:
             if (cb)
-                cb(ctx, &i, &left_filter, sorts, sorts_count, token, cb_param);
+                cb(ctx, &i, &left_filter, sorts, sorts_count, verbose, token,
+                   cb_param);
             break;
         }
 

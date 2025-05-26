@@ -155,7 +155,7 @@ void
 find_parse_callback(struct filters_context *ctx, int *arg_idx,
                     const struct rbh_filter *filter,
                     struct rbh_filter_sort **sorts, size_t *sorts_count,
-                    enum command_line_token token, void *param)
+                    bool verbose, enum command_line_token token, void *param)
 {
     struct find_context *find_ctx = (struct find_context *)param;
     bool ascending = true;
@@ -177,7 +177,7 @@ find_parse_callback(struct filters_context *ctx, int *arg_idx,
     case CLT_ACTION:
         find_ctx->action_done = true;
         find(find_ctx, str2action(ctx->argv[*arg_idx]), arg_idx,
-             filter, *sorts, *sorts_count);
+             filter, *sorts, *sorts_count, verbose);
         break;
     default:
         break;

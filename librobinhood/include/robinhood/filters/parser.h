@@ -42,7 +42,7 @@ str2command_line_token(struct filters_context *ctx, const char *string,
 typedef void (*parse_callback)(struct filters_context *ctx,
                                int *arg_idx, const struct rbh_filter *filter,
                                struct rbh_filter_sort **sorts,
-                               size_t *sort_count,
+                               size_t *sort_count, bool verbose,
                                enum command_line_token token, void *param);
 
 /**
@@ -53,6 +53,7 @@ typedef void (*parse_callback)(struct filters_context *ctx,
  * @param _filter       a filter (the part of the cli already parsed)
  * @param sorts         an array of filtering options
  * @param sorts_count   the size of \p sorts
+ * @param verbose       if verbose mode is enabled
  * @param cb            parsing callback to parse specific token
  * @param cb_param      argument for the parsing callback
  *
@@ -64,6 +65,6 @@ struct rbh_filter *
 parse_expression(struct filters_context *ctx, int *arg_idx,
                  const struct rbh_filter *_filter,
                  struct rbh_filter_sort **sorts, size_t *sorts_count,
-                 parse_callback cb, void *cb_param);
+                 bool verbose, parse_callback cb, void *cb_param);
 
 #endif

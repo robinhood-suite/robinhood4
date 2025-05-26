@@ -41,6 +41,7 @@ ctx_finish(struct find_context *ctx)
  * @param backend_index  index of the backend to go through
  * @param action         the type of action to execute
  * @param filter         the filter to apply to each fsentry
+ * @param verbose        if verbose mode is enabled
  * @param sorts          how the list of retrieved fsentries is sorted
  * @param sorts_count    how many fsentries to sort
  *
@@ -49,13 +50,14 @@ ctx_finish(struct find_context *ctx)
 static size_t
 _find(struct find_context *ctx, int backend_index, enum action action,
       const struct rbh_filter *filter, const struct rbh_filter_sort *sorts,
-      size_t sorts_count)
+      size_t sorts_count, bool verbose)
 {
     const struct rbh_filter_options OPTIONS = {
         .sort = {
             .items = sorts,
             .count = sorts_count
         },
+        .verbose = verbose,
     };
     const struct rbh_filter_output OUTPUT = {
         .type = RBH_FOT_PROJECTION,
@@ -109,7 +111,7 @@ _find(struct find_context *ctx, int backend_index, enum action action,
 void
 find(struct find_context *ctx, enum action action, int *arg_idx,
      const struct rbh_filter *filter, const struct rbh_filter_sort *sorts,
-     size_t sorts_count)
+     size_t sorts_count, bool verbose)
 {
     int i = *arg_idx;
     size_t count = 0;
@@ -119,7 +121,7 @@ find(struct find_context *ctx, enum action action, int *arg_idx,
     i += find_pre_action(ctx, i, action);
 
     for (size_t i = 0; i < ctx->backend_count; i++)
-        count += _find(ctx, i, action, filter, sorts, sorts_count);
+        count += _find(ctx, i, action, filter, sorts, sorts_count, verbose);
 
     find_post_action(ctx, i, action, count);
 

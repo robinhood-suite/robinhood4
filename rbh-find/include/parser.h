@@ -67,6 +67,6 @@ void
 find_parse_callback(struct filters_context *ctx, int *arg_idx,
                     const struct rbh_filter *filter,
                     struct rbh_filter_sort **sorts, size_t *sorts_count,
-                    enum command_line_token token, void *param);
+                    bool verbose, enum command_line_token token, void *param);
 
 #endif
