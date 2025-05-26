@@ -98,7 +98,7 @@ usage(const char *backend)
     if (plugin == NULL)
         error(EXIT_FAILURE, errno, "rbh_backend_plugin_import");
 
-    config = get_rbh_config();
+    config = rbh_config_get();
     rbh_pe_common_ops_helper(plugin->common_ops, backend, config,
                              &predicate_helper, &directive_helper);
 
@@ -178,7 +178,7 @@ main(int _argc, char *_argv[])
     nb_cli_args = rbh_count_args_before_uri(argc, argv);
     get_command_options(nb_cli_args, argv, &command_context);
 
-    rbh_load_config_from_path(command_context.config_file);
+    rbh_config_load_from_path(command_context.config_file);
     rbh_apply_aliases(&argc, &argv);
 
     nb_cli_args = rbh_count_args_before_uri(argc, argv);

@@ -839,7 +839,7 @@ posix_iter_enrich(struct rbh_backend *backend, const char *type,
     enricher->pair_count = INITIAL_PAIR_COUNT;
     enricher->symlink = symlink;
     enricher->skip_error = skip_error;
-    setup_fsevent_enrichers(enricher, get_rbh_config(), type);
+    setup_fsevent_enrichers(enricher, rbh_config_get(), type);
 
     return &enricher->iterator;
 }
@@ -946,7 +946,7 @@ posix_enrich_iter_builder_get_source_backends(void *_builder)
     struct rbh_value *backends;
     int i;
 
-    setup_fsevent_enrichers(&enricher, get_rbh_config(), builder->type);
+    setup_fsevent_enrichers(&enricher, rbh_config_get(), builder->type);
 
     if (source_backends_sstack == NULL) {
         source_backends_sstack = rbh_sstack_new(

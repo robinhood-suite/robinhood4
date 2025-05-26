@@ -86,7 +86,7 @@ backend_new(const char *type, const char *fsname, bool read_only)
     struct rbh_backend *backend;
     struct rbh_config *config;
 
-    config = get_rbh_config();
+    config = rbh_config_get();
     plugin = backend_plugin_import(resolve_config_plugin_name(config, type));
 
     backend = rbh_backend_plugin_new(plugin, type, fsname, config, read_only);

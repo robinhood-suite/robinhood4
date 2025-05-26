@@ -24,66 +24,16 @@ struct rbh_config {
 
 static struct rbh_config *config;
 
-int
-rbh_config_open(const char *config_file)
-{
-    int save_errno;
-
-    config = calloc(1, sizeof(*config));
-    if (config == NULL)
-        error(EXIT_FAILURE, errno, "calloc in rbh_config_open");
-
-    config->config_file = strdup(config_file);
-    if (config->config_file == NULL) {
-        fprintf(stderr, "Failed to duplicate '%s' in rbh_config_open\n",
-                config_file);
-        goto free_config;
-    }
-
-    config->file = fopen(config_file, "r");
-    if (config->file == NULL)
-        goto free_config;
-
-    config->parser_initialized = false;
-
-    if (rbh_config_reset())
-        goto free_config;
-
-    return 0;
-
-free_config:
-    save_errno = errno;
-    rbh_config_free();
-    errno = save_errno;
-
-    return -1;
-}
-
+/**
+ * Reset the config.
+ *
+ * Re-initialize the parser to the start of the file and skip the first two
+ * events.
+ *
+ * @return              0 if the reset succeeded, non-zero code otherwise
+ */
 static int
-rbh_config_try_open_env(void)
-{
-    const char *cfg_path;
-
-    if (config)
-        /* Already opened */
-        return 0;
-
-    cfg_path = rbh_config_env_name();
-    if (!cfg_path)
-        /* No env specified, no config to open */
-        return 0;
-
-    return rbh_config_open(cfg_path);
-}
-
-const char *
-rbh_config_env_name(void)
-{
-    return getenv("RBH_CONFIG_PATH");
-}
-
-int
-rbh_config_reset()
+config_reset()
 {
     yaml_event_t event;
     int type;
@@ -98,7 +48,7 @@ rbh_config_reset()
     }
 
     if (!yaml_parser_initialize(&config->parser)) {
-        fprintf(stderr, "Failed to initialize parser in rbh_config_reset\n");
+        fprintf(stderr, "Failed to initialize parser in config_reset\n");
         return 1;
     }
 
@@ -109,7 +59,7 @@ rbh_config_reset()
 
     if (!yaml_parser_parse(&config->parser, &event)) {
         fprintf(stderr,
-                "Failed to parse initial token of '%s' in rbh_config_reset\n",
+                "Failed to parse initial token of '%s' in config_reset\n",
                 config->config_file);
         goto free_config;
     }
@@ -126,7 +76,7 @@ rbh_config_reset()
     if (!yaml_parser_parse(&config->parser, &event)) {
         fprintf(
             stderr,
-            "Failed to parse first document token of '%s' in rbh_config_reset\n",
+            "Failed to parse first document token of '%s' in config_reset\n",
             config->config_file);
         goto free_config;
     }
@@ -144,7 +94,7 @@ rbh_config_reset()
     if (!yaml_parser_parse(&config->parser, &event)) {
         fprintf(
             stderr,
-            "Failed to parse first mapping token of '%s' in rbh_config_reset\n",
+            "Failed to parse first mapping token of '%s' in config_reset\n",
             config->config_file);
         goto free_config;
     }
@@ -166,6 +116,77 @@ free_config:
     errno = EINVAL;
 
     return 1;
+}
+
+/**
+ * Create and initialize the config.
+ *
+ * Two `parse` calls are done to skip the initial YAML_STREAM_START_EVENT and
+ * YAML_DOCUMENT_START_EVENT.
+ *
+ * @param config_file   the path to the configuration file to use
+ *
+ * @return              0 on success, -1 on error and set errno accordingly
+ */
+static int
+config_open(const char *config_file)
+{
+    int save_errno;
+
+    config = calloc(1, sizeof(*config));
+    if (config == NULL)
+        error(EXIT_FAILURE, errno, "calloc in config_open");
+
+    config->config_file = strdup(config_file);
+    if (config->config_file == NULL) {
+        fprintf(stderr, "Failed to duplicate '%s' in config_open\n",
+                config_file);
+        goto free_config;
+    }
+
+    config->file = fopen(config_file, "r");
+    if (config->file == NULL)
+        goto free_config;
+
+    config->parser_initialized = false;
+
+    if (config_reset())
+        goto free_config;
+
+    return 0;
+
+free_config:
+    save_errno = errno;
+    rbh_config_free();
+    errno = save_errno;
+
+    return -1;
+}
+
+/**
+ * Return the value of RBH_CONFIG_PATH
+ */
+static const char *
+config_env_name(void)
+{
+    return getenv("RBH_CONFIG_PATH");
+}
+
+static int
+rbh_config_try_open_env(void)
+{
+    const char *cfg_path;
+
+    if (config)
+        /* Already opened */
+        return 0;
+
+    cfg_path = config_env_name();
+    if (!cfg_path)
+        /* No env specified, no config to open */
+        return 0;
+
+    return config_open(cfg_path);
 }
 
 void
@@ -359,7 +380,7 @@ rbh_config_find(const char *key, struct rbh_value *value,
         return KPR_NOT_FOUND;
 
     rc = find_in_config(key, value);
-    rbh_config_reset();
+    config_reset();
     if (rc == KPR_ERROR)
         return rc;
 
@@ -389,13 +410,13 @@ rbh_config_find(const char *key, struct rbh_value *value,
 }
 
 struct rbh_config *
-get_rbh_config()
+rbh_config_get()
 {
     return config;
 }
 
 void
-load_rbh_config(struct rbh_config *new_config)
+rbh_config_load(struct rbh_config *new_config)
 {
     config = new_config;
 }
@@ -417,29 +438,29 @@ rbh_config_get_string(const char *key, const char *default_string)
 }
 
 static int
-rbh_config_open_default(void)
+config_open_default(void)
 {
     const char *default_config = "/etc/robinhood4.d/default.yaml";
     int rc;
 
-    rc = rbh_config_open(default_config);
+    rc = config_open(default_config);
 
     return (rc == 0 || errno == ENOENT) ? 0 : -1;
 }
 
 int
-rbh_load_config_from_path(const char *config_path)
+rbh_config_load_from_path(const char *config_path)
 {
     int rc;
 
     if (config_path)
-        return rbh_config_open(config_path);
+        return config_open(config_path);
 
     rc = rbh_config_try_open_env();
     if (rc || config)
         return rc;
 
-    return rbh_config_open_default();
+    return config_open_default();
 }
 
 int
@@ -462,7 +483,7 @@ rbh_config_from_args(int argc, char **argv)
         index++;
     }
 
-    return rbh_load_config_from_path(config_file);
+    return rbh_config_load_from_path(config_file);
 }
 
 static char *
