@@ -163,6 +163,8 @@ struct rbh_filter_options {
         const struct rbh_filter_sort *items;
         size_t count;
     } sort;
+    /** Boolean to indicate verbosity mode is enabled */
+    bool verbose;
 };
 
 struct rbh_range_field {

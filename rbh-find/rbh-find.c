@@ -134,6 +134,9 @@ get_command_options(int argc, char *argv[], struct command_context *context)
 
             context->config_file = argv[i + 1];
         }
+
+        if (strcmp(argv[i], "-v") == 0 || strcmp(argv[i], "--verbose") == 0)
+            context->verbose = true;
     }
 }
 
@@ -163,6 +166,7 @@ main(int _argc, char *_argv[])
     struct rbh_value_map **info_maps;
     struct rbh_filter *filter;
     size_t sorts_count = 0;
+    bool verbose = false;
     int nb_cli_args;
     char **argv;
     int index;
@@ -229,12 +233,12 @@ main(int _argc, char *_argv[])
 
     ctx.f_ctx.need_prefetch = false;
     filter = parse_expression(&ctx.f_ctx, &index, NULL, &sorts, &sorts_count,
-                              find_parse_callback, &ctx);
+                              verbose, find_parse_callback, &ctx);
     if (index != ctx.argc)
         error(EX_USAGE, 0, "you have too many ')'");
 
     if (!ctx.action_done)
-        find(&ctx, ACT_PRINT, &index, filter, sorts, sorts_count);
+        find(&ctx, ACT_PRINT, &index, filter, sorts, sorts_count, verbose);
     free(filter);
 
     return EXIT_SUCCESS;

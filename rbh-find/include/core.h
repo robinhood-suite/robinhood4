@@ -69,10 +69,11 @@ ctx_finish(struct find_context *ctx);
  * @param filter         the filter to apply to each fsentry
  * @param sorts          list of criteria used to sort the list of fsentries
  * @param sorts_count    size of the sorts list
+ * @param verbose        if verbose mode is enabled
  */
 void
 find(struct find_context *ctx, enum action action, int *arg_idx,
      const struct rbh_filter *filter, const struct rbh_filter_sort *sorts,
-     size_t sorts_count);
+     size_t sorts_count, bool verbose);
 
 #endif

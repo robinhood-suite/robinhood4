@@ -59,6 +59,7 @@ struct command_context {
     char *helper_target;
     bool helper;
     bool dry_run;
+    bool verbose;
 };
 
 /**
