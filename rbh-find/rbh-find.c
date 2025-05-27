@@ -115,32 +115,7 @@ usage(const char *backend)
 }
 
 static void
-check_command_options(int pre_uri_args, int argc, char *argv[])
-{
-    for (int i = 0; i < pre_uri_args; i++) {
-        if (strcmp(argv[i], "-h") == 0 || strcmp(argv[i], "--help") == 0) {
-            if (i + 1 < pre_uri_args)
-                usage(argv[i + 1]);
-            else
-                usage(NULL);
-
-            exit(0);
-        }
-
-        if (strcmp(argv[i], "-d") == 0 || strcmp(argv[i], "--dry-run") == 0) {
-            rbh_display_resolved_argv(program_invocation_short_name, &argc,
-                                      &argv);
-            exit(0);
-        }
-
-        if (strcmp(argv[i], "-c") == 0 || strcmp(argv[i], "--config") == 0)
-            i++;
-    }
-}
-
-static void
-get_command_options(int argc, char *argv[],
-                    struct command_context *context)
+get_command_options(int argc, char *argv[], struct command_context *context)
 {
     for (int i = 0; i < argc; i++) {
         if (strcmp(argv[i], "-h") == 0 || strcmp(argv[i], "--help") == 0) {
@@ -159,6 +134,24 @@ get_command_options(int argc, char *argv[],
 
             context->config_file = argv[i + 1];
         }
+    }
+}
+
+static void
+apply_command_options(struct command_context *context, int argc, char *argv[])
+{
+    if (context->helper) {
+        if (context->helper_target)
+            usage(context->helper_target);
+        else
+            usage(NULL);
+
+        exit(0);
+    }
+
+    if (context->dry_run) {
+        rbh_display_resolved_argv(program_invocation_short_name, &argc, &argv);
+        exit(0);
     }
 }
 
@@ -183,13 +176,14 @@ main(int _argc, char *_argv[])
     argv = &_argv[1];
 
     nb_cli_args = rbh_count_args_before_uri(argc, argv);
-    get_command_options(argc, argv, &command_context);
+    get_command_options(nb_cli_args, argv, &command_context);
 
     rbh_load_config_from_path(command_context.config_file);
     rbh_apply_aliases(&argc, &argv);
 
     nb_cli_args = rbh_count_args_before_uri(argc, argv);
-    check_command_options(nb_cli_args, argc, argv);
+    get_command_options(nb_cli_args, argv, &command_context);
+    apply_command_options(&command_context, argc, argv);
 
     ctx.argc = argc - nb_cli_args;
     ctx.argv = &argv[nb_cli_args];
