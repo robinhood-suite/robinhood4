@@ -26,19 +26,17 @@ struct rbh_filter_field
 str2field(const char *attribute);
 
 /**
- * Build a dynamically allocated options filter
+ * Add to the list of sort options in \p options a new sort option defined
+ * with \p field and \p ascending
  *
- * @param sorts     a list of sort predicates
- * @param count     the size of \p sorts
- * @param field     a sort attribute
- *
- * @return          a pointer to a newly allocated
- *                  struct rbh_filter_sort
+ * @param options    the list of filter options
+ * @param field      a sort attribute
+ * @param ascending  whether the sort is in ascending order or not
  *
  * Exit on error
  */
-struct rbh_filter_sort *
-sort_options_append(struct rbh_filter_sort *sorts, size_t count,
+void
+sort_options_append(struct rbh_filter_options *options,
                     struct rbh_filter_field field, bool ascending);
 
 #endif
