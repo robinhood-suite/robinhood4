@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2e2ec235_73cb46d8",
+        "filename": "rbh-info/tests/get_info.bash",
+        "patchSetId": 5
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-05-27T07:43:33Z",
+      "side": 1,
+      "message": "major: again, just check the `mountpoint` is the actual mountpoint you used",
+      "range": {
+        "startLine": 79,
+        "startChar": 9,
+        "endLine": 79,
+        "endChar": 27
+      },
+      "revId": "8eda8b819825427e48a58bf6f7dc902eb47657a0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5f88a598_f03a7c07",
+        "filename": "rbh-info/tests/get_info.bash",
+        "patchSetId": 5
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-05-27T07:43:33Z",
+      "side": 1,
+      "message": "typo: invalid",
+      "range": {
+        "startLine": 80,
+        "startChar": 15,
+        "endLine": 80,
+        "endChar": 22
+      },
+      "revId": "8eda8b819825427e48a58bf6f7dc902eb47657a0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
