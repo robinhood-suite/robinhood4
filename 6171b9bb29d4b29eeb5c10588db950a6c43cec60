@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e5d3476_02b54840",
+        "filename": "rbh-info/rbh-info.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-05-27T08:53:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "03f87051_7b2508b7",
+      "range": {
+        "startLine": 184,
+        "startChar": 34,
+        "endLine": 184,
+        "endChar": 40
+      },
+      "revId": "6171b9bb29d4b29eeb5c10588db950a6c43cec60",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0c779503_b8c4dd18",
@@ -47,6 +71,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "13f4499f_203028f2",
+        "filename": "rbh-info/rbh-info.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-05-27T08:53:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0c779503_b8c4dd18",
+      "range": {
+        "startLine": 195,
+        "startChar": 12,
+        "endLine": 197,
+        "endChar": 12
+      },
+      "revId": "6171b9bb29d4b29eeb5c10588db950a6c43cec60",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3e30beda_50885a01",
@@ -60,6 +108,30 @@
       "writtenOn": "2025-04-15T14:14:39Z",
       "side": 1,
       "message": "suggest: separate setter and condition\n\n```\nconst struct rbh_backend_plugin *backend_plugin;\n\nbackend_plugin \u003d rbh_backend_plugin_import(first_part);\nif (backend_plugin !\u003d NULL) {\n    ...\n}\n```",
+      "range": {
+        "startLine": 199,
+        "startChar": 20,
+        "endLine": 200,
+        "endChar": 27
+      },
+      "revId": "6171b9bb29d4b29eeb5c10588db950a6c43cec60",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "31a0c7be_eb21e937",
+        "filename": "rbh-info/rbh-info.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-05-27T08:53:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3e30beda_50885a01",
       "range": {
         "startLine": 199,
         "startChar": 20,
