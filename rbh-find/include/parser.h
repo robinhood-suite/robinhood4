@@ -58,15 +58,14 @@ action2str(enum action action);
  * @param ctx           filters context
  * @param arg_idx       a pointer to the index of argv to start parsing at
  * @param filter        a filter (the part of the cli already parsed)
- * @param sorts         an array of filtering options
- * @param sorts_count   the size of \p sorts
+ * @param options       filter options and modifiers
  * @param token         the token to parse
  * @param param         callback argument
  */
 void
 find_parse_callback(struct filters_context *ctx, int *arg_idx,
                     const struct rbh_filter *filter,
-                    struct rbh_filter_sort **sorts, size_t *sorts_count,
-                    bool verbose, enum command_line_token token, void *param);
+                    struct rbh_filter_options *options,
+                    enum command_line_token token, void *param);
 
 #endif

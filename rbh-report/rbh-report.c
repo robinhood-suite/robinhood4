@@ -345,8 +345,7 @@ main(int _argc, char *_argv[])
     f_ctx.argc = argc;
     f_ctx.argv = argv;
 
-    filter = parse_expression(&f_ctx, &index, NULL, NULL, NULL, false, NULL,
-                              NULL);
+    filter = parse_expression(&f_ctx, &index, NULL, NULL, NULL, NULL);
     if (index != f_ctx.argc)
         error(EX_USAGE, 0, "you have too many ')'");
 

@@ -144,20 +144,20 @@ str2field(const char *attribute)
     __builtin_unreachable();
 }
 
-struct rbh_filter_sort *
-sort_options_append(struct rbh_filter_sort *sorts, size_t count,
+void
+sort_options_append(struct rbh_filter_options *options,
                     struct rbh_filter_field field, bool ascending)
 {
-    struct rbh_filter_sort *tmp = sorts;
-    struct rbh_filter_sort sort = {
+    struct rbh_filter_sort new_sort = {
         .field = field,
         .ascending = ascending
     };
 
-    tmp = reallocarray(tmp, count + 1, sizeof(*tmp));
-    if (tmp == NULL)
-        error(EXIT_FAILURE, 0, "reallocarray with rbh_filter_sort");
-    tmp[count] = sort;
+    options->sort.items = reallocarray(options->sort.items,
+                                       options->sort.count + 1,
+                                       sizeof(*options->sort.items));
+    if (options->sort.items == NULL)
+        error(EXIT_FAILURE, errno, "reallocarray on sort array failed");
 
-    return tmp;
+    options->sort.items[options->sort.count++] = new_sort;
 }

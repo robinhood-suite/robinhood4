@@ -160,7 +160,7 @@ struct rbh_filter_options {
     bool one;
     /** A sequence of sorting options */
     struct {
-        const struct rbh_filter_sort *items;
+        struct rbh_filter_sort *items;
         size_t count;
     } sort;
     /** Boolean to indicate verbosity mode is enabled */

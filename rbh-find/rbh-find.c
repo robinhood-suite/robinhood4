@@ -162,11 +162,9 @@ int
 main(int _argc, char *_argv[])
 {
     struct command_context command_context = {0};
-    struct rbh_filter_sort *sorts = NULL;
+    struct rbh_filter_options options = {0};
     struct rbh_value_map **info_maps;
     struct rbh_filter *filter;
-    size_t sorts_count = 0;
-    bool verbose = false;
     int nb_cli_args;
     char **argv;
     int index;
@@ -193,6 +191,8 @@ main(int _argc, char *_argv[])
     ctx.argv = &argv[nb_cli_args];
     ctx.f_ctx.argc = ctx.argc;
     ctx.f_ctx.argv = ctx.argv;
+
+    options.verbose = command_context.verbose;
 
     /* Parse the command line */
     for (index = 0; index < ctx.argc; index++)
@@ -232,13 +232,13 @@ main(int _argc, char *_argv[])
     free(info_maps);
 
     ctx.f_ctx.need_prefetch = false;
-    filter = parse_expression(&ctx.f_ctx, &index, NULL, &sorts, &sorts_count,
-                              verbose, find_parse_callback, &ctx);
+    filter = parse_expression(&ctx.f_ctx, &index, NULL, &options,
+                              find_parse_callback, &ctx);
     if (index != ctx.argc)
         error(EX_USAGE, 0, "you have too many ')'");
 
     if (!ctx.action_done)
-        find(&ctx, ACT_PRINT, &index, filter, sorts, sorts_count, verbose);
+        find(&ctx, ACT_PRINT, &index, filter, &options);
     free(filter);
 
     return EXIT_SUCCESS;
