@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d227ab9a_8f340c3c",
+        "filename": "librobinhood/src/plugins/posix/fts_iter.c",
+        "patchSetId": 6
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-05-27T12:20:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "83bbda2e_831ca4ae",
+      "range": {
+        "startLine": 155,
+        "startChar": 21,
+        "endLine": 155,
+        "endChar": 22
+      },
+      "revId": "263d32dd6ec03d97f55cbaa39b5088664c7ebc2c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a054600f_35e64274",
@@ -47,6 +71,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e91904a3_dbb99a2d",
+        "filename": "librobinhood/src/plugins/posix/fts_iter.c",
+        "patchSetId": 6
+      },
+      "lineNbr": 316,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-05-27T12:20:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a054600f_35e64274",
+      "range": {
+        "startLine": 316,
+        "startChar": 7,
+        "endLine": 316,
+        "endChar": 10
+      },
+      "revId": "263d32dd6ec03d97f55cbaa39b5088664c7ebc2c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7575ca96_0b8b5d5f",
@@ -60,6 +108,30 @@
       "writtenOn": "2025-05-27T07:16:59Z",
       "side": 1,
       "message": "style: remove {",
+      "range": {
+        "startLine": 130,
+        "startChar": 20,
+        "endLine": 130,
+        "endChar": 22
+      },
+      "revId": "263d32dd6ec03d97f55cbaa39b5088664c7ebc2c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "489d3ee8_8f1deb0d",
+        "filename": "librobinhood/src/plugins/posix/iterators/mfu/iterator.c",
+        "patchSetId": 6
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-05-27T12:20:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7575ca96_0b8b5d5f",
       "range": {
         "startLine": 130,
         "startChar": 20,
