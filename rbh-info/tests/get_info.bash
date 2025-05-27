@@ -13,14 +13,27 @@ test_dir=$(dirname $(readlink -e $0))
 #                                    TESTS                                     #
 ################################################################################
 
+format_size()
+{
+    local size=$1
+    local KB=1024
+
+    if ((size < KB)); then
+        echo "${size} Bytes"
+    else
+        awk -v s="$size" -v kb="$KB" 'BEGIN { printf "%.2f KB\n", s/kb}'
+    fi
+}
+
 test_collection_size()
 {
     rbh_sync "rbh:posix:." "rbh:$db:$testdb"
 
     local rbh_info_size=$(rbh_info "rbh:$db:$testdb" -s)
     local db_size=$(do_db size "$testdb")
+    local formated_db_size=$(format_size "$db_size")
 
-    if [ "$rbh_info_size" != "$db_size" ]; then
+    if [ "$rbh_info_size" != "$formated_db_size" ]; then
         error "sizes are not matching\n"
     fi
 }
@@ -43,8 +56,9 @@ test_collection_avg_obj_size()
 
     local rbh_info_avg_obj_size=$(rbh_info "rbh:$db:$testdb" -a)
     local db_avg_obj_size=$(do_db avgsize "$testdb")
+    local formated_avg_obj_size_db=$(format_size "$db_avg_obj_size")
 
-    if [ "$rbh_info_avg_obj_size" != "$db_avg_obj_size" ]; then
+    if [ "$rbh_info_avg_obj_size" != "$formated_avg_obj_size_db" ]; then
         error "average objects size are not matching\n"
     fi
 }
