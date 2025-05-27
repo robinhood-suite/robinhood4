@@ -154,8 +154,8 @@ action2str(enum action action)
 void
 find_parse_callback(struct filters_context *ctx, int *arg_idx,
                     const struct rbh_filter *filter,
-                    struct rbh_filter_sort **sorts, size_t *sorts_count,
-                    bool verbose, enum command_line_token token, void *param)
+                    struct rbh_filter_options *options,
+                    enum command_line_token token, void *param)
 {
     struct find_context *find_ctx = (struct find_context *)param;
     bool ascending = true;
@@ -166,18 +166,17 @@ find_parse_callback(struct filters_context *ctx, int *arg_idx,
         ascending = false;
         __attribute__((fallthrough));
     case CLT_SORT:
-        /* Build an options filter from the sort command and its arguments */
+        /* Build an options filter from the sort option and its arguments */
         if (*arg_idx + 1 >= ctx->argc)
-            error(EX_USAGE, 0, "missing argument to '%s'",
-                  ctx->argv[*arg_idx]);
-        *sorts = sort_options_append(*sorts, (*sorts_count)++,
-                                     str2field(ctx->argv[++(*arg_idx)]),
-                                     ascending);
+            error(EX_USAGE, 0, "missing argument to '%s'", ctx->argv[*arg_idx]);
+
+        sort_options_append(options, str2field(ctx->argv[++(*arg_idx)]),
+                            ascending);
         break;
     case CLT_ACTION:
         find_ctx->action_done = true;
         find(find_ctx, str2action(ctx->argv[*arg_idx]), arg_idx,
-             filter, *sorts, *sorts_count, verbose);
+             filter, options);
         break;
     default:
         break;

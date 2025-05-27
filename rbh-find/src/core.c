@@ -49,16 +49,8 @@ ctx_finish(struct find_context *ctx)
  */
 static size_t
 _find(struct find_context *ctx, int backend_index, enum action action,
-      const struct rbh_filter *filter, const struct rbh_filter_sort *sorts,
-      size_t sorts_count, bool verbose)
+      const struct rbh_filter *filter, struct rbh_filter_options *options)
 {
-    const struct rbh_filter_options OPTIONS = {
-        .sort = {
-            .items = sorts,
-            .count = sorts_count
-        },
-        .verbose = verbose,
-    };
     const struct rbh_filter_output OUTPUT = {
         .type = RBH_FOT_PROJECTION,
         .projection = {
@@ -74,12 +66,12 @@ _find(struct find_context *ctx, int backend_index, enum action action,
      * doing the find.
      */
     if (ctx->f_ctx.need_prefetch &&
-        complete_rbh_filter(filter, ctx->backends[backend_index], &OPTIONS,
+        complete_rbh_filter(filter, ctx->backends[backend_index], options,
                             &OUTPUT))
         return count;
 
     fsentries = rbh_backend_filter(ctx->backends[backend_index], filter,
-                                   &OPTIONS, &OUTPUT);
+                                   options, &OUTPUT);
     if (fsentries == NULL)
         error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
                       "filter_fsentries");
@@ -110,8 +102,7 @@ _find(struct find_context *ctx, int backend_index, enum action action,
 
 void
 find(struct find_context *ctx, enum action action, int *arg_idx,
-     const struct rbh_filter *filter, const struct rbh_filter_sort *sorts,
-     size_t sorts_count, bool verbose)
+     const struct rbh_filter *filter, struct rbh_filter_options *options)
 {
     int i = *arg_idx;
     size_t count = 0;
@@ -121,7 +112,7 @@ find(struct find_context *ctx, enum action action, int *arg_idx,
     i += find_pre_action(ctx, i, action);
 
     for (size_t i = 0; i < ctx->backend_count; i++)
-        count += _find(ctx, i, action, filter, sorts, sorts_count, verbose);
+        count += _find(ctx, i, action, filter, options);
 
     find_post_action(ctx, i, action, count);
 
