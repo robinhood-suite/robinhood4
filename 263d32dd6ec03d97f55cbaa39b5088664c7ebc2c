@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "83bbda2e_831ca4ae",
+        "filename": "librobinhood/src/plugins/posix/fts_iter.c",
+        "patchSetId": 6
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-05-27T07:16:59Z",
+      "side": 1,
+      "message": "style: remove {",
+      "range": {
+        "startLine": 155,
+        "startChar": 21,
+        "endLine": 155,
+        "endChar": 22
+      },
+      "revId": "263d32dd6ec03d97f55cbaa39b5088664c7ebc2c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a054600f_35e64274",
+        "filename": "librobinhood/src/plugins/posix/fts_iter.c",
+        "patchSetId": 6
+      },
+      "lineNbr": 316,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-05-27T07:16:59Z",
+      "side": 1,
+      "message": "style: add {}",
+      "range": {
+        "startLine": 316,
+        "startChar": 7,
+        "endLine": 316,
+        "endChar": 10
+      },
+      "revId": "263d32dd6ec03d97f55cbaa39b5088664c7ebc2c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7575ca96_0b8b5d5f",
+        "filename": "librobinhood/src/plugins/posix/iterators/mfu/iterator.c",
+        "patchSetId": 6
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-05-27T07:16:59Z",
+      "side": 1,
+      "message": "style: remove {",
+      "range": {
+        "startLine": 130,
+        "startChar": 20,
+        "endLine": 130,
+        "endChar": 22
+      },
+      "revId": "263d32dd6ec03d97f55cbaa39b5088664c7ebc2c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
