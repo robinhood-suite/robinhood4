@@ -269,13 +269,31 @@ rbh_backend_list()
 static void
 _get_collection_avg_obj_size(const struct rbh_value *value)
 {
-    printf("%d\n", value->int32);
+    char _buffer[32];
+    size_t bufsize;
+    char *buffer;
+
+    buffer = _buffer;
+    bufsize = sizeof(_buffer);
+
+    size_printer(buffer, bufsize, value->int32);
+
+    printf("%s\n", buffer);
 }
 
 static void
 _get_collection_size(const struct rbh_value *value)
 {
-    printf("%d\n", value->int32);
+    char _buffer[32];
+    size_t bufsize;
+    char *buffer;
+
+    buffer = _buffer;
+    bufsize = sizeof(_buffer);
+
+    size_printer(buffer, bufsize, value->int32);
+
+    printf("%s\n", buffer);
 }
 
 static void
