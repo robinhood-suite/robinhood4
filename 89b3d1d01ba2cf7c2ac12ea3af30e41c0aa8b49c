@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3f1770d0_e1c429c7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-05-28T06:39:28Z",
+      "side": 1,
+      "message": "minor: `rbh_load_config_from_path`",
+      "range": {
+        "startLine": 15,
+        "startChar": 12,
+        "endLine": 15,
+        "endChar": 27
+      },
+      "revId": "89b3d1d01ba2cf7c2ac12ea3af30e41c0aa8b49c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
