@@ -62,22 +62,23 @@ test_collection_sync()
         error "There should be eight infos about posix sync"
     fi
 
-    echo "$output" | grep "sync_debut" ||
+    echo "$output" | grep "Start" ||
         error "sync_debut should have been retrieved"
 
-    echo "$output" | grep "sync_duration" ||
+    echo "$output" | grep "Duration" ||
         error "sync_duration should have been retrieved"
 
-    echo "$output" | grep "sync_end" ||
+    echo "$output" | grep "End" ||
         error "sync_end should have been retrieved"
 
-    local mountpoint=$(awk -F': ' '/mountpoint/ {print $2}' <<< "$output")
+    local mountpoint=$(echo "$output" | grep "Mountpoint used" |
+                       cut -d':' -f2- | xargs)
 
     if [ "$mountpoint" != "$(pwd)" ]; then
         error "Invalid mountpoint"
     fi
 
-    local command_line=$(grep 'command_line' <<< "$output" |
+    local command_line=$(grep 'Command used' <<< "$output" |
                          sed -n 's/.*rbh-sync/rbh-sync/p')
 
     if [ "$command_line" != "rbh-sync rbh:posix:. rbh:mongo:$testdb" ];
@@ -85,14 +86,14 @@ test_collection_sync()
         error "command lines are not matching"
     fi
 
-    local converted_entries=$(echo "$output" | \
-        awk -F': ' '/converted_entries/ {print $2}')
+    local converted_entries=$(echo "$output" | grep "converted" |
+                              cut -d':' -f2- |xargs)
 
-    local skipped_entries=$(echo "$output" | \
-        awk -F': ' '/skipped_entries/ {print $2}')
+    local skipped_entries=$(echo "$output" | grep "skipped" |
+                            cut -d':' -f2- |xargs)
 
-    local total_entries=$(echo "$output" | \
-        awk -F': ' '/total_entries_seen/ {print $2}')
+    local total_entries=$(echo "$output" | grep "Total entries seen" |
+                          cut -d':' -f2- |xargs)
 
     local sum_entries=$((skipped_entries + converted_entries))
 

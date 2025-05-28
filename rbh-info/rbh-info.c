@@ -24,6 +24,7 @@
 #include <robinhood/config.h>
 
 #define LIB_RBH_PREFIX "librbh-"
+#define WIDTH 32
 
 static struct rbh_backend *from;
 
@@ -331,16 +332,56 @@ _get_collection_sync(const struct rbh_value *value)
     assert(value->type == RBH_VT_MAP);
 
     const struct rbh_value_map metadata_map = value->map;
+    time_t time;
 
     for (size_t i = 0 ; i < metadata_map.count ; i++) {
         const struct rbh_value_pair *pair = &metadata_map.pairs[i];
-        printf("%s: ", pair->key);
+        if (strcmp(pair->key, "sync_debut") == 0) {
+            time = (time_t)pair->value->int64;
+            printf("%-*s %s\n", WIDTH, "Start of the sync:",
+                   time_from_timestamp(&time));
+        }
 
-        if (pair->value->type == RBH_VT_INT64)
-            printf("%ld\n", pair->value->int64);
+        if (strcmp(pair->key, "sync_duration") == 0) {
+            char _buffer[32];
+            size_t bufsize;
+            char *buffer;
 
-        if (pair->value->type == RBH_VT_STRING)
-            printf("%s\n", pair->value->string);
+            buffer = _buffer;
+            bufsize = sizeof(_buffer);
+
+            difftime_printer(buffer, bufsize, pair->value->int64);
+
+            printf("%-*s %s\n", WIDTH, "Duration of the sync:",
+                   buffer);
+        }
+
+        if (strcmp(pair->key, "sync_end") == 0) {
+            time = (time_t)pair->value->int64;
+            printf("%-*s %s\n", WIDTH, "End of the sync:",
+                   time_from_timestamp(&time));
+        }
+
+        if (strcmp(pair->key, "mountpoint") == 0)
+            printf("%-*s %s\n", WIDTH, "Mountpoint used for the sync:",
+                   pair->value->string);
+
+        if (strcmp(pair->key, "command_line") == 0)
+            printf("%-*s %s\n", WIDTH, "Command used for the sync:",
+                   pair->value->string);
+
+        if (strcmp(pair->key, "converted_entries") == 0)
+            printf("%-*s %ld\n", WIDTH, "Amount of entries converted:",
+                   pair->value->int64);
+
+        if (strcmp(pair->key, "skipped_entries") == 0)
+            printf("%-*s %ld\n", WIDTH, "Amount of entries skipped:",
+                   pair->value->int64);
+
+        if (strcmp(pair->key, "total_entries_seen") == 0)
+            printf("%-*s %ld\n", WIDTH,
+                   "Total entries seen by the sync:",
+                   pair->value->int64);
     }
 }
 
