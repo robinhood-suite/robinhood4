@@ -144,6 +144,25 @@ size_printer(char *buffer, size_t buffer_size, size_t size)
 }
 
 int
+difftime_printer(char *buffer, size_t buffer_size, double time)
+{
+    int sec = (int)time;
+    int d = sec / 86400;
+    int h = (sec % 86400) / 3600;
+    int m = (sec % 3600) / 60;
+    int s = sec % 60;
+
+    if (d > 0)
+        return snprintf(buffer, buffer_size, "%dd%dh%dm%ds", d, h, m, s);
+    else if (h > 0)
+        return snprintf(buffer, buffer_size, "%dh%dm%ds", h, m, s);
+    else if (m > 0)
+        return snprintf(buffer, buffer_size, "%dm%ds", m, s);
+    else
+        return snprintf(buffer, buffer_size, "%ds", s);
+}
+
+int
 rbh_count_args_before_uri(int argc, char **argv)
 {
     size_t count = 0;
