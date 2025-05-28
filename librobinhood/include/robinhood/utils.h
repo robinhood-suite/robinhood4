@@ -159,6 +159,18 @@ int
 size_printer(char *buffer, size_t buffer_size, size_t size);
 
 /**
+ * Formats a given difftime (double) into a human-readable string
+ *
+ * @param buffer      buffer filled with the human-readable string
+ * @param buffer_size size of the buffer
+ * @param time        the time to be formatted by the function
+ *
+ * @return            number of characters written
+ */
+int
+difftime_printer(char *buffer, size_t buffer_size, double time);
+
+/**
  * Return the number of arguments before the URI
  *
  * @param argc   the number of argument in the command line
