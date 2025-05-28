@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "21c41377_69d28943",
+        "filename": "rbh-find/include/parser.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-05-28T07:56:57Z",
+      "side": 1,
+      "message": "minor: add the verbose parameter",
+      "revId": "50775c1dc5d950673097ded9d7e64b79b5b83cbf",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ca656e4d_98b4f938",
+        "filename": "rbh-report/rbh-report.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 348,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-05-28T07:56:57Z",
+      "side": 1,
+      "message": "question: Is it planned to have the verbose with rbh-report ?",
+      "range": {
+        "startLine": 348,
+        "startChar": 63,
+        "endLine": 348,
+        "endChar": 69
+      },
+      "revId": "50775c1dc5d950673097ded9d7e64b79b5b83cbf",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
