@@ -137,6 +137,52 @@ START_TEST(sp_eb)
 }
 END_TEST
 
+/*----------------------------------------------------------------------------*
+ |                              difftime_printer                              |
+ *----------------------------------------------------------------------------*/
+
+START_TEST(dp_s)
+{
+    char _buffer[16];
+    size_t bufsize;
+    char *buffer;
+
+    buffer = _buffer;
+    bufsize = sizeof(_buffer);
+    difftime_printer(buffer, bufsize, 42);
+
+    ck_assert_str_eq(buffer, "42s");
+}
+END_TEST
+
+START_TEST(dp_m)
+{
+    char _buffer[16];
+    size_t bufsize;
+    char *buffer;
+
+    buffer = _buffer;
+    bufsize = sizeof(_buffer);
+    difftime_printer(buffer, bufsize, 123);
+
+    ck_assert_str_eq(buffer, "2m3s");
+}
+END_TEST
+
+START_TEST(dp_h)
+{
+    char _buffer[16];
+    size_t bufsize;
+    char *buffer;
+
+    buffer = _buffer;
+    bufsize = sizeof(_buffer);
+    difftime_printer(buffer, bufsize, 3671);
+
+    ck_assert_str_eq(buffer, "1h1m11s");
+}
+END_TEST
+
 static Suite *
 unit_suite(void)
 {
@@ -144,6 +190,7 @@ unit_suite(void)
     TCase *tests;
 
     suite = suite_create("utils");
+
     tests = tcase_create("size_printer");
     tcase_add_test(tests, sp_b);
     tcase_add_test(tests, sp_kb);
@@ -152,6 +199,13 @@ unit_suite(void)
     tcase_add_test(tests, sp_tb);
     tcase_add_test(tests, sp_pb);
     tcase_add_test(tests, sp_eb);
+
+    suite_add_tcase(suite, tests);
+
+    tests = tcase_create("difftime_printer");
+    tcase_add_test(tests, dp_s);
+    tcase_add_test(tests, dp_m);
+    tcase_add_test(tests, dp_h);
 
     suite_add_tcase(suite, tests);
 
