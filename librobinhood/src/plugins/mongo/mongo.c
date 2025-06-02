@@ -1427,7 +1427,7 @@ static const struct rbh_backend MONGO_BACKEND = {
  |                          rbh_mongo_backend_new()                           |
  *----------------------------------------------------------------------------*/
 
-#define MONGODB_ADDRESS_KEY "RBH_MONGODB_ADDRESS"
+#define MONGODB_ADDRESS_KEY "mongodb_address"
 
 static const char *
 get_mongo_addr()
