@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "55abf681_322e43a1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-06-02T12:23:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3f1770d0_e1c429c7",
+      "range": {
+        "startLine": 15,
+        "startChar": 12,
+        "endLine": 15,
+        "endChar": 27
+      },
+      "revId": "89b3d1d01ba2cf7c2ac12ea3af30e41c0aa8b49c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5c80cb5f_6cc546ec",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-06-02T09:30:47Z",
       "side": 1,
       "message": "typo: `to load` or `loading`",
+      "range": {
+        "startLine": 123,
+        "startChar": 35,
+        "endLine": 123,
+        "endChar": 44
+      },
+      "revId": "89b3d1d01ba2cf7c2ac12ea3af30e41c0aa8b49c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "267e3734_cc293520",
+        "filename": "librobinhood/include/robinhood/config.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-06-02T12:23:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5c80cb5f_6cc546ec",
       "range": {
         "startLine": 123,
         "startChar": 35,
