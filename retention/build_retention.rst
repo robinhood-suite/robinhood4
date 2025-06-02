@@ -48,7 +48,7 @@ The default configuration file is located at `/etc/robinhood4.d/rbh_conf.yaml`:
     #
     # See https://www.mongodb.com/docs/manual/reference/connection-string/ for
     # more information about connection string.
-    RBH_MONGO_DB_ADDRESS: "mongodb://localhost:27017"
+    mongodb_address: "mongodb://localhost:27017"
 
     # Name of the xattr used to store the expiration date of a file or
     # directory.  It will be used by the retention. If not set, the retention

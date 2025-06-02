@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # This file is part of RobinHood 4
-# Copyright (C) 2024 Commissariat a l'energie atomique et aux energies
+# Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
@@ -28,8 +28,8 @@ blob" > $conf_file
         error "Sync with invalid configuration file should have failed"
 
     echo "---
- RBH_MONGODB_ADDRESS: \"mongodb://localhost:12345\"
- RBH_MONGODB_ADDRESS: \"mongodb://localhost:27017\"
+ mongodb_address: \"mongodb://localhost:12345\"
+ mongodb_address: \"mongodb://localhost:27017\"
 ---" > $conf_file
 
     rbh_sync --config $conf_file --one rbh:posix:$file rbh:$db:$testdb &&

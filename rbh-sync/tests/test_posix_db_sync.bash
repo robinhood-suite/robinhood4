@@ -389,7 +389,7 @@ test_config()
     touch $file
 
     echo "---
- RBH_MONGODB_ADDRESS: \"mongodb://localhost:27017\"
+ mongodb_address: \"mongodb://localhost:27017\"
 ---" > $conf_file
 
     rbh_sync --config $conf_file --one rbh:posix:$file rbh:$db:$testdb
@@ -397,14 +397,14 @@ test_config()
     find_attribute '"ns.xattrs.path":"/'$file'"'
 
     echo "---
- RBH_MONGODB_ADDRESS: \"mongodb://localhost:12345\"
+ mongodb_address: \"mongodb://localhost:12345\"
 ---" > $conf_file
 
     rbh_sync --config $conf_file --one rbh:posix:$file rbh:$db:$testdb &&
         error "Sync with invalid server address in config should have failed"
 
     echo "---
- RBH_MONGODB_ADDRESS: !int32 12345
+ mongodb_address: !int32 12345
 ---" > $conf_file
 
     rbh_sync --config $conf_file --one rbh:posix:$file rbh:$db:$testdb &&

@@ -1,5 +1,5 @@
 .. This file is part of RobinHood 4
-   Copyright (C) 2020 Commissariat a l'energie atomique et aux energies
+   Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
                       alternatives
 
    SPDX-License-Identifer: LGPL-3.0-or-later
@@ -113,14 +113,14 @@ Remote MongoDB Database
 =======================
 
 Librobinhood can use a remote mongo database for the mongo backend. To do this,
-you must define the environment variable ``RBH_MONGODB_ADDRESS`` with the host
+you must define the environment variable ``mongodb_address`` with the host
 and port where the database is located.
 
 The variable must follow the form ``mongodb://HOST:PORT``
 
 .. code:: bash
 
-    export RBH_MONGODB_ADDRESS=mongodb://localhost:27017
+    export mongodb_address=mongodb://localhost:27017
 
 Limits
 ======
