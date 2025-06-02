@@ -48,9 +48,9 @@ destroy_from(void)
 
 static void
 report(const char *group_string, const char *output_string, bool ascending_sort,
-       bool csv_print, struct rbh_filter *filter)
+       bool csv_print, struct rbh_filter *filter,
+       struct rbh_filter_options *options)
 {
-    struct rbh_filter_options options = { 0 };
     struct rbh_filter_output output = { 0 };
     struct rbh_group_fields group = { 0 };
     struct rbh_value_map results[256];
@@ -75,8 +75,8 @@ report(const char *group_string, const char *output_string, bool ascending_sort,
                           "rbh_sstack_new");
     }
 
-    options.sort.items = &sort;
-    options.sort.count = 1;
+    options->sort.items = &sort;
+    options->sort.count = 1;
 
     buffer = _buffer;
     bufsize = sizeof(_buffer);
@@ -84,7 +84,7 @@ report(const char *group_string, const char *output_string, bool ascending_sort,
     parse_group_by(group_string, &group, &columns);
     parse_output(output_string, &group, &output, &columns);
 
-    iter = rbh_backend_report(from, filter, &group, &options, &output);
+    iter = rbh_backend_report(from, filter, &group, options, &output);
     if (iter == NULL)
         error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
                       "rbh_backend_report");
@@ -281,7 +281,6 @@ apply_command_options(struct command_context *context, int argc, char *argv[])
 int
 main(int _argc, char *_argv[])
 {
-    const struct rbh_filter_options OPTIONS = {0};
     struct command_context command_context = {0};
     const struct rbh_filter_output OUTPUT = {
         .type = RBH_FOT_PROJECTION,
@@ -290,6 +289,7 @@ main(int _argc, char *_argv[])
             .statx_mask = RBH_STATX_ALL,
         },
     };
+    struct rbh_filter_options options = {0};
     struct filters_context f_ctx = {0};
     struct rbh_value_map *info_map;
     bool ascending_sort = true;
@@ -319,6 +319,8 @@ main(int _argc, char *_argv[])
 
     argc = argc - nb_cli_args;
     argv = &argv[nb_cli_args];
+    options.verbose = command_context.verbose;
+    options.dry_run = command_context.dry_run;
 
     others = malloc(sizeof(char*) * argc);
     if (others == NULL)
@@ -382,10 +384,10 @@ main(int _argc, char *_argv[])
         error(EX_USAGE, 0, "you have too many ')'");
 
     if (f_ctx.need_prefetch &&
-        complete_rbh_filter(filter, from, &OPTIONS, &OUTPUT))
+        complete_rbh_filter(filter, from, &options, &OUTPUT))
         error(EXIT_FAILURE, errno, "Failed to complete filters");
 
-    report(group, output, ascending_sort, csv_print, filter);
+    report(group, output, ascending_sort, csv_print, filter, &options);
 
     cleanup(others, output, group);
     filters_ctx_finish(&f_ctx);
