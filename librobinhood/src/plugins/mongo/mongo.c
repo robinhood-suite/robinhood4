@@ -337,7 +337,8 @@ mongo_iter_next(void *iterator)
     bson_error_t error;
     const bson_t *doc;
 
-    if (!mongoc_cursor_more(mongo_iter->cursor)) {
+    /* cursor should only be NULL in dry-run mode */
+    if (mongo_iter->cursor == NULL || !mongoc_cursor_more(mongo_iter->cursor)) {
         errno = ENODATA;
         return NULL;
     }
@@ -724,7 +725,7 @@ mongo_backend_filter(void *backend, const struct rbh_filter *filter,
 {
     struct mongo_backend *mongo = backend;
     struct mongo_iterator *mongo_iter;
-    mongoc_cursor_t *cursor;
+    mongoc_cursor_t *cursor = NULL;
     bson_t *pipeline;
     bson_t *opts;
 
@@ -741,8 +742,15 @@ mongo_backend_filter(void *backend, const struct rbh_filter *filter,
     if (options->verbose)
         print_pipeline_and_opts(pipeline, opts);
 
+    if (options->dry_run) {
+        bson_destroy(opts);
+        bson_destroy(pipeline);
+        goto skip_aggregate;
+    }
+
     cursor = mongoc_collection_aggregate(mongo->entries, MONGOC_QUERY_NONE,
                                          pipeline, opts, NULL);
+
     bson_destroy(opts);
     bson_destroy(pipeline);
     if (cursor == NULL) {
@@ -750,6 +758,7 @@ mongo_backend_filter(void *backend, const struct rbh_filter *filter,
         return NULL;
     }
 
+skip_aggregate:
     mongo_iter = mongo_iterator_new(cursor);
     if (mongo_iter == NULL) {
         int save_errno = errno;
