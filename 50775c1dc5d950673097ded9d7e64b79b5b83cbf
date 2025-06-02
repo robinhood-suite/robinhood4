@@ -18,6 +18,24 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a063f628_cda732d5",
+        "filename": "rbh-find/include/parser.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-06-02T12:44:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "21c41377_69d28943",
+      "revId": "50775c1dc5d950673097ded9d7e64b79b5b83cbf",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ca656e4d_98b4f938",
@@ -31,6 +49,30 @@
       "writtenOn": "2025-05-28T07:56:57Z",
       "side": 1,
       "message": "question: Is it planned to have the verbose with rbh-report ?",
+      "range": {
+        "startLine": 348,
+        "startChar": 63,
+        "endLine": 348,
+        "endChar": 69
+      },
+      "revId": "50775c1dc5d950673097ded9d7e64b79b5b83cbf",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "095eb32b_936998c1",
+        "filename": "rbh-report/rbh-report.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 348,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-06-02T12:44:15Z",
+      "side": 1,
+      "message": "Yep, in a later patch",
+      "parentUuid": "ca656e4d_98b4f938",
       "range": {
         "startLine": 348,
         "startChar": 63,
