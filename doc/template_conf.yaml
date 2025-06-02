@@ -4,7 +4,7 @@
 #
 # See https://www.mongodb.com/docs/manual/reference/connection-string/ for more
 # information about connection string.
-RBH_MONGO_DB_ADDRESS: "mongodb://localhost:27017"
+mongodb_address: "mongodb://localhost:27017"
 
 # Map to indicate the type of each xattrs expected to find and to use the
 # appropriate type to store them in Mongo. If not set, all xattrs will be stored
