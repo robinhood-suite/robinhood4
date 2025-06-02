@@ -110,9 +110,6 @@ bson_pipeline_creation(const struct rbh_filter *filter,
     bson_t array;
     bson_t stage;
 
-    (void) group;
-    (void) output;
-
     if (options->skip > INT64_MAX || options->limit > INT64_MAX) {
         errno = ENOTSUP;
         return NULL;
@@ -719,9 +716,10 @@ print_pipeline_and_opts(bson_t *pipeline, bson_t *opts)
 }
 
 static struct rbh_mut_iterator *
-mongo_backend_filter(void *backend, const struct rbh_filter *filter,
-                     const struct rbh_filter_options *options,
-                     const struct rbh_filter_output *output)
+_mongo_backend_filter(void *backend, const struct rbh_filter *filter,
+                      const struct rbh_group_fields *group,
+                      const struct rbh_filter_options *options,
+                      const struct rbh_filter_output *output)
 {
     struct mongo_backend *mongo = backend;
     struct mongo_iterator *mongo_iter;
@@ -732,7 +730,7 @@ mongo_backend_filter(void *backend, const struct rbh_filter *filter,
     if (rbh_filter_validate(filter))
         return NULL;
 
-    pipeline = bson_pipeline_creation(filter, NULL, options, output);
+    pipeline = bson_pipeline_creation(filter, group, options, output);
     if (pipeline == NULL)
         return NULL;
 
@@ -771,6 +769,14 @@ skip_aggregate:
     return &mongo_iter->iterator;
 }
 
+static struct rbh_mut_iterator *
+mongo_backend_filter(void *backend, const struct rbh_filter *filter,
+                     const struct rbh_filter_options *options,
+                     const struct rbh_filter_output *output)
+{
+    return _mongo_backend_filter(backend, filter, NULL, options, output);
+}
+
     /*--------------------------------------------------------------------*
      |                               report                               |
      *--------------------------------------------------------------------*/
@@ -781,40 +787,7 @@ mongo_backend_report(void *backend, const struct rbh_filter *filter,
                      const struct rbh_filter_options *options,
                      const struct rbh_filter_output *output)
 {
-    struct mongo_backend *mongo = backend;
-    struct mongo_iterator *mongo_iter;
-    mongoc_cursor_t *cursor;
-    bson_t *pipeline;
-    bson_t *opts;
-
-    if (rbh_filter_validate(filter))
-        return NULL;
-
-    pipeline = bson_pipeline_creation(filter, group, options, output);
-    if (pipeline == NULL)
-        return NULL;
-
-    opts = options->sort.count > 0 ? BCON_NEW("allowDiskUse", BCON_BOOL(true))
-                                   : NULL;
-    cursor = mongoc_collection_aggregate(mongo->entries, MONGOC_QUERY_NONE,
-                                         pipeline, opts, NULL);
-    bson_destroy(opts);
-    bson_destroy(pipeline);
-    if (cursor == NULL) {
-        errno = EINVAL;
-        return NULL;
-    }
-
-    mongo_iter = mongo_iterator_new(cursor);
-    if (mongo_iter == NULL) {
-        int save_errno = errno;
-
-        mongoc_cursor_destroy(cursor);
-        errno = save_errno;
-        return NULL;
-    }
-
-    return &mongo_iter->iterator;
+    return _mongo_backend_filter(backend, filter, group, options, output);
 }
 
     /*--------------------------------------------------------------------*
