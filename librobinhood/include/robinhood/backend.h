@@ -165,6 +165,8 @@ struct rbh_filter_options {
     } sort;
     /** Boolean to indicate verbosity mode is enabled */
     bool verbose;
+    /** Boolean to indicate dry-run mode is enabled*/
+    bool dry_run;
 };
 
 struct rbh_range_field {

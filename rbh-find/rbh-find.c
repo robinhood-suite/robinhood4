@@ -154,7 +154,8 @@ apply_command_options(struct command_context *context, int argc, char *argv[])
 
     if (context->dry_run) {
         rbh_display_resolved_argv(program_invocation_short_name, &argc, &argv);
-        exit(0);
+        if (!context->verbose)
+            exit(0);
     }
 }
 
@@ -193,6 +194,7 @@ main(int _argc, char *_argv[])
     ctx.f_ctx.argv = ctx.argv;
 
     options.verbose = command_context.verbose;
+    options.dry_run = command_context.dry_run;
 
     /* Parse the command line */
     for (index = 0; index < ctx.argc; index++)
