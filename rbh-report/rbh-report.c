@@ -233,32 +233,63 @@ cleanup(char **others, char *output, char *group)
 }
 
 static void
-check_command_options(int pre_uri_args, int argc, char *argv[])
+get_command_options(int argc, char *argv[], struct command_context *context)
 {
-    for (int i = 0; i < pre_uri_args; i++) {
+    for (int i = 0; i < argc; i++) {
         if (strcmp(argv[i], "-h") == 0 || strcmp(argv[i], "--help") == 0) {
-            if (i + 1 < pre_uri_args)
-                usage(argv[i + 1]);
-            else
-                usage(NULL);
-
-            exit(0);
+            context->helper = true;
+            if (i + 1 < argc)
+                context->helper_target = argv[i + 1];
         }
 
-        if (strcmp(argv[i], "-d") == 0 || strcmp(argv[i], "--dry-run") == 0) {
-            rbh_display_resolved_argv(program_invocation_short_name, &argc,
-                                      &argv);
-            exit(0);
+        if (strcmp(argv[i], "-d") == 0 || strcmp(argv[i], "--dry-run") == 0)
+            context->dry_run = true;
+
+        if (strcmp(argv[i], "-c") == 0 || strcmp(argv[i], "--config") == 0) {
+            if (i + 1 >= argc)
+                error(EXIT_FAILURE, EINVAL,
+                      "missing configuration file value");
+
+            context->config_file = argv[i + 1];
         }
 
-        if (strcmp(argv[i], "-c") == 0 || strcmp(argv[i], "--config") == 0)
-            i++;
+        if (strcmp(argv[i], "-v") == 0 || strcmp(argv[i], "--verbose") == 0)
+            context->verbose = true;
     }
 }
+
+static void
+apply_command_options(struct command_context *context, int argc, char *argv[])
+{
+    if (context->helper) {
+        if (context->helper_target)
+            usage(context->helper_target);
+        else
+            usage(NULL);
+
+        exit(0);
+    }
+
+    if (context->dry_run) {
+        rbh_display_resolved_argv(program_invocation_short_name, &argc, &argv);
+        if (!context->verbose)
+            exit(0);
+    }
+}
+
 
 int
 main(int _argc, char *_argv[])
 {
+    const struct rbh_filter_options OPTIONS = {0};
+    struct command_context command_context = {0};
+    const struct rbh_filter_output OUTPUT = {
+        .type = RBH_FOT_PROJECTION,
+        .projection = {
+            .fsentry_mask = RBH_FP_ALL,
+            .statx_mask = RBH_STATX_ALL,
+        },
+    };
     struct filters_context f_ctx = {0};
     struct rbh_value_map *info_map;
     bool ascending_sort = true;
@@ -272,25 +303,26 @@ main(int _argc, char *_argv[])
     int index = 1;
     char **argv;
     int argc;
-    int rc;
 
     argc = _argc - 1;
     argv = &_argv[1];
 
     nb_cli_args = rbh_count_args_before_uri(argc, argv);
-    rc = rbh_config_from_args(nb_cli_args, argv);
-    if (rc)
-        error(EXIT_FAILURE, errno, "failed to load configuration file");
+    get_command_options(nb_cli_args, argv, &command_context);
 
+    rbh_config_load_from_path(command_context.config_file);
     rbh_apply_aliases(&argc, &argv);
 
     nb_cli_args = rbh_count_args_before_uri(argc, argv);
-    check_command_options(nb_cli_args, argc, argv);
+    get_command_options(nb_cli_args, argv, &command_context);
+    apply_command_options(&command_context, argc, argv);
 
     argc = argc - nb_cli_args;
     argv = &argv[nb_cli_args];
 
     others = malloc(sizeof(char*) * argc);
+    if (others == NULL)
+        error(EXIT_FAILURE, ENOMEM, "Failed to malloc 'others'");
 
     for (int i = 0; i < argc; ++i) {
         char *arg = argv[i];
@@ -348,15 +380,6 @@ main(int _argc, char *_argv[])
     filter = parse_expression(&f_ctx, &index, NULL, NULL, NULL, NULL);
     if (index != f_ctx.argc)
         error(EX_USAGE, 0, "you have too many ')'");
-
-    const struct rbh_filter_options OPTIONS = {0};
-    const struct rbh_filter_output OUTPUT = {
-        .type = RBH_FOT_PROJECTION,
-        .projection = {
-            .fsentry_mask = RBH_FP_ALL,
-            .statx_mask = RBH_STATX_ALL,
-        },
-    };
 
     if (f_ctx.need_prefetch &&
         complete_rbh_filter(filter, from, &OPTIONS, &OUTPUT))
