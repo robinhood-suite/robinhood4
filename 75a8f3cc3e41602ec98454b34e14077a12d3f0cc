@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "40c85d71_5071478c",
+        "filename": "librobinhood/include/robinhood/config.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-06-02T09:35:57Z",
+      "side": 1,
+      "message": "minor: not sure about the naming conventions\n\nJust taking three functions from this file:\n\n* `rbh_config_free` -- `rbh` + \u003ctarget\u003e + \u003cverb\u003e\n* `get_rbh_config` -- \u003cverb\u003e + `rbh` + \u003ctarget\u003e\n* `rbh_load_config` -- `rbh` + \u003cverb\u003e + \u003ctarget\u003e\n\nI think we need to standardize this.",
+      "range": {
+        "startLine": 86,
+        "startChar": 0,
+        "endLine": 86,
+        "endChar": 15
+      },
+      "revId": "75a8f3cc3e41602ec98454b34e14077a12d3f0cc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
