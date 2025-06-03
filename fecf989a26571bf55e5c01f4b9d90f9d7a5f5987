@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b6daf529_b98e0cfb",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-06-03T07:37:40Z",
+      "side": 1,
+      "message": "typo: it is",
+      "range": {
+        "startLine": 11,
+        "startChar": 12,
+        "endLine": 11,
+        "endChar": 16
+      },
+      "revId": "fecf989a26571bf55e5c01f4b9d90f9d7a5f5987",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b78b9c53_92bc905e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-06-03T07:37:40Z",
+      "side": 1,
+      "message": "typo: paired",
+      "range": {
+        "startLine": 11,
+        "startChar": 49,
+        "endLine": 11,
+        "endChar": 54
+      },
+      "revId": "fecf989a26571bf55e5c01f4b9d90f9d7a5f5987",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "37f3a0be_ab4b6bcf",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-06-03T07:37:40Z",
+      "side": 1,
+      "message": "suggest: `entries skipped by rbh_iter_next`",
+      "range": {
+        "startLine": 10,
+        "startChar": 15,
+        "endLine": 11,
+        "endChar": 10
+      },
+      "revId": "fecf989a26571bf55e5c01f4b9d90f9d7a5f5987",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "89a06b45_1e811d41",
+        "filename": "rbh-info/tests/get_info.bash",
+        "patchSetId": 3
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-06-03T07:37:40Z",
+      "side": 1,
+      "message": "comment: saying this now, but not specifically for this patch: it\u0027d be nice to have actual tests of the values shown, not just that there is a printf. These can be done in specific test files, so as to check each value separately, and in a more thorough manner",
+      "range": {
+        "startLine": 91,
+        "startChar": 4,
+        "endLine": 91,
+        "endChar": 43
+      },
+      "revId": "fecf989a26571bf55e5c01f4b9d90f9d7a5f5987",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
