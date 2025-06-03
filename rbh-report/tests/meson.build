@@ -17,6 +17,7 @@ integration_tests = [
   'test_parsing',
   'test_range',
   'test_sum',
+  'test_verbose',
 ]
 
 if liblustre.found()
