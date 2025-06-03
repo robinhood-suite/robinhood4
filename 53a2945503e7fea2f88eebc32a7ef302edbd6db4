@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3f017fc0_47bbb49e",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-06-03T10:07:01Z",
+      "side": 1,
+      "message": "typo: an",
+      "range": {
+        "startLine": 26,
+        "startChar": 65,
+        "endLine": 26,
+        "endChar": 67
+      },
+      "revId": "53a2945503e7fea2f88eebc32a7ef302edbd6db4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c230f801_3eb76df6",
         "filename": "designs/rbh-undelete.rst",
         "patchSetId": 4
@@ -95,6 +118,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d770ac57_961b27d6",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-06-03T10:07:01Z",
+      "side": 1,
+      "message": "There is a lot of repetition between each paragraphs.",
+      "range": {
+        "startLine": 37,
+        "startChar": 1,
+        "endLine": 41,
+        "endChar": 14
+      },
+      "revId": "53a2945503e7fea2f88eebc32a7ef302edbd6db4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ed9d100e_ad17f2d7",
         "filename": "designs/rbh-undelete.rst",
         "patchSetId": 4
@@ -164,6 +210,282 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "29d86f89_3375e0fe",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-06-03T10:07:01Z",
+      "side": 1,
+      "message": "I guess this depends on the underlying storage system we are talking about. For Lustre, this is true. I don\u0027t know about other systems.",
+      "range": {
+        "startLine": 43,
+        "startChar": 29,
+        "endLine": 43,
+        "endChar": 51
+      },
+      "revId": "53a2945503e7fea2f88eebc32a7ef302edbd6db4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "02d59c00_ade95af9",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-06-03T10:07:01Z",
+      "side": 1,
+      "message": "There is something wrong with this sentence.",
+      "range": {
+        "startLine": 44,
+        "startChar": 35,
+        "endLine": 45,
+        "endChar": 29
+      },
+      "revId": "53a2945503e7fea2f88eebc32a7ef302edbd6db4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7c485b7b_f0c5da7e",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-06-03T10:07:01Z",
+      "side": 1,
+      "message": "I\u0027m not sure what this is trying to say. And this repeats some of what you said ealier.",
+      "range": {
+        "startLine": 47,
+        "startChar": 0,
+        "endLine": 49,
+        "endChar": 47
+      },
+      "revId": "53a2945503e7fea2f88eebc32a7ef302edbd6db4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "494c83c7_34ba9242",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-06-03T10:07:01Z",
+      "side": 1,
+      "message": "In RBH4, entries in a backend can be identified with a URI. So rbh-undelete should take 2 URI: the one identifying the database and the one identifying the entry to \"undelete\".",
+      "range": {
+        "startLine": 74,
+        "startChar": 0,
+        "endLine": 79,
+        "endChar": 35
+      },
+      "revId": "53a2945503e7fea2f88eebc32a7ef302edbd6db4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0cc94342_a61b82c0",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-06-03T10:07:01Z",
+      "side": 1,
+      "message": "Or versions available for a given entry (e.g. what versions of a file are available on the HSM backend).",
+      "range": {
+        "startLine": 85,
+        "startChar": 42,
+        "endLine": 85,
+        "endChar": 70
+      },
+      "revId": "53a2945503e7fea2f88eebc32a7ef302edbd6db4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f4c47ba8_c21f9d1d",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-06-03T10:07:01Z",
+      "side": 1,
+      "message": "You can also give a path to a file to \"undelete\".",
+      "range": {
+        "startLine": 86,
+        "startChar": 13,
+        "endLine": 86,
+        "endChar": 57
+      },
+      "revId": "53a2945503e7fea2f88eebc32a7ef302edbd6db4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d08e631e_a800ff73",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-06-03T10:07:01Z",
+      "side": 1,
+      "message": "The tree like syntax is nice but maybe a bit ambitious?",
+      "range": {
+        "startLine": 98,
+        "startChar": 3,
+        "endLine": 98,
+        "endChar": 9
+      },
+      "revId": "53a2945503e7fea2f88eebc32a7ef302edbd6db4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "35f47dd9_fb5817e7",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-06-03T10:07:01Z",
+      "side": 1,
+      "message": "Why display the FID? Also, where do you get the version from? The rm_time should be a human readable time.",
+      "range": {
+        "startLine": 99,
+        "startChar": 15,
+        "endLine": 99,
+        "endChar": 38
+      },
+      "revId": "53a2945503e7fea2f88eebc32a7ef302edbd6db4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ca2ee5b6_02efa352",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-06-03T10:07:01Z",
+      "side": 1,
+      "message": "Restore has a meaning in Lustre HSM. It means read the data from the HSM backend back into Lustre. This can be a long process if the data is on tape. What v3 does is that it recreates a file in a released state. Which means that the inode is created and linked to the HSM backend but not restored. So the file is still empty (no data in Lustre). It can be restored later by the user. My point is: this message can confusing to Lustre users.",
+      "range": {
+        "startLine": 108,
+        "startChar": 33,
+        "endLine": 108,
+        "endChar": 54
+      },
+      "revId": "53a2945503e7fea2f88eebc32a7ef302edbd6db4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0cd0ade2_e5367f4e",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-06-03T10:07:01Z",
+      "side": 1,
+      "message": "typo: backends",
+      "range": {
+        "startLine": 116,
+        "startChar": 54,
+        "endLine": 116,
+        "endChar": 61
+      },
+      "revId": "53a2945503e7fea2f88eebc32a7ef302edbd6db4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7218b6f0_d4208384",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-06-03T10:07:01Z",
+      "side": 1,
+      "message": "Be careful here. We have 2 backends: the DB backend that contains the metadata (no undelete will be used on this backend) and the filesytem (or object store) backend where the file (or object) will be recreated. No metadata will be retrieved from the filesystem backend. You are confusing the two here.",
+      "range": {
+        "startLine": 117,
+        "startChar": 43,
+        "endLine": 121,
+        "endChar": 33
+      },
+      "revId": "53a2945503e7fea2f88eebc32a7ef302edbd6db4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e7986188_a5546e83",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-06-03T10:07:01Z",
+      "side": 1,
+      "message": "cf. my previous comment but this is wrong.",
+      "range": {
+        "startLine": 123,
+        "startChar": 0,
+        "endLine": 126,
+        "endChar": 24
+      },
+      "revId": "53a2945503e7fea2f88eebc32a7ef302edbd6db4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e87b4e12_fbf77e13",
         "filename": "designs/rbh-undelete.rst",
         "patchSetId": 4
@@ -180,6 +502,145 @@
         "startChar": 12,
         "endLine": 139,
         "endChar": 28
+      },
+      "revId": "53a2945503e7fea2f88eebc32a7ef302edbd6db4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fd3250ae_17a9e6c8",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-06-03T10:07:01Z",
+      "side": 1,
+      "message": "I think we should keep things simple. For now, we only have one use case that needs a string. The only other use case in v3 is a POSIX like interface that also uses a path. So I\u0027d rather not make things unnecessarily complex just to plan for some futur that may never come.",
+      "parentUuid": "e87b4e12_fbf77e13",
+      "range": {
+        "startLine": 139,
+        "startChar": 12,
+        "endLine": 139,
+        "endChar": 28
+      },
+      "revId": "53a2945503e7fea2f88eebc32a7ef302edbd6db4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c45f86d0_9c58ef02",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-06-03T10:07:01Z",
+      "side": 1,
+      "message": "This is not bash code. This is just regular text.",
+      "range": {
+        "startLine": 207,
+        "startChar": 10,
+        "endLine": 207,
+        "endChar": 14
+      },
+      "revId": "53a2945503e7fea2f88eebc32a7ef302edbd6db4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a2f7eb3c_5f8420cd",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-06-03T10:07:01Z",
+      "side": 1,
+      "message": "What is that?",
+      "range": {
+        "startLine": 215,
+        "startChar": 43,
+        "endLine": 215,
+        "endChar": 74
+      },
+      "revId": "53a2945503e7fea2f88eebc32a7ef302edbd6db4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b5e25d01_1d30ba47",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-06-03T10:07:01Z",
+      "side": 1,
+      "message": "suggest: mention that in this case, you expect the path to be relative to the CWD of rbh-undelete.",
+      "range": {
+        "startLine": 225,
+        "startChar": 55,
+        "endLine": 225,
+        "endChar": 70
+      },
+      "revId": "53a2945503e7fea2f88eebc32a7ef302edbd6db4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1282316e_58480679",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 239,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-06-03T10:07:01Z",
+      "side": 1,
+      "message": "This is not why v3 uses the rebind command. Entries are bound to an HSM element through an extended attribute (trusted.hsm_fuid) which contains `\u003cfsname\u003e:\u003cfid\u003e`. Setting this xattr is sufficient to rebind the data properly. This is what v3 does.\n\nSo in the simplest cases, llapi_hsm_import + setxattr(\"trusted.hsm_fuid\", ...) is enough to perform the undelete.\n\nThe lhsm_rebind command is only used when the value of this attribute is missing from the DB. In this case, we simply ask the copytool to rebind the entry with fid1 (fid of original removed file) to the name and fid of fid2 (essentially rename the file in the HSM backend) and set the xattr with `\u003cfsname\u003e:\u003cfid2\u003e`.",
+      "range": {
+        "startLine": 237,
+        "startChar": 39,
+        "endLine": 239,
+        "endChar": 2
+      },
+      "revId": "53a2945503e7fea2f88eebc32a7ef302edbd6db4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "661fa427_8df92ab6",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-06-03T10:07:01Z",
+      "side": 1,
+      "message": "You probably need an external command to list the version of files with the copytool.",
+      "range": {
+        "startLine": 249,
+        "startChar": 17,
+        "endLine": 250,
+        "endChar": 75
       },
       "revId": "53a2945503e7fea2f88eebc32a7ef302edbd6db4",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
