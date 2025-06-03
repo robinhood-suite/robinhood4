@@ -1,0 +1,188 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c230f801_3eb76df6",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-06-03T09:04:44Z",
+      "side": 1,
+      "message": "typo: same",
+      "range": {
+        "startLine": 29,
+        "startChar": 48,
+        "endLine": 29,
+        "endChar": 52
+      },
+      "revId": "53a2945503e7fea2f88eebc32a7ef302edbd6db4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "21b54882_4a14e92c",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-06-03T09:04:44Z",
+      "side": 1,
+      "message": "nit: summarizing the 2 sentences above isn\u0027t really necessary, it\u0027s only 2 sentences",
+      "range": {
+        "startLine": 32,
+        "startChar": 0,
+        "endLine": 34,
+        "endChar": 41
+      },
+      "revId": "53a2945503e7fea2f88eebc32a7ef302edbd6db4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "834028a3_f0d73db4",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-06-03T09:04:44Z",
+      "side": 1,
+      "message": "minor: in this paragraph, `inode` and `file` are used interchangeabilly, I\u0027d rather just stick with `entry`",
+      "range": {
+        "startLine": 36,
+        "startChar": 44,
+        "endLine": 36,
+        "endChar": 49
+      },
+      "revId": "53a2945503e7fea2f88eebc32a7ef302edbd6db4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7c928b0b_3b053c07",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-06-03T09:04:44Z",
+      "side": 1,
+      "message": "typo: through",
+      "range": {
+        "startLine": 40,
+        "startChar": 75,
+        "endLine": 40,
+        "endChar": 80
+      },
+      "revId": "53a2945503e7fea2f88eebc32a7ef302edbd6db4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ed9d100e_ad17f2d7",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-06-03T09:04:44Z",
+      "side": 1,
+      "message": "suggest: since we\u0027re talking about HSM here, use `restore` instead of `copy` in this paragraph",
+      "range": {
+        "startLine": 42,
+        "startChar": 40,
+        "endLine": 42,
+        "endChar": 47
+      },
+      "revId": "53a2945503e7fea2f88eebc32a7ef302edbd6db4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e66fae20_82b94d7f",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-06-03T09:04:44Z",
+      "side": 1,
+      "message": "suggest: `require`",
+      "range": {
+        "startLine": 42,
+        "startChar": 22,
+        "endLine": 42,
+        "endChar": 39
+      },
+      "revId": "53a2945503e7fea2f88eebc32a7ef302edbd6db4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cb667038_65212d45",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-06-03T09:04:44Z",
+      "side": 1,
+      "message": "suggest: `storage system`",
+      "range": {
+        "startLine": 43,
+        "startChar": 7,
+        "endLine": 43,
+        "endChar": 17
+      },
+      "revId": "53a2945503e7fea2f88eebc32a7ef302edbd6db4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e87b4e12_fbf77e13",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-06-03T09:04:44Z",
+      "side": 1,
+      "message": "minor: since there might be a list of arguments given to the backend, this should be an array of string here, with its size given as another parameter",
+      "range": {
+        "startLine": 139,
+        "startChar": 12,
+        "endLine": 139,
+        "endChar": 28
+      },
+      "revId": "53a2945503e7fea2f88eebc32a7ef302edbd6db4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
