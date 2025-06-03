@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6b0ca81a_68a8ed55",
+        "filename": "utils/generate_tree.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-06-03T09:10:00Z",
+      "side": 1,
+      "message": "this could be tricky if you are creating a directory",
+      "range": {
+        "startLine": 109,
+        "startChar": 64,
+        "endLine": 109,
+        "endChar": 70
+      },
+      "revId": "36aa43aa74ae4ee3b192f01a2e711314a1fcf8d9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
