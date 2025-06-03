@@ -22,6 +22,30 @@
       },
       "revId": "e878c07e149c65be8e64a6f5fe8d9fcc22f3d242",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "72ee1adf_48fd2e85",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-06-03T12:02:10Z",
+      "side": 1,
+      "message": "The template configuration which was installed when doing a meson install or rpm install was using the `RBH_MONGO_DB_ADDRESS` key, instead of the expected `RBH_MONGODB_ADDRESS`. THis meant modifying the value in that config file wouldn\u0027t have any impact on the DB used by RBH",
+      "parentUuid": "0cf12f40_2109c356",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 71
+      },
+      "revId": "e878c07e149c65be8e64a6f5fe8d9fcc22f3d242",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
