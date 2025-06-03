@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6d9fbc6b_57e45e9d",
+        "filename": "rbh-info/rbh-info.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-06-03T11:05:15Z",
+      "side": 1,
+      "message": "suggest? does directly calling sizeof(_buffer) here not work?",
+      "range": {
+        "startLine": 279,
+        "startChar": 25,
+        "endLine": 279,
+        "endChar": 32
+      },
+      "revId": "efa7e160361ddf607eca8e30051db2391bdd918b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3f9d0d0b_2e67e145",
+        "filename": "rbh-info/tests/get_info.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-06-03T11:05:15Z",
+      "side": 1,
+      "message": "defect: `$size`",
+      "range": {
+        "startLine": 24,
+        "startChar": 18,
+        "endLine": 24,
+        "endChar": 22
+      },
+      "revId": "efa7e160361ddf607eca8e30051db2391bdd918b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
