@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fd035dd5_ecfa36ce",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-06-03T09:05:41Z",
+      "side": 1,
+      "message": "2 suggestions:\n- to make it easier to use, you could rename it generate_tree and add `#!/usr/bin/env python3` to run it as a script\n- move it in a dedicated directory to keep the number of files in utils small. For instance: utils/benchmarks",
+      "revId": "14cdcfda89921fccde45fe00960c9da2f49fe7b6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "83a4bff2_d7d56200",
