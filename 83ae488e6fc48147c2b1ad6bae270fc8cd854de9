@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f15d7cb4_b1c1f200",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-06-03T07:23:44Z",
+      "side": 1,
+      "message": "style: line length of commit messages are normally not that long, I think it is 72 characters?",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 55
+      },
+      "revId": "83ae488e6fc48147c2b1ad6bae270fc8cd854de9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "57eb2bc9_289cb576",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-06-03T07:23:44Z",
+      "side": 1,
+      "message": "Also, my previous question is not answered yet :p.",
+      "revId": "83ae488e6fc48147c2b1ad6bae270fc8cd854de9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
