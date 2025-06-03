@@ -681,6 +681,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "644aaa17_ddff32ab",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 7
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-06-03T14:20:49Z",
+      "side": 1,
+      "message": "Having high/low thresholds is a native feature of rbh v3. Implementing it in all the actions can mean a lot of code duplication. Especially for default actions such as unlink for instance. You want to express something as simply as possible in the common case. There are a few policies that will need this: release, migration and purge at least. Possibly anything that is triggered with a volume threshold or a percent (% of inode available for instance). A policy that does load balancing on OSTs for instance.",
+      "parentUuid": "be78b7a5_0b6beccc",
+      "range": {
+        "startLine": 180,
+        "startChar": 7,
+        "endLine": 180,
+        "endChar": 32
+      },
+      "revId": "cde4d3e6e4f5f3b5410c372028c32700ad3ae4bf",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1c9482ee_b7b04f2d",
         "filename": "designs/rbh-policy.rst",
         "patchSetId": 7
@@ -1212,6 +1236,30 @@
       "side": 1,
       "message": "You\u0027re right, I will look into it and consider complementary solutions to reduce the security risks this may involve.  \nBut isn\u0027t the Python configuration for the policy engine only intended for administrators, meaning trusted individuals?",
       "parentUuid": "3862a7e3_87ef36e5",
+      "range": {
+        "startLine": 422,
+        "startChar": 30,
+        "endLine": 425,
+        "endChar": 2
+      },
+      "revId": "cde4d3e6e4f5f3b5410c372028c32700ad3ae4bf",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "20ec9a0c_69b0a292",
+        "filename": "designs/rbh-policy.rst",
+        "patchSetId": 7
+      },
+      "lineNbr": 425,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-06-03T14:20:49Z",
+      "side": 1,
+      "message": "Yes, but depending on how things are implemented, you might endup with code injection issues for instance. This could be done through a user giving a certain name to a file or inserting code in some extended attribute that is interpreted by the policy engine. Maybe this isn\u0027t worth mentionning.",
+      "parentUuid": "adaa1f61_f2165b97",
       "range": {
         "startLine": 422,
         "startChar": 30,

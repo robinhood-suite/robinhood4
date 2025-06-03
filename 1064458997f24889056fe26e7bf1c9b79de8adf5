@@ -3,6 +3,282 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0d54d26f_72b46d65",
+        "filename": "designs/rbh-policy/01-overview_and_goals.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-06-03T14:20:49Z",
+      "side": 1,
+      "message": "typo: either as an argument (one name for on policy) or which takes the name of the policies (plural) to execute as arguments.",
+      "range": {
+        "startLine": 18,
+        "startChar": 25,
+        "endLine": 18,
+        "endChar": 34
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e7d2494b_f15e2f99",
+        "filename": "designs/rbh-policy/01-overview_and_goals.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-06-03T14:20:49Z",
+      "side": 1,
+      "message": "I\u0027m not sure this behavior is useful. An issue with this is that --config referes to the other YAML config in other tools. And this configuration file will probably be used by the daemon as well. For instance, the backends definition is inside this file.",
+      "range": {
+        "startLine": 35,
+        "startChar": 0,
+        "endLine": 38,
+        "endChar": 32
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "08aabcf1_d345a860",
+        "filename": "designs/rbh-policy/02-configuration_syntax.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-06-03T14:20:49Z",
+      "side": 1,
+      "message": "I mentioned this in a previous comment but the definition of backends is in the YAML config. So you would need to manage this configuration as well.",
+      "range": {
+        "startLine": 12,
+        "startChar": 2,
+        "endLine": 12,
+        "endChar": 22
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "60564a53_17f34792",
+        "filename": "designs/rbh-policy/02-configuration_syntax.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-06-03T14:20:49Z",
+      "side": 1,
+      "message": "double space",
+      "range": {
+        "startLine": 18,
+        "startChar": 36,
+        "endLine": 18,
+        "endChar": 37
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cf3c9ed3_c16bc8d7",
+        "filename": "designs/rbh-policy/02-configuration_syntax.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-06-03T14:20:49Z",
+      "side": 1,
+      "message": "Simply backend",
+      "range": {
+        "startLine": 19,
+        "startChar": 37,
+        "endLine": 19,
+        "endChar": 48
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e65e1cad_63a0aaea",
+        "filename": "designs/rbh-policy/02-configuration_syntax.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-06-03T14:20:49Z",
+      "side": 1,
+      "message": "If we want to reuse fileclasses across configuration, the file that defines all the fileclasses will not have this. So I don\u0027t think you can make this mandatory.",
+      "range": {
+        "startLine": 27,
+        "startChar": 23,
+        "endLine": 27,
+        "endChar": 36
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3ecefe06_a72e044a",
+        "filename": "designs/rbh-policy/02-configuration_syntax.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-06-03T14:20:49Z",
+      "side": 1,
+      "message": "Could this also be a list? For instance, I could have policies common to an HSM capable filesystem and a non HSM one. And then in a sperate file, the HSM specific policies for the HSM capable filesystem.",
+      "range": {
+        "startLine": 35,
+        "startChar": 2,
+        "endLine": 35,
+        "endChar": 14
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cb8e87f6_97db9392",
+        "filename": "designs/rbh-policy/02-configuration_syntax.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-06-03T14:20:49Z",
+      "side": 1,
+      "message": "Is it really necessary to define what a URI is at this point?",
+      "range": {
+        "startLine": 37,
+        "startChar": 0,
+        "endLine": 43,
+        "endChar": 2
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0bd88cca_a008c30c",
+        "filename": "designs/rbh-policy/02-configuration_syntax.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-06-03T14:20:49Z",
+      "side": 1,
+      "message": "Why at the top ? This is python, you just need to declare it before using it.",
+      "range": {
+        "startLine": 44,
+        "startChar": 59,
+        "endLine": 45,
+        "endChar": 14
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "54e79096_dc3a0463",
+        "filename": "designs/rbh-policy/02-configuration_syntax.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-06-03T14:20:49Z",
+      "side": 1,
+      "message": "Why enforce it? A reasonable default could be used if not provided.",
+      "range": {
+        "startLine": 50,
+        "startChar": 5,
+        "endLine": 50,
+        "endChar": 23
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "285b9918_9b72055c",
+        "filename": "designs/rbh-policy/02-configuration_syntax.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-06-03T14:20:49Z",
+      "side": 1,
+      "message": "At first, I wanted to comment that you should stay generic as it may be a database different from mongo. But then I realised that you don\u0027t specify on which DB the policy engine runs. In v3 the config specifies both the DB and the Filesystem. But in v4 these are independent. How do you plan on managine both?",
+      "range": {
+        "startLine": 51,
+        "startChar": 53,
+        "endLine": 51,
+        "endChar": 71
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "04a9c28b_77992f21",
+        "filename": "designs/rbh-policy/02-configuration_syntax.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-06-03T14:20:49Z",
+      "side": 1,
+      "message": "this is redundant with the first paragraph of this section.",
+      "range": {
+        "startLine": 61,
+        "startChar": 27,
+        "endLine": 62,
+        "endChar": 60
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f053f77c_78722766",
         "filename": "designs/rbh-policy/02-configuration_syntax.rst",
         "patchSetId": 14
@@ -17,6 +293,29 @@
       "range": {
         "startLine": 65,
         "startChar": 52,
+        "endLine": 65,
+        "endChar": 79
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bd69164e_5a50dbef",
+        "filename": "designs/rbh-policy/02-configuration_syntax.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-06-03T14:20:49Z",
+      "side": 1,
+      "message": "Why? This is not an issue for Python to have both declarations. Only the last one will be used.",
+      "range": {
+        "startLine": 65,
+        "startChar": 53,
         "endLine": 65,
         "endChar": 79
       },
@@ -42,6 +341,604 @@
         "startChar": 1,
         "endLine": 66,
         "endChar": 55
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b6f06b48_82f6d00d",
+        "filename": "designs/rbh-policy/02-configuration_syntax.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-06-03T14:20:49Z",
+      "side": 1,
+      "message": "What about target or filter instead? target is used in the policy declaration. We should probably be consistent with it.",
+      "range": {
+        "startLine": 79,
+        "startChar": 8,
+        "endLine": 79,
+        "endChar": 17
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "949f6d76_5de9c028",
+        "filename": "designs/rbh-policy/02-configuration_syntax.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-06-03T14:20:49Z",
+      "side": 1,
+      "message": "typo: and where not",
+      "range": {
+        "startLine": 93,
+        "startChar": 60,
+        "endLine": 93,
+        "endChar": 67
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "716b7f64_fba22a35",
+        "filename": "designs/rbh-policy/02-configuration_syntax.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-06-03T14:20:49Z",
+      "side": 1,
+      "message": "question: I\u0027ve asked this before but I don\u0027t recall. How is this declared?\n\nIs it like this:\n```\nrecent_files \u003d declare_fileclass(...)\n```",
+      "range": {
+        "startLine": 146,
+        "startChar": 53,
+        "endLine": 146,
+        "endChar": 65
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ee8af4e3_e605e5d9",
+        "filename": "designs/rbh-policy/02-configuration_syntax.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-06-03T14:20:49Z",
+      "side": 1,
+      "message": "Do you define at some point how parameters are passed to the python function? And which parameters are passed?",
+      "range": {
+        "startLine": 155,
+        "startChar": 19,
+        "endLine": 155,
+        "endChar": 40
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3155c2a5_15435c0a",
+        "filename": "designs/rbh-policy/02-configuration_syntax.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-06-03T14:20:49Z",
+      "side": 1,
+      "message": "major: usage is vague. Is it in size or number of inode? Prefer GlobalSizePercent or GlobalInodePercent. Same for pool and ost.",
+      "range": {
+        "startLine": 169,
+        "startChar": 27,
+        "endLine": 169,
+        "endChar": 32
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2e27c818_cfd8e937",
+        "filename": "designs/rbh-policy/02-configuration_syntax.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-06-03T14:20:49Z",
+      "side": 1,
+      "message": "What does file mean here? Is it regular files only or files in general (e.g. not dir) ?",
+      "range": {
+        "startLine": 184,
+        "startChar": 33,
+        "endLine": 184,
+        "endChar": 37
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bf7ad32b_5f0dc460",
+        "filename": "designs/rbh-policy/02-configuration_syntax.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-06-03T14:20:49Z",
+      "side": 1,
+      "message": "I would not list this with the optional parameters. It\u0027s not that a rule CAN override the target, it MUST.",
+      "range": {
+        "startLine": 206,
+        "startChar": 55,
+        "endLine": 206,
+        "endChar": 80
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eedb6efe_16414f57",
+        "filename": "designs/rbh-policy/02-configuration_syntax.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-06-03T14:20:49Z",
+      "side": 1,
+      "message": "This seems wrong to me. The schedulers are a feature of robinhood 3\u0027s policy engine that we probably need to implement in v4 as well. common.rate_limit referes to a particular implementation of the concept of scheduler in rbh3. I think you need to investigate the implementation of this further in rbh3 and port it properly to rbh4.",
+      "range": {
+        "startLine": 235,
+        "startChar": 12,
+        "endLine": 235,
+        "endChar": 46
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "552ad422_c0404c78",
+        "filename": "designs/rbh-policy/02-configuration_syntax.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-06-03T14:20:49Z",
+      "side": 1,
+      "message": "Why not merge these 3 conditions?",
+      "range": {
+        "startLine": 243,
+        "startChar": 12,
+        "endLine": 254,
+        "endChar": 14
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a61c989a_f7bc20a0",
+        "filename": "designs/rbh-policy/03-policy_condition_filters.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-06-03T14:20:49Z",
+      "side": 1,
+      "message": "This is not a regex. This is a shell pattern. The equivalent in a regex would be `.*`. You can mention that this is similar to the `-path` predicate of rbh-find.",
+      "range": {
+        "startLine": 22,
+        "startChar": 39,
+        "endLine": 22,
+        "endChar": 45
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "21b481ab_deb1adad",
+        "filename": "designs/rbh-policy/03-policy_condition_filters.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-06-03T14:20:49Z",
+      "side": 1,
+      "message": "I don\u0027t know how rbh3 implements this filter but this is not how the -path predicate works. We probably want to have the same behavior. The pattern you used in this example matches entries whose path end with a \u0027/\u0027 (which is probably no entry since robinhood probably doesn\u0027t add a slash at the end of the path.",
+      "range": {
+        "startLine": 23,
+        "startChar": 2,
+        "endLine": 23,
+        "endChar": 53
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "34086960_1d872c04",
+        "filename": "designs/rbh-policy/03-policy_condition_filters.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-06-03T14:20:49Z",
+      "side": 1,
+      "message": "Does this support clustershell syntax?",
+      "range": {
+        "startLine": 39,
+        "startChar": 22,
+        "endLine": 39,
+        "endChar": 27
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4f999f08_0a9230a1",
+        "filename": "designs/rbh-policy/03-policy_condition_filters.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-06-03T14:20:49Z",
+      "side": 1,
+      "message": "I think rbh-find support PB as well.",
+      "range": {
+        "startLine": 54,
+        "startChar": 66,
+        "endLine": 54,
+        "endChar": 69
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "20c38f7a_70d859ae",
+        "filename": "designs/rbh-policy/03-policy_condition_filters.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-06-03T14:20:49Z",
+      "side": 1,
+      "message": "Why not simply Pool? IIRC, rbh-find has the -pool filter, not -ost-pool.",
+      "range": {
+        "startLine": 76,
+        "startChar": 4,
+        "endLine": 76,
+        "endChar": 7
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d3c114a4_b71061e8",
+        "filename": "designs/rbh-policy/03-policy_condition_filters.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-06-03T14:20:49Z",
+      "side": 1,
+      "message": "I assume you can override this operator in python?",
+      "range": {
+        "startLine": 97,
+        "startChar": 18,
+        "endLine": 97,
+        "endChar": 20
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9a15fec1_d62ac9ff",
+        "filename": "designs/rbh-policy/03-policy_condition_filters.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-06-03T14:20:49Z",
+      "side": 1,
+      "message": "Is it recursive? If not, why just subdirectories and not files as well?",
+      "range": {
+        "startLine": 141,
+        "startChar": 38,
+        "endLine": 141,
+        "endChar": 52
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b8681430_59671271",
+        "filename": "designs/rbh-policy/04-implementation_overview.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-06-03T14:20:49Z",
+      "side": 1,
+      "message": "typo: example",
+      "range": {
+        "startLine": 269,
+        "startChar": 6,
+        "endLine": 269,
+        "endChar": 13
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2dc662ce_b8e01d6b",
+        "filename": "designs/rbh-policy/04-implementation_overview.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 334,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-06-03T14:20:49Z",
+      "side": 1,
+      "message": "You can set a link to the other file\u0027s section so that the reader can jump to it when reading the doc from github for instance.",
+      "range": {
+        "startLine": 334,
+        "startChar": 30,
+        "endLine": 334,
+        "endChar": 41
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f2409069_615b460d",
+        "filename": "designs/rbh-policy/05-rbh-policy_command.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-06-03T14:20:49Z",
+      "side": 1,
+      "message": "uid/gid as well",
+      "range": {
+        "startLine": 54,
+        "startChar": 6,
+        "endLine": 54,
+        "endChar": 10
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "22415f7e_046cad71",
+        "filename": "designs/rbh-policy/05-rbh-policy_command.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-06-03T14:20:49Z",
+      "side": 1,
+      "message": "mdt might be useful.",
+      "range": {
+        "startLine": 58,
+        "startChar": 6,
+        "endLine": 58,
+        "endChar": 9
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bce76e37_5b9b6aba",
+        "filename": "designs/rbh-policy/05-rbh-policy_command.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-06-03T14:20:49Z",
+      "side": 1,
+      "message": "Personal preference but I like snake case better in CLI (true/false).",
+      "range": {
+        "startLine": 114,
+        "startChar": 37,
+        "endLine": 114,
+        "endChar": 41
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5887b3bb_c4da0077",
+        "filename": "designs/rbh-policy/05-rbh-policy_command.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-06-03T14:20:49Z",
+      "side": 1,
+      "message": "You don\u0027t usually have a `.d` extension in `/var/log`.",
+      "range": {
+        "startLine": 145,
+        "startChar": 13,
+        "endLine": 145,
+        "endChar": 25
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad15cecd_5b5eda87",
+        "filename": "designs/rbh-policy/05-rbh-policy_command.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-06-03T14:20:49Z",
+      "side": 1,
+      "message": "Be careful, quotes can be anoying in a shell script. Since you use \u0027:\u0027 for seperation this is not valid python anyway. So I would drop the quotes.",
+      "range": {
+        "startLine": 153,
+        "startChar": 38,
+        "endLine": 153,
+        "endChar": 45
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1ab856c7_2a6a3bd4",
+        "filename": "designs/rbh-policy/05-rbh-policy_command.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-06-03T14:20:49Z",
+      "side": 1,
+      "message": "I\u0027m not sure I like having both --daemon and --detach. I undestand why you did this but I don\u0027t if we really need all this complexity. Another solution could be to have subcommands:\n\n```\nrbh-policy run ... # the current version without --daemon and --detach\nrbh-policy daemon ... # currently --daemon\nrbh-policy daemon --background ... # currently --daemon --detach\n```",
+      "range": {
+        "startLine": 218,
+        "startChar": 14,
+        "endLine": 218,
+        "endChar": 43
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "398f9e9d_26335a0e",
+        "filename": "designs/rbh-policy/06-daemon_overview.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-06-03T14:20:49Z",
+      "side": 1,
+      "message": "This (and the explanation of the manual mode) is repeated a lot throughout the documents... I\u0027m not sure dividing the document was such a good idea.",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 40
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "44834e5a_2b329999",
+        "filename": "designs/rbh-policy/06-daemon_overview.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-06-03T14:20:49Z",
+      "side": 1,
+      "message": "This gives me no more info than the previous section did. I didn\u0027t read the rest o f this file thoroughly as I don\u0027t think it adds any meaningful information that was not already stated in a previous section. Try to keep the document short. There is already a lot of repetitions in it.",
+      "range": {
+        "startLine": 18,
+        "startChar": 0,
+        "endLine": 44,
+        "endChar": 11
       },
       "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
@@ -134,6 +1031,52 @@
         "startChar": 24,
         "endLine": 98,
         "endChar": 34
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f115900e_24f2769c",
+        "filename": "designs/rbh-policy/09-future_improvements.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-06-03T14:20:49Z",
+      "side": 1,
+      "message": "suggest: RBH_POLICY_EXTRA_CONFIG",
+      "range": {
+        "startLine": 44,
+        "startChar": 4,
+        "endLine": 44,
+        "endChar": 25
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "19628606_e5ca6801",
+        "filename": "designs/rbh-policy/09-future_improvements.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-06-03T14:20:49Z",
+      "side": 1,
+      "message": "Something that could be interesting (that rbh3 kind of already does with report) is to list all the files that match a given fileclass and also being able to do reports per fileclasses. In v3 you can also know which fileclasses a file is part of using rbh-report. This is an important feature as well. And I would classify these features as a must have not a futur improvement.",
+      "range": {
+        "startLine": 68,
+        "startChar": 3,
+        "endLine": 68,
+        "endChar": 37
       },
       "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
