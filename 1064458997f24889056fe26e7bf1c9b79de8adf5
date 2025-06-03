@@ -1,0 +1,165 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f053f77c_78722766",
+        "filename": "designs/rbh-policy/02-configuration_syntax.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-06-03T08:36:42Z",
+      "side": 1,
+      "message": "minor? Once for the policy rather ?",
+      "range": {
+        "startLine": 65,
+        "startChar": 52,
+        "endLine": 65,
+        "endChar": 79
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "54001052_afc93374",
+        "filename": "designs/rbh-policy/02-configuration_syntax.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-06-03T08:36:42Z",
+      "side": 1,
+      "message": "minor: I don\u0027t think it\u0027s necessary to specify it, or at least not here. If you really want it to be explicit, add it to the overview of the tool",
+      "range": {
+        "startLine": 66,
+        "startChar": 1,
+        "endLine": 66,
+        "endChar": 55
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aa23a4a0_725ce580",
+        "filename": "designs/rbh-policy/06-daemon_overview.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-06-03T08:36:42Z",
+      "side": 1,
+      "message": "nit: this may be too specific and unneeded in the design",
+      "range": {
+        "startLine": 67,
+        "startChar": 0,
+        "endLine": 71,
+        "endChar": 2
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a4fed27f_37c866da",
+        "filename": "designs/rbh-policy/06-daemon_overview.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-06-03T08:36:42Z",
+      "side": 1,
+      "message": "I see what you did there.",
+      "range": {
+        "startLine": 88,
+        "startChar": 0,
+        "endLine": 91,
+        "endChar": 62
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5724a436_9c8731ba",
+        "filename": "designs/rbh-policy/06-daemon_overview.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-06-03T08:36:42Z",
+      "side": 1,
+      "message": "minor: `from the given URI` as we could use other databases for this policy engine",
+      "range": {
+        "startLine": 93,
+        "startChar": 65,
+        "endLine": 94,
+        "endChar": 8
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c7b33488_025c56de",
+        "filename": "designs/rbh-policy/06-daemon_overview.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-06-03T08:36:42Z",
+      "side": 1,
+      "message": "minor: `UserDiskUsage` would be better than `UserSize` then, same for the groups",
+      "range": {
+        "startLine": 98,
+        "startChar": 24,
+        "endLine": 98,
+        "endChar": 34
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2b08145a_2c7f5904",
+        "filename": "designs/rbh-policy/09-future_improvements.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-06-03T08:36:42Z",
+      "side": 1,
+      "message": "comment: I think it\u0027s a good idea and easy enough to implement that having it from the start would be nice",
+      "range": {
+        "startLine": 74,
+        "startChar": 0,
+        "endLine": 74,
+        "endChar": 40
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
