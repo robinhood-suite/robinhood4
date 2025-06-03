@@ -116,6 +116,30 @@
       },
       "revId": "a9623533c6e987df1c31ea3933c6d1f74fba36fe",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c02f8092_df697a83",
+        "filename": "utils/generate_tree.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-06-03T09:21:18Z",
+      "side": 1,
+      "message": "lfs migrate can be used for files instead",
+      "parentUuid": "af37b2bf_d8c7f24c",
+      "range": {
+        "startLine": 69,
+        "startChar": 8,
+        "endLine": 72,
+        "endChar": 32
+      },
+      "revId": "a9623533c6e987df1c31ea3933c6d1f74fba36fe",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
