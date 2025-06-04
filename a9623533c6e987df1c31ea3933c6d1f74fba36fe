@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "24036ccf_343db0f3",
+        "filename": "utils/generate_tree.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-06-04T14:57:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7051ea1e_69fc1047",
+      "range": {
+        "startLine": 49,
+        "startChar": 8,
+        "endLine": 49,
+        "endChar": 28
+      },
+      "revId": "a9623533c6e987df1c31ea3933c6d1f74fba36fe",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4c80a4ce_60a9e355",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-06-03T09:13:30Z",
       "side": 1,
       "message": "action \u003d random.choice(actions)",
+      "range": {
+        "startLine": 54,
+        "startChar": 4,
+        "endLine": 54,
+        "endChar": 50
+      },
+      "revId": "a9623533c6e987df1c31ea3933c6d1f74fba36fe",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f68e53e1_fab5c814",
+        "filename": "utils/generate_tree.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-06-04T14:57:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4c80a4ce_60a9e355",
       "range": {
         "startLine": 54,
         "startChar": 4,
@@ -156,6 +204,30 @@
       "side": 1,
       "message": "Yes, but that doesn\u0027t work for directories, which is why I ultimately went with this. If you both think having a more readable code is worth an additionnal event for directories, I\u0027m fine with changing it",
       "parentUuid": "c02f8092_df697a83",
+      "range": {
+        "startLine": 69,
+        "startChar": 8,
+        "endLine": 72,
+        "endChar": 32
+      },
+      "revId": "a9623533c6e987df1c31ea3933c6d1f74fba36fe",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "53e8507c_4a88a4b1",
+        "filename": "utils/generate_tree.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-06-04T14:57:44Z",
+      "side": 1,
+      "message": "Done it even thought I didn\u0027t get an answer",
+      "parentUuid": "fb5bbf47_f941410a",
       "range": {
         "startLine": 69,
         "startChar": 8,
