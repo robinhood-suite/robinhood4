@@ -19,6 +19,8 @@ project(
 cc = meson.get_compiler('c')
 options = cc.get_supported_arguments([
     '-Wno-gnu-alignof-expression', # gcc >= 10.1.0 (maybe less)
+    '-Wno-stringop-overread',
+    '-Wno-array-bounds',
 ])
 
 ## Macro definitions
