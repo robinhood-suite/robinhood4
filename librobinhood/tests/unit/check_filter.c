@@ -1,5 +1,5 @@
 /* This file is part of the RobinHood Library
- * Copyright (C) 2019 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifer: LGPL-3.0-or-later
@@ -724,9 +724,9 @@ START_TEST(rfan_basic)
     filter = rbh_filter_and_new(filters, ARRAY_SIZE(filters));
     ck_assert_ptr_nonnull(filter);
 
-    ck_assert_filter_eq(filter, &FILTER);
+    ck_assert_filter_eq(&FILTER, filter);
     for (size_t i = 0; i < filter->logical.count; i++)
-        ck_assert_filter_eq(filter->logical.filters[i], filters[i]);
+        ck_assert_filter_eq(filters[i], filter->logical.filters[i]);
 
     free(filter);
 }
@@ -762,7 +762,7 @@ START_TEST(rfon_basic)
     filter = rbh_filter_or_new(FILTERS, ARRAY_SIZE(FILTERS));
     ck_assert_ptr_nonnull(filter);
 
-    ck_assert_filter_eq(filter, &FILTER);
+    ck_assert_filter_eq(&FILTER, filter);
     free(filter);
 }
 END_TEST
@@ -786,7 +786,7 @@ START_TEST(rfnn_basic)
     filter = rbh_filter_not_new(FILTERS[0]);
     ck_assert_ptr_nonnull(filter);
 
-    ck_assert_filter_eq(filter, &NEGATED);
+    ck_assert_filter_eq(&NEGATED, filter);
     free(filter);
 }
 END_TEST

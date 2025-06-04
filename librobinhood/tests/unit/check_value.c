@@ -1,5 +1,5 @@
 /* This file is part of the RobinHood Library
- * Copyright (C) 2019 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifer: LGPL-3.0-or-later
@@ -35,7 +35,7 @@ START_TEST(rvbn_false)
     value = rbh_value_boolean_new(VALUE.boolean);
     ck_assert_ptr_nonnull(value);
 
-    ck_assert_value_eq(value, &VALUE);
+    ck_assert_value_eq(&VALUE, value);
 
     free(value);
 }
@@ -52,7 +52,7 @@ START_TEST(rvbn_true)
     value = rbh_value_boolean_new(VALUE.boolean);
     ck_assert_ptr_nonnull(value);
 
-    ck_assert_value_eq(value, &VALUE);
+    ck_assert_value_eq(&VALUE, value);
 
     free(value);
 }
