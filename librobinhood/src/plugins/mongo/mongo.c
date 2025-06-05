@@ -21,6 +21,7 @@
 #include <bson.h>
 #include <mongoc.h>
 #include <miniyaml.h>
+#include <time.h>
 
 #include "robinhood/backends/mongo.h"
 #include "robinhood/sstack.h"
@@ -168,6 +169,9 @@ bson_pipeline_creation(const struct rbh_filter *filter,
 struct mongo_iterator {
     struct rbh_mut_iterator iterator;
     mongoc_cursor_t *cursor;
+    mongoc_client_t *client;
+    mongoc_client_session_t *session;
+    struct timespec last_refresh;
 };
 
 enum form_token {
@@ -330,6 +334,52 @@ out:
     return NULL;
 }
 
+static int
+refresh_session(struct mongo_iterator *mongo_iter)
+{
+    const uint8_t *bin_data;
+    bson_t *refresh_cmd;
+    const bson_t *lsid;
+    bson_error_t error;
+    bson_iter_t iter;
+    uint32_t bin_len;
+
+    lsid = mongoc_client_session_get_lsid(mongo_iter->session);
+
+    bson_iter_init(&iter, lsid);
+    BSON_ASSERT(bson_iter_find_descendant(&iter, "id", &iter));
+    bson_iter_binary(&iter, NULL, &bin_len, &bin_data);
+
+    refresh_cmd = BCON_NEW(
+            "refreshSessions", "[",
+                "{", "id", BCON_BIN(BSON_SUBTYPE_UUID, bin_data, bin_len), "}",
+            "]");
+
+    if (!mongoc_client_command_simple(mongo_iter->client, "admin", refresh_cmd,
+                                      NULL, NULL, &error)) {
+        fprintf(stderr, "Erreur refreshSessions : %s\n", error.message);
+        bson_destroy(refresh_cmd);
+        return -1;
+    }
+
+    clock_gettime(CLOCK_MONOTONIC, &mongo_iter->last_refresh);
+    bson_destroy(refresh_cmd);
+
+    return 0;
+}
+
+static long
+elapsed_seconds(struct timespec *start) {
+    struct timespec now;
+    clock_gettime(CLOCK_MONOTONIC, &now);
+
+    long seconds = now.tv_sec - start->tv_sec;
+
+    return seconds;
+}
+
+#define REFRESH_INTERVAL_SEC (5 * 60)
+
 static void *
 mongo_iter_next(void *iterator)
 {
@@ -343,8 +393,12 @@ mongo_iter_next(void *iterator)
         return NULL;
     }
 
-    if (mongoc_cursor_next(mongo_iter->cursor, &doc))
+    if (mongoc_cursor_next(mongo_iter->cursor, &doc)) {
+        if (elapsed_seconds(&mongo_iter->last_refresh) >= REFRESH_INTERVAL_SEC)
+            refresh_session(mongo_iter);
+
         return entry_from_bson(doc);
+    }
 
     if (!mongoc_cursor_error(mongo_iter->cursor, &error)) {
         errno = ENODATA;
@@ -373,6 +427,8 @@ mongo_iter_destroy(void *iterator)
     struct mongo_iterator *mongo_iter = iterator;
 
     mongoc_cursor_destroy(mongo_iter->cursor);
+    if (mongo_iter->session)
+        mongoc_client_session_destroy(mongo_iter->session);
     free(mongo_iter);
 }
 
@@ -725,7 +781,9 @@ mongo_backend_filter(void *backend, const struct rbh_filter *filter,
 {
     struct mongo_backend *mongo = backend;
     struct mongo_iterator *mongo_iter;
+    mongoc_client_session_t *session;
     mongoc_cursor_t *cursor = NULL;
+    bson_error_t error;
     bson_t *pipeline;
     bson_t *opts;
 
@@ -736,8 +794,24 @@ mongo_backend_filter(void *backend, const struct rbh_filter *filter,
     if (pipeline == NULL)
         return NULL;
 
-    opts = options->sort.count > 0 ? BCON_NEW("allowDiskUse", BCON_BOOL(true))
-                                   : NULL;
+    session = mongoc_client_start_session(mongo->client, NULL, &error);
+    if (session == NULL) {
+        fprintf(stderr, "Failed to start a session: %s\n", error.message);
+        bson_destroy(pipeline);
+        return NULL;
+    }
+
+    opts = bson_new();
+    if (!mongoc_client_session_append(session, opts, &error)) {
+        fprintf(stderr, "Failed to append the session to the client: %s\n",
+                error.message);
+        bson_destroy(opts);
+        bson_destroy(pipeline);
+        return NULL;
+    }
+
+    if (options->sort.count > 0)
+        BCON_APPEND(&opts, "allowDiskUse", BCON_BOOL(true));
 
     if (options->verbose)
         print_pipeline_and_opts(pipeline, opts);
@@ -754,6 +828,7 @@ mongo_backend_filter(void *backend, const struct rbh_filter *filter,
     bson_destroy(opts);
     bson_destroy(pipeline);
     if (cursor == NULL) {
+        mongoc_client_session_destroy(session);
         errno = EINVAL;
         return NULL;
     }
@@ -764,9 +839,14 @@ skip_aggregate:
         int save_errno = errno;
 
         mongoc_cursor_destroy(cursor);
+        mongoc_client_session_destroy(session);
         errno = save_errno;
         return NULL;
     }
+
+    clock_gettime(CLOCK_MONOTONIC, &mongo_iter->last_refresh);
+    mongo_iter->session = session;
+    mongo_iter->client = mongo->client;
 
     return &mongo_iter->iterator;
 }
