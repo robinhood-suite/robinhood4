@@ -1,5 +1,5 @@
 /* This file is part of RobinHood 4
- * Copyright (C) 2019 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifer: LGPL-3.0-or-later
@@ -67,8 +67,16 @@ enum rbh_uri_type {
     RBH_UT_PATH,
 };
 
+struct rbh_uri_address {
+    const char *username;
+    const char *password;
+    const char *host;
+    uint64_t port;
+};
+
 struct rbh_uri {
     enum rbh_uri_type type;
+    struct rbh_uri_address *address;
     const char *backend;
     const char *fsname;
     union {

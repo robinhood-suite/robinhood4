@@ -23,6 +23,8 @@
 #include "lu_fid.h"
 #include "utils.h"
 
+#include <stdio.h>
+
 /*----------------------------------------------------------------------------*
  |                         rbh_raw_uri_from_string()                          |
  *----------------------------------------------------------------------------*/
@@ -310,16 +312,26 @@ fragment_is_fid(const char *fragment, size_t length)
     return colon && memchr(colon + 1, ':', length - (colon + 1 - fragment));
 }
 
+static ssize_t
+parse_raw_address_into_uri_address(char *data, size_t *size,
+                                   const char *userinfo, const char *host,
+                                   const char *port,
+                                   struct rbh_uri_address *address)
+{
+    return 0;
+}
+
 struct rbh_uri *
 rbh_uri_from_raw_uri(const struct rbh_raw_uri *raw_uri)
 {
+    struct rbh_uri_address *address;
     size_t fragment_length = 0; /* gcc: uninitialized variable */
     enum rbh_uri_type type;
     struct rbh_uri *uri;
     struct rbh_id *id;
     const char *colon;
+    size_t size = 0;
     int save_errno;
-    size_t size;
     char *data;
     ssize_t rc;
 
@@ -328,13 +340,29 @@ rbh_uri_from_raw_uri(const struct rbh_raw_uri *raw_uri)
         return NULL;
     }
 
+    if (raw_uri->userinfo || raw_uri->host || raw_uri->port)
+        size += sizeof(*address);
+
+    if (raw_uri->userinfo) {
+        size += strlen(raw_uri->userinfo);
+
+        colon = strchr(raw_uri->userinfo, ':');
+        /* +1 if the userinfo only contains username, +2 if it contains both
+         * username and password
+         */
+        size += (colon ? 2 : 1);
+    }
+
+    if (raw_uri->host)
+        size += strlen(raw_uri->host) + 1;
+
     colon = strchr(raw_uri->path, ':');
     if (colon == NULL) {
         errno = EINVAL;
         return NULL;
     }
 
-    size = strlen(raw_uri->path) + 1;
+    size += strlen(raw_uri->path) + 1;
     if (raw_uri->fragment) {
         fragment_length = strlen(raw_uri->fragment);
         if (fragment_is_id(raw_uri->fragment, fragment_length)) {
@@ -366,6 +394,20 @@ rbh_uri_from_raw_uri(const struct rbh_raw_uri *raw_uri)
 
     /* uri->type */
     uri->type = type;
+
+    if (raw_uri->userinfo || raw_uri->host || raw_uri->port) {
+        address = aligned_memalloc(alignof(*address), sizeof(*address),
+                                   &data, &size);
+        assert(address);
+
+        rc = parse_raw_address_into_uri_address(data, &size, raw_uri->userinfo,
+                                                raw_uri->host, raw_uri->port,
+                                                uri->address);
+        if (rc < 0)
+            goto out_free_uri;
+    } else {
+        uri->address = NULL;
+    }
 
     /* uri->backend */
     uri->backend = data;
