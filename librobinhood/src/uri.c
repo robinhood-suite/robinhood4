@@ -97,7 +97,7 @@ rbh_raw_uri_from_string(const char *string_)
      */
     slash = strchr(string + 2, '/');
     if (slash) {
-        raw_uri->path = slash;
+        raw_uri->path = slash + 1;
         /* Up until now, there always was a separator to overwrite with a '\0'.
          * Here, we cannot overwrite '/' as it is part of the path and we need
          * to keep it.

@@ -200,7 +200,7 @@ START_TEST(rrufs_empty_authority_path)
     const struct rbh_raw_uri RAW_URI = {
         .scheme = RBH_SCHEME,
         .host = "",
-        .path = "/path",
+        .path = "path",
     };
     struct rbh_raw_uri *raw_uri;
 
