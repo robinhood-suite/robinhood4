@@ -19,5 +19,5 @@ const struct rbh_backend_plugin RBH_BACKEND_PLUGIN_SYMBOL(SQLITE) = {
     .ops = &SQLITE_BACKEND_PLUGIN_OPS,
     .capabilities = RBH_FILTER_OPS | RBH_SYNC_OPS | RBH_UPDATE_OPS |
         RBH_BRANCH_OPS,
-    .info = RBH_INFO_BACKEND_SOURCE,
+    .info = RBH_INFO_BACKEND_SOURCE | RBH_INFO_SIZE,
 };
