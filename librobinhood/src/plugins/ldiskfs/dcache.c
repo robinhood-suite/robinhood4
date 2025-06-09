@@ -6,6 +6,7 @@
  */
 
 #include "dcache.h"
+#include <robinhood/utils.h>
 
 #include <assert.h>
 
@@ -79,7 +80,7 @@ glist_name_cmp(gconstpointer a, gconstpointer b)
     const struct rbh_dentry *dentry = a;
     const char *name = b;
 
-    return !strncmp(dentry->name, name, dentry->namelen);
+    return strncmp(dentry->name, name, dentry->namelen);
 }
 
 static struct rbh_dentry *
