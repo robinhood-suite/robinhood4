@@ -16,6 +16,11 @@ struct sqlite_filter_where {
     size_t clause_len;
 };
 
+struct sqlite_query_options {
+    char limit[28]; /* " limit <SIZE_MAX>" */
+    size_t limit_len;
+};
+
 __attribute__((format(printf, 2, 3)))
 static bool
 sfw_clause_format(struct sqlite_filter_where *where, const char *fmt, ...)
@@ -35,6 +40,28 @@ sfw_clause_format(struct sqlite_filter_where *where, const char *fmt, ...)
         return sqlite_fail("vsnprintf: truncated string, buffer too small");
 
     where->clause_len += len;
+    return true;
+}
+
+__attribute__((format(printf, 2, 3)))
+static bool
+sqo_limit_format(struct sqlite_query_options *options, const char *fmt, ...)
+{
+    va_list args;
+    int len;
+
+    va_start(args, fmt);
+    len = vsnprintf(options->limit + options->limit_len,
+                    sizeof(options->limit) - options->limit_len,
+                    fmt, args);
+    va_end(args);
+    if (len == -1)
+        return sqlite_fail("vsnprintf: failed to format characters");
+
+    if (len > (sizeof(options->limit) - options->limit_len))
+        return sqlite_fail("vsnprintf: truncated string, buffer too small");
+
+    options->limit_len += len;
     return true;
 }
 
@@ -649,11 +676,19 @@ filter2sql(const struct rbh_filter *filter, struct sqlite_filter_where *where,
 
 static bool
 filter2where_clause(const struct rbh_filter *filter,
-                    const struct rbh_filter_options *options,
                     struct sqlite_filter_where *where)
 {
+    if (!filter)
+        return true;
+
+    if (!sfw_clause_format(where, " where "))
+        return false;
+
     if (!filter2sql(filter, where, 0, false))
-        return NULL;
+        return false;
+
+    if (!strcmp(where->clause, " where "))
+        where->clause_len = 0;
 
     return true;
 }
@@ -866,6 +901,20 @@ bind_filter_values(struct sqlite_cursor *cursor,
 }
 
 static bool
+options2sql(const struct rbh_filter_options *options,
+            struct sqlite_query_options *query_options)
+{
+    if (!options)
+        return true;
+
+    if (options->limit > 0 &&
+        !sqo_limit_format(query_options, " limit %lu", options->limit))
+        return false;
+
+    return true;
+}
+
+static bool
 sqlite_statement_from_filter(struct sqlite_iterator *iter,
                              const struct rbh_filter *filter,
                              const struct rbh_filter_options *options)
@@ -882,23 +931,27 @@ sqlite_statement_from_filter(struct sqlite_iterator *iter,
         "dev_major, dev_minor, mnt_id, "
         "entries.xattrs, ns.xattrs, symlink "
         "from entries join ns on entries.id = ns.id";
+    struct sqlite_query_options query_options = {0};
     struct sqlite_filter_where where = {0};
-    char *full_query = query;
+    char *full_query = NULL;
     int save_errno;
+    int rc;
 
-    if (filter) {
-        int rc;
+    if (rbh_filter_validate(filter) == -1)
+        return NULL;
 
-        if (!filter2where_clause(filter, options, &where))
-            return false;
+    if (!filter2where_clause(filter, &where))
+        return false;
 
-        if (where.clause_len > 0) {
-            rc = asprintf(&full_query, "%s where %s", query, where.clause);
-            if (rc == -1) {
-                errno = ENOMEM;
-                return false;
-            }
-        }
+    if (!options2sql(options, &query_options))
+        return false;
+
+    rc = asprintf(&full_query, "%s%s%s", query,
+                  where.clause_len > 0 ? where.clause : "",
+                  options->limit > 0 ? query_options.limit : "");
+    if (rc == -1) {
+        errno = ENOMEM;
+        return false;
     }
 
     if (!sqlite_setup_query(&iter->cursor, full_query))
@@ -907,19 +960,16 @@ sqlite_statement_from_filter(struct sqlite_iterator *iter,
     if (where.clause_len > 0) {
         if (!bind_filter_values(&iter->cursor, filter))
             goto free_query;
-
-        free(full_query);
     }
 
+    free(full_query);
     debug("query: %s", sqlite3_expanded_sql(iter->cursor.stmt));
     return true;
 
 free_query:
-    if (query != full_query) {
-        save_errno = errno;
-        free(full_query);
-        errno = save_errno;
-    }
+    save_errno = errno;
+    free(full_query);
+    errno = save_errno;
 
     return false;
 }
