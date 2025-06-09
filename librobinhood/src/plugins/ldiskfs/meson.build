@@ -13,6 +13,7 @@ librbh_ldiskfs = library(
     sources: [
         'backend.c',
         'dcache.c',
+        'filter.c',
         'plugin.c',
         'scan_target.c',
     ],
