@@ -19,6 +19,8 @@ get_binary_id_from_mongo()
 
     entry="$(echo "$entry" | tr -d '\n')"
     entry="BinData${entry#*BinData}"
+    # Newer versions of mongo use Binary.createFromBase64 not BinData
+    entry="BinData${entry#*Binary.createFromBase64}"
     entry="${entry%)*})"
 
     echo "$entry"
