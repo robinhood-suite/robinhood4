@@ -98,6 +98,7 @@ enum rbh_backend_id {
     RBH_BI_MFU,
     RBH_BI_S3,
     RBH_BI_SQLITE,
+    RBH_BI_LDISKFS,
     /* User defined backends should use an ID so that:
      * RBI_RESERVED_MAX < ID <= 255
      */
