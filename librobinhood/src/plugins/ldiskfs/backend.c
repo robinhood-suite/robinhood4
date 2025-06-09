@@ -23,12 +23,21 @@ rbh_ldiskfs_backend_new(const struct rbh_backend_plugin *self,
                         bool read_only)
 {
     struct ldiskfs_backend *ldiskfs;
+    char *io_opts = NULL;
+    errcode_t rc;
 
-    ldiskfs = calloc(1, sizeof(*ldiskfs));
-    if (!ldiskfs)
-        return NULL;
-
+    ldiskfs = xcalloc(1, sizeof(*ldiskfs));
     ldiskfs->backend = LDISKFS_BACKEND;
+
+    rc = ext2fs_open2(uri->fsname, io_opts, EXT2_FLAG_SOFTSUPP_FEATURES, 0, 0,
+                      unix_io_manager, &ldiskfs->fs);
+    if (rc) {
+        int save_errno = errno;
+
+        free(ldiskfs);
+        errno = save_errno;
+        return NULL;
+    }
 
     return &ldiskfs->backend;
 }
@@ -38,5 +47,6 @@ ldiskfs_backend_destroy(void *backend)
 {
     struct ldiskfs_backend *ldiskfs = backend;
 
+    ext2fs_close(ldiskfs->fs);
     free(ldiskfs);
 }
