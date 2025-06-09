@@ -15,6 +15,7 @@ const struct rbh_backend_operations SQLITE_BACKEND_OPS = {
     .insert_metadata = sqlite_backend_insert_metadata,
     .get_info        = sqlite_backend_get_info,
     .update          = sqlite_backend_update,
+    .report          = sqlite_backend_report,
 };
 
 static const struct rbh_backend SQLITE_BACKEND = {

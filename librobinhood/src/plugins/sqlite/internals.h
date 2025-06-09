@@ -74,11 +74,39 @@ extern const struct rbh_backend_operations SQLITE_BACKEND_OPS;
 ssize_t
 sqlite_backend_update(void *backend, struct rbh_iterator *fsevents);
 
+struct sqlite_filter_where {
+    char clause[2048];
+    size_t clause_len;
+};
+
+struct sqlite_query_options {
+    char limit[28]; /* " limit <SIZE_MAX>" */
+    size_t limit_len;
+    char skip[29]; /* " offset <SIZE_MAX>" */
+    size_t skip_len;
+    char sort[512];
+    size_t sort_len;
+};
+
+bool
+filter2where_clause(const struct rbh_filter *filter,
+                    struct sqlite_filter_where *where);
+
+bool
+options2sql(const struct rbh_filter_options *options,
+            struct sqlite_query_options *query_options);
+
 struct rbh_mut_iterator *
 sqlite_backend_filter(void *backend, const struct rbh_filter *filter,
                       const struct rbh_filter_options *options,
                       const struct rbh_filter_output *output,
                       struct rbh_metadata *metadata);
+
+struct rbh_mut_iterator *
+sqlite_backend_report(void *backend, const struct rbh_filter *filter,
+                      const struct rbh_group_fields *group,
+                      const struct rbh_filter_options *options,
+                      const struct rbh_filter_output *output);
 
 struct rbh_fsentry *
 sqlite_backend_root(void *backend,
