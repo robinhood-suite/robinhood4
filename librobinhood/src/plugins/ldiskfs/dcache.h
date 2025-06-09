@@ -19,10 +19,6 @@ struct rbh_dcache {
     GHashTable *dentries;
 };
 
-struct rbh_dcache_iter {
-    struct rbh_mut_iterator iter;
-};
-
 struct rbh_dentry_xattr {
     char *name;
     void *value;
@@ -59,7 +55,7 @@ typedef void (*rbh_dcache_cb_t)(struct rbh_fsentry *fsentry, void *udata);
 void
 rbh_dcache_foreach(struct rbh_dcache *dcache, rbh_dcache_cb_t cb, void *udata);
 
-struct rbh_dcache_iter *
-rbh_dcache_iter_new(struct rbh_dcache *dcache);
+struct rbh_dentry *
+rbh_dcache_lookup(struct rbh_dcache *dcache, ext2_ino_t ino, const char *name);
 
 #endif
