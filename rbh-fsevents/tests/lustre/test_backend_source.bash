@@ -51,9 +51,10 @@ EOF
 
     local backend_source=$(do_db source "$testdb")
 
-    if ! echo "$backend_source" | grep "posix" | grep "retention"; then
-        error "Source backend should contain POSIX plugin and retention extension"
-    fi
+    echo "$backend_source" | grep posix ||
+        error "Backend source does not contain 'posix'"
+    echo "$backend_source" | grep retention ||
+        error "Backend source does not contain 'retention'"
 }
 
 test_lustre()
@@ -78,10 +79,12 @@ EOF
 
     local backend_source=$(do_db source "$testdb")
 
-    if ! echo "$backend_source" | grep "posix" | grep "lustre" |
-                                  grep "retention"; then
-        error "Source backend should contain POSIX plugin and Lustre and retention extension"
-    fi
+    echo "$backend_source" | grep posix ||
+        error "Backend source does not contain 'posix'"
+    echo "$backend_source" | grep lustre ||
+        error "Backend source does not contain 'lustre'"
+    echo "$backend_source" | grep retention ||
+        error "Backend source does not contain 'retention'"
 }
 
 ################################################################################
