@@ -37,6 +37,10 @@ backend_plugin_import(const char *name)
         if (errno == 0)
             error(EXIT_FAILURE, 0, "Unable to load backend plugin: %s",
                   dlerror());
+
+	if (errno == RBH_BACKEND_ERROR)
+            error(EXIT_FAILURE, 0, "Unable to load backend plugin: %s",
+                  rbh_backend_error);
         error(EXIT_FAILURE, errno, "Unable to load backend plugin");
     }
 
