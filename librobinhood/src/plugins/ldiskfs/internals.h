@@ -16,9 +16,13 @@
 #include <robinhood/utils.h>
 #include <ext2fs/ext2fs.h>
 
+#include "dcache.h"
+
 struct ldiskfs_backend {
     struct rbh_backend backend;
     ext2_filsys fs;
+    ext2_inode_scan iscan;
+    struct rbh_dcache *dcache;
 };
 
 void
