@@ -8,6 +8,7 @@
 #include "internals.h"
 
 static const struct rbh_backend_operations SQLITE_BACKEND_OPS = {
+    .destroy = sqlite_backend_destroy,
 };
 
 static const struct rbh_backend SQLITE_BACKEND = {
@@ -30,6 +31,8 @@ rbh_sqlite_backend_new(const struct rbh_backend_plugin *self,
         return NULL;
 
     sqlite->backend = SQLITE_BACKEND;
+    if (!sqlite_backend_open(sqlite, path, read_only))
+        return NULL;
 
     return &sqlite->backend;
 }
@@ -39,5 +42,6 @@ sqlite_backend_destroy(void *backend)
 {
     struct sqlite_backend *sqlite = backend;
 
+    sqlite_backend_close(sqlite);
     free(sqlite);
 }
