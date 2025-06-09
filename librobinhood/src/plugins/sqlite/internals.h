@@ -15,6 +15,7 @@
 #include <assert.h>
 #include <jansson.h>
 #include <sqlite3.h>
+#include <sys/user.h>
 
 #include <robinhood/backends/sqlite.h>
 #include <robinhood/utils.h>
@@ -53,6 +54,7 @@ struct sqlite_backend {
     const char *path;
     bool read_only;
     sqlite3 *db;
+    struct rbh_sstack *sstack;
 };
 
 struct sqlite_iterator {
@@ -164,6 +166,11 @@ sqlite_cursor_get_id(struct sqlite_cursor *cursor, struct rbh_id *dst);
 const char *
 sqlite_xattr2json(const struct rbh_value_map *xattrs,
                   struct rbh_sstack *sstack);
+
+bool
+json2value_map(json_t *object, struct rbh_value_map *map,
+               struct rbh_sstack *sstack);
+
 
 bool
 sqlite_json2xattrs(const char *json, struct rbh_value_map *xattrs,

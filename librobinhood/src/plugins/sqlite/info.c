@@ -7,6 +7,10 @@
 
 #include "internals.h"
 
+/*----------------------------------------------------------------------------*
+ |                            insert_source()                                 |
+ *----------------------------------------------------------------------------*/
+
 static int
 insert_source(struct sqlite_backend *sqlite,
               const char *plugin,
@@ -124,95 +128,118 @@ sqlite_backend_insert_source(void *backend,
     return 0;
 }
 
-static struct rbh_value POSIX_STRING = {
-    .type = RBH_VT_STRING,
-    .string = "posix",
-};
+/*----------------------------------------------------------------------------*
+ |                            get_info()                                      |
+ *----------------------------------------------------------------------------*/
 
-static struct rbh_value LUSTRE_STRING = {
-    .type = RBH_VT_STRING,
-    .string = "lustre",
-};
+static json_t *
+plugin2json(const char *plugin)
+{
+    json_t *object = json_object();
 
-static struct rbh_value RETENTION_STRING = {
-    .type = RBH_VT_STRING,
-    .string = "retention",
-};
+    json_object_set_new(object, "type", json_string("plugin"));
+    json_object_set_new(object, "plugin", json_string(plugin));
 
-static struct rbh_value EXTENSION_STRING = {
-    .type = RBH_VT_STRING,
-    .string = "extension",
-};
+    return object;
+}
 
-static struct rbh_value PLUGIN_STRING = {
-    .type = RBH_VT_STRING,
-    .string = "plugin",
-};
+static json_t *
+extension2json(const char *plugin, const char *extension)
+{
+    json_t *object = json_object();
 
-static const struct rbh_value_pair POSIX_MAP_VALUES[2] = {
-    { .key = "type", .value = &PLUGIN_STRING },
-    { .key = "plugin", .value = &POSIX_STRING },
-};
+    json_object_set_new(object, "type", json_string("extension"));
+    json_object_set_new(object, "plugin", json_string(plugin));
+    json_object_set_new(object, "extension", json_string(extension));
 
-static const struct rbh_value_pair LUSTRE_MAP_VALUES[3] = {
-    { .key = "type", .value = &EXTENSION_STRING },
-    { .key = "plugin", .value = &POSIX_STRING },
-    { .key = "extension", .value = &LUSTRE_STRING },
-};
+    return object;
+}
 
-static const struct rbh_value_pair RETENTION_MAP_VALUES[3] = {
-    { .key = "type", .value = &EXTENSION_STRING },
-    { .key = "plugin", .value = &POSIX_STRING },
-    { .key = "extension", .value = &RETENTION_STRING },
-};
+static json_t *
+source2json(const char *plugin, const char *extensions_json)
+{
+    json_t *backend_source;
+    json_t *extensions;
+    json_error_t err;
+    json_t *source;
+    json_t *value;
+    size_t i;
 
-static struct rbh_value VALUES[3] = {
-    {
-        .type = RBH_VT_MAP,
-        .map = {
-            .count = 2,
-            .pairs = POSIX_MAP_VALUES,
-        }
-    },
-    {
-        .type = RBH_VT_MAP,
-        .map = {
-            .count = 3,
-            .pairs = LUSTRE_MAP_VALUES,
-        }
-    },
-    {
-        .type = RBH_VT_MAP,
-        .map = {
-            .count = 3,
-            .pairs = RETENTION_MAP_VALUES,
-        }
-    },
-};
+    extensions = json_loads(extensions_json, 0, &err);
+    if (!extensions)
+        return NULL;
 
-static struct rbh_value POSIX_VALUE = {
-    .type = RBH_VT_SEQUENCE,
-    .sequence = {
-        .count = 3,
-        .values = VALUES,
-    },
-};
+    source = json_array();
+    if (!source)
+        goto free_extensions;
 
-static struct rbh_value_pair POSIX_BACKEND = {
-    .key = "backend_source",
-    .value = &POSIX_VALUE,
-};
+    json_array_append_new(source, plugin2json(plugin));
 
-static struct rbh_value_map POSIX_SOURCE = {
-    .count = 1,
-    .pairs = &POSIX_BACKEND,
-};
+    json_array_foreach(extensions, i, value) {
+        json_t *extension;
+
+        if (!json_is_string(value))
+            goto free_extensions;
+
+        extension = extension2json(plugin, json_string_value(value));
+        json_array_append_new(source, extension);
+    }
+
+    backend_source = json_object();
+    json_object_set_new(backend_source, "backend_source", source);
+
+    json_decref(extensions);
+    return backend_source;
+
+free_extensions:
+    json_decref(extensions);
+    return NULL;
+}
+
+static json_t *
+backend_source(struct sqlite_backend *sqlite)
+{
+    const char *query = "select plugin, extensions from info where id = 1";
+    struct sqlite_cursor cursor;
+    const char *extensions;
+    const char *plugin;
+    json_t *source;
+    
+    if (!(sqlite_cursor_setup(sqlite, &cursor) &&
+        sqlite_setup_query(&cursor, query) &&
+        sqlite_cursor_step(&cursor)))
+        return NULL;
+
+    plugin = sqlite_cursor_get_string(&cursor);
+    extensions = sqlite_cursor_get_string(&cursor);
+
+    source = source2json(plugin, extensions);
+    sqlite_cursor_fini(&cursor);
+
+    return source;
+}
 
 struct rbh_value_map *
 sqlite_backend_get_info(void *backend, int flags)
 {
-    if (flags & RBH_INFO_BACKEND_SOURCE)
-        return &POSIX_SOURCE;
+    struct sqlite_backend *sqlite = backend;
+    struct rbh_value_map *map;
+    json_t *info;
 
+    map = malloc(sizeof(*map));
+    if (!map)
+        return NULL;
+
+    if (flags & RBH_INFO_BACKEND_SOURCE)
+        info = backend_source(sqlite);
+
+    if (!json2value_map(info, map, sqlite->sstack))
+        goto free_map;
+
+    json_decref(info);
+    return map;
+
+free_map:
+    free(map);
     return NULL;
 }

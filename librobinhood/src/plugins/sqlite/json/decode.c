@@ -8,10 +8,6 @@
 #include "internals.h"
 
 static bool
-json2value_map(json_t *object, struct rbh_value_map *map,
-               struct rbh_sstack *sstack);
-
-static bool
 json2value(json_t *object, struct rbh_value *value,
            struct rbh_sstack *sstack);
 
@@ -69,7 +65,7 @@ json2value(json_t *object, struct rbh_value *value,
     return true;
 }
 
-static bool
+bool
 json2value_map(json_t *object, struct rbh_value_map *map,
                struct rbh_sstack *sstack)
 {
