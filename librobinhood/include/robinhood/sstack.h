@@ -158,6 +158,46 @@ rbh_sstack_new(size_t chunk_size);
 void *
 rbh_sstack_push(struct rbh_sstack *sstack, const void *data, size_t size);
 
+/**
+ * Allocate \p size bytes on the stack respecting the memory alignment constraints
+ * of the system.
+ *
+ * @param sstack    the sstack to push data onto
+ * @param size      the number of bytes to push onto \p sstack
+ *
+ * @return          the address of first allocated byte , NULL on
+ *                  error and errno is set appropriately
+ *
+ * @error EINVAL    \p size is greater than \p sstack's chunk size
+ * @error ENOMEM    there is not enough memory available
+ */
+void *
+rbh_sstack_alloc(struct rbh_sstack *sstack, size_t size);
+
+/**
+ * Use rbh_sstack_alloc to allocate memory on \p sstack and copy \p str to it
+ *
+ * @param sstack    the sstack to push data onto
+ * @param str       the string to copy on the stack
+ *
+ * @return          the address of the duplicated string, NULL on
+ *                  error and errno is set appropriately
+ *
+ * @error EINVAL    \p str is greater than \p sstack's chunk size
+ * @error ENOMEM    there is not enough memory available
+ */
+char *
+rbh_sstack_strdup(struct rbh_sstack *sstack, const char *str);
+
+char *
+rbh_sstack_strndup(struct rbh_sstack *sstack, const char *str, size_t size);
+
+/**
+ * Pop all the data on \p sstack
+ */
+void
+rbh_sstack_pop_all(struct rbh_sstack *sstack);
+
 #define RBH_SSTACK_PUSH(_sstack, _data, _size) \
     ({ \
         void *_result = rbh_sstack_push(_sstack, _data, _size); \

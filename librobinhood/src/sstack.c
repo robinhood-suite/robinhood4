@@ -12,6 +12,7 @@
 #include <assert.h>
 #include <errno.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "robinhood/stack.h"
 #include "robinhood/sstack.h"
@@ -107,6 +108,42 @@ retry:
 }
 
 void *
+rbh_sstack_alloc(struct rbh_sstack *sstack, size_t size)
+{
+    size_t align = _Alignof(max_align_t);
+
+    if (size & (align - 1))
+        /* allocate a bit more to make sure data is always properly aligned */
+        size = (size & ~(align - 1)) + align;
+
+    return rbh_sstack_push(sstack, NULL, size);
+}
+
+char *
+rbh_sstack_strdup(struct rbh_sstack *sstack, const char *str)
+{
+    size_t len = strlen(str) + 1;
+    char *dup;
+
+    dup = rbh_sstack_alloc(sstack, len);
+    strcpy(dup, str);
+
+    return dup;
+}
+
+char *
+rbh_sstack_strndup(struct rbh_sstack *sstack, const char *str, size_t size)
+{
+    char *dup;
+
+    dup = rbh_sstack_alloc(sstack, size + 1);
+    strncpy(dup, str, size);
+    dup[size] = '\0';
+
+    return dup;
+}
+
+void *
 rbh_sstack_peek(struct rbh_sstack *sstack, size_t *readable)
 {
     return rbh_stack_peek(sstack->stacks[sstack->current], readable);
@@ -125,6 +162,19 @@ rbh_sstack_pop(struct rbh_sstack *sstack, size_t count)
         sstack->current--;
 
     return 0;
+}
+
+void
+rbh_sstack_pop_all(struct rbh_sstack *sstack)
+{
+    while (sstack->current != 0) {
+        struct rbh_stack *stack = sstack->stacks[sstack->current];
+        size_t count;
+
+        rbh_stack_peek(stack, &count);
+        rbh_stack_pop(stack, count);
+        sstack->current--;
+    }
 }
 
 void
