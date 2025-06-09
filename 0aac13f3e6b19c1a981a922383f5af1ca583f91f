@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9f9a4a71_fae6a20b",
+        "filename": "librobinhood/src/plugins/sqlite/json/decode.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-06-09T15:09:03Z",
+      "side": 1,
+      "message": "This code is changed in another patch. I\u0027ll fix it then.",
+      "parentUuid": "71d36bc1_683c09a5",
+      "range": {
+        "startLine": 60,
+        "startChar": 24,
+        "endLine": 60,
+        "endChar": 30
+      },
+      "revId": "0aac13f3e6b19c1a981a922383f5af1ca583f91f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "baa0d0c4_6bf8c017",
@@ -61,6 +85,30 @@
       "side": 1,
       "message": "I\u0027ll leave it here for now. I\u0027ll do a patch at the end of the stack to properly manage memory allocations. I know there are a few memory leaks in the current implementation.",
       "parentUuid": "baa0d0c4_6bf8c017",
+      "range": {
+        "startLine": 87,
+        "startChar": 29,
+        "endLine": 87,
+        "endChar": 66
+      },
+      "revId": "0aac13f3e6b19c1a981a922383f5af1ca583f91f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "482a9ebd_479736c9",
+        "filename": "librobinhood/src/plugins/sqlite/json/decode.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-06-09T15:09:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1723f7de_7bbd4863",
       "range": {
         "startLine": 87,
         "startChar": 29,
