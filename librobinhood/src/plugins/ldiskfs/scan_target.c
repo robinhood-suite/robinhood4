@@ -148,9 +148,63 @@ scan_inodes(struct ldiskfs_backend *backend)
     return true;
 }
 
+static void
+link_dentry(struct rbh_dentry *parent, struct rbh_dentry *child)
+{
+    child->parent = parent;
+    parent->children = g_list_append(parent->children, child);
+}
+
+static int
+dblist_iter_cb(ext2_ino_t parent_ino, int entry,
+               struct ext2_dir_entry *dentry,
+               int offset, int blocksize,
+               char *buf, void *private)
+{
+    struct rbh_dcache *dcache = private;
+    struct rbh_dentry *cached_dentry;
+    struct rbh_dentry *parent;
+    int namelen;
+
+    (void) entry;
+    (void) offset;
+    (void) blocksize;
+    (void) buf;
+
+    if (dentry->inode == 0)
+        return 0;
+
+    namelen = ext2fs_dirent_name_len(dentry);
+    if ((namelen == 2 && !strcmp(dentry->name, "..")) ||
+        (namelen == 1 && !strcmp(dentry->name, ".")))
+        return 0;
+
+    parent = rbh_dcache_find(dcache, parent_ino);
+    cached_dentry = rbh_dcache_find(dcache, dentry->inode);
+
+    assert(parent && cached_dentry);
+
+    cached_dentry->name = strndup(dentry->name, namelen);
+    cached_dentry->namelen = namelen;
+
+    link_dentry(parent, cached_dentry);
+
+    return 0;
+}
+
 static bool
 scan_dentries(struct ldiskfs_backend *backend)
 {
+    errcode_t rc;
+
+    rc = ext2fs_dblist_dir_iterate(backend->fs->dblist,
+                                   DIRENT_FLAG_INCLUDE_EMPTY,
+                                   NULL,
+                                   dblist_iter_cb,
+                                   backend->dcache);
+    if (rc)
+        return ldiskfs_error(rc, "failed to scan through directory block list");
+
     return true;
 }
 
