@@ -259,7 +259,7 @@ sqlite_iterator_new(void)
 
 static bool
 filter2sql(const struct rbh_filter *filter, struct sqlite_filter_where *where,
-           size_t depth, bool negate);
+           bool enter_subexpr, bool negate);
 
 const char *int64_ops[] = {
     [RBH_FOP_EQUAL]            = "%s = ?",
@@ -587,6 +587,12 @@ empty_filter(const struct rbh_filter *filter)
 }
 
 static bool
+is_or(const struct rbh_filter *filter)
+{
+    return filter->op == RBH_FOP_OR;
+}
+
+static bool
 and2sql(const struct rbh_filter *filter, struct sqlite_filter_where *where,
         size_t depth, bool negate)
 {
@@ -596,10 +602,14 @@ and2sql(const struct rbh_filter *filter, struct sqlite_filter_where *where,
     }
 
     for (size_t i = 0; i < filter->logical.count; i++) {
+        bool needs_paren;
+
         if (!filter->logical.filters[i])
             continue;
 
-        if (!filter2sql(filter->logical.filters[i], where, depth, false))
+        needs_paren = is_or(filter->logical.filters[i]);
+        if (!filter2sql(filter->logical.filters[i], where,
+                        needs_paren, false))
             return false;
 
         if (i != filter->logical.count - 1 &&
@@ -633,8 +643,7 @@ or2sql(const struct rbh_filter *filter, struct sqlite_filter_where *where,
             continue;
 
         if (!filter2sql(filter->logical.filters[i], where,
-                        depth + (needs_paren ? 1 : 0),
-                        false))
+                        needs_paren, false))
             return false;
 
         if (i != filter->logical.count - 1 &&
@@ -696,15 +705,15 @@ logical_filter2sql(const struct rbh_filter *filter,
 {
     switch (filter->op) {
     case RBH_FOP_AND:
-        return and2sql(filter, where, depth, negate);
+        return and2sql(filter, where, false, negate);
     case RBH_FOP_NOT:
-        return filter2sql(filter->logical.filters[0], where, depth, !negate);
+        return filter2sql(filter->logical.filters[0], where, false, !negate);
     case RBH_FOP_OR:
-        return or2sql(filter, where, depth, negate);
+        return or2sql(filter, where, false, negate);
     case RBH_FOP_GET:
-        return filter2sql(filter->get.filter, where, depth, negate);
+        return filter2sql(filter->get.filter, where, false, negate);
     case RBH_FOP_ELEMMATCH:
-        return elemmatch2sql(filter, where, depth, negate);
+        return elemmatch2sql(filter, where, false, negate);
     default:
         abort();
     }
@@ -713,13 +722,13 @@ logical_filter2sql(const struct rbh_filter *filter,
 
 static bool
 filter2sql(const struct rbh_filter *filter, struct sqlite_filter_where *where,
-           size_t depth, bool negate)
+           bool enter_subexpr, bool negate)
 {
-    return (depth > 0 ? sfw_clause_format(where, "(") : true) &&
+    return (enter_subexpr ? sfw_clause_format(where, "(") : true) &&
         (rbh_is_comparison_operator(filter->op) ?
-         comparison_filter2sql(filter, where, depth, negate, NULL) :
-         logical_filter2sql(filter, where, depth, negate)) &&
-        (depth > 0 ? sfw_clause_format(where, ")") : true);
+         comparison_filter2sql(filter, where, false, negate, NULL) :
+         logical_filter2sql(filter, where, false, negate)) &&
+        (enter_subexpr ? sfw_clause_format(where, ")") : true);
 }
 
 static bool
@@ -732,7 +741,7 @@ filter2where_clause(const struct rbh_filter *filter,
     if (!sfw_clause_format(where, " where "))
         return false;
 
-    if (!filter2sql(filter, where, 0, false))
+    if (!filter2sql(filter, where, false, false))
         return false;
 
     if (!strcmp(where->clause, " where "))

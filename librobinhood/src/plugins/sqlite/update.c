@@ -245,7 +245,7 @@ statx_field(const struct rbh_fsevent *fsevent, uint32_t attr)
 }
 
 static size_t
-upsert_query_size(const struct rbh_fsevent *fsevent, bool has_xattrs)
+upsert_query_size(const struct rbh_fsevent *fsevent)
 {
     uint32_t mask = fsevent->upsert.statx->stx_mask;
     const char *symlink = fsevent->upsert.symlink;
@@ -263,12 +263,10 @@ upsert_query_size(const struct rbh_fsevent *fsevent, bool has_xattrs)
     query_size += 4 * (nb_attrs - 1); // comma + space between attribute names and '?'
     query_size += nb_attrs; // 1 '?' per attribute
     query_size += 2 * (nb_attrs - 1); // comma + space between the excluded
-    if (has_xattrs) {
-        query_size += sizeof(", xattrs");
-        query_size += sizeof(", ?");
-        query_size +=
-            sizeof(", xattrs=json_patch(entries.xattrs, excluded.xattrs)");
-    }
+    query_size += sizeof(", xattrs");
+    query_size += sizeof(", ?");
+    query_size +=
+        sizeof(", xattrs=json_patch(entries.xattrs, excluded.xattrs)");
 
     if (symlink) {
         query_size += sizeof(", symlink");
@@ -297,10 +295,10 @@ fsevent_has_xattrs(const struct rbh_fsevent *fsevent)
 }
 
 static const char *
-build_upsert_query(const struct rbh_fsevent *fsevent, bool has_xattrs)
+build_upsert_query(const struct rbh_fsevent *fsevent)
 {
     uint32_t mask = fsevent->upsert.statx->stx_mask;
-    size_t size = upsert_query_size(fsevent, has_xattrs);
+    size_t size = upsert_query_size(fsevent);
     const char *symlink = fsevent->upsert.symlink;
     char *query;
     int i;
@@ -320,15 +318,12 @@ build_upsert_query(const struct rbh_fsevent *fsevent, bool has_xattrs)
             /* do not insert ',' for the last parameter */
             strncat(query, ", ", size);
     }
-    if (has_xattrs)
-        strncat(query, ", xattrs", size);
+    strncat(query, ", xattrs", size);
     if (symlink)
         strncat(query, ", symlink", size);
 
 
-    strncat(query, ") values (?, ?, ", size);
-    if (has_xattrs)
-        strncat(query, "?, ", size);
+    strncat(query, ") values (?, ?, ?, ", size);
     if (symlink)
         strncat(query, "?, ", size);
 
@@ -355,9 +350,8 @@ build_upsert_query(const struct rbh_fsevent *fsevent, bool has_xattrs)
             /* do not insert ' ' for the last parameter */
             strncat(query, ", ", size);
     }
-    if (has_xattrs)
-        strncat(query, ", xattrs=json_patch(entries.xattrs, excluded.xattrs)",
-                size);
+    strncat(query, ", xattrs=json_patch(entries.xattrs, excluded.xattrs)",
+            size);
     if (symlink)
         strncat(query, ", symlink=excluded.symlink", size);
 
@@ -369,7 +363,7 @@ sqlite_process_upsert(struct sqlite_backend *sqlite,
                       const struct rbh_fsevent *fsevent)
 {
     bool has_xattrs = fsevent_has_xattrs(fsevent);
-    const char *insert = build_upsert_query(fsevent, has_xattrs);
+    const char *insert = build_upsert_query(fsevent);
     uint32_t mask = fsevent->upsert.statx->stx_mask;
     struct sqlite_cursor *cursor = &sqlite->cursor;
     const char *symlink = fsevent->upsert.symlink;
@@ -399,6 +393,13 @@ sqlite_process_upsert(struct sqlite_backend *sqlite,
 
         res = sqlite_cursor_bind_string(cursor, xattrs);
         if (!res)
+            goto free_insert;
+    } else {
+        if (!sqlite_cursor_bind_string(cursor, "{}"))
+            /* always try to insert empty object otherwise json_patch won't
+             * merge xattrs on subsequent upserts if entries.xattrs is an empty
+             * string.
+             */
             goto free_insert;
     }
     if (symlink) {
