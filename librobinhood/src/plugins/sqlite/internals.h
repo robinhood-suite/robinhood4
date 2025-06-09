@@ -85,6 +85,11 @@ sqlite_branch_root(void *backend,
 void
 sqlite_backend_destroy(void *backend);
 
+int
+sqlite_backend_insert_metadata(void *backend,
+                               const struct rbh_value_map *value,
+                               enum metadata_type type);
+
 /* Open db connexion. Create the DB if it does not exist */
 bool
 sqlite_backend_open(struct sqlite_backend *sqlite,
