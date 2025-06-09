@@ -115,4 +115,7 @@ sqlite_cursor_bind_binary(struct sqlite_cursor *cursor,
 bool
 sqlite_cursor_get_id(struct sqlite_cursor *cursor, struct rbh_id *dst);
 
+const char *
+sqlite_xattr2json(const struct rbh_value_map *xattrs);
+
 #endif
