@@ -406,7 +406,7 @@ generic_branch_backend_filter(void *backend, const struct rbh_filter *filter,
     /* The recursive traversal of the branch prevents a few features from
      * working out of the box.
      */
-    if (options->skip || options->limit || options->sort.count) {
+    if (options->skip || options->limit) {
         errno = ENOTSUP;
         return NULL;
     }
@@ -461,8 +461,10 @@ generic_branch_backend_filter(void *backend, const struct rbh_filter *filter,
         goto out_free_first_ids_ringr;
     }
 
-    iter->options = *options;
-    iter->output = *output;
+    if (options)
+        iter->options = *options;
+    if (output)
+        iter->output = *output;
     iter->backend = backend;
     iter->iterator = BRANCH_ITERATOR;
 
