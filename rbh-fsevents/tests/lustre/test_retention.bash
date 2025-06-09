@@ -36,7 +36,7 @@ test_retention()
     local path_without_mount="$(realpath $entry)"
     path_without_mount="${path_without_mount#"$LUSTRE_DIR"}"
 
-    setfattr -n user.expires -v +5 $entry
+    setfattr -n user.expires -v +20 $entry
 
     invoke_rbh-fsevents
 
@@ -44,15 +44,15 @@ test_retention()
 
     verify_lustre "$entry"
 
-    local exp_time="$(( $(stat -c %X $entry) + 5))"
+    local exp_time="$(( $(stat -c %X $entry) + 20))"
     find_attribute \
         '"xattrs.trusted.expiration_date": NumberLong("'$exp_time'")'\
         '"ns.name": "'$entry'"'
-    find_attribute '"xattrs.user.expires": "+5"' '"ns.name": "'$entry'"'
+    find_attribute '"xattrs.user.expires": "+20"' '"ns.name": "'$entry'"'
 
     rbh_find "rbh:$db:$testdb" -expired | sort | difflines
 
-    date --set="@$(( $(stat -c %X $entry) + 6))"
+    date --set="@$(( $(stat -c %X $entry) + 21))"
 
     rbh_find "rbh:$db:$testdb" -expired | sort |
         difflines "/$path_without_mount"
@@ -63,15 +63,15 @@ test_retention()
 
     verify_lustre "$entry"
 
-    exp_time="$(( $(stat -c %Y $entry) + 5))"
+    exp_time="$(( $(stat -c %Y $entry) + 20))"
     find_attribute \
         '"xattrs.trusted.expiration_date": NumberLong("'$exp_time'")'\
         '"ns.name": "'$entry'"'
-    find_attribute '"xattrs.user.expires": "+5"' '"ns.name": "'$entry'"'
+    find_attribute '"xattrs.user.expires": "+20"' '"ns.name": "'$entry'"'
 
     rbh_find "rbh:$db:$testdb" -expired | sort | difflines
 
-    date --set="@$(( $(stat -c %Y $entry) + 6))"
+    date --set="@$(( $(stat -c %Y $entry) + 21))"
 
     rbh_find "rbh:$db:$testdb" -expired | sort |
         difflines "/$path_without_mount"
