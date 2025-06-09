@@ -120,7 +120,6 @@ sqlite_backend_open(struct sqlite_backend *sqlite,
     }
 
 ok:
-
     if (!(load_modules(sqlite->db) &&
           setup_custom_functions(sqlite->db))) {
         sqlite3_close_v2(sqlite->db);
