@@ -25,6 +25,11 @@ struct ldiskfs_backend {
     struct rbh_dcache *dcache;
 };
 
+struct rbh_mut_iterator *
+ldiskfs_backend_filter(void *backend, const struct rbh_filter *filter,
+                       const struct rbh_filter_options *options,
+                       const struct rbh_filter_output *output);
+
 void
 ldiskfs_backend_destroy(void *backend);
 
