@@ -14,6 +14,10 @@
 
 #include <robinhood/backends/ldiskfs.h>
 
+struct ldiskfs_backend {
+    struct rbh_backend backend;
+};
+
 void
 ldiskfs_backend_destroy(void *backend);
 
