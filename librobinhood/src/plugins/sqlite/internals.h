@@ -15,6 +15,7 @@
 #include <assert.h>
 #include <jansson.h>
 #include <sqlite3.h>
+#include <sys/stat.h>
 #include <sys/user.h>
 
 #include <robinhood/backends/sqlite.h>

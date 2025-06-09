@@ -118,7 +118,6 @@ sqlite_backend_open(struct sqlite_backend *sqlite,
     int mode = read_only ? SQLITE_OPEN_READONLY : SQLITE_OPEN_READWRITE;
     int rc;
 
-    sqlite->path = path;
     sqlite->read_only = read_only;
     rc = sqlite3_open_v2(path, &sqlite->db, mode, NULL);
     if (rc == SQLITE_OK)
