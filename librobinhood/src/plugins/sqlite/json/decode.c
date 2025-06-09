@@ -8,25 +8,29 @@
 #include "internals.h"
 
 static bool
-json2value_map(json_t *object, struct rbh_value_map *map);
+json2value_map(json_t *object, struct rbh_value_map *map,
+               struct rbh_sstack *sstack);
 
 static bool
-json2value(json_t *object, struct rbh_value *value);
+json2value(json_t *object, struct rbh_value *value,
+           struct rbh_sstack *sstack);
 
 static bool
-json_array2sequence(json_t *object, struct rbh_value *value)
+json_array2sequence(json_t *object, struct rbh_value *value,
+                    struct rbh_sstack *sstack)
 {
     struct rbh_value *values;
     json_t *elem;
     size_t index;
 
     value->sequence.count = json_array_size(object);
-    values = malloc(sizeof(*values) * value->sequence.count);
+    values = rbh_sstack_alloc(sstack, NULL,
+                              sizeof(*values) * value->sequence.count);
     if (!values)
         return false;
 
     json_array_foreach(object, index, elem) {
-        if (!json2value(elem, &values[index]))
+        if (!json2value(elem, &values[index], sstack))
             return false;
     }
 
@@ -36,7 +40,8 @@ json_array2sequence(json_t *object, struct rbh_value *value)
 }
 
 static bool
-json2value(json_t *object, struct rbh_value *value)
+json2value(json_t *object, struct rbh_value *value,
+           struct rbh_sstack *sstack)
 {
     if (json_is_integer(object)) {
         /* /!\ jansson stores integers as long long (i.e. int64_t) so we cannot
@@ -46,18 +51,22 @@ json2value(json_t *object, struct rbh_value *value)
         value->int64 = json_integer_value(object);
     } else if (json_is_object(object)) {
         value->type = RBH_VT_MAP;
-        if (!json2value_map(object, &value->map))
+        if (!json2value_map(object, &value->map, sstack))
             return false;
     } else if (json_is_array(object)) {
         value->type = RBH_VT_SEQUENCE;
-        if (!json_array2sequence(object, value))
+        if (!json_array2sequence(object, value, sstack))
             return false;
     } else if (json_is_boolean(object)) {
         value->type = RBH_VT_BOOLEAN;
         value->boolean = json_boolean_value(object);
     } else if (json_is_string(object)) {
+        const char *s = json_string_value(object);
+
         value->type = RBH_VT_STRING;
-        value->string = strdup(json_string_value(object));
+        value->string = rbh_sstack_alloc(sstack, s, strlen(s) + 1);
+        if (!value->string)
+            return false;
     } else if (json_is_null(object)) {
         value->type = RBH_VT_NULL;
     }
@@ -66,17 +75,17 @@ json2value(json_t *object, struct rbh_value *value)
 }
 
 static bool
-json2value_map(json_t *object, struct rbh_value_map *map)
+json2value_map(json_t *object, struct rbh_value_map *map,
+               struct rbh_sstack *sstack)
 {
     struct rbh_value_pair *pairs;
     const char *key;
-    int save_errno;
     json_t *value;
     size_t count;
     size_t i = 0;
 
     count = json_object_size(object);
-    pairs = malloc(sizeof(*pairs) * count);
+    pairs = rbh_sstack_alloc(sstack, NULL, sizeof(*pairs) * count);
     if (!pairs)
         return false;
 
@@ -84,16 +93,16 @@ json2value_map(json_t *object, struct rbh_value_map *map)
         struct rbh_value_pair *xattr = &pairs[i];
         struct rbh_value *tmp;
 
-        tmp = malloc(sizeof(*xattr->value));
+        tmp = rbh_sstack_alloc(sstack, NULL, sizeof(*xattr->value));
         if (!tmp)
-            goto free_pairs; // TODO free already allocated values
+            return false;
 
-        if (!json2value(value, tmp))
-            goto free_pairs;
+        if (!json2value(value, tmp, sstack))
+            return false;
 
-        xattr->key = strdup(key);
+        xattr->key = rbh_sstack_alloc(sstack, key, strlen(key) + 1);
         if (!xattr->key)
-            goto free_pairs;
+            return false;
 
         xattr->value = tmp;
         i++;
@@ -102,16 +111,11 @@ json2value_map(json_t *object, struct rbh_value_map *map)
     map->pairs = pairs;
     map->count = count;
     return true;
-
-free_pairs:
-    save_errno = errno;
-    free(pairs);
-    errno = save_errno;
-    return false;
 }
 
 bool
-sqlite_json2xattrs(const char *json, struct rbh_value_map *xattrs)
+sqlite_json2xattrs(const char *json, struct rbh_value_map *xattrs,
+                   struct rbh_sstack *sstack)
 {
     json_error_t error;
     json_t *object;
@@ -127,7 +131,7 @@ sqlite_json2xattrs(const char *json, struct rbh_value_map *xattrs)
         return sqlite_fail("failed to parse json xattrs '%s': %s",
                            json, error.text);
 
-    res = json2value_map(object, xattrs);
+    res = json2value_map(object, xattrs, sstack);
     json_decref(object);
     return res;
 }
