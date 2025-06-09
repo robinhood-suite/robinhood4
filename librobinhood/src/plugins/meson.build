@@ -26,6 +26,7 @@ library_dirs = [
     'posix/enrichers/retention',
     'posix/iterators/mfu',
     's3',
+    'sqlite',
 ]
 foreach backend: library_dirs
     # FIXME env.prepend only work with meson > 0.58.0
