@@ -39,6 +39,8 @@ test_collection_count()
 
 test_collection_avg_obj_size()
 {
+    mongo_only_test
+
     rbh_sync "rbh:posix:." "rbh:$db:$testdb"
 
     local rbh_info_avg_obj_size=$(rbh_info "rbh:$db:$testdb" -a)

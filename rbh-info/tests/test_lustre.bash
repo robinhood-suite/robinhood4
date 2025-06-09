@@ -15,11 +15,9 @@ test_dir=$(dirname $(readlink -e $0))
 
 test_lustre_source()
 {
-    mongo_only_test
+    rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
 
-    rbh_sync "rbh:lustre:." "rbh:mongo:$testdb"
-
-    local output=$(rbh_info "rbh:mongo:$testdb" -b)
+    local output=$(rbh_info "rbh:$db:$testdb" -b)
     local n_lines=$(echo "$output" | wc -l)
 
     if ((n_lines != 3)); then
