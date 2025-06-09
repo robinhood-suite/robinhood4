@@ -56,6 +56,7 @@ struct sqlite_backend {
     bool read_only;
     sqlite3 *db;
     struct rbh_sstack *sstack;
+    uint64_t version;
 };
 
 struct sqlite_iterator {
