@@ -131,9 +131,10 @@ sqlite_iter_next(void *iterator)
     const char *ns_xattrs_json;
     const char *symlink = NULL;
     struct rbh_statx statx;
-    int save_errno;
 
     cursor = &iter->cursor;
+
+    sqlite_cursor_free(cursor);
 
     if (iter->done) {
         errno = ENODATA;
@@ -195,11 +196,14 @@ sqlite_iter_next(void *iterator)
 
     inode_xattrs_json = sqlite_cursor_get_string(cursor);
     ns_xattrs_json = sqlite_cursor_get_string(cursor);
-    if (!(sqlite_json2xattrs(inode_xattrs_json, &inode_xattrs) &&
-          sqlite_json2xattrs(ns_xattrs_json, &ns_xattrs))) {
+    if (!(sqlite_json2xattrs(inode_xattrs_json, &inode_xattrs,
+                             cursor->sstack) &&
+          sqlite_json2xattrs(ns_xattrs_json, &ns_xattrs,
+                             cursor->sstack))) {
         fsentry = NULL;
-        goto out_free;
+        return NULL;
     }
+
     symlink = sqlite_cursor_get_string(cursor);
 
     errno = ENODATA;
@@ -212,12 +216,6 @@ sqlite_iter_next(void *iterator)
                               &ns_xattrs,
                               &inode_xattrs,
                               symlink);
-
-out_free:
-    save_errno = errno;
-    free((void *)tmp.id.data);
-    free((void *)tmp.parent_id.data);
-    errno = save_errno;
 
     return fsentry;
 }
@@ -777,7 +775,7 @@ bind_map(struct sqlite_cursor *cursor, const struct rbh_value_map *map)
 }
 
 static const char *
-sqlite_regex(const struct rbh_value *regex)
+sqlite_regex(struct sqlite_cursor *cursor, const struct rbh_value *regex)
 {
     const char *value;
     char *tmp;
@@ -788,7 +786,17 @@ sqlite_regex(const struct rbh_value *regex)
         value = regex->regex.string;
 
     if (regex->regex.options & RBH_RO_CASE_INSENSITIVE) {
-        asprintf(&tmp, "(?i)%s", value);
+        size_t len = strlen(value) + 5;
+        int rc;
+
+        tmp = sqlite_cursor_alloc(cursor, len);
+        if (!tmp)
+            return NULL;
+
+        rc = snprintf(tmp, len, "(?i)%s", value);
+        if (rc == -1 || rc != len - 1)
+            return NULL;
+
         value = tmp;
     }
 
@@ -822,7 +830,7 @@ bind_value(struct sqlite_cursor *cursor, const struct rbh_value *value,
             return true;
 
         if (bin_as_string) {
-            buf = malloc(2 * value->binary.size + 1);
+            buf = sqlite_cursor_alloc(cursor, 2 * value->binary.size + 1);
             if (!buf)
                 return false;
 
@@ -833,7 +841,7 @@ bind_value(struct sqlite_cursor *cursor, const struct rbh_value *value,
         return sqlite_cursor_bind_binary(cursor, value->binary.data,
                                          value->binary.size);
     case RBH_VT_REGEX:
-        return sqlite_cursor_bind_string(cursor, sqlite_regex(value));
+        return sqlite_cursor_bind_string(cursor, sqlite_regex(cursor, value));
     case RBH_VT_SEQUENCE:
         return bind_sequence(cursor, value->sequence.values,
                              value->sequence.count);
@@ -843,20 +851,35 @@ bind_value(struct sqlite_cursor *cursor, const struct rbh_value *value,
     __builtin_unreachable();
 }
 
+static char *
+sql_json_field(struct sqlite_cursor *cursor, const char *key)
+{
+    char *field;
+    size_t len;
+    int rc;
+
+    len = strlen(key) + 3;
+    field = sqlite_cursor_alloc(cursor, len);
+    rc = snprintf(field, len, "$.%s", key);
+    if (rc == -1 || rc != len - 1)
+        return NULL;
+
+    return field;
+}
+
 static bool
 bind_comparison_values(struct sqlite_cursor *cursor,
                        const struct rbh_filter *filter)
 {
     char *xattr;
-    int rc;
 
     switch (filter->op) {
     case RBH_FOP_REGEX:
         if (filter->compare.field.fsentry == RBH_FP_INODE_XATTRS ||
             filter->compare.field.fsentry == RBH_FP_NAMESPACE_XATTRS) {
 
-            rc = asprintf(&xattr, "$.%s", filter->compare.field.xattr);
-            if (rc == -1)
+            xattr = sql_json_field(cursor, filter->compare.field.xattr);
+            if (!xattr)
                 return false;
 
             return sqlite_cursor_bind_string(cursor, xattr) &&
@@ -875,9 +898,9 @@ bind_comparison_values(struct sqlite_cursor *cursor,
             break;
         }
 
-        rc = asprintf(&xattr, "$.%s", filter->compare.field.xattr);
-        if (rc == -1)
-            return false;
+        xattr = sql_json_field(cursor, filter->compare.field.xattr);
+        if (!xattr)
+            return NULL;
 
         return sqlite_cursor_bind_string(cursor, xattr) &&
             bind_value(cursor, &filter->compare.value, true);
@@ -888,8 +911,9 @@ bind_comparison_values(struct sqlite_cursor *cursor,
     if (filter->op != RBH_FOP_IN &&
         (filter->compare.field.fsentry == RBH_FP_INODE_XATTRS ||
          filter->compare.field.fsentry == RBH_FP_NAMESPACE_XATTRS)) {
-        rc = asprintf(&xattr, "$.%s", filter->compare.field.xattr);
-        if (rc == -1)
+
+        xattr = sql_json_field(cursor, filter->compare.field.xattr);
+        if (!xattr)
             return false;
 
         if (filter->op == RBH_FOP_EXISTS)
@@ -922,9 +946,12 @@ static bool
 bind_array_values(struct sqlite_cursor *cursor, const struct rbh_filter *filter)
 {
     char *xattr;
+    size_t len;
     int rc;
 
-    rc = asprintf(&xattr, "$.%s", filter->array.field.xattr);
+    len = strlen(filter->compare.field.xattr) + 3;
+    xattr = sqlite_cursor_alloc(cursor, len);
+    rc = snprintf(xattr, len, "$.%s", filter->array.field.xattr);
     if (rc == -1)
         return false;
 

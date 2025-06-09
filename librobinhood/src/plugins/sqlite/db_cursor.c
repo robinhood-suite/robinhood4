@@ -49,6 +49,8 @@ sqlite_cursor_setup(struct sqlite_backend *backend,
                     struct sqlite_cursor *cursor)
 {
     cursor->db = backend->db;
+    cursor->sstack = rbh_sstack_new(SQLITE_MAX_ALLOC_SIZE);
+
     return true;
 }
 
@@ -76,6 +78,7 @@ sqlite_setup_query(struct sqlite_cursor *cursor, const char *query)
 bool
 sqlite_cursor_fini(struct sqlite_cursor *cursor)
 {
+    rbh_sstack_destroy(cursor->sstack);
     sqlite3_finalize(cursor->stmt);
     return true;
 }
@@ -217,7 +220,7 @@ sqlite_cursor_get_id(struct sqlite_cursor *cursor, struct rbh_id *dst)
     int col = cursor->col++;
 
     dst->size = sqlite3_column_bytes(cursor->stmt, col);
-    dst->data = malloc(dst->size);
+    dst->data = sqlite_cursor_alloc(cursor, dst->size);
     if (!dst->data)
         return sqlite_fail("failed to allocate buffer");
 

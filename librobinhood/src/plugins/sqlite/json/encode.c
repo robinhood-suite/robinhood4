@@ -8,16 +8,17 @@
 #include "internals.h"
 
 static json_t *
-map2json(const struct rbh_value_map *value);
+map2json(const struct rbh_value_map *value, struct rbh_sstack *sstack);
 
 static json_t *
-sequence2json(const struct rbh_value *value);
+sequence2json(const struct rbh_value *value, struct rbh_sstack *sstack);
 
 static json_t *
-binary2json(const struct rbh_value *value);
+binary2json(const struct rbh_value *value,
+            struct rbh_sstack *sstack);
 
 static json_t *
-value2json(const struct rbh_value *value)
+value2json(const struct rbh_value *value, struct rbh_sstack *sstack)
 {
     json_t *object;
 
@@ -47,32 +48,31 @@ value2json(const struct rbh_value *value)
         object = json_string(value->string);
         break;
     case RBH_VT_BINARY:
-        object = binary2json(value);
+        object = binary2json(value, sstack);
         break;
     case RBH_VT_REGEX:
         abort(); /* Regex values are not supposed to be stored in the backend */
         break;
     case RBH_VT_SEQUENCE:
-        object = sequence2json(value);
+        object = sequence2json(value, sstack);
         break;
     case RBH_VT_MAP:
-        object = map2json(&value->map);
+        object = map2json(&value->map, sstack);
         break;
     }
 
     return object;
-
 }
 
 static json_t *
-sequence2json(const struct rbh_value *sequence)
+sequence2json(const struct rbh_value *sequence, struct rbh_sstack *sstack)
 {
     json_t *array = json_array();
 
     for (size_t i = 0; i < sequence->sequence.count; i++) {
         json_t *elem;
 
-        elem = value2json(&sequence->sequence.values[i]);
+        elem = value2json(&sequence->sequence.values[i], sstack);
         if (!elem) {
             json_decref(array);
             return NULL;
@@ -97,11 +97,11 @@ bin2hex(const struct rbh_value *binary, char *buf)
 }
 
 static json_t *
-binary2json(const struct rbh_value *binary)
+binary2json(const struct rbh_value *binary, struct rbh_sstack *sstack)
 {
     char *buf;
 
-    buf = malloc(2 * binary->binary.size + 1);
+    buf = rbh_sstack_alloc(sstack, 2 * binary->binary.size + 1);
     if (!buf)
         return NULL;
 
@@ -112,7 +112,7 @@ binary2json(const struct rbh_value *binary)
 }
 
 static json_t *
-create_subobjects(json_t *parent, const char *key)
+create_subobjects(json_t *parent, const char *key, struct rbh_sstack *sstack)
 {
     json_t *subobject;
     char *subkey;
@@ -122,22 +122,20 @@ create_subobjects(json_t *parent, const char *key)
     if (!dot)
         return parent;
 
-    subkey = strndup(key, dot - key);
+    subkey = rbh_sstack_strndup(sstack, key, dot - key);
     if (!subkey)
         return NULL;
 
     subobject = json_object_get(parent, subkey);
     if (!subobject) {
         subobject = json_object();
-        if (!subobject) {
-            free(subkey);
+        if (!subobject)
             return NULL;
-        }
     }
 
     json_object_set(parent, subkey, subobject);
-    free(subkey);
-    return create_subobjects(subobject, dot + 1);
+
+    return create_subobjects(subobject, dot + 1, sstack);
 }
 
 static const char *
@@ -152,7 +150,7 @@ last_key(const char *key)
 }
 
 static json_t *
-map2json(const struct rbh_value_map *map)
+map2json(const struct rbh_value_map *map, struct rbh_sstack *sstack)
 {
     json_t *object;
 
@@ -164,13 +162,13 @@ map2json(const struct rbh_value_map *map)
         json_t *subobject;
         json_t *value;
 
-        value = value2json(map->pairs[i].value);
+        value = value2json(map->pairs[i].value, sstack);
         if (!value) {
             json_decref(object);
             return NULL;
         }
 
-        subobject = create_subobjects(object, map->pairs[i].key);
+        subobject = create_subobjects(object, map->pairs[i].key, sstack);
         if (!subobject) {
             json_decref(object);
             return NULL;
@@ -183,17 +181,26 @@ map2json(const struct rbh_value_map *map)
 }
 
 const char *
-sqlite_xattr2json(const struct rbh_value_map *xattrs)
+sqlite_xattr2json(const struct rbh_value_map *xattrs,
+                  struct rbh_sstack *sstack)
 {
-    const char *repr;
     json_t *object;
+    int save_errno;
+    char *repr;
+    char *dup;
 
-    object = map2json(xattrs);
+    object = map2json(xattrs, sstack);
     if (!object)
         return NULL;
 
     repr = json_dumps(object, JSON_COMPACT);
     json_decref(object);
+    if (!repr)
+        return NULL;
 
-    return repr;
+    dup = rbh_sstack_strdup(sstack, repr);
+    save_errno = errno;
+    free(repr);
+    errno = save_errno;
+    return dup;
 }
