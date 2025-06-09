@@ -10,6 +10,7 @@ jansson = dependency('jansson', version: '>=1.16.0')
 librbh_sqlite = library(
     'rbh-sqlite',
     sources: [
+        'allocators.c',
         'backend.c',
         'branch.c',
         'custom_functions.c',
