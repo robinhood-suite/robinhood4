@@ -312,7 +312,7 @@ _get_collection_size(const struct rbh_value *value)
 
     buffer = _buffer;
 
-    size_printer(buffer, sizeof(_buffer), value->int32);
+    size_printer(buffer, sizeof(_buffer), value->int64);
 
     printf("%s\n", buffer);
 }

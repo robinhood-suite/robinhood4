@@ -219,12 +219,26 @@ backend_source(struct sqlite_backend *sqlite)
     return source;
 }
 
+static json_t *
+backend_size(struct sqlite_backend *sqlite, json_t *previous_info)
+{
+    json_t *info = previous_info ? : json_object();
+    struct stat st;
+
+    if (stat(sqlite->path, &st) == -1)
+        return NULL;
+
+    json_object_set_new(info, "size", json_integer(st.st_size));
+
+    return info;
+}
+
 struct rbh_value_map *
 sqlite_backend_get_info(void *backend, int flags)
 {
     struct sqlite_backend *sqlite = backend;
     struct rbh_value_map *map;
-    json_t *info;
+    json_t *info = NULL;
 
     map = malloc(sizeof(*map));
     if (!map)
@@ -232,6 +246,11 @@ sqlite_backend_get_info(void *backend, int flags)
 
     if (flags & RBH_INFO_BACKEND_SOURCE)
         info = backend_source(sqlite);
+    if (flags & RBH_INFO_SIZE)
+        info = backend_size(sqlite, info);
+
+    if (!info)
+        return NULL;
 
     if (!json2value_map(info, map, sqlite->sstack))
         goto free_map;

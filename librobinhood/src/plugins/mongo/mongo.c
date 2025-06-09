@@ -891,7 +891,7 @@ get_collection_stats(const struct mongo_backend *mongo, char *stats_to_find,
     struct rbh_value *value;
     bson_error_t error;
     bson_iter_t iter;
-    int32_t size = 0;
+    int64_t size = 0;
     bson_t *command;
     bson_t reply;
 
@@ -905,17 +905,17 @@ get_collection_stats(const struct mongo_backend *mongo, char *stats_to_find,
 
     if (bson_iter_init(&iter, &reply) &&
         bson_iter_find(&iter, stats_to_find)) {
-        if (BSON_ITER_HOLDS_INT32(&iter)) {
+        if (BSON_ITER_HOLDS_INT32(&iter))
             size = bson_iter_int32(&iter);
-        } else {
+        else
             goto out;
-        }
+
     } else {
         goto out;
     }
 
-    value->type = RBH_VT_INT32;
-    value->int32 = size;
+    value->type = RBH_VT_INT64;
+    value->int64 = size;
 
     if (strcmp(stats_to_find, "avgObjSize") == 0)
         pair->key = "average_object_size";
