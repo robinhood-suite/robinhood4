@@ -72,6 +72,48 @@ rbh_dcache_find_or_create(struct rbh_dcache *dcache, ext2_ino_t ino)
     return dentry;
 }
 
+static gint
+glist_name_cmp(gconstpointer a, gconstpointer b)
+{
+    const struct rbh_dentry *dentry = a;
+    const char *name = b;
+
+    return !strncmp(dentry->name, name, dentry->namelen);
+}
+
+static struct rbh_dentry *
+rbh_dir_lookup(struct rbh_dentry *parent, const char *name)
+{
+    GList *child;
+
+    if (!LINUX_S_ISDIR(parent->inode->i_mode)) {
+        errno = ENOTDIR;
+        return NULL;
+    }
+
+    child = g_list_find_custom(parent->children, name, glist_name_cmp);
+    if (!child) {
+        errno = ENOENT;
+        return NULL;
+    }
+
+    return child->data;
+}
+
+struct rbh_dentry *
+rbh_dcache_lookup(struct rbh_dcache *dcache, ext2_ino_t ino, const char *name)
+{
+    struct rbh_dentry *dentry;
+
+    dentry = rbh_dcache_find(dcache, ino);
+    if (!dentry) {
+        errno = ENOENT;
+        return NULL;
+    }
+
+    return rbh_dir_lookup(dentry, name);
+}
+
 struct iter_data {
     rbh_dcache_cb_t cb;
     void *udata;
@@ -94,39 +136,4 @@ rbh_dcache_foreach(struct rbh_dcache *dcache, rbh_dcache_cb_t cb, void *udata)
         .cb = cb,
     };
     g_hash_table_foreach(dcache->dentries, glib_foreach_cb, &data);
-}
-
-static void *
-rbh_dcache_iter_next(void *iterator)
-{
-    errno = ENODATA;
-    return NULL;
-}
-
-static void
-rbh_dcache_iter_destroy(void *iterator)
-{
-    struct rbh_dcache_iter *iter = iterator;
-
-    free(iter);
-}
-
-static const struct rbh_mut_iterator_operations DCACHE_ITER_OPS = {
-    .next    = rbh_dcache_iter_next,
-    .destroy = rbh_dcache_iter_destroy,
-};
-
-static const struct rbh_mut_iterator DCACHE_ITER = {
-    .ops = &DCACHE_ITER_OPS,
-};
-
-struct rbh_dcache_iter *
-rbh_dcache_iter_new(struct rbh_dcache *dcache)
-{
-    struct rbh_dcache_iter *iter;
-
-    iter = xmalloc(sizeof(*iter));
-    iter->iter = DCACHE_ITER;
-
-    return iter;
 }

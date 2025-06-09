@@ -214,3 +214,47 @@ scan_target(struct ldiskfs_backend *backend)
     return scan_inodes(backend) &&
         scan_dentries(backend);
 }
+
+int
+get_mdt_index(ext2_filsys fs)
+{
+    char volume_name[sizeof(fs->super->s_volume_name) + 1];
+    char *mdt_name;
+    long mdt_index;
+    char *index;
+    char *dash;
+    char *end;
+    int rc;
+
+    rc = snprintf(volume_name, sizeof(volume_name), "%.*s",
+             EXT2_LEN_STR(fs->super->s_volume_name));
+    if (rc == -1 || rc > sizeof(volume_name))
+        return -1;
+
+    dash = strchr(volume_name, '-');
+    if (!dash) {
+        rbh_backend_error_printf("no '-' found in volume name. Is this an Lustre target?");
+        return -1;
+    }
+
+    mdt_name = dash + 1;
+    if (strncmp(mdt_name, "MDT", 3)) {
+        rbh_backend_error_printf("'%s' is not an MDT UUID", volume_name);
+        return -1;
+    }
+
+    index = mdt_name + 3;
+    errno = 0;
+    mdt_index = strtol(index, &end, 10);
+    if (errno != 0 || *end != '\0') {
+        rbh_backend_error_printf("failed to parse MDT index '%s'", index);
+        return -1;
+    }
+
+    if (mdt_index > INT_MAX) {
+        rbh_backend_error_printf("MDT index '%ld' is too big", mdt_index);
+        return -1;
+    }
+
+    return (int) mdt_index;
+}
