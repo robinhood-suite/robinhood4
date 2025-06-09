@@ -19,6 +19,8 @@ get_binary_id_from_mongo()
 
     entry="$(echo "$entry" | tr -d '\n')"
     entry="BinData${entry#*BinData}"
+    # Newer versions of mongo use Binary.createFromBase64 not BinData
+    entry="BinData${entry#*Binary.createFromBase64}"
     entry="${entry%)*})"
 
     echo "$entry"
@@ -36,6 +38,7 @@ check_id_parent_id()
         parent="$(do_db get "$testdb" \
                   '"ns.xattrs.path": "'$parent_path'"' '"_id":1')"
         parent_id="$(get_binary_id_from_mongo "$parent")"
+        echo "$entry: '$entry_ns_parent' '$entry_ns_parent_id' '$parent' '$parent_id'"
 
         if [[ "$entry_ns_parent_id" != "$parent_id" ]]; then
             error "Id and parent Id differ for $entry, got " \
