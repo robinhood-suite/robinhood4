@@ -47,7 +47,7 @@ install_headers(librbh_mongo_h, subdir: 'robinhood/backends')
 # SQLite backend
 
 librbh_sqlite_conf = configuration_data()
-librbh_sqlite_conf.set('RBH_SQLITE_BACKEND_MAJOR', 0)
+librbh_sqlite_conf.set('RBH_SQLITE_BACKEND_MAJOR', 1)
 librbh_sqlite_conf.set('RBH_SQLITE_BACKEND_MINOR', 0)
 librbh_sqlite_conf.set('RBH_SQLITE_BACKEND_RELEASE', 0)
 
