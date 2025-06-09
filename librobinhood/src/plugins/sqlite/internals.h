@@ -12,6 +12,7 @@
 # include "config.h"
 #endif
 
+#include <assert.h>
 #include <jansson.h>
 #include <sqlite3.h>
 
