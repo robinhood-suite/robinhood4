@@ -766,7 +766,9 @@ setup_enrichers(struct enricher *enricher, const char *type,
 
         if (!strcmp(name, "lustre")) {
             enricher->extension_enrichers[i].name = "lustre";
+#ifdef HAVE_LUSTRE
             enricher->extension_enrichers[i].enrich_xattr = lustre_enrich_fsevent;
+#endif
             continue;
         } else if (!strcmp(name, "retention")) {
             enricher->extension_enrichers[i].name = "retention";

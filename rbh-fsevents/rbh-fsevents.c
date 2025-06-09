@@ -141,7 +141,6 @@ source_from_uri(const char *uri, const char *dump_file, uint64_t max_changelog)
         error(EXIT_FAILURE, errno, "cannot parse URI '%s'", uri);
 
     if (strcmp(raw_uri->scheme, RBH_SOURCE) != 0) {
-        free(raw_uri);
         error(EX_USAGE, 0, "%s: uri scheme not supported", raw_uri->scheme);
         __builtin_unreachable();
     }
@@ -158,6 +157,7 @@ source_from_uri(const char *uri, const char *dump_file, uint64_t max_changelog)
     else
         username = NULL;
 
+    (void) username;
     if (strcmp(raw_uri->path, "file") == 0) {
         source = source_from_file_uri(name, source_from_file);
     } else if (strcmp(raw_uri->path, "lustre") == 0) {
@@ -173,10 +173,10 @@ source_from_uri(const char *uri, const char *dump_file, uint64_t max_changelog)
         source = source_from_file_uri(name, source_from_hestia_file);
     }
 
-    free(raw_uri);
-
-    if (source)
+    if (source) {
+        free(raw_uri);
         return source;
+    }
 
     error(EX_USAGE, 0, "%s: uri path not supported", raw_uri->path);
     __builtin_unreachable();
