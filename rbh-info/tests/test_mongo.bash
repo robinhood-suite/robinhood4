@@ -31,10 +31,16 @@ test_mongo_source()
 #                                     MAIN                                     #
 ################################################################################
 
+drop_db2()
+{
+    do_db drop "$testdb-2"
+}
+
 declare -a tests=(test_mongo_source)
 
 tmpdir=$(mktemp --directory)
 trap -- "rm -rf '$tmpdir'" EXIT
 cd "$tmpdir"
 
+sub_teardown=drop_db2
 run_tests ${tests[@]}
