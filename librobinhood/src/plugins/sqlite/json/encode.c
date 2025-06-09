@@ -84,7 +84,7 @@ sequence2json(const struct rbh_value *sequence)
     return array;
 }
 
-static void
+void
 bin2hex(const struct rbh_value *binary, char *buf)
 {
     const void *data = binary->binary.data;
