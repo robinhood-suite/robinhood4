@@ -133,4 +133,7 @@ sqlite_xattr2json(const struct rbh_value_map *xattrs);
 bool
 sqlite_json2xattrs(const char *json, struct rbh_value_map *xattrs);
 
+bool
+setup_custom_functions(sqlite3 *db);
+
 #endif
