@@ -28,11 +28,15 @@ blob" > $conf_file
         error "Sync with invalid configuration file should have failed"
 
     echo "---
- RBH_MONGODB_ADDRESS: \"mongodb://localhost:12345\"
- RBH_MONGODB_ADDRESS: \"mongodb://localhost:27017\"
+backends:
+  test:
+    extends: posix
+backends:
+  test:
+    extends: posix
 ---" > $conf_file
 
-    rbh_sync --config $conf_file --one rbh:posix:$file rbh:$db:$testdb &&
+    rbh_sync --config $conf_file --one rbh:test:$file rbh:$db:$testdb &&
         error "Sync with duplicate keys should have failed"
 
     return 0
