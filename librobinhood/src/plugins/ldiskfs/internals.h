@@ -13,12 +13,18 @@
 #endif
 
 #include <robinhood/backends/ldiskfs.h>
+#include <robinhood/utils.h>
+#include <ext2fs/ext2fs.h>
 
 struct ldiskfs_backend {
     struct rbh_backend backend;
+    ext2_filsys fs;
 };
 
 void
 ldiskfs_backend_destroy(void *backend);
+
+bool
+scan_target(struct ldiskfs_backend *backend);
 
 #endif
