@@ -11,20 +11,6 @@
 
 #include <stdarg.h>
 
-struct sqlite_filter_where {
-    char clause[2048];
-    size_t clause_len;
-};
-
-struct sqlite_query_options {
-    char limit[28]; /* " limit <SIZE_MAX>" */
-    size_t limit_len;
-    char skip[29]; /* " offset <SIZE_MAX>" */
-    size_t skip_len;
-    char sort[512];
-    size_t sort_len;
-};
-
 __attribute__((format(printf, 2, 3)))
 static bool
 sfw_clause_format(struct sqlite_filter_where *where, const char *fmt, ...)
@@ -735,7 +721,7 @@ filter2sql(const struct rbh_filter *filter, struct sqlite_filter_where *where,
         (enter_subexpr ? sfw_clause_format(where, ")") : true);
 }
 
-static bool
+bool
 filter2where_clause(const struct rbh_filter *filter,
                     struct sqlite_filter_where *where)
 {
@@ -1023,7 +1009,7 @@ sort_field2str(const struct rbh_filter_field *field)
     return str;
 }
 
-static bool
+bool
 options2sql(const struct rbh_filter_options *options,
             struct sqlite_query_options *query_options)
 {

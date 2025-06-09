@@ -20,6 +20,7 @@ librbh_sqlite = library(
         'json/decode.c',
         'json/encode.c',
         'plugin.c',
+        'report.c',
         'schema.c',
         'update.c',
     ],
