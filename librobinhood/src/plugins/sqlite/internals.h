@@ -169,6 +169,9 @@ bool
 sqlite_json2xattrs(const char *json, struct rbh_value_map *xattrs,
                    struct rbh_sstack *sstack);
 
+json_t *
+sqlite_list2array(const char **values, size_t n_values);
+
 void
 bin2hex(const struct rbh_value *binary, char *buf);
 
