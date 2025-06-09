@@ -7,7 +7,46 @@
 
 #include "internals.h"
 
-static const char *RBH_SQLITE_SCHEMA_CODE = "";
+static const char *RBH_SQLITE_SCHEMA_CODE =
+"create table version("
+"    version INTEGER"
+");"
+"create table entries("
+"    id         BLOB primary key," // struct rbh_id
+"    mask       INT,"
+"    blksize    INT,"
+"    nlink      INT,"
+"    uid        INT,"
+"    gid        INT,"
+"    mode       INT,"
+"    type       INT,"
+"    ino        INT,"
+"    size       INT,"
+"    blocks     INT,"
+"    attributes INT,"
+"    atime_sec  INT,"
+"    atime_nsec INT,"
+"    btime_sec  INT,"
+"    btime_nsec INT,"
+"    ctime_sec  INT,"
+"    ctime_nsec INT,"
+"    mtime_sec  INT,"
+"    mtime_nsec INT,"
+"    rdev_major INT,"
+"    rdev_minor INT,"
+"    dev_major  INT,"
+"    dev_minor  INT,"
+"    mnt_id     INT,"
+"    symlink    TEXT,"
+"    xattrs     TEXT"  // json
+");"
+"create table ns("
+"    id         BLOB," // struct rbh_id
+"    parent_id  BLOB," // struct rbh_id
+"    name       TEXT,"
+"    xattrs     TEXT," // json
+"    primary key (id, parent_id, name)"
+");";
 
 static bool
 setup_schema(struct sqlite_backend *sqlite)
