@@ -9,7 +9,11 @@
 
 static const char *RBH_SQLITE_SCHEMA_CODE =
 "create table version("
-"    version INTEGER"
+"    id      INTEGER," // fake ID (always one) to make sure we have only one
+"    major   INTEGER," // row
+"    minor   INTEGER,"
+"    release INTEGER,"
+"    primary key (id)"
 ");"
 "create table entries("
 "    id         BLOB primary key," // struct rbh_id
@@ -55,6 +59,52 @@ static const char *RBH_SQLITE_SCHEMA_CODE =
 ");";
 
 static bool
+get_version(struct sqlite_backend *sqlite)
+{
+    const char *query =
+        "select major, minor, release from version where id = 1";
+    struct sqlite_cursor cursor;
+    int64_t release;
+    int64_t major;
+    int64_t minor;
+
+    if (!(sqlite_cursor_setup(sqlite, &cursor) &&
+          sqlite_setup_query(&cursor, query) &&
+          sqlite_cursor_step(&cursor)))
+        return false;
+
+    major = sqlite_cursor_get_int64(&cursor);
+    minor = sqlite_cursor_get_int64(&cursor);
+    release = sqlite_cursor_get_int64(&cursor);
+    sqlite_cursor_fini(&cursor);
+
+    // We cannot use the RPV macro here as it uses UINT64_C which only
+    // work on integer literals.
+    sqlite->version =
+        ((major << RPV_MAJOR_SHIFT) + (minor << RPV_MINOR_SHIFT) + release);
+
+    return true;
+}
+
+static bool
+set_version(struct sqlite_backend *sqlite)
+{
+    const char *query =
+        "insert or replace into version (id, major, minor, release)"
+        " values (1, ?, ?, ?)";
+    struct sqlite_cursor cursor;
+
+    sqlite->version = RBH_SQLITE_BACKEND_VERSION;
+
+    return sqlite_cursor_setup(sqlite, &cursor) &&
+        sqlite_setup_query(&cursor, query) &&
+        sqlite_cursor_bind_int64(&cursor, RBH_SQLITE_BACKEND_MAJOR) &&
+        sqlite_cursor_bind_int64(&cursor, RBH_SQLITE_BACKEND_MINOR) &&
+        sqlite_cursor_bind_int64(&cursor, RBH_SQLITE_BACKEND_RELEASE) &&
+        sqlite_cursor_exec(&cursor);
+}
+
+static bool
 setup_schema(struct sqlite_backend *sqlite)
 {
     int rc;
@@ -65,7 +115,7 @@ setup_schema(struct sqlite_backend *sqlite)
                               "Failed to create schema of '%s'",
                               sqlite->path);
 
-    return true;
+    return set_version(sqlite);
 }
 
 bool
@@ -134,6 +184,12 @@ sqlite_backend_open(struct sqlite_backend *sqlite,
     }
 
 ok:
+    if (!sqlite->version) {
+        if (!get_version(sqlite))
+            return sqlite_db_fail(sqlite->db,
+                    "failed to retrieve version from db '%s'",
+                    path);
+    }
     if (!(load_modules(sqlite->db) &&
           setup_custom_functions(sqlite->db))) {
         sqlite3_close_v2(sqlite->db);

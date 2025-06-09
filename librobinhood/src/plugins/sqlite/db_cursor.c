@@ -154,6 +154,16 @@ sqlite_cursor_get_int64(struct sqlite_cursor *cursor)
     return sqlite3_column_int64(cursor->stmt, cursor->col++);
 }
 
+int32_t
+sqlite_cursor_get_int32(struct sqlite_cursor *cursor)
+{
+    int64_t value = sqlite_cursor_get_int64(cursor);
+
+    assert(value >= INT32_MIN && value <= INT32_MAX);
+
+    return (uint32_t)value;
+}
+
 uint64_t
 sqlite_cursor_get_uint64(struct sqlite_cursor *trans)
 {

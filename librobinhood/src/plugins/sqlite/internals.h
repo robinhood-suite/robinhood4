@@ -56,6 +56,7 @@ struct sqlite_backend {
     bool read_only;
     sqlite3 *db;
     struct rbh_sstack *sstack;
+    uint64_t version;
 };
 
 struct sqlite_iterator {
@@ -137,6 +138,9 @@ sqlite_cursor_bind_int64(struct sqlite_cursor *cursor, int64_t value);
 
 int64_t
 sqlite_cursor_get_int64(struct sqlite_cursor *cursor);
+
+int32_t
+sqlite_cursor_get_int32(struct sqlite_cursor *cursor);
 
 uint64_t
 sqlite_cursor_get_uint64(struct sqlite_cursor *trans);
