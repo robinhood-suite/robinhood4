@@ -5,12 +5,7 @@
  * SPDX-License-Identifer: LGPL-3.0-or-later
  */
 
-#ifdef HAVE_CONFIG_H
-# include "config.h"
-#endif
-
-#include "robinhood/backends/sqlite.h"
-#include "robinhood/plugins/backend.h"
+#include "internals.h"
 
 static const struct rbh_backend_plugin_operations SQLITE_BACKEND_PLUGIN_OPS = {
     .new = rbh_sqlite_backend_new,

@@ -5,11 +5,16 @@
  * SPDX-License-Identifer: LGPL-3.0-or-later
  */
 
-#ifdef HAVE_CONFIG_H
-# include "config.h"
-#endif
+#include "internals.h"
 
-#include "robinhood/backends/sqlite.h"
+static const struct rbh_backend_operations SQLITE_BACKEND_OPS = {
+};
+
+static const struct rbh_backend SQLITE_BACKEND = {
+    .id   = RBH_BI_SQLITE,
+    .name = RBH_SQLITE_BACKEND_NAME,
+    .ops  = &SQLITE_BACKEND_OPS,
+};
 
 struct rbh_backend *
 rbh_sqlite_backend_new(const struct rbh_backend_plugin *self,
@@ -18,10 +23,21 @@ rbh_sqlite_backend_new(const struct rbh_backend_plugin *self,
                        struct rbh_config *config,
                        bool read_only)
 {
-    return NULL;
+    struct sqlite_backend *sqlite;
+
+    sqlite = calloc(1, sizeof(*sqlite));
+    if (!sqlite)
+        return NULL;
+
+    sqlite->backend = SQLITE_BACKEND;
+
+    return &sqlite->backend;
 }
 
 void
 sqlite_backend_destroy(void *backend)
 {
+    struct sqlite_backend *sqlite = backend;
+
+    free(sqlite);
 }
