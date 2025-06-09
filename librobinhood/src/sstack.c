@@ -86,6 +86,18 @@ retry:
 }
 
 void *
+rbh_sstack_alloc(struct rbh_sstack *sstack, const void *data, size_t size)
+{
+    size_t align = _Alignof(max_align_t);
+
+    if (size & (align - 1))
+        /* allocate a bit more to make sure data is always properly aligned */
+        size = (size & ~(align - 1)) + align;
+
+    return rbh_sstack_push(sstack, data, size);
+}
+
+void *
 rbh_sstack_peek(struct rbh_sstack *sstack, size_t *readable)
 {
     return rbh_stack_peek(sstack->stacks[sstack->current], readable);
@@ -104,6 +116,19 @@ rbh_sstack_pop(struct rbh_sstack *sstack, size_t count)
         sstack->current--;
 
     return 0;
+}
+
+void
+rbh_sstack_pop_all(struct rbh_sstack *sstack)
+{
+    while (sstack->current != 0) {
+        struct rbh_stack *stack = sstack->stacks[sstack->current];
+        size_t count;
+
+        rbh_stack_peek(stack, &count);
+        rbh_stack_pop(stack, count);
+        sstack->current--;
+    }
 }
 
 void
