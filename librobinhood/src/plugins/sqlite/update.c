@@ -244,11 +244,18 @@ statx_field(const struct rbh_fsevent *fsevent, uint32_t attr)
     __builtin_unreachable();
 }
 
+static uint32_t
+upsert_statx_mask(const struct rbh_fsevent *fsevent)
+{
+    assert(fsevent->type == RBH_FET_UPSERT);
+    return fsevent->upsert.statx ? fsevent->upsert.statx->stx_mask : 0;
+}
+
 static size_t
 upsert_query_size(const struct rbh_fsevent *fsevent)
 {
-    uint32_t mask = fsevent->upsert.statx->stx_mask;
     const char *symlink = fsevent->upsert.symlink;
+    uint32_t mask = upsert_statx_mask(fsevent);
     size_t query_size = base_size;
     size_t nb_attrs = 0;
     int i;
@@ -297,9 +304,9 @@ fsevent_has_xattrs(const struct rbh_fsevent *fsevent)
 static const char *
 build_upsert_query(const struct rbh_fsevent *fsevent)
 {
-    uint32_t mask = fsevent->upsert.statx->stx_mask;
-    size_t size = upsert_query_size(fsevent);
     const char *symlink = fsevent->upsert.symlink;
+    uint32_t mask = upsert_statx_mask(fsevent);
+    size_t size = upsert_query_size(fsevent);
     char *query;
     int i;
 
@@ -307,7 +314,10 @@ build_upsert_query(const struct rbh_fsevent *fsevent)
     if (!query)
         return NULL;
 
-    strncpy(query, "insert into entries (id, mask, ", size);
+    strncpy(query, "insert into entries (id", size);
+    if (mask != 0)
+        strncat(query, ", mask, ", size);
+
     foreach_bit_set(mask, i) {
         const struct statx_attr *attr = bit2ea(i);
         uint32_t field = bit2mask(i);
@@ -318,16 +328,18 @@ build_upsert_query(const struct rbh_fsevent *fsevent)
             /* do not insert ',' for the last parameter */
             strncat(query, ", ", size);
     }
+
     strncat(query, ", xattrs", size);
     if (symlink)
         strncat(query, ", symlink", size);
 
-
-    strncat(query, ") values (?, ?, ?, ", size);
+    strncat(query, ") values (?, ?", size);
     if (symlink)
-        strncat(query, "?, ", size);
+        strncat(query, ", ?", size);
+    if (upsert_statx_mask(fsevent) != 0)
+        strncat(query, ", ?, ", size);
 
-    mask = fsevent->upsert.statx->stx_mask;
+    mask = upsert_statx_mask(fsevent);
     foreach_bit_set(mask, i) {
         uint32_t field;
 
@@ -338,19 +350,21 @@ build_upsert_query(const struct rbh_fsevent *fsevent)
             /* do not insert ',' for the last parameter */
             strncat(query, ", ", size);
     }
-    strncat(query, ") on conflict(id) do update set mask=excluded.mask, ", size);
-    mask = fsevent->upsert.statx->stx_mask;
+
+    strncat(query, ") on conflict(id) do update set ", size);
+    if (upsert_statx_mask(fsevent) != 0)
+        strncat(query, "mask=excluded.mask, ", size);
+
+    mask = upsert_statx_mask(fsevent);
     foreach_bit_set(mask, i) {
         const struct statx_attr *attr = bit2ea(i);
-        uint32_t field = bit2mask(i);
 
         strncat(query, attr->excluded, size);
 
-        if (mask & ~field)
-            /* do not insert ' ' for the last parameter */
-            strncat(query, ", ", size);
+        /* insert ', ' for the last parameter as there is at least xattr after */
+        strncat(query, ", ", size);
     }
-    strncat(query, ", xattrs=json_patch(entries.xattrs, excluded.xattrs)",
+    strncat(query, "xattrs=json_patch(entries.xattrs, excluded.xattrs)",
             size);
     if (symlink)
         strncat(query, ", symlink=excluded.symlink", size);
@@ -362,11 +376,11 @@ static bool
 sqlite_process_upsert(struct sqlite_backend *sqlite,
                       const struct rbh_fsevent *fsevent)
 {
-    bool has_xattrs = fsevent_has_xattrs(fsevent);
     const char *insert = build_upsert_query(fsevent);
-    uint32_t mask = fsevent->upsert.statx->stx_mask;
     struct sqlite_cursor *cursor = &sqlite->cursor;
     const char *symlink = fsevent->upsert.symlink;
+    bool has_xattrs = fsevent_has_xattrs(fsevent);
+    uint32_t mask = upsert_statx_mask(fsevent);
     const struct rbh_id *id = &fsevent->id;
     int save_errno;
     bool res;
@@ -376,8 +390,10 @@ sqlite_process_upsert(struct sqlite_backend *sqlite,
         return false;
 
     if (!(sqlite_setup_query(cursor, insert) &&
-          sqlite_cursor_bind_id(cursor, id) &&
-          sqlite_cursor_bind_int64(cursor, fsevent->upsert.statx->stx_mask)))
+          sqlite_cursor_bind_id(cursor, id)))
+        goto free_insert;
+
+    if (mask != 0 && !sqlite_cursor_bind_int64(cursor, mask))
         goto free_insert;
 
     foreach_bit_set(mask, i) {
