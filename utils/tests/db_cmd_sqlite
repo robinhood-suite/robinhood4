@@ -4,6 +4,7 @@ import sqlite3
 import sys
 import base64
 import re
+import os
 from typing import List
 import logging
 import pathlib
@@ -208,7 +209,7 @@ def dump_db(db: str, filters: List[str]):
 
 
 def db_size(db: str, filters: List[str]):
-    pass
+    print(os.stat(db).st_size)
 
 
 def db_avgsize(db: str, filters: List[str]):

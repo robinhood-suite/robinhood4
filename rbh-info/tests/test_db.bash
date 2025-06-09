@@ -13,13 +13,13 @@ test_dir=$(dirname $(readlink -e $0))
 #                                    TESTS                                     #
 ################################################################################
 
-test_mongo_source()
+test_db_source()
 {
-    rbh_sync "rbh:retention:." "rbh:mongo:$testdb"
-    rbh_sync "rbh:mongo:$testdb" "rbh:mongo:$testdb-2"
+    rbh_sync "rbh:retention:." "rbh:$db:$testdb"
+    rbh_sync "rbh:$db:$testdb" "rbh:$db:$testdb-2"
 
-    local output=$(rbh_info "rbh:mongo:$testdb" -b)
-    local output2=$(rbh_info "rbh:mongo:$testdb-2" -b)
+    local output=$(rbh_info "rbh:$db:$testdb" -b)
+    local output2=$(rbh_info "rbh:$db:$testdb-2" -b)
 
     if [ "$output" != "$output2" ]; then
         error "Sync between two databases should result in both having the"
@@ -36,7 +36,7 @@ drop_db2()
     do_db drop "$testdb-2"
 }
 
-declare -a tests=(test_mongo_source)
+declare -a tests=(test_db_source)
 
 tmpdir=$(mktemp --directory)
 trap -- "rm -rf '$tmpdir'" EXIT
