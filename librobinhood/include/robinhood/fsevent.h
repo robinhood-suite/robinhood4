@@ -196,4 +196,16 @@ rbh_fsevent_ns_xattr_new(const struct rbh_id *id,
                          const struct rbh_value_map *xattrs,
                          const struct rbh_id *parent_id, const char *name);
 
+/**
+ * Return the path xattr of \p fsevent
+ *
+ * @return          return the value associated with the path xattr if found,
+ *                  NULL otherwise
+ *
+ * @error ENODATA   if the path was not found
+ * @error EFAULT    if the path was found but is not a string
+ */
+const char *
+rbh_fsevent_path(const struct rbh_fsevent *fsevent);
+
 #endif
