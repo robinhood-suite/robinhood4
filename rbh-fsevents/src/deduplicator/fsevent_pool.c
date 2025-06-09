@@ -92,8 +92,8 @@ rbh_fsevent_pool_new(size_t batch_size, struct source *source)
     if (!pool->pool) {
         int save_errno = errno;
 
-        free(pool);
         rbh_sstack_destroy(pool->list_container);
+        free(pool);
         errno = save_errno;
         return NULL;
     }
