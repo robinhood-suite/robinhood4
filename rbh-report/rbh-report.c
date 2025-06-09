@@ -88,8 +88,7 @@ report(const char *group_string, const char *output_string, bool ascending_sort,
 
     iter = rbh_backend_report(from, filter, &group, options, &output);
     if (iter == NULL)
-        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
-                      "rbh_backend_report");
+        error(EXIT_FAILURE, errno, "failed to gather report");
 
     do {
         struct rbh_value_map *map = rbh_mut_iter_next(iter);
