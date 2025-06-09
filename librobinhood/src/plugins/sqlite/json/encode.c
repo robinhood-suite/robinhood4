@@ -204,3 +204,14 @@ sqlite_xattr2json(const struct rbh_value_map *xattrs,
     errno = save_errno;
     return dup;
 }
+
+json_t *
+sqlite_list2array(const char **values, size_t n_values)
+{
+    json_t *array = json_array();
+
+    for (size_t i = 0; i < n_values; i++)
+        json_array_append(array, json_string(values[i]));
+
+    return array;
+}

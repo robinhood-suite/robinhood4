@@ -46,6 +46,12 @@ static const char *RBH_SQLITE_SCHEMA_CODE =
 "    name       TEXT,"
 "    xattrs     TEXT," // json
 "    primary key (id, parent_id, name)"
+");"
+"create table info("
+"    id         INT,"  // fake ID (always one) to make sure we have only one
+"    plugin     TEXT," // row
+"    extensions TEXT," // json array
+"    primary key (id)"
 ");";
 
 static bool
