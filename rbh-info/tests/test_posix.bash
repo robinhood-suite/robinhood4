@@ -15,9 +15,9 @@ test_dir=$(dirname $(readlink -e $0))
 
 test_posix_source()
 {
-    rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:posix:." "rbh:$db:$testdb"
 
-    local output=$(rbh_info "rbh:mongo:$testdb" -b)
+    local output=$(rbh_info "rbh:$db:$testdb" -b)
     local n_lines=$(echo "$output" | wc -l)
 
     if ((n_lines != 1)); then
@@ -30,9 +30,9 @@ test_posix_source()
 
 test_retention_source()
 {
-    rbh_sync "rbh:retention:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:retention:." "rbh:$db:$testdb"
 
-    local output=$(rbh_info "rbh:mongo:$testdb" -b)
+    local output=$(rbh_info "rbh:$db:$testdb" -b)
     local n_lines=$(echo "$output" | wc -l)
 
     if ((n_lines != 2)); then
@@ -51,13 +51,13 @@ test_posix_config() {
 mongodb_address: "mongodb://toto:27017"
 EOF
 
-    rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:posix:." "rbh:$db:$testdb"
 
-    local output=$(rbh_info "rbh:mongo:$testdb" -b)
+    local output=$(rbh_info "rbh:$db:$testdb" -b)
     echo "$output" | grep "posix" ||
         error "Only the POSIX backend should have been registered"
 
-    rbh_info -c test_conf.yaml rbh:mongo:$testdb -b ||
+    rbh_info -c test_conf.yaml rbh:$db:$testdb -b ||
         error "rbh_info should have failed"
 }
 
