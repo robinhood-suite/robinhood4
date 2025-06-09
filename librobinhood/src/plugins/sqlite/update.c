@@ -607,6 +607,7 @@ sqlite_backend_update(void *backend, struct rbh_iterator *fsevents)
     sqlite_cursor_setup(sqlite, &sqlite->cursor);
     sqlite_cursor_free(&sqlite->cursor);
 
+    sqlite_cursor_trans_begin(&sqlite->cursor);
     do {
         const struct rbh_fsevent *fsevent;
 
@@ -616,14 +617,20 @@ sqlite_backend_update(void *backend, struct rbh_iterator *fsevents)
             if (errno == ENODATA)
                 break;
 
-            return -1;
+            goto err;
         }
 
         if (!sqlite_process_fsevent(sqlite, fsevent))
-            return -1;
+            goto err;
 
         count++;
     } while (true);
 
+    sqlite_cursor_trans_end(&sqlite->cursor);
+
     return count;
+
+err:
+    sqlite_cursor_trans_end(&sqlite->cursor);
+    return -1;
 }

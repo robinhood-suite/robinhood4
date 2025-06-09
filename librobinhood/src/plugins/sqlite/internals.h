@@ -117,6 +117,12 @@ bool
 sqlite_setup_query(struct sqlite_cursor *cursor, const char *query);
 
 bool
+sqlite_cursor_trans_begin(struct sqlite_cursor *cursor);
+
+bool
+sqlite_cursor_trans_end(struct sqlite_cursor *cursor);
+
+bool
 sqlite_cursor_exec(struct sqlite_cursor *cursor);
 
 bool

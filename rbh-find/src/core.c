@@ -115,7 +115,7 @@ _find(struct find_context *ctx, int backend_index, enum action action,
         error(EXIT_FAILURE, 0, "unexpected errno value of 0 in %s", __func__);
     default:
         error(EXIT_FAILURE, errno,
-              "failed to execute filter on backend '%s'",
+              "failed to retrieve next fsentry on backend '%s'",
               ctx->backends[backend_index]->name);
     }
 
