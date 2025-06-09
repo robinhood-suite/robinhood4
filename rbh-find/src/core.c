@@ -96,14 +96,19 @@ _find(struct find_context *ctx, int backend_index, enum action action,
         free(fsentry);
     } while (true);
 
-    if (errno != ENODATA) {
-        if (errno == RBH_BACKEND_ERROR)
-            error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
-                          "%s", rbh_backend_error);
-        else
-            error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
-                          "rbh_mut_iter_next");
+    switch (errno) {
+    case ENODATA:
+        break;
+    case RBH_BACKEND_ERROR:
+        error(EXIT_FAILURE, 0, "%s", rbh_backend_error);
+    case 0:
+        error(EXIT_FAILURE, 0, "unexpected errno value of 0 in %s", __func__);
+    default:
+        error(EXIT_FAILURE, errno,
+              "failed to execute filter on backend '%s'",
+              ctx->backends[backend_index]->name);
     }
+
     rbh_mut_iter_destroy(fsentries);
 
     return count;

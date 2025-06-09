@@ -53,6 +53,9 @@ struct sqlite_backend {
 
 struct sqlite_iterator {
     struct rbh_mut_iterator iter;
+    struct sqlite_cursor cursor;
+    /** set to true the first time we reach the end of the rows. */
+    bool done;
 };
 
 ssize_t
@@ -126,5 +129,8 @@ sqlite_cursor_get_id(struct sqlite_cursor *cursor, struct rbh_id *dst);
 
 const char *
 sqlite_xattr2json(const struct rbh_value_map *xattrs);
+
+bool
+sqlite_json2xattrs(const char *json, struct rbh_value_map *xattrs);
 
 #endif
