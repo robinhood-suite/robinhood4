@@ -16,9 +16,9 @@ test_dir=$(dirname $(readlink -e $0))
 test_mpi_file_source()
 {
     dwalk -q -o "$testdb.mfu" .
-    rbh_sync "rbh:mpi-file:$testdb.mfu" "rbh:mongo:$testdb"
+    rbh_sync "rbh:mpi-file:$testdb.mfu" "rbh:$db:$testdb"
 
-    local output=$(rbh_info "rbh:mongo:$testdb" -b)
+    local output=$(rbh_info "rbh:$db:$testdb" -b)
     local n_lines=$(echo "$output" | wc -l)
 
     if ((n_lines != 1)); then
