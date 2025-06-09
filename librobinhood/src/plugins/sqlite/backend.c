@@ -43,6 +43,18 @@ rbh_sqlite_backend_new(const struct rbh_backend_plugin *self,
         return NULL;
     }
 
+    sqlite->path = rbh_sstack_alloc(sqlite->sstack,
+                                    uri->fsname,
+                                    strlen(uri->fsname) + 1);
+    if (!sqlite->path) {
+        int save_errno = errno;
+
+        rbh_sstack_destroy(sqlite->sstack);
+        free(sqlite);
+        errno = save_errno;
+        return NULL;
+    }
+
     sqlite->backend = SQLITE_BACKEND;
     if (!sqlite_backend_open(sqlite, uri->fsname, read_only))
         return NULL;
