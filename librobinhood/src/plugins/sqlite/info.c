@@ -233,6 +233,25 @@ backend_size(struct sqlite_backend *sqlite, json_t *previous_info)
     return info;
 }
 
+static json_t *
+backend_count(struct sqlite_backend *sqlite, json_t *previous_info)
+{
+    const char *query = "select count(*) from entries";
+    json_t *info = previous_info ? : json_object();
+    struct sqlite_cursor cursor;
+
+    if (!(sqlite_cursor_setup(sqlite, &cursor) &&
+          sqlite_setup_query(&cursor, query) &&
+          sqlite_cursor_step(&cursor)))
+        return NULL;
+
+    json_object_set_new(info, "count",
+                        json_integer(sqlite_cursor_get_int64(&cursor)));
+    sqlite_cursor_fini(&cursor);
+
+    return info;
+}
+
 struct rbh_value_map *
 sqlite_backend_get_info(void *backend, int flags)
 {
@@ -248,6 +267,8 @@ sqlite_backend_get_info(void *backend, int flags)
         info = backend_source(sqlite);
     if (flags & RBH_INFO_SIZE)
         info = backend_size(sqlite, info);
+    if (flags & RBH_INFO_COUNT)
+        info = backend_count(sqlite, info);
 
     if (!info)
         return NULL;
