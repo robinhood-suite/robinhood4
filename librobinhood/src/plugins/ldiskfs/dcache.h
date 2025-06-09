@@ -14,6 +14,8 @@
 #include <robinhood/fsentry.h>
 #include <robinhood/iterator.h>
 #include <robinhood/utils.h>
+#include <robinhood/id.h>
+#include "lu_fid.h"
 
 struct rbh_dcache {
     GHashTable *dentries;
@@ -31,6 +33,7 @@ struct rbh_dentry {
     const char *name;
     size_t namelen;
     struct rbh_dentry *parent;
+    struct lu_fid fid;
     GList *children;
     GList *xattrs;
 };
