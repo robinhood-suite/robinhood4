@@ -23,15 +23,12 @@ if liblustre.found()
         'src/enrichers/posix/lustre.c',
     ]
     extra_args += ['-DHAVE_LUSTRE']
-endif
-
-if libhestia.found()
-    extra_dependencies += [ libhestia ]
+    extra_dependencies += [ liblustre ]
 endif
 
 if libhestia.found()
     libjansson = dependency('jansson', version: '>=2.5')
-    extra_dependencies += [libjansson]
+    extra_dependencies += [ libjansson, libhestia ]
     extra_sources += [
         'src/enrichers/hestia.c',
     ]
@@ -59,7 +56,7 @@ fsevents_lib = static_library(
     ] + extra_sources,
     include_directories: includes,
     dependencies: [
-        librobinhood_dep, librbh_posix_dep, miniyaml, liblustre,
+        librobinhood_dep, librbh_posix_dep, miniyaml,
     ] + extra_dependencies,
     c_args: ['-DHAVE_CONFIG_H'] + extra_args,
 )
@@ -73,7 +70,9 @@ executable(
     sources: 'rbh-fsevents.c',
     include_directories: includes,
     link_with: fsevents_lib,
-    dependencies: [librobinhood_dep, miniyaml, liblustre],
+    dependencies: [
+      librobinhood_dep, miniyaml,
+    ] + extra_dependencies,
     install: true,
     c_args: ['-DHAVE_CONFIG_H'] + extra_args,
 )
