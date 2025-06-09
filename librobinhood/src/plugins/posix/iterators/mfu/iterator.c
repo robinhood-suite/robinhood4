@@ -108,9 +108,13 @@ skip:
 
     /* If parent is different of current_parent, it means that we are iterating
      * entries of a new directory. We need to get the new parent path/ID and
-     * generate a fsevent to update the children counter of the directory we are
+     * generate an fsevent to update the children counter of the directory we are
      * exiting.
      */
+    // FIXME the root path is '/' and dirname('/') == '/'. This means that
+    // dirname('/file') == dirname('/'). Depending on the order in which entries
+    // are processed, '/file' will have the same parent as '/' (e.g. no parent).
+    // Fix test_mpifile_mongo_sync as well when this is fixed.
     if (strcmp(current_parent, parent) != 0) {
         struct rbh_id *tmp_id = current_parent_id;
         int tmp_children = current_children;
