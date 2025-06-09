@@ -686,7 +686,6 @@ rbh_backend_get_attribute(struct rbh_backend *backend, uint64_t flags,
  * @param backend   a pointer to the struct rbh_backend to reclaim
  * @param info      enum of the required infos
  */
-
 static inline struct rbh_value_map *
 rbh_backend_get_info(struct rbh_backend *backend, int info_flags)
 {

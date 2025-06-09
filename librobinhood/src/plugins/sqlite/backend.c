@@ -13,6 +13,7 @@ const struct rbh_backend_operations SQLITE_BACKEND_OPS = {
     .destroy       = sqlite_backend_destroy,
     .filter        = sqlite_backend_filter,
     .insert_source = sqlite_backend_insert_source,
+    .get_info      = sqlite_backend_get_info,
     .update        = sqlite_backend_update,
 };
 
