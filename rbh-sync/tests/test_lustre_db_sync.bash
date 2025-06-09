@@ -508,20 +508,21 @@ test_mdt_index_dir()
     if [[ $mdt_count -ge 2 ]]; then
         mkdir "test_mdt_index1"
         lfs migrate -m 1 "test_mdt_index1"
-        mkdir "test_mdt_index2"
+
         # use MDT 0 and $mdt_count - 1 to stripe the content of the dir
-        lfs migrate -m 0,$((mdt_count - 1)) "test_mdt_index2"
+        lfs mkdir -c 2 test_mdt_index2
     fi
 
     rbh_sync_lustre "." "rbh:$db:$testdb"
 
-    local mdt_indexes="[$(lfs getdirstripe -m 'test_mdt_index0')]"
-    find_attribute '"xattrs.child_mdt_idx":'$mdt_indexes \
+    local mdt_indexes="$(lfs getdirstripe -m 'test_mdt_index0')"
+    # FIXME Non striped dirs don't have the same key and type for the mdt_index...
+    find_attribute '"xattrs.mdt_index":'$mdt_indexes \
                    '"ns.xattrs.path":"/test_mdt_index0"'
 
     if [[ $mdt_count -ge 2 ]]; then
-        mdt_indexes="[$(lfs getdirstripe -m 'test_mdt_index1')]"
-        find_attribute '"xattrs.child_mdt_idx":'$mdt_indexes \
+        mdt_indexes="$(lfs getdirstripe -m 'test_mdt_index1')"
+        find_attribute '"xattrs.mdt_index":'$mdt_indexes \
                        '"ns.xattrs.path":"/test_mdt_index1"'
 
         mdt_stripe=$(lfs getdirstripe -c 'test_mdt_index2')
@@ -547,8 +548,10 @@ test_mdt_hash()
 
     local mdt_hash1=$(lfs getdirstripe -H "test_mdt_hash1" | cut -d',' -f1)
     mdt_hash1="${mdt_hash1//all_char/1}"
+    mdt_hash1="${mdt_hash1//none/0}"
     local mdt_hash2=$(lfs getdirstripe -H "test_mdt_hash2" | cut -d',' -f1)
     mdt_hash2="${mdt_hash2//fnv_1a_64/2}"
+    mdt_hash2="${mdt_hash2//none/0}"
 
     find_attribute '"xattrs.mdt_hash":'$mdt_hash1 \
                    '"ns.xattrs.path":"/test_mdt_hash1"'
