@@ -8,9 +8,6 @@
 #include "internals.h"
 
 static const char *RBH_SQLITE_SCHEMA_CODE =
-"create table version("
-"    version INTEGER"
-");"
 "create table entries("
 "    id         BLOB primary key," // struct rbh_id
 "    mask       INT,"
@@ -52,6 +49,9 @@ static const char *RBH_SQLITE_SCHEMA_CODE =
 "    plugin     TEXT," // row
 "    extensions TEXT," // json array
 "    mountpoint TEXT,"
+"    major      INT,"  // version
+"    minor      INT,"
+"    release    INT,"
 "    primary key (id)"
 ");"
 "create table readers("
@@ -70,6 +70,66 @@ static const char *RBH_SQLITE_SCHEMA_CODE =
 "    end        INT"
 ");";
 
+static uint64_t
+build_version(void)
+{
+    return RPV(RBH_SQLITE_BACKEND_MAJOR,
+               RBH_SQLITE_BACKEND_MINOR,
+               RBH_SQLITE_BACKEND_RELEASE);
+}
+
+static bool
+get_version(struct sqlite_backend *sqlite)
+{
+    const char *query =
+        "select major, minor, release from info where id = 1";
+    struct sqlite_cursor cursor;
+    int64_t release;
+    int64_t major;
+    int64_t minor;
+
+    if (!(sqlite_cursor_setup(sqlite, &cursor) &&
+          sqlite_setup_query(&cursor, query) &&
+          sqlite_cursor_step(&cursor)))
+        return false;
+
+    major = sqlite_cursor_get_int64(&cursor);
+    minor = sqlite_cursor_get_int64(&cursor);
+    release = sqlite_cursor_get_int64(&cursor);
+    sqlite_cursor_fini(&cursor);
+
+    // We cannot use the RPV macro here as it uses UINT64_C which only
+    // work on integer literals.
+    sqlite->version =
+        ((major << RPV_MAJOR_SHIFT) + (minor << RPV_MINOR_SHIFT) + release);
+
+    if (build_version() != sqlite->version)
+        return sqlite_fail("version mismatch. Build version %lu != DB version %lu",
+                           build_version(), sqlite->version);
+
+    return true;
+}
+
+static bool
+set_version(struct sqlite_backend *sqlite)
+{
+    const char *query =
+        "insert into info (id, major, minor, release) "
+        "values (1, ?, ?, ?) on conflict(id) do "
+        "update set major=excluded.major, minor=excluded.minor, "
+        "release=excluded.release";
+    struct sqlite_cursor cursor;
+
+    sqlite->version = RBH_SQLITE_BACKEND_VERSION;
+
+    return sqlite_cursor_setup(sqlite, &cursor) &&
+        sqlite_setup_query(&cursor, query) &&
+        sqlite_cursor_bind_int64(&cursor, RBH_SQLITE_BACKEND_MAJOR) &&
+        sqlite_cursor_bind_int64(&cursor, RBH_SQLITE_BACKEND_MINOR) &&
+        sqlite_cursor_bind_int64(&cursor, RBH_SQLITE_BACKEND_RELEASE) &&
+        sqlite_cursor_exec(&cursor);
+}
+
 static bool
 setup_schema(struct sqlite_backend *sqlite)
 {
@@ -81,7 +141,7 @@ setup_schema(struct sqlite_backend *sqlite)
                               "Failed to create schema of '%s'",
                               sqlite->path);
 
-    return true;
+    return set_version(sqlite);
 }
 
 bool
@@ -151,6 +211,13 @@ sqlite_backend_open(struct sqlite_backend *sqlite,
     }
 
 ok:
+    if (!sqlite->version) {
+        if (!get_version(sqlite))
+            return sqlite_db_fail(sqlite->db,
+                    "failed to retrieve version from db '%s'",
+                    path);
+    }
+
     if (!(load_modules(sqlite->db) &&
           setup_custom_functions(sqlite->db))) {
         sqlite3_close_v2(sqlite->db);
