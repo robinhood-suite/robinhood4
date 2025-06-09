@@ -72,6 +72,15 @@ bool
 sqlite_backend_dup(struct sqlite_backend *sqlite,
                    struct sqlite_backend *dup)
 {
+    dup->sstack = rbh_sstack_new(PAGE_SIZE);
+    if (!dup->sstack)
+        return NULL;
+
+    dup->path = rbh_sstack_strdup(dup->sstack, sqlite->path);
+    if (!dup->path) {
+        rbh_sstack_destroy(dup->sstack);
+        return NULL;
+    }
     return sqlite_backend_open(dup, sqlite->path, sqlite->read_only);
 }
 

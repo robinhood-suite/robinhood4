@@ -35,6 +35,14 @@ rbh_sqlite_backend_new(const struct rbh_backend_plugin *self,
     if (!sqlite)
         return NULL;
 
+    sqlite->sstack = rbh_sstack_new(PAGE_SIZE);
+    if (!sqlite->sstack) {
+        int save_errno = errno;
+        free(sqlite);
+        errno = save_errno;
+        return NULL;
+    }
+
     sqlite->backend = SQLITE_BACKEND;
     if (!sqlite_backend_open(sqlite, uri->fsname, read_only))
         return NULL;
@@ -48,5 +56,6 @@ sqlite_backend_destroy(void *backend)
     struct sqlite_backend *sqlite = backend;
 
     sqlite_backend_close(sqlite);
+    rbh_sstack_destroy(sqlite->sstack);
     free(sqlite);
 }
