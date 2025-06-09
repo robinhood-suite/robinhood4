@@ -5,6 +5,7 @@
 # SPDX-License-Identifer: LGPL-3.0-or-later
 
 libext2fs = cc.find_library('libext2fs', disabler: true)
+libcom_err = cc.find_library('com_err', disabler: true)
 glib2 = dependency('glib-2.0', disabler: true)
 
 librbh_ldiskfs = library(
@@ -16,7 +17,7 @@ librbh_ldiskfs = library(
         'scan_target.c',
     ],
     version: librbh_ldiskfs_version, # defined in include/robinhood/backends
-    dependencies: [ librobinhood_dep, libext2fs, glib2 ],
+    dependencies: [ librobinhood_dep, libext2fs, glib2, libcom_err ],
     include_directories: rbh_include,
     install: true,
     c_args: '-DHAVE_CONFIG_H',

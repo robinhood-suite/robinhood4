@@ -39,6 +39,16 @@ rbh_ldiskfs_backend_new(const struct rbh_backend_plugin *self,
         return NULL;
     }
 
+    ldiskfs->dcache = rbh_dcache_new();
+    if (!ldiskfs->dcache) {
+        int save_errno = errno;
+
+        ext2fs_close(ldiskfs->fs);
+        free(ldiskfs);
+        errno = save_errno;
+        return NULL;
+    }
+
     return &ldiskfs->backend;
 }
 
@@ -47,6 +57,7 @@ ldiskfs_backend_destroy(void *backend)
 {
     struct ldiskfs_backend *ldiskfs = backend;
 
+    rbh_dcache_destroy(ldiskfs->dcache);
     ext2fs_close(ldiskfs->fs);
     free(ldiskfs);
 }
