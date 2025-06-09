@@ -11,6 +11,7 @@ librbh_sqlite = library(
     'rbh-sqlite',
     sources: [
         'backend.c',
+        'db_cursor.c',
         'plugin.c',
         'schema.c',
         'update.c',
