@@ -25,6 +25,13 @@ struct ldiskfs_backend {
     struct rbh_dcache *dcache;
 };
 
+struct ldiskfs_iter {
+    struct rbh_mut_iterator iter;
+    uint32_t mdt_index;
+    struct rbh_dentry *root;
+    struct rbh_dentry *remote_parent_dir;
+};
+
 struct rbh_mut_iterator *
 ldiskfs_backend_filter(void *backend, const struct rbh_filter *filter,
                        const struct rbh_filter_options *options,
@@ -35,5 +42,8 @@ ldiskfs_backend_destroy(void *backend);
 
 bool
 scan_target(struct ldiskfs_backend *backend);
+
+int
+get_mdt_index(ext2_filsys fs);
 
 #endif
