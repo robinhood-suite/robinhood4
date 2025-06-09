@@ -76,6 +76,26 @@ sqlite_setup_query(struct sqlite_cursor *cursor, const char *query)
 }
 
 bool
+sqlite_cursor_trans_begin(struct sqlite_cursor *cursor)
+{
+    char *err;
+
+    sqlite3_exec(cursor->db, "PRAGMA synchronous = OFF", NULL, NULL, &err);
+    sqlite3_exec(cursor->db, "PRAGMA journal_mode = MEMORY", NULL, NULL, &err);
+    sqlite3_exec(cursor->db, "begin transaction", NULL, NULL, &err);
+    return true;
+}
+
+bool
+sqlite_cursor_trans_end(struct sqlite_cursor *cursor)
+{
+    char *err;
+
+    sqlite3_exec(cursor->db, "end transaction", NULL, NULL, &err);
+    return true;
+}
+
+bool
 sqlite_cursor_fini(struct sqlite_cursor *cursor)
 {
     rbh_sstack_destroy(cursor->sstack);
