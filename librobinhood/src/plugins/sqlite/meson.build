@@ -12,6 +12,7 @@ librbh_sqlite = library(
     sources: [
         'backend.c',
         'db_cursor.c',
+        'filter.c',
         'json/encode.c',
         'plugin.c',
         'schema.c',
