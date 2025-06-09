@@ -15,6 +15,7 @@ librbh_sqlite = library(
         'custom_functions.c',
         'db_cursor.c',
         'filter.c',
+        'info.c',
         'json/decode.c',
         'json/encode.c',
         'plugin.c',

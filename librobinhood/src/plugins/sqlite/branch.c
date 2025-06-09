@@ -16,11 +16,12 @@ struct sqlite_backend_branch {
 };
 
 static const struct rbh_backend_operations SQLITE_BRANCH_BACKEND_OPS = {
-    .branch  = sqlite_backend_branch,
-    .root    = sqlite_branch_root,
-    .update  = sqlite_backend_update,
-    .filter  = generic_branch_backend_filter,
-    .destroy = sqlite_backend_destroy,
+    .branch        = sqlite_backend_branch,
+    .root          = sqlite_branch_root,
+    .update        = sqlite_backend_update,
+    .filter        = generic_branch_backend_filter,
+    .insert_source = sqlite_backend_insert_source,
+    .destroy       = sqlite_backend_destroy,
 };
 
 static const struct rbh_backend SQLITE_BRANCH_BACKEND = {
