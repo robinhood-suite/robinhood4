@@ -21,9 +21,6 @@ test_dump()
 
     touch $file
     rm $file
-
-    local changelogs=$(lfs changelog $LUSTRE_MDT | cut -d' ' -f2)
-
     diff <(lfs changelog $LUSTRE_MDT | awk '{ print substr($2, 3) }') \
          <(rbh_fsevents --dump "-" --enrich rbh:lustre:"$LUSTRE_DIR" \
                src:lustre:"$LUSTRE_MDT" "rbh:$db:$testdb" |
@@ -31,13 +28,10 @@ test_dump()
 
     local output=$(rbh_fsevents --dump "-" --enrich rbh:lustre:"$LUSTRE_DIR" \
                        src:lustre:"$LUSTRE_MDT" "rbh:$db:$testdb")
-
     rbh_fsevents --dump "$dump_file" --enrich rbh:lustre:"$LUSTRE_DIR" \
         src:lustre:"$LUSTRE_MDT" "rbh:$db:$testdb"
 
     diff <(echo "$output") $dump_file
-
-    rm $dump_file
 }
 
 ################################################################################
