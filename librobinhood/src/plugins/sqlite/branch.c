@@ -21,6 +21,7 @@ static const struct rbh_backend_operations SQLITE_BRANCH_BACKEND_OPS = {
     .update        = sqlite_backend_update,
     .filter        = generic_branch_backend_filter,
     .insert_source = sqlite_backend_insert_source,
+    .get_info      = sqlite_backend_get_info,
     .destroy       = sqlite_backend_destroy,
 };
 
