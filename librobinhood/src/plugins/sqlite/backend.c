@@ -7,10 +7,12 @@
 
 #include "internals.h"
 
-static const struct rbh_backend_operations SQLITE_BACKEND_OPS = {
-    .update  = sqlite_backend_update,
-    .filter  = sqlite_backend_filter,
+const struct rbh_backend_operations SQLITE_BACKEND_OPS = {
+    .branch  = sqlite_backend_branch,
+    .root    = sqlite_backend_root,
     .destroy = sqlite_backend_destroy,
+    .filter  = sqlite_backend_filter,
+    .update  = sqlite_backend_update,
 };
 
 static const struct rbh_backend SQLITE_BACKEND = {
