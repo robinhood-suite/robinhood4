@@ -515,7 +515,7 @@ sync(const struct rbh_filter_projection *projection)
         rbh_backend_update(to, NULL);
         return metadata;
     case RBH_BACKEND_ERROR:
-        error(EXIT_FAILURE, 0, "unhandled error: %s", rbh_backend_error);
+        error(EXIT_FAILURE, 0, "%s", rbh_backend_error);
         __builtin_unreachable();
     default:
         error(EXIT_FAILURE, errno, "while iterating over SOURCE's entries");
