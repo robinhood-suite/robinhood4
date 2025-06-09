@@ -155,6 +155,24 @@ rbh_sstack_new(size_t chunk_size);
 void *
 rbh_sstack_push(struct rbh_sstack *sstack, const void *data, size_t size);
 
+/**
+ * Allocate \p size bytes on the stack respecting the memory alignment
+ * constraints of the system.
+ *
+ * Other than memory alignement constraints, this function has the same behavior
+ * as rbh_sstack_push().
+ */
+void *
+rbh_sstack_alloc(struct rbh_sstack *sstack, const void *data, size_t size);
+
+/**
+ * Pop all the data on \p sstack. This resets all the rbh_stasks of this
+ * rbh_sstack to 0 but does not release the memory allocated so that it
+ * can be reused later.
+ */
+void
+rbh_sstack_pop_all(struct rbh_sstack *sstack);
+
 #define RBH_SSTACK_PUSH(_sstack, _data, _size) \
     ({ \
         void *_result = rbh_sstack_push(_sstack, _data, _size); \
