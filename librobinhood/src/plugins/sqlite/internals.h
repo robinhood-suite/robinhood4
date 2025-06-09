@@ -33,6 +33,9 @@ struct sqlite_backend {
     sqlite3 *db;
 };
 
+ssize_t
+sqlite_backend_update(void *backend, struct rbh_iterator *fsevents);
+
 void
 sqlite_backend_destroy(void *backend);
 
