@@ -258,6 +258,13 @@ teardown()
     rm -rf "$testdir"
 }
 
+mongo_only_test()
+{
+    if [[ $db != mongo ]]; then
+        skip "this can only works with mongodb"
+    fi
+}
+
 run_tests()
 {
     local fail=0

@@ -359,6 +359,8 @@ test_stop_sync_on_error()
     local third_file="test3"
     local dir="dir"
 
+    mongo_only_test
+
     touch $first_file
     touch $second_file
     mkdir $dir
@@ -385,6 +387,8 @@ test_config()
 {
     local conf_file="conf"
     local file="test_file"
+
+    mongo_only_test
 
     touch $file
 
@@ -479,6 +483,9 @@ test_sync_large_path()
 
 test_sync_number_children()
 {
+    # FIXME remove when nb_children is implemented in SQLite backend
+    mongo_only_test
+
     mkdir -p dir1/dir2/dir3
     touch dir1/fileA dir1/fileB dir1/dir2/fileC
 

@@ -575,6 +575,9 @@ test_mdt_count()
 
 test_sync_number_children()
 {
+    # FIXME remove when nb_children is implemented in SQLite backend
+    mongo_only_test
+
     mkdir -p dir1/dir2/dir3
     touch dir1/fileA dir1/fileB dir1/dir2/fileC
 
