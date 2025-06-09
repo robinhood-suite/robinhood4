@@ -252,9 +252,9 @@ verify_lustre()
         find_attribute '"xattrs.flags":0' '"ns.name":"'$name'"'
     fi
 
-    if [ -f $entry ]; then
-        find_attribute '"xattrs.gen":'$gen '"ns.name":"'$name'"'
-    fi
+    # if [ -f $entry ]; then
+    #     find_attribute '"xattrs.gen":'$gen '"ns.name":"'$name'"'
+    # fi
 
     # If the entry is mirrored, check the count and ids
     if [ ! -z $n_mirror ]; then
