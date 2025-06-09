@@ -275,7 +275,7 @@ _get_collection_avg_obj_size(const struct rbh_value *value)
 static void
 _get_collection_size(const struct rbh_value *value)
 {
-    printf("%d\n", value->int32);
+    printf("%ld\n", value->int64);
 }
 
 static void
