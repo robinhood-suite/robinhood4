@@ -170,12 +170,18 @@ difflines()
 archive_file()
 {
     local file="$1"
+    local count=0
+    local max=10
 
-    sudo lfs hsm_archive "$file"
+    lfs hsm_archive "$file"
 
     while ! lfs hsm_state "$file" | awk -F')' '{print $2}' | grep "archived"; do
         sleep 0.5
+        (( count++ > max )) &&
+            error "Failed to archive '$file' after $(echo "count * 0.5" | bc)s"
     done
+
+    return 0
 }
 
 get_test_user()
@@ -239,10 +245,13 @@ teardown()
         echo "$output"
     fi
 
-    rm -rf "$testdir"
     if [ "$(type -t $test_teardown)" == "function" ]; then
         $test_teardown
     fi
+
+    # Remove test dir after teardown otherwise cwd is no longer valid and some
+    # commands can fail.
+    rm -rf "$testdir"
 }
 
 run_tests()

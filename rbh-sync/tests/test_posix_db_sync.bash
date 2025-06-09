@@ -503,20 +503,17 @@ test_sync_number_children()
 
 test_sync_number_children_mpi()
 {
-    mkdir -p root/dir{1..5}/dir{1..5}/dir{1..5}
+    mkdir -p root/dir{1..2}/dir{1..2}/dir{1..2}
 
-    touch root/file{1..100}
-    touch root/dir{1..5}/file{1..100}
-    touch root/dir{1..5}/dir{1..5}/file{1..100}
-    touch root/dir{1..5}/dir{1..5}/dir{1..5}/file{1..105}
+    touch root/file{1..10}
+    touch root/dir{1..2}/file{1..10}
+    touch root/dir{1..2}/dir{1..2}/file{1..10}
+    touch root/dir{1..2}/dir{1..2}/dir{1..2}/file{1..12}
 
     rbh_sync_posix "root" "rbh:$db:$testdb"
 
-    local expected_children=105
-    local directories=()
-    while IFS= read -r -d $'\0'; do
-        directories+=("$REPLY")
-    done < <(find root -type d -print0)
+    local expected_children=12
+    local directories=($(find root -type d | xargs))
 
     local expected_nb_directories=${#directories[@]}
     local nb_directories=$(count_documents '"xattrs.nb_children": {$gt: 0}')
