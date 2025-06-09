@@ -30,6 +30,9 @@ struct ldiskfs_iter {
     uint32_t mdt_index;
     struct rbh_dentry *root;
     struct rbh_dentry *remote_parent_dir;
+    struct rbh_dentry *current;
+    GQueue *tasks;
+    GList *current_dir;
 };
 
 struct rbh_mut_iterator *

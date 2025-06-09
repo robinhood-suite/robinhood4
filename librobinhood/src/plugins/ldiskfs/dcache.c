@@ -6,6 +6,7 @@
  */
 
 #include "dcache.h"
+#include <robinhood/utils.h>
 
 #include <assert.h>
 
