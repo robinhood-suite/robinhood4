@@ -40,7 +40,7 @@ test_sync_simple()
     local db2entries="$(do_db dump "$testdb2")"
 
     if [ "$db1entries" != "$db2entries" ]; then
-        error "sync resulted in different db state\n"
+        error "sync resulted in different db state"
     fi
 }
 
@@ -57,7 +57,7 @@ test_sync_branch()
     local db2entries="$(do_db dump "$testdb2")"
 
     if [ "$db1entries" == "$db2entries" ]; then
-        error "sync should have resulted in different db state\n"
+        error "sync should have resulted in different db state"
     fi
 
     db1entries="$(do_db dump "$testdb1" \
