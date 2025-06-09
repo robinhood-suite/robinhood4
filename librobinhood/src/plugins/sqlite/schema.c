@@ -62,6 +62,13 @@ setup_schema(struct sqlite_backend *sqlite)
     return true;
 }
 
+bool
+sqlite_backend_dup(struct sqlite_backend *sqlite,
+                   struct sqlite_backend *dup)
+{
+    return sqlite_backend_open(dup, sqlite->path, sqlite->read_only);
+}
+
 static bool
 load_modules(sqlite3 *db)
 {
@@ -95,6 +102,7 @@ sqlite_backend_open(struct sqlite_backend *sqlite,
     int rc;
 
     sqlite->path = path;
+    sqlite->read_only = read_only;
     rc = sqlite3_open_v2(path, &sqlite->db, mode, NULL);
     if (rc == SQLITE_OK)
         goto ok;

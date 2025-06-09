@@ -48,6 +48,7 @@ struct sqlite_backend {
     struct rbh_backend backend;
     struct sqlite_cursor cursor;
     const char *path;
+    bool read_only;
     sqlite3 *db;
 };
 
@@ -57,6 +58,8 @@ struct sqlite_iterator {
     /** set to true the first time we reach the end of the rows. */
     bool done;
 };
+
+extern const struct rbh_backend_operations SQLITE_BACKEND_OPS;
 
 ssize_t
 sqlite_backend_update(void *backend, struct rbh_iterator *fsevents);
@@ -70,6 +73,13 @@ struct rbh_fsentry *
 sqlite_backend_root(void *backend,
                    const struct rbh_filter_projection *projection);
 
+struct rbh_backend *
+sqlite_backend_branch(void *backend, const struct rbh_id *id, const char *path);
+
+struct rbh_fsentry *
+sqlite_branch_root(void *backend,
+                   const struct rbh_filter_projection *projection);
+
 void
 sqlite_backend_destroy(void *backend);
 
@@ -78,6 +88,10 @@ bool
 sqlite_backend_open(struct sqlite_backend *sqlite,
                     const char *path,
                     bool read_only);
+
+bool
+sqlite_backend_dup(struct sqlite_backend *sqlite,
+                   struct sqlite_backend *dup);
 
 void
 sqlite_backend_close(struct sqlite_backend *sqlite);
