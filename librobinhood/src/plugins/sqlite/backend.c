@@ -8,6 +8,7 @@
 #include "internals.h"
 
 static const struct rbh_backend_operations SQLITE_BACKEND_OPS = {
+    .update  = sqlite_backend_update,
     .destroy = sqlite_backend_destroy,
 };
 
