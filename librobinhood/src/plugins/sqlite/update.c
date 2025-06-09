@@ -405,7 +405,11 @@ sqlite_process_upsert(struct sqlite_backend *sqlite,
             goto free_insert;
     }
     if (has_xattrs) {
-        const char *xattrs = sqlite_xattr2json(&fsevent->xattrs);
+        const char *xattrs;
+
+        xattrs = sqlite_xattr2json(&fsevent->xattrs, cursor->sstack);
+        if (!xattrs)
+            goto free_insert;
 
         res = sqlite_cursor_bind_string(cursor, xattrs);
         if (!res)
@@ -520,21 +524,17 @@ sqlite_process_ns_xattr(struct sqlite_backend *sqlite,
         "update set xattrs = json_patch(ns.xattrs, excluded.xattrs)";
     struct sqlite_cursor *cursor = &sqlite->cursor;
     const char *xattrs;
-    bool res;
 
-    xattrs = sqlite_xattr2json(&fsevent->xattrs);
+    xattrs = sqlite_xattr2json(&fsevent->xattrs, cursor->sstack);
     if (!xattrs)
         return false;
 
-    res = sqlite_setup_query(cursor, query) &&
+    return sqlite_setup_query(cursor, query) &&
         sqlite_cursor_bind_id(cursor, &fsevent->id) &&
         sqlite_cursor_bind_id(cursor, fsevent->ns.parent_id) &&
         sqlite_cursor_bind_string(cursor, fsevent->ns.name) &&
         sqlite_cursor_bind_string(cursor, xattrs) &&
         sqlite_cursor_exec(cursor);
-    free((void *)xattrs);
-
-    return res;
 }
 
 static bool
@@ -547,19 +547,15 @@ sqlite_process_xattr(struct sqlite_backend *sqlite,
         "update set xattrs=json_patch(entries.xattrs, excluded.xattrs)";
     struct sqlite_cursor *cursor = &sqlite->cursor;
     const char *xattrs;
-    bool res;
 
-    xattrs = sqlite_xattr2json(&fsevent->xattrs);
+    xattrs = sqlite_xattr2json(&fsevent->xattrs, cursor->sstack);
     if (!xattrs)
         return false;
 
-    res = sqlite_setup_query(cursor, query) &&
+    return sqlite_setup_query(cursor, query) &&
         sqlite_cursor_bind_id(cursor, &fsevent->id) &&
         sqlite_cursor_bind_string(cursor, xattrs) &&
         sqlite_cursor_exec(cursor);
-    free((void *)xattrs);
-
-    return res;
 }
 
 static bool
@@ -609,6 +605,7 @@ sqlite_backend_update(void *backend, struct rbh_iterator *fsevents)
         return 0;
 
     sqlite_cursor_setup(sqlite, &sqlite->cursor);
+    sqlite_cursor_free(&sqlite->cursor);
 
     do {
         const struct rbh_fsevent *fsevent;

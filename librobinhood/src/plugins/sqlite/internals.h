@@ -18,6 +18,7 @@
 
 #include <robinhood/backends/sqlite.h>
 #include <robinhood/utils.h>
+#include <robinhood/sstack.h>
 
 #define sqlite_fail(fmt, ...)                                    \
     ({                                                           \
@@ -43,6 +44,7 @@ struct sqlite_cursor {
      * row
      */
     int col;
+    struct rbh_sstack *sstack;
 };
 
 struct sqlite_backend {
@@ -154,15 +156,29 @@ bool
 sqlite_cursor_get_id(struct sqlite_cursor *cursor, struct rbh_id *dst);
 
 const char *
-sqlite_xattr2json(const struct rbh_value_map *xattrs);
+sqlite_xattr2json(const struct rbh_value_map *xattrs,
+                  struct rbh_sstack *sstack);
 
 bool
-sqlite_json2xattrs(const char *json, struct rbh_value_map *xattrs);
+sqlite_json2xattrs(const char *json, struct rbh_value_map *xattrs,
+                   struct rbh_sstack *sstack);
 
 void
 bin2hex(const struct rbh_value *binary, char *buf);
 
 bool
 setup_custom_functions(sqlite3 *db);
+
+// cf. XATTR_VALUE_MAX_VFS_SIZE in posix.c
+#define SQLITE_MAX_ALLOC_SIZE 1 << 16
+
+void *
+sqlite_cursor_alloc(struct sqlite_cursor *cursor, size_t count);
+
+char *
+sqlite_cursor_strdup(struct sqlite_cursor *cursor, const char *str);
+
+void
+sqlite_cursor_free(struct sqlite_cursor *cursor);
 
 #endif
