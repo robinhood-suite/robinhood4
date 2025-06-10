@@ -29,10 +29,23 @@
     ck_assert_pstr_eq((X)->fragment, (Y)->fragment); \
 } while (false)
 
+#define ck_assert_uri_address_eq(X, Y) do { \
+    ck_assert_str_eq((X)->username, (Y)->username); \
+    ck_assert_str_eq((X)->password, (Y)->password); \
+    ck_assert_str_eq((X)->host, (Y)->host); \
+    ck_assert_uint_eq((X)->port, (Y)->port); \
+} while (false)
+
 #define ck_assert_uri_eq(X, Y) do { \
     ck_assert_int_eq((X)->type, (Y)->type); \
     ck_assert_str_eq((X)->backend, (Y)->backend); \
     ck_assert_str_eq((X)->fsname, (Y)->fsname); \
+    if ((X)->address) { \
+        ck_assert_ptr_nonnull((Y)->address); \
+        ck_assert_uri_address_eq((X)->address, (Y)->address); \
+    } else  { \
+        ck_assert_ptr_null((Y)->address); \
+    } \
     switch ((X)->type) { \
     case RBH_UT_BARE: \
         break; \
@@ -775,6 +788,166 @@ START_TEST(rufru_fid_encoded_fragment)
 }
 END_TEST
 
+START_TEST(rufru_username)
+{
+    const struct rbh_raw_uri RAW_URI = {
+        .scheme = RBH_SCHEME,
+        .userinfo = "userinfo",
+        .path = ":",
+    };
+    struct rbh_uri_address URI_ADDRESS = {
+        .username = "userinfo",
+        .password = "",
+        .host = "",
+        .port = 0,
+    };
+    const struct rbh_uri URI = {
+        .type = RBH_UT_BARE,
+        .address = &URI_ADDRESS,
+        .backend = "",
+        .fsname = "",
+        .path = "",
+    };
+    struct rbh_uri *uri;
+
+    uri = rbh_uri_from_raw_uri(&RAW_URI);
+    ck_assert_ptr_nonnull(uri);
+    ck_assert_uri_eq(uri, &URI);
+}
+END_TEST
+
+START_TEST(rufru_username_and_password)
+{
+    const struct rbh_raw_uri RAW_URI = {
+        .scheme = RBH_SCHEME,
+        .userinfo = "userinfo:blob123",
+        .path = ":",
+    };
+    struct rbh_uri_address URI_ADDRESS = {
+        .username = "userinfo",
+        .password = "blob123",
+        .host = "",
+        .port = 0,
+    };
+    const struct rbh_uri URI = {
+        .type = RBH_UT_BARE,
+        .address = &URI_ADDRESS,
+        .backend = "",
+        .fsname = "",
+        .path = "",
+    };
+    struct rbh_uri *uri;
+
+    uri = rbh_uri_from_raw_uri(&RAW_URI);
+    ck_assert_ptr_nonnull(uri);
+    ck_assert_uri_eq(uri, &URI);
+}
+END_TEST
+
+START_TEST(rufru_host)
+{
+    const struct rbh_raw_uri RAW_URI = {
+        .scheme = RBH_SCHEME,
+        .host = "remotehost",
+        .path = ":",
+    };
+    struct rbh_uri_address URI_ADDRESS = {
+        .username = "",
+        .password = "",
+        .host = "remotehost",
+        .port = 0,
+    };
+    const struct rbh_uri URI = {
+        .type = RBH_UT_BARE,
+        .address = &URI_ADDRESS,
+        .backend = "",
+        .fsname = "",
+        .path = "",
+    };
+    struct rbh_uri *uri;
+
+    uri = rbh_uri_from_raw_uri(&RAW_URI);
+    ck_assert_ptr_nonnull(uri);
+    ck_assert_uri_eq(uri, &URI);
+}
+END_TEST
+
+START_TEST(rufru_host_and_port)
+{
+    const struct rbh_raw_uri RAW_URI = {
+        .scheme = RBH_SCHEME,
+        .host = "remotehost",
+        .port = "42",
+        .path = ":",
+    };
+    struct rbh_uri_address URI_ADDRESS = {
+        .username = "",
+        .password = "",
+        .host = "remotehost",
+        .port = 42,
+    };
+    const struct rbh_uri URI = {
+        .type = RBH_UT_BARE,
+        .address = &URI_ADDRESS,
+        .backend = "",
+        .fsname = "",
+        .path = "",
+    };
+    struct rbh_uri *uri;
+
+    uri = rbh_uri_from_raw_uri(&RAW_URI);
+    ck_assert_ptr_nonnull(uri);
+    ck_assert_uri_eq(uri, &URI);
+}
+END_TEST
+
+START_TEST(rufru_invalid_port)
+{
+    const struct rbh_raw_uri RAW_URI = {
+        .scheme = RBH_SCHEME,
+        .port = "invalid",
+        .path = ":",
+    };
+    struct rbh_uri *uri;
+
+    errno = 0;
+    uri = rbh_uri_from_raw_uri(&RAW_URI);
+
+    ck_assert_ptr_null(uri);
+    ck_assert_int_eq(errno, EINVAL);
+}
+END_TEST
+
+START_TEST(rufru_complete_address)
+{
+    const struct rbh_raw_uri RAW_URI = {
+        .scheme = RBH_SCHEME,
+        .userinfo = "john:doe",
+        .host = "sum",
+        .port = "41",
+        .path = ":",
+    };
+    struct rbh_uri_address URI_ADDRESS = {
+        .username = "john",
+        .password = "doe",
+        .host = "sum",
+        .port = 41,
+    };
+    const struct rbh_uri URI = {
+        .type = RBH_UT_BARE,
+        .address = &URI_ADDRESS,
+        .backend = "",
+        .fsname = "",
+        .path = "",
+    };
+    struct rbh_uri *uri;
+
+    uri = rbh_uri_from_raw_uri(&RAW_URI);
+    ck_assert_ptr_nonnull(uri);
+    ck_assert_uri_eq(uri, &URI);
+}
+END_TEST
+
 static Suite *
 unit_suite(void)
 {
@@ -831,6 +1004,12 @@ unit_suite(void)
     tcase_add_test(tests, rufru_id_not_a_fid);
     tcase_add_test(tests, rufru_id_two_unencoded_colons_fragment);
     tcase_add_test(tests, rufru_fid_encoded_fragment);
+    tcase_add_test(tests, rufru_username);
+    tcase_add_test(tests, rufru_username_and_password);
+    tcase_add_test(tests, rufru_host);
+    tcase_add_test(tests, rufru_host_and_port);
+    tcase_add_test(tests, rufru_invalid_port);
+    tcase_add_test(tests, rufru_complete_address);
 
     suite_add_tcase(suite, tests);
 
