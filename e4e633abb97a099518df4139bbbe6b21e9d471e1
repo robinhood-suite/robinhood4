@@ -63,6 +63,30 @@
       },
       "revId": "e4e633abb97a099518df4139bbbe6b21e9d471e1",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "09bd4619_c1a3e6e7",
+        "filename": "utils/tests/setup.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-06-10T12:24:15Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "248eb104_795faf0f",
+      "range": {
+        "startLine": 30,
+        "startChar": 0,
+        "endLine": 31,
+        "endChar": 17
+      },
+      "revId": "e4e633abb97a099518df4139bbbe6b21e9d471e1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
