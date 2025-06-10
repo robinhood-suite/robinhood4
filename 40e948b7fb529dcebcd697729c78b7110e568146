@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "62d524fb_e138e8df",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-06-10T08:25:32Z",
+      "side": 1,
+      "message": "minor: maybe just rename it without the \u0027.py\u0027 like Guillaume suggest it to run it as a script",
+      "revId": "40e948b7fb529dcebcd697729c78b7110e568146",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
