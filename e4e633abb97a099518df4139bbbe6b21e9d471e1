@@ -16,6 +16,29 @@
       "message": "I think it could be nice to extend this script to be able to setup all the dependencies for all the tests (hestia, s3, ...)",
       "revId": "e4e633abb97a099518df4139bbbe6b21e9d471e1",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ade4da00_733fe20f",
+        "filename": "utils/tests/setup.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-06-10T11:59:28Z",
+      "side": 1,
+      "message": "question: something not obvious, you seem to init 3 of each, so why 4?",
+      "range": {
+        "startLine": 30,
+        "startChar": 0,
+        "endLine": 31,
+        "endChar": 17
+      },
+      "revId": "e4e633abb97a099518df4139bbbe6b21e9d471e1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
