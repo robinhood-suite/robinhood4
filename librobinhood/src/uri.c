@@ -19,6 +19,7 @@
 #include <stdint.h>
 
 #include "robinhood/uri.h"
+#include "robinhood/utils.h"
 
 #include "lu_fid.h"
 #include "utils.h"
@@ -316,7 +317,65 @@ parse_raw_authority_into_uri_authority(char *data, size_t *size,
                                        const char *port,
                                        struct rbh_uri_authority *authority)
 {
-    return 0;
+    ssize_t counter = 0;
+    char *colon;
+    int rc;
+
+    if (userinfo == NULL) {
+        authority->username = "";
+        authority->password = "";
+        goto skip_userinfo;
+    }
+
+    authority->username = data;
+
+    rc = strlen(userinfo);
+    assert((size_t)rc < *size);
+
+    memcpy(data, userinfo, rc);
+    data[rc] = '\0';
+
+    colon = strchr(data, ':');
+    if (colon) {
+        *colon = '\0';
+        authority->password = colon + 1;
+    } else {
+        authority->password = "";
+    }
+
+    data += rc + 1;
+    *size -= rc + 1;
+    counter += rc + 1;
+
+skip_userinfo:
+    if (host == NULL) {
+        authority->host = "";
+        goto skip_host;
+    }
+
+    authority->host = data;
+
+    rc = strlen(host);
+    assert((size_t)rc < *size);
+
+    memcpy(data, host, rc);
+    data[rc] = '\0';
+    data += rc + 1;
+    *size -= rc + 1;
+    counter += rc + 1;
+
+skip_host:
+    if (port == NULL) {
+        authority->port = 0;
+        goto skip_port;
+    }
+
+    rc = str2uint64_t(port, &authority->port);
+    if (rc)
+        return rc;
+
+skip_port:
+    return counter;
 }
 
 struct rbh_uri *
