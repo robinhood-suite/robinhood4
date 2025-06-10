@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "00807028_6f3f7b50",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-06-10T08:52:03Z",
+      "side": 1,
+      "message": "I think it could be nice to extend this script to be able to setup all the dependencies for all the tests (hestia, s3, ...)",
+      "revId": "e4e633abb97a099518df4139bbbe6b21e9d471e1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
