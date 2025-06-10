@@ -19,6 +19,7 @@
 #include <stdint.h>
 
 #include "robinhood/uri.h"
+#include "robinhood/utils.h"
 
 #include "lu_fid.h"
 #include "utils.h"
@@ -318,7 +319,65 @@ parse_raw_address_into_uri_address(char *data, size_t *size,
                                    const char *port,
                                    struct rbh_uri_address *address)
 {
-    return 0;
+    ssize_t counter = 0;
+    char *colon;
+    int rc;
+
+    if (userinfo == NULL) {
+        address->username = "";
+        address->password = "";
+        goto skip_userinfo;
+    }
+
+    address->username = data;
+
+    rc = strlen(userinfo);
+    assert((size_t)rc < *size);
+
+    memcpy(data, userinfo, rc);
+    data[rc] = '\0';
+
+    colon = strchr(data, ':');
+    if (colon) {
+        *colon = '\0';
+        address->password = colon + 1;
+    } else {
+        address->password = "";
+    }
+
+    data += rc + 1;
+    *size -= rc + 1;
+    counter += rc + 1;
+
+skip_userinfo:
+    if (host == NULL) {
+        address->host = "";
+        goto skip_host;
+    }
+
+    address->host = data;
+
+    rc = strlen(host);
+    assert((size_t)rc < *size);
+
+    memcpy(data, host, rc);
+    data[rc] = '\0';
+    data += rc + 1;
+    *size -= rc + 1;
+    counter += rc + 1;
+
+skip_host:
+    if (port == NULL) {
+        address->port = 0;
+        goto skip_port;
+    }
+
+    rc = str2uint64_t(port, &address->port);
+    if (rc)
+        return rc;
+
+skip_port:
+    return counter;
 }
 
 struct rbh_uri *
