@@ -22,6 +22,30 @@
       },
       "revId": "de632c351906a35ac0bf281b274fb207c8ad566f",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bc2e92bf_e3fdba6c",
+        "filename": "librobinhood/tests/unit/check_uri.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-06-11T09:21:06Z",
+      "side": 1,
+      "message": "No it is not, turns out I was completely wrong and this patch is invalid",
+      "parentUuid": "8bca5246_3d1acca9",
+      "range": {
+        "startLine": 203,
+        "startChar": 8,
+        "endLine": 203,
+        "endChar": 23
+      },
+      "revId": "de632c351906a35ac0bf281b274fb207c8ad566f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
