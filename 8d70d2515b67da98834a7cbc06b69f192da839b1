@@ -46,6 +46,30 @@
       },
       "revId": "8d70d2515b67da98834a7cbc06b69f192da839b1",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2456240b_78ea6b5f",
+        "filename": "librobinhood/src/plugins/sqlite/backend.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-06-11T07:52:15Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "77bee3aa_403370b4",
+      "range": {
+        "startLine": 12,
+        "startChar": 15,
+        "endLine": 12,
+        "endChar": 36
+      },
+      "revId": "8d70d2515b67da98834a7cbc06b69f192da839b1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
