@@ -520,7 +520,12 @@ list_capabilities(char *uri)
 
     plugin = rbh_backend_plugin_import(uri);
     if (plugin != NULL) {
-        backend = rbh_backend_plugin_new(plugin, NULL, "none", NULL, false);
+        const struct rbh_uri URI = {
+            .backend = NULL,
+            .fsname = "none",
+        };
+
+        backend = rbh_backend_plugin_new(plugin, &URI, NULL, false);
     } else {
         backend = rbh_backend_from_uri(uri, true);
         if (backend == NULL)

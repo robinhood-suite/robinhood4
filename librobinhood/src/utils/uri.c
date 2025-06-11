@@ -80,16 +80,17 @@ resolve_config_plugin_name(struct rbh_config *config, const char *backend)
 }
 
 static struct rbh_backend *
-backend_new(const char *type, const char *fsname, bool read_only)
+backend_new(const struct rbh_uri *uri, bool read_only)
 {
     const struct rbh_backend_plugin *plugin;
     struct rbh_backend *backend;
     struct rbh_config *config;
 
     config = rbh_config_get();
-    plugin = backend_plugin_import(resolve_config_plugin_name(config, type));
+    plugin = backend_plugin_import(resolve_config_plugin_name(config,
+                                                              uri->backend));
 
-    backend = rbh_backend_plugin_new(plugin, type, fsname, config, read_only);
+    backend = rbh_backend_plugin_new(plugin, uri, config, read_only);
     if (backend == NULL) {
 
         if (errno == RBH_BACKEND_ERROR)
@@ -156,8 +157,7 @@ backend_branch_from_path(struct rbh_backend *backend, const char *path)
 static struct rbh_backend *
 backend_from_uri(const struct rbh_uri *uri, bool read_only)
 {
-    struct rbh_backend *backend = backend_new(uri->backend, uri->fsname,
-                                              read_only);
+    struct rbh_backend *backend = backend_new(uri, read_only);
     struct rbh_backend *branch = NULL; /* gcc: unitialized variable */
     int save_errno;
 

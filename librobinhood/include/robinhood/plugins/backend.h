@@ -19,6 +19,7 @@
 #include "robinhood/filter.h"
 #include "robinhood/fsentry.h"
 #include "robinhood/plugin.h"
+#include "robinhood/uri.h"
 
 struct rbh_backend_plugin {
     struct rbh_plugin plugin;
@@ -30,8 +31,7 @@ struct rbh_backend_plugin {
 
 struct rbh_backend_plugin_operations {
     struct rbh_backend *(*new)(const struct rbh_backend_plugin *self,
-                               const char *type,
-                               const char *fsname,
+                               const struct rbh_uri *uri,
                                struct rbh_config *config,
                                bool read_only);
     void (*destroy)();
@@ -137,10 +137,7 @@ rbh_plugin_load_extension(const struct rbh_plugin *super, const char *name);
  * Create a backend from a backend plugin
  *
  * @param plugin    the plugin to create a backend from
- * @param type      if not NULL, it is the name given in the URI. If NULL, the
- *                  name in the URI was the same as the plugin name
- * @param fsname    a string that identifies which filesystem to load a backend
- *                  for
+ * @param uri       the URI given to the command
  * @param read_only whether we intend to open the backend in read_only or
  *                  read/write mode
  *
@@ -153,12 +150,11 @@ rbh_plugin_load_extension(const struct rbh_plugin *super, const char *name);
  */
 static inline struct rbh_backend *
 rbh_backend_plugin_new(const struct rbh_backend_plugin *plugin,
-                       const char *type,
-                       const char *fsname,
+                       const struct rbh_uri *uri,
                        struct rbh_config *config,
                        bool read_only)
 {
-    return plugin->ops->new(plugin, type, fsname, config, read_only);
+    return plugin->ops->new(plugin, uri, config, read_only);
 }
 
 /**
