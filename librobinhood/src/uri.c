@@ -313,6 +313,7 @@ fragment_is_fid(const char *fragment, size_t length)
 struct rbh_uri *
 rbh_uri_from_raw_uri(const struct rbh_raw_uri *raw_uri)
 {
+    const char *raw_uri_path_for_rbh;
     size_t fragment_length = 0; /* gcc: uninitialized variable */
     enum rbh_uri_type type;
     struct rbh_uri *uri;
@@ -367,9 +368,15 @@ rbh_uri_from_raw_uri(const struct rbh_raw_uri *raw_uri)
     /* uri->type */
     uri->type = type;
 
+    if (raw_uri->path[0] == '/')
+        raw_uri_path_for_rbh = raw_uri->path + 1;
+    else
+        raw_uri_path_for_rbh = raw_uri->path;
+
     /* uri->backend */
     uri->backend = data;
-    rc = rbh_percent_decode(data, raw_uri->path, colon - raw_uri->path);
+    rc = rbh_percent_decode(data, raw_uri_path_for_rbh,
+                            colon - raw_uri_path_for_rbh);
     if (rc < 0)
         goto out_free_uri;
 
