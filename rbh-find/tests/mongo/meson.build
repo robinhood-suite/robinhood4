@@ -4,14 +4,11 @@
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
 
-subdir('posix')
-subdir('retention')
-subdir('mongo')
+integration_tests = [
+  'test_uri',
+]
 
-if test_mfu
-    subdir('mpifile')
-endif
-
-if get_option('lustre').enabled()
-    subdir('lustre')
-endif
+foreach t: integration_tests
+    e = find_program(t + '.bash')
+    test(t, e, env: backend_path_env, suite: 'rbh-find', timeout: 120)
+endforeach
