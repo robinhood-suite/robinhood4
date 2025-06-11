@@ -206,6 +206,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0946b685_6d24bc94",
+        "filename": "librobinhood/src/plugins/sqlite/filter.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 420,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-06-11T07:57:21Z",
+      "side": 1,
+      "message": "An exemple works perfect, thanks",
+      "parentUuid": "63b732c1_b3c6a8b6",
+      "range": {
+        "startLine": 406,
+        "startChar": 12,
+        "endLine": 420,
+        "endChar": 13
+      },
+      "revId": "98a26789ca62012514a6983b91478c20949eaa08",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4dd6f1b4_50d15782",
