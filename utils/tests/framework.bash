@@ -231,6 +231,8 @@ teardown()
     # properly cleaned.
     set +e
 
+    eval "$sub_teardown"
+
     local output=$(do_db drop "$testdb" 2>&1)
     if (( $? != 0 )); then
         echo "Failed to drop '$testdb':"
@@ -241,8 +243,6 @@ teardown()
     if [ "$(type -t $test_teardown)" == "function" ]; then
         $test_teardown
     fi
-
-    eval "$sub_teardown"
 }
 
 run_tests()
