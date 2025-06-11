@@ -142,6 +142,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "60b3f270_e6e894c7",
+        "filename": "librobinhood/src/plugins/sqlite/update.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-06-11T07:51:38Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "fca17060_aa691025",
+      "range": {
+        "startLine": 264,
+        "startChar": 4,
+        "endLine": 264,
+        "endChar": 50
+      },
+      "revId": "7833c9d1c1e25c895b5b07345322c17b6d357176",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5f5b7303_e920648f",
