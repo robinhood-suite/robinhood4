@@ -426,8 +426,7 @@ static const struct rbh_backend S3_BACKEND = {
 struct rbh_backend *
 rbh_s3_backend_new(__attribute__((unused))
                    const struct rbh_backend_plugin *self,
-                   __attribute__((unused)) const char *type,
-                   __attribute__((unused)) const char *path,
+                   __attribute__((unused)) const struct rbh_uri *uri,
                    struct rbh_config *config,
                    bool read_only)
 {
