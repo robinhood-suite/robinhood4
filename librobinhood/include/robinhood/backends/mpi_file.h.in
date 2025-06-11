@@ -24,7 +24,7 @@
 /**
  * Create a mpi_file backend
  *
- * @param path      the path of the mpifileutils file the backend refers to
+ * @param uri       the URI given to the command
  * @param config    the config to use in the new backend
  *
  * @return          a pointer to a newly allocated mpi_file backend on
@@ -34,8 +34,7 @@
  */
 struct rbh_backend *
 rbh_mpi_file_backend_new(const struct rbh_backend_plugin *self,
-                         const char *type,
-                         const char *path,
+                         const struct rbh_uri *uri,
                          __attribute__((unused)) struct rbh_config *config,
                          bool read_only);
 

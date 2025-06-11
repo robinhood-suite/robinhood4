@@ -74,11 +74,15 @@ START_TEST(lf_missing_root)
 {
     const struct rbh_filter_options OPTIONS = {};
     const struct rbh_backend_plugin *posix;
+    const struct rbh_uri URI = {
+        .backend = "lustre",
+        .fsname = "missing",
+    };
     struct rbh_backend *lustre;
 
     posix = rbh_backend_plugin_import("posix");
     ck_assert_ptr_nonnull(posix);
-    lustre = rbh_backend_plugin_new(posix, "lustre", "missing", NULL, false);
+    lustre = rbh_backend_plugin_new(posix, &URI, NULL, false);
     ck_assert_ptr_nonnull(lustre);
 
     errno = 0;
@@ -100,6 +104,10 @@ START_TEST(lf_empty_root)
     const struct rbh_backend_plugin *posix;
     struct rbh_mut_iterator *fsentries;
     static const char *EMPTY = "empty";
+    const struct rbh_uri URI = {
+        .backend = "lustre",
+        .fsname = EMPTY,
+    };
     struct rbh_fsentry *fsentry;
     struct rbh_backend *lustre;
 
@@ -107,7 +115,7 @@ START_TEST(lf_empty_root)
 
     posix = rbh_backend_plugin_import("posix");
     ck_assert_ptr_nonnull(posix);
-    lustre = rbh_backend_plugin_new(posix, "lustre", EMPTY, NULL, false);
+    lustre = rbh_backend_plugin_new(posix, &URI, NULL, false);
     ck_assert_ptr_nonnull(lustre);
 
     fsentries = rbh_backend_filter(lustre, NULL, &OPTIONS, &OUTPUT);
