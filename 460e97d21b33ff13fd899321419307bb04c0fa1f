@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2c0da2a6_55945a19",
+        "filename": "librobinhood/src/plugins/mongo/mongo.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 338,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-06-11T08:54:29Z",
+      "side": 1,
+      "message": "question: after reading a bit of the doc, do you think it could be used and useful to add a session for rbh-sync and fsevents, for better performances for instance ?",
+      "range": {
+        "startLine": 338,
+        "startChar": 0,
+        "endLine": 338,
+        "endChar": 15
+      },
+      "revId": "460e97d21b33ff13fd899321419307bb04c0fa1f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dbcd8599_23a2b15b",
+        "filename": "librobinhood/src/plugins/mongo/mongo.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 378,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-06-11T08:54:29Z",
+      "side": 1,
+      "message": "nit: `return now.tv_sec - start-\u003etv_sec;`",
+      "range": {
+        "startLine": 376,
+        "startChar": 4,
+        "endLine": 378,
+        "endChar": 19
+      },
+      "revId": "460e97d21b33ff13fd899321419307bb04c0fa1f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8316ab0a_9e09e845",
+        "filename": "librobinhood/src/plugins/mongo/mongo.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 784,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-06-11T08:54:29Z",
+      "side": 1,
+      "message": "question: does this session have to be once per filter, or could it be created and added to the backend creation function ?",
+      "range": {
+        "startLine": 784,
+        "startChar": 4,
+        "endLine": 784,
+        "endChar": 37
+      },
+      "revId": "460e97d21b33ff13fd899321419307bb04c0fa1f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
