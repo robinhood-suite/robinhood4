@@ -1451,32 +1451,56 @@ get_mongo_addr()
 }
 
 static int
-mongo_backend_init(struct mongo_backend *mongo, const char *fsname)
+mongo_backend_init(struct mongo_backend *mongo, const struct rbh_uri *uri)
 {
-    mongoc_uri_t *uri;
+    mongoc_uri_t *mongo_uri;
     int save_errno;
     const char *addr;
     int rc;
 
-    addr = get_mongo_addr();
-    if (addr == NULL)
-        return -1;
+    if (uri->authority) {
+        /* Per RFC 3986, if authority is given, the host MUST be specified, but
+         * the port is optionnal. So no need to revert to a default hostname.
+         */
+        uint16_t port = (uri->authority->port != 0 ? uri->authority->port :
+                                                     27017);
 
-    uri = mongoc_uri_new(addr);
-    if (uri == NULL) {
+        mongo_uri = mongoc_uri_new_for_host_port(uri->authority->host, port);
+
+        if (strcmp(uri->authority->username, "") &&
+            !mongoc_uri_set_username(mongo_uri, uri->authority->username)) {
+            mongoc_uri_destroy(mongo_uri);
+            errno = EINVAL;
+            return -1;
+        }
+
+        if (strcmp(uri->authority->password, "") &&
+            !mongoc_uri_set_password(mongo_uri, uri->authority->password)) {
+            mongoc_uri_destroy(mongo_uri);
+            errno = EINVAL;
+            return -1;
+        }
+    } else {
+        addr = get_mongo_addr();
+        if (addr == NULL)
+            return -1;
+
+        mongo_uri = mongoc_uri_new(addr);
+        if (mongo_uri == NULL) {
+            errno = EINVAL;
+            return -1;
+        }
+    }
+
+    if (!mongoc_uri_set_database(mongo_uri, uri->fsname)) {
+        mongoc_uri_destroy(mongo_uri);
         errno = EINVAL;
         return -1;
     }
 
-    if (!mongoc_uri_set_database(uri, fsname)) {
-        mongoc_uri_destroy(uri);
-        errno = EINVAL;
-        return -1;
-    }
-
-    rc = mongo_backend_init_from_uri(mongo, uri);
+    rc = mongo_backend_init_from_uri(mongo, mongo_uri);
     save_errno = errno;
-    mongoc_uri_destroy(uri);
+    mongoc_uri_destroy(mongo_uri);
     errno = save_errno;
     return rc;
 }
@@ -1495,7 +1519,7 @@ rbh_mongo_backend_new(const struct rbh_backend_plugin *self,
 
     rbh_config_load(config);
 
-    if (mongo_backend_init(mongo, uri->fsname)) {
+    if (mongo_backend_init(mongo, uri)) {
         int save_errno = errno;
 
         free(mongo);
