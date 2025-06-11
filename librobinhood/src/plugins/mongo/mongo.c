@@ -24,6 +24,7 @@
 
 #include "robinhood/backends/mongo.h"
 #include "robinhood/sstack.h"
+#include "robinhood/uri.h"
 #include "value.h"
 #include "utils.h"
 
@@ -1482,8 +1483,7 @@ mongo_backend_init(struct mongo_backend *mongo, const char *fsname)
 
 struct rbh_backend *
 rbh_mongo_backend_new(const struct rbh_backend_plugin *self,
-                      const char *type,
-                      const char *fsname,
+                      const struct rbh_uri *uri,
                       struct rbh_config *config,
                       bool read_only)
 {
@@ -1495,7 +1495,7 @@ rbh_mongo_backend_new(const struct rbh_backend_plugin *self,
 
     rbh_config_load(config);
 
-    if (mongo_backend_init(mongo, fsname)) {
+    if (mongo_backend_init(mongo, uri->fsname)) {
         int save_errno = errno;
 
         free(mongo);

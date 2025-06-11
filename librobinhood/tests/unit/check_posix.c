@@ -73,9 +73,13 @@ unchecked_teardown_tmpdir(void)
 START_TEST(pf_missing_root)
 {
     const struct rbh_filter_options OPTIONS = {};
+    const struct rbh_uri URI = {
+        .backend = NULL,
+        .fsname = "missing",
+    };
     struct rbh_backend *posix;
 
-    posix = rbh_posix_backend_new(NULL, NULL, "missing", NULL, true);
+    posix = rbh_posix_backend_new(NULL, &URI, NULL, true);
     ck_assert_ptr_nonnull(posix);
 
     errno = 0;
@@ -96,13 +100,17 @@ START_TEST(pf_empty_root)
     };
     static const char *EMPTY = "empty";
     struct rbh_mut_iterator *fsentries;
+    const struct rbh_uri URI = {
+        .backend = NULL,
+        .fsname = EMPTY,
+    };
     struct rbh_fsentry *fsentry;
     struct rbh_backend *posix;
 
 
     ck_assert_int_eq(mkdir(EMPTY, S_IRWXU), 0);
 
-    posix = rbh_posix_backend_new(NULL, NULL, EMPTY, NULL, true);
+    posix = rbh_posix_backend_new(NULL, &URI, NULL, true);
     ck_assert_ptr_nonnull(posix);
 
     fsentries = rbh_backend_filter(posix, NULL, &OPTIONS, &OUTPUT);
@@ -133,9 +141,13 @@ static const unsigned int PBO_MAX = RBH_PBO_STATX_SYNC_TYPE + 1;
 
 START_TEST(pbo_get_unknown)
 {
+    const struct rbh_uri URI = {
+        .backend = NULL,
+        .fsname = "",
+    };
     struct rbh_backend *posix;
 
-    posix = rbh_posix_backend_new(NULL, NULL, "", NULL, true);
+    posix = rbh_posix_backend_new(NULL, &URI, NULL, true);
     ck_assert_ptr_nonnull(posix);
 
     ck_assert_int_eq(rbh_backend_get_option(posix, PBO_MAX, NULL, NULL),
@@ -148,9 +160,13 @@ END_TEST
 
 START_TEST(pbo_set_unknown)
 {
+    const struct rbh_uri URI = {
+        .backend = NULL,
+        .fsname = "",
+    };
     struct rbh_backend *posix;
 
-    posix = rbh_posix_backend_new(NULL, NULL, "", NULL, true);
+    posix = rbh_posix_backend_new(NULL, &URI, NULL, true);
     ck_assert_ptr_nonnull(posix);
 
     ck_assert_int_eq(rbh_backend_set_option(posix, PBO_MAX, NULL, 0), -1);
@@ -169,10 +185,14 @@ static const size_t PBO_SIZES[] = {
 START_TEST(pbo_get_sizes)
 {
     size_t size = PBO_SIZES[BO_INDEX(_i)];
+    const struct rbh_uri URI = {
+        .backend = NULL,
+        .fsname = "",
+    };
     struct rbh_backend *posix;
     void *data;
 
-    posix = rbh_posix_backend_new(NULL, NULL, "", NULL, true);
+    posix = rbh_posix_backend_new(NULL, &URI, NULL, true);
     ck_assert_ptr_nonnull(posix);
 
     data = malloc(size + 1);
@@ -203,11 +223,15 @@ static const void *PBO_DEFAULTS[] = {
 
 START_TEST(pbo_defaults)
 {
+    const struct rbh_uri URI = {
+        .backend = NULL,
+        .fsname = "",
+    };
     struct rbh_backend *posix;
     size_t size;
     void *data;
 
-    posix = rbh_posix_backend_new(NULL, NULL, "", NULL, true);
+    posix = rbh_posix_backend_new(NULL, &URI, NULL, true);
     ck_assert_ptr_nonnull(posix);
 
     size = PBO_SIZES[BO_INDEX(_i)];
@@ -227,9 +251,13 @@ END_TEST
 START_TEST(pbo_set_sizes)
 {
     size_t size = PBO_SIZES[BO_INDEX(_i)];
+    const struct rbh_uri URI = {
+        .backend = NULL,
+        .fsname = "",
+    };
     struct rbh_backend *posix;
 
-    posix = rbh_posix_backend_new(NULL, NULL, "", NULL, true);
+    posix = rbh_posix_backend_new(NULL, &URI, NULL, true);
     ck_assert_ptr_nonnull(posix);
 
     /* Too little */
@@ -263,11 +291,15 @@ static const void * const * const RPBO_INVALIDS[] = {
 
 START_TEST(pbo_set_invalids)
 {
-    struct rbh_backend *posix;
     const void * const *data = RPBO_INVALIDS[BO_INDEX(_i)];
     size_t size = PBO_SIZES[BO_INDEX(_i)];
+    const struct rbh_uri URI = {
+        .backend = NULL,
+        .fsname = "",
+    };
+    struct rbh_backend *posix;
 
-    posix = rbh_posix_backend_new(NULL, NULL, "", NULL, true);
+    posix = rbh_posix_backend_new(NULL, &URI, NULL, true);
     ck_assert_ptr_nonnull(posix);
 
     for (; *data != NULL; data++) {
@@ -295,11 +327,15 @@ static const void * const * const RPBO_UNSUPPORTEDS[] = {
 
 START_TEST(pbo_set_unsupporteds)
 {
-    struct rbh_backend *posix;
     const void * const *data = RPBO_UNSUPPORTEDS[BO_INDEX(_i)];
     size_t size = PBO_SIZES[BO_INDEX(_i)];
+    const struct rbh_uri URI = {
+        .backend = NULL,
+        .fsname = "",
+    };
+    struct rbh_backend *posix;
 
-    posix = rbh_posix_backend_new(NULL, NULL, "", NULL, true);
+    posix = rbh_posix_backend_new(NULL, &URI, NULL, true);
     ck_assert_ptr_nonnull(posix);
 
     for (; *data != NULL; data++) {
@@ -330,12 +366,16 @@ static const void * const * const RBPO_VALIDS[] = {
 
 START_TEST(pbo_set_valids)
 {
-    struct rbh_backend *posix;
     const void * const *data = RBPO_VALIDS[BO_INDEX(_i)];
     size_t size = PBO_SIZES[BO_INDEX(_i)];
+    const struct rbh_uri URI = {
+        .backend = NULL,
+        .fsname = "",
+    };
+    struct rbh_backend *posix;
     void *value;
 
-    posix = rbh_posix_backend_new(NULL, NULL, "", NULL, true);
+    posix = rbh_posix_backend_new(NULL, &URI, NULL, true);
     ck_assert_ptr_nonnull(posix);
 
     value = malloc(size);

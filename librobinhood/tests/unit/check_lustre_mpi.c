@@ -1,5 +1,5 @@
 /* This file is part of the RobinHood 4
- * Copyright (C) 2024 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifer: LGPL-3.0-or-later
@@ -76,12 +76,15 @@ START_TEST(lf_missing_root)
     const struct rbh_filter_options OPTIONS = {};
     const struct rbh_backend_plugin *posix;
     struct rbh_backend *lustre_mpi;
+    const struct rbh_uri URI = {
+        .backend = "lustre-mpi",
+        .fsname = "missing",
+    };
 
     posix = rbh_backend_plugin_import("posix");
     ck_assert_ptr_nonnull(posix);
 
-    lustre_mpi = rbh_backend_plugin_new(posix, "lustre-mpi", "missing", NULL,
-                                        false);
+    lustre_mpi = rbh_backend_plugin_new(posix, &URI, NULL, false);
     ck_assert_ptr_nonnull(lustre_mpi);
 
     errno = 0;
@@ -105,14 +108,17 @@ START_TEST(lf_empty_root)
     static const char *EMPTY = "empty";
     struct rbh_backend *lustre_mpi;
     struct rbh_fsentry *fsentry;
+    const struct rbh_uri URI = {
+        .backend = "lustre-mpi",
+        .fsname = EMPTY,
+    };
 
     ck_assert_int_eq(mkdir(EMPTY, S_IRWXU), 0);
 
     posix = rbh_backend_plugin_import("posix");
     ck_assert_ptr_nonnull(posix);
 
-    lustre_mpi = rbh_backend_plugin_new(posix, "lustre-mpi", EMPTY, NULL,
-                                        false);
+    lustre_mpi = rbh_backend_plugin_new(posix, &URI, NULL, false);
     ck_assert_ptr_nonnull(lustre_mpi);
 
     fsentries = rbh_backend_filter(lustre_mpi, NULL, &OPTIONS, &OUTPUT);

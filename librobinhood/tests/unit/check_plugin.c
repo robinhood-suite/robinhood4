@@ -1,5 +1,5 @@
 /* This file is part of the RobinHood Library
- * Copyright (C) 2019 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifer: LGPL-3.0-or-later
@@ -14,6 +14,7 @@
 #include "check-compat.h"
 #include "robinhood/backend.h"
 #include "robinhood/plugin.h"
+#include "robinhood/uri.h"
 
 /*----------------------------------------------------------------------------*
  |                          Robinhood Plugin Version                          |
@@ -51,20 +52,23 @@ struct rbh_backend_plugin;
 struct rbh_config;
 
 typedef struct rbh_backend *(*new_t)(const struct rbh_backend_plugin *,
-                                     const char *,
-                                     const char *,
+                                     const struct rbh_uri *,
                                      struct rbh_config *config,
                                      bool read_only);
 
 START_TEST(rbi_posix)
 {
+    const struct rbh_uri URI = {
+        .backend = NULL,
+        .fsname = "",
+    };
     new_t rbh_posix_backend_new;
     struct rbh_backend *posix;
 
     rbh_posix_backend_new = rbh_plugin_import("posix", "rbh_posix_backend_new");
     ck_assert_ptr_nonnull(rbh_posix_backend_new);
 
-    posix = rbh_posix_backend_new(NULL, NULL, "", NULL, true);
+    posix = rbh_posix_backend_new(NULL, &URI, NULL, true);
     ck_assert_ptr_nonnull(posix);
 
     rbh_backend_destroy(posix);

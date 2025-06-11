@@ -22,6 +22,7 @@
 #include "robinhood/backend.h"
 #include "robinhood/statx.h"
 #include "robinhood/mpi_rc.h"
+#include "robinhood/uri.h"
 #include "mpi_file.h"
 
 /*----------------------------------------------------------------------------*
@@ -558,12 +559,12 @@ mpi_file_backend_init(struct mpi_file_backend *mpi_file)
 
 struct rbh_backend *
 rbh_mpi_file_backend_new(const struct rbh_backend_plugin *self,
-                         const char *type,
-                         const char *path,
+                         const struct rbh_uri *uri,
                          __attribute__((unused)) struct rbh_config *config,
                          bool read_only)
 {
     struct mpi_file_backend *mpi_file;
+    const char *path = uri->fsname;
     int save_errno;
 
     mpi_file = malloc(sizeof(*mpi_file));

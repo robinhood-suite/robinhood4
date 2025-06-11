@@ -1378,11 +1378,12 @@ rtrim(char *string, char c)
 
 struct rbh_backend *
 rbh_posix_backend_new(const struct rbh_backend_plugin *self,
-                      const char *type,
-                      const char *path,
+                      const struct rbh_uri *uri,
                       struct rbh_config *config,
                       bool read_only)
 {
+    const char *type = uri->backend;
+    const char *path = uri->fsname;
     struct posix_backend *posix;
     int save_errno = 0;
 
