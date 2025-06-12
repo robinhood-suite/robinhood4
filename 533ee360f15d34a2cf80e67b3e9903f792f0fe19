@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "63516a43_ef1f685b",
+        "filename": "rbh-find/tests/mongo/test_uri.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-06-12T07:10:34Z",
+      "side": 1,
+      "message": "missing hostname",
+      "range": {
+        "startLine": 35,
+        "startChar": 20,
+        "endLine": 35,
+        "endChar": 34
+      },
+      "revId": "533ee360f15d34a2cf80e67b3e9903f792f0fe19",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b93cf0fc_4af6b55f",
+        "filename": "rbh-find/tests/mongo/test_uri.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-06-12T07:10:34Z",
+      "side": 1,
+      "message": "You should move this in the teardown function so that it is clean on failure. You don\u0027t need the drop at the begining if you do this.",
+      "range": {
+        "startLine": 38,
+        "startChar": 4,
+        "endLine": 38,
+        "endChar": 46
+      },
+      "revId": "533ee360f15d34a2cf80e67b3e9903f792f0fe19",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ca79c096_d65757a1",
+        "filename": "rbh-find/tests/mongo/test_uri.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-06-12T07:10:34Z",
+      "side": 1,
+      "message": "What about branching?",
+      "range": {
+        "startLine": 54,
+        "startChar": 12,
+        "endLine": 54,
+        "endChar": 58
+      },
+      "revId": "533ee360f15d34a2cf80e67b3e9903f792f0fe19",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
