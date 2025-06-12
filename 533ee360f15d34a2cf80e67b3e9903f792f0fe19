@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3d883de4_98c24925",
+        "filename": "rbh-find/tests/mongo/test_uri.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-06-12T09:24:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "63516a43_ef1f685b",
+      "range": {
+        "startLine": 35,
+        "startChar": 20,
+        "endLine": 35,
+        "endChar": 34
+      },
+      "revId": "533ee360f15d34a2cf80e67b3e9903f792f0fe19",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b93cf0fc_4af6b55f",
@@ -47,6 +71,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "55eb1675_a61bfc89",
+        "filename": "rbh-find/tests/mongo/test_uri.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-06-12T09:24:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b93cf0fc_4af6b55f",
+      "range": {
+        "startLine": 38,
+        "startChar": 4,
+        "endLine": 38,
+        "endChar": 46
+      },
+      "revId": "533ee360f15d34a2cf80e67b3e9903f792f0fe19",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ca79c096_d65757a1",
@@ -60,6 +108,30 @@
       "writtenOn": "2025-06-12T07:10:34Z",
       "side": 1,
       "message": "What about branching?",
+      "range": {
+        "startLine": 54,
+        "startChar": 12,
+        "endLine": 54,
+        "endChar": 58
+      },
+      "revId": "533ee360f15d34a2cf80e67b3e9903f792f0fe19",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f1a7e181_7a1767ff",
+        "filename": "rbh-find/tests/mongo/test_uri.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-06-12T09:24:27Z",
+      "side": 1,
+      "message": "Branching is just a `fragment` per URI\u0027s RFC, so it is added at the end. Added a test for it aswell.",
+      "parentUuid": "ca79c096_d65757a1",
       "range": {
         "startLine": 54,
         "startChar": 12,
