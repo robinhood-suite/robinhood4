@@ -22,6 +22,23 @@
       },
       "revId": "80f8adcc8a160b00ce12329e06eca0b7c12c0552",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "efbfbac0_6838bf7a",
+        "filename": "librobinhood/src/plugins/mongo/mongo.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 1467,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-06-12T07:25:55Z",
+      "side": 1,
+      "message": "sugest: test the value of `mongo_uri`",
+      "revId": "80f8adcc8a160b00ce12329e06eca0b7c12c0552",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
