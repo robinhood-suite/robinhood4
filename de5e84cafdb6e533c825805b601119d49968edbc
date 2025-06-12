@@ -22,6 +22,30 @@
       },
       "revId": "de5e84cafdb6e533c825805b601119d49968edbc",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6b825be2_9ffcaa24",
+        "filename": "librobinhood/tests/unit/check_uri.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 815,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-06-12T08:53:57Z",
+      "side": 1,
+      "message": "Don\u0027t know... Let\u0027s be safe.",
+      "parentUuid": "0bfaf795_06d3eb00",
+      "range": {
+        "startLine": 815,
+        "startChar": 21,
+        "endLine": 815,
+        "endChar": 30
+      },
+      "revId": "de5e84cafdb6e533c825805b601119d49968edbc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
