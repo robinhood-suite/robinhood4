@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e10c863e_e706dafe",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-06-12T09:10:48Z",
+      "side": 1,
+      "message": "If you simply use `rbh:mongo:blob`, it will use the default address, so `localhost on port 27017` + `blob` database. If you use `rbh://localhost:3984/mongo:blob`, it will use `localhost on port 3984` + `blob` database.\n\nBasically, `rbh` is mandatory, and the `mongo:blob` part is considered the `path` per URI\u0027s RFC. So the authority must be placed before the path to work",
+      "parentUuid": "169cddd6_904b72f4",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 21
+      },
+      "revId": "80f8adcc8a160b00ce12329e06eca0b7c12c0552",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "efbfbac0_6838bf7a",
@@ -37,6 +61,24 @@
       "writtenOn": "2025-06-12T07:25:55Z",
       "side": 1,
       "message": "sugest: test the value of `mongo_uri`",
+      "revId": "80f8adcc8a160b00ce12329e06eca0b7c12c0552",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "da091a63_840ed7be",
+        "filename": "librobinhood/src/plugins/mongo/mongo.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 1467,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-06-12T09:10:48Z",
+      "side": 1,
+      "message": "According to the documentation, https://mongoc.org/libmongoc/current/mongoc_uri_new_for_host_port.html, this function cannot fail.",
+      "parentUuid": "efbfbac0_6838bf7a",
       "revId": "80f8adcc8a160b00ce12329e06eca0b7c12c0552",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
