@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "65b185c7_247b184c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-06-12T08:59:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fdb8ac12_e36373fb",
+      "range": {
+        "startLine": 9,
+        "startChar": 35,
+        "endLine": 9,
+        "endChar": 43
+      },
+      "revId": "7de882bb297d485fef5414aa2028f0d525842ce7",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d0e9eff0_eb9a0ef3",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-06-12T07:21:25Z",
       "side": 1,
       "message": "minor: remove the type and fsname parameter",
+      "range": {
+        "startLine": 33,
+        "startChar": 1,
+        "endLine": 34,
+        "endChar": 68
+      },
+      "revId": "7de882bb297d485fef5414aa2028f0d525842ce7",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dc357049_c648868f",
+        "filename": "librobinhood/include/robinhood/backends/mongo.h.in",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-06-12T08:59:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d0e9eff0_eb9a0ef3",
       "range": {
         "startLine": 33,
         "startChar": 1,
