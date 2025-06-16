@@ -1,0 +1,165 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8408d9b7_3cc6b55a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-06-16T08:57:53Z",
+      "side": 1,
+      "message": "minor: strndup",
+      "range": {
+        "startLine": 14,
+        "startChar": 19,
+        "endLine": 14,
+        "endChar": 25
+      },
+      "revId": "e1c382c5b27fa1eb9b10fd5250dc4f4936ac7122",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e65521ad_25fa3045",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-06-16T08:57:53Z",
+      "side": 1,
+      "message": "minor: same",
+      "range": {
+        "startLine": 14,
+        "startChar": 60,
+        "endLine": 14,
+        "endChar": 66
+      },
+      "revId": "e1c382c5b27fa1eb9b10fd5250dc4f4936ac7122",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3edb130c_caed5ada",
+        "filename": "librobinhood/include/robinhood/sstack.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-06-16T08:57:53Z",
+      "side": 1,
+      "message": "suggest: `rbh_sstack_aligned_alloc`, to be similar to the `aligned_memalloc` function we already have",
+      "range": {
+        "startLine": 175,
+        "startChar": 0,
+        "endLine": 175,
+        "endChar": 16
+      },
+      "revId": "e1c382c5b27fa1eb9b10fd5250dc4f4936ac7122",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a228ed90_7d844bc7",
+        "filename": "librobinhood/include/robinhood/sstack.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-06-16T08:57:53Z",
+      "side": 1,
+      "message": "comment: since you\u0027re using `rbh_sstack_alloc` for this function, wouldn\u0027t it be nice to use it in the other allocation functions ? Mainly use it in `rbh_sstack_push`, so that every allocation using the sstack is properly aligned. What do you think ?",
+      "range": {
+        "startLine": 178,
+        "startChar": 7,
+        "endLine": 178,
+        "endChar": 23
+      },
+      "revId": "e1c382c5b27fa1eb9b10fd5250dc4f4936ac7122",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8a31053b_2330c8d0",
+        "filename": "librobinhood/include/robinhood/sstack.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-06-16T08:57:53Z",
+      "side": 1,
+      "message": "minor: add better documentation, since we already have a `pop` function, it\u0027s not explicit the difference this function and that one",
+      "range": {
+        "startLine": 196,
+        "startChar": 2,
+        "endLine": 196,
+        "endChar": 32
+      },
+      "revId": "e1c382c5b27fa1eb9b10fd5250dc4f4936ac7122",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c6a7b260_cc54218c",
+        "filename": "librobinhood/src/sstack.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-06-16T08:57:53Z",
+      "side": 1,
+      "message": "minor: why do this when you could simply add a parameter to `rbh_sstack_alloc` so that the `rbh_sstack_push` also memcpy the string ?",
+      "range": {
+        "startLine": 128,
+        "startChar": 4,
+        "endLine": 129,
+        "endChar": 21
+      },
+      "revId": "e1c382c5b27fa1eb9b10fd5250dc4f4936ac7122",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7c778ee9_3a0bb9a7",
+        "filename": "librobinhood/src/sstack.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-06-16T08:57:53Z",
+      "side": 1,
+      "message": "minor: check the output, like line 257",
+      "range": {
+        "startLine": 175,
+        "startChar": 8,
+        "endLine": 175,
+        "endChar": 21
+      },
+      "revId": "e1c382c5b27fa1eb9b10fd5250dc4f4936ac7122",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
