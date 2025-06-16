@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "613c841c_64532449",
+        "filename": "rbh-info/tests/test_lustre.bash",
+        "patchSetId": 3
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-06-16T07:37:44Z",
+      "side": 1,
+      "message": "question: doesn\u0027t https://review.gerrithub.io/c/robinhood-suite/robinhood4/+/1216663/1 ensure this test works properly ? In it you set the backends registered to be posix, lustre and the retention",
+      "range": {
+        "startLine": 18,
+        "startChar": 4,
+        "endLine": 18,
+        "endChar": 19
+      },
+      "revId": "29b17a5cd4c07b814b3a9918d40ea7d06f74816b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
