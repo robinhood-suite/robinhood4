@@ -22,6 +22,30 @@
       },
       "revId": "cd438d8c901641a082bc7f8cecc60ad7542492bd",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e2a0f112_3e00261e",
+        "filename": "librobinhood/src/generic_branch.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 409,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-06-16T09:22:28Z",
+      "side": 1,
+      "message": "I think this is tricky. Since the branch does several queries to retrieve all the entries from the DB, you can\u0027t really apply these options on all the queries. You\u0027d have to keep a count somehow. We might be able to implement limit but the skip option seems more tricky. I just needed the sort for implementing rbh-diff (a teaser for later).",
+      "parentUuid": "0233094f_d2502e69",
+      "range": {
+        "startLine": 409,
+        "startChar": 7,
+        "endLine": 409,
+        "endChar": 40
+      },
+      "revId": "cd438d8c901641a082bc7f8cecc60ad7542492bd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
