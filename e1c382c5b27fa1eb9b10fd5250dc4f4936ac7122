@@ -94,6 +94,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "867b1153_5e41ec84",
+        "filename": "librobinhood/include/robinhood/sstack.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-06-16T09:17:14Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "b81ddddb_325cd031",
+      "range": {
+        "startLine": 175,
+        "startChar": 0,
+        "endLine": 175,
+        "endChar": 16
+      },
+      "revId": "e1c382c5b27fa1eb9b10fd5250dc4f4936ac7122",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a228ed90_7d844bc7",
@@ -131,6 +155,30 @@
       "side": 1,
       "message": "alloc is using push so I can\u0027t do this.",
       "parentUuid": "a228ed90_7d844bc7",
+      "range": {
+        "startLine": 178,
+        "startChar": 7,
+        "endLine": 178,
+        "endChar": 23
+      },
+      "revId": "e1c382c5b27fa1eb9b10fd5250dc4f4936ac7122",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f7535cd7_6fd9d940",
+        "filename": "librobinhood/include/robinhood/sstack.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-06-16T09:17:14Z",
+      "side": 1,
+      "message": "Here yes, but we could reverse the process so that push uses alloc, and ensure we\u0027re always memory aligned",
+      "parentUuid": "5078bd6f_5720abf1",
       "range": {
         "startLine": 178,
         "startChar": 7,
