@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a297a928_20713808",
+        "filename": "librobinhood/src/plugins/sqlite/info.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-06-17T07:21:13Z",
+      "side": 1,
+      "message": "style: useless tab",
+      "range": {
+        "startLine": 207,
+        "startChar": 0,
+        "endLine": 207,
+        "endChar": 4
+      },
+      "revId": "bf6f7e3757acaed5c82fcf596302d996a19edff0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "86a24705_763e1353",
+        "filename": "librobinhood/src/plugins/sqlite/info.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-06-17T07:21:13Z",
+      "side": 1,
+      "message": "suggest: add a NULL check, because from what I see, the error will only be seen by the caller of this function, so better show it early",
+      "range": {
+        "startLine": 234,
+        "startChar": 8,
+        "endLine": 234,
+        "endChar": 12
+      },
+      "revId": "bf6f7e3757acaed5c82fcf596302d996a19edff0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
