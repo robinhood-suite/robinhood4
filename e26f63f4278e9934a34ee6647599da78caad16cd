@@ -68,6 +68,30 @@
       },
       "revId": "e26f63f4278e9934a34ee6647599da78caad16cd",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f7afce43_bc5f1e72",
+        "filename": "librobinhood/src/plugins/sqlite/info.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-06-17T07:40:53Z",
+      "side": 1,
+      "message": "What would the code look like? I don\u0027t really understand where you want to put the json_object_set_new.",
+      "parentUuid": "99eb65e7_f8a1b55f",
+      "range": {
+        "startLine": 250,
+        "startChar": 36,
+        "endLine": 250,
+        "endChar": 40
+      },
+      "revId": "e26f63f4278e9934a34ee6647599da78caad16cd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
