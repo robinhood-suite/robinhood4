@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a2e988f5_513a8c11",
+        "filename": "designs/rbh-policy/01-overview_and_goals.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-06-17T15:26:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0d54d26f_72b46d65",
+      "range": {
+        "startLine": 18,
+        "startChar": 25,
+        "endLine": 18,
+        "endChar": 34
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e7d2494b_f15e2f99",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-06-03T14:20:49Z",
       "side": 1,
       "message": "I\u0027m not sure this behavior is useful. An issue with this is that --config referes to the other YAML config in other tools. And this configuration file will probably be used by the daemon as well. For instance, the backends definition is inside this file.",
+      "range": {
+        "startLine": 35,
+        "startChar": 0,
+        "endLine": 38,
+        "endChar": 32
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a53cfe44_6c811a0c",
+        "filename": "designs/rbh-policy/01-overview_and_goals.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-06-17T15:26:11Z",
+      "side": 1,
+      "message": "It is true that after reflection, to add additional policies, we can simply add an import in the main python configuration file. \nThis `--config` is therefore not really useful unless you want to occasionally load an additional file to launch a policy manually without having to modify the conf file. \nA problem of confusion between yaml and python can be solved by renaming `--config` to `--pyconfig` or `pconfig` for Policy engine config.\n\nGood documentation will also help avoid confusion.",
+      "parentUuid": "e7d2494b_f15e2f99",
       "range": {
         "startLine": 35,
         "startChar": 0,
@@ -72,6 +120,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a88f50af_20d96ad3",
+        "filename": "designs/rbh-policy/02-configuration_syntax.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-06-17T15:26:11Z",
+      "side": 1,
+      "message": "So this field wouldn\u0027t be useful if it\u0027s already present in a yaml config? This would mean that we have to load the yaml config every time!",
+      "parentUuid": "08aabcf1_d345a860",
+      "range": {
+        "startLine": 12,
+        "startChar": 2,
+        "endLine": 12,
+        "endChar": 22
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "60564a53_17f34792",
         "filename": "designs/rbh-policy/02-configuration_syntax.rst",
         "patchSetId": 14
@@ -83,6 +155,30 @@
       "writtenOn": "2025-06-03T14:20:49Z",
       "side": 1,
       "message": "double space",
+      "range": {
+        "startLine": 18,
+        "startChar": 36,
+        "endLine": 18,
+        "endChar": 37
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c91ea0a5_acabf2f3",
+        "filename": "designs/rbh-policy/02-configuration_syntax.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-06-17T15:26:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "60564a53_17f34792",
       "range": {
         "startLine": 18,
         "startChar": 36,
@@ -116,6 +212,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "21bd5f06_9359d9e9",
+        "filename": "designs/rbh-policy/02-configuration_syntax.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-06-17T15:26:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cf3c9ed3_c16bc8d7",
+      "range": {
+        "startLine": 19,
+        "startChar": 37,
+        "endLine": 19,
+        "endChar": 48
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e65e1cad_63a0aaea",
@@ -129,6 +249,30 @@
       "writtenOn": "2025-06-03T14:20:49Z",
       "side": 1,
       "message": "If we want to reuse fileclasses across configuration, the file that defines all the fileclasses will not have this. So I don\u0027t think you can make this mandatory.",
+      "range": {
+        "startLine": 27,
+        "startChar": 23,
+        "endLine": 27,
+        "endChar": 36
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "352efe49_245fc549",
+        "filename": "designs/rbh-policy/02-configuration_syntax.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-06-17T15:26:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e65e1cad_63a0aaea",
       "range": {
         "startLine": 27,
         "startChar": 23,
@@ -164,6 +308,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4ff6aabe_e10878af",
+        "filename": "designs/rbh-policy/02-configuration_syntax.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-06-17T15:26:11Z",
+      "side": 1,
+      "message": "This field should just be mandatory for the main policy engine config file so that the policy engine knows where to look for the data.",
+      "parentUuid": "3ecefe06_a72e044a",
+      "range": {
+        "startLine": 35,
+        "startChar": 2,
+        "endLine": 35,
+        "endChar": 14
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "cb8e87f6_97db9392",
         "filename": "designs/rbh-policy/02-configuration_syntax.rst",
         "patchSetId": 14
@@ -175,6 +343,30 @@
       "writtenOn": "2025-06-03T14:20:49Z",
       "side": 1,
       "message": "Is it really necessary to define what a URI is at this point?",
+      "range": {
+        "startLine": 37,
+        "startChar": 0,
+        "endLine": 43,
+        "endChar": 2
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "467b7149_c784a852",
+        "filename": "designs/rbh-policy/02-configuration_syntax.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-06-17T15:26:11Z",
+      "side": 1,
+      "message": "No of course, I recalled this because I was calling the fields \u003cbackend_type\u003e, \u003cfsname\u003e above. This is especially good if you want to use parts of this design as documentation.",
+      "parentUuid": "cb8e87f6_97db9392",
       "range": {
         "startLine": 37,
         "startChar": 0,
@@ -210,6 +402,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a463af7d_abb9a9b1",
+        "filename": "designs/rbh-policy/02-configuration_syntax.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-06-17T15:26:11Z",
+      "side": 1,
+      "message": "Yes that\u0027s true, I said that just to add a structure to the config file like uri then fileclass then policies. But we can totally write a file with the data written in another order",
+      "parentUuid": "0bd88cca_a008c30c",
+      "range": {
+        "startLine": 44,
+        "startChar": 59,
+        "endLine": 45,
+        "endChar": 14
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "54e79096_dc3a0463",
         "filename": "designs/rbh-policy/02-configuration_syntax.rst",
         "patchSetId": 14
@@ -221,6 +437,30 @@
       "writtenOn": "2025-06-03T14:20:49Z",
       "side": 1,
       "message": "Why enforce it? A reasonable default could be used if not provided.",
+      "range": {
+        "startLine": 50,
+        "startChar": 5,
+        "endLine": 50,
+        "endChar": 23
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5b744d99_255043a7",
+        "filename": "designs/rbh-policy/02-configuration_syntax.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-06-17T15:26:11Z",
+      "side": 1,
+      "message": "I remember discussing this with other developers and what came out was that what might seem \"reasonable\" to some might not be to others and therefore the field would be likely to be specified by the administrator no matter what.",
+      "parentUuid": "54e79096_dc3a0463",
       "range": {
         "startLine": 50,
         "startChar": 5,
@@ -256,6 +496,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "104f3cb5_fd1cd358",
+        "filename": "designs/rbh-policy/02-configuration_syntax.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-06-17T15:26:11Z",
+      "side": 1,
+      "message": "This is exactly what I was wondering while reading your comments so far. I think I forgot something, I need to add an extra field in the config to specify this.",
+      "parentUuid": "285b9918_9b72055c",
+      "range": {
+        "startLine": 51,
+        "startChar": 53,
+        "endLine": 51,
+        "endChar": 71
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "04a9c28b_77992f21",
         "filename": "designs/rbh-policy/02-configuration_syntax.rst",
         "patchSetId": 14
@@ -267,6 +531,30 @@
       "writtenOn": "2025-06-03T14:20:49Z",
       "side": 1,
       "message": "this is redundant with the first paragraph of this section.",
+      "range": {
+        "startLine": 61,
+        "startChar": 27,
+        "endLine": 62,
+        "endChar": 60
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7c501324_d641c1cc",
+        "filename": "designs/rbh-policy/02-configuration_syntax.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-06-17T15:26:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "04a9c28b_77992f21",
       "range": {
         "startLine": 61,
         "startChar": 27,
@@ -325,6 +613,54 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c166588a_b59aefdb",
+        "filename": "designs/rbh-policy/02-configuration_syntax.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-06-17T15:26:11Z",
+      "side": 1,
+      "message": "Yes, totally, but even if Python allows it, requiring a bit of formality on this kind of thing is good for the clarity of reading and writing.",
+      "parentUuid": "bd69164e_5a50dbef",
+      "range": {
+        "startLine": 65,
+        "startChar": 53,
+        "endLine": 65,
+        "endChar": 79
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9dd2aa82_e8293266",
+        "filename": "designs/rbh-policy/02-configuration_syntax.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-06-17T15:26:11Z",
+      "side": 1,
+      "message": "For the entire instance of this policy engine. The purpose of this field is to tell the PE how often it evaluates the triggers defined in the policies in our configuration files.",
+      "parentUuid": "f053f77c_78722766",
+      "range": {
+        "startLine": 65,
+        "startChar": 52,
+        "endLine": 65,
+        "endChar": 79
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "54001052_afc93374",
         "filename": "designs/rbh-policy/02-configuration_syntax.rst",
         "patchSetId": 14
@@ -336,6 +672,30 @@
       "writtenOn": "2025-06-03T08:36:42Z",
       "side": 1,
       "message": "minor: I don\u0027t think it\u0027s necessary to specify it, or at least not here. If you really want it to be explicit, add it to the overview of the tool",
+      "range": {
+        "startLine": 66,
+        "startChar": 1,
+        "endLine": 66,
+        "endChar": 55
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "18ec2e09_86ab2f09",
+        "filename": "designs/rbh-policy/02-configuration_syntax.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-06-17T15:26:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "54001052_afc93374",
       "range": {
         "startLine": 66,
         "startChar": 1,
@@ -369,6 +729,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "df369c68_46c79aa3",
+        "filename": "designs/rbh-policy/02-configuration_syntax.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-06-17T15:26:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b6f06b48_82f6d00d",
+      "range": {
+        "startLine": 79,
+        "startChar": 8,
+        "endLine": 79,
+        "endChar": 17
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "949f6d76_5de9c028",
@@ -382,6 +766,30 @@
       "writtenOn": "2025-06-03T14:20:49Z",
       "side": 1,
       "message": "typo: and where not",
+      "range": {
+        "startLine": 93,
+        "startChar": 60,
+        "endLine": 93,
+        "endChar": 67
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad5aae06_84ee7483",
+        "filename": "designs/rbh-policy/02-configuration_syntax.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-06-17T15:26:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "949f6d76_5de9c028",
       "range": {
         "startLine": 93,
         "startChar": 60,
@@ -417,6 +825,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2765d16e_7411c3c2",
+        "filename": "designs/rbh-policy/02-configuration_syntax.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-06-17T15:26:11Z",
+      "side": 1,
+      "message": "If we have for example :\n`declare_fileclass(name \u003d \"recent_files\", target \u003d (Last_Access \u003c \"30d\"))`\nAnd after :`declare_policy(\n    name\u003d\"custom_action_policy\",\n    target\u003d(Size \u003e 100) \u0026 large_files,\n    action\u003dcustom_action\n    ...\n)`\nThe `declare_fileclass(name, condition)` function will create an instance of a class: `FileClassCondition` which has the two data members: `name` and `condition`. And we create a variable with the name given in `name`, and it points to the corresponding `FileClassCondition` instance. At the time of evaluation, python will actually understand `recent_file \u003d FileClassCondition(name, condition)`",
+      "parentUuid": "716b7f64_fba22a35",
+      "range": {
+        "startLine": 146,
+        "startChar": 53,
+        "endLine": 146,
+        "endChar": 65
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ee8af4e3_e605e5d9",
         "filename": "designs/rbh-policy/02-configuration_syntax.rst",
         "patchSetId": 14
@@ -440,6 +872,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "88758c1a_46a7fc10",
+        "filename": "designs/rbh-policy/02-configuration_syntax.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-06-17T15:26:11Z",
+      "side": 1,
+      "message": "Parameters are given to the function by kwargs. These parameters are defined in the `parameters` field of a policy.",
+      "parentUuid": "ee8af4e3_e605e5d9",
+      "range": {
+        "startLine": 155,
+        "startChar": 19,
+        "endLine": 155,
+        "endChar": 40
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3155c2a5_15435c0a",
         "filename": "designs/rbh-policy/02-configuration_syntax.rst",
         "patchSetId": 14
@@ -451,6 +907,30 @@
       "writtenOn": "2025-06-03T14:20:49Z",
       "side": 1,
       "message": "major: usage is vague. Is it in size or number of inode? Prefer GlobalSizePercent or GlobalInodePercent. Same for pool and ost.",
+      "range": {
+        "startLine": 169,
+        "startChar": 27,
+        "endLine": 169,
+        "endChar": 32
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "828cea24_c3e5b890",
+        "filename": "designs/rbh-policy/02-configuration_syntax.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-06-17T15:26:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3155c2a5_15435c0a",
       "range": {
         "startLine": 169,
         "startChar": 27,
@@ -486,6 +966,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "77c64bd4_d07fdab2",
+        "filename": "designs/rbh-policy/02-configuration_syntax.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-06-17T15:26:11Z",
+      "side": 1,
+      "message": "We\u0027re talking about files in general.",
+      "parentUuid": "2e27c818_cfd8e937",
+      "range": {
+        "startLine": 184,
+        "startChar": 33,
+        "endLine": 184,
+        "endChar": 37
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bf7ad32b_5f0dc460",
         "filename": "designs/rbh-policy/02-configuration_syntax.rst",
         "patchSetId": 14
@@ -497,6 +1001,30 @@
       "writtenOn": "2025-06-03T14:20:49Z",
       "side": 1,
       "message": "I would not list this with the optional parameters. It\u0027s not that a rule CAN override the target, it MUST.",
+      "range": {
+        "startLine": 206,
+        "startChar": 55,
+        "endLine": 206,
+        "endChar": 80
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "adb981bb_faf13e31",
+        "filename": "designs/rbh-policy/02-configuration_syntax.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-06-17T15:26:11Z",
+      "side": 1,
+      "message": "If you just want to perform an action on the entire target then there is no need for additional rules. I think it makes sense to leave this optional, it\u0027s not necessary for the policy to run.",
+      "parentUuid": "bf7ad32b_5f0dc460",
       "range": {
         "startLine": 206,
         "startChar": 55,
@@ -532,6 +1060,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "67b627d5_e5a185fb",
+        "filename": "designs/rbh-policy/02-configuration_syntax.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-06-17T15:26:11Z",
+      "side": 1,
+      "message": "Yes, I completely agree. I originally wrote this to show what an rb4 configuration would look like compared to an rb3 configuration. So this policy is a copy-paste of an existing rbh3 policy. The settings here could very well be valid in the action we selected.",
+      "parentUuid": "eedb6efe_16414f57",
+      "range": {
+        "startLine": 235,
+        "startChar": 12,
+        "endLine": 235,
+        "endChar": 46
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "552ad422_c0404c78",
         "filename": "designs/rbh-policy/02-configuration_syntax.rst",
         "patchSetId": 14
@@ -543,6 +1095,30 @@
       "writtenOn": "2025-06-03T14:20:49Z",
       "side": 1,
       "message": "Why not merge these 3 conditions?",
+      "range": {
+        "startLine": 243,
+        "startChar": 12,
+        "endLine": 254,
+        "endChar": 14
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fe6f3a86_d573f91e",
+        "filename": "designs/rbh-policy/02-configuration_syntax.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-06-17T15:26:11Z",
+      "side": 1,
+      "message": "It\u0027s true that this example may not be well chosen. It was to illustrate that we can add rules to the chain, but it\u0027s true that in this case, it doesn\u0027t add any more than just adding one.\nI\u0027m going to merge them and keep only one aside to illustrate this anyway.",
+      "parentUuid": "552ad422_c0404c78",
       "range": {
         "startLine": 243,
         "startChar": 12,
@@ -576,6 +1152,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bc14dec2_c3c17531",
+        "filename": "designs/rbh-policy/03-policy_condition_filters.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-06-17T15:26:11Z",
+      "side": 1,
+      "message": "That\u0027s right, I edited that to be consistent.",
+      "parentUuid": "a61c989a_f7bc20a0",
+      "range": {
+        "startLine": 22,
+        "startChar": 39,
+        "endLine": 22,
+        "endChar": 45
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "21b481ab_deb1adad",
@@ -589,6 +1189,30 @@
       "writtenOn": "2025-06-03T14:20:49Z",
       "side": 1,
       "message": "I don\u0027t know how rbh3 implements this filter but this is not how the -path predicate works. We probably want to have the same behavior. The pattern you used in this example matches entries whose path end with a \u0027/\u0027 (which is probably no entry since robinhood probably doesn\u0027t add a slash at the end of the path.",
+      "range": {
+        "startLine": 23,
+        "startChar": 2,
+        "endLine": 23,
+        "endChar": 53
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "63090a99_6851b976",
+        "filename": "designs/rbh-policy/03-policy_condition_filters.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-06-17T15:26:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "21b481ab_deb1adad",
       "range": {
         "startLine": 23,
         "startChar": 2,
@@ -624,6 +1248,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "62109c83_f4e57ab3",
+        "filename": "designs/rbh-policy/03-policy_condition_filters.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-06-17T15:26:11Z",
+      "side": 1,
+      "message": "clustershell for usernames? I\u0027m not sure I understand.",
+      "parentUuid": "34086960_1d872c04",
+      "range": {
+        "startLine": 39,
+        "startChar": 22,
+        "endLine": 39,
+        "endChar": 27
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4f999f08_0a9230a1",
         "filename": "designs/rbh-policy/03-policy_condition_filters.rst",
         "patchSetId": 14
@@ -635,6 +1283,30 @@
       "writtenOn": "2025-06-03T14:20:49Z",
       "side": 1,
       "message": "I think rbh-find support PB as well.",
+      "range": {
+        "startLine": 54,
+        "startChar": 66,
+        "endLine": 54,
+        "endChar": 69
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4ec44480_b4374533",
+        "filename": "designs/rbh-policy/03-policy_condition_filters.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-06-17T15:26:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4f999f08_0a9230a1",
       "range": {
         "startLine": 54,
         "startChar": 66,
@@ -668,6 +1340,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "191547b7_42f330b6",
+        "filename": "designs/rbh-policy/03-policy_condition_filters.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-06-17T15:26:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "20c38f7a_70d859ae",
+      "range": {
+        "startLine": 76,
+        "startChar": 4,
+        "endLine": 76,
+        "endChar": 7
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d3c114a4_b71061e8",
@@ -681,6 +1377,30 @@
       "writtenOn": "2025-06-03T14:20:49Z",
       "side": 1,
       "message": "I assume you can override this operator in python?",
+      "range": {
+        "startLine": 97,
+        "startChar": 18,
+        "endLine": 97,
+        "endChar": 20
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "916bf7b5_7714b04d",
+        "filename": "designs/rbh-policy/03-policy_condition_filters.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-06-17T15:26:11Z",
+      "side": 1,
+      "message": "I haven\u0027t tried to do it but to my knowledge yes you can",
+      "parentUuid": "d3c114a4_b71061e8",
       "range": {
         "startLine": 97,
         "startChar": 18,
@@ -714,6 +1434,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "16a5c748_45ae65f2",
+        "filename": "designs/rbh-policy/03-policy_condition_filters.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-06-17T15:26:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a15fec1_d62ac9ff",
+      "range": {
+        "startLine": 141,
+        "startChar": 38,
+        "endLine": 141,
+        "endChar": 52
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b8681430_59671271",
@@ -727,6 +1471,30 @@
       "writtenOn": "2025-06-03T14:20:49Z",
       "side": 1,
       "message": "typo: example",
+      "range": {
+        "startLine": 269,
+        "startChar": 6,
+        "endLine": 269,
+        "endChar": 13
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "59abc5cc_92cdc8bb",
+        "filename": "designs/rbh-policy/04-implementation_overview.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-06-17T15:26:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b8681430_59671271",
       "range": {
         "startLine": 269,
         "startChar": 6,
@@ -760,6 +1528,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c4c04df5_4d8dac4f",
+        "filename": "designs/rbh-policy/04-implementation_overview.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 334,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-06-17T15:26:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2dc662ce_b8e01d6b",
+      "range": {
+        "startLine": 334,
+        "startChar": 30,
+        "endLine": 334,
+        "endChar": 41
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f2409069_615b460d",
@@ -773,6 +1565,30 @@
       "writtenOn": "2025-06-03T14:20:49Z",
       "side": 1,
       "message": "uid/gid as well",
+      "range": {
+        "startLine": 54,
+        "startChar": 6,
+        "endLine": 54,
+        "endChar": 10
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "798242f0_4493fcf0",
+        "filename": "designs/rbh-policy/05-rbh-policy_command.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-06-17T15:26:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f2409069_615b460d",
       "range": {
         "startLine": 54,
         "startChar": 6,
@@ -806,6 +1622,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f520d085_8937e94f",
+        "filename": "designs/rbh-policy/05-rbh-policy_command.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-06-17T15:26:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "22415f7e_046cad71",
+      "range": {
+        "startLine": 58,
+        "startChar": 6,
+        "endLine": 58,
+        "endChar": 9
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bce76e37_5b9b6aba",
@@ -819,6 +1659,30 @@
       "writtenOn": "2025-06-03T14:20:49Z",
       "side": 1,
       "message": "Personal preference but I like snake case better in CLI (true/false).",
+      "range": {
+        "startLine": 114,
+        "startChar": 37,
+        "endLine": 114,
+        "endChar": 41
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b4d47ac_0f02d84c",
+        "filename": "designs/rbh-policy/05-rbh-policy_command.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-06-17T15:26:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bce76e37_5b9b6aba",
       "range": {
         "startLine": 114,
         "startChar": 37,
@@ -852,6 +1716,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0704be30_3f1d8274",
+        "filename": "designs/rbh-policy/05-rbh-policy_command.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-06-17T15:26:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5887b3bb_c4da0077",
+      "range": {
+        "startLine": 145,
+        "startChar": 13,
+        "endLine": 145,
+        "endChar": 25
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ad15cecd_5b5eda87",
@@ -865,6 +1753,30 @@
       "writtenOn": "2025-06-03T14:20:49Z",
       "side": 1,
       "message": "Be careful, quotes can be anoying in a shell script. Since you use \u0027:\u0027 for seperation this is not valid python anyway. So I would drop the quotes.",
+      "range": {
+        "startLine": 153,
+        "startChar": 38,
+        "endLine": 153,
+        "endChar": 45
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "867065f9_b682b55f",
+        "filename": "designs/rbh-policy/05-rbh-policy_command.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-06-17T15:26:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ad15cecd_5b5eda87",
       "range": {
         "startLine": 153,
         "startChar": 38,
@@ -946,6 +1858,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "357e96d0_5317a97e",
+        "filename": "designs/rbh-policy/06-daemon_overview.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-06-17T15:26:11Z",
+      "side": 1,
+      "message": "Actually this part may not be necessary but it explains how to start the daemon with systemd, it does not completely repeat what is just before because before it barely mentions the operation with systemd.\nMaybe I could merge the two into one.",
+      "parentUuid": "44834e5a_2b329999",
+      "range": {
+        "startLine": 18,
+        "startChar": 0,
+        "endLine": 44,
+        "endChar": 11
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "aa23a4a0_725ce580",
         "filename": "designs/rbh-policy/06-daemon_overview.rst",
         "patchSetId": 14
@@ -957,6 +1893,30 @@
       "writtenOn": "2025-06-03T08:36:42Z",
       "side": 1,
       "message": "nit: this may be too specific and unneeded in the design",
+      "range": {
+        "startLine": 67,
+        "startChar": 0,
+        "endLine": 71,
+        "endChar": 2
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f2183136_59bb55c1",
+        "filename": "designs/rbh-policy/06-daemon_overview.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-06-17T15:26:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "aa23a4a0_725ce580",
       "range": {
         "startLine": 67,
         "startChar": 0,
@@ -1013,6 +1973,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3689ef32_eee06b26",
+        "filename": "designs/rbh-policy/06-daemon_overview.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-06-17T15:26:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5724a436_9c8731ba",
+      "range": {
+        "startLine": 93,
+        "startChar": 65,
+        "endLine": 94,
+        "endChar": 8
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c7b33488_025c56de",
@@ -1036,6 +2020,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "80f2655d_98effe0e",
+        "filename": "designs/rbh-policy/06-daemon_overview.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-06-17T15:26:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c7b33488_025c56de",
+      "range": {
+        "startLine": 98,
+        "startChar": 24,
+        "endLine": 98,
+        "endChar": 34
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f115900e_24f2769c",
@@ -1049,6 +2057,30 @@
       "writtenOn": "2025-06-03T14:20:49Z",
       "side": 1,
       "message": "suggest: RBH_POLICY_EXTRA_CONFIG",
+      "range": {
+        "startLine": 44,
+        "startChar": 4,
+        "endLine": 44,
+        "endChar": 25
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d840727f_95639986",
+        "filename": "designs/rbh-policy/09-future_improvements.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-06-17T15:26:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f115900e_24f2769c",
       "range": {
         "startLine": 44,
         "startChar": 4,
