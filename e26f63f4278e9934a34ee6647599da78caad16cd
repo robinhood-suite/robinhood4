@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "510fc74d_28ff0dcc",
+        "filename": "librobinhood/src/plugins/mongo/mongo.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 903,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-06-17T07:28:45Z",
+      "side": 1,
+      "message": "nit: remove these for this if",
+      "range": {
+        "startLine": 903,
+        "startChar": 42,
+        "endLine": 903,
+        "endChar": 43
+      },
+      "revId": "e26f63f4278e9934a34ee6647599da78caad16cd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a1a9f83a_f0a5160d",
+        "filename": "librobinhood/src/plugins/sqlite/backend.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-06-17T07:28:45Z",
+      "side": 1,
+      "message": "style: tab",
+      "range": {
+        "startLine": 50,
+        "startChar": 0,
+        "endLine": 50,
+        "endChar": 1
+      },
+      "revId": "e26f63f4278e9934a34ee6647599da78caad16cd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "99eb65e7_f8a1b55f",
+        "filename": "librobinhood/src/plugins/sqlite/info.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-06-17T07:28:45Z",
+      "side": 1,
+      "message": "question: instead of passing this argument to each function that may be added, why not use the `info` variable as an object, retrieve json objects J1, J2, ... in each sub-function, and use `json_object_set_new(info, key, J1)`, `json_object_set_new(info, key, J2)`, etc.\n\nWould that be an issue with the way the object is translated to the value map afterwards ?",
+      "range": {
+        "startLine": 250,
+        "startChar": 36,
+        "endLine": 250,
+        "endChar": 40
+      },
+      "revId": "e26f63f4278e9934a34ee6647599da78caad16cd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
