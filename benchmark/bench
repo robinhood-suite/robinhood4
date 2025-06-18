@@ -1,0 +1,119 @@
+#!/bin/bash
+
+function sync() {
+    echo "sync"
+}
+
+function _find() {
+    echo "find"
+}
+
+function fsevents() {
+    echo "fsevents"
+}
+
+NB_MDT=1
+FS="posix"
+MONGO="$(hostname -s)"
+MDS="$(hostname -s)"
+CLIENT="$(hostname -s)"
+INODES=1000
+
+function usage() {
+    echo "bench.sh [--fs FS_TYPE] [--mongo HOSTNAME] [--mds HOSTNAME[,HOSTNAME...]] [--client HOSTNAME] [--inodes NUM] BENCHMARK"
+    echo ""
+    echo "Run a Robinhood benchmark with the specified options."
+    echo ""
+    echo "Positional Argument:"
+    echo "BENCHMARK"
+    echo "The benchmark to run. Valid options: sync, find, fsevents."
+    echo ""
+    echo "Optional Arguments:"
+    echo "--fs FS_TYPE : Filesystem type to use: lustre or posix. Default: posix."
+    echo "--mongo HOSTNAME : Hostname of the MongoDB server. Default: localhost."
+    echo "--mds HOSTNAME[,HOSTNAME...] : Comma-separated list of Metadata Server (MDS) hostnames. Only with Lustre."
+    echo "--client HOSTNAME : Hostname where Robinhood should be launched."
+    echo "--inodes NUM : Number of inodes to create. Default: 1000."
+}
+
+ARGUMENT_LIST=(
+    "fs"
+    "mongo"
+    "mds"
+    "client"
+    "inodes"
+)
+
+opts=$(getopt \
+    --longoptions "$(printf "%s:," "${ARGUMENT_LIST[@]}")help" \
+    --name "$(basename "$0")" \
+    --options "" \
+    -- "$@"
+)
+
+eval set --$opts
+
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        --fs)
+            FS=$2
+            shift 2
+            ;;
+
+        --mongo)
+            MONGO=$2
+            shift 2
+            ;;
+
+        --mds)
+            IFS=',' read -r -a MDS <<< "$2"
+            NB_MDT=${#MDS[@]}
+            shift 2
+            ;;
+
+        --client)
+            CLIENT=$2
+            shift 2
+            ;;
+
+        --help)
+            usage
+            exit
+            ;;
+
+        --inodes)
+            INODES=$2
+            shift 2
+            ;;
+
+        *)
+            break
+            ;;
+    esac
+done
+
+shift 1
+COMMAND=$1
+
+case "$COMMAND" in
+    sync)
+        sync
+        ;;
+
+    find)
+        _find
+        ;;
+
+    fsevents)
+        if [[ $FS == "posix" ]]; then
+	    echo "Can only be used with Lustre, got $FS"
+            exit
+        fi
+        fsevents
+        ;;
+
+    *)
+        usage
+        exit
+        ;;
+esac
