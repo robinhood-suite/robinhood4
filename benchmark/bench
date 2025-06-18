@@ -58,6 +58,22 @@ function cleanup_mongo() {
     ssh $MONGO "systemctl stop mongod"
 }
 
+function drop_cache() {
+    echo 3 > /proc/sys/vm/drop_caches
+    # Drop MDS cache
+    for host in ${MDS[@]}; do
+        ssh $host "echo 3 > /proc/sys/vm/drop_caches"
+    done
+
+    # Drop CLIENTS cache
+    ssh $CLIENT "echo 3 > /proc/sys/vm/drop_caches"
+
+    # Drop MONGO cache
+    ssh $MONGO "systemctl stop mongod && " \
+               "echo 3 > /proc/sys/vm/drop_caches && " \
+               "systemctl start mongod"
+}
+
 function setup_tree() {
     local options=$1
     local need_to_sync=$2
@@ -86,8 +102,71 @@ function cleanup_tree() {
     done
 }
 
+function setup() {
+    if [[ $FS == "lustre" ]]; then
+        setup_lustre
+        export ROOT="/mnt/lustre"
+    else
+        setup_posix
+        export ROOT="/tmp/benchmark"
+    fi
+
+    cleanup_mongo
+    setup_mongo
+
+    ssh $CLIENT "sed -i -e 's/localhost/$MONGO/g' \
+                 /etc/robinhood4.d/default.yaml"
+}
+
+function bench_sync() {
+    local root=$1
+    local backend=$2
+
+    echo "Sequential"
+    drop_cache
+    ssh $CLIENT "time rbh-sync rbh:$backend:$root rbh:mongo:sync-$backend"
+    ssh $CLIENT "rbh-find rbh:mongo:sync-$backend -count"
+    mongo --quiet --host $MONGO sync-$backend --eval "db.dropDatabase()"
+
+    for i in 2 4 8 16 32 64 128 ; do
+        echo "$i process"
+        drop_cache
+        ssh $CLIENT "module load mpi/openmpi-x86_64 && time mpirun" \
+                     "--allow-run-as-root -np $i rbh-sync" \
+                     "rbh:$backend-mpi:$root rbh:mongo:sync-$backend"
+        ssh $CLIENT "rbh-find -c /etc/robinhood4.d/default.yaml" \
+                     "rbh:mongo:sync-$backend -count"
+        mongo --quiet --host $MONGO sync-$backend \
+              --eval "db.dropDatabase()" > /dev/null
+    done
+}
+
 function sync() {
-    echo "sync"
+    # SETUP SYNC
+    setup
+
+    setup_tree "-v -r $ROOT -n 6 -d 6 -m $NB_MDT $INODES"
+    if [[ $FS == "lustre" ]]; then
+        echo "LUSTRE"
+        for i in {1..5}; do
+            echo "Run n°$i"
+            bench_sync $ROOT "lustre"
+        done
+    fi
+    echo "POSIX"
+    for i in {1..5}; do
+        echo "Run n°$i"
+        bench_sync $ROOT "posix"
+    done
+
+    cleanup_tree $ROOT
+    cleanup_mongo
+
+    if [[ "$FS" == "posix" ]]; then
+        cleanup_posix
+    else
+        cleanup_lustre
+    fi
 }
 
 function _find() {
