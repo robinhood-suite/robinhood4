@@ -196,8 +196,38 @@ function sync() {
     fi
 }
 
+function bench_find() {
+    echo "Filter: $@"
+    for i in {1..5}; do
+        echo "Run n°$i"
+        drop_cache
+        reset_mongo_profiling "find"
+        ssh $CLIENT "time rbh-find rbh:mongo:find $@"
+        getMongoAggregateTime "find"
+    done
+}
+
 function _find() {
-    echo "find"
+    # SETUP FIND
+    setup
+
+    setup_tree "-v -r $ROOT -n 6 -d 6 -m $NB_MDT $INODES" "true" $ROOT "posix" \
+        "find"
+
+    bench_find "-count"
+    bench_find "-type d -count"
+    bench_find "-type f -count"
+    bench_find "'(' '(' -type d -a -name *_1 ')' -o " \
+               "'(' -type f -a -name *_10 ')' ')' -a -count"
+
+    cleanup_tree $ROOT
+    cleanup_mongo
+
+    if [[ "$FS" == "posix" ]]; then
+        cleanup_posix
+    else
+        cleanup_lustre
+    fi
 }
 
 function fsevents() {
