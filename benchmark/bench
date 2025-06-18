@@ -54,6 +54,32 @@ function cleanup_mongo() {
     ssh $MONGO "systemctl stop mongod"
 }
 
+function setup_tree() {
+    # $1: OPTIONS
+    # $2: NEED_TO_SYNC
+    # $3: ROOT
+    # $4: BACKEND
+    # $5: MONGO DB NAME
+    ./generate_tree $1
+    if [[ "$2" == "true" ]]; then
+        module load mpi/openmpi-x86_64
+        time mpirun --allow-run-as-root -np 128 rbh-sync \
+             rbh:$4-mpi:$3 rbh:mongo:$5
+        mongo --quiet --host $MONGO $5 --eval "db.entries.count()"
+    fi
+}
+
+function cleanup_tree() {
+    # $1: ROOT
+    module load mpi/openmpi-x86_64
+    for i in $(seq 0 $(($NB_MDT - 1))); do
+        mpirun --allow-run-as-root drm -q $1/mdt$i/
+        if [[ $FS == "lustre" ]]; then
+            lfs mkdir -m $i $1/mdt$i
+        fi
+    done
+}
+
 function sync() {
     echo "sync"
 }
