@@ -1,5 +1,59 @@
 #!/bin/bash
 
+function cleanup_lustre() {
+    ssh $CLIENT "umount /mnt/lustre"
+    /usr/lib64/lustre/tests/llmountcleanup.sh
+}
+
+function setup_lustre() {
+    export CLIENTS=$CLIENT
+    export MDSSIZE=26000000
+    export MDSCOUNT=$NB_MDT
+    export PDSH="pdsh -S -Rssh -w"
+    for i in $(seq 1 $NB_MDT); do
+        export "mds${i}_HOST"="${MDS[$(($i - 1))]}"
+    done
+    export OSTSIZE=50000000
+    export OSTCOUNT=4
+
+    /usr/lib64/lustre/tests/llmount.sh
+
+    for i in $(seq 0 $(($NB_MDT - 1))); do
+        lfs mkdir -m $i /mnt/lustre/mdt$i
+    done
+}
+
+function setup_posix() {
+    mkdir /tmp/benchmark
+}
+
+function reset_mongo() {
+    ssh $MONGO "kill $(sudo lsof -t -i:27017)"
+    ssh $MONGO rm -rf /tmp/mongodb-27017.sock
+    ssh $MONGO rm -f /var/lib/mongo/mongod.lock
+    ssh $MONGO rm -f /var/run/mongodb/mongod.pid
+    ssh $MONGO mkdir -p  /var/run/mongodb/
+    ssh $MONGO touch /var/run/mongodb/mongod.pid
+    ssh $MONGO chown -R  mongod:mongod /var/run/mongodb/
+    ssh $MONGO chown mongod:mongod /var/run/mongodb/mongod.pid
+}
+
+function setup_mongo() {
+    ssh $MONGO "sed -i -e 's/bindIp: 127.0.0.1/bindIp: 0.0.0.0/g'" \
+               "/etc/mongod.conf"
+    if ! ssh $MONGO "systemctl status mongod"; then
+        reset_mongo
+        ssh $MONGO "sudo systemctl start mongod"
+    fi
+}
+
+function cleanup_mongo() {
+    ssh $MONGO "mongo --quiet --eval 'var dbs = db.getMongo().getDBNames();"\
+               "for(var i in dbs) { db = db.getMongo().getDB(dbs[i]);" \
+               "db.dropDatabase(); }'"
+    ssh $MONGO "systemctl stop mongod"
+}
+
 function sync() {
     echo "sync"
 }
@@ -106,7 +160,7 @@ case "$COMMAND" in
 
     fsevents)
         if [[ $FS == "posix" ]]; then
-	    echo "Can only be used with Lustre, got $FS"
+            echo "Can only be used with Lustre, got $FS"
             exit
         fi
         fsevents
