@@ -116,6 +116,7 @@ subdir('doc')
 subdir('rbh-sync')
 subdir('rbh-find')
 subdir('rbh-fsevents')
+subdir('rbh-policy')
 subdir('rbh-report')
 subdir('rbh-info')
 if build_lustre
