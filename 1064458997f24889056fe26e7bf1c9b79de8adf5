@@ -1810,6 +1810,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b3c63613_9745fb0c",
+        "filename": "designs/rbh-policy/05-rbh-policy_command.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-06-18T08:53:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1ab856c7_2a6a3bd4",
+      "range": {
+        "startLine": 218,
+        "startChar": 14,
+        "endLine": 218,
+        "endChar": 43
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "398f9e9d_26335a0e",
@@ -2104,6 +2128,30 @@
       "writtenOn": "2025-06-03T14:20:49Z",
       "side": 1,
       "message": "Something that could be interesting (that rbh3 kind of already does with report) is to list all the files that match a given fileclass and also being able to do reports per fileclasses. In v3 you can also know which fileclasses a file is part of using rbh-report. This is an important feature as well. And I would classify these features as a must have not a futur improvement.",
+      "range": {
+        "startLine": 68,
+        "startChar": 3,
+        "endLine": 68,
+        "endChar": 37
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e645119a_00e8046a",
+        "filename": "designs/rbh-policy/09-future_improvements.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-06-18T08:53:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "19628606_e5ca6801",
       "range": {
         "startLine": 68,
         "startChar": 3,

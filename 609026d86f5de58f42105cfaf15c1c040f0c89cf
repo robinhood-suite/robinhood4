@@ -212,6 +212,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3b28203a_44e5c7c4",
+        "filename": "designs/rbh-policy/09-future_improvements.rst",
+        "patchSetId": 12
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-06-18T08:53:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0ec40f30_8f55116a",
+      "range": {
+        "startLine": 71,
+        "startChar": 0,
+        "endLine": 71,
+        "endChar": 38
+      },
+      "revId": "609026d86f5de58f42105cfaf15c1c040f0c89cf",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0d5388b4_a024a2d5",
