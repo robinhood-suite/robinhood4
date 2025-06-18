@@ -70,6 +70,31 @@ function drop_cache() {
                "systemctl start mongod"
 }
 
+function reset_mongo_profiling() {
+    # $1: MONGO DB NAME
+    mongo --quiet --host $MONGO $1 \
+          --eval "db.setProfilingLevel(0)" > /dev/null
+    mongo --quiet --host $MONGO $1 \
+          --eval "db.system.profile.drop()" > /dev/null
+    mongo --quiet --host $MONGO $1 \
+          --eval "db.setProfilingLevel(1, { slowms: 0 });" > /dev/null
+}
+
+function getMongoAggregateTime() {
+    # $1: MONGO DB NAME
+    mongo --quiet --host $MONGO $1 \
+          --eval "db.system.profile.find({ op: 'command', 'command.aggregate': \
+                  'entries' }, {'millis': true, 'nreturned': true})" |
+                  tee result > /dev/null
+    mongo --quiet --host $MONGO $1 \
+          --eval "db.system.profile.find({ op: 'getmore', 'command.collection':\
+                  'entries' }, {'millis': true, 'nreturned': \
+                  true}).forEach(printjson)" |
+                  tee -a result > /dev/null
+    echo "Time in ms of Mongo for an aggregate:"
+    echo "$(awk -F'"millis" :' '{ sum += $2 } END { print sum }' result)"
+}
+
 function setup_tree() {
     # $1: OPTIONS
     # $2: NEED_TO_SYNC
