@@ -239,8 +239,52 @@ function _find() {
     cleanup_mongo
 }
 
+function exec_fsevents() {
+    # $1: enricher
+    for i in $(seq 0 $(($NB_MDT - 1))); do
+        echo "Number of changelog: \
+              $(ssh $CLIENT "lfs changelog ${MDT[$i]} | wc -l")"
+        ssh $CLIENT "rbh-fsevents --enrich rbh:$1:$ROOT" \
+                     "src:lustre:${MDT[$i]}?ack-user=${userid[$i]}" \
+                     "rbh:mongo:fsevent" &
+    done
+    wait
+}
+
 function fsevents() {
-    echo "fsevents"
+    setup
+    setup_changelog
+    setup_hsm
+
+    echo "With POSIX enricher"
+    for i in {1..5}; do
+        echo "Run n°$i"
+        setup_tree "-v -r $ROOT -n 6 -d 6 -m $NB_MDT --changelog $INODES"
+        echo "Number of inodes: $(find $ROOT | wc -l)"
+        time exec_fsevents "posix"
+        ssh $CLIENT "rbh-find rbh:mongo:fsevent -count"
+
+        cleanup_tree $ROOT
+        cleanup_changelog
+        mongo --quiet --host $MONGO fsevent \
+              --eval "db.dropDatabase()" > /dev/null
+    done
+
+    echo "With LUSTRE enricher"
+    for i in {1..5}; do
+        echo "Run n°$i"
+        setup_tree "-v -r $ROOT -n 6 -d 6 -m $NB_MDT --changelog $INODES"
+        echo "Number of inodes: $(find $ROOT | wc -l)"
+        time exec_fsevents "lustre"
+        ssh $CLIENT "rbh-find rbh:mongo:fsevent -count"
+
+        cleanup_tree $ROOT
+        cleanup_changelog
+        mongo --quiet --host $MONGO fsevent \
+              --eval "db.dropDatabase()" > /dev/null
+    done
+
+    cleanup_lustre
 }
 
 NB_MDT=1
