@@ -1,0 +1,16 @@
+[Unit]
+Description=Lustre HSM POSIX Copytool
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/sbin/lhsmtool_posix \
+  --hsm-root=/mnt/hsm /mnt/lustre
+User=root
+Restart=on-failure
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=lhsmtool-posix
+
+[Install]
+WantedBy=multi-user.target

@@ -1,5 +1,35 @@
 #!/bin/bash
 
+function setup_changelog() {
+    MDT=()
+    userid=()
+    for i in $(seq 0 $(($NB_MDT - 1))); do
+        MDT+=(lustre-MDT000${i})
+        userid+=("$(ssh ${MDS[$i]} lctl --device "lustre-MDT000${i}" \
+                    changelog_register | cut -d "'" -f2)")
+    done
+
+    export MDT
+    export userid
+}
+
+function cleanup_changelog() {
+    for i in $(seq 0 $(($NB_MDT - 1))); do
+        lfs changelog_clear "${MDT[$i]}" "${userid[$i]}" 0
+    done
+}
+
+function setup_hsm() {
+    ssh $CLIENT "mkdir -p /mnt/hsm"
+    scp lhsmtool-posix.service $CLIENT:~/../etc/systemd/system
+
+    lctl set_param mdt.*.hsm_control=enabled
+
+    ssh $CLIENT "systemctl daemon-reload &&" \
+                "systemctl enable lhsmtool-posix.service &&" \
+                "systemctl start lhsmtool-posix.service"
+}
+
 function cleanup_lustre() {
     ssh $CLIENT "umount /mnt/lustre"
     /usr/lib64/lustre/tests/llmountcleanup.sh
