@@ -47,6 +47,69 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "508bed7c_2b25fc25",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-06-18T06:17:36Z",
+      "side": 1,
+      "message": "Do we need to have internal tests for those new alloc functions?",
+      "revId": "e1c382c5b27fa1eb9b10fd5250dc4f4936ac7122",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "64f68325_0b5746ec",
+        "filename": "librobinhood/include/robinhood/sstack.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-06-18T06:17:36Z",
+      "side": 1,
+      "message": "style: length",
+      "range": {
+        "startLine": 162,
+        "startChar": 0,
+        "endLine": 162,
+        "endChar": 82
+      },
+      "revId": "e1c382c5b27fa1eb9b10fd5250dc4f4936ac7122",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7a436521_1e242cfb",
+        "filename": "librobinhood/include/robinhood/sstack.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-06-18T06:17:36Z",
+      "side": 1,
+      "message": "typo: useless space",
+      "range": {
+        "startLine": 168,
+        "startChar": 55,
+        "endLine": 168,
+        "endChar": 56
+      },
+      "revId": "e1c382c5b27fa1eb9b10fd5250dc4f4936ac7122",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3edb130c_caed5ada",
@@ -207,6 +270,29 @@
         "startChar": 2,
         "endLine": 196,
         "endChar": 32
+      },
+      "revId": "e1c382c5b27fa1eb9b10fd5250dc4f4936ac7122",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "056e2fd4_17d95eba",
+        "filename": "librobinhood/include/robinhood/sstack.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-06-18T06:17:36Z",
+      "side": 1,
+      "message": "question: don\u0027t pop normally return released data? I agree it will be strange in this case to just retrieve the first pointer...",
+      "range": {
+        "startLine": 198,
+        "startChar": 0,
+        "endLine": 199,
+        "endChar": 46
       },
       "revId": "e1c382c5b27fa1eb9b10fd5250dc4f4936ac7122",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
