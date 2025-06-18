@@ -128,6 +128,7 @@ def create_tree(path, current_depth):
     total_file = file_per_dir
     if current_depth == 0:
         total_file += file_only_root
+
     create_files(path, total_file)
 
     if current_depth + 1 >= depth:
@@ -141,11 +142,16 @@ def task_create_tree(i):
     global inode_count
 
     verb_print("####     START MDT"+str(i)+"     ####")
-    clean_tree(i)
-    root_path = os.path.join(LUSTRE_DIR, PREFIX_MDT + str(i + 1))
+    root_path = os.path.join(ROOT, PREFIX_MDT + str(i))
+    entry = Entry(root_path, True)
+    try:
+        entry.create_entry()
+    except:
+        verb_print(root_path + " already exist")
+
     inode_count = 0
     create_tree(root_path, 0)
-    verb_print("Total inode created: ", inode_count, "/", nb_inode_mdt)
+    verb_print("Total inode created: " + str(inode_count) + "/" + str(nb_inode_mdt))
     verb_print("####     END MDT"+str(i)+"     ####")
 
     return inode_count
@@ -241,14 +247,9 @@ def main():
 
     print("#####     START     #####")
 
-    if nb_mdt == 1:
-        os.mkdir(root_path)
-        total_inode_count += 1
-        create_tree(root_path, 0)
-    else:
-        with Pool() as pool:
-            for result in pool.map(task_create_tree, range(nb_mdt)):
-                total_inode_count += result
+    with Pool() as pool:
+        for result in pool.map(task_create_tree, range(nb_mdt)):
+            total_inode_count += result
 
     print("Total inode created: ", total_inode_count, "/", nb_inode)
     print("#####     END     #####")
