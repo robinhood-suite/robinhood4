@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fd267850_1f07c5c4",
+        "filename": "librobinhood/src/plugins/mongo/mongo.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 338,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-06-19T14:25:03Z",
+      "side": 1,
+      "message": "It might be useful, since MongoDB doesn\u0027t need to create a new session for each batch. However, from what I\u0027ve seen, the main bottleneck is the Lustre enrichment with rbh-sync and rbh-fsevents.",
+      "parentUuid": "2c0da2a6_55945a19",
+      "range": {
+        "startLine": 338,
+        "startChar": 0,
+        "endLine": 338,
+        "endChar": 15
+      },
+      "revId": "460e97d21b33ff13fd899321419307bb04c0fa1f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "dbcd8599_23a2b15b",
         "filename": "librobinhood/src/plugins/mongo/mongo.c",
         "patchSetId": 2
@@ -37,6 +61,30 @@
       "writtenOn": "2025-06-11T08:54:29Z",
       "side": 1,
       "message": "nit: `return now.tv_sec - start-\u003etv_sec;`",
+      "range": {
+        "startLine": 376,
+        "startChar": 4,
+        "endLine": 378,
+        "endChar": 19
+      },
+      "revId": "460e97d21b33ff13fd899321419307bb04c0fa1f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "031fb48b_d63b8220",
+        "filename": "librobinhood/src/plugins/mongo/mongo.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 378,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-06-19T14:25:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dbcd8599_23a2b15b",
       "range": {
         "startLine": 376,
         "startChar": 4,
@@ -60,6 +108,30 @@
       "writtenOn": "2025-06-11T08:54:29Z",
       "side": 1,
       "message": "question: does this session have to be once per filter, or could it be created and added to the backend creation function ?",
+      "range": {
+        "startLine": 784,
+        "startChar": 4,
+        "endLine": 784,
+        "endChar": 37
+      },
+      "revId": "460e97d21b33ff13fd899321419307bb04c0fa1f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b4b0cfc0_6c1c74a3",
+        "filename": "librobinhood/src/plugins/mongo/mongo.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 784,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-06-19T14:25:03Z",
+      "side": 1,
+      "message": "No, this function can be created when the backend is initialized, but we need to ensure the session is refreshed if there\u0027s a delay before starting the filter. Otherwise, the session might expire. However, I think we can keep it here for now, as we don\u0027t currently have a use case where multiple filters are executed with the same backend.",
+      "parentUuid": "8316ab0a_9e09e845",
       "range": {
         "startLine": 784,
         "startChar": 4,
