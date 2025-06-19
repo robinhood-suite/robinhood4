@@ -309,6 +309,36 @@ function fsevents() {
     cleanup_lustre
 }
 
+function bench_report() {
+    echo "Report: $@"
+    for i in {1..5}; do
+        echo "Run n°$i"
+        drop_cache
+        reset_mongo_profiling "report"
+        ssh $CLIENT "time rbh-report rbh:mongo:report $@"
+        getMongoAggregateTime "report"
+    done
+}
+
+function report() {
+    setup
+
+    setup_tree "-v -r $ROOT -n 6 -d 6 -m $NB_MDT $INODES" "true" $ROOT "posix" \
+        "report"
+
+    bench_report --output '"avg(statx.size)"'
+    bench_report --output '"avg(statx.size),sum(statx.size)"'
+    bench_report --group-by '"statx.type"' --output '"avg(statx.size)"'
+    bench_report --group-by '"statx.type"' --output '"avg(statx.size),sum(statx.size)"'
+    cleanup_tree $ROOT
+    cleanup_mongo
+    if [[ "$FS" == "lustre" ]]; then
+        cleanup_lustre
+    else
+        cleanup_posix
+    fi
+}
+
 NB_MDT=1
 FS="posix"
 MONGO="$(hostname -s)"
@@ -407,6 +437,10 @@ case "$COMMAND" in
             exit
         fi
         fsevents
+        ;;
+
+    report)
+        report
         ;;
 
     *)
