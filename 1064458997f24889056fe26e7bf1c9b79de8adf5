@@ -168,6 +168,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3fd166b9_2488e248",
+        "filename": "designs/rbh-policy/02-configuration_syntax.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-06-19T10:14:04Z",
+      "side": 1,
+      "message": "Ok I can do that, but it means I\u0027ll be loading the yaml config every time at the same time as doing that in python. That\u0027s not a problem, but it also means we\u0027ll be loading the yaml config twice (once in the pe and once by using a tool that needs it if we use it in an action potentially)",
+      "parentUuid": "ad9065e1_7356a661",
+      "range": {
+        "startLine": 12,
+        "startChar": 2,
+        "endLine": 12,
+        "endChar": 22
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "60564a53_17f34792",
         "filename": "designs/rbh-policy/02-configuration_syntax.rst",
         "patchSetId": 14

@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5ede23b5_3b686590",
+        "filename": "designs/rbh-policy/02-configuration_syntax.rst",
+        "patchSetId": 17
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-06-19T10:14:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ab151463_33b37ef2",
+      "range": {
+        "startLine": 99,
+        "startChar": 64,
+        "endLine": 99,
+        "endChar": 69
+      },
+      "revId": "6ca8c7d6727024f538bd10dd50a4ffa84482731a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6a57d1fd_583cf99a",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-06-19T08:44:25Z",
       "side": 1,
       "message": "what\u0027s this ? French ?",
+      "range": {
+        "startLine": 153,
+        "startChar": 0,
+        "endLine": 153,
+        "endChar": 40
+      },
+      "revId": "6ca8c7d6727024f538bd10dd50a4ffa84482731a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a725b077_ae5a9064",
+        "filename": "designs/rbh-policy/02-configuration_syntax.rst",
+        "patchSetId": 17
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-06-19T10:14:04Z",
+      "side": 1,
+      "message": "Haha my bad! That was a comment I made for myself at the end of the day and forgot to delete.",
+      "parentUuid": "6a57d1fd_583cf99a",
       "range": {
         "startLine": 153,
         "startChar": 0,
@@ -70,6 +118,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d9b45ec6_68142cc1",
+        "filename": "designs/rbh-policy/02-configuration_syntax.rst",
+        "patchSetId": 17
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-06-19T10:14:04Z",
+      "side": 1,
+      "message": "I hadn\u0027t thought of that, but it would be interesting to have it.",
+      "parentUuid": "a3ca379d_ace51265",
+      "range": {
+        "startLine": 195,
+        "startChar": 5,
+        "endLine": 196,
+        "endChar": 41
+      },
+      "revId": "6ca8c7d6727024f538bd10dd50a4ffa84482731a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e458279c_de33a9ed",
@@ -83,6 +155,30 @@
       "writtenOn": "2025-06-19T08:44:25Z",
       "side": 1,
       "message": "remove this and line above",
+      "range": {
+        "startLine": 40,
+        "startChar": 0,
+        "endLine": 40,
+        "endChar": 16
+      },
+      "revId": "6ca8c7d6727024f538bd10dd50a4ffa84482731a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "70ca6543_99cdf004",
+        "filename": "designs/rbh-policy/07-base_API_and_extensibility.rst",
+        "patchSetId": 17
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-06-19T10:14:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e458279c_de33a9ed",
       "range": {
         "startLine": 40,
         "startChar": 0,
