@@ -144,6 +144,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ad9065e1_7356a661",
+        "filename": "designs/rbh-policy/02-configuration_syntax.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-06-19T08:44:25Z",
+      "side": 1,
+      "message": "Yeah but that\u0027s RBH\u0027s actual config, so it\u0027s expected and already done when invoking any of the other tools",
+      "parentUuid": "a88f50af_20d96ad3",
+      "range": {
+        "startLine": 12,
+        "startChar": 2,
+        "endLine": 12,
+        "endChar": 22
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "60564a53_17f34792",
         "filename": "designs/rbh-policy/02-configuration_syntax.rst",
         "patchSetId": 14
@@ -649,6 +673,30 @@
       "side": 1,
       "message": "For the entire instance of this policy engine. The purpose of this field is to tell the PE how often it evaluates the triggers defined in the policies in our configuration files.",
       "parentUuid": "f053f77c_78722766",
+      "range": {
+        "startLine": 65,
+        "startChar": 52,
+        "endLine": 65,
+        "endChar": 79
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4df8f8a6_7713f5ab",
+        "filename": "designs/rbh-policy/02-configuration_syntax.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-06-19T08:44:25Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "9dd2aa82_e8293266",
       "range": {
         "startLine": 65,
         "startChar": 52,

@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ab151463_33b37ef2",
+        "filename": "designs/rbh-policy/02-configuration_syntax.rst",
+        "patchSetId": 17
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-06-19T08:44:25Z",
+      "side": 1,
+      "message": "typo: were",
+      "range": {
+        "startLine": 99,
+        "startChar": 64,
+        "endLine": 99,
+        "endChar": 69
+      },
+      "revId": "6ca8c7d6727024f538bd10dd50a4ffa84482731a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6a57d1fd_583cf99a",
+        "filename": "designs/rbh-policy/02-configuration_syntax.rst",
+        "patchSetId": 17
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-06-19T08:44:25Z",
+      "side": 1,
+      "message": "what\u0027s this ? French ?",
+      "range": {
+        "startLine": 153,
+        "startChar": 0,
+        "endLine": 153,
+        "endChar": 40
+      },
+      "revId": "6ca8c7d6727024f538bd10dd50a4ffa84482731a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a3ca379d_ace51265",
+        "filename": "designs/rbh-policy/02-configuration_syntax.rst",
+        "patchSetId": 17
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-06-19T08:44:25Z",
+      "side": 1,
+      "message": "question: is it allowed to have multiple condition as part of a trigger ?\nFor instance if \"GlobalSizePercent \u003e 90% \u0026\u0026 DayOfWeek \u003d\u003d Friday\" or something like that",
+      "range": {
+        "startLine": 195,
+        "startChar": 5,
+        "endLine": 196,
+        "endChar": 41
+      },
+      "revId": "6ca8c7d6727024f538bd10dd50a4ffa84482731a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e458279c_de33a9ed",
+        "filename": "designs/rbh-policy/07-base_API_and_extensibility.rst",
+        "patchSetId": 17
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-06-19T08:44:25Z",
+      "side": 1,
+      "message": "remove this and line above",
+      "range": {
+        "startLine": 40,
+        "startChar": 0,
+        "endLine": 40,
+        "endChar": 16
+      },
+      "revId": "6ca8c7d6727024f538bd10dd50a4ffa84482731a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
