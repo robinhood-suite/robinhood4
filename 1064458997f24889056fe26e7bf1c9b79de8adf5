@@ -97,6 +97,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "70684e02_83946472",
+        "filename": "designs/rbh-policy/01-overview_and_goals.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-06-19T11:53:56Z",
+      "side": 1,
+      "message": "As a futur user of this :), I would prefer something like this:\n\n```\nrbh-policy run myconfig ...\n```\n\nmyconfig would be the basename (without python extension) of the config file that is stored in a fixed directory. If we want to split config in several files, I would allow admins to create a dir with the right name as I\u0027ve previously discussed. So that you would have something like this for example: `/etc/robinhood4.d/policies/myconfig/{fileclasses.py,hsm.py}`. The policy engine would see that myconfig points to a directory then load all the files in the dir. And if we have a file instead, it only loads the file (e.g. `/etc/robinhood4.d/policies/myconfig.py`). As for the --config, we can keep it as is but only for the YAML config.",
+      "parentUuid": "a53cfe44_6c811a0c",
+      "range": {
+        "startLine": 35,
+        "startChar": 0,
+        "endLine": 38,
+        "endChar": 32
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "08aabcf1_d345a860",
         "filename": "designs/rbh-policy/02-configuration_syntax.rst",
         "patchSetId": 14
@@ -380,6 +404,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f37e4392_6e6ed818",
+        "filename": "designs/rbh-policy/02-configuration_syntax.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-06-19T11:53:56Z",
+      "side": 1,
+      "message": "My point is that we could define the same policies for several filesystems if this can be a list as well.",
+      "parentUuid": "4ff6aabe_e10878af",
+      "range": {
+        "startLine": 35,
+        "startChar": 2,
+        "endLine": 35,
+        "endChar": 14
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "cb8e87f6_97db9392",
         "filename": "designs/rbh-policy/02-configuration_syntax.rst",
         "patchSetId": 14
@@ -568,6 +616,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b2b7b953_4410aa3a",
+        "filename": "designs/rbh-policy/02-configuration_syntax.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-06-19T11:53:56Z",
+      "side": 1,
+      "message": "One of the reasons for adding the source info originally was to also add the mount point so that specifying the database would be enough to know the mount point as well. In v3, they check the coherency between the DB and the filesystem mounted. The benefit is that you will not accidentally overwrite a DB with the wrong entries.",
+      "parentUuid": "104f3cb5_fd1cd358",
+      "range": {
+        "startLine": 51,
+        "startChar": 53,
+        "endLine": 51,
+        "endChar": 71
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "04a9c28b_77992f21",
         "filename": "designs/rbh-policy/02-configuration_syntax.rst",
         "patchSetId": 14
@@ -721,6 +793,30 @@
       "side": 1,
       "message": "Acknowledged",
       "parentUuid": "9dd2aa82_e8293266",
+      "range": {
+        "startLine": 65,
+        "startChar": 52,
+        "endLine": 65,
+        "endChar": 79
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "be760ffd_7993c901",
+        "filename": "designs/rbh-policy/02-configuration_syntax.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-06-19T11:53:56Z",
+      "side": 1,
+      "message": "I think v3 allows multiple check intervals per policy. Some policies don\u0027t require a constant check. So this can reduce the load on the database and filesystem.",
+      "parentUuid": "4df8f8a6_7713f5ab",
       "range": {
         "startLine": 65,
         "startChar": 52,
@@ -921,6 +1017,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "79bbd701_f168d55d",
+        "filename": "designs/rbh-policy/02-configuration_syntax.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-06-19T11:53:56Z",
+      "side": 1,
+      "message": "I don\u0027t like this. What if someone does this:\n\n```\nmyclass \u003d declare_fileclass(name \u003d \"myclass\", ...)\n```\n\nHow does python handle this?",
+      "parentUuid": "2765d16e_7411c3c2",
+      "range": {
+        "startLine": 146,
+        "startChar": 53,
+        "endLine": 146,
+        "endChar": 65
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ee8af4e3_e605e5d9",
         "filename": "designs/rbh-policy/02-configuration_syntax.rst",
         "patchSetId": 14
@@ -956,6 +1076,30 @@
       "side": 1,
       "message": "Parameters are given to the function by kwargs. These parameters are defined in the `parameters` field of a policy.",
       "parentUuid": "ee8af4e3_e605e5d9",
+      "range": {
+        "startLine": 155,
+        "startChar": 19,
+        "endLine": 155,
+        "endChar": 40
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7f4c26fa_67446198",
+        "filename": "designs/rbh-policy/02-configuration_syntax.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-06-19T11:53:56Z",
+      "side": 1,
+      "message": "How about the cmd example? What other parameters are available when developing a policy?",
+      "parentUuid": "88758c1a_46a7fc10",
       "range": {
         "startLine": 155,
         "startChar": 19,
@@ -1062,6 +1206,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2ef6be38_416fc861",
+        "filename": "designs/rbh-policy/02-configuration_syntax.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-06-19T11:53:56Z",
+      "side": 1,
+      "message": "So inode count?",
+      "parentUuid": "77c64bd4_d07fdab2",
+      "range": {
+        "startLine": 184,
+        "startChar": 33,
+        "endLine": 184,
+        "endChar": 37
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bf7ad32b_5f0dc460",
         "filename": "designs/rbh-policy/02-configuration_syntax.rst",
         "patchSetId": 14
@@ -1109,6 +1277,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a1fd1be2_c4aadf30",
+        "filename": "designs/rbh-policy/02-configuration_syntax.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-06-19T11:53:56Z",
+      "side": 1,
+      "message": "My issue was with the fact that you listed target files as a possible thing that a rule can overwrite. Not that rules themselves are optional. And this is kind of what you say in the previous sentence anyway:\n\n\"A list of rules that apply to subsets of the policy\u0027s target\". So if you give a rule, you must specify the target. This is what I was refering to.",
+      "parentUuid": "adb981bb_faf13e31",
+      "range": {
+        "startLine": 206,
+        "startChar": 55,
+        "endLine": 206,
+        "endChar": 80
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "eedb6efe_16414f57",
         "filename": "designs/rbh-policy/02-configuration_syntax.rst",
         "patchSetId": 14
@@ -1144,6 +1336,30 @@
       "side": 1,
       "message": "Yes, I completely agree. I originally wrote this to show what an rb4 configuration would look like compared to an rb3 configuration. So this policy is a copy-paste of an existing rbh3 policy. The settings here could very well be valid in the action we selected.",
       "parentUuid": "eedb6efe_16414f57",
+      "range": {
+        "startLine": 235,
+        "startChar": 12,
+        "endLine": 235,
+        "endChar": 46
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0318635b_c6737445",
+        "filename": "designs/rbh-policy/02-configuration_syntax.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-06-19T11:53:56Z",
+      "side": 1,
+      "message": "I\u0027d prefer it if you remove the quotes around common.rate_limit just to show that this is a Python object.",
+      "parentUuid": "67b627d5_e5a185fb",
       "range": {
         "startLine": 235,
         "startChar": 12,
@@ -1250,6 +1466,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8f0beded_f1b56fd2",
+        "filename": "designs/rbh-policy/03-policy_condition_filters.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-06-19T11:53:56Z",
+      "side": 1,
+      "message": "If we want to be consistant with -path of rbh-find, we should support shell expansions, not regex I think.",
+      "parentUuid": "bc14dec2_c3c17531",
+      "range": {
+        "startLine": 22,
+        "startChar": 39,
+        "endLine": 22,
+        "endChar": 45
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "21b481ab_deb1adad",
         "filename": "designs/rbh-policy/03-policy_condition_filters.rst",
         "patchSetId": 14
@@ -1332,6 +1572,30 @@
       "side": 1,
       "message": "clustershell for usernames? I\u0027m not sure I understand.",
       "parentUuid": "34086960_1d872c04",
+      "range": {
+        "startLine": 39,
+        "startChar": 22,
+        "endLine": 39,
+        "endChar": 27
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2af5af50_c07de5fb",
+        "filename": "designs/rbh-policy/03-policy_condition_filters.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-06-19T11:53:56Z",
+      "side": 1,
+      "message": "Maybe not usernames but I know that we have groups that ends with increasing numbers. And there is maybe some sysadmin somewhere who uses usernames with numbers at the end. My main concern is that if we want to specify several usernames, we would need to use several `User` predicates instead of just one with a clustershell compatible string.",
+      "parentUuid": "62109c83_f4e57ab3",
       "range": {
         "startLine": 39,
         "startChar": 22,
@@ -1473,6 +1737,30 @@
       "side": 1,
       "message": "I haven\u0027t tried to do it but to my knowledge yes you can",
       "parentUuid": "d3c114a4_b71061e8",
+      "range": {
+        "startLine": 97,
+        "startChar": 18,
+        "endLine": 97,
+        "endChar": 20
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f3f8295c_dd16af26",
+        "filename": "designs/rbh-policy/03-policy_condition_filters.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-06-19T11:53:56Z",
+      "side": 1,
+      "message": "I think you can too but you should probably check that it does what you want.",
+      "parentUuid": "916bf7b5_7714b04d",
       "range": {
         "startLine": 97,
         "startChar": 18,
@@ -1966,6 +2254,30 @@
       "side": 1,
       "message": "Actually this part may not be necessary but it explains how to start the daemon with systemd, it does not completely repeat what is just before because before it barely mentions the operation with systemd.\nMaybe I could merge the two into one.",
       "parentUuid": "44834e5a_2b329999",
+      "range": {
+        "startLine": 18,
+        "startChar": 0,
+        "endLine": 44,
+        "endChar": 11
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "77697ddf_404c9b52",
+        "filename": "designs/rbh-policy/06-daemon_overview.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-06-19T11:53:56Z",
+      "side": 1,
+      "message": "I don\u0027t think you need to talk about systemd at all. I think we all know how this will look like at the end. The only thing of interest may be the config files used by the daemon when run through systemd and the rbh-policy@myconfig part.",
+      "parentUuid": "357e96d0_5317a97e",
       "range": {
         "startLine": 18,
         "startChar": 0,
