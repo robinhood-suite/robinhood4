@@ -473,6 +473,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2b80b036_086958e5",
+        "filename": "designs/rbh-policy/02-configuration_syntax.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-06-19T14:53:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "467b7149_c784a852",
+      "range": {
+        "startLine": 37,
+        "startChar": 0,
+        "endLine": 43,
+        "endChar": 2
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0bd88cca_a008c30c",
@@ -520,6 +544,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "947ce7a6_daf2a577",
+        "filename": "designs/rbh-policy/02-configuration_syntax.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-06-19T14:53:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a463af7d_abb9a9b1",
+      "range": {
+        "startLine": 44,
+        "startChar": 59,
+        "endLine": 45,
+        "endChar": 14
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "54e79096_dc3a0463",
@@ -557,6 +605,30 @@
       "side": 1,
       "message": "I remember discussing this with other developers and what came out was that what might seem \"reasonable\" to some might not be to others and therefore the field would be likely to be specified by the administrator no matter what.",
       "parentUuid": "54e79096_dc3a0463",
+      "range": {
+        "startLine": 50,
+        "startChar": 5,
+        "endLine": 50,
+        "endChar": 23
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e0c9eff2_f2bf5c1d",
+        "filename": "designs/rbh-policy/02-configuration_syntax.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-06-19T14:53:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5b744d99_255043a7",
       "range": {
         "startLine": 50,
         "startChar": 5,
@@ -820,6 +892,54 @@
       "range": {
         "startLine": 65,
         "startChar": 52,
+        "endLine": 65,
+        "endChar": 79
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "80cf7423_fc90592c",
+        "filename": "designs/rbh-policy/02-configuration_syntax.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-06-19T14:53:02Z",
+      "side": 1,
+      "message": "In the PE, we will distinguish between policies that have triggers based on time and others. This only concerns the others.",
+      "parentUuid": "be760ffd_7993c901",
+      "range": {
+        "startLine": 65,
+        "startChar": 52,
+        "endLine": 65,
+        "endChar": 79
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3c40c613_fb0fd835",
+        "filename": "designs/rbh-policy/02-configuration_syntax.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-06-19T14:53:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c166588a_b59aefdb",
+      "range": {
+        "startLine": 65,
+        "startChar": 53,
         "endLine": 65,
         "endChar": 79
       },
@@ -1112,6 +1232,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "582945c1_54c6612f",
+        "filename": "designs/rbh-policy/02-configuration_syntax.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-06-19T14:53:02Z",
+      "side": 1,
+      "message": "If you use an action already defined in the API then the parameters to give to the function will be documented. If you use a custom action coded in Python then you can pass it the parameters you want using the `parameters` field. If you call an external command then pass the action parameters directly in the `cmd(\"\")` field, currently the parameters field is useless in this case",
+      "parentUuid": "7f4c26fa_67446198",
+      "range": {
+        "startLine": 155,
+        "startChar": 19,
+        "endLine": 155,
+        "endChar": 40
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3155c2a5_15435c0a",
         "filename": "designs/rbh-policy/02-configuration_syntax.rst",
         "patchSetId": 14
@@ -1228,6 +1372,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7f635089_fc4adb6c",
+        "filename": "designs/rbh-policy/02-configuration_syntax.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-06-19T14:53:02Z",
+      "side": 1,
+      "message": "Ok, that\u0027s right, I added a trigger on inodes for users and groups",
+      "parentUuid": "2ef6be38_416fc861",
+      "range": {
+        "startLine": 184,
+        "startChar": 33,
+        "endLine": 184,
+        "endChar": 37
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bf7ad32b_5f0dc460",
@@ -1299,6 +1467,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e0a76146_08ec635b",
+        "filename": "designs/rbh-policy/02-configuration_syntax.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-06-19T14:53:02Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "a1fd1be2_c4aadf30",
+      "range": {
+        "startLine": 206,
+        "startChar": 55,
+        "endLine": 206,
+        "endChar": 80
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "eedb6efe_16414f57",
@@ -1360,6 +1552,30 @@
       "side": 1,
       "message": "I\u0027d prefer it if you remove the quotes around common.rate_limit just to show that this is a Python object.",
       "parentUuid": "67b627d5_e5a185fb",
+      "range": {
+        "startLine": 235,
+        "startChar": 12,
+        "endLine": 235,
+        "endChar": 46
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2859dcef_02c3b9f6",
+        "filename": "designs/rbh-policy/02-configuration_syntax.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-06-19T14:53:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0318635b_c6737445",
       "range": {
         "startLine": 235,
         "startChar": 12,
@@ -1488,6 +1704,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ed653d4_9dee9d41",
+        "filename": "designs/rbh-policy/03-policy_condition_filters.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-06-19T14:53:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8f0beded_f1b56fd2",
+      "range": {
+        "startLine": 22,
+        "startChar": 39,
+        "endLine": 22,
+        "endChar": 45
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "21b481ab_deb1adad",
@@ -1596,6 +1836,30 @@
       "side": 1,
       "message": "Maybe not usernames but I know that we have groups that ends with increasing numbers. And there is maybe some sysadmin somewhere who uses usernames with numbers at the end. My main concern is that if we want to specify several usernames, we would need to use several `User` predicates instead of just one with a clustershell compatible string.",
       "parentUuid": "62109c83_f4e57ab3",
+      "range": {
+        "startLine": 39,
+        "startChar": 22,
+        "endLine": 39,
+        "endChar": 27
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b9323a54_d148756a",
+        "filename": "designs/rbh-policy/03-policy_condition_filters.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-06-19T14:53:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2af5af50_c07de5fb",
       "range": {
         "startLine": 39,
         "startChar": 22,
@@ -2217,6 +2481,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "59398d8c_6731c4ee",
+        "filename": "designs/rbh-policy/06-daemon_overview.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-06-19T14:53:02Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "398f9e9d_26335a0e",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 40
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "44834e5a_2b329999",
@@ -2288,6 +2576,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2937975e_04b4f8a2",
+        "filename": "designs/rbh-policy/06-daemon_overview.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-06-19T14:53:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "77697ddf_404c9b52",
+      "range": {
+        "startLine": 18,
+        "startChar": 0,
+        "endLine": 44,
+        "endChar": 11
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "aa23a4a0_725ce580",
@@ -2348,6 +2660,30 @@
       "writtenOn": "2025-06-03T08:36:42Z",
       "side": 1,
       "message": "I see what you did there.",
+      "range": {
+        "startLine": 88,
+        "startChar": 0,
+        "endLine": 91,
+        "endChar": 62
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "24a90825_3e1fcd0e",
+        "filename": "designs/rbh-policy/06-daemon_overview.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-06-19T14:53:02Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "a4fed27f_37c866da",
       "range": {
         "startLine": 88,
         "startChar": 0,
