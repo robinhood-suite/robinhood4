@@ -49,6 +49,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ae485b3d_94245e43",
+        "filename": "benchmark/bench",
+        "patchSetId": 1
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-06-23T14:13:27Z",
+      "side": 1,
+      "message": "Because it was calling the find command and not my function.",
+      "parentUuid": "b48311ae_1c004717",
+      "range": {
+        "startLine": 104,
+        "startChar": 8,
+        "endLine": 104,
+        "endChar": 13
+      },
+      "revId": "117a5f6812f3a52deab60a6352be8be36bc1b8b9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "fddaec0d_dd902025",
         "filename": "benchmark/bench",
         "patchSetId": 1
