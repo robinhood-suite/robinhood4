@@ -22,6 +22,30 @@
       },
       "revId": "26da7de823450f59c09d85d1f4f93a528d2f419b",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8affede6_f695beff",
+        "filename": "benchmark/generate_tree",
+        "patchSetId": 1
+      },
+      "lineNbr": 251,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-06-23T14:12:32Z",
+      "side": 1,
+      "message": "Yes, I can see all the verbose logs. They are not displayed in order because of the parallelism but all the logs are shown.",
+      "parentUuid": "235e6192_d58dc87a",
+      "range": {
+        "startLine": 251,
+        "startChar": 22,
+        "endLine": 251,
+        "endChar": 47
+      },
+      "revId": "26da7de823450f59c09d85d1f4f93a528d2f419b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
