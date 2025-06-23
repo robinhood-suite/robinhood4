@@ -48,6 +48,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0df5f5ee_0861e431",
+        "filename": "librobinhood/src/plugins/mongo/mongo.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 338,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-06-23T08:34:25Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "fd267850_1f07c5c4",
+      "range": {
+        "startLine": 338,
+        "startChar": 0,
+        "endLine": 338,
+        "endChar": 15
+      },
+      "revId": "460e97d21b33ff13fd899321419307bb04c0fa1f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dbcd8599_23a2b15b",
