@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "380dffec_b7896d6c",
+        "filename": "benchmark/bench",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-06-23T07:42:33Z",
+      "side": 1,
+      "message": "typo: no space",
+      "range": {
+        "startLine": 32,
+        "startChar": 22,
+        "endLine": 32,
+        "endChar": 23
+      },
+      "revId": "117a5f6812f3a52deab60a6352be8be36bc1b8b9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b48311ae_1c004717",
+        "filename": "benchmark/bench",
+        "patchSetId": 1
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-06-23T07:42:33Z",
+      "side": 1,
+      "message": "nit: why is sync `sync` but find is `_find` ?",
+      "range": {
+        "startLine": 104,
+        "startChar": 8,
+        "endLine": 104,
+        "endChar": 13
+      },
+      "revId": "117a5f6812f3a52deab60a6352be8be36bc1b8b9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fddaec0d_dd902025",
+        "filename": "benchmark/bench",
+        "patchSetId": 1
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-06-23T07:42:33Z",
+      "side": 1,
+      "message": "style: tab",
+      "range": {
+        "startLine": 109,
+        "startChar": 0,
+        "endLine": 109,
+        "endChar": 1
+      },
+      "revId": "117a5f6812f3a52deab60a6352be8be36bc1b8b9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
