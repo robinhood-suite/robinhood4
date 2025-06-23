@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "235e6192_d58dc87a",
+        "filename": "benchmark/generate_tree",
+        "patchSetId": 1
+      },
+      "lineNbr": 251,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-06-23T07:25:05Z",
+      "side": 1,
+      "message": "question: does that work properly with verbose mode and logs in the subfunctions ? Can you see the verbose logs ?",
+      "range": {
+        "startLine": 251,
+        "startChar": 22,
+        "endLine": 251,
+        "endChar": 47
+      },
+      "revId": "26da7de823450f59c09d85d1f4f93a528d2f419b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
