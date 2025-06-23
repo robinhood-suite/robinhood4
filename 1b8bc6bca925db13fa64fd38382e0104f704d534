@@ -45,6 +45,30 @@
       },
       "revId": "1b8bc6bca925db13fa64fd38382e0104f704d534",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dbffea63_df62208c",
+        "filename": "benchmark/bench",
+        "patchSetId": 1
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-06-23T14:16:31Z",
+      "side": 1,
+      "message": "Yes I did a POSIX one even with Lustre to see the overhead of the Lustre metadata retrieval. But I can modify it to do only a Lustre one with Lustre.",
+      "parentUuid": "82a6022a_0d7b995c",
+      "range": {
+        "startLine": 148,
+        "startChar": 4,
+        "endLine": 150,
+        "endChar": 23
+      },
+      "revId": "1b8bc6bca925db13fa64fd38382e0104f704d534",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
