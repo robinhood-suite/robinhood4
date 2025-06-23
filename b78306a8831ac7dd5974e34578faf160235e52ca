@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b14ba2a8_9603da9e",
+        "filename": "benchmark/bench",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-06-23T08:17:05Z",
+      "side": 1,
+      "message": "question: why not simply assign these to local variables with the respective names ?",
+      "range": {
+        "startLine": 58,
+        "startChar": 4,
+        "endLine": 62,
+        "endChar": 23
+      },
+      "revId": "b78306a8831ac7dd5974e34578faf160235e52ca",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
