@@ -1498,6 +1498,13 @@ mongo_backend_init(struct mongo_backend *mongo, const struct rbh_uri *uri)
         return -1;
     }
 
+    if (!mongoc_uri_set_option_as_int32(mongo_uri, MONGOC_URI_SOCKETTIMEOUTMS,
+                                        INT32_MAX)) {
+        mongoc_uri_destroy(mongo_uri);
+        errno = EINVAL;
+        return -1;
+    }
+
     rc = mongo_backend_init_from_uri(mongo, mongo_uri);
     save_errno = errno;
     mongoc_uri_destroy(mongo_uri);
