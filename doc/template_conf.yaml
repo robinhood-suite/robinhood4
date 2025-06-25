@@ -6,6 +6,10 @@
 # information about connection string.
 mongodb_address: "mongodb://localhost:27017"
 
+# Parameter to specify the libmongoc cursor timeout in milliseconds.
+# If not set, the mongo backend will use INT32_MAX as timeout.
+mongodb_cursor_timeout: 300000
+
 # Map to indicate the type of each xattrs expected to find and to use the
 # appropriate type to store them in Mongo. If not set, all xattrs will be stored
 # as a binary. Also, all xattrs not set in the map will be store as a binary.
