@@ -1432,7 +1432,8 @@ static const struct rbh_backend MONGO_BACKEND = {
  |                          rbh_mongo_backend_new()                           |
  *----------------------------------------------------------------------------*/
 
-#define MONGODB_ADDRESS_KEY "mongodb_address"
+#define MONGODB_ADDRESS_KEY "address"
+#define MONGODB_CURSOR_TIMEOUT "cursor_timeout"
 
 static const char *
 get_mongo_addr()
@@ -1440,7 +1441,7 @@ get_mongo_addr()
     struct rbh_value value = { 0 };
     enum key_parse_result rc;
 
-    rc = rbh_config_find(MONGODB_ADDRESS_KEY, &value, RBH_VT_STRING);
+    rc = rbh_config_find("mongo/"MONGODB_ADDRESS_KEY, &value, RBH_VT_STRING);
     if (rc == KPR_ERROR)
         return NULL;
 
@@ -1450,12 +1451,29 @@ get_mongo_addr()
     return value.string;
 }
 
+static int32_t
+get_cursor_timeout()
+{
+    struct rbh_value value = { 0 };
+    enum key_parse_result rc;
+
+    rc = rbh_config_find("mongo/"MONGODB_CURSOR_TIMEOUT, &value, RBH_VT_INT32);
+    if (rc == KPR_ERROR)
+        return -1;
+
+    if (rc == KPR_NOT_FOUND)
+        value.int32 = INT32_MAX;
+
+    return value.int32;
+}
+
 static int
 mongo_backend_init(struct mongo_backend *mongo, const struct rbh_uri *uri)
 {
     mongoc_uri_t *mongo_uri;
-    int save_errno;
     const char *addr;
+    int32_t timeout;
+    int save_errno;
     int rc;
 
     if (uri->authority) {
@@ -1493,6 +1511,17 @@ mongo_backend_init(struct mongo_backend *mongo, const struct rbh_uri *uri)
     }
 
     if (!mongoc_uri_set_database(mongo_uri, uri->fsname)) {
+        mongoc_uri_destroy(mongo_uri);
+        errno = EINVAL;
+        return -1;
+    }
+
+    timeout = get_cursor_timeout();
+    if (timeout == -1)
+        return -1;
+
+    if (!mongoc_uri_set_option_as_int32(mongo_uri, MONGOC_URI_SOCKETTIMEOUTMS,
+                                        timeout)) {
         mongoc_uri_destroy(mongo_uri);
         errno = EINVAL;
         return -1;

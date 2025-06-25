@@ -28,8 +28,9 @@ blob" > $conf_file
         error "Sync with invalid configuration file should have failed"
 
     echo "---
- mongodb_address: \"mongodb://localhost:12345\"
- mongodb_address: \"mongodb://localhost:27017\"
+ mongo:
+     address: \"mongodb://localhost:12345\"
+     address: \"mongodb://localhost:27017\"
 ---" > $conf_file
 
     rbh_sync --config $conf_file --one rbh:posix:$file rbh:$db:$testdb &&
