@@ -1,10 +1,15 @@
-# The connection string to indicate to the mongo backend where and how to
-# connect to the MongoDB database. If not set, the mongo backend will use
-# "mongodb://localhost:27017".
-#
-# See https://www.mongodb.com/docs/manual/reference/connection-string/ for more
-# information about connection string.
-mongodb_address: "mongodb://localhost:27017"
+mongo:
+    # The connection string to indicate to the mongo backend where and how to
+    # connect to the MongoDB database. If not set, the mongo backend will use
+    # "mongodb://localhost:27017".
+    #
+    # See https://www.mongodb.com/docs/manual/reference/connection-string/ for
+    # more information about connection string.
+    address: "mongodb://localhost:27017"
+
+    # Parameter to specify the libmongoc cursor timeout in milliseconds.
+    # If not set or set to 0, the mongo backend will use INT32_MAX as timeout.
+    cursor_timeout: 0
 
 # Map to indicate the type of each xattrs expected to find and to use the
 # appropriate type to store them in Mongo. If not set, all xattrs will be stored
