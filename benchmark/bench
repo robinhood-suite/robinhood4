@@ -73,19 +73,32 @@ function reset_mongo() {
 }
 
 function setup_mongo() {
-    ssh $MONGO "sed -i -e 's/bindIp: 127.0.0.1/bindIp: 0.0.0.0/g'" \
-               "/etc/mongod.conf"
-    if ! ssh $MONGO "systemctl status mongod"; then
-        reset_mongo
-        ssh $MONGO "sudo systemctl start mongod"
+    local db=$1
+
+    if [[ $NB_SHARD -gt 1 ]]; then
+        scp shard $MONGO:~/
+        ssh $MONGO "./shard clean"
+        ssh $MONGO "./shard setup $NB_SHARD $db"
+    else
+        ssh $MONGO "sed -i -e 's/bindIp: 127.0.0.1/bindIp: 0.0.0.0/g'" \
+                   "/etc/mongod.conf"
+        if ! ssh $MONGO "systemctl status mongod"; then
+            reset_mongo
+            ssh $MONGO "sudo systemctl start mongod"
+        fi
     fi
 }
 
 function cleanup_mongo() {
-    ssh $MONGO "mongo --quiet --eval 'var dbs = db.getMongo().getDBNames();"\
-               "for(var i in dbs) { db = db.getMongo().getDB(dbs[i]);" \
-               "db.dropDatabase(); }'"
-    ssh $MONGO "systemctl stop mongod"
+    if [[ $NB_SHARD -gt 1 ]]; then
+        scp shard $MONGO:~/
+        ssh $MONGO "./shard clean"
+    else
+        ssh $MONGO "mongo --quiet --eval 'var dbs = db.getMongo().getDBNames();"\
+                   "for(var i in dbs) { db = db.getMongo().getDB(dbs[i]);" \
+                   "db.dropDatabase(); }'"
+        ssh $MONGO "systemctl stop mongod"
+    fi
 }
 
 function drop_cache() {
@@ -99,34 +112,41 @@ function drop_cache() {
     ssh $CLIENT "echo 3 > /proc/sys/vm/drop_caches"
 
     # Drop MONGO cache
-    ssh $MONGO "systemctl stop mongod && " \
+    if [[ $NB_SHARD -eq 1 ]]; then
+        ssh $MONGO "systemctl stop mongod && " \
                "echo 3 > /proc/sys/vm/drop_caches && " \
                "systemctl start mongod"
+    fi
 }
 
 function reset_mongo_profiling() {
     local mongodb=$1
 
-    mongo --quiet --host $MONGO $mongodb \
+    for i in $(seq 1 $NB_SHARD); do
+        mongo --quiet --port $((27000 + $i)) --host $MONGO $mongodb \
           --eval "db.setProfilingLevel(0)" > /dev/null
-    mongo --quiet --host $MONGO $mongodb \
+        mongo --quiet --port $((27000 + $i)) --host $MONGO $mongodb \
           --eval "db.system.profile.drop()" > /dev/null
-    mongo --quiet --host $MONGO $mongodb \
+        mongo --quiet --port $((27000 + $i)) --host $MONGO $mongodb \
           --eval "db.setProfilingLevel(1, { slowms: 0 });" > /dev/null
+    done
 }
 
 function getMongoAggregateTime() {
     local mongodb=$1
 
-    mongo --quiet --host $MONGO $mongodb \
+    rm -f result
+    for i in $(seq 1 $NB_SHARD); do
+        mongo --quiet --port $((27000 + $i)) --host $MONGO $mongodb \
           --eval "db.system.profile.find({ op: 'command', 'command.aggregate': \
                   'entries' }, {'millis': true, 'nreturned': true})" |
-                  tee result > /dev/null
-    mongo --quiet --host $MONGO $mongodb \
+                  tee -a result > /dev/null
+        mongo --quiet --port $((27000 + $i)) --host $MONGO $mongodb \
           --eval "db.system.profile.find({ op: 'getmore', 'command.collection':\
                   'entries' }, {'millis': true, 'nreturned': \
                   true}).forEach(printjson)" |
                   tee -a result > /dev/null
+    done
     echo "Time in ms of Mongo for an aggregate:"
     echo "$(awk -F'"millis" :' '{ sum += $2 } END { print sum }' result)"
 }
@@ -160,6 +180,8 @@ function cleanup_tree() {
 }
 
 function setup() {
+    local db=$1
+
     if [[ $FS == "lustre" ]]; then
         setup_lustre
         export ROOT="/mnt/lustre"
@@ -169,7 +191,7 @@ function setup() {
     fi
 
     cleanup_mongo
-    setup_mongo
+    setup_mongo $db
 
     ssh $CLIENT "sed -i -e 's/localhost/$MONGO/g' \
                  /etc/robinhood4.d/default.yaml"
@@ -239,9 +261,9 @@ function bench_find() {
 
 function _find() {
     # SETUP FIND
-    setup
+    setup "find"
 
-    setup_tree "-v -r $ROOT -n 6 -d 6 -m $NB_MDT $INODES" "true" $ROOT "posix" \
+    setup_tree "-v -r $ROOT -n 6 -d 6 -m 8 $INODES" "true" $ROOT "posix" \
         "find"
 
     bench_find "-count"
@@ -341,36 +363,39 @@ function report() {
     fi
 }
 
-NB_MDT=1
-FS="posix"
-MONGO="$(hostname -s)"
-MDS="$(hostname -s)"
 CLIENT="$(hostname -s)"
+FS="posix"
 INODES=1000
+MDS="$(hostname -s)"
+MONGO="$(hostname -s)"
+NB_MDT=1
+NB_SHARD=1
 
 function usage() {
-    echo "bench.sh [--fs FS_TYPE] [--mongo HOSTNAME] [--mds HOSTNAME[,HOSTNAME...]] [--client HOSTNAME] [--inodes NUM] BENCHMARK"
+    echo "bench.sh [--client HOSTNAME] [--fs FS_TYPE] [--inodes NUM] [--mds HOSTNAME[,HOSTNAME...]] [--mongo HOSTNAME] [--shard NUM] BENCHMARK"
     echo ""
     echo "Run a Robinhood benchmark with the specified options."
     echo ""
     echo "Positional Argument:"
     echo "BENCHMARK"
-    echo "The benchmark to run. Valid options: sync, find, fsevents."
+    echo "The benchmark to run. Valid options: find, fsevents, sync, report."
     echo ""
     echo "Optional Arguments:"
-    echo "--fs FS_TYPE: Filesystem type to use: lustre or posix. Default: posix."
-    echo "--mongo HOSTNAME: Hostname of the MongoDB server. Default: localhost."
-    echo "--mds HOSTNAME[,HOSTNAME...]: Comma-separated list of Metadata Server (MDS) hostnames. Only with Lustre."
     echo "--client HOSTNAME: Hostname where Robinhood should be launched."
+    echo "--fs FS_TYPE: Filesystem type to use: lustre or posix. Default: posix."
     echo "--inodes NUM: Number of inodes to create. Default: 1000."
+    echo "--mds HOSTNAME[,HOSTNAME...]: Comma-separated list of Metadata Server (MDS) hostnames. Only with Lustre."
+    echo "--mongo HOSTNAME: Hostname of the MongoDB server. Default: localhost."
+    echo "--shard NUM: Number of shard to use with MongoDB. Default: no sharding."
 }
 
 ARGUMENT_LIST=(
-    "fs"
-    "mongo"
-    "mds"
     "client"
+    "fs"
     "inodes"
+    "mds"
+    "mongo"
+    "shard"
 )
 
 opts=$(getopt \
@@ -384,24 +409,13 @@ eval set --$opts
 
 while [[ $# -gt 0 ]]; do
     case "$1" in
-        --fs)
-            FS=$2
-            shift 2
-            ;;
-
-        --mongo)
-            MONGO=$2
-            shift 2
-            ;;
-
-        --mds)
-            IFS=',' read -r -a MDS <<< "$2"
-            NB_MDT=${#MDS[@]}
-            shift 2
-            ;;
-
         --client)
             CLIENT=$2
+            shift 2
+            ;;
+
+        --fs)
+            FS=$2
             shift 2
             ;;
 
@@ -415,6 +429,22 @@ while [[ $# -gt 0 ]]; do
             shift 2
             ;;
 
+        --mds)
+            IFS=',' read -r -a MDS <<< "$2"
+            NB_MDT=${#MDS[@]}
+            shift 2
+            ;;
+
+        --mongo)
+            MONGO=$2
+            shift 2
+            ;;
+
+        --shard)
+            NB_SHARD=$2
+            shift 2
+            ;;
+
         *)
             break
             ;;
@@ -425,10 +455,6 @@ shift 1
 COMMAND=$1
 
 case "$COMMAND" in
-    sync)
-        sync
-        ;;
-
     find)
         _find
         ;;
@@ -439,6 +465,10 @@ case "$COMMAND" in
             exit
         fi
         fsevents
+        ;;
+
+    sync)
+        sync
         ;;
 
     report)
