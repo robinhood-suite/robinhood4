@@ -1,0 +1,62 @@
+#!/bin/bash
+
+function setup() {
+    local nb_shard=$1
+    local db=$2
+
+    mkdir -p /var/lib/mongo-config
+    for i in $(seq 1 $nb_shard); do
+        mkdir -p /var/lib/mongo-shard$i
+    done
+
+    # Config server
+    mongod --configsvr --replSet csrs \
+           --port 27019 --dbpath /var/lib/mongo-config \
+           --bind_ip 0.0.0.0 --fork --logpath /var/log/mongo-csrs.log
+    mongo --quiet --port 27019 --eval \
+        'rs.initiate({_id:"csrs",members:[{_id:0,host:"localhost:27019"}]})'
+
+    # Shard server
+    for i in $(seq 1 $nb_shard); do
+        mongod --shardsvr --replSet shard$i \
+               --port $((27000 + $i)) --dbpath /var/lib/mongo-shard$i \
+               --bind_ip 0.0.0.0 --fork --logpath /var/log/mongo-shard$i.log
+        mongo --quiet --port $((27000 + $i)) \
+            --eval 'rs.initiate({_id:"shard'$i'",members:[{_id:0,host:"localhost:'$((27000 + $i))'"}]})'
+    done
+
+    # Mongos server
+    mongos --port 27017 \
+           --configdb csrs/localhost:27019 \
+           --bind_ip 0.0.0.0 --fork --logpath /var/log/mongos.log
+
+    # Add shard in the cluster
+    for i in $(seq 1 $nb_shard); do
+        mongo --quiet --port 27017 \
+            --eval 'sh.addShard("shard'$i'/localhost:'$((27000 + $i))'")'
+    done
+
+    # Enable sharding
+    mongo $db --quiet --port 27017 --eval 'sh.enableSharding("'$db'")'
+    mongo $db --quiet --port 27017 --eval 'db.createCollection("entries")'
+    mongo $db --quiet --port 27017 \
+        --eval 'sh.shardCollection("'$db'.entries", { _id: "hashed"})'
+
+    mongo --quiet --port 27017 --eval 'sh.status()'
+}
+
+function clean() {
+    pgrep mongos | xargs kill
+    pgrep mongod | xargs kill -9
+
+    rm -rf /var/lib/mongo-*
+    rm -rf /var/log/mongo-csrs*
+    rm -rf /var/log/mongo-shard*
+    rm -rf /var/log/mongos*
+}
+
+if [[ "$1" == "setup" ]]; then
+    setup $2 $3
+elif [[ "$1" == "clean" ]]; then
+    clean
+fi
