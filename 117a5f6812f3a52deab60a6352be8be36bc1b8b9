@@ -95,6 +95,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "04ab0f0e_c2a3b529",
+        "filename": "benchmark/bench",
+        "patchSetId": 1
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-06-26T08:41:24Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "ae485b3d_94245e43",
+      "range": {
+        "startLine": 104,
+        "startChar": 8,
+        "endLine": 104,
+        "endChar": 13
+      },
+      "revId": "117a5f6812f3a52deab60a6352be8be36bc1b8b9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fddaec0d_dd902025",
