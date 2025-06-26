@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f163793e_414a4fab",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-06-26T10:08:58Z",
+      "side": 1,
+      "message": "typo: launched",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 6
+      },
+      "revId": "0ff2331fb27a38ee073f6672814f2411e6adf551",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5bb2c202_725e336c",
+        "filename": "benchmark/bench",
+        "patchSetId": 2
+      },
+      "lineNbr": 332,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-06-26T10:08:58Z",
+      "side": 1,
+      "message": "suggest: add one with double group-by and one output",
+      "range": {
+        "startLine": 332,
+        "startChar": 4,
+        "endLine": 332,
+        "endChar": 16
+      },
+      "revId": "0ff2331fb27a38ee073f6672814f2411e6adf551",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
