@@ -45,15 +45,26 @@ std::shared_ptr<Aws::SDKOptions> options_ptr =
 
 void
 s3_init_api(const char *address, const char *username, const char *password,
-            const char *crt_path)
+            const char *crt_path, const char *region)
 {
     Aws::InitAPI(*options_ptr);
     Aws::S3::S3ClientConfiguration config;
-    config.endpointOverride = address;
-    config.scheme = Aws::Http::Scheme::HTTPS;
+
+    if (address != nullptr)
+        config.endpointOverride = address;
+
+    if (region != nullptr)
+        config.region = region;
+
+    if (crt_path == nullptr) {
+        config.scheme = Aws::Http::Scheme::HTTP;
+    } else {
+        config.scheme = Aws::Http::Scheme::HTTPS;
+        config.caFile = crt_path;
+        config.verifySSL = true;
+    }
+
     Aws::Auth::AWSCredentials credentials(username, password);
-    config.caFile = crt_path;
-    config.verifySSL = true;
     s3_client_ptr = std::unique_ptr<S3CLIENT>(new S3CLIENT(credentials,
                                               config, SIGNING_POLICY::Never,
                                               false));
