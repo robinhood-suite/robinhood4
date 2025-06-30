@@ -426,31 +426,62 @@ static const struct rbh_backend S3_BACKEND = {
 struct rbh_backend *
 rbh_s3_backend_new(__attribute__((unused))
                    const struct rbh_backend_plugin *self,
-                   __attribute__((unused)) const struct rbh_uri *uri,
+                   const struct rbh_uri *uri,
                    struct rbh_config *config,
                    bool read_only)
 {
     struct rbh_value value = { 0 };
+    size_t host_len, port_len;
     struct s3_backend *s3;
     const char *crt_path;
     const char *password;
     const char *address;
     const char *user;
+    char buffer[255];
+    char port[16];
+    int rc;
 
     s3 = malloc(sizeof(*s3));
     if (s3 == NULL)
         return NULL;
 
     rbh_config_load(config);
-
-    rbh_config_find("s3/password", &value, RBH_VT_STRING);
-    password = value.string;
-    rbh_config_find("s3/address", &value, RBH_VT_STRING);
-    address = value.string;
-    rbh_config_find("s3/user", &value, RBH_VT_STRING);
-    user = value.string;
     rbh_config_find("s3/crt_path", &value, RBH_VT_STRING);
     crt_path = value.string;
+
+    if (uri->authority) {
+        password = uri->authority->password;
+        if (!strcmp(password, "")) {
+            rbh_config_find("s3/password", &value, RBH_VT_STRING);
+            password = value.string;
+        }
+
+        user = uri->authority->username;
+        if (!strcmp(user, "")) {
+            rbh_config_find("s3/user", &value, RBH_VT_STRING);
+            user = value.string;
+        }
+
+        rc = snprintf(port, sizeof(port), "%ld", uri->authority->port);
+        if (rc < 0 || rc >= sizeof(port))
+            return NULL;
+
+        host_len = strlen(uri->authority->host);
+        port_len = strlen(port);
+        memcpy(buffer, uri->authority->host, host_len);
+        memcpy(buffer + host_len, ":", 1);
+        memcpy(buffer + host_len + 1, port, port_len);
+        buffer[host_len + 1 + port_len] = '\0';
+        address = buffer;
+
+    } else {
+        rbh_config_find("s3/address", &value, RBH_VT_STRING);
+        address = value.string;
+        rbh_config_find("s3/user", &value, RBH_VT_STRING);
+        user = value.string;
+        rbh_config_find("s3/password", &value, RBH_VT_STRING);
+        password = value.string;
+    }
 
     if (!address || !user || !password || !crt_path) {
         rbh_backend_error_printf("could not retrieve the s3 setup variables "
