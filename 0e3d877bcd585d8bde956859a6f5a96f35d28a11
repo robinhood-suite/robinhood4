@@ -22,6 +22,30 @@
       },
       "revId": "0e3d877bcd585d8bde956859a6f5a96f35d28a11",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "baca2042_8d753583",
+        "filename": "benchmark/bench",
+        "patchSetId": 2
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-06-30T13:49:32Z",
+      "side": 1,
+      "message": "The test without any filter is the first one. I\u0027m using the -count predicate to avoid printing all the entries",
+      "parentUuid": "b297c0be_b8e4b5c8",
+      "range": {
+        "startLine": 218,
+        "startChar": 4,
+        "endLine": 218,
+        "endChar": 14
+      },
+      "revId": "0e3d877bcd585d8bde956859a6f5a96f35d28a11",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
