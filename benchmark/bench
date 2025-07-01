@@ -75,10 +75,10 @@ function reset_mongo() {
 function setup_mongo() {
     local db=$1
 
-    if [[ $NB_SHARD -gt 1 ]]; then
+    if [[ $NB_SHARD -gt 0 ]]; then
         scp shard $MONGO:~/
-        ssh $MONGO "./shard clean"
-        ssh $MONGO "./shard setup $NB_SHARD $db"
+        ssh $MONGO "./shard clean ${MONGO[@]}"
+        ssh $MONGO "./shard setup $NB_SHARD $db ${MONGO[@]}"
     else
         ssh $MONGO "sed -i -e 's/bindIp: 127.0.0.1/bindIp: 0.0.0.0/g'" \
                    "/etc/mongod.conf"
@@ -90,9 +90,9 @@ function setup_mongo() {
 }
 
 function cleanup_mongo() {
-    if [[ $NB_SHARD -gt 1 ]]; then
+    if [[ $NB_SHARD -gt 0 ]]; then
         scp shard $MONGO:~/
-        ssh $MONGO "./shard clean"
+        ssh $MONGO "./shard clean ${MONGO[@]}"
     else
         ssh $MONGO "mongo --quiet --eval 'var dbs = db.getMongo().getDBNames();"\
                    "for(var i in dbs) { db = db.getMongo().getDB(dbs[i]);" \
@@ -112,41 +112,67 @@ function drop_cache() {
     ssh $CLIENT "echo 3 > /proc/sys/vm/drop_caches"
 
     # Drop MONGO cache
-    if [[ $NB_SHARD -eq 1 ]]; then
+    if [[ $NB_SHARD -eq 0 ]]; then
         ssh $MONGO "systemctl stop mongod && " \
                "echo 3 > /proc/sys/vm/drop_caches && " \
                "systemctl start mongod"
     fi
 }
 
+function execute_reset_profiling() {
+    local port=$1
+    local host=$2
+
+    mongo --quiet --port $port --host $host $mongodb \
+          --eval "db.setProfilingLevel(0)" > /dev/null
+    mongo --quiet --port $port --host $host $mongodb \
+          --eval "db.system.profile.drop()" > /dev/null
+    mongo --quiet --port $port --host $host $mongodb \
+          --eval "db.setProfilingLevel(1, { slowms: 0 });" > /dev/null
+}
+
 function reset_mongo_profiling() {
     local mongodb=$1
 
-    for i in $(seq 1 $NB_SHARD); do
-        mongo --quiet --port $((27000 + $i)) --host $MONGO $mongodb \
-          --eval "db.setProfilingLevel(0)" > /dev/null
-        mongo --quiet --port $((27000 + $i)) --host $MONGO $mongodb \
-          --eval "db.system.profile.drop()" > /dev/null
-        mongo --quiet --port $((27000 + $i)) --host $MONGO $mongodb \
-          --eval "db.setProfilingLevel(1, { slowms: 0 });" > /dev/null
-    done
+    if [[ $NB_SHARD -eq 0 ]]; then
+        execute_reset_profiling 27017 $MONGO
+    else
+        for host in ${MONGO[@]}; do
+            for i in $(seq 1 $NB_SHARD); do
+                execute_reset_profiling $((27000 + $i)) $host
+            done
+        done
+    fi
+}
+
+function execute_get_aggregateTime() {
+    local port=$1
+    local host=$2
+
+    mongo --quiet --port $port --host $host $mongodb \
+          --eval "db.system.profile.find({ op: 'command', 'command.aggregate': \
+                 'entries' }, {'millis': true, 'nreturned': true})" |
+                  tee -a result > /dev/null
+    mongo --quiet --port $port --host $host $mongodb \
+          --eval "db.system.profile.find({ op: 'getmore', 'command.collection':\
+                  'entries' }, {'millis': true, 'nreturned': \
+                  true}).forEach(printjson)" |
+                  tee -a result > /dev/null
 }
 
 function getMongoAggregateTime() {
     local mongodb=$1
 
     rm -f result
-    for i in $(seq 1 $NB_SHARD); do
-        mongo --quiet --port $((27000 + $i)) --host $MONGO $mongodb \
-          --eval "db.system.profile.find({ op: 'command', 'command.aggregate': \
-                  'entries' }, {'millis': true, 'nreturned': true})" |
-                  tee -a result > /dev/null
-        mongo --quiet --port $((27000 + $i)) --host $MONGO $mongodb \
-          --eval "db.system.profile.find({ op: 'getmore', 'command.collection':\
-                  'entries' }, {'millis': true, 'nreturned': \
-                  true}).forEach(printjson)" |
-                  tee -a result > /dev/null
-    done
+    if [[ $NB_SHARD -eq 0 ]]; then
+        execute_get_aggregateTime 27017 $MONGO
+    else
+        for host in ${MONGO[@]}; do
+            for i in $(seq 1 $NB_SHARD); do
+                execute_get_aggregateTime $((27000 + $i)) $host
+            done
+        done
+    fi
     echo "Time in ms of Mongo for an aggregate:"
     echo "$(awk -F'"millis" :' '{ sum += $2 } END { print sum }' result)"
 }
@@ -172,7 +198,7 @@ function cleanup_tree() {
 
     module load mpi/openmpi-x86_64
     for i in $(seq 0 $(($NB_MDT - 1))); do
-        mpirun --allow-run-as-root drm -q $root/mdt$i/
+        mpirun --allow-run-as-root drm -q -l --aggressive $root/mdt$i/
         if [[ $FS == "lustre" ]]; then
             lfs mkdir -m $i $root/mdt$i
         fi
@@ -203,26 +229,32 @@ function bench_sync() {
 
     echo "Sequential"
     drop_cache
-    ssh $CLIENT "time rbh-sync rbh:$backend:$root rbh:mongo:sync-$backend"
-    ssh $CLIENT "rbh-find rbh:mongo:sync-$backend -count"
-    mongo --quiet --host $MONGO sync-$backend --eval "db.dropDatabase()"
+    ssh $CLIENT "time rbh-sync rbh:$backend:$root rbh:mongo:sync"
+    ssh $CLIENT "rbh-find rbh:mongo:sync -count"
+    mongo --quiet --host $MONGO sync --eval "db.dropDatabase()" > /dev/null
+    if [[ $NB_SHARD -gt 0 ]]; then
+        ssh $MONGO "./shard init sync" > /dev/null
+    fi
+
 
     for i in 2 4 8 16 32 64 128 ; do
         echo "$i process"
         drop_cache
         ssh $CLIENT "module load mpi/openmpi-x86_64 && time mpirun" \
                      "--allow-run-as-root -np $i rbh-sync" \
-                     "rbh:$backend-mpi:$root rbh:mongo:sync-$backend"
+                     "rbh:$backend-mpi:$root rbh:mongo:sync"
         ssh $CLIENT "rbh-find -c /etc/robinhood4.d/default.yaml" \
-                     "rbh:mongo:sync-$backend -count"
-        mongo --quiet --host $MONGO sync-$backend \
-              --eval "db.dropDatabase()" > /dev/null
+                     "rbh:mongo:sync -count"
+        mongo --quiet --host $MONGO sync --eval "db.dropDatabase()" > /dev/null
+        if [[ $NB_SHARD -gt 0 ]]; then
+            ssh $MONGO "./shard init sync" > /dev/null
+        fi
     done
 }
 
 function sync() {
     # SETUP SYNC
-    setup
+    setup "sync"
 
     setup_tree "-v -r $ROOT -n 6 -d 6 -m $NB_MDT $INODES"
     if [[ $FS == "lustre" ]]; then
@@ -240,6 +272,9 @@ function sync() {
 
     cleanup_tree $ROOT
     cleanup_mongo
+
+    ssh $CLIENT "sed -i -e 's/$MONGO/localhost/g' \
+                 /etc/robinhood4.d/default.yaml"
 
     if [[ "$FS" == "posix" ]]; then
         cleanup_posix
@@ -272,6 +307,9 @@ function _find() {
     bench_find "'(' '(' -type d -a -name *_1 ')' -o " \
                "'(' -type f -a -name *_10 ')' ')' -a -count"
 
+    ssh $CLIENT "sed -i -e 's/$MONGO/localhost/g' \
+                 /etc/robinhood4.d/default.yaml"
+
     cleanup_tree $ROOT
     cleanup_mongo
 
@@ -296,38 +334,48 @@ function exec_fsevents() {
 }
 
 function fsevents() {
-    setup
+    setup "fsevent"
     setup_changelog
     setup_hsm
 
     echo "With POSIX enricher"
     for i in {1..5}; do
         echo "Run n°$i"
-        setup_tree "-v -r $ROOT -n 6 -d 6 -m $NB_MDT --changelog $INODES"
+        setup_tree "-v -r $ROOT -n 6 -d 6 -m $NB_MDT --changelog $INODES" > /dev/null
         echo "Number of inodes: $(find $ROOT | wc -l)"
         time exec_fsevents "posix"
         ssh $CLIENT "rbh-find rbh:mongo:fsevent -count"
-
         cleanup_tree $ROOT
         cleanup_changelog
         mongo --quiet --host $MONGO fsevent \
               --eval "db.dropDatabase()" > /dev/null
+        if [[ $NB_SHARD -gt 0 ]]; then
+            ssh $MONGO "./shard init fsevent" > /dev/null
+        fi
+
     done
 
     echo "With LUSTRE enricher"
     for i in {1..5}; do
         echo "Run n°$i"
-        setup_tree "-v -r $ROOT -n 6 -d 6 -m $NB_MDT --changelog $INODES"
+        setup_tree "-v -r $ROOT -n 6 -d 6 -m $NB_MDT --changelog $INODES" > /dev/null
         echo "Number of inodes: $(find $ROOT | wc -l)"
         time exec_fsevents "lustre"
         ssh $CLIENT "rbh-find rbh:mongo:fsevent -count"
-
         cleanup_tree $ROOT
         cleanup_changelog
         mongo --quiet --host $MONGO fsevent \
               --eval "db.dropDatabase()" > /dev/null
+        if [[ $NB_SHARD -gt 0 ]]; then
+            ssh $MONGO "./shard init fsevent" > /dev/null
+        fi
+
     done
 
+    ssh $CLIENT "sed -i -e 's/$MONGO/localhost/g' \
+                 /etc/robinhood4.d/default.yaml"
+
+    cleanup_mongo
     cleanup_lustre
 }
 
@@ -343,9 +391,9 @@ function bench_report() {
 }
 
 function report() {
-    setup
+    setup "report"
 
-    setup_tree "-v -r $ROOT -n 6 -d 6 -m $NB_MDT $INODES" "true" $ROOT "posix" \
+    setup_tree "-v -r $ROOT -n 6 -d 6 -m 8 $INODES" "true" $ROOT "posix" \
         "report"
 
     bench_report --output '"avg(statx.size)"'
@@ -356,6 +404,9 @@ function report() {
 
     cleanup_tree $ROOT
     cleanup_mongo
+    ssh $CLIENT "sed -i -e 's/$MONGO/localhost/g' \
+                 /etc/robinhood4.d/default.yaml"
+
     if [[ "$FS" == "lustre" ]]; then
         cleanup_lustre
     else
@@ -369,7 +420,8 @@ INODES=1000
 MDS="$(hostname -s)"
 MONGO="$(hostname -s)"
 NB_MDT=1
-NB_SHARD=1
+NB_HOST=1
+NB_SHARD=0
 
 function usage() {
     echo "bench.sh [--client HOSTNAME] [--fs FS_TYPE] [--inodes NUM] [--mds HOSTNAME[,HOSTNAME...]] [--mongo HOSTNAME] [--shard NUM] BENCHMARK"
@@ -436,7 +488,8 @@ while [[ $# -gt 0 ]]; do
             ;;
 
         --mongo)
-            MONGO=$2
+            IFS=',' read -r -a MONGO <<< "$2"
+            NB_HOST=${#MONGO[@]}
             shift 2
             ;;
 
@@ -453,6 +506,9 @@ done
 
 shift 1
 COMMAND=$1
+
+[[ $NB_HOST -gt 1 ]] && [[ $NB_SHARD -eq 0 ]] &&
+    echo "Can only use multi nodes with sharding" && exit
 
 case "$COMMAND" in
     find)
