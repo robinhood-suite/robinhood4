@@ -432,10 +432,12 @@ rbh_s3_backend_new(__attribute__((unused))
 {
     struct rbh_value value = { 0 };
     size_t host_len, port_len;
+    enum key_parse_result rc;
     struct s3_backend *s3;
     const char *crt_path;
     const char *password;
     const char *address;
+    uint64_t temp_port;
     const char *user;
     char buffer[255];
     char port[16];
@@ -446,7 +448,14 @@ rbh_s3_backend_new(__attribute__((unused))
         return NULL;
 
     rbh_config_load(config);
-    rbh_config_find("s3/crt_path", &value, RBH_VT_STRING);
+    rc = rbh_config_find("s3/crt_path", &value, RBH_VT_STRING);
+
+    if (rc == KPR_ERROR)
+        return NULL;
+
+    if (rc == KPR_NOT_FOUND)
+        value.string = NULL;
+
     crt_path = value.string;
 
     if (uri->authority) {
@@ -462,7 +471,12 @@ rbh_s3_backend_new(__attribute__((unused))
             user = value.string;
         }
 
-        rc = snprintf(port, sizeof(port), "%ld", uri->authority->port);
+        temp_port = uri->authority->port;
+        if (temp_port == 0)
+            //Default port is 80 in HTTP and 443 in HTTPS
+            temp_port = (crt_path != NULL ? 443 : 80);
+
+        rc = snprintf(port, sizeof(port), "%ld", temp_port);
         if (rc < 0 || rc >= sizeof(port))
             return NULL;
 
@@ -483,9 +497,9 @@ rbh_s3_backend_new(__attribute__((unused))
         password = value.string;
     }
 
-    if (!address || !user || !password || !crt_path) {
-        rbh_backend_error_printf("could not retrieve the s3 setup variables "
-                                 "from the config file");
+    if (!address || !user || !password) {
+        rbh_backend_error_printf("could not retrieve the s3 client setup "
+                                 "variables from the config file or the URI");
         return NULL;
     }
 
