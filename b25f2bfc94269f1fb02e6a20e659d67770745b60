@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "280a638c_a5e61eff",
+        "filename": "designs/rbh-policy/06-daemon_overview.rst",
+        "patchSetId": 20
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-07-01T10:10:12Z",
+      "side": 1,
+      "message": "minor: title is duplicated",
+      "range": {
+        "startLine": 17,
+        "startChar": 0,
+        "endLine": 18,
+        "endChar": 20
+      },
+      "revId": "b25f2bfc94269f1fb02e6a20e659d67770745b60",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
