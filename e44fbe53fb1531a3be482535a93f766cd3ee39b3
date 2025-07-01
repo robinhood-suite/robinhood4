@@ -93,6 +93,30 @@
       },
       "revId": "e44fbe53fb1531a3be482535a93f766cd3ee39b3",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9a6ba66b_6a82ad2b",
+        "filename": "librobinhood/src/plugins/s3/s3.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 470,
+      "author": {
+        "id": 1038646
+      },
+      "writtenOn": "2025-07-01T08:31:26Z",
+      "side": 1,
+      "message": "Mandatory for now, but will be optional in a future patch of this stack",
+      "parentUuid": "78a14932_ab3a216c",
+      "range": {
+        "startLine": 470,
+        "startChar": 12,
+        "endLine": 470,
+        "endChar": 58
+      },
+      "revId": "e44fbe53fb1531a3be482535a93f766cd3ee39b3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
