@@ -45,11 +45,16 @@ std::shared_ptr<Aws::SDKOptions> options_ptr =
 
 void
 s3_init_api(const char *address, const char *username, const char *password,
-            const char *crt_path)
+            const char *crt_path, const char *region)
 {
     Aws::InitAPI(*options_ptr);
     Aws::S3::S3ClientConfiguration config;
-    config.endpointOverride = address;
+
+    if (address != nullptr)
+        config.endpointOverride = address;
+
+    if (region != nullptr)
+        config.region = region;
 
     if (crt_path == nullptr) {
         config.scheme = Aws::Http::Scheme::HTTP;

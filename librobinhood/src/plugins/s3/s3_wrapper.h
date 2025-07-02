@@ -35,7 +35,7 @@ extern "C" {
      */
     void
     s3_init_api(const char *address, const char *username,
-                const char *password, const char *crt_path);
+                const char *password, const char *crt_path, const char *region);
 
     /**
      * Shutdown the AWS API
