@@ -46,6 +46,30 @@
       },
       "revId": "0e3d877bcd585d8bde956859a6f5a96f35d28a11",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "256b71d9_590c2b33",
+        "filename": "benchmark/bench",
+        "patchSetId": 2
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-07-02T08:18:54Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "baca2042_8d753583",
+      "range": {
+        "startLine": 218,
+        "startChar": 4,
+        "endLine": 218,
+        "endChar": 14
+      },
+      "revId": "0e3d877bcd585d8bde956859a6f5a96f35d28a11",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
