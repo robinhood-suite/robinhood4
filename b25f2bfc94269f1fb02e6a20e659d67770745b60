@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "077719ef_701c8379",
+        "filename": "designs/rbh-policy/03-policy_condition_filters.rst",
+        "patchSetId": 20
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-07-02T13:01:52Z",
+      "side": 1,
+      "message": "ajout de btime sous le nom CreationDate",
+      "range": {
+        "startLine": 74,
+        "startChar": 4,
+        "endLine": 74,
+        "endChar": 29
+      },
+      "revId": "b25f2bfc94269f1fb02e6a20e659d67770745b60",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "280a638c_a5e61eff",
         "filename": "designs/rbh-policy/06-daemon_overview.rst",
         "patchSetId": 20
@@ -14,6 +37,30 @@
       "writtenOn": "2025-07-01T10:10:12Z",
       "side": 1,
       "message": "minor: title is duplicated",
+      "range": {
+        "startLine": 17,
+        "startChar": 0,
+        "endLine": 18,
+        "endChar": 20
+      },
+      "revId": "b25f2bfc94269f1fb02e6a20e659d67770745b60",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ebdbc4b0_744e3042",
+        "filename": "designs/rbh-policy/06-daemon_overview.rst",
+        "patchSetId": 20
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-07-02T13:01:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "280a638c_a5e61eff",
       "range": {
         "startLine": 17,
         "startChar": 0,
