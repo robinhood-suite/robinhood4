@@ -25,4 +25,5 @@ s3:
     user: minioadmin
     password: minioadmin
     crt_path: /usr/certs/public.crt
+    region : "eu-west-3"
 ---
