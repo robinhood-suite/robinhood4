@@ -32,10 +32,12 @@ extern "C" {
      * @param username  the s3 username
      * @param password  the s3 password
      * @param crt_path  the path to the crt file
+     * @param region    the region code that corresponds to the AWS S3
+     *                  service endpoint
      */
     void
     s3_init_api(const char *address, const char *username,
-                const char *password, const char *crt_path);
+                const char *password, const char *crt_path, const char *region);
 
     /**
      * Shutdown the AWS API
