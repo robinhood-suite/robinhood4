@@ -423,6 +423,19 @@ static const struct rbh_backend S3_BACKEND = {
     .ops = &S3_BACKEND_OPS,
 };
 
+static const char *
+get_config_var(char *key)
+{
+    struct rbh_value value = { 0 };
+    enum key_parse_result rc;
+
+    rc = rbh_config_find(key, &value, RBH_VT_STRING);
+    if (rc == KPR_ERROR)
+        return NULL;
+
+    return rc == KPR_FOUND ? value.string : NULL;
+}
+
 struct rbh_backend *
 rbh_s3_backend_new(__attribute__((unused))
                    const struct rbh_backend_plugin *self,
