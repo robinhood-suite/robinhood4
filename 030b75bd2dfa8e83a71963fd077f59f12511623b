@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "16eb962c_e0038539",
+        "filename": "benchmark/shard",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-07-04T12:31:59Z",
+      "side": 1,
+      "message": "suggest: add a check in the other script that the number of shards requested doesn\u0027t become to large, so that it doesn\u0027t overrides other servers",
+      "range": {
+        "startLine": 25,
+        "startChar": 85,
+        "endLine": 25,
+        "endChar": 95
+      },
+      "revId": "030b75bd2dfa8e83a71963fd077f59f12511623b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
