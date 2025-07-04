@@ -19,6 +19,7 @@ install_headers(
     'mpi_rc.h',
     'open.h',
     'plugin.h',
+    'projection.h',
     'queue.h',
     'ring.h',
     'ringr.h',
