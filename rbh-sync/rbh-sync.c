@@ -18,6 +18,7 @@
 #include <robinhood/config.h>
 #include <robinhood/utils.h>
 #include <robinhood/alias.h>
+#include <robinhood/projection.h>
 
 #ifndef RBH_ITER_CHUNK_SIZE
 # define RBH_ITER_CHUNK_SIZE (1 << 12)
@@ -600,83 +601,6 @@ usage(void)
     return printf(message, program_invocation_short_name);
 }
 
-static void
-projection_add(struct rbh_filter_projection *projection,
-               const struct rbh_filter_field *field)
-{
-    projection->fsentry_mask |= field->fsentry;
-
-    switch (field->fsentry) {
-    case RBH_FP_ID:
-    case RBH_FP_PARENT_ID:
-    case RBH_FP_NAME:
-        break;
-    case RBH_FP_STATX:
-        projection->statx_mask |= field->statx;
-        break;
-    case RBH_FP_SYMLINK:
-    case RBH_FP_NAMESPACE_XATTRS:
-        // TODO: handle subfields
-        break;
-    case RBH_FP_INODE_XATTRS:
-        // TODO: handle subfields
-        break;
-    }
-}
-
-static void
-projection_remove(struct rbh_filter_projection *projection,
-                  const struct rbh_filter_field *field)
-{
-    projection->fsentry_mask &= ~field->fsentry;
-
-    switch (field->fsentry) {
-    case RBH_FP_ID:
-    case RBH_FP_PARENT_ID:
-    case RBH_FP_NAME:
-        break;
-    case RBH_FP_STATX:
-        projection->statx_mask &= ~field->statx;
-        if (projection->statx_mask & RBH_STATX_ALL)
-            projection->fsentry_mask |= RBH_FP_STATX;
-        break;
-    case RBH_FP_SYMLINK:
-    case RBH_FP_NAMESPACE_XATTRS:
-        // TODO: handle subfields
-        break;
-    case RBH_FP_INODE_XATTRS:
-        // TODO: handle subfields
-        break;
-    }
-}
-
-static void
-projection_set(struct rbh_filter_projection *projection,
-               const struct rbh_filter_field *field)
-{
-    projection->fsentry_mask = field->fsentry;
-    projection->statx_mask = 0;
-    projection->xattrs.inode.count = 0;
-    projection->xattrs.ns.count = 0;
-
-    switch (field->fsentry) {
-    case RBH_FP_ID:
-    case RBH_FP_PARENT_ID:
-    case RBH_FP_NAME:
-        break;
-    case RBH_FP_STATX:
-        projection->statx_mask = field->statx;
-        break;
-    case RBH_FP_SYMLINK:
-    case RBH_FP_NAMESPACE_XATTRS:
-        // TODO: handle subfields
-        break;
-    case RBH_FP_INODE_XATTRS:
-        // TODO: handle subfields
-        break;
-    }
-}
-
 int
 main(int argc, char *argv[])
 {
@@ -736,13 +660,13 @@ main(int argc, char *argv[])
         case 'f':
             switch (optarg[0]) {
             case '+':
-                projection_add(&projection, str2filter_field(optarg + 1));
+                rbh_projection_add(&projection, str2filter_field(optarg + 1));
                 break;
             case '-':
-                projection_remove(&projection, str2filter_field(optarg + 1));
+                rbh_projection_remove(&projection, str2filter_field(optarg + 1));
                 break;
             default:
-                projection_set(&projection, str2filter_field(optarg));
+                rbh_projection_set(&projection, str2filter_field(optarg));
                 break;
             }
             break;
