@@ -25,6 +25,7 @@ librobinhood = library(
         'mpi_rc.c',
         'plugin.c',
         'plugins/backend.c',
+        'projection.c',
         'queue.c',
         'ring.c',
         'ringr.c',
