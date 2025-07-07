@@ -123,12 +123,10 @@ import_plugins(struct filters_context *ctx, struct rbh_value_map **info_maps,
 static int
 complete_logical_filter(const struct rbh_filter *filter,
                         struct rbh_backend *backend,
-                        const struct rbh_filter_options *options,
-                        const struct rbh_filter_output *output)
+                        const struct rbh_filter_options *options)
 {
     for (uint32_t i = 0; i < filter->logical.count; i++) {
-        if (complete_rbh_filter(filter->logical.filters[i], backend, options,
-                                output))
+        if (complete_rbh_filter(filter->logical.filters[i], backend, options))
             return -1;
     }
 
@@ -165,14 +163,20 @@ update_rbh_value(struct rbh_filter *filter,
 static int
 complete_get_filter(const struct rbh_filter *filter,
                     struct rbh_backend *backend,
-                    const struct rbh_filter_options *options,
-                    const struct rbh_filter_output *output)
+                    const struct rbh_filter_options *options)
 {
+   const struct rbh_filter_output OUTPUT = {
+        .type = RBH_FOT_PROJECTION,
+        .projection = {
+            .fsentry_mask = RBH_FP_ALL,
+            .statx_mask = RBH_STATX_ALL
+        },
+    };
     struct rbh_mut_iterator *fsentries;
     struct rbh_fsentry *fsentry;
 
     fsentries = rbh_backend_filter(backend, filter->get.fsentry_to_get, options,
-                                   output);
+                                   &OUTPUT);
     if (fsentries == NULL)
         error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
                       "filter_fsentries");
@@ -194,14 +198,13 @@ complete_get_filter(const struct rbh_filter *filter,
 int
 complete_rbh_filter(const struct rbh_filter *filter,
                     struct rbh_backend *backend,
-                    const struct rbh_filter_options *options,
-                    const struct rbh_filter_output *output)
+                    const struct rbh_filter_options *options)
 {
     if (rbh_is_logical_operator(filter->op))
-        return complete_logical_filter(filter, backend, options, output);
+        return complete_logical_filter(filter, backend, options);
 
     if (rbh_is_get_operator(filter->op))
-        return complete_get_filter(filter, backend, options, output);
+        return complete_get_filter(filter, backend, options);
 
     return 0;
 }

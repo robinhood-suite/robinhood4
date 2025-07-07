@@ -282,13 +282,6 @@ int
 main(int _argc, char *_argv[])
 {
     struct command_context command_context = {0};
-    const struct rbh_filter_output OUTPUT = {
-        .type = RBH_FOT_PROJECTION,
-        .projection = {
-            .fsentry_mask = RBH_FP_ALL,
-            .statx_mask = RBH_STATX_ALL,
-        },
-    };
     struct rbh_filter_options options = {0};
     struct filters_context f_ctx = {0};
     struct rbh_value_map *info_map;
@@ -383,8 +376,7 @@ main(int _argc, char *_argv[])
     if (index != f_ctx.argc)
         error(EX_USAGE, 0, "you have too many ')'");
 
-    if (f_ctx.need_prefetch &&
-        complete_rbh_filter(filter, from, &options, &OUTPUT))
+    if (f_ctx.need_prefetch && complete_rbh_filter(filter, from, &options))
         error(EXIT_FAILURE, errno, "Failed to complete filters");
 
     report(group, output, ascending_sort, csv_print, filter, &options);
