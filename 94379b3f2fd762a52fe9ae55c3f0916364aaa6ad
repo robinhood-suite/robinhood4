@@ -16,6 +16,24 @@
       "message": "Do we want to add test checking the program is available after install, and verifying it can say hello?",
       "revId": "94379b3f2fd762a52fe9ae55c3f0916364aaa6ad",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "116be308_de80dca2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-07-07T07:14:53Z",
+      "side": 1,
+      "message": "I can add a test but I\u0027ll set up the infrastructure for testing in the next patch. I can also add this test in the next patch.",
+      "parentUuid": "2c91a4a1_e179e0e6",
+      "revId": "94379b3f2fd762a52fe9ae55c3f0916364aaa6ad",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
