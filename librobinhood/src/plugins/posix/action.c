@@ -275,11 +275,10 @@ rbh_posix_fill_entry_info(char *output, int max_length,
     case 'I':
         return write_base64_ID(fsentry, output, max_length);
     case 'l':
-        if (!S_ISLNK(fsentry->statx->stx_mode))
-            return 0;
-
+	if (!S_ISLNK(fsentry->statx->stx_mode))
+	    return 0;
         return snprintf(output, max_length, "%s", fsentry->symlink);
-    case 'm':
+   case 'm':
         return snprintf(output, max_length, "%o",
                         fsentry->statx->stx_mode & 0777);
     case 'M':
@@ -361,6 +360,7 @@ rbh_posix_fill_projection(struct rbh_filter_projection *projection,
         rbh_projection_add(projection, str2filter_field("id"));
         break;
     case 'l':
+	rbh_projection_add(projection, str2filter_field("statx.type"));
         rbh_projection_add(projection, str2filter_field("statx.mode"));
         rbh_projection_add(projection, str2filter_field("symlink"));
         break;

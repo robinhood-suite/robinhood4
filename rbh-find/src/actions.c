@@ -362,12 +362,33 @@ open_action_file(struct find_context *ctx, const char *filename)
         error(EXIT_FAILURE, errno, "fopen: %s", filename);
 }
 
-static bool
-validate_format_string(const char *format_string)
+static int
+validate_format_string(struct find_context *ctx, const char *format_string)
 {
-    (void) format_string;
+    size_t length = strlen(format_string);
 
-    return true;
+    if (format_string == NULL)
+        return -1;
+
+    for (size_t i = 0; i < length; i++) {
+        if (format_string[i] == '%') {
+            int rc;
+            for (int j = 0; j < ctx->f_ctx.info_pe_count; ++j) {
+                const struct rbh_pe_common_operations *common_ops =
+                    get_common_operations(&ctx->f_ctx.info_pe[j]);
+
+                rc = rbh_pe_common_ops_fill_projection(common_ops,
+                                                       &ctx->projection,
+                                                       format_string + i + 1);
+                if (rc == 1)
+                    break;
+            }
+            /* Go over the directive that was just printed */
+            i++;
+        }
+    }
+
+    return 0;
 }
 
 static int
@@ -454,28 +475,22 @@ find_pre_action(struct find_context *ctx, const int index,
 
         open_action_file(ctx, ctx->argv[index + 1]);
 
-        if (!validate_format_string(ctx->argv[index + 2]))
+        if (validate_format_string(ctx, ctx->argv[index + 2]))
             error(EX_USAGE, 0, "missing format string to `%s'",
                   action2str(action));
 
         ctx->format_string = ctx->argv[index + 2];
-        // Temporary projection until the format string is parsed
-        ctx->projection.fsentry_mask = RBH_FP_ALL;
-        ctx->projection.statx_mask = RBH_STATX_ALL;
 
         return 1;
     case ACT_PRINTF:
         if (index + 1 >= ctx->argc)
             error(EX_USAGE, 0, "missing argument to `%s'", action2str(action));
 
-        if (!validate_format_string(ctx->argv[index + 1]))
+        if (validate_format_string(ctx, ctx->argv[index + 1]))
             error(EX_USAGE, 0, "missing format string to `%s'",
                   action2str(action));
 
         ctx->format_string = ctx->argv[index + 1];
-        // Temporary projection until the format string is parsed
-        ctx->projection.fsentry_mask = RBH_FP_ALL;
-        ctx->projection.statx_mask = RBH_STATX_ALL;
 
         return 1;
     default:
