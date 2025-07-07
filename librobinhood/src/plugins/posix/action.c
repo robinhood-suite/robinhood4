@@ -317,3 +317,13 @@ rbh_posix_fill_entry_info(char *output, int max_length,
 
     return 0;
 }
+
+int
+rbh_posix_fill_projection(struct rbh_filter_projection *projection,
+                          const char *directive)
+{
+    (void) projection;
+    (void) directive;
+
+    return 0;
+}

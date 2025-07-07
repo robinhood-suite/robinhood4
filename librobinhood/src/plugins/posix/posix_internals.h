@@ -111,4 +111,17 @@ rbh_posix_fill_entry_info(char *output, int max_length,
 int
 rbh_posix_delete_entry(struct rbh_fsentry *fsentry);
 
+/**
+ * Fill the projection to retrieve only the information needed
+ *
+ * @param projection the projection to fill
+ * @param directive  which information to retrieve
+ *
+ * @return           1 on success, 0 if the directive requested is unknown,
+ *                   -1 on error
+ */
+int
+rbh_posix_fill_projection(struct rbh_filter_projection *projection,
+                          const char *directive);
+
 #endif
