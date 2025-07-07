@@ -11,6 +11,7 @@
 
 #include <robinhood/backend.h>
 #include <robinhood/fsentry.h>
+#include <robinhood/projection.h>
 #include <robinhood/utils.h>
 
 #include "retention_internals.h"
@@ -81,8 +82,17 @@ int
 rbh_retention_fill_projection(struct rbh_filter_projection *projection,
                               const char *directive)
 {
-    (void) projection;
-    (void) directive;
+    assert(directive != NULL);
+    assert(*directive != '\0');
 
-    return 0;
+    switch (*directive) {
+    case 'e':
+    case 'E':
+        rbh_projection_add(projection, str2filter_field("xattrs"));
+        break;
+    default:
+        return 0;
+    }
+
+    return 1;
 }
