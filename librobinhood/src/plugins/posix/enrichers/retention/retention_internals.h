@@ -15,8 +15,8 @@
 #include <stddef.h>
 #include <stdint.h>
 
+#include <robinhood/backend.h>
 #include <robinhood/fsentry.h>
-
 #include <robinhood/config.h>
 
 struct entry_info;
@@ -54,4 +54,16 @@ rbh_retention_fill_entry_info(char *output, int max_length,
                               const struct rbh_fsentry *fsentry,
                               const char *directive, const char *backend);
 
+/**
+ * Fill the projection to retrieve only the information needed
+ *
+ * @param projection the projection to fill
+ * @param directive  which information to retrieve
+ *
+ * @return           1 on success, 0 if the directive requested is unknown,
+ *                   -1 on error
+ */
+int
+rbh_retention_fill_projection(struct rbh_filter_projection *projection,
+                              const char *directive);
 #endif
