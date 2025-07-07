@@ -9,6 +9,7 @@
 #define ROBINHOOD_BACKEND_COMMON_OPS_H
 
 #include "robinhood/config.h"
+#include "robinhood/backend.h"
 
 /**
  * Define a list of operations common to both plugins and extensions.
@@ -93,6 +94,18 @@ struct rbh_pe_common_operations {
      * @return               0 on success, -1 on error and errno is set
      */
     int (*delete_entry)(struct rbh_fsentry *fsentry);
+
+    /**
+     * Fill the projection to retrieve only the information needed
+     *
+     * @param projection the projection to fill
+     * @param directive  which information to retrieve
+     *
+     * @return           1 on success, 0 if the directive requested is unknown
+     *                   -1 on error
+     */
+    int (*fill_projection)(struct rbh_filter_projection *projection,
+                           const char *directive);
 };
 
 /**
@@ -171,6 +184,19 @@ rbh_pe_common_ops_delete_entry(
 {
     if (common_ops && common_ops->delete_entry)
         return common_ops->delete_entry(fsentry);
+
+    errno = ENOTSUP;
+    return -1;
+}
+
+static inline int
+rbh_pe_common_ops_fill_projection(
+    const struct rbh_pe_common_operations *common_ops,
+    struct rbh_filter_projection *projection, const char *directive)
+{
+    if (common_ops && common_ops->fill_projection) {
+        return common_ops->fill_projection(projection, directive);
+    }
 
     errno = ENOTSUP;
     return -1;
