@@ -25,6 +25,7 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
+#include <robinhood/projection.h>
 #include <robinhood/statx.h>
 #include <robinhood/utils.h>
 
@@ -361,7 +362,6 @@ open_action_file(struct find_context *ctx, const char *filename)
         error(EXIT_FAILURE, errno, "fopen: %s", filename);
 }
 
-
 static bool
 validate_format_string(const char *format_string)
 {
@@ -395,6 +395,21 @@ parse_exec_command(struct find_context *ctx, const int index)
     return count;
 }
 
+static void set_ls_projection(struct rbh_filter_projection *projection)
+{
+    struct rbh_filter_field field_statx = {
+        .fsentry = RBH_FP_STATX,
+        .statx = RBH_STATX_INO | RBH_STATX_BLOCKS | RBH_STATX_TYPE |
+                 RBH_STATX_MODE | RBH_STATX_NLINK | RBH_STATX_UID |
+                 RBH_STATX_GID | RBH_STATX_SIZE | RBH_STATX_MTIME_SEC
+    };
+    struct rbh_filter_field field = {
+        .fsentry = RBH_FP_NAMESPACE_XATTRS | RBH_FP_SYMLINK,
+    };
+    rbh_projection_set(projection, &field);
+    rbh_projection_add(projection, &field_statx);
+}
+
 int
 find_pre_action(struct find_context *ctx, const int index,
                 const enum action action)
@@ -404,14 +419,33 @@ find_pre_action(struct find_context *ctx, const int index,
         if (index + 2 >= ctx->argc) // at least two args: -exec cmd ;
             error(EX_USAGE, 0, "missing argument to `%s'", action2str(action));
 
+        rbh_projection_add(&ctx->projection, str2filter_field("ns-xattrs"));
+
         return 1 + parse_exec_command(ctx, index + 1); // consume -exec
+    case ACT_LS:
+        set_ls_projection(&ctx->projection);
+
+        return 1;
+    case ACT_PRINT:
+    case ACT_PRINT0:
+        rbh_projection_add(&ctx->projection, str2filter_field("ns-xattrs"));
+        return 1;
     case ACT_FLS:
+        if (index + 1 >= ctx->argc)
+            error(EX_USAGE, 0, "missing argument to `%s'", action2str(action));
+
+        open_action_file(ctx, ctx->argv[index + 1]);
+
+        set_ls_projection(&ctx->projection);
+
+        return 1;
     case ACT_FPRINT:
     case ACT_FPRINT0:
         if (index + 1 >= ctx->argc)
             error(EX_USAGE, 0, "missing argument to `%s'", action2str(action));
 
         open_action_file(ctx, ctx->argv[index + 1]);
+        rbh_projection_add(&ctx->projection, str2filter_field("ns-xattrs"));
 
         return 1;
     case ACT_FPRINTF:
@@ -425,6 +459,9 @@ find_pre_action(struct find_context *ctx, const int index,
                   action2str(action));
 
         ctx->format_string = ctx->argv[index + 2];
+        // Temporary projection until the format string is parsed
+        ctx->projection.fsentry_mask = RBH_FP_ALL;
+        ctx->projection.statx_mask = RBH_STATX_ALL;
 
         return 1;
     case ACT_PRINTF:
@@ -436,9 +473,14 @@ find_pre_action(struct find_context *ctx, const int index,
                   action2str(action));
 
         ctx->format_string = ctx->argv[index + 1];
+	// Temporary projection until the format string is parsed
+        ctx->projection.fsentry_mask = RBH_FP_ALL;
+        ctx->projection.statx_mask = RBH_STATX_ALL;
 
         return 1;
     default:
+        rbh_projection_add(&ctx->projection, str2filter_field("ns-xattrs"));
+
         break;
     }
 

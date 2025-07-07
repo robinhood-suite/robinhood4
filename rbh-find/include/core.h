@@ -50,6 +50,8 @@ struct find_context {
 
     /** The command to execute on each entry and its arguments */
     char **exec_command;
+
+    struct rbh_filter_projection projection;
 };
 
 /**

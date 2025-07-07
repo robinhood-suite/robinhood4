@@ -1098,7 +1098,7 @@ str2filter_field(const char *string_)
             if (strncmp(string, "-xattrs", 7))
                 break;
             field.fsentry = RBH_FP_NAMESPACE_XATTRS;
-            string += 6;
+            string += 7;
 
             switch (*string++) {
             case '\0':
