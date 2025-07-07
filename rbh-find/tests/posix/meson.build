@@ -14,6 +14,7 @@ integration_tests = [
   'test_newer',
   'test_perm',
   'test_posix_printf',
+  'test_posix_projection',
   'test_regex',
   'test_size',
   'test_time',
