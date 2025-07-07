@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "678be890_03585b56",
+        "filename": "designs/rbh-policy/03-policy_condition_filters.rst",
+        "patchSetId": 20
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-07-07T09:20:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "077719ef_701c8379",
+      "range": {
+        "startLine": 74,
+        "startChar": 4,
+        "endLine": 74,
+        "endChar": 29
+      },
+      "revId": "b25f2bfc94269f1fb02e6a20e659d67770745b60",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "280a638c_a5e61eff",
