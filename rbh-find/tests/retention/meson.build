@@ -7,6 +7,7 @@
 integration_tests = [
     'test_retention_helper',
     'test_expiration',
+    'test_retention_projection',
 ]
 
 foreach t: integration_tests
