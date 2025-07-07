@@ -53,10 +53,7 @@ _find(struct find_context *ctx, int backend_index, enum action action,
 {
     const struct rbh_filter_output OUTPUT = {
         .type = RBH_FOT_PROJECTION,
-        .projection = {
-            .fsentry_mask = RBH_FP_ALL,
-            .statx_mask = RBH_STATX_ALL,
-        },
+        .projection = ctx->projection,
     };
     struct rbh_mut_iterator *fsentries;
     size_t count = 0;
@@ -66,8 +63,7 @@ _find(struct find_context *ctx, int backend_index, enum action action,
      * doing the find.
      */
     if (ctx->f_ctx.need_prefetch &&
-        complete_rbh_filter(filter, ctx->backends[backend_index], options,
-                            &OUTPUT))
+        complete_rbh_filter(filter, ctx->backends[backend_index], options))
         return count;
 
     fsentries = rbh_backend_filter(ctx->backends[backend_index], filter,
