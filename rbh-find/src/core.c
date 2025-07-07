@@ -87,10 +87,14 @@ _find(struct find_context *ctx, int backend_index, enum action action,
         free(fsentry);
     } while (true);
 
-    if (errno != ENODATA)
-        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
-                      "rbh_mut_iter_next");
-
+    if (errno != ENODATA) {
+	if (errno == RBH_BACKEND_ERROR)
+	    error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
+                          "%s", rbh_backend_error);
+	else
+            error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
+                          "rbh_mut_iter_next");
+    }
     rbh_mut_iter_destroy(fsentries);
 
     return count;

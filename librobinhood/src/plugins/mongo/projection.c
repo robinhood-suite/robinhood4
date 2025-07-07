@@ -150,18 +150,9 @@ bson_append_fot_projection(bson_t *bson, const char *key, size_t key_length,
      */
 
     if (fsentry_mask == 0)
-        /* Filter out everything
-         *
-         * XXX: This does not work with "fields from the future". It may be
-         *      better to simply filter in the "_id" field...
-         */
+        /* Filter out everything */
         return bson_append_document_begin(bson, key, key_length, &document)
             && BSON_APPEND_UTF8(&document, "form", "fsentry")
-            && BSON_APPEND_BOOL(&document, MFF_ID, false)
-            && BSON_APPEND_BOOL(&document, MFF_NAMESPACE, false)
-            && BSON_APPEND_BOOL(&document, MFF_STATX, false)
-            && BSON_APPEND_BOOL(&document, MFF_SYMLINK, false)
-            && BSON_APPEND_BOOL(&document, MFF_XATTRS, false)
             && bson_append_document_end(bson, &document);
 
     return bson_append_document_begin(bson, key, key_length, &document)
