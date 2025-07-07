@@ -21,6 +21,7 @@ static const struct rbh_pe_common_operations POSIX_BACKEND_PLUGIN_COMMON_OPS = {
     .build_filter = rbh_posix_build_filter,
     .fill_entry_info = rbh_posix_fill_entry_info,
     .delete_entry = rbh_posix_delete_entry,
+    .fill_projection = rbh_posix_fill_projection,
 };
 
 static const struct rbh_backend_plugin_operations POSIX_BACKEND_PLUGIN_OPS = {
