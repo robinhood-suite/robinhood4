@@ -20,6 +20,7 @@
 
 #include <robinhood/backend.h>
 #include <robinhood/fsentry.h>
+#include <robinhood/projection.h>
 #include <robinhood/statx.h>
 #include <robinhood/utils.h>
 
@@ -322,8 +323,71 @@ int
 rbh_posix_fill_projection(struct rbh_filter_projection *projection,
                           const char *directive)
 {
-    (void) projection;
-    (void) directive;
+    assert(directive != NULL);
+    assert(*directive != '\0');
 
-    return 0;
+    switch (*directive) {
+    case 'a':
+    case 'A':
+        rbh_projection_add(projection, str2filter_field("statx.atime.sec"));
+        break;
+    case 'b':
+        rbh_projection_add(projection, str2filter_field("statx.blocks"));
+        break;
+    case 'c':
+        rbh_projection_add(projection, str2filter_field("statx.ctime.sec"));
+        break;
+    case 'd': // Depth
+    case 'h': // Directory name
+    case 'p': // Path
+    case 'P': // Path without the start
+        rbh_projection_add(projection, str2filter_field("ns-xattrs"));
+        break;
+    case 'D':
+        rbh_projection_add(projection, str2filter_field("statx.dev.minor"));
+        rbh_projection_add(projection, str2filter_field("statx.dev.major"));
+        break;
+    case 'f':
+        rbh_projection_add(projection, str2filter_field("name"));
+        break;
+    case 'g':
+    case 'G':
+        rbh_projection_add(projection, str2filter_field("statx.gid"));
+        break;
+    case 'i':
+        rbh_projection_add(projection, str2filter_field("statx.ino"));
+        break;
+    case 'I':
+        rbh_projection_add(projection, str2filter_field("id"));
+        break;
+    case 'l':
+        rbh_projection_add(projection, str2filter_field("statx.type"));
+        rbh_projection_add(projection, str2filter_field("statx.mode"));
+        rbh_projection_add(projection, str2filter_field("symlink"));
+        break;
+    case 'm':
+    case 'M':
+    case 'y':
+        rbh_projection_add(projection, str2filter_field("statx.type"));
+        rbh_projection_add(projection, str2filter_field("statx.mode"));
+        break;
+    case 'n':
+        rbh_projection_add(projection, str2filter_field("statx.nlink"));
+        break;
+    case 's':
+        rbh_projection_add(projection, str2filter_field("statx.size"));
+        break;
+    case 't':
+    case 'T':
+        rbh_projection_add(projection, str2filter_field("statx.mtime.sec"));
+        break;
+    case 'u':
+    case 'U':
+        rbh_projection_add(projection, str2filter_field("statx.uid"));
+        break;
+    default:
+        return 0;
+    }
+
+    return 1;
 }
