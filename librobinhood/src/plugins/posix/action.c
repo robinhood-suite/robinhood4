@@ -277,7 +277,6 @@ rbh_posix_fill_entry_info(char *output, int max_length,
     case 'l':
         if (!S_ISLNK(fsentry->statx->stx_mode))
             return 0;
-
         return snprintf(output, max_length, "%s", fsentry->symlink);
     case 'm':
         return snprintf(output, max_length, "%o",
