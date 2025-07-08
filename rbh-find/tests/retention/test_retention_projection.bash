@@ -29,8 +29,8 @@ test_printf()
 
     rbh_sync "rbh:retention:." "rbh:$db:$testdb"
 
-    check_printf_project "%e\n" '"xattrs" : true'
-    check_printf_project "%E\n" '"xattrs" : true'
+    check_printf_project "%e\n" '"xattrs.user.expires" : true'
+    check_printf_project "%E\n" '"xattrs.trusted.expiration_date" : true'
 }
 
 ################################################################################

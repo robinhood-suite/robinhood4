@@ -100,23 +100,24 @@ static bool
 bson_append_xattrs_projection(bson_t *bson, const char *key, size_t key_length,
                               const struct rbh_value_map *xattrs)
 {
-    bson_t document;
-
     /* An empty map means "get everything" */
     if (xattrs->count == 0)
         return bson_append_bool(bson, key, key_length, true);
 
-    if (!bson_append_document_begin(bson, key, key_length, &document))
-        return false;
-
     for (size_t i = 0; i < xattrs->count; i++) {
         const char *xattr = xattrs->pairs[i].key;
+        char xattr_key[1024];
+        int rc;
 
-        if (!BSON_APPEND_BOOL(&document, xattr, true))
+        rc = sprintf(xattr_key, "xattrs.%s", xattr);
+        if (rc <= 0)
+            return false;
+
+        if (!BSON_APPEND_BOOL(bson, xattr_key, true))
             return false;
     }
 
-    return bson_append_document_end(bson, &document);
+    return true;
 }
 
 #define BSON_APPEND_XATTRS_PROJECTION(bson, key, map) \
