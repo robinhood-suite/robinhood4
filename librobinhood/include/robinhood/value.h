@@ -14,6 +14,8 @@
 #include <string.h>
 #include <sys/types.h>
 
+#include "robinhood/sstack.h"
+
 struct rbh_value;
 
 enum rbh_value_type {
@@ -311,5 +313,9 @@ rbh_value_validate(const struct rbh_value *value);
 int
 value_map_copy(struct rbh_value_map *dest, const struct rbh_value_map *src,
                char **buffer, size_t *bufsize);
+
+void
+value_map_insert_pair(struct rbh_sstack *sstack, struct rbh_value_map *map,
+                      const struct rbh_value_pair *pair);
 
 #endif
