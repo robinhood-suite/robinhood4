@@ -82,13 +82,28 @@ int
 rbh_retention_fill_projection(struct rbh_filter_projection *projection,
                               const char *directive)
 {
+    int rc;
+
     assert(directive != NULL);
     assert(*directive != '\0');
 
     switch (*directive) {
     case 'e':
+        const char *retention_attribute;
+        char xattr[262];
+
+        retention_attribute = rbh_config_get_string(XATTR_EXPIRES_KEY,
+                                                    "user.expires");
+
+        rc = sprintf(xattr, "xattrs.%s", retention_attribute);
+        if (rc <= 0)
+            return -1;
+
+        rbh_projection_add(projection, str2filter_field(xattr));
+        break;
     case 'E':
-        rbh_projection_add(projection, str2filter_field("xattrs"));
+        rbh_projection_add(projection,
+                           str2filter_field("xattrs.trusted.expiration_date"));
         break;
     default:
         return 0;

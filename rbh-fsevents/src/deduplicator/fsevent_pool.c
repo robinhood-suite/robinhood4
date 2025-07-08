@@ -273,33 +273,6 @@ rbh_fsevent_pool_insert_new_entry(struct rbh_fsevent_pool *pool,
 }
 
 static void
-map_insert_pair(struct rbh_fsevent_node *cached_event,
-                struct rbh_value_map *map,
-                const struct rbh_value_pair *pair)
-{
-    struct rbh_value_pair *tmp;
-    size_t *count_ref;
-    void **ptr;
-
-    tmp = RBH_SSTACK_PUSH(cached_event->copy_data, NULL,
-                          sizeof(*tmp) * (map->count + 1));
-
-    memcpy(tmp, map->pairs, map->count * sizeof(*map->pairs));
-    memcpy(&tmp[map->count], pair, sizeof(*pair));
-
-    // XXX this breaks the const constraint in struct rbh_value_map
-    // The alternatives are:
-    // 1. remove the const everywhere
-    // 2. duplicate the fsevent completely each time we want to insert something
-    // We decided that this was the "best" compromise.
-    ptr = (void **)&map->pairs;
-    count_ref = (size_t *)&map->count;
-
-    *ptr = tmp;
-    (*count_ref)++;
-}
-
-static void
 sequence_insert_value(struct rbh_fsevent_node *cached_event,
                       struct rbh_value *sequence,
                       const struct rbh_value *value)
@@ -348,7 +321,7 @@ insert_new_fsevents_map(struct rbh_fsevent_node *cached_event)
     const struct rbh_value_pair *last_pair;
     size_t last_index;
 
-    map_insert_pair(cached_event, &cached_event->fsevent.xattrs,
+    map_insert_pair(cached_event->copy_data, &cached_event->fsevent.xattrs,
                     &rbh_fsevents_pair);
 
     last_index = cached_event->fsevent.xattrs.count - 1;
@@ -384,7 +357,7 @@ insert_new_xattrs_string_sequence(struct rbh_fsevent_node *cached_event,
     };
 
     // XXX we discard const here
-    map_insert_pair(cached_event, (struct rbh_value_map *)rbh_fsevents,
+    map_insert_pair(cached_event->copy_data, (struct rbh_value_map *)rbh_fsevents,
                     &xattrs_pair);
 }
 
@@ -470,14 +443,14 @@ insert_enrich_element(struct rbh_fsevent_node *cached_event,
                                      sizeof(rbh_fsevents_value)),
         };
 
-        map_insert_pair(cached_event, &cached_event->fsevent.xattrs,
+        map_insert_pair(cached_event->copy_data, &cached_event->fsevent.xattrs,
                         &rbh_fsevents_map);
 
         return;
     }
 
     // XXX we discard const here
-    map_insert_pair(cached_event, (struct rbh_value_map *)rbh_fsevents_map,
+    map_insert_pair(cached_event->copy_data, (struct rbh_value_map *)rbh_fsevents_map,
                     xattr);
 }
 
@@ -604,7 +577,7 @@ insert_symlink(struct rbh_fsevent_node *cached_event)
     assert(rbh_fsevents_map);
 
     // XXX we discard const here
-    map_insert_pair(cached_event, (struct rbh_value_map *)rbh_fsevents_map,
+    map_insert_pair(cached_event->copy_data, (struct rbh_value_map *)rbh_fsevents_map,
                     &symlink_pair);
 }
 
