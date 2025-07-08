@@ -17,20 +17,41 @@ check_printf_project()
 {
     local printf=$1
     local project=$2
+    local conf=$3
 
-    local output="$(rbh_find --verbose "rbh:$db:$testdb" -printf "$printf")"
+    local output="$(rbh_find --config $conf --verbose "rbh:$db:$testdb" \
+                    -printf "$printf")"
 
     echo "$output" | grep "\$project" | grep "$project"
 }
 
 test_printf()
 {
+    local conf_file="conf_file"
+
     touch file
 
     rbh_sync "rbh:retention:." "rbh:$db:$testdb"
 
-    check_printf_project "%e\n" '"xattrs" : true'
-    check_printf_project "%E\n" '"xattrs" : true'
+    check_printf_project "%e\n" '"xattrs.user.expires" : true'
+    check_printf_project "%E\n" '"xattrs.trusted.expiration_date" : true'
+
+    do_db drop $testdb
+
+    echo "---
+RBH_RETENTION_XATTR: \"user.blob\"
+backends:
+    retention:
+        extends: posix
+        enrichers:
+            - retention
+---" > $conf_file
+
+    rbh_sync --config $conf_file "rbh:retention:." "rbh:$db:$testdb"
+
+    check_printf_project "%e\n" '"xattrs.user.blob" : true' $conf_file
+    check_printf_project "%E\n" '"xattrs.trusted.expiration_date" : true' \
+        $conf_file
 }
 
 ################################################################################

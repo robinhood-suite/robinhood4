@@ -12,6 +12,7 @@
 #include <assert.h>
 #include <errno.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
 
 #include "robinhood/value.h"
@@ -260,6 +261,31 @@ value_map_copy(struct rbh_value_map *dest, const struct rbh_value_map *src,
     *buffer = data;
     *bufsize = size;
     return 0;
+}
+
+void
+value_map_insert_pair(struct rbh_sstack *sstack, struct rbh_value_map *map,
+                      const struct rbh_value_pair *pair)
+{
+    struct rbh_value_pair *tmp;
+    size_t *count_ref;
+    void **ptr;
+
+    tmp = RBH_SSTACK_PUSH(sstack, NULL, sizeof(*tmp) * (map->count + 1));
+
+    memcpy(tmp, map->pairs, map->count * sizeof(*map->pairs));
+    memcpy(&tmp[map->count], pair, sizeof(*pair));
+
+    // XXX this breaks the const constraint in struct rbh_value_map
+    // The alternatives are:
+    // 1. remove the const everywhere
+    // 2. duplicate the fsevent completely each time we want to insert something
+    // We decided that this was the "best" compromise.
+    ptr = (void **)&map->pairs;
+    count_ref = (size_t *)&map->count;
+
+    *ptr = tmp;
+    (*count_ref)++;
 }
 
 struct rbh_value *
