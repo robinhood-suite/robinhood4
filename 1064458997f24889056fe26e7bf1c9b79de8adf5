@@ -2083,6 +2083,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec3f9985_9559cf16",
+        "filename": "designs/rbh-policy/03-policy_condition_filters.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-07-08T14:40:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f3f8295c_dd16af26",
+      "range": {
+        "startLine": 97,
+        "startChar": 18,
+        "endLine": 97,
+        "endChar": 20
+      },
+      "revId": "1064458997f24889056fe26e7bf1c9b79de8adf5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9a15fec1_d62ac9ff",
