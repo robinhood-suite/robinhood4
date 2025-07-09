@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b23b45bc_829d1a4b",
+        "filename": "librobinhood/src/plugins/s3/s3.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 451,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-07-09T07:30:01Z",
+      "side": 1,
+      "message": "you could \"simply\" do for all parameters:\n```\npassword \u003d uri-\u003eauthority-\u003epassword;\nif (!password) {\n    kpr \u003d rbh_config_find\n    if kpr \u003d\u003d not found\n        return null\n\n    password \u003d ...\n}",
+      "parentUuid": "c4da1d11_7b26e20e",
+      "range": {
+        "startLine": 451,
+        "startChar": 8,
+        "endLine": 451,
+        "endChar": 22
+      },
+      "revId": "e797b3a40b438ed710dad56daa8b27502e566316",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9ae0db2c_31f27138",
         "filename": "librobinhood/src/plugins/s3/s3.c",
         "patchSetId": 3
