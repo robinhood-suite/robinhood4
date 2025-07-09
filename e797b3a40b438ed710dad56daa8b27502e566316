@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c4da1d11_7b26e20e",
+        "filename": "librobinhood/src/plugins/s3/s3.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 451,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-07-09T07:17:35Z",
+      "side": 1,
+      "message": "defect: overall, you\u0027re assuming here that you have either none of the parameters, or all of them, which is wrong because there could only be a few parameters given to the URI, per the RFC. For RBH, if `uri-\u003eauthority` is defined, we\u0027re only assured the host is valid, but not any of the other fields.",
+      "range": {
+        "startLine": 451,
+        "startChar": 8,
+        "endLine": 451,
+        "endChar": 22
+      },
+      "revId": "e797b3a40b438ed710dad56daa8b27502e566316",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9ae0db2c_31f27138",
+        "filename": "librobinhood/src/plugins/s3/s3.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 458,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-07-09T07:17:35Z",
+      "side": 1,
+      "message": "minor: no need for an else here, the return NULL above already handles that",
+      "range": {
+        "startLine": 458,
+        "startChar": 10,
+        "endLine": 458,
+        "endChar": 16
+      },
+      "revId": "e797b3a40b438ed710dad56daa8b27502e566316",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
