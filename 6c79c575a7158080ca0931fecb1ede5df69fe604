@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8e84f83e_d26d051a",
+        "filename": "librobinhood/src/plugins/s3/s3.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 448,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-07-09T07:21:26Z",
+      "side": 1,
+      "message": "minor: this is properly handled by the config file already. If the load is given NULL, it will set its own config to NULL, and a `rbh_config_find` will return a `KPR_NOT_FOUND`, so the if/else is unnecessary (just the if/else, not the content)",
+      "range": {
+        "startLine": 448,
+        "startChar": 4,
+        "endLine": 448,
+        "endChar": 16
+      },
+      "revId": "6c79c575a7158080ca0931fecb1ede5df69fe604",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
