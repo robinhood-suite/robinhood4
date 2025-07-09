@@ -45,6 +45,23 @@
       },
       "revId": "d36bfb7c96dc1a12fc5e3f9e030a4d23e5e0179e",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fd152bba_e1aab357",
+        "filename": "librobinhood/src/plugins/s3/s3.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 488,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-07-09T08:00:44Z",
+      "side": 1,
+      "message": "minor: add a comment to explain the port chosen",
+      "revId": "d36bfb7c96dc1a12fc5e3f9e030a4d23e5e0179e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
