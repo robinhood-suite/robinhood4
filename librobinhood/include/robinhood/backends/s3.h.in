@@ -28,4 +28,7 @@ rbh_s3_backend_new(__attribute__((unused))
                    struct rbh_config *config,
                    bool read_only);
 
+void
+rbh_s3_plugin_destroy();
+
 #endif
