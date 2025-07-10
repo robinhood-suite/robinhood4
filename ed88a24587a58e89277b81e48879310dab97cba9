@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e550c4fb_43b11161",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 23
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-07-10T12:21:59Z",
+      "side": 1,
+      "message": "Good enough for landing, as a base design.",
+      "revId": "ed88a24587a58e89277b81e48879310dab97cba9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e7b77d45_186cd4b7",
+        "filename": "designs/rbh-policy/05-rbh-policy_command.rst",
+        "patchSetId": 23
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-07-10T12:21:59Z",
+      "side": 1,
+      "message": "question: what is this tag?",
+      "range": {
+        "startLine": 19,
+        "startChar": 0,
+        "endLine": 19,
+        "endChar": 16
+      },
+      "revId": "ed88a24587a58e89277b81e48879310dab97cba9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
