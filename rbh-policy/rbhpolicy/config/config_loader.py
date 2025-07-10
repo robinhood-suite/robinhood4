@@ -6,9 +6,10 @@ Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
 SPDX-License-Identifer: LGPL-3.0-or-later
 '''
 
-import os
 import importlib.util
 import types
+import sys
+import os
 
 CONFIG_DIR = "/etc/robinhood4.d/"
 
@@ -73,7 +74,7 @@ def load_config(fs_name):
             f"  Or directory:  {dir_path}"
         )
 
-    caller_globals = globals()
+    caller_globals = sys._getframe(1).f_globals
     for key, value in config_module.__dict__.items():
         if not key.startswith("__"):
             caller_globals[key] = value
