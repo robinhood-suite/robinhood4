@@ -168,15 +168,25 @@ backend_from_uri(const struct rbh_uri *uri, bool read_only)
         branch = rbh_backend_branch(backend, uri->id, NULL);
         break;
     case RBH_UT_PATH:
-        /* The posix/posix-mpi and lustre/lustre-mpi backend do not support
-         * filtering, treat it differently */
-        if (backend->id == RBH_BI_POSIX || backend->id == RBH_BI_POSIX_MPI ||
-            backend->id == RBH_BI_LUSTRE || backend->id == RBH_BI_LUSTRE_MPI)
-            branch = posix_backend_branch_from_path(backend, uri->fsname,
-                                                    uri->path);
-        else
-            branch = backend_branch_from_path(backend, uri->path);
-        break;
+        switch (backend->id) {
+            case RBH_BI_S3:
+                branch = rbh_backend_branch(backend, NULL, uri->path);
+                break;
+
+            /* The posix/posix-mpi and lustre/lustre-mpi backend do not support
+             * filtering, treat it differently */
+            case RBH_BI_POSIX:
+            case RBH_BI_POSIX_MPI:
+            case RBH_BI_LUSTRE:
+            case RBH_BI_LUSTRE_MPI:
+                branch = posix_backend_branch_from_path(backend, uri->fsname,
+                                                        uri->path);
+                break;
+
+            default:
+                branch = backend_branch_from_path(backend, uri->path);
+                break;
+        }
     }
 
     save_errno = errno;
@@ -184,7 +194,6 @@ backend_from_uri(const struct rbh_uri *uri, bool read_only)
     errno = save_errno;
     if (branch == NULL)
         error(EXIT_FAILURE, errno, "rbh_backend_branch");
-
     return branch;
 }
 
