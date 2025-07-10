@@ -11,7 +11,8 @@ src_root = meson.source_root() / 'rbh-policy'
 
 python_tests = [
   'test_generate_sources.py',
-  'test_installation.py'
+  'test_installation.py',
+  'test_config.py'
 ]
 
 foreach t : python_tests
