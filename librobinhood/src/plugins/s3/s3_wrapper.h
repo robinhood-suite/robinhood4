@@ -56,6 +56,14 @@ extern "C" {
     s3_get_bucket_list(size_t *number_of_buckets, char ***buckets_list);
 
     /**
+     * Checks whether a bucket with the given name exists
+     *
+     * @param bucket_name          the name of the bucket
+     */
+    bool
+    s3_check_bucket(const char *bucket_name);
+
+    /**
      * Gives an array of the names of the objects contained in a bucket, along
      * with the length of the array
      *
