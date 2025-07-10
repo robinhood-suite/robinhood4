@@ -15,3 +15,5 @@ install_data('rbh-policy.py',
   install_dir: get_option('bindir'),
   install_mode: ['rwxr-xr-x', 0, 0]
 )
+
+subdir('tests')
