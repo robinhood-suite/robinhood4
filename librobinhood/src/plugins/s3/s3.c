@@ -240,7 +240,7 @@ static const struct rbh_mut_iterator S3_ITER = {
 };
 
 static struct s3_iterator *
-s3_iterator_new()
+s3_iterator_new(char* bucket_name)
 {
     struct s3_iterator *s3_iter = NULL;
 
@@ -249,7 +249,16 @@ s3_iterator_new()
         return NULL;
 
     s3_iter->obj_data.list = NULL;
-    s3_get_bucket_list(&s3_iter->bkt_data.length, &s3_iter->bkt_data.list);
+    if (bucket_name == NULL) {
+        s3_get_bucket_list(&s3_iter->bkt_data.length, &s3_iter->bkt_data.list);
+    } else {
+        if (!s3_check_bucket(bucket_name))
+            error(EXIT_FAILURE, ENODATA, "specified bucket does not exist");
+
+        s3_iter->bkt_data.length = 1;
+        s3_iter->bkt_data.list = malloc(sizeof(char*));
+        s3_iter->bkt_data.list[0] = bucket_name;
+    }
 
     if (s3_iter->bkt_data.length == -1) {
         free(s3_iter);
@@ -281,6 +290,98 @@ struct s3_backend {
 };
 
     /*--------------------------------------------------------------------*
+     |                               branch                               |
+     *--------------------------------------------------------------------*/
+
+struct s3_branch_backend {
+    struct s3_backend s3;
+    char *bucket_name;
+};
+
+static struct rbh_backend *
+s3_backend_branch(void *backend, const struct rbh_id *id,
+                  const char *path);
+
+static struct rbh_value_map *
+s3_get_info(void *backend, int info_flags);
+
+static void
+s3_backend_destroy(void *backend);
+
+static struct rbh_mut_iterator *
+s3_branch_backend_filter(
+    void *backend, const struct rbh_filter *filter,
+    const struct rbh_filter_options *options,
+    const struct rbh_filter_output *output)
+{
+    struct s3_branch_backend *branch = backend;
+    struct s3_iterator *s3_iter;
+
+    if (filter != NULL) {
+        errno = ENOTSUP;
+        return NULL;
+    }
+
+    if (options->skip > 0 || options->limit > 0 || options->sort.count > 0) {
+        errno = ENOTSUP;
+        return NULL;
+    }
+
+    s3_iter = (struct s3_iterator *) branch->s3.iter_new(branch->bucket_name);
+    if (s3_iter == NULL)
+        return NULL;
+
+    return &s3_iter->iterator;
+}
+
+static struct rbh_value_map *
+s3_branch_get_info(void *backend, int info_flags)
+{
+    struct s3_branch_backend *branch = backend;
+
+    return s3_get_info(&branch->s3, info_flags);
+}
+
+static const struct rbh_backend_operations S3_BRANCH_BACKEND_OPS = {
+    .branch = s3_backend_branch,
+    .filter = s3_branch_backend_filter,
+    .get_info = s3_branch_get_info,
+    .destroy = s3_backend_destroy,
+};
+
+static const struct rbh_backend S3_BRANCH_BACKEND = {
+    .name = RBH_S3_BACKEND_NAME,
+    .ops = &S3_BRANCH_BACKEND_OPS,
+};
+
+static struct rbh_backend *
+s3_backend_branch(void *backend, const struct rbh_id *id,
+                  const char *path)
+{
+    struct s3_branch_backend *branch;
+
+    if (path == NULL) {
+        errno = EINVAL;
+        return NULL;
+    }
+
+    branch = malloc(sizeof(*branch));
+    if (branch == NULL)
+        return NULL;
+
+    branch->bucket_name = strdup(path);
+    if (branch->bucket_name == NULL) {
+        free(branch);
+        return NULL;
+    }
+
+    branch->s3.backend = S3_BRANCH_BACKEND;
+    branch->s3.iter_new = s3_iterator_new;
+
+    return &branch->s3.backend;
+}
+
+    /*--------------------------------------------------------------------*
      |                              filter()                              |
      *--------------------------------------------------------------------*/
 
@@ -302,7 +403,7 @@ s3_backend_filter(void *backend, const struct rbh_filter *filter,
         return NULL;
     }
 
-    s3_iter = s3->iter_new();
+    s3_iter = s3->iter_new(NULL);
     if (s3_iter == NULL)
         return NULL;
 
@@ -408,10 +509,16 @@ s3_backend_destroy(void *backend)
     struct s3_backend *s3 = backend;
 
     free(s3);
+}
+
+void
+rbh_s3_plugin_destroy()
+{
     s3_destroy_api();
 }
 
 static const struct rbh_backend_operations S3_BACKEND_OPS = {
+    .branch = s3_backend_branch,
     .filter = s3_backend_filter,
     .get_info = s3_get_info,
     .destroy = s3_backend_destroy,

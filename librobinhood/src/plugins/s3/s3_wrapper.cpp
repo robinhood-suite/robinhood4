@@ -8,6 +8,7 @@
 #include <aws/core/Aws.h>
 #include <aws/core/auth/AWSCredentialsProvider.h>
 #include <aws/s3/model/GetObjectRequest.h>
+#include <aws/s3/model/HeadBucketRequest.h>
 #include <aws/s3/model/HeadObjectRequest.h>
 #include <aws/s3/model/HeadObjectResult.h>
 #include <aws/s3/model/ListObjectsV2Request.h>
@@ -117,6 +118,14 @@ s3_get_bucket_list(size_t *number_of_buckets, char ***buckets_list)
         *number_of_buckets = -1;
         *buckets_list = NULL;
     }
+}
+
+bool s3_check_bucket(const char *bucket_name) {
+    Aws::S3::Model::HeadBucketRequest request;
+    request.WithBucket(bucket_name);
+
+    auto outcome = s3_client_ptr->HeadBucket(request);
+    return outcome.IsSuccess();
 }
 
 /*----------------------------------------------------------------------------*
