@@ -22,6 +22,30 @@
       },
       "revId": "030b75bd2dfa8e83a71963fd077f59f12511623b",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "51f5f0f2_05daa0ae",
+        "filename": "benchmark/shard",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-07-10T06:48:31Z",
+      "side": 1,
+      "message": "Done in the next patch",
+      "parentUuid": "16eb962c_e0038539",
+      "range": {
+        "startLine": 25,
+        "startChar": 85,
+        "endLine": 25,
+        "endChar": 95
+      },
+      "revId": "030b75bd2dfa8e83a71963fd077f59f12511623b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
