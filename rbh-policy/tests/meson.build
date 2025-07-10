@@ -10,7 +10,8 @@ tests_src = meson.source_root() / 'rbh-policy' / 'tests'
 src_root = meson.source_root() / 'rbh-policy'
 
 python_tests = [
-  'test_installation'
+  'test_installation',
+  'test_config'
 ]
 
 foreach t : python_tests
