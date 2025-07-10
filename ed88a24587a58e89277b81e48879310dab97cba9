@@ -39,6 +39,30 @@
       },
       "revId": "ed88a24587a58e89277b81e48879310dab97cba9",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "41a8e7a3_91aa0b8c",
+        "filename": "designs/rbh-policy/05-rbh-policy_command.rst",
+        "patchSetId": 23
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-07-10T13:05:36Z",
+      "side": 1,
+      "message": "At the end of the `implementation overview` part (n°4), I put a tag to refer to this part.",
+      "parentUuid": "e7b77d45_186cd4b7",
+      "range": {
+        "startLine": 19,
+        "startChar": 0,
+        "endLine": 19,
+        "endChar": 16
+      },
+      "revId": "ed88a24587a58e89277b81e48879310dab97cba9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
