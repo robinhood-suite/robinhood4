@@ -430,16 +430,14 @@ xattrs_fill_layout(struct iterator_data *data, int nb_xattrs,
 }
 
 static int
-_xattrs_get_magic_and_gen(int fd, const char *lov_buf,
-                          struct rbh_value_pair *pairs)
+xattrs_get_magic_and_gen(const char *lov_buf,
+                         struct rbh_value_pair *pairs)
 {
     uint32_t magic = 0;
     int subcount = 0;
     uint32_t gen = 0;
     char *magic_str;
     int rc;
-
-    (void) fd;
 
     magic = ((struct lov_user_md *) lov_buf)->lmm_magic;
 
@@ -486,49 +484,6 @@ _xattrs_get_magic_and_gen(int fd, const char *lov_buf,
         return -1;
 
     return subcount;
-}
-
-/* The Linux VFS does not allow values of more than 64KiB */
-static const size_t XATTR_VALUE_MAX_VFS_SIZE = 1 << 16;
-
-/**
- * Record a file's magic number and layout generation in \p pairs
- *
- * @param fd        file descriptor to check
- * @param pairs     list of pairs to fill
- *
- * @return          number of filled \p pairs
- */
-static int
-xattrs_get_magic_and_gen(int fd, struct rbh_value_pair *pairs)
-{
-    char buffer[XATTR_VALUE_MAX_VFS_SIZE];
-    const char *lov_buf = NULL;
-
-    if (_inode_xattrs != NULL) {
-        for (int i = 0; i < *_inode_xattrs_count; ++i) {
-            if (!strcmp(_inode_xattrs[i].key, XATTR_LUSTRE_LOV)) {
-                lov_buf = _inode_xattrs[i].value->binary.data;
-                break;
-            }
-        }
-    } else {
-    /* TODO: when the attribute will be retrieved using the changelog,
-     * change the xattr retrieval by seeking the one already retrieved.
-     */
-        ssize_t length = XATTR_VALUE_MAX_VFS_SIZE;
-
-        length = fgetxattr(fd, XATTR_LUSTRE_LOV, buffer, length);
-        if (length == -1)
-            return -1;
-
-        lov_buf = buffer;
-    }
-
-    if (!lov_buf)
-        return 0;
-
-    return _xattrs_get_magic_and_gen(fd, lov_buf, pairs);
 }
 
 /**
@@ -587,8 +542,10 @@ static int
 xattrs_get_layout(int fd, struct rbh_value_pair *pairs, int available_pairs)
 {
     struct iterator_data data = { .comp_index = 0 };
+    char tmp[XATTR_SIZE_MAX] = {0};
     struct llapi_layout *layout;
     uint16_t mirror_count = 0;
+    struct lov_user_md *lum;
     int required_pairs = 0;
     int save_errno = 0;
     /**
@@ -599,6 +556,7 @@ xattrs_get_layout(int fd, struct rbh_value_pair *pairs, int available_pairs)
     uint32_t nb_comp;
     int subcount = 0;
     uint32_t flags;
+    int lum_size;
     int rc;
 
     if (S_ISLNK(mode))
@@ -613,23 +571,26 @@ xattrs_get_layout(int fd, struct rbh_value_pair *pairs, int available_pairs)
     if (available_pairs < required_pairs)
         return -1;
 
-    if (S_ISDIR(mode)) {
-        /* Directories have a default striping that children can inherit from.
-         * These information can be manipulated as a regular file layout but
-         * they are fetched differently through the Lustre API.
-         */
-        layout = get_dir_data_striping(fd);
+    lum = (struct lov_user_md *)tmp;
+
+    rc = ioctl(fd, LL_IOC_LOV_GETSTRIPE, (void *)lum);
+    if (rc) {
+        if (S_ISDIR(mode))
+            return errno == ENODATA ? 0 : -1;
+        else
+            return -1;
+    }
+
+    lum_size = lov_user_md_size(lum->lmm_stripe_count, lum->lmm_magic);
+
+    layout = llapi_layout_get_by_xattr(lum, lum_size,
+                                       S_ISDIR(mode) ?
+                                            0 : LLAPI_LAYOUT_GET_CHECK);
+    if (layout == NULL)
         /* If layout is NULL and errno is ENODATA, that means the ioctl failed
          * because there is no default striping on the directory.
          */
-        if (layout == NULL && errno == ENODATA)
-            return 0;
-    } else {
-        layout = llapi_layout_get_by_fd(fd, 0);
-    }
-
-    if (layout == NULL)
-        return -1;
+        return (S_ISDIR(mode) && errno == ENODATA) ? 0 : -1;
 
     rc = llapi_layout_flags_get(layout, &flags);
     if (rc)
@@ -643,7 +604,7 @@ xattrs_get_layout(int fd, struct rbh_value_pair *pairs, int available_pairs)
         /* Magic number and generation are only meaningful for actual layouts,
          * not the default layout stored in the directory.
          */
-        rc = xattrs_get_magic_and_gen(fd, &pairs[subcount]);
+        rc = xattrs_get_magic_and_gen((void *) lum, &pairs[subcount]);
         if (rc < 0)
             goto err;
 
