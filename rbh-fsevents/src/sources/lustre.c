@@ -507,7 +507,9 @@ update_parent_acmtime_event(struct lu_fid *parent_id,
     fsevent->id.data = id->data;
     fsevent->id.size = id->size;
 
-    statx_enrich_mask = RBH_STATX_ATIME | RBH_STATX_CTIME | RBH_STATX_MTIME;
+    /* Also, retrieve the type because we need it when enriching the entry */
+    statx_enrich_mask = RBH_STATX_TYPE | RBH_STATX_ATIME | RBH_STATX_CTIME |
+                        RBH_STATX_MTIME;
     if (build_statx_event(statx_enrich_mask, fsevent, NULL))
         return -1;
 
