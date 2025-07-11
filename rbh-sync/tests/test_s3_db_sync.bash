@@ -137,6 +137,38 @@ test_sync_mixed_buckets()
     done
 }
 
+test_sync_branch()
+{
+    local bucket_1="test-bucket-1"
+    local bucket_2="test-bucket-2"
+
+    local object_1="test-1"
+    local object_2="test-2"
+
+    mc mb local/$bucket_1
+    mc mb local/$bucket_2
+    touch test_obj
+    mc cp test_obj local/$bucket_1/$object_1
+    mc cp test_obj local/$bucket_2/$object_2
+
+    local output=$(rbh_sync "rbh:s3:#not_a_bucket" "rbh:$db:$testdb" 2>&1)
+
+    if [[ $output != *"specified bucket does not exist"* ]]; then
+        error "Branching with invalid bucket name should have failed"
+    fi
+
+    rbh_sync "rbh:s3:#$bucket_1" "rbh:$db:$testdb"
+
+    find_attribute '"ns.name":"'$object_1'"'
+    find_attribute '"ns.xattrs.path":"'$bucket_1/$object_1'"'
+    ! (find_attribute '"ns.xattrs.path":"'$bucket_2/$object_2'"')
+
+    rbh_sync "rbh:s3:#$bucket_2" "rbh:$db:$testdb"
+
+    find_attribute '"ns.name":"'$object_2'"'
+    find_attribute '"ns.xattrs.path":"'$bucket_2/$object_2'"'
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
@@ -148,7 +180,8 @@ minio_teardown()
 
 declare -a tests=(test_sync test_sync_size test_sync_mtime test_sync_empty
                   test_sync_empty_bucket test_sync_custom_metadata
-                  test_sync_multi_buckets test_sync_mixed_buckets)
+                  test_sync_multi_buckets test_sync_mixed_buckets
+                  test_sync_branch)
 trap -- "minio_teardown" EXIT
 
 
