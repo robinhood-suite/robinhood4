@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "05f2115e_d085c7fc",
+        "filename": "librobinhood/src/plugins/s3/s3.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 481,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-07-11T09:32:20Z",
+      "side": 1,
+      "message": "nit:\n```\ntemp_port \u003d uri-\u003eauthority-\u003eport;\nif (temp_port \u003d\u003d 0)\n    //Default port is 80 in HTTP and 443 in HTTPS\n    temp_port \u003d (crt_path !\u003d NULL ? 443 : 80);\n```",
+      "range": {
+        "startLine": 477,
+        "startChar": 8,
+        "endLine": 481,
+        "endChar": 45
+      },
+      "revId": "0642b4403e415ebe1265776ce0b87f1d756b1be5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
