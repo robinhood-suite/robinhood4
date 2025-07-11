@@ -239,19 +239,25 @@ test_flags()
 
 test_gen()
 {
-    lfs setstripe -E 1k -c 2 -E -1 -c -1 "test_gen_1"
-    truncate -s 2k test_gen_1
-    lfs setstripe -E 1M -c 2 -S 256k -E -1 -c -1 "test_gen_2"
-    truncate -s 4M test_gen_2
+    truncate -s 1k test_gen_1
+    # The migrate enforce test_gen_1 to have a gen of 1
+    lfs migrate test_gen_1
+    lfs setstripe -E 1k -c 2 -E -1 -c -1 "test_gen_2"
+    truncate -s 2k test_gen_2
+    lfs setstripe -E 1M -c 2 -S 256k -E -1 -c -1 "test_gen_3"
+    truncate -s 4M test_gen_3
 
     rbh_sync_lustre "." "rbh:$db:$testdb"
 
-    local gen_1=$(lfs getstripe -v "test_gen_1" | grep "lcm_layout_gen" | \
+    local gen_1=$(lfs getstripe -v "test_gen_1" | grep "lmm_layout_gen" | \
                   cut -d ':' -f2 | xargs)
     local gen_2=$(lfs getstripe -v "test_gen_2" | grep "lcm_layout_gen" | \
                   cut -d ':' -f2 | xargs)
+    local gen_3=$(lfs getstripe -v "test_gen_3" | grep "lcm_layout_gen" | \
+                  cut -d ':' -f2 | xargs)
     find_attribute '"xattrs.gen":'$gen_1 '"ns.xattrs.path" : "/test_gen_1"'
     find_attribute '"xattrs.gen":'$gen_2 '"ns.xattrs.path" : "/test_gen_2"'
+    find_attribute '"xattrs.gen":'$gen_3 '"ns.xattrs.path" : "/test_gen_3"'
 }
 
 test_mirror_count()
