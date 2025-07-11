@@ -430,16 +430,14 @@ xattrs_fill_layout(struct iterator_data *data, int nb_xattrs,
 }
 
 static int
-_xattrs_get_magic_and_gen(int fd, const char *lov_buf,
-                          struct rbh_value_pair *pairs)
+xattrs_get_magic_and_gen(const char *lov_buf,
+                         struct rbh_value_pair *pairs)
 {
     uint32_t magic = 0;
     int subcount = 0;
     uint32_t gen = 0;
     char *magic_str;
     int rc;
-
-    (void) fd;
 
     magic = ((struct lov_user_md *) lov_buf)->lmm_magic;
 
@@ -488,63 +486,18 @@ _xattrs_get_magic_and_gen(int fd, const char *lov_buf,
     return subcount;
 }
 
-/* The Linux VFS does not allow values of more than 64KiB */
-static const size_t XATTR_VALUE_MAX_VFS_SIZE = 1 << 16;
-
 /**
- * Record a file's magic number and layout generation in \p pairs
+ * Retrieve a entry's lov_user_md struct by using an ioctl.
  *
- * @param fd        file descriptor to check
- * @param pairs     list of pairs to fill
+ * @param fd file descriptor of the entry
  *
- * @return          number of filled \p pairs
+ * @return   lov_user_md struct of the entry, or NULL
  */
-static int
-xattrs_get_magic_and_gen(int fd, struct rbh_value_pair *pairs)
-{
-    char buffer[XATTR_VALUE_MAX_VFS_SIZE];
-    const char *lov_buf = NULL;
-
-    if (_inode_xattrs != NULL) {
-        for (int i = 0; i < *_inode_xattrs_count; ++i) {
-            if (!strcmp(_inode_xattrs[i].key, XATTR_LUSTRE_LOV)) {
-                lov_buf = _inode_xattrs[i].value->binary.data;
-                break;
-            }
-        }
-    } else {
-    /* TODO: when the attribute will be retrieved using the changelog,
-     * change the xattr retrieval by seeking the one already retrieved.
-     */
-        ssize_t length = XATTR_VALUE_MAX_VFS_SIZE;
-
-        length = fgetxattr(fd, XATTR_LUSTRE_LOV, buffer, length);
-        if (length == -1)
-            return -1;
-
-        lov_buf = buffer;
-    }
-
-    if (!lov_buf)
-        return 0;
-
-    return _xattrs_get_magic_and_gen(fd, lov_buf, pairs);
-}
-
-/**
- * Retrieve a directory's layout by using an ioctl.
- *
- * @param fd        file descriptor of the directory we want the layout of
- *
- * @return          layout of the directory, or NULL
- */
-static struct llapi_layout *
-get_dir_data_striping(int fd)
+static void *
+get_lov_user_md(int fd)
 {
     char tmp[XATTR_SIZE_MAX] = {0};
-    struct llapi_layout *layout;
     struct lov_user_md *lum;
-    int lum_size;
     int rc = 0;
 
     lum = (struct lov_user_md *)tmp;
@@ -553,8 +506,29 @@ get_dir_data_striping(int fd)
     if (rc)
         return NULL;
 
+    return (void *) lum;
+}
+
+/**
+ * Retrieve an entry's layout from lov_user_md struct.
+ *
+ * @param lov_buf   lov_user_md struct of the entry we want the layout of
+ * @param is_dir    boolean to indicate if it's a directory or not
+ *
+ * @return          layout of the entry, or NULL
+ */
+static struct llapi_layout *
+get_data_striping(const char *lov_buf, bool is_dir)
+{
+    struct llapi_layout *layout;
+    struct lov_user_md *lum;
+    int lum_size;
+
+    lum = (struct lov_user_md *) lov_buf;
+
     lum_size = lov_user_md_size(lum->lmm_stripe_count, lum->lmm_magic);
-    layout = llapi_layout_get_by_xattr(lum, lum_size, 0);
+    layout = llapi_layout_get_by_xattr(lum, lum_size,
+                                       is_dir ? 0 : LLAPI_LAYOUT_GET_CHECK);
     if (!layout)
         return NULL;
 
@@ -589,6 +563,7 @@ xattrs_get_layout(int fd, struct rbh_value_pair *pairs, int available_pairs)
     struct iterator_data data = { .comp_index = 0 };
     struct llapi_layout *layout;
     uint16_t mirror_count = 0;
+    struct lov_user_md *lum;
     int required_pairs = 0;
     int save_errno = 0;
     /**
@@ -613,21 +588,14 @@ xattrs_get_layout(int fd, struct rbh_value_pair *pairs, int available_pairs)
     if (available_pairs < required_pairs)
         return -1;
 
-    if (S_ISDIR(mode)) {
-        /* Directories have a default striping that children can inherit from.
-         * These information can be manipulated as a regular file layout but
-         * they are fetched differently through the Lustre API.
-         */
-        layout = get_dir_data_striping(fd);
-        /* If layout is NULL and errno is ENODATA, that means the ioctl failed
+    lum = (struct lov_user_md *) get_lov_user_md(fd);
+    if (lum == NULL)
+        /* If lum is NULL and errno is ENODATA, that means the ioctl failed
          * because there is no default striping on the directory.
          */
-        if (layout == NULL && errno == ENODATA)
-            return 0;
-    } else {
-        layout = llapi_layout_get_by_fd(fd, 0);
-    }
+        return (S_ISDIR(mode) && errno == ENODATA) ? 0 : -1;
 
+    layout = get_data_striping((void *) lum, S_ISDIR(mode));
     if (layout == NULL)
         return -1;
 
@@ -643,7 +611,7 @@ xattrs_get_layout(int fd, struct rbh_value_pair *pairs, int available_pairs)
         /* Magic number and generation are only meaningful for actual layouts,
          * not the default layout stored in the directory.
          */
-        rc = xattrs_get_magic_and_gen(fd, &pairs[subcount]);
+        rc = xattrs_get_magic_and_gen((void *) lum, &pairs[subcount]);
         if (rc < 0)
             goto err;
 
@@ -900,7 +868,8 @@ lustre_attrs_get_all(struct entry_info *entry_info,
 static struct rbh_value *
 lustre_get_default_dir_stripe(int fd, uint64_t flags)
 {
-    struct llapi_layout *layout;
+    struct llapi_layout *layout = NULL;
+    struct lov_user_md *lum;
     struct rbh_value *value;
 
     assert(flags & RBH_LEF_DIR_LOV);
@@ -915,7 +884,10 @@ lustre_get_default_dir_stripe(int fd, uint64_t flags)
     if (!value)
         return NULL;
 
-    layout = get_dir_data_striping(fd);
+    lum = (struct lov_user_md *) get_lov_user_md(fd);
+
+    if (lum != NULL)
+        layout = get_data_striping((void *) lum, true);
 
     if (flags & RBH_LEF_STRIPE_COUNT) {
         if (!layout)
