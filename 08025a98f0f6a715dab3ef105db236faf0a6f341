@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "69646d0c_5a4af085",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-07-11T09:53:39Z",
+      "side": 1,
+      "message": "Not so sure about the directives, but the code seems ok.",
+      "revId": "08025a98f0f6a715dab3ef105db236faf0a6f341",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
