@@ -95,6 +95,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0ed31a7c_baa8ad32",
+        "filename": "librobinhood/src/plugins/s3/s3.c",
+        "patchSetId": 7
+      },
+      "lineNbr": 498,
+      "author": {
+        "id": 1038646
+      },
+      "writtenOn": "2025-07-15T14:14:17Z",
+      "side": 1,
+      "message": "It should be \u0027or\u0027 because the backend should be created if either one is retrieved. It should only fail when neither is retrieved.",
+      "parentUuid": "f1bead87_3d82f52c",
+      "range": {
+        "startLine": 498,
+        "startChar": 65,
+        "endLine": 498,
+        "endChar": 67
+      },
+      "revId": "b7bfe5aa72a6b08561720759d97a9e2d53f469a8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "133faadd_4ec9f98f",
         "filename": "librobinhood/src/plugins/s3/s3_wrapper.h",
         "patchSetId": 7
