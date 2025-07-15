@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6ab3a063_fd154263",
+        "filename": "librobinhood/src/plugins/posix/enrichers/lustre/lustre.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 600,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-07-15T09:25:48Z",
+      "side": 1,
+      "message": "I think all of this can just be llapi_layout_get_by_xattr now.",
+      "range": {
+        "startLine": 586,
+        "startChar": 4,
+        "endLine": 600,
+        "endChar": 5
+      },
+      "revId": "16c27f72d2551610014129c734073d9fb73bd191",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "36da85a2_b77da595",
+        "filename": "rbh-sync/tests/test_lustre_db_sync.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-07-15T09:25:48Z",
+      "side": 1,
+      "message": "This should fail if you create the file before. And the setstripe below as well. You want to use migrate I think.",
+      "range": {
+        "startLine": 243,
+        "startChar": 4,
+        "endLine": 243,
+        "endChar": 53
+      },
+      "revId": "16c27f72d2551610014129c734073d9fb73bd191",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "08bbc271_d09a004a",
+        "filename": "rbh-sync/tests/test_lustre_db_sync.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-07-15T09:25:48Z",
+      "side": 1,
+      "message": "Does it start at 0 or 1? If it starts at 0, you should migrate the file to enforce a gen of at least 1 to make sure that we get the right result. It is always 0 before 2.15 and always 255 after. So we should make sure we don\u0027t test 0 here.",
+      "range": {
+        "startLine": 246,
+        "startChar": 19,
+        "endLine": 246,
+        "endChar": 29
+      },
+      "revId": "16c27f72d2551610014129c734073d9fb73bd191",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
