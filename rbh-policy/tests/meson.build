@@ -10,6 +10,8 @@ tests_src = meson.source_root() / 'rbh-policy' / 'tests'
 src_root = meson.source_root() / 'rbh-policy'
 
 python_tests = [
+  'test_models_conditions',
+# 'test_models_fileclass',
   'test_installation',
   'test_filter',
   'test_config',
