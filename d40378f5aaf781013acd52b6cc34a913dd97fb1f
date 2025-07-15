@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e4bd0102_75bcd18e",
+        "filename": "librobinhood/src/plugins/posix/enrichers/retention/retention_internals.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-07-15T13:19:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e3a4bb3a_c48da8fe",
+      "range": {
+        "startLine": 18,
+        "startChar": 30,
+        "endLine": 20,
+        "endChar": 29
+      },
+      "revId": "d40378f5aaf781013acd52b6cc34a913dd97fb1f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "142a78a3_478c1679",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-07-15T11:02:37Z",
       "side": 1,
       "message": "comment: seeing the next patch, this isn\u0027t true",
+      "range": {
+        "startLine": 121,
+        "startChar": 21,
+        "endLine": 121,
+        "endChar": 32
+      },
+      "revId": "d40378f5aaf781013acd52b6cc34a913dd97fb1f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4b98ac33_e5b1532c",
+        "filename": "librobinhood/src/plugins/posix/posix_internals.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-07-15T13:19:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "142a78a3_478c1679",
       "range": {
         "startLine": 121,
         "startChar": 21,
