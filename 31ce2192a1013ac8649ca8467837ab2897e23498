@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "abb6575e_abd53bb5",
+        "filename": "rbh-find/tests/posix/test_posix_projection.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-07-15T13:48:03Z",
+      "side": 1,
+      "message": "I\u0027m not really fan of doing this. The outcome is already check in test_posix_printf.bash. If the projection doesn\u0027t works, this test should fail.",
+      "parentUuid": "e43f8291_67b94eee",
+      "range": {
+        "startLine": 63,
+        "startChar": 4,
+        "endLine": 63,
+        "endChar": 62
+      },
+      "revId": "31ce2192a1013ac8649ca8467837ab2897e23498",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bd146248_d318e225",
         "filename": "rbh-find/tests/posix/test_posix_projection.bash",
         "patchSetId": 2
@@ -37,6 +61,30 @@
       "writtenOn": "2025-07-15T11:27:17Z",
       "side": 1,
       "message": "suggest: add a check that \"%s %s\" is correctly understood",
+      "range": {
+        "startLine": 98,
+        "startChar": 4,
+        "endLine": 98,
+        "endChar": 78
+      },
+      "revId": "31ce2192a1013ac8649ca8467837ab2897e23498",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d4d7407a_91a6f4af",
+        "filename": "rbh-find/tests/posix/test_posix_projection.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-07-15T13:48:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bd146248_d318e225",
       "range": {
         "startLine": 98,
         "startChar": 4,
@@ -60,6 +108,30 @@
       "writtenOn": "2025-07-15T11:27:17Z",
       "side": 1,
       "message": "minor: not necessary",
+      "range": {
+        "startLine": 108,
+        "startChar": 0,
+        "endLine": 108,
+        "endChar": 47
+      },
+      "revId": "31ce2192a1013ac8649ca8467837ab2897e23498",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d80b2a95_9744368d",
+        "filename": "rbh-find/tests/posix/test_posix_projection.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-07-15T13:48:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3fab74de_d8402243",
       "range": {
         "startLine": 108,
         "startChar": 0,
