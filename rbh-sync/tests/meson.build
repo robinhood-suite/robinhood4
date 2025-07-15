@@ -18,7 +18,10 @@ if libhestia.found()
 endif
 
 if libs3.found()
-    integration_tests += ['test_s3_db_sync']
+    s3_test_name = 'test_s3_db_sync'
+    e = find_program(s3_test_name + '.bash')
+    test(s3_test_name, e, is_parallel: false, env: backend_path_env,
+         suite: 'rbh-sync', timeout: 140)
 endif
 
 foreach t: integration_tests
