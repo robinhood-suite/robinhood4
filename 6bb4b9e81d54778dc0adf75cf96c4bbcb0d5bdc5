@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cbb6af21_67ac67f5",
+        "filename": "librobinhood/src/plugins/s3/s3.c",
+        "patchSetId": 9
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-07-15T07:54:05Z",
+      "side": 1,
+      "message": "sugest: make the alloc only if the a bucket name is specified. Also, I think you can directly alloc `bkt_data.list`",
+      "range": {
+        "startLine": 245,
+        "startChar": 4,
+        "endLine": 245,
+        "endChar": 40
+      },
+      "revId": "6bb4b9e81d54778dc0adf75cf96c4bbcb0d5bdc5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "670066cd_04e7a8b0",
+        "filename": "librobinhood/src/plugins/s3/s3.c",
+        "patchSetId": 9
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-07-15T07:54:05Z",
+      "side": 1,
+      "message": "minor: the return is not useful. The `error` function will stop the execution.",
+      "range": {
+        "startLine": 258,
+        "startChar": 12,
+        "endLine": 258,
+        "endChar": 24
+      },
+      "revId": "6bb4b9e81d54778dc0adf75cf96c4bbcb0d5bdc5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d507b0a2_5fec76e5",
+        "filename": "librobinhood/src/plugins/s3/s3.c",
+        "patchSetId": 9
+      },
+      "lineNbr": 338,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-07-15T07:54:05Z",
+      "side": 1,
+      "message": "defect: return `\u0026s3_iter-\u003eiterator`",
+      "range": {
+        "startLine": 338,
+        "startChar": 11,
+        "endLine": 338,
+        "endChar": 46
+      },
+      "revId": "6bb4b9e81d54778dc0adf75cf96c4bbcb0d5bdc5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7ba19e46_224e0d55",
+        "filename": "librobinhood/src/plugins/s3/s3.c",
+        "patchSetId": 9
+      },
+      "lineNbr": 376,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-07-15T07:54:05Z",
+      "side": 1,
+      "message": "defect: where the bucket_name is freed ?",
+      "revId": "6bb4b9e81d54778dc0adf75cf96c4bbcb0d5bdc5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
