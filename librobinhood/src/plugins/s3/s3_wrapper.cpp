@@ -7,6 +7,7 @@
 
 #include <aws/core/Aws.h>
 #include <aws/core/auth/AWSCredentialsProvider.h>
+#include <aws/core/client/DefaultRetryStrategy.h>
 #include <aws/s3/model/GetObjectRequest.h>
 #include <aws/s3/model/HeadBucketRequest.h>
 #include <aws/s3/model/HeadObjectRequest.h>
@@ -64,7 +65,9 @@ s3_init_api(const char *address, const char *username, const char *password,
         config.caFile = crt_path;
         config.verifySSL = true;
     }
-
+    config.connectTimeoutMs = 10000;
+    config.retryStrategy = Aws::MakeShared<Aws::Client::DefaultRetryStrategy>(
+                           "LimitedRetry", 1);
     Aws::Auth::AWSCredentials credentials(username, password);
     s3_client_ptr = std::unique_ptr<S3CLIENT>(new S3CLIENT(credentials,
                                               config, SIGNING_POLICY::Never,
