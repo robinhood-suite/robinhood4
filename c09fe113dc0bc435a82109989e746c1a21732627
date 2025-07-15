@@ -97,6 +97,52 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "204f891b_04b3fa0c",
+        "filename": "rbh-find/src/actions.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 428,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-07-15T09:42:22Z",
+      "side": 1,
+      "message": "question: shouldn\u0027t it be return 0 here ? No field is checked here, so the output counter shouldn\u0027t be changed",
+      "range": {
+        "startLine": 428,
+        "startChar": 8,
+        "endLine": 428,
+        "endChar": 17
+      },
+      "revId": "c09fe113dc0bc435a82109989e746c1a21732627",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6be82a04_c0155620",
+        "filename": "rbh-find/src/actions.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 432,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-07-15T09:42:22Z",
+      "side": 1,
+      "message": "same here",
+      "range": {
+        "startLine": 432,
+        "startChar": 15,
+        "endLine": 432,
+        "endChar": 17
+      },
+      "revId": "c09fe113dc0bc435a82109989e746c1a21732627",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "dd6b0ff2_48b08296",
         "filename": "rbh-find/src/actions.c",
         "patchSetId": 1
