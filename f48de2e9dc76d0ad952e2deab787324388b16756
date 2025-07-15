@@ -22,6 +22,30 @@
       },
       "revId": "f48de2e9dc76d0ad952e2deab787324388b16756",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f7431e20_608c346a",
+        "filename": "librobinhood/src/plugins/posix/action.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 343,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-07-15T13:27:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c3188e15_6eae7279",
+      "range": {
+        "startLine": 340,
+        "startChar": 4,
+        "endLine": 343,
+        "endChar": 13
+      },
+      "revId": "f48de2e9dc76d0ad952e2deab787324388b16756",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
