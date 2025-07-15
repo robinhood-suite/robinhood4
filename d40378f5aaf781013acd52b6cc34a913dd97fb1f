@@ -22,6 +22,29 @@
       },
       "revId": "d40378f5aaf781013acd52b6cc34a913dd97fb1f",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "142a78a3_478c1679",
+        "filename": "librobinhood/src/plugins/posix/posix_internals.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-07-15T11:02:37Z",
+      "side": 1,
+      "message": "comment: seeing the next patch, this isn\u0027t true",
+      "range": {
+        "startLine": 121,
+        "startChar": 21,
+        "endLine": 121,
+        "endChar": 32
+      },
+      "revId": "d40378f5aaf781013acd52b6cc34a913dd97fb1f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
