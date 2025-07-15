@@ -169,6 +169,73 @@ test_sync_branch()
     find_attribute '"ns.xattrs.path":"'$bucket_2/$object_2'"'
 }
 
+test_sync_valid_uri()
+{
+    mc mb local/test-bucket
+    touch test_obj
+    mc cp test_obj local/test-bucket
+
+    rbh_sync "rbh://minioadmin:minioadmin@127.0.0.1:9000/s3:" "rbh:$db:$testdb"
+
+    find_attribute '"ns.name":"test_obj"'
+    find_attribute '"ns.xattrs.path":"test-bucket/test_obj"'
+}
+
+test_sync_partial_uri()
+{
+    mc mb local/test-bucket
+    touch test_obj
+    mc cp test_obj local/test-bucket
+
+    rbh_sync "rbh://@127.0.0.1:9000/s3:" "rbh:$db:$testdb"
+
+    find_attribute '"ns.name":"test_obj"'
+    find_attribute '"ns.xattrs.path":"test-bucket/test_obj"'
+}
+
+test_sync_invalid_uri()
+{
+    mc mb local/test-bucket
+    touch test_obj
+    mc cp test_obj local/test-bucket
+    local error_message="The Access Key Id you \
+                         provided does not exist in our records"
+
+    local output=$(rbh_sync \
+                   "rbh://wrong-user:wrong-password@127.0.0.1:9000/s3:"
+                   "rbh:$db:$testdb" 2>&1)
+
+    if echo "$output" | grep -q "$error_message"; then
+        error "Sync with URI containing wrong informations should " \
+              "have failed"
+    fi
+}
+
+test_sync_with_region()
+{
+    local conf="test_conf"
+    touch $conf
+    local error_message="Failed to connect to s3.eu-west-3.amazonaws.com"
+
+cat > $conf <<EOF
+s3:
+  region : "eu-west-3"
+  user: minioadmin
+  password: minioadmin
+EOF
+
+    local output=$(rbh_sync --config "$conf" "rbh:s3:" "rbh:$db:$testdb")
+
+    echo $output
+
+    if echo "$output" | grep -q "$error_message"; then
+        error "Sync with no address and a port should try to connect to the" \
+              "aws server of the region"
+    fi
+
+    rm -rf conf.yaml
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
@@ -181,7 +248,9 @@ minio_teardown()
 declare -a tests=(test_sync test_sync_size test_sync_mtime test_sync_empty
                   test_sync_empty_bucket test_sync_custom_metadata
                   test_sync_multi_buckets test_sync_mixed_buckets
-                  test_sync_branch)
+                  test_sync_branch test_sync_valid_uri test_sync_partial_uri
+                  test_sync_invalid_uri test_sync_with_region)
+
 trap -- "minio_teardown" EXIT
 
 
