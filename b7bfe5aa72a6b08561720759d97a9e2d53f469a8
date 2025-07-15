@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "71557198_2db5e05e",
+        "filename": "librobinhood/src/plugins/s3/s3.c",
+        "patchSetId": 7
+      },
+      "lineNbr": 468,
+      "author": {
+        "id": 1038646
+      },
+      "writtenOn": "2025-07-15T14:23:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1456db1c_0b251bca",
+      "range": {
+        "startLine": 468,
+        "startChar": 35,
+        "endLine": 468,
+        "endChar": 36
+      },
+      "revId": "b7bfe5aa72a6b08561720759d97a9e2d53f469a8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1ada2d27_081feff8",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-07-15T07:18:32Z",
       "side": 1,
       "message": "idem",
+      "range": {
+        "startLine": 473,
+        "startChar": 31,
+        "endLine": 473,
+        "endChar": 32
+      },
+      "revId": "b7bfe5aa72a6b08561720759d97a9e2d53f469a8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5dedfb4e_4674ef0d",
+        "filename": "librobinhood/src/plugins/s3/s3.c",
+        "patchSetId": 7
+      },
+      "lineNbr": 473,
+      "author": {
+        "id": 1038646
+      },
+      "writtenOn": "2025-07-15T14:23:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1ada2d27_081feff8",
       "range": {
         "startLine": 473,
         "startChar": 31,
@@ -154,6 +202,30 @@
       "writtenOn": "2025-07-15T07:18:32Z",
       "side": 1,
       "message": "minor: add it in the documentation above",
+      "range": {
+        "startLine": 38,
+        "startChar": 60,
+        "endLine": 38,
+        "endChar": 78
+      },
+      "revId": "b7bfe5aa72a6b08561720759d97a9e2d53f469a8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a9df41a6_5a523a0c",
+        "filename": "librobinhood/src/plugins/s3/s3_wrapper.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1038646
+      },
+      "writtenOn": "2025-07-15T14:23:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "133faadd_4ec9f98f",
       "range": {
         "startLine": 38,
         "startChar": 60,
