@@ -16,6 +16,24 @@
       "message": "sugest: check that there is a port in the authority, otherwise set a default value. The port is not mandatory in the authority.",
       "revId": "a42d4fe2e7cfd012e37375d37cf560a4bd9f67af",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6fc5759e_45d00218",
+        "filename": "librobinhood/src/plugins/s3/s3.c",
+        "patchSetId": 8
+      },
+      "lineNbr": 464,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-07-15T07:11:30Z",
+      "side": 1,
+      "message": "Nevermind, it\u0027s done in the next patch",
+      "parentUuid": "e001b063_97e773ae",
+      "revId": "a42d4fe2e7cfd012e37375d37cf560a4bd9f67af",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
