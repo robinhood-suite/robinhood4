@@ -118,6 +118,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "59d42ebc_6a77a8fd",
+        "filename": "rbh-find/src/actions.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 428,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-07-15T13:16:48Z",
+      "side": 1,
+      "message": "You\u0027re right",
+      "parentUuid": "204f891b_04b3fa0c",
+      "range": {
+        "startLine": 428,
+        "startChar": 8,
+        "endLine": 428,
+        "endChar": 17
+      },
+      "revId": "c09fe113dc0bc435a82109989e746c1a21732627",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6be82a04_c0155620",
@@ -131,6 +155,30 @@
       "writtenOn": "2025-07-15T09:42:22Z",
       "side": 1,
       "message": "same here",
+      "range": {
+        "startLine": 432,
+        "startChar": 15,
+        "endLine": 432,
+        "endChar": 17
+      },
+      "revId": "c09fe113dc0bc435a82109989e746c1a21732627",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6b417069_30084369",
+        "filename": "rbh-find/src/actions.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 432,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-07-15T13:16:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6be82a04_c0155620",
       "range": {
         "startLine": 432,
         "startChar": 15,
