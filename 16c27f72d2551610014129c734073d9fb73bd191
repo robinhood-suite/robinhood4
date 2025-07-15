@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f6296667_9204c771",
+        "filename": "librobinhood/src/plugins/posix/enrichers/lustre/lustre.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 600,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-07-15T11:29:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6ab3a063_fd154263",
+      "range": {
+        "startLine": 586,
+        "startChar": 4,
+        "endLine": 600,
+        "endChar": 5
+      },
+      "revId": "16c27f72d2551610014129c734073d9fb73bd191",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "36da85a2_b77da595",
@@ -49,6 +73,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "37edaa0b_f673317b",
+        "filename": "rbh-sync/tests/test_lustre_db_sync.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-07-15T11:29:07Z",
+      "side": 1,
+      "message": "I forgot to rename it to `test_gen_2` and `test_gen_3` below.",
+      "parentUuid": "36da85a2_b77da595",
+      "range": {
+        "startLine": 243,
+        "startChar": 4,
+        "endLine": 243,
+        "endChar": 53
+      },
+      "revId": "16c27f72d2551610014129c734073d9fb73bd191",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "08bbc271_d09a004a",
         "filename": "rbh-sync/tests/test_lustre_db_sync.bash",
         "patchSetId": 1
@@ -60,6 +108,30 @@
       "writtenOn": "2025-07-15T09:25:48Z",
       "side": 1,
       "message": "Does it start at 0 or 1? If it starts at 0, you should migrate the file to enforce a gen of at least 1 to make sure that we get the right result. It is always 0 before 2.15 and always 255 after. So we should make sure we don\u0027t test 0 here.",
+      "range": {
+        "startLine": 246,
+        "startChar": 19,
+        "endLine": 246,
+        "endChar": 29
+      },
+      "revId": "16c27f72d2551610014129c734073d9fb73bd191",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9a5efe4f_648dfa1e",
+        "filename": "rbh-sync/tests/test_lustre_db_sync.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-07-15T11:29:07Z",
+      "side": 1,
+      "message": "I added a `lfs migrate` for `test_gen_1` to start at 1. (It was 0 before)",
+      "parentUuid": "08bbc271_d09a004a",
       "range": {
         "startLine": 246,
         "startChar": 19,
