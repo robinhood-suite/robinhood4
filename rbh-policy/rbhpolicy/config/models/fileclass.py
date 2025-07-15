@@ -8,7 +8,7 @@
 from rbhpolicy.config.models.conditions import Condition
 import sys
 
-fileclasses = {}
+rbh_fileclasses = {}
 
 class FileClass:
     """A named file‐class defined by a Condition."""
@@ -17,7 +17,6 @@ class FileClass:
         self.condition = condition
 
     def evaluate(self, data: dict) -> bool:
-        """Return True if data matches the file‐class condition."""
         return self.condition.evaluate(data)
 
     def __and__(self, other: Condition) -> Condition:
