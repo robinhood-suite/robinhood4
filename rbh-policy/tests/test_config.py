@@ -73,5 +73,23 @@ class ConfigLoaderTests(unittest.TestCase):
                 "config should raise FileNotFoundError"):
             load_config("fs_none")
 
+    def test_invalid_fileclass_name(self):
+        from rbhpolicy.config.fileclass import declare_fileclass
+        with self.assertRaisesRegex(TypeError,
+                "FileClass name must be a string") as cm:
+            declare_fileclass(name=123, target=None)
+        self.assertEqual(str(cm.exception), "FileClass name must be a string, "
+                "got int", msg="Should raise exact error for invalid FileClass "
+                "name type")
+
+    def test_invalid_fileclass_condition(self):
+        from rbhpolicy.config.fileclass import declare_fileclass
+        with self.assertRaisesRegex(TypeError,
+                "FileClass condition must be a Condition instance") as cm:
+            declare_fileclass(name="Invalid", target="not_a_condition")
+        self.assertEqual(str(cm.exception), "FileClass condition must be a "
+                "Condition instance, got str", msg="Should raise exact error "
+                "for invalid FileClass condition type")
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

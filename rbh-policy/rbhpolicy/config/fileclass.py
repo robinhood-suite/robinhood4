@@ -6,6 +6,7 @@
 # SPDX-License-Identifer: LGPL-3.0-or-later
 
 from rbhpolicy.config.conditions import Condition
+from rbhpolicy.config.config_validator import validate_fileclass
 import sys
 
 rbh_fileclasses = {}
@@ -28,6 +29,9 @@ def declare_fileclass(*, name: str, target: Condition) -> FileClass:
     Declare a new file‐class in the global registry and inject it
     into the caller’s namespace so it’s directly available in config files.
     """
+
+    validate_fileclass(name, target)
+
     fc = FileClass(name, target)
     rbh_fileclasses[name] = fc
 
