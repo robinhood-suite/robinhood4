@@ -3,6 +3,52 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "56aeac7c_d1c0eeba",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-07-16T09:48:51Z",
+      "side": 1,
+      "message": "typo: versions",
+      "range": {
+        "startLine": 10,
+        "startChar": 41,
+        "endLine": 10,
+        "endChar": 48
+      },
+      "revId": "91284af10daacbb727e8daacd7dc09f3316ea5e0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad159734_162c243e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-07-16T09:48:51Z",
+      "side": 1,
+      "message": "It\u0027s not that it is not properly stored. The client actively removes the layout gen from the trusted.lov to prevent applications from using it when doing a setxattr.\n\nThe field that contains the layout gen is a union that contains both the generation and the stripe offset. So if you read a generation of 2 and use the same data to do a setxattr, Lustre will think you want to create the file on the OST 2 for instance. Which is not what applications such as tar want to do when copying the trusted.lov attribute for instance.\n\n\nSo instead of properly store, I would say \"the layout generation is not returned by getxattr on plain layouts\".",
+      "range": {
+        "startLine": 11,
+        "startChar": 11,
+        "endLine": 12,
+        "endChar": 12
+      },
+      "revId": "91284af10daacbb727e8daacd7dc09f3316ea5e0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "050e40ae_415ff28f",
         "filename": "librobinhood/src/plugins/posix/enrichers/lustre/lustre.c",
         "patchSetId": 2
@@ -14,6 +60,30 @@
       "writtenOn": "2025-07-16T08:17:33Z",
       "side": 1,
       "message": "question: why not simply call \"get_dir_data_striping\" and change its name ?",
+      "range": {
+        "startLine": 574,
+        "startChar": 4,
+        "endLine": 588,
+        "endChar": 72
+      },
+      "revId": "91284af10daacbb727e8daacd7dc09f3316ea5e0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a9e43d40_76cd9ddc",
+        "filename": "librobinhood/src/plugins/posix/enrichers/lustre/lustre.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 588,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-07-16T09:48:51Z",
+      "side": 1,
+      "message": "+1 get_data_striping that takes an fd and returns the llapi_layout structure.",
+      "parentUuid": "050e40ae_415ff28f",
       "range": {
         "startLine": 574,
         "startChar": 4,
@@ -49,6 +119,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4d6c12c0_75d5a040",
+        "filename": "librobinhood/src/plugins/posix/enrichers/lustre/lustre.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 593,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-07-16T09:48:51Z",
+      "side": 1,
+      "message": "+1 for the format suggestion of line 578.\n\nI just wanted to add that `llapi_layout_get_by_xattr` will not fail with ENODATA. This function simply converts from the \"on disk\" format of trusted.lov to the llapi_layout structure. It can fail (memory allocation or currupted layout xattr) but not with ENODATA. And if it ever does it wouldn\u0027t have the same meaning as the ioctl or getxattr. So this second check for ENODATA can be removed. If this function fails, we should return -1 here.",
+      "parentUuid": "7cb2bded_3f052171",
+      "range": {
+        "startLine": 593,
+        "startChar": 15,
+        "endLine": 593,
+        "endChar": 54
+      },
+      "revId": "91284af10daacbb727e8daacd7dc09f3316ea5e0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9b2b9c7e_60fc2b08",
         "filename": "rbh-sync/tests/test_lustre_db_sync.bash",
         "patchSetId": 2
@@ -60,6 +154,30 @@
       "writtenOn": "2025-07-16T08:17:33Z",
       "side": 1,
       "message": "defect? `lcm_layout_gen` ?",
+      "range": {
+        "startLine": 251,
+        "startChar": 56,
+        "endLine": 251,
+        "endChar": 70
+      },
+      "revId": "91284af10daacbb727e8daacd7dc09f3316ea5e0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7358ad66_b0dd523f",
+        "filename": "rbh-sync/tests/test_lustre_db_sync.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 251,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-07-16T09:48:51Z",
+      "side": 1,
+      "message": "No its lmm because this is not the same structure. test_gen_1 is a plain layout (struct lov_mds_md_v1 -\u003e lmm) whereas test_gen_{2,3} are PFL layouts (struct lov_comp_md_v1 -\u003e lcm).",
+      "parentUuid": "9b2b9c7e_60fc2b08",
       "range": {
         "startLine": 251,
         "startChar": 56,

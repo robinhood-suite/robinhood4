@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "65f2d598_a57c46c2",
+        "filename": "librobinhood/src/plugins/posix/enrichers/lustre/lustre.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 501,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-07-16T09:48:51Z",
+      "side": 0,
+      "message": "You could keep this and adapt it to the new API above. The most interesting part to keep is the return value IMO.",
+      "range": {
+        "startLine": 494,
+        "startChar": 0,
+        "endLine": 501,
+        "endChar": 3
+      },
+      "revId": "2aa97b9c82e3976f918d49fc5ff1af9862f50224",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
