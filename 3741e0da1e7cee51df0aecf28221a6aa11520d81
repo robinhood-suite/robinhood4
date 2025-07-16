@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd5a43ac_626158cb",
+        "filename": "rbh-sync/tests/test_s3_db_sync.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-07-16T07:15:08Z",
+      "side": 1,
+      "message": "minor: You don\u0027t need to put \u0027@\u0027 if you doesn\u0027t set the username and password",
+      "range": {
+        "startLine": 190,
+        "startChar": 20,
+        "endLine": 190,
+        "endChar": 21
+      },
+      "revId": "3741e0da1e7cee51df0aecf28221a6aa11520d81",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
