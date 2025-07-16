@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "85b92d95_000d1cfb",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-07-16T09:31:25Z",
+      "side": 1,
+      "message": "typo: are",
+      "range": {
+        "startLine": 12,
+        "startChar": 31,
+        "endLine": 12,
+        "endChar": 33
+      },
+      "revId": "87533db616de675677bc979db419581b03a4704c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "88695fbb_4f479c78",
         "filename": "rbh-find/tests/retention/test_retention_projection.bash",
         "patchSetId": 4
