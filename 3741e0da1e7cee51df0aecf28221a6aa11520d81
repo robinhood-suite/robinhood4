@@ -22,6 +22,30 @@
       },
       "revId": "3741e0da1e7cee51df0aecf28221a6aa11520d81",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4cc2f196_7e28e75f",
+        "filename": "rbh-sync/tests/test_s3_db_sync.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1038646
+      },
+      "writtenOn": "2025-07-16T09:39:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dd5a43ac_626158cb",
+      "range": {
+        "startLine": 190,
+        "startChar": 20,
+        "endLine": 190,
+        "endChar": 21
+      },
+      "revId": "3741e0da1e7cee51df0aecf28221a6aa11520d81",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
