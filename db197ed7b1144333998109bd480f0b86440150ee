@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d994fe66_ef65174a",
+        "filename": "rbh-policy/meson.build",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-07-16T10:02:23Z",
+      "side": 1,
+      "message": "I\u0027m not convinced this is the right way to install a python executable with meson.",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 2
+      },
+      "revId": "db197ed7b1144333998109bd480f0b86440150ee",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
