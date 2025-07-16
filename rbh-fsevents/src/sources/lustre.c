@@ -1270,9 +1270,11 @@ lustre_changelog_iter_init(struct lustre_changelog_iterator *events,
     if (events->mdt_name == NULL)
         error(EXIT_FAILURE, ENOMEM, "strdup");
 
-    for (mdtname_index = mdtname; !isdigit(*mdtname_index); mdtname_index++);
+    mdtname_index = strstr(mdtname, "MDT");
+    if (mdtname_index == NULL)
+        error(EXIT_FAILURE, errno, "strstr");
 
-    rc = str2int64_t(mdtname_index, (int64_t *) &events->source_mdt_index);
+    rc = str2int64_t(mdtname_index + 3, (int64_t *) &events->source_mdt_index);
     if (rc)
         error(EXIT_FAILURE, errno, "str2int64_t");
 
