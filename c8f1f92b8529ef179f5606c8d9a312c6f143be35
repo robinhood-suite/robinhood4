@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e39b5e5d_f423edb1",
+        "filename": "rbh-policy/rbhpolicy/config/models/conditions.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-07-16T15:28:13Z",
+      "side": 1,
+      "message": "you need to use super() to call the parent\u0027s constructor",
+      "range": {
+        "startLine": 66,
+        "startChar": 8,
+        "endLine": 66,
+        "endChar": 22
+      },
+      "revId": "c8f1f92b8529ef179f5606c8d9a312c6f143be35",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1a04d8d5_28c1d817",
+        "filename": "rbh-policy/rbhpolicy/config/models/conditions.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-07-16T15:28:13Z",
+      "side": 1,
+      "message": "This seems like a lot just to get the operator. Why not simply use strings directly when building the SimpleCondition object? You won\u0027t call the actual function anyway (e.g. operator.eq).",
+      "range": {
+        "startLine": 77,
+        "startChar": 8,
+        "endLine": 78,
+        "endChar": 52
+      },
+      "revId": "c8f1f92b8529ef179f5606c8d9a312c6f143be35",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "98c96768_60fb1b18",
+        "filename": "rbh-policy/rbhpolicy/config/models/conditions.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-07-16T15:28:13Z",
+      "side": 1,
+      "message": "I think this is wrong. When you evaluate a python expression to convert it to a rbh_filter for instance, you don\u0027t want to convert it to a boolean. This evaluate function will just be able to collapse a Condition tree into a single boolean. But this is not what you want to do with the policy engine.",
+      "range": {
+        "startLine": 87,
+        "startChar": 3,
+        "endLine": 88,
+        "endChar": 69
+      },
+      "revId": "c8f1f92b8529ef179f5606c8d9a312c6f143be35",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0bb111ab_033db2e9",
+        "filename": "rbh-policy/rbhpolicy/config/models/fileclass.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-07-16T15:28:13Z",
+      "side": 1,
+      "message": "Shouldn\u0027t a fileclass inherit from condition in order to be able to add fileclasses inside the conditions as well?",
+      "range": {
+        "startLine": 13,
+        "startChar": 6,
+        "endLine": 13,
+        "endChar": 15
+      },
+      "revId": "c8f1f92b8529ef179f5606c8d9a312c6f143be35",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "30475c77_b577c752",
+        "filename": "rbh-policy/rbhpolicy/config/models/fileclass.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-07-16T15:28:13Z",
+      "side": 1,
+      "message": "What does this do? I assume that it inserts the variable with the fileclass\u0027s name in the scope of the caller. You should probably document this.",
+      "range": {
+        "startLine": 43,
+        "startChar": 4,
+        "endLine": 44,
+        "endChar": 24
+      },
+      "revId": "c8f1f92b8529ef179f5606c8d9a312c6f143be35",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
