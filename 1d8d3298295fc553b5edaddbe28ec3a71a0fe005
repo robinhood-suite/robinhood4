@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "acfc84e1_2cced25a",
+        "filename": "rbh-policy/rbh-policy.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-07-16T15:15:59Z",
+      "side": 1,
+      "message": "use argparse.",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 19
+      },
+      "revId": "1d8d3298295fc553b5edaddbe28ec3a71a0fe005",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d54de937_477f7df2",
+        "filename": "rbh-policy/rbhpolicy/config/config_loader.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-07-16T15:15:59Z",
+      "side": 1,
+      "message": "I would add a policies directory in there.\nYou should also take the RBH_CONFIG_PATH env variable into account: `dir \u003d join(env[\"RBH_CONFIG_PATH\"], \"policies\")`.",
+      "range": {
+        "startLine": 13,
+        "startChar": 14,
+        "endLine": 13,
+        "endChar": 32
+      },
+      "revId": "1d8d3298295fc553b5edaddbe28ec3a71a0fe005",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "34c57a36_fbe03893",
+        "filename": "rbh-policy/rbhpolicy/config/config_loader.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-07-16T15:15:59Z",
+      "side": 1,
+      "message": "Where does this come from? Is this a python thing?",
+      "range": {
+        "startLine": 45,
+        "startChar": 39,
+        "endLine": 45,
+        "endChar": 46
+      },
+      "revId": "1d8d3298295fc553b5edaddbe28ec3a71a0fe005",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b987788a_d2b379c3",
+        "filename": "rbh-policy/rbhpolicy/config/config_loader.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-07-16T15:15:59Z",
+      "side": 1,
+      "message": "I think we should explicitly list what we insert in the config\u0027s env. This is more verbose but also more robust. We can probably do some magic with python decorators to make it easier to implement. For instance:\n\n```\n@rbh_config_export\ndef declare_fileclass(...):\n    ...\n```",
+      "range": {
+        "startLine": 78,
+        "startChar": 8,
+        "endLine": 78,
+        "endChar": 35
+      },
+      "revId": "1d8d3298295fc553b5edaddbe28ec3a71a0fe005",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
