@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6714edea_1594e43c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-07-16T14:05:58Z",
+      "side": 1,
+      "message": "no dot in commit message, here and in the other patches aswell",
+      "range": {
+        "startLine": 7,
+        "startChar": 53,
+        "endLine": 7,
+        "endChar": 54
+      },
+      "revId": "f87d31785cf29a6c18a9ee1de7bc02370a321f25",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "63c2830a_f92bc2d1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-07-16T14:05:58Z",
+      "side": 1,
+      "message": "I have no clue what the `generate_sources.py` does and why it\u0027s relevant to use everywhere",
+      "revId": "f87d31785cf29a6c18a9ee1de7bc02370a321f25",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cace9289_fafa25c9",
+        "filename": "rbh-policy/generate_sources.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-07-16T14:05:58Z",
+      "side": 1,
+      "message": "minor: that\u0027s exactly the second output of each os.walk",
+      "range": {
+        "startLine": 16,
+        "startChar": 12,
+        "endLine": 18,
+        "endChar": 37
+      },
+      "revId": "f87d31785cf29a6c18a9ee1de7bc02370a321f25",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a97ba887_b9a0003c",
+        "filename": "rbh-policy/meson.build",
+        "patchSetId": 5
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-07-16T14:05:58Z",
+      "side": 1,
+      "message": "major: really don\u0027t like going through the meson.build to do this... Should be done from the Python main file is possible",
+      "range": {
+        "startLine": 18,
+        "startChar": 0,
+        "endLine": 41,
+        "endChar": 10
+      },
+      "revId": "f87d31785cf29a6c18a9ee1de7bc02370a321f25",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6567408d_4fc0d93d",
+        "filename": "rbh-policy/tests/meson.build",
+        "patchSetId": 5
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-07-16T14:05:58Z",
+      "side": 1,
+      "message": "minor: simply remove the `.py` from the array above",
+      "range": {
+        "startLine": 18,
+        "startChar": 2,
+        "endLine": 18,
+        "endChar": 34
+      },
+      "revId": "f87d31785cf29a6c18a9ee1de7bc02370a321f25",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
