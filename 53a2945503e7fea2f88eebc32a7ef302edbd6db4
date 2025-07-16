@@ -753,6 +753,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c65c8106_416232c1",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-07-16T09:23:59Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "1ccec1b2_da422306",
+      "range": {
+        "startLine": 98,
+        "startChar": 3,
+        "endLine": 98,
+        "endChar": 9
+      },
+      "revId": "53a2945503e7fea2f88eebc32a7ef302edbd6db4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "35f47dd9_fb5817e7",
@@ -790,6 +814,30 @@
       "side": 1,
       "message": "If it isn\u0027t displayed, do we suppose that the user already know the FID of the file to \"undelete\" ?",
       "parentUuid": "35f47dd9_fb5817e7",
+      "range": {
+        "startLine": 99,
+        "startChar": 15,
+        "endLine": 99,
+        "endChar": 38
+      },
+      "revId": "53a2945503e7fea2f88eebc32a7ef302edbd6db4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "048027c5_fd4561cc",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-07-16T09:23:59Z",
+      "side": 1,
+      "message": "Admins are used to the commands to find a FID from a path (or the reverse). For undelete, they will know the path of their files. So I would say we only need to retrieve the rm_time. For the version, it would be very nice to be able to display it and restore a given version. This can be done with Phobos. The main issue is how we can get this info in rbh-undelete. We can imagine having an external command that rbh-undelete would call if configured that should display both the version and rm_time. This is doable with a phobos backend for instance. This would be very interesting to have with the tree like syntax.",
+      "parentUuid": "4bc31764_c6f1f5a4",
       "range": {
         "startLine": 99,
         "startChar": 15,
