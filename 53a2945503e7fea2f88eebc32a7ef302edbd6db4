@@ -1035,6 +1035,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bea49215_4ca7bb24",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-07-16T08:24:06Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "fd3250ae_17a9e6c8",
+      "range": {
+        "startLine": 139,
+        "startChar": 12,
+        "endLine": 139,
+        "endChar": 28
+      },
+      "revId": "53a2945503e7fea2f88eebc32a7ef302edbd6db4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c45f86d0_9c58ef02",
