@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "050e40ae_415ff28f",
+        "filename": "librobinhood/src/plugins/posix/enrichers/lustre/lustre.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 588,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-07-16T08:17:33Z",
+      "side": 1,
+      "message": "question: why not simply call \"get_dir_data_striping\" and change its name ?",
+      "range": {
+        "startLine": 574,
+        "startChar": 4,
+        "endLine": 588,
+        "endChar": 72
+      },
+      "revId": "91284af10daacbb727e8daacd7dc09f3316ea5e0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7cb2bded_3f052171",
+        "filename": "librobinhood/src/plugins/posix/enrichers/lustre/lustre.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 593,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-07-16T08:17:33Z",
+      "side": 1,
+      "message": "suggest: use this line instead of 578 aswell",
+      "range": {
+        "startLine": 593,
+        "startChar": 15,
+        "endLine": 593,
+        "endChar": 54
+      },
+      "revId": "91284af10daacbb727e8daacd7dc09f3316ea5e0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9b2b9c7e_60fc2b08",
+        "filename": "rbh-sync/tests/test_lustre_db_sync.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 251,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-07-16T08:17:33Z",
+      "side": 1,
+      "message": "defect? `lcm_layout_gen` ?",
+      "range": {
+        "startLine": 251,
+        "startChar": 56,
+        "endLine": 251,
+        "endChar": 70
+      },
+      "revId": "91284af10daacbb727e8daacd7dc09f3316ea5e0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1971b8bb_24187bd1",
+        "filename": "rbh-sync/tests/test_lustre_db_sync.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-07-16T08:17:33Z",
+      "side": 1,
+      "message": "nit: `\u0027` works fine",
+      "range": {
+        "startLine": 252,
+        "startChar": 25,
+        "endLine": 252,
+        "endChar": 29
+      },
+      "revId": "91284af10daacbb727e8daacd7dc09f3316ea5e0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}

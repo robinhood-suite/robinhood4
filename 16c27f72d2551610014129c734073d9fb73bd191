@@ -140,6 +140,30 @@
       },
       "revId": "16c27f72d2551610014129c734073d9fb73bd191",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b1a5d748_99369cdd",
+        "filename": "rbh-sync/tests/test_lustre_db_sync.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-07-16T08:17:33Z",
+      "side": 1,
+      "message": "Add a comment above the migrate to explain this please",
+      "parentUuid": "9a5efe4f_648dfa1e",
+      "range": {
+        "startLine": 246,
+        "startChar": 19,
+        "endLine": 246,
+        "endChar": 29
+      },
+      "revId": "16c27f72d2551610014129c734073d9fb73bd191",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
