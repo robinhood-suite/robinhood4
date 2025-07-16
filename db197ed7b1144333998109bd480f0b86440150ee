@@ -22,6 +22,30 @@
       },
       "revId": "db197ed7b1144333998109bd480f0b86440150ee",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e5195716_85292aee",
+        "filename": "rbh-policy/meson.build",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-07-16T13:47:25Z",
+      "side": 1,
+      "message": "Doesn\u0027t look like it indeed: https://mesonbuild.com/meson-python/tutorials/introduction.html",
+      "parentUuid": "d994fe66_ef65174a",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 2
+      },
+      "revId": "db197ed7b1144333998109bd480f0b86440150ee",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
