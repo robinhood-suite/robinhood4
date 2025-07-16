@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e24bd75c_bd656817",
+        "filename": "rbh-policy/generate_sources.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-07-16T15:07:41Z",
+      "side": 1,
+      "message": "This does not require python3.9\n\nAlso, as discussed previously, this is not how you should install a python package.",
+      "range": {
+        "startLine": 1,
+        "startChar": 1,
+        "endLine": 1,
+        "endChar": 24
+      },
+      "revId": "bd35a949b14bcefdf882e557cb657f9f24b64f43",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b2fb3aae_60870a1a",
+        "filename": "rbh-policy/generate_sources.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-07-16T15:07:41Z",
+      "side": 1,
+      "message": "There is probably a getcwd function either in the os or sys module.",
+      "range": {
+        "startLine": 10,
+        "startChar": 11,
+        "endLine": 10,
+        "endChar": 53
+      },
+      "revId": "bd35a949b14bcefdf882e557cb657f9f24b64f43",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e83c7e9b_14d3ac13",
+        "filename": "rbh-policy/rbhpolicy/config/config_loader.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-07-16T15:07:41Z",
+      "side": 1,
+      "message": "major: I think the proper way to do this is to import the file not exec it. All the declare_xxx functions will be executed this way.",
+      "range": {
+        "startLine": 30,
+        "startChar": 4,
+        "endLine": 31,
+        "endChar": 30
+      },
+      "revId": "bd35a949b14bcefdf882e557cb657f9f24b64f43",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5a4d0e26_b01c521d",
+        "filename": "rbh-policy/tests/test_installation.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-07-16T15:07:41Z",
+      "side": 1,
+      "message": "Trying to import the rbhpolicy module seems like a more reliable way to test if it is installed.",
+      "range": {
+        "startLine": 18,
+        "startChar": 11,
+        "endLine": 18,
+        "endChar": 71
+      },
+      "revId": "bd35a949b14bcefdf882e557cb657f9f24b64f43",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8394dbdf_0ac7ce8b",
+        "filename": "rbh-policy/tests/test_installation.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-07-16T15:07:41Z",
+      "side": 1,
+      "message": "A few things. Python has test modules that can be used for these sorts of things. No need to use sys.exit(1) and prints. Also, does this test expect the package to already be installed?",
+      "range": {
+        "startLine": 57,
+        "startChar": 0,
+        "endLine": 62,
+        "endChar": 24
+      },
+      "revId": "bd35a949b14bcefdf882e557cb657f9f24b64f43",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
