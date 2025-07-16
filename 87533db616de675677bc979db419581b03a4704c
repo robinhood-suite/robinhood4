@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "88695fbb_4f479c78",
+        "filename": "rbh-find/tests/retention/test_retention_projection.bash",
+        "patchSetId": 4
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-07-16T07:43:06Z",
+      "side": 1,
+      "message": "suggest: add another test where you change the config to verify this attribute is changed aswell",
+      "range": {
+        "startLine": 32,
+        "startChar": 41,
+        "endLine": 32,
+        "endChar": 53
+      },
+      "revId": "87533db616de675677bc979db419581b03a4704c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
