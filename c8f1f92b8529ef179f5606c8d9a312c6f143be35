@@ -72,6 +72,52 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "36b8310d_af3157f7",
+        "filename": "rbh-policy/rbhpolicy/config/models/conditions.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-07-17T07:07:52Z",
+      "side": 1,
+      "message": "defect: the representation does not take operator precedence into consideration. For instance, `(Size \u003e 100 \u0026\u0026 Type \u003d\u003d \"file\") || (DirCount \u003d\u003d 0 \u0026\u0026 Type \u003d\u003d \"dir\")` would be translated like this I think `Size \u003e 100 AND Type \u003d\u003d \"file\" OR DirCount \u003d\u003d 0 AND Type \u003d\u003d \"dir\"`.",
+      "range": {
+        "startLine": 91,
+        "startChar": 16,
+        "endLine": 91,
+        "endChar": 52
+      },
+      "revId": "c8f1f92b8529ef179f5606c8d9a312c6f143be35",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "247ebb38_f2e3dc39",
+        "filename": "rbh-policy/rbhpolicy/config/models/conditions.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-07-17T07:07:52Z",
+      "side": 1,
+      "message": "Why evaluate a dict? In practice you will evaluate rbh_fsentries. And I don\u0027t think we should convert from rbh_fsentries to dict for performance reasons.",
+      "range": {
+        "startLine": 100,
+        "startChar": 23,
+        "endLine": 100,
+        "endChar": 34
+      },
+      "revId": "c8f1f92b8529ef179f5606c8d9a312c6f143be35",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0bb111ab_033db2e9",
         "filename": "rbh-policy/rbhpolicy/config/models/fileclass.py",
         "patchSetId": 5
