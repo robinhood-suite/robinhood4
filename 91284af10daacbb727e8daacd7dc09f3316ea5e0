@@ -188,6 +188,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a1f255d1_02f18d22",
+        "filename": "rbh-sync/tests/test_lustre_db_sync.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 251,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-07-17T07:23:15Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "7358ad66_b0dd523f",
+      "range": {
+        "startLine": 251,
+        "startChar": 56,
+        "endLine": 251,
+        "endChar": 70
+      },
+      "revId": "91284af10daacbb727e8daacd7dc09f3316ea5e0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1971b8bb_24187bd1",
