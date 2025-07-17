@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "17d73a31_0ecae02a",
+        "filename": "rbh-policy/tests/test_models_conditions.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-07-17T07:03:38Z",
+      "side": 1,
+      "message": "This should not be here. Add them in a patch bellow this one.",
+      "range": {
+        "startLine": 17,
+        "startChar": 0,
+        "endLine": 19,
+        "endChar": 33
+      },
+      "revId": "1c53c0cbd11228732cfbbbd189f9a7b60f77247d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a78ac86b_9d837902",
+        "filename": "rbh-policy/tests/test_models_conditions.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-07-17T07:03:38Z",
+      "side": 1,
+      "message": "This is an implementation detail. Do not put a unit test on this.",
+      "range": {
+        "startLine": 25,
+        "startChar": 8,
+        "endLine": 25,
+        "endChar": 52
+      },
+      "revId": "1c53c0cbd11228732cfbbbd189f9a7b60f77247d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d36f6bb4_592802f3",
+        "filename": "rbh-policy/tests/test_models_conditions.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-07-17T07:03:38Z",
+      "side": 1,
+      "message": "I feel like this will change in the futur. I would not write tests like this right now. As I said in the previous patch, I think your evaluation method is not correctly implemented.",
+      "range": {
+        "startLine": 27,
+        "startChar": 26,
+        "endLine": 27,
+        "endChar": 39
+      },
+      "revId": "1c53c0cbd11228732cfbbbd189f9a7b60f77247d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c9e181ef_db5df8f1",
+        "filename": "rbh-policy/tests/test_models_conditions.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-07-17T07:03:38Z",
+      "side": 1,
+      "message": "I would not unit test the __repr__ method as either. If you want to test the string representation of the conditions, I would just convert it to a string and assert the whole string",
+      "range": {
+        "startLine": 170,
+        "startChar": 8,
+        "endLine": 182,
+        "endChar": 65
+      },
+      "revId": "1c53c0cbd11228732cfbbbd189f9a7b60f77247d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
