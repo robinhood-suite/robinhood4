@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c24e780d_3595c0af",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-07-17T08:37:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "85b92d95_000d1cfb",
+      "range": {
+        "startLine": 12,
+        "startChar": 31,
+        "endLine": 12,
+        "endChar": 33
+      },
+      "revId": "87533db616de675677bc979db419581b03a4704c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "88695fbb_4f479c78",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-07-16T07:43:06Z",
       "side": 1,
       "message": "suggest: add another test where you change the config to verify this attribute is changed aswell",
+      "range": {
+        "startLine": 32,
+        "startChar": 41,
+        "endLine": 32,
+        "endChar": 53
+      },
+      "revId": "87533db616de675677bc979db419581b03a4704c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d42e0b5b_6ef59ec5",
+        "filename": "rbh-find/tests/retention/test_retention_projection.bash",
+        "patchSetId": 4
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-07-17T08:37:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "88695fbb_4f479c78",
       "range": {
         "startLine": 32,
         "startChar": 41,
