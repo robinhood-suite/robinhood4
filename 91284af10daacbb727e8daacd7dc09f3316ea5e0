@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7f307f0c_bd36f565",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-07-17T11:07:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "56aeac7c_d1c0eeba",
+      "range": {
+        "startLine": 10,
+        "startChar": 41,
+        "endLine": 10,
+        "endChar": 48
+      },
+      "revId": "91284af10daacbb727e8daacd7dc09f3316ea5e0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ad159734_162c243e",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-07-16T09:48:51Z",
       "side": 1,
       "message": "It\u0027s not that it is not properly stored. The client actively removes the layout gen from the trusted.lov to prevent applications from using it when doing a setxattr.\n\nThe field that contains the layout gen is a union that contains both the generation and the stripe offset. So if you read a generation of 2 and use the same data to do a setxattr, Lustre will think you want to create the file on the OST 2 for instance. Which is not what applications such as tar want to do when copying the trusted.lov attribute for instance.\n\n\nSo instead of properly store, I would say \"the layout generation is not returned by getxattr on plain layouts\".",
+      "range": {
+        "startLine": 11,
+        "startChar": 11,
+        "endLine": 12,
+        "endChar": 12
+      },
+      "revId": "91284af10daacbb727e8daacd7dc09f3316ea5e0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "165c9166_6b3f3fc6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-07-17T11:07:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ad159734_162c243e",
       "range": {
         "startLine": 11,
         "startChar": 11,
@@ -96,6 +144,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c79f433c_3714bb57",
+        "filename": "librobinhood/src/plugins/posix/enrichers/lustre/lustre.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 588,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-07-17T11:07:24Z",
+      "side": 1,
+      "message": "I renamed the function to get_data_striping, but it takes a struct lov_user_md as a parameter because I need also this structure for the xattrs_get_magic_and_gen function.",
+      "parentUuid": "a9e43d40_76cd9ddc",
+      "range": {
+        "startLine": 574,
+        "startChar": 4,
+        "endLine": 588,
+        "endChar": 72
+      },
+      "revId": "91284af10daacbb727e8daacd7dc09f3316ea5e0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7cb2bded_3f052171",
         "filename": "librobinhood/src/plugins/posix/enrichers/lustre/lustre.c",
         "patchSetId": 2
@@ -131,6 +203,30 @@
       "side": 1,
       "message": "+1 for the format suggestion of line 578.\n\nI just wanted to add that `llapi_layout_get_by_xattr` will not fail with ENODATA. This function simply converts from the \"on disk\" format of trusted.lov to the llapi_layout structure. It can fail (memory allocation or currupted layout xattr) but not with ENODATA. And if it ever does it wouldn\u0027t have the same meaning as the ioctl or getxattr. So this second check for ENODATA can be removed. If this function fails, we should return -1 here.",
       "parentUuid": "7cb2bded_3f052171",
+      "range": {
+        "startLine": 593,
+        "startChar": 15,
+        "endLine": 593,
+        "endChar": 54
+      },
+      "revId": "91284af10daacbb727e8daacd7dc09f3316ea5e0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "90f52070_bbbe6a62",
+        "filename": "librobinhood/src/plugins/posix/enrichers/lustre/lustre.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 593,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-07-17T11:07:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4d6c12c0_75d5a040",
       "range": {
         "startLine": 593,
         "startChar": 15,
@@ -225,6 +321,30 @@
       "writtenOn": "2025-07-16T08:17:33Z",
       "side": 1,
       "message": "nit: `\u0027` works fine",
+      "range": {
+        "startLine": 252,
+        "startChar": 25,
+        "endLine": 252,
+        "endChar": 29
+      },
+      "revId": "91284af10daacbb727e8daacd7dc09f3316ea5e0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b4840b56_ecd08142",
+        "filename": "rbh-sync/tests/test_lustre_db_sync.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-07-17T11:07:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1971b8bb_24187bd1",
       "range": {
         "startLine": 252,
         "startChar": 25,
