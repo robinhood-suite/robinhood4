@@ -763,16 +763,26 @@ build_hardlink_or_mknod_events(struct changelog_rec *record, struct rbh_id *id,
 
 static int
 unlink_inode_event(struct lu_fid *parent_id, char *name, size_t namelen,
-                   bool last_copy, struct rbh_fsevent *fsevent)
+                   bool last_copy, struct rbh_fsevent *fsevent,
+                   time_t cr_time, bool last_copy_archived)
 {
     char *data;
 
     fsevent->xattrs.count = 0;
 
-    /* If the unlinked target is the last link and it has no copy archived,
-     * delete the entry altogether.
+    /* If the unlinked target is the last link:
+     *  - If it has a copy archived, delete the name and parent_id, and store
+     *  the path and rm_time.
+     *  - delete the entry altogether.
      */
     if (last_copy) {
+        if (last_copy_archived) {
+            fsevent->type = RBH_FET_PARTIAL_UNLINK;
+            fsevent->rm_time = cltime2sec(cr_time);
+
+            return 0;
+        }
+
         fsevent->type = RBH_FET_DELETE;
         return 0;
     }
@@ -797,14 +807,15 @@ static int
 build_unlink_or_rmdir_events(struct changelog_rec *record, struct rbh_id *id,
                              struct rbh_iterator **fsevents_iterator)
 {
-    bool last_copy = (record->cr_flags & CLF_UNLINK_LAST) &&
-                     !(record->cr_flags & CLF_UNLINK_HSM_EXISTS);
+    bool last_copy = record->cr_flags & CLF_UNLINK_LAST;
+    bool last_copy_archived = record->cr_flags & CLF_UNLINK_HSM_EXISTS;
     struct rbh_fsevent *new_events;
 
     new_events = fsevent_list_alloc(3, id);
 
     if (unlink_inode_event(&record->cr_pfid, changelog_rec_name(record),
-                           record->cr_namelen, last_copy, &new_events[0]))
+                           record->cr_namelen, last_copy, &new_events[0],
+                           record->cr_time, last_copy_archived))
         return -1;
 
     if (update_parent_acmtime_event(&record->cr_pfid, &new_events[1]))
@@ -838,8 +849,8 @@ build_rename_events(struct changelog_rec *record, struct rbh_id *id,
 {
     struct changelog_ext_rename *rename_log = changelog_rec_rename(record);
     /* If the overwriten link is the last one and it has no HSM copy */
-    bool last_copy = (record->cr_flags & CLF_RENAME_LAST) &&
-                     !(record->cr_flags & CLF_RENAME_LAST_EXISTS);
+    bool last_copy = record->cr_flags & CLF_RENAME_LAST;
+    bool last_copy_archived = record->cr_flags & CLF_RENAME_LAST_EXISTS;
     struct rbh_fsevent *new_events;
     struct rbh_id *renamed_id;
     int n_events = 7;
@@ -861,8 +872,8 @@ build_rename_events(struct changelog_rec *record, struct rbh_id *id,
 
         if (unlink_inode_event(&record->cr_pfid, changelog_rec_name(record),
                                record->cr_namelen, last_copy,
-                               &new_events[counter]))
-            return -1;
+                               &new_events[counter], 0, last_copy_archived))
+             return -1;
 
         counter++;
     }
@@ -892,8 +903,8 @@ build_rename_events(struct changelog_rec *record, struct rbh_id *id,
     }
 
     if (unlink_inode_event(&rename_log->cr_spfid, changelog_rec_sname(record),
-                           changelog_rec_snamelen(record),
-                           false, &new_events[counter]))
+                           changelog_rec_snamelen(record), false,
+                           &new_events[counter], record->cr_time, false))
         return -1;
 
     counter++;
@@ -1082,7 +1093,7 @@ build_migrate_events(struct changelog_rec *record, struct rbh_id *id,
     new_events[3].id.size = migrated_id->size;
     if (unlink_inode_event(&migrate_log->cr_spfid, changelog_rec_name(record),
                            changelog_rec_snamelen(record), true,
-                           &new_events[3]))
+                           &new_events[3], 0, false))
         return -1;
 
     if (update_parent_acmtime_event(&migrate_log->cr_spfid, &new_events[4]))
