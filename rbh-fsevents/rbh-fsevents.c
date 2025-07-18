@@ -38,7 +38,7 @@ static void
 usage(void)
 {
     const char *message =
-        "usage: %s [-h] [--raw] [--enrich MOUNTPOINT] SOURCE DESTINATION\n"
+        "usage: %s [OPTIONS] SOURCE DESTINATION\n"
         "\n"
         "Collect changelog records from SOURCE, optionally enrich them with data\n"
         "collected from MOUNTPOINT and send them to DESTINATION.\n"
@@ -59,7 +59,7 @@ usage(void)
         "                    the number of fsevents to keep in memory for deduplication\n"
         "                    default: %lu\n"
         "    -c, --config PATH\n"
-        "                    the configuration file to use.\n"
+        "                    the path to a configuration file\n"
         "    --dry-run       displays the command after alias management\n"
         "    -d, --dump PATH\n"
         "                    the path to a file where the changelogs should be dumped,\n"
