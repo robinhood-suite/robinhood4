@@ -132,6 +132,26 @@ bson_from_unlink(const struct rbh_id *parent_id, const char *name)
 }
 
 static bson_t *
+bson_from_partial_unlink(time_t rm_time)
+{
+    bson_t *bson = bson_new();
+    bson_t document;
+
+    if (BSON_APPEND_DOCUMENT_BEGIN(bson, "$unset", &document)
+     && BSON_APPEND_UTF8(&document, "ns.0.parent", "")
+     && BSON_APPEND_UTF8(&document, "ns.0.name", "")
+     && bson_append_document_end(bson, &document)
+     && BSON_APPEND_DOCUMENT_BEGIN(bson, "$set", &document)
+     && BSON_APPEND_INT64(&document, "ns.0.xattrs.rm_time", rm_time)
+     && bson_append_document_end(bson, &document))
+        return bson;
+
+    bson_destroy(bson);
+    errno = ENOBUFS;
+    return NULL;
+}
+
+static bson_t *
 bson_from_xattrs(const char *prefix, const struct rbh_value_map *xattrs)
 {
     bson_t *bson = bson_new();
@@ -213,6 +233,8 @@ bson_update_from_fsevent(const struct rbh_fsevent *fsevent)
                               fsevent->link.name);
     case RBH_FET_UNLINK:
         return bson_from_unlink(fsevent->link.parent_id, fsevent->link.name);
+    case RBH_FET_PARTIAL_UNLINK:
+        return bson_from_partial_unlink(fsevent->rm_time);
     case RBH_FET_XATTR:
         if (fsevent->ns.parent_id)
             return bson_from_ns_xattrs(&fsevent->xattrs);
