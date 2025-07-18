@@ -39,7 +39,7 @@ static int
 usage(const char *backend)
 {
     const char *message =
-        "usage: %s [-h|--help] SOURCE [PREDICATES] [ACTION]\n"
+        "usage: %s [-dh] [--alias NAME] SOURCE [--alias NAME] [PREDICATES] [ACTION]\n"
         "\n"
         "Query SOURCE's entries according to PREDICATE and do ACTION on each.\n"
         "\n"
@@ -48,7 +48,8 @@ usage(const char *backend)
         "\n"
         "Optional arguments:\n"
         "    -h,--help             show this message and exit\n"
-        "    --alias NAME          specify an alias for the operation.\n"
+        "    --alias NAME          specify an alias for the operation. An alias\n"
+        "                          can specify a SOURCE\n"
         "    -d,--dry-run          displays the command after alias management\n"
         "\n"
         "%s"
