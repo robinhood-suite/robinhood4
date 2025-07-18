@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2cdf6cf7_5bc6b773",
+        "filename": "rbh-fsevents/src/sources/lustre.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 718,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-07-18T13:01:44Z",
+      "side": 1,
+      "message": "minor: while I understand wanting to use the values in the changelog as the final fid and mdt_index, the enrichment will also fetch these values anyway (currently at least, this may change in the future) because of lines 733-736. So setting this here doesn\u0027t seem necessary to me at all",
+      "range": {
+        "startLine": 716,
+        "startChar": 12,
+        "endLine": 718,
+        "endChar": 80
+      },
+      "revId": "b6f32b8b3b347db20582e0b0de04ddb2fe9936c5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
