@@ -26,16 +26,23 @@ acceptance()
     local file6="test_file6"
     local file7="test_file7"
     local file8="test_file8"
-    local nod1="test_nod1"
-    local nod2="test_nod2"
+    local block="test_block"
+    local fifo="test_fifo"
+    local char="test_char"
+    local socket="test_socket"
 
     touch $file1
     mkdir $dir1
     touch $dir1/$file2
     ln -s $dir1/$file2 $file3
     ln $file1 $dir1/$file4
-    mknod $nod1 b 1 2
-    mknod $dir1/$nod2 p
+    mknod $block b 1 2
+    mknod $dir1/$fifo p
+    mknod $char c 1 2
+    python3 -c "import socket as s; \
+                sock = s.socket(s.AF_UNIX); \
+                sock.bind('$socket')"
+
     mv $dir1/$file2 $dir1/$file5
 
     archive_file $file1
