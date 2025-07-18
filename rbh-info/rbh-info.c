@@ -112,13 +112,13 @@ info_translate(const struct rbh_backend_plugin *plugin)
 
     printf("Available info for backend '%s': \n", plugin->plugin.name);
     if (info & RBH_INFO_AVG_OBJ_SIZE)
-        printf("- a: give the average size of objects inside entries collection");
+        printf("- a: give the average size of objects inside entries collection\n");
 
     if (info & RBH_INFO_BACKEND_SOURCE)
         printf("- b: give the backend sources of the backend\n");
 
     if (info & RBH_INFO_COUNT)
-        printf("- c: retrieve the amount of document inside entries collection");
+        printf("- c: retrieve the amount of document inside entries collection\n");
 
     if (info & RBH_INFO_SIZE)
         printf("- s: size of entries collection\n");
@@ -128,31 +128,49 @@ static int
 help()
 {
     const char *message =
-        "Usage:"
-        "  %s <URI> -uri_arguments   Show info about the given URI\n"
-        "URI arguments:\n"
-        "  -a --avg-obj-size         Show the average size of objects inside "
-        "a given backend\n"
-        "  -b --backend-source       Show the backend used as source for past "
-        "rbh-syncs\n"
-        "  -c --count                Show the amount of document inside a "
-        "given backend\n"
-        "  -s --size                 Show the size of entries collection\n\n"
-        "Arguments:\n"
-        "Usage:"
-        "  %s -arguments General informations about rbh-info command\n"
-        "  -h --help                 Show this message and exit\n"
-        "  -l --list                 Show the list of installed backends\n\n"
-        "Backends capabilities list:\n"
-        "Usage:"
-        "  rbh-info <backend name>   Show capabilities of the given backend\n"
+        "Usage: %s [-hl]\n"
+        "\n"
+        "Show information about plugins\n"
+        "\n"
+        "Optional arguments:\n"
+        "    -h,--help              Show this message and exit\n"
+        "    -l,--list              Show the list of installed plugins\n"
+        "\n"
+        "Usage: %s PLUGIN\n"
+        "\n"
+        "Show capabilities of the given plugin\n"
+        "\n"
+        "Positional argument:\n"
+        "    PLUGIN  a robinhood plugin\n"
+        "\n"
+        "Plugins capabilities list:\n"
         "- filter: The ability to read the data after filtering it according to"
         " different criteria\n"
         "- synchronisation: The ability to read the data\n"
         "- update: The ability to update information or metadata of files in"
         " the backend\n"
-        "- branch: The ability to read data over a subsection of a backend\n";
-    return printf(message, program_invocation_short_name);
+        "- branch: The ability to read data over a subsection of a backend\n"
+        "\n"
+        "Usage: %s [-abcs] URI\n"
+        "\n"
+        "Show information about the given URI\n"
+        "\n"
+        "Position arguments:\n"
+        "    URI   a robinhood URI\n"
+        "\n"
+        "A robinhood URI is built as follows:\n"
+        "    "RBH_SCHEME":BACKEND:FSNAME[#{PATH|ID}]\n"
+        "Optional arguments:\n"
+        "    -a,--avg-obj-size         Show the average size of objects inside "
+        "a given backend\n"
+        "    -b,--backend-source       Show the backend used as source for past "
+        "rbh-syncs\n"
+        "    -c,--count                Show the amount of document inside a "
+        "given backend\n"
+        "    -s,--size                 Show the size of entries collection\n\n";
+            return printf(message, program_invocation_short_name,
+                          program_invocation_short_name,
+                          program_invocation_short_name);
 }
 
 static int
@@ -180,7 +198,7 @@ print_backend_list(struct rbh_list_node *head)
     struct rbh_node_info *node;
     struct rbh_node_info *tmp;
 
-    printf("List of installed backends:\n");
+    printf("List of installed plugins:\n");
 
     rbh_list_foreach_safe(head, node, tmp, list) {
         char *backend_name = node->name + strlen(LIB_RBH_PREFIX);
@@ -446,7 +464,7 @@ main(int argc, char **argv)
     plugin = rbh_backend_plugin_import(from->name);
 
     if (plugin == NULL) {
-        fprintf(stderr, "This backend does not exist\n");
+        fprintf(stderr, "This plugin does not exist\n");
         return EINVAL;
     }
     if (flags)
