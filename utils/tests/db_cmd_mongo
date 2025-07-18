@@ -75,6 +75,14 @@ find_attribute()
     return 0
 }
 
+remove_attribute()
+{
+    local db="$1"
+    local query="$2"
+
+    mongo "$db" --eval "db.entries.remove({ $query })"
+}
+
 cmd="$1"
 db="$2"
 shift 2
@@ -100,6 +108,9 @@ case "$cmd" in
             'db.entries.find({'"$(args_to_filter "$@")"'},
                              {"_id": 0, "ns.parent": 0})
                        .sort({"ns.name": 1})'
+        ;;
+    remove)
+        remove_attribute "$db" "$@"
         ;;
     source)
         mongo "$db" --eval \

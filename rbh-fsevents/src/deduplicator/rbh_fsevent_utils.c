@@ -240,6 +240,10 @@ rbh_fsevent_deep_copy(struct rbh_fsevent *dst,
                 );
 
         break;
+    case RBH_FET_PARTIAL_UNLINK:
+        if (src->rm_time)
+            dst->rm_time = src->rm_time;
+        break;
     case RBH_FET_LINK:
     case RBH_FET_UNLINK:
         parent = RBH_SSTACK_PUSH(stack, NULL, sizeof(*parent));

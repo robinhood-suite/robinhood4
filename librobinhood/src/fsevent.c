@@ -70,6 +70,9 @@ fsevent_copy(struct rbh_fsevent *dest, const struct rbh_fsevent *src,
             dest->upsert.symlink = NULL;
         }
         break;
+    case RBH_FET_PARTIAL_UNLINK:
+        dest->rm_time = src->rm_time;
+        break;
     case RBH_FET_XATTR: /* dest->ns */
         if (src->ns.parent_id == NULL) {
             assert(src->ns.name == NULL);
@@ -126,6 +129,9 @@ fsevent_data_size(const struct rbh_fsevent *fsevent)
         }
         if (fsevent->upsert.symlink)
             size += strlen(fsevent->upsert.symlink) + 1;
+        break;
+    case RBH_FET_PARTIAL_UNLINK:
+        size += sizeof(fsevent->rm_time);
         break;
     case RBH_FET_XATTR: /* fsevent->ns */
         if (fsevent->ns.parent_id == NULL) {
