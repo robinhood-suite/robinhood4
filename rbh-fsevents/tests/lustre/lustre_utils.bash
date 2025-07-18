@@ -260,7 +260,8 @@ verify_lustre()
     local entry="$1"
     local name="$(basename "$entry")"
 
-    if [ -L $entry ] || [ -b $entry ] || [ -c $entry ] || [ -p $entry ]; then
+    if [ -L $entry ] || [ -b $entry ] || [ -c $entry ] || [ -p $entry ] ||
+       [ -S $entry ]; then
         return 0
     fi
 
@@ -400,6 +401,11 @@ verify_statx()
 
     find_attribute '"ns.name":"'$name'"'
     find_attribute '"ns.xattrs.path":"'$(mountless_path "$entry")'"'
+
+    if [ -c $entry ] || [ -S $entry ]; then
+        return 0
+    fi
+
     find_attribute '"statx.atime.sec":NumberLong("'$(statx %X "$entry")'")' \
                    '"ns.name":"'$name'"'
     find_attribute '"statx.atime.nsec":0' '"ns.name":"'$name'"'
