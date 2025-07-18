@@ -133,7 +133,7 @@ static int
 usage(const char *backend)
 {
     const char *message =
-        "usage: %s [-h | --help] [-c | --config] [-d | --dry-run] SOURCE [--alias NAME] [--csv] [--rsort] [--group-by GROUP-BY] [--output OUTPUT] [PREDICATES]\n"
+        "usage: %s [-dh] [-c PATH] SOURCE [--alias NAME] [--csv] [--rsort] [--group-by GROUP-BY] [--output OUTPUT] [PREDICATES]\n"
         "\n"
         "Create a report from SOURCE's entries\n"
         "\n"
