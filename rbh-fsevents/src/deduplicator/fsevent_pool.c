@@ -841,6 +841,9 @@ deduplicate_event(struct rbh_fsevent_pool *pool, struct rbh_list_node *events,
     case RBH_FET_LINK:
         /* no dedup for link */
         break;
+    case RBH_FET_PARTIAL_UNLINK:
+        /*no dedup for partial unlink */
+        break;
     case RBH_FET_UNLINK:
         should_insert = dedup_unlink_event(pool, events, event);
         break;

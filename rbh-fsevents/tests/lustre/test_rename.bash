@@ -164,10 +164,18 @@ test_rename_overwrite_data_with_hsm_copy()
     local result="$(do_db get "$testdb" \
         '"_id":'"$(get_mongo_id_from_binary_id "$old_entry")"',
          "ns": { $exists : true },
-         "ns": { $size : 0 }')"
+         "ns": { $size : 1 },
+         "ns.name": { $exists : false },
+         "ns.xattrs.rm_time": { $exists: true }
+         ')"
+    echo "result = '$result'"
     if [ -z "$result" ]; then
         error "Entry '$old_entry' should still be in the DB, but with no link"
     fi
+
+    # For easier testing, remove the overwritten entry
+    do_db remove "$testdb" \
+        '"_id":'"$(get_mongo_id_from_binary_id "$old_entry")"
 
     verify_lustre tmp/$entry_renamed
 }
