@@ -39,7 +39,7 @@ static int
 usage(const char *backend)
 {
     const char *message =
-        "usage: %s [-h|--help] SOURCE [PREDICATES] [ACTION]\n"
+        "usage: %s [-dh] [--alias NAME] SOURCE [PREDICATES] [ACTION]\n"
         "\n"
         "Query SOURCE's entries according to PREDICATE and do ACTION on each.\n"
         "\n"
@@ -72,12 +72,10 @@ usage(const char *backend)
         "             from a path)\n"
         "\n"
         "Predicates not implemented yet:\n"
-        "    -false         -true\n"
-        "    -fstype        -xtype\n"
-        "    -readable      -writable    -executable\n"
-        "    -iwholename    -wholename\n"
-        "    -used\n"
-        "    -context\n"
+        "    -false         -true        -fstype\n"
+        "    -xtype         -readable    -writable\n"
+        "    -executable    -iwholename  -wholename\n"
+        "    -used          -context\n"
         "\n"
         "Actions not implemented yet:\n"
         "    -prune\n"
