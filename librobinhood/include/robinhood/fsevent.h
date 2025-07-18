@@ -37,6 +37,8 @@ enum rbh_fsevent_type {
     RBH_FET_LINK,
     /** Delete a link from the backend */
     RBH_FET_UNLINK,
+    /** Rename the path in namespace's entry : "rm_path" and unlink the rest */
+    RBH_FET_PARTIAL_UNLINK,
     /** Delete an inode and all the links that point at it from the backend */
     RBH_FET_DELETE,
     /** Update either an inode's or a link's extended attributes */
@@ -89,6 +91,10 @@ struct rbh_fsevent {
             /** The fsentry's name */
             const char *name;
         } link, ns;
+
+        /**
+         * `type' == RBH_FET_PARTIAL_UNLINK */
+        time_t rm_time;
     };
 };
 
