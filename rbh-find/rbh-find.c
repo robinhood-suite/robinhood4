@@ -39,18 +39,22 @@ static int
 usage(const char *backend)
 {
     const char *message =
-        "usage: %s [-h|--help] SOURCE [PREDICATES] [ACTION]\n"
+        "Usage: %s [PRE_URI_OPTIONS] SOURCE [PREDICATES] [ACTION]\n"
+        "       %s [ALIAS]
         "\n"
         "Query SOURCE's entries according to PREDICATE and do ACTION on each.\n"
         "\n"
         "Positional arguments:\n"
-        "    SOURCE  a robinhood URI\n"
+        "    SOURCE               a robinhood URI\n"
         "\n"
-        "Optional arguments:\n"
-        "    -h,--help             show this message and exit\n"
-        "    --alias NAME          specify an alias for the operation.\n"
-        "    -d,--dry-run          displays the command after alias management\n"
+        "Pre URI optional arguments:\n"
+        "    -d, --dry-run        displays the command after alias management\n"
+        "    -h, --help           show this message and exit\n"
+        "    -v, --verbose        show additionnal information\n"
         "\n"
+        "Alias arguments:\n"
+        "    --alias NAME         specify an alias for the operation. An alias\n"
+        "                         can specify options, a SOURCE, predicates and actions\n"
         "%s"
         "%s"
         "Action arguments:\n"
