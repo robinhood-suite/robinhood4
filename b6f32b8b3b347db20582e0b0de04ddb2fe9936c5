@@ -70,6 +70,30 @@
       },
       "revId": "b6f32b8b3b347db20582e0b0de04ddb2fe9936c5",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7b355a58_36fcdeb5",
+        "filename": "rbh-fsevents/src/sources/lustre.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 718,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-07-18T13:49:24Z",
+      "side": 1,
+      "message": "My point is that we don\u0027t need to ask the filesystem for additional info if we have everything we need. This will only reduce the performance of rbh-fsevents. We already do too much enrichment.",
+      "parentUuid": "65b2a7d8_7efb6321",
+      "range": {
+        "startLine": 716,
+        "startChar": 12,
+        "endLine": 718,
+        "endChar": 80
+      },
+      "revId": "b6f32b8b3b347db20582e0b0de04ddb2fe9936c5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
