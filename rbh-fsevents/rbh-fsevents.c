@@ -37,7 +37,7 @@ static void
 usage(void)
 {
     const char *message =
-        "usage: %s [-h] [--raw] [--enrich MOUNTPOINT] SOURCE DESTINATION\n"
+        "usage: %s [OPTIONS] SOURCE DESTINATION\n"
         "\n"
         "Collect changelog records from SOURCE, optionally enrich them with data\n"
         "collected from MOUNTPOINT and send them to DESTINATION.\n"
