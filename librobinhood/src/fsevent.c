@@ -79,6 +79,7 @@ fsevent_copy(struct rbh_fsevent *dest, const struct rbh_fsevent *src,
         }
         assert(src->ns.name);
         __attribute__((fallthrough));
+    case RBH_FET_PARTIAL_UNLINK:
     case RBH_FET_LINK:
     case RBH_FET_UNLINK: /* dest->link */
         /* dest->link.parent_id */
@@ -134,6 +135,7 @@ fsevent_data_size(const struct rbh_fsevent *fsevent)
         }
         assert(fsevent->ns.name);
         __attribute__((fallthrough));
+    case RBH_FET_PARTIAL_UNLINK:
     case RBH_FET_LINK:
     case RBH_FET_UNLINK /* fsevent->link */:
         size = sizealign(size, alignof(*fsevent->link.parent_id));

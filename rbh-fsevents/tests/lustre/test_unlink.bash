@@ -46,7 +46,9 @@ test_rm_with_hsm_copy()
         error "There should be $count entries in the database, found $entries"
     fi
 
-    find_attribute '"ns": { $exists : true }' '"ns": { $size : 0 }'
+    find_attribute '"ns": { $exists : true }' '"ns": { $size : 1 }' \
+                   '"ns.0.xattrs.path": { $exists : true }' \
+                   '"ns.0.xattrs.rm_time": { $exists : true }'
 }
 
 ################################################################################
