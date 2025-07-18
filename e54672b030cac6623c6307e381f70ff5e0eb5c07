@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "06a0bd20_15d11f7b",
+        "filename": "librobinhood/src/plugins/s3/s3.c",
+        "patchSetId": 13
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-07-18T07:13:32Z",
+      "side": 1,
+      "message": "minor: You need to check the value of strdup",
+      "revId": "e54672b030cac6623c6307e381f70ff5e0eb5c07",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
