@@ -601,8 +601,10 @@ xattrs_get_layout(int fd, struct rbh_value_pair *pairs, int available_pairs)
     uint32_t flags;
     int rc;
 
-    if (S_ISLNK(mode))
-        /* no layout to fetch for links */
+    if (!S_ISREG(mode) && !S_ISDIR(mode))
+        /* no layout to fetch for links, block device, character device,
+         * fifo and socket
+         */
         return 0;
 
     if (S_ISREG(mode))
