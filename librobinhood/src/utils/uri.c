@@ -158,8 +158,8 @@ backend_branch_from_path(struct rbh_backend *backend, const char *path)
     return branch;
 }
 
-static struct rbh_backend *
-backend_from_uri(const struct rbh_uri *uri, bool read_only)
+struct rbh_backend *
+rbh_backend_and_branch_from_uri(const struct rbh_uri *uri, bool read_only)
 {
     struct rbh_backend *backend = backend_new(uri, read_only);
     struct rbh_backend *branch = NULL; /* gcc: unitialized variable */
@@ -218,7 +218,7 @@ rbh_backend_from_uri(const char *string, bool read_only)
         error(EXIT_FAILURE, errno, "Cannot detect given backend");
     free(raw_uri);
 
-    backend = backend_from_uri(uri, read_only);
+    backend = rbh_backend_and_branch_from_uri(uri, read_only);
     free(uri);
     return backend;
 }
