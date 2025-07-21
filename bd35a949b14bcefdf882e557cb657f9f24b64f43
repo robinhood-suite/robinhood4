@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa648dc5_97945890",
+        "filename": "rbh-policy/generate_sources.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-07-21T14:23:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e24bd75c_bd656817",
+      "range": {
+        "startLine": 1,
+        "startChar": 1,
+        "endLine": 1,
+        "endChar": 24
+      },
+      "revId": "bd35a949b14bcefdf882e557cb657f9f24b64f43",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b2fb3aae_60870a1a",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-07-16T15:07:41Z",
       "side": 1,
       "message": "There is probably a getcwd function either in the os or sys module.",
+      "range": {
+        "startLine": 10,
+        "startChar": 11,
+        "endLine": 10,
+        "endChar": 53
+      },
+      "revId": "bd35a949b14bcefdf882e557cb657f9f24b64f43",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9fec3cc8_da97e2be",
+        "filename": "rbh-policy/generate_sources.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-07-21T14:23:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b2fb3aae_60870a1a",
       "range": {
         "startLine": 10,
         "startChar": 11,
@@ -70,6 +118,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5ef44948_e538f4ac",
+        "filename": "rbh-policy/rbhpolicy/config/config_loader.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-07-21T14:23:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e83c7e9b_14d3ac13",
+      "range": {
+        "startLine": 30,
+        "startChar": 4,
+        "endLine": 31,
+        "endChar": 30
+      },
+      "revId": "bd35a949b14bcefdf882e557cb657f9f24b64f43",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5a4d0e26_b01c521d",
@@ -93,6 +165,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "68ddf38b_b2e51bdf",
+        "filename": "rbh-policy/tests/test_installation.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-07-21T14:23:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a4d0e26_b01c521d",
+      "range": {
+        "startLine": 18,
+        "startChar": 11,
+        "endLine": 18,
+        "endChar": 71
+      },
+      "revId": "bd35a949b14bcefdf882e557cb657f9f24b64f43",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8394dbdf_0ac7ce8b",
@@ -106,6 +202,30 @@
       "writtenOn": "2025-07-16T15:07:41Z",
       "side": 1,
       "message": "A few things. Python has test modules that can be used for these sorts of things. No need to use sys.exit(1) and prints. Also, does this test expect the package to already be installed?",
+      "range": {
+        "startLine": 57,
+        "startChar": 0,
+        "endLine": 62,
+        "endChar": 24
+      },
+      "revId": "bd35a949b14bcefdf882e557cb657f9f24b64f43",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6e1b59dc_c2ade4f4",
+        "filename": "rbh-policy/tests/test_installation.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-07-21T14:23:51Z",
+      "side": 1,
+      "message": "Yes, the package must be installed for these tests to run. It\u0027s not great, but it\u0027s the only way to test if the installation worked correctly as intended.",
+      "parentUuid": "8394dbdf_0ac7ce8b",
       "range": {
         "startLine": 57,
         "startChar": 0,
