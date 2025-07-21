@@ -411,24 +411,21 @@ create_statx_uid_gid(struct changelog_rec *record, struct rbh_statx **rec_statx)
 }
 
 static struct rbh_value *
-build_statx_lustre_map(void *enrich_mask)
+build_statx_map(void *enrich_mask)
 {
     struct rbh_value_pair *enrich_values;
-    struct rbh_value_pair *lustre_pair;
     struct rbh_value_pair *statx_pair;
     struct rbh_value_map map;
     struct rbh_value enrich;
 
-    enrich_values = source_stack_alloc(NULL, sizeof(*enrich_values) * 2);
+    enrich_values = source_stack_alloc(NULL, sizeof(*enrich_values) * 1);
 
     statx_pair = build_pair("statx", build_statx_mask, enrich_mask);
-    lustre_pair = build_pair("lustre", NULL, NULL);
 
     memcpy(&enrich_values[0], statx_pair, sizeof(*statx_pair));
-    memcpy(&enrich_values[1], lustre_pair, sizeof(*lustre_pair));
 
     map.pairs = enrich_values;
-    map.count = 2;
+    map.count = 1;
 
     enrich.map = map;
     enrich.type = RBH_VT_MAP;
@@ -443,7 +440,7 @@ build_statx_event(uint32_t statx_enrich_mask, struct rbh_fsevent *fsevent,
     fsevent->type = RBH_FET_UPSERT;
     fsevent->upsert.statx = rec_statx;
 
-    fsevent->xattrs = build_enrich_map(build_statx_lustre_map,
+    fsevent->xattrs = build_enrich_map(build_statx_map,
                                        &statx_enrich_mask);
     if (fsevent->xattrs.pairs == NULL)
         return -1;
@@ -604,7 +601,7 @@ build_setxattr_event(struct changelog_rec *record, struct rbh_id *id,
     struct rbh_fsevent *new_events;
     uint32_t statx_enrich_mask = 0;
 
-    new_events = fsevent_list_alloc(2, id);
+    new_events = fsevent_list_alloc(3, id);
 
     statx_enrich_mask = RBH_STATX_CTIME_SEC | RBH_STATX_CTIME_NSEC;
     if (build_statx_event(statx_enrich_mask, &new_events[0], NULL))
@@ -615,7 +612,14 @@ build_setxattr_event(struct changelog_rec *record, struct rbh_id *id,
     if (new_events[1].xattrs.pairs == NULL)
         return -1;
 
-    *fsevents_iterator = rbh_iter_array(new_events, sizeof(*new_events), 2);
+    new_events[2].type = RBH_FET_XATTR;
+    if (build_enrich_xattr_fsevent(&new_events[2].xattrs,
+                                   "rbh-fsevents",
+                                   build_empty_map("lustre"),
+                                   NULL))
+        return -1;
+
+    *fsevents_iterator = rbh_iter_array(new_events, sizeof(*new_events), 3);
 
     return 0;
 }
@@ -626,12 +630,19 @@ build_statx_update_event(uint32_t statx_enrich_mask, struct rbh_id *id,
 {
     struct rbh_fsevent *new_events;
 
-    new_events = fsevent_list_alloc(1, id);
+    new_events = fsevent_list_alloc(2, id);
 
     if (build_statx_event(statx_enrich_mask, &new_events[0], NULL))
         return -1;
 
-    *fsevents_iterator = rbh_iter_array(new_events, sizeof(*new_events), 1);
+    new_events[1].type = RBH_FET_XATTR;
+    if (build_enrich_xattr_fsevent(&new_events[1].xattrs,
+                                   "rbh-fsevents",
+                                   build_empty_map("lustre"),
+                                   NULL))
+        return -1;
+
+    *fsevents_iterator = rbh_iter_array(new_events, sizeof(*new_events), 2);
 
     return 0;
 }
@@ -657,6 +668,8 @@ build_softlink_events(struct changelog_rec *record, struct rbh_id *id,
                                    fill_xattrs_fid(record),
                                    "mdt_index",
                                    fill_xattrs_mdt_index(&mdt_index),
+                                   "rbh-fsevents",
+                                   build_empty_map("lustre"),
                                    NULL))
         return -1;
 
@@ -713,7 +726,7 @@ build_hardlink_or_mknod_events(struct changelog_rec *record, struct rbh_id *id,
     if (update_parent_nb_children_event(&record->cr_pfid, 1, &new_events[3]))
         return -1;
 
-    new_events[3].type = RBH_FET_XATTR;
+    new_events[4].type = RBH_FET_XATTR;
     if (build_enrich_xattr_fsevent(&new_events[4].xattrs,
                                    "rbh-fsevents",
                                    build_empty_map("lustre"),
