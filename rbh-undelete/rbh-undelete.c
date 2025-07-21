@@ -40,6 +40,42 @@ destroy_to(void)
 }
 
 /*----------------------------------------------------------------------------*
+ |                                undelete()                                  |
+ *----------------------------------------------------------------------------*/
+
+static void
+undelete(const char *path)
+{
+    const struct rbh_filter_projection ALL = {
+        /* Archived entries that have been deleted no longer have a PARENT_ID
+         * or a NAME stored inside the database
+         * */
+        .fsentry_mask = RBH_FP_ALL & ~RBH_FP_PARENT_ID & ~RBH_FP_NAME,
+        .statx_mask = RBH_STATX_ALL,
+    };
+    const struct rbh_filter PATH_FILTER = {
+        .op = RBH_FOP_EQUAL,
+        .compare = {
+            .field = {
+                .fsentry = RBH_FP_NAMESPACE_XATTRS,
+                .xattr = "path"
+            },
+            .value = {
+                .type = RBH_VT_STRING,
+                .string = path
+            },
+        },
+    };
+    struct rbh_fsentry *fsentry;
+
+    fsentry = rbh_backend_filter_one(from, &PATH_FILTER, &ALL);
+    if (fsentry == NULL)
+        error(EXIT_FAILURE, errno, "rbh_backend_filter_one");
+
+    return;
+}
+
+/*----------------------------------------------------------------------------*
  |                                    cli                                     |
  *----------------------------------------------------------------------------*/
 
@@ -93,6 +129,8 @@ int
 main(int _argc, char *_argv[])
 {
     struct command_context command_context = {0};
+    struct rbh_raw_uri *raw_uri;
+    struct rbh_uri *uri;
     int nb_cli_args;
     char **argv;
     int argc;
@@ -118,6 +156,18 @@ main(int _argc, char *_argv[])
 
     from = rbh_backend_from_uri(argv[0], true);
     to = rbh_backend_from_uri(argv[1], true);
+
+    raw_uri = rbh_raw_uri_from_string(argv[1]);
+    if (raw_uri == NULL)
+        error(EXIT_FAILURE, errno, "Cannot detect backend uri");
+
+    uri = rbh_uri_from_raw_uri(raw_uri);
+    if (uri == NULL)
+        error(EXIT_FAILURE, errno, "Cannot detect given backend");
+    free(raw_uri);
+
+    undelete(uri->fsname);
+    free(uri);
 
     return EXIT_SUCCESS;
 }
