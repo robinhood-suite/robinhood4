@@ -14,9 +14,10 @@
 #include <robinhood/filters/parser.h>
 
 static struct rbh_backend *metadata_source, *target_entry;
+static char *undelete_target_path;
 
 static void __attribute__((destructor))
-destroy_metadata_source_and_target_entry(void)
+destroy_global_variables(void)
 {
     const char *name;
 
@@ -31,6 +32,68 @@ destroy_metadata_source_and_target_entry(void)
         rbh_backend_destroy(target_entry);
         rbh_backend_plugin_destroy(name);
     }
+
+    if (undelete_target_path)
+        free(undelete_target_path);
+}
+
+/*----------------------------------------------------------------------------*
+ |                                undelete()                                  |
+ *----------------------------------------------------------------------------*/
+
+static int
+undelete(const char *path)
+{
+    const struct rbh_filter_projection ALL = {
+        /* Archived entries that have been deleted no longer have a PARENT_ID
+         * or a NAME stored inside the database
+         * */
+        .fsentry_mask = RBH_FP_ALL & ~RBH_FP_PARENT_ID & ~RBH_FP_NAME,
+        .statx_mask = RBH_STATX_ALL,
+    };
+    const struct rbh_filter PATH_FILTER = {
+        .op = RBH_FOP_EQUAL,
+        .compare = {
+            .field = {
+                .fsentry = RBH_FP_NAMESPACE_XATTRS,
+                .xattr = "path"
+            },
+            .value = {
+                .type = RBH_VT_STRING,
+                .string = path
+            },
+        },
+    };
+    struct rbh_fsentry *fsentry;
+
+    fsentry = rbh_backend_filter_one(metadata_source, &PATH_FILTER, &ALL);
+    if (fsentry == NULL)
+        error(EXIT_FAILURE, errno, "rbh_backend_filter_one");
+
+    return EXIT_SUCCESS;
+}
+
+static void
+set_targets(const char *target_uri)
+{
+    struct rbh_raw_uri *raw_uri;
+    struct rbh_uri *uri;
+
+    raw_uri = rbh_raw_uri_from_string(target_uri);
+    if (raw_uri == NULL)
+        error(EXIT_FAILURE, errno, "Cannot detect backend uri");
+
+    uri = rbh_uri_from_raw_uri(raw_uri);
+    free(raw_uri);
+    if (uri == NULL)
+        error(EXIT_FAILURE, errno, "Cannot detect given backend");
+
+    undelete_target_path = strdup(uri->fsname);
+    if (undelete_target_path == NULL)
+        error(EXIT_FAILURE, errno, "Failed to duplicate target name");
+
+    target_entry = rbh_backend_and_branch_from_uri(uri, false);
+    free(uri);
 }
 
 /*----------------------------------------------------------------------------*
@@ -99,7 +162,7 @@ main(int _argc, char *_argv[])
 
     if (_argc < 2)
         error(EX_USAGE, EINVAL,
-              "invalid number of arguments, expected at least 1");
+              "invalid number of arguments, expected at least 2");
 
     argc = _argc - 1;
     argv = &_argv[1];
@@ -117,7 +180,7 @@ main(int _argc, char *_argv[])
     argv = &argv[nb_cli_args];
 
     metadata_source = rbh_backend_from_uri(argv[0], true);
-    target_entry = rbh_backend_from_uri(argv[1], true);
+    set_targets(argv[1]);
 
-    return EXIT_SUCCESS;
+    return undelete(undelete_target_path);
 }
