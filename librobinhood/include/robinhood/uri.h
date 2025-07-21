@@ -105,6 +105,27 @@ struct rbh_uri *
 rbh_uri_from_raw_uri(const struct rbh_raw_uri *raw_uri);
 
 /*----------------------------------------------------------------------------*
+ |                      rbh_backend_and_branch_from_uri                       |
+ *----------------------------------------------------------------------------*/
+
+/**
+ * Create a new struct rbh_backend from a struct rbh_uri.
+ *
+ * If a branch is requested in the URI, return the corresponding backend.
+ *
+ * @param uri        a pointer to the struct rbh_uri to create a backend from
+ * @param read_only  whether the backend should be read only or not
+ *
+ * @return           a pointer to a newly allocated struct rbh_backend on
+ *                   success,
+ *                   NULL on error and errno is set appropriately
+ *
+ * @error ENOMEM     not enough memory available
+ */
+struct rbh_backend *
+rbh_backend_and_branch_from_uri(const struct rbh_uri *uri, bool read_only);
+
+/*----------------------------------------------------------------------------*
  |                             rbh_percent_decode                             |
  *----------------------------------------------------------------------------*/
 
