@@ -46,6 +46,30 @@
       },
       "revId": "db197ed7b1144333998109bd480f0b86440150ee",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "45e1c714_1cb6e1d3",
+        "filename": "rbh-policy/meson.build",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-07-21T14:23:59Z",
+      "side": 1,
+      "message": "I found how to get a more meson-oriented version. But making a pyproject.toml like what is said in this path is not feasible because here rbh-policy is a command of the rbh4 project, I don\u0027t want to create a project within the project, that would be weird and not clean IMO.\nI think my version after modification, whether in this patch or in the next one, is not bad !",
+      "parentUuid": "e5195716_85292aee",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 2
+      },
+      "revId": "db197ed7b1144333998109bd480f0b86440150ee",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
