@@ -528,24 +528,18 @@ enrich_xattrs(const struct rbh_value *xattrs_to_enrich,
 
 static int
 enrich_symlink(char symlink[SYMLINK_MAX_SIZE], const struct rbh_id *id,
-               int mount_fd)
+               int mount_fd, struct rbh_posix_enrich_ctx *ctx)
 {
-    int save_errno;
     ssize_t rc;
-    int fd;
 
-    fd = open_by_id_opath(mount_fd, id);
-    if (fd == -1)
-        return -1;
+    rc = rbh_posix_enrich_open_by_id(ctx, mount_fd, id);
+    if (rc)
+        return rc;
 
-    rc = readlinkat(fd, "", symlink, SYMLINK_MAX_SIZE - 1);
+    rc = readlinkat(ctx->einfo.fd, "", symlink, SYMLINK_MAX_SIZE - 1);
     if (rc != -1)
         symlink[rc] = 0;
 
-    save_errno = errno;
-    /* Ignore errors on close */
-    close(fd);
-    errno = save_errno;
     return rc == -1 ? -1 : 0;
 }
 
@@ -617,7 +611,7 @@ posix_enrich(struct enricher *enricher,
             return -1;
         }
 
-        if (enrich_symlink(symlink, &original->id, mount_fd))
+        if (enrich_symlink(symlink, &original->id, mount_fd, ctx))
             return -1;
 
         enriched->upsert.symlink = symlink;
