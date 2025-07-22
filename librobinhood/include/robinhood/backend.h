@@ -724,6 +724,7 @@ rbh_backend_undelete(struct rbh_backend *backend, const char *path,
         errno = ENOTSUP;
         return NULL;
     }
+
     return backend->ops->undelete(backend, path, fsentry);
 }
 

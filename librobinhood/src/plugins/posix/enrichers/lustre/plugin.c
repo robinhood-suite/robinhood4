@@ -19,6 +19,7 @@ static const struct rbh_pe_common_operations LUSTRE_EXTENSION_COMMON_OPS = {
     .helper = rbh_lustre_helper,
     .check_valid_token = rbh_lustre_check_valid_token,
     .build_filter = rbh_lustre_build_filter,
+    .undelete = rbh_lustre_undelete,
     .delete_entry = NULL,
 };
 
