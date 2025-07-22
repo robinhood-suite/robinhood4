@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bb7c0b5e_5c16f215",
+        "filename": "librobinhood/src/plugins/posix/enrichers/lustre/lustre.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 490,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-07-22T12:38:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "709c0ea3_0416dd2f",
+      "range": {
+        "startLine": 490,
+        "startChar": 12,
+        "endLine": 490,
+        "endChar": 13
+      },
+      "revId": "7e6cc8b2872640cb767dab400defa32475b7845c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7d4ce488_0f11f848",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-07-22T07:55:06Z",
       "side": 1,
       "message": "typo: remove space",
+      "range": {
+        "startLine": 243,
+        "startChar": 26,
+        "endLine": 243,
+        "endChar": 27
+      },
+      "revId": "7e6cc8b2872640cb767dab400defa32475b7845c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "088acd60_147297f5",
+        "filename": "rbh-sync/tests/test_lustre_db_sync.bash",
+        "patchSetId": 4
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-07-22T12:38:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7d4ce488_0f11f848",
       "range": {
         "startLine": 243,
         "startChar": 26,
