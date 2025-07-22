@@ -31,6 +31,7 @@
 #include <errno.h>
 
 #include <sys/types.h>
+#include <robinhood/config.h>
 
 #include "robinhood/filter.h"
 #include "robinhood/fsentry.h"
@@ -723,6 +724,7 @@ rbh_backend_undelete(struct rbh_backend *backend, const char *path,
         errno = ENOTSUP;
         return NULL;
     }
+
     return backend->ops->undelete(backend, path, fsentry);
 }
 
