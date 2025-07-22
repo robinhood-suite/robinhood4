@@ -31,6 +31,7 @@
 #include <errno.h>
 
 #include <sys/types.h>
+#include <robinhood/config.h>
 
 #include "robinhood/filter.h"
 #include "robinhood/fsentry.h"
@@ -305,7 +306,7 @@ struct rbh_backend_operations {
             );
     int (*undelete)(
             void *backend,
-            char *destination[]
+            struct rbh_fsentry *fsentry
             );
     void (*destroy)(
             void *backend
@@ -708,18 +709,19 @@ rbh_backend_get_info(struct rbh_backend *backend, int info_flags)
 /**
  * Undelete an entry from a given backend
  *
- * @param backend       a pointer to the backend where the metadata of the file
+ * @param backend       a pointer to the backend where the metadata of the entry
  *                      will be retrieved
- * @param destination   Reference used to access the original file
+ * @param fsentry       fsentry containing essential metadata needed to
+ *                      'undelete' a given entry
  */
 static inline int
-rbh_backend_undelete(struct rbh_backend *backend, char *destination[])
+rbh_backend_undelete(struct rbh_backend *backend, struct rbh_fsentry *fsentry)
 {
     if (backend->ops->undelete == NULL) {
         errno = ENOTSUP;
         return -1;
     }
-    return backend->ops->undelete(backend, destination);
+    return backend->ops->undelete(backend, fsentry);
 }
 
 /**

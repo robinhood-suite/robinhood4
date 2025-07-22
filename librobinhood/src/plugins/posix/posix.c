@@ -1249,6 +1249,26 @@ out:
     return NULL;
 }
 
+static int
+posix_undelete(void *type, struct rbh_fsentry *fsentry)
+{
+    struct posix_backend *posix = type;
+    int count = 0;
+
+    if (posix->enrichers == NULL)
+        fprintf(stderr, "undelete is only available for lustre extension.\n");
+
+    while (posix->enrichers && posix->enrichers[count]) {
+        if (strcmp(posix->enrichers[count]->extension.name, "lustre") == 0)
+            return rbh_pe_common_ops_undelete(
+                       posix->enrichers[count]->extension.common_ops, type,
+                       fsentry);
+        count++;
+    }
+
+    return -1;
+}
+
 static const struct rbh_backend_operations POSIX_BACKEND_OPS = {
     .get_option = posix_backend_get_option,
     .set_option = posix_backend_set_option,
@@ -1257,6 +1277,7 @@ static const struct rbh_backend_operations POSIX_BACKEND_OPS = {
     .filter = posix_backend_filter,
     .get_attribute = posix_get_attribute,
     .get_info = posix_get_info,
+    .undelete = posix_undelete,
     .destroy = posix_backend_destroy,
 };
 
