@@ -304,6 +304,7 @@ get_fs_default_dir_lov(uint64_t flags)
     char *mount_path = NULL;
     char pwd[PATH_MAX];
     int rc;
+    int fd;
 
     if (backend == NULL)
         error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
@@ -319,7 +320,9 @@ get_fs_default_dir_lov(uint64_t flags)
                       "Failed to get the mount point of the current working directory '%s'",
                       pwd);
 
-    *ctx.einfo.fd = open(mount_path, O_RDONLY | O_CLOEXEC);
+    fd = open(mount_path, O_RDONLY | O_CLOEXEC);
+    ctx.einfo.fd = &fd;
+
     if (*ctx.einfo.fd < 0)
         error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
                       "Failed to open the mount point '%s' of the current working directory",
