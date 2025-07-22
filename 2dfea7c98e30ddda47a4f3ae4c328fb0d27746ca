@@ -22,6 +22,30 @@
       },
       "revId": "2dfea7c98e30ddda47a4f3ae4c328fb0d27746ca",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "71a826e7_e47790c6",
+        "filename": "rbh-policy/meson.build",
+        "patchSetId": 6
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-07-22T10:01:40Z",
+      "side": 1,
+      "message": "With install_source in our context, it will not copy the tree correctly because this is provided by meson using meson-python but we have c project to which I add a python command so I cannot use meson-python. Unless I completely dissociate the robinhood project and the PE. We would then have two separate meson projects. This is a solution but I find it not great, it forces us to do two separate installations.",
+      "parentUuid": "d4ad537f_1bf1997f",
+      "range": {
+        "startLine": 9,
+        "startChar": 1,
+        "endLine": 11,
+        "endChar": 1
+      },
+      "revId": "2dfea7c98e30ddda47a4f3ae4c328fb0d27746ca",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
