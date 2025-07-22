@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e06d8711_da603bb1",
+        "filename": "rbh-info/rbh-info.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-07-22T12:23:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3bd27259_eeb327d1",
+      "range": {
+        "startLine": 165,
+        "startChar": 9,
+        "endLine": 165,
+        "endChar": 12
+      },
+      "revId": "68363137b8ea171b5cfd31e593168f6a63f719f0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "95bc6073_1e9b5a49",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-07-22T09:30:11Z",
       "side": 1,
       "message": "nit: no need for the space here",
+      "range": {
+        "startLine": 168,
+        "startChar": 75,
+        "endLine": 168,
+        "endChar": 76
+      },
+      "revId": "68363137b8ea171b5cfd31e593168f6a63f719f0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3b1b2677_0716dafe",
+        "filename": "rbh-info/rbh-info.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-07-22T12:23:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "95bc6073_1e9b5a49",
       "range": {
         "startLine": 168,
         "startChar": 75,
