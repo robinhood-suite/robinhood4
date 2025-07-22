@@ -106,6 +106,15 @@ struct rbh_pe_common_operations {
      */
     int (*fill_projection)(struct rbh_filter_projection *projection,
                            const char *directive);
+    /**
+    * Undelete an entry from a given backend
+    *
+    * @param backend       a pointer to the backend where the metadata of the
+    *                      entry will be retrieved
+    * @param fsentry       fsentry containing essential metadata needed to
+    *                      'undelete' a given entry
+    */
+    int (*undelete)(void *backend, struct rbh_fsentry *fsentry);
 };
 
 /**
@@ -196,6 +205,19 @@ rbh_pe_common_ops_fill_projection(
 {
     if (common_ops && common_ops->fill_projection) {
         return common_ops->fill_projection(projection, directive);
+    }
+
+    errno = ENOTSUP;
+    return -1;
+}
+
+static inline int
+rbh_pe_common_ops_undelete(
+    const struct rbh_pe_common_operations *common_ops,
+    void *backend, struct rbh_fsentry *fsentry)
+{
+    if (common_ops && common_ops->undelete) {
+        return common_ops->undelete(backend, fsentry);
     }
 
     errno = ENOTSUP;

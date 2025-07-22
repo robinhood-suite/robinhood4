@@ -40,4 +40,7 @@ struct rbh_filter *
 rbh_lustre_build_filter(const char **argv, int argc, int *index,
                         bool *need_prefetch);
 
+int
+rbh_lustre_undelete(void *backend, struct rbh_fsentry *fsentry);
+
 #endif

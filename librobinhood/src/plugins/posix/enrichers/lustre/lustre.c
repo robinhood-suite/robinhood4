@@ -945,6 +945,12 @@ lustre_get_default_dir_stripe(int fd, uint64_t flags)
     return value;
 }
 
+int
+rbh_lustre_undelete(void *backend, struct rbh_fsentry *fsentry)
+{
+    return 0;
+}
+
     /*--------------------------------------------------------------------*
      |                          extension enricher                        |
      *--------------------------------------------------------------------*/

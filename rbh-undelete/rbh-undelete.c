@@ -104,6 +104,9 @@ undelete(const char *path)
         .fsentry_mask = RBH_FP_ALL & ~RBH_FP_PARENT_ID & ~RBH_FP_NAME,
         .statx_mask = RBH_STATX_ALL & ~RBH_STATX_MNT_ID,
     };
+    const char *last = strrchr(path, '/') ?: path;
+    /*temporary pop of /mnt/lustre*/
+
     const struct rbh_filter PATH_FILTER = {
         .op = RBH_FOP_EQUAL,
         .compare = {
@@ -113,7 +116,7 @@ undelete(const char *path)
             },
             .value = {
                 .type = RBH_VT_STRING,
-                .string = path
+                .string = last
             },
         },
     };
@@ -122,6 +125,8 @@ undelete(const char *path)
     fsentry = rbh_backend_filter_one(from, &PATH_FILTER, &ALL);
     if (fsentry == NULL)
         error(EXIT_FAILURE, errno, "rbh_backend_filter_one");
+
+    rbh_backend_undelete(to, fsentry);
 
     return;
 }
