@@ -855,7 +855,7 @@ _get_attrs(struct entry_info *entry_info,
     _values = values;
 
     for (int i = 0; i < nb_attrs_funcs; ++i) {
-        subcount = attrs_funcs[i](entry_info->fd, &pairs[count],
+        subcount = attrs_funcs[i](*entry_info->fd, &pairs[count],
                                   available_pairs);
         if (subcount == -1)
             return -1;
@@ -965,7 +965,7 @@ rbh_lustre_enrich(struct entry_info *einfo, uint64_t flags,
         return lustre_attrs_get_all(einfo, pairs, pairs_count, values);
 
     if (flags & RBH_LEF_DIR_LOV) {
-        pairs->value = lustre_get_default_dir_stripe(einfo->fd, flags);
+        pairs->value = lustre_get_default_dir_stripe(*einfo->fd, flags);
         if (!pairs->value)
             return -1;
 

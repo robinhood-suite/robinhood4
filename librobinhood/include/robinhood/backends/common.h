@@ -15,7 +15,7 @@
  * other backends.
  */
 struct entry_info {
-    int fd;                              /* The file descriptor of the entry */
+    int *fd;                             /* The file descriptor of the entry */
     struct rbh_statx *statx;             /* The statx of the entry */
     struct rbh_value_pair *inode_xattrs; /* The inode xattrs of the entry */
     ssize_t *inode_xattrs_count;         /* The number of inode xattrs */

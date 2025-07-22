@@ -394,12 +394,8 @@ enrich_statx(struct rbh_statx *dest, const struct rbh_id *id, int mount_fd,
         return rc;
 
     rc = rbh_posix_enrich_statx(ctx, STATX_FLAGS, mask, &statxbuf);
-    if (rc == -1) {
-        int save_errno = errno;
-        close(ctx->einfo.fd);
-        errno = save_errno;
-        return -1;
-    }
+    if (rc == -1)
+        return rc;
 
     if (original) {
         *dest = *original;
@@ -490,7 +486,7 @@ enrich_xattrs(const struct rbh_value *xattrs_to_enrich,
     if (rc)
         return rc;
 
-    fd = ctx->einfo.fd;
+    fd = *ctx->einfo.fd;
     if (enriched->xattrs.count + xattrs_count >= *pair_count) {
         void *tmp;
 
@@ -536,7 +532,7 @@ enrich_symlink(char symlink[SYMLINK_MAX_SIZE], const struct rbh_id *id,
     if (rc)
         return rc;
 
-    rc = readlinkat(ctx->einfo.fd, "", symlink, SYMLINK_MAX_SIZE - 1);
+    rc = readlinkat(*ctx->einfo.fd, "", symlink, SYMLINK_MAX_SIZE - 1);
     if (rc != -1)
         symlink[rc] = 0;
 
@@ -628,10 +624,10 @@ enrich(struct enricher *enricher, const struct rbh_fsevent *original)
     struct rbh_value_pair *pairs = enricher->pairs;
     size_t pair_count = enricher->pair_count;
     struct rbh_posix_enrich_ctx ctx = {0};
-    int save_errno = 0;
 
     *enriched = *original;
     enriched->xattrs.count = 0;
+    ctx.einfo.fd = &enricher->fd;
 
     for (size_t i = 0; i < original->xattrs.count; i++) {
         const struct rbh_value_pair *pair = &original->xattrs.pairs[i];
@@ -646,7 +642,7 @@ enrich(struct enricher *enricher, const struct rbh_fsevent *original)
 
                 tmp = reallocarray(pairs, pair_count << 1, sizeof(*pairs));
                 if (tmp == NULL)
-                    goto close_ctxt;
+                    return -1;
                 enricher->pairs = pairs = tmp;
                 enricher->pair_count = pair_count = pair_count << 1;
             }
@@ -656,7 +652,7 @@ enrich(struct enricher *enricher, const struct rbh_fsevent *original)
 
         if (pair->value == NULL || pair->value->type != RBH_VT_MAP) {
             errno = EINVAL;
-            goto close_ctxt;
+            return -1;
         }
         partials = &pair->value->map;
 
@@ -664,33 +660,49 @@ enrich(struct enricher *enricher, const struct rbh_fsevent *original)
             if (posix_enrich(enricher, &partials->pairs[i],
                              &pairs, &pair_count, enriched,
                              original, &ctx) == -1)
-                goto close_ctxt;
+                return -1;
         }
 
     }
     enriched->xattrs.pairs = pairs;
 
-    close(ctx.einfo.fd);
     return 0;
-
-close_ctxt:
-    save_errno = errno;
-    close(ctx.einfo.fd);
-    errno = save_errno;
-    return -1;
 }
+
+
+static struct rbh_id *last_id = NULL;
 
 static const void *
 posix_enricher_iter_next(void *iterator)
 {
     struct enricher *enricher = iterator;
     const struct rbh_fsevent *fsevent;
+    struct rbh_id *id;
     int rc;
 
 skip:
     fsevent = rbh_iter_next(enricher->fsevents);
-    if (fsevent == NULL)
+    if (fsevent == NULL) {
+        if (enricher->fd > 0) {
+            close(enricher->fd);
+            enricher->fd = 0;
+        }
+        free(last_id);
+        last_id = NULL;
         return NULL;
+    }
+
+    if (last_id == NULL) {
+        last_id = rbh_id_new(fsevent->id.data, fsevent->id.size);
+    } else if (!rbh_id_equal(last_id, &fsevent->id)) {
+        free(last_id);
+        if (enricher->fd > 0) {
+            close(enricher->fd);
+            enricher->fd = 0;
+        }
+        id = rbh_id_new(fsevent->id.data, fsevent->id.size);
+        last_id = id;
+    }
 
     rc = enrich(enricher, fsevent);
     if (rc) {
@@ -827,6 +839,7 @@ posix_iter_enrich(struct rbh_backend *backend, const char *type,
     enricher->iterator = POSIX_ENRICHER_ITERATOR;
     enricher->backend = backend;
     enricher->fsevents = fsevents;
+    enricher->fd = 0;
     enricher->mount_fd = mount_fd;
     enricher->mount_path = mount_path;
     enricher->pairs = pairs;
