@@ -51,6 +51,12 @@ undelete(const char *path)
         .fsentry_mask = RBH_FP_ALL & ~RBH_FP_PARENT_ID & ~RBH_FP_NAME,
         .statx_mask = RBH_STATX_ALL,
     };
+    const char *actual_path;
+
+    /* Temporary pop of '/mnt/lustre' */
+    assert(strlen(path) >= 11);  // 11 = strlen("/mnt/lustre")
+    actual_path = path + 11;
+
     const struct rbh_filter PATH_FILTER = {
         .op = RBH_FOP_EQUAL,
         .compare = {
@@ -60,17 +66,27 @@ undelete(const char *path)
             },
             .value = {
                 .type = RBH_VT_STRING,
-                .string = path
+                .string = actual_path
             },
         },
     };
+    struct rbh_fsentry *new_fsentry;
     struct rbh_fsentry *fsentry;
 
     fsentry = rbh_backend_filter_one(metadata_source, &PATH_FILTER, &ALL);
-    if (fsentry == NULL)
-        error(EXIT_FAILURE, errno, "rbh_backend_filter_one");
+    if (fsentry == NULL) {
+        fprintf(stderr, "Failed to find '%s' in source URI",
+                undelete_target_path);
+        return ENOENT;
+    }
 
-    return EXIT_SUCCESS;
+    new_fsentry = rbh_backend_undelete(target_entry, path, fsentry);
+    if (new_fsentry == NULL) {
+        fprintf(stderr, "Error while returning fsentry from undelete\n");
+        return -1;
+    }
+
+    return 0;
 }
 
 static void
