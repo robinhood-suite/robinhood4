@@ -515,7 +515,7 @@ fsentry_from_any(struct fsentry_id_pair *fip, const struct rbh_value *path,
 
     if (enrichers != NULL) {
         struct entry_info info = {
-            .fd = fd,
+            .fd = &fd,
             .statx = &statxbuf,
             .inode_xattrs = pairs,
             .inode_xattrs_count = &count,

@@ -275,7 +275,7 @@ rbh_retention_enrich(struct entry_info *einfo, uint64_t flags,
     _values = values;
 
     if (!_inode_xattrs_count)
-        return enrich_from_file(einfo->fd, einfo->statx, pairs);
+        return enrich_from_file(*einfo->fd, einfo->statx, pairs);
     else
         return enrich_from_xattrs(einfo->statx, pairs);
 }

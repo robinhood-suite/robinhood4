@@ -55,6 +55,8 @@ struct enricher {
     int mount_fd;
     const char *mount_path;
 
+    int fd;
+
     struct rbh_value_pair *pairs;
     size_t pair_count;
 

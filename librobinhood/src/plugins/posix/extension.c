@@ -22,7 +22,7 @@ rbh_posix_enrich_open_by_id(struct rbh_posix_enrich_ctx *ctx,
 {
     int fd;
 
-    if (ctx->einfo.fd > 0)
+    if (*ctx->einfo.fd > 0)
         return 0;
 
     fd = open_by_id_generic(parent_fd, id);
@@ -32,7 +32,7 @@ rbh_posix_enrich_open_by_id(struct rbh_posix_enrich_ctx *ctx,
     if (fd < 0)
         return -1;
 
-    ctx->einfo.fd = fd;
+    *ctx->einfo.fd = fd;
 
     return 0;
 }
@@ -50,7 +50,7 @@ rbh_posix_enrich_statx(struct rbh_posix_enrich_ctx *ctx, int flags,
     /* Make sure to retrieve the mode as well as this will be used by the
      * Lustre enricher as well.
      */
-    rc = rbh_statx(ctx->einfo.fd, "", flags, mask | RBH_STATX_MODE, statxbuf);
+    rc = rbh_statx(*ctx->einfo.fd, "", flags, mask | RBH_STATX_MODE, statxbuf);
 
     ctx->einfo.statx = statxbuf;
 
