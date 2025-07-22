@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c23bf6cc_5d4e84a3",
+        "filename": "rbh-policy/meson.build",
+        "patchSetId": 4
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-07-22T06:55:54Z",
+      "side": 1,
+      "message": "question: Wouldn\u0027t using `python.install_source()` be better?",
+      "revId": "09b2b03a431c148bea6eeb9d4f2be0db616f29f1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
