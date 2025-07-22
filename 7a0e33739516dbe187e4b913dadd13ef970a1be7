@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "72b18e02_8c04a547",
+        "filename": "rbh-find/rbh-find.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-07-22T12:36:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bdc809ef_aa4ea228",
+      "range": {
+        "startLine": 42,
+        "startChar": 25,
+        "endLine": 42,
+        "endChar": 39
+      },
+      "revId": "7a0e33739516dbe187e4b913dadd13ef970a1be7",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2dd9b978_0f550940",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-07-22T09:45:33Z",
       "side": 1,
       "message": "suggest: keeping the related predicates on their own line was better IMO",
+      "range": {
+        "startLine": 75,
+        "startChar": 8,
+        "endLine": 78,
+        "endChar": 39
+      },
+      "revId": "7a0e33739516dbe187e4b913dadd13ef970a1be7",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "568b3702_194907b9",
+        "filename": "rbh-find/rbh-find.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-07-22T12:36:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2dd9b978_0f550940",
       "range": {
         "startLine": 75,
         "startChar": 8,
