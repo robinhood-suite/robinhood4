@@ -234,6 +234,30 @@
       },
       "revId": "bd35a949b14bcefdf882e557cb657f9f24b64f43",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "10efdb83_e54af0f1",
+        "filename": "rbh-policy/tests/test_installation.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-07-22T07:05:23Z",
+      "side": 1,
+      "message": "But you don\u0027t have to test the installation if you use the python packaging tools... Please switch to the proper way to package a python project with meson. I don\u0027t think we should have this test.",
+      "parentUuid": "6e1b59dc_c2ade4f4",
+      "range": {
+        "startLine": 57,
+        "startChar": 0,
+        "endLine": 62,
+        "endChar": 24
+      },
+      "revId": "bd35a949b14bcefdf882e557cb657f9f24b64f43",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
