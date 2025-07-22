@@ -263,7 +263,6 @@ mfu_iter_new(const char *root, const char *entry, int statx_sync_type,
             goto free_iter;
 
         rc = posix_iterator_setup(&mfu->posix, path, entry, statx_sync_type);
-        save_errno = errno;
         if (rc == -1)
             goto free_iter;
 
@@ -284,6 +283,7 @@ mfu_iter_new(const char *root, const char *entry, int statx_sync_type,
     return (struct rbh_mut_iterator *)mfu;
 
 free_iter:
+    save_errno = errno;
     free(mfu);
     errno = save_errno;
 
