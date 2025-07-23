@@ -11,6 +11,7 @@
 #include <string.h>
 #include <sys/stat.h>
 #include <sysexits.h>
+#include <sys/sysmacros.h>
 
 #include "robinhood/statx.h"
 
@@ -57,6 +58,30 @@ statx_from_stat(struct rbh_statx *statxbuf, struct stat *stat)
     statxbuf->stx_dev_minor = minor(stat->st_dev);
 }
 #endif
+
+void
+stat_from_statx(const struct rbh_statx *statxbuf, struct stat *st)
+{
+    st->st_dev = makedev(statxbuf->stx_dev_major, statxbuf->stx_dev_minor);
+    st->st_rdev = makedev(statxbuf->stx_rdev_major, statxbuf->stx_rdev_minor);
+    st->st_ino = statxbuf->stx_ino;
+    st->st_mode = statxbuf->stx_mode;
+    st->st_nlink = statxbuf->stx_nlink;
+    st->st_uid = statxbuf->stx_uid;
+    st->st_gid = statxbuf->stx_gid;
+    st->st_size = statxbuf->stx_size;
+    st->st_blksize = statxbuf->stx_blksize;
+    st->st_blocks = statxbuf->stx_blocks;
+
+    st->st_atim.tv_sec = statxbuf->stx_atime.tv_sec;
+    st->st_atim.tv_nsec = statxbuf->stx_atime.tv_nsec;
+
+    st->st_mtim.tv_sec = statxbuf->stx_mtime.tv_sec;
+    st->st_mtim.tv_nsec = statxbuf->stx_mtime.tv_nsec;
+
+    st->st_ctim.tv_sec = statxbuf->stx_ctime.tv_sec;
+    st->st_ctim.tv_nsec = statxbuf->stx_ctime.tv_nsec;
+}
 
 static uint32_t
 statx2rbh_statx_mask(uint32_t mask)
