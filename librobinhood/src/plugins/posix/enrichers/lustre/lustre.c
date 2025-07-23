@@ -946,9 +946,36 @@ lustre_get_default_dir_stripe(int fd, uint64_t flags)
 }
 
 int
-rbh_lustre_undelete(void *backend, struct rbh_fsentry *fsentry)
+rbh_lustre_undelete(void *backend, struct rbh_fsentry *fsentry,
+                    const char *dest)
 {
-    return 0;
+    const struct rbh_value *val;
+    uint32_t hsm_archive_id = 0;
+    struct lu_fid new_id = {0};
+    struct lu_fid *p_new_id;
+    struct stat st;
+    int rc = 0;
+
+    stat_from_statx(fsentry->statx, &st);
+    p_new_id = &new_id;
+
+    val = rbh_fsentry_find_inode_xattr(fsentry, "hsm_archive_id");
+    if (val)
+        hsm_archive_id = (uint32_t)val->int32;
+
+    if (hsm_archive_id == 0) {
+        fprintf(stderr, "hsm_archive_id should not be 0\n");
+        return -1;
+    }
+
+    rc = llapi_hsm_import(dest, hsm_archive_id, &st, 0, -1, 0, 0, NULL,
+                          p_new_id);
+    if (rc) {
+        fprintf(stderr, "llapi_hsm_import failed to import\n");
+        return rc;
+    }
+
+    return rc;
 }
 
     /*--------------------------------------------------------------------*

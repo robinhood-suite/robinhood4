@@ -1250,7 +1250,7 @@ out:
 }
 
 static int
-posix_undelete(void *type, struct rbh_fsentry *fsentry)
+posix_undelete(void *type, struct rbh_fsentry *fsentry, const char *dest)
 {
     struct posix_backend *posix = type;
     int count = 0;
@@ -1262,7 +1262,7 @@ posix_undelete(void *type, struct rbh_fsentry *fsentry)
         if (strcmp(posix->enrichers[count]->extension.name, "lustre") == 0)
             return rbh_pe_common_ops_undelete(
                        posix->enrichers[count]->extension.common_ops, type,
-                       fsentry);
+                       fsentry, dest);
         count++;
     }
 
