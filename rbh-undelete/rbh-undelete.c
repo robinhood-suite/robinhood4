@@ -13,6 +13,10 @@
 #include <robinhood/filter.h>
 #include <robinhood/filters/parser.h>
 
+enum rbh_undelete_option {
+    RBH_UNDELETE_RESTORE = 1 << 0
+};
+
 static struct rbh_backend *from, *to;
 
 static void __attribute__((destructor))
@@ -81,8 +85,6 @@ undelete(const char *path)
         fprintf(stderr, "Error while returning fsentry from undelete\n");
         return;
     }
-
-    return;
 }
 
 /*----------------------------------------------------------------------------*
@@ -142,6 +144,7 @@ main(int _argc, char *_argv[])
     struct rbh_raw_uri *raw_uri;
     struct rbh_uri *uri;
     int nb_cli_args;
+    int flags = 0;
     char **argv;
     int argc;
 
@@ -176,7 +179,16 @@ main(int _argc, char *_argv[])
         error(EXIT_FAILURE, errno, "Cannot detect given backend");
     free(raw_uri);
 
-    undelete(uri->fsname);
+    for (int i = 0 ; i < argc ; i++) {
+        char *arg = argv[i];
+
+        if (strcmp(arg, "--restore") == 0)
+            flags |= RBH_UNDELETE_RESTORE;
+    }
+
+    if (flags & RBH_UNDELETE_RESTORE)
+        undelete(uri->fsname);
+
     free(uri);
 
     return EXIT_SUCCESS;

@@ -14,6 +14,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
+#include <libgen.h>
 #include <sys/ioctl.h>
 #include <sys/param.h>
 #include <sys/types.h>
@@ -946,10 +947,78 @@ lustre_get_default_dir_stripe(int fd, uint64_t flags)
 }
 
 struct rbh_fsentry *
+build_fsentry_after_undelete(const char *path, struct rbh_fsentry *fsentry)
+{
+    char parent_path[PATH_MAX];
+    struct rbh_id *parent_id;
+    char namebuf[PATH_MAX];
+    struct lu_fid fid;
+    char *name;
+    char *dir;
+    int rc;
+
+    strncpy(parent_path, path, PATH_MAX);
+    parent_path[PATH_MAX - 1] = '\0';
+
+    dir = dirname(parent_path);
+    rc = llapi_path2fid(dir, &fid);
+    if (rc) {
+        fprintf(stderr, "Error while using llapi_path2fid\n");
+        return NULL;
+    }
+
+    parent_id = rbh_id_from_lu_fid(&fid);
+
+    strncpy(namebuf, path, PATH_MAX);
+    namebuf[PATH_MAX - 1] = '\0';
+    name = basename(namebuf);
+
+    if (fsentry) {
+        fsentry->parent_id = *parent_id;
+        fsentry->name = strdup(name);
+        fsentry->mask |= RBH_FP_PARENT_ID | RBH_FP_NAME;
+    }
+
+    return fsentry;
+}
+
+struct rbh_fsentry *
 rbh_lustre_undelete(void *backend, const char *path,
                     struct rbh_fsentry *fsentry)
 {
-    return NULL;
+    struct rbh_fsentry *new_fsentry;
+    const struct rbh_value *val;
+    uint32_t hsm_archive_id = 0;
+    struct lu_fid new_id = {0};
+    struct lu_fid *p_new_id;
+    struct stat st;
+    int rc = 0;
+
+    stat_from_statx(fsentry->statx, &st);
+    p_new_id = &new_id;
+
+    val = rbh_fsentry_find_inode_xattr(fsentry, "hsm_archive_id");
+    if (val)
+        hsm_archive_id = (uint32_t)val->int32;
+    else {
+        fprintf(stderr, "Unable to retrieve hsm_archive_id\n");
+        return NULL;
+    }
+
+    rc = llapi_hsm_import(path, hsm_archive_id, &st, 0, -1, 0, 0, NULL,
+                          p_new_id);
+    if (rc) {
+        fprintf(stderr, "llapi_hsm_import failed to import\n");
+        return NULL;
+    }
+
+    new_fsentry = build_fsentry_after_undelete(path, fsentry);
+    if (new_fsentry == NULL) {
+        fprintf(stderr, "Error fsentry is null");
+        return NULL;
+    }
+
+    return new_fsentry;
 }
 
     /*--------------------------------------------------------------------*
