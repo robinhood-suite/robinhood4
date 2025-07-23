@@ -13,6 +13,10 @@
 #include <robinhood/filter.h>
 #include <robinhood/filters/parser.h>
 
+enum rbh_undelete_option {
+    RBH_UNDELETE_RESTORE = 1 << 0
+};
+
 static struct rbh_backend *metadata_source, *target_entry;
 static char *undelete_target_path;
 
@@ -135,6 +139,8 @@ usage()
         "Optional arguments:\n"
         "    -c,--config PATH     The configuration file to use\n"
         "    -h,--help            Show this message and exit\n"
+        "    -r,--restore         Recreate a deleted entry that has been\n"
+        "                         deleted and rebind it to its old content\n"
         "\n"
         "A robinhood URI is built as follows:\n"
         "    "RBH_SCHEME":BACKEND:FSNAME[#{PATH|ID}]\n\n";
@@ -173,6 +179,7 @@ main(int _argc, char *_argv[])
 {
     struct command_context command_context = {0};
     int nb_cli_args;
+    int flags = 0;
     char **argv;
     int argc;
 
@@ -198,5 +205,15 @@ main(int _argc, char *_argv[])
     metadata_source = rbh_backend_from_uri(argv[0], true);
     set_targets(argv[1]);
 
-    return undelete(undelete_target_path);
+    for (int i = 0 ; i < argc ; i++) {
+        char *arg = argv[i];
+
+        if (strcmp(arg, "--restore") == 0)
+            flags |= RBH_UNDELETE_RESTORE;
+    }
+
+    if (flags & RBH_UNDELETE_RESTORE)
+        return undelete(undelete_target_path);
+
+    return 0;
 }
