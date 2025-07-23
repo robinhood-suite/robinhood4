@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "121dde9a_dbad0bb3",
+        "filename": "rbh-info/rbh-info.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-07-23T09:06:16Z",
+      "side": 1,
+      "message": "as discussed, adding the nothing of pre-URI and post-URI arguments would make the helpers more generic",
+      "range": {
+        "startLine": 154,
+        "startChar": 19,
+        "endLine": 154,
+        "endChar": 26
+      },
+      "revId": "f3471baead2fd3fa15d84036b637b8d469bd438c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
