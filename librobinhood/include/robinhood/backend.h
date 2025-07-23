@@ -306,7 +306,8 @@ struct rbh_backend_operations {
             );
     int (*undelete)(
             void *backend,
-            struct rbh_fsentry *fsentry
+            struct rbh_fsentry *fsentry,
+            const char *dest
             );
     void (*destroy)(
             void *backend
@@ -713,15 +714,17 @@ rbh_backend_get_info(struct rbh_backend *backend, int info_flags)
  *                      will be retrieved
  * @param fsentry       fsentry containing essential metadata needed to
  *                      'undelete' a given entry
+ * @param dest          the destination where the entry will be undeleted
  */
 static inline int
-rbh_backend_undelete(struct rbh_backend *backend, struct rbh_fsentry *fsentry)
+rbh_backend_undelete(struct rbh_backend *backend, struct rbh_fsentry *fsentry,
+                     const char *dest)
 {
     if (backend->ops->undelete == NULL) {
         errno = ENOTSUP;
         return -1;
     }
-    return backend->ops->undelete(backend, fsentry);
+    return backend->ops->undelete(backend, fsentry, dest);
 }
 
 /**

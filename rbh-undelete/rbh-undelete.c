@@ -126,7 +126,7 @@ undelete(const char *path)
     if (fsentry == NULL)
         error(EXIT_FAILURE, errno, "rbh_backend_filter_one");
 
-    rbh_backend_undelete(to, fsentry);
+    rbh_backend_undelete(to, fsentry, path);
 
     return;
 }
@@ -136,6 +136,7 @@ main(int _argc, char *_argv[])
 {
     struct command_context command_context = {0};
     struct rbh_raw_uri *raw_uri;
+    char **option = NULL;
     struct rbh_uri *uri;
     int nb_cli_args;
     char **argv;
@@ -172,8 +173,18 @@ main(int _argc, char *_argv[])
         error(EXIT_FAILURE, errno, "Cannot detect given backend");
     free(raw_uri);
 
-    undelete(uri->fsname);
+    option = malloc(sizeof(char *) *argc);
+    if (option == NULL)
+        error(EXIT_FAILURE, ENOMEM, "Failed to malloc 'option'");
 
+    for (int i = 0 ; i < argc ; i++) {
+        char *arg = argv[i];
+
+        if (strcmp(arg, "--restore") == 0)
+            undelete(uri->fsname);
+    }
+
+    free(option);
     free(uri);
 
     return EXIT_SUCCESS;

@@ -113,8 +113,10 @@ struct rbh_pe_common_operations {
     *                      entry will be retrieved
     * @param fsentry       fsentry containing essential metadata needed to
     *                      'undelete' a given entry
+    * @param dest          the path where entry should be undeleted
     */
-    int (*undelete)(void *backend, struct rbh_fsentry *fsentry);
+    int (*undelete)(void *backend, struct rbh_fsentry *fsentry,
+                    const char *dest);
 };
 
 /**
@@ -214,10 +216,10 @@ rbh_pe_common_ops_fill_projection(
 static inline int
 rbh_pe_common_ops_undelete(
     const struct rbh_pe_common_operations *common_ops,
-    void *backend, struct rbh_fsentry *fsentry)
+    void *backend, struct rbh_fsentry *fsentry, const char *dest)
 {
     if (common_ops && common_ops->undelete) {
-        return common_ops->undelete(backend, fsentry);
+        return common_ops->undelete(backend, fsentry, dest);
     }
 
     errno = ENOTSUP;
