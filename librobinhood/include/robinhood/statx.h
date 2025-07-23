@@ -8,6 +8,7 @@
  */
 
 #include <stdint.h>
+#include <sys/stat.h>
 
 #define RBH_STATX_TYPE          0x00000001U
 #define RBH_STATX_MODE          0x00000002U
@@ -90,6 +91,9 @@ struct rbh_statx {
 #define AT_RBH_STATX_FORCE_SYNC     0x2000
 #define AT_RBH_STATX_DONT_SYNC      0x4000
 #define AT_RBH_STATX_SYNC_TYPE      0x6000
+
+void
+stat_from_statx(const struct rbh_statx *statxbuf, struct stat *st);
 
 int
 rbh_statx(int dirfd, const char *restrict pathname, int flags,
