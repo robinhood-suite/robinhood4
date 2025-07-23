@@ -22,6 +22,30 @@
       },
       "revId": "2eee3f136023dd6f36bbc36186b1aa3dd64f4b27",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "38fe99b7_a0797e25",
+        "filename": "rbh-policy/rbhpolicy/config/models/fileclass.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-07-23T13:25:48Z",
+      "side": 1,
+      "message": "Yes, I\u0027ll do that. And we\u0027ll see later if we have too many files to add a subdirectory.",
+      "parentUuid": "db216a40_e5875d4e",
+      "range": {
+        "startLine": 8,
+        "startChar": 22,
+        "endLine": 8,
+        "endChar": 29
+      },
+      "revId": "2eee3f136023dd6f36bbc36186b1aa3dd64f4b27",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
