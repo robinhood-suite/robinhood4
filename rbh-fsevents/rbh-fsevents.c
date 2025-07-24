@@ -32,6 +32,7 @@ struct deduplicator_options {
 };
 
 static const size_t DEFAULT_BATCH_SIZE = 100;
+static bool verbose = false;
 
 static void
 usage(void)
@@ -70,6 +71,7 @@ usage(void)
         "    -h, --help      print this message and exit\n"
         "    -m, --max       Set a maximum number of changelog to read\n"
         "    -r, --raw       do not enrich changelog records (default)\n"
+        "    -v, --verbose   Set the verbose mode\n"
         "\n"
         "Note that uploading raw records to a RobinHood backend will fail, they have to\n"
         "be enriched first.\n"
@@ -323,6 +325,10 @@ feed(struct sink *sink, struct source *source,
      struct deduplicator_options *dedup_opts)
 {
     struct rbh_mut_iterator *deduplicator;
+    struct timespec total_enrich = {0};
+    struct timespec total_read = {0};
+    struct timespec start, end;
+    int rc;
 
     deduplicator = deduplicator_new(dedup_opts->batch_size, source);
     if (deduplicator == NULL)
@@ -332,9 +338,24 @@ feed(struct sink *sink, struct source *source,
         struct rbh_iterator *fsevents;
 
         errno = 0;
+
+        if (verbose) {
+            rc = clock_gettime(CLOCK_REALTIME, &start);
+            if (rc)
+                error(EXIT_FAILURE, 0, "Unable to get start time");
+        }
+
         fsevents = rbh_mut_iter_next(deduplicator);
         if (fsevents == NULL)
             break;
+
+        if (verbose) {
+            rc = clock_gettime(CLOCK_REALTIME, &end);
+            if (rc)
+                error(EXIT_FAILURE, 0, "Unable to get end time");
+
+            timespec_accumulate(&total_read, start, end);
+        }
 
         if (builder != NULL)
             fsevents = build_enrich_iter(builder, fsevents, skip_error);
@@ -344,10 +365,32 @@ feed(struct sink *sink, struct source *source,
         if (fsevents == NULL)
             error(EXIT_FAILURE, errno, "iter_enrich");
 
+        if (verbose) {
+            rc = clock_gettime(CLOCK_REALTIME, &start);
+            if (rc)
+                error(EXIT_FAILURE, 0, "Unable to get start time");
+        }
+
         if (sink_process(sink, fsevents))
             break;
 
+        if (verbose) {
+            rc = clock_gettime(CLOCK_REALTIME, &end_enri);
+            if (rc)
+                error(EXIT_FAILURE, 0, "Unable to get end time");
+
+            timespec_accumulate(&total_enrich, start, end);
+        }
+
         rbh_iter_destroy(fsevents);
+    }
+
+    if (verbose) {
+        printf("Total time elapsed to read changelogs and dedup:"
+               "%ld.%09ld seconds\n", total_read.tv_sec, total_read.tv_nsec);
+        printf("Total time elapsed to enrich and update mongo:"
+               "%ld.%09ld seconds\n", total_enrich.tv_sec,
+               total_enrich.tv_nsec);
     }
 
     switch (errno) {
@@ -438,6 +481,11 @@ main(int argc, char *argv[])
             .name = "raw",
             .val = 'r',
         },
+        {
+            .name = "verbose",
+            .has_arg = no_argument,
+            .val = 'v',
+        },
         {}
     };
     struct deduplicator_options dedup_opts = {
@@ -455,7 +503,7 @@ main(int argc, char *argv[])
     rbh_apply_aliases(&argc, &argv);
 
     /* Parse the command line */
-    while ((c = getopt_long(argc, argv, "b:c:d:e:hm:nr", LONG_OPTIONS,
+    while ((c = getopt_long(argc, argv, "b:c:d:e:hm:nrv", LONG_OPTIONS,
                             NULL)) != -1) {
         switch (c) {
         case 'b':
@@ -494,6 +542,9 @@ main(int argc, char *argv[])
         case 'x':
             rbh_display_resolved_argv(NULL, &argc, &argv);
             return EXIT_SUCCESS;
+        case 'v':
+            verbose = true;
+            break;
         case '?':
         default:
             /* getopt_long() prints meaningful error messages itself */

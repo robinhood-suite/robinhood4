@@ -153,3 +153,45 @@ rbh_count_args_before_uri(int argc, char **argv)
 
     return count;
 }
+
+struct timespec
+timespec_sub(struct timespec end, struct timespec start)
+{
+    struct timespec diff = {0};
+
+    diff.tv_sec  = end.tv_sec  - start.tv_sec;
+    diff.tv_nsec = end.tv_nsec - start.tv_nsec;
+
+    if (diff.tv_nsec < 0) {
+        diff.tv_sec  -= 1;
+        diff.tv_nsec += 1000000000L;
+    }
+
+    return diff;
+}
+
+struct timespec
+timespec_add(struct timespec a, struct timespec b)
+{
+    struct timespec result = {0};
+
+    result.tv_sec  = a.tv_sec  + b.tv_sec;
+    result.tv_nsec = a.tv_nsec + b.tv_nsec;
+
+    if (result.tv_nsec >= 1000000000L) {
+        result.tv_sec  += 1;
+        result.tv_nsec -= 1000000000L;
+    }
+
+    return result;
+}
+
+void
+timespec_accumulate(struct timespec *accum, struct timespec start,
+                    struct timespec end)
+{
+    struct timespec delta;
+
+    delta = timespec_diff(end, start);
+    *accum = timespec_add(*accum, delta);
+}
