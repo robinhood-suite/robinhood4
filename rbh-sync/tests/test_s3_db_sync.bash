@@ -9,6 +9,15 @@
 test_dir=$(dirname $(readlink -e $0))
 . $test_dir/../../utils/tests/framework.bash
 
+rbh_sync_s3()
+{
+    if [[ "$WITH_MPI" == "true" ]]; then
+        rbh_sync "rbh:s3-mpi:$1" "$2"
+    else
+        rbh_sync "rbh:s3:$1" "$2"
+    fi
+}
+
 minio_setup()
 {
     export MC_INSECURE=1
@@ -24,7 +33,7 @@ test_sync()
     mc mb local/test-bucket
     touch test_obj
     mc cp test_obj local/test-bucket
-    rbh_sync "rbh:s3:" "rbh:$db:$testdb"
+    rbh_sync_s3 "" "rbh:$db:$testdb"
 
     find_attribute '"ns.name":"test_obj"'
     find_attribute '"ns.xattrs.path":"test-bucket/test_obj"'
@@ -37,7 +46,7 @@ test_sync_size()
     mc cp test_obj local/test-bucket
     local length=$(stat -c %s "test_obj")
 
-    rbh_sync "rbh:s3:" "rbh:$db:$testdb"
+    rbh_sync_s3 "" "rbh:$db:$testdb"
     find_attribute '"ns.xattrs.path":"test-bucket/test_obj"' \
                    '"statx.size" : '$length
 }
@@ -48,7 +57,7 @@ test_sync_mtime()
     touch test_obj
     mc cp test_obj local/test-bucket
 
-    rbh_sync "rbh:s3:." "rbh:$db:$testdb"
+    rbh_sync_s3 "" "rbh:$db:$testdb"
 
     local filemtime=$(mc stat local/test-bucket/test_obj | grep "Date" | \
                       awk -F" : " '{print $2}'  | xargs -I {} date -d "{}" +%s)
@@ -59,7 +68,7 @@ test_sync_mtime()
 
 test_sync_empty()
 {
-    rbh_sync "rbh:s3:." "rbh:$db:$testdb"
+    rbh_sync_s3 "" "rbh:$db:$testdb"
     local count=$(count_documents)
 
     if [[ $count -ne 0 ]]; then
@@ -71,7 +80,7 @@ test_sync_empty_bucket()
 {
     mc mb local/test-bucket
 
-    rbh_sync "rbh:s3:." "rbh:$db:$testdb"
+    rbh_sync_s3 "" "rbh:$db:$testdb"
     local count=$(count_documents)
 
     if [[ $count -ne 0 ]]; then
@@ -87,7 +96,7 @@ test_sync_custom_metadata()
                   test_obj local/test-bucket/test_obj
     rm test_obj
 
-    rbh_sync "rbh:s3:." "rbh:$db:$testdb"
+    rbh_sync_s3 "" "rbh:$db:$testdb"
     find_attribute '"ns.name":"test_obj"'
     find_attribute '"xattrs.user_metadata.test_metadata1":"test_value1"'
     find_attribute '"xattrs.user_metadata.test_metadata2":"test_value2"'
@@ -103,7 +112,7 @@ test_sync_multi_buckets()
         mc cp test_obj local/test-bucket-$i/test_obj_$i
     done
 
-    rbh_sync "rbh:s3:." "rbh:$db:$testdb"
+    rbh_sync_s3 "" "rbh:$db:$testdb"
 
     for i in `seq 1 5`
     do
@@ -127,7 +136,7 @@ test_sync_mixed_buckets()
 
     mc cp test_obj local/test-bucket-3/test_obj_3-
 
-    rbh_sync "rbh:s3:." "rbh:$db:$testdb"
+    rbh_sync_s3 "" "rbh:$db:$testdb"
 
     find_attribute '"ns.name":"test_obj_3-"'
 
@@ -151,19 +160,19 @@ test_sync_branch()
     mc cp test_obj local/$bucket_1/$object_1
     mc cp test_obj local/$bucket_2/$object_2
 
-    local output=$(rbh_sync "rbh:s3:#not_a_bucket" "rbh:$db:$testdb" 2>&1)
+    local output=$(rbh_sync_s3 "#not_a_bucket" "rbh:$db:$testdb" 2>&1)
 
     if [[ $output != *"specified bucket does not exist"* ]]; then
         error "Branching with invalid bucket name should have failed"
     fi
 
-    rbh_sync "rbh:s3:#$bucket_1" "rbh:$db:$testdb"
+    rbh_sync_s3 "#$bucket_1" "rbh:$db:$testdb"
 
     find_attribute '"ns.name":"'$object_1'"'
     find_attribute '"ns.xattrs.path":"'$bucket_1/$object_1'"'
     ! (find_attribute '"ns.xattrs.path":"'$bucket_2/$object_2'"')
 
-    rbh_sync "rbh:s3:#$bucket_2" "rbh:$db:$testdb"
+    rbh_sync_s3 "#$bucket_2" "rbh:$db:$testdb"
 
     find_attribute '"ns.name":"'$object_2'"'
     find_attribute '"ns.xattrs.path":"'$bucket_2/$object_2'"'
@@ -247,8 +256,12 @@ minio_teardown()
 declare -a tests=(test_sync test_sync_size test_sync_mtime test_sync_empty
                   test_sync_empty_bucket test_sync_custom_metadata
                   test_sync_multi_buckets test_sync_mixed_buckets
-                  test_sync_branch test_sync_valid_uri test_sync_partial_uri
+                  test_sync_valid_uri test_sync_partial_uri
                   test_sync_invalid_uri test_sync_with_region)
+
+if [[ $WITH_MPI == false ]]; then
+    tests+=(test_sync_branch)
+fi
 
 trap -- "minio_teardown" EXIT
 
