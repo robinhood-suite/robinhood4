@@ -10,6 +10,9 @@ backends:
     posix-mpi:
         extends: posix
         iterator: mfu
+    s3-mpi:
+        extends: s3
+        iterator: mpi
     lustre-mpi:
         extends: posix
         iterator: mfu

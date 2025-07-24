@@ -21,6 +21,19 @@
                                    RBH_S3_BACKEND_MINOR, \
                                    RBH_S3_BACKEND_RELEASE)
 
+struct item_data {
+    int64_t length;
+    int64_t current_id;
+    char **list;
+};
+
+struct s3_iterator {
+    struct rbh_mut_iterator iterator;
+    struct rbh_sstack *values;
+    struct item_data bkt_data;
+    struct item_data obj_data;
+};
+
 struct rbh_backend *
 rbh_s3_backend_new(__attribute__((unused))
                    const struct rbh_backend_plugin *self,
@@ -30,5 +43,8 @@ rbh_s3_backend_new(__attribute__((unused))
 
 void
 rbh_s3_plugin_destroy();
+
+void
+s3_iter_destroy(void *iterator);
 
 #endif
