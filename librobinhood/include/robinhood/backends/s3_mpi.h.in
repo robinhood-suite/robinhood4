@@ -1,0 +1,52 @@
+/* This file is part of RobinHood 4
+ * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
+ *                    alternatives
+ *
+ * SPDX-License-Identifer: LGPL-3.0-or-later
+ */
+
+#ifndef ROBINHOOD_S3_MPI_H
+#define ROBINHOOD_S3_MPI_H
+
+#include <robinhood/iterator.h>
+#include <robinhood/plugin.h>
+#include <robinhood/backends/s3_extension.h>
+
+#define RBH_S3_MPI_PLUGIN_NAME "s3_mpi"
+
+#mesondefine RBH_S3_MPI_PLUGIN_MAJOR
+#mesondefine RBH_S3_MPI_PLUGIN_MINOR
+#mesondefine RBH_S3_MPI_PLUGIN_RELEASE
+#define RBH_S3_MPI_PLUGIN_VERSION RPV(RBH_S3_MPI_PLUGIN_MAJOR, \
+                                      RBH_S3_MPI_PLUGIN_MINOR, \
+                                      RBH_S3_MPI_PLUGIN_RELEASE)
+
+struct item_data {
+    int64_t length;
+    int64_t current_id;
+    char **list;
+};
+
+struct s3_iterator {
+    struct rbh_mut_iterator iterator;
+    struct rbh_sstack *values;
+    struct item_data bkt_data;
+    struct item_data obj_data;
+};
+
+struct mfu_iterator {
+    struct s3_iterator s3;
+    struct rbh_fsentry *
+    (*fsentry_new)(struct s3_iterator *iter);
+};
+
+struct s3_iterator *
+rbh_s3_mpi_iter_new();
+
+void
+rbh_mpi_initialize(void);
+
+void
+rbh_mpi_finalize(void);
+
+#endif
