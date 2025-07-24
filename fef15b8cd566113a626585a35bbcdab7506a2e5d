@@ -1,0 +1,716 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "454b452f_0f6c8981",
+        "filename": "librobinhood/include/robinhood/backends/meson.build",
+        "patchSetId": 2
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-07-24T14:42:16Z",
+      "side": 1,
+      "message": "sugest: add a `build_mpi` variable like `build_mfu`. Here, we are building the S3 MPI iterator only if mpiFileUtils is installed. We should be able to build the S3 MPI iterator without mpiFileUtils but with mpi installed.",
+      "revId": "fef15b8cd566113a626585a35bbcdab7506a2e5d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b4241e0f_751a58e3",
+        "filename": "librobinhood/include/robinhood/backends/meson.build",
+        "patchSetId": 2
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-07-24T14:42:16Z",
+      "side": 1,
+      "message": "style: alignment",
+      "range": {
+        "startLine": 147,
+        "startChar": 30,
+        "endLine": 147,
+        "endChar": 36
+      },
+      "revId": "fef15b8cd566113a626585a35bbcdab7506a2e5d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1c83dc88_33b960d3",
+        "filename": "librobinhood/include/robinhood/backends/meson.build",
+        "patchSetId": 2
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-07-24T14:42:16Z",
+      "side": 1,
+      "message": "style: alignment",
+      "range": {
+        "startLine": 167,
+        "startChar": 33,
+        "endLine": 167,
+        "endChar": 36
+      },
+      "revId": "fef15b8cd566113a626585a35bbcdab7506a2e5d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9b02cfe7_a27ac846",
+        "filename": "librobinhood/include/robinhood/backends/s3_extension.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-07-24T14:42:16Z",
+      "side": 1,
+      "message": "minor: in alphabetical order",
+      "range": {
+        "startLine": 15,
+        "startChar": 0,
+        "endLine": 19,
+        "endChar": 31
+      },
+      "revId": "fef15b8cd566113a626585a35bbcdab7506a2e5d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "99f201fd_e90e97a3",
+        "filename": "librobinhood/include/robinhood/backends/s3_mpi.h.in",
+        "patchSetId": 2
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-07-24T14:42:16Z",
+      "side": 1,
+      "message": "major: these functions are already defined in `mfu.h.in`",
+      "range": {
+        "startLine": 46,
+        "startChar": 0,
+        "endLine": 50,
+        "endChar": 23
+      },
+      "revId": "fef15b8cd566113a626585a35bbcdab7506a2e5d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3e55edfa_4b92fe04",
+        "filename": "librobinhood/src/plugins/s3/config.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-07-24T14:42:16Z",
+      "side": 1,
+      "message": "major: this function is already defined in the POSIX plugin",
+      "range": {
+        "startLine": 17,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 1
+      },
+      "revId": "fef15b8cd566113a626585a35bbcdab7506a2e5d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6c1278b2_4e9a74b1",
+        "filename": "librobinhood/src/plugins/s3/config.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-07-24T14:42:16Z",
+      "side": 1,
+      "message": "defect: The plugin S3 doesn\u0027t have a `fts` iterator",
+      "range": {
+        "startLine": 36,
+        "startChar": 3,
+        "endLine": 37,
+        "endChar": 17
+      },
+      "revId": "fef15b8cd566113a626585a35bbcdab7506a2e5d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a49646dd_f96aa068",
+        "filename": "librobinhood/src/plugins/s3/config.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-07-24T14:42:16Z",
+      "side": 1,
+      "message": "style: alignment",
+      "range": {
+        "startLine": 53,
+        "startChar": 19,
+        "endLine": 53,
+        "endChar": 22
+      },
+      "revId": "fef15b8cd566113a626585a35bbcdab7506a2e5d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cebec09b_accd3511",
+        "filename": "librobinhood/src/plugins/s3/config.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-07-24T14:42:16Z",
+      "side": 1,
+      "message": "I think, this function should be mutualized with the function from the POSIX plugin.",
+      "range": {
+        "startLine": 57,
+        "startChar": 4,
+        "endLine": 78,
+        "endChar": 5
+      },
+      "revId": "fef15b8cd566113a626585a35bbcdab7506a2e5d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fd676652_7b581ef8",
+        "filename": "librobinhood/src/plugins/s3/iterators/mpi/iterator.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-07-24T14:42:16Z",
+      "side": 1,
+      "message": "major: no need to reinitialize these functions, they are already defined in the mfu iterator",
+      "range": {
+        "startLine": 34,
+        "startChar": 0,
+        "endLine": 58,
+        "endChar": 1
+      },
+      "revId": "fef15b8cd566113a626585a35bbcdab7506a2e5d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4314cce2_2ca6f0ea",
+        "filename": "librobinhood/src/plugins/s3/iterators/mpi/iterator.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-07-24T14:42:16Z",
+      "side": 1,
+      "message": "minor: `s3_mpi_iter_destroy`",
+      "range": {
+        "startLine": 61,
+        "startChar": 0,
+        "endLine": 61,
+        "endChar": 15
+      },
+      "revId": "fef15b8cd566113a626585a35bbcdab7506a2e5d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dcee9e4a_a1b66c68",
+        "filename": "librobinhood/src/plugins/s3/iterators/mpi/iterator.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-07-24T14:42:16Z",
+      "side": 1,
+      "message": "sugest: \n```\ns3_iter_destroy(s3_iter);\nrbh_mpi_dec_ref(rbh_mpi_finalize);\n```",
+      "range": {
+        "startLine": 65,
+        "startChar": 4,
+        "endLine": 69,
+        "endChar": 69
+      },
+      "revId": "fef15b8cd566113a626585a35bbcdab7506a2e5d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "86adfb2d_11a59207",
+        "filename": "librobinhood/src/plugins/s3/iterators/mpi/iterator.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-07-24T14:42:16Z",
+      "side": 1,
+      "message": "major: `rbh_mpi_dec_ref(rbh_mpi_finalize);`",
+      "range": {
+        "startLine": 70,
+        "startChar": 4,
+        "endLine": 70,
+        "endChar": 23
+      },
+      "revId": "fef15b8cd566113a626585a35bbcdab7506a2e5d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "126e6a6e_83529c80",
+        "filename": "librobinhood/src/plugins/s3/iterators/mpi/iterator.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-07-24T14:42:16Z",
+      "side": 1,
+      "message": "minor: `S3_MPI_ITER_OPS`",
+      "range": {
+        "startLine": 75,
+        "startChar": 48,
+        "endLine": 75,
+        "endChar": 59
+      },
+      "revId": "fef15b8cd566113a626585a35bbcdab7506a2e5d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "32daf913_79cd7edd",
+        "filename": "librobinhood/src/plugins/s3/iterators/mpi/iterator.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-07-24T14:42:16Z",
+      "side": 1,
+      "message": "minor: `S3_MPI_ITER`",
+      "range": {
+        "startLine": 80,
+        "startChar": 37,
+        "endLine": 80,
+        "endChar": 44
+      },
+      "revId": "fef15b8cd566113a626585a35bbcdab7506a2e5d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d691c51e_db97ffc1",
+        "filename": "librobinhood/src/plugins/s3/iterators/mpi/iterator.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-07-24T14:42:16Z",
+      "side": 1,
+      "message": "style:\n```\nint\nget_sub_array_bounds\n```",
+      "range": {
+        "startLine": 84,
+        "startChar": 0,
+        "endLine": 84,
+        "endChar": 24
+      },
+      "revId": "fef15b8cd566113a626585a35bbcdab7506a2e5d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5f8ab970_12805d7b",
+        "filename": "librobinhood/src/plugins/s3/iterators/mpi/iterator.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-07-24T14:42:16Z",
+      "side": 1,
+      "message": "style: alignment",
+      "range": {
+        "startLine": 85,
+        "startChar": 25,
+        "endLine": 85,
+        "endChar": 26
+      },
+      "revId": "fef15b8cd566113a626585a35bbcdab7506a2e5d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c8e1eb14_5649d7c0",
+        "filename": "librobinhood/src/plugins/s3/iterators/mpi/iterator.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-07-24T14:42:16Z",
+      "side": 1,
+      "message": "style: to remove",
+      "range": {
+        "startLine": 87,
+        "startChar": 33,
+        "endLine": 87,
+        "endChar": 34
+      },
+      "revId": "fef15b8cd566113a626585a35bbcdab7506a2e5d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "83fe391e_aabe8eb9",
+        "filename": "librobinhood/src/plugins/s3/iterators/mpi/iterator.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-07-24T14:42:16Z",
+      "side": 1,
+      "message": "style: defined these variables at the start",
+      "range": {
+        "startLine": 94,
+        "startChar": 4,
+        "endLine": 94,
+        "endChar": 23
+      },
+      "revId": "fef15b8cd566113a626585a35bbcdab7506a2e5d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8f34e708_ba669d32",
+        "filename": "librobinhood/src/plugins/s3/iterators/mpi/iterator.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-07-24T14:42:16Z",
+      "side": 1,
+      "message": "major: `rbh_mpi_inc_ref(rbh_mpi_initialize);`",
+      "range": {
+        "startLine": 128,
+        "startChar": 4,
+        "endLine": 128,
+        "endChar": 25
+      },
+      "revId": "fef15b8cd566113a626585a35bbcdab7506a2e5d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4409c072_b5d83a59",
+        "filename": "librobinhood/src/plugins/s3/iterators/mpi/iterator.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-07-24T14:42:16Z",
+      "side": 1,
+      "message": "style: to remove",
+      "range": {
+        "startLine": 152,
+        "startChar": 62,
+        "endLine": 152,
+        "endChar": 63
+      },
+      "revId": "fef15b8cd566113a626585a35bbcdab7506a2e5d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cecf76a4_27002e84",
+        "filename": "librobinhood/src/plugins/s3/iterators/mpi/iterator.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-07-24T14:42:16Z",
+      "side": 1,
+      "message": "style: alignment",
+      "range": {
+        "startLine": 155,
+        "startChar": 20,
+        "endLine": 155,
+        "endChar": 51
+      },
+      "revId": "fef15b8cd566113a626585a35bbcdab7506a2e5d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ca8796c8_06301b01",
+        "filename": "librobinhood/src/plugins/s3/iterators/mpi/iterator.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-07-24T14:42:16Z",
+      "side": 1,
+      "message": "minor: check the result of the malloc",
+      "range": {
+        "startLine": 163,
+        "startChar": 12,
+        "endLine": 163,
+        "endChar": 66
+      },
+      "revId": "fef15b8cd566113a626585a35bbcdab7506a2e5d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bde15006_a3734940",
+        "filename": "librobinhood/src/plugins/s3/iterators/mpi/iterator.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-07-24T14:42:16Z",
+      "side": 1,
+      "message": "style: wrong indentation",
+      "range": {
+        "startLine": 161,
+        "startChar": 4,
+        "endLine": 172,
+        "endChar": 2
+      },
+      "revId": "fef15b8cd566113a626585a35bbcdab7506a2e5d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f8ff738e_4230d8dc",
+        "filename": "librobinhood/src/plugins/s3/iterators/mpi/iterator.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-07-24T14:42:16Z",
+      "side": 1,
+      "message": "minor: same, check the result of the malloc",
+      "range": {
+        "startLine": 178,
+        "startChar": 8,
+        "endLine": 178,
+        "endChar": 61
+      },
+      "revId": "fef15b8cd566113a626585a35bbcdab7506a2e5d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "17479d80_398cb46a",
+        "filename": "librobinhood/src/plugins/s3/iterators/mpi/iterator.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-07-24T14:42:16Z",
+      "side": 1,
+      "message": "sugest: define a variable",
+      "range": {
+        "startLine": 181,
+        "startChar": 41,
+        "endLine": 181,
+        "endChar": 43
+      },
+      "revId": "fef15b8cd566113a626585a35bbcdab7506a2e5d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "190037fb_173cb345",
+        "filename": "librobinhood/src/plugins/s3/iterators/mpi/iterator.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-07-24T14:42:16Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 181,
+        "startChar": 12,
+        "endLine": 181,
+        "endChar": 60
+      },
+      "revId": "fef15b8cd566113a626585a35bbcdab7506a2e5d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7d91e37a_0a5b5bb4",
+        "filename": "librobinhood/src/plugins/s3/iterators/mpi/iterator.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-07-24T14:42:16Z",
+      "side": 1,
+      "message": "sugest: remove this function and rename `s3_mpi_iterator_new` to `rbh_s3_mpi_iter_new`",
+      "range": {
+        "startLine": 209,
+        "startChar": 1,
+        "endLine": 213,
+        "endChar": 1
+      },
+      "revId": "fef15b8cd566113a626585a35bbcdab7506a2e5d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6e01ddbd_dc6cfa09",
+        "filename": "librobinhood/src/plugins/s3/iterators/mpi/s3_mpi_internals.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-07-24T14:42:16Z",
+      "side": 1,
+      "message": "question: why this include ?",
+      "range": {
+        "startLine": 15,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 19
+      },
+      "revId": "fef15b8cd566113a626585a35bbcdab7506a2e5d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a21f025b_8368dd2a",
+        "filename": "librobinhood/src/plugins/s3/s3.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-07-24T14:42:16Z",
+      "side": 1,
+      "message": "question: why include the mpi iterator ?",
+      "revId": "fef15b8cd566113a626585a35bbcdab7506a2e5d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "88d76da0_f2dfdf1e",
+        "filename": "librobinhood/src/plugins/s3/utils.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-07-24T14:42:16Z",
+      "side": 1,
+      "message": "question: why s3_mpi_internals and not s3_internals ?",
+      "revId": "fef15b8cd566113a626585a35bbcdab7506a2e5d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c248cd61_25ab3eed",
+        "filename": "librobinhood/src/plugins/s3/utils.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-07-24T14:42:16Z",
+      "side": 1,
+      "message": "style: add empty line",
+      "revId": "fef15b8cd566113a626585a35bbcdab7506a2e5d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
