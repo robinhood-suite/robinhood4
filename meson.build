@@ -81,8 +81,16 @@ else
     libhestia = disabler()
 endif
 
+build_s3_mpi = false
 if get_option('s3').enabled()
     libs3 = dependency('aws-cpp-sdk-s3', disabler: true, required: true)
+    libmpi = dependency('ompi', disabler: true, required: false)
+
+    if libmpi.found()
+        build_s3_mpi = true
+    else
+        message('openmpi library not found, do not compile with S3 MPI')
+    endif
 else
     libs3 = disabler()
 endif

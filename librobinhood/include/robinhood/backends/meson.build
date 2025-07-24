@@ -141,6 +141,30 @@ librbh_retention_h = configure_file(input: 'retention.h.in',
 
 install_headers(librbh_retention_h, subdir: 'robinhood/backends')
 
+
+
+# S3 MPI extension plugin
+
+if build_s3_mpi
+    librbh_s3_mpi_conf = configuration_data()
+
+    librbh_s3_mpi_conf.set('RBH_S3_MPI_PLUGIN_MAJOR', 1)
+    librbh_s3_mpi_conf.set('RBH_S3_MPI_PLUGIN_MINOR', 0)
+    librbh_s3_mpi_conf.set('RBH_S3_MPI_PLUGIN_RELEASE', 0)
+
+    librbh_s3_mpi_version = '@0@.@1@.@2@'.format(
+        librbh_s3_mpi_conf.get('RBH_S3_MPI_PLUGIN_MAJOR'),
+        librbh_s3_mpi_conf.get('RBH_S3_MPI_PLUGIN_MINOR'),
+        librbh_s3_mpi_conf.get('RBH_S3_MPI_PLUGIN_RELEASE')
+    )
+
+    librbh_s3_mpi_h = configure_file(input: 's3_mpi.h.in',
+                                     output: 's3_mpi.h',
+                                     configuration: librbh_s3_mpi_conf)
+
+    install_headers(librbh_s3_mpi_h, subdir: 'robinhood/backends')
+endif
+
 if not build_mfu
     subdir_done()
 endif
@@ -160,8 +184,8 @@ librbh_mfu_version = '@0@.@1@.@2@'.format(
 )
 
 librbh_mfu_h = configure_file(input: 'mfu.h.in',
-                                    output: 'mfu.h',
-                                    configuration: librbh_mfu_conf)
+                              output: 'mfu.h',
+                              configuration: librbh_mfu_conf)
 
 install_headers(librbh_mfu_h, subdir: 'robinhood/backends')
 
