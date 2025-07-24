@@ -18,7 +18,9 @@ librbh_s3 = library(
     'rbh-s3',
     sources: [
         's3.c',
+        'config.c',
         'plugin.c',
+        'utils.c',
     ],
     version: librbh_s3_version, # defined in include/robinhood/backends
     link_with: [librobinhood, s3_wrapper],
@@ -27,3 +29,6 @@ librbh_s3 = library(
     install: true,
     c_args: '-DHAVE_CONFIG_H',
 )
+if build_s3_mpi
+    subdir('iterators/mpi')
+endif
