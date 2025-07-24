@@ -169,4 +169,19 @@ size_printer(char *buffer, size_t buffer_size, size_t size);
 int
 rbh_count_args_before_uri(int argc, char **argv);
 
+/**
+ * Callback function to parse command output.
+ * The function can freely modify line contents
+ * without impacting program working.
+ *
+ * \param cb_arg    argument passed to command_call
+ * \param line      the line to be parsed
+ * \param size      size of the line buffer
+ * \param stream    fileno of the stream the line comes from
+ */
+typedef int (*parse_cb_t)(void *cb_arg, char *line, size_t size, int stream);
+
+/** Call a command and call cb_func for each output line. */
+int command_call(const char *cmd_line, parse_cb_t cb_func, void *cb_arg);
+
 #endif

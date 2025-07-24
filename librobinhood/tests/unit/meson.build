@@ -8,6 +8,8 @@ if not check.found()
     subdir_done()
 endif
 
+glib_dep = dependency('glib-2.0')
+
 foreach t: ['check_backend', 'check_filter', 'check_fsentry',
             'check_fsevent', 'check_hashmap', 'check_id', 'check_itertools',
             'check_list', 'check_lu_fid', 'check_plugin', 'check_queue',
@@ -15,7 +17,7 @@ foreach t: ['check_backend', 'check_filter', 'check_fsentry',
             'check_statx', 'check_uri', 'check_utils', 'check_value']
     test(t,
          executable(t, t + '.c',
-                    dependencies: [check, miniyaml],
+                    dependencies: [check, miniyaml, glib_dep ],
                     link_with: [librobinhood],
                     include_directories: rbh_include,
                     c_args: '-DHAVE_CONFIG_H'),
