@@ -210,7 +210,7 @@ main(int _argc, char *_argv[])
     for (int i = 0 ; i < argc ; i++) {
         char *arg = argv[i];
 
-        if (strcmp(arg, "--restore") == 0)
+        if (strcmp(arg, "--restore") == 0 || strcmp(arg, "-r") == 0)
             flags |= RBH_UNDELETE_RESTORE;
     }
 
