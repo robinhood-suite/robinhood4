@@ -17,19 +17,18 @@
 #include <string.h>
 
 #include "robinhood/backends/s3.h"
+#include "robinhood/backends/s3_extension.h"
 #include "robinhood/config.h"
 #include "robinhood/sstack.h"
 #include "robinhood/statx.h"
 #include "s3_internals.h"
-
 #include "s3_wrapper.h"
-#include "s3_internals.h"
 
 /*----------------------------------------------------------------------------*
  |                                s3_iterator                                 |
  *----------------------------------------------------------------------------*/
 
-static void
+void
 s3_iter_destroy(void *iterator)
 {
     struct s3_iterator *s3_iter = iterator;
@@ -96,11 +95,6 @@ s3_iterator_new(char* bucket_name)
 /*----------------------------------------------------------------------------*
  |                                  s3_backend                                |
  *----------------------------------------------------------------------------*/
-
-struct s3_backend {
-    struct rbh_backend backend;
-    struct s3_iterator *(*iter_new)();
-};
 
     /*--------------------------------------------------------------------*
      |                               branch                               |
