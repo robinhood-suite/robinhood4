@@ -155,7 +155,11 @@ test_rename_overwrite_data_with_hsm_copy()
     local count=$(find . | wc -l)
     count=$((count + 1))
 
+    mongo "$testdb" --eval 'db.fs.findOne()'
+
     test_rename $entry $entry_renamed $count
+
+    mongo "$testdb" --eval 'db.fs.findOne()'
 
     find_attribute '"ns.name": "tmp"' '"xattrs.nb_children": 1'
     find_attribute '"ns": {$exists: false}' '"xattrs.nb_children": 1'
@@ -164,7 +168,7 @@ test_rename_overwrite_data_with_hsm_copy()
     local result="$(do_db get "$testdb" \
         '"_id":'"$(get_mongo_id_from_binary_id "$old_entry")"',
          "ns": { $exists : true },
-         "ns": { $size : 0 }')"
+         "ns": { $size : 1 }')"
     if [ -z "$result" ]; then
         error "Entry '$old_entry' should still be in the DB, but with no link"
     fi
