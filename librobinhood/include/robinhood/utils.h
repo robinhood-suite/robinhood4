@@ -169,4 +169,38 @@ size_printer(char *buffer, size_t buffer_size, size_t size);
 int
 rbh_count_args_before_uri(int argc, char **argv);
 
+/**
+ * Computes the difference end - start and returns the result
+ * as a struct timespec.
+ *
+ * @param end    the ending time
+ * @param start  the starting time
+ *
+ * @return       the elapsed time between start and end
+ */
+struct timespec
+timespec_sub(struct timespec end, struct timespec start);
+
+/**
+ * Adds two struct timespec values
+ *
+ * @param a     the first operand
+ * @param b     the second operand
+ *
+ * @return      the resulting timespec sum
+ */
+struct timespec
+timespec_add(struct timespec a, struct timespec b);
+
+/**
+ * Computes the difference end - start and add it to accum
+ *
+ * @param accum  the total time
+ * @param start  the starting time
+ * @param end    the ending time
+ */
+void
+timespec_accumulate(struct timespec *accum, struct timespec start,
+                    struct timespec end);
+
 #endif
