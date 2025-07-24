@@ -49,7 +49,8 @@ if r.returncode() == 0 and libmfu.found()
     endforeach
 
     backend_path_env_for_mpi_tests.set('WITH_MPI', 'true')
-    integration_tests_mpi = ['test_posix_db_sync', 'test_mpifile_mongo_sync']
+    integration_tests_mpi = ['test_posix_db_sync', 'test_mpifile_mongo_sync',
+                             'test_s3_db_sync']
 
     if liblustre.found()
         integration_tests_mpi += ['test_lustre_db_sync']
