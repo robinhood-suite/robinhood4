@@ -945,10 +945,46 @@ lustre_get_default_dir_stripe(int fd, uint64_t flags)
     return value;
 }
 
+static int
+lhsm_rebind(const struct lu_fid *old_id, const struct lu_fid *new_id,
+            uint32_t hsm_archive_id, const char *dest)
+{
+    char old_fid_str[FID_LEN];
+    char new_fid_str[FID_LEN];
+    char cmd_line[512];
+    int rc;
+
+    if (!old_id || !new_id) {
+        fprintf(stderr, "Missing mandatory old/new fid\n");
+        return -EINVAL;
+    }
+
+    sprintf(old_fid_str, DFID, PFID(old_id));
+    sprintf(new_fid_str, DFID, PFID(new_id));
+
+    rc = snprintf(cmd_line, sizeof(cmd_line),
+                  "lhsmtool_posix --archive=%u -p /mnt/hsm --rebind %s %s %s",
+                  hsm_archive_id, old_fid_str, new_fid_str, dest);
+
+    if (rc < 0 || rc >= sizeof(cmd_line)) {
+        fprintf(stderr, "Error while formatting command line\n");
+        return -EINVAL;
+    }
+
+    printf("%s\n", cmd_line);
+
+    rc = command_call(cmd_line, NULL, NULL);
+    if (rc != 0)
+        fprintf(stderr, "Failed to execute rebind command\n");
+
+    return rc;
+}
+
 int
 rbh_lustre_undelete(void *backend, struct rbh_fsentry *fsentry,
                     const char *dest)
 {
+    const struct lu_fid *old_fid;
     const struct rbh_value *val;
     uint32_t hsm_archive_id = 0;
     struct lu_fid new_id = {0};
@@ -963,6 +999,8 @@ rbh_lustre_undelete(void *backend, struct rbh_fsentry *fsentry,
     if (val)
         hsm_archive_id = (uint32_t)val->int32;
 
+    old_fid = rbh_lu_fid_from_id(&fsentry->id);
+
     if (hsm_archive_id == 0) {
         fprintf(stderr, "hsm_archive_id should not be 0\n");
         return -1;
@@ -974,6 +1012,14 @@ rbh_lustre_undelete(void *backend, struct rbh_fsentry *fsentry,
         fprintf(stderr, "llapi_hsm_import failed to import\n");
         return rc;
     }
+
+    rc = lhsm_rebind(old_fid, &new_id, hsm_archive_id, dest);
+    if (rc) {
+        fprintf(stderr, "failed to rebind new_file to old_content\n");
+        return rc;
+    }
+
+    printf("%s has been successfully rebound\n", dest);
 
     return rc;
 }

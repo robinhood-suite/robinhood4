@@ -57,7 +57,9 @@ undelete_helper()
         "Usage:"
         "  %s <URI> -arguments       General informations about rbh-undelete"
         " command\n"
-        "  -h --help                 Show this message and exit\n";
+        "  -h --help                 Show this message and exit\n"
+        "  --restore                 Recreate a deleted entry that has been"
+        "deleted and rebind it to its old content\n";
     return printf(message, program_invocation_short_name);
 }
 
