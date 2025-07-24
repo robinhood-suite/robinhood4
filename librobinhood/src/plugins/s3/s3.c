@@ -17,6 +17,7 @@
 #include <string.h>
 
 #include "robinhood/backends/s3.h"
+#include "robinhood/backends/s3_extension.h"
 #include "robinhood/config.h"
 #include "robinhood/sstack.h"
 #include "robinhood/statx.h"
@@ -24,22 +25,24 @@
 
 #include "s3_internals.h"
 #include "s3_wrapper.h"
-#include "s3_internals.h"
 
 /*----------------------------------------------------------------------------*
  |                                s3_iterator                                 |
  *----------------------------------------------------------------------------*/
 
-static void
+void
 s3_iter_destroy(void *iterator)
 {
     struct s3_iterator *s3_iter = iterator;
 
-    rbh_sstack_destroy(s3_iter->values);
-    if (s3_iter->obj_data.list != NULL)
+    if (s3_iter->values)
+        rbh_sstack_destroy(s3_iter->values);
+
+    if (s3_iter->obj_data.length > 0)
         s3_delete_list(s3_iter->obj_data.length, s3_iter->obj_data.list);
 
-    s3_delete_list(s3_iter->bkt_data.length, s3_iter->bkt_data.list);
+    if (s3_iter->bkt_data.length > 0)
+        s3_delete_list(s3_iter->bkt_data.length, s3_iter->bkt_data.list);
 
     free(s3_iter);
 }
@@ -53,7 +56,7 @@ static const struct rbh_mut_iterator S3_ITER = {
     .ops = &S3_ITER_OPS,
 };
 
-static struct s3_iterator *
+static struct rbh_mut_iterator *
 s3_iterator_new(char* bucket_name)
 {
     struct s3_iterator *s3_iter = NULL;
@@ -87,17 +90,12 @@ s3_iterator_new(char* bucket_name)
 
     s3_iter->values = rbh_sstack_new(1 << 10);
 
-    return s3_iter;
+    return (struct rbh_mut_iterator *) s3_iter;
 }
 
 /*----------------------------------------------------------------------------*
  |                                  s3_backend                                |
  *----------------------------------------------------------------------------*/
-
-struct s3_backend {
-    struct rbh_backend backend;
-    struct s3_iterator *(*iter_new)();
-};
 
     /*--------------------------------------------------------------------*
      |                               branch                               |
@@ -209,7 +207,7 @@ s3_backend_filter(void *backend, const struct rbh_filter *filter,
         return NULL;
     }
 
-    s3_iter = s3->iter_new(NULL);
+    s3_iter = (struct s3_iterator *) s3->iter_new(NULL);
     if (s3_iter == NULL)
         return NULL;
 
