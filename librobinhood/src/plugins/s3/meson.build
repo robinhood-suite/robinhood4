@@ -29,3 +29,6 @@ librbh_s3 = library(
     install: true,
     c_args: '-DHAVE_CONFIG_H',
 )
+if build_s3_mpi
+    subdir('iterators/mpi')
+endif

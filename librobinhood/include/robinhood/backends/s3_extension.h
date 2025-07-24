@@ -21,12 +21,12 @@ typedef struct rbh_mut_iterator *(*iter_new_t)(const char *, const char *, int);
 
 struct s3_backend {
     struct rbh_backend backend;
-    struct s3_iterator *(*iter_new)();
+    struct rbh_mut_iterator *(*iter_new)();
 };
 
 struct rbh_s3_extension {
     struct rbh_plugin_extension extension;
-    struct s3_iterator *(*iter_new)();
+    struct rbh_mut_iterator *(*iter_new)();
 };
 
 static inline const struct rbh_s3_extension *
