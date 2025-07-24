@@ -982,14 +982,50 @@ build_fsentry_after_undelete(const char *path, struct rbh_fsentry *fsentry)
     return fsentry;
 }
 
+static int
+lhsm_rebind(const struct lu_fid *old_id, const struct lu_fid *new_id,
+            uint32_t hsm_archive_id, const char *dest)
+{
+    char old_fid_str[FID_LEN];
+    char new_fid_str[FID_LEN];
+    char cmd_line[512];
+    int rc;
+
+    rc = snprintf(old_fid_str, sizeof(old_fid_str), DFID, PFID(old_id));
+    if (rc < 0 || rc >= sizeof(old_fid_str))
+        goto out_snprintf_error;
+
+    rc = snprintf(new_fid_str, sizeof(new_fid_str), DFID, PFID(new_id));
+    if (rc < 0 || rc >= sizeof(new_fid_str))
+        goto out_snprintf_error;
+
+    rc = snprintf(cmd_line, sizeof(cmd_line),
+                  "lhsmtool_posix --archive=%u -p /mnt/hsm --rebind %s %s %s",
+                  hsm_archive_id, old_fid_str, new_fid_str, dest);
+    if (rc < 0 || rc >= sizeof(cmd_line))
+        goto out_snprintf_error;
+
+    rc = command_call(cmd_line, NULL, NULL);
+    if (rc != 0)
+        fprintf(stderr, "Failed to execute rebind command\n");
+
+    return rc;
+
+out_snprintf_error:
+    fprintf(stderr, "Error while formatting string\n");
+    return -EINVAL;
+}
+
 struct rbh_fsentry *
 rbh_lustre_undelete(void *backend, const char *path,
                     struct rbh_fsentry *fsentry)
 {
     struct rbh_fsentry *new_fsentry;
+    const struct lu_fid *old_fid;
     const struct rbh_value *val;
     uint32_t hsm_archive_id = 0;
     struct lu_fid new_id = {0};
+    char new_fid_str[FID_LEN];
     struct lu_fid *p_new_id;
     struct stat st;
     int rc = 0;
@@ -1005,12 +1041,28 @@ rbh_lustre_undelete(void *backend, const char *path,
         return NULL;
     }
 
+    old_fid = rbh_lu_fid_from_id(&fsentry->id);
+
     rc = llapi_hsm_import(path, hsm_archive_id, &st, 0, -1, 0, 0, NULL,
                           p_new_id);
     if (rc) {
         fprintf(stderr, "llapi_hsm_import failed to import\n");
         return NULL;
     }
+
+    rc = lhsm_rebind(old_fid, &new_id, hsm_archive_id, path);
+    if (rc) {
+        fprintf(stderr, "failed to rebind new_file to old_content\n");
+        return NULL;
+    }
+
+    rc = snprintf(new_fid_str, sizeof(new_fid_str), DFID, PFID(&new_id));
+    if (rc < 0 || rc >= sizeof(new_fid_str)) {
+        fprintf(stderr, "Error whilde formatting new_fid_str");
+        return NULL;
+    }
+
+    printf("'%s' has been undeleted, new FID is '%s'\n", path, new_fid_str);
 
     new_fsentry = build_fsentry_after_undelete(path, fsentry);
     if (new_fsentry == NULL) {
