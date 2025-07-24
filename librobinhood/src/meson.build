@@ -5,6 +5,7 @@
 # SPDX-License-Identifer: LGPL-3.0-or-later
 
 libdl = cc.find_library('dl', required: false)
+glib_dep = dependency('glib-2.0')
 
 librobinhood = library(
     'robinhood',
@@ -34,6 +35,7 @@ librobinhood = library(
         'stack.c',
         'statx.c',
         'uri.c',
+        'utils/command.c',
         'utils/path.c',
         'utils/uri.c',
         'utils/regex.c',
@@ -42,7 +44,7 @@ librobinhood = library(
         'value.c',
     ],
     version: meson.project_version(),
-    dependencies: [ libdl, miniyaml ],
+    dependencies: [ libdl, miniyaml, glib_dep ],
     include_directories: rbh_include,
     install: true,
     c_args: '-DHAVE_CONFIG_H',

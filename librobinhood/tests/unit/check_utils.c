@@ -9,10 +9,68 @@
 # include "config.h"
 #endif
 
+#include <glib.h>
+#include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "check-compat.h"
 #include "robinhood/utils.h"
+
+/*----------------------------------------------------------------------------*
+ |                                 command_call                               |
+ *----------------------------------------------------------------------------*/
+
+static int
+parse_line(void *arg, char *line, size_t size, int stream)
+{
+    GList **ctx = (GList **)arg;
+    int len;
+
+    if (line == NULL)
+        return -EINVAL;
+
+    len = strnlen(line, size);
+    /* terminate the string */
+    if (len >= size)
+        line[len - 1] = '\0';
+
+    *ctx = g_list_append(*ctx, g_strdup(line));
+    return 0;
+}
+
+START_TEST(ccs)
+{
+    GList *lines = NULL;
+    char buffer[256];
+    GList *line;
+    FILE *hosts;
+    int rc = 0;
+
+    hosts = fopen("/etc/hosts", "r");
+    ck_assert_ptr_nonnull(hosts);
+
+    /** call a command and call cb_func for each output line */
+    rc = command_call("cat /etc/hosts", parse_line, &lines);
+
+    ck_assert_int_eq(rc, 0);
+
+    line = lines;
+    while (fgets(buffer, sizeof(buffer), hosts)) {
+        size_t buffer_length = strlen(buffer);
+
+        if (buffer[buffer_length - 1] == '\n')
+            buffer[buffer_length - 1] = '\0';
+
+        ck_assert_str_eq(buffer, (char *) line->data);
+        line = line->next;
+    }
+
+    fclose(hosts);
+
+    g_list_free_full(lines, free);
+}
+END_TEST
 
 /*----------------------------------------------------------------------------*
  |                              size_printer                                  |
@@ -221,6 +279,9 @@ unit_suite(void)
     tcase_add_test(tests, dp_m);
     tcase_add_test(tests, dp_h);
     tcase_add_test(tests, dp_d);
+
+    tests = tcase_create("command_call");
+    tcase_add_test(tests, ccs);
 
     suite_add_tcase(suite, tests);
 
