@@ -203,4 +203,26 @@ void
 timespec_accumulate(struct timespec *accum, struct timespec start,
                     struct timespec end);
 
+/**
+ * Callback function to parse command output.
+ *
+ * The function can freely modify line contents without impacting program
+ * working.
+ *
+ * @param cb_arg    argument passed to command_call
+ * @param line      the line to be parsed
+ * @param size      size of the line buffer
+ * @param stream    fileno of the stream the line comes from
+ */
+typedef int (*parse_cb_t)(void *cb_arg, char *line, size_t size, int stream);
+
+/**
+ * Call a command and call cb_func for each output line.
+ *
+ * @param cmd_line  the command line to execute
+ * @param cb_func   the callback function to use for each output line
+ * @param cb_arg    additional parameter for the callback function
+ */
+int command_call(const char *cmd_line, parse_cb_t cb_func, void *cb_arg);
+
 #endif
