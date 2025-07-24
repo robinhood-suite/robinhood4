@@ -34,6 +34,8 @@ struct lustre_changelog_iterator {
     char *mdt_name;
     int32_t source_mdt_index;
     uint64_t last_changelog_index;
+    uint64_t nb_changelog;
+    uint64_t max_changelog;
 
     FILE *dump_file;
 };
@@ -1097,6 +1099,12 @@ lustre_changelog_iter_next(void *iterator)
         errno = 0;
     }
 
+    if (records->max_changelog > 0 &&
+        records->max_changelog == records->nb_changelog) {
+        errno = ENODATA;
+        return NULL;
+    }
+
 retry:
     rc = llapi_changelog_recv(records->reader, &record);
     if (rc > 0 || rc == -EAGAIN) {
@@ -1108,6 +1116,7 @@ retry:
     }
 
     records->last_changelog_index = record->cr_index;
+    records->nb_changelog++;
 
     if (records->dump_file)
         dump_changelog(records, record);
@@ -1246,11 +1255,13 @@ static const struct rbh_iterator LUSTRE_CHANGELOG_ITERATOR = {
 static void
 lustre_changelog_iter_init(struct lustre_changelog_iterator *events,
                            const char *mdtname, const char *username,
-                           const char *dump_file)
+                           const char *dump_file, uint64_t max_changelog)
 {
     const char *mdtname_index;
     int rc;
 
+    events->max_changelog = max_changelog;
+    events->nb_changelog = 0;
     events->last_changelog_index = 0;
 
     rc = llapi_changelog_start(&events->reader,
@@ -1337,7 +1348,7 @@ static const struct source LUSTRE_SOURCE = {
 
 struct source *
 source_from_lustre_changelog(const char *mdtname, const char *username,
-                             const char *dump_file)
+                             const char *dump_file, uint64_t max_changelog)
 {
     struct lustre_source *source;
 
@@ -1346,7 +1357,7 @@ source_from_lustre_changelog(const char *mdtname, const char *username,
         error(EXIT_FAILURE, errno, "malloc");
 
     lustre_changelog_iter_init(&source->events, mdtname, username,
-                               dump_file);
+                               dump_file, max_changelog);
 
     initialize_source_stack(sizeof(struct rbh_value_pair) * (1 << 7));
     source->source = LUSTRE_SOURCE;
