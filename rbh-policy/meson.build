@@ -16,4 +16,5 @@ install_data('rbh-policy.py',
   install_mode: ['rwxr-xr-x', 0, 0]
 )
 
+subdir('rbhpolicy')
 subdir('tests')
