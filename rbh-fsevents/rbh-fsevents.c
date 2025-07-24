@@ -57,7 +57,6 @@ usage(void)
         "    -b, --batch-size NUMBER\n"
         "                    the number of fsevents to keep in memory for deduplication\n"
         "                    default: %lu\n"
-        "                    the path to a configuration file\n"
         "    -c, --config PATH\n"
         "                    the configuration file to use.\n"
         "    --dry-run       displays the command after alias management\n"
@@ -68,6 +67,8 @@ usage(void)
         "                    enrich changelog records by querying MOUNTPOINT as needed\n"
         "                    MOUNTPOINT is a RobinHood URI (eg. rbh:lustre:/mnt/lustre)\n"
         "    -h, --help      print this message and exit\n"
+        "    -m, --max NUMBER\n"
+        "                    Set a maximum number of changelog to read\n"
         "    -r, --raw       do not enrich changelog records (default)\n"
         "\n"
         "Note that uploading raw records to a RobinHood backend will fail, they have to\n"
@@ -123,7 +124,7 @@ source_from_file_uri(const char *file_path,
 }
 
 static struct source *
-source_from_uri(const char *uri, const char *dump_file)
+source_from_uri(const char *uri, const char *dump_file, uint64_t max_changelog)
 {
     struct source *source = NULL;
     struct rbh_raw_uri *raw_uri;
@@ -159,7 +160,8 @@ source_from_uri(const char *uri, const char *dump_file)
         source = source_from_file_uri(name, source_from_file);
     } else if (strcmp(raw_uri->path, "lustre") == 0) {
 #ifdef HAVE_LUSTRE
-        source = source_from_lustre_changelog(name, username, dump_file);
+        source = source_from_lustre_changelog(name, username, dump_file,
+                                              max_changelog);
 #else
         free(raw_uri);
         error(EX_USAGE, EINVAL, "MDT source is not available");
@@ -179,14 +181,14 @@ source_from_uri(const char *uri, const char *dump_file)
 }
 
 static struct source *
-source_new(const char *arg, const char *dump_file)
+source_new(const char *arg, const char *dump_file, uint64_t max_changelog)
 {
     if (strcmp(arg, "-") == 0)
         /* SOURCE is '-' (stdin) */
         return source_from_file(stdin);
 
     if (rbh_is_uri(arg))
-        return source_from_uri(arg, dump_file);
+        return source_from_uri(arg, dump_file, max_changelog);
 
     error(EX_USAGE, EINVAL, "%s", arg);
     __builtin_unreachable();
@@ -410,6 +412,11 @@ main(int argc, char *argv[])
             .val = 'd',
         },
         {
+            .name = "dry-run",
+            .has_arg = no_argument,
+            .val = 'x',
+        },
+        {
             .name = "enrich",
             .has_arg = required_argument,
             .val = 'e',
@@ -419,6 +426,11 @@ main(int argc, char *argv[])
             .val = 'h',
         },
         {
+            .name = "max",
+            .has_arg = required_argument,
+            .val = 'm',
+        },
+        {
             .name = "no-skip",
             .val = 'n',
         },
@@ -426,16 +438,12 @@ main(int argc, char *argv[])
             .name = "raw",
             .val = 'r',
         },
-        {
-            .name = "dry-run",
-            .has_arg = no_argument,
-            .val = 'x',
-        },
         {}
     };
     struct deduplicator_options dedup_opts = {
         .batch_size = DEFAULT_BATCH_SIZE,
     };
+    uint64_t max_changelog = 0;
     char *dump_file = NULL;
     int rc;
     char c;
@@ -447,7 +455,7 @@ main(int argc, char *argv[])
     rbh_apply_aliases(&argc, &argv);
 
     /* Parse the command line */
-    while ((c = getopt_long(argc, argv, "b:c:d:e:hnr", LONG_OPTIONS,
+    while ((c = getopt_long(argc, argv, "b:c:d:e:hm:nr", LONG_OPTIONS,
                             NULL)) != -1) {
         switch (c) {
         case 'b':
@@ -471,6 +479,10 @@ main(int argc, char *argv[])
         case 'h':
             usage();
             return 0;
+        case 'm':
+            if (str2uint64_t(optarg, &max_changelog))
+                error(EXIT_FAILURE, 0, "'%s' is not an integer", optarg);
+            break;
         case 'n':
             skip_error = false;
             break;
@@ -498,7 +510,7 @@ main(int argc, char *argv[])
         error(EX_USAGE, EINVAL,
               "Cannot output changelogs and fsevents both to stdout");
 
-    source = source_new(argv[optind++], dump_file);
+    source = source_new(argv[optind++], dump_file, max_changelog);
     sink = sink_new(argv[optind++]);
 
     if (enrich_builder) {
