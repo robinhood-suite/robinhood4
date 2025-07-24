@@ -109,7 +109,9 @@ usage()
         "\n"
         "Optional arguments:\n"
         "    -c,--config PATH     The configuration file to use\n"
-        "    -h,--help            Show this message and exit\n";
+        "    -h,--help            Show this message and exit\n"
+        "    -r,--restore         Recreate a deleted entry that has been\n"
+        "                         deleted and rebind it to its old content\n";
     return printf(message, program_invocation_short_name);
 }
 
@@ -182,7 +184,7 @@ main(int _argc, char *_argv[])
     for (int i = 0 ; i < argc ; i++) {
         char *arg = argv[i];
 
-        if (strcmp(arg, "--restore") == 0)
+        if (strcmp(arg, "--restore") == 0 || strcmp(arg, "-r") == 0)
             flags |= RBH_UNDELETE_RESTORE;
     }
 
