@@ -4,6 +4,7 @@
  *
  * SPDX-License-Identifer: LGPL-3.0-or-later
  */
+#include <linux/limits.h>
 #include <sysexits.h>
 
 #include <robinhood.h>
@@ -14,7 +15,8 @@
 #include <robinhood/filters/parser.h>
 
 enum rbh_undelete_option {
-    RBH_UNDELETE_RESTORE = 1 << 0
+    RBH_UNDELETE_RESTORE = 1 << 0,
+    RBH_UNDELETE_LIST    = 1 << 1
 };
 
 static struct rbh_backend *metadata_source, *target_entry;
@@ -51,7 +53,7 @@ undelete(const char *path)
     const struct rbh_filter_projection ALL = {
         /* Archived entries that have been deleted no longer have a PARENT_ID
          * or a NAME stored inside the database
-         * */
+         */
         .fsentry_mask = RBH_FP_ALL & ~RBH_FP_PARENT_ID & ~RBH_FP_NAME,
         .statx_mask = RBH_STATX_ALL,
     };
@@ -119,6 +121,98 @@ set_targets(const char *target_uri)
 }
 
 /*----------------------------------------------------------------------------*
+ |                                  rm_list()                                 |
+ *----------------------------------------------------------------------------*/
+
+static void
+rm_list(const char *regex)
+{
+    const struct rbh_filter_options OPTIONS = { 0 };
+    const struct rbh_filter_output OUTPUT = {
+        .type = RBH_FOT_PROJECTION,
+        .projection = {
+            .fsentry_mask = RBH_FP_NAMESPACE_XATTRS,
+            .statx_mask = 0,
+        },
+    };
+    const struct rbh_filter RM_TIME_FILTER = {
+        .op = RBH_FOP_EXISTS,
+        .compare = {
+            .field = {
+                .fsentry = RBH_FP_NAMESPACE_XATTRS,
+                .xattr = "rm_time"
+            },
+            .value = {
+                .type = RBH_VT_BOOLEAN,
+                .boolean = true
+            },
+        },
+    };
+    const struct rbh_filter PATH_PREFIX_FILTER = {
+        .op = RBH_FOP_REGEX,
+        .compare = {
+            .field = {
+                .fsentry = RBH_FP_NAMESPACE_XATTRS,
+                .xattr = "path"
+            },
+            .value = {
+                .type = RBH_VT_REGEX,
+                .regex = {
+                    .string = regex,
+                    .options = 0
+                },
+            },
+        },
+    };
+    const struct rbh_filter *AND_FILTERS[] = {
+        &RM_TIME_FILTER,
+        &PATH_PREFIX_FILTER
+    };
+    const struct rbh_filter FILTER = {
+        .op = RBH_FOP_AND,
+        .logical = {
+            .filters = AND_FILTERS,
+            .count = sizeof(AND_FILTERS) / sizeof(*AND_FILTERS)
+        }
+    };
+    struct rbh_mut_iterator *_fsentries;
+    struct rbh_fsentry *fsentry;
+    time_t rm_time;
+
+    _fsentries = rbh_backend_filter(metadata_source, &FILTER, &OPTIONS,
+                                    &OUTPUT, NULL);
+    if (!_fsentries)
+        return;
+
+    printf("DELETED FILES:\n");
+    while ((fsentry = rbh_mut_iter_next(_fsentries)) != NULL) {
+        const struct rbh_value *ns_rm_time;
+        const char *rm_path;
+
+        rm_path = fsentry_path(fsentry);
+        if (rm_path == NULL) {
+            fprintf(stderr, "'%s' is archived and deleted but has no rm_path\n",
+                    fsentry->name);
+            continue;
+        }
+
+        ns_rm_time = rbh_fsentry_find_ns_xattr(fsentry, "rm_time");
+        if (ns_rm_time == NULL) {
+            fprintf(stderr, "'%s' is archived and deleted but has no rm_time\n",
+                    fsentry->name);
+            continue;
+        }
+
+        rm_time = (time_t) ns_rm_time->int64;
+
+        printf("-- rm_path: %s   rm_time: %s \n", rm_path,
+               time_from_timestamp(&rm_time));
+    }
+
+    rbh_mut_iter_destroy(_fsentries);
+}
+
+/*----------------------------------------------------------------------------*
  |                                    cli                                     |
  *----------------------------------------------------------------------------*/
 
@@ -141,6 +235,8 @@ usage()
         "Optional arguments:\n"
         "    -c,--config PATH     The configuration file to use\n"
         "    -h,--help            Show this message and exit\n"
+        "    -l,--list            Display a list of deleted but archived\n"
+        "                         entries\n"
         "    -r,--restore         Recreate a deleted entry that has been\n"
         "                         deleted and rebind it to its old content\n"
         "\n"
@@ -210,12 +306,28 @@ main(int _argc, char *_argv[])
     for (int i = 0 ; i < argc ; i++) {
         char *arg = argv[i];
 
+        if (strcmp(arg, "--list") == 0 || strcmp(arg, "-l") == 0)
+            flags |= RBH_UNDELETE_LIST;
+
         if (strcmp(arg, "--restore") == 0 || strcmp(arg, "-r") == 0)
             flags |= RBH_UNDELETE_RESTORE;
     }
 
     if (flags & RBH_UNDELETE_RESTORE)
         return undelete(undelete_target_path);
+
+    if (flags & RBH_UNDELETE_LIST) {
+        char regex[PATH_MAX];
+
+        if (snprintf(regex, sizeof(regex), "^%s", undelete_target_path) == -1) {
+            fprintf(stderr,
+                    "Error while formatting regex associated with '%s'\n",
+                    undelete_target_path);
+            return EXIT_FAILURE;
+        }
+
+        rm_list(regex);
+    }
 
     return 0;
 }
