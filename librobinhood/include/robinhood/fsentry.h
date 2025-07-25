@@ -154,6 +154,19 @@ const struct rbh_value *
 rbh_fsentry_find_inode_xattr(const struct rbh_fsentry *entry, const char *key);
 
 /**
+ * Disclaimer: This function is only for archived entries that has been deleted,
+ * since the rm_time field is only available for them.
+ *
+ * Retrieve an entry's rm_time from its namespace attribute.
+ *
+ * @param fsentry       the entry whose path should be retrieved
+ *
+ * @return              the entry's path
+ */
+int64_t
+fsentry_rm_time(const struct rbh_fsentry *fsentry);
+
+/**
  * Retrieve an entry's path from its namespace attribute
  *
  * @param fsentry       the entry whose path should be retrieved
