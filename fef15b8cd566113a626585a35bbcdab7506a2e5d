@@ -434,6 +434,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "dd50c2f8_e73c1c53",
+        "filename": "librobinhood/src/plugins/s3/iterators/mpi/iterator.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-07-25T06:53:35Z",
+      "side": 1,
+      "message": "sugest:\n```\nif (chunk_index \u003c remainder)\n    *start \u003d chunk_index * base_chunk_size;\nelse\n    *start \u003d chunk_index * base_chunk_size + remainder;\n    \n*end \u003d *start + base_chunk_size - 1;\n```",
+      "range": {
+        "startLine": 97,
+        "startChar": 4,
+        "endLine": 105,
+        "endChar": 0
+      },
+      "revId": "fef15b8cd566113a626585a35bbcdab7506a2e5d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8f34e708_ba669d32",
         "filename": "librobinhood/src/plugins/s3/iterators/mpi/iterator.c",
         "patchSetId": 2
@@ -496,6 +519,29 @@
         "startChar": 20,
         "endLine": 155,
         "endChar": 51
+      },
+      "revId": "fef15b8cd566113a626585a35bbcdab7506a2e5d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a4f843e2_5f061f33",
+        "filename": "librobinhood/src/plugins/s3/iterators/mpi/iterator.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-07-25T06:53:35Z",
+      "side": 1,
+      "message": "question: Wouldn\u0027t be easier to retrieve all the buckets with all the processes and keep only one chunk with the `get_sub_array_bounds` function ?\n```\ns3_get_bucket_list();\nrc \u003d get_sub_array_bounds(...,mpi_size, mpi_rank, \u0026start, \u0026end);\nsub_size \u003d arr_end - arr_start + 1;\ntemp_array \u003d (char**)malloc(sub_size * sizeof(char*));\nmemcpy(temp_array ,s3_iter-\u003ebkt_data.list,sub_size * sizeof(char*));\ns3_iter-\u003ebkt_data.list \u003d temp_array;\ns3_iter-\u003ebkt_data.length \u003d sub_size;\n```",
+      "range": {
+        "startLine": 133,
+        "startChar": 4,
+        "endLine": 156,
+        "endChar": 0
       },
       "revId": "fef15b8cd566113a626585a35bbcdab7506a2e5d",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
