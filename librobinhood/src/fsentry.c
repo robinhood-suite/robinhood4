@@ -155,11 +155,9 @@ rbh_map_find(const struct rbh_value_map *map, const char *key)
     return NULL;
 }
 
-const struct rbh_value *
-rbh_fsentry_find_inode_xattr(const struct rbh_fsentry *entry,
-                             const char *key_to_find)
+static const struct rbh_value *
+fsentry_find_xattr(const struct rbh_value_map *map, const char *key_to_find)
 {
-    const struct rbh_value_map *map = &entry->xattrs.inode;
     const struct rbh_value *value = NULL;
     char *key = strdup(key_to_find);
     char *subkey;
@@ -192,6 +190,20 @@ rbh_fsentry_find_inode_xattr(const struct rbh_fsentry *entry,
     free(key);
 
     return value;
+}
+
+const struct rbh_value *
+rbh_fsentry_find_inode_xattr(const struct rbh_fsentry *entry,
+                             const char *key_to_find)
+{
+    return fsentry_find_xattr(&entry->xattrs.inode, key_to_find);
+}
+
+const struct rbh_value *
+rbh_fsentry_find_ns_xattr(const struct rbh_fsentry *entry,
+                          const char* key_to_find)
+{
+    return fsentry_find_xattr(&entry->xattrs.ns, key_to_find);
 }
 
 const char *
