@@ -4,6 +4,7 @@
  *
  * SPDX-License-Identifer: LGPL-3.0-or-later
  */
+#include <linux/limits.h>
 #include <sysexits.h>
 
 #include <robinhood.h>
@@ -14,7 +15,8 @@
 #include <robinhood/filters/parser.h>
 
 enum rbh_undelete_option {
-    RBH_UNDELETE_RESTORE = 1 << 0
+    RBH_UNDELETE_RESTORE = 1 << 0,
+    RBH_UNDELETE_LIST    = 1 << 1
 };
 
 static struct rbh_backend *from, *to;
@@ -53,7 +55,7 @@ undelete(const char *path)
     const struct rbh_filter_projection ALL = {
         /* Archived entries that have been deleted no longer have a PARENT_ID
          * or a NAME stored inside the database
-         * */
+         **/
         .fsentry_mask = RBH_FP_ALL & ~RBH_FP_PARENT_ID & ~RBH_FP_NAME,
         .statx_mask = RBH_STATX_ALL,
     };
@@ -88,6 +90,95 @@ undelete(const char *path)
 }
 
 /*----------------------------------------------------------------------------*
+ |                                  rm_list()                                 |
+ *----------------------------------------------------------------------------*/
+
+static void
+rm_list(const char *prefix)
+{
+    const struct rbh_filter_options OPTIONS = { 0 };
+    const struct rbh_filter_output OUTPUT = {
+        .type = RBH_FOT_PROJECTION,
+        .projection = {
+            .fsentry_mask = RBH_FP_NAMESPACE_XATTRS,
+            .statx_mask = 0,
+        },
+    };
+    const struct rbh_filter RM_TIME_FILTER = {
+        .op = RBH_FOP_EXISTS,
+        .compare = {
+            .field = {
+                .fsentry = RBH_FP_NAMESPACE_XATTRS,
+                .xattr = "rm_time"
+            },
+            .value = {
+                .type = RBH_VT_BOOLEAN,
+                .boolean = true
+            },
+        },
+    };
+    struct rbh_mut_iterator *_fsentries;
+    struct rbh_fsentry *fsentry;
+    char regex[PATH_MAX];
+    const char *rm_path;
+    time_t rm_time;
+    int rc;
+
+    rc = snprintf(regex, sizeof(regex), "^%s", prefix);
+    if (rc < 0 || rc >= sizeof(regex)) {
+        fprintf(stderr, "Error while formatting regex\n");
+        return;
+    }
+
+   const struct rbh_filter PATH_PREFIX_FILTER = {
+        .op = RBH_FOP_REGEX,
+        .compare = {
+            .field = {
+                .fsentry = RBH_FP_NAMESPACE_XATTRS,
+                .xattr = "path"
+            },
+            .value = {
+                .type = RBH_VT_REGEX,
+                .regex = {
+                    .string = regex,
+                    .options = 0
+                },
+            },
+        },
+    };
+   const struct rbh_filter *AND_FILTERS[] = {
+        &RM_TIME_FILTER,
+        &PATH_PREFIX_FILTER
+    };
+    const struct rbh_filter FILTER = {
+        .op = RBH_FOP_AND,
+        .logical = {
+            .filters = AND_FILTERS,
+            .count = sizeof(AND_FILTERS) / sizeof(*AND_FILTERS)
+        }
+    };
+
+    _fsentries = rbh_backend_filter(from, &FILTER, &OPTIONS, &OUTPUT);
+    if (!_fsentries)
+        return;
+
+    printf("DELETED FILES:\n");
+    while ((fsentry = rbh_mut_iter_next(_fsentries)) != NULL) {
+        rm_path = fsentry_path(fsentry);
+        rm_time = (time_t)rbh_fsentry_find_ns_xattr(fsentry,"rm_time")->int64;
+
+        if (rm_path && rm_time >= 0)
+            printf("-- rm_path: %s   rm_time: %s \n", rm_path,
+                   time_from_timestamp(&rm_time));
+        else
+            fprintf(stderr, "Invalid or missing rm_time or path for '%s'",
+                    fsentry->name);
+    }
+
+    rbh_mut_iter_destroy(_fsentries);
+}
+
+/*----------------------------------------------------------------------------*
  |                                    cli                                     |
  *----------------------------------------------------------------------------*/
 
@@ -110,6 +201,8 @@ usage()
         "Optional arguments:\n"
         "    -c,--config PATH     The configuration file to use\n"
         "    -h,--help            Show this message and exit\n"
+        "    -l,--list            Display a list of deleted but archived\n"
+        "                         entries\n"
         "    -r,--restore         Recreate a deleted entry that has been\n"
         "                         deleted and rebind it to its old content\n";
     return printf(message, program_invocation_short_name);
@@ -184,12 +277,18 @@ main(int _argc, char *_argv[])
     for (int i = 0 ; i < argc ; i++) {
         char *arg = argv[i];
 
+        if (strcmp(arg, "--list") == 0 || strcmp(arg, "-l") == 0)
+            flags |= RBH_UNDELETE_LIST;
+
         if (strcmp(arg, "--restore") == 0 || strcmp(arg, "-r") == 0)
             flags |= RBH_UNDELETE_RESTORE;
     }
 
     if (flags & RBH_UNDELETE_RESTORE)
         undelete(uri->fsname);
+
+    if (flags & RBH_UNDELETE_LIST)
+        rm_list(uri->fsname);
 
     free(uri);
 
