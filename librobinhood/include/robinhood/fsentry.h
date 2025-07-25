@@ -154,6 +154,23 @@ const struct rbh_value *
 rbh_fsentry_find_inode_xattr(const struct rbh_fsentry *entry, const char *key);
 
 /**
+ * Retrieve a value associated to a key in a fsentry's namespace's xattrs
+ *
+ * The key to retrieve can be in dot notation, i.e. "users.blob", so we want
+ * to retrieve the value associated to "blob", which requires checking the
+ * submap "users".
+ *
+ * @param entry         a pointer to a struct rbh_fsentry
+ * @param key           the key to find, here only "path" and "rm_time" are
+ *                      available
+ *
+ * @return              a pointer to the value associated with the key in the
+ *                      entry's namespace's xattrs
+ */
+const struct rbh_value *
+rbh_fsentry_find_ns_xattr(const struct rbh_fsentry *entry, const char *key);
+
+/**
  * Retrieve an entry's path from its namespace attribute
  *
  * @param fsentry       the entry whose path should be retrieved
