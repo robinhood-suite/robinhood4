@@ -744,10 +744,7 @@ unlink_inode_event(struct lu_fid *parent_id, char *name, size_t namelen,
 
             return 0;
         }
-<<<<<<< HEAD
 
-=======
->>>>>>> ad5e9c2 (lustre: lhsm_rebind function added)
         fsevent->type = RBH_FET_DELETE;
         return 0;
     }
