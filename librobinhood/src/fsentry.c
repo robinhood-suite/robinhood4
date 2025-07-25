@@ -194,6 +194,25 @@ rbh_fsentry_find_inode_xattr(const struct rbh_fsentry *entry,
     return value;
 }
 
+const struct rbh_value *
+rbh_fsentry_find_ns_xattr(const struct rbh_fsentry *entry,
+                          const char* key_to_find)
+{
+    if (!(entry->mask & RBH_FP_NAMESPACE_XATTRS))
+        return NULL;
+
+    for (size_t i = 0 ; i < entry->xattrs.ns.count ; i++) {
+        const struct rbh_value_pair *pair = &entry->xattrs.ns.pairs[i];
+
+        if (strcmp(pair->key, key_to_find) != 0)
+            continue;
+
+        return pair->value;
+    }
+
+    return NULL;
+}
+
 const char *
 fsentry_path(const struct rbh_fsentry *fsentry)
 {
