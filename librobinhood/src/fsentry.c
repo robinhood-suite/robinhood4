@@ -194,6 +194,27 @@ rbh_fsentry_find_inode_xattr(const struct rbh_fsentry *entry,
     return value;
 }
 
+int64_t
+fsentry_rm_time(const struct rbh_fsentry *fsentry)
+{
+    if (!(fsentry->mask & RBH_FP_NAMESPACE_XATTRS))
+        return -1;
+
+    for (size_t i = 0; i < fsentry->xattrs.ns.count; i++) {
+        const struct rbh_value_pair *pair = &fsentry->xattrs.ns.pairs[i];
+
+        if (strcmp(pair->key, "rm_time"))
+            continue;
+
+        if (pair->value->type != RBH_VT_INT64)
+            continue;
+
+        return pair->value->int64;
+    }
+
+    return -1;
+}
+
 const char *
 fsentry_path(const struct rbh_fsentry *fsentry)
 {
