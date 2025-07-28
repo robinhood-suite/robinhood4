@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5ab3d02f_0c207cc6",
+        "filename": "rbh-report/rbh-report.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-07-28T08:25:50Z",
+      "side": 1,
+      "message": "major: missing --verbose",
+      "range": {
+        "startLine": 143,
+        "startChar": 8,
+        "endLine": 143,
+        "endChar": 16
+      },
+      "revId": "16017acd58886fcecce0ca670dfee21aaed1f6d3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
