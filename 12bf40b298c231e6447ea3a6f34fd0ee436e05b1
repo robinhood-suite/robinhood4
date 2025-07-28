@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "85d5a40a_e9d0d9ac",
+        "filename": "librobinhood/include/robinhood/backends/s3_mpi.h.in",
+        "patchSetId": 3
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-07-28T06:51:34Z",
+      "side": 1,
+      "message": "defect: these structures shouldn\u0027t be declared in the MPI iterator. It means you can\u0027t build the plugin S3 without the MPI iterator because the plugin S3 depends of these structures.",
+      "range": {
+        "startLine": 24,
+        "startChar": 0,
+        "endLine": 35,
+        "endChar": 2
+      },
+      "revId": "12bf40b298c231e6447ea3a6f34fd0ee436e05b1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5cab022b_36289bbd",
+        "filename": "librobinhood/include/robinhood/backends/s3_mpi.h.in",
+        "patchSetId": 3
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-07-28T06:51:34Z",
+      "side": 1,
+      "message": "minor: I think this structure is not used",
+      "range": {
+        "startLine": 37,
+        "startChar": 0,
+        "endLine": 41,
+        "endChar": 2
+      },
+      "revId": "12bf40b298c231e6447ea3a6f34fd0ee436e05b1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
