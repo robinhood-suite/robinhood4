@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "051b9010_4d959b2b",
+        "filename": "rbh-fsevents/rbh-fsevents.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-07-28T08:24:53Z",
+      "side": 1,
+      "message": "nit: those as not really pre-uri options, the options can just be anywhere, so I\u0027d advise doing the usual and have the options after the destination (as normal `[OPTIONS]`)",
+      "range": {
+        "startLine": 40,
+        "startChar": 19,
+        "endLine": 40,
+        "endChar": 36
+      },
+      "revId": "fde66d101f88cfcfddde8d4dbe874012da0bee91",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e7d86377_64eea215",
+        "filename": "rbh-fsevents/rbh-fsevents.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-07-28T08:24:53Z",
+      "side": 1,
+      "message": "minor: add back the spaces",
+      "range": {
+        "startLine": 57,
+        "startChar": 16,
+        "endLine": 57,
+        "endChar": 17
+      },
+      "revId": "fde66d101f88cfcfddde8d4dbe874012da0bee91",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
