@@ -415,6 +415,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "696eea02_3ebf6a75",
+        "filename": "librobinhood/src/plugins/s3/iterators/mpi/iterator.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1038646
+      },
+      "writtenOn": "2025-07-28T09:21:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dcee9e4a_a1b66c68",
+      "range": {
+        "startLine": 65,
+        "startChar": 4,
+        "endLine": 69,
+        "endChar": 69
+      },
+      "revId": "fef15b8cd566113a626585a35bbcdab7506a2e5d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "86adfb2d_11a59207",
@@ -957,6 +981,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fe740846_6d3ef8a7",
+        "filename": "librobinhood/src/plugins/s3/iterators/mpi/iterator.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1038646
+      },
+      "writtenOn": "2025-07-28T09:21:25Z",
+      "side": 1,
+      "message": "It would have been easier to implement but I think that retrieving the bucket list only once is slightly better",
+      "parentUuid": "a4f843e2_5f061f33",
+      "range": {
+        "startLine": 133,
+        "startChar": 4,
+        "endLine": 156,
+        "endChar": 0
+      },
+      "revId": "fef15b8cd566113a626585a35bbcdab7506a2e5d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ca8796c8_06301b01",
         "filename": "librobinhood/src/plugins/s3/iterators/mpi/iterator.c",
         "patchSetId": 2
@@ -1166,6 +1214,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fba6c48f_36cc95e1",
+        "filename": "librobinhood/src/plugins/s3/iterators/mpi/iterator.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1038646
+      },
+      "writtenOn": "2025-07-28T09:21:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "17479d80_398cb46a",
+      "range": {
+        "startLine": 181,
+        "startChar": 41,
+        "endLine": 181,
+        "endChar": 43
+      },
+      "revId": "fef15b8cd566113a626585a35bbcdab7506a2e5d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7d91e37a_0a5b5bb4",
@@ -1249,6 +1321,24 @@
       "writtenOn": "2025-07-24T14:42:16Z",
       "side": 1,
       "message": "question: why include the mpi iterator ?",
+      "revId": "fef15b8cd566113a626585a35bbcdab7506a2e5d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "74345ac8_86385274",
+        "filename": "librobinhood/src/plugins/s3/s3.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1038646
+      },
+      "writtenOn": "2025-07-28T09:21:25Z",
+      "side": 1,
+      "message": "It was due to the structs being defined in s3_mpi, but they are now defined in s3.h",
+      "parentUuid": "a21f025b_8368dd2a",
       "revId": "fef15b8cd566113a626585a35bbcdab7506a2e5d",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
