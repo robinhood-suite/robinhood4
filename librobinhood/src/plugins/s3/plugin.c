@@ -17,6 +17,10 @@
 
 #include "s3_internals.h"
 
+static const struct rbh_pe_common_operations S3_BACKEND_PLUGIN_COMMON_OPS = {
+    .check_valid_token = rbh_s3_check_valid_token,
+};
+
 static const struct rbh_backend_plugin_operations S3_BACKEND_PLUGIN_OPS = {
     .new = rbh_s3_backend_new,
     .destroy = rbh_s3_plugin_destroy,
