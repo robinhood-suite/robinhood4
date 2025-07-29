@@ -18,6 +18,24 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4762dbff_bb52e418",
+        "filename": "librobinhood/src/plugins/s3/parser.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1038646
+      },
+      "writtenOn": "2025-07-29T07:59:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a9287dd1_410a942b",
+      "revId": "be0106c37ae692b8cbbf194ba49d1496e7abfabc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "889a51e2_541970c7",
@@ -31,6 +49,30 @@
       "writtenOn": "2025-07-29T07:48:03Z",
       "side": 1,
       "message": "minor: no need for a double switch, you have only one possibility",
+      "range": {
+        "startLine": 21,
+        "startChar": 8,
+        "endLine": 21,
+        "endChar": 27
+      },
+      "revId": "be0106c37ae692b8cbbf194ba49d1496e7abfabc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f632dc17_550e9c0b",
+        "filename": "librobinhood/src/plugins/s3/parser.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1038646
+      },
+      "writtenOn": "2025-07-29T07:59:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "889a51e2_541970c7",
       "range": {
         "startLine": 21,
         "startChar": 8,
