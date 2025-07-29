@@ -589,6 +589,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1fd775c6_8d287f7b",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-07-29T14:15:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0238ec0c_ea7a23a4",
+      "range": {
+        "startLine": 31,
+        "startChar": 12,
+        "endLine": 31,
+        "endChar": 19
+      },
+      "revId": "1cb73636795d5682b2c35c3ba29f6aba8ed71049",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d6039484_296bb230",
@@ -1054,6 +1078,30 @@
         "startChar": 4,
         "endLine": 77,
         "endChar": 10
+      },
+      "revId": "1cb73636795d5682b2c35c3ba29f6aba8ed71049",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d8040c88_e93ad12c",
+        "filename": "designs/rbh-undelete.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-07-29T14:15:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6bc65774_5613c660",
+      "range": {
+        "startLine": 77,
+        "startChar": 11,
+        "endLine": 77,
+        "endChar": 19
       },
       "revId": "1cb73636795d5682b2c35c3ba29f6aba8ed71049",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
