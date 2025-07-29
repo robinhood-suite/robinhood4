@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6ccf0143_fa605e59",
+        "filename": "librobinhood/src/plugins/s3/plugin.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-07-29T08:08:01Z",
+      "side": 1,
+      "message": "defect: You need to declare this function in s3.h.in, otherwise it will not be found.",
+      "range": {
+        "startLine": 19,
+        "startChar": 25,
+        "endLine": 19,
+        "endChar": 50
+      },
+      "revId": "9e3a30a8669b6bb0b8bcf3b53fe0978787c5cafa",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
