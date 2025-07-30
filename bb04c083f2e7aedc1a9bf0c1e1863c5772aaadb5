@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c1396ca5_51939e7e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-07-30T07:19:25Z",
+      "side": 1,
+      "message": "style: on one line",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 8,
+        "endChar": 14
+      },
+      "revId": "bb04c083f2e7aedc1a9bf0c1e1863c5772aaadb5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "63d18bf4_3c19810a",
+        "filename": "rbh-undelete/rbh-undelete.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-07-30T07:19:25Z",
+      "side": 1,
+      "message": "minor: I don\u0027t think you need all this include",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 19
+      },
+      "revId": "bb04c083f2e7aedc1a9bf0c1e1863c5772aaadb5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dc906c8c_fe9a2241",
+        "filename": "rbh-undelete/rbh-undelete.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-07-30T07:19:25Z",
+      "side": 1,
+      "message": "sugest:\n```\n\"Usage: %s [-h] \\n\"\n\"\\n\"\n\"General information about rbh-undelete command\\n\"\n\"Optional arguments:\\n\"\n\"  -h, --help        Show this message and exit\\n\";\n```",
+      "range": {
+        "startLine": 25,
+        "startChar": 8,
+        "endLine": 26,
+        "endChar": 75
+      },
+      "revId": "bb04c083f2e7aedc1a9bf0c1e1863c5772aaadb5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
