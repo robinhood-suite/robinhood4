@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7bdb283e_806eda8d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-07-30T11:37:15Z",
+      "side": 1,
+      "message": "major: not done in this patch",
+      "range": {
+        "startLine": 10,
+        "startChar": 25,
+        "endLine": 12,
+        "endChar": 22
+      },
+      "revId": "b8fc20d3fe8a7be5c1b4ec07f7fed961082ce520",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6a426050_9bc8861d",
+        "filename": "librobinhood/src/plugins/posix/enrichers/lustre/lustre.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 966,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-07-30T11:37:15Z",
+      "side": 1,
+      "message": "suggest: change this to a `else`",
+      "range": {
+        "startLine": 966,
+        "startChar": 4,
+        "endLine": 966,
+        "endChar": 30
+      },
+      "revId": "b8fc20d3fe8a7be5c1b4ec07f7fed961082ce520",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e9b9d1d1_4534574e",
+        "filename": "rbh-undelete/rbh-undelete.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-07-30T11:37:15Z",
+      "side": 1,
+      "message": "major: unused",
+      "range": {
+        "startLine": 176,
+        "startChar": 4,
+        "endLine": 176,
+        "endChar": 42
+      },
+      "revId": "b8fc20d3fe8a7be5c1b4ec07f7fed961082ce520",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8070ce5d_a7436cf9",
+        "filename": "rbh-undelete/rbh-undelete.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-07-30T11:37:15Z",
+      "side": 1,
+      "message": "minor: set a flag instead, and check it after the loop",
+      "range": {
+        "startLine": 184,
+        "startChar": 12,
+        "endLine": 184,
+        "endChar": 34
+      },
+      "revId": "b8fc20d3fe8a7be5c1b4ec07f7fed961082ce520",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
