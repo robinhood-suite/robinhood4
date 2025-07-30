@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f9fe7d12_684742c9",
+        "filename": "rbh-policy/rbhpolicy/config/models/conditions.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-07-30T14:10:10Z",
+      "side": 1,
+      "message": "The parent class doesn\u0027t have constructors here, it\u0027s an \"abstract\" class.",
+      "parentUuid": "e39b5e5d_f423edb1",
+      "range": {
+        "startLine": 66,
+        "startChar": 8,
+        "endLine": 66,
+        "endChar": 22
+      },
+      "revId": "c8f1f92b8529ef179f5606c8d9a312c6f143be35",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1a04d8d5_28c1d817",
@@ -47,6 +71,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a014ed7_b02e7152",
+        "filename": "rbh-policy/rbhpolicy/config/models/conditions.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-07-30T14:10:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a04d8d5_28c1d817",
+      "range": {
+        "startLine": 77,
+        "startChar": 8,
+        "endLine": 78,
+        "endChar": 52
+      },
+      "revId": "c8f1f92b8529ef179f5606c8d9a312c6f143be35",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "98c96768_60fb1b18",
@@ -60,6 +108,30 @@
       "writtenOn": "2025-07-16T15:28:13Z",
       "side": 1,
       "message": "I think this is wrong. When you evaluate a python expression to convert it to a rbh_filter for instance, you don\u0027t want to convert it to a boolean. This evaluate function will just be able to collapse a Condition tree into a single boolean. But this is not what you want to do with the policy engine.",
+      "range": {
+        "startLine": 87,
+        "startChar": 3,
+        "endLine": 88,
+        "endChar": 69
+      },
+      "revId": "c8f1f92b8529ef179f5606c8d9a312c6f143be35",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7ce724a1_1e6215b2",
+        "filename": "rbh-policy/rbhpolicy/config/models/conditions.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-07-30T14:10:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "98c96768_60fb1b18",
       "range": {
         "startLine": 87,
         "startChar": 3,
@@ -95,6 +167,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e6c8777b_7603f5e9",
+        "filename": "rbh-policy/rbhpolicy/config/models/conditions.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-07-30T14:10:10Z",
+      "side": 1,
+      "message": "I know, I put \u0027AND\u0027, \u0027OR\u0027 etc. to make it more visual, but it\u0027s true that it lacks coherence with the rest perhaps.",
+      "parentUuid": "36b8310d_af3157f7",
+      "range": {
+        "startLine": 91,
+        "startChar": 16,
+        "endLine": 91,
+        "endChar": 52
+      },
+      "revId": "c8f1f92b8529ef179f5606c8d9a312c6f143be35",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "247ebb38_f2e3dc39",
         "filename": "rbh-policy/rbhpolicy/config/models/conditions.py",
         "patchSetId": 5
@@ -106,6 +202,30 @@
       "writtenOn": "2025-07-17T07:07:52Z",
       "side": 1,
       "message": "Why evaluate a dict? In practice you will evaluate rbh_fsentries. And I don\u0027t think we should convert from rbh_fsentries to dict for performance reasons.",
+      "range": {
+        "startLine": 100,
+        "startChar": 23,
+        "endLine": 100,
+        "endChar": 34
+      },
+      "revId": "c8f1f92b8529ef179f5606c8d9a312c6f143be35",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b4c6f2f_ed9af781",
+        "filename": "rbh-policy/rbhpolicy/config/models/conditions.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-07-30T14:10:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "247ebb38_f2e3dc39",
       "range": {
         "startLine": 100,
         "startChar": 23,
@@ -139,6 +259,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ab63c3f6_9e9466be",
+        "filename": "rbh-policy/rbhpolicy/config/models/fileclass.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-07-30T14:10:10Z",
+      "side": 1,
+      "message": "It\u0027s true that it\u0027s a good idea; it would save me from having to redefine the logical operators in fileclass, and that\u0027s better. But the current code still works thanks to:\n` fc \u003d FileClass(name, target)rbh_fileclasses[name] \u003d fc\ncaller_ns \u003d sys._getframe(1).f_globals\ncaller_ns[name] \u003d fc` + ` def __and__(self, other: Condition) -\u003e Condition:return self.condition \u0026 other ` if we want to do an and, for example. But we redo a logic in fileclass which already exists in condition.",
+      "parentUuid": "0bb111ab_033db2e9",
+      "range": {
+        "startLine": 13,
+        "startChar": 6,
+        "endLine": 13,
+        "endChar": 15
+      },
+      "revId": "c8f1f92b8529ef179f5606c8d9a312c6f143be35",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "30475c77_b577c752",
@@ -152,6 +296,30 @@
       "writtenOn": "2025-07-16T15:28:13Z",
       "side": 1,
       "message": "What does this do? I assume that it inserts the variable with the fileclass\u0027s name in the scope of the caller. You should probably document this.",
+      "range": {
+        "startLine": 43,
+        "startChar": 4,
+        "endLine": 44,
+        "endChar": 24
+      },
+      "revId": "c8f1f92b8529ef179f5606c8d9a312c6f143be35",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e8d0c4e1_24009774",
+        "filename": "rbh-policy/rbhpolicy/config/models/fileclass.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-07-30T14:10:10Z",
+      "side": 1,
+      "message": "Yes, this inserts the fileclass instance into the caller’s global namespace using its name, so users can reference it directly in expressions (e.g. `Myfileclass \u0026 (Size \u003e 1000)`) without manually assigning it. I’ve added a clarifying comment above the code.",
+      "parentUuid": "30475c77_b577c752",
       "range": {
         "startLine": 43,
         "startChar": 4,
