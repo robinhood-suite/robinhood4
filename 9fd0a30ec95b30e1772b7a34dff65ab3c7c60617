@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "41f239f5_94ad0b1e",
+        "filename": "librobinhood/include/robinhood/plugins/common_ops.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-07-30T11:30:49Z",
+      "side": 1,
+      "message": "style: add empty line above",
+      "range": {
+        "startLine": 109,
+        "startChar": 4,
+        "endLine": 109,
+        "endChar": 7
+      },
+      "revId": "9fd0a30ec95b30e1772b7a34dff65ab3c7c60617",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
