@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d72e5da7_4edcf203",
+        "filename": "rbh-undelete/rbh-undelete.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-07-30T11:05:05Z",
+      "side": 1,
+      "message": "major: don\u0027t think this is needed for now. The tool is only for Lustre currently, so don\u0027t bother making this generic",
+      "range": {
+        "startLine": 58,
+        "startChar": 12,
+        "endLine": 59,
+        "endChar": 53
+      },
+      "revId": "500008fe9a80fc70b7e73f9c25cd6c32bad5ddb4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b6fd013e_75bbd298",
+        "filename": "rbh-undelete/rbh-undelete.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-07-30T11:05:05Z",
+      "side": 1,
+      "message": "minor: just call the function with a if/else",
+      "range": {
+        "startLine": 76,
+        "startChar": 8,
+        "endLine": 79,
+        "endChar": 30
+      },
+      "revId": "500008fe9a80fc70b7e73f9c25cd6c32bad5ddb4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
