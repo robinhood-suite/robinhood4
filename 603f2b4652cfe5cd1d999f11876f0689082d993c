@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7ce9c6dd_22cc0851",
+        "filename": "librobinhood/src/plugins/posix/enrichers/lustre/lustre.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 960,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-07-30T11:43:07Z",
+      "side": 1,
+      "message": "minor: no need for this, it is a function called by rbh4, so its arguments should be known",
+      "range": {
+        "startLine": 957,
+        "startChar": 4,
+        "endLine": 960,
+        "endChar": 5
+      },
+      "revId": "603f2b4652cfe5cd1d999f11876f0689082d993c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "169abce3_80f29380",
+        "filename": "librobinhood/src/plugins/posix/enrichers/lustre/lustre.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 1020,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-07-30T11:43:07Z",
+      "side": 1,
+      "message": "suggest:\n```\nprintf(\"\u0027%s\u0027 has been undeleted, new FID is \u0027%s\u0027\", dest, \u003cnew fid\u003e);\n```Don\u0027t need to talk about rebinding, I don\u0027t think it\u0027ll be super clear to users",
+      "range": {
+        "startLine": 1020,
+        "startChar": 4,
+        "endLine": 1020,
+        "endChar": 55
+      },
+      "revId": "603f2b4652cfe5cd1d999f11876f0689082d993c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "55d29208_f4e5fd45",
+        "filename": "rbh-undelete/rbh-undelete.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-07-30T11:43:07Z",
+      "side": 1,
+      "message": "style: align to the start of the previous line (align at `recreate`)",
+      "range": {
+        "startLine": 62,
+        "startChar": 8,
+        "endLine": 62,
+        "endChar": 11
+      },
+      "revId": "603f2b4652cfe5cd1d999f11876f0689082d993c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
