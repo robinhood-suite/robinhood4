@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "14ef7f0e_9c8035ec",
+        "filename": "librobinhood/src/statx.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-07-30T11:32:06Z",
+      "side": 1,
+      "message": "nit: move this line under line 65",
+      "range": {
+        "startLine": 71,
+        "startChar": 4,
+        "endLine": 71,
+        "endChar": 78
+      },
+      "revId": "b7271de337e39bc7b417618c74e91904c75c1d46",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
