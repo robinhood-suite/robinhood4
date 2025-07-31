@@ -57,6 +57,30 @@
       },
       "revId": "a42d4fe2e7cfd012e37375d37cf560a4bd9f67af",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b2eb81a2_7fcfed75",
+        "filename": "librobinhood/src/plugins/s3/s3.c",
+        "patchSetId": 8
+      },
+      "lineNbr": 464,
+      "author": {
+        "id": 1038646
+      },
+      "writtenOn": "2025-07-31T14:29:15Z",
+      "side": 1,
+      "message": "Au revoir o7",
+      "parentUuid": "7d1bdfaa_711d5b72",
+      "range": {
+        "startLine": 464,
+        "startChar": 8,
+        "endLine": 464,
+        "endChar": 16
+      },
+      "revId": "a42d4fe2e7cfd012e37375d37cf560a4bd9f67af",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
