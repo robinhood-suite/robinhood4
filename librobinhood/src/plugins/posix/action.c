@@ -248,7 +248,8 @@ rbh_posix_fill_entry_info(char *output, int max_length,
                         );
     case 'd':
         return snprintf(output, max_length, "%d",
-                        depth_from_path(fsentry_path(fsentry)));
+                        depth_from_path(rbh_fsentry_find_ns_xattr(
+                                                    fsentry, "path")->string));
     case 'D':
         return snprintf(output, max_length, "%lu",
                         makedev(fsentry->statx->stx_dev_major,
@@ -264,7 +265,7 @@ rbh_posix_fill_entry_info(char *output, int max_length,
     case 'G':
         return snprintf(output, max_length, "%u", fsentry->statx->stx_gid);
     case 'h':
-        path = strdup(fsentry_path(fsentry));
+        path = strdup(rbh_fsentry_find_ns_xattr(fsentry, "path")->string);
         chars_written = snprintf(output, max_length, "%s", dirname(path));
         free(path);
         return chars_written;
@@ -287,10 +288,13 @@ rbh_posix_fill_entry_info(char *output, int max_length,
     case 'n':
         return snprintf(output, max_length, "%d", fsentry->statx->stx_nlink);
     case 'p':
-        return snprintf(output, max_length, "%s", fsentry_path(fsentry));
+        return snprintf(output, max_length, "%s",
+                        rbh_fsentry_find_ns_xattr(fsentry, "path")->string);
     case 'P':
         return snprintf(output, max_length, "%s",
-                        remove_start_point(fsentry_path(fsentry), backend));
+                        remove_start_point(rbh_fsentry_find_ns_xattr(
+                                                       fsentry, "path")->string,
+                                           backend));
     case 's':
         return snprintf(output, max_length, "%lu", fsentry->statx->stx_size);
     case 't':

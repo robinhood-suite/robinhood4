@@ -242,7 +242,7 @@ fsentry_print_ls_dils(FILE *file, const struct rbh_fsentry *fsentry)
     statx_print_ls_dils(file,
                         fsentry->mask & RBH_FP_STATX ? fsentry->statx : NULL);
 
-    fprintf(file, " %s", fsentry_path(fsentry));
+    fprintf(file, " %s", rbh_fsentry_find_ns_xattr(fsentry, "path")->string);
 
     if (fsentry->mask & RBH_FP_SYMLINK)
         fprintf(file, " -> %s", fsentry->symlink);
@@ -677,19 +677,22 @@ find_exec_action(struct find_context *ctx,
         /* XXX: glibc's printf() handles printf("%s", NULL) pretty well, but
          *      I do not think this is part of any standard.
          */
-        printf("%s\n", fsentry_path(fsentry));
+        printf("%s\n", rbh_fsentry_find_ns_xattr(fsentry, "path")->string);
         break;
     case ACT_PRINT0:
-        printf("%s%c", fsentry_path(fsentry), '\0');
+        printf("%s%c", rbh_fsentry_find_ns_xattr(fsentry, "path")->string,
+               '\0');
         break;
     case ACT_FLS:
         fsentry_print_ls_dils(ctx->action_file, fsentry);
         break;
     case ACT_FPRINT:
-        fprintf(ctx->action_file, "%s\n", fsentry_path(fsentry));
+        fprintf(ctx->action_file, "%s\n",
+                rbh_fsentry_find_ns_xattr(fsentry, "path")->string);
         break;
     case ACT_FPRINT0:
-        fprintf(ctx->action_file, "%s%c", fsentry_path(fsentry), '\0');
+        fprintf(ctx->action_file, "%s%c",
+                rbh_fsentry_find_ns_xattr(fsentry, "path")->string, '\0');
         break;
     case ACT_LS:
         fsentry_print_ls_dils(stdout, fsentry);

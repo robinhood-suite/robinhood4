@@ -214,31 +214,9 @@ rbh_fsentry_find_ns_xattr(const struct rbh_fsentry *entry,
 }
 
 const char *
-fsentry_path(const struct rbh_fsentry *fsentry)
-{
-    if (!(fsentry->mask & RBH_FP_NAMESPACE_XATTRS))
-        return NULL;
-
-    for (size_t i = 0; i < fsentry->xattrs.ns.count; i++) {
-        const struct rbh_value_pair *pair = &fsentry->xattrs.ns.pairs[i];
-
-        if (strcmp(pair->key, "path"))
-            continue;
-
-        if (pair->value->type != RBH_VT_STRING)
-            /* XXX: should probably say something... */
-            continue;
-
-        return pair->value->string;
-    }
-
-    return NULL;
-}
-
-const char *
 fsentry_relative_path(const struct rbh_fsentry *fsentry)
 {
-    const char *path = fsentry_path(fsentry);
+    const char *path = rbh_fsentry_find_ns_xattr(fsentry, "path")->string;
 
     if (path[0] == '/' && path[1] == '\0')
         return ".";
