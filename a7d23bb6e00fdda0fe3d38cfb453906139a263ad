@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "97a5d8a1_d15e5a28",
+        "filename": "rbh-policy/tests/meson.build",
+        "patchSetId": 4
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-07-31T09:42:22Z",
+      "side": 1,
+      "message": "suggest: seeing the content of the test, `test_cpython` or `test_interface` would be better. You\u0027re not testing any filter here",
+      "range": {
+        "startLine": 14,
+        "startChar": 3,
+        "endLine": 14,
+        "endChar": 14
+      },
+      "revId": "a7d23bb6e00fdda0fe3d38cfb453906139a263ad",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "96543aa5_9e41890d",
+        "filename": "rbh-policy/tests/test_filter.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-07-31T09:42:22Z",
+      "side": 1,
+      "message": "minor: add tests that should fail too, UID on a string for instance",
+      "range": {
+        "startLine": 40,
+        "startChar": 6,
+        "endLine": 40,
+        "endChar": 16
+      },
+      "revId": "a7d23bb6e00fdda0fe3d38cfb453906139a263ad",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "99f17243_3eb6b2ba",
+        "filename": "rbh-policy/tests/test_filter.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-07-31T09:42:22Z",
+      "side": 1,
+      "message": "minor: remove the prints",
+      "range": {
+        "startLine": 48,
+        "startChar": 8,
+        "endLine": 48,
+        "endChar": 44
+      },
+      "revId": "a7d23bb6e00fdda0fe3d38cfb453906139a263ad",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
