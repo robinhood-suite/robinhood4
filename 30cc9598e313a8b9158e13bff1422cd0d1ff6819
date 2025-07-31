@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "869c01d5_c719d636",
+        "filename": "rbh-policy/tests/test_config.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-07-31T15:02:30Z",
+      "side": 1,
+      "message": "You\u0027re right, injecting directly into globals can be risky in general. In this case, though, it\u0027s intentional: the config files act like a mini DSL, and the symbols are meant to be instantly usable in the current context. That said, I\u0027m considering adding an optional encapsulated mode to avoid side effects and improve safety.\nI was thinking of refining this functionality later to avoid as many problems as possible related to poorly written or faulty configuration.",
+      "parentUuid": "a67a5cf1_5ccb0317",
+      "range": {
+        "startLine": 45,
+        "startChar": 25,
+        "endLine": 45,
+        "endChar": 32
+      },
+      "revId": "30cc9598e313a8b9158e13bff1422cd0d1ff6819",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c72c5a12_b2a6b1db",
         "filename": "rbh-policy/tests/test_config.py",
         "patchSetId": 4
@@ -37,6 +61,30 @@
       "writtenOn": "2025-07-31T09:13:45Z",
       "side": 1,
       "message": "suggest: add a test that does the same thing but with both files using the same variables, to check the order of import matters and it is indeed alphabetical",
+      "range": {
+        "startLine": 48,
+        "startChar": 8,
+        "endLine": 48,
+        "endChar": 29
+      },
+      "revId": "30cc9598e313a8b9158e13bff1422cd0d1ff6819",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "66ce5608_6dd050d4",
+        "filename": "rbh-policy/tests/test_config.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-07-31T15:02:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c72c5a12_b2a6b1db",
       "range": {
         "startLine": 48,
         "startChar": 8,
