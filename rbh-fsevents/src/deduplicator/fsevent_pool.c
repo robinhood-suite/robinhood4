@@ -21,6 +21,7 @@
 
 struct rbh_fsevent_pool {
     size_t size; /* maximum number of ids allowed in the pool */
+    bool need_to_flush;
     struct rbh_hashmap *pool; /* container of lists of events per id */
     struct rbh_sstack *list_container; /* container of list elements */
     struct rbh_list_node ids; /* list of rbh_id that were inserted in the pool
@@ -106,6 +107,7 @@ rbh_fsevent_pool_new(size_t batch_size, struct source *source)
     }
 
     pool->size = batch_size;
+    pool->need_to_flush = false;
     rbh_list_init(&pool->ids);
     pool->count = 0;
     rbh_list_init(&pool->events);
@@ -825,7 +827,7 @@ rbh_fsevent_pool_push(struct rbh_fsevent_pool *pool,
     struct rbh_list_node *events;
     int rc;
 
-    if (rbh_fsevent_pool_is_full(pool)) {
+    if (rbh_fsevent_pool_is_full(pool) && pool->need_to_flush) {
         errno = ENOSPC;
         return POOL_ALREADY_FULL;
     }
@@ -839,14 +841,21 @@ rbh_fsevent_pool_push(struct rbh_fsevent_pool *pool,
     } else {
         /* we do not insert NULL values in the map */
         assert(errno == ENOENT);
-        rc = rbh_fsevent_pool_insert_new_entry(pool, event);
-        if (rc)
-            return POOL_INSERT_FAILED;
+        if (rbh_fsevent_pool_is_full(pool)) {
+            pool->need_to_flush = true;
+        } else {
+            rc = rbh_fsevent_pool_insert_new_entry(pool, event);
+            if (rc)
+                return POOL_INSERT_FAILED;
 
-        errno = 0;
+            errno = 0;
+        }
     }
 
-    if (rbh_fsevent_pool_is_full(pool)) {
+    /* If the pool is full and the current fsevent is for a new id,
+     * flush it
+     */
+    if (rbh_fsevent_pool_is_full(pool) && pool->need_to_flush) {
         /* Notify the caller that the pool is now full */
         errno = ENOSPC;
         return POOL_FULL;
@@ -883,6 +892,8 @@ rbh_fsevent_pool_flush(struct rbh_fsevent_pool *pool)
         event_list_free(pool, events);
         pool->count--;
     }
+
+    pool->need_to_flush = false;
 
     return rbh_iter_list(&pool->events,
                          offsetof(struct rbh_fsevent_node, link));

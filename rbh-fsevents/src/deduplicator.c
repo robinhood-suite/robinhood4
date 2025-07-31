@@ -28,6 +28,8 @@ struct deduplicator {
  |                                deduplicator                                |
  *----------------------------------------------------------------------------*/
 
+static const struct rbh_fsevent *last_fsevent = NULL;
+
 static void *
 deduplicator_iter_next(void *iterator)
 {
@@ -37,12 +39,17 @@ deduplicator_iter_next(void *iterator)
     do {
         int rc;
 
-        fsevent = rbh_iter_next(&deduplicator->source->fsevents);
-        if (fsevent == NULL) {
-            if (errno == ENODATA)
-                break;
+        if (last_fsevent != NULL) {
+            fsevent = last_fsevent;
+            last_fsevent = NULL;
+        } else {
+            fsevent = rbh_iter_next(&deduplicator->source->fsevents);
+            if (fsevent == NULL) {
+                if (errno == ENODATA)
+                    break;
 
-            return NULL;
+                return NULL;
+            }
         }
 
         errno = 0;
@@ -57,7 +64,8 @@ deduplicator_iter_next(void *iterator)
             return NULL;
         } else if (rc == POOL_FULL) {
             errno = 0;
-            /* last insert filled the pool, flush it now */
+            /* current fsevent cannot be inserted, flush it now */
+            last_fsevent = fsevent;
             break;
         }
         assert(rc == POOL_INSERT_OK);
