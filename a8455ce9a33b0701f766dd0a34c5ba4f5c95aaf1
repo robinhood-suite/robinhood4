@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5f69eb44_7032ce7d",
+        "filename": "rbh-policy/rbhpolicy/config/config_loader.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-07-31T08:52:13Z",
+      "side": 1,
+      "message": "style: don\u0027t need to put this on its own line, put it at the end in the line above",
+      "range": {
+        "startLine": 41,
+        "startChar": 12,
+        "endLine": 41,
+        "endChar": 23
+      },
+      "revId": "a8455ce9a33b0701f766dd0a34c5ba4f5c95aaf1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "54967021_34813fbc",
+        "filename": "rbh-policy/rbhpolicy/config/config_loader.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-07-31T08:52:13Z",
+      "side": 1,
+      "message": "suggest/question: wouldn\u0027t it be better to have a default resolution conflict ? Say if both file and directory exists, we output an error but still import the file ? Or have flags to choose that automatically, like a `--prefer-file` or something like that ? Or, third choice, ask the user directly with a yes/no question, like `dnf install` does",
+      "range": {
+        "startLine": 44,
+        "startChar": 12,
+        "endLine": 44,
+        "endChar": 64
+      },
+      "revId": "a8455ce9a33b0701f766dd0a34c5ba4f5c95aaf1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "39e93642_bb522e76",
+        "filename": "rbh-policy/rbhpolicy/config/config_loader.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-07-31T08:52:13Z",
+      "side": 1,
+      "message": "question: why use `exec` here but `exec_module` line 52 ? I\u0027d suggest having a single function to do the import, and call it repeatedly here and line 50/51/52",
+      "range": {
+        "startLine": 69,
+        "startChar": 16,
+        "endLine": 69,
+        "endChar": 20
+      },
+      "revId": "a8455ce9a33b0701f766dd0a34c5ba4f5c95aaf1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "851ce51c_82bf112a",
+        "filename": "rbh-policy/rbhpolicy/config/config_loader.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-07-31T08:52:13Z",
+      "side": 1,
+      "message": "minor: have this check earlier, I\u0027d say it\u0027s the first one to do in this function honestly",
+      "range": {
+        "startLine": 72,
+        "startChar": 8,
+        "endLine": 76,
+        "endChar": 9
+      },
+      "revId": "a8455ce9a33b0701f766dd0a34c5ba4f5c95aaf1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2cbb7139_b8ca06ee",
+        "filename": "rbh-policy/rbhpolicy/config/config_loader.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-07-31T08:52:13Z",
+      "side": 1,
+      "message": "question: shouldn\u0027t there be other checks that you\u0027re not capturing unneeded key/values, for instance those linked to Python standard classes/files ?",
+      "range": {
+        "startLine": 80,
+        "startChar": 8,
+        "endLine": 80,
+        "endChar": 36
+      },
+      "revId": "a8455ce9a33b0701f766dd0a34c5ba4f5c95aaf1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
