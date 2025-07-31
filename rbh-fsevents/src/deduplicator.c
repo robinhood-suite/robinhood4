@@ -17,6 +17,7 @@
 
 #include "deduplicator.h"
 #include "deduplicator/fsevent_pool.h"
+#include <lustre/lustreapi.h>
 
 struct deduplicator {
     struct rbh_mut_iterator batches;
@@ -31,18 +32,23 @@ struct deduplicator {
 static void *
 deduplicator_iter_next(void *iterator)
 {
+    static const struct rbh_fsevent *last_fsevent = NULL;
     struct deduplicator *deduplicator = iterator;
     const struct rbh_fsevent *fsevent;
+    int rc = 0;
 
     do {
-        int rc;
+        if (last_fsevent != NULL) {
+            fsevent = last_fsevent;
+            last_fsevent = NULL;
+        } else {
+            fsevent = rbh_iter_next(&deduplicator->source->fsevents);
+            if (fsevent == NULL) {
+                if (errno == ENODATA)
+                    break;
 
-        fsevent = rbh_iter_next(&deduplicator->source->fsevents);
-        if (fsevent == NULL) {
-            if (errno == ENODATA)
-                break;
-
-            return NULL;
+                return NULL;
+            }
         }
 
         errno = 0;
@@ -57,7 +63,7 @@ deduplicator_iter_next(void *iterator)
             return NULL;
         } else if (rc == POOL_FULL) {
             errno = 0;
-            /* last insert filled the pool, flush it now */
+            last_fsevent = fsevent;
             break;
         }
         assert(rc == POOL_INSERT_OK);
