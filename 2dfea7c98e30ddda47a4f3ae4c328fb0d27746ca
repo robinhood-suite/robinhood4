@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4ffc85c9_7141c540",
+        "filename": "rbh-policy/meson.build",
+        "patchSetId": 6
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-07-31T12:39:03Z",
+      "side": 1,
+      "message": "My goal here is to have the PE package bundled into rbhpolicy and the main (cli) script outside of the package. I can then install the package and executable in the adapter locations for each.\nI can rename rbhpolicy to rbh-policy if that is better.",
+      "parentUuid": "5d35f48c_83d9f1a0",
+      "range": {
+        "startLine": 9,
+        "startChar": 16,
+        "endLine": 9,
+        "endChar": 25
+      },
+      "revId": "2dfea7c98e30ddda47a4f3ae4c328fb0d27746ca",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d4ad537f_1bf1997f",
         "filename": "rbh-policy/meson.build",
         "patchSetId": 6
@@ -96,6 +120,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c0834b2a_4d71e1c9",
+        "filename": "rbh-policy/tests/test_installation.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-07-31T12:39:03Z",
+      "side": 1,
+      "message": "We force the PE to use python3.9. If in the future we want to update the version we will have to change this test. After that it is true that I ask myself the question of whether I will keep these installation tests in the non reg because in any case they can only be executed if the installation has been done so ...",
+      "parentUuid": "cbcf669e_1f2482b2",
+      "range": {
+        "startLine": 15,
+        "startChar": 21,
+        "endLine": 15,
+        "endChar": 35
+      },
+      "revId": "2dfea7c98e30ddda47a4f3ae4c328fb0d27746ca",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b8227639_4bcda946",
         "filename": "rbh-policy/tests/test_installation.py",
         "patchSetId": 6
@@ -107,6 +155,30 @@
       "writtenOn": "2025-07-31T08:34:08Z",
       "side": 1,
       "message": "question: where is this function used ?",
+      "range": {
+        "startLine": 19,
+        "startChar": 4,
+        "endLine": 19,
+        "endChar": 24
+      },
+      "revId": "2dfea7c98e30ddda47a4f3ae4c328fb0d27746ca",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f1297fcd_af6723fc",
+        "filename": "rbh-policy/tests/test_installation.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-07-31T12:39:03Z",
+      "side": 1,
+      "message": "In unittest, `setUpClass` is called once before all tests are executed and `SetUp` is called before each test is executed. The tests are executed in alphabetical order of names, they do not follow the order of the files",
+      "parentUuid": "b8227639_4bcda946",
       "range": {
         "startLine": 19,
         "startChar": 4,
@@ -140,6 +212,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fb176852_f8fa2abf",
+        "filename": "rbh-policy/tests/test_installation.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-07-31T12:39:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e4297cdc_9aba8f43",
+      "range": {
+        "startLine": 28,
+        "startChar": 8,
+        "endLine": 28,
+        "endChar": 37
+      },
+      "revId": "2dfea7c98e30ddda47a4f3ae4c328fb0d27746ca",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "915734ca_f50fa1c6",
@@ -153,6 +249,30 @@
       "writtenOn": "2025-07-31T08:34:08Z",
       "side": 1,
       "message": "nit: is there a `assertEmpty` function that could be used instead ? Yes I know an empty array evaluates to false, still asking",
+      "range": {
+        "startLine": 44,
+        "startChar": 13,
+        "endLine": 44,
+        "endChar": 24
+      },
+      "revId": "2dfea7c98e30ddda47a4f3ae4c328fb0d27746ca",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a89aa1d8_0ad32467",
+        "filename": "rbh-policy/tests/test_installation.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-07-31T12:39:03Z",
+      "side": 1,
+      "message": "No, `assertEmpty` does not exist in unittest.",
+      "parentUuid": "915734ca_f50fa1c6",
       "range": {
         "startLine": 44,
         "startChar": 13,
