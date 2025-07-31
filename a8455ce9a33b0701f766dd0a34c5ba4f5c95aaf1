@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a4ff1aed_36d58aa7",
+        "filename": "rbh-policy/rbhpolicy/config/config_loader.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-07-31T15:02:24Z",
+      "side": 1,
+      "message": "If I put it on the line above, it will be over 80 characters.",
+      "parentUuid": "5f69eb44_7032ce7d",
+      "range": {
+        "startLine": 41,
+        "startChar": 12,
+        "endLine": 41,
+        "endChar": 23
+      },
+      "revId": "a8455ce9a33b0701f766dd0a34c5ba4f5c95aaf1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "54967021_34813fbc",
         "filename": "rbh-policy/rbhpolicy/config/config_loader.py",
         "patchSetId": 4
@@ -37,6 +61,30 @@
       "writtenOn": "2025-07-31T08:52:13Z",
       "side": 1,
       "message": "suggest/question: wouldn\u0027t it be better to have a default resolution conflict ? Say if both file and directory exists, we output an error but still import the file ? Or have flags to choose that automatically, like a `--prefer-file` or something like that ? Or, third choice, ask the user directly with a yes/no question, like `dnf install` does",
+      "range": {
+        "startLine": 44,
+        "startChar": 12,
+        "endLine": 44,
+        "endChar": 64
+      },
+      "revId": "a8455ce9a33b0701f766dd0a34c5ba4f5c95aaf1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "82c73eb1_ae2e0172",
+        "filename": "rbh-policy/rbhpolicy/config/config_loader.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-07-31T15:02:24Z",
+      "side": 1,
+      "message": "The third option is fine, but I\u0027m not a fan of the first two. I prefer to be blocking to force the user to make a choice and avoid getting lost with files that have the same name as folders.",
+      "parentUuid": "54967021_34813fbc",
       "range": {
         "startLine": 44,
         "startChar": 12,
@@ -72,6 +120,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f69db420_0e75487e",
+        "filename": "rbh-policy/rbhpolicy/config/config_loader.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-07-31T15:02:24Z",
+      "side": 1,
+      "message": "Each call to exec_module will load the file into a separate module, whereas with exec I can execute the code in the same module. It\u0027s like concatenating all the .py files into one.\nI still use exec_module when possible because it\u0027s more secure than exec and in line with python convention.",
+      "parentUuid": "39e93642_bb522e76",
+      "range": {
+        "startLine": 69,
+        "startChar": 16,
+        "endLine": 69,
+        "endChar": 20
+      },
+      "revId": "a8455ce9a33b0701f766dd0a34c5ba4f5c95aaf1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "851ce51c_82bf112a",
         "filename": "rbh-policy/rbhpolicy/config/config_loader.py",
         "patchSetId": 4
@@ -83,6 +155,30 @@
       "writtenOn": "2025-07-31T08:52:13Z",
       "side": 1,
       "message": "minor: have this check earlier, I\u0027d say it\u0027s the first one to do in this function honestly",
+      "range": {
+        "startLine": 72,
+        "startChar": 8,
+        "endLine": 76,
+        "endChar": 9
+      },
+      "revId": "a8455ce9a33b0701f766dd0a34c5ba4f5c95aaf1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "77444361_81e2842b",
+        "filename": "rbh-policy/rbhpolicy/config/config_loader.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-07-31T15:02:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "851ce51c_82bf112a",
       "range": {
         "startLine": 72,
         "startChar": 8,
@@ -106,6 +202,30 @@
       "writtenOn": "2025-07-31T08:52:13Z",
       "side": 1,
       "message": "question: shouldn\u0027t there be other checks that you\u0027re not capturing unneeded key/values, for instance those linked to Python standard classes/files ?",
+      "range": {
+        "startLine": 80,
+        "startChar": 8,
+        "endLine": 80,
+        "endChar": 36
+      },
+      "revId": "a8455ce9a33b0701f766dd0a34c5ba4f5c95aaf1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "070a3f52_709991eb",
+        "filename": "rbh-policy/rbhpolicy/config/config_loader.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-07-31T15:02:24Z",
+      "side": 1,
+      "message": "Refocusing what we retrieve is a good thing later, but here we do not retrieve the Python built-ins because we are concentrating on the module that we have just created and therefore the elements of the standard Python are in the global built-in module and therefore not concerned.",
+      "parentUuid": "2cbb7139_b8ca06ee",
       "range": {
         "startLine": 80,
         "startChar": 8,
