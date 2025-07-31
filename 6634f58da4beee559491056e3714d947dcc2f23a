@@ -22,6 +22,30 @@
       },
       "revId": "6634f58da4beee559491056e3714d947dcc2f23a",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d0696635_7d760523",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-07-31T10:32:57Z",
+      "side": 1,
+      "message": "I\u0027m going to remove them. I thought they were secondary compared to the fileclass which is one of the basic structures of this PE.",
+      "parentUuid": "08c40d65_557dd5be",
+      "range": {
+        "startLine": 10,
+        "startChar": 36,
+        "endLine": 10,
+        "endChar": 48
+      },
+      "revId": "6634f58da4beee559491056e3714d947dcc2f23a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
