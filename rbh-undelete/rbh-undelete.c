@@ -177,7 +177,6 @@ rm_list(const char *regex)
     };
     struct rbh_mut_iterator *_fsentries;
     struct rbh_fsentry *fsentry;
-    time_t rm_time;
 
     _fsentries = rbh_backend_filter(metadata_source, &FILTER, &OPTIONS,
                                     &OUTPUT);
@@ -187,14 +186,18 @@ rm_list(const char *regex)
     printf("DELETED FILES:\n");
     while ((fsentry = rbh_mut_iter_next(_fsentries)) != NULL) {
         const struct rbh_value *ns_rm_time;
+        const struct rbh_value *ns_rm_path;
         const char *rm_path;
+        time_t rm_time;
 
-        rm_path = fsentry_path(fsentry);
-        if (rm_path == NULL) {
+        ns_rm_path = rbh_fsentry_find_ns_xattr(fsentry, "path");
+        if (ns_rm_path == NULL) {
             fprintf(stderr, "'%s' is archived and deleted but has no rm_path\n",
                     fsentry->name);
             continue;
         }
+
+        rm_path = ns_rm_path->string;
 
         ns_rm_time = rbh_fsentry_find_ns_xattr(fsentry, "rm_time");
         if (ns_rm_time == NULL) {
