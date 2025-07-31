@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5d35f48c_83d9f1a0",
+        "filename": "rbh-policy/meson.build",
+        "patchSetId": 6
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-07-31T08:34:08Z",
+      "side": 1,
+      "message": "question: is there no way to have the subdir be `rbh-policy` ?",
+      "range": {
+        "startLine": 9,
+        "startChar": 16,
+        "endLine": 9,
+        "endChar": 25
+      },
+      "revId": "2dfea7c98e30ddda47a4f3ae4c328fb0d27746ca",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d4ad537f_1bf1997f",
         "filename": "rbh-policy/meson.build",
         "patchSetId": 6
@@ -43,6 +66,98 @@
         "startChar": 1,
         "endLine": 11,
         "endChar": 1
+      },
+      "revId": "2dfea7c98e30ddda47a4f3ae4c328fb0d27746ca",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cbcf669e_1f2482b2",
+        "filename": "rbh-policy/tests/test_installation.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-07-31T08:34:08Z",
+      "side": 1,
+      "message": "minor: this will break easily in the future",
+      "range": {
+        "startLine": 15,
+        "startChar": 21,
+        "endLine": 15,
+        "endChar": 35
+      },
+      "revId": "2dfea7c98e30ddda47a4f3ae4c328fb0d27746ca",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b8227639_4bcda946",
+        "filename": "rbh-policy/tests/test_installation.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-07-31T08:34:08Z",
+      "side": 1,
+      "message": "question: where is this function used ?",
+      "range": {
+        "startLine": 19,
+        "startChar": 4,
+        "endLine": 19,
+        "endChar": 24
+      },
+      "revId": "2dfea7c98e30ddda47a4f3ae4c328fb0d27746ca",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e4297cdc_9aba8f43",
+        "filename": "rbh-policy/tests/test_installation.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-07-31T08:34:08Z",
+      "side": 1,
+      "message": "minor: if this test is used after the function above, then it is kinda redundant, since the `package_installed` and the `self.assertTrue` are basically the same check",
+      "range": {
+        "startLine": 28,
+        "startChar": 8,
+        "endLine": 28,
+        "endChar": 37
+      },
+      "revId": "2dfea7c98e30ddda47a4f3ae4c328fb0d27746ca",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "915734ca_f50fa1c6",
+        "filename": "rbh-policy/tests/test_installation.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-07-31T08:34:08Z",
+      "side": 1,
+      "message": "nit: is there a `assertEmpty` function that could be used instead ? Yes I know an empty array evaluates to false, still asking",
+      "range": {
+        "startLine": 44,
+        "startChar": 13,
+        "endLine": 44,
+        "endChar": 24
       },
       "revId": "2dfea7c98e30ddda47a4f3ae4c328fb0d27746ca",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
