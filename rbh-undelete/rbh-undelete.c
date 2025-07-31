@@ -164,7 +164,7 @@ rm_list(const char *prefix)
 
     printf("DELETED FILES:\n");
     while ((fsentry = rbh_mut_iter_next(_fsentries)) != NULL) {
-        rm_path = fsentry_path(fsentry);
+        rm_path = rbh_fsentry_find_ns_xattr(fsentry, "path")->string;
         rm_time = (time_t)rbh_fsentry_find_ns_xattr(fsentry,"rm_time")->int64;
 
         if (rm_path && rm_time >= 0)
