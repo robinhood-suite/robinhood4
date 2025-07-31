@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b9123fdc_86efbbbc",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-07-31T15:02:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ed1478a7_3299e3cc",
+      "range": {
+        "startLine": 7,
+        "startChar": 16,
+        "endLine": 7,
+        "endChar": 19
+      },
+      "revId": "87917d81e55386ec74e33e55fb045cfecfacd78e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e4352967_9df60b82",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-07-31T09:17:48Z",
       "side": 1,
       "message": "style: add empty lines between functions (and adding a pylint check would be nice for this tool :))",
+      "range": {
+        "startLine": 17,
+        "startChar": 4,
+        "endLine": 17,
+        "endChar": 13
+      },
+      "revId": "87917d81e55386ec74e33e55fb045cfecfacd78e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "15a709de_8117d8c6",
+        "filename": "rbh-policy/POC/policyengine.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-07-31T15:02:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e4352967_9df60b82",
       "range": {
         "startLine": 17,
         "startChar": 4,
