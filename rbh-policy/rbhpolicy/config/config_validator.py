@@ -20,3 +20,15 @@ def validate_fileclass(name, condition):
     if not isinstance(condition, Condition):
         raise TypeError(f"FileClass condition must be a Condition instance, got "
                         f"{type(condition).__name__}")
+
+def validate_policy(name, target, action, trigger, parameters=None, rules=None):
+    """
+    Validate arguments for declare_policy.
+    """
+    if not isinstance(name, str):
+        raise TypeError(f"Policy name must be a string, got "
+                        f"{type(name).__name__}")
+
+    if not isinstance(target, Condition):
+        raise TypeError(f"Policy target must be a Condition instance, got "
+                        f"{type(target).__name__}")

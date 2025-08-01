@@ -7,6 +7,7 @@
 
 import sys
 from rbhpolicy.config.conditions import Condition
+from rbhpolicy.config.config_validator import validate_policy
 
 rbh_policies = {}
 
@@ -53,6 +54,8 @@ def declare_policy(*, name: str, target, action, trigger, parameters=None,
     Declare a new policy and inject it into the caller’s namespace
     so it’s directly available in config files.
     """
+    validate_policy(name, target, action, trigger, parameters, rules)
+
     policy = Policy(name, target, action, trigger, parameters, rules)
     rbh_policies[name] = policy
 

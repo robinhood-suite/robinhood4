@@ -14,6 +14,7 @@ import unittest
 from rbhpolicy.config.config_loader import load_config, \
         CONFIG_DIR as ORIGINAL_CONFIG_DIR
 from rbhpolicy.config.fileclass import declare_fileclass
+from rbhpolicy.config.policy import declare_policy
 
 class ConfigLoaderTests(unittest.TestCase):
     def setUp(self):
@@ -96,6 +97,24 @@ class ConfigLoaderTests(unittest.TestCase):
         self.assertEqual(str(cm.exception), "FileClass condition must be a "
                 "Condition instance, got str", msg="Should raise exact error "
                 "for invalid FileClass condition type")
+
+
+    def test_invalid_policy_name(self):
+        with self.assertRaisesRegex(TypeError,
+                "Policy name must be a string") as cm:
+            declare_policy(name=123, target=None, action=None, trigger=None)
+        self.assertEqual(str(cm.exception),
+                "Policy name must be a string, got int",
+                msg="Should raise exact error for invalid Policy name type")
+
+    def test_invalid_policy_target(self):
+        with self.assertRaisesRegex(TypeError,
+                "Policy target must be a Condition instance") as cm:
+            declare_policy(name="InvalidPolicy", target="not_a_condition",
+                    action=None, trigger=None)
+        self.assertEqual(str(cm.exception),
+            "Policy target must be a Condition instance, got str",
+            msg="Should raise exact error for invalid Policy target type")
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
