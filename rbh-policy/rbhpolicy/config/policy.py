@@ -65,10 +65,19 @@ def declare_policy(*, name: str, target, action, trigger, parameters=None,
     Declare a new policy and inject it into the caller’s namespace
     so it’s directly available in config files.
     """
+    from rbhpolicy.config.config_validator import validate_policy
+    validate_policy(name, target, action, trigger, parameters, rules)
+
     policy = Policy(name, target, action, trigger, parameters, rules)
     policy._filter = target.to_filter()
-    rbh_policies[name] = policy
 
+    if isinstance(policy.rules, Rule):
+        policy.rules._filter = policy.rules.condition.to_filter()
+    elif isinstance(policy.rules, (list, tuple)):
+        for rule in policy.rules:
+            rule._filter = rule.condition.to_filter()
+
+    rbh_policies[name] = policy
     caller_ns = sys._getframe(1).f_globals
     caller_ns[name] = policy
 
