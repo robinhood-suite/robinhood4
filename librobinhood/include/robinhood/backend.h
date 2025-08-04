@@ -239,6 +239,7 @@ enum rbh_info {
     RBH_INFO_COUNT          = 1 << 2,
     RBH_INFO_AVG_OBJ_SIZE   = 1 << 3,
     RBH_INFO_BACKEND_SOURCE = 1 << 4,
+    RBH_INFO_MOUNTPOINT     = 1 << 5,
 };
 
 /** Determines which will be inserted by insert_metadata */
