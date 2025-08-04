@@ -12,6 +12,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <limits.h>
 #include <sysexits.h>
 
 #include <robinhood.h>
@@ -85,8 +86,65 @@ sync_source()
     assert(strcmp(pair->key, "backend_source") == 0);
     sources = pair->value;
 
-    if (rbh_backend_insert_source(to, sources))
+    if (rbh_backend_insert_metadata(to, sources, RBH_MT_SOURCE))
         fprintf(stderr, "Failed to set backend_info\n");
+}
+
+static void
+sync_mountpoint(const char *path)
+{
+    struct rbh_value *mountpoint;
+    struct rbh_raw_uri *raw_uri;
+    char clean_path[PATH_MAX];
+    struct rbh_uri *uri;
+    size_t len;
+
+    raw_uri = rbh_raw_uri_from_string(path);
+    if (raw_uri == NULL)
+        error(EXIT_FAILURE, errno, "Cannot detect backend uri");
+
+    uri = rbh_uri_from_raw_uri(raw_uri);
+    if (uri == NULL)
+        error(EXIT_FAILURE, errno, "Cannot detect given backend");
+    free(raw_uri);
+
+    if (uri->fsname[0] != '/') {
+        if (!realpath(uri->fsname, clean_path)) {
+            strncpy(clean_path, path, sizeof(clean_path));
+        }
+    } else {
+        if (uri->fsname)
+            strncpy(clean_path, uri->fsname, sizeof(clean_path));
+        else
+            strncpy(clean_path, path, sizeof(clean_path));
+    }
+
+    free(uri);
+
+    clean_path[sizeof(clean_path) - 1] = '\0';
+    len = strlen(clean_path);
+    if (len > 1 && clean_path[len - 1] == '/')
+        clean_path[len - 1] = '\0';
+
+    mountpoint = malloc(sizeof(*mountpoint));
+    if (!mountpoint) {
+        fprintf(stderr, "mountpoint allocation failed\n");
+        return;
+    }
+
+    mountpoint->type = RBH_VT_STRING;
+    mountpoint->string = strdup(clean_path);
+    if (!mountpoint->string) {
+        fprintf(stderr, "strdup failed\n");
+        free(mountpoint);
+        return;
+    }
+
+    if (rbh_backend_insert_metadata(to, mountpoint, RBH_MT_MOUNTPOINT))
+        fprintf(stderr, "Failed to set the mountpoint\n");
+
+    free((char *)mountpoint->string);
+    free(mountpoint);
 }
 
     /*--------------------------------------------------------------------*
@@ -706,6 +764,7 @@ main(int argc, char *argv[])
     to = rbh_backend_from_uri(argv[1], false);
 
     sync_source();
+    sync_mountpoint(argv[0]);
 
     sync(&projection);
 

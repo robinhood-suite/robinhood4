@@ -30,7 +30,17 @@ backend_sink_insert_source(void *_sink, const struct rbh_value *backend_source)
 {
     struct backend_sink *sink = _sink;
 
-    return rbh_backend_insert_source(sink->backend, backend_source);
+    return rbh_backend_insert_metadata(sink->backend, backend_source,
+                                       RBH_MT_SOURCE);
+}
+
+static int
+backend_sink_insert_mountpoint(void *_sink, const struct rbh_value *mountpoint)
+{
+    struct backend_sink *sink = _sink;
+
+    return rbh_backend_insert_metadata(sink->backend, mountpoint,
+                                       RBH_MT_MOUNTPOINT);
 }
 
 static void
@@ -45,6 +55,7 @@ backend_sink_destroy(void *_sink)
 static const struct sink_operations BACKEND_SINK_OPS = {
     .process = backend_sink_process,
     .insert_source = backend_sink_insert_source,
+    .insert_mountpoint = backend_sink_insert_mountpoint,
     .destroy = backend_sink_destroy,
 };
 
