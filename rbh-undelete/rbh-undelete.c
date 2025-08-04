@@ -46,21 +46,89 @@ destroy_to(void)
 }
 
 /*----------------------------------------------------------------------------*
+ |                              build_paths()                                 |
+ *----------------------------------------------------------------------------*/
+
+static char *
+ensure_slash(const char* path)
+{
+    char *buf;
+
+    if (path[0] == '/')
+        return strdup(path);
+    else {
+        if (asprintf(&buf, "/%s", path) < 0)
+            return NULL;
+        return buf;
+    }
+}
+
+int
+build_paths(const char *path, const char *mountpoint, char **_relative_path,
+            char **_full_path)
+{
+    char *relative_path = NULL;
+    char *full_path = NULL;
+    size_t mpt_len;
+
+    mpt_len = strlen(mountpoint);
+
+    if (strncmp(path, mountpoint, mpt_len) == 0 && path[mpt_len] == '/') {
+        relative_path = strdup(path + mpt_len);
+        if (!relative_path)
+            return -1;
+        full_path = strdup(path);
+        if (!full_path) {
+            free(relative_path);
+            return -1;
+        }
+    } else {
+        relative_path = ensure_slash(path);
+        if (!relative_path)
+            return -1;
+
+        if (asprintf(&full_path, "%s%s", mountpoint, relative_path) < 0) {
+            free(relative_path);
+            return -1;
+        }
+    }
+
+    *_relative_path = relative_path;
+    *_full_path = full_path;
+
+    return 0;
+}
+
+/*----------------------------------------------------------------------------*
  |                                undelete()                                  |
  *----------------------------------------------------------------------------*/
+
+#define FREE(x, y) do { if ((x) != NULL) { free(x); (x) = NULL; } \
+    if ((y) != NULL) { free(y); (y) = NULL; } } while (0)
 
 static void
 undelete(const char *path)
 {
     const struct rbh_filter_projection ALL = {
-        /* Archived entries that have been deleted no longer have a PARENT_ID
+        /**
+         * Archived entries that have been deleted no longer have a PARENT_ID
          * or a NAME stored inside the database
          **/
         .fsentry_mask = RBH_FP_ALL & ~RBH_FP_PARENT_ID & ~RBH_FP_NAME,
         .statx_mask = RBH_STATX_ALL,
     };
-    const char *last = strrchr(path, '/') ?: path;
-    /*temporary pop of /mnt/lustre*/
+    struct rbh_iterator *delete_iter;
+    struct rbh_fsentry *new_fsentry;
+    struct rbh_fsentry *fsentry;
+    char *relative_path = NULL;
+    char *full_path = NULL;
+    const char *mpt;
+
+    mpt = rbh_backend_get_info(from,
+                               RBH_INFO_MOUNTPOINT)->pairs[0].value->string;
+
+    if (build_paths(path, mpt, &relative_path, &full_path) != 0)
+        return;
 
     const struct rbh_filter PATH_FILTER = {
         .op = RBH_FOP_EQUAL,
@@ -71,20 +139,20 @@ undelete(const char *path)
             },
             .value = {
                 .type = RBH_VT_STRING,
-                .string = last
+                .string = relative_path
             },
         },
     };
-    struct rbh_iterator *delete_iter;
-    struct rbh_fsentry *new_fsentry;
-    struct rbh_fsentry *fsentry;
 
     fsentry = rbh_backend_filter_one(from, &PATH_FILTER, &ALL);
-    if (fsentry == NULL)
+    if (fsentry == NULL) {
+        FREE(relative_path, full_path);
         error(EXIT_FAILURE, errno, "rbh_backend_filter_one");
+    }
 
-    new_fsentry = rbh_backend_undelete(to, path, fsentry);
+    new_fsentry = rbh_backend_undelete(to, full_path, fsentry);
     if (new_fsentry == NULL) {
+        FREE(relative_path, full_path);
         fprintf(stderr, "Error while returning fsentry from undelete\n");
         return;
     }
@@ -94,15 +162,19 @@ undelete(const char *path)
         .id = new_fsentry->id
     };
     delete_iter = rbh_iter_array(&delete_event, sizeof(delete_event), 1);
-    if (delete_iter == NULL)
+    if (delete_iter == NULL) {
+        FREE(relative_path, full_path);
         error(EXIT_FAILURE, errno, "rbh_iter_array");
+    }
 
     if (rbh_backend_update(from, delete_iter) < 0) {
         int save_errno = errno;
+        FREE(relative_path, full_path);
         rbh_iter_destroy(delete_iter);
         error(EXIT_FAILURE, save_errno, "rbh_backend_update (DELETE)");
     }
 
+    FREE(relative_path, full_path);
     rbh_iter_destroy(delete_iter);
 }
 
@@ -136,14 +208,26 @@ rm_list(const char *prefix)
     };
     struct rbh_mut_iterator *_fsentries;
     struct rbh_fsentry *fsentry;
+    char *relative_path = NULL;
+    char *full_path = NULL;
     char regex[PATH_MAX];
     const char *rm_path;
+    const char *mpt;
     time_t rm_time;
     int rc;
 
-    rc = snprintf(regex, sizeof(regex), "^%s", prefix);
+    mpt = rbh_backend_get_info(from,
+                               RBH_INFO_MOUNTPOINT)->pairs[0].value->string;
+
+    if (build_paths(prefix, mpt, &relative_path, &full_path) != 0)
+        return;
+
+    free(full_path); /*Unused inside rm_list, but needed to call build_paths*/
+
+    rc = snprintf(regex, sizeof(regex), "^%s", relative_path);
     if (rc < 0 || rc >= sizeof(regex)) {
         fprintf(stderr, "Error while formatting regex\n");
+        free(relative_path);
         return;
     }
 
@@ -176,8 +260,10 @@ rm_list(const char *prefix)
     };
 
     _fsentries = rbh_backend_filter(from, &FILTER, &OPTIONS, &OUTPUT);
-    if (!_fsentries)
+    if (!_fsentries) {
+        free(relative_path);
         return;
+    }
 
     printf("DELETED FILES:\n");
     while ((fsentry = rbh_mut_iter_next(_fsentries)) != NULL) {
@@ -193,6 +279,7 @@ rm_list(const char *prefix)
     }
 
     rbh_mut_iter_destroy(_fsentries);
+    free(relative_path);
 }
 
 /*----------------------------------------------------------------------------*
