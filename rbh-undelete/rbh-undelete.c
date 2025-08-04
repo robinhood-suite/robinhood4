@@ -20,7 +20,7 @@ enum rbh_undelete_option {
 };
 
 static struct rbh_backend *metadata_source, *target_entry;
-static char *undelete_target_path;
+static char *full_undelete_target_path, *relative_undelete_target_path;
 
 static void __attribute__((destructor))
 destroy_global_variables(void)
@@ -39,30 +39,89 @@ destroy_global_variables(void)
         rbh_backend_plugin_destroy(name);
     }
 
-    if (undelete_target_path)
-        free(undelete_target_path);
+    /* `relative_undelete_target_path` is a substring of
+     * `full_undelete_target_path`, no need to free it.
+     */
+    if (full_undelete_target_path)
+        free(full_undelete_target_path);
+}
+
+/*----------------------------------------------------------------------------*
+ |                              build_paths()                                 |
+ *----------------------------------------------------------------------------*/
+
+static char *
+ensure_slash(const char* path)
+{
+    char *buf;
+
+    if (path[0] == '/')
+        return strdup(path);
+    else {
+        if (asprintf(&buf, "/%s", path) < 0)
+            return NULL;
+        return buf;
+    }
+}
+
+int
+build_paths(const char *path, const char *mountpoint, char **_relative_path,
+            char **_full_path)
+{
+    char *relative_path = NULL;
+    char *full_path = NULL;
+    size_t mpt_len;
+
+    mpt_len = strlen(mountpoint);
+
+    if (strncmp(path, mountpoint, mpt_len) == 0 && path[mpt_len] == '/') {
+        relative_path = strdup(path + mpt_len);
+        if (!relative_path)
+            return -1;
+        full_path = strdup(path);
+        if (!full_path) {
+            free(relative_path);
+            return -1;
+        }
+    } else {
+        relative_path = ensure_slash(path);
+        if (!relative_path)
+            return -1;
+
+        if (asprintf(&full_path, "%s%s", mountpoint, relative_path) < 0) {
+            free(relative_path);
+            return -1;
+        }
+    }
+
+    *_relative_path = relative_path;
+    *_full_path = full_path;
+
+    return 0;
 }
 
 /*----------------------------------------------------------------------------*
  |                                undelete()                                  |
  *----------------------------------------------------------------------------*/
 
-static int
-undelete(const char *path)
+#define FREE(x, y) do { if ((x) != NULL) { free(x); (x) = NULL; } \
+    if ((y) != NULL) { free(y); (y) = NULL; } } while (0)
+
+static void
+undelete()
 {
     const struct rbh_filter_projection ALL = {
-        /* Archived entries that have been deleted no longer have a PARENT_ID
+        /**
+         * Archived entries that have been deleted no longer have a PARENT_ID
          * or a NAME stored inside the database
          */
         .fsentry_mask = RBH_FP_ALL & ~RBH_FP_PARENT_ID & ~RBH_FP_NAME,
         .statx_mask = RBH_STATX_ALL,
     };
-    const char *actual_path;
-
-    /* Temporary pop of '/mnt/lustre' */
-    assert(strlen(path) >= 11);  // 11 = strlen("/mnt/lustre")
-    actual_path = path + 11;
-
+    struct rbh_fsevent delete_event = { .type = RBH_FET_DELETE };
+    struct rbh_iterator *delete_iter;
+    struct rbh_fsentry *new_fsentry;
+    struct rbh_fsentry *fsentry;
     const struct rbh_filter PATH_FILTER = {
         .op = RBH_FOP_EQUAL,
         .compare = {
@@ -72,27 +131,21 @@ undelete(const char *path)
             },
             .value = {
                 .type = RBH_VT_STRING,
-                .string = actual_path
+                .string = relative_undelete_target_path
             },
         },
     };
-    struct rbh_fsevent delete_event = { .type = RBH_FET_DELETE };
-    struct rbh_iterator *delete_iter;
-    struct rbh_fsentry *new_fsentry;
-    struct rbh_fsentry *fsentry;
 
     fsentry = rbh_backend_filter_one(metadata_source, &PATH_FILTER, &ALL);
-    if (fsentry == NULL) {
-        fprintf(stderr, "Failed to find '%s' in source URI",
-                undelete_target_path);
-        return ENOENT;
-    }
+    if (fsentry == NULL)
+        error(EXIT_FAILURE, ENOENT, "Failed to find '%s' in source URI",
+              relative_undelete_target_path);
 
-    new_fsentry = rbh_backend_undelete(target_entry, path, fsentry);
-    if (new_fsentry == NULL) {
-        fprintf(stderr, "Error while returning fsentry from undelete\n");
-        return -1;
-    }
+    new_fsentry = rbh_backend_undelete(target_entry, full_undelete_target_path,
+                                       fsentry);
+    if (new_fsentry == NULL)
+        error(EXIT_FAILURE, ENOENT, "Failed to undelete '%s'",
+              full_undelete_target_path);
 
     delete_event.id = fsentry->id;
 
@@ -108,14 +161,13 @@ undelete(const char *path)
     }
 
     rbh_iter_destroy(delete_iter);
-
-    return 0;
 }
 
 static void
-set_targets(const char *target_uri)
+set_targets(const char *target_uri, const char *mountpoint)
 {
     struct rbh_raw_uri *raw_uri;
+    size_t mountpoint_len;
     struct rbh_uri *uri;
 
     raw_uri = rbh_raw_uri_from_string(target_uri);
@@ -127,14 +179,38 @@ set_targets(const char *target_uri)
     if (uri == NULL)
         error(EXIT_FAILURE, errno, "Cannot detect given backend");
 
-    undelete_target_path = strdup(uri->fsname);
-    if (undelete_target_path == NULL) {
-        free(uri);
+    if (uri->fsname[0] != '/')
+        error(EXIT_FAILURE, ENOTSUP, "Cannot undelete relative path");
+
+    full_undelete_target_path = strdup(uri->fsname);
+    if (full_undelete_target_path == NULL)
         error(EXIT_FAILURE, errno, "Failed to duplicate target name");
-    }
+
+    mountpoint_len = strlen(mountpoint);
+
+    if (strncmp(full_undelete_target_path, mountpoint, mountpoint_len) != 0 ||
+        full_undelete_target_path[mountpoint_len] == '\0')
+        error(EXIT_FAILURE, ENOTSUP,
+              "Mountpoint recorded '%s' in the source URI isn't in the path to undelete '%s'",
+              mountpoint, full_undelete_target_path);
+
+    relative_undelete_target_path = &full_undelete_target_path[mountpoint_len];
 
     target_entry = rbh_backend_and_branch_from_uri(uri, false);
     free(uri);
+}
+
+static const char *
+get_source_mountpoint()
+{
+    struct rbh_value_map *mountpoint_value_map;
+
+    mountpoint_value_map = rbh_backend_get_info(metadata_source,
+                                                RBH_INFO_MOUNTPOINT);
+    if (mountpoint_value_map == NULL || mountpoint_value_map->count != 1)
+        fprintf(stderr, "Failed to get mountpoint from source URI\n");
+
+    return mountpoint_value_map->pairs[0].value->string;
 }
 
 /*----------------------------------------------------------------------------*
@@ -198,7 +274,9 @@ rm_list(const char *regex)
     _fsentries = rbh_backend_filter(metadata_source, &FILTER, &OPTIONS,
                                     &OUTPUT);
     if (!_fsentries)
-        return;
+        error(EXIT_FAILURE, errno,
+              "Failed to get undeletable entries in '%s'",
+              relative_undelete_target_path);
 
     printf("DELETED FILES:\n");
     while ((fsentry = rbh_mut_iter_next(_fsentries)) != NULL) {
@@ -296,6 +374,7 @@ int
 main(int _argc, char *_argv[])
 {
     struct command_context command_context = {0};
+    const char *mountpoint;
     int nb_cli_args;
     int flags = 0;
     char **argv;
@@ -321,7 +400,8 @@ main(int _argc, char *_argv[])
     argv = &argv[nb_cli_args];
 
     metadata_source = rbh_backend_from_uri(argv[0], true);
-    set_targets(argv[1]);
+    mountpoint = get_source_mountpoint();
+    set_targets(argv[1], mountpoint);
 
     for (int i = 0 ; i < argc ; i++) {
         char *arg = argv[i];
@@ -334,15 +414,16 @@ main(int _argc, char *_argv[])
     }
 
     if (flags & RBH_UNDELETE_RESTORE)
-        return undelete(undelete_target_path);
+        undelete();
 
     if (flags & RBH_UNDELETE_LIST) {
         char regex[PATH_MAX];
 
-        if (snprintf(regex, sizeof(regex), "^%s", undelete_target_path) == -1) {
+        if (snprintf(regex, sizeof(regex), "^%s",
+                     relative_undelete_target_path) == -1) {
             fprintf(stderr,
                     "Error while formatting regex associated with '%s'\n",
-                    undelete_target_path);
+                    relative_undelete_target_path);
             return EXIT_FAILURE;
         }
 
