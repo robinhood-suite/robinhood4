@@ -241,6 +241,12 @@ enum rbh_info {
     RBH_INFO_BACKEND_SOURCE = 1 << 4,
 };
 
+/** Determines which info will be inserted by insert_metadata */
+enum metadata_type_to_insert {
+    RBH_MT_SOURCE,
+    RBH_MT_MOUNTPOINT
+};
+
 /**
  * Operations backends implement
  *
@@ -267,9 +273,10 @@ struct rbh_backend_operations {
             void *backend,
             struct rbh_iterator *fsevents
             );
-    int (*insert_source)(
+    int (*insert_metadata)(
             void *backend,
-            const struct rbh_value *backend_source
+            const struct rbh_value *metadata,
+            enum metadata_type_to_insert mdt
             );
     struct rbh_backend *(*branch)(
             void *backend,
@@ -502,21 +509,22 @@ rbh_backend_update(struct rbh_backend *backend, struct rbh_iterator *fsevents)
  * Insert the source backends in the target backend
  *
  * @param backend         the backend in which to insert the source
- * @param backend_source  a rbh_value sequence containing the source backend
- *                        names
+ * @param mdt             an enum to determine which metadata to insert
+ * @param metedata        a rbh_value containing the metadata to insert
  *
  * @return                0 on success, -1 on error
  */
 static inline int
-rbh_backend_insert_source(struct rbh_backend *backend,
-                          const struct rbh_value *backend_source)
+rbh_backend_insert_metadata(struct rbh_backend *backend,
+                            const struct rbh_value *metadata,
+                            enum metadata_type_to_insert mdt)
 {
-    if (backend->ops->insert_source == NULL) {
+    if (backend->ops->insert_metadata == NULL) {
         errno = ENOTSUP;
         return -1;
     }
 
-    return backend->ops->insert_source(backend, backend_source);
+    return backend->ops->insert_metadata(backend, metadata, mdt);
 }
 
 /**
