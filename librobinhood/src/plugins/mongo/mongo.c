@@ -735,6 +735,51 @@ mongo_insert_source(mongoc_collection_t *collection, char *id_name,
 }
 
 static int
+mongo_insert_mountpoint(mongoc_collection_t *collection,
+                        const struct rbh_value *mountpoint)
+{
+    bson_t bson_mountpoint;
+    bson_error_t error;
+    bson_t *update;
+    bson_t *filter;
+    bson_t *opts;
+    bool result;
+    int rc = 0;
+
+    assert(mountpoint->type == RBH_VT_STRING);
+
+    filter = BCON_NEW("_id", "mountpoint_info");
+    opts = BCON_NEW("upsert", BCON_BOOL(true));
+    update = bson_new();
+
+    if (!(BSON_APPEND_DOCUMENT_BEGIN(update, "$set", &bson_mountpoint)
+          && BSON_APPEND_RBH_VALUE(&bson_mountpoint, "mountpoint", mountpoint)
+          && bson_append_document_end(update, &bson_mountpoint))) {
+        bson_destroy(update);
+        fprintf(stderr, "Failed to create bson to insert mountpoint '%s'\n",
+                mountpoint->string);
+        return -1;
+    }
+
+    fprintf(stderr, "%s:%s (%d): coll = '%p'\n", __FILE__, __func__, __LINE__, collection);
+    fprintf(stderr, "%s:%s (%d): filter = '%p'\n", __FILE__, __func__, __LINE__, filter);
+    fprintf(stderr, "%s:%s (%d): update = '%p'\n", __FILE__, __func__, __LINE__, update);
+    fprintf(stderr, "%s:%s (%d): opts = '%p'\n", __FILE__, __func__, __LINE__, opts);
+    result = mongoc_collection_update_one(collection, filter, update, opts,
+                                          NULL, &error);
+    bson_destroy(update);
+    if (!result) {
+        fprintf(stderr, "Upsert failed: %s\n", error.message);
+        return -1;
+    }
+
+    bson_destroy(filter);
+    bson_destroy(opts);
+
+    return rc;
+}
+
+static int
 mongo_insert_sync_metadata(mongoc_collection_t *collection,
                            const struct rbh_value_map *map_value)
 {
@@ -785,6 +830,7 @@ mongo_insert_metadata(void *backend, struct rbh_value_map *map_value,
     mongoc_collection_t *collection = NULL;
     struct mongo_backend *mongo = backend;
     int rc = 0;
+    int rc2;
 
     switch (mdt) {
     case RBH_DT_INFO:
@@ -798,19 +844,23 @@ mongo_insert_metadata(void *backend, struct rbh_value_map *map_value,
         return -1;
     }
 
-    for (size_t i = 0 ; i < map_value->count ; i++) {
-        const struct rbh_value *value = map_value->pairs[i].value;
+    if (mdt == RBH_DT_LOG)
+        return mongo_insert_sync_metadata(collection, map_value);
 
-        if (value->type == RBH_VT_SEQUENCE) {
-            rc = mongo_insert_source(collection, "backend_info",
-                                     value);
-            goto exit_loop;
+    for (size_t i = 0 ; i < map_value->count ; i++) {
+        const struct rbh_value_pair *pair = &map_value->pairs[i];
+
+        if (strcmp(pair->key, "backend_source") == 0 &&
+            pair->value->type == RBH_VT_SEQUENCE) {
+            rc2 = mongo_insert_source(collection, "backend_info",
+                                     pair->value);
+        } else if (strcmp(pair->key, "mountpoint") == 0) {
+            rc2 = mongo_insert_mountpoint(collection, pair->value);
         }
+
+        rc = (rc ? : rc2);
     }
 
-    rc = mongo_insert_sync_metadata(collection, map_value);
-
-exit_loop:
     return rc;
 }
 
