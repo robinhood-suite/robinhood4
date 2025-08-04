@@ -637,6 +637,46 @@ insert_backend_source()
     return 0;
 }
 
+static int
+insert_mountpoint()
+{
+    struct rbh_value *mountpoint;
+    char clean_path[PATH_MAX];
+    size_t len;
+
+    mountpoint = malloc(sizeof(*mountpoint));
+    if (!mountpoint) {
+        fprintf(stderr, "mountpoint value allocation failed\n");
+        return -1;
+    }
+
+    strncpy(clean_path, enrich_builder->mount_path, sizeof(clean_path));
+    clean_path[sizeof(clean_path) - 1] = '\0';
+
+    len = strlen(clean_path);
+    if (len > 1 && clean_path[len - 1] == '/')
+        clean_path[len - 1] = '\0';
+
+    mountpoint->type = RBH_VT_STRING;
+    mountpoint->string = strdup(clean_path);
+    if (!mountpoint->string) {
+        fprintf(stderr, "strdup failed\n");
+        free(mountpoint);
+        return -1;
+    }
+
+    if (sink_insert_mountpoint(sink, mountpoint)) {
+        fprintf(stderr, "Failed to set the mountpoint\n");
+        free((char *)mountpoint->string);
+        free(mountpoint);
+        return -1;
+    }
+
+    free((char *)mountpoint->string);
+    free(mountpoint);
+    return 0;
+}
+
 int
 main(int argc, char *argv[])
 {
@@ -784,6 +824,9 @@ main(int argc, char *argv[])
         if (insert_backend_source() && errno != ENOTSUP)
             error(EX_USAGE, EINVAL,
                   "Failed to insert source backends in destination");
+        if (insert_mountpoint() && errno != ENOTSUP)
+            error(EX_USAGE, EINVAL,
+                  "Failed to insert mountpoint in destination\n");
     }
 
     feed(sink, source, enrich_builder, strcmp(sink[0]->name, "backend"),
