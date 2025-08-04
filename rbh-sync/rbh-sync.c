@@ -12,6 +12,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <limits.h>
 #include <sysexits.h>
 
 #include <robinhood.h>
@@ -85,8 +86,20 @@ sync_source()
     assert(strcmp(pair->key, "backend_source") == 0);
     sources = pair->value;
 
-    if (rbh_backend_insert_source(to, sources))
+    if (rbh_backend_insert_metadata(to, sources, RBH_MT_SOURCE))
         fprintf(stderr, "Failed to set backend_info\n");
+}
+
+static void
+sync_mountpoint(const char *mountpoint_path)
+{
+    struct rbh_value mountpoint = {
+        .type = RBH_VT_STRING,
+        .string = mountpoint_path
+    };
+
+    if (rbh_backend_insert_metadata(to, &mountpoint, RBH_MT_MOUNTPOINT))
+        fprintf(stderr, "Failed to set the mountpoint\n");
 }
 
     /*--------------------------------------------------------------------*
@@ -543,6 +556,36 @@ list_capabilities(char *uri)
  |                                    cli                                     |
  *----------------------------------------------------------------------------*/
 
+static struct rbh_backend *
+get_source_backend_from_uri(const char *string, bool read_only,
+                            char *mountpoint)
+{
+    struct rbh_backend *backend;
+    struct rbh_raw_uri *raw_uri;
+    struct rbh_uri *uri;
+
+    raw_uri = rbh_raw_uri_from_string(string);
+    if (raw_uri == NULL)
+        error(EXIT_FAILURE, errno, "Cannot detect backend uri");
+
+    uri = rbh_uri_from_raw_uri(raw_uri);
+    if (uri == NULL)
+        error(EXIT_FAILURE, errno, "Cannot detect given backend");
+    free(raw_uri);
+
+    if (uri->fsname[0] != '/') {
+        if (realpath(uri->fsname, mountpoint) == NULL)
+            error(EXIT_FAILURE, errno, "Failed to get the source mountpoint");
+    } else {
+        strncpy(mountpoint, uri->fsname, PATH_MAX - 2);
+        mountpoint[PATH_MAX - 1] = '\0';
+    }
+
+    backend = rbh_backend_and_branch_from_uri(uri, read_only);
+    free(uri);
+    return backend;
+}
+
     /*--------------------------------------------------------------------*
      |                              usage()                               |
      *--------------------------------------------------------------------*/
@@ -641,6 +684,7 @@ main(int argc, char *argv[])
         .fsentry_mask = RBH_FP_ALL,
         .statx_mask = RBH_STATX_ALL & ~RBH_STATX_MNT_ID,
     };
+    char mountpoint[PATH_MAX];
     int rc;
     char c;
 
@@ -701,11 +745,12 @@ main(int argc, char *argv[])
         error(EX_USAGE, 0, "unexpected argument: %s", argv[2]);
 
     /* Parse SOURCE */
-    from = rbh_backend_from_uri(argv[0], true);
+    from = get_source_backend_from_uri(argv[0], true, (char *) &mountpoint);
     /* Parse DEST */
     to = rbh_backend_from_uri(argv[1], false);
 
     sync_source();
+    sync_mountpoint(mountpoint);
 
     sync(&projection);
 

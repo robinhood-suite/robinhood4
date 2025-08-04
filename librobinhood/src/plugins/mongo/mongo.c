@@ -997,7 +997,7 @@ out:
 }
 
     /*--------------------------------------------------------------------*
-     |                       insert_backend_source                        |
+     |                          insert_metadata                           |
      *--------------------------------------------------------------------*/
 
 static int
@@ -1051,6 +1051,72 @@ mongo_insert_source(void *backend, const struct rbh_value *backend_sequence)
     return rc;
 }
 
+static int
+mongo_insert_mountpoint(void *backend, const struct rbh_value *mountpoint)
+{
+    struct mongo_backend *mongo = backend;
+    mongoc_collection_t *collection;
+    bson_t bson_mountpoint;
+    bson_error_t error;
+    bson_t *update;
+    bson_t *filter;
+    bson_t *opts;
+    bool result;
+    int rc = 0;
+
+    assert(mountpoint->type == RBH_VT_STRING);
+
+    collection = mongo->info;
+    filter = BCON_NEW("_id", "mountpoint_info");
+    opts = BCON_NEW("upsert", BCON_BOOL(true));
+    update = bson_new();
+
+    if (!(BSON_APPEND_DOCUMENT_BEGIN(update, "$set", &bson_mountpoint)
+          && BSON_APPEND_RBH_VALUE(&bson_mountpoint, "mountpoint", mountpoint)
+          && bson_append_document_end(update, &bson_mountpoint))) {
+        bson_destroy(update);
+        rc = 1;
+    }
+
+    result = mongoc_collection_update_one(collection, filter, update, opts,
+                                          NULL, &error);
+    bson_destroy(update);
+    if (!result) {
+        fprintf(stderr, "Upsert failed: %s\n", error.message);
+        rc = 1;
+    }
+
+    bson_destroy(filter);
+    bson_destroy(opts);
+
+    return rc;
+}
+
+static int
+mongo_insert_metadata(void *backend, const struct rbh_value *metadata,
+                      enum metadata_type_to_insert mdt)
+{
+    int rc = 0;
+
+    switch(mdt) {
+    case RBH_MT_SOURCE:
+        rc = mongo_insert_source(backend, metadata);
+        break;
+    case RBH_MT_MOUNTPOINT:
+        rc = mongo_insert_mountpoint(backend, metadata);
+        break;
+    default:
+        fprintf(stderr, "Unknown metadata_type\n");
+        return -1;
+    }
+
+    if (rc)
+        fprintf(stderr, "Failed to insert metadata\n");
+
+    return rc;
+}
+
+
     /*--------------------------------------------------------------------*
      |                              destroy                               |
      *--------------------------------------------------------------------*/
@@ -1078,7 +1144,7 @@ static const struct rbh_backend_operations MONGO_BACKEND_OPS = {
     .filter = mongo_backend_filter,
     .report = mongo_backend_report,
     .get_info = mongo_backend_get_info,
-    .insert_source = mongo_insert_source,
+    .insert_metadata = mongo_insert_metadata,
     .destroy = mongo_backend_destroy,
 };
 
