@@ -247,8 +247,9 @@ enum rbh_info {
     RBH_INFO_BACKEND_SOURCE = 1 << 2,
     RBH_INFO_COUNT          = 1 << 3,
     RBH_INFO_FIRST_SYNC     = 1 << 4,
-    RBH_INFO_SIZE           = 1 << 5,
     RBH_INFO_LAST_SYNC      = 1 << 6,
+    RBH_INFO_MOUNTPOINT     = 1 << 7,
+    RBH_INFO_SIZE           = 1 << 8,
 };
 
 /**
