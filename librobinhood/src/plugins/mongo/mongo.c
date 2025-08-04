@@ -813,15 +813,19 @@ get_collection_info(const struct mongo_backend *mongo, char *field_to_find,
     bufsize = sizeof(_buffer);
     value = RBH_SSTACK_PUSH(info_sstack, NULL, sizeof(*value));
 
-    filter = BCON_NEW("_id", "backend_info");
+    if (strcmp(field_to_find, "mountpoint") == 0)
+        filter = BCON_NEW("_id", "mountpoint_info");
+    if (strcmp(field_to_find, "backend_source") == 0)
+        filter = BCON_NEW("_id", "backend_info");
+
     cursor = mongoc_collection_find_with_opts(mongo->info, filter, NULL, NULL);
     if (!mongoc_cursor_next(cursor, &doc)) {
-        rc = 1;
+        rc = -1;
         goto out;
     }
 
     if (!bson_iter_init(&iter, doc)) {
-        rc = 1;
+        rc = -1;
         goto out;
     }
 
@@ -830,7 +834,7 @@ get_collection_info(const struct mongo_backend *mongo, char *field_to_find,
 
         if (strcmp(key, field_to_find) == 0) {
             if (!bson_iter_rbh_value(&iter, value, &buffer, &bufsize)) {
-                rc = 1;
+                rc = -1;
                 goto out;
             }
 
@@ -972,12 +976,17 @@ mongo_backend_get_info(void *backend, int info_flags)
     }
 
     if (info_flags & RBH_INFO_BACKEND_SOURCE) {
-        if (get_collection_info(mongo, "backend_source", &pairs[idx++]))
+        if (get_collection_info(mongo, "backend_source", &pairs[idx++]) == -1)
             goto out;
     }
 
     if (info_flags & RBH_INFO_COUNT) {
         if (!get_collection_count(mongo, &pairs[idx++]))
+            goto out;
+    }
+
+    if (info_flags & RBH_INFO_MOUNTPOINT) {
+        if (get_collection_info(mongo, "mountpoint", &pairs[idx++]) == -1)
             goto out;
     }
 
