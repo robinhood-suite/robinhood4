@@ -18,6 +18,7 @@ struct sink;
 struct sink_operations {
     int (*process)(void *sink, struct rbh_iterator *fsevents);
     int (*insert_source)(void *sink, const struct rbh_value *backend_source);
+    int (*insert_mountpoint)(void *sink, const struct rbh_value *mountpoint);
     void (*destroy)(void *sink);
 };
 
@@ -37,6 +38,16 @@ sink_insert_source(struct sink *sink, const struct rbh_value *backend_source)
 {
     if (sink->ops->insert_source)
         return sink->ops->insert_source(sink, backend_source);
+
+    errno = ENOTSUP;
+    return -1;
+}
+
+static inline int
+sink_insert_mountpoint(struct sink *sink, const struct rbh_value *mountpoint)
+{
+    if (sink->ops->insert_mountpoint)
+        return sink->ops->insert_mountpoint(sink, mountpoint);
 
     errno = ENOTSUP;
     return -1;
