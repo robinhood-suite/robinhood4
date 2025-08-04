@@ -75,6 +75,7 @@ undelete(const char *path)
             },
         },
     };
+    struct rbh_iterator *delete_iter;
     struct rbh_fsentry *new_fsentry;
     struct rbh_fsentry *fsentry;
 
@@ -87,6 +88,22 @@ undelete(const char *path)
         fprintf(stderr, "Error while returning fsentry from undelete\n");
         return;
     }
+
+    struct rbh_fsevent delete_event = {
+        .type = RBH_FET_DELETE,
+        .id = new_fsentry->id
+    };
+    delete_iter = rbh_iter_array(&delete_event, sizeof(delete_event), 1);
+    if (delete_iter == NULL)
+        error(EXIT_FAILURE, errno, "rbh_iter_array");
+
+    if (rbh_backend_update(from, delete_iter) < 0) {
+        int save_errno = errno;
+        rbh_iter_destroy(delete_iter);
+        error(EXIT_FAILURE, save_errno, "rbh_backend_update (DELETE)");
+    }
+
+    rbh_iter_destroy(delete_iter);
 }
 
 /*----------------------------------------------------------------------------*
