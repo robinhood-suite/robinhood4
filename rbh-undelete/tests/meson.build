@@ -7,7 +7,7 @@
 integration_tests = []
 
 if liblustre.found()
-    integration_tests += ['undelete']
+    integration_tests += [ 'undelete' ]
 endif
 
 foreach t: integration_tests
