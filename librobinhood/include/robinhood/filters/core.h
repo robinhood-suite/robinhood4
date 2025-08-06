@@ -35,6 +35,11 @@ struct filters_context {
     struct rbh_plugin_or_extension *info_pe;
     size_t info_pe_count;
 
+    /** Centralized info about the main backend plugin and its extensions. This
+     * is used in the policy engine
+     */
+    struct rbh_backend_plugin_info backend_info;
+
     /** If a filter needs to be completed by an information of the backend */
     bool need_prefetch;
 

@@ -15,8 +15,11 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "robinhood/plugins/backend.h"
+#include "robinhood/filters/core.h"
 #include "robinhood/backend.h"
 #include "robinhood/utils.h"
+#include "robinhood/config.h"
 
 #include "utils.h"
 
@@ -257,4 +260,40 @@ rbh_backend_error_printf(const char *fmt, ...)
     va_end(args);
 
     errno = RBH_BACKEND_ERROR;
+}
+
+static struct rbh_backend_plugin_info
+get_backend_plugin_info(const char *uri)
+{
+    struct filters_context ctx = {0};
+
+    rbh_config_load_from_path(NULL);
+    struct rbh_backend *backend = rbh_backend_from_uri(uri, true);
+    if (!backend)
+        error(EXIT_FAILURE, errno, "rbh_backend_from_uri");
+
+    struct rbh_value_map *info_map =
+        rbh_backend_get_info(backend, RBH_INFO_BACKEND_SOURCE);
+    if (!info_map)
+        error(EXIT_FAILURE, errno, "rbh_backend_get_info failed");
+
+    assert(info_map->count == 1);
+    import_plugins(&ctx, &info_map, 1);
+
+    struct rbh_backend_plugin_info info = {0};
+    for (size_t i = 0; i < ctx.info_pe_count; ++i) {
+        if (ctx.info_pe[i].is_plugin && !info.plugin) {
+            info.plugin = ctx.info_pe[i].plugin;
+        } else if (!ctx.info_pe[i].is_plugin) {
+            info.extensions =
+                realloc(info.extensions,
+                        sizeof(struct rbh_plugin_extension *) *
+                        (info.extension_count + 1));
+            if (!info.extensions)
+                error(EXIT_FAILURE, errno, "realloc");
+            info.extensions[info.extension_count++] = ctx.info_pe[i].extension;
+        }
+    }
+    filters_ctx_finish(&ctx);
+    return info;
 }

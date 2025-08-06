@@ -11,7 +11,6 @@
 
 #include <errno.h>
 #include <limits.h>
-
 #include "robinhood/uri.h"
 #include "robinhood/utils.h"
 
