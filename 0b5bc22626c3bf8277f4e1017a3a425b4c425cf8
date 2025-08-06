@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2ba0e6d6_d9749732",
+        "filename": "rbh-policy/POC/policyengine.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2025-08-06T14:06:00Z",
+      "side": 1,
+      "message": "major: autant delete me semble une action de base qu\u0027on peut implémenter sans que ce soit custom, autant archive ? je ne vois pas comment cela ne peut pas être custom ?",
+      "range": {
+        "startLine": 115,
+        "startChar": 4,
+        "endLine": 120,
+        "endChar": 2
+      },
+      "revId": "0b5bc22626c3bf8277f4e1017a3a425b4c425cf8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
