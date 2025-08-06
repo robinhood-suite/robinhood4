@@ -16,7 +16,8 @@
 
 enum rbh_undelete_option {
     RBH_UNDELETE_RESTORE = 1 << 0,
-    RBH_UNDELETE_LIST    = 1 << 1
+    RBH_UNDELETE_LIST    = 1 << 1,
+    RBH_UNDELETE_OUTPUT  = 1 << 2,
 };
 
 static struct rbh_backend *metadata_source, *target_entry;
@@ -108,7 +109,7 @@ build_paths(const char *path, const char *mountpoint, char **_relative_path,
     if ((y) != NULL) { free(y); (y) = NULL; } } while (0)
 
 static void
-undelete()
+undelete(const char *output)
 {
     const struct rbh_filter_projection ALL = {
         /**
@@ -141,7 +142,9 @@ undelete()
         error(EXIT_FAILURE, ENOENT, "Failed to find '%s' in source URI",
               relative_undelete_target_path);
 
-    new_fsentry = rbh_backend_undelete(target_entry, full_undelete_target_path,
+    new_fsentry = rbh_backend_undelete(target_entry,
+                                       output != NULL ?
+                                           output : full_undelete_target_path,
                                        fsentry);
     if (new_fsentry == NULL)
         error(EXIT_FAILURE, ENOENT, "Failed to undelete '%s'",
@@ -335,6 +338,7 @@ usage()
         "    -h,--help            Show this message and exit\n"
         "    -l,--list            Display a list of deleted but archived\n"
         "                         entries\n"
+        "    --output OUTPUT      The path where the file will be recreated\n"
         "    -r,--restore         Recreate a deleted entry that has been\n"
         "                         deleted and rebind it to its old content\n"
         "\n"
@@ -374,6 +378,7 @@ int
 main(int _argc, char *_argv[])
 {
     struct command_context command_context = {0};
+    const char *output = NULL;
     const char *mountpoint;
     int nb_cli_args;
     int flags = 0;
@@ -411,10 +416,18 @@ main(int _argc, char *_argv[])
 
         if (strcmp(arg, "--restore") == 0 || strcmp(arg, "-r") == 0)
             flags |= RBH_UNDELETE_RESTORE;
+
+        if (strcmp(arg, "--output") == 0) {
+            flags |= RBH_UNDELETE_OUTPUT;
+            if (i + 1 >= argc)
+                error(EXIT_FAILURE, 0, "Missing path after --output\n");
+            output = argv[i + 1];
+            i++;
+        }
     }
 
     if (flags & RBH_UNDELETE_RESTORE)
-        undelete();
+        undelete(output);
 
     if (flags & RBH_UNDELETE_LIST) {
         char regex[PATH_MAX];
