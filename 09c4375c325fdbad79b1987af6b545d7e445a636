@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "42f96c0c_8fa384b1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2025-08-06T14:08:32Z",
+      "side": 1,
+      "message": "-1, le temps juste d erépondre à la question ?",
+      "revId": "09c4375c325fdbad79b1987af6b545d7e445a636",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5995c8e1_4b5405f9",
+        "filename": "rbh-policy/rbhpolicy/config/filter.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2025-08-06T14:08:32Z",
+      "side": 1,
+      "message": "question:il me semble que dans phobos on a déjà une manière de travailler pour porter le enum ? autrement qu\u0027en les recopiant tous ? pour pouvoir assurer une certaine évolutivité ? Non ?]",
+      "range": {
+        "startLine": 34,
+        "startChar": 0,
+        "endLine": 39,
+        "endChar": 15
+      },
+      "revId": "09c4375c325fdbad79b1987af6b545d7e445a636",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
