@@ -11,6 +11,7 @@
 
 #include "robinhood/filters/core.h"
 #include "robinhood/statx.h"
+#include <robinhood.h>
 
 void
 filters_ctx_finish(struct filters_context *ctx)
@@ -34,6 +35,32 @@ check_pe_already_registered(struct filters_context *ctx, int pe_count,
     return false;
 }
 
+static void
+parse_backend_map(const struct rbh_value_map *entry_map,
+                  const struct rbh_value **plugin_value,
+                  const struct rbh_value **extension_value,
+                  const struct rbh_value **type_value,
+                  bool *is_plugin)
+{
+    if (plugin_value) *plugin_value = NULL;
+    if (extension_value) *extension_value = NULL;
+    if (type_value) *type_value = NULL;
+    if (is_plugin) *is_plugin = true;
+
+    for (size_t i = 0; i < entry_map->count; ++i) {
+        const struct rbh_value_pair *pair = &entry_map->pairs[i];
+        if (strcmp(pair->key, "type") == 0) {
+            if (type_value) *type_value = pair->value;
+            if (is_plugin)
+                *is_plugin = (strcmp(pair->value->string, "plugin") == 0);
+        } else if (strcmp(pair->key, "plugin") == 0) {
+            if (plugin_value) *plugin_value = pair->value;
+        } else if (strcmp(pair->key, "extension") == 0) {
+            if (extension_value) *extension_value = pair->value;
+        }
+    }
+}
+
 static int
 import_backend_source(struct filters_context *ctx,
                       int pe_count, const struct rbh_value_map *backend_source)
@@ -43,18 +70,11 @@ import_backend_source(struct filters_context *ctx,
     const struct rbh_backend_plugin *plugin;
     bool is_plugin = true;
 
-    for (int i = 0; i < backend_source->count; ++i) {
-        const struct rbh_value_pair *pair = &backend_source->pairs[i];
+    for (size_t i = 0; i < backend_source->count; ++i)
+        assert(backend_source->pairs[i].value->type == RBH_VT_STRING);
 
-        assert(pair->value->type == RBH_VT_STRING);
-
-        if (strcmp(pair->key, "type") == 0)
-            is_plugin = (strcmp(pair->value->string, "plugin") == 0);
-        else if (strcmp(pair->key, "plugin") == 0)
-            plugin_value = pair->value;
-        else if (strcmp(pair->key, "extension") == 0)
-            extension_value = pair->value;
-    }
+    parse_backend_map(backend_source, &plugin_value, &extension_value, NULL,
+                      &is_plugin);
 
     assert(plugin_value != NULL);
 
@@ -118,6 +138,89 @@ import_plugins(struct filters_context *ctx, struct rbh_value_map **info_maps,
     }
 
     ctx->info_pe_count = pe_count;
+}
+
+static struct rbh_backend_plugin_info
+get_backend_plugin_info(const char *uri)
+{
+    struct rbh_backend_plugin_info info = {0};
+
+    rbh_config_load_from_path(NULL);
+    struct rbh_backend *backend = rbh_backend_from_uri(uri, true);
+    if (!backend)
+        error(EXIT_FAILURE, errno, "rbh_backend_from_uri");
+
+    const struct rbh_value_map *info_map =
+        rbh_backend_get_info(backend, RBH_INFO_BACKEND_SOURCE);
+    if (!info_map)
+        error(EXIT_FAILURE, errno, "rbh_backend_get_info failed");
+
+    assert(info_map->count == 1);
+    assert(strcmp(info_map->pairs[0].key, "backend_source") == 0);
+    const struct rbh_value *sequence_value = info_map->pairs[0].value;
+    assert(sequence_value->type == RBH_VT_SEQUENCE);
+
+    const struct rbh_value *entries = sequence_value->sequence.values;
+    size_t entry_count = sequence_value->sequence.count;
+
+    const char *plugin_name = NULL;
+    const char **extension_names = NULL;
+    int extension_count = 0;
+
+    for (size_t i = 0; i < entry_count; ++i) {
+        const struct rbh_value *entry = &entries[i];
+        assert(entry->type == RBH_VT_MAP);
+        const struct rbh_value_map *entry_map = &entry->map;
+
+        const struct rbh_value *type_value = NULL;
+        const struct rbh_value *plugin_value = NULL;
+        const struct rbh_value *extension_value = NULL;
+
+        parse_backend_map(entry_map, &plugin_value, &extension_value,
+                          &type_value, NULL);
+
+        assert(plugin_value != NULL);
+        assert(plugin_value->type == RBH_VT_STRING);
+
+        if (type_value && strcmp(type_value->string, "plugin") == 0) {
+            plugin_name = plugin_value->string;
+        } else if (extension_value && extension_value->type == RBH_VT_STRING) {
+            extension_names = realloc(extension_names,
+                                      sizeof(char *) * (extension_count + 1));
+            if (!extension_names)
+                error(EXIT_FAILURE, errno, "realloc");
+            extension_names[extension_count++] = extension_value->string;
+        }
+    }
+
+    if (!plugin_name)
+        error(EXIT_FAILURE, 0, "plugin name not found in backend source");
+
+    info.plugin = rbh_backend_plugin_import(plugin_name);
+    if (!info.plugin)
+        error(EXIT_FAILURE, errno, "rbh_backend_plugin_import");
+
+    if (extension_count > 0) {
+        info.extensions = malloc(
+            sizeof(struct rbh_plugin_extension *) * extension_count);
+        if (!info.extensions)
+            error(EXIT_FAILURE, errno, "malloc");
+
+        for (int i = 0; i < extension_count; ++i) {
+            const struct rbh_plugin_extension *ext =
+                rbh_plugin_load_extension(&info.plugin->plugin,
+                                          extension_names[i]);
+            if (!ext)
+                error(EXIT_FAILURE, errno, "rbh_plugin_load_extension");
+
+            info.extensions[i] = ext;
+        }
+    }
+
+    info.extension_count = extension_count;
+    free(extension_names);
+
+    return info;
 }
 
 static int

@@ -53,6 +53,24 @@ filters_ctx_finish(struct filters_context *ctx);
 void
 import_plugins(struct filters_context *ctx, struct rbh_value_map **info_maps,
                int backend_count);
+/**
+ * Struct holding information about a backend plugin and its associated
+ * extensions, extracted from a backend URI.
+ */
+struct rbh_backend_plugin_info {
+    /**
+     * Pointer to the main backend plugin extracted from the URI.
+     * This plugin typically provides the core operations for the backend.
+     */
+    const struct rbh_backend_plugin *plugin;
+    /**
+     * Array of pointers to plugin extensions associated with the backend
+     * plugin.
+     * Extensions may provide additional capabilities such as custom predicates.
+     */
+    const struct rbh_plugin_extension **extensions;
+    int extension_count;
+};
 
 struct command_context {
     char *config_file;
