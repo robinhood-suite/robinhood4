@@ -46,18 +46,11 @@ import_backend_source(struct filters_context *ctx,
     bool is_plugin = true;
     int rc;
 
-    for (int i = 0; i < backend_source->count; ++i) {
-        const struct rbh_value_pair *pair = &backend_source->pairs[i];
+    for (size_t i = 0; i < backend_source->count; ++i)
+        assert(backend_source->pairs[i].value->type == RBH_VT_STRING);
 
-        if (strcmp(pair->key, "type") == 0)
-            is_plugin = (strcmp(pair->value->string, "plugin") == 0);
-        else if (strcmp(pair->key, "plugin") == 0)
-            plugin_value = pair->value;
-        else if (strcmp(pair->key, "extension") == 0)
-            extension_value = pair->value;
-        else if (strcmp(pair->key, "param") == 0)
-            param_value = pair->value;
-    }
+    parse_backend_map(backend_source, &plugin_value, &extension_value, NULL,
+                      &is_plugin);
 
     assert(plugin_value != NULL);
 

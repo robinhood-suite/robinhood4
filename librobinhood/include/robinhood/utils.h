@@ -260,4 +260,20 @@ int command_call(const char *cmd_line, parse_cb_t cb_func, void *cb_arg);
 size_t
 base64_encode(char *dest, const char *src, size_t n);
 
+/**
+ * Parse a backend map entry to extract plugin, extension, and type values.
+ *
+ * @param entry_map the map to parse
+ * @param plugin_value output: pointer to plugin value (can be NULL)
+ * @param extension_value output: pointer to extension value (can be NULL)
+ * @param type_value output: pointer to type value (can be NULL)
+ * @param is_plugin output: true if type is "plugin", false otherwise (can be NULL)
+ */
+void
+parse_backend_map(const struct rbh_value_map *entry_map,
+                  const struct rbh_value **plugin_value,
+                  const struct rbh_value **extension_value,
+                  const struct rbh_value **type_value,
+                  bool *is_plugin);
+
 #endif

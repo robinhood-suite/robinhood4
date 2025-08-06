@@ -11,9 +11,10 @@
 
 #include <errno.h>
 #include <limits.h>
-
+#include <string.h>
 #include "robinhood/uri.h"
 #include "robinhood/utils.h"
+#include "robinhood/value.h"
 
 int
 str2int64_t(const char *input, int64_t *result)
@@ -258,4 +259,30 @@ base64_encode(char *dest, const char *src, size_t n)
 
     dest[j] = '\0';
     return j;
+}
+
+void
+parse_backend_map(const struct rbh_value_map *entry_map,
+                  const struct rbh_value **plugin_value,
+                  const struct rbh_value **extension_value,
+                  const struct rbh_value **type_value,
+                  bool *is_plugin)
+{
+    if (plugin_value) *plugin_value = NULL;
+    if (extension_value) *extension_value = NULL;
+    if (type_value) *type_value = NULL;
+    if (is_plugin) *is_plugin = true;
+
+    for (size_t i = 0; i < entry_map->count; ++i) {
+        const struct rbh_value_pair *pair = &entry_map->pairs[i];
+        if (strcmp(pair->key, "type") == 0) {
+            if (type_value) *type_value = pair->value;
+            if (is_plugin)
+                *is_plugin = (strcmp(pair->value->string, "plugin") == 0);
+        } else if (strcmp(pair->key, "plugin") == 0) {
+            if (plugin_value) *plugin_value = pair->value;
+        } else if (strcmp(pair->key, "extension") == 0) {
+            if (extension_value) *extension_value = pair->value;
+        }
+    }
 }
