@@ -46,6 +46,41 @@ test_simple_undelete()
     rm $entry $cp_entry
 }
 
+test_undelete_with_output()
+{
+    local entry="entry"
+    local cp_entry="cp_entry"
+    local test_dir="test_dir"
+
+    echo "test_content" > "$entry"
+    local path=$(realpath "$entry")
+
+    mkdir -p $test_dir
+
+    cp "$entry" "$cp_entry"
+
+    archive_file "$entry"
+    invoke_rbh-fsevents
+
+    rm "$entry"
+    invoke_rbh-fsevents
+
+    local output="$(pwd)/$test_dir/output_entry"
+
+    rbh_undelete "rbh:$db:$testdb" "rbh:lustre:$path" --output "$output" --restore
+
+    hsm_restore_file "$output"
+
+    if [ ! -f "$output" ]; then
+        error "rbh-undelete failed to restore $output"
+    fi
+
+    diff "$output" "$cp_entry" || error "Content restored is not matching"
+
+    rm -f "$entry" "$cp_entry" "$output"
+    rmdir "$test_dir"
+}
+
 test_list()
 {
     local fileA="test"
@@ -87,7 +122,7 @@ test_list()
 #                                     MAIN                                     #
 ################################################################################
 
-declare -a tests=(test_simple_undelete test_list)
+declare -a tests=(test_undelete_with_output)
 
 LUSTRE_DIR=/mnt/lustre/
 cd "$LUSTRE_DIR"
