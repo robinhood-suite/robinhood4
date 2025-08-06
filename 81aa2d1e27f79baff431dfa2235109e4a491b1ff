@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c7f070ad_59e54e38",
+        "filename": "rbh-policy/rbhpolicy/config/config_validator.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2025-08-06T14:31:20Z",
+      "side": 1,
+      "message": "major: je ne comprends pas ces tests ici. De ce que je comprends de cette partie du code du policy engine, on restera en interne. Ce n\u0027est pas une API utilisée à l\u0027extérieure ... Du coup, pourquoi tester des type de variable ? On ne serait pas sur de la programmation défensive là ?",
+      "range": {
+        "startLine": 16,
+        "startChar": 3,
+        "endLine": 22,
+        "endChar": 54
+      },
+      "revId": "81aa2d1e27f79baff431dfa2235109e4a491b1ff",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
