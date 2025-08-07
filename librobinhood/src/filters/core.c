@@ -12,6 +12,10 @@
 #include "robinhood/filters/core.h"
 #include "robinhood/statx.h"
 #include <robinhood.h>
+#include <unistd.h>
+#include <sys/wait.h>
+#include <errno.h>
+#include <string.h>
 
 void
 filters_ctx_finish(struct filters_context *ctx)
@@ -221,6 +225,42 @@ get_backend_plugin_info(const char *uri)
     free(extension_names);
 
     return info;
+}
+
+struct rbh_filter *
+build_filter_from_uri(const char *uri, const char **argv)
+{
+    struct rbh_backend_plugin_info info = get_backend_plugin_info(uri);
+
+    struct rbh_filter *filter = NULL;
+    bool need_prefetch = false;
+    int index = 0;
+    int argc = 2;
+
+    for (int i = 0; i < info.extension_count; ++i) {
+        const struct rbh_plugin_extension *ext = info.extensions[i];
+        if (ext->common_ops && ext->common_ops->build_filter &&
+            ext->common_ops->check_valid_token(argv[0]) ==
+            RBH_TOKEN_PREDICATE) {
+
+            filter = ext->common_ops->build_filter(argv, argc, &index,
+                                                   &need_prefetch);
+            if (filter != NULL)
+                return filter;
+        }
+    }
+
+    if (info.plugin->common_ops && info.plugin->common_ops->build_filter &&
+        info.plugin->common_ops->check_valid_token(argv[0]) ==
+        RBH_TOKEN_PREDICATE) {
+
+        filter = info.plugin->common_ops->build_filter(argv, argc, &index,
+                                                       &need_prefetch);
+        if (filter != NULL)
+            return filter;
+    }
+
+    return NULL;
 }
 
 static int
