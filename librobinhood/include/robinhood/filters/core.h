@@ -81,6 +81,23 @@ struct rbh_backend_plugin_info {
 struct rbh_backend_plugin_info
 get_backend_plugin_info(const char *uri);
 
+/**
+ * Build a filter object from a given backend URI and a simple predicate.
+ *
+ * This function attempts to create a filter by calling the `build_filter` method
+ * of either the main plugin or one of its extensions. The filter is constructed
+ * from a string array of two elements: the predicate and its value (e.g.,
+ * ["-size", "10"]).
+ *
+ * @param uri The URI of the backend to use.
+ * @param argv A NULL-terminated array of two strings: predicate name and value.
+ *             Example: {"-size", "10"}.
+ * @return A pointer to the constructed rbh_filter object, or NULL if no plugin
+ *         could handle the given arguments.
+ */
+struct rbh_filter *
+build_filter_from_uri(const char *uri, const char **argv);
+
 struct command_context {
     char *config_file;
     char *helper_target;
