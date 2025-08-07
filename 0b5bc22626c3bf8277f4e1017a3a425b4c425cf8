@@ -22,6 +22,30 @@
       },
       "revId": "0b5bc22626c3bf8277f4e1017a3a425b4c425cf8",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fe4dd330_40cdb5ee",
+        "filename": "rbh-policy/POC/policyengine.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-08-07T12:36:40Z",
+      "side": 1,
+      "message": "Oui, je suis complètement d\u0027accord. L\u0027idée de ce POC était surtout de se rendre compte de ce qui était possible ou pas en Python, j\u0027avais fait cela au moment du design donc ce n\u0027est peut-être pas cohérent. On a décidé de le laisser dans le code, dans un dossier à part, d\u0027où ce patch.",
+      "parentUuid": "2ba0e6d6_d9749732",
+      "range": {
+        "startLine": 115,
+        "startChar": 4,
+        "endLine": 120,
+        "endChar": 2
+      },
+      "revId": "0b5bc22626c3bf8277f4e1017a3a425b4c425cf8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
