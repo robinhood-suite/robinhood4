@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "21f73b6b_20285cdd",
+        "filename": "rbh-undelete/rbh-undelete.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-08-07T09:56:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2c6a3e11_2753cb2d",
+      "range": {
+        "startLine": 27,
+        "startChar": 33,
+        "endLine": 27,
+        "endChar": 36
+      },
+      "revId": "a569e138eb6a2f6929858cd3da4b3cda33106505",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "42734046_059b30f3",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-07-30T11:25:48Z",
       "side": 1,
       "message": "question: what\u0027s this ?",
+      "range": {
+        "startLine": 105,
+        "startChar": 36,
+        "endLine": 105,
+        "endChar": 55
+      },
+      "revId": "a569e138eb6a2f6929858cd3da4b3cda33106505",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6507d7fe_27b24368",
+        "filename": "rbh-undelete/rbh-undelete.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-08-07T09:56:57Z",
+      "side": 1,
+      "message": "I copied and paste from another rbh tool and forgot to delete it.",
+      "parentUuid": "42734046_059b30f3",
       "range": {
         "startLine": 105,
         "startChar": 36,
