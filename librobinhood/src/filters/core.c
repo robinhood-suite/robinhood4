@@ -12,6 +12,10 @@
 #include "robinhood/filters/core.h"
 #include "robinhood/statx.h"
 #include <robinhood.h>
+#include <unistd.h>
+#include <sys/wait.h>
+#include <errno.h>
+#include <string.h>
 
 void
 filters_ctx_finish(struct filters_context *ctx)
@@ -221,6 +225,98 @@ get_backend_plugin_info(const char *uri)
     free(extension_names);
 
     return info;
+}
+
+struct rbh_filter *
+build_filter_from_uri(const char *uri, const char **argv)
+{
+    struct rbh_backend_plugin_info info = get_backend_plugin_info(uri);
+
+    struct rbh_filter *filter = NULL;
+    bool need_prefetch = false;
+    int index = 0;
+    int argc = 2;
+
+    if (info.plugin->common_ops && info.plugin->common_ops->build_filter) {
+        int pipefd[2];
+        if (pipe(pipefd) != -1) {
+            pid_t pid = fork();
+            if (pid == 0) {
+                close(pipefd[0]);
+                struct rbh_filter *f =
+                    info.plugin->common_ops->build_filter(argv, argc, &index,
+                                                          &need_prefetch);
+                if (f != NULL) {
+                    write(pipefd[1], "1", 1);
+                }
+                close(pipefd[1]);
+                _exit(0);
+            }
+
+            close(pipefd[1]);
+            char result = 0;
+            read(pipefd[0], &result, 1);
+            close(pipefd[0]);
+
+            int status;
+            waitpid(pid, &status, 0);
+
+            if (WIFEXITED(status) && result == '1') {
+                filter = info.plugin->common_ops->build_filter(argv, argc,
+                                                               &index,
+                                                               &need_prefetch);
+                if (filter != NULL)
+                    return filter;
+            }
+        }
+    }
+
+
+    for (int i = 0; i < info.extension_count; ++i) {
+        const struct rbh_plugin_extension *ext = info.extensions[i];
+
+        if (ext->common_ops && ext->common_ops->build_filter) {
+            int pipefd[2];
+            if (pipe(pipefd) == -1)
+                continue;
+
+            pid_t pid = fork();
+            if (pid == -1) {
+                close(pipefd[0]);
+                close(pipefd[1]);
+                continue;
+            }
+
+            if (pid == 0) {
+                close(pipefd[0]);
+                struct rbh_filter *f =
+                    ext->common_ops->build_filter(argv, argc, &index,
+                                                  &need_prefetch);
+                if (f != NULL) {
+                    write(pipefd[1], "1", 1);
+                }
+                close(pipefd[1]);
+                _exit(0);
+            }
+
+            close(pipefd[1]);
+            char result = 0;
+            read(pipefd[0], &result, 1);
+            close(pipefd[0]);
+
+            int status;
+            waitpid(pid, &status, 0);
+
+            if (WIFEXITED(status) && result == '1') {
+                filter = ext->common_ops->build_filter(argv, argc, &index,
+                                                       &need_prefetch);
+                if (filter != NULL)
+                    return filter;
+            }
+        }
+    }
+
+    return NULL;
 }
 
 static int
