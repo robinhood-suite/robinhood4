@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee58309f_ffde5c6b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-08-07T09:55:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7bdb283e_806eda8d",
+      "range": {
+        "startLine": 10,
+        "startChar": 25,
+        "endLine": 12,
+        "endChar": 22
+      },
+      "revId": "b8fc20d3fe8a7be5c1b4ec07f7fed961082ce520",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6a426050_9bc8861d",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-07-30T11:37:15Z",
       "side": 1,
       "message": "suggest: change this to a `else`",
+      "range": {
+        "startLine": 966,
+        "startChar": 4,
+        "endLine": 966,
+        "endChar": 30
+      },
+      "revId": "b8fc20d3fe8a7be5c1b4ec07f7fed961082ce520",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e891a5c0_f20bbcf5",
+        "filename": "librobinhood/src/plugins/posix/enrichers/lustre/lustre.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 966,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-08-07T09:55:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6a426050_9bc8861d",
       "range": {
         "startLine": 966,
         "startChar": 4,
@@ -70,6 +118,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "26a8bfb8_11d2c168",
+        "filename": "rbh-undelete/rbh-undelete.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-08-07T09:55:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e9b9d1d1_4534574e",
+      "range": {
+        "startLine": 176,
+        "startChar": 4,
+        "endLine": 176,
+        "endChar": 42
+      },
+      "revId": "b8fc20d3fe8a7be5c1b4ec07f7fed961082ce520",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8070ce5d_a7436cf9",
@@ -83,6 +155,30 @@
       "writtenOn": "2025-07-30T11:37:15Z",
       "side": 1,
       "message": "minor: set a flag instead, and check it after the loop",
+      "range": {
+        "startLine": 184,
+        "startChar": 12,
+        "endLine": 184,
+        "endChar": 34
+      },
+      "revId": "b8fc20d3fe8a7be5c1b4ec07f7fed961082ce520",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a2f211f6_4e751918",
+        "filename": "rbh-undelete/rbh-undelete.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-08-07T09:55:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8070ce5d_a7436cf9",
       "range": {
         "startLine": 184,
         "startChar": 12,
