@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "36561db5_9adca5e3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-08-07T10:00:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3ce6f08a_417e35cf",
+      "range": {
+        "startLine": 7,
+        "startChar": 40,
+        "endLine": 7,
+        "endChar": 46
+      },
+      "revId": "bb04c083f2e7aedc1a9bf0c1e1863c5772aaadb5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c1396ca5_51939e7e",
@@ -47,6 +71,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b8290107_fbbd463c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-08-07T10:00:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c1396ca5_51939e7e",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 8,
+        "endChar": 14
+      },
+      "revId": "bb04c083f2e7aedc1a9bf0c1e1863c5772aaadb5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d3ec0b79_97859eeb",
@@ -60,6 +108,30 @@
       "writtenOn": "2025-07-30T09:18:25Z",
       "side": 1,
       "message": "typo: added",
+      "range": {
+        "startLine": 10,
+        "startChar": 15,
+        "endLine": 10,
+        "endChar": 19
+      },
+      "revId": "bb04c083f2e7aedc1a9bf0c1e1863c5772aaadb5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dce34927_1bc8bfad",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-08-07T10:00:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d3ec0b79_97859eeb",
       "range": {
         "startLine": 10,
         "startChar": 15,
@@ -117,6 +189,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f4ea555e_63904c15",
+        "filename": "rbh-undelete/rbh-undelete.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-08-07T10:00:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "de295698_4cc4dd19",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 19
+      },
+      "revId": "bb04c083f2e7aedc1a9bf0c1e1863c5772aaadb5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dc906c8c_fe9a2241",
@@ -130,6 +226,30 @@
       "writtenOn": "2025-07-30T07:19:25Z",
       "side": 1,
       "message": "sugest:\n```\n\"Usage: %s [-h] \\n\"\n\"\\n\"\n\"General information about rbh-undelete command\\n\"\n\"Optional arguments:\\n\"\n\"  -h, --help        Show this message and exit\\n\";\n```",
+      "range": {
+        "startLine": 25,
+        "startChar": 8,
+        "endLine": 26,
+        "endChar": 75
+      },
+      "revId": "bb04c083f2e7aedc1a9bf0c1e1863c5772aaadb5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "18798ad5_41775148",
+        "filename": "rbh-undelete/rbh-undelete.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-08-07T10:00:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dc906c8c_fe9a2241",
       "range": {
         "startLine": 25,
         "startChar": 8,
@@ -163,6 +283,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a21d5648_fbba3962",
+        "filename": "rbh-undelete/tests/meson.build",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-08-07T10:00:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bd007499_40149987",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 30
+      },
+      "revId": "bb04c083f2e7aedc1a9bf0c1e1863c5772aaadb5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "85fb38ee_884f7f3d",
@@ -176,6 +320,30 @@
       "writtenOn": "2025-07-30T09:18:25Z",
       "side": 1,
       "message": "minor: adding this file now is unnecessary if it isn\u0027t executed by the meson file",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 19
+      },
+      "revId": "bb04c083f2e7aedc1a9bf0c1e1863c5772aaadb5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "940c3a4d_ab9999ee",
+        "filename": "rbh-undelete/tests/undelete.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1038653
+      },
+      "writtenOn": "2025-08-07T10:00:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "85fb38ee_884f7f3d",
       "range": {
         "startLine": 1,
         "startChar": 0,
