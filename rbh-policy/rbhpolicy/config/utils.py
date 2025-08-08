@@ -161,3 +161,113 @@ def parse_unit(value: str):
             continue
 
     raise ValueError(f"No unit recognized in '{value}'")
+
+def split_number_suffix(val: str):
+    m = re.match(r"^(\d+)([A-Za-z]*)$", val)
+    if not m:
+        raise ValueError(f"Invalid numeric+suffix format: '{val}'")
+    num = int(m.group(1))
+    suffix = m.group(2) or ""
+    return num, suffix
+
+def translate_condition(key: str, operator: str, value: str):
+    keys_strings = {"Path", "Name", "IName", "User", "Group", "Pool"}
+    options = {
+        "Path": "-path",
+        "Name": "-name",
+        "IName": "-iname",
+        "Type": "-type",
+        "User": "-user",
+        "UID": "-uid",
+        "Group": "-group",
+        "GID": "-gid",
+        "Size": "-size",
+        "DirCount": "-dircount",
+        "LastAccess": "-atime",
+        "LastModification": "-mtime",
+        "LastChange": "-ctime",
+        "CreationDate": "-btime",
+        "Pool": "-pool",
+    }
+
+    option_minutes = {
+        "LastAccess": "-amin",
+        "LastModification": "-mmin",
+        "LastChange": "-cmin",
+        "CreationDate": "-bmin",
+    }
+
+    if key not in options:
+        raise ValueError(f"Unknown key '{key}'")
+
+    if key in keys_strings:
+        return [options[key], value]
+
+    parsed_val, kind, unit = parse_unit(value)
+
+    if key in option_minutes and kind == "time" and unit == "m":
+        option = option_minutes[key]
+    else:
+        option = options[key]
+
+    if key == "Type":
+        return [option, parsed_val]
+
+    if key == "Size":
+        if kind == "int":
+            parsed_val = f"{parsed_val}c"
+            kind = "storage"
+        num, suffix = split_number_suffix(parsed_val)
+
+        if operator == "eq":
+            final = f"{num}{suffix}"
+        elif operator == "gt":
+            final = f"+{num}{suffix}"
+        elif operator == "ge":
+            final = f"+{max(num-1, 0)}{suffix}"
+        elif operator == "lt":
+            final = f"-{num}{suffix}"
+        elif operator == "le":
+            final = f"-{num+1}{suffix}"
+        else:
+            raise ValueError(f"Unsupported operator for Size: {operator}")
+
+        return [option, final]
+
+    # Prototype because not yet implemented in rbh
+    if key == "DirCount":
+        num = int(parsed_val)
+        if operator == "eq":
+            final = str(num)
+        elif operator == "gt":
+            final = f"+{num}"
+        elif operator == "ge":
+            final = f"+{max(num-1, 0)}"
+        elif operator == "lt":
+            final = f"-{num}"
+        elif operator == "le":
+            final = f"-{num+1}"
+        else:
+            raise ValueError(f"Unsupported operator for DirCount: {operator}")
+        return [option, final]
+
+    if kind == "time" and key in options:
+        num = int(parsed_val)
+        if operator == "eq":
+            final = str(num)
+        elif operator == "gt":
+            final = f"+{num}"
+        elif operator == "ge":
+            final = f"+{max(num-1, 0)}"
+        elif operator == "lt":
+            final = f"-{num}"
+        elif operator == "le":
+            final = f"-{num+1}"
+        else:
+            raise ValueError(f"Unsupported operator for time: {operator}")
+        return [option, final]
+
+    if kind == "date":
+        return [option, parsed_val]
+
+    return [option, value]
