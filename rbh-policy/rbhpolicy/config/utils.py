@@ -185,3 +185,105 @@ def parse_unit(value: str):
             continue
 
     raise ValueError(f"No unit recognized in '{value}'")
+
+def split_number_suffix(val: str):
+    m = re.match(r"^(\d+)([A-Za-z]*)$", val)
+    if not m:
+        raise ValueError(f"Invalid numeric+suffix format: '{val}'")
+    num = int(m.group(1))
+    suffix = m.group(2) or ""
+    return num, suffix
+
+def translate_operator(num: int, operator: str):
+    """Convert a comparison operator into the corresponding find-style prefix."""
+    if operator == "eq":
+        return str(num)
+    elif operator == "gt":
+        return f"+{num}"
+    elif operator == "ge":
+        return f"+{max(num - 1, 0)}"
+    elif operator == "lt":
+        return f"-{num}"
+    elif operator == "le":
+        return f"-{num + 1}"
+    else:
+        raise ValueError(f"Unsupported operator: {operator}")
+
+def handle_size(parsed_val: str, kind: str, operator: str):
+    if kind == "int":
+        parsed_val = f"{parsed_val}c"
+        kind = "storage"
+    num, suffix = split_number_suffix(parsed_val)
+    return translate_operator(num, operator) + suffix
+
+def handle_dircount(parsed_val: str, operator: str):
+    num = int(parsed_val)
+    return translate_operator(num, operator)
+
+def handle_time(parsed_val: str, operator: str):
+    num = int(parsed_val)
+    return translate_operator(num, operator)
+
+def translate_condition(key: str, operator: str, value: str):
+    keys_strings = {"Path", "Name", "IName", "User", "Group"}
+    options = {
+        "Path": "-path",
+        "Name": "-name",
+        "IName": "-iname",
+        "Type": "-type",
+        "User": "-user",
+        "UID": "-uid",
+        "Group": "-group",
+        "GID": "-gid",
+        "Size": "-size",
+        "DirCount": "-dircount",
+        "LastAccess": "-atime",
+        "LastModification": "-mtime",
+        "LastChange": "-ctime",
+        "CreationDate": "-btime",
+    }
+
+    option_minutes = {
+        "LastAccess": "-amin",
+        "LastModification": "-mmin",
+        "LastChange": "-cmin",
+        "CreationDate": "-bmin",
+    }
+
+    if key not in options:
+        raise ValueError(f"Unknown key '{key}'")
+
+    if key in keys_strings:
+        return [options[key], value]
+
+    parsed_val, kind, unit = parse_unit(value)
+
+    if key in option_minutes and kind == "time" and unit == "m":
+        option = option_minutes[key]
+    else:
+        option = options[key]
+
+    if key == "Type":
+        return [option, parsed_val]
+
+    if key == "Size":
+        final = handle_size(parsed_val, kind, operator)
+        return [option, final]
+
+    elif key == "DirCount":
+        final = handle_dircount(parsed_val, operator)
+        return [option, final]
+
+    elif kind == "time" and key in options:
+        final = handle_time(parsed_val, operator)
+        return [option, final]
+
+    if kind == "date":
+        return [option, parsed_val]
+
+    if key in ["UID", "GID"]:
+        if kind != "int" and kind != "quantity":
+            raise ValueError(f"{key} must be a plain integer, got {kind}")
+        return [option, parsed_val]
+
+    return [option, value]
