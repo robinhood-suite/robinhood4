@@ -8,6 +8,7 @@
 from abc import ABC, abstractmethod
 from typing import TypeVar
 from rbhpolicy.config import filter as rbh
+from rbhpolicy.config.utils import translate_condition
 
 T = TypeVar("T", bound="Condition")
 
@@ -63,14 +64,13 @@ class SimpleCondition(Condition):
         self.value = value
 
     def to_filter(self):
+        param = translate_condition(self.key, self.operator_name,
+                str(self.value))
         if self.operator_name == "ne":
-            eq_filter = rbh.build_filter([f"-{self.key}", str(self.value)])
+            eq_filter = rbh.build_filter(param)
             return rbh.rbh_filter_not(eq_filter)
-        # In this patch we provide the key and value to create the filter, but
-        # it won't work. We need a translator that acts as an intermediary
-        # between the configuration interface we're using and what rbh-find
-        # understands. We'll do this in future patches.
-        return rbh.build_filter([f"-{self.key}", str(self.value)])
+
+        return rbh.build_filter(param)
 
     def __repr__(self):
         op_symbol = {
