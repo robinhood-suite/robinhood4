@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ac8f3e8f_9134c73b",
+        "filename": "rbh-undelete/rbh-undelete.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-08-18T13:43:35Z",
+      "side": 1,
+      "message": "sugest: add \n```\n\n\"A robinhood URI is built as follows: RBH_SCHEME\":BACKEND:FSNAME[#{PATH|ID}]\\n\"\n```",
+      "revId": "6d25e545e75e506fe73f43ba04733ad5cb125616",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
