@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "09276bc0_4a6d572a",
+        "filename": "rbh-undelete/rbh-undelete.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-08-18T14:03:44Z",
+      "side": 1,
+      "message": "defect: you need to set the config_file in the command_context structure",
+      "revId": "10d62f695345e550af3a7f7a2e8db51c7aa1e4cf",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
