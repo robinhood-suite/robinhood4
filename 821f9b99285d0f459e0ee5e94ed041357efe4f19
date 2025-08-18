@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "68452bef_c245cc19",
+        "filename": "librobinhood/src/plugins/mongo/fsevent.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-08-18T14:23:32Z",
+      "side": 1,
+      "message": "question: Are we sure that there will be only one element in the namespace array? Otherwise, it won’t work.",
+      "range": {
+        "startLine": 141,
+        "startChar": 37,
+        "endLine": 141,
+        "endChar": 48
+      },
+      "revId": "821f9b99285d0f459e0ee5e94ed041357efe4f19",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
