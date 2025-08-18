@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "63ed5505_f07a5554",
+        "filename": "librobinhood/include/robinhood/backend.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-08-18T14:44:44Z",
+      "side": 1,
+      "message": "minor: to remove",
+      "range": {
+        "startLine": 34,
+        "startChar": 0,
+        "endLine": 34,
+        "endChar": 29
+      },
+      "revId": "b5106d3d77570572aa5ee566992f52dc4daee2a0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b39bd78d_a4350df5",
+        "filename": "librobinhood/include/robinhood/plugins/common_ops.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-08-18T14:44:44Z",
+      "side": 1,
+      "message": "minor: entry",
+      "range": {
+        "startLine": 115,
+        "startChar": 39,
+        "endLine": 115,
+        "endChar": 43
+      },
+      "revId": "b5106d3d77570572aa5ee566992f52dc4daee2a0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a3f61a6c_6ad6de9b",
+        "filename": "librobinhood/src/plugins/posix/posix.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 1253,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-08-18T14:44:44Z",
+      "side": 1,
+      "message": "minor: backend",
+      "range": {
+        "startLine": 1253,
+        "startChar": 21,
+        "endLine": 1253,
+        "endChar": 24
+      },
+      "revId": "b5106d3d77570572aa5ee566992f52dc4daee2a0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7d1546d6_c3017ac1",
+        "filename": "rbh-undelete/rbh-undelete.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-08-18T14:44:44Z",
+      "side": 1,
+      "message": "defect: it\u0027s doesn\u0027t work with directories. If we have `/mnt/lustre/dir/file`, it will return `/file`.",
+      "revId": "b5106d3d77570572aa5ee566992f52dc4daee2a0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
