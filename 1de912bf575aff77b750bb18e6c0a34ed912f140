@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bfaa3bfd_3104967f",
+        "filename": "librobinhood/src/fsentry.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-08-19T07:04:48Z",
+      "side": 1,
+      "message": "defect: it will segfault if `rbh_fsentry_find_ns_xattr` return NULL",
+      "range": {
+        "startLine": 219,
+        "startChar": 23,
+        "endLine": 219,
+        "endChar": 74
+      },
+      "revId": "1de912bf575aff77b750bb18e6c0a34ed912f140",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
