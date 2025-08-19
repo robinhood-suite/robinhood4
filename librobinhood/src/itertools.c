@@ -32,6 +32,8 @@ struct array_iterator {
     size_t count;
 
     size_t index;
+
+    void (*free_elem)(void *elem);
 };
 
 static const void *
@@ -49,7 +51,12 @@ array_iter_next(void *iterator)
 static void
 array_iter_destroy(void *iterator)
 {
-    free(iterator);
+    struct array_iterator *array = iterator;
+
+    if (array->free_elem)
+        array->free_elem((void *)array->array);
+
+    free(array);
 }
 
 static const struct rbh_iterator_operations ARRAY_ITER_OPS = {
@@ -62,7 +69,8 @@ static const struct rbh_iterator ARRAY_ITER = {
 };
 
 struct rbh_iterator *
-rbh_iter_array(const void *array, size_t element_size, size_t element_count)
+rbh_iter_array(const void *array, size_t element_size, size_t element_count,
+               void (*free_elem)(void *elem))
 {
     struct array_iterator *iterator;
 
@@ -74,6 +82,7 @@ rbh_iter_array(const void *array, size_t element_size, size_t element_count)
     iterator->array = array;
     iterator->size = element_size;
     iterator->count = element_count;
+    iterator->free_elem = free_elem;
 
     iterator->index = 0;
 
@@ -85,10 +94,11 @@ rbh_iter_array(const void *array, size_t element_size, size_t element_count)
  *----------------------------------------------------------------------------*/
 
 struct rbh_mut_iterator *
-rbh_mut_iter_array(void *array, size_t element_size, size_t element_count)
+rbh_mut_iter_array(void *array, size_t element_size, size_t element_count,
+                   void (*free_elem)(void *elem))
 {
     return (struct rbh_mut_iterator *)rbh_iter_array(array, element_size,
-                                                     element_count);
+                                                     element_count, free_elem);
 }
 
 /*----------------------------------------------------------------------------*
@@ -624,6 +634,7 @@ struct list_iterator {
 
     struct rbh_list_node *head;
     struct rbh_list_node *current;
+    void (*free_node)(struct rbh_list_node *list);
     off_t offset;
 };
 
@@ -643,9 +654,18 @@ list_iter_next(void *iterator)
     return ((char *)iter->current - iter->offset);
 }
 
+static void
+list_iter_destroy(void *iterator)
+{
+    struct list_iterator *iter = iterator;
+    if (iter->free_node)
+        iter->free_node(iter->head);
+    free(iter);
+}
+
 static const struct rbh_iterator_operations LIST_OPS = {
     .next = list_iter_next,
-    .destroy = free,
+    .destroy = list_iter_destroy,
 };
 
 static const struct rbh_iterator LIST_ITERATOR = {
@@ -653,7 +673,8 @@ static const struct rbh_iterator LIST_ITERATOR = {
 };
 
 struct rbh_iterator *
-rbh_iter_list(struct rbh_list_node *list, off_t offset)
+rbh_iter_list(struct rbh_list_node *list, off_t offset,
+              void (*free_node)(struct rbh_list_node *list))
 {
     struct list_iterator *iterator;
 
@@ -665,6 +686,7 @@ rbh_iter_list(struct rbh_list_node *list, off_t offset)
     iterator->head = list;
     iterator->current = list;
     iterator->offset = offset;
+    iterator->free_node = free_node;
 
     return &iterator->iterator;
 }

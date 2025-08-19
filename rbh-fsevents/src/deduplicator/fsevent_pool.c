@@ -896,5 +896,5 @@ rbh_fsevent_pool_flush(struct rbh_fsevent_pool *pool)
     pool->need_to_flush = false;
 
     return rbh_iter_list(&pool->events,
-                         offsetof(struct rbh_fsevent_node, link));
+                         offsetof(struct rbh_fsevent_node, link), NULL);
 }
