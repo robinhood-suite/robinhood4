@@ -597,7 +597,8 @@ build_create_inode_events(struct changelog_rec *record, struct rbh_id *id,
     if (update_parent_nb_children_event(&record->cr_pfid, 1, &new_events[4]))
         return -1;
 
-    *fsevents_iterator = rbh_iter_array(new_events, sizeof(*new_events), 5);
+    *fsevents_iterator = rbh_iter_array(new_events, sizeof(*new_events), 5,
+                                        NULL);
 
     return 0;
 }
@@ -628,7 +629,8 @@ build_setxattr_event(struct changelog_rec *record, struct rbh_id *id,
                                    NULL))
         return -1;
 
-    *fsevents_iterator = rbh_iter_array(new_events, sizeof(*new_events), 3);
+    *fsevents_iterator = rbh_iter_array(new_events, sizeof(*new_events), 3,
+                                        NULL);
 
     return 0;
 }
@@ -651,7 +653,8 @@ build_statx_update_event(uint32_t statx_enrich_mask, struct rbh_id *id,
                                    NULL))
         return -1;
 
-    *fsevents_iterator = rbh_iter_array(new_events, sizeof(*new_events), 2);
+    *fsevents_iterator = rbh_iter_array(new_events, sizeof(*new_events), 2,
+                                        NULL);
 
     return 0;
 }
@@ -698,7 +701,8 @@ build_softlink_events(struct changelog_rec *record, struct rbh_id *id,
     if (new_events[5].xattrs.pairs == NULL)
         return -1;
 
-    *fsevents_iterator = rbh_iter_array(new_events, sizeof(*new_events), 6);
+    *fsevents_iterator = rbh_iter_array(new_events, sizeof(*new_events), 6,
+                                        NULL);
 
     return 0;
 }
@@ -759,7 +763,7 @@ build_hardlink_or_mknod_events(struct changelog_rec *record, struct rbh_id *id,
         return -1;
 
     *fsevents_iterator = rbh_iter_array(new_events, sizeof(*new_events),
-                                        nb_events);
+                                        nb_events, NULL);
 
     return 0;
 }
@@ -816,7 +820,8 @@ build_unlink_or_rmdir_events(struct changelog_rec *record, struct rbh_id *id,
     if (update_parent_nb_children_event(&record->cr_pfid, -1, &new_events[2]))
         return -1;
 
-    *fsevents_iterator = rbh_iter_array(new_events, sizeof(*new_events), 3);
+    *fsevents_iterator = rbh_iter_array(new_events, sizeof(*new_events), 3,
+                                        NULL);
 
     return 0;
 }
@@ -912,7 +917,7 @@ build_rename_events(struct changelog_rec *record, struct rbh_id *id,
 
 
     *fsevents_iterator = rbh_iter_array(new_events, sizeof(*new_events),
-                                       n_events);
+                                        n_events, NULL);
 
     return 0;
 }
@@ -955,7 +960,8 @@ build_hsm_events(struct rbh_id *id, struct rbh_iterator **fsevents_iterator)
     if (new_events[3].xattrs.pairs == NULL)
         return -1;
 
-    *fsevents_iterator = rbh_iter_array(new_events, sizeof(*new_events), 4);
+    *fsevents_iterator = rbh_iter_array(new_events, sizeof(*new_events), 4,
+                                        NULL);
 
     return 0;
 }
@@ -982,7 +988,8 @@ build_layout_events(struct rbh_id *id, struct rbh_iterator **fsevents_iterator)
                                    NULL))
         return -1;
 
-    *fsevents_iterator = rbh_iter_array(new_events, sizeof(*new_events), 2);
+    *fsevents_iterator = rbh_iter_array(new_events, sizeof(*new_events), 2,
+                                        NULL);
 
     return 0;
 }
@@ -1012,7 +1019,8 @@ build_flrw_events(struct rbh_id *id, struct rbh_iterator **fsevents_iterator)
                                    NULL))
         return -1;
 
-    *fsevents_iterator = rbh_iter_array(new_events, sizeof(*new_events), 2);
+    *fsevents_iterator = rbh_iter_array(new_events, sizeof(*new_events), 2,
+                                        NULL);
 
     return 0;
 }
@@ -1041,7 +1049,8 @@ build_resync_events(struct rbh_id *id, struct rbh_iterator **fsevents_iterator)
                                    NULL))
         return -1;
 
-    *fsevents_iterator = rbh_iter_array(new_events, sizeof(*new_events), 2);
+    *fsevents_iterator = rbh_iter_array(new_events, sizeof(*new_events), 2,
+                                        NULL);
 
     return 0;
 }
@@ -1092,7 +1101,8 @@ build_migrate_events(struct changelog_rec *record, struct rbh_id *id,
                                    NULL))
         return -1;
 
-    *fsevents_iterator = rbh_iter_array(new_events, sizeof(*new_events), 6);
+    *fsevents_iterator = rbh_iter_array(new_events, sizeof(*new_events), 6,
+                                        NULL);
 
     return 0;
 }
