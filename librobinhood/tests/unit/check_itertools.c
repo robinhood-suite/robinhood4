@@ -27,7 +27,7 @@ START_TEST(ria_basic)
     const char STRING[] = "abcdefghijklmno";
     struct rbh_iterator *letters;
 
-    letters = rbh_iter_array(STRING, sizeof(*STRING), sizeof(STRING));
+    letters = rbh_iter_array(STRING, sizeof(*STRING), sizeof(STRING), NULL);
     ck_assert_ptr_nonnull(letters);
 
     for (size_t i = 0; i < sizeof(STRING); i++)
@@ -38,6 +38,36 @@ START_TEST(ria_basic)
     ck_assert_int_eq(errno, ENODATA);
 
     rbh_iter_destroy(letters);
+}
+END_TEST
+
+static bool ria_freed = false;
+
+void
+custom_free(void *arg)
+{
+    free(arg);
+    ria_freed = true;
+}
+
+START_TEST(ria_free)
+{
+    const char LETTERS[] = "abcdefghijklmno";
+    struct rbh_iterator *letters;
+    char *STRING;
+
+    STRING = malloc(sizeof(LETTERS) * sizeof(*STRING));
+    ck_assert_ptr_nonnull(STRING);
+
+    for (int i = 0; i < sizeof(LETTERS); i++)
+        STRING[i] = LETTERS[i];
+
+    letters = rbh_iter_array(STRING, sizeof(*STRING), sizeof(STRING),
+                             custom_free);
+    ck_assert_ptr_nonnull(letters);
+
+    rbh_iter_destroy(letters);
+    ck_assert_int_eq(ria_freed, 1);
 }
 END_TEST
 
@@ -54,7 +84,7 @@ START_TEST(richu_basic)
 
     ck_assert_uint_eq(sizeof(STRING) % CHUNK_SIZE, 0);
 
-    letters = rbh_iter_array(STRING, sizeof(*STRING), sizeof(STRING));
+    letters = rbh_iter_array(STRING, sizeof(*STRING), sizeof(STRING), NULL);
     ck_assert_ptr_nonnull(letters);
 
     chunks = rbh_iter_chunkify(letters, CHUNK_SIZE);
@@ -146,7 +176,7 @@ START_TEST(rit_basic)
     struct rbh_iterator *tees[2];
     struct rbh_iterator *letters;
 
-    letters = rbh_iter_array(STRING, sizeof(*STRING), sizeof(STRING));
+    letters = rbh_iter_array(STRING, sizeof(*STRING), sizeof(STRING), NULL);
     ck_assert_ptr_nonnull(letters);
 
     ck_assert_int_eq(rbh_iter_tee(letters, tees), 0);
@@ -182,11 +212,11 @@ START_TEST(richa_basic)
     struct rbh_iterator *start;
     struct rbh_iterator *end;
 
-    start = rbh_iter_array(STRING, sizeof(*STRING), sizeof(STRING) / 2);
+    start = rbh_iter_array(STRING, sizeof(*STRING), sizeof(STRING) / 2, NULL);
     ck_assert_ptr_nonnull(start);
 
     end = rbh_iter_array(STRING + sizeof(STRING) / 2, sizeof(*STRING),
-                         (sizeof(STRING) + 1) / 2);
+                         (sizeof(STRING) + 1) / 2, NULL);
     ck_assert_ptr_nonnull(end);
 
     chain = rbh_iter_chain(start, end);
@@ -315,7 +345,7 @@ START_TEST(ril_empty)
     struct rbh_list_node list;
 
     rbh_list_init(&list);
-    iter = rbh_iter_list(&list, 0);
+    iter = rbh_iter_list(&list, 0, NULL);
     ck_assert_ptr_nonnull(iter);
 
     ck_assert_int_eq(rbh_list_empty(&list), 1);
@@ -324,12 +354,14 @@ START_TEST(ril_empty)
 }
 END_TEST
 
-START_TEST(ril_basic)
-{
-    struct list_elem {
+struct list_elem {
         int value;
         struct rbh_list_node link;
-    } values[4] = {
+};
+
+START_TEST(ril_basic)
+{
+    struct list_elem values[4] = {
         { .value = 1 },
         { .value = 2 },
         { .value = 3 },
@@ -343,7 +375,7 @@ START_TEST(ril_basic)
     for (int i = 0; i < 4; i++)
         rbh_list_add_tail(&list, &values[i].link);
 
-    iter = rbh_iter_list(&list, offsetof(struct list_elem, link));
+    iter = rbh_iter_list(&list, offsetof(struct list_elem, link), NULL);
     ck_assert_ptr_nonnull(iter);
 
     for (int i = 0; i < 4; i++) {
@@ -361,6 +393,54 @@ START_TEST(ril_basic)
 }
 END_TEST
 
+static bool ril_freed = false;
+
+static void
+free_nodes(struct rbh_list_node *list)
+{
+    struct list_elem *elem, *tmp;
+
+    rbh_list_foreach_safe(list, elem, tmp, link) {
+        rbh_list_del(&elem->link);
+        free(elem);
+    }
+
+    ril_freed = true;
+}
+
+START_TEST(ril_free)
+{
+    struct rbh_iterator *iter;
+    struct rbh_list_node list;
+
+    rbh_list_init(&list);
+
+    for (int i = 0; i < 4; i++) {
+        struct list_elem *node = malloc(sizeof(*node));
+        ck_assert_ptr_nonnull(node);
+        node->value = i;
+        rbh_list_add_tail(&list, &node->link);
+    }
+
+    iter = rbh_iter_list(&list, offsetof(struct list_elem, link), free_nodes);
+    ck_assert_ptr_nonnull(iter);
+
+    for (int i = 0; i < 4; i++) {
+        const struct list_elem *node;
+
+        node = rbh_iter_next(iter);
+        ck_assert_ptr_nonnull(node);
+        ck_assert_int_eq(node->value, i);
+    }
+
+    ck_assert_ptr_null(rbh_iter_next(iter));
+    ck_assert_int_eq(errno, ENODATA);
+
+    rbh_iter_destroy(iter);
+    ck_assert_int_eq(ril_freed, 1);
+}
+END_TEST
+
 static Suite *
 unit_suite(void)
 {
@@ -370,6 +450,7 @@ unit_suite(void)
     suite = suite_create("itertools");
     tests = tcase_create("rbh_iter_array()");
     tcase_add_test(tests, ria_basic);
+    tcase_add_test(tests, ria_free);
 
     suite_add_tcase(suite, tests);
 
@@ -400,6 +481,7 @@ unit_suite(void)
     tests = tcase_create("rbh_iter_list()");
     tcase_add_test(tests, ril_empty);
     tcase_add_test(tests, ril_basic);
+    tcase_add_test(tests, ril_free);
 
     suite_add_tcase(suite, tests);
 
