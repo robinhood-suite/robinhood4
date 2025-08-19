@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "51d85f27_e2d47dbb",
+        "filename": "librobinhood/include/robinhood/utils.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-08-19T06:51:57Z",
+      "side": 1,
+      "message": "minor: use the same doc style",
+      "range": {
+        "startLine": 177,
+        "startChar": 2,
+        "endLine": 177,
+        "endChar": 4
+      },
+      "revId": "78313ed50d170efc0bbd67a5bffebb640bd3d62e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "91945157_91ec7738",
+        "filename": "librobinhood/include/robinhood/utils.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-08-19T06:51:57Z",
+      "side": 1,
+      "message": "minor: add documentation for the parameter",
+      "revId": "78313ed50d170efc0bbd67a5bffebb640bd3d62e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
