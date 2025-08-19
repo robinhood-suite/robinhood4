@@ -27,12 +27,14 @@
 #include <robinhood/utils.h>
 #include <robinhood/config.h>
 #include <robinhood/alias.h>
+#include <robinhood/hashmap.h>
 #include <robinhood/list.h>
 
 #include "deduplicator.h"
 #include "enricher.h"
 #include "source.h"
 #include "sink.h"
+#include "utils.h"
 
 struct deduplicator_options {
     size_t batch_size;
@@ -248,6 +250,7 @@ sink_new(const char *arg)
 }
 
 static size_t nb_workers = 1;
+static int avail_batches = 1;
 static struct sink **sink;
 
 static void __attribute__((destructor))
@@ -332,23 +335,28 @@ destroy_enrich_point(void)
         rbh_backend_destroy(enrich_point);
 }
 
+static pthread_mutex_t batches_mutex = PTHREAD_MUTEX_INITIALIZER;
 static pthread_mutex_t queue_mutex = PTHREAD_MUTEX_INITIALIZER;
+static pthread_mutex_t pool_mutex = PTHREAD_MUTEX_INITIALIZER;
 static bool done_producing = false;
 static bool skip_error = true;
 
 struct rbh_node_iterator {
+    struct rbh_iterator *fsevents;
     struct rbh_iterator *enricher;
     struct rbh_list_node list;
 };
 
 static void
-enqueue(struct rbh_list_node *head, struct rbh_iterator *enricher)
+enqueue(struct rbh_list_node *head, struct rbh_iterator *fsevents,
+         struct rbh_iterator *enricher)
 {
     struct rbh_node_iterator *new_node = malloc(sizeof(*new_node));
 
     if (new_node == NULL)
         error(EXIT_FAILURE, ENOMEM, "malloc");
 
+    new_node->fsevents = fsevents;
     new_node->enricher = enricher;
 
     pthread_mutex_lock(&queue_mutex);
@@ -379,6 +387,8 @@ struct consumer_arg {
     struct rbh_list_node *src;
     struct sink *sink;
 };
+
+static struct rbh_hashmap *pool_in_process = NULL;
 
 void *consumer_thread(void *arg) {
     struct consumer_arg *args = (struct consumer_arg *) arg;
@@ -416,8 +426,32 @@ void *consumer_thread(void *arg) {
             timespec_accumulate(&args->total_enrich, start, end);
         }
 
+        /* Reset the iterator to iterator again over all the fsevents to
+         * pop all the ID of the hashmap
+         */
+        rbh_iter_reset(node->fsevents);
+        pthread_mutex_lock(&pool_mutex);
+        do {
+            const struct rbh_fsevent *fsevent;
+
+            fsevent = rbh_iter_next(node->fsevents);
+            if (fsevent == NULL) {
+                if (errno == ENODATA)
+                    break;
+                pthread_mutex_unlock(&pool_mutex);
+                return NULL;
+            }
+            rbh_hashmap_pop(pool_in_process, &fsevent->id);
+        } while (true);
+        pthread_mutex_unlock(&pool_mutex);
+
         rbh_iter_destroy(node->enricher);
         free(node);
+
+        // Tell the producer thread to flush a new batch
+        pthread_mutex_lock(&batches_mutex);
+        avail_batches++;
+        pthread_mutex_unlock(&batches_mutex);
     }
 
     switch (errno) {
@@ -444,12 +478,29 @@ feed(struct sink **sink, struct source *source,
     struct timespec total_enrich = {0};
     struct timespec total_read = {0};
     struct timespec start, end;
+    size_t (*hash_fn)(const void *);
     struct rbh_list_node *head;
     struct consumer_arg *args;
     pthread_t *consumers;
     int rc;
 
-    deduplicator = deduplicator_new(dedup_opts->batch_size, source);
+    if (!strcmp(source->name, "lustre"))
+        hash_fn = fsevent_pool_hash_lu_id;
+    else
+        hash_fn = fsevent_pool_hash_id;
+
+    pool_in_process = rbh_hashmap_new(fsevent_pool_equals, hash_fn,
+                                      dedup_opts->batch_size > 0 ?
+                                        free : NULL,
+                                      dedup_opts->batch_size > 0 ?
+                                        (dedup_opts->batch_size * nb_workers)
+                                         * 100 / 70 : nb_workers);
+    if (pool_in_process == NULL)
+        error(EXIT_FAILURE, errno, "rbh_hashmap_new");
+
+    deduplicator = deduplicator_new(dedup_opts->batch_size, source,
+                                    pool_in_process, &pool_mutex,
+                                    &avail_batches);
     if (deduplicator == NULL)
         error(EXIT_FAILURE, errno, "deduplicator_new");
 
@@ -483,20 +534,26 @@ feed(struct sink **sink, struct source *source,
 
     while (true) {
         struct rbh_iterator *fsevents;
+        struct rbh_iterator *enricher;
 
         fsevents = rbh_mut_iter_next(deduplicator);
         if (fsevents == NULL)
             break;
 
         if (builder != NULL)
-            fsevents = build_enrich_iter(builder, fsevents, skip_error);
+            enricher = build_enrich_iter(builder, fsevents, skip_error);
         else if (!allow_partials)
-            fsevents = iter_no_partial(fsevents);
+            enricher = iter_no_partial(fsevents);
+        else
+            enricher = fsevents;
 
-        if (fsevents == NULL)
+        if (enricher == NULL)
             error(EXIT_FAILURE, errno, "iter_enrich");
 
-        enqueue(head, fsevents);
+        pthread_mutex_lock(&batches_mutex);
+        enqueue(head, fsevents, enricher);
+        avail_batches--;
+        pthread_mutex_unlock(&batches_mutex);
     }
 
     if (verbose) {
@@ -540,6 +597,7 @@ feed(struct sink **sink, struct source *source,
     }
 
     rbh_mut_iter_destroy(deduplicator);
+    rbh_hashmap_destroy(pool_in_process);
 }
 
 static int
@@ -676,6 +734,8 @@ main(int argc, char *argv[])
         case 'w':
             if (str2uint64_t(optarg, &nb_workers))
                 error(EXIT_FAILURE, 0, "'%s' is not an integer", optarg);
+            avail_batches = nb_workers;
+
             break;
         case 'r':
             /* Ignore errors on close */
@@ -699,6 +759,10 @@ main(int argc, char *argv[])
         error(EX_USAGE, 0, "not enough arguments");
     if (argc - optind > 2)
         error(EX_USAGE, 0, "too many arguments");
+
+    // Temporary check until the no-dedup works with multiple workers
+    if (dedup_opts.batch_size == 0 && nb_workers > 1)
+        error(EX_USAGE, 0, "cannot use multiple workers without dedup");
 
     if (dump_file && strcmp(argv[optind + 1], dump_file) == 0)
         error(EX_USAGE, EINVAL,

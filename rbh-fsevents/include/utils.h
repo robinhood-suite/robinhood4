@@ -40,4 +40,13 @@ source_stack_alloc(const void *data, size_t size);
 void
 initialize_source_stack(size_t stack_size);
 
+bool
+fsevent_pool_equals(const void *first, const void *second);
+
+size_t
+fsevent_pool_hash_id(const void *key);
+
+size_t
+fsevent_pool_hash_lu_id(const void *key);
+
 #endif

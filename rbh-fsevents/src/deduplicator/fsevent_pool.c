@@ -10,7 +10,7 @@
 #include "rbh_fsevent_utils.h"
 
 #include <robinhood.h>
-
+#include <pthread.h>
 #include <assert.h>
 #include <errno.h>
 #include <error.h>
@@ -24,6 +24,8 @@ struct rbh_fsevent_pool {
     bool need_to_flush;
     struct rbh_hashmap *pool; /* container of lists of events per id */
     struct rbh_sstack *list_container; /* container of list elements */
+    struct rbh_hashmap *pool_in_process; /* container of id in process */
+    pthread_mutex_t *pool_mutex;
     struct rbh_list_node ids; /* list of rbh_id that were inserted in the pool
                                * ordered by time of insertion
                                */
@@ -37,6 +39,10 @@ struct rbh_fsevent_pool {
     struct rbh_list_node free_ids; /* List of available struct rbh_id_node */
     struct rbh_list_node free_nodes; /* List of available struct rbh_list_node
                                       */
+    struct rbh_list_node waiting_ids; /* List of events deduplicated waiting to
+                                       * be flush
+                                       */
+    size_t queue_size;
 };
 
 struct rbh_list_node_wrapper {
@@ -54,26 +60,28 @@ struct rbh_id_node {
     struct rbh_list_node link;
 };
 
-static bool
+bool
 fsevent_pool_equals(const void *first, const void *second)
 {
     return rbh_id_equal(first, second);
 }
 
-static size_t
+size_t
 fsevent_pool_hash_id(const void *key)
 {
     return hash_id(key);
 }
 
-static size_t
+size_t
 fsevent_pool_hash_lu_id(const void *key)
 {
     return hash_lu_id(key);
 }
 
 struct rbh_fsevent_pool *
-rbh_fsevent_pool_new(size_t batch_size, struct source *source)
+rbh_fsevent_pool_new(size_t batch_size, struct source *source,
+                     struct rbh_hashmap *pool_in_process,
+                     pthread_mutex_t *pool_mutex)
 {
     struct rbh_fsevent_pool *pool;
     size_t (*hash_fn)(const void *);
@@ -106,6 +114,8 @@ rbh_fsevent_pool_new(size_t batch_size, struct source *source)
         return NULL;
     }
 
+    pool->pool_in_process = pool_in_process;
+    pool->pool_mutex = pool_mutex;
     pool->size = batch_size;
     pool->need_to_flush = false;
     rbh_list_init(&pool->ids);
@@ -114,6 +124,8 @@ rbh_fsevent_pool_new(size_t batch_size, struct source *source)
     rbh_list_init(&pool->free_ids);
     rbh_list_init(&pool->free_nodes);
     rbh_list_init(&pool->free_fsevents);
+    rbh_list_init(&pool->waiting_ids);
+    pool->queue_size = 0;
 
     return pool;
 }
@@ -908,35 +920,112 @@ free_events_list(struct rbh_list_node *list)
     free(list);
 }
 
+struct waiting_id_node {
+    struct rbh_list_node link;
+    struct rbh_id *id;
+    struct rbh_list_node *events;
+};
+
 struct rbh_iterator *
 rbh_fsevent_pool_flush(struct rbh_fsevent_pool *pool)
 {
+    struct waiting_id_node *elem_w, *tmp_w;
     struct rbh_fsevent_node *elem, *tmp;
     struct rbh_list_node *events_copy;
+    bool in_process;
+    int size = 0;
+    int rc;
 
     rbh_list_foreach_safe(&pool->events, elem, tmp, link) {
         fsevent_node_free(pool, elem);
     }
 
-    if (pool->count == 0)
+    pthread_mutex_lock(pool->pool_mutex);
+    /* Iterate over the waiting deduplicated events to check if we can flush
+     * them
+     */
+    rbh_list_foreach_safe(&pool->waiting_ids, elem_w, tmp_w, link) {
+        in_process = rbh_hashmap_contains(pool->pool_in_process,
+                                          elem_w->id);
+        if (in_process)
+            continue;
+
+        rc = rbh_hashmap_set(pool->pool_in_process,
+                             elem_w->id, NULL);
+        if (rc)
+            break;
+
+        size++;
+        rbh_list_splice_tail(&pool->events, elem_w->events);
+        rbh_list_del(&elem_w->link);
+        pool->queue_size--;
+        free(elem_w);
+    }
+
+    if (pool->count == 0 && size == 0) {
+        pthread_mutex_unlock(pool->pool_mutex);
+        if (pool->queue_size > 0)
+            errno = EAGAIN;
+        else
+            errno = ENODATA;
         return NULL;
+    }
 
     while (pool->count > 0) {
         struct rbh_list_node *first_events;
+        struct waiting_id_node *node;
         struct rbh_id_node *first_id;
         struct rbh_list_node *events;
+        struct rbh_id *id_cpy;
+        int rc;
 
         first_id = rbh_list_first(&pool->ids, struct rbh_id_node, link);
         first_events = (void *)rbh_hashmap_get(pool->pool, first_id->id);
         assert(first_events);
 
-        rbh_list_splice_tail(&pool->events, first_events);
+        in_process = rbh_hashmap_contains(pool->pool_in_process,
+                                          first_id->id);
+
+        /* Duplicate the ID because the original will be freed to clear the
+         * dedup pool.
+         */
+        id_cpy = rbh_id_new(first_id->id->data, first_id->id->size);
+        if (id_cpy == NULL)
+            return NULL;
+
+        /* If this ID is already being processed, store it in a waiting queue to
+         * be flushed later. The goal is to clear the hashmap to avoid limiting
+         * the number of changelog entries read in the next batch.
+         *
+         * Without this mechanism, we observed that with a batch size of 100,
+         * only 10 IDs can be flushed, which slowed down the dedup process.
+         */
+        if (in_process || size == pool->size) {
+            node = malloc(sizeof(*node));
+            if (node == NULL)
+                return NULL;
+
+            node->events = events_list_copy(first_events);
+            node->id = id_cpy;
+            rbh_list_add_tail(&pool->waiting_ids, &node->link);
+            pool->queue_size++;
+        } else {
+            /* If this ID is not in process, flush it and mark it as in process
+             */
+            rc = rbh_hashmap_set(pool->pool_in_process, id_cpy, NULL);
+            if (rc)
+                break;
+
+            rbh_list_splice_tail(&pool->events, first_events);
+        }
 
         id_node_free(pool, first_id);
         events = (void *)rbh_hashmap_pop(pool->pool, first_id->id);
         event_list_free(pool, events);
         pool->count--;
     }
+
+    pthread_mutex_unlock(pool->pool_mutex);
 
     pool->need_to_flush = false;
 

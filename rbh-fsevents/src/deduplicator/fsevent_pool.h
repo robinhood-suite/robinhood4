@@ -15,7 +15,9 @@
 struct rbh_fsevent_pool;
 
 struct rbh_fsevent_pool *
-rbh_fsevent_pool_new(size_t batch_size, struct source *source);
+rbh_fsevent_pool_new(size_t batch_size, struct source *source,
+                     struct rbh_hashmap *pool_in_process,
+                     pthread_mutex_t *pool_mutex);
 
 void
 rbh_fsevent_pool_destroy(struct rbh_fsevent_pool *pool);

@@ -11,10 +11,13 @@
 #include <stddef.h>
 
 #include <robinhood/iterator.h>
+#include <robinhood/hashmap.h>
 
 #include "source.h"
 
 struct rbh_mut_iterator *
-deduplicator_new(size_t batch_size, struct source *source);
+deduplicator_new(size_t batch_size, struct source *source,
+                 struct rbh_hashmap *pool_in_process,
+                 pthread_mutex_t *pool_mutex, int *avail_batches);
 
 #endif

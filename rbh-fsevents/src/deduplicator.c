@@ -11,10 +11,12 @@
 
 #include <assert.h>
 #include <stdlib.h>
+#include <pthread.h>
 
 #include <robinhood/itertools.h>
 #include <robinhood/fsevent.h>
 #include <robinhood/ring.h>
+#include <robinhood/hashmap.h>
 
 #include "deduplicator.h"
 #include "deduplicator/fsevent_pool.h"
@@ -23,6 +25,9 @@ struct deduplicator {
     struct rbh_mut_iterator batches;
     struct rbh_fsevent_pool *pool;
     struct source *source;
+    struct rbh_hashmap *pool_in_process;
+    pthread_mutex_t *pool_mutex;
+    int *avail_batches;
 };
 
 /*----------------------------------------------------------------------------*
@@ -78,6 +83,10 @@ deduplicator_iter_next(void *iterator)
      * be flushed. In the first case, it means that not enough events
      * were generated and we could not fill the pool completely.
      */
+
+    while(*deduplicator->avail_batches == 0)
+        continue;
+
     return rbh_fsevent_pool_flush(deduplicator->pool);
 }
 
@@ -101,6 +110,7 @@ no_dedup_iter_next(void *iterator)
     struct deduplicator *deduplicator = iterator;
     const struct rbh_fsevent *fsevent_copy;
     const struct rbh_fsevent *fsevent;
+    int rc;
 
     fsevent = rbh_iter_next(&deduplicator->source->fsevents);
     if (fsevent == NULL)
@@ -108,6 +118,16 @@ no_dedup_iter_next(void *iterator)
 
     fsevent_copy = rbh_fsevent_clone(fsevent);
     if (fsevent_copy == NULL)
+        return NULL;
+
+    while (*deduplicator->avail_batches == 0)
+        continue;
+
+    pthread_mutex_lock(deduplicator->pool_mutex);
+    rc = rbh_hashmap_set(deduplicator->pool_in_process, &fsevent_copy->id,
+                         NULL);
+    pthread_mutex_unlock(deduplicator->pool_mutex);
+    if (rc)
         return NULL;
 
     return rbh_iter_array(fsevent_copy, sizeof(struct rbh_fsevent), 1, free);
@@ -127,7 +147,9 @@ static const struct rbh_mut_iterator NO_DEDUP_ITERATOR = {
 };
 
 struct rbh_mut_iterator *
-deduplicator_new(size_t batch_size, struct source *source)
+deduplicator_new(size_t batch_size, struct source *source,
+                 struct rbh_hashmap *pool_in_process,
+                 pthread_mutex_t *pool_mutex, int *avail_batches)
 {
     struct deduplicator *deduplicator;
 
@@ -136,11 +158,16 @@ deduplicator_new(size_t batch_size, struct source *source)
         return NULL;
 
     deduplicator->source = source;
+    deduplicator->pool_mutex = pool_mutex;
+    deduplicator->pool_in_process = pool_in_process;
+    deduplicator->avail_batches = avail_batches;
+
     if (batch_size == 0) {
         deduplicator->batches = NO_DEDUP_ITERATOR;
     } else {
         deduplicator->batches = DEDUPLICATOR_ITERATOR;
-        deduplicator->pool = rbh_fsevent_pool_new(batch_size, source);
+        deduplicator->pool = rbh_fsevent_pool_new(batch_size, source,
+                                                  pool_in_process, pool_mutex);
     }
 
     return &deduplicator->batches;
