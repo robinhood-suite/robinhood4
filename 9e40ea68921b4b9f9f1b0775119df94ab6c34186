@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d8dbcb09_cbfae260",
+        "filename": "rbh-undelete/rbh-undelete.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-08-19T06:42:36Z",
+      "side": 1,
+      "message": "minor: document it in the helper",
+      "range": {
+        "startLine": 185,
+        "startChar": 8,
+        "endLine": 185,
+        "endChar": 42
+      },
+      "revId": "9e40ea68921b4b9f9f1b0775119df94ab6c34186",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c6d66ecc_870d4ad6",
+        "filename": "rbh-undelete/rbh-undelete.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-08-19T06:42:36Z",
+      "side": 1,
+      "message": "sugest: use getopt_long",
+      "range": {
+        "startLine": 182,
+        "startChar": 4,
+        "endLine": 187,
+        "endChar": 5
+      },
+      "revId": "9e40ea68921b4b9f9f1b0775119df94ab6c34186",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
