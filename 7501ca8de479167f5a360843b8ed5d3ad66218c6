@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "14ff1a23_e018072f",
+        "filename": "rbh-policy/tests/test_cpython.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-08-19T08:03:22Z",
+      "side": 1,
+      "message": "major: same not fan of this",
+      "range": {
+        "startLine": 12,
+        "startChar": 51,
+        "endLine": 12,
+        "endChar": 59
+      },
+      "revId": "7501ca8de479167f5a360843b8ed5d3ad66218c6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4ead5064_aebde3a9",
+        "filename": "rbh-policy/tests/test_cpython.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-08-19T08:03:22Z",
+      "side": 1,
+      "message": "minor: these tests are duplicated",
+      "range": {
+        "startLine": 91,
+        "startChar": 3,
+        "endLine": 102,
+        "endChar": 2
+      },
+      "revId": "7501ca8de479167f5a360843b8ed5d3ad66218c6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
