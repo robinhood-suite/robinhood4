@@ -323,7 +323,7 @@ parse_read(yaml_parser_t *parser, struct rbh_iterator **fsevents_iterator)
     }
 
     *fsevents_iterator = rbh_iter_array(new_read_event, sizeof(*new_read_event),
-                                        1);
+                                        1, NULL);
 
     return seen_id && seen_time;
 }
@@ -476,7 +476,7 @@ parse_update(yaml_parser_t *parser, struct rbh_iterator **fsevents_iterator)
     new_update_events[0].upsert.statx = statx;
 
     *fsevents_iterator = rbh_iter_array(new_update_events,
-                                        sizeof(*new_update_events), 2);
+                                        sizeof(*new_update_events), 2, NULL);
 
     return seen_id && seen_attrs && seen_ctime && seen_mtime;
 }
@@ -542,7 +542,7 @@ parse_remove(yaml_parser_t *parser, struct rbh_iterator **fsevents_iterator)
     }
 
     *fsevents_iterator = rbh_iter_array(new_delete_event,
-                                        sizeof(*new_delete_event), 1);
+                                        sizeof(*new_delete_event), 1, NULL);
 
     return seen_id;
 }
@@ -712,7 +712,7 @@ parse_create(yaml_parser_t *parser, struct rbh_iterator **fsevents_iterator)
     new_create_events[2].upsert.statx = statx;
 
     *fsevents_iterator = rbh_iter_array(new_create_events,
-                                        sizeof(*new_create_events), 3);
+                                        sizeof(*new_create_events), 3, NULL);
 
     return seen_id;
 }

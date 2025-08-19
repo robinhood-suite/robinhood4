@@ -467,7 +467,7 @@ generic_branch_backend_filter(void *backend, const struct rbh_filter *filter,
     iter->iterator = BRANCH_ITERATOR;
 
     /* Setup `iter->value' for the first run of branch_next_fsentries() */
-    iter->directories = rbh_mut_iter_array(NULL, 0, 0); /* Empty iterator */
+    iter->directories = rbh_mut_iter_array(NULL, 0, 0, NULL); /* Empty iterator */
     iter->value.type = RBH_VT_BINARY;
     iter->value.binary.data = NULL;
 

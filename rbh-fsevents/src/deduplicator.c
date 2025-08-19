@@ -102,7 +102,7 @@ no_dedup_iter_next(void *iterator)
     if (fsevent == NULL)
         return NULL;
 
-    return rbh_iter_array(fsevent, sizeof(struct rbh_fsevent), 1);
+    return rbh_iter_array(fsevent, sizeof(struct rbh_fsevent), 1, NULL);
 }
 
 static const struct rbh_mut_iterator_operations NO_DEDUP_ITER_OPS = {
