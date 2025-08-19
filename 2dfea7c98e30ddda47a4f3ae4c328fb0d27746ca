@@ -97,6 +97,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3dd907d7_cf911568",
+        "filename": "rbh-policy/meson.build",
+        "patchSetId": 6
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-08-19T07:37:35Z",
+      "side": 1,
+      "message": "I think you don\u0027t need to declare a new meson project. If you look at https://github.com/scipy/scipy, they are using meson with a C and python. Also, in the documentation of meson-python, it says that the package name and version are retrieved from the meson.build. The .toml can be used to override some package metadata.",
+      "parentUuid": "71a826e7_e47790c6",
+      "range": {
+        "startLine": 9,
+        "startChar": 1,
+        "endLine": 11,
+        "endChar": 1
+      },
+      "revId": "2dfea7c98e30ddda47a4f3ae4c328fb0d27746ca",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "cbcf669e_1f2482b2",
         "filename": "rbh-policy/tests/test_installation.py",
         "patchSetId": 6
