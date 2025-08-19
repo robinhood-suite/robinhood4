@@ -34,6 +34,7 @@ struct rbh_iterator {
 struct rbh_iterator_operations {
     const void *(*next)(void *iterator);
     void (*destroy)(void *iterator);
+    void (*reset)(void *iterator);
 };
 
 /**
@@ -93,6 +94,17 @@ rbh_iter_destroy(struct rbh_iterator *iterator)
     return iterator->ops->destroy(iterator);
 }
 
+/**
+ * Reset an iterator to the start
+ *
+ * @param iterator a pointer to the struct rbh_iterator to reset
+ */
+static inline void
+rbh_iter_reset(struct rbh_iterator *iterator)
+{
+    return iterator->ops->reset(iterator);
+}
+
 /*----------------------------------------------------------------------------*
  |                              mutable iterator                              |
  *----------------------------------------------------------------------------*/
@@ -109,6 +121,7 @@ struct rbh_mut_iterator {
 struct rbh_mut_iterator_operations {
     void *(*next)(void *iterator);
     void (*destroy)(void *iterator);
+    void (*reset)(void *iterator);
 };
 
 /**
@@ -166,6 +179,17 @@ static inline void
 rbh_mut_iter_destroy(struct rbh_mut_iterator *iterator)
 {
     return iterator->ops->destroy(iterator);
+}
+
+/**
+ * Reset an iterator to the start
+ *
+ * @param iterator a pointer to the struct rbh_mut_iterator to reset
+ */
+static inline void
+rbh_mut_iter_reset(struct rbh_mut_iterator *iterator)
+{
+    return iterator->ops->reset(iterator);
 }
 
 #endif

@@ -59,9 +59,18 @@ array_iter_destroy(void *iterator)
     free(array);
 }
 
+static void
+array_iter_reset(void *iterator)
+{
+    struct array_iterator *array = iterator;
+
+    array->index = 0;
+}
+
 static const struct rbh_iterator_operations ARRAY_ITER_OPS = {
     .next = array_iter_next,
     .destroy = array_iter_destroy,
+    .reset = array_iter_reset,
 };
 
 static const struct rbh_iterator ARRAY_ITER = {
@@ -658,14 +667,24 @@ static void
 list_iter_destroy(void *iterator)
 {
     struct list_iterator *iter = iterator;
+
     if (iter->free_node)
         iter->free_node(iter->head);
     free(iter);
 }
 
+static void
+list_iter_reset(void *iterator)
+{
+    struct list_iterator *iter = iterator;
+
+    iter->current = iter->head;
+}
+
 static const struct rbh_iterator_operations LIST_OPS = {
     .next = list_iter_next,
     .destroy = list_iter_destroy,
+    .reset = list_iter_reset,
 };
 
 static const struct rbh_iterator LIST_ITERATOR = {
