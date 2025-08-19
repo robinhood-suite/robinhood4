@@ -27,13 +27,15 @@ struct rbh_hashmap_item {
 struct rbh_hashmap {
     size_t (*hash)(const void *key);
     bool (*equals)(const void *first, const void *second);
+    void (*free_key)(void *key);
     struct rbh_hashmap_item *items;
     size_t count;
 };
 
 struct rbh_hashmap *
 rbh_hashmap_new(bool (*equals)(const void *first, const void *second),
-                size_t (*hash)(const void *key), size_t count)
+                size_t (*hash)(const void *key),
+                void (*free_key)(void *key), size_t count)
 {
     struct rbh_hashmap *hashmap;
 
@@ -57,6 +59,7 @@ rbh_hashmap_new(bool (*equals)(const void *first, const void *second),
 
     hashmap->hash = hash;
     hashmap->equals = equals;
+    hashmap->free_key = free_key;
     for (size_t i = 0; i < count; i++)
         hashmap->items[i].key = NULL;
 
@@ -262,6 +265,8 @@ rbh_hashmap_pop(struct rbh_hashmap *hashmap, const void *key)
         return NULL;
     }
     value = match->value;
+    if (hashmap->free_key)
+        hashmap->free_key((void *) match->key);
 
     hashmap_pop(hashmap, match);
     return value;

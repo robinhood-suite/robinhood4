@@ -95,7 +95,7 @@ rbh_fsevent_pool_new(size_t batch_size, struct source *source)
     else
         hash_fn = fsevent_pool_hash_id;
 
-    pool->pool = rbh_hashmap_new(fsevent_pool_equals, hash_fn,
+    pool->pool = rbh_hashmap_new(fsevent_pool_equals, hash_fn, NULL,
                                  batch_size * 100 / 70);
     if (!pool->pool) {
         int save_errno = errno;

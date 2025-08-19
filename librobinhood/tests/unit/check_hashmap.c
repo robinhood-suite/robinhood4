@@ -44,7 +44,7 @@ START_TEST(rhn_zero)
     struct rbh_hashmap *hashmap;
 
     errno = 0;
-    hashmap = rbh_hashmap_new(strequals, djb2, 0);
+    hashmap = rbh_hashmap_new(strequals, djb2, NULL, 0);
     ck_assert_ptr_null(hashmap);
     ck_assert_int_eq(errno, EINVAL);
 }
@@ -54,7 +54,7 @@ START_TEST(rhn_basic)
 {
     struct rbh_hashmap *hashmap;
 
-    hashmap = rbh_hashmap_new(strequals, djb2, 1);
+    hashmap = rbh_hashmap_new(strequals, djb2, NULL, 1);
     ck_assert_ptr_nonnull(hashmap);
 
     rbh_hashmap_destroy(hashmap);
@@ -70,7 +70,7 @@ START_TEST(rhs_basic)
     struct rbh_hashmap *hashmap;
     int rc;
 
-    hashmap = rbh_hashmap_new(strequals, djb2, 1);
+    hashmap = rbh_hashmap_new(strequals, djb2, NULL, 1);
     ck_assert_ptr_nonnull(hashmap);
 
     rc = rbh_hashmap_set(hashmap, "abcdefg", "hijklmn");
@@ -86,7 +86,7 @@ START_TEST(rhs_replace)
     const char *value;
     int rc;
 
-    hashmap = rbh_hashmap_new(strequals, djb2, 1);
+    hashmap = rbh_hashmap_new(strequals, djb2, NULL, 1);
     ck_assert_ptr_nonnull(hashmap);
 
     rc = rbh_hashmap_set(hashmap, "abcdefg", "hijklmn");
@@ -108,7 +108,7 @@ START_TEST(rhs_full)
     struct rbh_hashmap *hashmap;
     int rc;
 
-    hashmap = rbh_hashmap_new(strequals, djb2, 1);
+    hashmap = rbh_hashmap_new(strequals, djb2, NULL, 1);
     ck_assert_ptr_nonnull(hashmap);
 
     rc = rbh_hashmap_set(hashmap, "abcdefg", "hijklmn");
@@ -133,7 +133,7 @@ START_TEST(rhg_basic)
     const void *value;
     int rc;
 
-    hashmap = rbh_hashmap_new(strequals, djb2, 1);
+    hashmap = rbh_hashmap_new(strequals, djb2, NULL, 1);
     ck_assert_ptr_nonnull(hashmap);
 
     rc = rbh_hashmap_set(hashmap, "abcdefg", "hijklmn");
@@ -152,7 +152,7 @@ START_TEST(rhg_missing)
     struct rbh_hashmap *hashmap;
     const void *value;
 
-    hashmap = rbh_hashmap_new(strequals, djb2, 1);
+    hashmap = rbh_hashmap_new(strequals, djb2, NULL, 1);
     ck_assert_ptr_nonnull(hashmap);
 
     errno = 0;
@@ -170,7 +170,7 @@ START_TEST(rhg_null)
     const void *value;
     int rc;
 
-    hashmap = rbh_hashmap_new(strequals, djb2, 1);
+    hashmap = rbh_hashmap_new(strequals, djb2, NULL, 1);
     ck_assert_ptr_nonnull(hashmap);
 
     rc = rbh_hashmap_set(hashmap, "abcdefg", NULL);
@@ -194,7 +194,7 @@ START_TEST(rhp_missing)
     struct rbh_hashmap *hashmap;
     const void *value;
 
-    hashmap = rbh_hashmap_new(strequals, djb2, 1);
+    hashmap = rbh_hashmap_new(strequals, djb2, NULL, 1);
     ck_assert_ptr_nonnull(hashmap);
 
     errno = 0;
@@ -212,7 +212,7 @@ START_TEST(rhp_basic)
     const void *value;
     int rc;
 
-    hashmap = rbh_hashmap_new(strequals, djb2, 1);
+    hashmap = rbh_hashmap_new(strequals, djb2, NULL, 1);
     ck_assert_ptr_nonnull(hashmap);
 
     rc = rbh_hashmap_set(hashmap, "abcdefg", "hijklmn");
@@ -226,6 +226,31 @@ START_TEST(rhp_basic)
     value = rbh_hashmap_pop(hashmap, "abcdefg");
     ck_assert_ptr_null(value);
     ck_assert_int_eq(errno, ENOENT);
+
+    rbh_hashmap_destroy(hashmap);
+}
+END_TEST
+
+START_TEST(rhp_free)
+{
+    struct rbh_hashmap *hashmap;
+    const void *value;
+    char *key;
+    int rc;
+
+    hashmap = rbh_hashmap_new(strequals, djb2, free, 1);
+    ck_assert_ptr_nonnull(hashmap);
+
+    key = malloc(8 * sizeof(char));
+    ck_assert_ptr_nonnull(key);
+    strcpy(key, "abcdefg");
+
+    rc = rbh_hashmap_set(hashmap, key, "hijklmn");
+    ck_assert_int_eq(rc, 0);
+
+    value = rbh_hashmap_pop(hashmap, key);
+    ck_assert_ptr_nonnull(value);
+    ck_assert_str_eq(value, "hijklmn");
 
     rbh_hashmap_destroy(hashmap);
 }
@@ -262,6 +287,7 @@ unit_suite(void)
     tests = tcase_create("rbh_hashmap_pop");
     tcase_add_test(tests, rhp_missing);
     tcase_add_test(tests, rhp_basic);
+    tcase_add_test(tests, rhp_free);
 
     suite_add_tcase(suite, tests);
 
@@ -292,7 +318,7 @@ START_TEST(fill_replace_and_empty)
     };
     struct rbh_hashmap *hashmap;
 
-    hashmap = rbh_hashmap_new(strequals, djb2, ARRAY_SIZE(STRINGS));
+    hashmap = rbh_hashmap_new(strequals, djb2, NULL, ARRAY_SIZE(STRINGS));
     ck_assert_ptr_nonnull(hashmap);
 
     for (size_t i = 0; i < ARRAY_SIZE(STRINGS); i++) {

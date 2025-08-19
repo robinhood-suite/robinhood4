@@ -142,6 +142,7 @@ struct rbh_hashmap;
  *
  * @param equals    a function to compare keys
  * @param hash      a function to hash keys
+ * @param free_key  a function to free the memory associated with a key
  * @param count     the number of slots in the hashmap
  *
  * @return          a pointer to a newly allocated hashmap on success, NULL on
@@ -152,7 +153,8 @@ struct rbh_hashmap;
  */
 struct rbh_hashmap *
 rbh_hashmap_new(bool (*equals)(const void *first, const void *second),
-                size_t (*hash)(const void *key), size_t count);
+                size_t (*hash)(const void *key),
+                void (*free_key)(void *key), size_t count);
 
 /**
  * Associate a key to a value in a hashmap
