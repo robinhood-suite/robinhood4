@@ -256,6 +256,45 @@ START_TEST(rhp_free)
 }
 END_TEST
 
+    /*--------------------------------------------------------------------*
+     |                          rbh_hashmap_contains                      |
+     *--------------------------------------------------------------------*/
+
+START_TEST(rhc_basic)
+{
+    struct rbh_hashmap *hashmap;
+    bool contains;
+    int rc;
+
+    hashmap = rbh_hashmap_new(strequals, djb2, NULL, 1);
+    ck_assert_ptr_nonnull(hashmap);
+
+    rc = rbh_hashmap_set(hashmap, "abcdefg", "hijklmn");
+    ck_assert_int_eq(rc, 0);
+
+    contains = rbh_hashmap_contains(hashmap, "abcdefg");
+    ck_assert_int_eq(contains, 1);
+
+    rbh_hashmap_destroy(hashmap);
+}
+END_TEST
+
+START_TEST(rhc_missing)
+{
+    struct rbh_hashmap *hashmap;
+    bool contains;
+
+    hashmap = rbh_hashmap_new(strequals, djb2, NULL, 1);
+    ck_assert_ptr_nonnull(hashmap);
+
+    errno = 0;
+    contains = rbh_hashmap_contains(hashmap, "abcdefg");
+    ck_assert_int_eq(contains, 0);
+
+    rbh_hashmap_destroy(hashmap);
+}
+END_TEST
+
 static Suite *
 unit_suite(void)
 {
@@ -288,6 +327,12 @@ unit_suite(void)
     tcase_add_test(tests, rhp_missing);
     tcase_add_test(tests, rhp_basic);
     tcase_add_test(tests, rhp_free);
+
+    suite_add_tcase(suite, tests);
+
+    tests = tcase_create("rbh_hashmap_contains");
+    tcase_add_test(tests, rhc_basic);
+    tcase_add_test(tests, rhc_missing);
 
     suite_add_tcase(suite, tests);
 

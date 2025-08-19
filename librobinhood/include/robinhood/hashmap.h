@@ -189,6 +189,17 @@ const void *
 rbh_hashmap_get(struct rbh_hashmap *hashmap, const void *key);
 
 /**
+ * Check if a key exist in a hashmap
+ *
+ * @param hashmap   the hashmap from which to check the key
+ * @param key       the key to query \p hashmap with
+ *
+ * @return          true if the key exist, false otherwise
+ */
+bool
+rbh_hashmap_contains(struct rbh_hashmap *hashmap, const void *key);
+
+/**
  * Remove a key/value pair from a hashmap
  *
  * @param hashmap   the hashmap from which to pop a key/value pair

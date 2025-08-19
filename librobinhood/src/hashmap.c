@@ -125,6 +125,17 @@ rbh_hashmap_get(struct rbh_hashmap *hashmap, const void *key)
     return match->value;
 }
 
+bool
+rbh_hashmap_contains(struct rbh_hashmap *hashmap, const void *key)
+{
+    struct rbh_hashmap_item *match = hashmap_key2slot(hashmap, key);
+
+    if (match == NULL || match->key == NULL)
+        return false;
+
+    return true;
+}
+
 /* Here, "is_between" means: if we traverse an array starting at index `low`,
  * wrap around once we reach the end, and stop at `high`, do we encounter
  * `index`?
