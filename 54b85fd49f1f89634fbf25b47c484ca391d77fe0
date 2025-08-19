@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e1df7467_d348b905",
+        "filename": "librobinhood/src/plugins/posix/enrichers/lustre/lustre.c",
+        "patchSetId": 6
+      },
+      "lineNbr": 1003,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-08-19T06:56:45Z",
+      "side": 1,
+      "message": "question: Is it planned to extend it to other copytools, such as the Phobos copytool?",
+      "range": {
+        "startLine": 1003,
+        "startChar": 18,
+        "endLine": 1003,
+        "endChar": 33
+      },
+      "revId": "54b85fd49f1f89634fbf25b47c484ca391d77fe0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
