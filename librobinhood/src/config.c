@@ -22,7 +22,7 @@ struct rbh_config {
     bool parser_initialized;
 };
 
-static struct rbh_config *config;
+static __thread struct rbh_config *config;
 
 /**
  * Reset the config.
