@@ -21,11 +21,13 @@
 #include <string.h>
 #include <sysexits.h>
 #include <unistd.h>
+#include <pthread.h>
 
 #include <robinhood/uri.h>
 #include <robinhood/utils.h>
 #include <robinhood/config.h>
 #include <robinhood/alias.h>
+#include <robinhood/list.h>
 
 #include "deduplicator.h"
 #include "enricher.h"
@@ -322,7 +324,46 @@ destroy_enrich_point(void)
         rbh_backend_destroy(enrich_point);
 }
 
+static pthread_mutex_t queue_mutex = PTHREAD_MUTEX_INITIALIZER;
 static bool skip_error = true;
+
+struct rbh_node_iterator {
+    struct rbh_iterator *enricher;
+    struct rbh_list_node list;
+};
+
+static void
+enqueue(struct rbh_list_node *head, struct rbh_iterator *enricher)
+{
+    struct rbh_node_iterator *new_node = malloc(sizeof(*new_node));
+
+    if (new_node == NULL)
+        error(EXIT_FAILURE, ENOMEM, "malloc");
+
+    new_node->enricher = enricher;
+
+    pthread_mutex_lock(&queue_mutex);
+    rbh_list_add_tail(head, &new_node->list);
+    pthread_mutex_unlock(&queue_mutex);
+}
+
+static struct rbh_node_iterator *
+dequeue(struct rbh_list_node *head)
+{
+    struct rbh_node_iterator *node;
+
+    pthread_mutex_lock(&queue_mutex);
+    if (rbh_list_empty(head)) {
+        pthread_mutex_unlock(&queue_mutex);
+        return NULL;
+    }
+
+    node = rbh_list_first(head, struct rbh_node_iterator, list);
+    rbh_list_del(&node->list);
+    pthread_mutex_unlock(&queue_mutex);
+
+    return node;
+}
 
 static void
 feed(struct sink *sink, struct source *source,
