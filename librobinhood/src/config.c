@@ -322,6 +322,8 @@ next_line:
         }
 
         rc = _rbh_config_find(NULL, value);
+        yaml_event_delete(&event);
+
         if (rc == KPR_NOT_FOUND || rc == KPR_ERROR)
             return rc;
 
