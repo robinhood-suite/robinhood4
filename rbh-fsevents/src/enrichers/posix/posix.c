@@ -420,13 +420,6 @@ static const size_t XATTR_VALUE_MAX_VFS_SIZE = 1 << 16;
 #define MIN_XATTR_VALUES_ALLOC (4 * PATH_MAX)
 static __thread struct rbh_sstack *xattrs_values;
 
-static void __attribute__((destructor))
-exit_xattrs_values(void)
-{
-    if (xattrs_values)
-        rbh_sstack_destroy(xattrs_values);
-}
-
 static int
 posix_extension_enrich(struct enricher *enricher,
                        const struct enrich_request *req,
@@ -675,7 +668,7 @@ enrich(struct enricher *enricher, const struct rbh_fsevent *original)
 }
 
 
-static struct rbh_id *last_id = NULL;
+static __thread struct rbh_id *last_id = NULL;
 
 static const void *
 posix_enricher_iter_next(void *iterator)
@@ -729,6 +722,12 @@ posix_enricher_iter_destroy(void *iterator)
     struct enricher *enricher = iterator;
 
     rbh_iter_destroy(enricher->fsevents);
+
+    if (xattrs_values) {
+        rbh_sstack_destroy(xattrs_values);
+        xattrs_values = NULL;
+    }
+
     free(enricher->extension_enrichers);
     free(enricher->symlink);
     free(enricher->pairs);
