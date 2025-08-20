@@ -1,3 +1,10 @@
+/* This file is part of Robinhood 4
+ * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
+ *                    alternatives
+ *
+ * SPDX-License-Identifer: LGPL-3.0-or-later
+ */
+
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif
