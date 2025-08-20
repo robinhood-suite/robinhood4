@@ -11,6 +11,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <sysexits.h>
+#include <pthread.h>
 
 #include "robinhood/config.h"
 #include "robinhood/serialization.h"
@@ -20,6 +21,7 @@ struct rbh_config {
     yaml_parser_t parser;
     char *config_file;
     bool parser_initialized;
+    pthread_mutex_t config_lock;
 };
 
 static struct rbh_config *config;
@@ -132,6 +134,7 @@ static int
 config_open(const char *config_file)
 {
     int save_errno;
+    int rc;
 
     config = calloc(1, sizeof(*config));
     if (config == NULL)
@@ -151,6 +154,10 @@ config_open(const char *config_file)
     config->parser_initialized = false;
 
     if (config_reset())
+        goto free_config;
+
+    rc = pthread_mutex_init(&config->config_lock, NULL);
+    if (rc)
         goto free_config;
 
     return 0;
@@ -202,6 +209,8 @@ rbh_config_free()
 
     if (config->parser_initialized)
         yaml_parser_delete(&config->parser);
+
+    pthread_mutex_destroy(&config->config_lock);
 
     free(config);
     config = NULL;
@@ -381,8 +390,10 @@ rbh_config_find(const char *key, struct rbh_value *value,
     if (config == NULL)
         return KPR_NOT_FOUND;
 
+    pthread_mutex_lock(&config->config_lock);
     rc = find_in_config(key, value);
     config_reset();
+    pthread_mutex_unlock(&config->config_lock);
     if (rc == KPR_ERROR)
         return rc;
 
