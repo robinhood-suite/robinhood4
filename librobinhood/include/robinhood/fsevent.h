@@ -93,6 +93,19 @@ struct rbh_fsevent {
 };
 
 /**
+ * Clone a fsevent
+ *
+ * @param fsevent   the fsevent to clone
+ *
+ * @return          a pointer to a newly allocated fsevent on success,
+ *                  NULL on error and errno is set appropriately
+ *
+ * @error ENOMEM    there was not enough memory available
+ */
+struct rbh_fsevent *
+rbh_fsevent_clone(const struct rbh_fsevent *fsevent);
+
+/**
  * Create an upsert fsevent
  *
  * @param id        the ID of the fsentry to upsert
