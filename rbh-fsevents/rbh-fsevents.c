@@ -21,6 +21,7 @@
 #include <string.h>
 #include <sysexits.h>
 #include <unistd.h>
+#include <pthread.h>
 
 #include <robinhood/uri.h>
 #include <robinhood/utils.h>
@@ -78,6 +79,8 @@ usage(void)
         "                    Set a maximum number of changelog to read\n"
         "    -r, --raw       do not enrich changelog records (default)\n"
         "    -v, --verbose   Set the verbose mode\n"
+        "    -w, --nb-workers NUMBER\n"
+        "                    number of workers to use to enrich and update the destination.\n"
         "\n"
         "Note that uploading raw records to a RobinHood backend will fail, they have to\n"
         "be enriched first.\n"
@@ -244,13 +247,19 @@ sink_new(const char *arg)
     __builtin_unreachable();
 }
 
-static struct sink *sink;
+static size_t nb_workers = 1;
+static struct sink **sink;
 
 static void __attribute__((destructor))
 sink_exit(void)
 {
-    if (sink)
-        sink_destroy(sink);
+    if (sink) {
+        for (int i = 0; i < nb_workers; i++) {
+            if (sink[i])
+                sink_destroy(sink[i]);
+        }
+        free(sink);
+    }
 }
 
 static struct enrich_iter_builder *
@@ -323,6 +332,7 @@ destroy_enrich_point(void)
         rbh_backend_destroy(enrich_point);
 }
 
+static bool done_producing = false;
 static bool skip_error = true;
 
 struct rbh_node_iterator {
@@ -353,34 +363,41 @@ consumer_get_iterator(struct rbh_list_node *list)
 {
     struct rbh_node_iterator *node;
 
-    if (rbh_list_empty(list))
-        return NULL;
-
     node = rbh_list_first(list, struct rbh_node_iterator, list);
     rbh_list_del(&node->list);
 
     return node;
 }
 
-static void
-feed(struct sink *sink, struct source *source,
-     struct enrich_iter_builder *builder, bool allow_partials,
-     struct deduplicator_options *dedup_opts)
-{
-    struct rbh_mut_iterator *deduplicator;
-    struct timespec total_enrich = {0};
-    struct timespec total_read = {0};
+struct consumer_info {
+    struct timespec total_enrich;
+    struct rbh_list_node *list;
+    pthread_mutex_t mutex_list;
+    pthread_cond_t signal_list;
+    struct sink *sink;
+};
+
+/* Consumer loop */
+void *
+consumer_thread(void *arg) {
+    struct consumer_info *cinfo = (struct consumer_info *) arg;
+    struct rbh_node_iterator *node;
     struct timespec start, end;
     int rc;
 
-    deduplicator = deduplicator_new(dedup_opts->batch_size, source);
-    if (deduplicator == NULL)
-        error(EXIT_FAILURE, errno, "deduplicator_new");
-
     while (true) {
-        struct rbh_iterator *fsevents;
+        pthread_mutex_lock(&cinfo->mutex_list);
+        while (rbh_list_empty(cinfo->list) && !done_producing)
+            pthread_cond_wait(&cinfo->signal_list, &cinfo->mutex_list);
 
-        errno = 0;
+        if (rbh_list_empty(cinfo->list) && done_producing) {
+            pthread_mutex_unlock(&cinfo->mutex_list);
+            errno = ENODATA;
+            break;
+        }
+
+        node = consumer_get_iterator(cinfo->list);
+        pthread_mutex_unlock(&cinfo->mutex_list);
 
         if (verbose) {
             rc = clock_gettime(CLOCK_REALTIME, &start);
@@ -388,52 +405,22 @@ feed(struct sink *sink, struct source *source,
                 error(EXIT_FAILURE, 0, "Unable to get start time");
         }
 
-        fsevents = rbh_mut_iter_next(deduplicator);
-        if (fsevents == NULL)
+        if (sink_process(cinfo->sink, node->enricher)) {
+            rbh_iter_destroy(node->enricher);
+            free(node);
             break;
+        }
 
         if (verbose) {
             rc = clock_gettime(CLOCK_REALTIME, &end);
             if (rc)
                 error(EXIT_FAILURE, 0, "Unable to get end time");
 
-            timespec_accumulate(&total_read, start, end);
+            timespec_accumulate(&cinfo->total_enrich, start, end);
         }
 
-        if (builder != NULL)
-            fsevents = build_enrich_iter(builder, fsevents, skip_error);
-        else if (!allow_partials)
-            fsevents = iter_no_partial(fsevents);
-
-        if (fsevents == NULL)
-            error(EXIT_FAILURE, errno, "iter_enrich");
-
-        if (verbose) {
-            rc = clock_gettime(CLOCK_REALTIME, &start);
-            if (rc)
-                error(EXIT_FAILURE, 0, "Unable to get start time");
-        }
-
-        if (sink_process(sink, fsevents))
-            break;
-
-        if (verbose) {
-            rc = clock_gettime(CLOCK_REALTIME, &end);
-            if (rc)
-                error(EXIT_FAILURE, 0, "Unable to get end time");
-
-            timespec_accumulate(&total_enrich, start, end);
-        }
-
-        rbh_iter_destroy(fsevents);
-    }
-
-    if (verbose) {
-        printf("Total time elapsed to read changelogs and dedup:"
-               "%ld.%09ld seconds\n", total_read.tv_sec, total_read.tv_nsec);
-        printf("Total time elapsed to enrich and update mongo:"
-               "%ld.%09ld seconds\n", total_enrich.tv_sec,
-               total_enrich.tv_nsec);
+        rbh_iter_destroy(node->enricher);
+        free(node);
     }
 
     switch (errno) {
@@ -448,7 +435,165 @@ feed(struct sink *sink, struct source *source,
         error(EXIT_FAILURE, errno, "could not get the next batch of fsevents");
     }
 
+    return NULL;
+}
+
+static struct rbh_list_node *
+init_consumer_list()
+{
+    struct rbh_list_node *list;
+
+    list = malloc(sizeof(*list));
+    if (list == NULL)
+        return NULL;
+
+    rbh_list_init(list);
+
+    return list;
+}
+
+static void
+setup_producer_consumers(struct rbh_mut_iterator **deduplicator,
+                         struct deduplicator_options *dedup_opts,
+                         pthread_t **consumers, struct consumer_info **cinfos)
+{
+    *deduplicator = deduplicator_new(dedup_opts->batch_size, source);
+    if (deduplicator == NULL)
+        error(EXIT_FAILURE, errno, "deduplicator_new");
+
+    *consumers = malloc(nb_workers * sizeof(*consumers));
+    if (consumers == NULL)
+        error(EXIT_FAILURE, errno, "consumers malloc");
+
+    *cinfos = malloc(nb_workers * sizeof(**cinfos));
+    if (*cinfos == NULL)
+        error(EXIT_FAILURE, errno, "cinfos malloc");
+
+    for (int i = 0; i < nb_workers; i++) {
+        struct consumer_info *cinfo = &(*cinfos)[i];
+
+        memset(&cinfo->total_enrich, 0, sizeof(cinfo->total_enrich));
+        pthread_mutex_init(&cinfo->mutex_list, NULL);
+        pthread_cond_init(&cinfo->signal_list, NULL);
+        cinfo->sink = sink[i];
+
+        cinfo->list = init_consumer_list();
+        if (cinfo->list == NULL)
+            error(EXIT_FAILURE, errno, "init_consumer_list");
+
+        if (pthread_create(&(*consumers)[i], NULL, consumer_thread, cinfo) != 0)
+            error(EXIT_FAILURE, errno, "Failed to create the thread %d", i);
+    }
+}
+
+/* Producer loop */
+static void
+producer_thread(struct rbh_mut_iterator *deduplicator,
+                struct enrich_iter_builder *builder, bool allow_partials,
+                struct consumer_info *cinfos, struct timespec *total_read)
+{
+    struct rbh_iterator *fsevents;
+    struct timespec start, end;
+    int idx = 0;
+    int rc;
+
+    if (verbose) {
+        rc = clock_gettime(CLOCK_REALTIME, &start);
+        if (rc)
+            error(EXIT_FAILURE, 0, "Unable to get start time");
+    }
+
+    for (fsevents = rbh_mut_iter_next(deduplicator); fsevents != NULL;
+         fsevents = rbh_mut_iter_next(deduplicator)) {
+
+        if (builder != NULL)
+            fsevents = build_enrich_iter(builder, fsevents, skip_error);
+        else if (!allow_partials)
+            fsevents = iter_no_partial(fsevents);
+
+        if (fsevents == NULL)
+            error(EXIT_FAILURE, errno, "iter_enrich");
+
+        /* Add batch from the dedup using round robin */
+        pthread_mutex_lock(&cinfos[idx].mutex_list);
+        add_iterators_to_consumer(cinfos[idx].list, fsevents);
+        pthread_cond_signal(&cinfos[idx].signal_list);
+        pthread_mutex_unlock(&cinfos[idx].mutex_list);
+        idx = (idx + 1) % nb_workers;
+    }
+
+    done_producing = true;
+
+    if (verbose) {
+        rc = clock_gettime(CLOCK_REALTIME, &end);
+        if (rc)
+            error(EXIT_FAILURE, 0, "Unable to get end time");
+
+        timespec_accumulate(total_read, start, end);
+    }
+
+    switch (errno) {
+    case 0:
+        error(EXIT_FAILURE, EINVAL, "unexpected exit status 0");
+    case ENODATA:
+        break;
+    case RBH_BACKEND_ERROR:
+        error(EXIT_FAILURE, 0, "%s\n", rbh_backend_error);
+        __builtin_unreachable();
+    default:
+        error(EXIT_FAILURE, errno, "could not get the next batch of fsevents");
+    }
+}
+
+static void
+cleanup_producer_consumers(struct rbh_mut_iterator *deduplicator,
+                           struct consumer_info *cinfos, pthread_t *consumers,
+                           struct timespec *total_enrich)
+{
+    for (int i = 0; i < nb_workers; i++) {
+        /* Wake up the the consumers */
+        pthread_cond_signal(&cinfos[i].signal_list);
+        pthread_join(consumers[i], NULL);
+
+        *total_enrich = timespec_add(*total_enrich, cinfos->total_enrich);
+        pthread_cond_destroy(&cinfos[i].signal_list);
+        pthread_mutex_destroy(&cinfos[i].mutex_list);
+        rbh_list_del(cinfos[i].list);
+        free(cinfos[i].list);
+    }
+
+    free(cinfos);
+    free(consumers);
     rbh_mut_iter_destroy(deduplicator);
+}
+
+static void
+feed(struct sink **sink, struct source *source,
+     struct enrich_iter_builder *builder, bool allow_partials,
+     struct deduplicator_options *dedup_opts)
+{
+    struct rbh_mut_iterator *deduplicator = NULL;
+    struct consumer_info *cinfos = NULL;
+    struct timespec total_enrich = {0};
+    struct timespec total_read = {0};
+    pthread_t *consumers = NULL;
+
+    /* Setup the producer and consumers */
+    setup_producer_consumers(&deduplicator, dedup_opts, &consumers, &cinfos);
+
+    /* Launch the producer loop */
+    producer_thread(deduplicator, builder, allow_partials, cinfos, &total_read);
+
+    /* Cleanup the producer and consumers */
+    cleanup_producer_consumers(deduplicator, cinfos, consumers, &total_enrich);
+
+    if (verbose) {
+        printf("Total time elapsed to read changelogs and dedup:"
+               "%ld.%09ld seconds\n", total_read.tv_sec, total_read.tv_nsec);
+        printf("Total time elapsed to enrich and update mongo:"
+               "%ld.%09ld seconds\n", total_enrich.tv_sec / nb_workers,
+               total_enrich.tv_nsec / nb_workers);
+    }
 }
 
 static int
@@ -470,7 +615,7 @@ insert_backend_source()
     assert(strcmp(pair->key, "backend_source") == 0);
     sources = pair->value;
 
-    if (sink_insert_source(sink, sources)) {
+    if (sink_insert_source(sink[0], sources)) {
         fprintf(stderr, "Failed to set backend_info\n");
         return -1;
     }
@@ -521,6 +666,11 @@ main(int argc, char *argv[])
             .val = 'n',
         },
         {
+            .name = "nb-workers",
+            .has_arg = required_argument,
+            .val = 'w',
+        },
+        {
             .name = "raw",
             .val = 'r',
         },
@@ -546,7 +696,7 @@ main(int argc, char *argv[])
     rbh_apply_aliases(&argc, &argv);
 
     /* Parse the command line */
-    while ((c = getopt_long(argc, argv, "b:c:d:e:hm:nrv", LONG_OPTIONS,
+    while ((c = getopt_long(argc, argv, "b:c:d:e:hm:nrvw:", LONG_OPTIONS,
                             NULL)) != -1) {
         switch (c) {
         case 'b':
@@ -577,6 +727,10 @@ main(int argc, char *argv[])
         case 'n':
             skip_error = false;
             break;
+        case 'w':
+            if (str2uint64_t(optarg, &nb_workers))
+                error(EXIT_FAILURE, 0, "'%s' is not an integer", optarg);
+            break;
         case 'r':
             /* Ignore errors on close */
             mount_fd_exit();
@@ -605,7 +759,12 @@ main(int argc, char *argv[])
               "Cannot output changelogs and fsevents both to stdout");
 
     source = source_new(argv[optind++], dump_file, max_changelog);
-    sink = sink_new(argv[optind++]);
+    sink = calloc(nb_workers, sizeof(*sink));
+    if (sink == NULL)
+        error(EXIT_FAILURE, errno, "calloc");
+
+    for (int i = 0; i < nb_workers; i++)
+        sink[i] = sink_new(argv[optind]);
 
     if (enrich_builder) {
         if (insert_backend_source() && errno != ENOTSUP)
@@ -613,7 +772,7 @@ main(int argc, char *argv[])
                   "Failed to insert source backends in destination");
     }
 
-    feed(sink, source, enrich_builder, strcmp(sink->name, "backend"),
+    feed(sink, source, enrich_builder, strcmp(sink[0]->name, "backend"),
          &dedup_opts);
 
     rbh_config_free();
