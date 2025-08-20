@@ -374,6 +374,7 @@ struct consumer_info {
     pthread_cond_t signal_list;
     struct sink *sink;
     char *config_path;
+    int id;
 };
 
 /* Consumer loop */
@@ -387,6 +388,9 @@ consumer_thread(void *arg) {
     rc = rbh_config_load_from_path(cinfo->config_path);
     if (rc)
         error(EXIT_FAILURE, errno, "Failed to load config for consumer");
+
+    if (verbose)
+        printf("Starting consumer thread: %d\n", cinfo->id);
 
     while (true) {
         pthread_mutex_lock(&cinfo->mutex_list);
@@ -427,6 +431,9 @@ consumer_thread(void *arg) {
     }
 
     rbh_config_free();
+
+    if (verbose)
+        printf("Ending consumer thread: %d\n", cinfo->id);
 
     switch (errno) {
     case 0:
@@ -483,6 +490,7 @@ setup_producer_consumers(struct rbh_mut_iterator **deduplicator,
         pthread_cond_init(&cinfo->signal_list, NULL);
         cinfo->sink = sink[i];
         cinfo->config_path = rbh_config_get_path();
+        cinfo->id = i;
 
         cinfo->list = init_consumer_list();
         if (cinfo->list == NULL)
