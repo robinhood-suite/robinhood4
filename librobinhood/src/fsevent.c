@@ -148,8 +148,8 @@ fsevent_data_size(const struct rbh_fsevent *fsevent)
     return size;
 }
 
-static struct rbh_fsevent *
-fsevent_clone(const struct rbh_fsevent *fsevent)
+struct rbh_fsevent *
+rbh_fsevent_clone(const struct rbh_fsevent *fsevent)
 {
     struct rbh_fsevent *clone;
     size_t size;
@@ -194,7 +194,7 @@ rbh_fsevent_upsert_new(const struct rbh_id *id,
         return NULL;
     }
 
-    return fsevent_clone(&upsert);
+    return rbh_fsevent_clone(&upsert);
 }
 
 struct rbh_fsevent *
@@ -223,7 +223,7 @@ rbh_fsevent_link_new(const struct rbh_id *id,
         return NULL;
     }
 
-    return fsevent_clone(&link);
+    return rbh_fsevent_clone(&link);
 }
 
 struct rbh_fsevent *
@@ -248,7 +248,7 @@ rbh_fsevent_unlink_new(const struct rbh_id *id, const struct rbh_id *parent_id,
         return NULL;
     }
 
-    return fsevent_clone(&unlink);
+    return rbh_fsevent_clone(&unlink);
 }
 
 struct rbh_fsevent *
@@ -263,7 +263,7 @@ rbh_fsevent_delete_new(const struct rbh_id *id)
         .xattrs.count = 0,
     };
 
-    return fsevent_clone(&delete);
+    return rbh_fsevent_clone(&delete);
 }
 
 struct rbh_fsevent *
@@ -286,7 +286,7 @@ rbh_fsevent_xattr_new(const struct rbh_id *id,
         },
     };
 
-    return fsevent_clone(&xattr);
+    return rbh_fsevent_clone(&xattr);
 }
 
 struct rbh_fsevent *
@@ -315,7 +315,7 @@ rbh_fsevent_ns_xattr_new(const struct rbh_id *id,
         return NULL;
     }
 
-    return fsevent_clone(&ns_xattr);
+    return rbh_fsevent_clone(&ns_xattr);
 }
 
 const char *
