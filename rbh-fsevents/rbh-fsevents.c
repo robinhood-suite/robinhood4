@@ -26,6 +26,7 @@
 #include <robinhood/utils.h>
 #include <robinhood/config.h>
 #include <robinhood/alias.h>
+#include <robinhood/list.h>
 
 #include "deduplicator.h"
 #include "enricher.h"
@@ -323,6 +324,43 @@ destroy_enrich_point(void)
 }
 
 static bool skip_error = true;
+
+struct rbh_node_iterator {
+    struct rbh_iterator *enricher;
+    struct rbh_list_node list;
+};
+
+/* Add an iterator to enrich to a consumer */
+__attribute__((unused))
+static void
+add_iterators_to_consumer(struct rbh_list_node *list,
+                          struct rbh_iterator *enricher)
+{
+    struct rbh_node_iterator *new_node = malloc(sizeof(*new_node));
+
+    if (new_node == NULL)
+        error(EXIT_FAILURE, ENOMEM, "malloc");
+
+    new_node->enricher = enricher;
+
+    rbh_list_add_tail(list, &new_node->list);
+}
+
+/* Retrieve an iterator from a consumer's list */
+__attribute__((unused))
+static struct rbh_node_iterator *
+consumer_get_iterator(struct rbh_list_node *list)
+{
+    struct rbh_node_iterator *node;
+
+    if (rbh_list_empty(list))
+        return NULL;
+
+    node = rbh_list_first(list, struct rbh_node_iterator, list);
+    rbh_list_del(&node->list);
+
+    return node;
+}
 
 static void
 feed(struct sink *sink, struct source *source,
