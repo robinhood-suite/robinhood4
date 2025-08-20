@@ -1,4 +1,9 @@
-/* SPDX-License-Identifer: LGPL-3.0-or-later */
+/* This file is part of Robinhood 4
+ * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
+ *                    alternatives
+ *
+ * SPDX-License-Identifer: LGPL-3.0-or-later
+ */
 
 #ifndef DEDUPLICATOR_H
 #define DEDUPLICATOR_H
