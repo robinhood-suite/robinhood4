@@ -72,12 +72,14 @@ fsevents_dep = declare_dependency(
     include_directories: includes
 )
 
+pthread = dependency('threads')
+
 executable(
     'rbh-fsevents',
     sources: 'rbh-fsevents.c',
     include_directories: includes,
     link_with: fsevents_lib,
-    dependencies: [librobinhood_dep, miniyaml, liblustre],
+    dependencies: [librobinhood_dep, miniyaml, liblustre, pthread],
     install: true,
     c_args: ['-DHAVE_CONFIG_H'] + extra_args,
 )

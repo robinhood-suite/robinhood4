@@ -675,7 +675,7 @@ enrich(struct enricher *enricher, const struct rbh_fsevent *original)
 }
 
 
-static struct rbh_id *last_id = NULL;
+static __thread struct rbh_id *last_id = NULL;
 
 static const void *
 posix_enricher_iter_next(void *iterator)
@@ -729,6 +729,12 @@ posix_enricher_iter_destroy(void *iterator)
     struct enricher *enricher = iterator;
 
     rbh_iter_destroy(enricher->fsevents);
+
+    if (xattrs_values) {
+        rbh_sstack_destroy(xattrs_values);
+        xattrs_values = NULL;
+    }
+
     free(enricher->extension_enrichers);
     free(enricher->symlink);
     free(enricher->pairs);
