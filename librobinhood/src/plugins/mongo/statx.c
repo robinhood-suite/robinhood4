@@ -21,37 +21,37 @@ static bool
 bson_append_statx_attributes(bson_t *bson, const char *key, size_t key_length,
                              uint64_t mask, uint64_t attributes)
 {
-    bson_t document = *bson;
+    bson_t *document = bson;
 
     (void) key;
     (void) key_length;
 
     return (mask & RBH_STATX_ATTR_COMPRESSED ?
-                BSON_APPEND_BOOL(&document, attr2str(RBH_STATX_ATTR_COMPRESSED),
+                BSON_APPEND_BOOL(document, attr2str(RBH_STATX_ATTR_COMPRESSED),
                                  attributes & RBH_STATX_ATTR_COMPRESSED) : true)
         && (mask & RBH_STATX_ATTR_IMMUTABLE ?
-                BSON_APPEND_BOOL(&document, attr2str(RBH_STATX_ATTR_IMMUTABLE),
+                BSON_APPEND_BOOL(document, attr2str(RBH_STATX_ATTR_IMMUTABLE),
                                  attributes & RBH_STATX_ATTR_IMMUTABLE) : true)
         && (mask & RBH_STATX_ATTR_APPEND ?
-                BSON_APPEND_BOOL(&document, attr2str(RBH_STATX_ATTR_APPEND),
+                BSON_APPEND_BOOL(document, attr2str(RBH_STATX_ATTR_APPEND),
                                  attributes & RBH_STATX_ATTR_APPEND) : true)
         && (mask & RBH_STATX_ATTR_NODUMP ?
-                BSON_APPEND_BOOL(&document, attr2str(RBH_STATX_ATTR_NODUMP),
+                BSON_APPEND_BOOL(document, attr2str(RBH_STATX_ATTR_NODUMP),
                                  attributes & RBH_STATX_ATTR_NODUMP) : true)
         && (mask & RBH_STATX_ATTR_ENCRYPTED ?
-                BSON_APPEND_BOOL(&document, attr2str(RBH_STATX_ATTR_ENCRYPTED),
+                BSON_APPEND_BOOL(document, attr2str(RBH_STATX_ATTR_ENCRYPTED),
                                  attributes & RBH_STATX_ATTR_ENCRYPTED) : true)
         && (mask & RBH_STATX_ATTR_AUTOMOUNT ?
-                BSON_APPEND_BOOL(&document, attr2str(RBH_STATX_ATTR_AUTOMOUNT),
+                BSON_APPEND_BOOL(document, attr2str(RBH_STATX_ATTR_AUTOMOUNT),
                                  attributes & RBH_STATX_ATTR_AUTOMOUNT) : true)
         && (mask & RBH_STATX_ATTR_MOUNT_ROOT ?
-                BSON_APPEND_BOOL(&document, attr2str(RBH_STATX_ATTR_MOUNT_ROOT),
+                BSON_APPEND_BOOL(document, attr2str(RBH_STATX_ATTR_MOUNT_ROOT),
                                  attributes & RBH_STATX_ATTR_MOUNT_ROOT) : true)
         && (mask & RBH_STATX_ATTR_VERITY ?
-                BSON_APPEND_BOOL(&document, attr2str(RBH_STATX_ATTR_VERITY),
+                BSON_APPEND_BOOL(document, attr2str(RBH_STATX_ATTR_VERITY),
                                  attributes & RBH_STATX_ATTR_VERITY) : true)
         && (mask & RBH_STATX_ATTR_DAX ?
-                BSON_APPEND_BOOL(&document, attr2str(RBH_STATX_ATTR_DAX),
+                BSON_APPEND_BOOL(document, attr2str(RBH_STATX_ATTR_DAX),
                                  attributes & RBH_STATX_ATTR_DAX) : true);
 }
 
