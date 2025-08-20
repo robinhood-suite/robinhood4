@@ -496,15 +496,22 @@ xattrs_get_magic_and_gen(const char *lov_buf,
 static void *
 get_lov_user_md(int fd)
 {
-    char tmp[XATTR_SIZE_MAX] = {0};
     struct lov_user_md *lum;
     int rc = 0;
+    char *tmp;
 
+    tmp = malloc(XATTR_SIZE_MAX * sizeof(*tmp));
+    if (tmp == NULL)
+        return NULL;
+
+    memset(tmp, 0, XATTR_SIZE_MAX);
     lum = (struct lov_user_md *)tmp;
 
     rc = ioctl(fd, LL_IOC_LOV_GETSTRIPE, (void *)lum);
-    if (rc)
+    if (rc) {
+        free(tmp);
         return NULL;
+    }
 
     return (void *) lum;
 }
@@ -598,8 +605,10 @@ xattrs_get_layout(int fd, struct rbh_value_pair *pairs, int available_pairs)
         return (S_ISDIR(mode) && errno == ENODATA) ? 0 : -1;
 
     layout = get_data_striping((void *) lum, S_ISDIR(mode));
-    if (layout == NULL)
+    if (layout == NULL) {
+        free(lum);
         return -1;
+    }
 
     rc = llapi_layout_flags_get(layout, &flags);
     if (rc)
@@ -684,6 +693,7 @@ free_data:
 err:
     save_errno = save_errno ? : errno;
     llapi_layout_free(layout);
+    free(lum);
     errno = save_errno;
     return rc ? rc : subcount;
 }

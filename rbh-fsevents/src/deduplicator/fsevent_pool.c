@@ -122,6 +122,9 @@ rbh_fsevent_pool_destroy(struct rbh_fsevent_pool *pool)
     rbh_list_foreach(&pool->events, fsevent, link)
         rbh_sstack_destroy(fsevent->copy_data);
 
+    rbh_list_foreach(&pool->free_fsevents, fsevent, link)
+        rbh_sstack_destroy(fsevent->copy_data);
+
     rbh_list_foreach(&pool->ids, id, link) {
         fsevent = (void *)rbh_hashmap_get(pool->pool, id->id);
         if (fsevent)
@@ -649,6 +652,7 @@ dedup_unlink_event(struct rbh_fsevent_pool *pool, struct rbh_list_node *events,
 {
     struct rbh_fsevent_node *link_fsevent = NULL;
     struct rbh_fsevent_node *node;
+    struct rbh_id_node *id_node;
 
     rbh_list_foreach(events, node, link) {
         if (node->fsevent.type == RBH_FET_LINK &&
@@ -663,8 +667,25 @@ dedup_unlink_event(struct rbh_fsevent_pool *pool, struct rbh_list_node *events,
 
     rbh_list_del(&link_fsevent->link);
 
-    if (rbh_list_empty(events))
-        remove_event_list(pool, &event->id);
+    /* If the fsevent list is not empty, we need pop the fsevent list from the
+     * hashmap and id list because the id used as key for the hashmap and
+     * node for the id list is from link_fsevent. So, we pop it and put it
+     * again with the next fsevent to be able to free the memory associated
+     * with link_fsevent.
+     */
+    remove_event_list(pool, &event->id);
+    if (!rbh_list_empty(events)) {
+        node = rbh_list_first(events, struct rbh_fsevent_node, link);
+        rbh_hashmap_set(pool->pool, &node->fsevent.id, events);
+        pool->count++;
+
+        id_node = id_node_alloc(pool);
+        id_node->id = &node->fsevent.id;
+        rbh_list_add_tail(&pool->ids, &id_node->link);
+
+        /* Free the memory associated with link_fsevent */
+        fsevent_node_free(pool, link_fsevent);
+    }
 
     return false;
 }
@@ -675,16 +696,23 @@ dedup_delete_event(struct rbh_fsevent_pool *pool, struct rbh_list_node *events,
 {
     struct rbh_fsevent_node *elem, *tmp;
     bool insert_delete = true;
+    struct rbh_list_node del;
+
+    rbh_list_init(&del);
 
     rbh_list_foreach_safe(events, elem, tmp, link) {
         if (elem->fsevent.type == RBH_FET_LINK)
             insert_delete = false;
 
         rbh_list_del(&elem->link);
+        rbh_list_add(&del, &elem->link);
     }
 
     if (!insert_delete) {
         remove_event_list(pool, &event->id);
+        rbh_list_foreach_safe(&del, elem, tmp, link) {
+            fsevent_node_free(pool, elem);
+        }
 
         return false;
     }

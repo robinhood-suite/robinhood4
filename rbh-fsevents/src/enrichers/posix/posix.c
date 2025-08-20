@@ -724,6 +724,7 @@ posix_enricher_iter_destroy(void *iterator)
     struct enricher *enricher = iterator;
 
     rbh_iter_destroy(enricher->fsevents);
+    free(enricher->extension_enrichers);
     free(enricher->symlink);
     free(enricher->pairs);
     free(enricher);
@@ -959,8 +960,10 @@ posix_enrich_iter_builder_get_source_backends(void *_builder)
         source_backends_sstack = rbh_sstack_new(
             MIN_VALUES_SSTACK_ALLOC * (sizeof(struct rbh_value_map *))
         );
-        if (!source_backends_sstack)
+        if (!source_backends_sstack) {
+            free(enricher.extension_enrichers);
             return NULL;
+        }
     }
 
     backends = RBH_SSTACK_PUSH(source_backends_sstack, NULL,
@@ -993,6 +996,8 @@ posix_enrich_iter_builder_get_source_backends(void *_builder)
     map_value->pairs = pair;
     map_value->count = 1;
 
+    free(enricher.extension_enrichers);
+
     return map_value;
 }
 
@@ -1004,6 +1009,7 @@ posix_enrich_iter_builder_destroy(void *_builder)
     rbh_backend_destroy(builder->backend);
     close(builder->mount_fd);
     free((char *)builder->mount_path);
+    free((char *)builder->type);
     free(builder);
 }
 
