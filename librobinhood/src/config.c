@@ -11,6 +11,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <sysexits.h>
+#include <pthread.h>
 
 #include "robinhood/config.h"
 #include "robinhood/serialization.h"
@@ -22,6 +23,7 @@ struct rbh_config {
     bool parser_initialized;
 };
 
+static pthread_mutex_t config_lock = PTHREAD_MUTEX_INITIALIZER;
 static struct rbh_config *config;
 
 /**
@@ -382,10 +384,12 @@ rbh_config_find(const char *key, struct rbh_value *value,
     if (config == NULL)
         return KPR_NOT_FOUND;
 
+    pthread_mutex_lock(&config_lock);
     rc = find_in_config(key, value);
     config_reset();
     if (rc == KPR_ERROR)
         return rc;
+    pthread_mutex_unlock(&config_lock);
 
     if (rc == KPR_FOUND) {
         if (value->type == expected_type)
