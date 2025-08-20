@@ -417,6 +417,12 @@ rbh_config_get()
     return config;
 }
 
+char *
+rbh_config_get_path()
+{
+    return config->config_file;
+}
+
 void
 rbh_config_load(struct rbh_config *new_config)
 {
