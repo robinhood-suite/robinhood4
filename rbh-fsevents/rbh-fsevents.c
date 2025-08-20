@@ -373,6 +373,7 @@ struct consumer_info {
     pthread_mutex_t mutex_list;
     pthread_cond_t signal_list;
     struct sink *sink;
+    int id;
 };
 
 /* Consumer loop */
@@ -382,6 +383,9 @@ consumer_thread(void *arg) {
     struct rbh_node_iterator *node;
     struct timespec start, end;
     int rc;
+
+    if (verbose)
+        printf("Starting consumer thread: %d\n", cinfo->id);
 
     while (true) {
         pthread_mutex_lock(&cinfo->mutex_list);
@@ -420,6 +424,9 @@ consumer_thread(void *arg) {
         rbh_iter_destroy(node->enricher);
         free(node);
     }
+
+    if (verbose)
+        printf("Ending consumer thread: %d\n", cinfo->id);
 
     switch (errno) {
     case 0:
@@ -475,6 +482,7 @@ setup_producer_consumers(struct rbh_mut_iterator **deduplicator,
         pthread_mutex_init(&cinfo->mutex_list, NULL);
         pthread_cond_init(&cinfo->signal_list, NULL);
         cinfo->sink = sink[i];
+        cinfo->id = i;
 
         cinfo->list = init_consumer_list();
         if (cinfo->list == NULL)
