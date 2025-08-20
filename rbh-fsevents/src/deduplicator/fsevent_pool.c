@@ -1,3 +1,10 @@
+/* This file is part of Robinhood 4
+ * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
+ *                    alternatives
+ *
+ * SPDX-License-Identifer: LGPL-3.0-or-later
+ */
+
 #include "fsevent_pool.h"
 #include "hash.h"
 #include "rbh_fsevent_utils.h"
