@@ -864,10 +864,55 @@ rbh_fsevent_pool_push(struct rbh_fsevent_pool *pool,
     return POOL_INSERT_OK;
 }
 
+static struct rbh_list_node*
+events_list_copy(struct rbh_list_node *events)
+{
+    struct rbh_list_node *events_copy;
+    struct rbh_fsevent_node *node;
+
+    events_copy = malloc(sizeof(struct rbh_list_node));
+    if (events_copy == NULL)
+        return NULL;
+
+    rbh_list_init(events_copy);
+
+    rbh_list_foreach(events, node, link) {
+        struct rbh_fsevent_node *node_copy;
+
+        node_copy = malloc(sizeof(struct rbh_fsevent_node));
+        if (node_copy == NULL)
+            return NULL;
+
+        node_copy->copy_data = rbh_sstack_new(1 << 10);
+        if (node_copy->copy_data == NULL)
+            return NULL;
+
+        rbh_fsevent_deep_copy(&node_copy->fsevent, &node->fsevent,
+                              node_copy->copy_data);
+        rbh_list_add_tail(events_copy, &node_copy->link);
+    }
+
+    return events_copy;
+}
+
+static void
+free_events_list(struct rbh_list_node *list)
+{
+    struct rbh_fsevent_node *elem, *tmp;
+
+    rbh_list_foreach_safe(list, elem, tmp, link) {
+        rbh_sstack_destroy(elem->copy_data);
+        free(elem);
+    }
+
+    free(list);
+}
+
 struct rbh_iterator *
 rbh_fsevent_pool_flush(struct rbh_fsevent_pool *pool)
 {
     struct rbh_fsevent_node *elem, *tmp;
+    struct rbh_list_node *events_copy;
 
     rbh_list_foreach_safe(&pool->events, elem, tmp, link) {
         fsevent_node_free(pool, elem);
@@ -895,6 +940,10 @@ rbh_fsevent_pool_flush(struct rbh_fsevent_pool *pool)
 
     pool->need_to_flush = false;
 
-    return rbh_iter_list(&pool->events,
-                         offsetof(struct rbh_fsevent_node, link), NULL);
+    events_copy = events_list_copy(&pool->events);
+    if (events_copy == NULL)
+        return NULL;
+
+    return rbh_iter_list(events_copy, offsetof(struct rbh_fsevent_node, link),
+                         free_events_list);
 }
