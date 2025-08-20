@@ -122,6 +122,9 @@ rbh_fsevent_pool_destroy(struct rbh_fsevent_pool *pool)
     rbh_list_foreach(&pool->events, fsevent, link)
         rbh_sstack_destroy(fsevent->copy_data);
 
+    rbh_list_foreach(&pool->free_fsevents, fsevent, link)
+        rbh_sstack_destroy(fsevent->copy_data);
+
     rbh_list_foreach(&pool->ids, id, link) {
         fsevent = (void *)rbh_hashmap_get(pool->pool, id->id);
         if (fsevent)

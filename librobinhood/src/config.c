@@ -322,10 +322,13 @@ next_line:
         }
 
         rc = _rbh_config_find(NULL, value);
-        if (rc == KPR_NOT_FOUND || rc == KPR_ERROR)
+        if (rc == KPR_NOT_FOUND || rc == KPR_ERROR) {
+            yaml_event_delete(&event);
             return rc;
+        }
 
         key_found = true;
+        yaml_event_delete(&event);
 
         goto next_line;
     }
