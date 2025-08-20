@@ -13,6 +13,7 @@
 #include <stdlib.h>
 
 #include <robinhood/itertools.h>
+#include <robinhood/fsevent.h>
 #include <robinhood/ring.h>
 
 #include "deduplicator.h"
@@ -96,13 +97,18 @@ static void *
 no_dedup_iter_next(void *iterator)
 {
     struct deduplicator *deduplicator = iterator;
+    const struct rbh_fsevent *fsevent_copy;
     const struct rbh_fsevent *fsevent;
 
     fsevent = rbh_iter_next(&deduplicator->source->fsevents);
     if (fsevent == NULL)
         return NULL;
 
-    return rbh_iter_array(fsevent, sizeof(struct rbh_fsevent), 1, NULL);
+    fsevent_copy = rbh_fsevent_clone(fsevent);
+    if (fsevent_copy == NULL)
+        return NULL;
+
+    return rbh_iter_array(fsevent_copy, sizeof(struct rbh_fsevent), 1, free);
 }
 
 static const struct rbh_mut_iterator_operations NO_DEDUP_ITER_OPS = {
