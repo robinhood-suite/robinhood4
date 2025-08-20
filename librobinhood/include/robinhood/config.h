@@ -78,6 +78,14 @@ struct rbh_config *
 rbh_config_get();
 
 /**
+ * Return the local config file path.
+ *
+ * @return              the local config file path
+ */
+char *
+rbh_config_get_path();
+
+/**
  * Load a given config as the local one.
  *
  * @param config        the config to load
