@@ -13,18 +13,17 @@ test_dir=$(dirname $(readlink -e $0))
 ################################################################################
 #                                    TESTS                                     #
 ################################################################################
-acceptance_workers()
-{
-    local dir1="test_dir1"
+setup_files() {
+    export dir1="test_dir1"
     local dir2="test_dir2"
-    local file1="test_file1"
+    export file1="test_file1"
     local file2="test_file2"
     local file3="test_file3"
     local file4="test_file4"
     local file5="test_file5"
     local file6="test_file6"
     local file7="test_file7"
-    local file8="test_file8"
+    export file8="test_file8"
     local nod1="test_nod1"
     local nod2="test_nod2"
 
@@ -52,6 +51,11 @@ acceptance_workers()
     lfs mirror resync $file7
 
     touch $file8
+}
+
+acceptance_workers()
+{
+    setup_files
 
     rbh_fsevents --nb-workers 3 -b 5 --enrich rbh:lustre:"$LUSTRE_DIR" \
         src:lustre:"$LUSTRE_MDT"?ack-user=$userid "rbh:$db:$testdb"
@@ -82,11 +86,44 @@ acceptance_workers()
     fi
 }
 
+acceptance_workers_no_dedup()
+{
+    setup_files
+
+    rbh_fsevents --nb-workers 3 -b 0 --enrich rbh:lustre:"$LUSTRE_DIR" \
+        src:lustre:"$LUSTRE_MDT"?ack-user=$userid "rbh:$db:$testdb"
+
+    for entry in $(find *); do
+        verify_statx $entry
+        verify_lustre $entry
+    done
+
+    clear_changelogs "$LUSTRE_MDT" "$userid"
+
+    rm -rf $dir1
+    # This entry should stay in the database even after a rm since it has valid
+    # copy archived
+    rm $file1
+    rm $file8
+
+    rbh_fsevents --nb-workers 3 -b 0 --enrich rbh:lustre:"$LUSTRE_DIR" \
+        src:lustre:"$LUSTRE_MDT"?ack-user=$userid "rbh:$db:$testdb"
+
+    local entries=$(count_documents)
+    local count=$(find . | wc -l)
+    # +1 for $file1 which is still in the DB
+    count=$((count + 1))
+    if [[ $entries -ne $count ]]; then
+        error "There should be only $count entries in the database, " \
+              "found $entries"
+    fi
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
-declare -a tests=(acceptance_workers)
+declare -a tests=(acceptance_workers acceptance_workers_no_dedup)
 
 LUSTRE_DIR=/mnt/lustre/
 cd "$LUSTRE_DIR"
