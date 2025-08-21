@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d1b12f4c_d9eb0720",
+        "filename": "rbh-policy/rbhpolicy/config/utils.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-08-21T06:42:20Z",
+      "side": 1,
+      "message": "sugest: options",
+      "range": {
+        "startLine": 173,
+        "startChar": 4,
+        "endLine": 173,
+        "endChar": 15
+      },
+      "revId": "69df377dfbdaa4ee5df0d20c2db84d63ba6fb808",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
