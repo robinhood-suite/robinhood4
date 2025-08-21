@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "45749414_4d1c5f5d",
+        "filename": "rbh-policy/tests/test_models_conditions.py",
+        "patchSetId": 12
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-08-21T06:49:33Z",
+      "side": 1,
+      "message": "major: You need to delete the file after the test",
+      "range": {
+        "startLine": 59,
+        "startChar": 12,
+        "endLine": 60,
+        "endChar": 52
+      },
+      "revId": "28c7f0d294f2bce0188c02a5969034942647e72b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "03196db3_cdf76b8a",
+        "filename": "rbh-policy/tests/test_models_conditions.py",
+        "patchSetId": 12
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-08-21T06:49:33Z",
+      "side": 1,
+      "message": "sugest: add a check with `rbh_filter_validate`",
+      "revId": "28c7f0d294f2bce0188c02a5969034942647e72b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "251c7e89_01b08d99",
+        "filename": "rbh-policy/tests/test_models_conditions.py",
+        "patchSetId": 12
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-08-21T06:49:33Z",
+      "side": 1,
+      "message": "sugest: idem add a check with `rbh_filter_validate`",
+      "revId": "28c7f0d294f2bce0188c02a5969034942647e72b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
