@@ -24,6 +24,7 @@
 struct deduplicator {
     struct rbh_mut_iterator batches;
     struct rbh_fsevent_pool *pool;
+    struct rbh_list_node *nodedup_queue;
     struct source *source;
     struct rbh_hashmap *pool_in_process;
     pthread_mutex_t *pool_mutex;
@@ -104,38 +105,97 @@ static const struct rbh_mut_iterator_operations DEDUPLICATOR_ITER_OPS = {
     .destroy = deduplicator_iter_destroy,
 };
 
+struct no_dedup_node {
+    struct rbh_fsevent *fsevent;
+    struct rbh_list_node link;
+};
+
 static void *
 no_dedup_iter_next(void *iterator)
 {
     struct deduplicator *deduplicator = iterator;
-    const struct rbh_fsevent *fsevent_copy;
-    const struct rbh_fsevent *fsevent;
+    struct rbh_fsevent *fsevent = NULL;
+    struct no_dedup_node *node;
+    bool in_process;
     int rc;
 
-    fsevent = rbh_iter_next(&deduplicator->source->fsevents);
-    if (fsevent == NULL)
-        return NULL;
+    // Check if an fsevent can be dequeued
+    struct no_dedup_node *elem, *tmp;
+    rbh_list_foreach_safe(deduplicator->nodedup_queue, elem, tmp, link) {
+        pthread_mutex_lock(deduplicator->pool_mutex);
+        in_process = rbh_hashmap_contains(deduplicator->pool_in_process,
+                                          &elem->fsevent->id);
+        if (in_process) {
+            pthread_mutex_unlock(deduplicator->pool_mutex);
+            continue;
+        }
 
-    fsevent_copy = rbh_fsevent_clone(fsevent);
-    if (fsevent_copy == NULL)
-        return NULL;
+        fsevent = elem->fsevent;
+        rbh_list_del(&elem->link);
+        free(elem);
+        pthread_mutex_unlock(deduplicator->pool_mutex);
+        break;
+    }
+
+    // No fsevent has been dequeued, take a new one
+    if (fsevent == NULL) {
+next:
+        fsevent = (struct rbh_fsevent *)
+                   rbh_iter_next(&deduplicator->source->fsevents);
+        if (fsevent == NULL) {
+            if (!rbh_list_empty(deduplicator->nodedup_queue))
+                errno = EAGAIN;
+            else
+                errno = ENODATA;
+            return NULL;
+        }
+
+        fsevent = rbh_fsevent_clone(fsevent);
+        if (fsevent == NULL)
+            return NULL;
+    }
 
     while (*deduplicator->avail_batches == 0)
         continue;
 
     pthread_mutex_lock(deduplicator->pool_mutex);
-    rc = rbh_hashmap_set(deduplicator->pool_in_process, &fsevent_copy->id,
-                         NULL);
+    in_process = rbh_hashmap_contains(deduplicator->pool_in_process,
+                                      &fsevent->id);
+    // If already in enrichment, store it to flush it later
+    if (in_process) {
+        node = malloc(sizeof(*node));
+        if (node == NULL) {
+            free(fsevent);
+            pthread_mutex_unlock(deduplicator->pool_mutex);
+            return NULL;
+        }
+
+        node->fsevent = fsevent;
+        rbh_list_add_tail(deduplicator->nodedup_queue, &node->link);
+        pthread_mutex_unlock(deduplicator->pool_mutex);
+        goto next;
+    }
+
+    rc = rbh_hashmap_set(deduplicator->pool_in_process, &fsevent->id, NULL);
     pthread_mutex_unlock(deduplicator->pool_mutex);
     if (rc)
         return NULL;
 
-    return rbh_iter_array(fsevent_copy, sizeof(struct rbh_fsevent), 1, free);
+    return rbh_iter_array(fsevent, sizeof(struct rbh_fsevent), 1, free);
+}
+
+static void
+no_dedup_iter_destroy(void *iterator)
+{
+    struct deduplicator *deduplicator = iterator;
+
+    free(deduplicator->nodedup_queue);
+    free(deduplicator);
 }
 
 static const struct rbh_mut_iterator_operations NO_DEDUP_ITER_OPS = {
     .next = no_dedup_iter_next,
-    .destroy = free,
+    .destroy = no_dedup_iter_destroy,
 };
 
 static const struct rbh_mut_iterator DEDUPLICATOR_ITERATOR = {
@@ -164,6 +224,12 @@ deduplicator_new(size_t batch_size, struct source *source,
 
     if (batch_size == 0) {
         deduplicator->batches = NO_DEDUP_ITERATOR;
+        deduplicator->nodedup_queue = malloc(sizeof(struct rbh_list_node));
+        if (deduplicator->nodedup_queue == NULL) {
+            free(deduplicator);
+            return NULL;
+        }
+        rbh_list_init(deduplicator->nodedup_queue);
     } else {
         deduplicator->batches = DEDUPLICATOR_ITERATOR;
         deduplicator->pool = rbh_fsevent_pool_new(batch_size, source,

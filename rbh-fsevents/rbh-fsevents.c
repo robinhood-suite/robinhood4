@@ -537,8 +537,11 @@ feed(struct sink **sink, struct source *source,
         struct rbh_iterator *enricher;
 
         fsevents = rbh_mut_iter_next(deduplicator);
-        if (fsevents == NULL)
+        if (fsevents == NULL) {
+            if (errno == EAGAIN)
+                continue;
             break;
+        }
 
         if (builder != NULL)
             enricher = build_enrich_iter(builder, fsevents, skip_error);
@@ -759,10 +762,6 @@ main(int argc, char *argv[])
         error(EX_USAGE, 0, "not enough arguments");
     if (argc - optind > 2)
         error(EX_USAGE, 0, "too many arguments");
-
-    // Temporary check until the no-dedup works with multiple workers
-    if (dedup_opts.batch_size == 0 && nb_workers > 1)
-        error(EX_USAGE, 0, "cannot use multiple workers without dedup");
 
     if (dump_file && strcmp(argv[optind + 1], dump_file) == 0)
         error(EX_USAGE, EINVAL,
