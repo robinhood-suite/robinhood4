@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f2cc83dd_b1fb220b",
+        "filename": "rbh-fsevents/src/sources/lustre.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 421,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-08-21T06:56:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8eacb2f6_8e909114",
+      "range": {
+        "startLine": 421,
+        "startChar": 67,
+        "endLine": 421,
+        "endChar": 71
+      },
+      "revId": "a7f0ad5b27209170df3afc5fcb3ff3d9539018b9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "977a2d68_9a3f44a9",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-08-18T09:47:34Z",
       "side": 1,
       "message": "nit: `enrich_values`",
+      "range": {
+        "startLine": 425,
+        "startChar": 11,
+        "endLine": 425,
+        "endChar": 28
+      },
+      "revId": "a7f0ad5b27209170df3afc5fcb3ff3d9539018b9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "750f5192_a4d32afd",
+        "filename": "rbh-fsevents/src/sources/lustre.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 425,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-08-21T06:56:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "977a2d68_9a3f44a9",
       "range": {
         "startLine": 425,
         "startChar": 11,
