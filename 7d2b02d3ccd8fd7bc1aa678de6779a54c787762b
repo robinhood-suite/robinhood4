@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "83cf2930_dc27f8e7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-08-21T11:48:18Z",
+      "side": 1,
+      "message": "Ok with the patch.\n\nNot sure one will expect this behavior with a `verbose` option though.",
+      "revId": "7d2b02d3ccd8fd7bc1aa678de6779a54c787762b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
