@@ -22,6 +22,30 @@
       },
       "revId": "c255fb58c33653321af57ae29fb091b156a59140",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b77c2929_cb5fc9ef",
+        "filename": "rbh-find/rbh-find.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-08-22T08:50:08Z",
+      "side": 1,
+      "message": "Maybe adding a second command line?\n\n```\n%s [options] source [predicates] [actions]\n%s [--alias] source\n```",
+      "parentUuid": "9ea24ed5_807c46e4",
+      "range": {
+        "startLine": 55,
+        "startChar": 8,
+        "endLine": 57,
+        "endChar": 22
+      },
+      "revId": "c255fb58c33653321af57ae29fb091b156a59140",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
