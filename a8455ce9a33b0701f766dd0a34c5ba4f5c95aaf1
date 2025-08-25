@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "57f3c337_49843d38",
+        "filename": "rbh-policy/rbhpolicy/config/config_loader.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-08-25T10:59:46Z",
+      "side": 1,
+      "message": "Well you do have lines over 80 characters in `rbh-policy.py`",
+      "parentUuid": "a4ff1aed_36d58aa7",
+      "range": {
+        "startLine": 41,
+        "startChar": 12,
+        "endLine": 41,
+        "endChar": 23
+      },
+      "revId": "a8455ce9a33b0701f766dd0a34c5ba4f5c95aaf1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "54967021_34813fbc",
         "filename": "rbh-policy/rbhpolicy/config/config_loader.py",
         "patchSetId": 4
@@ -132,6 +156,30 @@
       "side": 1,
       "message": "Each call to exec_module will load the file into a separate module, whereas with exec I can execute the code in the same module. It\u0027s like concatenating all the .py files into one.\nI still use exec_module when possible because it\u0027s more secure than exec and in line with python convention.",
       "parentUuid": "39e93642_bb522e76",
+      "range": {
+        "startLine": 69,
+        "startChar": 16,
+        "endLine": 69,
+        "endChar": 20
+      },
+      "revId": "a8455ce9a33b0701f766dd0a34c5ba4f5c95aaf1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "25e4ed76_49ed6769",
+        "filename": "rbh-policy/rbhpolicy/config/config_loader.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-08-25T10:59:46Z",
+      "side": 1,
+      "message": "Can\u0027t you use `importlib` to import the file as a module?",
+      "parentUuid": "f69db420_0e75487e",
       "range": {
         "startLine": 69,
         "startChar": 16,
