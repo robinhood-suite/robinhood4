@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "766e25b4_ef59f9c6",
+        "filename": "rbh-policy/tests/test_config.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-08-25T11:12:09Z",
+      "side": 1,
+      "message": "suggest:\n\n```\nfrom importlib import import_module\n\n...\n\nself.config_loader \u003d import_module(\u0027rbhpolicy.config.config_loader\u0027)\n```",
+      "range": {
+        "startLine": 23,
+        "startChar": 8,
+        "endLine": 24,
+        "endChar": 42
+      },
+      "revId": "f9f01ce0f5f724e29345e549e2469294d90ddb55",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
