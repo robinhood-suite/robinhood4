@@ -26,6 +26,52 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "855b4f8a_986ef285",
+        "filename": "rbh-policy/tests/test_cpython.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-08-26T09:33:22Z",
+      "side": 1,
+      "message": "comment: not fan of importing the whole module after importing some parts of it..",
+      "range": {
+        "startLine": 40,
+        "startChar": 0,
+        "endLine": 40,
+        "endChar": 30
+      },
+      "revId": "7501ca8de479167f5a360843b8ed5d3ad66218c6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3ef10efe_a3e36b3c",
+        "filename": "rbh-policy/tests/test_cpython.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-08-26T09:33:22Z",
+      "side": 1,
+      "message": "suggest: maybe adding a function in `rbhpolicy.config.filter` to manipulate the `backend` variable, instead of directly setting it",
+      "range": {
+        "startLine": 40,
+        "startChar": 0,
+        "endLine": 41,
+        "endChar": 51
+      },
+      "revId": "7501ca8de479167f5a360843b8ed5d3ad66218c6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4ead5064_aebde3a9",
         "filename": "rbh-policy/tests/test_cpython.py",
         "patchSetId": 6
