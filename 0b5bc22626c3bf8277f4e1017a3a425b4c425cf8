@@ -3,6 +3,92 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "009ef391_7cd45080",
+        "filename": "rbh-policy/POC/config.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-08-26T08:39:33Z",
+      "side": 1,
+      "message": "style: name the directory `poc`, lowercased",
+      "revId": "0b5bc22626c3bf8277f4e1017a3a425b4c425cf8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "78574c1b_ab545e65",
+        "filename": "rbh-policy/POC/config.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-08-26T08:39:33Z",
+      "side": 1,
+      "message": "comment: the size is in bytes? the time in seconds?\n\nEven if it is for a POC, kind of strange to see files being considered large if their size is more than 50 bytes. I suppose we will have a prefix for those.",
+      "range": {
+        "startLine": 6,
+        "startChar": 4,
+        "endLine": 6,
+        "endChar": 47
+      },
+      "revId": "0b5bc22626c3bf8277f4e1017a3a425b4c425cf8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f3043782_874e6297",
+        "filename": "rbh-policy/POC/policyengine.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-08-26T08:39:33Z",
+      "side": 1,
+      "message": "question: why did you implement both functions? what is the difference between them?",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 25,
+        "endChar": 72
+      },
+      "revId": "0b5bc22626c3bf8277f4e1017a3a425b4c425cf8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "90bdd64c_cd0e47ca",
+        "filename": "rbh-policy/POC/policyengine.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-08-26T08:39:33Z",
+      "side": 1,
+      "message": "major: need to be commented, this is not obvious",
+      "range": {
+        "startLine": 92,
+        "startChar": 0,
+        "endLine": 97,
+        "endChar": 13
+      },
+      "revId": "0b5bc22626c3bf8277f4e1017a3a425b4c425cf8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2ba0e6d6_d9749732",
         "filename": "rbh-policy/POC/policyengine.py",
         "patchSetId": 4
