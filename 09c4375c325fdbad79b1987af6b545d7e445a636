@@ -39,6 +39,30 @@
       },
       "revId": "09c4375c325fdbad79b1987af6b545d7e445a636",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b4a92a0b_05089a99",
+        "filename": "rbh-policy/rbhpolicy/config/filter.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-08-26T09:30:43Z",
+      "side": 1,
+      "message": "Yes, we do add macros to avoid setting directly the enumeration value. You can check the function `PyInit_const()` in `src/cli/phobos/core/const_module.c`.",
+      "parentUuid": "5995c8e1_4b5405f9",
+      "range": {
+        "startLine": 34,
+        "startChar": 0,
+        "endLine": 39,
+        "endChar": 15
+      },
+      "revId": "09c4375c325fdbad79b1987af6b545d7e445a636",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
