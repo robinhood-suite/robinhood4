@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "67a5fdb3_75f7ffad",
+        "filename": "rbh-policy/rbhpolicy/config/utils.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-08-27T08:28:51Z",
+      "side": 1,
+      "message": "comment: not sure about what the dictionaries represent here, GID and UID also do not have any units; do you want to say key_strings instead?",
+      "range": {
+        "startLine": 172,
+        "startChar": 4,
+        "endLine": 172,
+        "endChar": 22
+      },
+      "revId": "69df377dfbdaa4ee5df0d20c2db84d63ba6fb808",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d1b12f4c_d9eb0720",
         "filename": "rbh-policy/rbhpolicy/config/utils.py",
         "patchSetId": 1
