@@ -23,7 +23,9 @@ function setup_hsm() {
     ssh $CLIENT "mkdir -p /mnt/hsm"
     scp lhsmtool-posix.service $CLIENT:~/../etc/systemd/system
 
-    lctl set_param mdt.*.hsm_control=enabled
+    for mds in ${MDS[@]}; do
+        ssh $mds "lctl set_param mdt.*.hsm_control=enabled"
+    done
 
     ssh $CLIENT "systemctl daemon-reload &&" \
                 "systemctl enable lhsmtool-posix.service &&" \
@@ -31,12 +33,11 @@ function setup_hsm() {
 }
 
 function cleanup_lustre() {
-    ssh $CLIENT "umount /mnt/lustre"
     /usr/lib64/lustre/tests/llmountcleanup.sh
 }
 
 function setup_lustre() {
-    export CLIENTS=$CLIENT
+    export CLIENTS=$LUSTRE_CLIENT
     export MDSSIZE=26000000
     export MDSCOUNT=$NB_MDT
     export PDSH="pdsh -S -Rssh -w"
@@ -109,13 +110,14 @@ function drop_cache() {
     done
 
     # Drop CLIENTS cache
-    ssh $CLIENT "echo 3 > /proc/sys/vm/drop_caches"
+    for client in ${CLIENT[@]}; do
+        ssh $client "echo 3 > /proc/sys/vm/drop_caches"
+    done
 
     # Drop MONGO cache
-    if [[ $NB_SHARD -eq 0 ]]; then
-        ssh $MONGO "systemctl stop mongod && " \
-               "echo 3 > /proc/sys/vm/drop_caches && " \
-               "systemctl start mongod"
+    ssh $MONGO "echo 3 > /proc/sys/vm/drop_caches"
+    if [[ $NB_SHARD -gt 0 ]]; then
+        ssh $MONGO "./shard drop_cache $NB_SHARD ${MONGO[@]}" > /dev/null
     fi
 }
 
@@ -213,8 +215,10 @@ function setup() {
     cleanup_mongo
     setup_mongo $db
 
-    ssh $CLIENT "sed -i -e 's/localhost/$MONGO/g' \
-                 /etc/robinhood4.d/default.yaml"
+    for client in ${CLIENT[@]}; do
+        ssh $client "sed -i -e 's/localhost/$MONGO/g' \
+                     /etc/robinhood4.d/default.yaml"
+    done
 }
 
 function bench_sync() {
@@ -316,13 +320,12 @@ function _find() {
 
 function exec_fsevents() {
     local enricher=$1
+    local workers=$2
 
     for i in $(seq 0 $(($NB_MDT - 1))); do
-        echo "Number of changelog: \
-              $(ssh $CLIENT "lfs changelog ${MDT[$i]} | wc -l")"
-        ssh $CLIENT "rbh-fsevents --enrich rbh:$enricher:$ROOT" \
-                     "src:lustre:${MDT[$i]}?ack-user=${userid[$i]}" \
-                     "rbh:mongo:fsevent" &
+        ssh ${CLIENT[$i]} "rbh-fsevents --nb-workers $workers" \
+                          "--enrich rbh:$enricher:$ROOT" \
+                          "src:lustre:${MDT[$i]} rbh:mongo:fsevent" &
     done
     wait
 }
@@ -332,43 +335,36 @@ function fsevents() {
     setup_changelog
     setup_hsm
 
-    echo "With POSIX enricher"
-    for i in {1..5}; do
-        echo "Run n°$i"
-        setup_tree "-v -r $ROOT -n 6 -d 6 -m $NB_MDT --changelog $INODES" > /dev/null
-        echo "Number of inodes: $(find $ROOT | wc -l)"
-        time exec_fsevents "posix"
-        ssh $CLIENT "rbh-find rbh:mongo:fsevent -count"
-        cleanup_tree $ROOT
-        cleanup_changelog
-        mongo --quiet --host $MONGO fsevent \
-              --eval "db.dropDatabase()" > /dev/null
-        if [[ $NB_SHARD -gt 0 ]]; then
-            ssh $MONGO "./shard init fsevent" > /dev/null
-        fi
-
+    setup_tree "-v -r $ROOT -n 6 -d 6 -m $NB_MDT --changelog $INODES" > /dev/null
+    echo "Number of inodes: $(find $ROOT | wc -l)"
+    for mdt in ${MDT[@]}; do
+        echo "Number of changelog: $(ssh $CLIENT "lfs changelog $mdt | wc -l")"
     done
 
     echo "With LUSTRE enricher"
-    for i in {1..5}; do
-        echo "Run n°$i"
-        setup_tree "-v -r $ROOT -n 6 -d 6 -m $NB_MDT --changelog $INODES" > /dev/null
-        echo "Number of inodes: $(find $ROOT | wc -l)"
-        time exec_fsevents "lustre"
-        ssh $CLIENT "rbh-find rbh:mongo:fsevent -count"
-        cleanup_tree $ROOT
-        cleanup_changelog
-        mongo --quiet --host $MONGO fsevent \
-              --eval "db.dropDatabase()" > /dev/null
-        if [[ $NB_SHARD -gt 0 ]]; then
-            ssh $MONGO "./shard init fsevent" > /dev/null
-        fi
-
+    for w in 1 2 4 8 16 32 64 128; do
+        echo "$w workers"
+        for i in {1..5}; do
+            echo "Run n°$i"
+            drop_cache
+            time exec_fsevents "lustre" $w > /dev/null 2>&1
+            mongo --quiet --host $MONGO fsevent \
+                  --eval "db.entries.count()"
+            mongo --quiet --host $MONGO fsevent \
+                  --eval "db.dropDatabase()" > /dev/null
+            if [[ $NB_SHARD -gt 0 ]]; then
+                ssh $MONGO "./shard init fsevent" > /dev/null
+            fi
+        done
     done
 
-    ssh $CLIENT "sed -i -e 's/$MONGO/localhost/g' \
-                 /etc/robinhood4.d/default.yaml"
+    for client in ${CLIENT[@]}; do
+        ssh $client "sed -i -e 's/$MONGO/localhost/g' \
+                     /etc/robinhood4.d/default.yaml"
+    done
 
+    cleanup_tree $ROOT
+    cleanup_changelog
     cleanup_mongo
     cleanup_lustre
 }
@@ -409,6 +405,7 @@ function report() {
 }
 
 CLIENT="$(hostname -s)"
+LUSTRE_CLIENT=$CLIENT
 FS="posix"
 INODES=1000
 MDS="$(hostname -s)"
@@ -456,7 +453,9 @@ eval set --$opts
 while [[ $# -gt 0 ]]; do
     case "$1" in
         --client)
-            CLIENT=$2
+            LUSTRE_CLIENT="$2"
+            IFS=',' read -r -a CLIENT <<< "$2"
+            NB_CLIENT=${#CLIENT[@]}
             shift 2
             ;;
 
