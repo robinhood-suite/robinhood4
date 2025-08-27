@@ -4,10 +4,49 @@ function init_sharding() {
     # Enable sharding
     local db=$1
 
-    mongo $db --quiet --port 27017 --eval 'sh.enableSharding("'$db'");\
-        db.createCollection("entries"); \
-        sh.shardCollection("'$db'.entries", { _id: "hashed"}); \
+    mongo $db --quiet --port 27017 --eval 'sh.enableSharding("'$db'");
+        db.createCollection("entries");
+        sh.shardCollection("'$db'.entries", { _id: "hashed"});
         sh.status()'
+}
+
+function drop_cache() {
+    local nb_shard=$1
+    shift 1
+    IFS=' ' read -r -a node <<< "$@"
+
+    pid_config="$(ps x | grep "mongod --configsvr" | head -n1 | awk '{print $1}')"
+    kill -9 $pid_config
+    rm -rf /var/log/mongo-csrs.log
+
+    for i in $(seq 1 $nb_shard); do
+        local pid_shard="$(ps x | grep "mongod --shardsvr" | head -n1 | awk '{print $1}')"
+        kill -9 $pid_shard
+        rm -rf /var/log/mongo-shard$i.log
+    done
+
+    pid_mongos="$(ps x | grep "mongos" | head -n1 | awk '{print $1}')"
+    kill -9 $pid_mongos
+    rm -rf /var/log/mongos.log
+
+    sleep 1
+
+    mongod --configsvr --replSet csrs \
+           --port 27018 --dbpath /var/lib/mongo-config \
+           --bind_ip 0.0.0.0 --fork --logpath /var/log/mongo-csrs.log
+
+    local tmp=0
+    for host in ${node[@]}; do
+        for i in $(seq 1 $nb_shard); do
+            ssh $host "mongod --shardsvr --replSet shard$(($tmp + $i)) \
+                   --port $((27019 + $i)) --dbpath /var/lib/mongo-shard$i \
+                   --bind_ip 0.0.0.0 --fork --logpath /var/log/mongo-shard$i.log"
+        done
+    done
+
+    mongos --port 27017 \
+           --configdb csrs/${node[0]}:27018 \
+           --bind_ip 0.0.0.0 --fork --logpath /var/log/mongos.log
 }
 
 function setup() {
@@ -85,4 +124,8 @@ elif [[ "$1" == "clean" ]]; then
     clean "$@"
 elif [[ "$1" == "init" ]]; then
     init_sharding $2
+elif [[ "$1" == "drop_cache" ]]; then
+    nb_shard=$2
+    shift 2
+    drop_cache $nb_shard "$@"
 fi
