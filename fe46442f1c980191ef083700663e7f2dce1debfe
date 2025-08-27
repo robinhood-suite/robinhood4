@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9a157062_95db33f1",
+        "filename": "rbh-policy/rbhpolicy/config/conditions.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-08-27T08:02:24Z",
+      "side": 1,
+      "message": "minor: I think you should use the `@abstractmethod` decorator from `abc`",
+      "range": {
+        "startLine": 38,
+        "startChar": 4,
+        "endLine": 39,
+        "endChar": 74
+      },
+      "revId": "fe46442f1c980191ef083700663e7f2dce1debfe",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "182183f2_9c715c26",
+        "filename": "rbh-policy/rbhpolicy/config/conditions.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-08-27T08:02:24Z",
+      "side": 1,
+      "message": "nit: kind of strange to have a string here, but I understood why you can not have `Condition` directly\n\nInstead, depending on your python version, you can use `typing.Self` if python\u003e\u003d3.11 or `typing.TypeVar`.",
+      "range": {
+        "startLine": 41,
+        "startChar": 30,
+        "endLine": 41,
+        "endChar": 39
+      },
+      "revId": "fe46442f1c980191ef083700663e7f2dce1debfe",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3fa7b299_a12a70bb",
+        "filename": "rbh-policy/rbhpolicy/config/conditions.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-08-27T08:02:24Z",
+      "side": 1,
+      "message": "typo: logical or/and is double symbol",
+      "range": {
+        "startLine": 92,
+        "startChar": 32,
+        "endLine": 92,
+        "endChar": 33
+      },
+      "revId": "fe46442f1c980191ef083700663e7f2dce1debfe",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
