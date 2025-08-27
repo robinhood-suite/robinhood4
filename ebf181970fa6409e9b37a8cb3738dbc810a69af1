@@ -22,6 +22,52 @@
       },
       "revId": "ebf181970fa6409e9b37a8cb3738dbc810a69af1",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fd9c3bbb_ed4b7bc6",
+        "filename": "rbh-policy/rbhpolicy/config/utils.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-08-27T08:12:33Z",
+      "side": 1,
+      "message": "question: that means we must have a storage unit?",
+      "range": {
+        "startLine": 22,
+        "startChar": 29,
+        "endLine": 22,
+        "endChar": 40
+      },
+      "revId": "ebf181970fa6409e9b37a8cb3738dbc810a69af1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3c652e21_d4fb0281",
+        "filename": "rbh-policy/rbhpolicy/config/utils.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-08-27T08:12:33Z",
+      "side": 1,
+      "message": "nit: you could order/group the representations",
+      "range": {
+        "startLine": 102,
+        "startChar": 0,
+        "endLine": 107,
+        "endChar": 39
+      },
+      "revId": "ebf181970fa6409e9b37a8cb3738dbc810a69af1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
