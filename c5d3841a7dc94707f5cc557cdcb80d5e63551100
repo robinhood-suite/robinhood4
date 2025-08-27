@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b68b68cd_8fd5ae78",
+        "filename": "rbh-policy/tests/test_utils.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-08-27T08:14:57Z",
+      "side": 1,
+      "message": "comment: it depends on which coverage you want to have, but I think every possibility must be tested",
+      "revId": "c5d3841a7dc94707f5cc557cdcb80d5e63551100",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2e67c7eb_31483f95",
         "filename": "rbh-policy/tests/test_utils.py",
         "patchSetId": 6
