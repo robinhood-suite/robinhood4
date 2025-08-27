@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ab504a8d_5dcdd405",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-08-27T08:47:20Z",
+      "side": 1,
+      "message": "Except for what Gauthier pointed out, ok for me.",
+      "revId": "28c7f0d294f2bce0188c02a5969034942647e72b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "45749414_4d1c5f5d",
