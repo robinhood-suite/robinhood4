@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "92179f24_6e85d72c",
+        "filename": "rbh-fsevents/doc/adr/partial-fsevents.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-08-27T08:31:39Z",
+      "side": 1,
+      "message": "suggest: well, put 2025 directly",
+      "range": {
+        "startLine": 2,
+        "startChar": 17,
+        "endLine": 2,
+        "endChar": 21
+      },
+      "revId": "a97253783b08b7b1cd5ab87a12d61702d625ca32",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
