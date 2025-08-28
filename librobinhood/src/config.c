@@ -517,3 +517,20 @@ rbh_config_get_extended_plugin(const char *backend)
 
     return result;
 }
+
+enum key_parse_result
+rbh_config_find_backend(const char *type, const char *key,
+                        struct rbh_value *value,
+                        enum rbh_value_type expected_type)
+{
+    enum key_parse_result rc;
+    char *_key;
+
+    if (asprintf(&_key, "backends/%s/%s", type, key) == -1)
+        return KPR_ERROR;
+
+    rc = rbh_config_find(_key, value, expected_type);
+    free(_key);
+
+    return rc;
+}
