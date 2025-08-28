@@ -20,6 +20,7 @@
 #include "robinhood/config.h"
 #include "robinhood/sstack.h"
 #include "robinhood/statx.h"
+#include "s3_internals.h"
 
 #include "s3_wrapper.h"
 #include "s3_internals.h"
@@ -362,6 +363,7 @@ rbh_s3_backend_new(__attribute__((unused))
                    struct rbh_config *config,
                    bool read_only)
 {
+    const char *type = uri->backend;
     size_t host_len, port_len;
     struct s3_backend *s3;
     const char *crt_path;
@@ -430,6 +432,8 @@ rbh_s3_backend_new(__attribute__((unused))
     s3_init_api(address, user, password, crt_path, region);
     s3->iter_new = s3_iterator_new;
     s3->backend = S3_BACKEND;
+
+    rbh_backend_plugin_load_extensions(self, s3, type, config);
 
     return &s3->backend;
 }
