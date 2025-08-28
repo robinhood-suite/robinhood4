@@ -778,8 +778,7 @@ setup_enrichers(struct enricher *enricher, const char *type,
 }
 
 static void
-setup_fsevent_enrichers(struct enricher *enricher, struct rbh_config *config,
-                        const char *type)
+setup_fsevent_enrichers(struct enricher *enricher, const char *type)
 {
     struct rbh_value enrichers;
     int rc;
@@ -787,10 +786,11 @@ setup_fsevent_enrichers(struct enricher *enricher, struct rbh_config *config,
     enricher->extension_enrichers = NULL;
     enricher->n_extensions = 0;
 
-    if (!config || !type)
+    if (!type)
         return;
 
-    rc = rbh_posix_enrichers_list(config, type, &enrichers);
+    rc = rbh_config_find_backend(type, "enrichers", &enrichers,
+                                 RBH_VT_SEQUENCE);
     switch (rc) {
     case KPR_FOUND:
         setup_enrichers(enricher, type, &enrichers);
@@ -828,7 +828,7 @@ posix_iter_enrich(struct rbh_backend *backend, const char *type,
     enricher->pair_count = INITIAL_PAIR_COUNT;
     enricher->symlink = symlink;
     enricher->skip_error = skip_error;
-    setup_fsevent_enrichers(enricher, rbh_config_get(), type);
+    setup_fsevent_enrichers(enricher, type);
 
     return &enricher->iterator;
 }
@@ -933,7 +933,7 @@ posix_enrich_iter_builder_get_source_backends(void *_builder)
     struct rbh_value *backends;
     int i;
 
-    setup_fsevent_enrichers(&enricher, rbh_config_get(), builder->type);
+    setup_fsevent_enrichers(&enricher, builder->type);
 
     if (source_backends_sstack == NULL)
         source_backends_sstack = rbh_sstack_new(
