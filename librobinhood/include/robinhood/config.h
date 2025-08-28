@@ -124,4 +124,30 @@ rbh_config_get_string(const char *key, const char *default_string);
 const char *
 rbh_config_get_extended_plugin(const char *backend);
 
+/**
+ * Search iterator in the config file and return the value associated
+ *
+ * @param type  the backend
+ * @param value the value corresponding to the iterator
+ *
+ * @return               KPR_FOUND if the iterator was found,
+ *                       KPR_NOT_FOUND if the iterator wasn't found,
+ *                       KPR_ERROR if there was an error, and errno is set
+ */
+enum key_parse_result
+rbh_config_find_iterator(const char *type, struct rbh_value *value);
+
+/**
+ * Search enrichers in the config file and return the value associated
+ *
+ * @param type  the backend
+ * @param value the value corresponding to the enrichers
+ *
+ * @return               KPR_FOUND if the enrichers was found,
+ *                       KPR_NOT_FOUND if the enrichers wasn't found,
+ *                       KPR_ERROR if there was an error, and errno is set
+ */
+enum key_parse_result
+rbh_config_find_enrichers(const char *type, struct rbh_value *value);
+
 #endif

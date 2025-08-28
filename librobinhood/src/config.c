@@ -517,3 +517,57 @@ rbh_config_get_extended_plugin(const char *backend)
 
     return result;
 }
+
+static char *
+rbh_config_iterator_key(const char *type)
+{
+    char *key;
+
+    if (asprintf(&key, "backends/%s/iterator", type) == -1)
+        return NULL;
+
+    return key;
+}
+
+static char *
+rbh_config_enrichers_key(const char *type)
+{
+    char *key;
+
+    if (asprintf(&key, "backends/%s/enrichers", type) == -1)
+        return NULL;
+
+    return key;
+}
+
+enum key_parse_result
+rbh_config_find_iterator(const char *type, struct rbh_value *value)
+{
+    enum key_parse_result rc;
+    char *key;
+
+    key = rbh_config_iterator_key(type);
+    if (key == NULL)
+        return KPR_ERROR;
+
+    rc = rbh_config_find(key, value, RBH_VT_STRING);
+    free(key);
+
+    return rc;
+}
+
+enum key_parse_result
+rbh_config_find_enrichers(const char *type, struct rbh_value *value)
+{
+    enum key_parse_result rc;
+    char *key;
+
+    key = rbh_config_enrichers_key(type);
+    if (key == NULL)
+        return KPR_ERROR;
+
+    rc = rbh_config_find(key, value, RBH_VT_SEQUENCE);
+    free(key);
+
+    return rc;
+}

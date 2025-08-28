@@ -34,6 +34,7 @@ struct rbh_backend_plugin_operations {
                                const struct rbh_uri *uri,
                                struct rbh_config *config,
                                bool read_only);
+
     void (*destroy)();
 };
 
