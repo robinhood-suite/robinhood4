@@ -14,6 +14,10 @@
 
 #include <robinhood/backend.h>
 
+int
+rbh_s3_backend_load_extensions(const struct rbh_backend_plugin *self,
+                               void *backend, const char *type);
+
 char *
 get_next_object(struct s3_iterator *s3_iter);
 
