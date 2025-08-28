@@ -124,4 +124,40 @@ rbh_config_get_string(const char *key, const char *default_string);
 const char *
 rbh_config_get_extended_plugin(const char *backend);
 
+/**
+ * Construct the key in the config file to retrieve the iterator to use
+ * with a backend.
+ *
+ * @param type  the backend
+ *
+ * @return      the key to retrieve the iterator of type.
+ *              NULL on error.
+ */
+char *
+rbh_config_iterator_key(const char *type);
+
+/**
+ * Construct the key in the config file to retrieve the enrichers to use
+ * with a backend.
+ *
+ * @param type  the backend
+ *
+ * @return      the key to retrieve the enrichers of type.
+ *              NULL on error.
+ */
+char *
+rbh_config_enrichers_key(const char *type);
+
+/**
+ * Get the list of enricher for a backend
+ *
+ * @param config    the config from which retrieve the enrichers
+ * @param type      the backend from which to output the enrichers
+ * @param enrichers list of enrichers retrieved
+ *
+ */
+enum key_parse_result
+rbh_config_get_enrichers_list(struct rbh_config *config, const char *type,
+                              struct rbh_value *enrichers);
+
 #endif

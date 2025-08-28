@@ -143,3 +143,51 @@ free_symbol:
 
     return extension;
 }
+
+int
+rbh_backend_plugin_load_extensions(const struct rbh_backend_plugin *self,
+                                   void *backend, const char *type,
+                                   struct rbh_config *config)
+{
+    struct rbh_value enrichers;
+    struct rbh_value iterator;
+    enum key_parse_result rc;
+    char *key;
+
+    if (!config)
+        return 0;
+
+    key = rbh_config_iterator_key(type);
+    rc = rbh_config_find(key, &iterator, RBH_VT_STRING);
+    free(key);
+    switch (rc) {
+    case KPR_FOUND:
+        if (rbh_backend_plugin_load_iterator(self, backend, iterator.string,
+                                             type) == -1)
+            return -1;
+        break;
+    case KPR_NOT_FOUND:
+        break;
+    default:
+        rbh_backend_error_printf("failed to retrieve 'iterator' key in configuration: %s",
+                                 strerror(errno));
+        return -1;
+    }
+
+    rc = rbh_config_get_enrichers_list(config, type, &enrichers);
+    switch (rc) {
+    case KPR_FOUND:
+        if (rbh_backend_plugin_load_enrichers(self, backend, &enrichers,
+                                              type) == -1)
+            return -1;
+        break;
+    case KPR_NOT_FOUND:
+        break;
+    default:
+        rbh_backend_error_printf("failed to retrieve 'enrichers' key in configuration: %s",
+                                 strerror(errno));
+        return -1;
+    }
+
+    return 0;
+}

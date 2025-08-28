@@ -1285,12 +1285,11 @@ rbh_posix_helper(const char *type, struct rbh_config *config,
     posix->enrichers = NULL;
 
     if (type) {
-        const struct rbh_plugin plugin = {
-            .name = RBH_POSIX_BACKEND_NAME,
-            .version = RBH_POSIX_BACKEND_VERSION,
-        };
+        const struct rbh_backend_plugin *plugin;
 
-        if (load_posix_extensions(&plugin, posix, type, config) == -1)
+        plugin = rbh_backend_plugin_import(rbh_config_get_extended_plugin(type));
+        if (rbh_backend_plugin_load_extensions(plugin, (void *) posix, type,
+                                               config) == -1)
             goto err;
     }
 
@@ -1411,7 +1410,8 @@ rbh_posix_backend_new(const struct rbh_backend_plugin *self,
     if (type) {
         int count = 0;
 
-        if (load_posix_extensions(&self->plugin, posix, type, config) == -1) {
+        if (rbh_backend_plugin_load_extensions(self, posix, type,
+                                               config) == -1) {
             save_errno = errno;
             goto free_root;
         }
