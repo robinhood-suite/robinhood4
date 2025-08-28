@@ -19,6 +19,7 @@ librbh_s3 = library(
     sources: [
         's3.c',
         'plugin.c',
+        'utils.c',
     ],
     version: librbh_s3_version, # defined in include/robinhood/backends
     link_with: [librobinhood, s3_wrapper],
