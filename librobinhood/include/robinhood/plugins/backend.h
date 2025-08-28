@@ -34,6 +34,15 @@ struct rbh_backend_plugin_operations {
                                const struct rbh_uri *uri,
                                struct rbh_config *config,
                                bool read_only);
+
+    int (*load_iterator)(const struct rbh_backend_plugin *self,
+                         void *backend, const char *iterator,
+                         const char *type);
+
+    int (*load_enrichers)(const struct rbh_backend_plugin *self,
+                          void *backend, const struct rbh_value *enrichers,
+                          const char *type);
+
     void (*destroy)();
 };
 
@@ -179,5 +188,65 @@ rbh_backend_plugin_destroy(const char *name)
     if (plugin->ops->destroy)
         plugin->ops->destroy();
 }
+
+/**
+ * Load iterator for a backend from a backend plugin
+ *
+ * @param plugin    the plugin to load iterator from
+ * @param backend   the backend to load iterator in
+ * @param iterator  name of the iterator to load
+ * @param type      name of the backend in the config
+ *
+ * @return          0 on success,
+ *                  -1 on error and errno is set appropriately
+ */
+static inline int
+rbh_backend_plugin_load_iterator(const struct rbh_backend_plugin *plugin,
+                                 void *backend, const char *iterator,
+                                 const char *type)
+{
+    return plugin->ops->load_iterator(plugin, backend, iterator, type);
+}
+
+/**
+ * Load enrichers for a backend from a backend plugin
+ *
+ * @param plugin    the plugin to load enrichers from
+ * @param backend   the backend to load enrichers in
+ * @param iterator  list of enrichers to load
+ * @param type      name of the backend in the config
+ *
+ * @return          0 on success,
+ *                  -1 on error and errno is set appropriately
+ */
+static inline int
+rbh_backend_plugin_load_enrichers(const struct rbh_backend_plugin *plugin,
+                                  void *backend,
+                                  const struct rbh_value *enrichers,
+                                  const char *type)
+{
+    return plugin->ops->load_enrichers(plugin, backend, enrichers, type);
+}
+
+/**
+ * Import the backend extension \p name that extends the robinhood plugin
+ * \p super. The rbh_plugin_extension returned by this function can be embedded
+ * in a backend specific structure that will only be known by the backend and
+ * the extension itself. librobinhood will treat this pointer as a simple
+ * struct rbh_plugin_extension much like the way rbh_iterator works.
+ *
+ *
+ * @param plugin    the plugin use to extent the backend
+ * @param backend   the backend that will be extent by enrichers and iterators
+ * @param type      name of the backend in the config
+ * @param config    the config
+ *
+ * @return          0 on success,
+ *                  -1 on error and errno is set appropriately
+ */
+int
+rbh_backend_plugin_load_extensions(const struct rbh_backend_plugin *plugin,
+                                   void *backend, const char *type,
+                                   struct rbh_config *config);
 
 #endif

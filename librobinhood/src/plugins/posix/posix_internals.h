@@ -31,6 +31,16 @@ load_posix_extensions(const struct rbh_plugin *self,
                       const char *type,
                       struct rbh_config *config);
 
+int
+rbh_posix_backend_load_iterator(const struct rbh_backend_plugin *self,
+                                void *backend, const char *iterator,
+                                const char *type);
+
+int
+rbh_posix_backend_load_enrichers(const struct rbh_backend_plugin *self,
+                                 void *backend,
+                                 const struct rbh_value *enrichers,
+                                 const char *type);
 /**
  * Show POSIX and its extensions helper, detailling specific predicates and
  * directives.

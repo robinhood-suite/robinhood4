@@ -26,6 +26,8 @@ static const struct rbh_pe_common_operations POSIX_BACKEND_PLUGIN_COMMON_OPS = {
 
 static const struct rbh_backend_plugin_operations POSIX_BACKEND_PLUGIN_OPS = {
     .new = rbh_posix_backend_new,
+    .load_iterator = rbh_posix_backend_load_iterator,
+    .load_enrichers = rbh_posix_backend_load_enrichers,
 };
 
 const struct rbh_backend_plugin RBH_BACKEND_PLUGIN_SYMBOL(POSIX) = {

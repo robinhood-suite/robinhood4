@@ -793,7 +793,7 @@ setup_fsevent_enrichers(struct enricher *enricher, struct rbh_config *config,
     if (!config || !type)
         return;
 
-    rc = rbh_posix_enrichers_list(config, type, &enrichers);
+    rc = rbh_config_get_enrichers_list(config, type, &enrichers);
     switch (rc) {
     case KPR_FOUND:
         setup_enrichers(enricher, type, &enrichers);
