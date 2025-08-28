@@ -24,6 +24,18 @@
  * librobinhood to keep things modular.
  */
 
+void
+rbh_add_custom_initialize(int (*custom_initialize)(void));
+
+void
+rbh_add_custom_finalize(int (*custom_finalize)(void));
+
+void
+rbh_mpi_initialize(void);
+
+void
+rbh_mpi_finalize(void);
+
 /**
  * Atomically increment the number of MPI references.
  * Call \p init on the first increment.
