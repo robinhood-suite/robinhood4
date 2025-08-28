@@ -15,6 +15,8 @@
 #include "robinhood/plugins/backend.h"
 #include "robinhood/plugin.h"
 
+#include "s3_internals.h"
+
 static const struct rbh_backend_plugin_operations S3_BACKEND_PLUGIN_OPS = {
     .new = rbh_s3_backend_new,
     .destroy = rbh_s3_plugin_destroy,
