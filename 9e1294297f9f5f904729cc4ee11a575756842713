@@ -45,6 +45,75 @@
       },
       "revId": "9e1294297f9f5f904729cc4ee11a575756842713",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dcf97d0b_f6c221be",
+        "filename": "rbh-policy/tests/test_models_fileclass.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-08-28T09:34:16Z",
+      "side": 1,
+      "message": "style: alphabetical order",
+      "range": {
+        "startLine": 29,
+        "startChar": 0,
+        "endLine": 31,
+        "endChar": 18
+      },
+      "revId": "9e1294297f9f5f904729cc4ee11a575756842713",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7aaf82be_9799b5d2",
+        "filename": "rbh-policy/tests/test_models_fileclass.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-08-28T09:34:16Z",
+      "side": 1,
+      "message": "suggest: I think I prefer `import rbhpolicy.config.entities as entities`",
+      "range": {
+        "startLine": 34,
+        "startChar": 0,
+        "endLine": 34,
+        "endChar": 39
+      },
+      "revId": "9e1294297f9f5f904729cc4ee11a575756842713",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a8ddb0f5_04bfe6f3",
+        "filename": "rbh-policy/tests/test_models_fileclass.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-08-28T09:34:16Z",
+      "side": 1,
+      "message": "question: I suppose `globals` comes from `config.entities`?",
+      "range": {
+        "startLine": 39,
+        "startChar": 8,
+        "endLine": 39,
+        "endChar": 15
+      },
+      "revId": "9e1294297f9f5f904729cc4ee11a575756842713",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
