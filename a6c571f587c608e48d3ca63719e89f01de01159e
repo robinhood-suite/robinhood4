@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b02a5336_30f764af",
+        "filename": "librobinhood/include/robinhood/backends/meson.build",
+        "patchSetId": 8
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-08-28T14:28:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9f0c36a8_f1d4f82e",
+      "range": {
+        "startLine": 176,
+        "startChar": 0,
+        "endLine": 194,
+        "endChar": 62
+      },
+      "revId": "a6c571f587c608e48d3ca63719e89f01de01159e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e0ed87ce_a20bc06c",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-08-22T09:22:37Z",
       "side": 1,
       "message": "defect: I think computations are not correct\n\nStarts have an issue with a null remainder: 4 chunks and a size of 16 implies a null remainder and the first chunk starting at 1 (not 0).\n\nAlso, the number of managed elements is always equal to `nb_chunks * (base_chunk_size)`, which do not take into account the remainder.",
+      "range": {
+        "startLine": 99,
+        "startChar": 4,
+        "endLine": 107,
+        "endChar": 40
+      },
+      "revId": "a6c571f587c608e48d3ca63719e89f01de01159e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "861d4fb4_258b762a",
+        "filename": "librobinhood/src/plugins/s3/iterators/mpi/iterator.c",
+        "patchSetId": 8
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-08-28T14:28:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e0ed87ce_a20bc06c",
       "range": {
         "startLine": 99,
         "startChar": 4,

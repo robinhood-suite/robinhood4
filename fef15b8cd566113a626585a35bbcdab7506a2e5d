@@ -200,6 +200,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b49a8580_94042632",
+        "filename": "librobinhood/include/robinhood/backends/s3_mpi.h.in",
+        "patchSetId": 2
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-08-28T14:28:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "99f201fd_e90e97a3",
+      "range": {
+        "startLine": 46,
+        "startChar": 0,
+        "endLine": 50,
+        "endChar": 23
+      },
+      "revId": "fef15b8cd566113a626585a35bbcdab7506a2e5d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3e55edfa_4b92fe04",
@@ -213,6 +237,30 @@
       "writtenOn": "2025-07-24T14:42:16Z",
       "side": 1,
       "message": "major: this function is already defined in the POSIX plugin",
+      "range": {
+        "startLine": 17,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 1
+      },
+      "revId": "fef15b8cd566113a626585a35bbcdab7506a2e5d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "068716d4_cc15a4d6",
+        "filename": "librobinhood/src/plugins/s3/config.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-08-28T14:28:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3e55edfa_4b92fe04",
       "range": {
         "startLine": 17,
         "startChar": 0,
@@ -364,6 +412,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cf393125_aefadb9b",
+        "filename": "librobinhood/src/plugins/s3/config.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-08-28T14:28:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2ee9f1e5_ba6d2d49",
+      "range": {
+        "startLine": 57,
+        "startChar": 4,
+        "endLine": 78,
+        "endChar": 5
+      },
+      "revId": "fef15b8cd566113a626585a35bbcdab7506a2e5d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fd676652_7b581ef8",
@@ -377,6 +449,30 @@
       "writtenOn": "2025-07-24T14:42:16Z",
       "side": 1,
       "message": "major: no need to reinitialize these functions, they are already defined in the mfu iterator",
+      "range": {
+        "startLine": 34,
+        "startChar": 0,
+        "endLine": 58,
+        "endChar": 1
+      },
+      "revId": "fef15b8cd566113a626585a35bbcdab7506a2e5d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1c7c9c46_104726bb",
+        "filename": "librobinhood/src/plugins/s3/iterators/mpi/iterator.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-08-28T14:28:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fd676652_7b581ef8",
       "range": {
         "startLine": 34,
         "startChar": 0,
@@ -1035,6 +1131,30 @@
       "side": 1,
       "message": "It would have been easier to implement but I think that retrieving the bucket list only once is slightly better",
       "parentUuid": "a4f843e2_5f061f33",
+      "range": {
+        "startLine": 133,
+        "startChar": 4,
+        "endLine": 156,
+        "endChar": 0
+      },
+      "revId": "fef15b8cd566113a626585a35bbcdab7506a2e5d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2a40818f_1c1d6e3c",
+        "filename": "librobinhood/src/plugins/s3/iterators/mpi/iterator.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-08-28T14:28:34Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "fe740846_6d3ef8a7",
       "range": {
         "startLine": 133,
         "startChar": 4,
