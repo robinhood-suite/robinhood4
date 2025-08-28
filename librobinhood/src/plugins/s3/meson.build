@@ -18,6 +18,7 @@ librbh_s3 = library(
     'rbh-s3',
     sources: [
         's3.c',
+        'config.c',
         'plugin.c',
         'utils.c',
     ],
