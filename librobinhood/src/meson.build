@@ -4,7 +4,15 @@
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
 
+extra_sources = []
+extra_dependencies = []
+
 libdl = cc.find_library('dl', required: false)
+
+if (build_mfu or build_s3_mpi) and libmpi.found()
+    extra_sources += ['mpi_rc.c']
+    extra_dependencies += [libmpi]
+endif
 
 librobinhood = library(
     'robinhood',
@@ -22,7 +30,6 @@ librobinhood = library(
         'itertools.c',
         'list.c',
         'lu_fid.c',
-        'mpi_rc.c',
         'plugin.c',
         'plugins/backend.c',
         'projection.c',
@@ -40,9 +47,9 @@ librobinhood = library(
         'utils/utils.c',
         'utils/open.c',
         'value.c',
-    ],
+    ] + extra_sources,
     version: meson.project_version(),
-    dependencies: [ libdl, miniyaml ],
+    dependencies: [ libdl, miniyaml ] + extra_dependencies,
     include_directories: rbh_include,
     install: true,
     c_args: '-DHAVE_CONFIG_H',

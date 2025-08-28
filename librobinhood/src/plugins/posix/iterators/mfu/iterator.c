@@ -187,22 +187,6 @@ skip:
     return fsentry;
 }
 
-void
-rbh_mpi_finalize(void)
-{
-    int initialized;
-    int finalized;
-
-    /* Prevents finalizing twice MPI if we use two backends with MPI */
-    MPI_Initialized(&initialized);
-    MPI_Finalized(&finalized);
-
-    if (initialized && !finalized) {
-        mfu_finalize();
-        MPI_Finalize();
-    }
-}
-
 static void
 mfu_iter_destroy(void *iterator)
 {
@@ -212,6 +196,7 @@ mfu_iter_destroy(void *iterator)
         mfu_flist_free(&iter->files);
 
     free(iter);
+    rbh_add_custom_finalize(mfu_finalize);
     rbh_mpi_dec_ref(rbh_mpi_finalize);
 }
 
@@ -224,18 +209,6 @@ static const struct rbh_mut_iterator MFU_ITER = {
     .ops = &MFU_ITER_OPS,
 };
 
-void
-rbh_mpi_initialize(void)
-{
-    int initialized;
-
-    MPI_Initialized(&initialized);
-    if (!initialized) {
-        MPI_Init(NULL, NULL);
-        mfu_init();
-    }
-}
-
 static struct rbh_mut_iterator *
 mfu_iter_new(const char *root, const char *entry, int statx_sync_type,
              size_t prefix_len, mfu_flist flist, short backend_id)
@@ -245,6 +218,7 @@ mfu_iter_new(const char *root, const char *entry, int statx_sync_type,
     char *path;
     int rc;
 
+    rbh_add_custom_initialize(mfu_init);
     rbh_mpi_inc_ref(rbh_mpi_initialize);
 
     mfu = malloc(sizeof(*mfu));
