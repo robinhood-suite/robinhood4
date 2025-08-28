@@ -124,4 +124,24 @@ rbh_config_get_string(const char *key, const char *default_string);
 const char *
 rbh_config_get_extended_plugin(const char *backend);
 
+/**
+ * Search for a key in the backends map for a specific backend in the
+ * configuration file and return the associated value. The key lookup will use
+ * the format backends/type/key.
+ *
+ * @param type          the backend
+ * @param key           the key to search inside the backend
+ * @param value         the value corresponding to the key
+ * @param expected_type the type expected to be found in the configuration
+ *                      file.
+ *
+ * @return               KPR_FOUND if the enrichers was found,
+ *                       KPR_NOT_FOUND if the enrichers wasn't found,
+ *                       KPR_ERROR if there was an error, and errno is set
+ */
+enum key_parse_result
+rbh_config_find_backend(const char *type, const char *key,
+                        struct rbh_value *value,
+                        enum rbh_value_type expected_type);
+
 #endif
