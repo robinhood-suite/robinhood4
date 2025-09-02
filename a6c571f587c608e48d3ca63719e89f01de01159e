@@ -93,6 +93,30 @@
       },
       "revId": "a6c571f587c608e48d3ca63719e89f01de01159e",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5ef3397a_c779d7e5",
+        "filename": "librobinhood/src/plugins/s3/iterators/mpi/iterator.c",
+        "patchSetId": 8
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-09-02T08:51:54Z",
+      "side": 1,
+      "message": "Yes, computations are now correct.\n\nAs said IRL, the remainder is totally managed by the last \"worker\", maybe we want to scatter it to every \"worker\".",
+      "parentUuid": "861d4fb4_258b762a",
+      "range": {
+        "startLine": 99,
+        "startChar": 4,
+        "endLine": 107,
+        "endChar": 40
+      },
+      "revId": "a6c571f587c608e48d3ca63719e89f01de01159e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
