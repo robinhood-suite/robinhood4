@@ -930,7 +930,6 @@ out:
 
     if (!size) {
         fprintf(stderr, "%s not avalaible\n", stats_to_find);
-        free(value);
         return 0;
     }
 
