@@ -17,6 +17,7 @@ s3_wrapper = library(
 librbh_s3 = library(
     'rbh-s3',
     sources: [
+        'action.c',
         's3.c',
         'config.c',
         'filter.c',
