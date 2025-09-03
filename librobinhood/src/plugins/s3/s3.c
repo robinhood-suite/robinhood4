@@ -392,6 +392,43 @@ rbh_s3_plugin_destroy()
     s3_destroy_api();
 }
 
+    /*--------------------------------------------------------------------*
+     |                             helper()                               |
+     *--------------------------------------------------------------------*/
+
+void
+rbh_s3_helper(__attribute__((unused)) const char *backend,
+              __attribute__((unused)) struct rbh_config *config,
+              char **predicate_helper, char **directive_helper)
+{
+    int rc;
+
+    rc = asprintf(predicate_helper,
+        "  - S3:\n"
+        "    -bucket REGEX      filter entries based on which bucket they are.\n"
+        "    -mtime [+-]TIME    filter entries based on their modify time.\n"
+        "    -name REGEX        filter entries based on their name.\n"
+        "    -path REGEX        filter entries based on their path.\n"
+        "    -size [+-]SIZE     filter entries based on their size.\n");
+
+    if (rc == -1)
+        *predicate_helper = NULL;
+
+    rc = asprintf(directive_helper,
+        " - S3:\n"
+        "   %%b         Object's bucket.\n"
+        "   %%f         Object's name.\n"
+        "   %%H         Backend's name.\n"
+        "   %%I         Object's ID.\n"
+        "   %%p         Object's path.\n"
+        "   %%s         Object's size.\n"
+        "   %%t         Object's mtime in ctime format.\n"
+        "   %%T         Object's mtime timestamp.\n");
+
+    if (rc == -1)
+        *directive_helper = NULL;
+}
+
 static const struct rbh_backend_operations S3_BACKEND_OPS = {
     .branch = s3_backend_branch,
     .filter = s3_backend_filter,
