@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7ec16548_6bbd7bf2",
+        "filename": "rbh-undelete/tests/undelete.bash",
+        "patchSetId": 4
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-09-03T08:48:47Z",
+      "side": 1,
+      "message": "minor: This check should be above the hsm restore",
+      "range": {
+        "startLine": 40,
+        "startChar": 4,
+        "endLine": 42,
+        "endChar": 6
+      },
+      "revId": "c530e481967227fa333a362b6e815ae187a8a020",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
