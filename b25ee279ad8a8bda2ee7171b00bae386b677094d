@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9daff9ab_dfc5b711",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-09-03T08:54:42Z",
+      "side": 1,
+      "message": "major: Same thing, I think we shouldn\u0027t interpret this as a relative path",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 18,
+        "endChar": 2
+      },
+      "revId": "b25ee279ad8a8bda2ee7171b00bae386b677094d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
