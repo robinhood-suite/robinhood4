@@ -15,3 +15,7 @@ endif
 if get_option('lustre').enabled()
     subdir('lustre')
 endif
+
+if get_option('s3').enabled()
+    subdir('s3')
+endif
