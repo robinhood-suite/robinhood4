@@ -127,6 +127,19 @@ rbh_s3_fill_projection(struct rbh_filter_projection *projection,
                        const char *directive);
 
 /**
+ * Show S3 specific predicates and directives.
+ *
+ * @param predicate_helper   the output helper for predicates
+ * @param directive_helper   the output helper for directives
+ *
+ * @return                   S3 helper for predicates and directives
+ */
+void
+rbh_s3_helper(__attribute__((unused)) const char *backend,
+              __attribute__((unused)) struct rbh_config *config,
+              char **predicate_helper, char **directive_helper);
+
+/**
  * Release the memory associated with the plugin
  */
 void

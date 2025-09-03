@@ -23,6 +23,7 @@ static const struct rbh_pe_common_operations S3_BACKEND_PLUGIN_COMMON_OPS = {
     .delete_entry = rbh_s3_delete_entry,
     .fill_entry_info = rbh_s3_fill_entry_info,
     .fill_projection = rbh_s3_fill_projection,
+    .helper = rbh_s3_helper,
 };
 
 static const struct rbh_backend_plugin_operations S3_BACKEND_PLUGIN_OPS = {
