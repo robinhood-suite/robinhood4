@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aec8f8bc_fe6fd4c4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-09-03T08:17:29Z",
+      "side": 1,
+      "message": "minor: indicate instead we do deduplication until we encounter a new entry",
+      "range": {
+        "startLine": 9,
+        "startChar": 49,
+        "endLine": 10,
+        "endChar": 16
+      },
+      "revId": "2f42f3f00ad61cd5538b4beeca96fc92111ff28f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
