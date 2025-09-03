@@ -17,6 +17,10 @@ rbh_s3_check_valid_token(const char *token)
     assert(token[0] == '-');
 
     switch (token[1]) {
+    case 'b':
+        if (strcmp(&token[2], "ucket") == 0)
+            return RBH_TOKEN_PREDICATE;
+        break;
     case 'm':
         if (strcmp(&token[2], "time") == 0)
             return RBH_TOKEN_PREDICATE;
