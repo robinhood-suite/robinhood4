@@ -16,6 +16,24 @@
       "message": "Isn\u0027t it better to have a config option for this parameter?",
       "revId": "89079898e79380f1d5c1ec7e69704ba4453afd35",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "86da9430_4a36ef10",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-09-03T14:38:07Z",
+      "side": 1,
+      "message": "I added a config option. If not set, it will default to INT32_MAX to avoid timeout.",
+      "parentUuid": "d9b0ed9d_40633be2",
+      "revId": "89079898e79380f1d5c1ec7e69704ba4453afd35",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
