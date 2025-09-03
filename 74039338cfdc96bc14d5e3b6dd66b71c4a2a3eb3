@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dbc26fd9_b873a9dd",
+        "filename": "librobinhood/src/mpi_rc.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-09-03T07:24:55Z",
+      "side": 1,
+      "message": "suggest: `rbh_set_custom_initialize` instead of `_add_`?\n\nSame suggestion below.",
+      "range": {
+        "startLine": 24,
+        "startChar": 0,
+        "endLine": 24,
+        "endChar": 25
+      },
+      "revId": "74039338cfdc96bc14d5e3b6dd66b71c4a2a3eb3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
