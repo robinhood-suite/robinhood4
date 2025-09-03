@@ -128,12 +128,14 @@ s3_iter_next(void *iterator)
     struct rbh_value_map inode_xattrs;
     struct rbh_value_pair *ns_pairs;
     struct rbh_value_map ns_xattrs;
+    struct rbh_value *bucket_value;
     struct rbh_statx statx = {0};
     struct rbh_id parent_id;
     char *current_bucket;
     char *current_object;
     struct rbh_id id;
     char *full_path;
+    int count = 1;
     size_t length;
     int rc;
 
@@ -175,23 +177,27 @@ s3_iter_next(void *iterator)
     ns_xattrs.count = 1;
 
     inode_pairs = RBH_SSTACK_PUSH(s3_iter->values, NULL,
-                                  sizeof(*inode_pairs));
+                                  sizeof(*inode_pairs) * 2);
 
-    if (inode_pairs == NULL)
-        error(EXIT_FAILURE, errno, "rbh_sstack_push error");
+    /* Add the bucket name in the inode xattrs */
+    bucket_value = RBH_SSTACK_PUSH(s3_iter->values, NULL,
+                                   sizeof(*bucket_value));
+    bucket_value->type = RBH_VT_STRING;
+    bucket_value->string = RBH_SSTACK_PUSH(s3_iter->values, current_bucket,
+                                           strlen(current_bucket) + 1);
+    inode_pairs[0].key = "bucket";
+    inode_pairs[0].value = bucket_value;
 
     if (s3_get_custom_size() > 0) {
-        fill_user_metadata(&inode_pairs[0], s3_iter->values);
-
-        inode_xattrs.pairs = inode_pairs;
-        inode_xattrs.count = 1;
-
-        fsentry = rbh_fsentry_new(&id, &parent_id, current_object, &statx,
-                                  &ns_xattrs, &inode_xattrs, NULL);
-    } else {
-        fsentry = rbh_fsentry_new(&id, &parent_id, current_object, &statx,
-                                  &ns_xattrs, NULL, NULL);
+        fill_user_metadata(&inode_pairs[1], s3_iter->values);
+        count++;
     }
+
+    inode_xattrs.pairs = inode_pairs;
+    inode_xattrs.count = count;
+
+    fsentry = rbh_fsentry_new(&id, &parent_id, current_object, &statx,
+                              &ns_xattrs, &inode_xattrs, NULL);
 
 err:
     free(full_path);
