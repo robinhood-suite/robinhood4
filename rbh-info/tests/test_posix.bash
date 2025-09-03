@@ -46,11 +46,27 @@ test_retention_source()
         error "The retention backend should have been registered"
 }
 
+test_posix_config() {
+    cat > test_conf.yaml <<EOF
+mongodb_address: "mongodb://toto:27017"
+EOF
+
+    rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
+
+    local output=$(rbh_info "rbh:mongo:$testdb" -b)
+    echo "$output" | grep "posix" ||
+        error "Only the POSIX backend should have been registered"
+
+    rbh_info -c test_conf.yaml rbh:mongo:$testdb -b ||
+        error "rbh_info should have failed"
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
-declare -a tests=(test_posix_source test_retention_source)
+declare -a tests=(test_posix_source test_retention_source
+                  test_posix_config)
 
 tmpdir=$(mktemp --directory)
 trap -- "rm -rf '$tmpdir'" EXIT
