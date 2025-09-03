@@ -20,6 +20,7 @@
 static const struct rbh_pe_common_operations S3_BACKEND_PLUGIN_COMMON_OPS = {
     .check_valid_token = rbh_s3_check_valid_token,
     .build_filter = rbh_s3_build_filter,
+    .delete_entry = rbh_s3_delete_entry,
 };
 
 static const struct rbh_backend_plugin_operations S3_BACKEND_PLUGIN_OPS = {
