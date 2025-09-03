@@ -133,8 +133,8 @@ help()
         "Show information about plugins\n"
         "\n"
         "Optional arguments:\n"
-        "    -h,--help              Show this message and exit\n"
-        "    -l,--list              Show the list of installed plugins\n"
+        "    -h, --help             Show this message and exit\n"
+        "    -l, --list             Show the list of installed plugins\n"
         "\n"
         "Usage: %s [-h] PLUGIN\n"
         "\n"
@@ -144,7 +144,7 @@ help()
         "    PLUGIN                 a robinhood plugin\n"
         "\n"
         "Optional arguments:\n"
-        "    -h,--help              Show this message and exit\n"
+        "    -h, --help             Show this message and exit\n"
         "\n"
         "Plugins capabilities list:\n"
         "- filter: The ability to read the data after filtering it according to"
@@ -162,16 +162,17 @@ help()
         "    URI                    a robinhood URI\n"
         "\n"
         "Pre URI optional arguments:\n"
-        "    -h,--help             Show this message and exit\n"
+        "    -c, --config          The configuration file to use\n"
+        "    -h, --help            Show this message and exit\n"
         "\n"
         "Post URI optional arguments:\n"
-        "    -a,--avg-obj-size      Show the average size of objects inside\n"
+        "    -a, --avg-obj-size     Show the average size of objects inside\n"
         "                           a given backend\n"
-        "    -b,--backend-source    Show the backend used as source for past\n"
+        "    -b, --backend-source   Show the backend used as source for past\n"
         "                           rbh-syncs\n"
-        "    -c,--count             Show the amount of document inside a\n"
+        "    -c, --count            Show the amount of document inside a\n"
         "                           given backend\n"
-        "    -s,--size              Show the size of entries collection\n"
+        "    -s, --size             Show the size of entries collection\n"
         "\n"
         "A robinhood URI is built as follows:\n"
         "    "RBH_SCHEME":BACKEND:FSNAME[#{PATH|ID}]\n\n";
@@ -382,18 +383,34 @@ print_info_fields(int flags)
     }
 }
 
+static void
+apply_command_options(int argc, char *argv[])
+{
+    for (int i = 0; i < argc; i++) {
+        if (strcmp(argv[i], "-h") == 0 || strcmp(argv[i], "--help") == 0) {
+            help();
+            exit(0);
+        }
+
+        if (strcmp(argv[i], "-c") == 0 || strcmp(argv[i], "--config") == 0) {
+            if (i + 1 >= argc)
+                error(EXIT_FAILURE, EINVAL,
+                      "missing configuration file value");
+
+            rbh_config_load_from_path(argv[i + 1]);
+        }
+
+        if (strcmp(argv[i], "-l") == 0 || strcmp(argv[i], "--list") == 0) {
+            rbh_backend_list();
+            exit(0);
+        }
+    }
+}
+
 int
-main(int argc, char **argv)
+main(int _argc, char **_argv)
 {
     const struct option LONG_OPTIONS[] = {
-        {
-            .name = "help",
-            .val = 'h'
-        },
-        {
-            .name = "list",
-            .val = 'l'
-        },
         {
             .name = "size",
             .val = 's',
@@ -414,14 +431,22 @@ main(int argc, char **argv)
     };
     const struct rbh_backend_plugin *plugin;
     int flags = 0, option;
+    int nb_cli_args;
+    char **argv;
+    int argc;
 
-    if (argc == 1){
-        fprintf(stderr, "No backend name given, Please give a backend name\n");
-        help();
-        return EINVAL;
+    nb_cli_args = rbh_count_args_before_uri(_argc, _argv);
+    apply_command_options(nb_cli_args, _argv);
+
+    if (nb_cli_args == _argc) {
+        argc = _argc - 1;
+        argv = &_argv[1];
+    } else {
+        argc = _argc - nb_cli_args;
+        argv = &_argv[nb_cli_args];
     }
 
-    while ((option = getopt_long(argc, argv, "hlscab", LONG_OPTIONS,
+    while ((option = getopt_long(argc, argv, "scab", LONG_OPTIONS,
                                  NULL)) != -1) {
         switch (option) {
         case 'a':
@@ -433,12 +458,6 @@ main(int argc, char **argv)
         case 'c':
             flags |= RBH_INFO_COUNT;
             break;
-        case 'h':
-            help();
-            return 0;
-        case 'l':
-            rbh_backend_list();
-            return 0;
         case 's':
             flags |= RBH_INFO_SIZE;
             break;
@@ -449,13 +468,8 @@ main(int argc, char **argv)
         }
     }
 
-    argc -= optind;
-    argv += optind;
-
     if (argc < 1)
         error(EX_USAGE, 0, "not enough arguments\n");
-    if (argc > 1)
-        error(EX_USAGE, 0, "unexpected argument: %s\n", argv[1]);
 
     if (!rbh_is_uri(argv[0])) {
         plugin = rbh_backend_plugin_import(argv[0]);
