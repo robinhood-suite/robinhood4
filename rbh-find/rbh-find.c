@@ -246,6 +246,7 @@ main(int _argc, char *_argv[])
     if (!ctx.action_done)
         find(&ctx, ACT_PRINT, &index, filter, &options);
     free(filter);
+    destroy_plugins(&ctx.f_ctx);
 
     return EXIT_SUCCESS;
 }

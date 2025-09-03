@@ -8,6 +8,7 @@
 #include <aws/core/Aws.h>
 #include <aws/core/auth/AWSCredentialsProvider.h>
 #include <aws/core/client/DefaultRetryStrategy.h>
+#include <aws/s3/model/DeleteObjectRequest.h>
 #include <aws/s3/model/GetObjectRequest.h>
 #include <aws/s3/model/HeadBucketRequest.h>
 #include <aws/s3/model/HeadObjectRequest.h>
@@ -222,6 +223,23 @@ s3_get_object_list(const char *bucket_name, size_t *object_list_length,
         std::strcpy(results[i], objects_vector[i].c_str());
     }
     *list_objects = results;
+}
+
+bool
+s3_delete_object(const char *bucket_name, const char *object_name)
+{
+    Aws::S3::Model::DeleteObjectRequest request;
+
+    request.WithKey(object_name).WithBucket(bucket_name);
+
+    auto outcome = s3_client_ptr->DeleteObject(request);
+    if (!outcome.IsSuccess()) {
+        auto err = outcome.GetError();
+        std::cerr << "Error: deleteObject: " <<
+            err.GetExceptionName() << ": " << err.GetMessage() << std::endl;
+    }
+
+    return !outcome.IsSuccess();
 }
 
 /*----------------------------------------------------------------------------*

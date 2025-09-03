@@ -40,13 +40,13 @@ import_backend_source(struct filters_context *ctx,
 {
     const struct rbh_value *extension_value = NULL;
     const struct rbh_value *plugin_value = NULL;
+    const struct rbh_value *param_value = NULL;
     const struct rbh_backend_plugin *plugin;
     bool is_plugin = true;
+    int rc;
 
     for (int i = 0; i < backend_source->count; ++i) {
         const struct rbh_value_pair *pair = &backend_source->pairs[i];
-
-        assert(pair->value->type == RBH_VT_STRING);
 
         if (strcmp(pair->key, "type") == 0)
             is_plugin = (strcmp(pair->value->string, "plugin") == 0);
@@ -54,6 +54,8 @@ import_backend_source(struct filters_context *ctx,
             plugin_value = pair->value;
         else if (strcmp(pair->key, "extension") == 0)
             extension_value = pair->value;
+        else if (strcmp(pair->key, "param") == 0)
+            param_value = pair->value;
     }
 
     assert(plugin_value != NULL);
@@ -70,6 +72,14 @@ import_backend_source(struct filters_context *ctx,
         error(EXIT_FAILURE, errno, "rbh_backend_plugin_import");
 
     if (is_plugin) {
+        struct rbh_backend_plugin_init_arg arg = {
+            .is_uri = false,
+            .param = param_value,
+        };
+        rc = rbh_backend_plugin_init(plugin, &arg);
+        if (rc && errno != ENOTSUP)
+            error(EXIT_FAILURE, errno, "rbh_backend_plugin_init");
+
         ctx->info_pe[pe_count].plugin = plugin;
         ctx->info_pe[pe_count].is_plugin = true;
     } else {
@@ -83,6 +93,15 @@ import_backend_source(struct filters_context *ctx,
     }
 
     return 1;
+}
+
+void
+destroy_plugins(struct filters_context *ctx)
+{
+    for (int i = 0; i < ctx->info_pe_count; i++) {
+        if (ctx->info_pe[i].is_plugin)
+            rbh_backend_plugin_destroy(ctx->info_pe[i].plugin->plugin.name);
+    }
 }
 
 void

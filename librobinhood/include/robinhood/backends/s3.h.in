@@ -86,6 +86,16 @@ rbh_s3_build_filter(const char **argv, int argc, int *index,
                     bool *need_prefetch);
 
 /**
+ * Delete an entry from the plugin
+ *
+ * @param fsentry        the entry to delete
+ *
+ * @return               0 on success, -1 on error and errno is set
+ */
+int
+rbh_s3_delete_entry(struct rbh_fsentry *fsentry);
+
+/**
  * Release the memory associated with the plugin
  */
 void

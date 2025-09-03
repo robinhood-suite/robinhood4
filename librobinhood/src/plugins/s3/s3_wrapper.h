@@ -92,6 +92,18 @@ extern "C" {
                        char ***list_objects);
 
     /**
+     * Delete an object.
+     *
+     * @param bucket_name    the name of the bucket from which the object is
+     *                       delete
+     * @param object_name    the name of the object to delete
+     *
+     * @return               0 if successfull, 1 otherwise
+     */
+    bool
+    s3_delete_object(const char *bucket_name, const char *object_name);
+
+    /**
      * Free an array declared in c++ (used for bucket and object lists)
      *
      * @param list_length    the length of the array
