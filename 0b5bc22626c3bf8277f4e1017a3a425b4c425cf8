@@ -18,6 +18,24 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "75d1cad1_1ec1d055",
+        "filename": "rbh-policy/POC/config.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-09-04T15:19:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "009ef391_7cd45080",
+      "revId": "0b5bc22626c3bf8277f4e1017a3a425b4c425cf8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "78574c1b_ab545e65",
@@ -31,6 +49,30 @@
       "writtenOn": "2025-08-26T08:39:33Z",
       "side": 1,
       "message": "comment: the size is in bytes? the time in seconds?\n\nEven if it is for a POC, kind of strange to see files being considered large if their size is more than 50 bytes. I suppose we will have a prefix for those.",
+      "range": {
+        "startLine": 6,
+        "startChar": 4,
+        "endLine": 6,
+        "endChar": 47
+      },
+      "revId": "0b5bc22626c3bf8277f4e1017a3a425b4c425cf8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dbf23de6_c1251f33",
+        "filename": "rbh-policy/POC/config.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-09-04T15:19:45Z",
+      "side": 1,
+      "message": "I didn\u0027t implement units in this POC. But I understand that it can be a bit weird indeed. To answer the question, yes it is the case (not necessarily in this POC) but in the policy engine, a size without units is in bytes.",
+      "parentUuid": "78574c1b_ab545e65",
       "range": {
         "startLine": 6,
         "startChar": 4,
@@ -64,6 +106,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f1fc192e_04de3538",
+        "filename": "rbh-policy/POC/policyengine.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-09-04T15:19:45Z",
+      "side": 1,
+      "message": "Wow, it\u0027s true that it\u0027s a duplicate here, we\u0027re going to check callable twice which is useless here but I think I did it by trying things out, I modified _get then by modifying it again I put callable in it which wasn\u0027t the case at the base, anyway",
+      "parentUuid": "f3043782_874e6297",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 25,
+        "endChar": 72
+      },
+      "revId": "0b5bc22626c3bf8277f4e1017a3a425b4c425cf8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "90bdd64c_cd0e47ca",
@@ -77,6 +143,30 @@
       "writtenOn": "2025-08-26T08:39:33Z",
       "side": 1,
       "message": "major: need to be commented, this is not obvious",
+      "range": {
+        "startLine": 92,
+        "startChar": 0,
+        "endLine": 97,
+        "endChar": 13
+      },
+      "revId": "0b5bc22626c3bf8277f4e1017a3a425b4c425cf8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae856312_a09a8530",
+        "filename": "rbh-policy/POC/policyengine.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-09-04T15:19:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "90bdd64c_cd0e47ca",
       "range": {
         "startLine": 92,
         "startChar": 0,
