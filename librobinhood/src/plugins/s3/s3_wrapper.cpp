@@ -35,6 +35,15 @@ struct metadata {
     size_t size;
 };
 
+struct conn_param {
+    const char *address;
+    const char *crt_path;
+    const char *password;
+    const char *user;
+    const char *region;
+};
+
+std::unique_ptr<conn_param> s3_conn_param_ptr = nullptr;
 std::unique_ptr<metadata> s3_metadata_ptr = nullptr;
 std::unique_ptr<S3CLIENT> s3_client_ptr = nullptr;
 std::unique_ptr<map_entry> entry_ptr = nullptr;
@@ -73,6 +82,43 @@ s3_init_api(const char *address, const char *username, const char *password,
                                               config, SIGNING_POLICY::Never,
                                               false));
     s3_metadata_ptr = std::unique_ptr<metadata>(new metadata());
+    s3_conn_param_ptr = std::unique_ptr<conn_param>(new conn_param());
+
+    s3_conn_param_ptr->address = address;
+    s3_conn_param_ptr->crt_path = crt_path;
+    s3_conn_param_ptr->password = password;
+    s3_conn_param_ptr->user = username;
+    s3_conn_param_ptr->region = region;
+}
+
+const char *
+s3_get_address()
+{
+    return s3_conn_param_ptr->address;
+}
+
+const char *
+s3_get_crt_path()
+{
+    return s3_conn_param_ptr->crt_path;
+}
+
+const char *
+s3_get_password()
+{
+    return s3_conn_param_ptr->password;
+}
+
+const char *
+s3_get_user()
+{
+    return s3_conn_param_ptr->user;
+}
+
+const char *
+s3_get_region()
+{
+    return s3_conn_param_ptr->region;
 }
 
 void
@@ -80,6 +126,7 @@ s3_destroy_api()
 {
     s3_client_ptr.reset();
     s3_metadata_ptr.reset();
+    s3_conn_param_ptr.reset();
     entry_ptr.reset();
 
     /**
