@@ -7,6 +7,7 @@
 integration_tests = [
   'test_actions',
   'test_s3',
+  'test_s3_printf',
 ]
 
 foreach t: integration_tests
