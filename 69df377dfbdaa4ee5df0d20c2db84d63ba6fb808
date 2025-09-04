@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3720b11a_31d576dc",
+        "filename": "rbh-policy/rbhpolicy/config/utils.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-09-04T15:20:30Z",
+      "side": 1,
+      "message": "Yes, you are right, I wrote units because I was focused on my parse_unit function",
+      "parentUuid": "67a5fdb3_75f7ffad",
+      "range": {
+        "startLine": 172,
+        "startChar": 4,
+        "endLine": 172,
+        "endChar": 22
+      },
+      "revId": "69df377dfbdaa4ee5df0d20c2db84d63ba6fb808",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d1b12f4c_d9eb0720",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-08-21T06:42:20Z",
       "side": 1,
       "message": "sugest: options",
+      "range": {
+        "startLine": 173,
+        "startChar": 4,
+        "endLine": 173,
+        "endChar": 15
+      },
+      "revId": "69df377dfbdaa4ee5df0d20c2db84d63ba6fb808",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec82a411_7aeff29e",
+        "filename": "rbh-policy/rbhpolicy/config/utils.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-09-04T15:20:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d1b12f4c_d9eb0720",
       "range": {
         "startLine": 173,
         "startChar": 4,
