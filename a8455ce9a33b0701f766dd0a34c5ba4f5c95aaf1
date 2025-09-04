@@ -72,6 +72,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "01397ea8_20cd6ad0",
+        "filename": "rbh-policy/rbhpolicy/config/config_loader.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-09-04T15:19:36Z",
+      "side": 1,
+      "message": "True :) I fixed it !",
+      "parentUuid": "57f3c337_49843d38",
+      "range": {
+        "startLine": 41,
+        "startChar": 12,
+        "endLine": 41,
+        "endChar": 23
+      },
+      "revId": "a8455ce9a33b0701f766dd0a34c5ba4f5c95aaf1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "54967021_34813fbc",
@@ -180,6 +204,30 @@
       "side": 1,
       "message": "Can\u0027t you use `importlib` to import the file as a module?",
       "parentUuid": "f69db420_0e75487e",
+      "range": {
+        "startLine": 69,
+        "startChar": 16,
+        "endLine": 69,
+        "endChar": 20
+      },
+      "revId": "a8455ce9a33b0701f766dd0a34c5ba4f5c95aaf1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d2745ac9_75da846f",
+        "filename": "rbh-policy/rbhpolicy/config/config_loader.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-09-04T15:19:36Z",
+      "side": 1,
+      "message": "Yes, you can use importlib to import each .py file as a module, but if the files have dependencies between them, for example, if b.py uses a function defined in a.py, then importing them separately with importlib doesn\u0027t allow b.py to access that context, because each module is executed in isolation.\n\nTo ensure that all files share the same execution space (as if they were concatenated), you must either execute them in a common context, which exec() allows, or transform the directory into a Python package with explicit imports between files. But this is not what we want.",
+      "parentUuid": "25e4ed76_49ed6769",
       "range": {
         "startLine": 69,
         "startChar": 16,

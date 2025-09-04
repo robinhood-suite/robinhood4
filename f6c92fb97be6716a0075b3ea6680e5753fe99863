@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f2ad96c6_1057b203",
+        "filename": "rbh-policy/rbh-policy.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-09-04T15:19:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "114f7518_1668b433",
+      "range": {
+        "startLine": 13,
+        "startChar": 25,
+        "endLine": 13,
+        "endChar": 35
+      },
+      "revId": "f6c92fb97be6716a0075b3ea6680e5753fe99863",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f240f0ac_b37a65a4",
@@ -47,6 +71,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3bf022cd_cd55f610",
+        "filename": "rbh-policy/rbhpolicy/config/config_loader.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-09-04T15:19:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f240f0ac_b37a65a4",
+      "range": {
+        "startLine": 29,
+        "startChar": 24,
+        "endLine": 29,
+        "endChar": 29
+      },
+      "revId": "f6c92fb97be6716a0075b3ea6680e5753fe99863",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "78a6b419_5279ff30",
@@ -60,6 +108,30 @@
       "writtenOn": "2025-08-25T10:59:46Z",
       "side": 1,
       "message": "comment: you can use `glob` here",
+      "range": {
+        "startLine": 62,
+        "startChar": 8,
+        "endLine": 65,
+        "endChar": 9
+      },
+      "revId": "f6c92fb97be6716a0075b3ea6680e5753fe99863",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "29b85049_029c6e4e",
+        "filename": "rbh-policy/rbhpolicy/config/config_loader.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-09-04T15:19:36Z",
+      "side": 1,
+      "message": "I\u0027m not very good at it, but from what I\u0027ve seen, it\u0027s better when dealing with symbolic links.",
+      "parentUuid": "78a6b419_5279ff30",
       "range": {
         "startLine": 62,
         "startChar": 8,
