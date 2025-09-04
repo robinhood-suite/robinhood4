@@ -96,6 +96,37 @@ int
 rbh_s3_delete_entry(struct rbh_fsentry *fsentry);
 
 /**
+ * Fill information about an entry according to a given directive into a buffer
+ *
+ * @param output         an array in which the information can be printed
+ *                       according to \p directive. Size of the array should be
+ *                       \p max_length
+ * @param max_length     size of the \p output array
+ * @param fsentry        fsentry to print
+ * @param directive      which information about \p fsentry to print
+ * @param backend        the backend to print (XXX: may not be necessary)
+ *
+ * @return               the number of characters written to \p output, -1 on
+ *                       error
+ */
+int
+rbh_s3_fill_entry_info(char *output, int max_length,
+                       const struct rbh_fsentry *fsentry,
+                       const char *directive, const char *backend);
+
+/**
+ * Fill the projection to retrieve only the information needed
+ *
+ * @param projection the projection to fill
+ * @param directive  which information to retrieve
+ *
+ * @return           1 on success, 0 if the directive requested is unknown
+ */
+int
+rbh_s3_fill_projection(struct rbh_filter_projection *projection,
+                       const char *directive);
+
+/**
  * Release the memory associated with the plugin
  */
 void
