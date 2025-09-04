@@ -241,9 +241,10 @@ static const struct rbh_value RBH_S3_SOURCE_NAME = {
     .string = "s3",
 };
 
-static const struct rbh_value_pair RBH_S3_SOURCE_PAIR[] = {
+static struct rbh_value_pair RBH_S3_SOURCE_PAIR[] = {
     { .key = "type", &RBH_S3_SOURCE_TYPE },
     { .key = "plugin", &RBH_S3_SOURCE_NAME },
+    { .key = "param", NULL },
 };
 
 static const struct rbh_value RBH_S3_SOURCE_MAP = {
@@ -261,6 +262,16 @@ static const struct rbh_value RBH_S3_BACKEND_SEQUENCE = {
         .count = 1,
     },
 };
+
+static void
+s3_fill_info_param(const char *param, const char *key,
+                   struct rbh_value *value, struct rbh_value_pair *pair)
+{
+    value->type = RBH_VT_STRING;
+    value->string = RBH_SSTACK_PUSH(info_sstack, param, strlen(param) + 1);
+    pair->key = key;
+    pair->value = value;
+}
 
 static struct rbh_value_map *
 s3_get_info(__attribute__((unused)) void *backend, int info_flags)
@@ -292,6 +303,63 @@ s3_get_info(__attribute__((unused)) void *backend, int info_flags)
         goto out;
 
     if (info_flags & RBH_INFO_BACKEND_SOURCE) {
+        const char *password = s3_get_password();
+        const char *crt_path = s3_get_crt_path();
+        const char *address = s3_get_address();
+        const char *region = s3_get_region();
+        struct rbh_value_pair *pairs_param;
+        const char *user = s3_get_user();
+        struct rbh_value *map_param;
+        struct rbh_value *values;
+        int count = 0;
+        int i = 0;
+
+        count += (address != NULL ? 1 : 0);
+        count += (region != NULL ? 1 : 0);
+        count += (crt_path != NULL ? 1 : 0);
+        count += (password != NULL ? 1 : 0);
+        count += (user != NULL ? 1 : 0);
+
+        pairs_param = RBH_SSTACK_PUSH(info_sstack, NULL,
+                                      sizeof(*pairs_param) * count);
+
+        values = RBH_SSTACK_PUSH(info_sstack, NULL, sizeof(*values) * count);
+
+        if (address != NULL) {
+            s3_fill_info_param(address, "address", &values[i],
+                               &pairs_param[i]);
+            i++;
+        }
+
+        if (region != NULL) {
+            s3_fill_info_param(region, "region", &values[i],
+                               &pairs_param[i]);
+            i++;
+        }
+
+        if (crt_path != NULL) {
+            s3_fill_info_param(crt_path, "crt_path", &values[i],
+                               &pairs_param[i]);
+            i++;
+        }
+
+        if (password != NULL) {
+            s3_fill_info_param(password, "password", &values[i],
+                               &pairs_param[i]);
+            i++;
+        }
+
+        if (user != NULL)
+            s3_fill_info_param(user, "user", &values[i],
+                               &pairs_param[i]);
+
+        map_param = RBH_SSTACK_PUSH(info_sstack, NULL, sizeof(*map_param));
+        map_param->type = RBH_VT_MAP;
+        map_param->map.pairs = pairs_param;
+        map_param->map.count = count;
+
+        RBH_S3_SOURCE_PAIR[2].value = map_param;
+
         pairs[idx].key = "backend_source";
         pairs[idx++].value = &RBH_S3_BACKEND_SEQUENCE;
     }
