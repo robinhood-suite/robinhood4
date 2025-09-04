@@ -203,4 +203,7 @@ void
 timespec_accumulate(struct timespec *accum, struct timespec start,
                     struct timespec end);
 
+size_t
+base64_encode(char *dest, const char *src, size_t n);
+
 #endif
