@@ -257,4 +257,7 @@ typedef int (*parse_cb_t)(void *cb_arg, char *line, size_t size, int stream);
  */
 int command_call(const char *cmd_line, parse_cb_t cb_func, void *cb_arg);
 
+size_t
+base64_encode(char *dest, const char *src, size_t n);
+
 #endif
