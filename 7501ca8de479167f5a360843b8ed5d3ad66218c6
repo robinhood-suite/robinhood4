@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "232281b2_daaa0de1",
+        "filename": "rbh-policy/tests/test_cpython.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-09-04T15:20:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "14ff1a23_e018072f",
+      "range": {
+        "startLine": 12,
+        "startChar": 51,
+        "endLine": 12,
+        "endChar": 59
+      },
+      "revId": "7501ca8de479167f5a360843b8ed5d3ad66218c6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "855b4f8a_986ef285",
@@ -37,6 +61,54 @@
       "writtenOn": "2025-08-26T09:33:22Z",
       "side": 1,
       "message": "comment: not fan of importing the whole module after importing some parts of it..",
+      "range": {
+        "startLine": 40,
+        "startChar": 0,
+        "endLine": 40,
+        "endChar": 30
+      },
+      "revId": "7501ca8de479167f5a360843b8ed5d3ad66218c6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d015bea8_6258fac6",
+        "filename": "rbh-policy/tests/test_cpython.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-09-04T15:20:07Z",
+      "side": 1,
+      "message": "Yes, I wanted to change this but I forgot after my manual tests.",
+      "parentUuid": "855b4f8a_986ef285",
+      "range": {
+        "startLine": 40,
+        "startChar": 0,
+        "endLine": 40,
+        "endChar": 30
+      },
+      "revId": "7501ca8de479167f5a360843b8ed5d3ad66218c6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bca80906_0584b50a",
+        "filename": "rbh-policy/tests/test_cpython.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-09-04T15:20:07Z",
+      "side": 1,
+      "message": "Yes, I wanted to change this but I forgot after my manual tests.",
+      "parentUuid": "855b4f8a_986ef285",
       "range": {
         "startLine": 40,
         "startChar": 0,
@@ -70,6 +142,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "54a2e35f_52ee0d71",
+        "filename": "rbh-policy/tests/test_cpython.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-09-04T15:20:07Z",
+      "side": 1,
+      "message": "I\u0027m adding a setter for the backend, it will also be useful for the future.",
+      "parentUuid": "3ef10efe_a3e36b3c",
+      "range": {
+        "startLine": 40,
+        "startChar": 0,
+        "endLine": 41,
+        "endChar": 51
+      },
+      "revId": "7501ca8de479167f5a360843b8ed5d3ad66218c6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4ead5064_aebde3a9",
@@ -83,6 +179,30 @@
       "writtenOn": "2025-08-19T08:03:22Z",
       "side": 1,
       "message": "minor: these tests are duplicated",
+      "range": {
+        "startLine": 91,
+        "startChar": 3,
+        "endLine": 102,
+        "endChar": 2
+      },
+      "revId": "7501ca8de479167f5a360843b8ed5d3ad66218c6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6081f7a7_729219b7",
+        "filename": "rbh-policy/tests/test_cpython.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-09-04T15:20:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4ead5064_aebde3a9",
       "range": {
         "startLine": 91,
         "startChar": 3,
