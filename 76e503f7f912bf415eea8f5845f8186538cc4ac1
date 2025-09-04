@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e87cce55_b2257381",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-09-04T11:00:10Z",
+      "side": 1,
+      "message": "I am okay with this patch. But I do not think the tests check that memory is released.",
+      "revId": "76e503f7f912bf415eea8f5845f8186538cc4ac1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
