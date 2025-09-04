@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7fad8b3e_35d411d9",
+        "filename": "rbh-policy/rbhpolicy/config/utils.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-09-04T15:20:20Z",
+      "side": 1,
+      "message": "I did this because rbh-find\u0027s filter doesn\u0027t understand \"P\" and \"E\". It\u0027s only implemented up to \"T\".",
+      "parentUuid": "79672fcd_f50696af",
+      "range": {
+        "startLine": 18,
+        "startChar": 16,
+        "endLine": 19,
+        "endChar": 17
+      },
+      "revId": "ebf181970fa6409e9b37a8cb3738dbc810a69af1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "fd9c3bbb_ed4b7bc6",
         "filename": "rbh-policy/rbhpolicy/config/utils.py",
         "patchSetId": 6
@@ -49,6 +73,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c8593a1d_9709809c",
+        "filename": "rbh-policy/rbhpolicy/config/utils.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-09-04T15:20:20Z",
+      "side": 1,
+      "message": "Yes, having a unit is mandatory in this function.",
+      "parentUuid": "fd9c3bbb_ed4b7bc6",
+      "range": {
+        "startLine": 22,
+        "startChar": 29,
+        "endLine": 22,
+        "endChar": 40
+      },
+      "revId": "ebf181970fa6409e9b37a8cb3738dbc810a69af1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3c652e21_d4fb0281",
         "filename": "rbh-policy/rbhpolicy/config/utils.py",
         "patchSetId": 6
@@ -60,6 +108,30 @@
       "writtenOn": "2025-08-27T08:12:33Z",
       "side": 1,
       "message": "nit: you could order/group the representations",
+      "range": {
+        "startLine": 102,
+        "startChar": 0,
+        "endLine": 107,
+        "endChar": 39
+      },
+      "revId": "ebf181970fa6409e9b37a8cb3738dbc810a69af1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "222d5c91_fcafdf8b",
+        "filename": "rbh-policy/rbhpolicy/config/utils.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-09-04T15:20:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3c652e21_d4fb0281",
       "range": {
         "startLine": 102,
         "startChar": 0,
