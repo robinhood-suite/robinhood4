@@ -121,6 +121,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b4d9fc16_82f7b4be",
+        "filename": "rbh-policy/meson.build",
+        "patchSetId": 6
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-09-04T15:19:32Z",
+      "side": 1,
+      "message": "It\u0027s true, you are right. From what I understand, I would say that if we don\u0027t use pip, we don\u0027t need meson-python. Its main purpose is to allow the generation and installation of python packages in the correct format for pip to use.",
+      "parentUuid": "3dd907d7_cf911568",
+      "range": {
+        "startLine": 9,
+        "startChar": 1,
+        "endLine": 11,
+        "endChar": 1
+      },
+      "revId": "2dfea7c98e30ddda47a4f3ae4c328fb0d27746ca",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "cbcf669e_1f2482b2",
         "filename": "rbh-policy/tests/test_installation.py",
         "patchSetId": 6
