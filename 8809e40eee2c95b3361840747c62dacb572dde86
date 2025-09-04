@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9a95a623_b5fbd40f",
+        "filename": "librobinhood/include/robinhood/filters/core.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-09-04T15:19:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ac1db293_3363de8c",
+      "range": {
+        "startLine": 87,
+        "startChar": 0,
+        "endLine": 87,
+        "endChar": 81
+      },
+      "revId": "8809e40eee2c95b3361840747c62dacb572dde86",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9fd00e36_5023fa05",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-08-26T09:19:40Z",
       "side": 1,
       "message": "style: I prefer square brackets for array",
+      "range": {
+        "startLine": 94,
+        "startChar": 24,
+        "endLine": 94,
+        "endChar": 40
+      },
+      "revId": "8809e40eee2c95b3361840747c62dacb572dde86",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2d3c4859_d9779952",
+        "filename": "librobinhood/include/robinhood/filters/core.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-09-04T15:19:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9fd00e36_5023fa05",
       "range": {
         "startLine": 94,
         "startChar": 24,
@@ -70,6 +118,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3abe4a0b_c074039d",
+        "filename": "librobinhood/src/filters/core.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-09-04T15:19:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "438103d7_568a87c7",
+      "range": {
+        "startLine": 223,
+        "startChar": 1,
+        "endLine": 227,
+        "endChar": 31
+      },
+      "revId": "8809e40eee2c95b3361840747c62dacb572dde86",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d32f1247_c4bb7189",
@@ -83,6 +155,30 @@
       "writtenOn": "2025-08-26T09:19:40Z",
       "side": 1,
       "message": "question: I do not understand this part: why forking to retrieve info and retrieve it again in main thread?",
+      "range": {
+        "startLine": 230,
+        "startChar": 7,
+        "endLine": 260,
+        "endChar": 9
+      },
+      "revId": "8809e40eee2c95b3361840747c62dacb572dde86",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "05b534bd_3387e5a2",
+        "filename": "librobinhood/src/filters/core.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-09-04T15:19:53Z",
+      "side": 1,
+      "message": "We call build_filter() in the child process first because the plugin might crash or exit if the arguments are invalid for that backend (e.g., -pool X for POSIX). The child only writes \"1\" to a pipe if it successfully creates a filter. The parent reads this value, if nothing is read, the plugin failed or crashed, and the main process stays safe. The filter must be rebuilt in the parent because memory is not shared between processes.",
+      "parentUuid": "d32f1247_c4bb7189",
       "range": {
         "startLine": 230,
         "startChar": 7,
