@@ -39,6 +39,21 @@ extern "C" {
     s3_init_api(const char *address, const char *username,
                 const char *password, const char *crt_path, const char *region);
 
+    const char *
+    s3_get_address();
+
+    const char *
+    s3_get_crt_path();
+
+    const char *
+    s3_get_password();
+
+    const char *
+    s3_get_user();
+
+    const char *
+    s3_get_region();
+
     /**
      * Shutdown the AWS API
      */
@@ -66,7 +81,7 @@ extern "C" {
     /**
      * Gives an array of the names of the objects contained in a bucket, along
      * with the length of the array
-     *
+     _*
      * @param bucket_name          the name of the bucket from which the objects
      *                             are being retrieved
      * @param object_list_length   the number of objects in the specified bucket
