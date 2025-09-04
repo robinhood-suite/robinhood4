@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "581543fd_bc475fd7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-09-04T15:19:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "26698ca7_9dfbf817",
+      "range": {
+        "startLine": 11,
+        "startChar": 32,
+        "endLine": 11,
+        "endChar": 38
+      },
+      "revId": "e04d9d19ed8837a680d5f8f65a8c09ddd82d6536",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4002ab24_5d9c2c11",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-08-26T08:54:36Z",
       "side": 1,
       "message": "style: line too long",
+      "range": {
+        "startLine": 57,
+        "startChar": 0,
+        "endLine": 57,
+        "endChar": 83
+      },
+      "revId": "e04d9d19ed8837a680d5f8f65a8c09ddd82d6536",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f1b57bc7_7b133669",
+        "filename": "librobinhood/include/robinhood/filters/core.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-09-04T15:19:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4002ab24_5d9c2c11",
       "range": {
         "startLine": 57,
         "startChar": 0,
@@ -70,6 +118,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a1f620d_ac60d171",
+        "filename": "librobinhood/include/robinhood/filters/core.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-09-04T15:19:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "810da891_7a5b2ba9",
+      "range": {
+        "startLine": 67,
+        "startChar": 0,
+        "endLine": 67,
+        "endChar": 81
+      },
+      "revId": "e04d9d19ed8837a680d5f8f65a8c09ddd82d6536",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "882046bb_968e3bc8",
@@ -83,6 +155,30 @@
       "writtenOn": "2025-08-26T08:54:36Z",
       "side": 1,
       "message": "style: line too long",
+      "range": {
+        "startLine": 79,
+        "startChar": 0,
+        "endLine": 79,
+        "endChar": 81
+      },
+      "revId": "e04d9d19ed8837a680d5f8f65a8c09ddd82d6536",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dc94e7c6_2392c8f4",
+        "filename": "librobinhood/include/robinhood/filters/core.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-09-04T15:19:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "882046bb_968e3bc8",
       "range": {
         "startLine": 79,
         "startChar": 0,
@@ -112,6 +208,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5645ca50_f89992b9",
+        "filename": "librobinhood/src/filters/core.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-09-04T15:19:49Z",
+      "side": 1,
+      "message": "This function is only used when creating filters for the policy engine. That\u0027s why I put it here.",
+      "parentUuid": "fca1b63e_6f5c885d",
+      "revId": "e04d9d19ed8837a680d5f8f65a8c09ddd82d6536",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "da8491c1_f6a6bf3f",
         "filename": "librobinhood/src/filters/core.c",
         "patchSetId": 1
@@ -123,6 +237,30 @@
       "writtenOn": "2025-08-26T08:54:36Z",
       "side": 1,
       "message": "suggest: maybe some mutualization with `import_backend_source()` function",
+      "range": {
+        "startLine": 160,
+        "startChar": 8,
+        "endLine": 182,
+        "endChar": 9
+      },
+      "revId": "e04d9d19ed8837a680d5f8f65a8c09ddd82d6536",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "10b8b9b5_b2f9a8f2",
+        "filename": "librobinhood/src/filters/core.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-09-04T15:19:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da8491c1_f6a6bf3f",
       "range": {
         "startLine": 160,
         "startChar": 8,
