@@ -40,7 +40,7 @@ usage(const char *backend)
 {
     const char *message =
         "Usage: %s [PRE_URI_OPTIONS] SOURCE [PREDICATES] [ACTION]\n"
-        "       %s [ALIAS]
+        "       %s [ALIAS]\n"
         "\n"
         "Query SOURCE's entries according to PREDICATE and do ACTION on each.\n"
         "\n"
