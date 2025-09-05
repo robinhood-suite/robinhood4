@@ -240,6 +240,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7d2f7d85_42884f76",
+        "filename": "rbh-policy/rbhpolicy/config/config_loader.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-09-05T09:40:36Z",
+      "side": 1,
+      "message": "I donnot see why this is an issue. If `b.py` needs `a.py`, it should import it without us importing `a.py` right?\n\nBut ok, that was a suggestion more than anything else.",
+      "parentUuid": "d2745ac9_75da846f",
+      "range": {
+        "startLine": 69,
+        "startChar": 16,
+        "endLine": 69,
+        "endChar": 20
+      },
+      "revId": "a8455ce9a33b0701f766dd0a34c5ba4f5c95aaf1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "851ce51c_82bf112a",
         "filename": "rbh-policy/rbhpolicy/config/config_loader.py",
         "patchSetId": 4
