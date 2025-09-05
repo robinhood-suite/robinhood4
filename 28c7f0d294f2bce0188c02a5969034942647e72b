@@ -41,6 +41,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "997b8711_b0db46f3",
+        "filename": "rbh-policy/tests/test_models_conditions.py",
+        "patchSetId": 12
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-09-05T13:53:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "45749414_4d1c5f5d",
+      "range": {
+        "startLine": 59,
+        "startChar": 12,
+        "endLine": 60,
+        "endChar": 52
+      },
+      "revId": "28c7f0d294f2bce0188c02a5969034942647e72b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "03196db3_cdf76b8a",
@@ -58,6 +82,24 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e49477f4_a93b1722",
+        "filename": "rbh-policy/tests/test_models_conditions.py",
+        "patchSetId": 12
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-09-05T13:53:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "03196db3_cdf76b8a",
+      "revId": "28c7f0d294f2bce0188c02a5969034942647e72b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "251c7e89_01b08d99",
@@ -71,6 +113,24 @@
       "writtenOn": "2025-08-21T06:49:33Z",
       "side": 1,
       "message": "sugest: idem add a check with `rbh_filter_validate`",
+      "revId": "28c7f0d294f2bce0188c02a5969034942647e72b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "25b479e7_686fc8e7",
+        "filename": "rbh-policy/tests/test_models_conditions.py",
+        "patchSetId": 12
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-09-05T13:53:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "251c7e89_01b08d99",
       "revId": "28c7f0d294f2bce0188c02a5969034942647e72b",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
