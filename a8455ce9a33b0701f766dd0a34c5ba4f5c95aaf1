@@ -264,6 +264,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "abd88dd0_dc70cf66",
+        "filename": "rbh-policy/rbhpolicy/config/config_loader.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-09-08T11:37:22Z",
+      "side": 1,
+      "message": "If b.py needs something from a.py, then yes, in a standard Python package, it should import it.\nBut in our case, we don\u0027t treat these files as independent modules. They\u0027re part of a declarative config space, loaded into a shared namespace.\nThis allows b.py to use definitions from a.py without explicit imports, as long as a.py is executed first.\nThat\u0027s why we use exec(..., config_module.__dict__) instead of importlib",
+      "parentUuid": "7d2f7d85_42884f76",
+      "range": {
+        "startLine": 69,
+        "startChar": 16,
+        "endLine": 69,
+        "endChar": 20
+      },
+      "revId": "a8455ce9a33b0701f766dd0a34c5ba4f5c95aaf1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "851ce51c_82bf112a",
         "filename": "rbh-policy/rbhpolicy/config/config_loader.py",
         "patchSetId": 4
