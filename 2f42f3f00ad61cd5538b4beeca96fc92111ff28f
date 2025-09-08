@@ -22,6 +22,52 @@
       },
       "revId": "2f42f3f00ad61cd5538b4beeca96fc92111ff28f",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bca7d325_7888f0fb",
+        "filename": "rbh-fsevents/src/deduplicator.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-09-08T08:44:47Z",
+      "side": 1,
+      "message": "minor: no need for a global variable, putting it directly in the function seems enough",
+      "range": {
+        "startLine": 31,
+        "startChar": 0,
+        "endLine": 31,
+        "endChar": 53
+      },
+      "revId": "2f42f3f00ad61cd5538b4beeca96fc92111ff28f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b4871699_d1abe248",
+        "filename": "rbh-fsevents/src/deduplicator.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-09-08T08:44:47Z",
+      "side": 1,
+      "message": "major: I think it would be easier to do:\n```\nif rc !\u003d POOL_FULL \u0026\u0026 last_event\n    fsevent \u003d last_event\nelse\n    fsevent \u003d iter_next\n\nif rc \u003d\u003d POOL_FULL \u0026\u0026 fsevent !\u003d last_event\n    last_event \u003d fsevent\n    break\n \npush fsevent\n# do the same as current for POOL_ALREADY_FULL and INSERT_FAILED\nif rc \u003d POOL_FULL\n    last_event \u003d fsevent\n    continue -\u003e don\u0027t break here \n```\n\nThis way, you don\u0027t have to handle anything outside of this function",
+      "range": {
+        "startLine": 42,
+        "startChar": 8,
+        "endLine": 45,
+        "endChar": 16
+      },
+      "revId": "2f42f3f00ad61cd5538b4beeca96fc92111ff28f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
