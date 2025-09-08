@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ea7d844_8b900e69",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-09-08T09:11:18Z",
+      "side": 1,
+      "message": "As discussed, `__thread` might be enough, but a verification is needed",
+      "revId": "8cd5529a00d19816d661e5d8b13611d698a5dd2b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
