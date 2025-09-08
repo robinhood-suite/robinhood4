@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "20823c7a_ae6046ea",
+        "filename": "librobinhood/src/config.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 326,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-09-08T08:16:14Z",
+      "side": 1,
+      "message": "suggest: put this above before the if, and remove line 331",
+      "range": {
+        "startLine": 326,
+        "startChar": 12,
+        "endLine": 326,
+        "endChar": 38
+      },
+      "revId": "b072e7beb36b3063565540c992c918d2589b03dd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
