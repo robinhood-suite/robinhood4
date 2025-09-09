@@ -29,6 +29,7 @@ enum rbh_value_type {
     RBH_VT_REGEX,
     RBH_VT_SEQUENCE,
     RBH_VT_MAP,
+    RBH_VT_NULL,
 };
 
 struct rbh_value_pair {
@@ -104,6 +105,7 @@ static const char * const VALUE_TYPE_NAMES[] = {
     [RBH_VT_REGEX] = "regex",
     [RBH_VT_SEQUENCE] = "sequence",
     [RBH_VT_MAP] = "map",
+    [RBH_VT_NULL] = "null",
 };
 
 /**

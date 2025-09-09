@@ -124,7 +124,9 @@ bson_pipeline_creation(const struct rbh_filter *filter,
      && BSON_APPEND_UTF8(&stage, "$unwind", "$" MFF_NAMESPACE)
      && bson_append_document_end(&array, &stage)
      && BSON_APPEND_DOCUMENT_BEGIN(&array, UINT8_TO_STR[i], &stage) && ++i
-     && BSON_APPEND_RBH_FILTER(&stage, "$match", filter)
+     && (group ?
+         BSON_APPEND_RBH_FILTER_WITH_GROUP(&stage, "$match", filter, group) :
+         BSON_APPEND_RBH_FILTER(&stage, "$match", filter))
      && bson_append_document_end(&array, &stage)
      && (group && is_set_for_range_needed(group) ?
             BSON_APPEND_DOCUMENT_BEGIN(&array, UINT8_TO_STR[i], &stage) && ++i
