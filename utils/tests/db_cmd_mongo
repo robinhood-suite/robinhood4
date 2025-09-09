@@ -80,6 +80,11 @@ db="$2"
 shift 2
 
 case "$cmd" in
+    update)
+        mongo "$db" --eval \
+            'db.entries.updateOne({ "ns.xattrs.path":"'"$1"'"},
+                                  { $set: { '"$2"'}})'
+        ;;
     count)
         count_documents "$db" "$@"
         ;;

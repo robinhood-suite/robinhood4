@@ -968,6 +968,8 @@ parse_rbh_value(yaml_parser_t *parser, yaml_event_t *event,
         return parse_sequence(parser, value);
     case RBH_VT_MAP:
         return parse_rbh_value_map(parser, &value->map, false);
+    case RBH_VT_NULL:
+        return true;
     }
 
     yaml_event_delete(event);
