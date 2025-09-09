@@ -119,6 +119,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b725927b_c93ea3c8",
+        "filename": "rbh-policy/rbhpolicy/config/conditions.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-09-09T14:25:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0a971ec2_727431b4",
+      "range": {
+        "startLine": 41,
+        "startChar": 30,
+        "endLine": 41,
+        "endChar": 39
+      },
+      "revId": "fe46442f1c980191ef083700663e7f2dce1debfe",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3fa7b299_a12a70bb",
@@ -180,6 +204,30 @@
       "side": 1,
       "message": "My bad, I thought I double checked... But it seems not.\n\nWhy not typing `and`/`or` directly?",
       "parentUuid": "571e733e_347104e3",
+      "range": {
+        "startLine": 92,
+        "startChar": 32,
+        "endLine": 92,
+        "endChar": 33
+      },
+      "revId": "fe46442f1c980191ef083700663e7f2dce1debfe",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d20dc32b_5b9da484",
+        "filename": "rbh-policy/rbhpolicy/config/conditions.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-09-09T14:25:05Z",
+      "side": 1,
+      "message": "I had done this initially but for more consistency with the actual display of the configuration, I changed it.",
+      "parentUuid": "1e8b1153_9b064731",
       "range": {
         "startLine": 92,
         "startChar": 32,
