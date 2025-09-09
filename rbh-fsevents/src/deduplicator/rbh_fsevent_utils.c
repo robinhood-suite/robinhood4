@@ -170,6 +170,8 @@ rbh_value_deep_copy(struct rbh_value *dest, const struct rbh_value *src,
         return 0;
 
     switch (src->type) {
+    case RBH_VT_NULL:
+        return 0;
     case RBH_VT_BOOLEAN:
     case RBH_VT_INT32:
     case RBH_VT_UINT32:

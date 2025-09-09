@@ -486,3 +486,37 @@ bson_append_rbh_filter(bson_t *bson, const char *key, size_t key_length,
         && _bson_append_rbh_filter(&document, filter, negate)
         && bson_append_document_end(bson, &document);
 }
+
+bool
+bson_append_rbh_filter_with_group(bson_t *bson, const char *key,
+                                  size_t key_length,
+                                  const struct rbh_filter *filter,
+                                  bool negate,
+                                  const struct rbh_group_fields *group)
+{
+    bson_t document;
+
+    if (!bson_append_document_begin(bson, key, key_length, &document))
+        return false;
+
+    if (!_bson_append_rbh_filter(&document, filter, negate))
+        return false;
+
+    for (size_t i = 0; i < group->id_count; i++) {
+        struct rbh_range_field *field = &group->id_fields[i];
+        struct rbh_value value = { .type = RBH_VT_NULL };
+        struct rbh_filter *tmp;
+
+        tmp = rbh_filter_compare_new(RBH_FOP_EQUAL, &field->field, &value);
+        if (tmp == NULL)
+            return false;
+
+        if (!_bson_append_rbh_filter(&document, tmp, true)) {
+            free(tmp);
+            return false;
+        }
+        free(tmp);
+    }
+
+    return bson_append_document_end(bson, &document);
+}
