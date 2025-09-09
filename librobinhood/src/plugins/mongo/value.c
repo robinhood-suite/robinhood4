@@ -99,6 +99,8 @@ bson_append_rbh_value(bson_t *bson, const char *key, size_t key_length,
     case RBH_VT_MAP:
         /* TODO: support this */
         return bson_append_rbh_value_map(bson, key, key_length, &value->map);
+    case RBH_VT_NULL:
+        return bson_append_null(bson, key, key_length);
     }
     __builtin_unreachable();
 }
