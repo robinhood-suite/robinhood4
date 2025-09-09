@@ -211,6 +211,30 @@
       },
       "revId": "8809e40eee2c95b3361840747c62dacb572dde86",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "86b9d08a_6c2522cc",
+        "filename": "librobinhood/src/filters/core.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-09-09T14:24:53Z",
+      "side": 1,
+      "message": "Exceptions in c? It\u0027s signal fiddling. But I see why a fork is problematic performance-wise. I will do it differently",
+      "parentUuid": "68a5d235_670cace9",
+      "range": {
+        "startLine": 230,
+        "startChar": 7,
+        "endLine": 260,
+        "endChar": 9
+      },
+      "revId": "8809e40eee2c95b3361840747c62dacb572dde86",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
