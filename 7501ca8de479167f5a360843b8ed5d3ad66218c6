@@ -119,6 +119,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7913c420_0c317da8",
+        "filename": "rbh-policy/tests/test_cpython.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-09-09T14:25:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d015bea8_6258fac6",
+      "range": {
+        "startLine": 40,
+        "startChar": 0,
+        "endLine": 40,
+        "endChar": 30
+      },
+      "revId": "7501ca8de479167f5a360843b8ed5d3ad66218c6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3ef10efe_a3e36b3c",
