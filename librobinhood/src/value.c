@@ -30,6 +30,7 @@ value_data_size(const struct rbh_value *value, size_t offset)
     case RBH_VT_UINT32:
     case RBH_VT_INT64:
     case RBH_VT_UINT64:
+    case RBH_VT_NULL:
         return 0;
     case RBH_VT_STRING:
         return strlen(value->string) + 1;
@@ -180,6 +181,8 @@ value_copy(struct rbh_value *dest, const struct rbh_value *src, char **buffer,
         if (value_map_copy(&dest->map, &src->map, &data, &size))
             return -1;
         break;
+    case RBH_VT_NULL:
+        return 0;
     default:
         errno = EINVAL;
         return -1;
@@ -444,6 +447,7 @@ rbh_value_validate(const struct rbh_value *value)
     case RBH_VT_UINT32:
     case RBH_VT_INT64:
     case RBH_VT_UINT64:
+    case RBH_VT_NULL:
         return 0;
     case RBH_VT_STRING:
         if (value->string == NULL)
