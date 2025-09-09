@@ -96,11 +96,45 @@ test_multi_group_by()
                   "$fake_user_id,file: $fake_user_file_size"
 }
 
+test_group_by_invalid_value()
+{
+    mkdir first_dir
+    mkdir second_dir
+    truncate --size 1M first_dir/first_file
+    truncate --size 1G second_dir/second_file
+
+    local fake_user_id="$(id -u $test_user)"
+    chown $test_user: first_dir first_dir/first_file
+
+    rbh_sync "rbh:posix:." "rbh:$db:$testdb"
+
+    local root_size="$(stat -c %s .)"
+    local first_dir_size="$(stat -c %s first_dir)"
+    local second_dir_size="$(stat -c %s second_dir)"
+    local first_file_size="$(stat -c %s first_dir/first_file)"
+    local second_file_size="$(stat -c %s second_dir/second_file)"
+
+    local main_user_dir_size="$((root_size + second_dir_size))"
+    local main_user_file_size="$((second_file_size))"
+    local fake_user_dir_size="$((first_dir_size))"
+    local fake_user_file_size="$((first_file_size))"
+
+    do_db update $testdb "/first_dir" '"statx.uid": null'
+    do_db update $testdb "/second_dir/second_file" '"statx.uid": -1'
+
+    rbh_report "rbh:$db:$testdb" --csv --group-by "statx.uid,statx.type" \
+                                   --output "sum(statx.size)" |
+        difflines "-1,file: $main_user_file_size" \
+	          "$main_user_id,directory: $main_user_dir_size" \
+                  "$fake_user_id,file: $fake_user_file_size"
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
-declare -a tests=(test_group_by_type test_group_by_user test_multi_group_by)
+declare -a tests=(test_group_by_type test_group_by_user test_multi_group_by
+                  test_group_by_invalid_value)
 
 tmpdir=$(mktemp --directory)
 test_user="$(get_test_user "$(basename "$0")")"

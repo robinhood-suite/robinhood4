@@ -260,6 +260,17 @@ bson_append_rbh_filter(bson_t *bson, const char *key, size_t key_length,
 #define BSON_APPEND_RBH_FILTER(bson, key, filter) \
     bson_append_rbh_filter(bson, key, strlen(key), filter, false)
 
+bool
+bson_append_rbh_filter_with_group(bson_t *bson, const char *key,
+                                  size_t key_length,
+                                  const struct rbh_filter *filter,
+                                  bool negate,
+                                  const struct rbh_group_fields *group);
+
+#define BSON_APPEND_RBH_FILTER_WITH_GROUP(bson, key, filter, group) \
+        bson_append_rbh_filter_with_group(bson, key, strlen(key), filter, \
+                                          false, group)
+
     /*--------------------------------------------------------------------*
      |                               group                                |
      *--------------------------------------------------------------------*/
