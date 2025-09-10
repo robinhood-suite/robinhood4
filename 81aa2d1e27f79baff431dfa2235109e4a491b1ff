@@ -22,6 +22,30 @@
       },
       "revId": "81aa2d1e27f79baff431dfa2235109e4a491b1ff",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "89e6fe94_9b06d7e7",
+        "filename": "rbh-policy/rbhpolicy/config/config_validator.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-09-10T13:35:49Z",
+      "side": 1,
+      "message": "Regarding the definition of file classes, the user cannot do whatever he wants. He must enter a valid name as a string and the condition must also be valid, otherwise we will not be able to create the rbh filter.\nChecking this also allows you to return an explicit error explaining what is wrong with the user\u0027s configuration.",
+      "parentUuid": "c7f070ad_59e54e38",
+      "range": {
+        "startLine": 16,
+        "startChar": 3,
+        "endLine": 22,
+        "endChar": 54
+      },
+      "revId": "81aa2d1e27f79baff431dfa2235109e4a491b1ff",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
