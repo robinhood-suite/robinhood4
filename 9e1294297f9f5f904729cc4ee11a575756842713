@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c17fce3f_4584a7a7",
+        "filename": "rbh-policy/tests/test_models_fileclass.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-09-10T08:42:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bf03e7d8_901c407a",
+      "range": {
+        "startLine": 12,
+        "startChar": 51,
+        "endLine": 12,
+        "endChar": 59
+      },
+      "revId": "9e1294297f9f5f904729cc4ee11a575756842713",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5ed984c3_175f2b17",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-08-21T06:35:18Z",
       "side": 1,
       "message": "question: Why are we checking if librobinhood is built? It’s always built, isn’t it ?",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 80
+      },
+      "revId": "9e1294297f9f5f904729cc4ee11a575756842713",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a0bca0f1_e7fd78cb",
+        "filename": "rbh-policy/tests/test_models_fileclass.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-09-10T08:42:54Z",
+      "side": 1,
+      "message": "Yes, that\u0027s always the case. I can remove this test, it\u0027s not essential, it\u0027s there mainly as a precaution and to give an explicit error message that\u0027s more understandable than the one from ctypes.CDLL(). \nWould you prefer that it be deleted?",
+      "parentUuid": "5ed984c3_175f2b17",
       "range": {
         "startLine": 14,
         "startChar": 0,
@@ -70,6 +118,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f56a3486_ea0e82c3",
+        "filename": "rbh-policy/tests/test_models_fileclass.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-09-10T08:42:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dcf97d0b_f6c221be",
+      "range": {
+        "startLine": 29,
+        "startChar": 0,
+        "endLine": 31,
+        "endChar": 18
+      },
+      "revId": "9e1294297f9f5f904729cc4ee11a575756842713",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7aaf82be_9799b5d2",
@@ -93,6 +165,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6be8ed43_926ae6ad",
+        "filename": "rbh-policy/tests/test_models_fileclass.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-09-10T08:42:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7aaf82be_9799b5d2",
+      "range": {
+        "startLine": 34,
+        "startChar": 0,
+        "endLine": 34,
+        "endChar": 39
+      },
+      "revId": "9e1294297f9f5f904729cc4ee11a575756842713",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a8ddb0f5_04bfe6f3",
@@ -106,6 +202,30 @@
       "writtenOn": "2025-08-28T09:34:16Z",
       "side": 1,
       "message": "question: I suppose `globals` comes from `config.entities`?",
+      "range": {
+        "startLine": 39,
+        "startChar": 8,
+        "endLine": 39,
+        "endChar": 15
+      },
+      "revId": "9e1294297f9f5f904729cc4ee11a575756842713",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a88572e0_fd7dd624",
+        "filename": "rbh-policy/tests/test_models_fileclass.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-09-10T08:42:54Z",
+      "side": 1,
+      "message": "No, globals() is in python the dictionary of all variables defined in a python module. Here I use it to remove variable declarations from previous tests. \nI do this before each test (setUp) and after all the tests in the file have been executed (tearDownClass)",
+      "parentUuid": "a8ddb0f5_04bfe6f3",
       "range": {
         "startLine": 39,
         "startChar": 8,
