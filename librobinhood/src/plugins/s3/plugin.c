@@ -24,6 +24,7 @@ static const struct rbh_pe_common_operations S3_BACKEND_PLUGIN_COMMON_OPS = {
 
 static const struct rbh_backend_plugin_operations S3_BACKEND_PLUGIN_OPS = {
     .new = rbh_s3_backend_new,
+    .init = rbh_s3_plugin_init,
     .destroy = rbh_s3_plugin_destroy,
     .load_iterator = rbh_s3_backend_load_iterator,
 };

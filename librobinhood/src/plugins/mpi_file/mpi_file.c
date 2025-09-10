@@ -545,9 +545,6 @@ static const struct rbh_backend MPI_FILE_BACKEND = {
 static void
 mpi_file_backend_init(struct mpi_file_backend *mpi_file)
 {
-    rbh_add_custom_initialize(mfu_init);
-    rbh_mpi_inc_ref(rbh_mpi_initialize);
-
     mpi_file->flist = mfu_flist_new();
     /* We tell mpifileutils that we have the stat informations */
     mfu_flist_set_detail(mpi_file->flist, 1);
@@ -598,4 +595,15 @@ rbh_mpi_file_plugin_destroy(void)
 {
     rbh_add_custom_finalize(mfu_finalize);
     rbh_mpi_dec_ref(rbh_mpi_finalize);
+}
+
+int
+rbh_mpi_file_plugin_init(struct rbh_backend_plugin_init_arg *arg)
+{
+    (void) arg;
+
+    rbh_add_custom_initialize(mfu_init);
+    rbh_mpi_inc_ref(rbh_mpi_initialize);
+
+    return 0;
 }

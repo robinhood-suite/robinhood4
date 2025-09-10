@@ -83,12 +83,25 @@ static struct rbh_backend *
 backend_new(const struct rbh_uri *uri, bool read_only)
 {
     const struct rbh_backend_plugin *plugin;
+    struct rbh_backend_plugin_init_arg arg = {
+        .is_uri = true,
+        .uri_arg = {
+            .uri = uri,
+        }
+    };
     struct rbh_backend *backend;
     struct rbh_config *config;
+    int rc;
 
     config = rbh_config_get();
+    arg.uri_arg.config = config;
+
     plugin = backend_plugin_import(resolve_config_plugin_name(config,
                                                               uri->backend));
+
+    rc = rbh_backend_plugin_init(plugin, &arg);
+    if (rc && errno != ENOTSUP)
+        return NULL;
 
     backend = rbh_backend_plugin_new(plugin, uri, config, read_only);
     if (backend == NULL) {

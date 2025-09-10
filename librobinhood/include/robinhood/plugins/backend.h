@@ -29,7 +29,20 @@ struct rbh_backend_plugin {
     const uint8_t info;
 };
 
+struct rbh_backend_plugin_init_arg {
+    bool is_uri;
+    union {
+        struct {
+            const struct rbh_uri *uri;
+            struct rbh_config *config;
+        } uri_arg;
+        const struct rbh_value *param;
+    };
+};
+
 struct rbh_backend_plugin_operations {
+    int (*init) (struct rbh_backend_plugin_init_arg *arg);
+
     struct rbh_backend *(*new)(const struct rbh_backend_plugin *self,
                                const struct rbh_uri *uri,
                                struct rbh_config *config,
@@ -226,6 +239,17 @@ rbh_backend_plugin_load_enrichers(const struct rbh_backend_plugin *plugin,
                                   const char *type)
 {
     return plugin->ops->load_enrichers(plugin, backend, enrichers, type);
+}
+
+static inline int
+rbh_backend_plugin_init(const struct rbh_backend_plugin *plugin,
+                        struct rbh_backend_plugin_init_arg *arg)
+{
+    if (plugin->ops->init)
+        return plugin->ops->init(arg);
+
+    errno = ENOTSUP;
+    return -1;
 }
 
 /**
