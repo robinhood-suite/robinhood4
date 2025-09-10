@@ -34,7 +34,7 @@ s3_iter_destroy(void *iterator)
     struct s3_iterator *s3_iter = iterator;
 
     rbh_sstack_destroy(s3_iter->values);
-    if (s3_iter->obj_data.list != NULL)
+    if (s3_iter->obj_data.length > 0)
         s3_delete_list(s3_iter->obj_data.length, s3_iter->obj_data.list);
 
     s3_delete_list(s3_iter->bkt_data.length, s3_iter->bkt_data.list);
@@ -418,6 +418,121 @@ get_config_var(char *key)
     return rc == KPR_FOUND ? value.string : NULL;
 }
 
+static int
+s3_get_connection_param_from_uri(const struct rbh_uri *uri,
+                                 struct rbh_config *config,
+                                 const char **address, const char **user,
+                                 const char **password, const char **crt_path,
+                                 const char **region)
+{
+    size_t host_len, port_len;
+    uint64_t temp_port;
+    char buffer[255];
+    char port[16];
+    int rc;
+
+    rbh_config_load(config);
+
+    *crt_path = get_config_var("s3/crt_path");
+    *region = get_config_var("s3/region");
+
+    if (uri->authority) {
+        *password = uri->authority->password;
+        if (!strcmp(*password, ""))
+            *password = get_config_var("s3/password");
+
+        *user = uri->authority->username;
+        if (!strcmp(*user, ""))
+            *user = get_config_var("s3/user");
+
+        if (uri->authority->port == 0)
+            //Default port is 80 in HTTP and 443 in HTTPS
+            temp_port = (crt_path != NULL ? 443 : 80);
+        else
+            temp_port = uri->authority->port;
+
+        rc = snprintf(port, sizeof(port), "%ld", temp_port);
+        if (rc < 0 || rc >= sizeof(port))
+            return -1;
+
+        host_len = strlen(uri->authority->host);
+        port_len = strlen(port);
+        memcpy(buffer, uri->authority->host, host_len);
+        memcpy(buffer + host_len, ":", 1);
+        memcpy(buffer + host_len + 1, port, port_len);
+        buffer[host_len + 1 + port_len] = '\0';
+        *address = strdup(buffer);
+    } else {
+        *address = get_config_var("s3/address");
+        *user = get_config_var("s3/user");
+        *password = get_config_var("s3/password");
+    }
+
+    if (!*address && !*region) {
+        rbh_backend_error_printf("could not retrieve the address or region "
+                                 "from the config file or the URI");
+        return -1;
+    }
+
+    if (!*user || !*password) {
+        rbh_backend_error_printf("could not retrieve the user and password "
+                                 "from the config file or the URI");
+        return -1;
+    }
+
+    return 0;
+}
+
+static void
+s3_get_connection_param_from_find(const struct rbh_value *value,
+                                  const char **address, const char **user,
+                                  const char **password, const char **crt_path,
+                                  const char **region)
+{
+    for (int i = 0; i < value->map.count; i++) {
+        const struct rbh_value_pair *pair = &value->map.pairs[i];
+
+        if (strcmp(pair->key, "address") == 0)
+            *address = pair->value->string;
+        else if (strcmp(pair->key, "region") == 0)
+            *region = pair->value->string;
+         else if (strcmp(pair->key, "crt_path") == 0)
+            *crt_path = pair->value->string;
+         else if (strcmp(pair->key, "password") == 0)
+            *password = pair->value->string;
+         else if (strcmp(pair->key, "user") == 0)
+            *user = pair->value->string;
+    }
+}
+
+int
+rbh_s3_plugin_init(struct rbh_backend_plugin_init_arg *arg)
+{
+    const char *crt_path = NULL;
+    const char *password = NULL;
+    const char *address = NULL;
+    const char *region = NULL;
+    const char *user = NULL;
+    int rc;
+
+    if (arg->is_uri) {
+        rc = s3_get_connection_param_from_uri(arg->uri_arg.uri,
+                                              arg->uri_arg.config,
+                                              &address, &user, &password,
+                                              &crt_path, &region);
+        if (rc)
+            return -1;
+    } else {
+        s3_get_connection_param_from_find(arg->param, &address, &user,
+                                          &password, &crt_path, &region);
+    }
+
+
+    s3_init_api(address, user, password, crt_path, region);
+
+    return 0;
+}
+
 struct rbh_backend *
 rbh_s3_backend_new(__attribute__((unused))
                    const struct rbh_backend_plugin *self,
@@ -426,72 +541,12 @@ rbh_s3_backend_new(__attribute__((unused))
                    bool read_only)
 {
     const char *type = uri->backend;
-    size_t host_len, port_len;
     struct s3_backend *s3;
-    const char *crt_path;
-    const char *password;
-    const char *address;
-    const char *region;
-    uint64_t temp_port;
-    const char *user;
-    char buffer[255];
-    char port[16];
-    int rc2;
 
     s3 = malloc(sizeof(*s3));
     if (s3 == NULL)
         return NULL;
 
-    rbh_config_load(config);
-
-    crt_path = get_config_var("s3/crt_path");
-    region = get_config_var("s3/region");
-
-    if (uri->authority) {
-        password = uri->authority->password;
-        if (!strcmp(password, ""))
-            password = get_config_var("s3/password");
-
-        user = uri->authority->username;
-        if (!strcmp(user, ""))
-            user = get_config_var("s3/user");
-
-        if (uri->authority->port == 0)
-            //Default port is 80 in HTTP and 443 in HTTPS
-            temp_port = (crt_path != NULL ? 443 : 80);
-        else
-            temp_port = uri->authority->port;
-
-        rc2 = snprintf(port, sizeof(port), "%ld", temp_port);
-        if (rc2 < 0 || rc2 >= sizeof(port))
-            return NULL;
-
-        host_len = strlen(uri->authority->host);
-        port_len = strlen(port);
-        memcpy(buffer, uri->authority->host, host_len);
-        memcpy(buffer + host_len, ":", 1);
-        memcpy(buffer + host_len + 1, port, port_len);
-        buffer[host_len + 1 + port_len] = '\0';
-        address = buffer;
-    } else {
-        address = get_config_var("s3/address");
-        user = get_config_var("s3/user");
-        password = get_config_var("s3/password");
-    }
-
-    if (!address && !region) {
-        rbh_backend_error_printf("could not retrieve the address or region "
-                                 "from the config file or the URI");
-        return NULL;
-    }
-
-    if (!user || !password) {
-        rbh_backend_error_printf("could not retrieve the user and password "
-                                 "from the config file or the URI");
-        return NULL;
-    }
-
-    s3_init_api(address, user, password, crt_path, region);
     s3->iter_new = s3_iterator_new;
     s3->backend = S3_BACKEND;
 

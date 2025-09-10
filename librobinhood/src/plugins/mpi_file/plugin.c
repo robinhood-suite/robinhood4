@@ -24,6 +24,7 @@ static const struct rbh_pe_common_operations
 static const struct rbh_backend_plugin_operations
 MPI_FILE_BACKEND_PLUGIN_OPS = {
     .new = rbh_mpi_file_backend_new,
+    .init = rbh_mpi_file_plugin_init,
     .destroy = rbh_mpi_file_plugin_destroy,
 };
 

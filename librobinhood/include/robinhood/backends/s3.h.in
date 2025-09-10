@@ -97,4 +97,7 @@ rbh_s3_plugin_destroy();
 void
 s3_iter_destroy(void *iterator);
 
+int
+rbh_s3_plugin_init(struct rbh_backend_plugin_init_arg *arg);
+
 #endif

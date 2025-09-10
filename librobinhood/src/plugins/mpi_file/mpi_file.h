@@ -12,6 +12,7 @@
 
 #include "mfu.h"
 #include "robinhood/filter.h"
+#include "robinhood/plugins/backend.h"
 
 /**
  * The structure of the rbh_filter is reproduced with mfu_pred structure.
@@ -72,6 +73,8 @@
 void
 rbh_mpi_file_plugin_destroy(void);
 
+int
+rbh_mpi_file_plugin_init(struct rbh_backend_plugin_init_arg *arg);
 
 /*----------------------------------------------------------------------------*
  |                                PRED FUNCTION                               |
