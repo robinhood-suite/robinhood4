@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b783c766_02d8c452",
+        "filename": "utils/tests/framework.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-09-11T11:26:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1f0508c1_e215320b",
+      "range": {
+        "startLine": 180,
+        "startChar": 0,
+        "endLine": 180,
+        "endChar": 1
+      },
+      "revId": "44ed7f6d0db678befe2c6a3d423d6c0c4b8d87f8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b567b6e9_b9d02e81",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-06-10T14:23:40Z",
       "side": 1,
       "message": "suggest: add an \u0027s\u0027 after the time",
+      "range": {
+        "startLine": 181,
+        "startChar": 12,
+        "endLine": 181,
+        "endChar": 77
+      },
+      "revId": "44ed7f6d0db678befe2c6a3d423d6c0c4b8d87f8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7198bbcc_b03d8154",
+        "filename": "utils/tests/framework.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-09-11T11:26:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b567b6e9_b9d02e81",
       "range": {
         "startLine": 181,
         "startChar": 12,
