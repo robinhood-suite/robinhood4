@@ -318,6 +318,18 @@ _get_collection_count(const struct rbh_value *value)
 }
 
 static void
+print_conn_param(const struct rbh_value_map *map)
+{
+    printf("Connection parameters used for this plugin:\n");
+    for (int i = 0; i < map->count; i++) {
+        const struct rbh_value_pair *pair = &map->pairs[i];
+
+        assert(pair->value->type == RBH_VT_STRING);
+        printf("%s: %s\n", pair->key, pair->value->string);
+    }
+}
+
+static void
 _get_backend_source(const struct rbh_value *value)
 {
     assert(value->type == RBH_VT_SEQUENCE);
@@ -340,10 +352,15 @@ _get_backend_source(const struct rbh_value *value)
         is_plugin = (strcmp(submap->pairs[type_index].value->string,
                             "plugin") == 0);
 
-        for (j = 0; j < submap->count; j++)
+        for (j = 0; j < submap->count; j++) {
             if ((is_plugin && strcmp(submap->pairs[j].key, "plugin") == 0) ||
                 (!is_plugin && strcmp(submap->pairs[j].key, "extension") == 0))
-                printf("%s\n", submap->pairs[j].value->string);
+                printf("%s: %s\n", is_plugin ? "Plugin" : "Extension",
+                       submap->pairs[j].value->string);
+
+            if (is_plugin && strcmp(submap->pairs[j].key, "param") == 0)
+                print_conn_param(&submap->pairs[j].value->map);
+        }
     }
 }
 
