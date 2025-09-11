@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b2f78e17_067a53e5",
+        "filename": "rbh-sync/tests/test_lustre_db_sync.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 512,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-09-11T11:08:15Z",
+      "side": 1,
+      "message": "minor: update the comment since it\u0027s irrelevant now",
+      "range": {
+        "startLine": 512,
+        "startChar": 8,
+        "endLine": 512,
+        "endChar": 71
+      },
+      "revId": "b71fde46f9944ac4aad774710e6a0732390d9298",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
