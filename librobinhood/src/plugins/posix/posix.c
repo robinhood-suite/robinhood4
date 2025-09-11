@@ -800,10 +800,10 @@ posix_backend_filter(
                   posix->iter_new(options->one ? root : posix->root,
                                   options->one ? full_path + strlen(root) : NULL,
                                   posix->statx_sync_type);
-    posix_iter->enrichers = posix->enrichers;
     if (posix_iter == NULL)
         return NULL;
 
+    posix_iter->enrichers = posix->enrichers;
     posix_iter->skip_error = options->skip_error;
 
     if (options->one)

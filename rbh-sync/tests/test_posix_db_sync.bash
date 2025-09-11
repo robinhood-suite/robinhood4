@@ -537,6 +537,32 @@ test_sync_number_children_mpi()
     done
 }
 
+test_sync_dir_delete_while_mfu_walk()
+{
+    mkdir dir
+    touch dir/fileA
+    touch fileB
+
+    tmp_gdb_script=$(mktemp)
+    cat << EOF > "$tmp_gdb_script"
+set breakpoint pending on
+break rbh_iter_chunkify
+commands
+shell rm -rf dir
+continue
+end
+run
+EOF
+
+    DEBUGINFOD_URLS="" gdb --batch -x "$tmp_gdb_script" \
+        --args $__rbh_sync "rbh:posix-mpi:." "rbh:$db:$testdb"
+
+    find_attribute '"ns.xattrs.path": "/"' \
+                   '"xattrs.nb_children": 1'
+    find_attribute '"ns.xattrs.path": "/fileB"'
+    ! (find_attribute '"ns.xattrs.path": "/dir"')
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
@@ -549,7 +575,8 @@ declare -a tests=(test_sync_2_files test_sync_size test_sync_3_files
                   test_stop_sync_on_error test_config test_sync_number_children)
 
 if [[ $WITH_MPI == true ]]; then
-    tests+=(test_sync_number_children_mpi test_sync_large_path)
+    tests+=(test_sync_number_children_mpi test_sync_large_path
+            test_sync_dir_delete_while_mfu_walk)
 fi
 
 tmpdir=$(mktemp --directory)

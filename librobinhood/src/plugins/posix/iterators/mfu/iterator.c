@@ -122,10 +122,11 @@ skip:
                                           iter->posix.prefix_len,
                                           iter->backend_id);
 
-        if (!rbh_id_equal(tmp_id, &ROOT_PARENT_ID))
+        if (tmp_id != NULL && !rbh_id_equal(tmp_id, &ROOT_PARENT_ID))
             fsentry = build_fsentry_nb_children(tmp_id, tmp_children, sstack);
 
-        free(tmp_id);
+        if (tmp_id)
+            free(tmp_id);
 
         if (fsentry)
             return fsentry;
