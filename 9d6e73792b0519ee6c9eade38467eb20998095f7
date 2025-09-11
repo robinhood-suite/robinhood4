@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aba0a012_cfd3d0cd",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-09-11T11:56:26Z",
+      "side": 1,
+      "message": "suggest: as talked about, adding a small paragraph about the relation between `cursor_get_next`, `getMore` and Mongo would be nice",
+      "range": {
+        "startLine": 15,
+        "startChar": 23,
+        "endLine": 15,
+        "endChar": 30
+      },
+      "revId": "9d6e73792b0519ee6c9eade38467eb20998095f7",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
