@@ -156,5 +156,39 @@ class TestLogicalConditions(unittest.TestCase):
         self.assertEqual(rbh_filter_validate(f), 0)
         rbh_filter_free(f)
 
+class TestInvalidConditions(unittest.TestCase):
+    def test_invalid_uid_string(self):
+        cond = (entities.UID == "usr1")
+        with self.assertRaises((TypeError, ValueError)):
+            cond.to_filter()
+
+    def test_invalid_gid_string(self):
+        cond = (entities.GID == "abc")
+        with self.assertRaises((TypeError, ValueError)):
+            cond.to_filter()
+
+    def test_invalid_size_string(self):
+        cond = (entities.Size > "Patrick")
+        with self.assertRaises((TypeError, ValueError)):
+            cond.to_filter()
+
+    def test_unknown_field(self):
+        Unknown = entities.ConditionBuilder("UnknownField")
+        cond = (Unknown == "test")
+        with self.assertRaises(ValueError) as cm:
+            cond.to_filter()
+        self.assertIn("Unknown key", str(cm.exception))
+
+    def test_invalid_operator_for_size(self):
+        cond = entities.Size != 100
+        with self.assertRaises(ValueError) as cm:
+            cond.to_filter()
+        self.assertIn("Unsupported operator for Size", str(cm.exception))
+
+    def test_invalid_time_kind(self):
+        cond = (entities.LastAccess > "nonsense")
+        with self.assertRaises((TypeError, ValueError)):
+            cond.to_filter()
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)
