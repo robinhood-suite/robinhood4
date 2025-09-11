@@ -18,6 +18,10 @@ if liblustre.found()
     parallel_integration_tests += ['test_lustre']
 endif
 
+if libs3.found()
+    parallel_integration_tests += ['test_s3']
+endif
+
 foreach t: non_parallel_integration_tests
     e = find_program(t + '.bash')
     test(t, e, env: backend_path_env, suite: 'rbh-info', is_parallel: false)
