@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ea888efa_e5359684",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2025-09-12T14:15:44Z",
+      "side": 1,
+      "message": "question: what is the meaning of this last sentence ?",
+      "range": {
+        "startLine": 11,
+        "startChar": 35,
+        "endLine": 12,
+        "endChar": 46
+      },
+      "revId": "d803cc57d548f25c084b0699c6374749c26991e0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7a34492f_ed8ebaa6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2025-09-12T14:15:44Z",
+      "side": 1,
+      "message": "All this module import is very complicated. What is the final goal ? To be able to write some python functions into the configuration file ?\n\nIs there no easier way to do that ?",
+      "revId": "d803cc57d548f25c084b0699c6374749c26991e0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7b472169_4cae5736",
+        "filename": "rbh-policy/rbhpolicy/config/config_loader.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2025-09-12T14:15:44Z",
+      "side": 1,
+      "message": "question: did you envisioned to look for a special path in some existing backend of the RBH DB ? (a special path per monitored FS for example ?)",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 44
+      },
+      "revId": "d803cc57d548f25c084b0699c6374749c26991e0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "833739f2_43a5d8c2",
+        "filename": "rbh-policy/rbhpolicy/config/config_loader.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2025-09-12T14:15:44Z",
+      "side": 1,
+      "message": "question: why making an effort to load a configuration inside a separate module and then adding some stuff of this specific module into sys._getframe(1).f_globals ? Why not letting this stuff into the specific module ?",
+      "range": {
+        "startLine": 79,
+        "startChar": 4,
+        "endLine": 80,
+        "endChar": 20
+      },
+      "revId": "d803cc57d548f25c084b0699c6374749c26991e0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}

@@ -145,6 +145,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e8701976_abe16680",
+        "filename": "rbh-policy/rbhpolicy/config/config_loader.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2025-09-12T14:15:44Z",
+      "side": 1,
+      "message": "I\u0027m not fan of the third option also. I think that the RBH policy engine will often be executed without any user ready to answer any question.",
+      "parentUuid": "82c73eb1_ae2e0172",
+      "range": {
+        "startLine": 44,
+        "startChar": 12,
+        "endLine": 44,
+        "endChar": 64
+      },
+      "revId": "a8455ce9a33b0701f766dd0a34c5ba4f5c95aaf1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "39e93642_bb522e76",
         "filename": "rbh-policy/rbhpolicy/config/config_loader.py",
         "patchSetId": 4
@@ -276,6 +300,30 @@
       "side": 1,
       "message": "If b.py needs something from a.py, then yes, in a standard Python package, it should import it.\nBut in our case, we don\u0027t treat these files as independent modules. They\u0027re part of a declarative config space, loaded into a shared namespace.\nThis allows b.py to use definitions from a.py without explicit imports, as long as a.py is executed first.\nThat\u0027s why we use exec(..., config_module.__dict__) instead of importlib",
       "parentUuid": "7d2f7d85_42884f76",
+      "range": {
+        "startLine": 69,
+        "startChar": 16,
+        "endLine": 69,
+        "endChar": 20
+      },
+      "revId": "a8455ce9a33b0701f766dd0a34c5ba4f5c95aaf1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d8e69093_40aa8d3d",
+        "filename": "rbh-policy/rbhpolicy/config/config_loader.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2025-09-12T14:15:44Z",
+      "side": 1,
+      "message": "Why not using package instead of a module ? It will allow to have many different files, and to load them with the submodule_search_locations paramater of spec_from_file_location ?",
+      "parentUuid": "abd88dd0_dc70cf66",
       "range": {
         "startLine": 69,
         "startChar": 16,
