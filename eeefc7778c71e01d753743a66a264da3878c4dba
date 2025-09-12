@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6354f64c_a33598d1",
+        "filename": "rbh-policy/rbhpolicy/config/config_loader.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2025-09-12T13:46:55Z",
+      "side": 1,
+      "message": "question: how could you use importlib and spec here, without any related import ?",
+      "range": {
+        "startLine": 28,
+        "startChar": 4,
+        "endLine": 31,
+        "endChar": 24
+      },
+      "revId": "eeefc7778c71e01d753743a66a264da3878c4dba",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
