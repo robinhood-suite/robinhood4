@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c3cc8c1d_2c206e0d",
+        "filename": "librobinhood/src/hashmap.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-09-17T14:56:18Z",
+      "side": 1,
+      "message": "question: can the hashmap be destroyed whilst it is not empty ?",
+      "range": {
+        "startLine": 276,
+        "startChar": 0,
+        "endLine": 276,
+        "endChar": 19
+      },
+      "revId": "4cce6c73b96636ec0a2b692f50cf24488c5c9c86",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9e57e4eb_e0c7f9f4",
+        "filename": "librobinhood/tests/unit/check_hashmap.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-09-17T14:56:18Z",
+      "side": 1,
+      "message": "defect: this test is the same as `rhs_basic`. Similarly to the other free function added in another patch, we should use here a special free function which sets some kind of value that can be accessed from this test, this way we can verify it has been changed when called by the pop",
+      "range": {
+        "startLine": 234,
+        "startChar": 11,
+        "endLine": 234,
+        "endChar": 19
+      },
+      "revId": "4cce6c73b96636ec0a2b692f50cf24488c5c9c86",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
