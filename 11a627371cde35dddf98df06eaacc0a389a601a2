@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "213372ba_c3f1e4f9",
+        "filename": "librobinhood/src/plugins/meson.build",
+        "patchSetId": 5
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-09-17T14:44:15Z",
+      "side": 1,
+      "message": "minor: add an option to meson for building sqlite. Can be done in a later patch",
+      "range": {
+        "startLine": 46,
+        "startChar": 0,
+        "endLine": 46,
+        "endChar": 16
+      },
+      "revId": "11a627371cde35dddf98df06eaacc0a389a601a2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
