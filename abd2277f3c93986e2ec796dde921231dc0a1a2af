@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "79f715d6_9669d00a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-09-17T14:35:12Z",
+      "side": 1,
+      "message": "Except the thread not doing any sleep, the patch is fine for me",
+      "revId": "abd2277f3c93986e2ec796dde921231dc0a1a2af",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0b0c5b83_6789f233",
+        "filename": "rbh-fsevents/rbh-fsevents.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 397,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-09-17T14:35:12Z",
+      "side": 1,
+      "message": "defect: using something like https://linux.die.net/man/3/pthread_cond_wait or a sleep here would be better, because here the thread is actively trying to dequeue for no reason, constantly working for no reason, and potentially blocking off other thread from working",
+      "range": {
+        "startLine": 397,
+        "startChar": 12,
+        "endLine": 397,
+        "endChar": 21
+      },
+      "revId": "abd2277f3c93986e2ec796dde921231dc0a1a2af",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "de42838a_0038e275",
+        "filename": "rbh-fsevents/rbh-fsevents.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 439,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-09-17T14:35:12Z",
+      "side": 1,
+      "message": "suggest: divide the function in 3 parts: structures init, producer loop, and structure cleaning\n\nThe function is very long currently",
+      "range": {
+        "startLine": 439,
+        "startChar": 0,
+        "endLine": 439,
+        "endChar": 4
+      },
+      "revId": "abd2277f3c93986e2ec796dde921231dc0a1a2af",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6880924d_73b8b112",
+        "filename": "rbh-fsevents/rbh-fsevents.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 539,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-09-17T14:35:12Z",
+      "side": 1,
+      "message": "comment: it\u0027d be interesting to have the time of each worker given, that way we could see if the work is evenly distributed or if there are certains combinations of events or moments where threads take longer.\n\nBut probably only print that with a second level of verbose",
+      "range": {
+        "startLine": 537,
+        "startChar": 8,
+        "endLine": 539,
+        "endChar": 50
+      },
+      "revId": "abd2277f3c93986e2ec796dde921231dc0a1a2af",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
