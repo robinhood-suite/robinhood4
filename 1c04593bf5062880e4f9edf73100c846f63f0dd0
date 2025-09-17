@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fcc34696_101e3ecb",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-09-17T15:11:24Z",
+      "side": 1,
+      "message": "typo: exists",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 5
+      },
+      "revId": "1c04593bf5062880e4f9edf73100c846f63f0dd0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7d3d5c03_54b623c9",
+        "filename": "librobinhood/src/hashmap.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-09-17T15:11:24Z",
+      "side": 1,
+      "message": "nit: this function is the same as a get where you check the result is not NULL",
+      "range": {
+        "startLine": 129,
+        "startChar": 0,
+        "endLine": 129,
+        "endChar": 20
+      },
+      "revId": "1c04593bf5062880e4f9edf73100c846f63f0dd0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "48f0b1b4_9b262d8e",
+        "filename": "librobinhood/src/hashmap.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-09-17T15:11:24Z",
+      "side": 1,
+      "message": "suggest: `return match !\u003d NULL \u0026\u0026 match-\u003ekey !\u003d NULL;`",
+      "range": {
+        "startLine": 133,
+        "startChar": 4,
+        "endLine": 136,
+        "endChar": 16
+      },
+      "revId": "1c04593bf5062880e4f9edf73100c846f63f0dd0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e492e93e_1778c1a8",
+        "filename": "librobinhood/tests/unit/check_hashmap.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-09-17T15:11:24Z",
+      "side": 1,
+      "message": "suggest: `ck_assert(contains);`",
+      "range": {
+        "startLine": 276,
+        "startChar": 4,
+        "endLine": 276,
+        "endChar": 34
+      },
+      "revId": "1c04593bf5062880e4f9edf73100c846f63f0dd0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d3787b10_de125bb3",
+        "filename": "librobinhood/tests/unit/check_hashmap.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-09-17T15:11:24Z",
+      "side": 1,
+      "message": "suggest: `ck_assert(!contains);`",
+      "range": {
+        "startLine": 292,
+        "startChar": 4,
+        "endLine": 292,
+        "endChar": 34
+      },
+      "revId": "1c04593bf5062880e4f9edf73100c846f63f0dd0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
