@@ -22,6 +22,30 @@
       },
       "revId": "a97253783b08b7b1cd5ab87a12d61702d625ca32",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fbdb01ae_3893a3a8",
+        "filename": "rbh-fsevents/doc/adr/partial-fsevents.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2025-09-18T07:58:28Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "92179f24_6e85d72c",
+      "range": {
+        "startLine": 2,
+        "startChar": 17,
+        "endLine": 2,
+        "endChar": 21
+      },
+      "revId": "a97253783b08b7b1cd5ab87a12d61702d625ca32",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
