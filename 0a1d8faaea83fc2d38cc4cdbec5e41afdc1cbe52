@@ -1,0 +1,159 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "963d9e59_b60adf24",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-09-18T12:35:52Z",
+      "side": 1,
+      "message": "style: too long",
+      "range": {
+        "startLine": 16,
+        "startChar": 3,
+        "endLine": 18,
+        "endChar": 2
+      },
+      "revId": "0a1d8faaea83fc2d38cc4cdbec5e41afdc1cbe52",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2ff6ca4b_eb088998",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-09-18T12:35:52Z",
+      "side": 1,
+      "message": "As discussed, having one batch queue per thread and always giving the same FID to a same thread would make this way easier, as this way, there is no issue with unlink being processed before links",
+      "revId": "0a1d8faaea83fc2d38cc4cdbec5e41afdc1cbe52",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a437fcba_1b996396",
+        "filename": "rbh-fsevents/rbh-fsevents.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 481,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-09-18T12:35:52Z",
+      "side": 1,
+      "message": "style: order",
+      "range": {
+        "startLine": 480,
+        "startChar": 31,
+        "endLine": 481,
+        "endChar": 36
+      },
+      "revId": "0a1d8faaea83fc2d38cc4cdbec5e41afdc1cbe52",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d385e6ca_e4dc5ed6",
+        "filename": "rbh-fsevents/rbh-fsevents.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 490,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-09-18T12:35:52Z",
+      "side": 1,
+      "message": "major: don\u0027t like this, should be given by the source itself",
+      "range": {
+        "startLine": 487,
+        "startChar": 4,
+        "endLine": 490,
+        "endChar": 39
+      },
+      "revId": "0a1d8faaea83fc2d38cc4cdbec5e41afdc1cbe52",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "916751b3_edc89e8d",
+        "filename": "rbh-fsevents/rbh-fsevents.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 497,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-09-18T12:35:52Z",
+      "side": 1,
+      "message": "question: what\u0027s that equation ?",
+      "range": {
+        "startLine": 496,
+        "startChar": 40,
+        "endLine": 497,
+        "endChar": 51
+      },
+      "revId": "0a1d8faaea83fc2d38cc4cdbec5e41afdc1cbe52",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "72487237_8b0a3d95",
+        "filename": "rbh-fsevents/src/deduplicator.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-09-18T12:35:52Z",
+      "side": 1,
+      "message": "defect: sleep here instead",
+      "range": {
+        "startLine": 88,
+        "startChar": 8,
+        "endLine": 88,
+        "endChar": 17
+      },
+      "revId": "0a1d8faaea83fc2d38cc4cdbec5e41afdc1cbe52",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b863200f_c14786ce",
+        "filename": "rbh-fsevents/src/deduplicator.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-09-18T12:35:52Z",
+      "side": 1,
+      "message": "same",
+      "range": {
+        "startLine": 124,
+        "startChar": 8,
+        "endLine": 124,
+        "endChar": 17
+      },
+      "revId": "0a1d8faaea83fc2d38cc4cdbec5e41afdc1cbe52",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
