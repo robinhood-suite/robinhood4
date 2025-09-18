@@ -24,6 +24,23 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "abb396b2_cd820bc4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2025-09-18T08:20:05Z",
+      "side": 1,
+      "message": "The current insert function logic is more complicated than it should be.",
+      "revId": "2f42f3f00ad61cd5538b4beeca96fc92111ff28f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bca7d325_7888f0fb",
@@ -49,6 +66,53 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "73130889_76f804ee",
+        "filename": "rbh-fsevents/src/deduplicator.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2025-09-18T08:20:05Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "bca7d325_7888f0fb",
+      "range": {
+        "startLine": 31,
+        "startChar": 0,
+        "endLine": 31,
+        "endChar": 53
+      },
+      "revId": "2f42f3f00ad61cd5538b4beeca96fc92111ff28f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e804deb2_b5d0cade",
+        "filename": "rbh-fsevents/src/deduplicator.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2025-09-18T08:20:05Z",
+      "side": 1,
+      "message": "question: I am not familiar with the architecture of RBH4 but static variables like this are a danger for thread parallelism. Is there any chance here to be in a multithreaded context ?",
+      "range": {
+        "startLine": 31,
+        "startChar": 0,
+        "endLine": 31,
+        "endChar": 12
+      },
+      "revId": "2f42f3f00ad61cd5538b4beeca96fc92111ff28f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b4871699_d1abe248",
         "filename": "rbh-fsevents/src/deduplicator.c",
         "patchSetId": 1
@@ -65,6 +129,52 @@
         "startChar": 8,
         "endLine": 45,
         "endChar": 16
+      },
+      "revId": "2f42f3f00ad61cd5538b4beeca96fc92111ff28f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a0bd3edd_32fea9af",
+        "filename": "rbh-fsevents/src/deduplicator/fsevent_pool.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 837,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2025-09-18T08:20:05Z",
+      "side": 1,
+      "message": "minor: if deduplicate_event never sets pool-\u003eneed_to_flush to true we could directly \"return POOL_INSERT_OK\" here and avoid the next else.",
+      "range": {
+        "startLine": 837,
+        "startChar": 13,
+        "endLine": 837,
+        "endChar": 30
+      },
+      "revId": "2f42f3f00ad61cd5538b4beeca96fc92111ff28f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0919ee80_456434eb",
+        "filename": "rbh-fsevents/src/deduplicator/fsevent_pool.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 845,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2025-09-18T08:20:05Z",
+      "side": 1,
+      "message": "minor: you could directly set here \"errno \u003d ENOSPC\" and \"return POOL_FULL\". This could save the next if at line 858 (and also the next else at line 846 ...)",
+      "range": {
+        "startLine": 845,
+        "startChar": 12,
+        "endLine": 845,
+        "endChar": 39
       },
       "revId": "2f42f3f00ad61cd5538b4beeca96fc92111ff28f",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
