@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "97c1543b_35f1ae94",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2025-09-18T11:54:52Z",
+      "side": 1,
+      "message": "question: why explicitly naming Mongo here ? Is not Enrichment a generic feature that could be executed from any source backend to any destination backend ?",
+      "range": {
+        "startLine": 7,
+        "startChar": 52,
+        "endLine": 8,
+        "endChar": 2
+      },
+      "revId": "abd2277f3c93986e2ec796dde921231dc0a1a2af",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "79f715d6_9669d00a",
@@ -43,6 +66,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5818f9cf_a0dbf1ab",
+        "filename": "rbh-fsevents/rbh-fsevents.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 397,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2025-09-18T11:54:52Z",
+      "side": 1,
+      "message": "+1 This thread condition will work with the mutex of the lock. This comment is linked with a previous comment on the previous patch : I think you need to attach a mutex per queue (instead of having only one mutex, shared and used for all queues .)",
+      "parentUuid": "0b0c5b83_6789f233",
+      "range": {
+        "startLine": 397,
+        "startChar": 12,
+        "endLine": 397,
+        "endChar": 21
+      },
+      "revId": "abd2277f3c93986e2ec796dde921231dc0a1a2af",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "de42838a_0038e275",
         "filename": "rbh-fsevents/rbh-fsevents.c",
         "patchSetId": 1
@@ -66,6 +113,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "bcba7ca2_46f0b59e",
+        "filename": "rbh-fsevents/rbh-fsevents.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 489,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2025-09-18T11:54:52Z",
+      "side": 1,
+      "message": "suggest:\n\n```\nfor (fsevents \u003d rbh_mut_iter_next(deduplicator);\n     fsevents !\u003d NULL;\n     fsevents \u003d rbh_mut_iter_next(deduplicator)) {\n[...]\n}\n```",
+      "range": {
+        "startLine": 484,
+        "startChar": 4,
+        "endLine": 489,
+        "endChar": 18
+      },
+      "revId": "abd2277f3c93986e2ec796dde921231dc0a1a2af",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6880924d_73b8b112",
         "filename": "rbh-fsevents/rbh-fsevents.c",
         "patchSetId": 1
@@ -82,6 +152,29 @@
         "startChar": 8,
         "endLine": 539,
         "endChar": 50
+      },
+      "revId": "abd2277f3c93986e2ec796dde921231dc0a1a2af",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e4a4de6d_dfe3e4a1",
+        "filename": "rbh-fsevents/src/enrichers/posix/posix.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 736,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2025-09-18T11:54:52Z",
+      "side": 1,
+      "message": "question: is there any link between this modification and the purpose of this current patch ?",
+      "range": {
+        "startLine": 733,
+        "startChar": 4,
+        "endLine": 736,
+        "endChar": 5
       },
       "revId": "abd2277f3c93986e2ec796dde921231dc0a1a2af",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
