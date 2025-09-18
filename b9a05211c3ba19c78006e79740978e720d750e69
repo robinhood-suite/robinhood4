@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e93261d3_9748d825",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2025-09-18T12:41:38Z",
+      "side": 1,
+      "message": "defect: as for the previous patch, distributing fsevent among the consumers by using a consistent hash on fid will lead to always manage fsevent of the same fid by the same consumers. Directly compatible wiht \"no-dedup\" .",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 12
+      },
+      "revId": "b9a05211c3ba19c78006e79740978e720d750e69",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
