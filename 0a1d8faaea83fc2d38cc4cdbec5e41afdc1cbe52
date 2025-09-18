@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "033fc578_e416aa09",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2025-09-18T12:37:38Z",
+      "side": 1,
+      "message": "defect: instead of dealing with the complexity of a hashmap and a waiting list that will be concurrently accessed, why not simply routing fsevent too different consumer (by hashing the fid for example). This simple \"sharding\" behaviour allows to have all fsevent of the same fid always managed by the same consumer.",
+      "range": {
+        "startLine": 13,
+        "startChar": 3,
+        "endLine": 17,
+        "endChar": 32
+      },
+      "revId": "0a1d8faaea83fc2d38cc4cdbec5e41afdc1cbe52",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "963d9e59_b60adf24",
         "filename": "/COMMIT_MSG",
         "patchSetId": 1
