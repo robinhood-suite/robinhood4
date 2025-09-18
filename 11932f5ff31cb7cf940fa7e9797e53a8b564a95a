@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "32e9c89f_f29ca8ca",
+        "filename": "rbh-fsevents/tests/lustre/acceptance_workers.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-09-18T14:41:01Z",
+      "side": 1,
+      "message": "style: add empty line above",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 1
+      },
+      "revId": "11932f5ff31cb7cf940fa7e9797e53a8b564a95a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "af11b667_ca23ca4e",
+        "filename": "rbh-fsevents/tests/lustre/acceptance_workers.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-09-18T14:41:01Z",
+      "side": 1,
+      "message": "defect: this test does not verify the `nb_workers` is used and that multiple threads are actually created. Maybe adding logging to the workers so that each one outputs something specific to itself would be better, but as-is, we only verify that the `rbh-fsevents` call with `--nb-workers` does not crash, but not that it isn\u0027t ignored",
+      "range": {
+        "startLine": 56,
+        "startChar": 17,
+        "endLine": 56,
+        "endChar": 31
+      },
+      "revId": "11932f5ff31cb7cf940fa7e9797e53a8b564a95a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
