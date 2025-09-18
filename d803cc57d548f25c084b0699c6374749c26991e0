@@ -66,6 +66,75 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "05911855_0c9e0458",
+        "filename": "rbh-policy/rbhpolicy/config/config_loader.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-09-18T09:17:09Z",
+      "side": 1,
+      "message": "typo: a",
+      "range": {
+        "startLine": 29,
+        "startChar": 21,
+        "endLine": 29,
+        "endChar": 23
+      },
+      "revId": "d803cc57d548f25c084b0699c6374749c26991e0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ac056b4e_858b36f3",
+        "filename": "rbh-policy/rbhpolicy/config/config_loader.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-09-18T09:17:09Z",
+      "side": 1,
+      "message": "suggest: \n```\nspec \u003d importlib.util.spec_from_file_location(module_name, file_path)\nmodule \u003d importlib.util.module_from_spec(spec)\nsys.modules[module_name] \u003d module\nspec.loader.exec_module(module)\n```\nAnd return the module at the end of the function",
+      "range": {
+        "startLine": 54,
+        "startChar": 3,
+        "endLine": 59,
+        "endChar": 46
+      },
+      "revId": "d803cc57d548f25c084b0699c6374749c26991e0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "30e73c52_a052ee25",
+        "filename": "rbh-policy/rbhpolicy/config/config_loader.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-09-18T09:17:09Z",
+      "side": 1,
+      "message": "comment: I\u0027m wondering if it\u0027s really necessary to support directories for now. I think supporting a single configuration file will be easier to start with. We can always add directory support later if it\u0027s really needed.",
+      "range": {
+        "startLine": 61,
+        "startChar": 3,
+        "endLine": 61,
+        "endChar": 19
+      },
+      "revId": "d803cc57d548f25c084b0699c6374749c26991e0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "833739f2_43a5d8c2",
         "filename": "rbh-policy/rbhpolicy/config/config_loader.py",
         "patchSetId": 6
@@ -77,6 +146,30 @@
       "writtenOn": "2025-09-12T14:15:44Z",
       "side": 1,
       "message": "question: why making an effort to load a configuration inside a separate module and then adding some stuff of this specific module into sys._getframe(1).f_globals ? Why not letting this stuff into the specific module ?",
+      "range": {
+        "startLine": 79,
+        "startChar": 4,
+        "endLine": 80,
+        "endChar": 20
+      },
+      "revId": "d803cc57d548f25c084b0699c6374749c26991e0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "08659f59_899259e0",
+        "filename": "rbh-policy/rbhpolicy/config/config_loader.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-09-18T09:17:09Z",
+      "side": 1,
+      "message": "+1. I don’t understand why you want to load the module’s elements as global variables in the environment. That could cause issues if a function or variable in the module has the same name as another function or variable, couldn’t it? It seems to me like you’re making things unnecessarily complicated. I think it would be much easier to understand and maintain later on if you simply returned the module and used it to call the functions inside.",
+      "parentUuid": "833739f2_43a5d8c2",
       "range": {
         "startLine": 79,
         "startChar": 4,

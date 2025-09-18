@@ -144,6 +144,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5997cb62_a6c2a546",
+        "filename": "rbh-policy/rbhpolicy/config/config_loader.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-09-18T09:17:09Z",
+      "side": 1,
+      "message": "I don\u0027t think it\u0027s the right way to import dynamicly a module. After reading the documentation, a more appropriate way would be to use `importlib.util.module_from_spec(spec)`.",
+      "parentUuid": "21722404_0b6ea6a4",
+      "range": {
+        "startLine": 45,
+        "startChar": 39,
+        "endLine": 45,
+        "endChar": 46
+      },
+      "revId": "1d8d3298295fc553b5edaddbe28ec3a71a0fe005",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b987788a_d2b379c3",
         "filename": "rbh-policy/rbhpolicy/config/config_loader.py",
         "patchSetId": 3
