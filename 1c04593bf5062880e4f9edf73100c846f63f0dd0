@@ -24,6 +24,23 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "63b37b88_3d4d758a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2025-09-18T12:32:37Z",
+      "side": 1,
+      "message": "Why coding this function instead of using get -\u003e check !NULL ?",
+      "revId": "1c04593bf5062880e4f9edf73100c846f63f0dd0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7d3d5c03_54b623c9",
