@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d00fba73_dab84b59",
+        "filename": "rbh-policy/meson.build",
+        "patchSetId": 6
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-09-19T07:46:42Z",
+      "side": 1,
+      "message": "What do you mean by install the package ? Do you mean the RPM ? I\u0027m only talking about the code here, I\u0027d rather have a directory `rbh-policy` in the main repo than a `rbhpolicy`, especially since that seems very easy to do for the Meson part",
+      "parentUuid": "4ffc85c9_7141c540",
+      "range": {
+        "startLine": 9,
+        "startChar": 16,
+        "endLine": 9,
+        "endChar": 25
+      },
+      "revId": "2dfea7c98e30ddda47a4f3ae4c328fb0d27746ca",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d4ad537f_1bf1997f",
         "filename": "rbh-policy/meson.build",
         "patchSetId": 6
@@ -251,6 +275,30 @@
       "side": 1,
       "message": "In unittest, `setUpClass` is called once before all tests are executed and `SetUp` is called before each test is executed. The tests are executed in alphabetical order of names, they do not follow the order of the files",
       "parentUuid": "b8227639_4bcda946",
+      "range": {
+        "startLine": 19,
+        "startChar": 4,
+        "endLine": 19,
+        "endChar": 24
+      },
+      "revId": "2dfea7c98e30ddda47a4f3ae4c328fb0d27746ca",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb10beb5_5ac5652f",
+        "filename": "rbh-policy/tests/test_installation.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-09-19T07:46:42Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "f1297fcd_af6723fc",
       "range": {
         "startLine": 19,
         "startChar": 4,
