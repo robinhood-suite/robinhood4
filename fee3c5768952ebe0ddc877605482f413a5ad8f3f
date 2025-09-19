@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7c859f66_6779f49b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2025-09-19T07:54:19Z",
+      "side": 1,
+      "message": "This is a good beginning of testing. But it reveals a lot of question on the global architecture of this config loading ...",
+      "revId": "fee3c5768952ebe0ddc877605482f413a5ad8f3f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c4a8a2ab_b0b78938",
+        "filename": "rbh-policy/tests/test_config.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2025-09-19T07:54:19Z",
+      "side": 1,
+      "message": "question: why not importing the config_loader with a classical import ?",
+      "range": {
+        "startLine": 24,
+        "startChar": 29,
+        "endLine": 24,
+        "endChar": 76
+      },
+      "revId": "fee3c5768952ebe0ddc877605482f413a5ad8f3f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "41032eee_8f66d2b1",
+        "filename": "rbh-policy/tests/test_config.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2025-09-19T07:54:19Z",
+      "side": 1,
+      "message": "comment: this exemple seems to be a very classical \".py\" file and could be imported directly in any python code, without any complicated code ...",
+      "range": {
+        "startLine": 39,
+        "startChar": 12,
+        "endLine": 40,
+        "endChar": 53
+      },
+      "revId": "fee3c5768952ebe0ddc877605482f413a5ad8f3f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "af21c115_ee56ba2d",
+        "filename": "rbh-policy/tests/test_config.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2025-09-19T07:54:19Z",
+      "side": 1,
+      "message": "minor: do not be lazy, add a function in a and in b .",
+      "range": {
+        "startLine": 50,
+        "startChar": 8,
+        "endLine": 51,
+        "endChar": 67
+      },
+      "revId": "fee3c5768952ebe0ddc877605482f413a5ad8f3f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "92145b41_24fc6b0b",
+        "filename": "rbh-policy/tests/test_config.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2025-09-19T07:54:19Z",
+      "side": 1,
+      "message": "comment: why not considering OK to have a file at root dir of the config and also subdirs with other files ?",
+      "range": {
+        "startLine": 70,
+        "startChar": 8,
+        "endLine": 76,
+        "endChar": 34
+      },
+      "revId": "fee3c5768952ebe0ddc877605482f413a5ad8f3f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
