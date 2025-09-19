@@ -20,6 +20,52 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "537b2c79_d0b6e343",
+        "filename": "rbh-policy/meson.build",
+        "patchSetId": 7
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-09-19T10:02:39Z",
+      "side": 1,
+      "message": "minor: `src` directory would be better and aligned with the rest of the repo",
+      "range": {
+        "startLine": 19,
+        "startChar": 8,
+        "endLine": 19,
+        "endChar": 17
+      },
+      "revId": "adb0326ed0363188326d8fc1882ea9730d3362c9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f725499a_9b4b260a",
+        "filename": "rbh-policy/rbhpolicy/config/filter.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-09-19T10:02:39Z",
+      "side": 1,
+      "message": "question: why enforce this ?",
+      "range": {
+        "startLine": 17,
+        "startChar": 7,
+        "endLine": 17,
+        "endChar": 12
+      },
+      "revId": "adb0326ed0363188326d8fc1882ea9730d3362c9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d096b458_bf6f5232",
         "filename": "rbh-policy/rbhpolicy/config/filter.py",
         "patchSetId": 7
@@ -36,6 +82,29 @@
         "startChar": 0,
         "endLine": 29,
         "endChar": 29
+      },
+      "revId": "adb0326ed0363188326d8fc1882ea9730d3362c9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c3a55c12_15891a19",
+        "filename": "rbh-policy/rbhpolicy/config/filter.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-09-19T10:02:39Z",
+      "side": 1,
+      "message": "major: you should take heavy inspiration from Phobos for this IMO",
+      "range": {
+        "startLine": 31,
+        "startChar": 8,
+        "endLine": 31,
+        "endChar": 72
       },
       "revId": "adb0326ed0363188326d8fc1882ea9730d3362c9",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
