@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "755253a3_2f775db1",
+        "filename": "rbh-policy/rbhpolicy/config/utils.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-09-19T15:03:42Z",
+      "side": 1,
+      "message": "defect: this shouldn\u0027t be here, it should be part of a Lustre extension for the policy engine, not the default version",
+      "range": {
+        "startLine": 190,
+        "startChar": 8,
+        "endLine": 190,
+        "endChar": 24
+      },
+      "revId": "7b4ffb1121bfae1d87c739fa6d6159605e3219cb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1ca5e382_bc64e3fb",
+        "filename": "rbh-policy/rbhpolicy/config/utils.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-09-19T15:03:42Z",
+      "side": 1,
+      "message": "major: going back to one of my previous comments, since here you have the requested key, you can help the parser know how to do its job by giving the key as context.",
+      "range": {
+        "startLine": 206,
+        "startChar": 4,
+        "endLine": 206,
+        "endChar": 46
+      },
+      "revId": "7b4ffb1121bfae1d87c739fa6d6159605e3219cb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3a0c620e_988636b4",
+        "filename": "rbh-policy/rbhpolicy/config/utils.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-09-19T15:03:42Z",
+      "side": 1,
+      "message": "minor: put each of these if in a function (and use a switch too)",
+      "range": {
+        "startLine": 216,
+        "startChar": 4,
+        "endLine": 216,
+        "endChar": 21
+      },
+      "revId": "7b4ffb1121bfae1d87c739fa6d6159605e3219cb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7e897414_c63b8fdc",
+        "filename": "rbh-policy/rbhpolicy/config/utils.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-09-19T15:03:42Z",
+      "side": 1,
+      "message": "minor: all of these could be made simpler with a first handling of the operator, than the rest",
+      "range": {
+        "startLine": 216,
+        "startChar": 4,
+        "endLine": 265,
+        "endChar": 31
+      },
+      "revId": "7b4ffb1121bfae1d87c739fa6d6159605e3219cb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
