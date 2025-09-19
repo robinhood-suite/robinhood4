@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4bf40762_0e91172a",
+        "filename": "rbh-policy/tests/test_cpython.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2025-09-19T09:26:54Z",
+      "side": 1,
+      "message": "question: what does the \"rbh_filter_validate\" function ?",
+      "range": {
+        "startLine": 51,
+        "startChar": 25,
+        "endLine": 51,
+        "endChar": 44
+      },
+      "revId": "e20369a513f085cd7bcea0a430f9cb1d3db4138a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
