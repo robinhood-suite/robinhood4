@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c8b8ebd_8b4e5368",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2025-09-19T09:24:47Z",
+      "side": 1,
+      "message": "I do not know Cpython well enough to comment this patch.",
+      "revId": "adb0326ed0363188326d8fc1882ea9730d3362c9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d096b458_bf6f5232",
+        "filename": "rbh-policy/rbhpolicy/config/filter.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2025-09-19T09:24:47Z",
+      "side": 1,
+      "message": "question: why did you not manage the previous question about getting enum from C code without adding them into python ?",
+      "range": {
+        "startLine": 20,
+        "startChar": 0,
+        "endLine": 29,
+        "endChar": 29
+      },
+      "revId": "adb0326ed0363188326d8fc1882ea9730d3362c9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
