@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "161d4c46_2978f79a",
+        "filename": "rbh-policy/rbhpolicy/config/utils.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-09-19T14:34:30Z",
+      "side": 1,
+      "message": "Adding these units for rbh-find is better than having a special case here, because you provide rbh-find with a better filter, and handle this here at the same time",
+      "parentUuid": "7fad8b3e_35d411d9",
+      "range": {
+        "startLine": 18,
+        "startChar": 16,
+        "endLine": 19,
+        "endChar": 17
+      },
+      "revId": "ebf181970fa6409e9b37a8cb3738dbc810a69af1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "fd9c3bbb_ed4b7bc6",
         "filename": "rbh-policy/rbhpolicy/config/utils.py",
         "patchSetId": 6
