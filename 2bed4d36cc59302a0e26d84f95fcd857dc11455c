@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d1437bf4_dd042be1",
+        "filename": "rbh-policy/rbhpolicy/config/policy.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2025-09-19T13:16:10Z",
+      "side": 1,
+      "message": "question: I think I approximatively understand what is a trigger/target/action. But a rule ? What is a rule ?\n\nFrom a global point of view, I think you could explain all this stuff with few comments.",
+      "range": {
+        "startLine": 37,
+        "startChar": 4,
+        "endLine": 37,
+        "endChar": 19
+      },
+      "revId": "2bed4d36cc59302a0e26d84f95fcd857dc11455c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c464c43d_cf617b54",
+        "filename": "rbh-policy/rbhpolicy/config/policy.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2025-09-19T13:16:10Z",
+      "side": 1,
+      "message": "question: why the input Condition into a rule is named a \"condition\" whereas the input Condition of a Policy is named \"target\".",
+      "range": {
+        "startLine": 39,
+        "startChar": 34,
+        "endLine": 39,
+        "endChar": 51
+      },
+      "revId": "2bed4d36cc59302a0e26d84f95fcd857dc11455c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c8229f02_e7fbfb9b",
+        "filename": "rbh-policy/rbhpolicy/config/policy.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2025-09-19T13:16:10Z",
+      "side": 1,
+      "message": "question: why adding all these \"declare_xxx\" functions instead of classical Class constructors ?",
+      "range": {
+        "startLine": 62,
+        "startChar": 4,
+        "endLine": 63,
+        "endChar": 41
+      },
+      "revId": "2bed4d36cc59302a0e26d84f95fcd857dc11455c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
