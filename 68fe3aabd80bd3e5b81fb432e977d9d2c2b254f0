@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7df6afe7_da276888",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2025-09-19T09:31:44Z",
+      "side": 1,
+      "message": "Why not adding them directly to the existing condition source file ?",
+      "revId": "68fe3aabd80bd3e5b81fb432e977d9d2c2b254f0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
