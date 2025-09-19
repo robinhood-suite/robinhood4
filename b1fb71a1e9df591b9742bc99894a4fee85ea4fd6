@@ -16,6 +16,69 @@
       "message": "I think I need to know what you call a rbh \"filter\" .",
       "revId": "b1fb71a1e9df591b9742bc99894a4fee85ea4fd6",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0592a3f8_a9993993",
+        "filename": "librobinhood/src/filters/core.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-09-19T09:06:25Z",
+      "side": 1,
+      "message": "minor: same as before, could be merged with other part of rbh-find\u0027s code",
+      "range": {
+        "startLine": 231,
+        "startChar": 0,
+        "endLine": 231,
+        "endChar": 21
+      },
+      "revId": "b1fb71a1e9df591b9742bc99894a4fee85ea4fd6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cffbca4c_08a3c77a",
+        "filename": "librobinhood/src/filters/core.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-09-19T09:06:25Z",
+      "side": 1,
+      "message": "minor: what\u0027s the point of having this function available in the header if it isn\u0027t used outside of here ?",
+      "range": {
+        "startLine": 233,
+        "startChar": 42,
+        "endLine": 233,
+        "endChar": 65
+      },
+      "revId": "b1fb71a1e9df591b9742bc99894a4fee85ea4fd6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d23a5a29_575d8af1",
+        "filename": "librobinhood/src/filters/core.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-09-19T09:06:25Z",
+      "side": 1,
+      "message": "style: remove empty line",
+      "revId": "b1fb71a1e9df591b9742bc99894a4fee85ea4fd6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
