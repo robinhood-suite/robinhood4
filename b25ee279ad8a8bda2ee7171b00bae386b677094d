@@ -22,6 +22,29 @@
       },
       "revId": "b25ee279ad8a8bda2ee7171b00bae386b677094d",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "16033ca6_29705f8f",
+        "filename": "rbh-undelete/tests/undelete.bash",
+        "patchSetId": 5
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-09-22T09:37:32Z",
+      "side": 1,
+      "message": "defect: other tests were removed",
+      "range": {
+        "startLine": 124,
+        "startChar": 0,
+        "endLine": 124,
+        "endChar": 44
+      },
+      "revId": "b25ee279ad8a8bda2ee7171b00bae386b677094d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
