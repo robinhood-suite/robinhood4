@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5ebaa9d5_9673e2cb",
+        "filename": "rbh-info/rbh-info.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-09-22T10:01:03Z",
+      "side": 1,
+      "message": "question: so it prints \u0027Plugin\u0027 even if it is an extension, that\u0027s the expected behavior?",
+      "range": {
+        "startLine": 364,
+        "startChar": 24,
+        "endLine": 364,
+        "endChar": 30
+      },
+      "revId": "7bee7651942259a85abdcc6db5bf8ebd0dca36ec",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
