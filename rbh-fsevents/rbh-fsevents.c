@@ -341,7 +341,6 @@ struct rbh_node_iterator {
 };
 
 /* Add an iterator to enrich to a consumer */
-__attribute__((unused))
 static void
 add_iterators_to_consumer(struct rbh_list_node *list,
                           struct rbh_iterator *enricher)
@@ -357,7 +356,6 @@ add_iterators_to_consumer(struct rbh_list_node *list,
 }
 
 /* Retrieve an iterator from a consumer's list */
-__attribute__((unused))
 static struct rbh_node_iterator *
 consumer_get_iterator(struct rbh_list_node *list)
 {
@@ -457,7 +455,8 @@ setup_producer_consumers(struct rbh_mut_iterator **deduplicator,
                          struct deduplicator_options *dedup_opts,
                          pthread_t **consumers, struct consumer_info **cinfos)
 {
-    *deduplicator = deduplicator_new(dedup_opts->batch_size, source);
+    *deduplicator = deduplicator_new(dedup_opts->batch_size, source,
+                                     nb_workers);
     if (deduplicator == NULL)
         error(EXIT_FAILURE, errno, "deduplicator_new");
 
@@ -492,9 +491,9 @@ producer_thread(struct rbh_mut_iterator *deduplicator,
                 struct enrich_iter_builder *builder, bool allow_partials,
                 struct consumer_info *cinfos, struct timespec *total_read)
 {
-    struct rbh_iterator *fsevents;
+    struct rbh_mut_iterator *fsevents;
     struct timespec start, end;
-    int idx = 0;
+    struct dedup_iter *dedup;
     int rc;
 
     if (verbose) {
@@ -506,20 +505,24 @@ producer_thread(struct rbh_mut_iterator *deduplicator,
     for (fsevents = rbh_mut_iter_next(deduplicator); fsevents != NULL;
          fsevents = rbh_mut_iter_next(deduplicator)) {
 
-        if (builder != NULL)
-            fsevents = build_enrich_iter(builder, fsevents, skip_error);
-        else if (!allow_partials)
-            fsevents = iter_no_partial(fsevents);
+        for (dedup = rbh_mut_iter_next(fsevents); dedup != NULL;
+             dedup = rbh_mut_iter_next(fsevents)) {
 
-        if (fsevents == NULL)
-            error(EXIT_FAILURE, errno, "iter_enrich");
+            if (builder != NULL)
+                dedup->iter = build_enrich_iter(builder, dedup->iter,
+                                                skip_error);
+            else if (!allow_partials)
+                dedup->iter = iter_no_partial(dedup->iter);
 
-        /* Add batch from the dedup using round robin */
-        pthread_mutex_lock(&cinfos[idx].mutex_list);
-        add_iterators_to_consumer(cinfos[idx].list, fsevents);
-        pthread_cond_signal(&cinfos[idx].signal_list);
-        pthread_mutex_unlock(&cinfos[idx].mutex_list);
-        idx = (idx + 1) % nb_workers;
+            if (dedup->iter == NULL)
+                error(EXIT_FAILURE, errno, "iter_enrich");
+
+            pthread_mutex_lock(&cinfos[dedup->index].mutex_list);
+            add_iterators_to_consumer(cinfos[dedup->index].list, dedup->iter);
+            pthread_cond_signal(&cinfos[dedup->index].signal_list);
+            pthread_mutex_unlock(&cinfos[dedup->index].mutex_list);
+        }
+        rbh_mut_iter_destroy(fsevents);
     }
 
     done_producing = true;
