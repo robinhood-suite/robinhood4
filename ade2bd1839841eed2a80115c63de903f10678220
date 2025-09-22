@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "27c75668_a64e1a3f",
+        "filename": "rbh-find/tests/s3/test_s3_printf.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-09-22T11:24:29Z",
+      "side": 1,
+      "message": "minor: only at the end right?",
+      "range": {
+        "startLine": 41,
+        "startChar": 4,
+        "endLine": 42,
+        "endChar": 27
+      },
+      "revId": "ade2bd1839841eed2a80115c63de903f10678220",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
