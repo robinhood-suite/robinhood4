@@ -17,3 +17,9 @@ hash_id(const struct rbh_id *id);
 
 size_t
 hash_lu_id(const struct rbh_id *id);
+
+size_t
+hash_lu_id2index(const struct rbh_id *id, size_t size);
+
+size_t
+hash_id2index(const struct rbh_id *id, size_t size);
