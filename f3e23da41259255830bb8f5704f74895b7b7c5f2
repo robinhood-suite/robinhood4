@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "66eb8d1c_242846be",
+        "filename": "librobinhood/src/fsentry.c",
+        "patchSetId": 6
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-09-22T09:03:23Z",
+      "side": 1,
+      "message": "minor: mutualize with the above function",
+      "range": {
+        "startLine": 198,
+        "startChar": 0,
+        "endLine": 198,
+        "endChar": 25
+      },
+      "revId": "f3e23da41259255830bb8f5704f74895b7b7c5f2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2b4dc54e_f00f5597",
         "filename": "rbh-undelete/rbh-undelete.c",
         "patchSetId": 6
@@ -42,6 +65,29 @@
         "startChar": 26,
         "endLine": 168,
         "endChar": 78
+      },
+      "revId": "f3e23da41259255830bb8f5704f74895b7b7c5f2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "be4d4f32_6a07edaf",
+        "filename": "rbh-undelete/rbh-undelete.c",
+        "patchSetId": 6
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-09-22T09:03:23Z",
+      "side": 1,
+      "message": "minor: they should be mutually exclusive",
+      "range": {
+        "startLine": 280,
+        "startChar": 7,
+        "endLine": 284,
+        "endChar": 42
       },
       "revId": "f3e23da41259255830bb8f5704f74895b7b7c5f2",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
