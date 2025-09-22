@@ -22,6 +22,53 @@
       },
       "revId": "821f9b99285d0f459e0ee5e94ed041357efe4f19",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "75ff0425_7a334ea5",
+        "filename": "librobinhood/src/plugins/mongo/fsevent.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-09-22T08:20:23Z",
+      "side": 1,
+      "message": "Theoretically yes, because this event is only triggered on a rm on the last hardlink of an archived entry, so the DB should only have 1 hardlink at that point",
+      "parentUuid": "68452bef_c245cc19",
+      "range": {
+        "startLine": 141,
+        "startChar": 37,
+        "endLine": 141,
+        "endChar": 48
+      },
+      "revId": "821f9b99285d0f459e0ee5e94ed041357efe4f19",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b192e4c0_18e3f548",
+        "filename": "rbh-fsevents/src/sources/lustre.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 739,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-09-22T08:20:23Z",
+      "side": 1,
+      "message": "minor: still invalid",
+      "range": {
+        "startLine": 737,
+        "startChar": 4,
+        "endLine": 739,
+        "endChar": 7
+      },
+      "revId": "821f9b99285d0f459e0ee5e94ed041357efe4f19",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
