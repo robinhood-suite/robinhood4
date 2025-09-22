@@ -32,7 +32,7 @@ START_TEST(dedup_basic)
     fake_source = empty_source();
     ck_assert_ptr_nonnull(fake_source);
 
-    deduplicator = deduplicator_new(20, fake_source);
+    deduplicator = deduplicator_new(20, fake_source, 1);
     ck_assert_ptr_nonnull(deduplicator);
 
     events = rbh_mut_iter_next(deduplicator);
@@ -48,8 +48,9 @@ START_TEST(dedup_one_event)
     struct rbh_mut_iterator *deduplicator;
     struct source *fake_source = NULL;
     struct rbh_mut_iterator *events;
+    const struct rbh_fsevent *event;
     struct rbh_fsevent fake_event;
-    struct rbh_fsevent *event;
+    struct dedup_iter *dedup;
     struct rbh_id *parent;
     struct rbh_id *id;
 
@@ -60,17 +61,21 @@ START_TEST(dedup_one_event)
     fake_source = event_list_source(&fake_event, 1);
     ck_assert_ptr_nonnull(fake_source);
 
-    deduplicator = deduplicator_new(20, fake_source);
+    deduplicator = deduplicator_new(20, fake_source, 1);
     ck_assert_ptr_nonnull(deduplicator);
 
     events = rbh_mut_iter_next(deduplicator);
     ck_assert_ptr_nonnull(events);
 
-    event = rbh_mut_iter_next(events);
+    dedup = rbh_mut_iter_next(events);
+    ck_assert_ptr_nonnull(dedup);
+
+    event = rbh_iter_next(dedup->iter);
     ck_assert_ptr_nonnull(event);
     ck_assert_id_eq(id, &event->id);
 
     free(id);
+    rbh_iter_destroy(dedup->iter);
     rbh_mut_iter_destroy(events);
     rbh_mut_iter_destroy(deduplicator);
     event_list_source_destroy(fake_source);
@@ -84,7 +89,8 @@ START_TEST(dedup_many_events)
     struct source *fake_source = NULL;
     struct rbh_fsevent fake_events[5];
     struct rbh_mut_iterator *events;
-    struct rbh_fsevent *event;
+    const struct rbh_fsevent *event;
+    struct dedup_iter *dedup;
     struct rbh_id *parent;
     struct rbh_id *ids[5];
 
@@ -97,25 +103,29 @@ START_TEST(dedup_many_events)
     fake_source = event_list_source(fake_events, 5);
     ck_assert_ptr_nonnull(fake_source);
 
-    deduplicator = deduplicator_new(20, fake_source);
+    deduplicator = deduplicator_new(20, fake_source, 1);
     ck_assert_ptr_nonnull(deduplicator);
 
     events = rbh_mut_iter_next(deduplicator);
     ck_assert_ptr_nonnull(events);
 
+    dedup = rbh_mut_iter_next(events);
+    ck_assert_ptr_nonnull(dedup);
+
     errno = 0;
     for (int i = 0; i < 5; i++) {
-        event = rbh_mut_iter_next(events);
+        event = rbh_iter_next(dedup->iter);
         ck_assert_ptr_nonnull(event);
         ck_assert_int_eq(errno, 0);
         ck_assert_id_eq(ids[i], &event->id);
         free(ids[i]);
     }
 
-    event = rbh_mut_iter_next(events);
+    event = rbh_iter_next(dedup->iter);
     ck_assert_ptr_null(event);
     ck_assert_int_eq(errno, ENODATA);
 
+    rbh_iter_destroy(dedup->iter);
     rbh_mut_iter_destroy(events);
     rbh_mut_iter_destroy(deduplicator);
     event_list_source_destroy(fake_source);
@@ -128,8 +138,9 @@ START_TEST(dedup_no_dedup)
     struct rbh_mut_iterator *deduplicator;
     struct source *fake_source = NULL;
     struct rbh_fsevent fake_events[2];
+    const struct rbh_fsevent *event;
     struct rbh_mut_iterator *events;
-    struct rbh_fsevent *event;
+    struct dedup_iter *dedup;
     struct rbh_id *parent;
     struct rbh_id *id;
 
@@ -141,23 +152,27 @@ START_TEST(dedup_no_dedup)
     fake_source = event_list_source(fake_events, 2);
     ck_assert_ptr_nonnull(fake_source);
 
-    deduplicator = deduplicator_new(20, fake_source);
+    deduplicator = deduplicator_new(20, fake_source, 1);
     ck_assert_ptr_nonnull(deduplicator);
 
     events = rbh_mut_iter_next(deduplicator);
     ck_assert_ptr_nonnull(events);
 
-    event = rbh_mut_iter_next(events);
+    dedup = rbh_mut_iter_next(events);
+    ck_assert_ptr_nonnull(dedup);
+
+    event = rbh_iter_next(dedup->iter);
     ck_assert_ptr_nonnull(event);
-    event = rbh_mut_iter_next(events);
+    event = rbh_iter_next(dedup->iter);
     ck_assert_ptr_nonnull(event);
 
-    event = rbh_mut_iter_next(events);
+    event = rbh_iter_next(dedup->iter);
     ck_assert_ptr_null(event);
     ck_assert_int_eq(errno, ENODATA);
 
     free(id);
     free(parent);
+    rbh_iter_destroy(dedup->iter);
     rbh_mut_iter_destroy(events);
     rbh_mut_iter_destroy(deduplicator);
     event_list_source_destroy(fake_source);
@@ -182,7 +197,7 @@ START_TEST(dedup_link_unlink)
     fake_source = event_list_source(fake_events, 2);
     ck_assert_ptr_nonnull(fake_source);
 
-    deduplicator = deduplicator_new(20, fake_source);
+    deduplicator = deduplicator_new(20, fake_source, 1);
     ck_assert_ptr_nonnull(deduplicator);
 
     events = rbh_mut_iter_next(deduplicator);
@@ -202,8 +217,9 @@ START_TEST(dedup_link_unlink_same_entry_different_parents)
     struct source *fake_source = NULL;
     struct rbh_fsevent fake_events[2];
     struct rbh_mut_iterator *events;
+    const struct rbh_fsevent *event;
     struct rbh_id *parents[2];
-    struct rbh_fsevent *event;
+    struct dedup_iter *dedup;
     struct rbh_id *id;
 
     id = fake_id();
@@ -216,25 +232,29 @@ START_TEST(dedup_link_unlink_same_entry_different_parents)
     fake_source = event_list_source(fake_events, 2);
     ck_assert_ptr_nonnull(fake_source);
 
-    deduplicator = deduplicator_new(20, fake_source);
+    deduplicator = deduplicator_new(20, fake_source, 1);
     ck_assert_ptr_nonnull(deduplicator);
 
     events = rbh_mut_iter_next(deduplicator);
     ck_assert_ptr_nonnull(events);
 
-    event = rbh_mut_iter_next(events);
+    dedup = rbh_mut_iter_next(events);
+    ck_assert_ptr_nonnull(dedup);
+
+    event = rbh_iter_next(dedup->iter);
     ck_assert_link(event, id, "test", parents[0]);
 
-    event = rbh_mut_iter_next(events);
+    event = rbh_iter_next(dedup->iter);
     ck_assert_unlink(event, id, "test", parents[1]);
 
-    event = rbh_mut_iter_next(events);
+    event = rbh_iter_next(dedup->iter);
     ck_assert_ptr_null(event);
     ck_assert_int_eq(errno, ENODATA);
 
     free(id);
     free(parents[0]);
     free(parents[1]);
+    rbh_iter_destroy(dedup->iter);
     rbh_mut_iter_destroy(events);
     rbh_mut_iter_destroy(deduplicator);
     event_list_source_destroy(fake_source);
@@ -261,7 +281,7 @@ START_TEST(dedup_create_delete)
     fake_source = event_list_source(fake_events, 4);
     ck_assert_ptr_nonnull(fake_source);
 
-    deduplicator = deduplicator_new(20, fake_source);
+    deduplicator = deduplicator_new(20, fake_source, 1);
     ck_assert_ptr_nonnull(deduplicator);
 
     events = rbh_mut_iter_next(deduplicator);
@@ -280,8 +300,9 @@ START_TEST(dedup_last_unlink)
     struct rbh_mut_iterator *deduplicator;
     struct source *fake_source = NULL;
     struct rbh_fsevent fake_events[4];
+    const struct rbh_fsevent *event;
     struct rbh_mut_iterator *events;
-    struct rbh_fsevent *event;
+    struct dedup_iter *dedup;
     struct rbh_id *parent;
     struct rbh_id *id;
 
@@ -295,22 +316,26 @@ START_TEST(dedup_last_unlink)
     fake_source = event_list_source(fake_events, 3);
     ck_assert_ptr_nonnull(fake_source);
 
-    deduplicator = deduplicator_new(20, fake_source);
+    deduplicator = deduplicator_new(20, fake_source, 1);
     ck_assert_ptr_nonnull(deduplicator);
 
     events = rbh_mut_iter_next(deduplicator);
     ck_assert_ptr_nonnull(events);
 
-    event = rbh_mut_iter_next(events);
+    dedup = rbh_mut_iter_next(events);
+    ck_assert_ptr_nonnull(dedup);
+
+    event = rbh_iter_next(dedup->iter);
     ck_assert_ptr_nonnull(event);
     ck_assert_int_eq(event->type, RBH_FET_DELETE);
 
-    event = rbh_mut_iter_next(events);
+    event = rbh_iter_next(dedup->iter);
     ck_assert_ptr_null(event);
     ck_assert_int_eq(errno, ENODATA);
 
     free(id);
     free(parent);
+    rbh_iter_destroy(dedup->iter);
     rbh_mut_iter_destroy(events);
     rbh_mut_iter_destroy(deduplicator);
     event_list_source_destroy(fake_source);
@@ -323,7 +348,8 @@ START_TEST(dedup_upsert_no_statx)
     struct source *fake_source = NULL;
     struct rbh_fsevent fake_events[2];
     struct rbh_mut_iterator *events;
-    struct rbh_fsevent *event;
+    const struct rbh_fsevent *event;
+    struct dedup_iter *dedup;
     struct rbh_id *id;
 
     id = fake_id();
@@ -334,23 +360,27 @@ START_TEST(dedup_upsert_no_statx)
     fake_source = event_list_source(fake_events, 2);
     ck_assert_ptr_nonnull(fake_source);
 
-    deduplicator = deduplicator_new(20, fake_source);
+    deduplicator = deduplicator_new(20, fake_source, 1);
     ck_assert_ptr_nonnull(deduplicator);
 
     events = rbh_mut_iter_next(deduplicator);
     ck_assert_ptr_nonnull(events);
 
-    event = rbh_mut_iter_next(events);
+    dedup = rbh_mut_iter_next(events);
+    ck_assert_ptr_nonnull(dedup);
+
+    event = rbh_iter_next(dedup->iter);
     ck_assert_ptr_nonnull(event);
     ck_assert_int_eq(event->xattrs.pairs[0].value->map.pairs[0].value->uint32,
                      RBH_STATX_ATIME | RBH_STATX_MTIME
                      );
 
-    event = rbh_mut_iter_next(events);
+    event = rbh_iter_next(dedup->iter);
     ck_assert_ptr_null(event);
     ck_assert_int_eq(errno, ENODATA);
 
     free(id);
+    rbh_iter_destroy(dedup->iter);
     rbh_mut_iter_destroy(events);
     rbh_mut_iter_destroy(deduplicator);
     event_list_source_destroy(fake_source);
@@ -363,8 +393,9 @@ START_TEST(dedup_upsert_statx)
     struct source *fake_source = NULL;
     struct rbh_fsevent fake_events[4];
     struct rbh_mut_iterator *events;
-    struct rbh_fsevent *event;
+    const struct rbh_fsevent *event;
     struct rbh_statx stats[3];
+    struct dedup_iter *dedup;
     struct rbh_id *id;
 
     memset(stats, 0, sizeof(stats));
@@ -386,13 +417,16 @@ START_TEST(dedup_upsert_statx)
     fake_source = event_list_source(fake_events, 4);
     ck_assert_ptr_nonnull(fake_source);
 
-    deduplicator = deduplicator_new(20, fake_source);
+    deduplicator = deduplicator_new(20, fake_source, 1);
     ck_assert_ptr_nonnull(deduplicator);
 
     events = rbh_mut_iter_next(deduplicator);
     ck_assert_ptr_nonnull(events);
 
-    event = rbh_mut_iter_next(events);
+    dedup = rbh_mut_iter_next(events);
+    ck_assert_ptr_nonnull(dedup);
+
+    event = rbh_iter_next(dedup->iter);
     ck_assert_ptr_nonnull(event);
     ck_assert_int_eq(event->type, RBH_FET_UPSERT);
     ck_assert_ptr_nonnull(event->upsert.statx);
@@ -407,11 +441,12 @@ START_TEST(dedup_upsert_statx)
     ck_assert_int_eq(event->upsert.statx->stx_mtime.tv_sec, 4321);
     ck_assert_int_eq(event->upsert.statx->stx_ctime.tv_sec, 2143);
 
-    event = rbh_mut_iter_next(events);
+    event = rbh_iter_next(dedup->iter);
     ck_assert_ptr_null(event);
     ck_assert_int_eq(errno, ENODATA);
 
     free(id);
+    rbh_iter_destroy(dedup->iter);
     rbh_mut_iter_destroy(events);
     rbh_mut_iter_destroy(deduplicator);
     event_list_source_destroy(fake_source);
@@ -424,7 +459,8 @@ START_TEST(dedup_upsert_statx_symlink)
     struct source *fake_source = NULL;
     struct rbh_fsevent fake_events[2];
     struct rbh_mut_iterator *events;
-    struct rbh_fsevent *event;
+    const struct rbh_fsevent *event;
+    struct dedup_iter *dedup;
     struct rbh_statx stat;
     struct rbh_id *id;
 
@@ -440,13 +476,16 @@ START_TEST(dedup_upsert_statx_symlink)
     fake_source = event_list_source(fake_events, 2);
     ck_assert_ptr_nonnull(fake_source);
 
-    deduplicator = deduplicator_new(20, fake_source);
+    deduplicator = deduplicator_new(20, fake_source, 1);
     ck_assert_ptr_nonnull(deduplicator);
 
     events = rbh_mut_iter_next(deduplicator);
     ck_assert_ptr_nonnull(events);
 
-    event = rbh_mut_iter_next(events);
+    dedup = rbh_mut_iter_next(events);
+    ck_assert_ptr_nonnull(dedup);
+
+    event = rbh_iter_next(dedup->iter);
     ck_assert_ptr_nonnull(event);
     ck_assert_int_eq(event->type, RBH_FET_UPSERT);
     ck_assert_ptr_nonnull(event->upsert.statx);
@@ -462,11 +501,12 @@ START_TEST(dedup_upsert_statx_symlink)
     ck_assert_str_eq(event->xattrs.pairs[0].value->map.pairs[1].value->string,
                      "symlink");
 
-    event = rbh_mut_iter_next(events);
+    event = rbh_iter_next(dedup->iter);
     ck_assert_ptr_null(event);
     ck_assert_int_eq(errno, ENODATA);
 
     free(id);
+    rbh_iter_destroy(dedup->iter);
     rbh_mut_iter_destroy(events);
     rbh_mut_iter_destroy(deduplicator);
     event_list_source_destroy(fake_source);
@@ -479,7 +519,8 @@ START_TEST(dedup_same_xattr)
     struct source *fake_source = NULL;
     struct rbh_fsevent fake_events[2];
     struct rbh_mut_iterator *events;
-    struct rbh_fsevent *event;
+    const struct rbh_fsevent *event;
+    struct dedup_iter *dedup;
     struct rbh_id *id;
 
     id = fake_id();
@@ -490,20 +531,24 @@ START_TEST(dedup_same_xattr)
     fake_source = event_list_source(fake_events, 2);
     ck_assert_ptr_nonnull(fake_source);
 
-    deduplicator = deduplicator_new(20, fake_source);
+    deduplicator = deduplicator_new(20, fake_source, 1);
     ck_assert_ptr_nonnull(deduplicator);
 
     events = rbh_mut_iter_next(deduplicator);
     ck_assert_ptr_nonnull(events);
 
-    event = rbh_mut_iter_next(events);
+    dedup = rbh_mut_iter_next(events);
+    ck_assert_ptr_nonnull(dedup);
+
+    event = rbh_iter_next(dedup->iter);
     ck_assert_ptr_nonnull(event);
 
-    event = rbh_mut_iter_next(events);
+    event = rbh_iter_next(dedup->iter);
     ck_assert_ptr_null(event);
     ck_assert_int_eq(errno, ENODATA);
 
     free(id);
+    rbh_iter_destroy(dedup->iter);
     rbh_mut_iter_destroy(events);
     rbh_mut_iter_destroy(deduplicator);
     event_list_source_destroy(fake_source);
@@ -516,8 +561,9 @@ START_TEST(dedup_different_xattrs)
     struct source *fake_source = NULL;
     struct rbh_fsevent fake_events[2];
     struct rbh_mut_iterator *events;
+    const struct rbh_fsevent *event;
     const struct rbh_value *xattrs;
-    struct rbh_fsevent *event;
+    struct dedup_iter *dedup;
     struct rbh_id *id;
 
     id = fake_id();
@@ -528,13 +574,16 @@ START_TEST(dedup_different_xattrs)
     fake_source = event_list_source(fake_events, 2);
     ck_assert_ptr_nonnull(fake_source);
 
-    deduplicator = deduplicator_new(20, fake_source);
+    deduplicator = deduplicator_new(20, fake_source, 1);
     ck_assert_ptr_nonnull(deduplicator);
 
     events = rbh_mut_iter_next(deduplicator);
     ck_assert_ptr_nonnull(events);
 
-    event = rbh_mut_iter_next(events);
+    dedup = rbh_mut_iter_next(events);
+    ck_assert_ptr_nonnull(dedup);
+
+    event = rbh_iter_next(dedup->iter);
     ck_assert_ptr_nonnull(event);
 
     ck_assert_int_eq(event->type, RBH_FET_XATTR);
@@ -553,11 +602,12 @@ START_TEST(dedup_different_xattrs)
     ck_assert_int_eq(xattrs->sequence.values[1].type, RBH_VT_STRING);
     ck_assert_str_eq(xattrs->sequence.values[1].string, "key2");
 
-    event = rbh_mut_iter_next(events);
+    event = rbh_iter_next(dedup->iter);
     ck_assert_ptr_null(event);
     ck_assert_int_eq(errno, ENODATA);
 
     free(id);
+    rbh_iter_destroy(dedup->iter);
     rbh_mut_iter_destroy(events);
     rbh_mut_iter_destroy(deduplicator);
     event_list_source_destroy(fake_source);
@@ -570,7 +620,8 @@ START_TEST(dedup_same_xattr_different_values)
     struct source *fake_source = NULL;
     struct rbh_fsevent fake_events[4];
     struct rbh_mut_iterator *events;
-    struct rbh_fsevent *event;
+    const struct rbh_fsevent *event;
+    struct dedup_iter *dedup;
     struct rbh_id *id;
 
     id = fake_id();
@@ -583,13 +634,16 @@ START_TEST(dedup_same_xattr_different_values)
     fake_source = event_list_source(fake_events, 4);
     ck_assert_ptr_nonnull(fake_source);
 
-    deduplicator = deduplicator_new(20, fake_source);
+    deduplicator = deduplicator_new(20, fake_source, 1);
     ck_assert_ptr_nonnull(deduplicator);
 
     events = rbh_mut_iter_next(deduplicator);
     ck_assert_ptr_nonnull(events);
 
-    event = rbh_mut_iter_next(events);
+    dedup = rbh_mut_iter_next(events);
+    ck_assert_ptr_nonnull(dedup);
+
+    event = rbh_iter_next(dedup->iter);
     ck_assert_ptr_nonnull(event);
 
     ck_assert_int_eq(event->type, RBH_FET_XATTR);
@@ -598,11 +652,12 @@ START_TEST(dedup_same_xattr_different_values)
     ck_assert_int_eq(event->xattrs.pairs[0].value->type, RBH_VT_BINARY);
     ck_assert_str_eq(event->xattrs.pairs[0].value->binary.data, "value4");
 
-    event = rbh_mut_iter_next(events);
+    event = rbh_iter_next(dedup->iter);
     ck_assert_ptr_null(event);
     ck_assert_int_eq(errno, ENODATA);
 
     free(id);
+    rbh_iter_destroy(dedup->iter);
     rbh_mut_iter_destroy(events);
     rbh_mut_iter_destroy(deduplicator);
     event_list_source_destroy(fake_source);
@@ -615,7 +670,8 @@ START_TEST(dedup_lustre_xattr)
     struct source *fake_source = NULL;
     struct rbh_fsevent fake_events[2];
     struct rbh_mut_iterator *events;
-    struct rbh_fsevent *event;
+    const struct rbh_fsevent *event;
+    struct dedup_iter *dedup;
     struct rbh_id *id;
 
     id = fake_id();
@@ -626,20 +682,24 @@ START_TEST(dedup_lustre_xattr)
     fake_source = event_list_source(fake_events, 2);
     ck_assert_ptr_nonnull(fake_source);
 
-    deduplicator = deduplicator_new(20, fake_source);
+    deduplicator = deduplicator_new(20, fake_source, 1);
     ck_assert_ptr_nonnull(deduplicator);
 
     events = rbh_mut_iter_next(deduplicator);
     ck_assert_ptr_nonnull(events);
 
-    event = rbh_mut_iter_next(events);
+    dedup = rbh_mut_iter_next(events);
+    ck_assert_ptr_nonnull(dedup);
+
+    event = rbh_iter_next(dedup->iter);
     ck_assert_ptr_nonnull(event);
 
-    event = rbh_mut_iter_next(events);
+    event = rbh_iter_next(dedup->iter);
     ck_assert_ptr_null(event);
     ck_assert_int_eq(errno, ENODATA);
 
     free(id);
+    rbh_iter_destroy(dedup->iter);
     rbh_mut_iter_destroy(events);
     rbh_mut_iter_destroy(deduplicator);
     event_list_source_destroy(fake_source);
@@ -653,7 +713,8 @@ START_TEST(dedup_xattr_merge_lustre_with_xattr)
     struct rbh_fsevent fake_events[2];
     struct rbh_value const * sequence;
     struct rbh_mut_iterator *events;
-    struct rbh_fsevent *event;
+    const struct rbh_fsevent *event;
+    struct dedup_iter *dedup;
     struct rbh_id *id;
 
     id = fake_id();
@@ -664,13 +725,16 @@ START_TEST(dedup_xattr_merge_lustre_with_xattr)
     fake_source = event_list_source(fake_events, 2);
     ck_assert_ptr_nonnull(fake_source);
 
-    deduplicator = deduplicator_new(20, fake_source);
+    deduplicator = deduplicator_new(20, fake_source, 1);
     ck_assert_ptr_nonnull(deduplicator);
 
     events = rbh_mut_iter_next(deduplicator);
     ck_assert_ptr_nonnull(events);
 
-    event = rbh_mut_iter_next(events);
+    dedup = rbh_mut_iter_next(events);
+    ck_assert_ptr_nonnull(dedup);
+
+    event = rbh_iter_next(dedup->iter);
     ck_assert_ptr_nonnull(event);
     ck_assert_int_eq(event->xattrs.count, 1);
     ck_assert_str_eq(event->xattrs.pairs[0].key, "rbh-fsevents");
@@ -685,11 +749,12 @@ START_TEST(dedup_xattr_merge_lustre_with_xattr)
     ck_assert_int_eq(sequence->sequence.values[0].type, RBH_VT_STRING);
     ck_assert_str_eq(sequence->sequence.values[0].string, "test");
 
-    event = rbh_mut_iter_next(events);
+    event = rbh_iter_next(dedup->iter);
     ck_assert_ptr_null(event);
     ck_assert_int_eq(errno, ENODATA);
 
     free(id);
+    rbh_iter_destroy(dedup->iter);
     rbh_mut_iter_destroy(events);
     rbh_mut_iter_destroy(deduplicator);
     event_list_source_destroy(fake_source);
@@ -702,7 +767,8 @@ START_TEST(dedup_xattr_merge_xattrs_with_lustre)
     struct source *fake_source = NULL;
     struct rbh_fsevent fake_events[2];
     struct rbh_mut_iterator *events;
-    struct rbh_fsevent *event;
+    const struct rbh_fsevent *event;
+    struct dedup_iter *dedup;
     struct rbh_id *id;
 
     id = fake_id();
@@ -713,13 +779,16 @@ START_TEST(dedup_xattr_merge_xattrs_with_lustre)
     fake_source = event_list_source(fake_events, 2);
     ck_assert_ptr_nonnull(fake_source);
 
-    deduplicator = deduplicator_new(20, fake_source);
+    deduplicator = deduplicator_new(20, fake_source, 1);
     ck_assert_ptr_nonnull(deduplicator);
 
     events = rbh_mut_iter_next(deduplicator);
     ck_assert_ptr_nonnull(events);
 
-    event = rbh_mut_iter_next(events);
+    dedup = rbh_mut_iter_next(events);
+    ck_assert_ptr_nonnull(dedup);
+
+    event = rbh_iter_next(dedup->iter);
     ck_assert_ptr_nonnull(event);
     ck_assert_int_eq(event->xattrs.count, 1);
     ck_assert_str_eq(event->xattrs.pairs[0].key, "rbh-fsevents");
@@ -728,11 +797,12 @@ START_TEST(dedup_xattr_merge_xattrs_with_lustre)
     ck_assert_str_eq(event->xattrs.pairs[0].value->map.pairs[0].key, "lustre");
     ck_assert_str_eq(event->xattrs.pairs[0].value->map.pairs[1].key, "xattrs");
 
-    event = rbh_mut_iter_next(events);
+    event = rbh_iter_next(dedup->iter);
     ck_assert_ptr_null(event);
     ck_assert_int_eq(errno, ENODATA);
 
     free(id);
+    rbh_iter_destroy(dedup->iter);
     rbh_mut_iter_destroy(events);
     rbh_mut_iter_destroy(deduplicator);
     event_list_source_destroy(fake_source);
@@ -746,7 +816,8 @@ START_TEST(dedup_xattr_merge_fid_with_lustre)
     struct rbh_fsevent fake_events[2];
     struct rbh_mut_iterator *events;
     const struct rbh_value_map *map;
-    struct rbh_fsevent *event;
+    const struct rbh_fsevent *event;
+    struct dedup_iter *dedup;
     struct rbh_id *id;
 
     id = fake_id();
@@ -757,13 +828,16 @@ START_TEST(dedup_xattr_merge_fid_with_lustre)
     fake_source = event_list_source(fake_events, 2);
     ck_assert_ptr_nonnull(fake_source);
 
-    deduplicator = deduplicator_new(20, fake_source);
+    deduplicator = deduplicator_new(20, fake_source, 1);
     ck_assert_ptr_nonnull(deduplicator);
 
     events = rbh_mut_iter_next(deduplicator);
     ck_assert_ptr_nonnull(events);
 
-    event = rbh_mut_iter_next(events);
+    dedup = rbh_mut_iter_next(events);
+    ck_assert_ptr_nonnull(dedup);
+
+    event = rbh_iter_next(dedup->iter);
     ck_assert_ptr_nonnull(event);
     ck_assert_int_eq(event->xattrs.count, 2);
     ck_assert_str_eq(event->xattrs.pairs[0].key, "fid");
@@ -775,11 +849,12 @@ START_TEST(dedup_xattr_merge_fid_with_lustre)
     ck_assert_str_eq(map->pairs[0].key, "lustre");
     ck_assert_ptr_eq(map->pairs[0].value, NULL);
 
-    event = rbh_mut_iter_next(events);
+    event = rbh_iter_next(dedup->iter);
     ck_assert_ptr_null(event);
     ck_assert_int_eq(errno, ENODATA);
 
     free(id);
+    rbh_iter_destroy(dedup->iter);
     rbh_mut_iter_destroy(events);
     rbh_mut_iter_destroy(deduplicator);
     event_list_source_destroy(fake_source);
@@ -792,7 +867,8 @@ START_TEST(dedup_xattr_merge_lustre_with_fid)
     struct source *fake_source = NULL;
     struct rbh_fsevent fake_events[2];
     struct rbh_mut_iterator *events;
-    struct rbh_fsevent *event;
+    const struct rbh_fsevent *event;
+    struct dedup_iter *dedup;
     struct rbh_id *id;
 
     id = fake_id();
@@ -803,23 +879,27 @@ START_TEST(dedup_xattr_merge_lustre_with_fid)
     fake_source = event_list_source(fake_events, 2);
     ck_assert_ptr_nonnull(fake_source);
 
-    deduplicator = deduplicator_new(20, fake_source);
+    deduplicator = deduplicator_new(20, fake_source, 1);
     ck_assert_ptr_nonnull(deduplicator);
 
     events = rbh_mut_iter_next(deduplicator);
     ck_assert_ptr_nonnull(events);
 
-    event = rbh_mut_iter_next(events);
+    dedup = rbh_mut_iter_next(events);
+    ck_assert_ptr_nonnull(dedup);
+
+    event = rbh_iter_next(dedup->iter);
     ck_assert_ptr_nonnull(event);
     ck_assert_int_eq(event->xattrs.count, 2);
     ck_assert_str_eq(event->xattrs.pairs[0].key, "rbh-fsevents");
     ck_assert_str_eq(event->xattrs.pairs[1].key, "fid");
 
-    event = rbh_mut_iter_next(events);
+    event = rbh_iter_next(dedup->iter);
     ck_assert_ptr_null(event);
     ck_assert_int_eq(errno, ENODATA);
 
     free(id);
+    rbh_iter_destroy(dedup->iter);
     rbh_mut_iter_destroy(events);
     rbh_mut_iter_destroy(deduplicator);
     event_list_source_destroy(fake_source);
@@ -832,7 +912,8 @@ START_TEST(dedup_xattr_merge_xattrs_with_fid)
     struct source *fake_source = NULL;
     struct rbh_fsevent fake_events[2];
     struct rbh_mut_iterator *events;
-    struct rbh_fsevent *event;
+    const struct rbh_fsevent *event;
+    struct dedup_iter *dedup;
     struct rbh_id *id;
 
     id = fake_id();
@@ -843,23 +924,27 @@ START_TEST(dedup_xattr_merge_xattrs_with_fid)
     fake_source = event_list_source(fake_events, 2);
     ck_assert_ptr_nonnull(fake_source);
 
-    deduplicator = deduplicator_new(20, fake_source);
+    deduplicator = deduplicator_new(20, fake_source, 1);
     ck_assert_ptr_nonnull(deduplicator);
 
     events = rbh_mut_iter_next(deduplicator);
     ck_assert_ptr_nonnull(events);
 
-    event = rbh_mut_iter_next(events);
+    dedup = rbh_mut_iter_next(events);
+    ck_assert_ptr_nonnull(dedup);
+
+    event = rbh_iter_next(dedup->iter);
     ck_assert_ptr_nonnull(event);
     ck_assert_int_eq(event->xattrs.count, 2);
     ck_assert_str_eq(event->xattrs.pairs[0].key, "fid");
     ck_assert_str_eq(event->xattrs.pairs[1].key, "rbh-fsevents");
 
-    event = rbh_mut_iter_next(events);
+    event = rbh_iter_next(dedup->iter);
     ck_assert_ptr_null(event);
     ck_assert_int_eq(errno, ENODATA);
 
     free(id);
+    rbh_iter_destroy(dedup->iter);
     rbh_mut_iter_destroy(events);
     rbh_mut_iter_destroy(deduplicator);
     event_list_source_destroy(fake_source);
@@ -873,7 +958,8 @@ START_TEST(dedup_xattr_merge_xattrs_fid_and_lustre)
     struct source *fake_source = NULL;
     struct rbh_fsevent fake_events[3];
     struct rbh_mut_iterator *events;
-    struct rbh_fsevent *event;
+    const struct rbh_fsevent *event;
+    struct dedup_iter *dedup;
     struct rbh_id *id;
 
     id = fake_id();
@@ -885,13 +971,16 @@ START_TEST(dedup_xattr_merge_xattrs_fid_and_lustre)
     fake_source = event_list_source(fake_events, 3);
     ck_assert_ptr_nonnull(fake_source);
 
-    deduplicator = deduplicator_new(20, fake_source);
+    deduplicator = deduplicator_new(20, fake_source, 1);
     ck_assert_ptr_nonnull(deduplicator);
 
     events = rbh_mut_iter_next(deduplicator);
     ck_assert_ptr_nonnull(events);
 
-    event = rbh_mut_iter_next(events);
+    dedup = rbh_mut_iter_next(events);
+    ck_assert_ptr_nonnull(dedup);
+
+    event = rbh_iter_next(dedup->iter);
     ck_assert_ptr_nonnull(event);
     ck_assert_int_eq(event->xattrs.count, 2);
     ck_assert_str_eq(event->xattrs.pairs[0].key, "fid");
@@ -903,11 +992,12 @@ START_TEST(dedup_xattr_merge_xattrs_fid_and_lustre)
     ck_assert_str_eq(pairs[0].key, "xattrs");
     ck_assert_str_eq(pairs[1].key, "lustre");
 
-    event = rbh_mut_iter_next(events);
+    event = rbh_iter_next(dedup->iter);
     ck_assert_ptr_null(event);
     ck_assert_int_eq(errno, ENODATA);
 
     free(id);
+    rbh_iter_destroy(dedup->iter);
     rbh_mut_iter_destroy(events);
     rbh_mut_iter_destroy(deduplicator);
     event_list_source_destroy(fake_source);
@@ -920,7 +1010,8 @@ START_TEST(dedup_check_flush_order)
     struct source *fake_source = NULL;
     struct rbh_fsevent fake_events[6];
     struct rbh_mut_iterator *events;
-    struct rbh_fsevent *event;
+    const struct rbh_fsevent *event;
+    struct dedup_iter *dedup;
     struct rbh_id *ids[3];
 
     fprintf(stderr, "dedup xattr start\n");
@@ -948,30 +1039,34 @@ START_TEST(dedup_check_flush_order)
     fake_source = event_list_source(fake_events, 6);
     ck_assert_ptr_nonnull(fake_source);
 
-    deduplicator = deduplicator_new(20, fake_source);
+    deduplicator = deduplicator_new(20, fake_source, 1);
     ck_assert_ptr_nonnull(deduplicator);
 
     events = rbh_mut_iter_next(deduplicator);
     ck_assert_ptr_nonnull(events);
 
-    event = rbh_mut_iter_next(events);
+    dedup = rbh_mut_iter_next(events);
+    ck_assert_ptr_nonnull(dedup);
+
+    event = rbh_iter_next(dedup->iter);
     ck_assert_ptr_nonnull(event);
     ck_assert_id_eq(ids[1], &event->id);
 
-    event = rbh_mut_iter_next(events);
+    event = rbh_iter_next(dedup->iter);
     ck_assert_ptr_nonnull(event);
     ck_assert_id_eq(ids[0], &event->id);
 
-    event = rbh_mut_iter_next(events);
+    event = rbh_iter_next(dedup->iter);
     ck_assert_ptr_nonnull(event);
     ck_assert_id_eq(ids[2], &event->id);
 
-    event = rbh_mut_iter_next(events);
+    event = rbh_iter_next(dedup->iter);
     ck_assert_ptr_null(event);
     ck_assert_int_eq(errno, ENODATA);
 
     for (size_t i = 0; i < 3; i++)
         free(ids[i]);
+    rbh_iter_destroy(dedup->iter);
     rbh_mut_iter_destroy(events);
     rbh_mut_iter_destroy(deduplicator);
     event_list_source_destroy(fake_source);
