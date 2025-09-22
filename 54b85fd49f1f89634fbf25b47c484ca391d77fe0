@@ -22,6 +22,29 @@
       },
       "revId": "54b85fd49f1f89634fbf25b47c484ca391d77fe0",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9c19a718_f777f164",
+        "filename": "librobinhood/src/plugins/posix/enrichers/lustre/lustre.c",
+        "patchSetId": 6
+      },
+      "lineNbr": 1059,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-09-22T08:55:50Z",
+      "side": 1,
+      "message": "minor: no need for this, using DFID/PFID in the log is enough",
+      "range": {
+        "startLine": 1059,
+        "startChar": 4,
+        "endLine": 1059,
+        "endChar": 73
+      },
+      "revId": "54b85fd49f1f89634fbf25b47c484ca391d77fe0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
