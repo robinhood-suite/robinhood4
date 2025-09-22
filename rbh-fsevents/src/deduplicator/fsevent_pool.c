@@ -7,6 +7,7 @@
 
 #include "fsevent_pool.h"
 #include "hash.h"
+#include "deduplicator.h"
 #include "rbh_fsevent_utils.h"
 
 #include <robinhood.h>
@@ -28,9 +29,10 @@ struct rbh_fsevent_pool {
                                * ordered by time of insertion
                                */
     size_t count; /* total number of ids in the pool */
-    struct rbh_list_node events; /* list of flushed events that the user of the
-                                  * pool will iterate over
-                                  */
+    struct rbh_list_node *events; /* array of list of flushed events associated
+                                   * with each worker
+                                   */
+    size_t events_size; /* Number of list of flushed events */
     struct rbh_list_node free_fsevents; /* List of available
                                          * struct rbh_fsevent_node
                                          */
@@ -73,7 +75,8 @@ fsevent_pool_hash_lu_id(const void *key)
 }
 
 struct rbh_fsevent_pool *
-rbh_fsevent_pool_new(size_t batch_size, struct source *source)
+rbh_fsevent_pool_new(size_t batch_size, struct source *source,
+                     size_t nb_workers)
 {
     struct rbh_fsevent_pool *pool;
     size_t (*hash_fn)(const void *);
@@ -110,7 +113,21 @@ rbh_fsevent_pool_new(size_t batch_size, struct source *source)
     rbh_list_init(&pool->ids);
     pool->need_to_flush = false;
     pool->count = 0;
-    rbh_list_init(&pool->events);
+
+    pool->events_size = nb_workers;
+    pool->events = malloc(nb_workers * sizeof(*pool->events));
+    if (pool->events == NULL) {
+        int save_errno = errno;
+
+        rbh_hashmap_destroy(pool->pool);
+        rbh_sstack_destroy(pool->list_container);
+        free(pool);
+        errno = save_errno;
+        return NULL;
+    }
+
+    for (int i = 0; i < nb_workers; i++)
+        rbh_list_init(&pool->events[i]);
     rbh_list_init(&pool->free_ids);
     rbh_list_init(&pool->free_nodes);
     rbh_list_init(&pool->free_fsevents);
@@ -128,8 +145,11 @@ rbh_fsevent_pool_destroy(struct rbh_fsevent_pool *pool)
     // need to free this as it may be slow to go through every elements of the
     // lists and the hashmap. We could have a compile time flag to remove this
     // part of the code and only run it in tests.
-    rbh_list_foreach(&pool->events, fsevent, link)
-        rbh_sstack_destroy(fsevent->copy_data);
+    for (int i = 0; i < pool->events_size; i++) {
+        rbh_list_foreach(&pool->events[i], fsevent, link)
+            rbh_sstack_destroy(fsevent->copy_data);
+    }
+    free(pool->events);
 
     rbh_list_foreach(&pool->free_fsevents, fsevent, link)
         rbh_sstack_destroy(fsevent->copy_data);
@@ -929,9 +949,14 @@ rbh_fsevent_pool_flush(struct rbh_fsevent_pool *pool)
 {
     struct rbh_fsevent_node *elem, *tmp;
     struct rbh_list_node *events_copy;
+    struct dedup_iter *iterators;
+    struct dedup_iter *iter_ptr;
+    size_t size = 0;
 
-    rbh_list_foreach_safe(&pool->events, elem, tmp, link) {
-        fsevent_node_free(pool, elem);
+    for (size_t i = 0; i < pool->events_size; i++) {
+        rbh_list_foreach_safe(&pool->events[i], elem, tmp, link) {
+            fsevent_node_free(pool, elem);
+        }
     }
 
     if (pool->count == 0)
@@ -941,12 +966,15 @@ rbh_fsevent_pool_flush(struct rbh_fsevent_pool *pool)
         struct rbh_list_node *first_events;
         struct rbh_id_node *first_id;
         struct rbh_list_node *events;
+        size_t index;
 
         first_id = rbh_list_first(&pool->ids, struct rbh_id_node, link);
         first_events = (void *)rbh_hashmap_get(pool->pool, first_id->id);
         assert(first_events);
 
-        rbh_list_splice_tail(&pool->events, first_events);
+        index = hash_id2index(first_id->id, pool->events_size);
+
+        rbh_list_splice_tail(&pool->events[index], first_events);
 
         id_node_free(pool, first_id);
         events = (void *)rbh_hashmap_pop(pool->pool, first_id->id);
@@ -956,10 +984,35 @@ rbh_fsevent_pool_flush(struct rbh_fsevent_pool *pool)
 
     pool->need_to_flush = false;
 
-    events_copy = events_list_copy(&pool->events);
-    if (events_copy == NULL)
+    /* Compute how many iterator we need to return */
+    for (size_t i = 0; i < pool->events_size; i++) {
+        if (!rbh_list_empty(&pool->events[i]))
+            size++;
+    }
+
+    iterators = malloc(size * sizeof(*iterators));
+    if (iterators == NULL)
         return NULL;
 
-    return rbh_iter_list(events_copy, offsetof(struct rbh_fsevent_node, link),
-                         free_events_list);
+    iter_ptr = iterators;
+
+    for (size_t i = 0; i < pool->events_size; i++) {
+        if (rbh_list_empty(&pool->events[i]))
+            continue;
+
+        events_copy = events_list_copy(&pool->events[i]);
+        if (events_copy == NULL)
+            return NULL;
+
+        iter_ptr->iter = rbh_iter_list(events_copy,
+                                       offsetof(struct rbh_fsevent_node, link),
+                                       free_events_list);
+        if (iter_ptr->iter == NULL)
+            return NULL;
+
+        iter_ptr->index = i;
+        iter_ptr++;
+    }
+
+    return rbh_iter_array(iterators, sizeof(struct dedup_iter), size, free);
 }
