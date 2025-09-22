@@ -3,6 +3,98 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "feb68540_11f102a6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-09-22T08:41:07Z",
+      "side": 1,
+      "message": "typo: set",
+      "range": {
+        "startLine": 10,
+        "startChar": 47,
+        "endLine": 10,
+        "endChar": 51
+      },
+      "revId": "9e40ea68921b4b9f9f1b0775119df94ab6c34186",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a794092a_a695f049",
+        "filename": "librobinhood/src/plugins/posix/enrichers/lustre/lustre.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 976,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-09-22T08:41:07Z",
+      "side": 1,
+      "message": "minor: this seems like a mandatory parameter",
+      "range": {
+        "startLine": 976,
+        "startChar": 4,
+        "endLine": 976,
+        "endChar": 18
+      },
+      "revId": "9e40ea68921b4b9f9f1b0775119df94ab6c34186",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ea0760ec_11ed8098",
+        "filename": "librobinhood/src/plugins/posix/enrichers/lustre/lustre.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 978,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-09-22T08:41:07Z",
+      "side": 1,
+      "message": "minor: don\u0027t think this is ever freed",
+      "range": {
+        "startLine": 978,
+        "startChar": 24,
+        "endLine": 978,
+        "endChar": 30
+      },
+      "revId": "9e40ea68921b4b9f9f1b0775119df94ab6c34186",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "84341a88_8fb5383e",
+        "filename": "librobinhood/src/plugins/posix/enrichers/lustre/lustre.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 1003,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-09-22T08:41:07Z",
+      "side": 1,
+      "message": "style: add `{}` on the if aswell",
+      "range": {
+        "startLine": 1003,
+        "startChar": 9,
+        "endLine": 1003,
+        "endChar": 10
+      },
+      "revId": "9e40ea68921b4b9f9f1b0775119df94ab6c34186",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d8dbcb09_cbfae260",
         "filename": "rbh-undelete/rbh-undelete.c",
         "patchSetId": 5
