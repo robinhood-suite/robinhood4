@@ -18,12 +18,13 @@
 
 #include "deduplicator.h"
 #include "deduplicator/fsevent_pool.h"
-#include <lustre/lustreapi.h>
+#include "deduplicator/hash.h"
 
 struct deduplicator {
     struct rbh_mut_iterator batches;
     struct rbh_fsevent_pool *pool;
     struct source *source;
+    size_t nb_workers;
 };
 
 /*----------------------------------------------------------------------------*
@@ -99,6 +100,7 @@ no_dedup_iter_next(void *iterator)
     struct deduplicator *deduplicator = iterator;
     const struct rbh_fsevent *fsevent_copy;
     const struct rbh_fsevent *fsevent;
+    struct dedup_iter *dedup;
 
     fsevent = rbh_iter_next(&deduplicator->source->fsevents);
     if (fsevent == NULL)
@@ -108,7 +110,18 @@ no_dedup_iter_next(void *iterator)
     if (fsevent_copy == NULL)
         return NULL;
 
-    return rbh_iter_array(fsevent_copy, sizeof(struct rbh_fsevent), 1, free);
+    dedup = malloc(sizeof(*dedup));
+    if (dedup == NULL)
+        return NULL;
+
+    dedup->iter = rbh_iter_array(fsevent_copy, sizeof(struct rbh_fsevent), 1,
+                                 free);
+    if (dedup->iter == NULL)
+        return NULL;
+
+    dedup->index = hash_id2index(&fsevent_copy->id, deduplicator->nb_workers);
+
+    return rbh_iter_array(dedup, sizeof(struct dedup_iter), 1, free);
 }
 
 static const struct rbh_mut_iterator_operations NO_DEDUP_ITER_OPS = {
@@ -125,7 +138,7 @@ static const struct rbh_mut_iterator NO_DEDUP_ITERATOR = {
 };
 
 struct rbh_mut_iterator *
-deduplicator_new(size_t batch_size, struct source *source)
+deduplicator_new(size_t batch_size, struct source *source, size_t nb_workers)
 {
     struct deduplicator *deduplicator;
 
@@ -134,11 +147,13 @@ deduplicator_new(size_t batch_size, struct source *source)
         return NULL;
 
     deduplicator->source = source;
+    deduplicator->nb_workers = nb_workers;
     if (batch_size == 0) {
         deduplicator->batches = NO_DEDUP_ITERATOR;
     } else {
         deduplicator->batches = DEDUPLICATOR_ITERATOR;
-        deduplicator->pool = rbh_fsevent_pool_new(batch_size, source);
+        deduplicator->pool = rbh_fsevent_pool_new(batch_size, source,
+                                                  nb_workers);
     }
 
     return &deduplicator->batches;

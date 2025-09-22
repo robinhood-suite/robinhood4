@@ -54,3 +54,9 @@ hash_lu_id(const struct rbh_id *id)
 #endif
 
 }
+
+size_t
+hash_id2index(const struct rbh_id *id, size_t size)
+{
+    return hash_lu_id(id) % size;
+}

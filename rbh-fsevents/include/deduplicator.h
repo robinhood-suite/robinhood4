@@ -15,6 +15,11 @@
 #include "source.h"
 
 struct rbh_mut_iterator *
-deduplicator_new(size_t batch_size, struct source *source);
+deduplicator_new(size_t batch_size, struct source *source, size_t nb_workers);
+
+struct dedup_iter {
+    struct rbh_iterator *iter;
+    size_t index;
+};
 
 #endif
