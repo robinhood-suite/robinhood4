@@ -16,6 +16,29 @@
       "message": "Why not adding them directly to the existing condition source file ?",
       "revId": "68fe3aabd80bd3e5b81fb432e977d9d2c2b254f0",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7fecec99_495cd930",
+        "filename": "rbh-policy/rbhpolicy/config/entities.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-09-23T09:19:42Z",
+      "side": 1,
+      "message": "style: alphabetical order?",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 24,
+        "endChar": 43
+      },
+      "revId": "68fe3aabd80bd3e5b81fb432e977d9d2c2b254f0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
