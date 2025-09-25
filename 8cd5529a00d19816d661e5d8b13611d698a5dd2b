@@ -56,6 +56,30 @@
       },
       "revId": "8cd5529a00d19816d661e5d8b13611d698a5dd2b",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5eb8e79b_059a230d",
+        "filename": "librobinhood/src/config.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-09-25T14:39:11Z",
+      "side": 1,
+      "message": "Yes, but I added `__thread` meaning that each thread as it\u0027s own config and should init/free the config.",
+      "parentUuid": "f0ff4fb2_5b068bb7",
+      "range": {
+        "startLine": 197,
+        "startChar": 4,
+        "endLine": 209,
+        "endChar": 18
+      },
+      "revId": "8cd5529a00d19816d661e5d8b13611d698a5dd2b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
