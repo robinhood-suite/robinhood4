@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "62f998d0_bed99229",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-09-25T14:21:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "aec8f8bc_fe6fd4c4",
+      "range": {
+        "startLine": 9,
+        "startChar": 49,
+        "endLine": 10,
+        "endChar": 16
+      },
+      "revId": "2f42f3f00ad61cd5538b4beeca96fc92111ff28f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "abb396b2_cd820bc4",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
@@ -111,6 +135,54 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "78ddc7f5_4536dad6",
+        "filename": "rbh-fsevents/src/deduplicator.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-09-25T14:21:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "73130889_76f804ee",
+      "range": {
+        "startLine": 31,
+        "startChar": 0,
+        "endLine": 31,
+        "endChar": 53
+      },
+      "revId": "2f42f3f00ad61cd5538b4beeca96fc92111ff28f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2f90f601_262cec20",
+        "filename": "rbh-fsevents/src/deduplicator.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-09-25T14:21:21Z",
+      "side": 1,
+      "message": "The deduplication is not a multithreaded context, having this variable is ok. I move it directly in the function to avoid futur problems.",
+      "parentUuid": "e804deb2_b5d0cade",
+      "range": {
+        "startLine": 31,
+        "startChar": 0,
+        "endLine": 31,
+        "endChar": 12
+      },
+      "revId": "2f42f3f00ad61cd5538b4beeca96fc92111ff28f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b4871699_d1abe248",
@@ -124,6 +196,30 @@
       "writtenOn": "2025-09-08T08:44:47Z",
       "side": 1,
       "message": "major: I think it would be easier to do:\n```\nif rc !\u003d POOL_FULL \u0026\u0026 last_event\n    fsevent \u003d last_event\nelse\n    fsevent \u003d iter_next\n\nif rc \u003d\u003d POOL_FULL \u0026\u0026 fsevent !\u003d last_event\n    last_event \u003d fsevent\n    break\n \npush fsevent\n# do the same as current for POOL_ALREADY_FULL and INSERT_FAILED\nif rc \u003d POOL_FULL\n    last_event \u003d fsevent\n    continue -\u003e don\u0027t break here \n```\n\nThis way, you don\u0027t have to handle anything outside of this function",
+      "range": {
+        "startLine": 42,
+        "startChar": 8,
+        "endLine": 45,
+        "endChar": 16
+      },
+      "revId": "2f42f3f00ad61cd5538b4beeca96fc92111ff28f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "82eff01d_6df62022",
+        "filename": "rbh-fsevents/src/deduplicator.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-09-25T14:21:21Z",
+      "side": 1,
+      "message": "This way, it\u0027s not doing the dedup until the pool is full and we got a new id not in the dedup pool. It will stop directly after the pool is full.",
+      "parentUuid": "b4871699_d1abe248",
       "range": {
         "startLine": 42,
         "startChar": 8,
@@ -157,6 +253,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3345a546_0bc141d3",
+        "filename": "rbh-fsevents/src/deduplicator/fsevent_pool.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 837,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-09-25T14:21:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a0bd3edd_32fea9af",
+      "range": {
+        "startLine": 837,
+        "startChar": 13,
+        "endLine": 837,
+        "endChar": 30
+      },
+      "revId": "2f42f3f00ad61cd5538b4beeca96fc92111ff28f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0919ee80_456434eb",
@@ -170,6 +290,30 @@
       "writtenOn": "2025-09-18T08:20:05Z",
       "side": 1,
       "message": "minor: you could directly set here \"errno \u003d ENOSPC\" and \"return POOL_FULL\". This could save the next if at line 858 (and also the next else at line 846 ...)",
+      "range": {
+        "startLine": 845,
+        "startChar": 12,
+        "endLine": 845,
+        "endChar": 39
+      },
+      "revId": "2f42f3f00ad61cd5538b4beeca96fc92111ff28f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d4b7dc3d_e9d4634b",
+        "filename": "rbh-fsevents/src/deduplicator/fsevent_pool.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 845,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-09-25T14:21:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0919ee80_456434eb",
       "range": {
         "startLine": 845,
         "startChar": 12,
