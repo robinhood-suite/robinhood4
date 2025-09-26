@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4f89d3f7_ae4f05b3",
+        "filename": "librobinhood/include/robinhood/backend.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-09-26T16:15:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "63ed5505_f07a5554",
+      "range": {
+        "startLine": 34,
+        "startChar": 0,
+        "endLine": 34,
+        "endChar": 29
+      },
+      "revId": "b5106d3d77570572aa5ee566992f52dc4daee2a0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b39bd78d_a4350df5",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-08-18T14:44:44Z",
       "side": 1,
       "message": "minor: entry",
+      "range": {
+        "startLine": 115,
+        "startChar": 39,
+        "endLine": 115,
+        "endChar": 43
+      },
+      "revId": "b5106d3d77570572aa5ee566992f52dc4daee2a0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "13f347d3_9261a5e6",
+        "filename": "librobinhood/include/robinhood/plugins/common_ops.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-09-26T16:15:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b39bd78d_a4350df5",
       "range": {
         "startLine": 115,
         "startChar": 39,
@@ -70,6 +118,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "edf9e26a_5aef20f5",
+        "filename": "librobinhood/src/plugins/posix/posix.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 1253,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-09-26T16:15:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a3f61a6c_6ad6de9b",
+      "range": {
+        "startLine": 1253,
+        "startChar": 21,
+        "endLine": 1253,
+        "endChar": 24
+      },
+      "revId": "b5106d3d77570572aa5ee566992f52dc4daee2a0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7d1546d6_c3017ac1",
@@ -83,6 +155,24 @@
       "writtenOn": "2025-08-18T14:44:44Z",
       "side": 1,
       "message": "defect: it\u0027s doesn\u0027t work with directories. If we have `/mnt/lustre/dir/file`, it will return `/file`.",
+      "revId": "b5106d3d77570572aa5ee566992f52dc4daee2a0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "722787db_7149848f",
+        "filename": "rbh-undelete/rbh-undelete.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-09-26T16:15:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7d1546d6_c3017ac1",
       "revId": "b5106d3d77570572aa5ee566992f52dc4daee2a0",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
