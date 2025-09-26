@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "507c7f7d_bf323896",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2025-09-26T08:22:33Z",
+      "side": 1,
+      "message": "Maybe I do not understand how iterator works, but I guess that you are not first giving all the work of the first consumer before beginning to give work to the second one... And why not simply hashing in the previous producer function ? Without adding this complex iterator of iterators architecture ?",
+      "revId": "92a54ddc886941b661880f5d77e5a48c1856a510",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6e223aea_ab16f222",
+        "filename": "rbh-fsevents/rbh-fsevents.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 518,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2025-09-26T08:22:33Z",
+      "side": 1,
+      "message": "major: you are not distributing all the work to the first consumer before beginning to distribute work to the second one ... It is not a perfect parallel optimization .\n\nCould you not keep the previous code with only one deduplicator iterator and here inside this producer thread distributing loop doing the hash computing to distribute to the good cinfo[idx] ? Only a question of computing the good idx ? It will allow to distribute fsevent in parallel to all consumer instead of giving all the work to the first one before provisionning the second one ...\n\nIn addition, I think that the code will be simplier than having an iterator of iterator ...",
+      "range": {
+        "startLine": 513,
+        "startChar": 4,
+        "endLine": 518,
+        "endChar": 2
+      },
+      "revId": "92a54ddc886941b661880f5d77e5a48c1856a510",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
