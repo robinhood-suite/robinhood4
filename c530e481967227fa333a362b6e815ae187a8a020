@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "87a0043f_0802329f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-09-26T16:16:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "79f05cfe_c3fd5a9e",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 78
+      },
+      "revId": "c530e481967227fa333a362b6e815ae187a8a020",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7ec16548_6bbd7bf2",
@@ -47,6 +71,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2eecee81_3628758f",
+        "filename": "rbh-undelete/tests/undelete.bash",
+        "patchSetId": 4
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-09-26T16:16:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7ec16548_6bbd7bf2",
+      "range": {
+        "startLine": 40,
+        "startChar": 4,
+        "endLine": 42,
+        "endChar": 6
+      },
+      "revId": "c530e481967227fa333a362b6e815ae187a8a020",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c85f09fa_61d59e15",
@@ -60,6 +108,30 @@
       "writtenOn": "2025-09-22T09:31:35Z",
       "side": 1,
       "message": "nit: no need for this",
+      "range": {
+        "startLine": 46,
+        "startChar": 4,
+        "endLine": 46,
+        "endChar": 23
+      },
+      "revId": "c530e481967227fa333a362b6e815ae187a8a020",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d78740e3_7b6271c5",
+        "filename": "rbh-undelete/tests/undelete.bash",
+        "patchSetId": 4
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-09-26T16:16:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c85f09fa_61d59e15",
       "range": {
         "startLine": 46,
         "startChar": 4,
