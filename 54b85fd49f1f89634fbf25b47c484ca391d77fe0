@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "215ccc43_fa4e58db",
+        "filename": "librobinhood/src/plugins/posix/enrichers/lustre/lustre.c",
+        "patchSetId": 6
+      },
+      "lineNbr": 1003,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-09-26T16:15:39Z",
+      "side": 1,
+      "message": "Yes, but we\u0027re not exactly sure how to do yet, maybe correlate an archive id to a copytool, maybe just a config parameter...",
+      "parentUuid": "e1df7467_d348b905",
+      "range": {
+        "startLine": 1003,
+        "startChar": 18,
+        "endLine": 1003,
+        "endChar": 33
+      },
+      "revId": "54b85fd49f1f89634fbf25b47c484ca391d77fe0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9c19a718_f777f164",
         "filename": "librobinhood/src/plugins/posix/enrichers/lustre/lustre.c",
         "patchSetId": 6
@@ -37,6 +61,30 @@
       "writtenOn": "2025-09-22T08:55:50Z",
       "side": 1,
       "message": "minor: no need for this, using DFID/PFID in the log is enough",
+      "range": {
+        "startLine": 1059,
+        "startChar": 4,
+        "endLine": 1059,
+        "endChar": 73
+      },
+      "revId": "54b85fd49f1f89634fbf25b47c484ca391d77fe0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3b2685a0_d2ff1e2d",
+        "filename": "librobinhood/src/plugins/posix/enrichers/lustre/lustre.c",
+        "patchSetId": 6
+      },
+      "lineNbr": 1059,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-09-26T16:15:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9c19a718_f777f164",
       "range": {
         "startLine": 1059,
         "startChar": 4,
