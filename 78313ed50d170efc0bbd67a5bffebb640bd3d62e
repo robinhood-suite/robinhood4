@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f03a7d5d_b3dbdbc3",
+        "filename": "librobinhood/include/robinhood/utils.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-09-26T16:15:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "51d85f27_e2d47dbb",
+      "range": {
+        "startLine": 177,
+        "startChar": 2,
+        "endLine": 177,
+        "endChar": 4
+      },
+      "revId": "78313ed50d170efc0bbd67a5bffebb640bd3d62e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "91945157_91ec7738",
@@ -37,6 +61,24 @@
       "writtenOn": "2025-08-19T06:51:57Z",
       "side": 1,
       "message": "minor: add documentation for the parameter",
+      "revId": "78313ed50d170efc0bbd67a5bffebb640bd3d62e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "24aada74_cf94abea",
+        "filename": "librobinhood/include/robinhood/utils.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-09-26T16:15:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "91945157_91ec7738",
       "revId": "78313ed50d170efc0bbd67a5bffebb640bd3d62e",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
