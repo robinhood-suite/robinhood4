@@ -33,6 +33,24 @@
       "message": "defect: you need to set the config_file in the command_context structure",
       "revId": "10d62f695345e550af3a7f7a2e8db51c7aa1e4cf",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9100c875_35c00b12",
+        "filename": "rbh-undelete/rbh-undelete.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-09-26T16:15:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "09276bc0_4a6d572a",
+      "revId": "10d62f695345e550af3a7f7a2e8db51c7aa1e4cf",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
