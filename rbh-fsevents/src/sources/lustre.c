@@ -728,9 +728,9 @@ build_hardlink_or_mknod_events(struct changelog_rec *record, struct rbh_id *id,
      * operations done to build a inode creation event.
      */
     if (record->cr_type == CL_MKNOD)
-        nb_events = 6;
-    else
         nb_events = 5;
+    else
+        nb_events = 4;
 
     new_events = fsevent_list_alloc(nb_events, id);
 
@@ -753,13 +753,6 @@ build_hardlink_or_mknod_events(struct changelog_rec *record, struct rbh_id *id,
         return -1;
 
     if (update_parent_nb_children_event(&record->cr_pfid, 1, &new_events[i]))
-        return -1;
-
-    new_events[i++].type = RBH_FET_XATTR;
-    if (build_enrich_xattr_fsevent(&new_events[i].xattrs,
-                                   "rbh-fsevents",
-                                   build_empty_map("lustre"),
-                                   NULL))
         return -1;
 
     *fsevents_iterator = rbh_iter_array(new_events, sizeof(*new_events),
