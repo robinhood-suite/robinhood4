@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce5bf211_7778a20b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-09-26T16:15:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "feb68540_11f102a6",
+      "range": {
+        "startLine": 10,
+        "startChar": 47,
+        "endLine": 10,
+        "endChar": 51
+      },
+      "revId": "9e40ea68921b4b9f9f1b0775119df94ab6c34186",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a794092a_a695f049",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-09-22T08:41:07Z",
       "side": 1,
       "message": "minor: this seems like a mandatory parameter",
+      "range": {
+        "startLine": 976,
+        "startChar": 4,
+        "endLine": 976,
+        "endChar": 18
+      },
+      "revId": "9e40ea68921b4b9f9f1b0775119df94ab6c34186",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "420fba69_953aa2d5",
+        "filename": "librobinhood/src/plugins/posix/enrichers/lustre/lustre.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 976,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-09-26T16:15:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a794092a_a695f049",
       "range": {
         "startLine": 976,
         "startChar": 4,
@@ -70,6 +118,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "da658bf4_ac303310",
+        "filename": "librobinhood/src/plugins/posix/enrichers/lustre/lustre.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 978,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-09-26T16:15:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ea0760ec_11ed8098",
+      "range": {
+        "startLine": 978,
+        "startChar": 24,
+        "endLine": 978,
+        "endChar": 30
+      },
+      "revId": "9e40ea68921b4b9f9f1b0775119df94ab6c34186",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "84341a88_8fb5383e",
@@ -83,6 +155,30 @@
       "writtenOn": "2025-09-22T08:41:07Z",
       "side": 1,
       "message": "style: add `{}` on the if aswell",
+      "range": {
+        "startLine": 1003,
+        "startChar": 9,
+        "endLine": 1003,
+        "endChar": 10
+      },
+      "revId": "9e40ea68921b4b9f9f1b0775119df94ab6c34186",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4808cb94_37ac6931",
+        "filename": "librobinhood/src/plugins/posix/enrichers/lustre/lustre.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 1003,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-09-26T16:15:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "84341a88_8fb5383e",
       "range": {
         "startLine": 1003,
         "startChar": 9,
@@ -116,6 +212,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "36351dee_98636601",
+        "filename": "rbh-undelete/rbh-undelete.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-09-26T16:15:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d8dbcb09_cbfae260",
+      "range": {
+        "startLine": 185,
+        "startChar": 8,
+        "endLine": 185,
+        "endChar": 42
+      },
+      "revId": "9e40ea68921b4b9f9f1b0775119df94ab6c34186",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c6d66ecc_870d4ad6",
@@ -129,6 +249,30 @@
       "writtenOn": "2025-08-19T06:42:36Z",
       "side": 1,
       "message": "sugest: use getopt_long",
+      "range": {
+        "startLine": 182,
+        "startChar": 4,
+        "endLine": 187,
+        "endChar": 5
+      },
+      "revId": "9e40ea68921b4b9f9f1b0775119df94ab6c34186",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a4b1736_401c4776",
+        "filename": "rbh-undelete/rbh-undelete.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-09-26T16:15:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c6d66ecc_870d4ad6",
       "range": {
         "startLine": 182,
         "startChar": 4,
