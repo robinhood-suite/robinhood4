@@ -22,6 +22,30 @@
       },
       "revId": "6dce7b5be0b6da79b34fc59b0e0eb3bab1c8a454",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0ed1f3b9_40347881",
+        "filename": "rbh-fsevents/rbh-fsevents.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 528,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2025-09-26T08:08:13Z",
+      "side": 1,
+      "message": "Marked as resolved.\n\nSorry, I did not pay attention to \"idx\" . There is one condition per consumer. So you\u0027re effectively doing a \"round robin policy\" .",
+      "parentUuid": "3758d4b1_727919c2",
+      "range": {
+        "startLine": 528,
+        "startChar": 8,
+        "endLine": 528,
+        "endChar": 54
+      },
+      "revId": "6dce7b5be0b6da79b34fc59b0e0eb3bab1c8a454",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
