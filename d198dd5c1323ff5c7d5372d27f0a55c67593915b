@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4ee4ecf7_d623aa74",
+        "filename": "librobinhood/include/robinhood/backend.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-09-26T16:16:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "de4a0b77_e1ebca83",
+      "range": {
+        "startLine": 244,
+        "startChar": 21,
+        "endLine": 244,
+        "endChar": 25
+      },
+      "revId": "d198dd5c1323ff5c7d5372d27f0a55c67593915b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ccbc3b5d_bc89b1ac",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-09-22T09:22:02Z",
       "side": 1,
       "message": "major: using the `from` global variable would be better IMO",
+      "range": {
+        "startLine": 94,
+        "startChar": 0,
+        "endLine": 94,
+        "endChar": 15
+      },
+      "revId": "d198dd5c1323ff5c7d5372d27f0a55c67593915b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e14d1433_da53e9d9",
+        "filename": "rbh-sync/rbh-sync.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-09-26T16:16:01Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "ccbc3b5d_bc89b1ac",
       "range": {
         "startLine": 94,
         "startChar": 0,
