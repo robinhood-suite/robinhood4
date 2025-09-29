@@ -22,6 +22,30 @@
       },
       "revId": "ade2bd1839841eed2a80115c63de903f10678220",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1c12fdff_5f5bfa0a",
+        "filename": "rbh-find/tests/s3/test_s3_printf.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-09-29T07:58:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "27c75668_a64e1a3f",
+      "range": {
+        "startLine": 41,
+        "startChar": 4,
+        "endLine": 42,
+        "endChar": 27
+      },
+      "revId": "ade2bd1839841eed2a80115c63de903f10678220",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
