@@ -20,6 +20,7 @@ install_headers(
     'open.h',
     'plugin.h',
     'projection.h',
+    'policyengine.h',
     'queue.h',
     'ring.h',
     'ringr.h',
