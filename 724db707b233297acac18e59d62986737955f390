@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "01d8a83e_7391f218",
+        "filename": "rbh-undelete/rbh-undelete.c",
+        "patchSetId": 7
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-09-29T12:55:23Z",
+      "side": 1,
+      "message": "defect: not sure what you\u0027re trying to do with this, but the variable is accessed two lines below without being set up.",
+      "range": {
+        "startLine": 188,
+        "startChar": 32,
+        "endLine": 188,
+        "endChar": 42
+      },
+      "revId": "724db707b233297acac18e59d62986737955f390",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
