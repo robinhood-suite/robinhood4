@@ -70,6 +70,30 @@
       },
       "revId": "81aa2d1e27f79baff431dfa2235109e4a491b1ff",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "74d4dca9_c04f2afa",
+        "filename": "rbh-policy/rbhpolicy/config/config_validator.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-09-29T13:07:43Z",
+      "side": 1,
+      "message": "Ok, I understand what you mean. In fact I will not call validate_fileclass directly but I will call declare_fileclass when I define my fileclasses in the configuration file. And I want the name to be compliant, the types are not forced in python so if I do not do defensive programming here I will have a non-compliant name for the future.",
+      "parentUuid": "a31dddfe_4ad05a29",
+      "range": {
+        "startLine": 16,
+        "startChar": 3,
+        "endLine": 22,
+        "endChar": 54
+      },
+      "revId": "81aa2d1e27f79baff431dfa2235109e4a491b1ff",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
