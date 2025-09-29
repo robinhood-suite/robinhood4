@@ -22,6 +22,30 @@
       },
       "revId": "e20369a513f085cd7bcea0a430f9cb1d3db4138a",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6fd1f0ad_cd6f96dd",
+        "filename": "rbh-policy/tests/test_cpython.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-09-29T11:25:25Z",
+      "side": 1,
+      "message": "This function allow us to validate a filter. We check if the pointer provided to the function is a valid robinhood4 filter, with valid fields.",
+      "parentUuid": "4bf40762_0e91172a",
+      "range": {
+        "startLine": 51,
+        "startChar": 25,
+        "endLine": 51,
+        "endChar": 44
+      },
+      "revId": "e20369a513f085cd7bcea0a430f9cb1d3db4138a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
