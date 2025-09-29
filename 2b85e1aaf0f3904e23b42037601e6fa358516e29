@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b6d7162f_7dd8e5c0",
+        "filename": "rbh-undelete/rbh-undelete.c",
+        "patchSetId": 6
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-09-29T12:06:35Z",
+      "side": 1,
+      "message": "question: does that mean this tool is only for us? in case lustre mounted in another path? is this tool only work with lustre backend?",
+      "range": {
+        "startLine": 57,
+        "startChar": 4,
+        "endLine": 58,
+        "endChar": 28
+      },
+      "revId": "2b85e1aaf0f3904e23b42037601e6fa358516e29",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
