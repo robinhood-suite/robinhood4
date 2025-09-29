@@ -36,6 +36,7 @@ librobinhood = library(
         'plugin.c',
         'plugins/backend.c',
         'projection.c',
+        'policyengine.c',
         'queue.c',
         'ring.c',
         'ringr.c',
