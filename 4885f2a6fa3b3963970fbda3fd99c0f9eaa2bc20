@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eac82ac9_b9ad1905",
+        "filename": "rbh-undelete/rbh-undelete.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-09-29T11:04:50Z",
+      "side": 1,
+      "message": "question: why loading the config if there is a helper requested?",
+      "range": {
+        "startLine": 110,
+        "startChar": 4,
+        "endLine": 110,
+        "endChar": 59
+      },
+      "revId": "4885f2a6fa3b3963970fbda3fd99c0f9eaa2bc20",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
