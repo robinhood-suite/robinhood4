@@ -16,6 +16,24 @@
       "message": "sugest: add \n```\n\n\"A robinhood URI is built as follows: RBH_SCHEME\":BACKEND:FSNAME[#{PATH|ID}]\\n\"\n```",
       "revId": "6d25e545e75e506fe73f43ba04733ad5cb125616",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5e16b7cc_51ea7991",
+        "filename": "rbh-undelete/rbh-undelete.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-09-29T08:23:43Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "ac8f3e8f_9134c73b",
+      "revId": "6d25e545e75e506fe73f43ba04733ad5cb125616",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
