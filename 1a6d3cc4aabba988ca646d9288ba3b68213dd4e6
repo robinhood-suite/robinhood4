@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c47fd6e2_94c4e35a",
+        "filename": "rbh-undelete/rbh-undelete.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-09-29T12:04:00Z",
+      "side": 1,
+      "message": "defect: needs to free uri in the if l.92",
+      "range": {
+        "startLine": 96,
+        "startChar": 4,
+        "endLine": 96,
+        "endChar": 14
+      },
+      "revId": "1a6d3cc4aabba988ca646d9288ba3b68213dd4e6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
