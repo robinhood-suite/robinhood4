@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "95634eee_a57e685c",
+        "filename": "librobinhood/tests/unit/check_itertools.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-09-29T08:29:40Z",
+      "side": 1,
+      "message": "nit: `ria_freed` is a boolean here, check it as such",
+      "range": {
+        "startLine": 70,
+        "startChar": 4,
+        "endLine": 70,
+        "endChar": 35
+      },
+      "revId": "07c4ac6d5f2bf4d44c7c8307c755c84939705d53",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
