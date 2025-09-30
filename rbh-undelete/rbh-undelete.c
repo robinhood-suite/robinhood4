@@ -4,15 +4,15 @@
  *
  * SPDX-License-Identifer: LGPL-3.0-or-later
  */
+#include <getopt.h>
 #include <linux/limits.h>
 #include <sysexits.h>
 
 #include <robinhood.h>
+#include <robinhood/alias.h>
 #include <robinhood/config.h>
 #include <robinhood/uri.h>
 #include <robinhood/value.h>
-#include <robinhood/filter.h>
-#include <robinhood/filters/parser.h>
 
 enum rbh_undelete_option {
     RBH_UNDELETE_RESTORE = 1 << 0,
@@ -48,65 +48,8 @@ destroy_global_variables(void)
 }
 
 /*----------------------------------------------------------------------------*
- |                              build_paths()                                 |
- *----------------------------------------------------------------------------*/
-
-static char *
-ensure_slash(const char* path)
-{
-    char *buf;
-
-    if (path[0] == '/')
-        return strdup(path);
-    else {
-        if (asprintf(&buf, "/%s", path) < 0)
-            return NULL;
-        return buf;
-    }
-}
-
-int
-build_paths(const char *path, const char *mountpoint, char **_relative_path,
-            char **_full_path)
-{
-    char *relative_path = NULL;
-    char *full_path = NULL;
-    size_t mpt_len;
-
-    mpt_len = strlen(mountpoint);
-
-    if (strncmp(path, mountpoint, mpt_len) == 0 && path[mpt_len] == '/') {
-        relative_path = strdup(path + mpt_len);
-        if (!relative_path)
-            return -1;
-        full_path = strdup(path);
-        if (!full_path) {
-            free(relative_path);
-            return -1;
-        }
-    } else {
-        relative_path = ensure_slash(path);
-        if (!relative_path)
-            return -1;
-
-        if (asprintf(&full_path, "%s%s", mountpoint, relative_path) < 0) {
-            free(relative_path);
-            return -1;
-        }
-    }
-
-    *_relative_path = relative_path;
-    *_full_path = full_path;
-
-    return 0;
-}
-
-/*----------------------------------------------------------------------------*
  |                                undelete()                                  |
  *----------------------------------------------------------------------------*/
-
-#define FREE(x, y) do { if ((x) != NULL) { free(x); (x) = NULL; } \
-    if ((y) != NULL) { free(y); (y) = NULL; } } while (0)
 
 static void
 undelete(const char *output)
@@ -325,7 +268,7 @@ static int
 usage()
 {
     const char *message =
-        "Usage: %s [-h|--help] SOURCE DEST\n"
+        "Usage: %s [OPTIONS] SOURCE DEST\n"
         "\n"
         "Undelete DEST's entry using SOURCES's metadata\n"
         "\n"
@@ -348,83 +291,94 @@ usage()
     return printf(message, program_invocation_short_name);
 }
 
-static void
-get_command_options(int argc, char *argv[], struct command_context *context)
-{
-    for (int i = 0; i < argc; i++) {
-        if (strcmp(argv[i], "-h") == 0 || strcmp(argv[i], "--help") == 0)
-            context->helper = true;
-
-        if (strcmp(argv[i], "-c") == 0 || strcmp(argv[i], "--config") == 0) {
-            if (i + 1 >= argc)
-                error(EXIT_FAILURE, EINVAL,
-                      "missing configuration file value");
-
-            context->config_file = argv[i + 1];
-        }
-    }
-}
-
-static void
-apply_command_options(struct command_context *context, int argc, char *argv[])
-{
-    if (context->helper) {
-        usage();
-        exit(0);
-    }
-}
-
 int
-main(int _argc, char *_argv[])
+main(int argc, char *argv[])
 {
-    struct command_context command_context = {0};
+    const struct option LONG_OPTIONS[] = {
+        {
+            .name = "config",
+            .has_arg = required_argument,
+            .val = 'c',
+        },
+        {
+            .name = "help",
+            .has_arg = no_argument,
+            .val = 'h',
+        },
+        {
+            .name = "list",
+            .has_arg = no_argument,
+            .val = 'l',
+        },
+        {
+            .name = "output",
+            .has_arg = required_argument,
+            .val = 'o',
+        },
+        {
+            .name = "restore",
+            .has_arg = no_argument,
+            .val = 'r',
+        },
+        {}
+    };
     const char *output = NULL;
     const char *mountpoint;
-    int nb_cli_args;
     int flags = 0;
-    char **argv;
-    int argc;
+    char c;
+    int rc;
 
-    if (_argc < 2)
-        error(EX_USAGE, EINVAL,
-              "invalid number of arguments, expected at least 2");
+    rc = rbh_config_from_args(argc - 1, argv + 1);
+    if (rc)
+        error(EXIT_FAILURE, errno, "failed to load configuration file");
 
-    argc = _argc - 1;
-    argv = &_argv[1];
+    rbh_apply_aliases(&argc, &argv);
 
-    nb_cli_args = rbh_count_args_before_uri(argc, argv);
-    get_command_options(nb_cli_args, argv, &command_context);
-
-    rbh_config_load_from_path(command_context.config_file);
-
-    nb_cli_args = rbh_count_args_before_uri(argc, argv);
-    get_command_options(nb_cli_args, argv, &command_context);
-    apply_command_options(&command_context, argc, argv);
-
-    argc = argc - nb_cli_args;
-    argv = &argv[nb_cli_args];
-
-    metadata_source = rbh_backend_from_uri(argv[0], true);
-    mountpoint = get_source_mountpoint();
-    set_targets(argv[1], mountpoint);
-
-    for (int i = 0 ; i < argc ; i++) {
-        char *arg = argv[i];
-
-        if (strcmp(arg, "--list") == 0 || strcmp(arg, "-l") == 0)
+    /* Parse the command line */
+    while ((c = getopt_long(argc, argv, "c:hlo:r", LONG_OPTIONS,
+                            NULL)) != -1) {
+        switch (c) {
+        case 'c':
+            /* already parsed */
+            break;
+        case 'h':
+            usage();
+            return 0;
+        case 'l':
             flags |= RBH_UNDELETE_LIST;
+            break;
+        case 'o':
+            output = strdup(optarg);
+            if (output == NULL)
+                error(EXIT_FAILURE, ENOMEM, "strdup");
 
-        if (strcmp(arg, "--restore") == 0 || strcmp(arg, "-r") == 0)
-            flags |= RBH_UNDELETE_RESTORE;
-
-        if (strcmp(arg, "--output") == 0) {
             flags |= RBH_UNDELETE_OUTPUT;
-            if (i + 1 >= argc)
-                error(EXIT_FAILURE, 0, "Missing path after --output\n");
-            output = argv[i + 1];
-            i++;
+            break;
+        case 'r':
+            flags |= RBH_UNDELETE_RESTORE;
+            break;
+        default:
+            /* getopt_long() prints meaningful error messages itself */
+            exit(EX_USAGE);
         }
     }
+
+    if (argc - optind < 2)
+        error(EX_USAGE, 0, "not enough arguments");
+    if (argc - optind > 2)
+        error(EX_USAGE, 0, "too many arguments");
+
+    if (flags & RBH_UNDELETE_LIST && flags & RBH_UNDELETE_RESTORE)
+        error(EX_USAGE, ENOMEM,
+              "cannot list and restore a file at the same time");
+
+    if (flags & RBH_UNDELETE_OUTPUT && flags & ~RBH_UNDELETE_RESTORE)
+        error(EX_USAGE, ENOMEM,
+              "output option can only be used with the restore option");
+
+    metadata_source = rbh_backend_from_uri(argv[optind++], true);
+    mountpoint = get_source_mountpoint();
+    set_targets(argv[optind++], mountpoint);
 
     if (flags & RBH_UNDELETE_RESTORE)
         undelete(output);
@@ -443,5 +397,5 @@ main(int _argc, char *_argv[])
         rm_list(regex);
     }
 
-    return 0;
+    return EXIT_SUCCESS;
 }
