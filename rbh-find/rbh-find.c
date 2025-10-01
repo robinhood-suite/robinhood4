@@ -78,7 +78,6 @@ usage(const char *backend)
         "Predicates not implemented yet:\n"
         "    -false         -true\n"
         "    -fstype        -xtype\n"
-        "    -readable      -writable    -executable\n"
         "    -iwholename    -wholename\n"
         "    -used\n"
         "    -context\n"

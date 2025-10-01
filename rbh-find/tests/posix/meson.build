@@ -15,6 +15,7 @@ integration_tests = [
   'test_perm',
   'test_posix_printf',
   'test_posix_projection',
+  'test_rwxable',
   'test_regex',
   'test_size',
   'test_time',

@@ -689,6 +689,68 @@ username2filter(const char *username)
     return filter;
 }
 
+static const char *readable[] = { "/u=r", "/o=r", "/g=r" };
+static const char *writeable[] = { "/u=w", "/o=w", "/g=w" };
+static const char *executable[] = { "/u=x", "/o=x", "/g=x" };
+static const char **modes[] = {
+    [PRED_READABLE] = readable,
+    [PRED_WRITEABLE] = writeable,
+    [PRED_EXECUTABLE] = executable,
+};
+
+static struct rbh_filter *
+rwxable2filter(const char *user, enum predicate predicate)
+{
+    struct rbh_filter *filter_perm, *filter_user, *filter_grp;
+    struct rbh_filter *filters[3];
+    struct rbh_filter *filter;
+    struct passwd *pwd;
+
+    /* User filter */
+    filter_perm = mode2filter(modes[predicate][0]);
+    filter_user = username2filter(user);
+
+    filters[0] = rbh_filter_and(filter_perm, filter_user);
+    if (filters[0] == NULL)
+        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
+                      "rbh_filter_and");
+
+    /* Other filter */
+    filters[1] = mode2filter(modes[predicate][1]);
+
+    /* Group filters */
+    pwd = getpwnam(user);
+    if (pwd == NULL)
+        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__, "getpwnam");
+
+    filter_grp = rbh_filter_compare_uint64_new(
+                                            RBH_FOP_EQUAL,
+                                            &predicate2filter_field[PRED_GROUP],
+                                            pwd->pw_gid);
+
+    if (filter_grp == NULL)
+        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
+                      "rbh_filter_compare_uint64_new");
+
+    filter_perm = mode2filter(modes[predicate][2]);
+
+    filters[2] = rbh_filter_and(filter_perm, filter_grp);
+    if (filters[2] == NULL)
+        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
+                      "rbh_filter_and");
+
+    /* All filter together */
+    filter = rbh_filter_or(filters[0], filters[1]);
+    if (filter == NULL)
+        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__, "rbh_filter_or");
+
+    filter = rbh_filter_or(filter, filters[2]);
+    if (filter == NULL)
+        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__, "rbh_filter_or");
+
+    return filter;
+}
+
 static struct rbh_filter *
 xattr2filter(const char *xattr_field)
 {
@@ -875,6 +937,11 @@ rbh_posix_build_filter(const char **argv, int argc, int *index,
         break;
     case PRED_PERM:
         filter = mode2filter(argv[++i]);
+        break;
+    case PRED_READABLE:
+    case PRED_WRITEABLE:
+    case PRED_EXECUTABLE:
+        filter = rwxable2filter(argv[++i], predicate);
         break;
     case PRED_REGEX:
         filter = regex2filter(PRED_PATH, argv[++i], 0);
