@@ -1295,6 +1295,13 @@ rbh_posix_helper(const char *type, struct rbh_config *config,
         "                         addition of the 'T' modifier for terabytes\n"
         "    -perm PERMISSIONS    filter entries based on their permissions,\n"
         "                         the '+' prefix is not supported\n"
+        "    -executable USER\n"
+        "    -readable   USER\n"
+        "    -writeable  USER     filter entries based on if they are\n"
+        "                         executable, readable or writeable by the user\n"
+        "                         provided. Contrarely to GNU's find, this will\n"
+        "                         not check that the user has the right permissions\n"
+        "                         on all the components of each entry\n"
         "\n"
         "%s", ext_predicate_helper);
 
