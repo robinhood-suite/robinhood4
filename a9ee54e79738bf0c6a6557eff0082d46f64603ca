@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "25c118d3_a9782264",
+        "filename": "rbh-undelete/tests/test_list.bash",
+        "patchSetId": 5
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-10-01T14:42:48Z",
+      "side": 1,
+      "message": "comment: the first line is a header?",
+      "range": {
+        "startLine": 41,
+        "startChar": 8,
+        "endLine": 41,
+        "endChar": 52
+      },
+      "revId": "a9ee54e79738bf0c6a6557eff0082d46f64603ca",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
