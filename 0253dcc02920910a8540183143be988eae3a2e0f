@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ffc00b9f_508c7043",
+        "filename": "rbh-undelete/rbh-undelete.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-10-01T14:40:23Z",
+      "side": 1,
+      "message": "nit: well following the standard, freeing a NULL pointer is valid, we may not need to check on that",
+      "range": {
+        "startLine": 107,
+        "startChar": 28,
+        "endLine": 107,
+        "endChar": 39
+      },
+      "revId": "0253dcc02920910a8540183143be988eae3a2e0f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
