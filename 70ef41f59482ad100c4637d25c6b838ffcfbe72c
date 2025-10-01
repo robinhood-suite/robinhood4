@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aeec1315_ffe5ca40",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-10-01T14:17:28Z",
+      "side": 1,
+      "message": "I may need a bit of context here. We want to delete the previous entry because there is a new one to replace the lost entry?",
+      "revId": "70ef41f59482ad100c4637d25c6b838ffcfbe72c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
