@@ -78,7 +78,6 @@ usage(const char *backend)
         "Predicates not implemented yet:\n"
         "    -false         -true\n"
         "    -fstype        -xtype\n"
-        "    -readable      -writable    -executable\n"
         "    -iwholename    -wholename\n"
         "    -used\n"
         "    -context\n"
@@ -95,7 +94,8 @@ usage(const char *backend)
     int count_chars;
 
     if (backend == NULL)
-        return printf(message, program_invocation_short_name, "", "", "", "");
+        return printf(message, program_invocation_short_name,
+                      program_invocation_short_name, "", "", "", "");
 
     plugin_str = rbh_config_get_extended_plugin(backend);
     plugin = rbh_backend_plugin_import(plugin_str);
@@ -107,6 +107,7 @@ usage(const char *backend)
                              &predicate_helper, &directive_helper);
 
     count_chars = printf(message, program_invocation_short_name,
+                         program_invocation_short_name,
                          predicate_helper ? "Predicate arguments:\n" : "",
                          predicate_helper ? : "",
                          directive_helper ? "Printf directives:\n" : "",
