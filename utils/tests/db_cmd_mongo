@@ -88,6 +88,9 @@ case "$cmd" in
     count)
         count_documents "$db" "$@"
         ;;
+    custom)
+        mongo "$db" --eval "$@"
+        ;;
     find)
         find_attribute "$db" "$@"
         ;;

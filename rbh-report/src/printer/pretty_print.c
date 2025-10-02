@@ -111,25 +111,28 @@ pretty_print_values(const struct rbh_value_map *id_map,
 }
 
 void
-pretty_print_results(struct rbh_value_map *result_maps, int count_results,
+pretty_print_results(struct rbh_list_node *results,
                      const struct rbh_group_fields group,
                      const struct rbh_filter_output output,
                      struct result_columns *columns)
 {
     const struct rbh_value_map *output_map = NULL;
     const struct rbh_value_map *id_map = NULL;
+    struct rbh_value_map *result_map;
+    struct map_node *elem, *tmp;
     char dash_line[4096];
     int line_size;
 
     (void) output;
 
-    for (int i = 0; i < count_results; ++i) {
-        if (result_maps[i].count == 2) {
-            id_map = &result_maps[i].pairs[0].value->map;
-            output_map = &result_maps[i].pairs[1].value->map;
+    rbh_list_foreach(results, elem, link) {
+        result_map = &elem->map;
+        if (result_map->count == 2) {
+            id_map = &result_map->pairs[0].value->map;
+            output_map = &result_map->pairs[1].value->map;
         } else {
             id_map = NULL;
-            output_map = &result_maps[i].pairs[0].value->map;
+            output_map = &result_map->pairs[0].value->map;
         }
 
         check_columns_lengths(id_map, group, output_map, columns);
@@ -144,15 +147,18 @@ pretty_print_results(struct rbh_value_map *result_maps, int count_results,
 
     printf("%s\n", dash_line);
 
-    for (int i = 0; i < count_results; ++i) {
-        if (result_maps[i].count == 2) {
-            id_map = &result_maps[i].pairs[0].value->map;
-            output_map = &result_maps[i].pairs[1].value->map;
+    rbh_list_foreach_safe(results, elem, tmp, link) {
+        result_map = &elem->map;
+        if (result_map->count == 2) {
+            id_map = &result_map->pairs[0].value->map;
+            output_map = &result_map->pairs[1].value->map;
         } else {
             id_map = NULL;
-            output_map = &result_maps[i].pairs[0].value->map;
+            output_map = &result_map->pairs[0].value->map;
         }
 
         pretty_print_values(id_map, group, output_map, output, columns);
+        rbh_list_del(&elem->link);
+        free(elem);
     }
 }
