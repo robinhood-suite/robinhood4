@@ -53,7 +53,7 @@ report(const char *group_string, const char *output_string, bool ascending_sort,
 {
     struct rbh_filter_output output = { 0 };
     struct rbh_group_fields group = { 0 };
-    struct rbh_value_map results[256];
+    struct rbh_sstack *buffer_sstack;
     struct rbh_filter_sort sort = {
         .field = {
             .fsentry = RBH_FP_ID,
@@ -62,10 +62,11 @@ report(const char *group_string, const char *output_string, bool ascending_sort,
     };
     struct result_columns columns;
     struct rbh_mut_iterator *iter;
-    char _buffer[4096];
-    size_t bufsize;
-    int count = 0;
+    struct rbh_list_node *results;
+    size_t buf_size = 4096;
+    struct map_node *node;
     char *buffer;
+    size_t size;
 
     if (values_sstack == NULL) {
         values_sstack = rbh_sstack_new(MIN_VALUES_SSTACK_ALLOC *
@@ -75,11 +76,21 @@ report(const char *group_string, const char *output_string, bool ascending_sort,
                           "rbh_sstack_new");
     }
 
+    if (!csv_print) {
+        buffer_sstack = rbh_sstack_new(MIN_VALUES_SSTACK_ALLOC * buf_size);
+        if (buffer_sstack == NULL)
+            error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
+                          "rbh_sstack_new");
+
+        results = malloc(sizeof(*results));
+        if (results == NULL)
+            error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__, "malloc");
+
+        rbh_list_init(results);
+    }
+
     options->sort.items = &sort;
     options->sort.count = 1;
-
-    buffer = _buffer;
-    bufsize = sizeof(_buffer);
 
     parse_group_by(group_string, &group, &columns);
     parse_output(output_string, &group, &output, &columns);
@@ -108,17 +119,30 @@ report(const char *group_string, const char *output_string, bool ascending_sort,
         if (csv_print) {
             csv_print_results(map, group, output);
         } else {
-            assert(count < (sizeof(results) / sizeof(results[0])));
+            node = malloc(sizeof(*node));
+            if (node == NULL)
+                error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
+                              "malloc");
 
-            if (value_map_copy(&results[count++], map, &buffer, &bufsize))
+            buffer = RBH_SSTACK_PUSH(buffer_sstack, NULL, buf_size);
+            size = buf_size;
+            if (value_map_copy(&node->map, map, &buffer, &size))
                 error_at_line(EXIT_FAILURE, EINVAL, __FILE__, __LINE__,
                               "Failed to copy result map");
+            rbh_list_add_tail(results, &node->link);
         }
 
     } while (true);
 
-    if (!csv_print)
-        pretty_print_results(results, count, group, output, &columns);
+    rbh_mut_iter_destroy(iter);
+
+    if (!csv_print) {
+        pretty_print_results(results, group, output, &columns);
+
+        rbh_list_del(results);
+        free(results);
+        rbh_sstack_destroy(buffer_sstack);
+    }
 }
 
 /*----------------------------------------------------------------------------*
