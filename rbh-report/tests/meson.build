@@ -10,6 +10,7 @@ integration_tests = [
   'test_filter',
   'test_group_by',
   'test_helper',
+  'test_many_output',
   'test_max',
   'test_min',
   'test_multi_output',
