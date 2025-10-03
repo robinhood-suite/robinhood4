@@ -31,6 +31,7 @@ add_project_arguments([
         '-D_DEFAULT_SOURCE',
         '-D_GNU_SOURCE',
         '-Wno-pedantic',
+        '-O3',
     ] + options,
     language: 'c'
 )
