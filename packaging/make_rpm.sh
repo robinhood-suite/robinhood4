@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # This file is part of RobinHood 4
-# Copyright (C) 2024 Commissariat a l'energie atomique et aux energies
+# Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
@@ -19,7 +19,10 @@ BUILDDIR=$1
 
 meson dist -C "$BUILDDIR" --no-tests
 
-if [ "$BUILD_MPI" == "True" ]; then
+if [ "$BUILD_LUSTRE" == "False" ]; then
+    opts+="--without lustre "
+fi
+if [ "$BUILD_MFU" == "True" ]; then
     opts+="--with mfu "
 fi
 if [ "$BUILD_HESTIA" == "True" ]; then
