@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c9d27b49_3a3802ef",
+        "filename": "rbh-fsevents/rbh-fsevents.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 556,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-10-03T08:06:29Z",
+      "side": 1,
+      "message": "suggest: do a first loop that sends all signals, then a second one for the join + rest of this for loop",
+      "range": {
+        "startLine": 553,
+        "startChar": 4,
+        "endLine": 556,
+        "endChar": 41
+      },
+      "revId": "af0e58a903c9e6076555832f9144bed2664df7ab",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
