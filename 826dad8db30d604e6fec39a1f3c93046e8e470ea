@@ -45,6 +45,30 @@
       },
       "revId": "826dad8db30d604e6fec39a1f3c93046e8e470ea",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "caba0cd3_b4a26725",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-10-03T08:55:58Z",
+      "side": 1,
+      "message": "I\u0027m not really a fan of doing this because it means I would have to iterate through all the events, whereas with deduplication I only need to iterate through all the entries. Also, in deduplication I can easily move batches of events. And I think it\u0027s more efficient to send the events directly to the correct thread instead of sending them to one thread and then redirecting them to another.",
+      "parentUuid": "f99a1e37_d81ad7cf",
+      "range": {
+        "startLine": 14,
+        "startChar": 11,
+        "endLine": 15,
+        "endChar": 44
+      },
+      "revId": "826dad8db30d604e6fec39a1f3c93046e8e470ea",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
