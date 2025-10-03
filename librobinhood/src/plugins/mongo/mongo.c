@@ -1090,12 +1090,12 @@ get_collection_sync(const struct mongo_backend *mongo, char *field_to_find,
 {
     struct rbh_value *value;
     mongoc_cursor_t *cursor;
+    bson_t *opts = NULL;
     char _buffer[4096];
     const bson_t *doc;
     bson_iter_t iter;
     bson_t *filter;
     size_t bufsize;
-    bson_t *opts;
     char *buffer;
     int rc = 0;
 

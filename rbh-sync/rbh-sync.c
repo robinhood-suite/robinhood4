@@ -667,13 +667,13 @@ sync_metadata_value_map(time_t sync_debut, time_t sync_end, char *from,
 
     if (uri->fsname[0] != '/') {
         if (!realpath(uri->fsname, abs_path)) {
-            strncpy(abs_path, from, sizeof(abs_path));
+            strncpy(abs_path, from, sizeof(abs_path) - 2);
         }
     } else {
         if (uri->fsname)
-            strncpy(abs_path, uri->fsname, sizeof(abs_path));
+            strncpy(abs_path, uri->fsname, sizeof(abs_path) - 2);
         else
-            strncpy(abs_path, from, sizeof(abs_path));
+            strncpy(abs_path, from, sizeof(abs_path) - 2);
     }
 
     free(uri);

@@ -52,8 +52,9 @@ report(const char *group_string, const char *output_string, bool ascending_sort,
        struct rbh_filter_options *options)
 {
     struct rbh_filter_output output = { 0 };
+    struct rbh_sstack *buffer_sstack = NULL;
     struct rbh_group_fields group = { 0 };
-    struct rbh_sstack *buffer_sstack;
+    struct rbh_list_node *results = NULL;
     struct rbh_filter_sort sort = {
         .field = {
             .fsentry = RBH_FP_ID,
@@ -62,7 +63,6 @@ report(const char *group_string, const char *output_string, bool ascending_sort,
     };
     struct result_columns columns;
     struct rbh_mut_iterator *iter;
-    struct rbh_list_node *results;
     size_t buf_size = 4096;
     struct map_node *node;
     char *buffer;
