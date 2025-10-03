@@ -939,6 +939,51 @@ destroy_fsentry_names(void)
         rbh_sstack_destroy(fsentry_names);
 }
 
+static struct rbh_value *
+lustre_get_fid_from_path(struct entry_info *einfo)
+{
+    struct rbh_value *value;
+    const char *path = NULL;
+    struct rbh_id *id;
+    struct lu_fid fid;
+    int rc;
+
+    for (int i = 0; i < *(einfo->inode_xattrs_count); ++i) {
+        if (strcmp(einfo->inode_xattrs[i].key, "path") != 0)
+            continue;
+
+        assert(einfo->inode_xattrs[i].value->type == RBH_VT_STRING);
+        path = einfo->inode_xattrs[i].value->string;
+        break;
+    }
+
+    if (path == NULL)
+        return NULL;
+
+    rc = llapi_path2fid(path, &fid);
+    if (rc) {
+        fprintf(stderr, "Error while using llapi_path2fid\n");
+        return NULL;
+    }
+
+    id = rbh_id_from_lu_fid(&fid);
+    if (id == NULL)
+        return NULL;
+
+    value = malloc(sizeof(*value));
+    if (value == NULL)
+        return NULL;
+
+    value->type = RBH_VT_BINARY;
+    value->binary.data = id->data;
+    value->binary.size = id->size;
+
+    return value;
+}
+
+    /*--------------------------------------------------------------------*
+     |                              undelete                              |
+     *--------------------------------------------------------------------*/
 
 struct rbh_fsentry *
 build_fsentry_after_undelete(const char *path, struct rbh_fsentry *fsentry)
@@ -1085,6 +1130,14 @@ rbh_lustre_enrich(struct entry_info *einfo, uint64_t flags,
 
     if (flags & RBH_LEF_DIR_LOV) {
         pairs->value = lustre_get_default_dir_stripe(*einfo->fd, flags);
+        if (!pairs->value)
+            return -1;
+
+        return 1;
+    }
+
+    if (flags & RBH_LEF_FID) {
+        pairs->value = lustre_get_fid_from_path(einfo);
         if (!pairs->value)
             return -1;
 
