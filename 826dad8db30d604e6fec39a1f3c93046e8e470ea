@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9f829ad6_2d36b8af",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-10-03T08:34:02Z",
+      "side": 1,
+      "message": "nit: not necessarily a FID",
+      "range": {
+        "startLine": 10,
+        "startChar": 13,
+        "endLine": 10,
+        "endChar": 16
+      },
+      "revId": "826dad8db30d604e6fec39a1f3c93046e8e470ea",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f99a1e37_d81ad7cf",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-10-03T08:34:02Z",
+      "side": 1,
+      "message": "question: so the deduplication part also pre-computes where each fsevent will go to ? Not sure I\u0027m a fan of that... Maybe the enricher could do that part, as in it iterates through a batch\u0027s events, calculates the hash of one event, and send it to the corresponding consumer ?",
+      "range": {
+        "startLine": 14,
+        "startChar": 11,
+        "endLine": 15,
+        "endChar": 44
+      },
+      "revId": "826dad8db30d604e6fec39a1f3c93046e8e470ea",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
