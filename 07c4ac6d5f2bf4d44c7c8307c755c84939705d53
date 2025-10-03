@@ -22,6 +22,30 @@
       },
       "revId": "07c4ac6d5f2bf4d44c7c8307c755c84939705d53",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e2542e9a_118fcfa6",
+        "filename": "librobinhood/tests/unit/check_itertools.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-10-03T11:57:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "95634eee_a57e685c",
+      "range": {
+        "startLine": 70,
+        "startChar": 4,
+        "endLine": 70,
+        "endChar": 35
+      },
+      "revId": "07c4ac6d5f2bf4d44c7c8307c755c84939705d53",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
