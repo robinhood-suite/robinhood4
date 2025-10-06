@@ -17,8 +17,8 @@ struct sink;
 
 struct sink_operations {
     int (*process)(void *sink, struct rbh_iterator *fsevents);
-    int (*insert_source)(void *sink, const struct rbh_value *backend_source);
-    int (*insert_mountpoint)(void *sink, const struct rbh_value *mountpoint);
+    int (*insert_metadata)(void *sink, const struct rbh_value_map *value,
+                           enum metadata_type type);
     void (*destroy)(void *sink);
 };
 
@@ -34,20 +34,11 @@ sink_process(struct sink *sink, struct rbh_iterator *fsevents)
 }
 
 static inline int
-sink_insert_source(struct sink *sink, const struct rbh_value *backend_source)
+sink_insert_metadata(struct sink *sink, const struct rbh_value_map *value,
+                     enum metadata_type type)
 {
-    if (sink->ops->insert_source)
-        return sink->ops->insert_source(sink, backend_source);
-
-    errno = ENOTSUP;
-    return -1;
-}
-
-static inline int
-sink_insert_mountpoint(struct sink *sink, const struct rbh_value *mountpoint)
-{
-    if (sink->ops->insert_mountpoint)
-        return sink->ops->insert_mountpoint(sink, mountpoint);
+    if (sink->ops->insert_metadata)
+        return sink->ops->insert_metadata(sink, value, type);
 
     errno = ENOTSUP;
     return -1;

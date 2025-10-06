@@ -34,34 +34,12 @@ backend_sink_process(void *_sink, struct rbh_iterator *fsevents)
 }
 
 static int
-backend_sink_insert_metadata_info(void *_sink, const char *key,
-                                  const struct rbh_value *value)
+backend_sink_insert_metadata(void *_sink, const struct rbh_value_map *value,
+                             enum metadata_type type)
 {
     struct backend_sink *sink = _sink;
-    struct rbh_value_pair pair = {
-        .key = key,
-        .value = value
-    };
-    struct rbh_value_map value_map = {
-        .pairs = &pair,
-        .count = 1,
-    };
 
-    return rbh_backend_insert_metadata(sink->backend, &value_map, RBH_DT_INFO);
-}
-
-static int
-backend_sink_insert_source(void *_sink, const struct rbh_value *backend_source)
-{
-    return backend_sink_insert_metadata_info(_sink, "backend_source",
-                                             backend_source);
-}
-
-static int
-backend_sink_insert_mountpoint(void *_sink, const struct rbh_value *mountpoint)
-{
-    return backend_sink_insert_metadata_info(_sink, "mountpoint",
-                                             mountpoint);
+    return rbh_backend_insert_metadata(sink->backend, value, type);
 }
 
 static void
@@ -75,8 +53,7 @@ backend_sink_destroy(void *_sink)
 
 static const struct sink_operations BACKEND_SINK_OPS = {
     .process = backend_sink_process,
-    .insert_source = backend_sink_insert_source,
-    .insert_mountpoint = backend_sink_insert_mountpoint,
+    .insert_metadata = backend_sink_insert_metadata,
     .destroy = backend_sink_destroy,
 };
 
