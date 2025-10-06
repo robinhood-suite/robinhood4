@@ -996,7 +996,7 @@ out:
 }
 
     /*--------------------------------------------------------------------*
-     |                       insert_backend_source                        |
+     |                              set_info                              |
      *--------------------------------------------------------------------*/
 
 static int
@@ -1051,15 +1051,79 @@ _mongo_insert_source(const struct mongo_backend *mongo,
 }
 
 static int
+_mongo_insert_fsevents(const struct mongo_backend *mongo,
+                       const struct rbh_value *map)
+{
+    bson_t *filter, *bson, *opts;
+    bson_error_t error;
+    bson_t document;
+    bool result;
+    int rc = 0;
+
+    assert(map->type == RBH_VT_MAP);
+
+    filter = BCON_NEW("_id", "backend_info");
+    opts = BCON_NEW("upsert", BCON_BOOL(true));
+
+    bson = bson_new();
+
+    if (!BSON_APPEND_DOCUMENT_BEGIN(bson, "$set", &document)) {
+        rc = -1;
+        goto destroy;
+    }
+
+    for (int i = 0; i < map->map.count; i++) {
+        const struct rbh_value_pair *pair = &map->map.pairs[i];
+        char *key;
+
+        if (asprintf(&key,"fsevents_source.%s", pair->key) < 0) {
+            rc = -1;
+            goto destroy;
+        }
+
+        if (!BSON_APPEND_RBH_VALUE(&document, key, pair->value)) {
+            free(key);
+            rc = -1;
+            goto destroy;
+        }
+        free(key);
+    }
+
+    if (!bson_append_document_end(bson, &document)) {
+        rc = -1;
+        goto destroy;
+    }
+
+    result = mongoc_collection_update_one(mongo->info, filter, bson, opts,
+                                          NULL, &error);
+
+    if (!result) {
+        fprintf(stderr, "Upsert of backend_fsevents failed: %s\n",
+                error.message);
+        rc = -1;
+    }
+
+destroy:
+    bson_destroy(bson);
+    bson_destroy(filter);
+    bson_destroy(opts);
+
+    return rc;
+}
+
+static int
 mongo_set_info(void *backend, const struct rbh_value *infos, int flags)
 {
     struct mongo_backend *mongo = backend;
-    int rc = 0;
 
     if (flags & RBH_INFO_BACKEND_SOURCE)
-        rc = _mongo_insert_source(mongo, infos);
+        return _mongo_insert_source(mongo, infos);
 
-    return rc;
+    if (flags & RBH_INFO_FSEVENTS_SOURCE)
+        return _mongo_insert_fsevents(mongo, infos);
+
+    errno = EINVAL;
+    return -1;
 }
 
     /*--------------------------------------------------------------------*
