@@ -31,6 +31,14 @@ backend_sink_process(void *_sink, struct rbh_iterator *fsevents)
     return rbh_backend_update(sink->backend, fsevents) >= 0 ? 0 : -1;
 }
 
+static struct rbh_value_map *
+backend_sink_get_info(void *_sink, int flags)
+{
+    struct backend_sink *sink = _sink;
+
+    return rbh_backend_get_info(sink->backend, flags);
+}
+
 static int
 backend_sink_insert_metadata(void *_sink, const struct rbh_value_map *value,
                              enum metadata_type type)
@@ -52,6 +60,7 @@ backend_sink_destroy(void *_sink)
 static const struct sink_operations BACKEND_SINK_OPS = {
     .process = backend_sink_process,
     .insert_metadata = backend_sink_insert_metadata,
+    .get_info = backend_sink_get_info,
     .destroy = backend_sink_destroy,
 };
 

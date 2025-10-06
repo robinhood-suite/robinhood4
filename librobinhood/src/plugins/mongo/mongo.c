@@ -50,8 +50,8 @@ mongo_cleanup(void)
 }
 
 #define MIN_VALUES_SSTACK_ALLOC (1 << 6)
-struct rbh_sstack *values_sstack;
-struct rbh_sstack *info_sstack;
+static __thread struct rbh_sstack *values_sstack;
+static __thread struct rbh_sstack *info_sstack;
 
 static void __attribute__((destructor))
 destroy_sstack(void)
@@ -1268,6 +1268,11 @@ mongo_backend_get_info(void *backend, int info_flags)
 
     if (info_flags & RBH_INFO_LAST_SYNC) {
         if (get_collection_sync(mongo, "last_sync", &pairs[idx++]))
+            goto out;
+    }
+
+    if (info_flags & RBH_INFO_FSEVENTS_SOURCE) {
+        if (get_collection_info(mongo, "fsevents_source", &pairs[idx++]))
             goto out;
     }
 
