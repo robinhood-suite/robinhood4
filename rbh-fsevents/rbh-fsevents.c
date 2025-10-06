@@ -601,8 +601,6 @@ feed(struct sink **sink, struct source *source,
 static int
 insert_backend_source()
 {
-    const struct rbh_value_pair *pair;
-    const struct rbh_value *sources;
     struct rbh_value_map *info_map;
 
     info_map = enrich_iter_builder_get_source_backends(enrich_builder);
@@ -611,13 +609,7 @@ insert_backend_source()
         return -1;
     }
 
-    assert(info_map->count == 1);
-
-    pair = &info_map->pairs[0];
-    assert(strcmp(pair->key, "backend_source") == 0);
-    sources = pair->value;
-
-    if (sink_insert_source(sink[0], sources)) {
+    if (sink_insert_metadata(sink[0], info_map, RBH_DT_INFO)) {
         fprintf(stderr, "Failed to set backend_info\n");
         return -1;
     }
@@ -628,15 +620,11 @@ insert_backend_source()
 static int
 insert_mountpoint()
 {
-    struct rbh_value *mountpoint;
+    struct rbh_value_map mountpoint_map;
+    struct rbh_value mountpoint;
+    struct rbh_value_pair pair;
     char clean_path[PATH_MAX];
     size_t len;
-
-    mountpoint = malloc(sizeof(*mountpoint));
-    if (!mountpoint) {
-        fprintf(stderr, "mountpoint value allocation failed\n");
-        return -1;
-    }
 
     strncpy(clean_path, enrich_builder->mount_path, sizeof(clean_path));
     clean_path[sizeof(clean_path) - 1] = '\0';
@@ -645,23 +633,22 @@ insert_mountpoint()
     if (len > 1 && clean_path[len - 1] == '/')
         clean_path[len - 1] = '\0';
 
-    mountpoint->type = RBH_VT_STRING;
-    mountpoint->string = strdup(clean_path);
-    if (!mountpoint->string) {
-        fprintf(stderr, "strdup failed\n");
-        free(mountpoint);
-        return -1;
-    }
+    mountpoint.type = RBH_VT_STRING;
+    mountpoint.string = xstrdup(clean_path);
 
-    if (sink_insert_mountpoint(sink[0], mountpoint)) {
+    pair.key = "mountpoint";
+    pair.value = &mountpoint;
+
+    mountpoint_map.pairs = &pair;
+    mountpoint_map.count = 1;
+
+    if (sink_insert_metadata(sink[0], &mountpoint_map, RBH_DT_INFO)) {
         fprintf(stderr, "Failed to set the mountpoint\n");
-        free((char *)mountpoint->string);
-        free(mountpoint);
+        free((char *)mountpoint.string);
         return -1;
     }
 
-    free((char *)mountpoint->string);
-    free(mountpoint);
+    free((char *)mountpoint.string);
     return 0;
 }
 
