@@ -85,7 +85,7 @@ sync_source()
     assert(strcmp(pair->key, "backend_source") == 0);
     sources = pair->value;
 
-    if (rbh_backend_insert_source(to, sources))
+    if (rbh_backend_set_info(to, sources, RBH_INFO_BACKEND_SOURCE))
         fprintf(stderr, "Failed to set backend_info\n");
 }
 

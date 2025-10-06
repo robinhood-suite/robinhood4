@@ -234,11 +234,12 @@ struct rbh_filter_output {
  * Determines which info will be displayed by rbh-info.
  */
 enum rbh_info {
-    RBH_CAPABILITIES_FLAG   = 1 << 0,
-    RBH_INFO_SIZE           = 1 << 1,
-    RBH_INFO_COUNT          = 1 << 2,
-    RBH_INFO_AVG_OBJ_SIZE   = 1 << 3,
-    RBH_INFO_BACKEND_SOURCE = 1 << 4,
+    RBH_CAPABILITIES_FLAG    = 1 << 0,
+    RBH_INFO_SIZE            = 1 << 1,
+    RBH_INFO_COUNT           = 1 << 2,
+    RBH_INFO_AVG_OBJ_SIZE    = 1 << 3,
+    RBH_INFO_BACKEND_SOURCE  = 1 << 4,
+    RBH_INFO_FSEVENTS_SOURCE = 1 << 5,
 };
 
 /**
@@ -267,9 +268,10 @@ struct rbh_backend_operations {
             void *backend,
             struct rbh_iterator *fsevents
             );
-    int (*insert_source)(
+    int (*set_info)(
             void *backend,
-            const struct rbh_value *backend_source
+            const struct rbh_value *info,
+            int flags
             );
     struct rbh_backend *(*branch)(
             void *backend,
@@ -494,24 +496,24 @@ rbh_backend_update(struct rbh_backend *backend, struct rbh_iterator *fsevents)
 }
 
 /**
- * Insert the source backends in the target backend
+ * Insert informations backends in the target backend
  *
- * @param backend         the backend in which to insert the source
- * @param backend_source  a rbh_value sequence containing the source backend
- *                        names
+ * @param backend    the backend in which to insert the source
+ * @param info       a rbh_value containing the information to set
+ * @param flags      the information to set
  *
  * @return                0 on success, -1 on error
  */
 static inline int
-rbh_backend_insert_source(struct rbh_backend *backend,
-                          const struct rbh_value *backend_source)
+rbh_backend_set_info(struct rbh_backend *backend, const struct rbh_value *info,
+                     int flags)
 {
-    if (backend->ops->insert_source == NULL) {
+    if (backend->ops->set_info == NULL) {
         errno = ENOTSUP;
         return -1;
     }
 
-    return backend->ops->insert_source(backend, backend_source);
+    return backend->ops->set_info(backend, info, flags);
 }
 
 /**

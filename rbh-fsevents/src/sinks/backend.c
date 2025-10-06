@@ -31,11 +31,11 @@ backend_sink_process(void *_sink, struct rbh_iterator *fsevents)
 }
 
 static int
-backend_sink_insert_source(void *_sink, const struct rbh_value *backend_source)
+backend_sink_set_info(void *_sink, const struct rbh_value *infos, int flags)
 {
     struct backend_sink *sink = _sink;
 
-    return rbh_backend_insert_source(sink->backend, backend_source);
+    return rbh_backend_set_info(sink->backend, infos, flags);
 }
 
 static void
@@ -49,7 +49,7 @@ backend_sink_destroy(void *_sink)
 
 static const struct sink_operations BACKEND_SINK_OPS = {
     .process = backend_sink_process,
-    .insert_source = backend_sink_insert_source,
+    .set_info = backend_sink_set_info,
     .destroy = backend_sink_destroy,
 };
 

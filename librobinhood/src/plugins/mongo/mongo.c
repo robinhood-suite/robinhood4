@@ -1000,9 +1000,9 @@ out:
      *--------------------------------------------------------------------*/
 
 static int
-mongo_insert_source(void *backend, const struct rbh_value *backend_sequence)
+_mongo_insert_source(const struct mongo_backend *mongo,
+                     const struct rbh_value *backend_sequence)
 {
-    struct mongo_backend *mongo = backend;
     mongoc_collection_t *collection;
     bson_t *filter;
     bson_t *opts;
@@ -1050,6 +1050,18 @@ mongo_insert_source(void *backend, const struct rbh_value *backend_sequence)
     return rc;
 }
 
+static int
+mongo_set_info(void *backend, const struct rbh_value *infos, int flags)
+{
+    struct mongo_backend *mongo = backend;
+    int rc = 0;
+
+    if (flags & RBH_INFO_BACKEND_SOURCE)
+        rc = _mongo_insert_source(mongo, infos);
+
+    return rc;
+}
+
     /*--------------------------------------------------------------------*
      |                              destroy                               |
      *--------------------------------------------------------------------*/
@@ -1077,7 +1089,7 @@ static const struct rbh_backend_operations MONGO_BACKEND_OPS = {
     .filter = mongo_backend_filter,
     .report = mongo_backend_report,
     .get_info = mongo_backend_get_info,
-    .insert_source = mongo_insert_source,
+    .set_info = mongo_set_info,
     .destroy = mongo_backend_destroy,
 };
 

@@ -629,7 +629,7 @@ insert_backend_source()
     assert(strcmp(pair->key, "backend_source") == 0);
     sources = pair->value;
 
-    if (sink_insert_source(sink[0], sources)) {
+    if (sink_set_info(sink[0], sources, RBH_INFO_BACKEND_SOURCE)) {
         fprintf(stderr, "Failed to set backend_info\n");
         return -1;
     }
