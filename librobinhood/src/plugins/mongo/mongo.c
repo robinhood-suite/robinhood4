@@ -678,22 +678,15 @@ mongo_backend_update(void *backend, struct rbh_iterator *fsevents)
 #define SAFE_CLEANUP(x) if ((x) != NULL) { bson_destroy((x)); (x) = NULL; }
 
 static int
-mongo_insert_source(mongoc_collection_t *collection, char *id_name,
-                    const struct rbh_value *backend_sequence)
+mongo_insert_backend_source(mongoc_collection_t *collection,
+                            const struct rbh_value *backend_sequence)
 {
-    char *field_to_insert;
-    char *option_key;
     bson_t *filter;
     bson_t *opts;
     bool result;
     int rc = 0;
 
-    if (strcmp(id_name, "backend_info") == 0) {
-        field_to_insert = "backend_source";
-        option_key = "$addToSet";
-    }
-
-    filter = BCON_NEW("_id", id_name);
+    filter = BCON_NEW("_id", "backend_info");
     opts = BCON_NEW("upsert", BCON_BOOL(true));
 
     for (size_t i = 0 ; i < backend_sequence->sequence.count ; i++) {
@@ -703,10 +696,10 @@ mongo_insert_source(mongoc_collection_t *collection, char *id_name,
 
         update = bson_new();
 
-        if (!(BSON_APPEND_DOCUMENT_BEGIN(update, option_key, &metadata_doc)
+        if (!(BSON_APPEND_DOCUMENT_BEGIN(update, "$addToSet", &metadata_doc)
              && BSON_APPEND_RBH_VALUE_MAP(
                      &metadata_doc,
-                     field_to_insert,
+                     "backend_source",
                      &backend_sequence->sequence.values[i].map
                 )
              && bson_append_document_end(update, &metadata_doc))) {
@@ -777,14 +770,14 @@ skip_update:
 }
 
 static int
-mongo_insert_metadata(void *backend, struct rbh_value_map *map_value,
-                      enum metadata_type_to_insert mdt)
+mongo_insert_metadata(void *backend, const struct rbh_value_map *map_value,
+                      enum metadata_type type)
 {
     mongoc_collection_t *collection = NULL;
     struct mongo_backend *mongo = backend;
     int rc = 0;
 
-    switch (mdt) {
+    switch (type) {
     case RBH_DT_INFO:
         collection = mongo->info;
         break;
@@ -796,17 +789,19 @@ mongo_insert_metadata(void *backend, struct rbh_value_map *map_value,
         return -1;
     }
 
-    for (size_t i = 0 ; i < map_value->count ; i++) {
-        const struct rbh_value *value = map_value->pairs[i].value;
+    if (type == RBH_DT_INFO) {
+        for (size_t i = 0 ; i < map_value->count ; i++) {
+            const struct rbh_value_pair *pair = &map_value->pairs[i];
 
-        if (value->type == RBH_VT_SEQUENCE) {
-            rc = mongo_insert_source(collection, "backend_info",
-                                     value);
-            goto exit_loop;
+            if (strcmp(pair->key, "backend_source") == 0) {
+                rc = mongo_insert_backend_source(collection, pair->value);
+                if (rc)
+                    goto exit_loop;
+            }
         }
+    } else {
+        rc = mongo_insert_sync_metadata(collection, map_value);
     }
-
-    rc = mongo_insert_sync_metadata(collection, map_value);
 
 exit_loop:
     return rc;

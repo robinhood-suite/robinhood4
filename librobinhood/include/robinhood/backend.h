@@ -242,13 +242,14 @@ struct rbh_filter_output {
  * Determines which info will be displayed by rbh-info.
  */
 enum rbh_info {
-    RBH_CAPABILITIES_FLAG   = 1 << 0,
-    RBH_INFO_AVG_OBJ_SIZE   = 1 << 1,
-    RBH_INFO_BACKEND_SOURCE = 1 << 2,
-    RBH_INFO_COUNT          = 1 << 3,
-    RBH_INFO_FIRST_SYNC     = 1 << 4,
-    RBH_INFO_SIZE           = 1 << 5,
-    RBH_INFO_LAST_SYNC      = 1 << 6,
+    RBH_CAPABILITIES_FLAG    = 1 << 0,
+    RBH_INFO_AVG_OBJ_SIZE    = 1 << 1,
+    RBH_INFO_BACKEND_SOURCE  = 1 << 2,
+    RBH_INFO_COUNT           = 1 << 3,
+    RBH_INFO_FIRST_SYNC      = 1 << 4,
+    RBH_INFO_SIZE            = 1 << 5,
+    RBH_INFO_LAST_SYNC       = 1 << 6,
+    RBH_INFO_FSEVENTS_SOURCE = 1 << 7,
 };
 
 /**
@@ -258,7 +259,7 @@ enum rbh_info {
  * of the same metadata_type (i.e you can not have a rbh_value_map with DT_INFO
  * & DT_LOG data at the same time).
  */
-enum metadata_type_to_insert {
+enum metadata_type {
     RBH_DT_INFO,
     RBH_DT_LOG,
 };
@@ -291,8 +292,8 @@ struct rbh_backend_operations {
             );
     int (*insert_metadata)(
             void *backend,
-            struct rbh_value_map *value_map,
-            enum metadata_type_to_insert mdt
+            const struct rbh_value_map *value,
+            enum metadata_type type
             );
     struct rbh_backend *(*branch)(
             void *backend,
@@ -518,26 +519,26 @@ rbh_backend_update(struct rbh_backend *backend, struct rbh_iterator *fsevents)
 }
 
 /**
- * Insert the source backends in the target backend
+ * Insert informations backends in the target backend
  *
  * @param backend         the backend in which to insert the source
- * @param value_map       a rbh_value map containing metadata to insert
- * @param mdt             type of metadata which will help to determine where
+ * @param value           a rbh_value map containing metadata to insert
+ * @param type            type of metadata which will help to determine where
  *                        to insert them
  *
  * @return                0 on success, -1 on error
  */
 static inline int
 rbh_backend_insert_metadata(struct rbh_backend *backend,
-                            struct rbh_value_map *value_map,
-                            enum metadata_type_to_insert mdt)
+                            const struct rbh_value_map *value,
+                            enum metadata_type type)
 {
     if (backend->ops->insert_metadata == NULL) {
         errno = ENOTSUP;
         return -1;
     }
 
-    return backend->ops->insert_metadata(backend, value_map, mdt);
+    return backend->ops->insert_metadata(backend, value, type);
 }
 
 /**
