@@ -33,6 +33,7 @@ struct lustre_changelog_iterator {
     struct rbh_iterator iterator;
 
     void *reader;
+    struct sink *sink;
     struct rbh_iterator *fsevents_iterator;
 
     char *username;
@@ -1244,12 +1245,57 @@ end_event:
     return NULL;
 }
 
+static int
+lustre_changelog_set_last_read(void *iterator)
+{
+    struct lustre_changelog_iterator *records = iterator;
+    struct rbh_value_pair last_read_pair, mdt_pair;
+    struct rbh_value *last_read_value;
+    struct rbh_value *map, *mdt_map;
+    int rc = 0;
+
+    last_read_value = rbh_value_uint64_new(records->last_changelog_index);
+    if (last_read_value == NULL)
+        return -1;
+
+    last_read_pair.key = "last_read";
+    last_read_pair.value = last_read_value;
+
+    mdt_map = rbh_value_map_new(&last_read_pair, 1);
+    if (mdt_map == NULL) {
+        free(last_read_value);
+        return -1;
+    }
+
+    mdt_pair.key = records->mdt_name;
+    mdt_pair.value = mdt_map;
+
+    map = rbh_value_map_new(&mdt_pair, 1);
+    if (map == NULL) {
+        free(last_read_value);
+        free(mdt_map);
+        return -1;
+    }
+
+    rc = sink_set_info(records->sink, map, RBH_INFO_FSEVENTS_SOURCE);
+
+    free(last_read_value);
+    free(mdt_map);
+    free(map);
+
+    return rc;
+}
+
 static void
 lustre_changelog_iter_destroy(void *iterator)
 {
     struct lustre_changelog_iterator *records = iterator;
 
     llapi_changelog_fini(&records->reader);
+
+    if (lustre_changelog_set_last_read(records))
+        error(EXIT_FAILURE, errno, "Failed to set backend_fsevents info\n");
+
     if (records->fsevents_iterator)
         rbh_iter_destroy(records->fsevents_iterator);
 
@@ -1283,7 +1329,8 @@ static const struct rbh_iterator LUSTRE_CHANGELOG_ITERATOR = {
 static void
 lustre_changelog_iter_init(struct lustre_changelog_iterator *events,
                            const char *mdtname, const char *username,
-                           const char *dump_file, uint64_t max_changelog)
+                           const char *dump_file, uint64_t max_changelog,
+                           struct sink *sink)
 {
     const char *mdtname_index;
     int rc;
@@ -1291,6 +1338,7 @@ lustre_changelog_iter_init(struct lustre_changelog_iterator *events,
     events->max_changelog = max_changelog;
     events->nb_changelog = 0;
     events->last_changelog_index = 0;
+    events->sink = sink;
 
     rc = llapi_changelog_start(&events->reader,
                                CHANGELOG_FLAG_JOBID |
@@ -1377,7 +1425,8 @@ static const struct source LUSTRE_SOURCE = {
 
 struct source *
 source_from_lustre_changelog(const char *mdtname, const char *username,
-                             const char *dump_file, uint64_t max_changelog)
+                             const char *dump_file, uint64_t max_changelog,
+                             struct sink *sink)
 {
     struct lustre_source *source;
 
@@ -1386,7 +1435,7 @@ source_from_lustre_changelog(const char *mdtname, const char *username,
         error(EXIT_FAILURE, errno, "malloc");
 
     lustre_changelog_iter_init(&source->events, mdtname, username,
-                               dump_file, max_changelog);
+                               dump_file, max_changelog, sink);
 
     initialize_source_stack(sizeof(struct rbh_value_pair) * (1 << 7));
     source->source = LUSTRE_SOURCE;
