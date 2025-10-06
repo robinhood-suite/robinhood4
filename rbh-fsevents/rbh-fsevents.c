@@ -613,8 +613,6 @@ feed(struct sink **sink, struct source *source,
 static int
 insert_backend_source()
 {
-    const struct rbh_value_pair *pair;
-    const struct rbh_value *sources;
     struct rbh_value_map *info_map;
 
     info_map = enrich_iter_builder_get_source_backends(enrich_builder);
@@ -623,13 +621,7 @@ insert_backend_source()
         return -1;
     }
 
-    assert(info_map->count == 1);
-
-    pair = &info_map->pairs[0];
-    assert(strcmp(pair->key, "backend_source") == 0);
-    sources = pair->value;
-
-    if (sink_insert_source(sink[0], sources)) {
+    if (sink_insert_metadata(sink[0], info_map, RBH_DT_INFO)) {
         fprintf(stderr, "Failed to set backend_info\n");
         return -1;
     }
