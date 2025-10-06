@@ -52,8 +52,8 @@ mongo_cleanup(void)
 }
 
 #define MIN_VALUES_SSTACK_ALLOC (1 << 6)
-struct rbh_sstack *values_sstack;
-struct rbh_sstack *info_sstack;
+static __thread struct rbh_sstack *values_sstack;
+static __thread struct rbh_sstack *info_sstack;
 
 static void __attribute__((destructor))
 destroy_sstack(void)
@@ -1042,6 +1042,7 @@ get_collection_info(const struct mongo_backend *mongo, char *field_to_find,
     mongoc_cursor_t *cursor;
     bson_t *filter = NULL;
     char _buffer[4096];
+    bool found = false;
     const bson_t *doc;
     bson_iter_t iter;
     size_t bufsize;
@@ -1054,7 +1055,8 @@ get_collection_info(const struct mongo_backend *mongo, char *field_to_find,
 
     if (strcmp(field_to_find, "mountpoint") == 0)
         filter = BCON_NEW("_id", "mountpoint_info");
-    if (strcmp(field_to_find, "backend_source") == 0)
+    if (strcmp(field_to_find, "backend_source") == 0 ||
+        strcmp(field_to_find, "fsevents_source") == 0)
         filter = BCON_NEW("_id", "backend_info");
 
     cursor = mongoc_collection_find_with_opts(mongo->info, filter, NULL, NULL);
@@ -1077,12 +1079,15 @@ get_collection_info(const struct mongo_backend *mongo, char *field_to_find,
                 goto out;
             }
 
+            found = true;
             pair->key = field_to_find;
             pair->value = value_clone(value);
             break;
         }
     }
 
+    if (!found)
+        rc = -1;
 out:
     if (cursor)
         mongoc_cursor_destroy(cursor);
@@ -1300,6 +1305,11 @@ mongo_backend_get_info(void *backend, int info_flags)
 
     if (info_flags & RBH_INFO_SIZE) {
         if (!get_collection_stats(mongo, "size", &pairs[idx++]))
+            goto out;
+    }
+
+    if (info_flags & RBH_INFO_FSEVENTS_SOURCE) {
+        if (get_collection_info(mongo, "fsevents_source", &pairs[idx++]))
             goto out;
     }
 
