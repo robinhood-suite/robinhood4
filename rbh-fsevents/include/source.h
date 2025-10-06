@@ -12,6 +12,7 @@
 #include <stdio.h>
 #include <time.h>
 
+#include "sink.h"
 #include <robinhood/iterator.h>
 
 struct source {
@@ -24,7 +25,8 @@ source_from_file(FILE *file);
 
 struct source *
 source_from_lustre_changelog(const char *mdtname, const char *username,
-                             const char *dump_file, uint64_t max_changelog);
+                             const char *dump_file, uint64_t max_changelog,
+                             struct sink *sink);
 
 struct source *
 source_from_hestia_file(FILE *file);

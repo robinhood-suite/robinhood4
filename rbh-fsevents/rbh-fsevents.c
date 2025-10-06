@@ -134,6 +134,8 @@ source_from_file_uri(const char *file_path,
     __builtin_unreachable();
 }
 
+static struct sink **sink;
+
 static struct source *
 source_from_uri(const char *uri, const char *dump_file, uint64_t max_changelog)
 {
@@ -172,7 +174,7 @@ source_from_uri(const char *uri, const char *dump_file, uint64_t max_changelog)
     } else if (strcmp(raw_uri->path, "lustre") == 0) {
 #ifdef HAVE_LUSTRE
         source = source_from_lustre_changelog(name, username, dump_file,
-                                              max_changelog);
+                                              max_changelog, sink[0]);
 #else
         free(raw_uri);
         error(EX_USAGE, EINVAL, "MDT source is not available");
@@ -207,7 +209,10 @@ source_new(const char *arg, const char *dump_file, uint64_t max_changelog)
 
 static struct source *source;
 
-static void __attribute__((destructor))
+/* Because the source needs a sink backend, we need to make sure that the
+ * source is freed before the sink backends.
+ */
+static void __attribute__((destructor(102)))
 source_exit(void)
 {
     if (source)
@@ -248,9 +253,8 @@ sink_new(const char *arg)
 }
 
 static size_t nb_workers = 1;
-static struct sink **sink;
 
-static void __attribute__((destructor))
+static void __attribute__((destructor(101)))
 sink_exit(void)
 {
     if (sink) {
@@ -764,13 +768,16 @@ main(int argc, char *argv[])
         error(EX_USAGE, EINVAL,
               "Cannot output changelogs and fsevents both to stdout");
 
-    source = source_new(argv[optind++], dump_file, max_changelog);
+    char *source_uri = argv[optind++];
+
     sink = calloc(nb_workers, sizeof(*sink));
     if (sink == NULL)
         error(EXIT_FAILURE, errno, "calloc");
 
     for (int i = 0; i < nb_workers; i++)
         sink[i] = sink_new(argv[optind]);
+
+    source = source_new(source_uri, dump_file, max_changelog);
 
     if (enrich_builder) {
         if (insert_backend_source() && errno != ENOTSUP)
