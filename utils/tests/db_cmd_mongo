@@ -129,6 +129,14 @@ case "$cmd" in
         fi
         exit $rc
         ;;
+    drop_info)
+        output=$(mongo "$db" --eval "db.info.drop()" 2>&1)
+        rc=$?
+        if (( rc != 0 )); then
+            echo "$output"
+        fi
+        exit $rc
+        ;;
     *)
         echo "Unknown command '$cmd'"
         exit 1
