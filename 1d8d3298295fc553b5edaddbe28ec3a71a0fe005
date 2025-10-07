@@ -166,6 +166,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a5071fa0_7f7bd058",
+        "filename": "rbh-policy/rbhpolicy/config/config_loader.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-10-07T14:22:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5997cb62_a6c2a546",
+      "range": {
+        "startLine": 45,
+        "startChar": 39,
+        "endLine": 45,
+        "endChar": 46
+      },
+      "revId": "1d8d3298295fc553b5edaddbe28ec3a71a0fe005",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b987788a_d2b379c3",
@@ -203,6 +227,30 @@
       "side": 1,
       "message": "Yes, we will of course explain everything that we will inject into the global space of the config. But here we retrieve what is in the config, so we retrieve everything because we do not know what the user has defined. Afterwards we could limit what we retrieve but it would have to be done with precision so that everything does not break because we forgot to retrieve something.",
       "parentUuid": "b987788a_d2b379c3",
+      "range": {
+        "startLine": 78,
+        "startChar": 8,
+        "endLine": 78,
+        "endChar": 35
+      },
+      "revId": "1d8d3298295fc553b5edaddbe28ec3a71a0fe005",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b3af8dfc_06d78911",
+        "filename": "rbh-policy/rbhpolicy/config/config_loader.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-10-07T14:22:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9eb8d6f8_5a20695d",
       "range": {
         "startLine": 78,
         "startChar": 8,

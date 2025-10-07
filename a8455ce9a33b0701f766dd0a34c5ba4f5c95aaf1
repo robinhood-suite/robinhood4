@@ -120,6 +120,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c3c8e8b7_bcce5509",
+        "filename": "rbh-policy/rbhpolicy/config/config_loader.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-10-07T14:22:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cc198654_686c3d2d",
+      "range": {
+        "startLine": 41,
+        "startChar": 12,
+        "endLine": 41,
+        "endChar": 23
+      },
+      "revId": "a8455ce9a33b0701f766dd0a34c5ba4f5c95aaf1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "54967021_34813fbc",
@@ -205,6 +229,30 @@
       "side": 1,
       "message": "What do you mean by \"getting lost\" ? They may have the same name but not the same path, so it\u0027s easy to keep track of",
       "parentUuid": "e8701976_abe16680",
+      "range": {
+        "startLine": 44,
+        "startChar": 12,
+        "endLine": 44,
+        "endChar": 64
+      },
+      "revId": "a8455ce9a33b0701f766dd0a34c5ba4f5c95aaf1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea007207_5410dd34",
+        "filename": "rbh-policy/rbhpolicy/config/config_loader.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-10-07T14:22:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8a2f14b8_6042ddc4",
       "range": {
         "startLine": 44,
         "startChar": 12,
@@ -382,6 +430,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3d6b9766_f198eaa7",
+        "filename": "rbh-policy/rbhpolicy/config/config_loader.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-10-07T14:22:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d8e69093_40aa8d3d",
+      "range": {
+        "startLine": 69,
+        "startChar": 16,
+        "endLine": 69,
+        "endChar": 20
+      },
+      "revId": "a8455ce9a33b0701f766dd0a34c5ba4f5c95aaf1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "851ce51c_82bf112a",
@@ -466,6 +538,30 @@
       "side": 1,
       "message": "Refocusing what we retrieve is a good thing later, but here we do not retrieve the Python built-ins because we are concentrating on the module that we have just created and therefore the elements of the standard Python are in the global built-in module and therefore not concerned.",
       "parentUuid": "2cbb7139_b8ca06ee",
+      "range": {
+        "startLine": 80,
+        "startChar": 8,
+        "endLine": 80,
+        "endChar": 36
+      },
+      "revId": "a8455ce9a33b0701f766dd0a34c5ba4f5c95aaf1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0321d9fa_c593d3f6",
+        "filename": "rbh-policy/rbhpolicy/config/config_loader.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-10-07T14:22:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "070a3f52_709991eb",
       "range": {
         "startLine": 80,
         "startChar": 8,
