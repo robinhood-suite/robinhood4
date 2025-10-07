@@ -929,13 +929,14 @@ free_events_list(struct rbh_list_node *list)
     free(list);
 }
 
-struct rbh_iterator *
+struct batch *
 rbh_fsevent_pool_flush(struct rbh_fsevent_pool *pool)
 {
     struct rbh_fsevent_node *elem, *tmp;
     struct rbh_list_node *events_copy;
     struct sub_batch *sub_batches;
     struct sub_batch *iter_ptr;
+    struct batch *batch;
     size_t size = 0;
 
     for (size_t i = 0; i < pool->events_size; i++) {
@@ -975,6 +976,7 @@ rbh_fsevent_pool_flush(struct rbh_fsevent_pool *pool)
             size++;
     }
 
+    batch = xmalloc(sizeof(*batch));
     sub_batches = xmalloc(size * sizeof(*sub_batches));
     iter_ptr = sub_batches;
 
@@ -991,5 +993,9 @@ rbh_fsevent_pool_flush(struct rbh_fsevent_pool *pool)
         iter_ptr++;
     }
 
-    return rbh_iter_array(sub_batches, sizeof(struct sub_batch), size, free);
+    batch->ack_required = size;
+    batch->sub_batches = rbh_iter_array(sub_batches, sizeof(struct sub_batch),
+                                        size, free);
+
+    return batch;
 }

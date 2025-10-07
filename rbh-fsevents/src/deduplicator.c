@@ -38,6 +38,8 @@ deduplicator_iter_next(void *iterator)
     static const struct rbh_fsevent *last_fsevent = NULL;
     struct deduplicator *deduplicator = iterator;
     const struct rbh_fsevent *fsevent;
+    struct rbh_iterator *sub_batches;
+    struct batch *batch;
     int rc = 0;
 
     do {
@@ -78,7 +80,18 @@ deduplicator_iter_next(void *iterator)
      * be flushed. In the first case, it means that not enough events
      * were generated and we could not fill the pool completely.
      */
-    return rbh_fsevent_pool_flush(deduplicator->pool);
+    batch = rbh_fsevent_pool_flush(deduplicator->pool);
+    if (batch == NULL)
+        return NULL;
+
+    if (deduplicator->source->save_batch != NULL)
+        deduplicator->source->save_batch(deduplicator->source,
+                                         batch->ack_required, true);
+
+    sub_batches = batch->sub_batches;
+    free(batch);
+
+    return sub_batches;
 }
 
 static void
@@ -119,6 +132,9 @@ no_dedup_iter_next(void *iterator)
     else
         sub_batch->index = hash_id2index(&fsevent_copy->id,
                                          deduplicator->nb_workers);
+
+    if (deduplicator->source->save_batch != NULL)
+        deduplicator->source->save_batch(deduplicator->source, 1, false);
 
     return rbh_iter_array(sub_batch, sizeof(struct sub_batch), 1, free);
 }
