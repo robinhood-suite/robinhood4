@@ -26,4 +26,7 @@ s3:
     password: minioadmin
     crt_path: /usr/certs/public.crt
     region : "eu-west-3"
+
+rbh-fsevents:
+    ack_count: !int32 1024
 ---

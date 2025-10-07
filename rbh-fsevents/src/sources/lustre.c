@@ -19,6 +19,7 @@
 #include <lustre/lustreapi.h>
 #include <linux/lustre/lustre_fid.h>
 
+#include <robinhood/config.h>
 #include <robinhood/itertools.h>
 #include <robinhood/fsevent.h>
 #include <robinhood/sstack.h>
@@ -43,6 +44,7 @@ struct lustre_changelog_iterator {
     uint64_t last_changelog_index;
     uint64_t nb_changelog;
     uint64_t max_changelog;
+    int64_t ack_count;
 
     FILE *dump_file;
 };
@@ -1128,6 +1130,14 @@ lustre_changelog_iter_next(void *iterator)
         errno = 0;
     }
 
+    if (records->username && records->nb_changelog > 0 &&
+        (records->nb_changelog % records->ack_count) == 0) {
+        rc = llapi_changelog_clear(records->mdt_name, records->username,
+                                   records->last_changelog_index);
+        if (rc < 0)
+            return NULL;
+    }
+
     if (records->max_changelog > 0 &&
         records->max_changelog == records->nb_changelog) {
         errno = ENODATA;
@@ -1362,11 +1372,30 @@ lustre_changelog_get_start_idx(struct lustre_changelog_iterator *events,
     return start_index;
 }
 
+#define ACK_COUNT "ack_count"
+#define DEFAULT_ACK_COUNT 1024
+
+static int64_t
+get_ack_count()
+{
+    struct rbh_value value = { 0 };
+    enum key_parse_result rc;
+
+    rc = rbh_config_find("rbh-fsevents/"ACK_COUNT, &value, RBH_VT_INT64);
+    if (rc == KPR_ERROR)
+        return -1;
+
+    if (rc == KPR_NOT_FOUND)
+        value.int64 = DEFAULT_ACK_COUNT;
+
+    return value.int64;
+}
+
 static void
 lustre_changelog_iter_init(struct lustre_changelog_iterator *events,
                            const char *mdtname, const char *username,
                            const char *dump_file, uint64_t max_changelog,
-                           struct sink *sink)
+                           struct sink *sink, int64_t ack_count)
 {
     const char *mdtname_index;
     uint64_t start_index = 0;
@@ -1376,6 +1405,12 @@ lustre_changelog_iter_init(struct lustre_changelog_iterator *events,
     events->nb_changelog = 0;
     events->sink = sink;
 
+    if (ack_count == 0)
+        events->ack_count = get_ack_count();
+    else
+        events->ack_count = ack_count;
+
+    printf("%ld\n", events->ack_count);
     start_index = lustre_changelog_get_start_idx(events, mdtname);
     events->last_changelog_index = start_index;
 
@@ -1465,7 +1500,7 @@ static const struct source LUSTRE_SOURCE = {
 struct source *
 source_from_lustre_changelog(const char *mdtname, const char *username,
                              const char *dump_file, uint64_t max_changelog,
-                             struct sink *sink)
+                             struct sink *sink, int64_t ack_count)
 {
     struct lustre_source *source;
 
@@ -1474,7 +1509,7 @@ source_from_lustre_changelog(const char *mdtname, const char *username,
         error(EXIT_FAILURE, errno, "malloc");
 
     lustre_changelog_iter_init(&source->events, mdtname, username,
-                               dump_file, max_changelog, sink);
+                               dump_file, max_changelog, sink, ack_count);
 
     initialize_source_stack(sizeof(struct rbh_value_pair) * (1 << 7));
     source->source = LUSTRE_SOURCE;

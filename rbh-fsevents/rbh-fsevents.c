@@ -62,6 +62,9 @@ usage(void)
         "\n"
         "Optional arguments:\n"
         "    --alias NAME    specify an alias for the operation.\n"
+        "    -a, --ack-count NUMBER\n"
+        "                    the number of changelog to read before doing an\n"
+        "                    acknowledgement\n"
         "    -b, --batch-size NUMBER\n"
         "                    the number of fsevents to keep in memory for deduplication\n"
         "                    default: %lu\n"
@@ -137,7 +140,8 @@ source_from_file_uri(const char *file_path,
 static struct sink **sink;
 
 static struct source *
-source_from_uri(const char *uri, const char *dump_file, uint64_t max_changelog)
+source_from_uri(const char *uri, const char *dump_file, uint64_t max_changelog,
+                int64_t ack_count)
 {
     struct source *source = NULL;
     struct rbh_raw_uri *raw_uri;
@@ -174,7 +178,8 @@ source_from_uri(const char *uri, const char *dump_file, uint64_t max_changelog)
     } else if (strcmp(raw_uri->path, "lustre") == 0) {
 #ifdef HAVE_LUSTRE
         source = source_from_lustre_changelog(name, username, dump_file,
-                                              max_changelog, sink[0]);
+                                              max_changelog, sink[0],
+                                              ack_count);
 #else
         free(raw_uri);
         error(EX_USAGE, EINVAL, "MDT source is not available");
@@ -194,14 +199,15 @@ source_from_uri(const char *uri, const char *dump_file, uint64_t max_changelog)
 }
 
 static struct source *
-source_new(const char *arg, const char *dump_file, uint64_t max_changelog)
+source_new(const char *arg, const char *dump_file, uint64_t max_changelog,
+           int64_t ack_count)
 {
     if (strcmp(arg, "-") == 0)
         /* SOURCE is '-' (stdin) */
         return source_from_file(stdin);
 
     if (rbh_is_uri(arg))
-        return source_from_uri(arg, dump_file, max_changelog);
+        return source_from_uri(arg, dump_file, max_changelog, ack_count);
 
     error(EX_USAGE, EINVAL, "%s", arg);
     __builtin_unreachable();
@@ -643,6 +649,11 @@ main(int argc, char *argv[])
 {
     const struct option LONG_OPTIONS[] = {
         {
+            .name = "ack-count",
+            .has_arg = required_argument,
+            .val = 'a',
+        },
+        {
             .name = "batch-size",
             .has_arg = required_argument,
             .val = 'b',
@@ -701,6 +712,7 @@ main(int argc, char *argv[])
     };
     uint64_t max_changelog = 0;
     char *dump_file = NULL;
+    int64_t ack_count = 0;
     int rc;
     char c;
 
@@ -711,9 +723,13 @@ main(int argc, char *argv[])
     rbh_apply_aliases(&argc, &argv);
 
     /* Parse the command line */
-    while ((c = getopt_long(argc, argv, "b:c:d:e:hm:nrvw:", LONG_OPTIONS,
+    while ((c = getopt_long(argc, argv, "a:b:c:d:e:hm:nrvw:", LONG_OPTIONS,
                             NULL)) != -1) {
         switch (c) {
+        case 'a':
+            if (str2int64_t(optarg, &ack_count))
+                error(EXIT_FAILURE, 0, "'%s' is not an integer", optarg);
+            break;
         case 'b':
             if (str2uint64_t(optarg, &dedup_opts.batch_size))
                 error(EXIT_FAILURE, 0, "'%s' is not an integer", optarg);
@@ -782,7 +798,7 @@ main(int argc, char *argv[])
     for (int i = 0; i < nb_workers; i++)
         sink[i] = sink_new(argv[optind]);
 
-    source = source_new(source_uri, dump_file, max_changelog);
+    source = source_new(source_uri, dump_file, max_changelog, ack_count);
 
     if (enrich_builder) {
         if (insert_backend_source() && errno != ENOTSUP)

@@ -74,3 +74,5 @@ backends:
 #     blob1: "-name blob -printf '%A'"
 #     blob2: "-type dir -user blob"
 #     ...
+rbh-fsevents:
+    ack_count: !int64 1024
