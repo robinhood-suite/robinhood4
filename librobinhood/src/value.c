@@ -583,3 +583,13 @@ fill_sequence_pair(const char *key, struct rbh_value *values, uint64_t length,
 
     return fill_pair(key, &sequence_value, pair, stack);
 }
+
+const struct rbh_value *
+rbh_map_find(const struct rbh_value_map *map, const char *key)
+{
+    for (size_t i = 0; i < map->count; i++)
+        if (!strcmp(map->pairs[i].key, key))
+            return map->pairs[i].value;
+
+    return NULL;
+}

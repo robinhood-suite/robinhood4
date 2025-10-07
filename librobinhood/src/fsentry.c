@@ -145,16 +145,6 @@ rbh_fsentry_new(const struct rbh_id *id, const struct rbh_id *parent_id,
     return fsentry;
 }
 
-static const struct rbh_value *
-rbh_map_find(const struct rbh_value_map *map, const char *key)
-{
-    for (size_t i = 0; i < map->count; i++)
-        if (!strcmp(map->pairs[i].key, key))
-            return map->pairs[i].value;
-
-    return NULL;
-}
-
 const struct rbh_value *
 rbh_fsentry_find_inode_xattr(const struct rbh_fsentry *entry,
                              const char *key_to_find)

@@ -318,4 +318,16 @@ void
 value_map_insert_pair(struct rbh_sstack *sstack, struct rbh_value_map *map,
                       const struct rbh_value_pair *pair);
 
+
+/*
+ * Find a key in a rbh_value_map
+ *
+ * @param map  the map to search
+ * @param key  the key to find
+ *
+ * @return     a pointer to an rbh_value if the key is find, otherwise NULL
+ */
+const struct rbh_value *
+rbh_map_find(const struct rbh_value_map *map, const char *key);
+
 #endif
