@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "22db5281_58943254",
+        "filename": "rbh-policy/poc/config.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-10-07T14:22:35Z",
+      "side": 1,
+      "message": "It\u0027s true that this may lack consistency, but this POC was mainly done to test the possibilities in Python.",
+      "parentUuid": "5a58dcb1_5624c78b",
+      "range": {
+        "startLine": 6,
+        "startChar": 30,
+        "endLine": 6,
+        "endChar": 47
+      },
+      "revId": "ee418bd944f3e93a5980a54d125ced6f3ac91445",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e693383f_e1056a56",
@@ -71,6 +95,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a89755e2_6653504c",
+        "filename": "rbh-policy/poc/config.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-10-07T14:22:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "55581eb2_f19b0156",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 1
+      },
+      "revId": "ee418bd944f3e93a5980a54d125ced6f3ac91445",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9b0e85f4_93e17b40",
@@ -84,6 +132,30 @@
       "writtenOn": "2025-09-19T08:04:13Z",
       "side": 1,
       "message": "major: all this stuff is fully cryptic for me !",
+      "range": {
+        "startLine": 126,
+        "startChar": 4,
+        "endLine": 141,
+        "endChar": 34
+      },
+      "revId": "ee418bd944f3e93a5980a54d125ced6f3ac91445",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "03a8ce3b_ace3d425",
+        "filename": "rbh-policy/poc/policyengine.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-10-07T14:22:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9b0e85f4_93e17b40",
       "range": {
         "startLine": 126,
         "startChar": 4,
