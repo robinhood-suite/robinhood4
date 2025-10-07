@@ -25,6 +25,7 @@
 #include <robinhood/statx.h>
 #include <robinhood/config.h>
 #include <robinhood/utils.h>
+#include <robinhood/value.h>
 
 #include "source.h"
 #include "utils.h"
@@ -1326,6 +1327,41 @@ static const struct rbh_iterator LUSTRE_CHANGELOG_ITERATOR = {
     .ops = &LUSTRE_CHANGELOG_ITER_OPS,
 };
 
+static uint64_t
+lustre_changelog_get_start_idx(struct lustre_changelog_iterator *events,
+                               const char *mdtname)
+{
+    const struct rbh_value *mdts, *mdt, *last_read;
+    const struct rbh_value_pair *pair;
+    struct rbh_value_map *info_map;
+    uint64_t start_index = 0;
+
+    info_map = sink_get_info(events->sink, RBH_INFO_FSEVENTS_SOURCE);
+    if (info_map == NULL)
+        return 0;
+
+    assert(info_map->count == 1);
+
+    pair = &info_map->pairs[0];
+    if (pair->key != NULL) {
+        assert(strcmp(pair->key, "fsevents_source") == 0);
+        mdts = pair->value;
+        assert(mdts->type == RBH_VT_MAP);
+
+        mdt = rbh_map_find(&mdts->map, mdtname);
+        if (mdt == NULL)
+            return 0;
+
+        last_read = rbh_map_find(&mdt->map, "last_read");
+        if (last_read == NULL)
+            return 0;
+
+        start_index = last_read->uint64;
+    }
+
+    return start_index;
+}
+
 static void
 lustre_changelog_iter_init(struct lustre_changelog_iterator *events,
                            const char *mdtname, const char *username,
@@ -1333,17 +1369,20 @@ lustre_changelog_iter_init(struct lustre_changelog_iterator *events,
                            struct sink *sink)
 {
     const char *mdtname_index;
+    uint64_t start_index = 0;
     int rc;
 
     events->max_changelog = max_changelog;
     events->nb_changelog = 0;
-    events->last_changelog_index = 0;
     events->sink = sink;
+
+    start_index = lustre_changelog_get_start_idx(events, mdtname);
+    events->last_changelog_index = start_index;
 
     rc = llapi_changelog_start(&events->reader,
                                CHANGELOG_FLAG_JOBID |
                                CHANGELOG_FLAG_EXTRA_FLAGS,
-                               mdtname, events->last_changelog_index);
+                               mdtname, start_index == 0 ? 0 : start_index + 1);
     if (rc < 0)
         error(EXIT_FAILURE, -rc, "llapi_changelog_start");
 
