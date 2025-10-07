@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # This file is part of rbh-fsevents.
-# Copyright (C) 2023 Commissariat a l'energie atomique et aux energies
+# Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
@@ -15,6 +15,12 @@ invoke_rbh-fsevents()
 {
     rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" \
         src:lustre:"$LUSTRE_MDT"?ack-user=$userid "rbh:$db:$testdb"
+}
+
+invoke_rbh-fsevents_no_ack()
+{
+    rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" \
+        src:lustre:"$LUSTRE_MDT" "rbh:$db:$testdb"
 }
 
 ################################################################################
