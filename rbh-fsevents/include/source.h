@@ -18,6 +18,18 @@
 struct source {
     struct rbh_iterator fsevents;
     const char *name;
+
+    /** Callback to save all the information (cf. changelogs for Lustre) the
+     * source has read to create a batch. The information saved will be used
+     * by the ack_batch callback.
+     */
+    void (*save_batch)(void *source, size_t ack_required, bool dedup);
+
+    /** Callback to acknowledge a batch to the source. It will be used to free
+     *  the memory associated with this batch in the source (cf. ack the
+     *  changelogs for Lustre).
+     */
+    void (*ack_batch)(void *source, uint64_t batch_id);
 };
 
 struct source *

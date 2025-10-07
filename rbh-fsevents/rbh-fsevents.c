@@ -340,6 +340,7 @@ static bool done_producing = false;
 static bool skip_error = true;
 
 struct rbh_node_iterator {
+    uint64_t batch_id;
     struct rbh_iterator *enricher;
     struct rbh_list_node list;
 };
@@ -347,7 +348,8 @@ struct rbh_node_iterator {
 /* Add an iterator to enrich to a consumer */
 static void
 add_iterators_to_consumer(struct rbh_list_node *list,
-                          struct rbh_iterator *enricher)
+                          struct rbh_iterator *enricher,
+                          uint64_t batch_id)
 {
     struct rbh_node_iterator *new_node = malloc(sizeof(*new_node));
 
@@ -355,6 +357,7 @@ add_iterators_to_consumer(struct rbh_list_node *list,
         error(EXIT_FAILURE, ENOMEM, "malloc");
 
     new_node->enricher = enricher;
+    new_node->batch_id = batch_id;
 
     rbh_list_add_tail(list, &new_node->list);
 }
@@ -416,6 +419,9 @@ consumer_thread(void *arg) {
             free(node);
             break;
         }
+
+        if (source->ack_batch != NULL)
+            source->ack_batch(source, node->batch_id);
 
         if (verbose) {
             rc = clock_gettime(CLOCK_REALTIME, &end);
@@ -506,6 +512,7 @@ producer_thread(struct rbh_mut_iterator *deduplicator,
     struct rbh_mut_iterator *batch;
     struct sub_batch *sub_batch;
     struct timespec start, end;
+    uint64_t batch_id = 1;
     int rc;
 
     if (verbose) {
@@ -531,11 +538,12 @@ producer_thread(struct rbh_mut_iterator *deduplicator,
 
             pthread_mutex_lock(&cinfos[sub_batch->index].mutex_list);
             add_iterators_to_consumer(cinfos[sub_batch->index].list,
-                                      sub_batch->fsevents);
+                                      sub_batch->fsevents, batch_id);
             pthread_cond_signal(&cinfos[sub_batch->index].signal_list);
             pthread_mutex_unlock(&cinfos[sub_batch->index].mutex_list);
         }
         rbh_mut_iter_destroy(batch);
+        batch_id++;
     }
 
     done_producing = true;
