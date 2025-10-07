@@ -587,3 +587,45 @@ fill_sequence_pair(const char *key, struct rbh_value *values, uint64_t length,
 
     return fill_pair(key, &sequence_value, pair, stack);
 }
+
+static const struct rbh_value *
+_rbh_map_find(const struct rbh_value_map *map, const char *key)
+{
+    for (size_t i = 0; i < map->count; i++)
+        if (!strcmp(map->pairs[i].key, key))
+            return map->pairs[i].value;
+
+    return NULL;
+}
+
+const struct rbh_value *
+rbh_map_find(const struct rbh_value_map *map, const char *key_to_find)
+{
+    const struct rbh_value *value = NULL;
+    char *key = xstrdup(key_to_find);
+    char *subkey;
+    char *next;
+
+    subkey = strtok(key, ".");
+
+    while (subkey != NULL) {
+        next = strtok(NULL, ".");
+
+        if (next != NULL) {
+            value = rbh_map_find(map, subkey);
+            if (value == NULL || value->type != RBH_VT_MAP) {
+                free(key);
+                return NULL;
+            }
+
+            map = &value->map;
+        } else {
+            value = _rbh_map_find(map, subkey);
+            break;
+        }
+
+        subkey = next;
+    }
+
+    return value;
+}
