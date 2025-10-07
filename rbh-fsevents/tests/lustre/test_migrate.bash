@@ -23,12 +23,10 @@ test_migrate()
 {
     local entry="test_entry"
     local other_mdt="lustre-MDT0001"
-    # This will be done more properly in a next patch
-    local other_mdt_user="$(lctl --device "$other_mdt" changelog_register |
-                            cut -d "'" -f2)"
+    local other_mdt_user=$(start_changelogs "$other_mdt")
     # Clear changelogs from previous tests
-    lfs changelog_clear "$LUSTRE_MDT" "$userid" 0
-    lfs changelog_clear "$other_mdt" "$other_mdt_user" 0
+    clear_changelogs "$LUSTRE_MDT" "$userid"
+    clear_changelogs "$other_mdt" "$other_mdt_user"
 
     mkdir $entry
 
@@ -58,7 +56,7 @@ test_migrate()
     find_attribute '"xattrs.mdt_index": 0' '"ns.name":"'$entry'"'
     find_attribute '"xattrs.mdt_count": 1' '"ns.name":"'$entry'"'
 
-    lctl --device "$other_mdt" changelog_deregister "$other_mdt_user"
+    stop_changelogs "$other_mdt" "$other_mdt_user"
 }
 
 ################################################################################
