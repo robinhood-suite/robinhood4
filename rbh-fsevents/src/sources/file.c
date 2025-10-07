@@ -95,6 +95,8 @@ static const struct source FILE_SOURCE = {
     .fsevents = {
         .ops = &YAML_SOURCE_ITER_OPS,
     },
+    .save_batch = NULL,
+    .ack_batch = NULL,
 };
 
 struct source *
