@@ -105,6 +105,11 @@ case "$cmd" in
         mongo "$db" --eval \
             'db.info.find({}, {"_id": 0, "backend_source": 1})'
         ;;
+    fsevents)
+        mongo "$db" --eval \
+            'db.info.findOne({}, { "_id":0, "fsevents_source":1})
+                .fsevents_source["'"$@"'"].last_read.valueOf()'
+        ;;
     drop)
         output=$(mongo "$db" --eval "db.dropDatabase()" 2>&1)
         rc=$?
@@ -112,6 +117,9 @@ case "$cmd" in
             echo "$output"
         fi
         exit $rc
+        ;;
+    clear_entries)
+        mongo "$db" --eval "db.entries.remove({})"
         ;;
     *)
         echo "Unknown command '$cmd'"
