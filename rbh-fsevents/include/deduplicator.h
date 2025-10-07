@@ -24,4 +24,11 @@ struct sub_batch {
     size_t index;
 };
 
+struct batch {
+    /** Iterator containing all the sub-batch */
+    struct rbh_iterator *sub_batches;
+    /** Number of sub-batch to enrich to ack this batch */
+    size_t ack_required;
+};
+
 #endif

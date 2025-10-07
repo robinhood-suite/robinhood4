@@ -15,6 +15,7 @@
 #include <error.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <pthread.h>
 
 #include <lustre/lustreapi.h>
 #include <linux/lustre/lustre_fid.h>
@@ -30,6 +31,8 @@
 #include "source.h"
 #include "utils.h"
 
+struct source_batch_node;
+
 struct lustre_changelog_iterator {
     struct rbh_iterator iterator;
 
@@ -41,8 +44,15 @@ struct lustre_changelog_iterator {
     char *mdt_name;
     int32_t source_mdt_index;
     uint64_t last_changelog_index;
+    uint64_t last_batch_changelog_index;
     uint64_t nb_changelog;
     uint64_t max_changelog;
+    bool empty;
+
+    /* Only use without dedup, it's a reference to the current batch in the
+     * list of batches saved to avoid iterating over the list each times.
+     */
+    struct source_batch_node *curr_batch;
 
     FILE *dump_file;
 };
@@ -1149,6 +1159,7 @@ lustre_changelog_iter_next(void *iterator)
 retry:
     rc = llapi_changelog_recv(records->reader, &record);
     if (rc > 0 || rc == -EAGAIN) {
+        records->empty = true;
         errno = ENODATA;
         return NULL;
     } else if (rc < 0) {
@@ -1394,9 +1405,11 @@ lustre_changelog_iter_init(struct lustre_changelog_iterator *events,
     events->max_changelog = max_changelog;
     events->nb_changelog = 0;
     events->sink = sink;
+    events->empty = false;
 
     start_index = lustre_changelog_get_start_idx(events, mdtname);
     events->last_changelog_index = start_index;
+    events->last_batch_changelog_index = start_index;
 
     rc = llapi_changelog_start(&events->reader,
                                CHANGELOG_FLAG_JOBID |
@@ -1449,8 +1462,108 @@ lustre_changelog_iter_init(struct lustre_changelog_iterator *events,
 struct lustre_source {
     struct source source;
 
+    struct rbh_list_node *batch_list;
+    pthread_mutex_t batch_lock;
+    uint64_t batch_id;
     struct lustre_changelog_iterator events;
 };
+
+struct source_batch_node {
+    struct rbh_list_node link;
+    uint64_t batch_id;
+    uint64_t last_changelog_index;
+    size_t ack_required;
+};
+
+static void lustre_changelog_save_batch(void *source, size_t ack_required,
+                                        bool dedup)
+{
+    struct lustre_changelog_iterator *events;
+    struct lustre_source *lustre = source;
+    struct source_batch_node *new_node;
+
+    events = &lustre->events;
+
+    if (events->username == NULL)
+        return;
+
+    /* Without deduplication, we create a batch for each fsevents generate by
+     * a changelog. So, we doesn't want to ack the changelog until the last
+     * fsevents has been handle. Here, until we haven't read a new changelog,
+     * we simulate as a new batch is saved by updating the last batch saved.
+     * With this, only the last batch (last fsevents) will ack the changelog.
+     */
+    if (!dedup && events->last_batch_changelog_index == events->last_changelog_index) {
+        events->curr_batch->batch_id++;
+        lustre->batch_id++;
+        return;
+    }
+
+    new_node = malloc(sizeof(*new_node));
+    if (new_node == NULL)
+        error(EXIT_FAILURE, errno, "malloc");
+
+    new_node->batch_id = lustre->batch_id;
+    /* We need to to last_changelog_index - 1 because with the dedup we always
+     * try to read the next changelog until the batch is full. If the batch is
+     * full, the last changelog is keep in memory.
+     */
+    if (dedup && !events->empty)
+        new_node->last_changelog_index = events->last_changelog_index - 1;
+    else
+        new_node->last_changelog_index = events->last_changelog_index;
+
+    new_node->ack_required = ack_required;
+
+    pthread_mutex_lock(&lustre->batch_lock);
+    rbh_list_add_tail(lustre->batch_list, &new_node->link);
+    pthread_mutex_unlock(&lustre->batch_lock);
+
+    lustre->batch_id++;
+    events->last_batch_changelog_index = events->last_changelog_index;
+    events->curr_batch = new_node;
+}
+
+static void lustre_changelog_ack_batch(void *source, uint64_t batch_id)
+{
+    struct lustre_source *lustre = source;
+    struct source_batch_node *elem, *tmp;
+    bool can_clear = true;
+    int rc;
+
+    if (lustre->events.username == NULL)
+        return;
+
+    pthread_mutex_lock(&lustre->batch_lock);
+
+    rbh_list_foreach_safe(lustre->batch_list, elem, tmp, link) {
+        /* If a batch older than this batch is not yet finished, we can't
+         * continue to ack the changelog
+         */
+        if (elem->ack_required > 0 && elem->batch_id < batch_id)
+            can_clear = false;
+
+        if (elem->batch_id > batch_id && elem->ack_required > 0)
+            break;
+
+        if (elem->batch_id == batch_id)
+            elem->ack_required--;
+
+        /* We ack the changelog only if no older batch not yet finished has
+         * been founded
+         */
+        if (elem->ack_required == 0 && can_clear) {
+            rbh_list_del(&elem->link);
+            rc = llapi_changelog_clear(lustre->events.mdt_name, lustre->events.username,
+                                       elem->last_changelog_index);
+            free(elem);
+            if (rc < 0)
+                error(EXIT_FAILURE, errno, "llapi_changelog_clear");
+        }
+    }
+
+    pthread_mutex_unlock(&lustre->batch_lock);
+}
 
 static const void *
 source_iter_next(void *iterator)
@@ -1465,6 +1578,9 @@ source_iter_destroy(void *iterator)
 {
     struct lustre_source *source = iterator;
 
+    rbh_list_del(source->batch_list);
+    pthread_mutex_destroy(&source->batch_lock);
+    free(source->batch_list);
     rbh_iter_destroy(&source->events.iterator);
     free(source);
 }
@@ -1479,6 +1595,8 @@ static const struct source LUSTRE_SOURCE = {
     .fsevents = {
         .ops = &SOURCE_ITER_OPS,
     },
+    .save_batch = lustre_changelog_save_batch,
+    .ack_batch = lustre_changelog_ack_batch,
 };
 
 struct source *
@@ -1496,6 +1614,13 @@ source_from_lustre_changelog(const char *mdtname, const char *username,
                                dump_file, max_changelog, sink);
 
     initialize_source_stack(sizeof(struct rbh_value_pair) * (1 << 7));
+    source->batch_list = malloc(sizeof(*source->batch_list));
+    if (source->batch_list == NULL)
+        error(EXIT_FAILURE, errno, "malloc");
+
+    rbh_list_init(source->batch_list);
+    source->batch_id = 1;
+    pthread_mutex_init(&source->batch_lock, NULL);
     source->source = LUSTRE_SOURCE;
     return &source->source;
 }
