@@ -355,7 +355,7 @@ stop_changelogs()
     local mdt="$1"
     local user="$2"
 
-    lctl --device "$mdt" changelog_deregister "$userid"
+    lctl --device "$mdt" changelog_deregister "$user"
 }
 
 lustre_setup()
