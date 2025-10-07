@@ -34,9 +34,6 @@
 
 #include <robinhood.h>
 
-const struct rbh_value *
-rbh_map_find(const struct rbh_value_map *map, const char *key);
-
 const struct rbh_value_map *
 rbh_fsevent_find_fsevents_map(const struct rbh_fsevent *fsevent);
 

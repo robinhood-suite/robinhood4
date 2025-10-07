@@ -12,16 +12,6 @@
 #include <stdio.h>
 
 const struct rbh_value *
-rbh_map_find(const struct rbh_value_map *map, const char *key)
-{
-    for (size_t i = 0; i < map->count; i++)
-        if (!strcmp(map->pairs[i].key, key))
-            return map->pairs[i].value;
-
-    return NULL;
-}
-
-const struct rbh_value *
 rbh_fsevent_find_partial_xattr(const struct rbh_fsevent *fsevent,
                                const char *key)
 {
