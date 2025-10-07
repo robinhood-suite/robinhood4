@@ -39,6 +39,15 @@ args_to_filter()
     echo "$filter"
 }
 
+add_mountpoint()
+{
+    local db="$1"
+    local mountpoint="$2"
+
+    mongo $db --eval "db.info.insertOne({\"_id\": \"mountpoint_info\",
+                                         \"mountpoint\": \"/mnt/lustre\"})"
+}
+
 count_documents()
 {
     local db="$1"
@@ -93,6 +102,9 @@ case "$cmd" in
             'db.entries.updateOne({ "ns.xattrs.path":"'"$1"'"},
                                   { $set: { '"$2"'}})'
         ;;
+    add_mountpoint)
+        add_mountpoint "$db" "$@"
+        ;;
     count)
         count_documents "$db" "$@"
         ;;
@@ -123,6 +135,14 @@ case "$cmd" in
         ;;
     drop)
         output=$(mongo "$db" --eval "db.dropDatabase()" 2>&1)
+        rc=$?
+        if (( rc != 0 )); then
+            echo "$output"
+        fi
+        exit $rc
+        ;;
+    drop_info)
+        output=$(mongo "$db" --eval "db.info.drop()" 2>&1)
         rc=$?
         if (( rc != 0 )); then
             echo "$output"
