@@ -65,6 +65,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d0bd4f32_13f5e985",
+        "filename": "rbh-policy/tests/test_config.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2025-10-08T09:07:32Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "3213ef70_ae5fcce0",
+      "range": {
+        "startLine": 24,
+        "startChar": 29,
+        "endLine": 24,
+        "endChar": 76
+      },
+      "revId": "fee3c5768952ebe0ddc877605482f413a5ad8f3f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "41032eee_8f66d2b1",
