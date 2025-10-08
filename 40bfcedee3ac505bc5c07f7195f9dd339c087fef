@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "65c9b34f_15590a39",
+        "filename": "rbh-policy/rbhpolicy/config/config_loader.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2025-10-08T09:02:21Z",
+      "side": 1,
+      "message": "minor: as already discussed together, I think you could let CONFIG_DIR to the PATH.",
+      "range": {
+        "startLine": 19,
+        "startChar": 4,
+        "endLine": 20,
+        "endChar": 23
+      },
+      "revId": "40bfcedee3ac505bc5c07f7195f9dd339c087fef",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
