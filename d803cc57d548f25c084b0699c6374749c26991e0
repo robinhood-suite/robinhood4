@@ -88,6 +88,54 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0c5f7ed5_6c64f971",
+        "filename": "rbh-policy/rbh-policy.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-10-08T13:39:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d973e060_0798d0cb",
+      "range": {
+        "startLine": 12,
+        "startChar": 75,
+        "endLine": 13,
+        "endChar": 61
+      },
+      "revId": "d803cc57d548f25c084b0699c6374749c26991e0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "278b1323_b0aec008",
+        "filename": "rbh-policy/rbh-policy.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-10-08T13:39:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d973e060_0798d0cb",
+      "range": {
+        "startLine": 12,
+        "startChar": 75,
+        "endLine": 13,
+        "endChar": 61
+      },
+      "revId": "d803cc57d548f25c084b0699c6374749c26991e0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1dbd9857_eab1fe37",
@@ -101,6 +149,54 @@
       "writtenOn": "2025-09-19T08:01:01Z",
       "side": 1,
       "message": "style: alignment",
+      "range": {
+        "startLine": 15,
+        "startChar": 11,
+        "endLine": 15,
+        "endChar": 61
+      },
+      "revId": "d803cc57d548f25c084b0699c6374749c26991e0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7ca480f4_78f64e0f",
+        "filename": "rbh-policy/rbh-policy.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-10-08T13:39:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1dbd9857_eab1fe37",
+      "range": {
+        "startLine": 15,
+        "startChar": 11,
+        "endLine": 15,
+        "endChar": 61
+      },
+      "revId": "d803cc57d548f25c084b0699c6374749c26991e0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2abc6cb4_a646844d",
+        "filename": "rbh-policy/rbh-policy.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-10-08T13:39:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1dbd9857_eab1fe37",
       "range": {
         "startLine": 15,
         "startChar": 11,
