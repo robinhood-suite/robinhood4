@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b9987e4_b1d7cdf1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2025-10-08T09:06:03Z",
+      "side": 1,
+      "message": "Congrats for this far simpler new version !",
+      "revId": "568ee80fff82237a0ae581b2c305e5e2eeea74a9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
