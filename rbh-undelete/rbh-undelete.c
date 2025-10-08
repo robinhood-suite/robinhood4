@@ -24,7 +24,15 @@ enum rbh_undelete_option {
 };
 
 static struct rbh_backend *metadata_source, *target_entry;
-static char *full_undelete_target_path, *relative_undelete_target_path;
+
+struct undelete_paths {
+    char *absolute_target_path;
+    char *relative_target_path;
+    char *absolute_output_path;
+    char *relative_output_path;
+};
+
+static struct undelete_paths undelete_paths;
 
 static void __attribute__((destructor))
 destroy_global_variables(void)
@@ -43,11 +51,14 @@ destroy_global_variables(void)
         rbh_backend_plugin_destroy(name);
     }
 
-    /* `relative_undelete_target_path` is a substring of
-     * `full_undelete_target_path`, no need to free it.
+    /* `undelete_paths.relative_*_path` are substrings of
+     * `undelete_paths.absolute_*_path`, no need to free them.
      */
-    if (full_undelete_target_path)
-        free(full_undelete_target_path);
+    if (undelete_paths.absolute_target_path)
+        free(undelete_paths.absolute_target_path);
+
+    if (undelete_paths.absolute_output_path)
+        free(undelete_paths.absolute_output_path);
 }
 
 struct rbh_fsentry *
@@ -113,6 +124,61 @@ get_fsentry_from_metadata_source_with_fid(const struct rbh_value *fid_value)
  |                                undelete()                                  |
  *----------------------------------------------------------------------------*/
 
+static struct rbh_sstack *fsentry_new_info;
+
+static void __attribute__((destructor))
+destroy_fsentry_new_info(void)
+{
+    if (fsentry_new_info)
+        rbh_sstack_destroy(fsentry_new_info);
+}
+
+static void
+copy_ns_xattrs_and_add_path(struct rbh_fsentry *new_fsentry,
+                            struct rbh_fsentry *old_fsentry,
+                            const char *path)
+{
+    struct rbh_value_map ns_map = old_fsentry->xattrs.ns;
+    struct rbh_value_map *new_ns_map;
+    struct rbh_value_pair *path_pair;
+    struct rbh_value *path_value;
+
+    if (fsentry_new_info == NULL) {
+        fsentry_new_info = rbh_sstack_new(1 << 16);
+        if (fsentry_new_info == NULL)
+            error(EXIT_FAILURE, errno, "Failed to allocate 'fsentry_new_info'");
+    }
+
+    new_ns_map = RBH_SSTACK_PUSH(fsentry_new_info, NULL, sizeof(*new_ns_map));
+
+    new_ns_map->pairs = NULL;
+    new_ns_map->count = 0;
+
+    for (int i = 0; i < ns_map.count; ++i) {
+        const struct rbh_value_pair *pair = &ns_map.pairs[i];
+
+        if (strcmp(pair->key, "rm_time") == 0 ||
+            strcmp(pair->key, "path") == 0)
+            continue;
+
+        value_map_insert_pair(fsentry_new_info, new_ns_map, pair);
+    }
+
+    path_value = RBH_SSTACK_PUSH(fsentry_new_info, NULL, sizeof(*path_value));
+    path_value->type = RBH_VT_STRING;
+    path_value->string = (undelete_paths.relative_output_path ?
+                            undelete_paths.relative_output_path :
+                            undelete_paths.relative_target_path);
+
+    path_pair = RBH_SSTACK_PUSH(fsentry_new_info, NULL, sizeof(*path_pair));
+    path_pair->key = "path";
+    path_pair->value = path_value;
+
+    value_map_insert_pair(fsentry_new_info, new_ns_map, path_pair);
+
+    new_fsentry->xattrs.ns = *new_ns_map;
+}
+
 static void
 undelete(const char *output)
 {
@@ -128,18 +194,22 @@ undelete(const char *output)
     events[2].type = RBH_FET_UPSERT;
 
     fsentry = get_fsentry_from_metadata_source_with_path(
-        relative_undelete_target_path
+        undelete_paths.relative_target_path
     );
 
     events[0].id = fsentry->id;
 
     new_fsentry = rbh_backend_undelete(target_entry,
                                        output != NULL ?
-                                           output : full_undelete_target_path,
+                                           output :
+                                           undelete_paths.absolute_target_path,
                                        fsentry);
     if (new_fsentry == NULL)
         error(EXIT_FAILURE, ENOENT, "Failed to undelete '%s'",
-              full_undelete_target_path);
+              undelete_paths.absolute_target_path);
+
+    copy_ns_xattrs_and_add_path(new_fsentry, fsentry,
+                                undelete_paths.relative_target_path);
 
     events[1].id = new_fsentry->id;
     events[1].xattrs = new_fsentry->xattrs.ns;
@@ -164,35 +234,60 @@ undelete(const char *output)
 }
 
 static void
-set_targets(struct rbh_uri *target_uri, const char *mountpoint)
+set_absolute_path(const char *path, char **absolute_path)
+{
+    char pwd[PATH_MAX];
+
+    if (path[0] == '/') {
+        *absolute_path = strdup(path);
+        if (*absolute_path == NULL)
+            error(EXIT_FAILURE, errno, "Failed to duplicate '%s'", path);
+        return;
+    }
+
+    if (getcwd(pwd, sizeof(pwd)) == NULL)
+        error(EXIT_FAILURE, errno, "getcwd");
+
+    if (asprintf(absolute_path, "%s/%s", pwd, path) == -1)
+        error(EXIT_FAILURE, errno,
+              "Failed to create absolute path '%s/%s'", pwd, path);
+}
+
+static void
+set_targets(struct rbh_uri *target_uri, const char *output,
+            const char *mountpoint)
 {
     size_t mountpoint_len;
 
     mountpoint_len = strlen(mountpoint);
 
-    if (target_uri->fsname[0] != '/') {
-        char full_path[PATH_MAX];
+    set_absolute_path(target_uri->fsname, &undelete_paths.absolute_target_path);
+    if (output == NULL)
+        undelete_paths.absolute_output_path = NULL;
+    else
+        set_absolute_path(output, &undelete_paths.absolute_output_path);
 
-        if (getcwd(full_path, sizeof(full_path)) == NULL)
-            error(EXIT_FAILURE, errno, "getcwd");
-
-        if (asprintf(&full_undelete_target_path, "%s/%s",
-                     full_path, target_uri->fsname) == -1)
-            error(EXIT_FAILURE, errno, "Failed create full target path");
-    } else {
-        full_undelete_target_path = strdup(target_uri->fsname);
-    }
-
-    if (full_undelete_target_path == NULL)
-        error(EXIT_FAILURE, errno, "Failed to duplicate target name");
-
-    if (strncmp(full_undelete_target_path, mountpoint, mountpoint_len) != 0 ||
-        full_undelete_target_path[mountpoint_len] == '\0')
+    if (strncmp(undelete_paths.absolute_target_path,
+                mountpoint, mountpoint_len) != 0 ||
+        undelete_paths.absolute_target_path[mountpoint_len] == '\0')
         error(EXIT_FAILURE, ENOTSUP,
-              "Mountpoint recorded '%s' in the source URI isn't in the path to undelete '%s'",
-              mountpoint, full_undelete_target_path);
+              "Mountpoint '%s' isn't in the path to undelete '%s'",
+              mountpoint, undelete_paths.absolute_target_path);
 
-    relative_undelete_target_path = &full_undelete_target_path[mountpoint_len];
+    if (output && (strncmp(undelete_paths.absolute_output_path,
+                           mountpoint, mountpoint_len) != 0 ||
+                   undelete_paths.absolute_output_path[mountpoint_len] == '\0'))
+        error(EXIT_FAILURE, ENOTSUP,
+              "Mountpoint '%s' isn't in the output location '%s'",
+              mountpoint, undelete_paths.absolute_output_path);
+
+    undelete_paths.relative_target_path =
+        &undelete_paths.absolute_target_path[mountpoint_len];
+    if (output == NULL)
+        undelete_paths.relative_output_path = NULL;
+    else
+        undelete_paths.relative_output_path =
+            &undelete_paths.absolute_output_path[mountpoint_len];
 }
 
 static const char *
@@ -357,7 +452,7 @@ rm_list(const char *regex)
     if (!_fsentries)
         error(EXIT_FAILURE, errno,
               "Failed to get undeletable entries in '%s'",
-              relative_undelete_target_path);
+              undelete_paths.relative_target_path);
 
     printf("DELETED FILES:\n");
     while ((fsentry = rbh_mut_iter_next(_fsentries)) != NULL) {
@@ -532,7 +627,7 @@ main(int argc, char *argv[])
               "Failed to retrieve mountpoint to undelete '%s'",
               uri->fsname);
 
-    set_targets(uri, mountpoint);
+    set_targets(uri, output, mountpoint);
     free(uri);
 
     if (flags & RBH_UNDELETE_RESTORE)
@@ -542,10 +637,10 @@ main(int argc, char *argv[])
         char regex[PATH_MAX];
 
         if (snprintf(regex, sizeof(regex), "^%s",
-                     relative_undelete_target_path) == -1) {
+                     undelete_paths.relative_target_path) == -1) {
             fprintf(stderr,
                     "Error while formatting regex associated with '%s'\n",
-                    relative_undelete_target_path);
+                    undelete_paths.relative_target_path);
             return EXIT_FAILURE;
         }
 
