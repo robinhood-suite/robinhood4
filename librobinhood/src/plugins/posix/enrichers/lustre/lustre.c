@@ -986,12 +986,14 @@ lustre_get_fid_from_path(struct entry_info *einfo)
      *--------------------------------------------------------------------*/
 
 struct rbh_fsentry *
-build_fsentry_after_undelete(const char *path, struct rbh_fsentry *fsentry)
+build_fsentry_after_undelete(const char *path, const struct lu_fid *new_fid,
+                             struct rbh_fsentry *fsentry)
 {
     char parent_path[PATH_MAX];
     struct rbh_id *parent_id;
+    struct lu_fid parent_fid;
     char namebuf[PATH_MAX];
-    struct lu_fid fid;
+    struct rbh_id *new_id;
     char *name;
     char *dir;
     int rc;
@@ -1000,13 +1002,19 @@ build_fsentry_after_undelete(const char *path, struct rbh_fsentry *fsentry)
     parent_path[PATH_MAX - 1] = '\0';
 
     dir = dirname(parent_path);
-    rc = llapi_path2fid(dir, &fid);
+    rc = llapi_path2fid(dir, &parent_fid);
     if (rc) {
         fprintf(stderr, "Error while using llapi_path2fid\n");
         return NULL;
     }
 
-    parent_id = rbh_id_from_lu_fid(&fid);
+    parent_id = rbh_id_from_lu_fid(&parent_fid);
+    if (parent_id == NULL)
+        return NULL;
+
+    new_id = rbh_id_from_lu_fid(new_fid);
+    if (new_id == NULL)
+        return NULL;
 
     strncpy(namebuf, path, PATH_MAX);
     namebuf[PATH_MAX - 1] = '\0';
@@ -1021,6 +1029,7 @@ build_fsentry_after_undelete(const char *path, struct rbh_fsentry *fsentry)
             error(EXIT_FAILURE, errno, "Failed to allocate 'fsentry_names'");
     }
 
+    fsentry->id = *new_id;
     fsentry->parent_id = *parent_id;
     fsentry->name = RBH_SSTACK_PUSH(fsentry_names, name, strlen(name) + 1);
     fsentry->mask |= RBH_FP_PARENT_ID | RBH_FP_NAME;
@@ -1070,13 +1079,11 @@ rbh_lustre_undelete(void *backend, const char *path,
     struct rbh_fsentry *new_fsentry;
     const struct lu_fid *old_fid;
     struct lu_fid new_id = {0};
-    struct lu_fid *p_new_id;
     uint32_t archive_id = 0;
     struct stat st;
     int rc = 0;
 
     stat_from_statx(fsentry->statx, &st);
-    p_new_id = &new_id;
 
     archive_id_value = rbh_fsentry_find_inode_xattr(fsentry, "hsm_archive_id");
     if (archive_id_value == 0) {
@@ -1087,7 +1094,7 @@ rbh_lustre_undelete(void *backend, const char *path,
     archive_id = (uint32_t) archive_id_value->int32;
     old_fid = rbh_lu_fid_from_id(&fsentry->id);
 
-    rc = llapi_hsm_import(path, archive_id, &st, 0, -1, 0, 0, NULL, p_new_id);
+    rc = llapi_hsm_import(path, archive_id, &st, 0, -1, 0, 0, NULL, &new_id);
     if (rc) {
         fprintf(stderr, "llapi_hsm_import failed to import: %d\n", rc);
         return NULL;
@@ -1099,9 +1106,10 @@ rbh_lustre_undelete(void *backend, const char *path,
         return NULL;
     }
 
-    printf("'%s' has been undeleted, new FID is '"DFID"'\n", path, PFID(&new_id));
+    printf("'%s' has been undeleted, new FID is '"DFID"'\n", path,
+           PFID(&new_id));
 
-    new_fsentry = build_fsentry_after_undelete(path, fsentry);
+    new_fsentry = build_fsentry_after_undelete(path, &new_id, fsentry);
     if (new_fsentry == NULL)
         fprintf(stderr, "Failed to create new fsentry after undelete: %s (%d)",
                 strerror(errno), errno);

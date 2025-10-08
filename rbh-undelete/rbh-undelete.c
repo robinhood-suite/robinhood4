@@ -116,14 +116,23 @@ get_fsentry_from_metadata_source_with_fid(const struct rbh_value *fid_value)
 static void
 undelete(const char *output)
 {
-    struct rbh_fsevent delete_event = { .type = RBH_FET_DELETE };
-    struct rbh_iterator *delete_iter;
     struct rbh_fsentry *new_fsentry;
+    struct rbh_fsevent events[3];
     struct rbh_fsentry *fsentry;
+    struct rbh_iterator *iter;
+    int save_errno;
+    int rc;
+
+    events[0].type = RBH_FET_DELETE;
+    events[1].type = RBH_FET_LINK;
+    events[2].type = RBH_FET_UPSERT;
 
     fsentry = get_fsentry_from_metadata_source_with_path(
         relative_undelete_target_path
     );
+
+    events[0].id = fsentry->id;
+
     new_fsentry = rbh_backend_undelete(target_entry,
                                        output != NULL ?
                                            output : full_undelete_target_path,
@@ -132,20 +141,26 @@ undelete(const char *output)
         error(EXIT_FAILURE, ENOENT, "Failed to undelete '%s'",
               full_undelete_target_path);
 
-    delete_event.id = fsentry->id;
+    events[1].id = new_fsentry->id;
+    events[1].xattrs = new_fsentry->xattrs.ns;
+    events[1].link.parent_id = &new_fsentry->parent_id;
+    events[1].link.name = new_fsentry->name;
 
-    delete_iter = rbh_iter_array(&delete_event, sizeof(delete_event), 1);
-    if (delete_iter == NULL)
+    events[2].id = new_fsentry->id;
+    events[2].xattrs = new_fsentry->xattrs.inode;
+    events[2].upsert.statx = new_fsentry->statx;
+    events[2].upsert.symlink = NULL;
+
+    iter = rbh_iter_array(events, sizeof(events[0]), 3);
+    if (iter == NULL)
         error(EXIT_FAILURE, errno, "rbh_iter_array");
 
-    if (rbh_backend_update(metadata_source, delete_iter) < 0) {
-        int save_errno = errno;
-
-        rbh_iter_destroy(delete_iter);
-        error(EXIT_FAILURE, save_errno, "rbh_backend_update (DELETE)");
-    }
-
-    rbh_iter_destroy(delete_iter);
+    rc = rbh_backend_update(metadata_source, iter);
+    save_errno = errno;
+    rbh_iter_destroy(iter);
+    if (rc < 0)
+        error(EXIT_FAILURE, save_errno,
+              "rbh_backend_update (DELETE AND UPSERT)");
 }
 
 static void
