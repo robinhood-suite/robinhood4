@@ -22,6 +22,30 @@
       },
       "revId": "4885f2a6fa3b3963970fbda3fd99c0f9eaa2bc20",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4b430158_735d2900",
+        "filename": "rbh-undelete/rbh-undelete.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-10-08T14:55:44Z",
+      "side": 1,
+      "message": "Because we forgot to handle that case. It is already working like for other tools with this way of parsing arguments, but that is changed in a later patch anyway.",
+      "parentUuid": "eac82ac9_b9ad1905",
+      "range": {
+        "startLine": 110,
+        "startChar": 4,
+        "endLine": 110,
+        "endChar": 59
+      },
+      "revId": "4885f2a6fa3b3963970fbda3fd99c0f9eaa2bc20",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
