@@ -22,6 +22,30 @@
       },
       "revId": "a9ee54e79738bf0c6a6557eff0082d46f64603ca",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a0d6ad8d_7646c4a9",
+        "filename": "rbh-undelete/tests/test_list.bash",
+        "patchSetId": 5
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-10-08T15:38:36Z",
+      "side": 1,
+      "message": "Yes, output looks like:\n```\nDELETED FILES:\n-- rm_path: /tmp.lYky8hen11/test_list-test_list/test   rm_time: Wed Oct  8 15:37:53 2025 \n```\n\nOne header, than one line per entry",
+      "parentUuid": "25c118d3_a9782264",
+      "range": {
+        "startLine": 41,
+        "startChar": 8,
+        "endLine": 41,
+        "endChar": 52
+      },
+      "revId": "a9ee54e79738bf0c6a6557eff0082d46f64603ca",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
