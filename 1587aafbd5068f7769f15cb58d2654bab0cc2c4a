@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "392aefc6_155243c7",
+        "filename": "rbh-report/tests/test_many_output.bash",
+        "patchSetId": 3
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-10-08T08:19:24Z",
+      "side": 1,
+      "message": "(sorry for being annoying): capture the output and verify the line count",
+      "range": {
+        "startLine": 25,
+        "startChar": 4,
+        "endLine": 25,
+        "endChar": 14
+      },
+      "revId": "1587aafbd5068f7769f15cb58d2654bab0cc2c4a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
