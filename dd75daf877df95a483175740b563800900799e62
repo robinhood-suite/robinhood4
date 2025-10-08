@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3ddfb279_66ce95bb",
+        "filename": "rbh-policy/poc/config.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2025-10-08T09:13:19Z",
+      "side": 1,
+      "message": "major: why don\u0027t we have the \"import\" line we discussed together at the top of this config file ?",
+      "revId": "dd75daf877df95a483175740b563800900799e62",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
