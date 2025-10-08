@@ -187,6 +187,30 @@
       },
       "revId": "f3e23da41259255830bb8f5704f74895b7b7c5f2",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "33f7ac0f_9fc1f3e4",
+        "filename": "rbh-undelete/rbh-undelete.c",
+        "patchSetId": 6
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-10-08T15:32:34Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "e13efa15_bee19d6a",
+      "range": {
+        "startLine": 280,
+        "startChar": 7,
+        "endLine": 284,
+        "endChar": 42
+      },
+      "revId": "f3e23da41259255830bb8f5704f74895b7b7c5f2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
