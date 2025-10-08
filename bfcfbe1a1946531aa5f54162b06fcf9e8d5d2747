@@ -16,6 +16,24 @@
       "message": "defect ? still not freed",
       "revId": "bfcfbe1a1946531aa5f54162b06fcf9e8d5d2747",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "938681c4_b1ede6cd",
+        "filename": "librobinhood/src/plugins/posix/enrichers/lustre/lustre.c",
+        "patchSetId": 6
+      },
+      "lineNbr": 951,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-10-08T15:24:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a9cd1bc5_b0422f9a",
+      "revId": "bfcfbe1a1946531aa5f54162b06fcf9e8d5d2747",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
