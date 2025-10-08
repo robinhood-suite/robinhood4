@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cdf9b37d_4c8a907e",
+        "filename": "rbh-report/tests/test_many_output.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-10-08T07:20:31Z",
+      "side": 1,
+      "message": "major: this will not work for SQLite, and an easy fix would be to simply generate a large amount of files, and group on their names. This way you will have the same amount of lines as the number of entries.\n\ncomment: maybe a test will a lot of outputs and group-by would be nice too",
+      "range": {
+        "startLine": 23,
+        "startChar": 4,
+        "endLine": 25,
+        "endChar": 58
+      },
+      "revId": "b74ea1d2f20b8c7470f4d5e6544645a775d74a22",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
