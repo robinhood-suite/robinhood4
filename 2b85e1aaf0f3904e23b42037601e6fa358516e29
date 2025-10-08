@@ -22,6 +22,30 @@
       },
       "revId": "2b85e1aaf0f3904e23b42037601e6fa358516e29",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d69370c4_030237a5",
+        "filename": "rbh-undelete/rbh-undelete.c",
+        "patchSetId": 6
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-10-08T15:03:10Z",
+      "side": 1,
+      "message": "This is temporary for the stack, the mountpoint is changed later to either use the one calculated from the current system or from the database.\n\nAt the end of the stack, the tool will work for a Lustre system mounted anywhere. But it will only work for Lustre tools, as it is currently the only use case. If we have another, some code will have to be changed, but I didn\u0027t want to bother with it for now.",
+      "parentUuid": "b6d7162f_7dd8e5c0",
+      "range": {
+        "startLine": 57,
+        "startChar": 4,
+        "endLine": 58,
+        "endChar": 28
+      },
+      "revId": "2b85e1aaf0f3904e23b42037601e6fa358516e29",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
