@@ -16,6 +16,24 @@
       "message": "I may need a bit of context here. We want to delete the previous entry because there is a new one to replace the lost entry?",
       "revId": "70ef41f59482ad100c4637d25c6b838ffcfbe72c",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b577129d_a7b4e810",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-10-08T15:34:56Z",
+      "side": 1,
+      "message": "Yes exactly. When Lustre undelete (import) an entry, it creates a new one with the same information, but a different FID. For us, since a Lustre entry has an id equivalent to the Lustre FID, that means a completely new entry. So after an undelete, we will have a new entry in the database, corresponding to the undeleted entry, and the old one (which has no hard link anymore). The old one can thus be removed from the DB.",
+      "parentUuid": "aeec1315_ffe5ca40",
+      "revId": "70ef41f59482ad100c4637d25c6b838ffcfbe72c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
