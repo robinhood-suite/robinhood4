@@ -28,6 +28,7 @@ librbh_posix_lustre_ext = library(
         'lustre.c',
         'parser.c',
         'plugin.c',
+        'undelete.c',
     ],
     version: librbh_lustre_version, # defined in include/robinhood/backends
     link_with: [librobinhood, librbh_posix],
