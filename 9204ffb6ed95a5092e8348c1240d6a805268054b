@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2a569f5b_4f808cc1",
+        "filename": "rbh-undelete/rbh-undelete.c",
+        "patchSetId": 8
+      },
+      "lineNbr": 341,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-10-09T08:45:18Z",
+      "side": 1,
+      "message": "suggest: add `-o` possibility",
+      "range": {
+        "startLine": 341,
+        "startChar": 13,
+        "endLine": 341,
+        "endChar": 21
+      },
+      "revId": "9204ffb6ed95a5092e8348c1240d6a805268054b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
