@@ -16,6 +16,24 @@
       "message": "question: After reading the next patches, I have seen that the `mongo_insert_source` function is also called by the `mongo_isert_metadata`. It would be better to have only one call to insert information. We can keep this and do the modification later to land this stack or do it now, as you want ?",
       "revId": "1515becae7e13277852cf736394a74351bc4aaee",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6be8cd6e_900874e6",
+        "filename": "librobinhood/include/robinhood/backend.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-10-09T11:30:36Z",
+      "side": 1,
+      "message": "Nevermind, it\u0027s already done",
+      "parentUuid": "00a8bf20_57a6a341",
+      "revId": "1515becae7e13277852cf736394a74351bc4aaee",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
