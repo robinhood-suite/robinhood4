@@ -120,10 +120,15 @@ undelete(const char *output)
     struct rbh_iterator *delete_iter;
     struct rbh_fsentry *new_fsentry;
     struct rbh_fsentry *fsentry;
+    int save_errno;
+    int rc;
 
     fsentry = get_fsentry_from_metadata_source_with_path(
         relative_undelete_target_path
     );
+
+    delete_event.id = fsentry->id;
+
     new_fsentry = rbh_backend_undelete(target_entry,
                                        output != NULL ?
                                            output : full_undelete_target_path,
@@ -132,20 +137,15 @@ undelete(const char *output)
         error(EXIT_FAILURE, ENOENT, "Failed to undelete '%s'",
               full_undelete_target_path);
 
-    delete_event.id = fsentry->id;
-
     delete_iter = rbh_iter_array(&delete_event, sizeof(delete_event), 1, NULL);
     if (delete_iter == NULL)
         error(EXIT_FAILURE, errno, "rbh_iter_array");
 
-    if (rbh_backend_update(metadata_source, delete_iter) < 0) {
-        int save_errno = errno;
-
-        rbh_iter_destroy(delete_iter);
-        error(EXIT_FAILURE, save_errno, "rbh_backend_update (DELETE)");
-    }
-
+    rc = rbh_backend_update(metadata_source, delete_iter);
+    save_errno = errno;
     rbh_iter_destroy(delete_iter);
+    if (rc < 0)
+        error(EXIT_FAILURE, save_errno, "rbh_backend_update (DELETE)");
 }
 
 static void
