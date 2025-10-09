@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9fc13d3f_8e413863",
+        "filename": "rbh-policy/rbhpolicy/config/config_loader.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-10-09T09:01:12Z",
+      "side": 1,
+      "message": "defect: `fs_name` doesn\u0027t exist",
+      "range": {
+        "startLine": 52,
+        "startChar": 35,
+        "endLine": 52,
+        "endChar": 42
+      },
+      "revId": "5f3d7dea94c1427eb2b995a3f2717c256c4dcc1d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
