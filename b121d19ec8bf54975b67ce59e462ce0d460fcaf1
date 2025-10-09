@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "97c6ff7a_1683a76f",
+        "filename": "rbh-sync/rbh-sync.c",
+        "patchSetId": 7
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-10-09T08:34:40Z",
+      "side": 1,
+      "message": "question: This function doesn\u0027t exist yet in this stack. You planned to land first the other stack that introduce this function ?",
+      "range": {
+        "startLine": 101,
+        "startChar": 8,
+        "endLine": 101,
+        "endChar": 35
+      },
+      "revId": "b121d19ec8bf54975b67ce59e462ce0d460fcaf1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "befe74f4_cc3aa897",
+        "filename": "rbh-sync/rbh-sync.c",
+        "patchSetId": 7
+      },
+      "lineNbr": 574,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-10-09T08:34:40Z",
+      "side": 1,
+      "message": "major: add a free line 572 also.",
+      "revId": "b121d19ec8bf54975b67ce59e462ce0d460fcaf1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "39b80590_75975a7d",
+        "filename": "rbh-sync/rbh-sync.c",
+        "patchSetId": 7
+      },
+      "lineNbr": 581,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-10-09T08:34:40Z",
+      "side": 1,
+      "message": "defect: I don\u0027t know if we want to failed if we cannot get the source mountpoint, but you need atleast to return an error or something. Currently, we will still sync the mountpoint even if the mountpoint variable is undefined.",
+      "revId": "b121d19ec8bf54975b67ce59e462ce0d460fcaf1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2b401180_ec0a7459",
+        "filename": "rbh-sync/rbh-sync.c",
+        "patchSetId": 7
+      },
+      "lineNbr": 583,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-10-09T08:34:40Z",
+      "side": 1,
+      "message": "question: Why -2 and not -1 ?",
+      "range": {
+        "startLine": 583,
+        "startChar": 41,
+        "endLine": 583,
+        "endChar": 53
+      },
+      "revId": "b121d19ec8bf54975b67ce59e462ce0d460fcaf1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
