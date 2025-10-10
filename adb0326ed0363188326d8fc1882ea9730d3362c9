@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "10c17049_65d2c7e8",
+        "filename": "rbh-policy/meson.build",
+        "patchSetId": 7
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-10-10T13:12:59Z",
+      "side": 1,
+      "message": "I can, but I thought it was better to import `rbhpolicy.config.file` rather than `src.config.file`; I thought it was clearer.",
+      "parentUuid": "537b2c79_d0b6e343",
+      "range": {
+        "startLine": 19,
+        "startChar": 8,
+        "endLine": 19,
+        "endChar": 17
+      },
+      "revId": "adb0326ed0363188326d8fc1882ea9730d3362c9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f725499a_9b4b260a",
         "filename": "rbh-policy/rbhpolicy/config/filter.py",
         "patchSetId": 7
@@ -54,6 +78,30 @@
       "writtenOn": "2025-09-19T10:02:39Z",
       "side": 1,
       "message": "question: why enforce this ?",
+      "range": {
+        "startLine": 17,
+        "startChar": 7,
+        "endLine": 17,
+        "endChar": 12
+      },
+      "revId": "adb0326ed0363188326d8fc1882ea9730d3362c9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f7cbbc80_9bf81716",
+        "filename": "rbh-policy/rbhpolicy/config/filter.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-10-10T13:12:59Z",
+      "side": 1,
+      "message": "I had put this line in an old version of the code. It was mandatory because otherwise the python interpreter returned an error, the global backend variable not being initialized but in the current state this is no longer the case so I can remove this line.",
+      "parentUuid": "f725499a_9b4b260a",
       "range": {
         "startLine": 17,
         "startChar": 7,
@@ -87,6 +135,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf9160bb_3d64bbc0",
+        "filename": "rbh-policy/rbhpolicy/config/filter.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-10-10T13:12:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d096b458_bf6f5232",
+      "range": {
+        "startLine": 20,
+        "startChar": 0,
+        "endLine": 29,
+        "endChar": 29
+      },
+      "revId": "adb0326ed0363188326d8fc1882ea9730d3362c9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c3a55c12_15891a19",
@@ -100,6 +172,30 @@
       "writtenOn": "2025-09-19T10:02:39Z",
       "side": 1,
       "message": "major: you should take heavy inspiration from Phobos for this IMO",
+      "range": {
+        "startLine": 31,
+        "startChar": 8,
+        "endLine": 31,
+        "endChar": 72
+      },
+      "revId": "adb0326ed0363188326d8fc1882ea9730d3362c9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f5f2a8f9_9ff26264",
+        "filename": "rbh-policy/rbhpolicy/config/filter.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-10-10T13:12:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c3a55c12_15891a19",
       "range": {
         "startLine": 31,
         "startChar": 8,
