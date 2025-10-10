@@ -10,6 +10,7 @@
 #include <linux/limits.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
 
 #include "robinhood/backend.h"
@@ -156,6 +157,14 @@ set_targets(const char *target, struct undelete_context *context)
 {
     size_t mountpoint_len = strlen(context->mountpoint);
 
+    if (strstr(target, "//") || strstr(target, "/./") ||
+        strstr(target, "/../")) {
+        fprintf(stderr,
+                "Target path '%s' cannot contain double slashes, '.' or '..'\n",
+                target);
+        return -1;
+    }
+
     if (target[0] != '/') {
         char full_path[PATH_MAX];
 
@@ -166,7 +175,7 @@ set_targets(const char *target, struct undelete_context *context)
 
         if (asprintf(&context->absolute_target_path, "%s/%s",
                      full_path, target) == -1) {
-            fprintf(stderr, "Failed create full target path: %s (%d)",
+            fprintf(stderr, "Failed create full target path: %s (%d)\n",
                     strerror(errno), errno);
             return -1;
         }
@@ -175,7 +184,7 @@ set_targets(const char *target, struct undelete_context *context)
     }
 
     if (context->absolute_target_path == NULL) {
-        fprintf(stderr, "Failed to duplicate target name: %s (%d)",
+        fprintf(stderr, "Failed to duplicate target name: %s (%d)\n",
                 strerror(errno), errno);
         return -1;
     }
@@ -184,7 +193,7 @@ set_targets(const char *target, struct undelete_context *context)
                 mountpoint_len) != 0 ||
         context->absolute_target_path[mountpoint_len] == '\0') {
         fprintf(stderr,
-                "Mountpoint recorded '%s' in the source URI isn't in the path to undelete '%s'",
+                "Mountpoint recorded '%s' in the source URI isn't in the path to undelete '%s'\n",
                 context->mountpoint, context->absolute_target_path);
         errno = EINVAL;
         return -1;
