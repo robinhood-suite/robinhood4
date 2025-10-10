@@ -20,30 +20,34 @@ configuration file.
 
 1. **Loading the Configuration File**
 
-The engine takes the path to the configuration file as a command-line argument.
-It then imports this file as a Python module at runtime.
-This is not a standard static config parsing: instead, the file is executed in
-a pre-filled environment where all the necessary functions and variables (such
-as declare_policy, Size, etc.) are already available.
-This allows administrators to write policies in plain Python without needing to
-explicitly import anything.
+The engine takes the path to a configuration file as a command-line argument.
+If no path is provided, it defaults to searching for a file named after the
+target filesystem in the standard configuration directory (e.g.,
+``/etc/robinhood4/fs1.py``).
+
+The configuration file is imported and executed as a Python module at runtime.
+This is not a static config parser: instead, the file runs in a pre-initialized
+environment where all necessary functions and constants (such as
+``declare_policy``, ``Size``, ``LastAccess``, etc.) are already available from a
+import at the top of configuration file.
 
 2. **Making the Connection Possible**
 
-To allow the configuration file to define fileclasses and policies using the
-functions ``declare_fileclass`` and ``declare_policy``, the program injects
-those functions (along with useful constant and function like actions) into the
-execution context of the config file.
-This way, when the configuration file runs and calls ``declare_policy(...)``,
-it is actually calling the engine’s internal function, which stores the policy
-inside a dictionary for later use. The same goes for fileclasses and other
-elements.
+To enable the configuration file to define fileclasses, policies, and actions,
+the engine injects a predefined set of functions and constants into the
+execution context. These include declare_fileclass, declare_policy, and various
+built-in filters and actions.
 
-In addition, if the configuration file defines new things, for example a custom
-action function, the engine also has access to it. Since the configuration is a
-Python script that runs in a known execution context, the program can retrieve
-any custom function, variable, or class defined inside. These can then be used
-during policy execution just like built-in components.
+When the configuration file calls ``declare_policy(...)`` or
+``declare_fileclass(...)``, it is invoking internal engine functions that
+register the declared elements in centralized registries. These registries are
+later used to resolve and execute policies based on administrator input or
+automated triggers.
+
+In addition, any custom function, class, or variable defined within the
+configuration file is accessible to the engine.
+Since the file is executed as a Python module, the engine can introspect its
+contents and incorporate user-defined logic seamlessly into policy execution.
 
 The config is not just a static declaration, it can include real Python logic
 that becomes part of how the engine works during execution.

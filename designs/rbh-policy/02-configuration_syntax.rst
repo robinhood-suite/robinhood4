@@ -80,10 +80,19 @@ These file classes can be reused across multiple policies to avoid redundancy.
 
 .. code:: python
 
-    declare_fileclass(
+    class_name = declare_fileclass(
         name = "<class_name>",
         target = <filter_condition>
     )
+
+To enable reuse and introspection, each declared fileclass is typically assigned
+to a variable. This allows policies to reference it directly by name.
+Note that the variable name used in the configuration file (e.g.,
+``large_files = ...``) is purely local and has no impact on the internal
+behavior of the engine. The actual name of the fileclass, as specified in the
+name parameter of ``declare_fileclass(...)``, is what determines its identity
+within the policy engine. This declared name is used for registration, logging,
+and policy resolution, regardless of the variable it was assigned to.
 
 **Example:**
 
@@ -91,7 +100,7 @@ Define a file class for large, old files:
 
 .. code:: python
 
-    declare_fileclass(
+    exemple_fileclass = declare_fileclass(
         name = "exemple_fileclass",
         target = (Size >= "10GB") & (LastAccess > "180d")
     )
