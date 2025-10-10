@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c79aef3b_a59e8461",
+        "filename": "rbh-fsevents/rbh-fsevents.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-10-10T08:18:16Z",
+      "side": 1,
+      "message": "Because we need to allocate a sink for each consumer threads",
+      "parentUuid": "9a5dd4af_3410025a",
+      "range": {
+        "startLine": 177,
+        "startChar": 61,
+        "endLine": 177,
+        "endChar": 68
+      },
+      "revId": "c7ccaecdc4c7051f0c6227690227610b25b748f8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "37e2d56c_ec1ade9a",
         "filename": "rbh-fsevents/rbh-fsevents.c",
         "patchSetId": 1
@@ -37,6 +61,30 @@
       "writtenOn": "2025-10-09T09:30:35Z",
       "side": 1,
       "message": "minor: a small comment ... to explain the need to order source_exit and sink_exit",
+      "range": {
+        "startLine": 212,
+        "startChar": 38,
+        "endLine": 212,
+        "endChar": 41
+      },
+      "revId": "c7ccaecdc4c7051f0c6227690227610b25b748f8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "160fed8c_22179b26",
+        "filename": "rbh-fsevents/rbh-fsevents.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-10-10T08:18:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "37e2d56c_ec1ade9a",
       "range": {
         "startLine": 212,
         "startChar": 38,
