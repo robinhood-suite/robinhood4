@@ -64,6 +64,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b074460b_1c5e2ab1",
+        "filename": "librobinhood/src/filters/core.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-10-10T13:12:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cffbca4c_08a3c77a",
+      "range": {
+        "startLine": 233,
+        "startChar": 42,
+        "endLine": 233,
+        "endChar": 65
+      },
+      "revId": "b1fb71a1e9df591b9742bc99894a4fee85ea4fd6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d23a5a29_575d8af1",
@@ -77,6 +101,24 @@
       "writtenOn": "2025-09-19T09:06:25Z",
       "side": 1,
       "message": "style: remove empty line",
+      "revId": "b1fb71a1e9df591b9742bc99894a4fee85ea4fd6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9bd1e3d2_066736dc",
+        "filename": "librobinhood/src/filters/core.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-10-10T13:12:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d23a5a29_575d8af1",
       "revId": "b1fb71a1e9df591b9742bc99894a4fee85ea4fd6",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
