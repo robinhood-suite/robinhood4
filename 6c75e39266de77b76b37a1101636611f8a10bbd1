@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a7af80a8_8df98452",
+        "filename": "librobinhood/src/plugins/mongo/mongo.c",
+        "patchSetId": 8
+      },
+      "lineNbr": 1015,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2025-10-10T07:56:27Z",
+      "side": 1,
+      "message": "question: why introducing a particular case for the mountpoint and not dealing as one the inner info of a backend source ?",
+      "range": {
+        "startLine": 1012,
+        "startChar": 4,
+        "endLine": 1015,
+        "endChar": 49
+      },
+      "revId": "6c75e39266de77b76b37a1101636611f8a10bbd1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
