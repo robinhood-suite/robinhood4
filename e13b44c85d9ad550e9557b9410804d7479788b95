@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9553aed6_012d1fc5",
+        "filename": "rbh-policy/poc/corepolicyengine.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-10-10T07:58:51Z",
+      "side": 1,
+      "message": "I can add another file and put everything there, then import it into my main file. The policy engine code is better structured than the code in this POC.\nThe real goal of this poc is to show this is possible to write a configuration like we done with using python.",
+      "parentUuid": "8c052259_f8039e07",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 22
+      },
+      "revId": "e13b44c85d9ad550e9557b9410804d7479788b95",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bb198a5d_c7d9db4b",
         "filename": "rbh-policy/poc/corepolicyengine.py",
         "patchSetId": 11
@@ -37,6 +61,30 @@
       "writtenOn": "2025-10-10T07:15:12Z",
       "side": 1,
       "message": "suggest: declare it as variable of the FileClass class.",
+      "range": {
+        "startLine": 83,
+        "startChar": 0,
+        "endLine": 83,
+        "endChar": 16
+      },
+      "revId": "e13b44c85d9ad550e9557b9410804d7479788b95",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "66384017_b1e9469d",
+        "filename": "rbh-policy/poc/corepolicyengine.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-10-10T07:58:51Z",
+      "side": 1,
+      "message": "The dictionary must be external because it represents an external registry for all file classes.",
+      "parentUuid": "bb198a5d_c7d9db4b",
       "range": {
         "startLine": 83,
         "startChar": 0,
@@ -72,6 +120,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "02d23092_5c2699eb",
+        "filename": "rbh-policy/poc/corepolicyengine.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-10-10T07:58:51Z",
+      "side": 1,
+      "message": "There is a Policy class in the actual code but not in this POC, we just simplify as much as possible with simple dictionaries to represent the policies.",
+      "parentUuid": "3ca70db2_2a9d661c",
+      "range": {
+        "startLine": 84,
+        "startChar": 0,
+        "endLine": 84,
+        "endChar": 13
+      },
+      "revId": "e13b44c85d9ad550e9557b9410804d7479788b95",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bdf425bb_6630b7c5",
         "filename": "rbh-policy/poc/corepolicyengine.py",
         "patchSetId": 11
@@ -83,6 +155,30 @@
       "writtenOn": "2025-10-10T07:15:12Z",
       "side": 1,
       "message": "question: no Polycy class ? to organize and standardize what is a polycy ?",
+      "range": {
+        "startLine": 94,
+        "startChar": 4,
+        "endLine": 94,
+        "endChar": 12
+      },
+      "revId": "e13b44c85d9ad550e9557b9410804d7479788b95",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "07f1ac01_c6de2b96",
+        "filename": "rbh-policy/poc/corepolicyengine.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-10-10T07:58:51Z",
+      "side": 1,
+      "message": "Same answer than the previous question.",
+      "parentUuid": "bdf425bb_6630b7c5",
       "range": {
         "startLine": 94,
         "startChar": 4,
