@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3b81bf28_a02e89c4",
+        "filename": "rbh-sync/rbh-sync.c",
+        "patchSetId": 7
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-10-10T10:12:09Z",
+      "side": 1,
+      "message": "Not really sure what happened since the function was indeed not in the stack, but compilation still worked, so it was defined elsewhere 🤔\nDone anyway, since the other stack has been landed.",
+      "parentUuid": "97c6ff7a_1683a76f",
+      "range": {
+        "startLine": 101,
+        "startChar": 8,
+        "endLine": 101,
+        "endChar": 35
+      },
+      "revId": "b121d19ec8bf54975b67ce59e462ce0d460fcaf1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "befe74f4_cc3aa897",
@@ -37,6 +61,24 @@
       "writtenOn": "2025-10-09T08:34:40Z",
       "side": 1,
       "message": "major: add a free line 572 also.",
+      "revId": "b121d19ec8bf54975b67ce59e462ce0d460fcaf1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "afaff461_089d7cfa",
+        "filename": "rbh-sync/rbh-sync.c",
+        "patchSetId": 7
+      },
+      "lineNbr": 574,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-10-10T10:12:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "befe74f4_cc3aa897",
       "revId": "b121d19ec8bf54975b67ce59e462ce0d460fcaf1",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
@@ -58,6 +100,24 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2c147508_af049de2",
+        "filename": "rbh-sync/rbh-sync.c",
+        "patchSetId": 7
+      },
+      "lineNbr": 581,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-10-10T10:12:09Z",
+      "side": 1,
+      "message": "Changed it to always have a proper mountpoint registered. If the realpath failed, we just register the uri-\u003efsname, as it most likely doesn\u0027t correspond to a filesystem backend.",
+      "parentUuid": "39b80590_75975a7d",
+      "revId": "b121d19ec8bf54975b67ce59e462ce0d460fcaf1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2b401180_ec0a7459",
@@ -71,6 +131,30 @@
       "writtenOn": "2025-10-09T08:34:40Z",
       "side": 1,
       "message": "question: Why -2 and not -1 ?",
+      "range": {
+        "startLine": 583,
+        "startChar": 41,
+        "endLine": 583,
+        "endChar": 53
+      },
+      "revId": "b121d19ec8bf54975b67ce59e462ce0d460fcaf1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e2df0d16_2345571d",
+        "filename": "rbh-sync/rbh-sync.c",
+        "patchSetId": 7
+      },
+      "lineNbr": 583,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-10-10T10:12:09Z",
+      "side": 1,
+      "message": "-1 can only be the `\\0`, so -2 is the part that is actually usable. Not much difference if we use -1 here, since we will overwrite that last character anyway",
+      "parentUuid": "2b401180_ec0a7459",
       "range": {
         "startLine": 583,
         "startChar": 41,
