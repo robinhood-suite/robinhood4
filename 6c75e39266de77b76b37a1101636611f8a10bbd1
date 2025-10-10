@@ -22,6 +22,30 @@
       },
       "revId": "6c75e39266de77b76b37a1101636611f8a10bbd1",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "29b72bc1_dcca1a2c",
+        "filename": "librobinhood/src/plugins/mongo/mongo.c",
+        "patchSetId": 8
+      },
+      "lineNbr": 1015,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-10-10T08:00:58Z",
+      "side": 1,
+      "message": "The source backends correspond to the backends used for sync/fsevents, so generally posix, lustre, retention, ... While the mountpoint corresponds to the starting location for sync/fsevents in those backends, so `/mnt/lustre`, `/tmp/blob`, ... So since they are different information, we decided to separate them in different documents in the same `info` collection",
+      "parentUuid": "a7af80a8_8df98452",
+      "range": {
+        "startLine": 1012,
+        "startChar": 4,
+        "endLine": 1015,
+        "endChar": 49
+      },
+      "revId": "6c75e39266de77b76b37a1101636611f8a10bbd1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
