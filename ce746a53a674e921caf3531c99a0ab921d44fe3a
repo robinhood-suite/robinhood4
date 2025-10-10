@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "50c34adb_29009998",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2025-10-10T07:51:38Z",
+      "side": 1,
+      "message": "Is-it normal that there is no answer of the previous Gauthier\u0027s comments on patchset 7  ?",
+      "revId": "ce746a53a674e921caf3531c99a0ab921d44fe3a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
