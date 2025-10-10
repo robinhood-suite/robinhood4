@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8c052259_f8039e07",
+        "filename": "rbh-policy/poc/corepolicyengine.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2025-10-10T07:15:12Z",
+      "side": 1,
+      "message": "minor: could not it pushed to an other file than this core one ?",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 22
+      },
+      "revId": "e13b44c85d9ad550e9557b9410804d7479788b95",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bb198a5d_c7d9db4b",
+        "filename": "rbh-policy/poc/corepolicyengine.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2025-10-10T07:15:12Z",
+      "side": 1,
+      "message": "suggest: declare it as variable of the FileClass class.",
+      "range": {
+        "startLine": 83,
+        "startChar": 0,
+        "endLine": 83,
+        "endChar": 16
+      },
+      "revId": "e13b44c85d9ad550e9557b9410804d7479788b95",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3ca70db2_2a9d661c",
+        "filename": "rbh-policy/poc/corepolicyengine.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2025-10-10T07:15:12Z",
+      "side": 1,
+      "message": "minor: do you not have a Policy class ? and maybe declare it as a varaible of the Policy class.",
+      "range": {
+        "startLine": 84,
+        "startChar": 0,
+        "endLine": 84,
+        "endChar": 13
+      },
+      "revId": "e13b44c85d9ad550e9557b9410804d7479788b95",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bdf425bb_6630b7c5",
+        "filename": "rbh-policy/poc/corepolicyengine.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2025-10-10T07:15:12Z",
+      "side": 1,
+      "message": "question: no Polycy class ? to organize and standardize what is a polycy ?",
+      "range": {
+        "startLine": 94,
+        "startChar": 4,
+        "endLine": 94,
+        "endChar": 12
+      },
+      "revId": "e13b44c85d9ad550e9557b9410804d7479788b95",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
