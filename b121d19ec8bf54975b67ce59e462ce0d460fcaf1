@@ -163,6 +163,30 @@
       },
       "revId": "b121d19ec8bf54975b67ce59e462ce0d460fcaf1",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a8ebc95a_8a97f25e",
+        "filename": "rbh-sync/rbh-sync.c",
+        "patchSetId": 7
+      },
+      "lineNbr": 583,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-10-10T11:22:36Z",
+      "side": 1,
+      "message": "No, Gauthier is right: a copy of `PATH_MAX - 2` bytes will copy bytes from `0` to `PATH_MAX - 3`.",
+      "parentUuid": "e2df0d16_2345571d",
+      "range": {
+        "startLine": 583,
+        "startChar": 41,
+        "endLine": 583,
+        "endChar": 53
+      },
+      "revId": "b121d19ec8bf54975b67ce59e462ce0d460fcaf1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
