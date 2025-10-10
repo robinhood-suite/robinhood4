@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a711c1de_21084c8a",
+        "filename": "designs/rbh-policy/02-configuration_syntax.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-10-10T08:10:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b436beae_f337daae",
+      "range": {
+        "startLine": 89,
+        "startChar": 61,
+        "endLine": 89,
+        "endChar": 68
+      },
+      "revId": "e4445dd6ce49b71b413f467a192c3ba137778403",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c2984f64_c7cdebd2",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-10-10T07:07:11Z",
       "side": 1,
       "message": "minor: I think that all these sentences add more complexity and ambiguity than they solve problems. I will remove them and only add a simple word about the use of the name parameter in the log.",
+      "range": {
+        "startLine": 90,
+        "startChar": 0,
+        "endLine": 95,
+        "endChar": 69
+      },
+      "revId": "e4445dd6ce49b71b413f467a192c3ba137778403",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4ca35d84_7a883312",
+        "filename": "designs/rbh-policy/02-configuration_syntax.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-10-10T08:10:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c2984f64_c7cdebd2",
       "range": {
         "startLine": 90,
         "startChar": 0,
@@ -72,6 +120,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "42198bb7_e3b5e840",
+        "filename": "designs/rbh-policy/04-implementation_overview.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-10-10T08:10:57Z",
+      "side": 1,
+      "message": "I think so, this explains that calling these functions will be enough for the policies to be known by the policy engine, so the user does not need to make a list of policies defined in the file.",
+      "parentUuid": "b0252c18_30e1e73d",
+      "range": {
+        "startLine": 41,
+        "startChar": 0,
+        "endLine": 45,
+        "endChar": 19
+      },
+      "revId": "e4445dd6ce49b71b413f467a192c3ba137778403",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "137bbc22_6c751c70",
         "filename": "designs/rbh-policy/04-implementation_overview.rst",
         "patchSetId": 1
@@ -83,6 +155,30 @@
       "writtenOn": "2025-10-10T07:07:11Z",
       "side": 1,
       "message": "minor: use",
+      "range": {
+        "startLine": 49,
+        "startChar": 62,
+        "endLine": 49,
+        "endChar": 72
+      },
+      "revId": "e4445dd6ce49b71b413f467a192c3ba137778403",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "76dc138c_13e6ca04",
+        "filename": "designs/rbh-policy/04-implementation_overview.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-10-10T08:10:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "137bbc22_6c751c70",
       "range": {
         "startLine": 49,
         "startChar": 62,
