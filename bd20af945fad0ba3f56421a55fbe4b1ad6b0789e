@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4303af05_ca0f89ca",
+        "filename": "rbh-policy/rbhpolicy/config/conditions.py",
+        "patchSetId": 14
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-10-10T13:13:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "69fffe0e_d4c60009",
+      "range": {
+        "startLine": 40,
+        "startChar": 6,
+        "endLine": 40,
+        "endChar": 15
+      },
+      "revId": "bd20af945fad0ba3f56421a55fbe4b1ad6b0789e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "900bd4e2_749ea885",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-09-19T13:07:18Z",
       "side": 1,
       "message": "question: from the content of this function, it is expected to be called multiple times ?",
+      "range": {
+        "startLine": 20,
+        "startChar": 8,
+        "endLine": 20,
+        "endChar": 17
+      },
+      "revId": "bd20af945fad0ba3f56421a55fbe4b1ad6b0789e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cb9c902a_ebb28491",
+        "filename": "rbh-policy/rbhpolicy/config/fileclass.py",
+        "patchSetId": 14
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-10-10T13:13:17Z",
+      "side": 1,
+      "message": "It\u0027s possible. If the fileclass is called multiple times in multiple rules or policies, we should call this function each time.",
+      "parentUuid": "900bd4e2_749ea885",
       "range": {
         "startLine": 20,
         "startChar": 8,
