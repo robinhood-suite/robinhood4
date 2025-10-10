@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b436beae_f337daae",
+        "filename": "designs/rbh-policy/02-configuration_syntax.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2025-10-10T07:07:11Z",
+      "side": 1,
+      "message": "minor: by using this variable name.",
+      "range": {
+        "startLine": 89,
+        "startChar": 61,
+        "endLine": 89,
+        "endChar": 68
+      },
+      "revId": "e4445dd6ce49b71b413f467a192c3ba137778403",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c2984f64_c7cdebd2",
+        "filename": "designs/rbh-policy/02-configuration_syntax.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2025-10-10T07:07:11Z",
+      "side": 1,
+      "message": "minor: I think that all these sentences add more complexity and ambiguity than they solve problems. I will remove them and only add a simple word about the use of the name parameter in the log.",
+      "range": {
+        "startLine": 90,
+        "startChar": 0,
+        "endLine": 95,
+        "endChar": 69
+      },
+      "revId": "e4445dd6ce49b71b413f467a192c3ba137778403",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b0252c18_30e1e73d",
+        "filename": "designs/rbh-policy/04-implementation_overview.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2025-10-10T07:07:11Z",
+      "side": 1,
+      "message": "minor: I not sure that is really useful.",
+      "range": {
+        "startLine": 41,
+        "startChar": 0,
+        "endLine": 45,
+        "endChar": 19
+      },
+      "revId": "e4445dd6ce49b71b413f467a192c3ba137778403",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "137bbc22_6c751c70",
+        "filename": "designs/rbh-policy/04-implementation_overview.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2025-10-10T07:07:11Z",
+      "side": 1,
+      "message": "minor: use",
+      "range": {
+        "startLine": 49,
+        "startChar": 62,
+        "endLine": 49,
+        "endChar": 72
+      },
+      "revId": "e4445dd6ce49b71b413f467a192c3ba137778403",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
