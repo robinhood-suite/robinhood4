@@ -18,6 +18,24 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f0267c42_4f450901",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-10-10T14:01:15Z",
+      "side": 1,
+      "message": "These entities will be injected into the configuration module. Here we will add all the variables and functions that will be used in the configuration file. This will allow us to inject all of this easily.",
+      "parentUuid": "7df6afe7_da276888",
+      "revId": "68fe3aabd80bd3e5b81fb432e977d9d2c2b254f0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7fecec99_495cd930",
@@ -31,6 +49,30 @@
       "writtenOn": "2025-09-23T09:19:42Z",
       "side": 1,
       "message": "style: alphabetical order?",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 24,
+        "endChar": 43
+      },
+      "revId": "68fe3aabd80bd3e5b81fb432e977d9d2c2b254f0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "faddffd3_89c67f84",
+        "filename": "rbh-policy/rbhpolicy/config/entities.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-10-10T14:01:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7fecec99_495cd930",
       "range": {
         "startLine": 10,
         "startChar": 0,
