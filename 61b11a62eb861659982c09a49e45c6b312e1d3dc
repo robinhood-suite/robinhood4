@@ -48,6 +48,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d40990cf_5848413e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-10-10T13:12:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2c8ffed8_41c9c74c",
+      "range": {
+        "startLine": 7,
+        "startChar": 12,
+        "endLine": 7,
+        "endChar": 66
+      },
+      "revId": "61b11a62eb861659982c09a49e45c6b312e1d3dc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6deb25fe_dfaada17",
@@ -61,6 +85,30 @@
       "writtenOn": "2025-09-19T08:12:07Z",
       "side": 1,
       "message": "major: If I do not understand the commit message, I\u0027m not very hopefull that I will understand the folowing parts of this commit.",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 33
+      },
+      "revId": "61b11a62eb861659982c09a49e45c6b312e1d3dc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5c3621b7_a3b6a1cc",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-10-10T13:12:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6deb25fe_dfaada17",
       "range": {
         "startLine": 9,
         "startChar": 0,
@@ -136,6 +184,54 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "97e9c58c_7152fe1e",
+        "filename": "librobinhood/include/robinhood/filters/core.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-10-10T13:12:37Z",
+      "side": 1,
+      "message": "Where to place it? This is currently only used for filters.",
+      "parentUuid": "f173d0dd_0dc11af0",
+      "range": {
+        "startLine": 60,
+        "startChar": 7,
+        "endLine": 60,
+        "endChar": 30
+      },
+      "revId": "61b11a62eb861659982c09a49e45c6b312e1d3dc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e6f9abf3_1ba57964",
+        "filename": "librobinhood/include/robinhood/filters/core.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-10-10T13:12:37Z",
+      "side": 1,
+      "message": "rbh_backend_plugin_info allows you to store a plugin with an array of all its extensions. `rbh_plugin_or_extension` is designed from what I understand to be contained in the find context through `filters_context`. This makes my code complicated with unnecessary contexts in my case. So I opted to make a new, simpler structure that is only descriptive.",
+      "parentUuid": "69df9dd4_eb48d7e1",
+      "range": {
+        "startLine": 60,
+        "startChar": 0,
+        "endLine": 60,
+        "endChar": 32
+      },
+      "revId": "61b11a62eb861659982c09a49e45c6b312e1d3dc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4cced217_a7efa2c7",
         "filename": "librobinhood/src/filters/core.c",
         "patchSetId": 3
@@ -147,6 +243,30 @@
       "writtenOn": "2025-09-19T08:36:07Z",
       "side": 1,
       "message": "major: wrong file to put this in, it\u0027s not related to filters\nmajor: this function and the ones from rbh-find to get the `rbh_plugin_or_extension` structures could be mutualised, as they\u0027re very similar in their goal and working",
+      "range": {
+        "startLine": 144,
+        "startChar": 0,
+        "endLine": 144,
+        "endChar": 23
+      },
+      "revId": "61b11a62eb861659982c09a49e45c6b312e1d3dc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f83148b6_3986e2b7",
+        "filename": "librobinhood/src/filters/core.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-10-10T13:12:37Z",
+      "side": 1,
+      "message": "I partially addressed this by introducing `parse_backend_map()`, which already centralises the parsing logic used in both `get_backend_plugin_info()` and `import_backend_source()`.\nThe remaining parts differ mainly in context handling:\n- rbh-find uses a filters_context with multiple backends,\n- while `get_backend_plugin_info()` operates on a single backend and returns a static description.\n\nBecause of this, full mutualisation isn’t practical without overcomplicating the interfaces.",
+      "parentUuid": "4cced217_a7efa2c7",
       "range": {
         "startLine": 144,
         "startChar": 0,
