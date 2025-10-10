@@ -27,25 +27,22 @@ In both cases, policies and their behavior are defined entirely in the
 configuration file.
 
 Configuration is organized per filesystem and stored in a standard location
-(e.g., ``/etc/robinhood4.d/``). For a given filesystem (e.g., ``fs1``), the
-policy engine automatically locates and loads its configuration by searching
-for one of the following:
+(e.g., ``/etc/robinhood4/``). For a given filesystem (e.g., fs1), the policy
+engine automatically locates and loads its configuration by searching for a
+Python file named after the filesystem: /etc/robinhood4/fs1.py.
 
-- A Python file named after the filesystem: ``/etc/robinhood4.d/fs1.py``
-- A directory named after the filesystem: ``/etc/robinhood4.d/fs1/``
+Alternatively, administrators may explicitly provide a full path to a
+configuration file via the command line. This allows for flexible overrides or
+testing without relying on the default location.
 
-If a directory is found, all Python files within it and its subdirectories
-are recursively loaded. This allows large or complex configurations to be split
-across multiple files.
+If administrators wish to split configuration across multiple files, they are
+responsible for managing imports within their main configuration file. The
+engine does not recursively load directories or resolve dependencies across
+files. Modularization must be handled explicitly by the user.
 
-There is no need to pass additional configuration files via command-line
-arguments. The engine deduces the configuration location solely from the
-filesystem name.
-
-To reuse or share logic across multiple filesystems, administrators can define
-common code or configuration in separate modules (e.g.,
-``/etc/robinhood4.d/common.py``), and import it explicitly in their
-per-filesystem configuration:
+To reuse or share logic across multiple filesystems, common modules (e.g.,
+``common.py``) can be created and imported manually into each configuration file
+that requires them.
 
 Python has been chosen as the configuration language because it provides the
 flexibility of a full-fledged programming language. This allows administrators
