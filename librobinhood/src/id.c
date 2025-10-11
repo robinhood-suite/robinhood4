@@ -17,6 +17,7 @@
 
 #include "robinhood/backend.h"
 #include "robinhood/id.h"
+#include "robinhood/utils.h"
 
 #include "lu_fid.h"
 
@@ -64,9 +65,7 @@ rbh_id_clone(const struct rbh_id *id)
     int rc;
 
     size = id->size;
-    clone = malloc(sizeof(*clone) + size);
-    if (clone == NULL)
-        return NULL;
+    clone = xmalloc(sizeof(*clone) + size);
     data = (char *)clone + sizeof(*clone);
 
     rc = rbh_id_copy(clone, id, &data, &size);
@@ -128,9 +127,7 @@ rbh_id_from_file_handle(const struct file_handle *handle, short backend_id)
 
     size = sizeof(short) + sizeof(handle->handle_type)
            + handle->handle_bytes;
-    id = malloc(sizeof(*id) + size);
-    if (id == NULL)
-        return NULL;
+    id = xmalloc(sizeof(*id) + size);
 
     data = (char *)id + sizeof(*id);
 
@@ -197,9 +194,7 @@ rbh_id_from_lu_fid(const struct lu_fid *fid)
     struct rbh_id *id;
     char *data;
 
-    id = malloc(sizeof(*id) + LUSTRE_ID_SIZE);
-    if (id == NULL)
-        return NULL;
+    id = xmalloc(sizeof(*id) + LUSTRE_ID_SIZE);
     data = (char *)id + sizeof(*id);
 
     /* id->data */
@@ -235,17 +230,16 @@ rbh_file_handle_from_id(const struct rbh_id *id)
         return NULL;
     }
 
-    handle = malloc(sizeof(*handle) + id->size - sizeof(short)
-                    - sizeof(handle->handle_bytes));
-    if (handle == NULL)
-        return NULL;
+    handle = xmalloc(sizeof(*handle) + id->size - sizeof(short)
+                     - sizeof(handle->handle_bytes));
 
     handle->handle_bytes = id->size - sizeof(short)
-                           - sizeof(handle->handle_type);
+                                    - sizeof(handle->handle_type);
     memcpy(&handle->handle_type, id->data + sizeof(short),
            sizeof(handle->handle_type));
-    memcpy(&handle->f_handle, id->data + sizeof(short)
-           + sizeof(handle->handle_type), handle->handle_bytes);
+    memcpy(&handle->f_handle,
+           id->data + sizeof(short) + sizeof(handle->handle_type),
+           handle->handle_bytes);
 
     return handle;
 }

@@ -51,9 +51,7 @@ rbh_raw_uri_from_string(const char *string_)
     }
 
     size = strlen(string_) + 1;
-    raw_uri = malloc(sizeof(*raw_uri) + size);
-    if (raw_uri == NULL)
-        return NULL;
+    raw_uri = xmalloc(sizeof(*raw_uri) + size);
     memset(raw_uri, 0, sizeof(*raw_uri));
     string = (char *)raw_uri + sizeof(*raw_uri);
     memcpy(string, string_, size);
@@ -249,9 +247,7 @@ id_from_encoded_fid_string(const char *encoded, size_t length)
     char *decoded;
     ssize_t size;
 
-    decoded = malloc(length + 1);
-    if (decoded == NULL)
-        return NULL;
+    decoded = xmalloc(length + 1);
 
     size = rbh_percent_decode(decoded, encoded, length);
     if (size < 0)
@@ -445,9 +441,7 @@ rbh_uri_from_raw_uri(const struct rbh_raw_uri *raw_uri)
         type = RBH_UT_BARE;
     }
 
-    uri = malloc(sizeof(*uri) + size);
-    if (uri == NULL)
-        return NULL;
+    uri = xmalloc(sizeof(*uri) + size);
     data = (char *)uri + sizeof(*uri);
 
     /* uri->type */

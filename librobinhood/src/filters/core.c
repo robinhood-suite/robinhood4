@@ -11,6 +11,7 @@
 
 #include "robinhood/filters/core.h"
 #include "robinhood/statx.h"
+#include "robinhood/utils.h"
 
 void
 filters_ctx_finish(struct filters_context *ctx)
@@ -99,9 +100,7 @@ import_plugins(struct filters_context *ctx, struct rbh_value_map **info_maps,
         ctx->info_pe_count += info_maps[i]->pairs[0].value->sequence.count;
     }
 
-    ctx->info_pe = malloc(ctx->info_pe_count * sizeof(*ctx->info_pe));
-    if (ctx->info_pe == NULL)
-        error(EXIT_FAILURE, errno, "malloc");
+    ctx->info_pe = xmalloc(ctx->info_pe_count * sizeof(*ctx->info_pe));
 
     for (int i = 0; i < backend_count; ++i) {
         const struct rbh_value *backend_source_sequence =

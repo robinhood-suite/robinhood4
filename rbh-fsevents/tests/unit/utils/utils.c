@@ -128,10 +128,6 @@ event_list_source(struct rbh_fsevent *events, size_t count)
 
     source->list = rbh_iter_array(events, sizeof(*events), count, NULL);
     source->source = EVENT_LIST_SOURCE;
-    if (!source->list) {
-        free(source);
-        return NULL;
-    }
 
     return &source->source;
 }

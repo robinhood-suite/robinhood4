@@ -209,17 +209,9 @@ main(int _argc, char *_argv[])
     if (index == 0)
         error(EX_USAGE, 0, "missing at least one robinhood URI");
 
-    ctx.backends = malloc(index * sizeof(*ctx.backends));
-    if (ctx.backends == NULL)
-        error(EXIT_FAILURE, errno, "malloc");
-
-    ctx.uris = malloc(index * sizeof(*ctx.uris));
-    if (!ctx.uris)
-        error(EXIT_FAILURE, errno, "malloc");
-
-    info_maps = malloc(index * sizeof(*info_maps));
-    if (!info_maps)
-        error(EXIT_FAILURE, errno, "malloc");
+    ctx.backends = xmalloc(index * sizeof(*ctx.backends));
+    ctx.uris = xmalloc(index * sizeof(*ctx.uris));
+    info_maps = xmalloc(index * sizeof(*info_maps));
 
     for (int i = 0; i < index; i++) {
         ctx.backends[i] = rbh_backend_from_uri(ctx.argv[i], true);

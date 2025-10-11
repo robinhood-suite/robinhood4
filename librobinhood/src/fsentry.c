@@ -19,6 +19,7 @@
 
 #include "robinhood/fsentry.h"
 #include "robinhood/statx.h"
+#include "robinhood/utils.h"
 
 #include "utils.h"
 #include "value.h"
@@ -69,9 +70,7 @@ rbh_fsentry_new(const struct rbh_id *id, const struct rbh_id *parent_id,
         size += value_map_data_size(xattrs);
     }
 
-    fsentry = malloc(sizeof(*fsentry) + size);
-    if (fsentry == NULL)
-        return NULL;
+    fsentry = xmalloc(sizeof(*fsentry) + size);
     data = fsentry->symlink;
 
     /* fsentry->mask */
@@ -160,12 +159,9 @@ static const struct rbh_value *
 fsentry_find_xattr(const struct rbh_value_map *map, const char *key_to_find)
 {
     const struct rbh_value *value = NULL;
-    char *key = strdup(key_to_find);
+    char *key = xstrdup(key_to_find);
     char *subkey;
     char *next;
-
-    if (key == NULL)
-        return NULL;
 
     subkey = strtok(key, ".");
 

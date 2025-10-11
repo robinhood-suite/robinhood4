@@ -488,9 +488,8 @@ enrich_xattrs(const struct rbh_value *xattrs_to_enrich,
     if (enriched->xattrs.count + xattrs_count >= *pair_count) {
         void *tmp;
 
-        tmp = reallocarray(*pairs, *pair_count + xattrs_count, sizeof(**pairs));
-        if (tmp == NULL)
-            return -1;
+        tmp = xreallocarray(*pairs, *pair_count + xattrs_count,
+                            sizeof(**pairs));
 
         *pairs = tmp;
         *pair_count = *pair_count + xattrs_count;
@@ -552,13 +551,10 @@ posix_enrich(struct enricher *enricher,
     struct enrich_request req = {0};
     uint32_t statx_mask;
 
-    if (xattrs_values == NULL) {
+    if (xattrs_values == NULL)
         xattrs_values = rbh_sstack_new(MIN_XATTR_VALUES_ALLOC *
                                        sizeof(struct rbh_value *));
-        if (xattrs_values == NULL)
-            return -1;
 
-    }
     ctx->values = xattrs_values;
 
     switch (str2partial_field(partial->key)) {
@@ -638,9 +634,7 @@ enrich(struct enricher *enricher, const struct rbh_fsevent *original)
             if (enriched->xattrs.count + 1 >= pair_count) {
                 void *tmp;
 
-                tmp = reallocarray(pairs, pair_count << 1, sizeof(*pairs));
-                if (tmp == NULL)
-                    return -1;
+                tmp = xreallocarray(pairs, pair_count << 1, sizeof(*pairs));
                 enricher->pairs = pairs = tmp;
                 enricher->pair_count = pair_count = pair_count << 1;
             }
@@ -753,11 +747,9 @@ setup_enrichers(struct enricher *enricher, const char *type,
     assert(enrichers->type == RBH_VT_SEQUENCE);
 
     enricher->n_extensions = enrichers->sequence.count;
-    enricher->extension_enrichers = malloc(
+    enricher->extension_enrichers = xmalloc(
         sizeof(*enricher->extension_enrichers) * enricher->n_extensions
         );
-    if (!enricher->extension_enrichers)
-        error(EXIT_FAILURE, errno, "setup_enrichers: failed to allocate memory");
 
     for (size_t i = 0; i < enrichers->sequence.count; i++) {
         const char *name;
@@ -820,28 +812,11 @@ posix_iter_enrich(struct rbh_backend *backend, const char *type,
     struct enricher *enricher;
     char *symlink;
 
-    symlink = malloc(SYMLINK_MAX_SIZE);
-    if (symlink == NULL)
-        return NULL;
+    symlink = xmalloc(SYMLINK_MAX_SIZE);
 
-    pairs = reallocarray(NULL, INITIAL_PAIR_COUNT, sizeof(*pairs));
-    if (pairs == NULL) {
-        int save_errno = errno;
+    pairs = xreallocarray(NULL, INITIAL_PAIR_COUNT, sizeof(*pairs));
 
-        free(symlink);
-        errno = save_errno;
-        return NULL;
-    }
-
-    enricher = malloc(sizeof(*enricher));
-    if (enricher == NULL) {
-        int save_errno = errno;
-
-        free(pairs);
-        free(symlink);
-        errno = save_errno;
-        return NULL;
-    }
+    enricher = xmalloc(sizeof(*enricher));
 
     enricher->iterator = POSIX_ENRICHER_ITERATOR;
     enricher->backend = backend;
@@ -913,9 +888,7 @@ iter_no_partial(struct rbh_iterator *fsevents)
 {
     struct no_partial_iterator *no_partial;
 
-    no_partial = malloc(sizeof(*no_partial));
-    if (no_partial == NULL)
-        return NULL;
+    no_partial = xmalloc(sizeof(*no_partial));
 
     no_partial->iterator = NO_PARTIAL_ITERATOR;
     no_partial->fsevents = fsevents;
@@ -962,15 +935,10 @@ posix_enrich_iter_builder_get_source_backends(void *_builder)
 
     setup_fsevent_enrichers(&enricher, rbh_config_get(), builder->type);
 
-    if (source_backends_sstack == NULL) {
+    if (source_backends_sstack == NULL)
         source_backends_sstack = rbh_sstack_new(
             MIN_VALUES_SSTACK_ALLOC * (sizeof(struct rbh_value_map *))
         );
-        if (!source_backends_sstack) {
-            free(enricher.extension_enrichers);
-            return NULL;
-        }
-    }
 
     backends = RBH_SSTACK_PUSH(source_backends_sstack, NULL,
                                (enricher.n_extensions + 1) * sizeof(*backends));
@@ -1038,21 +1006,17 @@ posix_enrich_iter_builder(struct rbh_backend *backend,
 {
     struct enrich_iter_builder *builder;
 
-    builder = malloc(sizeof(*builder));
-    if (builder == NULL)
-        error(EXIT_FAILURE, errno, "malloc");
+    builder = xmalloc(sizeof(*builder));
 
     *builder = POSIX_ENRICH_ITER_BUILDER;
 
     builder->backend = backend;
-    builder->type = strdup(type);
+    builder->type = xstrdup(type);
     builder->mount_fd = open(mount_path, O_RDONLY | O_CLOEXEC);
     if (builder->mount_fd == -1)
         error(EXIT_FAILURE, errno, "open: %s", mount_path);
 
-    builder->mount_path = strdup(mount_path);
-    if (builder->mount_path == NULL)
-        error(EXIT_FAILURE, ENOMEM, "strdup: %s", mount_path);
+    builder->mount_path = xstrdup(mount_path);
 
     return builder;
 }

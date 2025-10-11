@@ -62,11 +62,7 @@ shell2pcre(const char *shell)
      *                                   ^       ^^^^^^^^
      *                                   1       234 5678
      */
-    pcre = malloc(len + 8);
-    if (pcre == NULL) {
-        errno = ENOMEM;
-        return NULL;
-    }
+    pcre = xmalloc(len + 8);
 
     len = i - 1; /* len = strlen(shell) */
     pcre[k++] = '^';

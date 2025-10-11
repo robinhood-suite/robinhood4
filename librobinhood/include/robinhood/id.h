@@ -1,5 +1,5 @@
 /* This file is part of RobinHood 4
- * Copyright (C) 2019 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifer: LGPL-3.0-or-later
@@ -72,10 +72,7 @@ rbh_id_equal(const struct rbh_id *first, const struct rbh_id *second);
  * @param data      a pointer to \p size bytes of arbitrary data
  * @param size      the number of bytes \p data points at
  *
- * @return          a pointer to a newly allocated struct rbh_id on success,
- *                  NULL on error and errno is set appropriately
- *
- * @error ENOMEM    not enough memory available
+ * @return          a pointer to a newly allocated struct rbh_id on success
  *
  * The returned ID points at an internally managed copy of \p data.
  */
@@ -90,10 +87,7 @@ rbh_id_new(const char *data, size_t size);
  * @param backend_id  the backend id that prepend the rbh_id,
  *                    backend id is from the backend.h enum
  *
- * @return            a pointer to a newly allocated struct rbh_id on success,
- *                    NULL on error and errno is set appropriately
- *
- * @error ENOMEM      not enough memory available
+ * @return            a pointer to a newly allocated struct rbh_id on success
  *
  * The returned ID points at an internally managed copy of \p data.
  */
@@ -110,10 +104,7 @@ struct file_handle;
  * @param backend_id  the backend id that prepend the rbh_id,
  *                    backend id is from the backend.h enum
  *
- * @return            a pointer to a newly allocated struct rbh_id on success,
- *                    NULL on error and errno is set appropriately
- *
- * @error ENOMEM      not enough memory available
+ * @return            a pointer to a newly allocated struct rbh_id on success
  *
  * The returned ID does not share data with \p handle.
  */
@@ -132,10 +123,7 @@ struct lu_fid;
  *
  * @param fid       the Lustre fid to use
  *
- * @return          a pointer to a newly allocated struct rbh_id on success,
- *                  NULL on error and errno is set appropriately
- *
- * @error ENOMEM    not enough memory available
+ * @return          a pointer to a newly allocated struct rbh_id on success
  *
  * The returned ID and \p fid do not share data.
  */
@@ -164,7 +152,6 @@ rbh_lu_fid_from_id(const struct rbh_id *id);
  *                  NULL on error and errno is set appropriately
  *
  * @error EINVAL    \p id cannot be unpacked into a struct file_handle
- * @error ENOMEM    not enough memory available
  */
 struct file_handle *
 rbh_file_handle_from_id(const struct rbh_id *id);

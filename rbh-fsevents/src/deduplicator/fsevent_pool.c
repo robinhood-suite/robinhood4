@@ -83,16 +83,10 @@ rbh_fsevent_pool_new(size_t batch_size, struct source *source,
     struct rbh_fsevent_pool *pool;
     size_t (*hash_fn)(const void *);
 
-    pool = malloc(sizeof(*pool));
-    if (!pool)
-        return NULL;
+    pool = xmalloc(sizeof(*pool));
 
     // XXX the stack size should probably be a function of the batch_size
     pool->list_container = rbh_sstack_new(1 << 10);
-    if (!pool->list_container) {
-        free(pool);
-        return NULL;
-    }
 
     if (!strcmp(source->name, "lustre")) {
         /* more efficient lustre specific hash function */
@@ -120,16 +114,7 @@ rbh_fsevent_pool_new(size_t batch_size, struct source *source,
     pool->count = 0;
 
     pool->events_size = nb_workers;
-    pool->events = malloc(nb_workers * sizeof(*pool->events));
-    if (pool->events == NULL) {
-        int save_errno = errno;
-
-        rbh_hashmap_destroy(pool->pool);
-        rbh_sstack_destroy(pool->list_container);
-        free(pool);
-        errno = save_errno;
-        return NULL;
-    }
+    pool->events = xmalloc(nb_workers * sizeof(*pool->events));
 
     for (int i = 0; i < nb_workers; i++)
         rbh_list_init(&pool->events[i]);
@@ -217,8 +202,6 @@ fsevent_node_alloc(struct rbh_fsevent_pool *pool)
                            sizeof(struct rbh_fsevent_node));
 
     node->copy_data = rbh_sstack_new(1 << 10);
-    if (!node->copy_data)
-        return NULL;
 
     return node;
 }
@@ -914,22 +897,16 @@ events_list_copy(struct rbh_list_node *events)
     struct rbh_list_node *events_copy;
     struct rbh_fsevent_node *node;
 
-    events_copy = malloc(sizeof(struct rbh_list_node));
-    if (events_copy == NULL)
-        return NULL;
+    events_copy = xmalloc(sizeof(struct rbh_list_node));
 
     rbh_list_init(events_copy);
 
     rbh_list_foreach(events, node, link) {
         struct rbh_fsevent_node *node_copy;
 
-        node_copy = malloc(sizeof(struct rbh_fsevent_node));
-        if (node_copy == NULL)
-            return NULL;
+        node_copy = xmalloc(sizeof(struct rbh_fsevent_node));
 
         node_copy->copy_data = rbh_sstack_new(1 << 10);
-        if (node_copy->copy_data == NULL)
-            return NULL;
 
         rbh_fsevent_deep_copy(&node_copy->fsevent, &node->fsevent,
                               node_copy->copy_data);
@@ -998,9 +975,7 @@ rbh_fsevent_pool_flush(struct rbh_fsevent_pool *pool)
             size++;
     }
 
-    iterators = malloc(size * sizeof(*iterators));
-    if (iterators == NULL)
-        return NULL;
+    iterators = xmalloc(size * sizeof(*iterators));
 
     iter_ptr = iterators;
 
@@ -1009,14 +984,10 @@ rbh_fsevent_pool_flush(struct rbh_fsevent_pool *pool)
             continue;
 
         events_copy = events_list_copy(&pool->events[i]);
-        if (events_copy == NULL)
-            return NULL;
 
         iter_ptr->iter = rbh_iter_list(events_copy,
                                        offsetof(struct rbh_fsevent_node, link),
                                        free_events_list);
-        if (iter_ptr->iter == NULL)
-            return NULL;
 
         iter_ptr->index = i;
         iter_ptr++;

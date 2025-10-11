@@ -18,6 +18,8 @@
 #include <sys/syscall.h>
 
 #include "robinhood/ring.h"
+#include "robinhood/utils.h"
+
 #include "ring.h"
 
 struct rbh_ring *
@@ -78,14 +80,7 @@ rbh_ring_new(size_t size)
         return NULL;
     }
 
-    ring = malloc(sizeof(*ring));
-    if (ring == NULL) {
-        int save_errno = errno;
-
-        munmap(buffer, size << 1);
-        errno = save_errno;
-        return NULL;
-    }
+    ring = xmalloc(sizeof(*ring));
 
     ring->size = size;
     ring->used = 0;

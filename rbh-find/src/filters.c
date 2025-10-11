@@ -153,11 +153,9 @@ sort_options_append(struct rbh_filter_options *options,
         .ascending = ascending
     };
 
-    options->sort.items = reallocarray(options->sort.items,
-                                       options->sort.count + 1,
-                                       sizeof(*options->sort.items));
-    if (options->sort.items == NULL)
-        error(EXIT_FAILURE, errno, "reallocarray on sort array failed");
+    options->sort.items = xreallocarray(options->sort.items,
+                                        options->sort.count + 1,
+                                        sizeof(*options->sort.items));
 
     options->sort.items[options->sort.count++] = new_sort;
 }

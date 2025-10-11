@@ -15,6 +15,8 @@
 #include <stdlib.h>
 
 #include "robinhood/ring.h"
+#include "robinhood/utils.h"
+
 #include "ring.h"
 
 struct rbh_ringr {
@@ -34,14 +36,7 @@ rbh_ringr_new(size_t size)
     if (ring == NULL)
         return NULL;
 
-    ringr = malloc(sizeof(*ringr));
-    if (ringr == NULL) {
-        int save_errno = errno;
-
-        rbh_ring_destroy(ring);
-        errno = save_errno;
-        return NULL;
-    }
+    ringr = xmalloc(sizeof(*ringr));
 
     ringr->ring = ring;
     ringr->head = ring->head;
@@ -56,9 +51,7 @@ rbh_ringr_dup(struct rbh_ringr *ringr)
 {
     struct rbh_ringr *duplicate;
 
-    duplicate = malloc(sizeof(*duplicate));
-    if (duplicate == NULL)
-        return NULL;
+    duplicate = xmalloc(sizeof(*duplicate));
 
     duplicate->ring = ringr->ring;
     duplicate->head = ringr->head;

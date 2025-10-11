@@ -18,6 +18,7 @@
 #include <sys/types.h>
 
 #include "robinhood/hashmap.h"
+#include "robinhood/utils.h"
 
 struct rbh_hashmap_item {
     const void *key;
@@ -42,18 +43,8 @@ rbh_hashmap_new(bool (*equals)(const void *first, const void *second),
         return NULL;
     }
 
-    hashmap = malloc(sizeof(*hashmap));
-    if (hashmap == NULL)
-        return NULL;
-
-    hashmap->items = reallocarray(NULL, count, sizeof(*hashmap->items));
-    if (hashmap->items == NULL) {
-        int save_errno = errno;
-
-        free(hashmap);
-        errno = save_errno;
-        return NULL;
-    }
+    hashmap = xmalloc(sizeof(*hashmap));
+    hashmap->items = xreallocarray(NULL, count, sizeof(*hashmap->items));
 
     hashmap->hash = hash;
     hashmap->equals = equals;

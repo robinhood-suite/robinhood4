@@ -68,23 +68,14 @@ report(const char *group_string, const char *output_string, bool ascending_sort,
     char *buffer;
     size_t size;
 
-    if (values_sstack == NULL) {
+    if (values_sstack == NULL)
         values_sstack = rbh_sstack_new(MIN_VALUES_SSTACK_ALLOC *
                                        sizeof(struct rbh_value *));
-        if (values_sstack == NULL)
-            error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
-                          "rbh_sstack_new");
-    }
 
     if (!csv_print) {
         buffer_sstack = rbh_sstack_new(MIN_VALUES_SSTACK_ALLOC * buf_size);
-        if (buffer_sstack == NULL)
-            error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
-                          "rbh_sstack_new");
 
-        results = malloc(sizeof(*results));
-        if (results == NULL)
-            error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__, "malloc");
+        results = xmalloc(sizeof(*results));
 
         rbh_list_init(results);
     }
@@ -119,10 +110,7 @@ report(const char *group_string, const char *output_string, bool ascending_sort,
         if (csv_print) {
             csv_print_results(map, group, output);
         } else {
-            node = malloc(sizeof(*node));
-            if (node == NULL)
-                error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
-                              "malloc");
+            node = xmalloc(sizeof(*node));
 
             buffer = RBH_SSTACK_PUSH(buffer_sstack, NULL, buf_size);
             size = buf_size;
@@ -342,9 +330,7 @@ main(int _argc, char *_argv[])
     options.verbose = command_context.verbose;
     options.dry_run = command_context.dry_run;
 
-    others = malloc(sizeof(char*) * argc);
-    if (others == NULL)
-        error(EXIT_FAILURE, ENOMEM, "Failed to malloc 'others'");
+    others = xmalloc(sizeof(char*) * argc);
 
     for (int i = 0; i < argc; ++i) {
         char *arg = argv[i];
@@ -356,17 +342,13 @@ main(int _argc, char *_argv[])
             if (i + 1 >= argc)
                 error(EXIT_FAILURE, EINVAL, "Missing argument for %s", arg);
 
-            group = strdup(argv[++i]);
-            if (!group)
-                error(EXIT_FAILURE, ENOMEM, "strdup");
+            group = xstrdup(argv[++i]);
 
         } else if (strcmp(arg, "--output") == 0) {
             if (i + 1 >= argc)
                 error(EXIT_FAILURE, EINVAL, "Missing argument for %s", arg);
 
-            output = strdup(argv[++i]);
-            if (!output)
-                error(EXIT_FAILURE, ENOMEM, "strdup");
+            output = xstrdup(argv[++i]);
 
         } else if (strcmp(arg, "--rsort") == 0) {
             ascending_sort = false;

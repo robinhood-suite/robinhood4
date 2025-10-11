@@ -15,6 +15,7 @@
 
 #include <miniyaml.h>
 #include <robinhood/serialization.h>
+#include <robinhood/utils.h>
 
 #include "sink.h"
 
@@ -71,9 +72,7 @@ sink_from_file(FILE *file)
 {
     struct file_sink *sink;
 
-    sink = malloc(sizeof(*sink));
-    if (sink == NULL)
-        error(EXIT_FAILURE, 0, "malloc");
+    sink = xmalloc(sizeof(*sink));
 
     if (!yaml_emitter_initialize(&sink->emitter))
         error(EXIT_FAILURE, 0, "yaml_emitter_initialize");

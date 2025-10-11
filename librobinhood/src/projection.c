@@ -45,13 +45,9 @@ rbh_projection_add(struct rbh_filter_projection *projection,
         break;
     case RBH_FP_INODE_XATTRS:
         if (field->xattr) {
-            if (sstack == NULL) {
+            if (sstack == NULL)
                 sstack = rbh_sstack_new((1 << 10) *
                                         (sizeof(struct rbh_value_pair)));
-
-                if (sstack == NULL)
-                    error(EXIT_FAILURE, errno, "rbh_sstack_new");
-            }
 
             struct rbh_value_pair pair = {
                 .key = RBH_SSTACK_PUSH(sstack, field->xattr,

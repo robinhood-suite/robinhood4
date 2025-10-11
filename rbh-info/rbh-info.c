@@ -53,17 +53,10 @@ struct rbh_info_fields {
 static int
 add_list(struct rbh_list_node *head, const char *name)
 {
-    struct rbh_node_info *new_node = malloc(sizeof(*new_node));
+    struct rbh_node_info *new_node = xmalloc(sizeof(*new_node));
 
-    if (new_node == NULL) {
-        perror("malloc");
-        return 1;
-    }
-    new_node->name = strdup(name);
-    if (new_node->name == NULL) {
-        perror("strdup");
-        return 1;
-    }
+    new_node->name = xstrdup(name);
+
     rbh_list_add_tail(head, &new_node->list);
     return 0;
 }
@@ -243,11 +236,7 @@ check_ld_library_path(const char *pattern, struct rbh_list_node *head)
     if (env == NULL)
         return 0;
 
-    ld_library_path = strdup(env);
-    if (ld_library_path == NULL) {
-        perror("strdup");
-        return 0;
-    }
+    ld_library_path = xstrdup(env);
 
     path = strtok(ld_library_path, ":");
     while (path != NULL) {
@@ -269,12 +258,7 @@ rbh_backend_list()
         "/usr/lib64",
     };
     int len_library = sizeof(library_dirs) / sizeof(library_dirs[0]);
-    struct rbh_list_node *head = malloc(sizeof(struct rbh_list_node));
-
-    if (head == NULL) {
-        perror("malloc");
-        return 1;
-    }
+    struct rbh_list_node *head = xmalloc(sizeof(struct rbh_list_node));
 
     rbh_list_init(head);
 
