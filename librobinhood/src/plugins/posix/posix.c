@@ -25,18 +25,17 @@
 #include <sys/stat.h>
 #include <sys/xattr.h>
 
-#include "robinhood/backends/posix.h"
 #include "robinhood/backend.h"
-#include "posix_internals.h"
+#include "robinhood/backends/posix.h"
 #include "robinhood/backends/posix_extension.h"
 #include "robinhood/backends/posix.h"
-
+#include "robinhood/open.h"
 #include "robinhood/plugins/backend.h"
 #include "robinhood/sstack.h"
 #include "robinhood/statx.h"
-#include "robinhood/open.h"
-#include <robinhood/utils.h>
+#include "robinhood/utils.h"
 
+#include "posix_internals.h"
 #include "xattrs_mapping.h"
 
 /*----------------------------------------------------------------------------*
@@ -60,9 +59,8 @@ id_from_fd(int fd, short backend_id)
 
     if (handle == NULL) {
         /* Per-thread initialization of `handle' */
-        handle = malloc(sizeof(*handle) + handle_size);
-        if (handle == NULL)
-            return NULL;
+        handle = xmalloc(sizeof(*handle) + handle_size);
+
         handle->handle_bytes = handle_size;
     }
 
@@ -78,9 +76,7 @@ retry:
             return NULL;
         }
 
-        tmp = malloc(sizeof(*tmp) + handle->handle_bytes);
-        if (tmp == NULL)
-            return NULL;
+        tmp = xmalloc(sizeof(*tmp) + handle->handle_bytes);
 
         handle_size = handle->handle_bytes;
         free(handle);
@@ -99,9 +95,7 @@ freadlink(int fd, const char *path, size_t *size_)
     ssize_t rc;
 
 retry:
-    symlink = malloc(size);
-    if (symlink == NULL)
-        return NULL;
+    symlink = xmalloc(size);
 
     if (path == NULL)
         rc = readlinkat(fd, "", symlink, size);
@@ -194,9 +188,7 @@ retry:
                 /* The list of xattrs must have shrunk in between both calls */
                 goto retry;
 
-            tmp = realloc(keys, ceil2(length));
-            if (tmp == NULL)
-                return -1;
+            tmp = xrealloc(keys, ceil2(length));
             *buffer = keys = tmp;
             *size = buflen = ceil2(length);
 
@@ -236,11 +228,8 @@ getxattrs(char *proc_fd_path, struct rbh_value_pair **_pairs,
     ssize_t count;
     char *name;
 
-    if (names == NULL) {
-        names = malloc(names_length);
-        if (names == NULL)
-            return -1;
-    }
+    if (names == NULL)
+        names = xmalloc(names_length);
 
     count = flistxattrs(proc_fd_path, &names, &names_length);
     if (count == -1)
@@ -255,9 +244,7 @@ getxattrs(char *proc_fd_path, struct rbh_value_pair **_pairs,
         if (i - skipped == pairs_count) {
             void *tmp;
 
-            tmp = reallocarray(pairs, pairs_count * 2, sizeof(*pairs));
-            if (tmp == NULL)
-                return -1;
+            tmp = xreallocarray(pairs, pairs_count * 2, sizeof(*pairs));
             *_pairs = pairs = tmp;
             *_pairs_count = pairs_count *= 2;
         }
@@ -387,40 +374,25 @@ fsentry_from_any(struct fsentry_id_pair *fip, const struct rbh_value *path,
     int save_errno;
     int fd;
 
-    if (pairs == NULL) {
+    if (pairs == NULL)
         /* Per-thread initialization of `pairs' */
-        pairs = reallocarray(NULL, pairs_count, sizeof(*pairs));
-        if (pairs == NULL)
-            return false;
-    }
+        pairs = xreallocarray(NULL, pairs_count, sizeof(*pairs));
 
-    if (ns_pairs == NULL) {
+    if (ns_pairs == NULL)
         /* Per-thread initialization of `ns_pairs' */
-        ns_pairs = reallocarray(NULL, ns_pairs_count, sizeof(*ns_pairs));
-        if (ns_pairs == NULL)
-            return false;
-    }
+        ns_pairs = xreallocarray(NULL, ns_pairs_count, sizeof(*ns_pairs));
 
-    if (values == NULL) {
+    if (values == NULL)
         /* Per-thread initialization of `xattrs' */
         values = rbh_sstack_new(sizeof(ns_pairs->value) * pairs_count);
-        if (values == NULL)
-            return false;
-    }
 
-    if (xattrs == NULL) {
+    if (xattrs == NULL)
         /* Per-thread initialization of `values' */
         xattrs = rbh_sstack_new(XATTR_VALUE_MAX_VFS_SIZE);
-        if (xattrs == NULL)
-            return false;
-    }
 
-    if (ns_values == NULL) {
+    if (ns_values == NULL)
         /* Per-thread initialization of `ns_values' */
         ns_values = rbh_sstack_new(sizeof(ns_pairs->value) * ns_pairs_count);
-        if (ns_values == NULL)
-            return false;
-    }
 
     fd = openat(AT_FDCWD, accpath,
                 O_RDONLY | O_CLOEXEC | O_NOFOLLOW | O_NONBLOCK);
@@ -603,15 +575,12 @@ posix_iterator_setup(struct posix_iterator *iter,
     assert(strcmp(root, "/") == 0 || root[strlen(root) - 1] != '/');
 
     if (entry == NULL) {
-        iter->path = strdup(root);
+        iter->path = xstrdup(root);
     } else {
         assert(strcmp(root, "/") == 0 || *entry == '/' || *entry == '\0');
         if (asprintf(&iter->path, "%s%s", root, entry) < 0)
-            iter->path = NULL;
+            return -1;
     }
-
-    if (iter->path == NULL)
-        return 0;
 
     iter->statx_sync_type = statx_sync_type;
     iter->prefix_len = strcmp(root, "/") ? strlen(root) : 0;
@@ -1002,13 +971,8 @@ dup_enrichers(const struct rbh_posix_extension **enrichers)
     const struct rbh_posix_extension **dup;
     int count;
 
-    if (!enrichers)
-        return NULL;
-
     count = enrichers_count(enrichers);
-    dup = malloc(sizeof(*dup) * (count + 1)); // + 1 for NULL at the end
-    if (!dup)
-        return NULL;
+    dup = xmalloc(sizeof(*dup) * (count + 1)); // + 1 for NULL at the end
 
     memcpy(dup, enrichers, sizeof(*enrichers) * (count + 1));
 
@@ -1031,32 +995,15 @@ posix_backend_branch(void *backend, const struct rbh_id *id, const char *path)
 
     if (id) {
         data_size = id->size;
-        branch = malloc(sizeof(*branch) + data_size);
-        if (branch == NULL)
-            return NULL;
+        branch = xmalloc(sizeof(*branch) + data_size);
 
         data = (char *)branch + sizeof(*branch);
     } else {
-        branch = malloc(sizeof(*branch));
-        if (branch == NULL)
-            return NULL;
+        branch = xmalloc(sizeof(*branch));
     }
 
-    branch->posix.root = strdup(posix->root);
-    if (branch->posix.root == NULL) {
-        save_errno = errno;
-        goto free_branch;
-    }
-
-    if (path) {
-        branch->path = strdup(path);
-        if (branch->path == NULL) {
-            save_errno = errno;
-            goto free_root;
-        }
-    } else {
-        branch->path = NULL;
-    }
+    branch->posix.root = xstrdup(posix->root);
+    branch->path = xstrdup_safe(path);
 
     if (id)
         rbh_id_copy(&branch->id, id, &data, &data_size);
@@ -1066,24 +1013,13 @@ posix_backend_branch(void *backend, const struct rbh_id *id, const char *path)
     branch->posix.backend = POSIX_BRANCH_BACKEND;
     branch->posix.iter_new = posix->iter_new;
     errno = 0;
-    branch->posix.enrichers = dup_enrichers(posix->enrichers);
-    if (!branch->posix.enrichers && errno != 0) {
-        save_errno = errno;
-        goto free_path;
-    }
+
+    if (posix->enrichers)
+        branch->posix.enrichers = dup_enrichers(posix->enrichers);
 
     branch->posix.statx_sync_type = posix->statx_sync_type;
 
     return &branch->posix.backend;
-
-free_path:
-    free(branch->path);
-free_root:
-    free(branch->posix.root);
-free_branch:
-    free(branch);
-    errno = save_errno;
-    return NULL;
 }
 
 static int
@@ -1228,12 +1164,9 @@ posix_get_info(void *backend, int info_flags)
         tmp_flags >>= 1;
     }
 
-    if (info_sstack == NULL) {
+    if (info_sstack == NULL)
         info_sstack = rbh_sstack_new(MIN_VALUES_SSTACK_ALLOC *
                                      (sizeof(struct rbh_value_map *)));
-        if (!info_sstack)
-            goto out;
-    }
 
     pairs = RBH_SSTACK_PUSH(info_sstack, NULL, count * sizeof(*pairs));
     map_value = RBH_SSTACK_PUSH(info_sstack, NULL, sizeof(*map_value));
@@ -1303,9 +1236,7 @@ rbh_posix_helper(const char *type, struct rbh_config *config,
     int count = 0;
     int rc;
 
-    posix = malloc(sizeof(*posix));
-    if (posix == NULL)
-        goto err;
+    posix = xmalloc(sizeof(*posix));
 
     posix->enrichers = NULL;
 
@@ -1412,15 +1343,9 @@ rbh_posix_backend_new(const struct rbh_backend_plugin *self,
     struct posix_backend *posix;
     int save_errno = 0;
 
-    posix = malloc(sizeof(*posix));
-    if (posix == NULL)
-        return NULL;
+    posix = xmalloc(sizeof(*posix));
 
-    posix->root = strdup(*path == '\0' ? "." : path);
-    if (posix->root == NULL) {
-        save_errno = errno;
-        goto free_backend;
-    }
+    posix->root = xstrdup(*path == '\0' ? "." : path);
 
     if (rtrim(posix->root, '/') == 0)
         *posix->root = '/';
@@ -1458,7 +1383,6 @@ rbh_posix_backend_new(const struct rbh_backend_plugin *self,
 
 free_root:
     free(posix->root);
-free_backend:
     free(posix);
     errno = save_errno;
 

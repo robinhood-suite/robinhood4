@@ -139,9 +139,7 @@ mut_iter_one(void *element)
 {
     struct one_iterator *one;
 
-    one = malloc(sizeof(*one));
-    if (one == NULL)
-        error(EXIT_FAILURE, errno, "malloc");
+    one = xmalloc(sizeof(*one));
 
     one->element = element;
     one->iterator = ONE_ITERATOR;
@@ -398,9 +396,7 @@ iter_convert(struct rbh_iterator *fsentries,
 {
     struct convert_iterator *convert;
 
-    convert = malloc(sizeof(*convert));
-    if (convert == NULL)
-        return NULL;
+    convert = xmalloc(sizeof(*convert));
 
     convert->iterator = CONVERT_ITER;
     convert->fsentries = fsentries;
@@ -431,9 +427,7 @@ sync(const struct rbh_filter_projection *projection)
     struct rbh_metadata *metadata;
     struct rbh_iterator *fsevents;
 
-    metadata = malloc(sizeof(*metadata));
-    if (!metadata)
-        return 0;
+    metadata = xmalloc(sizeof(*metadata));
 
     metadata->converted_entries = 0;
     metadata->skipped_entries = 0;
@@ -630,12 +624,9 @@ sync_metadata_value_map(time_t sync_debut, time_t sync_end, char *from,
 
     sync_duration = difftime(sync_end, sync_debut);
 
-    if (metadata_sstack == NULL) {
+    if (metadata_sstack == NULL)
         metadata_sstack = rbh_sstack_new(MIN_VALUES_SSTACK_ALLOC *
                                          (sizeof(struct rbh_value_map *)));
-        if (!metadata_sstack)
-            return NULL;
-    }
 
     value_map = RBH_SSTACK_PUSH(metadata_sstack, NULL, sizeof(*value_map));
     values = RBH_SSTACK_PUSH(metadata_sstack, NULL, count * sizeof(*values));
@@ -719,9 +710,8 @@ get_command_line(int argc, char *argv[]) {
     for (int i = 0 ; i < argc ; i++)
         total_len += strlen(argv[i]) + 1;
 
-    cmd_line = malloc(total_len);
-    if (!cmd_line)
-        return NULL;
+    assert(total_len > 0);
+    cmd_line = xmalloc(total_len);
 
     cmd_line[0] = '\0';
     for (int i = 0 ; i < argc ; i++) {

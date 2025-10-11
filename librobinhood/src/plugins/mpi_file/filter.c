@@ -93,9 +93,7 @@ shell_pattern2map(int prefix_len, const char *pattern) {
     struct rbh_value *map;
 
     /* It will be free by mfu_pred_free() */
-    pairs = reallocarray(NULL, 2, sizeof(*pairs));
-    if (pairs == NULL)
-        error(EXIT_FAILURE, ENOMEM, "reallocarray rbh_value_pair");
+    pairs = xreallocarray(NULL, 2, sizeof(*pairs));
 
     pair = &pairs[0];
     pair->key = "pattern";
@@ -128,18 +126,16 @@ filter2arg(mfu_pred_times *now, const struct rbh_filter *filter, int prefix_len)
         switch(value->type)
         {
         case RBH_VT_STRING:
-            arg_regex = strdup(value->string);
+            arg_regex = xstrdup(value->string);
             break;
         case RBH_VT_REGEX:
-            arg_regex = strdup(value->regex.string);
+            arg_regex = xstrdup(value->regex.string);
             break;
         default:
             errno = ENOTSUP;
             return NULL;
         }
 
-        if (arg_regex == NULL)
-            error(EXIT_FAILURE, errno, "strdup name argument");
         return arg_regex;
 
     case RBH_FP_NAMESPACE_XATTRS:
@@ -164,9 +160,7 @@ filter2arg(mfu_pred_times *now, const struct rbh_filter *filter, int prefix_len)
         {
         case RBH_STATX_TYPE:
             /* It will be free by mfu_pred_free() */
-            arg_type = malloc(sizeof(*arg_type));
-            if (arg_type == NULL)
-                error(EXIT_FAILURE, errno, "malloc mode_t type");
+            arg_type = xmalloc(sizeof(*arg_type));
 
             *arg_type = value->uint32;
             return arg_type;

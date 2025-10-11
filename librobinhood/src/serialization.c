@@ -19,6 +19,7 @@
 #include <robinhood.h>
 
 #include "robinhood/serialization.h"
+#include "robinhood/utils.h"
 
 static struct {
     struct rbh_sstack *events;
@@ -30,16 +31,8 @@ static void __attribute__((constructor))
 context_init(void)
 {
     context.events = rbh_sstack_new(sizeof(yaml_event_t) * 64);
-    if (context.events == NULL)
-        error(EXIT_FAILURE, errno, "rbh_sstack_new");
-
     context.pointers = rbh_sstack_new(sizeof(void *) * 8);
-    if (context.pointers == NULL)
-        error(EXIT_FAILURE, errno, "rbh_sstack_new");
-
     context.values = rbh_sstack_new(sizeof(struct rbh_value) * 64);
-    if (context.values == NULL)
-        error(EXIT_FAILURE, errno, "rbh_sstack_new");
 }
 
 static void
@@ -534,9 +527,7 @@ parse_rbh_value_map(yaml_parser_t *parser, struct rbh_value_map *map,
         yaml_event_delete(&map_event);
     }
 
-    pairs = malloc(sizeof(*pairs) * count);
-    if (pairs == NULL)
-        return false;
+    pairs = xmalloc(sizeof(*pairs) * count);
 
     do {
         yaml_event_t event;
@@ -563,15 +554,7 @@ parse_rbh_value_map(yaml_parser_t *parser, struct rbh_value_map *map,
             void *tmp = pairs;
 
             count *= 2;
-            tmp = reallocarray(tmp, count, sizeof(*pairs));
-            if (tmp == NULL) {
-                int save_errno = errno;
-
-                yaml_event_delete(&event);
-                free(pairs);
-                errno = save_errno;
-                return false;
-            }
+            tmp = xreallocarray(tmp, count, sizeof(*pairs));
             pairs = tmp;
         }
 
@@ -610,9 +593,7 @@ parse_sequence(yaml_parser_t *parser, struct rbh_value *sequence)
     size_t count = 1; /* TODO: fine tune this */
     size_t i = 0;
 
-    values = malloc(sizeof(*values) * count);
-    if (values == NULL)
-        return false;
+    values = xmalloc(sizeof(*values) * count);
 
     while (true) {
         yaml_event_t event;
@@ -629,15 +610,7 @@ parse_sequence(yaml_parser_t *parser, struct rbh_value *sequence)
             void *tmp = values;
 
             count *= 2;
-            tmp = reallocarray(tmp, count, sizeof(*values));
-            if (tmp == NULL) {
-                int save_errno = errno;
-
-                yaml_event_delete(&event);
-                free(values);
-                errno = save_errno;
-                return false;
-            }
+            tmp = xreallocarray(tmp, count, sizeof(*values));
             values = tmp;
         }
 

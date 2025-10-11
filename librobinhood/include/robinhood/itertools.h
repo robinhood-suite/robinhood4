@@ -27,9 +27,7 @@
  * @param free_elem     function to free memory associated with each element
  *
  * @return              a pointer to a newly allocated struct rbh_iterator on
- *                      success, NULL otherwise and errno is set appropriately
- *
- * @retval ENOMEM       there was not enough memory to allocate the iterator
+ *                      success
  *
  * The returned iterator's next method yields one element of \p array at a time.
  */
@@ -46,10 +44,7 @@ rbh_iter_array(const void *array, size_t element_size, size_t element_count,
  * @param free_elem     function to free memory associated with each element
  *
  * @return              a pointer to a newly allocated struct rbh_mut_iterator
- *                      on success, NULL otherwise and errno is set
- *                      appropriately
- *
- * @retval ENOMEM       there was not enough memory to allocate the iterator
+ *                      on success
  *
  * The returned iterator's next method yields one element of \p array at a time.
  */
@@ -233,10 +228,7 @@ rbh_mut_iter_ring(struct rbh_ring *ring, size_t element_size);
  *                    );
  * @param free_node function to free the memory of the list
  *
- * @return        a pointer to a newly allocated struct rbh_iterator on success,
- *                NULL on error and errno is set appropriately
- *
- * @errro ENOMEM  there was not enough memory available
+ * @return        a pointer to a newly allocated struct rbh_iterator on success
  */
 struct rbh_iterator *
 rbh_iter_list(struct rbh_list_node *list, off_t offset,

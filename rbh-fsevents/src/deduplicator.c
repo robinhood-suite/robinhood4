@@ -15,6 +15,7 @@
 #include <robinhood/itertools.h>
 #include <robinhood/fsevent.h>
 #include <robinhood/ring.h>
+#include <robinhood/utils.h>
 
 #include "deduplicator.h"
 #include "deduplicator/fsevent_pool.h"
@@ -110,14 +111,10 @@ no_dedup_iter_next(void *iterator)
     if (fsevent_copy == NULL)
         return NULL;
 
-    dedup = malloc(sizeof(*dedup));
-    if (dedup == NULL)
-        return NULL;
+    dedup = xmalloc(sizeof(*dedup));
 
     dedup->iter = rbh_iter_array(fsevent_copy, sizeof(struct rbh_fsevent), 1,
                                  free);
-    if (dedup->iter == NULL)
-        return NULL;
 
     if (strcmp(deduplicator->source->name, "lustre") == 0)
         dedup->index = hash_lu_id2index(&fsevent_copy->id,
@@ -147,9 +144,7 @@ deduplicator_new(size_t batch_size, struct source *source, size_t nb_workers)
 {
     struct deduplicator *deduplicator;
 
-    deduplicator = malloc(sizeof(*deduplicator));
-    if (deduplicator == NULL)
-        return NULL;
+    deduplicator = xmalloc(sizeof(*deduplicator));
 
     deduplicator->source = source;
     deduplicator->nb_workers = nb_workers;

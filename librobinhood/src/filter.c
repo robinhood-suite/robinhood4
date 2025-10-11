@@ -327,9 +327,7 @@ rbh_filter_clone(const struct rbh_filter *filter)
         return NULL;
     size = filter_data_size(filter);
 
-    clone = malloc(sizeof(*clone) + size);
-    if (clone == NULL)
-        return NULL;
+    clone = xmalloc(sizeof(*clone) + size);
     data = (char *)clone + sizeof(*clone);
 
     rc = filter_copy(clone, filter, &data, &size);
@@ -646,8 +644,6 @@ init_filters(void)
     const int MIN_FILTER_ALLOC = 32;
 
     filters = rbh_sstack_new(MIN_FILTER_ALLOC * sizeof(struct rbh_filter *));
-    if (filters == NULL)
-        error(EXIT_FAILURE, errno, "rbh_sstack_new");
 }
 
 static void __attribute__((destructor))
@@ -683,9 +679,7 @@ filter_compose(enum rbh_filter_operator op, struct rbh_filter *left,
 
     assert(op == RBH_FOP_AND || op == RBH_FOP_OR);
 
-    filter = malloc(sizeof(*filter));
-    if (filter == NULL)
-        error(EXIT_FAILURE, errno, "malloc");
+    filter = xmalloc(sizeof(*filter));
 
     array = RBH_SSTACK_PUSH(filters, NULL, sizeof(*array) * 2);
 
@@ -717,9 +711,7 @@ rbh_filter_array_compose(struct rbh_filter *left, struct rbh_filter *right)
     const struct rbh_filter **array;
     struct rbh_filter *filter;
 
-    filter = malloc(sizeof(*filter));
-    if (filter == NULL)
-        error(EXIT_FAILURE, errno, "malloc");
+    filter = xmalloc(sizeof(*filter));
 
     array = RBH_SSTACK_PUSH(filters, NULL, sizeof(*array) * 2);
 
@@ -738,9 +730,7 @@ rbh_filter_not(struct rbh_filter *filter)
 {
     struct rbh_filter *not;
 
-    not = malloc(sizeof(*not));
-    if (not == NULL)
-        error(EXIT_FAILURE, errno, "malloc");
+    not = xmalloc(sizeof(*not));
 
     not->logical.filters = RBH_SSTACK_PUSH(filters, &filter, sizeof(filter));
 

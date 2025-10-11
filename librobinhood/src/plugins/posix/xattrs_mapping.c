@@ -225,8 +225,6 @@ set_xattrs_types_map()
     }
 
     xattrs_types_stack = rbh_sstack_new(xattrs_types_count);
-    if (xattrs_types_stack == NULL)
-        return false;
 
     xattrs_types = RBH_SSTACK_PUSH(xattrs_types_stack, NULL,
                                    sizeof(*xattrs_types));

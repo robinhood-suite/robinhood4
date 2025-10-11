@@ -286,9 +286,7 @@ enrich_iter_builder_from_uri(const char *uri)
      * build at the moment.
      */
     if (strlen(rbh_uri->fsname) == 0) {
-        uri_backend = malloc(sizeof(*uri_backend));
-        if (uri_backend == NULL)
-            error(EXIT_FAILURE, errno, "malloc");
+        uri_backend = xmalloc(sizeof(*uri_backend));
 
         uri_backend->id = RBH_BI_HESTIA;
     } else {
@@ -345,10 +343,7 @@ static void
 add_iterators_to_consumer(struct rbh_list_node *list,
                           struct rbh_iterator *enricher)
 {
-    struct rbh_node_iterator *new_node = malloc(sizeof(*new_node));
-
-    if (new_node == NULL)
-        error(EXIT_FAILURE, ENOMEM, "malloc");
+    struct rbh_node_iterator *new_node = xmalloc(sizeof(*new_node));
 
     new_node->enricher = enricher;
 
@@ -448,9 +443,7 @@ init_consumer_list()
 {
     struct rbh_list_node *list;
 
-    list = malloc(sizeof(*list));
-    if (list == NULL)
-        return NULL;
+    list = xmalloc(sizeof(*list));
 
     rbh_list_init(list);
 
@@ -467,13 +460,8 @@ setup_producer_consumers(struct rbh_mut_iterator **deduplicator,
     if (deduplicator == NULL)
         error(EXIT_FAILURE, errno, "deduplicator_new");
 
-    *consumers = malloc(nb_workers * sizeof(*consumers));
-    if (consumers == NULL)
-        error(EXIT_FAILURE, errno, "consumers malloc");
-
-    *cinfos = malloc(nb_workers * sizeof(**cinfos));
-    if (*cinfos == NULL)
-        error(EXIT_FAILURE, errno, "cinfos malloc");
+    *consumers = xmalloc(nb_workers * sizeof(*consumers));
+    *cinfos = xmalloc(nb_workers * sizeof(**cinfos));
 
     for (int i = 0; i < nb_workers; i++) {
         struct consumer_info *cinfo = &(*cinfos)[i];
@@ -722,9 +710,7 @@ main(int argc, char *argv[])
             /* already parsed */
             break;
         case 'd':
-            dump_file = strdup(optarg);
-            if (dump_file == NULL)
-                error(EXIT_FAILURE, ENOMEM, "strdup");
+            dump_file = xstrdup(optarg);
             break;
         case 'e':
             enrich_builder = enrich_iter_builder_from_uri(optarg);
@@ -773,9 +759,7 @@ main(int argc, char *argv[])
               "Cannot output changelogs and fsevents both to stdout");
 
     source = source_new(argv[optind++], dump_file, max_changelog);
-    sink = calloc(nb_workers, sizeof(*sink));
-    if (sink == NULL)
-        error(EXIT_FAILURE, errno, "calloc");
+    sink = xcalloc(nb_workers, sizeof(*sink));
 
     for (int i = 0; i < nb_workers; i++)
         sink[i] = sink_new(argv[optind]);

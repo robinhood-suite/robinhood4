@@ -15,7 +15,9 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "robinhood/utils.h"
 #include "robinhood/value.h"
+
 #include "utils.h"
 #include "value.h"
 
@@ -300,9 +302,7 @@ value_clone(const struct rbh_value *value)
     int rc;
 
     size = value_data_size(value, 0);
-    clone = malloc(sizeof(*clone) + size);
-    if (clone == NULL)
-        return NULL;
+    clone = xmalloc(sizeof(*clone) + size);
     data = (char *)clone + sizeof(*clone);
 
     rc = value_copy(clone, value, &data, &size);

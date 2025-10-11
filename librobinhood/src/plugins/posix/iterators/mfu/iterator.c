@@ -64,11 +64,8 @@ mfu_iter_next(void *_iter)
     char *parent;
     int rank;
 
-    if (sstack == NULL) {
+    if (sstack == NULL)
         sstack = rbh_sstack_new(1 << 16);
-        if (sstack == NULL)
-            return NULL;
-    }
 
 skip:
     if (iter->current == iter->total) {
@@ -259,9 +256,7 @@ mfu_iter_new(struct rbh_metadata *metadata, const char *root, const char *entry,
 
     rbh_mpi_inc_ref(rbh_mpi_initialize);
 
-    mfu = malloc(sizeof(*mfu));
-    if (!mfu)
-        return NULL;
+    mfu = xmalloc(sizeof(*mfu));
 
     if (flist) {
         mfu->posix.prefix_len = prefix_len;

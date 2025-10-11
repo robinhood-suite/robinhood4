@@ -111,7 +111,4 @@ void
 initialize_source_stack(size_t stack_size)
 {
     source_stack = rbh_sstack_new(stack_size);
-    if (!source_stack)
-        error(EXIT_FAILURE, errno,
-              "rbh_sstack_new in initialize_source_stack");
 }

@@ -127,10 +127,7 @@ struct rbh_sstack;
  * @param chunk_size    the maximum number of bytes that can be pushed onto the
  *                      sstack at once
  *
- * @return              a pointer to a newly allocated sstack on success, NULL
- *                      on error and errno is set appropriately
- *
- * @error ENOMEM        there was not enough memory available
+ * @return              a pointer to a newly allocated sstack on success
  */
 struct rbh_sstack *
 rbh_sstack_new(size_t chunk_size);

@@ -166,9 +166,7 @@ s3_iter_next(void *iterator)
         return NULL;
 
     length = strlen(current_bucket) + strlen(current_object) + 2;
-    full_path = malloc(length);
-    if (full_path == NULL)
-        return NULL;
+    full_path = xmalloc(length);
 
     rc = snprintf(full_path, length, "%s/%s", current_bucket, current_object);
     if (rc == -1)
@@ -244,9 +242,7 @@ s3_iterator_new(char* bucket_name)
 {
     struct s3_iterator *s3_iter = NULL;
 
-    s3_iter = malloc(sizeof(*s3_iter));
-    if (s3_iter == NULL)
-        return NULL;
+    s3_iter = xmalloc(sizeof(*s3_iter));
 
     s3_iter->obj_data.list = NULL;
     if (bucket_name == NULL) {
@@ -256,7 +252,7 @@ s3_iterator_new(char* bucket_name)
             error(EXIT_FAILURE, ENODATA, "specified bucket does not exist");
 
         s3_iter->bkt_data.length = 1;
-        s3_iter->bkt_data.list = malloc(sizeof(char*));
+        s3_iter->bkt_data.list = xmalloc(sizeof(char*));
         s3_iter->bkt_data.list[0] = bucket_name;
     }
 
@@ -274,8 +270,6 @@ s3_iterator_new(char* bucket_name)
     s3_iter->iterator = S3_ITER;
 
     s3_iter->values = rbh_sstack_new(1 << 10);
-    if (s3_iter->values == NULL)
-        return NULL;
 
     return s3_iter;
 }
@@ -366,15 +360,9 @@ s3_backend_branch(void *backend, const struct rbh_id *id,
         return NULL;
     }
 
-    branch = malloc(sizeof(*branch));
-    if (branch == NULL)
-        return NULL;
+    branch = xmalloc(sizeof(*branch));
 
-    branch->bucket_name = strdup(path);
-    if (branch->bucket_name == NULL) {
-        free(branch);
-        return NULL;
-    }
+    branch->bucket_name = xstrdup(path);
 
     branch->s3.backend = S3_BRANCH_BACKEND;
     branch->s3.iter_new = s3_iterator_new;
@@ -471,20 +459,12 @@ s3_get_info(__attribute__((unused)) void *backend, int info_flags)
         tmp_flags >>= 1;
     }
 
-    if (info_sstack == NULL) {
+    if (info_sstack == NULL)
         info_sstack = rbh_sstack_new(MIN_VALUES_SSTACK_ALLOC *
                                      (sizeof(struct rbh_value_map *)));
-        if (!info_sstack)
-            goto out;
-    }
 
     pairs = RBH_SSTACK_PUSH(info_sstack, NULL, count * sizeof(*pairs));
-    if (!pairs)
-        goto out;
-
     map_value = RBH_SSTACK_PUSH(info_sstack, NULL, sizeof(*map_value));
-    if (!map_value)
-        goto out;
 
     if (info_flags & RBH_INFO_BACKEND_SOURCE) {
         pairs[idx].key = "backend_source";
@@ -495,10 +475,6 @@ s3_get_info(__attribute__((unused)) void *backend, int info_flags)
     map_value->count = idx;
 
     return map_value;
-
-out:
-    errno = EINVAL;
-    return NULL;
 }
 
     /*--------------------------------------------------------------------*
@@ -564,9 +540,7 @@ rbh_s3_backend_new(__attribute__((unused))
     char port[16];
     int rc2;
 
-    s3 = malloc(sizeof(*s3));
-    if (s3 == NULL)
-        return NULL;
+    s3 = xmalloc(sizeof(*s3));
 
     rbh_config_load(config);
 

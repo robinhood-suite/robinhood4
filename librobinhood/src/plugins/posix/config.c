@@ -10,6 +10,7 @@
 
 #include "robinhood/config.h"
 #include "robinhood/plugins/backend.h"
+#include "robinhood/utils.h"
 #include "robinhood/value.h"
 
 #include "robinhood/backends/posix_extension.h"
@@ -71,7 +72,7 @@ load_enrichers(const struct rbh_plugin *self,
     /* if we arrive here, we have at least one enricher to load */
     assert(count >= 2);
 
-    posix->enrichers = malloc(sizeof(*posix->enrichers) * count);
+    posix->enrichers = xmalloc(sizeof(*posix->enrichers) * count);
 
     for (size_t i = 0; i < enrichers->sequence.count; i++) {
         const struct rbh_value *value = &enrichers->sequence.values[i];

@@ -15,6 +15,7 @@
 
 #include <robinhood/backend.h>
 #include "robinhood/sstack.h"
+#include "robinhood/utils.h"
 
 #include "sink.h"
 
@@ -43,18 +44,12 @@ destroy_metadata_sstack(void)
 static int
 backend_sink_insert_source(void *_sink, const struct rbh_value *backend_source)
 {
-    if (backend_source == NULL)
-        return -1;
-
     struct backend_sink *sink = _sink;
     struct rbh_value_map *value_map;
     struct rbh_value_pair *pair;
 
-    if (metadata_sstack == NULL) {
+    if (metadata_sstack == NULL)
         metadata_sstack = rbh_sstack_new(sizeof(struct rbh_value_map));
-        if (!metadata_sstack)
-            return -1;
-    }
 
     value_map = RBH_SSTACK_PUSH(metadata_sstack, NULL, sizeof(*value_map));
     pair = RBH_SSTACK_PUSH(metadata_sstack, NULL, sizeof(*pair));
@@ -93,9 +88,7 @@ sink_from_backend(struct rbh_backend *backend)
 {
     struct backend_sink *sink;
 
-    sink = malloc(sizeof(*sink));
-    if (sink == NULL)
-        error(EXIT_FAILURE, errno, "malloc");
+    sink = xmalloc(sizeof(*sink));
 
     sink->sink = BACKEND_SINK;
     sink->backend = backend;

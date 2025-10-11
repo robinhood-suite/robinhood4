@@ -15,6 +15,7 @@
 #include "robinhood/stack.h"
 #include "robinhood/sstack.h"
 #include "robinhood/utils.h"
+#include "utils.h"
 
 static struct rbh_sstack *aliases_stack;
 static struct rbh_stack *history_stack;
@@ -53,10 +54,6 @@ load_aliases_from_config(void)
     }
 
     aliases_stack = rbh_sstack_new(stack_size);
-    if (aliases_stack == NULL) {
-        fprintf(stderr, "Failed to create alias stack.\n");
-        return -1;
-    }
 
     aliases = RBH_SSTACK_PUSH(aliases_stack, &value.map, sizeof(value.map));
     aliases->count = value.map.count;
@@ -72,7 +69,7 @@ load_aliases_from_config(void)
 static int
 add_args_to_argv(char **argv_dest, int dest_index, const char *args)
 {
-    char *copy = strdup(args);
+    char *copy = xstrdup(args);
     char *arg = strtok(copy, " ");
 
     while (arg != NULL) {
@@ -161,11 +158,7 @@ alias_resolution(int *argc, char ***argv, size_t alias_index,
     rbh_stack_push(history_stack, aliases->pairs[alias_index].key,
                    strlen(aliases->pairs[alias_index].key) + 1);
 
-    argv_temp = malloc(new_argc * sizeof(char *));
-    if (!argv_temp) {
-        fprintf(stderr, "Failed to allocate memory for argv_temp.\n");
-        return -1;
-    }
+    argv_temp = xmalloc(new_argc * sizeof(char *));
 
     temp_index = copy_args(argv_temp, *argv, 0, argv_alias_index, temp_index);
 

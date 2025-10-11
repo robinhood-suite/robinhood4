@@ -100,9 +100,7 @@ parse_group_by(const char *_group_by, struct rbh_group_fields *group,
 
     fields = RBH_SSTACK_PUSH(values_sstack, NULL, count * sizeof(*fields));
 
-    group_by = strdup(_group_by);
-    if (group_by == NULL)
-        error_at_line(EXIT_FAILURE, EINVAL, __FILE__, __LINE__, "strdup");
+    group_by = xstrdup(_group_by);
 
     init_id_columns(columns, count);
 

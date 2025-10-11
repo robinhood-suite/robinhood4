@@ -95,10 +95,7 @@ undelete(const char *path)
     }
 
     delete_event.id = fsentry->id;
-
     delete_iter = rbh_iter_array(&delete_event, sizeof(delete_event), 1, NULL);
-    if (delete_iter == NULL)
-        error(EXIT_FAILURE, errno, "rbh_iter_array");
 
     if (rbh_backend_update(metadata_source, delete_iter) < 0) {
         int save_errno = errno;
@@ -127,11 +124,7 @@ set_targets(const char *target_uri)
     if (uri == NULL)
         error(EXIT_FAILURE, errno, "Cannot detect given backend");
 
-    undelete_target_path = strdup(uri->fsname);
-    if (undelete_target_path == NULL) {
-        free(uri);
-        error(EXIT_FAILURE, errno, "Failed to duplicate target name");
-    }
+    undelete_target_path = xstrdup(uri->fsname);
 
     target_entry = rbh_backend_and_branch_from_uri(uri, false);
     free(uri);

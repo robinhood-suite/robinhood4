@@ -25,6 +25,8 @@
 #include "robinhood/backends/mongo.h"
 #include "robinhood/sstack.h"
 #include "robinhood/uri.h"
+#include "robinhood/utils.h"
+
 #include "value.h"
 #include "utils.h"
 #include "value.h"
@@ -269,12 +271,9 @@ map_from_bson(bson_iter_t *iter)
     bufsize = sizeof(tmp);
     buffer = tmp;
 
-    if (values_sstack == NULL) {
+    if (values_sstack == NULL)
         values_sstack = rbh_sstack_new(MIN_VALUES_SSTACK_ALLOC *
                                        sizeof(struct rbh_value *));
-        if (values_sstack == NULL)
-            goto out;
-    }
 
     while (bson_iter_next(iter)) {
         const char *key = bson_iter_key(iter);
@@ -391,10 +390,7 @@ mongo_iterator_new(mongoc_cursor_t *cursor)
 {
     struct mongo_iterator *mongo_iter;
 
-    mongo_iter = malloc(sizeof(*mongo_iter));
-    if (mongo_iter == NULL)
-        return NULL;
-
+    mongo_iter = xmalloc(sizeof(*mongo_iter));
     mongo_iter->iterator = MONGO_ITER;
     mongo_iter->cursor = cursor;
 
@@ -905,13 +901,6 @@ _mongo_backend_filter(void *backend, const struct rbh_filter *filter,
 
 skip_aggregate:
     mongo_iter = mongo_iterator_new(cursor);
-    if (mongo_iter == NULL) {
-        int save_errno = errno;
-
-        mongoc_cursor_destroy(cursor);
-        errno = save_errno;
-        return NULL;
-    }
 
     return &mongo_iter->iterator;
 }
@@ -1166,20 +1155,12 @@ mongo_backend_get_info(void *backend, int info_flags)
         tmp_flags >>= 1;
     }
 
-    if (info_sstack == NULL) {
+    if (info_sstack == NULL)
         info_sstack = rbh_sstack_new(MIN_VALUES_SSTACK_ALLOC *
                                     (sizeof(struct rbh_value_map *)));
-        if (!info_sstack)
-            goto out;
-    }
 
     pairs = RBH_SSTACK_PUSH(info_sstack, NULL, count * sizeof(*pairs));
-    if (!pairs)
-        goto out;
-
     map_value = RBH_SSTACK_PUSH(info_sstack, NULL, sizeof(*map_value));
-    if (!map_value)
-        goto out;
 
     if (info_flags & RBH_INFO_AVG_OBJ_SIZE) {
         if (!get_collection_stats(mongo, "avgObjSize", &pairs[idx++]))
@@ -1351,12 +1332,6 @@ mongo_gc_backend_filter(void *backend, const struct rbh_filter *filter_,
     }
 
     mongo_iter = mongo_iterator_new(cursor);
-    if (mongo_iter == NULL) {
-        int save_errno = errno;
-
-        mongoc_cursor_destroy(cursor);
-        errno = save_errno;
-    }
 
     return &mongo_iter->iterator;
 }
@@ -1577,9 +1552,7 @@ mongo_backend_branch(void *backend, const struct rbh_id *id, const char *path)
     (void) path;
 
     data_size = id->size;
-    branch = malloc(sizeof(*branch) + data_size);
-    if (branch == NULL)
-        return NULL;
+    branch = xmalloc(sizeof(*branch) + data_size);
     data = (char *)branch + sizeof(*branch);
 
     if (mongo_backend_init_from_uri(&branch->mongo,
@@ -1721,9 +1694,7 @@ rbh_mongo_backend_new(const struct rbh_backend_plugin *self,
 {
     struct mongo_backend *mongo;
 
-    mongo = malloc(sizeof(*mongo));
-    if (mongo == NULL)
-        return NULL;
+    mongo = xmalloc(sizeof(*mongo));
 
     rbh_config_load(config);
 

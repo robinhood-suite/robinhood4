@@ -16,6 +16,7 @@
 #include <string.h>
 
 #include "robinhood/backend.h"
+#include "robinhood/utils.h"
 
 #include "utils.h"
 
@@ -237,9 +238,7 @@ rbh_backend_fsentry_from_path(struct rbh_backend *backend, const char *path_,
     int save_errno;
     char *path;
 
-    path = strdup(path_);
-    if (path == NULL)
-        return NULL;
+    path = xstrdup(path_);
 
     fsentry = backend_fsentry_from_path(backend, path, projection);
     save_errno = errno;

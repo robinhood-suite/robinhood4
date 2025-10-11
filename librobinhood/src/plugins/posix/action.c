@@ -265,7 +265,7 @@ rbh_posix_fill_entry_info(char *output, int max_length,
     case 'G':
         return snprintf(output, max_length, "%u", fsentry->statx->stx_gid);
     case 'h':
-        path = strdup(rbh_fsentry_find_ns_xattr(fsentry, "path")->string);
+        path = xstrdup(rbh_fsentry_find_ns_xattr(fsentry, "path")->string);
         chars_written = snprintf(output, max_length, "%s", dirname(path));
         free(path);
         return chars_written;

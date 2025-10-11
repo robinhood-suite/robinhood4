@@ -14,6 +14,7 @@
 #include <string.h>
 
 #include "robinhood/stack.h"
+#include "robinhood/utils.h"
 
 struct rbh_stack {
     size_t size;
@@ -27,18 +28,8 @@ rbh_stack_new(size_t size)
     struct rbh_stack *stack;
     char *buffer;
 
-    buffer = malloc(size);
-    if (buffer == NULL)
-        return NULL;
-
-    stack = malloc(sizeof(*stack));
-    if (stack == NULL) {
-        int save_errno = errno;
-
-        free(buffer);
-        errno = save_errno;
-        return NULL;
-    }
+    buffer = xmalloc(size);
+    stack = xmalloc(sizeof(*stack));
 
     stack->buffer = buffer;
     stack->used = 0;

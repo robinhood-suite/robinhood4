@@ -46,9 +46,7 @@ get_parent_id(const char *path, bool use_fd, int prefix_len, short backend_id)
     char *tmp_path;
     int fd;
 
-    tmp_path = strdup(path);
-    if (tmp_path == NULL)
-        return NULL;
+    tmp_path = xstrdup(path);
 
     if (use_fd) {
         parent_path = dirname(tmp_path);

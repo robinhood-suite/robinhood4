@@ -19,6 +19,9 @@
 #ifndef ROBINHOOD_UTILS_H
 #define ROBINHOOD_UTILS_H
 
+#include <error.h>
+#include <errno.h>
+
 #include "robinhood/backend.h"
 #include "robinhood/config.h"
 
@@ -33,6 +36,23 @@
 
 #define debug(fmt, ...) _debug(__FILE__, __LINE__, __func__, fmt, __VA_ARGS__)
 #define entry() debug("entry")
+
+#define XWRAPPER(func, args...) ({                                  \
+    void *ptr = func(args);                                         \
+    if (!ptr) {                                                     \
+        fprintf(stderr, #func " failed in '%s' (%d): %s (%d)",      \
+                  __FILE__, __LINE__, strerror(errno), errno);      \
+        abort();                                                    \
+    }                                                               \
+    ptr; })
+
+#define xmalloc(size)                   XWRAPPER(malloc, size)
+#define xcalloc(nmemb, size)            XWRAPPER(calloc, nmemb, size)
+#define xstrdup(str)                    XWRAPPER(strdup, str)
+#define xstrndup(str, n)                XWRAPPER(strndup, str, n)
+#define xrealloc(ptr, size)             XWRAPPER(realloc, ptr, size)
+#define xreallocarray(ptr, nmemb, size) XWRAPPER(reallocarray, ptr, nmemb, size)
+#define xstrdup_safe(str)               ({ str ? xstrdup(str) : NULL; })
 
 /**
  * Create a backend from a URI string

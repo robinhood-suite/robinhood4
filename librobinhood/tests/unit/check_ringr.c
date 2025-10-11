@@ -100,7 +100,6 @@ START_TEST(rrd_once)
     ck_assert_ptr_nonnull(ringr);
 
     duplicate = rbh_ringr_dup(ringr);
-    ck_assert_ptr_nonnull(duplicate);
 
     rbh_ringr_destroy(duplicate);
     rbh_ringr_destroy(ringr);

@@ -19,6 +19,7 @@
 #include "robinhood/itertools.h"
 #include "robinhood/queue.h"
 #include "robinhood/ring.h"
+#include "robinhood/utils.h"
 
 /*----------------------------------------------------------------------------*
  |                              rbh_iter_array()                              |
@@ -74,9 +75,7 @@ rbh_iter_array(const void *array, size_t element_size, size_t element_count,
 {
     struct array_iterator *iterator;
 
-    iterator = malloc(sizeof(*iterator));
-    if (iterator == NULL)
-        return NULL;
+    iterator = xmalloc(sizeof(*iterator));
     iterator->iter = ARRAY_ITER;
 
     iterator->array = array;
@@ -178,9 +177,7 @@ chunkify_iter_next(void *iterator)
         return NULL;
     errno = save_errno;
 
-    chunk = malloc(sizeof(*chunk));
-    if (chunk == NULL)
-        return NULL;
+    chunk = xmalloc(sizeof(*chunk));
 
     chunk->iterator = CHUNK_ITER;
 
@@ -220,11 +217,7 @@ rbh_iter_chunkify(struct rbh_iterator *iterator, size_t chunk)
         return NULL;
     }
 
-    chunkify = malloc(sizeof(*chunkify));
-    if (chunkify == NULL) {
-        errno = ENOMEM;
-        return NULL;
-    }
+    chunkify = xmalloc(sizeof(*chunkify));
 
     chunkify->iterator = CHUNKIFY_ITER;
     chunkify->subiter = iterator;
@@ -354,12 +347,7 @@ tee_iter_new(struct rbh_iterator *subiter)
         return NULL;
     }
 
-    tee = malloc(sizeof(*tee));
-    if (tee == NULL) {
-        rbh_queue_destroy(queue);
-        errno = ENOMEM;
-        return NULL;
-    }
+    tee = xmalloc(sizeof(*tee));
 
     tee->iterator = TEE_ITER;
     tee->subiter = subiter;
@@ -481,9 +469,7 @@ rbh_iter_chain(struct rbh_iterator *first, struct rbh_iterator *second)
     if (second == NULL)
         return first;
 
-    chain = malloc(sizeof(*chain));
-    if (chain == NULL)
-        return NULL;
+    chain = xmalloc(sizeof(*chain));
 
     chain->iterator = CHAIN_ITER;
     chain->first = first;
@@ -550,9 +536,7 @@ rbh_iter_constify(struct rbh_mut_iterator *iterator)
 {
     struct constify_iterator *constify;
 
-    constify = malloc(sizeof(*constify));
-    if (constify == NULL)
-        return NULL;
+    constify = xmalloc(sizeof(*constify));
 
     constify->iterator = CONSTIFY_ITERATOR;
     constify->subiter = iterator;
@@ -605,9 +589,7 @@ rbh_iter_ring(struct rbh_ring *ring, size_t element_size)
 {
     struct ring_iterator *iterator;
 
-    iterator = malloc(sizeof(*iterator));
-    if (iterator == NULL)
-        return NULL;
+    iterator = xmalloc(sizeof(*iterator));
 
     iterator->iterator = RING_ITERATOR;
     iterator->ring = ring;
@@ -678,9 +660,7 @@ rbh_iter_list(struct rbh_list_node *list, off_t offset,
 {
     struct list_iterator *iterator;
 
-    iterator = malloc(sizeof(*iterator));
-    if (iterator == NULL)
-        return NULL;
+    iterator = xmalloc(sizeof(*iterator));
 
     iterator->iterator = LIST_ITERATOR;
     iterator->head = list;

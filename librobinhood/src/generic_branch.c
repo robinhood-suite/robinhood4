@@ -413,9 +413,7 @@ generic_branch_backend_filter(void *backend, const struct rbh_filter *filter,
         return NULL;
     }
 
-    iter = malloc(sizeof(*iter));
-    if (iter == NULL)
-        return NULL;
+    iter = xmalloc(sizeof(*iter));
 
     iter->directory = rbh_backend_root(backend, &ID_ONLY);
     if (iter->directory == NULL) {
@@ -440,28 +438,9 @@ generic_branch_backend_filter(void *backend, const struct rbh_filter *filter,
     errno = save_errno;
 
     iter->values[0] = rbh_ringr_new(VALUE_RING_SIZE);
-    if (iter->values[0] == NULL) {
-        save_errno = errno;
-        goto out_free_filter;
-    }
-
     iter->values[1] = rbh_ringr_dup(iter->values[0]);
-    if (iter->values[1] == NULL) {
-        save_errno = errno;
-        goto out_free_first_values_ringr;
-    }
-
     iter->ids[0] = rbh_ringr_new(ID_RING_SIZE);
-    if (iter->ids[0] == NULL) {
-        save_errno = errno;
-        goto out_free_second_values_ringr;
-    }
-
     iter->ids[1] = rbh_ringr_dup(iter->ids[0]);
-    if (iter->ids[1] == NULL) {
-        save_errno = errno;
-        goto out_free_first_ids_ringr;
-    }
 
     iter->options = *options;
     iter->output = *output;
@@ -475,14 +454,6 @@ generic_branch_backend_filter(void *backend, const struct rbh_filter *filter,
 
     return &iter->iterator;
 
-out_free_first_ids_ringr:
-    rbh_ringr_destroy(iter->ids[0]);
-out_free_second_values_ringr:
-    rbh_ringr_destroy(iter->values[1]);
-out_free_first_values_ringr:
-    rbh_ringr_destroy(iter->values[0]);
-out_free_filter:
-    free(iter->filter);
 out_destroy_fsentries:
     rbh_mut_iter_destroy(iter->fsentries);
 out_free_directory:

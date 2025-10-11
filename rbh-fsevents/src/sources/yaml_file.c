@@ -17,6 +17,7 @@
 #include <miniyaml.h>
 #include <robinhood/fsevent.h>
 #include <robinhood/serialization.h>
+#include <robinhood/utils.h>
 
 #include "source.h"
 
@@ -36,9 +37,7 @@ yaml_fsevent_init(FILE *file, const struct rbh_iterator iterator,
     struct file_source *file_source;
     yaml_event_t event;
 
-    file_source = malloc(sizeof(*file_source));
-    if (file_source == NULL)
-        error(EXIT_FAILURE, errno, "malloc in yaml_fsevent_init");
+    file_source = xmalloc(sizeof(*file_source));
 
     if (!yaml_parser_initialize(&file_source->fsevents.parser))
         error(EXIT_FAILURE, errno,

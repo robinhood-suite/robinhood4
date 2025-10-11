@@ -82,9 +82,8 @@ xattrs_get_fid(int fd, struct rbh_value_pair *pairs, int available_pairs)
 
     if (handle == NULL) {
         /* Per-thread initialization of `handle' */
-        handle = malloc(sizeof(*handle) + handle_size);
-        if (handle == NULL)
-            return -1;
+        handle = xmalloc(sizeof(*handle) + handle_size);
+
         handle->handle_bytes = handle_size;
     }
 
@@ -96,9 +95,7 @@ retry:
         if (errno != EOVERFLOW || handle->handle_bytes <= handle_size)
             return -1;
 
-        tmp = malloc(sizeof(*tmp) + handle->handle_bytes);
-        if (tmp == NULL)
-            return -1;
+        tmp = xmalloc(sizeof(*tmp) + handle->handle_bytes);
 
         handle_size = handle->handle_bytes;
         free(handle);
@@ -201,24 +198,18 @@ create_string_value(char *str, size_t len)
  *
  * @return          -1 if an error occured (and errno is set), 0 otherwise
  */
-static int
+static void
 iter_data_ost_try_resize(struct iterator_data *data, int ost_len)
 {
     void *tmp;
 
-    if (data->ost_idx + ost_len > data->ost_size) {
-        tmp = realloc(data->ost,
-                      (data->ost_size + ost_len) * sizeof(*data->ost));
-        if (tmp == NULL) {
-            errno = -ENOMEM;
-            return -1;
-        }
+    if (data->ost_idx + ost_len <= data->ost_size)
+        return;
 
-        data->ost = tmp;
-        data->ost_size += ost_len;
-    }
+    tmp = xrealloc(data->ost, (data->ost_size + ost_len) * sizeof(*data->ost));
 
-    return 0;
+    data->ost = tmp;
+    data->ost_size += ost_len;
 }
 
 /**
@@ -281,10 +272,7 @@ fill_iterator_data(struct llapi_layout *layout,
                            !llapi_layout_is_composite(layout));
     ost_len = (is_init_or_not_comp ? stripe_count : 1);
 
-    rc = iter_data_ost_try_resize(data, ost_len);
-    if (rc)
-        return rc;
-
+    iter_data_ost_try_resize(data, ost_len);
     if (is_init_or_not_comp) {
         uint64_t i;
 
@@ -353,7 +341,7 @@ layout_get_nb_comp(struct llapi_layout *layout, void *cbdata)
     return 0;
 }
 
-static int
+static void
 init_iterator_data(struct iterator_data *data, const uint32_t length,
                    const int nb_xattrs)
 {
@@ -364,9 +352,7 @@ init_iterator_data(struct iterator_data *data, const uint32_t length,
      * Additionnaly, we will keep the OSTs of each component in a separate list
      * because its length isn't fixed.
      */
-    struct rbh_value *arr = calloc(nb_xattrs * length, sizeof(*arr));
-    if (arr == NULL)
-        return -1;
+    struct rbh_value *arr = xcalloc(nb_xattrs * length, sizeof(*arr));
 
     data->stripe_count = arr;
     data->stripe_size = &arr[1 * length];
@@ -380,23 +366,15 @@ init_iterator_data(struct iterator_data *data, const uint32_t length,
         data->end = &arr[7 * length];
     }
 
-    if (S_ISDIR(mode)) {
+    if (S_ISDIR(mode))
         /* XXX we do not yet fetch the OST indexes of directories */
         data->ost = NULL;
-    } else {
-        data->ost = malloc(length * sizeof(*data->ost));
-        if (data->ost == NULL) {
-            free(arr);
-            errno = -ENOMEM;
-            return -1;
-        }
-    }
+    else
+        data->ost = xmalloc(length * sizeof(*data->ost));
 
     data->ost_size = length;
     data->ost_idx = 0;
     data->comp_index = 0;
-
-    return 0;
 }
 
 static int
@@ -501,9 +479,7 @@ get_lov_user_md(int fd)
     int rc = 0;
     char *tmp;
 
-    tmp = malloc(XATTR_SIZE_MAX * sizeof(*tmp));
-    if (tmp == NULL)
-        return NULL;
+    tmp = xmalloc(XATTR_SIZE_MAX * sizeof(*tmp));
 
     memset(tmp, 0, XATTR_SIZE_MAX);
     lum = (struct lov_user_md *)tmp;
@@ -657,9 +633,7 @@ xattrs_get_layout(int fd, struct rbh_value_pair *pairs, int available_pairs)
         nb_comp = 1;
     }
 
-    rc = init_iterator_data(&data, nb_comp, nb_xattrs);
-    if (rc)
-        goto err;
+    init_iterator_data(&data, nb_comp, nb_xattrs);
 
     if (llapi_layout_is_composite(layout)) {
         rc = llapi_layout_comp_iterate(layout, &xattrs_layout_iterator, &data);
@@ -729,8 +703,8 @@ xattrs_get_mdt_info(int fd, struct rbh_value_pair *pairs, int available_pairs)
          * the ioctl again.
          */
 again:
-        lum = calloc(1,
-                     lmv_user_md_size(stripe_count, LMV_USER_MAGIC_SPECIFIC));
+        lum = xcalloc(1,
+                      lmv_user_md_size(stripe_count, LMV_USER_MAGIC_SPECIFIC));
         lum->lum_magic = LMV_MAGIC_V1;
         lum->lum_stripe_count = stripe_count;
 
@@ -759,9 +733,7 @@ again:
             __builtin_unreachable();
         }
 
-        mdt_idx = calloc(lum->lum_stripe_count, sizeof(*mdt_idx));
-        if (mdt_idx == NULL)
-            goto free_lum;
+        mdt_idx = xcalloc(lum->lum_stripe_count, sizeof(*mdt_idx));
 
         objects = lum->lum_objects;
 
@@ -893,9 +865,7 @@ lustre_get_default_dir_stripe(int fd, uint64_t flags)
         return NULL;
     }
 
-    value = malloc(sizeof(*value));
-    if (!value)
-        return NULL;
+    value = xmalloc(sizeof(*value));
 
     lum = (struct lov_user_md *) get_lov_user_md(fd);
 
@@ -967,14 +937,11 @@ build_fsentry_after_undelete(const char *path, struct rbh_fsentry *fsentry)
     namebuf[PATH_MAX - 1] = '\0';
     name = basename(namebuf);
 
-    if (fsentry_names == NULL) {
+    if (fsentry_names == NULL)
         /* This stack should only contain the names of fsentries, no need to
          * make its size larger than a path can be...
          */
         fsentry_names = rbh_sstack_new(PATH_MAX);
-        if (fsentry_names == NULL)
-            error(EXIT_FAILURE, errno, "Failed to allocate 'fsentry_names'");
-    }
 
     fsentry->parent_id = *parent_id;
     fsentry->name = RBH_SSTACK_PUSH(fsentry_names, name, strlen(name) + 1);
