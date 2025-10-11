@@ -67,19 +67,11 @@ get_mount_path(const char *path, char **mount_path)
             ((path[pathlen] == '/') || (path[pathlen] == '\0'))) {
             /* replace contents of mount_path */
             free(mount_point);
-            mount_point = strdup(p_mount->mnt_dir);
-            if (!mount_point) {
-                endmntent(fp);
-                errno = ENOMEM;
-                rc = -1;
-                goto out_free;
-            }
+            mount_point = xstrdup(p_mount->mnt_dir);
         }
     }
 
     endmntent(fp);
-
-out_free:
     save_errno = errno;
 
     if (rc) {

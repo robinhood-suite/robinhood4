@@ -99,10 +99,7 @@ rbh_ringr_new(size_t size);
  *
  * @param ringr     the ringr to duplicate to create the new reader
  *
- * @return          a pointer to a newly allocated ringr on success,
- *                  NULL on error and errno is set appropriately
- *
- * @error ENOMEM    there was not enough memory available
+ * @return          a pointer to a newly allocated ringr on success
  */
 struct rbh_ringr *
 rbh_ringr_dup(struct rbh_ringr *ringr);

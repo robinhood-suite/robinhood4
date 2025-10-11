@@ -15,6 +15,7 @@
 
 #include "robinhood/backend.h"
 #include "robinhood/sstack.h"
+#include "robinhood/utils.h"
 #include "robinhood/value.h"
 
 #include "sink.h"
@@ -89,9 +90,7 @@ sink_from_backend(struct rbh_backend *backend)
 {
     struct backend_sink *sink;
 
-    sink = malloc(sizeof(*sink));
-    if (sink == NULL)
-        error(EXIT_FAILURE, errno, "malloc");
+    sink = xmalloc(sizeof(*sink));
 
     sink->sink = BACKEND_SINK;
     sink->backend = backend;

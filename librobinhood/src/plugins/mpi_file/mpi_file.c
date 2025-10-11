@@ -23,6 +23,7 @@
 #include "robinhood/statx.h"
 #include "robinhood/mpi_rc.h"
 #include "robinhood/uri.h"
+#include "robinhood/utils.h"
 #include "mpi_file.h"
 
 /*----------------------------------------------------------------------------*
@@ -76,11 +77,8 @@ fsentry_from_flist(struct file_info *mpi_fi,
     struct rbh_id *id;
     int save_errno;
 
-    if (sstack == NULL) {
+    if (sstack == NULL)
         sstack = rbh_sstack_new(1 << 10);
-        if (sstack == NULL)
-            return NULL;
-    }
 
     const char *path = strlen(mpi_fi->path) == posix->prefix_len ?
                         "/" : mpi_fi->path + posix->prefix_len;
@@ -91,10 +89,6 @@ fsentry_from_flist(struct file_info *mpi_fi,
      */
     id = rbh_id_new_with_id(path, (strlen(path) + 1) * sizeof(*path),
                             RBH_BI_MPI_FILE);
-    if (id == NULL) {
-        save_errno = errno;
-        return NULL;
-    }
 
     flist_file2statx(mfu->files, mfu->current, &statxbuf);
 
@@ -481,20 +475,12 @@ mpi_file_backend_get_info(__attribute__((unused)) void *backend, int info_flags)
         tmp_flags >>= 1;
     }
 
-    if (info_sstack == NULL) {
+    if (info_sstack == NULL)
         info_sstack = rbh_sstack_new(MIN_VALUES_SSTACK_ALLOC *
                                      (sizeof(struct rbh_value_map *)));
-        if (!info_sstack)
-            goto out;
-    }
 
     pairs = RBH_SSTACK_PUSH(info_sstack, NULL, count * sizeof(*pairs));
-    if (!pairs)
-        goto out;
-
     map_value = RBH_SSTACK_PUSH(info_sstack, NULL, sizeof(*map_value));
-    if (!map_value)
-        goto out;
 
     if (info_flags & RBH_INFO_BACKEND_SOURCE) {
         pairs[idx].key = "backend_source";
@@ -505,10 +491,6 @@ mpi_file_backend_get_info(__attribute__((unused)) void *backend, int info_flags)
     map_value->count = idx;
 
     return map_value;
-
-out:
-    errno = EINVAL;
-    return NULL;
 }
 
     /*--------------------------------------------------------------------*
@@ -568,9 +550,7 @@ rbh_mpi_file_backend_new(const struct rbh_backend_plugin *self,
     const char *path = uri->fsname;
     int save_errno;
 
-    mpi_file = malloc(sizeof(*mpi_file));
-    if (mpi_file == NULL)
-        error(EXIT_FAILURE, errno, "malloc mpi_file_backend struct");
+    mpi_file = xmalloc(sizeof(*mpi_file));
 
     if (*path == '\0') {
         save_errno = errno;
@@ -579,14 +559,7 @@ rbh_mpi_file_backend_new(const struct rbh_backend_plugin *self,
         return NULL;
     }
 
-    mpi_file->path = strdup(path);
-    if (mpi_file->path == NULL) {
-        save_errno = errno;
-        free(mpi_file);
-        errno = save_errno;
-        return NULL;
-    }
-
+    mpi_file->path = xstrdup(path);
     mpi_file_backend_init(mpi_file);
     mpi_file->backend = MPI_FILE_BACKEND;
 

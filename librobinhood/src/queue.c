@@ -19,6 +19,7 @@
 #include "robinhood/queue.h"
 #include "robinhood/ring.h"
 #include "robinhood/sstack.h"
+#include "robinhood/utils.h"
 
 struct rbh_queue {
     struct rbh_ring **rings;
@@ -43,35 +44,9 @@ rbh_queue_new(size_t chunk_size)
     if (ring == NULL)
         return NULL;
 
-    queue = malloc(sizeof(*queue));
-    if (queue == NULL) {
-        int save_errno = errno;
-
-        rbh_ring_destroy(ring);
-        errno = save_errno;
-        return NULL;
-    }
-
-    queue->rings = malloc(sizeof(*queue->rings));
-    if (queue->rings == NULL) {
-        int save_errno = errno;
-
-        free(queue);
-        rbh_ring_destroy(ring);
-        errno = save_errno;
-        return NULL;
-    }
-
+    queue = xmalloc(sizeof(*queue));
+    queue->rings = xmalloc(sizeof(*queue->rings));
     queue->pool = rbh_sstack_new(QUEUE_POOL_START_COUNT * sizeof(ring));
-    if (queue->pool == NULL) {
-        int save_errno = errno;
-
-        free(queue->rings);
-        free(queue);
-        rbh_ring_destroy(ring);
-        errno = save_errno;
-        return NULL;
-    }
 
     queue->rings[0] = ring;
     queue->chunk_size = chunk_size;
@@ -107,11 +82,7 @@ retry:
             struct rbh_ring **tmp = queue->rings;
             size_t new_count = queue->count * 2;
 
-            tmp = reallocarray(tmp, new_count, sizeof(*tmp));
-            if (tmp == NULL) {
-                queue->tail--;
-                return NULL;
-            }
+            tmp = xreallocarray(tmp, new_count, sizeof(*tmp));
 
             queue->rings = tmp;
             queue->count = new_count;

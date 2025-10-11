@@ -385,8 +385,6 @@ build_id(const struct lu_fid *fid)
     int rc;
 
     tmp_id = rbh_id_from_lu_fid(fid);
-    if (tmp_id == NULL)
-        return NULL;
 
     data_size = tmp_id->size;
     id = source_stack_alloc(NULL, sizeof(*id) + data_size);
@@ -1322,17 +1320,8 @@ lustre_changelog_iter_init(struct lustre_changelog_iterator *events,
     events->iterator = LUSTRE_CHANGELOG_ITERATOR;
     events->fsevents_iterator = NULL;
 
-    if (username != NULL) {
-        events->username = strdup(username);
-        if (events->username == NULL)
-            error(EXIT_FAILURE, ENOMEM, "strdup");
-    } else {
-        events->username = NULL;
-    }
-
-    events->mdt_name = strdup(mdtname);
-    if (events->mdt_name == NULL)
-        error(EXIT_FAILURE, ENOMEM, "strdup");
+    events->username = xstrdup_safe(username);
+    events->mdt_name = xstrdup(mdtname);
 
     for (mdtname_index = mdtname + strlen(mdtname) - 1;
          isdigit(*mdtname_index); mdtname_index--);
@@ -1393,9 +1382,7 @@ source_from_lustre_changelog(const char *mdtname, const char *username,
 {
     struct lustre_source *source;
 
-    source = malloc(sizeof(*source));
-    if (source == NULL)
-        error(EXIT_FAILURE, errno, "malloc");
+    source = xmalloc(sizeof(*source));
 
     lustre_changelog_iter_init(&source->events, mdtname, username,
                                dump_file, max_changelog);

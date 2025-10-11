@@ -1,5 +1,5 @@
 /* This file is part of RobinHood 4
- * Copyright (C) 2019 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifer: LGPL-3.0-or-later
@@ -101,10 +101,7 @@ struct rbh_fsevent {
  *
  * @param fsevent   the fsevent to clone
  *
- * @return          a pointer to a newly allocated fsevent on success,
- *                  NULL on error and errno is set appropriately
- *
- * @error ENOMEM    there was not enough memory available
+ * @return          a pointer to a newly allocated fsevent on success
  */
 struct rbh_fsevent *
 rbh_fsevent_clone(const struct rbh_fsevent *fsevent);
@@ -123,7 +120,6 @@ rbh_fsevent_clone(const struct rbh_fsevent *fsevent);
  *
  * @error EINVAL    \p statxbuf says \p ID is not a symlink, but \p symlink is
  *                  not NULL
- * @error ENOMEM    there was not enough memory available
  */
 struct rbh_fsevent *
 rbh_fsevent_upsert_new(const struct rbh_id *id,
@@ -142,7 +138,6 @@ rbh_fsevent_upsert_new(const struct rbh_id *id,
  *                  on error and errno is set appropriately
  *
  * @error EINVAL    \p parent_id and/or \p name were NULL
- * @error ENOMEM    there was not enough memory available
  */
 struct rbh_fsevent *
 rbh_fsevent_link_new(const struct rbh_id *id,
@@ -160,7 +155,6 @@ rbh_fsevent_link_new(const struct rbh_id *id,
  *                  NULL on error and errno is set appropriately
  *
  * @error EINVAL    \p parent_id and/or \p name were NULL
- * @error ENOMEM    there was not enough memory available
  */
 struct rbh_fsevent *
 rbh_fsevent_unlink_new(const struct rbh_id *id, const struct rbh_id *parent_id,
@@ -171,10 +165,7 @@ rbh_fsevent_unlink_new(const struct rbh_id *id, const struct rbh_id *parent_id,
  *
  * @param id        the ID of the fsentry to delete
  *
- * @return          a pointer to a newly allocated delete fsevent on success,
- *                  NULL on error and errno is set appropriately
- *
- * @error ENOMEM    there was not enough memory available
+ * @return          a pointer to a newly allocated delete fsevent on success
  */
 struct rbh_fsevent *
 rbh_fsevent_delete_new(const struct rbh_id *id);
@@ -186,9 +177,7 @@ rbh_fsevent_delete_new(const struct rbh_id *id);
  * @param xattrs    the inode xattrs to update
  *
  * @return          a pointer to a newly allocated inode xattr fsevent on
- *                  success, NULL on error and errno is set appropriately
- *
- * @error ENOMEM    there was not enough memory available
+ *                  success
  */
 struct rbh_fsevent *
 rbh_fsevent_xattr_new(const struct rbh_id *id,
@@ -206,7 +195,6 @@ rbh_fsevent_xattr_new(const struct rbh_id *id,
  *                  NULL on error and errno is set appropriately
  *
  * @error EINVAL    \p parent_id and/or \p name were NULL
- * @error ENOMEM    there was not enough memory available
  */
 struct rbh_fsevent *
 rbh_fsevent_ns_xattr_new(const struct rbh_id *id,

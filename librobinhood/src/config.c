@@ -15,6 +15,7 @@
 
 #include "robinhood/config.h"
 #include "robinhood/serialization.h"
+#include "robinhood/utils.h"
 
 struct rbh_config {
     FILE *file;
@@ -136,16 +137,9 @@ config_open(const char *config_file)
     int save_errno;
     int rc;
 
-    config = calloc(1, sizeof(*config));
-    if (config == NULL)
-        error(EXIT_FAILURE, errno, "calloc in config_open");
+    config = xcalloc(1, sizeof(*config));
 
-    config->config_file = strdup(config_file);
-    if (config->config_file == NULL) {
-        fprintf(stderr, "Failed to duplicate '%s' in config_open\n",
-                config_file);
-        goto free_config;
-    }
+    config->config_file = xstrdup(config_file);
 
     config->file = fopen(config_file, "r");
     if (config->file == NULL)
@@ -365,9 +359,7 @@ find_in_config(const char *_key, struct rbh_value *value)
         return KPR_ERROR;
     }
 
-    key = strdup(_key);
-    if (key == NULL)
-        error(EXIT_FAILURE, ENOMEM, "strdup in rbh_config_find");
+    key = xstrdup(_key);
 
     result = _rbh_config_find(key, value);
     free(key);

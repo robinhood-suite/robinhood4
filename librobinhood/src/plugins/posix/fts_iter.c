@@ -13,6 +13,7 @@
 #include <unistd.h>
 
 #include <robinhood/backends/posix_extension.h>
+#include "robinhood/utils.h"
 #include <robinhood/value.h>
 
 struct fts_iterator {
@@ -91,11 +92,8 @@ fts_iter_next(void *iterator)
     size_t readable;
     FTSENT *ftsent;
 
-    if (sstack == NULL) {
+    if (sstack == NULL)
         sstack = rbh_sstack_new(1 << 10);
-        if (sstack == NULL)
-            return NULL;
-    }
 
 skip:
     errno = 0;
@@ -189,13 +187,10 @@ skip:
      */
     if (ftsent->fts_parent->fts_pointer == NULL &&
         ftsent->fts_accpath[0] == '/') {
-        char *path_dup = strdup(ftsent->fts_accpath);
+        char *path_dup = xstrdup(ftsent->fts_accpath);
         char *first_slash;
         char *last_slash;
         int fd;
-
-        if (path_dup == NULL)
-            return NULL;
 
         last_slash = strrchr(path_dup, '/');
         if (last_slash == NULL) {
@@ -288,9 +283,7 @@ fts_iter_new(struct rbh_metadata *metadata, const char *root, const char *entry,
     int save_errno;
     int rc;
 
-    iter = malloc(sizeof(*iter));
-    if (!iter)
-        return NULL;
+    iter = xmalloc(sizeof(*iter));
 
    rc = posix_iterator_setup(&iter->posix, root, entry, statx_sync_type);
     save_errno = errno;

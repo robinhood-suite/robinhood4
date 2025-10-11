@@ -115,9 +115,7 @@ parse_output(const char *_output_string, struct rbh_group_fields *group,
 
     fields = RBH_SSTACK_PUSH(values_sstack, NULL, count * sizeof(*fields));
 
-    output_string = strdup(_output_string);
-    if (output_string == NULL)
-        error_at_line(EXIT_FAILURE, EINVAL, __FILE__, __LINE__, "strdup");
+    output_string = xstrdup(_output_string);
 
     init_output_columns(columns, count);
 

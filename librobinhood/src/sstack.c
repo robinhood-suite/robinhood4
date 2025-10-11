@@ -15,6 +15,7 @@
 
 #include "robinhood/stack.h"
 #include "robinhood/sstack.h"
+#include "robinhood/utils.h"
 
 struct rbh_sstack {
     struct rbh_stack **stacks;
@@ -32,27 +33,9 @@ rbh_sstack_new(size_t chunk_size)
     struct rbh_stack *stack;
 
     stack = rbh_stack_new(chunk_size);
-    if (stack == NULL)
-        return NULL;
 
-    sstack = malloc(sizeof(*sstack));
-    if (sstack == NULL) {
-        int save_errno = errno;
-
-        rbh_stack_destroy(stack);
-        errno = save_errno;
-        return NULL;
-    }
-
-    sstack->stacks = malloc(sizeof(*sstack->stacks));
-    if (sstack->stacks == NULL) {
-        int save_errno = errno;
-
-        free(sstack);
-        rbh_stack_destroy(stack);
-        errno = save_errno;
-        return NULL;
-    }
+    sstack = xmalloc(sizeof(*sstack));
+    sstack->stacks = xmalloc(sizeof(*sstack->stacks));
 
     sstack->stacks[0] = stack;
     sstack->chunk_size = chunk_size;
@@ -81,11 +64,7 @@ retry:
         struct rbh_stack **tmp = sstack->stacks;
         size_t new_count = sstack->count * 2;
 
-        tmp = reallocarray(tmp, new_count, sizeof(*tmp));
-        if (tmp == NULL) {
-            sstack->current--;
-            return NULL;
-        }
+        tmp = xreallocarray(tmp, new_count, sizeof(*tmp));
 
         sstack->stacks = tmp;
         sstack->count = new_count;

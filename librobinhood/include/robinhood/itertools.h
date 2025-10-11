@@ -1,5 +1,5 @@
 /* This file is part of RobinHood 4
- * Copyright (C) 2019 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifer: LGPL-3.0-or-later
@@ -27,9 +27,7 @@
  * @param free_elem     function to free memory associated with each element
  *
  * @return              a pointer to a newly allocated struct rbh_iterator on
- *                      success, NULL otherwise and errno is set appropriately
- *
- * @retval ENOMEM       there was not enough memory to allocate the iterator
+ *                      success
  *
  * The returned iterator's next method yields one element of \p array at a time.
  */
@@ -46,10 +44,7 @@ rbh_iter_array(const void *array, size_t element_size, size_t element_count,
  * @param free_elem     function to free memory associated with each element
  *
  * @return              a pointer to a newly allocated struct rbh_mut_iterator
- *                      on success, NULL otherwise and errno is set
- *                      appropriately
- *
- * @retval ENOMEM       there was not enough memory to allocate the iterator
+ *                      on success
  *
  * The returned iterator's next method yields one element of \p array at a time.
  */
@@ -69,7 +64,6 @@ rbh_mut_iter_array(void *array, size_t element_size, size_t element_count,
  *                  NULL on error, and errno is set appropriately
  *
  * @error EINVAL    Invalid value for \p chunk (must be > 0)
- * @error ENOMEM    there was not enough memory available
  *
  * The iterators yielded by the returned iterator must be exhausted sequentially
  * in order to yield elements in the same order \p iterator would have.
@@ -132,9 +126,7 @@ rbh_mut_iter_tee(struct rbh_mut_iterator *iterator,
  * @param second    the second iterator to chain
  *
  * @return          a pointer to a newly allocated struct rbh_iterator on
- *                  success, NULL otherwise and errno is set appropriately
- *
- * @error ENOMEM    there was not enough memory available
+ *                  success
  *
  * \p first and \p second should not be used anymore after a successful call to
  * this function.
@@ -150,9 +142,7 @@ rbh_iter_chain(struct rbh_iterator *restrict first,
  * @param second    the second iterator to chain
  *
  * @return          a pointer to a newly allocated struct rbh_mut_iterator on
- *                  success, NULL otherwise and errno is set appropriately
- *
- * @error ENOMEM    there was not enough memory available
+ *                  success
  *
  * \p first and \p second should not be used anymore after a successful call to
  * this function.
@@ -167,9 +157,7 @@ rbh_mut_iter_chain(struct rbh_mut_iterator *restrict first,
  * @param iterator  a mutable iterator
  *
  * @return          a pointer to a newly allocated struct rbh_iterator on
- *                  success, NULL on error and errno is set appropriately
- *
- * @error ENOMEM    there was not enough memory available
+ *                  success
  *
  * Each entry yielded by \p iterator will be freed automatically.
  *
@@ -189,9 +177,7 @@ rbh_iter_constify(struct rbh_mut_iterator *iterator);
  * @param element_size  the size of the elements in \p ring
  *
  * @return              a pointer to a newly allocated struct rbh_iterator on
- *                      success, NULL on error and errno is set appropriately
- *
- * @error ENOMEM        there was not enough memory available
+ *                      success
  *
  * Each element yielded by the returned iterator will be popped from the ring.
  */
@@ -205,9 +191,7 @@ rbh_iter_ring(struct rbh_ring *ring, size_t element_size);
  * @param element_size  the size of the elements in \p ring
  *
  * @return              a pointer to a newly allocated struct rbh_mut_iterator
- *                      on success, NULL on error and errno is set appropriately
- *
- * @error ENOMEM        there was not enough memory available
+ *                      on success
  *
  * Each element yielded by the returned iterator will be popped from the ring.
  */
@@ -233,10 +217,7 @@ rbh_mut_iter_ring(struct rbh_ring *ring, size_t element_size);
  *                    );
  * @param free_node function to free the memory of the list
  *
- * @return        a pointer to a newly allocated struct rbh_iterator on success,
- *                NULL on error and errno is set appropriately
- *
- * @errro ENOMEM  there was not enough memory available
+ * @return        a pointer to a newly allocated struct rbh_iterator on success
  */
 struct rbh_iterator *
 rbh_iter_list(struct rbh_list_node *list, off_t offset,

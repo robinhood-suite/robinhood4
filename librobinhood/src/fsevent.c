@@ -19,6 +19,7 @@
 
 #include "robinhood/fsevent.h"
 #include "robinhood/statx.h"
+#include "robinhood/utils.h"
 
 #include "utils.h"
 #include "value.h"
@@ -163,9 +164,7 @@ rbh_fsevent_clone(const struct rbh_fsevent *fsevent)
     int rc;
 
     size = fsevent_data_size(fsevent);
-    clone = malloc(sizeof(*clone) + size);
-    if (clone == NULL)
-        return NULL;
+    clone = xmalloc(sizeof(*clone) + size);
     data = (char *)clone + sizeof(*clone);
 
     rc = fsevent_copy(clone, fsevent, &data, &size);

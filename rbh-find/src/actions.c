@@ -407,10 +407,7 @@ parse_exec_command(struct find_context *ctx, const int index)
         error(EX_USAGE, 0, "missing ';' at the end of -exec command");
 
     // +1 for NULL at the end
-    ctx->exec_command = calloc(count + 1, sizeof(*ctx->exec_command));
-    if (!ctx->exec_command)
-        error(EXIT_FAILURE, errno, "parse_exec_command");
-
+    ctx->exec_command = xcalloc(count + 1, sizeof(*ctx->exec_command));
     for (size_t j = 0; j < count; j++)
         ctx->exec_command[j] = ctx->argv[index + j];
 
@@ -605,9 +602,7 @@ resolve_arg(const char *arg, struct rbh_fsentry *fsentry)
         /* no substitution to do */
         return arg;
 
-    buffer = malloc((size_t)substitute_size);
-    if (!buffer)
-        error(EXIT_FAILURE, errno, "malloc in substitute_path");
+    buffer = xmalloc((size_t)substitute_size);
 
     return substitute_path(arg, substitution, buffer);
 }
@@ -621,10 +616,7 @@ exec_command(struct find_context *ctx, struct rbh_fsentry *fsentry)
 
     i = count_exec_command_args(ctx->exec_command);
 
-    cmd = calloc(i + 1, sizeof(*cmd));
-    if (!cmd)
-        return -1;
-
+    cmd = xcalloc(i + 1, sizeof(*cmd));
     for (int j = 0; j < i; j++)
         cmd[j] = resolve_arg(ctx->exec_command[j], fsentry);
 
