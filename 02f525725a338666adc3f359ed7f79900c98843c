@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "49a37b83_7ad86eef",
+        "filename": "rbh-info/rbh-info.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 367,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-10-13T13:43:52Z",
+      "side": 1,
+      "message": "suggest:\n```suggestion\n                printf(\"%s: %s\\n\", is_plugin ? \"Plugin\" : \"Extension\", submap-\u003epairs[j].value-\u003estring);\n```",
+      "range": {
+        "startLine": 364,
+        "startChar": 16,
+        "endLine": 367,
+        "endChar": 73
+      },
+      "revId": "02f525725a338666adc3f359ed7f79900c98843c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b90bcc97_d0535a8f",
+        "filename": "rbh-info/tests/test_s3.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-10-13T13:43:52Z",
+      "side": 1,
+      "message": "major: all of this is invalid if there more than 1 of each type, or if the names are contained in other parts of the output",
+      "range": {
+        "startLine": 27,
+        "startChar": 4,
+        "endLine": 43,
+        "endChar": 61
+      },
+      "revId": "02f525725a338666adc3f359ed7f79900c98843c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
