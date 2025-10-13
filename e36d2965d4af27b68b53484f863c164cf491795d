@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "79b9daa7_d9bb02ee",
+        "filename": "rbh-undelete/tests/test_undelete.bash",
+        "patchSetId": 5
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-10-13T13:50:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1cf9db81_9f8290ae",
+      "range": {
+        "startLine": 16,
+        "startChar": 19,
+        "endLine": 16,
+        "endChar": 23
+      },
+      "revId": "e36d2965d4af27b68b53484f863c164cf491795d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cf3521e6_47ad327d",
@@ -47,6 +71,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1d446781_88d145bc",
+        "filename": "rbh-undelete/tests/test_undelete.bash",
+        "patchSetId": 5
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-10-13T13:50:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cf3521e6_47ad327d",
+      "range": {
+        "startLine": 130,
+        "startChar": 4,
+        "endLine": 130,
+        "endChar": 41
+      },
+      "revId": "e36d2965d4af27b68b53484f863c164cf491795d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3b8065f5_a4c5cce4",
@@ -60,6 +108,24 @@
       "writtenOn": "2025-10-13T08:00:36Z",
       "side": 1,
       "message": "minor: this function is not used",
+      "revId": "e36d2965d4af27b68b53484f863c164cf491795d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ecff209e_1760f48c",
+        "filename": "utils/tests/db_cmd_mongo",
+        "patchSetId": 5
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-10-13T13:50:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3b8065f5_a4c5cce4",
       "revId": "e36d2965d4af27b68b53484f863c164cf491795d",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
