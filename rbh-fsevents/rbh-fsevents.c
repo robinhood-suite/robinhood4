@@ -491,9 +491,9 @@ producer_thread(struct rbh_mut_iterator *deduplicator,
                 struct enrich_iter_builder *builder, bool allow_partials,
                 struct consumer_info *cinfos, struct timespec *total_read)
 {
-    struct rbh_mut_iterator *fsevents;
+    struct rbh_mut_iterator *batch;
+    struct sub_batch *sub_batch;
     struct timespec start, end;
-    struct dedup_iter *dedup;
     int rc;
 
     if (verbose) {
@@ -502,27 +502,28 @@ producer_thread(struct rbh_mut_iterator *deduplicator,
             error(EXIT_FAILURE, 0, "Unable to get start time");
     }
 
-    for (fsevents = rbh_mut_iter_next(deduplicator); fsevents != NULL;
-         fsevents = rbh_mut_iter_next(deduplicator)) {
-
-        for (dedup = rbh_mut_iter_next(fsevents); dedup != NULL;
-             dedup = rbh_mut_iter_next(fsevents)) {
+    for (batch = rbh_mut_iter_next(deduplicator); batch != NULL;
+         batch = rbh_mut_iter_next(deduplicator)) {
+        for (sub_batch = rbh_mut_iter_next(batch); sub_batch != NULL;
+             sub_batch = rbh_mut_iter_next(batch)) {
 
             if (builder != NULL)
-                dedup->iter = build_enrich_iter(builder, dedup->iter,
-                                                skip_error);
+                sub_batch->fsevents = build_enrich_iter(builder,
+                                                        sub_batch->fsevents,
+                                                        skip_error);
             else if (!allow_partials)
-                dedup->iter = iter_no_partial(dedup->iter);
+                sub_batch->fsevents = iter_no_partial(sub_batch->fsevents);
 
-            if (dedup->iter == NULL)
+            if (sub_batch->fsevents == NULL)
                 error(EXIT_FAILURE, errno, "iter_enrich");
 
-            pthread_mutex_lock(&cinfos[dedup->index].mutex_list);
-            add_iterators_to_consumer(cinfos[dedup->index].list, dedup->iter);
-            pthread_cond_signal(&cinfos[dedup->index].signal_list);
-            pthread_mutex_unlock(&cinfos[dedup->index].mutex_list);
+            pthread_mutex_lock(&cinfos[sub_batch->index].mutex_list);
+            add_iterators_to_consumer(cinfos[sub_batch->index].list,
+                                      sub_batch->fsevents);
+            pthread_cond_signal(&cinfos[sub_batch->index].signal_list);
+            pthread_mutex_unlock(&cinfos[sub_batch->index].mutex_list);
         }
-        rbh_mut_iter_destroy(fsevents);
+        rbh_mut_iter_destroy(batch);
     }
 
     done_producing = true;

@@ -101,7 +101,7 @@ no_dedup_iter_next(void *iterator)
     struct deduplicator *deduplicator = iterator;
     const struct rbh_fsevent *fsevent_copy;
     const struct rbh_fsevent *fsevent;
-    struct dedup_iter *dedup;
+    struct sub_batch *sub_batch;
 
     fsevent = rbh_iter_next(&deduplicator->source->fsevents);
     if (fsevent == NULL)
@@ -109,19 +109,18 @@ no_dedup_iter_next(void *iterator)
 
     fsevent_copy = rbh_fsevent_clone(fsevent);
 
-    dedup = xmalloc(sizeof(*dedup));
-
-    dedup->iter = rbh_iter_array(fsevent_copy, sizeof(struct rbh_fsevent), 1,
-                                 free);
+    sub_batch = xmalloc(sizeof(*sub_batch));
+    sub_batch->fsevents = rbh_iter_array(fsevent_copy,
+                                         sizeof(struct rbh_fsevent), 1, free);
 
     if (strcmp(deduplicator->source->name, "lustre") == 0)
-        dedup->index = hash_lu_id2index(&fsevent_copy->id,
-                                        deduplicator->nb_workers);
+        sub_batch->index = hash_lu_id2index(&fsevent_copy->id,
+                                            deduplicator->nb_workers);
     else
-        dedup->index = hash_id2index(&fsevent_copy->id,
-                                     deduplicator->nb_workers);
+        sub_batch->index = hash_id2index(&fsevent_copy->id,
+                                         deduplicator->nb_workers);
 
-    return rbh_iter_array(dedup, sizeof(struct dedup_iter), 1, free);
+    return rbh_iter_array(sub_batch, sizeof(struct sub_batch), 1, free);
 }
 
 static const struct rbh_mut_iterator_operations NO_DEDUP_ITER_OPS = {
