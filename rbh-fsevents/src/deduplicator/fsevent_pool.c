@@ -957,8 +957,8 @@ rbh_fsevent_pool_flush(struct rbh_fsevent_pool *pool)
 {
     struct rbh_fsevent_node *elem, *tmp;
     struct rbh_list_node *events_copy;
-    struct dedup_iter *iterators;
-    struct dedup_iter *iter_ptr;
+    struct sub_batch *sub_batches;
+    struct sub_batch *iter_ptr;
     size_t size = 0;
 
     for (size_t i = 0; i < pool->events_size; i++) {
@@ -998,11 +998,11 @@ rbh_fsevent_pool_flush(struct rbh_fsevent_pool *pool)
             size++;
     }
 
-    iterators = malloc(size * sizeof(*iterators));
-    if (iterators == NULL)
+    sub_batches = malloc(size * sizeof(*sub_batches));
+    if (sub_batches == NULL)
         return NULL;
 
-    iter_ptr = iterators;
+    iter_ptr = sub_batches;
 
     for (size_t i = 0; i < pool->events_size; i++) {
         if (rbh_list_empty(&pool->events[i]))
@@ -1012,15 +1012,15 @@ rbh_fsevent_pool_flush(struct rbh_fsevent_pool *pool)
         if (events_copy == NULL)
             return NULL;
 
-        iter_ptr->iter = rbh_iter_list(events_copy,
-                                       offsetof(struct rbh_fsevent_node, link),
-                                       free_events_list);
-        if (iter_ptr->iter == NULL)
+        iter_ptr->fsevents = rbh_iter_list(events_copy,
+                                        offsetof(struct rbh_fsevent_node, link),
+                                        free_events_list);
+        if (iter_ptr->fsevents == NULL)
             return NULL;
 
         iter_ptr->index = i;
         iter_ptr++;
     }
 
-    return rbh_iter_array(iterators, sizeof(struct dedup_iter), size, free);
+    return rbh_iter_array(sub_batches, sizeof(struct sub_batch), size, free);
 }
