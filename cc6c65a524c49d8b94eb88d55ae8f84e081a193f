@@ -1,0 +1,182 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f29dd25f_2f826689",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 12
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-10-13T12:20:53Z",
+      "side": 1,
+      "message": "typo: missing dot",
+      "range": {
+        "startLine": 11,
+        "startChar": 9,
+        "endLine": 11,
+        "endChar": 11
+      },
+      "revId": "cc6c65a524c49d8b94eb88d55ae8f84e081a193f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3210e940_2584d028",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-10-13T12:20:53Z",
+      "side": 1,
+      "message": "The changes I ask for can be done in a later patch",
+      "revId": "cc6c65a524c49d8b94eb88d55ae8f84e081a193f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "904895e5_ede75c2d",
+        "filename": "librobinhood/src/plugins/s3/iterators/mpi/iterator.c",
+        "patchSetId": 12
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-10-13T12:20:53Z",
+      "side": 1,
+      "message": "style: reorder everything + some include use `\u003c\u003e` and others `\"\"`",
+      "range": {
+        "startLine": 23,
+        "startChar": 0,
+        "endLine": 34,
+        "endChar": 29
+      },
+      "revId": "cc6c65a524c49d8b94eb88d55ae8f84e081a193f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7a79ea29_432ef84e",
+        "filename": "librobinhood/src/plugins/s3/iterators/mpi/iterator.c",
+        "patchSetId": 12
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-10-13T12:20:53Z",
+      "side": 1,
+      "message": "minor: this free is forgotten in next error handling cases",
+      "range": {
+        "startLine": 116,
+        "startChar": 12,
+        "endLine": 116,
+        "endChar": 26
+      },
+      "revId": "cc6c65a524c49d8b94eb88d55ae8f84e081a193f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ee733797_e9432e70",
+        "filename": "librobinhood/src/plugins/s3/iterators/mpi/iterator.c",
+        "patchSetId": 12
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-10-13T12:20:53Z",
+      "side": 1,
+      "message": "minor: this function could be simplified, because each thread only needs to know the start index in the bucket, and the number of buckets to sync. Here the start/end is calculated each time, when it could be calculated once at the start and be done with it",
+      "range": {
+        "startLine": 121,
+        "startChar": 17,
+        "endLine": 122,
+        "endChar": 60
+      },
+      "revId": "cc6c65a524c49d8b94eb88d55ae8f84e081a193f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "38f542a5_f0d4f107",
+        "filename": "librobinhood/src/plugins/s3/iterators/mpi/iterator.c",
+        "patchSetId": 12
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-10-13T12:20:53Z",
+      "side": 1,
+      "message": "major: so that thread will not cover any bucket, but it\u0027s not an issue ?",
+      "range": {
+        "startLine": 123,
+        "startChar": 12,
+        "endLine": 125,
+        "endChar": 70
+      },
+      "revId": "cc6c65a524c49d8b94eb88d55ae8f84e081a193f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b75ec4d3_e28bd8b2",
+        "filename": "librobinhood/src/plugins/s3/iterators/mpi/iterator.c",
+        "patchSetId": 12
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-10-13T12:20:53Z",
+      "side": 1,
+      "message": "same here",
+      "range": {
+        "startLine": 151,
+        "startChar": 16,
+        "endLine": 151,
+        "endChar": 45
+      },
+      "revId": "cc6c65a524c49d8b94eb88d55ae8f84e081a193f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "41eaac6e_7a261785",
+        "filename": "librobinhood/src/plugins/s3/iterators/mpi/iterator.c",
+        "patchSetId": 12
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-10-13T12:20:53Z",
+      "side": 1,
+      "message": "major: there\u0027s actually no need for any comm here, all threads could get the list of buckets and calculate themselves what they have to sync.",
+      "range": {
+        "startLine": 156,
+        "startChar": 8,
+        "endLine": 156,
+        "endChar": 16
+      },
+      "revId": "cc6c65a524c49d8b94eb88d55ae8f84e081a193f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
