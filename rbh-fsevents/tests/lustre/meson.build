@@ -12,7 +12,7 @@ integration_tests = ['test_create_close', 'test_mkdir', 'test_symlink',
                      'acknowledgement', 'dump_changelog', 'no_skip_option',
                      'test_alias', 'test_retention', 'test_backend_source',
                      'test_max_changelog', 'acceptance_workers',
-                     'test_starting_idx']
+                     'test_starting_idx', 'test_ack']
 
 foreach t: integration_tests
     e = find_program(t + '.bash')
