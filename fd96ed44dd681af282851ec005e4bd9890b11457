@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c3ed96a1_1d40e13a",
+        "filename": "librobinhood/src/plugins/mongo/mongo.c",
+        "patchSetId": 10
+      },
+      "lineNbr": 758,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-10-13T07:08:41Z",
+      "side": 1,
+      "message": "major: You also need to free `filter` and `opts`",
+      "range": {
+        "startLine": 758,
+        "startChar": 8,
+        "endLine": 758,
+        "endChar": 29
+      },
+      "revId": "fd96ed44dd681af282851ec005e4bd9890b11457",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
