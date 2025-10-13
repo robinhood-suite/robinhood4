@@ -17,8 +17,10 @@
 struct rbh_mut_iterator *
 deduplicator_new(size_t batch_size, struct source *source, size_t nb_workers);
 
-struct dedup_iter {
-    struct rbh_iterator *iter;
+struct sub_batch {
+    /** Iterator containing all the fsevents of this sub-batch */
+    struct rbh_iterator *fsevents;
+    /** Index of the thread that will enrich these fsevents */
     size_t index;
 };
 
