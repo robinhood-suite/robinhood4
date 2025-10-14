@@ -113,6 +113,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b20bf957_380ce17d",
+        "filename": "rbh-fsevents/src/sources/lustre.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 1464,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-10-14T10:26:15Z",
+      "side": 1,
+      "message": "OK I understand now, thanks a lot (adding this as a comment would still be nice)",
+      "parentUuid": "b8ff6c89_97f3d155",
+      "range": {
+        "startLine": 1464,
+        "startChar": 7,
+        "endLine": 1464,
+        "endChar": 24
+      },
+      "revId": "32966828108a346adb60a39627866286bcd2e958",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8c09aafb_fcc43ce5",
         "filename": "rbh-fsevents/src/sources/lustre.c",
         "patchSetId": 3
@@ -217,6 +241,30 @@
       "side": 1,
       "message": "Without deduplication, each changelog generates fsevents, and each fsevent is treated as a batch. However, we only want to acknowledge the changelog once the last fsevent/batch has been processed.\n\nTo achieve this, we update the batch saved for this changelog so that it matches the batch_id of the last fsevent/batch returned for that changelog. This way, only the acknowledgment from the final fsevent/batch associated with this changelog will actually acknowledge the changelog itself.",
       "parentUuid": "2f586068_cf8785fa",
+      "range": {
+        "startLine": 1485,
+        "startChar": 33,
+        "endLine": 1486,
+        "endChar": 75
+      },
+      "revId": "32966828108a346adb60a39627866286bcd2e958",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fde979df_4672e880",
+        "filename": "rbh-fsevents/src/sources/lustre.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 1486,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-10-14T10:26:15Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "46db746c_d9b1fd8b",
       "range": {
         "startLine": 1485,
         "startChar": 33,
