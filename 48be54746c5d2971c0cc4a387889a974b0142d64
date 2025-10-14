@@ -22,6 +22,30 @@
       },
       "revId": "48be54746c5d2971c0cc4a387889a974b0142d64",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1f36e55a_dbd320ab",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-10-14T09:49:48Z",
+      "side": 1,
+      "message": "I haven\u0027t change this. The backend/extensions used to enrich are still saved in the `backend_source`. But I have added next to it the `fsevents_source` map that store the information about the source (last changelog read for each MDT, ...)",
+      "parentUuid": "fd55323e_9d8d3162",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 71
+      },
+      "revId": "48be54746c5d2971c0cc4a387889a974b0142d64",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
