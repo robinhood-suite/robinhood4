@@ -804,7 +804,9 @@ posix_backend_destroy(void *backend)
 {
     struct posix_backend *posix = backend;
 
-    free(posix->enrichers);
+    if (posix->enrichers)
+        free(posix->enrichers);
+
     free(posix->root);
     free(posix);
 }
@@ -971,8 +973,10 @@ dup_enrichers(const struct rbh_posix_extension **enrichers)
     const struct rbh_posix_extension **dup;
     int count;
 
+    fprintf(stderr, "%s:%s (%d)\n", __FILE__, __func__, __LINE__);
     count = enrichers_count(enrichers);
     dup = xmalloc(sizeof(*dup) * (count + 1)); // + 1 for NULL at the end
+    fprintf(stderr, "%s:%s (%d)\n", __FILE__, __func__, __LINE__);
 
     memcpy(dup, enrichers, sizeof(*enrichers) * (count + 1));
 
@@ -1015,6 +1019,8 @@ posix_backend_branch(void *backend, const struct rbh_id *id, const char *path)
 
     if (posix->enrichers)
         branch->posix.enrichers = dup_enrichers(posix->enrichers);
+    else
+        branch->posix.enrichers = NULL;
 
     branch->posix.statx_sync_type = posix->statx_sync_type;
 
@@ -1115,8 +1121,19 @@ get_source_backend(const struct posix_backend *posix,
     int i;
 
     // Count all registered enrichers
-    while (posix->enrichers && posix->enrichers[count] != NULL)
+    if (posix->enrichers)
+        fprintf(stderr, "%s:%s (%d): enrichers = '%p'\n", __FILE__, __func__, __LINE__, posix->enrichers);
+
+    if (posix->enrichers && posix->enrichers[count])
+        fprintf(stderr, "%s:%s (%d): enrichers = '%p'\n", __FILE__, __func__, __LINE__, posix->enrichers);
+
+    while (posix->enrichers) {
+        fprintf(stderr, "%s:%s (%d): enrichers = '%p'\n", __FILE__, __func__, __LINE__, posix->enrichers);
+        if (posix->enrichers[count] == NULL)
+            break;
+        fprintf(stderr, "%s:%s (%d): enrichers = '%p'\n", __FILE__, __func__, __LINE__, posix->enrichers);
         count++;
+    }
 
     count += 1; // And add the POSIX plugin itself
 
@@ -1342,7 +1359,7 @@ rbh_posix_backend_new(const struct rbh_backend_plugin *self,
     struct posix_backend *posix;
     int save_errno = 0;
 
-    posix = xmalloc(sizeof(*posix));
+    posix = xcalloc(1, sizeof(*posix));
 
     posix->root = xstrdup(*path == '\0' ? "." : path);
 
@@ -1360,10 +1377,12 @@ rbh_posix_backend_new(const struct rbh_backend_plugin *self,
     if (type) {
         int count = 0;
 
+        fprintf(stderr, "%s:%s (%d): enrichers = '%p'\n", __FILE__, __func__, __LINE__, posix->enrichers);
         if (load_posix_extensions(&self->plugin, posix, type, config) == -1) {
             save_errno = errno;
             goto free_root;
         }
+        fprintf(stderr, "%s:%s (%d): enrichers = '%p'\n", __FILE__, __func__, __LINE__, posix->enrichers);
 
         while (posix->enrichers && posix->enrichers[count]) {
             if (posix->enrichers[count]->setup_enricher)
@@ -1377,6 +1396,7 @@ rbh_posix_backend_new(const struct rbh_backend_plugin *self,
         save_errno = errno;
         goto free_root;
     }
+        fprintf(stderr, "%s:%s (%d): enrichers = '%p'\n", __FILE__, __func__, __LINE__, posix->enrichers);
 
     return &posix->backend;
 
