@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1134179b_2e6b1ed9",
+        "filename": "librobinhood/src/plugins/s3/action.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-10-14T12:25:43Z",
+      "side": 1,
+      "message": "defect? `.` ?",
+      "range": {
+        "startLine": 102,
+        "startChar": 59,
+        "endLine": 102,
+        "endChar": 60
+      },
+      "revId": "4d3ce26c8fe618d333aec4353fb956355626ca58",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
