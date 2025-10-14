@@ -475,21 +475,9 @@ sync(const struct rbh_filter_projection *projection)
     }
 
     fsentries = rbh_iter_constify(_fsentries);
-    if (fsentries == NULL) {
-        int save_errno = errno;
-
-        rbh_mut_iter_destroy(_fsentries);
-        error(EXIT_FAILURE, save_errno, "rbh_iter_constify");
-    }
 
     /* Convert all this information into fsevents */
     fsevents = iter_convert(fsentries, projection);
-    if (fsevents == NULL) {
-        int save_errno = errno;
-
-        rbh_iter_destroy(fsentries);
-        error(EXIT_FAILURE, save_errno, "iter_convert");
-    }
 
     /* XXX: the mongo backend tries to process all the fsevents at once in a
      *      single bulk operation, but a bulk operation is limited in size.
@@ -497,12 +485,8 @@ sync(const struct rbh_filter_projection *projection)
      * Splitting `fsevents' into fixed-size sub-iterators solves this.
      */
     chunks = rbh_iter_chunkify(fsevents, RBH_ITER_CHUNK_SIZE);
-    if (chunks == NULL) {
-        int save_errno = errno;
-
-        rbh_iter_destroy(fsevents);
-        error(EXIT_FAILURE, save_errno, "rbh_mut_iter_chunkify");
-    }
+    if (chunks == NULL)
+        error(EXIT_FAILURE, errno, "rbh_mut_iter_chunkify");
 
     /* Update `to' */
     do {
@@ -730,7 +714,8 @@ sync_metadata_value_map(time_t sync_debut, time_t sync_end, char *from,
 
     pairs[3].key = "mountpoint";
     values[3].type = RBH_VT_STRING;
-    values[3].string = abs_path;
+    values[3].string = RBH_SSTACK_PUSH(metadata_sstack, abs_path,
+                                       strlen(abs_path) + 1);
     pairs[3].value = &values[3];
 
     pairs[4].key = "command_line";
