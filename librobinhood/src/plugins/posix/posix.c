@@ -1015,6 +1015,8 @@ posix_backend_branch(void *backend, const struct rbh_id *id, const char *path)
 
     if (posix->enrichers)
         branch->posix.enrichers = dup_enrichers(posix->enrichers);
+    else
+        branch->posix.enrichers = NULL;
 
     branch->posix.statx_sync_type = posix->statx_sync_type;
 
@@ -1342,7 +1344,7 @@ rbh_posix_backend_new(const struct rbh_backend_plugin *self,
     struct posix_backend *posix;
     int save_errno = 0;
 
-    posix = xmalloc(sizeof(*posix));
+    posix = xcalloc(1, sizeof(*posix));
 
     posix->root = xstrdup(*path == '\0' ? "." : path);
 
