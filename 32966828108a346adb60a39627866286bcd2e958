@@ -89,6 +89,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b8ff6c89_97f3d155",
+        "filename": "rbh-fsevents/src/sources/lustre.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 1464,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-10-14T10:15:48Z",
+      "side": 1,
+      "message": "To put it simply, the source maintains a list of all batches sent for enrichment. For each batch, we store the last changelog index read for that batch, as well as the number of threads the batch was divided among.\n\nHere’s how it works: when we send a batch for enrichment, we use the save_batch callback to record the last changelog index for that batch. When a thread finishes enriching its sub-batch, it calls the ack_batch callback, which decrements the ack_required counter. If ack_required reaches 0, it means that all threads have finished enriching the batch, and the changelogs for that batch can be acknowledged.\n\nHowever, there’s trickier cases where a newer batch might finish before an older one. In that case, we need to check if there is no older batches that aren\u0027t done before acknowledging the changelog.",
+      "parentUuid": "2121a7e9_abdc8b72",
+      "range": {
+        "startLine": 1464,
+        "startChar": 7,
+        "endLine": 1464,
+        "endChar": 24
+      },
+      "revId": "32966828108a346adb60a39627866286bcd2e958",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8c09aafb_fcc43ce5",
         "filename": "rbh-fsevents/src/sources/lustre.c",
         "patchSetId": 3
@@ -169,6 +193,30 @@
       "writtenOn": "2025-10-14T09:50:57Z",
       "side": 1,
       "message": "minor: didn\u0027t understand this part",
+      "range": {
+        "startLine": 1485,
+        "startChar": 33,
+        "endLine": 1486,
+        "endChar": 75
+      },
+      "revId": "32966828108a346adb60a39627866286bcd2e958",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "46db746c_d9b1fd8b",
+        "filename": "rbh-fsevents/src/sources/lustre.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 1486,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-10-14T10:15:48Z",
+      "side": 1,
+      "message": "Without deduplication, each changelog generates fsevents, and each fsevent is treated as a batch. However, we only want to acknowledge the changelog once the last fsevent/batch has been processed.\n\nTo achieve this, we update the batch saved for this changelog so that it matches the batch_id of the last fsevent/batch returned for that changelog. This way, only the acknowledgment from the final fsevent/batch associated with this changelog will actually acknowledge the changelog itself.",
+      "parentUuid": "2f586068_cf8785fa",
       "range": {
         "startLine": 1485,
         "startChar": 33,
