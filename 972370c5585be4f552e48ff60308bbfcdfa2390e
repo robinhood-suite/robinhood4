@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "44b5b835_2dcdbc36",
+        "filename": "rbh-fsevents/src/sources/lustre.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 1365,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-10-14T08:25:25Z",
+      "side": 1,
+      "message": "minor: I think it\u0027s a fair assumption to make that the key will always be defined, no need to test it",
+      "range": {
+        "startLine": 1365,
+        "startChar": 8,
+        "endLine": 1365,
+        "endChar": 25
+      },
+      "revId": "972370c5585be4f552e48ff60308bbfcdfa2390e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5a672be7_c782aa3d",
+        "filename": "rbh-fsevents/src/sources/lustre.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 1366,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-10-14T08:25:25Z",
+      "side": 1,
+      "message": "minor: similarly, you\u0027re assuming here the `sink_get_info` method works as expected, I don\u0027t think it\u0027s necessary to test out, especially since it\u0027s a whole `strcmp`",
+      "range": {
+        "startLine": 1366,
+        "startChar": 8,
+        "endLine": 1366,
+        "endChar": 58
+      },
+      "revId": "972370c5585be4f552e48ff60308bbfcdfa2390e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "688e5ce6_6d127df1",
+        "filename": "rbh-fsevents/src/sources/lustre.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 1404,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-10-14T08:25:25Z",
+      "side": 1,
+      "message": "suggest: if the `lustre_changelog_get_start_idx` returns `0` or `start_index + 1`, this could just be `start_index` here",
+      "range": {
+        "startLine": 1404,
+        "startChar": 40,
+        "endLine": 1404,
+        "endChar": 78
+      },
+      "revId": "972370c5585be4f552e48ff60308bbfcdfa2390e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
