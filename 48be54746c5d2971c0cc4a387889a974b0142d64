@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fd55323e_9d8d3162",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-10-14T07:40:06Z",
+      "side": 1,
+      "message": "question: why change this ? The idea was that both information were recorded the same way, because you can create a completely new database either from sync or from fsevents, so distinguishing the two just makes our job harder",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 71
+      },
+      "revId": "48be54746c5d2971c0cc4a387889a974b0142d64",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
