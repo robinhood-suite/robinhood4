@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e09386be_b5fbb396",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-10-15T07:50:59Z",
+      "side": 1,
+      "message": "question: is applying a sort to both arrays allow removing this constraint?",
+      "range": {
+        "startLine": 13,
+        "startChar": 46,
+        "endLine": 13,
+        "endChar": 56
+      },
+      "revId": "c5d1fbe8d6d7060787c0fc3b74ce61b8daedea55",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f3ba74fb_1444b370",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-10-15T07:50:59Z",
+      "side": 1,
+      "message": "typo: element",
+      "range": {
+        "startLine": 15,
+        "startChar": 43,
+        "endLine": 15,
+        "endChar": 52
+      },
+      "revId": "c5d1fbe8d6d7060787c0fc3b74ce61b8daedea55",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
