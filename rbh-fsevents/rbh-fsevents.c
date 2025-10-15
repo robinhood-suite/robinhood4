@@ -22,6 +22,7 @@
 #include <sysexits.h>
 #include <unistd.h>
 #include <pthread.h>
+#include <stdatomic.h>
 
 #include <robinhood/uri.h>
 #include <robinhood/utils.h>
@@ -334,6 +335,7 @@ destroy_enrich_point(void)
         rbh_backend_destroy(enrich_point);
 }
 
+static _Atomic _Bool should_stop;
 static bool done_producing = false;
 static bool skip_error = true;
 
@@ -369,6 +371,12 @@ consumer_get_iterator(struct rbh_list_node *list)
     return node;
 }
 
+static void
+signal_shutdown(void)
+{
+    atomic_store(&should_stop, true);
+}
+
 struct consumer_info {
     struct timespec total_enrich;
     struct rbh_list_node *list;
@@ -387,14 +395,16 @@ consumer_thread(void *arg) {
     int rc;
 
     if (verbose)
-        printf("Starting consumer thread: %d\n", cinfo->id);
+        printf("Starting enricher thread: %d\n", cinfo->id);
 
-    while (true) {
+    while (!atomic_load(&should_stop)) {
         pthread_mutex_lock(&cinfo->mutex_list);
-        while (rbh_list_empty(cinfo->list) && !done_producing)
+        while (rbh_list_empty(cinfo->list) && !done_producing &&
+               !atomic_load(&should_stop))
             pthread_cond_wait(&cinfo->signal_list, &cinfo->mutex_list);
 
-        if (rbh_list_empty(cinfo->list) && done_producing) {
+        if ((rbh_list_empty(cinfo->list) && done_producing) ||
+            atomic_load(&should_stop)) {
             pthread_mutex_unlock(&cinfo->mutex_list);
             errno = ENODATA;
             break;
@@ -405,8 +415,13 @@ consumer_thread(void *arg) {
 
         if (verbose) {
             rc = clock_gettime(CLOCK_REALTIME, &start);
-            if (rc)
-                error(EXIT_FAILURE, 0, "Unable to get start time");
+            if (rc) {
+                fprintf(stderr, "Enricher thread %d failed to get start time\n",
+                        cinfo->id);
+                rbh_iter_destroy(node->enricher);
+                free(node);
+                break;
+            }
         }
 
         if (sink_process(cinfo->sink, node->enricher)) {
@@ -415,35 +430,40 @@ consumer_thread(void *arg) {
             break;
         }
 
-        if (source->ack_batch != NULL)
-            source->ack_batch(source, node->batch_id);
-
         if (verbose) {
             rc = clock_gettime(CLOCK_REALTIME, &end);
-            if (rc)
-                error(EXIT_FAILURE, 0, "Unable to get end time");
+            if (rc) {
+                fprintf(stderr, "Enricher thread %d failed to get end time\n",
+                        cinfo->id);
+                rbh_iter_destroy(node->enricher);
+                free(node);
+                break;
+            }
 
             timespec_accumulate(&cinfo->total_enrich, start, end);
         }
+
+        if (source->ack_batch != NULL)
+            source->ack_batch(source, node->batch_id);
 
         rbh_iter_destroy(node->enricher);
         free(node);
     }
 
     if (verbose)
-        printf("Ending consumer thread: %d\n", cinfo->id);
+        printf("Ending enricher thread: %d\n", cinfo->id);
 
-    switch (errno) {
-    case 0:
-        error(EXIT_FAILURE, EINVAL, "unexpected exit status 0");
-    case ENODATA:
-        break;
-    case RBH_BACKEND_ERROR:
-        error(EXIT_FAILURE, 0, "%s\n", rbh_backend_error);
-        __builtin_unreachable();
-    default:
-        error(EXIT_FAILURE, errno, "could not get the next batch of fsevents");
-    }
+    if (errno == ENODATA)
+        return NULL;
+
+    signal_shutdown();
+
+    if (errno == 0)
+        fprintf(stderr, "Enricher thread %d: unexpected exit status 0",
+                cinfo->id);
+    else if (errno == RBH_BACKEND_ERROR)
+        fprintf(stderr, "Enricher thread %d: %s\n", cinfo->id,
+                rbh_backend_error);
 
     return NULL;
 }
@@ -473,6 +493,8 @@ setup_producer_consumers(struct rbh_mut_iterator **deduplicator,
     *consumers = xmalloc(nb_workers * sizeof(*consumers));
     *cinfos = xmalloc(nb_workers * sizeof(**cinfos));
 
+    atomic_init(&should_stop, false);
+
     for (int i = 0; i < nb_workers; i++) {
         struct consumer_info *cinfo = &(*cinfos)[i];
 
@@ -492,12 +514,12 @@ setup_producer_consumers(struct rbh_mut_iterator **deduplicator,
 }
 
 /* Producer loop */
-static void
+static int
 producer_thread(struct rbh_mut_iterator *deduplicator,
                 struct enrich_iter_builder *builder, bool allow_partials,
                 struct consumer_info *cinfos, struct timespec *total_read)
 {
-    struct rbh_mut_iterator *batch;
+    struct rbh_mut_iterator *batch = NULL;
     struct sub_batch *sub_batch;
     struct timespec start, end;
     uint64_t batch_id = 1;
@@ -505,13 +527,19 @@ producer_thread(struct rbh_mut_iterator *deduplicator,
 
     if (verbose) {
         rc = clock_gettime(CLOCK_REALTIME, &start);
-        if (rc)
-            error(EXIT_FAILURE, 0, "Unable to get start time");
+        if (rc) {
+            fprintf(stderr, "Failed to get start time\n");
+            signal_shutdown();
+            return rc;
+        }
     }
 
-    for (batch = rbh_mut_iter_next(deduplicator); batch != NULL;
+    for (batch = rbh_mut_iter_next(deduplicator);
+         batch != NULL && !atomic_load(&should_stop);
          batch = rbh_mut_iter_next(deduplicator)) {
-        for (sub_batch = rbh_mut_iter_next(batch); sub_batch != NULL;
+
+        for (sub_batch = rbh_mut_iter_next(batch);
+             sub_batch != NULL && !atomic_load(&should_stop);
              sub_batch = rbh_mut_iter_next(batch)) {
 
             if (builder != NULL)
@@ -521,8 +549,12 @@ producer_thread(struct rbh_mut_iterator *deduplicator,
             else if (!allow_partials)
                 sub_batch->fsevents = iter_no_partial(sub_batch->fsevents);
 
-            if (sub_batch->fsevents == NULL)
-                error(EXIT_FAILURE, errno, "iter_enrich");
+            if (sub_batch->fsevents == NULL) {
+                fprintf(stderr, "Failed to create enricher iterator\n");
+                signal_shutdown();
+                rbh_mut_iter_destroy(batch);
+                return -1;
+            }
 
             pthread_mutex_lock(&cinfos[sub_batch->index].mutex_list);
             add_iterators_to_consumer(cinfos[sub_batch->index].list,
@@ -538,23 +570,24 @@ producer_thread(struct rbh_mut_iterator *deduplicator,
 
     if (verbose) {
         rc = clock_gettime(CLOCK_REALTIME, &end);
-        if (rc)
-            error(EXIT_FAILURE, 0, "Unable to get end time");
+        if (rc) {
+            fprintf(stderr, "Failed to get end time\n");
+            signal_shutdown();
+            return rc;
+        }
 
         timespec_accumulate(total_read, start, end);
     }
 
-    switch (errno) {
-    case 0:
-        error(EXIT_FAILURE, EINVAL, "unexpected exit status 0");
-    case ENODATA:
-        break;
-    case RBH_BACKEND_ERROR:
-        error(EXIT_FAILURE, 0, "%s\n", rbh_backend_error);
-        __builtin_unreachable();
-    default:
-        error(EXIT_FAILURE, errno, "could not get the next batch of fsevents");
+    if (batch == NULL && errno != ENODATA)
+        fprintf(stderr, "Could not get the next batch of fsevents\n");
+
+    if (errno != ENODATA) {
+        signal_shutdown();
+        return -1;
     }
+
+    return 0;
 }
 
 static void
@@ -582,7 +615,7 @@ cleanup_producer_consumers(struct rbh_mut_iterator *deduplicator,
     rbh_mut_iter_destroy(deduplicator);
 }
 
-static void
+static int
 feed(struct sink **sink, struct source *source,
      struct enrich_iter_builder *builder, bool allow_partials,
      struct deduplicator_options *dedup_opts)
@@ -592,15 +625,20 @@ feed(struct sink **sink, struct source *source,
     struct timespec total_enrich = {0};
     struct timespec total_read = {0};
     pthread_t *consumers = NULL;
+    int rc = 0;
 
     /* Setup the producer and consumers */
     setup_producer_consumers(&deduplicator, dedup_opts, &consumers, &cinfos);
 
     /* Launch the producer loop */
-    producer_thread(deduplicator, builder, allow_partials, cinfos, &total_read);
+    rc = producer_thread(deduplicator, builder, allow_partials, cinfos,
+                         &total_read);
 
     /* Cleanup the producer and consumers */
     cleanup_producer_consumers(deduplicator, cinfos, consumers, &total_enrich);
+
+    if (atomic_load(&should_stop))
+        rc = -1;
 
     if (verbose) {
         printf("Total time elapsed to read changelogs and dedup:"
@@ -609,6 +647,8 @@ feed(struct sink **sink, struct source *source,
                "%ld.%09ld seconds\n", total_enrich.tv_sec / nb_workers,
                total_enrich.tv_nsec / nb_workers);
     }
+
+    return rc;
 }
 
 static int
@@ -816,10 +856,10 @@ main(int argc, char *argv[])
                   "Failed to insert mountpoint in destination\n");
     }
 
-    feed(sink, source, enrich_builder, strcmp(sink[0]->name, "backend"),
-         &dedup_opts);
+    rc = feed(sink, source, enrich_builder, strcmp(sink[0]->name, "backend"),
+              &dedup_opts);
 
     rbh_config_free();
 
-    return error_message_count == 0 ? EXIT_SUCCESS : EXIT_FAILURE;
+    return rc == 0 ? EXIT_SUCCESS : EXIT_FAILURE;
 }
