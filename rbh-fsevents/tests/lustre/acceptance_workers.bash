@@ -70,7 +70,7 @@ acceptance_workers()
         src:lustre:"$LUSTRE_MDT"?ack-user=$userid "rbh:$db:$testdb" )"
 
     for i in 0 1 2; do
-        echo "$output" | grep "Starting consumer thread: $i"
+        echo "$output" | grep "Starting enricher/update thread: $i"
     done
 
     for entry in $(find *); do
@@ -91,7 +91,7 @@ acceptance_workers()
         src:lustre:"$LUSTRE_MDT"?ack-user=$userid "rbh:$db:$testdb")"
 
     for i in 0 1 2; do
-        echo "$output" | grep "Starting consumer thread: $i"
+        echo "$output" | grep "Starting enricher/update thread: $i"
     done
 
     local entries=$(count_documents)
@@ -113,7 +113,7 @@ acceptance_workers_no_dedup()
         src:lustre:"$LUSTRE_MDT"?ack-user=$userid "rbh:$db:$testdb")"
 
     for i in 0 1 2; do
-        echo "$output" | grep "Starting consumer thread: $i"
+        echo "$output" | grep "Starting enricher/update thread: $i"
     done
 
     for entry in $(find *); do
@@ -134,7 +134,7 @@ acceptance_workers_no_dedup()
         src:lustre:"$LUSTRE_MDT"?ack-user=$userid "rbh:$db:$testdb")"
 
     for i in 0 1 2; do
-        echo "$output" | grep "Starting consumer thread: $i"
+        echo "$output" | grep "Starting enricher/update thread: $i"
     done
 
     local entries=$(count_documents)
