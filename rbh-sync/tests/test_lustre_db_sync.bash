@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # This file is part of RobinHood 4
-# Copyright (C) 2022 Commissariat a l'energie atomique et aux energies
+# Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #
 # SPDX-License-Identifier: LGPL-3.0-or-later
@@ -222,6 +222,25 @@ test_hsm_archive_id()
     local id_1=$(lfs hsm_state "archive-id-1" | cut -d ':' -f3)
     find_attribute '"xattrs.hsm_archive_id":'$id_1 \
                    '"ns.xattrs.path" : "/archive-id-1"'
+}
+
+test_project_id()
+{
+    touch "project_1"
+    touch "project_2"
+    touch "vanilla"
+
+    sudo lfs project -p 1 "project_1"
+    sudo lfs project -p 2 "project_2"
+
+    rbh_sync_lustre "." "rbh:$db:$testdb"
+
+    find_attribute '"xattrs.project_id":1' \
+                   '"ns.xattrs.path": "/project_1"'
+    find_attribute '"xattrs.project_id":2' \
+                   '"ns.xattrs.path": "/project_2"'
+    find_attribute '"xattrs.project_id":0' \
+                   '"ns.xattrs.path": "/vanilla"'
 }
 
 # TODO: test with other flags
@@ -605,7 +624,7 @@ fi
 tests+=(test_flags test_gen test_mirror_count test_stripe_count
         test_stripe_size test_pattern test_comp_flags test_pool test_mirror_id
         test_begin test_end test_ost test_mdt_index_file test_mdt_index_dir
-        test_mdt_hash test_mdt_count)
+        test_mdt_hash test_mdt_count test_project_id)
 
 LUSTRE_DIR=/mnt/lustre/
 cd "$LUSTRE_DIR"
