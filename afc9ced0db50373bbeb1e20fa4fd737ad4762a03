@@ -48,6 +48,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c334ee57_b3b1c506",
+        "filename": "rbh-fsevents/tests/lustre/test_ack.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-10-15T14:44:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "32d4faa2_ad82c0ec",
+      "range": {
+        "startLine": 21,
+        "startChar": 11,
+        "endLine": 21,
+        "endChar": 25
+      },
+      "revId": "afc9ced0db50373bbeb1e20fa4fd737ad4762a03",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f1744478_e0ff62f3",
@@ -71,6 +95,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "94de6663_1a9a0016",
+        "filename": "rbh-fsevents/tests/lustre/test_ack.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-10-15T14:44:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f1744478_e0ff62f3",
+      "range": {
+        "startLine": 36,
+        "startChar": 4,
+        "endLine": 36,
+        "endChar": 44
+      },
+      "revId": "afc9ced0db50373bbeb1e20fa4fd737ad4762a03",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c3f208ac_20ea19d8",
@@ -84,6 +132,30 @@
       "writtenOn": "2025-10-14T09:54:52Z",
       "side": 1,
       "message": "question: similar question, what does this do ?",
+      "range": {
+        "startLine": 41,
+        "startChar": 0,
+        "endLine": 41,
+        "endChar": 26
+      },
+      "revId": "afc9ced0db50373bbeb1e20fa4fd737ad4762a03",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9ba6aad8_f0856ba7",
+        "filename": "rbh-fsevents/tests/lustre/test_ack.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-10-15T14:44:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c3f208ac_20ea19d8",
       "range": {
         "startLine": 41,
         "startChar": 0,
