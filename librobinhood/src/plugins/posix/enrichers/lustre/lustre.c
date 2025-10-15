@@ -155,6 +155,37 @@ xattrs_get_hsm(int fd, struct rbh_value_pair *pairs, int available_pairs)
     return subcount;
 }
 
+static int
+xattrs_get_project_id(int fd, struct rbh_value_pair *pairs, int available_pairs)
+{
+    struct fsxattr fsx;
+    int subcount = 0;
+    int rc;
+
+    if (S_ISLNK(mode))
+        /* Links do not have a project ID */
+        return 0;
+
+    if (available_pairs < 1)
+        return -1;
+
+    rc = ioctl(fd, FS_IOC_FSGETXATTR, &fsx);
+    if (rc && rc != -ENODATA) {
+        errno = -rc;
+        return -1;
+    }
+
+    if (rc == -ENODATA)
+        return 0;
+
+    rc = fill_uint32_pair("project_id", fsx.fsx_projid, &pairs[subcount++],
+                          _values);
+    if (rc)
+        return -1;
+
+    return subcount;
+}
+
 static inline struct rbh_value
 create_uint64_value(uint64_t integer)
 {
@@ -827,7 +858,8 @@ lustre_attrs_get_no_fid(struct entry_info *entry_info,
                         struct rbh_sstack *values)
 {
     int (*xattrs_funcs[])(int, struct rbh_value_pair *, int) = {
-        xattrs_get_hsm, xattrs_get_layout, xattrs_get_mdt_info
+        xattrs_get_hsm, xattrs_get_layout, xattrs_get_mdt_info,
+        xattrs_get_project_id
     };
 
     return _get_attrs(entry_info, xattrs_funcs,
@@ -842,7 +874,8 @@ lustre_attrs_get_all(struct entry_info *entry_info,
                      struct rbh_sstack *values)
 {
     int (*xattrs_funcs[])(int, struct rbh_value_pair *, int) = {
-        xattrs_get_fid, xattrs_get_hsm, xattrs_get_layout, xattrs_get_mdt_info
+        xattrs_get_fid, xattrs_get_hsm, xattrs_get_layout, xattrs_get_mdt_info,
+        xattrs_get_project_id
     };
 
     return _get_attrs(entry_info, xattrs_funcs,
