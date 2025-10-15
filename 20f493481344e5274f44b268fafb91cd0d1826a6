@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1335e701_f0b0e4cc",
+        "filename": "librobinhood/src/plugins/posix/posix.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 807,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-10-15T07:35:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4d9ac861_2864f595",
+      "range": {
+        "startLine": 807,
+        "startChar": 4,
+        "endLine": 807,
+        "endChar": 25
+      },
+      "revId": "20f493481344e5274f44b268fafb91cd0d1826a6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3739705c_6214101f",
@@ -41,6 +65,24 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5aaa0403_4c3a1967",
+        "filename": "librobinhood/src/plugins/posix/posix.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 976,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-10-15T07:35:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3739705c_6214101f",
+      "revId": "20f493481344e5274f44b268fafb91cd0d1826a6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f1c76ecb_7401fe5b",
@@ -54,6 +96,30 @@
       "writtenOn": "2025-10-15T07:04:20Z",
       "side": 1,
       "message": "idem",
+      "range": {
+        "startLine": 1124,
+        "startChar": 4,
+        "endLine": 1128,
+        "endChar": 105
+      },
+      "revId": "20f493481344e5274f44b268fafb91cd0d1826a6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "38b49241_d96425ed",
+        "filename": "librobinhood/src/plugins/posix/posix.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 1128,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-10-15T07:35:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f1c76ecb_7401fe5b",
       "range": {
         "startLine": 1124,
         "startChar": 4,
