@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "54947dcc_c2eb09e5",
+        "filename": "rbh-fsevents/src/sources/lustre.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 1365,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-10-15T14:44:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "44b5b835_2dcdbc36",
+      "range": {
+        "startLine": 1365,
+        "startChar": 8,
+        "endLine": 1365,
+        "endChar": 25
+      },
+      "revId": "972370c5585be4f552e48ff60308bbfcdfa2390e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5a672be7_c782aa3d",
@@ -47,6 +71,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9bce7419_1a172d6e",
+        "filename": "rbh-fsevents/src/sources/lustre.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 1366,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-10-15T14:44:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a672be7_c782aa3d",
+      "range": {
+        "startLine": 1366,
+        "startChar": 8,
+        "endLine": 1366,
+        "endChar": 58
+      },
+      "revId": "972370c5585be4f552e48ff60308bbfcdfa2390e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "688e5ce6_6d127df1",
@@ -60,6 +108,30 @@
       "writtenOn": "2025-10-14T08:25:25Z",
       "side": 1,
       "message": "suggest: if the `lustre_changelog_get_start_idx` returns `0` or `start_index + 1`, this could just be `start_index` here",
+      "range": {
+        "startLine": 1404,
+        "startChar": 40,
+        "endLine": 1404,
+        "endChar": 78
+      },
+      "revId": "972370c5585be4f552e48ff60308bbfcdfa2390e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e8ad3ad5_92919203",
+        "filename": "rbh-fsevents/src/sources/lustre.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 1404,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-10-15T14:44:04Z",
+      "side": 1,
+      "message": "I want `last_changelog_index` to be equal to the index saved and not index + 1",
+      "parentUuid": "688e5ce6_6d127df1",
       "range": {
         "startLine": 1404,
         "startChar": 40,
