@@ -23,7 +23,10 @@ extra_args = []
 
 if liblustre.found()
     extra_sources += [
-        'src/sources/lustre.c',
+        'src/sources/lustre/lustre.c',
+        'src/sources/lustre/lustre_utils.c',
+        'src/sources/lustre/changelog_iter.c',
+        'src/sources/lustre/ack.c',
         'src/enrichers/posix/lustre.c',
     ]
     extra_args += ['-DHAVE_LUSTRE']
