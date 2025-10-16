@@ -96,12 +96,17 @@ function handle_non_relative_expiration()
 function run_retention_updater
 {
     local URI="$1"
-    local mount_point="$2"
+    local mount_point
     local tmp_file="$(mktemp tmp.XXXXXX)"
+    local config_option
 
     if [ ! -z "$conf_file" ]; then
-        local config_option="--config $conf_file"
+        config_option="--config $conf_file"
+    else
+        config_option=""
     fi
+
+    mount_point="$(rbh-info $URI -m)"
 
     rbh-find $config_option $URI -type d -expired -printf "%p|%e|%E|%I\n" |
         while IFS='|' read -r dir expires expiration_date ID; do
@@ -130,7 +135,7 @@ function run_retention_updater
 
 function print_doc
 {
-    echo "Usage: rbh-update-retention URI mount_point [--delete] [--config PATH] [--help]"
+    echo "Usage: rbh-update-retention URI [--delete] [--config PATH] [--help]"
     echo ""
     echo "Update the retention of attributes of any directory that is expired,"
     echo "based on their content's last accessed time."
@@ -143,8 +148,8 @@ function print_doc
     echo ""
 }
 
-if [ $# -lt 2 ]; then
-    echo "Please specify a URI to update and the mount point of the entries"
+if [ $# -lt 1 ]; then
+    echo "Please specify a URI to update"
     echo ""
     print_doc
     exit 1
@@ -180,23 +185,16 @@ do
             ;;
         *)
             if [ ! -z "$args_found" ]; then
-                echo "URI and mount point already given"
+                echo "URI already given"
                 exit 1
             fi
 
             URI="$1"
-            mount_point="$2"
             args_found=true
-            shift
             ;;
     esac
 
     shift
 done
 
-if [ ! -d "$mount_point" ]; then
-    echo "Mount point provided is not a directory, please provide one"
-    exit 1
-fi
-
-run_retention_updater "$URI" "$mount_point"
+run_retention_updater "$URI"
