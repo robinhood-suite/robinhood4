@@ -73,7 +73,8 @@ rbh_undelete()
 __rbh_update_retention=$(PATH="$PWD/../retention:$PATH" which rbh_update_retention)
 __update_retention_PATH+="$PWD/rbh-sync:"
 __update_retention_PATH+="$PWD/rbh-fsevents:"
-__update_retention_PATH+="$PWD/rbh-find"
+__update_retention_PATH+="$PWD/rbh-find:"
+__update_retention_PATH+="$PWD/rbh-info"
 
 rbh_update_retention()
 {
