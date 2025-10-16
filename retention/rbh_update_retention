@@ -6,7 +6,7 @@
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
 
-for program in rbh-sync rbh-find rbh-fsevents; do
+for program in rbh-find rbh-fsevents rbh-info; do
     if ! command -v $program &> /dev/null; then
         echo "This command requires $program to be installed"
         exit 1
@@ -28,6 +28,28 @@ function update_directory_expiration_date
 EOF
 }
 
+function update_expiration_date
+{
+    local URI="$1"
+    local directory="$2"
+    local directory_ID="$3"
+    local expires="$4"
+    local max_time="$5"
+    local verbose="$6"
+
+    local new_expiration_date=$((max_time + expires + 1))
+
+    if [ ! -z "$verbose" ]; then
+        echo "Expiration of the directory should occur '$expires' seconds after it's last usage"
+        echo "Changing the expiration date of '$directory' to '$(date -d "@$new_expiration_date")'"
+    fi
+
+    update_directory_expiration_date "$URI" "$directory_ID" \
+                                     "$new_expiration_date"
+    setfattr -n trusted.expiration_date -v "$new_expiration_date" \
+                                           "$mount_point/$directory"
+}
+
 function check_expiration_date
 {
     local URI="$1"
@@ -40,36 +62,60 @@ function check_expiration_date
     local max_time=$(rbh-find "$URI#$directory" \
                         -type f -printf "%A\n%T\n" | sort -rn | head -n 1)
 
-    echo "Directory '$directory' expiration date is set to '$expiration_date'"
-
     if [ -z "$max_time" ]; then
-        echo "Directory '$directory' has expired and it is empty, no other check needed"
-        if [ ! -z "$delete_found" ] && [ ! -z "$directory" ]; then
-            find "$mount_point/$directory" -depth -exec "rmdir" {} ";"
+        max_time="0"
+    fi
+
+    local actual_exp_date="$(( max_time + expires ))"
+
+    if (( actual_exp_date <= current )); then
+        # All entries here are considered truly expired and could be deleted
+        echo "Directory '$directory' expiration date is set to '$expiration_date'"
+
+        if (( max_time == 0 )); then
+            echo "Directory '$directory' has expired and it is empty, no other check needed"
+
+            if [ ! -z "$delete_found" ] && [ ! -z "$directory" ]; then
+                find "$mount_point/$directory" -depth -exec "rmdir" {} ";"
+            fi
+        else
+            echo "The last accessed file in it was accessed on '$(date -d "@$max_time")'"
+            echo "Expiration of the directory should occur '$expires' seconds after it's last usage"
+            if [ ! -z "$delete_found" ] && [ ! -z "$directory" ]; then
+                echo "Directory '$directory' has expired and will be deleted"
+                rm -rf "$mount_point/$directory"
+            else
+                echo "Directory '$directory' has expired"
+            fi
         fi
+
         return 0
     fi
 
-    echo "The last accessed file in it was accessed on '$(date -d "@$max_time")'"
+    # Here we only have entries which are expired after the delay, but not truly
 
-    local current="$(date +%s)"
+    if (( actual_exp_date >= delay )); then
+        # If the directory truly expires after the delay
 
-    if (( max_time + expires > current )); then
-        local new_expiration_date=$((max_time + expires + 1))
-
-        echo "Expiration of the directory should occur '$expires' seconds after it's last usage"
-        echo "Changing the expiration date of '$directory' to '$(date -d "@$new_expiration_date")'"
-        update_directory_expiration_date "$URI" "$directory_ID" \
-                                         "$new_expiration_date"
-        setfattr -n trusted.expiration_date -v "$new_expiration_date" \
-                                               "$mount_point/$directory"
-    else
-        if [ ! -z "$delete_found" ] && [ ! -z "$directory" ]; then
-            echo "Directory '$directory' has expired and will be deleted"
-            rm -rf "$mount_point/$directory"
+        if (( $(date +%s -d "$expiration_date") <= current )); then
+            # The directory has expired, but an entry in it has pushed that
+            # expiration date back, so update it and notify the user
+            update_expiration_date "$URI" "$directory" "$directory_ID" \
+                                   "$expires" "$max_time" --verbose
         else
-            echo "Directory '$directory' has expired"
+            # The directory will expire during the delay window, but since an
+            # entry in it pushes back the expiration date, update it, but don't
+            # bother notifying the user
+            update_expiration_date "$URI" "$directory" "$directory_ID" \
+                                   "$expires" "$max_time"
         fi
+    else
+        # Otherwise the directory will truly expire during the delay, so provide
+        # a countdown to its expiration
+        local exp_days="$(( (actual_exp_date - current) / 86400))"
+
+        echo "Directory '$directory' expiration date is set to '$expiration_date'"
+        echo "So '$directory' expires in $exp_days days"
     fi
 }
 
@@ -108,7 +154,8 @@ function run_retention_updater
 
     mount_point="$(rbh-info $URI -m)"
 
-    rbh-find $config_option $URI -type d -expired -printf "%p|%e|%E|%I\n" |
+    rbh-find $config_option $URI -type d \
+             -expired-at "$delay" -printf "%p|%e|%E|%I\n" |
         while IFS='|' read -r dir expires expiration_date ID; do
 
         if [ "${expires:0:1}" != "+" ]; then
@@ -135,7 +182,7 @@ function run_retention_updater
 
 function print_doc
 {
-    echo "Usage: rbh-update-retention URI [--delete] [--config PATH] [--help]"
+    echo "Usage: rbh-update-retention URI [--delete] [--config PATH] [--help] [--delay DELAY]"
     echo ""
     echo "Update the retention of attributes of any directory that is expired,"
     echo "based on their content's last accessed time."
@@ -143,7 +190,12 @@ function print_doc
     echo ""
     echo "'--config PATH'   path to a configuration file, used to determine the"
     echo "                  expiration attribute to check for"
-    echo "'--delete'        delete the expired directories instead of just printing"
+    echo "'--delay'         a delay window during which entries that will"
+    echo "                  expire should be notified. Should be given as a"
+    echo "                  number of days. If not given, no delay shall be"
+    echo "                  used"
+    echo "'--delete'        delete the expired directories instead of just"
+    echo "                  printing"
     echo "'--help'          print this message"
     echo ""
 }
@@ -154,6 +206,9 @@ if [ $# -lt 1 ]; then
     print_doc
     exit 1
 fi
+
+current="$(date +%s)"
+delay="$current"
 
 while :
 do
@@ -183,8 +238,17 @@ do
             conf_file="$2"
             shift
             ;;
+        --delay)
+            if [ "$delay_found" == "true" ]; then
+                echo "Delay option already given"
+                exit 1
+            fi
+
+            delay="$(date +%s -d "+ $2 days")"
+            shift
+            ;;
         *)
-            if [ ! -z "$args_found" ]; then
+            if [ "$args_found" == "true" ]; then
                 echo "URI already given"
                 exit 1
             fi
