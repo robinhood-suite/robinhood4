@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "14b36b7c_5b3d1894",
+        "filename": "rbh-fsevents/rbh-fsevents.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 642,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-10-16T13:56:09Z",
+      "side": 1,
+      "message": "typo: occured",
+      "range": {
+        "startLine": 642,
+        "startChar": 25,
+        "endLine": 642,
+        "endChar": 31
+      },
+      "revId": "146eb49c287657f4e8336e2f171eed9bcc459bea",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
