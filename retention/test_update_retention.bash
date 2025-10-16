@@ -308,12 +308,66 @@ test_retention_on_empty_dir()
     fi
 }
 
+test_retention_expiration_in_days()
+{
+    local dir="dir"
+    local file="file"
+
+    mkdir $dir
+    touch $dir/$file
+
+    local current="$(date +%s)"
+
+    setfattr -n user.expires -v "+$(( 5 * 86400 ))" $dir
+
+    rbh_sync rbh:retention:. "rbh:$db:$testdb"
+
+    local output="$(rbh_update_retention "rbh:$db:$testdb" --delay 15)"
+    local output_lines="$(echo "$output" | grep "expires in 5 days" | wc -l)"
+    if (( output_lines != 1 )); then
+        error "'$dir' should expire in 5 days: '$output'"
+    fi
+
+    touch $dir/$file -d "+ 5 days" -m
+
+    rbh_sync rbh:retention:. "rbh:$db:$testdb"
+
+    local output="$(rbh_update_retention "rbh:$db:$testdb" --delay 15)"
+    local output_lines="$(echo "$output" | grep "expires in 10 days" | wc -l)"
+    if (( output_lines != 1 )); then
+        error "'$dir' should expire in 10 days: '$output'"
+    fi
+
+    touch -m $dir/$file -d "+ 15 days"
+
+    rbh_sync rbh:retention:. "rbh:$db:$testdb"
+
+    local output="$(rbh_update_retention "rbh:$db:$testdb" --delay 15)"
+    if [ ! -z "$output" ]; then
+        error "'$dir' expiration date should have been pushed back without notification: '$output'"
+    fi
+
+    date --set="@$(( current + (20 * 86400) ))"
+    touch -m $dir
+    date --set="@$(( current + (30 * 86400) ))"
+    touch -m $dir/$file -d "+ 16 days"
+
+    rbh_sync rbh:retention:. "rbh:$db:$testdb"
+
+    local output="$(rbh_update_retention "rbh:$db:$testdb" --delay 15)"
+    local output_lines="$(echo "$output" | grep "Changing" | wc -l)"
+    if (( output_lines != 1 )); then
+        error "'$dir''s expiration date should have modified: '$output'"
+    fi
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
 declare -a tests=(test_retention_script test_retention_after_sync
-                  test_retention_with_config test_retention_on_empty_dir)
+                  test_retention_with_config test_retention_on_empty_dir
+                  test_retention_expiration_in_days)
 
 tmpdir=$(mktemp --directory)
 trap "rm -r $tmpdir" EXIT
