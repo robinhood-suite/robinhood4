@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a341b92f_157af332",
+        "filename": "rbh-fsevents/rbh-fsevents.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 398,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-10-16T07:21:04Z",
+      "side": 1,
+      "message": "nit: technically, enricher + update thread",
+      "range": {
+        "startLine": 398,
+        "startChar": 25,
+        "endLine": 398,
+        "endChar": 33
+      },
+      "revId": "078970fac54d48578daf82ee94c6dc47ab11fd1f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d219159d_df95380e",
+        "filename": "rbh-fsevents/rbh-fsevents.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 538,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-10-16T07:21:04Z",
+      "side": 1,
+      "message": "nit: remove these from here, and instead put them in a if -\u003e goto block line 544",
+      "range": {
+        "startLine": 538,
+        "startChar": 23,
+        "endLine": 538,
+        "endChar": 52
+      },
+      "revId": "078970fac54d48578daf82ee94c6dc47ab11fd1f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "39cd07f8_31f56a69",
+        "filename": "rbh-fsevents/rbh-fsevents.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 641,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-10-16T07:21:04Z",
+      "side": 1,
+      "message": "suggest: add a comment to explain why this final check",
+      "range": {
+        "startLine": 640,
+        "startChar": 4,
+        "endLine": 641,
+        "endChar": 16
+      },
+      "revId": "078970fac54d48578daf82ee94c6dc47ab11fd1f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
