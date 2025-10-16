@@ -1,5 +1,5 @@
 /* This file is part of Robinhood 4
- * Copyright (C) 2024 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifer: LGPL-3.0-or-later
@@ -174,6 +174,8 @@ help()
         "                           given backend\n"
         "    -f, --first-sync       Show infos about the first rbh-sync done\n"
         "    -y, --last-sync        Show infos about the last rbh-sync done\n"
+        "    -m, --mountpoint       Show the mountpoint used as source for\n"
+        "                           the last rbh-sync\n"
         "    -s, --size             Show the size of entries collection\n"
         "\n"
         "A robinhood URI is built as follows:\n"
@@ -365,6 +367,12 @@ _get_backend_source(const struct rbh_value *value)
 }
 
 static void
+_get_mountpoint(const struct rbh_value *value)
+{
+    printf("%s\n", value->string);
+}
+
+static void
 _get_collection_sync(const struct rbh_value *value)
 {
     assert(value->type == RBH_VT_MAP);
@@ -425,11 +433,12 @@ _get_collection_sync(const struct rbh_value *value)
 
 static struct rbh_info_fields INFO_FIELDS[] = {
     { "average_object_size", _get_collection_avg_obj_size },
+    { "backend_source", _get_backend_source},
     { "count", _get_collection_count },
     { "first_sync", _get_collection_sync },
     { "last_sync", _get_collection_sync },
+    { "mountpoint", _get_mountpoint },
     { "size", _get_collection_size },
-    { "backend_source", _get_backend_source},
 };
 
 void
@@ -512,6 +521,10 @@ main(int _argc, char **_argv)
             .val = 'l'
         },
         {
+            .name = "mountpoint",
+            .val = 'm'
+        },
+        {
             .name = "size",
             .val = 's',
         },
@@ -534,7 +547,7 @@ main(int _argc, char **_argv)
         argv = &_argv[nb_cli_args];
     }
 
-    while ((option = getopt_long(argc, argv, "abcfhlsy", LONG_OPTIONS,
+    while ((option = getopt_long(argc, argv, "abcfhlmsy", LONG_OPTIONS,
                                  NULL)) != -1) {
         switch (option) {
         case 'a':
@@ -555,6 +568,9 @@ main(int _argc, char **_argv)
         case 'l':
             rbh_backend_list();
             return 0;
+        case 'm':
+            flags |= RBH_INFO_MOUNTPOINT;
+            break;
         case 's':
             flags |= RBH_INFO_SIZE;
             break;

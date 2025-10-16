@@ -134,13 +134,34 @@ test_collection_last_sync() {
     test_collection_sync "--last-sync"
 }
 
+test_collection_mountpoint()
+{
+    rbh_sync "rbh:posix:." "rbh:$db:$testdb"
+
+    local found_mountpoint=$(rbh_info "rbh:$db:$testdb" -m)
+
+    if [ "$found_mountpoint" != "$(pwd)" ]; then
+        error "Mountpoints don't match, found '$found_mountpoint', expected '$(pwd)'\n"
+    fi
+
+    rbh_sync "rbh:posix:/tmp" "rbh:$db:$testdb-2"
+
+    local found_mountpoint=$(rbh_info "rbh:$db:$testdb-2" -m)
+
+    do_db drop $testdb-2
+
+    if [ "$found_mountpoint" != "/tmp" ]; then
+        error "Mountpoints don't match, found '$found_mountpoint', expected '/tmp'\n"
+    fi
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
 declare -a tests=(test_collection_size test_collection_count
                   test_collection_avg_obj_size test_collection_first_sync
-                  test_collection_last_sync)
+                  test_collection_last_sync test_collection_mountpoint)
 
 tmpdir=$(mktemp --directory)
 trap -- "rm -rf '$tmpdir'" EXIT
