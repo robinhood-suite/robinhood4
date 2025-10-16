@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c7895502_b64213e2",
+        "filename": "rbh-fsevents/src/sources/lustre/changelog_iter.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-10-16T07:37:51Z",
+      "side": 1,
+      "message": "nit: rename the file to `source_reader`",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 35
+      },
+      "revId": "23848a6e5b56950243c8a09b144ac7e9d8f3e33f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
