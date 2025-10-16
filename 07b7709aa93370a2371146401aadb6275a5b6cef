@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "52804993_30a700f2",
+        "filename": "rbh-fsevents/tests/lustre/test_ack.bash",
+        "patchSetId": 3
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-10-16T07:24:50Z",
+      "side": 1,
+      "message": "suggest: adding an explanation on how the fsevents above should behave would be nice, saying for instance that we have 2 * 3 + 1 changelog in total (don\u0027t remember exactly how many are generated per touch/rm), and with a batch size of 2, we will read/enrich/update the first create, ack, then try to do the second touch, but fail the enrich because it has been removed, ...",
+      "range": {
+        "startLine": 30,
+        "startChar": 14,
+        "endLine": 30,
+        "endChar": 61
+      },
+      "revId": "07b7709aa93370a2371146401aadb6275a5b6cef",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
