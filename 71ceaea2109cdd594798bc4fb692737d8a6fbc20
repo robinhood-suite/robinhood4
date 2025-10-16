@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d894dd19_5c8ed2d2",
+        "filename": "rbh-fsevents/src/sources/lustre.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 1270,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-10-16T09:38:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1af604f1_adef3c5f",
+      "range": {
+        "startLine": 1269,
+        "startChar": 4,
+        "endLine": 1270,
+        "endChar": 18
+      },
+      "revId": "71ceaea2109cdd594798bc4fb692737d8a6fbc20",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dfffe7e4_ed3a09b8",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-10-15T14:58:00Z",
       "side": 1,
       "message": "minor: no need now, `rbh_value_map_new` cannot fail anymore",
+      "range": {
+        "startLine": 1276,
+        "startChar": 4,
+        "endLine": 1279,
+        "endChar": 5
+      },
+      "revId": "71ceaea2109cdd594798bc4fb692737d8a6fbc20",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "847982fa_524fcd92",
+        "filename": "rbh-fsevents/src/sources/lustre.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 1279,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-10-16T09:38:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dfffe7e4_ed3a09b8",
       "range": {
         "startLine": 1276,
         "startChar": 4,
