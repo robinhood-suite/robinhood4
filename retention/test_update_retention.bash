@@ -78,7 +78,7 @@ test_retention_script()
 
     rbh_sync rbh:retention:. "rbh:$db:$testdb"
 
-    local output="$(rbh_update_retention "rbh:$db:$testdb" "$PWD")"
+    local output="$(rbh_update_retention "rbh:$db:$testdb")"
     local output_lines="$(echo "$output" | grep "No directory has expired" | \
                           wc -l)"
     if [ "$output_lines" != "1" ]; then
@@ -88,7 +88,7 @@ test_retention_script()
     date --set="@$(( $(stat -c %X $dir3) + 6))"
 
     echo "Test: 1 expired, 3 not expired, 0 updated"
-    output="$(rbh_update_retention "rbh:$db:$testdb" "$PWD")"
+    output="$(rbh_update_retention "rbh:$db:$testdb")"
     shant_be_expired "$output" "$dir1"
     shant_be_expired "$output" "$dir2"
     should_be_expired "$output" "$dir3"
@@ -98,7 +98,7 @@ test_retention_script()
     date --set="@$(( $(stat -c %X $dir1) + 11))"
 
     echo "Test: 2 expired, 2 not expired, 0 updated"
-    output="$(rbh_update_retention "rbh:$db:$testdb" "$PWD")"
+    output="$(rbh_update_retention "rbh:$db:$testdb")"
     should_be_expired "$output" "$dir1"
     shant_be_expired "$output" "$dir2"
     should_be_expired "$output" "$dir3"
@@ -109,7 +109,7 @@ test_retention_script()
     rbh_sync rbh:retention:. "rbh:$db:$testdb"
 
     echo "Test: 1 expired, 2 not expired, 1 updated"
-    output="$(rbh_update_retention "rbh:$db:$testdb" "$PWD")"
+    output="$(rbh_update_retention "rbh:$db:$testdb")"
     should_be_updated "$output" "$dir1"
     shant_be_expired "$output" "$dir2"
     should_be_expired "$output" "$dir3"
@@ -119,7 +119,7 @@ test_retention_script()
     date --set="@$(( $(stat -c %X $dir1/$entry1) + 11))"
 
     echo "Test: 3 expired, 0 not expired, 1 updated"
-    output="$(rbh_update_retention "rbh:$db:$testdb" "$PWD")"
+    output="$(rbh_update_retention "rbh:$db:$testdb")"
     should_be_expired "$output" "$dir1"
     should_be_updated "$output" "$dir2"
     should_be_expired "$output" "$dir3"
@@ -129,7 +129,7 @@ test_retention_script()
     date --set="@$(( $(stat -c %X $dir2/$entry3) + 16))"
 
     echo "Test: 4 expired, 0 not expired, 0 updated"
-    output="$(rbh_update_retention "rbh:$db:$testdb" "$PWD")"
+    output="$(rbh_update_retention "rbh:$db:$testdb")"
     should_be_expired "$output" "$dir1"
     should_be_expired "$output" "$dir2"
     should_be_expired "$output" "$dir3"
@@ -142,7 +142,7 @@ test_retention_script()
     # Nothing should have changed because we only updated the access time of the
     # directory, and not its modify time
     echo "Test: 4 expired, 0 not expired, 0 updated"
-    output="$(rbh_update_retention "rbh:$db:$testdb" "$PWD")"
+    output="$(rbh_update_retention "rbh:$db:$testdb")"
     should_be_expired "$output" "$dir1"
     should_be_expired "$output" "$dir2"
     should_be_expired "$output" "$dir3"
@@ -153,7 +153,7 @@ test_retention_script()
     rbh_sync rbh:retention:. "rbh:$db:$testdb"
 
     echo "Test: 3 expired, 0 not expired, 1 updated"
-    output="$(rbh_update_retention "rbh:$db:$testdb" "$PWD")"
+    output="$(rbh_update_retention "rbh:$db:$testdb")"
     should_be_expired "$output" "$dir1"
     should_be_expired "$output" "$dir2"
     shant_be_expired "$output" "$dir3"
@@ -163,7 +163,7 @@ test_retention_script()
     date --set="@$(( $(stat -c %X $dir3) + 6))"
 
     echo "Test: 4 deleted"
-    rbh_update_retention "rbh:$db:$testdb" "$PWD" --delete
+    rbh_update_retention "rbh:$db:$testdb" --delete
 
     if [ -d "$dir1" ] || [ -d "$dir2" ] || [ -d "$dir3" ] || [ -d "$dir4" ]
     then
@@ -196,7 +196,7 @@ test_retention_after_sync()
     touch -m $dir/$entry
     rbh_sync rbh:retention:. "rbh:$db:$testdb"
 
-    output="$(rbh_update_retention "rbh:$db:$testdb" "$PWD")"
+    output="$(rbh_update_retention "rbh:$db:$testdb")"
     should_be_updated "$output" "$dir"
 
     expiration_date="$(( $(stat -c %Y $dir/$entry) + 11))"
@@ -265,21 +265,19 @@ backends:
 
     date --set="@$(( $(stat -c %Y $dir) + 11))"
 
-    local output="$(rbh_update_retention "rbh:$db:$testdb" "$PWD")"
+    local output="$(rbh_update_retention "rbh:$db:$testdb")"
     echo "$output" | grep -q "Skipping"
 
-    output="$(rbh_update_retention "rbh:$db:$testdb" "$PWD" \
-                        --config $conf_file)"
+    output="$(rbh_update_retention "rbh:$db:$testdb" --config $conf_file)"
     should_be_expired "$output" "$dir"
 
     touch $dir/$entry
     rbh_sync rbh:retention:. "rbh:$db:$testdb" --config $conf_file
 
-    output="$(rbh_update_retention "rbh:$db:$testdb" "$PWD")"
+    output="$(rbh_update_retention "rbh:$db:$testdb")"
     echo "$output" | grep -q "Skipping"
 
-    output="$(rbh_update_retention "rbh:$db:$testdb" "$PWD" \
-                        --config $conf_file)"
+    output="$(rbh_update_retention "rbh:$db:$testdb" --config $conf_file)"
     should_be_updated "$output" "$dir"
 }
 
@@ -295,7 +293,7 @@ test_retention_on_empty_dir()
 
     rbh_sync rbh:retention:. "rbh:$db:$testdb"
 
-    local output="$(rbh_update_retention "rbh:$db:$testdb" "$PWD")"
+    local output="$(rbh_update_retention "rbh:$db:$testdb")"
     local output_lines="$(echo "$output" | grep "No directory has expired" | \
                           wc -l)"
     if [ "$output_lines" != "1" ]; then
@@ -304,7 +302,7 @@ test_retention_on_empty_dir()
 
     date --set="@$(( $(stat -c %X $dir1) + 6))"
 
-    output="$(rbh_update_retention "rbh:$db:$testdb" "$PWD" --delete)"
+    output="$(rbh_update_retention "rbh:$db:$testdb" --delete)"
     if [ -d $dir1 ]; then
         error "Directory '$dir1' should have been deleted"
     fi
