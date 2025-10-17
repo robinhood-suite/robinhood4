@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "48a4d9b9_78bdd981",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 12
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-10-17T13:25:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f29dd25f_2f826689",
+      "range": {
+        "startLine": 11,
+        "startChar": 9,
+        "endLine": 11,
+        "endChar": 11
+      },
+      "revId": "cc6c65a524c49d8b94eb88d55ae8f84e081a193f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "3210e940_2584d028",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 12
@@ -64,6 +88,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4ef8f0f5_d7eaac44",
+        "filename": "librobinhood/src/plugins/s3/iterators/mpi/iterator.c",
+        "patchSetId": 12
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-10-17T13:25:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "904895e5_ede75c2d",
+      "range": {
+        "startLine": 23,
+        "startChar": 0,
+        "endLine": 34,
+        "endChar": 29
+      },
+      "revId": "cc6c65a524c49d8b94eb88d55ae8f84e081a193f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7a79ea29_432ef84e",
@@ -77,6 +125,30 @@
       "writtenOn": "2025-10-13T12:20:53Z",
       "side": 1,
       "message": "minor: this free is forgotten in next error handling cases",
+      "range": {
+        "startLine": 116,
+        "startChar": 12,
+        "endLine": 116,
+        "endChar": 26
+      },
+      "revId": "cc6c65a524c49d8b94eb88d55ae8f84e081a193f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "24a8a992_e8417978",
+        "filename": "librobinhood/src/plugins/s3/iterators/mpi/iterator.c",
+        "patchSetId": 12
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-10-17T13:25:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7a79ea29_432ef84e",
       "range": {
         "startLine": 116,
         "startChar": 12,
@@ -112,6 +184,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ba9c18f7_58b67913",
+        "filename": "librobinhood/src/plugins/s3/iterators/mpi/iterator.c",
+        "patchSetId": 12
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-10-17T13:25:02Z",
+      "side": 1,
+      "message": "Keep the function, but call it only once per process.",
+      "parentUuid": "ee733797_e9432e70",
+      "range": {
+        "startLine": 121,
+        "startChar": 17,
+        "endLine": 122,
+        "endChar": 60
+      },
+      "revId": "cc6c65a524c49d8b94eb88d55ae8f84e081a193f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "38f542a5_f0d4f107",
         "filename": "librobinhood/src/plugins/s3/iterators/mpi/iterator.c",
         "patchSetId": 12
@@ -123,6 +219,30 @@
       "writtenOn": "2025-10-13T12:20:53Z",
       "side": 1,
       "message": "major: so that thread will not cover any bucket, but it\u0027s not an issue ?",
+      "range": {
+        "startLine": 123,
+        "startChar": 12,
+        "endLine": 125,
+        "endChar": 70
+      },
+      "revId": "cc6c65a524c49d8b94eb88d55ae8f84e081a193f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f4b52848_e129447f",
+        "filename": "librobinhood/src/plugins/s3/iterators/mpi/iterator.c",
+        "patchSetId": 12
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-10-17T13:25:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "38f542a5_f0d4f107",
       "range": {
         "startLine": 123,
         "startChar": 12,
@@ -156,6 +276,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "89571e8b_5837f492",
+        "filename": "librobinhood/src/plugins/s3/iterators/mpi/iterator.c",
+        "patchSetId": 12
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-10-17T13:25:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b75ec4d3_e28bd8b2",
+      "range": {
+        "startLine": 151,
+        "startChar": 16,
+        "endLine": 151,
+        "endChar": 45
+      },
+      "revId": "cc6c65a524c49d8b94eb88d55ae8f84e081a193f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "41eaac6e_7a261785",
@@ -169,6 +313,30 @@
       "writtenOn": "2025-10-13T12:20:53Z",
       "side": 1,
       "message": "major: there\u0027s actually no need for any comm here, all threads could get the list of buckets and calculate themselves what they have to sync.",
+      "range": {
+        "startLine": 156,
+        "startChar": 8,
+        "endLine": 156,
+        "endChar": 16
+      },
+      "revId": "cc6c65a524c49d8b94eb88d55ae8f84e081a193f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9923638e_694d6352",
+        "filename": "librobinhood/src/plugins/s3/iterators/mpi/iterator.c",
+        "patchSetId": 12
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-10-17T13:25:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "41eaac6e_7a261785",
       "range": {
         "startLine": 156,
         "startChar": 8,
