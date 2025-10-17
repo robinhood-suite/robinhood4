@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5347854a_0cdcd886",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2025-10-17T07:25:48Z",
+      "side": 1,
+      "message": "typo: have",
+      "range": {
+        "startLine": 16,
+        "startChar": 14,
+        "endLine": 16,
+        "endChar": 17
+      },
+      "revId": "80a9b97a7c050aafa5970f503d668f5220c178b3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7e398e7f_d293e896",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2025-10-17T07:25:48Z",
+      "side": 1,
+      "message": "It\u0027s not mandatory to fix the typo of the commit message.",
+      "revId": "80a9b97a7c050aafa5970f503d668f5220c178b3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
