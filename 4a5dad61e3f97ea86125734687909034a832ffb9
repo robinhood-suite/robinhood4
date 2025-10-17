@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ebcf9605_90801c5e",
+        "filename": "rbh-info/rbh-info.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 504,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-10-17T07:24:34Z",
+      "side": 1,
+      "message": "minor: add it in the helper",
+      "revId": "4a5dad61e3f97ea86125734687909034a832ffb9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
