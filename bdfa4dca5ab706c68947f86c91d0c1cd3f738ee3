@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dc2859c3_e9984995",
+        "filename": "rbh-find/tests/s3/test_actions.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-10-17T13:27:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5f28c0cb_ea513fc7",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 11
+      },
+      "revId": "bdfa4dca5ab706c68947f86c91d0c1cd3f738ee3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b98d97ac_37e17f15",
@@ -47,6 +71,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0789ccd6_6c4b003d",
+        "filename": "rbh-find/tests/s3/test_actions.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-10-17T13:27:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b98d97ac_37e17f15",
+      "range": {
+        "startLine": 57,
+        "startChar": 0,
+        "endLine": 57,
+        "endChar": 1
+      },
+      "revId": "bdfa4dca5ab706c68947f86c91d0c1cd3f738ee3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b4701dc3_5fb4c34d",
@@ -60,6 +108,30 @@
       "writtenOn": "2025-10-14T12:13:29Z",
       "side": 1,
       "message": "nit: no need for this and the other similar cleanups",
+      "range": {
+        "startLine": 44,
+        "startChar": 4,
+        "endLine": 44,
+        "endChar": 19
+      },
+      "revId": "bdfa4dca5ab706c68947f86c91d0c1cd3f738ee3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1e058eae_45062173",
+        "filename": "rbh-find/tests/s3/test_s3.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-10-17T13:27:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b4701dc3_5fb4c34d",
       "range": {
         "startLine": 44,
         "startChar": 4,
