@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4f9f3545_a3637d53",
+        "filename": "librobinhood/include/robinhood/config.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-10-17T13:24:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ca7833a6_97007edc",
+      "range": {
+        "startLine": 154,
+        "startChar": 37,
+        "endLine": 154,
+        "endChar": 43
+      },
+      "revId": "1172a73703a6187f2e0af4bc6d5f4118b3c65f1e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f8b0c1d2_3288a5c4",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-10-13T07:59:58Z",
       "side": 1,
       "message": "major: don\u0027t like that the terms `iterator` and `enrichers` are now here, since they are POSIX-extension specific terms. As discussed, a more generic function that searches a name in the config and load the result would be better, but then i\u0027d say it\u0027s just a `rbh_config_find`, so maybe there is no need for these functions anyway...",
+      "range": {
+        "startLine": 38,
+        "startChar": 3,
+        "endLine": 44,
+        "endChar": 44
+      },
+      "revId": "1172a73703a6187f2e0af4bc6d5f4118b3c65f1e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "700cf26c_b07549fb",
+        "filename": "librobinhood/include/robinhood/plugins/backend.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-10-17T13:24:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f8b0c1d2_3288a5c4",
       "range": {
         "startLine": 38,
         "startChar": 3,
