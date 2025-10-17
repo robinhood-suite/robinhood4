@@ -23,3 +23,5 @@ install_data(
     install_dir: get_option('bindir'),
     rename: 'rbh-retention'
 )
+
+subdir('update-retention')
