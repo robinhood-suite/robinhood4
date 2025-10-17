@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9d299bb1_608727dd",
+        "filename": "librobinhood/include/robinhood/backends/s3.h.in",
+        "patchSetId": 2
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-10-17T13:27:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4d5e0f40_a4193040",
+      "range": {
+        "startLine": 93,
+        "startChar": 39,
+        "endLine": 93,
+        "endChar": 67
+      },
+      "revId": "d6d4331a5e322c88a1565b9929daad4eece00b7e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8686f09f_d1072f43",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-10-13T14:43:31Z",
       "side": 1,
       "message": "question: is the bool to int mapping valid for S3 ? Because here you return a bool, but the `rbh_s3_delete_object` returns an int",
+      "range": {
+        "startLine": 242,
+        "startChar": 11,
+        "endLine": 242,
+        "endChar": 32
+      },
+      "revId": "d6d4331a5e322c88a1565b9929daad4eece00b7e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "99bd022f_1020336c",
+        "filename": "librobinhood/src/plugins/s3/s3_wrapper.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-10-17T13:27:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8686f09f_d1072f43",
       "range": {
         "startLine": 242,
         "startChar": 11,
@@ -70,6 +118,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fb7b618b_21d4af1d",
+        "filename": "librobinhood/src/plugins/s3/s3_wrapper.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-10-17T13:27:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5e1e0c2b_b5c947cb",
+      "range": {
+        "startLine": 97,
+        "startChar": 57,
+        "endLine": 98,
+        "endChar": 35
+      },
+      "revId": "d6d4331a5e322c88a1565b9929daad4eece00b7e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "256c77fc_5149be96",
@@ -83,6 +155,30 @@
       "writtenOn": "2025-10-13T14:43:31Z",
       "side": 1,
       "message": "minor: the function returns a bool, yadayada",
+      "range": {
+        "startLine": 101,
+        "startChar": 29,
+        "endLine": 101,
+        "endChar": 58
+      },
+      "revId": "d6d4331a5e322c88a1565b9929daad4eece00b7e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f6cacea1_7a370e8f",
+        "filename": "librobinhood/src/plugins/s3/s3_wrapper.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-10-17T13:27:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "256c77fc_5149be96",
       "range": {
         "startLine": 101,
         "startChar": 29,
