@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d739c8e_5659e6d4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-10-20T08:23:35Z",
+      "side": 1,
+      "message": "I really feel all of this isn’t necessary. You’re doing the same thing as the `import_plugins` function in rbh-find but using a different structure to hold the data. I think you could simply use the `filters_context` structure and you will have the same information without duplicating code.",
+      "revId": "e90fe0f0ad2c08922d5d8b18a28c37cc8468ff33",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
