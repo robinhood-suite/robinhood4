@@ -38,11 +38,21 @@ add_project_arguments([
 
 miniyaml = dependency('miniyaml', version: '>=0.0.0')
 
+build_lustre = false
+test_lustre = false
+
 if get_option('lustre').enabled()
     liblustre = dependency('lustre', disabler: true, required: false)
     if not liblustre.found()
-            liblustre = cc.find_library('lustreapi', disabler:true,
-                                        required: false)
+        liblustre = cc.find_library('lustreapi', disabler:true, required: false)
+    endif
+    build_lustre = true
+
+    r = run_command('utils/check_lustre.sh', check: false)
+    if r.returncode() == 0
+        test_lustre = true
+    else
+        message('"check_lustre" failed, do not run Lustre specific tests')
     endif
 else
     liblustre = disabler()
@@ -100,6 +110,8 @@ subdir('rbh-find')
 subdir('rbh-fsevents')
 subdir('rbh-report')
 subdir('rbh-info')
-subdir('rbh-undelete')
+if build_lustre
+    subdir('rbh-undelete')
+endif
 subdir('retention')
 subdir('packaging')

@@ -62,7 +62,7 @@ librbh_sqlite_h = configure_file(input: 'sqlite.h.in', output: 'sqlite.h',
 
 # Lustre backend
 
-if get_option('lustre').enabled()
+if build_lustre
     librbh_lustre_conf = configuration_data()
 
     librbh_lustre_conf.set('RBH_LUSTRE_BACKEND_MAJOR', 1)
