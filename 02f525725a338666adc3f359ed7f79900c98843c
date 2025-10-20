@@ -93,6 +93,30 @@
       },
       "revId": "02f525725a338666adc3f359ed7f79900c98843c",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c0101d54_2a887d91",
+        "filename": "rbh-info/tests/test_s3.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-10-20T08:03:53Z",
+      "side": 1,
+      "message": "I made a mistake, sorry, all good otherwise",
+      "parentUuid": "1573f7eb_2efde873",
+      "range": {
+        "startLine": 27,
+        "startChar": 4,
+        "endLine": 43,
+        "endChar": 61
+      },
+      "revId": "02f525725a338666adc3f359ed7f79900c98843c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
