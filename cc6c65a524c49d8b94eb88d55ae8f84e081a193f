@@ -206,6 +206,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c640df2d_c4f40d4f",
+        "filename": "librobinhood/src/plugins/s3/iterators/mpi/iterator.c",
+        "patchSetId": 12
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-10-20T07:58:13Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "ba9c18f7_58b67913",
+      "range": {
+        "startLine": 121,
+        "startChar": 17,
+        "endLine": 122,
+        "endChar": 60
+      },
+      "revId": "cc6c65a524c49d8b94eb88d55ae8f84e081a193f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "38f542a5_f0d4f107",
