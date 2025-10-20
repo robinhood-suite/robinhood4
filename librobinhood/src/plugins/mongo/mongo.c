@@ -876,8 +876,8 @@ mongo_insert_metadata(void *backend, const struct rbh_value_map *map_value,
 {
     mongoc_collection_t *collection = NULL;
     struct mongo_backend *mongo = backend;
+    int rc2 = 0;
     int rc = 0;
-    int rc2;
 
     switch (type) {
     case RBH_DT_INFO:
