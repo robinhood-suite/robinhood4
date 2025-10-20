@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "080590c2_2a0ecc69",
+        "filename": "rbh-policy/rbhpolicy/meson.build",
+        "patchSetId": 8
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-10-20T08:37:15Z",
+      "side": 1,
+      "message": "minor: missing the licence",
+      "revId": "74a3ac373092bbe104d6ae3952793414be87d2fa",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b1e7bed5_c1c5835a",
+        "filename": "rbh-policy/rbhpolicy/meson.build",
+        "patchSetId": 8
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-10-20T08:37:15Z",
+      "side": 1,
+      "message": "question: Where does this file come from ?",
+      "range": {
+        "startLine": 7,
+        "startChar": 15,
+        "endLine": 7,
+        "endChar": 34
+      },
+      "revId": "74a3ac373092bbe104d6ae3952793414be87d2fa",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
