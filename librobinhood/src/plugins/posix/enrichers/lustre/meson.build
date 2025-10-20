@@ -4,11 +4,6 @@
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
 
-if get_option('lustre').disabled()
-    librbh_lustre = disabler()
-    subdir_done()
-endif
-
 lustre_conf_data = configuration_data()
 
 lustre_conf_data.merge_from(conf_data)
