@@ -1,5 +1,5 @@
 Name:    robinhood4
-Version: 1.3.0
+Version: 1.4.0
 Release: 1%{?dist}
 Summary: RobinHood V4 tool suite
 
@@ -13,10 +13,12 @@ Source0: %{name}-%{version}.tar.xz
 # --without lustre ||   %%_with_lustre 0 || remove lustre as dependency
 # --with mfu       ||   %%_with_mfu 1    || force libmfu as dependency
 # --with hestia    ||   %%_with_hestia 1 || force hestia as dependency
+# --with s3        ||   %%_with_s3 1     || force s3 as dependency
 
 %bcond_without lustre
 %bcond_with mfu
 %bcond_with hestia
+%bcond_with s3
 
 Conflicts: robinhood
 
@@ -35,6 +37,10 @@ Requires: libmfu
 
 %if %{with hestia}
 Requires: hestia
+%endif
+
+%if %{with s3}
+Requires: aws-cpp-sdk-s3
 %endif
 
 BuildRequires: meson
@@ -71,7 +77,7 @@ It is installed on machines that run a Mongo database.
 %package devel
 Summary: C API for RobinHood V4 tool suite.
 Conflicts: robinhood
-Requires: robinhood4 >= 1.3
+Requires: robinhood4 >= 1.4
 Requires: pkgconf-pkg-config
 %if %{with lustre}
 #Requires: (lustre-devel or lustre-client < 2.15)
@@ -112,6 +118,12 @@ OPTS=""
     OPTS+="-Dhestia=disabled "
 %endif
 
+%if %{with s3}
+    OPTS+="-Ds3=enabled "
+%else
+    OPTS+="-Ds3=disabled "
+%endif
+
 %meson $OPTS
 %meson_build
 
@@ -132,6 +144,9 @@ OPTS=""
 %endif
 %if %{with hestia}
 %{_libdir}/librbh-hestia.so*
+%endif
+%if %{with s3}
+%{_libdir}/librbh-s3.so*
 %endif
 %{_libdir}/pkgconfig/robinhood.pc
 %{_bindir}/rbh-sync
@@ -159,7 +174,9 @@ OPTS=""
 %if %{with mfu}
 %{_includedir}/robinhood/backends/mfu.h
 %{_includedir}/robinhood/backends/mpi_file.h
-%{_includedir}/robinhood/backends/posix_mpi_internal.h
+%endif
+%if %{with s3}
+%{_includedir}/robinhood/backends/s3.h
 %endif
 %{_includedir}/robinhood/backends/mongo.h
 %{_includedir}/robinhood/backends/posix.h
@@ -181,6 +198,7 @@ OPTS=""
 %{_includedir}/robinhood/plugin.h
 %{_includedir}/robinhood/plugins/backend.h
 %{_includedir}/robinhood/plugins/common_ops.h
+%{_includedir}/robinhood/projection.h
 %{_includedir}/robinhood/queue.h
 %{_includedir}/robinhood/ring.h
 %{_includedir}/robinhood/ringr.h
@@ -200,6 +218,16 @@ OPTS=""
 ldconfig
 
 %changelog
+* Mon Oct 20 2025 - Yoann Valeri <yoann.valeri@cea.fr> - 1.4-1
+- New S3 plugin
+- Improved performance of rbh-find/report by using projections
+- Added parallelization of enrichment/update in rbh-fsevents
+- Added new tool "rbh-undelete" to recreate deleted entries that were previously
+archived
+- Modified rbh-fsevents to do continuous acknowledgement of changelogs
+- Modified rbh-fsevents to allow starting at the last index read in multi-reader
+situations
+
 * Wed May 14 2025 - Yoann Valeri <yoann.valeri@cea.fr> - 1.3-1
 - Reorganized plugins and backends with extensions. Removed the following
 backends: Lustre-MPI and POSIX-MPI. Added the following extensions to the POSIX
