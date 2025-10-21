@@ -10,6 +10,7 @@ import argparse
 import pathlib
 import re
 
+from datetime import datetime, timedelta
 from lib.directory import Directory
 
 def looks_like_URI(string):
@@ -49,6 +50,15 @@ def make_parser():
 
 def main(args=None):
     args = make_parser().parse_args(args)
+
+    dt = datetime.now()
+    current = datetime.timestamp(dt)
+
+    if args.delay is 0:
+        args.delay = int(current)
+    else:
+        two_days = timedelta(days=args.delay)
+        args.delay = int(datetime.timestamp(dt + two_days))
 
     print("uri = " + args.uri)
     print("config = " + str(args.config))
