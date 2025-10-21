@@ -12,7 +12,7 @@ class Directory():
     """Class representing a directory as output of rbh-find"""
     def __init__(self, path, retention_attr, expiration_date, ID):
         self.path = path
-        self.relative_retention = (retention_attr[0] == '+')
+        self.relative_retention = (retention_attr[0] is '+')
         self.retention_attr = (retention_attr[1:] if self.relative_retention
                                                   else retention_attr)
         self.expiration_date = expiration_date
