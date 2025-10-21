@@ -50,6 +50,14 @@ def make_parser():
 
     return parser
 
+def check_directory_expirancy(uri, _dir_info):
+    dir_info = _dir_info.split("|")
+    directory = Directory(path = dir_info[0], retention_attr = dir_info[1],
+                          expiration_date = dir_info[2], ID = dir_info[3])
+    print(directory.path)
+    directory.set_max_time(uri)
+    print(directory.max_time)
+
 def main(args=None):
     args = make_parser().parse_args(args)
 
@@ -72,8 +80,8 @@ def main(args=None):
     try:
         process = subprocess.Popen(command, stdout=subprocess.PIPE)
         for line in iter(process.stdout.readline, b""):
-            line = line.decode('utf-8')
-            print(f"line = '{line.rstrip()}'")
+            line = line.decode('utf-8').rstrip()
+            check_directory_expirancy(args.uri, line)
 
     except subprocess.CalledProcessError as e:
         print(f"rbh-find failed: {e.output.decode('utf-8')}")
@@ -83,8 +91,4 @@ def main(args=None):
     return 0
 
 if __name__ == "__main__":
-    print("Hello, I'm UR")
-    directory = Directory("blob")
-    print(directory.name)
-
     main()
