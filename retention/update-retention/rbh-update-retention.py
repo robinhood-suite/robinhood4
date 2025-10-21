@@ -12,7 +12,7 @@ import re
 import subprocess
 import sys
 
-from datetime import datetime, timedelta
+from lib.context import Context
 from lib.directory import Directory
 
 def looks_like_URI(string):
@@ -50,38 +50,27 @@ def make_parser():
 
     return parser
 
-def check_directory_expirancy(uri, _dir_info):
+def check_directory_expirancy(context, _dir_info):
     dir_info = _dir_info.split("|")
     directory = Directory(path = dir_info[0], retention_attr = dir_info[1],
                           expiration_date = dir_info[2], ID = dir_info[3])
     print(directory.path)
-    directory.set_max_time(uri)
+    directory.set_max_time(context.uri)
     print(directory.max_time)
 
 def main(args=None):
     args = make_parser().parse_args(args)
 
-    dt = datetime.now()
-    current = datetime.timestamp(dt)
-
-    if args.delay is 0:
-        args.delay = int(current)
-    else:
-        two_days = timedelta(days=args.delay)
-        args.delay = int(datetime.timestamp(dt + two_days))
-
-    print("uri = " + args.uri)
-    print("config = " + str(args.config))
-    print("delay = " + str(args.delay))
-    print("delete = " + str(args.delete))
-    command = (["rbh-find", "-c", str(args.config), args.uri, "-type", "d",
-                "-expired-at", str(args.delay), "-printf", "%p|%e|%E|%I\n"])
+    context = Context(args.uri, args.config, args.delay, args.delete)
+    command = (["rbh-find", "-c", str(context.config), context.uri,
+                "-type", "d", "-expired-at", str(context.delay),
+                "-printf", "%p|%e|%E|%I\n"])
 
     try:
         process = subprocess.Popen(command, stdout=subprocess.PIPE)
         for line in iter(process.stdout.readline, b""):
             line = line.decode('utf-8').rstrip()
-            check_directory_expirancy(args.uri, line)
+            check_directory_expirancy(context, line)
 
     except subprocess.CalledProcessError as e:
         print(f"rbh-find failed: {e.output.decode('utf-8')}")
