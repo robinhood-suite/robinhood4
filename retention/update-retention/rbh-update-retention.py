@@ -9,6 +9,8 @@
 import argparse
 import pathlib
 import re
+import subprocess
+import sys
 
 from datetime import datetime, timedelta
 from lib.directory import Directory
@@ -64,6 +66,19 @@ def main(args=None):
     print("config = " + str(args.config))
     print("delay = " + str(args.delay))
     print("delete = " + str(args.delete))
+    command = (["rbh-find", "-c", str(args.config), args.uri, "-type", "d",
+                "-expired-at", str(args.delay), "-printf", "%p|%e|%E|%I\n"])
+
+    try:
+        process = subprocess.run(command, stdout=subprocess.PIPE, check=True)
+        for line in iter(process.stdout.readline, b""):
+            line = line.decode('utf-8')
+            print(f"line = '{line.rstrip()}'")
+
+    except subprocess.CalledProcessError as e:
+        print(f"rbh-find failed: {e.output.decode('utf-8')}")
+        sys.tracebacklimit = -1
+        return 1
 
     return 0
 
