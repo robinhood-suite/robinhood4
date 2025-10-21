@@ -9,6 +9,7 @@
 import argparse
 import pathlib
 import re
+import shutil
 import subprocess
 import sys
 
@@ -50,10 +51,33 @@ def make_parser():
 
     return parser
 
+def handle_non_relative_expiration(context, directory):
+    print(f"Directory '{directory.path}' expired on "
+          f"'{datetime.fromtimestamp(directory.expiration_date)}'")
+
+    if context.delete:
+        shutil.rmtree(f"{context.mountpoint}/{directory.path}",
+                      ignore_errors=True)
+
 def check_directory_expirancy(context, _dir_info):
     dir_info = _dir_info.split("|")
+
+    if not dir_info[0]:
+        print(f"Directory in '{_dir_info}' doesn't have a proper path, "
+              "skipping it.")
+        return
+    elif dir_info[1] == "None":
+        print("Expiration attribute is unknown, so we cannot determine if the "
+              f"directory is really expired or not. Skipping '{dir_info[0]}'")
+        return
+
     directory = Directory(path = dir_info[0], retention_attr = dir_info[1],
                           expiration_date = dir_info[2], ID = dir_info[3])
+
+    if not directory.relative_retention:
+        handle_non_relative_expiration(context, directory)
+        return
+
     directory.set_max_time(context.uri)
 
 def main(args=None):
