@@ -50,11 +50,17 @@ def make_parser():
 
     return parser
 
+def handle_non_relative_expiration(context, directory):
+
 def check_directory_expirancy(context, _dir_info):
     dir_info = _dir_info.split("|")
     directory = Directory(path = dir_info[0], retention_attr = dir_info[1],
                           expiration_date = dir_info[2], ID = dir_info[3])
     print(directory.path)
+
+    if directory.non_relative_expiration():
+        handle_non_relative_expiration(directory)
+
     directory.set_max_time(context.uri)
     print(directory.max_time)
 
