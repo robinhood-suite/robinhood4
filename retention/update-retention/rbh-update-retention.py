@@ -13,6 +13,7 @@ import shutil
 import subprocess
 import sys
 
+from datetime import datetime
 from lib.context import Context
 from lib.directory import Directory
 from lib.utils import exec_check_output, exec_popen, rm_tree
@@ -124,6 +125,21 @@ def check_directory_expirancy(context, _dir_info):
             # entry in it pushes back the expiration date, update it, but don't
             # bother notifying the user
             directory.update_expiration_date(context)
+    else:
+        # Otherwise the directory will truly expire during the delay, so provide
+        # a countdown to its expiration
+        print(f"Directory '{directory.path}' expiration date is set to "
+              f"'{datetime.fromtimestamp(directory.expiration_date)}'")
+
+        start = datetime.fromtimestamp(context.current)
+        end = datetime.fromtimestamp(directory.actual_expiration_date())
+        countdown = end - start
+
+        countdown = (f"{countdown.days}d:"
+                     f"{countdown.seconds // 3600}h:"
+                     f"{countdown.seconds // 60 % 60}m:"
+                     f"{countdown.seconds % 60}s")
+        print(f"So '{directory.path}' expires in {countdown}")
 
 def main(args=None):
     args = make_parser().parse_args(args)
