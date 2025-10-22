@@ -6,10 +6,11 @@
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
 
+import os
 import subprocess
 
 from datetime import datetime
-from lib.utils import exec_popen
+from lib.utils import exec_popen, exec_run
 
 def _set_max_time(directory, line):
     if int(line) > directory.max_time:
@@ -40,4 +41,24 @@ class Directory():
 
     def is_empty(self):
         return self.max_time == 0
->>>>>>> 64c11fcb (update-ret: properly define directory class and functions)
+
+    def update_expiration_date(self, context, verbose=False):
+        new_expiration_date = int(self.actual_expiration_date() + 1)
+
+        if verbose:
+            print(f"Expiration of the directory should occur "
+                  f"'{self.retention_attr}' seconds after it's last usage.")
+            print(f"Changing the expiration date of '{self.path}' to "
+                  f"'{datetime.fromtimestamp(new_expiration_date)}'")
+
+        command = f"rbh-fsevents - {context.uri}"
+        string = (f"--- !inode_xattr\n"
+                  f"\"id\": !!binary {self.ID}\n"
+                  f"\"xattrs\":\n"
+                  f"  \"trusted.expiration_date\": !int64 {new_expiration_date}\n"
+                  f"...\n")
+
+        exec_run(command, string)
+        os.setxattr(f"{context.mountpoint}/{self.path}",
+                     "trusted.expiration_date",
+                     (str(new_expiration_date)).encode("utf-8"))
