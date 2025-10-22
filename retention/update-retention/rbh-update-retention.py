@@ -82,6 +82,7 @@ def handle_truly_expired_directory(context, directory):
         print(f"Directory '{directory.path}' has expired")
 
 def check_directory_expirancy(context, _dir_info):
+    context.found_expired_dir = True
     dir_info = _dir_info.split("|")
 
     if not dir_info[0]:
@@ -151,6 +152,9 @@ def main(args=None):
                f"-type d -expired-at {str(context.delay)} "
                 "-printf %p|%e|%E|%I\\n")
     exec_popen(command, check_directory_expirancy, context)
+
+    if not context.found_expired_dir:
+        print("No directory has expired")
 
     return 0
 
