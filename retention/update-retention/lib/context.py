@@ -17,6 +17,7 @@ class Context():
         self.uri = uri
         self.config = config
         self.delete = delete
+        self.found_expired_dir = False
 
         dt = datetime.now()
         self.current = datetime.timestamp(dt)
