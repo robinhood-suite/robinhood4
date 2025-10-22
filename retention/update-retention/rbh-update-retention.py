@@ -59,6 +59,35 @@ def handle_non_relative_expiration(context, directory):
         shutil.rmtree(f"{context.mountpoint}/{directory.path}",
                       ignore_errors=True)
 
+def handle_truly_expired_empty_directory(context, directory):
+    print(f"Directory '{directory.path}' has expired and is empty, no other "
+           "check needed")
+
+    if context.delete:
+        command = (["find", f"{context.mountpoint}/{directory.path}",
+                    "-depth", "-exec", "\"rmdir\"", "{}", "\";\""])
+
+    try:
+        process = subprocess.check_output(command)
+
+    except subprocess.CalledProcessError as e:
+        print(f"find failed: {e.output.decode('utf-8')}")
+        sys.tracebacklimit = -1
+        return 1
+
+def handle_truly_expired_directory(context, directory):
+    print(f"The last accessed file in it was accessed on "
+          f"'{datetime.fromtimestamp(directory.max_time)}'")
+    print(f"Expiration of the directory should occur "
+          f"'{directory.retention_attr}' seconds after it's last usage")
+
+    if context.delete:
+        print(f"Directory '{directory.path}' has expired and will be deleted")
+        shutil.rmtree(f"{context.mountpoint}/{directory.path}",
+                      ignore_errors=True)
+    else:
+        print(f"Directory '{directory.path}' has expired")
+
 def check_directory_expirancy(context, _dir_info):
     dir_info = _dir_info.split("|")
 
@@ -81,6 +110,15 @@ def check_directory_expirancy(context, _dir_info):
 
     directory.set_max_time(context.uri)
     print(directory.max_time)
+
+    if directory.is_truly_expired(context.current):
+        print(f"Directory '{directory.path}' expiration date is set to "
+              f"'{datetime.fromtimestamp(directory.expiration_date)}'")
+        if directory.is_empty():
+            handle_truly_expired_empty_directory(context, directory)
+        else:
+            handle_truly_expired_directory(context, directory)
+        return
 
 def main(args=None):
     args = make_parser().parse_args(args)
