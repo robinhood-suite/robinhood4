@@ -9,6 +9,7 @@
 import subprocess
 
 from datetime import datetime, timedelta
+from lib.utils import exec_check_output
 
 class Context():
     """General context of the command"""
@@ -26,13 +27,4 @@ class Context():
             two_days = timedelta(days=delay)
             self.delay = int(datetime.timestamp(dt + two_days))
 
-        command = (["rbh-info", uri, "-m"])
-
-        try:
-            process = subprocess.check_output(command)
-            self.mountpoint = process.decode('utf-8').rstrip()
-
-        except subprocess.CalledProcessError as e:
-            print(f"rbh-info failed: {e.output.decode('utf-8')}")
-            sys.tracebacklimit = -1
-
+        self.mountpoint = exec_check_output(f"rbh-info {uri} -m")
