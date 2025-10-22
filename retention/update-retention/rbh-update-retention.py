@@ -15,6 +15,7 @@ import sys
 
 from lib.context import Context
 from lib.directory import Directory
+from lib.utils import exec_check_output, exec_popen, rm_tree
 
 def looks_like_URI(string):
     pattern = re.compile(r"rbh:mongo:[A-Za-z0-9]+", re.IGNORECASE)
@@ -56,24 +57,16 @@ def handle_non_relative_expiration(context, directory):
           f"'{datetime.fromtimestamp(directory.expiration_date)}'")
 
     if context.delete:
-        shutil.rmtree(f"{context.mountpoint}/{directory.path}",
-                      ignore_errors=True)
+        rm_tree(f"{context.mountpoint}/{directory.path}")
 
 def handle_truly_expired_empty_directory(context, directory):
     print(f"Directory '{directory.path}' has expired and is empty, no other "
            "check needed")
 
     if context.delete:
-        command = (["find", f"{context.mountpoint}/{directory.path}",
-                    "-depth", "-exec", "\"rmdir\"", "{}", "\";\""])
-
-    try:
-        process = subprocess.check_output(command)
-
-    except subprocess.CalledProcessError as e:
-        print(f"find failed: {e.output.decode('utf-8')}")
-        sys.tracebacklimit = -1
-        return 1
+        command = (f"find {context.mountpoint}/{directory.path} "
+                    "-depth -exec rmdir {} ;")
+        exec_check_output(command)
 
 def handle_truly_expired_directory(context, directory):
     print(f"The last accessed file in it was accessed on "
@@ -83,8 +76,7 @@ def handle_truly_expired_directory(context, directory):
 
     if context.delete:
         print(f"Directory '{directory.path}' has expired and will be deleted")
-        shutil.rmtree(f"{context.mountpoint}/{directory.path}",
-                      ignore_errors=True)
+        rm_tree(f"{context.mountpoint}/{directory.path}")
     else:
         print(f"Directory '{directory.path}' has expired")
 
@@ -122,20 +114,10 @@ def main(args=None):
     args = make_parser().parse_args(args)
 
     context = Context(args.uri, args.config, args.delay, args.delete)
-    command = (["rbh-find", "-c", str(context.config), context.uri,
-                "-type", "d", "-expired-at", str(context.delay),
-                "-printf", "%p|%e|%E|%I\n"])
-
-    try:
-        process = subprocess.run(command, stdout=subprocess.PIPE, check=True)
-        for line in iter(process.stdout.readline, b""):
-            line = line.decode('utf-8').rstrip()
-            check_directory_expirancy(context, line)
-
-    except subprocess.CalledProcessError as e:
-        print(f"rbh-find failed: {e.output.decode('utf-8')}")
-        sys.tracebacklimit = -1
-        return 1
+    command = (f"rbh-find -c {str(context.config)} {context.uri} "
+               f"-type d -expired-at {str(context.delay)} "
+                "-printf %p|%e|%E|%I\\n")
+    exec_popen(command, check_directory_expirancy, context)
 
     return 0
 

@@ -9,6 +9,11 @@
 import subprocess
 
 from datetime import datetime
+from lib.utils import exec_popen
+
+def _set_max_time(directory, line):
+    if int(line) > directory.max_time:
+        directory.max_time = int(line)
 
 class Directory():
     """Class representing a directory as output of rbh-find"""
@@ -23,23 +28,9 @@ class Directory():
 
     def set_max_time(self, uri):
         branch = f"{uri}#{self.path}"
-        command = (["rbh-find", branch, "-type", "f",
-                    "-printf", "%A\n%T\n"])
-
-        try:
-            process = subprocess.Popen(command, stdout=subprocess.PIPE)
-        except subprocess.CalledProcessError as e:
-            print(f"rbh-find failed: {e.output.decode('utf-8')}")
-            sys.tracebacklimit = -1
-            return 1
-
-        print(f"args = '{process.args}'")
-
+        command = f"rbh-find {branch} -type f -printf %A\\n%T\\n"
         self.max_time = 0
-        for line in iter(process.stdout.readline, b""):
-            line = line.decode('utf-8').rstrip()
-            if int(line) > self.max_time:
-                self.max_time = int(line)
+        exec_popen(command, _set_max_time, self)
 
     def actual_expiration_date(self):
         return int(self.retention_attr) + self.max_time
