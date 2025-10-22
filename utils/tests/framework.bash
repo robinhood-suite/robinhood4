@@ -70,7 +70,7 @@ rbh_undelete()
     "$__rbh_undelete" "$@"
 }
 
-__rbh_update_retention=$(PATH="$PWD/../retention:$PATH" which rbh_update_retention)
+__rbh_update_retention="$PWD/../retention/update-retention/rbh-update-retention.py"
 __update_retention_PATH+="$PWD/rbh-sync:"
 __update_retention_PATH+="$PWD/rbh-fsevents:"
 __update_retention_PATH+="$PWD/rbh-find:"
@@ -78,7 +78,7 @@ __update_retention_PATH+="$PWD/rbh-info"
 
 rbh_update_retention()
 {
-    PATH="$__update_retention_PATH:$PATH" "$__rbh_update_retention" "$@"
+    PATH="$__update_retention_PATH:$PATH" python3 "$__rbh_update_retention" "$@"
 }
 
 __rbh_retention=$(PATH="$PWD/../retention:$PATH" which rbh_retention)
@@ -169,10 +169,10 @@ find_attribute()
     do_db find "$testdb" "$@"
 }
 
-difflines()
-{
-    diff -y - <([ $# -eq 0 ] && printf '' || printf '%s\n' "$@")
-}
+#difflines()
+#{
+#    diff -y - <([ $# -eq 0 ] && printf '' || printf '%s\n' "$@")
+#}
 
 archive_file()
 {

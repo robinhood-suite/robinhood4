@@ -96,14 +96,12 @@ def check_directory_expirancy(context, _dir_info):
 
     directory = Directory(path = dir_info[0], retention_attr = dir_info[1],
                           expiration_date = dir_info[2], ID = dir_info[3])
-    print(directory.path)
 
     if not directory.relative_retention:
         handle_non_relative_expiration(context, directory)
         return
 
     directory.set_max_time(context.uri)
-    print(directory.max_time)
 
     if directory.is_truly_expired(context.current):
         print(f"Directory '{directory.path}' expiration date is set to "
