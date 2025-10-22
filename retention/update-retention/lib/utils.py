@@ -35,5 +35,15 @@ def exec_popen(_command, output_callback, context):
         sys.tracebacklimit = -1
         sys.exit(e.returncode)
 
+def exec_run(_command, string):
+    command = _command.split()
+    try:
+        process = subprocess.run(command, stdout=subprocess.PIPE, input=string,
+                                 encoding='ascii')
+    except subprocess.CalledProcessError as e:
+        print(f"'{_command}' failed: {e.output.decode('utf-8')}")
+        sys.tracebacklimit = -1
+        sys.exit(e.returncode)
+
 def rm_tree(tree):
     shutil.rmtree(tree, ignore_errors=True)

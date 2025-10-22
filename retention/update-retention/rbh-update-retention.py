@@ -106,11 +106,26 @@ def check_directory_expirancy(context, _dir_info):
     if directory.is_truly_expired(context.current):
         print(f"Directory '{directory.path}' expiration date is set to "
               f"'{datetime.fromtimestamp(directory.expiration_date)}'")
+
         if directory.is_empty():
             handle_truly_expired_empty_directory(context, directory)
         else:
             handle_truly_expired_directory(context, directory)
+
         return
+
+    if directory.actual_expiration_date() >= context.delay:
+        # If the directory truly expires after the delay
+
+        if directory.expiration_date <= context.current:
+            # The directory has expired, but an entry in it has pushed that
+            # expiration date back, so update it and notify the user
+            directory.update_expiration_date(context, verbose=True)
+        else:
+            # The directory will expire during the delay window, but since an
+            # entry in it pushes back the expiration date, update it, but don't
+            # bother notifying the user
+            directory.update_expiration_date(context)
 
 def main(args=None):
     args = make_parser().parse_args(args)
