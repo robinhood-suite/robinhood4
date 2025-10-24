@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3da223db_7dcaa3ab",
+        "filename": "retention/update-retention/rbh-update-retention.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-10-24T12:58:04Z",
+      "side": 1,
+      "message": "question: What does this line do ?",
+      "revId": "a549b602a1130a5ed9052a01aa42da3c7decaf55",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
