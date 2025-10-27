@@ -58,6 +58,7 @@ backends:
 #                                     MAIN                                     #
 ################################################################################
 
+mongo_only_test
 declare -a tests=(test_printf)
 
 tmpdir=$(mktemp --directory)
