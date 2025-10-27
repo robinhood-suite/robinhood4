@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c118e3e2_65aaa553",
+        "filename": "retention/update-retention/rbh-update-retention.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-10-27T07:55:08Z",
+      "side": 1,
+      "message": "minor: remove this line",
+      "range": {
+        "startLine": 76,
+        "startChar": 0,
+        "endLine": 76,
+        "endChar": 25
+      },
+      "revId": "71b2f9b699f85dc5af91537113eb7c76f827baf2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
