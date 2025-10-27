@@ -140,7 +140,7 @@ def build_query(output: str, filters: List[str]):
     return (query, data)
 
 
-def count_entries(db: str, filters: List[str]):
+def nb_entries(db: str, filters: List[str]):
     with sqlite3.connect(db) as con:
         cursor = con.cursor()
         if len(filters) > 0:
@@ -155,11 +155,24 @@ def count_entries(db: str, filters: List[str]):
 
         res = cursor.execute(query, data)
         count = res.fetchone()
-        print(count[0])
+        return count[0]
+
+
+def count_entries(db: str, filters: List[str]):
+    count = nb_entries(db, filters)
+    print(count)
 
 
 def find_entry(db: str, filters: List[str]):
-    pass
+    count = nb_entries(db, filters)
+    if count == 0:
+        print("No entries found")
+        sys.exit(1)
+    elif count == 1:
+        return
+    else:
+        print(f"{count} entries matching filter found")
+        sys.exit(1)
 
 
 def key2column(key: str) -> str:
