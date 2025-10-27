@@ -451,6 +451,70 @@ backend_fsevents_source(struct sqlite_backend *sqlite, json_t *previous_info)
     return info;
 }
 
+static json_t *
+backend_sync_info(struct sqlite_backend *sqlite, json_t *previous_info,
+                  bool first)
+{
+    json_t *info = previous_info ? : json_object();
+    const char *query =
+        "select "
+        "    mountpoint, cli, duration, inserted, skipped, start, total, end "
+        " from log order by start %s limit 1";
+    const char *mountpoint = NULL;
+    const char *key = first ? "first_sync" : "last_sync";
+    struct sqlite_cursor cursor;
+    const char *cli = NULL;
+    int64_t duration = -1;
+    int64_t inserted = -1;
+    int64_t skipped = -1;
+    int64_t start = -1;
+    json_t *first_sync;
+    int64_t total = -1;
+    char *full_query;
+    int64_t end = -1;
+
+    if (asprintf(&full_query, query, first ? "ASC" : "DESC") < 0) {
+        json_decref(info);
+        return NULL;
+    }
+
+    if (!(sqlite_cursor_setup(sqlite, &cursor) &&
+          sqlite_setup_query(&cursor, full_query))) {
+        json_decref(info);
+        return NULL;
+    }
+
+    if (!sqlite_cursor_step(&cursor)) {
+        free(full_query);
+        json_object_set_new(info, key, json_null());
+        return info;
+    }
+
+    mountpoint = sqlite_cursor_get_string(&cursor);
+    cli = sqlite_cursor_get_string(&cursor);
+    duration = sqlite_cursor_get_int64(&cursor);
+    inserted = sqlite_cursor_get_int64(&cursor);
+    skipped = sqlite_cursor_get_int64(&cursor);
+    start = sqlite_cursor_get_int64(&cursor);
+    total = sqlite_cursor_get_int64(&cursor);
+    end = sqlite_cursor_get_int64(&cursor);
+
+    first_sync = json_object();
+    json_object_set_new(first_sync, "sync_debut", json_integer(start));
+    json_object_set_new(first_sync, "sync_duration", json_integer(duration));
+    json_object_set_new(first_sync, "sync_end", json_integer(end));
+    json_object_set_new(first_sync, "mountpoint", json_string(mountpoint));
+    json_object_set_new(first_sync, "command_line", json_string(cli));
+    json_object_set_new(first_sync, "converted_entries",
+                        json_integer(inserted));
+    json_object_set_new(first_sync, "skipped_entries", json_integer(skipped));
+    json_object_set_new(first_sync, "total_entries_seen", json_integer(total));
+    json_object_set_new(info, key, first_sync);
+
+    free(full_query);
+    return info;
+}
+
 struct rbh_value_map *
 sqlite_backend_get_info(void *backend, int flags)
 {
@@ -470,6 +534,10 @@ sqlite_backend_get_info(void *backend, int flags)
         info = backend_count(sqlite, info);
     if (flags & RBH_INFO_FSEVENTS_SOURCE)
         info = backend_fsevents_source(sqlite, info);
+    if (flags & RBH_INFO_FIRST_SYNC)
+        info = backend_sync_info(sqlite, info, true);
+    if (flags & RBH_INFO_LAST_SYNC)
+        info = backend_sync_info(sqlite, info, false);
 
     if (!info)
         return NULL;
