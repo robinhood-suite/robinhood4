@@ -22,6 +22,30 @@
       },
       "revId": "8eca1994fd0d074556b0c5f828101385995ada5b",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2ceb3757_44abe4f2",
+        "filename": "rbh-policy/rbhpolicy/config/conditions.py",
+        "patchSetId": 16
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-10-27T10:22:36Z",
+      "side": 1,
+      "message": "I did this because it was requested in a review. This allows to clearly understand the types manipulated in LogicalCondition, It also improves the developer experience in tools like VSCode, where type hinting and autocomplete become more accurate. Not useful for us who use VIM, but more so for other users. I can remove it if you think it\u0027s unnecessary?",
+      "parentUuid": "30390bb3_c704fc58",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 35
+      },
+      "revId": "8eca1994fd0d074556b0c5f828101385995ada5b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
