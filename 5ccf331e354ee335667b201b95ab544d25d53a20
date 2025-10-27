@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "62682ac5_be313e3b",
+        "filename": "utils/tests/framework.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-10-27T08:17:53Z",
+      "side": 1,
+      "message": "question: Why comment these lines ?",
+      "revId": "5ccf331e354ee335667b201b95ab544d25d53a20",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
