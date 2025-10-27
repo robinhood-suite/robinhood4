@@ -14,7 +14,9 @@ insert_source(struct sqlite_backend *sqlite,
               size_t n_extensions)
 {
     const char *query =
-        "insert or replace into info (id, plugin, extensions) values (1, ?, ?)";
+        "insert into info (id, plugin, extensions) values (1, ?, ?) "
+        "on conflict(id) do "
+        "update set plugin=excluded.plugin, extensions=excluded.extensions";
     const char *extensions_array;
     struct sqlite_cursor cursor;
     int save_errno;
@@ -111,6 +113,20 @@ free_extensions:
 }
 
 static bool
+store_mountpoint(struct sqlite_backend *sqlite, const char *mountpoint)
+{
+    const char *query =
+        "insert into info (id, mountpoint) values (1, ?) on conflict(id) do "
+        "update set mountpoint=excluded.mountpoint";
+    struct sqlite_cursor cursor;
+
+    return sqlite_cursor_setup(sqlite, &cursor) &&
+        sqlite_setup_query(&cursor, query) &&
+        sqlite_cursor_bind_string(&cursor, mountpoint) &&
+        sqlite_cursor_exec(&cursor);
+}
+
+static bool
 insert_info(void *backend, const struct rbh_value_map *map)
 {
     for (size_t i = 0; i < map->count; i++) {
@@ -118,8 +134,12 @@ insert_info(void *backend, const struct rbh_value_map *map)
 
         if (!strcmp(pair->key, "backend_source") &&
             pair->value->type == RBH_VT_SEQUENCE) {
-
             if (!store_source(backend, pair->value))
+                return false;
+
+        } else if (!strcmp(pair->key, "mountpoint") &&
+                   pair->value->type == RBH_VT_STRING) {
+            if (!store_mountpoint(backend, pair->value->string))
                 return false;
         }
     }

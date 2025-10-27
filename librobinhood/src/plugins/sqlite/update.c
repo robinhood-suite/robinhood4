@@ -543,8 +543,8 @@ sqlite_process_xattr(struct sqlite_backend *sqlite,
                      const struct rbh_fsevent *fsevent)
 {
     const char *query =
-        "insert into entries (id, xattrs) "
-        "values (?, ?) on conflict(id) do "
+        "insert into entries (id, xattrs) values (?, ?) "
+        "on conflict(id) do "
         "update set xattrs=json_patch(entries.xattrs, excluded.xattrs)";
     struct sqlite_cursor *cursor = &sqlite->cursor;
     const char *xattrs;
