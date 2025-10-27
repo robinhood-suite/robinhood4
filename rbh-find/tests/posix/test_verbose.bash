@@ -63,6 +63,7 @@ test_verbose_dry_run()
 #                                     MAIN                                     #
 ################################################################################
 
+mongo_only_test
 declare -a tests=(test_verbose test_verbose_dry_run)
 
 tmpdir=$(mktemp --directory)
