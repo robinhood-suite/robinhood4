@@ -108,7 +108,7 @@ def eval_value(value: str):
 
 
 def build_query(output: str, filters: List[str]):
-    query = f"select {output} from entries join ns on entries.id = ns.id where "
+    query = f"select {output} from entries left join ns on entries.id = ns.id where "
     data = ()
 
     for table, column, attribute, value in parse_filter(filters):
