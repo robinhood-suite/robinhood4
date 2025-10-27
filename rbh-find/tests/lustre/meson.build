@@ -10,6 +10,7 @@ integration_tests = [
     'test_fid',
     'test_ost_index',
     'test_pool',
+    'test_project_id',
     'test_comp',
     'test_mdt_index',
     'test_mdt_count'
