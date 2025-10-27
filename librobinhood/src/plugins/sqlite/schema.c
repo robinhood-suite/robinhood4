@@ -58,7 +58,17 @@ static const char *RBH_SQLITE_SCHEMA_CODE =
 "    id         TEXT,"
 "    last_read  INT,"
 "    primary key (id)"
-")";
+");"
+"create table log("
+"    mountpoint TEXT,"
+"    cli        TEXT,"
+"    total      INT,"
+"    inserted   INT,"
+"    skipped    INT,"
+"    start      INT,"
+"    duration   INT,"
+"    end        INT"
+");";
 
 static bool
 setup_schema(struct sqlite_backend *sqlite)
