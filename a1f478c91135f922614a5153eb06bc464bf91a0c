@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "989baec0_b3eeb578",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-10-27T12:35:23Z",
+      "side": 1,
+      "message": "suggest: lays the foundation",
+      "range": {
+        "startLine": 9,
+        "startChar": 11,
+        "endLine": 9,
+        "endChar": 31
+      },
+      "revId": "a1f478c91135f922614a5153eb06bc464bf91a0c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "273e02ea_6d00bb6b",
         "filename": "retention/update-retention/lib/directory.py",
         "patchSetId": 2
