@@ -21,6 +21,7 @@ enum lustre_predicate {
     LPRED_MDT_INDEX,
     LPRED_OST_INDEX,
     LPRED_POOL,
+    LPRED_PROJECT_ID,
     LPRED_STRIPE_COUNT,
     LPRED_STRIPE_SIZE,
 

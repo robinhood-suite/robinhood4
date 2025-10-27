@@ -66,8 +66,16 @@ str2lustre_predicate(const char *string)
             return LPRED_OST_INDEX;
         break;
     case 'p':
-        if (strcmp(&string[2], "ool") == 0)
-            return LPRED_POOL;
+        switch (string[2]) {
+        case 'o':
+            if (strcmp(&string[3], "ol") == 0)
+                return LPRED_POOL;
+            break;
+        case 'r':
+            if (strcmp(&string[3], "oject-id") == 0)
+                return LPRED_PROJECT_ID;
+            break;
+        }
         break;
     case 's':
         if (strcmp(&string[2], "tripe-count") == 0)
@@ -100,6 +108,7 @@ static const char *__lustre_predicate2str[] = {
     [LPRED_MDT_INDEX]      = "mdt-index",
     [LPRED_OST_INDEX]      = "ost",
     [LPRED_POOL]           = "pool",
+    [LPRED_PROJECT_ID]     = "project_id",
     [LPRED_STRIPE_COUNT]   = "stripe-count",
     [LPRED_STRIPE_SIZE]    = "stripe-size",
 };
