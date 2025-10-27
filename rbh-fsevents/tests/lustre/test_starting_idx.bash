@@ -28,7 +28,7 @@ test_save_idx()
     local fsevents_source_idx=$(do_db fsevents "$testdb" "$LUSTRE_MDT")
 
     if [[ $fsevents_source_idx != $last_changelog ]]; then
-        error "Fsevents source index should be $nb_changelog"
+        error "Fsevents source index should be $last_changelog, got $fsevents_source_idx"
     fi
 }
 

@@ -131,6 +131,46 @@ store_mountpoint(struct sqlite_backend *sqlite, const char *mountpoint)
 }
 
 static bool
+insert_last_read(struct sqlite_backend *sqlite, const char *id,
+                 uint64_t last_read)
+{
+    const char *query =
+        "insert into readers (id, last_read) "
+        "values (?, ?) on conflict(id) do "
+        "update set last_read = excluded.last_read";
+    struct sqlite_cursor cursor;
+
+    return sqlite_cursor_setup(sqlite, &cursor) &&
+        sqlite_setup_query(&cursor, query) &&
+        sqlite_cursor_bind_string(&cursor, id) &&
+        sqlite_cursor_bind_int64(&cursor, last_read) &&
+        sqlite_cursor_exec(&cursor);
+}
+
+static bool
+store_fsevents_source(struct sqlite_backend *sqlite,
+                      const struct rbh_value *value)
+{
+    for (size_t i = 0; i < value->map.count; i++) {
+        const struct rbh_value_pair *pair = &value->map.pairs[i];
+
+        if (pair->value->type != RBH_VT_MAP ||
+            pair->value->map.count != 1 ||
+            strcmp(pair->value->map.pairs[0].key, "last_read") ||
+            pair->value->map.pairs[0].value->type != RBH_VT_UINT64) {
+            errno = EINVAL;
+            return false;
+        }
+
+        if (!insert_last_read(sqlite, pair->key,
+                              pair->value->map.pairs[0].value->uint64))
+            return false;
+    }
+
+    return true;
+}
+
+static bool
 insert_info(void *backend, const struct rbh_value_map *map)
 {
     for (size_t i = 0; i < map->count; i++) {
@@ -145,6 +185,15 @@ insert_info(void *backend, const struct rbh_value_map *map)
                    pair->value->type == RBH_VT_STRING) {
             if (!store_mountpoint(backend, pair->value->string))
                 return false;
+
+        } else if (!strcmp(pair->key, "fsevents_source") &&
+                   pair->value->type == RBH_VT_MAP) {
+            if (!store_fsevents_source(backend, pair->value))
+                return false;
+
+        } else {
+            errno = EINVAL;
+            return false;
         }
     }
 
@@ -303,6 +352,51 @@ backend_count(struct sqlite_backend *sqlite, json_t *previous_info)
     return info;
 }
 
+static json_t *
+backend_fsevents_source(struct sqlite_backend *sqlite, json_t *previous_info)
+{
+    const char *query = "select id, last_read from readers";
+    json_t *info = previous_info ? : json_object();
+    struct sqlite_cursor cursor;
+    bool loop = true;
+    json_t *map;
+
+    if (!(sqlite_cursor_setup(sqlite, &cursor) &&
+          sqlite_setup_query(&cursor, query)))
+        return NULL;
+
+    map = json_object();
+    while (loop) {
+        uint64_t last_read;
+        const char *id;
+        json_t *subobj;
+
+        if (!sqlite_cursor_step(&cursor))
+            break;
+
+        if (errno == 0)
+            /* last/only element */
+            loop = false;
+
+        id = sqlite_cursor_get_string(&cursor);
+        if (!id)
+            continue;
+        last_read = sqlite_cursor_get_uint64(&cursor);
+
+        subobj = json_object();
+        json_object_set_new(subobj, "last_read", json_integer(last_read));
+        json_object_set_new(map, strdup(id), subobj);
+    }
+
+    if (json_object_size(map) == 0) {
+        json_decref(map);
+        return NULL;
+    }
+
+    json_object_set_new(info, "fsevents_source", map);
+    return info;
+}
+
 struct rbh_value_map *
 sqlite_backend_get_info(void *backend, int flags)
 {
@@ -320,6 +414,8 @@ sqlite_backend_get_info(void *backend, int flags)
         info = backend_size(sqlite, info);
     if (flags & RBH_INFO_COUNT)
         info = backend_count(sqlite, info);
+    if (flags & RBH_INFO_FSEVENTS_SOURCE)
+        info = backend_fsevents_source(sqlite, info);
 
     if (!info)
         return NULL;

@@ -207,6 +207,23 @@ def dump_db(db: str, filters: List[str]):
             print(row)
 
 
+def get_last_id(db: str, filters: List[str]):
+    with sqlite3.connect(db) as con:
+        query = "select last_read from readers where id = ?"
+        cursor = con.cursor()
+        res = cursor.execute(query, (filters[0],))
+        for res in res.fetchall():
+            print(res[0])
+
+
+def clear_entries(db: str, filters: List[str]):
+    with sqlite3.connect(db) as con:
+        cursor = con.cursor()
+        cursor.execute("delete from entries")
+        cursor.execute("delete from ns")
+        con.commit()
+
+
 def db_size(db: str, filters: List[str]):
     pass
 
@@ -238,6 +255,8 @@ if __name__ == '__main__':
         "size": db_size,
         "source": source,
         "avgsize": db_avgsize,
+        "fsevents": get_last_id,
+        "clear_entries": clear_entries,
     }
 
     cmd = sys.argv[1]
