@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd6ce969_10e7e3ae",
+        "filename": "rbh-find/tests/lustre/meson.build",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-10-27T15:11:08Z",
+      "side": 1,
+      "message": "defect: file isn\u0027t added in this patch",
+      "range": {
+        "startLine": 13,
+        "startChar": 4,
+        "endLine": 13,
+        "endChar": 22
+      },
+      "revId": "716be0dd56969944c732c0c61e30e22fe164316e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
