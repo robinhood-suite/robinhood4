@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4384a54c_8b1a6012",
+        "filename": "retention/update-retention/rbh-update-retention.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-10-27T13:14:58Z",
+      "side": 1,
+      "message": "Minor: if `args.delay \u003d\u003d 0` is preferred over `is 0` because `\u003d\u003d` compares values, while `is` checks object identity. Although Python caches small integers like `0`, `args.delay` is the result of `int(\"0\")` when the user passes `-d 0`, which may create a new object. So `args.delay is 0` might work by coincidence, but it\u0027s not guaranteed and could fail depending on how Python allocates the integer. Using `\u003d\u003d` is safer and more semantically correct here (We are only interested in value).",
+      "range": {
+        "startLine": 57,
+        "startChar": 4,
+        "endLine": 57,
+        "endChar": 23
+      },
+      "revId": "16a6e1e7e4967356a11577e55f9f797cf836d8ba",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "50e48dfb_34260ac1",
         "filename": "retention/update-retention/rbh-update-retention.py",
         "patchSetId": 2
