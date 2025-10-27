@@ -22,6 +22,29 @@
       },
       "revId": "87d68230024448d6bde28a606158f709edc53a2f",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "10577cc5_b3dcd2ba",
+        "filename": "retention/rbh_update_retention",
+        "patchSetId": 3
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-10-27T12:30:45Z",
+      "side": 1,
+      "message": "question: I have a doubt here, is `max_time` well defined in this function? \nYou define it locally in the `check_expiration_date` function, so will this value be passed to the `update_expiration_date` function? I believe that in bash, local variables are scoped to the current function and are not inherited by functions called within it.",
+      "range": {
+        "startLine": 39,
+        "startChar": 33,
+        "endLine": 39,
+        "endChar": 41
+      },
+      "revId": "87d68230024448d6bde28a606158f709edc53a2f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
