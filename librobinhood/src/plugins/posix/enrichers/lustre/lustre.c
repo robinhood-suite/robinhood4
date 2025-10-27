@@ -1038,6 +1038,7 @@ rbh_lustre_helper(__attribute__((unused)) const char *backend,
         "    -ipool NAME          filter entries based on the pool their\n"
         "                         components belong to (case insensitive,\n"
         "                         regex allowed).\n"
+        "    -project-id INDEX    filter entries based on their project ID.\n"
         "    -stripe-count {[+-]COUNT, default}\n"
         "                         filter entries based on their component's\n"
         "                         stripe count. If given default, will fetch\n"
