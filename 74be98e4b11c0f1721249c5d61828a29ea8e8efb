@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "637bfcc2_395de7e1",
+        "filename": "retention/update-retention/lib/directory.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-10-27T14:05:07Z",
+      "side": 1,
+      "message": "Same error as the previous patch",
+      "range": {
+        "startLine": 31,
+        "startChar": 15,
+        "endLine": 31,
+        "endChar": 44
+      },
+      "revId": "74be98e4b11c0f1721249c5d61828a29ea8e8efb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0ac30711_ba1c8cc8",
         "filename": "retention/update-retention/rbh-update-retention.py",
         "patchSetId": 2
