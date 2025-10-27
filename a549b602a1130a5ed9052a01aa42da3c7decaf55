@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3c88865f_a320b538",
+        "filename": "retention/update-retention/rbh-update-retention.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-10-27T13:47:46Z",
+      "side": 1,
+      "message": "defect: `subprocess.CalledProcessError` is only raised when using `subprocess.run(..., check\u003dTrue)`, not with `subprocess.Popen(...)`. With Popen, Python doesn\u0027t automatically check the command\u0027s exit status, it simply starts the process and lets you handle its output manually.\nIf you want to use Popen you have to do:\n```\n\nprocess \u003d subprocess.Popen(command, stdout\u003dsubprocess.PIPE)\n...\n\nprocess.wait()\nif process.returncode !\u003d 0:\n    print(f\"rbh-find failed with exit code {process.returncode}\")\n    return 1\n\n``` \nor you can use `subprocess.run(..., check\u003dTrue)` and keep `except subprocess.CalledProcessError`",
+      "range": {
+        "startLine": 78,
+        "startChar": 4,
+        "endLine": 78,
+        "endChar": 40
+      },
+      "revId": "a549b602a1130a5ed9052a01aa42da3c7decaf55",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3da223db_7dcaa3ab",
         "filename": "retention/update-retention/rbh-update-retention.py",
         "patchSetId": 2
@@ -14,6 +37,24 @@
       "writtenOn": "2025-10-24T12:58:04Z",
       "side": 1,
       "message": "question: What does this line do ?",
+      "revId": "a549b602a1130a5ed9052a01aa42da3c7decaf55",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d6d53962_5861d8c2",
+        "filename": "retention/update-retention/rbh-update-retention.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-10-27T13:47:46Z",
+      "side": 1,
+      "message": "In my opinion, this will only display the error message itself, excluding the usual context Python provides when an exception occurs, such as the traceback showing where in the code the error happened.",
+      "parentUuid": "3da223db_7dcaa3ab",
       "revId": "a549b602a1130a5ed9052a01aa42da3c7decaf55",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
