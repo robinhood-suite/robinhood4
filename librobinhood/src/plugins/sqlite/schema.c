@@ -51,6 +51,7 @@ static const char *RBH_SQLITE_SCHEMA_CODE =
 "    id         INT,"  // fake ID (always one) to make sure we have only one
 "    plugin     TEXT," // row
 "    extensions TEXT," // json array
+"    mountpoint TEXT,"
 "    primary key (id)"
 ");";
 
