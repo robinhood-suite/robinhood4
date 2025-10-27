@@ -109,9 +109,24 @@ sync_mountpoint(const char *mountpoint_path)
         .count = 1,
         .pairs = &pair
     };
+    int rc;
 
-    if (rbh_backend_insert_metadata(to, &map, RBH_DT_INFO))
+    rc = rbh_backend_insert_metadata(to, &map, RBH_DT_INFO);
+    if (rc == 0)
+        return;
+    switch (errno) {
+    case RBH_BACKEND_ERROR:
+        fprintf(stderr, "Failed to set the mountpoint: %s\n",
+                rbh_backend_error);
+        break;
+    case 0:
         fprintf(stderr, "Failed to set the mountpoint\n");
+        break;
+    default:
+        fprintf(stderr, "Failed to set the mountpoint: %s\n",
+                strerror(errno));
+        break;
+    }
 }
 
     /*--------------------------------------------------------------------*
