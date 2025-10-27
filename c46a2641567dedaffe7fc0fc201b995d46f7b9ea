@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6dea354b_bd92e8bb",
+        "filename": "retention/update-retention/lib/context.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-10-27T14:07:47Z",
+      "side": 1,
+      "message": "minor: `if delay \u003d\u003d 0`",
+      "range": {
+        "startLine": 23,
+        "startChar": 8,
+        "endLine": 23,
+        "endChar": 22
+      },
+      "revId": "c46a2641567dedaffe7fc0fc201b995d46f7b9ea",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
