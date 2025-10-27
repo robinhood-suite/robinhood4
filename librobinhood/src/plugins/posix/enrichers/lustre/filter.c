@@ -50,6 +50,8 @@ static const struct rbh_filter_field predicate2filter_field[] = {
                               .xattr = "ost"},
     [LPRED_POOL]           = {.fsentry = RBH_FP_INODE_XATTRS,
                               .xattr = "pool"},
+    [LPRED_PROJECT_ID]     = {.fsentry = RBH_FP_INODE_XATTRS,
+                              .xattr = "project_id"},
     [LPRED_STRIPE_COUNT]   = {.fsentry = RBH_FP_INODE_XATTRS,
                               .xattr = "stripe_count"},
     [LPRED_STRIPE_SIZE]    = {.fsentry = RBH_FP_INODE_XATTRS,
@@ -254,26 +256,38 @@ ost_index2filter(const char *ost_index)
 }
 
 static struct rbh_filter *
-mdt_index2filter(const char *mdt_index)
+index2filter(const char *index, int predicate, const char *err_info)
 {
     struct rbh_filter *filter;
-    uint64_t index;
+    uint64_t _index;
     int rc;
 
-    if (!isdigit(*mdt_index))
-        error(EX_USAGE, 0, "invalid mdt index: `%s'", mdt_index);
+    if (!isdigit(*index))
+        error(EX_USAGE, 0, "invalid %s: `%s'", err_info, index);
 
-    rc = str2uint64_t(mdt_index, &index);
+    rc = str2uint64_t(index, &_index);
     if (rc)
-        error(EX_USAGE, errno, "invalid mdt index: `%s'", mdt_index);
+        error(EX_USAGE, errno, "invalid %s: `%s'", err_info, index);
 
     filter = rbh_filter_compare_uint64_new(
-               RBH_FOP_EQUAL, get_filter_field(LPRED_MDT_INDEX), index);
+               RBH_FOP_EQUAL, get_filter_field(predicate), _index);
     if (filter == NULL)
         error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
-                      "mdt_index2filter");
+                      "index2filter");
 
     return filter;
+}
+
+static struct rbh_filter *
+mdt_index2filter(const char *mdt_index)
+{
+    return index2filter(mdt_index, LPRED_MDT_INDEX, "mdt index");
+}
+
+static struct rbh_filter *
+project_id2filter(const char *project_id)
+{
+    return index2filter(project_id, LPRED_PROJECT_ID, "project id");
 }
 
 static struct rbh_filter *
@@ -701,6 +715,9 @@ rbh_lustre_build_filter(const char **argv, int argc, int *index,
         break;
     case LPRED_POOL:
         filter = pool2filter(argv[++i]);
+        break;
+    case LPRED_PROJECT_ID:
+        filter = project_id2filter(argv[++i]);
         break;
     case LPRED_STRIPE_COUNT:
         filter = stripe_count2filter(argv[++i]);
