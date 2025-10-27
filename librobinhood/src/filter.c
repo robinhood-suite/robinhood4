@@ -820,6 +820,12 @@ rbh_get_size_parameters(const char *_size, char *operator, uint64_t *unit_size,
               "size arguments should start with at least one digit");
 
     switch (*suffix++) {
+    case 'E':
+        *unit_size = 1152921504606846976ULL;
+        break;
+    case 'P':
+        *unit_size = 1125899906842624ULL;
+        break;
     case 'T':
         *unit_size = 1099511627776;
         break;
