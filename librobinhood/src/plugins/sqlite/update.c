@@ -575,6 +575,23 @@ sqlite_process_delete(struct sqlite_backend *sqlite,
 }
 
 static bool
+sqlite_process_partial_unlink(struct sqlite_backend *sqlite,
+                              const struct rbh_fsevent *fsevent)
+{
+    struct sqlite_cursor *cursor = &sqlite->cursor;
+    const char *query =
+        "update ns set xattrs = json_object("
+        "    'rm_time', ?, "
+        "    'path', json_extract(xattrs, '$.path')"
+        ") where id = ?";
+
+    return sqlite_setup_query(cursor, query) &&
+        sqlite_cursor_bind_int64(cursor, fsevent->rm_time) &&
+        sqlite_cursor_bind_id(cursor, &fsevent->id) &&
+        sqlite_cursor_exec(cursor);
+}
+
+static bool
 sqlite_process_fsevent(struct sqlite_backend *sqlite,
                        const struct rbh_fsevent *fsevent)
 {
@@ -593,8 +610,7 @@ sqlite_process_fsevent(struct sqlite_backend *sqlite,
     case RBH_FET_DELETE:
         return sqlite_process_delete(sqlite, fsevent);
     case RBH_FET_PARTIAL_UNLINK:
-        debug("TODO");
-        return false;
+        return sqlite_process_partial_unlink(sqlite, fsevent);
     }
     return true;
 }
