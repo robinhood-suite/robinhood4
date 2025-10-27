@@ -49,6 +49,54 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "310ea26b_d53add7f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-10-27T11:39:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8408d9b7_3cc6b55a",
+      "range": {
+        "startLine": 14,
+        "startChar": 19,
+        "endLine": 14,
+        "endChar": 25
+      },
+      "revId": "e1c382c5b27fa1eb9b10fd5250dc4f4936ac7122",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "69997353_70b5b8d4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-10-27T11:39:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e65521ad_25fa3045",
+      "range": {
+        "startLine": 14,
+        "startChar": 60,
+        "endLine": 14,
+        "endChar": 66
+      },
+      "revId": "e1c382c5b27fa1eb9b10fd5250dc4f4936ac7122",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "508bed7c_2b25fc25",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
@@ -87,6 +135,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5d8a86af_a1f1c400",
+        "filename": "librobinhood/include/robinhood/sstack.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-10-27T11:39:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "64f68325_0b5746ec",
+      "range": {
+        "startLine": 162,
+        "startChar": 0,
+        "endLine": 162,
+        "endChar": 82
+      },
+      "revId": "e1c382c5b27fa1eb9b10fd5250dc4f4936ac7122",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7a436521_1e242cfb",
@@ -100,6 +172,30 @@
       "writtenOn": "2025-06-18T06:17:36Z",
       "side": 1,
       "message": "typo: useless space",
+      "range": {
+        "startLine": 168,
+        "startChar": 55,
+        "endLine": 168,
+        "endChar": 56
+      },
+      "revId": "e1c382c5b27fa1eb9b10fd5250dc4f4936ac7122",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "24040cd2_3808cbaa",
+        "filename": "librobinhood/include/robinhood/sstack.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-10-27T11:39:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7a436521_1e242cfb",
       "range": {
         "startLine": 168,
         "startChar": 55,
@@ -252,6 +348,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "14c68053_b3a538fd",
+        "filename": "librobinhood/include/robinhood/sstack.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-10-27T11:39:26Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "f7535cd7_6fd9d940",
+      "range": {
+        "startLine": 178,
+        "startChar": 7,
+        "endLine": 178,
+        "endChar": 23
+      },
+      "revId": "e1c382c5b27fa1eb9b10fd5250dc4f4936ac7122",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8a31053b_2330c8d0",
@@ -265,6 +385,30 @@
       "writtenOn": "2025-06-16T08:57:53Z",
       "side": 1,
       "message": "minor: add better documentation, since we already have a `pop` function, it\u0027s not explicit the difference this function and that one",
+      "range": {
+        "startLine": 196,
+        "startChar": 2,
+        "endLine": 196,
+        "endChar": 32
+      },
+      "revId": "e1c382c5b27fa1eb9b10fd5250dc4f4936ac7122",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bb104e22_e4313922",
+        "filename": "librobinhood/include/robinhood/sstack.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-10-27T11:39:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8a31053b_2330c8d0",
       "range": {
         "startLine": 196,
         "startChar": 2,
@@ -300,6 +444,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b6495667_5d951c8d",
+        "filename": "librobinhood/include/robinhood/sstack.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-10-27T11:39:26Z",
+      "side": 1,
+      "message": "rbh_sstack_pop doesn\u0027t. It returns 0 on success and -1 on error.",
+      "parentUuid": "056e2fd4_17d95eba",
+      "range": {
+        "startLine": 198,
+        "startChar": 0,
+        "endLine": 199,
+        "endChar": 46
+      },
+      "revId": "e1c382c5b27fa1eb9b10fd5250dc4f4936ac7122",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c6a7b260_cc54218c",
         "filename": "librobinhood/src/sstack.c",
         "patchSetId": 1
@@ -311,6 +479,30 @@
       "writtenOn": "2025-06-16T08:57:53Z",
       "side": 1,
       "message": "minor: why do this when you could simply add a parameter to `rbh_sstack_alloc` so that the `rbh_sstack_push` also memcpy the string ?",
+      "range": {
+        "startLine": 128,
+        "startChar": 4,
+        "endLine": 129,
+        "endChar": 21
+      },
+      "revId": "e1c382c5b27fa1eb9b10fd5250dc4f4936ac7122",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "40656059_7e99a19d",
+        "filename": "librobinhood/src/sstack.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-10-27T11:39:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c6a7b260_cc54218c",
       "range": {
         "startLine": 128,
         "startChar": 4,
@@ -334,6 +526,30 @@
       "writtenOn": "2025-06-16T08:57:53Z",
       "side": 1,
       "message": "minor: check the output, like line 257",
+      "range": {
+        "startLine": 175,
+        "startChar": 8,
+        "endLine": 175,
+        "endChar": 21
+      },
+      "revId": "e1c382c5b27fa1eb9b10fd5250dc4f4936ac7122",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2360f5cd_015b06c3",
+        "filename": "librobinhood/src/sstack.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-10-27T11:39:26Z",
+      "side": 1,
+      "message": "There is no reason to do it since count has been returned by peek. peek returns the amount in the stack. Since I pop what peek returns this is garantied to work. And also, I just want to pop everything so I would just ignore the error and continue anyway.",
+      "parentUuid": "7c778ee9_3a0bb9a7",
       "range": {
         "startLine": 175,
         "startChar": 8,
