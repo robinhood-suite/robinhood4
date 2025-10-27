@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aa89b250_f8f39342",
+        "filename": "retention/update-retention/rbh-update-retention.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-10-27T08:08:52Z",
+      "side": 1,
+      "message": "minor: \"Directory \u0027{directory.path}\u0027\"",
+      "range": {
+        "startLine": 144,
+        "startChar": 16,
+        "endLine": 144,
+        "endChar": 19
+      },
+      "revId": "a2a08fdfb6f9771146d5d67d021ad598839ab2f2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
