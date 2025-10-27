@@ -459,7 +459,7 @@ consumer_thread(void *arg) {
     signal_shutdown();
 
     if (errno == 0)
-        fprintf(stderr, "Enricher/update thread %d: unexpected exit status 0",
+        fprintf(stderr, "Enricher/update thread %d: unexpected exit status 0\n",
                 cinfo->id);
     else if (errno == RBH_BACKEND_ERROR)
         fprintf(stderr, "Enricher/update thread %d: %s\n", cinfo->id,
