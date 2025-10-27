@@ -18,6 +18,24 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "97788f42_627fd2dc",
+        "filename": "rbh-policy/rbhpolicy/meson.build",
+        "patchSetId": 8
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-10-27T10:22:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "080590c2_2a0ecc69",
+      "revId": "74a3ac373092bbe104d6ae3952793414be87d2fa",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b1e7bed5_c1c5835a",
@@ -31,6 +49,30 @@
       "writtenOn": "2025-10-20T08:37:15Z",
       "side": 1,
       "message": "question: Where does this file come from ?",
+      "range": {
+        "startLine": 7,
+        "startChar": 15,
+        "endLine": 7,
+        "endChar": 34
+      },
+      "revId": "74a3ac373092bbe104d6ae3952793414be87d2fa",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4b5c4db5_3632f01a",
+        "filename": "rbh-policy/rbhpolicy/meson.build",
+        "patchSetId": 8
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-10-27T10:22:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b1e7bed5_c1c5835a",
       "range": {
         "startLine": 7,
         "startChar": 15,
