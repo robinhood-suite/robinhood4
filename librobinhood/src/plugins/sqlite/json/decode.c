@@ -7,6 +7,7 @@
 
 #include "internals.h"
 
+
 static bool
 json2value(json_t *object, struct rbh_value *value,
            struct rbh_sstack *sstack);

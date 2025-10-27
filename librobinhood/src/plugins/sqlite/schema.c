@@ -53,7 +53,12 @@ static const char *RBH_SQLITE_SCHEMA_CODE =
 "    extensions TEXT," // json array
 "    mountpoint TEXT,"
 "    primary key (id)"
-");";
+");"
+"create table readers("
+"    id         TEXT,"
+"    last_read  INT,"
+"    primary key (id)"
+")";
 
 static bool
 setup_schema(struct sqlite_backend *sqlite)
