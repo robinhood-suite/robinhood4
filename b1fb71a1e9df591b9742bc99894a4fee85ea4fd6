@@ -67,6 +67,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d864fc38_3ca616bd",
+        "filename": "librobinhood/src/filters/core.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-10-27T10:22:22Z",
+      "side": 1,
+      "message": "Is it worth sharing this code with find? I would like to not carry the context of find ideally, it complicates what we have to manipulate with the policyEngine while it is not necessary.",
+      "parentUuid": "8e9d18dc_293245ce",
+      "range": {
+        "startLine": 231,
+        "startChar": 0,
+        "endLine": 231,
+        "endChar": 21
+      },
+      "revId": "b1fb71a1e9df591b9742bc99894a4fee85ea4fd6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "cffbca4c_08a3c77a",
         "filename": "librobinhood/src/filters/core.c",
         "patchSetId": 4
