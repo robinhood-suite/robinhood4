@@ -201,9 +201,62 @@ insert_info(void *backend, const struct rbh_value_map *map)
 }
 
 static bool
-insert_log(void *backend, const struct rbh_value_map *map)
+insert_log(struct sqlite_backend *sqlite, const struct rbh_value_map *map)
 {
-    return true;
+    const char *query =
+        "insert into log ("
+        "    mountpoint, cli, duration, inserted, skipped, start, total, end"
+        ") values ("
+        "    ?, ?, ?, ?, ?, ?, ?, ?"
+        ")";
+    const char *mountpoint = NULL;
+    struct sqlite_cursor cursor;
+    const char *cli = NULL;
+    int64_t duration = -1;
+    int64_t inserted = -1;
+    int64_t skipped = -1;
+    int64_t start = -1;
+    int64_t total = -1;
+    int64_t end = -1;
+
+    for (size_t i = 0; i < map->count; i++) {
+        const struct rbh_value_pair *pair = &map->pairs[i];
+
+        if (!strcmp(pair->key, "sync_debut"))
+            start = pair->value->int64;
+        else if (!strcmp(pair->key, "sync_duration"))
+            duration = pair->value->int64;
+        else if (!strcmp(pair->key, "sync_end"))
+            end = pair->value->int64;
+        else if (!strcmp(pair->key, "mountpoint"))
+            mountpoint = pair->value->string;
+        else if (!strcmp(pair->key, "command_line"))
+            cli = pair->value->string;
+        else if (!strcmp(pair->key, "converted_entries"))
+            inserted = pair->value->int64;
+        else if (!strcmp(pair->key, "skipped_entries"))
+            skipped = pair->value->int64;
+        else if (!strcmp(pair->key, "total_entries_seen"))
+            total = pair->value->int64;
+    }
+
+    if (duration == -1 || inserted == -1 || skipped == -1 || total == -1 ||
+        end == -1 || start == -1 || mountpoint == NULL || cli == NULL) {
+        errno = EINVAL;
+        return false;
+    }
+
+    return sqlite_cursor_setup(sqlite, &cursor) &&
+        sqlite_setup_query(&cursor, query) &&
+        sqlite_cursor_bind_string(&cursor, mountpoint) &&
+        sqlite_cursor_bind_string(&cursor, cli) &&
+        sqlite_cursor_bind_int64(&cursor, duration) &&
+        sqlite_cursor_bind_int64(&cursor, inserted) &&
+        sqlite_cursor_bind_int64(&cursor, skipped) &&
+        sqlite_cursor_bind_int64(&cursor, start) &&
+        sqlite_cursor_bind_int64(&cursor, total) &&
+        sqlite_cursor_bind_int64(&cursor, end) &&
+        sqlite_cursor_exec(&cursor);
 }
 
 int

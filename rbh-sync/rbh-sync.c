@@ -78,6 +78,29 @@ static bool skip_error = true;
  *----------------------------------------------------------------------------*/
 
 static void
+insert_metadata(struct rbh_backend *backend, struct rbh_value_map *map,
+                enum metadata_type type, const char *msg)
+{
+    int rc;
+
+    rc = rbh_backend_insert_metadata(backend, map, type);
+    if (!rc)
+        return;
+
+    switch (errno) {
+    case 0:
+        fprintf(stderr, "failed to set %s\n", msg);
+        break;
+    case RBH_BACKEND_ERROR:
+        fprintf(stderr, "failed to set %s: %s\n", msg, rbh_backend_error);
+        break;
+    default:
+        fprintf(stderr, "failed to set %s: %s\n", msg, strerror(errno));
+        break;
+    }
+}
+
+static void
 sync_source()
 {
     struct rbh_value_map *info_map;
@@ -90,8 +113,7 @@ sync_source()
 
     assert(info_map->count == 1);
 
-    if (rbh_backend_insert_metadata(to, info_map, RBH_DT_INFO) == 1)
-        fprintf(stderr, "Failed to set backend_info\n");
+    insert_metadata(to, info_map, RBH_DT_INFO, "backend info");
 }
 
 static void
@@ -109,24 +131,8 @@ sync_mountpoint(const char *mountpoint_path)
         .count = 1,
         .pairs = &pair
     };
-    int rc;
 
-    rc = rbh_backend_insert_metadata(to, &map, RBH_DT_INFO);
-    if (rc == 0)
-        return;
-    switch (errno) {
-    case RBH_BACKEND_ERROR:
-        fprintf(stderr, "Failed to set the mountpoint: %s\n",
-                rbh_backend_error);
-        break;
-    case 0:
-        fprintf(stderr, "Failed to set the mountpoint\n");
-        break;
-    default:
-        fprintf(stderr, "Failed to set the mountpoint: %s\n",
-                strerror(errno));
-        break;
-    }
+    insert_metadata(to, &map, RBH_DT_INFO, "mountpoint");
 }
 
     /*--------------------------------------------------------------------*
@@ -904,7 +910,7 @@ main(int argc, char *argv[])
     metadata_map = sync_metadata_value_map(sync_debut, sync_end, argv[0],
                                            metadata, command_line);
 
-    rbh_backend_insert_metadata(to, metadata_map, RBH_DT_LOG);
+    insert_metadata(to, metadata_map, RBH_DT_LOG, "metadata");
 
     free(command_line);
     rbh_config_free();

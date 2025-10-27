@@ -34,7 +34,7 @@ test_collection_size()
     local formated_db_size=$(format_size "$db_size")
 
     if [ "$rbh_info_size" != "$formated_db_size" ]; then
-        error "sizes are not matching\n"
+        error "sizes are not matching. Expected $formated_db_size, got $rbh_info_size"
     fi
 }
 
@@ -46,12 +46,14 @@ test_collection_count()
     local db_count=$(do_db count "$testdb")
 
     if [ "$rbh_info_count" != "$db_count" ]; then
-        error "count are not matching\n"
+        error "count are not matching"
     fi
 }
 
 test_collection_avg_obj_size()
 {
+    mongo_only_test
+
     rbh_sync "rbh:posix:." "rbh:$db:$testdb"
 
     local rbh_info_avg_obj_size=$(rbh_info "rbh:$db:$testdb" -a)
@@ -59,7 +61,7 @@ test_collection_avg_obj_size()
     local formated_avg_obj_size_db=$(format_size "$db_avg_obj_size")
 
     if [ "$rbh_info_avg_obj_size" != "$formated_avg_obj_size_db" ]; then
-        error "average objects size are not matching\n"
+        error "average objects size are not matching"
     fi
 }
 
@@ -67,9 +69,9 @@ test_collection_sync()
 {
     local info_flag=$1
 
-    rbh_sync "rbh:posix:." "rbh:mongo:$testdb"
+    rbh_sync "rbh:posix:." "rbh:$db:$testdb"
 
-    local output=$(rbh_info "rbh:mongo:$testdb" "$info_flag")
+    local output=$(rbh_info "rbh:$db:$testdb" "$info_flag")
     local n_lines=$(echo "$output" | wc -l)
 
     if ((n_lines != 8)); then
@@ -95,7 +97,7 @@ test_collection_sync()
     local command_line=$(grep 'Command used' <<< "$output" |
                          sed -n 's/.*rbh-sync/rbh-sync/p')
 
-    if [ "$command_line" != "rbh-sync rbh:posix:. rbh:mongo:$testdb" ];
+    if [ "$command_line" != "rbh-sync rbh:posix:. rbh:$db:$testdb" ];
     then
         error "command lines are not matching"
     fi
