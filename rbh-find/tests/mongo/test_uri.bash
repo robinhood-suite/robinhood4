@@ -66,6 +66,7 @@ test_uri()
 #                                     MAIN                                     #
 ################################################################################
 
+mongo_only_test
 declare -a tests=(test_invalid_uri test_uri)
 
 tmpdir=$(mktemp --directory)

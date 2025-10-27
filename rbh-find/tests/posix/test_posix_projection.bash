@@ -103,6 +103,7 @@ test_printf()
 #                                     MAIN                                     #
 ################################################################################
 
+mongo_only_test
 declare -a tests=(test_print test_print0 test_ls test_printf)
 
 tmpdir=$(mktemp --directory)
