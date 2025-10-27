@@ -439,7 +439,8 @@ print_info_fields(int flags)
     size_t field_count = sizeof(INFO_FIELDS) / sizeof(INFO_FIELDS[0]);
 
     if (info_map == NULL) {
-        printf("Failed to retrieve backend info.\n");
+        fprintf(stderr, "Failed to retrieve backend info: %s\n",
+                rbh_backend_error);
         return;
     }
 
