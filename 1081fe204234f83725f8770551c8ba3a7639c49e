@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "79054357_d02e9c06",
+        "filename": "rbh-policy/rbhpolicy/config/utils.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-10-28T14:09:19Z",
+      "side": 1,
+      "message": "I disagree, I don\u0027t like the notation of find. For example, I find it clearer to write `Size \u003d\u003d \"10B\"` than `Size \u003d\u003d \"10c\"`.",
+      "parentUuid": "b198ee23_1bbfa5a5",
+      "range": {
+        "startLine": 15,
+        "startChar": 8,
+        "endLine": 15,
+        "endChar": 12
+      },
+      "revId": "1081fe204234f83725f8770551c8ba3a7639c49e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "06960094_a0a29602",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-09-19T14:34:30Z",
       "side": 1,
       "message": "defect: if the value provided is `f`, this errors out, even though it is a correct type",
+      "range": {
+        "startLine": 47,
+        "startChar": 4,
+        "endLine": 48,
+        "endChar": 57
+      },
+      "revId": "1081fe204234f83725f8770551c8ba3a7639c49e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "53eb2ed7_9262ca7f",
+        "filename": "rbh-policy/rbhpolicy/config/utils.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-10-28T14:09:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "06960094_a0a29602",
       "range": {
         "startLine": 47,
         "startChar": 4,
@@ -70,6 +118,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7eddc70b_ac6c6d5f",
+        "filename": "rbh-policy/rbhpolicy/config/utils.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-10-28T14:09:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dac2f039_87381eaf",
+      "range": {
+        "startLine": 64,
+        "startChar": 23,
+        "endLine": 64,
+        "endChar": 44
+      },
+      "revId": "1081fe204234f83725f8770551c8ba3a7639c49e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6183a9bf_c7a93790",
@@ -93,6 +165,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e266d0fa_8cdfc5aa",
+        "filename": "rbh-policy/rbhpolicy/config/utils.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-10-28T14:09:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6183a9bf_c7a93790",
+      "range": {
+        "startLine": 69,
+        "startChar": 34,
+        "endLine": 69,
+        "endChar": 45
+      },
+      "revId": "1081fe204234f83725f8770551c8ba3a7639c49e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9117ceea_7b07f081",
@@ -106,6 +202,30 @@
       "writtenOn": "2025-09-19T14:34:30Z",
       "side": 1,
       "message": "question: I remember we talked about this, but is it necessary to have the `n` here ? Can\u0027t we just deduce from the context that we expect `B` should correspond to `billion` and not `byte` ?",
+      "range": {
+        "startLine": 81,
+        "startChar": 9,
+        "endLine": 81,
+        "endChar": 11
+      },
+      "revId": "1081fe204234f83725f8770551c8ba3a7639c49e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "95638d6c_755b355b",
+        "filename": "rbh-policy/rbhpolicy/config/utils.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-10-28T14:09:19Z",
+      "side": 1,
+      "message": "The problem is that for Size for example, if the user does `Size \u003e 100B` then we don\u0027t know if this refers to `100c` or `1_000_000_000`",
+      "parentUuid": "9117ceea_7b07f081",
       "range": {
         "startLine": 81,
         "startChar": 9,
