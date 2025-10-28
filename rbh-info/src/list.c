@@ -27,8 +27,8 @@ add_list(struct rbh_list_node *head, const char *name)
     struct rbh_node_info *new_node = xmalloc(sizeof(*new_node));
 
     new_node->name = xstrdup(name);
-
     rbh_list_add_tail(head, &new_node->list);
+
     return 0;
 }
 
