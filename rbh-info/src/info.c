@@ -17,7 +17,7 @@ struct rbh_info_fields {
 };
 
 static void
-_get_collection_avg_obj_size(const struct rbh_value *value)
+_get_avg_obj_size(const struct rbh_value *value)
 {
     char _buffer[32];
     char *buffer;
@@ -27,25 +27,6 @@ _get_collection_avg_obj_size(const struct rbh_value *value)
     size_printer(buffer, sizeof(_buffer), value->int32);
 
     printf("%s\n", buffer);
-}
-
-static void
-_get_collection_size(const struct rbh_value *value)
-{
-    char _buffer[32];
-    char *buffer;
-
-    buffer = _buffer;
-
-    size_printer(buffer, sizeof(_buffer), value->int32);
-
-    printf("%s\n", buffer);
-}
-
-static void
-_get_collection_count(const struct rbh_value *value)
-{
-    printf("%ld\n", value->int64);
 }
 
 static void
@@ -79,7 +60,13 @@ _get_backend_source(const struct rbh_value *value)
 }
 
 static void
-_get_collection_sync(const struct rbh_value *value)
+_get_count(const struct rbh_value *value)
+{
+    printf("%ld\n", value->int64);
+}
+
+static void
+_get_sync(const struct rbh_value *value)
 {
     assert(value->type == RBH_VT_MAP);
 
@@ -137,35 +124,48 @@ _get_collection_sync(const struct rbh_value *value)
     }
 }
 
+static void
+_get_size(const struct rbh_value *value)
+{
+    char _buffer[32];
+    char *buffer;
+
+    buffer = _buffer;
+
+    size_printer(buffer, sizeof(_buffer), value->int32);
+
+    printf("%s\n", buffer);
+}
+
 static struct rbh_info_fields INFO_FIELDS[] = {
-    { "average_object_size", _get_collection_avg_obj_size },
-    { "count", _get_collection_count },
-    { "first_sync", _get_collection_sync },
-    { "last_sync", _get_collection_sync },
-    { "size", _get_collection_size },
+    { "average_object_size", _get_avg_obj_size },
     { "backend_source", _get_backend_source},
+    { "count", _get_count },
+    { "first_sync", _get_sync },
+    { "last_sync", _get_sync },
+    { "size", _get_size },
 };
 
-void
+int
 print_info_fields(struct rbh_backend *from, int flags)
 {
     struct rbh_value_map *info_map = rbh_backend_get_info(from, flags);
     size_t field_count = sizeof(INFO_FIELDS) / sizeof(INFO_FIELDS[0]);
 
     if (info_map == NULL) {
-        printf("Failed to retrieve backend info.\n");
-        return;
+        printf("Failed to retrieve requested information\n");
+        return 1;
     }
 
     for (size_t i = 0 ; i < info_map->count ; i++) {
         const struct rbh_value_pair *pair = &info_map->pairs[i];
 
-        for (size_t j = 0 ; j < field_count ; j++) {
-            if (strcmp(pair->key, INFO_FIELDS[j].field_name) == 0) {
+        for (size_t j = 0 ; j < field_count ; j++)
+            if (strcmp(pair->key, INFO_FIELDS[j].field_name) == 0)
                 INFO_FIELDS[j].value_function(pair->value);
-            }
-        }
     }
+
+    return 0;
 }
 
 void
@@ -174,12 +174,12 @@ info_translate(const struct rbh_backend_plugin *plugin)
     const uint8_t info = plugin->info;
 
     if (!info) {
-        printf("Currently no info available for %s backend\n",
+        printf("Currently no info available for plugin '%s'\n",
                plugin->plugin.name);
         return;
     }
 
-    printf("Available info for backend '%s': \n", plugin->plugin.name);
+    printf("Available info for plugin '%s': \n", plugin->plugin.name);
     if (info & RBH_INFO_AVG_OBJ_SIZE)
         printf("- a: give the average size of objects inside entries collection\n");
 
