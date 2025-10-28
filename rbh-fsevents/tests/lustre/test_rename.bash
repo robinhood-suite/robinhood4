@@ -52,8 +52,6 @@ test_rename()
     local entry_renamed="$2"
     local count=$3
 
-    mongo_only_test
-
     invoke_rbh-fsevents
 
     local entries=$(count_documents)
@@ -73,8 +71,8 @@ test_rename()
 
     local parent="$(get_entry_from_binary_id "$parent_id")"
 
-    if [[ "$parent" != *"$parent_id"* ]]; then
-        error "'$entry_renamed' is not located in the '$parent' directory, but"
+    if [[ "$parent" != "$parent_id" ]]; then
+        error "'$entry_renamed' is not located in the '$parent' directory, but" \
               "in '$entry_parent'"
     fi
 }
@@ -98,6 +96,9 @@ test_rename_different_dir()
 {
     local entry="test_entry"
     local entry_renamed="test_entry_renamed"
+
+    mongo_only_test 'sqlite do_db does not support {$exists: false} yet'
+
     mkdir tmp
     touch $entry
     mv $entry tmp/$entry_renamed
@@ -115,6 +116,9 @@ test_rename_overwrite_data()
 {
     local entry="test_entry"
     local entry_renamed="test_entry_renamed"
+
+    mongo_only_test 'sqlite do_db does not support {$exists: false} yet'
+
     touch $entry
     mkdir tmp
     touch tmp/$entry_renamed
@@ -134,6 +138,9 @@ test_rename_overwrite_data_with_hsm_copy()
 {
     local entry="test_entry"
     local entry_renamed="test_entry_renamed"
+
+    mongo_only_test 'sqlite do_db does not support {$exists: false} yet'
+
     touch $entry
     mkdir tmp
     touch tmp/$entry_renamed
