@@ -151,6 +151,7 @@ acceptance_workers_no_dedup()
 #                                     MAIN                                     #
 ################################################################################
 
+mongo_only_test "sqlite backend does not support concurrent updates"
 declare -a tests=(acceptance_workers acceptance_workers_no_dedup)
 
 LUSTRE_DIR=/mnt/lustre/

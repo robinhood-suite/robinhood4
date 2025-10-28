@@ -272,18 +272,20 @@ teardown()
     return $rc
 }
 
-if [[ "$WITH_MPI" != "true" ]]; then
-    db=${RBH_TEST_DB:-mongo}
-else
-    # SQLite does not support concurrent writers so use mongo for mpi
-    # tests.
-    db=mongo
+db=${RBH_TEST_DB:-mongo}
+if "$WITH_MPI"; then
+    # SQLite does not support concurrent writers so skip tests.
+    mongo_only_test
 fi
 
 mongo_only_test()
 {
     if [[ $db != mongo ]]; then
-        skip "this can only works with mongodb"
+        if (( $# != 0 )); then
+            skip "$@"
+        else
+            skip "this can only works with mongodb"
+        fi
     fi
 }
 

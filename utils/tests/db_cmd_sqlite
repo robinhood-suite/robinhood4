@@ -8,6 +8,7 @@ import os
 from typing import List
 import logging
 import pathlib
+import json
 
 logging.basicConfig(level=logging.INFO, handlers=[logging.StreamHandler()])
 logger = logging.getLogger(__name__)
@@ -44,10 +45,23 @@ class NumberLong:
     def __init__(self, value):
         self.value = int(value)
 
+
 class BinData:
 
     def __init__(self, n, value):
         self.value = base64.b64decode(value)
+
+    def __repr__(self):
+        return f"BinData(0, '{base64.b64encode(self.value).decode('utf-8')}')"
+
+
+# Compat with mongo versions
+class Binary:
+
+    @staticmethod
+    def createFromBase64(value, n):
+        return BinData(n, value)
+
 
 def parse_filter(filters: List[str]):
     for f in filters:
@@ -60,11 +74,11 @@ def parse_filter(filters: List[str]):
 
         key = remove_quotes(key)
         if key == "ns.name":
-            yield ("ns", "name", key[len("ns.name"):], value)
+            yield ("ns", "name", "", value)
         elif key == "ns":
             yield ("ns", "", "", value)
-        elif key == "ns.xattrs.parent_id":
-            yield ("ns", "parent_id", key[len("ns.xattrs.parent_id"):], value)
+        elif key in ("ns.xattrs.parent", "ns.parent"):
+            yield ("ns", "parent_id", "", value)
         elif key.startswith("ns.xattrs.") or key.startswith("ns.0.xattrs."):
             if key.startswith("ns.xattrs."):
                 yield ("ns", "xattrs", key[len("ns.xattrs."):], value)
@@ -83,20 +97,27 @@ def parse_filter(filters: List[str]):
             raise UnManagedFilter(f)
 
 
-def remove_type(value: str) -> str:
-    if value.startswith("NumberLong("):
-        return value[len("NumberLong("):-1]
-
-    return value
-
 # TODO
-# - '"ns": { $exists : true }' '"ns": { $size : 1 }' '"ns.name":"'$entry_renamed'"'
 # - local entry_parent="$(mongo "$testdb" --eval \
 #       'db.entries.find({"ns.name":"'$entry_renamed'"},
 #       {"ns.parent": 1, "_id": 0})')"
 # -   local old_value=$(mongo "$testdb" --eval \
 #         'db.entries.find({"xattrs.user.test":{$exists: true}},
 #                          {_id: 0, "xattrs.user.test": 1})')
+
+
+def resolve_mongo_types(value):
+    if isinstance(value, NumberLong):
+        return value.value
+    elif isinstance(value, BinData):
+        return value.value
+    elif isinstance(value, list):
+        res = []
+        for v in value:
+            res.append(resolve_mongo_types(v))
+        return res
+    else:
+        return value
 
 
 def eval_value(value: str):
@@ -106,13 +127,23 @@ def eval_value(value: str):
     value = value.replace('$exists', '"$exists"')
     value = value.replace('$size', '"$size"')
     value = value.replace('$regex', '"$regex"')
-    value = value.replace('_id', '"_id"')
+    # The use of _id is not consistent accross tests. Some use "_id" other
+    # use _id. Mongo doesn't seem to care but we have to. We also need to make
+    # sure we don't match things like mirror_id. Hence the regex.
+    value = re.sub(r'([^a-zA-Z0-9_"])_id([^"])', r'\1"_id"\2', value)
+    value = value.replace('\n', '')
 
-    return eval(value)
+    return resolve_mongo_types(eval(value))
 
 
 def build_query(output: str, filters: List[str]):
-    query = f"select {output} from entries left join ns on entries.id = ns.id where "
+    if output != "count(*)":
+        group_by = output
+        # FIXME does not work if output contains several elements
+        query = f"select * from (select {output} from entries left join ns on entries.id = ns.id where "
+    else:
+        group_by = "entries.id"
+        query = f"select count(*) from (select entries.id from entries left join ns on entries.id = ns.id where "
     data = ()
 
     for table, column, attribute, value in parse_filter(filters):
@@ -131,12 +162,29 @@ def build_query(output: str, filters: List[str]):
                 query += f"entries.id in (select id from ns group by id having count(*) = ?) and "
                 data = data + (v["$size"],)
         else:
-            if isinstance(v, BinData):
-                data = data + (v.value,)
+            if isinstance(v, list):
+                data = data + (json.dumps(v),)
             else:
                 data = data + (v,)
-            if len(attribute) > 0:
-                query += f"json_extract({table}.{column}, '$.{attribute}') = ? and "
+
+            if table == "ns":
+                query += "entries.id in (select id from ns where"
+
+                if column in ("name", "path", "parent_id"):
+                    query += f" {column} = ?"
+                elif column == "xattrs":
+                    query += f" json_extract(ns.xattrs, '$.{attribute}') = "
+                    if isinstance(v, list):
+                        query += "json(?)"
+                    else:
+                        query += "?"
+                query += ") and "
+
+            elif len(attribute) > 0:
+                if isinstance(v, list):
+                    query += f"json_extract({table}.{column}, '$.{attribute}') = json(?) and "
+                else:
+                    query += f"json_extract({table}.{column}, '$.{attribute}') = ? and "
             else:
                 query += table + "." + column + " = ? and "
 
@@ -145,6 +193,7 @@ def build_query(output: str, filters: List[str]):
     if query.endswith(" where "):
         query = query[:-len(" where ")]
 
+    query += f" group by {group_by})"
     return (query, data)
 
 
@@ -187,20 +236,62 @@ def key2column(key: str) -> str:
     if key.startswith("xattrs."):
         xattr = key[len("xattrs."):]
         return f"json_extract(entries.xattrs, '$.{xattr}')"
+    elif key == "_id":
+        return "entries.id"
+    elif key == "ns.parent":
+        return "ns.parent_id"
     else:
         return key
 
 
 def get_entry(db: str, filters: List[str]):
+    if len(filters) not in (1, 2):
+        logger.error("invalid arguments: get <filter> <output>")
+        sys.exit(1)
+
+    filter = eval_value(f"{{ {filters[0]} }}")
+    if len(filters) == 2:
+        output = eval_value(f"{{ {filters[1]} }}")
+    else:
+        # By default output the id
+        output = {"_id": 1}
+
+    filters = ('"' + key + '":' + repr(value) for key, value in filter.items())
+    output = ", ".join(
+        (key2column(key) for key in output if output[key])
+    )
+    query, data = build_query(output, filters)
+
     with sqlite3.connect(db) as con:
         cursor = con.cursor()
-        output = eval_value(f"{{ {filters[1]} }}")
-
-        output = ", ".join((key2column(key) for key in output if output[key]))
-        query, data = build_query(output, [ filters[0] ])
         res = cursor.execute(query, data)
         for row in res.fetchall():
-            print(row)
+            if len(row) == 1:
+                if isinstance(row[0], bytes):
+                    print(base64.b64encode(row[0]).decode('utf-8'), end="")
+                else:
+                    print(row[0], end="")
+            else:
+                for elem in row:
+                    if isinstance(elem, bytes):
+                        print(base64.b64encode(elem).decode('utf-8'), end=" ")
+                    else:
+                        print(elem, end=" ")
+            print("")
+
+
+def remove_entries(db: str, filters: List[str]):
+    if len(filters) != 1:
+        logger.error("invalid arguments: remove <id>")
+        sys.exit(1)
+
+    filter = eval_value(f"{{ {filters[0]} }}")
+    with sqlite3.connect(db) as con:
+        cursor = con.cursor()
+        cursor.execute("delete from entries where id = ?",
+                       (filter["_id"].value,))
+        cursor.execute("delete from ns where id = ?",
+                       (filter["_id"].value,))
 
 
 def drop_db(db: str, filters: List[str]):
@@ -279,6 +370,7 @@ if __name__ == '__main__':
         "avgsize": db_avgsize,
         "fsevents": get_last_id,
         "clear_entries": clear_entries,
+        "remove": remove_entries,
     }
 
     cmd = sys.argv[1]
