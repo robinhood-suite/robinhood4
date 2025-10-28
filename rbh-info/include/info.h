@@ -21,9 +21,11 @@ list_plugins_and_extensions();
  * Show the capabilities of a given plugin.
  *
  * @param plugin   The plugin whose capabilities should be shown
+ *
+ * @return         0 on success, 1 on error
  */
-void
-capabilities_translate(const struct rbh_backend_plugin *plugin);
+int
+capabilities_translate(const char *plugin);
 
 /**
  * Show the information requested in \p flags using the backend \p from.
