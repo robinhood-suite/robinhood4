@@ -5,16 +5,16 @@
 # SPDX-License-Identifer: LGPL-3.0-or-later
 
 non_parallel_integration_tests = [
-  'info',
+  'test_list',
 ]
 
 parallel_integration_tests = [
-  'get_info',
+  'test_info',
   'test_posix',
   'test_mongo',
 ]
 
-if liblustre.found()
+if test_lustre
     parallel_integration_tests += ['test_lustre']
 endif
 
