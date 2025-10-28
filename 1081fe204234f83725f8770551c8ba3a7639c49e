@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "dbc99392_f8842970",
+        "filename": "rbh-policy/rbhpolicy/config/utils.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-10-28T14:38:58Z",
+      "side": 1,
+      "message": "We talked about this, sticking to one notation is better, and since we want rbh-find to be a close of GNU find, its notation should be used. So rbh-find\u0027s notation should be used here aswell.",
+      "parentUuid": "79054357_d02e9c06",
+      "range": {
+        "startLine": 15,
+        "startChar": 8,
+        "endLine": 15,
+        "endChar": 12
+      },
+      "revId": "1081fe204234f83725f8770551c8ba3a7639c49e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "06960094_a0a29602",
         "filename": "rbh-policy/rbhpolicy/config/utils.py",
         "patchSetId": 9
@@ -226,6 +250,30 @@
       "side": 1,
       "message": "The problem is that for Size for example, if the user does `Size \u003e 100B` then we don\u0027t know if this refers to `100c` or `1_000_000_000`",
       "parentUuid": "9117ceea_7b07f081",
+      "range": {
+        "startLine": 81,
+        "startChar": 9,
+        "endLine": 81,
+        "endChar": 11
+      },
+      "revId": "1081fe204234f83725f8770551c8ba3a7639c49e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "54814a13_68adc01a",
+        "filename": "rbh-policy/rbhpolicy/config/utils.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-10-28T14:38:58Z",
+      "side": 1,
+      "message": "We talked about this aswell, anybody writing \"100B\" for a size means 100 bytes. The people that will use this policy engine are admins who know at least a bit about computer science.",
+      "parentUuid": "95638d6c_755b355b",
       "range": {
         "startLine": 81,
         "startChar": 9,
