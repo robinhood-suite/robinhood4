@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # This file is part of rbh-info.
-# Copyright (C) 2024 Commissariat a l'energie atomique et aux energies
+# Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
@@ -126,7 +126,7 @@ tests_mongo_backend_detection()
     unset LD_LIBRARY_PATH
     local output=$(rbh_info mongo 2>&1)
 
-    if echo "$output" | grep -q "This backend does not exist"; then
+    if echo "$output" | grep -q "Failed to import plugin 'mongo'"; then
         echo "Mongo backend correctly not imported as expected"
     else
         error "Mongo backend was unexpectedly detected in default paths"
