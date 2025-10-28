@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ed80097d_e6e4dd7a",
+        "filename": "rbh-policy/rbhpolicy/config/utils.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-10-28T14:09:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "755253a3_2f775db1",
+      "range": {
+        "startLine": 190,
+        "startChar": 8,
+        "endLine": 190,
+        "endChar": 24
+      },
+      "revId": "7b4ffb1121bfae1d87c739fa6d6159605e3219cb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1ca5e382_bc64e3fb",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-09-19T15:03:42Z",
       "side": 1,
       "message": "major: going back to one of my previous comments, since here you have the requested key, you can help the parser know how to do its job by giving the key as context.",
+      "range": {
+        "startLine": 206,
+        "startChar": 4,
+        "endLine": 206,
+        "endChar": 46
+      },
+      "revId": "7b4ffb1121bfae1d87c739fa6d6159605e3219cb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b1eae483_628138b0",
+        "filename": "rbh-policy/rbhpolicy/config/utils.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-10-28T14:09:26Z",
+      "side": 1,
+      "message": "That\u0027s right, I\u0027ve thought about it and if I do that I\u0027ll have to do a switch with all the possible keys in `parse_unit` to determine the function to apply. Then do a re-parse of the keys in `translate_condition` to perform the translation.\nThis gives me the impression of complicating the code by adding duplication. The only time there might be ambiguity in parsing it is regarding Size, if we allow `M` for millions and `M` for Megabyte. And I don\u0027t think this suggestion will resolve this misunderstanding.",
+      "parentUuid": "1ca5e382_bc64e3fb",
       "range": {
         "startLine": 206,
         "startChar": 4,
@@ -70,6 +118,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a55d8ed5_0ebf214e",
+        "filename": "rbh-policy/rbhpolicy/config/utils.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-10-28T14:09:26Z",
+      "side": 1,
+      "message": "Switch/case does not exist before python3.10 with match/case",
+      "parentUuid": "3a0c620e_988636b4",
+      "range": {
+        "startLine": 216,
+        "startChar": 4,
+        "endLine": 216,
+        "endChar": 21
+      },
+      "revId": "7b4ffb1121bfae1d87c739fa6d6159605e3219cb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7e897414_c63b8fdc",
@@ -83,6 +155,30 @@
       "writtenOn": "2025-09-19T15:03:42Z",
       "side": 1,
       "message": "minor: all of these could be made simpler with a first handling of the operator, than the rest",
+      "range": {
+        "startLine": 216,
+        "startChar": 4,
+        "endLine": 265,
+        "endChar": 31
+      },
+      "revId": "7b4ffb1121bfae1d87c739fa6d6159605e3219cb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "00e5fa2d_219d19a5",
+        "filename": "rbh-policy/rbhpolicy/config/utils.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-10-28T14:09:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7e897414_c63b8fdc",
       "range": {
         "startLine": 216,
         "startChar": 4,
