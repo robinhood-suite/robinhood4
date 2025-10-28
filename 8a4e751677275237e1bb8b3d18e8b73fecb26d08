@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bb3de2cd_ba675870",
+        "filename": "librobinhood/src/plugins/posix/filter.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 692,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-10-28T14:28:22Z",
+      "side": 1,
+      "message": "question: do the parent directory and its parent (and ...) need to be checked aswell ? If one doesn\u0027t have read access on a directory, will it be able to read files in that directory ?",
+      "range": {
+        "startLine": 692,
+        "startChar": 19,
+        "endLine": 692,
+        "endChar": 27
+      },
+      "revId": "8a4e751677275237e1bb8b3d18e8b73fecb26d08",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "313e5758_6f5fdab0",
+        "filename": "librobinhood/src/plugins/posix/filter.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 725,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-10-28T14:28:22Z",
+      "side": 1,
+      "message": "minor: wrong function, same below",
+      "range": {
+        "startLine": 725,
+        "startChar": 23,
+        "endLine": 725,
+        "endChar": 38
+      },
+      "revId": "8a4e751677275237e1bb8b3d18e8b73fecb26d08",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "66e90836_8b87955d",
+        "filename": "librobinhood/src/plugins/posix/filter.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 729,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-10-28T14:28:22Z",
+      "side": 1,
+      "message": "style: alignment",
+      "range": {
+        "startLine": 728,
+        "startChar": 40,
+        "endLine": 729,
+        "endChar": 45
+      },
+      "revId": "8a4e751677275237e1bb8b3d18e8b73fecb26d08",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
