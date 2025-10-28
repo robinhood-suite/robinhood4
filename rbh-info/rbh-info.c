@@ -24,20 +24,6 @@
 
 #include "info.h"
 
-static struct rbh_backend *from;
-
-static void __attribute__((destructor))
-destroy_from(void)
-{
-    const char *name;
-
-    if (from) {
-        name = from->name;
-        rbh_backend_destroy(from);
-        rbh_backend_plugin_destroy(name);
-    }
-}
-
 static int
 help()
 {
@@ -166,9 +152,12 @@ main(int _argc, char **_argv)
         {}
     };
     const struct rbh_backend_plugin *plugin;
+    struct rbh_backend *from = NULL;
     int flags = 0, option;
+    const char *name;
     int nb_cli_args;
     char **argv;
+    int rc = 0;
     int argc;
 
     nb_cli_args = rbh_count_args_before_uri(_argc, _argv);
@@ -222,22 +211,32 @@ main(int _argc, char **_argv)
     if (argc < 1)
         error(EX_USAGE, 0, "not enough arguments\n");
 
-    if (!rbh_is_uri(argv[0]))
+    if (!rbh_is_uri(argv[0])) {
         // Print capabilities of the given plugin
-        return capabilities_translate(argv[0]);
+        rc = capabilities_translate(argv[0]);
+        goto end;
+    }
 
     from = rbh_backend_from_uri(argv[0], true);
-    plugin = rbh_backend_plugin_import(from->name);
+    name = from->name;
+    plugin = rbh_backend_plugin_import(name);
 
     if (plugin == NULL) {
         fprintf(stderr, "This plugin does not exist\n");
-        return EINVAL;
+        rc = EINVAL;
+        goto end;
     }
 
     if (flags)
-        print_info_fields(from, flags);
+        rc = print_info_fields(from, flags);
     else
         info_translate(plugin);
 
-    return EXIT_SUCCESS;
+end:
+    if (from) {
+        rbh_backend_destroy(from);
+        rbh_backend_plugin_destroy(name);
+    }
+
+    return rc;
 }
