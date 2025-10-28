@@ -222,15 +222,9 @@ main(int _argc, char **_argv)
     if (argc < 1)
         error(EX_USAGE, 0, "not enough arguments\n");
 
-    if (!rbh_is_uri(argv[0])) {
-        plugin = rbh_backend_plugin_import(argv[0]);
-        if (plugin == NULL) {
-            fprintf(stderr, "This backend does not exist\n");
-            return EINVAL;
-        }
-        capabilities_translate(plugin);
-        return 0;
-    }
+    if (!rbh_is_uri(argv[0]))
+        // Print capabilities of the given plugin
+        return capabilities_translate(argv[0]);
 
     from = rbh_backend_from_uri(argv[0], true);
     plugin = rbh_backend_plugin_import(from->name);
