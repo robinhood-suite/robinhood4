@@ -32,8 +32,10 @@ capabilities_translate(const char *plugin);
  *
  * @param from     Where to fetch the information
  * @param flags    The information to fetch and show
+ *
+ * @return         0 on success, 1 on error
  */
-void
+int
 print_info_fields(struct rbh_backend *from, int flags);
 
 void
