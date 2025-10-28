@@ -233,9 +233,10 @@ main(int _argc, char **_argv)
         fprintf(stderr, "This plugin does not exist\n");
         return EINVAL;
     }
+
     if (flags)
         print_info_fields(from, flags);
-    if (!flags)
+    else
         info_translate(plugin);
 
     return EXIT_SUCCESS;
