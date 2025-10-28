@@ -6,14 +6,24 @@
  */
 
 #include <stdio.h>
+#include <string.h>
 
 #include "info.h"
 
-void
-capabilities_translate(const struct rbh_backend_plugin *plugin)
+int
+capabilities_translate(const char *_plugin)
 {
-    const uint8_t capabilities = plugin->capabilities;
+    const struct rbh_backend_plugin *plugin =
+        rbh_backend_plugin_import(_plugin);
+    uint8_t capabilities;
 
+    if (plugin == NULL) {
+        fprintf(stderr, "Failed to import plugin '%s': %s (%d)\n",
+                _plugin, strerror(errno), errno);
+        return EINVAL;
+    }
+
+    capabilities = plugin->capabilities;
     printf("Capabilities of %s:\n", plugin->plugin.name);
 
     if (capabilities & RBH_FILTER_OPS)
@@ -24,4 +34,6 @@ capabilities_translate(const struct rbh_backend_plugin *plugin)
         printf("- update: rbh-sync [target]\n");
     if (capabilities & RBH_BRANCH_OPS)
         printf("- branch: rbh-sync [source for partial processing]\n");
+
+    return 0;
 }
