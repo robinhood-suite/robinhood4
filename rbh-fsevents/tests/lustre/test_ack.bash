@@ -56,6 +56,8 @@ test_ack_no_dedup()
 
 test_ack_thread()
 {
+    mongo_only_test "sqlite does not support concurrent inserts"
+
     touch entry
     touch entry2
     touch entry3
