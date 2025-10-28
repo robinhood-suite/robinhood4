@@ -16,7 +16,7 @@ test_create_entry()
     local entries=$(count_documents)
     local count=$(find . | wc -l)
     if [[ $entries != $count ]]; then
-        error "There should be only $count entries in the database"
+        error "There should be only $count entries in the database, found $entries"
     fi
 
     verify_statx "$entry"
