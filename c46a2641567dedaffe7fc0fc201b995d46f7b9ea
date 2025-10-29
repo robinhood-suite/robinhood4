@@ -22,6 +22,30 @@
       },
       "revId": "c46a2641567dedaffe7fc0fc201b995d46f7b9ea",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f9445abc_b798b7d9",
+        "filename": "retention/update-retention/lib/context.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-10-29T15:39:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6dea354b_bd92e8bb",
+      "range": {
+        "startLine": 23,
+        "startChar": 8,
+        "endLine": 23,
+        "endChar": 22
+      },
+      "revId": "c46a2641567dedaffe7fc0fc201b995d46f7b9ea",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
