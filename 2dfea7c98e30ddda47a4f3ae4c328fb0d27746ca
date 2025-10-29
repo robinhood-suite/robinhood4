@@ -96,6 +96,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3c4edc76_57f1e9e7",
+        "filename": "rbh-policy/meson.build",
+        "patchSetId": 6
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-10-29T08:49:59Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "27f1bb1b_d46814f3",
+      "range": {
+        "startLine": 9,
+        "startChar": 16,
+        "endLine": 9,
+        "endChar": 25
+      },
+      "revId": "2dfea7c98e30ddda47a4f3ae4c328fb0d27746ca",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d4ad537f_1bf1997f",
