@@ -63,21 +63,26 @@ every entry under the current directory and exit:
     main()
     {
         struct rbh_filter_options options = {
+            .skip_error = true,
+            .one = false,
+        };
+        struct rbh_filter_output output = {
+            .type = RBH_FOT_PROJECTION,
             .projection = {
                 .fsentry_mask = RBH_FP_NAME,
-            }
+            },
         };
         struct rbh_mut_iterator *fsentries;
         struct rbh_backend *backend;
 
         /* Build a backend from a URI */
-        backend = rbh_backend_from_uri(uri);
+        backend = rbh_backend_from_uri(uri, false);
 
         /* Fetch every fsentry */
-        fsentries = rbh_backend_filter(backend, NULL, &options);
+        fsentries = rbh_backend_filter(backend, NULL, &options, &output, NULL);
 
         /* Iterate over each fsentry and print its name (if it is set) */
-        while (1) {
+        while (true) {
             struct rbh_fsentry *fsentry;
 
             errno = 0;
@@ -101,26 +106,31 @@ every entry under the current directory and exit:
 
 For more advanced use cases, check out the following applications built on top
 of librobinhood:
- - rbh-sync_ to synchronize two backends
- - rbh-fsevents_ to update a backend with changelog events
  - rbh-find_ to query a backend and filter entries
+ - rbh-fsevents_ to update a backend with changelog events
+ - rbh-info_ to display information about a backend
+ - rbh-sync_ to synchronize two backends
+ - rbh-undelete_ to undelete an entries in a backend
 
-.. _rbh-sync: https://github.com/robinhood-suite/robinhood4/tree/main/rbh-sync
-.. _rbh-fsevents: https://github.com/robinhood-suite/robinhood4/tree/main/rbh-fsevents
 .. _rbh-find: https://github.com/robinhood-suite/robinhood4/tree/main/rbh-find
+.. _rbh-fsevents: https://github.com/robinhood-suite/robinhood4/tree/main/rbh-fsevents
+.. _rbh-info: https://github.com/robinhood-suite/robinhood4/tree/main/rbh-info
+.. _rbh-sync: https://github.com/robinhood-suite/robinhood4/tree/main/rbh-sync
+.. _rbh-undelete: https://github.com/robinhood-suite/robinhood4/tree/main/rbh-undelete
 
 Remote MongoDB Database
 =======================
 
 Librobinhood can use a remote mongo database for the mongo backend. To do this,
-you must define the environment variable ``mongodb_address`` with the host
-and port where the database is located.
+you must define in the configuration file the variable ``address`` inside the
+``mongo`` section with the host and port where the database is located.
 
 The variable must follow the form ``mongodb://HOST:PORT``
 
-.. code:: bash
-
-    export mongodb_address=mongodb://localhost:27017
+.. code:: yaml
+    ---
+    mongo:
+        address: "mongodb://localhost:27017"
 
 Limits
 ======
