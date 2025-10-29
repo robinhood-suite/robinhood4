@@ -354,6 +354,22 @@ def source(db: str, filters: List[str]):
             print(ext)
 
 
+def get_info(db: str, filters: List[str]):
+    with sqlite3.connect(db) as con:
+        cursor = con.cursor()
+        cursor.execute(f"select {filters[0]} from info")
+        res = cursor.fetchone()
+        print(res[0])
+
+
+def drop_info(db: str, filters: List[str]):
+    with sqlite3.connect(db) as con:
+        cursor = con.cursor()
+        cursor.execute(
+            "update info set plugin=NULL, extensions=NULL, mountpoint=NULL where id = 1")
+        con.commit()
+
+
 def usage(progname: str):
     print(f"usage: {progname} <cmd> <dbname> <filter> [<filters>]")
 
@@ -375,6 +391,8 @@ if __name__ == '__main__':
         "fsevents": get_last_id,
         "clear_entries": clear_entries,
         "remove": remove_entries,
+        "get_info": get_info,
+        "drop_info": drop_info,
     }
 
     cmd = sys.argv[1]

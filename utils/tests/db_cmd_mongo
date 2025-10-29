@@ -145,6 +145,12 @@ case "$cmd" in
     clear_entries)
         mongo "$db" --eval "db.entries.remove({})"
         ;;
+    get_info)
+        if [[ "$1" == "mountpoint" ]]; then
+            mongo "$db" --eval \
+                'db.info.findOne({_id: "mountpoint_info"}, {mountpoint: 1}).mountpoint'
+        fi
+        ;;
     *)
         echo "Unknown command '$cmd'"
         exit 1
