@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "771b4407_e0a57a14",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-10-29T15:11:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "989baec0_b3eeb578",
+      "range": {
+        "startLine": 9,
+        "startChar": 11,
+        "endLine": 9,
+        "endChar": 31
+      },
+      "revId": "a1f478c91135f922614a5153eb06bc464bf91a0c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "273e02ea_6d00bb6b",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-10-24T12:49:52Z",
       "side": 1,
       "message": "minor: wrong description",
+      "range": {
+        "startLine": 14,
+        "startChar": 7,
+        "endLine": 14,
+        "endChar": 62
+      },
+      "revId": "a1f478c91135f922614a5153eb06bc464bf91a0c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "860301d6_083ed634",
+        "filename": "retention/update-retention/lib/directory.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-10-29T15:11:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "273e02ea_6d00bb6b",
       "range": {
         "startLine": 14,
         "startChar": 7,
