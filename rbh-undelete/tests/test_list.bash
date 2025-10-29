@@ -37,12 +37,11 @@ test_list()
         sed -n 's/.*rm_path: \([^ ]*\).*/\1/p')
     local n_lines=$(echo "$list" | wc -l)
 
-    if ((n_lines != 2)); then
-        error "There shoud be only one file deleted"
+    if (( n_lines != 2 )); then
+        error "There shoud be only one file deleted. Got $n_lines"
     fi
 
-    local mountpoint=$(mongo --quiet "$testdb" --eval \
-    'db.info.findOne({_id: "mountpoint_info"}, {mountpoint: 1}).mountpoint')
+    local mountpoint=$(do_db get_info "$testdb" mountpoint)
 
     local rm_full_path="${mountpoint}${rm_path}"
 
