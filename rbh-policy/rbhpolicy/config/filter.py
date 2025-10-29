@@ -4,6 +4,7 @@
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
 
+import json
 import ctypes
 import ctypes.util
 from ctypes import c_int, c_uint, c_char_p, c_void_p, Structure, POINTER, Union
@@ -16,6 +17,7 @@ libc.free.restype = None
 
 # struct rbh_filter* (opaque to avoid mapping)
 rbh_filter_p = c_void_p
+rbh_mut_iterator_p = c_void_p
 
 librbh.rbh_filter_and.restype = rbh_filter_p
 librbh.rbh_filter_and.argtypes = [rbh_filter_p, rbh_filter_p]
@@ -31,6 +33,27 @@ librbh.rbh_filter_validate.argtypes = [rbh_filter_p]
 
 librbh.build_filter_from_uri.restype = rbh_filter_p
 librbh.build_filter_from_uri.argtypes = [c_char_p, ctypes.POINTER(c_char_p)]
+
+librbh.rbh_collect_fsentry.restype = rbh_mut_iterator_p
+librbh.rbh_collect_fsentry.argtypes = [c_char_p, rbh_filter_p]
+
+class RbhRule(Structure):
+    _fields_ = [
+        ("name", c_char_p),
+        ("filter", rbh_filter_p),
+        ("action", c_char_p),
+        ("parameters", c_char_p),  # JSON string
+    ]
+
+def make_c_rules(py_rules):
+    arr = (RbhRule * len(py_rules))()
+    for i, rule in enumerate(py_rules):
+        params_json = json.dumps(rule.parameters).encode()
+        arr[i].name = rule.name.encode()
+        arr[i].filter = rule.to_filter()
+        arr[i].action = (rule.action or "").encode()
+        arr[i].parameters = params_json
+    return arr, len(py_rules)
 
 def build_filter(args):
     global backend # The URI, comes from the configuration file.
