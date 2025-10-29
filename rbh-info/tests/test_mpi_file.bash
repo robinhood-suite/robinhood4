@@ -13,6 +13,15 @@ test_dir=$(dirname $(readlink -e $0))
 #                                    TESTS                                     #
 ################################################################################
 
+test_mpi_file_list()
+{
+    local output=$(rbh_info --list)
+
+    echo "$output" | grep -q "mpi-file"
+    echo "$output" | grep -q "posix"
+    echo "$output" | grep -q "mfu"
+}
+
 test_mpi_file_source()
 {
     dwalk -q -o "$testdb.mfu" .
@@ -33,7 +42,7 @@ test_mpi_file_source()
 #                                     MAIN                                     #
 ################################################################################
 
-declare -a tests=(test_mpi_file_source)
+declare -a tests=(test_mpi_file_list test_mpi_file_source)
 
 tmpdir=$(mktemp --directory --tmpdir=$LUSTRE_DIR)
 trap -- "rm -rf '$tmpdir'" EXIT
