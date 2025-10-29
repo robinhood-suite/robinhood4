@@ -17,7 +17,10 @@
 #include <sqlite3.h>
 #include <sys/stat.h>
 #include <sys/user.h>
+#include <stdbool.h>
+#include <stdint.h>
 
+#include <robinhood/statx.h>
 #include <robinhood/backends/sqlite.h>
 #include <robinhood/utils.h>
 #include <robinhood/sstack.h>
