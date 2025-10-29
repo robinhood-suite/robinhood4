@@ -189,7 +189,7 @@ main(int argc, char *argv[])
         error(EX_USAGE, ENOMEM,
               "output option can only be used with the restore option");
 
-    context.source = rbh_backend_from_uri(argv[optind++], true);
+    context.source = rbh_backend_from_uri(argv[optind++], false);
 
     uri = get_rbh_uri_from_string(argv[optind++]);
     if (uri == NULL)
