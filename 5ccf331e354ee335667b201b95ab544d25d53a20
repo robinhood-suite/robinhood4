@@ -16,6 +16,24 @@
       "message": "question: Why comment these lines ?",
       "revId": "5ccf331e354ee335667b201b95ab544d25d53a20",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb64bbc6_0296c866",
+        "filename": "utils/tests/framework.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-10-29T15:43:17Z",
+      "side": 1,
+      "message": "Forgot to add them back, done",
+      "parentUuid": "62682ac5_be313e3b",
+      "revId": "5ccf331e354ee335667b201b95ab544d25d53a20",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
