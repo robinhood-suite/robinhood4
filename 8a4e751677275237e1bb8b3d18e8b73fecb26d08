@@ -74,6 +74,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "31a3cf1b_d2667e45",
+        "filename": "librobinhood/src/plugins/posix/filter.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 692,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-10-29T07:47:59Z",
+      "side": 1,
+      "message": "Find\u0027s useful side is `access()` to test permissions and so if a file is inaccessible because of a parent then it will not be listed by find. Perhaps we could add a check with `access()` to handle this.",
+      "parentUuid": "74447445_40fba754",
+      "range": {
+        "startLine": 692,
+        "startChar": 19,
+        "endLine": 692,
+        "endChar": 27
+      },
+      "revId": "8a4e751677275237e1bb8b3d18e8b73fecb26d08",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "313e5758_6f5fdab0",
         "filename": "librobinhood/src/plugins/posix/filter.c",
         "patchSetId": 2
