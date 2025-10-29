@@ -12,6 +12,13 @@
 #include "robinhood/statx.h"
 #include <robinhood.h>
 
+struct rbh_rule {
+    const char *name;
+    struct rbh_filter *filter;
+    const char *action;
+    const char *parameters;
+};
+
 struct rbh_mut_iterator *
 rbh_collect_fsentry(const char *uri, struct rbh_filter *filter)
 {
