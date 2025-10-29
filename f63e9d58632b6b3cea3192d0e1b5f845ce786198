@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dc907e1a_f0bb8012",
+        "filename": "rbh-policy/rbhpolicy/config/config_loader.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-10-29T09:11:49Z",
+      "side": 1,
+      "message": "minor: `\u003cfs_input\u003e.py`",
+      "range": {
+        "startLine": 22,
+        "startChar": 6,
+        "endLine": 22,
+        "endChar": 17
+      },
+      "revId": "f63e9d58632b6b3cea3192d0e1b5f845ce786198",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
