@@ -14,8 +14,8 @@ corresponding FSEntry.
 
 The enricher is mainly used by rbh-sync_ and rbh-fsevents_.
 
-.. _rbh-sync: https://github.com/robinhood-suite/robinhood4/tree/main/rbh-sync
 .. _rbh-fsevents: https://github.com/robinhood-suite/robinhood4/tree/main/rbh-fsevents
+.. _rbh-sync: https://github.com/robinhood-suite/robinhood4/tree/main/rbh-sync
 
 Enrichment
 ==========
@@ -61,87 +61,11 @@ from a backend.
 
 Below are defined the predicates defined by the Lustre extension.
 
--hsm-state
-----------
+-comp-end
+---------
 
-A predicate that filters entries based on their HSM status. These include:
-archived, dirty, exists, lost, noarchive, norelease, none and released.
-
-.. code:: bash
-
-    rbh-find rbh:mongo:test -hsm-state archived
-    /file
-    /dir/file-0
-    /dir/file-1
-
-    rbh-find rbh:mongo:test -hsm-state archived -hsm-state norelease
-    /dir/file-0
-
--fid
-----
-
-A predicate that filters entries based on a fid.
-
-.. code:: bash
-
-    rbh-find rbh:mongo:test -fid [0xa:0xb:0xc]
-    /dir/file-1
-
--ost
-----
-
-A predicate that filters entries based on an OST index.
-
-.. code:: bash
-
-    rbh-find rbh:mongo:test -ost 1 -o ost 2
-    /dir/file-on-ost-1
-    /dir/file-on-ost-2
-    /dir/file-on-ost-1-and-2
-
--stripe-count
--------------
-
-A predicate that filters entries based on the stripe count of any of their
-components. It supports filtering on a stripe count equal, larger or lower than
-``n``, by respectively using ``n``, ``+n`` or ``-n``.
-
-Moreover, the value given can be ``default``, in which case it will filter all
-that do not have a stripe count set. This will only match directories however,
-because only directories have a default striping, as it does not make sense for
-other types of entries in Lustre.
-
-Finally, if given a numerical value, rbh-find will fetch the default stripe
-count of the current mount point (meaning we assume rbh-find's working
-directory is under the right filesystem mount point), and compare it to the
-value that is to be filtered. If they match (i.e. if the default stripe is
-equal, larger or lower then the value given by the user), every directory with
-a default stripe count will be printed.
-
-.. code:: bash
-
-    rbh-find rbh:mongo:test -stripe-count 1
-    /dir/file-with-stripe-count-1
-
-    lfs setstripe --stripe-count 2 /mnt/lustre
-    rbh-find rbh:mongo:test -stripe-count 2
-    /dir/file-with-stripe-count-2
-    /directory-with-default-striping
-    /
-
--stripe-size
-------------
-
-A predicate that filters entries based on the stripe size of any of their
-components. It behaves exactly like the ``stripe-count`` predicate otherwise.
-
--layout-pattern
----------------
-
-A predicate that filters entries based on the pattern of any of their
-components. The only accepted values are ``default``, ``raid0``, ``mdt``,
-``released`` and ``overstriped``. It behaves exactly like the ``stripe-count``
-predicate with regards to the default value otherwise.
+A predicate that filters entries based on the component end  of any of their
+components. It behaves exactly like the ``-comp-start`` predicate otherwise.
 
 -comp-start
 -----------
@@ -191,3 +115,126 @@ To showcase the difference:
     rbh-find rbh:mongo:test -comp-start 1M,2M
     # nothing is outputted because `comp_start_at_0_and_1G` doesn't have a
     # component start in the interval ]0 ; 2M]
+
+-fid
+----
+
+A predicate that filters entries based on a fid.
+
+.. code:: bash
+
+    rbh-find rbh:mongo:test -fid [0xa:0xb:0xc]
+    /dir/file-1
+
+-hsm-state
+----------
+
+A predicate that filters entries based on their HSM status. These include:
+archived, dirty, exists, lost, noarchive, norelease, none and released.
+
+.. code:: bash
+
+    rbh-find rbh:mongo:test -hsm-state archived
+    /file
+    /dir/file-0
+    /dir/file-1
+
+    rbh-find rbh:mongo:test -hsm-state archived -hsm-state norelease
+    /dir/file-0
+
+-layout-pattern
+---------------
+
+A predicate that filters entries based on the pattern of any of their
+components. The only accepted values are ``default``, ``raid0``, ``mdt``,
+``released`` and ``overstriped``. It behaves exactly like the ``stripe-count``
+predicate with regards to the default value otherwise.
+
+-mdt-count
+----------
+
+A predicate that filters directories based on how many MDTs they are striped
+across. It supports filtering on an MDT count equal to, greater than, or less
+than ``n``, by using ``n``, ``+n``, or ``-n``, respectively.
+
+.. code:: bash
+
+    lfs mkdir -c 3 dir-on-3-mdt
+
+    rbh-find rbh:mongo:test -mdt-count 3
+    /dir-on-3-mdt
+
+-mdt-index
+----------
+
+A predicate that filters entries based on an MDT index.
+
+.. code:: bash
+
+    rbh-find rbh:mongo:test -mdt-index 1
+    /dir-on-mdt-1
+    /dir-on-mdt-1/file
+
+-ost-index
+----------
+
+A predicate that filters entries based on an OST index.
+
+.. code:: bash
+
+    rbh-find rbh:mongo:test -ost 1 -o ost 2
+    /dir/file-on-ost-1
+    /dir/file-on-ost-2
+    /dir/file-on-ost-1-and-2
+
+-[i]pool
+--------
+
+A predicate that filters entries based on the pool their components belong to.
+It supports regular expressions and is case-sensitive by default. To make it
+case-insensitive, use the ``-ipool`` predicate.
+
+.. code:: bash
+
+    lfs setstripe -E 1M -p "pool1" -E -1 -p "pool2" file
+
+    rbh-find rbh:mongo:test -pool pool1
+    /file
+    rbh-find rbh:mongo:test -pool pool*
+    /file
+
+-stripe-count
+-------------
+
+A predicate that filters entries based on the stripe count of any of their
+components. It supports filtering on a stripe count equal, larger or lower than
+``n``, by respectively using ``n``, ``+n`` or ``-n``.
+
+Moreover, the value given can be ``default``, in which case it will filter all
+that do not have a stripe count set. This will only match directories however,
+because only directories have a default striping, as it does not make sense for
+other types of entries in Lustre.
+
+Finally, if given a numerical value, rbh-find will fetch the default stripe
+count of the current mount point (meaning we assume rbh-find's working
+directory is under the right filesystem mount point), and compare it to the
+value that is to be filtered. If they match (i.e. if the default stripe is
+equal, larger or lower then the value given by the user), every directory with
+a default stripe count will be printed.
+
+.. code:: bash
+
+    rbh-find rbh:mongo:test -stripe-count 1
+    /dir/file-with-stripe-count-1
+
+    lfs setstripe --stripe-count 2 /mnt/lustre
+    rbh-find rbh:mongo:test -stripe-count 2
+    /dir/file-with-stripe-count-2
+    /directory-with-default-striping
+    /
+
+-stripe-size
+------------
+
+A predicate that filters entries based on the stripe size of any of their
+components. It behaves exactly like the ``stripe-count`` predicate otherwise.
