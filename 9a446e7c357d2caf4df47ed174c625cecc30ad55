@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "12ec3cf1_532cdf3d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-10-29T08:46:15Z",
+      "side": 1,
+      "message": "It would be nice to add a test",
+      "revId": "9a446e7c357d2caf4df47ed174c625cecc30ad55",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7991d5c9_d7a3ec14",
+        "filename": "rbh-info/rbh-info.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-10-29T08:46:15Z",
+      "side": 1,
+      "message": "minor: you can use xstrdup",
+      "revId": "9a446e7c357d2caf4df47ed174c625cecc30ad55",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "05c5af9f_36e34a7d",
+        "filename": "rbh-info/rbh-info.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-10-29T08:46:15Z",
+      "side": 1,
+      "message": "minor: if you use xstrdup, you remove these lines",
+      "range": {
+        "startLine": 218,
+        "startChar": 8,
+        "endLine": 221,
+        "endChar": 9
+      },
+      "revId": "9a446e7c357d2caf4df47ed174c625cecc30ad55",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f77c6c1f_6be1fc16",
+        "filename": "rbh-info/rbh-info.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-10-29T08:46:15Z",
+      "side": 1,
+      "message": "question: Why are doing a special case for the mpifile plugin ?",
+      "revId": "9a446e7c357d2caf4df47ed174c625cecc30ad55",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
