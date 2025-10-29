@@ -18,9 +18,9 @@ FSEntries, and print specific information about them.
 The iteration/enrichment part is mainly used by rbh-sync_ and rbh-fsevents_.
 The predicates/directives part is mainly used by rbh-find_.
 
-.. _rbh-sync: https://github.com/robinhood-suite/robinhood4/tree/main/rbh-sync
-.. _rbh-fsevents: https://github.com/robinhood-suite/robinhood4/tree/main/rbh-fsevents
 .. _rbh-find: https://github.com/robinhood-suite/robinhood4/tree/main/rbh-find
+.. _rbh-fsevents: https://github.com/robinhood-suite/robinhood4/tree/main/rbh-fsevents
+.. _rbh-sync: https://github.com/robinhood-suite/robinhood4/tree/main/rbh-sync
 
 Enrichment
 ==========
@@ -120,7 +120,7 @@ They correspond to which data is printed when using the `-printf` and
 
 .. _rbh-find: https://github.com/robinhood-suite/robinhood4/tree/main/rbh-find
 
-Similarly to the directives, most of the POSIX directives are the same ones
+Similarly to the predicates, most of the POSIX directives are the same ones
 provided by `find(1)`__, so we will only list the differences.
 
 .. __: find_
