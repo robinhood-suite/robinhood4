@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3c68f63b_687382b1",
+        "filename": "retention/update-retention/lib/directory.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-10-29T15:37:57Z",
+      "side": 1,
+      "message": "Handled later when the subprocess functions are moved to the other file",
+      "parentUuid": "637bfcc2_395de7e1",
+      "range": {
+        "startLine": 31,
+        "startChar": 15,
+        "endLine": 31,
+        "endChar": 44
+      },
+      "revId": "74be98e4b11c0f1721249c5d61828a29ea8e8efb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0ac30711_ba1c8cc8",
@@ -55,6 +79,24 @@
       "side": 1,
       "message": "+1",
       "parentUuid": "0ac30711_ba1c8cc8",
+      "revId": "74be98e4b11c0f1721249c5d61828a29ea8e8efb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "742a5b12_228992c8",
+        "filename": "retention/update-retention/rbh-update-retention.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-10-29T15:37:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fdabbbad_928b7c27",
       "revId": "74be98e4b11c0f1721249c5d61828a29ea8e8efb",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
