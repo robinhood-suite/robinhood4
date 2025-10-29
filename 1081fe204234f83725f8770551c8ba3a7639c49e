@@ -72,6 +72,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bc053450_930637d7",
+        "filename": "rbh-policy/rbhpolicy/config/utils.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-10-29T07:27:10Z",
+      "side": 1,
+      "message": "It\u0027s true, we already talked about it but I forgot to delete me draft :).",
+      "parentUuid": "dbc99392_f8842970",
+      "range": {
+        "startLine": 15,
+        "startChar": 8,
+        "endLine": 15,
+        "endChar": 12
+      },
+      "revId": "1081fe204234f83725f8770551c8ba3a7639c49e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "06960094_a0a29602",
@@ -274,6 +298,30 @@
       "side": 1,
       "message": "We talked about this aswell, anybody writing \"100B\" for a size means 100 bytes. The people that will use this policy engine are admins who know at least a bit about computer science.",
       "parentUuid": "95638d6c_755b355b",
+      "range": {
+        "startLine": 81,
+        "startChar": 9,
+        "endLine": 81,
+        "endChar": 11
+      },
+      "revId": "1081fe204234f83725f8770551c8ba3a7639c49e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7a561dd6_79661529",
+        "filename": "rbh-policy/rbhpolicy/config/utils.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-10-29T07:27:10Z",
+      "side": 1,
+      "message": "Yes I know but in this case if a user writes: `Size \u003e 100M` here we should interpret `100 megabytes`? Or `100 million`?",
+      "parentUuid": "54814a13_68adc01a",
       "range": {
         "startLine": 81,
         "startChar": 9,
