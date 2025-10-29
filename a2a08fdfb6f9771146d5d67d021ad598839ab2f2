@@ -22,6 +22,30 @@
       },
       "revId": "a2a08fdfb6f9771146d5d67d021ad598839ab2f2",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "61f1db74_cdead30c",
+        "filename": "retention/update-retention/rbh-update-retention.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-10-29T15:42:13Z",
+      "side": 1,
+      "message": "I\u0027d rather keep it because the previous says that the directory (with its name) expiration date is set to XXX, so it expires in countdown. Feels more natural IMO",
+      "parentUuid": "aa89b250_f8f39342",
+      "range": {
+        "startLine": 144,
+        "startChar": 16,
+        "endLine": 144,
+        "endChar": 19
+      },
+      "revId": "a2a08fdfb6f9771146d5d67d021ad598839ab2f2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
