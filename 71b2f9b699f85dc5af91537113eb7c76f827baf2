@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ab920063_7c4b711e",
+        "filename": "retention/update-retention/lib/directory.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-10-29T15:40:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a123eb5d_3e08d407",
+      "range": {
+        "startLine": 17,
+        "startChar": 53,
+        "endLine": 17,
+        "endChar": 55
+      },
+      "revId": "71b2f9b699f85dc5af91537113eb7c76f827baf2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fac9c226_7d0eb086",
@@ -47,6 +71,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "82cee4ff_1a4a0287",
+        "filename": "retention/update-retention/rbh-update-retention.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-10-29T15:40:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fac9c226_7d0eb086",
+      "range": {
+        "startLine": 70,
+        "startChar": 14,
+        "endLine": 70,
+        "endChar": 15
+      },
+      "revId": "71b2f9b699f85dc5af91537113eb7c76f827baf2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c118e3e2_65aaa553",
@@ -60,6 +108,30 @@
       "writtenOn": "2025-10-27T07:55:08Z",
       "side": 1,
       "message": "minor: remove this line",
+      "range": {
+        "startLine": 76,
+        "startChar": 0,
+        "endLine": 76,
+        "endChar": 25
+      },
+      "revId": "71b2f9b699f85dc5af91537113eb7c76f827baf2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d8e85bd0_f10002f3",
+        "filename": "retention/update-retention/rbh-update-retention.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-10-29T15:40:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c118e3e2_65aaa553",
       "range": {
         "startLine": 76,
         "startChar": 0,
