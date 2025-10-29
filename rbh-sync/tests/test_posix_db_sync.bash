@@ -570,6 +570,21 @@ EOF
     ! (find_attribute '"ns.xattrs.path": "/dir"')
 }
 
+test_nb_children_two_sync()
+{
+    mkdir test
+    touch test/{1..5}
+
+    rbh_sync "rbh:posix:." "rbh:$db:$testdb"
+
+    find_attribute '"ns.xattrs.path": "/test"' '"xattrs.nb_children": 5'
+
+    rbh_sync "rbh:posix:." "rbh:$db:$testdb"
+
+    # FIXME this is wrong, we add nb_children twice
+    find_attribute '"ns.xattrs.path": "/test"' '"xattrs.nb_children": 10'
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
@@ -579,7 +594,8 @@ declare -a tests=(test_sync_2_files test_sync_size test_sync_3_files
                   test_sync_one_one_file test_sync_one test_sync_one_two_files
                   test_sync_symbolic_link test_sync_socket test_sync_fifo
                   test_sync_branch test_continue_sync_on_error
-                  test_stop_sync_on_error test_config test_sync_number_children)
+                  test_stop_sync_on_error test_config test_sync_number_children
+                  test_nb_children_two_sync)
 
 if [[ $WITH_MPI == true ]]; then
     tests+=(test_sync_number_children_mpi test_sync_large_path
