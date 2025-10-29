@@ -67,6 +67,48 @@ search_library(const char *dir, const char *prefix, struct rbh_list_node *head)
     return 0;
 }
 
+/**
+ * The `backend_name` given here, should look like this
+ * `<plugin>-<extension>-ext` or like this `<plugin>`.
+ *
+ * So we do the following procedure:
+ *  1) first find the last dash in the string
+ *  1) if there is no dash, then the `backend_name` doesn't correspond to an
+ *  extension, and it is wholly a plugin
+ *  3) otherwise, we check if what follows that dash is `ext`
+ *  4) if it isn't, then the `backend_name` corresponds to a plugin with a dash
+ *  in it (for instance, `mpi-file`)
+ *  5) if it is `ext`, then we "void" that part
+ *  6) then we get the last dash again from the start, consider what follows to
+ *  be the extension, and what precedes to be the plugin.
+ *
+ * XXX: there is an issue with this procedure if we have a `backend_name` of
+ * the following form: `<plugin>-<ext_part1>-<ext_part2>` (and also when there
+ * are even more dashes in the extension). In that case, the
+ * parsing will be invalid.
+ *
+ * But since that isn't the case at the time of writing this code, and isn't
+ * likely to change soon, we deemed it a non-issue.
+ */
+static void
+parse_plugin_and_extension(char *backend_name, char **plugin, char **extension)
+{
+    char *ext = strrchr(backend_name, '-');
+
+    if (ext && strcmp(ext + 1, "ext") == 0) {
+        char *last_part;
+
+        *ext = '\0';
+        last_part = strrchr(backend_name, '-');
+        *extension = last_part + 1;
+        *last_part = '\0';
+    } else {
+        *extension = NULL;
+    }
+
+    *plugin = backend_name;
+}
+
 static void
 print_backend_list(struct rbh_list_node *head)
 {
@@ -78,28 +120,25 @@ print_backend_list(struct rbh_list_node *head)
     rbh_list_foreach_safe(head, node, tmp, list) {
         char *backend_name = node->name + strlen(LIB_RBH_PREFIX);
         char *suffix_backend_name = strchr(backend_name, '.');
-        char *backend_name_copy = xstrdup(backend_name);
+        const struct rbh_backend_plugin *backend_plugin;
+        char *extension;
+        char *plugin;
 
-        if (suffix_backend_name) {
-            char *first_part = strtok(backend_name_copy, "-");
-            char *second_part = strtok(NULL, "-");
+        assert(suffix_backend_name);
+        *suffix_backend_name = '\0';
 
-            *suffix_backend_name = '\0';
+        parse_plugin_and_extension(backend_name, &plugin, &extension);
 
-            if (second_part == NULL || strstr(second_part, "file")) {
-                if (rbh_backend_plugin_import(backend_name))
-                    printf("- %s\n", backend_name);
-            } else {
-                const struct rbh_backend_plugin *backend_plugin;
-
-                backend_plugin = rbh_backend_plugin_import(first_part);
-                if (backend_plugin != NULL) {
-                    if (rbh_plugin_load_extension(&backend_plugin->plugin,
-                                                  second_part))
-                        printf("    - %s\n", second_part);
-                }
-            }
+        backend_plugin = rbh_backend_plugin_import(plugin);
+        if (backend_plugin == NULL) {
+            fprintf(stderr, "Failed to import plugin '%s'\n", plugin);
+            continue;
         }
+
+        if (extension == NULL)
+            printf("- %s\n", plugin);
+        else if (rbh_plugin_load_extension(&backend_plugin->plugin, extension))
+            printf("    - %s\n", extension);
 
         free(node->name);
         free(node);
