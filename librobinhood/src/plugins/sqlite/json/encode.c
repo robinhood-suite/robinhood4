@@ -166,6 +166,10 @@ map2json(const struct rbh_value_map *map, struct rbh_sstack *sstack)
         json_t *subobject;
         json_t *value;
 
+        // FIXME this is very hugly...
+        if (!strcmp(map->pairs[i].key, "nb_children"))
+            continue;
+
         value = value2json(map->pairs[i].value, sstack);
         if (!value) {
             json_decref(object);
