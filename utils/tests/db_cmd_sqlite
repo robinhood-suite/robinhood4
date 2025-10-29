@@ -345,9 +345,13 @@ def db_avgsize(db: str, filters: List[str]):
     pass
 
 def source(db: str, filters: List[str]):
-    print("posix")
-    print("lustre")
-    print("retention")
+    with sqlite3.connect(db) as con:
+        cursor = con.cursor()
+        cursor.execute("select plugin, extensions from info")
+        res = cursor.fetchone()
+        print(res[0])
+        for ext in json.loads(res[1]):
+            print(ext)
 
 
 def usage(progname: str):
