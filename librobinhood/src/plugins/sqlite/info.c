@@ -528,6 +528,29 @@ err_info:
     return NULL;
 }
 
+static json_t *
+backend_mountpoint(struct sqlite_backend *sqlite, json_t *previous_info)
+{
+    const char *query = "select mountpoint from info";
+    json_t *info = previous_info ? : json_object();
+    const char *mountpoint = NULL;
+    struct sqlite_cursor cursor;
+
+    if (!(sqlite_cursor_setup(sqlite, &cursor) &&
+          sqlite_setup_query(&cursor, query)))
+        return NULL;
+
+    if (!sqlite_cursor_step(&cursor))
+        return NULL;
+
+    mountpoint = sqlite_cursor_get_string(&cursor);
+    json_object_set_new(info, "mountpoint", json_string(mountpoint));
+
+    sqlite_cursor_fini(&cursor);
+
+    return info;
+}
+
 struct rbh_value_map *
 sqlite_backend_get_info(void *backend, int flags)
 {
@@ -551,6 +574,8 @@ sqlite_backend_get_info(void *backend, int flags)
         info = backend_sync_info(sqlite, info, true);
     if (flags & RBH_INFO_LAST_SYNC)
         info = backend_sync_info(sqlite, info, false);
+    if (flags & RBH_INFO_MOUNTPOINT)
+        info = backend_mountpoint(sqlite, info);
 
     if (!info)
         return NULL;
