@@ -65,8 +65,12 @@ def parse_filter(filters: List[str]):
             yield ("ns", "", "", value)
         elif key == "ns.xattrs.parent_id":
             yield ("ns", "parent_id", key[len("ns.xattrs.parent_id"):], value)
-        elif key.startswith("ns.xattrs."):
-            yield ("ns", "xattrs", key[len("ns.xattrs."):], value)
+        elif key.startswith("ns.xattrs.") or key.startswith("ns.0.xattrs."):
+            if key.startswith("ns.xattrs."):
+                yield ("ns", "xattrs", key[len("ns.xattrs."):], value)
+            else:
+                yield ("ns", "xattrs", key[len("ns.0.xattrs."):], value)
+
         elif key.startswith("xattrs."):
             yield ("entries", "xattrs", key[len("xattrs."):], value)
         elif key.startswith("statx."):
@@ -117,11 +121,15 @@ def build_query(output: str, filters: List[str]):
             if "$exists" in v:
                 # Logic is reversed: exists: true means not NULL
                 negate = "not " if v["$exists"] else ""
+                if attribute == "":
+                     continue
                 query += f"json_extract({table}.{column}, '$.{attribute}') is {negate}NULL and "
             elif "$size" in v:
+                if table != "ns" or column != "" or attribute != "":
+                    logger.error("$size only supported for 'ns'")
+                    sys.exit(1)
+                query += f"entries.id in (select id from ns group by id having count(*) = ?) and "
                 data = data + (v["$size"],)
-                logger.error("$size not supported yet")
-                sys.exit(1)
         else:
             if isinstance(v, BinData):
                 data = data + (v.value,)
