@@ -891,7 +891,7 @@ lustre_changelog_iter_destroy(void *iterator)
 
         rc = lustre_changelog_set_last_read(records);
         if (rc < 0)
-            error(EXIT_FAILURE, -rc, "Failed to set backend_fsevents info\n");
+            error(EXIT_FAILURE, -rc, "Failed to set backend_fsevents info");
 
         free(records->username);
     }
