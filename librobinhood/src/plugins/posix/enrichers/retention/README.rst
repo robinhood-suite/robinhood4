@@ -15,9 +15,9 @@ filtering and printing.
 The first part is mainly used by rbh-sync_ and rbh-fsevents_.
 The second part is used by rbh-find_.
 
-.. _rbh-sync: https://github.com/robinhood-suite/robinhood4/tree/main/rbh-sync
-.. _rbh-fsevents: https://github.com/robinhood-suite/robinhood4/tree/main/rbh-fsevents
 .. _rbh-find: https://github.com/robinhood-suite/robinhood4/tree/main/rbh-find
+.. _rbh-fsevents: https://github.com/robinhood-suite/robinhood4/tree/main/rbh-fsevents
+.. _rbh-sync: https://github.com/robinhood-suite/robinhood4/tree/main/rbh-sync
 
 Enrichment
 ==========
