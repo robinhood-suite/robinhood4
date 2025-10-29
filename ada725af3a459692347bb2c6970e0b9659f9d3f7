@@ -16,6 +16,24 @@
       "message": "style: add an empty line below",
       "revId": "ada725af3a459692347bb2c6970e0b9659f9d3f7",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "325eded0_c64baf72",
+        "filename": "rbh-info/include/info.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-10-29T10:23:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f3afd50b_8bd32ee0",
+      "revId": "ada725af3a459692347bb2c6970e0b9659f9d3f7",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
