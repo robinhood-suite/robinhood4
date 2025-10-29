@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a9535865_ae8ffd7a",
+        "filename": "retention/update-retention/rbh-update-retention.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-10-29T15:19:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3c88865f_a320b538",
+      "range": {
+        "startLine": 78,
+        "startChar": 4,
+        "endLine": 78,
+        "endChar": 40
+      },
+      "revId": "a549b602a1130a5ed9052a01aa42da3c7decaf55",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3da223db_7dcaa3ab",
@@ -55,6 +79,24 @@
       "side": 1,
       "message": "In my opinion, this will only display the error message itself, excluding the usual context Python provides when an exception occurs, such as the traceback showing where in the code the error happened.",
       "parentUuid": "3da223db_7dcaa3ab",
+      "revId": "a549b602a1130a5ed9052a01aa42da3c7decaf55",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9ce6aa34_92494af7",
+        "filename": "retention/update-retention/rbh-update-retention.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-10-29T15:19:30Z",
+      "side": 1,
+      "message": "Yes exactly",
+      "parentUuid": "d6d53962_5861d8c2",
       "revId": "a549b602a1130a5ed9052a01aa42da3c7decaf55",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
