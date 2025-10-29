@@ -96,6 +96,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "be5c80b5_49b533bd",
+        "filename": "librobinhood/src/plugins/posix/filter.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 692,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-10-29T09:54:44Z",
+      "side": 1,
+      "message": "As discussed, we\u0027ll keep it that way without worrying about the parents.",
+      "parentUuid": "31a3cf1b_d2667e45",
+      "range": {
+        "startLine": 692,
+        "startChar": 19,
+        "endLine": 692,
+        "endChar": 27
+      },
+      "revId": "8a4e751677275237e1bb8b3d18e8b73fecb26d08",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "313e5758_6f5fdab0",
