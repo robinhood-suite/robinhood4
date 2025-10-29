@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f3afd50b_8bd32ee0",
+        "filename": "rbh-info/include/info.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-10-29T08:49:08Z",
+      "side": 1,
+      "message": "style: add an empty line below",
+      "revId": "ada725af3a459692347bb2c6970e0b9659f9d3f7",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
