@@ -558,6 +558,30 @@
       },
       "revId": "e1c382c5b27fa1eb9b10fd5250dc4f4936ac7122",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "74548c6e_1714d549",
+        "filename": "librobinhood/src/sstack.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-10-30T08:29:27Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "2360f5cd_015b06c3",
+      "range": {
+        "startLine": 175,
+        "startChar": 8,
+        "endLine": 175,
+        "endChar": 21
+      },
+      "revId": "e1c382c5b27fa1eb9b10fd5250dc4f4936ac7122",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
