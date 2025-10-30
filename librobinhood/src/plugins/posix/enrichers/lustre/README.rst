@@ -37,6 +37,7 @@ Here are the additional information enrichment for the POSIX plugin:
    * FID
    * layout flags
    * mirror count for composite entries
+   * project ID
    * per component (composite entries have multiple components, non-composite
      have a single one):
      * stripe_count
@@ -98,6 +99,18 @@ A predicate that filters entries based on an OST index.
     /dir/file-on-ost-1
     /dir/file-on-ost-2
     /dir/file-on-ost-1-and-2
+
+-project-id
+-----------
+
+A predicate that filters entries based on a project ID.
+
+.. code:: bash
+
+    rbh-find rbh:mongo:test -project-id 1
+    /dir-for-project1
+    /dir-for-project1/file-0
+    /dir-for-project1/file-1
 
 -stripe-count
 -------------
