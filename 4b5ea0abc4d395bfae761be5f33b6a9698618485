@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5eb80499_794098a3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-10-30T10:40:16Z",
+      "side": 1,
+      "message": "typo: disregard",
+      "range": {
+        "startLine": 11,
+        "startChar": 17,
+        "endLine": 11,
+        "endChar": 26
+      },
+      "revId": "4b5ea0abc4d395bfae761be5f33b6a9698618485",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fb26466a_1cbe6c31",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-10-30T10:40:16Z",
+      "side": 1,
+      "message": "question: I\u0027m not sure I understand, in the sync code, when we sync a directory, we set its children counter to 0, and then increment it, which seems to be the correct behaviour ?",
+      "range": {
+        "startLine": 11,
+        "startChar": 14,
+        "endLine": 12,
+        "endChar": 16
+      },
+      "revId": "4b5ea0abc4d395bfae761be5f33b6a9698618485",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
