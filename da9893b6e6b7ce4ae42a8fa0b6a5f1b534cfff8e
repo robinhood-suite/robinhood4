@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c08746a2_4434d25a",
+        "filename": "retention/update-retention/tests/meson.build",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-10-30T09:44:37Z",
+      "side": 1,
+      "message": "minor: I think you forgot to remove these lines",
+      "range": {
+        "startLine": 18,
+        "startChar": 0,
+        "endLine": 27,
+        "endChar": 11
+      },
+      "revId": "da9893b6e6b7ce4ae42a8fa0b6a5f1b534cfff8e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
