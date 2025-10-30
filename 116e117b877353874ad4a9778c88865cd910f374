@@ -16,6 +16,24 @@
       "message": "minor: to remove",
       "revId": "116e117b877353874ad4a9778c88865cd910f374",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6cbb070a_4c875e39",
+        "filename": "retention/update-retention/lib/directory.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-10-30T12:48:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ec535fee_318a624c",
+      "revId": "116e117b877353874ad4a9778c88865cd910f374",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
