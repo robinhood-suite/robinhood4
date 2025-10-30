@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ec535fee_318a624c",
+        "filename": "retention/update-retention/lib/directory.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-10-30T09:35:02Z",
+      "side": 1,
+      "message": "minor: to remove",
+      "revId": "116e117b877353874ad4a9778c88865cd910f374",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
