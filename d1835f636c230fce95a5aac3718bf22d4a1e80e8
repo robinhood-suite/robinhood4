@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ef8bc8a1_302c9aa3",
+        "filename": "librobinhood/src/plugins/sqlite/info.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-10-30T09:44:09Z",
+      "side": 1,
+      "message": "suggest: add an else line 242 that sets a bool, and check that bool is set line 244",
+      "range": {
+        "startLine": 241,
+        "startChar": 1,
+        "endLine": 245,
+        "endChar": 72
+      },
+      "revId": "d1835f636c230fce95a5aac3718bf22d4a1e80e8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
