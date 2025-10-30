@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "aea59977_c29aca4e",
+        "filename": "librobinhood/src/plugins/mongo/mongo.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 903,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-10-30T08:35:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "510fc74d_28ff0dcc",
+      "range": {
+        "startLine": 903,
+        "startChar": 42,
+        "endLine": 903,
+        "endChar": 43
+      },
+      "revId": "e26f63f4278e9934a34ee6647599da78caad16cd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a1a9f83a_f0a5160d",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-06-17T07:28:45Z",
       "side": 1,
       "message": "style: tab",
+      "range": {
+        "startLine": 50,
+        "startChar": 0,
+        "endLine": 50,
+        "endChar": 1
+      },
+      "revId": "e26f63f4278e9934a34ee6647599da78caad16cd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d42b2782_e09cb781",
+        "filename": "librobinhood/src/plugins/sqlite/backend.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-10-30T08:35:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a1a9f83a_f0a5160d",
       "range": {
         "startLine": 50,
         "startChar": 0,
@@ -108,6 +156,30 @@
       "side": 1,
       "message": "```\nsqlite_backend_get_info():\n    info \u003d json_object\n\n    if flags \u0026 BACKEND_SOURCE:\n        json_t *backend_source \u003d backend_source(sqlite)\n        json_object_set_new(info, \"backend_source\", backend_source)\n\n    if flags \u0026 SIZE:\n        json_t *size \u003d backend_size(sqlite)\n        json_object_set_new(info, \"size\", size)\n        \n    json2value_map(info, map, sqlite-\u003esstack);```",
       "parentUuid": "f7afce43_bc5f1e72",
+      "range": {
+        "startLine": 250,
+        "startChar": 36,
+        "endLine": 250,
+        "endChar": 40
+      },
+      "revId": "e26f63f4278e9934a34ee6647599da78caad16cd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bfeb5329_43a5350d",
+        "filename": "librobinhood/src/plugins/sqlite/info.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-10-30T08:35:45Z",
+      "side": 1,
+      "message": "ping",
+      "parentUuid": "cd33837e_62578404",
       "range": {
         "startLine": 250,
         "startChar": 36,
