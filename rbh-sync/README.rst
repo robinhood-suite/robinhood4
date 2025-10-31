@@ -1,5 +1,5 @@
 .. This file is part of Robinhood 4
-   Copyright (C) 2019 Commissariat a l'energie atomique et aux energies
+   Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
                       alternatives
 
    SPDX-License-Identifer: LGPL-3.0-or-later
@@ -30,7 +30,7 @@ for the RobinHood scheme is detailed in the `library's documentation`__. Here
 are the key takeaways:
 
 * RobinHood URIs always start with ``rbh:``;
-* followed by a type of backend (currently either ``mongo`` or ``posix``); [#]_
+* followed by a type of backend; [#]_
 * another colon (":");
 * and a filesystem identifier, which we call an ``fsname``.
 
@@ -47,7 +47,8 @@ This references a (whole) backend.
 The syntax for ``fsname`` depends on the backend's type:
 
 * for ``mongo`` it can pretty much be anything you want; [#]_
-* for ``posix`` or ``lustre`` it must be the path to the backend's root.
+* for ``posix`` backend it must be the path to the backend's root;
+* for ``s3`` no need to specify it.
 
 ::
 
@@ -57,12 +58,14 @@ The syntax for ``fsname`` depends on the backend's type:
     rbh:posix:/scratch
     rbh:lustre:/work
     rbh:mongo:scratch
+    rbh:s3:
 
 Optionnally, you can append a ``#``, followed by either:
 
 * a path (relative to the backend's root);
 * or an fsentry_'s ID enclosed in brackets ("[", "]"), or a FID if the backend
-  manages entries of a Lustre filesystem.
+  manages entries of a Lustre filesystem;
+* a bucket for the S3 plugin.
 
 This references a particular fsentry in a backend.
 
@@ -71,6 +74,7 @@ This references a particular fsentry in a backend.
     rbh:posix:/scratch#testuser/somedir
     rbh:lustre:/work#testuser2/somedirbis
     rbh:mongo:scratch#[0x200000007:0x1:0x0]
+    rbh:s3:#myBucket
 
 We choose not to put an example with a regular fsentry's ID here, as they are
 impractical to write on a command line.
@@ -139,12 +143,28 @@ comparable to that of a local filesystem: `eventual consistency`__.
 Parallelism
 -----------
 
-rbh-sync is fundamentally a single-threaded program. There is no plan to
-parallelize it any time in the future.
+rbh-sync can be parallelized using the MPI iterators available for the POSIX and
+S3 plugins. The iterator to used need to be specify inside the configuration
+file under the `backends` section.
 
-Nevertheless, rbh-sync being a single-threaded program does not mean you cannot
-run several instances of it, in parallel. The following script should therefore
-provide a reasonable amount of parallelization, without sacrificing consistency.
+.. code:: yaml
+
+    backends:
+        posix-mpi:
+            extends: posix
+            iterator: mpi
+
+You only need to specify that you want to use the `posix-mpi` backend you just
+defined in the configuration and launch rbh-sync with mpirun.
+
+.. code:: bash
+
+    mpirun -np 16 rbh-sync rbh:posix-mpi:/scratch rbh:mongo:scratch
+
+If you don't want to use MPI, you can still run several instances of rbh-sync
+in parallel to synchronizes a backend using the branching. The following script
+should therefore provide a reasonable amount of parallelization, without
+sacrificing consistency.
 
 .. code:: bash
 
@@ -153,7 +173,3 @@ provide a reasonable amount of parallelization, without sacrificing consistency.
     done
     rbh-sync --one rbh:posix:/scratch rbh:mongo:scratch &
     wait
-
-Also, since rbh-sync heavily relies on the backends' implementation, if these
-were to implement any sort of parallelization, rbh-sync would transparently
-benefit from it.
