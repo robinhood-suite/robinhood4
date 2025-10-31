@@ -13,17 +13,6 @@ rbh-find is a close twin of `find(1)`__.
 .. __: find_
 .. _find: http://man7.org/linux/man-pages/man1/find.1.html
 
-A work in progress
-==================
-
-rbh-find is a close twin of `find(1)`__. At least it aims at being one. Right
-now, it is more like the child version of find's twin.
-
-The structure of the project is all done. The rest should be easy enough.
-Feel free to contribute!
-
-.. __: find_
-
 Usage
 =====
 
@@ -217,8 +206,20 @@ time to build the queries would increase as we exclude more and more entries.
 mpi-file backend
 ----------------
 
-Only the ``-name``, ``-path``, ``-size``, ``-type``, ``-[acm]time`` and
-``-[acm]min`` predicates are supported by rbh-find with the mpi-file backend.
+To check the available predicates for the mpi-file backend, have a look at
+mpi-file_'s documentation.
+
+.. _mpi-file:
+    https://github.com/robinhood-suite/robinhood4/tree/main/librobinhood/src/plugins/mpi_file/README.rst
+
+S3 backend
+----------
+
+To check the available predicates for the s3 backend, have a look at s3_'s
+documentation.
+
+.. _s3:
+    https://github.com/robinhood-suite/robinhood4/tree/main/librobinhood/src/plugins/s3/README.rst
 
 Extra features
 ==============
