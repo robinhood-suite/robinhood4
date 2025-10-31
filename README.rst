@@ -23,12 +23,17 @@ The main components of RobinHood are:
  - rbh-sync_ to synchronize two backends
  - rbh-fsevents_ to update a backend with changelog events
  - rbh-find_ to query a backend and filter entries
+ - rbh-report_ to get aggregate statistics about a backend
+ - rbh-info_ to get general information about a backend
+ - rbh-undelete_ to undelete an entry
 
 .. _librobinhood: https://github.com/robinhood-suite/robinhood4/tree/main/librobinhood
 .. _rbh-sync: https://github.com/robinhood-suite/robinhood4/tree/main/rbh-sync
 .. _rbh-fsevents: https://github.com/robinhood-suite/robinhood4/tree/main/rbh-fsevents
 .. _rbh-find: https://github.com/robinhood-suite/robinhood4/tree/main/rbh-find
+.. _rbh-report: https://github.com/robinhood-suite/robinhood4/tree/main/rbh-report
 .. _rbh-info: https://github.com/robinhood-suite/robinhood4/tree/main/rbh-info
+.. _rbh-undelete: https://github.com/robinhood-suite/robinhood4/tree/main/rbh-undelete
 .. _Lustre: https://lustre.org
 
 Installation
@@ -43,13 +48,15 @@ Download the sources:
 
 RobinHood supports various backends that can be optionally enabled.
 To change the defaults, you need to update the file `meson_options.txt`.
-It supports 3 options:
+It supports 5 options:
 
  - `lustre`: enabled by default, build the `lustre` extention;
  - `mfu`: enabled by default, build `posix-mpi`, `lustre-mpi` and `mpi-file`
    backends. Both `lustre` and `mfu` must be enabled to build the `lustre-mpi`
    backend;
  - `hestia`: disabled by default, build the `hestia` backend;
+ - `s3`: disabled by default, build the `s3` backend;
+ - `sqlite`: disabled by default, build the `sqlite` backend;
 
 Build and install with meson_ and ninja_:
 
