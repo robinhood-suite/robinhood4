@@ -22,6 +22,30 @@
       },
       "revId": "d1835f636c230fce95a5aac3718bf22d4a1e80e8",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b74e3176_2b6eede8",
+        "filename": "librobinhood/src/plugins/sqlite/info.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-11-01T09:50:29Z",
+      "side": 1,
+      "message": "You want to check whether we where passed keys other than the ones listed here?",
+      "parentUuid": "ef8bc8a1_302c9aa3",
+      "range": {
+        "startLine": 241,
+        "startChar": 1,
+        "endLine": 245,
+        "endChar": 72
+      },
+      "revId": "d1835f636c230fce95a5aac3718bf22d4a1e80e8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
