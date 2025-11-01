@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "68cf1f54_1f4bf326",
+        "filename": "librobinhood/src/plugins/sqlite/info.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 463,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-11-01T09:52:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fdc760b8_1fea01d2",
+      "range": {
+        "startLine": 463,
+        "startChar": 4,
+        "endLine": 463,
+        "endChar": 34
+      },
+      "revId": "77d728203ea12389ef437d8347738b3b9975d52d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "876a220b_f1bf4525",
@@ -41,6 +65,24 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "092f1109_229ec75e",
+        "filename": "librobinhood/src/plugins/sqlite/info.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 481,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-11-01T09:52:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "876a220b_f1bf4525",
+      "revId": "77d728203ea12389ef437d8347738b3b9975d52d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c62cfc50_69a54204",
@@ -54,6 +96,24 @@
       "writtenOn": "2025-10-30T09:04:24Z",
       "side": 1,
       "message": "major: you need to free `full_query`",
+      "revId": "77d728203ea12389ef437d8347738b3b9975d52d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "94a3d5f6_ba740f79",
+        "filename": "librobinhood/src/plugins/sqlite/info.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 483,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-11-01T09:52:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c62cfc50_69a54204",
       "revId": "77d728203ea12389ef437d8347738b3b9975d52d",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
