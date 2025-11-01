@@ -188,6 +188,30 @@
       },
       "revId": "e26f63f4278e9934a34ee6647599da78caad16cd",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a7422ef7_d289ed4b",
+        "filename": "librobinhood/src/plugins/sqlite/info.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-11-01T09:45:33Z",
+      "side": 1,
+      "message": "There is no perfect solution. I prefer it like this since only the subfunctions have to worry about how the data should be encoded in the JSON object. Your solution splits that process in both the subfunctions and the get_info method.",
+      "parentUuid": "bfeb5329_43a5350d",
+      "range": {
+        "startLine": 250,
+        "startChar": 36,
+        "endLine": 250,
+        "endChar": 40
+      },
+      "revId": "e26f63f4278e9934a34ee6647599da78caad16cd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
