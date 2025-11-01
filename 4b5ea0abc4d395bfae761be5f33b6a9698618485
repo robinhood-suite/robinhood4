@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ba1af64b_e2290106",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-11-01T10:12:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5eb80499_794098a3",
+      "range": {
+        "startLine": 11,
+        "startChar": 17,
+        "endLine": 11,
+        "endChar": 26
+      },
+      "revId": "4b5ea0abc4d395bfae761be5f33b6a9698618485",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fb26466a_1cbe6c31",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-10-30T10:40:16Z",
       "side": 1,
       "message": "question: I\u0027m not sure I understand, in the sync code, when we sync a directory, we set its children counter to 0, and then increment it, which seems to be the correct behaviour ?",
+      "range": {
+        "startLine": 11,
+        "startChar": 14,
+        "endLine": 12,
+        "endChar": 16
+      },
+      "revId": "4b5ea0abc4d395bfae761be5f33b6a9698618485",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e8d71962_68723476",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-11-01T10:12:49Z",
+      "side": 1,
+      "message": "As discussed, we only ever increase the nb_children field. So setting it to 0 doesn\u0027t change the value. Hence the doubling of the value with two sync.",
+      "parentUuid": "fb26466a_1cbe6c31",
       "range": {
         "startLine": 11,
         "startChar": 14,
