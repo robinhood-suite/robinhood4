@@ -539,10 +539,19 @@ test_mdt_index_dir()
 
 test_mdt_hash()
 {
-    mkdir "test_mdt_hash1"
-    lfs migrate -m 0 -H all_char "test_mdt_hash1"
-    mkdir "test_mdt_hash2"
-    lfs migrate -m 0 -H fnv_1a_64 "test_mdt_hash2"
+    # Make sure to create directories on a different MDT as the migration.
+    # The MDT checks whether the migration is necessary or not. Since
+    # all_char is the default, test_mdt_hash1 is not actually migrated if
+    # test_mdt_hash1 is already on MDT0. Creating both directories on a
+    # different MDT forces the migration which makes the test always pass.
+    # The -v flags lets us see an error message when the directory is not
+    # actually migrated to make debuging easier.
+
+    lfs mkdir -i 1 "test_mdt_hash1"
+    lfs migrate -v -m 0 -H all_char "test_mdt_hash1"
+
+    lfs mkdir -i 1 "test_mdt_hash2"
+    lfs migrate -v -m 0 -H fnv_1a_64 "test_mdt_hash2"
 
     rbh_sync_lustre "." "rbh:$db:$testdb"
 
