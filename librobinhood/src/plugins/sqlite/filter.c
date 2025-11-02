@@ -1092,8 +1092,16 @@ sqlite_statement_from_filter(struct sqlite_iterator *iter,
             goto free_query;
     }
 
+    if (options->verbose)
+        printf("%s\n", sqlite3_expanded_sql(iter->cursor.stmt));
+
     free(full_query);
-    debug("query: %s", sqlite3_expanded_sql(iter->cursor.stmt));
+
+    if (options->dry_run) {
+        errno = ENODATA;
+        return false;
+    }
+
     return true;
 
 free_query:
