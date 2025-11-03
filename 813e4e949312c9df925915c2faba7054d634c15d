@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f81dc831_4eccb4d2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-11-03T13:06:47Z",
+      "side": 1,
+      "message": "```\n2/2 robinhood4:rbh-fsevents / test_rename FAIL             3.13s   exit status 1\n\n13:03:00 MALLOC_PERTURB_\u003d132 WITH_MPI\u003dfalse LD_LIBRARY_PATH\u003d:/home/valeriy/robinhood4/builddir/librobinhood/src/plugins/..:/home/valeriy/robinhood4/builddir/librobinhood/src/plugins/hestia:/home/valeriy/robinhood4/builddir/librobinhood/src/plugins/mongo:/home/valeriy/robinhood4/builddir/librobinhood/src/plugins/mpi_file:/home/valeriy/robinhood4/builddir/librobinhood/src/plugins/posix:/home/valeriy/robinhood4/builddir/librobinhood/src/plugins/posix/enrichers/lustre:/home/valeriy/robinhood4/builddir/librobinhood/src/plugins/posix/enrichers/retention:/home/valeriy/robinhood4/builddir/librobinhood/src/plugins/posix/iterators/mfu:/home/valeriy/robinhood4/builddir/librobinhood/src/plugins/s3:/home/valeriy/robinhood4/builddir/librobinhood/src/plugins/sqlite /home/valeriy/robinhood4/rbh-fsevents/tests/lustre/test_rename.bash\n----------------------------------- output -----------------------------------\nstdout:\nmdt.lustre-MDT0000.hsm_control\u003denabled\nmdt.lustre-MDT0001.hsm_control\u003denabled\nmdt.lustre-MDT0002.hsm_control\u003denabled\nmdt.lustre-MDT0003.hsm_control\u003denabled\ntest_rename_same_dir: ✖  (1s)\ntest_rename_different_dir: ✖  (0s)\ntest_rename_overwrite_data: ✖  (1s)\n exists archived, archive_id:1\ntest_rename_overwrite_data_with_hsm_copy: ✖  (1s)\nlustre-MDT0000: Deregistered changelog user #84\nstderr:\nwhich: no mongosh in (/sbin:/bin:/usr/sbin:/usr/bin)\nwhich: no mongosh in (/sbin:/bin:/usr/sbin:/usr/bin)\nwhich: no mongosh in (/sbin:/bin:/usr/sbin:/usr/bin)\nwhich: no mongosh in (/sbin:/bin:/usr/sbin:/usr/bin)\nwhich: no mongosh in (/sbin:/bin:/usr/sbin:/usr/bin)\n\u0027test_entry_renamed\u0027 is not located in the \u0027{ \"_id\" : BinData(0,\"AQCXAAAABAQAAAIAAAA2BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\u003d\") }\u0027 directory, but in \u0027{ \"ns\" : [ { \"parent\" : BinData(0,\"AQCXAAAABAQAAAIAAAA2BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\u003d\") } ] }\u0027\nwhich: no mongosh in (/sbin:/bin:/usr/sbin:/usr/bin)\nwhich: no mongosh in (/sbin:/bin:/usr/sbin:/usr/bin)\nwhich: no mongosh in (/sbin:/bin:/usr/sbin:/usr/bin)\nwhich: no mongosh in (/sbin:/bin:/usr/sbin:/usr/bin)\n\u0027test_entry_renamed\u0027 is not located in the \u0027{ \"_id\" : BinData(0,\"AQCXAAAABAQAAAIAAAA5BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\u003d\") }\u0027 directory, but in \u0027{ \"ns\" : [ { \"parent\" : BinData(0,\"AQCXAAAABAQAAAIAAAA5BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\u003d\") } ] }\u0027\nwhich: no mongosh in (/sbin:/bin:/usr/sbin:/usr/bin)\nwhich: no mongosh in (/sbin:/bin:/usr/sbin:/usr/bin)\nwhich: no mongosh in (/sbin:/bin:/usr/sbin:/usr/bin)\nwhich: no mongosh in (/sbin:/bin:/usr/sbin:/usr/bin)\n\u0027test_entry_renamed\u0027 is not located in the \u0027{ \"_id\" : BinData(0,\"AQCXAAAABAQAAAIAAAA9BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\u003d\") }\u0027 directory, but in \u0027{ \"ns\" : [ { \"parent\" : BinData(0,\"AQCXAAAABAQAAAIAAAA9BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\u003d\") } ] }\u0027\nwhich: no mongosh in (/sbin:/bin:/usr/sbin:/usr/bin)\nwhich: no mongosh in (/sbin:/bin:/usr/sbin:/usr/bin)\nwhich: no mongosh in (/sbin:/bin:/usr/sbin:/usr/bin)\nwhich: no mongosh in (/sbin:/bin:/usr/sbin:/usr/bin)\nwhich: no mongosh in (/sbin:/bin:/usr/sbin:/usr/bin)\nwhich: no mongosh in (/sbin:/bin:/usr/sbin:/usr/bin)\nwhich: no mongosh in (/sbin:/bin:/usr/sbin:/usr/bin)\n\u0027test_entry_renamed\u0027 is not located in the \u0027{ \"_id\" : BinData(0,\"AQCXAAAABAQAAAIAAABBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\u003d\") }\u0027 directory, but in \u0027{ \"ns\" : [ { \"parent\" : BinData(0,\"AQCXAAAABAQAAAIAAABBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\u003d\") } ] }\u0027\n\n```",
+      "revId": "813e4e949312c9df925915c2faba7054d634c15d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
