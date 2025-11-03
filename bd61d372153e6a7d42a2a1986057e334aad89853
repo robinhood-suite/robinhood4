@@ -34,6 +34,24 @@
       "parentUuid": "ae40bdd6_fa6d8677",
       "revId": "bd61d372153e6a7d42a2a1986057e334aad89853",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0e196fd5_69fc9da3",
+        "filename": "librobinhood/include/robinhood/sstack.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-11-03T08:17:05Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "4f4b8bff_f9086b6f",
+      "revId": "bd61d372153e6a7d42a2a1986057e334aad89853",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
