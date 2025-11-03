@@ -16,6 +16,29 @@
       "message": "```\n 8/11 robinhood4:rbh-sync / test_posix_db_sync_mpi      FAIL            33.82s   exit status 1\n11:54:28 LD_LIBRARY_PATH\u003d:/home/valeriy/robinhood4/builddir/librobinhood/src/plugins/..:/home/valeriy/robinhood4/builddir/librobinhood/src/plugins/hestia:/home/valeriy/robinhood4/builddir/librobinhood/src/plugins/mongo:/home/valeriy/robinhood4/builddir/librobinhood/src/plugins/mpi_file:/home/valeriy/robinhood4/builddir/librobinhood/src/plugins/posix:/home/valeriy/robinhood4/builddir/librobinhood/src/plugins/posix/enrichers/lustre:/home/valeriy/robinhood4/builddir/librobinhood/src/plugins/posix/enrichers/retention:/home/valeriy/robinhood4/builddir/librobinhood/src/plugins/posix/iterators/mfu:/home/valeriy/robinhood4/builddir/librobinhood/src/plugins/s3:/home/valeriy/robinhood4/builddir/librobinhood/src/plugins/sqlite MALLOC_PERTURB_\u003d185 WITH_MPI\u003dtrue /home/valeriy/robinhood4/rbh-sync/tests/test_posix_db_sync.bash\n----------------------------------- output -----------------------------------\nstdout:\ntest_sync_2_files: ✔  (0s)\ntest_sync_size: ✔  (1s)\ntest_sync_3_files: ✔  (1s)\ntest_sync_xattrs: ✔  (1s)\ntest_sync_subdir: ✔  (1s)\ntest_sync_large_tree: ✔  (7s)\ntest_sync_one_one_file: ✔  (1s)\ntest_sync_one: ✔  (1s)\ntest_sync_one_two_files: ✔  (0s)\ntest_sync_symbolic_link: ✔  (0s)\ntest_sync_socket: ✔  (0s)\ntest_sync_fifo: ✔  (1s)\ntest_sync_branch: ✔  (5s)\nFailed to open \u0027/test2\u0027: Permission denied (13)\nFailed to open \u0027/dir\u0027: Permission denied (13)\n[2025-11-03T11:54:47] [0] [/builddir/build/BUILD/mpifileutils-0.12/src/common/mfu_flist_walk.c:318] ERROR: Failed to open directory with opendir: \u0027/tmp/tmp.NncyhKMLSc/test_posix_db_sync-test_continue_sync_on_error/dir\u0027 (errno\u003d13 Permission denied)\ntest_continue_sync_on_error: ✔  (2s)\ntest_stop_sync_on_error: ✔  (3s)\ntest_config: ✔  (2s)\nNo entry found with filter \u0027\"ns.xattrs.path\": \"/dir1/fileA\" \"xattrs.nb_children\": {$exists: true}\u0027\ntest_sync_number_children: ✔  (2s)\nNo entry found with filter \u0027\"ns.xattrs.path\": \"/test\" \"xattrs.nb_children\": 5\u0027\ntest_nb_children_two_sync: ✖  (1s)\ntest_sync_number_children_mpi: ✔  (2s)\n```",
       "revId": "ed9e77c538ad403db1cbacbb104a779df1c9358b",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "efd0dd89_3ce3c251",
+        "filename": "rbh-sync/tests/test_posix_db_sync.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 578,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-11-03T15:16:43Z",
+      "side": 1,
+      "message": "defect: You need to use `rbh_sync_posix \".\" \"rbh:$db:$testdb\"`, otherwise if we launch the tests with MPI, it will launch N rbh_sync witht the FTS iterator.",
+      "range": {
+        "startLine": 578,
+        "startChar": 4,
+        "endLine": 578,
+        "endChar": 26
+      },
+      "revId": "ed9e77c538ad403db1cbacbb104a779df1c9358b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
