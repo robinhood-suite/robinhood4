@@ -14,11 +14,16 @@ Source0: %{name}-%{version}.tar.xz
 # --with mfu       ||   %%_with_mfu 1    || force libmfu as dependency
 # --with hestia    ||   %%_with_hestia 1 || force hestia as dependency
 # --with s3        ||   %%_with_s3 1     || force s3 as dependency
+# --with man       ||   %%_with_man 1    || build man pages
 
 %bcond_without lustre
 %bcond_with mfu
 %bcond_with hestia
 %bcond_with s3
+%bcond_with man
+
+# FIXME to remove when rbhpolicy is correctly packaged
+%define _unpackaged_files_terminate_build 0
 
 Conflicts: robinhood
 
@@ -68,6 +73,9 @@ BuildRequires: hestia-devel
 %if %{with mfu}
 BuildRequires: openmpi-devel
 BuildRequires: libmfu-devel
+%endif
+%if %{with man}
+BuildRequires: python3-sphinx
 %endif
 
 %description
@@ -125,6 +133,12 @@ OPTS=""
     OPTS+="-Ds3=disabled "
 %endif
 
+%if %{with man}
+    OPTS+="-Dman=enabled "
+%else
+    OPTS+="-Dman=disabled "
+%endif
+
 %meson $OPTS
 %meson_build
 
@@ -157,6 +171,9 @@ OPTS=""
 %{_bindir}/rbh-undelete
 %{_bindir}/rbh-update-retention
 %{_bindir}/rbh-report
+%if %{with man}
+%{_mandir}/man1/*
+%endif
 
 %config(noreplace) %{_sysconfdir}/robinhood4.d/default.yaml
 
