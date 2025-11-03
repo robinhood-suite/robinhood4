@@ -7,3 +7,7 @@
 install_data('template_conf.yaml',
              install_dir: '/etc/robinhood4.d',
              rename: 'default.yaml')
+
+if get_option('man').enabled()
+    subdir('man')
+endif
