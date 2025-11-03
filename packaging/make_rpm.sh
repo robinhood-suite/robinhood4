@@ -28,6 +28,9 @@ fi
 if [ "$BUILD_HESTIA" == "True" ]; then
     opts+="--with hestia "
 fi
+if [ "$BUILD_MAN" == "True" ]; then
+    opts+="--with man "
+fi
 
 rpmbuild --define="_topdir $PWD/rpms" $opts \
     -ta "$BUILDDIR/meson-dist/robinhood4-$VERSION.tar.xz"
