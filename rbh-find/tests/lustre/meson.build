@@ -12,7 +12,8 @@ integration_tests = [
     'test_pool',
     'test_comp',
     'test_mdt_index',
-    'test_mdt_count'
+    'test_mdt_count',
+    'test_mirror',
 ]
 
 foreach t: integration_tests

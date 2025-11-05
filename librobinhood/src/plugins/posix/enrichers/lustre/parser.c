@@ -57,14 +57,19 @@ str2lustre_predicate(const char *string)
             return LPRED_LAYOUT_PATTERN;
         break;
     case 'm':
-        if (strncmp(&string[2], "dt-", 3))
+        switch (string[2]) {
+        case 'd':
+            if (strcmp(&string[3], "t-count") == 0)
+                return LPRED_MDT_COUNT;
+
+            if (strcmp(&string[3], "t-index") == 0)
+                return LPRED_MDT_INDEX;
             break;
-
-        if (strcmp(&string[5], "count") == 0)
-            return LPRED_MDT_COUNT;
-
-        if (strcmp(&string[5], "index") == 0)
-            return LPRED_MDT_INDEX;
+        case 'i':
+            if (strcmp(&string[3], "rror-count") == 0)
+                return LPRED_MIRROR_COUNT;
+            break;
+        }
         break;
     case 'o':
         if (strcmp(&string[2], "st") == 0)
@@ -108,6 +113,7 @@ static const char *__lustre_predicate2str[] = {
     [LPRED_POOL]           = "pool",
     [LPRED_STRIPE_COUNT]   = "stripe-count",
     [LPRED_STRIPE_SIZE]    = "stripe-size",
+    [LPRED_MIRROR_COUNT]   = "mirror-count",
 };
 
 const char *

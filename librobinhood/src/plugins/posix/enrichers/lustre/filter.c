@@ -48,6 +48,8 @@ static const struct rbh_filter_field predicate2filter_field[] = {
                               .xattr = "mdt_count"},
     [LPRED_MDT_INDEX]      = {.fsentry = RBH_FP_INODE_XATTRS,
                               .xattr = "mdt_index"},
+    [LPRED_MIRROR_COUNT]   = {.fsentry = RBH_FP_INODE_XATTRS,
+                              .xattr = "mirror_count"},
     [LPRED_OST_INDEX]      = {.fsentry = RBH_FP_INODE_XATTRS,
                               .xattr = "ost"},
     [LPRED_POOL]           = {.fsentry = RBH_FP_INODE_XATTRS,
@@ -661,6 +663,13 @@ mdt_count2filter(const char *mdt_count)
                               RBH_FOP_EQUAL);
 }
 
+static struct rbh_filter *
+mirror_count2filter(const char *mirror_count)
+{
+    return rbh_numeric2filter(get_filter_field(LPRED_MIRROR_COUNT),
+                              mirror_count, RBH_FOP_EQUAL);
+}
+
 struct rbh_filter *
 rbh_lustre_build_filter(const char **argv, int argc, int *index,
                         __attribute__((unused)) bool *need_prefetch)
@@ -707,6 +716,9 @@ rbh_lustre_build_filter(const char **argv, int argc, int *index,
         break;
     case LPRED_MDT_INDEX:
         filter = mdt_index2filter(argv[++i]);
+        break;
+    case LPRED_MIRROR_COUNT:
+        filter = mirror_count2filter(argv[++i]);
         break;
     case LPRED_OST_INDEX:
         filter = ost_index2filter(argv[++i]);
