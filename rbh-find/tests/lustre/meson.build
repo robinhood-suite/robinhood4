@@ -13,7 +13,8 @@ integration_tests = [
     'test_project_id',
     'test_comp',
     'test_mdt_index',
-    'test_mdt_count'
+    'test_mdt_count',
+    'test_mirror',
 ]
 
 foreach t: integration_tests

@@ -1070,7 +1070,9 @@ rbh_lustre_helper(__attribute__((unused)) const char *backend,
         "    -comp-count [+-]COUNT\n"
         "                         filter entries base on their component count.\n"
         "    -mdt-count  [+-]COUNT\n"
-        "                         filter entries based on their MDT count.\n");
+        "                         filter entries based on their MDT count.\n"
+        "    -mirror-count [+-]COUNT\n"
+        "                         filter entries based on their mirror count.\n");
 
     if (rc == -1)
         *predicate_helper = NULL;
