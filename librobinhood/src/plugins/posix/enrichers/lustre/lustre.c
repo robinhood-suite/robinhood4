@@ -660,9 +660,15 @@ xattrs_get_layout(int fd, struct rbh_value_pair *pairs, int available_pairs)
         /** The file is composite, so we add 3 more xattrs to the main alloc */
         nb_xattrs += 3;
         available_pairs -= 1;
+
     } else {
         nb_comp = 1;
     }
+
+    rc = fill_uint32_pair("comp_count", nb_comp, &pairs[subcount++], _values);
+    if (rc)
+        goto err;
+    available_pairs -= 1;
 
     init_iterator_data(&data, nb_comp, nb_xattrs);
 
@@ -1061,6 +1067,8 @@ rbh_lustre_helper(__attribute__((unused)) const char *backend,
         "                         filter entries based on their component's\n"
         "                         end values. `+` or `-` signs are\n"
         "                         not considered if given an interval in CSV.\n"
+        "    -comp-count [+-]COUNT\n"
+        "                         filter entries base on their component count.\n"
         "    -mdt-count  [+-]COUNT\n"
         "                         filter entries based on their MDT count.\n");
 
