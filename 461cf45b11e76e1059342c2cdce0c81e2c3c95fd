@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "64155444_106027dc",
+        "filename": "rbh-info/src/list.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-11-05T09:55:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6d967528_2f90f1d1",
+      "range": {
+        "startLine": 75,
+        "startChar": 15,
+        "endLine": 75,
+        "endChar": 21
+      },
+      "revId": "461cf45b11e76e1059342c2cdce0c81e2c3c95fd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "760351ba_7ee7cdcf",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-11-05T08:16:34Z",
       "side": 1,
       "message": "comment: just saw that `rbh_backend_plugin_import()` and `rbh_plugin_load_extension()` names do not seem to be constructed in the same way, as the verbs are not at the same place",
+      "range": {
+        "startLine": 117,
+        "startChar": 17,
+        "endLine": 117,
+        "endChar": 42
+      },
+      "revId": "461cf45b11e76e1059342c2cdce0c81e2c3c95fd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4bf0fea7_e2d3b503",
+        "filename": "rbh-info/src/list.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-11-05T09:55:27Z",
+      "side": 1,
+      "message": "I\u0027d say they\u0027re constructed the same way ? Exclusing `rbh`, the subject is either `backend_plugin` or `plugin`, then the action `import` or `load`, and the optionnal object `extension`.",
+      "parentUuid": "760351ba_7ee7cdcf",
       "range": {
         "startLine": 117,
         "startChar": 17,
