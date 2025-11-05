@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "009397b5_c0e81a8b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-11-05T08:06:37Z",
+      "side": 1,
+      "message": "You got a warning",
+      "revId": "b5903949c1d4a16bda15054d6fcb00fdf0e22124",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "662c44b9_3278f728",
+        "filename": "rbh-info/tests/test_list.bash",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-11-05T08:06:37Z",
+      "side": 1,
+      "message": "You have a warning this file is not executable, don\u0027t know is this is important with meson, maybe it call it using `bash`.",
+      "revId": "b5903949c1d4a16bda15054d6fcb00fdf0e22124",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
