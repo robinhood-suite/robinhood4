@@ -143,6 +143,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "997e374d_04724c34",
+        "filename": "librobinhood/src/plugins/posix/filter.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 725,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-11-05T09:08:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "313e5758_6f5fdab0",
+      "range": {
+        "startLine": 725,
+        "startChar": 23,
+        "endLine": 725,
+        "endChar": 38
+      },
+      "revId": "8a4e751677275237e1bb8b3d18e8b73fecb26d08",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "66e90836_8b87955d",
@@ -156,6 +180,30 @@
       "writtenOn": "2025-10-28T14:28:22Z",
       "side": 1,
       "message": "style: alignment",
+      "range": {
+        "startLine": 728,
+        "startChar": 40,
+        "endLine": 729,
+        "endChar": 45
+      },
+      "revId": "8a4e751677275237e1bb8b3d18e8b73fecb26d08",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "153eddb9_23e63fda",
+        "filename": "librobinhood/src/plugins/posix/filter.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 729,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-11-05T09:08:43Z",
+      "side": 1,
+      "message": "Yes but if I align the line 728, it will be too long",
+      "parentUuid": "66e90836_8b87955d",
       "range": {
         "startLine": 728,
         "startChar": 40,
