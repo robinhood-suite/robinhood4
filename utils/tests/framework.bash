@@ -86,11 +86,6 @@ rbh_retention()
 {
     PATH="$__retention_PATH:$PATH" "$__rbh_retention" "$@"
 }
-__mongo=$(which mongosh || which mongo)
-mongo()
-{
-    "$__mongo" --quiet "$@"
-}
 
 function version_code()
 {
