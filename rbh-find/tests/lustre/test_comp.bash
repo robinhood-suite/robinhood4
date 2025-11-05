@@ -73,11 +73,30 @@ test_comp_end()
         sort | difflines "/" "/$file"
 }
 
+test_comp_count()
+{
+    touch 1comp
+    lfs setstripe -E 1M -c 1 -S 256k -E 512M -c 2 -S 512k -E -1 -c -1 -S 1024k \
+        "3comp"
+    truncate -s 1M "3comp"
+
+    rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
+
+    rbh_find "rbh:$db:$testdb" -comp-count 3 | sort |
+        difflines "/3comp"
+    rbh_find "rbh:$db:$testdb" -comp-count -3 | sort |
+        difflines "/1comp"
+    rbh_find "rbh:$db:$testdb" -comp-count +0 | sort |
+        difflines "/1comp" "/3comp"
+    rbh_find "rbh:$db:$testdb" -not -comp-count 3 | sort |
+        difflines "/" "/1comp"
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
-declare -a tests=(test_comp_start test_comp_end)
+declare -a tests=(test_comp_start test_comp_end test_comp_count)
 
 LUSTRE_DIR=/mnt/lustre/
 cd "$LUSTRE_DIR"

@@ -627,5 +627,7 @@ rbh_map_find(const struct rbh_value_map *map, const char *key_to_find)
         subkey = next;
     }
 
+    free(key);
+
     return value;
 }

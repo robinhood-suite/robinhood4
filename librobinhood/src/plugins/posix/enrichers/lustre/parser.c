@@ -23,6 +23,11 @@ str2lustre_predicate(const char *string)
             break;
 
         switch (string[6]) {
+        case 'c':
+            if (!strcmp(&string[7], "ount"))
+                return LPRED_COMP_COUNT;
+
+            break;
         case 'e':
             if (!strcmp(&string[7], "nd"))
                 return LPRED_COMP_END;
@@ -98,6 +103,7 @@ rbh_lustre_check_valid_token(const char *token)
 }
 
 static const char *__lustre_predicate2str[] = {
+    [LPRED_COMP_COUNT]     = "comp-count",
     [LPRED_COMP_END]       = "comp-end",
     [LPRED_COMP_START]     = "comp-start",
     [LPRED_FID]            = "fid",
