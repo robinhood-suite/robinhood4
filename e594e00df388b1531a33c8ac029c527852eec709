@@ -22,6 +22,30 @@
       },
       "revId": "e594e00df388b1531a33c8ac029c527852eec709",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "93fb555e_2f93b734",
+        "filename": "rbh-info/rbh-info.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-11-05T09:12:47Z",
+      "side": 1,
+      "message": "The `name` is not malloc\u0027ed, so no need to free it, so it can be used here without issue.",
+      "parentUuid": "9e701acc_f2c23385",
+      "range": {
+        "startLine": 229,
+        "startChar": 35,
+        "endLine": 229,
+        "endChar": 39
+      },
+      "revId": "e594e00df388b1531a33c8ac029c527852eec709",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
