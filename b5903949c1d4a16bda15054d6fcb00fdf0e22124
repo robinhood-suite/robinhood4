@@ -33,6 +33,24 @@
       "message": "You have a warning this file is not executable, don\u0027t know is this is important with meson, maybe it call it using `bash`.",
       "revId": "b5903949c1d4a16bda15054d6fcb00fdf0e22124",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "abbdb577_0ee03ba2",
+        "filename": "rbh-info/tests/test_list.bash",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-11-05T08:22:59Z",
+      "side": 1,
+      "message": "I think it\u0027s just to point out that the file mode changed, not that there is an actual issue with it. Otherwise a mode change on a file would be hard to see. Also, I just \"aligned\" this test with many others which are non-executable.",
+      "parentUuid": "662c44b9_3278f728",
+      "revId": "b5903949c1d4a16bda15054d6fcb00fdf0e22124",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
