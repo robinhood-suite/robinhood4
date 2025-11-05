@@ -9,7 +9,11 @@ error()
     exit 1
 }
 
-__mongo=$(which mongosh || which mongo)
+__mongo="$(which mongosh 2>&1)"
+if [[ "$__mongo" == *"no mongosh"* ]]; then
+    __mongo=$(which mongo)
+fi
+
 mongo()
 {
     "$__mongo" --quiet "$@"
