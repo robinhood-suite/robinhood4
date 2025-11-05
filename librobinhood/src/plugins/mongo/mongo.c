@@ -836,7 +836,7 @@ mongo_insert_sync_metadata(mongoc_collection_t *collection,
     bson_t *update;
     bson_t *opts;
     int result;
-    int rc;
+    int rc = 0;
 
     update = bson_new();
 
