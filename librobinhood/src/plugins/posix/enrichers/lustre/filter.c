@@ -32,6 +32,8 @@
 #include "parser.h"
 
 static const struct rbh_filter_field predicate2filter_field[] = {
+    [LPRED_COMP_COUNT]     = {.fsentry = RBH_FP_INODE_XATTRS,
+                              .xattr = "comp_count"},
     [LPRED_COMP_END]       = {.fsentry = RBH_FP_INODE_XATTRS,
                               .xattr = "end"},
     [LPRED_COMP_START]     = {.fsentry = RBH_FP_INODE_XATTRS,
@@ -646,6 +648,13 @@ comp_end2filter(const char *end)
 }
 
 static struct rbh_filter *
+comp_count2filter(const char *comp_count)
+{
+    return rbh_numeric2filter(get_filter_field(LPRED_COMP_COUNT), comp_count,
+                              RBH_FOP_EQUAL);
+}
+
+static struct rbh_filter *
 mdt_count2filter(const char *mdt_count)
 {
     return rbh_numeric2filter(get_filter_field(LPRED_MDT_COUNT), mdt_count,
@@ -677,6 +686,9 @@ rbh_lustre_build_filter(const char **argv, int argc, int *index,
         break;
     case LPRED_COMP_START:
         filter = comp_start2filter(argv[++i]);
+        break;
+    case LPRED_COMP_COUNT:
+        filter = comp_count2filter(argv[++i]);
         break;
     case LPRED_FID:
         filter = fid2filter(argv[++i]);
