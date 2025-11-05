@@ -237,10 +237,21 @@ setup()
 
 teardown()
 {
-    local sub_teardown="$1"
+    local rc=$?
+
+    local errorfile="$1"
+    local sub_teardown="$2"
+
     # Execute the full teardown regardless of errors otherwise, things aren't
     # properly cleaned.
     set +e
+
+    if (( rc != 0 )); then
+        echo "Test directory content:" > "$errorfile"
+        find $testdir >> "$errorfile"
+        echo "Test DB content:" >> "$errorfile"
+        do_db dump "$testdb" >> "$errorfile"
+    fi
 
     eval "$sub_teardown"
 
@@ -257,6 +268,8 @@ teardown()
     # Remove test dir after teardown otherwise cwd is no longer valid and some
     # commands can fail.
     rm -rf "$testdir"
+
+    return $rc
 }
 
 mongo_only_test()
@@ -270,6 +283,7 @@ run_tests()
 {
     local fail=0
     local timefile=$(mktemp)
+    local errorfile=$(mktemp)
     local all_skipped=true
 
     if [[ "$WITH_MPI" != "true" ]]; then
@@ -283,13 +297,14 @@ run_tests()
     for test in "$@"; do
         (
          set -e
-         trap -- "teardown $sub_teardown" EXIT
+         trap -- "teardown $errorfile $sub_teardown" EXIT
 
          # The time needs to be stored in a file because we can't propagate bash
          # or env variable outside of this subshell.
          date +%s > "$timefile"
 
          setup "$sub_setup"
+
          "$test"
         )
         local rc=$?
@@ -305,10 +320,12 @@ run_tests()
             all_skipped=false
             echo "$test: ✖  (${duration}s)"
             fail=$rc
+            >&2 cat "$errorfile"
         fi
     done
 
     rm "$timefile"
+    rm "$errorfile"
 
     # Mark the whole test as skipped if all the subtests where skipped
     if $all_skipped; then
