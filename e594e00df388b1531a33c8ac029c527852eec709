@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9e701acc_f2c23385",
+        "filename": "rbh-info/rbh-info.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-11-05T08:05:15Z",
+      "side": 1,
+      "message": "question: why `name` is not released with `rbh_backend_destroy()`?",
+      "range": {
+        "startLine": 229,
+        "startChar": 35,
+        "endLine": 229,
+        "endChar": 39
+      },
+      "revId": "e594e00df388b1531a33c8ac029c527852eec709",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
