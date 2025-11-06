@@ -41,13 +41,13 @@ test_list()
         error "There shoud be only one file deleted"
     fi
 
-    local mountpoint=$(mongo "$testdb" --eval \
+    local mountpoint=$(mongo --quiet "$testdb" --eval \
     'db.info.findOne({_id: "mountpoint_info"}, {mountpoint: 1}).mountpoint')
 
     local rm_full_path="${mountpoint}${rm_path}"
 
     if [[ "$rm_full_path" != "$path" ]]; then
-        error "rm_path is not equal to path"
+        error "rm_path '$rm_full_path' is not equal to path '$path'"
     fi
 }
 

@@ -21,20 +21,21 @@ integration_tests = [
   'test_verbose',
 ]
 
-if liblustre.found()
-    integration_tests += ['test_lustre_filter']
-endif
-
 foreach t: integration_tests
     e = find_program(t + '.bash')
-    test(t, e, env: backend_path_env, suite: 'rbh-report', timeout: 120)
+    test(t, e, env: backend_path_env, suite: 'rbh-report',
+         timeout: 120)
 endforeach
 
-test(
-     'test_alias',
-     find_program('test_alias.bash'),
-     env: backend_path_env,
-     suite: 'rbh-report',
-     timeout: 120,
-     is_parallel: false
-)
+if test_lustre
+    integration_tests = ['test_lustre_filter']
+
+    foreach t: integration_tests
+        e = find_program(t + '.bash')
+        test(t, e, env: backend_path_env, suite: ['rbh-report', 'lustre'],
+             timeout: 120)
+    endforeach
+endif
+
+test('test_alias', find_program('test_alias.bash'), env: backend_path_env,
+     suite: 'rbh-report', timeout: 120, is_parallel: false)

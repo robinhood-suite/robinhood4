@@ -14,14 +14,6 @@ parallel_integration_tests = [
   'test_db',
 ]
 
-if liblustre.found()
-    parallel_integration_tests += ['test_lustre']
-endif
-
-if libs3.found()
-    parallel_integration_tests += ['test_s3']
-endif
-
 foreach t: non_parallel_integration_tests
     e = find_program(t + '.bash')
     test(t, e, env: backend_path_env, suite: 'rbh-info', is_parallel: false)
@@ -33,7 +25,25 @@ foreach t: parallel_integration_tests
 endforeach
 
 if test_mfu
-    e = find_program('test_mpi_file.bash')
-    test('test_mpi_file', e, env: backend_path_env_for_mpi_tests,
-         suite: 'rbh-info')
+    foreach t: ['test_mpi_file']
+        e = find_program(t + '.bash')
+        test(t, e, env: backend_path_env_for_mpi_tests,
+             suite: ['rbh-info', 'mpi'])
+    endforeach
+endif
+
+if test_lustre
+    foreach t: ['test_lustre']
+        e = find_program(t + '.bash')
+        test(t, e, env: backend_path_env,
+             suite: ['rbh-info', 'lustre'])
+    endforeach
+endif
+
+if libs3.found()
+    foreach t: ['test_s3']
+        e = find_program(t + '.bash')
+        test(t, e, env: backend_path_env,
+             suite: ['rbh-info', 's3'])
+    endforeach
 endif

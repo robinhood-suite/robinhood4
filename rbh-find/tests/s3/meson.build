@@ -13,6 +13,6 @@ integration_tests = [
 
 foreach t: integration_tests
     e = find_program(t + '.bash')
-    test(t, e, is_parallel:false, env: backend_path_env, suite: 'rbh-find',
-         timeout: 120)
+    test(t, e, is_parallel:false, env: backend_path_env,
+         suite: ['rbh-find', 's3'], timeout: 120)
 endforeach

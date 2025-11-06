@@ -17,7 +17,7 @@ integration_tests = [
 
 foreach t: integration_tests
     e = find_program(t + '.bash')
-    test(t, e, env: backend_path_env, suite: 'rbh-find')
+    test(t, e, env: backend_path_env, suite: ['rbh-find', 'lustre'])
 endforeach
 
 non_parallel_integration_tests = [
@@ -29,5 +29,5 @@ non_parallel_integration_tests = [
 foreach t: non_parallel_integration_tests
     e = find_program(t + '.bash')
     test(t, e, is_parallel: false, env: backend_path_env,
-         suite: 'rbh-find')
+         suite: ['rbh-find', 'lustre'])
 endforeach

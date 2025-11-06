@@ -12,5 +12,5 @@ integration_tests = [
 
 foreach t: integration_tests
     e = find_program(t + '.bash')
-    test(t, e, env: backend_path_env, suite: 'rbh-find')
+    test(t, e, env: backend_path_env, suite: ['rbh-find', 'retention'])
 endforeach
