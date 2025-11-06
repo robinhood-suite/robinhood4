@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # This file is part of rbh-fsevents.
-# Copyright (C) 2024 Commissariat a l'energie atomique et aux energies
+# Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
