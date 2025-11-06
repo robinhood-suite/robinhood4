@@ -50,6 +50,8 @@ static const struct rbh_filter_field predicate2filter_field[] = {
                               .xattr = "mdt_index"},
     [LPRED_MIRROR_COUNT]   = {.fsentry = RBH_FP_INODE_XATTRS,
                               .xattr = "mirror_count"},
+    [LPRED_MIRROR_STATE]   = {.fsentry = RBH_FP_INODE_XATTRS,
+                              .xattr = "mirror_state"},
     [LPRED_OST_INDEX]      = {.fsentry = RBH_FP_INODE_XATTRS,
                               .xattr = "ost"},
     [LPRED_POOL]           = {.fsentry = RBH_FP_INODE_XATTRS,
@@ -684,6 +686,70 @@ mirror_count2filter(const char *mirror_count)
                               mirror_count, RBH_FOP_EQUAL);
 }
 
+enum mirror_state {
+    MIRROR_STATE_INVALID,
+    MIRROR_STATE_RDONLY,
+    MIRROR_STATE_WRITE_PENDING,
+    MIRROR_STATE_SYNC_PENDING,
+};
+
+static enum mirror_state
+str2mirror_state(const char *mirror_state)
+{
+    if (strcmp(mirror_state, "ro") == 0)
+        return MIRROR_STATE_RDONLY;
+
+    if (strcmp(mirror_state, "sp") == 0)
+        return MIRROR_STATE_SYNC_PENDING;
+
+    if (strcmp(mirror_state, "wp") == 0)
+        return MIRROR_STATE_WRITE_PENDING;
+
+    return MIRROR_STATE_INVALID;
+}
+
+static struct rbh_filter *
+mirror_state2filter(const char *mirror_state)
+{
+    struct rbh_filter *filter;
+    enum mirror_state state;
+
+    state = str2mirror_state(mirror_state);
+    if (state == MIRROR_STATE_INVALID)
+        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
+                      "Invalid mirror state provided, should be 'ro', 'sp' or 'wp', got '%s'",
+                      mirror_state);
+
+    switch (state) {
+    case MIRROR_STATE_RDONLY:
+        filter = rbh_filter_compare_uint32_new(
+                                           RBH_FOP_EQUAL,
+                                           get_filter_field(LPRED_MIRROR_STATE),
+                                           LCM_FL_RDONLY);
+        break;
+    case MIRROR_STATE_WRITE_PENDING:
+        filter = rbh_filter_compare_uint32_new(
+                                           RBH_FOP_EQUAL,
+                                           get_filter_field(LPRED_MIRROR_STATE),
+                                           LCM_FL_WRITE_PENDING);
+        break;
+    case MIRROR_STATE_SYNC_PENDING:
+        filter = rbh_filter_compare_uint32_new(
+                                           RBH_FOP_EQUAL,
+                                           get_filter_field(LPRED_MIRROR_STATE),
+                                           LCM_FL_SYNC_PENDING);
+        break;
+    default:
+        __builtin_unreachable();
+    }
+
+    if (filter == NULL)
+        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
+                      "Failed to create the filter for the mirror state");
+
+    return filter;
+}
+
 struct rbh_filter *
 rbh_lustre_build_filter(const char **argv, int argc, int *index,
                         __attribute__((unused)) bool *need_prefetch)
@@ -733,6 +799,9 @@ rbh_lustre_build_filter(const char **argv, int argc, int *index,
         break;
     case LPRED_MIRROR_COUNT:
         filter = mirror_count2filter(argv[++i]);
+        break;
+    case LPRED_MIRROR_STATE:
+        filter = mirror_state2filter(argv[++i]);
         break;
     case LPRED_OST_INDEX:
         filter = ost_index2filter(argv[++i]);

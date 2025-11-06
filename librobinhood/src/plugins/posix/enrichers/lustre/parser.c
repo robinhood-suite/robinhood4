@@ -68,6 +68,10 @@ str2lustre_predicate(const char *string)
         case 'i':
             if (strcmp(&string[3], "rror-count") == 0)
                 return LPRED_MIRROR_COUNT;
+
+            if (strcmp(&string[3], "rror-state") == 0)
+                return LPRED_MIRROR_STATE;
+
             break;
         }
         break;
