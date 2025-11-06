@@ -609,6 +609,9 @@ xattrs_get_layout(int fd, struct rbh_value_pair *pairs, int available_pairs)
     available_pairs -= subcount;
 
     if (llapi_layout_is_composite(layout)) {
+        struct lov_comp_md_v1 *v1;
+        uint32_t state;
+
         if (available_pairs < 1)
             return -1;
 
@@ -621,6 +624,14 @@ xattrs_get_layout(int fd, struct rbh_value_pair *pairs, int available_pairs)
         if (rc)
             goto err;
 
+        v1 = (struct lov_comp_md_v1 *) lum;
+        state = v1->lcm_flags & LCM_FL_FLR_MASK;
+
+        rc = fill_uint32_pair("mirror_state", state, &pairs[subcount++],
+                             _values);
+        if (rc)
+            goto err;
+
         nb_comp = 0;
         rc = llapi_layout_comp_iterate(layout, &layout_get_nb_comp, &nb_comp);
         if (rc)
@@ -628,7 +639,7 @@ xattrs_get_layout(int fd, struct rbh_value_pair *pairs, int available_pairs)
 
         /** The file is composite, so we add 3 more xattrs to the main alloc */
         nb_xattrs += 3;
-        available_pairs -= 1;
+        available_pairs -= 2;
 
     } else {
         nb_comp = 1;
@@ -1038,7 +1049,9 @@ rbh_lustre_helper(__attribute__((unused)) const char *backend,
         "    -mdt-count  [+-]COUNT\n"
         "                         filter entries based on their MDT count.\n"
         "    -mirror-count [+-]COUNT\n"
-        "                         filter entries based on their mirror count.\n");
+        "                         filter entries based on their mirror count.\n"
+        "    -mirror-state {ro, sp, wp}\n"
+        "                         filter entries based on their mirror state.\n");
 
     if (rc == -1)
         *predicate_helper = NULL;
