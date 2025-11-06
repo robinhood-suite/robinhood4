@@ -1,68 +1,24 @@
 # This file is part of RobinHood 4
-# Copyright (C) 2021 Commissariat a l'energie atomique et aux energies
+# Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
 
-backend_path_env.set('WITH_MPI', 'false')
-integration_tests = [
-    'test_posix_db_sync', 'test_db_db_sync', 'test_config'
-]
+subdir('posix')
+subdir('db')
 
-if liblustre.found()
-    integration_tests += ['test_lustre_db_sync']
+if test_lustre
+    subdir('lustre')
+endif
+
+if test_mfu
+    subdir('mpifile')
 endif
 
 if libhestia.found()
-    integration_tests += ['test_hestia_db_sync']
+    subdir('hestia')
 endif
 
 if libs3.found()
-    s3_test_name = 'test_s3_db_sync'
-    e = find_program(s3_test_name + '.bash')
-    test(s3_test_name, e, is_parallel: false, env: backend_path_env,
-         suite: 'rbh-sync', timeout: 140)
-endif
-
-foreach t: integration_tests
-    e = find_program(t + '.bash')
-    test(t, e, is_parallel: false, env: backend_path_env,
-         suite: 'rbh-sync', timeout: 120)
-endforeach
-
-non_parallel_integration_tests = ['test_alias']
-foreach t: non_parallel_integration_tests
-    e = find_program(t + '.bash')
-    test(t, e, is_parallel: false, env: backend_path_env,
-         suite: 'rbh-sync')
-endforeach
-
-# Tests with MPI
-r = run_command('../../utils/check_mpirun.sh', check: false)
-
-if r.returncode() == 0 and libmfu.found()
-    integration_tests = ['test_mongo_mpifile_sync']
-    foreach t: integration_tests
-        e = find_program(t + '.bash')
-        test(t, e, is_parallel: false, env: backend_path_env, suite: 'rbh-sync',
-             timeout: 120)
-    endforeach
-
-    backend_path_env_for_mpi_tests.set('WITH_MPI', 'true')
-    integration_tests_mpi = ['test_posix_db_sync', 'test_mpifile_mongo_sync']
-
-    if libs3.found()
-        integration_tests_mpi += ['test_s3_db_sync']
-    endif
-
-    if liblustre.found()
-        integration_tests_mpi += ['test_lustre_db_sync']
-    endif
-
-    foreach t: integration_tests_mpi
-        e = find_program(t + '.bash')
-        test(t + '_mpi', e, is_parallel: false, timeout: 120,
-             env: backend_path_env_for_mpi_tests, suite: 'rbh-sync')
-    endforeach
-
+    subdir('s3')
 endif

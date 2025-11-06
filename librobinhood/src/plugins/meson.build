@@ -40,7 +40,9 @@ foreach backend: library_dirs
 endforeach
 
 backend_path_env.set('LD_LIBRARY_PATH', ld_library_path)
+backend_path_env.set('WITH_MPI', 'false')
 backend_path_env_for_mpi_tests.set('LD_LIBRARY_PATH', ld_library_path)
+backend_path_env_for_mpi_tests.set('WITH_MPI', 'true')
 
 subdir('mongo')
 subdir('posix')
