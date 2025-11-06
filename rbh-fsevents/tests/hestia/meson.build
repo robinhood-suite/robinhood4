@@ -1,5 +1,5 @@
 # This file is part of the rbh-fsevents
-# Copyright (C) 2023 Commissariat a l'energie atomique et aux energies
+# Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
@@ -14,5 +14,5 @@ foreach t: integration_tests
     # test results. To prevent this, we forbid Meson from running tests
     # in parallel.
     test(t, e, is_parallel : false, env: backend_path_env,
-         suite: 'rbh-fsevents')
+         suite: ['rbh-fsevents', 'hestia'])
 endforeach
