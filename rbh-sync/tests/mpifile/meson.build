@@ -4,7 +4,7 @@
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
 
-integration_tests = ['test_mongo_mpifile_sync', 'test_mpifile_mongo_sync']
+integration_tests = ['test_posix_mpifile_sync', 'test_mpifile_db_sync']
 
 foreach t: integration_tests
     e = find_program(t + '.bash')
