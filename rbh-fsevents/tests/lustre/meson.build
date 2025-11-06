@@ -21,5 +21,5 @@ foreach t: integration_tests
     # test results. To prevent this, we forbid Meson from running tests
     # in parallel.
     test(t, e, is_parallel : false, env: backend_path_env,
-         suite: 'rbh-fsevents', timeout: 120)
+         suite: ['rbh-fsevents', 'lustre'], timeout: 120)
 endforeach
