@@ -22,6 +22,30 @@
       },
       "revId": "616831d1af90048fdd9ab1194a1e996e67a364ca",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "09f84292_5a250bbc",
+        "filename": "librobinhood/src/plugins/sqlite/filter.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 1102,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-11-11T19:24:54Z",
+      "side": 1,
+      "message": "ENODATA is the standard way of saying \"I have nothing to return\" in librobinhood. I find it better than having to create an iterator for nothing. If we use dryrun, we shouldn\u0027t even return an iterator.",
+      "parentUuid": "416119ff_0c1ceafc",
+      "range": {
+        "startLine": 1102,
+        "startChar": 8,
+        "endLine": 1102,
+        "endChar": 21
+      },
+      "revId": "616831d1af90048fdd9ab1194a1e996e67a364ca",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
