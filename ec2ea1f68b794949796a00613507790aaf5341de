@@ -22,6 +22,30 @@
       },
       "revId": "ec2ea1f68b794949796a00613507790aaf5341de",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "733db278_798be76a",
+        "filename": "doc/man/source/rbh-sync.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-11-12T14:25:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cc34a76d_95c57bef",
+      "range": {
+        "startLine": 65,
+        "startChar": 0,
+        "endLine": 65,
+        "endChar": 3
+      },
+      "revId": "ec2ea1f68b794949796a00613507790aaf5341de",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
