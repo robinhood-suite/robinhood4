@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8fc14dd4_4da89048",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-11-12T11:28:51Z",
+      "side": 1,
+      "message": "typo: tools\u0027",
+      "range": {
+        "startLine": 7,
+        "startChar": 12,
+        "endLine": 7,
+        "endChar": 18
+      },
+      "revId": "4d1ac2bb1f353245812d20c59b81f44b8603fe3b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6274aaf2_b2c697f5",
+        "filename": "rbh-find/README.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-11-12T11:28:51Z",
+      "side": 1,
+      "message": "suggest: adding a link here to the plugins\u0027s README rather than detailling the predicates may be better IMO",
+      "range": {
+        "startLine": 206,
+        "startChar": 0,
+        "endLine": 212,
+        "endChar": 10
+      },
+      "revId": "4d1ac2bb1f353245812d20c59b81f44b8603fe3b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f978e552_298d4c29",
+        "filename": "rbh-sync/README.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-11-12T11:28:51Z",
+      "side": 1,
+      "message": "typo: use",
+      "range": {
+        "startLine": 147,
+        "startChar": 28,
+        "endLine": 147,
+        "endChar": 32
+      },
+      "revId": "4d1ac2bb1f353245812d20c59b81f44b8603fe3b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6a7b4765_a7d1fe17",
+        "filename": "rbh-sync/README.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-11-12T11:28:51Z",
+      "side": 1,
+      "message": "typo: specified",
+      "range": {
+        "startLine": 147,
+        "startChar": 44,
+        "endLine": 147,
+        "endChar": 51
+      },
+      "revId": "4d1ac2bb1f353245812d20c59b81f44b8603fe3b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "97b97d98_23a69d63",
+        "filename": "rbh-sync/README.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-11-12T11:28:51Z",
+      "side": 1,
+      "message": "typo: has",
+      "range": {
+        "startLine": 147,
+        "startChar": 33,
+        "endLine": 147,
+        "endChar": 37
+      },
+      "revId": "4d1ac2bb1f353245812d20c59b81f44b8603fe3b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
