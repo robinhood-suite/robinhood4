@@ -48,6 +48,7 @@ usage(const char *backend)
         "    SOURCE               a robinhood URI\n"
         "\n"
         "Pre URI optional arguments:\n"
+        "    -c, --config         the configuration file to use\n"
         "    -d, --dry-run        displays the command after alias management\n"
         "    -h, --help           show this message and exit\n"
         "    -v, --verbose        show additionnal information\n"
