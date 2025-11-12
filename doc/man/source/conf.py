@@ -50,6 +50,7 @@ man_pages = [
     ('rbh-report', 'rbh-report', 'rbh-report tool', [author], 1),
     ('rbh-info', 'rbh-info', 'rbh-info tool', [author], 1),
     ('rbh-undelete', 'rbh-undelete', 'rbh-undelete tool', [author], 1),
+    ('rbh4',  'rbh4', 'general RobinHood4 knowledge', [author], 7),
 ]
 
 smartquotes = False
