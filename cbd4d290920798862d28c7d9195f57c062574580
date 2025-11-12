@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f2af6461_c6a0f229",
+        "filename": "doc/man/meson.build",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-11-12T14:09:46Z",
+      "side": 1,
+      "message": "I don\u0027t know how sphinx works when it comes to man pages but how could we specify the man page section? For instance, tools go in section 1 but overview of concepts such as URI should go in section 7. We should be able to specify which section we want. Either using the dirname (e.g. `doc/man/7/robinhood.rst`) or the name itself `doc/man/source/robinhood.7.rst`.",
+      "range": {
+        "startLine": 14,
+        "startChar": 20,
+        "endLine": 14,
+        "endChar": 56
+      },
+      "revId": "cbd4d290920798862d28c7d9195f57c062574580",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1ebd775f_6f7b6847",
+        "filename": "doc/man/meson.build",
+        "patchSetId": 2
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-11-12T14:09:46Z",
+      "side": 1,
+      "message": "This could be done with find or possibly ls as well. Why create a script just for this?",
+      "range": {
+        "startLine": 18,
+        "startChar": 8,
+        "endLine": 18,
+        "endChar": 56
+      },
+      "revId": "cbd4d290920798862d28c7d9195f57c062574580",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0ad2a7ea_1a62f7f6",
+        "filename": "doc/man/source/index.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-11-12T14:09:46Z",
+      "side": 1,
+      "message": "Why have an index file for manpages?",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 37
+      },
+      "revId": "cbd4d290920798862d28c7d9195f57c062574580",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
