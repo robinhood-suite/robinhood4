@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e15c9389_08a6d690",
+        "filename": "librobinhood/src/plugins/posix/enrichers/lustre/filter.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 687,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-11-12T10:30:10Z",
+      "side": 1,
+      "message": "minor: I think there\u0027s an easier way to do these conditions :p",
+      "range": {
+        "startLine": 687,
+        "startChar": 12,
+        "endLine": 687,
+        "endChar": 46
+      },
+      "revId": "002932bba9057897d478f1ecfcca6849e4d4d890",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a670abc9_c5dcb6fd",
+        "filename": "librobinhood/src/plugins/posix/enrichers/lustre/lustre.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 630,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-11-12T10:30:10Z",
+      "side": 1,
+      "message": "question: the mirror state is the same for all mirrors/components of the file, and not a per-mirror/component information ?",
+      "range": {
+        "startLine": 630,
+        "startChar": 31,
+        "endLine": 630,
+        "endChar": 43
+      },
+      "revId": "002932bba9057897d478f1ecfcca6849e4d4d890",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "921e8cdb_788a7e0c",
+        "filename": "librobinhood/src/plugins/posix/enrichers/lustre/lustre.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 631,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-11-12T10:30:10Z",
+      "side": 1,
+      "message": "style: alignment",
+      "range": {
+        "startLine": 631,
+        "startChar": 19,
+        "endLine": 631,
+        "endChar": 34
+      },
+      "revId": "002932bba9057897d478f1ecfcca6849e4d4d890",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f79007cc_e59ffd24",
+        "filename": "librobinhood/src/plugins/posix/enrichers/lustre/lustre.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 1054,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-11-12T10:30:10Z",
+      "side": 1,
+      "message": "minor: add what each value correspond to (i.e. ro \u003d read only, ...)",
+      "range": {
+        "startLine": 1054,
+        "startChar": 34,
+        "endLine": 1054,
+        "endChar": 81
+      },
+      "revId": "002932bba9057897d478f1ecfcca6849e4d4d890",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "01d1b2f8_b1b63abe",
+        "filename": "rbh-find/tests/lustre/test_mirror.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-11-12T10:30:10Z",
+      "side": 1,
+      "message": "minor: only 2 values are checked, but 3 are available",
+      "range": {
+        "startLine": 45,
+        "startChar": 0,
+        "endLine": 45,
+        "endChar": 17
+      },
+      "revId": "002932bba9057897d478f1ecfcca6849e4d4d890",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
