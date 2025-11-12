@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "02374b10_db363f21",
+        "filename": "doc/man/source/conf.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-11-12T15:21:02Z",
+      "side": 1,
+      "message": "sugest: you can specify here that it\u0027s the main document and remove the index.rst file",
+      "revId": "1343e891336b8bded49f24b141f03df65d2e526c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
