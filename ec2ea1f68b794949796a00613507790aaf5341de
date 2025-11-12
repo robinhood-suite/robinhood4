@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cc34a76d_95c57bef",
+        "filename": "doc/man/source/rbh-sync.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-11-12T14:04:03Z",
+      "side": 1,
+      "message": "This should be in a different man page. For instance, the section 7 of the man page could contain a robinhood4 manpage. This man page should include generic concepts such as the URI, backends...",
+      "range": {
+        "startLine": 65,
+        "startChar": 0,
+        "endLine": 65,
+        "endChar": 3
+      },
+      "revId": "ec2ea1f68b794949796a00613507790aaf5341de",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
