@@ -49,6 +49,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "95e554f5_ec3287f7",
+        "filename": "librobinhood/src/plugins/posix/enrichers/lustre/lustre.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 630,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-11-13T09:19:52Z",
+      "side": 1,
+      "message": "Yes, there is only one mirror state for all mirrors. It’s not linked to components. It’s a global state about all mirrors, indicating whether all mirrors are up to date (ro), one mirror has been written to (wp), or the mirrors are being resynchronized (sp).",
+      "parentUuid": "a670abc9_c5dcb6fd",
+      "range": {
+        "startLine": 630,
+        "startChar": 31,
+        "endLine": 630,
+        "endChar": 43
+      },
+      "revId": "002932bba9057897d478f1ecfcca6849e4d4d890",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "921e8cdb_788a7e0c",
         "filename": "librobinhood/src/plugins/posix/enrichers/lustre/lustre.c",
         "patchSetId": 1
@@ -106,6 +130,30 @@
       "writtenOn": "2025-11-12T10:30:10Z",
       "side": 1,
       "message": "minor: only 2 values are checked, but 3 are available",
+      "range": {
+        "startLine": 45,
+        "startChar": 0,
+        "endLine": 45,
+        "endChar": 17
+      },
+      "revId": "002932bba9057897d478f1ecfcca6849e4d4d890",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a30af4ab_3fd8dfff",
+        "filename": "rbh-find/tests/lustre/test_mirror.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-11-13T09:19:52Z",
+      "side": 1,
+      "message": "I know, but it’s tricky to check the third value (sp). From what I understand, a file is in the sp state only while it’s being resynchronized. So, we would need to pause the lfs mirror resync command and then run rbh-find.",
+      "parentUuid": "01d1b2f8_b1b63abe",
       "range": {
         "startLine": 45,
         "startChar": 0,
