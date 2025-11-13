@@ -93,6 +93,30 @@
       },
       "revId": "461cf45b11e76e1059342c2cdce0c81e2c3c95fd",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6771b7af_4784dfab",
+        "filename": "rbh-info/src/list.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-11-13T10:32:29Z",
+      "side": 1,
+      "message": "`backend_plugin` is still a thing?\n\n\nWell do not really care, if you think it\u0027s ok, good to go.",
+      "parentUuid": "4bf0fea7_e2d3b503",
+      "range": {
+        "startLine": 117,
+        "startChar": 17,
+        "endLine": 117,
+        "endChar": 42
+      },
+      "revId": "461cf45b11e76e1059342c2cdce0c81e2c3c95fd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
