@@ -22,6 +22,30 @@
       },
       "revId": "563f430fca1348e8436f3a9ab055683d015add91",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e5dff0a4_bb36cd20",
+        "filename": "rbh-find/tests/lustre/test_mirror.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-11-13T09:08:08Z",
+      "side": 1,
+      "message": "Currently no, we are only storing the mirror count for composite files, so only for file2 and file3 here. I don\u0027t know if it makes sense to store a default mirror count of 1 for non-composite files.",
+      "parentUuid": "d43d01d4_aee7790b",
+      "range": {
+        "startLine": 28,
+        "startChar": 3,
+        "endLine": 29,
+        "endChar": 17
+      },
+      "revId": "563f430fca1348e8436f3a9ab055683d015add91",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
