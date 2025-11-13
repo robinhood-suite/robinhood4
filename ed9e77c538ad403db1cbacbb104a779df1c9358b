@@ -57,6 +57,30 @@
       },
       "revId": "ed9e77c538ad403db1cbacbb104a779df1c9358b",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb9beec2_df6d1925",
+        "filename": "rbh-sync/tests/test_posix_db_sync.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 578,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-11-13T11:46:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "efd0dd89_3ce3c251",
+      "range": {
+        "startLine": 578,
+        "startChar": 4,
+        "endLine": 578,
+        "endChar": 26
+      },
+      "revId": "ed9e77c538ad403db1cbacbb104a779df1c9358b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
