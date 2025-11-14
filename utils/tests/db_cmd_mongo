@@ -146,6 +146,12 @@ case "$cmd" in
         fi
         exit $rc
         ;;
+    drop_path)
+        mongo "$db" --eval \
+            'db.entries.updateOne({"ns.xattrs.path": "'"$1"'"},
+                {"$unset" : { "ns.0.xattrs.path": ""},
+                 "$set" : { "ns.0.name" : "'"$2"'"}})'
+        ;;
     clear_entries)
         mongo "$db" --eval "db.entries.remove({})"
         ;;
