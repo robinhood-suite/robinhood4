@@ -25,28 +25,20 @@ destroy_backend(void)
     }
 }
 
-struct rbh_mut_iterator *
-get_entry_without_path()
+static struct rbh_mut_iterator *
+_get_entries(struct rbh_filter *filter)
 {
-    const struct rbh_filter_field *field = str2filter_field("ns-xattrs.path");
-    const struct rbh_filter_options option = {0};
     const struct rbh_filter_projection proj = {
-        .fsentry_mask = RBH_FP_ID | RBH_FP_PARENT_ID | RBH_FP_NAME,
+        .fsentry_mask = RBH_FP_ID | RBH_FP_PARENT_ID | RBH_FP_NAME |
+                        RBH_FP_NAMESPACE_XATTRS,
         .statx_mask = 0,
     };
+    const struct rbh_filter_options option = {0};
     const struct rbh_filter_output output = {
         .type = RBH_FOT_PROJECTION,
         .projection = proj,
     };
     struct rbh_mut_iterator *fsentries;
-    struct rbh_filter *filter_path;
-    struct rbh_filter *filter;
-
-    filter_path = rbh_filter_exists_new(field);
-    if (filter_path == NULL)
-        error(EXIT_FAILURE, errno, "failed to create path filter");
-
-    filter = rbh_filter_not(filter_path);
 
     fsentries = rbh_backend_filter(backend, filter, &option, &output, NULL);
     if (fsentries == NULL) {
@@ -60,6 +52,22 @@ get_entry_without_path()
     free(filter);
 
     return fsentries;
+}
+
+static struct rbh_mut_iterator *
+get_entry_without_path()
+{
+    const struct rbh_filter_field *field = str2filter_field("ns-xattrs.path");
+    struct rbh_filter *filter_path;
+    struct rbh_filter *filter;
+
+    filter_path = rbh_filter_exists_new(field);
+    if (filter_path == NULL)
+        error(EXIT_FAILURE, errno, "failed to create path filter");
+
+    filter = rbh_filter_not(filter_path);
+
+    return _get_entries(filter);
 }
 
 int
