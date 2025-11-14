@@ -161,7 +161,7 @@ generate_fsevent_update_path(struct rbh_fsentry *entry,
     return fsevent;
 }
 
-static void
+static bool
 update_path()
 {
     struct rbh_mut_iterator *fsentries;
@@ -169,6 +169,7 @@ update_path()
     struct rbh_mut_iterator *children;
     struct rbh_iterator *update_iter;
     struct rbh_fsevent *fsevent;
+    bool need_update = false;
     int rc;
 
     fsentries = get_entry_without_path();
@@ -221,6 +222,11 @@ update_path()
                 error(EXIT_FAILURE, errno, "failed to update '%s'",
                       child->name);
 
+            /* We need to call the update_path function atleast one other time
+             * to finish updating the path
+             */
+            need_update = true;
+
             rbh_iter_destroy(update_iter);
             free(fsevent);
             free(child);
@@ -267,6 +273,8 @@ update_path:
     }
 
     rbh_mut_iter_destroy(fsentries);
+
+    return need_update;
 }
 
 int
@@ -309,7 +317,7 @@ main(int argc, char *argv[])
 
     backend = rbh_backend_from_uri(argv[0], false);
 
-    update_path();
+    while (update_path());
 
     return EXIT_SUCCESS;
 }
