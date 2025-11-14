@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3e8ac4ca_635f200f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-11-14T10:06:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8fc14dd4_4da89048",
+      "range": {
+        "startLine": 7,
+        "startChar": 12,
+        "endLine": 7,
+        "endChar": 18
+      },
+      "revId": "4d1ac2bb1f353245812d20c59b81f44b8603fe3b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6274aaf2_b2c697f5",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-11-12T11:28:51Z",
       "side": 1,
       "message": "suggest: adding a link here to the plugins\u0027s README rather than detailling the predicates may be better IMO",
+      "range": {
+        "startLine": 206,
+        "startChar": 0,
+        "endLine": 212,
+        "endChar": 10
+      },
+      "revId": "4d1ac2bb1f353245812d20c59b81f44b8603fe3b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4653160d_9c0503d4",
+        "filename": "rbh-find/README.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-11-14T10:06:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6274aaf2_b2c697f5",
       "range": {
         "startLine": 206,
         "startChar": 0,
@@ -111,6 +159,78 @@
         "startChar": 33,
         "endLine": 147,
         "endChar": 37
+      },
+      "revId": "4d1ac2bb1f353245812d20c59b81f44b8603fe3b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "776799e1_1abb7682",
+        "filename": "rbh-sync/README.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-11-14T10:06:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "97b97d98_23a69d63",
+      "range": {
+        "startLine": 147,
+        "startChar": 33,
+        "endLine": 147,
+        "endChar": 37
+      },
+      "revId": "4d1ac2bb1f353245812d20c59b81f44b8603fe3b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "288ace38_70cd4d98",
+        "filename": "rbh-sync/README.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-11-14T10:06:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6a7b4765_a7d1fe17",
+      "range": {
+        "startLine": 147,
+        "startChar": 44,
+        "endLine": 147,
+        "endChar": 51
+      },
+      "revId": "4d1ac2bb1f353245812d20c59b81f44b8603fe3b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e16fe9bf_27024c29",
+        "filename": "rbh-sync/README.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-11-14T10:06:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f978e552_298d4c29",
+      "range": {
+        "startLine": 147,
+        "startChar": 28,
+        "endLine": 147,
+        "endChar": 32
       },
       "revId": "4d1ac2bb1f353245812d20c59b81f44b8603fe3b",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
