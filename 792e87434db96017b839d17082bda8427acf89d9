@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4aa3ea6e_06f78836",
+        "filename": "librobinhood/src/plugins/mpi_file/README.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-11-14T10:00:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "281a00fc_6a940dd6",
+      "range": {
+        "startLine": 9,
+        "startChar": 15,
+        "endLine": 9,
+        "endChar": 16
+      },
+      "revId": "792e87434db96017b839d17082bda8427acf89d9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "222ffcf5_f9cf46b6",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-11-12T11:23:45Z",
       "side": 1,
       "message": "typo: contained",
+      "range": {
+        "startLine": 11,
+        "startChar": 67,
+        "endLine": 11,
+        "endChar": 75
+      },
+      "revId": "792e87434db96017b839d17082bda8427acf89d9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d91e461c_fe68908b",
+        "filename": "librobinhood/src/plugins/mpi_file/README.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-11-14T10:00:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "222ffcf5_f9cf46b6",
       "range": {
         "startLine": 11,
         "startChar": 67,
@@ -116,6 +164,78 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "91559c6d_6dbd7b90",
+        "filename": "librobinhood/src/plugins/mpi_file/README.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-11-14T10:00:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f9456fdd_9db950d6",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 48
+      },
+      "revId": "792e87434db96017b839d17082bda8427acf89d9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a20a928a_cc56c636",
+        "filename": "librobinhood/src/plugins/mpi_file/README.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-11-14T10:00:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "173009ba_e7e62443",
+      "range": {
+        "startLine": 14,
+        "startChar": 44,
+        "endLine": 14,
+        "endChar": 47
+      },
+      "revId": "792e87434db96017b839d17082bda8427acf89d9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b2ac6564_4f9a8faa",
+        "filename": "librobinhood/src/plugins/mpi_file/README.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-11-14T10:00:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b3f326d3_426ba960",
+      "range": {
+        "startLine": 14,
+        "startChar": 3,
+        "endLine": 14,
+        "endChar": 9
+      },
+      "revId": "792e87434db96017b839d17082bda8427acf89d9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4690f20b_3ee9aa87",
@@ -139,6 +259,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0deb0463_5f75bb5e",
+        "filename": "librobinhood/src/plugins/mpi_file/README.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-11-14T10:00:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4690f20b_3ee9aa87",
+      "range": {
+        "startLine": 18,
+        "startChar": 33,
+        "endLine": 18,
+        "endChar": 39
+      },
+      "revId": "792e87434db96017b839d17082bda8427acf89d9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "64e9a860_d9cb691b",
@@ -152,6 +296,30 @@
       "writtenOn": "2025-11-12T11:23:45Z",
       "side": 1,
       "message": "typo: same, currently, nothing but rbh-find uses this backend",
+      "range": {
+        "startLine": 19,
+        "startChar": 23,
+        "endLine": 19,
+        "endChar": 29
+      },
+      "revId": "792e87434db96017b839d17082bda8427acf89d9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "45b0f940_521bd6c7",
+        "filename": "librobinhood/src/plugins/mpi_file/README.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-11-14T10:00:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "64e9a860_d9cb691b",
       "range": {
         "startLine": 19,
         "startChar": 23,
@@ -208,6 +376,54 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "99021ee5_1a98f8f5",
+        "filename": "librobinhood/src/plugins/mpi_file/README.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-11-14T10:00:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cac36834_afa283f9",
+      "range": {
+        "startLine": 27,
+        "startChar": 36,
+        "endLine": 27,
+        "endChar": 46
+      },
+      "revId": "792e87434db96017b839d17082bda8427acf89d9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f0c920a3_78100143",
+        "filename": "librobinhood/src/plugins/mpi_file/README.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-11-14T10:00:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b6a73756_8e881975",
+      "range": {
+        "startLine": 27,
+        "startChar": 13,
+        "endLine": 27,
+        "endChar": 24
+      },
+      "revId": "792e87434db96017b839d17082bda8427acf89d9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b655bdbe_ff578d64",
@@ -221,6 +437,30 @@
       "writtenOn": "2025-11-12T11:23:45Z",
       "side": 1,
       "message": "suggest: since this is now alphabetically ordered, might want to move the explanation of how comp-start works here, and change comp-start to say \"works like comp-end\" instead",
+      "range": {
+        "startLine": 64,
+        "startChar": 1,
+        "endLine": 64,
+        "endChar": 9
+      },
+      "revId": "792e87434db96017b839d17082bda8427acf89d9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "74464552_42ca22a9",
+        "filename": "librobinhood/src/plugins/posix/enrichers/lustre/README.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-11-14T10:00:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b655bdbe_ff578d64",
       "range": {
         "startLine": 64,
         "startChar": 1,
@@ -254,6 +494,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9544ab4d_d4311107",
+        "filename": "librobinhood/src/plugins/s3/README.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-11-14T10:00:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2b56db88_0ff72cfb",
+      "range": {
+        "startLine": 7,
+        "startChar": 9,
+        "endLine": 7,
+        "endChar": 11
+      },
+      "revId": "792e87434db96017b839d17082bda8427acf89d9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "585d9ce7_cd5ea078",
@@ -267,6 +531,30 @@
       "writtenOn": "2025-11-12T11:23:45Z",
       "side": 1,
       "message": "minor: remove the `mainly`",
+      "range": {
+        "startLine": 15,
+        "startChar": 33,
+        "endLine": 15,
+        "endChar": 39
+      },
+      "revId": "792e87434db96017b839d17082bda8427acf89d9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a4b48c44_3d1024b5",
+        "filename": "librobinhood/src/plugins/s3/README.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-11-14T10:00:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "585d9ce7_cd5ea078",
       "range": {
         "startLine": 15,
         "startChar": 33,
@@ -300,6 +588,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "552bff91_50375a1c",
+        "filename": "librobinhood/src/plugins/s3/README.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-11-14T10:00:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7678ab5c_66bf09fc",
+      "range": {
+        "startLine": 34,
+        "startChar": 4,
+        "endLine": 34,
+        "endChar": 5
+      },
+      "revId": "792e87434db96017b839d17082bda8427acf89d9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "acc51f60_373a3031",
@@ -313,6 +625,30 @@
       "writtenOn": "2025-11-12T11:23:45Z",
       "side": 1,
       "message": "nit: switch the two, since they appear in that order above",
+      "range": {
+        "startLine": 49,
+        "startChar": 8,
+        "endLine": 50,
+        "endChar": 25
+      },
+      "revId": "792e87434db96017b839d17082bda8427acf89d9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eac2c854_9dfaaad7",
+        "filename": "librobinhood/src/plugins/s3/README.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-11-14T10:00:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "acc51f60_373a3031",
       "range": {
         "startLine": 49,
         "startChar": 8,
@@ -346,6 +682,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "32305965_29b41f63",
+        "filename": "librobinhood/src/plugins/s3/README.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-11-14T10:00:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7260d483_37029bae",
+      "range": {
+        "startLine": 68,
+        "startChar": 13,
+        "endLine": 68,
+        "endChar": 23
+      },
+      "revId": "792e87434db96017b839d17082bda8427acf89d9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1bd440b8_d9ea7590",
@@ -359,6 +719,30 @@
       "writtenOn": "2025-11-12T11:23:45Z",
       "side": 1,
       "message": "typo: explained",
+      "range": {
+        "startLine": 96,
+        "startChar": 60,
+        "endLine": 96,
+        "endChar": 67
+      },
+      "revId": "792e87434db96017b839d17082bda8427acf89d9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "822bc1e7_618fdc59",
+        "filename": "librobinhood/src/plugins/s3/README.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-11-14T10:00:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1bd440b8_d9ea7590",
       "range": {
         "startLine": 96,
         "startChar": 60,
@@ -392,6 +776,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "103878c4_cbe6f5b8",
+        "filename": "librobinhood/src/plugins/s3/README.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-11-14T10:00:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2e54335f_a7f08c34",
+      "range": {
+        "startLine": 112,
+        "startChar": 73,
+        "endLine": 112,
+        "endChar": 79
+      },
+      "revId": "792e87434db96017b839d17082bda8427acf89d9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c9cbd560_86982289",
@@ -405,6 +813,30 @@
       "writtenOn": "2025-11-12T11:23:45Z",
       "side": 1,
       "message": "typo: belongs",
+      "range": {
+        "startLine": 122,
+        "startChar": 37,
+        "endLine": 122,
+        "endChar": 43
+      },
+      "revId": "792e87434db96017b839d17082bda8427acf89d9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "908d7243_97a09417",
+        "filename": "librobinhood/src/plugins/s3/README.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-11-14T10:00:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c9cbd560_86982289",
       "range": {
         "startLine": 122,
         "startChar": 37,
