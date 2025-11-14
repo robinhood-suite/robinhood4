@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "51d1ba55_57d2a30d",
+        "filename": "librobinhood/src/plugins/posix/enrichers/lustre/filter.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 687,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-11-14T10:22:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e15c9389_08a6d690",
+      "range": {
+        "startLine": 687,
+        "startChar": 12,
+        "endLine": 687,
+        "endChar": 46
+      },
+      "revId": "002932bba9057897d478f1ecfcca6849e4d4d890",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a670abc9_c5dcb6fd",
@@ -94,6 +118,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "09c2edff_95529b01",
+        "filename": "librobinhood/src/plugins/posix/enrichers/lustre/lustre.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 631,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-11-14T10:22:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "921e8cdb_788a7e0c",
+      "range": {
+        "startLine": 631,
+        "startChar": 19,
+        "endLine": 631,
+        "endChar": 34
+      },
+      "revId": "002932bba9057897d478f1ecfcca6849e4d4d890",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f79007cc_e59ffd24",
@@ -107,6 +155,30 @@
       "writtenOn": "2025-11-12T10:30:10Z",
       "side": 1,
       "message": "minor: add what each value correspond to (i.e. ro \u003d read only, ...)",
+      "range": {
+        "startLine": 1054,
+        "startChar": 34,
+        "endLine": 1054,
+        "endChar": 81
+      },
+      "revId": "002932bba9057897d478f1ecfcca6849e4d4d890",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d69ec3c_1850d255",
+        "filename": "librobinhood/src/plugins/posix/enrichers/lustre/lustre.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 1054,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-11-14T10:22:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f79007cc_e59ffd24",
       "range": {
         "startLine": 1054,
         "startChar": 34,
