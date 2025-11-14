@@ -30,8 +30,8 @@ _get_entries(struct rbh_filter *filter)
 {
     const struct rbh_filter_projection proj = {
         .fsentry_mask = RBH_FP_ID | RBH_FP_PARENT_ID | RBH_FP_NAME |
-                        RBH_FP_NAMESPACE_XATTRS,
-        .statx_mask = 0,
+                        RBH_FP_NAMESPACE_XATTRS | RBH_FP_STATX,
+        .statx_mask = RBH_STATX_TYPE,
     };
     const struct rbh_filter_options option = {0};
     const struct rbh_filter_output output = {
@@ -85,11 +85,36 @@ get_entry_without_path()
     return _get_entries(filter);
 }
 
+static struct rbh_fsevent *
+generate_fsevent_ns_xattrs(struct rbh_fsentry *entry, struct rbh_value *value)
+{
+    struct rbh_value_map xattrs;
+    struct rbh_fsevent *fsevent;
+    struct rbh_value_pair pair;
+
+    pair.key = "path";
+    pair.value = value;
+
+    xattrs.pairs = &pair;
+    xattrs.count = 1;
+
+    fsevent = rbh_fsevent_ns_xattr_new(&entry->id, &xattrs, &entry->parent_id,
+                                       entry->name);
+
+    if (fsevent == NULL)
+        error(EXIT_FAILURE, errno, "failed to generate fsevent");
+
+    return fsevent;
+}
+
 static void
 update_path()
 {
     struct rbh_mut_iterator *fsentries;
     struct rbh_mut_iterator *children;
+    struct rbh_iterator *update_iter;
+    struct rbh_fsevent *fsevent;
+    int rc;
 
     fsentries = get_entry_without_path();
 
@@ -108,6 +133,12 @@ update_path()
 
         printf("parent: %s\n", entry->name);
 
+        /* If it's not a directory, no need to update its children */
+        if (!S_ISDIR(entry->statx->stx_mode)) {
+            free(entry);
+            continue;
+        }
+
         children = get_entry_children(entry);
 
         while (true) {
@@ -125,6 +156,19 @@ update_path()
 
             printf("child: %s\n", child->name);
 
+            /* TODO: store all the fsevent in a list and call rbh_backend_update
+             * one time
+             */
+            fsevent = generate_fsevent_ns_xattrs(child, NULL);
+            update_iter = rbh_iter_array(fsevent, sizeof(*fsevent), 1, NULL);
+
+            rc = rbh_backend_update(backend, update_iter);
+            if (rc == -1)
+                error(EXIT_FAILURE, errno, "failed to update '%s'",
+                      child->name);
+
+            rbh_iter_destroy(update_iter);
+            free(fsevent);
             free(child);
         }
 
