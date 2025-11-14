@@ -70,6 +70,12 @@ rbh_undelete()
     "$__rbh_undelete" "$@"
 }
 
+__rbh_update_path=$(PATH="$PWD/rbh-update-path:$PATH" which rbh-update-path)
+rbh_update_path()
+{
+    "$__rbh_update_path" "$@"
+}
+
 __rbh_update_retention="$PWD/../retention/update-retention/rbh-update-retention.py"
 __update_retention_PATH+="$PWD/rbh-sync:"
 __update_retention_PATH+="$PWD/rbh-fsevents:"
