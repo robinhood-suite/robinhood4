@@ -55,6 +55,21 @@ _get_entries(struct rbh_filter *filter)
 }
 
 static struct rbh_mut_iterator *
+get_entry_children(struct rbh_fsentry *entry)
+{
+    const struct rbh_filter_field *field;
+    struct rbh_filter *filter;
+
+    field = str2filter_field("parent-id");
+    filter = rbh_filter_compare_binary_new(RBH_FOP_EQUAL, field,
+                                           entry->id.data, entry->id.size);
+    if (filter == NULL)
+        error(EXIT_FAILURE, errno, "failed to create filter");
+
+    return _get_entries(filter);
+}
+
+static struct rbh_mut_iterator *
 get_entry_without_path()
 {
     const struct rbh_filter_field *field = str2filter_field("ns-xattrs.path");
@@ -70,6 +85,56 @@ get_entry_without_path()
     return _get_entries(filter);
 }
 
+static void
+update_path()
+{
+    struct rbh_mut_iterator *fsentries;
+    struct rbh_mut_iterator *children;
+
+    fsentries = get_entry_without_path();
+
+    while (true) {
+        struct rbh_fsentry *entry = rbh_mut_iter_next(fsentries);
+
+        if (entry == NULL) {
+            if (errno == ENODATA)
+                break;
+
+            if (errno == RBH_BACKEND_ERROR)
+                error(EXIT_FAILURE, 0, "%s", rbh_backend_error);
+            else
+                error(EXIT_FAILURE, errno, "failed to retrieve entry");
+        }
+
+        printf("parent: %s\n", entry->name);
+
+        children = get_entry_children(entry);
+
+        while (true) {
+            struct rbh_fsentry *child = rbh_mut_iter_next(children);
+
+            if (child == NULL) {
+                if (errno == ENODATA)
+                    break;
+
+                if (errno == RBH_BACKEND_ERROR)
+                    error(EXIT_FAILURE, 0, "%s", rbh_backend_error);
+                else
+                    error(EXIT_FAILURE, errno, "failed to retrieve child");
+            }
+
+            printf("child: %s\n", child->name);
+
+            free(child);
+        }
+
+        rbh_mut_iter_destroy(children);
+        free(entry);
+    }
+
+    rbh_mut_iter_destroy(fsentries);
+}
+
 int
 main(int argc, char *argv[])
 {
@@ -81,7 +146,6 @@ main(int argc, char *argv[])
         },
         {}
     };
-    struct rbh_mut_iterator *fsentries;
     int rc;
     char c;
 
@@ -111,27 +175,7 @@ main(int argc, char *argv[])
 
     backend = rbh_backend_from_uri(argv[0], false);
 
-    fsentries = get_entry_without_path();
-
-    while (true) {
-        struct rbh_fsentry *fsentry = rbh_mut_iter_next(fsentries);
-
-        if (fsentry == NULL) {
-            if (errno == ENODATA)
-                break;
-
-            if (errno == RBH_BACKEND_ERROR)
-                error(EXIT_FAILURE, 0, "%s", rbh_backend_error);
-            else
-                error(EXIT_FAILURE, errno, "failed to retrieve fsentry");
-        }
-
-        printf("%s\n", fsentry->name);
-
-        free(fsentry);
-    }
-
-    rbh_mut_iter_destroy(fsentries);
+    update_path();
 
     return EXIT_SUCCESS;
 }
