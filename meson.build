@@ -119,6 +119,7 @@ subdir('rbh-fsevents')
 subdir('rbh-policy')
 subdir('rbh-report')
 subdir('rbh-info')
+subdir('rbh-update')
 if build_lustre
     subdir('rbh-undelete')
 endif
