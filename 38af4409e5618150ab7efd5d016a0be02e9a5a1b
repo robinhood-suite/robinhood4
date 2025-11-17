@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7d5ab0d8_4cb32deb",
+        "filename": "doc/man/source/rbh-sync.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-11-17T08:56:56Z",
+      "side": 1,
+      "message": "This is redundant",
+      "range": {
+        "startLine": 38,
+        "startChar": 39,
+        "endLine": 38,
+        "endChar": 72
+      },
+      "revId": "38af4409e5618150ab7efd5d016a0be02e9a5a1b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b066a72d_32fcb2d2",
+        "filename": "doc/man/source/rbh-sync.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-11-17T08:56:56Z",
+      "side": 1,
+      "message": "You should add more complex examples:\n- a mongo URI with the address and port\n- the --field parameter, especially with statx since the syntax is not explained in the doc above.\n- MPIFileUtils scan with mpirun.",
+      "range": {
+        "startLine": 65,
+        "startChar": 0,
+        "endLine": 65,
+        "endChar": 8
+      },
+      "revId": "38af4409e5618150ab7efd5d016a0be02e9a5a1b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ea97e0a7_49327b5a",
+        "filename": "doc/man/source/rbh-sync.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-11-17T08:56:56Z",
+      "side": 1,
+      "message": "I\u0027m not sure Lustre + SQLite is the best example. I would do posix + SQLite and Lustre + mongo.",
+      "range": {
+        "startLine": 72,
+        "startChar": 42,
+        "endLine": 72,
+        "endChar": 48
+      },
+      "revId": "38af4409e5618150ab7efd5d016a0be02e9a5a1b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
