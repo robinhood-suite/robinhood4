@@ -16,6 +16,98 @@
       "message": "sugest: you can specify here that it\u0027s the main document and remove the index.rst file",
       "revId": "1343e891336b8bded49f24b141f03df65d2e526c",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c835de41_23cbd453",
+        "filename": "doc/man/source/conf.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-11-17T09:00:35Z",
+      "side": 1,
+      "message": "I would call this robinhood4 not rbh4. This is the main man page of the product.",
+      "range": {
+        "startLine": 53,
+        "startChar": 6,
+        "endLine": 53,
+        "endChar": 10
+      },
+      "revId": "1343e891336b8bded49f24b141f03df65d2e526c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "54c32e1c_10572e9d",
+        "filename": "doc/man/source/rbh4.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-11-17T09:00:35Z",
+      "side": 1,
+      "message": "Right now, only Lustre FIDs are supported. You should mention this and give an example.",
+      "range": {
+        "startLine": 16,
+        "startChar": 3,
+        "endLine": 16,
+        "endChar": 11
+      },
+      "revId": "1343e891336b8bded49f24b141f03df65d2e526c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b6bfc167_fa06febf",
+        "filename": "doc/man/source/rbh4.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-11-17T09:00:35Z",
+      "side": 1,
+      "message": "a Robinhood4 plugin",
+      "range": {
+        "startLine": 23,
+        "startChar": 70,
+        "endLine": 24,
+        "endChar": 24
+      },
+      "revId": "1343e891336b8bded49f24b141f03df65d2e526c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2b71252f_67405045",
+        "filename": "doc/man/source/rbh4.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-11-17T09:00:35Z",
+      "side": 1,
+      "message": "You should give a reference to the config\u0027s man page here.",
+      "range": {
+        "startLine": 28,
+        "startChar": 4,
+        "endLine": 28,
+        "endChar": 12
+      },
+      "revId": "1343e891336b8bded49f24b141f03df65d2e526c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
