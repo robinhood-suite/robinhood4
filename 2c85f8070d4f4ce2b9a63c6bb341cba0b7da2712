@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c86ce07a_2be88c99",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-11-18T08:55:13Z",
+      "side": 1,
+      "message": "Just agreeing with the code, but you need to think of mutualising parts.",
+      "revId": "2c85f8070d4f4ce2b9a63c6bb341cba0b7da2712",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
