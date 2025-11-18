@@ -18,6 +18,24 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2fac90fd_2c53c11d",
+        "filename": "doc/man/source/conf.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-11-18T15:55:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "02374b10_db363f21",
+      "revId": "1343e891336b8bded49f24b141f03df65d2e526c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c835de41_23cbd453",
@@ -31,6 +49,30 @@
       "writtenOn": "2025-11-17T09:00:35Z",
       "side": 1,
       "message": "I would call this robinhood4 not rbh4. This is the main man page of the product.",
+      "range": {
+        "startLine": 53,
+        "startChar": 6,
+        "endLine": 53,
+        "endChar": 10
+      },
+      "revId": "1343e891336b8bded49f24b141f03df65d2e526c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "454ce9b1_03544755",
+        "filename": "doc/man/source/conf.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-11-18T15:55:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c835de41_23cbd453",
       "range": {
         "startLine": 53,
         "startChar": 6,
