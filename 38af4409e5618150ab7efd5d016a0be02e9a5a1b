@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "14c1d58f_29cd4e46",
+        "filename": "doc/man/source/rbh-sync.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-11-18T15:53:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7d5ab0d8_4cb32deb",
+      "range": {
+        "startLine": 38,
+        "startChar": 39,
+        "endLine": 38,
+        "endChar": 72
+      },
+      "revId": "38af4409e5618150ab7efd5d016a0be02e9a5a1b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b066a72d_32fcb2d2",
@@ -47,6 +71,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "05ec35f6_4a63d124",
+        "filename": "doc/man/source/rbh-sync.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-11-18T15:53:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b066a72d_32fcb2d2",
+      "range": {
+        "startLine": 65,
+        "startChar": 0,
+        "endLine": 65,
+        "endChar": 8
+      },
+      "revId": "38af4409e5618150ab7efd5d016a0be02e9a5a1b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ea97e0a7_49327b5a",
@@ -60,6 +108,30 @@
       "writtenOn": "2025-11-17T08:56:56Z",
       "side": 1,
       "message": "I\u0027m not sure Lustre + SQLite is the best example. I would do posix + SQLite and Lustre + mongo.",
+      "range": {
+        "startLine": 72,
+        "startChar": 42,
+        "endLine": 72,
+        "endChar": 48
+      },
+      "revId": "38af4409e5618150ab7efd5d016a0be02e9a5a1b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e358a9a7_7ae0aa76",
+        "filename": "doc/man/source/rbh-sync.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-11-18T15:53:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ea97e0a7_49327b5a",
       "range": {
         "startLine": 72,
         "startChar": 42,
