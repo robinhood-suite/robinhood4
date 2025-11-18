@@ -258,6 +258,30 @@
       },
       "revId": "9e1294297f9f5f904729cc4ee11a575756842713",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d67fcde7_dd05ded6",
+        "filename": "rbh-policy/tests/test_models_fileclass.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-11-18T09:19:23Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "a88572e0_fd7dd624",
+      "range": {
+        "startLine": 39,
+        "startChar": 8,
+        "endLine": 39,
+        "endChar": 15
+      },
+      "revId": "9e1294297f9f5f904729cc4ee11a575756842713",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
