@@ -330,6 +330,30 @@
       },
       "revId": "1081fe204234f83725f8770551c8ba3a7639c49e",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "941bf9cb_83e7345e",
+        "filename": "rbh-policy/rbhpolicy/config/utils.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-11-18T09:07:31Z",
+      "side": 1,
+      "message": "A size is in bytes. We will consider **100 megabytes**, even though it is nearly equal to 100 million of bytes.\n\nI agree with Yoann on this one, `n` is not necessary.",
+      "parentUuid": "7a561dd6_79661529",
+      "range": {
+        "startLine": 81,
+        "startChar": 9,
+        "endLine": 81,
+        "endChar": 11
+      },
+      "revId": "1081fe204234f83725f8770551c8ba3a7639c49e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
