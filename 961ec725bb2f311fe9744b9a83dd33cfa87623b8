@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6f60bc21_cb384f1d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-11-18T08:38:08Z",
+      "side": 1,
+      "message": "Still not fan about having `rbh_backend_plugin_info` in the `filters` files, but ok about the code itself.",
+      "revId": "961ec725bb2f311fe9744b9a83dd33cfa87623b8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
