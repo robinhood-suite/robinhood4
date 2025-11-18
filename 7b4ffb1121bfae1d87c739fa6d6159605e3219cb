@@ -97,6 +97,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c314e7cb_8acaeead",
+        "filename": "rbh-policy/rbhpolicy/config/utils.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-11-18T09:17:23Z",
+      "side": 1,
+      "message": "Maybe that\u0027s not relevant, but you can give a callable from `parse_unit` to `translate_condition`, thus avoiding another parsing.",
+      "parentUuid": "b1eae483_628138b0",
+      "range": {
+        "startLine": 206,
+        "startChar": 4,
+        "endLine": 206,
+        "endChar": 46
+      },
+      "revId": "7b4ffb1121bfae1d87c739fa6d6159605e3219cb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3a0c620e_988636b4",
         "filename": "rbh-policy/rbhpolicy/config/utils.py",
         "patchSetId": 5
