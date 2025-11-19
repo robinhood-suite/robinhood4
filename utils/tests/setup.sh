@@ -4,7 +4,7 @@
 # Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #
-# SPDX-License-Identifer: LGPL-3.0-or-later
+# SPDX-License-Identifier: LGPL-3.0-or-later
 
 if [[ "$EUID" -ne 0 ]]; then
     echo "This setup script must be run as root"

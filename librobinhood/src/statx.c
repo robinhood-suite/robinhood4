@@ -1,6 +1,6 @@
 /* This file is part of the RobinHood Library
  *
- * SPDX-License-Identifer: LGPL-3.0-or-later
+ * SPDX-License-Identifier: LGPL-3.0-or-later
  */
 
 #ifdef HAVE_CONFIG_H
