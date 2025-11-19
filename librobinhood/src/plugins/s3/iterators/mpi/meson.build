@@ -2,7 +2,7 @@
 # Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #
-# SPDX-License-Identifer: LGPL-3.0-or-later
+# SPDX-License-Identifier: LGPL-3.0-or-later
 
 librbh_s3_mpi_ext = library(
     'rbh-s3-mpi-ext',

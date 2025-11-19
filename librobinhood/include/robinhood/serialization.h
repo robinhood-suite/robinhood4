@@ -1,4 +1,4 @@
-/* SPDX-License-Identifer: LGPL-3.0-or-later */
+/* SPDX-License-Identifier: LGPL-3.0-or-later */
 
 #ifndef SERIALIZATION_H
 #define SERIALIZATION_H

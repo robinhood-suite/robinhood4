@@ -1,8 +1,8 @@
-/* This file is part of Robinhood 4
+/* This file is part of RobinHood 4
  * Copyright (C) 2022 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
- * SPDX-License-Identifer: LGPL-3.0-or-later
+ * SPDX-License-Identifier: LGPL-3.0-or-later
  */
 
 #ifdef HAVE_CONFIG_H
