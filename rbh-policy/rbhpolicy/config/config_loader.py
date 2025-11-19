@@ -18,7 +18,7 @@ def load_config(fs_input):
     Behavior:
     - If fs_input is a simple name (no slashes, e.g. "fs1"), the file
       /etc/robinhood4.d/<fs_input>.py is looked up and imported.
-    - If fs_input is an absolute path (e.g. "/tmp/fs1"), the file
+    - If fs_input is an absolute path (e.g. "/tmp/fs1.py"), the file
       <fs_input.py> is looked up and imported.
     - If fs_input contains a slash but is not absolute (relative path),
       a ValueError is raised.
@@ -35,6 +35,8 @@ def load_config(fs_input):
     if os.path.isabs(fs_input):
         config_dir = os.path.dirname(fs_input) or "/"
         module_name = os.path.basename(fs_input)
+        if module_name.endswith('.py'):
+            module_name = module_name[:-3]
         config_path = os.path.join(config_dir, f"{module_name}.py")
     elif "/" in fs_input:
         raise ValueError(f"Relative paths are not allowed: '{fs_input}'")
