@@ -6,6 +6,7 @@
 # SPDX-License-Identifer: LGPL-3.0-or-later
 
 from rbhpolicy.config.config_loader import load_config
+from rbhpolicy.execution.run import run
 import argparse
 
 if __name__ == "__main__":
@@ -26,4 +27,4 @@ if __name__ == "__main__":
         policy_list = args.policies.split(",")
         config = load_config(fs_name)
         print(f"Loaded configuration for '{fs_name}'")
-        print("Hello, I'm PE")
+        run(policy_list)
