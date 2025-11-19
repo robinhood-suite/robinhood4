@@ -3,6 +3,52 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5d45b805_2d6c20b0",
+        "filename": "rbh-gc/rbh-gc.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-11-19T15:09:32Z",
+      "side": 1,
+      "message": "minor: xstrdup",
+      "range": {
+        "startLine": 69,
+        "startChar": 17,
+        "endLine": 69,
+        "endChar": 23
+      },
+      "revId": "fb959d5e73dccf69461185985625c0128ff54a85",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "60147355_b9ef7e0f",
+        "filename": "rbh-gc/rbh-gc.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-11-19T15:09:32Z",
+      "side": 1,
+      "message": "major: use `open_by_id_generic` rather, otherwise the file really be opened here, when it isn\u0027t necessary.",
+      "range": {
+        "startLine": 100,
+        "startChar": 13,
+        "endLine": 100,
+        "endChar": 31
+      },
+      "revId": "fb959d5e73dccf69461185985625c0128ff54a85",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3c8fa615_5c7786e2",
         "filename": "rbh-gc/tests/test.bash",
         "patchSetId": 1
