@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "64e43df0_a333000b",
+        "filename": "doc/man/source/rbh-info.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-11-19T14:22:04Z",
+      "side": 1,
+      "message": "It would be nice for these example to have sample outputs. For someone discovering RBH4, this is very abstract.",
+      "range": {
+        "startLine": 92,
+        "startChar": 4,
+        "endLine": 92,
+        "endChar": 15
+      },
+      "revId": "3ba5fff2cde5524b527343c98c2ad02f82a8b4f4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
