@@ -9,12 +9,21 @@ from rbhpolicy.config.config_loader import load_config
 import argparse
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Load configuration for a filesystem")
-    parser.add_argument("fs_name", help="Name of the filesystem to load config for")
+    parser = argparse.ArgumentParser(description="RBH Policy CLI")
+    subparsers = parser.add_subparsers(dest="command", required=True)
+
+    run_parser = subparsers.add_parser("run",
+            help="Run policies on a filesystem")
+    run_parser.add_argument("fs_name",
+            help="Path to the configuration file or filesystem name")
+    run_parser.add_argument("policies",
+            help="Comma-separated list of policies to run")
 
     args = parser.parse_args()
-    fs_name = args.fs_name
 
-    config = load_config(fs_name)
-    print(f"Loaded configuration for '{fs_name}'")
-    print("Hello, I'm PE")
+    if args.command == "run":
+        fs_name = args.fs_name
+        policy_list = args.policies.split(",")
+        config = load_config(fs_name)
+        print(f"Loaded configuration for '{fs_name}'")
+        print("Hello, I'm PE")
