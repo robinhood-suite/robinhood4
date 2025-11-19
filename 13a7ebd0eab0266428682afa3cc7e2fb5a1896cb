@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "95d3bde3_5d5d709a",
+        "filename": "doc/man/source/rbh-find.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-11-19T10:48:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5423198f_fe8db06f",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 16
+      },
+      "revId": "13a7ebd0eab0266428682afa3cc7e2fb5a1896cb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2fc976e1_d6640590",
@@ -47,6 +71,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9af60e33_f075aa7d",
+        "filename": "doc/man/source/rbh-find.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-11-19T10:48:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2fc976e1_d6640590",
+      "range": {
+        "startLine": 15,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 11
+      },
+      "revId": "13a7ebd0eab0266428682afa3cc7e2fb5a1896cb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b5d31c99_53c68821",
@@ -60,6 +108,30 @@
       "writtenOn": "2025-11-17T09:07:44Z",
       "side": 1,
       "message": "major: there can be multiple sources",
+      "range": {
+        "startLine": 22,
+        "startChar": 0,
+        "endLine": 22,
+        "endChar": 6
+      },
+      "revId": "13a7ebd0eab0266428682afa3cc7e2fb5a1896cb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2fa84728_b023cc63",
+        "filename": "doc/man/source/rbh-find.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-11-19T10:48:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b5d31c99_53c68821",
       "range": {
         "startLine": 22,
         "startChar": 0,
@@ -95,6 +167,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "bd592f51_66cf9970",
+        "filename": "doc/man/source/rbh-find.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-11-19T10:48:05Z",
+      "side": 1,
+      "message": "There is currently no per-backend action available, there are all in rbh-find.",
+      "parentUuid": "138ff768_f10da7bb",
+      "range": {
+        "startLine": 42,
+        "startChar": 28,
+        "endLine": 42,
+        "endChar": 38
+      },
+      "revId": "13a7ebd0eab0266428682afa3cc7e2fb5a1896cb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8260cc0c_01aeb7a9",
         "filename": "doc/man/source/rbh-find.rst",
         "patchSetId": 1
@@ -106,6 +202,30 @@
       "writtenOn": "2025-11-17T09:07:44Z",
       "side": 1,
       "message": "You can merge this with the section on predicates.",
+      "range": {
+        "startLine": 86,
+        "startChar": 0,
+        "endLine": 88,
+        "endChar": 31
+      },
+      "revId": "13a7ebd0eab0266428682afa3cc7e2fb5a1896cb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "411f6749_ab5e9190",
+        "filename": "doc/man/source/rbh-find.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-11-19T10:48:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8260cc0c_01aeb7a9",
       "range": {
         "startLine": 86,
         "startChar": 0,
@@ -129,6 +249,30 @@
       "writtenOn": "2025-11-17T09:07:44Z",
       "side": 1,
       "message": "You don\u0027t have to repete this",
+      "range": {
+        "startLine": 90,
+        "startChar": 1,
+        "endLine": 92,
+        "endChar": 1
+      },
+      "revId": "13a7ebd0eab0266428682afa3cc7e2fb5a1896cb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "59fa1b3b_e45fc3ba",
+        "filename": "doc/man/source/rbh-find.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-11-19T10:48:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0bab70f9_55b852dc",
       "range": {
         "startLine": 90,
         "startChar": 1,
