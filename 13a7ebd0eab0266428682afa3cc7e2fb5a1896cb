@@ -189,6 +189,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c205de7a_d61e9a8b",
+        "filename": "doc/man/source/rbh-find.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-11-19T14:05:05Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "bd592f51_66cf9970",
+      "range": {
+        "startLine": 42,
+        "startChar": 28,
+        "endLine": 42,
+        "endChar": 38
+      },
+      "revId": "13a7ebd0eab0266428682afa3cc7e2fb5a1896cb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8260cc0c_01aeb7a9",
