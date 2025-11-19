@@ -64,6 +64,12 @@ rbh_info()
     "$__rbh_info" "$@"
 }
 
+__rbh_gc=$(PATH="$PWD/rbh-gc:$PATH" which rbh-gc)
+rbh_gc()
+{
+    "$__rbh_gc" "$@"
+}
+
 __rbh_undelete=$(PATH="$PWD/rbh-undelete:$PATH" which rbh-undelete)
 rbh_undelete()
 {
