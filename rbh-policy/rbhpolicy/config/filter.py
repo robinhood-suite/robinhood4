@@ -45,6 +45,16 @@ class RbhRule(Structure):
         ("parameters", c_char_p),  # JSON string
     ]
 
+class RbhPolicy(Structure):
+    _fields_ = [
+        ("name", c_char_p),
+        ("filter", rbh_filter_p),
+        ("action", c_char_p),
+        ("parameters", c_char_p),
+        ("rules", POINTER(RbhRule)),
+        ("rule_count", ctypes.c_size_t),
+    ]
+
 def make_c_rules(py_rules):
     arr = (RbhRule * len(py_rules))()
     for i, rule in enumerate(py_rules):
@@ -54,6 +64,19 @@ def make_c_rules(py_rules):
         arr[i].action = (rule.action or "").encode()
         arr[i].parameters = params_json
     return arr, len(py_rules)
+
+def make_c_policy(py_policy):
+    rules_arr, rules_len = make_c_rules(py_policy.rules)
+    root_params_json = json.dumps(py_policy.parameters or {}).encode()
+    c_policy = RbhPolicy()
+    c_policy.name = py_policy.name.encode()
+    c_policy.filter = py_policy.to_filter()
+    c_policy.action = (py_policy.action or "").encode()
+    c_policy.parameters = root_params_json
+    c_policy.rules = rules_arr
+    c_policy.rule_count = rules_len
+
+    return c_policy
 
 def build_filter(args):
     global backend # The URI, comes from the configuration file.
