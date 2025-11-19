@@ -1,4 +1,4 @@
-.. This file is part of the RobinHood Library
+.. This file is part of RobinHood
    Copyright (C) 2025 Commissariat à l'énergie atomique et
                       aux énergies alternatives
 

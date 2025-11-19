@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
-# This file is part of rbh-info.
+# This file is part of RobinHood.
 # Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #
-# SPDX-License-Identifer: LGPL-3.0-or-later
+# SPDX-License-Identifier: LGPL-3.0-or-later
 
 test_dir=$(dirname $(readlink -e $0))
 . $test_dir/../../utils/tests/framework.bash
