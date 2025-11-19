@@ -91,6 +91,11 @@ def build_filter(args):
 
     return librbh.build_filter_from_uri(backend.encode(), argv)
 
+def collect_fs_entries(rbhfilter):
+    global database
+    uri_c = c_char_p(database.encode("utf-8"))
+    return librbh.rbh_collect_fsentry(uri_c, rbhfilter)
+
 def rbh_filter_and(filter1, filter2):
     return librbh.rbh_filter_and(filter1, filter2)
 
@@ -110,3 +115,7 @@ def rbh_filter_free(ptr):
 def set_backend(uri: str):
     global backend
     backend = uri
+
+def set_database(uri: str):
+    global database
+    database = uri
