@@ -1,8 +1,8 @@
-# This file is part of RobinHood 4
+# This file is part of RobinHood
 # Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #
-# SPDX-License-Identifer: LGPL-3.0-or-later
+# SPDX-License-Identifier: LGPL-3.0-or-later
 
 sqlite3 = dependency('sqlite3', version: '>=1.3.6', required: false,
                      disabler: true)

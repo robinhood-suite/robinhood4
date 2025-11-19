@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
-# This file is part of rbh-fsevents.
+# This file is part of RobinHood.
 # Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #
-# SPDX-License-Identifer: LGPL-3.0-or-later
+# SPDX-License-Identifier: LGPL-3.0-or-later
 
 ################################################################################
 #                                 LUSTRE UTILS                                 #
