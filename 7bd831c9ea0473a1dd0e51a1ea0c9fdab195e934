@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd7b7416_1c8335b1",
+        "filename": "doc/man/source/rbh-fsevents.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-11-19T14:18:04Z",
+      "side": 1,
+      "message": "It\u0027s not a config file. It\u0027s a file containing the YAML representation of fsevents.",
+      "range": {
+        "startLine": 28,
+        "startChar": 23,
+        "endLine": 28,
+        "endChar": 36
+      },
+      "revId": "7bd831c9ea0473a1dd0e51a1ea0c9fdab195e934",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0983fc8a_f817b1c0",
+        "filename": "doc/man/source/rbh-fsevents.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-11-19T14:18:04Z",
+      "side": 1,
+      "message": "suggest: use fsname-MDT0000 instead to make it clear that lustre in this case is the FS\u0027 name.",
+      "range": {
+        "startLine": 32,
+        "startChar": 7,
+        "endLine": 32,
+        "endChar": 21
+      },
+      "revId": "7bd831c9ea0473a1dd0e51a1ea0c9fdab195e934",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0a90ac18_bcbc54a1",
+        "filename": "doc/man/source/rbh-fsevents.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-11-19T14:18:04Z",
+      "side": 1,
+      "message": "this should probably be increased to 10k to 100k",
+      "range": {
+        "startLine": 50,
+        "startChar": 13,
+        "endLine": 50,
+        "endChar": 17
+      },
+      "revId": "7bd831c9ea0473a1dd0e51a1ea0c9fdab195e934",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a4bc3a53_8846b3e5",
+        "filename": "doc/man/source/rbh-fsevents.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-11-19T14:18:04Z",
+      "side": 1,
+      "message": "Why? I would say \"cannot be used with a YAML file source\" instead. We could imagine another source implementing this as well.",
+      "range": {
+        "startLine": 60,
+        "startChar": 12,
+        "endLine": 60,
+        "endChar": 49
+      },
+      "revId": "7bd831c9ea0473a1dd0e51a1ea0c9fdab195e934",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "afa13638_bdeec2a2",
+        "filename": "doc/man/source/rbh-fsevents.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-11-19T14:18:04Z",
+      "side": 1,
+      "message": "Default is 1 I assume. You should mention it.",
+      "range": {
+        "startLine": 82,
+        "startChar": 6,
+        "endLine": 82,
+        "endChar": 10
+      },
+      "revId": "7bd831c9ea0473a1dd0e51a1ea0c9fdab195e934",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ccda8b39_d34cf2cd",
+        "filename": "doc/man/source/rbh-fsevents.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-11-19T14:18:04Z",
+      "side": 1,
+      "message": "again here I would use fsname instead.",
+      "range": {
+        "startLine": 96,
+        "startChar": 27,
+        "endLine": 96,
+        "endChar": 32
+      },
+      "revId": "7bd831c9ea0473a1dd0e51a1ea0c9fdab195e934",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
