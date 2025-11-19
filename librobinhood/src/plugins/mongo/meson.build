@@ -2,7 +2,7 @@
 # Copyright (C) 2019 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #
-# SPDX-License-Identifer: LGPL-3.0-or-later
+# SPDX-License-Identifier: LGPL-3.0-or-later
 
 libmongoc = dependency('libmongoc-1.0', version: '>=1.3.6')
 libbson = dependency('libbson-1.0', version: '>=1.16.0')

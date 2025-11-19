@@ -2,7 +2,7 @@
 # Copyright (C) 2024 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #
-# SPDX-License-Identifer: LGPL-3.0-or-later
+# SPDX-License-Identifier: LGPL-3.0-or-later
 
 specfile = configuration_data()
 specfile.set('version', meson.project_version())
