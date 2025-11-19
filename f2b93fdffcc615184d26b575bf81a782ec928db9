@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "25e9f001_6352b29f",
+        "filename": "doc/man/source/robinhood4.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-11-19T13:59:04Z",
+      "side": 1,
+      "message": "Here an example of rbh-info to list all the backends available on a machine would be nice.",
+      "range": {
+        "startLine": 20,
+        "startChar": 0,
+        "endLine": 20,
+        "endChar": 6
+      },
+      "revId": "f2b93fdffcc615184d26b575bf81a782ec928db9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
