@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8be196fc_bb4cf665",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-11-19T16:05:13Z",
+      "side": 1,
+      "message": "There\u0027s a typo in one of the files, good luck finding it :)",
+      "revId": "fa2b14a7779cb8120fa2276fe839adcbf3fffd8c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
