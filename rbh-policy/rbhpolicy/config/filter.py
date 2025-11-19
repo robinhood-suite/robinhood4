@@ -16,6 +16,8 @@ libc.free.argtypes = [c_void_p]
 libc.free.restype = None
 
 # struct rbh_filter* (opaque to avoid mapping)
+rbh_mut_iterator_p = c_void_p
+rbh_backend_p = c_void_p
 rbh_filter_p = c_void_p
 
 librbh.rbh_filter_and.restype = rbh_filter_p
@@ -32,6 +34,12 @@ librbh.rbh_filter_validate.argtypes = [rbh_filter_p]
 
 librbh.build_filter_from_uri.restype = rbh_filter_p
 librbh.build_filter_from_uri.argtypes = [c_char_p, ctypes.POINTER(c_char_p)]
+
+librbh.rbh_backend_from_uri.restype = rbh_backend_p
+librbh.rbh_backend_from_uri.argtypes = [c_char_p, c_bool]
+
+librbh.rbh_collect_fsentries.restype = rbh_mut_iterator_p
+librbh.rbh_collect_fsentries.argtypes = [rbh_backend_p, rbh_filter_p]
 
 class RbhRule(Structure):
     _fields_ = [
@@ -89,6 +97,17 @@ def build_filter(args):
 
     return librbh.build_filter_from_uri(backend.encode(), argv)
 
+def collect_fs_entries(rbhfilter):
+    global database
+    uri_c = c_char_p(database.encode("utf-8"))
+    backend = librbh.rbh_backend_from_uri(uri_c, True)
+    if not backend:
+        raise RuntimeError("Failed to create backend")
+
+    it = librbh.rbh_collect_fsentries(backend, rbhfilter)
+
+    return it, backend
+
 def rbh_filter_and(filter1, filter2):
     return librbh.rbh_filter_and(filter1, filter2)
 
@@ -108,3 +127,7 @@ def rbh_filter_free(ptr):
 def set_backend(uri: str):
     global backend
     backend = uri
+
+def set_database(uri: str):
+    global database
+    database = uri
