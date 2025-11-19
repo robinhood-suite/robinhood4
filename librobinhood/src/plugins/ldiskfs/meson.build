@@ -1,8 +1,8 @@
-# This file is part of RobinHood 4
+# This file is part of RobinHood
 # Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #
-# SPDX-License-Identifer: LGPL-3.0-or-later
+# SPDX-License-Identifier: LGPL-3.0-or-later
 
 libext2fs = cc.find_library('libext2fs', required: false, disabler: true)
 libcom_err = cc.find_library('com_err', required: false, disabler: true)

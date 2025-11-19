@@ -1,5 +1,5 @@
 #!/usr/bin/env python3.9
-# This file is part of RobinHood 4
+# This file is part of RobinHood
 # Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
 #            alternatives
 #
