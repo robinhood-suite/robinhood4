@@ -19,6 +19,14 @@ struct rbh_rule {
     const char *parameters;
 };
 
+struct rbh_policy {
+    const char *name;
+    const char *action;
+    const char *parameters;
+    struct rbh_rule *rules;
+    size_t rule_count;
+};
+
 struct rbh_mut_iterator *
 rbh_collect_fsentry(const char *uri, struct rbh_filter *filter)
 {
