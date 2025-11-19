@@ -1,0 +1,13 @@
+[build-system]
+requires = ["meson-python"]
+build-backend = "mesonpy"
+
+[project]
+name = "rbhpolicy"
+version = "0.1.0"
+description = "Python packaging for rbh-policy"
+requires-python = ">=3.9"
+
+[project.scripts]
+rbh-policy = "rbhpolicy.__main__:main"
+

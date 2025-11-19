@@ -1,4 +1,4 @@
-/* SPDX-License-Identifer: LGPL-3.0-or-later */
+/* SPDX-License-Identifier: LGPL-3.0-or-later */
 
 #ifndef ROBINHOOD_STATX_H
 #define ROBINHOOD_STATX_H
