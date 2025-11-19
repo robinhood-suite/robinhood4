@@ -120,6 +120,7 @@ subdir('rbh-policy')
 subdir('rbh-report')
 subdir('rbh-info')
 subdir('rbh-update-path')
+subdir('rbh-gc')
 if build_lustre
     subdir('rbh-undelete')
 endif
