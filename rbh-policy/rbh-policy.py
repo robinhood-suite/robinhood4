@@ -3,7 +3,7 @@
 # Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
 #            alternatives
 #
-# SPDX-License-Identifer: LGPL-3.0-or-later
+# SPDX-License-Identifier: LGPL-3.0-or-later
 
 from rbhpolicy.config.config_loader import load_config
 import argparse
