@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3c8fa615_5c7786e2",
+        "filename": "rbh-gc/tests/test.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-11-19T14:55:50Z",
+      "side": 1,
+      "message": "nit: to remove",
+      "range": {
+        "startLine": 17,
+        "startChar": 4,
+        "endLine": 18,
+        "endChar": 6
+      },
+      "revId": "fb959d5e73dccf69461185985625c0128ff54a85",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a5764430_c6a080fa",
+        "filename": "rbh-gc/tests/test.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-11-19T14:55:50Z",
+      "side": 1,
+      "message": "nit: to remove",
+      "range": {
+        "startLine": 32,
+        "startChar": 4,
+        "endLine": 32,
+        "endChar": 34
+      },
+      "revId": "fb959d5e73dccf69461185985625c0128ff54a85",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
