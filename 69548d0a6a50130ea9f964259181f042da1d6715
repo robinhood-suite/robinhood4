@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "96fd7903_4200a282",
+        "filename": "doc/man/source/rbh-report.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-11-19T14:10:30Z",
+      "side": 1,
+      "message": "What about xattrs?",
+      "range": {
+        "startLine": 37,
+        "startChar": 9,
+        "endLine": 37,
+        "endChar": 19
+      },
+      "revId": "69548d0a6a50130ea9f964259181f042da1d6715",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
