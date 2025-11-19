@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a545587b_a37a78f6",
+        "filename": "doc/man/source/rbh-sync.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-11-19T13:56:51Z",
+      "side": 1,
+      "message": "typo: I think it should be a URI (same below)",
+      "range": {
+        "startLine": 32,
+        "startChar": 42,
+        "endLine": 32,
+        "endChar": 48
+      },
+      "revId": "c707f5188c96b08014a11647301e999c7594308d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9235219f_9c4d97e4",
+        "filename": "doc/man/source/rbh-sync.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2025-11-19T13:56:51Z",
+      "side": 1,
+      "message": "sugges: then",
+      "range": {
+        "startLine": 53,
+        "startChar": 60,
+        "endLine": 53,
+        "endChar": 63
+      },
+      "revId": "c707f5188c96b08014a11647301e999c7594308d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
