@@ -49,6 +49,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "bbf4977a_1d692efe",
+        "filename": "doc/man/source/rbh-undelete.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2025-11-20T14:11:04Z",
+      "side": 1,
+      "message": "I think, you must at least say that the source backend must have a way to built again the data to the dest backend ... Or that the data is not lost on dest, only the metadata and that we are able to build this metadata from source to dest.",
+      "parentUuid": "9c9fc34d_832dc530",
+      "range": {
+        "startLine": 17,
+        "startChar": 0,
+        "endLine": 18,
+        "endChar": 67
+      },
+      "revId": "f8290046b58ba5f1d507908c886c809c5579ef50",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "428118c1_4419aa86",
         "filename": "doc/man/source/rbh-undelete.rst",
         "patchSetId": 2
