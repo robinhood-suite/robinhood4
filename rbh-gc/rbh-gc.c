@@ -52,7 +52,8 @@ usage(void)
         "\n"
         "Optional arguments:\n"
         "    -d, --dry-run  displays the list of the absent entries\n"
-        "    -h, --help     print this messsage and exit\n";
+        "    -h, --help     print this messsage and exit\n"
+        "    -v, --verbose  verbose mode\n";
 
     printf(message, program_invocation_short_name);
 }
@@ -72,21 +73,46 @@ get_mountpoint_from_source(struct rbh_backend *source)
     return xstrdup(mountpoint_value_map->pairs[0].value->string);
 }
 
-struct fsentry2delete_iterator {
+struct fsentry2gc_iterator {
     struct rbh_iterator iterator;
 
     struct rbh_iterator *fsentries;
     struct rbh_fsevent delete;
 };
 
+static bool
+still_alive(const struct rbh_id *id)
+{
+    int fd;
+
+    errno = 0;
+
+    fd = open_by_id_opath(mount_fd, id);
+    if (fd < 0 && errno != ENOENT && errno != ESTALE)
+        /* Something happened, something bad... */
+        error(EXIT_FAILURE, errno, "open_by_id_opath");
+
+    if (fd >= 0) {
+        /* The entry still exists somewhere in the filesystem
+         *
+         * Let's not delete it yet.
+         */
+        if (close(fd))
+            /* This should never happen */
+            error(EXIT_FAILURE, errno, "unexpected error on close");
+        return true;
+    }
+
+    return false;
+}
+
 static const void *
 fsentry2delete_iter_next(void *iterator)
 {
-    struct fsentry2delete_iterator *deletes = iterator;
+    struct fsentry2gc_iterator *deletes = iterator;
 
     while (true) {
         const struct rbh_fsentry *fsentry;
-        int fd;
 
         fsentry = rbh_iter_next(deletes->fsentries);
         if (fsentry == NULL)
@@ -94,51 +120,70 @@ fsentry2delete_iter_next(void *iterator)
 
         assert((fsentry->mask & RBH_FP_ID) == RBH_FP_ID);
 
-        errno = 0;
-
-        fd = open_by_id_opath(mount_fd, &fsentry->id);
-        if (fd < 0 && errno != ENOENT && errno != ESTALE)
-            /* Something happened, something bad... */
-            error(EXIT_FAILURE, errno, "open_by_id_generic");
-
-        if (fd >= 0) {
-            /* The entry still exists somewhere in the filesystem
-             *
-             * Let's not delete it yet.
-             */
-            if (close(fd))
-                /* This should never happen */
-                error(EXIT_FAILURE, errno, "unexpected error on close");
+        if (still_alive(&fsentry->id))
             continue;
-        }
 
         deletes->delete.id = fsentry->id;
         return &deletes->delete;
     }
+
+    return NULL;
+}
+
+static const void *
+fsentry2print_iter_next(void *iterator)
+{
+    struct fsentry2gc_iterator *prints = iterator;
+
+    while (true) {
+        const struct rbh_fsentry *fsentry;
+
+        fsentry = rbh_iter_next(prints->fsentries);
+        if (fsentry == NULL)
+            return NULL;
+
+        assert((fsentry->mask & RBH_FP_ID) == RBH_FP_ID);
+
+        if (still_alive(&fsentry->id))
+            continue;
+
+        return fsentry;
+    }
+
+    return NULL;
 }
 
 static void
-fsentry2delete_iter_destroy(void *iterator)
+fsentry2gc_iter_destroy(void *iterator)
 {
-    struct fsentry2delete_iterator *deletes = iterator;
+    struct fsentry2gc_iterator *iter = iterator;
 
-    rbh_iter_destroy(deletes->fsentries);
-    free(deletes);
+    rbh_iter_destroy(iter->fsentries);
+    free(iter);
 }
 
 static const struct rbh_iterator_operations FSENTRY2DELETE_ITER_OPS = {
     .next = fsentry2delete_iter_next,
-    .destroy = fsentry2delete_iter_destroy,
+    .destroy = fsentry2gc_iter_destroy,
+};
+
+static const struct rbh_iterator_operations FSENTRY2PRINT_ITER_OPS = {
+    .next = fsentry2print_iter_next,
+    .destroy = fsentry2gc_iter_destroy,
 };
 
 static const struct rbh_iterator FSENTRY2DELETE_ITERATOR = {
     .ops = &FSENTRY2DELETE_ITER_OPS,
 };
 
+static const struct rbh_iterator FSENTRY2PRINT_ITERATOR = {
+    .ops = &FSENTRY2PRINT_ITER_OPS,
+};
+
 static struct rbh_iterator *
 iter_fsentry2delete(struct rbh_iterator *fsentries)
 {
-    struct fsentry2delete_iterator *deletes;
+    struct fsentry2gc_iterator *deletes;
 
     deletes = xmalloc(sizeof(*deletes));
 
@@ -148,65 +193,121 @@ iter_fsentry2delete(struct rbh_iterator *fsentries)
     return &deletes->iterator;
 }
 
+static struct rbh_iterator *
+iter_fsentry2print(struct rbh_iterator *fsentries)
+{
+    struct fsentry2gc_iterator *prints;
+
+    prints = xmalloc(sizeof(*prints));
+
+    prints->iterator = FSENTRY2PRINT_ITERATOR;
+    prints->fsentries = fsentries;
+    return &prints->iterator;
+}
+
+static int
+print_entries(struct rbh_iterator *iterator)
+{
+    int save_errno = errno;
+    size_t count = 0;
+
+    if (iterator == NULL)
+        return 0;
+
+    do {
+        const struct rbh_fsentry *entry;
+
+        entry = rbh_iter_next(iterator);
+        if (entry == NULL) {
+            if (errno == ENODATA)
+                break;
+
+            return -1;
+        }
+
+        printf("'%s' needs to be deleted\n",
+               rbh_fsentry_find_ns_xattr(entry, "path")->string);
+        count++;
+    } while (true);
+
+    printf("%lu element%s total to delete\n", count, count > 1 ? "s" : "");
+
+    errno = save_errno;
+    return count;
+}
+
 static void
 gc(bool dry_run_mode, bool verbose_mode)
 {
     const struct rbh_filter_options OPTIONS = {
-        .dry_run = dry_run_mode,
         .verbose = verbose_mode,
     };
     const struct rbh_filter_output OUTPUT = {
         .type = RBH_FOT_PROJECTION,
         .projection = {
-            .fsentry_mask = RBH_FP_ID,
+            .fsentry_mask = dry_run_mode ?
+                RBH_FP_ID | RBH_FP_NAMESPACE_XATTRS :
+                RBH_FP_ID,
         },
     };
     struct rbh_mut_iterator *fsentries;
-    struct rbh_mut_iterator *chunks;
     struct rbh_iterator *constify;
-    struct rbh_iterator *deletes;
 
     fsentries = rbh_backend_filter(backend, NULL, &OPTIONS, &OUTPUT, NULL);
     if (fsentries == NULL)
         error(EXIT_FAILURE, errno, "rbh_backend_filter");
 
     constify = rbh_iter_constify(fsentries);
-    deletes = iter_fsentry2delete(constify);
 
-    chunks = rbh_iter_chunkify(deletes, RBH_ITER_CHUNK_SIZE);
-    if (chunks == NULL)
-        error(EXIT_FAILURE, errno, "rbh_iter_chunkify");
+    if (!dry_run_mode) {
+        struct rbh_mut_iterator *chunks;
+        struct rbh_iterator *deletes;
 
-    do {
-        struct rbh_iterator *chunk = rbh_mut_iter_next(chunks);
-        int save_errno;
-        ssize_t count;
+        deletes = iter_fsentry2delete(constify);
 
-        if (chunk == NULL) {
-            if (errno == ENODATA || errno == RBH_BACKEND_ERROR)
+        chunks = rbh_iter_chunkify(deletes, RBH_ITER_CHUNK_SIZE);
+        if (chunks == NULL)
+            error(EXIT_FAILURE, errno, "rbh_iter_chunkify");
+
+        do {
+            struct rbh_iterator *chunk = rbh_mut_iter_next(chunks);
+            int save_errno;
+            ssize_t count;
+
+            if (chunk == NULL) {
+                if (errno == ENODATA || errno == RBH_BACKEND_ERROR)
+                    break;
+                error(EXIT_FAILURE, errno, "while chunkifying entries");
+            }
+
+            count = rbh_backend_update(backend, chunk);
+            save_errno = errno;
+            rbh_iter_destroy(chunk);
+            if (count < 0) {
+                errno = save_errno;
+                assert(errno != ENODATA);
                 break;
-            error(EXIT_FAILURE, errno, "while chunkifying entries");
-        }
+            }
+        } while (true);
 
-        count = rbh_backend_update(backend, chunk);
-        save_errno = errno;
-        rbh_iter_destroy(chunk);
-        if (count < 0) {
-            errno = save_errno;
-            assert(errno != ENODATA);
+        switch (errno) {
+        case ENODATA:
+            rbh_backend_update(backend, NULL);
             break;
+        case RBH_BACKEND_ERROR:
+            error(EXIT_FAILURE, 0, "%s", rbh_backend_error);
+            __builtin_unreachable();
+        default:
+            error(EXIT_FAILURE, errno, "while iterating over entries");
         }
-    } while (true);
+    } else {
+        struct rbh_iterator *prints;
 
-    switch (errno) {
-    case ENODATA:
-        rbh_backend_update(backend, NULL);
-        break;
-    case RBH_BACKEND_ERROR:
-        error(EXIT_FAILURE, 0, "%s", rbh_backend_error);
-        __builtin_unreachable();
-    default:
-        error(EXIT_FAILURE, errno, "while iterating over entries");
+        prints = iter_fsentry2print(constify);
+        if (print_entries(prints) == -1)
+            error(EXIT_FAILURE, errno, "print_entries");
+
+        rbh_iter_destroy(prints);
     }
 }
 

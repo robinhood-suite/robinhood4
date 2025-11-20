@@ -32,8 +32,21 @@ test_basic()
         difflines "/" "/fileB"
 }
 
+test_dry_run()
+{
+    touch fileA fileB
 
-declare -a tests=(test_basic)
+    rbh_sync "rbh:posix:." "rbh:$db:$testdb"
+
+    rbh_gc -d "rbh:$db:$testdb" | difflines "0 element total to delete"
+
+    rm fileA
+
+    rbh_gc -d "rbh:$db:$testdb" |
+        difflines "'/fileA' needs to be deleted" "1 element total to delete"
+}
+
+declare -a tests=(test_basic test_dry_run)
 
 tmpdir=$(mktemp --directory)
 trap -- "rm -rf '$tmpdir'" EXIT
