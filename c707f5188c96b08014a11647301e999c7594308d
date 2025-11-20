@@ -45,6 +45,52 @@
       },
       "revId": "c707f5188c96b08014a11647301e999c7594308d",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e2a32992_0eb29248",
+        "filename": "doc/man/source/rbh-sync.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2025-11-20T13:53:12Z",
+      "side": 1,
+      "message": "comment: the added syntax (a checked-box by entry) is a bit heavy for only one field, mount-id, that does not follow the default.",
+      "range": {
+        "startLine": 72,
+        "startChar": 4,
+        "endLine": 73,
+        "endChar": 50
+      },
+      "revId": "c707f5188c96b08014a11647301e999c7594308d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "29efabed_37bae218",
+        "filename": "doc/man/source/rbh-sync.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2025-11-20T13:53:12Z",
+      "side": 1,
+      "message": "comment: why only ?",
+      "range": {
+        "startLine": 105,
+        "startChar": 17,
+        "endLine": 105,
+        "endChar": 21
+      },
+      "revId": "c707f5188c96b08014a11647301e999c7594308d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
