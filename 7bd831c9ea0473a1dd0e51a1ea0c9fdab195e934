@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "612f7154_2a485195",
+        "filename": "doc/man/source/rbh-fsevents.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-11-20T15:42:28Z",
+      "side": 1,
+      "message": "Neither is possible actually, can\u0027t source from a file, only stdin",
+      "parentUuid": "dd7b7416_1c8335b1",
+      "range": {
+        "startLine": 28,
+        "startChar": 23,
+        "endLine": 28,
+        "endChar": 36
+      },
+      "revId": "7bd831c9ea0473a1dd0e51a1ea0c9fdab195e934",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0983fc8a_f817b1c0",
@@ -47,6 +71,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "46ce3ab1_436b300b",
+        "filename": "doc/man/source/rbh-fsevents.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-11-20T15:42:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0983fc8a_f817b1c0",
+      "range": {
+        "startLine": 32,
+        "startChar": 7,
+        "endLine": 32,
+        "endChar": 21
+      },
+      "revId": "7bd831c9ea0473a1dd0e51a1ea0c9fdab195e934",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0a90ac18_bcbc54a1",
@@ -60,6 +108,30 @@
       "writtenOn": "2025-11-19T14:18:04Z",
       "side": 1,
       "message": "this should probably be increased to 10k to 100k",
+      "range": {
+        "startLine": 50,
+        "startChar": 13,
+        "endLine": 50,
+        "endChar": 17
+      },
+      "revId": "7bd831c9ea0473a1dd0e51a1ea0c9fdab195e934",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fab98197_ba3ec4e3",
+        "filename": "doc/man/source/rbh-fsevents.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-11-20T15:42:28Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "0a90ac18_bcbc54a1",
       "range": {
         "startLine": 50,
         "startChar": 13,
@@ -95,6 +167,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e4d464ff_f1be3e3d",
+        "filename": "doc/man/source/rbh-fsevents.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-11-20T15:42:28Z",
+      "side": 1,
+      "message": "Currently, its only use is the Lustre source, I rephrased it in that regard. We can imagine this feature for another source, but we don\u0027t even have another source ATM, so I don\u0027t think it should be noted (Hestia doesn\u0027t count).",
+      "parentUuid": "a4bc3a53_8846b3e5",
+      "range": {
+        "startLine": 60,
+        "startChar": 12,
+        "endLine": 60,
+        "endChar": 49
+      },
+      "revId": "7bd831c9ea0473a1dd0e51a1ea0c9fdab195e934",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "afa13638_bdeec2a2",
         "filename": "doc/man/source/rbh-fsevents.rst",
         "patchSetId": 1
@@ -106,6 +202,30 @@
       "writtenOn": "2025-11-19T14:18:04Z",
       "side": 1,
       "message": "Default is 1 I assume. You should mention it.",
+      "range": {
+        "startLine": 82,
+        "startChar": 6,
+        "endLine": 82,
+        "endChar": 10
+      },
+      "revId": "7bd831c9ea0473a1dd0e51a1ea0c9fdab195e934",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e2cdb7c6_a24af591",
+        "filename": "doc/man/source/rbh-fsevents.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-11-20T15:42:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "afa13638_bdeec2a2",
       "range": {
         "startLine": 82,
         "startChar": 6,
@@ -129,6 +249,30 @@
       "writtenOn": "2025-11-19T14:18:04Z",
       "side": 1,
       "message": "again here I would use fsname instead.",
+      "range": {
+        "startLine": 96,
+        "startChar": 27,
+        "endLine": 96,
+        "endChar": 32
+      },
+      "revId": "7bd831c9ea0473a1dd0e51a1ea0c9fdab195e934",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5ba6022d_15ff0675",
+        "filename": "doc/man/source/rbh-fsevents.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-11-20T15:42:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ccda8b39_d34cf2cd",
       "range": {
         "startLine": 96,
         "startChar": 27,
