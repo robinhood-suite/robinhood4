@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "711e05a9_431c0434",
+        "filename": "doc/man/source/rbh-info.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-11-24T12:53:42Z",
+      "side": 1,
+      "message": "minor: to remove",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 2,
+        "endChar": 8
+      },
+      "revId": "9792b7e37c52f21330c6bdf4570b373ac4e75571",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5d186a82_18853ebb",
+        "filename": "doc/man/source/rbh-info.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-11-24T12:53:42Z",
+      "side": 1,
+      "message": "minor: robinhood4",
+      "range": {
+        "startLine": 117,
+        "startChar": 20,
+        "endLine": 117,
+        "endChar": 24
+      },
+      "revId": "9792b7e37c52f21330c6bdf4570b373ac4e75571",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
