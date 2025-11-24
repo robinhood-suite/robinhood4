@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b3acf7e7_7d06eba5",
+        "filename": "doc/man/source/rbh-report.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-11-24T12:42:12Z",
+      "side": 1,
+      "message": "minor: in alphabetical order",
+      "revId": "86e7ee5ee6a3dbd8697b32ede015b684661df641",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ddc70b41_c7da2409",
+        "filename": "doc/man/source/rbh-report.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-11-24T12:42:12Z",
+      "side": 1,
+      "message": "minor: robinhood4",
+      "range": {
+        "startLine": 97,
+        "startChar": 22,
+        "endLine": 97,
+        "endChar": 26
+      },
+      "revId": "86e7ee5ee6a3dbd8697b32ede015b684661df641",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
