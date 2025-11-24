@@ -116,6 +116,30 @@
       },
       "revId": "cbd4d290920798862d28c7d9195f57c062574580",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f1c873ae_5468b44a",
+        "filename": "doc/man/source/index.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-11-24T12:06:23Z",
+      "side": 1,
+      "message": "It\u0027s because Sphinx works with a hierarchical structure of files. It needs a main file, which in this case is index.rst. This file will serve as the main RBH4 man page.",
+      "parentUuid": "0ad2a7ea_1a62f7f6",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 37
+      },
+      "revId": "cbd4d290920798862d28c7d9195f57c062574580",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
