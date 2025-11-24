@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad1d7529_ec52d92c",
+        "filename": "doc/man/source/rbh-find.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-11-24T12:36:46Z",
+      "side": 1,
+      "message": "minor: robinhood4",
+      "range": {
+        "startLine": 226,
+        "startChar": 31,
+        "endLine": 226,
+        "endChar": 38
+      },
+      "revId": "817e838e9ee3c9aaee753fcf1b13e489e5e0536e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
