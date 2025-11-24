@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4023061b_9e2d2f1d",
+        "filename": "doc/man/source/rbh-fsevents.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-11-24T12:49:47Z",
+      "side": 1,
+      "message": "typo: the",
+      "range": {
+        "startLine": 29,
+        "startChar": 73,
+        "endLine": 29,
+        "endChar": 76
+      },
+      "revId": "58f97f00257eba000fafc38a0c23b0e0dc3ad0f7",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1339fe02_01aa0d80",
+        "filename": "doc/man/source/rbh-fsevents.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-11-24T12:49:47Z",
+      "side": 1,
+      "message": "major: rbh:lustre:/mnt/scratch",
+      "range": {
+        "startLine": 93,
+        "startChar": 22,
+        "endLine": 93,
+        "endChar": 34
+      },
+      "revId": "58f97f00257eba000fafc38a0c23b0e0dc3ad0f7",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "86e2988c_5a33a57d",
+        "filename": "doc/man/source/rbh-fsevents.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-11-24T12:49:47Z",
+      "side": 1,
+      "message": "minor: robinhood4",
+      "range": {
+        "startLine": 138,
+        "startChar": 9,
+        "endLine": 138,
+        "endChar": 13
+      },
+      "revId": "58f97f00257eba000fafc38a0c23b0e0dc3ad0f7",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
