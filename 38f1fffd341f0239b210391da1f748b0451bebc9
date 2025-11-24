@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ab12e2b7_d8ad3aa4",
+        "filename": "doc/man/source/rbh-sync.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-11-24T12:16:07Z",
+      "side": 1,
+      "message": "minor: robinhood4(7)",
+      "revId": "38f1fffd341f0239b210391da1f748b0451bebc9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
