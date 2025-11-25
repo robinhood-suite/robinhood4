@@ -647,6 +647,8 @@ find_exec_action(struct find_context *ctx,
                  enum action action,
                  struct rbh_fsentry *fsentry)
 {
+    const struct rbh_value *path;
+
     switch (action) {
     case ACT_DELETE:
         {
@@ -669,22 +671,27 @@ find_exec_action(struct find_context *ctx,
         /* XXX: glibc's printf() handles printf("%s", NULL) pretty well, but
          *      I do not think this is part of any standard.
          */
-        printf("%s\n", rbh_fsentry_find_ns_xattr(fsentry, "path")->string);
+        path = rbh_fsentry_find_ns_xattr(fsentry, "path");
+        if (path)
+            printf("%s\n", path->string);
         break;
     case ACT_PRINT0:
-        printf("%s%c", rbh_fsentry_find_ns_xattr(fsentry, "path")->string,
-               '\0');
+        path = rbh_fsentry_find_ns_xattr(fsentry, "path");
+        if (path)
+            printf("%s%c", path->string,'\0');
         break;
     case ACT_FLS:
         fsentry_print_ls_dils(ctx->action_file, fsentry);
         break;
     case ACT_FPRINT:
-        fprintf(ctx->action_file, "%s\n",
-                rbh_fsentry_find_ns_xattr(fsentry, "path")->string);
+        path = rbh_fsentry_find_ns_xattr(fsentry, "path");
+        if (path)
+            fprintf(ctx->action_file, "%s\n", path->string);
         break;
     case ACT_FPRINT0:
-        fprintf(ctx->action_file, "%s%c",
-                rbh_fsentry_find_ns_xattr(fsentry, "path")->string, '\0');
+        path = rbh_fsentry_find_ns_xattr(fsentry, "path");
+        if (path)
+            fprintf(ctx->action_file, "%s%c", path->string, '\0');
         break;
     case ACT_LS:
         fsentry_print_ls_dils(stdout, fsentry);
