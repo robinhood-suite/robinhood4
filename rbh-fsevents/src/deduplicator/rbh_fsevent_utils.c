@@ -247,6 +247,7 @@ rbh_fsevent_deep_copy(struct rbh_fsevent *dst,
         dst->link.parent_id = parent;
         dst->link.name = RBH_SSTACK_PUSH(stack, src->link.name,
                                          strlen(src->link.name) + 1);
+        dst->link.rename = src->link.rename;
 
         break;
     case RBH_FET_XATTR:

@@ -96,23 +96,22 @@ lustre_enrich_xattr(struct enricher *enricher,
                                  | AT_NO_AUTOMOUNT | AT_SYMLINK_NOFOLLOW;
     struct rbh_value_pair *pairs;
     size_t n_xattrs;
+    int rc;
 
     n_xattrs = enricher->fsevent.xattrs.count;
     pairs = enricher->pairs;
 
+    rc = rbh_posix_enrich_open_by_id(ctx, enricher->mount_fd,
+                                     &original->id);
+    if (rc == -1)
+        return rc;
+
+    rc = rbh_posix_enrich_statx(ctx, STATX_FLAGS, RBH_STATX_MODE,
+                                &enricher->statx);
+    if (rc == -1)
+        return rc;
+
     if (!strcmp(xattr->key, "lustre")) {
-        int rc;
-
-        rc = rbh_posix_enrich_open_by_id(ctx, enricher->mount_fd,
-                                         &original->id);
-        if (rc == -1)
-            return rc;
-
-        rc = rbh_posix_enrich_statx(ctx, STATX_FLAGS, RBH_STATX_MODE,
-                                    &enricher->statx);
-        if (rc == -1)
-            return rc;
-
         return rbh_backend_get_attribute(enricher->backend,
                                          RBH_LEF_LUSTRE | RBH_LEF_ALL_NOFID,
                                          ctx,
@@ -122,6 +121,12 @@ lustre_enrich_xattr(struct enricher *enricher,
     } else if (!strcmp(xattr->key, "path")) {
         struct rbh_value *value;
         int size;
+
+        /* If from a rename and the entry is a directory, don't set the path.
+         * It will be update later by rbh-update.
+         */
+        if (original->link.rename && S_ISDIR(ctx->einfo.statx->stx_mode))
+            return 0;
 
         size = enrich_path(enricher->mount_path, original->link.parent_id,
                            original->link.name, ctx->values, &value);
