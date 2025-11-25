@@ -134,6 +134,22 @@ test_rename_overwrite_data()
     verify_lustre tmp/$entry_renamed
 }
 
+test_rename_dir()
+{
+    local entry="test_dir"
+    local entry_renamed="test_dir_renamed"
+
+    mongo_only_test 'sqlite do_db does not support {$exists: false} yet'
+
+    mkdir $entry
+    mv $entry $entry_renamed
+
+    local count=$(find . | wc -l)
+    test_rename $entry $entry_renamed $count
+
+    find_attribute '"ns.name": "'"$entry_renamed"'"' '"ns.xattrs.path": {$exists: false}'
+}
+
 test_rename_overwrite_data_with_hsm_copy()
 {
     local entry="test_entry"
@@ -194,7 +210,7 @@ test_rename_overwrite_data_with_hsm_copy()
 ################################################################################
 
 declare -a tests=(test_rename_same_dir test_rename_different_dir
-                  test_rename_overwrite_data)
+                  test_rename_overwrite_data test_rename_dir)
 
 if lctl get_param mdt.*.hsm_control | grep "enabled"; then
     tests+=(test_rename_overwrite_data_with_hsm_copy)

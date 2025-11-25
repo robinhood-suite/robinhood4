@@ -90,6 +90,8 @@ struct rbh_fsevent {
             const struct rbh_id *parent_id;
             /** The fsentry's name */
             const char *name;
+
+            bool rename;
         } link, ns;
         /** `type' == RBH_FET_PARTIAL_UNLINK */
         time_t rm_time;
