@@ -484,10 +484,15 @@ rbh_uri_from_raw_uri(const struct rbh_raw_uri *raw_uri)
     size -= rc + 1;
 
     /* uri->fsname */
-    uri->fsname = data;
     rc = rbh_percent_decode(data, colon + 1, -1);
     if (rc < 0)
         goto out_free_uri;
+
+    /* Remove trailing '/' */
+    if (data[rc - 1] == '/')
+        data[rc - 1] = '\0';
+
+    uri->fsname = data;
 
     assert((size_t)rc < size);
     data[rc] = '\0';

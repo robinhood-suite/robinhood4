@@ -38,7 +38,8 @@ build_statx_event(uint32_t statx_enrich_mask, struct rbh_fsevent *fsevent,
 }
 
 static int
-new_link_inode_event(struct changelog_rec *record, struct rbh_fsevent *fsevent)
+new_link_inode_event(struct changelog_rec *record, struct rbh_fsevent *fsevent,
+                     bool rename)
 {
     char *data;
 
@@ -58,6 +59,8 @@ new_link_inode_event(struct changelog_rec *record, struct rbh_fsevent *fsevent)
     memcpy(data, changelog_rec_name(record), record->cr_namelen);
     data[record->cr_namelen] = '\0';
     fsevent->link.name = data;
+
+    fsevent->link.rename = rename;
 
     return 0;
 }
@@ -157,7 +160,7 @@ build_create_inode_events(struct changelog_rec *record, struct rbh_id *id,
 
     new_events = fsevent_list_alloc(5, id);
 
-    if (new_link_inode_event(record, &new_events[0]))
+    if (new_link_inode_event(record, &new_events[0], false))
         return -1;
 
     new_events[1].type = RBH_FET_XATTR;
@@ -253,7 +256,7 @@ build_softlink_events(struct changelog_rec *record, struct rbh_id *id,
 
     new_events = fsevent_list_alloc(6, id);
 
-    if (new_link_inode_event(record, &new_events[0]))
+    if (new_link_inode_event(record, &new_events[0], false))
         return -1;
 
     new_events[1].type = RBH_FET_XATTR;
@@ -316,7 +319,7 @@ build_hardlink_or_mknod_events(struct changelog_rec *record, struct rbh_id *id,
 
     new_events = fsevent_list_alloc(nb_events, id);
 
-    if (new_link_inode_event(record, &new_events[i++]))
+    if (new_link_inode_event(record, &new_events[i++], false))
         return -1;
 
     if (record->cr_type == CL_MKNOD) {
@@ -461,7 +464,7 @@ build_rename_events(struct changelog_rec *record, struct rbh_id *id,
         counter++;
     }
 
-    if (new_link_inode_event(record, &new_events[counter]))
+    if (new_link_inode_event(record, &new_events[counter], true))
         return -1;
 
     counter++;
@@ -662,7 +665,7 @@ build_migrate_events(struct changelog_rec *record, struct rbh_id *id,
     /* This new link is necessary because a metadata migration changes the
      * FID of the entry.
      */
-    if (new_link_inode_event(record, &new_events[0]))
+    if (new_link_inode_event(record, &new_events[0], false))
         return -1;
 
     if (update_statx_without_uid_gid_event(record, &new_events[1]))

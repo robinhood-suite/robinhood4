@@ -87,6 +87,24 @@ enrich_path(const char *mount_path, const struct rbh_id *id, const char *name,
 }
 
 static int
+rbh_lustre_enrich_statx(struct rbh_posix_enrich_ctx *ctx, int flags,
+                        unsigned int mask, struct rbh_statx *restrict statxbuf,
+                        const char *path)
+{
+    int rc;
+
+    if (ctx->einfo.statx)
+        return 0;
+
+    rc = rbh_statx(0, path, flags, mask | RBH_STATX_MODE, statxbuf);
+
+    ctx->einfo.statx = statxbuf;
+
+    return rc;
+}
+
+
+static int
 lustre_enrich_xattr(struct enricher *enricher,
                     const struct rbh_value_pair *xattr,
                     struct rbh_posix_enrich_ctx *ctx,
@@ -96,13 +114,12 @@ lustre_enrich_xattr(struct enricher *enricher,
                                  | AT_NO_AUTOMOUNT | AT_SYMLINK_NOFOLLOW;
     struct rbh_value_pair *pairs;
     size_t n_xattrs;
+    int rc;
 
     n_xattrs = enricher->fsevent.xattrs.count;
     pairs = enricher->pairs;
 
     if (!strcmp(xattr->key, "lustre")) {
-        int rc;
-
         rc = rbh_posix_enrich_open_by_id(ctx, enricher->mount_fd,
                                          &original->id);
         if (rc == -1)
@@ -127,6 +144,31 @@ lustre_enrich_xattr(struct enricher *enricher,
                            original->link.name, ctx->values, &value);
         if (size == -1)
             return -1;
+
+        /* If from a rename and the entry is a directory, don't set the path.
+         * It will be update later by rbh-update.
+         */
+        if (original->type == RBH_FET_LINK && original->link.rename) {
+           char *path;
+            /* We need to compute the asbolute path because we can't use
+             * open_by_handle_at with mknod and socket entry
+             *
+             * XXX: Maybe we should have a fallback when we can't use
+             * open_by_handle_at() and use open() with the path ?
+             * */
+           if(asprintf(&path, "%s%s", enricher->mount_path, value->string) < 0)
+                return -1;
+
+            rc = rbh_lustre_enrich_statx(ctx, STATX_FLAGS, RBH_STATX_MODE,
+                                         &enricher->statx, path);
+
+            free(path);
+            if (rc == -1)
+                return rc;
+
+            if (S_ISDIR(ctx->einfo.statx->stx_mode))
+                return 0;
+        }
 
         pairs[enricher->fsevent.xattrs.count].key = "path";
         pairs[enricher->fsevent.xattrs.count].value = value;

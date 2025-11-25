@@ -99,6 +99,9 @@ fsevent_copy(struct rbh_fsevent *dest, const struct rbh_fsevent *src,
         dest->link.name = data;
         data = mempcpy(data, src->link.name, length);
         size -= length;
+
+        dest->link.rename = src->link.rename;
+
         break;
     case RBH_FET_DELETE:
         break;
