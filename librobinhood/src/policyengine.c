@@ -7,6 +7,7 @@
 
 #include <errno.h>
 #include <fnmatch.h>
+#include <limits.h>
 #include <regex.h>
 #include <stdbool.h>
 #include <string.h>
@@ -44,18 +45,6 @@ rbh_collect_fsentries(struct rbh_backend *backend, struct rbh_filter *filter)
         error(EXIT_FAILURE, errno, "rbh_backend_filter failed");
 
     return it;
-}
-
-__attribute__((unused)) static const char *
-rbh_pe_get_path(const struct rbh_fsentry *fsentry)
-{
-    const struct rbh_value *path_value;
-
-    path_value = rbh_fsentry_find_ns_xattr(fsentry, "path");
-    if (path_value == NULL || path_value->type != RBH_VT_STRING)
-        return NULL;
-
-    return path_value->string;
 }
 
 static bool
@@ -401,51 +390,129 @@ rbh_filter_matches_fsentry(const struct rbh_filter *filter,
     }
 }
 
-__attribute__((unused)) static struct rbh_fsentry *
-rbh_pe_get_fresh_fsentry(struct rbh_backend *fs_backend,
-                         const char *path)
+static struct rbh_fsentry *
+rbh_get_fresh_fsentry(struct rbh_backend *backend,
+                      struct rbh_fsentry *fsentry)
 {
-    struct rbh_fsentry *fresh_entry;
-    struct rbh_backend *fs_branch;
-
-    fs_branch = rbh_backend_branch(fs_backend, NULL, path);
-    if (fs_branch == NULL) {
-        if (errno == ENOTSUP) {
-            fprintf(stderr,
-                    "Warning: backend doesn't support branch(), skipping '%s'\n",
-                    path);
-        }
-        return NULL;
-    }
-
-    struct rbh_filter_options options = {
-        .skip = 0,
-        .limit = 0,
-        .skip_error = false,
-        .one = false,
-    };
-
     struct rbh_filter_projection projection = {
-        .fsentry_mask = RBH_FP_ID | RBH_FP_STATX | RBH_FP_NAMESPACE_XATTRS,
+        .fsentry_mask = RBH_FP_ALL,
         .statx_mask = RBH_STATX_ALL,
     };
+    struct rbh_backend *backend_branch;
+    struct rbh_fsentry *system_fsentry;
 
-    struct rbh_filter_output output = {
-        .type = RBH_FOT_PROJECTION,
-        .projection = projection,
-    };
-
-    struct rbh_mut_iterator *it = rbh_backend_filter(fs_branch, NULL,
-                                                     &options, &output, NULL);
-
-    if (it == NULL)
+    backend_branch = rbh_backend_branch(backend, &fsentry->id, NULL);
+    if (!backend_branch)
         return NULL;
 
-    fresh_entry = rbh_mut_iter_next(it);
-    int save_errno = errno;
-    rbh_mut_iter_destroy(it);
-    rbh_backend_destroy(fs_branch);
-    errno = save_errno;
+    system_fsentry = rbh_backend_root(backend_branch, &projection);
+    if (!system_fsentry)
+        return NULL;
 
-    return fresh_entry;
+    rbh_backend_destroy(backend_branch);
+
+    return system_fsentry;
+}
+
+// This function will be used for the check-exec of rbh-find
+__attribute__((unused)) static int
+rbh_check_real_fsentry_match_filter(struct rbh_backend *backend,
+                                    const struct rbh_filter *filter,
+                                    struct rbh_fsentry *fsentry)
+{
+    struct rbh_fsentry *system_fsentry;
+
+    system_fsentry = rbh_get_fresh_fsentry(backend, fsentry);
+    if (!system_fsentry)
+        return 1;
+
+    if (!rbh_filter_matches_fsentry(filter, system_fsentry)) {
+        errno = EINVAL;
+        return 1;
+    }
+
+    return 0;
+}
+
+int
+rbh_pe_execute(struct rbh_mut_iterator *mirror_iter,
+               struct rbh_backend *mirror_backend,
+               const char *fs_uri,
+               const struct rbh_policy *policy)
+{
+    struct rbh_fsentry *mirror_entry;
+    struct rbh_backend *fs_backend;
+    struct rbh_raw_uri *raw_uri;
+    struct rbh_uri *uri;
+    int save_errno;
+
+    raw_uri = rbh_raw_uri_from_string(fs_uri);
+    if (raw_uri == NULL)
+        error(EXIT_FAILURE, errno, "rbh_raw_uri_from_string failed for '%s'",
+              fs_uri);
+
+    uri = rbh_uri_from_raw_uri(raw_uri);
+    free(raw_uri);
+    if (uri == NULL)
+        error(EXIT_FAILURE, errno, "rbh_uri_from_raw_uri failed for '%s'",
+              fs_uri);
+
+    fs_backend = rbh_backend_and_branch_from_uri(uri, true);
+    save_errno = errno;
+    free(uri);
+
+    if (!fs_backend) {
+        error(EXIT_FAILURE, save_errno,
+              "rbh_backend_and_branch_from_uri failed for '%s'", fs_uri);
+    }
+
+    while (true) {
+        const struct rbh_rule *matched_rule = NULL;
+        struct rbh_fsentry *fresh;
+
+        errno = 0;
+        mirror_entry = rbh_mut_iter_next(mirror_iter);
+
+        if (mirror_entry == NULL) {
+            if (errno == ENODATA)
+                break;
+            if (errno == EAGAIN)
+                continue;
+
+            fprintf(stderr, "Error during iteration: %s\n", strerror(errno));
+            rbh_backend_destroy(fs_backend);
+            return -1;
+        }
+
+        fresh = rbh_get_fresh_fsentry(fs_backend, mirror_entry);
+        if (fresh == NULL) {
+            fprintf(stderr, "Warning: cannot get fresh metadata %s\n",
+                    strerror(errno));
+            continue;
+        }
+
+        // First, check if entry matches the policy's default filter
+        if (!rbh_filter_matches_fsentry(policy->filter, fresh)) {
+            free(fresh);
+            continue;
+        }
+
+        // Now try to match a rule
+        for (size_t i = 0; i < policy->rule_count; i++) {
+            const struct rbh_rule *rule = &policy->rules[i];
+            if (rbh_filter_matches_fsentry(rule->filter, fresh)) {
+                matched_rule = rule;
+                printf("Rule: %s matched\n", matched_rule->name);
+                break;
+            }
+        }
+
+        free(fresh);
+    }
+
+    rbh_backend_destroy(fs_backend);
+    rbh_backend_destroy(mirror_backend);
+    rbh_mut_iter_destroy(mirror_iter);
+
+    return 0;
 }
