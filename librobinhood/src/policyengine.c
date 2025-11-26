@@ -7,6 +7,7 @@
 
 #include <errno.h>
 #include <fnmatch.h>
+#include <limits.h>
 #include <regex.h>
 #include <stdbool.h>
 #include <string.h>
@@ -448,4 +449,129 @@ rbh_pe_get_fresh_fsentry(struct rbh_backend *fs_backend,
     errno = save_errno;
 
     return fresh_entry;
+}
+
+int
+rbh_pe_execute(struct rbh_mut_iterator *mirror_iter,
+               struct rbh_backend *mirror_backend,
+               const char *fs_uri,
+               const struct rbh_policy *policy)
+{
+    struct rbh_fsentry *mirror_entry;
+    struct rbh_backend *fs_backend;
+    struct rbh_raw_uri *raw_uri;
+    const char *fs_root;
+    struct rbh_uri *uri;
+    int processed = 0;
+
+    raw_uri = rbh_raw_uri_from_string(fs_uri);
+    if (raw_uri == NULL)
+        error(EXIT_FAILURE, errno, "rbh_raw_uri_from_string failed for '%s'",
+              fs_uri);
+
+    uri = rbh_uri_from_raw_uri(raw_uri);
+    free(raw_uri);
+    if (uri == NULL)
+        error(EXIT_FAILURE, errno, "rbh_uri_from_raw_uri failed for '%s'",
+              fs_uri);
+
+    fs_root = uri->fsname;
+
+    fs_backend = rbh_backend_and_branch_from_uri(uri, true);
+    if (!fs_backend) {
+        int save_errno = errno;
+        free(uri);
+        error(EXIT_FAILURE, save_errno,
+              "rbh_backend_and_branch_from_uri failed for '%s'", fs_uri);
+    }
+
+    if (fs_backend->id == RBH_BI_MONGO || fs_backend->id == RBH_BI_SQLITE) {
+        free(uri);
+        rbh_backend_destroy(fs_backend);
+        error(EXIT_FAILURE, ENOTSUP,
+              "Backend '%s' (id=%d) not supported. Use a real filesystem "
+              "backend instead of metadata-only backend",
+              fs_uri, fs_backend->id);
+    }
+
+    while (true) {
+        mirror_entry = rbh_mut_iter_next(mirror_iter);
+        char abs_path[PATH_MAX];
+        errno = 0;
+
+        if (mirror_entry == NULL) {
+            if (errno == ENODATA)
+                break;
+            if (errno == EAGAIN)
+                continue;
+
+            fprintf(stderr, "Error during iteration: %s\n", strerror(errno));
+            free(uri);
+            rbh_backend_destroy(fs_backend);
+            return -1;
+        }
+
+        const char *rel_path = rbh_pe_get_path(mirror_entry);
+        if (rel_path == NULL) {
+            fprintf(stderr, "Warning: fsentry without path, skipping\n");
+            continue;
+        }
+
+        if (rel_path[0] == '/') {
+            snprintf(abs_path, PATH_MAX, "%s%s", fs_root, rel_path);
+        } else {
+            snprintf(abs_path, PATH_MAX, "%s/%s", fs_root, rel_path);
+        }
+
+        struct rbh_fsentry *fresh = rbh_pe_get_fresh_fsentry(fs_backend,
+                                                             abs_path);
+        if (fresh == NULL) {
+            fprintf(stderr, "Warning: cannot get fresh metadata for '%s': %s\n",
+                    abs_path, strerror(errno));
+            continue;
+        }
+
+        // First, check if entry matches the policy's default filter
+        if (!rbh_filter_matches_fsentry(policy->filter, fresh)) {
+            printf("SKIP - Path: %s | Reason: No longer matches policy '%s' "
+                   "condition\n", abs_path, policy->name);
+            free(fresh);
+            processed++;
+            continue;
+        }
+
+        // Now try to match a rule
+        const struct rbh_rule *matched_rule = NULL;
+        for (size_t i = 0; i < policy->rule_count; i++) {
+            const struct rbh_rule *rule = &policy->rules[i];
+            if (rule->filter == NULL) {
+                matched_rule = rule;
+                break;
+            }
+            if (rbh_filter_matches_fsentry(rule->filter, fresh)) {
+                matched_rule = rule;
+                break;
+            }
+        }
+
+        if (matched_rule != NULL) {
+            printf("MATCH - Path: %s | Rule: '%s' | Action: %s\n",
+                   abs_path, matched_rule->name, matched_rule->action);
+        } else {
+            printf("DEFAULT - Path: %s | Policy: '%s' | Action: %s\n",
+                   abs_path, policy->name, policy->action);
+        }
+
+        free(fresh);
+        processed++;
+    }
+
+    printf("\nTotal processed: %d fsentries\n", processed);
+
+    free(uri);
+    rbh_backend_destroy(fs_backend);
+    rbh_backend_destroy(mirror_backend);
+    rbh_mut_iter_destroy(mirror_iter)
+
+    return 0;
 }
