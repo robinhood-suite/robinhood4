@@ -396,3 +396,52 @@ rbh_filter_matches_fsentry(const struct rbh_filter *filter,
         return false;
     }
 }
+
+static struct rbh_fsentry *
+rbh_pe_get_fresh_fsentry(struct rbh_backend *fs_backend,
+                         const char *path)
+{
+    struct rbh_backend *fs_branch;
+    struct rbh_fsentry *fresh_entry;
+
+    fs_branch = rbh_backend_branch(fs_backend, NULL, path);
+    if (fs_branch == NULL) {
+        if (errno == ENOTSUP) {
+            fprintf(stderr,
+                    "Warning: backend doesn't support branch(), skipping '%s'\n",
+                    path);
+        }
+        return NULL;
+    }
+
+    struct rbh_filter_options options = {
+        .skip = 0,
+        .limit = 0,
+        .skip_error = false,
+        .one = false,
+    };
+
+    struct rbh_filter_projection projection = {
+        .fsentry_mask = RBH_FP_ID | RBH_FP_STATX | RBH_FP_NAMESPACE_XATTRS,
+        .statx_mask = RBH_STATX_ALL,
+    };
+
+    struct rbh_filter_output output = {
+        .type = RBH_FOT_PROJECTION,
+        .projection = projection,
+    };
+
+    struct rbh_mut_iterator *it = rbh_backend_filter(fs_branch, NULL,
+                                                     &options, &output, NULL);
+    rbh_backend_destroy(fs_branch);
+
+    if (it == NULL)
+        return NULL;
+
+    fresh_entry = rbh_mut_iter_next(it);
+    int save_errno = errno;
+    rbh_mut_iter_destroy(it);
+    errno = save_errno;
+
+    return fresh_entry;
+}
