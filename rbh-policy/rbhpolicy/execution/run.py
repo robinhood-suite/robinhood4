@@ -6,7 +6,7 @@
 # SPDX-License-Identifer: LGPL-3.0-or-later
 
 from rbhpolicy.config.policy import rbh_policies
-from rbhpolicy.config.filter import collect_fs_entries
+from rbhpolicy.config.filter import collect_fs_entries, rbh_pe_execute
 
 def run(policies):
     unknown = [name for name in policies if name not in rbh_policies]
@@ -18,3 +18,6 @@ def run(policies):
         print(f"[INFO] Executing policy '{name}'")
         rbhfilter = policy._filter
         iterator = collect_fs_entries(rbhfilter)
+
+        result = rbh_pe_execute(iterator, policy)
+        print(f"[INFO] Policy '{name}' completed")
