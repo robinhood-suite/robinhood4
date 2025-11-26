@@ -65,6 +65,92 @@ rbh_pe_get_path(const struct rbh_fsentry *fsentry)
     return path_value->string;
 }
 
+static bool
+compare_values(enum rbh_filter_operator op,
+               const struct rbh_value *field_val,
+               const struct rbh_value *filter_val)
+{
+    if (field_val->type != filter_val->type)
+        return false;
+
+    switch (op) {
+    case RBH_FOP_EQUAL:
+        switch (field_val->type) {
+        case RBH_VT_INT32:
+            return field_val->int32 == filter_val->int32;
+        case RBH_VT_UINT32:
+            return field_val->uint32 == filter_val->uint32;
+        case RBH_VT_INT64:
+            return field_val->int64 == filter_val->int64;
+        case RBH_VT_UINT64:
+            return field_val->uint64 == filter_val->uint64;
+        case RBH_VT_STRING:
+            return strcmp(field_val->string, filter_val->string) == 0;
+        default:
+            return false;
+        }
+
+    case RBH_FOP_STRICTLY_LOWER:
+        switch (field_val->type) {
+        case RBH_VT_INT32:
+            return field_val->int32 < filter_val->int32;
+        case RBH_VT_UINT32:
+            return field_val->uint32 < filter_val->uint32;
+        case RBH_VT_INT64:
+            return field_val->int64 < filter_val->int64;
+        case RBH_VT_UINT64:
+            return field_val->uint64 < filter_val->uint64;
+        default:
+            return false;
+        }
+
+    case RBH_FOP_STRICTLY_GREATER:
+        switch (field_val->type) {
+        case RBH_VT_INT32:
+            return field_val->int32 > filter_val->int32;
+        case RBH_VT_UINT32:
+            return field_val->uint32 > filter_val->uint32;
+        case RBH_VT_INT64:
+            return field_val->int64 > filter_val->int64;
+        case RBH_VT_UINT64:
+            return field_val->uint64 > filter_val->uint64;
+        default:
+            return false;
+        }
+
+    case RBH_FOP_LOWER_OR_EQUAL:
+        switch (field_val->type) {
+        case RBH_VT_INT32:
+            return field_val->int32 <= filter_val->int32;
+        case RBH_VT_UINT32:
+            return field_val->uint32 <= filter_val->uint32;
+        case RBH_VT_INT64:
+            return field_val->int64 <= filter_val->int64;
+        case RBH_VT_UINT64:
+            return field_val->uint64 <= filter_val->uint64;
+        default:
+            return false;
+        }
+
+    case RBH_FOP_GREATER_OR_EQUAL:
+        switch (field_val->type) {
+        case RBH_VT_INT32:
+            return field_val->int32 >= filter_val->int32;
+        case RBH_VT_UINT32:
+            return field_val->uint32 >= filter_val->uint32;
+        case RBH_VT_INT64:
+            return field_val->int64 >= filter_val->int64;
+        case RBH_VT_UINT64:
+            return field_val->uint64 >= filter_val->uint64;
+        default:
+            return false;
+        }
+
+    default:
+        return false;
+    }
+}
+
 static const struct rbh_value *
 get_field_value(const struct rbh_fsentry *fsentry,
                 const struct rbh_filter_field *field)
