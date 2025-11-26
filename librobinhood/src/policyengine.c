@@ -6,6 +6,8 @@
  */
 
 #include <errno.h>
+#include <fnmatch.h>
+#include <regex.h>
 #include <stdbool.h>
 #include <string.h>
 #include <sys/stat.h>
@@ -280,5 +282,119 @@ get_field_value(const struct rbh_fsentry *fsentry,
 
     default:
         return NULL;
+    }
+}
+
+static bool
+rbh_filter_matches_fsentry(const struct rbh_filter *filter,
+                           const struct rbh_fsentry *fsentry)
+{
+    if (filter == NULL)
+        return true;
+
+    switch (filter->op) {
+    case RBH_FOP_EQUAL:
+    case RBH_FOP_STRICTLY_LOWER:
+    case RBH_FOP_LOWER_OR_EQUAL:
+    case RBH_FOP_STRICTLY_GREATER:
+    case RBH_FOP_GREATER_OR_EQUAL:
+        {
+            const struct rbh_value *field_val =
+                get_field_value(fsentry, &filter->compare.field);
+
+            if (field_val == NULL)
+                return false;
+
+            return compare_values(filter->op, field_val,
+                                 &filter->compare.value);
+        }
+
+    /* REGEX operator - for Name, Path with wildcards */
+    case RBH_FOP_REGEX:
+        {
+            const struct rbh_value *field_val =
+                get_field_value(fsentry, &filter->compare.field);
+
+            if (field_val == NULL || field_val->type != RBH_VT_STRING)
+                return false;
+
+            if (filter->compare.value.type != RBH_VT_REGEX)
+                return false;
+
+            const char *regex_string = filter->compare.value.regex.string;
+            unsigned int regex_options = filter->compare.value.regex.options;
+
+            regex_t compiled;
+            int cflags = REG_EXTENDED | REG_NOSUB;
+
+            if (regex_options & RBH_RO_CASE_INSENSITIVE)
+                cflags |= REG_ICASE;
+
+            if (regex_options & RBH_RO_SHELL_PATTERN) {
+                int flags = 0;
+                if (regex_options & RBH_RO_CASE_INSENSITIVE)
+                    flags |= FNM_CASEFOLD;
+                return fnmatch(regex_string, field_val->string, flags) == 0;
+            }
+
+            if (regcomp(&compiled, regex_string, cflags) != 0)
+                return false;
+
+            bool match = regexec(&compiled, field_val->string, 0, NULL, 0) == 0;
+            regfree(&compiled);
+            return match;
+        }
+
+    /* IN operator - for User/Group with lists */
+    case RBH_FOP_IN:
+        {
+            const struct rbh_value *field_val =
+                get_field_value(fsentry, &filter->compare.field);
+
+            if (field_val == NULL)
+                return false;
+
+            if (filter->compare.value.type != RBH_VT_SEQUENCE)
+                return false;
+
+            const struct rbh_value *seq_values = filter->compare.value.sequence.values;
+            size_t seq_count = filter->compare.value.sequence.count;
+
+            for (size_t i = 0; i < seq_count; i++) {
+                if (compare_values(RBH_FOP_EQUAL, field_val, &seq_values[i]))
+                    return true;
+            }
+            return false;
+        }
+
+    case RBH_FOP_EXISTS:
+        {
+            const struct rbh_value *field_val =
+                get_field_value(fsentry, &filter->compare.field);
+            return field_val != NULL;
+        }
+
+    case RBH_FOP_AND:
+        for (size_t i = 0; i < filter->logical.count; i++) {
+            if (!rbh_filter_matches_fsentry(filter->logical.filters[i],
+                                           fsentry))
+                return false;
+        }
+        return true;
+
+    case RBH_FOP_OR:
+        for (size_t i = 0; i < filter->logical.count; i++) {
+            if (rbh_filter_matches_fsentry(filter->logical.filters[i],
+                                          fsentry))
+                return true;
+        }
+        return false;
+
+    case RBH_FOP_NOT:
+        return !rbh_filter_matches_fsentry(filter->logical.filters[0],
+                                          fsentry);
+
+    default:
+        return false;
     }
 }
