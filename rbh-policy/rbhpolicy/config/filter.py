@@ -37,6 +37,9 @@ librbh.build_filter_from_uri.argtypes = [c_char_p, ctypes.POINTER(c_char_p)]
 librbh.rbh_collect_fsentry.restype = rbh_mut_iterator_p
 librbh.rbh_collect_fsentry.argtypes = [c_char_p, rbh_filter_p]
 
+librbh.rbh_pe_execute.restype = c_int
+librbh.rbh_pe_execute.argtypes = [rbh_mut_iterator_p, c_char_p, c_void_p]
+
 class RbhRule(Structure):
     _fields_ = [
         ("name", c_char_p),
@@ -97,6 +100,15 @@ def collect_fs_entries(rbhfilter):
     global database
     uri_c = c_char_p(database.encode("utf-8"))
     return librbh.rbh_collect_fsentry(uri_c, rbhfilter)
+
+def rbh_pe_execute(mirror_iter, policy_obj):
+    global backend
+    c_policy = make_c_policy(policy_obj)
+    fs_uri_c = backend.encode('utf-8')
+
+    result = librbh.rbh_pe_execute(mirror_iter, fs_uri_c, ctypes.byref(c_policy))
+
+    return result
 
 def rbh_filter_and(filter1, filter2):
     return librbh.rbh_filter_and(filter1, filter2)
