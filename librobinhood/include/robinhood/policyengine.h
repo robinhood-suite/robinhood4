@@ -30,5 +30,8 @@ struct rbh_policy {
 struct rbh_mut_iterator *
 rbh_collect_fsentry(const char *uri, struct rbh_filter *filter);
 
-#endif
+int
+rbh_pe_execute(struct rbh_mut_iterator *mongo_iter, const char *fs_uri,
+               const struct rbh_policy *policy);
 
+#endif
