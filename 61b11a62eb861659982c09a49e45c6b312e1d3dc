@@ -230,6 +230,54 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "21c3da0b_d0edd54d",
+        "filename": "librobinhood/include/robinhood/filters/core.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-11-27T14:00:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "97e9c58c_7152fe1e",
+      "range": {
+        "startLine": 60,
+        "startChar": 7,
+        "endLine": 60,
+        "endChar": 30
+      },
+      "revId": "61b11a62eb861659982c09a49e45c6b312e1d3dc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "04cd9545_63c5d5bc",
+        "filename": "librobinhood/include/robinhood/filters/core.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-11-27T14:00:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e6f9abf3_1ba57964",
+      "range": {
+        "startLine": 60,
+        "startChar": 0,
+        "endLine": 60,
+        "endChar": 32
+      },
+      "revId": "61b11a62eb861659982c09a49e45c6b312e1d3dc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4cced217_a7efa2c7",
@@ -267,6 +315,30 @@
       "side": 1,
       "message": "I partially addressed this by introducing `parse_backend_map()`, which already centralises the parsing logic used in both `get_backend_plugin_info()` and `import_backend_source()`.\nThe remaining parts differ mainly in context handling:\n- rbh-find uses a filters_context with multiple backends,\n- while `get_backend_plugin_info()` operates on a single backend and returns a static description.\n\nBecause of this, full mutualisation isn’t practical without overcomplicating the interfaces.",
       "parentUuid": "4cced217_a7efa2c7",
+      "range": {
+        "startLine": 144,
+        "startChar": 0,
+        "endLine": 144,
+        "endChar": 23
+      },
+      "revId": "61b11a62eb861659982c09a49e45c6b312e1d3dc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a3d7e09_59bd4e5d",
+        "filename": "librobinhood/src/filters/core.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-11-27T14:00:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f83148b6_3986e2b7",
       "range": {
         "startLine": 144,
         "startChar": 0,
