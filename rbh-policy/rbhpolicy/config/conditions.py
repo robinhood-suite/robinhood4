@@ -7,7 +7,7 @@
 
 from abc import ABC, abstractmethod
 from typing import TypeVar
-from rbhpolicy.config import filter as rbh
+from rbhpolicy.config import cpython as rbh
 from rbhpolicy.config.utils import translate_condition
 
 T = TypeVar("T", bound="Condition")
