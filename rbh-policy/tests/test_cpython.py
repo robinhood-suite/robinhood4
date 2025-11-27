@@ -26,7 +26,7 @@ def _patched_cdll(name, *args, **kwargs):
 
 ctypes.CDLL = _patched_cdll
 
-from rbhpolicy.config.filter import (
+from rbhpolicy.config.cpython import (
     build_filter,
     rbh_filter_and,
     rbh_filter_or,
