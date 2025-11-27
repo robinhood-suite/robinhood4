@@ -154,6 +154,8 @@ def set_evaluation_interval(interval):
 # Sets `backend`, `database` and `evaluation_interval` variables.
 def config(*, filesystem, database, evaluation_interval):
     """Initialize backend, database and evaluation interval."""
+    from rbhpolicy.config.config_validator import validate_config
+    validate_config(filesystem, database, evaluation_interval)
     set_backend(filesystem)
     set_database(database)
     set_evaluation_interval(evaluation_interval)
