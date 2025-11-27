@@ -6,5 +6,5 @@
 # SPDX-License-Identifier: LGPL-3.0-or-later
 
 from rbhpolicy.config.fileclass import declare_fileclass
-from rbhpolicy.config.entities import *
 from rbhpolicy.config.policy import declare_policy
+from rbhpolicy.config.entities import *
