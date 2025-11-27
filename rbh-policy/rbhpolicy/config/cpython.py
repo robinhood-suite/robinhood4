@@ -133,3 +133,12 @@ def set_backend(uri: str):
 def set_database(uri: str):
     global database
     database = uri
+
+def set_evaluation_interval(interval):
+    global evaluation_interval
+    evaluation_interval = interval
+
+def config(*, filesystem, database, evaluation_interval):
+    set_backend(filesystem)
+    set_database(database)
+    set_evaluation_interval(evaluation_interval)
