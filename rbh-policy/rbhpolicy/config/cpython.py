@@ -145,3 +145,15 @@ def set_backend(uri: str):
 def set_database(uri: str):
     global database
     database = uri
+
+def set_evaluation_interval(interval):
+    global evaluation_interval
+    evaluation_interval = interval
+
+# Initialize global policy engine settings used by admin config scripts.
+# Sets `backend`, `database` and `evaluation_interval` variables.
+def config(*, filesystem, database, evaluation_interval):
+    """Initialize backend, database and evaluation interval."""
+    set_backend(filesystem)
+    set_database(database)
+    set_evaluation_interval(evaluation_interval)
