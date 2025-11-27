@@ -66,3 +66,21 @@ def validate_policy(name, condition, action, trigger, parameters=None,
                 validate_rule(r)
         else:
             raise TypeError("rules must be a Rule or a list of Rule")
+
+def validate_config(filesystem, database, evaluation_interval):
+    """
+    Validate arguments for the Config DSL function.
+    """
+    def is_rbh_uri(val):
+        return (
+            isinstance(val, str)
+            and val.startswith("rbh:")
+            and val.count(":") == 2
+            and all(part for part in val.split(":", 2))
+        )
+    if not is_rbh_uri(filesystem):
+        raise TypeError("filesystem must be a string of the form 'rbh:X:X'")
+    if not is_rbh_uri(database):
+        raise TypeError("database must be a string of the form 'rbh:X:X'")
+    if not isinstance(evaluation_interval, str):
+        raise TypeError("evaluation_interval must be a string")
