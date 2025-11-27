@@ -139,6 +139,9 @@ def set_evaluation_interval(interval):
     evaluation_interval = interval
 
 def config(*, filesystem, database, evaluation_interval):
+    from rbhpolicy.config.config_validator import validate_config
+    validate_config(filesystem, database, evaluation_interval)
+
     set_backend(filesystem)
     set_database(database)
     set_evaluation_interval(evaluation_interval)

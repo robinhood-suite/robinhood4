@@ -36,6 +36,7 @@ from rbhpolicy.config.cpython import (
     set_backend,
     config
 )
+from rbhpolicy.config.config_validator import validate_config
 
 set_backend("rbh:lustre:test")
 
@@ -107,6 +108,35 @@ class TestConfigDSL(unittest.TestCase):
             config(filesystem="rbh:lustre:fs1", database="rbh:sqlite:db1")
         with self.assertRaises(TypeError):
             config(database="rbh:sqlite:db1", evaluation_interval="1s")
+
+    def test_valid_config(self):
+        """Validate a correct configuration (all fields valid)."""
+        validate_config("rbh:fs:1", "rbh:db:2", "5s")
+
+    def test_invalid_filesystem(self):
+        """Should raise if filesystem is not a valid rbh:X:X URI."""
+        with self.assertRaises(TypeError):
+            validate_config("lustre:fs:1", "rbh:db:2", "30")
+        with self.assertRaises(TypeError):
+            validate_config("rbh:fs", "rbh:db:2", "30")
+        with self.assertRaises(TypeError):
+            validate_config(123, "rbh:db:2", "30")
+
+    def test_invalid_database(self):
+        """Should raise if database is not a valid rbh:X:X URI."""
+        with self.assertRaises(TypeError):
+            validate_config("rbh:fs:1", "sqlite:///tmp", "30")
+        with self.assertRaises(TypeError):
+            validate_config("rbh:fs:1", "rbh:db", "30")
+        with self.assertRaises(TypeError):
+            validate_config("rbh:fs:1", 42, "30")
+
+    def test_invalid_evaluation_interval(self):
+        """Should raise if evaluation_interval is not a string."""
+        with self.assertRaises(TypeError):
+            validate_config("rbh:fs:1", "rbh:db:2", 30)
+        with self.assertRaises(TypeError):
+            validate_config("rbh:fs:1", "rbh:db:2", None)
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
