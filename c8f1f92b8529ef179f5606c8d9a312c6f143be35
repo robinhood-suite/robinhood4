@@ -189,6 +189,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f7988bd_a216b6bd",
+        "filename": "rbh-policy/rbhpolicy/config/models/conditions.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-11-27T11:23:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e6c8777b_7603f5e9",
+      "range": {
+        "startLine": 91,
+        "startChar": 16,
+        "endLine": 91,
+        "endChar": 52
+      },
+      "revId": "c8f1f92b8529ef179f5606c8d9a312c6f143be35",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "247ebb38_f2e3dc39",
@@ -320,6 +344,30 @@
       "side": 1,
       "message": "Yes, this inserts the fileclass instance into the caller’s global namespace using its name, so users can reference it directly in expressions (e.g. `Myfileclass \u0026 (Size \u003e 1000)`) without manually assigning it. I’ve added a clarifying comment above the code.",
       "parentUuid": "30475c77_b577c752",
+      "range": {
+        "startLine": 43,
+        "startChar": 4,
+        "endLine": 44,
+        "endChar": 24
+      },
+      "revId": "c8f1f92b8529ef179f5606c8d9a312c6f143be35",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "81093b35_ce672fc4",
+        "filename": "rbh-policy/rbhpolicy/config/models/fileclass.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-11-27T11:23:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e8d0c4e1_24009774",
       "range": {
         "startLine": 43,
         "startChar": 4,
