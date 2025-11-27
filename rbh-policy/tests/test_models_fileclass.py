@@ -34,7 +34,7 @@ from rbhpolicy.config.fileclass import (
         FileClass,
         rbh_fileclasses,
 )
-from rbhpolicy.config.filter import (
+from rbhpolicy.config.cpython import (
         rbh_filter_free,
         rbh_filter_validate,
         set_backend,
