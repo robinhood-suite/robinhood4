@@ -414,26 +414,6 @@ rbh_get_fresh_fsentry(struct rbh_backend *backend,
     return system_fsentry;
 }
 
-// This function will be used for the check-exec of rbh-find
-__attribute__((unused)) static int
-rbh_check_real_fsentry_match_filter(struct rbh_backend *backend,
-                                    const struct rbh_filter *filter,
-                                    struct rbh_fsentry *fsentry)
-{
-    struct rbh_fsentry *system_fsentry;
-
-    system_fsentry = rbh_get_fresh_fsentry(backend, fsentry);
-    if (!system_fsentry)
-        return 1;
-
-    if (!rbh_filter_matches_fsentry(filter, system_fsentry)) {
-        errno = EINVAL;
-        return 1;
-    }
-
-    return 0;
-}
-
 int
 rbh_pe_execute(struct rbh_mut_iterator *mirror_iter,
                struct rbh_backend *mirror_backend,
