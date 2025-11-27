@@ -2,7 +2,7 @@
 # Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
 #            alternatives
 #
-# SPDX-License-Identifer: LGPL-3.0-or-later
+# SPDX-License-Identifier: LGPL-3.0-or-later
 
 import unittest
 import ctypes
@@ -34,6 +34,7 @@ from rbhpolicy.config.cpython import (
     rbh_filter_validate,
     rbh_filter_free,
     set_backend,
+    config
 )
 
 set_backend("rbh:posix:test")
@@ -82,6 +83,30 @@ class TestFilter(unittest.TestCase):
         self.assertEqual(rbh_filter_validate(negated), 0)
         print("[OK] Negated filter created successfully")
         rbh_filter_free(negated)
+
+class TestConfigDSL(unittest.TestCase):
+    def test_config_ok(self):
+        """Test config with all named parameters (normal usage)"""
+        fs = "rbh:posix:fs1"
+        db = "rbh:sqlite:db1"
+        interval = "60s"
+        config(filesystem=fs, database=db, evaluation_interval=interval)
+        from rbhpolicy.config import cpython
+        self.assertEqual(cpython.backend, fs)
+        self.assertEqual(cpython.database, db)
+        self.assertEqual(cpython.evaluation_interval, interval)
+
+    def test_config_without_keywords(self):
+        """Test config without keywords (should raise TypeError)"""
+        with self.assertRaises(TypeError):
+            config("fs", "db", 10)
+
+    def test_config_missing_param(self):
+        """Test config with a missing parameter (should raise TypeError)"""
+        with self.assertRaises(TypeError):
+            config(filesystem="rbh:posix:fs1", database="rbh:sqlite:db1")
+        with self.assertRaises(TypeError):
+            config(database="rbh:sqlite:db1", evaluation_interval="1s")
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
