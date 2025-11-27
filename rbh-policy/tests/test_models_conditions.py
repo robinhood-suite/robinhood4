@@ -39,7 +39,7 @@ from rbhpolicy.config.conditions import (
     NotCondition,
     ConditionBuilder,
 )
-from rbhpolicy.config.filter import (
+from rbhpolicy.config.cpython import (
         rbh_filter_free,
         rbh_filter_validate,
         set_backend,

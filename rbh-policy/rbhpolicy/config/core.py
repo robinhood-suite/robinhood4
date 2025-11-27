@@ -7,5 +7,5 @@
 
 from rbhpolicy.config.fileclass import *
 from rbhpolicy.config.entities import *
+from rbhpolicy.config.cpython import *
 from rbhpolicy.config.policy import *
-from rbhpolicy.config.filter import *
