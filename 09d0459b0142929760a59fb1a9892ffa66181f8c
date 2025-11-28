@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cf82c21a_9284218c",
+        "filename": "librobinhood/include/robinhood/backend.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 847,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-11-28T14:22:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "21d6799a_989a8191",
+      "range": {
+        "startLine": 847,
+        "startChar": 14,
+        "endLine": 847,
+        "endChar": 44
+      },
+      "revId": "09d0459b0142929760a59fb1a9892ffa66181f8c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8f21e85a_62e82059",
@@ -37,6 +61,24 @@
       "writtenOn": "2025-11-28T08:13:13Z",
       "side": 1,
       "message": "question: Why do you want to build only one filter with this function and not build all the filters ?",
+      "revId": "09d0459b0142929760a59fb1a9892ffa66181f8c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eaaf9191_bb3dcb5f",
+        "filename": "librobinhood/src/backend.c",
+        "patchSetId": 9
+      },
+      "lineNbr": 348,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-11-28T14:22:35Z",
+      "side": 1,
+      "message": "For ease of processing on the Python side during parsing in the classes, if we wanted to apply all the filters at once, we would send all the strings to the C script, and the parsing would not be performed on the Python side but in C.\nIn terms of performance, I don\u0027t know which is better, but IMO it\u0027s negligible considering that the filters are only created at PE startup and stored in memory to be reused.",
+      "parentUuid": "8f21e85a_62e82059",
       "revId": "09d0459b0142929760a59fb1a9892ffa66181f8c",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
