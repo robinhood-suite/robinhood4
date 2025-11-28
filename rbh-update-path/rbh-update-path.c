@@ -161,15 +161,110 @@ generate_fsevent_update_path(struct rbh_fsentry *entry,
     return fsevent;
 }
 
+struct rbh_node_fsevent {
+    struct rbh_fsevent fsevent;
+    struct rbh_list_node link;
+};
+
+static int
+add_fsevents_child(struct rbh_list_node *list, struct rbh_fsevent *fsevent,
+                   struct rbh_sstack *stack)
+{
+    struct rbh_node_fsevent *node = xmalloc(sizeof(*node));
+
+    rbh_fsevent_deep_copy(&node->fsevent, fsevent, stack);
+
+    rbh_list_add_tail(list, &node->link);
+
+    return 0;
+}
+
+static void
+free_fsevents_list(struct rbh_list_node *list)
+{
+    struct rbh_node_fsevent *elem, *tmp;
+
+    rbh_list_foreach_safe(list, elem, tmp, link) {
+        free(elem);
+    }
+
+    free(list);
+}
+
+/* Remove the ns.xattrs.path on all the children of an entry.
+ *
+ * @param entry
+ *
+ * @return true if we have remove the ns.xattrs.path of at least one child,
+ *         false otherwise.
+ */
+static bool
+remove_children_path(struct rbh_fsentry *entry)
+{
+    struct rbh_mut_iterator * children;
+    struct rbh_iterator *update_iter;
+    struct rbh_list_node *fsevents;
+    struct rbh_fsevent *fsevent;
+    struct rbh_sstack *stack;
+    int rc;
+
+    fsevents = xmalloc(sizeof(*fsevents));
+    rbh_list_init(fsevents);
+
+    children = get_entry_children(entry);
+
+    stack = rbh_sstack_new(1 << 10);
+
+    while (true) {
+        struct rbh_fsentry *child = rbh_mut_iter_next(children);
+
+        if (child == NULL) {
+            if (errno == ENODATA)
+                break;
+
+            if (errno == RBH_BACKEND_ERROR)
+                error(EXIT_FAILURE, 0, "%s", rbh_backend_error);
+            else
+                error(EXIT_FAILURE, errno, "failed to retrieve child");
+        }
+
+        fsevent = generate_fsevent_ns_xattrs(child, NULL);
+        add_fsevents_child(fsevents, fsevent, stack);
+        free(fsevent);
+        free(child);
+    }
+
+    rbh_mut_iter_destroy(children);
+
+    if (rbh_list_empty(fsevents)) {
+        rbh_sstack_destroy(stack);
+        free(fsevents);
+        return false;
+    }
+
+    update_iter = rbh_iter_list(fsevents,
+                                offsetof(struct rbh_node_fsevent, link),
+                                free_fsevents_list);
+
+    rc = rbh_backend_update(backend, update_iter);
+    if (rc == -1)
+        error(EXIT_FAILURE, errno, "failed to update children of '%s'",
+              entry->name);
+
+    rbh_iter_destroy(update_iter);
+    rbh_sstack_destroy(stack);
+
+    return true;
+}
+
 static bool
 update_path()
 {
     struct rbh_mut_iterator *fsentries;
     const struct rbh_value *value_path;
-    struct rbh_mut_iterator *children;
+    bool has_update_children = false;
     struct rbh_iterator *update_iter;
     struct rbh_fsevent *fsevent;
-    bool need_update = false;
     int rc;
 
     fsentries = get_entry_without_path();
@@ -195,44 +290,7 @@ update_path()
         if (!S_ISDIR(entry->statx->stx_mode))
             goto update_path;
 
-        /* Remove children's path */
-        children = get_entry_children(entry);
-
-        while (true) {
-            struct rbh_fsentry *child = rbh_mut_iter_next(children);
-
-            if (child == NULL) {
-                if (errno == ENODATA)
-                    break;
-
-                if (errno == RBH_BACKEND_ERROR)
-                    error(EXIT_FAILURE, 0, "%s", rbh_backend_error);
-                else
-                    error(EXIT_FAILURE, errno, "failed to retrieve child");
-            }
-
-            /* TODO: store all the fsevent in a list and call rbh_backend_update
-             * one time
-             */
-            fsevent = generate_fsevent_ns_xattrs(child, NULL);
-            update_iter = rbh_iter_array(fsevent,sizeof(*fsevent), 1, NULL);
-
-            rc = rbh_backend_update(backend, update_iter);
-            if (rc == -1)
-                error(EXIT_FAILURE, errno, "failed to update '%s'",
-                      child->name);
-
-            /* We need to call the update_path function atleast one other time
-             * to finish updating the path
-             */
-            need_update = true;
-
-            rbh_iter_destroy(update_iter);
-            free(fsevent);
-            free(child);
-        }
-
-        rbh_mut_iter_destroy(children);
+        has_update_children = remove_children_path(entry);
 
 update_path:
         /* Update entry path */
@@ -274,7 +332,7 @@ update_path:
 
     rbh_mut_iter_destroy(fsentries);
 
-    return need_update;
+    return has_update_children;
 }
 
 int
