@@ -16,6 +16,24 @@
       "message": "question: Why do you import here and not at the start of the file ?",
       "revId": "6b5ecd2a8ce08fe904ba8dcff1e75cf50c7c2998",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "47774267_371bc683",
+        "filename": "rbh-policy/rbhpolicy/config/policy.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2025-11-28T11:18:26Z",
+      "side": 1,
+      "message": "To avoid circular dependencies, the `config_validation` function imports the `Rule` class defined in that file. Therefore, if this import is placed at the top of the file, it will cause a loop (Python is interpreted). By placing these imports locally within this function, we avoid this because `declare_policy` is not imported into the `config_validation` file.",
+      "parentUuid": "9582128d_fa053b02",
+      "revId": "6b5ecd2a8ce08fe904ba8dcff1e75cf50c7c2998",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
