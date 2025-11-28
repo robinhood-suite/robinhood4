@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3fcaadbb_e3537d79",
+        "filename": "librobinhood/include/robinhood/backend.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 824,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-11-28T08:04:21Z",
+      "side": 1,
+      "message": "major: I\u0027m okay with this structure but I think you should use it in the `filters_context` structure and modify the `import_plugins` function with this change.",
+      "revId": "bcdd5b5453cec3cd42ca93ddebb75752ced8d4c8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b8fdeb12_c19f57c1",
+        "filename": "librobinhood/include/robinhood/utils.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 267,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-11-28T08:04:21Z",
+      "side": 1,
+      "message": "style: alignment",
+      "range": {
+        "startLine": 267,
+        "startChar": 31,
+        "endLine": 267,
+        "endChar": 68
+      },
+      "revId": "bcdd5b5453cec3cd42ca93ddebb75752ced8d4c8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "df147bb6_9e2ddb04",
+        "filename": "librobinhood/src/backend.c",
+        "patchSetId": 8
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-11-28T08:04:21Z",
+      "side": 1,
+      "message": "major: After this line, all of this is already done by the `import_plugins` function. If you decide to transform `filters_context` with your `rbh_backend_plugin_info` struct, you can easily use the `import_plugins` function here and return the rbh_backend_plugin_info field.\n\nSugestion:\n```\nstatic struct rbh_backend_plugin_info\nget_backend_plugin_info(const char *uri)\n{\n   struct filters_context ctx;\n   \n   rbh_config_load_from_path(NULL);\n   backend \u003d rbh_backend_from_uri(uri, true);\n   \n   info_map \u003d rbh_backend_get_info(backend, ...);\n   \n   import_plugins(\u0026ctx, info_map, 1);\n   \n   return ctx.info;\n}\n```",
+      "revId": "bcdd5b5453cec3cd42ca93ddebb75752ced8d4c8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
