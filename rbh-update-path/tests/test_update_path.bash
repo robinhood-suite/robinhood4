@@ -37,10 +37,103 @@ test_simple_update_path()
     rbh_find "rbh:$db:$testdb" | sort | difflines "/" "/new_dir" "/new_dir/file"
 }
 
+test_multiple_update_path()
+{
+    mkdir dir
+    mkdir dir/subdir1
+    mkdir dir/subdir1/subdir2
+
+    touch dir/file
+    touch dir/subdir1/file2
+    touch dir/subdir1/subdir2/file3
+
+    rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
+
+    local userid="$(lctl --device "$LUSTRE_MDT" changelog_register |
+                        cut -d "'" -f2)"
+
+    mv dir new_dir
+
+    rbh_fsevents -e "rbh:lustre:." "src:lustre:$LUSTRE_MDT?ack-user=$userid" \
+        "rbh:$db:$testdb"
+
+    lctl --device "$LUSTRE_MDT" changelog_deregister "$userid"
+
+    rbh_find "rbh:$db:$testdb" | sort |
+        difflines "/" "/dir/file" "/dir/subdir1" "/dir/subdir1/file2" \
+            "/dir/subdir1/subdir2" "/dir/subdir1/subdir2/file3"
+
+    rbh_update_path "rbh:$db:$testdb"
+
+    rbh_find "rbh:$db:$testdb" | sort |
+        difflines "/" "/new_dir" "/new_dir/file" "/new_dir/subdir1" \
+            "/new_dir/subdir1/file2" "/new_dir/subdir1/subdir2" \
+            "/new_dir/subdir1/subdir2/file3"
+}
+
+test_2_depth_update_path()
+{
+    mkdir dir
+    mkdir dir/subdir
+
+    touch dir/file
+    touch dir/subdir/file2
+
+    rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
+
+    local userid="$(lctl --device "$LUSTRE_MDT" changelog_register |
+                        cut -d "'" -f2)"
+
+    mv dir/subdir dir/new_subdir
+    mv dir new_dir
+
+    rbh_fsevents -e "rbh:lustre:." "src:lustre:$LUSTRE_MDT?ack-user=$userid" \
+        "rbh:$db:$testdb"
+
+    lctl --device "$LUSTRE_MDT" changelog_deregister "$userid"
+
+    rbh_find "rbh:$db:$testdb" | sort |
+        difflines "/" "/dir/file" "/dir/subdir/file2"
+
+    rbh_update_path "rbh:$db:$testdb"
+
+    rbh_find "rbh:$db:$testdb" | sort
+}
+
+test_hardlink_update_path()
+{
+    mkdir dir
+    mkdir dir2
+
+    touch dir/file
+    ln dir/file dir2/link
+
+    rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
+
+    local userid="$(lctl --device "$LUSTRE_MDT" changelog_register |
+                        cut -d "'" -f2)"
+
+    mv dir new_dir
+
+    rbh_fsevents -e "rbh:lustre:." "src:lustre:$LUSTRE_MDT?ack-user=$userid" \
+        "rbh:$db:$testdb"
+
+    lctl --device "$LUSTRE_MDT" changelog_deregister "$userid"
+
+    rbh_find "rbh:$db:$testdb" | sort |
+        difflines "/" "/dir/file" "/dir2" "/dir2/link"
+
+    rbh_update_path "rbh:$db:$testdb"
+
+    rbh_find "rbh:$db:$testdb" | sort |
+        difflines "/" "/dir2" "/dir2/link" "/new_dir" "/new_dir/file"
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
-declare -a tests=(test_simple_update_path)
+declare -a tests=(test_simple_update_path test_multiple_update_path
+                  test_2_depth_update_path test_hardlink_update_path)
 
 LUSTRE_DIR=/mnt/lustre/
 cd "$LUSTRE_DIR"
