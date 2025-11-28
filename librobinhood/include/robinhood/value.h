@@ -332,4 +332,13 @@ value_map_insert_pair(struct rbh_sstack *sstack, struct rbh_value_map *map,
 const struct rbh_value *
 rbh_map_find(const struct rbh_value_map *map, const char *key);
 
+int
+rbh_value_map_deep_copy(struct rbh_value_map *dest,
+                        const struct rbh_value_map *src,
+                        struct rbh_sstack *stack);
+
+int
+rbh_value_deep_copy(struct rbh_value *dest, const struct rbh_value *src,
+                    struct rbh_sstack *stack);
+
 #endif

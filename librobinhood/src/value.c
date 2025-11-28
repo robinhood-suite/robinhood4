@@ -629,3 +629,114 @@ rbh_map_find(const struct rbh_value_map *map, const char *key_to_find)
 
     return value;
 }
+
+int
+rbh_value_map_deep_copy(struct rbh_value_map *dest,
+                        const struct rbh_value_map *src,
+                        struct rbh_sstack *stack)
+{
+    struct rbh_value_pair *tmp;
+
+    tmp = RBH_SSTACK_PUSH(stack, NULL, src->count * sizeof(*src->pairs));
+
+    dest->count = src->count;
+    dest->pairs = tmp;
+
+    for (size_t i = 0; i < src->count; i++) {
+        struct rbh_value_pair *pair = &tmp[i];
+        struct rbh_value *value;
+        int rc;
+
+        pair->key = RBH_SSTACK_PUSH(stack, src->pairs[i].key,
+                                    strlen(src->pairs[i].key) + 1);
+        if (!pair->key)
+            return -1;
+
+        if (src->pairs[i].value == NULL) {
+            pair->value = NULL;
+            continue;
+        }
+
+        value = RBH_SSTACK_PUSH(stack, NULL, sizeof(*value));
+
+        pair->value = value;
+        rc = rbh_value_deep_copy(value, src->pairs[i].value, stack);
+        if (rc)
+            return -1;
+    }
+
+    return 0;
+}
+
+static int
+rbh_sequence_deep_copy(struct rbh_value *dest,
+                       const struct rbh_value *src,
+                       struct rbh_sstack *stack)
+{
+    struct rbh_value *tmp;
+
+    tmp = RBH_SSTACK_PUSH(stack, NULL, src->sequence.count * sizeof(*tmp));
+
+    dest->sequence.count = src->sequence.count;
+    dest->sequence.values = tmp;
+
+    memset(tmp, 0, dest->sequence.count * sizeof(*tmp));
+
+    for (size_t i = 0; i < src->sequence.count; i++) {
+        int rc = rbh_value_deep_copy(&tmp[i],
+                                     &src->sequence.values[i],
+                                     stack);
+        if (rc)
+            return -1;
+    }
+
+    return 0;
+}
+
+int
+rbh_value_deep_copy(struct rbh_value *dest, const struct rbh_value *src,
+                    struct rbh_sstack *stack)
+{
+    if (!src)
+        return 0;
+
+    switch (src->type) {
+    case RBH_VT_NULL:
+        return 0;
+    case RBH_VT_BOOLEAN:
+    case RBH_VT_INT32:
+    case RBH_VT_UINT32:
+    case RBH_VT_INT64:
+    case RBH_VT_UINT64:
+        *dest = *src;
+        return 0;
+    case RBH_VT_STRING:
+        dest->type = RBH_VT_STRING;
+        dest->string = RBH_SSTACK_PUSH(stack, src->string,
+                                       strlen(src->string) + 1);
+
+        return 0;
+    case RBH_VT_BINARY:
+        dest->type = RBH_VT_BINARY;
+        dest->binary.size = src->binary.size;
+        dest->binary.data = RBH_SSTACK_PUSH(stack, src->binary.data,
+                                            src->binary.size);
+
+        return 0;
+    case RBH_VT_REGEX:
+        dest->type = RBH_VT_REGEX;
+        dest->regex.options = src->regex.options;
+        dest->regex.string = RBH_SSTACK_PUSH(stack, src->regex.string,
+                                             strlen(src->regex.string) + 1);
+
+        return 0;
+    case RBH_VT_SEQUENCE:
+        dest->type = RBH_VT_SEQUENCE;
+        return rbh_sequence_deep_copy(dest, src, stack);
+    case RBH_VT_MAP:
+        dest->type = RBH_VT_MAP;
+        return rbh_value_map_deep_copy(&dest->map, &src->map, stack);
+    }
+
+    return 0;
+}
