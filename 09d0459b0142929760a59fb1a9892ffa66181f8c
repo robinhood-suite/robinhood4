@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "21d6799a_989a8191",
+        "filename": "librobinhood/include/robinhood/backend.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 847,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-11-28T08:13:13Z",
+      "side": 1,
+      "message": "style: alignment",
+      "range": {
+        "startLine": 847,
+        "startChar": 14,
+        "endLine": 847,
+        "endChar": 44
+      },
+      "revId": "09d0459b0142929760a59fb1a9892ffa66181f8c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8f21e85a_62e82059",
+        "filename": "librobinhood/src/backend.c",
+        "patchSetId": 9
+      },
+      "lineNbr": 348,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-11-28T08:13:13Z",
+      "side": 1,
+      "message": "question: Why do you want to build only one filter with this function and not build all the filters ?",
+      "revId": "09d0459b0142929760a59fb1a9892ffa66181f8c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
