@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9582128d_fa053b02",
+        "filename": "rbh-policy/rbhpolicy/config/policy.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-11-28T09:24:46Z",
+      "side": 1,
+      "message": "question: Why do you import here and not at the start of the file ?",
+      "revId": "6b5ecd2a8ce08fe904ba8dcff1e75cf50c7c2998",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
