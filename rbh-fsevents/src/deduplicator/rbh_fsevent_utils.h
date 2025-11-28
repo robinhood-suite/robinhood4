@@ -49,13 +49,4 @@ const struct rbh_value_pair *
 rbh_fsevent_find_xattr(const struct rbh_fsevent *fsevent,
                        const char *key);
 
-int
-rbh_fsevent_deep_copy(struct rbh_fsevent *dst,
-                      const struct rbh_fsevent *src,
-                      struct rbh_sstack *stack);
-
-int
-rbh_value_deep_copy(struct rbh_value *dest, const struct rbh_value *src,
-                    struct rbh_sstack *stack);
-
 #endif

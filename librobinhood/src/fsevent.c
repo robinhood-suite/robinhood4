@@ -345,3 +345,77 @@ rbh_fsevent_path(const struct rbh_fsevent *fsevent)
     errno = ENODATA;
     return NULL;
 }
+
+int
+rbh_fsevent_deep_copy(struct rbh_fsevent *dst,
+                      const struct rbh_fsevent *src,
+                      struct rbh_sstack *stack)
+{
+    struct rbh_id *parent;
+    int rc;
+
+    memset(dst, 0, sizeof(*dst));
+
+    dst->type = src->type;
+    dst->id.size = src->id.size;
+    dst->id.data = RBH_SSTACK_PUSH(stack, src->id.data, src->id.size);
+
+    if (src->xattrs.count > 0) {
+        rc = rbh_value_map_deep_copy(&dst->xattrs, &src->xattrs, stack);
+        if (rc)
+            return rc;
+    }
+
+    switch (src->type) {
+    case RBH_FET_UPSERT:
+        if (src->upsert.statx)
+            dst->upsert.statx = RBH_SSTACK_PUSH(stack, src->upsert.statx,
+                                                sizeof(*src->upsert.statx));
+
+        if (src->upsert.symlink)
+            dst->upsert.symlink = RBH_SSTACK_PUSH(
+                stack, src->upsert.symlink, strlen(src->upsert.symlink) + 1
+                );
+
+        break;
+    case RBH_FET_PARTIAL_UNLINK:
+        if (src->rm_time)
+            dst->rm_time = src->rm_time;
+        break;
+    case RBH_FET_LINK:
+    case RBH_FET_UNLINK:
+        parent = RBH_SSTACK_PUSH(stack, NULL, sizeof(*parent));
+
+        parent->size = src->link.parent_id->size;
+        parent->data = RBH_SSTACK_PUSH(stack, src->link.parent_id->data,
+                                       src->link.parent_id->size);
+
+        dst->link.parent_id = parent;
+        dst->link.name = RBH_SSTACK_PUSH(stack, src->link.name,
+                                         strlen(src->link.name) + 1);
+        dst->link.rename = src->link.rename;
+
+        break;
+    case RBH_FET_XATTR:
+        if (src->ns.parent_id) {
+            parent = RBH_SSTACK_PUSH(stack, NULL, sizeof(*parent));
+
+            parent->size = src->ns.parent_id->size;
+            parent->data = RBH_SSTACK_PUSH(
+                stack, src->ns.parent_id->data, src->ns.parent_id->size);
+
+            dst->ns.parent_id = parent;
+        }
+
+        if (src->ns.name)
+            dst->ns.name = RBH_SSTACK_PUSH(
+                stack, src->ns.name, strlen(src->ns.name) + 1);
+
+        break;
+    case RBH_FET_DELETE:
+        /* nothing to do here */
+        break;
+    }
+
+    return 0;
+}

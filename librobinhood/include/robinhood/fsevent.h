@@ -215,4 +215,9 @@ rbh_fsevent_ns_xattr_new(const struct rbh_id *id,
 const char *
 rbh_fsevent_path(const struct rbh_fsevent *fsevent);
 
+int
+rbh_fsevent_deep_copy(struct rbh_fsevent *dst,
+                      const struct rbh_fsevent *src,
+                      struct rbh_sstack *stack);
+
 #endif
