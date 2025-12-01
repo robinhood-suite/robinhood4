@@ -129,11 +129,56 @@ test_hardlink_update_path()
         difflines "/" "/dir2" "/dir2/link" "/new_dir" "/new_dir/file"
 }
 
+test_concurrent_rename()
+{
+    tmp_gdb_script=$(mktemp)
+
+    mkdir dir
+    mkdir dir/subdir
+    touch dir/subdir/file
+
+    rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
+    local userid="$(lctl --device "$LUSTRE_MDT" changelog_register |
+                        cut -d "'" -f2)"
+
+    cat <<EOF > "$tmp_gdb_script"
+set breakpoint pending on
+break generate_fsevent_update_path
+commands
+shell mv dir new_dir
+shell $__rbh_fsevents -e rbh:lustre:. src:lustre:$LUSTRE_MDT?ack-user=$userid \
+    rbh:$db:$testdb
+del 1
+continue
+end
+run
+EOF
+
+    mv dir/subdir dir/new_subdir
+
+    rbh_fsevents -e "rbh:lustre:." "src:lustre:$LUSTRE_MDT?ack-user=$userid" \
+        "rbh:$db:$testdb"
+
+    rbh_find "rbh:$db:$testdb" | sort | difflines "/" "/dir" "/dir/subdir/file"
+
+    # We rename dir while rbh-update is updating the path of new_subdir, as
+    # as new_subdir have children, dir should also be updated by rbh-update.
+    DEBUGINFOD_URLS="" gdb -batch -x "$tmp_gdb_script" \
+        --args $__rbh_update_path rbh:$db:$testdb
+
+    lctl --device "$LUSTRE_MDT" changelog_deregister "$userid"
+
+    rbh_find "rbh:$db:$testdb" | sort |
+        difflines "/" "/new_dir" "/new_dir/new_subdir" \
+            "/new_dir/new_subdir/file"
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 declare -a tests=(test_simple_update_path test_multiple_update_path
-                  test_2_depth_update_path test_hardlink_update_path)
+                  test_2_depth_update_path test_hardlink_update_path
+                  test_concurrent_rename)
 
 LUSTRE_DIR=/mnt/lustre/
 cd "$LUSTRE_DIR"
