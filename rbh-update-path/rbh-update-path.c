@@ -11,6 +11,10 @@
 
 #include <robinhood.h>
 
+#ifndef RBH_ITER_CHUNK_SIZE
+# define RBH_ITER_CHUNK_SIZE (1 << 12)
+#endif
+
 static struct rbh_backend *backend;
 
 static void __attribute__((destructor))
@@ -203,10 +207,10 @@ remove_children_path(struct rbh_fsentry *entry)
 {
     struct rbh_mut_iterator * children;
     struct rbh_iterator *update_iter;
+    struct rbh_mut_iterator *chunks;
     struct rbh_list_node *fsevents;
     struct rbh_fsevent *fsevent;
     struct rbh_sstack *stack;
-    int rc;
 
     fsevents = xmalloc(sizeof(*fsevents));
     rbh_list_init(fsevents);
@@ -246,12 +250,36 @@ remove_children_path(struct rbh_fsentry *entry)
                                 offsetof(struct rbh_node_fsevent, link),
                                 free_fsevents_list);
 
-    rc = rbh_backend_update(backend, update_iter);
-    if (rc == -1)
-        error(EXIT_FAILURE, errno, "failed to update children of '%s'",
-              entry->name);
+    /* XXX: the mongo backend tries to process all the fsevents at once in a
+     *      single bulk operation, but a bulk operation is limited in size.
+     *
+     * Splitting `fsevents' into fixed-size sub-iterators solves this.
+     */
+    chunks = rbh_iter_chunkify(update_iter, RBH_ITER_CHUNK_SIZE);
+    if (chunks == NULL)
+        error(EXIT_FAILURE, errno, "rbh_mut_iter_chunkify");
 
-    rbh_iter_destroy(update_iter);
+    do {
+        struct rbh_iterator *chunk = rbh_mut_iter_next(chunks);
+        int save_errno;
+        ssize_t count;
+
+        if (chunk == NULL) {
+            if (errno == ENODATA)
+                break;
+            error(EXIT_FAILURE, errno, "while chunkifying fsevents");
+        }
+
+        count = rbh_backend_update(backend, chunk);
+        save_errno = errno;
+        rbh_iter_destroy(chunk);
+        if (count < 0) {
+            errno = save_errno;
+            error(EXIT_FAILURE, errno, "rbh_backend_update");
+        }
+    } while (true);
+
+    rbh_mut_iter_destroy(chunks);
     rbh_sstack_destroy(stack);
 
     return true;
