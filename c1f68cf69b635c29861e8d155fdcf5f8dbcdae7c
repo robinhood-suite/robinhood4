@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2bb67418_3040723c",
+        "filename": "rbh-gc/tests/test.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-12-04T08:01:24Z",
+      "side": 1,
+      "message": "style: remove empty line",
+      "revId": "c1f68cf69b635c29861e8d155fdcf5f8dbcdae7c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
