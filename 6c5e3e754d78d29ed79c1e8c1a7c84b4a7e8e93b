@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a6107858_d2c713fd",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-12-05T10:52:35Z",
+      "side": 1,
+      "message": "comment: don\u0027t really like the name, maybe some opposite of \"pruning\" would be better ? Maybe \"reattach\" or \"reconnect\" ? We can change it at the end of the stack",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 10
+      },
+      "revId": "6c5e3e754d78d29ed79c1e8c1a7c84b4a7e8e93b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
