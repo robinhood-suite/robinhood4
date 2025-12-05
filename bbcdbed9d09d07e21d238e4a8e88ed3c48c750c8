@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b29b105c_8812e77c",
+        "filename": "rbh-update/rbh-update.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-12-05T11:19:23Z",
+      "side": 1,
+      "message": "minor: function is getting quite big there",
+      "range": {
+        "startLine": 231,
+        "startChar": 0,
+        "endLine": 231,
+        "endChar": 12
+      },
+      "revId": "bbcdbed9d09d07e21d238e4a8e88ed3c48c750c8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a5aa80ef_427a35aa",
+        "filename": "rbh-update/rbh-update.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-12-05T11:19:23Z",
+      "side": 1,
+      "message": "typo: updated",
+      "range": {
+        "startLine": 235,
+        "startChar": 68,
+        "endLine": 235,
+        "endChar": 74
+      },
+      "revId": "bbcdbed9d09d07e21d238e4a8e88ed3c48c750c8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2314120d_6ec83e47",
+        "filename": "rbh-update/rbh-update.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-12-05T11:19:23Z",
+      "side": 1,
+      "message": "typo: updated",
+      "range": {
+        "startLine": 249,
+        "startChar": 71,
+        "endLine": 249,
+        "endChar": 77
+      },
+      "revId": "bbcdbed9d09d07e21d238e4a8e88ed3c48c750c8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3533d76e_6f5eca69",
+        "filename": "rbh-update/rbh-update.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-12-05T11:19:23Z",
+      "side": 1,
+      "message": "typo: its",
+      "range": {
+        "startLine": 249,
+        "startChar": 30,
+        "endLine": 249,
+        "endChar": 35
+      },
+      "revId": "bbcdbed9d09d07e21d238e4a8e88ed3c48c750c8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
