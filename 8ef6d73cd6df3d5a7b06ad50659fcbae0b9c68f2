@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "93facd50_f80c6454",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-12-05T15:46:18Z",
+      "side": 1,
+      "message": "suggest: \"we don\u0027t update the path and instead keep it empty\"",
+      "range": {
+        "startLine": 9,
+        "startChar": 27,
+        "endLine": 10,
+        "endChar": 5
+      },
+      "revId": "8ef6d73cd6df3d5a7b06ad50659fcbae0b9c68f2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "65076a6d_4cb43c03",
+        "filename": "librobinhood/include/robinhood/fsevent.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-12-05T15:46:18Z",
+      "side": 1,
+      "message": "question: would handling empty paths as paths to be updated void the need for this field ? If a rename occurs, the new entry keeps a path, but empty as \"\", and you later check whether the path is \"\" or not. Would that work ? Maybe there\u0027d be a time difference ?",
+      "range": {
+        "startLine": 94,
+        "startChar": 12,
+        "endLine": 94,
+        "endChar": 24
+      },
+      "revId": "8ef6d73cd6df3d5a7b06ad50659fcbae0b9c68f2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
