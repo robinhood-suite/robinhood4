@@ -3,6 +3,75 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1f970207_a97c6139",
+        "filename": "rbh-gc/rbh-gc.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-12-05T09:09:12Z",
+      "side": 1,
+      "message": "nit: `still_alive` ? Just for the ref ?",
+      "range": {
+        "startLine": 80,
+        "startChar": 0,
+        "endLine": 80,
+        "endChar": 12
+      },
+      "revId": "c1f68cf69b635c29861e8d155fdcf5f8dbcdae7c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d4647997_5784d329",
+        "filename": "rbh-gc/rbh-gc.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-12-05T09:09:12Z",
+      "side": 1,
+      "message": "minor: change the name of this structure since its generic",
+      "range": {
+        "startLine": 132,
+        "startChar": 11,
+        "endLine": 132,
+        "endChar": 34
+      },
+      "revId": "c1f68cf69b635c29861e8d155fdcf5f8dbcdae7c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2d921237_df320bef",
+        "filename": "rbh-gc/rbh-gc.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-12-05T09:09:12Z",
+      "side": 1,
+      "message": "minor: change the name of this function since it\u0027s generic",
+      "range": {
+        "startLine": 168,
+        "startChar": 15,
+        "endLine": 168,
+        "endChar": 42
+      },
+      "revId": "c1f68cf69b635c29861e8d155fdcf5f8dbcdae7c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2bb67418_3040723c",
         "filename": "rbh-gc/tests/test.bash",
         "patchSetId": 1
