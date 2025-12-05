@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6188f65f_60c28fb3",
+        "filename": "rbh-update/rbh-update.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2025-12-05T11:10:21Z",
+      "side": 1,
+      "message": "typo: no need to",
+      "range": {
+        "startLine": 136,
+        "startChar": 38,
+        "endLine": 136,
+        "endChar": 46
+      },
+      "revId": "ab275d57b138416894914a5d5458ef33da9f64b0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
