@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "01a3793e_a7295153",
+        "filename": "doc/man/source/robinhood4-conf.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2025-12-05T10:46:00Z",
+      "side": 1,
+      "message": "nitpick: set (to avoid repetition)",
+      "range": {
+        "startLine": 4,
+        "startChar": 50,
+        "endLine": 4,
+        "endChar": 62
+      },
+      "revId": "4478248db9812bc75972dee7e165a32e27f03d74",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
