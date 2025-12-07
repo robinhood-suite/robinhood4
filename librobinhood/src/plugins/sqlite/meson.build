@@ -4,8 +4,10 @@
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
 
-sqlite3 = dependency('sqlite3', version: '>=1.3.6')
-jansson = dependency('jansson', version: '>=1.16.0')
+sqlite3 = dependency('sqlite3', version: '>=1.3.6', required: false,
+                     disabler: true)
+jansson = dependency('jansson', version: '>=1.16.0', required: false,
+                     disabler: true)
 
 librbh_sqlite = library(
     'rbh-sqlite',
