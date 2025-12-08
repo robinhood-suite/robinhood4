@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ddd549ac_71d70991",
+        "filename": "librobinhood/include/robinhood/backends/ldiskfs.h.in",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-12-08T13:38:13Z",
+      "side": 1,
+      "message": "typo: this backend",
+      "range": {
+        "startLine": 34,
+        "startChar": 41,
+        "endLine": 34,
+        "endChar": 51
+      },
+      "revId": "e4c088890dd5a0d27d93bbf948d7868f17bc16fc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1a4e38e9_36e5479c",
+        "filename": "librobinhood/src/plugins/ldiskfs/plugin.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-12-08T13:38:13Z",
+      "side": 1,
+      "message": "minor: only RBH_SYNC_OPS ?",
+      "range": {
+        "startLine": 21,
+        "startChar": 20,
+        "endLine": 22,
+        "endChar": 23
+      },
+      "revId": "e4c088890dd5a0d27d93bbf948d7868f17bc16fc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
