@@ -69,6 +69,30 @@
       },
       "revId": "e4c088890dd5a0d27d93bbf948d7868f17bc16fc",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a3557319_daa1dd65",
+        "filename": "librobinhood/src/plugins/ldiskfs/plugin.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-12-08T15:07:43Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "cd667abd_361b0fdc",
+      "range": {
+        "startLine": 21,
+        "startChar": 20,
+        "endLine": 22,
+        "endChar": 23
+      },
+      "revId": "e4c088890dd5a0d27d93bbf948d7868f17bc16fc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
