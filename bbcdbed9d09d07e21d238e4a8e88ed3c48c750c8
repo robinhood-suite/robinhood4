@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1796ed31_6a4e642b",
+        "filename": "rbh-update/rbh-update.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-12-08T14:43:58Z",
+      "side": 1,
+      "message": "I know, I\u0027m going to add a patch at the end to organize all of this in different files",
+      "parentUuid": "b29b105c_8812e77c",
+      "range": {
+        "startLine": 231,
+        "startChar": 0,
+        "endLine": 231,
+        "endChar": 12
+      },
+      "revId": "bbcdbed9d09d07e21d238e4a8e88ed3c48c750c8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a5aa80ef_427a35aa",
         "filename": "rbh-update/rbh-update.c",
         "patchSetId": 2
@@ -37,6 +61,30 @@
       "writtenOn": "2025-12-05T11:19:23Z",
       "side": 1,
       "message": "typo: updated",
+      "range": {
+        "startLine": 235,
+        "startChar": 68,
+        "endLine": 235,
+        "endChar": 74
+      },
+      "revId": "bbcdbed9d09d07e21d238e4a8e88ed3c48c750c8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e8fd6d74_5bf6626a",
+        "filename": "rbh-update/rbh-update.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-12-08T14:43:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a5aa80ef_427a35aa",
       "range": {
         "startLine": 235,
         "startChar": 68,
@@ -83,6 +131,54 @@
       "writtenOn": "2025-12-05T11:19:23Z",
       "side": 1,
       "message": "typo: its",
+      "range": {
+        "startLine": 249,
+        "startChar": 30,
+        "endLine": 249,
+        "endChar": 35
+      },
+      "revId": "bbcdbed9d09d07e21d238e4a8e88ed3c48c750c8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a654d1ca_55ad23f8",
+        "filename": "rbh-update/rbh-update.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-12-08T14:43:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2314120d_6ec83e47",
+      "range": {
+        "startLine": 249,
+        "startChar": 71,
+        "endLine": 249,
+        "endChar": 77
+      },
+      "revId": "bbcdbed9d09d07e21d238e4a8e88ed3c48c750c8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b852d16_3bc79936",
+        "filename": "rbh-update/rbh-update.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-12-08T14:43:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3533d76e_6f5eca69",
       "range": {
         "startLine": 249,
         "startChar": 30,
