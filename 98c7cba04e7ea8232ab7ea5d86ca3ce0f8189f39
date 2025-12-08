@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8cd3c1e3_fd135f55",
+        "filename": "librobinhood/src/plugins/ldiskfs/dcache.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-12-08T13:50:29Z",
+      "side": 1,
+      "message": "sugest: use xcalloc",
+      "range": {
+        "startLine": 17,
+        "startChar": 4,
+        "endLine": 19,
+        "endChar": 20
+      },
+      "revId": "98c7cba04e7ea8232ab7ea5d86ca3ce0f8189f39",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0bf81ac5_89997563",
+        "filename": "librobinhood/src/plugins/ldiskfs/dcache.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-12-08T13:50:29Z",
+      "side": 1,
+      "message": "sugest: xmalloc",
+      "range": {
+        "startLine": 30,
+        "startChar": 4,
+        "endLine": 32,
+        "endChar": 20
+      },
+      "revId": "98c7cba04e7ea8232ab7ea5d86ca3ce0f8189f39",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
