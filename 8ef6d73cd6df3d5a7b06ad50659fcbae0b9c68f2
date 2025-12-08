@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6cd081ff_fe125720",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-12-08T14:44:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "93facd50_f80c6454",
+      "range": {
+        "startLine": 9,
+        "startChar": 27,
+        "endLine": 10,
+        "endChar": 5
+      },
+      "revId": "8ef6d73cd6df3d5a7b06ad50659fcbae0b9c68f2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "65076a6d_4cb43c03",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-12-05T15:46:18Z",
       "side": 1,
       "message": "question: would handling empty paths as paths to be updated void the need for this field ? If a rename occurs, the new entry keeps a path, but empty as \"\", and you later check whether the path is \"\" or not. Would that work ? Maybe there\u0027d be a time difference ?",
+      "range": {
+        "startLine": 94,
+        "startChar": 12,
+        "endLine": 94,
+        "endChar": 24
+      },
+      "revId": "8ef6d73cd6df3d5a7b06ad50659fcbae0b9c68f2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "897df414_208ad852",
+        "filename": "librobinhood/include/robinhood/fsevent.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2025-12-08T14:44:18Z",
+      "side": 1,
+      "message": "If I remember correctly, I did this because I needed to know whether the entry being renamed was a directory or not. I could check this in source_reader.c and avoid adding the \"path\" key and I don\u0027t need anymore this boolean. However, there is no way to know this information in source_reader.c without doing a statx. Since statx will be done by the enricher anyway, I added this boolean to indicate that this link comes from a rename and check if it\u0027s a directory.",
+      "parentUuid": "65076a6d_4cb43c03",
       "range": {
         "startLine": 94,
         "startChar": 12,
