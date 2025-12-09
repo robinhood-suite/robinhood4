@@ -48,37 +48,47 @@ static bool
 update_path()
 {
     struct rbh_mut_iterator *fsentries;
+    struct rbh_mut_iterator *batch;
+    struct rbh_list_node *batches;
+    struct rbh_fsentry *entry;
     bool need_update = false;
 
+    batches = xmalloc(sizeof(*batches));
+    rbh_list_init(batches);
+
+    /* Init the list with the entry without a path from the mirror backend */
     fsentries = get_entry_without_path();
+    add_iterator(batches, fsentries);
 
-    while (true) {
-        struct rbh_fsentry *entry;
+    for (batch = get_iterator(batches); batch != NULL;
+         batch = get_iterator(batches)) {
+        for (entry = rbh_mut_iter_next(batch); entry != NULL;
+             entry = rbh_mut_iter_next(batch)) {
 
-        entry = rbh_mut_iter_next(fsentries);
+            /* If it's not a directory, no need to update it's children */
+            if (S_ISDIR(entry->statx->stx_mode)) {
+                if(remove_children_path(backend, entry))
+                    need_update = true;
+            }
 
-        /* TODO: store all the directories to avoid querying the backend */
-        if (entry == NULL) {
-            if (errno == ENODATA)
-                break;
+            update_entry_path(backend, entry);
 
-            if (errno == RBH_BACKEND_ERROR)
-                error(EXIT_FAILURE, 0, "%s", rbh_backend_error);
-            else
-                error(EXIT_FAILURE, errno, "failed to retrieve entry");
+            free(entry);
         }
 
-        /* If it's not a directory, no need to update its children */
-        if (S_ISDIR(entry->statx->stx_mode)) {
-            if (remove_children_path(backend, entry))
-                need_update = true;
+        switch (errno) {
+        case ENODATA:
+            break;
+        case RBH_BACKEND_ERROR:
+            error(EXIT_FAILURE, 0, "%s", rbh_backend_error);
+        default:
+            error(EXIT_FAILURE, errno, "failed to retrieve entry");
         }
 
-        update_entry_path(backend, entry);
-        free(entry);
+        rbh_mut_iter_destroy(batch);
     }
 
-    rbh_mut_iter_destroy(fsentries);
+    free(batches);
 
     return need_update;
 }

@@ -7,6 +7,38 @@
 
 #include <robinhood.h>
 
+struct rbh_node_iterator {
+    struct rbh_mut_iterator *iterator;
+    struct rbh_list_node link;
+};
+
+static inline void
+add_iterator(struct rbh_list_node *list, struct rbh_mut_iterator *iterator)
+{
+    struct rbh_node_iterator *node = xmalloc(sizeof(*node));
+
+    node->iterator = iterator;
+    rbh_list_add_tail(list, &node->link);
+}
+
+static inline struct rbh_mut_iterator *
+get_iterator(struct rbh_list_node *list)
+{
+    struct rbh_mut_iterator *iterator;
+    struct rbh_node_iterator *node;
+
+    if (rbh_list_empty(list))
+        return NULL;
+
+    node = rbh_list_first(list, struct rbh_node_iterator, link);
+    rbh_list_del(&node->link);
+
+    iterator = node->iterator;
+    free(node);
+
+    return iterator;
+}
+
 struct rbh_mut_iterator *
 get_entries(struct rbh_backend *backend, struct rbh_filter *filter);
 
