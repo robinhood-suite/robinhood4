@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # This file is part of RobinHood 4
-# Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
+# Copyright (C) 2026 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #
 # SPDX-License-Identifier: LGPL-3.0-or-later
@@ -46,12 +46,29 @@ test_dry_run()
         difflines "'/fileA' needs to be deleted" "1 element total to delete"
 }
 
-declare -a tests=(test_basic test_dry_run)
+test_sync_gc_run()
+{
+    touch fileA
+
+    before=$(date +%s)
+
+    rbh_sync "rbh:posix:." "rbh:$db:$testdb"
+
+    after=$(date +%s)
+
+    rm fileA
+
+    rbh_gc -d -s $(($before - 1)) "rbh:$db:$testdb" |
+        difflines "0 element total to delete"
+
+    rbh_gc -d -s $(($after + 1)) "rbh:$db:$testdb" |
+        difflines "'/fileA' needs to be deleted" "1 element total to delete"
+}
+
+declare -a tests=(test_basic test_dry_run test_sync_gc_run)
 
 tmpdir=$(mktemp --directory)
 trap -- "rm -rf '$tmpdir'" EXIT
 cd "$tmpdir"
-
-pwd
 
 run_tests ${tests[@]}

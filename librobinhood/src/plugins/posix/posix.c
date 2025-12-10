@@ -368,6 +368,7 @@ fsentry_from_any(struct fsentry_id_pair *fip, const struct rbh_value *path,
     struct rbh_statx statxbuf;
     char proc_fd_path[64];
     char *symlink = NULL;
+    struct rbh_value now;
     struct rbh_id *id;
     ssize_t count = 0;
     int save_errno;
@@ -481,7 +482,13 @@ fsentry_from_any(struct fsentry_id_pair *fip, const struct rbh_value *path,
     pair->key = "path";
     pair->value = RBH_SSTACK_PUSH(ns_values, path, sizeof(*path));
 
-    ns_xattrs.count = 1;
+    now.type = RBH_VT_INT64;
+    now.int64 = time(NULL);
+    pair = &ns_pairs[1];
+    pair->key = "sync_time";
+    pair->value = RBH_SSTACK_PUSH(ns_values, &now, sizeof(now));
+
+    ns_xattrs.count = 2;
     ns_xattrs.pairs = ns_pairs;
 
     if (enrichers != NULL) {

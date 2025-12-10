@@ -1,5 +1,5 @@
 /* This file is part of Robinhood 4
- * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2026 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifier: LGPL-3.0-or-later
@@ -51,9 +51,12 @@ usage(void)
         "    BACKEND  a URI describing a robinhood backend\n"
         "\n"
         "Optional arguments:\n"
-        "    -d, --dry-run  displays the list of the absent entries\n"
-        "    -h, --help     print this messsage and exit\n"
-        "    -v, --verbose  verbose mode\n";
+        "    -d, --dry-run            displays the list of the absent entries\n"
+        "    -h, --help               print this messsage and exit\n"
+        "    -s, --sync-gc SYNC_TIME  instead of checking every entry of the BACKEND,\n"
+        "                             only consider entries with a sync_time lesser\n"
+        "                             than SYNC_TIME\n"
+        "    -v, --verbose            verbose mode\n";
 
     printf(message, program_invocation_short_name);
 }
@@ -237,7 +240,7 @@ print_entries(struct rbh_iterator *iterator)
 }
 
 static void
-gc(bool dry_run_mode, bool verbose_mode)
+gc(bool dry_run_mode, bool verbose_mode, int64_t sync_time)
 {
     const struct rbh_filter_options OPTIONS = {
         .verbose = verbose_mode,
@@ -250,12 +253,25 @@ gc(bool dry_run_mode, bool verbose_mode)
                 RBH_FP_ID,
         },
     };
+    const struct rbh_filter_field *field;
     struct rbh_mut_iterator *fsentries;
+    struct rbh_filter *filter = NULL;
     struct rbh_iterator *constify;
 
-    fsentries = rbh_backend_filter(backend, NULL, &OPTIONS, &OUTPUT, NULL);
+    field = str2filter_field("ns-xattrs.sync_time");
+
+    if (sync_time >= 0) {
+        filter = rbh_filter_compare_int64_new(RBH_FOP_STRICTLY_LOWER, field,
+                                              sync_time);
+        if (filter == NULL)
+            error(EXIT_FAILURE, errno, "sync_time2filter");
+    }
+
+    fsentries = rbh_backend_filter(backend, filter, &OPTIONS, &OUTPUT, NULL);
     if (fsentries == NULL)
         error(EXIT_FAILURE, errno, "rbh_backend_filter");
+
+    free(filter);
 
     constify = rbh_iter_constify(fsentries);
 
@@ -324,6 +340,10 @@ main(int argc, char *argv[])
             .val = 'h',
         },
         {
+            .name = "sync-time",
+            .val = 's',
+        },
+        {
             .name = "verbose",
             .val = 'v',
         },
@@ -331,11 +351,12 @@ main(int argc, char *argv[])
     };
     bool dry_run_mode = false;
     bool verbose_mode = false;
+    int64_t sync_time = -1;
     char *path;
     char c;
 
     /* Parse the command line */
-    while ((c = getopt_long(argc, argv, "dhv", LONG_OPTIONS, NULL)) != -1) {
+    while ((c = getopt_long(argc, argv, "dhs:v", LONG_OPTIONS, NULL)) != -1) {
         switch (c) {
         case 'd':
             dry_run_mode = true;
@@ -343,6 +364,10 @@ main(int argc, char *argv[])
         case 'h':
             usage();
             return 0;
+        case 's':
+            if (str2int64_t(optarg, &sync_time))
+                error(EXIT_FAILURE, errno, "str2int64_t");
+            break;
         case 'v':
             verbose_mode = true;
             break;
@@ -372,6 +397,6 @@ main(int argc, char *argv[])
     if (mount_fd < 0)
         error(EXIT_FAILURE, errno, "open: %s", argv[1]);
 
-    gc(dry_run_mode, verbose_mode);
+    gc(dry_run_mode, verbose_mode, sync_time);
     return EXIT_SUCCESS;
 }
