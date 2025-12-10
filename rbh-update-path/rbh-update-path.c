@@ -51,29 +51,42 @@ update_path()
     struct rbh_mut_iterator *batch;
     struct rbh_list_node *batches;
     struct rbh_fsentry *entry;
-    bool need_update = false;
+    bool from_mirror = true;
+    bool empty = true;
 
     batches = xmalloc(sizeof(*batches));
     rbh_list_init(batches);
 
-    /* Init the list with the entry without a path from the mirror backend */
+    /* Retrieve initial batch: all entries without a path from mirror backend */
     fsentries = get_entry_without_path();
     add_iterator(batches, fsentries);
 
+    /* The first batch is from the mirror backend, subsequent batches are
+     * children discovered during processing.
+     */
     for (batch = get_iterator(batches); batch != NULL;
          batch = get_iterator(batches)) {
         for (entry = rbh_mut_iter_next(batch); entry != NULL;
              entry = rbh_mut_iter_next(batch)) {
 
+            /* Mark that we've processed at least one entry. This indicates
+             * update_path() should be called again until there is no more
+             * entry without a path.
+             */
+            if (empty)
+                empty = false;
+
             /* If it's not a directory, no need to update it's children */
-            if (S_ISDIR(entry->statx->stx_mode)) {
-                if(remove_children_path(backend, entry))
-                    need_update = true;
-            }
+            if (S_ISDIR(entry->statx->stx_mode))
+                remove_children_path(backend, entry, batches);
 
             update_entry_path(backend, entry);
 
-            free(entry);
+            /* Entries in child batches are freed when their iterator is
+             * destroyed, so we only free the initial mirror entries here.
+             */
+            if (from_mirror)
+                free(entry);
         }
 
         switch (errno) {
@@ -86,11 +99,15 @@ update_path()
         }
 
         rbh_mut_iter_destroy(batch);
+        /* After processing the first batch, all subsequent batches are
+         * children, not from the mirror backend.
+         */
+        from_mirror = false;
     }
 
     free(batches);
 
-    return need_update;
+    return empty;
 }
 
 int
@@ -133,7 +150,7 @@ main(int argc, char *argv[])
 
     backend = rbh_backend_from_uri(argv[0], false);
 
-    while (update_path());
+    while (!update_path());
 
     return EXIT_SUCCESS;
 }

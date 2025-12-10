@@ -40,33 +40,32 @@ get_entry_children(struct rbh_backend *backend, struct rbh_fsentry *entry)
     return get_entries(backend, filter);
 }
 
-struct rbh_node_fsevent {
-    struct rbh_fsevent *fsevent;
+struct rbh_node_data {
+    void *data;
     struct rbh_list_node link;
 };
 
 static void
-add_fsevents_child(struct rbh_list_node *list, struct rbh_fsevent *fsevent)
+add_data_child(struct rbh_list_node *list, void *data)
 {
-    struct rbh_node_fsevent *node;
+    struct rbh_node_data *node;
 
     if (stack == NULL)
         stack = rbh_sstack_new(MIN_VALUES_SSTACK_ALLOC *
-                               sizeof(struct rbh_node_fsevent *));
+                               sizeof(struct rbh_node_data *));
 
     node = RBH_SSTACK_PUSH(stack, NULL, sizeof(*node));
-
-    node->fsevent = fsevent;
+    node->data = data;
     rbh_list_add_tail(list, &node->link);
 }
 
 static void
-free_fsevents_list(struct rbh_list_node *list)
+free_data_list(struct rbh_list_node *list)
 {
-    struct rbh_node_fsevent *node, *tmp;
+    struct rbh_node_data *node, *tmp;
 
     rbh_list_foreach_safe(list, node, tmp, link)
-        free(node->fsevent);
+        free(node->data);
 
     free(list);
 }
@@ -77,16 +76,16 @@ struct list_iterator {
 };
 
 static const void *
-fsevent_iter_next(void *iterator)
+list_iter_next(void *iterator)
 {
     struct list_iterator *iter = iterator;
-    const struct rbh_node_fsevent *node;
+    const struct rbh_node_data *node;
 
     node = rbh_iter_next(iter->list);
     if (node == NULL)
         return NULL;
 
-    return node->fsevent;
+    return node->data;
 }
 
 static void
@@ -99,7 +98,7 @@ list_iter_destroy(void *iterator)
 }
 
 static const struct rbh_iterator_operations FSEVENT_ITER_OPS = {
-    .next = fsevent_iter_next,
+    .next = list_iter_next,
     .destroy = list_iter_destroy,
 };
 
@@ -119,13 +118,40 @@ new_iter_list(struct rbh_iterator *list)
     return &iter->iterator;
 }
 
-static struct rbh_list_node *
-build_fsevents_remove_path(struct rbh_mut_iterator *children)
+static struct rbh_mut_iterator *
+_rbh_mut_iter_list(struct rbh_list_node *list)
 {
+    struct rbh_iterator *list_iter;
+
+    list_iter = rbh_iter_list(list, offsetof(struct rbh_node_data, link),
+                              free_data_list);
+
+    return (struct rbh_mut_iterator *) new_iter_list(list_iter);
+}
+
+static struct rbh_iterator *
+_rbh_iter_list(struct rbh_list_node *list)
+{
+    struct rbh_iterator *list_iter;
+
+    list_iter = rbh_iter_list(list, offsetof(struct rbh_node_data, link),
+                              free_data_list);
+
+    return new_iter_list(list_iter);
+}
+
+static struct rbh_list_node *
+build_fsevents_remove_path(struct rbh_mut_iterator *children,
+                           struct rbh_list_node *batches)
+{
+    struct rbh_list_node *fsentries;
     struct rbh_list_node *fsevents;
 
     fsevents = xmalloc(sizeof(*fsevents));
     rbh_list_init(fsevents);
+
+    fsentries = xmalloc(sizeof(*fsentries));
+    rbh_list_init(fsentries);
 
     while (true) {
         struct rbh_fsevent *fsevent;
@@ -141,23 +167,29 @@ build_fsevents_remove_path(struct rbh_mut_iterator *children)
                 error(EXIT_FAILURE, errno, "failed to retrieve child");
         }
 
+        add_data_child(fsentries, child);
         fsevent = generate_fsevent_ns_xattrs(child, NULL);
-        add_fsevents_child(fsevents, fsevent);
-        free(child);
+        add_data_child(fsevents, fsevent);
     }
 
     if (rbh_list_empty(fsevents)) {
         free(fsevents);
+        free(fsentries);
         return NULL;
+    }
+
+    if (!rbh_list_empty(fsentries)) {
+        struct rbh_mut_iterator *iter = _rbh_mut_iter_list(fsentries);
+        add_iterator(batches, iter);
     }
 
     return fsevents;
 }
 
-bool
-remove_children_path(struct rbh_backend *backend, struct rbh_fsentry *entry)
+void
+remove_children_path(struct rbh_backend *backend, struct rbh_fsentry *entry,
+                     struct rbh_list_node *batches)
 {
-    struct rbh_iterator *list_iterator;
     struct rbh_mut_iterator *children;
     struct rbh_iterator *update_iter;
     struct rbh_mut_iterator *chunks;
@@ -165,18 +197,14 @@ remove_children_path(struct rbh_backend *backend, struct rbh_fsentry *entry)
 
     children = get_entry_children(backend, entry);
 
-    fsevents = build_fsevents_remove_path(children);
+    fsevents = build_fsevents_remove_path(children, batches);
 
     rbh_mut_iter_destroy(children);
 
     if (fsevents == NULL)
-        return false;
+        return;
 
-    list_iterator = rbh_iter_list(fsevents,
-                                  offsetof(struct rbh_node_fsevent, link),
-                                  free_fsevents_list);
-
-    update_iter = new_iter_list(list_iterator);
+    update_iter = _rbh_iter_list(fsevents);
 
     /* the mongo backend tries to process all the fsevents at once in a
      * single bulk operation, but a bulk operation is limited in size.
@@ -208,6 +236,4 @@ remove_children_path(struct rbh_backend *backend, struct rbh_fsentry *entry)
     } while (true);
 
     rbh_mut_iter_destroy(chunks);
-
-    return true;
 }
