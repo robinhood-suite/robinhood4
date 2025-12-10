@@ -2,12 +2,15 @@
  * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
- * SPDX-License-Identifer: LGPL-3.0-or-later
+ * SPDX-License-Identifier: LGPL-3.0-or-later
  */
 
 #include <error.h>
 #include <getopt.h>
 #include <sysexits.h>
+
+#include "rbh_update_path.h"
+#include "utils.h"
 
 #include <robinhood.h>
 
@@ -26,50 +29,6 @@ destroy_backend(void)
 }
 
 static struct rbh_mut_iterator *
-_get_entries(struct rbh_filter *filter)
-{
-    const struct rbh_filter_projection proj = {
-        .fsentry_mask = RBH_FP_ID | RBH_FP_PARENT_ID | RBH_FP_NAME |
-                        RBH_FP_NAMESPACE_XATTRS | RBH_FP_STATX,
-        .statx_mask = RBH_STATX_TYPE,
-    };
-    const struct rbh_filter_options option = {0};
-    const struct rbh_filter_output output = {
-        .type = RBH_FOT_PROJECTION,
-        .projection = proj,
-    };
-    struct rbh_mut_iterator *fsentries;
-
-    fsentries = rbh_backend_filter(backend, filter, &option, &output, NULL);
-    if (fsentries == NULL) {
-        if (errno == RBH_BACKEND_ERROR)
-            error(EXIT_FAILURE, 0, "%s", rbh_backend_error);
-        else
-            error(EXIT_FAILURE, errno,
-                  "failed to execute filter on backend '%s'", backend->name);
-    }
-
-    free(filter);
-
-    return fsentries;
-}
-
-static struct rbh_mut_iterator *
-get_entry_children(struct rbh_fsentry *entry)
-{
-    const struct rbh_filter_field *field;
-    struct rbh_filter *filter;
-
-    field = str2filter_field("parent-id");
-    filter = rbh_filter_compare_binary_new(RBH_FOP_EQUAL, field,
-                                           entry->id.data, entry->id.size);
-    if (filter == NULL)
-        error(EXIT_FAILURE, errno, "failed to create filter");
-
-    return _get_entries(filter);
-}
-
-static struct rbh_mut_iterator *
 get_entry_without_path()
 {
     const struct rbh_filter_field *field = str2filter_field("ns-xattrs.path");
@@ -82,100 +41,18 @@ get_entry_without_path()
 
     filter = rbh_filter_not(filter_path);
 
-    return _get_entries(filter);
-}
-
-static struct rbh_fsentry *
-get_entry_parent(struct rbh_fsentry *entry)
-{
-    const struct rbh_filter_projection proj = {
-        .fsentry_mask = RBH_FP_ID | RBH_FP_PARENT_ID | RBH_FP_NAME |
-                        RBH_FP_NAMESPACE_XATTRS,
-        .statx_mask = 0,
-    };
-    const struct rbh_filter_field *field;
-    struct rbh_fsentry *parent;
-    struct rbh_filter *filter;
-
-    field = str2filter_field("id");
-    filter = rbh_filter_compare_binary_new(RBH_FOP_EQUAL, field,
-                                           entry->parent_id.data,
-                                           entry->parent_id.size);
-    if (filter == NULL)
-        error(EXIT_FAILURE, errno, "failed to create filter");
-
-    parent = rbh_backend_filter_one(backend, filter, &proj);
-
-    free(filter);
-
-    return parent;
-}
-
-static struct rbh_fsevent *
-generate_fsevent_ns_xattrs(struct rbh_fsentry *entry, struct rbh_value *value)
-{
-    struct rbh_value_map xattrs;
-    struct rbh_fsevent *fsevent;
-    struct rbh_value_pair pair;
-
-    pair.key = "path";
-    pair.value = value;
-
-    xattrs.pairs = &pair;
-    xattrs.count = 1;
-
-    fsevent = rbh_fsevent_ns_xattr_new(&entry->id, &xattrs, &entry->parent_id,
-                                       entry->name);
-
-    if (fsevent == NULL)
-        error(EXIT_FAILURE, errno, "failed to generate fsevent");
-
-    return fsevent;
-}
-
-static struct rbh_fsevent *
-generate_fsevent_update_path(struct rbh_fsentry *entry,
-                             struct rbh_fsentry *parent,
-                             const struct rbh_value *value_path)
-{
-    struct rbh_fsevent *fsevent;
-    struct rbh_value value;
-    char *format;
-    char *path;
-
-    if (strcmp(value_path->string, "/") == 0)
-        format = "%s%s";
-    else
-        format = "%s/%s";
-
-    if (asprintf(&path, format, value_path->string, entry->name) == -1)
-        error(EXIT_FAILURE, errno, "failed to create the path");
-
-    value.type = RBH_VT_STRING;
-    value.string = path;
-
-    fsevent = generate_fsevent_ns_xattrs(entry, &value);
-
-    free(path);
-
-    return fsevent;
+    return get_entries(backend, filter);
 }
 
 static bool
 update_path()
 {
     struct rbh_mut_iterator *fsentries;
-    const struct rbh_value *value_path;
-    struct rbh_mut_iterator *children;
-    struct rbh_iterator *update_iter;
-    struct rbh_fsevent *fsevent;
     bool need_update = false;
-    int rc;
 
     fsentries = get_entry_without_path();
 
     while (true) {
-        struct rbh_fsentry *parent;
         struct rbh_fsentry *entry;
 
         entry = rbh_mut_iter_next(fsentries);
@@ -192,83 +69,12 @@ update_path()
         }
 
         /* If it's not a directory, no need to update its children */
-        if (!S_ISDIR(entry->statx->stx_mode))
-            goto update_path;
-
-        /* Remove children's path */
-        children = get_entry_children(entry);
-
-        while (true) {
-            struct rbh_fsentry *child = rbh_mut_iter_next(children);
-
-            if (child == NULL) {
-                if (errno == ENODATA)
-                    break;
-
-                if (errno == RBH_BACKEND_ERROR)
-                    error(EXIT_FAILURE, 0, "%s", rbh_backend_error);
-                else
-                    error(EXIT_FAILURE, errno, "failed to retrieve child");
-            }
-
-            /* TODO: store all the fsevent in a list and call rbh_backend_update
-             * one time
-             */
-            fsevent = generate_fsevent_ns_xattrs(child, NULL);
-            update_iter = rbh_iter_array(fsevent, sizeof(*fsevent), 1, NULL);
-
-            rc = rbh_backend_update(backend, update_iter);
-            if (rc == -1)
-                error(EXIT_FAILURE, errno, "failed to update '%s'",
-                      child->name);
-
-            /* We need to call the update_path function atleast one other time
-             * to finish updating the path
-             */
-            need_update = true;
-
-            rbh_iter_destroy(update_iter);
-            free(fsevent);
-            free(child);
+        if (S_ISDIR(entry->statx->stx_mode)) {
+            if (remove_children_path(backend, entry))
+                need_update = true;
         }
 
-        rbh_mut_iter_destroy(children);
-
-update_path:
-        /* Update entry path */
-        parent = get_entry_parent(entry);
-        if (entry == NULL) {
-            /* Skip this entry if it doesn't have a parent, will be updated
-             * later
-             */
-            if (errno == ENODATA)
-                continue;
-
-            if (errno == RBH_BACKEND_ERROR)
-                error(EXIT_FAILURE, 0, "%s", rbh_backend_error);
-            else
-                error(EXIT_FAILURE, errno,
-                      "failed to get the parent of '%s'", entry->name);
-        }
-
-        value_path = rbh_fsentry_find_ns_xattr(parent, "path");
-        /* Skip this entry if its parent doesn't have a path, will be updated
-         * later
-         */
-        if (value_path == NULL)
-            continue;
-
-        fsevent = generate_fsevent_update_path(entry, parent, value_path);
-        update_iter = rbh_iter_array(fsevent, sizeof(*fsevent), 1, NULL);
-
-        rc = rbh_backend_update(backend, update_iter);
-        if (rc == -1)
-            error(EXIT_FAILURE, errno, "failed to update '%s'",
-                  entry->name);
-
-        rbh_iter_destroy(update_iter);
-        free(fsevent);
-        free(parent);
+        update_entry_path(backend, entry);
         free(entry);
     }
 
