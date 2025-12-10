@@ -24,6 +24,60 @@ get_entry_children(struct rbh_backend *backend, struct rbh_fsentry *entry)
     return get_entries(backend, filter);
 }
 
+struct rbh_node_fsevent {
+    struct rbh_fsevent *fsevent;
+    struct rbh_list_node link;
+};
+
+struct list_iterator {
+    struct rbh_iterator iterator;
+    struct rbh_iterator *list;
+};
+
+static const void *
+fsevent_iter_next(void *iterator)
+{
+    struct list_iterator *iter = iterator;
+    const struct rbh_node_fsevent *node;
+
+    node = rbh_iter_next(iter->list);
+    if (node == NULL)
+        return NULL;
+
+    return node->fsevent;
+}
+
+static void
+list_iter_destroy(void *iterator)
+{
+    struct list_iterator *iter = iterator;
+
+    rbh_iter_destroy(iter->list);
+    free(iter);
+}
+
+static const struct rbh_iterator_operations FSEVENT_ITER_OPS = {
+    .next = fsevent_iter_next,
+    .destroy = list_iter_destroy,
+};
+
+static const struct rbh_iterator FSEVENT_ITERATOR = {
+    .ops = &FSEVENT_ITER_OPS,
+};
+
+__attribute__((unused))
+static struct rbh_iterator *
+new_iter_list(struct rbh_iterator *list)
+{
+    struct list_iterator *iter;
+
+    iter = xmalloc(sizeof(*iter));
+
+    iter->iterator = FSEVENT_ITERATOR;
+    iter->list = list;
+    return &iter->iterator;
+}
+
 bool
 remove_children_path(struct rbh_backend *backend, struct rbh_fsentry *entry)
 {
