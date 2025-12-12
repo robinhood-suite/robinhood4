@@ -164,7 +164,7 @@ EOF
     rbh_find "rbh:$db:$testdb" | sort | difflines "/" "/dir" "/dir/subdir/file"
 
     # We rename dir while rbh-update is updating the path of new_subdir, as
-    # as new_subdir have children, dir should also be updated by rbh-update.
+    # new_subdir have children, dir should also be updated by rbh-update.
     DEBUGINFOD_URLS="" gdb -batch -x "$tmp_gdb_script" \
         --args $__rbh_update_path rbh:$db:$testdb
 
@@ -175,12 +175,87 @@ EOF
             "/new_dir/new_subdir/file"
 }
 
+test_multiple_arborescence()
+{
+    for i in {1..5}; do
+        mkdir "dir$i"
+        touch "dir$i/file"
+        touch "dir$i/file_bis"
+    done
+
+    rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
+
+    local expected="$(echo "/"; find . -type f -printf "/%P\n" | sort)"
+
+    local userid="$(lctl --device "$LUSTRE_MDT" changelog_register |
+                        cut -d "'" -f2)"
+
+    for i in {1..5}; do
+        mv "dir$i" "new_dir$i"
+    done
+
+    rbh_fsevents -e "rbh:lustre:$LUSTRE_DIR" \
+        "src:lustre:$LUSTRE_MDT?ack-user=$userid" "rbh:$db:$testdb"
+
+    lctl --device "$LUSTRE_MDT" changelog_deregister "$userid"
+
+    rbh_find "rbh:$db:$testdb" | sort | difflines "$expected"
+
+    rbh_update_path "rbh:$db:$testdb"
+
+    expected="$(find . -printf "/%P\n" | sort)"
+    rbh_find "rbh:$db:$testdb" | sort | difflines "$expected"
+}
+
+test_config()
+{
+    local conf_file="conf"
+
+    mkdir dir
+    touch dir/file
+
+    rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
+
+    local userid="$(lctl --device "$LUSTRE_MDT" changelog_register |
+                        cut -d "'" -f2)"
+
+    mv dir new_dir
+
+    rbh_fsevents -e "rbh:lustre:$LUSTRE_DIR" \
+        "src:lustre:$LUSTRE_MDT?ack-user=$userid" "rbh:$db:$testdb"
+
+    lctl --device "$LUSTRE_MDT" changelog_deregister "$userid"
+
+    rbh_find "rbh:$db:$testdb" | sort | difflines "/" "/dir/file"
+
+    # invalid config
+    echo "---
+ mongo:
+     address: \"mongodb://localhost:12345\"
+---" > $conf_file
+
+    rbh_update_path --config $conf_file "rbh:$db:$testdb" &&
+        error "rbh-update-path with invalid server address in config should" \
+              "have failed"
+
+    # valid config
+    echo "---
+ mongo:
+     address: \"mongodb://localhost:27017\"
+---" > $conf_file
+
+    rbh_update_path --config $conf_file "rbh:$db:$testdb"
+
+    rbh_find "rbh:$db:$testdb" | sort | difflines "/" "/new_dir" "/new_dir/file"
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 declare -a tests=(test_simple_update_path test_multiple_update_path
                   test_2_depth_update_path test_hardlink_update_path
-                  test_concurrent_rename)
+                  test_concurrent_rename test_multiple_arborescence
+                  test_config)
 
 LUSTRE_DIR=/mnt/lustre/
 cd "$LUSTRE_DIR"
