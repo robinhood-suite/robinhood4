@@ -200,3 +200,42 @@ _rbh_iter_list(struct rbh_list_node *list)
 
     return new_iter_list(list_iter);
 }
+
+int
+chunkify_update(struct rbh_iterator *iter, struct rbh_backend *backend)
+{
+    struct rbh_mut_iterator *chunks;
+
+    /* XXX: the mongo backend tries to process all the fsevents at once in a
+     *      single bulk operation, but a bulk operation is limited in size.
+     *
+     * Splitting `fsevents' into fixed-size sub-iterators solves this.
+     */
+    chunks = rbh_iter_chunkify(iter, RBH_ITER_CHUNK_SIZE);
+    if (chunks == NULL)
+        return -1;
+
+    do {
+        struct rbh_iterator *chunk = rbh_mut_iter_next(chunks);
+        int save_errno;
+        ssize_t count;
+
+        if (chunk == NULL) {
+            if (errno == ENODATA)
+                break;
+            return -1;
+        }
+
+        count = rbh_backend_update(backend, chunk);
+        save_errno = errno;
+        rbh_iter_destroy(chunk);
+        if (count < 0) {
+            errno = save_errno;
+            return -1;
+        }
+    } while (true);
+
+    rbh_mut_iter_destroy(chunks);
+
+    return 0;
+}

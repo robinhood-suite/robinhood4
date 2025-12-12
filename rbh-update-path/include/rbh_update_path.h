@@ -7,9 +7,12 @@
 
 #include <robinhood.h>
 
-void
+int
 remove_children_path(struct rbh_backend *backend, struct rbh_fsentry *entry,
                      struct rbh_list_node *batches);
 
-void
-update_entry_path(struct rbh_backend *backend, struct rbh_fsentry *entry);
+struct rbh_fsevent *
+get_entry_path(struct rbh_backend *backend, struct rbh_fsentry *entry);
+
+int
+chunkify_update(struct rbh_iterator *iter, struct rbh_backend *backend);

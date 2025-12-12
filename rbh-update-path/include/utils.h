@@ -7,6 +7,10 @@
 
 #include <robinhood.h>
 
+#ifndef RBH_ITER_CHUNK_SIZE
+# define RBH_ITER_CHUNK_SIZE (1 << 12)
+#endif
+
 struct rbh_node_iterator {
     struct rbh_mut_iterator *iterator;
     struct rbh_list_node link;

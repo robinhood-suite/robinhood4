@@ -53,6 +53,7 @@ update_path()
     struct rbh_fsentry *entry;
     bool from_mirror = true;
     bool empty = true;
+    int rc;
 
     batches = xmalloc(sizeof(*batches));
     rbh_list_init(batches);
@@ -66,8 +67,12 @@ update_path()
      */
     for (batch = get_iterator(batches); batch != NULL;
          batch = get_iterator(batches)) {
+        struct rbh_list_node *fsevents = xmalloc(sizeof(*fsevents));
+        rbh_list_init(fsevents);
+
         for (entry = rbh_mut_iter_next(batch); entry != NULL;
              entry = rbh_mut_iter_next(batch)) {
+            struct rbh_fsevent *fsevent;
 
             /* Mark that we've processed at least one entry. This indicates
              * update_path() should be called again until there is no more
@@ -77,10 +82,19 @@ update_path()
                 empty = false;
 
             /* If it's not a directory, no need to update it's children */
-            if (S_ISDIR(entry->statx->stx_mode))
-                remove_children_path(backend, entry, batches);
+            if (S_ISDIR(entry->statx->stx_mode)) {
+                if(remove_children_path(backend, entry, batches))
+                    error(EXIT_FAILURE, errno, "failed to remove children path");
+            }
 
-            update_entry_path(backend, entry);
+            fsevent = get_entry_path(backend, entry);
+            /* Means that entry doesn't have a parent yet or its parent doesn't
+             * have yet a path
+             */
+            if (fsevent == NULL && errno == ENODATA)
+                continue;
+
+            add_data_list(fsevents, fsevent);
 
             /* Entries in child batches are freed when their iterator is
              * destroyed, so we only free the initial mirror entries here.
@@ -96,6 +110,15 @@ update_path()
             error(EXIT_FAILURE, 0, "%s", rbh_backend_error);
         default:
             error(EXIT_FAILURE, errno, "failed to retrieve entry");
+        }
+
+        if (!rbh_list_empty(fsevents)) {
+            struct rbh_iterator *iter = _rbh_iter_list(fsevents);
+            rc = chunkify_update(iter, backend);
+            if (rc)
+                error(EXIT_FAILURE, errno, "failed to update path");
+        } else {
+            free(fsevents);
         }
 
         rbh_mut_iter_destroy(batch);

@@ -35,14 +35,12 @@ get_entry_parent(struct rbh_backend *backend, struct rbh_fsentry *entry)
     return parent;
 }
 
-void
-update_entry_path(struct rbh_backend *backend, struct rbh_fsentry *entry)
+struct rbh_fsevent *
+get_entry_path(struct rbh_backend *backend, struct rbh_fsentry *entry)
 {
     const struct rbh_value *value_path;
-    struct rbh_iterator *update_iter;
     struct rbh_fsevent *fsevent;
     struct rbh_fsentry *parent;
-    int rc;
 
     /* Update entry path */
     parent = get_entry_parent(backend, entry);
@@ -51,7 +49,7 @@ update_entry_path(struct rbh_backend *backend, struct rbh_fsentry *entry)
          * later
          */
         if (errno == ENODATA)
-            return;
+            return NULL;
 
         if (errno == RBH_BACKEND_ERROR)
             error(EXIT_FAILURE, 0, "%s", rbh_backend_error);
@@ -66,17 +64,11 @@ update_entry_path(struct rbh_backend *backend, struct rbh_fsentry *entry)
      */
     if (value_path == NULL) {
         errno = ENODATA;
-        return;
+        return NULL;
     }
 
     fsevent = generate_fsevent_update_path(entry, parent, value_path);
-    update_iter = rbh_iter_array(fsevent, sizeof(*fsevent), 1, NULL);
-
-    rc = rbh_backend_update(backend, update_iter);
-    if (rc == -1)
-        error(EXIT_FAILURE, errno, "failed to update '%s'", entry->name);
-
-    rbh_iter_destroy(update_iter);
-    free(fsevent);
     free(parent);
+
+    return fsevent;
 }

@@ -6,12 +6,9 @@
  */
 
 #include "utils.h"
+#include "rbh_update_path.h"
 
 #include <robinhood.h>
-
-#ifndef RBH_ITER_CHUNK_SIZE
-# define RBH_ITER_CHUNK_SIZE (1 << 12)
-#endif
 
 static struct rbh_mut_iterator *
 get_entry_children(struct rbh_backend *backend, struct rbh_fsentry *entry)
@@ -74,54 +71,24 @@ build_fsevents_remove_path(struct rbh_mut_iterator *children,
     return fsevents;
 }
 
-void
+int
 remove_children_path(struct rbh_backend *backend, struct rbh_fsentry *entry,
                      struct rbh_list_node *batches)
 {
     struct rbh_mut_iterator *children;
     struct rbh_iterator *update_iter;
-    struct rbh_mut_iterator *chunks;
     struct rbh_list_node *fsevents;
 
     children = get_entry_children(backend, entry);
 
     fsevents = build_fsevents_remove_path(children, batches);
-
     rbh_mut_iter_destroy(children);
 
+    /* The entry doesn't have children */
     if (fsevents == NULL)
-        return;
+        return 0;
 
     update_iter = _rbh_iter_list(fsevents);
 
-    /* the mongo backend tries to process all the fsevents at once in a
-     * single bulk operation, but a bulk operation is limited in size.
-     *
-     * Splitting `fsevents' into fixed-size sub-iterators solves this.
-     */
-    chunks = rbh_iter_chunkify(update_iter, RBH_ITER_CHUNK_SIZE);
-    if (chunks == NULL)
-        error(EXIT_FAILURE, errno, "rbh_mut_iter_chunkify");
-
-    do {
-        struct rbh_iterator *chunk = rbh_mut_iter_next(chunks);
-        int save_errno;
-        ssize_t count;
-
-        if (chunk == NULL) {
-            if (errno == ENODATA)
-                break;
-            error(EXIT_FAILURE, errno, "while chunkifying fsevents");
-        }
-
-        count = rbh_backend_update(backend, chunk);
-        save_errno = errno;
-        rbh_iter_destroy(chunk);
-        if (count < 0) {
-            errno = save_errno;
-            error(EXIT_FAILURE, errno, "rbh_backend_update");
-        }
-    } while (true);
-
-    rbh_mut_iter_destroy(chunks);
+    return chunkify_update(update_iter, backend);
 }
