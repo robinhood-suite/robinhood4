@@ -49,3 +49,12 @@ struct rbh_fsevent *
 generate_fsevent_update_path(struct rbh_fsentry *entry,
                              struct rbh_fsentry *parent,
                              const struct rbh_value *value_path);
+
+void
+add_data_list(struct rbh_list_node *list, void *data);
+
+struct rbh_mut_iterator *
+_rbh_mut_iter_list(struct rbh_list_node *list);
+
+struct rbh_iterator *
+_rbh_iter_list(struct rbh_list_node *list);
