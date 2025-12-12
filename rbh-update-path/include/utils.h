@@ -51,7 +51,6 @@ generate_fsevent_ns_xattrs(struct rbh_fsentry *entry, struct rbh_value *value);
 
 struct rbh_fsevent *
 generate_fsevent_update_path(struct rbh_fsentry *entry,
-                             struct rbh_fsentry *parent,
                              const struct rbh_value *value_path);
 
 void

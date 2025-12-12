@@ -47,26 +47,26 @@ get_entry_without_path()
 static bool
 update_path()
 {
+    struct rbh_update_context ctx = {0};
     struct rbh_mut_iterator *fsentries;
     struct rbh_mut_iterator *batch;
-    struct rbh_list_node *batches;
+    struct rbh_list_node batches;
     struct rbh_fsentry *entry;
-    bool from_mirror = true;
     bool empty = true;
     int rc;
 
-    batches = xmalloc(sizeof(*batches));
-    rbh_list_init(batches);
+    rbh_list_init(&batches);
 
     /* Retrieve initial batch: all entries without a path from mirror backend */
     fsentries = get_entry_without_path();
-    add_iterator(batches, fsentries);
+    add_iterator(&batches, fsentries);
 
+    ctx.from_mirror = true;
     /* The first batch is from the mirror backend, subsequent batches are
      * children discovered during processing.
      */
-    for (batch = get_iterator(batches); batch != NULL;
-         batch = get_iterator(batches)) {
+    for (batch = get_iterator(&batches); batch != NULL;
+         batch = get_iterator(&batches)) {
         struct rbh_list_node *fsevents = xmalloc(sizeof(*fsevents));
         rbh_list_init(fsevents);
 
@@ -83,11 +83,11 @@ update_path()
 
             /* If it's not a directory, no need to update it's children */
             if (S_ISDIR(entry->statx->stx_mode)) {
-                if(remove_children_path(backend, entry, batches))
+                if(remove_children_path(backend, entry, &batches))
                     error(EXIT_FAILURE, errno, "failed to remove children path");
             }
 
-            fsevent = get_entry_path(backend, entry);
+            fsevent = get_entry_path(backend, entry, &ctx);
             /* Means that entry doesn't have a parent yet or its parent doesn't
              * have yet a path
              */
@@ -99,7 +99,7 @@ update_path()
             /* Entries in child batches are freed when their iterator is
              * destroyed, so we only free the initial mirror entries here.
              */
-            if (from_mirror)
+            if (ctx.from_mirror)
                 free(entry);
         }
 
@@ -125,10 +125,10 @@ update_path()
         /* After processing the first batch, all subsequent batches are
          * children, not from the mirror backend.
          */
-        from_mirror = false;
+        ctx.from_mirror = false;
+        ctx.value_path = NULL;
+        free(ctx.parent);
     }
-
-    free(batches);
 
     return empty;
 }

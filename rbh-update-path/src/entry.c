@@ -5,6 +5,7 @@
  * SPDX-License-Identifier: LGPL-3.0-or-later
  */
 
+#include "rbh_update_path.h"
 #include "utils.h"
 
 #include <robinhood.h>
@@ -35,40 +36,60 @@ get_entry_parent(struct rbh_backend *backend, struct rbh_fsentry *entry)
     return parent;
 }
 
+static const struct rbh_value *
+get_parent_path(struct rbh_backend *backend, struct rbh_fsentry *entry,
+                struct rbh_update_context *ctx)
+{
+    /* If we are updating the first batch (from the mirror), we need to get
+     * the parent of each entry because we are not sure that all entries
+     * have the same parent, unlike in all the next batches.
+     */
+    if (ctx->value_path == NULL ||
+        (ctx->value_path != NULL && ctx->from_mirror)) {
+
+        if(ctx->parent && ctx->from_mirror)
+            free(ctx->parent);
+
+        ctx->parent = get_entry_parent(backend, entry);
+        if (ctx->parent == NULL) {
+            /* Skip this entry if it doesn't have a parent, will be updated
+             * later
+             */
+            if (errno == ENODATA)
+                return NULL;
+
+            if (errno == RBH_BACKEND_ERROR)
+                error(EXIT_FAILURE, 0, "%s", rbh_backend_error);
+            else
+                error(EXIT_FAILURE, errno,
+                      "failed to get the parent of '%s'", entry->name);
+        }
+
+        ctx->value_path = rbh_fsentry_find_ns_xattr(ctx->parent, "path");
+        /* Skip this entry if it's parent doesn't have a path, will be updated
+         * later
+         */
+        if (ctx->value_path == NULL) {
+            errno = ENODATA;
+            return NULL;
+        }
+    }
+
+    return ctx->value_path;
+}
+
 struct rbh_fsevent *
-get_entry_path(struct rbh_backend *backend, struct rbh_fsentry *entry)
+get_entry_path(struct rbh_backend *backend, struct rbh_fsentry *entry,
+               struct rbh_update_context *ctx)
 {
     const struct rbh_value *value_path;
     struct rbh_fsevent *fsevent;
-    struct rbh_fsentry *parent;
 
-    /* Update entry path */
-    parent = get_entry_parent(backend, entry);
-    if (entry == NULL) {
-        /* Skip this entry if it doesn't have a parent, will be update
-         * later
-         */
-        if (errno == ENODATA)
-            return NULL;
-
-        if (errno == RBH_BACKEND_ERROR)
-            error(EXIT_FAILURE, 0, "%s", rbh_backend_error);
-        else
-            error(EXIT_FAILURE, errno,
-                  "failed to get the parent of '%s'", entry->name);
-    }
-
-    value_path = rbh_fsentry_find_ns_xattr(parent, "path");
-    /* Skip this entry if it's parent doesn't have a path, will be update
-     * later
-     */
-    if (value_path == NULL) {
-        errno = ENODATA;
+    value_path = get_parent_path(backend, entry, ctx);
+    if (value_path == NULL)
         return NULL;
-    }
 
-    fsevent = generate_fsevent_update_path(entry, parent, value_path);
-    free(parent);
+    fsevent = generate_fsevent_update_path(entry, value_path);
 
     return fsevent;
 }
