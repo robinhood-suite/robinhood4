@@ -53,6 +53,7 @@ man_pages = [
     ('robinhood4',  'robinhood4', 'general RobinHood4 knowledge', [author], 7),
     ('robinhood4-conf',  'robinhood4', 'RobinHood4\'s configuration file',
      [author], 5),
+    ('rbh-update-path', 'rbh-update-path', 'rbh-update-path tool', [author], 1),
 ]
 
 smartquotes = False
