@@ -34,6 +34,24 @@
       "parentUuid": "9582128d_fa053b02",
       "revId": "6b5ecd2a8ce08fe904ba8dcff1e75cf50c7c2998",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "69a9cc63_ea5eb77b",
+        "filename": "rbh-policy/rbhpolicy/config/policy.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-12-22T15:15:36Z",
+      "side": 1,
+      "message": "And why not having Rule in another file?",
+      "parentUuid": "47774267_371bc683",
+      "revId": "6b5ecd2a8ce08fe904ba8dcff1e75cf50c7c2998",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
