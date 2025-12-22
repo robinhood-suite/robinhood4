@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9f168213_5065fbdd",
+        "filename": "rbh-policy/tests/test_models_fileclass.py",
+        "patchSetId": 14
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-12-22T15:08:04Z",
+      "side": 1,
+      "message": "style: I kind of prefer this:\n\n```\n  BigFiles \u003d declare_fileclass(\n      name\u003d\"BigFiles\",\n      target\u003dentities.Size \u003e\u003d \"1000MB\")\n```",
+      "range": {
+        "startLine": 65,
+        "startChar": 8,
+        "endLine": 66,
+        "endChar": 49
+      },
+      "revId": "1eb8a11ce1db87b47ad447722bbf2ebdd15fb21f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
