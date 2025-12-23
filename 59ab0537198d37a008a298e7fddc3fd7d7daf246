@@ -26,6 +26,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3fe6b2cd_8540a5be",
+        "filename": "librobinhood/src/policyengine.c",
+        "patchSetId": 9
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-12-23T08:01:41Z",
+      "side": 1,
+      "message": "question: are you sure about the parametrization here? do we want to allow anyone to configure this?",
+      "range": {
+        "startLine": 24,
+        "startChar": 8,
+        "endLine": 24,
+        "endChar": 18
+      },
+      "revId": "59ab0537198d37a008a298e7fddc3fd7d7daf246",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5a6133a7_16891b29",
         "filename": "librobinhood/src/policyengine.c",
         "patchSetId": 9
