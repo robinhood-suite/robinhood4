@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b4742f4e_5e790bcc",
+        "filename": "librobinhood/src/policyengine.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2025-12-23T13:47:44Z",
+      "side": 1,
+      "message": "question: maybe I just don\u0027t understand what you are trying to do here, but why using backend_branch to retrieve a given fsentry? couldn\u0027t you do a filter targeting directly the fsentry?",
+      "range": {
+        "startLine": 407,
+        "startChar": 16,
+        "endLine": 407,
+        "endChar": 34
+      },
+      "revId": "1cffa013697f054f62d0dc7fbbb8b48361b95d5b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
