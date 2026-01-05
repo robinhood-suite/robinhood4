@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "63a87bf7_6eacf623",
+        "filename": "rbh-policy/rbhpolicy/config/filter.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-01-05T10:02:50Z",
+      "side": 1,
+      "message": "minor: like in the previous patch, why mongo?",
+      "range": {
+        "startLine": 104,
+        "startChar": 19,
+        "endLine": 104,
+        "endChar": 29
+      },
+      "revId": "88625c8414ef3de947116cb965caa4e7f01b2070",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
