@@ -20,6 +20,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a1302627_1593d82a",
+        "filename": "librobinhood/src/policyengine.c",
+        "patchSetId": 6
+      },
+      "lineNbr": 450,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-01-05T10:01:37Z",
+      "side": 1,
+      "message": "minor: not necessarily a mongo iterator, maybe a sqlite one?",
+      "range": {
+        "startLine": 450,
+        "startChar": 40,
+        "endLine": 450,
+        "endChar": 50
+      },
+      "revId": "397eeaeafdb1f0910d471ff53249a468d355895d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "69df0878_f2471533",
         "filename": "librobinhood/src/policyengine.c",
         "patchSetId": 6
