@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "209d4d8d_7a2fa5c3",
+        "filename": "librobinhood/src/plugins/ldiskfs/dcache.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-01-06T14:00:11Z",
+      "side": 1,
+      "message": "comment: this one is corrected in the next patch",
+      "range": {
+        "startLine": 82,
+        "startChar": 11,
+        "endLine": 82,
+        "endChar": 19
+      },
+      "revId": "e06b41473cfe96bfbb2885126a46b3e5009474ec",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "efb8be40_dbb12ecb",
         "filename": "librobinhood/src/plugins/ldiskfs/filter.c",
         "patchSetId": 2
