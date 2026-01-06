@@ -49,6 +49,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2ce8e496_5d758157",
+        "filename": "librobinhood/src/policyengine.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 346,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-01-06T14:25:42Z",
+      "side": 1,
+      "message": "style: english comment",
+      "revId": "e2ce73578cd348075f36d7735026a9d5830795f8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a43e1ed1_8cd66a15",
         "filename": "librobinhood/src/policyengine.c",
         "patchSetId": 5
