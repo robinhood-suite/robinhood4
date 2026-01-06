@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ac281bef_a41afc98",
+        "filename": "librobinhood/src/policyengine.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 405,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-01-06T14:30:26Z",
+      "side": 1,
+      "message": "style: in pyramidale order",
+      "range": {
+        "startLine": 405,
+        "startChar": 4,
+        "endLine": 405,
+        "endChar": 36
+      },
+      "revId": "1cffa013697f054f62d0dc7fbbb8b48361b95d5b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b4742f4e_5e790bcc",
         "filename": "librobinhood/src/policyengine.c",
         "patchSetId": 5
@@ -20,6 +43,23 @@
         "endLine": 407,
         "endChar": 34
       },
+      "revId": "1cffa013697f054f62d0dc7fbbb8b48361b95d5b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e18decd5_c1c05b01",
+        "filename": "librobinhood/src/policyengine.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 436,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-01-06T14:30:26Z",
+      "side": 1,
+      "message": "question: Are you sure you can destroy the backend before using the iterator ?",
       "revId": "1cffa013697f054f62d0dc7fbbb8b48361b95d5b",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
