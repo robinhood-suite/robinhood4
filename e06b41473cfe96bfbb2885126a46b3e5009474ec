@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "efb8be40_dbb12ecb",
+        "filename": "librobinhood/src/plugins/ldiskfs/filter.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-01-06T09:55:00Z",
+      "side": 1,
+      "message": "defect: don\u0027t you need to release iter here also?",
+      "range": {
+        "startLine": 56,
+        "startChar": 8,
+        "endLine": 56,
+        "endChar": 20
+      },
+      "revId": "e06b41473cfe96bfbb2885126a46b3e5009474ec",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "085046f3_684dfd43",
+        "filename": "librobinhood/src/plugins/ldiskfs/scan_target.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-01-06T09:55:00Z",
+      "side": 1,
+      "message": "typo: a Lustre",
+      "range": {
+        "startLine": 237,
+        "startChar": 71,
+        "endLine": 237,
+        "endChar": 73
+      },
+      "revId": "e06b41473cfe96bfbb2885126a46b3e5009474ec",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
