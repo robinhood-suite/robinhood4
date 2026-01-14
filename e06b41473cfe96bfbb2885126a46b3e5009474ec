@@ -26,6 +26,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e72505f1_655410d2",
+        "filename": "librobinhood/src/plugins/ldiskfs/filter.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-01-14T08:24:17Z",
+      "side": 1,
+      "message": "sugest: xmalloc",
+      "revId": "e06b41473cfe96bfbb2885126a46b3e5009474ec",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "efb8be40_dbb12ecb",
         "filename": "librobinhood/src/plugins/ldiskfs/filter.c",
         "patchSetId": 2
