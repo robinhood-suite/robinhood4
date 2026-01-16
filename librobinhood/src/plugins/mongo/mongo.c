@@ -338,7 +338,15 @@ mongo_iter_next(void *iterator)
     const bson_t *doc;
 
     /* cursor should only be NULL in dry-run mode */
-    if (mongo_iter->cursor == NULL || !mongoc_cursor_more(mongo_iter->cursor)) {
+    if (mongo_iter->cursor == NULL) {
+           errno = ENODATA;
+           return NULL;
+    }
+
+    if (!mongoc_cursor_more(mongo_iter->cursor)) {
+        if (mongoc_cursor_error(mongo_iter->cursor, &error))
+            goto handle_error;
+
         errno = ENODATA;
         return NULL;
     }
@@ -351,6 +359,7 @@ mongo_iter_next(void *iterator)
         return NULL;
     }
 
+handle_error:
     switch (error.domain) {
     case MONGOC_ERROR_SERVER_SELECTION:
         switch (error.code) {
