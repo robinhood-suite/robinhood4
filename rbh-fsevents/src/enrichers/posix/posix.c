@@ -1,5 +1,5 @@
 /* This file is part of Robinhood 4
- * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2026 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifer: LGPL-3.0-or-later
@@ -502,14 +502,12 @@ enrich_xattrs(const struct rbh_value *xattrs_to_enrich,
         if (length == -1) {
             value = NULL;
         } else {
-            value = RBH_SSTACK_PUSH(xattrs_values, NULL, sizeof(*value));
+            assert(length <= (ssize_t) sizeof(buffer));
 
-            value->type = RBH_VT_BINARY;
-            value->binary.data = RBH_SSTACK_PUSH(xattrs_values, buffer, length);
-            value->binary.size = length;
+            value = create_value_from_xattr(key, buffer, length, xattrs_values);
+            if (value == NULL)
+                return -1;
         }
-
-        assert(length <= (ssize_t) sizeof(buffer));
 
         (*pairs)[enriched->xattrs.count].key = xattrs_seq[i].string;
         (*pairs)[enriched->xattrs.count].value = value;

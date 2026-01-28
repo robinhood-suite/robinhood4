@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # This file is part of RobinHood 4
-# Copyright (C) 2023 Commissariat a l'energie atomique et aux energies
+# Copyright (C) 2026 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
@@ -109,12 +109,58 @@ test_setxattr_replace()
     fi
 }
 
+test_setxattr_with_typing()
+{
+    local entry="test_file"
+    local conf_file="conf"
+
+    touch "$entry"
+
+    echo "---
+backends:
+    lustre:
+        extends: posix
+        enrichers:
+            - lustre
+xattrs_map:
+    user.blob: int32
+---" > $conf_file
+
+    setfattr -n user.blob -v 42 "$entry"
+
+    rbh_fsevents --config $conf_file --enrich rbh:lustre:"$LUSTRE_DIR" \
+        src:lustre:"$LUSTRE_MDT"?ack-user=$userid "rbh:$db:$testdb"
+
+    find_attribute '"xattrs.user":{$exists: true}' '"ns.name":"'$entry'"'
+    find_attribute '"xattrs.user.blob": 42' '"ns.name":"'$entry'"'
+
+    echo "---
+backends:
+    lustre:
+        extends: posix
+        enrichers:
+            - lustre
+xattrs_map:
+    user.blob: string
+---" > $conf_file
+
+    setfattr -n user.blob -v toto "$entry"
+
+    rbh_fsevents --config $conf_file --enrich rbh:lustre:"$LUSTRE_DIR" \
+        src:lustre:"$LUSTRE_MDT"?ack-user=$userid "rbh:$db:$testdb"
+
+    find_attribute '"xattrs.user":{$exists: true}' '"ns.name":"'$entry'"'
+    ! find_attribute '"xattrs.user.blob": 42' '"ns.name":"'$entry'"'
+    find_attribute '"xattrs.user.blob": "toto"' '"ns.name":"'$entry'"'
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
 declare -a tests=(test_setxattr test_setxattr_remove
-                  test_check_last_setxattr_is_inserted test_setxattr_replace)
+                  test_check_last_setxattr_is_inserted test_setxattr_replace
+                  test_setxattr_with_typing)
 
 LUSTRE_DIR=/mnt/lustre/
 cd "$LUSTRE_DIR"

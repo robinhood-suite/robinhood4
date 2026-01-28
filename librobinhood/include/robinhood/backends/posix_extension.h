@@ -1,5 +1,5 @@
 /* This file is part of RobinHood 4
- * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2026 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifer: LGPL-3.0-or-later
@@ -141,5 +141,12 @@ fsentry_from_any(struct fsentry_id_pair *fip, const struct rbh_value *path,
 
 char *
 id2path(const char *root, const struct rbh_id *id);
+
+int
+set_xattrs_types_map();
+
+struct rbh_value *
+create_value_from_xattr(const char *name, const char *buffer, ssize_t length,
+                        struct rbh_sstack *xattrs);
 
 #endif
