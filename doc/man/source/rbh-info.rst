@@ -1,11 +1,6 @@
 rbh-info(1)
 ===========
 
-NAME
-----
-
-rbh-info - Display information about Robinhood backends and their metadata
-
 SYNOPSIS
 --------
 
@@ -68,47 +63,42 @@ INFO MODE
 **-c**, **--count**
     Shows the number of entries in the backend.
 
-**-s**, **--size**
-    Displays the total size of the entries in a backend (as written on disk).
-
 **-f**, **--first-sync**
     Shows details about the first synchronization performed in that backend.
     These include: duration of the sync, when it started and when it ended (as
     timestamps), mountpoint used for the sync, the complete command line for
     that sync, and the number of entries seen, converted and skipped.
 
+**-s**, **--size**
+    Displays the total size of the entries in a backend (as written on disk).
+
 **-y**, **--last-sync**
     Shows details about the last synchronization performed in that backend. Same
     information as **--first-sync**.
 
-USAGE EXAMPLES
---------------
+EXAMPLES
+--------
 
-1. **List Installed Backends**:
-    ```bash
-    rbh-info --list
-    List of installed plugins and their extensions:
-    - mongo
-    - posix
-        - retention
-    ```
+List Installed Backends
+    | $ rbh-info --list
+    | List of installed plugins and their extensions:
+    | - mongo
+    | - posix
+    |     - retention
 
-2. **Display Capabilities of the Mongo Plugin**:
-    ```bash
-    rbh-info mongo
-    Capabilities of mongo:
-    - filter: rbh-find [source]
-    - synchronisation: rbh-sync [source]
-    - update: rbh-sync [target]
-    - branch: rbh-sync [source for partial processing]
-    ```
+Display Capabilities of the Mongo Plugin
+    | $ rbh-info mongo
+    | Capabilities of mongo:
+    | - filter: rbh-find [source]
+    | - synchronisation: rbh-sync [source]
+    | - update: rbh-sync [target]
+    | - branch: rbh-sync [source for partial processing]
 
-3. **Query Metadata for a Specific Backend**:
-    ```bash
-    rbh-info rbh:mongo:test --count --size
-    6577
-    3.58 MB
-    ```
+Query Metadata for a Specific Backend
+    | $ rbh-info rbh:mongo:test --count --size
+    | 6577
+    | 3.58 MB
+
 This retrieves the count of documents and total size for the backend `test`
 configured with MongoDB.
 
@@ -126,12 +116,6 @@ dlopen(3), robinhood4(5), robinhood4(7)
 
 CREDITS
 -------
-
-rbh-info and RobinHood4 are distributed under the GNU Lesser General Public
-License v3.0 or later. See the file COPYING for details.
-
-AUTHOR
-------
 
 rbh-info and RobinHood4 is written by the storage software development team of
 the Commissariat à l'énergie atomique et aux énergies alternatives.

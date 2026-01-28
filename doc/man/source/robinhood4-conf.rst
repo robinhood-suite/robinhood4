@@ -27,26 +27,27 @@ read those additionnal keys and handle them.
 For instance, a backend extending the POSIX plugin can only define an iterator
 to use and enrichers with which to retrieve additional data.
 
-```
-backends:
-    posix-mpi:
-        extends: posix
-        iterator: mfu
-```
+.. code:: yaml
+
+    backends:
+        posix-mpi:
+            extends: posix
+            iterator: mfu
 
 Here, we define the `posix-mpi` backend, which extends the `posix` plugin and
 will use the `mfu` extension. It will be usable with the `rbh:posix-mpi:/tmp`
 URI for instance.
 
 Another example in the default configuration file:
-```
-backends:
-    lustre-mpi:
-        extends: posix
-        iterator: mfu
-        enrichers:
-            - lustre
-```
+
+.. code:: yaml
+
+    backends:
+        lustre-mpi:
+            extends: posix
+            iterator: mfu
+            enrichers:
+                - lustre
 
 Here, we define the lustre-mpi backend, meaning `rbh:lustre-mpi:/mnt/lustre` is
 now a valid URI. This backend:
@@ -64,13 +65,15 @@ over the extension/plugin.
 
 For instance:
 
-backends:
-    posix:
-        extends: posix
-        iterator: mfu
-        enrichers:
-            - retention
-            - lustre
+.. code:: yaml
+
+    backends:
+        posix:
+            extends: posix
+            iterator: mfu
+            enrichers:
+                - retention
+                - lustre
 
 Is a valid backend, and means using the URI rbh:posix:/mnt/lustre will iterate
 over each entry in /mnt/lustre with the MFU iterator and use the
@@ -83,18 +86,18 @@ ALIAS
 Aliases are a way to shorten frequently used command lines. All commands
 understand aliases, and they must be defined in the configuration file as a
 dictionnary in the `alias` section, for instance:
-```yaml
-alias:
-    blob1: "-name blob -printf '%A'"
-    blob2: "-type dir -user blob"
-```
 
-Here are defined the `blob1` and `blob2` aliases, which can be used as such:
-```bash
-rbh-find rbh:mongo:blob --alias blob1
-# which will be understood as
-rbh-find rbh:mongo:blob -name blob -printf '%A'
-```
+.. code:: yaml
+
+    alias:
+        blob1: "-name blob -printf '%A'"
+
+Here is defined the `blob1` alias, which makes the following lines equal:
+
+.. code:: bash
+
+    $ rbh-find rbh:mongo:blob --alias blob1
+    $ rbh-find rbh:mongo:blob -name blob -printf '%A'
 
 EXTENDED ATTRIBUTE MAP
 ----------------------
@@ -106,12 +109,13 @@ value the typing associated with that name. The types can be: int32, int64,
 uint32, uint64, string, boolean and binary.
 
 Here is an example of the map:
-```yaml
-xattrs_map:
-    user.blob_int32: int32
-    user.blob_string: string
-    user.blob_boolean: boolean
-```
+
+.. code:: yaml
+
+    xattrs_map:
+        user.blob_int32: int32
+        user.blob_string: string
+        user.blob_boolean: boolean
 
 PLUGIN-SPECIFIC ATTRIBUTES
 --------------------------
@@ -129,3 +133,16 @@ RETENTION
 
 You can define the extended attribute used to set the retention date of an entry
 with the `RBH_RETENTION_XATTR` key.
+
+SEE ALSO
+--------
+
+robinhood4(7)
+
+CREDITS
+-------
+
+RobinHood4 is written by the storage software development team of
+the Commissariat à l'énergie atomique et aux énergies alternatives.
+
+It can be contacted at st-hpc@saxifrage.saclay.cea.fr.

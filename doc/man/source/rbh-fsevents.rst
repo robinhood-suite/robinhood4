@@ -1,11 +1,6 @@
 rbh-fsevents(1)
 ===============
 
-NAME
-----
-
-rbh-fsevents - Process and manage storage system events
-
 SYNOPSIS
 --------
 
@@ -17,11 +12,7 @@ DESCRIPTION
 Collect SOURCE system events (fsevents), optionally enrich them with additional
 metadata, and store the processed events in DESTINATION.
 
-ARGUMENTS
----------
-
-PARAMETERS
-++++++++++
+Mandatory arguments to long options are mandatory for short options too.
 
 **SOURCE**
     Specifies the event source. Supported formats include:
@@ -34,9 +25,6 @@ PARAMETERS
     Specifies the event destination. Supported formats include:
     - `-` for standard output (stdout).
     - A URI for storage backends, such as MongoDB (e.g., `rbh:mongo:test`).
-
-OPTIONS
-+++++++
 
 **--alias** *NAME*
     Specify an alias for the operation. Aliases are a way to shorten the
@@ -84,14 +72,13 @@ OPTIONS
 EXAMPLES
 --------
 
-### Combined Workflow: Collect, Enrich, and Update in One Command
+Combined Workflow: Collect, Enrich, and Update in One Command
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 The most streamlined way to use `rbh-fsevents` is to collect events, enrich
 them, and update a backend in a single command:
 
-```bash
-rbh-fsevents --enrich rbh:lustre:/mnt/scratch src:lustre:fsname-MDT0000 rbh:mongo:test
-```
+    $ rbh-fsevents --enrich rbh:lustre:/mnt/scratch src:lustre:fsname-MDT0000 rbh:mongo:test
 
 - **SOURCE**: `src:lustre:fsname-MDT0000` represents an MDT from which events
   are collected
@@ -100,28 +87,23 @@ rbh-fsevents --enrich rbh:lustre:/mnt/scratch src:lustre:fsname-MDT0000 rbh:mong
 - **DESTINATION**: `rbh:mongo:test` sends the processed and enriched events
   directly to a MongoDB backend.
 
-### Separate Workflow: Step-by-Step Processing
+Separate Workflow: Step-by-Step Processing
+++++++++++++++++++++++++++++++++++++++++++
 
-#### Step 1: Collect Sparse Events
-Collect filesystem events from an MDT and save them as sparse events in a YAML
-file:
-```bash
-rbh-fsevents src:lustre:lustre-MDT0000 - > /tmp/sparse-fsevents.yaml
-```
+- Step 1: Collect filesystem events from an MDT and save them as sparse events in a YAML file
+.. code:: bash
 
-#### Step 2: Enrich Sparse Events
-Read the sparse events from the previously collected file, enrich them with
-additional metadata from a specified mount point, and output the enriched
-events to another file:
-```bash
-rbh-fsevents --enrich rbh:lustre:/mnt/data - - < /tmp/sparse-fsevents.yaml > /tmp/enriched-fsevents.yaml
-```
+    $ rbh-fsevents src:lustre:lustre-MDT0000 - > /tmp/sparse-fsevents.yaml
 
-#### Step 3: Update Backend with Enriched Events
-Send the enriched events to a backend, such as MongoDB:
-```bash
-rbh-fsevents - rbh:mongo:test < /tmp/enriched-fsevents.yaml
-```
+- Step 2: Read the sparse events from the previously collected file, enrich them with additional metadata from a specified mount point, and output the enriched events to another file
+.. code:: bash
+
+    $ rbh-fsevents --enrich rbh:lustre:/mnt/data - - < /tmp/sparse-fsevents.yaml > /tmp/enriched-fsevents.yaml
+
+- Step 3: Send the enriched events to a backend, such as MongoDB
+.. code:: bash
+
+    $ rbh-fsevents - rbh:mongo:test < /tmp/enriched-fsevents.yaml
 
 NOTES
 -----
@@ -139,12 +121,6 @@ robinhood4(5), robinhood4(7)
 
 CREDITS
 -------
-
-rbh-fsevents and RobinHood4 are distributed under the GNU Lesser General Public
-License v3.0 or later. See the file COPYING for details.
-
-AUTHOR
-------
 
 rbh-fsevents and RobinHood4 is written by the storage software development team
 of the Commissariat à l'énergie atomique et aux énergies alternatives.

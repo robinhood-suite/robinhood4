@@ -1,11 +1,6 @@
 rbh-find(1)
 ===========
 
-NAME
-----
-
-rbh-find - query and filter metadata from one backend
-
 SYNOPSIS
 --------
 
@@ -24,12 +19,6 @@ rbh-find is a close twin of GNU's find(1), so here are only listed the
 differences between the two.
 
 Mandatory arguments to long options are mandatory for short options too.
-
-ARGUMENTS
----------
-
-PARAMETERS
-++++++++++
 
 **SOURCE**
     Specify the backend to filter on and get entries from. Should take the
@@ -74,14 +63,14 @@ specified earlier in the command line.
 
 Following is a list of available actions that are replicas of GNU's find's
 actions:
-    -delete
-    -exec
-    -print
-    -print0
-    -printf
-    -fprint
-    -fprintf
-    -ls
+    | -delete
+    | -exec
+    | -print
+    | -print0
+    | -printf
+    | -fprint
+    | -fprintf
+    | -ls
 
 Similarly to predicates, directives for the `-[f]printf` action are on a
 per-backend basis, so use `rbh-find`'s helper to know the available directives.
@@ -95,7 +84,7 @@ For example, when running the following command:
 
 .. code:: bash
 
-    find -type f -name '*.txt' -print
+    $ find -type f -name '*.txt' -print
 
 The first thing find does is build a tree -- or rather, a pipeline -- of its
 command line's predicates (``-type f``, ``-name '*.txt'``) and actions
@@ -119,7 +108,7 @@ Now, find allows you to place multiple actions on the command line:
 
 .. code:: bash
 
-    find -print -print
+    $ find -print -print
 
 This is also converted into a single tree::
 
@@ -167,7 +156,7 @@ An example of the difference in the output ordering:
 
 .. code:: bash
 
-    find -print -print
+    $ find -print -print
     ./a
     ./a
     ./a/b
@@ -175,7 +164,7 @@ An example of the difference in the output ordering:
     ./a/b/c
     ./a/b/c
 
-    rbh-find rbh:mongo:test -print -print
+    $ rbh-find rbh:mongo:test -print -print
     ./a
     ./a/b
     ./a/b/c
@@ -189,10 +178,8 @@ examples, we used the action ``-print`` which always evaluates to ``true`` and
 so does not filter out any entries. But there are other actions that do exactly
 that:
 
-.. code:: bash
-
-    # find every file that contains 'string'
-    find -type f -exec grep -q 'string' {} \; -print
+Find every file that contains 'string'
+    $ find -type f -exec grep -q 'string' {} \; -print
 
 The same query, ran with rbh-find would simply print each file and directory
 under the current directory. Implementing the same behaviour as find is not
@@ -204,21 +191,14 @@ time to build the queries would increase as we exclude more and more entries.
 EXAMPLES
 --------
 
-1. **Find all entries in a Mongo database with a size larger than 3GB**:
-   ```bash
-   rbh-find rbh:mongo:blob -size +3G
-   ```
+Find all entries in a Mongo database with a size larger than 3GB
+    $ rbh-find rbh:mongo:blob -size +3G
 
-2. **Find all files in an SQLite database and output their path and size**:
-   ```bash
-   rbh-find rbh:sqlite:blob.sqlite -type f -printf "%p: %s\n"
-   ```
+Find all files in an SQLite database and output their path and size
+    $ rbh-find rbh:sqlite:blob.sqlite -type f -printf "%p: %s\n"
 
-3. **Find all entries in a Mongo database belonging to uid 3000 and delete
-   them**:
-   ```bash
-   rbh-find rbh:mongo:blob -uid 3000 -delete
-   ```
+Find all entries in a Mongo database belonging to uid 3000 and delete them
+    $ rbh-find rbh:mongo:blob -uid 3000 -delete
 
 SEE ALSO
 --------
@@ -227,12 +207,6 @@ find(1), rbh-info(1), robinhood4(5), robinhood4(7)
 
 CREDITS
 -------
-
-rbh-find and RobinHood4 are distributed under the GNU Lesser General Public
-License v3.0 or later. See the file COPYING for details.
-
-AUTHOR
-------
 
 rbh-find and RobinHood4 is written by the storage software development team of
 the Commissariat à l'énergie atomique et aux énergies alternatives.

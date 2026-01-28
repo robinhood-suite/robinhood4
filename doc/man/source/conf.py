@@ -7,7 +7,7 @@
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = 'RobinHood v4'
-copyright = '2025, CEA/DAM'
+copyright = '2026, CEA/DAM. The RobinHood4 tool suite is distributed under the GNU Lesser General Public License v3.0 or later.'
 author = 'CEA/DAM'
 
 # -- General configuration ---------------------------------------------------
@@ -44,14 +44,29 @@ rst_prolog = ''
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('rbh-sync', 'rbh-sync', 'rbh-sync tool', [author], 1),
-    ('rbh-find', 'rbh-find', 'rbh-find tool', [author], 1),
-    ('rbh-fsevents', 'rbh-fsevents', 'rbh-fsevents tool', [author], 1),
-    ('rbh-report', 'rbh-report', 'rbh-report tool', [author], 1),
-    ('rbh-info', 'rbh-info', 'rbh-info tool', [author], 1),
-    ('rbh-undelete', 'rbh-undelete', 'rbh-undelete tool', [author], 1),
-    ('robinhood4',  'robinhood4', 'general RobinHood4 knowledge', [author], 7),
-    ('robinhood4-conf',  'robinhood4', 'RobinHood4\'s configuration file',
+    ('rbh-sync', 'rbh-sync',
+     'synchronize metadata between RobinHood4 backends - RobinHood4 tool suite',
+     [author], 1),
+    ('rbh-find', 'rbh-find',
+     'query and filter metadata from RobinHood4 backends - RobinHood4 tool suite',
+     [author], 1),
+    ('rbh-fsevents', 'rbh-fsevents',
+     'process and manage storage system events - RobinHood4 tool suite',
+     [author], 1),
+    ('rbh-report', 'rbh-report',
+     'generate aggregated reports from Robinhood4 backends - RobinHood4 tool suite',
+     [author], 1),
+    ('rbh-info', 'rbh-info',
+     'display information about RobinHood4 backends and their metadata - RobinHood4 tool suite',
+     [author], 1),
+    ('rbh-undelete', 'rbh-undelete',
+     'restore deleted entries using archived metadata in RobinHood4 backends - RobinHood4 tool suite',
+     [author], 1),
+    ('robinhood4', 'robinhood4',
+     'general knowledge about the RobinHood4 tool suite',
+     [author], 7),
+    ('robinhood4-conf', 'robinhood4',
+     'configuration file for the RobinHood4 tool suite',
      [author], 5),
     ('rbh-update-path', 'rbh-update-path', 'rbh-update-path tool', [author], 1),
 ]

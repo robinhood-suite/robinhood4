@@ -1,8 +1,6 @@
 RobinHood4(7)
 =============
 
-Here are explained major concepts of RobinHood4
-
 URI
 ===
 
@@ -13,21 +11,16 @@ and are built as follows:
     rbh:BACKEND:FSNAME[#BRANCH]
 
 Where:
-    BACKEND       is the name of a backend (see below for more information)
-    MOUNTPOINT    is an instance of BACKEND (e.g. path for filesystems, database
-                  name for databases, ...).
-    BRANCH        is the path/id of an fsentry managed by BACKEND:FSNAME. IDs
-                  must be enclosed in square brackets '[ID]' to distinguish them
-                  from a path. Currently only Lustre FIDs are handled.
+    | BACKEND       is the name of a backend (see below for more information)
+    | MOUNTPOINT    is an instance of BACKEND (e.g. path for filesystems, database name for databases, ...).
+    | BRANCH        is the path/id of an fsentry managed by BACKEND:FSNAME. IDs must be enclosed in square brackets '[ID]' to distinguish them from a path. Currently only Lustre FIDs are handled.
 
 BACKEND
 -------
 
 By default, the BACKEND must correspond to a plugin currently installed. This
 list can be checked with rbh-info(1), as such:
-```bash
-rbh-info --list
-```
+    $ rbh-info --list
 
 These plugins act as ways to interact with a storage system, either by fetching
 metadata from it, or by updating data in it.
@@ -62,20 +55,14 @@ BRANCH
 A branch in RobinHood4 allows one to target specific subset in the given
 storage system. For instance, in a POSIX architecture, you can add a branch to
 target only subdirectories in the main path, like so:
-
-```bash
-rbh:posix:/tmp#somewhere/something
-```
+    $ rbh:posix:/tmp#somewhere/something
 
 This is important because it allows one to still target the same system (here,
 `/tmp`) without targetting all of its content when it isn't necessary.
 
 For ID targeting, only Lustre FIDs are handled, and here is an example in a
 Mongo database:
-
-```bash
-rbh:mongo:blob#[0x200000404:0x1:0x0]
-```
+    $ rbh:mongo:blob#[0x200000404:0x1:0x0]
 
 ADDITIONAL PARAMETERS
 ---------------------
@@ -96,25 +83,19 @@ rbh-fsevents(1).
 EXAMPLES
 --------
 
-rbh:posix:/tmp
-rbh:lustre:/mnt/lustre/
-rbh:mongo:blob
-rbh://208.80.152.201:27018/mongo:blob
-rbh:mpi-file:dummy.mpi
+| rbh:posix:/tmp
+| rbh:lustre:/mnt/lustre/
+| rbh:mongo:blob
+| rbh://208.80.152.201:27018/mongo:blob
+| rbh:mpi-file:dummy.mpi
 
 SEE ALSO
 --------
 
-rbh-info(1), rbh-sync(1), rbh-fsevents(1), robinhood4(5)
+rbh-info(1), rbh-find(1), rbh-report(1), rbh-sync(1), rbh-fsevents(1), rbh-undelete(1), robinhood4(5)
 
 CREDITS
 -------
-
-RobinHood4 is distributed under the GNU Lesser General Public License v3.0 or
-later. See the file COPYING for details.
-
-AUTHOR
-------
 
 RobinHood4 is written by the storage software development team of the
 Commissariat à l'énergie atomique et aux énergies alternatives.
