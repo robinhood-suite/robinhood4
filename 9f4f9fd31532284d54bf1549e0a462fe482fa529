@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "acd5140c_15f01641",
+        "filename": "doc/man/source/rbh-find.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-01-28T15:18:32Z",
+      "side": 1,
+      "message": "question: no code environment anymore?",
+      "range": {
+        "startLine": 196,
+        "startChar": 0,
+        "endLine": 203,
+        "endChar": 47
+      },
+      "revId": "9f4f9fd31532284d54bf1549e0a462fe482fa529",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d0d8219e_f07ecbde",
+        "filename": "doc/man/source/rbh-fsevents.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-01-28T15:18:32Z",
+      "side": 1,
+      "message": "comment: seems obvious no? you saw this sentence in other docs?",
+      "range": {
+        "startLine": 15,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 72
+      },
+      "revId": "9f4f9fd31532284d54bf1549e0a462fe482fa529",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c13eb63f_631b44a3",
+        "filename": "doc/man/source/rbh-fsevents.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-01-28T15:18:32Z",
+      "side": 1,
+      "message": "comment: same as before, about the code environment",
+      "range": {
+        "startLine": 81,
+        "startChar": 4,
+        "endLine": 81,
+        "endChar": 92
+      },
+      "revId": "9f4f9fd31532284d54bf1549e0a462fe482fa529",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aa437ad2_3c6fa026",
+        "filename": "doc/man/source/robinhood4-conf.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-01-28T15:18:32Z",
+      "side": 1,
+      "message": "question: how to differentiate `#` for comment to `#` for root command?",
+      "range": {
+        "startLine": 101,
+        "startChar": 4,
+        "endLine": 101,
+        "endChar": 33
+      },
+      "revId": "9f4f9fd31532284d54bf1549e0a462fe482fa529",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
