@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3d0d18af_4cdf06f2",
+        "filename": "doc/man/source/rbh-find.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-01-28T15:37:58Z",
+      "side": 1,
+      "message": "From what I gathered, it\u0027s not necessary, it\u0027s mostly a styling thing, and it can be necessary for multi-lines code. Here it\u0027s only one line which is indented anyway, so I just removed it.",
+      "parentUuid": "acd5140c_15f01641",
+      "range": {
+        "startLine": 196,
+        "startChar": 0,
+        "endLine": 203,
+        "endChar": 47
+      },
+      "revId": "9f4f9fd31532284d54bf1549e0a462fe482fa529",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d0d8219e_f07ecbde",
         "filename": "doc/man/source/rbh-fsevents.rst",
         "patchSetId": 1
@@ -37,6 +61,30 @@
       "writtenOn": "2026-01-28T15:18:32Z",
       "side": 1,
       "message": "comment: seems obvious no? you saw this sentence in other docs?",
+      "range": {
+        "startLine": 15,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 72
+      },
+      "revId": "9f4f9fd31532284d54bf1549e0a462fe482fa529",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "17c6572c_c2713a8c",
+        "filename": "doc/man/source/rbh-fsevents.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-01-28T15:37:58Z",
+      "side": 1,
+      "message": "Yeah, `cp` or `ls` for instance say it, though I agree I\u0027ve never seem a command where that\u0027s not the case.",
+      "parentUuid": "d0d8219e_f07ecbde",
       "range": {
         "startLine": 15,
         "startChar": 0,
@@ -72,6 +120,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1ffeefe5_cd97d98b",
+        "filename": "doc/man/source/rbh-fsevents.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-01-28T15:37:58Z",
+      "side": 1,
+      "message": "same answer",
+      "parentUuid": "c13eb63f_631b44a3",
+      "range": {
+        "startLine": 81,
+        "startChar": 4,
+        "endLine": 81,
+        "endChar": 92
+      },
+      "revId": "9f4f9fd31532284d54bf1549e0a462fe482fa529",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "aa437ad2_3c6fa026",
         "filename": "doc/man/source/robinhood4-conf.rst",
         "patchSetId": 1
@@ -83,6 +155,30 @@
       "writtenOn": "2026-01-28T15:18:32Z",
       "side": 1,
       "message": "question: how to differentiate `#` for comment to `#` for root command?",
+      "range": {
+        "startLine": 101,
+        "startChar": 4,
+        "endLine": 101,
+        "endChar": 33
+      },
+      "revId": "9f4f9fd31532284d54bf1549e0a462fe482fa529",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "06ec5436_b95780a3",
+        "filename": "doc/man/source/robinhood4-conf.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-01-28T15:37:58Z",
+      "side": 1,
+      "message": "`#` for root command ? What\u0027s that ? Never seen `#` used for commands that should be ran as root...",
+      "parentUuid": "aa437ad2_3c6fa026",
       "range": {
         "startLine": 101,
         "startChar": 4,
