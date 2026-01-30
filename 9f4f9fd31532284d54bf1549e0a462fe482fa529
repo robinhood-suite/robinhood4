@@ -72,6 +72,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "871af288_5d3d0a70",
+        "filename": "doc/man/source/rbh-find.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-01-30T08:27:32Z",
+      "side": 1,
+      "message": "I\u0027ll think about it if/when we get HTML pages. For now, I\u0027ll leave it as-is.",
+      "parentUuid": "248ef2d5_b5791a7d",
+      "range": {
+        "startLine": 196,
+        "startChar": 0,
+        "endLine": 203,
+        "endChar": 47
+      },
+      "revId": "9f4f9fd31532284d54bf1549e0a462fe482fa529",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d0d8219e_f07ecbde",
@@ -275,6 +299,30 @@
       "side": 1,
       "message": "That\u0027s used in some documentation. You can just decide it\u0027s not important :).",
       "parentUuid": "06ec5436_b95780a3",
+      "range": {
+        "startLine": 101,
+        "startChar": 4,
+        "endLine": 101,
+        "endChar": 33
+      },
+      "revId": "9f4f9fd31532284d54bf1549e0a462fe482fa529",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "201d758f_96477e73",
+        "filename": "doc/man/source/robinhood4-conf.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-01-30T08:27:32Z",
+      "side": 1,
+      "message": "Changed the explanation around to remove the comment",
+      "parentUuid": "c17d800b_fbab8522",
       "range": {
         "startLine": 101,
         "startChar": 4,
