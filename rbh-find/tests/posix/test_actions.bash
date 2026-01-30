@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # This file is part of the RobinHood Library
-# Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
+# Copyright (C) 2026 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
@@ -55,11 +55,31 @@ test_delete()
     fi
 }
 
+test_checked_exec()
+{
+    touch should_be_rm
+    touch shouldnt_be_rm
+
+    rbh_sync "rbh:posix:." "rbh:$db:$testdb"
+
+    echo "blob" > shouldnt_be_rm
+
+    rbh_find "rbh:$db:$testdb" -size 0 -checked-exec rm {} ";"
+
+    if [[ -f should_be_rm ]]; then
+        error "File 'should_be_rm' should have been deleted"
+    fi
+
+    if [[ ! -f shouldnt_be_rm ]]; then
+        error "File 'shouldnt_be_rm' shouldn't have been deleted"
+    fi
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
-declare -a tests=(test_exec test_delete)
+declare -a tests=(test_exec test_delete test_checked_exec)
 
 tmpdir=$(mktemp --directory)
 trap -- "rm -rf '$tmpdir'" EXIT
