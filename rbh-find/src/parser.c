@@ -1,5 +1,5 @@
 /* This file is part of RobinHood 4
- * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2026 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifer: LGPL-3.0-or-later
@@ -27,8 +27,16 @@ str2action(const char *string)
 
     switch (string[1]) {
     case 'c':
-        if (strcmp(&string[2], "ount") == 0)
-            return ACT_COUNT;
+        switch (string[2]) {
+        case 'h':
+            if (strcmp(&string[3], "ecked-exec") == 0)
+                return ACT_CHECKED_EXEC;
+            break;
+        case 'o':
+            if (strcmp(&string[3], "unt") == 0)
+                return ACT_COUNT;
+            break;
+        }
         break;
     case 'd':
         if (strcmp(&string[2], "elete") == 0)
@@ -127,22 +135,23 @@ str2action(const char *string)
 }
 
 static const char *__action2str[] = {
-    [ACT_COUNT]     = "-count",
-    [ACT_DELETE]    = "-delete",
-    [ACT_EXEC]      = "-exec",
-    [ACT_EXECDIR]   = "-execdir",
-    [ACT_FLS]       = "-fls",
-    [ACT_FPRINT]    = "-fprint",
-    [ACT_FPRINT0]   = "-fprint0",
-    [ACT_FPRINTF]   = "-fprintf",
-    [ACT_LS]        = "-ls",
-    [ACT_OK]        = "-ok",
-    [ACT_OKDIR]     = "-okdir",
-    [ACT_PRINT]     = "-print",
-    [ACT_PRINT0]    = "-print0",
-    [ACT_PRINTF]    = "-printf",
-    [ACT_PRUNE]     = "-prune",
-    [ACT_QUIT]      = "-quit",
+    [ACT_CHECKED_EXEC] = "-checked-exec",
+    [ACT_COUNT]        = "-count",
+    [ACT_DELETE]       = "-delete",
+    [ACT_EXEC]         = "-exec",
+    [ACT_EXECDIR]      = "-execdir",
+    [ACT_FLS]          = "-fls",
+    [ACT_FPRINT]       = "-fprint",
+    [ACT_FPRINT0]      = "-fprint0",
+    [ACT_FPRINTF]      = "-fprintf",
+    [ACT_LS]           = "-ls",
+    [ACT_OK]           = "-ok",
+    [ACT_OKDIR]        = "-okdir",
+    [ACT_PRINT]        = "-print",
+    [ACT_PRINT0]       = "-print0",
+    [ACT_PRINTF]       = "-printf",
+    [ACT_PRUNE]        = "-prune",
+    [ACT_QUIT]         = "-quit",
 };
 
 const char *

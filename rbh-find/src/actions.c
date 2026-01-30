@@ -434,6 +434,7 @@ find_pre_action(struct find_context *ctx, const int index,
                 const enum action action)
 {
     switch (action) {
+    case ACT_CHECKED_EXEC:
     case ACT_EXEC:
         if (index + 2 >= ctx->argc) // at least two args: -exec cmd ;
             error(EX_USAGE, 0, "missing argument to `%s'", action2str(action));
@@ -641,6 +642,14 @@ exec_command(struct find_context *ctx, struct rbh_fsentry *fsentry)
     }
 }
 
+static int
+check_real_fsentry_match_filters(struct find_context *ctx,
+                                 size_t backend_index,
+                                 struct rbh_fsentry *fsentry)
+{
+    return 0;
+}
+
 int
 find_exec_action(struct find_context *ctx,
                  size_t backend_index,
@@ -664,6 +673,14 @@ find_exec_action(struct find_context *ctx,
             }
 
             return rc;
+        }
+    case ACT_CHECKED_EXEC:
+        {
+            int rc;
+
+            rc = check_real_fsentry_match_filters(ctx, backend_index, fsentry);
+            if (rc)
+                return rc;
         }
     case ACT_EXEC:
         return exec_command(ctx, fsentry);
@@ -723,6 +740,7 @@ find_post_action(struct find_context *ctx, const int index,
     const char *filename;
 
     switch (action) {
+    case ACT_CHECKED_EXEC:
     case ACT_EXEC:
         free(ctx->exec_command);
         break;
