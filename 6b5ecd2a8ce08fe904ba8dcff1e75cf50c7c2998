@@ -52,6 +52,24 @@
       "parentUuid": "47774267_371bc683",
       "revId": "6b5ecd2a8ce08fe904ba8dcff1e75cf50c7c2998",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "33fc7777_6e97e128",
+        "filename": "rbh-policy/rbhpolicy/config/policy.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-02-02T12:17:44Z",
+      "side": 1,
+      "message": "We could have done that, but rules are part of policy, so it seemed to me that they belonged in policy.py",
+      "parentUuid": "69a9cc63_ea5eb77b",
+      "revId": "6b5ecd2a8ce08fe904ba8dcff1e75cf50c7c2998",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
