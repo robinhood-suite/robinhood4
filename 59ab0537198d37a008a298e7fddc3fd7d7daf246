@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a848157a_99c11c89",
+        "filename": "librobinhood/src/policyengine.c",
+        "patchSetId": 9
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-02-02T15:15:30Z",
+      "side": 1,
+      "message": "After checking the different iterator structures, none of them store the backend address, so we can destroy it in this function without any problems.",
+      "parentUuid": "2a323ea5_5f3ad7ec",
+      "range": {
+        "startLine": 19,
+        "startChar": 23,
+        "endLine": 19,
+        "endChar": 31
+      },
+      "revId": "59ab0537198d37a008a298e7fddc3fd7d7daf246",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3fe6b2cd_8540a5be",
@@ -47,6 +71,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8e359b14_2b947769",
+        "filename": "librobinhood/src/policyengine.c",
+        "patchSetId": 9
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-02-02T15:15:30Z",
+      "side": 1,
+      "message": "We want to retrieve all entries that match the filter in the database, that\u0027s what we\u0027re doing here with these options, which aren\u0027t configurable by the user. It\u0027s later, when applying the rules or before applying the action, that we can give the user the ability to configure their query.",
+      "parentUuid": "3fe6b2cd_8540a5be",
+      "range": {
+        "startLine": 24,
+        "startChar": 8,
+        "endLine": 24,
+        "endChar": 18
+      },
+      "revId": "59ab0537198d37a008a298e7fddc3fd7d7daf246",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5a6133a7_16891b29",
@@ -60,6 +108,30 @@
       "writtenOn": "2025-12-15T13:30:02Z",
       "side": 1,
       "message": "style: define these variables at the start",
+      "range": {
+        "startLine": 23,
+        "startChar": 4,
+        "endLine": 40,
+        "endChar": 31
+      },
+      "revId": "59ab0537198d37a008a298e7fddc3fd7d7daf246",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "89c2e27b_293173f9",
+        "filename": "librobinhood/src/policyengine.c",
+        "patchSetId": 9
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-02-02T15:15:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a6133a7_16891b29",
       "range": {
         "startLine": 23,
         "startChar": 4,
