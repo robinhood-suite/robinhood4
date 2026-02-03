@@ -598,7 +598,7 @@ declare -a tests=(test_sync_2_files test_sync_size test_sync_3_files
                   test_sync_branch test_continue_sync_on_error
                   test_stop_sync_on_error test_config)
 
-#Disable these tests with MPI temporaly
+# Disable these tests with MPI temporaly
 if [[ $WITH_MPI == false ]]; then
     tests+=(test_sync_number_children test_nb_children_two_sync)
 fi

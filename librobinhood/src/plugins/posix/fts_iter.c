@@ -130,12 +130,9 @@ skip:
         children_counter = *(int *) rbh_sstack_peek(sstack, &readable);
         rbh_sstack_pop(sstack, sizeof(int));
 
-        /* If the directory we are leaving has children, we generate a fsevent
-         * to update the destination backend
-         */
-        if (current_counter > 0)
-            fsentry = build_fsentry_nb_children(ftsent->fts_pointer,
-                                                current_counter, NULL);
+        /* We generate a fsevent to update the destination backend */
+        fsentry = build_fsentry_nb_children(ftsent->fts_pointer,
+                                            current_counter, NULL);
 
         /* fsentry_from_ftsent() memoizes ids of directories */
         free(ftsent->fts_pointer);

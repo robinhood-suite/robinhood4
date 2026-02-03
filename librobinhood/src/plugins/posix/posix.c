@@ -507,11 +507,6 @@ fsentry_from_any(struct fsentry_id_pair *fip, const struct rbh_value *path,
         }
     }
 
-    if (S_ISDIR(statxbuf.stx_mode)) {
-        build_pair_nb_children(&pairs[count], 0, xattrs);
-        count++;
-    }
-
     inode_xattrs.pairs = pairs;
     inode_xattrs.count = count;
 
