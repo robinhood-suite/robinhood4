@@ -260,4 +260,8 @@ int command_call(const char *cmd_line, parse_cb_t cb_func, void *cb_arg);
 size_t
 base64_encode(char *dest, const char *src, size_t n);
 
+int
+convert_xattrs_with_operation(const struct rbh_value_pair *pairs, int count,
+                              const char *op, struct rbh_sstack *stack);
+
 #endif
