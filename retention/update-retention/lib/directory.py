@@ -55,7 +55,8 @@ class Directory():
         string = (f"--- !inode_xattr\n"
                   f"\"id\": !!binary {self.ID}\n"
                   f"\"xattrs\":\n"
-                  f"  \"trusted.expiration_date\": !int64 {new_expiration_date}\n"
+                  f"  \"trusted.expiration_date\":\n"
+                  f"      \"set\": !int64 {new_expiration_date}\n"
                   f"...\n")
 
         exec_run(command, string)

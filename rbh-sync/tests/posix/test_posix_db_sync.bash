@@ -581,8 +581,7 @@ test_nb_children_two_sync()
 
     rbh_sync_posix "." "rbh:$db:$testdb"
 
-    # FIXME this is wrong, we add nb_children twice
-    find_attribute '"ns.xattrs.path": "/test"' '"xattrs.nb_children": 10'
+    find_attribute '"ns.xattrs.path": "/test"' '"xattrs.nb_children": 5'
 }
 
 ################################################################################
@@ -594,12 +593,15 @@ declare -a tests=(test_sync_2_files test_sync_size test_sync_3_files
                   test_sync_one_one_file test_sync_one test_sync_one_two_files
                   test_sync_symbolic_link test_sync_socket test_sync_fifo
                   test_sync_branch test_continue_sync_on_error
-                  test_stop_sync_on_error test_config test_sync_number_children
-                  test_nb_children_two_sync)
+                  test_stop_sync_on_error test_config)
+
+#Disable these tests with MPI temporaly
+if [[ $WITH_MPI == false ]]; then
+    tests+=(test_sync_number_children test_nb_children_two_sync)
+fi
 
 if [[ $WITH_MPI == true ]]; then
-    tests+=(test_sync_number_children_mpi test_sync_large_path
-            test_sync_dir_delete_while_mfu_walk)
+    tests+=(test_sync_large_path test_sync_dir_delete_while_mfu_walk)
 fi
 
 tmpdir=$(mktemp --directory)

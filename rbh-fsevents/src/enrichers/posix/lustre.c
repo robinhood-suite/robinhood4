@@ -120,6 +120,8 @@ lustre_enrich_xattr(struct enricher *enricher,
     pairs = enricher->pairs;
 
     if (!strcmp(xattr->key, "lustre")) {
+        int count;
+
         rc = rbh_posix_enrich_open_by_id(ctx, enricher->mount_fd,
                                          &original->id);
         if (rc == -1)
@@ -130,11 +132,17 @@ lustre_enrich_xattr(struct enricher *enricher,
         if (rc == -1)
             return rc;
 
-        return rbh_backend_get_attribute(enricher->backend,
-                                         RBH_LEF_LUSTRE | RBH_LEF_ALL_NOFID,
-                                         ctx,
-                                         &pairs[n_xattrs],
-                                         enricher->pair_count - n_xattrs);
+        count = rbh_backend_get_attribute(enricher->backend,
+                                          RBH_LEF_LUSTRE | RBH_LEF_ALL_NOFID,
+                                          ctx, &pairs[n_xattrs],
+                                          enricher->pair_count - n_xattrs);
+
+        rc = convert_xattrs_with_operation(&pairs[n_xattrs], count, "set",
+                                           ctx->values);
+        if (rc == -1)
+            return rc;
+
+        return count;
 
     } else if (!strcmp(xattr->key, "path")) {
         struct rbh_value *value;

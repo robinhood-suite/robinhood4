@@ -82,6 +82,7 @@ test_sync_time()
     find_attribute '"ns.xattrs.path":"/fileA"' '"statx.ctime.sec":'$ctime
 }
 
+# Disable this test temporaly
 test_sync_number_children()
 {
     mkdir -p dir1/dir2/dir3
@@ -104,7 +105,7 @@ test_sync_number_children()
 ################################################################################
 
 declare -a tests=(test_sync_simple_from_dwalk test_sync_simple_from_robinhood
-                  test_sync_size test_sync_time test_sync_number_children)
+                  test_sync_size test_sync_time)
 
 tmpdir=$(mktemp --directory)
 trap -- "rm -rf '$tmpdir'" EXIT

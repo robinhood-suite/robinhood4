@@ -511,6 +511,9 @@ enrich_xattrs(const struct rbh_value *xattrs_to_enrich,
 
         (*pairs)[enriched->xattrs.count].key = xattrs_seq[i].string;
         (*pairs)[enriched->xattrs.count].value = value;
+        convert_xattrs_with_operation(&(*pairs)[enriched->xattrs.count], 1,
+                                      value == NULL ? "unset" : "set",
+                                      xattrs_values);
         enriched->xattrs.count++;
     }
 
