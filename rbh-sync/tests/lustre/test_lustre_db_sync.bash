@@ -630,7 +630,7 @@ test_sync_number_children()
 
 declare -a tests=(test_simple_sync test_branch_sync test_sync_one_file)
 
-#Disable this test with MPI temporaly
+# Disable this test with MPI temporaly
 if [[ $WITH_MPI == false ]]; then
     tests+=(test_sync_number_children)
 fi
