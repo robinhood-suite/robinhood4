@@ -114,9 +114,17 @@ case "$cmd" in
         ;;
     dump)
         mongo "$db" --eval \
-            'db.entries.find({'"$(args_to_filter "$@")"'},
-                             {"_id": 0, "ns.parent": 0})
-                       .sort({"ns.name": 1})'
+            'db.entries.aggregate([
+                {
+                    $match: {'"$(args_to_filter "$@")"'}
+                },
+                {
+                    $project: { "_id": 0, statx: "$statx", ns: "$ns",
+                                xattrs: "$xattrs"}
+                },
+                {
+                    $sort: { "ns.name": 1}
+                }])'
         ;;
     remove)
         remove_attribute "$db" "$@"
