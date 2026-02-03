@@ -21,14 +21,6 @@ rbh_s3_backend_load_extensions(const struct rbh_backend_plugin *self,
 char *
 get_next_object(struct s3_iterator *s3_iter);
 
-int
-fill_path(char *path, struct rbh_value_pair **_pairs,
-          struct rbh_sstack *values);
-
-void
-fill_user_metadata(struct rbh_value_pair *pairs,
-                   struct rbh_sstack *values);
-
 void *
 s3_iter_next(void *iterator);
 
