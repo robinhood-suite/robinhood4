@@ -56,7 +56,7 @@ get_next_object(struct s3_iterator *s3_iter)
     return s3_iter->obj_data.list[*curr_obj_id];
 }
 
-int
+static int
 fill_path(char *path, struct rbh_value_pair **_pairs, struct rbh_sstack *values)
 {
     struct rbh_value *path_value;
@@ -75,21 +75,21 @@ fill_path(char *path, struct rbh_value_pair **_pairs, struct rbh_sstack *values)
     return 0;
 }
 
-void
-fill_user_metadata(struct rbh_value_pair *pairs,
+static int
+fill_user_metadata(struct rbh_value_pair *pairs, int *count,
                    struct rbh_sstack *values)
 {
     size_t custom_size = s3_get_custom_size();
-    struct rbh_value *map_value = RBH_SSTACK_PUSH(values, NULL,
-                                                  sizeof(*map_value));
-    struct rbh_value_pair *user_pairs = RBH_SSTACK_PUSH(values, NULL,
-                                                        sizeof(*user_pairs) *
-                                                        custom_size);
-    struct rbh_value_map map;
+    char *key = "user_metadata";
+    size_t len_key;
+
+    len_key = strlen(key);
 
     for (size_t i = 0; i < custom_size; ++i) {
         struct rbh_value *attr_value;
         struct map_entry *entry;
+        char *md_key;
+        size_t len;
 
         entry = s3_get_user_metadata_entry();
 
@@ -99,19 +99,17 @@ fill_user_metadata(struct rbh_value_pair *pairs,
         attr_value->string = RBH_SSTACK_PUSH(values, entry->value,
                                              strlen(entry->value) + 1);
 
-        user_pairs[i].key = RBH_SSTACK_PUSH(values, entry->key,
-                                            strlen(entry->key) + 1);
-        user_pairs[i].value = attr_value;
+        len = len_key + strlen(entry->key) + 2;
+        md_key = RBH_SSTACK_PUSH(values, NULL, len);
+        if (sprintf(md_key, "%s.%s", key, entry->key) <= 0)
+            return -1;
+
+        pairs[*count].key = md_key;
+        pairs[*count].value = attr_value;
+        (*count)++;
     }
 
-    map.count = custom_size;
-    map.pairs = user_pairs;
-
-    map_value->type = RBH_VT_MAP;
-    map_value->map = map;
-
-    pairs->key = "user_metadata";
-    pairs->value = map_value;
+    return 0;
 }
 
 void *
@@ -130,6 +128,7 @@ s3_iter_next(void *iterator)
     char *current_object;
     struct rbh_id id;
     char *full_path;
+    size_t md_size;
     int count = 1;
     size_t length;
     int rc;
@@ -169,8 +168,9 @@ s3_iter_next(void *iterator)
     ns_xattrs.pairs = ns_pairs;
     ns_xattrs.count = 1;
 
+    md_size = s3_get_custom_size();
     inode_pairs = RBH_SSTACK_PUSH(s3_iter->values, NULL,
-                                  sizeof(*inode_pairs) * 2);
+                                  sizeof(*inode_pairs) * (1 + md_size));
 
     /* Add the bucket name in the inode xattrs */
     bucket_value = RBH_SSTACK_PUSH(s3_iter->values, NULL,
@@ -181,9 +181,9 @@ s3_iter_next(void *iterator)
     inode_pairs[0].key = "bucket";
     inode_pairs[0].value = bucket_value;
 
-    if (s3_get_custom_size() > 0) {
-        fill_user_metadata(&inode_pairs[1], s3_iter->values);
-        count++;
+    if (md_size > 0) {
+        if (fill_user_metadata(inode_pairs, &count, s3_iter->values))
+            return NULL;
     }
 
     inode_xattrs.pairs = inode_pairs;
