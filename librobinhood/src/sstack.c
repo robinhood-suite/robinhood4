@@ -147,3 +147,20 @@ rbh_sstack_destroy(struct rbh_sstack *sstack)
     free(sstack->stacks);
     free(sstack);
 }
+
+void
+rbh_sstack_clear(struct rbh_sstack *sstack)
+{
+    size_t readable;
+
+    while (true) {
+        int rc;
+
+        rbh_sstack_peek(sstack, &readable);
+        if (readable == 0)
+            break;
+
+        rc = rbh_sstack_pop(sstack, readable);
+        assert(rc == 0);
+    }
+}

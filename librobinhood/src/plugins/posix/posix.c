@@ -278,23 +278,6 @@ getxattrs(char *proc_fd_path, struct rbh_value_pair **_pairs,
     return count - skipped;
 }
 
-static void
-sstack_clear(struct rbh_sstack *sstack)
-{
-    size_t readable;
-
-    while (true) {
-        int rc;
-
-        rbh_sstack_peek(sstack, &readable);
-        if (readable == 0)
-            break;
-
-        rc = rbh_sstack_pop(sstack, readable);
-        assert(rc == 0);
-    }
-}
-
 static __thread struct rbh_value_pair *ns_pairs;
 static __thread size_t ns_pairs_count = 1 << 7;
 static __thread struct rbh_sstack *ns_values;
@@ -540,9 +523,9 @@ fsentry_from_any(struct fsentry_id_pair *fip, const struct rbh_value *path,
         goto out_clear_sstacks;
     }
 
-    sstack_clear(values);
-    sstack_clear(xattrs);
-    sstack_clear(ns_values);
+    rbh_sstack_clear(values);
+    rbh_sstack_clear(xattrs);
+    rbh_sstack_clear(ns_values);
     free(symlink);
     /* Ignore errors on close */
     close(fd);
@@ -553,9 +536,9 @@ fsentry_from_any(struct fsentry_id_pair *fip, const struct rbh_value *path,
     return true;
 
 out_clear_sstacks:
-    sstack_clear(values);
-    sstack_clear(xattrs);
-    sstack_clear(ns_values);
+    rbh_sstack_clear(values);
+    rbh_sstack_clear(xattrs);
+    rbh_sstack_clear(ns_values);
 
     free(symlink);
 out_free_id:
