@@ -649,8 +649,14 @@ START_TEST(dedup_same_xattr_different_values)
     ck_assert_int_eq(event->type, RBH_FET_XATTR);
     ck_assert_int_eq(event->xattrs.count, 1);
     ck_assert_str_eq(event->xattrs.pairs[0].key, "key");
-    ck_assert_int_eq(event->xattrs.pairs[0].value->type, RBH_VT_BINARY);
-    ck_assert_str_eq(event->xattrs.pairs[0].value->binary.data, "value4");
+    ck_assert_int_eq(event->xattrs.pairs[0].value->type, RBH_VT_MAP);
+    ck_assert_int_eq(event->xattrs.pairs[0].value->map.count, 1);
+    ck_assert_str_eq(event->xattrs.pairs[0].value->map.pairs[0].key, "set");
+    ck_assert_int_eq(event->xattrs.pairs[0].value->map.pairs[0].value->type,
+                     RBH_VT_BINARY);
+    ck_assert_str_eq(
+                event->xattrs.pairs[0].value->map.pairs[0].value->binary.data,
+                "value4");
 
     event = rbh_iter_next(sub_batch->fsevents);
     ck_assert_ptr_null(event);

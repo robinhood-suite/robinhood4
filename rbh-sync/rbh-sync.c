@@ -16,6 +16,7 @@
 #include <sysexits.h>
 
 #include <robinhood.h>
+#include <robinhood/value.h>
 #include <robinhood/config.h>
 #include <robinhood/utils.h>
 #include <robinhood/alias.h>
@@ -29,12 +30,16 @@ static struct rbh_backend *from, *to;
 
 #define MIN_VALUES_SSTACK_ALLOC (1 << 6)
 static __thread struct rbh_sstack *metadata_sstack;
+static __thread struct rbh_sstack *stack;
 
 static void __attribute__ ((destructor))
 destroy_metadata_sstack(void)
 {
     if (metadata_sstack)
         rbh_sstack_destroy(metadata_sstack);
+
+    if (stack)
+        rbh_sstack_destroy(stack);
 }
 
 static void __attribute__((destructor))
@@ -316,10 +321,20 @@ upsert_from_fsentry(struct rbh_fsevent *fsevent, struct rbh_statx *statx,
     assert(fsentry->mask & RBH_FP_ID);
     fsevent->id = fsentry->id;
 
-    if (needs.xattrs & has.xattrs)
+    if (needs.xattrs & has.xattrs) {
         fsevent->xattrs = fsentry->xattrs.inode;
-    else
+
+        if (stack == NULL)
+            stack = rbh_sstack_new(MIN_VALUES_SSTACK_ALLOC *
+                                   (sizeof(struct rbh_value)));
+
+        rbh_sstack_clear(stack);
+        if (convert_xattrs_with_operation(fsevent->xattrs.pairs,
+                                          fsevent->xattrs.count, "set", stack))
+            return NULL;
+    } else {
         fsevent->xattrs.count = 0;
+    }
 
     if (needs.statx & has.statx)
         fsevent->upsert.statx = statx_project(statx, fsentry->statx,
@@ -344,6 +359,14 @@ inode_xattr_from_fsentry(struct rbh_fsevent *fsevent,
     fsevent->id = fsentry->id;
     assert(fsentry->mask & RBH_FP_INODE_XATTRS);
     fsevent->xattrs = fsentry->xattrs.inode;
+    if (stack == NULL)
+        stack = rbh_sstack_new(MIN_VALUES_SSTACK_ALLOC *
+                               (sizeof(struct rbh_value)));
+
+    rbh_sstack_clear(stack);
+    if (convert_xattrs_with_operation(fsevent->xattrs.pairs,
+                                      fsevent->xattrs.count, "set", stack))
+        return NULL;
 
     fsevent->ns.parent_id = NULL;
     fsevent->ns.name = NULL;
@@ -929,6 +952,7 @@ main(int argc, char *argv[])
 
     insert_metadata(to, metadata_map, RBH_DT_LOG, "metadata");
 
+    free(metadata);
     free(command_line);
     rbh_config_free();
 

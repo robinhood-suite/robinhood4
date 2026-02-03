@@ -41,14 +41,29 @@ get_entries(struct rbh_backend *backend, struct rbh_filter *filter)
 struct rbh_fsevent *
 generate_fsevent_ns_xattrs(struct rbh_fsentry *entry, struct rbh_value *value)
 {
+    struct rbh_value_pair operator_pair;
+    struct rbh_value_map operator_map;
+    struct rbh_value_pair xattr_pair;
+    struct rbh_value operator_value;
     struct rbh_value_map xattrs;
     struct rbh_fsevent *fsevent;
-    struct rbh_value_pair pair;
 
-    pair.key = "path";
-    pair.value = value;
+    operator_pair.value = value;
+    if (value)
+        operator_pair.key = "set";
+    else
+        operator_pair.key = "unset";
 
-    xattrs.pairs = &pair;
+    operator_map.count = 1;
+    operator_map.pairs = &operator_pair;
+
+    operator_value.type = RBH_VT_MAP;
+    operator_value.map = operator_map;
+
+    xattr_pair.key = "path";
+    xattr_pair.value = &operator_value;
+
+    xattrs.pairs = &xattr_pair;
     xattrs.count = 1;
 
     fsevent = rbh_fsevent_ns_xattr_new(&entry->id, &xattrs, &entry->parent_id,

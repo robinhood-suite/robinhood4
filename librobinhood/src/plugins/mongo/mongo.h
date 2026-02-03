@@ -218,16 +218,8 @@ bool
 bson_iter_statx(bson_iter_t *iter, struct rbh_statx *statxbuf);
 
 bool
-bson_append_setxattrs(bson_t *bson, const char *prefix,
-                      const struct rbh_value_map *xattrs);
-
-bool
-bson_append_unsetxattrs(bson_t *bson, const char *prefix,
-                        const struct rbh_value_map *xattrs);
-
-bool
-bson_append_incxattrs(bson_t *bson, const char *prefix,
-                      const struct rbh_value_map *xattrs);
+bson_append_xattrs(const char *prefix, const struct rbh_value_map *xattrs,
+                   bson_t *set, bson_t *unset, bson_t *inc);
 
 bool
 bson_iter_namespace(bson_iter_t *iter, struct rbh_fsentry *fsentry,

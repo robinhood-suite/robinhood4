@@ -24,15 +24,23 @@ retention_enrich_statx(struct enricher *enricher,
 {
     struct rbh_value_pair *pairs;
     size_t n_xattrs;
+    int count;
+    int rc;
 
     n_xattrs = enricher->fsevent.xattrs.count;
     pairs = enricher->pairs;
 
-    return rbh_backend_get_attribute(enricher->backend,
-                                     RBH_REF_RETENTION | RBH_REF_ALL,
-                                     ctx,
-                                     &pairs[n_xattrs],
-                                     enricher->pair_count - n_xattrs);
+    count = rbh_backend_get_attribute(enricher->backend,
+                                      RBH_REF_RETENTION | RBH_REF_ALL,
+                                      ctx, &pairs[n_xattrs],
+                                      enricher->pair_count - n_xattrs);
+
+    rc = convert_xattrs_with_operation(&pairs[n_xattrs], count, "set",
+                                       ctx->values);
+    if (rc)
+        return rc;
+
+    return count;
 }
 
 static int
@@ -43,6 +51,8 @@ retention_enrich_xattr(struct enricher *enricher,
 {
     struct rbh_value_pair *pairs;
     size_t n_xattrs;
+    int count;
+    int rc;
 
     if (strcmp(xattr->key, retention_attribute)) {
         errno = ENOTSUP;
@@ -59,11 +69,17 @@ retention_enrich_xattr(struct enricher *enricher,
     n_xattrs = enricher->fsevent.xattrs.count;
     pairs = enricher->pairs;
 
-    return rbh_backend_get_attribute(enricher->backend,
-                                     RBH_REF_RETENTION | RBH_REF_ALL,
-                                     ctx,
-                                     &pairs[n_xattrs],
-                                     enricher->pair_count - n_xattrs + 1);
+    count = rbh_backend_get_attribute(enricher->backend,
+                                      RBH_REF_RETENTION | RBH_REF_ALL,
+                                      ctx, &pairs[n_xattrs],
+                                      enricher->pair_count - n_xattrs + 1);
+
+    rc = convert_xattrs_with_operation(&pairs[n_xattrs], count, "set",
+                                       ctx->values);
+    if (rc)
+        return rc;
+
+    return count;
 }
 
 int

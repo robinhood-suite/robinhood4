@@ -53,9 +53,19 @@ struct rbh_fsevent {
     /** An fsentry's ID */
     struct rbh_id id;
     /**
-     * Extended attributes to set/unset
+     * Extended attributes to set/unset/inc
      *
-     * To unset an xattr, use a key/value pair with value set to NULL.
+     * If `type` is RBH_FET_UPSERT or RBH_FET_XATTR:
+     *      xattrs = { "xattr1" : { "op" : value }, "xattr2": { "op": value }}
+     *
+     *      To set or inc an xattr, use the operator "set" or "inc" with the
+     *      value to update.
+     *
+     *      To unset an xattr, use the operator "unset" with a value set to
+     *      NULL.
+     *
+     * Otherwise:
+     *      xattrs = { "xattr1" : value , "xattr2" : value }
      */
     struct rbh_value_map xattrs;
     union {

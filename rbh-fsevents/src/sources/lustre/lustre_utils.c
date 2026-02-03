@@ -31,6 +31,25 @@ fill_uidgid(struct changelog_rec *record, struct rbh_statx *statx)
     statx->stx_gid = uidgid->cr_gid;
 }
 
+
+static struct rbh_value *
+build_op_xattr(const char *op, struct rbh_value *xattr_value)
+{
+    struct rbh_value_pair *pair_op;
+    struct rbh_value value;
+
+    pair_op = source_stack_alloc(NULL, sizeof(*pair_op));
+
+    pair_op->key = op;
+    pair_op->value = source_stack_alloc(xattr_value, sizeof(*xattr_value));
+
+    value.type = RBH_VT_MAP;
+    value.map.count = 1;
+    value.map.pairs = pair_op;
+
+    return source_stack_alloc(&value, sizeof(value));
+}
+
 /* BSON results:
  * { "xattrs": { "fid" : x } }
  */
@@ -52,7 +71,7 @@ fill_xattrs_fid(void *arg)
     if (value == NULL)
         return NULL;
 
-    return value;
+    return build_op_xattr("set", value);
 }
 
 /* BSON results:
@@ -72,7 +91,7 @@ fill_xattrs_mdt_index(void *arg)
     if (value == NULL)
         return NULL;
 
-    return value;
+    return build_op_xattr("set", value);
 }
 
 /* BSON results:
@@ -92,7 +111,7 @@ fill_xattrs_nb_children(void *arg)
     if (value == NULL)
         return NULL;
 
-    return value;
+    return build_op_xattr("inc", value);
 }
 
 static struct rbh_value *
