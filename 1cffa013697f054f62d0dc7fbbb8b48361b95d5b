@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e339f8f9_1c2cb8e9",
+        "filename": "librobinhood/src/policyengine.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 405,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-02-03T15:39:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ac281bef_a41afc98",
+      "range": {
+        "startLine": 405,
+        "startChar": 4,
+        "endLine": 405,
+        "endChar": 36
+      },
+      "revId": "1cffa013697f054f62d0dc7fbbb8b48361b95d5b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b4742f4e_5e790bcc",
@@ -47,6 +71,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "17ced0dc_57a92150",
+        "filename": "librobinhood/src/policyengine.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-02-03T15:39:59Z",
+      "side": 1,
+      "message": "The goal here is to retrieve the data from the actual filesystem, but POSIX, for example, cannot filter based on criteria; it simply retrieves all entries. Therefore, we create a branch on the path of the entry we wish to retrieve, and then perform a POSIX filter that doesn\u0027t filter anything to obtain the metadata of that specific entry.",
+      "parentUuid": "b4742f4e_5e790bcc",
+      "range": {
+        "startLine": 407,
+        "startChar": 16,
+        "endLine": 407,
+        "endChar": 34
+      },
+      "revId": "1cffa013697f054f62d0dc7fbbb8b48361b95d5b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e18decd5_c1c05b01",
@@ -60,6 +108,24 @@
       "writtenOn": "2026-01-06T14:30:26Z",
       "side": 1,
       "message": "question: Are you sure you can destroy the backend before using the iterator ?",
+      "revId": "1cffa013697f054f62d0dc7fbbb8b48361b95d5b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b43979c9_0e2983a7",
+        "filename": "librobinhood/src/policyengine.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 436,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-02-03T15:39:59Z",
+      "side": 1,
+      "message": "The iterator structure doesn\u0027t contain the backend, so I can destroy it once the iterator is built. The filter method needs the backend to perform the filtering but no longer needs it once the iterator is created.",
+      "parentUuid": "e18decd5_c1c05b01",
       "revId": "1cffa013697f054f62d0dc7fbbb8b48361b95d5b",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
