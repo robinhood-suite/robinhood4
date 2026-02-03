@@ -526,6 +526,30 @@ update_xattr_value(struct rbh_value *cached_xattr,
 }
 
 static void
+increment_xattr_value(struct rbh_value *cached_xattr,
+                      const struct rbh_value *new_xattr)
+{
+    assert(cached_xattr->type == new_xattr->type);
+
+    switch (new_xattr->type) {
+    case RBH_VT_INT32:
+        cached_xattr->int32 += new_xattr->int32;
+        break;
+    case RBH_VT_UINT32:
+        cached_xattr->uint32 += new_xattr->uint32;
+        break;
+    case RBH_VT_INT64:
+        cached_xattr->int64 += new_xattr->int64;
+        break;
+    case RBH_VT_UINT64:
+        cached_xattr->uint64 += new_xattr->uint64;
+        break;
+    default:
+        break;
+    }
+}
+
+static void
 dedup_xattr(struct rbh_fsevent_node *cached_event,
             const struct rbh_value_pair *xattr)
 {
@@ -533,12 +557,25 @@ dedup_xattr(struct rbh_fsevent_node *cached_event,
 
     cached_xattr = rbh_fsevent_find_xattr(&cached_event->fsevent, xattr->key);
     if (cached_xattr) {
-        if (strcmp(xattr->key, "nb_children") == 0)
-            ((struct rbh_value *) xattr->value)->int64 +=
-                ((struct rbh_value *) cached_xattr->value)->int64;
+        const char *op;
 
-        /* xattr found, do not add it to the cached fsevent */
-        update_xattr_value((void *)cached_xattr->value, xattr->value);
+        assert(xattr->value->map.count == 1);
+        assert(cached_xattr->value->map.count == 1);
+
+        op = xattr->value->map.pairs->key;
+
+        if (strcmp(op, "inc") == 0) {
+            const struct rbh_value *cached_value;
+            const struct rbh_value *value;
+
+            cached_value = cached_xattr->value->map.pairs->value;
+            value = xattr->value->map.pairs->value;
+
+            increment_xattr_value((void *)cached_value, value);
+        } else {
+            /* xattr found, do not add it to the cached fsevent */
+            update_xattr_value((void *)cached_xattr->value, xattr->value);
+        }
     } else {
         insert_xattr(cached_event, xattr);
     }
