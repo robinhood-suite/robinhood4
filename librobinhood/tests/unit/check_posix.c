@@ -123,6 +123,11 @@ START_TEST(pf_empty_root)
 
     free(fsentry);
 
+    /* Fsentry with the number of children */
+    fsentry = rbh_mut_iter_next(fsentries);
+    ck_assert_ptr_nonnull(fsentry);
+    free(fsentry);
+
     errno = 0;
     ck_assert_ptr_null(rbh_mut_iter_next(fsentries));
     ck_assert_int_eq(errno, ENODATA);
