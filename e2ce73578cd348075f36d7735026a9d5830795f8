@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "28d59b6d_f1f60b76",
+        "filename": "librobinhood/src/policyengine.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-02-03T15:39:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "11887b46_3ae521f8",
+      "range": {
+        "startLine": 310,
+        "startChar": 7,
+        "endLine": 310,
+        "endChar": 55
+      },
+      "revId": "e2ce73578cd348075f36d7735026a9d5830795f8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4b10e63b_aa7e69de",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-12-23T13:40:27Z",
       "side": 1,
       "message": "style: generally, we put all declarations at the beginning of the block",
+      "range": {
+        "startLine": 322,
+        "startChar": 11,
+        "endLine": 326,
+        "endChar": 50
+      },
+      "revId": "e2ce73578cd348075f36d7735026a9d5830795f8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f5b56b2a_44eb247a",
+        "filename": "librobinhood/src/policyengine.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 326,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-02-03T15:39:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4b10e63b_aa7e69de",
       "range": {
         "startLine": 322,
         "startChar": 11,
@@ -64,6 +112,24 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "18bdd74b_769bcf66",
+        "filename": "librobinhood/src/policyengine.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 346,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-02-03T15:39:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2ce8e496_5d758157",
+      "revId": "e2ce73578cd348075f36d7735026a9d5830795f8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a43e1ed1_8cd66a15",
@@ -77,6 +143,30 @@
       "writtenOn": "2025-12-23T13:40:27Z",
       "side": 1,
       "message": "style: length \u003e 80 characters",
+      "range": {
+        "startLine": 358,
+        "startChar": 12,
+        "endLine": 358,
+        "endChar": 87
+      },
+      "revId": "e2ce73578cd348075f36d7735026a9d5830795f8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "787f52b2_5b43c50e",
+        "filename": "librobinhood/src/policyengine.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 358,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-02-03T15:39:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a43e1ed1_8cd66a15",
       "range": {
         "startLine": 358,
         "startChar": 12,
