@@ -17,23 +17,6 @@
 #include <robinhood/mpi_rc.h>
 #include <robinhood/utils.h>
 
-static void
-sstack_clear(struct rbh_sstack *sstack)
-{
-    size_t readable;
-
-    while (true) {
-        int rc;
-
-        rbh_sstack_peek(sstack, &readable);
-        if (readable == 0)
-            break;
-
-        rc = rbh_sstack_pop(sstack, readable);
-        assert(rc == 0);
-    }
-}
-
 static __thread struct rbh_id *current_parent_id = NULL;
 static __thread char *current_parent = NULL;
 static __thread struct rbh_sstack *sstack;
@@ -117,7 +100,7 @@ skip:
         struct rbh_id *tmp_id = current_parent_id;
         int tmp_children = current_children;
 
-        sstack_clear(sstack);
+        rbh_sstack_clear(sstack);
         current_children = 0;
         current_parent = RBH_SSTACK_PUSH(sstack, parent, strlen(parent) + 1);
         current_parent_id = get_parent_id(path, !iter->is_mpifile,
