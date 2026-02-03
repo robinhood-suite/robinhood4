@@ -52,6 +52,7 @@ librobinhood = library(
         'utils/regex.c',
         'utils/utils.c',
         'utils/open.c',
+        'utils/value.c',
         'value.c',
     ] + extra_sources,
     version: meson.project_version(),
