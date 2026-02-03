@@ -91,6 +91,30 @@
       },
       "revId": "3606f144aaa55a35a91697e4d860fbf5e2757e29",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "00f3a45b_96c11387",
+        "filename": "librobinhood/src/policyengine.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-02-03T15:39:46Z",
+      "side": 1,
+      "message": "I prefer to keep everything in a single function, I find it better for visibility.",
+      "parentUuid": "124c8502_ff4aff61",
+      "range": {
+        "startLine": 101,
+        "startChar": 8,
+        "endLine": 192,
+        "endChar": 24
+      },
+      "revId": "3606f144aaa55a35a91697e4d860fbf5e2757e29",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
