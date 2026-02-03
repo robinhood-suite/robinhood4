@@ -225,4 +225,12 @@ rbh_sstack_shrink(struct rbh_sstack *sstack);
 void
 rbh_sstack_destroy(struct rbh_sstack *sstack);
 
+/**
+ * Clear all the data inside an sstack
+ *
+ * @param sstack  the sstack to clear
+ */
+void
+rbh_sstack_clear(struct rbh_sstack *sstack);
+
 #endif
