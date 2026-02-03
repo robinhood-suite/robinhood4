@@ -206,10 +206,12 @@ make_xattr_fsevent(struct rbh_value_pair *pairs, struct rbh_value *map_values,
         .count = 1,
         .pairs = &pairs[0], /* "rbh-fsevents" */
     };
+
     struct rbh_value_pair rbh_fsevents_map = { /* pairs[0] */
         .key = "rbh-fsevents",
         .value = &map_values[0],
     };
+
     struct rbh_value rbh_fsevents_value = { /* map_values[0] */
         .type = RBH_VT_MAP,
         .map = {
@@ -238,7 +240,7 @@ make_xattr_fsevent(struct rbh_value_pair *pairs, struct rbh_value *map_values,
 
     memcpy(&map_values[0], &rbh_fsevents_value, sizeof(rbh_fsevents_value));
     memcpy(&map_values[1], &xattrs_value, sizeof(xattrs_value));
-    memcpy(&map_values[2], &key_string, sizeof(key_string));
+    memcpy(&map_values[2] , &key_string, sizeof(key_string));
 
     return xattr;
 }
@@ -322,6 +324,17 @@ make_xattr_key_value(struct rbh_value *map_values, struct rbh_value_pair *pairs,
         .key = key,
         .value = &map_values[0],
     };
+    struct rbh_value op_value = {
+        .type = RBH_VT_MAP,
+        .map = {
+            .count = 1,
+            .pairs = &pairs[1],
+        },
+    };
+    struct rbh_value_pair op_pair = {
+        .key = "set",
+        .value = &map_values[1],
+    };
     struct rbh_value xattr_value = {
         .type = RBH_VT_BINARY,
         .binary = {
@@ -331,7 +344,10 @@ make_xattr_key_value(struct rbh_value *map_values, struct rbh_value_pair *pairs,
     };
 
     memcpy(&pairs[0], &xattr_pair, sizeof(xattr_pair));
-    memcpy(&map_values[0], &xattr_value, sizeof(xattr_value));
+    memcpy(&pairs[1], &op_pair, sizeof(op_pair));
+
+    memcpy(&map_values[0], &op_value, sizeof(op_value));
+    memcpy(&map_values[1], &xattr_value, sizeof(xattr_value));
 
     return xattr;
 }
@@ -343,10 +359,10 @@ fake_xattr_key_value(struct rbh_fsevent *fsevent, struct rbh_id *id,
     struct rbh_value *map_values;
     struct rbh_value_pair *pairs;
 
-    map_values = alloc(sizeof(*map_values));
+    map_values = alloc(2 * sizeof(*map_values));
     ck_assert_ptr_nonnull(map_values);
 
-    pairs = alloc(sizeof(*pairs));
+    pairs = alloc(2 * sizeof(*pairs));
     ck_assert_ptr_nonnull(pairs);
 
     memset(fsevent, 0, sizeof(*fsevent));
@@ -364,9 +380,9 @@ fake_fid(struct rbh_fsevent *fsevent, struct rbh_id *id)
     struct rbh_value_pair *pairs;
     const struct lu_fid *fid;
 
-    map_values = alloc(sizeof(*map_values));
+    map_values = alloc(2 * sizeof(*map_values));
     ck_assert_ptr_nonnull(map_values);
-    pairs = alloc(sizeof(*pairs));
+    pairs = alloc(2 * sizeof(*pairs));
     ck_assert_ptr_nonnull(pairs);
 
     fid = rbh_lu_fid_from_id(id);

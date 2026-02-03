@@ -581,8 +581,7 @@ test_nb_children_two_sync()
 
     rbh_sync_posix "." "rbh:$db:$testdb"
 
-    # FIXME this is wrong, we add nb_children twice
-    find_attribute '"ns.xattrs.path": "/test"' '"xattrs.nb_children": 10'
+    find_attribute '"ns.xattrs.path": "/test"' '"xattrs.nb_children": 5'
 }
 
 ################################################################################
