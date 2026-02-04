@@ -120,6 +120,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3a8f2e79_629a15c2",
+        "filename": "librobinhood/src/policyengine.c",
+        "patchSetId": 9
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-02-04T11:55:21Z",
+      "side": 1,
+      "message": "I chose to add the backend in the function parameters, as initially suggested by Gauthier, this is surely the best option. I have modified all the relevant patches accordingly to carry this backend.",
+      "parentUuid": "ac2067cc_cccb0632",
+      "range": {
+        "startLine": 19,
+        "startChar": 23,
+        "endLine": 19,
+        "endChar": 31
+      },
+      "revId": "59ab0537198d37a008a298e7fddc3fd7d7daf246",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3fe6b2cd_8540a5be",
