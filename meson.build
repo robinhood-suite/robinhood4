@@ -67,7 +67,9 @@ build_mfu = false
 test_mfu = false
 
 if get_option('mfu').enabled()
-    libmfu = cc.find_library('mfu', disabler: true, required: false)
+    libmfu = cc.find_library('mfu',
+                             dirs: '/usr/lib64/openmpi/lib',
+                             disabler: true, required: false)
     libmpi = dependency('ompi', disabler: true, required: false)
     build_mfu = true
 
