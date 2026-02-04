@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0ee004b7_38b06bc5",
+        "filename": "librobinhood/src/policyengine.c",
+        "patchSetId": 14
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-02-04T08:51:46Z",
+      "side": 1,
+      "message": "style: declaration order",
+      "range": {
+        "startLine": 19,
+        "startChar": 3,
+        "endLine": 21,
+        "endChar": 66
+      },
+      "revId": "71b4dacff8a5beac3b468606883347235fc34262",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
