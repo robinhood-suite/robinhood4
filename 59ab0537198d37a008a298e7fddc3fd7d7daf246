@@ -74,6 +74,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fc8d1965_28042536",
+        "filename": "librobinhood/src/policyengine.c",
+        "patchSetId": 9
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-02-04T09:12:53Z",
+      "side": 1,
+      "message": "Haven\u0027t read the rest of the stack (yet) but here you\u0027re searching only for one entry, as the projection indicate. Plus the function\u0027s name imply you collect an fsentry. So to me, it makes sense to rather get the iterator, iterate on it to retrieve an entry, and return it. In that case, destroying the backend in this function shouldn\u0027t be any issue I think.\n\nDo you agree ?\n\nOtherwise yes I think what you\u0027re doing here is an issue, because the iter_next called after destroying the backend will most likely fail because of multiple fields being undefined/freed, for instance the enrichers.",
+      "parentUuid": "6ef64120_8819eab2",
+      "range": {
+        "startLine": 19,
+        "startChar": 23,
+        "endLine": 19,
+        "endChar": 31
+      },
+      "revId": "59ab0537198d37a008a298e7fddc3fd7d7daf246",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3fe6b2cd_8540a5be",
         "filename": "librobinhood/src/policyengine.c",
         "patchSetId": 9
