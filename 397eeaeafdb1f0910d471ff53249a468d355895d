@@ -161,6 +161,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4c3e958c_ba3776f0",
+        "filename": "librobinhood/src/policyengine.c",
+        "patchSetId": 6
+      },
+      "lineNbr": 477,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-02-05T09:02:11Z",
+      "side": 1,
+      "message": "What I was saying is to free `uri` before the condition block:\n\n```\nfs_backend \u003d rbh_backend_and_branch_from_uri(uri, true);\nfree(uri);\nif (!fs_backend) {\n  int save_errno \u003d errno;\n  error(...)\n}\n```\n\nThus, no need to release it later, already done.",
+      "parentUuid": "7c73daaf_b2d50a33",
+      "range": {
+        "startLine": 477,
+        "startChar": 8,
+        "endLine": 477,
+        "endChar": 18
+      },
+      "revId": "397eeaeafdb1f0910d471ff53249a468d355895d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1f22b354_7ba8f7d5",
         "filename": "librobinhood/src/policyengine.c",
         "patchSetId": 6
@@ -243,6 +267,30 @@
       "side": 1,
       "message": "No, that\u0027s not possible, rbh-info won\u0027t allow us to know if we\u0027re dealing with the real file system here.",
       "parentUuid": "7976b4c5_187dd1ba",
+      "range": {
+        "startLine": 482,
+        "startChar": 4,
+        "endLine": 489,
+        "endChar": 5
+      },
+      "revId": "397eeaeafdb1f0910d471ff53249a468d355895d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c74a6203_ae98da7d",
+        "filename": "librobinhood/src/policyengine.c",
+        "patchSetId": 6
+      },
+      "lineNbr": 489,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-02-05T09:02:11Z",
+      "side": 1,
+      "message": "Well, not sure your method can check that anyway. My point is maybe we can add (if not existing) an additional metadata to the backend to indicate it can lead to a \"real\" input system?",
+      "parentUuid": "589ae59c_df13d427",
       "range": {
         "startLine": 482,
         "startChar": 4,
