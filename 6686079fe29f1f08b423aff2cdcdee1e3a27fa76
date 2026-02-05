@@ -22,6 +22,30 @@
       },
       "revId": "6686079fe29f1f08b423aff2cdcdee1e3a27fa76",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1ad6987d_653321af",
+        "filename": "rbh-policy/rbhpolicy/execution/run.py",
+        "patchSetId": 13
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-02-05T14:42:10Z",
+      "side": 1,
+      "message": "1. The backend will be freed in the policy execution function `rbh_pe_execute` arriving in next patches. So yes, the structure is not freed yet.\n2. Hmmm,I like the idea and I think it would be possible in the current state of affairs, but in the long term, with the parallelization of policy execution, it seems problematic to me, if multiple worker thread are using the same backend structure.",
+      "parentUuid": "dac7dced_1b632db8",
+      "range": {
+        "startLine": 20,
+        "startChar": 8,
+        "endLine": 20,
+        "endChar": 51
+      },
+      "revId": "6686079fe29f1f08b423aff2cdcdee1e3a27fa76",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
