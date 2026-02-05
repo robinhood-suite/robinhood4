@@ -12,9 +12,10 @@ glib_dep = dependency('glib-2.0')
 
 foreach t: ['check_backend', 'check_filter', 'check_fsentry',
             'check_fsevent', 'check_hashmap', 'check_id', 'check_itertools',
-            'check_list', 'check_lu_fid', 'check_plugin', 'check_queue',
-            'check_ring', 'check_ringr', 'check_sstack', 'check_stack',
-            'check_statx', 'check_uri', 'check_utils', 'check_value']
+            'check_list', 'check_lu_fid', 'check_plugin', 'check_policyengine',
+            'check_queue', 'check_ring', 'check_ringr', 'check_sstack',
+            'check_stack', 'check_statx', 'check_uri', 'check_utils',
+            'check_value']
     test(t,
          executable(t, t + '.c',
                     dependencies: [check, miniyaml, glib_dep ],
