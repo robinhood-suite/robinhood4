@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "59690a4a_4417cb14",
+        "filename": "librobinhood/src/policyengine.c",
+        "patchSetId": 13
+      },
+      "lineNbr": 447,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-02-05T08:56:13Z",
+      "side": 1,
+      "message": "suggest: just invert them :p",
+      "range": {
+        "startLine": 446,
+        "startChar": 4,
+        "endLine": 447,
+        "endChar": 29
+      },
+      "revId": "8ae92e52bab44574c39dd924fe55a3cc057add53",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
