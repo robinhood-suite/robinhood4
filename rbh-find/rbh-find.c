@@ -227,7 +227,7 @@ main(int _argc, char *_argv[])
                                             RBH_INFO_BACKEND_SOURCE);
         if (info_maps[i] == NULL)
             error(EXIT_FAILURE, errno,
-                  "Failed to retrieve the source backends from URI '%s', aborting\n",
+                  "Failed to retrieve the source backends from URI '%s', aborting",
                   ctx.argv[i]);
     }
 

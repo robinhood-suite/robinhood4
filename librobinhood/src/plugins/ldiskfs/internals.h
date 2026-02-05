@@ -25,7 +25,6 @@
         false;                                                 \
     })
 
-
 struct ldiskfs_backend {
     struct rbh_backend backend;
     ext2_filsys fs;
@@ -46,10 +45,14 @@ struct ldiskfs_iter {
 struct rbh_mut_iterator *
 ldiskfs_backend_filter(void *backend, const struct rbh_filter *filter,
                        const struct rbh_filter_options *options,
-                       const struct rbh_filter_output *output);
+                       const struct rbh_filter_output *output,
+                       struct rbh_metadata *metadata);
 
 void
 ldiskfs_backend_destroy(void *backend);
+
+struct rbh_value_map *
+ldiskfs_backend_get_info(void *backend, int info_flags);
 
 bool
 scan_target(struct ldiskfs_backend *backend);

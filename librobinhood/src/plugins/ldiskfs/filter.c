@@ -275,7 +275,8 @@ free_iter:
 struct rbh_mut_iterator *
 ldiskfs_backend_filter(void *backend, const struct rbh_filter *filter,
                        const struct rbh_filter_options *options,
-                       const struct rbh_filter_output *output)
+                       const struct rbh_filter_output *output,
+                       struct rbh_metadata *metadata)
 {
     struct ldiskfs_backend *ldiskfs = backend;
     struct ldiskfs_iter *iter;
