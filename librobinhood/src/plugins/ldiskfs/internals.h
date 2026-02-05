@@ -18,6 +18,14 @@
 
 #include "dcache.h"
 
+#define ldiskfs_error(fmt, ...) \
+    ({                                                         \
+        rbh_backend_error_printf("ldiskfs: " fmt __VA_OPT__(,) \
+                                 __VA_ARGS__);                 \
+        false;                                                 \
+    })
+
+
 struct ldiskfs_backend {
     struct rbh_backend backend;
     ext2_filsys fs;

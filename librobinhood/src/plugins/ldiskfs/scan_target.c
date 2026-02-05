@@ -7,13 +7,6 @@
 
 #include "internals.h"
 
-#define ldiskfs_error(rc, fmt, ...) \
-    ({                                                               \
-        rbh_backend_error_printf("ldiskfs: " fmt ": %s"__VA_OPT__(,) \
-                                 __VA_ARGS__, error_message(rc));    \
-        false;                                                       \
-    })
-
 static struct ext2_inode *
 dup_inode(struct ext2_inode *src, size_t inode_size)
 {
@@ -75,9 +68,10 @@ add_dir_blocks(struct ldiskfs_backend *ldiskfs,
     rc = ext2fs_block_iterate3(ldiskfs->fs, ino, 0, buf, scan_dir_cb, &ino);
     if (rc) {
         free(buf);
-        return ldiskfs_error(rc,
-                         "failed to iterate through directory blocks of '%d'",
-                         ino);
+        return ldiskfs_error(
+            "failed to iterate through directory blocks of '%d': %s",
+            ino, error_message(rc)
+        );
     }
 
     free(buf);
@@ -101,17 +95,20 @@ scan_inodes(struct ldiskfs_backend *backend)
 
     rc = ext2fs_read_inode_bitmap(backend->fs);
     if (rc)
-        return ldiskfs_error(rc, "failed to read inode bitmap");
+        return ldiskfs_error("failed to read inode bitmap: %s",
+                             error_message(rc));
 
     rc = ext2fs_init_dblist(backend->fs, NULL);
     if (rc)
-        return ldiskfs_error(rc, "failed to init directory block list");
+        return ldiskfs_error("failed to init directory block list: %s",
+                             error_message(rc));
 
     rc = ext2fs_open_inode_scan(backend->fs,
                                 backend->fs->inode_blocks_per_group,
                                 &backend->iscan);
     if (rc)
-        return ldiskfs_error(rc, "failed to init inode scan");
+        return ldiskfs_error("failed to init inode scan: %s",
+                             error_message(rc));
 
     inode_size = EXT2_INODE_SIZE(backend->fs->super);
     inode = malloc(inode_size);
@@ -203,7 +200,8 @@ scan_dentries(struct ldiskfs_backend *backend)
                                    dblist_iter_cb,
                                    backend->dcache);
     if (rc)
-        return ldiskfs_error(rc, "failed to scan through directory block list");
+        return ldiskfs_error("failed to scan through directory block list: %s",
+                             error_message(rc));
 
     return true;
 }
