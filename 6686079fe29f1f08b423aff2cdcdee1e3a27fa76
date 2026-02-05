@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dac7dced_1b632db8",
+        "filename": "rbh-policy/rbhpolicy/execution/run.py",
+        "patchSetId": 13
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-02-05T08:51:37Z",
+      "side": 1,
+      "message": "major: seems kind of strange\n\n1. backend is not retrieved and can not be freed, right?\n2. is there a way to use the same backend for all iterators? does it make sense?",
+      "range": {
+        "startLine": 20,
+        "startChar": 8,
+        "endLine": 20,
+        "endChar": 51
+      },
+      "revId": "6686079fe29f1f08b423aff2cdcdee1e3a27fa76",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
