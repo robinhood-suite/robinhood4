@@ -16,9 +16,9 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "robinhood/policyengine_internal.h"
 #include "robinhood/backend.h"
 #include "robinhood/utils.h"
-#include "robinhood/policyengine.h"
 
 /*
  * Test: rbh_collect_fsentries_test
@@ -46,6 +46,112 @@ START_TEST(rbh_collect_fsentries_test)
 
     rbh_mut_iter_destroy(it);
     rbh_backend_destroy(backend);
+}
+END_TEST
+
+/*
+ * Test: compare_values_success_test
+ * Scenario: Validates that compare_values returns true for all supported types
+ * and operators when values match the expected logic.
+ */
+START_TEST(compare_values_success_test)
+{
+    struct rbh_value a = {0};
+    struct rbh_value b = {0};
+
+    // int32 equality
+    a.type = RBH_VT_INT32;
+    a.int32 = 42;
+    b.type = RBH_VT_INT32;
+    b.int32 = 42;
+    ck_assert(compare_values(RBH_FOP_EQUAL, &a, &b));
+
+    // uint32 strictly lower
+    a.type = RBH_VT_UINT32;
+    a.uint32 = 5;
+    b.type = RBH_VT_UINT32;
+    b.uint32 = 10;
+    ck_assert(compare_values(RBH_FOP_STRICTLY_LOWER, &a, &b));
+
+    // int64 strictly lower
+    a.type = RBH_VT_INT64;
+    a.int64 = -100;
+    b.type = RBH_VT_INT64;
+    b.int64 = -50;
+    ck_assert(compare_values(RBH_FOP_STRICTLY_LOWER, &a, &b));
+
+    // uint64 strictly greater
+    a.type = RBH_VT_UINT64;
+    a.uint64 = 200;
+    b.type = RBH_VT_UINT64;
+    b.uint64 = 100;
+    ck_assert(compare_values(RBH_FOP_STRICTLY_GREATER, &a, &b));
+
+    // uint64 greater or equal
+    a.type = RBH_VT_UINT64;
+    a.uint64 = 100;
+    b.type = RBH_VT_UINT64;
+    b.uint64 = 100;
+    ck_assert(compare_values(RBH_FOP_GREATER_OR_EQUAL, &a, &b));
+
+    // string equality
+    a.type = RBH_VT_STRING;
+    a.string = "test";
+    b.type = RBH_VT_STRING;
+    b.string = "test";
+    ck_assert(compare_values(RBH_FOP_EQUAL, &a, &b));
+}
+END_TEST
+
+/*
+ * Test: compare_values_failure_test
+ * Scenario: Validates that compare_values returns false for incompatible types,
+ * mismatched values, or invalid operators.
+ */
+START_TEST(compare_values_failure_test)
+{
+    struct rbh_value a = {0};
+    struct rbh_value b = {0};
+
+    // incompatible types (int32 vs uint32)
+    a.type = RBH_VT_INT32;
+    a.int32 = 10;
+    b.type = RBH_VT_UINT32;
+    b.uint32 = 10;
+    ck_assert(!compare_values(RBH_FOP_EQUAL, &a, &b));
+
+    // string not equal
+    a.type = RBH_VT_STRING;
+    a.string = "test";
+    b.type = RBH_VT_STRING;
+    b.string = "other";
+    ck_assert(!compare_values(RBH_FOP_EQUAL, &a, &b));
+
+    // string strictly lower (should fail)
+    a.type = RBH_VT_STRING;
+    a.string = "a";
+    b.type = RBH_VT_STRING;
+    b.string = "b";
+    ck_assert(!compare_values(RBH_FOP_STRICTLY_LOWER, &a, &b));
+    /* Also verify with equal strings: the operator is unsupported regardless
+     * of the values. */
+    a.string = "a";
+    b.string = "a";
+    ck_assert(!compare_values(RBH_FOP_STRICTLY_LOWER, &a, &b));
+
+    // int32 strictly greater (should fail)
+    a.type = RBH_VT_INT32;
+    a.int32 = 5;
+    b.type = RBH_VT_INT32;
+    b.int32 = 10;
+    ck_assert(!compare_values(RBH_FOP_STRICTLY_GREATER, &a, &b));
+
+    // invalid operator
+    a.type = RBH_VT_UINT64;
+    a.uint64 = 100;
+    b.type = RBH_VT_UINT64;
+    b.uint64 = 200;
+    ck_assert(!compare_values((enum rbh_filter_operator)999, &a, &b));
 }
 END_TEST
 
@@ -92,6 +198,11 @@ unit_suite(void)
 
     tc = tcase_create("collect_fsentries");
     tcase_add_test(tc, rbh_collect_fsentries_test);
+    suite_add_tcase(suite, tc);
+
+    tc = tcase_create("compare_values");
+    tcase_add_test(tc, compare_values_success_test);
+    tcase_add_test(tc, compare_values_failure_test);
     suite_add_tcase(suite, tc);
 
     tc = tcase_create("pe_execute");
