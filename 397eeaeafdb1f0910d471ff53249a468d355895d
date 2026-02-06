@@ -325,6 +325,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1cf50e69_b96f0a1e",
+        "filename": "librobinhood/src/policyengine.c",
+        "patchSetId": 6
+      },
+      "lineNbr": 489,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-02-06T08:21:01Z",
+      "side": 1,
+      "message": "Okay, I made a mistake, a flag does indeed exist, its name misled me the first time. I\u0027ve made the changes in that function.",
+      "parentUuid": "c74a6203_ae98da7d",
+      "range": {
+        "startLine": 482,
+        "startChar": 4,
+        "endLine": 489,
+        "endChar": 5
+      },
+      "revId": "397eeaeafdb1f0910d471ff53249a468d355895d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "91d22945_4d3f7785",
