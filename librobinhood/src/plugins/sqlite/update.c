@@ -379,11 +379,15 @@ find_nb_children(const struct rbh_fsevent *fsevent)
     for (size_t i = 0; i < fsevent->xattrs.count; i++) {
         const struct rbh_value_pair *xattr = &fsevent->xattrs.pairs[i];
         const struct rbh_value *value;
+        const struct rbh_value *map;
 
         if (strcmp(xattr->key, "nb_children"))
             continue;
 
-        value = xattr->value->map.pairs->value;
+        map = xattr->value->map.pairs->value;
+        assert(map->type == RBH_VT_MAP);
+
+        value = rbh_map_find(&map->map, "value");
 
         if (!value) {
             rbh_backend_error_printf(

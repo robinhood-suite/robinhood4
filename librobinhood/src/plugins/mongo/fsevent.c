@@ -48,9 +48,15 @@ static bson_t *
 bson_from_upsert(const struct rbh_value_map *xattrs,
                  const struct rbh_statx *statxbuf, const char *symlink)
 {
-    bson_t *bson = bson_new();
+    bson_t *pipeline = bson_new();
+    bson_t bson, set, unset, inc;
     int save_errno = ENOBUFS;
-    bson_t set, unset, inc;
+
+    /* We use an array here because we need to use an Update Aggregation
+     * Pipeline in order to set conditional $set for the nb_children.
+     */
+    if (!BSON_APPEND_DOCUMENT_BEGIN(pipeline, "0", &bson))
+        goto out_destroy_pipeline;
 
     bson_init(&set);
     if (statxbuf) {
@@ -65,22 +71,28 @@ bson_from_upsert(const struct rbh_value_map *xattrs,
 
     bson_init(&unset);
     bson_init(&inc);
-    if (!_bson_from_xattrs(MFF_XATTRS, xattrs, bson, &set, &unset, &inc)) {
+    if (!_bson_from_xattrs(MFF_XATTRS, xattrs, &bson, &set, &unset, &inc)) {
         save_errno = errno;
         goto out_destroy;
     }
 
+    if (!bson_append_document_end(pipeline, &bson))
+        goto out_destroy;
+
     bson_destroy(&inc);
     bson_destroy(&unset);
     bson_destroy(&set);
-    return bson;
+    bson_destroy(&bson);
+    return pipeline;
 
 out_destroy:
     bson_destroy(&inc);
     bson_destroy(&unset);
 out_destroy_set:
     bson_destroy(&set);
-    bson_destroy(bson);
+    bson_destroy(&bson);
+out_destroy_pipeline:
+    bson_destroy(pipeline);
     errno = save_errno;
     return NULL;
 }

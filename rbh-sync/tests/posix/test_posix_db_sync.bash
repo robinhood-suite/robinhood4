@@ -348,7 +348,7 @@ test_continue_sync_on_error()
     fi
 
     find_attribute '"ns.xattrs.path":"/"'
-    find_attribute '"ns.xattrs.path":"/"' '"xattrs.nb_children": 1'
+    find_attribute '"ns.xattrs.path":"/"' '"xattrs.nb_children.value": 1'
     find_attribute '"ns.name":"'$first_file'"'
 }
 
@@ -502,11 +502,11 @@ test_sync_number_children()
 
     local output=$(sync_with_other_user)
 
-    find_attribute '"ns.xattrs.path": "/"' '"xattrs.nb_children": 1'
-    find_attribute '"ns.xattrs.path": "/dir1"' '"xattrs.nb_children": 3'
-    find_attribute '"ns.xattrs.path": "/dir1/dir2"' '"xattrs.nb_children": 2'
+    find_attribute '"ns.xattrs.path": "/"' '"xattrs.nb_children.value": 1'
+    find_attribute '"ns.xattrs.path": "/dir1"' '"xattrs.nb_children.value": 3'
+    find_attribute '"ns.xattrs.path": "/dir1/dir2"' '"xattrs.nb_children.value": 2'
     find_attribute '"ns.xattrs.path": "/dir1/dir2/dir3"'\
-                   '"xattrs.nb_children": 0'
+                   '"xattrs.nb_children.value": 0'
     ! (find_attribute '"ns.xattrs.path": "/dir1/fileA"' \
                       '"xattrs.nb_children": {$exists: true}')
 }
@@ -526,7 +526,7 @@ test_sync_number_children_mpi()
     local directories=($(find root -type d | xargs))
 
     local expected_nb_directories=${#directories[@]}
-    local nb_directories=$(count_documents '"xattrs.nb_children": {$gt: 0}')
+    local nb_directories=$(count_documents '"xattrs.nb_children.value": {$gt: 0}')
 
     if [[ $expected_nb_directories != $nb_directories ]]; then
         error "There should be $expected_nb_directories with a number of" \
@@ -540,7 +540,7 @@ test_sync_number_children_mpi()
         fi
 
         find_attribute '"ns.xattrs.path": "'"$name"'"'\
-                       '"xattrs.nb_children": '"$expected_children"''
+                       '"xattrs.nb_children.value": '"$expected_children"''
     done
 }
 
@@ -565,7 +565,7 @@ EOF
         --args $__rbh_sync "rbh:posix-mpi:." "rbh:$db:$testdb"
 
     find_attribute '"ns.xattrs.path": "/"' \
-                   '"xattrs.nb_children": 1'
+                   '"xattrs.nb_children.value": 1'
     find_attribute '"ns.xattrs.path": "/fileB"'
     ! (find_attribute '"ns.xattrs.path": "/dir"')
 }
@@ -577,14 +577,19 @@ test_nb_children_two_sync()
 
     mkdir test
     touch test/{1..5}
+    mkdir test/dir
 
     rbh_sync_posix "." "rbh:$db:$testdb"
 
-    find_attribute '"ns.xattrs.path": "/test"' '"xattrs.nb_children": 5'
+    find_attribute '"ns.xattrs.path": "/test"' '"xattrs.nb_children.value": 6'
+    find_attribute '"ns.xattrs.path": "/test/dir"' \
+        '"xattrs.nb_children.value": 0'
 
     rbh_sync_posix "." "rbh:$db:$testdb"
 
-    find_attribute '"ns.xattrs.path": "/test"' '"xattrs.nb_children": 5'
+    find_attribute '"ns.xattrs.path": "/test"' '"xattrs.nb_children.value": 6'
+    find_attribute '"ns.xattrs.path": "/test/dir"' \
+        '"xattrs.nb_children.value": 0'
 }
 
 ################################################################################
@@ -596,12 +601,8 @@ declare -a tests=(test_sync_2_files test_sync_size test_sync_3_files
                   test_sync_one_one_file test_sync_one test_sync_one_two_files
                   test_sync_symbolic_link test_sync_socket test_sync_fifo
                   test_sync_branch test_continue_sync_on_error
-                  test_stop_sync_on_error test_config)
-
-# Disable these tests with MPI temporaly
-if [[ $WITH_MPI == false ]]; then
-    tests+=(test_sync_number_children test_nb_children_two_sync)
-fi
+                  test_stop_sync_on_error test_config test_sync_number_children
+                  test_nb_children_two_sync)
 
 if [[ $WITH_MPI == true ]]; then
     tests+=(test_sync_number_children_mpi test_sync_large_path
