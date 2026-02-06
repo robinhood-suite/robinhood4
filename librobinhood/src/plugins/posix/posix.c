@@ -302,14 +302,39 @@ free_ns_data(void)
 
 void
 build_pair_nb_children(struct rbh_value_pair *pair, int nb_children,
+                       int64_t timestamp, bool final,
                        struct rbh_sstack *sstack)
 {
+    struct rbh_value_pair *pairs;
     struct rbh_value *value;
 
-    value = RBH_SSTACK_PUSH(sstack, NULL, sizeof(*pair->value));
+    pairs = RBH_SSTACK_PUSH(sstack, NULL, 3 * sizeof(*pairs));
 
+    value = RBH_SSTACK_PUSH(sstack, NULL, sizeof(*value));
     value->type = RBH_VT_INT64;
     value->int64 = nb_children;
+
+    pairs[0].key = "value";
+    pairs[0].value = value;
+
+    value = RBH_SSTACK_PUSH(sstack, NULL, sizeof(*value));
+    value->type = RBH_VT_INT64;
+    value->int64 = timestamp;
+
+    pairs[1].key = "timestamp";
+    pairs[1].value = value;
+
+    value = RBH_SSTACK_PUSH(sstack, NULL, sizeof(*value));
+    value->type = RBH_VT_BOOLEAN;
+    value->boolean = final;
+
+    pairs[2].key = "final";
+    pairs[2].value = value;
+
+    value = RBH_SSTACK_PUSH(sstack, NULL, sizeof(*value));
+    value->type = RBH_VT_MAP;
+    value->map.count = 3;
+    value->map.pairs = pairs;
 
     pair->key = "nb_children";
     pair->value = value;
@@ -317,20 +342,21 @@ build_pair_nb_children(struct rbh_value_pair *pair, int nb_children,
 
 struct rbh_fsentry *
 build_fsentry_nb_children(struct rbh_id *id, int nb_children,
+                          int64_t timestamp, bool final,
                           struct rbh_sstack *sstack)
 {
-    struct rbh_value_pair *pair;
+    struct rbh_value_pair *pairs;
     struct rbh_value_map xattr;
 
     if (sstack == NULL && xattrs != NULL)
         sstack = xattrs;
 
-    pair = RBH_SSTACK_PUSH(sstack, NULL, sizeof(*pair));
+    pairs = RBH_SSTACK_PUSH(sstack, NULL, sizeof(*pairs));
 
-    build_pair_nb_children(pair, nb_children, sstack);
+    build_pair_nb_children(pairs, nb_children, timestamp, final, sstack);
 
     xattr.count = 1;
-    xattr.pairs = pair;
+    xattr.pairs = pairs;
 
     return rbh_fsentry_new(id, NULL, NULL, NULL, NULL, &xattr, NULL);
 }
