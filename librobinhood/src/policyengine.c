@@ -14,8 +14,8 @@
 #include <sys/stat.h>
 #include <sysexits.h>
 
-#include "robinhood/filters/core.h"
 #include "robinhood/policyengine.h"
+#include "robinhood/filters/core.h"
 #include <robinhood.h>
 
 struct rbh_mut_iterator *
