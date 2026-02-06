@@ -9,6 +9,7 @@
 #define ROBINHOOD_CORE_FILTERS_H
 
 #include "robinhood/plugins/backend.h"
+#include "robinhood/value.h"
 
 struct rbh_plugin_or_extension {
     bool is_plugin;
@@ -81,6 +82,10 @@ complete_rbh_filter(const struct rbh_filter *filter,
                     struct rbh_backend *backend,
                     const struct rbh_filter_options *options);
 
+bool
+compare_values(enum rbh_filter_operator op,
+               const struct rbh_value *field_val,
+               const struct rbh_value *filter_val);
 /**
  * Check if a filesystem entry matches the given filter.
  *
