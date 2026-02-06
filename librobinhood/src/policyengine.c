@@ -14,8 +14,8 @@
 #include <sys/stat.h>
 #include <sysexits.h>
 
+#include "robinhood/policyengine_internal.h"
 #include "robinhood/filters/core.h"
-#include "robinhood/policyengine.h"
 #include <robinhood.h>
 
 struct rbh_mut_iterator *
@@ -59,7 +59,7 @@ rbh_pe_get_path(const struct rbh_fsentry *fsentry)
     return path_value->string;
 }
 
-static bool
+bool
 compare_values(enum rbh_filter_operator op,
                const struct rbh_value *field_val,
                const struct rbh_value *filter_val)
