@@ -17,7 +17,7 @@
 #include "robinhood/filters/core.h"
 #include <robinhood.h>
 
-static bool
+bool
 compare_values(enum rbh_filter_operator op,
                const struct rbh_value *field_val,
                const struct rbh_value *filter_val)
