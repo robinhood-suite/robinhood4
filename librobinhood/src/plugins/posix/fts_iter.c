@@ -132,7 +132,8 @@ skip:
 
         /* We generate a fsevent to update the destination backend */
         fsentry = build_fsentry_nb_children(ftsent->fts_pointer,
-                                            current_counter, NULL);
+                                            current_counter,
+                                            iter->posix.start_time, true, NULL);
 
         /* fsentry_from_ftsent() memoizes ids of directories */
         free(ftsent->fts_pointer);
