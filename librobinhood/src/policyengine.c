@@ -268,7 +268,7 @@ get_field_value(const struct rbh_fsentry *fsentry,
     }
 }
 
-__attribute__((unused)) static bool
+bool
 rbh_filter_matches_fsentry(const struct rbh_filter *filter,
                            const struct rbh_fsentry *fsentry)
 {
