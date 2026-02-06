@@ -71,6 +71,7 @@ rbh_fsentry_new(const struct rbh_id *id, const struct rbh_id *parent_id,
     }
 
     fsentry = xmalloc(sizeof(*fsentry) + size);
+    memset(fsentry, 0, sizeof(*fsentry) + size);
     data = fsentry->symlink;
 
     /* fsentry->mask */
