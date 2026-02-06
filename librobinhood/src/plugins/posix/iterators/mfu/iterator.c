@@ -18,6 +18,7 @@
 #include <robinhood/utils.h>
 
 static __thread struct rbh_id *current_parent_id = NULL;
+static __thread bool seen_first_time = true;
 static __thread char *current_parent = NULL;
 static __thread struct rbh_sstack *sstack;
 static __thread int current_children = 0;
@@ -51,7 +52,7 @@ mfu_iter_handle_end(struct mfu_iterator *iter)
      * its children counter.
      */
     fsentry = build_fsentry_nb_children(current_parent_id, current_children,
-                                        sstack);
+                                        iter->posix.start_time, true, sstack);
 
     free(current_parent_id);
     rbh_sstack_clear(sstack);
@@ -91,6 +92,7 @@ mfu_iter_handle_new_parent(struct mfu_iterator *iter, const char *path,
      */
     if (prev_parent_id && !rbh_id_equal(prev_parent_id, &ROOT_PARENT_ID))
         fsentry = build_fsentry_nb_children(prev_parent_id, prev_children,
+                                            iter->posix.start_time, true,
                                             sstack);
     free(prev_parent_id);
 
@@ -114,6 +116,20 @@ mfu_iter_skip_or_fail(struct mfu_iterator *iter, bool skip_error,
     return true;
 }
 
+static struct rbh_fsentry *
+mfu_iter_handle_new_directory(struct mfu_iterator *iter, const char *path)
+{
+    struct rbh_id *id;
+
+    seen_first_time = false;
+    id = mfu_build_id(path, iter->posix.prefix_len, iter->is_mpifile);
+    if (id == NULL)
+        return NULL;
+
+    return build_fsentry_nb_children(id, 0, iter->posix.start_time,
+                                     false, sstack);
+}
+
 static void *
 mfu_iter_next(void *_iter)
 {
@@ -121,6 +137,7 @@ mfu_iter_next(void *_iter)
     bool skip_error = iter->posix.skip_error;
     struct rbh_fsentry *fsentry = NULL;
     struct file_info fi;
+    mfu_filetype type;
     size_t parent_len;
     size_t path_len;
     char *path_dup;
@@ -135,7 +152,29 @@ mfu_iter_next(void *_iter)
             return mfu_iter_handle_end(iter);
 
         fi.path = mfu_flist_file_get_name(iter->files, iter->current);
+        type = mfu_flist_file_get_type(iter->files, iter->current);
         path_len = strlen(fi.path) + 1;
+
+        /**
+         * If it's a directory, return an fsentry to setup its nb_children to 0
+         * The 'seen_first_time' is just here to keep in memory that we already
+         * have set the nb_children for this directory.
+         */
+        if (type == MFU_TYPE_DIR && seen_first_time) {
+            fsentry = mfu_iter_handle_new_directory(iter, fi.path);
+            if (fsentry == NULL) {
+                fprintf(stderr,
+                        "Failed to initialize the number of children of '%s'\n",
+                        fi.path);
+                if (!skip_error) {
+                    /* the flist belongs to the backend, do not free it */
+                    iter->files = NULL;
+                    return NULL;
+                }
+                continue;
+            }
+            return fsentry;
+        }
 
         path_dup = RBH_SSTACK_PUSH(sstack, fi.path, path_len);
         parent = dirname(path_dup);
@@ -198,6 +237,7 @@ mfu_iter_next(void *_iter)
         }
 
         iter->current++;
+        seen_first_time = true;
 
         if (iter->metadata)
             iter->metadata->converted_entries++;
@@ -236,6 +276,7 @@ mfu_iter_new(struct rbh_metadata *metadata, const char *root, const char *entry,
     struct mfu_iterator *mfu;
     int save_errno;
     char *path;
+    int rank;
     int rc;
 
     rbh_add_custom_initialize(mfu_init);
@@ -265,6 +306,12 @@ mfu_iter_new(struct rbh_metadata *metadata, const char *root, const char *entry,
         free(path);
         free(mfu->posix.path);
     }
+
+    /* Setup the start time for all the processes */
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+    if (rank == 0)
+        mfu->posix.start_time = time(NULL);
+    MPI_Bcast(&mfu->posix.start_time, 1, MPI_INT64_T, 0, MPI_COMM_WORLD);
 
     mfu->metadata = metadata ? metadata : NULL;
     mfu->posix.iterator = MFU_ITER;
