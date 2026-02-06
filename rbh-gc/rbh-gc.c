@@ -51,12 +51,12 @@ usage(void)
         "    BACKEND  a URI describing a robinhood backend\n"
         "\n"
         "Optional arguments:\n"
-        "    -d, --dry-run            displays the list of the absent entries\n"
-        "    -h, --help               print this messsage and exit\n"
-        "    -s, --sync-gc SYNC_TIME  instead of checking every entry of the BACKEND,\n"
-        "                             only consider entries with a sync_time lesser\n"
-        "                             than SYNC_TIME\n"
-        "    -v, --verbose            verbose mode\n";
+        "    -d, --dry-run              displays the list of the absent entries\n"
+        "    -h, --help                 print this messsage and exit\n"
+        "    -s, --sync-time SYNC_TIME  instead of checking every entry of the BACKEND,\n"
+        "                               only consider entries with a sync_time lesser\n"
+        "                               than SYNC_TIME\n"
+        "    -v, --verbose              verbose mode\n";
 
     printf(message, program_invocation_short_name);
 }
@@ -342,6 +342,7 @@ main(int argc, char *argv[])
         {
             .name = "sync-time",
             .val = 's',
+            .has_arg = required_argument,
         },
         {
             .name = "verbose",
