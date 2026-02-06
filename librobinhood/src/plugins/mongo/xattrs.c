@@ -51,6 +51,70 @@ bson_append_xattr(bson_t *bson, const char *prefix, const char *xattr,
     return success;
 }
 
+static bson_t *
+make_cond_bson(const struct rbh_value *ts)
+{
+    assert(ts->type ==  RBH_VT_INT64);
+
+    return BCON_NEW("$or", "[",
+                     "{",
+                       "$gt",  "[",
+                         BCON_INT64(ts->int64),
+                         BCON_UTF8("$xattrs.nb_children.timestamp"),
+                       "]",
+                      "}",
+                      "{",
+                        "$and", "[",
+                          "{",
+                            "$eq", "[",
+                              BCON_INT64(ts->int64),
+                              BCON_UTF8("$xattrs.nb_children.timestamp"),
+                            "]",
+                           "}",
+                           "{",
+                             "$eq", "[",
+                               BCON_BOOL(false),
+                               BCON_UTF8("$xattrs.nb_children.final"),
+                             "]",
+                           "}",
+                        "]",
+                      "}",
+                    "]");
+}
+
+__attribute__((unused))
+static bool
+bson_append_set_nb_children(bson_t *bson, const char *prefix, const char *xattr,
+                            const struct rbh_value *value)
+{
+
+    const struct rbh_value *timestamp;
+    bson_t doc, cond;
+    bool rc = true;
+    bson_t *_cond;
+
+    timestamp = rbh_map_find(&value->map, "timestamp");
+    if (timestamp == NULL)
+        return false;
+
+    _cond = make_cond_bson(timestamp);
+    if (_cond == NULL)
+        return false;
+
+    if (!(BSON_APPEND_DOCUMENT_BEGIN(bson, "xattrs.nb_children", &doc) &&
+         BSON_APPEND_ARRAY_BEGIN(&doc, "$cond", &cond) &&
+         BSON_APPEND_DOCUMENT(&cond, "0", _cond) &&
+         bson_append_rbh_value(&cond, "1", 1, value) &&
+         BSON_APPEND_UTF8(&cond, "2", "$xattrs.nb_children") &&
+         bson_append_array_end(&doc, &cond) &&
+         bson_append_document_end(bson, &doc)))
+        rc = false;
+
+    bson_destroy(_cond);
+
+    return rc;
+}
+
 /**
  *  xattrs = { "xattr1" : { "op" : value }, "xattr2": { "op": value }}
  */
