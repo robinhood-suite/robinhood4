@@ -55,6 +55,12 @@ struct mfu_iterator {
 
 };
 
+struct rbh_id *
+mfu_build_id(const char *accpath, size_t prefix_len, bool is_mpifile);
+
+struct rbh_id *
+mfu_build_parent_id(const char *accpath, size_t prefix_len, bool is_mpifile);
+
 struct rbh_mut_iterator *
 rbh_mpi_file_mfu_iter_new(mfu_flist flist, size_t prefix_len);
 
