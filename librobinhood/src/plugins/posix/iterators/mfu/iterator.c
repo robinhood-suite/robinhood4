@@ -99,9 +99,8 @@ skip:
     /* Setup the current_parent path/ID */
     if (current_parent == NULL) {
         current_parent = RBH_SSTACK_PUSH(sstack, parent, strlen(parent) + 1);
-        current_parent_id = get_parent_id(path, !iter->is_mpifile,
-                                          iter->posix.prefix_len,
-                                          iter->backend_id);
+        current_parent_id = mfu_build_parent_id(path, iter->is_mpifile,
+                                                iter->posix.prefix_len);
     }
 
     /* If parent is different of current_parent, it means that we are iterating
@@ -120,9 +119,8 @@ skip:
         sstack_clear(sstack);
         current_children = 0;
         current_parent = RBH_SSTACK_PUSH(sstack, parent, strlen(parent) + 1);
-        current_parent_id = get_parent_id(path, !iter->is_mpifile,
-                                          iter->posix.prefix_len,
-                                          iter->backend_id);
+        current_parent_id = mfu_build_parent_id(path, iter->is_mpifile,
+                                                iter->posix.prefix_len);
 
         if (tmp_id) {
             if (!rbh_id_equal(tmp_id, &ROOT_PARENT_ID))

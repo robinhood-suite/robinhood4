@@ -38,45 +38,59 @@ walk_path(const char* path)
     return flist;
 }
 
-struct rbh_id *
-get_parent_id(const char *path, bool use_fd, int prefix_len, short backend_id)
+static struct rbh_id *
+_build_id(const char *path, bool is_mpifile)
 {
-    struct rbh_id *parent_id;
-    int save_errno = errno;
-    char *parent_path;
-    char *tmp_path;
+    struct rbh_id *id;
     int fd;
 
-    tmp_path = xstrdup(path);
-
-    if (use_fd) {
-        parent_path = dirname(tmp_path);
-        fd = openat(AT_FDCWD, parent_path, O_RDONLY | O_CLOEXEC | O_PATH);
-        if (fd < 0) {
-            save_errno = errno;
-            free(tmp_path);
-            errno = save_errno;
-            return NULL;
-        }
-
-        parent_id = id_from_fd(fd, backend_id);
+    if (is_mpifile) {
+        id = rbh_id_new_with_id(path, (strlen(path) + 1) * sizeof(*path),
+                                RBH_BI_MPI_FILE);
     } else {
-        parent_path = dirname(strlen(tmp_path) == prefix_len ? tmp_path :
-                              tmp_path + prefix_len);
-        parent_id = rbh_id_new_with_id(
-            parent_path,
-            (strlen(parent_path) + 1) * sizeof(*parent_path),
-            backend_id
-            );
+        fd = openat(AT_FDCWD, path,
+                    O_RDONLY | O_CLOEXEC | O_NOFOLLOW | O_NONBLOCK);
+        if (fd < 0)
+            return NULL;
+
+        id = id_from_fd(fd, RBH_BI_POSIX);
+        close(fd);
     }
 
-    save_errno = errno;
-    if (use_fd)
-        close(fd);
-    free(tmp_path);
-    errno = save_errno;
+    return id;
+}
 
-    return parent_id;
+struct rbh_id *
+mfu_build_parent_id(const char *accpath, size_t prefix_len, bool is_mpifile)
+{
+    struct rbh_id *id;
+    const char *path;
+    char *tmp;
+
+    tmp = xstrdup(accpath);
+
+    if (is_mpifile)
+        path = dirname(tmp);
+    else
+        path = dirname(strlen(tmp) == prefix_len ? tmp : tmp + prefix_len);
+
+    id = _build_id(path, is_mpifile);
+    free(tmp);
+
+    return id;
+}
+
+struct rbh_id *
+mfu_build_id(const char *accpath, size_t prefix_len, bool is_mpifile)
+{
+    const char *path;
+
+    if (is_mpifile)
+        path = strlen(accpath) == prefix_len ? "/" : accpath + prefix_len;
+    else
+        path = accpath;
+
+    return _build_id(path, is_mpifile);
 }
 
 struct rbh_fsentry *
