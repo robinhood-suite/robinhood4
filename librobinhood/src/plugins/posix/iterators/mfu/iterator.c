@@ -35,6 +35,7 @@ sstack_clear(struct rbh_sstack *sstack)
 }
 
 static __thread struct rbh_id *current_parent_id = NULL;
+static __thread bool seen_first_time = true;
 static __thread char *current_parent = NULL;
 static __thread struct rbh_sstack *sstack;
 static __thread int current_children = 0;
@@ -59,6 +60,7 @@ mfu_iter_next(void *_iter)
     bool skip_error = iter->posix.skip_error;
     struct rbh_fsentry *fsentry = NULL;
     struct file_info fi;
+    struct rbh_id *id;
     const char *path;
     char *parent_dup;
     char *path_dup;
@@ -75,7 +77,10 @@ skip:
          */
         if (current_parent_id != NULL) {
             fsentry = build_fsentry_nb_children(current_parent_id,
-                                                current_children, sstack);
+                                                current_children,
+                                                iter->posix.start_time,
+                                                true,
+                                                sstack);
 
             free(current_parent_id);
 
@@ -92,6 +97,23 @@ skip:
     }
 
     path = mfu_flist_file_get_name(iter->files, iter->current);
+    mfu_filetype type = mfu_flist_file_get_type(iter->files, iter->current);
+
+    /**
+     * If it's a directory, return an fsentry to setup its nb_children to 0
+     * The 'seen_first_time' is just here to keep in memory that we already
+     * have set the nb_children for this directory.
+     */
+    if (type == MFU_TYPE_DIR && seen_first_time) {
+        seen_first_time = false;
+        // TODO: faire en sortes de réutiliser l'ID si déjà créer
+        id = mfu_build_id(path, iter->posix.prefix_len, iter->is_mpifile);
+
+        return build_fsentry_nb_children(id, 0, iter->posix.start_time,
+                                         false, sstack);
+    }
+
+    seen_first_time = true;
 
     parent_dup = RBH_SSTACK_PUSH(sstack, path, strlen(path) + 1);
     parent = dirname(parent_dup);
@@ -124,7 +146,10 @@ skip:
 
         if (tmp_id) {
             if (!rbh_id_equal(tmp_id, &ROOT_PARENT_ID))
-                fsentry = build_fsentry_nb_children(tmp_id, tmp_children, sstack);
+                fsentry = build_fsentry_nb_children(tmp_id, tmp_children,
+                                                    iter->posix.start_time,
+                                                    true,
+                                                    sstack);
 
             free(tmp_id);
         }

@@ -23,9 +23,15 @@ static bson_t *
 bson_from_upsert(const struct rbh_value_map *xattrs,
                  const struct rbh_statx *statxbuf, const char *symlink)
 {
-    bson_t *bson = bson_new();
+    bson_t *pipeline = bson_new();
+    bson_t bson, set, unset, inc;
     int save_errno = ENOBUFS;
-    bson_t set, unset, inc;
+
+    /* We use an array here because we need to use an Update Aggregation
+     * Pipeline in order to set conditional $set for the nb_children.
+     */
+    if (!BSON_APPEND_DOCUMENT_BEGIN(pipeline, "0", &bson))
+        goto out_destroy_pipeline;
 
     bson_init(&set);
     if (statxbuf) {
@@ -47,33 +53,39 @@ bson_from_upsert(const struct rbh_value_map *xattrs,
 
     /* Empty $set documents are not allowed */
     if (!bson_empty(&set)) {
-        if (!BSON_APPEND_DOCUMENT(bson, "$set", &set))
+        if (!BSON_APPEND_DOCUMENT(&bson, "$set", &set))
             goto out_destroy;
     }
 
     /* Empty $unset documents are not allowed */
     if (!bson_empty(&unset)) {
-        if (!BSON_APPEND_DOCUMENT(bson, "$unset", &unset))
+        if (!BSON_APPEND_DOCUMENT(&bson, "$unset", &unset))
             goto out_destroy;
     }
 
     /* Empty $inc documents are not allowed */
     if (!bson_empty(&inc)) {
-        if (!BSON_APPEND_DOCUMENT(bson, "$inc", &inc))
+        if (!BSON_APPEND_DOCUMENT(&bson, "$inc", &inc))
             goto out_destroy;
     }
+
+    if (!bson_append_document_end(pipeline, &bson))
+        goto out_destroy;
 
     bson_destroy(&inc);
     bson_destroy(&unset);
     bson_destroy(&set);
-    return bson;
+    bson_destroy(&bson);
+    return pipeline;
 
 out_destroy:
     bson_destroy(&inc);
     bson_destroy(&unset);
 out_destroy_set:
     bson_destroy(&set);
-    bson_destroy(bson);
+    bson_destroy(&bson);
+out_destroy_pipeline:
+    bson_destroy(pipeline);
     errno = save_errno;
     return NULL;
 }

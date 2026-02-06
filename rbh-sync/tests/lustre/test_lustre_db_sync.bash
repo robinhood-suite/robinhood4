@@ -615,11 +615,11 @@ test_sync_number_children()
 
     rbh_sync_lustre "." "rbh:$db:$testdb"
 
-    find_attribute '"ns.xattrs.path": "/"' '"xattrs.nb_children": 1'
-    find_attribute '"ns.xattrs.path": "/dir1"' '"xattrs.nb_children": 3'
-    find_attribute '"ns.xattrs.path": "/dir1/dir2"' '"xattrs.nb_children": 2'
+    find_attribute '"ns.xattrs.path": "/"' '"xattrs.nb_children.value": 1'
+    find_attribute '"ns.xattrs.path": "/dir1"' '"xattrs.nb_children.value": 3'
+    find_attribute '"ns.xattrs.path": "/dir1/dir2"' '"xattrs.nb_children.value": 2'
     find_attribute '"ns.xattrs.path": "/dir1/dir2/dir3"'\
-                   '"xattrs.nb_children": 0'
+                   '"xattrs.nb_children.value": 0'
     ! (find_attribute '"ns.xattrs.path": "/dir1/fileA"' \
                       '"xattrs.nb_children": {$exists: true}')
 }
@@ -628,12 +628,8 @@ test_sync_number_children()
 #                                     MAIN                                     #
 ################################################################################
 
-declare -a tests=(test_simple_sync test_branch_sync test_sync_one_file)
-
-# Disable this test with MPI temporaly
-if [[ $WITH_MPI == false ]]; then
-    tests+=(test_sync_number_children)
-fi
+declare -a tests=(test_simple_sync test_branch_sync test_sync_one_file
+                  test_sync_number_children)
 
 if lctl get_param mdt.*.hsm_control | grep "enabled"; then
     tests+=(test_hsm_state_none test_hsm_state_archived_states

@@ -95,7 +95,7 @@ fill_xattrs_mdt_index(void *arg)
 }
 
 /* BSON results:
- * { "xattrs": { "nb_children" : x [+-]1 } }
+ * { "xattrs": { "nb_children" : { value : x [+-]1 } } }
  */
 struct rbh_value *
 fill_xattrs_nb_children(void *arg)
