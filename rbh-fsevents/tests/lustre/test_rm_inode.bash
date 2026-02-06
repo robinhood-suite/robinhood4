@@ -22,7 +22,7 @@ test_rm_same_batch()
         error "There should be $count entries in the database, found $entries"
     fi
 
-    find_attribute '"xattrs.nb_children": 0'
+    find_attribute '"xattrs.nb_children.value": 0'
 }
 
 test_rm_different_batch()
@@ -32,7 +32,7 @@ test_rm_different_batch()
 
     invoke_rbh-fsevents
 
-    find_attribute '"xattrs.nb_children": 1'
+    find_attribute '"xattrs.nb_children.value": 1'
 
     clear_changelogs "$LUSTRE_MDT" "$userid"
     rm_entry $entry
@@ -45,5 +45,5 @@ test_rm_different_batch()
         error "There should be $count entries in the database, found $entries"
     fi
 
-    find_attribute '"xattrs.nb_children": 0'
+    find_attribute '"xattrs.nb_children.value": 0'
 }

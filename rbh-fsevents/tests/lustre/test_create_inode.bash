@@ -22,7 +22,7 @@ test_create_entry()
     verify_statx "$entry"
     verify_lustre "$entry"
 
-    find_attribute '"xattrs.nb_children": '"$NB_ENTRY"''
+    find_attribute '"xattrs.nb_children.value": '"$NB_ENTRY"''
 }
 
 test_create_two_entries()
@@ -40,5 +40,5 @@ test_create_two_entries()
     verify_statx "$entry2"
     verify_lustre "$entry2"
 
-    find_attribute '"xattrs.nb_children": '"$(($NB_ENTRY * 2))"''
+    find_attribute '"xattrs.nb_children.value": '"$(($NB_ENTRY * 2))"''
 }

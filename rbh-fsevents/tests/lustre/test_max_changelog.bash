@@ -40,7 +40,7 @@ test_max_changelog()
     verify_statx "$entry1"
     verify_lustre "$entry1"
 
-    find_attribute '"xattrs.nb_children": 1'
+    find_attribute '"xattrs.nb_children.value": 1'
 
     rbh_fsevents --enrich rbh:lustre:"$LUSTRE_DIR" --max 8 \
         src:lustre:"$LUSTRE_MDT"?ack-user=$userid "rbh:$db:$testdb"
@@ -59,7 +59,7 @@ test_max_changelog()
     verify_statx "$entry2"
     verify_lustre "$entry2"
 
-    find_attribute '"xattrs.nb_children": 2'
+    find_attribute '"xattrs.nb_children.value": 2'
 }
 
 ################################################################################

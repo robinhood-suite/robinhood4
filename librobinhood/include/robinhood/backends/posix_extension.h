@@ -48,6 +48,7 @@ struct posix_iterator {
     size_t prefix_len;
     bool skip_error;
     char *path;
+    int64_t start_time;
 };
 
 /**
@@ -127,11 +128,11 @@ freadlink(int fd, const char *path, size_t *size_);
 
 void
 build_pair_nb_children(struct rbh_value_pair *pair, int nb_children,
-                       struct rbh_sstack *sstack);
+                       int64_t timestamp, bool final, struct rbh_sstack *sstack);
 
 struct rbh_fsentry *
-build_fsentry_nb_children(struct rbh_id *id, int nb_children,
-                          struct rbh_sstack *sstack);
+build_fsentry_nb_children(struct rbh_id *id, int nb_children, int64_t timestamp,
+                          bool final, struct rbh_sstack *sstack);
 
 bool
 fsentry_from_any(struct fsentry_id_pair *fip, const struct rbh_value *path,

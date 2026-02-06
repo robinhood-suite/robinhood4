@@ -132,7 +132,8 @@ skip:
 
         /* We generate a fsevent to update the destination backend */
         fsentry = build_fsentry_nb_children(ftsent->fts_pointer,
-                                            current_counter, NULL);
+                                            current_counter,
+                                            iter->posix.start_time, true, NULL);
 
         /* fsentry_from_ftsent() memoizes ids of directories */
         free(ftsent->fts_pointer);
@@ -282,11 +283,12 @@ fts_iter_new(struct rbh_metadata *metadata, const char *root, const char *entry,
 
     iter = xmalloc(sizeof(*iter));
 
-   rc = posix_iterator_setup(&iter->posix, root, entry, statx_sync_type);
+    rc = posix_iterator_setup(&iter->posix, root, entry, statx_sync_type);
     save_errno = errno;
     if (rc == -1)
         goto free_iter;
 
+    iter->posix.start_time = time(NULL);
     paths[0] = iter->posix.path;
     iter->fts_handle = fts_open(paths, FTS_PHYSICAL | FTS_NOSTAT | FTS_XDEV,
                                 NULL);

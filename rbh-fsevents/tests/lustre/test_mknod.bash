@@ -43,7 +43,7 @@ test_create_mknod()
     verify_statx "$entry.2"
     verify_lustre "$entry.2"
 
-    find_attribute '"xattrs.nb_children": '"$(($NB_ENTRY * 2))"''
+    find_attribute '"xattrs.nb_children.value": '"$(($NB_ENTRY * 2))"''
 }
 
 ################################################################################

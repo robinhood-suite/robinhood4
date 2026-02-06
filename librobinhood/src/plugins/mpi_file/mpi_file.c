@@ -117,15 +117,8 @@ fsentry_from_flist(struct file_info *mpi_fi,
     ns_xattrs.count = 1;
     ns_xattrs.pairs = pair;
 
-    if (S_ISDIR(statxbuf.stx_mode)) {
-        pair = &pairs[1];
-        build_pair_nb_children(pair, 0, sstack);
-        inode_xattrs.pairs = pair;
-        inode_xattrs.count = 1;
-    } else {
-        inode_xattrs.pairs = NULL;
-        inode_xattrs.count = 0;
-    }
+    inode_xattrs.pairs = NULL;
+    inode_xattrs.count = 0;
 
     fsentry = rbh_fsentry_new(id, mpi_fi->parent_id, mpi_fi->name, &statxbuf,
                               &ns_xattrs, &inode_xattrs, symlink);

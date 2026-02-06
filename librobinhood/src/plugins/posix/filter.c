@@ -79,7 +79,7 @@ empty_dir_filter()
     struct rbh_filter *filter_type, *filter_nb;
     struct rbh_filter_field field = {
         .fsentry = RBH_FP_INODE_XATTRS,
-        .xattr = "nb_children",
+        .xattr = "nb_children.value",
     };
     struct rbh_filter *filter;
 

@@ -45,7 +45,7 @@ test_create_symlink()
     verify_statx "$entry"
     verify_statx "$entry.tmp"
     find_attribute "\"ns.name\":\"$entry\"" "\"symlink\":\"$entry.tmp\""
-    find_attribute '"xattrs.nb_children": '"$NB_ENTRY"''
+    find_attribute '"xattrs.nb_children.value": '"$NB_ENTRY"''
 }
 
 test_symlink_other_mdt()

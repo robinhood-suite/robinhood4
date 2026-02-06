@@ -82,7 +82,6 @@ test_sync_time()
     find_attribute '"ns.xattrs.path":"/fileA"' '"statx.ctime.sec":'$ctime
 }
 
-# Disable this test temporaly
 test_sync_number_children()
 {
     mkdir -p dir1/dir2/dir3
@@ -91,11 +90,12 @@ test_sync_number_children()
     dwalk -q -o "$testdb.mfu" .
     rbh_sync "rbh:mpi-file:$testdb.mfu" "rbh:$db:$testdb"
 
-    find_attribute '"ns.xattrs.path": "/"' '"xattrs.nb_children": 1'
-    find_attribute '"ns.xattrs.path": "/dir1"' '"xattrs.nb_children": 3'
-    find_attribute '"ns.xattrs.path": "/dir1/dir2"' '"xattrs.nb_children": 2'
+    find_attribute '"ns.xattrs.path": "/"' '"xattrs.nb_children.value": 1'
+    find_attribute '"ns.xattrs.path": "/dir1"' '"xattrs.nb_children.value": 3'
+    find_attribute '"ns.xattrs.path": "/dir1/dir2"' \
+        '"xattrs.nb_children.value": 2'
     find_attribute '"ns.xattrs.path": "/dir1/dir2/dir3"'\
-                   '"xattrs.nb_children": 0'
+                   '"xattrs.nb_children.value": 0'
     ! (find_attribute '"ns.xattrs.path": "/dir1/fileA"' \
                       '"xattrs.nb_children": {$exists: true}')
 }
@@ -105,7 +105,7 @@ test_sync_number_children()
 ################################################################################
 
 declare -a tests=(test_sync_simple_from_dwalk test_sync_simple_from_robinhood
-                  test_sync_size test_sync_time)
+                  test_sync_size test_sync_time test_sync_number_children)
 
 tmpdir=$(mktemp --directory)
 trap -- "rm -rf '$tmpdir'" EXIT

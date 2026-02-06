@@ -41,7 +41,7 @@ test_create_hardlink()
     fi
 
     find_attribute "\"ns.name\":\"$entry.tmp\"" "\"ns.name\":\"$entry\""
-    find_attribute '"xattrs.nb_children": '"$NB_ENTRY"''
+    find_attribute '"xattrs.nb_children.value": '"$NB_ENTRY"''
     verify_statx "$entry"
     verify_statx "$entry.tmp"
     verify_lustre "$entry"

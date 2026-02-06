@@ -200,6 +200,17 @@ set_xattr_value(json_t *object, const char *xattr,
 
 /**
  *  xattrs = { "xattr1" : { "op" : value }, "xattr2": { "op": value }}
+ *
+ *  Only one exception with nb_children:
+ *
+ *  xattrs = { "nb_children" :
+ *              { "op" :
+ *                  { "value": 1, "timestamp": xxx, "final": true }
+ *              }
+ *           }
+ *
+ *  But the timestamp and final value are not used as sqlite can't be used with
+ *  MPI.
  */
 static json_t *
 xattrs2json(const struct rbh_value_map *map, struct rbh_sstack *sstack)
