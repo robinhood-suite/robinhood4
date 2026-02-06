@@ -16,4 +16,8 @@ compare_values(enum rbh_filter_operator op,
                const struct rbh_value *field_val,
                const struct rbh_value *filter_val);
 
+bool
+rbh_filter_matches_fsentry(const struct rbh_filter *filter,
+                           const struct rbh_fsentry *fsentry);
+
 #endif

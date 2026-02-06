@@ -19,6 +19,7 @@
 #include "robinhood/policyengine_internal.h"
 #include "robinhood/backend.h"
 #include "robinhood/utils.h"
+#include "robinhood/statx.h"
 
 /*
  * Test: rbh_collect_fsentries_test
@@ -190,6 +191,588 @@ START_TEST(rbh_pe_execute_empty_iter_test)
 }
 END_TEST
 
+/*
+ * Test: rbh_filter_matches_fsentry_null_filter_test
+ * Scenario: Validates that a NULL filter matches any fsentry (returns true).
+ */
+START_TEST(rbh_filter_matches_fsentry_null_filter_test)
+{
+    struct rbh_fsentry fsentry = {
+        .mask = RBH_FP_STATX
+    };
+
+    // NULL filter matches all
+    ck_assert(rbh_filter_matches_fsentry(NULL, &fsentry));
+}
+END_TEST
+
+/*
+ * Test: rbh_filter_matches_fsentry_equality_match_test
+ * Scenario: Validates that an equality filter matches when the field value
+ * equals the filter value.
+ */
+START_TEST(rbh_filter_matches_fsentry_equality_match_test)
+{
+    struct rbh_statx statx = {
+        .stx_mask = RBH_STATX_SIZE,
+        .stx_size = 1024
+    };
+
+    struct rbh_fsentry fsentry = {
+        .mask = RBH_FP_STATX,
+        .statx = &statx
+    };
+
+    struct rbh_value filter_value = {
+        .type = RBH_VT_UINT64,
+        .uint64 = 1024
+    };
+
+    struct rbh_filter_field field = {
+        .fsentry = RBH_FP_STATX,
+        .statx = RBH_STATX_SIZE
+    };
+
+    struct rbh_filter filter = {
+        .op = RBH_FOP_EQUAL,
+        .compare = {
+            .field = field,
+            .value = filter_value
+        }
+    };
+
+    // size == 1024
+    ck_assert(rbh_filter_matches_fsentry(&filter, &fsentry));
+}
+END_TEST
+
+/*
+ * Test: rbh_filter_matches_fsentry_equality_no_match_test
+ * Scenario: Validates that an equality filter returns false when values don't
+ * match.
+ */
+START_TEST(rbh_filter_matches_fsentry_equality_no_match_test)
+{
+    struct rbh_statx statx = {
+        .stx_mask = RBH_STATX_SIZE,
+        .stx_size = 2048
+    };
+
+    struct rbh_fsentry fsentry = {
+        .mask = RBH_FP_STATX,
+        .statx = &statx
+    };
+
+    struct rbh_value filter_value = {
+        .type = RBH_VT_UINT64,
+        .uint64 = 1024
+    };
+
+    struct rbh_filter_field field = {
+        .fsentry = RBH_FP_STATX,
+        .statx = RBH_STATX_SIZE
+    };
+
+    struct rbh_filter filter = {
+        .op = RBH_FOP_EQUAL,
+        .compare = {
+            .field = field,
+            .value = filter_value
+        }
+    };
+
+    // size != 1024
+    ck_assert(!rbh_filter_matches_fsentry(&filter, &fsentry));
+}
+END_TEST
+
+/*
+ * Test: rbh_filter_matches_fsentry_greater_match_test
+ * Scenario: Validates that STRICTLY_GREATER filter matches when field value is
+ * greater.
+ */
+START_TEST(rbh_filter_matches_fsentry_greater_match_test)
+{
+    struct rbh_statx statx = {
+        .stx_mask = RBH_STATX_SIZE,
+        .stx_size = 2048
+    };
+
+    struct rbh_fsentry fsentry = {
+        .mask = RBH_FP_STATX,
+        .statx = &statx
+    };
+
+    struct rbh_value filter_value = {
+        .type = RBH_VT_UINT64,
+        .uint64 = 1024
+    };
+
+    struct rbh_filter_field field = {
+        .fsentry = RBH_FP_STATX,
+        .statx = RBH_STATX_SIZE
+    };
+
+    struct rbh_filter filter = {
+        .op = RBH_FOP_STRICTLY_GREATER,
+        .compare = {
+            .field = field,
+            .value = filter_value
+        }
+    };
+
+    // size > 1024
+    ck_assert(rbh_filter_matches_fsentry(&filter, &fsentry));
+}
+END_TEST
+
+/*
+ * Test: rbh_filter_matches_fsentry_greater_no_match_test
+ * Scenario: Validates that STRICTLY_GREATER filter returns false when field
+ * value is not greater.
+ */
+START_TEST(rbh_filter_matches_fsentry_greater_no_match_test)
+{
+    struct rbh_statx statx = {
+        .stx_mask = RBH_STATX_SIZE,
+        .stx_size = 512
+    };
+
+    struct rbh_fsentry fsentry = {
+        .mask = RBH_FP_STATX,
+        .statx = &statx
+    };
+
+    struct rbh_value filter_value = {
+        .type = RBH_VT_UINT64,
+        .uint64 = 1024
+    };
+
+    struct rbh_filter_field field = {
+        .fsentry = RBH_FP_STATX,
+        .statx = RBH_STATX_SIZE
+    };
+
+    struct rbh_filter filter = {
+        .op = RBH_FOP_STRICTLY_GREATER,
+        .compare = {
+            .field = field,
+            .value = filter_value
+        }
+    };
+
+    // size <= 1024
+    ck_assert(!rbh_filter_matches_fsentry(&filter, &fsentry));
+}
+END_TEST
+
+/*
+ * Test: rbh_filter_matches_fsentry_missing_field_test
+ * Scenario: Validates that filter returns false when the field is not present
+ * in fsentry.
+ */
+START_TEST(rbh_filter_matches_fsentry_missing_field_test)
+{
+    struct rbh_fsentry fsentry = {
+        fsentry.mask = 0  // no fields set
+    };
+
+    struct rbh_value filter_value = {
+        .type = RBH_VT_UINT64,
+        .uint64 = 1024
+    };
+
+    struct rbh_filter_field field = {
+        .fsentry = RBH_FP_STATX,
+        .statx = RBH_STATX_SIZE
+    };
+
+    struct rbh_filter filter = {
+        .op = RBH_FOP_EQUAL,
+        .compare = {
+            .field = field,
+            .value = filter_value
+        }
+    };
+
+    // field absent
+    ck_assert(!rbh_filter_matches_fsentry(&filter, &fsentry));
+}
+END_TEST
+
+/*
+ * Test: rbh_filter_matches_fsentry_and_all_true_test
+ * Scenario: Validates that AND filter returns true when all conditions are
+ * satisfied.
+ */
+START_TEST(rbh_filter_matches_fsentry_and_all_true_test)
+{
+    struct rbh_statx statx = {
+        .stx_mask = RBH_STATX_SIZE | RBH_STATX_UID,
+        .stx_size = 2048,
+        .stx_uid = 1000
+    };
+
+    struct rbh_fsentry fsentry = {
+        .mask = RBH_FP_STATX,
+        .statx = &statx
+    };
+
+    // size > 1024
+    struct rbh_filter_field size_field = {
+        .fsentry = RBH_FP_STATX,
+        .statx = RBH_STATX_SIZE
+    };
+    struct rbh_value size_value = {
+        .type = RBH_VT_UINT64,
+        .uint64 = 1024
+    };
+    struct rbh_filter size_filter = {
+        .op = RBH_FOP_STRICTLY_GREATER,
+        .compare = {
+            .field = size_field,
+            .value = size_value
+        }
+    };
+
+    // uid == 1000
+    struct rbh_filter_field uid_field = {
+        .fsentry = RBH_FP_STATX,
+        .statx = RBH_STATX_UID
+    };
+    struct rbh_value uid_value = {
+        .type = RBH_VT_UINT64,
+        .uint64 = 1000
+    };
+    struct rbh_filter uid_filter = {
+        .op = RBH_FOP_EQUAL,
+        .compare = {
+            .field = uid_field,
+            .value = uid_value
+        }
+    };
+
+    const struct rbh_filter *sub_filters[] = {&size_filter, &uid_filter};
+    struct rbh_filter and_filter = {
+        .op = RBH_FOP_AND,
+        .logical = {
+            .filters = sub_filters,
+            .count = 2
+        }
+    };
+
+    // both conditions true
+    ck_assert(rbh_filter_matches_fsentry(&and_filter, &fsentry));
+}
+END_TEST
+
+/*
+ * Test: rbh_filter_matches_fsentry_and_one_false_test
+ * Scenario: Validates that AND filter returns false when at least one
+ * condition is not satisfied.
+ */
+START_TEST(rbh_filter_matches_fsentry_and_one_false_test)
+{
+    struct rbh_statx statx = {
+        .stx_mask = RBH_STATX_SIZE | RBH_STATX_UID,
+        .stx_size = 512,  // fails size > 1024
+        .stx_uid = 1000
+    };
+
+    struct rbh_fsentry fsentry = {
+        .mask = RBH_FP_STATX,
+        .statx = &statx
+    };
+
+    // size > 1024 (will fail)
+    struct rbh_filter_field size_field = {
+        .fsentry = RBH_FP_STATX,
+        .statx = RBH_STATX_SIZE
+    };
+    struct rbh_value size_value = {
+        .type = RBH_VT_UINT64,
+        .uint64 = 1024
+    };
+    struct rbh_filter size_filter = {
+        .op = RBH_FOP_STRICTLY_GREATER,
+        .compare = {
+            .field = size_field,
+            .value = size_value
+        }
+    };
+
+    // uid == 1000 (will pass)
+    struct rbh_filter_field uid_field = {
+        .fsentry = RBH_FP_STATX,
+        .statx = RBH_STATX_UID
+    };
+    struct rbh_value uid_value = {
+        .type = RBH_VT_UINT64,
+        .uint64 = 1000
+    };
+    struct rbh_filter uid_filter = {
+        .op = RBH_FOP_EQUAL,
+        .compare = {
+            .field = uid_field,
+            .value = uid_value
+        }
+    };
+
+    const struct rbh_filter *sub_filters[] = {&size_filter, &uid_filter};
+    struct rbh_filter and_filter = {
+        .op = RBH_FOP_AND,
+        .logical = {
+            .filters = sub_filters,
+            .count = 2
+        }
+    };
+
+    // one condition false
+    ck_assert(!rbh_filter_matches_fsentry(&and_filter, &fsentry));
+}
+END_TEST
+
+/*
+ * Test: rbh_filter_matches_fsentry_or_one_true_test
+ * Scenario: Validates that OR filter returns true when at least one condition
+ * is satisfied.
+ */
+START_TEST(rbh_filter_matches_fsentry_or_one_true_test)
+{
+    struct rbh_statx statx = {
+        .stx_mask = RBH_STATX_SIZE | RBH_STATX_UID,
+        .stx_size = 512,  // fails size > 1024
+        .stx_uid = 1000  // passes uid == 1000
+    };
+
+    struct rbh_fsentry fsentry = {
+        .mask = RBH_FP_STATX,
+        .statx = &statx
+    };
+
+    // size > 1024 (will fail)
+    struct rbh_filter_field size_field = {
+        .fsentry = RBH_FP_STATX,
+        .statx = RBH_STATX_SIZE
+    };
+    struct rbh_value size_value = {
+        .type = RBH_VT_UINT64,
+        .uint64 = 1024
+    };
+    struct rbh_filter size_filter = {
+        .op = RBH_FOP_STRICTLY_GREATER,
+        .compare = {
+            .field = size_field,
+            .value = size_value
+        }
+    };
+
+    // uid == 1000 (will pass)
+    struct rbh_filter_field uid_field = {
+        .fsentry = RBH_FP_STATX,
+        .statx = RBH_STATX_UID
+    };
+    struct rbh_value uid_value = {
+        .type = RBH_VT_UINT64,
+        .uint64 = 1000
+    };
+    struct rbh_filter uid_filter = {
+        .op = RBH_FOP_EQUAL,
+        .compare = {
+            .field = uid_field,
+            .value = uid_value
+        }
+    };
+
+    const struct rbh_filter *sub_filters[] = {&size_filter, &uid_filter};
+    struct rbh_filter or_filter = {
+        .op = RBH_FOP_OR,
+        .logical = {
+            .filters = sub_filters,
+            .count = 2
+        }
+    };
+
+    // at least one condition true
+    ck_assert(rbh_filter_matches_fsentry(&or_filter, &fsentry));
+}
+END_TEST
+
+/*
+ * Test: rbh_filter_matches_fsentry_or_all_false_test
+ * Scenario: Validates that OR filter returns false when all conditions are not
+ * satisfied.
+ */
+START_TEST(rbh_filter_matches_fsentry_or_all_false_test)
+{
+    struct rbh_statx statx = {
+        .stx_mask = RBH_STATX_SIZE | RBH_STATX_UID,
+        .stx_size = 512,  // fails size > 1024
+        .stx_uid = 500   // fails uid == 1000
+    };
+
+    struct rbh_fsentry fsentry = {
+        .mask = RBH_FP_STATX,
+        .statx = &statx
+    };
+
+    // size > 1024 (will fail)
+    struct rbh_filter_field size_field = {
+        .fsentry = RBH_FP_STATX,
+        .statx = RBH_STATX_SIZE
+    };
+    struct rbh_value size_value = {
+        .type = RBH_VT_UINT64,
+        .uint64 = 1024
+    };
+    struct rbh_filter size_filter = {
+        .op = RBH_FOP_STRICTLY_GREATER,
+        .compare = {
+            .field = size_field,
+            .value = size_value
+        }
+    };
+
+    // uid == 1000 (will fail)
+    struct rbh_filter_field uid_field = {
+        .fsentry = RBH_FP_STATX,
+        .statx = RBH_STATX_UID
+    };
+    struct rbh_value uid_value = {
+        .type = RBH_VT_UINT64,
+        .uint64 = 1000
+    };
+    struct rbh_filter uid_filter = {
+        .op = RBH_FOP_EQUAL,
+        .compare = {
+            .field = uid_field,
+            .value = uid_value
+        }
+    };
+
+    const struct rbh_filter *sub_filters[] = {&size_filter, &uid_filter};
+    struct rbh_filter or_filter = {
+        .op = RBH_FOP_OR,
+        .logical = {
+            .filters = sub_filters,
+            .count = 2
+        }
+    };
+
+    // all conditions false
+    ck_assert(!rbh_filter_matches_fsentry(&or_filter, &fsentry));
+}
+END_TEST
+
+/*
+ * Test: rbh_filter_matches_fsentry_not_test
+ * Scenario: Validates that NOT filter inverts the result of the inner filter.
+ */
+START_TEST(rbh_filter_matches_fsentry_not_test)
+{
+    struct rbh_statx statx = {
+        .stx_mask = RBH_STATX_SIZE,
+        .stx_size = 512
+    };
+
+    struct rbh_fsentry fsentry = {
+        .mask = RBH_FP_STATX,
+        .statx = &statx
+    };
+
+    // size > 1024 (will fail for size=512)
+    struct rbh_filter_field size_field = {
+        .fsentry = RBH_FP_STATX,
+        .statx = RBH_STATX_SIZE
+    };
+    struct rbh_value size_value = {
+        .type = RBH_VT_UINT64,
+        .uint64 = 1024
+    };
+    struct rbh_filter size_filter = {
+        .op = RBH_FOP_STRICTLY_GREATER,
+        .compare = {
+            .field = size_field,
+            .value = size_value
+        }
+    };
+
+    const struct rbh_filter *sub_filter = &size_filter;
+    struct rbh_filter not_filter = {
+        .op = RBH_FOP_NOT,
+        .logical = {
+            .filters = &sub_filter,
+            .count = 1
+        }
+    };
+
+    // NOT(size > 1024) = true (because size <= 1024)
+    ck_assert(rbh_filter_matches_fsentry(&not_filter, &fsentry));
+}
+END_TEST
+
+/*
+ * Test: rbh_filter_matches_fsentry_exists_present_test
+ * Scenario: Validates that EXISTS filter returns true when the field is
+ * present.
+ */
+START_TEST(rbh_filter_matches_fsentry_exists_present_test)
+{
+    struct rbh_statx statx = {
+        .stx_mask = RBH_STATX_SIZE,
+        .stx_size = 1024
+    };
+
+    struct rbh_fsentry fsentry = {
+        .mask = RBH_FP_STATX,
+        .statx = &statx
+    };
+
+    struct rbh_filter_field size_field = {
+        .fsentry = RBH_FP_STATX,
+        .statx = RBH_STATX_SIZE
+    };
+
+    struct rbh_filter exists_filter = {
+        .op = RBH_FOP_EXISTS,
+        .compare = {
+            .field = size_field
+        }
+    };
+
+    // field present
+    ck_assert(rbh_filter_matches_fsentry(&exists_filter, &fsentry));
+}
+END_TEST
+
+/*
+ * Test: rbh_filter_matches_fsentry_exists_absent_test
+ * Scenario: Validates that EXISTS filter returns false when the field is
+ * absent.
+ */
+START_TEST(rbh_filter_matches_fsentry_exists_absent_test)
+{
+    struct rbh_fsentry fsentry = {
+        .mask = RBH_FP_NAME  // no fields set
+    };
+
+    struct rbh_filter_field size_field = {
+        .fsentry = RBH_FP_STATX,
+        .statx = RBH_STATX_SIZE
+    };
+
+    struct rbh_filter exists_filter = {
+        .op = RBH_FOP_EXISTS,
+        .compare = {
+            .field = size_field
+        }
+    };
+
+    // field absent
+    ck_assert(!rbh_filter_matches_fsentry(&exists_filter, &fsentry));
+}
+END_TEST
+
 static Suite *
 unit_suite(void)
 {
@@ -207,6 +790,22 @@ unit_suite(void)
 
     tc = tcase_create("pe_execute");
     tcase_add_test(tc, rbh_pe_execute_empty_iter_test);
+    suite_add_tcase(suite, tc);
+
+    tc = tcase_create("filter_matches_fsentry");
+    tcase_add_test(tc, rbh_filter_matches_fsentry_null_filter_test);
+    tcase_add_test(tc, rbh_filter_matches_fsentry_equality_match_test);
+    tcase_add_test(tc, rbh_filter_matches_fsentry_equality_no_match_test);
+    tcase_add_test(tc, rbh_filter_matches_fsentry_greater_match_test);
+    tcase_add_test(tc, rbh_filter_matches_fsentry_greater_no_match_test);
+    tcase_add_test(tc, rbh_filter_matches_fsentry_missing_field_test);
+    tcase_add_test(tc, rbh_filter_matches_fsentry_and_all_true_test);
+    tcase_add_test(tc, rbh_filter_matches_fsentry_and_one_false_test);
+    tcase_add_test(tc, rbh_filter_matches_fsentry_or_one_true_test);
+    tcase_add_test(tc, rbh_filter_matches_fsentry_or_all_false_test);
+    tcase_add_test(tc, rbh_filter_matches_fsentry_not_test);
+    tcase_add_test(tc, rbh_filter_matches_fsentry_exists_present_test);
+    tcase_add_test(tc, rbh_filter_matches_fsentry_exists_absent_test);
     suite_add_tcase(suite, tc);
 
     return suite;
