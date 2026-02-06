@@ -119,7 +119,7 @@ update_parent_nb_children_event(struct lu_fid *parent_id, int64_t inc,
 
     fsevent->type = RBH_FET_XATTR;
     if (build_enrich_xattr_fsevent(&fsevent->xattrs,
-                                   "nb_children",
+                                   "nb_children.value",
                                    fill_xattrs_nb_children(&inc),
                                    NULL))
         return -1;

@@ -82,7 +82,6 @@ make_cond_bson(const struct rbh_value *ts)
                     "]");
 }
 
-__attribute__((unused))
 static bool
 bson_append_set_nb_children(bson_t *bson, const char *prefix, const char *xattr,
                             const struct rbh_value *value)
@@ -117,6 +116,14 @@ bson_append_set_nb_children(bson_t *bson, const char *prefix, const char *xattr,
 
 /**
  *  xattrs = { "xattr1" : { "op" : value }, "xattr2": { "op": value }}
+ *
+ *  Only one exception with nb_children:
+ *
+ *  xattrs = { "nb_children" :
+ *              { "op" :
+ *                  { "value": 1, "timestamp": xxx, "final": true }
+ *              }
+ *           }
  */
 bool
 bson_append_xattrs(const char *prefix, const struct rbh_value_map *xattrs,
@@ -148,9 +155,18 @@ bson_append_xattrs(const char *prefix, const struct rbh_value_map *xattrs,
             return false;
         }
 
-        if (!bson_append_xattr(bson, prefix, xattr,
-                               bson == unset ? NULL : value))
-            return false;
+        /* Specific function for the nb_children xattr with a $set operation
+         * because of the MPI's backends
+         */
+        if (strcmp(xattr, "nb_children") == 0 && bson == set) {
+            if (!bson_append_set_nb_children(bson, prefix, xattr,
+                                             op_map->pairs->value))
+                return false;
+        } else {
+            if (!bson_append_xattr(bson, prefix, xattr,
+                                   bson == unset ? NULL : value))
+                return false;
+        }
     }
 
     return true;
