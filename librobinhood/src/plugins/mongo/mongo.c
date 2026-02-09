@@ -1109,7 +1109,8 @@ get_collection_info(const struct mongo_backend *mongo, char *field_to_find,
     if (strcmp(field_to_find, "mountpoint") == 0)
         filter = BCON_NEW("_id", "mountpoint_info");
     if (strcmp(field_to_find, "backend_source") == 0 ||
-        strcmp(field_to_find, "fsevents_source") == 0)
+        strcmp(field_to_find, "fsevents_source") == 0 ||
+        strcmp(field_to_find, "command_backend") == 0)
         filter = BCON_NEW("_id", "backend_info");
 
     cursor = mongoc_collection_find_with_opts(mongo->info, filter, NULL, NULL);
@@ -1333,6 +1334,11 @@ mongo_backend_get_info(void *backend, int info_flags)
 
     if (info_flags & RBH_INFO_BACKEND_SOURCE) {
         if (get_collection_info(mongo, "backend_source", &pairs[idx++]) == -1)
+            goto out;
+    }
+
+    if (info_flags & RBH_INFO_COMMAND_BACKEND) {
+        if (get_collection_info(mongo, "command_backend", &pairs[idx++]) == -1)
             goto out;
     }
 

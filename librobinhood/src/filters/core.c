@@ -1,5 +1,5 @@
 /* This file is part of the RobinHood Library
- * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2026 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifer: LGPL-3.0-or-later
@@ -17,6 +17,10 @@ void
 filters_ctx_finish(struct filters_context *ctx)
 {
     free(ctx->info_pe);
+    for (int i = 0; i < ctx->backend_count; ++i)
+        rbh_backend_destroy(ctx->backend[i]);
+
+    free(ctx->backend);
 }
 
 static bool

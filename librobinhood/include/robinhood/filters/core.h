@@ -35,6 +35,10 @@ struct filters_context {
     struct rbh_plugin_or_extension *info_pe;
     size_t info_pe_count;
 
+    /** Backends associated with the plugins in info_pe */
+    struct rbh_backend **backend;
+    size_t backend_count;
+
     /** If a filter needs to be completed by an information of the backend */
     bool need_prefetch;
 
