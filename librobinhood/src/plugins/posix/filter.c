@@ -1,5 +1,5 @@
 /* This file is part of RobinHood 4
- * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2026 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifer: LGPL-3.0-or-later
@@ -148,15 +148,19 @@ size2filter(const struct rbh_filter_field *field, const char *_size)
     switch (operator) {
     case '-':
         filter = rbh_filter_compare_uint64_new(RBH_FOP_LOWER_OR_EQUAL, field,
-                                               (size - 1) * unit_size);
+                                               size == 0 ? 0 :
+                                                   (size - 1) * unit_size);
         break;
     case '+':
         filter = rbh_filter_compare_uint64_new(RBH_FOP_STRICTLY_GREATER, field,
                                                size * unit_size);
         break;
     default:
-        filter = filter_uint64_range_new(field, (size - 1) * unit_size,
-                                         size * unit_size + 1);
+        if (size == 0)
+            filter = filter_uint64_range_new(field, 0, unit_size + 1);
+        else
+            filter = filter_uint64_range_new(field, (size - 1) * unit_size,
+                                             size * unit_size + 1);
     }
 
     if (filter == NULL)
