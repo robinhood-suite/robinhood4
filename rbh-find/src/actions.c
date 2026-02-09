@@ -429,12 +429,65 @@ static void set_ls_projection(struct rbh_filter_projection *projection)
     rbh_projection_add(projection, &field_statx);
 }
 
+static void open_system_backends(struct find_context *ctx)
+{
+    struct filters_context *f_ctx = &ctx->f_ctx;
+
+    f_ctx->backend_count = ctx->backend_count;
+    f_ctx->backend = xmalloc(f_ctx->backend_count);
+
+    for (int i = 0; i < ctx->backend_count; ++i) {
+        struct rbh_value_map *info_map;
+        struct rbh_raw_uri *raw_uri;
+        const char *command_backend;
+        const char *mountpoint;
+        struct rbh_uri *uri;
+        char *string_uri;
+
+        info_map = rbh_backend_get_info(ctx->backends[i],
+                                        RBH_INFO_COMMAND_BACKEND |
+                                        RBH_INFO_MOUNTPOINT);
+        if (info_map == NULL)
+            error(EXIT_FAILURE, errno,
+                  "Failed to retrieve the command backend and mountpoint from '%s', aborting\n",
+                  ctx->backends[i]->name);
+
+        assert(info_map->count == 2);
+
+        assert(info_map->pairs[0].value->type == RBH_VT_STRING);
+        command_backend = info_map->pairs[0].value->string;
+        assert(info_map->pairs[1].value->type == RBH_VT_STRING);
+        mountpoint = info_map->pairs[1].value->string;
+
+        if (asprintf(&string_uri, "rbh:%s:%s", command_backend, mountpoint) < 0)
+            error(EXIT_FAILURE, errno,
+                  "Failed to asprintf the rbh URI using '%s' and '%s'\n",
+                  command_backend, mountpoint);
+
+        raw_uri = rbh_raw_uri_from_string(string_uri);
+        if (raw_uri == NULL)
+            error(EXIT_FAILURE, errno, "Cannot open URI '%s'", string_uri);
+
+        free(string_uri);
+        uri = rbh_uri_from_raw_uri(raw_uri);
+        free(raw_uri);
+        if (uri == NULL)
+            error(EXIT_FAILURE, errno, "Cannot detect given backend");
+
+        f_ctx->backend[i] = rbh_backend_and_branch_from_uri(uri, true);
+        free(uri);
+        if (f_ctx->backend[i] == NULL)
+            error(EXIT_FAILURE, errno, "Cannot open given backend");
+    }
+}
+
 int
 find_pre_action(struct find_context *ctx, const int index,
                 const enum action action)
 {
     switch (action) {
     case ACT_CHECKED_EXEC:
+        open_system_backends(ctx);
     case ACT_EXEC:
         if (index + 2 >= ctx->argc) // at least two args: -exec cmd ;
             error(EX_USAGE, 0, "missing argument to `%s'", action2str(action));
