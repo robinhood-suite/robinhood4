@@ -125,6 +125,10 @@ case "$cmd" in
         mongo "$db" --eval \
             'db.info.find({}, {"_id": 0, "backend_source": 1})'
         ;;
+    command_backend)
+        mongo "$db" --eval \
+            'db.info.find({}, {"_id": 0, "command_backend": 1})'
+        ;;
     fsevents)
         mongo "$db" --eval \
             'db.info.findOne({}, { "_id":0, "fsevents_source":1})

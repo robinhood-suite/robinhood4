@@ -1,5 +1,5 @@
 /* This file is part of RobinHood 4
- * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2026 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifer: LGPL-3.0-or-later
@@ -733,6 +733,50 @@ mongo_insert_backend_source(mongoc_collection_t *collection,
 }
 
 static int
+mongo_insert_command_backend(mongoc_collection_t *collection,
+                             const struct rbh_value *command_backend)
+{
+    bson_t bson_command_backend;
+    bson_error_t error;
+    bson_t *update;
+    bson_t *filter;
+    bson_t *opts;
+    bool result;
+    int rc = 0;
+
+    assert(command_backend->type == RBH_VT_STRING);
+
+    filter = BCON_NEW("_id", "backend_info");
+    opts = BCON_NEW("upsert", BCON_BOOL(true));
+    update = bson_new();
+
+    if (!(BSON_APPEND_DOCUMENT_BEGIN(update, "$set", &bson_command_backend)
+          && BSON_APPEND_RBH_VALUE(&bson_command_backend, "command_backend",
+                                   command_backend)
+          && bson_append_document_end(update, &bson_command_backend))) {
+        fprintf(stderr,
+                "Failed to create bson to insert command_backend '%s'\n",
+                command_backend->string);
+        rc = -1;
+        goto end;
+    }
+
+    result = mongoc_collection_update_one(collection, filter, update, opts,
+                                          NULL, &error);
+    if (!result) {
+        fprintf(stderr, "Upsert failed: %s\n", error.message);
+        rc = -1;
+    }
+
+end:
+    bson_destroy(filter);
+    bson_destroy(opts);
+    bson_destroy(update);
+
+    return rc;
+}
+
+static int
 mongo_insert_mountpoint(mongoc_collection_t *collection,
                         const struct rbh_value *mountpoint)
 {
@@ -906,14 +950,14 @@ mongo_insert_metadata(void *backend, const struct rbh_value_map *map_value,
     for (size_t i = 0 ; i < map_value->count ; i++) {
         const struct rbh_value_pair *pair = &map_value->pairs[i];
 
-        if (strcmp(pair->key, "backend_source") == 0 &&
-            pair->value->type == RBH_VT_SEQUENCE) {
+        if (strcmp(pair->key, "backend_source") == 0)
             rc2 = mongo_insert_backend_source(collection, pair->value);
-        } else if (strcmp(pair->key, "mountpoint") == 0) {
+        else if (strcmp(pair->key, "command_backend") == 0)
+            rc2 = mongo_insert_command_backend(collection, pair->value);
+        else if (strcmp(pair->key, "mountpoint") == 0)
             rc2 = mongo_insert_mountpoint(collection, pair->value);
-        } else if (strcmp(pair->key, "fsevents_source") == 0) {
+        else if (strcmp(pair->key, "fsevents_source") == 0)
             rc2 = mongo_insert_fsevents_source(collection, pair->value);
-        }
 
         rc = (rc ? : rc2);
     }

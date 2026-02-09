@@ -1,5 +1,5 @@
 /* This file is part of Robinhood 4
- * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2026 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifer: LGPL-3.0-or-later
@@ -101,9 +101,15 @@ insert_metadata(struct rbh_backend *backend, struct rbh_value_map *map,
 }
 
 static void
-sync_source()
+sync_source(char *cmd_backend)
 {
+    struct rbh_value command_backend_value = {
+        .type = RBH_VT_STRING,
+        .string = cmd_backend
+    };
     struct rbh_value_map *info_map;
+    struct rbh_value_map sync_map;
+    struct rbh_value_pair pair;
 
     info_map = rbh_backend_get_info(from, RBH_INFO_BACKEND_SOURCE);
     if (info_map == NULL) {
@@ -113,7 +119,14 @@ sync_source()
 
     assert(info_map->count == 1);
 
+    pair.key = "command_backend";
+    pair.value = &command_backend_value;
+
+    sync_map.pairs = &pair;
+    sync_map.count = 1;
+
     insert_metadata(to, info_map, RBH_DT_INFO, "backend info");
+    insert_metadata(to, &sync_map, RBH_DT_INFO, "command backend");
 }
 
 static void
@@ -581,7 +594,7 @@ list_capabilities(char *uri)
 
 static struct rbh_backend *
 get_source_backend_from_uri(const char *string, bool read_only,
-                            char *mountpoint)
+                            char *mountpoint, char **cmd_backend)
 {
     struct rbh_backend *backend;
     struct rbh_raw_uri *raw_uri;
@@ -596,6 +609,7 @@ get_source_backend_from_uri(const char *string, bool read_only,
     if (uri == NULL)
         error(EXIT_FAILURE, errno, "Cannot detect given backend");
 
+    *cmd_backend = xstrdup(uri->backend);
     if (uri->fsname[0] != '/') {
         if (realpath(uri->fsname, mountpoint) == NULL) {
             /* Register the mountpoint as given, since it most likely doesn't
@@ -831,6 +845,7 @@ main(int argc, char *argv[])
     struct rbh_metadata *metadata;
     char mountpoint[PATH_MAX];
     char *command_line;
+    char *cmd_backend;
     time_t sync_debut;
     time_t sync_end;
     int rc;
@@ -896,11 +911,13 @@ main(int argc, char *argv[])
         error(EX_USAGE, 0, "unexpected argument: %s", argv[2]);
 
     /* Parse SOURCE */
-    from = get_source_backend_from_uri(argv[0], true, (char *) mountpoint);
+    from = get_source_backend_from_uri(argv[0], true, (char *) mountpoint,
+                                       &cmd_backend);
     /* Parse DEST */
     to = rbh_backend_from_uri(argv[1], false);
 
-    sync_source();
+    sync_source(cmd_backend);
+    free(cmd_backend);
     sync_mountpoint(mountpoint);
 
     sync_debut = time(NULL);
