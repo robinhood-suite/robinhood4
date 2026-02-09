@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # This file is part of RobinHood 4
-# Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
+# Copyright (C) 2026 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
@@ -26,7 +26,13 @@ test_posix()
     local backend_source=$(do_db source "$testdb")
 
     if ! echo "$backend_source" | grep "posix"; then
-        error "Source backend should contain POSIX plugin"
+        error "Source backends should contain POSIX plugin"
+    fi
+
+    local command_backend=$(do_db command_backend "$testdb")
+
+    if ! echo "$command_backend" | grep "posix"; then
+        error "Source command's backend should be 'posix'"
     fi
 }
 
@@ -55,6 +61,12 @@ EOF
         error "Backend source does not contain 'posix'"
     echo "$backend_source" | grep retention ||
         error "Backend source does not contain 'retention'"
+
+    local command_backend=$(do_db command_backend "$testdb")
+
+    if ! echo "$command_backend" | grep "retention"; then
+        error "Source command's backend should be 'retention'"
+    fi
 }
 
 test_lustre()
@@ -85,6 +97,12 @@ EOF
         error "Backend source does not contain 'lustre'"
     echo "$backend_source" | grep retention ||
         error "Backend source does not contain 'retention'"
+
+    local command_backend=$(do_db command_backend "$testdb")
+
+    if ! echo "$command_backend" | grep "lustre"; then
+        error "Source command's backend should be 'lustre'"
+    fi
 }
 
 ################################################################################
