@@ -1,5 +1,5 @@
 /* This file is part of RobinHood 4
- * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2026 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifer: LGPL-3.0-or-later
@@ -252,6 +252,7 @@ enum rbh_info {
     RBH_INFO_LAST_SYNC       = 1 << 6,
     RBH_INFO_MOUNTPOINT      = 1 << 7,
     RBH_INFO_SIZE            = 1 << 8,
+    RBH_INFO_COMMAND_BACKEND = 1 << 9,
 };
 
 /**
