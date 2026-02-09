@@ -1,5 +1,5 @@
 /* This file is part of Robinhood 4
- * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2026 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifer: LGPL-3.0-or-later
@@ -268,7 +268,7 @@ sink_exit(void)
 }
 
 static struct enrich_iter_builder *
-enrich_iter_builder_from_uri(const char *uri)
+enrich_iter_builder_from_uri(const char *uri, char **backend_source)
 {
     struct enrich_iter_builder *builder;
     struct rbh_backend *uri_backend;
@@ -286,6 +286,8 @@ enrich_iter_builder_from_uri(const char *uri)
     errno = save_errno;
     if (rbh_uri == NULL)
         error(EXIT_FAILURE, errno, "cannot parse URI '%s'", uri);
+
+    *backend_source = xstrdup(rbh_uri->backend);
 
     /* XXX: this a temporary hack because the Hestia backend cannot properly
      * build at the moment.
@@ -655,9 +657,16 @@ feed(struct sink **sink, struct source *source,
 }
 
 static int
-insert_backend_source()
+insert_backend_source(char *cmd_backend)
 {
+    struct rbh_value command_backend_value = {
+        .type = RBH_VT_STRING,
+        .string = cmd_backend
+    };
     struct rbh_value_map *info_map;
+    struct rbh_value_map sync_map;
+    struct rbh_value_pair pair;
+
 
     info_map = enrich_iter_builder_get_source_backends(enrich_builder);
     if (info_map == NULL) {
@@ -667,6 +676,17 @@ insert_backend_source()
 
     if (sink_insert_metadata(sink[0], info_map, RBH_DT_INFO)) {
         fprintf(stderr, "Failed to set backend_info\n");
+        return -1;
+    }
+
+    pair.key = "command_backend";
+    pair.value = &command_backend_value;
+
+    sync_map.pairs = &pair;
+    sync_map.count = 1;
+
+    if (sink_insert_metadata(sink[0], &sync_map, RBH_DT_INFO)) {
+        fprintf(stderr, "Failed to set command_backend\n");
         return -1;
     }
 
@@ -770,6 +790,7 @@ main(int argc, char *argv[])
         .batch_size = DEFAULT_BATCH_SIZE,
     };
     uint64_t max_changelog = 0;
+    char *cmd_backend = NULL;
     char *dump_file = NULL;
     int rc;
     char c;
@@ -796,7 +817,7 @@ main(int argc, char *argv[])
             dump_file = xstrdup(optarg);
             break;
         case 'e':
-            enrich_builder = enrich_iter_builder_from_uri(optarg);
+            enrich_builder = enrich_iter_builder_from_uri(optarg, &cmd_backend);
             if (enrich_builder == NULL)
                 error(EXIT_FAILURE, errno, "invalid enrich URI '%s'", optarg);
             break;
@@ -851,9 +872,11 @@ main(int argc, char *argv[])
     source = source_new(source_uri, dump_file, max_changelog);
 
     if (enrich_builder) {
-        if (insert_backend_source() && errno != ENOTSUP)
+        if (insert_backend_source(cmd_backend) && errno != ENOTSUP)
             error(EX_USAGE, EINVAL,
                   "Failed to insert source backends in destination");
+
+        free(cmd_backend);
         if (insert_mountpoint() && errno != ENOTSUP)
             error(EX_USAGE, EINVAL,
                   "Failed to insert mountpoint in destination\n");
