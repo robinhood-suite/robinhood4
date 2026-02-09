@@ -41,6 +41,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "89c30240_c02b076a",
+        "filename": "librobinhood/src/plugins/ldiskfs/scan_target.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2026-02-09T14:36:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "80c6f29c_b5f94149",
+      "range": {
+        "startLine": 22,
+        "startChar": 3,
+        "endLine": 22,
+        "endChar": 29
+      },
+      "revId": "0ad9bd7c84c11de6ebf77a998afa19bdba5e1506",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5c4b3635_07ebdad0",
@@ -54,6 +78,24 @@
       "writtenOn": "2026-01-06T09:43:21Z",
       "side": 1,
       "message": "question: Shouldn’t it be `dentry-\u003einode` here?",
+      "revId": "0ad9bd7c84c11de6ebf77a998afa19bdba5e1506",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a67baf69_e8b7b498",
+        "filename": "librobinhood/src/plugins/ldiskfs/scan_target.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2026-02-09T14:36:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5c4b3635_07ebdad0",
       "revId": "0ad9bd7c84c11de6ebf77a998afa19bdba5e1506",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
@@ -98,6 +140,48 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "791e4d38_9c3a709b",
+        "filename": "librobinhood/src/plugins/ldiskfs/scan_target.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2026-02-09T14:36:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8df193aa_9af34833",
+      "range": {
+        "startLine": 71,
+        "startChar": 17,
+        "endLine": 71,
+        "endChar": 43
+      },
+      "revId": "0ad9bd7c84c11de6ebf77a998afa19bdba5e1506",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ff88308_7994fb51",
+        "filename": "librobinhood/src/plugins/ldiskfs/scan_target.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2026-02-09T14:36:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4ae1d1db_7b4dbb96",
+      "revId": "0ad9bd7c84c11de6ebf77a998afa19bdba5e1506",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e7cb8d64_67de3ac3",
@@ -111,6 +195,30 @@
       "writtenOn": "2026-01-06T09:43:21Z",
       "side": 1,
       "message": "idem",
+      "range": {
+        "startLine": 140,
+        "startChar": 12,
+        "endLine": 141,
+        "endChar": 29
+      },
+      "revId": "0ad9bd7c84c11de6ebf77a998afa19bdba5e1506",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7ae8bf07_74c63b30",
+        "filename": "librobinhood/src/plugins/ldiskfs/scan_target.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2026-02-09T14:36:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e7cb8d64_67de3ac3",
       "range": {
         "startLine": 140,
         "startChar": 12,
