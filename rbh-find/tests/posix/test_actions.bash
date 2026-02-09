@@ -64,7 +64,7 @@ test_checked_exec()
 
     echo "blob" > shouldnt_be_rm
 
-    rbh_find "rbh:$db:$testdb" -size 0 -checked-exec rm {} ";"
+    rbh_find "rbh:$db:$testdb" -empty -checked-exec rm {} ";"
 
     if [[ -f should_be_rm ]]; then
         error "File 'should_be_rm' should have been deleted"
