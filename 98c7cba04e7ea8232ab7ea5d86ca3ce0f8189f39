@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e8bfb72e_b5a1793f",
+        "filename": "librobinhood/src/plugins/ldiskfs/dcache.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2026-02-09T14:35:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8cd3c1e3_fd135f55",
+      "range": {
+        "startLine": 17,
+        "startChar": 4,
+        "endLine": 19,
+        "endChar": 20
+      },
+      "revId": "98c7cba04e7ea8232ab7ea5d86ca3ce0f8189f39",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0bf81ac5_89997563",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-12-08T13:50:29Z",
       "side": 1,
       "message": "sugest: xmalloc",
+      "range": {
+        "startLine": 30,
+        "startChar": 4,
+        "endLine": 32,
+        "endChar": 20
+      },
+      "revId": "98c7cba04e7ea8232ab7ea5d86ca3ce0f8189f39",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2ec79667_30417f53",
+        "filename": "librobinhood/src/plugins/ldiskfs/dcache.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2026-02-09T14:35:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0bf81ac5_89997563",
       "range": {
         "startLine": 30,
         "startChar": 4,
