@@ -1,5 +1,5 @@
 /* This file is part of RobinHood 4
- * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2026 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifer: LGPL-3.0-or-later
@@ -92,7 +92,7 @@ _find(struct find_context *ctx, int backend_index, enum action action,
         if (fsentry == NULL)
             break;
 
-        count += find_exec_action(ctx, backend_index, action, fsentry);
+        count += find_exec_action(ctx, backend_index, filter, action, fsentry);
         free(fsentry);
     } while (true);
 
