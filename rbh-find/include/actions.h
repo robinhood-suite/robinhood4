@@ -1,5 +1,5 @@
 /* This file is part of RobinHood 4
- * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2026 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifer: LGPL-3.0-or-later
@@ -42,6 +42,7 @@ find_pre_action(struct find_context *ctx, const int index,
  *
  * @param ctx            find's context for this execution
  * @param backend_index  which backend is being queried
+ * @param filter         the filter used to get the fsentry to act on
  * @param action         the type of action to execute
  * @param fsentry        the fsentry to act on
  *
@@ -50,6 +51,7 @@ find_pre_action(struct find_context *ctx, const int index,
 int
 find_exec_action(struct find_context *ctx,
                  size_t backend_index,
+                 const struct rbh_filter *filter,
                  enum action action,
                  struct rbh_fsentry *fsentry);
 

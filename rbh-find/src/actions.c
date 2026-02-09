@@ -25,6 +25,7 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
+#include <robinhood/filters/core.h>
 #include <robinhood/projection.h>
 #include <robinhood/statx.h>
 #include <robinhood/utils.h>
@@ -698,15 +699,20 @@ exec_command(struct find_context *ctx, struct rbh_fsentry *fsentry)
 static int
 check_real_fsentry_match_filters(struct find_context *ctx,
                                  size_t backend_index,
+                                 const struct rbh_filter *filter,
                                  struct rbh_fsentry *fsentry)
 {
-    return 0;
+    for (int i = 0; i < ctx->f_ctx.backend_count; ++i)
+        if (!rbh_check_real_fsentry_match_filter(ctx->f_ctx.backend[i],
+                                                 filter, fsentry))
+            return 0;
+
+    return 1;
 }
 
 int
-find_exec_action(struct find_context *ctx,
-                 size_t backend_index,
-                 enum action action,
+find_exec_action(struct find_context *ctx, size_t backend_index,
+                 const struct rbh_filter *filter, enum action action,
                  struct rbh_fsentry *fsentry)
 {
     const struct rbh_value *path;
@@ -728,13 +734,9 @@ find_exec_action(struct find_context *ctx,
             return rc;
         }
     case ACT_CHECKED_EXEC:
-        {
-            int rc;
-
-            rc = check_real_fsentry_match_filters(ctx, backend_index, fsentry);
-            if (rc)
-                return rc;
-        }
+        if (check_real_fsentry_match_filters(ctx, backend_index, filter,
+                                             fsentry))
+            return 0;
     case ACT_EXEC:
         return exec_command(ctx, fsentry);
     case ACT_PRINT:

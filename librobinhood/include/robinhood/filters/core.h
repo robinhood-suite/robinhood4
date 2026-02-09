@@ -81,4 +81,20 @@ complete_rbh_filter(const struct rbh_filter *filter,
                     struct rbh_backend *backend,
                     const struct rbh_filter_options *options);
 
+/**
+ * Check the storage system's fsentry corresponding to \p fsentry actually
+ * matches the given \p filter.
+ *
+ * @param  backend  the backend from which to fetch the actual fsentry
+ * @param  filter   the filter against which to check the actual fsentry
+ * @param  fsentry  the DB fsentry whose original should be fetched
+ *
+ * @return          0 if the actual fsentry matches the filter, 1 otherwise with
+ *                  ERRNO set
+ */
+int
+rbh_check_real_fsentry_match_filter(struct rbh_backend *backend,
+                                    const struct rbh_filter *filter,
+                                    struct rbh_fsentry *fsentry);
+
 #endif
