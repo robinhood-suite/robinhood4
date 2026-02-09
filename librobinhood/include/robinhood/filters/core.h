@@ -1,5 +1,5 @@
 /* This file is part of RobinHood 4
- * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2026 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifer: LGPL-3.0-or-later
@@ -34,6 +34,10 @@ struct filters_context {
     /** The type of information stored in the backends */
     struct rbh_plugin_or_extension *info_pe;
     size_t info_pe_count;
+
+    /** Backends associated with the plugins in info_pe */
+    struct rbh_backend **backend;
+    size_t backend_count;
 
     /** If a filter needs to be completed by an information of the backend */
     bool need_prefetch;
