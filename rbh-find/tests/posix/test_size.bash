@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # This file is part of RobinHood 4
-# Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
+# Copyright (C) 2026 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
@@ -190,6 +190,25 @@ test_branch_plus_1M_minus_2G()
         difflines "/dir/1.xM" "/dir/4M"
 }
 
+test_zero()
+{
+    touch "file1"
+    touch "file2"
+
+    echo "blobblobblob" > "file2"
+
+    rbh_sync "rbh:posix:." "rbh:$db:$testdb"
+
+    rbh_find "rbh:$db:$testdb" -size -0 | sort |
+        difflines "/file1"
+    rbh_find "rbh:$db:$testdb" -size 0 | sort |
+        difflines "/" "/file2"
+    rbh_find "rbh:$db:$testdb" -size +0 | sort |
+        difflines "/" "/file2"
+    rbh_find "rbh:$db:$testdb" -size 0w | sort |
+        difflines
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
@@ -199,7 +218,8 @@ declare -a tests=(test_equal_1K test_plus_1K test_plus_1K_minus_1M
                   test_plus_1M_minus_2G test_branch_equal_1K
                   test_branch_plus_1K test_branch_plus_1K_minus_1M
                   test_branch_equal_1M test_branch_minus_1M
-                  test_branch_plus_3M test_branch_plus_1M_minus_2G)
+                  test_branch_plus_3M test_branch_plus_1M_minus_2G
+                  test_zero)
 
 tmpdir=$(mktemp --directory)
 trap -- "rm -rf '$tmpdir'" EXIT
