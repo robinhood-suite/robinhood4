@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "673946f5_e3cdfbdd",
+        "filename": "librobinhood/src/policyengine.c",
+        "patchSetId": 18
+      },
+      "lineNbr": 501,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-02-10T09:12:34Z",
+      "side": 1,
+      "message": "style: order",
+      "range": {
+        "startLine": 499,
+        "startChar": 8,
+        "endLine": 501,
+        "endChar": 32
+      },
+      "revId": "ceaf28f6518f0c13b86565e4342d374320a70f8b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7098e8ff_e479c6a0",
+        "filename": "librobinhood/src/policyengine.c",
+        "patchSetId": 18
+      },
+      "lineNbr": 514,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-02-10T09:12:34Z",
+      "side": 1,
+      "message": "style: declare it at the start of the block",
+      "range": {
+        "startLine": 514,
+        "startChar": 8,
+        "endLine": 514,
+        "endChar": 28
+      },
+      "revId": "ceaf28f6518f0c13b86565e4342d374320a70f8b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
