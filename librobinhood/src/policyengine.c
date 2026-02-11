@@ -9,8 +9,10 @@
 #include <fnmatch.h>
 #include <limits.h>
 #include <regex.h>
+#include <stddef.h>
 #include <stdbool.h>
 #include <string.h>
+#include <stdlib.h>
 #include <sys/stat.h>
 #include <sysexits.h>
 
@@ -434,12 +436,219 @@ rbh_check_real_fsentry_match_filter(struct rbh_backend *backend,
     return 0;
 }
 
+/**
+ * Parse an action string into a structured rbh_action.
+ *
+ * @param action_str  raw action string from the policy (e.g. "common:delete",
+ *                    "cmd:rsync ...", "py:func").
+ *
+ * @return            a parsed rbh_action describing the action type and its
+ *                    associated value. Unknown formats are returned as
+ *                    RBH_ACTION_UNKNOWN.
+ *
+ * This function performs lightweight parsing and is typically used together
+ * with an action cache to avoid repeated parsing.
+ */
+static struct rbh_action
+rbh_parse_action(const char *action_str)
+{
+    struct rbh_action act = {0};
+
+    if (action_str == NULL) {
+        act.type = RBH_ACTION_UNKNOWN;
+        act.value = NULL;
+        return act;
+    }
+
+    if (strncmp(action_str, "cmd:", 4) == 0) {
+        act.type = RBH_ACTION_CMD;
+        act.value = action_str + 4;
+        return act;
+    }
+
+    if (strncmp(action_str, "py:", 3) == 0) {
+        act.type = RBH_ACTION_PYTHON;
+        act.value = action_str + 3;
+        return act;
+    }
+
+    if (strncmp(action_str, "common:", sizeof "common:" - 1) == 0) {
+        const char *sub = action_str + (sizeof "common:" - 1);
+        if (strcmp(sub, "delete") == 0) {
+            act.type = RBH_ACTION_DELETE;
+            act.value = NULL;
+            return act;
+        } else if (strcmp(sub, "print") == 0) {
+            act.type = RBH_ACTION_PRINT;
+            act.value = NULL;
+            return act;
+        }
+    }
+
+    act.type = RBH_ACTION_UNKNOWN;
+    act.value = action_str;
+    return act;
+}
+
+/**
+ * Initialize the action cache for a policy.
+ *
+ * This function sets the default action to RBH_ACTION_UNSET and allocates
+ * the per‑rule action array when the policy defines rules. All rule actions
+ * are initialized to RBH_ACTION_UNSET.
+ *
+ * @param policy    the policy whose rules determine the cache size
+ * @param cache     the action cache to initialize
+ */
+static void
+rbh_pe_actions_init(const struct rbh_policy *policy,
+                    struct rbh_action_cache *cache)
+{
+    cache->default_action.type = RBH_ACTION_UNSET;
+    cache->default_action.value = NULL;
+    cache->rule_actions = NULL;
+    cache->rule_count = policy->rule_count;
+
+    if (policy->rule_count == 0)
+        return;
+
+    cache->rule_actions = malloc(sizeof(*cache->rule_actions) *
+                                 policy->rule_count);
+    if (cache->rule_actions == NULL)
+        error(EXIT_FAILURE, errno, "malloc failed");
+
+    for (size_t i = 0; i < policy->rule_count; i++) {
+        cache->rule_actions[i].type = RBH_ACTION_UNSET;
+        cache->rule_actions[i].value = NULL;
+    }
+}
+
+/**
+ * Destroy the action cache.
+ *
+ * This function frees the per‑rule action array if it was allocated and
+ * resets the cache fields to their default values.
+ *
+ * @param cache     the action cache to destroy
+ */
+static void
+rbh_pe_actions_destroy(struct rbh_action_cache *cache)
+{
+    if (cache->rule_actions)
+        free(cache->rule_actions);
+    cache->rule_actions = NULL;
+    cache->rule_count = 0;
+}
+
+/**
+ * Select the action to apply for a matched entry.
+ *
+ * If the matched rule has an associated cached action, it is returned.
+ * Otherwise, the action is parsed from the rule and stored in the cache.
+ * If no rule matched, the policy's default action is parsed and cached
+ * on first use.
+ *
+ * @param policy        the policy containing rule and default actions
+ * @param cache         the action cache used to store parsed actions
+ * @param has_rule      whether a rule matched the entry
+ * @param matched_index index of the matched rule when has_rule is true
+ *
+ * @return              the selected action
+ */
+static struct rbh_action
+rbh_pe_select_action(const struct rbh_policy *policy,
+                     struct rbh_action_cache *cache,
+                     bool has_rule,
+                     size_t matched_index)
+{
+    if (has_rule && cache->rule_actions != NULL) {
+        if (cache->rule_actions[matched_index].type == RBH_ACTION_UNSET)
+            cache->rule_actions[matched_index] =
+                rbh_parse_action(policy->rules[matched_index].action);
+        return cache->rule_actions[matched_index];
+    }
+
+    if (cache->default_action.type == RBH_ACTION_UNSET)
+        cache->default_action = rbh_parse_action(policy->action);
+
+    return cache->default_action;
+}
+
+/**
+ * Match a rule against a fresh fsentry.
+ *
+ * This function iterates over all rules in the policy and returns the first
+ * rule whose filter matches the provided fsentry. A rule with a NULL filter
+ * matches unconditionally.
+ *
+ * @param policy        the policy containing the rules to evaluate
+ * @param fresh         the fresh fsentry to test against rule filters
+ * @param matched_rule  output pointer set to the matched rule, or NULL
+ * @param matched_index output index of the matched rule when one is found
+ *
+ * @return              true if a rule matched, false otherwise
+ */
+static bool
+rbh_pe_match_rule(const struct rbh_policy *policy,
+                  const struct rbh_fsentry *fresh,
+                  const struct rbh_rule **matched_rule,
+                  size_t *matched_index)
+{
+    for (size_t i = 0; i < policy->rule_count; i++) {
+        const struct rbh_rule *rule = &policy->rules[i];
+        if (rule->filter == NULL ||
+            rbh_filter_matches_fsentry(rule->filter, fresh)) {
+            *matched_rule = rule;
+            *matched_index = i;
+            return true;
+        }
+    }
+
+    *matched_rule = NULL;
+    return false;
+}
+
+/**
+ * Apply an action to a filesystem entry.
+ *
+ * This function dispatches the action based on its type. The specific
+ * behavior for each action type is implemented elsewhere.
+ *
+ * @param action        the action to apply
+ * @param entry         the fsentry on which the action is applied
+ * @param matched_rule  the rule that selected this action, or NULL
+ * @param policy        the policy being evaluated
+ *
+ * @return              0
+ */
+static int
+rbh_pe_apply_action(const struct rbh_action *action,
+                    const struct rbh_fsentry *entry,
+                    const struct rbh_rule *matched_rule,
+                    const struct rbh_policy *policy)
+{
+    switch (action->type) {
+    case RBH_ACTION_PRINT:
+        break;
+    case RBH_ACTION_DELETE:
+        break;
+    case RBH_ACTION_CMD:
+        break;
+    case RBH_ACTION_PYTHON:
+        break;
+    default:
+        break;
+    }
+    return 0;
+}
+
 int
 rbh_pe_execute(struct rbh_mut_iterator *mirror_iter,
                struct rbh_backend *mirror_backend,
                const char *fs_uri,
                const struct rbh_policy *policy)
 {
+    struct rbh_action_cache action_cache;
     struct rbh_fsentry *mirror_entry;
     struct rbh_backend *fs_backend;
     struct rbh_raw_uri *raw_uri;
@@ -466,9 +675,14 @@ rbh_pe_execute(struct rbh_mut_iterator *mirror_iter,
               "rbh_backend_and_branch_from_uri failed for '%s'", fs_uri);
     }
 
+    rbh_pe_actions_init(policy, &action_cache);
+
     while (true) {
         const struct rbh_rule *matched_rule = NULL;
+        struct rbh_action current_action;
+        bool has_matched_rule = false;
         struct rbh_fsentry *fresh;
+        size_t matched_index = 0;
 
         errno = 0;
         mirror_entry = rbh_mut_iter_next(mirror_iter);
@@ -480,6 +694,7 @@ rbh_pe_execute(struct rbh_mut_iterator *mirror_iter,
                 continue;
 
             fprintf(stderr, "Error during iteration: %s\n", strerror(errno));
+            rbh_pe_actions_destroy(&action_cache);
             rbh_backend_destroy(fs_backend);
             return -1;
         }
@@ -507,9 +722,17 @@ rbh_pe_execute(struct rbh_mut_iterator *mirror_iter,
             }
         }
 
+        has_matched_rule = rbh_pe_match_rule(policy, fresh,
+                                             &matched_rule, &matched_index);
+        current_action = rbh_pe_select_action(policy, &action_cache,
+                                              has_matched_rule, matched_index);
+
+        rbh_pe_apply_action(&current_action, fresh, matched_rule, policy);
+
         free(fresh);
     }
 
+    rbh_pe_actions_destroy(&action_cache);
     rbh_backend_destroy(fs_backend);
     rbh_backend_destroy(mirror_backend);
     rbh_mut_iter_destroy(mirror_iter);
