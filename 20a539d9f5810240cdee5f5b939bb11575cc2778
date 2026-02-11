@@ -3,6 +3,40 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6afb188c_d0f0a691",
+        "filename": "librobinhood/src/plugins/posix/iterators/mfu/iterator.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-02-11T09:01:47Z",
+      "side": 1,
+      "message": "comment: really needs to refactor this function",
+      "revId": "20a539d9f5810240cdee5f5b939bb11575cc2778",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7015b560_35902206",
+        "filename": "librobinhood/src/plugins/posix/iterators/mfu/iterator.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-02-11T09:01:47Z",
+      "side": 1,
+      "message": "minor: to remove",
+      "revId": "20a539d9f5810240cdee5f5b939bb11575cc2778",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bd7af055_5ef5b71f",
         "filename": "librobinhood/src/plugins/posix/posix.c",
         "patchSetId": 1
