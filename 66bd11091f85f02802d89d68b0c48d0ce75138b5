@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e8b2b204_b837acfa",
+        "filename": "rbh-sync/tests/posix/test_posix_db_sync.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 584,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-02-11T11:06:16Z",
+      "side": 1,
+      "message": "minor: remove this",
+      "range": {
+        "startLine": 584,
+        "startChar": 4,
+        "endLine": 584,
+        "endChar": 51
+      },
+      "revId": "66bd11091f85f02802d89d68b0c48d0ce75138b5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
