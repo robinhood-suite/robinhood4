@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4125590a_bf7bd2b7",
+        "filename": "librobinhood/src/policyengine.c",
+        "patchSetId": 20
+      },
+      "lineNbr": 483,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-02-11T15:15:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "64a64b87_bf9f9d93",
+      "range": {
+        "startLine": 483,
+        "startChar": 8,
+        "endLine": 483,
+        "endChar": 31
+      },
+      "revId": "88e43c88f24b7386d02e925959555fc17ea2b1fe",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5250927e_877d1d38",
@@ -37,6 +61,30 @@
       "writtenOn": "2026-02-11T09:04:56Z",
       "side": 1,
       "message": "minor: there\u0027s already a function that does this in the fsentry API",
+      "range": {
+        "startLine": 508,
+        "startChar": 19,
+        "endLine": 508,
+        "endChar": 49
+      },
+      "revId": "88e43c88f24b7386d02e925959555fc17ea2b1fe",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "feb98810_b7f5d152",
+        "filename": "librobinhood/src/policyengine.c",
+        "patchSetId": 20
+      },
+      "lineNbr": 508,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-02-11T15:15:00Z",
+      "side": 1,
+      "message": "I can\u0027t use it because the function in fsentry crashes the program if `path_value \u003d\u003d NULL`, whereas here, I don\u0027t want my policy execution to fail just because an entry doesn\u0027t have a path. So I skip the entry.",
+      "parentUuid": "5250927e_877d1d38",
       "range": {
         "startLine": 508,
         "startChar": 19,
@@ -70,6 +118,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "da9f8e15_886eee09",
+        "filename": "librobinhood/src/policyengine.c",
+        "patchSetId": 20
+      },
+      "lineNbr": 519,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-02-11T15:15:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1347279c_587bed64",
+      "range": {
+        "startLine": 514,
+        "startChar": 8,
+        "endLine": 519,
+        "endChar": 1
+      },
+      "revId": "88e43c88f24b7386d02e925959555fc17ea2b1fe",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "eb50fa21_c425f9b5",
@@ -93,6 +165,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "988d3d70_3c97874b",
+        "filename": "librobinhood/src/policyengine.c",
+        "patchSetId": 20
+      },
+      "lineNbr": 520,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-02-11T15:15:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eb50fa21_c425f9b5",
+      "range": {
+        "startLine": 520,
+        "startChar": 16,
+        "endLine": 520,
+        "endChar": 40
+      },
+      "revId": "88e43c88f24b7386d02e925959555fc17ea2b1fe",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "96d4914c_84c0641c",
@@ -106,6 +202,30 @@
       "writtenOn": "2026-02-11T09:04:56Z",
       "side": 1,
       "message": "minor: print to stderr",
+      "range": {
+        "startLine": 529,
+        "startChar": 12,
+        "endLine": 529,
+        "endChar": 18
+      },
+      "revId": "88e43c88f24b7386d02e925959555fc17ea2b1fe",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5c4013ce_2342b68c",
+        "filename": "librobinhood/src/policyengine.c",
+        "patchSetId": 20
+      },
+      "lineNbr": 529,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-02-11T15:15:00Z",
+      "side": 1,
+      "message": "It was mainly for me, for testing, I will remove it and add it back when I add the verbose mode.",
+      "parentUuid": "96d4914c_84c0641c",
       "range": {
         "startLine": 529,
         "startChar": 12,
@@ -164,6 +284,54 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "92fe4938_60214335",
+        "filename": "librobinhood/src/policyengine.c",
+        "patchSetId": 20
+      },
+      "lineNbr": 530,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-02-11T15:15:00Z",
+      "side": 1,
+      "message": "It seems correct to me that the C code should display the errors and logs. Alternatively, if we want Python to do this, we can also replace the `printf` statements with Python callbacks.",
+      "parentUuid": "e49a1a9d_d013ded8",
+      "range": {
+        "startLine": 529,
+        "startChar": 12,
+        "endLine": 530,
+        "endChar": 58
+      },
+      "revId": "88e43c88f24b7386d02e925959555fc17ea2b1fe",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "53028974_ffb07d2a",
+        "filename": "librobinhood/src/policyengine.c",
+        "patchSetId": 20
+      },
+      "lineNbr": 530,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-02-11T15:15:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e75fdd20_247f200f",
+      "range": {
+        "startLine": 529,
+        "startChar": 19,
+        "endLine": 530,
+        "endChar": 32
+      },
+      "revId": "88e43c88f24b7386d02e925959555fc17ea2b1fe",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "27c267e8_ccab41fd",
         "filename": "librobinhood/src/policyengine.c",
         "patchSetId": 20
@@ -175,6 +343,30 @@
       "writtenOn": "2026-02-11T09:04:56Z",
       "side": 1,
       "message": "question: what\u0027s the explanation behind this check ? Adding the answer as a comment would be nice",
+      "range": {
+        "startLine": 539,
+        "startChar": 12,
+        "endLine": 542,
+        "endChar": 13
+      },
+      "revId": "88e43c88f24b7386d02e925959555fc17ea2b1fe",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a22f3b2f_2a85eb2f",
+        "filename": "librobinhood/src/policyengine.c",
+        "patchSetId": 20
+      },
+      "lineNbr": 542,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-02-11T15:15:00Z",
+      "side": 1,
+      "message": "After discussing this with Guillaume, I\u0027m going to remove it. This check allowed to a rule defined without conditions to match all entries,but we\u0027re going to do the opposite: if the administrator defines a rule without conditions, this rule will be ignored.",
+      "parentUuid": "27c267e8_ccab41fd",
       "range": {
         "startLine": 539,
         "startChar": 12,
@@ -208,6 +400,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c00f0644_b0112571",
+        "filename": "librobinhood/src/policyengine.c",
+        "patchSetId": 20
+      },
+      "lineNbr": 546,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-02-11T15:15:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "08a2c4c1_61ad8b74",
+      "range": {
+        "startLine": 539,
+        "startChar": 12,
+        "endLine": 546,
+        "endChar": 13
+      },
+      "revId": "88e43c88f24b7386d02e925959555fc17ea2b1fe",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ea27702d_f88f9eb8",
@@ -231,6 +447,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa0b3ed0_71229e01",
+        "filename": "librobinhood/src/policyengine.c",
+        "patchSetId": 20
+      },
+      "lineNbr": 555,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-02-11T15:15:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ea27702d_f88f9eb8",
+      "range": {
+        "startLine": 549,
+        "startChar": 8,
+        "endLine": 555,
+        "endChar": 9
+      },
+      "revId": "88e43c88f24b7386d02e925959555fc17ea2b1fe",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8927860a_1296f0ed",
@@ -244,6 +484,30 @@
       "writtenOn": "2026-02-11T09:04:56Z",
       "side": 1,
       "message": "question: similarly, this should be printed by the PE IMO",
+      "range": {
+        "startLine": 561,
+        "startChar": 4,
+        "endLine": 561,
+        "endChar": 59
+      },
+      "revId": "88e43c88f24b7386d02e925959555fc17ea2b1fe",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad9a2a52_ce890fbb",
+        "filename": "librobinhood/src/policyengine.c",
+        "patchSetId": 20
+      },
+      "lineNbr": 561,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-02-11T15:15:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8927860a_1296f0ed",
       "range": {
         "startLine": 561,
         "startChar": 4,
