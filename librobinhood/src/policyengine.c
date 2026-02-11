@@ -46,7 +46,7 @@ rbh_collect_fsentries(struct rbh_backend *backend, struct rbh_filter *filter)
     return it;
 }
 
-static const char *
+__attribute__((unused)) static const char *
 rbh_pe_get_path(const struct rbh_fsentry *fsentry)
 {
     const struct rbh_value *path_value;
@@ -279,7 +279,7 @@ get_field_value(const struct rbh_fsentry *fsentry,
     }
 }
 
-static bool
+__attribute__((unused)) static bool
 rbh_filter_matches_fsentry(const struct rbh_filter *filter,
                            const struct rbh_fsentry *fsentry)
 {
@@ -401,7 +401,7 @@ rbh_filter_matches_fsentry(const struct rbh_filter *filter,
     }
 }
 
-static struct rbh_fsentry *
+__attribute__((unused)) static struct rbh_fsentry *
 rbh_pe_get_fresh_fsentry(struct rbh_backend *fs_backend,
                          const char *path)
 {
