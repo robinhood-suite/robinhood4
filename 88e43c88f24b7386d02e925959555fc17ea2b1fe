@@ -1,0 +1,257 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "64a64b87_bf9f9d93",
+        "filename": "librobinhood/src/policyengine.c",
+        "patchSetId": 20
+      },
+      "lineNbr": 483,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-02-11T09:04:56Z",
+      "side": 1,
+      "message": "minor: this does nothing, the `save_errno` tech is to put it before the free, because free may change it",
+      "range": {
+        "startLine": 483,
+        "startChar": 8,
+        "endLine": 483,
+        "endChar": 31
+      },
+      "revId": "88e43c88f24b7386d02e925959555fc17ea2b1fe",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5250927e_877d1d38",
+        "filename": "librobinhood/src/policyengine.c",
+        "patchSetId": 20
+      },
+      "lineNbr": 508,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-02-11T09:04:56Z",
+      "side": 1,
+      "message": "minor: there\u0027s already a function that does this in the fsentry API",
+      "range": {
+        "startLine": 508,
+        "startChar": 19,
+        "endLine": 508,
+        "endChar": 49
+      },
+      "revId": "88e43c88f24b7386d02e925959555fc17ea2b1fe",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1347279c_587bed64",
+        "filename": "librobinhood/src/policyengine.c",
+        "patchSetId": 20
+      },
+      "lineNbr": 519,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-02-11T09:04:56Z",
+      "side": 1,
+      "message": "style: no need for braces",
+      "range": {
+        "startLine": 514,
+        "startChar": 8,
+        "endLine": 519,
+        "endChar": 1
+      },
+      "revId": "88e43c88f24b7386d02e925959555fc17ea2b1fe",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eb50fa21_c425f9b5",
+        "filename": "librobinhood/src/policyengine.c",
+        "patchSetId": 20
+      },
+      "lineNbr": 520,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-02-11T09:04:56Z",
+      "side": 1,
+      "message": "major: as I\u0027ve done with the `checked-exec`, you can use `rbh_backend_branch` + `rbh_backend_root` to get this fsentry in a better way",
+      "range": {
+        "startLine": 520,
+        "startChar": 16,
+        "endLine": 520,
+        "endChar": 40
+      },
+      "revId": "88e43c88f24b7386d02e925959555fc17ea2b1fe",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "96d4914c_84c0641c",
+        "filename": "librobinhood/src/policyengine.c",
+        "patchSetId": 20
+      },
+      "lineNbr": 529,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-02-11T09:04:56Z",
+      "side": 1,
+      "message": "minor: print to stderr",
+      "range": {
+        "startLine": 529,
+        "startChar": 12,
+        "endLine": 529,
+        "endChar": 18
+      },
+      "revId": "88e43c88f24b7386d02e925959555fc17ea2b1fe",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e75fdd20_247f200f",
+        "filename": "librobinhood/src/policyengine.c",
+        "patchSetId": 20
+      },
+      "lineNbr": 530,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-02-11T09:04:56Z",
+      "side": 1,
+      "message": "style: same line",
+      "range": {
+        "startLine": 529,
+        "startChar": 19,
+        "endLine": 530,
+        "endChar": 32
+      },
+      "revId": "88e43c88f24b7386d02e925959555fc17ea2b1fe",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e49a1a9d_d013ded8",
+        "filename": "librobinhood/src/policyengine.c",
+        "patchSetId": 20
+      },
+      "lineNbr": 530,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-02-11T09:04:56Z",
+      "side": 1,
+      "message": "question: don\u0027t think it should be the internal C code that prints errors and logs, but rather the PE itself. What do others think ?",
+      "range": {
+        "startLine": 529,
+        "startChar": 12,
+        "endLine": 530,
+        "endChar": 58
+      },
+      "revId": "88e43c88f24b7386d02e925959555fc17ea2b1fe",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "27c267e8_ccab41fd",
+        "filename": "librobinhood/src/policyengine.c",
+        "patchSetId": 20
+      },
+      "lineNbr": 542,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-02-11T09:04:56Z",
+      "side": 1,
+      "message": "question: what\u0027s the explanation behind this check ? Adding the answer as a comment would be nice",
+      "range": {
+        "startLine": 539,
+        "startChar": 12,
+        "endLine": 542,
+        "endChar": 13
+      },
+      "revId": "88e43c88f24b7386d02e925959555fc17ea2b1fe",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "08a2c4c1_61ad8b74",
+        "filename": "librobinhood/src/policyengine.c",
+        "patchSetId": 20
+      },
+      "lineNbr": 546,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-02-11T09:04:56Z",
+      "side": 1,
+      "message": "minor: merge into one condition",
+      "range": {
+        "startLine": 539,
+        "startChar": 12,
+        "endLine": 546,
+        "endChar": 13
+      },
+      "revId": "88e43c88f24b7386d02e925959555fc17ea2b1fe",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ea27702d_f88f9eb8",
+        "filename": "librobinhood/src/policyengine.c",
+        "patchSetId": 20
+      },
+      "lineNbr": 555,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-02-11T09:04:56Z",
+      "side": 1,
+      "message": "style: no need for braces",
+      "range": {
+        "startLine": 549,
+        "startChar": 8,
+        "endLine": 555,
+        "endChar": 9
+      },
+      "revId": "88e43c88f24b7386d02e925959555fc17ea2b1fe",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8927860a_1296f0ed",
+        "filename": "librobinhood/src/policyengine.c",
+        "patchSetId": 20
+      },
+      "lineNbr": 561,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-02-11T09:04:56Z",
+      "side": 1,
+      "message": "question: similarly, this should be printed by the PE IMO",
+      "range": {
+        "startLine": 561,
+        "startChar": 4,
+        "endLine": 561,
+        "endChar": 59
+      },
+      "revId": "88e43c88f24b7386d02e925959555fc17ea2b1fe",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
