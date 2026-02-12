@@ -124,6 +124,23 @@ rbh_posix_delete_entry(struct rbh_backend *backend,
                        struct rbh_fsentry *fsentry);
 
 /**
+ * Apply a RobinHood action to a POSIX backend entry.
+ *
+ * @param action         Action to apply with its parameters.
+ * @param entry          Target filesystem entry for the action.
+ * @param mi_backend     RobinHood storage backend.
+ * @param fs_backend     RobinHood filesystem backend.
+ *
+ * @return               0 on success, 1 if at least one parent directory was
+ *                       also removed (delete), -1 on error and errno is set.
+ */
+int
+rbh_posix_apply_action(const struct rbh_action *action,
+                       struct rbh_fsentry *entry,
+                       struct rbh_backend *mi_backend,
+                       struct rbh_backend *fs_backend);
+
+/**
  * Fill the projection to retrieve only the information needed
  *
  * @param projection the projection to fill

@@ -18,7 +18,7 @@ action2string(enum rbh_action_type type)
         return "unknown";
     case RBH_ACTION_DELETE:
         return "delete";
-    case RBH_ACTION_PRINT:
+    case RBH_ACTION_LOG:
         return "log";
     default:
         return "invalid";
