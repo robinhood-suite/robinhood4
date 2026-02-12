@@ -11,6 +11,9 @@
 #include "robinhood/filters/core.h"
 #include "robinhood/fsentry.h"
 
+/**
+ * Types of actions supported by the policy engine.
+ */
 enum rbh_action_type {
     RBH_ACTION_UNSET,
     RBH_ACTION_DELETE,
@@ -20,6 +23,12 @@ enum rbh_action_type {
     RBH_ACTION_UNKNOWN
 };
 
+/**
+ * Parsed representation of an action.
+ *
+ * The action type identifies the operation to perform, and the value field
+ * stores the raw action string associated with the action.
+ */
 struct rbh_action {
     enum rbh_action_type type;
     const char *value;
@@ -29,8 +38,8 @@ struct rbh_action {
  * rbh_action_cache — caches parsed actions for a policy execution.
  *
  * Each action string (default policy action or per‑rule action) is parsed only
- * once. The cache stores the parsed result so that repeated matches of the same
- * rule do not trigger repeated parsing.
+ * once. The cache stores the parsed result so that repeated matches of the
+ * same rule do not trigger repeated parsing.
  */
 struct rbh_action_cache {
     struct rbh_action default_action;
