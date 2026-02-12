@@ -35,6 +35,13 @@ test_sync_simple_from_dwalk()
 
     entries=("/dir" "/fileA" "/dir/fileB")
     check_id_parent_id ${entries[@]}
+    # FIXME: the MFU iterator requires that all entries for a given directory be
+    # consecutive. If the order is "/dir", "/dir/fileB", and "/fileA", the MFU
+    # iterator will set nb_children for "/" to 1 after seeing "/dir", then set
+    # it to 1 again after "/fileA" because it thinks "/" is a new directory.
+    #
+    # find_attribute '"ns.xattrs.path": "/"' '"xattrs.nb_children.value": 2'
+    # find_attribute '"ns.xattrs.path": "/dir"' '"xattrs.nb_children.value": 1'
 }
 
 test_sync_simple_from_robinhood()
@@ -51,9 +58,9 @@ test_sync_simple_from_robinhood()
     find_attribute '"ns.xattrs.path": "/dir"'
     find_attribute '"ns.xattrs.path": "/dir/fileB"'
 
-    # FIXME this is broken. See FIXME in
-    # librobinhood/src/plugins/posix/iterators/mfu/iterator.c
-    # check_id_parent_id "/dir" "/dir/fileB" "/fileA"
+    check_id_parent_id "/dir" "/dir/fileB" "/fileA"
+    find_attribute '"ns.xattrs.path": "/"' '"xattrs.nb_children.value": 2'
+    find_attribute '"ns.xattrs.path": "/dir"' '"xattrs.nb_children.value": 1'
 }
 
 test_sync_size()
