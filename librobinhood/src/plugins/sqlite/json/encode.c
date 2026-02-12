@@ -28,10 +28,8 @@ map2json(const struct rbh_value_map *map, struct rbh_sstack *sstack)
             return NULL;
         }
     }
-
     return object;
 }
-
 static json_t *
 sequence2json(const struct rbh_value *value, struct rbh_sstack *sstack);
 
@@ -235,6 +233,7 @@ xattrs2json(const struct rbh_value_map *map, struct rbh_sstack *sstack)
 
         if (!set_xattr_value(object, xattr, operator_map->pairs->value,
                              sstack)) {
+
             json_decref(object);
             return NULL;
         }

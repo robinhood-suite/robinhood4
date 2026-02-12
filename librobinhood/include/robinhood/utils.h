@@ -264,4 +264,15 @@ int
 convert_xattrs_with_operation(const struct rbh_value_pair *pairs, int count,
                               const char *op, struct rbh_sstack *stack);
 
+/**
+ * Format an rbh_value_map into a Python-like dictionary string
+ *
+ * @param map       the rbh_value_map to format
+ *
+ * @return          a newly allocated string containing the formatted map,
+ *                  or NULL on error. Must be freed by the caller.
+ */
+char *
+rbh_value_map_to_string(const struct rbh_value_map *map);
+
 #endif
