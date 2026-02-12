@@ -200,7 +200,7 @@ sqlite_cursor_get_id(struct sqlite_cursor *cursor, struct rbh_id *dst);
 
 const char *
 sqlite_xattr2json(const struct rbh_value_map *xattrs,
-                  struct rbh_sstack *sstack);
+                  struct rbh_sstack *sstack, bool inode);
 
 bool
 json2value_map(json_t *object, struct rbh_value_map *map,

@@ -7,8 +7,14 @@
 
 #include "internals.h"
 
+enum map2json_mode {
+    MAP2JSON_DIRECT,   // map->pairs[i].value
+    MAP2JSON_INODE_OP, // map->pairs[i].value->map.pairs[0].value
+};
+
 static json_t *
-map2json(const struct rbh_value_map *value, struct rbh_sstack *sstack);
+map2json(const struct rbh_value_map *value, struct rbh_sstack *sstack,
+         enum map2json_mode mode);
 
 static json_t *
 sequence2json(const struct rbh_value *value, struct rbh_sstack *sstack);
@@ -57,7 +63,7 @@ value2json(const struct rbh_value *value, struct rbh_sstack *sstack)
         object = sequence2json(value, sstack);
         break;
     case RBH_VT_MAP:
-        object = map2json(&value->map, sstack);
+        object = map2json(&value->map, sstack, MAP2JSON_DIRECT);
         break;
     case RBH_VT_NULL:
         object = json_null();
@@ -153,8 +159,24 @@ last_key(const char *key)
     return key;
 }
 
+static const struct rbh_value *
+get_value_for_json(const struct rbh_value_map *map, size_t i,
+                   enum map2json_mode mode)
+{
+    const struct rbh_value_map *op_map;
+
+    if (mode == MAP2JSON_DIRECT)
+        return map->pairs[i].value;
+
+    op_map = &map->pairs[i].value->map;
+    assert(op_map->count == 1);
+
+    return op_map->pairs[0].value;
+}
+
 static json_t *
-map2json(const struct rbh_value_map *map, struct rbh_sstack *sstack)
+map2json(const struct rbh_value_map *map, struct rbh_sstack *sstack,
+         enum map2json_mode mode)
 {
     json_t *object;
 
@@ -163,26 +185,30 @@ map2json(const struct rbh_value_map *map, struct rbh_sstack *sstack)
         return NULL;
 
     for (size_t i = 0; i < map->count; i++) {
+        const char *xattr = map->pairs[i].key;
+        const struct rbh_value *_value;
         json_t *subobject;
         json_t *value;
 
-        // FIXME this is very hugly...
-        if (!strcmp(map->pairs[i].key, "nb_children"))
+        // FIXME this is very ugly...
+        if (!strcmp(xattr, "nb_children"))
             continue;
 
-        value = value2json(map->pairs[i].value, sstack);
+        _value = get_value_for_json(map, i, mode);
+
+        value = value2json(_value, sstack);
         if (!value) {
             json_decref(object);
             return NULL;
         }
 
-        subobject = create_subobjects(object, map->pairs[i].key, sstack);
+        subobject = create_subobjects(object, xattr, sstack);
         if (!subobject) {
             json_decref(object);
             return NULL;
         }
 
-        json_object_set(subobject, last_key(map->pairs[i].key), value);
+        json_object_set(subobject, last_key(xattr), value);
     }
 
     return object;
@@ -190,14 +216,15 @@ map2json(const struct rbh_value_map *map, struct rbh_sstack *sstack)
 
 const char *
 sqlite_xattr2json(const struct rbh_value_map *xattrs,
-                  struct rbh_sstack *sstack)
+                  struct rbh_sstack *sstack, bool inode)
 {
     json_t *object;
     int save_errno;
     char *repr;
     char *dup;
 
-    object = map2json(xattrs, sstack);
+    object = map2json(xattrs, sstack,
+                      inode ? MAP2JSON_INODE_OP : MAP2JSON_DIRECT);
     if (!object)
         return NULL;
 

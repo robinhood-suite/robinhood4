@@ -378,26 +378,29 @@ find_nb_children(const struct rbh_fsevent *fsevent)
 {
     for (size_t i = 0; i < fsevent->xattrs.count; i++) {
         const struct rbh_value_pair *xattr = &fsevent->xattrs.pairs[i];
+        const struct rbh_value *value;
 
         if (strcmp(xattr->key, "nb_children"))
             continue;
 
-        if (!xattr->value) {
+        value = xattr->value->map.pairs->value;
+
+        if (!value) {
             rbh_backend_error_printf(
                 "missing value in 'nb_children' xattr. Expected '%s'",
                 VALUE_TYPE_NAMES[RBH_VT_INT64]);
             return NULL;
         }
 
-        if (xattr->value->type != RBH_VT_INT64) {
+        if (value->type != RBH_VT_INT64) {
             rbh_backend_error_printf(
                 "invalid type for 'nb_children' xattr. Expected '%s', got '%s'",
                 VALUE_TYPE_NAMES[RBH_VT_INT64],
-                VALUE_TYPE_NAMES[xattr->value->type]);
+                VALUE_TYPE_NAMES[value->type]);
             return NULL;
         }
 
-        return xattr->value;
+        return value;
     }
 
     return NULL;
@@ -457,7 +460,7 @@ sqlite_process_upsert(struct sqlite_backend *sqlite,
     if (has_xattrs) {
         const char *xattrs;
 
-        xattrs = sqlite_xattr2json(&fsevent->xattrs, cursor->sstack);
+        xattrs = sqlite_xattr2json(&fsevent->xattrs, cursor->sstack, true);
         if (!xattrs)
             goto free_insert;
 
@@ -583,7 +586,7 @@ sqlite_process_ns_xattr(struct sqlite_backend *sqlite,
     struct sqlite_cursor *cursor = &sqlite->cursor;
     const char *xattrs;
 
-    xattrs = sqlite_xattr2json(&fsevent->xattrs, cursor->sstack);
+    xattrs = sqlite_xattr2json(&fsevent->xattrs, cursor->sstack, false);
     if (!xattrs)
         return false;
 
@@ -612,7 +615,7 @@ sqlite_process_xattr(struct sqlite_backend *sqlite,
     if (!nb_children && errno)
         return false;
 
-    xattrs = sqlite_xattr2json(&fsevent->xattrs, cursor->sstack);
+    xattrs = sqlite_xattr2json(&fsevent->xattrs, cursor->sstack, true);
     if (!xattrs)
         return false;
 
