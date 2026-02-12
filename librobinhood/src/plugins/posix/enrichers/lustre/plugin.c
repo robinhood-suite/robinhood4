@@ -21,6 +21,7 @@ static const struct rbh_pe_common_operations LUSTRE_EXTENSION_COMMON_OPS = {
     .build_filter = rbh_lustre_build_filter,
     .undelete = rbh_lustre_undelete,
     .delete_entry = NULL,
+    .apply_action = rbh_lustre_apply_action,
 };
 
 const struct rbh_posix_extension RBH_BACKEND_EXTENDS(POSIX, LUSTRE) = {
@@ -31,7 +32,7 @@ const struct rbh_posix_extension RBH_BACKEND_EXTENDS(POSIX, LUSTRE) = {
         .min_version = RBH_POSIX_BACKEND_VERSION,
         .max_version = RBH_POSIX_BACKEND_VERSION,
         .common_ops  = &LUSTRE_EXTENSION_COMMON_OPS,
-        .available_actions = RBH_ACTION_FLAG(RBH_ACTION_PRINT),
+        .available_actions = RBH_ACTION_FLAG(RBH_ACTION_LOG),
     },
     .enrich = rbh_lustre_enrich,
 };
