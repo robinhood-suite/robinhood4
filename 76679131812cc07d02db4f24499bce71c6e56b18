@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "63f97f63_1330ef84",
+        "filename": "librobinhood/src/filters/check_fsentry.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-02-12T14:06:32Z",
+      "side": 1,
+      "message": "question: we don\u0027t authorize comparisons for binaries?\n\nAlso it is still possible to compare strings, even if this is not meaningful..",
+      "range": {
+        "startLine": 41,
+        "startChar": 8,
+        "endLine": 42,
+        "endChar": 25
+      },
+      "revId": "76679131812cc07d02db4f24499bce71c6e56b18",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cfeab9d5_a56d179e",
+        "filename": "librobinhood/src/filters/check_fsentry.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 300,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-02-12T14:06:32Z",
+      "side": 1,
+      "message": "style: declarations in the middle of blocks",
+      "range": {
+        "startLine": 270,
+        "startChar": 12,
+        "endLine": 300,
+        "endChar": 25
+      },
+      "revId": "76679131812cc07d02db4f24499bce71c6e56b18",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d62543c8_6a40df25",
+        "filename": "librobinhood/src/filters/check_fsentry.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 315,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-02-12T14:06:32Z",
+      "side": 1,
+      "message": "style: line length",
+      "range": {
+        "startLine": 315,
+        "startChar": 12,
+        "endLine": 315,
+        "endChar": 87
+      },
+      "revId": "76679131812cc07d02db4f24499bce71c6e56b18",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
