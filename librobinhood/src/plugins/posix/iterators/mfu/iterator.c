@@ -178,16 +178,16 @@ mfu_iter_next(void *_iter)
 
         path_dup = RBH_SSTACK_PUSH(sstack, fi.path, path_len);
         parent = dirname(path_dup);
-        parent_len = strlen(parent) + 1;
+        if (strcmp(fi.path, parent) == 0) {
+            parent = "";
+            parent_len = 1;
+        } else {
+            parent_len = strlen(parent) + 1;
+        }
 
         /* Initial setup of current_parent path/ID */
         if (current_parent == NULL)
             mfu_iter_setup_current_parent(iter, fi.path, parent, parent_len);
-
-        // FIXME the root path is '/' and dirname('/') == '/'. This means that
-        // dirname('/file') == dirname('/'). Depending on the order in which entries
-        // are processed, '/file' will have the same parent as '/' (e.g. no parent).
-        // Fix test_mpifile_mongo_sync as well when this is fixed.
 
         /* If parent is different of current_parent, it means that we are iterating
          * entries of a new directory. We need to get the new parent path/ID and
