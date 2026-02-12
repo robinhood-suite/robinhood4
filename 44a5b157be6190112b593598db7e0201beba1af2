@@ -41,6 +41,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "eaa51147_03f74b7a",
+        "filename": "librobinhood/src/plugins/mongo/xattrs.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-02-12T15:52:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f801ca5b_bd47bbd3",
+      "range": {
+        "startLine": 74,
+        "startChar": 8,
+        "endLine": 74,
+        "endChar": 33
+      },
+      "revId": "44a5b157be6190112b593598db7e0201beba1af2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d57595a6_b42b8782",
@@ -54,6 +78,30 @@
       "writtenOn": "2026-02-11T10:57:25Z",
       "side": 1,
       "message": "suggest: no need for an intermediary variable, just check if `bson \u003d\u003d unset` here",
+      "range": {
+        "startLine": 85,
+        "startChar": 52,
+        "endLine": 85,
+        "endChar": 75
+      },
+      "revId": "44a5b157be6190112b593598db7e0201beba1af2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1e17bd46_880ab43c",
+        "filename": "librobinhood/src/plugins/mongo/xattrs.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-02-12T15:52:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d57595a6_b42b8782",
       "range": {
         "startLine": 85,
         "startChar": 52,
@@ -100,6 +148,30 @@
       "writtenOn": "2026-02-11T10:57:25Z",
       "side": 1,
       "message": "nit: add an assert on the count of the submap aswell",
+      "range": {
+        "startLine": 653,
+        "startChar": 4,
+        "endLine": 653,
+        "endChar": 76
+      },
+      "revId": "44a5b157be6190112b593598db7e0201beba1af2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "12318bca_e930413a",
+        "filename": "rbh-fsevents/tests/unit/check_dedup.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 653,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-02-12T15:52:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "33a9ea62_8e5bb098",
       "range": {
         "startLine": 653,
         "startChar": 4,
