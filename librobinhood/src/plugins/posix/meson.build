@@ -1,8 +1,10 @@
 # This file is part of RobinHood 4
-# Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
+# Copyright (C) 2026 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #
-# SPDX-License-Identifer: LGPL-3.0-or-later
+# SPDX-License-Identifier: LGPL-3.0-or-later
+
+jansson_dep = dependency('jansson', version: '>=1.16.0')
 
 librbh_posix = library(
     'rbh-posix',
@@ -19,6 +21,7 @@ librbh_posix = library(
     ],
     version: librbh_posix_version, # defined in include/robinhood/backends
     link_with: librobinhood,
+    dependencies: jansson_dep,
     include_directories: rbh_include,
     install: true,
     c_args: '-DHAVE_CONFIG_H',
