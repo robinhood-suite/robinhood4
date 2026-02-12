@@ -268,4 +268,10 @@ bool
 json2value_map(json_t *object, struct rbh_value_map *map,
                struct rbh_sstack *sstack);
 
+json_t *
+map2json(const struct rbh_value_map *map, struct rbh_sstack *sstack);
+
+json_t *
+xattrs2json(const struct rbh_value_map *map, struct rbh_sstack *sstack);
+
 #endif
