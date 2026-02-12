@@ -19,6 +19,7 @@
 #include "robinhood/policyengine_internal.h"
 #include "robinhood/filters/core.h"
 #include <robinhood.h>
+#include "lu_fid.h"
 
 struct rbh_mut_iterator *
 rbh_collect_fsentries(struct rbh_backend *backend, struct rbh_filter *filter)
@@ -609,6 +610,43 @@ rbh_pe_match_rule(const struct rbh_policy *policy,
 }
 
 /**
+ * Print information about an entry for the Print action.
+ *
+ * This function prints the relative path of the entry and, when using a
+ * Lustre backend, also prints the corresponding FID. The params string is
+ * printed as‑is and may be NULL.
+ *
+ * @param entry the fsentry to print, or NULL
+ * @param params optional parameters associated with the action
+ * @param fs_backend the backend used to determine formatting
+ */
+static void
+rbh_print_action(const struct rbh_fsentry *entry, const char *params,
+                 struct rbh_backend *fs_backend)
+{
+    const char *path = "(NULL)";
+    if (entry) {
+        const char *rel_path = fsentry_relative_path(entry);
+        if (rel_path)
+            path = rel_path;
+    }
+
+    if (fs_backend->id == RBH_BI_LUSTRE) {
+        char fid_str[LU_FID_STRING_SIZE];
+        if (entry) {
+            const struct lu_fid *fid = rbh_lu_fid_from_id(&entry->id);
+            fid_to_str(fid_str, sizeof(fid_str), fid);
+        } else
+            snprintf(fid_str, sizeof(fid_str), "(NULL)");
+
+        printf("PrintAction | fid=%s, path=%s, params=%s\n", fid_str, path,
+               params ? params : "{}" );
+    } else
+        printf("PrintAction | path=%s, params=%s\n", path,
+               params ? params : "{}" );
+}
+
+/**
  * Apply an action to a filesystem entry.
  *
  * This function dispatches the action based on its type. The specific
@@ -625,10 +663,21 @@ static int
 rbh_pe_apply_action(const struct rbh_action *action,
                     const struct rbh_fsentry *entry,
                     const struct rbh_rule *matched_rule,
-                    const struct rbh_policy *policy)
+                    const struct rbh_policy *policy,
+                    struct rbh_backend *fs_backend)
 {
+    const char *params = NULL;
+
+    if (matched_rule && matched_rule->parameters &&
+        matched_rule->parameters[0] != '\0') {
+        params = matched_rule->parameters;
+    } else if (policy->parameters && policy->parameters[0] != '\0') {
+        params = policy->parameters;
+    }
+
     switch (action->type) {
     case RBH_ACTION_PRINT:
+        rbh_print_action(entry, params, fs_backend);
         break;
     case RBH_ACTION_DELETE:
         break;
@@ -727,7 +776,8 @@ rbh_pe_execute(struct rbh_mut_iterator *mirror_iter,
         current_action = rbh_pe_select_action(policy, &action_cache,
                                               has_matched_rule, matched_index);
 
-        rbh_pe_apply_action(&current_action, fresh, matched_rule, policy);
+        rbh_pe_apply_action(&current_action, fresh, matched_rule, policy,
+                            fs_backend);
 
         free(fresh);
     }
