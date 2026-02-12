@@ -1,8 +1,8 @@
 /* This file is part of RobinHood 4
- * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2026 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
- * SPDX-License-Identifer: LGPL-3.0-or-later
+ * SPDX-License-Identifier: LGPL-3.0-or-later
  */
 
 #include <assert.h>
@@ -18,6 +18,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 
+#include <robinhood/action.h>
 #include <robinhood/backend.h>
 #include <robinhood/fsentry.h>
 #include <robinhood/projection.h>
@@ -58,6 +59,52 @@ rbh_posix_delete_entry(struct rbh_backend *backend,
 
     free(path);
     return rc;
+}
+
+static int
+rbh_posix_log_entry(struct rbh_fsentry *entry,
+                    const struct rbh_value_map *params,
+                    struct rbh_sstack *sstack)
+{
+    const char *path = "(NULL)";
+    char *json_str = NULL;
+    json_t *json_params = NULL;
+
+    if (entry) {
+        const char *rel_path = fsentry_relative_path(entry);
+        if (rel_path)
+            path = rel_path;
+    }
+
+    if (params && sstack) {
+        json_params = map2json(params, sstack);
+        if (json_params) {
+            json_str = json_dumps(json_params, JSON_COMPACT);
+            json_decref(json_params);
+        }
+    }
+
+    printf("LogAction | path=%s, params=%s\n", path,
+           json_str ? json_str : "{}");
+
+    free(json_str);
+    return 0;
+}
+
+int
+rbh_posix_apply_action(const struct rbh_action *action,
+                       struct rbh_fsentry *entry,
+                       struct rbh_backend *mi_backend,
+                       struct rbh_backend *fs_backend)
+{
+    switch (action->type) {
+    case RBH_ACTION_LOG:
+        return rbh_posix_log_entry(entry, &action->params.map,
+                                   action->params.sstack);
+    default:
+        errno = ENOTSUP;
+        return -1;
+    }
 }
 
 #define MAX_OUTPUT_SIZE (PATH_MAX + 256)
