@@ -368,7 +368,8 @@ rbh_pe_execute(struct rbh_mut_iterator *mirror_iter,
             if (errno == EAGAIN)
                 continue;
 
-            fprintf(stderr, "Error during iteration: %s\n", strerror(errno));
+            fprintf(stderr, "Error during iteration: %s\n",
+                    rbh_strerror(errno));
             rbh_pe_actions_destroy(&action_cache);
             rbh_backend_destroy(fs_backend);
             return -1;
@@ -377,7 +378,7 @@ rbh_pe_execute(struct rbh_mut_iterator *mirror_iter,
         fresh = rbh_get_fresh_fsentry(fs_backend, mirror_entry);
         if (fresh == NULL) {
             fprintf(stderr, "Warning: cannot get fresh metadata %s\n",
-                    strerror(errno));
+                    rbh_strerror(errno));
             continue;
         }
 
