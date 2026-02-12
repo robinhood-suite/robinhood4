@@ -232,4 +232,8 @@ sqlite_cursor_strdup(struct sqlite_cursor *cursor, const char *str);
 void
 sqlite_cursor_free(struct sqlite_cursor *cursor);
 
+bool
+bind_value(struct sqlite_cursor *cursor, const struct rbh_value *value,
+           bool bin_as_string);
+
 #endif

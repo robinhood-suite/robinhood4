@@ -7,8 +7,30 @@
 
 #include "internals.h"
 
+static bool
+set_xattr_value(json_t *object, const char *xattr,
+                const struct rbh_value *value, struct rbh_sstack *sstack);
+
 static json_t *
-map2json(const struct rbh_value_map *value, struct rbh_sstack *sstack);
+map2json(const struct rbh_value_map *map, struct rbh_sstack *sstack)
+{
+    json_t *object;
+
+    object = json_object();
+    if (!object)
+        return NULL;
+
+    for (size_t i = 0; i < map->count; i++) {
+        const char *xattr = map->pairs[i].key;
+
+        if (!set_xattr_value(object, xattr, map->pairs[i].value, sstack)) {
+            json_decref(object);
+            return NULL;
+        }
+    }
+
+    return object;
+}
 
 static json_t *
 sequence2json(const struct rbh_value *value, struct rbh_sstack *sstack);
@@ -153,8 +175,34 @@ last_key(const char *key)
     return key;
 }
 
+static bool
+set_xattr_value(json_t *object, const char *xattr,
+                const struct rbh_value *value, struct rbh_sstack *sstack)
+{
+    json_t *json_value;
+    json_t *subobject;
+
+    json_value = value2json(value, sstack);
+    if (!json_value)
+        return false;
+
+    subobject = create_subobjects(object, xattr, sstack);
+    if (!subobject) {
+        json_decref(json_value);
+        return false;
+    }
+
+    json_object_set(subobject, last_key(xattr), json_value);
+    json_decref(json_value);
+
+    return true;
+}
+
+/**
+ *  xattrs = { "xattr1" : { "op" : value }, "xattr2": { "op": value }}
+ */
 static json_t *
-map2json(const struct rbh_value_map *map, struct rbh_sstack *sstack)
+xattrs2json(const struct rbh_value_map *map, struct rbh_sstack *sstack)
 {
     json_t *object;
 
@@ -163,41 +211,36 @@ map2json(const struct rbh_value_map *map, struct rbh_sstack *sstack)
         return NULL;
 
     for (size_t i = 0; i < map->count; i++) {
-        json_t *subobject;
-        json_t *value;
+        const struct rbh_value_map *operator_map = &map->pairs[i].value->map;
+        const char *xattr = map->pairs[i].key;
+        const char *operator;
 
-        // FIXME this is very hugly...
-        if (!strcmp(map->pairs[i].key, "nb_children"))
+        assert(operator_map->count == 1);
+
+        operator = operator_map->pairs->key;
+        // The increment operator are handle differently
+        if (strcmp(operator, "inc") == 0)
             continue;
 
-        value = value2json(map->pairs[i].value, sstack);
-        if (!value) {
+        if (!set_xattr_value(object, xattr, operator_map->pairs->value,
+                             sstack)) {
             json_decref(object);
             return NULL;
         }
-
-        subobject = create_subobjects(object, map->pairs[i].key, sstack);
-        if (!subobject) {
-            json_decref(object);
-            return NULL;
-        }
-
-        json_object_set(subobject, last_key(map->pairs[i].key), value);
     }
 
     return object;
 }
 
 const char *
-sqlite_xattr2json(const struct rbh_value_map *xattrs,
-                  struct rbh_sstack *sstack)
+sqlite_xattr2json(const struct rbh_value_map *xattrs, struct rbh_sstack *sstack)
 {
     json_t *object;
     int save_errno;
     char *repr;
     char *dup;
 
-    object = map2json(xattrs, sstack);
+    object = xattrs2json(xattrs, sstack);
     if (!object)
         return NULL;
 

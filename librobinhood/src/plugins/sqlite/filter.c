@@ -745,10 +745,6 @@ bind_filter_values(struct sqlite_cursor *cursor,
                    const struct rbh_filter *filter);
 
 static bool
-bind_value(struct sqlite_cursor *cursor, const struct rbh_value *value,
-           bool bin_as_string);
-
-static bool
 bind_sequence(struct sqlite_cursor *cursor, const struct rbh_value *values,
               size_t count)
 {
@@ -795,7 +791,7 @@ sqlite_regex(struct sqlite_cursor *cursor, const struct rbh_value *regex)
     return value;
 }
 
-static bool
+bool
 bind_value(struct sqlite_cursor *cursor, const struct rbh_value *value,
            bool bin_as_string)
 {

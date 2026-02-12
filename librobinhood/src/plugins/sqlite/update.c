@@ -373,52 +373,66 @@ build_upsert_query(const struct rbh_fsevent *fsevent)
     return query;
 }
 
-static const struct rbh_value *
-find_nb_children(const struct rbh_fsevent *fsevent)
+static bool
+inc_xattrs(struct sqlite_backend *sqlite, const struct rbh_id *id,
+           const struct rbh_value_map *xattrs)
 {
-    for (size_t i = 0; i < fsevent->xattrs.count; i++) {
-        const struct rbh_value_pair *xattr = &fsevent->xattrs.pairs[i];
+    struct sqlite_cursor *cursor = &sqlite->cursor;
+    const char *operator;
+    size_t buff_len = 0;
+    char buffer[4096];
+    size_t len;
 
-        if (strcmp(xattr->key, "nb_children"))
+    len = sprintf(buffer, "UPDATE entries set xattrs = json_set(xattrs, ");
+    buff_len += len;
+
+    /* Build the query */
+    for (int i = 0; i < xattrs->count; i++) {
+        const struct rbh_value_map *operator_map = &xattrs->pairs[i].value->map;
+        const char *xattr = xattrs->pairs[i].key;
+        bool add_coma = false;
+
+        assert(operator_map->count == 1);
+        operator = operator_map->pairs->key;
+
+        if (strcmp(operator, "inc"))
             continue;
 
-        if (!xattr->value) {
-            rbh_backend_error_printf(
-                "missing value in 'nb_children' xattr. Expected '%s'",
-                VALUE_TYPE_NAMES[RBH_VT_INT64]);
-            return NULL;
-        }
+        len = sprintf(buffer + buff_len,
+                      "%s'$.%s', COALESCE(json_extract(xattrs, '$.%s'), 0) + ?",
+                      add_coma ? "," : "",xattr, xattr);
+        if (len > (sizeof(buffer) - buff_len))
+            return sqlite_fail("sprintf: truncated string, buffer too small");
 
-        if (xattr->value->type != RBH_VT_INT64) {
-            rbh_backend_error_printf(
-                "invalid type for 'nb_children' xattr. Expected '%s', got '%s'",
-                VALUE_TYPE_NAMES[RBH_VT_INT64],
-                VALUE_TYPE_NAMES[xattr->value->type]);
-            return NULL;
-        }
-
-        return xattr->value;
+        buff_len += len;
+        add_coma = true;
     }
 
-    return NULL;
-}
+    if (buff_len == len)
+        return true;
 
-static bool
-inc_nb_children(struct sqlite_backend *sqlite,
-                const struct rbh_fsevent *fsevent,
-                int64_t nb_children)
-{
-    const char *query =
-        "update entries set "
-        "xattrs = json_set(xattrs, '$.nb_children', "
-        "IFNULL(json_extract(xattrs, '$.nb_children'), 0) + ?) where id = ?";
-    struct sqlite_cursor *cursor = &sqlite->cursor;
+    len = sprintf(buffer + buff_len, ") where id = ?");
+    if (len > (sizeof(buffer) - buff_len))
+            return sqlite_fail("sprintf: truncated string, buffer too small");
 
-    // XXX why do we emit fsevents with nb_children = 0?
-    return sqlite_setup_query(cursor, query) &&
-        sqlite_cursor_bind_int64(cursor, nb_children) &&
-        sqlite_cursor_bind_id(cursor, &fsevent->id) &&
-        sqlite_cursor_exec(cursor);
+    buff_len += len;
+    buffer[buff_len] = '\0';
+
+    /* Bind the value */
+    sqlite_setup_query(cursor, buffer);
+    for (int i = 0; i < xattrs->count; i++) {
+        const struct rbh_value_map *operator_map = &xattrs->pairs[i].value->map;
+
+        operator = operator_map->pairs->key;
+
+        if (strcmp(operator, "inc"))
+            continue;
+
+        if (!bind_value(cursor, operator_map->pairs->value, false))
+            sqlite_fail("failed to bind value for '%s'", xattrs->pairs[i].key);
+    }
+
+    return sqlite_cursor_bind_id(cursor, id) && sqlite_cursor_exec(cursor);
 }
 
 static bool
@@ -431,7 +445,6 @@ sqlite_process_upsert(struct sqlite_backend *sqlite,
     bool has_xattrs = fsevent_has_xattrs(fsevent);
     uint32_t mask = upsert_statx_mask(fsevent);
     const struct rbh_id *id = &fsevent->id;
-    const struct rbh_value *nb_children;
     int save_errno;
     bool res;
     int i;
@@ -480,13 +493,7 @@ sqlite_process_upsert(struct sqlite_backend *sqlite,
     if (!sqlite_cursor_exec(cursor))
         goto free_insert;
 
-    errno = 0;
-    nb_children = find_nb_children(fsevent);
-    if (!nb_children && errno)
-        return false;
-
-    if (nb_children)
-        inc_nb_children(sqlite, fsevent, nb_children->int64);
+    inc_xattrs(sqlite, &fsevent->id, &fsevent->xattrs);
 
     free((void *)insert);
     return true;
@@ -604,13 +611,7 @@ sqlite_process_xattr(struct sqlite_backend *sqlite,
         "on conflict(id) do "
         "update set xattrs=json_patch(entries.xattrs, excluded.xattrs)";
     struct sqlite_cursor *cursor = &sqlite->cursor;
-    const struct rbh_value *nb_children;
     const char *xattrs;
-
-    errno = 0;
-    nb_children = find_nb_children(fsevent);
-    if (!nb_children && errno)
-        return false;
 
     xattrs = sqlite_xattr2json(&fsevent->xattrs, cursor->sstack);
     if (!xattrs)
@@ -620,11 +621,10 @@ sqlite_process_xattr(struct sqlite_backend *sqlite,
         sqlite_cursor_bind_id(cursor, &fsevent->id) &&
         sqlite_cursor_bind_string(cursor, xattrs) &&
         sqlite_cursor_exec(cursor) &&
-        /* Update nb_children after inserting the xattr, otherwise the entry
+        /* Increment the xattr after inserting it, otherwise the entry
          * might not exist yet.
          */
-        (nb_children ? inc_nb_children(sqlite, fsevent, nb_children->int64) :
-         true);
+        inc_xattrs(sqlite, &fsevent->id, &fsevent->xattrs);
 }
 
 static bool

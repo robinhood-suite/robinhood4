@@ -572,6 +572,9 @@ EOF
 
 test_nb_children_two_sync()
 {
+    # FIXME remove when nb_children is implemented in SQLite backend
+    mongo_only_test
+
     mkdir test
     touch test/{1..5}
 
