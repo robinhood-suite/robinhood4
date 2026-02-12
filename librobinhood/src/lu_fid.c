@@ -13,6 +13,8 @@
 #include <limits.h>
 #include <stdbool.h>
 #include <stdlib.h>
+#include <stdio.h>
+#include <inttypes.h>
 
 #include "lu_fid.h"
 
@@ -113,4 +115,11 @@ lu_fid_init_from_string(const char *string, struct lu_fid *fid, char **endptr)
     *endptr = end;
     errno = save_errno;
     return 0;
+}
+
+int
+fid_to_str(char *buf, size_t buflen, const struct lu_fid *fid)
+{
+    return snprintf(buf, buflen, "%#" PRIx64 ":%#" PRIx32 ":%#" PRIx32,
+                    fid->f_seq, fid->f_oid, fid->f_ver);
 }

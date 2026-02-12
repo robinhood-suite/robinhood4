@@ -478,8 +478,8 @@ rbh_pe_parse_action(const char *action_str)
             act.type = RBH_ACTION_DELETE;
             act.value = NULL;
             return act;
-        } else if (strcmp(sub, "print") == 0) {
-            act.type = RBH_ACTION_PRINT;
+        } else if (strcmp(sub, "log") == 0) {
+            act.type = RBH_ACTION_LOG;
             act.value = NULL;
             return act;
         }
@@ -678,7 +678,7 @@ rbh_pe_apply_action(const struct rbh_action *action,
                     const struct rbh_pe_common_operations *common_ops)
 {
     switch (action->type) {
-    case RBH_ACTION_PRINT:
+    case RBH_ACTION_LOG:
         return rbh_pe_common_ops_apply_action(common_ops, action, entry,
                                               mi_backend, fs_backend);
     case RBH_ACTION_DELETE:
