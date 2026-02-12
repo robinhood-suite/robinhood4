@@ -54,6 +54,15 @@
  */
 extern __thread char rbh_backend_error[512];
 
+/*
+ * Macro to get the appropriate error message for an error code:
+ * - If e == RBH_BACKEND_ERROR, returns the backend error message
+ *   (thread-local buffer)
+ * - Otherwise, returns strerror(e)
+ */
+#define rbh_strerror(e) \
+    ((e) == RBH_BACKEND_ERROR ? rbh_backend_error : strerror(e))
+
 __attribute__((format(printf, 1, 2)))
 void
 rbh_backend_error_printf(const char *fmt, ...);
