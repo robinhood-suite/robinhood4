@@ -35,6 +35,85 @@ free_sstack(void)
         rbh_sstack_destroy(sstack);
 }
 
+static struct rbh_fsentry *
+mfu_iter_handle_end(struct mfu_iterator *iter)
+{
+    struct rbh_fsentry *fsentry;
+
+    if (current_parent_id == NULL) {
+        errno = ENODATA;
+        /* the flist belongs to the backend, do not free it */
+        iter->files = NULL;
+        return NULL;
+    }
+
+    /* Generate a fsevent for the last directory we have explored to update
+     * its children counter.
+     */
+    fsentry = build_fsentry_nb_children(current_parent_id, current_children,
+                                        sstack);
+
+    free(current_parent_id);
+    rbh_sstack_clear(sstack);
+
+    current_parent = NULL;
+    current_parent_id = NULL;
+
+    return fsentry;
+}
+
+static void
+mfu_iter_setup_current_parent(struct mfu_iterator *iter, const char *path,
+                              const char *parent, size_t parent_len)
+{
+    current_parent = RBH_SSTACK_PUSH(sstack, parent, parent_len);
+    current_parent_id = mfu_build_parent_id(path, iter->posix.prefix_len,
+                                            iter->is_mpifile);
+}
+
+static struct rbh_fsentry *
+mfu_iter_handle_new_parent(struct mfu_iterator *iter, const char *path,
+                           const char *parent, size_t parent_len)
+{
+    struct rbh_fsentry *fsentry = NULL;
+    struct rbh_id *prev_parent_id;
+    int prev_children;
+
+    prev_parent_id = current_parent_id;
+    prev_children = current_children;
+
+    current_children = 0;
+    rbh_sstack_clear(sstack);
+    mfu_iter_setup_current_parent(iter, path, parent, parent_len);
+
+    /* If we are dealing with the root, don't update the parent nb_children
+     * because the parent doesn't really exist.
+     */
+    if (prev_parent_id && !rbh_id_equal(prev_parent_id, &ROOT_PARENT_ID))
+        fsentry = build_fsentry_nb_children(prev_parent_id, prev_children,
+                                            sstack);
+    free(prev_parent_id);
+
+    return fsentry;
+}
+
+static bool
+mfu_iter_skip_or_fail(struct mfu_iterator *iter, bool skip_error,
+                      const char *path)
+{
+    if (!skip_error) {
+        /* the flist belongs to the backend, do not free it */
+        iter->files = NULL;
+        return false;
+    }
+
+    iter->metadata->skipped_entries++;
+    fprintf(stderr, "Synchronization of '%s' skipped\n", path);
+    iter->current++;
+    current_children--;
+    return true;
+}
+
 static void *
 mfu_iter_next(void *_iter)
 {
@@ -42,8 +121,8 @@ mfu_iter_next(void *_iter)
     bool skip_error = iter->posix.skip_error;
     struct rbh_fsentry *fsentry = NULL;
     struct file_info fi;
-    const char *path;
-    char *parent_dup;
+    size_t parent_len;
+    size_t path_len;
     char *path_dup;
     char *parent;
     int rank;
@@ -51,131 +130,80 @@ mfu_iter_next(void *_iter)
     if (sstack == NULL)
         sstack = rbh_sstack_new(1 << 16);
 
-skip:
-    if (iter->current == iter->total) {
-        /* Generate a fsevent for the last directory we have explored to update
-         * its children counter.
+    while (true) {
+        if (iter->current == iter->total)
+            return mfu_iter_handle_end(iter);
+
+        fi.path = mfu_flist_file_get_name(iter->files, iter->current);
+        path_len = strlen(fi.path) + 1;
+
+        path_dup = RBH_SSTACK_PUSH(sstack, fi.path, path_len);
+        parent = dirname(path_dup);
+        parent_len = strlen(parent) + 1;
+
+        /* Initial setup of current_parent path/ID */
+        if (current_parent == NULL)
+            mfu_iter_setup_current_parent(iter, fi.path, parent, parent_len);
+
+        // FIXME the root path is '/' and dirname('/') == '/'. This means that
+        // dirname('/file') == dirname('/'). Depending on the order in which entries
+        // are processed, '/file' will have the same parent as '/' (e.g. no parent).
+        // Fix test_mpifile_mongo_sync as well when this is fixed.
+
+        /* If parent is different of current_parent, it means that we are iterating
+         * entries of a new directory. We need to get the new parent path/ID and
+         * generate an fsevent to update the children counter of the directory we are
+         * exiting.
          */
-        if (current_parent_id != NULL) {
-            fsentry = build_fsentry_nb_children(current_parent_id,
-                                                current_children, sstack);
-
-            free(current_parent_id);
-
-            current_parent = NULL;
-            current_parent_id = NULL;
-
-            return fsentry;
-        }
-
-        errno = ENODATA;
-        /* the flist belongs to the backend, do not free it */
-        iter->files = NULL;
-        return NULL;
-    }
-
-    path = mfu_flist_file_get_name(iter->files, iter->current);
-
-    parent_dup = RBH_SSTACK_PUSH(sstack, path, strlen(path) + 1);
-    parent = dirname(parent_dup);
-
-    /* Setup the current_parent path/ID */
-    if (current_parent == NULL) {
-        current_parent = RBH_SSTACK_PUSH(sstack, parent, strlen(parent) + 1);
-        current_parent_id = mfu_build_parent_id(path, iter->posix.prefix_len,
-                                                iter->is_mpifile);
-    }
-
-    /* If parent is different of current_parent, it means that we are iterating
-     * entries of a new directory. We need to get the new parent path/ID and
-     * generate an fsevent to update the children counter of the directory we are
-     * exiting.
-     */
-    // FIXME the root path is '/' and dirname('/') == '/'. This means that
-    // dirname('/file') == dirname('/'). Depending on the order in which entries
-    // are processed, '/file' will have the same parent as '/' (e.g. no parent).
-    // Fix test_mpifile_mongo_sync as well when this is fixed.
-    if (strcmp(current_parent, parent) != 0) {
-        struct rbh_id *tmp_id = current_parent_id;
-        int tmp_children = current_children;
-
-        rbh_sstack_clear(sstack);
-        current_children = 0;
-        current_parent = RBH_SSTACK_PUSH(sstack, parent, strlen(parent) + 1);
-        current_parent_id = mfu_build_parent_id(path, iter->posix.prefix_len,
-                                                iter->is_mpifile);
-
-        if (tmp_id) {
-            if (!rbh_id_equal(tmp_id, &ROOT_PARENT_ID))
-                fsentry = build_fsentry_nb_children(tmp_id, tmp_children,
-                                                    sstack);
-
-            free(tmp_id);
-        }
-
-        if (fsentry)
-            return fsentry;
-        else
+        if (strcmp(current_parent, parent) == 0) {
             current_children++;
-    } else {
-        current_children++;
-    }
+        } else {
+            fsentry = mfu_iter_handle_new_parent(iter, fi.path, parent,
+                                                 parent_len);
+            if (fsentry)
+                return fsentry;
 
-    fi.path = path;
-    path_dup = RBH_SSTACK_PUSH(sstack, path, strlen(path) + 1);
-
-    /* Modify the root's name and parent ID to match RobinHood's conventions,
-     * only if we are not synchronizing a branch
-     */
-    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-    if (rank == 0 && iter->current == 0 && !iter->is_branch) {
-        free(current_parent_id);
-        current_parent_id = rbh_id_new(NULL, 0);
-        fi.parent_id = current_parent_id;
-        fi.name = "\0";
-    } else {
-        fi.name = basename(path_dup);
-        fi.parent_id = current_parent_id;
-    }
-
-    if (fi.parent_id == NULL) {
-        fprintf(stderr, "Failed to get parent id of '%s'\n", path);
-        if (skip_error) {
-            iter->metadata->skipped_entries++;
-            fprintf(stderr, "Synchronization of '%s' skipped\n", path);
-            iter->current++;
-            current_children--;
-            goto skip;
+            current_children++;
         }
 
-        /* the flist belongs to the backend, do not free it */
-        iter->files = NULL;
-        return NULL;
-    }
-
-    fsentry = iter->fsentry_new(&fi, &iter->posix);
-
-    if (fsentry == NULL && (errno == ENOENT || errno == ESTALE)) {
-        /* The entry moved from under our feet */
-        if (skip_error) {
-            iter->metadata->skipped_entries++;
-            fprintf(stderr, "Synchronization of '%s' skipped\n",
-                    path);
-            iter->current++;
-            current_children--;
-            goto skip;
+        /* Modify the root's name and parent ID to match RobinHood's
+         * conventions, only if we are not synchronizing a branch.
+         */
+        MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+        if (rank == 0 && iter->current == 0 && !iter->is_branch) {
+            free(current_parent_id);
+            current_parent_id = rbh_id_new(NULL, 0);
+            fi.parent_id = current_parent_id;
+            fi.name = "\0";
+        } else {
+            path_dup = RBH_SSTACK_PUSH(sstack, fi.path, path_len);
+            fi.name = basename(path_dup);
+            fi.parent_id = current_parent_id;
         }
-        /* the flist belongs to the backend, do not free it */
-        iter->files = NULL;
-        return NULL;
+
+        if (fi.parent_id == NULL) {
+            fprintf(stderr, "Failed to get parent id of '%s'\n", fi.path);
+            if (!mfu_iter_skip_or_fail(iter, skip_error, fi.path))
+                return NULL;
+            continue;
+        }
+
+        fsentry = iter->fsentry_new(&fi, &iter->posix);
+
+        if (fsentry == NULL && (errno == ENOENT || errno == ESTALE)) {
+            /* The entry moved from under our feet */
+            if (!mfu_iter_skip_or_fail(iter, skip_error, fi.path))
+                return NULL;
+            continue;
+        }
+
+        iter->current++;
+
+        if (iter->metadata)
+            iter->metadata->converted_entries++;
+
+        return fsentry;
     }
-
-    iter->current++;
-
-    if (iter->metadata)
-        iter->metadata->converted_entries++;
-
-    return fsentry;
 }
 
 static void
