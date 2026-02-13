@@ -120,4 +120,9 @@ rbh_filter2mfu_pred(const struct rbh_filter *filter, int prefix_len,
 void
 _mfu_pred_free(mfu_pred *pred);
 
+int
+rbh_mpi_file_apply_action(const struct rbh_action *action,
+                          struct rbh_fsentry *entry,
+                          struct rbh_backend *mi_backend,
+                          struct rbh_backend *fs_backend);
 #endif
