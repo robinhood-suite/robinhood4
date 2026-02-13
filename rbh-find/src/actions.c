@@ -658,7 +658,9 @@ find_exec_action(struct find_context *ctx,
                 const struct rbh_pe_common_operations *common_ops =
                     get_common_operations(&ctx->f_ctx.info_pe[i]);
 
-                rc = rbh_pe_common_ops_delete_entry(common_ops, fsentry);
+                rc = rbh_pe_common_ops_delete_entry(common_ops,
+                                                    ctx->backends[backend_index],
+                                                    fsentry);
                 if (rc == 0)
                     return rc;
             }

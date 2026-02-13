@@ -11,11 +11,13 @@
 #include "plugin_callback_common.h"
 
 int
-rbh_mpi_file_delete_entry(struct rbh_fsentry *fsentry)
+rbh_mpi_file_delete_entry(struct rbh_backend *backend,
+                          struct rbh_fsentry *fsentry)
 {
     if (posix_plugin == NULL)
         if (import_posix_plugin())
             return -1;
 
-    return rbh_pe_common_ops_delete_entry(posix_plugin->common_ops, fsentry);
+    return rbh_pe_common_ops_delete_entry(posix_plugin->common_ops,
+                                          backend, fsentry);
 }
