@@ -434,6 +434,10 @@ find_pre_action(struct find_context *ctx, const int index,
                 const enum action action)
 {
     switch (action) {
+    case ACT_DELETE:
+        rbh_projection_add(&ctx->projection, str2filter_field("ns-xattrs"));
+        rbh_projection_add(&ctx->projection, str2filter_field("statx"));
+        return 0;
     case ACT_EXEC:
         if (index + 2 >= ctx->argc) // at least two args: -exec cmd ;
             error(EX_USAGE, 0, "missing argument to `%s'", action2str(action));
