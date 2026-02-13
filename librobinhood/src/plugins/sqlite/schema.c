@@ -1,5 +1,5 @@
 /* This file is part of RobinHood 4
- * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2026 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifer: LGPL-3.0-or-later
@@ -49,6 +49,7 @@ static const char *RBH_SQLITE_SCHEMA_CODE =
 "    plugin     TEXT," // row
 "    extensions TEXT," // json array
 "    mountpoint TEXT,"
+"    backend    TEXT," // backend specified in the command line
 "    major      INT,"  // version
 "    minor      INT,"
 "    release    INT,"
@@ -214,8 +215,8 @@ ok:
     if (!sqlite->version) {
         if (!get_version(sqlite))
             return sqlite_db_fail(sqlite->db,
-                    "failed to retrieve version from db '%s'",
-                    path);
+                                  "failed to retrieve version from db '%s'",
+                                  path);
     }
 
     if (!(load_modules(sqlite->db) &&
