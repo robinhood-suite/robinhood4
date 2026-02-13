@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "81c3f2ba_f3c2bc35",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-02-13T08:00:33Z",
+      "side": 1,
+      "message": "Will be nice to add it in sqlite also",
+      "revId": "1cbedd03978a2bf1fdccbb16bf27df9671bd9821",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
