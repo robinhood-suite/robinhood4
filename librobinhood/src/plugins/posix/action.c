@@ -101,6 +101,8 @@ rbh_posix_apply_action(const struct rbh_action *action,
     case RBH_ACTION_LOG:
         return rbh_posix_log_entry(entry, &action->params.map,
                                    action->params.sstack);
+    case RBH_ACTION_DELETE:
+        return rbh_posix_delete_entry(mi_backend, entry);
     default:
         errno = ENOTSUP;
         return -1;
