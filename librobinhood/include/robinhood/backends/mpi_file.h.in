@@ -73,11 +73,13 @@ rbh_mpi_file_build_filter(const char **argv, int argc, int *index,
 /**
  * Delete an entry from the plugin
  *
+ * @param backend        the backend handling the entry
  * @param fsentry        the entry to delete
  *
  * @return               0 on success, -1 on error and errno is set
  */
 int
-rbh_mpi_file_delete_entry(struct rbh_fsentry *fsentry);
+rbh_mpi_file_delete_entry(struct rbh_backend *backend,
+                          struct rbh_fsentry *fsentry);
 
 #endif
