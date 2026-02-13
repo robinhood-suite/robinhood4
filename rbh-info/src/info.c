@@ -1,5 +1,5 @@
 /* This file is part of Robinhood 4
- * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2026 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifer: LGPL-3.0-or-later
@@ -160,10 +160,16 @@ _get_mountpoint(const struct rbh_value *value)
     printf("%s\n", value->string);
 }
 
+static void
+_get_command_backend(const struct rbh_value *value)
+{
+    printf("%s\n", value->string);
+}
 
 static struct rbh_info_fields INFO_FIELDS[] = {
     { "average_object_size", _get_collection_avg_obj_size },
     { "backend_source", _get_backend_source},
+    { "command_backend", _get_command_backend },
     { "count", _get_collection_count },
     { "first_sync", _get_collection_sync },
     { "last_sync", _get_collection_sync },
@@ -210,6 +216,9 @@ info_translate(const struct rbh_backend_plugin *plugin)
 
     if (info & RBH_INFO_BACKEND_SOURCE)
         printf("- b: give the backend sources of the backend\n");
+
+    if (info & RBH_INFO_COMMAND_BACKEND)
+        printf("- B: give the backend specified in the last command\n");
 
     if (info & RBH_INFO_COUNT)
         printf("- c: retrieve the amount of document inside entries collection\n");
