@@ -13,6 +13,7 @@
 #endif
 
 #include <robinhood/backend.h>
+#include <robinhood/action.h>
 
 int
 rbh_s3_backend_load_extensions(const struct rbh_backend_plugin *self,
