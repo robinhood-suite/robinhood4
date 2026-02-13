@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # This file is part of rbh-info.
-# Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
+# Copyright (C) 2026 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
@@ -155,13 +155,31 @@ test_collection_mountpoint()
     fi
 }
 
+test_command_backend()
+{
+    rbh_sync "rbh:posix:." "rbh:$db:$testdb"
+
+    local command_backend=$(rbh_info "rbh:$db:$testdb" -B)
+
+    if [ "$command_backend" != "posix" ]; then
+        error "Command backends don't match, found '$command_backend', expected 'posix'\n"
+    fi
+
+    command_backend=$(rbh_info "rbh:$db:$testdb" --command-backend)
+
+    if [ "$command_backend" != "posix" ]; then
+        error "Command backends don't match, found '$command_backend', expected 'posix'\n"
+    fi
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
 declare -a tests=(test_collection_size test_collection_count
                   test_collection_avg_obj_size test_collection_first_sync
-                  test_collection_last_sync test_collection_mountpoint)
+                  test_collection_last_sync test_collection_mountpoint
+                  test_command_backend)
 
 tmpdir=$(mktemp --directory)
 trap -- "rm -rf '$tmpdir'" EXIT

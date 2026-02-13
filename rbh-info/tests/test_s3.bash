@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # This file is part of rbh-info.
-# Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
+# Copyright (C) 2026 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
@@ -43,11 +43,28 @@ test_s3_source()
         error "The password used should have been registered"
 }
 
+test_command_backend()
+{
+    rbh_sync "rbh:s3:." "rbh:$db:$testdb"
+
+    local command_backend=$(rbh_info "rbh:$db:$testdb" -B)
+
+    if [ "$command_backend" != "s3" ]; then
+        error "Command backends don't match, found '$command_backend', expected 's3'\n"
+    fi
+
+    command_backend=$(rbh_info "rbh:$db:$testdb" --command-backend)
+
+    if [ "$command_backend" != "s3" ]; then
+        error "Command backends don't match, found '$command_backend', expected 's3'\n"
+    fi
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
-declare -a tests=(test_s3_source)
+declare -a tests=(test_s3_source test_command_backend)
 
 tmpdir=$(mktemp --directory)
 trap -- "rm -rf '$tmpdir'" EXIT
