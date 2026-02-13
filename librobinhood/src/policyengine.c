@@ -657,6 +657,49 @@ rbh_print_action(const struct rbh_fsentry *entry, const char *params,
 }
 
 /**
+ * Delete an entry from the filesystem using the backend's delete_entry
+ * operation.
+ *
+ * This function calls the backend's delete_entry method via the common_ops
+ * interface, passing the backend pointer and the fsentry to delete.
+ *
+ * @param entry         the fsentry to delete
+ * @param fs_backend    the backend to use for deletion
+ * @param common_ops    the backend's common operations interface
+ *
+ * @return 0 on success, -1 on error (errno is set)
+ */
+static int
+rbh_delete_action(struct rbh_backend *backend,
+                  const struct rbh_fsentry *entry,
+                  const struct rbh_pe_common_operations *common_ops)
+{
+    int rc;
+
+    if (!entry) {
+        fprintf(stderr, "DeleteAction | entry is NULL\n");
+        return -1;
+    }
+
+    if (!common_ops || !common_ops->delete_entry) {
+        fprintf(stderr, "DeleteAction | backend does not support delete\n");
+        errno = ENOTSUP;
+        return -1;
+    }
+
+    rc = rbh_pe_common_ops_delete_entry(common_ops, backend,
+                                        (struct rbh_fsentry *)entry);
+    if (rc == 0) {
+        printf("DeleteAction | deleted '%s'\n", fsentry_relative_path(entry));
+    } else {
+        fprintf(stderr, "DeleteAction | failed to delete '%s': %s\n",
+                fsentry_relative_path(entry), rbh_strerror(errno));
+    }
+
+    return rc;
+}
+
+/**
  * Apply an action to a filesystem entry.
  *
  * This function dispatches the action based on its type. The specific
@@ -672,7 +715,9 @@ rbh_print_action(const struct rbh_fsentry *entry, const char *params,
 static int
 rbh_pe_apply_action(const struct rbh_action *action,
                     const struct rbh_fsentry *entry,
-                    struct rbh_backend *fs_backend)
+                    struct rbh_backend *mirror_backend,
+                    struct rbh_backend *fs_backend,
+                    const struct rbh_pe_common_operations *common_ops)
 {
     const char *params = NULL;
 
@@ -684,6 +729,7 @@ rbh_pe_apply_action(const struct rbh_action *action,
         rbh_print_action(entry, params, fs_backend);
         break;
     case RBH_ACTION_DELETE:
+        rbh_delete_action(mirror_backend, entry, common_ops);
         break;
     case RBH_ACTION_CMD:
         break;
@@ -701,7 +747,10 @@ rbh_pe_execute(struct rbh_mut_iterator *mirror_iter,
                const char *fs_uri,
                const struct rbh_policy *policy)
 {
+    const struct rbh_pe_common_operations *common_ops = NULL;
+    struct rbh_value_map *info_map = NULL;
     struct rbh_action_cache action_cache;
+    struct filters_context f_ctx = {0};
     struct rbh_fsentry *mirror_entry;
     struct rbh_backend *fs_backend;
     struct rbh_raw_uri *raw_uri;
@@ -729,6 +778,21 @@ rbh_pe_execute(struct rbh_mut_iterator *mirror_iter,
     }
 
     rbh_pe_actions_init(policy, &action_cache);
+
+    /* Initialize common_ops once for all entries */
+    info_map = rbh_backend_get_info(fs_backend, RBH_INFO_BACKEND_SOURCE);
+    if (info_map) {
+        import_plugins(&f_ctx, &info_map, 1);
+        /* Find common_ops from plugin or extensions */
+        for (size_t i = 0; i < f_ctx.info_pe_count; ++i) {
+            const struct rbh_pe_common_operations *ops =
+                get_common_operations(&f_ctx.info_pe[i]);
+            if (ops) {
+                common_ops = ops;
+                break;
+            }
+        }
+    }
 
     while (true) {
         const struct rbh_rule *matched_rule = NULL;
@@ -781,11 +845,13 @@ rbh_pe_execute(struct rbh_mut_iterator *mirror_iter,
         current_action = rbh_pe_select_action(policy, &action_cache,
                                               has_matched_rule, matched_index);
 
-        rbh_pe_apply_action(&current_action, fresh, fs_backend);
+        rbh_pe_apply_action(&current_action, fresh, mirror_backend, fs_backend,
+                            common_ops);
 
         free(fresh);
     }
 
+    filters_ctx_finish(&f_ctx);
     rbh_pe_actions_destroy(&action_cache);
     rbh_backend_destroy(fs_backend);
     rbh_backend_destroy(mirror_backend);
