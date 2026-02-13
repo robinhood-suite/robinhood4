@@ -15,6 +15,7 @@
  * fsentry is the generic name for a filesystem entry (file, dir, symlink, ...)
  */
 
+struct rbh_backend;
 struct rbh_statx;
 
 /**
@@ -188,4 +189,17 @@ rbh_fsentry_find_ns_xattr(const struct rbh_fsentry *entry, const char *key);
 const char *
 fsentry_relative_path(const struct rbh_fsentry *fsentry);
 
+/**
+ * Construct an entry's absolute path by combining the mount point from backend
+ * and the relative path.
+ *
+ * @param backend       the backend to query for mountpoint
+ * @param fsentry       the entry whose absolute path should be
+ *                      retrieved
+ *
+ * @return              the entry's absolute path (must be freed by caller)
+ */
+const char *
+fsentry_absolute_path(struct rbh_backend *backend,
+                      struct rbh_fsentry *fsentry);
 #endif
