@@ -17,7 +17,6 @@ static const struct rbh_pe_common_operations RETENTION_EXTENSION_COMMON_OPS = {
     .sort2field = rbh_retention_sort2field,
     .build_filter = rbh_retention_build_filter,
     .fill_entry_info = rbh_retention_fill_entry_info,
-    .delete_entry = NULL,
     .fill_projection = rbh_retention_fill_projection,
 };
 
