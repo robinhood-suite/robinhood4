@@ -26,6 +26,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "cac20d54_62638922",
+        "filename": "librobinhood/src/filters/check_fsentry.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-02-13T08:22:08Z",
+      "side": 1,
+      "message": "minor: to remove",
+      "revId": "76679131812cc07d02db4f24499bce71c6e56b18",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "cfeab9d5_a56d179e",
         "filename": "librobinhood/src/filters/check_fsentry.c",
         "patchSetId": 1
