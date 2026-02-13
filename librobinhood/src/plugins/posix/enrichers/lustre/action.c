@@ -9,6 +9,7 @@
 #include <robinhood/backend.h>
 #include <robinhood.h>
 #include "lu_fid.h"
+#include "../../posix_internals.h"
 
 static int
 rbh_lustre_log_entry(struct rbh_fsentry *entry,
@@ -61,6 +62,8 @@ rbh_lustre_apply_action(const struct rbh_action *action,
     case RBH_ACTION_LOG:
         return rbh_lustre_log_entry(entry, &action->params.map,
                                     action->params.sstack);
+    case RBH_ACTION_DELETE:
+        return rbh_posix_delete_entry(mi_backend, entry);
     default:
         errno = ENOTSUP;
         return -1;

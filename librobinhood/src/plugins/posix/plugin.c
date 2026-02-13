@@ -20,7 +20,6 @@ static const struct rbh_pe_common_operations POSIX_BACKEND_PLUGIN_COMMON_OPS = {
     .check_valid_token = rbh_posix_check_valid_token,
     .build_filter = rbh_posix_build_filter,
     .fill_entry_info = rbh_posix_fill_entry_info,
-    .delete_entry = rbh_posix_delete_entry,
     .apply_action = rbh_posix_apply_action,
     .fill_projection = rbh_posix_fill_projection,
 };
