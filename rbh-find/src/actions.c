@@ -656,15 +656,22 @@ find_exec_action(struct find_context *ctx,
     switch (action) {
     case ACT_DELETE:
         {
+            struct rbh_action delete_action = {
+                .type = RBH_ACTION_DELETE,
+                .value = NULL,
+                .params = { .initialized = false },
+            };
             int rc = 0;
 
             for (int i = 0; i < ctx->f_ctx.info_pe_count; ++i) {
                 const struct rbh_pe_common_operations *common_ops =
                     get_common_operations(&ctx->f_ctx.info_pe[i]);
 
-                rc = rbh_pe_common_ops_delete_entry(common_ops,
+                rc = rbh_pe_common_ops_apply_action(common_ops,
+                                                    &delete_action,
+                                                    fsentry,
                                                     ctx->backends[backend_index],
-                                                    fsentry);
+                                                    NULL);
                 if (rc == 0)
                     return rc;
             }

@@ -9,6 +9,7 @@
 #define ROBINHOOD_S3_BACKEND_H
 
 #include "robinhood/plugins/backend.h"
+#include "robinhood/action.h"
 #include "robinhood/backend.h"
 #include "robinhood/config.h"
 
@@ -154,5 +155,11 @@ s3_iter_destroy(void *iterator);
 
 int
 rbh_s3_plugin_init(struct rbh_backend_plugin_init_arg *arg);
+
+int
+rbh_s3_apply_action(const struct rbh_action *action,
+                    struct rbh_fsentry *entry,
+                    struct rbh_backend *mi_backend,
+                    struct rbh_backend *fs_backend);
 
 #endif
