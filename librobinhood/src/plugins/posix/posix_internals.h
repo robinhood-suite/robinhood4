@@ -104,12 +104,14 @@ rbh_posix_fill_entry_info(char *output, int max_length,
 /**
  * Delete an entry from the plugin
  *
+ * @param backend        a pointer to the backend used for deletion
  * @param fsentry        the entry to delete
  *
  * @return               0 on success, -1 on error and errno is set
  */
 int
-rbh_posix_delete_entry(struct rbh_fsentry *fsentry);
+rbh_posix_delete_entry(struct rbh_backend *backend,
+                       struct rbh_fsentry *fsentry);
 
 /**
  * Fill the projection to retrieve only the information needed

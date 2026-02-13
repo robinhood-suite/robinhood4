@@ -89,11 +89,14 @@ struct rbh_pe_common_operations {
     /**
      * Delete an entry
      *
+     * @param backend        a pointer to the mirroring database backend used
+     *                       for deletion
      * @param fsentry        the entry to delete
      *
      * @return               0 on success, -1 on error and errno is set
      */
-    int (*delete_entry)(struct rbh_fsentry *fsentry);
+    int (*delete_entry)(struct rbh_backend *backend,
+                        struct rbh_fsentry *fsentry);
 
     /**
      * Fill the projection to retrieve only the information needed
@@ -191,11 +194,12 @@ rbh_pe_common_ops_fill_entry_info(
 static inline int
 rbh_pe_common_ops_delete_entry(
     const struct rbh_pe_common_operations *common_ops,
+    struct rbh_backend *backend,
     struct rbh_fsentry *fsentry
 )
 {
     if (common_ops && common_ops->delete_entry)
-        return common_ops->delete_entry(fsentry);
+        return common_ops->delete_entry(backend, fsentry);
 
     errno = ENOTSUP;
     return -1;
