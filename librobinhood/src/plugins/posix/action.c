@@ -45,7 +45,8 @@ static const mode_t MODE_BITS[] = {
 #endif
 
 int
-rbh_posix_delete_entry(struct rbh_fsentry *fsentry)
+rbh_posix_delete_entry(struct rbh_backend *backend,
+                       struct rbh_fsentry *fsentry)
 {
     return unlink(fsentry_relative_path(fsentry));
 }
