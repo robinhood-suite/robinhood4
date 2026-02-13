@@ -20,7 +20,7 @@
 static const struct rbh_pe_common_operations S3_BACKEND_PLUGIN_COMMON_OPS = {
     .check_valid_token = rbh_s3_check_valid_token,
     .build_filter = rbh_s3_build_filter,
-    .delete_entry = rbh_s3_delete_entry,
+    .apply_action = rbh_s3_apply_action,
     .fill_entry_info = rbh_s3_fill_entry_info,
     .fill_projection = rbh_s3_fill_projection,
     .helper = rbh_s3_helper,
@@ -40,4 +40,5 @@ const struct rbh_backend_plugin RBH_BACKEND_PLUGIN_SYMBOL(S3) = {
     .ops = &S3_BACKEND_PLUGIN_OPS,
     .common_ops = &S3_BACKEND_PLUGIN_COMMON_OPS,
     .capabilities = RBH_SYNC_OPS,
+    .available_actions = RBH_ACTION_FLAG(RBH_ACTION_DELETE),
 };
