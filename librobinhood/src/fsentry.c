@@ -17,6 +17,7 @@
 
 #include <sys/stat.h>
 
+#include "robinhood/backend.h"
 #include "robinhood/fsentry.h"
 #include "robinhood/statx.h"
 #include "robinhood/utils.h"
@@ -175,4 +176,30 @@ fsentry_relative_path(const struct rbh_fsentry *fsentry)
         return ".";
     else
         return &path[1];
+}
+
+const char *
+fsentry_absolute_path(struct rbh_backend *backend,
+                      struct rbh_fsentry *fsentry)
+{
+    struct rbh_value_map *info = NULL;
+    const char *mountpoint = NULL;
+    const char *rel_path;
+    size_t len_mount, len_rel;
+    char *abs_path;
+
+    rel_path = fsentry_relative_path(fsentry);
+
+    info = rbh_backend_get_info(backend, RBH_INFO_MOUNTPOINT);
+    if (info && info->count > 0 && info->pairs[0].value->type == RBH_VT_STRING)
+        mountpoint = info->pairs[0].value->string;
+
+    if (!mountpoint)
+        error(EXIT_FAILURE, EINVAL,
+              "Cannot retrieve mountpoint for '%s'", fsentry->name);
+
+    if (asprintf(&abs_path, "%s%s", mountpoint, rel) < 0)
+        error(EXIT_FAILURE, ENOMEM, "asprintf failed for absolute path");
+
+    return abs_path;
 }
