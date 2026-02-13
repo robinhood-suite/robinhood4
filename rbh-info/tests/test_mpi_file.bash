@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # This file is part of rbh-info.
-# Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
+# Copyright (C) 2026 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
@@ -38,11 +38,29 @@ test_mpi_file_source()
         error "The mpi-file backend should have been registered"
 }
 
+test_command_backend()
+{
+    dwalk -q -o "$testdb.mfu" .
+    rbh_sync "rbh:mpi-file:$testdb.mfu" "rbh:$db:$testdb"
+
+    local command_backend=$(rbh_info "rbh:$db:$testdb" -B)
+
+    if [ "$command_backend" != "mpi-file" ]; then
+        error "Command backends don't match, found '$command_backend', expected 'mpi-file'\n"
+    fi
+
+    command_backend=$(rbh_info "rbh:$db:$testdb" --command-backend)
+
+    if [ "$command_backend" != "mpi-file" ]; then
+        error "Command backends don't match, found '$command_backend', expected 'mpi-file'\n"
+    fi
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
-declare -a tests=(test_mpi_file_list test_mpi_file_source)
+declare -a tests=(test_mpi_file_list test_mpi_file_source test_command_backend)
 
 tmpdir=$(mktemp --directory --tmpdir=$LUSTRE_DIR)
 trap -- "rm -rf '$tmpdir'" EXIT
