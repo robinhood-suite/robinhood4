@@ -262,6 +262,44 @@ rbh_pe_match_rule(const struct rbh_policy *policy,
 }
 
 /**
+ * Delete an entry from the filesystem by dispatching a DELETE action through
+ * the backend's apply_action operation.
+ *
+ * @param action       the action to apply (contains parsed parameters)
+ * @param mi_backend   the mirror backend
+ * @param fs_backend   the filesystem backend to use for deletion
+ * @param entry        the fsentry to delete
+ * @param common_ops   the backend's common operations interface
+ *
+ * @return 0 on success, -1 on error (errno is set)
+ */
+static int
+rbh_pe_delete_action(const struct rbh_action *action,
+                     struct rbh_backend *mi_backend,
+                     struct rbh_backend *fs_backend,
+                     struct rbh_fsentry *entry,
+                     const struct rbh_pe_common_operations *common_ops)
+{
+    int rc;
+
+    if (!entry) {
+        fprintf(stderr, "DeleteAction | entry is NULL\n");
+        return -1;
+    }
+
+    rc = rbh_pe_common_ops_apply_action(common_ops, action, entry, mi_backend,
+                                        fs_backend);
+    if (rc == 0) {
+        printf("DeleteAction | deleted '%s'\n", fsentry_relative_path(entry));
+    } else {
+        fprintf(stderr, "DeleteAction | failed to delete '%s': %s\n",
+                fsentry_relative_path(entry), rbh_strerror(errno));
+    }
+
+    return rc;
+}
+
+/**
  * Apply an action to a filesystem entry.
  *
  * This function dispatches the action based on its type. The specific behavior
@@ -288,7 +326,8 @@ rbh_pe_apply_action(const struct rbh_action *action,
         return rbh_pe_common_ops_apply_action(common_ops, action, entry,
                                               mi_backend, fs_backend);
     case RBH_ACTION_DELETE:
-        break;
+        return rbh_pe_delete_action(action, mi_backend, fs_backend, entry,
+                                    common_ops);
     case RBH_ACTION_CMD:
         break;
     case RBH_ACTION_PYTHON:
@@ -392,7 +431,7 @@ rbh_pe_execute(struct rbh_mut_iterator *mirror_iter,
         current_action = rbh_pe_select_action(policy, &action_cache,
                                               has_matched_rule, matched_index);
 
-        rbh_pe_apply_action(&current_action, fresh, mirror_backend,fs_backend,
+        rbh_pe_apply_action(&current_action, fresh, mirror_backend, fs_backend,
                             common_ops);
 
         free(fresh);
