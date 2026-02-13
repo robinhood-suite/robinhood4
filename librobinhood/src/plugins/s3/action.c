@@ -10,6 +10,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "robinhood/backend.h"
 #include "robinhood/filter.h"
 #include "robinhood/fsentry.h"
 #include "robinhood/projection.h"
@@ -18,7 +19,7 @@
 #include "s3_wrapper.h"
 
 int
-rbh_s3_delete_entry(struct rbh_fsentry *fsentry)
+rbh_s3_delete_entry(struct rbh_backend *backend, struct rbh_fsentry *fsentry)
 {
     const struct rbh_value *value;
     char *bucket, *object;
