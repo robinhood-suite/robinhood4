@@ -1,5 +1,5 @@
 /* This file is part of RobinHood 4
- * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2026 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifer: LGPL-3.0-or-later
@@ -131,6 +131,21 @@ store_mountpoint(struct sqlite_backend *sqlite, const char *mountpoint)
 }
 
 static bool
+store_command_backend(struct sqlite_backend *sqlite,
+                      const char *command_backend)
+{
+    const char *query =
+        "insert into info (id, backend) values (1, ?) on conflict(id) do "
+        "update set backend=excluded.backend";
+    struct sqlite_cursor cursor;
+
+    return sqlite_cursor_setup(sqlite, &cursor) &&
+        sqlite_setup_query(&cursor, query) &&
+        sqlite_cursor_bind_string(&cursor, command_backend) &&
+        sqlite_cursor_exec(&cursor);
+}
+
+static bool
 insert_last_read(struct sqlite_backend *sqlite, const char *id,
                  uint64_t last_read)
 {
@@ -184,6 +199,11 @@ insert_info(void *backend, const struct rbh_value_map *map)
         } else if (!strcmp(pair->key, "mountpoint") &&
                    pair->value->type == RBH_VT_STRING) {
             if (!store_mountpoint(backend, pair->value->string))
+                return false;
+
+        } else if (!strcmp(pair->key, "command_backend") &&
+                   pair->value->type == RBH_VT_STRING) {
+            if (!store_command_backend(backend, pair->value->string))
                 return false;
 
         } else if (!strcmp(pair->key, "fsevents_source") &&
