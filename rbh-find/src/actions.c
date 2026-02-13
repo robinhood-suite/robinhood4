@@ -496,6 +496,10 @@ find_pre_action(struct find_context *ctx, const int index,
         rbh_projection_add(&ctx->projection, str2filter_field("ns-xattrs"));
 
         return 1 + parse_exec_command(ctx, index + 1); // consume -exec
+    case ACT_DELETE:
+        rbh_projection_add(&ctx->projection, str2filter_field("ns-xattrs"));
+        rbh_projection_add(&ctx->projection, str2filter_field("statx"));
+        return 0;
     case ACT_LS:
         set_ls_projection(&ctx->projection);
 
