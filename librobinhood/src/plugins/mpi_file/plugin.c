@@ -18,7 +18,7 @@ static const struct rbh_pe_common_operations
     MPI_FILE_BACKEND_PLUGIN_COMMON_OPS = {
     .check_valid_token = rbh_mpi_file_check_valid_token,
     .build_filter = rbh_mpi_file_build_filter,
-    .delete_entry = rbh_mpi_file_delete_entry,
+    .apply_action = rbh_mpi_file_apply_action,
 };
 
 static const struct rbh_backend_plugin_operations
@@ -36,6 +36,7 @@ const struct rbh_backend_plugin RBH_BACKEND_PLUGIN_SYMBOL(MPI_FILE) = {
     .ops = &MPI_FILE_BACKEND_PLUGIN_OPS,
     .common_ops = &MPI_FILE_BACKEND_PLUGIN_COMMON_OPS,
     .capabilities = RBH_SYNC_OPS | RBH_FILTER_OPS | RBH_UPDATE_OPS,
+    .available_actions = RBH_ACTION_FLAG(RBH_ACTION_DELETE),
     .info = 0,
 };
 

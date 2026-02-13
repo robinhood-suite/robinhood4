@@ -9,6 +9,7 @@
 #include <robinhood/action.h>
 #include <robinhood/backend.h>
 #include <robinhood.h>
+#include "../../posix_internals.h"
 
 static int
 rbh_lustre_log_entry(struct rbh_fsentry *entry,
