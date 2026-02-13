@@ -1,5 +1,5 @@
 /* This file is part of Robinhood 4
- * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2026 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifer: LGPL-3.0-or-later
@@ -70,6 +70,9 @@ help()
         "                           a given backend\n"
         "    -b, --backend-source   Show the backend used as source for past\n"
         "                           rbh-syncs\n"
+        "    -B, --command-backend  Show the backend used as source in the\n"
+        "                           rbh-sync command line or the fsevents\n"
+        "                           enrich URI\n"
         "    -c, --count            Show the amount of document inside a\n"
         "                           given backend\n"
         "    -f, --first-sync       Show infos about the first rbh-sync done\n"
@@ -122,6 +125,10 @@ main(int _argc, char **_argv)
             .val = 'b',
         },
         {
+            .name = "command-backend",
+            .val = 'B',
+        },
+        {
             .name = "count",
             .val = 'c',
         },
@@ -171,7 +178,7 @@ main(int _argc, char **_argv)
         argv = &_argv[nb_cli_args];
     }
 
-    while ((option = getopt_long(argc, argv, "abcfhlmsy", LONG_OPTIONS,
+    while ((option = getopt_long(argc, argv, "abBcfhlmsy", LONG_OPTIONS,
                                  NULL)) != -1) {
         switch (option) {
         case 'a':
@@ -179,6 +186,9 @@ main(int _argc, char **_argv)
             break;
         case 'b':
             flags |= RBH_INFO_BACKEND_SOURCE;
+            break;
+        case 'B':
+            flags |= RBH_INFO_COMMAND_BACKEND;
             break;
         case 'c':
             flags |= RBH_INFO_COUNT;

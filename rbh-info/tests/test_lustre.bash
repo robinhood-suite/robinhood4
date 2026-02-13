@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # This file is part of rbh-info.
-# Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
+# Copyright (C) 2026 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
@@ -34,11 +34,28 @@ test_lustre_source()
         error "The retention extension should have been registered"
 }
 
+test_command_backend()
+{
+    rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
+
+    local command_backend=$(rbh_info "rbh:$db:$testdb" -B)
+
+    if [ "$command_backend" != "lustre" ]; then
+        error "Command backends don't match, found '$command_backend', expected 'lustre'\n"
+    fi
+
+    command_backend=$(rbh_info "rbh:$db:$testdb" --command-backend)
+
+    if [ "$command_backend" != "lustre" ]; then
+        error "Command backends don't match, found '$command_backend', expected 'lustre'\n"
+    fi
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
-declare -a tests=(test_lustre_source)
+declare -a tests=(test_lustre_source test_command_backend)
 
 LUSTRE_DIR=/mnt/lustre/
 cd "$LUSTRE_DIR"
