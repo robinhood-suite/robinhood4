@@ -48,7 +48,13 @@ int
 rbh_posix_delete_entry(struct rbh_backend *backend,
                        struct rbh_fsentry *fsentry)
 {
-    return unlink(fsentry_relative_path(fsentry));
+    mode_t mode = fsentry->statx ? fsentry->statx->stx_mode : 0;
+    const char *path = fsentry_absolute_path(backend, fsentry);
+
+    if (S_ISDIR(mode))
+        return rmdir(path);
+    else
+        return unlink(path);
 }
 
 #define MAX_OUTPUT_SIZE (PATH_MAX + 256)

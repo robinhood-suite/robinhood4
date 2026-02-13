@@ -17,6 +17,7 @@
 
 #include <sys/stat.h>
 
+#include "robinhood/backend.h"
 #include "robinhood/fsentry.h"
 #include "robinhood/statx.h"
 #include "robinhood/utils.h"
@@ -175,4 +176,45 @@ fsentry_relative_path(const struct rbh_fsentry *fsentry)
         return ".";
     else
         return &path[1];
+}
+
+const char *
+fsentry_absolute_path(struct rbh_backend *backend,
+                      struct rbh_fsentry *fsentry)
+{
+    const struct rbh_value *path_value;
+    struct rbh_value_map *info = NULL;
+    const char *mountpoint = NULL;
+    size_t len_mount;
+    size_t len_path;
+    char *abs_path;
+
+    path_value = rbh_fsentry_find_ns_xattr(fsentry, "path");
+    if (!path_value)
+        error(EXIT_FAILURE, EINVAL,
+              "Cannot reconstruct absolute path for '%s'", fsentry->name);
+
+    if (backend && backend->ops && backend->ops->get_info) {
+        info = backend->ops->get_info(backend, RBH_INFO_MOUNTPOINT);
+        if (info && info->count > 0 &&
+            info->pairs[0].value->type == RBH_VT_STRING)
+            mountpoint = info->pairs[0].value->string;
+    }
+
+    if (!mountpoint)
+        error(EXIT_FAILURE, EINVAL, "Cannot retrieve mountpoint for '%s'",
+              fsentry->name);
+
+    len_mount = strlen(mountpoint);
+    len_path = strlen(path_value->string);
+    abs_path = malloc(len_mount + len_path + 1);
+    if (!abs_path)
+        error(EXIT_FAILURE, ENOMEM, "malloc failed for absolute path");
+
+    strcpy(abs_path, mountpoint);
+    if (abs_path[len_mount - 1] == '/')
+        abs_path[len_mount - 1] = '\0';
+    strcat(abs_path, path_value->string);
+
+    return abs_path;
 }
