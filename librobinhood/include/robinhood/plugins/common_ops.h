@@ -88,17 +88,6 @@ struct rbh_pe_common_operations {
                            const char *directive, const char *backend);
 
     /**
-     * Delete an entry
-     *
-     * @param backend        a pointer to the metadata backend
-     * @param fsentry        the entry to delete
-     *
-     * @return               0 on success, -1 on error and errno is set
-     */
-    int (*delete_entry)(struct rbh_backend *backend,
-                        struct rbh_fsentry *fsentry);
-
-    /**
      * Apply an action on a given entry.
      *
      * This function is responsible for executing the action described by
@@ -225,20 +214,6 @@ rbh_pe_common_ops_apply_action(
 {
     if (common_ops && common_ops->apply_action)
         return common_ops->apply_action(action, entry, mi_backend, fs_backend);
-
-    errno = ENOTSUP;
-    return -1;
-}
-
-static inline int
-rbh_pe_common_ops_delete_entry(
-    const struct rbh_pe_common_operations *common_ops,
-    struct rbh_backend *backend,
-    struct rbh_fsentry *fsentry
-)
-{
-    if (common_ops && common_ops->delete_entry)
-        return common_ops->delete_entry(backend, fsentry);
 
     errno = ENOTSUP;
     return -1;
