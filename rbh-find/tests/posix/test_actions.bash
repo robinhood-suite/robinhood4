@@ -57,6 +57,8 @@ test_delete()
 
 test_checked_exec()
 {
+    mongo_only_test
+
     touch should_be_rm
     touch shouldnt_be_rm
 

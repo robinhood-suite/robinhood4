@@ -143,6 +143,8 @@ test_format_pretty_print()
 #                                     MAIN                                     #
 ################################################################################
 
+mongo_only_test
+
 declare -a tests=(test_format_multi_group_and_rsort test_format_pretty_print)
 
 tmpdir=$(mktemp --directory)

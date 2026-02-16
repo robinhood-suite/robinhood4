@@ -157,6 +157,8 @@ test_collection_mountpoint()
 
 test_command_backend()
 {
+    mongo_only_test
+
     rbh_sync "rbh:posix:." "rbh:$db:$testdb"
 
     local command_backend=$(rbh_info "rbh:$db:$testdb" -B)
