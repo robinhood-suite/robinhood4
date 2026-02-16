@@ -133,6 +133,8 @@ test_group_by_invalid_value()
 #                                     MAIN                                     #
 ################################################################################
 
+mongo_only_test
+
 declare -a tests=(test_group_by_type test_group_by_user test_multi_group_by
                   test_group_by_invalid_value)
 

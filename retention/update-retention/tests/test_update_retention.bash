@@ -368,6 +368,8 @@ test_retention_expiration_in_days()
 #                                     MAIN                                     #
 ################################################################################
 
+mongo_only_test
+
 declare -a tests=(test_retention_script test_retention_after_sync
                   test_retention_with_config test_retention_on_empty_dir
                   test_retention_expiration_in_days)

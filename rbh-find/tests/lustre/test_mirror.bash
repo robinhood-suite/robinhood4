@@ -15,6 +15,8 @@ test_dir=$(dirname $(readlink -e $0))
 
 test_mirror_count()
 {
+    mongo_only_test
+
     touch file
     lfs mirror create -N2 file2
     lfs mirror create -N3 file3
