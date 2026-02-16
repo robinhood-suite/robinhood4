@@ -260,6 +260,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6be337ae_0b1911ab",
+        "filename": "librobinhood/src/policyengine.c",
+        "patchSetId": 20
+      },
+      "lineNbr": 529,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-02-16T14:49:06Z",
+      "side": 1,
+      "message": "look at the following comment",
+      "parentUuid": "ada40932_4b530aa8",
+      "range": {
+        "startLine": 529,
+        "startChar": 12,
+        "endLine": 529,
+        "endChar": 18
+      },
+      "revId": "88e43c88f24b7386d02e925959555fc17ea2b1fe",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e75fdd20_247f200f",
@@ -368,6 +392,30 @@
       "side": 1,
       "message": "As discussed, let this one here, the rest can go, and we\u0027ll see what admins say in the future",
       "parentUuid": "92fe4938_60214335",
+      "range": {
+        "startLine": 529,
+        "startChar": 12,
+        "endLine": 530,
+        "endChar": 58
+      },
+      "revId": "88e43c88f24b7386d02e925959555fc17ea2b1fe",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cf977c6e_7cf74dbc",
+        "filename": "librobinhood/src/policyengine.c",
+        "patchSetId": 20
+      },
+      "lineNbr": 530,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-02-16T14:49:06Z",
+      "side": 1,
+      "message": "Following Guillaume\u0027s comments, I\u0027ll keep them removed and we\u0027ll add the total number of skiped entries later.",
+      "parentUuid": "33b4809f_71bfb85c",
       "range": {
         "startLine": 529,
         "startChar": 12,
