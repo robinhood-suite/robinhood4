@@ -238,6 +238,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ada40932_4b530aa8",
+        "filename": "librobinhood/src/policyengine.c",
+        "patchSetId": 20
+      },
+      "lineNbr": 529,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-02-16T09:59:40Z",
+      "side": 1,
+      "message": "I think it\u0027s a valid thing to print, even without verbosity, but I\u0027d say only do it to stderr",
+      "parentUuid": "5c4013ce_2342b68c",
+      "range": {
+        "startLine": 529,
+        "startChar": 12,
+        "endLine": 529,
+        "endChar": 18
+      },
+      "revId": "88e43c88f24b7386d02e925959555fc17ea2b1fe",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e75fdd20_247f200f",
         "filename": "librobinhood/src/policyengine.c",
         "patchSetId": 20
@@ -330,6 +354,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "33b4809f_71bfb85c",
+        "filename": "librobinhood/src/policyengine.c",
+        "patchSetId": 20
+      },
+      "lineNbr": 530,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-02-16T09:59:40Z",
+      "side": 1,
+      "message": "As discussed, let this one here, the rest can go, and we\u0027ll see what admins say in the future",
+      "parentUuid": "92fe4938_60214335",
+      "range": {
+        "startLine": 529,
+        "startChar": 12,
+        "endLine": 530,
+        "endChar": 58
+      },
+      "revId": "88e43c88f24b7386d02e925959555fc17ea2b1fe",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "27c267e8_ccab41fd",
@@ -367,6 +415,30 @@
       "side": 1,
       "message": "After discussing this with Guillaume, I\u0027m going to remove it. This check allowed to a rule defined without conditions to match all entries,but we\u0027re going to do the opposite: if the administrator defines a rule without conditions, this rule will be ignored.",
       "parentUuid": "27c267e8_ccab41fd",
+      "range": {
+        "startLine": 539,
+        "startChar": 12,
+        "endLine": 542,
+        "endChar": 13
+      },
+      "revId": "88e43c88f24b7386d02e925959555fc17ea2b1fe",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a46725d_d8420131",
+        "filename": "librobinhood/src/policyengine.c",
+        "patchSetId": 20
+      },
+      "lineNbr": 542,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-02-16T09:59:40Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "a22f3b2f_2a85eb2f",
       "range": {
         "startLine": 539,
         "startChar": 12,
