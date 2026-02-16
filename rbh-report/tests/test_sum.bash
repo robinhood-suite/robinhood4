@@ -83,6 +83,8 @@ test_sum_ino()
 #                                     MAIN                                     #
 ################################################################################
 
+mongo_only_test
+
 declare -a tests=(test_sum_size test_sum_mtime test_sum_ino)
 
 tmpdir=$(mktemp --directory)

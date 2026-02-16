@@ -15,6 +15,8 @@ test_dir=$(dirname $(readlink -e $0))
 
 test_s3_source()
 {
+    mongo_only_test
+
     rbh_sync "rbh:s3:" "rbh:mongo:$testdb"
 
     local output=$(rbh_info "rbh:mongo:$testdb" -b)

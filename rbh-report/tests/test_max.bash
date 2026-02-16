@@ -69,6 +69,8 @@ test_max_ino()
 #                                     MAIN                                     #
 ################################################################################
 
+mongo_only_test
+
 declare -a tests=(test_max_size test_max_mtime test_max_ino)
 
 tmpdir=$(mktemp --directory)

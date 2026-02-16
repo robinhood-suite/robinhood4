@@ -189,7 +189,7 @@ sqlite_cursor_bind_string(struct sqlite_cursor *cursor, const char *string)
     int rc;
 
     rc = sqlite3_bind_text(cursor->stmt, cursor->index++, string, -1,
-                           SQLITE_STATIC);
+                           SQLITE_TRANSIENT);
     if (rc != SQLITE_OK)
         return sqlite_db_fail(cursor->db, "failed to bind string '%s'", string);
 
@@ -213,7 +213,7 @@ sqlite_cursor_bind_binary(struct sqlite_cursor *cursor,
     int rc;
 
     rc = sqlite3_bind_blob(cursor->stmt, cursor->index++, data, size,
-                           SQLITE_STATIC);
+                           SQLITE_TRANSIENT);
     if (rc != SQLITE_OK)
         return sqlite_db_fail(cursor->db, "failed to bind binary value");
 
@@ -226,7 +226,7 @@ sqlite_cursor_bind_id(struct sqlite_cursor *cursor, const struct rbh_id *id)
     int rc;
 
     rc = sqlite3_bind_blob(cursor->stmt, cursor->index++, id->data, id->size,
-                           SQLITE_STATIC);
+                           SQLITE_TRANSIENT);
     if (rc != SQLITE_OK)
         return sqlite_db_fail(cursor->db, "failed to bind binary value");
 
