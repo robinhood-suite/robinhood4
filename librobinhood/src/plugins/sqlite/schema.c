@@ -166,19 +166,27 @@ static bool
 load_modules(sqlite3 *db)
 {
     const char *modules[] = {
-        "/usr/lib64/sqlite3/pcre.so",
+        "/usr/lib64/sqlite3/sqlite_pcre.so",
+        "sqlite_pcre.so",
     };
+    size_t len_modules;
     int rc;
 
     rc = sqlite3_enable_load_extension(db, 1);
     if (rc != SQLITE_OK)
         return sqlite_db_fail(db, "failed to enable module loading");
 
-    for (size_t i = 0; i < sizeof(modules) / sizeof(modules[0]); i++) {
+    len_modules = sizeof(modules) / sizeof(modules[0]);
+
+    for (size_t i = 0; i < len_modules; i++) {
         char *err_msg;
 
+        /* XXX: Works for now as we only have one module to load */
         rc = sqlite3_load_extension(db, modules[i], 0, &err_msg);
-        if (rc != SQLITE_OK)
+        if (rc == SQLITE_OK)
+            break;
+
+        if (i == len_modules - 1)
             return sqlite_db_fail(db, "failed to load '%s': %s",
                                   modules[i], err_msg);
     }
