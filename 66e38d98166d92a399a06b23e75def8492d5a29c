@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7287dddc_7fb457aa",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-02-16T14:48:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4e3f3ae3_e3a8eb34",
+      "range": {
+        "startLine": 9,
+        "startChar": 57,
+        "endLine": 9,
+        "endChar": 64
+      },
+      "revId": "66e38d98166d92a399a06b23e75def8492d5a29c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6e643ab2_f1d3610d",
@@ -37,6 +61,30 @@
       "writtenOn": "2026-02-16T09:42:51Z",
       "side": 1,
       "message": "minor: without specifying if it\u0027s the real FS/object store or the database, it\u0027s hard to understand",
+      "range": {
+        "startLine": 92,
+        "startChar": 46,
+        "endLine": 92,
+        "endChar": 71
+      },
+      "revId": "66e38d98166d92a399a06b23e75def8492d5a29c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e559975c_a1b1bf5c",
+        "filename": "librobinhood/include/robinhood/plugins/common_ops.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-02-16T14:48:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6e643ab2_f1d3610d",
       "range": {
         "startLine": 92,
         "startChar": 46,
