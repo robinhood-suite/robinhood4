@@ -304,7 +304,14 @@ def drop_db(db: str, filters: List[str]):
 def dump_db(db: str, filters: List[str]):
     with sqlite3.connect(db) as con:
         con.enable_load_extension(True)
-        con.load_extension("/usr/lib64/sqlite3/pcre.so")
+        paths = ["pcre.so", "/usr/lib64/sqlite3/pcre.so"]
+        for p in paths:
+            try:
+                con.load_extension(p)
+                break
+            except:
+                print(f"Failed to load '{p}'")
+
         regex = ""
         if len(filters) > 0:
             if "ns.xattrs.path" in filters[0]:

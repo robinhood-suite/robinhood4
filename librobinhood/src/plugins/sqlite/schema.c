@@ -161,11 +161,16 @@ sqlite_backend_dup(struct sqlite_backend *sqlite,
     return sqlite_backend_open(dup, sqlite->path, sqlite->read_only);
 }
 
+struct sqlite_module {
+    const char *path; // Extension's path
+    const char *name; // Extension's name
+};
+
 static bool
 load_modules(sqlite3 *db)
 {
-    const char *modules[] = {
-        "/usr/lib64/sqlite3/pcre.so",
+    const struct sqlite_module modules[] = {
+        { "/usr/lib64/sqlite3/pcre.so", "pcre.so" },
     };
     int rc;
 
@@ -176,10 +181,17 @@ load_modules(sqlite3 *db)
     for (size_t i = 0; i < sizeof(modules) / sizeof(modules[0]); i++) {
         char *err_msg;
 
-        rc = sqlite3_load_extension(db, modules[i], 0, &err_msg);
-        if (rc != SQLITE_OK)
-            return sqlite_db_fail(db, "failed to load '%s': %s",
-                                  modules[i], err_msg);
+        rc = sqlite3_load_extension(db, modules[i].path, 0, &err_msg);
+        if (rc != SQLITE_OK) {
+            sqlite_db_fail(db, "failed to load '%s': %s. Will try from the "
+                           "environment.", modules[i].path, err_msg);
+
+            rc = sqlite3_load_extension(db, modules[i].name, 0, &err_msg);
+            if (rc != SQLITE_OK)
+                return sqlite_db_fail(db, "failed to load '%s' from the "
+                                      "environment: %s", modules[i].name,
+                                      err_msg);
+        }
     }
 
     return true;
