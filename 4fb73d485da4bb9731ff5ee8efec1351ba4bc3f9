@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e523384_26bfc85f",
+        "filename": "librobinhood/include/robinhood/fsentry.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-02-16T14:48:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7dba690f_cc35cd8b",
+      "range": {
+        "startLine": 193,
+        "startChar": 3,
+        "endLine": 193,
+        "endChar": 11
+      },
+      "revId": "4fb73d485da4bb9731ff5ee8efec1351ba4bc3f9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "07b1ec14_7b97e744",
@@ -37,6 +61,30 @@
       "writtenOn": "2026-02-16T09:49:14Z",
       "side": 1,
       "message": "style: alignment is incorrect",
+      "range": {
+        "startLine": 196,
+        "startChar": 10,
+        "endLine": 196,
+        "endChar": 31
+      },
+      "revId": "4fb73d485da4bb9731ff5ee8efec1351ba4bc3f9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "627fbb1b_02cdaac7",
+        "filename": "librobinhood/include/robinhood/fsentry.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-02-16T14:48:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "07b1ec14_7b97e744",
       "range": {
         "startLine": 196,
         "startChar": 10,
@@ -70,6 +118,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9c45aaf7_0afdf662",
+        "filename": "librobinhood/src/fsentry.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-02-16T14:48:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "00a5fa55_4c045fb9",
+      "range": {
+        "startLine": 192,
+        "startChar": 4,
+        "endLine": 195,
+        "endChar": 74
+      },
+      "revId": "4fb73d485da4bb9731ff5ee8efec1351ba4bc3f9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "838e68a5_26e8bd02",
@@ -83,6 +155,30 @@
       "writtenOn": "2026-02-16T09:49:14Z",
       "side": 1,
       "message": "minor: if only there was a function that does exactly this already...",
+      "range": {
+        "startLine": 197,
+        "startChar": 4,
+        "endLine": 198,
+        "endChar": 68
+      },
+      "revId": "4fb73d485da4bb9731ff5ee8efec1351ba4bc3f9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "07d8e2fd_e4cd4f40",
+        "filename": "librobinhood/src/fsentry.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-02-16T14:48:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "838e68a5_26e8bd02",
       "range": {
         "startLine": 197,
         "startChar": 4,
@@ -116,6 +212,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "266a0b0b_3da28e7c",
+        "filename": "librobinhood/src/fsentry.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-02-16T14:48:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b51c101f_8df22cb0",
+      "range": {
+        "startLine": 210,
+        "startChar": 15,
+        "endLine": 210,
+        "endChar": 21
+      },
+      "revId": "4fb73d485da4bb9731ff5ee8efec1351ba4bc3f9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "825a5a5e_617cd4c0",
@@ -139,6 +259,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1041bd16_56e9fe99",
+        "filename": "librobinhood/src/fsentry.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-02-16T14:48:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "825a5a5e_617cd4c0",
+      "range": {
+        "startLine": 208,
+        "startChar": 4,
+        "endLine": 217,
+        "endChar": 41
+      },
+      "revId": "4fb73d485da4bb9731ff5ee8efec1351ba4bc3f9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cd48a81f_fbd4be5c",
@@ -152,6 +296,30 @@
       "writtenOn": "2026-02-16T09:49:14Z",
       "side": 1,
       "message": "minor: I think having the fsentry having a statx component is assured, you should check, but I\u0027d say this condition can be removed",
+      "range": {
+        "startLine": 51,
+        "startChar": 4,
+        "endLine": 51,
+        "endChar": 64
+      },
+      "revId": "4fb73d485da4bb9731ff5ee8efec1351ba4bc3f9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "65bdde58_6a2dcfa0",
+        "filename": "librobinhood/src/plugins/posix/action.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-02-16T14:48:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cd48a81f_fbd4be5c",
       "range": {
         "startLine": 51,
         "startChar": 4,
