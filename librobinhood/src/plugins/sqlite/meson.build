@@ -32,3 +32,5 @@ librbh_sqlite = library(
     install: true,
     c_args: '-DHAVE_CONFIG_H',
 )
+
+subdir('modules')
