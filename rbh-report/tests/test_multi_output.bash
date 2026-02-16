@@ -44,6 +44,8 @@ test_multi_output()
 #                                     MAIN                                     #
 ################################################################################
 
+mongo_only_test
+
 declare -a tests=(test_multi_output)
 
 tmpdir=$(mktemp --directory)

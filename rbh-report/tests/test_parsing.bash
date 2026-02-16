@@ -151,6 +151,8 @@ test_parsing_group()
 #                                     MAIN                                     #
 ################################################################################
 
+mongo_only_test
+
 declare -a tests=(test_parsing test_parsing_group test_parsing_output)
 
 tmpdir=$(mktemp --directory)

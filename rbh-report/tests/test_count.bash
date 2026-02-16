@@ -34,6 +34,8 @@ test_count()
 #                                     MAIN                                     #
 ################################################################################
 
+mongo_only_test
+
 declare -a tests=(test_count)
 
 tmpdir=$(mktemp --directory)

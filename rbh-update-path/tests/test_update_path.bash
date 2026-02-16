@@ -133,6 +133,8 @@ test_hardlink_update_path()
 
 test_concurrent_rename()
 {
+    mongo_only_test
+
     tmp_gdb_script=$(mktemp)
 
     mkdir dir
@@ -209,6 +211,8 @@ test_multiple_arborescence()
 
 test_config()
 {
+    mongo_only_test
+
     local conf_file="conf"
 
     mkdir dir

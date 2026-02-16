@@ -128,6 +128,8 @@ test_bucket()
 #                                     MAIN                                     #
 ################################################################################
 
+mongo_only_test
+
 declare -a tests=(test_filename test_backend_name test_size test_id test_path
                   test_bucket)
 

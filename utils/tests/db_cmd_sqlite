@@ -373,7 +373,7 @@ def drop_info(db: str, filters: List[str]):
     with sqlite3.connect(db) as con:
         cursor = con.cursor()
         cursor.execute(
-            "update info set plugin=NULL, extensions=NULL, command=NULL, mountpoint=NULL where id = 1")
+            "update info set plugin=NULL, extensions=NULL, backend=NULL, mountpoint=NULL where id = 1")
         con.commit()
 
 

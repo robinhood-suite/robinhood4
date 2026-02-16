@@ -107,6 +107,8 @@ test_group_by_field_and_range()
 #                                     MAIN                                     #
 ################################################################################
 
+mongo_only_test
+
 declare -a tests=(test_range test_group_by_field_and_range)
 
 tmpdir=$(mktemp --directory)

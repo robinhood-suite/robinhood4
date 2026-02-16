@@ -74,6 +74,8 @@ test_bucket()
 #                                     MAIN                                     #
 ################################################################################
 
+mongo_only_test
+
 declare -a tests=(test_name test_size test_bucket)
 
 trap -- "minio_teardown" EXIT

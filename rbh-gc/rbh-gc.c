@@ -388,7 +388,7 @@ main(int argc, char *argv[])
         error(EX_USAGE, 0, "unexpected argument: %s", argv[1]);
 
     /* Parse BACKEND */
-    backend = rbh_backend_from_uri(argv[0], true);
+    backend = rbh_backend_from_uri(argv[0], false);
 
     /* Retrieve mountpoint */
     path = get_mountpoint_from_source(backend);

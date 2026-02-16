@@ -109,6 +109,8 @@ EOF
 #                                     MAIN                                     #
 ################################################################################
 
+mongo_only_test
+
 declare -a tests=(test_posix test_retention test_lustre)
 
 LUSTRE_DIR=/mnt/lustre/

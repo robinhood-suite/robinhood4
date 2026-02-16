@@ -75,6 +75,8 @@ test_comp_end()
 
 test_comp_count()
 {
+    mongo_only_test
+
     touch 1comp
     lfs setstripe -E 1M -c 1 -S 256k -E 512M -c 2 -S 512k -E -1 -c -1 -S 1024k \
         "3comp"

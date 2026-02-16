@@ -285,12 +285,6 @@ teardown()
     return $rc
 }
 
-db=${RBH_TEST_DB:-mongo}
-if "$WITH_MPI"; then
-    # SQLite does not support concurrent writers so skip tests.
-    mongo_only_test
-fi
-
 mongo_only_test()
 {
     if [[ $db != mongo ]]; then
@@ -301,6 +295,12 @@ mongo_only_test()
         fi
     fi
 }
+
+db=${RBH_TEST_DB:-mongo}
+if "$WITH_MPI"; then
+    # SQLite does not support concurrent writers so skip tests.
+    mongo_only_test
+fi
 
 run_tests()
 {

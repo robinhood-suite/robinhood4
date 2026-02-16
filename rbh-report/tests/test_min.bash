@@ -68,6 +68,8 @@ test_min_ino()
 #                                     MAIN                                     #
 ################################################################################
 
+mongo_only_test
+
 declare -a tests=(test_min_size test_min_mtime test_min_ino)
 
 tmpdir=$(mktemp --directory)

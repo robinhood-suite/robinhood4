@@ -36,6 +36,8 @@ test_lustre_source()
 
 test_command_backend()
 {
+    mongo_only_test
+
     rbh_sync "rbh:lustre:." "rbh:$db:$testdb"
 
     local command_backend=$(rbh_info "rbh:$db:$testdb" -B)

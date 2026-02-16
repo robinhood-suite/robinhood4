@@ -163,6 +163,8 @@ EOF
 #                                     MAIN                                     #
 ################################################################################
 
+mongo_only_test
+
 declare -a tests=(test_config_specified test_config_default test_multiple_alias
                   test_recursive_alias test_recursive_alias_loop
                   test_alias_repeated test_aliases_in_single_argument

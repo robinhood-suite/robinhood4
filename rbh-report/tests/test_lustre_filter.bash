@@ -52,6 +52,8 @@ test_mdt_index()
 #                                     MAIN                                     #
 ################################################################################
 
+mongo_only_test
+
 declare -a tests=(test_mdt_index)
 
 LUSTRE_DIR=/mnt/lustre/

@@ -37,6 +37,8 @@ test_many_output()
 #                                     MAIN                                     #
 ################################################################################
 
+mongo_only_test
+
 declare -a tests=(test_many_output)
 
 tmpdir=$(mktemp --directory)

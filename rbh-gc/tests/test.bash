@@ -48,6 +48,8 @@ test_dry_run()
 
 test_sync_gc_run()
 {
+    mongo_only_test
+
     touch fileA
 
     before=$(date +%s)

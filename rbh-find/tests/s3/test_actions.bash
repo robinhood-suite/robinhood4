@@ -41,6 +41,8 @@ test_delete()
 #                                     MAIN                                     #
 ################################################################################
 
+mongo_only_test
+
 declare -a tests=(test_delete)
 
 trap -- "minio_teardown" EXIT

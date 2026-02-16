@@ -85,6 +85,8 @@ test_avg_ino()
 #                                     MAIN                                     #
 ################################################################################
 
+mongo_only_test
+
 declare -a tests=(test_avg_size test_avg_mtime test_avg_ino)
 
 tmpdir=$(mktemp --directory)

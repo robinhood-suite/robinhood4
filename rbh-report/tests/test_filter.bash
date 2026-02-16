@@ -82,6 +82,8 @@ test_filter_to_complete()
 #                                     MAIN                                     #
 ################################################################################
 
+mongo_only_test
+
 declare -a tests=(test_filter_type test_filter_size test_filter_to_complete)
 
 tmpdir=$(mktemp --directory)
