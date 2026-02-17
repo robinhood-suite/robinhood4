@@ -203,11 +203,6 @@ sqlite_xattr2json(const struct rbh_value_map *xattrs,
                   struct rbh_sstack *sstack);
 
 bool
-json2value_map(json_t *object, struct rbh_value_map *map,
-               struct rbh_sstack *sstack);
-
-
-bool
 sqlite_json2xattrs(const char *json, struct rbh_value_map *xattrs,
                    struct rbh_sstack *sstack);
 

@@ -9,6 +9,7 @@ extra_dependencies = []
 
 libdl = cc.find_library('dl', required: true)
 glib_dep = dependency('glib-2.0')
+jansson_dep = dependency('jansson', version: '>=1.16.0')
 libuuid = cc.find_library('libuuid', has_headers: ['uuid/uuid.h'],
                           required: true)
 
@@ -20,6 +21,7 @@ endif
 librobinhood = library(
     'robinhood',
     sources: [
+        'action.c',
         'alias.c',
         'backend.c',
         'config.c',
@@ -47,6 +49,7 @@ librobinhood = library(
         'statx.c',
         'uri.c',
         'utils/command.c',
+        'utils/json.c',
         'utils/path.c',
         'utils/uri.c',
         'utils/regex.c',
@@ -55,7 +58,7 @@ librobinhood = library(
         'value.c',
     ] + extra_sources,
     version: meson.project_version(),
-    dependencies: [ libdl, miniyaml, glib_dep, libuuid ] +
+    dependencies: [ libdl, miniyaml, glib_dep, libuuid, jansson_dep ] +
                   extra_dependencies,
     include_directories: rbh_include,
     install: true,
