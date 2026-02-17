@@ -8,6 +8,7 @@
 #ifndef ROBINHOOD_BACKEND_COMMON_OPS_H
 #define ROBINHOOD_BACKEND_COMMON_OPS_H
 
+#include "robinhood/action.h"
 #include "robinhood/config.h"
 #include "robinhood/backend.h"
 
@@ -99,6 +100,30 @@ struct rbh_pe_common_operations {
                         struct rbh_fsentry *fsentry);
 
     /**
+     * Apply an action on a given entry.
+     *
+     * This function is responsible for executing the action described by
+     * action on the provided fsentry. The backend implementation decides
+     * whether the action is supported and how it should be executed.
+     *
+     * @param action        the action to apply, containing its type and
+     *                      associated parameters
+     * @param fsentry       the filesystem entry on which the action must be
+     *                      applied
+     * @param mi_backend    the mirror database backend
+     * @param fs_backend    the filesystem backend
+     *
+     * @return              0 on success
+     *                      -1 on error and errno is set appropriately
+     *                      ENOTSUP if the action is not supported by the
+     *                      backend
+     */
+    int (*apply_action)(const struct rbh_action *action,
+                        struct rbh_fsentry *entry,
+                        struct rbh_backend *mi_backend,
+                        struct rbh_backend *fs_backend);
+
+    /**
      * Fill the projection to retrieve only the information needed
      *
      * @param projection the projection to fill
@@ -186,6 +211,21 @@ rbh_pe_common_ops_fill_entry_info(
     if (common_ops && common_ops->fill_entry_info)
         return common_ops->fill_entry_info(output, max_length, fsentry,
                                             directive, backend);
+
+    errno = ENOTSUP;
+    return -1;
+}
+
+static inline int
+rbh_pe_common_ops_apply_action(
+    const struct rbh_pe_common_operations *common_ops,
+    const struct rbh_action *action,
+    struct rbh_fsentry *entry,
+    struct rbh_backend *mi_backend,
+    struct rbh_backend *fs_backend)
+{
+    if (common_ops && common_ops->apply_action)
+        return common_ops->apply_action(action, entry, mi_backend, fs_backend);
 
     errno = ENOTSUP;
     return -1;

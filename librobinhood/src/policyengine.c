@@ -18,7 +18,6 @@
 
 #include "robinhood/policyengine_internal.h"
 #include "robinhood/filters/core.h"
-#include "robinhood/action.h"
 #include <robinhood.h>
 
 struct rbh_mut_iterator *
@@ -659,33 +658,26 @@ rbh_pe_match_rule(const struct rbh_policy *policy,
 /**
  * Apply an action to a filesystem entry.
  *
- * This function dispatches the action based on its type. The specific
- * behavior for each action type is implemented elsewhere.
+ * This function dispatches the action to the backend-specific
+ * apply_action function.
  *
- * @param action        the action to apply
+ * @param action        the action to apply (contains parsed parameters)
  * @param entry         the fsentry on which the action is applied
- * @param matched_rule  the rule that selected this action, or NULL
- * @param policy        the policy being evaluated
+ * @param mi_backend    the mirror backend
+ * @param fs_backend    the filesystem backend
+ * @param common_ops    backend-specific common operations
  *
- * @return              0
+ * @return              0 on success, -1 on error
  */
 static int
 rbh_pe_apply_action(const struct rbh_action *action,
-                    const struct rbh_fsentry *entry)
+                    struct rbh_fsentry *entry,
+                    struct rbh_backend *mi_backend,
+                    struct rbh_backend *fs_backend,
+                    const struct rbh_pe_common_operations *common_ops)
 {
-    switch (action->type) {
-    case RBH_ACTION_PRINT:
-        break;
-    case RBH_ACTION_DELETE:
-        break;
-    case RBH_ACTION_CMD:
-        break;
-    case RBH_ACTION_PYTHON:
-        break;
-    default:
-        break;
-    }
-    return 0;
+    return rbh_pe_common_ops_apply_action(common_ops, action, entry, mi_backend,
+                                          fs_backend);
 }
 
 int
@@ -694,7 +686,10 @@ rbh_pe_execute(struct rbh_mut_iterator *mirror_iter,
                const char *fs_uri,
                const struct rbh_policy *policy)
 {
+    const struct rbh_pe_common_operations *common_ops = NULL;
     struct rbh_action_cache action_cache = {0};
+    struct rbh_value_map *info_map = NULL;
+    struct filters_context f_ctx = {0};
     struct rbh_fsentry *mirror_entry;
     struct rbh_backend *fs_backend;
     struct rbh_raw_uri *raw_uri;
@@ -722,6 +717,21 @@ rbh_pe_execute(struct rbh_mut_iterator *mirror_iter,
     }
 
     rbh_pe_actions_init(policy, &action_cache);
+
+    /* Initialize common_ops once for all entries */
+    info_map = rbh_backend_get_info(fs_backend, RBH_INFO_BACKEND_SOURCE);
+    if (info_map) {
+        import_plugins(&f_ctx, &info_map, 1);
+        /* Find common_ops from plugin or extensions */
+        for (size_t i = 0; i < f_ctx.info_pe_count; ++i) {
+            const struct rbh_pe_common_operations *ops =
+                get_common_operations(&f_ctx.info_pe[i]);
+            if (ops) {
+                common_ops = ops;
+                break;
+            }
+        }
+    }
 
     while (true) {
         const struct rbh_rule *matched_rule = NULL;
@@ -773,11 +783,13 @@ rbh_pe_execute(struct rbh_mut_iterator *mirror_iter,
         current_action = rbh_pe_select_action(policy, &action_cache,
                                               has_matched_rule, matched_index);
 
-        rbh_pe_apply_action(&current_action, fresh);
+        rbh_pe_apply_action(&current_action, fresh, mirror_backend,fs_backend,
+                            common_ops);
 
         free(fresh);
     }
 
+    filters_ctx_finish(&f_ctx);
     rbh_pe_actions_destroy(&action_cache);
     rbh_backend_destroy(fs_backend);
     rbh_backend_destroy(mirror_backend);
