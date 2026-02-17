@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ca22b6e9_1594dc1a",
+        "filename": "librobinhood/src/plugins/sqlite/json/encode.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-02-17T14:31:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "55d9d6fe_4ea9795d",
+      "range": {
+        "startLine": 10,
+        "startChar": 1,
+        "endLine": 10,
+        "endChar": 19
+      },
+      "revId": "93c716fcf1212c24517938ce7a72423f92a61674",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bd5b224e_b1f8e9b0",
@@ -37,6 +61,30 @@
       "writtenOn": "2026-02-13T11:56:57Z",
       "side": 1,
       "message": "This function name is not very explicit. What is the purpose of this function?",
+      "range": {
+        "startLine": 163,
+        "startChar": 2,
+        "endLine": 163,
+        "endChar": 18
+      },
+      "revId": "93c716fcf1212c24517938ce7a72423f92a61674",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0eccd597_8a2d55ce",
+        "filename": "librobinhood/src/plugins/sqlite/json/encode.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-02-17T14:31:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bd5b224e_b1f8e9b0",
       "range": {
         "startLine": 163,
         "startChar": 2,
@@ -70,6 +118,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d88fe97e_e6af9379",
+        "filename": "librobinhood/src/plugins/sqlite/json/encode.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-02-17T14:31:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "01f49dc7_f49c1663",
+      "range": {
+        "startLine": 166,
+        "startChar": 32,
+        "endLine": 166,
+        "endChar": 34
+      },
+      "revId": "93c716fcf1212c24517938ce7a72423f92a61674",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "24d58af7_9c5ca922",
@@ -93,6 +165,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cdb536ef_8e0b120a",
+        "filename": "librobinhood/src/plugins/sqlite/json/encode.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-02-17T14:31:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "24d58af7_9c5ca922",
+      "range": {
+        "startLine": 171,
+        "startChar": 4,
+        "endLine": 171,
+        "endChar": 39
+      },
+      "revId": "93c716fcf1212c24517938ce7a72423f92a61674",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "474ad42f_25123625",
@@ -106,6 +202,30 @@
       "writtenOn": "2026-02-13T11:56:57Z",
       "side": 1,
       "message": "Use the mode directly as an argument here. I don\u0027t like magic booleans passed to a function like this. You need to look at the implementation details to know what true and false mean.",
+      "range": {
+        "startLine": 219,
+        "startChar": 45,
+        "endLine": 219,
+        "endChar": 56
+      },
+      "revId": "93c716fcf1212c24517938ce7a72423f92a61674",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c6f3159_af0a0266",
+        "filename": "librobinhood/src/plugins/sqlite/json/encode.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-02-17T14:31:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "474ad42f_25123625",
       "range": {
         "startLine": 219,
         "startChar": 45,
