@@ -37,5 +37,6 @@ const struct rbh_backend_plugin RBH_BACKEND_PLUGIN_SYMBOL(POSIX) = {
     .ops = &POSIX_BACKEND_PLUGIN_OPS,
     .common_ops = &POSIX_BACKEND_PLUGIN_COMMON_OPS,
     .capabilities = RBH_SYNC_OPS | RBH_BRANCH_OPS,
+    .available_actions = RBH_ACTION_FLAG(RBH_ACTION_PRINT),
     .info = 0,
 };

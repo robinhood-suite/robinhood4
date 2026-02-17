@@ -29,6 +29,7 @@ struct rbh_plugin_extension {
     uint64_t min_version;
     uint64_t max_version;
     const struct rbh_pe_common_operations *common_ops;
+    uint64_t available_actions;
 };
 
 /**
@@ -84,5 +85,8 @@ rbh_plugin_import(const char *name, const char *symbol);
 #define RBH_BRANCH_OPS 0b0010
 #define RBH_SYNC_OPS   0b0001
 #define RBH_EMPTY_OPS  0b0000
+
+
+#define RBH_ACTION_FLAG(a) (1ULL << (a))
 
 #endif
