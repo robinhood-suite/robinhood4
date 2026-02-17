@@ -35,6 +35,9 @@ struct rbh_action {
     struct rbh_value_map params;
 };
 
+const char *
+action2string(enum rbh_action_type type);
+
 /**
  * Parse YAML parameters into a value_map.
  *
