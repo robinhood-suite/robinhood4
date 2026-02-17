@@ -8,6 +8,9 @@
 #ifndef RBH_ACT
 #define RBH_ACT
 
+#include "robinhood/sstack.h"
+#include "robinhood/value.h"
+
 /**
  * Types of actions supported by the policy engine.
  */
@@ -28,8 +31,24 @@ enum rbh_action_type {
  */
 struct rbh_action {
     enum rbh_action_type type;
-    const char *parameters;
     const char *value;
+    struct rbh_value_map params;
 };
+
+/**
+ * Parse YAML parameters into a value_map.
+ *
+ * Parses YAML-formatted parameter string and fills the provided value_map.
+ * Memory is allocated using the global context from serialization.c and
+ * persists until program exit.
+ *
+ * @param parameters  YAML-formatted parameter string (e.g. "key: value")
+ * @param map         pointer to the value_map to fill
+ *
+ * @return            true on success, false on error
+ */
+bool
+rbh_action_parameters2value_map(const char *parameters,
+                                struct rbh_value_map *map);
 
 #endif

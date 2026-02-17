@@ -18,6 +18,7 @@
 
 #include "robinhood/policyengine.h"
 #include "robinhood/filters/core.h"
+#include "robinhood/action.h"
 #include <robinhood.h>
 
 struct rbh_mut_iterator *
@@ -117,7 +118,9 @@ static void
 rbh_pe_actions_init(const struct rbh_policy *policy,
                     struct rbh_action_cache *cache)
 {
+    cache->default_action = (struct rbh_action){0};
     cache->default_action.type = RBH_ACTION_UNSET;
+
     cache->rule_count = policy->rule_count;
 
     if (policy->rule_count == 0)
@@ -126,9 +129,8 @@ rbh_pe_actions_init(const struct rbh_policy *policy,
     cache->rule_actions = xcalloc(policy->rule_count,
                                   sizeof(*cache->rule_actions));
 
-    for (size_t i = 0; i < policy->rule_count; i++) {
+    for (size_t i = 0; i < policy->rule_count; i++)
         cache->rule_actions[i].type = RBH_ACTION_UNSET;
-    }
 }
 
 /**
@@ -149,6 +151,32 @@ rbh_pe_actions_destroy(struct rbh_action_cache *cache)
 }
 
 /**
+ * Initialize the parameters of a parsed action.
+ *
+ * Converts the YAML parameter string into a rbh_value_map using the global
+ * context allocation. Memory persists until program exit.
+ *
+ * @param parsed      the action whose params field will be filled
+ * @param parameters  YAML parameter string, or NULL
+ */
+static void
+rbh_pe_load_action_params(struct rbh_action *parsed, const char *parameters)
+{
+    /* Initialize to empty map */
+    parsed->params.pairs = NULL;
+    parsed->params.count = 0;
+
+    if (!parameters)
+        return;
+
+    /* Parse YAML into value_map using global context */
+    if (!rbh_action_parameters2value_map(parameters, &parsed->params)) {
+        parsed->params.pairs = NULL;
+        parsed->params.count = 0;
+    }
+}
+
+/**
  * Select the action to apply for a matched entry.
  *
  * If the matched rule has an associated cached action, it is returned.
@@ -163,30 +191,32 @@ rbh_pe_actions_destroy(struct rbh_action_cache *cache)
  *
  * @return              the selected action
  */
-static struct rbh_action
+struct rbh_action
 rbh_pe_select_action(const struct rbh_policy *policy,
                      struct rbh_action_cache *cache,
                      bool has_rule,
                      size_t matched_index)
 {
+    const char *parameters = NULL;
     struct rbh_action parsed;
 
     if (has_rule && cache->rule_actions != NULL) {
         if (cache->rule_actions[matched_index].type == RBH_ACTION_UNSET) {
             parsed = rbh_pe_parse_action(policy->rules[matched_index].action);
-            parsed.parameters = policy->rules[matched_index].parameters;
+            parameters = policy->rules[matched_index].parameters;
+            rbh_pe_load_action_params(&parsed, parameters);
             cache->rule_actions[matched_index] = parsed;
         }
-
         return cache->rule_actions[matched_index];
     }
 
+    /* Default action */
     if (cache->default_action.type == RBH_ACTION_UNSET) {
         parsed = rbh_pe_parse_action(policy->action);
-        parsed.parameters = policy->parameters;
+        parameters = policy->parameters;
+        rbh_pe_load_action_params(&parsed, parameters);
         cache->default_action = parsed;
     }
-
     return cache->default_action;
 }
 

@@ -17,6 +17,7 @@
 
 #include "robinhood/utils.h"
 #include "robinhood/value.h"
+#include "robinhood/serialization.h"
 
 #include "utils.h"
 #include "value.h"

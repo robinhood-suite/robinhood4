@@ -3,6 +3,7 @@
 #ifndef SERIALIZATION_H
 #define SERIALIZATION_H
 
+#include <error.h>
 #include <stdbool.h>
 
 #include <robinhood/fsevent.h>
