@@ -18,6 +18,7 @@
 
 #include "robinhood/policyengine_internal.h"
 #include "robinhood/filters/core.h"
+#include "robinhood/action.h"
 #include <robinhood.h>
 
 struct rbh_mut_iterator *
@@ -504,25 +505,21 @@ static void
 rbh_pe_actions_init(const struct rbh_policy *policy,
                     struct rbh_action_cache *cache)
 {
+    cache->default_action = (struct rbh_action){0};
     cache->default_action.type = RBH_ACTION_UNSET;
-    cache->default_action.parameters = NULL;
-    cache->default_action.value = NULL;
-    cache->rule_actions = NULL;
+
     cache->rule_count = policy->rule_count;
 
     if (policy->rule_count == 0)
         return;
 
-    cache->rule_actions = malloc(sizeof(*cache->rule_actions) *
-                                 policy->rule_count);
+    cache->rule_actions = calloc(policy->rule_count,
+                                 sizeof(*cache->rule_actions));
     if (cache->rule_actions == NULL)
-        error(EXIT_FAILURE, errno, "malloc failed");
+        error(EXIT_FAILURE, errno, "calloc failed");
 
-    for (size_t i = 0; i < policy->rule_count; i++) {
+    for (size_t i = 0; i < policy->rule_count; i++)
         cache->rule_actions[i].type = RBH_ACTION_UNSET;
-        cache->rule_actions[i].parameters = NULL;
-        cache->rule_actions[i].value = NULL;
-    }
 }
 
 /**
@@ -536,8 +533,15 @@ rbh_pe_actions_init(const struct rbh_policy *policy,
 static void
 rbh_pe_actions_destroy(struct rbh_action_cache *cache)
 {
-    if (cache->rule_actions)
-        free(cache->rule_actions);
+    if (cache->default_action.params.initialized)
+        rbh_sstack_destroy(cache->default_action.params.sstack);
+
+    for (size_t i = 0; i < cache->rule_count; i++) {
+        if (cache->rule_actions && cache->rule_actions[i].params.initialized)
+            rbh_sstack_destroy(cache->rule_actions[i].params.sstack);
+    }
+
+    free(cache->rule_actions);
     cache->rule_actions = NULL;
     cache->rule_count = 0;
 }
@@ -563,24 +567,58 @@ rbh_pe_select_action(const struct rbh_policy *policy,
                      bool has_rule,
                      size_t matched_index)
 {
+    const char *parameters = NULL;
     struct rbh_action parsed;
 
     if (has_rule && cache->rule_actions != NULL) {
         if (cache->rule_actions[matched_index].type == RBH_ACTION_UNSET) {
             parsed = rbh_pe_parse_action(policy->rules[matched_index].action);
-            parsed.parameters = policy->rules[matched_index].parameters;
+            parameters = policy->rules[matched_index].parameters;
+
+            parsed.params.sstack = NULL;
+            parsed.params.initialized = false;
+
+            if (parameters) {
+                parsed.params.sstack = rbh_sstack_new(1 << 10);
+                if (!parsed.params.sstack)
+                    error(EXIT_FAILURE, errno, "rbh_sstack_new failed");
+
+                if (!rbh_action_parameters_to_value_map(parameters,
+                                                        &parsed.params.map,
+                                                        parsed.params.sstack)) {
+                    rbh_sstack_destroy(parsed.params.sstack);
+                    parsed.params.sstack = NULL;
+                } else
+                    parsed.params.initialized = true;
+            }
             cache->rule_actions[matched_index] = parsed;
         }
-
         return cache->rule_actions[matched_index];
     }
 
+    /* Default action */
     if (cache->default_action.type == RBH_ACTION_UNSET) {
         parsed = rbh_pe_parse_action(policy->action);
-        parsed.parameters = policy->parameters;
+        parameters = policy->parameters;
+
+        parsed.params.sstack = NULL;
+        parsed.params.initialized = false;
+
+        if (parameters) {
+            parsed.params.sstack = rbh_sstack_new(1 << 10);
+            if (!parsed.params.sstack)
+                error(EXIT_FAILURE, errno, "rbh_sstack_new failed");
+
+            if (!rbh_action_parameters_to_value_map(parameters,
+                                                    &parsed.params.map,
+                                                    parsed.params.sstack)) {
+                rbh_sstack_destroy(parsed.params.sstack);
+                parsed.params.sstack = NULL;
+            } else
+                parsed.params.initialized = true;
+        }
         cache->default_action = parsed;
     }
-
     return cache->default_action;
 }
 
@@ -656,7 +694,7 @@ rbh_pe_execute(struct rbh_mut_iterator *mirror_iter,
                const char *fs_uri,
                const struct rbh_policy *policy)
 {
-    struct rbh_action_cache action_cache;
+    struct rbh_action_cache action_cache = {0};
     struct rbh_fsentry *mirror_entry;
     struct rbh_backend *fs_backend;
     struct rbh_raw_uri *raw_uri;
