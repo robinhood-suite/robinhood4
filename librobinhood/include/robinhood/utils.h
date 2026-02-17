@@ -19,6 +19,7 @@
 #ifndef ROBINHOOD_UTILS_H
 #define ROBINHOOD_UTILS_H
 
+#include <jansson.h>
 #include <error.h>
 #include <errno.h>
 
@@ -259,5 +260,9 @@ int command_call(const char *cmd_line, parse_cb_t cb_func, void *cb_arg);
 
 size_t
 base64_encode(char *dest, const char *src, size_t n);
+
+bool
+json2value_map(json_t *object, struct rbh_value_map *map,
+               struct rbh_sstack *sstack);
 
 #endif
