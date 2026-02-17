@@ -20,6 +20,7 @@ endif
 librobinhood = library(
     'robinhood',
     sources: [
+        'action.c',
         'alias.c',
         'backend.c',
         'config.c',
