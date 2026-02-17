@@ -18,6 +18,7 @@
 
 #include "robinhood/policyengine_internal.h"
 #include "robinhood/filters/core.h"
+#include "robinhood/action.h"
 #include <robinhood.h>
 
 struct rbh_mut_iterator *
@@ -504,7 +505,9 @@ static void
 rbh_pe_actions_init(const struct rbh_policy *policy,
                     struct rbh_action_cache *cache)
 {
+    cache->default_action = (struct rbh_action){0};
     cache->default_action.type = RBH_ACTION_UNSET;
+
     cache->rule_count = policy->rule_count;
 
     if (policy->rule_count == 0)
@@ -513,9 +516,8 @@ rbh_pe_actions_init(const struct rbh_policy *policy,
     cache->rule_actions = xcalloc(policy->rule_count,
                                   sizeof(*cache->rule_actions));
 
-    for (size_t i = 0; i < policy->rule_count; i++) {
+    for (size_t i = 0; i < policy->rule_count; i++)
         cache->rule_actions[i].type = RBH_ACTION_UNSET;
-    }
 }
 
 /**
@@ -529,10 +531,48 @@ rbh_pe_actions_init(const struct rbh_policy *policy,
 static void
 rbh_pe_actions_destroy(struct rbh_action_cache *cache)
 {
-    if (cache->rule_actions)
-        free(cache->rule_actions);
+    if (cache->default_action.params.initialized)
+        rbh_sstack_destroy(cache->default_action.params.sstack);
+
+    for (size_t i = 0; i < cache->rule_count; i++) {
+        if (cache->rule_actions && cache->rule_actions[i].params.initialized)
+            rbh_sstack_destroy(cache->rule_actions[i].params.sstack);
+    }
+
+    free(cache->rule_actions);
     cache->rule_actions = NULL;
     cache->rule_count = 0;
+}
+
+/**
+ * Initialize the parameters of a parsed action.
+ *
+ * Allocates an sstack and converts the JSON parameter string into a
+ * rbh_value_map. If parameters is NULL or conversion fails, the action
+ * is left with params.initialized = false.
+ *
+ * @param parsed      the action whose params field will be filled
+ * @param parameters  JSON parameter string, or NULL
+ */
+static void
+rbh_pe_load_action_params(struct rbh_action *parsed, const char *parameters)
+{
+    parsed->params.sstack = NULL;
+    parsed->params.initialized = false;
+
+    if (!parameters)
+        return;
+
+    parsed->params.sstack = rbh_sstack_new(1 << 10);
+
+    if (!rbh_action_parameters2value_map(parameters,
+                                         &parsed->params.map,
+                                         parsed->params.sstack)) {
+        rbh_sstack_destroy(parsed->params.sstack);
+        parsed->params.sstack = NULL;
+    } else {
+        parsed->params.initialized = true;
+    }
 }
 
 /**
@@ -550,30 +590,32 @@ rbh_pe_actions_destroy(struct rbh_action_cache *cache)
  *
  * @return              the selected action
  */
-static struct rbh_action
+struct rbh_action
 rbh_pe_select_action(const struct rbh_policy *policy,
                      struct rbh_action_cache *cache,
                      bool has_rule,
                      size_t matched_index)
 {
+    const char *parameters = NULL;
     struct rbh_action parsed;
 
     if (has_rule && cache->rule_actions != NULL) {
         if (cache->rule_actions[matched_index].type == RBH_ACTION_UNSET) {
             parsed = rbh_pe_parse_action(policy->rules[matched_index].action);
-            parsed.parameters = policy->rules[matched_index].parameters;
+            parameters = policy->rules[matched_index].parameters;
+            rbh_pe_load_action_params(&parsed, parameters);
             cache->rule_actions[matched_index] = parsed;
         }
-
         return cache->rule_actions[matched_index];
     }
 
+    /* Default action */
     if (cache->default_action.type == RBH_ACTION_UNSET) {
         parsed = rbh_pe_parse_action(policy->action);
-        parsed.parameters = policy->parameters;
+        parameters = policy->parameters;
+        rbh_pe_load_action_params(&parsed, parameters);
         cache->default_action = parsed;
     }
-
     return cache->default_action;
 }
 
