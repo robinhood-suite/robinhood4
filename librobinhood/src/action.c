@@ -6,6 +6,24 @@
  */
 
 #include "robinhood/serialization.h"
+#include "robinhood/action.h"
+
+const char *
+action2string(enum rbh_action_type type)
+{
+    switch (type) {
+    case RBH_ACTION_UNSET:
+        return "unset";
+    case RBH_ACTION_UNKNOWN:
+        return "unknown";
+    case RBH_ACTION_DELETE:
+        return "delete";
+    case RBH_ACTION_PRINT:
+        return "log";
+    default:
+        return "invalid";
+    }
+}
 
 bool
 rbh_action_parameters2value_map(const char *parameters,

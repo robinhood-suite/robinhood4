@@ -18,7 +18,6 @@
 
 #include "robinhood/policyengine.h"
 #include "robinhood/filters/core.h"
-#include "robinhood/action.h"
 #include <robinhood.h>
 
 struct rbh_mut_iterator *
@@ -250,23 +249,91 @@ rbh_pe_match_rule(const struct rbh_policy *policy,
     return false;
 }
 
+static const struct rbh_pe_common_operations *
+rbh_pe_select_common_ops_for_actions(const struct rbh_action *action,
+                                     struct rbh_backend *fs_backend,
+                                     const struct filters_context *f_ctx)
+{
+    const struct rbh_pe_common_operations *plugin_ops = NULL;
+    const struct rbh_pe_common_operations *ext_ops = NULL;
+    const struct rbh_backend_plugin *plugin = NULL;
+    size_t ext_matches = 0;
+    uint64_t flag;
+
+    flag = RBH_ACTION_FLAG(action->type);
+
+    for (size_t i = 0; i < f_ctx->info_pe_count; ++i) {
+        const struct rbh_plugin_extension *ext;
+
+        if (f_ctx->info_pe[i].is_plugin) {
+            plugin = f_ctx->info_pe[i].plugin;
+
+            if (plugin && plugin->common_ops)
+                plugin_ops = plugin->common_ops;
+
+            continue;
+        }
+
+        ext = f_ctx->info_pe[i].extension;
+
+        if (!ext || !(ext->available_actions & flag))
+            continue;
+
+        if (ext_matches > 0) {
+            fprintf(stderr, "Error: multiple extensions implement action %s\n",
+                    action2string(action->type));
+            errno = EINVAL;
+            return NULL;
+        }
+
+        ext_ops = ext->common_ops;
+        ext_matches++;
+    }
+
+    if (ext_matches == 1)
+        return ext_ops;
+
+    if (ext_matches == 0 && plugin && plugin_ops &&
+        (plugin->available_actions & flag))
+        return plugin_ops;
+
+    fprintf(stderr, "Error: action %s not supported by backend\n",
+            action2string(action->type));
+    errno = ENOTSUP;
+    return NULL;
+}
+
 /**
  * Apply an action to a filesystem entry.
  *
  * This function dispatches the action based on its type.
  *
- * @param action        the action to apply
+ * @param action        the action to apply (contains parsed parameters)
  * @param entry         the fsentry on which the action is applied
+ * @param mi_backend    the mirror backend
+ * @param fs_backend    the filesystem backend
+ * @param f_ctx         context containing plugins/extensions
  *
- * @return              0
+ * @return              0 on success, -1 on error
  */
 static int
 rbh_pe_apply_action(const struct rbh_action *action,
-                    const struct rbh_fsentry *entry)
+                    struct rbh_fsentry *entry,
+                    struct rbh_backend *mi_backend,
+                    struct rbh_backend *fs_backend,
+                    const struct filters_context *f_ctx)
 {
+    const struct rbh_pe_common_operations *common_ops;
+
     switch (action->type) {
     case RBH_ACTION_PRINT:
-        break;
+        common_ops = rbh_pe_select_common_ops_for_actions(action, fs_backend,
+                                                          f_ctx);
+        if (!common_ops)
+            return -1;
+
+        return rbh_pe_common_ops_apply_action(common_ops, action, entry,
+                                              mi_backend, fs_backend);
     case RBH_ACTION_DELETE:
         break;
     case RBH_ACTION_CMD:
@@ -274,7 +341,9 @@ rbh_pe_apply_action(const struct rbh_action *action,
     case RBH_ACTION_PYTHON:
         break;
     default:
-        break;
+        printf("Action type not supported\n");
+        errno = ENOTSUP;
+        return -1;
     }
     return 0;
 }
@@ -286,6 +355,8 @@ rbh_pe_execute(struct rbh_mut_iterator *mirror_iter,
                const struct rbh_policy *policy)
 {
     struct rbh_action_cache action_cache = {0};
+    struct rbh_value_map *info_map = NULL;
+    struct filters_context f_ctx = {0};
     struct rbh_fsentry *mirror_entry;
     struct rbh_backend *fs_backend;
     struct rbh_raw_uri *raw_uri;
@@ -312,6 +383,11 @@ rbh_pe_execute(struct rbh_mut_iterator *mirror_iter,
               "rbh_backend_and_branch_from_uri failed for '%s'", fs_uri);
 
     rbh_pe_actions_init(policy, &action_cache);
+
+    /* Load plugin/extension info into f_ctx */
+    info_map = rbh_backend_get_info(fs_backend, RBH_INFO_BACKEND_SOURCE);
+    if (info_map)
+        import_plugins(&f_ctx, &info_map, 1);
 
     while (true) {
         struct rbh_action current_action;
@@ -351,11 +427,13 @@ rbh_pe_execute(struct rbh_mut_iterator *mirror_iter,
         current_action = rbh_pe_select_action(policy, &action_cache,
                                               has_matched_rule, matched_index);
 
-        rbh_pe_apply_action(&current_action, fresh);
+        rbh_pe_apply_action(&current_action, fresh, mirror_backend, fs_backend,
+                            &f_ctx);
 
         free(fresh);
     }
 
+    filters_ctx_finish(&f_ctx);
     rbh_pe_actions_destroy(&action_cache);
     rbh_backend_destroy(fs_backend);
     rbh_backend_destroy(mirror_backend);
