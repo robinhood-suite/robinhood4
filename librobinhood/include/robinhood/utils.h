@@ -19,6 +19,7 @@
 #ifndef ROBINHOOD_UTILS_H
 #define ROBINHOOD_UTILS_H
 
+#include <jansson.h>
 #include <error.h>
 #include <errno.h>
 
@@ -263,5 +264,8 @@ base64_encode(char *dest, const char *src, size_t n);
 int
 convert_xattrs_with_operation(const struct rbh_value_pair *pairs, int count,
                               const char *op, struct rbh_sstack *stack);
+bool
+json2value_map(json_t *object, struct rbh_value_map *map,
+               struct rbh_sstack *sstack);
 
 #endif
