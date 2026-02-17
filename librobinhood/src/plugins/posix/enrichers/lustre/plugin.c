@@ -31,6 +31,7 @@ const struct rbh_posix_extension RBH_BACKEND_EXTENDS(POSIX, LUSTRE) = {
         .min_version = RBH_POSIX_BACKEND_VERSION,
         .max_version = RBH_POSIX_BACKEND_VERSION,
         .common_ops  = &LUSTRE_EXTENSION_COMMON_OPS,
+        .available_actions = RBH_ACTION_FLAG(RBH_ACTION_PRINT),
     },
     .enrich = rbh_lustre_enrich,
 };
