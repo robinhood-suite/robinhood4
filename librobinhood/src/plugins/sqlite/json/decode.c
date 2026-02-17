@@ -103,7 +103,6 @@ json2value_map(json_t *object, struct rbh_value_map *map,
         xattr->value = tmp;
         i++;
     }
-
     map->pairs = pairs;
     map->count = count;
     return true;
