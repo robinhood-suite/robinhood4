@@ -1,0 +1,112 @@
+/* This file is part of RobinHood 4
+ * Copyright (C) 2026 Commissariat a l'energie atomique et aux energies
+ *                    alternatives
+ *
+ * SPDX-License-Identifier: LGPL-3.0-or-later
+ */
+
+#include <jansson.h>
+
+#include "robinhood/utils.h"
+
+static bool
+json2value(json_t *object, struct rbh_value *value,
+           struct rbh_sstack *sstack);
+
+static bool
+json_array2sequence(json_t *object, struct rbh_value *value,
+                    struct rbh_sstack *sstack)
+{
+    struct rbh_value *values;
+    json_t *elem;
+    size_t index;
+
+    value->sequence.count = json_array_size(object);
+    values = rbh_sstack_alloc(sstack, NULL,
+                              sizeof(*values) * value->sequence.count);
+    if (!values)
+        return false;
+
+    json_array_foreach(object, index, elem) {
+        if (!json2value(elem, &values[index], sstack))
+            return false;
+    }
+
+    value->sequence.values = values;
+
+    return true;
+}
+
+static bool
+json2value(json_t *object, struct rbh_value *value,
+           struct rbh_sstack *sstack)
+{
+    if (json_is_integer(object)) {
+        /* /!\ jansson stores integers as long long (i.e. int64_t) so we cannot
+         * store uint64_t values in the xattrs.
+         */
+        value->type = RBH_VT_INT64;
+        value->int64 = json_integer_value(object);
+    } else if (json_is_object(object)) {
+        value->type = RBH_VT_MAP;
+        if (!json2value_map(object, &value->map, sstack))
+            return false;
+    } else if (json_is_array(object)) {
+        value->type = RBH_VT_SEQUENCE;
+        if (!json_array2sequence(object, value, sstack))
+            return false;
+    } else if (json_is_boolean(object)) {
+        value->type = RBH_VT_BOOLEAN;
+        value->boolean = json_boolean_value(object);
+    } else if (json_is_string(object)) {
+        const char *s = json_string_value(object);
+
+        value->type = RBH_VT_STRING;
+        value->string = rbh_sstack_alloc(sstack, s, strlen(s) + 1);
+        if (!value->string)
+            return false;
+    } else if (json_is_null(object)) {
+        value->type = RBH_VT_NULL;
+    }
+
+    return true;
+}
+
+bool
+json2value_map(json_t *object, struct rbh_value_map *map,
+               struct rbh_sstack *sstack)
+{
+    struct rbh_value_pair *pairs;
+    const char *key;
+    json_t *value;
+    size_t count;
+    size_t i = 0;
+
+    count = json_object_size(object);
+    pairs = rbh_sstack_alloc(sstack, NULL, sizeof(*pairs) * count);
+    if (!pairs)
+        return false;
+
+    json_object_foreach(object, key, value) {
+        struct rbh_value_pair *xattr = &pairs[i];
+        struct rbh_value *tmp;
+
+        tmp = rbh_sstack_alloc(sstack, NULL, sizeof(*xattr->value));
+        if (!tmp)
+            return false;
+
+        if (!json2value(value, tmp, sstack))
+            return false;
+
+        xattr->key = rbh_sstack_alloc(sstack, key, strlen(key) + 1);
+        if (!xattr->key)
+            return false;
+
+        xattr->value = tmp;
+        i++;
+    }
+
+    map->pairs = pairs;
+    map->count = count;
+    return true;
+}
