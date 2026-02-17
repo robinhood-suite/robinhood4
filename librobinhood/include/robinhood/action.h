@@ -8,6 +8,9 @@
 #ifndef RBH_ACT
 #define RBH_ACT
 
+#include "robinhood/sstack.h"
+#include "robinhood/value.h"
+
 /**
  * Types of actions supported by the policy engine.
  */
@@ -20,6 +23,12 @@ enum rbh_action_type {
     RBH_ACTION_UNKNOWN
 };
 
+struct rbh_action_parameters {
+    struct rbh_value_map map;
+    struct rbh_sstack *sstack;
+    bool initialized;
+};
+
 /**
  * Parsed representation of an action.
  *
@@ -28,8 +37,12 @@ enum rbh_action_type {
  */
 struct rbh_action {
     enum rbh_action_type type;
-    const char *parameters;
     const char *value;
+    struct rbh_action_parameters params;
 };
 
+bool
+rbh_action_parameters2value_map(const char *parameters,
+                                struct rbh_value_map *map,
+                                struct rbh_sstack *sstack);
 #endif
