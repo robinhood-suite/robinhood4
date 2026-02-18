@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8be72b98_85c4d6f5",
+        "filename": "librobinhood/src/fsentry.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-02-18T09:15:39Z",
+      "side": 1,
+      "message": "suggest: change the xmalloc above to xcalloc, and it\u0027s the same result, with one less line",
+      "range": {
+        "startLine": 74,
+        "startChar": 4,
+        "endLine": 74,
+        "endChar": 48
+      },
+      "revId": "77e7f833e142c76a3ecc128bba094382841ebf56",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
