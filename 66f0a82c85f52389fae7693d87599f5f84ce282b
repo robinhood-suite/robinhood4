@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "153ef408_887ad44a",
+        "filename": "librobinhood/tests/unit/check_policyengine.c",
+        "patchSetId": 10
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-02-18T10:22:57Z",
+      "side": 1,
+      "message": "sugest:\n```\nstruct rbh_statx statx \u003d {\n   .stx_mask \u003d RBH_STATX_SIZE;\n   .stx_size \u003d 1024;\n};\n```",
+      "revId": "66f0a82c85f52389fae7693d87599f5f84ce282b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "10f51a40_22e02ac0",
+        "filename": "librobinhood/tests/unit/check_policyengine.c",
+        "patchSetId": 10
+      },
+      "lineNbr": 725,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-02-18T10:22:57Z",
+      "side": 1,
+      "message": "sugest: add another field otherwise it\u0027s exactly the same test as without any fields",
+      "revId": "66f0a82c85f52389fae7693d87599f5f84ce282b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
