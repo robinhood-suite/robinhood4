@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ae6e8ac6_6f17653a",
+        "filename": "librobinhood/src/plugins/sqlite/extensions/meson.build",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-02-18T08:59:29Z",
+      "side": 1,
+      "message": "question: I\u0027m not sure I understand, from what we talked about, shouldn\u0027t this line be incorrect ? I thought this directory was the new shared library to be used, so why is there another dependency on top of it ?",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 8,
+        "endChar": 64
+      },
+      "revId": "031d1b2ada2176cc4af0bd630a1518aac959cf20",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d89393e6_ada5e0da",
+        "filename": "librobinhood/src/plugins/sqlite/meson.build",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-02-18T08:59:29Z",
+      "side": 1,
+      "message": "minor: don\u0027t like this name because it\u0027s already used in RBH4, seeing this you could reasonably think it\u0027s a RBH4 extension, when it isn\u0027t, it\u0027s a SQLite specific one, and a mandatory one at that. Maybe \"sqlite_extension\" or simply \"modules\" as used in the code",
+      "range": {
+        "startLine": 34,
+        "startChar": 0,
+        "endLine": 34,
+        "endChar": 20
+      },
+      "revId": "031d1b2ada2176cc4af0bd630a1518aac959cf20",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b8cd63d2_45f9e55d",
+        "filename": "librobinhood/src/plugins/sqlite/schema.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-02-18T08:59:29Z",
+      "side": 1,
+      "message": "minor: one line, even over 80 characters",
+      "range": {
+        "startLine": 186,
+        "startChar": 31,
+        "endLine": 187,
+        "endChar": 39
+      },
+      "revId": "031d1b2ada2176cc4af0bd630a1518aac959cf20",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4aa25b1c_860d0ea0",
+        "filename": "librobinhood/src/plugins/sqlite/schema.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-02-18T08:59:29Z",
+      "side": 1,
+      "message": "question: why the double load_extension ? The code before used only one, why bother with two now ?",
+      "range": {
+        "startLine": 189,
+        "startChar": 17,
+        "endLine": 189,
+        "endChar": 39
+      },
+      "revId": "031d1b2ada2176cc4af0bd630a1518aac959cf20",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3aca3878_9e26246e",
+        "filename": "librobinhood/src/plugins/sqlite/schema.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-02-18T08:59:29Z",
+      "side": 1,
+      "message": "minor: same",
+      "range": {
+        "startLine": 191,
+        "startChar": 42,
+        "endLine": 192,
+        "endChar": 55
+      },
+      "revId": "031d1b2ada2176cc4af0bd630a1518aac959cf20",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
