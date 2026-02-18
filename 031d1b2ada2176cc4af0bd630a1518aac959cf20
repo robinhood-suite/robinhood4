@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d55ca88f_699e5dde",
+        "filename": "librobinhood/src/plugins/sqlite/extensions/meson.build",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-02-18T09:54:11Z",
+      "side": 1,
+      "message": "No, it’s the libpcre library, which is a dependency of this extension just like sqlite3. The name of this extension is simply pcre perhaps I should rename it to make that clearer.",
+      "parentUuid": "ae6e8ac6_6f17653a",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 8,
+        "endChar": 64
+      },
+      "revId": "031d1b2ada2176cc4af0bd630a1518aac959cf20",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d89393e6_ada5e0da",
         "filename": "librobinhood/src/plugins/sqlite/meson.build",
         "patchSetId": 1
@@ -83,6 +107,30 @@
       "writtenOn": "2026-02-18T08:59:29Z",
       "side": 1,
       "message": "question: why the double load_extension ? The code before used only one, why bother with two now ?",
+      "range": {
+        "startLine": 189,
+        "startChar": 17,
+        "endLine": 189,
+        "endChar": 39
+      },
+      "revId": "031d1b2ada2176cc4af0bd630a1518aac959cf20",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "770fae54_2134cfe3",
+        "filename": "librobinhood/src/plugins/sqlite/schema.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-02-18T09:54:11Z",
+      "side": 1,
+      "message": "It’s because of the tests. When running them, the extension is not yet installed at `/usr/lib64/sqlite3/pcre.so`, but it is available in LD_LIBRARY_PATH as `pcre.so`. So the second load_extension is, in practice, only used when running the tests.",
+      "parentUuid": "4aa25b1c_860d0ea0",
       "range": {
         "startLine": 189,
         "startChar": 17,
