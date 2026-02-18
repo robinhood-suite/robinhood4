@@ -143,6 +143,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "07dd1042_a52d1e13",
+        "filename": "librobinhood/src/plugins/sqlite/schema.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-02-18T10:07:25Z",
+      "side": 1,
+      "message": "OK, but in that case keeping only one load_extension is enough, just make it fail if none of the modules load, and succeed if at least one does",
+      "parentUuid": "770fae54_2134cfe3",
+      "range": {
+        "startLine": 189,
+        "startChar": 17,
+        "endLine": 189,
+        "endChar": 39
+      },
+      "revId": "031d1b2ada2176cc4af0bd630a1518aac959cf20",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3aca3878_9e26246e",
         "filename": "librobinhood/src/plugins/sqlite/schema.c",
         "patchSetId": 1
