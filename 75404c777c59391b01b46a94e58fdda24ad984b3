@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0b693aaa_5f02b68b",
+        "filename": "librobinhood/src/fsentry.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-02-18T09:26:26Z",
+      "side": 1,
+      "message": "minor: I think you can assume this is always correct, so either don\u0027t add this check or make it an assert",
+      "range": {
+        "startLine": 193,
+        "startChar": 4,
+        "endLine": 193,
+        "endChar": 79
+      },
+      "revId": "75404c777c59391b01b46a94e58fdda24ad984b3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cdf49475_6520e8a4",
+        "filename": "librobinhood/src/fsentry.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-02-18T09:26:26Z",
+      "side": 1,
+      "message": "minor: I think this is unnecessary",
+      "range": {
+        "startLine": 196,
+        "startChar": 4,
+        "endLine": 198,
+        "endChar": 68
+      },
+      "revId": "75404c777c59391b01b46a94e58fdda24ad984b3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "25239fa7_201cc9e8",
+        "filename": "librobinhood/src/fsentry.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-02-18T09:26:26Z",
+      "side": 1,
+      "message": "major: this has to be freed btw",
+      "range": {
+        "startLine": 200,
+        "startChar": 18,
+        "endLine": 200,
+        "endChar": 26
+      },
+      "revId": "75404c777c59391b01b46a94e58fdda24ad984b3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
