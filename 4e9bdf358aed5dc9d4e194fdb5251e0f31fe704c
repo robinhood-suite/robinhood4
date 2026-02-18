@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ff43fd28_8e1bae5f",
+        "filename": "librobinhood/tests/unit/check_policyengine.c",
+        "patchSetId": 10
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-02-18T10:15:47Z",
+      "side": 1,
+      "message": "comment: I think these tests should be in another file as `compare_value` are not only used with the policy-engine, rbh-find also used it with the check-exec",
+      "revId": "4e9bdf358aed5dc9d4e194fdb5251e0f31fe704c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a3ab1d1e_7b7c9f34",
+        "filename": "librobinhood/tests/unit/check_policyengine.c",
+        "patchSetId": 10
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-02-18T10:15:47Z",
+      "side": 1,
+      "message": "sugest: use also \"a\" to check that we can\u0027t use the RBH_FOP_STRICLTY_LOWER operator with strings",
+      "range": {
+        "startLine": 130,
+        "startChar": 16,
+        "endLine": 130,
+        "endChar": 17
+      },
+      "revId": "4e9bdf358aed5dc9d4e194fdb5251e0f31fe704c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
