@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "48f0bf84_bc91c827",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-02-18T15:45:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "453a2f94_4a08562b",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 8
+      },
+      "revId": "7554a75abb9d78267d7d46faf49b67bc9951380c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "762de996_ae863998",
@@ -37,6 +61,30 @@
       "writtenOn": "2026-02-18T09:23:29Z",
       "side": 1,
       "message": "minor: not necessarily a database, could also be a mpifile",
+      "range": {
+        "startLine": 92,
+        "startChar": 56,
+        "endLine": 92,
+        "endChar": 64
+      },
+      "revId": "7554a75abb9d78267d7d46faf49b67bc9951380c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f5c87d4_e5f4df49",
+        "filename": "librobinhood/include/robinhood/plugins/common_ops.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-02-18T15:45:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "762de996_ae863998",
       "range": {
         "startLine": 92,
         "startChar": 56,
