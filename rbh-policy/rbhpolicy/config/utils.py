@@ -302,3 +302,45 @@ def translate_condition(key: str, operator: str, value: str):
         return [option, parsed_val]
 
     return [option, value]
+
+def cmd(cmdline: str):
+    """
+    Declare a shell command action.
+
+    Usage in a config file:
+        action = cmd("archive_tool --path {fullpath}")
+
+    The resulting action string stored in the policy will be:
+        "cmd:archive_tool --path {fullpath}"
+    """
+    if not isinstance(cmdline, str):
+        raise TypeError(f"cmd() expects a string, got {type(cmdline).__name__}")
+    return f"cmd:{cmdline}"
+
+
+def normalize_action(action):
+    """
+    Normalize an action to a prefixed string for the C policy engine.
+
+    Rules:
+    - If action is a Python callable, returns "py:<function_name>".
+    - If action is a string already containing ':', returns it unchanged
+      (e.g. "common:delete", "cmd:my_tool").
+    - Otherwise raises TypeError or ValueError.
+    """
+    if callable(action):
+        name = getattr(action, '__name__', None)
+        if not name:
+            raise ValueError("Cannot determine function name for action")
+        return f"py:{name}"
+    if isinstance(action, str):
+        if ':' in action:
+            return action
+        raise ValueError(
+            f"Action string '{action}' must include a type prefix "
+            f"(e.g. 'common:delete', 'cmd:mytool ...')."
+        )
+    raise TypeError(
+        f"Action must be a callable or a prefixed string, "
+        f"got {type(action).__name__}"
+    )
