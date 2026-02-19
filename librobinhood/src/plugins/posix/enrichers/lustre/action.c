@@ -63,7 +63,9 @@ rbh_lustre_apply_action(const struct rbh_action *action,
         return rbh_lustre_log_entry(entry, &action->params.map,
                                     action->params.sstack);
     case RBH_ACTION_DELETE:
-        return rbh_posix_delete_entry(mi_backend, entry);
+        return rbh_posix_delete_entry(mi_backend, entry,
+                                      action->params.initialized ?
+                                      &action->params.map : NULL);
     default:
         errno = ENOTSUP;
         return -1;
