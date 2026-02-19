@@ -106,13 +106,15 @@ rbh_posix_fill_entry_info(char *output, int max_length,
  *
  * @param backend        a pointer to the backend used for deletion
  * @param fsentry        the entry to delete
+ * @param params         optional action parameters
  *
- * @return               0 on success, -1 on error and errno is set
+ * @return               0 on success, 1 if the parent directory was also
+ *                       removed, -1 on error and errno is set
  */
 int
 rbh_posix_delete_entry(struct rbh_backend *backend,
-                       struct rbh_fsentry *fsentry);
-
+                       struct rbh_fsentry *fsentry,
+                       const struct rbh_value_map *params);
 int
 rbh_posix_apply_action(const struct rbh_action *action,
                        struct rbh_fsentry *entry,
