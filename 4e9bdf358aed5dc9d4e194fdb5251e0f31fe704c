@@ -18,6 +18,24 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "adcdd899_74011773",
+        "filename": "librobinhood/tests/unit/check_policyengine.c",
+        "patchSetId": 10
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-02-19T11:23:10Z",
+      "side": 1,
+      "message": "Yes, I agree. I discussed it with Yoann, and we\u0027ll make the file changes when chec-exec will be land.",
+      "parentUuid": "ff43fd28_8e1bae5f",
+      "revId": "4e9bdf358aed5dc9d4e194fdb5251e0f31fe704c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a3ab1d1e_7b7c9f34",
@@ -31,6 +49,54 @@
       "writtenOn": "2026-02-18T10:15:47Z",
       "side": 1,
       "message": "sugest: use also \"a\" to check that we can\u0027t use the RBH_FOP_STRICLTY_LOWER operator with strings",
+      "range": {
+        "startLine": 130,
+        "startChar": 16,
+        "endLine": 130,
+        "endChar": 17
+      },
+      "revId": "4e9bdf358aed5dc9d4e194fdb5251e0f31fe704c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6723f34e_f63a6c94",
+        "filename": "librobinhood/tests/unit/check_policyengine.c",
+        "patchSetId": 10
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-02-19T11:23:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a3ab1d1e_7b7c9f34",
+      "range": {
+        "startLine": 130,
+        "startChar": 16,
+        "endLine": 130,
+        "endChar": 17
+      },
+      "revId": "4e9bdf358aed5dc9d4e194fdb5251e0f31fe704c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c7a9ebb9_2922a3b8",
+        "filename": "librobinhood/tests/unit/check_policyengine.c",
+        "patchSetId": 10
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-02-19T11:23:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a3ab1d1e_7b7c9f34",
       "range": {
         "startLine": 130,
         "startChar": 16,
