@@ -47,15 +47,53 @@ static const mode_t MODE_BITS[] = {
 
 int
 rbh_posix_delete_entry(struct rbh_backend *backend,
-                       struct rbh_fsentry *fsentry)
+                       struct rbh_fsentry *fsentry,
+                       const struct rbh_value_map *params)
 {
-    char *path = fsentry_absolute_path(backend, fsentry);
+    bool remove_empty_parent = false;
+    char *path;
     int rc;
+
+    if (params) {
+        const struct rbh_value *val = rbh_map_find(params,
+                                                   "remove_empty_parent");
+        if (val && val->type == RBH_VT_BOOLEAN)
+            remove_empty_parent = val->boolean;
+    }
+
+    path = fsentry_absolute_path(backend, fsentry);
 
     if (S_ISDIR(fsentry->statx->stx_mode))
         rc = rmdir(path);
     else
         rc = unlink(path);
+
+    if (rc == 0 && remove_empty_parent) {
+        bool parent_is_mountpoint;
+        const char *rel_path;
+
+        rel_path = fsentry_relative_path(fsentry);
+        /* Do not attempt to remove the parent if it is the backend mount
+         * point. This is the case when the entry's relative path contains
+         * no '/', meaning the entry lives directly in the mount point
+         * directory. */
+        parent_is_mountpoint = (rel_path == NULL ||
+                                strchr(rel_path, '/') == NULL);
+
+        if (!parent_is_mountpoint) {
+            char *path_copy;
+            char *parent;
+
+            path_copy = xstrdup(path);
+            parent = dirname(path_copy);
+            /* rmdir fails silently if parent is not empty (ENOTEMPTY) or
+             * does not exist (ENOENT), which is the expected behaviour. */
+            if (rmdir(parent) == 0)
+                rc = 1; /* signal: parent was also removed */
+
+            free(path_copy);
+        }
+    }
 
     free(path);
     return rc;
@@ -102,7 +140,9 @@ rbh_posix_apply_action(const struct rbh_action *action,
         return rbh_posix_log_entry(entry, &action->params.map,
                                    action->params.sstack);
     case RBH_ACTION_DELETE:
-        return rbh_posix_delete_entry(mi_backend, entry);
+        return rbh_posix_delete_entry(mi_backend, entry,
+                                      action->params.initialized ?
+                                      &action->params.map : NULL);
     default:
         errno = ENOTSUP;
         return -1;
