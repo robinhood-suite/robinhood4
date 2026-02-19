@@ -7,6 +7,7 @@
 
 #include <errno.h>
 #include <fnmatch.h>
+#include <libgen.h>
 #include <limits.h>
 #include <regex.h>
 #include <stddef.h>
@@ -683,12 +684,18 @@ rbh_pe_delete_action(const struct rbh_action *action,
 
     rc = rbh_pe_common_ops_apply_action(common_ops, action, entry, mi_backend,
                                         fs_backend);
-    if (rc == 0) {
+    if (rc == 0 || rc == 1) {
         printf("DeleteAction | deleted '%s'\n", fsentry_relative_path(entry));
-    } else {
+        if (rc == 1) {
+            char *rel_copy = xstrdup(fsentry_relative_path(entry));
+            printf("DeleteAction | removed empty parent directory '%s'\n",
+                   dirname(rel_copy));
+            free(rel_copy);
+        }
+        rc = 0;
+    } else
         fprintf(stderr, "DeleteAction | failed to delete '%s': %s\n",
                 fsentry_relative_path(entry), rbh_strerror(errno));
-    }
 
     return rc;
 }
