@@ -7,6 +7,7 @@
 
 from rbhpolicy.config.conditions import LogicalCondition
 from rbhpolicy.config.policy import Rule
+from rbhpolicy.config.utils import normalize_action
 
 def validate_fileclass(name, condition):
     """
@@ -41,6 +42,13 @@ def validate_rule(rule):
         raise TypeError(f"Rule condition must be a LogicalCondition"
                         f"instance, got {type(rule.condition).__name__}")
 
+    if (rule.action is not None
+            and not isinstance(rule.action, str)
+            and not callable(rule.action)):
+        raise TypeError(f"Rule action must be a normalized string (use cmd(), "
+                        f"a callable, or a prefixed string like 'common:...'). "
+                        f"Got {type(rule.action).__name__}")
+
     if rule.parameters is not None and not isinstance(rule.parameters, dict):
         raise TypeError(f"Rule parameters must be a dict, got "
                         f"{type(rule.parameters).__name__}")
@@ -57,6 +65,13 @@ def validate_policy(name, condition, action, trigger, parameters=None,
     if not isinstance(condition, LogicalCondition):
         raise TypeError(f"Policy target must be a LogicalCondition instance, got "
                         f"{type(condition).__name__}")
+
+    if (action is not None
+            and not isinstance(action, str)
+            and not callable(action)):
+        raise TypeError(f"Policy action must be a normalized string (use cmd(), "
+                        f"a callable, or a prefixed string like 'common:...'). "
+                        f"Got {type(action).__name__}")
 
     if rules is not None:
         if isinstance(rules, Rule):
