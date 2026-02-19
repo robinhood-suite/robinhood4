@@ -7,6 +7,7 @@
 
 import sys
 from rbhpolicy.config.conditions import LogicalCondition
+from rbhpolicy.config.utils import normalize_action
 
 rbh_policies = {}
 
@@ -16,7 +17,7 @@ class Rule:
             parameters=None):
         self.name = name
         self.condition = condition
-        self.action = action
+        self.action = normalize_action(action) if action is not None else None
         self.parameters = parameters or {}
         self._filter = None
 
@@ -40,7 +41,7 @@ class Policy:
             parameters=None, rules=None):
         self.name = name
         self.target = target
-        self.action = action
+        self.action = normalize_action(action) if action is not None else None
         self.trigger = trigger
         self.parameters = parameters or {}
         self.rules = rules or []
