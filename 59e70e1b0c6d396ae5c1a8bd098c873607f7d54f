@@ -18,6 +18,24 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3b7430fb_9c27ef25",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-02-19T11:26:22Z",
+      "side": 1,
+      "message": "Yes, I will add a patch to my stack to avoid having to resolve multiple conflicts currently.",
+      "parentUuid": "ca573378_db079c6a",
+      "revId": "59e70e1b0c6d396ae5c1a8bd098c873607f7d54f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d49c4400_243281ae",
