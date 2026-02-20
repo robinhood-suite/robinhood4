@@ -18,7 +18,7 @@
 
 #include "robinhood/backend.h"
 #include "robinhood/utils.h"
-#include "robinhood/policyengine.h"
+#include "robinhood/policyengine/core.h"
 
 /*
  * Test: rbh_collect_fsentries_test
