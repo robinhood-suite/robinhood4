@@ -303,22 +303,57 @@ def translate_condition(key: str, operator: str, value: str):
 
     return [option, value]
 
-def cmd(cmdline: str):
+def cmd(cmdline: str) -> str:
     """
     Declare a shell command action.
 
-    Usage in a config file:
-        action = cmd("archive_tool --path {fullpath}")
+    Named placeholders like ``{paramname}`` are resolved later against the
+    ``parameters`` dict of the enclosing Policy or Rule.  The special
+    placeholder ``{}`` is reserved for the filesystem entry path, resolved at
+    runtime by the C engine.
 
-    The resulting action string stored in the policy will be:
-        "cmd:archive_tool --path {fullpath}"
+    Usage in a config file:
+        action = cmd("stat {}")
+        action = cmd("archive_tool --level {lvl} {}")
+        # with parameters={"lvl": 3}
     """
     if not isinstance(cmdline, str):
         raise TypeError("cmd() expects a string, got "
                         f"{type(cmdline).__name__}")
     return f"cmd:{cmdline}"
 
+def resolve_cmd_action(action: str, parameters: dict) -> str:
+    """
+    Resolve named placeholders in a ``cmd:`` action string against parameters
+    and protect ``{}`` from wordexp brace expansion.
 
+    This is called by Policy/Rule constructors once both ``action`` and
+    ``parameters`` are known.  Non-cmd actions are returned unchanged.
+
+    :raises ValueError: if a ``{name}`` placeholder remains unresolved after
+                        substitution (i.e. it was not provided in parameters).
+    """
+    if not action or not action.startswith("cmd:"):
+        return action
+
+    cmdline = action[len("cmd:"):]
+
+    # Substitute named parameters
+    for name, value in (parameters or {}).items():
+        cmdline = cmdline.replace(f"{{{name}}}", str(value))
+
+    # Protect the path placeholder from wordexp brace expansion
+    cmdline = cmdline.replace("{}", "'{}'")
+
+    # Detect any remaining {name} placeholders not covered by parameters
+    unresolved = re.findall(r'\{[^}\']+\}', cmdline)
+    if unresolved:
+        raise ValueError(
+            f"cmd action has unresolved placeholders {unresolved}. "
+            f"Add them to the 'parameters' dict of the Policy or Rule."
+        )
+
+    return f"cmd:{cmdline}"
 def normalize_action(action):
     """
     Normalize an action to a prefixed string for the C policy engine.
