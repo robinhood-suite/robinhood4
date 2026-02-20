@@ -45,21 +45,98 @@ static const mode_t MODE_BITS[] = {
 # define ARRAY_SIZE(array) sizeof(array) / sizeof(array[0])
 #endif
 
+static void
+parse_delete_params(const struct rbh_value_map *params,
+                    bool *remove_empty_parent,
+                    const char **parents_below)
+{
+    if (!params)
+        return;
+
+    const struct rbh_value *val = rbh_map_find(params, "remove_empty_parent");
+    if (val && val->type == RBH_VT_STRING)
+        *remove_empty_parent = (strcmp(val->string, "true") == 0);
+
+    val = rbh_map_find(params, "remove_parents_below");
+    if (val && val->type == RBH_VT_STRING)
+        *parents_below = val->string;
+}
+
+/* Build the absolute floor path:
+ * - If parents_below is given, use it as the floor relative to the mountpoint.
+ * - Otherwise, set the floor to the grandparent of the deleted entry so that
+ *   only the direct parent can be removed. */
+static char *
+build_abs_floor(const char *path, size_t mountpoint_len,
+                const char *parents_below)
+{
+    char *abs_floor;
+
+    if (parents_below) {
+        size_t floor_len = mountpoint_len + 1 + strlen(parents_below);
+        abs_floor = xmalloc(floor_len + 1);
+        memcpy(abs_floor, path, mountpoint_len);
+        abs_floor[mountpoint_len] = '/';
+        strcpy(abs_floor + mountpoint_len + 1, parents_below);
+    } else {
+        char *tmp1 = xstrdup(path);
+        char *tmp2 = xstrdup(dirname(tmp1));
+        abs_floor = xstrdup(dirname(tmp2));
+        free(tmp1);
+        free(tmp2);
+    }
+
+    return abs_floor;
+}
+
+static bool
+remove_empty_parents(const char *path, size_t mountpoint_len,
+                     const char *abs_floor)
+{
+    bool parent_removed = false;
+    char *current = xstrdup(path);
+
+    while (true) {
+        char *tmp = xstrdup(current);
+        char *parent = dirname(tmp);
+
+        /* Stop at or above the mountpoint */
+        if (strlen(parent) <= mountpoint_len) {
+            free(tmp);
+            break;
+        }
+
+        /* Stop at the floor path (do not remove it) */
+        if (abs_floor && strcmp(parent, abs_floor) == 0) {
+            free(tmp);
+            break;
+        }
+
+        if (rmdir(parent) == 0) {
+            parent_removed = true;
+            free(current);
+            current = tmp;
+        } else {
+            free(tmp);
+            break;
+        }
+    }
+
+    free(current);
+    return parent_removed;
+}
+
 int
 rbh_posix_delete_entry(struct rbh_backend *backend,
                        struct rbh_fsentry *fsentry,
                        const struct rbh_value_map *params)
 {
     bool remove_empty_parent = false;
+    const char *parents_below = NULL;
     char *path;
     int rc;
 
-    if (params) {
-        const struct rbh_value *val = rbh_map_find(params,
-                                                   "remove_empty_parent");
-        if (val && val->type == RBH_VT_STRING)
-            remove_empty_parent = (strcmp(val->string, "true") == 0);
-    }
+    parse_delete_params(params, &remove_empty_parent, &parents_below);
 
     path = fsentry_absolute_path(backend, fsentry);
 
@@ -69,29 +146,26 @@ rbh_posix_delete_entry(struct rbh_backend *backend,
         rc = unlink(path);
 
     if (rc == 0 && remove_empty_parent) {
-        bool parent_is_mountpoint;
-        const char *rel_path;
-
-        rel_path = fsentry_relative_path(fsentry);
+        const char *rel_path = fsentry_relative_path(fsentry);
         /* Do not attempt to remove the parent if it is the backend mount
          * point. This is the case when the entry's relative path contains
          * no '/', meaning the entry lives directly in the mount point
          * directory. */
-        parent_is_mountpoint = (rel_path == NULL ||
-                                strchr(rel_path, '/') == NULL);
+        bool parent_is_mountpoint = (rel_path == NULL ||
+                                     strchr(rel_path, '/') == NULL);
 
         if (!parent_is_mountpoint) {
-            char *path_copy;
-            char *parent;
+            /* mountpoint_len is the length of the absolute mountpoint path,
+             * e.g. len("/mnt/fs") when abs_path is "/mnt/fs/a/b/c" and
+             * rel_path is "a/b/c". */
+            size_t mountpoint_len = strlen(path) - strlen(rel_path) - 1;
+            char *abs_floor = build_abs_floor(path, mountpoint_len,
+                                              parents_below);
 
-            path_copy = xstrdup(path);
-            parent = dirname(path_copy);
-            /* rmdir fails silently if parent is not empty (ENOTEMPTY) or
-             * does not exist (ENOENT), which is the expected behaviour. */
-            if (rmdir(parent) == 0)
-                rc = 1; /* signal: parent was also removed */
+            if (remove_empty_parents(path, mountpoint_len, abs_floor))
+                rc = 1; /* signal: at least one parent was also removed */
 
-            free(path_copy);
+            free(abs_floor);
         }
     }
 
