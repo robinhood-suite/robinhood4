@@ -106,10 +106,18 @@ rbh_posix_fill_entry_info(char *output, int max_length,
  *
  * @param backend        a pointer to the backend used for deletion
  * @param fsentry        the entry to delete
- * @param params         optional action parameters
+ * @param params         optional action parameters:
+ *                         - "remove_empty_parent" (bool): if true, walk up
+ *                           the directory tree and remove empty parent
+ *                           directories up to the mount point.
+ *                         - "remove_parents_below" (string): relative path
+ *                           from the mount point acting as a floor. Empty
+ *                           parents are removed only below this path; the
+ *                           floor directory itself is never removed.
+ *                           Only meaningful when remove_empty_parent is true.
  *
- * @return               0 on success, 1 if the parent directory was also
- *                       removed, -1 on error and errno is set
+ * @return 0 on success, 1 if at least one parent directory was also removed,
+ *        -1 on error and errno is set
  */
 int
 rbh_posix_delete_entry(struct rbh_backend *backend,
