@@ -16,7 +16,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "robinhood/policyengine_internal.h"
+#include "robinhood/policyengine/core.h"
 #include "robinhood/backend.h"
 #include "robinhood/utils.h"
 #include "robinhood/statx.h"
