@@ -51,6 +51,7 @@ rbh_posix_delete_entry(struct rbh_backend *backend,
                        const struct rbh_value_map *params)
 {
     bool remove_empty_parent = false;
+    const char *parents_below = NULL;
     char *path;
     int rc;
 
@@ -59,6 +60,10 @@ rbh_posix_delete_entry(struct rbh_backend *backend,
                                                    "remove_empty_parent");
         if (val && val->type == RBH_VT_BOOLEAN)
             remove_empty_parent = val->boolean;
+
+        val = rbh_map_find(params, "remove_parents_below");
+        if (val && val->type == RBH_VT_STRING)
+            parents_below = val->string;
     }
 
     path = fsentry_absolute_path(backend, fsentry);
@@ -81,17 +86,70 @@ rbh_posix_delete_entry(struct rbh_backend *backend,
                                 strchr(rel_path, '/') == NULL);
 
         if (!parent_is_mountpoint) {
-            char *path_copy;
-            char *parent;
+            /* mountpoint_len is the length of the absolute mountpoint path,
+             * e.g. len("/mnt/fs") when abs_path is "/mnt/fs/a/b/c" and
+             * rel_path is "a/b/c". */
+            size_t mountpoint_len = strlen(path) - strlen(rel_path) - 1;
+            char *abs_floor = NULL;
+            bool parent_removed;
+            char *current;
 
-            path_copy = xstrdup(path);
-            parent = dirname(path_copy);
-            /* rmdir fails silently if parent is not empty (ENOTEMPTY) or
-             * does not exist (ENOENT), which is the expected behaviour. */
-            if (rmdir(parent) == 0)
-                rc = 1; /* signal: parent was also removed */
+            /* Build the absolute floor path:
+             * - If remove_parents_below is given, use it as the floor.
+             * - Otherwise, set the floor to the grandparent of the deleted
+             *   entry so that only the direct parent can be removed. */
+            if (parents_below) {
+                size_t floor_len = mountpoint_len + 1 + strlen(parents_below);
+                abs_floor = xmalloc(floor_len + 1);
+                memcpy(abs_floor, path, mountpoint_len);
+                abs_floor[mountpoint_len] = '/';
+                strcpy(abs_floor + mountpoint_len + 1, parents_below);
+            } else {
+                char *tmp1;
+                char *tmp2;
 
-            free(path_copy);
+                tmp1 = xstrdup(path);
+                tmp2 = xstrdup(dirname(tmp1));
+                abs_floor = xstrdup(dirname(tmp2));
+                free(tmp1);
+                free(tmp2);
+            }
+
+            current = xstrdup(path);
+            parent_removed = false;
+
+            while (true) {
+                char *tmp = xstrdup(current);
+                char *parent = dirname(tmp);
+
+                /* Stop at or above the mountpoint */
+                if (strlen(parent) <= mountpoint_len) {
+                    free(tmp);
+                    break;
+                }
+
+                /* Stop at the floor path (do not remove it) */
+                if (abs_floor && strcmp(parent, abs_floor) == 0) {
+                    free(tmp);
+                    break;
+                }
+
+                if (rmdir(parent) == 0) {
+                    parent_removed = true;
+                    free(current);
+                    current = xstrdup(parent);
+                    free(tmp);
+                } else {
+                    free(tmp);
+                    break;
+                }
+            }
+
+            free(current);
+            free(abs_floor);
+
+            if (parent_removed)
+                rc = 1; /* signal: at least one parent was also removed */
         }
     }
 
