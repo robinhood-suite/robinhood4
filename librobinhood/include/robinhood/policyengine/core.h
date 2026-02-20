@@ -5,8 +5,8 @@
  * SPDX-License-Identifier: LGPL-3.0-or-later
  */
 
-#ifndef RBH_PE
-#define RBH_PE
+#ifndef RBH_POLICYENGINE_CORE_H
+#define RBH_POLICYENGINE_CORE_H
 
 #include "robinhood/filters/core.h"
 #include "robinhood/fsentry.h"
@@ -15,7 +15,7 @@
 /**
  * rbh_action_cache — caches parsed actions for a policy execution.
  *
- * Each action string (default policy action or per‑rule action) is parsed only
+ * Each action string (default policy action or per-rule action) is parsed only
  * once. The cache stores the parsed result so that repeated matches of the
  * same rule do not trigger repeated parsing.
  */
@@ -45,7 +45,7 @@ struct rbh_mut_iterator *
 rbh_collect_fsentries(struct rbh_backend *backend, struct rbh_filter *filter);
 
 int
-rbh_pe_execute(struct rbh_mut_iterator *mongo_iter,
+rbh_pe_execute(struct rbh_mut_iterator *mirror_iter,
                struct rbh_backend *mirror_backend,
                const char *fs_uri,
                const struct rbh_policy *policy);
