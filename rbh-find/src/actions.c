@@ -22,9 +22,8 @@
 #include <sys/stat.h>
 #include <sys/sysmacros.h>
 #include <sys/types.h>
-#include <sys/wait.h>
-#include <unistd.h>
 
+#include <robinhood/action.h>
 #include <robinhood/projection.h>
 #include <robinhood/statx.h>
 #include <robinhood/utils.h>
@@ -505,144 +504,11 @@ find_pre_action(struct find_context *ctx, const int index,
 }
 
 static int
-wait_process(pid_t child)
-{
-    int rc;
-
-    rc = waitpid(child, NULL, 0);
-    if (rc == -1)
-        perror("waitpid");
-
-    return 0;
-}
-
-static size_t
-count_exec_command_args(char **exec_command)
-{
-    size_t size = 0;
-
-    /* The list of arguments is NULL terminated. */
-    while (exec_command[size++]);
-
-    /* At the end of the loop, size includes the last NULL, so we remove 1 to
-     * ignore it.
-     */
-    return size - 1;
-}
-
-static size_t
-count_subtitutions(const char *arg)
-{
-    const char *cursor = arg;
-    size_t count = 0;
-
-    while ((cursor = strstr(cursor, "{}"))) {
-        count++;
-        cursor += 2;
-    }
-
-    return count;
-}
-
-static ssize_t
-substituted_size(const char *arg, const char *substitution)
-{
-    size_t substitution_len;
-    size_t arg_len;
-    size_t count;
-
-    count = count_subtitutions(arg);
-    if (count == 0)
-        return -1;
-
-    arg_len = strlen(arg);
-    substitution_len = strlen(substitution);
-
-    return arg_len + count * (substitution_len - 2) + 1;
-}
-
-static char *
-append_range(char *buffer, const char *start, const char *end)
-{
-    strncpy(buffer, start, end - start);
-
-    return buffer + (end - start);
-}
-
-static const char *
-substitute_path(const char *arg, const char *path, char *buffer)
-{
-    size_t path_len = strlen(path);
-    const char *prev_cursor = arg;
-    const char *cursor = arg;
-    char *buf_iter;
-
-    buffer[0] = '\0';
-    buf_iter = buffer;
-
-    while ((cursor = strstr(cursor, "{}"))) {
-        buf_iter = append_range(buf_iter, prev_cursor, cursor);
-        buf_iter = append_range(buf_iter, path, path + path_len);
-
-        cursor += 2;
-        prev_cursor = cursor;
-    }
-
-    strcpy(buf_iter, prev_cursor);
-
-    return buffer;
-}
-
-static const char *
-resolve_arg(const char *arg, struct rbh_fsentry *fsentry)
-{
-    const char *substitution;
-    ssize_t substitute_size;
-    char *buffer;
-
-    substitution = fsentry_relative_path(fsentry);
-    substitute_size = substituted_size(arg, substitution);
-    if (substitute_size == -1)
-        /* no substitution to do */
-        return arg;
-
-    buffer = xmalloc((size_t)substitute_size);
-
-    return substitute_path(arg, substitution, buffer);
-}
-
-static int
 exec_command(struct find_context *ctx, struct rbh_fsentry *fsentry)
 {
-    const char **cmd;
-    pid_t child;
-    int i;
+    const char *path = fsentry_relative_path(fsentry);
 
-    i = count_exec_command_args(ctx->exec_command);
-
-    cmd = xcalloc(i + 1, sizeof(*cmd));
-    for (int j = 0; j < i; j++)
-        cmd[j] = resolve_arg(ctx->exec_command[j], fsentry);
-
-    child = fork();
-
-    switch (child) {
-    case -1:
-        return -1;
-    case 0:
-        execvp(cmd[0], (char * const *)cmd);
-        // This is exiting the child process, not the main rbh-find process.
-        error(EXIT_FAILURE, errno, "failed to execute '%s'", cmd[0]);
-        __builtin_unreachable();
-    default:
-        for (int j = 0; j < i; j++) {
-            /* substitute_path only allocates if a substitution is required */
-            if (cmd[j] != ctx->exec_command[j])
-                free((char *)cmd[j]);
-        }
-        free(cmd);
-        return wait_process(child);
-    }
+    return rbh_action_exec_argv((const char **)ctx->exec_command, path);
 }
 
 int
