@@ -303,6 +303,50 @@ rbh_pe_delete_action(const struct rbh_action *action,
 }
 
 /**
+ * Execute an external command action on a filesystem entry.
+ *
+ * Substitutes "{}" placeholders in the command template with the entry's
+ * relative path and executes the resulting command synchronously.
+ *
+ * @param action        the parsed CMD action (action->value is the command
+ *                      template)
+ * @param mi_backend    the mirror backend
+ * @param entry         the fsentry to act on
+ *
+ * @return        0 on success, -1 on error
+ */
+static int
+rbh_pe_cmd_action(const struct rbh_action *action,
+                  struct rbh_fsentry *entry,
+                  struct rbh_backend *mi_backend)
+{
+    const char *rel_path;
+    int rc;
+
+    if (!entry) {
+        fprintf(stderr, "CmdAction | entry is NULL\n");
+        return -1;
+    }
+
+    if (!action->value || !*action->value) {
+        fprintf(stderr, "CmdAction | empty command\n");
+        errno = EINVAL;
+        return -1;
+    }
+
+    rel_path = fsentry_absolute_path(mi_backend, entry);
+
+    rc = rbh_action_exec_command(action->value, rel_path);
+    if (rc != 0) {
+        fprintf(stderr, "CmdAction | command failed (rc=%d) for '%s': %s\n",
+                rc, rel_path, action->value);
+        return -1;
+    }
+
+    return 0;
+}
+
+/**
  * Apply an action to a filesystem entry.
  *
  * This function dispatches the action based on its type. The specific behavior
@@ -332,7 +376,7 @@ rbh_pe_apply_action(const struct rbh_action *action,
         return rbh_pe_delete_action(action, mi_backend, fs_backend, entry,
                                     common_ops);
     case RBH_ACTION_CMD:
-        break;
+        return rbh_pe_cmd_action(action, entry, mi_backend);
     case RBH_ACTION_PYTHON:
         break;
     default:
