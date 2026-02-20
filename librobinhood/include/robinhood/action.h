@@ -45,4 +45,33 @@ bool
 rbh_action_parameters2value_map(const char *parameters,
                                 struct rbh_value_map *map,
                                 struct rbh_sstack *sstack);
+
+/**
+ * Execute a pre-split command with "{}" placeholders replaced by a path.
+ *
+ * Each element of \p argv that contains "{}" is expanded with \p path.
+ * The command is executed synchronously via fork(2) + execvp(3).
+ *
+ * @param argv  a NULL-terminated argument array
+ * @param path  the path to substitute for "{}"
+ *
+ * @return      the exit status of the child on success, -1 on error
+ */
+int
+rbh_action_exec_argv(const char **argv, const char *path);
+
+/**
+ * Execute an external command with "{}" placeholders replaced by a path.
+ *
+ * The command string is split into tokens using wordexp(3), then passed
+ * to rbh_action_exec_argv().
+ *
+ * @param cmd_str  the command template (e.g. "archive_tool --path {}")
+ * @param path     the path to substitute for "{}"
+ *
+ * @return         the exit status of the child on success, -1 on error
+ */
+int
+rbh_action_exec_command(const char *cmd_str, const char *path);
+
 #endif
