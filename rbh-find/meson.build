@@ -1,5 +1,5 @@
 # This file is part of RobinHood 4
-# Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
+# Copyright (C) 2026 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
@@ -25,7 +25,6 @@ executable(
         'rbh-find.c',
         'src/actions.c',
         'src/core.c',
-        'src/filters.c',
         'src/parser.c',
     ],
     dependencies: [librobinhood_dep],

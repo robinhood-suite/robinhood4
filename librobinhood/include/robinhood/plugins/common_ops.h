@@ -1,5 +1,5 @@
 /* This file is part of RobinHood 4
- * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2026 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifer: LGPL-3.0-or-later
@@ -48,6 +48,15 @@ struct rbh_pe_common_operations {
      *                  RBH_TOKEN_ERROR if an error occurs
      */
     enum rbh_parser_token (*check_valid_token)(const char *token);
+
+    /**
+     * Convert a sort field \p str to a rbh_filter_field.
+     *
+     * @param string         the -sort argument to convert
+     *
+     * @return               a rbh_filter_field corresponding to the sort field
+     */
+    struct rbh_filter_field (*sort2field)(const char *string);
 
     /**
      * Create a filter from the command line argument at \p index in \p argv
@@ -160,6 +169,19 @@ rbh_pe_common_ops_check_valid_token(
     return RBH_TOKEN_ERROR;
 }
 
+static inline struct rbh_filter_field
+rbh_pe_common_ops_sort2field(
+    const struct rbh_pe_common_operations *common_ops, const char *string)
+{
+    struct rbh_filter_field field = { 0 };
+
+    if (common_ops && common_ops->sort2field)
+        return common_ops->sort2field(string);
+
+    errno = ENOTSUP;
+    return field;
+}
+
 static inline struct rbh_filter *
 rbh_pe_common_ops_build_filter(
     const struct rbh_pe_common_operations *common_ops,
@@ -206,9 +228,8 @@ rbh_pe_common_ops_fill_projection(
     const struct rbh_pe_common_operations *common_ops,
     struct rbh_filter_projection *projection, const char *directive)
 {
-    if (common_ops && common_ops->fill_projection) {
+    if (common_ops && common_ops->fill_projection)
         return common_ops->fill_projection(projection, directive);
-    }
 
     errno = ENOTSUP;
     return -1;
@@ -219,9 +240,8 @@ rbh_pe_common_ops_undelete(
     const struct rbh_pe_common_operations *common_ops, void *backend,
     const char *path, struct rbh_fsentry *fsentry)
 {
-    if (common_ops && common_ops->undelete) {
+    if (common_ops && common_ops->undelete)
         return common_ops->undelete(backend, path, fsentry);
-    }
 
     errno = ENOTSUP;
     return NULL;
