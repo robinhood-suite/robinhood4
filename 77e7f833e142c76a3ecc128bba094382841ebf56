@@ -22,6 +22,30 @@
       },
       "revId": "77e7f833e142c76a3ecc128bba094382841ebf56",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9d561780_d8aed39a",
+        "filename": "librobinhood/src/fsentry.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-02-23T11:46:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8be72b98_85c4d6f5",
+      "range": {
+        "startLine": 74,
+        "startChar": 4,
+        "endLine": 74,
+        "endChar": 48
+      },
+      "revId": "77e7f833e142c76a3ecc128bba094382841ebf56",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
