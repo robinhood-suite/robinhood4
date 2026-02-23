@@ -18,6 +18,7 @@ integration_tests = [
   'test_rwxable',
   'test_regex',
   'test_size',
+  'test_sort',
   'test_time',
   'test_uid_gid',
   'test_verbose',

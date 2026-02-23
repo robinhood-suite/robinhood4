@@ -1,5 +1,5 @@
 /* This file is part of RobinHood 4
- * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2026 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifer: LGPL-3.0-or-later
@@ -18,6 +18,7 @@
 static const struct rbh_pe_common_operations POSIX_BACKEND_PLUGIN_COMMON_OPS = {
     .helper = rbh_posix_helper,
     .check_valid_token = rbh_posix_check_valid_token,
+    .sort2field = rbh_posix_sort2field,
     .build_filter = rbh_posix_build_filter,
     .fill_entry_info = rbh_posix_fill_entry_info,
     .delete_entry = rbh_posix_delete_entry,

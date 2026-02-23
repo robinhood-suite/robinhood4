@@ -1,5 +1,5 @@
 /* This file is part of RobinHood 4
- * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2026 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifer: LGPL-3.0-or-later
@@ -63,6 +63,16 @@ rbh_posix_helper(const char *backend, struct rbh_config *config,
  */
 enum rbh_parser_token
 rbh_posix_check_valid_token(const char *token);
+
+/**
+ * Convert a sort field \p str to a rbh_filter_field.
+ *
+ * @param string         the -sort argument to convert
+ *
+ * @return               a rbh_filter_field corresponding to the sort field
+ */
+struct rbh_filter_field
+rbh_posix_sort2field(const char *attribute);
 
 /**
  * Create a filter from the given command line arguments and position in that
