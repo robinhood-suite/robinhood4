@@ -71,6 +71,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "33e85d1a_fb446152",
+        "filename": "librobinhood/src/plugins/sqlite/meson.build",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-02-23T11:46:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d89393e6_ada5e0da",
+      "range": {
+        "startLine": 34,
+        "startChar": 0,
+        "endLine": 34,
+        "endChar": 20
+      },
+      "revId": "031d1b2ada2176cc4af0bd630a1518aac959cf20",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b8cd63d2_45f9e55d",
@@ -84,6 +108,30 @@
       "writtenOn": "2026-02-18T08:59:29Z",
       "side": 1,
       "message": "minor: one line, even over 80 characters",
+      "range": {
+        "startLine": 186,
+        "startChar": 31,
+        "endLine": 187,
+        "endChar": 39
+      },
+      "revId": "031d1b2ada2176cc4af0bd630a1518aac959cf20",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "637ab314_f7c90c92",
+        "filename": "librobinhood/src/plugins/sqlite/schema.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-02-23T11:46:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b8cd63d2_45f9e55d",
       "range": {
         "startLine": 186,
         "startChar": 31,
@@ -178,6 +226,30 @@
       "writtenOn": "2026-02-18T08:59:29Z",
       "side": 1,
       "message": "minor: same",
+      "range": {
+        "startLine": 191,
+        "startChar": 42,
+        "endLine": 192,
+        "endChar": 55
+      },
+      "revId": "031d1b2ada2176cc4af0bd630a1518aac959cf20",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a054f23_9d0e97ac",
+        "filename": "librobinhood/src/plugins/sqlite/schema.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-02-23T11:46:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3aca3878_9e26246e",
       "range": {
         "startLine": 191,
         "startChar": 42,
