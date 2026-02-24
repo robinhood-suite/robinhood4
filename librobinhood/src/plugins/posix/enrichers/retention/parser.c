@@ -1,5 +1,5 @@
 /* This file is part of RobinHood 4
- * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2026 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifer: LGPL-3.0-or-later
@@ -53,4 +53,21 @@ retention_predicate2str(int predicate)
     assert(RPRED_MIN <= predicate && predicate < RPRED_MAX);
 
     return __retention_predicate2str[predicate];
+}
+
+struct rbh_filter_field
+rbh_retention_sort2field(const char *attribute)
+{
+    struct rbh_filter_field field = { 0 };
+
+    switch(attribute[0]) {
+    case 'e':
+        if (strcmp(&attribute[1], "xpiration-date") == 0) {
+            field.fsentry = RBH_FP_INODE_XATTRS;
+            field.xattr = "trusted.expiration_date";
+        }
+        break;
+    }
+
+    return field;
 }
