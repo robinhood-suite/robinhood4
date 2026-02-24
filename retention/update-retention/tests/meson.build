@@ -13,7 +13,7 @@ tests = [
   'test_update_retention'
 ]
 
-backend_path_env.set('PYTHONPATH', src_root)
+backend_path_env.prepend('PYTHONPATH', src_root)
 
 foreach t: tests
     e = find_program(t + '.bash')
