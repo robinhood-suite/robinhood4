@@ -15,6 +15,7 @@ python_tests = [
   'test_models_fileclass',
   'test_cpython',
   'test_config',
+  'test_actions',
   'test_utils'
 ]
 foreach t : python_tests
