@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fbf486d5_a15c9dd5",
+        "filename": "librobinhood/include/robinhood/plugins/common_ops.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-02-24T09:35:36Z",
+      "side": 1,
+      "message": "question: why do you need this operation ? You already have the delete operation, you can add a log operation which would print different information for a fsentry depending the plugin you use",
+      "revId": "4fbba868760981876d004f489c221c551cfbe0fb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
