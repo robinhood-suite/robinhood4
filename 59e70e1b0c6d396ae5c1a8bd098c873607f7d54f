@@ -71,6 +71,24 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "004a6985_8cf942ff",
+        "filename": "librobinhood/include/robinhood/action.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-02-24T08:38:29Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "29ba6d59_b1ee3f16",
+      "revId": "59e70e1b0c6d396ae5c1a8bd098c873607f7d54f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7637dd7f_a02cabd8",
@@ -106,6 +124,24 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4bb98762_1aa1f8db",
+        "filename": "librobinhood/include/robinhood/action.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-02-24T08:38:29Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "6b1d74bc_9535c2cb",
+      "revId": "59e70e1b0c6d396ae5c1a8bd098c873607f7d54f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ac0f9a1a_27a95751",
@@ -137,6 +173,24 @@
       "side": 1,
       "message": "In our usage, the action string passed to rbh_pe_parse_action is always owned by the rbh_policy structure (or its rules), which remains valid for the entire lifetime of the policy engine execution. Therefore, there is no risk of use-after-free, and duplicating the string is not necessary here.",
       "parentUuid": "ac0f9a1a_27a95751",
+      "revId": "59e70e1b0c6d396ae5c1a8bd098c873607f7d54f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "611130ff_e4b52793",
+        "filename": "librobinhood/src/policyengine.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 465,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-02-24T08:38:29Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "164ea011_a05b6ec3",
       "revId": "59e70e1b0c6d396ae5c1a8bd098c873607f7d54f",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
@@ -201,6 +255,30 @@
       "writtenOn": "2026-02-18T10:39:43Z",
       "side": 1,
       "message": "minor: I think it can be mutualized with the `rbh_pe_match_rule` function",
+      "range": {
+        "startLine": 724,
+        "startChar": 4,
+        "endLine": 731,
+        "endChar": 9
+      },
+      "revId": "59e70e1b0c6d396ae5c1a8bd098c873607f7d54f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f9ca0a88_89c85933",
+        "filename": "librobinhood/src/policyengine.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 731,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-02-24T08:38:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d004f5d6_5ff8a368",
       "range": {
         "startLine": 724,
         "startChar": 4,

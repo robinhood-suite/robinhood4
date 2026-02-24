@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d6e041fc_79d64c27",
+        "filename": "librobinhood/src/policyengine.c",
+        "patchSetId": 8
+      },
+      "lineNbr": 510,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-02-24T08:38:29Z",
+      "side": 1,
+      "message": "sugest: init action_cache in rbh_pe_execute to {0} and remove these lines",
+      "range": {
+        "startLine": 508,
+        "startChar": 4,
+        "endLine": 510,
+        "endChar": 31
+      },
+      "revId": "235e6ea5d0587264ea1b27516be4769ae201d1fb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "17f4615a_f67826e7",
+        "filename": "librobinhood/src/policyengine.c",
+        "patchSetId": 8
+      },
+      "lineNbr": 516,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-02-24T08:38:29Z",
+      "side": 1,
+      "message": "defect: xmalloc",
+      "range": {
+        "startLine": 516,
+        "startChar": 26,
+        "endLine": 516,
+        "endChar": 32
+      },
+      "revId": "235e6ea5d0587264ea1b27516be4769ae201d1fb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "be376a37_11411803",
+        "filename": "librobinhood/src/policyengine.c",
+        "patchSetId": 8
+      },
+      "lineNbr": 522,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-02-24T08:38:29Z",
+      "side": 1,
+      "message": "sugest: If you use xcalloc, you can remove these lines as calloc set it to 0",
+      "range": {
+        "startLine": 521,
+        "startChar": 8,
+        "endLine": 522,
+        "endChar": 44
+      },
+      "revId": "235e6ea5d0587264ea1b27516be4769ae201d1fb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b316f8c3_9aef4383",
+        "filename": "librobinhood/src/policyengine.c",
+        "patchSetId": 8
+      },
+      "lineNbr": 628,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-02-24T08:38:29Z",
+      "side": 1,
+      "message": "minor: you don\u0027t have these parameters",
+      "range": {
+        "startLine": 627,
+        "startChar": 3,
+        "endLine": 628,
+        "endChar": 50
+      },
+      "revId": "235e6ea5d0587264ea1b27516be4769ae201d1fb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "72660b3a_06ddaa6a",
+        "filename": "librobinhood/src/policyengine.c",
+        "patchSetId": 8
+      },
+      "lineNbr": 721,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-02-24T08:38:29Z",
+      "side": 1,
+      "message": "minor: matched_rule is not used. Do you plan to use it ? Otherwise remove it",
+      "range": {
+        "startLine": 721,
+        "startChar": 45,
+        "endLine": 721,
+        "endChar": 58
+      },
+      "revId": "235e6ea5d0587264ea1b27516be4769ae201d1fb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
