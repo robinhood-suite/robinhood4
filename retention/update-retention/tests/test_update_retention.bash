@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # This file is part of RobinHood4
-# Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
+# Copyright (C) 2026 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
@@ -364,13 +364,52 @@ test_retention_expiration_in_days()
     fi
 }
 
+test_retention_sort()
+{
+    local dir1="dir1"
+    local dir2="dir2"
+    local dir3="dir3"
+    local dir4="dir4"
+
+    # Output of an `update-retention` will look like this, so '$dir2' and
+    # '$dir1' appear twice in this array:
+    #
+    # Directory '/dir3' expired on '1970-01-01 00:00:42'
+    # Directory '/dir4' expired on '2026-02-27 11:22:42'
+    # Directory '/dir2' expiration date is set to '2026-02-27 11:22:47'
+    # Directory '/dir2' has expired and is empty, no other check needed
+    # Directory '/dir1' expiration date is set to '2026-02-27 11:23:02'
+    # Directory '/dir1' has expired and is empty, no other check needed
+    local dirs_sorted=("$dir3" "$dir4" "$dir2" "$dir2" "$dir1" "$dir1")
+
+    local current="$(date +%s)"
+
+    mkdir $dir1 $dir2 $dir3 $dir4
+    setfattr -n user.expires -v +20 $dir1
+    setfattr -n user.expires -v +5 $dir2
+    setfattr -n user.expires -v 42 $dir3
+    setfattr -n user.expires -v $current $dir4
+
+    date --set="@$(( current + 30 ))"
+
+    rbh_sync rbh:retention:. "rbh:$db:$testdb"
+
+    local output="$(rbh_update_retention "rbh:$db:$testdb")"
+
+    local counter=0
+    while IFS= read -r line; do
+        echo "$line" | grep "${dirs_sorted[$counter]}"
+        counter=$(( counter + 1 ))
+    done <<< "$output"
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
 declare -a tests=(test_retention_script test_retention_after_sync
                   test_retention_with_config test_retention_on_empty_dir
-                  test_retention_expiration_in_days)
+                  test_retention_expiration_in_days test_retention_sort)
 
 tmpdir=$(mktemp --directory)
 trap "rm -r $tmpdir" EXIT

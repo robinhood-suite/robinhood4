@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 # This file is part of RobinHood 4
-# Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
+# Copyright (C) 2026 Commissariat a l'energie atomique et aux energies
 #            alternatives
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
@@ -148,7 +148,7 @@ def main(args=None):
     context = Context(args.uri, args.config, args.delay, args.delete)
     command = (f"rbh-find -c {str(context.config)} {context.uri} "
                f"-type d -expired-at {str(context.delay)} "
-                "-printf %p|%e|%E|%I\\n")
+                "-sort expiration-date -printf %p|%e|%E|%I\\n")
     exec_popen(command, check_directory_expirancy, context)
 
     if not context.found_expired_dir:
