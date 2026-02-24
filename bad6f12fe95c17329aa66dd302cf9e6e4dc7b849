@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d397c795_38cc2258",
+        "filename": "librobinhood/include/lu_fid.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-02-24T09:43:21Z",
+      "side": 1,
+      "message": "minor: It\u0027s already defined by Lustre as FID_LEN",
+      "revId": "bad6f12fe95c17329aa66dd302cf9e6e4dc7b849",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fe908275_cbc0f0b6",
+        "filename": "librobinhood/src/lu_fid.c",
+        "patchSetId": 9
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-02-24T09:43:21Z",
+      "side": 1,
+      "message": "sugest: replace it by `DFID, PFID(fid)`",
+      "range": {
+        "startLine": 123,
+        "startChar": 33,
+        "endLine": 124,
+        "endChar": 54
+      },
+      "revId": "bad6f12fe95c17329aa66dd302cf9e6e4dc7b849",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2f837f96_ba1715b8",
+        "filename": "librobinhood/src/plugins/posix/action.c",
+        "patchSetId": 9
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-02-24T09:43:21Z",
+      "side": 1,
+      "message": "question: what are the purpose of the parameters for the log action ?",
+      "revId": "bad6f12fe95c17329aa66dd302cf9e6e4dc7b849",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
