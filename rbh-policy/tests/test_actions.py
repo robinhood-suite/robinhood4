@@ -205,5 +205,289 @@ declare_policy(
                             "rbh-policy.py should have failed when 'action' "
                             "is missing from declare_policy")
 
+    def test_delete_file_success(self):
+        """
+        Verify that the delete action removes a targeted file from the
+        filesystem, leaving all other files untouched.
+        """
+        config_path = self._write_config("""
+from rbhpolicy.config.core import *
+
+config(
+    filesystem = "rbh:posix:{fs}",
+    database = "rbh:mongo:{db}",
+    evaluation_interval = "5s"
+)
+
+declare_policy(
+    name = "test_delete_file",
+    target = (Type == "f") & (Name == "file1.txt"),
+    action = "delete",
+    trigger = 'Periodic("10m")'
+)
+""")
+        result = self._run_policy(config_path, "test_delete_file")
+        self.assertEqual(
+            result.returncode, 0,
+            f"rbh-policy.py failed:\nstdout:\n{result.stdout}\n"
+            f"stderr:\n{result.stderr}")
+
+        deleted = os.path.join(self.test_dir, "filedir", "file1.txt")
+        self.assertFalse(
+            os.path.exists(deleted),
+            "file1.txt should have been deleted")
+
+        # All other files must be untouched
+        for name in ("file2.log", "file3.csv"):
+            self.assertTrue(
+                os.path.exists(
+                    os.path.join(self.test_dir, "filedir", name)),
+                f"{name} should not have been deleted")
+
+    def test_delete_directory_success(self):
+        """
+        Verify that the delete action removes an empty directory from the
+        filesystem, leaving all other directories untouched.
+        """
+        empty_dir = os.path.join(self.test_dir, "filedir", "emptydir")
+        os.makedirs(empty_dir)
+        self._sync_filesystem()
+
+        config_path = self._write_config("""
+from rbhpolicy.config.core import *
+
+config(
+    filesystem = "rbh:posix:{fs}",
+    database = "rbh:mongo:{db}",
+    evaluation_interval = "5s"
+)
+
+declare_policy(
+    name = "test_delete_dir",
+    target = (Type == "d") & (Name == "emptydir"),
+    action = "delete",
+    trigger = 'Periodic("10m")'
+)
+""")
+        result = self._run_policy(config_path, "test_delete_dir")
+        self.assertEqual(
+            result.returncode, 0,
+            f"rbh-policy.py failed:\nstdout:\n{result.stdout}\n"
+            f"stderr:\n{result.stderr}")
+
+        self.assertFalse(
+            os.path.exists(empty_dir),
+            "emptydir should have been deleted")
+
+        # Other directories must be untouched
+        for rel in ("filedir", os.path.join("filedir", "test1")):
+            self.assertTrue(
+                os.path.exists(os.path.join(self.test_dir, rel)),
+                f"{rel} should not have been deleted")
+
+    def test_delete_files_log_dirs_with_rules(self):
+        """
+        Verify that rules route actions correctly: files matched by a rule
+        get deleted, while directories fall back to the default log action.
+        """
+        config_path = self._write_config("""
+from rbhpolicy.config.core import *
+
+config(
+    filesystem = "rbh:posix:{fs}",
+    database = "rbh:mongo:{db}",
+    evaluation_interval = "5s"
+)
+
+declare_policy(
+    name = "test_mixed_policy",
+    target = (Type == "f") | (Type == "d"),
+    action = "log",
+    trigger = 'Periodic("10m")',
+    rules = [
+        Rule(
+            name = "delete_files_rule",
+            condition = (Type == "f"),
+            action = "delete",
+        )
+    ]
+)
+""")
+        result = self._run_policy(config_path, "test_mixed_policy")
+        self.assertEqual(
+            result.returncode, 0,
+            f"rbh-policy.py failed:\nstdout:\n{result.stdout}\n"
+            f"stderr:\n{result.stderr}")
+
+        output = result.stdout
+
+        # Files must have been deleted from the filesystem
+        for name in ("file1.txt", "file2.log", "file3.csv"):
+            self.assertFalse(
+                os.path.exists(
+                    os.path.join(self.test_dir, "filedir", name)),
+                f"{name} should have been deleted by the rule")
+
+        # Directories must still exist (only logged, not deleted)
+        for rel in ("filedir",
+                    os.path.join("filedir", "test1"),
+                    os.path.join("filedir", "test1", "test2")):
+            self.assertTrue(
+                os.path.exists(os.path.join(self.test_dir, rel)),
+                f"{rel} should not have been deleted")
+
+        # Directories must appear in the log output
+        self.assertIn("LogAction | path=filedir, params=", output)
+        self.assertIn("LogAction | path=filedir/test1, params=", output)
+
+    def test_delete_remove_empty_parent(self):
+        """
+        Verify that remove_empty_parent causes the parent directory to be
+        removed after the last file inside it is deleted.
+        """
+        solo_dir = os.path.join(self.test_dir, "filedir", "solo_dir")
+        os.makedirs(solo_dir)
+        solo_file = os.path.join(solo_dir, "solo.txt")
+        with open(solo_file, "w") as f:
+            f.write("alone\n")
+        self._sync_filesystem()
+
+        config_path = self._write_config("""
+from rbhpolicy.config.core import *
+
+config(
+    filesystem = "rbh:posix:{fs}",
+    database = "rbh:mongo:{db}",
+    evaluation_interval = "5s"
+)
+
+declare_policy(
+    name = "test_delete_with_parent",
+    target = (Type == "f") & (Name == "solo.txt"),
+    action = "delete",
+    parameters = {"remove_empty_parent": True},
+    trigger = 'Periodic("10m")'
+)
+""")
+        result = self._run_policy(config_path, "test_delete_with_parent")
+        self.assertEqual(
+            result.returncode, 0,
+            f"rbh-policy.py failed:\nstdout:\n{result.stdout}\n"
+            f"stderr:\n{result.stderr}")
+
+        self.assertFalse(
+            os.path.exists(solo_file),
+            "solo.txt should have been deleted")
+        self.assertFalse(
+            os.path.exists(solo_dir),
+            "solo_dir should have been removed (empty after deletion)")
+
+        # The parent of solo_dir (filedir) must still be present
+        self.assertTrue(
+            os.path.exists(os.path.join(self.test_dir, "filedir")),
+            "filedir should not have been removed")
+
+        self.assertIn("removed empty parent directories", result.stdout)
+
+    def test_delete_remove_parents_below(self):
+        """
+        Verify that remove_parents_below limits upward parent removal:
+        empty parents above the floor path are preserved.
+        """
+        # Create filedir/a/b/c/ with a single file inside c/
+        level_b = os.path.join(self.test_dir, "filedir", "a", "b")
+        level_c = os.path.join(level_b, "c")
+        os.makedirs(level_c)
+        deep_file = os.path.join(level_c, "deep.txt")
+        with open(deep_file, "w") as f:
+            f.write("deep file\n")
+        self._sync_filesystem()
+
+        config_path = self._write_config("""
+from rbhpolicy.config.core import *
+
+config(
+    filesystem = "rbh:posix:{fs}",
+    database = "rbh:mongo:{db}",
+    evaluation_interval = "5s"
+)
+
+declare_policy(
+    name = "test_delete_parents_below",
+    target = (Type == "f") & (Name == "deep.txt"),
+    action = "delete",
+    parameters = {
+        "remove_empty_parent": True,
+        "remove_parents_below": "filedir/a/b",
+    },
+    trigger = 'Periodic("10m")'
+)
+""")
+        result = self._run_policy(config_path, "test_delete_parents_below")
+        self.assertEqual(
+            result.returncode, 0,
+            f"rbh-policy.py failed:\nstdout:\n{result.stdout}\n"
+            f"stderr:\n{result.stderr}")
+
+        # The file and its direct empty parent (c/) must be removed
+        self.assertFalse(
+            os.path.exists(deep_file),
+            "deep.txt should have been deleted")
+        self.assertFalse(
+            os.path.exists(level_c),
+            "c/ should have been removed (empty after deletion)")
+
+        # The floor directory (b/) must be preserved
+        self.assertTrue(
+            os.path.exists(level_b),
+            "b/ is the floor and must not have been removed")
+
+    def test_delete_remove_parents_below_without_remove_empty_parent(self):
+        """
+        Verify that remove_parents_below alone (without remove_empty_parent)
+        has no effect: the deleted file's parent directory is preserved.
+        """
+        alone_dir = os.path.join(self.test_dir, "filedir", "alone_dir")
+        os.makedirs(alone_dir)
+        alone_file = os.path.join(alone_dir, "alone.txt")
+        with open(alone_file, "w") as f:
+            f.write("alone\n")
+        self._sync_filesystem()
+
+        config_path = self._write_config("""
+from rbhpolicy.config.core import *
+
+config(
+    filesystem = "rbh:posix:{fs}",
+    database = "rbh:mongo:{db}",
+    evaluation_interval = "5s"
+)
+
+declare_policy(
+    name = "test_no_remove_parent",
+    target = (Type == "f") & (Name == "alone.txt"),
+    action = "delete",
+    parameters = {"remove_parents_below": "filedir/alone_dir"},
+    trigger = 'Periodic("10m")'
+)
+""")
+        result = self._run_policy(config_path, "test_no_remove_parent")
+        self.assertEqual(
+            result.returncode, 0,
+            f"rbh-policy.py failed:\nstdout:\n{result.stdout}\n"
+            f"stderr:\n{result.stderr}")
+
+        # The file must have been deleted
+        self.assertFalse(
+            os.path.exists(alone_file),
+            "alone.txt should have been deleted")
+
+        # Without remove_empty_parent, the parent must NOT have been removed
+        self.assertTrue(
+            os.path.exists(alone_dir),
+            "alone_dir must be preserved when remove_empty_parent is absent")
+
+        self.assertNotIn("removed empty parent directories", result.stdout)
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)
