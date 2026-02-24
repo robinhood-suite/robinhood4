@@ -120,6 +120,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4e466153_a7b160e6",
+        "filename": "librobinhood/tests/unit/check_policyengine.c",
+        "patchSetId": 12
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-02-24T08:00:52Z",
+      "side": 1,
+      "message": "You can set the backend and iterator to NULL just after the free and check that they are NULL after `rbh_pe_execute`",
+      "parentUuid": "78e9217d_d8564d4d",
+      "revId": "a4b0ee32b696189692e23c04afa7814f0ff2463a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "93f5e23a_2087aa8a",
         "filename": "librobinhood/tests/unit/check_policyengine.c",
         "patchSetId": 12
