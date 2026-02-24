@@ -18,6 +18,24 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fe4ff202_1b6aac00",
+        "filename": "librobinhood/include/lu_fid.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-02-24T15:52:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d397c795_38cc2258",
+      "revId": "bad6f12fe95c17329aa66dd302cf9e6e4dc7b849",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fe908275_cbc0f0b6",
@@ -41,6 +59,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8614039c_9173215a",
+        "filename": "librobinhood/src/lu_fid.c",
+        "patchSetId": 9
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-02-24T15:52:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fe908275_cbc0f0b6",
+      "range": {
+        "startLine": 123,
+        "startChar": 33,
+        "endLine": 124,
+        "endChar": 54
+      },
+      "revId": "bad6f12fe95c17329aa66dd302cf9e6e4dc7b849",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2f837f96_ba1715b8",
@@ -54,6 +96,24 @@
       "writtenOn": "2026-02-24T09:43:21Z",
       "side": 1,
       "message": "question: what are the purpose of the parameters for the log action ?",
+      "revId": "bad6f12fe95c17329aa66dd302cf9e6e4dc7b849",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "869aaa5f_aae350c2",
+        "filename": "librobinhood/src/plugins/posix/action.c",
+        "patchSetId": 9
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-02-24T15:52:09Z",
+      "side": 1,
+      "message": "I don\u0027t really know, I copied the way robinhood3 works which displayed: \"LogAction | fid\u003dentry_id, path\u003dentry_path, params\u003d{action_params}\".",
+      "parentUuid": "2f837f96_ba1715b8",
       "revId": "bad6f12fe95c17329aa66dd302cf9e6e4dc7b849",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
