@@ -16,6 +16,24 @@
       "message": "question: why do you need this operation ? You already have the delete operation, you can add a log operation which would print different information for a fsentry depending the plugin you use",
       "revId": "4fbba868760981876d004f489c221c551cfbe0fb",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "71d168a6_2dc22ff8",
+        "filename": "librobinhood/include/robinhood/plugins/common_ops.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-02-24T14:36:23Z",
+      "side": 1,
+      "message": "Yes, we could have done what you suggested, but after discussion, it seems that using a single `apply_action` operation with each plugin that implements its own actions is better because it avoids having to add multiple operations to this structure for each new action we want to add.",
+      "parentUuid": "fbf486d5_a15c9dd5",
+      "revId": "4fbba868760981876d004f489c221c551cfbe0fb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
