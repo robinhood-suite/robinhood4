@@ -22,6 +22,30 @@
       },
       "revId": "e8026cf5284bcfbcb5420a744a1d7e561c00d224",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "555025e3_4297d5ac",
+        "filename": "librobinhood/include/robinhood/fsentry.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-02-24T13:12:24Z",
+      "side": 1,
+      "message": "In my opinion, we retrieve the relative path using this fsentry, but we want to retrieve the absolute path of this fsentry with the function. That\u0027s the function\u0027s goal, so my original formulation seems correct to me.",
+      "parentUuid": "f72b0080_53d6b8a4",
+      "range": {
+        "startLine": 197,
+        "startChar": 40,
+        "endLine": 197,
+        "endChar": 48
+      },
+      "revId": "e8026cf5284bcfbcb5420a744a1d7e561c00d224",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
