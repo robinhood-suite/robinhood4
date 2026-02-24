@@ -1,5 +1,5 @@
 /* This file is part of RobinHood 4
- * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2026 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifer: LGPL-3.0-or-later
@@ -14,6 +14,7 @@
 static const struct rbh_pe_common_operations RETENTION_EXTENSION_COMMON_OPS = {
     .helper = rbh_retention_helper,
     .check_valid_token = rbh_retention_check_valid_token,
+    .sort2field = rbh_retention_sort2field,
     .build_filter = rbh_retention_build_filter,
     .fill_entry_info = rbh_retention_fill_entry_info,
     .delete_entry = NULL,

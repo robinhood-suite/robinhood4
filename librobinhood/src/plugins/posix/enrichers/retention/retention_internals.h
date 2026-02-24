@@ -1,5 +1,5 @@
 /* This file is part of RobinHood 4
- * Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
+ * Copyright (C) 2026 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
  * SPDX-License-Identifer: LGPL-3.0-or-later
@@ -44,6 +44,9 @@ rbh_retention_helper(__attribute__((unused)) const char *backend,
 
 enum rbh_parser_token
 rbh_retention_check_valid_token(const char *token);
+
+struct rbh_filter_field
+rbh_retention_sort2field(const char *attribute);
 
 struct rbh_filter *
 rbh_retention_build_filter(const char **argv, int argc, int *index,
