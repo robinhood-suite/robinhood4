@@ -1044,6 +1044,7 @@ _mongo_backend_filter(void *backend, const struct rbh_filter *filter,
         goto skip_aggregate;
     }
 
+    dump_bson(pipeline);
     cursor = mongoc_collection_aggregate(mongo->entries, MONGOC_QUERY_NONE,
                                          pipeline, opts, NULL);
 

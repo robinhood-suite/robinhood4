@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # This file is part of RobinHood 4
-# Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
+# Copyright (C) 2026 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
@@ -208,12 +208,39 @@ backends:
         difflines "/ None" "/$fileA 42" "/$fileB None"
 }
 
+test_sort()
+{
+    local fileA="fileA"
+    local timeA="+30"
+    local fileB="fileB"
+    local timeB="3"
+    local fileC="fileC"
+    local timeC="inf"
+    local fileD="fileD"
+    local fileE="fileE"
+    local timeE="+300"
+
+    touch "$fileA" "$fileB" "$fileC" "$fileD" "$fileE"
+    setfattr -n user.expires -v "$timeA" "$fileA"
+    setfattr -n user.expires -v "$timeB" "$fileB"
+    setfattr -n user.expires -v "$timeC" "$fileC"
+    setfattr -n user.expires -v "$timeE" "$fileE"
+
+    rbh_sync "rbh:retention:." "rbh:$db:$testdb"
+
+    rbh_find "rbh:$db:$testdb" | sort |
+        difflines "/" "/$fileA" "/$fileB" "/$fileC" "/$fileD" "/$fileE"
+
+    rbh_find "rbh:$db:$testdb" -sort expiration-date |
+        difflines "/" "/$fileD" "/$fileB" "/$fileA" "/$fileE" "/$fileC"
+}
+
 ################################################################################
 #                                     MAIN                                     #
 ################################################################################
 
 declare -a tests=(test_invalid test_expired_abs test_expired_rel
-                  test_printf_expiration_info test_config)
+                  test_printf_expiration_info test_config test_sort)
 
 tmpdir=$(mktemp --directory --tmpdir=$LUSTRE_DIR)
 trap "rm -r $tmpdir" EXIT
