@@ -489,5 +489,179 @@ declare_policy(
 
         self.assertNotIn("removed empty parent directories", result.stdout)
 
+    def test_cmd_action_success(self):
+        """
+        Verify that the cmd action executes the specified command on all
+        matching files and that parameters are correctly passed to the command.
+        """
+        config_path = self._write_config("""
+from rbhpolicy.config.core import *
+config(
+    filesystem = "rbh:posix:{fs}",
+    database = "rbh:mongo:{db}",
+    evaluation_interval = "5s"
+)
+declare_policy(
+    name = "test_cmd_policy",
+    target = (Type == "f"),
+    action = cmd("ls {exemple_param} {}"),
+    parameters = {
+        "exemple_param": "-la"
+    },
+    trigger = 'Periodic("10m")'
+)
+""")
+        result = self._run_policy(config_path, "test_cmd_policy")
+        self.assertEqual(result.returncode, 0,
+                         f"rbh-policy.py failed:\nstdout:\n{result.stdout}\n"
+                         f"stderr:\n{result.stderr}")
+
+        output = result.stdout
+        for name in ("file1.txt", "file2.log", "file3.csv"):
+            file_path = os.path.join(self.test_dir, "filedir", name)
+            file_size = os.path.getsize(file_path)
+
+            expected_path = os.path.join(self.test_dir, "filedir", name)
+
+            expected_line = (
+                fr"-rw-r--r-- \d+ root root {file_size} \w+ \d+ "
+                f"\d+:\d+ {expected_path}"
+            )
+
+            self.assertRegex(output, expected_line,
+                             f"Expected line for {name} not found in output: "
+                             f"{expected_line}")
+
+    def test_cmd_action_without_parameters(self):
+        """
+        Verify that the cmd action works correctly when no additional
+        parameters are provided.
+        """
+        config_path = self._write_config("""
+from rbhpolicy.config.core import *
+config(
+    filesystem = "rbh:posix:{fs}",
+    database = "rbh:mongo:{db}",
+    evaluation_interval = "5s"
+)
+declare_policy(
+    name = "test_cmd_policy_no_params",
+    target = (Type == "f"),
+    action = cmd("ls {}"),
+    trigger = 'Periodic("10m")'
+)
+""")
+        result = self._run_policy(config_path, "test_cmd_policy_no_params")
+        self.assertEqual(result.returncode, 0,
+                         f"rbh-policy.py failed:\nstdout:\n{result.stdout}\n"
+                         f"stderr:\n{result.stderr}")
+
+        output = result.stdout
+        for name in ("file1.txt", "file2.log", "file3.csv"):
+            self.assertIn(name, output,
+                          f"Command output should contain information about "
+                          f"{name}")
+
+    def test_cmd_action_with_rules(self):
+        """
+        Verify that the cmd action works correctly when used with rules.
+        """
+        config_path = self._write_config("""
+from rbhpolicy.config.core import *
+config(
+    filesystem = "rbh:posix:{fs}",
+    database = "rbh:mongo:{db}",
+    evaluation_interval = "5s"
+)
+declare_policy(
+    name = "test_cmd_policy_with_rules",
+    target = (Type == "f") | (Type == "d"),
+    action = "log",
+    trigger = 'Periodic("10m")',
+    rules = [
+        Rule(
+            name = "cmd_rule",
+            condition = (Type == "f"),
+            action = cmd("ls {exemple_param} {}"),
+            parameters = {
+                "exemple_param": "-la"
+            },
+        )
+    ]
+)
+""")
+        result = self._run_policy(config_path, "test_cmd_policy_with_rules")
+        self.assertEqual(result.returncode, 0,
+                         f"rbh-policy.py failed:\nstdout:\n{result.stdout}\n"
+                         f"stderr:\n{result.stderr}")
+
+        output = result.stdout
+
+        for name in ("file1.txt", "file2.log", "file3.csv"):
+            file_path = os.path.join(self.test_dir, "filedir", name)
+            file_size = os.path.getsize(file_path)
+            expected_path = os.path.join(self.test_dir, "filedir", name)
+
+            file_pattern = (
+                fr"-rw-r--r-- \d+ root root {file_size} "
+                fr"\w+ \d+ \d+:\d+ {expected_path}"
+            )
+            self.assertRegex(output, file_pattern,
+                             f"Expected file line for {name} not found in "
+                             f"output")
+
+        for dir_name in ("filedir", "test1", "test2"):
+            dir_path = os.path.join(self.test_dir, "filedir", dir_name)
+
+            dir_pattern = (
+                fr"drwxr-xr-x \d+ root root "
+                fr"\w+ \d+ \d+:\d+ {dir_path}"
+            )
+            self.assertNotRegex(output, dir_pattern,
+                                f"Expected directory line for {dir_name} not "
+                                f"found in output")
+
+    def test_cmd_action_command_errors(self):
+        """
+        Verify that the cmd action correctly handles command execution errors.
+        Should test both error handling and proper error reporting.
+        """
+        config_path = self._write_config("""
+from rbhpolicy.config.core import *
+config(
+    filesystem = "rbh:posix:{fs}",
+    database = "rbh:mongo:{db}",
+    evaluation_interval = "5s"
+)
+declare_policy(
+    name = "test_error_handling",
+    target = (Type == "f"),
+    action = cmd("nonexistent_command {}"),
+    trigger = 'Periodic("10m")'
+)
+""")
+        result = self._run_policy(config_path, "test_error_handling")
+
+        self.assertEqual(result.returncode, 0,
+                         f"rbh-policy.py failed:\nstdout:\n{result.stdout}\n"
+                         f"stderr:\n{result.stderr}")
+
+        output = result.stderr
+
+        for name in ("file1.txt", "file2.log", "file3.csv"):
+            file_path = os.path.join(self.test_dir, "filedir", name)
+            error_pattern = (
+                fr"CmdAction \| command failed \(rc=1\) for '{file_path}': "
+                fr"nonexistent_command '{{}}'"
+            )
+            self.assertRegex(output, error_pattern,
+                             f"Expected error message for {name} not found "
+                             f"in output")
+
+        for name in ("file1.txt", "file2.log", "file3.csv"):
+            self.assertIn(name, output,
+                          f"File {name} should have been processed despite "
+                          f"the error")
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)
