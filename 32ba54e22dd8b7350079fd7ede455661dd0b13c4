@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4088a0bb_72d0feac",
+        "filename": "retention/update-retention/tests/test_update_retention.bash",
+        "patchSetId": 1
+      },
+      "lineNbr": 374,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-02-27T08:19:04Z",
+      "side": 1,
+      "message": "suggest: can you add an example of printings?",
+      "range": {
+        "startLine": 373,
+        "startChar": 0,
+        "endLine": 374,
+        "endChar": 59
+      },
+      "revId": "32ba54e22dd8b7350079fd7ede455661dd0b13c4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
