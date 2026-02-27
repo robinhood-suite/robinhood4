@@ -238,7 +238,7 @@ get_field_value(const struct rbh_fsentry *fsentry,
     }
 }
 
-static bool
+bool
 rbh_filter_matches_fsentry(const struct rbh_filter *filter,
                            const struct rbh_fsentry *fsentry)
 {
@@ -262,16 +262,17 @@ rbh_filter_matches_fsentry(const struct rbh_filter *filter,
                                  &filter->compare.value);
         }
 
-    /* Opérateur REGEX - pour Name, Path avec wildcards */
+    /* REGEX operator - for Name, Path with wildcards */
     case RBH_FOP_REGEX:
         {
-            const struct rbh_value *field_val =
-                get_field_value(fsentry, &filter->compare.field);
-            int cflags = REG_EXTENDED | REG_NOSUB;
+            const struct rbh_value *field_val;
             unsigned int regex_options;
             const char *regex_string;
             regex_t compiled;
+            int cflags;
             bool match;
+
+            field_val = get_field_value(fsentry, &filter->compare.field);
 
             if (field_val == NULL || field_val->type != RBH_VT_STRING)
                 return false;
@@ -282,15 +283,15 @@ rbh_filter_matches_fsentry(const struct rbh_filter *filter,
             regex_string = filter->compare.value.regex.string;
             regex_options = filter->compare.value.regex.options;
 
+            cflags = REG_EXTENDED | REG_NOSUB;
+
             if (regex_options & RBH_RO_CASE_INSENSITIVE)
                 cflags |= REG_ICASE;
 
             if (regex_options & RBH_RO_SHELL_PATTERN) {
                 int flags = 0;
-
                 if (regex_options & RBH_RO_CASE_INSENSITIVE)
                     flags |= FNM_CASEFOLD;
-
                 return fnmatch(regex_string, field_val->string, flags) == 0;
             }
 
@@ -302,13 +303,14 @@ rbh_filter_matches_fsentry(const struct rbh_filter *filter,
             return match;
         }
 
-    /* Opérateur IN - pour User/Group avec listes */
+    /* IN operator - for User/Group with lists */
     case RBH_FOP_IN:
         {
-            const struct rbh_value *field_val =
-                get_field_value(fsentry, &filter->compare.field);
             const struct rbh_value *seq_values;
+            const struct rbh_value *field_val;
             size_t seq_count;
+
+            field_val = get_field_value(fsentry, &filter->compare.field);
 
             if (field_val == NULL)
                 return false;
@@ -319,10 +321,10 @@ rbh_filter_matches_fsentry(const struct rbh_filter *filter,
             seq_values = filter->compare.value.sequence.values;
             seq_count = filter->compare.value.sequence.count;
 
-            for (size_t i = 0; i < seq_count; i++)
+            for (size_t i = 0; i < seq_count; i++) {
                 if (compare_values(RBH_FOP_EQUAL, field_val, &seq_values[i]))
                     return true;
-
+            }
             return false;
         }
 
@@ -336,7 +338,7 @@ rbh_filter_matches_fsentry(const struct rbh_filter *filter,
     case RBH_FOP_AND:
         for (size_t i = 0; i < filter->logical.count; i++) {
             if (!rbh_filter_matches_fsentry(filter->logical.filters[i],
-                                           fsentry))
+                                            fsentry))
                 return false;
         }
         return true;
@@ -344,24 +346,23 @@ rbh_filter_matches_fsentry(const struct rbh_filter *filter,
     case RBH_FOP_OR:
         for (size_t i = 0; i < filter->logical.count; i++) {
             if (rbh_filter_matches_fsentry(filter->logical.filters[i],
-                                          fsentry))
+                                           fsentry))
                 return true;
         }
         return false;
 
     case RBH_FOP_NOT:
         return !rbh_filter_matches_fsentry(filter->logical.filters[0],
-                                          fsentry);
+                                           fsentry);
 
     default:
         return false;
     }
 }
 
-int
-rbh_check_real_fsentry_match_filter(struct rbh_backend *backend,
-                                    const struct rbh_filter *filter,
-                                    struct rbh_fsentry *fsentry)
+struct rbh_fsentry *
+rbh_get_fresh_fsentry(struct rbh_backend *backend,
+                      struct rbh_fsentry *fsentry)
 {
     struct rbh_filter_projection projection = {
         .fsentry_mask = RBH_FP_ALL,
@@ -372,9 +373,25 @@ rbh_check_real_fsentry_match_filter(struct rbh_backend *backend,
 
     backend_branch = rbh_backend_branch(backend, &fsentry->id, NULL);
     if (!backend_branch)
-        return 1;
+        return NULL;
 
     system_fsentry = rbh_backend_root(backend_branch, &projection);
+    if (!system_fsentry)
+        return NULL;
+
+    rbh_backend_destroy(backend_branch);
+
+    return system_fsentry;
+}
+
+int
+rbh_check_real_fsentry_match_filter(struct rbh_backend *backend,
+                                    const struct rbh_filter *filter,
+                                    struct rbh_fsentry *fsentry)
+{
+    struct rbh_fsentry *system_fsentry;
+
+    system_fsentry = rbh_get_fresh_fsentry(backend, fsentry);
     if (!system_fsentry)
         return 1;
 
