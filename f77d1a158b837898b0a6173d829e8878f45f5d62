@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ac72ea39_dc9c595c",
+        "filename": "rbh-find/tests/retention/test_expiration.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-02-27T08:16:42Z",
+      "side": 1,
+      "message": "comment: kind of strange to have in this example None before shortest expiration date, in a logical way ; I suppose in production other filters will be used to avoid files without expiration date to be considered? well it is up to admins to decide..",
+      "range": {
+        "startLine": 235,
+        "startChar": 18,
+        "endLine": 235,
+        "endChar": 31
+      },
+      "revId": "f77d1a158b837898b0a6173d829e8878f45f5d62",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
