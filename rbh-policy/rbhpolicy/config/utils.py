@@ -366,6 +366,7 @@ def normalize_action(action):
     """
     if callable(action):
         name = getattr(action, '__name__', None)
+        module = getattr(action, '__module__', None)
 
         if not name:
             raise ValueError("Cannot determine function name for action")
@@ -376,6 +377,10 @@ def normalize_action(action):
                 "Use a named function defined with 'def'."
             )
 
+        # Encode as "py:<module>:<funcname>" so the C layer can locate
+        # the function in sys.modules rather than searching __main__.
+        if module and module != "__main__":
+            return f"py:{module}:{name}"
         return f"py:{name}"
 
     if isinstance(action, str):
