@@ -7,5 +7,6 @@
 install_headers(
     'core.h',
     'actions.h',
+    'python.h',
     subdir: 'robinhood/policyengine'
 )
