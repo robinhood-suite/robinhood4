@@ -46,6 +46,30 @@
       },
       "revId": "f77d1a158b837898b0a6173d829e8878f45f5d62",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9ccfafb8_a62d2992",
+        "filename": "rbh-find/tests/retention/test_expiration.bash",
+        "patchSetId": 2
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-02-27T12:14:00Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "166c9ee7_ea73b02c",
+      "range": {
+        "startLine": 235,
+        "startChar": 18,
+        "endLine": 235,
+        "endChar": 31
+      },
+      "revId": "f77d1a158b837898b0a6173d829e8878f45f5d62",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
