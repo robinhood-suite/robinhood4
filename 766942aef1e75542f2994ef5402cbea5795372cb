@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "abe771e7_d9ba2e99",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2026-02-27T08:08:06Z",
+      "side": 1,
+      "message": "Not sure removing the comment is correct, as there might still be an issue with the ordering, and the fact that the number of children of `/` is not correct.",
+      "revId": "766942aef1e75542f2994ef5402cbea5795372cb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
