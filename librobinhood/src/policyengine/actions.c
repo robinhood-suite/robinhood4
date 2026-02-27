@@ -13,6 +13,7 @@
 #include <sysexits.h>
 
 #include "robinhood/policyengine/actions.h"
+#include "robinhood/policyengine/python.h"
 #include "robinhood/action.h"
 #include "robinhood/fsentry.h"
 #include "robinhood/plugins/common_ops.h"
@@ -49,6 +50,7 @@ rbh_pe_parse_action(const char *action_str)
     }
 
     if (strncmp(action_str, "py:", 3) == 0) {
+        /* value holds either "func" or "module:func" */
         act.type = RBH_ACTION_PYTHON;
         act.value = action_str + 3;
         return act;
@@ -368,11 +370,10 @@ rbh_pe_apply_action(const struct rbh_action *action,
     case RBH_ACTION_CMD:
         return rbh_pe_cmd_action(action, entry, mi_backend);
     case RBH_ACTION_PYTHON:
-        break;
+        return rbh_pe_python_action(action, entry, mi_backend);
     default:
         printf("Action type not supported\n");
         errno = ENOTSUP;
         return -1;
     }
-    return 0;
 }
