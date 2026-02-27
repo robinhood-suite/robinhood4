@@ -82,6 +82,37 @@ complete_rbh_filter(const struct rbh_filter *filter,
                     const struct rbh_filter_options *options);
 
 /**
+ * Check if a filesystem entry matches the given filter.
+ *
+ * This function evaluates whether the provided filesystem entry \p fsentry
+ * satisfies all the conditions specified by \p filter.
+ *
+ * @param  filter   the filter to apply on the filesystem entry
+ * @param  fsentry  the filesystem entry to check against the filter
+ *
+ * @return          true if the entry matches the filter, false otherwise
+ */
+bool
+rbh_filter_matches_fsentry(const struct rbh_filter *filter,
+                           const struct rbh_fsentry *fsentry);
+
+/**
+ * Retrieve a fresh filesystem entry from the storage backend.
+ *
+ * This function fetches the current state of the filesystem entry corresponding
+ * to \p fsentry from the storage system, ensuring the returned entry reflects
+ * the latest data available in the backend.
+ *
+ * @param  backend  the storage backend from which to fetch the entry
+ * @param  fsentry  the reference filesystem entry used to locate the data
+ *
+ * @return          a newly allocated fsentry representing the current state in
+ *                  the storage, or NULL on error (with ERRNO set)
+ */
+struct rbh_fsentry *
+rbh_get_fresh_fsentry(struct rbh_backend *backend,
+                      struct rbh_fsentry *fsentry);
+/**
  * Check the storage system's fsentry corresponding to \p fsentry actually
  * matches the given \p filter.
  *
