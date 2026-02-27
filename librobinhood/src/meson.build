@@ -12,6 +12,8 @@ glib_dep = dependency('glib-2.0')
 jansson_dep = dependency('jansson', version: '>=1.16.0')
 libuuid = cc.find_library('libuuid', has_headers: ['uuid/uuid.h'],
                           required: true)
+python3_inst = import('python').find_installation('python3.9')
+python3_dep = python3_inst.dependency(embed: true)
 
 if (build_mfu or build_s3_mpi) and libmpi.found()
     extra_sources += ['mpi_rc.c']
@@ -59,7 +61,8 @@ librobinhood = library(
         'value.c',
     ] + extra_sources,
     version: meson.project_version(),
-    dependencies: [ libdl, miniyaml, glib_dep, libuuid, jansson_dep ] +
+    dependencies: [ libdl, miniyaml, glib_dep, libuuid, jansson_dep,
+                    python3_dep ] +
                   extra_dependencies,
     include_directories: rbh_include,
     install: true,
