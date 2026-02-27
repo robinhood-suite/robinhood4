@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "734b81db_10a7b0f8",
+        "filename": "librobinhood/src/policyengine.c",
+        "patchSetId": 6
+      },
+      "lineNbr": 572,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-02-27T10:32:49Z",
+      "side": 1,
+      "message": "sugest: if you set sstack to NULL if an error occurs, you don\u0027t need `initialized`. If `sstack !\u003d NULL`, the parameters are initialized",
+      "range": {
+        "startLine": 572,
+        "startChar": 8,
+        "endLine": 572,
+        "endChar": 37
+      },
+      "revId": "af67a5d7dba495530b7802eb01d5ba8b5d64e136",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
