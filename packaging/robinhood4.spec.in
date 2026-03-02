@@ -1,5 +1,5 @@
 Name:    robinhood4
-Version: 1.4.0
+Version: 1.5.0
 Release: 1%{?dist}
 Summary: RobinHood V4 tool suite
 
@@ -31,6 +31,8 @@ Requires: mongo-c-driver-libs
 # The MongoDB dependency can be found here: https://repo.mongodb.org/yum/redhat/
 Requires: (mongodb-org or mongodb)
 Requires: miniyaml
+Requires: python39
+
 %if %{with lustre}
 Requires: lustre-client
 %endif
@@ -65,6 +67,7 @@ BuildRequires: lustre-devel
 BuildRequires: libyaml-devel
 BuildRequires: pkgconf-pkg-config
 BuildRequires: miniyaml-devel
+BuildRequires: python39
 
 %if %{with hestia}
 BuildRequires: hestia-devel
@@ -86,7 +89,7 @@ rbh-update-retention.
 %package devel
 Summary: C API for RobinHood V4 tool suite.
 Conflicts: robinhood
-Requires: robinhood4 >= 1.4
+Requires: robinhood4 >= 1.5
 Requires: pkgconf-pkg-config
 %if %{with lustre}
 #Requires: (lustre-devel or lustre-client < 2.15)
@@ -236,6 +239,20 @@ OPTS=""
 ldconfig
 
 %changelog
+* Mon Mar 02 2026 - Yoann Valeri <yoann.valeri@cea.fr> - 1.5-1
+- New SQLite plugin for smaller DB setup
+- New ldiskfs plugin for directly reading a Lustre MDT
+- New MPI iterator for S3
+- Added specific filters and actions for S3 in rbh-find
+- Added support for project-id metadata and associated filter
+- Added multiple Lustre filters
+- Man pages are now available
+- New rbh-update-path tool to update the path of all entries under a directory
+after a change to its name
+- New rbh-gc tool to clear entries kept in the mirror backend that aren't
+available anymore in the original backend
+- Start of the rbh-policy tool for a policy engine, still a work-in-progress
+
 * Mon Oct 20 2025 - Yoann Valeri <yoann.valeri@cea.fr> - 1.4-1
 - New S3 plugin
 - Improved performance of rbh-find/report by using projections
