@@ -34,6 +34,24 @@
       "parentUuid": "fbf486d5_a15c9dd5",
       "revId": "4fbba868760981876d004f489c221c551cfbe0fb",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bdeb56fa_7e87e3ae",
+        "filename": "librobinhood/include/robinhood/plugins/common_ops.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-03-02T08:22:27Z",
+      "side": 1,
+      "message": "If you will have actions that only one plugin or extension will have (like all the HSM actions), I\u0027m okay to avoid adding operations that only one plugin/extension will use.",
+      "parentUuid": "71d168a6_2dc22ff8",
+      "revId": "4fbba868760981876d004f489c221c551cfbe0fb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
