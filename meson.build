@@ -1,5 +1,5 @@
 # This file is part of RobinHood 4
-# Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
+# Copyright (C) 2026 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
@@ -7,7 +7,7 @@
 project(
     'robinhood4',
     'c', 'cpp',
-    version: '1.4.0',
+    version: '1.5.0',
     license: 'LGPL3.0-or-later',
     default_options: [
         'werror=true',
