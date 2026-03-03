@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "978ac6da_c474bd8e",
+        "filename": "librobinhood/src/policyengine.c",
+        "patchSetId": 8
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-03-03T08:31:30Z",
+      "side": 1,
+      "message": "question: If I’m using the Lustre backend (POSIX plugin + Lustre extension), how can I tell whether the common_ops being used is the POSIX one or the Lustre one? From my understanding, it looks like it will retrieve the POSIX common_ops because it’s the first one in the list. However, for the log action, I would expect it to use the Lustre common_ops instead.",
+      "range": {
+        "startLine": 346,
+        "startChar": 8,
+        "endLine": 353,
+        "endChar": 9
+      },
+      "revId": "0cba1a4dd25188af531b690e1736380ef38dba54",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
