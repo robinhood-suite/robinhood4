@@ -669,5 +669,239 @@ declare_policy(
                           f"File {name} should have been processed despite "
                           f"the error")
 
+    def test_python_action_success(self):
+        """
+        Verify that a Python action defined in the config file is called
+        with the absolute path and receives parameters as keyword arguments.
+        """
+        config_path = self._write_config("""
+from rbhpolicy.config.core import *
+
+def my_python_action(path, tag=None):
+    print(f"PythonAction | path={path} tag={tag}")
+    return 0
+
+config(
+    filesystem = "rbh:posix:{fs}",
+    database = "rbh:mongo:{db}",
+    evaluation_interval = "5s"
+)
+
+declare_policy(
+    name = "test_py_action",
+    target = (Type == "f") & (Name == "file1.txt"),
+    action = my_python_action,
+    parameters = {"tag": "test_value"},
+    trigger = 'Periodic("10m")'
+)
+""")
+        result = self._run_policy(config_path, "test_py_action")
+        self.assertEqual(result.returncode, 0,
+                         f"rbh-policy.py failed:\nstdout:\n{result.stdout}\n"
+                         f"stderr:\n{result.stderr}")
+
+        expected_path = os.path.join(self.test_dir, "filedir", "file1.txt")
+        self.assertIn(f"PythonAction | path={expected_path} tag=test_value",
+                      result.stdout)
+
+    def test_python_action_from_module(self):
+        """
+        Verify that a Python action imported from an external module
+        is correctly called.
+        """
+        # Create a Python module in a temporary directory
+        config_dir = (
+            os.path.dirname(self.config_file_path)
+            if self.config_file_path
+            else tempfile.gettempdir()
+        )
+        module_path = os.path.join(config_dir, "test_actions_module.py")
+        with open(module_path, "w") as f:
+            f.write("""
+def external_action(path, label=None):
+    print(f"ExternalAction | path={path} label={label}")
+    return 0
+""")
+
+        config_path = self._write_config("""
+from rbhpolicy.config.core import *
+import sys
+import os
+
+# Add the config directory to sys.path to import our test module
+config_dir = os.path.dirname(__file__)
+if config_dir not in sys.path:
+    sys.path.insert(0, config_dir)
+
+import test_actions_module
+
+config(
+    filesystem = "rbh:posix:{fs}",
+    database = "rbh:mongo:{db}",
+    evaluation_interval = "5s"
+)
+
+declare_policy(
+    name = "test_py_module",
+    target = (Type == "f") & (Name == "file2.log"),
+    action = test_actions_module.external_action,
+    parameters = {"label": "module_test"},
+    trigger = 'Periodic("10m")'
+)
+""")
+
+        try:
+            result = self._run_policy(config_path, "test_py_module")
+            self.assertEqual(result.returncode, 0,
+                             f"rbh-policy.py failed:\nstdout:\n{result.stdout}\n"
+                             f"stderr:\n{result.stderr}")
+
+            expected_path = os.path.join(self.test_dir, "filedir", "file2.log")
+            self.assertIn(
+                f"ExternalAction | path={expected_path} label=module_test",
+                result.stdout
+            )
+        finally:
+            if os.path.exists(module_path):
+                os.remove(module_path)
+
+    def test_python_action_missing_function(self):
+        """
+        Verify that referencing a non-existent Python function in the action
+        causes an error.
+        """
+        config_path = self._write_config("""
+from rbhpolicy.config.core import *
+
+config(
+    filesystem = "rbh:posix:{fs}",
+    database = "rbh:mongo:{db}",
+    evaluation_interval = "5s"
+)
+
+declare_policy(
+    name = "test_missing_func",
+    target = (Type == "f") & (Name == "file1.txt"),
+    action = nonexistent_function,
+    trigger = 'Periodic("10m")'
+)
+""")
+        result = self._run_policy(config_path, "test_missing_func")
+        self.assertNotEqual(result.returncode, 0,
+                            "rbh-policy.py should fail when action function "
+                            "does not exist")
+
+    def test_python_action_with_exception(self):
+        """
+        Verify that a Python action that raises an exception is properly
+        handled and reported.
+        """
+        config_path = self._write_config("""
+from rbhpolicy.config.core import *
+
+def failing_action(path):
+    raise RuntimeError(f"Intentional error for {path}")
+
+config(
+    filesystem = "rbh:posix:{fs}",
+    database = "rbh:mongo:{db}",
+    evaluation_interval = "5s"
+)
+
+declare_policy(
+    name = "test_exception",
+    target = (Type == "f") & (Name == "file1.txt"),
+    action = failing_action,
+    trigger = 'Periodic("10m")'
+)
+""")
+        result = self._run_policy(config_path, "test_exception")
+
+        # The policy should still return 0 (process continues despite errors)
+        self.assertEqual(result.returncode, 0,
+                         f"rbh-policy.py failed:\nstdout:\n{result.stdout}\n"
+                         f"stderr:\n{result.stderr}")
+
+        # Check that the error was reported
+        self.assertIn("RuntimeError", result.stderr)
+        self.assertIn("Intentional error", result.stderr)
+
+    def test_python_action_without_parameters(self):
+        """
+        Verify that a Python action works correctly when no parameters
+        are provided (only the path argument).
+        """
+        config_path = self._write_config("""
+from rbhpolicy.config.core import *
+
+def simple_action(path):
+    print(f"SimpleAction | {path}")
+    return 0
+
+config(
+    filesystem = "rbh:posix:{fs}",
+    database = "rbh:mongo:{db}",
+    evaluation_interval = "5s"
+)
+
+declare_policy(
+    name = "test_simple_py",
+    target = (Type == "f") & (Name == "file3.csv"),
+    action = simple_action,
+    trigger = 'Periodic("10m")'
+)
+""")
+        result = self._run_policy(config_path, "test_simple_py")
+        self.assertEqual(result.returncode, 0,
+                         f"rbh-policy.py failed:\nstdout:\n{result.stdout}\n"
+                         f"stderr:\n{result.stderr}")
+
+        expected_path = os.path.join(self.test_dir, "filedir", "file3.csv")
+        self.assertIn(f"SimpleAction | {expected_path}", result.stdout)
+
+    def test_python_action_with_rules(self):
+        """
+        Verify that Python actions work correctly when used in policy rules.
+        """
+        config_path = self._write_config("""
+from rbhpolicy.config.core import *
+
+def rule_action(path, rule_param=None):
+    print(f"RuleAction | path={path} param={rule_param}")
+    return 0
+
+config(
+    filesystem = "rbh:posix:{fs}",
+    database = "rbh:mongo:{db}",
+    evaluation_interval = "5s"
+)
+
+declare_policy(
+    name = "test_py_rules",
+    target = (Type == "f") | (Type == "d"),
+    action = "log",
+    trigger = 'Periodic("10m")',
+    rules = [
+        Rule(
+            name = "python_rule",
+            condition = (Type == "f") & (Name == "file1.txt"),
+            action = rule_action,
+            parameters = {"rule_param": "from_rule"}
+        )
+    ]
+)
+""")
+        result = self._run_policy(config_path, "test_py_rules")
+        self.assertEqual(result.returncode, 0,
+                         f"rbh-policy.py failed:\nstdout:\n{result.stdout}\n"
+                         f"stderr:\n{result.stderr}")
+
+        expected_path = os.path.join(self.test_dir, "filedir", "file1.txt")
+        self.assertIn(f"RuleAction | path={expected_path} param=from_rule",
+                      result.stdout)
+
+        # Other files should be logged (default action)
+        self.assertIn("LogAction | path=filedir/file2.log", result.stdout)
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)
