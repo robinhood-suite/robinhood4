@@ -7,10 +7,13 @@
 import unittest
 import ctypes
 import os
+import re
 import sys
 import tempfile
 import shutil
 import subprocess
+
+from utils import BaseIntegrationTest
 
 build_lib_path = os.environ.get("BUILD_LIB_PATH")
 if not build_lib_path:
@@ -29,30 +32,10 @@ def _patched_cdll(name, *args, **kwargs):
 
 ctypes.CDLL = _patched_cdll
 
-def get_build_root():
-    return os.path.dirname(os.path.dirname(build_lib_path))
-
-def find_rbh_sync():
-    build_root = get_build_root()
-    path = os.path.join(build_root, "rbh-sync", "rbh-sync")
-    if not os.path.exists(path):
-        raise RuntimeError(f"rbh-sync not found at expected location: {path}")
-    return path
-
-class TestActionsIntegration(unittest.TestCase):
+class TestActionsIntegration(BaseIntegrationTest):
     """Integration tests for rbh-policy actions."""
-    def setUp(self):
-        self.test_dir = tempfile.mkdtemp(prefix="rbh_test_")
-        self.mongo_db = f"test_{os.getpid()}"
-        self.config_file_path = None
-
-        self._create_filesystem_structure()
-        self._sync_filesystem()
-
-    def tearDown(self):
-        if self.config_file_path and os.path.exists(self.config_file_path):
-            os.remove(self.config_file_path)
-        shutil.rmtree(self.test_dir, ignore_errors=True)
+    BACKEND = "posix"
+    ROOT_PATH = "/tmp"
 
     def _create_filesystem_structure(self):
         base = os.path.join(self.test_dir, "filedir")
@@ -91,43 +74,6 @@ class TestActionsIntegration(unittest.TestCase):
             mode = "wb" if isinstance(content, bytes) else "w"
             with open(path, mode) as f:
                 f.write(content)
-
-    def _sync_filesystem(self):
-        rbh_sync = find_rbh_sync()
-        subprocess.run(
-            [
-                rbh_sync,
-                f"rbh:posix:{self.test_dir}",
-                f"rbh:mongo:{self.mongo_db}"
-            ],
-            check=True,
-        )
-
-    def _write_config(self, config_body: str) -> str:
-        """Create a temporary policy configuration file."""
-        content = (config_body
-                   .replace("{fs}", self.test_dir)
-                   .replace("{db}", self.mongo_db))
-        tmp_file = tempfile.NamedTemporaryFile(mode="w", suffix=".py",
-                                               delete=False)
-        tmp_file.write(content)
-        tmp_file.close()
-        self.config_file_path = tmp_file.name
-        return tmp_file.name
-
-    def _run_policy(self, config_path: str, policy_name: str):
-        """Run a policy via rbh-policy.py and return CompletedProcess."""
-        rbh_policy_script = os.path.join(
-            os.path.dirname(os.path.dirname(__file__)), "rbh-policy.py")
-        if not os.path.exists(rbh_policy_script):
-            raise RuntimeError(
-                f"rbh-policy.py not found at: {rbh_policy_script}")
-        return subprocess.run(
-            [sys.executable, rbh_policy_script, "run",
-                config_path, policy_name],
-            capture_output=True,
-            text=True,
-        )
 
     def test_log_action_success(self):
         """
