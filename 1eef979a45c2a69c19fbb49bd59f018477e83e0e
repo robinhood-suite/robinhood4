@@ -18,6 +18,24 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "237361d2_2fdde8d1",
+        "filename": "librobinhood/src/plugins/posix/action.c",
+        "patchSetId": 13
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-03-04T15:54:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9fc2a410_8ccfc55c",
+      "revId": "1eef979a45c2a69c19fbb49bd59f018477e83e0e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4f9f4fd0_a762d422",
@@ -41,6 +59,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "36d84e95_471905c2",
+        "filename": "librobinhood/src/plugins/posix/enrichers/lustre/action.c",
+        "patchSetId": 13
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-03-04T15:54:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4f9f4fd0_a762d422",
+      "range": {
+        "startLine": 32,
+        "startChar": 8,
+        "endLine": 33,
+        "endChar": 1
+      },
+      "revId": "1eef979a45c2a69c19fbb49bd59f018477e83e0e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "68c9f6a9_1eb0eb32",
@@ -54,6 +96,24 @@
       "writtenOn": "2026-03-02T08:45:28Z",
       "side": 1,
       "message": "minor: missing the documentation",
+      "revId": "1eef979a45c2a69c19fbb49bd59f018477e83e0e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "68cfbf24_d8a67fb8",
+        "filename": "librobinhood/src/plugins/posix/posix_internals.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-03-04T15:54:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "68c9f6a9_1eb0eb32",
       "revId": "1eef979a45c2a69c19fbb49bd59f018477e83e0e",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
