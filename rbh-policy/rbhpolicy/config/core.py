@@ -10,3 +10,4 @@ from rbhpolicy.config.policy import declare_policy, Rule
 from rbhpolicy.config.cpython import config
 from rbhpolicy.config.utils import cmd
 from rbhpolicy.config.entities import *
+from rbhpolicy.config.core_actions import *
