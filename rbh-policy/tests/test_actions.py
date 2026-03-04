@@ -161,7 +161,7 @@ config(
 declare_policy(
     name = "test_log_policy",
     target = (Type == "f"),
-    action = "log",
+    action = action.log,
     trigger = 'Periodic("10m")'
 )
 """)
@@ -231,7 +231,7 @@ config(
 declare_policy(
     name = "test_delete_file",
     target = (Type == "f") & (Name == "file1.txt"),
-    action = "delete",
+    action = action.delete,
     trigger = 'Periodic("10m")'
 )
 """)
@@ -274,7 +274,7 @@ config(
 declare_policy(
     name = "test_delete_dir",
     target = (Type == "d") & (Name == "emptydir"),
-    action = "delete",
+    action = action.delete,
     trigger = 'Periodic("10m")'
 )
 """)
@@ -311,7 +311,7 @@ config(
 declare_policy(
     name = "test_mixed_policy",
     target = (Type == "f") | (Type == "d"),
-    action = "log",
+    action = action.log,
     trigger = 'Periodic("10m")',
     rules = [
         Rule(
@@ -373,7 +373,7 @@ config(
 declare_policy(
     name = "test_delete_with_parent",
     target = (Type == "f") & (Name == "solo.txt"),
-    action = "delete",
+    action = action.delete,
     parameters = {"remove_empty_parent": True},
     trigger = 'Periodic("10m")'
 )
@@ -424,7 +424,7 @@ config(
 declare_policy(
     name = "test_delete_parents_below",
     target = (Type == "f") & (Name == "deep.txt"),
-    action = "delete",
+    action = action.delete,
     parameters = {
         "remove_empty_parent": True,
         "remove_parents_below": "filedir/a/b",
@@ -475,7 +475,7 @@ config(
 declare_policy(
     name = "test_no_remove_parent",
     target = (Type == "f") & (Name == "alone.txt"),
-    action = "delete",
+    action = action.delete,
     parameters = {"remove_parents_below": "filedir/alone_dir"},
     trigger = 'Periodic("10m")'
 )
@@ -585,7 +585,7 @@ config(
 declare_policy(
     name = "test_cmd_policy_with_rules",
     target = (Type == "f") | (Type == "d"),
-    action = "log",
+    action = action.log,
     trigger = 'Periodic("10m")',
     rules = [
         Rule(
@@ -882,7 +882,7 @@ config(
 declare_policy(
     name = "test_py_rules",
     target = (Type == "f") | (Type == "d"),
-    action = "log",
+    action = action.log,
     trigger = 'Periodic("10m")',
     rules = [
         Rule(
@@ -1049,7 +1049,7 @@ config(
 declare_policy(
     name = "test_lustre_log_policy",
     target = (Type == "f"),
-    action = "log",
+    action = action.log,
     trigger = 'Periodic("10m")'
 )
 """)
@@ -1109,7 +1109,7 @@ config(
 declare_policy(
     name = "test_lustre_delete",
     target = (Type == "f") & (Name == "file1.txt"),
-    action = "delete",
+    action = action.delete,
     trigger = 'Periodic("10m")'
 )
 """)
