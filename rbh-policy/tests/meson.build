@@ -29,3 +29,12 @@ foreach t : python_tests
     workdir: src_root
   )
 endforeach
+
+test(
+  'test_actions_lustre',
+  python,
+  args: [tests_src / 'lustre' / 'test_actions_lustre.py'],
+  suite: 'rbh-policy',
+  env: backend_path_env,
+  workdir: src_root
+)
