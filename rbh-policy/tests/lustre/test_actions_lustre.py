@@ -133,7 +133,7 @@ config(
 declare_policy(
     name = "test_lustre_log_policy",
     target = (Type == "f"),
-    action = "log",
+    action = action.log,
     trigger = 'Periodic("10m")'
 )
 """)
@@ -193,7 +193,7 @@ config(
 declare_policy(
     name = "test_lustre_delete",
     target = (Type == "f") & (Name == "file1.txt"),
-    action = "delete",
+    action = action.delete,
     trigger = 'Periodic("10m")'
 )
 """)
