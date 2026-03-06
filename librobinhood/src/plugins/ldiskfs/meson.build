@@ -1,5 +1,5 @@
 # This file is part of RobinHood 4
-# Copyright (C) 2025 Commissariat a l'energie atomique et aux energies
+# Copyright (C) 2026 Commissariat a l'energie atomique et aux energies
 #                    alternatives
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
@@ -16,6 +16,7 @@ librbh_ldiskfs = library(
         'filter.c',
         'plugin.c',
         'scan_target.c',
+        'xattrs.c',
     ],
     version: librbh_ldiskfs_version, # defined in include/robinhood/backends
     dependencies: [ librobinhood_dep, libext2fs, glib2, libcom_err ],
