@@ -208,12 +208,12 @@ scan_target(struct ldiskfs_backend *backend)
         scan_dentries(backend);
 }
 
-int
-get_mdt_index(ext2_filsys fs)
+bool
+set_target_type_and_index(ext2_filsys fs, struct ldiskfs_iter *iter)
 {
     char volume_name[sizeof(fs->super->s_volume_name) + 1];
-    char *mdt_name;
-    long mdt_index;
+    char *target_name;
+    long target_index;
     char *index;
     char *dash;
     char *end;
@@ -223,32 +223,41 @@ get_mdt_index(ext2_filsys fs)
                   /* expand to length and buf */
                   EXT2_LEN_STR(fs->super->s_volume_name));
     if (rc == -1 || rc > sizeof(volume_name))
-        return -1;
+        return false;
 
     dash = strchr(volume_name, '-');
     if (!dash) {
-        rbh_backend_error_printf("no '-' found in volume name. Is this a Lustre target?");
-        return -1;
+        rbh_backend_error_printf("no '-' found in volume name. Is this a lustre target?");
+        return false;
     }
 
-    mdt_name = dash + 1;
-    if (strncmp(mdt_name, "MDT", 3)) {
-        rbh_backend_error_printf("'%s' is not an MDT UUID", volume_name);
-        return -1;
+    target_name = dash + 1;
+    if (!strncmp(target_name, "MDT", 3)) {
+        iter->is_mdt = true;
+    } else if (!strncmp(target_name, "OST", 3)) {
+        iter->is_mdt = false;
+    } else if (!strncmp(target_name, "MGS", 3)) {
+        rbh_backend_error_printf("The ldiskfs backend does not support MGT scans.");
+        return false;
+    } else {
+        rbh_backend_error_printf("'%s' is not a lustre target UUID", volume_name);
+        return false;
     }
 
-    index = mdt_name + 3;
+    index = target_name + 3;
     errno = 0;
-    mdt_index = strtol(index, &end, 10);
+    target_index = strtol(index, &end, 16);
     if (errno != 0 || *end != '\0') {
-        rbh_backend_error_printf("failed to parse MDT index '%s'", index);
-        return -1;
+        rbh_backend_error_printf("failed to parse lustre target index '%s'", index);
+        return false;
     }
 
-    if (mdt_index > INT_MAX) {
-        rbh_backend_error_printf("MDT index '%ld' is too big", mdt_index);
-        return -1;
+    if (target_index > INT_MAX) {
+        rbh_backend_error_printf("Lustre target index '%ld' is too big", target_index);
+        return false;
     }
 
-    return (int) mdt_index;
+    iter->target_index = target_index;
+
+    return true;
 }

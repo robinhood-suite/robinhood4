@@ -34,7 +34,8 @@ struct ldiskfs_backend {
 
 struct ldiskfs_iter {
     struct rbh_mut_iterator iter;
-    uint32_t mdt_index;
+    bool is_mdt;
+    uint32_t target_index;
     struct rbh_dentry *root;
     struct rbh_dentry *remote_parent_dir;
     struct rbh_dentry *current;
@@ -57,7 +58,7 @@ ldiskfs_backend_get_info(void *backend, int info_flags);
 bool
 scan_target(struct ldiskfs_backend *backend);
 
-int
-get_mdt_index(ext2_filsys fs);
+bool
+set_target_type_and_index(ext2_filsys fs, struct ldiskfs_iter *iter);
 
 #endif
