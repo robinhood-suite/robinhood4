@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "652633a1_93c50cfa",
+        "filename": "librobinhood/src/policyengine.c",
+        "patchSetId": 10
+      },
+      "lineNbr": 374,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-03-06T09:02:12Z",
+      "side": 1,
+      "message": "major: Instead of depending on the backend name specified in the configuration matching a plugin or extension name, we could do the following: add a prefix to the common action, such as `lustre.log` or `posix.log`. This would allow us to retrieve all defined common_ops by the backend and, for each action, iterate through them until we find a matching common_op.",
+      "range": {
+        "startLine": 347,
+        "startChar": 8,
+        "endLine": 374,
+        "endChar": 38
+      },
+      "revId": "257a1db01bee24bdaeae6532c42fd342d7ec4d45",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
