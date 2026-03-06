@@ -122,10 +122,11 @@ dentry_path(struct rbh_dentry *dentry, struct rbh_dentry *root)
 }
 
 static struct rbh_fsentry *
-fsentry_from_dentry(struct rbh_dentry *dentry, struct rbh_dentry *root)
+fsentry_from_dentry(struct rbh_dentry *dentry, struct rbh_dentry *root, ext2_filsys fs)
 {
     struct ext2_inode_large *inode = (struct ext2_inode_large *)dentry->inode;
-    struct rbh_value_map inode_xattrs = {0};
+    ext2_ino_t ino = dentry->ino;
+    struct rbh_value_map inode_xattrs = get_xattrs_from_inode(fs, inode, ino);
     struct rbh_value_map ns_xattrs = {0};
     const struct rbh_id *parent_id;
     struct rbh_value path_value = {
@@ -154,7 +155,7 @@ fsentry_from_dentry(struct rbh_dentry *dentry, struct rbh_dentry *root)
     statx.stx_uid = inode_uid(*inode);
     statx.stx_gid = inode_gid(*inode);
     statx.stx_mode = inode->i_mode;
-    statx.stx_ino = dentry->ino;
+    statx.stx_ino = ino;
     statx.stx_size = inode->i_size;
     statx.stx_blocks = inode_blocks(inode);
     /* statx.stx_attributes_mask; */
@@ -200,7 +201,7 @@ ldiskfs_iter_next(void *iterator)
     if (is_dir(dentry))
         fifo_push_child_entries(iter, dentry);
 
-    return fsentry_from_dentry(dentry, iter->root);
+    return fsentry_from_dentry(dentry, iter->root, iter->fs);
 }
 
 static void
@@ -235,6 +236,7 @@ ldiskfs_iter_new(struct ldiskfs_backend *ldiskfs)
         goto free_iter;
 
     iter->tasks = g_queue_new();
+    iter->fs = ldiskfs->fs;
 
     if (iter->is_mdt) {
 

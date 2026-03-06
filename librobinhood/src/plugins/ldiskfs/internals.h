@@ -39,6 +39,7 @@ struct ldiskfs_iter {
     struct rbh_dentry *root;
     struct rbh_dentry *remote_parent_dir;
     struct rbh_dentry *current;
+    ext2_filsys fs;
     GQueue *tasks;
     GList *current_dir;
 };
@@ -63,5 +64,8 @@ get_target_index(ext2_filsys fs);
 
 bool
 get_target_type(struct ldiskfs_iter *iter, ext2_filsys fs);
+
+struct rbh_value_map
+get_xattrs_from_inode(ext2_filsys fs, struct ext2_inode_large *inode, ext2_ino_t ino);
 
 #endif
