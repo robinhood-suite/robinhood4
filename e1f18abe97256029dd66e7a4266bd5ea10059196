@@ -22,6 +22,23 @@
       },
       "revId": "e1f18abe97256029dd66e7a4266bd5ea10059196",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "105937f7_a0826cbd",
+        "filename": "librobinhood/src/itertools.c",
+        "patchSetId": 7
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-03-06T12:59:14Z",
+      "side": 0,
+      "message": "idem",
+      "revId": "e1f18abe97256029dd66e7a4266bd5ea10059196",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
