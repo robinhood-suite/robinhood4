@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7fa7fb52_04845aa9",
+        "filename": "librobinhood/include/robinhood/filters/core.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1019048
+      },
+      "writtenOn": "2026-03-06T09:25:35Z",
+      "side": 1,
+      "message": "minor: still not only a filesystem entry, could be an object store. Just say \"entry\", and same thing bellow",
+      "range": {
+        "startLine": 100,
+        "startChar": 20,
+        "endLine": 100,
+        "endChar": 30
+      },
+      "revId": "89d7118073d5de0391f01bc54c3edaef80cae816",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
