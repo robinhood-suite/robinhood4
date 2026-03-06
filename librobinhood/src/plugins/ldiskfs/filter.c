@@ -228,35 +228,58 @@ ldiskfs_iter_new(struct ldiskfs_backend *ldiskfs)
 
     iter = xmalloc(sizeof(*iter));
     iter->iter = LDISKFS_ITER;
-    iter->mdt_index = get_mdt_index(ldiskfs->fs);
-    if (iter->mdt_index == -1)
+    if (!get_target_type(iter, ldiskfs->fs))
         goto free_iter;
-
-    iter->root = rbh_dcache_lookup(ldiskfs->dcache, EXT2_ROOT_INO, "ROOT");
-    if (iter->root && !LINUX_S_ISDIR(iter->root->inode->i_mode)) {
-        rbh_backend_error_printf("'ROOT' found, but is not a directory. Is this an MDT target?");
+    iter->target_index = get_target_index(ldiskfs->fs);
+    if (iter->target_index == -1)
         goto free_iter;
-    }
-    if (iter->mdt_index == 0 && !iter->root) {
-        rbh_backend_error_printf("MDT0000 must have the 'ROOT' directory");
-        goto free_iter;
-    }
-
-    iter->remote_parent_dir = rbh_dcache_lookup(ldiskfs->dcache,
-                                                EXT2_ROOT_INO,
-                                                "REMOTE_PARENT_DIR");
-    if (!iter->remote_parent_dir) {
-        rbh_backend_error_printf("'REMOTE_PARENT_DIR' not found. Is this an MDT target?");
-        goto free_iter;
-    }
-
-    if (!LINUX_S_ISDIR(iter->remote_parent_dir->inode->i_mode)) {
-        rbh_backend_error_printf("'REMOTE_PARENT_DIR' found but is not a directory. Is this an MDT target?");
-        goto free_iter;
-    }
 
     iter->tasks = g_queue_new();
-    fifo_push_child_entries(iter, iter->remote_parent_dir);
+
+    if (iter->is_mdt) {
+
+	iter->root = rbh_dcache_lookup(ldiskfs->dcache, EXT2_ROOT_INO, "ROOT");
+	if (iter->root && !LINUX_S_ISDIR(iter->root->inode->i_mode)) {
+	    rbh_backend_error_printf("'ROOT' found, but is not a directory. Is this an MDT target?");
+	    goto free_iter;
+	}
+	if (iter->target_index == 0 && !iter->root) {
+	    rbh_backend_error_printf("MDT0000 must have the 'ROOT' directory");
+	    goto free_iter;
+	}
+
+	iter->remote_parent_dir = rbh_dcache_lookup(ldiskfs->dcache,
+						    EXT2_ROOT_INO,
+						    "REMOTE_PARENT_DIR");
+	if (!iter->remote_parent_dir) {
+	    rbh_backend_error_printf("'REMOTE_PARENT_DIR' not found. Is this an MDT target?");
+	    goto free_iter;
+	}
+
+	if (!LINUX_S_ISDIR(iter->remote_parent_dir->inode->i_mode)) {
+	    rbh_backend_error_printf("'REMOTE_PARENT_DIR' found but is not a directory. Is this an MDT target?");
+	    goto free_iter;
+	}
+
+	fifo_push_child_entries(iter, iter->remote_parent_dir);
+
+    } else {
+
+    iter->root = rbh_dcache_lookup(ldiskfs->dcache,
+						    EXT2_ROOT_INO,
+						    "O");
+	if (!iter->root) {
+	    rbh_backend_error_printf("'O' not found. Is this an OST target?");
+	    goto free_iter;
+	}
+
+	if (!LINUX_S_ISDIR(iter->root->inode->i_mode)) {
+	    rbh_backend_error_printf("'O' found but is not a directory. Is this an OST target?");
+	    goto free_iter;
+	}
+
+    }
+
     fifo_push(iter, iter->root);
 
     return iter;

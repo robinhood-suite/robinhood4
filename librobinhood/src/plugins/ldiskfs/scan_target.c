@@ -209,11 +209,11 @@ scan_target(struct ldiskfs_backend *backend)
 }
 
 int
-get_mdt_index(ext2_filsys fs)
+get_target_index(ext2_filsys fs)
 {
     char volume_name[sizeof(fs->super->s_volume_name) + 1];
-    char *mdt_name;
-    long mdt_index;
+    char *target_name;
+    long target_index;
     char *index;
     char *dash;
     char *end;
@@ -227,28 +227,59 @@ get_mdt_index(ext2_filsys fs)
 
     dash = strchr(volume_name, '-');
     if (!dash) {
-        rbh_backend_error_printf("no '-' found in volume name. Is this a Lustre target?");
+        rbh_backend_error_printf("no '-' found in volume name. Is this a lustre target?");
         return -1;
     }
 
-    mdt_name = dash + 1;
-    if (strncmp(mdt_name, "MDT", 3)) {
-        rbh_backend_error_printf("'%s' is not an MDT UUID", volume_name);
-        return -1;
-    }
+    target_name = dash + 1;
 
-    index = mdt_name + 3;
+    index = target_name + 3;
     errno = 0;
-    mdt_index = strtol(index, &end, 10);
+    target_index = strtol(index, &end, 10);
     if (errno != 0 || *end != '\0') {
-        rbh_backend_error_printf("failed to parse MDT index '%s'", index);
+        rbh_backend_error_printf("failed to parse lustre target index '%s'", index);
         return -1;
     }
 
-    if (mdt_index > INT_MAX) {
-        rbh_backend_error_printf("MDT index '%ld' is too big", mdt_index);
+    if (target_index > INT_MAX) {
+        rbh_backend_error_printf("Lustre target index '%ld' is too big", target_index);
         return -1;
     }
 
-    return (int) mdt_index;
+    return (int) target_index;
+}
+
+bool
+get_target_type(struct ldiskfs_iter *iter, ext2_filsys fs)
+{
+    char volume_name[sizeof(fs->super->s_volume_name) + 1];
+    char *target_name;
+    char *dash;
+    int rc;
+    bool is_mdt;
+
+    rc = snprintf(volume_name, sizeof(volume_name), "%.*s",
+                  /* expand to length and buf */
+                  EXT2_LEN_STR(fs->super->s_volume_name));
+    if (rc == -1 || rc > sizeof(volume_name))
+        return false;
+
+    dash = strchr(volume_name, '-');
+    if (!dash) {
+        rbh_backend_error_printf("no '-' found in volume name. Is this a lustre target?");
+        return false;
+    }
+
+    target_name = dash + 1;
+    if (!strncmp(target_name, "MDT", 3)) {
+        is_mdt = true;
+    } else if (!strncmp(target_name, "OST", 3)) {
+        is_mdt = false;
+    } else {
+        rbh_backend_error_printf("'%s' is not an lustre target UUID", volume_name);
+        return false;
+    }
+
+    iter->is_mdt = is_mdt;
+    return true;
 }
