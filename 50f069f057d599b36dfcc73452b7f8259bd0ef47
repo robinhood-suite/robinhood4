@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c95734a1_a42310ca",
+        "filename": "rbh-policy/tests/test_actions.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 341,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-03-09T13:32:03Z",
+      "side": 1,
+      "message": "minor: Test that `test2` is also logged",
+      "revId": "50f069f057d599b36dfcc73452b7f8259bd0ef47",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
