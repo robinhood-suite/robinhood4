@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bfa9361c_22a98837",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-03-09T13:24:57Z",
+      "side": 1,
+      "message": "I think it would have been much easier to do the tests in bash",
+      "revId": "18fe3d2e3ca0a9d3ca84d1fac7589c3a9844dcab",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e97e8382_6a8abd9b",
+        "filename": "rbh-policy/tests/meson.build",
+        "patchSetId": 8
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-03-09T13:24:57Z",
+      "side": 1,
+      "message": "question: Can\u0027t you use the `backend_path_env` environment declare in meson which contains the `LD_LIBRARY_PATH` with the path of all plugins/extensions ?",
+      "range": {
+        "startLine": 30,
+        "startChar": 6,
+        "endLine": 31,
+        "endChar": 59
+      },
+      "revId": "18fe3d2e3ca0a9d3ca84d1fac7589c3a9844dcab",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bafa4bbf_589b872e",
+        "filename": "rbh-policy/tests/test_actions.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-03-09T13:24:57Z",
+      "side": 1,
+      "message": "minor: RobinHood",
+      "range": {
+        "startLine": 1,
+        "startChar": 23,
+        "endLine": 1,
+        "endChar": 34
+      },
+      "revId": "18fe3d2e3ca0a9d3ca84d1fac7589c3a9844dcab",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0641c6d4_0d1e5e20",
+        "filename": "rbh-policy/tests/test_actions.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-03-09T13:24:57Z",
+      "side": 1,
+      "message": "comment: If you can use the `backend_path_env` from meson, you don\u0027t need it",
+      "range": {
+        "startLine": 30,
+        "startChar": 0,
+        "endLine": 34,
+        "endChar": 48
+      },
+      "revId": "18fe3d2e3ca0a9d3ca84d1fac7589c3a9844dcab",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1136452b_8cbc67e5",
+        "filename": "rbh-policy/tests/test_actions.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-03-09T13:24:57Z",
+      "side": 1,
+      "message": "major: You need to check that each files appear in output to ensure that its works correctly",
+      "range": {
+        "startLine": 168,
+        "startChar": 8,
+        "endLine": 171,
+        "endChar": 9
+      },
+      "revId": "18fe3d2e3ca0a9d3ca84d1fac7589c3a9844dcab",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
