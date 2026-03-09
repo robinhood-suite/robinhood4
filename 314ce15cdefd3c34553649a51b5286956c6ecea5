@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c73e49c4_4f0dcc13",
+        "filename": "librobinhood/src/plugins/ldiskfs/filter.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1039247
+      },
+      "writtenOn": "2026-03-09T15:17:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d21216be_7a85d583",
+      "range": {
+        "startLine": 233,
+        "startChar": 4,
+        "endLine": 233,
+        "endChar": 8
+      },
+      "revId": "314ce15cdefd3c34553649a51b5286956c6ecea5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e7201994_347bdf42",
@@ -37,6 +61,30 @@
       "writtenOn": "2026-03-09T09:25:28Z",
       "side": 1,
       "message": "major: target_index is a uint32_t. You are casting a signed integer to an unsigned here. If you want to do this, use a temporary int and check for -1 before casting it. You could declare an `int rc;` variable for this. What you are doing here may work but I would prefer if we avoid relying on signed/unsigned conversions for this.",
+      "range": {
+        "startLine": 234,
+        "startChar": 14,
+        "endLine": 234,
+        "endChar": 32
+      },
+      "revId": "314ce15cdefd3c34553649a51b5286956c6ecea5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "36cdfc71_b5e5f69d",
+        "filename": "librobinhood/src/plugins/ldiskfs/filter.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1039247
+      },
+      "writtenOn": "2026-03-09T15:17:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e7201994_347bdf42",
       "range": {
         "startLine": 234,
         "startChar": 14,
@@ -70,6 +118,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7e25996e_55912d2a",
+        "filename": "librobinhood/src/plugins/ldiskfs/filter.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 239,
+      "author": {
+        "id": 1039247
+      },
+      "writtenOn": "2026-03-09T15:17:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "06385942_50caf392",
+      "range": {
+        "startLine": 239,
+        "startChar": 7,
+        "endLine": 239,
+        "endChar": 21
+      },
+      "revId": "314ce15cdefd3c34553649a51b5286956c6ecea5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f16fb790_82878e57",
@@ -83,6 +155,30 @@
       "writtenOn": "2026-03-09T09:25:28Z",
       "side": 1,
       "message": "major: the indentation seems to be wrong here. Through the gerrithub interface, it seems to me that you are using tabs. We use spaces in robinhood.",
+      "range": {
+        "startLine": 268,
+        "startChar": 4,
+        "endLine": 268,
+        "endChar": 12
+      },
+      "revId": "314ce15cdefd3c34553649a51b5286956c6ecea5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5e20ba9a_91a3f39f",
+        "filename": "librobinhood/src/plugins/ldiskfs/filter.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1039247
+      },
+      "writtenOn": "2026-03-09T15:17:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f16fb790_82878e57",
       "range": {
         "startLine": 268,
         "startChar": 4,
@@ -116,6 +212,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "afbb90a0_f458a6ae",
+        "filename": "librobinhood/src/plugins/ldiskfs/scan_target.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1039247
+      },
+      "writtenOn": "2026-03-09T15:17:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8ecffdc2_1c7d6ecb",
+      "range": {
+        "startLine": 238,
+        "startChar": 39,
+        "endLine": 238,
+        "endChar": 41
+      },
+      "revId": "314ce15cdefd3c34553649a51b5286956c6ecea5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "29461989_0b185406",
@@ -129,6 +249,30 @@
       "writtenOn": "2026-03-09T09:25:28Z",
       "side": 1,
       "message": "nit: this is a personal preference but I prefer output parameters at the end of a function signature.",
+      "range": {
+        "startLine": 253,
+        "startChar": 37,
+        "endLine": 253,
+        "endChar": 41
+      },
+      "revId": "314ce15cdefd3c34553649a51b5286956c6ecea5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c076d49d_ed073bb1",
+        "filename": "librobinhood/src/plugins/ldiskfs/scan_target.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1039247
+      },
+      "writtenOn": "2026-03-09T15:17:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "29461989_0b185406",
       "range": {
         "startLine": 253,
         "startChar": 37,
@@ -162,6 +306,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0fc87e10_a792d7d9",
+        "filename": "librobinhood/src/plugins/ldiskfs/scan_target.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1039247
+      },
+      "writtenOn": "2026-03-09T15:17:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "efffd7f6_94e244dc",
+      "range": {
+        "startLine": 278,
+        "startChar": 6,
+        "endLine": 278,
+        "endChar": 10
+      },
+      "revId": "314ce15cdefd3c34553649a51b5286956c6ecea5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "82a1b844_3e87100a",
@@ -175,6 +343,30 @@
       "writtenOn": "2026-03-09T09:25:28Z",
       "side": 1,
       "message": "nit: you can modify it directly in the if statements. No need for the intermediary variable.",
+      "range": {
+        "startLine": 283,
+        "startChar": 10,
+        "endLine": 283,
+        "endChar": 16
+      },
+      "revId": "314ce15cdefd3c34553649a51b5286956c6ecea5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4b2ede0c_b1492553",
+        "filename": "librobinhood/src/plugins/ldiskfs/scan_target.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1039247
+      },
+      "writtenOn": "2026-03-09T15:17:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "82a1b844_3e87100a",
       "range": {
         "startLine": 283,
         "startChar": 10,
