@@ -1,0 +1,188 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d21216be_7a85d583",
+        "filename": "librobinhood/src/plugins/ldiskfs/filter.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2026-03-09T09:25:28Z",
+      "side": 1,
+      "message": "style: add a space before this line",
+      "range": {
+        "startLine": 233,
+        "startChar": 4,
+        "endLine": 233,
+        "endChar": 8
+      },
+      "revId": "314ce15cdefd3c34553649a51b5286956c6ecea5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e7201994_347bdf42",
+        "filename": "librobinhood/src/plugins/ldiskfs/filter.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2026-03-09T09:25:28Z",
+      "side": 1,
+      "message": "major: target_index is a uint32_t. You are casting a signed integer to an unsigned here. If you want to do this, use a temporary int and check for -1 before casting it. You could declare an `int rc;` variable for this. What you are doing here may work but I would prefer if we avoid relying on signed/unsigned conversions for this.",
+      "range": {
+        "startLine": 234,
+        "startChar": 14,
+        "endLine": 234,
+        "endChar": 32
+      },
+      "revId": "314ce15cdefd3c34553649a51b5286956c6ecea5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "06385942_50caf392",
+        "filename": "librobinhood/src/plugins/ldiskfs/filter.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 239,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2026-03-09T09:25:28Z",
+      "side": 1,
+      "message": "suggest: move the content of both branches to a dedicated function: setup_mdt_iterator and setup_ost_iterator for instance.",
+      "range": {
+        "startLine": 239,
+        "startChar": 7,
+        "endLine": 239,
+        "endChar": 21
+      },
+      "revId": "314ce15cdefd3c34553649a51b5286956c6ecea5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f16fb790_82878e57",
+        "filename": "librobinhood/src/plugins/ldiskfs/filter.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2026-03-09T09:25:28Z",
+      "side": 1,
+      "message": "major: the indentation seems to be wrong here. Through the gerrithub interface, it seems to me that you are using tabs. We use spaces in robinhood.",
+      "range": {
+        "startLine": 268,
+        "startChar": 4,
+        "endLine": 268,
+        "endChar": 12
+      },
+      "revId": "314ce15cdefd3c34553649a51b5286956c6ecea5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8ecffdc2_1c7d6ecb",
+        "filename": "librobinhood/src/plugins/ldiskfs/scan_target.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2026-03-09T09:25:28Z",
+      "side": 1,
+      "message": "defect: the index is stored in hexadecimal (the max is `ffff`).",
+      "range": {
+        "startLine": 238,
+        "startChar": 39,
+        "endLine": 238,
+        "endChar": 41
+      },
+      "revId": "314ce15cdefd3c34553649a51b5286956c6ecea5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "29461989_0b185406",
+        "filename": "librobinhood/src/plugins/ldiskfs/scan_target.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2026-03-09T09:25:28Z",
+      "side": 1,
+      "message": "nit: this is a personal preference but I prefer output parameters at the end of a function signature.",
+      "range": {
+        "startLine": 253,
+        "startChar": 37,
+        "endLine": 253,
+        "endChar": 41
+      },
+      "revId": "314ce15cdefd3c34553649a51b5286956c6ecea5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "efffd7f6_94e244dc",
+        "filename": "librobinhood/src/plugins/ldiskfs/scan_target.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2026-03-09T09:25:28Z",
+      "side": 1,
+      "message": "nit: the MGT has the name \"MGS\". You could check for this and use a different error message. Something like \"the ldiskfs backend does not support MGT scans\". Also, I don\u0027t know what the name of a combined MGT/MDT0 is. Could you check that it is `fsname-MDT0000`?",
+      "range": {
+        "startLine": 278,
+        "startChar": 6,
+        "endLine": 278,
+        "endChar": 10
+      },
+      "revId": "314ce15cdefd3c34553649a51b5286956c6ecea5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "82a1b844_3e87100a",
+        "filename": "librobinhood/src/plugins/ldiskfs/scan_target.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2026-03-09T09:25:28Z",
+      "side": 1,
+      "message": "nit: you can modify it directly in the if statements. No need for the intermediary variable.",
+      "range": {
+        "startLine": 283,
+        "startChar": 10,
+        "endLine": 283,
+        "endChar": 16
+      },
+      "revId": "314ce15cdefd3c34553649a51b5286956c6ecea5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
