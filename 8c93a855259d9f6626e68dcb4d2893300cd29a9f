@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fb291053_e4e0199d",
+        "filename": "librobinhood/src/plugins/ldiskfs/scan_target.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2026-03-09T15:25:21Z",
+      "side": 1,
+      "message": "typo: a lustre target",
+      "range": {
+        "startLine": 283,
+        "startChar": 46,
+        "endLine": 283,
+        "endChar": 51
+      },
+      "revId": "8c93a855259d9f6626e68dcb4d2893300cd29a9f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
