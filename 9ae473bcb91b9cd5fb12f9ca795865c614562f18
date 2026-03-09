@@ -1,0 +1,159 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eaabe9fd_b8438d96",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2026-03-09T09:46:23Z",
+      "side": 1,
+      "message": "I leave it at 0 to wait for your answer. I\u0027m fine with landing this with the memory leak since this is still in development and you can fix it in the next commit.",
+      "revId": "9ae473bcb91b9cd5fb12f9ca795865c614562f18",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "100a4742_73b881a3",
+        "filename": "librobinhood/src/plugins/ldiskfs/filter.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2026-03-09T09:46:23Z",
+      "side": 1,
+      "message": "nit/style: we prefer when declarations are in reversed length. I understand why you wrote it like this. Does the line become too long if you use `dentry-\u003eino` directly? If so I\u0027d prefer if the initialisation was done in a seperate line under all the declarations.",
+      "range": {
+        "startLine": 128,
+        "startChar": 21,
+        "endLine": 128,
+        "endChar": 33
+      },
+      "revId": "9ae473bcb91b9cd5fb12f9ca795865c614562f18",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d0449ed0_57986041",
+        "filename": "librobinhood/src/plugins/ldiskfs/xattrs.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2026-03-09T09:46:23Z",
+      "side": 1,
+      "message": "style: no space here",
+      "range": {
+        "startLine": 12,
+        "startChar": 18,
+        "endLine": 12,
+        "endChar": 19
+      },
+      "revId": "9ae473bcb91b9cd5fb12f9ca795865c614562f18",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "02ff1ee2_baf1e91a",
+        "filename": "librobinhood/src/plugins/ldiskfs/xattrs.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2026-03-09T09:46:23Z",
+      "side": 1,
+      "message": "Yes, you are right. What we usualy do for these kinds of allocation is use a rbh_sstack. This is a custom allocator in robinhood where you can append memory dynamically at the end and free everything at once. The idea is that you use it to allocate memory as you need in each iteration. Then at then end you release everything. But this memory is used outside of the iterator, so you actually need to release it on the next call to the iterator\u0027s next function (otherwise this is a use-after-free kind of situation). So the pattern would be:\n\n```\nvoid *myiter_next(void *)\n{\n    // free what was allocated on the previous iteration\n    rbh_sstack_clear(iter-\u003esstack); // or rbh_sstack_pop_all\n\n    // then you can allocate new stuff on the sstack\n    // return what has been allocated for the caller to use\n}\n```\n\nYou also need to free the remaining memory when the iterator is destroyed.",
+      "range": {
+        "startLine": 17,
+        "startChar": 7,
+        "endLine": 17,
+        "endChar": 37
+      },
+      "revId": "9ae473bcb91b9cd5fb12f9ca795865c614562f18",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "15f04f0b_df6d0790",
+        "filename": "librobinhood/src/plugins/ldiskfs/xattrs.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2026-03-09T09:46:23Z",
+      "side": 1,
+      "message": "as much as possible, we prefer declarations at the begining of the function. I know rbh_values can be hard to work with since everything is const. There are a few helper functions in librobinhood to help manage this. I recommend that you look at other backends to see how you can do this. The posix backend might be a good example for this.",
+      "range": {
+        "startLine": 27,
+        "startChar": 21,
+        "endLine": 27,
+        "endChar": 33
+      },
+      "revId": "9ae473bcb91b9cd5fb12f9ca795865c614562f18",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "93861b51_f866d0cc",
+        "filename": "librobinhood/src/plugins/ldiskfs/xattrs.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2026-03-09T09:46:23Z",
+      "side": 1,
+      "message": "style: this should be on the next line.",
+      "range": {
+        "startLine": 53,
+        "startChar": 85,
+        "endLine": 53,
+        "endChar": 87
+      },
+      "revId": "9ae473bcb91b9cd5fb12f9ca795865c614562f18",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "281f999f_cdc1e29e",
+        "filename": "librobinhood/src/plugins/ldiskfs/xattrs.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2026-03-09T09:46:23Z",
+      "side": 1,
+      "message": "Does this function ignore the `system.data` xattr? It contains the content of inline files when the content doesn\u0027t fit in the inode. Just to be safe, you can explicitly ignore it here.",
+      "range": {
+        "startLine": 84,
+        "startChar": 10,
+        "endLine": 84,
+        "endChar": 31
+      },
+      "revId": "9ae473bcb91b9cd5fb12f9ca795865c614562f18",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
