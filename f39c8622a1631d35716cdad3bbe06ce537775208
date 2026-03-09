@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "80bf4c37_4b527667",
+        "filename": "librobinhood/src/plugins/ldiskfs/scan_target.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2026-03-09T14:52:58Z",
+      "side": 1,
+      "message": "defect: MGS (yes Lustre is very inconsistent...)",
+      "range": {
+        "startLine": 279,
+        "startChar": 38,
+        "endLine": 279,
+        "endChar": 41
+      },
+      "revId": "f39c8622a1631d35716cdad3bbe06ce537775208",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
