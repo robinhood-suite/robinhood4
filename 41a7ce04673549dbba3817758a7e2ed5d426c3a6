@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b8d1be17_c93ef9f9",
+        "filename": "librobinhood/src/plugins/posix/action.c",
+        "patchSetId": 12
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-03-09T10:45:43Z",
+      "side": 1,
+      "message": "sugest: separates the function into several small functions",
+      "revId": "41a7ce04673549dbba3817758a7e2ed5d426c3a6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1b7cda8a_377356e0",
+        "filename": "librobinhood/src/plugins/posix/action.c",
+        "patchSetId": 12
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1037727
+      },
+      "writtenOn": "2026-03-09T10:45:43Z",
+      "side": 1,
+      "message": "minor: you don\u0027t need `tmp` as you already strdup `path` in `current`.",
+      "range": {
+        "startLine": 122,
+        "startChar": 16,
+        "endLine": 122,
+        "endChar": 45
+      },
+      "revId": "41a7ce04673549dbba3817758a7e2ed5d426c3a6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
