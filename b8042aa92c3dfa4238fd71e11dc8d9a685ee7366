@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "50e74697_77227f21",
+        "filename": "librobinhood/include/robinhood/filters/core.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-03-10T13:35:49Z",
+      "side": 1,
+      "message": "I changed it to \"backend\", but this function is actually only used with a storage backend at the moment.",
+      "parentUuid": "81777a2b_e6633f31",
+      "range": {
+        "startLine": 100,
+        "startChar": 35,
+        "endLine": 100,
+        "endChar": 50
+      },
+      "revId": "b8042aa92c3dfa4238fd71e11dc8d9a685ee7366",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6204f75a_ca84c14b",
@@ -37,6 +61,30 @@
       "writtenOn": "2026-03-10T13:13:56Z",
       "side": 1,
       "message": "question: idem ?",
+      "range": {
+        "startLine": 106,
+        "startChar": 24,
+        "endLine": 106,
+        "endChar": 39
+      },
+      "revId": "b8042aa92c3dfa4238fd71e11dc8d9a685ee7366",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "87b1429e_baff9870",
+        "filename": "librobinhood/include/robinhood/filters/core.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-03-10T13:35:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6204f75a_ca84c14b",
       "range": {
         "startLine": 106,
         "startChar": 24,
