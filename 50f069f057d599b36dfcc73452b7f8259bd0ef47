@@ -16,6 +16,24 @@
       "message": "minor: Test that `test2` is also logged",
       "revId": "50f069f057d599b36dfcc73452b7f8259bd0ef47",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8e8691ec_37d0507e",
+        "filename": "rbh-policy/tests/test_actions.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 341,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-03-10T13:36:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c95734a1_a42310ca",
+      "revId": "50f069f057d599b36dfcc73452b7f8259bd0ef47",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
