@@ -18,6 +18,24 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "aaaae3ad_2b50f888",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-03-10T13:36:46Z",
+      "side": 1,
+      "message": "I thought the same thing afterwards, but since the work is already done, I\u0027ll stick with that. I could go back to bash for future integration tests.",
+      "parentUuid": "bfa9361c_22a98837",
+      "revId": "18fe3d2e3ca0a9d3ca84d1fac7589c3a9844dcab",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e97e8382_6a8abd9b",
@@ -31,6 +49,30 @@
       "writtenOn": "2026-03-09T13:24:57Z",
       "side": 1,
       "message": "question: Can\u0027t you use the `backend_path_env` environment declare in meson which contains the `LD_LIBRARY_PATH` with the path of all plugins/extensions ?",
+      "range": {
+        "startLine": 30,
+        "startChar": 6,
+        "endLine": 31,
+        "endChar": 59
+      },
+      "revId": "18fe3d2e3ca0a9d3ca84d1fac7589c3a9844dcab",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f6b862da_aff51d1f",
+        "filename": "rbh-policy/tests/meson.build",
+        "patchSetId": 8
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-03-10T13:36:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e97e8382_6a8abd9b",
       "range": {
         "startLine": 30,
         "startChar": 6,
@@ -64,6 +106,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "58b9ee4f_ff5f32a4",
+        "filename": "rbh-policy/tests/test_actions.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-03-10T13:36:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bafa4bbf_589b872e",
+      "range": {
+        "startLine": 1,
+        "startChar": 23,
+        "endLine": 1,
+        "endChar": 34
+      },
+      "revId": "18fe3d2e3ca0a9d3ca84d1fac7589c3a9844dcab",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0641c6d4_0d1e5e20",
@@ -87,6 +153,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f2e37ea0_0433ec5c",
+        "filename": "rbh-policy/tests/test_actions.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-03-10T13:36:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0641c6d4_0d1e5e20",
+      "range": {
+        "startLine": 30,
+        "startChar": 0,
+        "endLine": 34,
+        "endChar": 48
+      },
+      "revId": "18fe3d2e3ca0a9d3ca84d1fac7589c3a9844dcab",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1136452b_8cbc67e5",
@@ -100,6 +190,30 @@
       "writtenOn": "2026-03-09T13:24:57Z",
       "side": 1,
       "message": "major: You need to check that each files appear in output to ensure that its works correctly",
+      "range": {
+        "startLine": 168,
+        "startChar": 8,
+        "endLine": 171,
+        "endChar": 9
+      },
+      "revId": "18fe3d2e3ca0a9d3ca84d1fac7589c3a9844dcab",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "55dffc48_43020340",
+        "filename": "rbh-policy/tests/test_actions.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1038163
+      },
+      "writtenOn": "2026-03-10T13:36:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1136452b_8cbc67e5",
       "range": {
         "startLine": 168,
         "startChar": 8,
