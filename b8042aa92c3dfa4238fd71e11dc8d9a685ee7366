@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "81777a2b_e6633f31",
+        "filename": "librobinhood/include/robinhood/filters/core.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2026-03-10T13:13:56Z",
+      "side": 1,
+      "message": "question: why a \"storage backend\" and not only a \"backend\"",
+      "range": {
+        "startLine": 100,
+        "startChar": 35,
+        "endLine": 100,
+        "endChar": 50
+      },
+      "revId": "b8042aa92c3dfa4238fd71e11dc8d9a685ee7366",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6204f75a_ca84c14b",
+        "filename": "librobinhood/include/robinhood/filters/core.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2026-03-10T13:13:56Z",
+      "side": 1,
+      "message": "question: idem ?",
+      "range": {
+        "startLine": 106,
+        "startChar": 24,
+        "endLine": 106,
+        "endChar": 39
+      },
+      "revId": "b8042aa92c3dfa4238fd71e11dc8d9a685ee7366",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
