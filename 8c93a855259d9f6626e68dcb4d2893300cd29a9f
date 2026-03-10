@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1b9d3e0e_1d63d4d4",
+        "filename": "librobinhood/src/plugins/ldiskfs/filter.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2026-03-10T08:06:34Z",
+      "side": 1,
+      "message": "This was not changed by the patch. This is just some refactoring.",
+      "parentUuid": "ac502179_aa6d2da7",
+      "range": {
+        "startLine": 229,
+        "startChar": 33,
+        "endLine": 229,
+        "endChar": 95
+      },
+      "revId": "8c93a855259d9f6626e68dcb4d2893300cd29a9f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4732590a_f75dcc16",
         "filename": "librobinhood/src/plugins/ldiskfs/filter.c",
         "patchSetId": 3
@@ -72,6 +96,54 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "855822fe_08c3e319",
+        "filename": "librobinhood/src/plugins/ldiskfs/filter.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2026-03-10T08:06:34Z",
+      "side": 1,
+      "message": "Only MDT0 has a ROOT directory.",
+      "parentUuid": "4732590a_f75dcc16",
+      "range": {
+        "startLine": 233,
+        "startChar": 8,
+        "endLine": 233,
+        "endChar": 31
+      },
+      "revId": "8c93a855259d9f6626e68dcb4d2893300cd29a9f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "43da430f_e16d4815",
+        "filename": "librobinhood/src/plugins/ldiskfs/filter.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2026-03-10T08:06:34Z",
+      "side": 1,
+      "message": "This is not superfluous. `rbh_dcache_lookup` searches for a dentry with a given name. That dentry can be any type of inode not necessarily a directory. Only MDT0 has a ROOT directory. So it could be NULL for other MDTs, changing the order of the checks does not change the fact that `iter-\u003eroot` being NULL is valid for certain MDTs.",
+      "parentUuid": "4837053b_bfb66470",
+      "range": {
+        "startLine": 233,
+        "startChar": 35,
+        "endLine": 233,
+        "endChar": 46
+      },
+      "revId": "8c93a855259d9f6626e68dcb4d2893300cd29a9f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8de55d30_67863c05",
         "filename": "librobinhood/src/plugins/ldiskfs/filter.c",
         "patchSetId": 3
@@ -106,6 +178,30 @@
       "writtenOn": "2026-03-09T15:49:34Z",
       "side": 1,
       "message": "suggest: same as the other function, merge the two conditions",
+      "range": {
+        "startLine": 246,
+        "startChar": 9,
+        "endLine": 246,
+        "endChar": 22
+      },
+      "revId": "8c93a855259d9f6626e68dcb4d2893300cd29a9f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "451d63e4_c82b406c",
+        "filename": "librobinhood/src/plugins/ldiskfs/filter.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2026-03-10T08:06:34Z",
+      "side": 1,
+      "message": "The error is not the same so they can\u0027t be merged.",
+      "parentUuid": "0c271694_535a31fd",
       "range": {
         "startLine": 246,
         "startChar": 9,
@@ -187,6 +283,54 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1fea6dd3_f2264ff0",
+        "filename": "librobinhood/src/plugins/ldiskfs/filter.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2026-03-10T08:06:34Z",
+      "side": 1,
+      "message": "No `rbh_dcache_lookup` can return any type of dentry, not just directories.",
+      "parentUuid": "197e4bcd_499d7207",
+      "range": {
+        "startLine": 265,
+        "startChar": 9,
+        "endLine": 265,
+        "endChar": 22
+      },
+      "revId": "8c93a855259d9f6626e68dcb4d2893300cd29a9f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7080e851_aa7d9c4f",
+        "filename": "librobinhood/src/plugins/ldiskfs/filter.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2026-03-10T08:06:34Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "0babcbe1_b5dfa9cd",
+      "range": {
+        "startLine": 265,
+        "startChar": 8,
+        "endLine": 265,
+        "endChar": 49
+      },
+      "revId": "8c93a855259d9f6626e68dcb4d2893300cd29a9f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8257e38d_4245b061",
         "filename": "librobinhood/src/plugins/ldiskfs/filter.c",
         "patchSetId": 3
@@ -256,6 +400,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "74f98ed1_88d7ed00",
+        "filename": "librobinhood/src/plugins/ldiskfs/scan_target.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2026-03-10T08:06:34Z",
+      "side": 1,
+      "message": "I don\u0027t think this works since there is no `0x` prefix in the string.",
+      "parentUuid": "58f230ec_5b74d94b",
+      "range": {
+        "startLine": 238,
+        "startChar": 4,
+        "endLine": 247,
+        "endChar": 5
+      },
+      "revId": "8c93a855259d9f6626e68dcb4d2893300cd29a9f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a50206b0_121eb1f6",
         "filename": "librobinhood/src/plugins/ldiskfs/scan_target.c",
         "patchSetId": 3
@@ -313,6 +481,54 @@
       "writtenOn": "2026-03-09T15:49:34Z",
       "side": 1,
       "message": "question/comment: is it planned in the future ?",
+      "range": {
+        "startLine": 280,
+        "startChar": 8,
+        "endLine": 280,
+        "endChar": 84
+      },
+      "revId": "8c93a855259d9f6626e68dcb4d2893300cd29a9f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "19e85b0c_331140f9",
+        "filename": "librobinhood/src/plugins/ldiskfs/scan_target.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2026-03-10T08:06:34Z",
+      "side": 1,
+      "message": "No MGT",
+      "parentUuid": "84e6bf75_ce8e6f91",
+      "range": {
+        "startLine": 280,
+        "startChar": 71,
+        "endLine": 280,
+        "endChar": 74
+      },
+      "revId": "8c93a855259d9f6626e68dcb4d2893300cd29a9f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "59a90aee_9d8f291e",
+        "filename": "librobinhood/src/plugins/ldiskfs/scan_target.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2026-03-10T08:06:34Z",
+      "side": 1,
+      "message": "No",
+      "parentUuid": "3f3e9db8_defd5d9f",
       "range": {
         "startLine": 280,
         "startChar": 8,
