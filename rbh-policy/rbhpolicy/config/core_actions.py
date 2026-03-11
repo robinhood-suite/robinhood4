@@ -9,3 +9,24 @@ class action:
     log = "log"
     delete = "delete"
     # Add more built-in actions as needed
+
+class ExtActions:
+    """
+    Namespace for extension-specific built-in actions.
+
+    Each attribute is a string of the form "<ext>:<builtin>" that the C
+    policy engine uses to select the common_ops of the named extension.
+
+    Usage in a config file::
+
+        action = lustre.delete  # forces Lustre extension's delete
+        action = retention.log  # forces retention extension's log
+    """
+    def __init__(self, ext_name: str):
+        for builtin in ("log", "delete"):
+            setattr(self, builtin, f"{ext_name}:{builtin}")
+
+
+lustre    = ExtActions("lustre")
+retention = ExtActions("retention")
+posix     = ExtActions("posix")
