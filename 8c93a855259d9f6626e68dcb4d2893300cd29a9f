@@ -190,6 +190,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1ffe7edb_0738dd77",
+        "filename": "librobinhood/src/plugins/ldiskfs/filter.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2026-03-11T08:38:55Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "855822fe_08c3e319",
+      "range": {
+        "startLine": 233,
+        "startChar": 8,
+        "endLine": 233,
+        "endChar": 31
+      },
+      "revId": "8c93a855259d9f6626e68dcb4d2893300cd29a9f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8de55d30_67863c05",
@@ -321,6 +345,30 @@
       "writtenOn": "2026-03-09T15:49:34Z",
       "side": 1,
       "message": "suggest: `disk was identified as an OST target but doesn\u0027t have a \u00270\u0027 directory`",
+      "range": {
+        "startLine": 261,
+        "startChar": 33,
+        "endLine": 261,
+        "endChar": 72
+      },
+      "revId": "8c93a855259d9f6626e68dcb4d2893300cd29a9f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6197690b_bb5ec379",
+        "filename": "librobinhood/src/plugins/ldiskfs/filter.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2026-03-11T08:38:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "733f7682_2bfd8f37",
       "range": {
         "startLine": 261,
         "startChar": 33,
@@ -590,6 +638,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3a93138e_d591686f",
+        "filename": "librobinhood/src/plugins/ldiskfs/scan_target.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2026-03-11T08:38:55Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "74f98ed1_88d7ed00",
+      "range": {
+        "startLine": 238,
+        "startChar": 4,
+        "endLine": 247,
+        "endChar": 5
+      },
+      "revId": "8c93a855259d9f6626e68dcb4d2893300cd29a9f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a50206b0_121eb1f6",
@@ -726,6 +798,54 @@
         "startChar": 8,
         "endLine": 280,
         "endChar": 84
+      },
+      "revId": "8c93a855259d9f6626e68dcb4d2893300cd29a9f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2ee74dfa_aa72d0e8",
+        "filename": "librobinhood/src/plugins/ldiskfs/scan_target.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2026-03-11T08:38:55Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "59a90aee_9d8f291e",
+      "range": {
+        "startLine": 280,
+        "startChar": 8,
+        "endLine": 280,
+        "endChar": 84
+      },
+      "revId": "8c93a855259d9f6626e68dcb4d2893300cd29a9f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cfad0a85_641a71f6",
+        "filename": "librobinhood/src/plugins/ldiskfs/scan_target.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2026-03-11T08:38:55Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "19e85b0c_331140f9",
+      "range": {
+        "startLine": 280,
+        "startChar": 71,
+        "endLine": 280,
+        "endChar": 74
       },
       "revId": "8c93a855259d9f6626e68dcb4d2893300cd29a9f",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
