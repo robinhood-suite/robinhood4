@@ -14,6 +14,8 @@
 
 #include <robinhood/backends/ldiskfs.h>
 #include <robinhood/utils.h>
+#include <robinhood/sstack.h>
+#include <value.h>
 #include <ext2fs/ext2fs.h>
 
 #include "dcache.h"
@@ -34,6 +36,7 @@ struct ldiskfs_backend {
 
 struct ldiskfs_iter {
     struct rbh_mut_iterator iter;
+    struct rbh_sstack *sstack;
     bool is_mdt;
     uint32_t target_index;
     struct rbh_dentry *root;
@@ -63,6 +66,7 @@ bool
 set_target_type_and_index(ext2_filsys fs, struct ldiskfs_iter *iter);
 
 struct rbh_value_map
-get_xattrs_from_inode(ext2_filsys fs, struct ext2_inode_large *inode, ext2_ino_t ino);
+get_xattrs_from_inode(ext2_filsys fs, struct ext2_inode_large *inode,
+                      ext2_ino_t ino, struct rbh_sstack *sstack);
 
 #endif
