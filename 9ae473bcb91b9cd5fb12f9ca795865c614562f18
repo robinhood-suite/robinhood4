@@ -135,6 +135,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cd578876_60427c25",
+        "filename": "librobinhood/src/plugins/ldiskfs/xattrs.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1039247
+      },
+      "writtenOn": "2026-03-11T13:43:06Z",
+      "side": 1,
+      "message": "Fixed in the next commit",
+      "parentUuid": "02ff1ee2_baf1e91a",
+      "range": {
+        "startLine": 17,
+        "startChar": 7,
+        "endLine": 17,
+        "endChar": 37
+      },
+      "revId": "9ae473bcb91b9cd5fb12f9ca795865c614562f18",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "15f04f0b_df6d0790",
@@ -148,6 +172,30 @@
       "writtenOn": "2026-03-09T09:46:23Z",
       "side": 1,
       "message": "as much as possible, we prefer declarations at the begining of the function. I know rbh_values can be hard to work with since everything is const. There are a few helper functions in librobinhood to help manage this. I recommend that you look at other backends to see how you can do this. The posix backend might be a good example for this.",
+      "range": {
+        "startLine": 27,
+        "startChar": 21,
+        "endLine": 27,
+        "endChar": 33
+      },
+      "revId": "9ae473bcb91b9cd5fb12f9ca795865c614562f18",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e2c691d4_6b3ff220",
+        "filename": "librobinhood/src/plugins/ldiskfs/xattrs.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1039247
+      },
+      "writtenOn": "2026-03-11T13:43:06Z",
+      "side": 1,
+      "message": "Fixed in the next commit",
+      "parentUuid": "15f04f0b_df6d0790",
       "range": {
         "startLine": 27,
         "startChar": 21,
