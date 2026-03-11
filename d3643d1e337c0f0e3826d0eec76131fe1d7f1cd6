@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0ee861f4_7d57ffc4",
+        "filename": "designs/rbh-policy/02-configuration_syntax.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2026-03-11T10:48:06Z",
+      "side": 1,
+      "message": "typo: \"example\" instead of \"exemple\" and adding a final dot \".\"",
+      "range": {
+        "startLine": 91,
+        "startChar": 24,
+        "endLine": 91,
+        "endChar": 35
+      },
+      "revId": "d3643d1e337c0f0e3826d0eec76131fe1d7f1cd6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}

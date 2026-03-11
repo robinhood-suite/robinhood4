@@ -142,6 +142,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c22f2fdd_1a368f4c",
+        "filename": "designs/rbh-policy/04-implementation_overview.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1008040
+      },
+      "writtenOn": "2026-03-11T10:48:06Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "42198bb7_e3b5e840",
+      "range": {
+        "startLine": 41,
+        "startChar": 0,
+        "endLine": 45,
+        "endChar": 19
+      },
+      "revId": "e4445dd6ce49b71b413f467a192c3ba137778403",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "137bbc22_6c751c70",
