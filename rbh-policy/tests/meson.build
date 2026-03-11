@@ -4,7 +4,13 @@
 #
 # SPDX-License-Identifier: LGPL-3.0-or-later
 
-python3 = import('python').find_installation('python3.9')
+py_mod = import('python')
+python = py_mod.find_installation('python3', required: true)
+
+if not python.language_version().version_compare('>=3.9')
+error('Python 3.9 or newer is required, but found Python '
+      + python.language_version())
+endif
 
 build_lib_path = meson.build_root() / 'librobinhood' / 'src'
 tests_src = meson.source_root() / 'rbh-policy' / 'tests'
