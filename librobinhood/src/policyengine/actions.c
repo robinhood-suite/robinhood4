@@ -69,6 +69,29 @@ rbh_pe_parse_action(const char *action_str)
         }
     }
 
+    /*
+     * "<ext>:<builtin>": extension-namespaced built-in action.
+     * value points to the full action string so that
+     * rbh_pe_select_common_ops_for_actions can extract the extension hint.
+     * e.g. "lustre:delete", "retention:log"
+     */
+    {
+        const char *colon = strchr(action_str, ':');
+        if (colon) {
+            const char *sub = colon + 1;
+            if (strcmp(sub, "delete") == 0) {
+                act.type = RBH_ACTION_DELETE;
+                act.value = action_str;
+                return act;
+            }
+            if (strcmp(sub, "log") == 0) {
+                act.type = RBH_ACTION_LOG;
+                act.value = action_str;
+                return act;
+            }
+        }
+    }
+
     act.type = RBH_ACTION_UNKNOWN;
     act.value = action_str;
     return act;
@@ -210,10 +233,26 @@ rbh_pe_select_common_ops_for_actions(const struct rbh_action *action,
     const struct rbh_pe_common_operations *plugin_ops = NULL;
     const struct rbh_pe_common_operations *ext_ops = NULL;
     const struct rbh_backend_plugin *plugin = NULL;
+    bool plugin_hint_matches = false;
+    const char *ext_hint = NULL;
+    size_t ext_hint_len = 0;
     size_t ext_matches = 0;
     uint64_t flag;
 
     flag = RBH_ACTION_FLAG(action->type);
+
+    /*
+     * For LOG/DELETE, action->value may encode an extension hint as
+     * "<ext_name>:<builtin>" (e.g. "lustre:log").  Extract the prefix so
+     * we can restrict the search to the named extension only.
+     */
+    if (action->value) {
+        const char *colon = strchr(action->value, ':');
+        if (colon) {
+            ext_hint = action->value;
+            ext_hint_len = (size_t)(colon - action->value);
+        }
+    }
 
     for (size_t i = 0; i < f_ctx->info_pe_count; ++i) {
         const struct rbh_plugin_extension *ext;
@@ -232,8 +271,17 @@ rbh_pe_select_common_ops_for_actions(const struct rbh_action *action,
         if (!ext || !(ext->available_actions & flag))
             continue;
 
+        /* If the user specified an extension hint ("lustre:log"), skip any
+         * extension whose name does not match. */
+        if (ext_hint != NULL &&
+            (strncmp(ext->name, ext_hint, ext_hint_len) != 0 ||
+             ext->name[ext_hint_len] != '\0'))
+            continue;
+
         if (ext_matches > 0) {
-            fprintf(stderr, "Error: multiple extensions implement action %s\n",
+            fprintf(stderr, "Error: multiple extensions implement action %s. "
+                    "Specify the extension explicitly in the configuration "
+                    "(e.g. 'lustre.delete' instead of 'action.delete').\n",
                     action2string(action->type));
             errno = EINVAL;
             return NULL;
@@ -243,11 +291,48 @@ rbh_pe_select_common_ops_for_actions(const struct rbh_action *action,
         ext_matches++;
     }
 
+    if (plugin && plugin_ops && (plugin->available_actions & flag)) {
+        if (ext_hint == NULL) {
+            plugin_hint_matches = true;
+        } else if (plugin->plugin.name != NULL &&
+                   strncmp(plugin->plugin.name, ext_hint, ext_hint_len) == 0 &&
+                   plugin->plugin.name[ext_hint_len] == '\0') {
+            plugin_hint_matches = true;
+        }
+    }
+
+    if (ext_hint != NULL) {
+        if (ext_matches == 1 && plugin_hint_matches) {
+            fprintf(stderr,
+                    "Error: both backend plugin '%s' and an extension "
+                    "implement action %s\n",
+                    plugin->plugin.name, action2string(action->type));
+            errno = EINVAL;
+            return NULL;
+        }
+
+        if (ext_matches == 1)
+            return ext_ops;
+
+        if (plugin_hint_matches)
+            return plugin_ops;
+
+        /* The user named a provider that does not implement this action. */
+        char hint_str[256] = {0};
+        size_t copy_len = ext_hint_len < sizeof(hint_str) - 1
+                          ? ext_hint_len : sizeof(hint_str) - 1;
+        memcpy(hint_str, ext_hint, copy_len);
+        fprintf(stderr,
+                "Error: plugin or extension '%s' does not implement action %s\n",
+                hint_str, action2string(action->type));
+        errno = ENOTSUP;
+        return NULL;
+    }
+
     if (ext_matches == 1)
         return ext_ops;
 
-    if (ext_matches == 0 && plugin && plugin_ops &&
-        (plugin->available_actions & flag))
+    if (plugin_hint_matches)
         return plugin_ops;
 
     fprintf(stderr, "Error: action %s not supported by backend\n",
