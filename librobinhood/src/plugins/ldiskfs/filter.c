@@ -9,6 +9,8 @@
 
 #include <robinhood/statx.h>
 
+#define MIN_VALUES_SSTACK_ALLOC (1 << 6)
+
 static bool
 is_dir(struct rbh_dentry *dentry)
 {
@@ -122,11 +124,12 @@ dentry_path(struct rbh_dentry *dentry, struct rbh_dentry *root)
 }
 
 static struct rbh_fsentry *
-fsentry_from_dentry(struct rbh_dentry *dentry, struct rbh_dentry *root, ext2_filsys fs)
+fsentry_from_dentry(struct rbh_dentry *dentry, struct rbh_dentry *root,
+                    ext2_filsys fs, struct rbh_sstack *sstack)
 {
     struct ext2_inode_large *inode = (struct ext2_inode_large *)dentry->inode;
-    struct rbh_value_map inode_xattrs = get_xattrs_from_inode(fs, inode, 
-                                                              dentry->ino);
+    struct rbh_value_map inode_xattrs = get_xattrs_from_inode(fs, inode, dentry->ino,
+                                                              sstack);
     struct rbh_value_map ns_xattrs = {0};
     const struct rbh_id *parent_id;
     struct rbh_value path_value = {
@@ -192,6 +195,8 @@ ldiskfs_iter_next(void *iterator)
     struct ldiskfs_iter *iter = iterator;
     struct rbh_dentry *dentry;
 
+    rbh_sstack_clear(iter->sstack);
+
     dentry = fifo_pop(iter);
     if (!dentry) {
         errno = ENODATA;
@@ -201,13 +206,15 @@ ldiskfs_iter_next(void *iterator)
     if (is_dir(dentry))
         fifo_push_child_entries(iter, dentry);
 
-    return fsentry_from_dentry(dentry, iter->root, iter->fs);
+    return fsentry_from_dentry(dentry, iter->root, iter->fs, iter->sstack);
 }
 
 static void
 ldiskfs_iter_destroy(void *iterator)
 {
     struct ldiskfs_iter *iter = iterator;
+
+    rbh_sstack_destroy(iter->sstack);
 
     free(iter);
 }
@@ -280,6 +287,9 @@ ldiskfs_iter_new(struct ldiskfs_backend *ldiskfs)
 
     if (!rc)
         goto free_iter;
+
+    iter->sstack = rbh_sstack_new(MIN_VALUES_SSTACK_ALLOC *
+                                  (sizeof(struct rbh_value_map *)));
 
     fifo_push(iter, iter->root);
 
