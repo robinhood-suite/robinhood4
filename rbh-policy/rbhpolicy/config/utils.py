@@ -387,7 +387,14 @@ def normalize_action(action):
     if isinstance(action, str):
         if ':' not in action:
             return f"common:{action}"
-        elif 'cmd:' in action:
+
+        if action.startswith("cmd:"):
+            return action
+
+        # Accept "<ext>:<builtin>" for extension-namespaced actions
+        # e.g. "lustre:log", "retention:delete"
+        prefix, _, builtin = action.partition(':')
+        if prefix and builtin in ("log", "delete"):
             return action
 
         raise ValueError(
