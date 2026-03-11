@@ -7,53 +7,43 @@
 
 #include "internals.h"
 
+struct xattr_iter_data {
+    struct rbh_value_map *values;
+    struct rbh_sstack *sstack;
+};
+
+
 int
-rbh_get_xattrs(char *_name, char *_value,size_t value_len,
-               ext2_ino_t inode_num, void *data)
+rbh_get_xattrs(char *_name, char *value,size_t value_len,
+               ext2_ino_t inode_num, void *_data)
 {
+    struct xattr_iter_data *data = _data;
+    struct rbh_value_pair *xattr_pair;
+    struct rbh_value_map *xattrs;
+    struct rbh_value_pair *pairs;
+    char *name;
+    int rc;
 
     (void) inode_num;
 
-    // FIXME I'm pretty sure this is a memory leak since rbh fsentries are freed using only a call to free()
-    size_t name_len = strlen(_name);
-    struct rbh_value *xattr_value;
-    char *value;
-    char *name;
+    xattrs = data->values;
+    pairs = (struct rbh_value_pair *)xattrs->pairs;
+    xattr_pair = &pairs[xattrs->count];
 
-    xattr_value = xmalloc(sizeof(struct rbh_value));
-    value = xmalloc(value_len * sizeof(char));
-    name = xmalloc(name_len * sizeof(char));
-
-    memcpy(value, _value, value_len * sizeof(char));
-    memcpy(name, _name, name_len * sizeof(char));
-
-    // Skip the system.data xattr that only contains inline data if it exists
-    if (strcmp(name, "system.data") == 0) {
-        free(value);
-        free(name);
-        free(xattr_value);
+    // The system.data extended attribute stores inline data if it does not fit
+    // in the ext4 inode
+    // Lustre does not store metadata in it so we do not need it
+    // and can skip it safely
+    if (!strcmp(_name, "system.data"))
         return 0;
-    }
 
-    struct rbh_value _xattr_value = {
-        .type = RBH_VT_STRING,
-        .binary = {
-            .data = value,
-            .size = value_len,
-        }
-    };
+    // fill_binary_pair does not push the name on the sstack so we do it manually.
+    name = rbh_sstack_push(data->sstack, _name, strlen(_name) + 1);
 
-    *xattr_value = _xattr_value;
+    rc = fill_binary_pair(name, value, value_len, xattr_pair, data->sstack);
+    if (rc)
+        return -1;
 
-    struct rbh_value_pair xattr_pair = {
-        .key = name,
-        .value = xattr_value,
-    };
-
-    struct rbh_value_map *xattrs = data;
-    struct rbh_value_pair *pairs = (struct rbh_value_pair *)xattrs->pairs;
-
-    pairs[xattrs->count] = xattr_pair;
     xattrs->count++;
 
     return 0;
@@ -61,14 +51,18 @@ rbh_get_xattrs(char *_name, char *_value,size_t value_len,
 
 struct rbh_value_map
 get_xattrs_from_inode(ext2_filsys fs, struct ext2_inode_large *inode,
-                      ext2_ino_t ino)
+                      ext2_ino_t ino, struct rbh_sstack *sstack)
 {
     struct rbh_value_map default_ret = {0};
     struct ext2_xattr_handle *handle;
     struct rbh_value_pair *pairs;
+    struct xattr_iter_data data;
     struct rbh_value_map ret;
     errcode_t err;
     size_t count;
+
+    data.values = &ret;
+    data.sstack = sstack;
 
     err = ext2fs_xattrs_open(fs, ino, &handle);
     if (err)
@@ -82,13 +76,13 @@ get_xattrs_from_inode(ext2_filsys fs, struct ext2_inode_large *inode,
     if (err)
         goto err2;
 
-    pairs = xmalloc(count * sizeof(struct rbh_value_pair));
+    pairs = rbh_sstack_alloc(sstack, NULL, count * sizeof(struct rbh_value_pair));
 
     ret.count = 0;
     ret.pairs = pairs;
 
     // we don't change any xattr value so the return value will always be 0
-    ext2fs_xattrs_iterate(handle, &rbh_get_xattrs, &ret);
+    ext2fs_xattrs_iterate(handle, &rbh_get_xattrs, &data);
 
     err = ext2fs_xattrs_close(&handle);
     if (err)
