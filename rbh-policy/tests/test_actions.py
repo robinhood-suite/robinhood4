@@ -1129,5 +1129,73 @@ declare_policy(
                     os.path.join(self.test_dir, "filedir", name)),
                 f"{name} should not have been deleted")
 
+def test_log_action_with_posix_on_lustre_fs(self):
+    """
+    Verify that when using posix.log explicitly on a Lustre filesystem,
+    the POSIX log action is used (no Lustre FID in output).
+    """
+
+    config_path = self._write_config("""
+from rbhpolicy.config.core import *
+
+config(
+    filesystem = "rbh:lustre:{fs}",
+    database = "rbh:mongo:{db}",
+    evaluation_interval = "5s"
+)
+
+declare_policy(
+    name = "test_posix_log_on_lustre",
+    target = (Type == "f"),
+    action = posix.log,
+    trigger = 'Periodic("10m")'
+)
+""")
+
+    result = self._run_policy(config_path, "test_posix_log_on_lustre")
+    self.assertEqual(
+        result.returncode, 0,
+        f"rbh-policy.py failed:\nstdout:\n{result.stdout}\n"
+        f"stderr:\n{result.stderr}"
+    )
+
+    output = result.stdout
+
+    # POSIX log format: no fid=[...], only path=...
+    posix_log_pattern = re.compile(
+        r'LogAction \| path=([^,]+), params='
+    )
+
+    log_matches = posix_log_pattern.findall(output)
+    self.assertTrue(
+        log_matches,
+        "POSIX log entries should follow format: "
+        "LogAction | path=..., params=..."
+    )
+
+    logged_paths = log_matches
+
+    expected_files = [
+        "filedir/file1.txt",
+        "filedir/file2.log",
+        "filedir/file3.csv",
+        "filedir/test1/file4.bin",
+        "filedir/test1/test2/file5.json"
+    ]
+
+    for expected_path in expected_files:
+        self.assertIn(
+            expected_path, logged_paths,
+            f"Expected file {expected_path} not found in log output"
+        )
+
+    self.assertEqual(
+        len(logged_paths), 5,
+        f"Expected 5 files logged, found {len(logged_paths)}"
+    )
+
+    # Ensure NO Lustre FID appears
+    self.assertNotRegex(output, r'fid= \[')
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)
