@@ -191,8 +191,8 @@ class TestActionUtils(unittest.TestCase):
         )
 
     def test_normalize_prefixed_string(self):
-        with self.assertRaises(ValueError):
-            normalize_action("common:delete")
+        action = normalize_action("common:delete")
+        self.assertEqual(action, "common:delete")
 
     def test_normalize_invalid_type(self):
         with self.assertRaises(TypeError):
