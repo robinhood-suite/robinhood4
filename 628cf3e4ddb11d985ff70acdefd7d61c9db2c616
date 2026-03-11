@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a832ab7c_4e0e3f9c",
+        "filename": "librobinhood/src/plugins/ldiskfs/filter.c",
+        "patchSetId": 6
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2026-03-11T12:08:03Z",
+      "side": 1,
+      "message": "typo: remove trailing whitespace",
+      "range": {
+        "startLine": 128,
+        "startChar": 72,
+        "endLine": 128,
+        "endChar": 73
+      },
+      "revId": "628cf3e4ddb11d985ff70acdefd7d61c9db2c616",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
