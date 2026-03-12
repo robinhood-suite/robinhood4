@@ -17,6 +17,7 @@
 #include <robinhood/sstack.h>
 #include <value.h>
 #include <ext2fs/ext2fs.h>
+#include <lustre/lustre_user.h>
 
 #include "dcache.h"
 
@@ -47,6 +48,22 @@ struct ldiskfs_iter {
     GList *current_dir;
 };
 
+// Internal Lustre structures needed to use the trusted.link xattr
+// Copied from Lustre source code and modified for our use
+struct link_ea_entry {
+        __u8      lee_reclen[2]; /* __u16 big-endian, unaligned */
+        struct lu_fid      lee_parent_fid;
+        char               lee_name[];
+} __attribute__((packed));
+
+struct link_ea_header {
+        __le32 leh_magic;
+        __le32 leh_reccount;
+        __le64 leh_len;
+        __le32 leh_overflow_time;
+        __le32 leh_padding;
+};
+
 struct rbh_mut_iterator *
 ldiskfs_backend_filter(void *backend, const struct rbh_filter *filter,
                        const struct rbh_filter_options *options,
@@ -68,5 +85,17 @@ set_target_type_and_index(ext2_filsys fs, struct ldiskfs_iter *iter);
 struct rbh_value_map
 get_xattrs_from_inode(ext2_filsys fs, struct ext2_inode_large *inode,
                       ext2_ino_t ino, struct rbh_sstack *sstack);
+
+const struct lu_fid
+lu_fid_from_lma(char *lma);
+
+const struct lu_fid
+lu_fid_from_fid(char *fid);
+
+const struct rbh_value_map
+parents_lu_fid_from_link(char *link, struct rbh_sstack *sstack);
+
+struct lu_fid
+get_fid_from_xattrs(struct rbh_value_map xattrs);
 
 #endif
