@@ -1093,7 +1093,9 @@ rbh_lustre_helper(__attribute__((unused)) const char *backend,
         "                         filter entries based on their mirror state\n"
         "                           ro - the entry is in read-only state\n"
         "                           sp - the entry is in a state of being resynchronized\n"
-        "                           wp - the entry is in a state of being written.\n");
+        "                           wp - the entry is in a state of being written.\n"
+        "    -composite\n"
+        "                         filter entries based on if they have a composite layout.\n");
 
     if (rc == -1)
         *predicate_helper = NULL;
