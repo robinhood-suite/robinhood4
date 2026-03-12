@@ -1090,7 +1090,9 @@ rbh_lustre_helper(__attribute__((unused)) const char *backend,
         "                           sp - the entry is in a state of being resynchronized\n"
         "                           wp - the entry is in a state of being written.\n"
         "    -composite\n"
-        "                         filter entries based on if they have a composite layout.\n");
+        "                         filter entries based on if they have a composite layout.\n"
+        "    -hash-type {all_char, fnv_1a_64, crush, crush2}\n"
+        "                         filter entries based on their MDT hash type.\n");
 
     if (rc == -1)
         *predicate_helper = NULL;
