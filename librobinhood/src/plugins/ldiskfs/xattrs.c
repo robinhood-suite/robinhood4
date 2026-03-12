@@ -6,12 +6,15 @@
  */
 
 #include "internals.h"
+#include <endian.h>
+#include <linux/swab.h>
+
+#define LINK_EA_MAGIC 0x11EAF1DFUL
 
 struct xattr_iter_data {
     struct rbh_value_map *values;
     struct rbh_sstack *sstack;
 };
-
 
 int
 rbh_get_xattrs(char *_name, char *value,size_t value_len,
@@ -97,4 +100,39 @@ err:
     rbh_backend_error_printf("Failed to read extended attributes of inode %d",
                             ino);
     return default_ret;
+}
+
+// use right endianness for attributes of struct lu_fid
+void set_lu_fid_with_right_endianness(struct lu_fid *fid)
+{
+    fid->f_seq = le64toh(fid->f_seq);
+    fid->f_oid = le32toh(fid->f_oid);
+    fid->f_ver = le32toh(fid->f_ver);
+}
+
+struct lu_fid
+lu_fid_from_lma(void *lma)
+{
+    struct lustre_mdt_attrs *attrs;
+    struct lu_fid res;
+
+    attrs = (void *)lma;
+    res = attrs->lma_self_fid;
+
+    // FIDs are in little endian notation on disk so we use the right endianness
+    set_lu_fid_with_right_endianness(&res);
+
+    return res;
+}
+
+bool
+get_fid_from_xattrs(struct rbh_value_map *xattrs, struct lu_fid *fid)
+{
+    for(int i = 0; i < xattrs->count; i++) {
+        if (!strcmp(xattrs->pairs[i].key, "trusted.lma")) {
+            *fid = lu_fid_from_lma((char *)xattrs->pairs[i].value->string);
+            return true;
+        }
+    }
+    return false;
 }

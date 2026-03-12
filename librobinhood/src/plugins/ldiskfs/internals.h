@@ -17,6 +17,7 @@
 #include <robinhood/sstack.h>
 #include <value.h>
 #include <ext2fs/ext2fs.h>
+#include <lustre/lustre_user.h>
 
 #include "dcache.h"
 
@@ -68,5 +69,26 @@ set_target_type_and_index(ext2_filsys fs, struct ldiskfs_iter *iter);
 struct rbh_value_map
 get_xattrs_from_inode(ext2_filsys fs, struct ext2_inode_large *inode,
                       ext2_ino_t ino, struct rbh_sstack *sstack);
+
+/*
+ * Gets the lustre fid of a file from the value of the trusted.lma
+ * extended attribute.
+ *
+ * The extended attribute is passed as a pointer to its binary data.
+ */
+const struct lu_fid
+lu_fid_from_lma(void *lma);
+
+/*
+ * Obtain the fid of a file from the extended attributes.
+ *
+ * Extended attributes are passed as a rbh_value_map as returned by
+ * get_xattrs_from_inode()
+ *
+ * Returns true and sets the 'fid' variable if a a Lustre fid was found, else
+ * returns false.
+ */
+bool
+get_fid_from_xattrs(struct rbh_value_map *xattrs, struct lu_fid *fid);
 
 #endif
