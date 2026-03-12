@@ -40,10 +40,6 @@ static const mode_t MODE_BITS[] = {
     S_IROTH, S_IWOTH, S_IXOTH
 };
 
-#ifndef ARRAY_SIZE
-# define ARRAY_SIZE(array) sizeof(array) / sizeof(array[0])
-#endif
-
 int
 rbh_posix_delete_entry(struct rbh_backend *backend,
                        struct rbh_fsentry *fsentry)

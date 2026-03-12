@@ -36,6 +36,8 @@ static const struct rbh_filter_field predicate2filter_field[] = {
                               .xattr = "comp_count"},
     [LPRED_COMP_END]       = {.fsentry = RBH_FP_INODE_XATTRS,
                               .xattr = "end"},
+    [LPRED_COMP_FLAGS]     = {.fsentry = RBH_FP_INODE_XATTRS,
+                              .xattr = "comp_flags"},
     [LPRED_COMP_START]     = {.fsentry = RBH_FP_INODE_XATTRS,
                               .xattr = "begin"},
     [LPRED_FID]            = {.fsentry = RBH_FP_INODE_XATTRS,
@@ -810,6 +812,64 @@ hash_type2filter(const char *hash_type)
     return filter;
 }
 
+static enum lov_comp_md_entry_flags
+str2comp_flags(const char *comp_flags)
+{
+    /**
+     * For reference, 'comp_flags_table' is defined in the lustreapi header, and
+     * at the time of writing this code looks like this:
+     *  comp_flags_table[] = {
+     *      { LCME_FL_INIT,         "init" },
+     *      { LCME_FL_STALE,        "stale" },
+     *      { LCME_FL_PREF_RW,      "prefer" },
+     *      { LCME_FL_PREF_RD,      "prefrd" },
+     *      { LCME_FL_PREF_WR,      "prefwr" },
+     *      { LCME_FL_OFFLINE,      "offline" },
+     *      { LCME_FL_NOSYNC,       "nosync" },
+     *      { LCME_FL_EXTENSION,    "extension" },
+     *      { LCME_FL_PARITY,       "parity" },
+     *      { LCME_FL_COMPRESS,     "compress" },
+     *      { LCME_FL_PARTIAL,      "partial" },
+     *      { LCME_FL_NOCOMPR,      "nocompr" },
+     };
+     */
+    for (int i = 0; i < ARRAY_SIZE(comp_flags_table); i++) {
+        enum lov_comp_md_entry_flags comp_flag = comp_flags_table[i].cfn_flag;
+        const char *comp_name = comp_flags_table[i].cfn_name;
+
+        if (!strcmp(comp_name, comp_flags))
+            return comp_flag;
+    }
+
+    /**
+     * 0 in the enum doesn't correspond to any value, so use it to detect
+     * parsing errors here.
+     */
+    return 0;
+}
+
+static struct rbh_filter *
+comp_flags2filter(const char *comp_flags)
+{
+    enum lov_comp_md_entry_flags flags;
+    struct rbh_filter *filter;
+
+    flags = str2comp_flags(comp_flags);
+    if (flags == 0)
+        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
+                      "Invalid component flags provided, should be 'init', 'stale', 'prefer', 'offline' or 'nosync', got '%s'",
+                      comp_flags);
+
+    filter = rbh_filter_compare_uint32_new(RBH_FOP_BITS_ANY_SET,
+                                           get_filter_field(LPRED_COMP_FLAGS),
+                                           flags);
+    if (filter == NULL)
+        error_at_line(EXIT_FAILURE, errno, __FILE__, __LINE__,
+                      "Failed to create the filter for the component flags");
+
+    return filter;
+}
+
 static bool
 predicate_has_argument(int predicate)
 {
@@ -836,14 +896,17 @@ rbh_lustre_build_filter(const char **argv, int argc, int *index,
      * precise and meaningul error messages.
      */
     switch (predicate) {
+    case LPRED_COMP_COUNT:
+        filter = comp_count2filter(argv[++i]);
+        break;
     case LPRED_COMP_END:
         filter = comp_end2filter(argv[++i]);
         break;
+    case LPRED_COMP_FLAGS:
+        filter = comp_flags2filter(argv[++i]);
+        break;
     case LPRED_COMP_START:
         filter = comp_start2filter(argv[++i]);
-        break;
-    case LPRED_COMP_COUNT:
-        filter = comp_count2filter(argv[++i]);
         break;
     case LPRED_COMPOSITE:
         filter = composite2filter();
