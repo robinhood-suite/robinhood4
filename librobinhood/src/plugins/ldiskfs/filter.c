@@ -141,8 +141,12 @@ fsentry_from_dentry(struct rbh_dentry *dentry, struct rbh_dentry *root,
     };
     struct rbh_fsentry *fsentry;
     struct rbh_statx statx;
+    struct lu_fid fid;
     struct rbh_id *id;
     int save_errno;
+
+    if (get_fid_from_xattrs(&inode_xattrs, &fid))
+       dentry->fid = fid;
 
     id = rbh_id_from_lu_fid(&dentry->fid);
     parent_id = dentry->parent ?
@@ -159,7 +163,7 @@ fsentry_from_dentry(struct rbh_dentry *dentry, struct rbh_dentry *root,
     statx.stx_gid = inode_gid(*inode);
     statx.stx_mode = inode->i_mode;
     statx.stx_ino = dentry->ino;
-    statx.stx_size = inode->i_size;
+    statx.stx_size = EXT2_I_SIZE(inode);
     statx.stx_blocks = inode_blocks(inode);
     /* statx.stx_attributes_mask; */
     statx.stx_atime.tv_sec = ext2fs_inode_xtime_get(inode, i_atime);
